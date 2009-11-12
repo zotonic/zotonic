@@ -79,6 +79,10 @@ you install these packages:
 
 sudo apt-get install unixodbc-dev libncurses-dev libssl-dev
 
+PostgreSQL and Imagemagick are available on Ubuntu as packages:
+
+sudo apt-get install postgresql-8.4 imagemagick
+
 
 
 Ubuntu 9.10 (karmic)
@@ -90,3 +94,18 @@ erlang-edoc erlang-et erlang-eunit erlang-gs erlang-inets \
 erlang-mnesia erlang-observer erlang-odbc erlang-parsetools \
 erlang-public-key erlang-runtime-tools erlang-ssl \
 erlang-syntax-tools erlang-tools erlang-webtool erlang-xmerl
+
+
+
+Windows
+-------
+
+Currently, Zotonic has not been tested on the Windows
+platform. However, the main dependencies Erlang, PostgreSQL and
+ImageMagick do work on Windows, so, if you're adventurous, it should
+be possible to get it running.
+
+For a start, you'll have to compile Zotonic and make a Windows version
+of start.sh, probably as a .bat file.... We'd love to hear your
+progress! Post a message to zotonic-developers@googlegroups.com to
+inform us of your progress.
