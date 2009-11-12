@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Disabled</key>
+    <false/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>Debug</key>
+    <false/>
+    <key>Label</key>
+    <string>varnishd</string>
+    <key>OnDemand</key>
+    <false/>
+    <key>GroupName</key>
+    <string>wheel</string>
+    <key>UserName</key>
+    <string>root</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/sbin/varnishd</string>
+        <string>-F</string>
+        <string>-a</string>
+        <string>:80</string>
+        <string>-T</string>
+        <string>localhost:6082</string>
+        <string>-f</string>
+        <string>/usr/local/etc/varnish/varnish.zotonic.vcl</string>
+        <string>-s</string>
+        <string>malloc</string>
+        <string>-u</string>
+        <string>nobody</string>
+    </array>
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

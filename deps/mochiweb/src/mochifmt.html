@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module mochifmt</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module mochifmt</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>String Formatting for Erlang, inspired by Python 2.6
+       (<a href="http://www.python.org/dev/peps/pep-3101/">PEP 3101</a>).
+<p>Copyright © 2008 Mochi Media, Inc.</p>
+
+<p><b>Authors:</b> Bob Ippolito (<a href="mailto:bob@mochimedia.com"><tt>bob@mochimedia.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2>String Formatting for Erlang, inspired by Python 2.6
+       (<a href="http://www.python.org/dev/peps/pep-3101/">PEP 3101</a>).
+ 
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bformat-2">bformat/2</a></td><td>Format Args with Format and return a binary().</td></tr>
+<tr><td valign="top"><a href="#bformat-3">bformat/3</a></td><td>Format Args with Format using Module and return a binary().</td></tr>
+<tr><td valign="top"><a href="#convert_field-2">convert_field/2</a></td><td>Process Arg according to the given explicit conversion specifier.</td></tr>
+<tr><td valign="top"><a href="#f-2">f/2</a></td><td>Format Args with Format and return a string().</td></tr>
+<tr><td valign="top"><a href="#f-3">f/3</a></td><td>Format Args with Format using Module and return a string().</td></tr>
+<tr><td valign="top"><a href="#format-2">format/2</a></td><td>Format Args with Format.</td></tr>
+<tr><td valign="top"><a href="#format-3">format/3</a></td><td>Format Args with Format using Module.</td></tr>
+<tr><td valign="top"><a href="#format_field-2">format_field/2</a></td><td>Format Arg with Format.</td></tr>
+<tr><td valign="top"><a href="#format_field-3">format_field/3</a></td><td>Format Arg with Format.</td></tr>
+<tr><td valign="top"><a href="#get_field-2">get_field/2</a></td><td>Consecutively call get_value/2 on parts of Key delimited by ".",
+       replacing Args with the result of the previous get_value.</td></tr>
+<tr><td valign="top"><a href="#get_field-3">get_field/3</a></td><td>Consecutively call Module:get_value/2 on parts of Key delimited by ".",
+       replacing Args with the result of the previous get_value.</td></tr>
+<tr><td valign="top"><a href="#get_value-2">get_value/2</a></td><td>Get the Key from Args.</td></tr>
+<tr><td valign="top"><a href="#test-0">test/0</a></td><td>Run tests.</td></tr>
+<tr><td valign="top"><a href="#tokenize-1">tokenize/1</a></td><td>Tokenize a format string into mochifmt's internal format.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bformat-2">bformat/2</a></h3>
+<div class="spec">
+<p><tt>bformat(Format::string(), Args) -&gt; binary()</tt></p>
+</div><p>Format Args with Format and return a binary().</p>
+
+<h3 class="function"><a name="bformat-3">bformat/3</a></h3>
+<div class="spec">
+<p><tt>bformat(Format::string(), Args, Module) -&gt; binary()</tt></p>
+</div><p>Format Args with Format using Module and return a binary().</p>
+
+<h3 class="function"><a name="convert_field-2">convert_field/2</a></h3>
+<div class="spec">
+<p><tt>convert_field(Arg, Conversion::<a href="#type-conversion">conversion()</a>) -&gt; term()</tt></p>
+</div><p>Process Arg according to the given explicit conversion specifier.</p>
+
+<h3 class="function"><a name="f-2">f/2</a></h3>
+<div class="spec">
+<p><tt>f(Format::string(), Args) -&gt; string()</tt></p>
+</div><p>Format Args with Format and return a string().</p>
+
+<h3 class="function"><a name="f-3">f/3</a></h3>
+<div class="spec">
+<p><tt>f(Format::string(), Args, Module) -&gt; string()</tt></p>
+</div><p>Format Args with Format using Module and return a string().</p>
+
+<h3 class="function"><a name="format-2">format/2</a></h3>
+<div class="spec">
+<p><tt>format(Format::string(), Args) -&gt; <a href="#type-iolist">iolist()</a></tt></p>
+</div><p>Format Args with Format.</p>
+
+<h3 class="function"><a name="format-3">format/3</a></h3>
+<div class="spec">
+<p><tt>format(Format::string(), Args, Module) -&gt; <a href="#type-iolist">iolist()</a></tt></p>
+</div><p>Format Args with Format using Module.</p>
+
+<h3 class="function"><a name="format_field-2">format_field/2</a></h3>
+<div class="spec">
+<p><tt>format_field(Arg, Format) -&gt; <a href="#type-iolist">iolist()</a></tt></p>
+</div><p>Format Arg with Format.</p>
+
+<h3 class="function"><a name="format_field-3">format_field/3</a></h3>
+<div class="spec">
+<p><tt>format_field(Arg, Format, Module::_Module) -&gt; <a href="#type-iolist">iolist()</a></tt></p>
+</div><p>Format Arg with Format.</p>
+
+<h3 class="function"><a name="get_field-2">get_field/2</a></h3>
+<div class="spec">
+<p><tt>get_field(Key::string(), Args) -&gt; term()</tt></p>
+</div><p>Consecutively call get_value/2 on parts of Key delimited by ".",
+       replacing Args with the result of the previous get_value. This
+       is used to implement formats such as {0.0}.</p>
+
+<h3 class="function"><a name="get_field-3">get_field/3</a></h3>
+<div class="spec">
+<p><tt>get_field(Key::string(), Args, Module) -&gt; term()</tt></p>
+</div><p>Consecutively call Module:get_value/2 on parts of Key delimited by ".",
+       replacing Args with the result of the previous get_value. This
+       is used to implement formats such as {0.0}.</p>
+
+<h3 class="function"><a name="get_value-2">get_value/2</a></h3>
+<div class="spec">
+<p><tt>get_value(Key::string(), Args::<a href="#type-args">args()</a>) -&gt; term()</tt></p>
+</div><p>Get the Key from Args. If Args is a tuple then convert Key to
+       an integer and get element(1 + Key, Args). If Args is a list and Key
+       can be parsed as an integer then use lists:nth(1 + Key, Args),
+       otherwise try and look for Key in Args as a proplist, converting
+       Key to an atom or binary if necessary.</p>
+
+<h3 class="function"><a name="test-0">test/0</a></h3>
+<div class="spec">
+<p><tt>test() -&gt; ok</tt></p>
+</div><p>Run tests.</p>
+
+<h3 class="function"><a name="tokenize-1">tokenize/1</a></h3>
+<div class="spec">
+<p><tt>tokenize(S::string()) -&gt; <a href="#type-tokens">tokens()</a></tt></p>
+</div><p>Tokenize a format string into mochifmt's internal format.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Feb 22 2009, 15:32:42.</i></p>
+</body>
+</html>

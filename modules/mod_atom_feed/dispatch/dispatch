@@ -1,0 +1,3 @@
+[
+    { atom_feed, ["feed", cat], resource_atom_feed_cat, [] }
+].

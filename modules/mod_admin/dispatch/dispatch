@@ -1,0 +1,16 @@
+%% Admin dispatch rules
+
+[
+	{admin,   				["admin"],								resource_admin,			[]},
+	{admin_logon,   		["admin", "logon"],						resource_admin_logon,	[]},
+	{admin_overview_rsc,  	["admin", "overview"],					resource_admin_overview,[]},
+	{admin_edit_rsc, 		["admin", "edit", id],					resource_admin_edit,	[]},
+    {admin_referrers,       ["admin", "referrer", id],              resource_admin_referrers,[]},
+    {admin_predicate,       ["admin", "predicate"],                 resource_admin_predicate,[]},
+    {admin_predicate_edit,  ["admin", "predicate", id],             resource_admin_predicate_edit,[]},
+    {admin_media,           ["admin", "media"],                     resource_admin_media,    []},
+    {admin_media,           ["admin", "media", "preview", id],      resource_admin_media_preview,    []},
+
+    {admin_categories_manager, ["admin", "categories"],             resource_admin_categories_manager,[]}
+
+].

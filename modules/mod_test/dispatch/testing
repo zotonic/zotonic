@@ -1,0 +1,5 @@
+[
+%% Just for testing
+{helloworld, ["helloworld"], resource_template, [{template, "helloworld.tpl"}, {anonymous, true}]},
+{test,       ["test"],       resource_test_helloworld,        []}
+].

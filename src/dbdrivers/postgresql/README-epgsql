@@ -1,0 +1,91 @@
+Erlang PostgreSQL Database Client
+
+* Connect
+
+  {ok, C} = pgsql:connect(Host, [Username, Password, Opts]).
+
+  Opts is a property list. The following properties are supported:
+
+  - database
+  - port
+
+  ok = pgsql:close(C).
+
+* Simple Query
+
+  {ok, Columns, Rows} = pgsql:squery(C, Sql).
+  {error, #error{}}   = pgsql:squery(C, InvalidSql).
+
+  Columns       - list of column records, see pgsql.hrl for definition.
+  Rows          - list of tuples, one for each row.
+
+  The simple query protocol returns all columns as text (Erlang binaries)
+  and does not support binding parameters.
+
+* Extended Query
+
+  {ok, Columns, Rows}        = pgsql:equery(C, "select ...", [Parameters]).
+  {ok, Count}                = pgsql:equery(C, "update ...", [Parameters]).
+  {ok, Count, Columns, Rows} = pgsql:equery(C, "insert ... returning ...", [Parameters]).
+
+  {error, #error{}}          = pgsql:equery(C, "invalid SQL", [Parameters]).
+
+  Parameters    - list of values to be bound to $1, $2, $3, etc.
+
+  The extended query protocol combines parse, bind, and execute using
+  the unnamed prepared statement and portal. A "select" statement returns
+  {ok, Columns, Rows}, "insert/update/delete" returns {ok, Count} or
+  {ok, Count, Columns, Rows} when a "returning" clause is present. When
+  an error occurs, all statements result in {error, #error{}}.
+
+  PostgreSQL's binary format is used to return integers as Erlang
+  integers, floats as floats, bytea/text/varchar columns as binaries,
+  bools as true/false, etc. For details see pgsql_binary.erl and the
+  Data Representation section below.
+
+* Parse/Bind/Execute
+
+  {ok, Statement} = pgsql:parse(C, [StatementName], Sql, [ParameterTypes]).
+
+  StatementName   - optional, reusable, name for the prepared statement.
+  ParameterTypes  - optional list of PostgreSQL types for each parameter.
+
+  For valid type names see pgsql_types.erl.
+
+  ok = pgsql:bind(C, Statement, [PortalName], ParameterValues).
+
+  PortalName- optional name for the result portal.
+
+  {ok | partial, Rows} = pgsql:execute(C, Statement, [PortalName], [MaxRows]).
+  {ok, Count}          = pgsql:execute(C, Statement, [PortalName]).
+  {ok, Count, Rows}    = pgsql:execute(C, Statement, [PortalName]).
+
+  PortalName      - optional portal name used in bind/4.
+  MaxRows         - maximum number of rows to return (0 for all rows).
+
+  execute returns {partial, Rows} when more rows are available.
+
+  ok = pgsql:close(C, Statement).
+  ok = pgsql:close(C, statement | portal, Name).
+  ok = pgsql:sync(C).
+
+  All functions return {error, #error{}} when an error occurs.
+
+* Data Representation
+
+  null        = null
+  bool        = true | false
+  char        = $A | binary
+  intX        = 1
+  floatX      = 1.0
+  date        = {Year, Month, Day}
+  time        = {Hour, Minute, Second.Microsecond}
+  timetz      = {time, Timezone}
+  timestamp   = {date, time}
+  timestamptz = {date, time}
+  interval    = {time, Days, Months}
+  text        = <<"a">>
+  varchar     = <<"a">>
+  bytea       = <<1, 2>>
+
+  record      = {int2, time, text, ...} (decode only)

@@ -1,0 +1,4 @@
+%% Dispatch rule for a predicate list page
+[
+    {admin_predicate,       ["admin", "predicate"],                 resource_admin_predicate,[]}
+].
