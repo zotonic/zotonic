@@ -8,7 +8,7 @@
 
 	<section id="banner">
 		<section id="download-zotonic">
-			<a href="#" title=""><img src="/lib/images/download_zotonic.png" alt="" /></a>
+			<a href="/download" title=""><img src="/lib/images/download_zotonic.png" alt="" /></a>
 		</section>
 		<section id="docs-zotonic">
 			<a href="/documentation" title=""><img src="/lib/images/docs.png" alt="" /></a>
