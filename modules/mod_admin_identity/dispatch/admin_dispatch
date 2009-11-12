@@ -1,0 +1,3 @@
+[
+    { admin_user, ["admin", "users"], resource_admin_users, [] }
+].

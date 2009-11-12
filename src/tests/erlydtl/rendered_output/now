@@ -1,0 +1,11 @@
+Expected format : Thu, 21 Dec 2000 16:01:07 +0200
+Got : Mon, 16 Mar 2009 11:38:15 +0100
+
+Expected format : 27th February 2008 01:24
+Got : 16th March 2009 11:38
+
+Expected format : It is the 4th of September 2007
+Got : It is the 16th of March 2009
+
+Expected format : ''
+Got : ''

@@ -1,0 +1,79 @@
+ErlyDTL
+=======
+
+ErlyDTL implements most but not all of the Django Template Language.
+
+Project homepage: http://code.google.com/p/erlydtl/
+
+
+Compilation
+-----------
+
+To compile ErlyDTL, type "make" in this directory.
+
+
+Template compilation
+--------------------
+
+Four ways:
+
+    erlydtl:compile("/path/to/template.dtl", my_module_name)
+
+    erlydtl:compile("/path/to/template.dtl", my_module_name, Options)
+
+    erlydtl:compile(<<"<html>{{ foo }}</html>">>, my_module_name)
+
+    erlydtl:compile(<<"<html>{{ foo }}</html>">>, my_module_name, Options)
+
+Options is a proplist possibly containing:
+
+    doc_root - Included template paths will be relative to this directory;
+        defaults to the compiled template's directory.
+
+    custom_tags_dir - Directory of DTL files (no extension) includable as tags.
+        E.g. if $custom_tags_dir/foo contains "<b>{{ bar }}</b>", then 
+        "{{ foo bar=100 }}" will evaluate to "<b>100</b>". Get it?
+
+    vars - Variables (and their values) to evaluate at compile-time rather than
+        render-time. 
+
+    reader - {module, function} tuple that takes a path to a template and returns
+        a binary with the file contents. Defaults to {file, read_file}. Useful
+        for reading templates from a network resource.
+
+    compiler_options - Proplist passed directly to compiler:forms/2 
+
+    force_recompile - Recompile the module even if the source's checksum has not
+        changed. Useful for debugging.
+
+
+Usage (of a compiled template)
+------------------------------ 
+
+    my_compiled_template:render(Variables) -> {ok, IOList} | {error, Err}
+
+        Variables is a proplist, dict, gb_tree, or a parameterized module
+        (whose method names correspond to variable names). The variable 
+        values can be atoms, strings, binaries, or (nested) variables.
+
+        IOList is the rendered template.
+
+    my_compiled_template:source() -> {FileName, CheckSum}
+
+        Name and checksum of the original template file.
+
+    my_compiled_template:dependencies() -> [{FileName, CheckSum}]
+
+        List of names/checksums of templates included by the original template
+        file. Useful for frameworks that recompile a template only when the
+        template's dependencies change.
+
+
+Tests
+-----
+
+From a Unix shell, run:
+
+    make test
+
+Note that the tests will create some output in examples/rendered_output.

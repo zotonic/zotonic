@@ -1,0 +1,10 @@
+{parameter_status,<<"client_encoding">>,<<"UTF8">>}
+{parameter_status,<<"DateStyle">>,<<"ISO, MDY">>}
+{parameter_status,<<"integer_datetimes">>,<<"on">>}
+{parameter_status,<<"IntervalStyle">>,<<"postgres">>}
+{parameter_status,<<"is_superuser">>,<<"off">>}
+{parameter_status,<<"server_encoding">>,<<"UTF8">>}
+{parameter_status,<<"server_version">>,<<"8.4rc1">>}
+{parameter_status,<<"session_authorization">>,<<"zotonic">>}
+{parameter_status,<<"standard_conforming_strings">>,<<"off">>}
+{parameter_status,<<"TimeZone">>,<<"Europe/Amsterdam">>}

@@ -1,0 +1,67 @@
+%% Base dispatch rules for zotonic
+[
+    %% The home page, just shows the "home.tpl" template.
+    {home,     [],            resource_template, [ {template, "home.tpl"} ]},
+
+    %% Comet connection, used with long polls from the browser.
+    {comet,    ["comet"],     resource_comet, []},
+    
+    %% Postback of events from the browser to the server, dispatched from the postback resource.
+    {postback, ["postback"],  resource_postback, []},
+    
+    %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
+    {close_connection, ["close-connection"],  resource_close_connection, []},
+
+    %% Normal page to show a resource.
+    {page,    ["page", id],       resource_page, [ {template, "page.tpl"} ]},
+    {page,    ["page", id, slug], resource_page, [ {template, "page.tpl"} ]},
+
+    %% The id controller redirects depending on the accept header sent by the user agent.
+    {id,       ["id", id],    resource_id, []},
+
+    % CSS and Javascript files from the "lib" module folder. Possibly more than one file combined in one request.
+    {lib,      ["lib",'*'],   resource_lib, [ {use_cache, false} ]},
+
+    %% Resized images, expects resize parameters and a checksum. Places resized images in the root folder.
+    %% The original images must be present in the media_path.
+    {image,    ["image",'*'], resource_file_readonly, [ 
+                                            {use_cache, false},
+                                            {is_media_preview, true}
+                                        ]},
+    
+    %% Inline display of original uploaded files. Assumes the files are in the root folder.
+    {media_inline, ["media","inline",'*'], resource_file_readonly, [
+                                            {use_cache, false},
+                                            {content_disposition, inline}
+                                        ]},
+
+    %% Download of original uploaded files. Assumes the files are in the root folder.
+    {media_attachment, ["media","attachment",'*'], resource_file_readonly, [
+                                            {use_cache, false},
+                                            {content_disposition, attachment}
+                                        ]},
+
+    %% API access
+    {api,    ["api",module,method], resource_api, []},
+    
+    %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
+    {favicon, ["favicon.ico"], resource_file_readonly, [ 
+                                            {path, "images/favicon.ico"},
+                                            {root,[lib]}, 
+                                            {use_cache, false},
+                                            {content_disposition, inline}
+                                        ]},
+    
+    %% robots.txt - simple allow all file
+    {robots_txt, ["robots.txt"], resource_file_readonly, [
+                                            {path, "misc/robots.txt"},
+                                            {root,[lib]}, 
+                                            {use_cache, false},
+                                            {content_disposition, inline}
+                                        ]},
+    
+    %% "Last resort" we check the request path against the page_path of resources and redirect to
+    %% the page configured for the page path.
+    {page_path, ['*'], resource_page_path, []}
+
+].

@@ -1,0 +1,92 @@
+Zotonic installation
+======================
+
+You will need to:
+
+1. Install Erlang R12B (13B might also work). Build it from source, or
+   use packages (see platform-specific notes below)
+2. Install ImageMagick 'convert' and 'identify' tools (also install
+   libjpeg, -tiff, -png and other required libraries).  Make sure that
+   the convert and identify tools are in your path so that zotonic can
+   find them.
+3. Install PostgreSQL (preferably 8.3 or newer).
+4. Obtain a copy of the Zotonic source code.
+
+
+Steps:
+
+0. Make sure you put the zotonic source in a directory named 'zotonic'
+   (important for now; we're working on a solution for this).
+
+1. Type "make" in the root of zotonic (there where the Makefile is located). (*1)
+
+2. Create an user and database in PostgreSQL:
+
+CREATE USER zotonic WITH PASSWORD 'yourdbpassword';
+CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
+GRANT ALL ON DATABASE zotonic TO zotonic;
+\c zotonic
+CREATE LANGUAGE "plpgsql";
+
+4. Create the configuration for the default site by copying
+   priv/sites/default/config.in to priv/sites/default/config
+
+5. Edit this file; at least specify the credentials to the postgres database.
+
+5. Make sure that the directory "priv/sites/default" and all its subdirectories are readable 
+   and writeable for the current user. (Which is the user zotonic will run under.)
+
+6. Start zotonic in debug mode:
+
+  ./start.sh
+
+7. You see zotonic starting up, lots of messages pass by, and zotonic will install the initial database.
+   When something goes wrong here, then it is almost always a problem with the database connection. Check your 
+   database configuration in the zotonic.sh file.
+
+8. Point your browser to 
+	
+    http://localhost:8000/
+	
+   or logon as admin (the default password is 'admin') at: 
+
+    http://localhost:8000/admin/
+
+9. When all done, then you can stop the erlang shell with:
+
+    q().
+  
+
+
+
+Operating system specific notes:
+-------------------------------
+
+FreeBSD:
+-------
+If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
+(check with 'make --version', which should give you GNU, and version
+info) If you're not running GNU-make as a default, edit the Makefile
+to run with 'gmake' (make sure gmake is available first))
+
+
+
+Ubuntu 9.04 (jaunty)
+--------------------
+
+You'll need to build erlang from source. Before building, make sure
+you install these packages:
+
+sudo apt-get install unixodbc-dev libncurses-dev libssl-dev
+
+
+
+Ubuntu 9.10 (karmic)
+--------------------
+Instead of compiling erlang, you can install the following erlang packages:
+
+sudo apt-get install erlang-base erlang-crypto erlang-dev erlang-docbuilder \
+erlang-edoc erlang-et erlang-eunit erlang-gs erlang-inets \
+erlang-mnesia erlang-observer erlang-odbc erlang-parsetools \
+erlang-public-key erlang-runtime-tools erlang-ssl \
+erlang-syntax-tools erlang-tools erlang-webtool erlang-xmerl

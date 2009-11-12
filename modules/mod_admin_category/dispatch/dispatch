@@ -1,0 +1,3 @@
+[
+    {admin_category_sorter, ["admin", "category"], resource_admin_category_sorter, []}
+].

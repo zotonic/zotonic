@@ -1,0 +1,35 @@
+Erlang PostgreSQL Connection Pool
+
+* Application
+
+  epgsql_pool will create any pools defined in the application's 'pools' environment
+  parameter, which is a list of atoms. Each atom must refer to an environment parameter
+  with the same name and value {Size, Opts} where Opts is a property list with the
+  following supported options:
+
+  host      - host to connect to, default "localhost".
+  port      - port to connect to, default 5432.
+  username  - username to authenticate with, default os:getenv("USER").
+  password  - password to authenticate with, default "".
+  database  - database to connect to, no default.
+
+  .config file example:
+
+    {epgsql_pool,  [{pools, [db1, db2]},
+                    {db1, {10, [{database, "db1"}]}},
+                    {db2, {10, [{database, "db2"}]}}]}                    
+  
+* Pool Usage
+
+  {ok, C} = pgsql_pool:get_connection(Pool, Timeout).
+
+  Pool          - Pid or Name of pool.
+  Timeout       - Time, in milliseconds, to wait for a free connection.
+
+  ok = pgsql_pool:return_connection(Pool, Connection).
+
+* Details
+
+  epgsql_pool monitors the process which called get_connection and returns the
+  allocated connection to the pool if that process dies. If a connection dies,
+  a new one is created and added to the pool in its place.

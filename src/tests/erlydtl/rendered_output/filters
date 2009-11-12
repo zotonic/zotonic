@@ -1,0 +1,45 @@
+Add: 2 + 2 = 4
+
+Capfirst: Capitalized
+
+Centered:
+<pre>
+       center       
+</pre>
+
+Date format:  Thu, 24 Jul 1975 00:00:00 +0100
+DateTime format: Thu, 24 Jul 1975 07:13:01 +0100
+
+Escape JS: \" \'
+
+First letter: f
+
+Fix ampersands: &amp;
+
+Force_escape: &lt;b&gt;&lt;/b&gt;
+
+Joined: eins, zwei, drei
+
+Last: t
+
+Length: 3
+
+Length is 2?: false
+
+Left adjust: 
+<pre>
+left                
+</pre>
+
+Line breaks: Line 1<br />Line 2<br />Line 3
+
+Lowercase: lowercase
+
+Right adjust:
+<pre>
+               right
+</pre>
+
+Uppercase: UPPERCASE
+
+URL Encode: Let%27s+go%21

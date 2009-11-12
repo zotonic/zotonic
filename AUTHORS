@@ -1,0 +1,29 @@
+# This is the official list of Zotonic authors for copyright purposes.
+# This file is distinct from the CONTRIBUTORS file.
+# See the latter for an explanation.
+
+# Names should be added to this file as
+# Name or Organization <email address>
+
+# Authors contributing directly to Zotonic
+
+Arjan Scherpenisse <arjan@scherpenisse.net>
+Marc Worrell <marc@worrell.nl>
+Tim Benniks <tim@timbenniks.nl>
+
+# Authors of open source projects that are either
+# integrated or essential to Zotonic.
+
+Basho Technologies
+Evan Miller <emmiller@gmail.com>
+Faruk Ates
+Geoff Cant <geoff@catalyst.net.nz>
+John Resig
+Michael Bradford <michael.bradford@t-mobile.uk.net>
+Mochi Media, Inc.
+Roberto Saccon <rsaccon@gmail.com>
+Rusty Klophaus
+Simo Kinnunen
+Tim Fletcher
+Torbjorn Tornkvist <tobbe@bluetail.com>
+Will Glozer

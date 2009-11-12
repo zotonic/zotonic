@@ -1,0 +1,528 @@
+== Form handling / Validation ==
+
+Add validations and form handling.
+
+	event({submit, ...}, Context).
+	
+Result is javascript, might be redirect javascript.
+
+Validation:
+	- attach validations to data of the to be posted element
+	- sign with nonce and md5
+	- name="bla" add to the post:  "z_v=bla:email:nonce:aa1b8db21157fae46b72e8731f4023da"
+
+  wf:wire(continueButton, nameTextBox, #validate { validators=[
+    #is_required { text="Required." },
+    #custom { text="Must start with 'Rusty'.", tag=some_tag, function=fun custom_validator/2 }
+  ]}),
+
+becomes:
+
+	<input type="text" name="email" id="bla" value="" />
+	{% validate id="bla"
+		type={presence}
+		type={email}
+		type={not_in_use delegate="xxx"}
+	%}
+
+When you don't supply the delegate then either:
+- there is a validator module with the name validator_xxxx (where xxxx = validation type)
+- there is a validator(some_extra_validate, ..) in the resource
+
+You can access:
+
+	z_context:q()
+	z_context:q_validated()
+	
+Javascript needed:
+
+	add-some-validation(#bla),
+	$(#bla).data("z_validation", "pickled-postback-data");
+
+TODO:
+	- add live validation refs in javascript  - done.
+	- add onsubmit handler - done.
+	- add onsubmit handler after possible form insertion - done.
+	- add pickled info per field in the data - done.
+	- collect all pickled data on submit - done.
+	- collect form fields on submit - done.
+	- send ajax with form to postback (either generic "form" or postback wired to form) - done.
+	- in postback handler: 
+		- catch form submit - done.
+		- check all pickled validation handlers -done.
+			- postback the invalid fields + error messages - done.
+		- call event(submit, ...) of resource (or delegate - as wired to the form) - done.
+		- add javascript z_validation_error(Id, Error) - done.
+	- add more erlang validations - done.
+	- add redirect action - done.
+
+
+== Redo the context vars - should not be in context to prevent duplicating on message passing ==
+
+Possible solutions:
+
+	- Let the template server return the template and evaluate the template in the request thread (do not pass context around) - done.
+
+Will need some context vars for lookup of @include variables (which is ok).
+
+== Inline Templates ==
+
+Make it possible to translate inline templates, i.e. not from a file.
+
+== Depcache ==
+
+Make a depcache server, now the scomp server uses its own simple cache.
+It is better to make one with dependencies, so that the scomps can give MaxAge _and_ dependencies
+
+TODO:
+	- check if is better to store big data in dict (avoid copying)
+
+== User support ==
+
+Need support for users.  
+
+One user can have:
+	- multiple sessions, with each multiple pages
+	- leaves an unique id on a user agent (different per ua - store in database)
+	- has unprotected info (nickname, shopping cart)
+	- has private info (real name, address, e-mail)
+	- is_anonymous flag
+
+When an anonymous user logs on then the data of the anonymous user gets merged into the data of the user.
+For this we need to have a merge strategy per variable - maybe put it in the varname?
+Strategies per user variable:
+	- merge_bag
+	- merge_set
+	- replace_userdata
+	- keep_userdata (default)
+	- transient (will not be stored in db)
+ 
+User:define_var(Name, Attrs)
+
+Let modules 'hook' into the user merging / startup routines and solve the variables problem in that way?
+
+User has three property tables (which are reflected in the user process state):
+	1. Public (just user cookie is enough)
+	2. Protected (must have an autologon, or authenticated)
+	3. Private (must have recently authenticated < 30 minutes)
+
+Timestamps on user/person:
+	1. Created
+	2. Last Visit
+	3. Last Authenticated (only in user process)
+
+States of user/person:
+	1. Anonymous (expiry date - when do we delete this person)
+	2. User (which does not assume verified - just that this is a known user)
+
+Cookie on user-agent:
+	1. zpuid - per user agent different
+	2. in database coupled
+		- coupled with person info
+		- last visit timestamp
+		- expiry timestamp
+		- autologon check, as a expiry timestamp
+
+Flow:
+
+	- On first visit:
+		1. Create new user, flag as anonymous user
+		2. Add cookie to user, set cookie "zpuid" - valid for 10 years or so - done.
+		3. Name of user is empty, no details known except for last visit
+		4. Set autologon of cookie to false - an anonymous user can't logon
+	- On next visit: - done.
+		1. Grab user from db, using zpuid cookie
+		2. If no such user -> handle as first visit - done.
+		3. Set 'last visit' of user to now()
+		4. If autologon status set, mark user in session as logged on (protected stuff is visible)
+ 
+	- On user creation:
+		1. Create new user
+		2. Send user an e-mail with account details
+		3. Log on as the new user (see below)
+	- On user logon:
+		1. Find user record with username/password (or openid)
+		2. Set autologon status of zpuid cookie to checkbox value
+		3. If current user is anonymous -> Copy/merge public information over to new user
+		4. Change zpsid and zpuid (safety measure)
+	- On user logoff:
+		1. Set user process state to 'public' (locking protected and private properties)
+
+
+== Scomps - code change ==
+
+Catch code changes for the scomps so that they can be re-initialised.
+	- Ask question about this on erlang-questions group
+
+== Templates - production switch ==
+
+Options to disable the modification checks during production.
+
+== Templates - custom_tags ==
+
+Test & check include paths for the custom_tags
+
+== Templates - dependencies + change 'depend' to 'vary' ==
+
+Add:
+
+	{% vary variable %}
+
+This adds a 
+
+	-varies(['variable']).
+
+property to the translated template. This will be used by the include scomp.
+
+Change depend parameter of scomps to 'vary' - done.
+
+== Google chart ==
+
+Check code, adapt calling interface to something that will work with our template system - done.
+
+== LOG ==
+
+Add rotating logger to the webmachine logger
+
+== Webmachine / MochiWeb ==
+
+Integrate webmachine and mochiweb in our source tree, check makefiles.
+
+== Translations and filter applications ==
+
+A translation is of the form:
+
+ {_ english text _}
+
+or
+
+  {% _ "english" nl="nederlands" fr="français" %}
+
+and is translated by the grammar as:
+
+ {trans, [{en,"english text"},{nl,"nederlands"},...]}
+
+which is translated as:
+
+ % ...
+ Language = erlydtl_runtime:fetch_value(language, Variables),
+ % ...
+ z_trans:trans({trans, [{en, "english text"}]}, Language)
+ % ...
+
+We always need to apply an extra runtime filter on a value to make sure that the value is not a {trans} from a database field.
+
+Also add the prefix '_' operator to strings:
+
+	_"hello world"|escape
+	
+or:
+
+	{{ title|default:_"untitled" }}
+
+
+TODO:
+	- Add the z_i18n directory for i18n modules - done
+	- Add the {{ _ en="english text" }} construct - done
+	- Delay z_trans:trans application for parameters of filters - nice to have - not done yet
+	- Modify erlydtl filters so that optional {trans} parameter (and argument) are translated - done
+	- Move language to #context{} - done.
+	- Add all gettext functionality (get .po files, use them, refetch them)
+	- Add scanning of different strings in the templates and erlang code (to .pot file)
+
+
+== Add Context as parameter to the template routines ==
+
+Pass the context to the different lookup routines, separate the context from the variables.
+Especially the erlydtl_runtime:value_lookup() routine must have the context as an extra parameter.
+
+TODO:
+	- modify erlydtl compile - done.
+	- modify erlydtl runtime lookups - done.
+	- modify z_scomp to correctly handle contexts - done.
+	- modify scomp behaviour + implementations - done.
+	- modify calls to z_template, add vars parameter - done.
+	
+
+== Handling of resources in Erlang code and templates ==
+
+(All below is done, some small variations in the real implementation vs. the notes below.)
+
+We want to have something like the anyMeta $thing in our templates and Erlang code.
+Possible actions on this 'thing' (resource or m_rsc)
+
+  - Get property
+  - Get list of media attached
+  - Get list of all objects (optionally filtered by predicate)
+  - Get list of all subjects (optionally filtered by predicate)
+
+Updates of properties / object / subject are done with separate function calls to m_rsc.
+
+		-module(m_rsc).
+		-export([
+			rsc/0,
+			exists/1, 
+			is_readable/2, is_writeable/2, is_owner/2, is_ingroup/2, is_me/2
+			p/3, 
+			op/2, o/2, o/3. o/4,
+			sp/2, s/2, s/3. s/4,
+			media/2, media/3
+		]).
+		
+		rsc() -> fun(Id, _Context) -> #rsc{id=Id} end.
+
+		exists(Id) -> true | false.
+		is_readable(Id, Context) -> true | false.
+		is_writeable(Id, Context) -> true | false.
+		is_owner(Id, Context) -> true | false.
+		is_ingroup(Id, Context) -> true | false.
+		is_me(Id, Context) -> true | false.
+
+		%% Perform access control checks, return 'undefined' on an error
+		%% Unknown properties will be checked against the predicates, returns o(Predicate).
+		p(Id, Predicate, Context) -> 
+			undefined | Value
+
+		%% Return a list of all edge predicates of this resource
+		op(Id, Context) ->
+			[].
+
+		%% Used for dereferencing object edges inside template expressions
+		o(Id, Context) ->
+			fun(P) -> o(Id, P, Context) end.
+
+		o(Id, Predicate, Context) ->
+			{rsc_list, []}.
+			
+		o(Id, Predicate, Index, Context) ->
+			#rsc{id=SomeId}.
+			
+		%% Return a list of all edge predicates to this resource
+		sp(Id, Context) ->
+			[].
+
+		%% Used for dereferencing subject edges inside template expressions
+		s(Id, Context) ->
+			fun(S) -> s(Id, P, Context) end.
+
+		s(Id, Predicate, Context) ->
+			{rsc_list, []}.
+			
+		s(Id, Predicate, Index, Context) ->
+			#rsc{id=SomeId}.
+
+		media(Id, Context) ->
+			[].
+
+		media(Id, Index, Context) ->
+			undefined | MediaPropList.
+
+During template evaluation we can cache rsc proplists in the process dictionary.
+It is also possible to pre-assign resources as a batch in the controller.
+
+In template:
+
+	{{ rsc[Id].title }}  (can return a trans #trans record {trans, [{en,"english text"},{nl,"..."}]})
+
+or just:
+
+	{{ rsc[Id] }}
+
+which will give #rsc{id=Id}, which will be evaluated to its id by the renderer.
+
+The following expressions are the same:
+
+	{{ rsc[Id].author.name }}
+	{{ rsc[Id].o.author.name }}
+	{{ rsc[Id].o.author[1].name }}
+
+	rsc => fun(Id) -> #rsc{id=Id} end.
+	Id  => #rsc{}
+	o   => fun (P) -> {rsc_list, []} end.
+	author => {rsc_list, [#rsc{}|..]} 
+	1 => #rsc{}
+	name => Value 
+	
+In erlang this will be:
+
+	m_rsc:p(m_rsc:p(Id, author, Context), name, Context);
+
+The expression
+
+	{{ rsc[Id].author[1] }}
+
+gives as result:
+
+	#rsc{id=AuthorId}
+
+Where the expression:
+
+	{{ rsc[Id].author }}
+
+gives as result:
+
+	[ #rsc{id=AuthorId1}, #rsc{id=AuthorId2}, ... ]
+
+The m_rsc:p() function returns the predicate of the first #rsc{} in a #rsc list.
+
+	p(#rsc{id=Id}, Predicate) -> 
+		do_something;
+	p(Id, Predicate) when is_integer(Id) ->
+		p(#rsc{id=Id}, Predicate);
+	p([R|_], Predicate) ->
+		p(R, Predicate);
+	p([], _Predicate) -> undefined;
+	p(undefined, _Predicate) -> undefined;
+
+
+== (Product) Properties ==
+
+triplet:
+
+	(property-id, optional-property-value-id, optional-term)
+
+property ->
+
+	(group-id, property-text, [(property-value-id, text)])
+
+group ->
+
+	(text)
+
+
+For template ->
+
+	[
+		{
+			group-text,
+			[
+				{property-text, property-value-text},
+				...
+			]
+		},
+		...
+	]
+	
+== Module/ how they extend the system ==
+
+Modules:
+
+	module_indexer:
+	- listen to {scomp/ template/ action/ validator/ model} notifications, maps them to the ones
+	  found in the module folders - done.
+	- listen to {module_activate/ module_deactivate} notifications, rescan the list of scomps (etc)
+	  after receiving, also instructs the dispatcher to reload the dispatch rules - done.
+	- listen to {module_rescan} message, as send from the dev module to force a rescan when in
+	  development mode - done.
+
+	module_admin
+	- for overview of modules, activate/deactivate modules in the admin - done.
+
+	admin
+	- basic admin controllers - done.
+	
+	shop
+	- the webshop site - done.
+
+	google_chart
+	- The google chart scomp, and also chart_pie and chart_pie3d - now still in mod_base
+
+	base
+	- all normal buttons, drag/drop, validators etc. - done.
+
+	dropbox
+	- handle new images in the upload folder, move & publish them - still a gen_server in src/support
+
+	pivot
+	- handles extraction of texts for indexing rsc entries - still a gen_server in src/support
+
+	
+When looking up an item:
+
+	Send a notification {item-kind, item-name, Args, Context}.
+
+		{scomp, button, [{text,"Click Me"}], Context}
+	
+	The module manager will receive this notification and check against the known list of items.
+	Other modules can also hook into the notification manager to intercept the message and return
+	an alternative.  This can be on the basis of the arguments or the supplied context.
+	- done.
+	
+Get a list of all admin menu items:
+
+	{% for title, url in m.notify.admin_menu %}
+
+	This sends a notification {admin_menu} to all modules.
+	The resulting list is filtered from empty results and returned.
+	
+	- not done yet - will be implemented when needed.
+
+Call a scomp in a module:
+
+	{% scompname arg=value %}
+	
+	The module manager scans the scomp directory of every module, so it can do a mapping 
+	from the name of scomps found there to scomps requested.
+	Scomp names should be:  scomp_<modulename>_<scompname>.erl
+
+	It uses the -module_priority() attribute of the module or the scomp to sort the scomps, enabling
+	a scomp to be overruled by another module.
+
+	- above is done.
+
+	LATER:
+	
+	A fallback is to send a notification {scomp, scompname, [Arg]}, the first answer that
+	is non-undefined will be returned.  
+
+	The answer can be:
+	- an iolist() for direct result
+	- an atom, comprising the name of the module that should handle the scomp
+	- a context, which should be updated with the result of the scomp rendering
+	- a tuple {iolist(), Context}, comprising the rendered result of the scomp
+
+Call all scomps by all modules:
+
+	{% all scompname arg=value %}
+	- done.
+
+Include a template from a module:
+
+ 	{% include "templatename.tpl" %}
+
+	The module manager scans the templates directory in all modules. It can map a requested name to
+	a found template.  <modulename>_<templatename>.tpl
+
+	It uses the -module_priority() attribute to sort the templates, enabling a template to be overruled
+	by another module.
+	- done.
+	
+Include all templates by all modules:
+
+	{% all include "templatename.tpl" %}
+	- done.
+	
+Refer to an action in a module:
+
+	The module manager scans the actions directory of the every module, so it can do a mapping
+	from the name of the actions.  action_<modulename>_<actionname>.erl
+
+	It uses the -module_priority() attribute of the module or the action to sort the actions, enabling
+	an action to be overruled by another module.
+	- done.
+	
+Refer to a validator in a module:
+
+	The module manager scans the validators directory of the every module, so it can do a mapping
+	from the name of the validators.   validator_<modulename>_<validator>.erl
+	- done.
+	
+Refer to a model in a module:
+
+	The module manager scans the model directory of every module. It maps the names found to the
+	names requested.  m_<modulename>_<modelname>.erl
+	
+	- Will not do this for now, you should specify unique names for all models and address them in that way.
+	Reason: not needed at this moment and extra messaging overhead to find the correct model.
+
+

@@ -1,0 +1,49 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2009 Marc Worrell
+%%
+%% Original code copyright (c) 2008-2009 Rusty Klophaus
+%% @todo Adapt this for Zotonic.
+
+-module(action_base_validate).
+-include("zotonic.hrl").
+-export([render_action/4]).
+
+render_action(TriggerId, TargetId, Args, Context) -> 
+	% Initialize a validator for the Target...
+	SuccessText     = proplists:get_value(success_text,Args,""),
+	On              = proplists:get_value(on,Args,submit),
+	AttachTo        = proplists:get_value(attach_to,Args),
+    Validators      = lists:flatten([proplists:get_value(validators,Args)]),
+
+	OnlyOnBlur      = case On of
+	                    "blur" -> <<"true">>;
+	                    _      -> <<"false">>
+	                  end,
+  	OnlyOnSubmit    = case On of
+  	                    "submit" -> <<"true">>;
+  	                    _        -> <<"false">>
+  	                  end,
+    
+	ValidMessage    = z_utils:js_escape(SuccessText),
+	InsertAfterNode = case AttachTo of
+                    		undefined -> <<>>;
+                    		Node      -> [<<", insertAfterWhatNode : obj(\"">>,Node,<<"\")">>]
+                      end,
+    
+    %% @todo Replace the 'me' with the target id? --> check the semantics of the validators
+	ConstructorJS   = io_lib:format("var v = obj('me').validator = new LiveValidation(obj('me'), { validMessage: \"~s\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});", 
+	                                [z_utils:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
+	TriggerJS       = [<<"v.trigger = $('#">>,TriggerId,<<"');">>],
+	
+    %% @todo Replace this with our format of the validators
+	% Context the validation javascript...
+	F = fun(Validation, {Acc,R}) ->
+			Base        = z_utils:get_validatorbase(Validation),
+			TypeModule  = Base#validatorbase.module,
+			{Script,R1} = TypeModule:render_validator(TriggerId, TargetId, Validation, R),
+			{[Script|Acc], R1}
+	    end,
+	{ValidatorsJS,Context1} = lists:foldr(F, {[],Context}, Validators),
+
+    % Final javascript is a combination of the validators
+    {[ConstructorJS,TriggerJS,ValidatorsJS,$;], Context1}.
