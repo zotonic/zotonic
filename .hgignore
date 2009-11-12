@@ -1,0 +1,7 @@
+syntax: glob
+
+erl_crash.dump
+*~
+ebin/*
+deps/mochiweb/doc/*
+src/erlydtl/erlydtl_parser.erl
