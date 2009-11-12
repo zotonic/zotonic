@@ -58,6 +58,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    z_datamodel:manage(?MODULE, datamodel(), Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -107,4 +108,26 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+
+datamodel() ->
+    [
+
+     {resources, 
+      [
+       {zotonic_news_test1,
+        article,
+        [{title, <<"Wanna learn more?">>},
+         {body, {file, filename:join([code:lib_dir(zotonic, priv), "sites", "default", "demodata", "learnmore.html"])}}]
+       },
+       {zotonic_news_test0,
+        news,
+        [{title, <<"Welcome to Zotonic " ?ZOTONIC_VERSION "!">>},
+         {summary, <<"Zotonic is the content management system for people that want a fast, extensible, flexible and complete system for dynamic web sites. It is built from the ground up with rich internet applications ánd web publishing in mind.">>},
+         {body, {file, filename:join([code:lib_dir(zotonic, priv), "sites", "default", "demodata", "welcome.html"])}}
+        ]
+       }
+      ]
+     }
+     
+    ].
 

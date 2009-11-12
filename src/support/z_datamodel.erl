@@ -29,22 +29,39 @@
 
 
 manage(Module, Datamodel, Context) ->
-    CatNames = case proplists:get_value(categories, Datamodel) of
+    CatIds = case proplists:get_value(categories, Datamodel) of
                    undefined ->
                        [];
                    Categories ->
                        {ok, N} = manage_categories(Module, Categories, Context),
                        N
                end,
-    PredNames = case proplists:get_value(predicates, Datamodel) of
+    PredIds = case proplists:get_value(predicates, Datamodel) of
                     undefined ->
                         [];
                     Preds ->
                         {ok, N2} = manage_predicates(Module, Preds, Context),
                         N2
                 end,
-    ?DEBUG(CatNames ++ PredNames),
+    RscIds = case proplists:get_value(resources, Datamodel) of
+                 undefined ->
+                     [];
+                 Rs ->
+                     {ok, N3} = manage_resources(Module, Rs, Context),
+                     N3
+             end,
+    ?DEBUG(CatIds ++ PredIds ++ RscIds),
     ok.
+
+
+manage_resources(Module, Rcs, Context) ->
+    manage_resources(Module, Rcs, Context, []).
+manage_resources(_Module, [], _Context, Acc) ->
+    {ok, Acc};
+manage_resources(Module, [R|Rest], Context, Acc) ->
+    Id = manage_resource(Module, R, Context),
+    manage_resources(Module, Rest, Context, [Id|Acc]).
+
 
 
 manage_categories(Module, Cats, Context) ->
@@ -104,12 +121,14 @@ manage_predicate(Module, {Name, Props, ValidFor}, Context) ->
 
 
 
-manage_resource(Module, {Name, Category, Props}, Context) ->
+manage_resource(Module, {Name, Category, Props0}, Context) ->
 
     CatId = case m_category:name_to_id(Category, Context) of
                 {ok, CId} -> CId;
                 _ -> throw({error, {nonexisting_category, Category}})
             end,
+
+    Props = map_props(Props0, Context),
 
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} ->
@@ -163,3 +182,20 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
 
     manage_predicate_validfor(Id, Rest, Context).
     
+
+
+map_props(Props, Context) ->
+    map_props(Props, Context, []).
+
+map_props([], _Context, Acc) ->
+    Acc;
+map_props([{Key, Value}|Rest], Context, Acc) ->
+    Value2 = map_prop(Value, Context),
+    map_props(Rest, Context, [{Key, Value2}|Acc]).
+
+
+map_prop({file, Filepath}, _Context) ->
+    {ok, Txt} = file:read_file(Filepath),
+    Txt;    
+map_prop(Value, _Context) ->
+    Value.
