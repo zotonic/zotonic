@@ -174,9 +174,11 @@ url1(Filename, Options, Context) ->
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
     % Map all ImageOpts to an opt string
     UrlProps = props2url(ImageOpts),
-    Checksum = z_utils:checksum([Filename,UrlProps,".jpg"], Context),
+	MimeFile = z_media_identify:guess_mime(Filename),
+	{_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts),
+    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
     PropCheck = mochiweb_util:quote_plus(lists:flatten([UrlProps,$(,Checksum,$)])),
-    {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropCheck,".jpg"]))), 
+    {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]))), 
           TagOpts,
           ImageOpts}.
 
@@ -217,13 +219,15 @@ props2url([{Prop,Value}|Rest], Width, Height, Acc) ->
 %% @todo Map the extension to the format of the preview (.jpg or .png)
 url2props(Url, Context) ->
     {Filepath,Rest} = lists:splitwith(fun(C) -> C =/= $( end, Url),
-    PropsRoot       = filename:rootname(Rest),
+    PropsRoot = filename:rootname(Rest),
     % Take the checksum from the string
-    LastParen       = string:rchr(PropsRoot, $(),
+    LastParen = string:rchr(PropsRoot, $(),
     {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
-    Check1          = string:strip(Check, right, $)),
-    z_utils:checksum_assert([Filepath,Props,".jpg"], Check1, Context),
-    PropList        = string:tokens(Props, ")("),
+    Check1 = string:strip(Check, right, $)),
+    PropList = string:tokens(Props, ")("),
+	FileMime = z_media_identify:guess_mime(Rest),
+	{_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
+    z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
     PropList1       = case PropList of
                         [] -> [];
                         [Size|RestProps]->

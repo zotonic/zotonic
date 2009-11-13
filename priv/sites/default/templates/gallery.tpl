@@ -23,7 +23,7 @@
 									<p class="summary">{{ m.rsc[c_id].summary }}</p>
 								{% endif %}
 								{% if m.rsc[c_id].depiction %}
-									{% image m.rsc[c_id].depiction width=450 %}
+									{% image m.rsc[c_id].depiction width=450 lossless %}
 								{% endif %}
 							</li>
 							{% endfor %}
