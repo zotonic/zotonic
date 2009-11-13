@@ -50,9 +50,9 @@
 
 			{% include "_documents.tpl" %}
 
-            <div style="padding-top: 20px; color: #bbbbbb; border-top: 1px dotted #bbbbbb">
-                This page is part of the  Zotonic documentation, which is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License version 2.0</a>.
-            </div>
+			<p class="zotonic-license-notice">
+				This page is part of the Zotonic documentation, which is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License version 2.0</a>.
+			</p>
 
 		</aside>
 	{% endwith %}

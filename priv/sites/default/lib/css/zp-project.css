@@ -157,6 +157,7 @@ li.list-item {
 .list-filters li a {
 	color: #fff;
 	text-decoration: none;
+	font-size: 11px;
 }
 
 	.list-filters li a.current,
@@ -373,10 +374,17 @@ nav {
 		color: #444;
 	}
 	
+.zotonic-license-notice {
+	color: #bbb; 
+	border-top: 1px dotted #666; 
+	padding: 17px 0 0 0;
+}
 
+/* modernizr stuff */
 #fonttest {
 	display: none !important;
 }
+
 
 /* Forms
 ---------------------------------------------------------- */
