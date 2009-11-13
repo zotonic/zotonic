@@ -20,6 +20,8 @@
 			{% with m.rsc[id].media as media %}
 				{% if media[1] %}
 					{% media media[1] width=540 %}
+				{% else %}
+					{% media m.rsc[id].depiction width=540 %}
 				{% endif %}
 
 				{{ m.rsc[id].body|show_media }}
