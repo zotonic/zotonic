@@ -1,19 +1,9 @@
 <div id="footer-content" class="clearfix"> 
-	<div class="zp-33">
-		<h5>Latest blog posts</h5>
+	<div class="zp-67">
 		<ul class="footer-list">
-		{% for id in m.search[{latest cat="blog" pagelen="4"}] %}
-				<li><a href="{{ m.rsc[id].page_url }}" title="{{ m.rsc[id].title }}">{{ m.rsc[id].publish_date }}&mdash;{{ m.rsc[id].title }}</a></li>
-			{% endfor %}
-		</ul>
-	</div>
-
-	<div class="zp-33">
-		<h5>Latest changes</h5>
-		<ul class="footer-list">
-		{% for id in m.search[{latest cat="text" pagelen="4"}] %}
-				<li><a href="{{ m.rsc[id].page_url }}" title="{{ m.rsc[id].title }}">{{ m.rsc[id].title }}</a></li>
-			{% endfor %}
+			<li><a href="/" title="Zotonic's homepage">Home</a></li>
+			<li><a href="/support" title="Get Zotonic Support">Support</a></li>
+			<li><a href="/zotonic-team" title="The Zotonic team">Team</a></li>
 		</ul>
 	</div>
 

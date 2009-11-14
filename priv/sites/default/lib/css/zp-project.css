@@ -304,15 +304,15 @@ footer {
 	}
 	
 	.footer-list li {
-		margin: 0 18px 0 0;
+		margin: 0 9px 0 0;
+		display: inline;
+		float: left;
 	}
 	
 	.footer-list li a {
 		font-size: 11px;
-		border-bottom:  1px dotted #555;
 		color: #bbb;
-		line-height: 24px;
-		display: block;
+		line-height: 18px;
 	}	
 
 		.footer-list li a:hover {
