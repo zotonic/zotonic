@@ -21,9 +21,7 @@
 -export([
     init/1,
 	service_available/2,
-    resource_exists/2,
-    content_types_provided/2,
-    see_other/2
+    resource_exists/2
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -55,7 +53,7 @@ resource_exists(ReqData, Context) ->
                             %% Redirect to the website.
                             AbsUrl = z_context:abs_url(Url, ContextQs),
                             Context3 = z_context:set_resp_header("Location", AbsUrl, ContextQs),
-                            ?WM_REPLY({halt, 303}, Context3)
+                            ?WM_REPLY({halt, 301}, Context3)
                     end;
                 _ ->
                     ?WM_REPLY(false, ContextQs)
