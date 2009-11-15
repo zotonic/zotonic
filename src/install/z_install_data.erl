@@ -146,31 +146,27 @@ install_category(C) ->
         {101,undefined,  1, other,       true,  undefined,                                   [{title, {trans, [{en, <<"Uncategorized">>}, {nl, <<"Zonder categorie">>}]}}] },
 
         {102,undefined,  3, person,      true,  undefined,                                   [{title, {trans, [{en, <<"Person">>}, {nl, <<"Persoon">>}]}}] },
-            {121,102,    1, artist,      false, undefined,                                   [{title, {trans, [{en, <<"Artist">>}, {nl, <<"Artiest">>}]}}] },
 
         {104,undefined,  2, text,        false, "http://purl.org/dc/dcmitype/Text",          [{title, {trans, [{en, <<"Text">>}, {nl, <<"Tekst">>}]}}] },
             {106,104,    1, article,     false, undefined,                                   [{title, {trans, [{en, <<"Article">>}, {nl, <<"Artikel">>}]}}] },
                 {109,106,1, news,        false, undefined,                                   [{title, {trans, [{en, <<"News">>}, {nl, <<"Nieuws">>}]}}] },
-            {105,104,    2, review,      false, undefined,                                   [{title, {trans, [{en, <<"Review">>},  {nl, <<"Beoordeling">>}]}}] },
 
         {119,undefined,  4, location,    false, undefined,                                   [{title, {trans, [{en, <<"Location">>}, {nl, <<"Locatie">>}]}}] },
-            {120,119,    1, venue,       false, undefined,                                   [{title, {trans, [{en, <<"Venue">>}, {nl, <<"Toneel">>}]}}] },
 
         {108, undefined, 5, event,       false, "http://purl.org/dc/dcmitype/Event",         [{title, {trans, [{en, <<"Event">>}, {nl, <<"Evenement">>}]}}] },
 
         {103,undefined,  6, artifact,    false, "http://purl.org/dc/dcmitype/PhysicalObject",[{title, {trans, [{en, <<"Artifact">>}, {nl, <<"Artefact">>}]}}] },
-            {107,103,    1, product,     false, undefined,                                   [{title, {trans, [{en, <<"Product">>}, {nl, <<"Product">>}]}}] },
 
         {110,undefined,  7, media,       true,  "http://purl.org/dc/dcmitype/Image",         [{title, {trans, [{en, <<"Media">>}, {nl, <<"Media">>}]}}] }, 
             {111,110,    1, image,       true,  "http://purl.org/dc/dcmitype/StillImage",    [{title, {trans, [{en, <<"Image">>}, {nl, <<"Afbeelding">>}]}}] },
             {112,110,    2, video,       true,  "http://purl.org/dc/dcmitype/MovingImage",   [{title, {trans, [{en, <<"Video">>}, {nl, <<"Video">>}]}}] },
             {113,110,    3, sound,       true,  "http://purl.org/dc/dcmitype/Sound",         [{title, {trans, [{en, <<"Sound">>}, {nl, <<"Sound">>}]}}] },
+            {114,110,    4, document,    true,  undefined,							         [{title, {trans, [{en, <<"Document">>}, {nl, <<"Document">>}]}}] },
 
-        {114,undefined,  8, collection,  false, "http://purl.org/dc/dcmitype/Collection",    [{title, {trans, [{en, <<"Collection">>}, {nl, <<"Collectie">>}]}}] },
+        {120,undefined,  8, collection,  false, "http://purl.org/dc/dcmitype/Collection",    [{title, {trans, [{en, <<"Collection">>}, {nl, <<"Collectie">>}]}}] },
 
         {122,undefined,  9, categorization,true,undefined,                                   [{title, {trans, [{en, <<"Categorization">>}, {nl, <<"Categorisatie">>}]}}] },
-            {123,122,    1, keyword,     true,  undefined,                                   [{title, {trans, [{en, <<"Keyword">>}, {nl, <<"Trefwoord">>}]}}] },
-            {124,122,    2, genre,       true,  undefined,                                   [{title, {trans, [{en, <<"Genre">>}, {nl, <<"Genre">>}]}}] }
+            {123,122,    1, keyword,     true,  undefined,                                   [{title, {trans, [{en, <<"Keyword">>}, {nl, <<"Trefwoord">>}]}}] }
 
         % 115-118 meta -> @ position 99
         
@@ -254,18 +250,11 @@ install_predicate(C) ->
         % id   protect name       uri                                                  props
         [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  [{reversed, false},{title, {trans, [{en,"About"},    {nl,"Over"}]}}]],
         [ 301, true,   "author",   "http://purl.org/dc/terms/creator",                  [{reversed, false},{title, {trans, [{en,"Author"},   {nl,"Auteur"}]}}]],
-        [ 302, true,   "hasreview","http://purl.org/stuff/rev#hasReview",               [{reversed, false},{title, {trans, [{en,"Review"},   {nl,"Beoordeling"}]}}]],
         [ 303, true,   "relation", "http://purl.org/dc/terms/relation",                 [{reversed, false},{title, {trans, [{en,"Relation"}, {nl,"Relatie"}]}}]],
         [ 304, true,   "depiction","http://xmlns.com/foaf/0.1/depiction",               [{reversed, false},{title, {trans, [{en,"Depiction"},{nl,"Afbeelding"}]}}]],
-
-        [ 305, true,   "atvenue",  "http://zotonic.net/predicate/atvenue",              [{reversed, false},{title, "Venue"}]],
-        [ 306, true,   "performer","http://zotonic.net/predicate/performer",            [{reversed, false},{title, "Performer"}]],
-        [ 307, true,   "hasgenre", "http://zotonic.net/predicate/hasgenre",             [{reversed, false},{title, "Genre"}]],
-
         [ 308, true,   "subject",  "http://purl.org/dc/elements/1.1/subject",           [{reversed, false},{title, {trans, [{en,"Keyword"},  {nl,"Trefwoord"}]}}]],
-
-        [ 309, true,   "document", "http://zotonic.net/predicate/document",             [{reversed, false},{title, "Document"}]],
-		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					[{reversed, false},{title, "Contains"}]]
+        [ 309, true,   "hasdocument", "http://zotonic.net/predicate/hasDocument",       [{reversed, false},{title, {trans, [{en,"Document"}, {nl,"Document"}]}}]],
+		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					[{reversed, false},{title, {trans, [{en,"Contains"}, {nl,"Bevat"}]}}]]
     ],
 
     {ok, CatId}   = pgsql:squery1(C, "select id from rsc where name = 'predicate'"),
@@ -280,17 +269,7 @@ install_predicate(C) ->
     ObjSubj = [
         {300, true,  104}, %  text   -> about     -> _
         {301, false, 102}, %  _      -> author    -> person
-        {302, false, 105}, %  _      -> hasreview -> review
         {304, false, 110}, %  _      -> depiction -> image
-
-        {305, true,  108}, %  Event  -> atvenue   -> _
-        {305, false, 120}, %  _      -> atvenue   -> venue
-
-        {306, true,  108}, %  Event  -> performer -> _
-        {306, false, 121}, %  _      -> performer -> artist
-
-        {307, true,  108}, %  Event  -> hasgenre  -> _
-        {307, false, 124}, %  _      -> hasgenre  -> genre
 
         {308, true,  104}, %  text     -> subject   -> _
         {308, true,  102}, %  person   -> subject   -> _
@@ -305,9 +284,9 @@ install_predicate(C) ->
         {309, true,  103}, %  artifact -> document -> _
         {309, true,  104}, %  text     -> document -> _
         {309, true,  119}, %  location -> document -> _
-        {309, false, 110}, %  _        -> document -> media
+        {309, false, 114}, %  _        -> document -> media
 
-        {310, true,  114}  %  collection -> haspart -> _
+        {310, true,  120}  %  collection -> haspart -> _
     ],
     
     [ {ok, 1} = pgsql:equery(C, "

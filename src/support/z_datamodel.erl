@@ -111,6 +111,9 @@ manage_predicates(Module, [Predicate|Rest], Context, Acc) ->
             manage_predicates(Module, Rest, Context, [Id|Acc])
     end.
 
+manage_predicate(Module, {Name, Uri, Props, ValidFor}, Context) ->
+    manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Context);
+
 manage_predicate(Module, {Name, Props, ValidFor}, Context) ->
     case manage_resource(Module, {Name, predicate, Props}, Context) of
         {ok} ->
