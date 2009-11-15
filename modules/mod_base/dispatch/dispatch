@@ -22,6 +22,9 @@
     % CSS and Javascript files from the "lib" module folder. Possibly more than one file combined in one request.
     {lib,      ["lib",'*'],   resource_lib, [ {use_cache, false} ]},
 
+    % Redirect controller for resource of type 'website'
+    {website,  ["redirect", id, slug],   resource_website_redirect, []},
+
     %% Resized images, expects resize parameters and a checksum. Places resized images in the root folder.
     %% The original images must be present in the media_path.
     {image,    ["image",'*'], resource_file_readonly, [ 
