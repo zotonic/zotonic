@@ -84,7 +84,6 @@ search(Search, Context) ->
 %% @doc Perform the named search and its arguments
 %% @spec search({Name, SearchPropList}, {Offset, Limit}, Context) -> #search_result
 search({SearchName, Props} = Search, Limit, Context) ->
-    % todo: fetch paging information from props
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
         Cats -> [{cat, Cats} | proplists:delete(cat, Props)]
