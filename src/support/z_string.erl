@@ -135,6 +135,10 @@ to_lower(L) when is_list(L) ->
 	to_lower("Э"++T, Acc) -> to_lower(T, [141,209|Acc]);
 	to_lower("Ю"++T, Acc) -> to_lower(T, [142,209|Acc]);
 	to_lower("Я"++T, Acc) -> to_lower(T, [143,209|Acc]);
+	% Extra Ukrainian characters
+	to_lower("Ґ"++T, Acc) -> to_lower(T, [145,210|Acc]);
+	to_lower("Ї"++T, Acc) -> to_lower(T, [151,209|Acc]);
+	to_lower("І"++T, Acc) -> to_lower(T, [150,209|Acc]);
 	% Polish support
 	to_lower("Ą"++T, Acc) -> to_lower(T, [133,196|Acc]);
 	to_lower("Ę"++T, Acc) -> to_lower(T, [153,196|Acc]);
@@ -217,6 +221,10 @@ to_upper(L) when is_list(L) ->
 	to_upper("э"++T, Acc) -> to_upper(T, [173,208|Acc]);
 	to_upper("ю"++T, Acc) -> to_upper(T, [174,208|Acc]);
 	to_upper("я"++T, Acc) -> to_upper(T, [175,208|Acc]);
+	% Extra Ukrainian characters
+	to_upper("ґ"++T, Acc) -> to_upper(T, [144,210|Acc]);
+	to_upper("ї"++T, Acc) -> to_upper(T, [135,208|Acc]);
+	to_upper("і"++T, Acc) -> to_upper(T, [143,208|Acc]);
 	% Polish support
 	to_upper("ą"++T, Acc) -> to_upper(T, [132,196|Acc]);
 	to_upper("ę"++T, Acc) -> to_upper(T, [152,196|Acc]);
@@ -226,7 +234,7 @@ to_upper(L) when is_list(L) ->
 	to_upper("ś"++T, Acc) -> to_upper(T, [154,197|Acc]);
 	to_upper("ź"++T, Acc) -> to_upper(T, [185,197|Acc]);
 	to_upper("ż"++T, Acc) -> to_upper(T, [187,197|Acc]);
-	% Other chars are takes as-is
+	% Other chars are taken as-is
 	to_upper([H|T], Acc) -> to_upper(T, [H|Acc]).
 
 %% @doc Filter a filename so that we obtain a basename that is safe to use.
@@ -365,6 +373,13 @@ to_name("Ю"++T, Acc, I) -> to_name(T, [$u,$y|Acc], I+2);
 to_name("ю"++T, Acc, I) -> to_name(T, [$u,$y|Acc], I+2);
 to_name("Я"++T, Acc, I) -> to_name(T, [$a,$y|Acc], I+2);
 to_name("я"++T, Acc, I) -> to_name(T, [$a,$y|Acc], I+2);
+% Ukrainian support
+to_name("Ґ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("ґ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("Ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("І"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("і"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
 % Polish support
 to_name("Ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
 to_name("ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
