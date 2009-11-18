@@ -139,6 +139,7 @@ to_lower(L) when is_list(L) ->
 	to_lower("Ґ"++T, Acc) -> to_lower(T, [145,210|Acc]);
 	to_lower("Ї"++T, Acc) -> to_lower(T, [151,209|Acc]);
 	to_lower("І"++T, Acc) -> to_lower(T, [150,209|Acc]);
+	to_lower("Є"++T, Acc) -> to_lower(T, [148,209|Acc]);
 	% Polish support
 	to_lower("Ą"++T, Acc) -> to_lower(T, [133,196|Acc]);
 	to_lower("Ę"++T, Acc) -> to_lower(T, [153,196|Acc]);
@@ -225,6 +226,7 @@ to_upper(L) when is_list(L) ->
 	to_upper("ґ"++T, Acc) -> to_upper(T, [144,210|Acc]);
 	to_upper("ї"++T, Acc) -> to_upper(T, [135,208|Acc]);
 	to_upper("і"++T, Acc) -> to_upper(T, [143,208|Acc]);
+	to_upper("є"++T, Acc) -> to_upper(T, [132,208|Acc]);
 	% Polish support
 	to_upper("ą"++T, Acc) -> to_upper(T, [132,196|Acc]);
 	to_upper("ę"++T, Acc) -> to_upper(T, [152,196|Acc]);
@@ -380,6 +382,8 @@ to_name("Ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
 to_name("ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
 to_name("І"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
 to_name("і"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("Є"++T, Acc, I) -> to_name(T, [$e,$y|Acc], I+2);
+to_name("є"++T, Acc, I) -> to_name(T, [$e,$y|Acc], I+2);
 % Polish support
 to_name("Ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
 to_name("ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
