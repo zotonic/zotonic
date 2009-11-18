@@ -9,6 +9,7 @@
 	"modules/*/*/*",
 	"modules/*/*/*/*",
 	"priv/sites/*/*",
+	"priv/sites/*/*/*",
 	"priv/sites/*/modules/*",
 	"priv/sites/*/modules/*/*",
 	"priv/sites/*/modules/*/*/*"
