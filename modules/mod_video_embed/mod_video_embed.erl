@@ -119,15 +119,23 @@ media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
 
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Html}
-media_stillimage({media_stillimage, Props}, _Context) ->
+%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+media_stillimage({media_stillimage, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
-            case proplists:get_value(video_embed_service, Props) of
-                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
-                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
-                _ -> {ok, "lib/images/embed.jpg"}
-            end;
+			case m_rsc:p(proplists:get_value(id, Props), depiction, Context) of
+				undefined ->
+		            case proplists:get_value(video_embed_service, Props) of
+		                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
+		                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
+		                _ -> {ok, "lib/images/embed.jpg"}
+		            end;
+				DepictionProps ->
+					case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
+						[] -> undefined;
+						Filename -> {ok, Filename}
+					end
+			end;
         _ ->
             undefined
     end.
