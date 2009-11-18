@@ -78,7 +78,7 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
             prev(Page, Pages, Dispatch, DispatchArgs, Context),
             [ url_to_li(Url, N, N == Page) || {N, Url} <- Urls ],
             next(Page, Pages, Dispatch, DispatchArgs, Context),
-        "\n</ul"
+        "\n</ul>"
     ].
 
 prev(Page, _Pages, _Dispatch, _DispatchArgs, _Context) when Page =< 1 ->

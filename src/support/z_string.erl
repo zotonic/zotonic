@@ -101,6 +101,55 @@ to_lower(L) when is_list(L) ->
 	to_lower("Ç"++T, Acc) -> to_lower(T, [167,195|Acc]);
 	to_lower("Æ"++T, Acc) -> to_lower(T, [166,195|Acc]);
 	to_lower("Œ"++T, Acc) -> to_lower(T, [147,197|Acc]);
+	% Cyrillic support
+	to_lower("А"++T, Acc) -> to_lower(T, [176,208|Acc]);
+	to_lower("Б"++T, Acc) -> to_lower(T, [177,208|Acc]);
+	to_lower("В"++T, Acc) -> to_lower(T, [178,208|Acc]);
+	to_lower("Г"++T, Acc) -> to_lower(T, [179,208|Acc]);
+	to_lower("Д"++T, Acc) -> to_lower(T, [180,208|Acc]);
+	to_lower("Е"++T, Acc) -> to_lower(T, [181,208|Acc]);
+	to_lower("Ё"++T, Acc) -> to_lower(T, [145,209|Acc]);
+	to_lower("Ж"++T, Acc) -> to_lower(T, [182,208|Acc]);
+	to_lower("З"++T, Acc) -> to_lower(T, [183,208|Acc]);
+	to_lower("И"++T, Acc) -> to_lower(T, [184,208|Acc]);
+	to_lower("Й"++T, Acc) -> to_lower(T, [185,208|Acc]);
+	to_lower("К"++T, Acc) -> to_lower(T, [186,208|Acc]);
+	to_lower("Л"++T, Acc) -> to_lower(T, [187,208|Acc]);
+	to_lower("М"++T, Acc) -> to_lower(T, [188,208|Acc]);
+	to_lower("Н"++T, Acc) -> to_lower(T, [189,208|Acc]);
+	to_lower("О"++T, Acc) -> to_lower(T, [190,208|Acc]);
+	to_lower("П"++T, Acc) -> to_lower(T, [191,208|Acc]);
+	to_lower("Р"++T, Acc) -> to_lower(T, [128,209|Acc]);
+	to_lower("С"++T, Acc) -> to_lower(T, [129,209|Acc]);
+	to_lower("Т"++T, Acc) -> to_lower(T, [130,209|Acc]);
+	to_lower("У"++T, Acc) -> to_lower(T, [131,209|Acc]);
+	to_lower("Ф"++T, Acc) -> to_lower(T, [132,209|Acc]);
+	to_lower("Х"++T, Acc) -> to_lower(T, [133,209|Acc]);
+	to_lower("Ц"++T, Acc) -> to_lower(T, [134,209|Acc]);
+	to_lower("Ч"++T, Acc) -> to_lower(T, [135,209|Acc]);
+	to_lower("Ш"++T, Acc) -> to_lower(T, [136,209|Acc]);
+	to_lower("Щ"++T, Acc) -> to_lower(T, [137,209|Acc]);
+	to_lower("Ъ"++T, Acc) -> to_lower(T, [138,209|Acc]);
+	to_lower("Ы"++T, Acc) -> to_lower(T, [139,209|Acc]);
+	to_lower("Ь"++T, Acc) -> to_lower(T, [140,209|Acc]);
+	to_lower("Э"++T, Acc) -> to_lower(T, [141,209|Acc]);
+	to_lower("Ю"++T, Acc) -> to_lower(T, [142,209|Acc]);
+	to_lower("Я"++T, Acc) -> to_lower(T, [143,209|Acc]);
+	% Extra Ukrainian characters
+	to_lower("Ґ"++T, Acc) -> to_lower(T, [145,210|Acc]);
+	to_lower("Ї"++T, Acc) -> to_lower(T, [151,209|Acc]);
+	to_lower("І"++T, Acc) -> to_lower(T, [150,209|Acc]);
+	to_lower("Є"++T, Acc) -> to_lower(T, [148,209|Acc]);
+	% Polish support
+	to_lower("Ą"++T, Acc) -> to_lower(T, [133,196|Acc]);
+	to_lower("Ę"++T, Acc) -> to_lower(T, [153,196|Acc]);
+	to_lower("Ć"++T, Acc) -> to_lower(T, [135,196|Acc]);
+	to_lower("Ł"++T, Acc) -> to_lower(T, [130,197|Acc]);
+	to_lower("Ń"++T, Acc) -> to_lower(T, [132,197|Acc]);
+	to_lower("Ś"++T, Acc) -> to_lower(T, [155,197|Acc]);
+	to_lower("Ź"++T, Acc) -> to_lower(T, [186,197|Acc]);
+	to_lower("Ż"++T, Acc) -> to_lower(T, [188,197|Acc]);
+	% Other characters are taken as-is
 	to_lower([H|T], Acc) -> to_lower(T, [H|Acc]).
 
 
@@ -139,6 +188,55 @@ to_upper(L) when is_list(L) ->
 	to_upper("ç"++T, Acc) -> to_upper(T, [135,195|Acc]);
 	to_upper("æ"++T, Acc) -> to_upper(T, [134,195|Acc]);
 	to_upper("œ"++T, Acc) -> to_upper(T, [146,197|Acc]);
+	% Cyrillic support
+	to_upper("а"++T, Acc) -> to_upper(T, [144,208|Acc]);
+	to_upper("б"++T, Acc) -> to_upper(T, [145,208|Acc]);
+	to_upper("в"++T, Acc) -> to_upper(T, [146,208|Acc]);
+	to_upper("г"++T, Acc) -> to_upper(T, [147,208|Acc]);
+	to_upper("д"++T, Acc) -> to_upper(T, [148,208|Acc]);
+	to_upper("е"++T, Acc) -> to_upper(T, [149,208|Acc]);
+	to_upper("ё"++T, Acc) -> to_upper(T, [129,208|Acc]);
+	to_upper("ж"++T, Acc) -> to_upper(T, [150,208|Acc]);
+	to_upper("з"++T, Acc) -> to_upper(T, [151,208|Acc]);
+	to_upper("и"++T, Acc) -> to_upper(T, [152,208|Acc]);
+	to_upper("й"++T, Acc) -> to_upper(T, [153,208|Acc]);
+	to_upper("к"++T, Acc) -> to_upper(T, [154,208|Acc]);
+	to_upper("л"++T, Acc) -> to_upper(T, [155,208|Acc]);
+	to_upper("м"++T, Acc) -> to_upper(T, [156,208|Acc]);
+	to_upper("н"++T, Acc) -> to_upper(T, [157,208|Acc]);
+	to_upper("о"++T, Acc) -> to_upper(T, [158,208|Acc]);
+	to_upper("п"++T, Acc) -> to_upper(T, [159,208|Acc]);
+	to_upper("р"++T, Acc) -> to_upper(T, [160,208|Acc]);
+	to_upper("с"++T, Acc) -> to_upper(T, [161,208|Acc]);
+	to_upper("т"++T, Acc) -> to_upper(T, [162,208|Acc]);
+	to_upper("у"++T, Acc) -> to_upper(T, [163,208|Acc]);
+	to_upper("ф"++T, Acc) -> to_upper(T, [164,208|Acc]);
+	to_upper("х"++T, Acc) -> to_upper(T, [165,208|Acc]);
+	to_upper("ц"++T, Acc) -> to_upper(T, [166,208|Acc]);
+	to_upper("ч"++T, Acc) -> to_upper(T, [167,208|Acc]);
+	to_upper("ш"++T, Acc) -> to_upper(T, [168,208|Acc]);
+	to_upper("щ"++T, Acc) -> to_upper(T, [169,208|Acc]);
+	to_upper("ъ"++T, Acc) -> to_upper(T, [170,208|Acc]);
+	to_upper("ы"++T, Acc) -> to_upper(T, [171,208|Acc]);
+	to_upper("ь"++T, Acc) -> to_upper(T, [172,208|Acc]);
+	to_upper("э"++T, Acc) -> to_upper(T, [173,208|Acc]);
+	to_upper("ю"++T, Acc) -> to_upper(T, [174,208|Acc]);
+	to_upper("я"++T, Acc) -> to_upper(T, [175,208|Acc]);
+	% Extra Ukrainian characters
+	to_upper("ґ"++T, Acc) -> to_upper(T, [144,210|Acc]);
+	to_upper("ї"++T, Acc) -> to_upper(T, [135,208|Acc]);
+	to_upper("і"++T, Acc) -> to_upper(T, [143,208|Acc]);
+	to_upper("є"++T, Acc) -> to_upper(T, [132,208|Acc]);
+	% Polish support
+	to_upper("ą"++T, Acc) -> to_upper(T, [132,196|Acc]);
+	to_upper("ę"++T, Acc) -> to_upper(T, [152,196|Acc]);
+	to_upper("ć"++T, Acc) -> to_upper(T, [134,196|Acc]);
+	to_upper("ł"++T, Acc) -> to_upper(T, [129,197|Acc]);
+	to_upper("ń"++T, Acc) -> to_upper(T, [131,197|Acc]);
+	to_upper("ś"++T, Acc) -> to_upper(T, [154,197|Acc]);
+	to_upper("ź"++T, Acc) -> to_upper(T, [185,197|Acc]);
+	to_upper("ż"++T, Acc) -> to_upper(T, [187,197|Acc]);
+	% Other chars are taken as-is
 	to_upper([H|T], Acc) -> to_upper(T, [H|Acc]).
 
 %% @doc Filter a filename so that we obtain a basename that is safe to use.
@@ -168,7 +266,7 @@ to_name([], Acc, _I) ->
         [] -> "_";
         Name -> Name
     end;
-to_name(_, Acc, 80) ->
+to_name(_, Acc, N) when N >= 80 ->
     to_name([], Acc, 80);
 to_name([C|T], Acc, I) when C >= $A andalso C =< $Z ->
     to_name(T, [C+32|Acc], I+1);
@@ -200,7 +298,7 @@ to_name("ó"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
 to_name("ò"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
 to_name("Ó"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
 to_name("Ò"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
-to_name("ß"++T, Acc, I) -> to_name(T, [$s,$s|Acc], I+1);
+to_name("ß"++T, Acc, I) -> to_name(T, [$s,$s|Acc], I+2);
 to_name("ç"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
 to_name("Ç"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
 to_name("ø"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
@@ -208,8 +306,102 @@ to_name("Ø"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
 to_name("å"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
 to_name("Å"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
 to_name("€"++T, Acc, I) -> to_name(T, [$e|Acc], I+1);
-to_name("ÿ"++T, Acc, I) -> to_name(T, [$i,$j|Acc], I+1);
-to_name("@"++T, Acc, I) -> to_name(T, [$_,$t,$a,$_|Acc], I+1);
+to_name("ÿ"++T, Acc, I) -> to_name(T, [$i,$j|Acc], I+2);
+to_name("@"++T, Acc, I) -> to_name(T, [$_,$t,$a,$_|Acc], I+4);
+% Cyrillic support (from http://en.wikipedia.org/wiki/Romanization_of_Russian)
+to_name("А"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
+to_name("а"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
+to_name("Б"++T, Acc, I) -> to_name(T, [$b|Acc], I+1);
+to_name("б"++T, Acc, I) -> to_name(T, [$b|Acc], I+1);
+to_name("В"++T, Acc, I) -> to_name(T, [$v|Acc], I+1);
+to_name("в"++T, Acc, I) -> to_name(T, [$v|Acc], I+1);
+to_name("Г"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("г"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("Д"++T, Acc, I) -> to_name(T, [$d|Acc], I+1);
+to_name("д"++T, Acc, I) -> to_name(T, [$d|Acc], I+1);
+to_name("Е"++T, Acc, I) -> to_name(T, [$e|Acc], I+1);
+to_name("е"++T, Acc, I) -> to_name(T, [$e|Acc], I+1);
+to_name("Ё"++T, Acc, I) -> to_name(T, [$o,$y|Acc], I+2);
+to_name("ё"++T, Acc, I) -> to_name(T, [$o,$y|Acc], I+2);
+to_name("Ж"++T, Acc, I) -> to_name(T, [$h,$z|Acc], I+2);
+to_name("ж"++T, Acc, I) -> to_name(T, [$h,$z|Acc], I+2);
+to_name("З"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+to_name("з"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+to_name("И"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("и"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("Й"++T, Acc, I) -> to_name(T, [$j|Acc], I+1);
+to_name("й"++T, Acc, I) -> to_name(T, [$j|Acc], I+1);
+to_name("К"++T, Acc, I) -> to_name(T, [$k|Acc], I+1);
+to_name("к"++T, Acc, I) -> to_name(T, [$k|Acc], I+1);
+to_name("Л"++T, Acc, I) -> to_name(T, [$l|Acc], I+1);
+to_name("л"++T, Acc, I) -> to_name(T, [$l|Acc], I+1);
+to_name("М"++T, Acc, I) -> to_name(T, [$m|Acc], I+1);
+to_name("м"++T, Acc, I) -> to_name(T, [$m|Acc], I+1);
+to_name("Н"++T, Acc, I) -> to_name(T, [$n|Acc], I+1);
+to_name("н"++T, Acc, I) -> to_name(T, [$n|Acc], I+1);
+to_name("О"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
+to_name("о"++T, Acc, I) -> to_name(T, [$o|Acc], I+1);
+to_name("П"++T, Acc, I) -> to_name(T, [$p|Acc], I+1);
+to_name("п"++T, Acc, I) -> to_name(T, [$p|Acc], I+1);
+to_name("Р"++T, Acc, I) -> to_name(T, [$r|Acc], I+1);
+to_name("р"++T, Acc, I) -> to_name(T, [$r|Acc], I+1);
+to_name("С"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("с"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("Т"++T, Acc, I) -> to_name(T, [$t|Acc], I+1);
+to_name("т"++T, Acc, I) -> to_name(T, [$t|Acc], I+1);
+to_name("У"++T, Acc, I) -> to_name(T, [$u|Acc], I+1);
+to_name("у"++T, Acc, I) -> to_name(T, [$u|Acc], I+1);
+to_name("Ф"++T, Acc, I) -> to_name(T, [$f|Acc], I+1);
+to_name("ф"++T, Acc, I) -> to_name(T, [$f|Acc], I+1);
+to_name("Х"++T, Acc, I) -> to_name(T, [$h|Acc], I+1);
+to_name("х"++T, Acc, I) -> to_name(T, [$h|Acc], I+1);
+to_name("Ц"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
+to_name("ц"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
+to_name("Ч"++T, Acc, I) -> to_name(T, [$h,$c|Acc], I+2);
+to_name("ч"++T, Acc, I) -> to_name(T, [$h,$c|Acc], I+2);
+to_name("Ш"++T, Acc, I) -> to_name(T, [$h,$s|Acc], I+2);
+to_name("ш"++T, Acc, I) -> to_name(T, [$h,$s|Acc], I+2);
+to_name("Щ"++T, Acc, I) -> to_name(T, [$h,$h,$s|Acc], I+3);
+to_name("щ"++T, Acc, I) -> to_name(T, [$h,$h,$s|Acc], I+3);
+to_name("Ъ"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("ъ"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("Ы"++T, Acc, I) -> to_name(T, [$y|Acc], I+1);
+to_name("ы"++T, Acc, I) -> to_name(T, [$y|Acc], I+1);
+to_name("Ь"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("ь"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("Э"++T, Acc, I) -> to_name(T, [$h,$e|Acc], I+2);
+to_name("э"++T, Acc, I) -> to_name(T, [$h,$e|Acc], I+2);
+to_name("Ю"++T, Acc, I) -> to_name(T, [$u,$y|Acc], I+2);
+to_name("ю"++T, Acc, I) -> to_name(T, [$u,$y|Acc], I+2);
+to_name("Я"++T, Acc, I) -> to_name(T, [$a,$y|Acc], I+2);
+to_name("я"++T, Acc, I) -> to_name(T, [$a,$y|Acc], I+2);
+% Ukrainian support
+to_name("Ґ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("ґ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("Ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("ї"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("І"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("і"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("Є"++T, Acc, I) -> to_name(T, [$e,$y|Acc], I+2);
+to_name("є"++T, Acc, I) -> to_name(T, [$e,$y|Acc], I+2);
+% Polish support
+to_name("Ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
+to_name("ą"++T, Acc, I) -> to_name(T, [$a|Acc], I+1);
+to_name("Ę"++T, Acc, I) -> to_name(T, [$e|Acc], I+1);
+to_name("ę"++T, Acc, I) -> to_name(T, [$e|Acc], I+1);
+to_name("Ć"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
+to_name("ć"++T, Acc, I) -> to_name(T, [$c|Acc], I+1);
+to_name("Ł"++T, Acc, I) -> to_name(T, [$l|Acc], I+1);
+to_name("ł"++T, Acc, I) -> to_name(T, [$l|Acc], I+1);
+to_name("Ń"++T, Acc, I) -> to_name(T, [$n|Acc], I+1);
+to_name("ń"++T, Acc, I) -> to_name(T, [$n|Acc], I+1);
+to_name("Ś"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("ś"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("Ź"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+to_name("ź"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+to_name("Ż"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+to_name("ż"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+% Other sequences of characters are mapped to $_
 to_name([_C|T], [$_|_] = Acc, I) ->
     to_name(T, Acc, I+1);
 to_name([_C|T], Acc, I) ->
