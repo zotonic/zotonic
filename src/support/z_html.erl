@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% @date 2009-04-17
 %%
-%% @doc Utility functions for html processing.
+%% @doc Utility functions for html processing.  Also used for property filtering (by m_rsc_update).
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -26,7 +26,9 @@
     escape_props/1,
     escape/1,
     unescape/1,
-    strip/1
+    strip/1,
+	sanitize/1,
+	noscript/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -42,7 +44,7 @@ escape_props(Props) ->
     escape_props([{_K,V} = Prop|T], Acc) when is_float(V); is_integer(V); is_atom(V) -> 
         escape_props(T, [Prop|Acc]);
     escape_props([{body, V}|T], Acc) ->
-        escape_props(T, [{body, V} | Acc]);
+        escape_props(T, [{body, sanitize(V)} | Acc]);
     escape_props([{K, V}|T], Acc) ->
         escape_props(T, [{K, escape_value(V)} | Acc]).
 
@@ -160,3 +162,240 @@ strip(<<H,T/binary>>, in_text, Acc) ->
     strip(T, in_text, <<Acc/binary, H>>);
 strip(<<_,T/binary>>, State, Acc) ->
     strip(T, State, Acc).
+
+
+%% @doc Sanitize a (X)HTML string. Remove elements and attributes that might be harmful.
+%% @type sanitize(binary()) -> binary()
+sanitize(Html) when is_binary(Html) ->
+	sanitize1(<<"<sanitize>",Html/binary,"</sanitize>">>);
+sanitize(Html) when is_list(Html) ->
+	sanitize1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"])).
+
+sanitize1(Html) ->
+	Parsed = mochiweb_html:parse(Html),
+	Sanitized = sanitize(Parsed, []),
+	flatten(Sanitized).
+
+	sanitize(B, _Stack) when is_binary(B) ->
+		B;
+	sanitize({comment, Text}, _Stack) ->
+		{comment, Text};
+	sanitize({Elt,Attrs,Enclosed}, Stack) ->
+		Lower = list_to_binary(z_string:to_lower(Elt)),
+		case allow_elt(Lower) orelse (not lists:member(Lower, Stack) andalso allow_once(Lower))	of
+			true ->
+				Attrs1 = lists:filter(fun({A,_}) -> allow_attr(A) end, Attrs),
+				Attrs2 = [ {list_to_binary(z_string:to_lower(A)), V} || {A,V} <- Attrs1 ],
+				Stack1 = [Lower|Stack],
+				{	Lower, 
+					Attrs2,
+					[ sanitize(Encl, Stack1) || Encl <- Enclosed ]};
+			false ->
+				{nop, [ sanitize(Encl, Stack) || Encl <- Enclosed ]}
+		end.
+
+	%% @doc Flatten the sanitized html tree to 
+	flatten(B) when is_binary(B) ->
+		escape_html_text(B, <<>>);
+	flatten({nop, Enclosed}) ->
+		flatten(Enclosed);
+	flatten({comment, Text}) ->
+		Comment = escape_html_comment(Text, <<>>),
+		<<"<!--", Comment/binary, "-->">>;
+	flatten({Elt, Attrs, Enclosed}) ->
+		EncBin = flatten(Enclosed),
+		Attrs1 = [flatten_attr(Attr) || Attr <- Attrs ],
+		Attrs2 = iolist_to_binary(z_utils:prefix(32, Attrs1)),
+		<<$<, Elt/binary, Attrs2/binary, $>, EncBin/binary, $<, $/, Elt/binary, $>>>;
+	flatten(L) when is_list(L) -> 
+		iolist_to_binary([ flatten(A) || A <- L ]).
+	
+	%% @doc Flatten an attribute to a binary
+	%% @todo Filter javascript from the value (when there is a ':' then only allow http/https)
+	%% @todo Strip scripting and text css attributes
+	%% css: anything within () should be removed
+	flatten_attr({<<"style">>,Value}) ->
+		Value1 = escape(filter_css(Value), <<>>),
+		<<"style=\"", Value1/binary, $">>;
+	flatten_attr({Attr,Value}) ->
+		Value1 = case is_url_attr(Attr) of
+					true -> noscript(Value);
+					false -> Value
+				end,
+		Value2 = escape(Value1, <<>>),
+		<<Attr/binary, $=, $", Value2/binary, $">>.
+
+	%% @doc Escape <, >, ' and " in texts (& is already removed or escaped).
+    escape_html_text(<<>>, Acc) -> 
+        Acc;
+    escape_html_text(<<$<, T/binary>>, Acc) ->
+        escape_html_text(T, <<Acc/binary, "&lt;">>);
+    escape_html_text(<<$>, T/binary>>, Acc) ->
+        escape_html_text(T, <<Acc/binary, "&gt;">>);
+    escape_html_text(<<$", T/binary>>, Acc) ->
+        escape_html_text(T, <<Acc/binary, "&quot;">>);
+    escape_html_text(<<$', T/binary>>, Acc) ->
+        escape_html_text(T, <<Acc/binary, "&#39;">>);
+    escape_html_text(<<C, T/binary>>, Acc) ->
+        escape_html_text(T, <<Acc/binary, C>>).
+
+	%% @doc Escape <, > (for in comments)
+    escape_html_comment(<<>>, Acc) -> 
+        Acc;
+    escape_html_comment(<<$<, T/binary>>, Acc) ->
+        escape_html_comment(T, <<Acc/binary, "&lt;">>);
+    escape_html_comment(<<$>, T/binary>>, Acc) ->
+        escape_html_comment(T, <<Acc/binary, "&gt;">>);
+    escape_html_comment(<<C, T/binary>>, Acc) ->
+        escape_html_comment(T, <<Acc/binary, C>>).
+
+	
+%% @doc Elements that can only occur once in a nesting.
+%% Used for cleaning up code from html editors.
+allow_once(<<"a">>) -> true;
+allow_once(<<"abbr">>) -> true;
+allow_once(<<"area">>) -> true;
+allow_once(<<"b">>) -> true;
+allow_once(<<"bdo">>) -> true;
+allow_once(<<"big">>) -> true;
+allow_once(<<"br">>) -> true;
+allow_once(<<"cite">>) -> true;
+allow_once(<<"del">>) -> true;
+allow_once(<<"dfn">>) -> true;
+allow_once(<<"em">>) -> true;
+allow_once(<<"hr">>) -> true;
+allow_once(<<"i">>) -> true;
+allow_once(<<"ins">>) -> true;
+allow_once(<<"p">>) -> true;
+allow_once(<<"pre">>) -> true;
+allow_once(<<"q">>) -> true;
+allow_once(<<"s">>) -> true;
+allow_once(<<"small">>) -> true;
+allow_once(<<"sub">>) -> true;
+allow_once(<<"sup">>) -> true;
+allow_once(<<"strong">>) -> true;
+allow_once(<<"strike">>) -> true;
+allow_once(<<"tt">>) -> true;
+allow_once(<<"u">>) -> true;
+allow_once(<<"var">>) -> true;
+allow_once(_) -> false.
+
+%% @doc Allowed elements (see also allow_once/1 above)
+allow_elt(<<"blockquote">>) -> true;
+allow_elt(<<"caption">>) -> true;
+allow_elt(<<"col">>) -> true;
+allow_elt(<<"colgroup">>) -> true;
+allow_elt(<<"dd">>) -> true;
+allow_elt(<<"dl">>) -> true;
+allow_elt(<<"dt">>) -> true;
+allow_elt(<<"div">>) -> true;
+allow_elt(<<"h1">>) -> true;
+allow_elt(<<"h2">>) -> true;
+allow_elt(<<"h3">>) -> true;
+allow_elt(<<"h4">>) -> true;
+allow_elt(<<"h5">>) -> true;
+allow_elt(<<"h6">>) -> true;
+allow_elt(<<"img">>) -> true;
+allow_elt(<<"li">>) -> true;
+allow_elt(<<"legend">>) -> true;
+allow_elt(<<"map">>) -> true;
+allow_elt(<<"ol">>) -> true;
+allow_elt(<<"samp">>) -> true;
+allow_elt(<<"span">>) -> true;
+allow_elt(<<"table">>) -> true;
+allow_elt(<<"tbody">>) -> true;
+allow_elt(<<"tfoot">>) -> true;
+allow_elt(<<"thead">>) -> true;
+allow_elt(<<"td">>) -> true;
+allow_elt(<<"th">>) -> true;
+allow_elt(<<"tr">>) -> true;
+allow_elt(<<"ul">>) -> true;
+allow_elt(_) -> false.
+
+%% @doc Allowed attributes
+allow_attr(<<"align">>) -> true;
+allow_attr(<<"alt">>) -> true;
+allow_attr(<<"border">>) -> true;
+allow_attr(<<"borderspacing">>) -> true;
+allow_attr(<<"cellpadding">>) -> true;
+allow_attr(<<"cellspacing">>) -> true;
+allow_attr(<<"class">>) -> true;
+allow_attr(<<"colspan">>) -> true;
+allow_attr(<<"coords">>) -> true;
+allow_attr(<<"dir">>) -> true;
+allow_attr(<<"height">>) -> true;
+allow_attr(<<"href">>) -> true;
+%allow_attr(<<"id">>) -> true;
+allow_attr(<<"name">>) -> true;
+allow_attr(<<"rowspan">>) -> true;
+allow_attr(<<"shape">>) -> true;
+allow_attr(<<"src">>) -> true;
+allow_attr(<<"style">>) -> true;
+allow_attr(<<"target">>) -> true;
+allow_attr(<<"title">>) -> true;
+allow_attr(<<"usemap">>) -> true;
+allow_attr(<<"valign">>) -> true;
+allow_attr(<<"width">>) -> true;
+allow_attr(_) -> false.
+
+%% @doc Check if the attribute might contain an url
+is_url_attr(<<"src">>) -> true;
+is_url_attr(<<"href">>) -> true;
+is_url_attr(_) -> false.
+
+
+%% @doc Simple filter for css. Removes parts between () and quoted strings. 
+filter_css(undefined) ->
+    [];
+filter_css(<<>>) ->
+    <<>>;
+filter_css([]) ->
+    [];
+filter_css(Html) when is_binary(Html) ->
+    filter_css(Html, in_text, <<>>);
+filter_css(L) when is_list(L) ->
+    filter_css(list_to_binary(L)).
+
+filter_css(<<>>, _, Acc) -> Acc;
+filter_css(<<$(,T/binary>>, in_text, Acc) ->
+    filter_css(T, in_paren, <<Acc/binary,$(>>);
+filter_css(<<$),T/binary>>, in_paren, Acc) ->
+    filter_css(T, in_text, <<Acc/binary,$)>>);
+filter_css(<<$),T/binary>>, State, Acc) ->
+    filter_css(T, State, Acc);
+filter_css(<<_,T/binary>>, in_paren, Acc) ->
+    filter_css(T, in_paren, Acc);
+filter_css(<<$",T/binary>>, in_text, Acc) ->
+    filter_css(T, in_dstring, <<Acc/binary,$">>);
+filter_css(<<$",T/binary>>, in_dstring, Acc) ->
+    filter_css(T, in_text, <<Acc/binary,$">>);
+filter_css(<<$',T/binary>>, in_text, Acc) ->
+    filter_css(T, in_sstring, <<Acc/binary,$'>>);
+filter_css(<<$',T/binary>>, in_sstring, Acc) ->
+    filter_css(T, in_text, <<Acc/binary,$'>>);
+filter_css(<<$\\,_,T/binary>>, in_sstring, Acc) ->
+    filter_css(T, in_sstring, Acc);
+filter_css(<<$\\,_,T/binary>>, in_dstring, Acc) ->
+    filter_css(T, in_dstring, Acc);
+filter_css(<<$\\,H,T/binary>>, in_text, Acc) ->
+    filter_css(T, in_text, <<Acc/binary,H>>);
+filter_css(<<H,T/binary>>, in_text, Acc) ->
+    filter_css(T, in_text, <<Acc/binary, H>>);
+filter_css(<<_,T/binary>>, State, Acc) ->
+    filter_css(T, State, Acc).
+
+%% @doc Filter a url, remove any javascript.
+noscript(Url) -> 
+	case nows(z_convert:to_list(Url), []) of
+		"script:" ++ _ -> <<"#script-removed">>;
+		_ -> Url
+	end.
+
+	%% @doc Remove whitespace and make lowercase till we find a colon or slash.
+	nows([], Acc) -> lists:reverse(Acc);
+	nows([C|_] = L, Acc) when C =:= $:; C =:= $/ -> lists:reverse(Acc, L);
+	nows([C|T], Acc) when C =< 32 -> nows(T,Acc);
+	nows([C|T], Acc) when C >= $A, C =< $Z -> nows(T, [C+32|Acc]);
+	nows([$\\|T], Acc) -> nows(T, Acc);
+	nows([C|T], Acc) -> nows(T, [C|Acc]).
+
