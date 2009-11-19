@@ -117,13 +117,13 @@ datamodel() ->
        {zotonic_news_test1,
         article,
         [{title, <<"Wanna learn more?">>},
-         {body, {file, filename:join([code:lib_dir(zotonic, priv), "sites", ?MODULE, "demodata", "learnmore.html"])}}]
+         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "learnmore.html"])}}]
        },
        {zotonic_news_test0,
         news,
         [{title, <<"Welcome to Zotonic " ?ZOTONIC_VERSION "!">>},
          {summary, <<"Zotonic is the content management system for people that want a fast, extensible, flexible and complete system for dynamic web sites. It is built from the ground up with rich internet applications ánd web publishing in mind.">>},
-         {body, {file, filename:join([code:lib_dir(zotonic, priv), "sites", ?MODULE, "demodata", "welcome.html"])}}
+         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "welcome.html"])}}
         ]
        }
       ]

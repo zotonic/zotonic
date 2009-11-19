@@ -109,7 +109,7 @@ init([]) ->
 %% @doc Scan all sites subdirectories for the site configurations.
 %% @spec scan_sites -> [ SiteProps ]
 scan_sites() ->
-    SitesDir = filename:join([code:lib_dir(zotonic, priv), "sites", "*", "config"]),
+    SitesDir = filename:join([z_utils:lib_dir(priv), "sites", "*", "config"]),
     Configs = [ parse_config(C) || C <- filelib:wildcard(SitesDir) ],
     [ C || C <- Configs, is_list(C) ].
 
@@ -126,6 +126,6 @@ scan_sites() ->
 %% @doc Fetch the configuration of a specific site.
 %% @spec site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
 get_site_config(Site) ->
-    ConfigFile = filename:join([code:lib_dir(zotonic, priv), "sites", Site, "config"]),
+    ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
     parse_config(ConfigFile).
 

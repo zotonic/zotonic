@@ -23,6 +23,8 @@
 -include("zotonic.hrl").
 
 -export ([
+	lib_dir/0,
+	lib_dir/1,
     now/0,
 	get_seconds/0,
 	f/1,
@@ -71,11 +73,20 @@ f(S) -> f(S, []).
 f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
 
 
+%% @doc Return an abspath to a directory relative to the application root.
+%% This is used to prevent that we have to name the root dir "zotonic".
+lib_dir() ->
+	{ok, Path} = zotonic_app:get_path(),
+	Path.
+lib_dir(Dir) ->
+	{ok, Path} = zotonic_app:get_path(),
+	filename:join([Path, Dir]).
+
+
 %% @doc Return the current tick count
 now() ->
     {M,S,_M} = erlang:now(),
     M*1000 + S.
-
 
 %% @doc Return the current universal time in seconds
 get_seconds() -> calendar:datetime_to_gregorian_seconds(calendar:universal_time()).

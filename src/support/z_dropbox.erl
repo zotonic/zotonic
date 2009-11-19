@@ -71,7 +71,7 @@ scan(Context) ->
 init(SiteProps) ->
     Host     = proplists:get_value(host, SiteProps),
     Context  = z_context:new(Host),
-    FilesDir = filename:join([code:lib_dir(zotonic, priv), "sites", Host, "files"]),
+    FilesDir = filename:join([z_utils:lib_dir(priv), "sites", Host, "files"]),
     DropBox  = string:strip(proplists:get_value(dropbox_dir,            SiteProps, filename:join([FilesDir, "dropbox"])),    right, $/), 
     ProcDir  = string:strip(proplists:get_value(dropbox_processing_dir, SiteProps, filename:join([FilesDir, "processing"])), right, $/), 
     UnDir    = string:strip(proplists:get_value(dropbox_unhandled_dir,  SiteProps, filename:join([FilesDir, "unhandled"])),  right, $/), 
@@ -234,8 +234,8 @@ rel_file(BaseDir, File) ->
     end.
 
 test() ->
-    DropBox = filename:join([code:lib_dir(zotonic, priv), "sites", "default", "dropbox"]),
-    _ProcDir = filename:join([code:lib_dir(zotonic, priv), "sites", "default", "processing"]),
+    DropBox = filename:join([z_utils:lib_dir(priv), "sites", "default", "dropbox"]),
+    _ProcDir = filename:join([z_utils:lib_dir(priv), "sites", "default", "processing"]),
     Files = scan_directory(DropBox),
     Files.
 %    lists:map(fun(F) -> move_file(DropBox, F, ProcDir) end, Files).
