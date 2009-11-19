@@ -66,7 +66,7 @@ init([]) ->
 		 {ip, WebIp},
 		 {port, WebPort},
 		 {error_handler, z_webmachine_error_handler},
-         {log_dir, filename:join([code:lib_dir(zotonic, priv), "log"])},
+         {log_dir, filename:join([z_utils:lib_dir(priv), "log"])},
 		 {dispatch, []},
 		 {backlog, 500}
 	],

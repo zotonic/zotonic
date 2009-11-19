@@ -20,7 +20,7 @@
 -author('Marc Worrell <marc@worrell.nl>').
 
 -behaviour(application).
--export([start/2,stop/1]).
+-export([start/2, stop/1, get_path/0]).
 
 ensure_started(App) ->
     case application:start(App) of
@@ -33,6 +33,7 @@ ensure_started(App) ->
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for zotonic.
 start(_Type, _StartArgs) ->
+	set_path(),
     ensure_started(crypto),
     ensure_started(ssl),
 	ensure_started(inets),
@@ -44,3 +45,13 @@ start(_Type, _StartArgs) ->
 %% @doc application stop callback for zotonic.
 stop(_State) ->
     ok.
+
+set_path() ->
+	P = code:all_loaded(),
+	Path = filename:dirname(filename:dirname(proplists:get_value(?MODULE, P))),
+	application:set_env(zotonic, lib_dir, Path).
+
+get_path() ->
+	application:get_env(zotonic, lib_dir).
+
+	

@@ -30,9 +30,9 @@
 %% @doc Return the path to the media preview directory
 %% @spec media_preview(#context) -> filename()
 media_preview(#context{host=Host}) ->
-    filename:join([code:lib_dir(zotonic, priv), "sites", Host, "files", "preview"]).
+    filename:join([z_utils:lib_dir(priv), "sites", Host, "files", "preview"]).
 
 %% @doc Return the path to the media archive directory
 %% @spec media_archive(#context) -> filename()
 media_archive(#context{host=Host}) ->
-    filename:join([code:lib_dir(zotonic, priv), "sites", Host, "files", "archive"]).
+    filename:join([z_utils:lib_dir(priv), "sites", Host, "files", "archive"]).

@@ -157,7 +157,7 @@ reload_module(M) ->
 %% @doc Reload all modules from the zotonic directory or subdirectories.  Return a list of modules reloaded. Empty list when nothing changed.
 %% @spec reload_all() -> [Result]
 reload_loaded_modules() ->
-	Dir = code:lib_dir(zotonic),
+	Dir = z_utils:lib_dir(),
 	Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
 	[reload_module(M) || {M,Path} <- Modules, module_changed(M,Path)].
 	
