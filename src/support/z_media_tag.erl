@@ -88,14 +88,9 @@ tag([], _Options, _Context) ->
 tag(Id, Options, Context) when is_integer(Id) ->
     tag(m_media:get(Id, Context), Options, Context);
 tag([{_Prop, _Value}|_] = Props, Options, Context) ->
-    case z_convert:to_list(proplists:get_value(filename, Props)) of
-        None when None == undefined; None == <<>>; None == [] -> 
-            case z_notifier:first({media_stillimage, Props}, Context) of
-                {ok, Filename} -> tag1(Props, Filename, Options, Context);
-                _ -> {ok, []}
-            end;
-        Filename -> 
-            tag1(Props, Filename, Options, Context)
+    case mediaprops_filename(Props, Context) of
+        [] -> {ok, []};
+        Filename -> tag1(Props, Filename, Options, Context)
     end;
 tag(Filename, Options, Context) when is_binary(Filename) ->
     tag(binary_to_list(Filename), Options, Context);
@@ -120,6 +115,21 @@ tag(Filename, Options, Context) when is_list(Filename) ->
                     end,
         {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])}.
 
+
+	mediaprops_filename(Props, Context) ->
+	    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+			[] ->
+		    	case z_convert:to_list(proplists:get_value(filename, Props)) of
+		        	[] -> 
+		            	case z_notifier:first({media_stillimage, Props}, Context) of
+			                {ok, Filename} -> Filename;
+							_ -> []
+						end;
+					Filename -> Filename
+				end;
+			Filename -> Filename
+		end.
+			
 
 %% @doc Give the filepath for the filename being served.
 %% @todo Ensure the file is really in the given directory (ie. no ..'s)

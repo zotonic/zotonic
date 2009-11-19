@@ -38,7 +38,8 @@
     insert_file/2,
     insert_file/3,
     replace_file/3,
-    replace_file/4
+    replace_file/4,
+	save_preview/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -298,3 +299,74 @@ add_medium_info(File, Props, Context) ->
     end,
     PropsMime.
 
+
+%% @doc Save a preview for a medium record. The data is saved to a file in the archive directory.
+save_preview(RscId, Data, Mime, Context) ->
+	case z_acl:rsc_editable(RscId, Context) of
+    	true ->
+			Filename = data2filepath(RscId, Data, z_media_identify:extension(Mime)),
+			{OldPreviewFilename, OldIsDeletablePreview} = z_db:q_row("select preview_filename, is_deletable_preview from medium where id = $1", [RscId], Context),
+			case z_convert:to_list(OldPreviewFilename) of
+				Filename -> 
+					ok;
+				OldFile ->
+					FileUnique = make_preview_unique(Filename, Context),
+					FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
+					ok = filelib:ensure_dir(FileUniqueAbs),
+					ok = file:write_file(FileUniqueAbs, Data),
+					
+					try
+						{ok, MediaInfo} = z_media_identify:identify(FileUniqueAbs, Context),
+						{width, Width} = proplists:lookup(width, MediaInfo),
+						{height, Height} = proplists:lookup(height, MediaInfo),
+					
+						UpdateProps = [
+							{preview_filename, FileUnique},
+							{preview_width, Width},
+							{preview_height, Height},
+							{is_deletable_preview, true}
+						],
+						{ok,1} = z_db:update(medium, RscId, UpdateProps, Context),
+						z_depcache:flush({medium, RscId}, Context),
+						
+						case {OldIsDeletablePreview, OldFile} of 
+							{_,[]} -> ok;
+							{false,_} -> ok;
+							{true,_} ->
+								OldFileAbs = z_media_archive:abspath(OldFile, Context),
+								case filelib:is_file(OldFileAbs) of
+									true -> 
+										file:delete(OldFileAbs),
+										z_db:q("insert into medium_deleted (filename) values ($1)", [OldFile]);
+									false -> ok
+								end
+						end,
+						{ok, FileUnique}
+					catch 
+						Error -> 
+							file:delete(FileUniqueAbs), 
+							Error
+					end
+			end;
+		false ->
+			{error, eacces}
+	end.
+
+	data2filepath(RscId, Data, Extension) ->
+		<<A:8, B:8, Rest/binary>> = crypto:sha(Data),
+		filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), 
+						integer_to_list(RscId) ++ [$-|mochihex:to_hex(Rest)] ++ Extension ]).
+
+	make_preview_unique(Filename, Context) ->
+		case filelib:is_file(z_media_archive:abspath(Filename, Context)) of
+			false -> 
+				Filename;
+			true ->
+				Dirname = filename:dirname(Filename),
+				Basename = filename:basename(Filename),
+				Rootname = filename:rootname(Basename),
+				Rootname1 = Rootname ++ [$-|z_ids:identifier()],
+				Filename1 = filename:join([Dirname, Rootname1 ++ filename:extension(Basename)]),
+				make_preview_unique(Filename1, Context)
+		end.
+		

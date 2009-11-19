@@ -77,8 +77,8 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 
                     case m_media:get(Id, Context) of
                         undefined ->
-                            %% Will change
                             ok = m_media:replace(Id, MediaProps, Context),
+							preview_create(Id, MediaProps, Context),
                             true;
                         OldMediaProps ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
@@ -91,6 +91,7 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
                                 false -> 
                                     %% Changed, update the medium record
                                     ok = m_media:replace(Id, MediaProps, Context),
+									preview_create(Id, MediaProps, Context),
                                     true
                             end
                     end
@@ -181,6 +182,7 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
     
             case z_db:transaction(F, Context) of
                 {ok, MediaId} ->
+					spawn(fun() -> preview_create(MediaId, Props, Context) end),
                     ContextRedirect = case SubjectId of
                         undefined ->
                             case Stay of
@@ -288,3 +290,32 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+%% Fetch or create a preview for the movie
+preview_create(MediaId, InsertProps, Context) ->
+	case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
+		"youtube" -> 
+			spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
+		_ -> nop
+	end.
+
+% @doc Fetch the preview image of a youtube video. The preview is located at: http://img.youtube.com/vi/[code]/0.jpg
+% @todo Make this more robust wrt http errors.
+preview_youtube(MediaId, InsertProps, Context) ->
+	case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
+		[] -> nop;
+		Embed ->
+			case re:run(Embed, "youtube\\.com/v/([^\"'&]+)", [{capture,[1],list}]) of
+				{match, [Code]} ->
+					Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
+					case http:request(Url) of
+						{ok, {_StatusLine, _Header, Data}} ->
+							%% Received the preview image, move it to a file.
+							m_media:save_preview(MediaId, Data, "image/jpeg", Context);
+						{error, _Reason} ->
+							%% Too bad - no preview available - ignore for now (see todo above)
+							nop
+					end;
+				_ ->
+					nop
+			end
+	end.

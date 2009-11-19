@@ -35,6 +35,8 @@ ensure_started(App) ->
 start(_Type, _StartArgs) ->
     ensure_started(crypto),
     ensure_started(ssl),
+	ensure_started(inets),
+	inets:start(httpc,[{profile,zotonic}]),
     zotonic_deps:ensure(),
     zotonic_sup:start_link().
 
