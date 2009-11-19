@@ -24,6 +24,7 @@
 %% interface functions
 -export([
     transaction/2,
+    transaction_clear/1,
     set/3,
     get/2,
     get_parameter/2,
@@ -78,6 +79,13 @@ transaction(Function, #context{dbc=undefined} = Context) ->
 transaction(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
     Function(Context).
+
+%% @doc Clear any transaction in the context, useful when starting a thread with this context.
+transaction_clear(#context{dbc=undefined} = Context) ->
+	Context;
+transaction_clear(Context) ->
+	Context#context{dbc=undefined}.
+	
 
 
 %% @doc Simple get/set functions for db property lists
