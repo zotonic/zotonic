@@ -173,12 +173,13 @@ hostname_port(Context) ->
     end.
 
 
-%% @doc Make the context safe to use in a async message
+%% @doc Make the context safe to use in a async message. This removes buffers and the db transaction.
 prune_for_async(#context{} = Context) ->
     #context{
         wm_reqdata=Context#context.wm_reqdata, 
         host=Context#context.host, 
-        acl=Context#context.acl, 
+		user_id=Context#context.user_id,
+        acl=Context#context.acl,
         props=Context#context.props,
         depcache=Context#context.depcache,
         notifier=Context#context.notifier,
