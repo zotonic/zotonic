@@ -82,7 +82,6 @@ stop(Pid) ->
 ping(Pid) ->
     gen_server:cast(Pid, ping).
 
-
 get_attach_state(Pid) ->
     try
         gen_server:call(Pid, get_attach_state)
@@ -90,15 +89,23 @@ get_attach_state(Pid) ->
         error 
     end.
         
+set(Key, Value, #context{page_pid=Pid}) ->
+	set(Key, Value, Pid);
 set(Key, Value, Pid) ->
     gen_server:cast(Pid, {set, Key, Value}).
 
+get(Key, #context{page_pid=Pid}) ->
+	get(Key, Pid);
 get(Key, Pid) ->
     gen_server:call(Pid, {get, Key}).
 
+incr(Key, Value, #context{page_pid=Pid}) ->
+	incr(Key, Value, Pid);
 incr(Key, Value, Pid) ->
     gen_server:call(Pid, {incr, Key, Value}).
 
+append(Key, Value, #context{page_pid=Pid}) ->
+    append(Key, Value, Pid);
 append(Key, Value, Pid) ->
     gen_server:cast(Pid, {append, Key, Value}).
 
