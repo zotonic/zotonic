@@ -76,12 +76,19 @@ stop(Pid) ->
         error 
     end.
 
+%% Set, get or increment session state variables.
+set(Key, Value, #context{session_pid=Pid}) ->
+	set(Key, Value, Pid);
 set(Key, Value, Pid) ->
     gen_server:cast(Pid, {set, Key, Value}).
 
+get(Key, #context{session_pid=Pid}) ->
+	get(Key, Pid);
 get(Key, Pid) ->
     gen_server:call(Pid, {get, Key}).
 
+incr(Key, Value, #context{session_pid=Pid}) ->
+	incr(Key, Value, Pid);
 incr(Key, Value, Pid) ->
     gen_server:call(Pid, {incr, Key, Value}).
 
