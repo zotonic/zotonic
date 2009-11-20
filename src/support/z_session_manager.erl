@@ -182,6 +182,7 @@ ensure_session1(S, P, Context, State) when S == undefined orelse P == error ->
     Context1  = set_session_id(SessionId, Context),
     State1    = store_session_pid(SessionId, Pid, State),
     Context2  = Context1#context{session_pid = Pid},
+	z_notifier:notify(session_init, Context2),
     {Pid, Context2, State1};
 ensure_session1(_SessionId, Pid, Context, State) ->
     z_session:keepalive(Context#context.page_pid, Pid),
