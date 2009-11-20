@@ -44,7 +44,7 @@ start_link(SiteProps) ->
     Args1 = [{context, Context} | SiteProps],
     Name = z_utils:name_for_host(?MODULE, Host),
     Result = supervisor:start_link({local, Name}, ?MODULE, Args1),
-    z_notifier:notify({module_ready}, Context),
+    z_notifier:notify(module_ready, Context),
     Result.
 
 
@@ -78,7 +78,7 @@ upgrade(Context) ->
                 z_notifier:notify({module_deactivate, Id}, Context), 
                 ok 
             end, ok, Kill),
-    z_notifier:notify({module_ready}, Context),
+    z_notifier:notify(module_ready, Context),
     ok.
 
 
