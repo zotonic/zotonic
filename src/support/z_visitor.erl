@@ -78,17 +78,23 @@ associate_session(_Pid, _SessionPid) ->
 
 %% @doc Set a property of the visitor information
 %% @spec set(Pid, Key, Value) -> void()
+set(Key, Value, #context{visitor_pid=Pid}) ->
+	set(Key, Value, Pid);
 set(Key, Value, Pid) ->
     gen_server:cast(Pid, {set, Key, Value}).
 
 %% @doc Get a property from the visitor information
-%% @spec get(Pid, Key) -> term()
+%% @spec get(Key, Pid) -> term()
+get(Key, #context{visitor_pid=Pid}) ->
+	get(Key, Pid);
 get(Key, Pid) ->
     gen_server:call(Pid, {get, Key}).
 
 
 %% @doc Force the visitor to have an id, return the id.
 %% @spec get_id(Pid) -> integer()
+ensure_visitor_id(#context{visitor_pid=Pid}) ->
+	ensure_visitor_id(Pid);
 ensure_visitor_id(Pid) ->
     gen_server:call(Pid, ensure_visitor_id).
 
