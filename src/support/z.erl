@@ -54,7 +54,7 @@ flush() ->
 flush(Context) ->
    	z_depcache:flush(Context),
    	z_dispatcher:reload(Context),
-   	n({module_ready}, Context).
+   	n(module_ready, Context).
 
 %% @doc Full restart of Zotonic
 restart() ->

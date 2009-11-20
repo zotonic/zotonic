@@ -106,7 +106,7 @@ reload(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'reload'),
     z_sites_sup:update_dispatchinfo().
 
-reload({module_ready}, Context) ->
+reload(module_ready, Context) ->
     reload(Context).
 
 

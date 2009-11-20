@@ -54,10 +54,10 @@ start_link(Args) when is_list(Args) ->
 
 
 reload(Context) ->
-	z_event:notify(development_reload, Context).
+	z_notifier:notify(development_reload, Context).
 
 make(Context) ->
-	z_event:notify(development_make, Context).
+	z_notifier:notify(development_make, Context).
 
 
 %%====================================================================

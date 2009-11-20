@@ -52,7 +52,7 @@ start_link(SiteProps) ->
     
 %% @doc Reindex the list of all scomps, etc for the site in the context.
 reindex(Context) ->
-    gen_server:cast(Context#context.module_indexer, module_ready).
+    gen_server:cast(Context#context.module_indexer, {module_ready, Context}).
 
 
 %% @doc Find a scomp, validator etc.
@@ -130,7 +130,7 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Scan for all scomps etc. for the context given.
-handle_cast({{module_ready}, _NotifyContext}, State) ->
+handle_cast({module_ready, _NotifyContext}, State) ->
     Scanned = scan(State#state.context),
     State1 = State#state{
         scomps     = proplists:get_value(scomp, Scanned),
