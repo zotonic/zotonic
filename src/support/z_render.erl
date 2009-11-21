@@ -47,8 +47,11 @@
 	set_value/3,
 	
 	dialog/4,
+	dialog_close/1,
+
 	growl/2,
 	growl_error/2,
+	growl/4,
 	
 	make_postback/6,
 	make_postback_info/6,
@@ -235,11 +238,18 @@ dialog(Title, Template, Vars, Context) ->
     {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
     z_render:wire({dialog, [{title, Title}, {text, Html}]}, Context1).
 
+dialog_close(Context) ->
+	z_render:wire({dialog_close, []}, Context).
+
 growl(Text, Context) ->
     z_render:wire({growl, [{text, Text}]}, Context).
 
 growl_error(Text, Context) ->
     z_render:wire({growl, [{text, Text}, {type, "error"}]}, Context).
+
+growl(Text, Type, Stay, Context) ->
+    z_render:wire({growl, [{text, Text}, {type, Type}, {stay, Stay}]}, Context).
+
 
 
 %%% POSTBACK ENCODING %%%

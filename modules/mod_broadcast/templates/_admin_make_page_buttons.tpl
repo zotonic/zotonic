@@ -1,0 +1,1 @@
+{% if m.acl.is_admin %}{% button class="right" text="Broadcast Message" action={dialog_broadcast} %}{% endif %}
