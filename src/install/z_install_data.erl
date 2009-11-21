@@ -69,6 +69,7 @@ install_modules(C) ->
         "mod_search",
         "mod_video_embed",
         "mod_atom_feed",
+		"mod_broadcast",
         
         "mod_seo",
         "mod_seo_google",
