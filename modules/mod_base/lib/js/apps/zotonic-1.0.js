@@ -24,7 +24,8 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 ---------------------------------------------------------- */
 
 var z_comet_is_running		= false;
-var z_is_in_postback		= false;
+var z_starting_postback		= false;
+var z_spinner_show_ct		= 0;
 var z_postbacks				= [];
 var z_default_form_postback = false;
 var z_input_updater			= false;
@@ -46,20 +47,6 @@ function z_dialog_close()
 {
 	$('.dialog-close').click();
 }
-
-$(function()
-{
-	$(window).bind('ajaxStart', function()
-	{
-		$(document.body).addClass('wait');
-	});
-
-	$(window).bind('ajaxStop', function()
-	{
-		$(document.body).removeClass('wait');
-	});
-});
-
 
 /* Growl messages
 ---------------------------------------------------------- */
@@ -93,15 +80,17 @@ function z_growl_close()
 
 function z_postback_loop() 
 {
-	if (!z_is_in_postback && z_postbacks.length != 0) 
+	if (!z_starting_postback && z_spinner_show_ct == 0 && z_postbacks.length > 0) 
 	{
-		// For now, allow only a single postback at a time.
-		z_is_in_postback++;
+		// Send only a single postback at a time.
+		z_starting_postback = true;
 
 		var o = z_postbacks.shift();
 		z_do_postback(o.triggerID, o.postback, o.extraParams);
 
-		setTimeout("z_postback_loop()", 2);
+		z_starting_postback = false;
+
+		setTimeout("z_postback_loop()", 10);
 	}
 	else
 	{
@@ -162,7 +151,7 @@ function z_do_postback(triggerID, postback, extraParams)
 
 function z_ajax(params)
 {
-	z_start_spinner();	
+	z_start_spinner();
 
 	$.ajax({ 
 		url:		'/postback',
@@ -171,7 +160,6 @@ function z_ajax(params)
 		dataType:	'text',
 		success: function(data, textStatus) 
 		{
-			z_is_in_postback--;
 			z_stop_spinner();
 			
 			try 
@@ -187,7 +175,6 @@ function z_ajax(params)
 		},
 		error: function(xmlHttpRequest, textStatus, errorThrown) 
 		{
-			z_is_in_postback--;
 			z_stop_spinner();
 			
 			$.misc.error("FAIL: " + textStatus);
@@ -203,7 +190,7 @@ function z_comet_start()
 {
 	if (!z_comet_is_running)
 	{
-		setTimeout("z_comet();", 1000);
+		setTimeout("z_comet();", 2000);
 		z_comet_is_running = true;
 	}
 }
@@ -227,8 +214,7 @@ function z_comet()
 				alert("Error evaluating Comet return value: " + data);
 				alert(e);
 			}
-		
-			setTimeout("z_comet();", 10);
+			setTimeout("z_comet();", 1000);
 		},
 		error: function(xmlHttpRequest, textStatus, errorThrown) 
 		{
@@ -248,22 +234,24 @@ function z_is_enter_key(event)
 }
 
 
-/* Spinner, showen when waiting for a postback
+/* Spinner, show when waiting for a postback
 ---------------------------------------------------------- */
 
 function z_start_spinner()
 {
-	if(z_is_in_postback > 0)
+	if (z_spinner_show_ct++ == 0)
 	{
+		$(document.body).addClass('wait');
 		$('#spinner').fadeIn(100);
 	}
 }
 
 function z_stop_spinner() 
 {
-	if(z_is_in_postback == 0)
+	if (--z_spinner_show_ct == 0)
 	{
 		$('#spinner').fadeOut(100);
+		$(document.body).removeClass('wait');
 	}
 }
 

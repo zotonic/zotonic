@@ -38,6 +38,8 @@
     ensure_session/1, 
     stop_session/1, 
     rename_session/1, 
+	add_script/1,
+	add_script/2,
     count/1, 
     dump/1, 
     tick/1
@@ -72,17 +74,26 @@ stop_session(#context{session_manager=SessionManager} = Context) ->
 rename_session(#context{session_manager=SessionManager} = Context) ->
     gen_server:call(SessionManager, {rename_session, Context}).
 
+%% @spec add_script(Context) -> none()
+%% @doc Send the scripts in the context to all pages of all sessions
+add_script(#context{session_manager=SessionManager} = Context) ->
+	Script = z_script:get_script(Context),
+    gen_server:cast(SessionManager, {add_script, Script}).
+
+%% @spec add_script(Script::io_list(), Context) -> none()
+%% @doc Send a script to all pages of all sessions
+add_script(Script, #context{session_manager=SessionManager}) ->
+    gen_server:cast(SessionManager, {add_script, Script}).
+
 %% @spec count(Context) -> Int
 %% @doc Return the number of open sessions
 count(#context{session_manager=SessionManager}) ->
     gen_server:call(SessionManager, count).
 
-
 %% @spec dump(Context) -> void()
 %% @doc Dump all session to stdout
 dump(#context{session_manager=SessionManager}) ->
     gen_server:call(SessionManager, dump).
-
 
 %% @spec tick(pid()) -> void()
 %% @doc Periodic tick used for cleaning up sessions
@@ -162,6 +173,11 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
 handle_info(_Msg, State) -> 
     {noreply, State}.
 
+%% Add a script to all pages of all sessions
+handle_cast({add_script, Script}, State) ->
+    SesPids = dict:fetch_keys(State#session_srv.pid2key),
+    lists:foreach(fun(Pid) -> z_session:add_script(Script, Pid) end, SesPids),
+	{noreply, State};
 
 handle_cast(tick, State) ->
     Tick    = z_utils:now(),

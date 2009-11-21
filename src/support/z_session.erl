@@ -92,6 +92,12 @@ incr(Key, Value, #context{session_pid=Pid}) ->
 incr(Key, Value, Pid) ->
     gen_server:call(Pid, {incr, Key, Value}).
 
+%% @spec add_script(Script::io_list(), PageId::list(), Pid::pid()) -> none()
+%% @doc Send a script to all session pages
+add_script(Script, #context{session_pid=Pid}) ->
+	add_script(Script, Pid);
+add_script(Script, Pid) ->
+    gen_server:cast(Pid, {add_script, Script}).
 
 %% @doc Reset the expire counter of the session, called from the page process when comet attaches
 keepalive(Pid) ->
@@ -107,12 +113,6 @@ keepalive(PageId, Pid) ->
 %%      adjust the expiration of the page.  Returns a new context with the page id set.
 ensure_page_session(Context, Pid) ->
     gen_server:call(Pid, {ensure_page_session, Context}).
-
-
-%% @spec add_script(Script::io_list(), PageId::list(), Pid::pid()) -> none()
-%% @doc Send a script to all session pages
-add_script(Script, Pid) ->
-    gen_server:cast(Pid, {add_script, Script}).
 
 
 %% @spec check_expire(Now::integer(), Pid::pid()) -> none()
