@@ -28,8 +28,8 @@ varies(_Params, _Context) -> undefined.
 terminate(_State, _Context) -> ok.
 
 render(Params, _Vars, Context, _State) ->
-    Id        = proplists:get_value(id, Params, <<>>),
-    Type      = proplists:get_value(type,Params,click),
+    Id        = proplists:get_value(id, Params, 'window'),
+    Type      = proplists:get_value(type,Params, case Id of 'window' -> inline; _ -> click end),
     TargetId  = proplists:get_value(target,Params,Id),
     Actions   = proplists:get_all_values(action,Params),
     Postback  = proplists:get_value(postback,Params),

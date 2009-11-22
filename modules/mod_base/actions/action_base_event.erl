@@ -54,16 +54,20 @@ render_action(TriggerId, TargetId, Args, Context) ->
                         _  -> [SubmitPostback, <<".data('z_submit_action', \"">>, z_utils:js_escape(ActionsJS), <<"\");\n">>]
                     end;
 
-                %% Should check this against the wire() function.
                 EventType == undefined orelse EventType == "none" orelse
-                EventType == inline orelse EventType == "inline" ->
+                EventType == inline orelse EventType == "inline" orelse
+				EventType == load orelse EventType == "load" ->
                     [
                         PostbackMsgJS, ActionsJS
                     ];
                     
         		true ->
         		    [
-    	                <<"$('#">>, TriggerId, <<"').bind('">>, z_convert:to_list(EventType), <<"', ">>,
+						case TriggerId of
+							window -> <<"$(window)">>;
+							_ -> [<<"$('#">>, TriggerId, $', $)]
+						end,
+    	                <<".bind('">>, z_convert:to_list(EventType), <<"', ">>,
         	            <<"function(event) { ">>, PostbackMsgJS, ActionsJS, <<" return z_opt_cancel(this); } );\n">>
         	        ]
         	end,
