@@ -55,7 +55,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
                     end;
 
                 %% Should check this against the wire() function.
-                EventType == undefined orelse EventType == "none" ->
+                EventType == undefined orelse EventType == "none" orelse
+                EventType == inline orelse EventType == "inline" ->
                     [
                         PostbackMsgJS, ActionsJS
                     ];
