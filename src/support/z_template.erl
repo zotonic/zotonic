@@ -56,8 +56,9 @@ reset(Context) ->
     gen_server:cast(Context#context.template_server, reset).
 
 
-%% @spec render(File, Variables, Context) -> iolist()
+%% @spec render(File, Variables, Context) -> list()
 %% @doc Render a template.  First requests the template module from the template server, then renders the template.
+%% The resulting list contains the rendered template and scomp contexts.  Use render_to_iolist/3 to get a iolist().
 render(File, Variables, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
