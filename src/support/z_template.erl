@@ -139,7 +139,7 @@ is_template_module(Module) ->
 %%                     {stop, Reason}
 %% @doc Initialize the template server, handles template compiles and rendering.
 init(SiteProps) ->
-    {ok, #state{reset_counter=0, host=proplists:get_value(host, SiteProps)}}.
+    {ok, #state{reset_counter=z_utils:now_msec(), host=proplists:get_value(host, SiteProps)}}.
 
 
 %% @spec check_modified(File) -> {ok, Module} | {error, Reason}
