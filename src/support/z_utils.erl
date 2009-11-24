@@ -26,6 +26,7 @@
 	lib_dir/0,
 	lib_dir/1,
     now/0,
+    now_msec/0,
 	get_seconds/0,
 	f/1,
 	f/2,
@@ -87,6 +88,10 @@ lib_dir(Dir) ->
 now() ->
     {M,S,_M} = erlang:now(),
     M*1000 + S.
+
+now_msec() ->
+    {M,S,Micro} = erlang:now(),
+    M*1000000 + S*1000 + Micro div 1000.
 
 %% @doc Return the current universal time in seconds
 get_seconds() -> calendar:datetime_to_gregorian_seconds(calendar:universal_time()).
