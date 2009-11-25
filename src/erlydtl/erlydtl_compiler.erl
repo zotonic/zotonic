@@ -102,6 +102,9 @@ compile(File, Module, Options) ->
                 Err ->
                     Err
             end;
+        {error, {ErrLineCol, ErrModule, ["syntax error before: " = ErrMsg, [$[,Text,$]]]}} when is_list(Text) ->
+			Text1 = [ list_to_integer(C) || C <- Text, is_list(C) ],
+            {error, {ErrLineCol, ErrModule, ErrMsg ++ Text1}};
         {error, {ErrLineCol, ErrModule, ErrMsg}} ->
             {error, {ErrLineCol, ErrModule, lists:flatten(ErrMsg)}};
         Err ->
