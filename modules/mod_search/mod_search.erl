@@ -118,6 +118,30 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 
+%% @doc Return the rsc records that have similar objects
+search({match_objects, [{id,Id}]}, _OffsetLimit, Context) ->
+	ObjectIds = m_edge:objects(Id, Context),
+	MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds ],
+	TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+	?DEBUG(TsQuery),
+	case TsQuery of
+		[] ->
+			#search_result{};
+		_ ->
+		    #search_sql{
+		        select="r.id, ts_rank(pivot_rtsv, query) AS rank",
+		        from="rsc r, to_tsquery($1) query",
+		        where=" query @@ pivot_rtsv and id <> $2",
+		        order="rank desc",
+		        args=[TsQuery, Id],
+		        tables=[{rsc,"r"}]
+		    }
+	end;
+search({match_objects, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
+	case search({match_objects, [{id,Id}]}, OffsetLimit, Context) of
+		#search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
+		Result -> Result
+	end;
 
 %% @doc Return a list of resource ids, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> #search_sql{}
