@@ -1,7 +1,5 @@
 {% if m.rsc[id].is_a.person %}
 
-{% sortable id="sort-user-credentials" %}
-
 <div class="item-wrapper" id="sort-user-credentials">
 	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
 		<span class="title">Username / password</span>
