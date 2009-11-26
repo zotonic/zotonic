@@ -26,6 +26,7 @@
     is_auth/1,
     is_auth_recent/1,
     output_logon/1,
+    output_logon/2,
     
     logon_pw/3,
     logoff/1,
@@ -60,9 +61,10 @@ logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, Id} ->
             Context1 = z_acl:logon(Id, Context),
-            z_context:set_session(auth_user_id, Id, Context1),
-            z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
-            {true, Context1};
+			Context2 = z_session_manager:rename_session(Context1),
+            z_context:set_session(auth_user_id, Id, Context2),
+            z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+            {true, Context2};
         {error, _Reason} ->
             {false, Context}
     end.
@@ -159,16 +161,27 @@ wm_output_logon(Context) ->
 %% @doc Render the logon screen to the reqdata of the context.
 %% @spec output_logon(Context) -> LogonContext
 output_logon(Context) ->
-    Html = z_template:render("admin_logon.tpl", [], Context),
+	output_logon(Context, []).
+output_logon(Context, Vars) ->
+    RD1 = z_context:get_reqdata(Context),
+	Redirect = case z_context:get_q("redirect", Context) of
+		undefined -> wrq:raw_path(RD1);
+		Redir -> Redir
+	end,
+	Vars1 = [
+		{zp_username, z_context:get_q("zp-username", Context)},
+		{redirect, Redirect} | Vars
+	],
+    Html = z_template:render("admin_logon.tpl", Vars1, Context),
     {Data, ContextOut} = z_context:output(Html, Context),
-    RD1 = z_context:get_reqdata(ContextOut),
     RD2 = wrq:append_to_resp_body(Data, RD1),
     RD3 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD2),
     z_context:set_reqdata(RD3, ContextOut).
 
 
 
-%% @doc Handle logon events. When successful then reload the current page
+%% @doc Handle logon events. When successful then reload the current page. Can be used as a postback
+%% from a logon form.
 %% @spec event(Event, Context) -> NewContext
 event({submit, logon, _TriggerId, _TargetId}, Context) ->
     Context1 = z_session_manager:rename_session(Context),
