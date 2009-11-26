@@ -486,6 +486,8 @@ vsplit_in(L, N) ->
 	
 	vsplit_in(1, L, _, Acc) ->
 		lists:reverse([L|Acc]);
+	vsplit_in(N, [], RunLength, Acc) ->
+		vsplit_in(N-1, [], RunLength, [[]|Acc]);
 	vsplit_in(N, L, RunLength, Acc) ->
 		{Row,Rest} = lists:split(RunLength, L),
 		vsplit_in(N-1, Rest, RunLength, [Row|Acc]).
