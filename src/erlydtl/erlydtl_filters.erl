@@ -193,6 +193,13 @@ date(Input, _FormatStr, _Context) when is_list(Input) ->
     io:format("Unexpected date parameter : ~p~n", [Input]),
     "".
 
+element(List, N, _Context) when is_list(List) ->
+	[ element(N,Tuple) || Tuple <- List, is_tuple(Tuple) ];
+element(Tuple, N, _Context) when is_tuple(Tuple) ->
+	element(N, Tuple);
+element(_Value, _N, _Context) ->
+	undefined.
+
 escapejs(undefined, _Context) ->
     <<>>;
 escapejs(Input, _Context) when is_binary(Input) ->
