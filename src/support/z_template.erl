@@ -76,6 +76,10 @@ render(File, Variables, Context) ->
                             ?ERROR("Error rendering template: ~p (~p)", [File, Reason]),
                             throw({error, {template_rendering_error, File, Reason}})
                      end;
+                {error, {{Line,Col}, _CompilerModule, Error}} ->
+                    Error1 = try lists:flatten(Error) catch _:_ -> Error end,
+                    ?ERROR("Error compiling template: ~s (~p: ~p)", [File, {Line,Col}, Error1]),
+                    throw({error, {template_compile_error, File, {Line,Col}, Error1}});
                 {error, Reason} ->
                     Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
                     ?ERROR("Error compiling template: ~s (~p)", [File, Reason1]),
@@ -139,7 +143,7 @@ is_template_module(Module) ->
 %%                     {stop, Reason}
 %% @doc Initialize the template server, handles template compiles and rendering.
 init(SiteProps) ->
-    {ok, #state{reset_counter=0, host=proplists:get_value(host, SiteProps)}}.
+    {ok, #state{reset_counter=z_utils:now_msec(), host=proplists:get_value(host, SiteProps)}}.
 
 
 %% @spec check_modified(File) -> {ok, Module} | {error, Reason}

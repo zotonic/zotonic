@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} admin edit resource {% endblock %}
+{% block title %}Edit “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block tinymce %}
 <script type="text/javascript" src="/lib/js/modules/tinymce/tiny_mce.js"></script>

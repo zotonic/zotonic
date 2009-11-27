@@ -48,6 +48,7 @@
 	is_visible/2, is_editable/2, is_ingroup/2, is_me/2, 
 	is_cat/3,
 	is_a/2,
+	is_a_id/2,
 	is_a/3,
 	
 	p/3,
@@ -195,7 +196,7 @@ insert(Props, Context) ->
     m_rsc_update:insert(Props, Context).
 
 %% @doc Delete a resource
-%% @spec delete(Props, Context) -> void()
+%% @spec delete(Props, Context) -> ok | {error, Reason}
 delete(Id, Context) when is_integer(Id) ->
     m_rsc_update:delete(Id, Context).
 
@@ -509,6 +510,12 @@ is_cat(Id, Cat, Context) ->
 is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
+
+%% @doc Return the categories and the inherited categories of the resource. Returns a list with category ids
+%% @spec is_a(int(), Context) -> list()
+is_a_id(Id, Context) ->
+    RscCatId = p(Id, category_id, Context),
+	[ RscCatId | m_category:get_path(RscCatId, Context)].
 
 %% @doc Check if the resource is in a categorie.
 %% @spec is_a(int(), atom(), Context) -> bool()

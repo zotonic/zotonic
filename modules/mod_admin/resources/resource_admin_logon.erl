@@ -37,12 +37,9 @@ html(Context) ->
     html(Context, []).
 
 html(Context, Vars) ->
-    Html = z_template:render("admin_logon.tpl", Vars, Context),
-    {Data, ContextOut} = z_context:output(Html, Context),
-    RD1 = z_context:get_reqdata(ContextOut),
-    RD2 = wrq:append_to_resp_body(Data, RD1),
-    RD3 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD2),
-    {{halt, 401}, RD3, Context}.
+	ContextLogon = z_auth:output_logon(Context, Vars),
+    ReqData = z_context:get_reqdata(ContextLogon),
+    {{halt, 401}, ReqData, Context}.
 
 
 process_post(ReqData, Context) ->
@@ -53,11 +50,19 @@ process_post(ReqData, Context) ->
 
     case z_auth:logon_pw(Username, Password, Context2) of
         {true, ContextLogon} -> 
-            Url = z_dispatcher:url_for(admin, ContextLogon),
-            {{halt, 302}, wrq:set_resp_header("Location", Url, ReqData), ContextLogon};
-        
+			Url = case z_context:get_q("redirect", ContextLogon, "") of
+				"" ->  z_dispatcher:url_for(admin, ContextLogon);
+				Redirect -> Redirect
+			end,
+			UrlAbs = z_context:abs_url(Url, ContextLogon),
+			ReqData1 = z_context:get_reqdata(ContextLogon),
+            {{halt, 302}, wrq:set_resp_header("Location", UrlAbs, ReqData1), ContextLogon};
         {_, ContextLogon} ->
-            html(ContextLogon, [{error, invalid_credentials}])
+			Vars = [
+				{error, invalid_credentials},
+				{redirect, z_context:get_q("redirect", ContextLogon, "")}
+			],
+            html(ContextLogon, Vars)
     end.
 
 
