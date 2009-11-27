@@ -30,12 +30,17 @@
     poll/1,
     pivot/2,
 
+    get_pivot_title/1,
+    get_pivot_title/2,
+
 	insert_task/3,
 	insert_task/4,
 	insert_task/5,
     
     pivot_resource/2,
-    pg_lang/1
+    pg_lang/1,
+
+    define_custom_pivot/3
 ]).
 
 -include("zotonic.hrl").
@@ -278,6 +283,7 @@ pivot_resource(Id, Context) ->
             ", pivot_title     = $",integer_to_list(N+12),
             " where id = $",integer_to_list(N+13)
         ]),
+
     SqlArgs = ArgsD ++ [
         TsvIds,
         proplists:get_value(street, R),
@@ -290,10 +296,13 @@ pivot_resource(Id, Context) ->
         proplists:get_value(gender, R),
         DateStart,
         DateEnd,
-        pivot_sort_title(R),
+        get_pivot_title(R),
         Id
     ],
-    z_db:q(Sql, SqlArgs, Context).
+    z_db:q(Sql, SqlArgs, Context),
+    Results = z_notifier:map({custom_pivot, Id}, Context),
+    [ok = update_custom_pivot(Id, Res, Context) || Res <- Results],
+    ok.
 
 
     %% Make the setweight(to_tsvector()) parts of the update statement
@@ -332,8 +341,11 @@ pivot_date(R) ->
 
 
 %% @doc Fetch the first title from the record for sorting.
-pivot_sort_title(R) ->
-    case proplists:get_value(title, R) of
+get_pivot_title(Id, Context) ->
+    get_pivot_title([{title, m_rsc:p(Id, title, Context)}]).
+
+get_pivot_title(Props) ->
+    case proplists:get_value(title, Props) of
         {trans, []} ->
             "";
         {trans, [{_, Text}|_]} ->
@@ -444,4 +456,48 @@ pg_lang(de) -> "german";
 pg_lang(fr) -> "french";
 pg_lang(_) -> "english".
 
+
+%% @doc Let a module define a custom pivot
+%% @spec define_custom_pivot(Module, columns(), Context) -> ok
+%% columns() -> [column()]
+%% column()  -> {atom colname, string colspec}
+define_custom_pivot(Module, Columns, Context) ->
+    TableName = "pivot_" ++ z_convert:to_list(Module),
+    case z_db:table_exists(TableName, Context) of
+        true ->
+            ok;
+        false ->
+            Fields = custom_columns(Columns),
+            Sql = "CREATE TABLE " ++ TableName ++ "(" ++
+                "id int NOT NULL," ++ Fields ++ ")",
+            z_db:q(lists:flatten(Sql), Context),
+            z_db:q("ALTER TABLE " ++ TableName ++ " ADD CONSTRAINT fk_" ++ TableName ++ "_id FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Context),
+            
+            Idx = ["CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON " ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")" || {K,_} <- Columns],
+            [z_db:q(Sql1, Context) || Sql1 <- Idx]
+    end,
+    ok.
+
+
+custom_columns(Cols) ->
+    custom_columns(Cols, []).
+custom_columns([{Name, Spec}], Acc) ->
+    [ z_convert:to_list(Name), " ", Spec |  Acc];
+custom_columns([{Name, Spec}|Rest], Acc) ->
+    custom_columns(Rest, [ z_convert:to_list(Name), " ", Spec |  Acc]).
+
+
+
+update_custom_pivot(_Id, none, _Context) ->
+    ok;
+update_custom_pivot(Id, {Module, Columns}, Context) ->
+    TableName = "pivot_" ++ z_convert:to_list(Module),
+    case z_db:select(TableName, Id, Context) of
+        {ok, []} ->
+            {ok, _} = z_db:insert(TableName, [{id, Id}|Columns], Context);
+        {ok, _}  ->
+            {ok, _} = z_db:update(TableName, Id, Columns, Context)
+    end,
+    ok.
+            
 

@@ -210,7 +210,7 @@ handle_call({get_wait, Key}, From, State) ->
 					%% Another process is already calculating the value, let the caller wait.
 					WaitPids = dict:store(Key, {MaxAge, [From|List]}, State1#state.wait_pids),
 					{noreply, State1#state{wait_pids=WaitPids}};
-				error ->
+				_ ->
 					%% Nobody waiting or we hit a timeout, let next requestors wait for this caller.
 					WaitPids = dict:store(Key, {State#state.now+?MAX_GET_WAIT, []}, State1#state.wait_pids),
 					{reply, undefined, State1#state{wait_pids=WaitPids}}
