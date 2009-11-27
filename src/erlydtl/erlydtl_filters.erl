@@ -278,6 +278,23 @@ format_price(Input, Context) when is_list(Input) ->
 format_price(undefined, _Context) ->
     "-".
 
+in_future({_,_,_} = Date, _Context) ->
+	{LocalDate, _} = erlang:localtime(),
+	Date > LocalDate;
+in_future({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
+	DateTime > erlang:localtime();
+in_future(_, _Context) ->
+	undefined.
+
+in_past({_,_,_} = Date, _Context) ->
+	{LocalDate, _} = erlang:localtime(),
+	Date < LocalDate;
+in_past({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
+	DateTime < erlang:localtime();
+in_past(_, _Context) ->
+	undefined.
+
+
 % default, default_if_none and default_if_undefined are directly compiled inline.
 
 is_defined(undefined, _Context) ->
