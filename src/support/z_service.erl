@@ -115,12 +115,22 @@ method(Service) ->
     string:join(string:tokens(S2, "_"), "/").
 
 %%
-%% In which Zotonic module this API call resides.
+%% In which Zotonic module this API call resides. First checks to see
+%% if a module exists which starts with 'mod_'; if this is not the
+%% case the module is just the part of the service until the first
+%% underscore.
 %% 
 module(Service) ->
     S = atom_to_list(Service),
     [M|_Rest] = string:tokens(string:substr(S, 9), "_"),
-    list_to_atom("mod_" ++ M).
+    Mod = list_to_atom("mod_" ++ M),
+    case z_module_sup:module_exists(Mod) of
+        true ->
+            Mod;
+        false ->
+            list_to_atom(M)
+    end.
+
 
 %%
 %% Which HTTP methods does this API support?
