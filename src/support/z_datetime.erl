@@ -43,7 +43,10 @@
 	next_minute/1,
 	next_second/1,
 	
-	diff/2
+	diff/2,
+
+    week_boundaries/1,
+    week_boundaries/2
 ]).
 
 
@@ -208,4 +211,28 @@ diff({{Y1,M1,D1},{H1,I1,S1}}, {{Y2,M2,D2},{H2,I2,S2}}) ->
 	{{Y1-Y2, M1-M2, D1-D2}, {H1-H2, I1-I2, S1-S2}}.
 
 
-	
+%% @doc Return the week-boundaries of a given date.
+%% WeekStart is optional, and determines on which day a week starts.
+week_boundaries(Date) ->
+    week_boundaries(Date, 1).
+
+week_boundaries({D,_T}=Date, WeekStart) ->
+    DOW = calendar:day_of_the_week(D),
+    Start = -weeknorm(DOW - WeekStart),
+    {S,_} = day_add(Date, Start),
+    {E,_} = day_add(Date, Start + 6),
+    { {S, {0,0,0}}, {E, {23,59,59}} }.
+
+weeknorm(D) when D < 0 ->
+    weeknorm(D+7);
+weeknorm(D) when D > 6 ->
+    weeknorm(D-7);
+weeknorm(D) ->
+    D.
+
+day_add(Date, 0) ->
+    Date;
+day_add(Date, Num) when Num < 0 ->
+    day_add(prev_day(Date), Num + 1);
+day_add(Date, Num) when Num > 0 ->
+    day_add(next_day(Date), Num - 1).
