@@ -39,7 +39,7 @@
 			<div class="right search">
 				<form action="/admin/overview" method="get">
 					<div class="search-wrapper">
-						<input type="text" name="qs" value="{{q.qs}}">
+						<input type="text" name="qs" value="{{q.qs|escape}}">
 					</div>
 				</form>
 			</div>
