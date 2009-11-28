@@ -255,7 +255,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, OffsetLimit, Context) when Cat 
 
 search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
     case QueryText of
-        A when A == undefined ->
+        A when A == undefined orelse A == "" orelse A == <<>> ->
             #search_sql{
                 select="r.id, 1 AS rank",
                 from="rsc r",
