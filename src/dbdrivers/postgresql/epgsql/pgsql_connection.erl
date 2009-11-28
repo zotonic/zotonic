@@ -51,10 +51,10 @@ get_parameter(C, Name) ->
     gen_fsm:sync_send_event(C, {get_parameter, to_binary(Name)}).
 
 squery(C, Sql) ->
-    gen_fsm:sync_send_event(C, {squery, Sql}).
+    gen_fsm:sync_send_event(C, {squery, Sql}, ?PGSQL_TIMEOUT).
 
 equery(C, Statement, Parameters) ->
-    gen_fsm:sync_send_event(C, {equery, Statement, Parameters}).
+    gen_fsm:sync_send_event(C, {equery, Statement, Parameters}, ?PGSQL_TIMEOUT).
 
 parse(C, Name, Sql, Types) ->
     gen_fsm:sync_send_event(C, {parse, Name, Sql, Types}).
@@ -63,7 +63,7 @@ bind(C, Statement, PortalName, Parameters) ->
     gen_fsm:sync_send_event(C, {bind, Statement, PortalName, Parameters}).
 
 execute(C, Statement, PortalName, MaxRows) ->
-    gen_fsm:sync_send_event(C, {execute, Statement, PortalName, MaxRows}).
+    gen_fsm:sync_send_event(C, {execute, Statement, PortalName, MaxRows}, ?PGSQL_TIMEOUT).
 
 describe(C, Type, Name) ->
     gen_fsm:sync_send_event(C, {describe, Type, Name}).
