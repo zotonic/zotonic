@@ -95,6 +95,25 @@ le(Input, Number, _Context) ->
         _:_ -> undefined
     end.
 
+gt(undefined, _Number, _Context) ->
+    undefined;
+gt(Input, Number, _Context) ->
+    try
+        z_convert:to_integer(Input) > z_convert:to_integer(Number)
+    catch
+        _:_ -> undefined
+    end.
+
+ge(undefined, _Number, _Context) ->
+    undefined;
+ge(Input, Number, _Context) ->
+    try
+        z_convert:to_integer(Input) >= z_convert:to_integer(Number)
+    catch
+        _:_ -> undefined
+    end.
+
+
 eq(undefined, _Number, _Context) ->
     undefined;
 eq(Input, Number, _Context) ->
