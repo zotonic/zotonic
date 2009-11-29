@@ -1,0 +1,7 @@
+[
+	{admin_mailinglist, ["admin", "mailinglists"], resource_admin_mailinglist, []},
+	{admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], resource_admin_mailinglist_recipients, []},
+	
+	{mailinglist_confirm, ["mailinglist", "confirm", confirm_key], resource_template, [{template, "mailinglist_confirm.tpl"}]},
+	{mailinglist_unsubscribe, ["mailinglist", "unsubscribe", confirm_key], resource_template, [{template, "mailinglist_unsubscribe.tpl"}]}
+].
