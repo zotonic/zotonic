@@ -71,8 +71,12 @@ m_find_value(Id, #m{value=undefined} = M, Context) ->
         undefined -> undefined;
         RId -> 
 			case z_acl:rsc_visible(Id, Context) of
-				true -> M#m{value=RId};
-				false -> undefined
+				true ->
+					M#m{value=RId};
+				false -> 
+					fun(is_a, C) -> is_a(RId, C);
+					   (_, _C) -> undefined
+					end
 			end
     end;
 m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) -> 
