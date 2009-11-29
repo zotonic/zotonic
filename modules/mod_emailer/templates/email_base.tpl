@@ -1,6 +1,9 @@
 <html>
 	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<title>{% block title %}A mail message from Zotonic{% endblock %}</title>
+		<base href="http://{{ m.site.hostname }}/" />
+		<base target="_blank" />
 	</head>
 
 	<body>
