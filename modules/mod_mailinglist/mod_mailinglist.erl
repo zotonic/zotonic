@@ -1,0 +1,238 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2009 Marc Worrell
+%% @date 2009-11-23
+%% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
+
+%% Copyright 2009 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%% 
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%% 
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+-module(mod_mailinglist).
+-author("Marc Worrell <marc@worrell.nl>").
+-behaviour(gen_server).
+
+-mod_title("Mailing list").
+-mod_description("Mailing lists. Send a page to a list of recipients.").
+-mod_prio(600).
+
+%% gen_server exports
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
+-export([start_link/1]).
+
+%% interface functions
+-export([
+	search_query/2,
+	send_message/2,
+	event/2,
+	update_scheduled_list/2
+]).
+
+-include_lib("zotonic.hrl").
+
+-record(state, {context}).
+
+
+search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
+    #search_sql{
+        select="id, email, is_enabled",
+        from="mailinglist_recipient",
+		where="mailinglist_id = $1",
+		args=[Id],
+        order="email",
+        tables=[]
+    };
+search_query(_, _) ->
+	undefined.
+
+
+%% @doc Send status messages to a recipient.
+send_message({mailinglist_message, send_goodbye, ListId, Email}, Context) ->
+	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}], Context),
+	ok;
+send_message({mailinglist_message, Message, ListId, RecipientId}, Context) ->
+	Template = case Message of
+		send_welcome -> "email_mailinglist_welcome.tpl";
+		send_confirm -> "email_mailinglist_confirm.tpl"
+	end,
+	Props = m_mailinglist:recipient_get(RecipientId, Context),
+	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
+	ok.
+
+
+%% @doc Request confirmation of canceling this mailing.
+event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, Context) ->
+	MailingId = proplists:get_value(mailinglist_id, Args),
+	case z_acl:rsc_editable(MailingId, Context) of
+		true ->
+			z_render:dialog("Confirm mailing cancelation.", "_dialog_mailing_cancel_confirm.tpl", Args, Context);
+		false ->
+			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
+	end;
+event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
+	MailingId = proplists:get_value(mailinglist_id, Args),
+	PageId = proplists:get_value(page_id, Args),
+	case z_acl:rsc_editable(MailingId, Context) of
+		true ->
+			m_mailinglist:delete_scheduled(MailingId, PageId, Context),
+			Context1 = update_scheduled_list(PageId, Context),
+			z_render:growl("The mailing has been canceled.", Context1);
+		false ->
+			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
+	end.
+
+
+%% @doc Update the list with the mailings scheduled for this page.
+update_scheduled_list(Id, Context) ->
+	Vars = [
+		{id, Id},
+		{scheduled, m_mailinglist:get_scheduled(Id, Context)}
+	],
+	Html = z_template:render("_mailinglist_scheduled.tpl", Vars, Context),
+	z_render:update("mailinglist-scheduled", Html, Context).
+
+
+	
+
+%%====================================================================
+%% API
+%%====================================================================
+%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+%% @doc Starts the server
+start_link(Args) when is_list(Args) ->
+    gen_server:start_link(?MODULE, Args, []).
+
+%%====================================================================
+%% gen_server callbacks
+%%====================================================================
+
+%% @spec init(Args) -> {ok, State} |
+%%                     {ok, State, Timeout} |
+%%                     ignore               |
+%%                     {stop, Reason}
+%% @doc Initiates the server.
+init(Args) ->
+    process_flag(trap_exit, true),
+    {context, Context} = proplists:lookup(context, Args),
+	m_mailinglist:install(Context),
+    z_notifier:observe(search_query, {?MODULE, search_query}, Context),
+    z_notifier:observe(mailinglist_message, {?MODULE, send_message}, Context),
+    z_notifier:observe(mailinglist_mailing, self(), Context),
+    timer:send_interval(180000, poll),
+	{ok, #state{context=z_context:new(Context)}}.
+	
+
+%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
+%%                                      {reply, Reply, State, Timeout} |
+%%                                      {noreply, State} |
+%%                                      {noreply, State, Timeout} |
+%%                                      {stop, Reason, Reply, State} |
+%%                                      {stop, Reason, State}
+%% Description: Handling call messages
+%% @doc Trap unknown calls
+handle_call(Message, _From, State) ->
+    {stop, {unknown_call, Message}, State}.
+
+%% @spec handle_cast(Msg, State) -> {noreply, State} |
+%%                                  {noreply, State, Timeout} |
+%%                                  {stop, Reason, State}
+%% @doc Send a mailing.
+handle_cast({{mailinglist_mailing, ListId, PageId}, SenderContext}, State) ->
+	send_mailing(ListId, PageId, SenderContext),
+	{noreply, State};
+	
+%% @doc Trap unknown casts
+handle_cast(Message, State) ->
+    {stop, {unknown_cast, Message}, State}.
+
+%% @spec handle_info(Info, State) -> {noreply, State} |
+%%                                   {noreply, State, Timeout} |
+%%                                   {stop, Reason, State}
+%% @doc Poll the database for scheduled mailings.
+handle_info(poll, State) ->
+    poll_scheduled(z_acl:sudo(State#state.context)),
+    {noreply, State};
+
+%% @doc Handling all non call/cast messages
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+%% @spec terminate(Reason, State) -> void()
+%% @doc This function is called by a gen_server when it is about to
+%% terminate. It should be the opposite of Module:init/1 and do any necessary
+%% cleaning up. When it returns, the gen_server terminates with Reason.
+%% The return value is ignored.
+terminate(_Reason, State) ->
+    z_notifier:detach(search_query, {?MODULE, search_query}, State#state.context),
+    z_notifier:detach(mailinglist_message, {?MODULE, send_message}, State#state.context),
+    z_notifier:detach(mailinglist_mailing, self(), State#state.context),
+    ok.
+
+%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+%% @doc Convert process state when code is changed
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+%%====================================================================
+%% support functions
+%%====================================================================
+
+%% @doc Check if there are any scheduled mailings waiting.
+poll_scheduled(Context) ->
+	case m_mailinglist:check_scheduled(Context) of
+		{ListId, PageId} ->
+			m_mailinglist:delete_scheduled(ListId, PageId, Context),
+			send_mailing(ListId, PageId, Context);
+		undefined ->
+			ok
+	end.
+	
+
+%% @doc Send the page to the mailinglist. The first 20 e-mails are send directly, which is useful for
+%% short lists like test e-mail lists. All other e-mails are queued and send later.  When the page is
+%% not yet visible then the mailing is queued.  The test mailinglist is always send directly.
+send_mailing(ListId, PageId, Context) ->
+	case m_rsc:p(ListId, name, Context) of
+		<<"mailinglist_test">> ->
+			spawn(fun() -> send_mailing_process(ListId, PageId, Context) end);
+		_ ->
+			AnonymousContext = z_acl:anondo(Context),
+			case z_acl:rsc_visible(PageId, AnonymousContext) of
+				true -> spawn(fun() -> send_mailing_process(ListId, PageId, AnonymousContext) end);
+				false -> m_mailinglist:insert_scheduled(ListId, PageId, Context)
+			end
+	end.
+
+send_mailing_process(ListId, PageId, Context) ->
+	Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
+	{Direct,Queued} = split_list(20, Recipients),
+	[
+		z_email:send_render(Email, "mailing_page.tpl", [{id,PageId}, {email,Email}, {list_id, ListId}], Context)
+		|| Email <- Direct
+	],
+	[
+		z_email:sendq_render(Email, "mailing_page.tpl", [{id,PageId}, {email,Email}, {list_id, ListId}], Context)
+		|| Email <- Queued
+	],
+	ok.
+
+	split_list(N, List) ->
+		split_list(N, List, []).
+
+		split_list(0, List, Acc) ->
+			{Acc, List};
+		split_list(_N, [], Acc) ->
+			{Acc, []};
+		split_list(N, [H|T], Acc) ->
+			split_list(N-1, T, [H|Acc]).
+

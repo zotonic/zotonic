@@ -1,0 +1,10 @@
+To do for the mailing lists:
+
+- List recipients, optional search (Link into searches, return recipient records)
+
+	download
+	upload
+
+- Link into dropbox event for loading new recipient list
+- Template/scomp for subscribing to mailing list (for in front end)
+- Search for e-mail address in recipient list
