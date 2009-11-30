@@ -27,7 +27,7 @@
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-	z_auth:wm_is_authorized(ReqData, Context2).
+	z_auth:wm_is_authorized(ReqData, Context).
 
 html(Context) ->
     Vars = [
@@ -61,7 +61,7 @@ event({submit, {recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
 			end;
 		false ->
 			z_render:growl_error("You are not allowed to add and enable recipients.", Context)
-	end.
+	end;
 
 event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
@@ -73,5 +73,5 @@ event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _Targ
 					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
 				], Context);
 
-event({postback, {dialog_recipient_upload, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+event({postback, {dialog_recipient_upload, [{id,_Id}]}, _TriggerId, _TargetId}, Context) ->
 	Context.
