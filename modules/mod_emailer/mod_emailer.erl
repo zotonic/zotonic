@@ -42,7 +42,7 @@
 % Maximum times we retry to send a message before we mark it as failed.
 -define(MAX_RETRY, 7).
 
--record(state, {from, ehlo, host, ssl, port, username, password, context}).
+-record(state, {sendmail, from, ehlo, host, ssl, port, username, password, context}).
 
 %%====================================================================
 %% API
@@ -143,6 +143,7 @@ update_config(State) ->
 
 	%% Let the defaults be overruled by the config settings (from the admin and site config)
     State#state{
+		sendmail = z_convert:to_list(m_config:get_value(?MODULE, sendmail, State#state.context)),
         from     = z_convert:to_list(m_config:get_value(?MODULE, email_from, EmailFrom, State#state.context)),
         host     = z_convert:to_list(m_config:get_value(?MODULE, smtp_host, "localhost", State#state.context)),
         port     = z_convert:to_integer(m_config:get_value(?MODULE, smtp_port, 25, State#state.context)),
@@ -239,7 +240,17 @@ mark_retry(Id, Retry, Context) ->
     period(5) -> 72 * 60;
     period(_) -> 7 * 24 * 60.       % Retry every week for extreme cases
     
-         
+
+
+%% Send the e-mail with sendmail
+sendemail(Msg = #mime_msg{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
+	Message = esmtp_mime:encode(Msg),
+	SendmailFrom = Sendmail ++ " -f" ++ emstp_mime:from(Msg),
+	P = open_port({spawn, SendmailFrom}, [use_stdio]),
+	port_command(P, Message),
+	port_close(P);
+
+%% Send the e-mail with smtp
 sendemail(Msg = #mime_msg{}, State) ->
     Login = case State#state.username of
         undefined -> no_login;
