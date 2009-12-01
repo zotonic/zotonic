@@ -59,8 +59,21 @@ get_admin_email(Context) ->
 %% @doc Send a simple text message to the administrator
 send_admin(Subject, Message, Context) ->
 	case get_admin_email(Context) of
-		undefined -> error;
-		Email -> z_notifier:notify1(#email{queue=false, to=Email, subject=Subject, text=Message}, Context)
+		undefined -> 
+			error;
+		Email ->
+			Subject1 = [
+				$[,
+				z_context:hostname(Context),
+				"] ",
+				Subject
+			],
+			Message1 = [
+				Message, 
+				"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
+				z_context:abs_url("/", Context)
+			],
+			z_notifier:notify1(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
 	end.
 
 %% @doc Send an email message defined by the email record.
