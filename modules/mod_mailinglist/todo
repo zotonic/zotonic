@@ -1,10 +1,9 @@
 To do for mod_mailinglist.
 
 Required:
-- Download recipients list
-- Upload recipients list
 - Link into dropbox event for loading new recipient list
 - Template/scomp for subscribing to mailing list (for in front end)
+- Add recipient by non-editor -> send confirm instead of welcome/silent.
 
 Nice to have:
 - Search for e-mail address in recipient list

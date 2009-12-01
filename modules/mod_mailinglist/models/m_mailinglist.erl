@@ -216,11 +216,21 @@ insert_recipient(ListId, Email, Message, Context) ->
 	end,
 	ok.
 
+
+%% @doc Replace all recipients found in the binary file. One recipient per line.
+replace_recipients(ListId, Bin, Context) when is_binary(Bin) ->
+	Lines = z_string:split_lines(Bin),
+	replace_recipients(ListId, Lines, Context);
+
 %% @doc Replace all recipients of the mailinglist. Do not send welcome messages to the recipients.
 %% @spec replace_recipients(ListId::int(), Recipients::list(), Context) -> ok | {error, Error}
 replace_recipients(ListId, Recipients, Context) ->
-	true = z_acl:rsc_editable(ListId, Context),
-	z_db:transaction(fun(Ctx) -> replace_recipients1(ListId, Recipients, Ctx) end, Context).
+	case z_acl:rsc_editable(ListId, Context) of
+		true ->
+			ok = z_db:transaction(fun(Ctx) -> replace_recipients1(ListId, Recipients, Ctx) end, Context);
+		false ->
+			{error, eacces}
+	end.
 	
 	replace_recipients1(ListId, Recipients, Context) ->
 		Now = erlang:localtime(),
@@ -232,19 +242,24 @@ replace_recipients(ListId, Recipients, Context) ->
 		ok.
 	
 	replace_recipient(ListId, Recipient, Now, Context) ->
-		Recipient1 = z_string:to_lower(Recipient),
-		case z_db:q("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", [ListId, Recipient1], Context) of
-			undefined -> 
-				ConfirmKey = z_ids:id(20),
-				z_db:q("
-					insert into mailinglist_recipient (is_enabled, mailinglist_id, email, timestamp, confirm_key)
-					values (true, $1, $2, $3, $4)", [ListId, Recipient1, Now, ConfirmKey], Context);
-			RecipientId ->
-				z_db:q("
-					update mailinglist_recipient 
-					set timestamp = $1,
-					    is_enabled = true
-					where id = $2", [Now, RecipientId], Context)
+		case z_string:trim(z_string:to_lower(Recipient)) of
+			"" ->
+				skip;
+			Recipient1 ->
+				case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", 
+							[ListId, Recipient1], Context) of
+					undefined -> 
+						ConfirmKey = z_ids:id(20),
+						z_db:q("
+							insert into mailinglist_recipient (is_enabled, mailinglist_id, email, timestamp, confirm_key)
+							values (true, $1, $2, $3, $4)", [ListId, Recipient1, Now, ConfirmKey], Context);
+					RecipientId ->
+						z_db:q("
+							update mailinglist_recipient 
+							set timestamp = $1,
+							    is_enabled = true
+							where id = $2", [Now, RecipientId], Context)
+				end
 		end.
 
 
