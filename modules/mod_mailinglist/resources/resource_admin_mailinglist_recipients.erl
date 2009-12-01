@@ -44,7 +44,7 @@ event({postback, {dialog_recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Cont
 	z_render:dialog("Add recipient.", "_dialog_mailinglist_recipient_add.tpl", Vars, Context);
 
 event({submit, {recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
-	case z_acl:rsc_is_editable(Id, Context) of
+	case z_acl:rsc_editable(Id, Context) of
 		true ->
 			Email = z_context:get_q_validated(email, Context),
 			Notification = case z_convert:to_bool(z_context:get_q(send_welcome, Context, false)) of
@@ -60,7 +60,7 @@ event({submit, {recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
 					z_render:growl_error("Could not add the recipient.", Context)
 			end;
 		false ->
-			z_render:growl_error("You are not allowed to add and enable recipients.", Context)
+			z_render:growl_error("You are not allowed to add or enable recipients.", Context)
 	end;
 
 event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->

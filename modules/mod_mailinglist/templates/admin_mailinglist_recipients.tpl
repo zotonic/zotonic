@@ -15,8 +15,8 @@
 	{% else %}
 
 		{% button text="Add recipient" title="Add a new recipient." postback={dialog_recipient_add id=id} %}
-		{% button text="Download all" title="Download list of all active recipients." redirect={mailinglist_recipient_download id=id} %}
-		{% button text="Upload file" title="Upload a list of recipients." postback={dialog_recipient_upload id=id} %}
+		{% button text="Download all" title="Download list of all active recipients." action={growl text="Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
+		{% button text="Upload file" title="Upload a list of recipients." action={dialog_open template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
 
 		<hr class="clear" />
 		<p>All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. <br/><a href="{% url admin_edit_rsc id=id %}">Edit the mailing list &raquo;</a></p>

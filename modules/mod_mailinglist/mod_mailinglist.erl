@@ -88,8 +88,15 @@ event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
 			z_render:growl("The mailing has been canceled.", Context1);
 		false ->
 			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
-	end.
+	end;
 
+%% @doc Handle upload of a new recipients list
+event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+	{upload, _OriginalFilename, TmpFile} = z_context:get_q_validated("file", Context),
+	{ok, Data} = file:read_file(TmpFile),
+	file:delete(TmpFile),
+	m_mailinglist:replace_recipients(Id, Data, Context),
+	z_render:wire([{dialog_close, []}, {reload, []}], Context).
 
 %% @doc Update the list with the mailings scheduled for this page.
 update_scheduled_list(Id, Context) ->
