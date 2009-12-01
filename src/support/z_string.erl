@@ -23,6 +23,8 @@
 %% interface functions
 -export([
     trim/1,
+	trim_left/1,
+	trim_right/1,
     is_string/1,
     line/1,
     to_rootname/1,
@@ -32,15 +34,44 @@
     to_upper/1,
     replace/3,
 	truncate/2,
-	truncate/3
+	truncate/3,
+	split_lines/1
 ]).
 
 -include_lib("include/zotonic.hrl").
 
 
 %% @doc Remove whitespace at the start and end of the string
-%% @todo Check if we want to use a regexp (re) instead, needed for stripping newline, tab etc.
-trim(S) -> string:strip(S, both).
+trim(B) when is_binary(B) ->
+	trim_right(trim_left(B));
+trim(L) when is_list(L) ->
+	binary_to_list(trim(iolist_to_binary(L))).
+
+
+%% @doc Remove whitespace at the start the string
+trim_left(<<C, Rest/binary>> = Bin) ->
+	case C of
+		W when W=:=10; W=:=13; W=:=9; W=:=32 -> trim(Rest);
+		_ -> Bin
+	end;
+trim_left(<<>>) ->
+	<<>>;
+trim_left(L) ->
+	binary_to_list(trim_left(iolist_to_binary(L))).
+	
+%% @doc Remove whitespace at the end of the string
+trim_right(B) when is_binary(B) ->
+	trim_right(B, <<>>, <<>>);
+trim_right(L) ->
+	binary_to_list(trim_right(iolist_to_binary(L))).
+
+	trim_right(<<C, Rest/binary>>, WS, Acc) ->
+		case C of
+			W when W=:=10; W=:=13; W=:=9; W=:=32 -> trim_right(Rest, <<WS/binary, C>>, Acc);
+			_ -> trim_right(Rest, <<>>, <<Acc/binary, WS/binary, C>>)
+		end;
+	trim_right(<<>>, _WS, Acc) ->
+		Acc.
 
 
 %% @doc Check if the variable is a one dimensional list, probably a string
@@ -505,4 +536,19 @@ truncate(L, N, Append) ->
 		{Rest,[$;|Acc]};
 	get_entity([C|Rest], Acc) ->
 		get_entity(Rest, [C|Acc]).
+
+
+%% @doc Split the binary into lines. Line seperators can be \r, \n or \r\n.
+split_lines(B) when is_binary(B) ->
+	split_lines(B, <<>>, []).
 	
+	split_lines(<<>>, Line, Acc) ->
+		lists:reverse([Line|Acc]);
+ 	split_lines(<<13,10,Rest/binary>>, Line, Acc) ->
+		split_lines(Rest, <<>>, [Line|Acc]);
+ 	split_lines(<<13,Rest/binary>>, Line, Acc) ->
+		split_lines(Rest, <<>>, [Line|Acc]);
+ 	split_lines(<<10,Rest/binary>>, Line, Acc) ->
+		split_lines(Rest, <<>>, [Line|Acc]);
+	split_lines(<<C, Rest/binary>>, Line, Acc) ->
+		split_lines(Rest, <<Line/binary, C>>, Acc).
