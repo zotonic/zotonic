@@ -189,6 +189,27 @@ search({featured, [{cat, Cat}]}, _OffsetLimit, _Context) ->
         tables=[{rsc,"r"}]
     };
 
+%% @doc Return the list of resource ids, on descending id
+%% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
+search({all, []}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+		order="r.id desc",
+        tables=[{rsc,"r"}]
+    };
+
+%% @doc Return the list of resource ids inside a category, on descending id
+%% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
+search({all, [{cat, Cat}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+		order="r.id desc",
+        cats=[{"r", Cat}],
+        tables=[{rsc,"r"}]
+    };
+
 %% @doc Return a list of featured resource ids inside a category having a object_id as predicate
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
 search({featured, [{cat,Cat},{object,ObjectId},{predicate,Predicate}]}, _OffsetLimit, Context) ->
