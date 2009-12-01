@@ -67,7 +67,7 @@ send_message({mailinglist_message, Message, ListId, RecipientId}, Context) ->
 	Props = m_mailinglist:recipient_get(RecipientId, Context),
 	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
 	ok.
-
+	
 
 %% @doc Request confirmation of canceling this mailing.
 event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, Context) ->
@@ -134,6 +134,7 @@ init(Args) ->
     z_notifier:observe(search_query, {?MODULE, search_query}, Context),
     z_notifier:observe(mailinglist_message, {?MODULE, send_message}, Context),
     z_notifier:observe(mailinglist_mailing, self(), Context),
+    z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(180000, poll),
 	{ok, #state{context=z_context:new(Context)}}.
 	
@@ -145,6 +146,31 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
+%% @doc Handle a dropbox file with recipients.
+handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
+	GetFiles = fun() ->
+		C = z_acl:sudo(State#state.context),
+		#search_result{result=Ids} = z_search:search({all, [{cat,mailinglist}]}, C),
+		[ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
+	end,
+	Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),
+	case proplists:get_value(list_to_binary(filename:basename(File)), Files) of
+		undefined ->
+			{reply, undefined, State};
+		ListId ->
+			HandleF = fun() ->
+				C = z_acl:sudo(State#state.context),
+				{ok, Data} = file:read_file(File),
+				m_mailinglist:replace_recipients(ListId, Data, C),
+				z_email:send_admin(
+							"mod_mailinglist: Import from dropbox",
+							["Replaced all recipients of ", m_rsc:p(ListId, title, C), " with the contents of ", File, "."], State#state.context),
+				file:delete(File)
+			end,
+			spawn(HandleF),
+			{reply, ok, State}
+	end;
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -182,6 +208,7 @@ terminate(_Reason, State) ->
     z_notifier:detach(search_query, {?MODULE, search_query}, State#state.context),
     z_notifier:detach(mailinglist_message, {?MODULE, send_message}, State#state.context),
     z_notifier:detach(mailinglist_mailing, self(), State#state.context),
+    z_notifier:detach(dropbox_file, self(), State#state.context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
