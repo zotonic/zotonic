@@ -49,7 +49,7 @@ render(Params, Vars, Context, _State) ->
 	IsA = m_rsc:is_a(Id, Context),
 	Root = filename:rootname(File),
 	Ext = filename:extension(File),
-	case lists:foldr(fun(Cat, {error, enoent}) -> z_template:find_template(Root ++ [$_|atom_to_list(Cat)] ++ Ext, Context);
+	case lists:foldr(fun(Cat, {error, enoent}) -> z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
 					    (_Cat, Found) -> Found	
 					 end, {error, enoent}, IsA) of
 		{error, enoent} -> {ok, z_template:render(File, Vars, Context)};
