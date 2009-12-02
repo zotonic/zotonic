@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @doc Include a template, with possible caching
+%% @doc Include a template by category, with possible caching
 %%
 %%      Example: include "some_file.tpl" and cache it for 3600 seconds
-%%      {% @include depend="something" maxage=3600 file="some_file.tpl" %}
+%%      {% include depend="something" maxage=3600 file="some_file.tpl" %}
 %%
 %%      Give a maxage of 0 for slam dunk protection but no caching.
 
@@ -21,7 +21,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(scomp_base_include).
+-module(scomp_base_catinclude).
 -behaviour(gen_scomp).
 
 -export([init/1, varies/2, terminate/2, render/4]).
@@ -45,12 +45,14 @@ terminate(_State, _Context) -> ok.
 
 render(Params, Vars, Context, _State) ->
     File = proplists:get_value('$file', Params),
-    AddC =  fun 
-                ({Name,Value}, Vs) when Name =/= '$file' andalso Name =/= vary andalso Name =/= maxage ->
-                    [{Name,Value}|Vs];
-                (_, Vs) -> 
-                    Vs
-            end,
-    Vars1 = lists:foldl(AddC, Vars, Params),
-    {ok, z_template:render(File, Vars1, Context)}.
+	Id = proplists:get_value('$id', Params),
+	IsA = m_rsc:is_a(Id, Context),
+	Root = filename:rootname(File),
+	Ext = filename:extension(File),
+	case lists:foldr(fun(Cat, {error, enoent}) -> z_template:find_template(Root ++ [$_|atom_to_list(Cat)] ++ Ext, Context);
+					    (_Cat, Found) -> Found	
+					 end, {error, enoent}, IsA) of
+		{error, enoent} -> {ok, z_template:render(File, Vars, Context)};
+		{ok, Template} -> {ok, z_template:render(Template, Vars, Context)}
+	end.
 
