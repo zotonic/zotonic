@@ -45,7 +45,7 @@ terminate(_State, _Context) -> ok.
 
 render(Params, Vars, Context, _State) ->
     File = proplists:get_value('$file', Params),
-	Id = proplists:get_value('$id', Params),
+	Id = proplists:get_value('id', Params),
 	IsA = m_rsc:is_a(Id, Context),
 	Root = filename:rootname(File),
 	Ext = filename:extension(File),
