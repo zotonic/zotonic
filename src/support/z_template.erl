@@ -111,6 +111,9 @@ compile(File, Context) ->
 
 %% @spec find_template(File, Context) -> {ok, filename()} | {error, code} 
 %% @doc Finds the template designated by the file, check modules.
+%% When the file is an absolute path, then do nothing and assume the file exists.
+find_template([$/|_] = File, _Context) ->
+    {ok, File};
 find_template(File, Context) ->
     z_module_indexer:find(template, File, Context).
     
