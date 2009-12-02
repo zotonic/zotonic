@@ -61,7 +61,7 @@ scan(Template) ->
 identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToken == open_tag; PrevToken == all_keyword ->
     %% At the start of a {% .... %} tag we accept all keywords
     RevString = lists:reverse(String),
-    Keywords = ["for", "empty", "endfor", "in", "include", "block", "endblock",
+    Keywords = ["for", "empty", "endfor", "in", "include", "catinclude", "block", "endblock",
         "extends", "autoescape", "endautoescape", "if", "else", "endif",
         "not", "or", "and", "comment", "endcomment", "cycle", "firstof",
         "ifchanged", "ifequal", "endifequal", "ifnotequal", "endifnotequal",

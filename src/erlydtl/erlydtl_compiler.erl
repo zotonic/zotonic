@@ -321,6 +321,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 string_ast(String, TreeWalkerAcc);
             ({'include', {string_literal, _, File}, Args, All}, TreeWalkerAcc) ->
                 include_ast(unescape_string_literal(File), Args, All, Context, TreeWalkerAcc);
+            ({'catinclude', {string_literal, _, File}, RscId, Args}, TreeWalkerAcc) ->
+                catinclude_ast(unescape_string_literal(File), RscId, Args, Context, TreeWalkerAcc);
             ({'if', {'expr', {'not', Variable}, 'none'}, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = empty_ast(TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(Contents, Context, TreeWalker1),
@@ -504,6 +506,12 @@ string_ast(String, TreeWalker) ->
     {{erl_syntax:binary([erl_syntax:binary_field(erl_syntax:integer(X)) || X <- String]), #ast_info{}}, TreeWalker}.       
 
 
+catinclude_ast(File, Id, Args, Context, TreeWalker) ->
+    Args1 = [ {{identifier, none, "$file"},{string_literal, none, File}},
+			  {{identifier, none, "$id"}, Id} | Args],
+    scomp_ast("catinclude", Args1, false, Context, TreeWalker).
+
+
 include_ast(File, Args, All, Context, TreeWalker) ->
     UseScomp = lists:foldl( fun({{identifier, _, Key}, _}, IsC) -> 
                                 case Key of
@@ -527,7 +535,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                 end,
                 {[], []},
                 InterpretedArgs),
-            
+
             % {AstList, Info, TreeWalker}
             IncludeFun = fun(FilePath, {AstList, InclInfo, TreeW}) ->
                     case parse(FilePath, Context) of
@@ -560,7 +568,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                             throw(Err)
                     end
             end,
-            
+
             % Compile all included files, put them in a block expr with a single assignment of the argument vars at the start.
             case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(File, All, Context#dtl_context.finder)) of
                 {[], _, TreeWalkerN} ->
@@ -574,7 +582,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                     {{AstN, AstInfo}, TreeWalkerN}
             end;
         true ->
-            Args1 = [{{identifier, none, "file"},{string_literal, none, File}} | Args],
+            Args1 = [{{identifier, none, "$file"},{string_literal, none, File}} | Args],
             scomp_ast("include", Args1, All, Context, TreeWalker)
     end.
 
