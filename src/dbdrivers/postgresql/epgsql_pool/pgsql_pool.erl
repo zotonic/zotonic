@@ -7,9 +7,10 @@
 -export([init/1, code_change/3, terminate/2]). 
 -export([handle_call/3, handle_cast/2, handle_info/2]).
 
--record(state, {id, connections, monitors, waiting, opts}).
+-record(state, {id, size, connections, monitors, waiting, opts, timer}).
 
  %% -- client interface --
+-include_lib("zotonic.hrl").
 
 opts(Opts) ->
     Defaults = [{host, "localhost"},
@@ -66,14 +67,16 @@ init({Name, Size, Opts}) ->
         undefined -> Id = self();
         _Name     -> Id = Name
     end,
-    Connections = connect(Size, Opts),
-
+    Connections = connect(1, Opts),
+	{ok, TRef} = timer:send_interval(60000, close_unused),
     State = #state{
       id          = Id,
+      size        = Size,
       opts        = Opts,
       connections = Connections,
       monitors    = [],
-      waiting     = queue:new()},
+      waiting     = queue:new(),
+      timer       = TRef},
     {ok, State}.
 
 handle_call({return_connection, C},  _From, State) ->
@@ -92,8 +95,19 @@ handle_call(Request, _From, State) ->
 handle_cast({get_connection, Pid}, State) ->
     #state{connections = Connections, waiting = Waiting} = State,
     case Connections of
-        [C | T] -> {noreply, deliver(Pid, C, State#state{connections = T})};
-        []      -> {noreply, State#state{waiting = queue:in(Pid, Waiting)}}
+        [{C,_} | T] -> 
+			% Return existing unused connection
+			{noreply, deliver(Pid, C, State#state{connections = T})};
+        [] ->
+			case length(State#state.monitors) < State#state.size of
+				true ->
+					% Allocate a new connection
+					[{C,_}] = connect(1, State#state.opts),
+				    {noreply, deliver(Pid, C, State)};
+				false ->
+					% Reached max connections, let the requestor wait
+	 				{noreply, State#state{waiting = queue:in(Pid, Waiting)}}
+			end
     end;
 
 handle_cast({cancel_wait, Pid}, State) ->
@@ -102,10 +116,18 @@ handle_cast({cancel_wait, Pid}, State) ->
     {noreply, State#state{waiting = Waiting2}};
 
 handle_cast(stop, State) ->
+	timer:cancel(State#state.timer),
     {stop, normal, State};
 
 handle_cast(Request, State) ->
     {stop, {unsupported_cast, Request}, State}.
+
+%% Close all connections that are unused for longer than a minute.
+handle_info(close_unused, State) ->
+	Old = z_utils:now() - 60,
+	{Unused, Used} = lists:partition(fun({_C,Time}) -> Time < Old end, State#state.connections),
+	[ pgsql:close(C) || {C,_} <- Unused ],
+	{noreply, State#state{connections=Used}};
 
 handle_info({'DOWN', M, process, _Pid, _Info}, State) ->
     #state{monitors = Monitors} = State,
@@ -118,15 +140,13 @@ handle_info({'DOWN', M, process, _Pid, _Info}, State) ->
     end;
 
 handle_info({'EXIT', Pid, _Reason}, State) ->
-    #state{opts = Opts, connections = Connections, monitors = Monitors} = State,
-    Connections2 = lists:delete(Pid, Connections),
+    #state{connections = Connections, monitors = Monitors} = State,
+    Connections2 = proplists:delete(Pid, Connections),
     F = fun({C, M}) when C == Pid -> erlang:demonitor(M), false;
            ({_, _})               -> true
         end,
     Monitors2 = lists:filter(F, Monitors),
-    [C] = connect(1, Opts),
-    State2 = return(C, State#state{connections = Connections2, monitors = Monitors2}),
-    {noreply, State2};
+    {noreply, State#state{connections = Connections2, monitors = Monitors2}};
 
 handle_info({pgsql_pool, P, {ack, Pid, _C}}, #state{id = P} = State) ->
     error_logger:error_msg("pgsql_pool ~p received late ack from ~p~n", [P, Pid]),
@@ -153,7 +173,7 @@ connect(N, Opts, Acc) ->
     Username = proplists:get_value(username, Opts),
     Password = proplists:get_value(password, Opts),
     {ok, C} = pgsql:connect(Host, Username, Password, Opts),
-    connect(N - 1, Opts, [C | Acc]).
+    connect(N - 1, Opts, [{C, z_utils:now()} | Acc]).
 
 deliver(Pid, C, State) ->
     #state{id = Id, connections = Connections, monitors = Monitors} = State,
@@ -165,7 +185,7 @@ deliver(Pid, C, State) ->
             State#state{monitors = Monitors2}
     after
         100 ->
-            State#state{connections = [C | Connections]}
+            State#state{connections = [{C, z_utils:now()} | Connections]}
     end.
 
 return(C, State) ->
@@ -175,6 +195,6 @@ return(C, State) ->
             State2 = deliver(Pid, C, State),
             State2#state{waiting = Waiting2};
         {empty, _Waiting} ->
-            Connections2 = [C | Connections],
+            Connections2 = [{C, z_utils:now()} | Connections],
             State#state{connections = Connections2}
     end.
