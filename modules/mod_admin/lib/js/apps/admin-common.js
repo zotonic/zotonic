@@ -25,7 +25,7 @@ tinyInit = {
 	elements: "field-content",
 	theme: "advanced",
 	skin: "wp_theme", 
-	theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,code,|,formatselect,|,zmedia,zmore",
+	theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,code,|,formatselect,|,cleanup,zmedia,zmore",
 	theme_advanced_buttons2: "tablecontrols",
 	theme_advanced_buttons3: "",
 	theme_advanced_buttons4: "",
