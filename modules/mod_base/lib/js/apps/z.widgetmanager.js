@@ -55,7 +55,7 @@ limitations under the License.
 
 				if(element.childNodes) 
 				{
-					for(var i in element.childNodes)
+				    for(var i = 0; i< element.childNodes.length; i++)
 					{
 						if(element.childNodes[i].nodeType != 3)
 						{
