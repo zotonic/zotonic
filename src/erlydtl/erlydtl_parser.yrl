@@ -45,6 +45,7 @@ Nonterminals
 
     ExtendsTag
     IncludeTag
+    CatIncludeTag
     NowTag
 
     BlockBlock
@@ -136,6 +137,7 @@ Terminals
     block_keyword
 	cache_keyword
     call_keyword
+	catinclude_keyword
     close_tag
     close_var
     comment_keyword
@@ -204,6 +206,7 @@ Elements -> Elements ValueBraced : '$1' ++ ['$2'].
 Elements -> Elements TransTag : '$1' ++ ['$2'].
 Elements -> Elements ExtendsTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
+Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
 Elements -> Elements NowTag : '$1' ++ ['$2'].
 Elements -> Elements LibTag : '$1' ++ ['$2'].
 Elements -> Elements LoadTag : '$1' ++ ['$2'].
@@ -234,6 +237,7 @@ TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag '__keyword' string_literal Args close_tag : {trans_ext, '$3', '$4'}.
 ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 IncludeTag -> open_tag OptionalAll include_keyword string_literal Args close_tag : {include, '$4', '$5', '$2'}.
+CatIncludeTag -> open_tag catinclude_keyword string_literal Value Args close_tag : {catinclude, '$3', '$4', '$5'}.
 NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
 
 OptionalAll -> all_keyword : true.
