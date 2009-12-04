@@ -484,7 +484,7 @@ custom_columns(Cols) ->
 custom_columns([{Name, Spec}], Acc) ->
     [ z_convert:to_list(Name), " ", Spec |  Acc];
 custom_columns([{Name, Spec}|Rest], Acc) ->
-    custom_columns(Rest, [ z_convert:to_list(Name), " ", Spec |  Acc]).
+    custom_columns(Rest, [ ", ", z_convert:to_list(Name), " ", Spec |  Acc]).
 
 
 
