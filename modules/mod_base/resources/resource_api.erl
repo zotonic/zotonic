@@ -23,10 +23,11 @@
 
 -export([
     init/1,
+    service_available/2,
     resource_exists/2,
     allowed_methods/2,
     process_post/2,
-         is_authorized/2,
+    is_authorized/2,
     content_types_provided/2,
     to_json/2
 ]).
@@ -34,16 +35,24 @@
 -include_lib("webmachine_resource.hrl").
 -include_lib("zotonic.hrl").
 
-init([]) -> {ok, []}.
+init(DispatchArgs) -> {ok, DispatchArgs}.
 
-
-allowed_methods(ReqData, _Context) ->
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:ensure_qs(Context),
+    Context1 = z_context:set(DispatchArgs, Context),
+    ?WM_REPLY(true, Context1).
+
+
+allowed_methods(ReqData, Context) ->
+    Context0 = ?WM_REQ(ReqData, Context),
+    Context1 = z_context:ensure_qs(Context0),
     %% 'ping' the service to ensure we loaded all the existing services.
     z_service:all(Context1),
-    Method   = z_context:get_q("method", Context1),
     TheMod   = z_context:get_q("module", Context1),
+    Method = case z_context:get(method_is_module, Context1) of
+                 true -> TheMod;
+                 _ -> z_context:get_q("method", Context1)
+             end,
     try
         Module  = list_to_existing_atom("service_" ++ TheMod ++ "_" ++ Method),
         Context2 = z_context:set("module", Module, Context1),
@@ -121,6 +130,9 @@ api_result(ReqData, Context, Result) ->
     case Result of 
         {error, Err=missing_arg, Arg} ->
             api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
+
+        {error, Err=unknown_arg, Arg} ->
+            api_error(400, Err, "Unknown argument: " ++ Arg, ReqData, Context);
 
         {error, Err=not_exists, Arg} ->
             api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
