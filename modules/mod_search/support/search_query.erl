@@ -116,7 +116,7 @@ parse_query([{sort, Sort}|Rest], Context, Result) ->
     Order = case FirstChar of
                 $- -> F1 ++ " DESC";
                 $+ -> F1 ++ " ASC";
-                _ -> Sort ++ " ASC"
+                _ -> Sort1 ++ " ASC"
             end,
     parse_query(Rest, Context, add_order(Order, Result));
 
