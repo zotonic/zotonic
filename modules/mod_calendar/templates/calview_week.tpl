@@ -21,11 +21,7 @@
 		<li>
 			<ol class="programme-day">
 				{% for ev in event_divs[day] %}
-					<li style="z-index: {{ev.z_index|format_integer}}; top: {{ev.top_em|format_number}}em; height: {{ev.height_em|format_number}}em; width: 100%" class="cal-lev-{{ev.level|format_number}}of{{ev.max_level|format_number}}">
-						<div class="programme-event-item">
-							{{ m.rsc[ev.id].title }}
-						</div>
-					</li>
+					{% catinclude "calview_item.tpl" ev.id ev=ev %}
 				{% endfor %}
 			</ol>
 		</li>
