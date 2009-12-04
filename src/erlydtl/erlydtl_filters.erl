@@ -270,6 +270,16 @@ format_integer(Input, _Context) when is_integer(Input) ->
 format_integer(Input, _Context) ->
     Input.
 
+format_integer(Input, Len, _Context) when is_integer(Input) ->
+    S = integer_to_list(Input),
+	case Len - length(S) of
+		N when N > 0 -> lists:duplicate(N, $0) ++ S;
+		N when N < 0 -> lists:duplicate(Len, $*);
+		0 -> S
+	end;
+format_integer(Input, _Len, _Context) ->
+    Input.
+
 format_number(Input, _Context) when is_integer(Input) ->
     integer_to_list(Input);
 format_number(Input, _Context) when is_float(Input) ->
