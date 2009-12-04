@@ -170,87 +170,37 @@ search({match_objects_cats, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
 
 %% @doc Return a list of resource ids, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> #search_sql{}
-search({featured, []}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        order="r.is_featured desc, r.id desc",
-        tables=[{rsc,"r"}]
-    };
+search({featured, []}, OffsetLimit, Context) ->
+    search({'query', [{sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
 
 %% @doc Return a list of resource ids inside a category, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
-search({featured, [{cat, Cat}]}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        order="r.is_featured desc, r.id desc",
-        cats=[{"r", Cat}],
-        tables=[{rsc,"r"}]
-    };
+search({featured, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{cat, Cat}, {sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
 
 %% @doc Return the list of resource ids, on descending id
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
-search({all, []}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-		order="r.id desc",
-        tables=[{rsc,"r"}]
-    };
+search({all, []}, OffsetLimit, Context) ->
+    search({'query', []}, OffsetLimit, Context);
 
 %% @doc Return the list of resource ids inside a category, on descending id
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
-search({all, [{cat, Cat}]}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-		order="r.id desc",
-        cats=[{"r", Cat}],
-        tables=[{rsc,"r"}]
-    };
+search({all, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{cat, Cat}]}, OffsetLimit, Context);
 
 %% @doc Return a list of featured resource ids inside a category having a object_id as predicate
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
-search({featured, [{cat,Cat},{object,ObjectId},{predicate,Predicate}]}, _OffsetLimit, Context) ->
-    PredId = m_predicate:name_to_id_check(Predicate, Context),
-    #search_sql{
-        select="r.id",
-        from="rsc r, edge e",
-        where="r.id = e.subject_id and e.predicate_id = $1 and e.object_id = $2",
-        order="r.is_featured desc, r.id desc",
-        args=[PredId, ObjectId],
-        cats=[{"r", Cat}],
-        tables=[{rsc,"r"}]
-    };
+search({featured, [{cat,Cat},{object,ObjectId},{predicate,Predicate}]}, OffsetLimit, Context) ->
+    search({'query', [{cat, Cat}, {hassubject, [ObjectId, Predicate]}]}, OffsetLimit, Context);
 
+search({latest, []}, OffsetLimit, Context) ->
+    search({'query', [{sort, '-rsc.modified'}]}, OffsetLimit, Context);
 
-search({latest, []}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        order="r.modified desc, r.id desc",
-        tables=[{rsc,"r"}]
-    };
-search({latest, [{cat, Cat}]}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        order="r.modified desc, r.id desc",
-        cats=[{"r", Cat}],
-        tables=[{rsc,"r"}]
-    };
+search({latest, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{cat, Cat}, {sort, '-rsc.modified'}]}, OffsetLimit, Context);
 
-
-search({upcoming, [{cat, Cat}]}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        where="pivot_date_end >= current_date",
-        order="r.pivot_date_start asc",
-        cats=[{"r", Cat}],
-        tables=[{rsc,"r"}]
-    };
+search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{upcoming, true}, {cat, Cat}, {sort, 'rsc.pivot_date_start'}]}, OffsetLimit, Context);
 
 search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
     search({autocomplete, [{cat,[]}, {text,QueryText}]}, OffsetLimit, Context);
@@ -371,6 +321,9 @@ search({all_bytitle, [{cat_is, Cat}]}, _OffsetLimit, Context) ->
 
 search({all_bytitle_featured, [{cat_is, Cat}]}, _OffsetLimit, Context) ->
     search_all_bytitle:search_cat_is(Cat, all_bytitle_featured, Context);
+
+search({'query', Args}, _OffsetLimit, Context) ->
+    search_query:search(Args, Context);
 
 search(_, _, _) ->
     undefined.
