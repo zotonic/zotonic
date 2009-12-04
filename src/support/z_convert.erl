@@ -34,6 +34,7 @@
 	to_bool/1,
 	to_utc/1,
 	to_localtime/1,
+	to_datetime/1,
     to_json/1
 ]).
 
@@ -124,6 +125,26 @@ to_localtime(D) ->
         {'EXIT', _} -> D;
         LocalD -> LocalD
     end.
+
+%% @doc Convert an input to a datetime, very simplistic function.
+to_datetime({{_,_,_},{_,_,_}} = DT) -> DT;
+to_datetime({_,_,_} = D) -> {D, {0,0,0}};
+to_datetime(L) when is_list(L) ->
+	try
+		case string:tokens(L, " ") of
+			[Date,Time] ->
+				[Y,M,D] = string:tokens(Date, "-/"),
+				[H,I,S] = string:tokens(Time, ":."),
+				{{to_integer(Y),to_integer(M),to_integer(D)}, {to_integer(H),to_integer(I),to_integer(S)}};
+			[Date] ->
+				[Y,M,D] = string:tokens(Date, "-/"),
+				{{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}}
+		end
+	catch
+		_:_ -> undefined
+	end;
+to_datetime(undefined) ->
+	undefined.
 
 %%
 %% @doc Convert an Erlang structure to a format that can be serialized by mochijson.
