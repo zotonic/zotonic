@@ -21,7 +21,8 @@
 
 %% interface functions
 -export([
-    search/2
+         search/2,
+         parse_request_args/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -34,6 +35,28 @@ search(Query, Context) ->
     %% add default sorting
     add_order("rsc.id desc", R).
 
+
+parse_request_args(Args) ->
+    parse_request_args(Args, []).
+
+parse_request_args([], Acc) ->
+    Acc;
+parse_request_args([{K,V}|Rest], Acc) ->
+    NewVal = V,
+    parse_request_args(Rest, [{request_arg(K),NewVal}|Acc]).
+
+% Convert request arguments to atom. Doing it this way avoids atom
+% table overflows.
+request_arg("cat")        -> cat;
+request_arg("hassubject") -> hassubject;
+request_arg("hasobject")  -> hasobject;
+request_arg("upcoming")   -> upcoming;
+request_arg("sort")       -> sort;
+request_arg(Term)         -> throw({error, {unknown_query_term, Term}}).
+
+
+
+%% Private methods start here
 
 parse_query([], _Context, Result) ->
     Result;
