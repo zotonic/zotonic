@@ -15,16 +15,15 @@
 					<li class="quarter quarter-30">:30</li>
 				{% endfor %}
 			</ol>
-
 		</li>
 		{% for day,time in week_dates %}
-		<li>
-			<ol class="programme-day">
-				{% for ev in event_divs[day] %}
-					{% catinclude "calview_item.tpl" ev.id ev=ev %}
-				{% endfor %}
-			</ol>
-		</li>
+			<li>
+				<ol class="programme-day">
+					{% for ev in event_divs[day] %}
+						{% catinclude "calview_item.tpl" ev.id ev=ev %}
+					{% endfor %}
+				</ol>
+			</li>
 		{% endfor %}
 	</ol>
 		
