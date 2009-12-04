@@ -552,6 +552,7 @@ recombine_dates([H|T], Dates, Acc) ->
 	to_date_value("hi", V) ->
 		case string:tokens(V, "-/: ") of
 			[] -> {undefined, undefined, undefined};
+			[H] -> {to_int(H), 0, undefined};
 			[H,I] -> {to_int(H), to_int(I), undefined}
 		end;
 	to_date_value(_, V) ->
