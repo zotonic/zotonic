@@ -1,7 +1,9 @@
 .calender {
 	font-size: 18px;
 	line-height: 1;
-	width: 691px;
+	width: 696px;
+	overflow: auto;
+	height: 496px;
 }
 
 .calender ul, .calender ol {
@@ -9,6 +11,10 @@
 	list-style-position:outside;
 	list-style-type: none;
 	margin: 0;
+}
+
+.quarter-30 {
+	text-indent: 16px;
 }
 
 .calender ol.programme-days li ol.programme-day {
@@ -22,21 +28,25 @@
 
 	.calender ol.programme-days li ol.programme-day li {
 		position: absolute;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		background: #666;
-		background: rgba(96,96,96,0.8);
-		color: #fff;
-		border: 1px solid black;
+		background: #fff;
+		color: #000;
+		border: 2px solid #000;
 		overflow: hidden;
 	}
+	
+		.calender ol.programme-days li ol.programme-day li p {
+			margin: 0;
+		}
+		
+			.calender ol.programme-days li ol.programme-day li .time {
+				color: #555;
+			}
 
 .calender ol.programme-days li,
 .calender ol.programme-day-titles li {
 	display: block;
 	float: left;
-	width: 90px;
+	width: 92px;
 	margin: 0;
 }
 
@@ -53,10 +63,6 @@
 .calender ol.programme-hours {
 	font-size: 12px;
 	line-height: 18px;
-}
-
-.calender ol.programme-hours li.quarter {
-	text-indent: 15px;
 }
 
 .calender .programme-event-item {
@@ -76,4 +82,3 @@
 .cal-lev-2of4 { left: 23%; width: 35% !important; }
 .cal-lev-3of4 { left: 44%; width: 35% !important; }
 .cal-lev-4of4 { left: 65%; width: 35% !important; }
-
