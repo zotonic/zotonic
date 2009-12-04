@@ -450,34 +450,35 @@ props_filter_protected(Props) ->
     lists:filter(fun({K,_V}) -> not protected(K) end, Props).
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-protected(id) -> true;
-protected(creator_id) -> true;
-protected(modifier_id) -> true;
-protected(created) -> true;
-protected(modified) -> true;
-protected(version) -> true;
-protected(comment_by) -> true;
-protected(comments) -> true;
-protected(rating) -> true;
-protected(rating_count) -> true;
-protected(props) -> true;
-protected(pivot_tsv) -> true;
-protected(pivot_rtsv) -> true;
-protected(pivot_category_nr) -> true;
-protected(pivot_first_name) -> true;
-protected(pivot_surname) -> true;
-protected(pivot_gender) -> true;
-protected(pivot_date_start) -> true;
-protected(pivot_date_end) -> true;
+protected(comment_by)                 -> true;
+protected(comments)                   -> true;
+protected(created)                    -> true;
+protected(creator_id)                 -> true;
+protected(id)                         -> true;
+protected(modified)                   -> true;
+protected(modifier_id)                -> true;
+protected(pivot_category_nr)          -> true;
+protected(pivot_city)                 -> true;
+protected(pivot_country)              -> true;
+protected(pivot_date_end)             -> true;
+protected(pivot_date_end_month_day)   -> true;
+protected(pivot_date_start)           -> true;
 protected(pivot_date_start_month_day) -> true;
-protected(pivot_date_end_month_day) -> true;
-protected(pivot_street) -> true;
-protected(pivot_city) -> true;
-protected(pivot_state) -> true;
-protected(pivot_postcode) -> true;
-protected(pivot_country) -> true;
-protected(pivot_geocode) -> true;
-protected(_) -> false.
+protected(pivot_first_name)           -> true;
+protected(pivot_gender)               -> true;
+protected(pivot_geocode)              -> true;
+protected(pivot_postcode)             -> true;
+protected(pivot_rtsv)                 -> true;
+protected(pivot_state)                -> true;
+protected(pivot_street)               -> true;
+protected(pivot_surname)              -> true;
+protected(pivot_title)                -> true;
+protected(pivot_tsv)                  -> true;
+protected(props)                      -> true;
+protected(rating)                     -> true;
+protected(rating_count)               -> true;
+protected(version)                    -> true;
+protected(_)                          -> false.
 
 
 recombine_dates(Props) ->
