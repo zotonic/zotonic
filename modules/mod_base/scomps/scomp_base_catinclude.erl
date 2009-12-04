@@ -52,7 +52,7 @@ render(Params, Vars, Context, _State) ->
 	case lists:foldr(fun(Cat, {error, enoent}) -> z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
 					    (_Cat, Found) -> Found	
 					 end, {error, enoent}, IsA) of
-		{error, enoent} -> {ok, z_template:render(File, Vars, Context)};
-		{ok, Template} -> {ok, z_template:render(Template, Vars, Context)}
+		{error, enoent} -> {ok, z_template:render(File, Params++Vars, Context)};
+		{ok, Template} -> {ok, z_template:render(Template, Params++Vars, Context)}
 	end.
 
