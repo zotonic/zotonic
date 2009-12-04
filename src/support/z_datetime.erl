@@ -107,8 +107,11 @@ prev_day({{_,_,1},_} = Date) ->
 	{{Y1,M1,_},T1} = prev_month(Date),
 	{{Y1,M1,last_day_of_month(Y1,M1)}, T1};
 prev_day({{Y,M,D},T}) ->
-	{{Y,M,D-1}, T}.
-	
+	{{Y,M,D-1}, T};
+prev_day({_,_,_} = Date) ->
+	prev_day({Date, {0,0,0}}).
+
+
 %% @doc Return the date one hour earlier.
 prev_hour({_,{0,_,_}} = Date) ->
 	{YMD,{_,I,S}} = prev_day(Date),
@@ -146,7 +149,9 @@ next_day({{Y,M,D},T} = Date) ->
 			{{Y1,M1,1},T1};
 		_ ->
 			{{Y,M,D+1},T}
-	end.
+	end;
+next_day({_,_,_} = Date) ->
+	next_day({Date, {0,0,0}}).
 
 %% @doc Return the date one hour later.
 next_hour({_,{23,_,_}} = Date) ->
