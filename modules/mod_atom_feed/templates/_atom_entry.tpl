@@ -1,6 +1,6 @@
 {% with m.rsc[id] as r %}
 	{% with r.medium as medium %}
-		<entry xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+		<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" xml:lang="en">
 			<id>{{ r.resource_uri }}</id>
 			<updated>{{ r.modified|date:"c" }}</updated>
 			<author>
@@ -26,6 +26,15 @@
 			{% if medium.filename %}
 				<content type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" /> 
 			{% endif %}
+			
+			{% if r.is_a.event and r.date_start %}
+				{# http://code.google.com/apis/gdata/docs/2.0/elements.html#gdEventKind #}
+				<category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/g/2005#event" />
+				<gd:eventStatus value="http://schemas.google.com/g/2005#event.confirmed" />
+				<gd:when startTime="{{ r.date_start|date:"c" }}" endTime="{{ r.date_end|date:"c" }}" />
+				{# <gd:where>My Living Room</gd:where> #}
+			{% endif %}
+				
 			<category term="{{ r.category.name }}" scheme="http://zotonic.com/id/category" />
 		</entry>
 	{% endwith %}
