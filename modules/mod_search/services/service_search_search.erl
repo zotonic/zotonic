@@ -36,8 +36,8 @@ process_get(_ReqData, Context) ->
         {array, S#search_result.result}
     catch
         _: {error, {unknown_query_term, E}} ->
-            {error, unknown_arg, E}
+            {error, unknown_arg, E};
+        _: {case_clause, {error, {error, error, _, E, _}}} ->
+            {error, syntax, binary_to_list(E)}
     end.
-
-
 

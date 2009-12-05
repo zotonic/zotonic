@@ -47,13 +47,13 @@ parse_request_args([{K,V}|Rest], Acc) ->
 
 % Convert request arguments to atom. Doing it this way avoids atom
 % table overflows.
-request_arg("cat")        -> cat;
-request_arg("hassubject") -> hassubject;
-request_arg("hasobject")  -> hasobject;
-request_arg("upcoming")   -> upcoming;
-request_arg("sort")       -> sort;
-request_arg(Term)         -> throw({error, {unknown_query_term, Term}}).
-
+request_arg("cat")         -> cat;
+request_arg("custompivot") -> custompivot;
+request_arg("hassubject")  -> hassubject;
+request_arg("hasobject")   -> hasobject;
+request_arg("upcoming")    -> upcoming;
+request_arg("sort")        -> sort;
+request_arg(Term)          -> throw({error, {unknown_query_term, Term}}).
 
 
 %% Private methods start here
@@ -143,6 +143,16 @@ parse_query([{sort, Sort}|Rest], Context, Result) ->
             end,
     parse_query(Rest, Context, add_order(Order, Result));
 
+%% custompivot=tablename
+%% Add a join on the given custom pivot table.
+parse_query([{custompivot, Table}|Rest], Context, Result) ->
+    Table1 = case is_atom(Table) of
+                 true -> atom_to_list(Table);
+                 false -> Table
+             end,
+    parse_query(Rest, Context, add_custompivot_join(Table1, Result));
+
+%% No match found
 parse_query([Term|_], _Context, _Result) ->
     throw({error, {unknown_query_term, Term}}).
 
@@ -179,6 +189,18 @@ add_edge_join(RscTable, ObjectOrSubject, Search) ->
        from=Search1#search_sql.from ++ ", edge " ++ Alias
       }
     }.
+
+
+%% Add a join on a custom pivot table
+add_custompivot_join(Table, SearchSql) ->
+    add_custompivot_join("rsc", Table, SearchSql).
+add_custompivot_join(RscTable, Table, Search) ->
+    Alias = "pivot" ++ integer_to_list(length(Search#search_sql.tables)),
+    JoinClause = "(" ++ RscTable ++ ".id = " ++ Alias ++ ".id)",
+    Search#search_sql{
+      tables=Search#search_sql.tables ++ [{Table, Alias}],
+      from=Search#search_sql.from ++ " left join pivot_" ++ Table ++ " " ++ Alias ++ " on " ++ JoinClause
+     }.
 
 %% Add an AND clause to the WHERE of a #search_sql
 add_where(Clause, Search) ->
