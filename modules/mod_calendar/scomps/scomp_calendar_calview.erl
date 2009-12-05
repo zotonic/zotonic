@@ -91,7 +91,7 @@ event2div(CalEvents) ->
 				{level,Level},
 				{z_index, 1000*Level + N},
 				{max_level, MaxLevel},
-				{height_em, max(Duration / 1800, 0.5)},
+				{height_em, max(Duration / 1800, 0.75)},
 				{top_em, SecStart / 1800}] | Acc],
 		event2div(Rest, N+1, Acc1).
 
