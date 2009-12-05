@@ -134,6 +134,9 @@ api_result(ReqData, Context, Result) ->
         {error, Err=unknown_arg, Arg} ->
             api_error(400, Err, "Unknown argument: " ++ Arg, ReqData, Context);
 
+        {error, Err=syntax, Arg} ->
+            api_error(400, Err, "Syntax error: " ++ Arg, ReqData, Context);
+
         {error, Err=not_exists, Arg} ->
             api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
 
