@@ -164,7 +164,7 @@ to_json(X) when is_binary(X) ->
 to_json({{Y,M,D},{H,I,S}} = DateTime)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
-    erlydtl_dateformat:format(DateTime, "Y-m-d H:i:s");
+    erlydtl_dateformat:format(DateTime, "Y-m-d H:i:s", en);
 to_json({array, X}) ->
     %% Explicit request for array (to prevent string conversion for some lists)
     {array, [to_json(V) || V <- X]};

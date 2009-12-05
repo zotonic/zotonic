@@ -44,7 +44,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 event({postback, {new_rsc_dialog, Title, Cat, Redirect, SubjectId, Predicate}, _TriggerId, _TargetId}, Context) ->
     CatName = case Cat of
         undefined -> "page";
-        _ -> z_convert:to_list(?TR(m_rsc:p(Cat, title, Context), Context))
+        _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
     end,
     CatId = case Cat of 
                 undefined -> undefined;

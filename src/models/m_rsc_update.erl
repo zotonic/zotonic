@@ -437,7 +437,7 @@ props_defaults(Props, _Context) ->
                 undefined ->
                     Props;
                 Title ->
-                    Text = ?TR(Title, en),
+                    Text = ?__(Title, en),
                     Slug = z_string:to_slug(Text),
                     lists:keystore(slug, 1, Props, {slug, Slug})
             end;

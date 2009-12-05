@@ -60,8 +60,8 @@ search1(Left, Right, Search, Context) ->
 
 
     add_title(Id, true, all_bytitle_featured, Context) ->
-        Title = ?TR(m_rsc:p(Id, title, Context), Context),
+        Title = ?__(m_rsc:p(Id, title, Context), Context),
         {[32 | z_string:to_name(Title)], Title, Id};
     add_title(Id, _Featured, _Search, Context) ->
-        Title = ?TR(m_rsc:p(Id, title, Context), Context),
+        Title = ?__(m_rsc:p(Id, title, Context), Context),
         {z_string:to_name(Title), Title, Id}.

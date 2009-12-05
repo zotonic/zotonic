@@ -294,10 +294,10 @@ date(Input, FormatStr, Context) when is_binary(FormatStr) ->
     date(Input, binary_to_list(FormatStr), Context);
 date(Input, FormatStr, Context) when is_binary(Input) ->
     list_to_binary(date(binary_to_list(Input), FormatStr, Context));
-date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, _Context) ->
-     erlydtl_dateformat:format({Date, Time}, FormatStr);
-date({_,_,_} = Date, FormatStr, _Context) ->
-    erlydtl_dateformat:format(Date, FormatStr);
+date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, Context) ->
+     erlydtl_dateformat:format({Date, Time}, FormatStr, Context);
+date({_,_,_} = Date, FormatStr, Context) ->
+    erlydtl_dateformat:format(Date, FormatStr, Context);
 date(Input, _FormatStr, _Context) when is_list(Input) ->
     io:format("Unexpected date parameter : ~p~n", [Input]),
     "".

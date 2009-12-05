@@ -220,4 +220,4 @@ flatten_color(A) ->
 make_label(N, _Context) when is_integer(N) orelse is_float(N) orelse is_atom(N) ->
     z_convert:to_list(N);
 make_label(L, Context) -> 
-    z_convert:to_list(?TR(L, Context)).
+    z_convert:to_list(?__(L, Context)).
