@@ -26,7 +26,6 @@
     timesince/2,
 	timesince/3,
 	
-	last_day_of_month/2,
 	days_in_year/1,
 	
 	prev_year/1,
@@ -105,7 +104,7 @@ prev_month({{Y,M,D},T}) -> {{Y,M-1,D}, T}.
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
 	{{Y1,M1,_},T1} = prev_month(Date),
-	{{Y1,M1,last_day_of_month(Y1,M1)}, T1};
+	{{Y1,M1,calendar:last_day_of_the_month(Y1,M1)}, T1};
 prev_day({{Y,M,D},T}) ->
 	{{Y,M,D-1}, T};
 prev_day({_,_,_} = Date) ->
@@ -143,7 +142,7 @@ next_month({{Y,M,D},T}) -> {{Y,M+1,D}, T}.
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
-	case last_day_of_month(Y,M) of
+	case calendar:last_day_of_the_month(Y,M) of
 		D -> 
 			{{Y1,M1,_},T1} = next_month(Date),
 			{{Y1,M1,1},T1};
@@ -174,18 +173,6 @@ next_second({_,{_,_,59}} = Date) ->
 next_second({YMD,{H,I,S}}) ->
 	{YMD, {H,I,S+1}}.
 
-%% @doc Return the last day of the month in a certain year.
-last_day_of_month(Y,2) ->
-	case calendar:is_leap_year(Y) of
-		true -> 29;
-   		false -> 28
-	end;
-last_day_of_month(_,M) 
-	when M == 1; M == 3; M == 5; M == 7; M == 8; M == 10; M == 12 ->
-	31;
-last_day_of_month(_,_) ->
-	30.
-
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
 	case calendar:is_leap_year(Y) of
@@ -207,7 +194,7 @@ diff({YMD1,{H1,I1,S1}}, {_,{H2,_,_}} = Date2) when H2 > H1 ->
 	diff({YMD1,{H1+24,I1,S1}},NextDate2);
 diff({{Y1,M1,D1},T1}, {{Y2,M2,D2},_} = Date2) when D2 > D1 ->
 	NextDate2 = next_month(Date2),
-	diff({{Y1,M1,D1+last_day_of_month(Y2,M2)},T1},NextDate2);
+	diff({{Y1,M1,D1+calendar:last_day_of_the_month(Y2,M2)},T1},NextDate2);
 diff({{Y1,M1,D1},T1}, {{_,M2,_},_} = Date2) when M2 > M1 ->
 	NextDate2 = next_year(Date2),
 	diff({{Y1,M1+12,D1},T1},NextDate2);
