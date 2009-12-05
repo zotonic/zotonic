@@ -27,13 +27,15 @@
 
 -include_lib("zotonic.hrl").
 
+-define(SQL_SAFE_REGEXP, "^[a-zA-Z_\.]+$").
+
 search(Query, Context) ->
     Start = #search_sql{select="rsc.id",
                         from="rsc rsc",
                         tables=[{rsc, "rsc"}]},
     R = parse_query(Query, Context, Start),
     %% add default sorting
-    add_order("rsc.id desc", R).
+    add_order("-rsc.id", R).
 
 
 parse_request_args(Args) ->
@@ -135,13 +137,7 @@ parse_query([{sort, Sort}|Rest], Context, Result) ->
                 true -> atom_to_list(Sort);
                 false -> Sort
             end,
-    [FirstChar|F1] = Sort1,
-    Order = case FirstChar of
-                $- -> F1 ++ " DESC";
-                $+ -> F1 ++ " ASC";
-                _ -> Sort1 ++ " ASC"
-            end,
-    parse_query(Rest, Context, add_order(Order, Result));
+    parse_query(Rest, Context, add_order(Sort1, Result));
 
 %% custompivot=tablename
 %% Add a join on the given custom pivot table.
@@ -195,14 +191,17 @@ add_edge_join(RscTable, ObjectOrSubject, Search) ->
 add_custompivot_join(Table, SearchSql) ->
     add_custompivot_join("rsc", Table, SearchSql).
 add_custompivot_join(RscTable, Table, Search) ->
+    Table1 = sql_safe(Table),
+    RscTable1 = sql_safe(RscTable),
     Alias = "pivot" ++ integer_to_list(length(Search#search_sql.tables)),
-    JoinClause = "(" ++ RscTable ++ ".id = " ++ Alias ++ ".id)",
+    JoinClause = "(" ++ RscTable1 ++ ".id = " ++ Alias ++ ".id)",
     Search#search_sql{
       tables=Search#search_sql.tables ++ [{Table, Alias}],
-      from=Search#search_sql.from ++ " left join pivot_" ++ Table ++ " " ++ Alias ++ " on " ++ JoinClause
+      from=Search#search_sql.from ++ " left join pivot_" ++ Table1 ++ " " ++ Alias ++ " on " ++ JoinClause
      }.
 
 %% Add an AND clause to the WHERE of a #search_sql
+%% Clause is already supposed to be safe.
 add_where(Clause, Search) ->
     case Search#search_sql.where of
         [] ->
@@ -211,8 +210,20 @@ add_where(Clause, Search) ->
             Search#search_sql{where=C ++ " AND " ++ Clause}
     end.
 
+
 %% Add an AND clause to the WHERE of a #search_sql
-add_order(Clause, Search) ->
+add_order(Sort, Search) ->
+    Clause = case Sort of 
+                 "random" ->
+                     "random()";
+                 _ -> 
+                     [FirstChar|F1] = Sort,
+                     case FirstChar of
+                         $- -> sql_safe(F1) ++ " DESC";
+                         $+ -> sql_safe(F1) ++ " ASC";
+                         _ -> sql_safe(Sort) ++ " ASC"
+                     end
+             end,
     case Search#search_sql.order of
         [] ->
             Search#search_sql{order=Clause};
@@ -225,3 +236,12 @@ add_arg(ArgValue, Search) ->
     Arg = [$$] ++ integer_to_list(length(Search#search_sql.args) + 1),
     {Arg, Search#search_sql{args=Search#search_sql.args ++ [ArgValue]}}.
 
+
+%% Make sure that parts of the query are safe to append to the search query.
+sql_safe(String) ->
+    case re:run(String, ?SQL_SAFE_REGEXP) of
+        {match, _} ->
+            String;
+        _ ->
+            throw({error, {unsafe_expression, String}})
+    end.
