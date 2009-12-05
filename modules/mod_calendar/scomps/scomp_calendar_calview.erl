@@ -102,7 +102,7 @@ min(A,B) when A < B -> A;
 min(_,B) -> B.
 
 group_by_day(Result, TimeStart) ->
-	CalEvents = [ #calendar_event{id=Id, date_start=nosecs(min(Start,End)), date_end=nosecs(max(Start,End))} || {Id,Start,End} <- Result ],
+	CalEvents = [ #calendar_event{id=Id, date_start=nosecs(Start), date_end=nosecs(max(Start,End))} || {Id,Start,End} <- Result ],
 	calendar_sort:sort(CalEvents, TimeStart).
 	
 	nosecs({D,{H,I,_}}) -> {D, {H,I,0}}.
