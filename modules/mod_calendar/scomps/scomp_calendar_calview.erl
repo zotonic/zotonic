@@ -99,10 +99,14 @@ max(A,B) when A > B -> A;
 max(_,B) -> B.
 
 group_by_day(Result, DayStart) ->
-	CalEvents = [ #calendar_event{id=Id, date_start=nosecs(Start), date_end=nosecs(max(Start,End))} || {Id,Start,End} <- Result ],
+	CalEvents = [ #calendar_event{id=Id, date_start=nosecs(Start), date_end=nosecs(sensible_end_date(Start,End))} || {Id,Start,End} <- Result ],
 	calendar_sort:sort(CalEvents, DayStart).
 	
 	nosecs({D,{H,I,_}}) -> {D, {H,I,0}}.
+
+	sensible_end_date(Start, {{9999,_,_},_}) -> Start;
+	sensible_end_date(Start, End) when Start > End -> Start;
+	sensible_end_date(_Start, End) -> End.
 
 filter_period(Days, StartDate, EndDate) ->
 	{SD,_} = StartDate,
