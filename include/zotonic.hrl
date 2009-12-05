@@ -133,7 +133,7 @@
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 
 %% @doc Call the translate function, 2nd parameter is either language or context
--define(TR(T,L), z_trans:trans(T,L)).
+-define(__(T,L), z_trans:trans(T,L)).
 
 %% The name of the session request parameter
 -define(SESSION_PAGE_Q, "z_pageid").

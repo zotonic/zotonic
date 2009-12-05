@@ -57,7 +57,7 @@ html(Context) ->
 event({submit, rscform, _FormId, _TargetId}, Context) ->
     Post = z_context:get_q_all(Context),
     Props = filter_props(Post),
-    Title = ?TR(proplists:get_value("title", Props), Context),
+    Title = ?__(proplists:get_value("title", Props), Context),
     Id = z_convert:to_integer(proplists:get_value("id", Props)),
     Props1 = proplists:delete("id", Props),
     CatBefore = m_rsc:p(Id, category_id, Context),

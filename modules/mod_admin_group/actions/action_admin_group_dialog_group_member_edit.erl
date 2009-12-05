@@ -60,7 +60,7 @@ event({submit, group_member_edit, _TriggerId, _TargetId}, Context) ->
             end,
 
             z_render:wire([
-                    {growl, [{text, ["Set member status of ",?TR(m_rsc:p(MemberId, title, Context), Context)]}]},
+                    {growl, [{text, ["Set member status of ",?__(m_rsc:p(MemberId, title, Context), Context)]}]},
                     {dialog_close, []},
                     {reload, []}], Context);
 

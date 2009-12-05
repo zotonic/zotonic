@@ -409,7 +409,7 @@ fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc)
         andalso is_integer(H) andalso is_integer(Min) andalso is_integer(S) ->
     case do_pivot_field(F) of
         false -> Acc;
-        true -> {A, [erlydtl_dateformat:format(Date, "Y m d H i s F l h")|B]}
+        true -> {A, [erlydtl_dateformat:format(Date, "Y m d H i s F l h", en)|B]}
     end;
 fetch_texts({_, {trans, _} = V}, {A,B}) ->
     {A, [V|B]};

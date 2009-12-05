@@ -109,8 +109,8 @@ menu_item(N, T, Id, Nr, Context) ->
     end.
 
 get_title(Id, Context) ->
-	case ?TR(m_rsc:p(Id, short_title, Context), Context) of
-		N when N == [] orelse N == <<"">> orelse N == undefined -> ?TR(m_rsc:p(Id, title, Context), Context);
+	case ?__(m_rsc:p(Id, short_title, Context), Context) of
+		N when N == [] orelse N == <<"">> orelse N == undefined -> ?__(m_rsc:p(Id, title, Context), Context);
 		Title -> Title
 	end.
 

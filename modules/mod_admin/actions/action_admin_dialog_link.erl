@@ -41,7 +41,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event({postback, {dialog_link, SubjectId, Predicate, ElementId, Actions}, _TriggerId, _TargetId}, Context) ->
     Pred = m_predicate:get(Predicate, Context),
-    Title = ["Add a connection: ", ?TR(proplists:get_value(title, Pred), Context)],
+    Title = ["Add a connection: ", ?__(proplists:get_value(title, Pred), Context)],
     PredCat = case m_predicate:object_category(Predicate, Context) of
                   [{Id}] -> Id;
                   _ -> undefined

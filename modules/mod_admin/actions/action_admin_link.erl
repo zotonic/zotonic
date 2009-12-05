@@ -60,7 +60,7 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, Action, Context) ->
 				{edge_id, EdgeId}
             ],
             Html  = z_template:render("_rsc_edge.tpl", Vars, Context),
-            Title = z_html:strip(?TR(m_rsc:p(ObjectId, title, Context), Context)),
+            Title = z_html:strip(?__(m_rsc:p(ObjectId, title, Context), Context)),
             ElementId1 = case ElementId of
                 undefined -> "links-"++z_convert:to_list(SubjectId)++"-"++z_convert:to_list(Predicate);
                 _ -> ElementId

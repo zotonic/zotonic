@@ -178,7 +178,7 @@ test_runner(_DateParam, [], _TestNum, PassCount) ->
     PassCount;
 test_runner(DateParam, [{Input, Expect} | Rest], TestNum, PassCount) ->
     Text = "'" ++ Input ++ "' -> '" ++ Expect ++ "'",
-    IsPass = is(TestNum, Text, erlydtl_dateformat:format(DateParam, Input), Expect),
+    IsPass = is(TestNum, Text, erlydtl_dateformat:format(DateParam, Input, en), Expect),
     test_runner(DateParam, Rest, TestNum + 1, PassCount + IsPass).
     
 is(TestNum, Text, Input1, Input2) when Input1 =:= Input2, ?DISPLAY_PASSES ->
