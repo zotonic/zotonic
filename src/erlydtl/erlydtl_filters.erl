@@ -64,6 +64,96 @@ add(Input, Number, Context) when is_list(Input) ->
 add(Input, Number, _Context) when is_integer(Input) ->
     Input + z_convert:to_integer(Number).
 
+sub(Input, Number, Context) ->
+	add(Input, 0-Number, Context).
+
+add_day(undefined, _Context) ->
+	undefined;
+add_day(Date, Context) ->
+	add_day(Date, 1, Context).
+
+add_day(undefined, _N, _Context) ->
+	undefined;
+add_day(Date, 0, _Context) ->
+	Date; 
+add_day(Date, N, Context) when is_integer(N), N > 0 -> 
+	add_day(z_datetime:next_day(Date), N-1, Context);
+add_day(Date, N, Context) when is_integer(N), N < 0 -> 
+	add_day(z_datetime:prev_day(Date), N+1, Context).
+
+sub_day(undefined, _Context) ->
+	undefined;
+sub_day(Date, Context) ->
+	add_day(Date, -1, Context).
+sub_day(undefined, _N, _Context) ->
+	undefined;
+sub_day(Date, N, Context) ->
+	sub_day(Date, 0-N, Context).
+
+add_week(undefined, _Context) ->
+	undefined;
+add_week(Date, Context) ->
+	add_day(Date, 7, Context).
+add_week(undefined, _N, _Context) ->
+	undefined;
+add_week(Date, N, Context) ->
+	add_day(Date, 7*N, Context).
+
+sub_week(undefined, _Context) ->
+	undefined;
+sub_week(Date, Context) ->
+	add_day(Date, -7, Context).
+
+sub_week(undefined, _N, _Context) ->
+	undefined;
+sub_week(Date, N, Context) ->
+	add_day(Date, -7*N, Context).
+
+add_month(undefined, _Context) ->
+	undefined;
+add_month(Date, Context) ->
+	add_month(Date, 1, Context).
+
+add_month(undefined, _N, _Context) ->
+	undefined;
+add_month(Date, 0, _Context) ->
+	Date; 
+add_month(Date, N, Context) when is_integer(N), N > 0 -> 
+	add_month(z_datetime:next_month(Date), N-1, Context);
+add_month(Date, N, Context) when is_integer(N), N < 0 -> 
+	add_month(z_datetime:prev_month(Date), N+1, Context).
+
+sub_month(undefined, _Context) ->
+	undefined;
+sub_month(Date, Context) ->
+	add_month(Date, -1, Context).
+
+sub_month(undefined, _N, _Context) ->
+	undefined;
+sub_month(Date, N, Context) ->
+	sub_month(Date, 0-N, Context).
+
+add_year(undefined, _Context) ->
+	undefined;
+add_year({{Y,M,D},Time}, _Context) ->
+	{{Y+1,M,D},Time}.
+
+add_year(undefined, _N, _Context) ->
+	undefined;
+add_year({{Y,M,D},Time}, N, _Context) ->
+	{{Y+N,M,D},Time}.
+
+sub_year(undefined, _Context) ->
+	undefined;
+sub_year({{Y,M,D},Time}, _Context) ->
+	{{Y-1,M,D},Time}.
+
+sub_year(undefined, _N, _Context) ->
+	undefined;
+sub_year({{Y,M,D},Time}, N, _Context) ->
+	{{Y-N,M,D},Time}.
+
+
 
 append(Input, undefined, _Context) ->
     Input;

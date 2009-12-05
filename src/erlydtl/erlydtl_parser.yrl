@@ -192,7 +192,6 @@ Terminals
 	or_keyword
 	and_keyword
 	'__keyword'
-	model_index
  	hash.
 
 Rootsymbol
@@ -364,7 +363,6 @@ TermValue -> open_bracket ValueList close_bracket : {value_list, '$2'}.
 AutoId -> identifier dot identifier : { '$1', '$3' }.
 AutoId -> identifier : '$1'.
 
-Variable -> model_index identifier : {model, '$2'}.
 Variable -> identifier : {variable, '$1'}.
 Variable -> Variable open_bracket Value close_bracket : {index_value, '$1', '$3'}.
 Variable -> Variable dot identifier : {attribute, {'$3', '$1'}}.
