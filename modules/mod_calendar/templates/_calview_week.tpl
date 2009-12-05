@@ -20,7 +20,7 @@
 			<li>
 				<ol class="programme-day">
 					{% for ev in event_divs[day] %}
-						{% catinclude "calview_item.tpl" ev.id ev=ev %}
+						{% catinclude "_calview_item.tpl" ev.id ev=ev %}
 					{% endfor %}
 				</ol>
 			</li>
