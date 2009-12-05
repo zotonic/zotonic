@@ -30,11 +30,11 @@ varies(_Params, _Context) -> undefined.
 terminate(_State, _Context) -> ok.
 
 render(Params, _Vars, Context, _State) ->
-	%For now we only do a weekview
-	%Period    = proplists:get_value(period, Params, "week"),
-	Date      = z_convert:to_datetime(proplists:get_value(date, Params)),
-	WeekStart = z_convert:to_integer(proplists:get_value(weekstart, Params, 1)),
-	TimeStart = z_convert:to_integer(proplists:get_value(daystart, Params, 0)),
+	WeekStartConf = m_config:get_value(mod_calendar, weekstart, 1, Context),
+	DayStartConf = m_config:get_value(mod_calendar, daystart, 0, Context),
+	Date = z_convert:to_datetime(proplists:get_value(date, Params)),
+	WeekStart = z_convert:to_integer(proplists:get_value(weekstart, Params, WeekStartConf)),
+	DayStart = z_convert:to_integer(proplists:get_value(daystart, Params, DayStartConf)),
 	
 	Date1 = case Date of
 		undefined -> erlang:localtime();
@@ -43,7 +43,7 @@ render(Params, _Vars, Context, _State) ->
 	
 	%% Calculate the datetime range for the weekview.
 	{StartDate, EndDate} = z_datetime:week_boundaries(Date1, WeekStart),
-	{StartDate1, EndDate1} = case TimeStart of
+	{StartDate1, EndDate1} = case DayStart of
 									0 -> 
 										{StartDate, EndDate};
 									H ->
@@ -56,10 +56,10 @@ render(Params, _Vars, Context, _State) ->
     #search_result{result=Result} = z_search:search({events, [{start, StartDate1}, {'end', EndDate1}]}, Context),
 
 	%% Prepare for displaying, crop events to the week.
-	Calendar = group_by_day(Result, TimeStart),
+	Calendar = group_by_day(Result, DayStart),
 	WeekCalendar = filter_period(Calendar, StartDate1, EndDate1),
 	WeekDates = week_dates(StartDate1),
-	DayHours = case TimeStart of
+	DayHours = case DayStart of
 		0 -> lists:seq(0,23);
 		N -> lists:seq(N,23) ++ lists:seq(0,N-1)
 	end,
@@ -70,7 +70,7 @@ render(Params, _Vars, Context, _State) ->
 		{week_dates, WeekDates},
 		{event_divs, EventDivs}
 	],
-	Html = z_template:render("calview_week.tpl", Vars, Context),
+	Html = z_template:render("_calview_week.tpl", Vars, Context),
     {ok, Html}.
 
 %% @doc Recalculate the events to divs with offsets and unique z-index
@@ -98,12 +98,9 @@ event2div(CalEvents) ->
 max(A,B) when A > B -> A;
 max(_,B) -> B.
 
-min(A,B) when A < B -> A;
-min(_,B) -> B.
-
-group_by_day(Result, TimeStart) ->
+group_by_day(Result, DayStart) ->
 	CalEvents = [ #calendar_event{id=Id, date_start=nosecs(Start), date_end=nosecs(max(Start,End))} || {Id,Start,End} <- Result ],
-	calendar_sort:sort(CalEvents, TimeStart).
+	calendar_sort:sort(CalEvents, DayStart).
 	
 	nosecs({D,{H,I,_}}) -> {D, {H,I,0}}.
 

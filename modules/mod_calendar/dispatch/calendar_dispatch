@@ -1,0 +1,5 @@
+[
+	{calendar, ["calendar"], resource_calendar, []},
+	{calendar, ["calendar", "week"], resource_calendar, []},
+	{calendar, ["calendar", "week", date], resource_calendar, []}
+].
