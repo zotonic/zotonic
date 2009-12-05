@@ -483,9 +483,6 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
         {'index_value', _, _} = Variable ->
             {{Ast, VarName, VarInfo}, TreeWalker1} = resolve_indexvariable_ast(Variable, Context, TreeWalker),
             {{Ast, merge_info(VarInfo, #ast_info{var_names = [VarName]})}, TreeWalker1};
-        {model, {identifier, _, _}} = Model ->
-            {{Ast, VarName, VarInfo}, TreeWalker1} = resolve_variable_ast(Model, Context, TreeWalker),
-            {{Ast, merge_info(VarInfo, #ast_info{var_names = [VarName]})}, TreeWalker1};
         {tuple_value, {identifier, _, TupleName}, TupleArgs} ->
             TupleNameAst = erl_syntax:atom(TupleName),
             {TupleArgsAst, TreeWalker1} = scomp_ast_list_args(TupleArgs, Context, TreeWalker),
@@ -724,14 +721,6 @@ opttrans_variable_ast({{Ast, VarName, Info}, TreeWalker}, Context) ->
 			]),
 	{{Ast1, VarName, Info}, TreeWalker}.
 
-resolve_variable_ast({model, {identifier, _, VarName}}, _Context, TreeWalker, _FinderFunction) ->
-    Ast = erl_syntax:tuple([
-            erl_syntax:atom(m),
-            erl_syntax:atom("m_" ++ VarName),
-            erl_syntax:atom(undefined)
-        ]),
-    {{Ast, "m", #ast_info{}}, TreeWalker};
-
 resolve_variable_ast({index_value, Variable, Index}, Context, TreeWalker, FinderFunction) ->
     {{IndexAst,Info},TreeWalker2} = value_ast(Index, false, Context, TreeWalker),
     {{VarAst, VarName, Info2}, TreeWalker3} = resolve_variable_ast(Variable, Context, TreeWalker2, FinderFunction),
@@ -740,7 +729,15 @@ resolve_variable_ast({index_value, Variable, Index}, Context, TreeWalker, Finder
             erl_syntax:atom(FinderFunction),
             [IndexAst, VarAst, z_context_ast(Context)]),
     {{Ast, VarName, merge_info(Info, Info2)}, TreeWalker3};
-           
+
+resolve_variable_ast({attribute, {{identifier, _, Model}, {variable, {identifier, _, "m"}}}}, _Context, TreeWalker, _FinderFunction) ->
+    Ast = erl_syntax:tuple([
+            erl_syntax:atom(m),
+            erl_syntax:atom("m_" ++ Model),
+            erl_syntax:atom(undefined)
+        ]),
+    {{Ast, "m", #ast_info{}}, TreeWalker};
+
 resolve_variable_ast({attribute, {{identifier, _, AttrName}, Variable}}, Context, TreeWalker, FinderFunction) ->
     {{VarAst, VarName, Info}, TreeWalker2} = resolve_variable_ast(Variable, Context, TreeWalker, FinderFunction),
     Ast = erl_syntax:application(
@@ -749,6 +746,18 @@ resolve_variable_ast({attribute, {{identifier, _, AttrName}, Variable}}, Context
             [erl_syntax:atom(AttrName), VarAst, z_context_ast(Context)]),
     {{Ast, VarName, Info}, TreeWalker2};
 
+resolve_variable_ast({variable, {identifier, _, "now"}}, Context, TreeWalker, _FinderFunction) ->
+    Ast = case resolve_scoped_variable_ast("now", Context) of
+        undefined ->
+			erl_syntax:application(
+				erl_syntax:atom(erlang),
+				erl_syntax:atom(localtime),
+				[]);
+        Val ->
+            Val
+    end,
+	{{Ast, "now", #ast_info{}}, TreeWalker};
+	
 resolve_variable_ast({variable, {identifier, _, VarName}}, Context, TreeWalker, FinderFunction) ->
     Ast = case resolve_scoped_variable_ast(VarName, Context) of
         undefined ->

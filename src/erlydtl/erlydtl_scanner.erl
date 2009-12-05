@@ -208,9 +208,6 @@ scan([H | T], Scanned, {Row, Column}, {in_double_quote, Closer}) ->
 scan([H | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
     scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_single_quote, Closer});
 
-scan("m." ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{model_index, {Row, Column}, "m:"} | Scanned], {Row, Column + 2}, {in_code, Closer});
-
 scan("," ++ T, Scanned, {Row, Column}, {_, Closer}) ->
     scan(T, [{comma, {Row, Column}, ","} | Scanned], {Row, Column + 1}, {in_code, Closer});
 
