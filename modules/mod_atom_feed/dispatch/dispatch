@@ -1,3 +1,4 @@
 [
-    { atom_feed, ["feed", cat], resource_atom_feed_cat, [] }
+    { atom_feed_search, ["feed", "search" ], 	resource_atom_feed_search, [] },
+    { atom_feed, 		["feed", cat], 		resource_atom_feed_cat, [] }
 ].
