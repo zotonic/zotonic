@@ -137,9 +137,13 @@ to_datetime(L) when is_list(L) ->
 				[H,I,S] = string:tokens(Time, ":."),
 				{{to_integer(Y),to_integer(M),to_integer(D)}, {to_integer(H),to_integer(I),to_integer(S)}};
 			[Date] ->
-				[Y,M,D] = string:tokens(Date, "-/"),
-				{{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}}
-		end
+                case string:tokens(Date, "-/") of
+                    [D,M,Y] when length(Y) =:= 4 ->
+                        {{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}};
+                    [Y,M,D] ->
+                        {{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}}
+                end
+        end
 	catch
 		_:_ -> undefined
 	end;

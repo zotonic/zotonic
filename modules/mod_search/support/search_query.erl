@@ -27,13 +27,15 @@
 
 -include_lib("zotonic.hrl").
 
--define(SQL_SAFE_REGEXP, "^[a-zA-Z_\.]+$").
+-define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
 search(Query, Context) ->
     Start = #search_sql{select="rsc.id",
                         from="rsc rsc",
                         tables=[{rsc, "rsc"}]},
-    R = parse_query(Query, Context, Start),
+    Query1 = filter_empty(Query),
+    ?DEBUG(Query1),
+    R = parse_query(Query1, Context, Start),
     %% add default sorting
     add_order("-rsc.id", R).
 
@@ -49,16 +51,28 @@ parse_request_args([{K,V}|Rest], Acc) ->
 
 % Convert request arguments to atom. Doing it this way avoids atom
 % table overflows.
-request_arg("cat")         -> cat;
-request_arg("custompivot") -> custompivot;
-request_arg("hassubject")  -> hassubject;
-request_arg("hasobject")   -> hasobject;
-request_arg("upcoming")    -> upcoming;
-request_arg("sort")        -> sort;
-request_arg(Term)          -> throw({error, {unknown_query_term, Term}}).
+request_arg("cat")                 -> cat;
+request_arg("custompivot")         -> custompivot;
+request_arg("hasobject")           -> hasobject;
+request_arg("hasobjectpredicate")  -> hasobjectpredicate;
+request_arg("hassubject")          -> hassubject;
+request_arg("hassubjectpredicate") -> hassubjectpredicate;
+request_arg("sort")                -> sort;
+request_arg("text")                -> text;
+request_arg("upcoming")            -> upcoming;
+request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
 %% Private methods start here
+filter_empty(Q) ->
+    lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
+
+empty_term(X) when X =:= [] orelse X =:= undefined orelse X =:= <<>> -> true;
+empty_term([X, _]) ->
+    empty_term(X);
+empty_term(_) ->
+    false.
+
 
 parse_query([], _Context, Result) ->
     Result;
@@ -87,7 +101,6 @@ parse_query([{hassubject, [Id, Predicate]}|Rest], Context, Result) ->
 
     {Arg1, Result2} = add_arg(Id, Result1),
     Result3 = add_where(A ++ ".object_id = " ++ Arg1, Result2),
-
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
     {Arg2, Result4} = add_arg(PredicateId, Result3),
     Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
@@ -110,11 +123,28 @@ parse_query([{hasobject, [Id, Predicate]}|Rest], Context, Result) ->
 
     {Arg1, Result2} = add_arg(Id, Result1),
     Result3 = add_where(A ++ ".subject_id = " ++ Arg1, Result2),
-
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
     {Arg2, Result4} = add_arg(PredicateId, Result3),
     Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
     parse_query(Rest, Context, Result5);
+
+%% hasobjectpredicate=predicate
+%% Give all things which have any outgoing edge with given predicate
+parse_query([{hasobjectpredicate, Predicate}|Rest], Context, Result) ->
+    {A, Result1} = add_edge_join("object_id", Result),
+    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    {Arg1, Result2} = add_arg(PredicateId, Result1),
+    Result3 = add_where(A ++ ".predicate_id = " ++ Arg1, Result2),
+    parse_query(Rest, Context, Result3);
+
+%% hassubjectpredicate=predicate
+%% Give all things which have any incoming edge with given predicate
+parse_query([{hassubjectpredicate, Predicate}|Rest], Context, Result) ->
+    {A, Result1} = add_edge_join("subject_id", Result),
+    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    {Arg1, Result2} = add_arg(PredicateId, Result1),
+    Result3 = add_where(A ++ ".predicate_id = " ++ Arg1, Result2),
+    parse_query(Rest, Context, Result3);
 
 %% is_featured or is_featured={false,true}
 %% Filter on whether an item is featured or not.
@@ -147,6 +177,37 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
                  false -> Table
              end,
     parse_query(Rest, Context, add_custompivot_join(Table1, Result));
+
+%% text=...
+%% Perform a fulltext search
+parse_query([{text, Text}|Rest], Context, Result) ->
+    Text1 = z_string:trim(Text),
+    case Text1 of 
+        [] ->
+            parse_query(Rest, Context, Result);
+        _ ->
+            TsQuery = mod_search:to_tsquery(Text, Context),
+            {QArg, Result1} = add_arg(TsQuery, Result),
+            {LArg, Result2} = add_arg(z_pivot_rsc:pg_lang(Context#context.language), Result1),
+            Result3 = Result2#search_sql{
+                        from=Result2#search_sql.from ++ ", to_tsquery(" ++ LArg ++ ", " ++ QArg ++ ") txtquery"
+                       },
+            Result4 = add_where("txtquery @@ rsc.pivot_tsv", Result3),
+            parse_query(Rest, Context, Result4)
+    end;
+
+%% date_start_after=date
+%% Filter on date_start after a specific date.
+parse_query([{date_start_after, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    parse_query(Rest, Context, add_where("rsc.pivot_date_start >= " ++ Arg, Result1));
+
+%% date_start_after=date
+%% Filter on date_start before a specific date.
+parse_query([{date_start_before, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    parse_query(Rest, Context, add_where("rsc.pivot_date_start <= " ++ Arg, Result1));
+
 
 %% No match found
 parse_query([Term|_], _Context, _Result) ->
