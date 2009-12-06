@@ -40,7 +40,7 @@ tag(Files, Context) ->
             [];
         _ -> 
             ModCss = newest(Css, {{1900,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<link href=\"/lib">>, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"screen\" rel=\"stylesheet\" />">>])
+            iolist_to_binary([ <<"<link href=\"/lib">>, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>])
     end,
     ScriptElement = case JsPath of
         [] ->
