@@ -308,6 +308,11 @@ element(Tuple, N, _Context) when is_tuple(Tuple) ->
 element(_Value, _N, _Context) ->
 	undefined.
 
+escape_ical(undefined, _Context) ->
+	<<>>;
+escape_ical(In, _Context) ->
+	z_string:escape_ical(In).
+
 escapejs(undefined, _Context) ->
     <<>>;
 escapejs(Input, _Context) when is_binary(Input) ->
@@ -704,11 +709,6 @@ escape1("'" ++ Rest, Acc) ->
     escape1(Rest, lists:reverse("&#039;", Acc));
 escape1([C | Rest], Acc) ->
     escape1(Rest, [C | Acc]).
-
-escape_ical(undefined, _Context) ->
-	<<>>;
-escape_ical(In, _Context) ->
-	z_string:escape_ical(In).
 
 fix_ampersands1(Input, Index) when is_binary(Input) ->
     case Input of
