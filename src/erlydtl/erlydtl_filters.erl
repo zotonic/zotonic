@@ -154,7 +154,6 @@ sub_year({{Y,M,D},Time}, N, _Context) ->
 	{{Y-N,M,D},Time}.
 
 
-
 append(Input, undefined, _Context) ->
     Input;
 append(undefined, Append, _Context) ->
@@ -622,6 +621,12 @@ truncate(In, N, Context) ->
 	z_string:truncate(erlydtl_runtime:to_list(In, Context), z_convert:to_integer(N)).
 
 
+unescape(undefined, _Context) ->
+	<<>>;
+unescape(In, _Context) ->
+	z_html:unescape(In).
+
+
 upper(undefined, _Context) ->
     undefined;
 upper(Input, _Context) when is_list(Input) or is_binary(Input) ->
@@ -637,6 +642,11 @@ urlencode(Input, _Context) when is_list(Input) ->
     urlencode1(Input, []);
 urlencode(_Input, _Context) ->
     <<>>.
+
+utc(undefined, _Context) ->
+	undefined;
+utc(Input, _Context) ->
+	hd(calendar:local_time_to_universal_time_dst(Input)).
 
 yesno(B, _Context) ->
     case erlydtl_runtime:is_false(B) of
@@ -693,6 +703,10 @@ escape1("'" ++ Rest, Acc) ->
 escape1([C | Rest], Acc) ->
     escape1(Rest, [C | Acc]).
 
+escape_ical(undefined, _Context) ->
+	<<>>;
+escape_ical(In, _Context) ->
+	z_string:escape_ical(In).
 
 fix_ampersands1(Input, Index) when is_binary(Input) ->
     case Input of
