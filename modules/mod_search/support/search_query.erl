@@ -34,7 +34,6 @@ search(Query, Context) ->
                         from="rsc rsc",
                         tables=[{rsc, "rsc"}]},
     Query1 = filter_empty(Query),
-    ?DEBUG(Query1),
     R = parse_query(Query1, Context, Start),
     %% add default sorting
     add_order("-rsc.id", R).
