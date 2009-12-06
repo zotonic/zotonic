@@ -206,7 +206,10 @@ sanitize1(Html) ->
 		EncBin = flatten(Enclosed),
 		Attrs1 = [flatten_attr(Attr) || Attr <- Attrs ],
 		Attrs2 = iolist_to_binary(z_utils:prefix(32, Attrs1)),
-		<<$<, Elt/binary, Attrs2/binary, $>, EncBin/binary, $<, $/, Elt/binary, $>>>;
+		case is_selfclosing(Elt) andalso EncBin == <<>> of
+			true ->  <<$<, Elt/binary, Attrs2/binary, 32, $/, $>>>;
+			false -> <<$<, Elt/binary, Attrs2/binary, $>, EncBin/binary, $<, $/, Elt/binary, $>>>
+		end;
 	flatten(L) when is_list(L) -> 
 		iolist_to_binary([ flatten(A) || A <- L ]).
 	
@@ -343,6 +346,11 @@ is_url_attr(<<"src">>) -> true;
 is_url_attr(<<"href">>) -> true;
 is_url_attr(_) -> false.
 
+%% @doc Elements that shouldn't use a open and close tag.
+is_selfclosing(<<"br">>) -> true;
+is_selfclosing(<<"hr">>) -> true;
+is_selfclosing(<<"img">>) -> true;
+is_selfclosing(_) -> false.
 
 %% @doc Simple filter for css. Removes parts between () and quoted strings. 
 filter_css(undefined) ->
