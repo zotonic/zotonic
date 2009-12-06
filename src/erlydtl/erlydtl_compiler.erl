@@ -1039,7 +1039,7 @@ trans_ext_ast(String, Args, Context, TreeWalker) ->
 	
 
 
-now_ast(FormatString, _Context, TreeWalker) ->
+now_ast(FormatString, Context, TreeWalker) ->
     % Note: we can't use unescape_string_literal here
     % because we want to allow escaping in the format string.
     % We only want to remove the surrounding escapes,
@@ -1048,7 +1048,7 @@ now_ast(FormatString, _Context, TreeWalker) ->
     {{erl_syntax:application(
         erl_syntax:atom(erlydtl_dateformat),
         erl_syntax:atom(format),
-        [erl_syntax:string(UnescapeOuter)]),
+        [erl_syntax:string(UnescapeOuter), z_context_ast(Context)]),
         #ast_info{}}, TreeWalker}.
 
 unescape_string_literal(String) ->
