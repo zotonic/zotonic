@@ -58,6 +58,8 @@ format(FormatString, #context{} = Context) ->
 % This is the format returned by erlang:localtime()
 % and other standard date/time BIFs
 %
+format({{9999,_,_},_}, _FormatString, _Context) ->
+	undefined;
 format({{_,_,_} = Date,{_,_,_} = Time}, FormatString, Context) ->
    replace_tags(Date, Time, FormatString, Context);
 %
