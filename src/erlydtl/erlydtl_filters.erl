@@ -424,6 +424,8 @@ in_past(_, _Context) ->
 
 is_defined(undefined, _Context) ->
     false;
+is_defined({{9999,_,_},{_,_,_}}, _Context) ->
+	false;
 is_defined(_V, _Context) ->
     true.
 
