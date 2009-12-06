@@ -7,7 +7,7 @@
 	<title>{{ m.rsc.home.title|escapexml }} - {{ m.rsc[cat].title|escapexml }}</title>
 
 	{% for id in m.search[{latest cat=cat}] %}
-		{% include "_atom_entry.tpl" id=id %}
+		{% catinclude "_atom_entry.tpl" id %}
 	{% endfor %}
 	
 </feed>

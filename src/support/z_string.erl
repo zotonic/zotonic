@@ -35,7 +35,8 @@
     replace/3,
 	truncate/2,
 	truncate/3,
-	split_lines/1
+	split_lines/1,
+	escape_ical/1
 ]).
 
 -include_lib("include/zotonic.hrl").
@@ -552,3 +553,22 @@ split_lines(B) when is_binary(B) ->
 		split_lines(Rest, <<>>, [Line|Acc]);
 	split_lines(<<C, Rest/binary>>, Line, Acc) ->
 		split_lines(Rest, <<Line/binary, C>>, Acc).
+
+
+%% @doc Escape special characters for ical RFC2445 elements
+escape_ical(L) when is_list(L) ->
+	escape_ical(iolist_to_binary(L));
+escape_ical(B) when is_binary(B) ->
+	escape_ical(B, <<>>, 0).
+
+	escape_ical(<<>>, Acc, _N) -> Acc;
+	escape_ical(B, Acc, N) when N >= 70 -> escape_ical(B, <<Acc/binary, 13, 10, 32>>, 0);
+	escape_ical(<<13, 10, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $n>>, N+2);
+	escape_ical(<<10, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $n>>, N+2);
+	escape_ical(<<9, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, 32>>, N+1);
+	escape_ical(<<$", Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, "DQUOTE">>, N+6);
+	escape_ical(<<$,, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $,>>, N+2);
+	escape_ical(<<$:, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $", $:, $">>, N+3);
+	escape_ical(<<$;, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $;>>, N+2);
+	escape_ical(<<$\\, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $\\>>, N+2);
+	escape_ical(<<C, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, C>>, N+1).
