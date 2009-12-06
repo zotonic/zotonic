@@ -37,7 +37,7 @@
 -include_lib("include/zotonic.hrl").
 
 %% Let cached versions expire in an hour.
--define(MAX_AGE, 1).
+-define(MAX_AGE, 3600).
 
 
 init(DispatchArgs) -> 
