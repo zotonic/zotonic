@@ -1,5 +1,5 @@
 {# Show the edit fields to edit the name of a person #}
-{% if r.is_a.person %}
+{% with m.rsc[id] as r %}
 <div class="item-wrapper">
 	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 		<span class="title">Person name</span>
@@ -12,16 +12,6 @@
 				Here you can edit the person's name.  Use the title of the base content for the display name of this person.
 				<a href="javascript:void(0)" class="do_dialog {title: 'Help about person name.', text: '<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name.', width: '450px'}">Need more help?</a>
 			</div>
-
-			{#
-			  prefix character varying(32) NOT NULL DEFAULT ''::character varying,
-			  first_name character varying(80) NOT NULL DEFAULT ''::character varying,
-			  given_names character varying(128) NOT NULL DEFAULT ''::character varying,
-			  middle_name character varying(80) NOT NULL DEFAULT ''::character varying,
-			  surname_prefix character varying(32) NOT NULL DEFAULT ''::character varying,
-			  surname character varying(80) NOT NULL DEFAULT ''::character varying,
-			  suffix character varying(32) NOT NULL DEFAULT ''::character varying,
-			#}
 			
 			<div class="zp-20">
 				<div class="form-item clearfix">
@@ -54,4 +44,6 @@
 		</fieldset>
 	</div>
 </div>
-{% endif %}
+{% endwith %}
+{# A person also has an address #}
+{% include "_admin_edit_content_address.tpl" id=id %}

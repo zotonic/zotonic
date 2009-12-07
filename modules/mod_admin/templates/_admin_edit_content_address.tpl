@@ -1,5 +1,5 @@
 {# Show the edit fields to edit the name of a person #}
-{% if r.is_a.person or r.is_a.location %}
+{% with m.rsc[id] as r %}
 <div class="item-wrapper">
 	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
 		<span class="title">Address</span>
@@ -45,22 +45,6 @@
 					<input id="website" type="text" name="website" value="{{ r.website }}" style="width: 295px" />
 				</div>
 			</div>
-{#
-	-- Inherited:   street1 character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   street2 character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   city character varying(50) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   state character varying(50) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   postcode character varying(30) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   country character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   mail_is_special boolean NOT NULL DEFAULT false,
-	-- Inherited:   m_street1 character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_street2 character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_city character varying(50) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_state character varying(50) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_postcode character varying(30) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_country character varying(80) NOT NULL DEFAULT ''::character varying,
-	-- Inherited:   m_addressee character varying(80) NOT NULL DEFAULT ''::character varying,
-#}
 
 			<hr class="clear" />
 
@@ -138,4 +122,4 @@
 		</fieldset>
 	</div>
 </div>
-{% endif %}
+{% endwith %}

@@ -7,4 +7,4 @@ deps/mochiweb/doc/*
 src/erlydtl/erlydtl_parser.erl
 priv/log/*
 priv/sites/default/files/*
-
+*.orig
