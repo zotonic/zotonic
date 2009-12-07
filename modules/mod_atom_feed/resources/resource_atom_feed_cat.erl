@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@
 -define(MAX_AGE, 3600).
 
 
-init(DispatchArgs) -> 
+init(DispatchArgs) ->
     {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
@@ -49,7 +49,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context2 = z_context:ensure_qs(Context1),
     ?WM_REPLY(true, Context2).
 
-    
+
 allowed_methods(ReqData, Context) ->
     {['HEAD', 'GET'], ReqData, Context}.
 
@@ -87,13 +87,14 @@ provide_content(ReqData, Context) ->
     F = fun() ->
         Vars = [
             {cat, CatName},
+            {upcoming, z_context:get(upcoming, Context1)},
             {updated, z_context:get(last_modified, Context1)},
             {site_url, z_context:abs_url("", Context1)}
         ],
         {Content, _Context2} = z_template:render_to_iolist("atom_feed_cat.tpl", Vars, Context1),
         Content
-    end,
-    Content = z_depcache:memo(F, {atom_feed, CatName}, ?MAX_AGE, [CatName], Context1),
+    end,    
+    Content = F(), %%z_depcache:memo(F, {atom_feed, CatName}, ?MAX_AGE, [CatName], Context1),
     ?WM_REPLY(Content, Context1).
 
 

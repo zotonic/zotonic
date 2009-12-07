@@ -4,10 +4,15 @@
 	<logo />
 	<link rel="self" type="application/atom+xml" href="{{ site_url }}{% url atom_feed cat=cat %}" />
 	<id>{{ site_url }}{% url atom_feed cat=cat %}</id>
-	<title>{{ m.rsc.home.title|escapexml }} - {{ m.rsc[cat].title|escapexml }}</title>
+	<title>{{ m.config.site.title.value|escapexml }} - {{ m.rsc[cat].title|escapexml }}</title>
 
+    {% if upcoming %}
+	{% for id in m.search[{upcoming cat=cat}] %}
+		{% catinclude "_atom_entry.tpl" id upcoming=1 %}
+	{% endfor %}
+    {% else %}
 	{% for id in m.search[{latest cat=cat}] %}
 		{% catinclude "_atom_entry.tpl" id %}
 	{% endfor %}
-	
+	{% endif %}
 </feed>
