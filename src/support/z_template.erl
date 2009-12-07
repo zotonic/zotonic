@@ -28,6 +28,10 @@
 
 -include_lib("zotonic.hrl").
 
+%% Max time comppiling a template is allowed to take.  Could be long after a cache flush or when
+%% the server is on tight memory and is swapping.
+-define(TIMEOUT, 30000).
+
 %% External exports
 -export([
     compile/2,
@@ -62,7 +66,7 @@ reset(Context) ->
 render(File, Variables, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
-            Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}) of
+            Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
                 modified -> compile(File, Context);
                 Other -> Other
             end,
@@ -103,7 +107,7 @@ render_to_iolist(File, Vars, Context) ->
 compile(File, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
-            gen_server:call(Context#context.template_server, {compile, FoundFile, Context});
+            gen_server:call(Context#context.template_server, {compile, FoundFile, Context}, ?TIMEOUT);
         {error, Reason} ->
             {error, Reason}
     end.
