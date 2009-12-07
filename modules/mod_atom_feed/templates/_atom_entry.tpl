@@ -2,7 +2,7 @@
 	{% with r.medium as medium %}
 		<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" xml:lang="en">
 			<id>{{ r.resource_uri }}</id>
-			<updated>{{ r.modified|date:"c" }}</updated>
+			<updated>{% if upcoming %}{{ r.date_start|date:"c" }}{% else %}{{ r.modified|date:"c" }}{% endif %}</updated>
 			<author>
 				{% with r.o.author[1] as author_id %}
 				<name>{{ m.rsc[author_id|default:r.creator_id].title|escapexml }}</name>

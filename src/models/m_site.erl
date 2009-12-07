@@ -76,6 +76,8 @@ get(Key, Context) when is_atom(Key) ->
     end.
 
 %% @doc Fetch a nested key from the site configuration
+get(site, Key, Context) when is_atom(Key) ->
+    get(Key, Context);
 get(Module, Key, Context) when is_atom(Key) ->
 	case get(Module, Context) of
 		undefined -> undefined;
