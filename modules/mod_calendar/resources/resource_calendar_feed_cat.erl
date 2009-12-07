@@ -18,7 +18,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(resource_icalendar_feed_cat).
+-module(resource_calendar_feed_cat).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
