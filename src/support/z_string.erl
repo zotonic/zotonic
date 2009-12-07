@@ -559,7 +559,9 @@ split_lines(B) when is_binary(B) ->
 escape_ical(L) when is_list(L) ->
 	escape_ical(iolist_to_binary(L));
 escape_ical(B) when is_binary(B) ->
-	escape_ical(B, <<>>, 0).
+	escape_ical(B, <<>>, 0);
+escape_ical(A) when is_atom(A) ->
+	escape_ical(atom_to_list(A)).
 
 	escape_ical(<<>>, Acc, _N) -> Acc;
 	escape_ical(B, Acc, N) when N >= 70 -> escape_ical(B, <<Acc/binary, 13, 10, 32>>, 0);
