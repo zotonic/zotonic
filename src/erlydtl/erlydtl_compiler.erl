@@ -321,8 +321,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 string_ast(String, TreeWalkerAcc);
             ({'include', {string_literal, _, File}, Args, All}, TreeWalkerAcc) ->
                 include_ast(unescape_string_literal(File), Args, All, Context, TreeWalkerAcc);
-            ({'catinclude', {string_literal, _, File}, RscId, Args}, TreeWalkerAcc) ->
-                catinclude_ast(unescape_string_literal(File), RscId, Args, Context, TreeWalkerAcc);
+            ({'catinclude', {string_literal, _, File}, RscId, Args, All}, TreeWalkerAcc) ->
+                catinclude_ast(unescape_string_literal(File), RscId, Args, All, Context, TreeWalkerAcc);
             ({'if', {'expr', {'not', Variable}, 'none'}, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = empty_ast(TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(Contents, Context, TreeWalker1),
@@ -503,10 +503,10 @@ string_ast(String, TreeWalker) ->
     {{erl_syntax:binary([erl_syntax:binary_field(erl_syntax:integer(X)) || X <- String]), #ast_info{}}, TreeWalker}.       
 
 
-catinclude_ast(File, Id, Args, Context, TreeWalker) ->
+catinclude_ast(File, Id, Args, All, Context, TreeWalker) ->
     Args1 = [ {{identifier, none, "$file"},{string_literal, none, File}},
 			  {{identifier, none, "id"}, Id} | Args],
-    scomp_ast("catinclude", Args1, false, Context, TreeWalker).
+    scomp_ast("catinclude", Args1, All, Context, TreeWalker).
 
 
 include_ast(File, Args, All, Context, TreeWalker) ->

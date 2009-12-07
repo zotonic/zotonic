@@ -70,9 +70,10 @@ render_all(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find_all(scomp, ScompName, Context) of
         [] -> [];
         ModuleNames when is_list(ModuleNames) ->
-        	ScompContext = z_context:prune_for_scomp(a_acl:args_to_visible_for(Args), Context),
+        	ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
+			Args1 = [{'$all', true} | Args],
         	RenderFun = fun(ModuleName) ->
-        	    case render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) of
+       	    case render_scomp_module(ModuleName, Args1, Vars, ScompContext, Context) of
         	        {ok, Result} -> z_context:prune_for_template(Result);
         	        {error, Reason} -> throw({error, Reason})
         	    end
