@@ -1,3 +1,0 @@
-[
-    { icalendar_feed, ["icalendar", cat], resource_icalendar_feed_cat, [] }
-].
