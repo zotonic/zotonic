@@ -31,6 +31,7 @@
 	to_atom/1, 
 	to_binary/1, 
 	to_integer/1,
+	to_float/1,
 	to_bool/1,
 	to_utc/1,
 	to_localtime/1,
@@ -54,6 +55,7 @@ to_list(A) -> inner_to_list(A).
 inner_to_list(A) when is_atom(A) -> atom_to_list(A);
 inner_to_list(B) when is_binary(B) -> binary_to_list(B);
 inner_to_list(I) when is_integer(I) -> integer_to_list(I);
+inner_to_list(F) when is_float(F) -> float_to_list(F);
 inner_to_list(L) when is_list(L) -> L.
 
 to_atom(<<>>) -> undefined;
@@ -67,6 +69,7 @@ to_binary(undefined) -> <<>>;
 to_binary(A) when is_atom(A) -> to_binary(atom_to_list(A));
 to_binary(B) when is_binary(B) -> B;
 to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
+to_binary(F) when is_float(F) -> to_binary(float_to_list(F));
 to_binary(L) when is_list(L) -> list_to_binary(L).
 
 to_integer(undefined) -> undefined;
@@ -74,7 +77,16 @@ to_integer([]) -> undefined;
 to_integer(A) when is_atom(A) -> to_integer(atom_to_list(A));
 to_integer(B) when is_binary(B) -> to_integer(binary_to_list(B));
 to_integer(I) when is_integer(I) -> I;
+to_integer(F) when is_float(F) -> erlang:round(F);
 to_integer(L) when is_list(L) -> list_to_integer(L).
+
+to_float(undefined) -> undefined;
+to_float([]) -> undefined;
+to_float(A) when is_atom(A) -> to_float(atom_to_list(A));
+to_float(B) when is_binary(B) -> to_float(binary_to_list(B));
+to_float(I) when is_integer(I) -> I + 0.0;
+to_float(F) when is_float(F) -> F;
+to_float(L) when is_list(L) -> list_to_float(L).
 
 to_bool(undefined) -> false;
 to_bool(false) -> false;
