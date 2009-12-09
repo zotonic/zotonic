@@ -146,12 +146,14 @@ newest([File|Files], Mod, Context) ->
     end.
 
 
-%% @doc Split the list of files in js and css files, make sure that all files start with a '/'
+%% @doc Split the list of files in js and css files, remove leading '/'
 split_css_js(Files) ->
     split_css_js(Files, [], []).
     
     split_css_js([], CssAcc, JsAcc) ->
         {lists:reverse(CssAcc), lists:reverse(JsAcc)};
+    split_css_js([[$/|File]|Rest], CssAcc, JsAcc) ->
+		split_css_js([File|Rest], CssAcc, JsAcc);
     split_css_js([File|Rest], CssAcc, JsAcc) ->
         case filename:extension(File) of
             ".css" -> split_css_js(Rest, [File|CssAcc], JsAcc);
@@ -166,7 +168,7 @@ test() ->
         "/a/b/c.js",
         "/a/b3.js"
     ],
-    {[],[],["/a/b1.js","/a/b2.js","/a/b/c.js","/a/b3.js"],"/a/b1~~b2~~b/c~~/a/b3"} = collapsed_paths(Files),
+    {[],[],["a/b1.js","a/b2.js","a/b/c.js","a/b3.js"],"/a/b1~b2~b/c~/a/b3"} = collapsed_paths(Files),
     ["/a/b1.js","/a/b2.js","/a/b/c.js","/a/b3.js"] = uncollapse("/a/b1~~b2~~b/c~~/a/b3~~63415422477.js"),
     ok.
     
