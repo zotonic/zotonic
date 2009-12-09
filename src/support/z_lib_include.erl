@@ -131,7 +131,8 @@ collapse_dirs([File|Files]) ->
 
 %% @doc Get the newest mod time of the list of files.
 newest([], Mod, _Context) ->
-    calendar:datetime_to_gregorian_seconds(Mod);
+	[ModUTC|_] = calendar:local_time_to_universal_time_dst(Mod),
+    calendar:datetime_to_gregorian_seconds(ModUTC);
 newest([File|Files], Mod, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, FilePath} ->

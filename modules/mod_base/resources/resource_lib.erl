@@ -130,9 +130,10 @@ last_modified(ReqData, State) ->
     case State#state.last_modified of
         undefined -> 
             LMod = max_last_modified(State#state.fullpaths, {{1970,1,1},{12,0,0}}),
-            {LMod, RD1, State#state{last_modified=LMod}};
-        LMod ->
-            {LMod, RD1, State}
+			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+            {LModUTC, RD1, State#state{last_modified=LModUTC}};
+        LModUTC ->
+            {LModUTC, RD1, State}
     end.
 
     %% @doc Find the latest modification time of a list of files.
