@@ -3,7 +3,7 @@
 	<ol class="programme-day-titles clearfix">
 		<li class="programme-empty-first-cell">&nbsp;</li>
 		{% for day in week_dates %}
-			<li><h3>{{ day|date:"l" }}</h3></li>
+			<li><h3>{{ day|date:"l" }}{% if date_format %}<span>{{ day|date:date_format }}</span>{% endif %}</h3></li>
 		{% endfor %}
 	</ol>
 	
