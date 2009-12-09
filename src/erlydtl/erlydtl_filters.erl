@@ -62,7 +62,9 @@ add(Input, Number, Context) when is_binary(Input) ->
 add(Input, Number, Context) when is_list(Input) ->
     integer_to_list(add(list_to_integer(Input), Number, Context));
 add(Input, Number, _Context) when is_integer(Input) ->
-    Input + z_convert:to_integer(Number).
+    Input + z_convert:to_integer(Number);
+add(Input, Number, _Context) when is_float(Input) ->
+    Input + z_convert:to_float(Number).
 
 sub(Input, Number, Context) ->
 	add(Input, 0-Number, Context).
@@ -450,6 +452,24 @@ vsplit_in(In, N, Context) ->
     z_utils:vsplit_in(erlydtl_runtime:to_list(In, Context), N).
 
 
+rand(_Context) ->
+	z_ids:number().
+
+rand(Max, Context) when is_binary(Max) ->
+	rand(binary_to_list(Max), Context);
+rand(Max, Context) when is_list(Max) ->
+	case lists:member($., Max) of
+		true ->  rand(erlang:list_to_float(Max), Context);
+		false -> rand(z_convert:to_integer(Max), Context)
+	end;
+rand(Max, _Context) when is_float(Max) ->
+	z_ids:number(1000000000000) / 1000000000000 * Max;
+rand(Max, _Context) when is_integer(Max) ->
+	z_ids:number(z_convert:to_integer(Max));
+rand(_, _Context) ->
+	undefined.
+
+	
 striptags(undefined, _Context) ->
     undefined;
 striptags(In, _Context) when is_integer(In) ->
