@@ -50,6 +50,11 @@
 	margin: 0;
 }
 
+.calender ol.programme-day-titles li h3 span {
+	display: block;
+	font-weight: normal;
+}
+
 .calender ol.programme-days li.programme-hours-item,
 .calender ol.programme-day-titles li.programme-empty-first-cell {
 	width: 37px;

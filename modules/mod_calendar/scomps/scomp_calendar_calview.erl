@@ -35,6 +35,7 @@ render(Params, _Vars, Context, _State) ->
 	Date = z_convert:to_datetime(proplists:get_value(date, Params)),
 	WeekStart = z_convert:to_integer(proplists:get_value(weekstart, Params, WeekStartConf)),
 	DayStart = z_convert:to_integer(proplists:get_value(daystart, Params, DayStartConf)),
+	DateFormat = z_convert:to_list(proplists:get_value(date_format, Params, "b j")),
 	
 	Date1 = case Date of
 		undefined -> erlang:localtime();
@@ -68,7 +69,8 @@ render(Params, _Vars, Context, _State) ->
 	Vars = [
 		{day_hours, DayHours},
 		{week_dates, WeekDates},
-		{event_divs, EventDivs}
+		{event_divs, EventDivs},
+		{date_format, DateFormat}
 	],
 	Html = z_template:render("_calview_week.tpl", Vars, Context),
     {ok, Html}.
