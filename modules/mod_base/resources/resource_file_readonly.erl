@@ -156,9 +156,10 @@ last_modified(ReqData, State) ->
     case State#state.last_modified of
         undefined -> 
             LMod = filelib:last_modified(State#state.fullpath),
-            {LMod, RD1, State#state{last_modified=LMod}};
-        LMod ->
-            {LMod, RD1, State}
+			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+            {LModUTC, RD1, State#state{last_modified=LModUTC}};
+        LModUTC ->
+            {LModUTC, RD1, State}
     end.
 
 expires(ReqData, State) ->
