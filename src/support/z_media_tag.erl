@@ -119,13 +119,9 @@ tag(Filename, Options, Context) when is_list(Filename) ->
 	mediaprops_filename(Props, Context) ->
 	    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
 			[] ->
-		    	case z_convert:to_list(proplists:get_value(filename, Props)) of
-		        	[] -> 
-		            	case z_notifier:first({media_stillimage, Props}, Context) of
-			                {ok, Filename} -> Filename;
-							_ -> []
-						end;
-					Filename -> Filename
+            	case z_notifier:first({media_stillimage, Props}, Context) of
+	                {ok, Filename} -> Filename;
+					_ -> z_convert:to_list(proplists:get_value(filename, Props))
 				end;
 			Filename -> Filename
 		end.

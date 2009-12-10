@@ -138,7 +138,7 @@ cmd_args(FileProps, Filters) ->
                     false -> Filters2 ++ [{sharpen_small}, {quality}]
                end,
     Filters4 = case proplists:get_value(background, Filters3) of
-                    undefined -> [{background,"white"} | Filters3];
+                    undefined -> [{background,"white"}, {layers,"flatten"} | Filters3];
                     _ -> Filters3
                end,
 
@@ -190,6 +190,8 @@ filter2arg({correct_orientation, Orientation}, Width, Height) ->
     end;
 filter2arg({background, Color}, Width, Height) ->
     {Width, Height, ["-background ", $", z_utils:os_escape(Color), $"]};
+filter2arg({layers, Method}, Width, Height) ->
+    {Width, Height, ["-layers ", $", z_utils:os_escape(Method), $"]};
 filter2arg({colorspace, Colorspace}, Width, Height) ->
     {Width, Height, ["-colorspace ", $", z_utils:os_escape(Colorspace), $"]};
 filter2arg({width, _}, Width, Height) ->
