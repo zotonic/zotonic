@@ -25,6 +25,9 @@
 %% interface functions
 -export([
     identify/2,
+	identify/3,
+	identify_file/2,
+	identify_file/3,
     extension/1,
 	guess_mime/1
 ]).
@@ -32,27 +35,73 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec identifyImageFile) -> {ok, Meta} | {error, Error}
+%% @spec identify(File, Context) -> {ok, Meta} | {error, Error}
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
-identify(ImageFile, Context) ->
+identify(File, Context) ->
+	identify(File, File, Context).
+identify(File, OriginalFilename, Context) ->
     F = fun() ->
-            case m_media:identify(ImageFile, Context) of
+            case m_media:identify(File, Context) of
                 {ok, _Props} = Result -> Result;
-                {error, _Reason} -> identify_file(ImageFile, Context)
+                {error, _Reason} -> identify_file(File, OriginalFilename, Context)
             end
     end,
-    z_depcache:memo(F, {media_identify, ImageFile}, ?DAY, [media_identify], Context).
+    z_depcache:memo(F, {media_identify, File}, ?DAY, [media_identify], Context).
     
 
 
-%% @spec identify(ImageFile) -> {ok, PropList} | {error, Reason}
-%% @doc Fetch information about an image, returns width, height, type, etc.
-identify_file(ImageFile, Context) ->
-    case z_notifier:first({media_identify_file, ImageFile}, Context) of
-        {ok, Props} -> {ok, Props};
-        undefined -> identify_file_imagemagick(ImageFile)
-    end.
-    
+%% @spec identify(File, Context) -> {ok, PropList} | {error, Reason}
+%% @doc Fetch information about a file, returns mime, width, height, type, etc.
+identify_file(File, Context) ->
+	identify_file(File, File, Context).
+identify_file(File, OriginalFilename, Context) ->
+    case z_notifier:first({media_identify_file, File}, Context) of
+        {ok, Props} ->
+			{ok, Props};
+        undefined -> 
+			case identify_file_os(File, OriginalFilename) of
+				{error, _} ->
+					%% Last resort, give ImageMagick a try
+					identify_file_imagemagick(File);
+				{ok, Props} ->
+					%% Images, pdf and ps are further investigated by ImageMagick
+					case proplists:get_value(mime, Props) of
+						"image/" ++ _ -> identify_file_imagemagick(File);
+						"application/pdf" -> identify_file_imagemagick(File);
+						"application/postscript" -> identify_file_imagemagick(File);
+						_Mime -> {ok, Props}
+					end
+			end
+	end.
+
+
+%% @spec identify_file_os(File::string()) -> {ok, PropList} | {error, Reason}
+%% @doc Identify the mime type of a file using the unix "file" command.
+identify_file_os(File, OriginalFilename) ->
+	SafeFile = z_utils:os_escape(File),
+	Mime = z_string:trim(os:cmd("file -b --mime-type \""++SafeFile++"\"")),
+	case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
+		nomatch -> 
+			{error, Mime};
+		{match, _} ->
+			case Mime of
+				"text/x-c" ->
+					%% "file" does a lousy job recognizing files with curly braces in them.
+					case guess_mime(OriginalFilename) of
+						"text/" ++ _ = MimeFilename -> {ok, [{mime, MimeFilename}]};
+						_ -> {ok, [{mime, "text/plain"}]}
+					end;
+				"application/x-gzip" ->
+					%% Special case for the often used extension ".tgz" instead of ".tar.gz"
+					case filename:extension(OriginalFilename) of
+						".tgz" -> {ok, [{mime, "application/x-gzip+tar"}]};
+						_ -> {ok, [{mime, "application/x-gzip"}]}
+					end;
+				_ ->
+					{ok, [{mime, Mime}]}
+			end
+	end.
+
 
 %% @spec identify(ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
@@ -107,65 +156,104 @@ mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
 %% @doc Return the extension for a known mime type.
-%% @todo Include extra mime types when we can identify them.
-extension(B) when is_binary(B) -> extension(binary_to_list(B));
-extension("image/jpeg") -> ".jpg";
-extension("image/gif") -> ".gif";
-extension("image/tiff") -> ".tiff";
-extension("image/bmp") -> ".bmp";
-extension("image/png") -> ".png";
-extension("application/pdf") -> ".pdf";
-extension("application/postscript") -> ".ps";
-extension("application/vnd.ms-excel") -> ".xls";
-extension("application/msword") -> ".doc";
-extension("application/vnd.ms-powerpoint") -> ".pps";
-extension("audio/mpeg") -> ".mp3";
-extension("video/mp4") -> ".mp4";
-extension("video/mpeg") -> ".mpg";
-extension("video/msvideo") -> ".avi";
-extension("video/x-ms-asf") -> ".asf";
-extension("video/quicktime") -> ".mov";
-extension(_) -> ".bin".
+extension(B) when is_binary(B) -> 
+	extension(binary_to_list(B));
+extension(Mime) ->
+	case lists:keysearch(Mime, 2, extension_mime()) of
+		{value,{Ext,_Mime}} -> Ext;
+		false -> ".bin"
+	end.
+
 
 %% @spec guess_mime(string()) -> string()
 %% @doc  Guess the mime type of a file by the extension of its filename.
+guess_mime(File) when is_binary(File) ->
+	guess_mime(binary_to_list(File));
 guess_mime(File) ->
-    case filename:extension(File) of
-	".htm" -> "text/html";
-	".html" -> "text/html";
-	".xhtml" -> "application/xhtml+xml";
-	".xml" -> "application/xml";
-	".css" -> "text/css";
-	".js" -> "application/x-javascript";
-	".jpg" -> "image/jpeg";
-	".jpeg" -> "image/jpeg";
-	".gif" -> "image/gif";
-	".png" -> "image/png";
-	".bmp" -> "image/bmp";
-	".tiff" -> "image/tiff";
-	".tif" -> "image/tiff";
-	".ico" -> "image/vnd.microsoft.icon";
-	".pdf" -> "application/pdf";
-	".ps" -> "application/ps";
-	".swf" -> "application/x-shockwave-flash";
-	".zip" -> "application/zip";
-	".bz2" -> "application/x-bzip2";
-	".gz" -> "application/x-gzip";
-	".tar" -> "application/x-tar";
-	".tgz" -> "application/x-gzip";
-    ".htc" -> "text/x-component";
-	".txt" -> "text/plain";
-	".doc" -> "application/msword";
-	".xls" -> "application/vnd.ms-excel";
-	".pps" -> "application/vnd.ms-powerpoint";
-	".ppt" -> "application/vnd.ms-powerpoint";
-	".mp3" -> "audio/mpeg";
-	".mp4" -> "video/mp4";
-	".mpg" -> "video/mpeg";
-	".mpeg" -> "video/mpeg";
-	".avi" -> "video/msvideo";
-	".asf" -> "video/x-ms-asf";
-	".mov" -> "video/quicktime";
-	_ -> "application/octet-stream"
-end.
+    case lists:keysearch(filename:extension(File), 1, extension_mime()) of
+		{value,{_Ext,Mime}} -> 
+			Mime;
+		false ->
+			"application/octet-stream"
+	end.
+
+
+% @doc Return a list of mime-type with their extension.
+extension_mime() ->
+	[
+		% Preferred extension/mime-type mapping
+		{".aiff", "audio/x-aiff"},
+		{".asf", "video/x-ms-asf"},
+		{".au", "audio/basic"},
+		{".avi", "video/msvideo"},
+		{".bin", "application/octet-stream"},
+		{".bmp", "image/bmp"},
+		{".bz2", "application/x-bzip2"},
+		{".c", "text/x-c"},
+		{".csh", "application/x-csh"},
+		{".css", "text/css"},
+		{".diff", "text/x-diff"},
+		{".doc", "application/msword"},
+		{".dot", "application/x-dot"},
+		{".dvi", "application/x-dvi"},
+		{".dwg", "application/acad"},
+		{".gif", "image/gif"},
+		{".gz", "application/x-gzip"},
+		{".hqx", "application/mac-binhex40"},
+		{".htc", "text/x-component"},
+		{".html", "text/html"},
+		{".ico", "image/vnd.microsoft.icon"},
+		{".jar", "application/java-archive"},
+		{".jpeg", "image/jpeg"},
+		{".jpg", "image/jpeg"},
+		{".js", "application/x-javascript"},
+		{".json", "application/json"},
+		{".latex", "application/x-latex"},
+		{".mdb", "application/x-msaccess"},
+		{".midi", "audio/midi"},
+		{".mov", "video/quicktime"},
+		{".mp3", "audio/mpeg"},
+		{".mp4", "video/mp4"},
+		{".mpg", "video/mpeg"},
+		{".mpp", "application/vnd.ms-project"},
+		{".patch", "text/patch"},
+		{".pdf", "application/pdf"},
+		{".php", "text/x-php"},
+		{".png", "image/png"},
+		{".ppt", "application/vnd.ms-powerpoint"},
+		{".ps", "application/postscript"},
+		{".sh", "text/x-shellscript"},
+		{".sit", "application/x-stuffit"},
+		{".swf", "application/x-shockwave-flash"},
+		{".tar", "application/x-tar"},
+		{".tgz", "application/x-gzip+tar"},
+		{".tif", "image/tiff"},
+		{".txt", "text/plain"},
+		{".wav", "audio/x-wav"},
+		{".wmf", "application/x-msmetafile"},
+		{".xhtml", "application/xhtml+xml"},
+		{".xls", "application/vnd.ms-excel"},
+		{".xml", "application/xml"},
+		{".z", "application/x-compress"},
+		{".zip", "application/zip"},
+		
+		% Alternative mime mappings
+		{".ai", "application/postscript"},
+		{".aif", "audio/x-aiff"},
+		{".aifc", "audio/x-aiff"},
+		{".eps", "application/postscript"},
+		{".erl", "text/plain"},
+		{".gzip", "application/x-gzip"},
+		{".htm", "text/html"},
+		{".js", "text/javascript"},
+		{".js", "text/x-javascript"},
+		{".mid", "audio/midi"},
+		{".mpeg", "video/mpeg"},
+		{".pps", "application/vnd.ms-powerpoint"},
+		{".ps", "application/ps"},
+		{".qt", "video/quicktime"},
+		{".rtf", "application/msword"},
+		{".sh", "application/x-sh"},
+		{".tiff", "image/tiff"}
+	].
 

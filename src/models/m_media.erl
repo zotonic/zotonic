@@ -224,7 +224,7 @@ replace_file(File, RscId, Props, Context) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
             OriginalFilename = proplists:get_value(original_filename, Props, File),
-            PropsMedia = add_medium_info(File, [{original_filename, OriginalFilename}], Context),
+            PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
             SafeRootName = z_string:to_rootname(OriginalFilename),
             SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
             ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
@@ -281,7 +281,7 @@ replace_file(File, RscId, Props, Context) ->
 
 
 %% @doc Fetch the medium information of the file, if they are not set in the Props
-add_medium_info(File, Props, Context) ->
+add_medium_info(File, OriginalFilename, Props, Context) ->
     PropsSize = case proplists:get_value(size, Props) of
         undefined ->
             [{size, filelib:file_size(File)}|Props];
@@ -290,7 +290,7 @@ add_medium_info(File, Props, Context) ->
     end,
     PropsMime = case proplists:get_value(mime, PropsSize) of
         undefined ->
-            case z_media_identify:identify(File, Context) of
+            case z_media_identify:identify_file(File, OriginalFilename, Context) of
                 {ok, MediaInfo} -> MediaInfo ++ PropsSize;
                 {error, _Reason} -> PropsSize
             end;
