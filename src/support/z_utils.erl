@@ -1,6 +1,6 @@
 %% @author Marc Worrell
 %% @copyright 2009 Marc Worrell
-%% 
+%%
 %% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
 %%
 %% @doc Misc utility functions for zotonic
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,7 +65,10 @@
 	replace1/3,
 	list_dir_recursive/1,
 	are_equal/2,
-	name_for_host/2
+	name_for_host/2,
+    url_valid_char/1,
+    url_reserved_char/1,
+    url_unreserved_char/1
 ]).
 
 %%% FORMAT %%%
@@ -100,7 +103,7 @@ get_seconds() -> calendar:datetime_to_gregorian_seconds(calendar:universal_time(
 %% @doc Multinode is_process_alive check
 is_process_alive(Pid) ->
 	case is_pid(Pid) of
-		true -> 
+		true ->
 			% If node(Pid) is down, rpc:call returns something other than
 			% true or false.
 			case rpc:call(node(Pid), erlang, is_process_alive, [Pid]) of
@@ -124,17 +127,17 @@ encode(Data, Base) when is_list(Data) ->
 		end
 	end,
 	[F(I) || I <- Data].
-	
+
 decode(Data, Base) when is_binary(Data) -> decode(binary_to_list(Data), Base);
-decode(Data, Base) when is_list(Data) -> 	
+decode(Data, Base) when is_list(Data) ->
 	inner_decode(Data, Base).
 
 inner_decode(Data, Base) when is_list(Data) ->
 	case Data of
-		[C1, C2|Rest] -> 
+		[C1, C2|Rest] ->
 			I = erlang:list_to_integer([C1, C2], Base),
 			[I|inner_decode(Rest, Base)];
-		[] -> 
+		[] ->
 			[]
 	end.
 
@@ -158,7 +161,7 @@ pickle(Data, Context) ->
 	SData = <<BData/binary, Nonce:32, Sign/binary>>,
 	<<C1:64,C2:64>> = erlang:md5(SData),
 	base64:encode(<<C1:64, C2:64, Nonce:32, BData/binary>>).
-	
+
 depickle(Data, Context) ->
     try
         <<C1:64, C2:64, Nonce:32, BData/binary>> = base64:decode(Data),
@@ -169,7 +172,7 @@ depickle(Data, Context) ->
     catch
         _M:_E -> erlang:throw("Postback data invalid, could not depickle: "++Data)
     end.
-	
+
 %%% URL ENCODE %%%
 
 url_encode(S) -> quote_plus(S).
@@ -208,12 +211,12 @@ quote_plus([C | Rest], Acc) ->
 %% @doc Simple escape function for command line arguments
 os_escape(A) when is_binary(A) ->
     os_escape(binary_to_list(A));
-os_escape(A) when is_list(A) -> 
+os_escape(A) when is_list(A) ->
     os_escape(lists:flatten(A), []).
 
 os_escape([], Acc) ->
     lists:reverse(Acc);
-os_escape([C|Rest], Acc) when 
+os_escape([C|Rest], Acc) when
                 (C >= $A andalso C =< $Z)
          orelse (C >= $a andalso C =< $z)
          orelse (C >= $0 andalso C =< $9)
@@ -225,15 +228,53 @@ os_escape([C|Rest], Acc) when
          orelse C == $(
          orelse C == $)
          orelse C == 32
-    -> 
+    ->
     os_escape(Rest, [C|Acc]);
-os_escape([C|Rest], Acc) when 
+os_escape([C|Rest], Acc) when
                 C >= 32
         orelse  C == $\r
         orelse  C == $\n
         orelse  C == $\t
     ->
     os_escape(Rest, [C,$\\|Acc]).
+
+
+%% VALID URL CHARACTERS
+%% RFC 3986
+url_valid_char(Char) ->
+    url_reserved_char(Char) orelse url_unreserved_char(Char).
+
+url_reserved_char($!) -> true;
+url_reserved_char($*) -> true;
+url_reserved_char($") -> true;
+url_reserved_char($') -> true;
+url_reserved_char($() -> true;
+url_reserved_char($)) -> true;
+url_reserved_char($;) -> true;
+url_reserved_char($:) -> true;
+url_reserved_char($@) -> true;
+url_reserved_char($&) -> true;
+url_reserved_char($=) -> true;
+url_reserved_char($+) -> true;
+url_reserved_char($$) -> true;
+url_reserved_char($,) -> true;
+url_reserved_char($/) -> true;
+url_reserved_char($?) -> true;
+url_reserved_char($%) -> true;
+url_reserved_char($#) -> true;
+url_reserved_char($[) -> true;
+url_reserved_char($]) -> true;
+url_reserved_char(_) -> false.
+
+url_unreserved_char(Ch) when Ch >= $A andalso Ch < $Z + 1 -> true;
+url_unreserved_char(Ch) when Ch >= $a andalso Ch < $z + 1 -> true;
+url_unreserved_char(Ch) when Ch >= $0 andalso Ch < $9 + 1 -> true;
+url_unreserved_char($-) -> true;
+url_unreserved_char($_) -> true;
+url_unreserved_char($.) -> true;
+url_unreserved_char($~) -> true;
+url_unreserved_char(_)  -> false.
+
 
 
 %%% ESCAPE JAVASCRIPT %%%
@@ -264,9 +305,9 @@ js_escape([16#2028|T],Acc)-> js_escape(T, [$8,$2,$0,$2,$u,$\\|Acc]);
 js_escape([16#2029|T],Acc)-> js_escape(T, [$9,$2,$0,$2,$u,$\\|Acc]);
 js_escape([16#e2,16#80,16#a8|T],Acc)-> js_escape(T, [$8,$2,$0,$2,$u,$\\|Acc]);
 js_escape([16#e2,16#80,16#a9|T],Acc)-> js_escape(T, [$9,$2,$0,$2,$u,$\\|Acc]);
-js_escape([H|T], Acc) when is_integer(H) -> 
+js_escape([H|T], Acc) when is_integer(H) ->
     js_escape(T, [H|Acc]);
-js_escape([H|T], Acc) -> 
+js_escape([H|T], Acc) ->
     H1 = js_escape(H),
     js_escape(T, [H1|Acc]).
 
@@ -282,7 +323,7 @@ js_object(L, []) -> js_object1(L, []);
 js_object(L, [Key|T]) -> js_object(proplists:delete(Key,L), T).
 
 %% recursively add all properties as object properties
-js_object1([], Acc) -> 
+js_object1([], Acc) ->
     [${, combine($,,Acc), $}];
 js_object1([{Key,Value}|T], Acc) ->
     Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value)],
@@ -295,13 +336,13 @@ js_prop_value(_, Atom) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(A
 js_prop_value(pattern, [$/|T]=List) ->
     %% Check for regexp
     case length(T) of
-        Len when Len =< 2 -> 
+        Len when Len =< 2 ->
             [$",js_escape(List),$"];
         _Len ->
             case string:rchr(T, $/) of
-                0 -> 
+                0 ->
                     [$",js_escape(List),$"];
-                N -> 
+                N ->
                     {_Re, [$/|Options]} = lists:split(N-1,T),
                     case only_letters(Options) of
                         true -> List;
@@ -313,7 +354,7 @@ js_prop_value(_, Int) when is_integer(Int) -> io_lib:write(Int);
 js_prop_value(_, Value) -> [$",js_escape(Value),$"].
 
 
-only_letters([]) -> 
+only_letters([]) ->
     true;
 only_letters([C|T]) when (C >= $a andalso C =< $z) orelse (C >= $A andalso C =< $Z) ->
     only_letters(T);
@@ -327,7 +368,7 @@ only_digits(L) when is_list(L) ->
 only_digits(B) when is_binary(B) ->
     only_digits(binary_to_list(B)).
 
-    only_digits1([]) -> 
+    only_digits1([]) ->
         true;
     only_digits1([C|R]) when C >= $0 andalso C =< $9 ->
         only_digits1(R);
@@ -358,7 +399,7 @@ coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
 
-%% @doc Check if the parameter could represent the logical value of "true"    
+%% @doc Check if the parameter could represent the logical value of "true"
 is_true([$t|_T]) -> true;
 is_true([$y|_T]) -> true;
 is_true("on") -> true;
@@ -396,7 +437,7 @@ prop_delete(Prop, List) ->
 %% For example:  [[{a,b}{x}], [{a,b}{z}], [{a,c}{y}]] gives:
 %%   [ {b, [[{a,b}{x}], [{a,b}{z}]]},  {c, [[{a,c}{y}]]} ]
 %% @spec group_proplists(Property, [PropList]) -> PropList
-group_proplists(_Prop, []) -> 
+group_proplists(_Prop, []) ->
     [];
 group_proplists(Prop, [Item|Rest]) ->
     PropValue = proplists:get_value(Prop, Item),
@@ -409,7 +450,7 @@ group_proplists(Prop, PropValue, [], Acc, Result) ->
     group_proplists(Prop, PropValue, [], [], [{z_convert:to_atom(PropValue),Acc}|Result]);
 group_proplists(Prop, PropValue, [C|Rest], Acc, Result) ->
     case proplists:get_value(Prop, C) of
-        PropValue -> 
+        PropValue ->
             group_proplists(Prop, PropValue, Rest, [C|Acc], Result);
         Other ->
             group_proplists(Prop, Other, Rest, [C], [{z_convert:to_atom(PropValue),Acc}|Result])
@@ -437,7 +478,7 @@ randomize(List) ->
     D = lists:map(fun(A) ->
                     {random:uniform(), A}
              end, List),
-    {_, D1} = lists:unzip(lists:keysort(1, D)), 
+    {_, D1} = lists:unzip(lists:keysort(1, D)),
     D1.
 
 randomize(N, List) ->
@@ -483,7 +524,7 @@ vsplit_in(L, N) ->
 		_ -> Len div N + 1
 	end,
 	vsplit_in(N, L, RunLength, []).
-	
+
 	vsplit_in(1, L, _, Acc) ->
 		lists:reverse([L|Acc]);
 	vsplit_in(N, [], RunLength, Acc) ->
@@ -492,7 +533,7 @@ vsplit_in(L, N) ->
 		{Row,Rest} = lists:split(RunLength, L),
 		vsplit_in(N-1, Rest, RunLength, [Row|Acc]).
 
-		
+
 %% @doc Group by a property or m_rsc property, keeps the input list in the same order.
 group_by([], _, _Context) ->
     [];
@@ -508,7 +549,7 @@ group_by(L, Prop, Context) ->
             true -> group_by_fetch_in_order(T, Ks, Dict, Acc);
             false -> group_by_fetch_in_order(T, [Key|Ks], Dict, [dict:fetch(Key, Dict)|Acc])
         end.
-    
+
     group_by_dict([], Dict) ->
         Dict;
     group_by_dict([{Key,V}|T], Dict) ->
@@ -516,7 +557,7 @@ group_by(L, Prop, Context) ->
             true -> group_by_dict(T, dict:append(Key, V, Dict));
             false -> group_by_dict(T, dict:store(Key, [V], Dict))
         end.
-    
+
     group_by_addprop(Id, Prop, Context) when is_integer(Id) ->
         {m_rsc:p(Id, Prop, Context), Id};
     group_by_addprop(L, Prop, _Context) when is_list(L) ->
@@ -537,14 +578,14 @@ replace1(F, T, [C|R], Acc) ->
 
 %% @doc Return a list of all files in a directory, recursive depth first search for files not starting with a '.'
 list_dir_recursive(Dir) ->
-    case file:list_dir(Dir) of 
+    case file:list_dir(Dir) of
         {ok, Files} ->
             list_dir_recursive(Files, Dir, []);
         {error, _} ->
             []
     end.
 
-    list_dir_recursive([], _BaseDir, Acc) -> 
+    list_dir_recursive([], _BaseDir, Acc) ->
         Acc;
     list_dir_recursive([[$.|_]|OtherFiles], BaseDir, Acc) ->
         list_dir_recursive(OtherFiles, BaseDir, Acc);
@@ -565,7 +606,7 @@ list_dir_recursive(Dir) ->
                                 Acc
                         end,
                         list_dir_recursive(OtherFiles, BaseDir, Acc1);
-                    false -> 
+                    false ->
                         list_dir_recursive(OtherFiles, BaseDir, Acc)
                 end
         end.
