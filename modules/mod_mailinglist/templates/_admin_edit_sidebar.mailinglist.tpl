@@ -1,4 +1,3 @@
-{% if r.is_a.mailinglist %}
 <div class="item-wrapper">
 	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 		<span class="title">Mailing list</span>
@@ -44,4 +43,3 @@
 		</div>
 	</div>
 </div>
-{% endwith %}
