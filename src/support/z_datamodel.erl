@@ -30,28 +30,27 @@
 
 manage(Module, Datamodel, Context) ->
 	AdminContext = z_acl:sudo(Context),
-    CatIds = case proplists:get_value(categories, Datamodel) of
-                   undefined ->
-                       [];
-                   Categories ->
-                       {ok, N} = manage_categories(Module, Categories, AdminContext),
-                       N
-               end,
-    PredIds = case proplists:get_value(predicates, Datamodel) of
-                    undefined ->
-                        [];
-                    Preds ->
-                        {ok, N2} = manage_predicates(Module, Preds, AdminContext),
-                        N2
-                end,
-    RscIds = case proplists:get_value(resources, Datamodel) of
-                 undefined ->
-                     [];
-                 Rs ->
-                     {ok, N3} = manage_resources(Module, Rs, AdminContext),
-                     N3
-             end,
-    ?DEBUG(CatIds ++ PredIds ++ RscIds),
+    case proplists:get_value(categories, Datamodel) of
+        undefined ->
+            [];
+        Categories ->
+            {ok, N} = manage_categories(Module, Categories, AdminContext),
+            N
+    end,
+    case proplists:get_value(predicates, Datamodel) of
+        undefined ->
+            [];
+        Preds ->
+            {ok, N2} = manage_predicates(Module, Preds, AdminContext),
+            N2
+    end,
+    case proplists:get_value(resources, Datamodel) of
+        undefined ->
+            [];
+        Rs ->
+            {ok, N3} = manage_resources(Module, Rs, AdminContext),
+            N3
+    end,
     ok.
 
 
@@ -140,8 +139,6 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                 Module ->
                     %% Resource exists and has been installed by us.
                     %% FIXME Check if it needs updating!
-                    ?DEBUG("Updating"),
-                    ?DEBUG(Name),
                     m_rsc:update(Id, Props, Context),
                     {ok, Id};
                 _ ->
