@@ -87,10 +87,13 @@ identify_file_os(File, OriginalFilename) ->
 			case Mime of
 				"text/x-c" ->
 					%% "file" does a lousy job recognizing files with curly braces in them.
-					case guess_mime(OriginalFilename) of
-						"text/" ++ _ = MimeFilename -> {ok, [{mime, MimeFilename}]};
-						_ -> {ok, [{mime, "text/plain"}]}
-					end;
+					Mime2 = case guess_mime(OriginalFilename) of
+						"text/" ++ _ = MimeFilename -> MimeFilename;
+						"application/x-" ++ _ = MimeFilename -> MimeFilename;
+						"application/json" -> "application/json";
+						_ -> "text/plain"
+					end,
+					{ok, [{mime, Mime2}]};
 				"application/x-gzip" ->
 					%% Special case for the often used extension ".tgz" instead of ".tar.gz"
 					case filename:extension(OriginalFilename) of
