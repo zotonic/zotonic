@@ -206,6 +206,7 @@ start_following(Context) ->
                     URL = "http://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
                     Follow = z_utils:combine(",", Follow1),
                     Body = lists:flatten("follow=" ++ Follow),
+                    ?DEBUG("Started the Twitter follower."),
                     spawn_link(?MODULE, fetch, [URL, Body, 5, Context])
             end
     end.
@@ -214,7 +215,6 @@ start_following(Context) ->
 %% Main fetch process
 %%
 fetch(URL, Body, Sleep, Context) ->
-    ?DEBUG("Started the Twitter follower."),
     case http:request(post,
                       {URL, [], "application/x-www-form-urlencoded", Body},
                       [],
