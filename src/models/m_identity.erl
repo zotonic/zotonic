@@ -35,7 +35,14 @@
     set_username_pw/4,
     check_username_pw/3,
     hash/1,
-    hash_is_equal/2
+    hash_is_equal/2,
+    get_rsc/2,
+    get_rsc/3,
+
+    lookup_by_type_and_key/3,
+
+    insert/4,
+    delete/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -176,7 +183,7 @@ get_rsc(Id, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1", [Id], Context).
 
 get_rsc(Id, Type, Context) ->
-    z_db:assoc_row("select * from identity where rsc_id = $1 and type = '$2'", [Id, Type], Context).
+    z_db:assoc_row("select * from identity where rsc_id = $1 and type = $2", [Id, Type], Context).
 
 
 %% @doc Hash a password, using sha1 and a salt
@@ -195,3 +202,13 @@ hash_is_equal(Pw, {hash, Salt, Hash}) ->
 hash_is_equal(_, _) ->
     false.
 
+%% @doc Create an identity record.
+insert(RscId, Type, Key, Context) ->
+    Props = [{rsc_id, RscId}, {type, Type}, {key, Key}],
+    z_db:insert(identity, Props, Context).
+
+delete(IdnId, Context) ->
+    z_db:delete(identity, IdnId, Context).
+
+lookup_by_type_and_key(Type, Key, Context) ->
+    z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).

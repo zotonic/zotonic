@@ -1,5 +1,3 @@
-{% if m.rsc[id].is_a.artist %}
-
 <div class="item-wrapper" id="sort-user-credentials">
 	<h3 class="above-item clearfix do_blockminifier">
 		<span class="title">Events for this artist</span>
@@ -33,5 +31,3 @@
 		</div>
 	</div>
 </div>
-
-{% endif %}

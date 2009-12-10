@@ -1,5 +1,3 @@
-{% if m.rsc[id].is_a.group %}
-
 {% sortable id="sort-group_members" %}
 
 <div class="item-wrapper" id="sort-group_members">
@@ -20,5 +18,3 @@
 		{% button text="View group members" action={redirect dispatch="admin_group_members" id=id} %}
 	</div>
 </div>
-
-{% endif %}

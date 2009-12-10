@@ -1,5 +1,4 @@
-{% if r.is_a.group %}
-	{% with m.group[r.id] as g %}
+{% with m.group[r.id] as g %}
 		<div class="item-wrapper">
 			<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 				<span class="title">Additional site wide rights</span>
@@ -53,5 +52,4 @@
 				</fieldset>
 			</div>
 		</div>
-	{% endwith %}
-{% endif %}
+{% endwith %}

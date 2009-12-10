@@ -1,5 +1,4 @@
-{% if r.is_a.predicate %}
-	{% with m.predicate[id] as p %}
+{% with m.predicate[id] as p %}
 		<div class="item-wrapper">
 			<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 				<span class="title">Valid between</span>
@@ -51,5 +50,4 @@
 				</fieldset>
 			</div>
 		</div>
-	{% endwith %}
-{% endif %}
+{% endwith %}
