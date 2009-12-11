@@ -42,7 +42,8 @@
 	add_script/2,
     count/1, 
     dump/1, 
-    tick/1
+    tick/1,
+    broadcast/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -99,6 +100,17 @@ dump(#context{session_manager=SessionManager}) ->
 %% @doc Periodic tick used for cleaning up sessions
 tick(Pid) when is_pid(Pid) ->
     gen_server:cast(Pid, tick).
+
+%% @spec broadcast(#broadcast, Context) -> ok
+%% @doc Broadcast a notification message to all open sessions.
+broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, stay=Stay}, Context) ->
+	Message1 = case IsHtml of
+		true -> [ <<"<strong>">>, Title, <<"</strong> ">>, Message ];
+		false -> [ <<"<strong>">>, z_html:escape(Title), <<"</strong> ">>, z_html:escape(Message) ]
+	end,
+	Context1 = z_context:prune_for_scomp(?ACL_VIS_PUBLIC, Context),
+	add_script(z_render:growl(Message1, Type, Stay, Context1)),
+	ok.
 
 
 %% gen_server callbacks
