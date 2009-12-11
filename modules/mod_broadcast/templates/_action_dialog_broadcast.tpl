@@ -11,8 +11,17 @@
 		</div>
 
 		<div class="form-item clearfix">
+			<label for="{{ #type }}">Type</label>
+			<select id="{{ #type }}" name="type">
+                <option value="notice" selected="selected">Notice</option>
+                <option value="error">Error / warning</option>
+            </select>
+			{% validate id=#type name="type" type={presence} %}
+        </div>
+
+		<div class="form-item clearfix">
 			<label for="{{ #message }}">Message</label>
-			<input type="text" id="{{ #message }}" name="message" value="" />
+			<textarea id="{{ #message }}" name="message"></textarea>
 			{% validate id=#message name="message" type={presence} %}
 		</div>
 

@@ -127,7 +127,7 @@
 -record(email, {to=[], from=[], subject, text, html, text_tpl, html_tpl, vars=[], queue=false}).
 
 %% @doc Broadcast notification.
--record(broadcast, {title=[], message=[], is_html=false}).
+-record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).

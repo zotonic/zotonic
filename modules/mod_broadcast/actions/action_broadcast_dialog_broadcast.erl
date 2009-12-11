@@ -48,7 +48,12 @@ event({submit, broadcast, _TriggerId, _TargetId}, Context) ->
 		true ->
 		    Title = z_context:get_q_validated("title", Context),
 		    Message = z_context:get_q_validated("message", Context),
-			z_notifier:notify1(#broadcast{title=Title, message=Message}, Context),
+		    Type = z_context:get_q_validated("type", Context),
+            Stay = case Type of
+                       "notice" -> false;
+                       _ -> true
+                   end,
+			z_notifier:notify1(#broadcast{title=Title, message=Message, type=Type, stay=Stay}, Context),
 			z_render:dialog_close(Context);
 		false ->
 			z_render:growl_error("Only admins can broadcast messages.", Context)
