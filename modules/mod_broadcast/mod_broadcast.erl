@@ -40,14 +40,10 @@
 
 
 %% @doc Notification handler for sending broadcasts.
-broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml}, Context) ->
-	Message1 = case IsHtml of
-		true -> [ <<"<strong>">>, Title, <<"</strong> ">>, Message ];
-		false -> [ <<"<strong>">>, z_html:escape(Title), <<"</strong> ">>, z_html:escape(Message) ]
-	end,
-	Context1 = z_context:prune_for_scomp(?ACL_VIS_PUBLIC, Context),
-	z_session_manager:add_script(z_render:growl(Message1, "error", true, Context1)),
-	ok.
+broadcast(B=#broadcast{}, Context) ->
+    z_session_manager:broadcast(B, Context),
+    ok.
+
 
 %%====================================================================
 %% API
