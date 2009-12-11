@@ -90,11 +90,11 @@ lib_dir(Dir) ->
 %% @doc Return the current tick count
 now() ->
     {M,S,_M} = erlang:now(),
-    M*1000 + S.
+    M*1000000 + S.
 
 now_msec() ->
     {M,S,Micro} = erlang:now(),
-    M*1000000 + S*1000 + Micro div 1000.
+    M*1000000000 + S*1000 + Micro div 1000.
 
 %% @doc Return the current universal time in seconds
 get_seconds() -> calendar:datetime_to_gregorian_seconds(calendar:universal_time()).

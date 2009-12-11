@@ -25,6 +25,7 @@
 -mod_description("Base supplies all basic scomps, actions and validators.").
 -mod_prio(9999).
 
+-include_lib("zotonic.hrl").
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -32,7 +33,32 @@
 
 %% interface functions
 -export([
+	media_stillimage/2
 ]).
+
+-record(state, {context}).
+
+%% @doc Return the filename of a still image to be used for image tags.
+%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+media_stillimage({media_stillimage, Props}, Context) ->
+    Mime = proplists:get_value(mime, Props),
+	case z_media_preview:can_generate_preview(Mime) of
+		true ->
+			%% Let media preview handle this.
+			undefined;
+		false ->
+			%% Serve an existing icon.
+			[A,B] = string:tokens(z_convert:to_list(Mime), "/"),
+			case z_module_indexer:find(lib, "images/mimeicons/"++A++[$-,B]++".png", Context) of
+				{ok, File} -> {ok, File};
+				{error, enoent} ->
+					case z_module_indexer:find(lib, "images/mimeicons/"++A++".png", Context) of
+						{ok, File} -> {ok, File};
+						{error, enoent} -> {ok, "lib/images/mimeicons/application-octet-stream.png"}
+					end
+			end
+    end.
+
 
 %%====================================================================
 %% API
@@ -51,9 +77,11 @@ start_link(Args) when is_list(Args) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(_Args) ->
+init(Args) ->
     process_flag(trap_exit, true),
-    {ok, []}.
+    {context, Context} = proplists:lookup(context, Args),
+    z_notifier:observe(media_stillimage, {?MODULE, media_stillimage}, Context),
+    {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -88,7 +116,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    z_notifier:detach(media_stillimage, {?MODULE, media_stillimage}, State#state.context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
