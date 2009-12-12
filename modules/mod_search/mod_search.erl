@@ -117,6 +117,19 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
+    Subject = m_predicate:name_to_id_check(subject, Context),
+    #search_sql{
+        select="kw.id as id, count(*) as count",
+        from="rsc kw, edge e, rsc r",
+        where="kw.id = e.object_id AND e.predicate_id = $1 AND e.subject_id = r.id",
+        tables=[{rsc, "kw"}, {edge, "e"}, {rsc, "r"}],
+        cats=[{"kw", keyword}, {"r", Cat}],
+        args=[Subject],
+        group_by="kw.id, kw.pivot_title",
+        order="kw.pivot_title"
+       };
+
 search({archive_year_month, [{cat,Cat}]}, OffsetLimit, Context) ->
     Q = #search_sql{
       select="date_part('year', r.publication_start)::varchar as year, date_part('month', r.publication_start)::varchar as month, count(*) as count",
