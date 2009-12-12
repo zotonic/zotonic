@@ -59,6 +59,8 @@ request_arg("hassubjectpredicate") -> hassubjectpredicate;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
+request_arg("publication_year")    -> publication_year;
+request_arg("publication_month")   -> publication_month;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -208,6 +210,18 @@ parse_query([{date_start_after, Date}|Rest], Context, Result) ->
 parse_query([{date_start_before, Date}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
     parse_query(Rest, Context, add_where("rsc.pivot_date_start <= " ++ Arg, Result1));
+
+%% publication_year=year
+%% Filter on year of publication
+parse_query([{publication_year, Year}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(list_to_integer(Year), Result),
+    parse_query(Rest, Context, add_where("date_part('year', rsc.publication_start) = " ++ Arg, Result1));
+
+%% publication_month=month
+%% Filter on month of publication
+parse_query([{publication_month, Month}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(list_to_integer(Month), Result),
+    parse_query(Rest, Context, add_where("date_part('month', rsc.publication_start) = " ++ Arg, Result1));
 
 
 %% No match found
