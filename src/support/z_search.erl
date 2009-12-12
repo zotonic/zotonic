@@ -26,6 +26,7 @@
     search/3,
     search_pager/3,
     search_pager/4,
+    search_result/3,
     pager/3,
     pager/4
 ]).

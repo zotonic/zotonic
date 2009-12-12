@@ -117,6 +117,21 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+search({archive_year_month, [{cat,Cat}]}, OffsetLimit, Context) ->
+    Q = #search_sql{
+      select="date_part('year', r.publication_start)::varchar as year, date_part('month', r.publication_start)::varchar as month, count(*) as count",
+      from="rsc r",
+      tables=[{rsc, "r"}],
+      assoc=true,
+      cats=[{"r", Cat}],
+      group_by="date_part('year', r.publication_start), date_part('month', r.publication_start)",
+      order="year desc, month desc"
+     },
+    R = z_search:search_result(Q, OffsetLimit, Context),
+    Result = [ [{month_as_date, {{z_convert:to_integer(Y),z_convert:to_integer(M),1},{0,0,0}}}|Rest]
+               || Rest = [{year, Y}, {month, M}, {count, _}] <- R#search_result.result],
+    #search_result{result=z_utils:group_proplists(year, Result)};
+
 
 %% @doc Return the rsc records that have similar objects
 search({match_objects, [{id,Id}]}, _OffsetLimit, Context) ->
