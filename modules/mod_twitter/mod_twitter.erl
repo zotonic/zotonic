@@ -196,8 +196,16 @@ start_following(Context) ->
             error_logger:info_msg("No follow configuration for mod_twitter. ~n"),
             undefined;
         _ ->
-            Login = m_config:get_value(?MODULE, api_login, false, Context),
-            Pass  = m_config:get_value(?MODULE, api_password, false, Context),
+            Login = case m_config:get_value(?MODULE, api_login, false, Context) of
+                        LB when is_binary(LB) ->
+                            binary_to_list(LB);
+                        L -> L
+                    end,
+            Pass  = case m_config:get_value(?MODULE, api_password, false, Context) of
+                        LP when is_binary(LP) ->
+                            binary_to_list(LP);
+                        P -> P
+                    end,
             case Login of
                 false ->
                     error_logger:info_msg("No username/password configuration for mod_twitter. ~n"),
