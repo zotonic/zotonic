@@ -281,6 +281,8 @@ process_data(Data, Context) ->
                                 {ok, _} = m_edge:insert(UserId, tweeted, TweetId, AdminContext),
 
                                 ?DEBUG("New tweet."),
+                                Message = proplists:get_value("screen_name", User) ++ ": " ++ proplists:get_value("text", Tweet),
+                                z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
                                 TweetId
                         end
                 end,
