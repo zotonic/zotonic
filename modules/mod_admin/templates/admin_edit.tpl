@@ -3,10 +3,117 @@
 {% block title %}Edit “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block tinymce %}
-<script type="text/javascript" src="/lib/js/modules/tinymce/tiny_mce.js"></script>
-<script type="text/javascript">
-	tinyMCE.init(tinyInit);
-</script>
+	<script type="text/javascript" src="/lib/js/modules/tinymce/tiny_mce.js"></script>
+	<script type="text/javascript">
+		tinyMCE.init(tinyInit);
+	</script>
+{% endblock %}
+
+{% block js_extra %}
+	<script type="text/javascript">
+		$(function()
+		{
+			if($('#map_canvas').length)
+			{
+				googleMapsControl.buildMap({lat: 0, lng: 0, mapId: 'map_canvas', zoom: 1});
+
+				window.marker = false; 
+				var map = googleMapsControl.getMap();
+				
+				{% if m.rsc[id].location_lat and m.rsc[id].location_lng %}
+				addMarker(new google.maps.LatLng({{ m.rsc[id].location_lat }}, {{ m.rsc[id].location_lng }}));
+				{% endif %}
+				
+				$('#fill-geo').click(function()
+				{
+					var position = googleMapsControl.getGeoForAddress($('#field-title').val());
+					
+					googleMapsControl.getGeoForAddress($('#field-title').val(), function(data)
+					{
+						if(window.marker)
+						{
+							removeMarker(window.marker)
+						}
+						
+						addMarker(data.geometry.location);
+						fillLatLng(data.geometry.location);
+						
+						google.maps.event.addListener(window.marker, 'dragend', function(e)
+						{
+							fillLatLng(window.marker.getPosition())
+							map.setCenter(window.marker.getPosition());
+						});
+
+						google.maps.event.addListener(window.marker, 'drag', function(e)
+						{
+							fillLatLng(window.marker.getPosition());
+						});
+					})
+				});
+				
+				google.maps.event.addListener(map, 'click', function(e)
+				{
+					if(window.marker)
+					{
+						removeMarker(window.marker)
+					}
+					
+					addMarker(e.latLng);
+					
+					google.maps.event.addListener(window.marker, 'click', function(e)
+					{
+						fillLatLng(window.marker.getPosition())
+						map.setCenter(window.marker.getPosition());
+					});
+
+					clickMarker(window.marker);
+
+					google.maps.event.addListener(window.marker, 'dragend', function(e)
+					{
+						fillLatLng(window.marker.getPosition())
+						map.setCenter(window.marker.getPosition());
+					});
+					
+					google.maps.event.addListener(window.marker, 'drag', function(e)
+					{
+						fillLatLng(window.marker.getPosition());
+					});
+				});
+			}
+			
+			function fillLatLng(pos)
+			{
+				$('#location_lat').val(pos.lat());
+				$('#location_lng').val(pos.lng());
+			}
+			
+			function addMarker(position)
+			{
+				window.marker = new google.maps.Marker(
+				{
+					position:	position,
+					map: 		map,
+					icon:		'/lib/images/map_icon.png',
+					flat: 		false,
+					draggable:  true
+				});
+
+				google.maps.event.trigger(window.marker, "click");
+				
+				map.setCenter(window.marker.getPosition());
+			}
+			
+			function removeMarker(marker)
+			{
+				marker.setMap(null);
+			}
+		
+			function clickMarker(marker)
+			{
+				google.maps.event.trigger(marker, "click");
+			}
+		});
+	</script>
 {% endblock %}
 
 {% block content %}
