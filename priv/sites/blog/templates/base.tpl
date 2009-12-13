@@ -19,6 +19,7 @@
 
 	{% lib
 		"css/zp-compressed.css"
+		"css/zp-project.css"
 	%}
 
 	<!--[if IE]>
@@ -43,7 +44,7 @@
 	
 	<section id="content-area" class="clearfix">
 			
-		<section id="content" class="zp-67">
+		<section id="content" class="zp-80">
 			<div class="padding">
                 {% block content %}
                 The default content goes here.
@@ -51,7 +52,7 @@
 			</div>
 		</section>
 		
-		<sidebar class="zp-33 last">
+		<sidebar class="zp-20 last">
 			<div class="padding">
                 {% block sidebar %}
                 {% include "_sidebar.tpl" %}
