@@ -14,7 +14,7 @@
 </ul>     
 
 <h3>Keywords</h3>
-<ul>
+<ul class="keywords">
     {% for id, count in m.search[{keyword_cloud cat='text'}] %}
     <li><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a> ({{ count }})</li>
     {% endfor %}

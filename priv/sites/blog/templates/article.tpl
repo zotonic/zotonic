@@ -1,5 +1,7 @@
 {% extends "page.tpl" %}
 
+{% block title %}{{ m.rsc[id].title }}{% endblock %}
+
 {% block content %}
 <h1>{{ m.rsc[id].title }}</h1>
 {% include "_article_meta.tpl" id=id %}

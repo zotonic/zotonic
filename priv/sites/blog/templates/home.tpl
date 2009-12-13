@@ -2,6 +2,13 @@
 
 {% block title %}Welcome to your blog{% endblock %}
 
+{% block featured %}
+<div class="featured">
+    <h1>Welcome on your blog.</h1>
+    <div>Your subtitle should go here...</div>
+</div>
+{% endblock %}
+
 {% block content %}
 
 {% with m.search.paged[{latest cat='text' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
