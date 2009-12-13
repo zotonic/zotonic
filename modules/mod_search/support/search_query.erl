@@ -107,6 +107,9 @@ parse_query([{hassubject, [Id, Predicate]}|Rest], Context, Result) ->
     Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
     parse_query(Rest, Context, Result5);
 
+parse_query([{hassubject, Id}|Rest], Context, Result) when is_list(Id) ->
+    parse_query([{hassubject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
+
 %% hasobject=[id]
 %% Give all things which have an outgoing edge to Id
 parse_query([{hasobject, Id}|Rest], Context, Result) when is_integer(Id) ->
@@ -128,6 +131,9 @@ parse_query([{hasobject, [Id, Predicate]}|Rest], Context, Result) ->
     {Arg2, Result4} = add_arg(PredicateId, Result3),
     Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
     parse_query(Rest, Context, Result5);
+
+parse_query([{hasobject, Id}|Rest], Context, Result) when is_list(Id) ->
+    parse_query([{hasobject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
 
 %% hasobjectpredicate=predicate
 %% Give all things which have any outgoing edge with given predicate
