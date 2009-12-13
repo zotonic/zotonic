@@ -910,3 +910,16 @@ body.wait {
 body.wait button {
     cursor: wait;
 }
+
+
+/* maps
+-------------------------------------------------------------- */
+
+.map-wrapper {
+	height: 300px;
+	width: 610px;
+	border: 3px solid #ddd;
+	margin: 0 0 9px 0;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+}
