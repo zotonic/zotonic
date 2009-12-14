@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>priv/sites/australia/templates/travel_schedule.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -18,95 +16,9 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>370</integer>
+	<integer>340</integer>
 	<key>metaData</key>
 	<dict>
-		<key>priv/sites/australia/lib/css/zp-project.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>438</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>145</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>438</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>438</integer>
-			</dict>
-		</dict>
-		<key>priv/sites/australia/lib/js/google_maps.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>5</integer>
-		</dict>
-		<key>priv/sites/australia/templates/base.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>5</integer>
-		</dict>
-		<key>priv/sites/australia/templates/blog.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>priv/sites/australia/templates/home.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>95</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>22</integer>
-		</dict>
 		<key>priv/sites/australia/templates/page.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -137,20 +49,6 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<key>priv/sites/australia/templates/travel_schedule.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>40</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>priv/sites/mediafonds/templates/_calview_item.mf_broadcast.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -166,16 +64,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>priv/sites/australia/templates/page.tpl</string>
-		<string>priv/sites/australia/templates/travel_schedule.tpl</string>
-		<string>priv/sites/australia/lib/js/google_maps.js</string>
-		<string>priv/sites/australia/lib/css/zp-project.css</string>
-		<string>priv/sites/australia/templates/base.tpl</string>
-		<string>priv/sites/australia/templates/home.tpl</string>
-		<string>priv/sites/australia/templates/blog.tpl</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>showFileHierarchyPanel</key>
@@ -200,12 +88,58 @@
 							<true/>
 							<key>subItems</key>
 							<dict>
+								<key>lib</key>
+								<dict>
+									<key>isExpanded</key>
+									<true/>
+									<key>subItems</key>
+									<dict>
+										<key>css</key>
+										<dict>
+											<key>isExpanded</key>
+											<true/>
+											<key>subItems</key>
+											<dict/>
+										</dict>
+									</dict>
+								</dict>
 								<key>templates</key>
 								<dict>
 									<key>isExpanded</key>
 									<true/>
 									<key>subItems</key>
 									<dict/>
+								</dict>
+							</dict>
+						</dict>
+						<key>mod_base</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict>
+								<key>lib</key>
+								<dict>
+									<key>isExpanded</key>
+									<true/>
+									<key>subItems</key>
+									<dict>
+										<key>js</key>
+										<dict>
+											<key>isExpanded</key>
+											<true/>
+											<key>subItems</key>
+											<dict>
+												<key>modules</key>
+												<dict>
+													<key>isExpanded</key>
+													<true/>
+													<key>subItems</key>
+													<dict/>
+												</dict>
+											</dict>
+										</dict>
+									</dict>
 								</dict>
 							</dict>
 						</dict>
@@ -274,6 +208,13 @@
 										</dict>
 									</dict>
 								</dict>
+								<key>blog</key>
+								<dict>
+									<key>isExpanded</key>
+									<true/>
+									<key>subItems</key>
+									<dict/>
+								</dict>
 								<key>default</key>
 								<dict>
 									<key>isExpanded</key>
@@ -289,6 +230,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{198, 55}, {1722, 1123}}</string>
+	<string>{{6, 55}, {1861, 1123}}</string>
 </dict>
 </plist>

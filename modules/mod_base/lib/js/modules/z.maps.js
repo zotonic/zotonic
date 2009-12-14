@@ -21,7 +21,7 @@ var googleMapsControl =
 		self.opts.center 	= new google.maps.LatLng(self.opts.lat, self.opts.lng);
 		self.map			= new google.maps.Map($('#'+self.opts.mapId)[0], self.opts);
 		
-		self.fluster = new Fluster2(self.map, true);
+		self.fluster = new Fluster2(self.map, false);
 	
 		self.fluster.styles = 
 		{
@@ -130,9 +130,9 @@ var googleMapsControl =
 		self.linePath = new google.maps.Polyline(
 		{
 			path: coordinates,
-			strokeColor: "#000000",
+			strokeColor: "#fff",
 			strokeOpacity: 0.5,
-			strokeWeight: 5
+			strokeWeight: 3
 		});
 
 		self.linePath.setMap(self.map);
