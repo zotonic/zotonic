@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>priv/sites/australia/templates/travel_schedule.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -19,6 +21,34 @@
 	<integer>340</integer>
 	<key>metaData</key>
 	<dict>
+		<key>modules/mod_base/lib/js/modules/z.maps.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>134</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>92</integer>
+		</dict>
+		<key>priv/sites/australia/templates/home.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>63</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>20</integer>
+		</dict>
 		<key>priv/sites/australia/templates/page.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -49,6 +79,20 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
+		<key>priv/sites/australia/templates/travel_schedule.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>21</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
+		</dict>
 		<key>priv/sites/mediafonds/templates/_calview_item.mf_broadcast.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -64,6 +108,12 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>priv/sites/australia/templates/travel_schedule.tpl</string>
+		<string>modules/mod_base/lib/js/modules/z.maps.js</string>
+		<string>priv/sites/australia/templates/home.tpl</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>showFileHierarchyPanel</key>
@@ -101,6 +151,13 @@
 											<key>subItems</key>
 											<dict/>
 										</dict>
+										<key>images</key>
+										<dict>
+											<key>isExpanded</key>
+											<true/>
+											<key>subItems</key>
+											<dict/>
+										</dict>
 									</dict>
 								</dict>
 								<key>templates</key>
@@ -124,6 +181,13 @@
 									<true/>
 									<key>subItems</key>
 									<dict>
+										<key>images</key>
+										<dict>
+											<key>isExpanded</key>
+											<true/>
+											<key>subItems</key>
+											<dict/>
+										</dict>
 										<key>js</key>
 										<dict>
 											<key>isExpanded</key>
