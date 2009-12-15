@@ -13,7 +13,7 @@
 
 {% block content %}
 
-	{% with m.search.paged[{latest cat='article' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
+	{% with m.search.paged[{query cat='article' sort='-publication_start' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
 		{% for id in result %}
 			{% include "_article_summary.tpl" id=id %}
 		{% endfor %}
