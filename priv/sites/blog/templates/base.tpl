@@ -14,18 +14,9 @@
 	<meta name="author" content="YOUR NAME HERE &copy; 2009" />
 
 	{% include "_atom_feed_link.tpl" cat="blog" %}
-
 	{% all include "_html_head.tpl" %}
-
-	{% lib
-		"css/zp-compressed.css"
-		"css/zp-project.css"
-	%}
-
-	<!--[if IE]>
-	{% lib	"css/zp-ie.css" %}
-	<![endif]-->
-
+	{% lib "css/zp-compressed.css" "css/zp-project.css" %}
+	<!--[if IE]>{}% lib	"css/zp-ie.css" %}<![endif]-->
 </head>
 <body class="home">
 
@@ -34,40 +25,37 @@
 	<header>
 	
 		<nav>
-            {% menu id=id class="list" %}
+			{% menu id=id %}
 		</nav>
 
-        {% block featured %}
-        {% endblock %}
+		{% block featured %}
+		{% endblock %}
 	
 	</header>
 	
 	<section id="content-area" class="clearfix">
 			
-		<section id="content" class="zp-80">
+		<section id="content" class="zp-75">
 			<div class="padding">
-                {% block content %}
-                The default content goes here.
-                {% endblock %}
+				{% block content %}
+				The default content goes here.
+				{% endblock %}
 			</div>
 		</section>
 		
-		<sidebar class="zp-20 last">
-			<div class="padding">
-                {% block sidebar %}
-                {% include "_sidebar.tpl" %}
-                {% endblock %}
-			</div>
+		<sidebar class="zp-25 last">
+			{% block sidebar %}
+			{% include "_sidebar.tpl" %}
+			{% endblock %}
 		</sidebar>
 	
 	</section>
 
-    <footer>
-        Website powered by <a href="http://zotonic.com">Zotonic</a>, the Erlang CMS.
-    </footer>
+	<footer>
+		Website powered by <a href="http://zotonic.com">Zotonic</a>, the Erlang CMS.
+	</footer>
 
 </section>
-
 
 </body>
 </html>

@@ -1,10 +1,10 @@
-<section class="zp-100">
-    <h2><a href="{{m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h2>
-    {% include "_article_meta.tpl" id=id %}
+<section class="post">
 
-    <p class="summary">
-        {{ m.rsc[id].summary }}
-    </p>
+	<h2><a href="{{m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h2>
+	{% include "_article_meta.tpl" id=id %}
 
-    <hr />
+	<p class="summary">
+		{{ m.rsc[id].summary }} <a href="{{ m.rsc[id].page_url }}">Read more &raquo;</a>
+	</p>
+
 </section>
