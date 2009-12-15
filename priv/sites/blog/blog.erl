@@ -108,6 +108,63 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 datamodel() ->
+    Now = erlang:localtime(),
     [
-    ].
+     {resources,
+      [
 
+       %% MENU ENTRIES
+
+       {page_home,
+        text,
+        [{title, <<"Welcome to your blog!">>}]
+       },
+
+       {page_about,
+        text,
+        [{title, <<"About this blog">>},
+         {summary, <<"This is your blog. It would be wise to type some text here on what you will be writing about. Ofcourse, this page is just a demo page and can be deleted just as well.">>}]
+       },
+
+
+       %% BLOG ENTRIES
+
+       {blog_article_welcome,
+        article,
+        [{title, <<"Welcome to Zotonic " ?ZOTONIC_VERSION "!">>},
+         {publication_start, Now},
+         {summary, <<"Zotonic is the content management system for people that want a fast, extensible, flexible and complete system for dynamic web sites. It is built from the ground up with rich internet applications ánd web publishing in mind.">>},
+         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "welcome.html"])}}
+        ]
+       },
+       {blog_article_learnmore,
+        article,
+        [{title, <<"Want to learn more?">>},
+         {publication_start, z_datetime:prev_day(Now)},
+         {summary, <<"This blog website you're looking demonstrates only a small part of what you can do with a Zotonic site. For instance, did you know that sending mass-mailings is a builtin module? That it does OAuth out of the box? That Zotonic sites are SEO optimized by default?">>},
+         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "learnmore.html"])}}]
+       },
+       {blog_article_demo,
+        article,
+        [{title, <<"Zotonic's Typography">>},
+         {publication_start, z_datetime:prev_month(Now)},
+         {summary, <<"This article demonstrates the typographic features that Zotonic has. It shows creating ordered and unordered lists, blockquotes, and different methods of embedding media, even even showing an embedded Youtube video.">>},
+         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "demo.html"])}}
+        ]
+       }
+
+      ]
+     },
+
+     {menu,
+      [page_home, page_about]
+     },
+
+     {edges,
+      [
+       {blog_article_learnmore, author, administrator},
+       {blog_article_welcome, author, administrator},
+       {blog_article_demo, author, administrator}
+      ]
+     }
+    ].

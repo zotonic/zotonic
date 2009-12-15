@@ -1,19 +1,19 @@
 {% extends "base.tpl" %}
 
-{% block title %}Welcome to your blog{% endblock %}
+{% block title %}{{ m.rsc[id].title }}{% endblock %}
 
 {% block featured %}
 
 	<div class="featured">
-	    <h1>Welcome on your blog.</h1>
-	    <p>Your subtitle should go here...</p>
+	    <h1>{{ m.site.title }}</h1>
+	    <p>{{ m.site.subtitle }}</p>
 	</div>
 
 {% endblock %}
 
 {% block content %}
 
-	{% with m.search.paged[{latest cat='text' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
+	{% with m.search.paged[{latest cat='article' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
 		{% for id in result %}
 			{% include "_article_summary.tpl" id=id %}
 		{% endfor %}
