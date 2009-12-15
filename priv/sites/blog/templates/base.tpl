@@ -29,6 +29,8 @@
 		</nav>
 
 		{% block featured %}
+        <div class="featured-empty">
+        </div>
 		{% endblock %}
 	
 	</header>

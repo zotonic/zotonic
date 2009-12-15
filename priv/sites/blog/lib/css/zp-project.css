@@ -26,6 +26,10 @@ body {
 	background: #eee;
 }
 
+a, a:focus {
+    color: #004;
+}
+
 header, article, aside, nav, figure, footer {
 	display: block !important;
 }
@@ -33,6 +37,13 @@ header, article, aside, nav, figure, footer {
 .zp-wrapper {
 	border: none;
 	background: #fff;
+}
+
+.at-menu a {
+    text-decoration: none;
+}
+.at-menu a.current {
+    text-decoration: underline;
 }
 
 header nav {
@@ -57,14 +68,18 @@ header nav {
 	}
 
 header .featured {
-    padding: 9px;
-    border-bottom: 2px solid #eee;
-    background: #f9f9f9;
+    color: white;
+    padding: 18px;
+    background: #004;
 }
 
 	header .featured p {
 		margin: 0;
 	}
+
+header .featured-empty {
+    border-bottom: 2px solid #004;
+}
 
 #content-area {
 	padding: 18px 9px 9px;
@@ -94,13 +109,24 @@ header .featured {
 		    display: inline;
 		}
 
-			.pager .current {
-			    font-weight: bold;
+			.pager a {
+                text-decoration: none;
+            }
+			.pager .current a {
+			    text-decoration: underline;
 			}
 			
 		h2 {
 			line-height: 27px;
 		}	
+
+        p.summary {
+            font-weight: bold;
+        }
+
+        .post p.summary {
+            font-weight: normal;
+        }
 		
 	sidebar ul {
 	    margin: 0 0 18px 0;
@@ -109,7 +135,13 @@ header .featured {
 footer {
     margin: 0;
     padding: 10px;
-    border-top: 2px solid #eee;
+    border-top: 2px solid #004;
     background: #f9f9f9;
 	font-size: 11px;
+}
+
+h1.listpage {
+	margin: 0 0 8px 0;
+	padding: 0 0 9px 0;
+	border-bottom: 1px solid #eee;
 }

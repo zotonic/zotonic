@@ -39,58 +39,41 @@
 manage(Module, Datamodel, Context) ->
 	AdminContext = z_acl:sudo(Context),
     case proplists:get_value(categories, Datamodel) of
-        undefined ->
-            [];
-        Categories ->
-            {ok, N} = manage_categories(Module, Categories, AdminContext),
-            N
+        undefined  -> ok;
+        Categories -> [manage_category(Module, Cat, AdminContext) || Cat <- Categories]
     end,
     case proplists:get_value(predicates, Datamodel) of
-        undefined ->
-            [];
-        Preds ->
-            {ok, N2} = manage_predicates(Module, Preds, AdminContext),
-            N2
+        undefined -> ok;
+        Preds     -> [manage_predicate(Module, Pred, AdminContext) || Pred <- Preds]
     end,
     case proplists:get_value(resources, Datamodel) of
-        undefined ->
-            [];
-        Rs ->
-            {ok, N3} = manage_resources(Module, Rs, AdminContext),
-            N3
+        undefined -> ok;
+        Rs        -> [manage_resource(Module, R, AdminContext) || R <- Rs]
+    end,
+    case proplists:get_value(media, Datamodel) of
+        undefined -> ok;
+        Ms        -> [manage_medium(Module, Medium, AdminContext) || Medium <- Ms]
     end,
     case proplists:get_value(menu, Datamodel) of
-        undefined ->
-            [];
-        M ->
-            {ok, N4} = manage_menu(Module, M, AdminContext),
-            N4
+        undefined -> ok;
+        Menu      -> manage_menu(Module, Menu, AdminContext)
+    end,
+    case proplists:get_value(edges, Datamodel) of
+        undefined -> ok;
+        Edges     -> [manage_edge(Module, Edge, AdminContext) || Edge <- Edges]
     end,
     ok.
 
 
-manage_resources(Module, Rcs, Context) ->
-    manage_resources(Module, Rcs, Context, []).
-manage_resources(_Module, [], _Context, Acc) ->
-    {ok, Acc};
-manage_resources(Module, [R|Rest], Context, Acc) ->
-    Result = manage_resource(Module, R, Context),
-    manage_resources(Module, Rest, Context, [Result|Acc]).
-
-
-
-manage_categories(Module, Cats, Context) ->
-    manage_categories(Module, Cats, Context, []).
-
-manage_categories(_Module, [] , _C, Acc) ->
-    {ok, Acc};
-manage_categories(Module, [Category|Rest], Context, Acc) ->
-    case manage_category(Module, Category, Context) of
+manage_medium(Module, {Name, Filename, Props}, Context) ->
+    case manage_resource(Module, {Name, media, Props}, Context) of
         {ok} ->
-            manage_categories(Module, Rest, Context, Acc);
+            {ok};
         {ok, Id} ->
-            manage_categories(Module, Rest, Context, [Id|Acc])
+            m_media:replace_file(Filename, Id, Context),
+            {ok, Id}
     end.
+
 
 manage_category(Module, {Name, ParentCategory, Props}, Context) ->
     case manage_resource(Module, {Name, category, Props}, Context) of
@@ -110,20 +93,6 @@ manage_category(Module, {Name, ParentCategory, Props}, Context) ->
             end
     end.
 
-
-
-manage_predicates(Module, Cats, Context) ->
-    manage_predicates(Module, Cats, Context, []).
-
-manage_predicates(_Module, [] , _C, Acc) ->
-    {ok, Acc};
-manage_predicates(Module, [Predicate|Rest], Context, Acc) ->
-    case manage_predicate(Module, Predicate, Context) of
-        {ok} ->
-            manage_predicates(Module, Rest, Context, Acc);
-        {ok, Id} ->
-            manage_predicates(Module, Rest, Context, [Id|Acc])
-    end.
 
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Context) ->
     manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Context);
@@ -280,4 +249,11 @@ manage_menu(Module, M, Context) ->
     {ok, []}.
 
 
+
+manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->
+    ?DEBUG("MANAGE EDGE"),
+    Subject = m_rsc:name_to_id_check(SubjectName, Context),
+    Predicate = m_predicate:name_to_id_check(PredicateName, Context),
+    Object = m_rsc:name_to_id_check(ObjectName, Context),
+    m_edge:insert(Subject, Predicate, Object, Context).
 
