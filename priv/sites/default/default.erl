@@ -108,7 +108,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 datamodel() ->
-    Now = erlang:localtime(),
+    Now = {{2009,12,15},{23,27,9}},
     [
      {resources,
       [

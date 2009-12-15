@@ -264,7 +264,6 @@ manage_menu(Module, M, Context) ->
 
 
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->
-    ?DEBUG("MANAGE EDGE"),
     Subject = m_rsc:name_to_id_check(SubjectName, Context),
     Predicate = m_predicate:name_to_id_check(PredicateName, Context),
     Object = m_rsc:name_to_id_check(ObjectName, Context),
