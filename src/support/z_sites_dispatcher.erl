@@ -96,7 +96,8 @@ handle_call({dispatch, HostAsString, PathAsString, Req}, _From, State) ->
             end;
         {redirect, Hostname} ->
             %% Redirect to another host name.
-            Uri = "http://" ++ Hostname ++ Req:raw_path(),
+            {RawPath, _} = Req:raw_path(),
+            Uri = "http://" ++ Hostname ++ RawPath,
             {ok, Req1a} = Req:add_response_header("Location", Uri),
             Req1b = {webmachine_request, Req1a},
             {ok, Req2a} = Req1b:send_response(301),
@@ -108,7 +109,7 @@ handle_call({dispatch, HostAsString, PathAsString, Req}, _From, State) ->
                     _ -> webmachine_logger
                 end,
             spawn(LogModule, log_access, [LogData]),
-            {handled, Req2b};
+            handled;
         no_host_match ->
             {{no_dispatch_match, undefined, undefined}, Req}
     end,
