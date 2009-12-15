@@ -20,6 +20,9 @@
 -export([wrap/2]).
 -export([do/2,log_d/1,stop/0]).
 
+-include_lib("include/wm_reqdata.hrl").
+-include_lib("include/wm_reqstate.hrl").
+
 default(ping) ->
     no_default;
 default(service_available) ->
@@ -115,24 +118,24 @@ wrap(Mod, Args) ->
     end.
 
 do(Fun, ReqProps) when is_atom(Fun) andalso is_list(ReqProps) ->
-    Self = proplists:get_value(resource, ReqProps),
-    Req = proplists:get_value(req, ReqProps),
-    RD0 = Req:get_reqdata(),
-    {Reply, RD1, NewModState} = handle_wm_call(Fun, RD0),
-    case Reply of
-        {error, Err} -> {Err, Self};
-        _ -> 
-            Req:set_reqdata(RD1),
-            {Reply,
-            webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace)}
-    end.
+    RState0 = proplists:get_value(reqstate, ReqProps),
+    put(tmp_reqstate, empty),
+    {Reply, ReqData, NewModState} = handle_wm_call(Fun, 
+                    (RState0#reqstate.reqdata)#wm_reqdata{wm_state=RState0}),
+    ReqState = case get(tmp_reqstate) of
+                   empty -> RState0;
+                   X -> X
+               end,
+    {Reply,
+     webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace),
+     ReqState#reqstate{reqdata=ReqData}}.
 
 handle_wm_call(Fun, ReqData) ->
     case default(Fun) of
         no_default ->
             resource_call(Fun, ReqData);
         Default ->
-            case dict:is_key(Fun, R_ModExports) of % XXX SLOW PROBABLY
+            case dict:is_key(Fun, R_ModExports) of
                 true ->
                     resource_call(Fun, ReqData);
                 false ->
@@ -146,6 +149,12 @@ handle_wm_call(Fun, ReqData) ->
             end
     end.
 
+trim_trace([{M,F,[RD = #wm_reqdata{},S]}|STRest]) ->
+    TrimState = (RD#wm_reqdata.wm_state)#reqstate{reqdata='REQDATA'},
+    TrimRD = RD#wm_reqdata{wm_state=TrimState},
+    [{M,F,[TrimRD,S]}|STRest];
+trim_trace(X) -> X.
+
 resource_call(F, ReqData) ->
     case R_Trace of
         false -> nop;
@@ -154,7 +163,7 @@ resource_call(F, ReqData) ->
     Result = try
         apply(R_Mod, F, [ReqData, R_ModState])
     catch C:R ->
-	    Reason = {C, R, erlang:get_stacktrace()},
+	    Reason = {C, R, trim_trace(erlang:get_stacktrace())},
             {{error, Reason}, ReqData, R_ModState}
     end,
         case R_Trace of
@@ -184,12 +193,27 @@ escape_trace_data(Fun) when is_function(Fun) ->
       erlang:fun_info(Fun, type)]};
 escape_trace_data(Pid) when is_pid(Pid) ->
     {'WMTRACE_ESCAPED_PID', pid_to_list(Pid)};
+escape_trace_data(Port) when is_port(Port) ->
+    {'WMTRACE_ESCAPED_PORT', erlang:port_to_list(Port)};
 escape_trace_data(List) when is_list(List) ->
-    [ escape_trace_data(E) || E <- List ];
+    escape_trace_list(List, []);
+escape_trace_data(R=#reqstate{}) ->
+    list_to_tuple(
+      escape_trace_data(
+        tuple_to_list(R#reqstate{reqdata='WMTRACE_NESTED_REQDATA'})));
 escape_trace_data(Tuple) when is_tuple(Tuple) ->
     list_to_tuple(escape_trace_data(tuple_to_list(Tuple)));
 escape_trace_data(Other) ->
     Other.
+
+escape_trace_list([Head|Tail], Acc) ->
+    escape_trace_list(Tail, [escape_trace_data(Head)|Acc]);
+escape_trace_list([], Acc) ->
+    %% proper, nil-terminated list
+    lists:reverse(Acc);
+escape_trace_list(Final, Acc) ->
+    %% non-nil-terminated list, like the dict module uses
+    lists:reverse(tl(Acc))++[hd(Acc)|escape_trace_data(Final)].
 
 log_decision(File, DecisionID) ->
     io:format(File, "{decision, ~p}.~n", [DecisionID]).

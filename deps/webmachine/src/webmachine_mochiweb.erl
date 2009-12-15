@@ -14,9 +14,6 @@
 %%    See the License for the specific language governing permissions and
 %%    limitations under the License.
 
-%% Changed by Marc Worrell, 2009.
-%% Added vhost support. Re-organized loop/1 to use webmachine_host.erl
-
 %% @doc Mochiweb interface for webmachine.
 -module(webmachine_mochiweb).
 -author('Justin Sheehy <justin@basho.com>').
@@ -51,73 +48,68 @@ stop() ->
 
 loop(MochiReq) ->
     Req = webmachine:new_request(mochiweb, MochiReq),
-    case webmachine_host:get_host_dispatch_list(Req) of
-        {ok, Host, DispatchList} ->
-            dispatch_request(Req, Host, DispatchList);
-        {redirect, Hostname} ->
-            Uri = "http://" ++ Hostname ++ Req:raw_path(),
-            Req:add_response_header("Location", Uri),
-            Req:send_response(301),
-            LogData = Req:log_data(),
-            LogModule = 
-                case application:get_env(webmachine,webmachine_logger_module) of
-                    {ok, Val} -> Val;
-                    _ -> webmachine_logger
-                end,
-            spawn(LogModule, log_access, [LogData]),
-            Req:stop();
-        no_host_match ->
-            send_no_host(Req)
-    end.
-
-dispatch_request(Req, Host, DispatchList) ->
-    case webmachine_dispatcher:dispatch(Req:path(), DispatchList) of
-        {no_dispatch_match, _UnmatchedPathTokens} ->
-            send_404(Req, Host);
-        {Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
+    Host = case host_headers(Req) of
+               [H|_] -> H;
+               [] -> []
+           end,
+    {Path, _} = Req:path(),
+    {Dispatch, ReqDispatch} = case application:get_env(webmachine, dispatcher) of
+        {ok, Dispatcher} ->
+            Dispatcher:dispatch(Host, Path, Req);
+        undefined ->
+            {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
+            {webmachine_dispatcher:dispatch(Host, Path, DispatchList), Req}
+    end,
+    case Dispatch of
+        {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
+            {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
+            {ErrorHTML,ReqState1} = 
+                ErrorHandler:render_error(404, ReqDispatch, {none, none, []}),
+            Req1 = {webmachine_request,ReqState1},
+            {ok,ReqState2} = Req1:append_to_response_body(ErrorHTML),
+            Req2 = {webmachine_request,ReqState2},
+            {ok,ReqState3} = Req2:send_response(404),
+            Req3 = {webmachine_request,ReqState3},
+            {LogData,_ReqState4} = Req3:log_data(),
+            case application:get_env(webmachine,webmachine_logger_module) of
+                {ok, LogModule} ->
+                    spawn(LogModule, log_access, [LogData]);
+                _ -> nop
+            end;
+        {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings,
+         AppRoot, StringPath} ->
             BootstrapResource = webmachine_resource:new(x,x,x,x),
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
-            Req:load_dispatch_data(Host, Bindings,PathTokens,AppRoot,StringPath,Req),
-            Req:set_metadata('resource_module', Mod),
-            Req:set_metadata('host', Host),
-            webmachine_decision_core:handle_request(Req, Resource)
+            {ok,RS1} = ReqDispatch:load_dispatch_data(Bindings,HostTokens,Port,
+                                              PathTokens,AppRoot,StringPath),
+            XReq1 = {webmachine_request,RS1},
+            {ok,RS2} = XReq1:set_metadata('resource_module', Mod),
+            try 
+                webmachine_decision_core:handle_request(Resource, RS2)
+            catch
+                error:_ -> 
+                    FailReq = {webmachine_request,RS2},
+                    {ok,RS3} = FailReq:send_response(500),
+                    PostFailReq = {webmachine_request,RS3},
+                    {LogData,_RS4} = PostFailReq:log_data(),
+                    case application:get_env(webmachine,
+                                             webmachine_logger_module) of
+                        {ok, LogModule} ->
+                            spawn(LogModule, log_access, [LogData]);
+                        _ -> nop
+                    end
+            end;
+        handled ->
+            nop
     end.
-
-send_404(Req, Host) ->
-    Req:set_metadata('host', Host),
-    {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
-    ErrorHTML = ErrorHandler:render_error(404, Req, {none, none, []}),
-    Req:append_to_response_body(ErrorHTML),
-    Req:send_response(404),
-    LogData = Req:log_data(),
-    LogModule = 
-        case application:get_env(webmachine,webmachine_logger_module) of
-            {ok, Val} -> Val;
-            _ -> webmachine_logger
-        end,
-    spawn(LogModule, log_access, [LogData]),
-    Req:stop().
 
 get_option(Option, Options) ->
     {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
 
-send_no_host(Req) ->
-	ErrorHTML = <<"<html>
-<title>Site Unknown &mdash; Webmachine</title>
-<body>
-	<h1>Who, What, Where?</h1>
-	<p>Someone sent you here for a site I don't know.</p>
-	<p>I guess I'm wrongly configured or you should have been somewhere else.</p>
-	<p>I'm really sorry about this.</p>
-</body>
-</html>">>,
-	Req:append_to_response_body(ErrorHTML),
-	Req:send_response(404),
-	LogData = Req:log_data(),
-	LogModule = 
-	    case application:get_env(webmachine,webmachine_logger_module) of
-	        {ok, Val} -> Val;
-	        _ -> webmachine_logger
-	    end,
-	spawn(LogModule, log_access, [LogData]),
-	Req:stop().
+host_headers(Req) ->
+    [ V || {V,_ReqState} <- [Req:get_header_value(H)
+                             || H <- ["x-forwarded-for",
+                                      "x-forwarded-host",
+                                      "x-forwarded-server",
+                                      "host"]],
+           V /= undefined].

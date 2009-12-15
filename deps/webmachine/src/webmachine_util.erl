@@ -26,6 +26,7 @@
 -export([unquote_header/1]).
 -export([now_diff_milliseconds/2]).
 -export([media_type_to_detail/1]).
+-export([test/0]).
 
 convert_request_date(Date) ->
     try 
@@ -80,6 +81,10 @@ guess_mime(File) ->
 	    "application/x-gzip";
         ".htc" ->
             "text/x-component";
+	".manifest" ->
+	    "text/cache-manifest";
+        ".svg" ->
+            "image/svg+xml";
 	_ ->
 	    "text/plain"
     end.
@@ -118,10 +123,10 @@ media_type_match(Req,Prov) ->
 	Prov ->
 	    true;
 	_ ->
-	    [R1,R2] = string:tokens(Req,"/"),
+	    [R1|R2] = string:tokens(Req,"/"),
 	    [P1,_P2] = string:tokens(Prov,"/"),
 	    case R2 of
-		"*" ->
+		["*"] ->
 		    case R1 of
 			P1 -> true;
 			_ -> false
@@ -282,3 +287,15 @@ now_diff_milliseconds({M,S,U}, {M,S1,U1}) ->
     ((S-S1) * 1000) + ((U-U1) div 1000);
 now_diff_milliseconds({M,S,U}, {M1,S1,U1}) ->
     ((M-M1)*1000000+(S-S1))*1000 + ((U-U1) div 1000).
+
+test() ->
+    test_choose_media_type(),
+    ok.
+
+test_choose_media_type() ->
+    Provided = "text/html",
+    ShouldMatch = ["*", "*/*", "text/*", "text/html"],
+    WantNone = ["foo", "text/xml", "application/*", "foo/bar/baz"],
+    [ Provided = choose_media_type([Provided], I) || I <- ShouldMatch ],
+    [ none = choose_media_type([Provided], I) || I <- WantNone ],
+    ok.
