@@ -1,15 +1,9 @@
 %% Dispatch rules for mod_zotonic.
 
 [
-    {home,      [],                         resource_page,  [ {template, "home.tpl"}, {id, page_home} ]},
-    {features,  ["features"],               resource_page,  [ {template, "features.tpl"}, {id, page_features} ]},
-    {team,      ["zotonic-team"],           resource_page,  [ { template, "zotonic_team.tpl"}, {id, zotonic_team} ]},
-    {collection,["collection", id],         resource_page,  [ {template, "collection.tpl"} ]},
-    {collection,["collection", id, slug],   resource_page,  [ {template, "collection.tpl"} ]},
-    {category,  ["category", id],           resource_page,  [ {template, "category.tpl"} ]},
-    {category,  ["category", id, slug],     resource_page,  [ {template, "category.tpl"} ]},
-    {documentation,  ["documentation", id],       resource_page,  [ {template, "documentation.tpl"} ]},
-    {documentation,  ["documentation", id, slug], resource_page,  [ {template, "documentation.tpl"} ]},
-    {gallery,   ["gallery", id],            resource_page,  [ {template, "gallery.tpl"} ]},
-    {gallery,   ["gallery", id, slug],      resource_page,  [ {template, "gallery.tpl"} ]}
+    {home,      [],                         resource_page,  	[ {template, "home.tpl"}, {id, page_home} ]},
+    {article,   ["article", id, slug],      resource_page,  	[ {template, "article.tpl"}, {cat, article} ]},
+    {archives_y,["archives", year],			resource_template,	[ {template, "archives.tpl"}, {cat, article} ]},
+    {archives_m,["archives", year, month],	resource_template,	[ {template, "archives.tpl"}, {cat, article} ]},
+    {keyword,	["by_keyword", id, slug],	resource_template,	[ {template, "by_keyword.tpl"} ]}
 ].
