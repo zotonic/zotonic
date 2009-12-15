@@ -5,10 +5,13 @@
     {enabled, true},
     
     % Atomic hostname, MUST be equal to the directory name of this site.
-    {host, blog},
+    {host, zotonic},
 
     % Hostname for virtual host support
-    {hostname, "blog.local:8000"},
+    {hostname, "zotonic.local:8000"},
+    {hostalias, "www.zotonic.com"},
+    {hostalias, "zotonic.net"},
+    {hostalias, "www.zotonic.net"},
 
     
     % PostgreSQL database connection
@@ -28,10 +31,5 @@
     % Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
     % When not defined, then zotonic will generate a new key on every restart.
     % When a new key is generated then all postbacks from old html pages will fail.
-    {sign_key, <<"--change-me--">>},
-
-    %% Specific options
-
-    %% Page length
-    {pagelen, 2}
+    {sign_key, <<"--change-me--">>}
 ].

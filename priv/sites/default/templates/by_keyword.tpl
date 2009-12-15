@@ -1,10 +1,10 @@
 {% extends "base.tpl" %}
 
-{% block title %}By keyword{% endblock %}
+{% block title %}Articles for "{{ m.rsc[q.id].title }}"{% endblock %}
 
 {% block content %}
 
-<h1>Referrers for <em>{{ m.rsc[q.id].title }}</em></h1>
+<h1 class="listpage">Articles for <em>{{ m.rsc[q.id].title }}</em></h1>
 
 {% with m.search.paged[{referrers id=q.id}] as result %}
 {% for id, predicate in result %}

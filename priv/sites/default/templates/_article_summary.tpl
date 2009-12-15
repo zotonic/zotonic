@@ -4,7 +4,7 @@
 	{% include "_article_meta.tpl" id=id %}
 
 	<p class="summary">
-		{{ m.rsc[id].summary }} <a href="{{ m.rsc[id].page_url }}">Read more &raquo;</a>
+		{{ m.rsc[id].summary }} <a href="{{ m.rsc[id].page_url }}">Read&nbsp;more&nbsp;&raquo;</a>
 	</p>
 
 </section>
