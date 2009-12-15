@@ -102,6 +102,8 @@
 new(#context{host=Host}) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{language=z_trans:default_language(Context)};
+new(undefined) ->
+    new(default);
 new(Host) when is_atom(Host) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{language=z_trans:default_language(Context)};
@@ -145,10 +147,11 @@ set_server_names(#context{host=Host} = Context) ->
 site(#context{host=Host}) ->
     Host;
 %% @spec site(wm_reqdata) -> atom()
-site(ReqData) ->
-    case wrq:host(ReqData) of
-        undefined -> default;
-        Host -> Host
+site(ReqData = #wm_reqdata{}) ->
+    PathInfo = wrq:path_info(ReqData),
+    case dict:find(zotonic_host, PathInfo) of
+        {ok, Host} -> Host;
+        error -> default
     end.
 
 
@@ -402,7 +405,9 @@ ensure_qs(Context) ->
             ReqData  = Context#context.wm_reqdata,
             PathDict = wrq:path_info(ReqData),
             PathArgs = lists:map(
-                            fun ({T,V}) -> {atom_to_list(T),mochiweb_util:unquote(V)} end, 
+                            fun ({T,V}) when is_atom(V) -> {atom_to_list(T),atom_to_list(V)}; 
+                                ({T,V})                 -> {atom_to_list(T),mochiweb_util:unquote(V)}
+                            end, 
                             dict:to_list(PathDict)),
             {Body, ContextParsed} = parse_form_urlencoded(Context),
             Query    = wrq:req_qs(ReqData),
