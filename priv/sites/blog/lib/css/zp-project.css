@@ -1,0 +1,61 @@
+/**
+ * Styling for default blog template.
+ * 
+ * Arjan Scherpenisse <arjan@scherpenisse.net>
+ */
+
+#navigation li {
+    float: left;
+}
+
+#navigation li a {
+    padding-left: 9px;
+}
+
+#navigation li.first a {
+    padding-left: 0;
+}
+
+.padding {
+    padding-right: 10px;
+}
+
+.last .padding {
+    padding-right: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+
+.pager li {
+    display: inline;
+}
+
+header nav {
+    padding: 10px;
+    border-bottom: 2px solid #eee;
+    background: #eeeeee;
+}
+
+header .featured {
+    padding: 10px;
+    border-bottom: 2px solid #eee;
+    background: #f9f9f9;
+}
+
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 2px solid #eee;
+    background: #f9f9f9;
+}
+
+sidebar ul {
+    margin-bottom: 20px;
+}
+
+.pager .current {
+    font-weight: bold;
+}
