@@ -48,9 +48,10 @@ error_handler("application/json", Req, Code, ErrorDump) ->
 error_handler(_Default, Req, Code, ErrorDump) ->
     Req:add_response_header("Content-Type", "text/html; charset=utf-8"),
     Req:add_response_header("Content-Encoding", "identity"),
-    Context = z_context:new(Req:get_metadata('host')),
+    {Host, Req1} = Req:get_metadata('zotonic_host'),
+    Context = z_context:new(Host),
     Vars = [{error_code, Code}, {error_dump, ErrorDump}],
     Html = z_template:render("error.tpl", Vars, Context),
     {Output, _} = z_context:output(Html, Context),
-    Output.
+    {Output, Req1}.
 

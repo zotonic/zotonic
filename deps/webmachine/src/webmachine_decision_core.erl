@@ -25,9 +25,9 @@
 -export([do_log/1]).
 -include("webmachine_logger.hrl").
 
-handle_request(Req, Resource) ->
-    put(req, Req),
+handle_request(Resource, ReqState) ->
     put(resource, Resource),
+    put(reqstate, ReqState),
     try
         d(v3b13)
     catch
@@ -36,8 +36,18 @@ handle_request(Req, Resource) ->
     end.
 
 wrcall(X) ->
-    Req = get(req),
-    Req:call(X).
+    RS0 = get(reqstate),
+    Req = webmachine_request:new(RS0),
+    {Response, RS1} = Req:call(X),
+    put(reqstate, RS1),
+    Response.
+
+resource_call(Fun) ->
+    Resource = get(resource),
+    {Reply, NewResource, NewRS} = Resource:do(Fun,get()),
+    put(resource, NewResource),
+    put(reqstate, NewRS),
+    Reply.
 
 get_header_val(H) -> wrcall({get_req_header, H}).
 
@@ -55,7 +65,9 @@ respond(Code) ->
 	404 ->
 	    {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
 	    Reason = {none, none, []},
-	    ErrorHTML = ErrorHandler:render_error(Code, get(req), Reason),
+	    {ErrorHTML,ReqState} = ErrorHandler:render_error(
+                          Code, {webmachine_request,get(reqstate)}, Reason),
+            put(reqstate, ReqState),
             wrcall({set_resp_body, ErrorHTML});
         304 ->
             wrcall({remove_resp_header, "Content-Type"}),
@@ -81,9 +93,7 @@ respond(Code) ->
     LogData = LogData0#wm_log_data{resource_module=RMod,
 				   end_time=EndTime},
     spawn(fun() -> do_log(LogData) end),
-    Resource:stop(),
-    Req = get(req),
-    Req:stop().
+    Resource:stop().
 
 respond(Code, Headers) ->
     wrcall({set_resp_headers, Headers}),
@@ -91,7 +101,8 @@ respond(Code, Headers) ->
 
 error_response(Code, Reason) ->
     {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
-    ErrorHTML = ErrorHandler:render_error(Code, get(req), Reason),
+    ErrorHTML = ErrorHandler:render_error(
+                  Code, {webmachine_request,get(reqstate)}, Reason),
     wrcall({set_resp_body, ErrorHTML}),
     respond(Code).
 error_response(Reason) ->
@@ -115,24 +126,16 @@ decision_flow({ErrCode, Reason}, _TestResult) when is_integer(ErrCode) ->
     error_response(ErrCode, Reason).
 
 do_log(LogData) ->
-    LoggerModule =
-	case application:get_env(webmachine, webmachine_logger_module) of
-	    {ok, Val} -> Val;
-	    _ -> webmachine_logger
-	end,
-    LoggerModule:log_access(LogData),
+    case application:get_env(webmachine, webmachine_logger_module) of
+        {ok, LoggerModule} -> LoggerModule:log_access(LogData);
+        _ -> nop
+    end,
     case application:get_env(webmachine, enable_perf_logger) of
 	{ok, true} ->
 	    webmachine_perf_logger:log(LogData);
 	_ ->
 	    ignore
     end.
-
-resource_call(Fun) ->
-    Resource = get(resource),
-    {Reply, NewResource} = Resource:do(Fun,get()),
-    put(resource, NewResource),
-    Reply.
 
 log_decision(DecisionID) -> 
     Resource = get(resource),
@@ -417,7 +420,9 @@ decision(v3n11) ->
             end;
         _ ->
             case resource_call(process_post) of
-                true -> stage1_ok;
+                true -> 
+                    encode_body_if_set(),
+                    stage1_ok;
                 {halt, Code} -> respond(Code);
                 Err -> error_response(Err)
             end
@@ -539,7 +544,21 @@ accept_helper() ->
         [] -> {respond,415};
         AcceptedContentList ->
             F = hd(AcceptedContentList),
-            resource_call(F)
+            case resource_call(F) of
+                true ->
+                    encode_body_if_set(),
+                    true;
+                Result -> Result
+            end
+    end.
+
+encode_body_if_set() ->
+    case wrcall(has_resp_body) of
+        true ->
+            Body = wrcall(resp_body),
+            wrcall({set_resp_body, encode_body(Body)}),
+            true;
+        _ -> false
     end.
 
 encode_body(Body) ->
@@ -555,6 +574,8 @@ encode_body(Body) ->
     case Body of
         {stream, StreamBody} ->
             {stream, make_encoder_stream(Encoder, Charsetter, StreamBody)};
+        {writer, BodyFun} ->
+            {writer, {Encoder, Charsetter, BodyFun}};
         _ ->
             Encoder(Charsetter(iolist_to_binary(Body)))
     end.
@@ -564,7 +585,7 @@ make_encoder_stream(Encoder, Charsetter, {Body, done}) ->
 make_encoder_stream(Encoder, Charsetter, {Body, Next}) ->
     {Encoder(Charsetter(Body)),
      fun() -> make_encoder_stream(Encoder, Charsetter, Next()) end}.
-            
+
 choose_encoding(AccEncHdr) ->
     Encs = [Enc || {Enc,_Fun} <- resource_call(encodings_provided)],
     case webmachine_util:choose_encoding(Encs, AccEncHdr) of

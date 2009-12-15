@@ -91,13 +91,18 @@ init([]) ->
                 {z_media_preview_server, start_link, []}, 
                 permanent, 5000, worker, dynamic},
 
+    % Sites disapatcher, matches hosts and paths to sites and resources.
+    Dispatcher = {z_sites_dispatcher,
+                {z_sites_dispatcher, start_link, []},
+                permanent, 5000, worker, dynamic},
+
     % Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_sup,
                 {z_sites_sup, start_link, []},
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-            Webmachine, Ids, Postgres, PreviewServer, SitesSup
+            Webmachine, Ids, Postgres, PreviewServer, Dispatcher, SitesSup
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 

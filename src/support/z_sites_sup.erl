@@ -23,7 +23,14 @@
 -behaviour(supervisor).
 
 %% External exports
--export([start_link/0, upgrade/0, update_dispatchinfo/0, get_sites/0, get_site_contexts/0, get_site_config/1]).
+-export([
+	start_link/0,
+	upgrade/0,
+	update_dispatchinfo/0,
+	get_sites/0,
+	get_site_contexts/0,
+	get_site_config/1
+]).
 
 %% supervisor callbacks
 -export([init/1]).
@@ -41,7 +48,8 @@ start_link() ->
 %% to webmachine for updating its dispatch lists and host information.
 update_dispatchinfo() ->
     DispatchList = [ fetch_dispatchinfo(Site) || Site <- get_sites() ],
-    application:set_env(webmachine, dispatch_list, DispatchList).
+    z_sites_dispatcher:set_dispatch_rules(DispatchList),
+    ok.
 
     fetch_dispatchinfo(Site) ->
         Name = z_utils:name_for_host(z_dispatcher, Site),
