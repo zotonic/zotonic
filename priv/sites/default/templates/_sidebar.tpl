@@ -1,6 +1,6 @@
 <h2>Archive</h2>
 <ul class="archive">
-    {% for year, months in m.search[{archive_year_month cat='text'}] %}
+    {% for year, months in m.search[{archive_year_month cat='article'}] %}
     <li>
         <a href="{% url archives_y year=year %}">{{ year }}</a>
         <ul>
@@ -14,7 +14,7 @@
 
 <h2>Keywords</h2>
 <ul class="keywords">
-    {% for id, count in m.search[{keyword_cloud cat='text'}] %}
+    {% for id, count in m.search[{keyword_cloud cat='article'}] %}
     <li><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a> ({{ count }})</li>
     {% endfor %}
 </ul>

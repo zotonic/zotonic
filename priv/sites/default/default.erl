@@ -117,7 +117,9 @@ datamodel() ->
 
        {page_home,
         text,
-        [{title, <<"Welcome to your blog!">>}]
+        [{title, <<"Home">>},
+         {summary, <<"Welcome to your blog!">>},
+         {page_path, <<"/">>}]
        },
 
        {page_about,
@@ -151,6 +153,21 @@ datamodel() ->
          {summary, <<"This article demonstrates the typographic features that Zotonic has. It shows creating ordered and unordered lists, blockquotes, and different methods of embedding media, even even showing an embedded Youtube video.">>},
          {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "demo.html"])}}
         ]
+       },
+
+       %% KEYWORDS
+
+       {kw_announcement,
+        keyword,
+        [{title, <<"Announcement">>}]
+       },
+       {kw_technical,
+        keyword,
+        [{title, <<"Technical">>}]
+       },
+       {kw_support,
+        keyword,
+        [{title, <<"Support">>}]
        }
 
       ]
@@ -164,7 +181,13 @@ datamodel() ->
       [
        {blog_article_learnmore, author, administrator},
        {blog_article_welcome, author, administrator},
-       {blog_article_demo, author, administrator}
+       {blog_article_demo, author, administrator},
+
+       {blog_article_learnmore, subject, kw_support},
+       {blog_article_learnmore, subject, kw_announcement},
+       {blog_article_demo, subject, kw_technical},
+       {blog_article_welcome, subject, kw_support},
+       {blog_article_welcome, subject, kw_announcement}
       ]
      }
     ].
