@@ -1,14 +1,20 @@
-% Configuration of the Zotonic site
+% Configuration of the default zotonic site.
 % Copy this file to 'config' and change the settings below.
 [
     % This site is enabled or not.
     {enabled, true},
     
     % Atomic hostname, MUST be equal to the directory name of this site.
-    {host, blog},
+    {host, default},
 
-    % Hostname for virtual host support
-    {hostname, "blog.local:8000"},
+    % Hostname for virtual host support. Change this to your real
+    % hostname (e.g. www.example.com) once you move your site to
+    % production.
+    {hostname, "127.0.0.1:8000"},
+
+    % Aliases which should redirect to the primary hostname
+    {hostalias, "www.example.com"},
+    {hostalias, "example.com"},
 
     
     % PostgreSQL database connection
@@ -31,6 +37,11 @@
     {sign_key, <<"--change-me--">>},
 
     %% Specific options
+
+    %% Title of your site
+    {title, <<"Your first blog">>},
+    %% Subtitle
+    {subtitle, <<"Built with Zotonic, the Erlang CMS.">>},
 
     %% Page length
     {pagelen, 2}

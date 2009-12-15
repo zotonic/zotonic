@@ -8,7 +8,7 @@
     {host, zotonic},
 
     % Hostname for virtual host support
-    {hostname, "127.0.0.1:8000"},
+    {hostname, "zotonic.local:8000"},
     {hostalias, "www.zotonic.com"},
     {hostalias, "zotonic.net"},
     {hostalias, "www.zotonic.net"},
