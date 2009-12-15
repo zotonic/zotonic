@@ -109,7 +109,7 @@ handle_call({dispatch, HostAsString, PathAsString, Req}, _From, State) ->
                     _ -> webmachine_logger
                 end,
             spawn(LogModule, log_access, [LogData]),
-            handled;
+            {handled, Req2b};
         no_host_match ->
             {{no_dispatch_match, undefined, undefined}, Req}
     end,
