@@ -38,7 +38,6 @@
 				</section>
 			{% endif %}
 		{% endfor %}
-
 	</section>
 	
 {% endblock %}
