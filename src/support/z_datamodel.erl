@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,14 @@
 
 -export([manage/3]).
 
+
+%% The datamodel manages parts of your datamodel. This includes
+%% categories and predicates, but also "default data" like resources
+%% and the menu.
+%%
+%% The data model maintains a special property on this installed data,
+%% called 'installed_by'. This decides whether it can touch it.
+%%
 
 -include_lib("zotonic.hrl").
 
@@ -51,6 +59,13 @@ manage(Module, Datamodel, Context) ->
             {ok, N3} = manage_resources(Module, Rs, AdminContext),
             N3
     end,
+    case proplists:get_value(menu, Datamodel) of
+        undefined ->
+            [];
+        M ->
+            {ok, N4} = manage_menu(Module, M, AdminContext),
+            N4
+    end,
     ok.
 
 
@@ -59,8 +74,8 @@ manage_resources(Module, Rcs, Context) ->
 manage_resources(_Module, [], _Context, Acc) ->
     {ok, Acc};
 manage_resources(Module, [R|Rest], Context, Acc) ->
-    Id = manage_resource(Module, R, Context),
-    manage_resources(Module, Rest, Context, [Id|Acc]).
+    Result = manage_resource(Module, R, Context),
+    manage_resources(Module, Rest, Context, [Result|Acc]).
 
 
 
@@ -139,7 +154,14 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                 Module ->
                     %% Resource exists and has been installed by us.
                     %% FIXME Check if it needs updating!
-                    m_rsc:update(Id, Props, Context),
+                    case m_rsc:p(Id, managed_props, Context) of
+                        Props ->
+                            %% The props are equal, do nothing.
+                            nothing;
+                        _ ->
+                            %% Different props, update it.
+                            m_rsc:update(Id, [{managed_props, Props} | Props], Context)
+                    end,
                     {ok, Id};
                 _ ->
                     %% Resource exists but is not installed by us!
@@ -149,17 +171,38 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                     {ok}
             end;
         {error, {unknown_rsc, _}} ->
-            %% new resource
-            Props1 = [{name, Name}, {group_id, m_group:name_to_id_check(admins, Context)}, {category_id, CatId},
-                      {installed_by, Module}] ++ Props,
-            Props2 = case proplists:get_value(is_published, Props1) of
-                         undefined ->
-                             [{is_published, true} | Props1];
-                         _ -> Props1
-                     end,
-            ?DEBUG("New resource"),
-            ?DEBUG(Props2),
-            m_rsc:insert(Props2, Context)
+            %% new resource, or old resource
+
+            %% Check if name was previously inserted.
+            ManagedNames = case m_config:get(Module, datamodel, Context) of
+                               undefined ->
+                                   [];
+                               Cfg ->
+                                   case proplists:get_value(managed_resources, Cfg) of
+                                       undefined ->
+                                           [];
+                                       N -> N
+                                   end
+                           end,
+
+            {Result, NewNames} = case lists:member(Name, ManagedNames) of
+                                     false ->
+                                         Props1 = [{name, Name}, {group_id, m_group:name_to_id_check(admins, Context)}, {category_id, CatId},
+                                                   {installed_by, Module}, {managed_props, Props}] ++ Props,
+                                         Props2 = case proplists:get_value(is_published, Props1) of
+                                                      undefined ->
+                                                          [{is_published, true} | Props1];
+                                                      _ -> Props1
+                                                  end,
+                                         ?DEBUG("New resource"),
+                                         ?DEBUG(Props2),
+                                         {m_rsc:insert(Props2, Context), [Name | ManagedNames ]};
+                                     true ->
+                                         ?DEBUG("resource was deleted."),
+                                         {{ok}, ManagedNames}
+                                 end,
+            m_config:set_prop(Module, datamodel, managed_resources, NewNames, Context),
+            Result
     end.
 
 
@@ -182,7 +225,7 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
     F(Id, false, ObjectId),
 
     manage_predicate_validfor(Id, Rest, Context).
-    
+
 
 
 map_props(Props, Context) ->
@@ -197,6 +240,44 @@ map_props([{Key, Value}|Rest], Context, Acc) ->
 
 map_prop({file, Filepath}, _Context) ->
     {ok, Txt} = file:read_file(Filepath),
-    Txt;    
+    Txt;
 map_prop(Value, _Context) ->
     Value.
+
+
+manage_menu(Module, M, Context) ->
+    Menu = [{m_rsc:name_to_id_check(Nm, Context), []} || Nm <- M],
+    case m_config:get(menu, menu_default, Context) of
+        undefined ->
+            m_config:set_prop(menu, menu_default, installed_by, Module, Context),
+            m_config:set_prop(menu, menu_default, menu, Menu, Context),
+            m_config:set_prop(menu, menu_default, menu_orig, Menu, Context),
+            ok;
+        X ->
+            case proplists:get_value(installed_by, X) of
+                Module ->
+                    %% Menu is installed by us; update it, but only if it has not been changed.
+                    Orig = proplists:get_value(menu_orig, X),
+                    case proplists:get_value(menu, X) of
+                        Menu ->
+                            %% It is still the same as now. Bail out.
+                            ok;
+                        Orig ->
+                            %% It has not been changed in the admin, but it is different from what we have.
+                            %% Lets update it.
+                            m_config:set_prop(menu, menu_default, menu, Menu, Context),
+                            m_config:set_prop(menu, menu_default, menu_orig, Menu, Context),
+                            ok;
+                        _ ->
+                            %% Menu changed in the admin
+                            ok
+                    end;
+                _ ->
+                    %% Not touching the menu, it is not installed by us.
+                    ok
+            end
+    end,
+    {ok, []}.
+
+
+
