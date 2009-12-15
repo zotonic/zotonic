@@ -12,9 +12,10 @@
 
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 	<meta name="author" content="YOUR NAME HERE &copy; 2009" />
-
 	{% include "_atom_feed_link.tpl" cat="blog" %}
+
 	{% all include "_html_head.tpl" %}
+
 	{% lib "css/zp-compressed.css" "css/zp-project.css" %}
 	<!--[if IE]>{}% lib	"css/zp-ie.css" %}<![endif]-->
 </head>
