@@ -65,6 +65,19 @@ manage(Module, Datamodel, Context) ->
     ok.
 
 
+manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Context) ->
+    case manage_resource(Module, {Name, media, Props}, Context) of
+        {ok} ->
+            {ok};
+        {ok, Id} ->
+            MediaProps = [{mime, "text/html-video-embed"}, 
+                          {video_embed_service, EmbedService}, 
+                          {video_embed_code, EmbedCode}
+                         ],
+            m_media:replace(Id, MediaProps, Context),
+            {ok, Id}
+    end;
+
 manage_medium(Module, {Name, Filename, Props}, Context) ->
     case manage_resource(Module, {Name, media, Props}, Context) of
         {ok} ->

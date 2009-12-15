@@ -150,7 +150,7 @@ datamodel() ->
         article,
         [{title, <<"Zotonic's Typography">>},
          {publication_start, z_datetime:prev_month(Now)},
-         {summary, <<"This article demonstrates the typographic features that Zotonic has. It shows creating ordered and unordered lists, blockquotes, and different methods of embedding media, even even showing an embedded Youtube video.">>},
+         {summary, <<"This article demonstrates the typographic features that Zotonic has. It shows creating ordered and unordered lists, blockquotes, and different methods of embedding media, even even showing an embedded video from Vimeo.com.">>},
          {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "demo.html"])}}
         ]
        },
@@ -173,6 +173,20 @@ datamodel() ->
       ]
      },
 
+     {media,
+      [
+       {media_learning,
+        filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "learning.jpg"]),
+        [{title, <<"A bunch of computer books">>},
+         {summary, <<"Taken by Sibi from Flickr, licensed Attribution-Noncommercial-No Derivative Works 2.0.">>}]
+       },
+       {media_video,
+        {<<"vimeo">>, <<"<object width=\"400\" height=\"225\"><param name=\"allowfullscreen\" value=\"true\" /><param name=\"allowscriptaccess\" value=\"always\" /><param name=\"movie\" value=\"http://vimeo.com/moogaloop.swf?clip_id=7630916&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=&amp;fullscreen=1\" /><embed src=\"http://vimeo.com/moogaloop.swf?clip_id=7630916&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=&amp;fullscreen=1\" type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" allowscriptaccess=\"always\" width=\"400\" height=\"225\"></embed></object>">>},
+        [{title, <<"Zotonic introduction video">>}]
+       }
+      ]
+     },
+
      {menu,
       [page_home, page_about]
      },
@@ -184,10 +198,13 @@ datamodel() ->
        {blog_article_demo, author, administrator},
 
        {blog_article_learnmore, subject, kw_support},
-       {blog_article_learnmore, subject, kw_announcement},
        {blog_article_demo, subject, kw_technical},
        {blog_article_welcome, subject, kw_support},
-       {blog_article_welcome, subject, kw_announcement}
+       {blog_article_welcome, subject, kw_announcement},
+
+       {blog_article_learnmore, depiction, media_learning},
+       {blog_article_demo, depiction, media_learning}
+
       ]
      }
     ].

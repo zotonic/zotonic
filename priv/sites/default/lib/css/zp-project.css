@@ -145,3 +145,7 @@ h1.listpage {
 	padding: 0 0 9px 0;
 	border-bottom: 1px solid #eee;
 }
+
+img.block, p img.block {
+    float: none;
+}
