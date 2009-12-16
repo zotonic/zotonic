@@ -19,7 +19,7 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -behaviour(gen_server).
 
--mod_title("Blog").
+-mod_title("Default Zotonic site").
 -mod_description("A simple weblog, used as an example of how to create a Zotonic site.").
 -mod_prio(10).
 
@@ -56,7 +56,12 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_datamodel:manage(?MODULE, datamodel(), Context),
+    case z_context:site(Context) of
+        ?MODULE ->
+            z_datamodel:manage(?MODULE, datamodel(), Context);
+        _ ->
+            ignore
+    end,
     {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
