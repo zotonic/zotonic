@@ -117,6 +117,29 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+%% Retrieve the previous id (on publication date) 
+search({previous, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+        where="publication_start < (SELECT publication_start FROM rsc WHERE id = $1)",
+        tables=[{rsc, "r"}],
+        cats=[{"r", Cat}],
+        args=[Id],
+        order="publication_start DESC"
+       };
+search({next, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+        where="publication_start > (SELECT publication_start FROM rsc WHERE id = $1)",
+        tables=[{rsc, "r"}],
+        cats=[{"r", Cat}],
+        args=[Id],
+        order="publication_start"
+       };
+
+
 search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
     Subject = m_predicate:name_to_id_check(subject, Context),
     #search_sql{
