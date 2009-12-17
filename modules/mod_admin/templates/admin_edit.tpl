@@ -342,6 +342,13 @@
 										{% else %}
 											{% button class="save-resource do_tooltip" text="duplicate" action={dialog_duplicate_rsc id=id}  title="Duplicate this page." %}
 										{% endif %}
+
+                                        {% for id in m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}] %}
+										{% button class="goto-resource right do_tooltip" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title="Next in category: "|append:m.rsc[id].title %}
+                                        {% endfor %}
+                                        {% for id in m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}] %}
+										{% button class="goto-resource right do_tooltip" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title="Previous in category: "|append:m.rsc[id].title %}
+                                        {% endfor %}
 									</div>
 								</div>
 							</div>
