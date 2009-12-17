@@ -149,3 +149,10 @@ h1.listpage {
 img.block, p img.block {
     float: none;
 }
+
+div.prevnext div.next {
+    float: right;
+}
+div.prevnext div.prev {
+    float: left;
+}
