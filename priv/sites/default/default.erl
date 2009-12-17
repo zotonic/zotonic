@@ -56,12 +56,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    case z_context:site(Context) of
-        ?MODULE ->
-            z_datamodel:manage(?MODULE, datamodel(), Context);
-        _ ->
-            ignore
-    end,
+    z_datamodel:manage(?MODULE, datamodel(), Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
