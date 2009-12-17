@@ -44,5 +44,5 @@
     {subtitle, <<"Built with Zotonic, the Erlang CMS.">>},
 
     %% Page length
-    {pagelen, 2}
+    {pagelen, 5}
 ].
