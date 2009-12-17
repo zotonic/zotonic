@@ -103,7 +103,8 @@ upgrade(Context) ->
 %% @doc supervisor callback.  The proplist is the concatenation of {context,_} and the site configuration.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
-    Ms = lists:filter(fun module_exists/1, active(Context)),
+    Ms0 = lists:filter(fun module_exists/1, active(Context)),
+    Ms  = lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0),
     Processes = [
         {M, 
             {M, start_link, [Args]},
@@ -208,6 +209,11 @@ module_exists(M) ->
         {module,M} -> true;
         {error, _} -> false
     end.
+
+%% @doc Check whether given module is valid for the given host
+%% @spec valid(atom(), context()) -> bool()
+valid(M, Context) ->
+    lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
 %%
 %% Get the title of a module.
