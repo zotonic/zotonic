@@ -26,10 +26,6 @@ body {
 	background: #eee;
 }
 
-a, a:focus {
-    color: #004;
-}
-
 header, article, aside, nav, figure, footer {
 	display: block !important;
 }
@@ -39,11 +35,30 @@ header, article, aside, nav, figure, footer {
 	background: #fff;
 }
 
-.at-menu a {
-    text-decoration: none;
+a, a:focus {
+    color: #666;
 }
-.at-menu a.current {
-    text-decoration: underline;
+
+a:hover, a:active {
+    color: #004;
+}
+
+h1.listpage {
+	margin: 0 0 8px 0;
+	padding: 0 0 9px 0;
+	border-bottom: 1px solid #eee;
+}
+
+h2 {
+	line-height: 27px;
+}	
+
+p.summary {
+    font-weight: bold;
+}
+
+.post p.summary {
+    font-weight: normal;
 }
 
 header nav {
@@ -65,7 +80,12 @@ header nav {
 		display: block;
 		float: left;
 		font-size: 11px;
+		text-decoration: none;
 	}
+	
+		#navigation li a.current {
+			text-decoration: underline;
+		}
 
 header .featured {
     color: white;
@@ -116,19 +136,7 @@ header .featured-empty {
 			    text-decoration: underline;
 			}
 			
-		h2 {
-			line-height: 27px;
-		}	
-
-        p.summary {
-            font-weight: bold;
-        }
-
-        .post p.summary {
-            font-weight: normal;
-        }
-		
-	sidebar ul {
+	aside ul {
 	    margin: 0 0 18px 0;
 	}
 
@@ -140,12 +148,6 @@ footer {
 	font-size: 11px;
 }
 
-h1.listpage {
-	margin: 0 0 8px 0;
-	padding: 0 0 9px 0;
-	border-bottom: 1px solid #eee;
-}
-
 img.block, p img.block {
     float: none;
 }
@@ -153,6 +155,54 @@ img.block, p img.block {
 div.prevnext div.next {
     float: right;
 }
+
 div.prevnext div.prev {
     float: left;
+}
+
+.form-item:last-child {
+	margin: 0;
+}
+
+.form-item label {
+	display: block;
+	float: none;
+	font-size: 11px;
+	color: #666;
+}
+
+textarea {
+	font-family: "Lucida Grande", helvetica, sans-serif;
+}
+
+fieldset {
+	background: #f9f9f9;
+	border: solid #004;
+	border-width: 0 0 2px 0;
+}
+
+.comments-list {
+	margin: 0 0 18px 0;
+}
+
+	.comments-list li {
+		padding: 6px;
+		border-bottom: 2px solid #ccc;
+		margin: 0 0 18px 0;
+		background: #f9f9f9;
+	}
+	
+	.comments-list li p.comment-meta,
+	.comments-list li p.comment-body {
+		font-size: 11px;
+		margin: 0;
+	}
+	
+	.comments-list li p.comment-meta {
+		margin: 0 0 6px 0;
+		color: #888;
+	}
+	
+.z_validation_message {
+	display: none;
 }
