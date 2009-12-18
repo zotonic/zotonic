@@ -17,40 +17,35 @@
 	{% all include "_html_head.tpl" %}
 
 	{% lib "css/zp-compressed.css" "css/zp-project.css" %}
-	<!--[if IE]>{}% lib	"css/zp-ie.css" %}<![endif]-->
+	<!--[if IE]>{% lib "css/zp-ie.css" %}<![endif]-->
+	
+	{% lib "js/apps/modernizr.js" %}
+	
 </head>
-<body class="home">
+<body class="{% block page_class %}page{% endblock %}">
 
 <section class="zp-wrapper">
 	
 	<header>
-	
-		<nav>
-			{% menu id=id %}
-		</nav>
-
-		{% block featured %}
-        <div class="featured-empty">
-        </div>
-		{% endblock %}
-	
+		<nav>{% menu id=id %}</nav>
+		{% block featured %}<div class="featured-empty"></div>{% endblock %}
 	</header>
 	
 	<section id="content-area" class="clearfix">
-			
-		<section id="content" class="zp-75">
+	
+		<article id="content" class="zp-75">
 			<div class="padding">
 				{% block content %}
-				The default content goes here.
+					The default content goes here.
 				{% endblock %}
 			</div>
-		</section>
+		</article>
 		
-		<sidebar class="zp-25 last">
+		<aside class="zp-25 last">
 			{% block sidebar %}
-			{% include "_sidebar.tpl" %}
+				{% include "_sidebar.tpl" %}
 			{% endblock %}
-		</sidebar>
+		</aside>
 	
 	</section>
 
@@ -59,6 +54,16 @@
 	</footer>
 
 </section>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
+{% lib "js/apps/zotonic-1.0.js" "js/apps/z.widgetmanager.js" "js/modules/livevalidation-1.3.js" %}
+
+<script type="text/javascript">
+	$(function() { $.widgetManager(); });
+</script>
+
+{% script %}
 
 </body>
 </html>

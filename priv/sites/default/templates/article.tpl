@@ -16,6 +16,7 @@
 </div>
 
 {% include "_article_keywords.tpl" id=id %}
+{# {% include "_article_comments.tpl" id=id %} #}
 {% include "_article_prevnext.tpl" id=id %}
 
 {% endblock %}
