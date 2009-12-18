@@ -153,8 +153,10 @@
                 while ( (m = re.exec(html)) )
                 {
                     var img = m[0];
+                    var idmatch = (new RegExp('id="z-media-([0-9]+)', 'g')).exec(img);
+                    if (!idmatch) return html;
+                    var id = idmatch[1];
                     var cls = (new RegExp('class="(.*?)"', 'g')).exec(img)[1];
-                    var id = (new RegExp('id="z-media-([0-9]+)', 'g')).exec(img)[1];
                     var opts = this._zMediaOptsFromClassName(cls);
                     var newtag = this._zMediaMarker(id, opts);
 
