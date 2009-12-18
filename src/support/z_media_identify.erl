@@ -59,7 +59,8 @@ identify_file(File, OriginalFilename, Context) ->
         {ok, Props} ->
 			{ok, Props};
         undefined -> 
-			case identify_file_os(File, OriginalFilename) of
+            {OsFamily, _} = os:type(),
+			case identify_file_os(OsFamily, File, OriginalFilename) of
 				{error, _} ->
 					%% Last resort, give ImageMagick a try
 					identify_file_imagemagick(File);
@@ -74,12 +75,14 @@ identify_file(File, OriginalFilename, Context) ->
 			end
 	end.
 
-
-%% @spec identify_file_os(File::string()) -> {ok, PropList} | {error, Reason}
+%% @spec identify_file_os(OsFamily::atom(), File::string(), OriginalFilename::string()) -> {ok, PropList} | {error, Reason}
 %% @doc Identify the mime type of a file using the unix "file" command.
-identify_file_os(File, OriginalFilename) ->
-	SafeFile = z_utils:os_escape(File),
-	Mime = z_string:trim(os:cmd("file -b --mime-type \""++SafeFile++"\"")),
+identify_file_os(win32, File, _OriginalFilename) ->
+    {ok, [{mime, guess_mime(File)}]};
+
+identify_file_os(unix, File, OriginalFilename) ->
+	SafeFile = z_utils:os_filename(File),
+	Mime = z_string:trim(os:cmd("file -b --mime-type "++SafeFile)),
 	case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
 		nomatch -> 
 			{error, Mime};
@@ -109,8 +112,8 @@ identify_file_os(File, OriginalFilename) ->
 %% @spec identify(ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
 identify_file_imagemagick(ImageFile) ->
-    CleanedImageFile = z_utils:os_escape(ImageFile),
-    Result    = os:cmd("identify -quiet \"" ++ CleanedImageFile ++ "[0]\""),
+    CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
+    Result    = os:cmd("identify -quiet " ++ CleanedImageFile),
     % ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
     % sometimes:
     % test.jpg[0]=>test.jpg JPEG 2126x1484 2126x1484+0+0 DirectClass 8-bit 836.701kb 0.130u 0:02

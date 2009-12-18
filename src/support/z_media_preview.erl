@@ -54,8 +54,8 @@ convert(InFile, OutFile, Filters, Context) ->
                     {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters),
                     z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
                     z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
-                    Args1   = lists:flatten(z_utils:combine(32, CmdArgs)),
-                    Cmd     = ["convert \"", z_utils:os_escape(InFile), "[0]\" ", Args1, " \"", z_utils:os_escape(OutFile), "\""],
+                    Args1   = lists:flatten(z_utils:combine(32, [z_utils:os_escape(A) || A <- CmdArgs])),
+                    Cmd     = ["convert ", z_utils:os_filename(InFile++"[0]"), " ", Args1, " ", z_utils:os_filename(OutFile)],
                     file:delete(OutFile),
                     ok = filelib:ensure_dir(OutFile),
                     Result  = z_media_preview_server:exec(lists:flatten(Cmd), OutFile),
@@ -203,11 +203,11 @@ filter2arg({resize, EndWidth, EndHeight}, Width, Height) when Width < EndWidth a
     GArg = "-gravity Center",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     % Still thumbnail to remove extra info from the image
-    RArg = ["-thumbnail ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$\\,$!],
+    RArg = ["-thumbnail ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
 filter2arg({resize, EndWidth, EndHeight}, _Width, _Height) ->
     GArg = "-gravity NorthWest",
-    RArg = ["-thumbnail ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$\\,$!],
+    RArg = ["-thumbnail ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!],
     {EndWidth, EndHeight, [GArg, 32, RArg]};
 filter2arg({crop, none}, Width, Height) ->
     {Width, Height, []};
