@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@
     site/1,
     hostname/1,
     hostname_port/1,
-    
+
     prune_for_async/1,
     prune_for_template/1,
     prune_for_database/1,
@@ -34,10 +34,10 @@
     output/2,
 
     abs_url/2,
-    
+
     pickle/1,
     depickle/1,
-    
+
     combine_results/2,
 
     ensure_all/1,
@@ -46,7 +46,7 @@
     ensure_visitor_id/1,
     ensure_page_session/1,
     ensure_qs/1,
-    
+
     get_reqdata/1,
     set_reqdata/2,
     get_resource_module/1,
@@ -63,9 +63,9 @@
 
     spawn_link_session/4,
     spawn_link_page/4,
-    
+
     get_value/2,
-    
+
     set_session/3,
     get_session/2,
     incr_session/3,
@@ -83,12 +83,13 @@
     get/3,
     incr/3,
     get_all/1,
-    
+
     language/1,
-    
+    set_language/2,
+
     merge_scripts/2,
     copy_scripts/2,
-    
+
     set_resp_header/3,
     get_resp_header/2
 ]).
@@ -112,7 +113,7 @@ new(ReqData) ->
 	z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, host=site(ReqData)}),
     Context#context{language=z_trans:default_language(Context)}.
-    
+
 
 %% @doc Create a new context record for the current request and resource module
 new(ReqData, Module) ->
@@ -179,8 +180,8 @@ hostname_port(Context) ->
 %% @doc Make the context safe to use in a async message. This removes buffers and the db transaction.
 prune_for_async(#context{} = Context) ->
     #context{
-        wm_reqdata=Context#context.wm_reqdata, 
-        host=Context#context.host, 
+        wm_reqdata=Context#context.wm_reqdata,
+        host=Context#context.host,
 		user_id=Context#context.user_id,
 		visitor_pid=Context#context.visitor_pid,
 		session_pid=Context#context.session_pid,
@@ -220,7 +221,7 @@ prune_for_template(Output) -> Output.
 %% @doc Cleanup a context so that it can be used exclusively for database connections
 prune_for_database(Context) ->
     #context{
-        host=Context#context.host, 
+        host=Context#context.host,
         dbc=Context#context.dbc,
         depcache=Context#context.depcache,
         notifier=Context#context.notifier,
@@ -263,8 +264,8 @@ abs_url(Url, Context) ->
         false ->
             ["http://", hostname_port(Context), Url]
     end.
-    
-    has_url_protocol([]) -> 
+
+    has_url_protocol([]) ->
         false;
     has_url_protocol([H|T]) when is_integer($a) andalso H >= $a andalso H =< $z ->
         has_url_protocol(T);
@@ -308,7 +309,7 @@ output1([{script}|Rest], Context, Acc) ->
     Script = [
             <<"\n\n<script type='text/javascript'>\n$(function() {\n">>,
                 z_script:get_page_startup_script(Context),
-                z_script:get_script(Context), 
+                z_script:get_script(Context),
                 <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $;,
             <<"\n});\n</script>\n">>
            ],
@@ -340,7 +341,7 @@ merge_scripts(C, Acc) ->
         wire=combine(Acc#context.wire, C#context.wire),
         validators=combine(Acc#context.validators, C#context.validators)
     }.
-    
+
 combine([],X) -> X;
 combine(X,[]) -> X;
 combine(X,Y) -> [X++Y].
@@ -374,16 +375,16 @@ ensure_session(Context) ->
             Context2 = z_auth:logon_from_session(Context1),
             add_nocache_headers(Context2);
         _ ->
-            Context    
+            Context
     end.
-    
+
 %% @doc Ensure that we have a visitor, start a new visitor process when needed
 ensure_visitor(Context) ->
     case Context#context.visitor_pid of
         undefined ->
             z_visitor_manager:ensure_visitor(Context);
         _ ->
-            Context    
+            Context
     end.
 
 %% @doc Ensure that we have a page session, used for comet and postback requests
@@ -395,7 +396,7 @@ ensure_page_session(Context) ->
         _ ->
             Context
     end.
-    
+
 %% @doc Ensure that we have parsed the query string, fetch body if necessary
 ensure_qs(Context) ->
     case proplists:lookup('q', Context#context.props) of
@@ -405,9 +406,9 @@ ensure_qs(Context) ->
             ReqData  = Context#context.wm_reqdata,
             PathDict = wrq:path_info(ReqData),
             PathArgs = lists:map(
-                            fun ({T,V}) when is_atom(V) -> {atom_to_list(T),atom_to_list(V)}; 
+                            fun ({T,V}) when is_atom(V) -> {atom_to_list(T),atom_to_list(V)};
                                 ({T,V})                 -> {atom_to_list(T),mochiweb_util:unquote(V)}
-                            end, 
+                            end,
                             dict:to_list(PathDict)),
             {Body, ContextParsed} = parse_form_urlencoded(Context),
             Query    = wrq:req_qs(ReqData),
@@ -476,7 +477,7 @@ get_q_all(Context) ->
 get_q_all(Key, Context) ->
     {'q', Qs} = proplists:lookup('q', Context#context.props),
     proplists:get_all_values(z_convert:to_list(Key), Qs).
-    
+
 
 %% @spec get_q_validated(Key, Context) -> Value
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
@@ -542,7 +543,7 @@ get_value(Key, Context) ->
     case get(Key, Context) of
         undefined ->
             case get_page(Key, Context) of
-                undefined -> 
+                undefined ->
                     case get_session(Key, Context) of
                         undefined -> get_visitor(Key, Context);
                         Value -> Value
@@ -618,7 +619,7 @@ set(Key, Value, Context) ->
 %% @doc Set the value of the context variables to all {Key, Value} properties.
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
-        fun ({Key,Value}, Props) -> 
+        fun ({Key,Value}, Props) ->
             z_utils:prop_replace(Key, Value, Props)
         end, Context#context.props, PropList),
     Context#context{props = NewProps}.
@@ -655,7 +656,7 @@ incr(Key, Value, Context) ->
             set(Key, Value, Context),
             Value;
         N ->
-            R = N+Value, 
+            R = N+Value,
             set(Key, R, Context),
             R
     end.
@@ -664,8 +665,13 @@ incr(Key, Value, Context) ->
 %% @doc Return the selected language of the Context
 language(Context) ->
     Context#context.language.
-    
-    
+
+%% @doc Set the language of the context.
+%% @spec set_language(atom(), context()) -> context()
+set_language(Lang, Context) ->
+    Context#context{language=Lang}.
+
+
 %% @doc Add a response header to the request in the context.
 %% @spec add_response_header(Header, Value, Context) -> NewContext
 set_resp_header(Header, Value, Context = #context{wm_reqdata=ReqData}) ->
