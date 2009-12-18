@@ -197,10 +197,10 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Set the contents of an element to the the html fragment	
 update(TargetId, undefined, Context) -> 
-    Script = "$('#~s').html(\"~s\"); $.widgetManager();",
+    Script = "$('#~s').html(\"~s\").widgetManager();",
     add_update(TargetId, "", Script, Context);
 update(TargetId, Html, Context) -> 
-    Script = "$('#~s').html(\"~s\"); $.widgetManager();",
+    Script = "$('#~s').html(\"~s\").widgetManager();",
     add_update(TargetId, Html, Script, Context).
     
 %% @doc Insert a html fragment at the top of the contents of an element

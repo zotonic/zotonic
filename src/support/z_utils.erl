@@ -294,7 +294,7 @@ js_escape([$\n|T], Acc) -> js_escape(T, [$n,$\\|Acc]);
 js_escape([$\r|T], Acc) -> js_escape(T, [$r,$\\|Acc]);
 js_escape([$\t|T], Acc) -> js_escape(T, [$t,$\\|Acc]);
 js_escape([$'|T], Acc) -> js_escape(T, [$7,$2,$x,$\\|Acc]);
-js_escape([$"|T], Acc) -> js_escape(T, [$7,$2,$x,$\\|Acc]);
+js_escape([$"|T], Acc) -> js_escape(T, [$2,$2,$x,$\\|Acc]);
 js_escape([$<|T], Acc) -> js_escape(T, [$c,$3,$x,$\\|Acc]);
 js_escape([$>|T], Acc) -> js_escape(T, [$e,$3,$x,$\\|Acc]);
 js_escape([$=|T], Acc) -> js_escape(T, [$d,$3,$x,$\\|Acc]);

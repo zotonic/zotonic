@@ -219,5 +219,11 @@ limitations under the License.
 	$.fn.metadata = function(opts)
 	{
 		return $.metadata.get( this[0], opts );
-	}
+	};
+    
+	$.fn.widgetManager = function(opts)
+	{
+	    $.widgetManager(this[0]);
+	};
+
 })(jQuery);
