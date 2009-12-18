@@ -44,6 +44,8 @@ parse_request_args(Args) ->
 
 parse_request_args([], Acc) ->
     Acc;
+parse_request_args([{"zotonic_host",_}|Rest], Acc) ->
+    parse_request_args(Rest, Acc);
 parse_request_args([{K,V}|Rest], Acc) ->
     NewVal = V,
     parse_request_args(Rest, [{request_arg(K),NewVal}|Acc]).
