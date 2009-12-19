@@ -122,21 +122,25 @@ search({previous, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
     #search_sql{
         select="r.id",
         from="rsc r",
-        where="publication_start < (SELECT publication_start FROM rsc WHERE id = $1)",
+        where="publication_start <= (SELECT publication_start FROM rsc WHERE id = $1) " ++
+		      "AND modified <= (SELECT modified FROM rsc WHERE id = $1) " ++
+		      "AND id <> $1",
         tables=[{rsc, "r"}],
         cats=[{"r", Cat}],
         args=[Id],
-        order="publication_start DESC"
+        order="publication_start DESC, modified DESC, id DESC"
        };
 search({next, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
     #search_sql{
         select="r.id",
         from="rsc r",
-        where="publication_start > (SELECT publication_start FROM rsc WHERE id = $1)",
+        where="publication_start >= (SELECT publication_start FROM rsc WHERE id = $1) " ++
+		      "AND modified >= (SELECT modified FROM rsc WHERE id = $1) " ++
+		      "AND id <> $1",
         tables=[{rsc, "r"}],
         cats=[{"r", Cat}],
         args=[Id],
-        order="publication_start"
+        order="publication_start, modified, id"
        };
 
 
