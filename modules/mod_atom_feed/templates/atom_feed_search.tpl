@@ -4,7 +4,7 @@
 	<logo />
 	<link rel="self" type="application/atom+xml" href="{{ site_url }}{% url atom_feed_search %}" />
 	<id>zotonic.atom.search</id>
-	<title>{% if qtext %}Latest updates for &quot;{{ qtext }}&quot;{% else %}Latest updates{% endif %}</title>
+	<title>{{ m.config.site.title.value|escapexml }} - {{ feed_title }}{% if qtext %} - &quot;{{ qtext }}&quot;{% endif %}</title>
 
 	{% for id in ids %}
 		{% include "_atom_entry.tpl" id=id %}
