@@ -67,14 +67,21 @@ expires(ReqData, State) ->
 
 provide_content(ReqData, Context) ->
 
-    Query = z_context:get_q_all(Context),
+    Query0 = z_context:get_q_all(Context),
     try
+        {FeedTitle, Query} = case proplists:get_value("feed_title", Query0) of
+                                 undefined ->
+                                     {"Latest updates", Query0};
+                                 T ->
+                                     {T, proplists:delete("feed_title", Query0)}
+                             end,
         Q = search_query:parse_request_args(Query),
         Q1 = Q ++ [{sort, "-rsc.modified"}],
         F = fun() ->
                     S = z_search:search({'query', Q1}, Context),
                     Vars = [{ids, S#search_result.result},
                             {qtext, proplists:get_value(text, Q1)},
+                            {feed_title, FeedTitle},
                             {updated, z_context:get(last_modified, Context)},
                             {site_url, z_context:abs_url("", Context)}
                            ],
