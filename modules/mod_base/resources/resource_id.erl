@@ -56,7 +56,7 @@ see_other(ReqData, Context) ->
     Id = z_context:get_q("id", Context2),
 	Location = case proplists:get_value(Mime, CT) of
 					page_url -> m_rsc:p_no_acl(Id, page_url, Context2);
-					Dispatch -> z_dispatcher:url(Dispatch, [{id,Id}], Context2)
+					Dispatch -> z_dispatcher:url_for(Dispatch, [{id,Id}], Context2)
 			   end,
 	AbsUrl = z_context:abs_url(Location, Context2),
     Context3 = z_context:set_resp_header("Location", AbsUrl, Context2),

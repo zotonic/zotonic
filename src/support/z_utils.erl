@@ -85,7 +85,7 @@ lib_dir() ->
 	Path.
 lib_dir(Dir) ->
 	{ok, Path} = zotonic_app:get_path(),
-	filename:join([Path, Dir]).
+	filename:join([Path, z_convert:to_list(Dir)]).
 
 
 %% @doc Return the current tick count

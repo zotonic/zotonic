@@ -21,7 +21,7 @@
 -export([render_validator/5, validate/5]).
 
 render_validator(confirmation, TriggerId, _TargetId, Args, Context)  ->
-    MatchField = z_utils:get_value(match, Args),
+    MatchField = proplists:get_value(match, Args),
 	JsObject   = z_utils:js_object(Args), 
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"confirmation\", ">>, JsObject, <<");\n">>],
 	{[MatchField], Script, Context}.

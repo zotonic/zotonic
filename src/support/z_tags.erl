@@ -60,7 +60,7 @@ display_property({_, []}) ->
 display_property({Prop, Value}) when is_integer(Value) ->
     [32, Prop, $=, $', list_to_binary(integer_to_list(Value)), $'];
 display_property({Prop, Value}) when is_float(Value) ->
-	[32, Prop, $=, $', list_to_binary(io_lib:format("~f",Value)), $'];
+	[32, Prop, $=, $', list_to_binary(io_lib:format("~f",[Value])), $'];
 display_property({Prop, Value}) when is_list(Value) ->
     case io_lib:char_list(Value) of
         true -> 

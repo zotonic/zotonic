@@ -230,7 +230,7 @@ move_file(BaseDir, File, DeleteTarget, ToDir) ->
 rel_file(BaseDir, File) ->
     case lists:prefix(BaseDir, File) of
         true -> lists:nthtail(length(BaseDir)+1, File);
-        false -> filelib:basename(File)
+        false -> filename:basename(File)
     end.
 
 test() ->

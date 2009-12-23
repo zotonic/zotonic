@@ -197,7 +197,7 @@ insert(Table, Context) when is_atom(Table) ->
 insert(Table, Context) ->
     assert_table_name(Table),
     C = get_connection(Context),
-    {ok, Id} = pgsql:equery1("insert into \""++Table++"\" default values returning id"),
+    {ok, Id} = pgsql:equery1(C, "insert into \""++Table++"\" default values returning id"),
     return_connection(C, Context),
     {ok, Id}.
 
