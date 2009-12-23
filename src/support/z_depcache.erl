@@ -540,7 +540,7 @@ cleanup(Pid, MetaTable, DepsTable, SlotNr, Now, cache_full, Ct) ->
 flush_expired(#meta{key=Key, serial=Serial, expire=Expire, depend=Depend}, Now, DepsTable, Pid) ->
     Expired = Expire < Now orelse not check_depend(Serial, Depend, DepsTable),
     case Expired of
-        true  -> gen_server:cast(Pid, {flush, Key});
+        true  -> gen_server:cast(Pid, {flush, Key}), flushed;
         false -> ok
     end.
 

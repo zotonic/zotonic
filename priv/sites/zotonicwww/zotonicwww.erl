@@ -117,7 +117,7 @@ datamodel() ->
        {zotonic_news_test1,
         article,
         [{title, <<"Wanna learn more?">>},
-         {body, {file, filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "learnmore.html"])}}]
+         {body, {file, filename:join([z_utils:lib_dir("priv"), "sites", ?MODULE, "demodata", "learnmore.html"])}}]
        },
        {zotonic_news_test0,
         news,

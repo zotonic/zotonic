@@ -209,12 +209,10 @@ update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_
                                 [ {pivot_category_nr, CatNr} | UpdatePropsN]
                         end,
                         
-                        case Id == rsc_id orelse Changed orelse is_changed(RscId, UpdatePropsN1, Ctx) of
+                        case Id == insert_rsc orelse Changed orelse is_changed(RscId, UpdatePropsN1, Ctx) of
                             true ->
-                                case z_db:update(rsc, RscId, UpdatePropsN1, Ctx) of
-                                    {ok, _RowsModified} -> {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
-                                    {error, Reason} -> {error, Reason}
-                                end;
+                                {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsN1, Ctx),
+                                {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
                             false ->
                                 {ok, RscId, notchanged}
                         end

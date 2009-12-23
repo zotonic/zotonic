@@ -198,7 +198,7 @@ returning(VisitorCookieId, Context, State) ->
                         State1   = store_pid(VisitorCookieId, Pid, State),
                         Context1 = Context#context{visitor_pid=Pid},
                         {Context1, State1};
-                error ->
+                {error, _Reason} ->
                         %% Unknown cookie, or person was deleted, handle as a first visit
                         first_visit(Context, State)
             end
