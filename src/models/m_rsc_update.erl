@@ -114,7 +114,7 @@ duplicate(Id, DupProps, Context) ->
                             FilteredProps,
                             SafeDupProps ++ [
                                 {name,undefined}, {uri,undefined}, {page_path,undefined},
-                                {is_authoritative,false}, {is_protected,false},
+                                {is_authoritative,true}, {is_protected,false},
                                 {slug,undefined}
                             ]),
             case insert(InsProps, false, Context) of
