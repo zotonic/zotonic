@@ -151,6 +151,7 @@ prioritize_media(Type,Params,Acc) ->
 		    QVal = case Val of
 			"1" ->
 			    1;
+			[$.|_] -> list_to_float([$0|Val]);
 			_ -> list_to_float(Val)
 		    end,
 		    {QVal, Type, Rest ++ Acc};
@@ -254,6 +255,7 @@ build_conneg_list([Acc|AccRest], Result) ->
             case PrioStr of
                 "0" -> {0.0, Choice};
                 "1" -> {1.0, Choice};
+                [$.|_] -> {list_to_float([$0|PrioStr]), Choice};
                 _ -> {list_to_float(PrioStr), Choice}
             end;
         {Choice} ->
