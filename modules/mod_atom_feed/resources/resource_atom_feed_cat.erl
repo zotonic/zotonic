@@ -25,6 +25,7 @@
     init/1,
     service_available/2,
     allowed_methods/2,
+    encodings_provided/2,
 	resource_exists/2,
 	last_modified/2,
 	expires/2,
@@ -56,6 +57,13 @@ allowed_methods(ReqData, Context) ->
 
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+
+
+encodings_provided(ReqData, Context) ->
+    {[
+        {"identity", fun(X) -> X end}, 
+        {"gzip", fun(X) -> zlib:gzip(X) end}
+    ], ReqData, Context}.
 
 
 content_types_provided(ReqData, Context) ->
