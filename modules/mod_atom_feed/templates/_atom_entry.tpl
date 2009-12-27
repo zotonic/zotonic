@@ -13,11 +13,11 @@
 			<link rel="alternate" type="text/html" href="{{ site_url }}{{ r.page_url|escapexml }}"/>
 			
 			{% if medium.filename %}
-				<link rel="enclosure" type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" />
+				<link rel="enclosure" type="{{ medium.mime }}" href="{{ site_url }}{% url media_attachment star=medium.filename %}" />
 			{% endif %}
 			
 			{% for media_id in r.media %}
-				<link rel="enclosure" type="image/jpeg" src="{{ site_url }}{% image_url media_id width=400 height=400 %}" />
+				<link rel="enclosure" type="image/jpeg" href="{{ site_url }}{% image_url media_id width=400 height=400 %}" />
 			{% endfor %}
 
 			<title>{{ r.title|escapexml }}</title>
