@@ -47,22 +47,16 @@ render(Params, Vars, Context, _State) ->
 	All = proplists:get_value('$all', Params, false),
     File = proplists:get_value('$file', Params),
 	Id = proplists:get_value('id', Params),
-	IsA = m_rsc:is_a(Id, Context),
-	Root = filename:rootname(File),
-	Ext = filename:extension(File),
 	Params1 = Params ++ Vars,
 	case All of
 		false ->
-			% Render the first found template
-			case lists:foldr(fun(Cat, {error, enoent}) -> z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
-							    (_Cat, Found) -> Found	
-							 end, {error, enoent}, IsA) of
-				{error, enoent} -> {ok, z_template:render(File, Params1, Context)};
-				{ok, Template} -> {ok, z_template:render(Template, Params1, Context)}
-			end;
+		    {ok, z_template:render({cat, File}, Params1, Context)};
 		
 		true ->
 			% Collect all templates, then render them
+        	IsA = m_rsc:is_a(Id, Context),
+        	Root = filename:rootname(File),
+        	Ext = filename:extension(File),
 			Templates = lists:foldr(fun(Cat, Templates) -> Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context) end, [], IsA),
 			Templates1 = Templates ++ z_template:find_template(File, true, Context),
 			{ok, [ z_template:render(Tpl, Params1, Context) || Tpl <- Templates1 ]}

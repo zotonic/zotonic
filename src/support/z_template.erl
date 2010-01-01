@@ -39,6 +39,7 @@
     render_to_iolist/3,
     find_template/2,
     find_template/3,
+    find_template_cat/3,
     reset/1,
 	is_template_module/1
 ]).
@@ -63,36 +64,49 @@ reset(Context) ->
 %% @spec render(File, Variables, Context) -> list()
 %% @doc Render a template.  First requests the template module from the template server, then renders the template.
 %% The resulting list contains the rendered template and scomp contexts.  Use render_to_iolist/3 to get a iolist().
+render({cat, File}, Variables, Context) ->
+    case find_template_cat(File, proplists:get_value(id, Variables), Context) of
+        {ok, FoundFile} -> 
+            render1(File, FoundFile, Variables, Context);
+        {error, Reason} ->
+            ?LOG("Could not find template: ~s (~p)", [File, Reason]),
+            throw({error, {template_not_found, File, Reason}})
+    end;
 render(File, Variables, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
-            Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
-                modified -> compile(File, Context);
-                Other -> Other
-            end,
-
-            case Result of
-                {ok, Module} ->
-                    case Module:render(Variables, Context) of
-                        {ok, Output}   -> 
-                            Output;
-                        {error, Reason} ->
-                            ?ERROR("Error rendering template: ~p (~p)", [File, Reason]),
-                            throw({error, {template_rendering_error, File, Reason}})
-                     end;
-                {error, {{Line,Col}, _CompilerModule, Error}} ->
-                    Error1 = try lists:flatten(Error) catch _:_ -> Error end,
-                    ?ERROR("Error compiling template: ~s (~p: ~p)", [File, {Line,Col}, Error1]),
-                    throw({error, {template_compile_error, File, {Line,Col}, Error1}});
-                {error, Reason} ->
-                    Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
-                    ?ERROR("Error compiling template: ~s (~p)", [File, Reason1]),
-                    throw({error, {template_compile_error, File, Reason1}})
-            end;
+            render1(File, FoundFile, Variables, Context);
         {error, Reason} ->
             ?LOG("Could not find template: ~s (~p)", [File, Reason]),
             throw({error, {template_not_found, File, Reason}})
     end.
+
+    %% Render the found template
+    render1(File, FoundFile, Variables, Context) ->
+        Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
+            modified -> compile(File, Context);
+            Other -> Other
+        end,
+
+        case Result of
+            {ok, Module} ->
+                case Module:render(Variables, Context) of
+                    {ok, Output}   -> 
+                        Output;
+                    {error, Reason} ->
+                        ?ERROR("Error rendering template: ~p (~p)", [File, Reason]),
+                        throw({error, {template_rendering_error, File, Reason}})
+                 end;
+            {error, {{Line,Col}, _CompilerModule, Error}} ->
+                Error1 = try lists:flatten(Error) catch _:_ -> Error end,
+                ?ERROR("Error compiling template: ~s (~p: ~p)", [File, {Line,Col}, Error1]),
+                throw({error, {template_compile_error, File, {Line,Col}, Error1}});
+            {error, Reason} ->
+                Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
+                ?ERROR("Error compiling template: ~s (~p)", [File, Reason1]),
+                throw({error, {template_compile_error, File, Reason1}})
+        end.
+    
             
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
@@ -120,7 +134,7 @@ find_template([$/|_] = File, _Context) ->
     {ok, File};
 find_template(File, Context) ->
     z_module_indexer:find(template, File, Context).
-    
+
 
 %% @spec find_template(File, All, Context) -> FilenameList
 %% @doc Finds the first or all templates designated by the file, check modules.
@@ -131,6 +145,24 @@ find_template(File, false, Context) ->
     end;
 find_template(File, true, Context) ->
     z_module_indexer:find_all(template, File, Context).
+
+
+%% @spec find_template_cat(File, Id, Context) -> {ok, filename()} | {error, code} 
+%% @doc Finds the template designated by the file, for the category of the rsc with id, check modules.
+%% When the file is an absolute path, then do nothing and assume the file exists.
+find_template_cat([$/|_] = File, _Id, _Context) ->
+    {ok, File};
+find_template_cat(File, Id, Context) ->
+	IsA = m_rsc:is_a(Id, Context),
+	Root = filename:rootname(File),
+	Ext = filename:extension(File),
+	case lists:foldr(fun(Cat, {error, enoent}) -> find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
+					    (_Cat, Found) -> Found	
+					 end, {error, enoent}, IsA) of
+		{error, enoent} -> find_template(File, Context);
+		{ok, Template} -> {ok, Template}
+	end.
+
 
 %% @doc Check if the module is a template module.
 %% @spec is_template_module(atom()) -> bool()
