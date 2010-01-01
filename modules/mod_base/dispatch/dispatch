@@ -13,8 +13,8 @@
     {close_connection, ["close-connection"],  resource_close_connection, []},
 
     %% Normal page to show a resource.
-    {page,    ["page", id],       resource_page, [ {template, "page.tpl"} ]},
-    {page,    ["page", id, slug], resource_page, [ {template, "page.tpl"} ]},
+    {page,    ["page", id],       resource_page, [ {template, {cat, "page.tpl"}} ]},
+    {page,    ["page", id, slug], resource_page, [ {template, {cat, "page.tpl"}} ]},
 
     %% The id controller redirects depending on the accept header sent by the user agent.
     {id,       ["id", id],    resource_id, []},
