@@ -49,7 +49,7 @@ html(Context) ->
     Vars = [
         {id, z_context:get(id, Context)}
     ],
-    Html = z_template:render("admin_edit.tpl", Vars, Context),
+    Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
 	z_context:output(Html, Context).
 
 
