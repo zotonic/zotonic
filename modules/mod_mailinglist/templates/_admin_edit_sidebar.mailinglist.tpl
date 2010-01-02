@@ -17,7 +17,6 @@
 		</fieldset>
 	</div>
 </div>
-{% endif %}
 
 {% with m.mailinglist.scheduled[id] as scheduled %}
 <div class="item-wrapper">
