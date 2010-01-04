@@ -58,19 +58,27 @@ render(Params, _Vars, Context, _State) ->
 
 	%% Prepare for displaying, crop events to the week.
 	Calendar = group_by_day(Result, DayStart),
-	WeekCalendar = filter_period(Calendar, StartDate1, EndDate1),
+    WeekCalendar = filter_period(Calendar, StartDate1, EndDate1),
 	WeekDates = week_dates(StartDate1),
 	DayHours = case DayStart of
 		0 -> lists:seq(0,23);
 		N -> lists:seq(N,23) ++ lists:seq(0,N-1)
 	end,
 	EventDivs = [ {D,event2div(Evs)} || {D,Evs} <- WeekCalendar ],
-	
+
+	WholeDay0 = [ {D,[calevent_to_proplist(E2) || E2 <- lists:filter(fun is_wholeday/1, Evs)]} || {D,Evs} <- WeekCalendar ],
+	MaxWholeDay = lists:max([length(E2) || {_,E2} <- WholeDay0]),
+    %% fill all wholeday entries with empy items, for the template.
+    WholeDay = [ {D, Ev ++ [ undefined || _ <- lists:seq(1, MaxWholeDay - length(Ev))]} || {D, Ev} <- WholeDay0],
+    ?DEBUG(WholeDay),
+
 	Vars = [
 		{day_hours, DayHours},
 		{week_dates, WeekDates},
 		{event_divs, EventDivs},
-		{date_format, DateFormat}
+		{date_format, DateFormat},
+        {whole_day, WholeDay},
+        {all_whole_day, [ undefined || _ <- lists:seq(1, MaxWholeDay)]}
 	],
 	Html = z_template:render("_calview_week.tpl", Vars, Context),
     {ok, Html}.
@@ -83,19 +91,37 @@ event2div(CalEvents) ->
 	compare_date_start(#calendar_event{date_start=A}, #calendar_event{date_start=B}) ->
 		A > B.
 	
-	event2div([], _N, Acc) ->
-		lists:reverse(Acc);
-	event2div([#calendar_event{id=Id, date_start=DateStart, date_end=DateEnd, duration=Duration, 
-							sec_start=SecStart, level=Level, max_level=MaxLevel}|Rest], N, Acc) ->
-		Acc1 = [[{id, Id},
-				{date_start, DateStart},
-				{date_end, DateEnd},
-				{level,Level},
-				{z_index, 1000*Level + N},
-				{max_level, MaxLevel},
-				{height_em, max(Duration / 1800, 0.75)},
-				{top_em, SecStart / 1800}] | Acc],
-		event2div(Rest, N+1, Acc1).
+event2div([], _N, Acc) ->
+    lists:reverse(Acc);
+event2div([Event=#calendar_event{date_start=DateStart, date_end=DateEnd, duration=Duration, 
+                           sec_start=SecStart, level=Level}|Rest], N, Acc) ->
+    case DateStart of
+        {_, {0,0,0}} = DateEnd ->
+            %% Wholeday event; skip.
+            event2div(Rest, N+1, Acc);
+        _ -> 
+            Acc1 = [ calevent_to_proplist(Event) ++
+                     [ {z_index, 1000*Level + N},
+                       {height_em, max(Duration / 1800, 0.75)},
+                       {top_em, SecStart / 1800}] | Acc],
+            event2div(Rest, N+1, Acc1)
+    end.
+
+is_wholeday(#calendar_event{date_start=A,date_end=A}) ->
+    case A of
+        {_,{0,0,0}} -> true;
+        _ -> false
+    end;
+is_wholeday(_) -> false.
+
+calevent_to_proplist(#calendar_event{id=Id, date_start=DateStart, date_end=DateEnd, duration=Duration, 
+                           level=Level, max_level=MaxLevel}) ->
+    [{id, Id},
+     {date_start, DateStart},
+     {date_end, DateEnd},
+     {duration, Duration},
+     {level,Level},
+     {max_level, MaxLevel}].
 
 max(A,B) when A > B -> A;
 max(_,B) -> B.
