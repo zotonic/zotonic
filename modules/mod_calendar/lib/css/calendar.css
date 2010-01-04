@@ -60,11 +60,13 @@
 	width: 37px;
 }
 
+.calender ol.programme-all-day li,
 .calender ol.programme-day li {
 	float: none;
 	display: block;
 }
 
+.calender ol.programme-hours-fill,
 .calender ol.programme-hours {
 	font-size: 12px;
 	line-height: 18px;
