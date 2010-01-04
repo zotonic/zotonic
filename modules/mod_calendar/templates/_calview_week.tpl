@@ -7,12 +7,29 @@
 		{% endfor %}
 	</ol>
 
+	<ol class="programme-days clearfix">
+		<li class="programme-hours-item">
+			<ol class="programme-hours">
+                <li>&nbsp;</li>
+            </ol>
+        </li>
+
+		{% for day,time in week_dates %}
+        <li>
+            <ol class="programme-all-day">
+                {% for ev in whole_day[day] %}
+                {% catinclude "_calview_item.tpl" ev.id ev=ev allday=1 %}
+                {% empty %}
+                {# spacer #}
+                <li>&nbsp;</li>
+                {% endfor %}
+            </ol>
+        </li>
+        {% endfor %}
+    </ol>
+
 	<ol class="programme-days">
 		<li class="programme-hours-item">
-            <ol class="programme-hours-fill">
-                {# spacer LIs met de juiste hoogte #}
-                {% for spacer in all_whole_day %}<li>&nbsp;</li>{% endfor %}
-            </ol>
 			<ol class="programme-hours">
 				{% for h in day_hours %}
 					<li class="hour">{{ h|format_integer:2 }}:00</li>
@@ -22,11 +39,6 @@
 		</li>
 		{% for day,time in week_dates %}
 			<li>
-				<ol class="programme-all-day">
-                    {% for ev in whole_day[day] %}
-                    <li>{% if ev %}{{ m.rsc[ev.id].title }}{% else %}&nbsp;{# this a spacer #}{% endif %}</li>
-                    {% endfor %}
-                </ol>
 				<ol class="programme-day">
 					{% for ev in event_divs[day] %}
 						{% catinclude "_calview_item.tpl" ev.id ev=ev %}
