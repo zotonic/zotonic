@@ -184,6 +184,18 @@
 				<h2>Id test (cont)</h2>
 
 				And the id of above again: {{ #id }}
+				
+				<h2>catinclude test</h2>
+				
+				<p><strong>A person</strong></p>
+				{% catinclude "catinclude_test.tpl" 1 %}
+
+				<p><strong>Not a person</strong></p>
+				{% catinclude "catinclude_test.tpl" 2 %}
+
+				<h2>all catinclude test</h2>
+				
+				{% all catinclude "catinclude_test.tpl" 1 %}
 			</div>
 		</div>
 

@@ -84,7 +84,7 @@ render(File, Variables, Context) ->
     %% Render the found template
     render1(File, FoundFile, Variables, Context) ->
         Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
-            modified -> compile(File, Context);
+            modified -> compile(FoundFile, Context);
             Other -> Other
         end,
 
