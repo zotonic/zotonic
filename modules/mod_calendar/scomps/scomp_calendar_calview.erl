@@ -56,8 +56,6 @@ render(Params, _Vars, Context, _State) ->
 	%% Search all events within the range
     #search_result{result=Result} = z_search:search({events, [{start, StartDate1}, {'end', EndDate1}]}, Context),
 
-?DEBUG(Result),
-
 	%% Prepare for displaying, crop events to the week.
 	{Calendar, WholeDay} = group_by_day(Result, DayStart),
     WeekCalendar = filter_period(Calendar, StartDate1, EndDate1),
