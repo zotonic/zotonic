@@ -380,6 +380,20 @@ search({all_bytitle_featured, [{cat_is, Cat}]}, _OffsetLimit, Context) ->
 search({'query', Args}, _OffsetLimit, Context) ->
     search_query:search(Args, Context);
 
+search({events, [{cat, Cat}, {'end', End}, {start, Start}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+		select="r.id, r.pivot_date_start, r.pivot_date_end",
+        from="rsc r",
+        where="r.pivot_date_end >= $1 AND r.pivot_date_start <= $2",
+        args =[Start, End],
+        order="r.pivot_date_start asc",
+        cats=[{"r", Cat}],
+        tables=[{rsc,"r"}]
+    };
+
+search({events, [{'end', End}, {start, Start}]}, OffsetLimit, Context) ->
+    search({events, [{cat, event}, {'end', End}, {start, Start}]}, OffsetLimit, Context);
+
 search(_, _, _) ->
     undefined.
 
