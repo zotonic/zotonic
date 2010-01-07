@@ -22,7 +22,7 @@ limitations under the License.
 
 tinyInit = {
 	mode: "exact",
-	elements: "field-content",
+	elements: "rsc-body,rsc-body_extra",
 	theme: "advanced",
 	skin: "wp_theme", 
 	theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,cleanup,code,|,formatselect,|,zmedia,zmore",
