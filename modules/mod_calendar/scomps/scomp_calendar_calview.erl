@@ -57,31 +57,28 @@ render(Params, _Vars, Context, _State) ->
     #search_result{result=Result} = z_search:search({events, [{start, StartDate1}, {'end', EndDate1}]}, Context),
 
 	%% Prepare for displaying, crop events to the week.
-	Calendar = group_by_day(Result, DayStart),
+	{Calendar, WholeDay} = group_by_day(Result, DayStart),
     WeekCalendar = filter_period(Calendar, StartDate1, EndDate1),
+    WeekWholeDay = filter_period(WholeDay, StartDate1, EndDate1),
 	WeekDates = week_dates(StartDate1),
 	DayHours = case DayStart of
 		0 -> lists:seq(0,23);
 		N -> lists:seq(N,23) ++ lists:seq(0,N-1)
 	end,
+	
 	EventDivs = [ {D,event2div(Evs)} || {D,Evs} <- WeekCalendar ],
-
-	WholeDay0 = [ {D,[calevent_to_proplist(E2) || E2 <- lists:filter(fun is_wholeday/1, Evs)]} || {D,Evs} <- WeekCalendar ],
-    WholeDay = case DayStart of
-                   0 -> WholeDay0;
-                   _ -> %% increase whole-day events
-                       [{extract_date(z_datetime:next_day(D)),E} || {D,E} <- WholeDay0]
-               end,
+	WholeDayProps = [ {D,[calevent_to_proplist(E2) || E2 <- Evs]} || {D,Evs} <- WeekWholeDay ],
 
 	Vars = [
 		{day_hours, DayHours},
 		{week_dates, WeekDates},
 		{event_divs, EventDivs},
 		{date_format, DateFormat},
-        {whole_day, WholeDay}
+        {whole_day, WholeDayProps}
 	],
 	Html = z_template:render("_calview_week.tpl", Vars, Context),
     {ok, Html}.
+    
 
 %% @doc Recalculate the events to divs with offsets and unique z-index
 event2div(CalEvents) ->
@@ -106,15 +103,6 @@ event2div([Event=#calendar_event{date_start=DateStart, date_end=DateEnd, duratio
                        {top_em, SecStart / 1800}] | Acc],
             event2div(Rest, N+1, Acc1)
     end.
-
-extract_date({D,_}) -> D.
-     
-is_wholeday(#calendar_event{date_start=A,date_end=A}) ->
-    case A of
-        {_,{0,0,0}} -> true;
-        _ -> false
-    end;
-is_wholeday(_) -> false.
 
 calevent_to_proplist(#calendar_event{id=Id, date_start=DateStart, date_end=DateEnd, duration=Duration, 
                            level=Level, max_level=MaxLevel}) ->

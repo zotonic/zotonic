@@ -31,19 +31,22 @@
 
 
 %% @doc Sort the events into per-day buckets. Days are separated at the cut off time.
-%% @spec sort()
+%% @spec sort([#event]) -> { [{date(),[#event]}], [{date(),[#event]}] }
 sort(Events) ->
 	sort(Events, 0).
 sort(Events, DayBorderHour) ->
 	DayBorder = {DayBorderHour, 0, 0},
 	%% 1. Split events that overlap the day borders into an event per day.
 	Split = lists:flatten([ split_event(E, DayBorder) || E <- Events ]),
-	%% 2. Sort all events into separate days.
-	Days = day_buckets(lists:sort(Split)),
-	%% 3. Sort every day by the duration of the events.
+	%% 2. Split the events in whole day and partial day events
+	{WholeDay,PartDay} = lists:partition(fun is_wholeday/1, Split),
+	%% 3. Sort all events into separate days.
+	Days = day_buckets(lists:sort(PartDay)),
+	WholePerDay = day_buckets(lists:sort(WholeDay)),
+	%% 4. Sort every day by the duration of the events.
 	DaysDuration = [ duration_bucket(Bucket, DayBorderHour) || Bucket <- Days ],
-	%% 4. Place events per day, longest events first.
-	[ {Day, maxlevel(schedule(Evs))} || {Day,Evs} <- DaysDuration ].
+	%% 5. Place events per day, longest events first.
+	{[ {Day, maxlevel(schedule(Evs))} || {Day,Evs} <- DaysDuration ], WholePerDay}.
 
 
 %% @doc Assign the maximum level for each event, taking into account the nested overlapping events.
@@ -174,6 +177,15 @@ calday({_, Time} = DateTime, DayBorder) when Time < DayBorder ->
 	PrevDate;
 calday({Date, _Time}, _DayBorder) ->
 	Date.
+
+
+%% Check if an event is a whole day. This assumes the events are already placed in the day buckets
+is_wholeday({_, #calendar_event{date_start={A,T},date_end={A,T}}}) when T =:= {0,0,0} ->
+    true;
+is_wholeday({_, #calendar_event{date_start={DateStart,Time}, date_end={DateEnd,Time}}}) when DateStart =/= DateEnd ->
+    true;
+is_wholeday(_) ->
+    false.
 
 
 max(A,B) when A > B -> A;
