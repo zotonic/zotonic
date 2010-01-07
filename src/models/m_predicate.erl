@@ -98,7 +98,7 @@ is_predicate(Pred, Context) ->
 id_to_name(Id, Context) when is_integer(Id) ->
     F = fun() ->
                 {L,R} = cat_bounds(Context),
-                case z_db:q1("select name from rsc r join category c on (r.category_id = c.id) where r.id = $1 and $2 <= c.nr and c.nr <= $3", [Id, R, L], Context) of
+                case z_db:q1("select name from rsc r join category c on (r.category_id = c.id) where r.id = $1 and $2 <= c.nr and c.nr <= $3", [Id, L, R], Context) of
                     undefined -> {error, {unknown_predicate, Id}};
                     Name -> {ok, z_convert:to_atom(Name)}
                 end
