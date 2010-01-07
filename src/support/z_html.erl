@@ -45,6 +45,8 @@ escape_props(Props) ->
         escape_props(T, [Prop|Acc]);
     escape_props([{body, V}|T], Acc) ->
         escape_props(T, [{body, sanitize(V)} | Acc]);
+    escape_props([{body_extra, V}|T], Acc) ->
+        escape_props(T, [{body_extra, sanitize(V)} | Acc]);
     escape_props([{K, V}|T], Acc) ->
         escape_props(T, [{K, escape_value(V)} | Acc]).
 
