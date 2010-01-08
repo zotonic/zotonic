@@ -578,8 +578,12 @@ encode_body(Body) ->
         {writer, BodyFun} ->
             {writer, {Encoder, Charsetter, BodyFun}};
         _ ->
-            Encoder(Charsetter(iolist_to_binary(Body)))
+            Encoder(Charsetter(to_binary(Body)))
     end.
+    
+    to_binary(Body) when is_tuple(Body) -> Body;
+    to_binary(Body) -> iolist_to_binary(Body).
+
 
 make_encoder_stream(Encoder, Charsetter, {Body, done}) ->
     {Encoder(Charsetter(Body)), done};
