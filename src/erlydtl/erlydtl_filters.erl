@@ -838,6 +838,8 @@ twitter1(Input, Index, Context) when is_binary(Input) ->
             process_binary_match(Pre, <<>>, size(Post), twitter1_url("https://", Post, 0, Context));
         <<Pre:Index/binary, $@, Post/binary>> ->
             process_binary_match(Pre, <<>>, size(Post), twitter1_at(Post, 0, Context));
+        <<_:Index/binary, $&, $#, _/binary>> ->
+            twitter1(Input, Index + 2, Context);
         <<Pre:Index/binary, $#, Post/binary>> ->
             process_binary_match(Pre, <<>>, size(Post), twitter1_hash(Post, 0, Context));
         <<_:Index/binary, _/binary>> ->
