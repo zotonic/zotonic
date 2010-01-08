@@ -82,7 +82,7 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     ].
 
 prev(Page, _Pages, _Dispatch, _DispatchArgs, _Context) when Page =< 1 ->
-    ["\n<li>&laquo; prev</li>"];
+    ["\n<li class=\"disabled\">&laquo; prev</li>"];
 prev(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     Url = z_dispatcher:url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context),
     ["\n<li><a href=\"",Url,"\">&laquo; prev</a></li>"].
@@ -91,7 +91,7 @@ next(Page, Pages, _Dispatch, _DispatchArgs, _Context) when Page >= Pages ->
     ["\n<li>next &raquo;</li>"];
 next(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     Url = z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context),
-    ["\n<li><a href=\"",Url,"\">next &raquo;</a></li>"].
+    ["\n<li class=\"disabled\"><a href=\"",Url,"\">next &raquo;</a></li>"].
 
 
 url_to_li(sep, _, _) ->
