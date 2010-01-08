@@ -54,7 +54,7 @@
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
+    gen_server:start_link(?MODULE, Args, []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -74,11 +74,12 @@ init(Args) ->
 
     %% Listen to resource-change events
     z_notifier:observe(rsc_update_done,   {?MODULE, event}, Context),
+    z_notifier:observe(restart_twitter, self(), Context),
 
     %% Start the twitter process
     Pid = start_following(Context),
 
-    {ok, #state{context=z_context:new(Context), twitter_pid=Pid}}.
+    {ok, #state{context=z_context:new(Context),twitter_pid=Pid}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -94,15 +95,16 @@ init(Args) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-handle_cast(restart_http, State=#state{twitter_pid=Pid}) ->
+handle_cast({restart_twitter, _Context}, #state{context=Context,twitter_pid=Pid}=State) ->
     case Pid of
         undefined ->
             %% not running
-            restart_http(State);
+            Pid2 = start_following(Context),
+            {noreply, #state{context=Context,twitter_pid=Pid2}};
         _ ->
             %% Exit the process; will be started again.
             erlang:exit(Pid, restarting),
-            {noreply, State}
+            {noreply, State#state{twitter_pid=undefined}}
     end;
 
 handle_cast(Message, State) ->
@@ -114,24 +116,19 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
-handle_info({'EXIT', Pid, restarting}, State=#state{twitter_pid=Pid}) ->
-    ?DEBUG("Restarting"),
+handle_info({'EXIT', _Pid, restarting}, #state{context=Context}=State) ->
     timer:sleep(500),
-    {noreply, restart_http(State)};
+    Pid=start_following(Context),
+    {noreply, State#state{twitter_pid=Pid}};
 
-handle_info({'EXIT', Pid, {error, Reason}}, State=#state{twitter_pid=Pid}) ->
-    ?DEBUG(Reason),
+handle_info({'EXIT', _Pid, {error, _Reason}}, #state{context=Context}=State) ->
     timer:sleep(15000),
-    {noreply, restart_http(State)};
+    Pid=start_following(Context),
+    {noreply, State#state{twitter_pid=Pid}};
 
 handle_info(_Info, State) ->
-    ?DEBUG(_Info),
     {noreply, State}.
 
-restart_http(State=#state{context=Context}) ->
-    NewPid = start_following(Context),
-    State#state{twitter_pid=NewPid}.
-    
 
 %% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
@@ -140,10 +137,12 @@ restart_http(State=#state{context=Context}) ->
 %% The return value is ignored.
 terminate(_Reason, State) ->
     z_notifier:detach(rsc_update_done, {?MODULE, event}, State#state.context),
+    z_notifier:observe(restart_twitter, self(), State#state.context),
     ok.
 
 
 %% Handle z_notifier events
+
 event({rsc_update_done, _Type, Id, _, _}, Context) ->
     case m_rsc:p(Id, twitter_id, Context) of
         undefined ->
@@ -170,11 +169,9 @@ event({rsc_update_done, _Type, Id, _, _}, Context) ->
                 true -> m_identity:insert(Id, twitter_id, TwitterId, Context);
                 _    -> ignore
             end,
-            ?DEBUG("twitter"),
-            ?DEBUG(Restart),
-            ?DEBUG(NonEmptyNewId),
             case Restart of
-                true  -> gen_server:cast(?MODULE, restart_http);
+                true  -> 
+                    z_notifier:notify(restart_twitter, Context);
                 false -> ok
             end
     end.
@@ -256,17 +253,16 @@ fetch(URL, Body, Sleep, Context) ->
 process_data(Data, Context) ->
     case Data of
         <<${, _/binary>> ->
-            ?DEBUG("received tweet"),
             {struct, Tweet} = mochijson:decode(Data),
 
             AsyncContext = z_context:prune_for_async(Context),
             F = fun() ->
-                        %%?DEBUG(Tweet),
                         {struct, User} = proplists:get_value("user", Tweet),
                         TweeterId = proplists:get_value("id", User),
                         case m_identity:lookup_by_type_and_key("twitter_id", TweeterId, AsyncContext) of
                             undefined ->
-                                ?DEBUG("Unknown user...");
+                                ?DEBUG("Unknown user..."),
+                                z_session_manager:broadcast(#broadcast{type="error", message="Received a tweet for an unknown user.", title="Unknown user", stay=false}, Context);
                             Row ->
                                 UserId = proplists:get_value(rsc_id, Row),
 
