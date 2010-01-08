@@ -236,6 +236,7 @@ extension_mime() ->
 		{".tar", "application/x-tar"},
 		{".tgz", "application/x-gzip+tar"},
 		{".tif", "image/tiff"},
+		{".tpl", "text/html"},
 		{".txt", "text/plain"},
 		{".wav", "audio/x-wav"},
 		{".wmf", "application/x-msmetafile"},
