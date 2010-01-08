@@ -380,7 +380,7 @@ function z_init_postback_forms()
 	})
 	.submit(function(event)
 	{
-		if ($('#field-content', this).length > 0 && tinyMCE)
+		if ($('.tinymce', this).length > 0 && tinyMCE)
 		{
 			tinyMCE.triggerSave(true,true);
 		}
