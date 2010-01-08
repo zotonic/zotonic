@@ -200,7 +200,7 @@ filter2arg({height, _}, Width, Height) ->
     {Width, Height, []};
 filter2arg({resize, EndWidth, EndHeight}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
     % Prevent scaling up, perform an extent instead
-    GArg = "-gravity Center",
+    GArg = "-gravity West",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
