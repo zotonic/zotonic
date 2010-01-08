@@ -19,7 +19,7 @@
 
             {% button action={zmedia id=id media_div_id=#media subject_id=id} text="Add media to body" id="zmedia-open-dialog" style="display:none" %}
             <div class="form-item clearfix">
-                <textarea rows="10" cols="10" id="rsc-body" name="body" class="body">{{ r.body|escape }}</textarea>
+                <textarea rows="10" cols="10" id="rsc-body" name="body" class="body tinymce">{{ r.body|escape }}</textarea>
             </div>
 
             {% include "_admin_save_buttons.tpl" %}
