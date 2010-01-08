@@ -88,10 +88,10 @@ prev(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     ["\n<li><a href=\"",Url,"\">&laquo; prev</a></li>"].
 
 next(Page, Pages, _Dispatch, _DispatchArgs, _Context) when Page >= Pages ->
-    ["\n<li>next &raquo;</li>"];
+    ["\n<li class=\"disabled\">next &raquo;</li>"];
 next(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     Url = z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context),
-    ["\n<li class=\"disabled\"><a href=\"",Url,"\">next &raquo;</a></li>"].
+    ["\n<li><a href=\"",Url,"\">next &raquo;</a></li>"].
 
 
 url_to_li(sep, _, _) ->
