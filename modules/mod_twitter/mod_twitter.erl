@@ -211,6 +211,7 @@ start_following(Context) ->
                     URL = "http://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
                     Follow = z_utils:combine(",", Follow1),
                     Body = lists:flatten("follow=" ++ Follow),
+                    z_session_manager:broadcast(#broadcast{type="notice", message="Now waiting for tweets to arrive...", title="Twitter", stay=false}, Context),
                     ?DEBUG("Started the Twitter follower."),
                     spawn_link(?MODULE, fetch, [URL, Body, 5, Context])
             end
