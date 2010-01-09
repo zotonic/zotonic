@@ -6,6 +6,6 @@
     {oauth_authorize,     ["oauth", "authorize"], resource_oauth_authorize, []},
     {oauth_finish,        ["oauth", "authorize", "finished"], resource_template, [  {template, "oauth_authorize_finished.tpl"} ]},
 
-    {oauth_apps,          ["oauth", "apps"], resource_oauth_apps, []}
+    {admin_oauth,          ["admin", "oauth", "apps"], resource_oauth_apps, []}
 ].
 

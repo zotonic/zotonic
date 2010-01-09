@@ -1,6 +1,6 @@
-{% extends "base.tpl" %}
+{% extends "admin_base.tpl" %}
 
-{% block title %} OAuth apps {% endblock %}
+{% block title %}OAuth applications{% endblock %}
 
 {% block content %}
 <style type="text/css">
@@ -24,17 +24,24 @@
     }
 </style>
 
-<div id="content" class="zp-100">
-    <h1>Your registered OAuth applications</h1>
+<div id="content" class="zp-85">
+    <div class="block clearfix">
+        
+		<h2>Registered OAuth applications</h2>
+        <p>
+            This page allows you to register API keys with which 3rd parties can gain access to specific parts of the Zotonic API and database.
+        </p>
 
-    <ul id="oauth-apps">
-        {% include "_oauth_apps_list.tpl" %}
-    </ul>
-
-    <p class="clearfix">
-        {% button text="Add new application" postback="start_add_app" %}
-    </p>
-
+        <ul id="oauth-apps">
+            {% include "_oauth_apps_list.tpl" %}
+        </ul>
+        
+        <p class="clearfix">
+            {% button text="Add new application" postback="start_add_app" %}
+        </p>
+        
+    </div>
 </div>
+
 {% endblock %}
 
