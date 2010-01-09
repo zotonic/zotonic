@@ -27,7 +27,10 @@
     % Admin password, used during installation. You can change it later
     {adminpassword, "admin"},
     
+	% Now you'll need to construct two keys. They should be short strings of random characters. Like good passwords, they should be hard to guess.
+
     % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
+    %  This key will help prevent denial of service attacks.
     % A new key will also forces regenerating images, which takes cpu time and will fill your hard disk.
     {sign_key_simple, <<"--change-me--">>},
     
