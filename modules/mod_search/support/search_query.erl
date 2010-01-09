@@ -53,6 +53,7 @@ parse_request_args([{K,V}|Rest], Acc) ->
 % Convert request arguments to atom. Doing it this way avoids atom
 % table overflows.
 request_arg("cat")                 -> cat;
+request_arg("cat_exclude")         -> cat_exclude;
 request_arg("custompivot")         -> custompivot;
 request_arg("hasobject")           -> hasobject;
 request_arg("hasobjectpredicate")  -> hasobjectpredicate;
@@ -86,6 +87,13 @@ parse_query([{cat, Cat}|Rest], Context, Result) ->
     Cats = add_or_append("rsc", Cat, Result#search_sql.cats),
     Tables1 = Result#search_sql.tables,
     parse_query(Rest, Context, Result#search_sql{cats=Cats, tables=Tables1});
+
+%% cat_exclude=categoryname
+%% Filter results outside a certain category.
+parse_query([{cat_exclude, Cat}|Rest], Context, Result) ->
+    Cats = add_or_append("rsc", Cat, Result#search_sql.cats_exclude),
+    Tables1 = Result#search_sql.tables,
+    parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats, tables=Tables1});
 
 %% hassubject=[id]
 %% Give all things which have an outgoing edge to Id

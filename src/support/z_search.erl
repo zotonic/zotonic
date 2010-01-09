@@ -89,7 +89,11 @@ search({SearchName, Props} = Search, Limit, Context) ->
         [] -> Props;
         Cats -> [{cat, Cats} | proplists:delete(cat, Props)]
     end,
-    PropsSorted = lists:keysort(1, Props1),
+    Props2 = case proplists:get_all_values(cat_exclude, Props1) of
+        [] -> Props;
+        CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
+    end,
+    PropsSorted = lists:keysort(1, Props2),
     case z_notifier:first({search_query, {SearchName, PropsSorted}, Limit}, Context) of
         undefined -> 
             ?LOG("Unknown search query ~p", [Search]),
@@ -153,22 +157,29 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
 
 %% @doc Inject the ACL checks in the SQL query.
 %% @spec reformat_sql_query(#search_sql, Context) -> #search_sql
-reformat_sql_query(#search_sql{where=Where, tables=Tables, args=Args, cats=TabCats} = Q, Context) ->
+reformat_sql_query(#search_sql{where=Where, tables=Tables, args=Args, cats=TabCats, cats_exclude=TabCatsExclude} = Q, Context) ->
     {ExtraWhere, Args1} = lists:foldl(
                                 fun(Table, {Acc,As}) ->
                                     {W,As1} = add_acl_check(Table, As, Context),
                                     {[W|Acc], As1}
                                 end, {[], Args}, Tables),
-
     ExtraWhere1 = lists:foldl(
                                 fun({Alias, Cats}, Acc) ->
-                                    case add_cat_check(Alias, Cats, Context) of
+                                    case add_cat_check(Alias, false, Cats, Context) of
                                         [] -> Acc;
                                         CatCheck -> [CatCheck | Acc]
                                     end
                                 end, ExtraWhere, TabCats),
 
-    Where1 = lists:flatten(concat_where(ExtraWhere1, Where)),
+    ExtraWhere2 = lists:foldl(
+                                fun({Alias, Cats}, Acc) ->
+                                    case add_cat_check(Alias, true, Cats, Context) of
+                                        [] -> Acc;
+                                        CatCheck -> [CatCheck | Acc]
+                                    end
+                                end, ExtraWhere1, TabCatsExclude),
+
+    Where1 = lists:flatten(concat_where(ExtraWhere2, Where)),
     Q#search_sql{where=Where1, args=Args1}.
 
 
@@ -234,20 +245,25 @@ add_acl_check1(Table, Alias, Args, Context) ->
 
 %% @doc Create the 'where' conditions for the category check
 %% @spec add_cat_check(Alias, Cats, Context) -> Where
-add_cat_check(_Alias, [], _Context) ->
+add_cat_check(_Alias, _Exclude, [], _Context) ->
     [];
-add_cat_check(Alias, Cats, Context) ->
+add_cat_check(Alias, Exclude, Cats, Context) ->
     Ranges = m_category:ranges(Cats, Context),
-    CatChecks = [ cat_check1(Alias, Range) || Range <- Ranges ],
+    CatChecks = [ cat_check1(Alias, Exclude, Range) || Range <- Ranges ],
     case CatChecks of
         [] -> [];
         [_CatCheck] -> CatChecks;
-        _ -> "(" ++ string:join(CatChecks, " or ") ++ ")"
+        _ -> "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"
     end.
 
-
-    cat_check1(Alias, {From,From}) ->
+    cat_check1(Alias, false, {From,From}) ->
         Alias ++ ".pivot_category_nr = "++integer_to_list(From);
-    cat_check1(Alias, {From,To}) ->
+    cat_check1(Alias, false, {From,To}) ->
         Alias ++ ".pivot_category_nr >= " ++ integer_to_list(From)
-        ++ " and "++ Alias ++ ".pivot_category_nr <= " ++ integer_to_list(To).
+        ++ " and "++ Alias ++ ".pivot_category_nr <= " ++ integer_to_list(To);
+
+    cat_check1(Alias, true, {From,From}) ->
+        Alias ++ ".pivot_category_nr <> "++integer_to_list(From);
+    cat_check1(Alias, true, {From,To}) ->
+        Alias ++ ".pivot_category_nr < " ++ integer_to_list(From)
+        ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To).
