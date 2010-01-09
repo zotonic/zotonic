@@ -3,31 +3,35 @@
 
     {% tabs id=#tabs %}
     <div id="{{ #tabs }}">
-        <ul>
+        <ul class="clearfix">
             <li><a href="#{{ #tab }}-details">Details</a></li>
             <li><a href="#{{ #tab }}-auth">Authorization</a></li>
         </ul>
 
         <div id="{{ #tab }}-details">
-            <h2>Application details</h2>
-            <div class="form-item">
-                <label for="zp-title">Application title:</label><br />
-                <input type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
+
+            <div class="form-item clearfix">
+                <label>Application title:
+                    <input type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
+                </label>
             </div>
 
-            <div class="form-item">
-                <label for="zp-url">Homepage:</label><br />
-                <input type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
+            <div class="form-item clearfix">
+                <label>Homepage:
+                    <input type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
+                </label>
             </div>
 
-            <div class="form-item">
-                <label for="zp-text">Description:</label><br />
-                <textarea name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
+            <div class="form-item clearfix">
+                <label>Description:
+                    <textarea name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
+                </label>
             </div>
 
-            <div class="form-item">
-                <label for="zp-callback">Callback URL:</label><br />
-                <input type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
+            <div class="form-item clearfix">
+                <label>Callback URL:
+                    <input type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
+                </label>
             </div>
 
             <div class="form-item clearfix">
@@ -42,10 +46,8 @@
         </div>
         <div id="{{ #tab }}-auth">
 
-            <h2>Authorization</h2>
-
             {% with m.oauth_perms.selected[consumer.id] as perms %}
-            <table>
+            <table width="100%" border="0">
                 {% for perm in m.oauth_perms %}
                 <tr>
                     <td>
@@ -62,13 +64,14 @@
             
             {% endwith %}
 
+            <div class="form-item clearfix">
                 {% if consumer.id %}
                 {% button type="submit" text="Update" %}
                 {% else %}
                 {% button type="submit" text="Add application" %}
                 {% endif %}
                 {% button action={dialog_close} text="Cancel" %}
-
+            </div>
         </div>
     </div>
 </form>

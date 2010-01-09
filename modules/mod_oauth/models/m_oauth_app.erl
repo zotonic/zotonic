@@ -84,11 +84,9 @@ all_apps(Context) ->
                      [Context#context.user_id], Context).
 
 consumer_tokens(Id, Context) ->
-    X = z_db:assoc_props("SELECT * FROM oauth_application_token 
+    z_db:assoc_props("SELECT * FROM oauth_application_token 
                         WHERE application_id = $1 ORDER BY timestamp DESC",
-                     [Id], Context),
-    ?DEBUG(X),
-    X.
+                     [Id], Context).
 
 
 
@@ -184,7 +182,6 @@ request_token(Consumer, Context) ->
                   {token_type, "request"},
                   {callback_uri, z_db:get(callback_uri, Consumer)}], Context) of
         {ok, Id} ->
-            ?DEBUG(Id),
             z_db:select("oauth_application_token", Id, Context);
         _ ->
             undefined
@@ -210,9 +207,7 @@ exchange_request_for_access(Token, Context) ->
             z_db:q("UPDATE oauth_application_token SET timestamp = now() WHERE id = $1", [TokenId], Context),
             z_db:select("oauth_application_token", TokenId, Context);
 
-        X ->
-            ?DEBUG("FOOO"),
-            ?DEBUG(X),
+        _ ->
             {false, "Failed to exchange request token for access token.\n"}
     end.
 
@@ -240,7 +235,6 @@ create_consumer(Title, URL, Desc, Callback, Context) ->
                   {application_notes, ""},
                   {application_type, ""}], Context) of
         {ok, Id} ->
-            ?DEBUG(Id),
             {ok, C} = z_db:select("oauth_application_registry", Id, Context),
             C;
         _ ->

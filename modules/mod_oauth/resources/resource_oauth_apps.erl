@@ -21,7 +21,6 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-         init/1,
          is_authorized/2,
          event/2
 ]).
@@ -34,7 +33,7 @@ is_authorized(ReqData, Context) ->
 
 
 html(Context) ->
-    Html = z_template:render("oauth_apps.tpl", [], Context),
+    Html = z_template:render("oauth_apps.tpl", [{page_admin_oauth, true}], Context),
 	z_context:output(Html, Context).
 
 
