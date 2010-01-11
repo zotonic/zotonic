@@ -170,7 +170,6 @@ reformat_sql_query(#search_sql{where=Where, tables=Tables, args=Args, cats=TabCa
                                         CatCheck -> [CatCheck | Acc]
                                     end
                                 end, ExtraWhere, TabCats),
-
     ExtraWhere2 = lists:foldl(
                                 fun({Alias, Cats}, Acc) ->
                                     case add_cat_check(Alias, true, Cats, Context) of

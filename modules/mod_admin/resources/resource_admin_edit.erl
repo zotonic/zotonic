@@ -110,8 +110,16 @@ event({sort, Sorted, {dragdrop, {object_sorter, Props}, _, _}}, Context) ->
     Predicate = proplists:get_value(predicate, Props),
     EdgeIds   = [ EdgeId || {dragdrop, EdgeId, _, _ElementId} <- Sorted ],
     m_edge:update_sequence_edge_ids(RscId, Predicate, EdgeIds, Context),
-    Context.
-    
+    Context;
+
+event({postback, {query_preview, Opts}, _TriggerId, _TargetId}, Context) ->
+    ?DEBUG(Opts),
+    DivId = proplists:get_value(div_id, Opts),
+    Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),
+    S = z_search:search({'query', Q}, Context),
+    {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
+    z_render:update(DivId, Html, Context1).
+
 
 %% @doc Remove some properties that are part of the postback
 filter_props(Fs) ->
@@ -127,5 +135,3 @@ filter_props(Fs) ->
     ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
     %[ {list_to_existing_atom(K), list_to_binary(V)} || {K,V} <- Props ].
-
-

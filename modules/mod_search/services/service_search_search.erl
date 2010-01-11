@@ -37,6 +37,8 @@ process_get(_ReqData, Context) ->
     catch
         _: {error, {unknown_query_term, E}} ->
             {error, unknown_arg, E};
+        _: {error, {Message, E}} ->
+            {error, Message, E};
         _: {case_clause, {error, {error, error, _, E, _}}} ->
             {error, syntax, binary_to_list(E)}
     end.
