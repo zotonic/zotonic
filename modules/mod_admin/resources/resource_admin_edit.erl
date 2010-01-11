@@ -112,8 +112,8 @@ event({sort, Sorted, {dragdrop, {object_sorter, Props}, _, _}}, Context) ->
     m_edge:update_sequence_edge_ids(RscId, Predicate, EdgeIds, Context),
     Context;
 
+%% Previewing the results of a query in the admin edit
 event({postback, {query_preview, Opts}, _TriggerId, _TargetId}, Context) ->
-    ?DEBUG(Opts),
     DivId = proplists:get_value(div_id, Opts),
     Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),
     S = z_search:search({'query', Q}, Context),
