@@ -431,7 +431,11 @@ is_a(Id, Cat, Context) ->
 %% @spec ranges(CatList, Context) -> RangeList
 ranges(Cat, Context) when is_atom(Cat); is_integer(Cat); is_binary(Cat) ->
     ranges([Cat], Context);
-ranges(CatList, Context) ->
+ranges(CatList0, Context) ->
+    CatList = case z_string:is_string(CatList0) of
+                  true -> [CatList0];
+                  false -> CatList0
+              end,
     F = fun(Nm, Acc) ->
         case name_to_id(Nm, Context) of
             {ok, CId} ->
