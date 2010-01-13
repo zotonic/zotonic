@@ -23,6 +23,7 @@
 					Pages overview{% if q.qs %}, 
 						matching “{{ q.qs|escape }}”
 						{% button text="show all" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
+						<input type="text" name="qs" value="{{ q.qs|escape }}" />
 					{% endif %}
 
 					{% with q.qcat as qcat %}
