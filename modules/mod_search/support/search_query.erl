@@ -22,7 +22,8 @@
 %% interface functions
 -export([
          search/2,
-         parse_request_args/1
+         parse_request_args/1,
+         parse_query_text/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -50,6 +51,19 @@ parse_request_args([{K,V}|Rest], Acc) ->
     NewVal = V,
     parse_request_args(Rest, [{request_arg(K),NewVal}|Acc]).
 
+%% Parses a query text. Every line is an argument; of which the first
+%% '=' separates argument key from argument value.
+%% @doc parse_query_text(string()) -> [{K, V}]
+parse_query_text(Text) ->
+    try
+        Lines = string:tokens(Text, "\n"),
+        [ {request_arg(L), string:join(Rest, "=")} || [L|Rest] <- [ string:tokens(string:strip(L), "=") || L <- Lines] ]
+    catch
+        _:_ ->
+            throw({error, {invalid_query_text, Text}})
+    end.
+
+
 % Convert request arguments to atom. Doing it this way avoids atom
 % table overflows.
 request_arg("cat")                 -> cat;
@@ -59,11 +73,12 @@ request_arg("hasobject")           -> hasobject;
 request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
+request_arg("publication_month")   -> publication_month;
+request_arg("publication_year")    -> publication_year;
+request_arg("query_id")            -> query_id;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
-request_arg("publication_year")    -> publication_year;
-request_arg("publication_month")   -> publication_month;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -178,6 +193,16 @@ parse_query([{upcoming, true}|Rest], Context, Result) ->
      Result1 = add_where("rsc.pivot_date_end >= current_date", Result),
      parse_query(Rest, Context, Result1);
 
+%% query_id=<rsc id>
+%% Get the query terms from given resource ID, and use those terms.
+parse_query([{query_id, Id}|Rest], Context, Result) ->
+    case m_category:is_a(m_rsc:p(Id, category_id, Context), 'query', Context) of
+        true ->
+            Q = z_convert:to_list(m_rsc:p(Id, 'query', Context)),
+            parse_query(parse_query_text(Q) ++ Rest, Context, Result);
+        false ->
+            throw({error, {invalid_query_id, Id}})
+    end;
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.

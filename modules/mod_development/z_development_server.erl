@@ -135,12 +135,17 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% @doc Check if any of the loaded modules has been changed. If so reload the module's beam file.
+%% @doc Check if any of the loaded modules has been changed. If so reload the module's beam file. Also rescan for templates and files.
 reload_all() ->
 	case reload_loaded_modules() of
-		[] -> ok;
-		_ -> z:flush()
+		[] -> 
+		    z_sites_sup:update_dispatchinfo(),
+		    [ z_module_indexer:reindex(C) || C <- z_sites_sup:get_site_contexts() ],
+		    ok;
+		_ -> 
+		    z:flush()
 	end.
+	
 
 %% @doc Remake beam files from source. Do not load the new files (yet).
 make_all() ->
