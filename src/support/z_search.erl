@@ -90,7 +90,7 @@ search({SearchName, Props} = Search, Limit, Context) ->
         Cats -> [{cat, Cats} | proplists:delete(cat, Props)]
     end,
     Props2 = case proplists:get_all_values(cat_exclude, Props1) of
-        [] -> Props;
+        [] -> Props1;
         CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
     end,
     PropsSorted = lists:keysort(1, Props2),
