@@ -264,5 +264,5 @@ add_cat_check(Alias, Exclude, Cats, Context) ->
     cat_check1(Alias, true, {From,From}) ->
         Alias ++ ".pivot_category_nr <> "++integer_to_list(From);
     cat_check1(Alias, true, {From,To}) ->
-        Alias ++ ".pivot_category_nr < " ++ integer_to_list(From)
-        ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To).
+        [$(|Alias] ++ ".pivot_category_nr < " ++ integer_to_list(From)
+        ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To) ++ ")".
