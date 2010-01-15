@@ -16,7 +16,6 @@
             <div class="form-item clearfix">
                 <label for="query">Query</label>
                 <textarea id="{{ #query }}" name="query" rows="15">{{ r.query }}</textarea>
-                <a class="button" href="javascript:;">Preview</a>
                 {% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview} delegate="resource_admin_edit" %}
             </div>
 
