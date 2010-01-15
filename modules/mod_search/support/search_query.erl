@@ -372,7 +372,8 @@ assure_categories(Name, Context) ->
                true -> [Name];
                false -> Name
            end,
-    [ assure_category(C, Context) || C <- Cats ].
+    Cats1 = lists:filter(fun(C) -> not(C == undefined) andalso not(C == []) end, Cats),
+    [ assure_category(C, Context) || C <- Cats1 ].
 
 %% Make sure the given name is a category.
 assure_category(Name, Context) ->
