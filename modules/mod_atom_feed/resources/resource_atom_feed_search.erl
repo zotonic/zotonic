@@ -74,7 +74,6 @@ expires(ReqData, State) ->
 
 
 provide_content(ReqData, Context) ->
-
     Query0 = z_context:get_q_all(Context),
     try
         {FeedTitle, Query} = case proplists:get_value("feed_title", Query0) of
@@ -96,8 +95,8 @@ provide_content(ReqData, Context) ->
                     {Content, _Context1} = z_template:render_to_iolist("atom_feed_search.tpl", Vars, Context),
                     Content
             end,
-        Content = z_depcache:memo(F, {atom_feed_search, io_lib:format("~p", [Q])}, ?MAX_AGE, [], Context),
-        {{halt, 200}, wrq:set_resp_body(Content, ReqData), Context}
+        Content = z_depcache:memo(F, {atom_feed_search, Q}, ?MAX_AGE, [], Context),
+        {Content, ReqData, Context}
 
     catch
         _: {error, {unknown_query_term, E}} ->
