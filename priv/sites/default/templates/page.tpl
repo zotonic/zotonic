@@ -11,4 +11,6 @@
 
 {{ m.rsc[id].body|show_media }}
 
+{% block below_body %}{% endblock %}
+
 {% endblock %}
