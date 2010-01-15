@@ -129,6 +129,7 @@ cmd_args(FileProps, Filters) ->
     {CropPar,Filters1} = fetch_crop(Filters),
     {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation),
     Filters2   = [  {make_image, Mime},
+                    {auto_orient},
                     {correct_orientation, Orientation},
                     {resize, ResizeWidth, ResizeHeight}, 
                     {crop, CropArgs},
@@ -177,6 +178,8 @@ filter2arg({make_image, "application/pdf"}, Width, Height) ->
     {Width, Height, RArg};
 filter2arg({make_image, _Mime}, Width, Height) ->
     {Width, Height, []};
+filter2arg({auto_orient}, Width, Height) ->
+    {Width, Height, "-auto-orient"};
 filter2arg({correct_orientation, Orientation}, Width, Height) ->
     case Orientation of
     	2 -> {Width, Height, "-flip"};
@@ -348,7 +351,6 @@ string2filter("background", Arg) ->
     {background,Arg};
 string2filter("lossless", []) ->
     {lossless}.
-
 
 
 % simple ceil for positive numbers
