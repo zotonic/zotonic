@@ -118,28 +118,28 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 %% Retrieve the previous id (on publication date) 
-search({previous, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
+search({previous, [{cat, Cat}, {id, Id}]}, _OffsetLimit, Context) ->
+    PubStart = m_rsc:p(Id, publication_start, Context),
+    Modified = m_rsc:p(Id, modified, Context),
     #search_sql{
         select="r.id",
         from="rsc r",
-        where="publication_start <= (SELECT publication_start FROM rsc WHERE id = $1) " ++
-		      "AND modified <= (SELECT modified FROM rsc WHERE id = $1) " ++
-		      "AND id <> $1",
+        where="((publication_start < $1 OR (publication_start = $1 AND modified < $2)) AND id <> $3)",
         tables=[{rsc, "r"}],
         cats=[{"r", Cat}],
-        args=[Id],
+        args=[PubStart, Modified, Id],
         order="publication_start DESC, modified DESC, id DESC"
        };
-search({next, [{cat, Cat}, {id, Id}]}, _OffsetLimit, _Context) ->
+search({next, [{cat, Cat}, {id, Id}]}, _OffsetLimit, Context) ->
+    PubStart = m_rsc:p(Id, publication_start, Context),
+    Modified = m_rsc:p(Id, modified, Context),
     #search_sql{
         select="r.id",
         from="rsc r",
-        where="publication_start >= (SELECT publication_start FROM rsc WHERE id = $1) " ++
-		      "AND modified >= (SELECT modified FROM rsc WHERE id = $1) " ++
-		      "AND id <> $1",
+        where="((publication_start > $1 OR (publication_start = $1 AND modified > $2)) AND id <> $3)",
         tables=[{rsc, "r"}],
         cats=[{"r", Cat}],
-        args=[Id],
+        args=[PubStart, Modified, Id],
         order="publication_start, modified, id"
        };
 
