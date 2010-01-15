@@ -129,13 +129,18 @@ identify_file_imagemagick(ImageFile) ->
     end,
     try 
         [_Path, Type, Dim, _Dim2] = Words1,
+        Mime = mime(Type),
         [Width,Height] = string:tokens(Dim, "x"),
-        {ok, [
-            {width, list_to_integer(Width)},
-            {height, list_to_integer(Height)},
-            {mime, mime(Type)},
-            {orientation, 1}
-        ]}
+        Props1 = [{width, list_to_integer(Width)},
+                  {height, list_to_integer(Height)},
+                  {mime, Mime},
+                  {orientation, 1}],
+        Props2 = case Mime of
+                     "image/" ++ _ ->
+                         detect_exif_rotation(ImageFile, Props1);
+                     _ -> Props1
+                 end,
+        {ok, Props2}
     catch 
         _:_ ->
             ?LOG("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
@@ -266,3 +271,19 @@ extension_mime() ->
 		{".tiff", "image/tiff"}
 	].
 
+
+%% Detect the exif rotation in an image and swaps width/height accordingly.
+detect_exif_rotation(InFile, FileProps) ->
+    case need_exif_swap(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile))) of
+        false ->
+            FileProps;
+        true ->
+            %% Swap width and height
+            W = proplists:get_value(width, FileProps),
+            H = proplists:get_value(height, FileProps),
+            [{width, H}, {height, W} | proplists:delete(width, proplists:delete(height, FileProps))]
+    end.
+
+need_exif_swap("left - " ++ _) -> true;
+need_exif_swap("right - " ++ _) -> true;
+need_exif_swap(_) -> false.
