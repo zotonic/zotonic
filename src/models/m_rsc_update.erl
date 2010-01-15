@@ -4,7 +4,7 @@
 %%
 %% @doc Update routines for resources.  For use by the m_rsc module.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -304,6 +304,21 @@ preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
     case z_db:q1("select count(*) from rsc where uri = $1 and id <> $2", [Uri, Id], Context) of
         0 ->  preflight_check(Id, T, Context);
         _N -> {error, duplicate_uri}
+    end;
+preflight_check(Id, [{'query', Query}|T], Context) ->
+    Valid = case m_rsc:is_a(Id, 'query', Context) of
+                true ->
+                    try
+                        search_query:search(search_query:parse_query_text(Query), Context), true
+                    catch
+                        _: {error, {_, _}} ->
+                            false
+                    end;
+                false -> true
+            end,
+    case Valid of
+        false -> {error, invalid_query};
+        true -> preflight_check(Id, T, Context)
     end;
 preflight_check(Id, [_H|T], Context) ->
     preflight_check(Id, T, Context).

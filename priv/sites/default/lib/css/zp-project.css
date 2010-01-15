@@ -206,3 +206,10 @@ fieldset {
 .z_validation_message {
 	display: none;
 }
+
+ul.list li.listitem {
+    width: 32%;
+    float: left;
+    height: 130px;
+    overflow: hidden;
+}

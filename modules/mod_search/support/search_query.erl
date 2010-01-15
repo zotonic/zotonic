@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
+%% @copyright 2009-2010 Arjan Scherpenisse
 %% @date 2009-04-12
 %% @doc Handler for m.search[{query, Args..}]
 
@@ -55,12 +55,12 @@ parse_request_args([{K,V}|Rest], Acc) ->
 %% '=' separates argument key from argument value.
 %% @doc parse_query_text(string()) -> [{K, V}]
 parse_query_text(Text) ->
-    try
-        Lines = string:tokens(Text, "\n"),
-        [ {request_arg(L), string:join(Rest, "=")} || [L|Rest] <- [ string:tokens(string:strip(L), "=") || L <- Lines] ]
-    catch
-        _:_ ->
-            throw({error, {invalid_query_text, Text}})
+    case is_binary(Text) of
+        true ->
+            parse_query_text(z_convert:to_list(Text));
+        _ ->
+            Lines = string:tokens(Text, "\n"),
+            [ {request_arg(L), string:join(Rest, "=")} || [L|Rest] <- [ string:tokens(string:strip(L), "=") || L <- Lines] ]
     end.
 
 
@@ -98,17 +98,19 @@ parse_query([], _Context, Result) ->
 
 %% cat=categoryname
 %% Filter results on a certain category.
-parse_query([{cat, Cat}|Rest], Context, Result) ->
-    Cats = add_or_append("rsc", Cat, Result#search_sql.cats),
+parse_query([{cat, Cats}|Rest], Context, Result) ->
+    Cats1 = assure_categories(Cats, Context),
+    Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats),
     Tables1 = Result#search_sql.tables,
-    parse_query(Rest, Context, Result#search_sql{cats=Cats, tables=Tables1});
+    parse_query(Rest, Context, Result#search_sql{cats=Cats2, tables=Tables1});
 
 %% cat_exclude=categoryname
 %% Filter results outside a certain category.
-parse_query([{cat_exclude, Cat}|Rest], Context, Result) ->
-    Cats = add_or_append("rsc", Cat, Result#search_sql.cats_exclude),
+parse_query([{cat_exclude, Cats}|Rest], Context, Result) ->
+    Cats1 = assure_categories(Cats, Context),
+    Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats_exclude),
     Tables1 = Result#search_sql.tables,
-    parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats, tables=Tables1});
+    parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats2, tables=Tables1});
 
 %% hassubject=[id]
 %% Give all things which have an outgoing edge to Id
@@ -362,3 +364,34 @@ sql_safe(String) ->
         _ ->
             throw({error, {unsafe_expression, String}})
     end.
+
+
+%% Make sure the input is a list of valid categories.
+assure_categories(Name, Context) ->
+    Cats = case z_string:is_string(Name) of
+               true -> [Name];
+               false -> Name
+           end,
+    [ assure_category(C, Context) || C <- Cats ].
+
+%% Make sure the given name is a category.
+assure_category(Name, Context) ->
+    case m_category:name_to_id(Name, Context) of
+        {ok, _Id} ->
+            Name;
+        _ -> 
+            CatId = try 
+                        z_convert:to_integer(Name)
+                    catch
+                        _:_ ->
+                            throw({error, {unknown_category, Name}})
+                    end,
+            case m_category:id_to_name(CatId, Context) of
+                undefined ->
+                    throw({error, {unknown_category, Name}});
+                Name1 ->
+                    Name1
+            end
+    end.
+
+

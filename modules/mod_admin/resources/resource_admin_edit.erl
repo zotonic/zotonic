@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_resource.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -95,6 +95,8 @@ event({submit, rscform, _FormId, _TargetId}, Context) ->
             z_render:growl_error("Error, duplicate name. Please change the name.", Context);
         {error, eacces} ->
             z_render:growl_error("You don't have permission to edit this page.", Context);
+        {error, invalid_query} ->
+            z_render:growl_error("Your search query is invalid. Please correct it before saving.", Context);
         {error, _Reason} ->
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;
@@ -115,10 +117,15 @@ event({sort, Sorted, {dragdrop, {object_sorter, Props}, _, _}}, Context) ->
 %% Previewing the results of a query in the admin edit
 event({postback, {query_preview, Opts}, _TriggerId, _TargetId}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
-    Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),
-    S = z_search:search({'query', Q}, Context),
-    {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
-    z_render:update(DivId, Html, Context1).
+    try
+        Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),
+        S = z_search:search({'query', Q}, Context),
+        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
+        z_render:update(DivId, Html, Context1)
+    catch
+        _: {error, {Kind, Arg}} ->
+            z_render:growl_error(["There is an error in your query: ", Kind, " - ", Arg], Context)
+    end.
 
 
 %% @doc Remove some properties that are part of the postback
