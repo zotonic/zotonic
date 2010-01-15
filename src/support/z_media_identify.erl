@@ -133,15 +133,14 @@ identify_file_imagemagick(ImageFile) ->
         [Width,Height] = string:tokens(Dim, "x"),
         Props1 = [{width, list_to_integer(Width)},
                   {height, list_to_integer(Height)},
-                  {mime, Mime},
-                  {orientation, 1}],
+                  {mime, Mime}],
         Props2 = case Mime of
                      "image/" ++ _ ->
-                         detect_exif_rotation(ImageFile, Props1);
+                         [{orientation, exif_orientation(ImageFile)} | Props1];
                      _ -> Props1
                  end,
         {ok, Props2}
-    catch 
+    catch
         _:_ ->
             ?LOG("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
             {error, "unknown result from 'identify': '"++Line1++"'"}
@@ -273,17 +272,17 @@ extension_mime() ->
 
 
 %% Detect the exif rotation in an image and swaps width/height accordingly.
-detect_exif_rotation(InFile, FileProps) ->
-    case need_exif_swap(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile))) of
-        false ->
-            FileProps;
-        true ->
-            %% Swap width and height
-            W = proplists:get_value(width, FileProps),
-            H = proplists:get_value(height, FileProps),
-            [{width, H}, {height, W} | proplists:delete(width, proplists:delete(height, FileProps))]
+exif_orientation(InFile) ->
+    %% FIXME - don't depend on external command
+    case os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)) of
+        "top - left\n" -> 1;
+        "top - right\n" -> 2;
+        "bottom - right\n" -> 3;
+        "bottom - left\n" -> 4;
+        "left - top\n" -> 5;
+        "right - top\n" -> 6;
+        "right - bottom\n" -> 7;
+        "left - bottom\n" -> 8;
+        _ -> 1
     end.
 
-need_exif_swap("left - " ++ _) -> true;
-need_exif_swap("right - " ++ _) -> true;
-need_exif_swap(_) -> false.
