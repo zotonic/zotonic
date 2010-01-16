@@ -44,11 +44,10 @@
 ]).
 
 %% internal
--export([notify_observer/4, test/0, test_observer/2]).
+-export([notify_observer/4]).
 
 -include_lib("zotonic.hrl").
 
--define(DEFAULT_PRIORITY, 500).
 -define(TIMEOUT, 60000).
 
 -record(state, {observers}).
@@ -72,7 +71,7 @@ start_link(SiteProps) when is_list(SiteProps) ->
 observe(Event, {Module, Function}, Context) ->
     observe(Event, {Module, Function}, z_module_sup:prio(Module), Context);
 observe(Event, Observer, Context) ->
-    observe(Event, Observer, ?DEFAULT_PRIORITY, Context).
+    observe(Event, Observer, ?NOTIFIER_DEFAULT_PRIORITY, Context).
 
 %% @doc Subscribe to an event. Observer is a {M,F} or pid()
 observe(Event, Observer, Priority, #context{notifier=Notifier}) ->
@@ -303,21 +302,3 @@ notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
     end;
 notify_observer_fold(Msg, {_Prio, {M,F}}, Acc, Context) ->
     M:F(Msg, Acc, Context).
-
-
-%% Simple test
-
-test() ->
-    Context = z_context:new(default),
-    detach_all(test_blaat, Context),
-    observe(test_blaat, {?MODULE, test_observer}, Context),
-    received = first({test_blaat, arg1, arg2}, Context),
-    [{?DEFAULT_PRIORITY, {?MODULE, test_observer}}] = get_observers(test_blaat, Context),
-    detach(test_blaat, {?MODULE, test_observer}, Context),
-    [] = get_observers(test_blaat, Context),
-    ok.
-    
-
-test_observer(_Msg, _Context) ->
-    received.
-

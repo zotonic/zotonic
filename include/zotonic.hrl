@@ -163,6 +163,9 @@
 %% Our default WWW-Authenticate header
 -define(WWW_AUTHENTICATE, "OAuth-rsn").
 
+%% Notifier defines
+-define(NOTIFIER_DEFAULT_PRIORITY, 500).
+
 %% Below is copied from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %%% LOGGING %%%
@@ -170,3 +173,4 @@
 -define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
 -define(DEBUG(Msg), error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [?MODULE, ?LINE, Msg])).
 -define(ERROR(Msg, Args), error_logger:error_msg("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
+

@@ -30,7 +30,7 @@
 -export([memo/2, memo/3, memo/4, memo/5]).
 
 %% internal export
--export([cleanup/3, cleanup/7, test/0]).
+-export([cleanup/3, cleanup/7]).
 
 -include_lib("zotonic.hrl").
 
@@ -556,18 +556,3 @@ cleanup_mode(Pid) ->
         Memory >= ?MEMORY_MAX -> cache_full;
         true -> normal
     end.
-
-
-
-test() ->
-	C = z_context:new(default),
-	?MODULE:flush(test_m_key, C),
-	[ test_m(C) || _N <- lists:seq(1,100) ],
-	ok.
-
-	test_m(Context) ->
-		?DEBUG(?MODULE:memo(fun test_f/0, test_m_key, Context)).
-
-	test_f() ->
-		?DEBUG(waiting),
-		receive after 5000 -> y end.

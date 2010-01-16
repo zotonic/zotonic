@@ -32,8 +32,7 @@
 
 %% interface functions
 -export([
-    scan/1,
-    test/0
+    scan/1
 ]).
 
 %% internal
@@ -232,10 +231,3 @@ rel_file(BaseDir, File) ->
         true -> lists:nthtail(length(BaseDir)+1, File);
         false -> filename:basename(File)
     end.
-
-test() ->
-    DropBox = filename:join([z_utils:lib_dir(priv), "sites", "default", "dropbox"]),
-    _ProcDir = filename:join([z_utils:lib_dir(priv), "sites", "default", "processing"]),
-    Files = scan_directory(DropBox),
-    Files.
-%    lists:map(fun(F) -> move_file(DropBox, F, ProcDir) end, Files).

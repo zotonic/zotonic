@@ -36,8 +36,7 @@
 	dispatchinfo/1,
 	update/1,
 	reload/1,
-	reload/2,
-	test/0
+	reload/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -389,25 +388,3 @@ append_qargs(Args, Context) ->
                         Args1,
                         Qs)
     end.
-
-
-% {ok, X, _}  = erl_scan:string("[{hello, blaat}].").
-% {ok, Y} = erl_parse:parse_exprs(X).
-% {value, Value, _NewBindings} = erl_eval:exprs(Y, [])}.
-
-test() ->
-    Ctx  = z_context:new(default),
-    List = collect_dispatch_lists(Ctx),
-    Dict = dispatch_for_uri_lookup(List),
-    dict:to_list(Dict),
-
-    Uri = make_url_for1(
-                [{a,"A"},{b,"B"},{c,"hello&plop"},{d,"bla"}], 
-                [
-                {1, [a],   [a,"a"]},
-                {2, [a,b], [a,"ab",b]}, 
-                {2, [b,a], [b,"ba",a]} 
-                ], 
-                html,
-                undefined),
-    lists:flatten(Uri).

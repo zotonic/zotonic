@@ -29,7 +29,7 @@
     can_generate_preview/1,
 	out_mime/2,
     string2filter/2,
-    test/0
+    cmd_args/2
 ]).
 
 -define(MAX_WIDTH,  5000).
@@ -129,7 +129,8 @@ can_generate_preview(_Mime) -> false.
 cmd_args(FileProps, Filters) ->
     {width, ImageWidth}   = proplists:lookup(width, FileProps),
     {height, ImageHeight} = proplists:lookup(height, FileProps),
-    {mime, Mime}          = proplists:lookup(mime, FileProps),
+    {mime, Mime0} = proplists:lookup(mime, FileProps),
+    Mime = z_convert:to_list(Mime0),
     {orientation, Orientation} = proplists:lookup(orientation, FileProps),
     ReqWidth   = proplists:get_value(width, Filters),
     ReqHeight  = proplists:get_value(height, Filters),
@@ -143,7 +144,7 @@ cmd_args(FileProps, Filters) ->
     Filters3 = case is_blurred(Filters2) of
                     true ->  Filters2 ++ [{quality}];
                     false -> case Mime of
-                                 <<"image/gif">> -> Filters2 ++ [{quality}];
+                                 "image/gif" -> Filters2 ++ [{quality}];
                                  _ -> Filters2 ++ [{sharpen_small}, {quality}]
                              end
                end,
@@ -161,7 +162,7 @@ cmd_args(FileProps, Filters) ->
     {EndWidth, EndHeight, lists:reverse(Args)}.
 
 
-default_background(<<"image/gif">>) -> [{coalesce}];
+default_background("image/gif") -> [{coalesce}];
 default_background(_) -> [{background,"white"}, {layers,"flatten"}].
 
 %% @doc Check if there is a blurring filter that prevents us from sharpening the resulting image
@@ -374,13 +375,3 @@ ceil(A)  -> round(A + 0.499999).
 
 ensure_integer(A) ->
     integer_to_list(list_to_integer(A)).
-
-
-test() ->
-    Props = [{width,100}, {height,66}, {mime,"image/jpeg"}, {orientation,1}],
-    Filters = [{crop,center}, {width,80}, {height,80}],
-    {_W,_H,Args} = cmd_args(Props, Filters),
-    CmdArgs = lists:flatten(z_utils:combine(32, Args)),
-    "-background \"white\"   -gravity Center -extent 122x80 -thumbnail 122x80\\! -gravity NorthWest -crop 80x80+21+0 +repage -colorspace \"RGB\"   -unsharp 0.3x0.7  -quality 99" = CmdArgs,
-    ok.
-
