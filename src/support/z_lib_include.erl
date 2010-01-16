@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @date 2009-07-22
 %% @copyright (c) 2009 Marc Worrell
-%% @doc Support for the {% lib filename ... %} tag in the templates.  Generates the <link /> or <script /> tag for css or js files.
-%% Also adds the greatest modification date so that updates are loaded by the browser.
+%% @doc Support for the {% lib filename ... %} tag in the templates.
+%% Generates the <link /> or <script /> tag for css or js files.  Also
+%% adds the greatest modification date so that updates are loaded by
+%% the browser.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -26,8 +28,7 @@
 
 -export([
     tag/2,
-    uncollapse/1,
-    test/0
+    uncollapse/1
 ]).
 
 -define(SEP, $~).
@@ -39,14 +40,14 @@ tag(Files, Context) ->
         [] ->
             [];
         _ -> 
-            ModCss = newest(Css, {{1900,1,1},{12,0,0}}, Context),
+            ModCss = newest(Css, {{1970,1,1},{12,0,0}}, Context),
             iolist_to_binary([ <<"<link href=\"/lib">>, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>])
     end,
     ScriptElement = case JsPath of
         [] ->
             [];
         _ -> 
-            ModJs = newest(Js, {{1900,1,1},{12,0,0}}, Context),
+            ModJs = newest(Js, {{1970,1,1},{12,0,0}}, Context),
             iolist_to_binary([ <<"<script src=\"/lib">>, JsPath, ?SEP, integer_to_list(ModJs), <<".js\" type=\"text/javascript\"></script>">>])
     end,
     [LinkElement, ScriptElement].
@@ -158,19 +159,6 @@ split_css_js(Files) ->
     split_css_js([File|Rest], CssAcc, JsAcc) ->
         case filename:extension(File) of
             ".css" -> split_css_js(Rest, [File|CssAcc], JsAcc);
-            ".js"  -> split_css_js(Rest, CssAcc, [File|JsAcc])
+            ".js"  -> split_css_js(Rest, CssAcc, [File|JsAcc]);
+            _ -> split_css_js(Rest, CssAcc, JsAcc)
         end.
-
-
-test() ->
-    Files = [
-        "/a/b1.js",
-        "/a/b2.js",
-        "/a/b/c.js",
-        "/a/b3.js"
-    ],
-    {[],[],["a/b1.js","a/b2.js","a/b/c.js","a/b3.js"],"/a/b1~b2~b/c~/a/b3"} = collapsed_paths(Files),
-    ["/a/b1.js","/a/b2.js","/a/b/c.js","/a/b3.js"] = uncollapse("/a/b1~~b2~~b/c~~/a/b3~~63415422477.js"),
-    ok.
-    
-

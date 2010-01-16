@@ -19,7 +19,7 @@
 
 -module(zotonic).
 -author('Marc Worrell <marc@worrell.nl>').
--export([start/0, start/1, stop/0, stop/1, update/0, update/1]).
+-export([start/0, start/1, stop/0, stop/1, update/0, update/1, run_tests/0]).
 -revision("$Id$").
 
 ensure_started(App) ->
@@ -79,3 +79,5 @@ update([Node]) ->
     end,
     init:stop().
 
+run_tests() ->
+    z_media_preview_tests:test().
