@@ -31,7 +31,7 @@
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
 search(Query, Context) ->
-    Start = #search_sql{select="rsc.id",
+    Start = #search_sql{select="distinct rsc.id",
                         from="rsc rsc",
                         tables=[{rsc, "rsc"}]},
     Query1 = filter_empty(Query),
