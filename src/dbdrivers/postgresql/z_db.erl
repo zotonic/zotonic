@@ -48,6 +48,7 @@
     delete/3,
     select/3,
     columns/2,
+    column_names/2,
     update_sequence/3,
     table_exists/2,
     
@@ -382,6 +383,11 @@ columns(Table, Context) ->
             z_depcache:set({columns, Db, Table}, Cols, ?YEAR, [{database, Db}], Context),
             Cols
     end.
+
+%% @doc Return a list with the column names of a table.  The names are sorted.
+%% @spec column_names(Table, Context) -> [ atom, ... ]
+column_names(Table, Context) ->
+    lists:sort(proplists:get_keys(columns(Table, Context))).
 
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
