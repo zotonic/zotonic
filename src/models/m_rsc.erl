@@ -167,8 +167,7 @@ get_raw(Id, Context) when is_integer(Id) ->
                 is_authoritative, is_published, is_featured, is_protected,
                 publication_start, publication_end,
                 group_id, creator_id, modifier_id, version, category_id,
-                visible_for, comment_by, comments, rating, rating_count,
-                slug, props, created, modified
+                visible_for, slug, props, created, modified
             from rsc
             where id = $1", [Id], Context).
 

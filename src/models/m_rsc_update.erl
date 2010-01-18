@@ -463,8 +463,6 @@ props_filter_protected(Props) ->
     lists:filter(fun({K,_V}) -> not protected(K) end, Props).
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-protected(comment_by)                 -> true;
-protected(comments)                   -> true;
 protected(created)                    -> true;
 protected(creator_id)                 -> true;
 protected(id)                         -> true;
@@ -488,8 +486,6 @@ protected(pivot_surname)              -> true;
 protected(pivot_title)                -> true;
 protected(pivot_tsv)                  -> true;
 protected(props)                      -> true;
-protected(rating)                     -> true;
-protected(rating_count)               -> true;
 protected(version)                    -> true;
 protected(_)                          -> false.
 
