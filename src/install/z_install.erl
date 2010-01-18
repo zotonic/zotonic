@@ -110,10 +110,6 @@ model_pgsql() ->
         version int NOT NULL DEFAULT 1,
         category_id int NOT NULL,
         visible_for int NOT NULL DEFAULT 1, -- 0 = public, 1 = community, 2 = group
-        comment_by int NOT NULL DEFAULT 3, -- 0 = public, 1 = community, 2 = group, 3 = nobody
-        comments int NOT NULL default 0,
-        rating int,
-        rating_count int,
         slug character varying(80) NOT NULL DEFAULT ''::character varying,
         props bytea,
         created timestamp with time zone NOT NULL DEFAULT now(),
@@ -312,37 +308,6 @@ model_pgsql() ->
     "CREATE INDEX medium_rootname_key ON medium (rootname)",
 
 
-    % Table comment
-    % Comments on resources
-    % notify_id is typically set to the owner of the resource being commented on (at the time of the comment)
-
-    "CREATE TABLE comment
-    (
-      id serial NOT NULL,
-      rsc_id int NOT NULL,
-      creator_id int,
-      notify_id int,
-      props bytea,
-      ip_address character varying(40),
-      rating int,
-      created timestamp with time zone NOT NULL DEFAULT now(),
-      
-      CONSTRAINT comment_pkey PRIMARY KEY (id),
-      CONSTRAINT fk_comment_rsc_id FOREIGN KEY (rsc_id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT fk_comment_creator_id FOREIGN KEY (creator_id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT fk_comment_notify_id FOREIGN KEY (notify_id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_comment_rsc_id ON comment (rsc_id)",
-    "CREATE INDEX fki_comment_creator_id ON comment (creator_id)",
-    "CREATE INDEX fki_comment_notify_id ON comment (notify_id)",
-
     % Table category
     % nr, left and right are filled using a topological sort of the category tree
     % A category hierarchy is derived from the resources with the category "category"
@@ -430,35 +395,6 @@ model_pgsql() ->
     )",
 
     "CREATE INDEX fki_visitor_id ON visitor_cookie (visitor_id)",
-
-    % Table rating
-    % rating can be coupled with a comment, remove the comment and the rating gets adapted
-    
-    "
-    CREATE TABLE rating
-    (
-        id serial NOT NULL,
-        rsc_id int not null,
-        visitor_id bigint not null,
-        comment_id int,
-        created timestamp with time zone NOT NULL DEFAULT now(),
-        ip_address character varying(40),
-        CONSTRAINT rating_pkey PRIMARY KEY (id),
-        CONSTRAINT fk_rating_rsc_id FOREIGN KEY (rsc_id)
-          REFERENCES rsc(id)
-          ON UPDATE CASCADE ON DELETE CASCADE,
-        CONSTRAINT fk_rating_comment_id FOREIGN KEY (comment_id)
-          REFERENCES comment(id)
-          ON UPDATE CASCADE ON DELETE CASCADE,
-        CONSTRAINT fk_rating_visitor_id FOREIGN KEY (visitor_id)
-          REFERENCES visitor(id)
-          ON UPDATE CASCADE ON DELETE CASCADE
-    )
-    ",
-
-    "CREATE INDEX fki_rating_rsc_id ON rating (rsc_id)",
-    "CREATE INDEX fki_rating_comment_id ON rating (comment_id)",
-    "CREATE INDEX fki_rating_visitor_id ON rating (visitor_id)",
 
     % Table identity
     % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.
