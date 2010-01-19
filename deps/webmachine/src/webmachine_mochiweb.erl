@@ -20,6 +20,8 @@
 -author('Andy Gross <andy@basho.com>').
 -export([start/1, stop/0, loop/1]).
 
+-include_lib("wm_reqdata.hrl").
+
 start(Options) ->
     {DispatchList, Options1} = get_option(dispatch, Options),
     {ErrorHandler0, Options2} = get_option(error_handler, Options1),
@@ -76,24 +78,22 @@ loop(MochiReq) ->
                     spawn(LogModule, log_access, [LogData]);
                 _ -> nop
             end;
-        {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings,
-         AppRoot, StringPath} ->
+        {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath} ->
             BootstrapResource = webmachine_resource:new(x,x,x,x),
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
-            {ok,RS1} = ReqDispatch:load_dispatch_data(Bindings,HostTokens,Port,
-                                              PathTokens,AppRoot,StringPath),
+            {ok,RS1} = ReqDispatch:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath),
             XReq1 = {webmachine_request,RS1},
             {ok,RS2} = XReq1:set_metadata('resource_module', Mod),
             try 
                 webmachine_decision_core:handle_request(Resource, RS2)
             catch
                 error:_ -> 
+                    ?DBG({error, erlang:get_stacktrace()}),
                     FailReq = {webmachine_request,RS2},
                     {ok,RS3} = FailReq:send_response(500),
                     PostFailReq = {webmachine_request,RS3},
                     {LogData,_RS4} = PostFailReq:log_data(),
-                    case application:get_env(webmachine,
-                                             webmachine_logger_module) of
+                    case application:get_env(webmachine, webmachine_logger_module) of
                         {ok, LogModule} ->
                             spawn(LogModule, log_access, [LogData]);
                         _ -> nop
@@ -108,9 +108,7 @@ get_option(Option, Options) ->
 
 host_headers(Req) ->
     [ V || {V,_ReqState} <- [Req:get_header_value(H)
-                             || H <- [
-%%                                      "x-forwarded-for",
-                                      "x-forwarded-host",
+                             || H <- ["x-forwarded-host",
                                       "x-forwarded-server",
                                       "host"]],
            V /= undefined].

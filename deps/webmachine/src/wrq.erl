@@ -31,12 +31,10 @@
 
 % @type reqdata(). The opaque data type used for req/resp data structures.
 -include_lib("include/wm_reqdata.hrl").
--include_lib("include/wm_reqstate.hrl").
 
 create(Method,Version,RawPath,Headers) ->
     create(#wm_reqdata{method=Method,version=Version,
                        raw_path=RawPath,req_headers=Headers,
-      wm_state=defined_on_call,
       path="defined_in_create",
       req_cookie=defined_in_create,
       req_qs=defined_in_create,
@@ -98,13 +96,13 @@ req_qs(_RD = #wm_reqdata{req_qs=QS}) when is_list(QS) -> QS.
 
 req_headers(_RD = #wm_reqdata{req_headers=ReqH}) -> ReqH. % mochiheaders
 
-req_body(_RD = #wm_reqdata{wm_state=ReqState0,max_recv_body=MRB}) ->
+req_body(ReqState0 = #wm_reqdata{max_recv_body=MRB}) ->
     Req = webmachine_request:new(ReqState0),
     {ReqResp, ReqState} = Req:req_body(MRB),
     put(tmp_reqstate, ReqState),
     maybe_conflict_body(ReqResp).
 
-stream_req_body(_RD = #wm_reqdata{wm_state=ReqState0}, MaxHunk) ->
+stream_req_body(ReqState0 = #wm_reqdata{}, MaxHunk) ->
     Req = webmachine_request:new(ReqState0),
     {ReqResp, ReqState} = Req:stream_req_body(MaxHunk),
     put(tmp_reqstate, ReqState),

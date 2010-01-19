@@ -24,10 +24,11 @@
 -export([handle_request/2]).
 -export([do_log/1]).
 -include("webmachine_logger.hrl").
+-include("wm_reqdata.hrl").
 
-handle_request(Resource, ReqState) ->
+handle_request(Resource, ReqData) ->
     put(resource, Resource),
-    put(reqstate, ReqState),
+    put(reqdata, ReqData),
     try
         d(v3b13)
     catch
@@ -36,17 +37,18 @@ handle_request(Resource, ReqState) ->
     end.
 
 wrcall(X) ->
-    RS0 = get(reqstate),
+    RS0 = get(reqdata),
     Req = webmachine_request:new(RS0),
     {Response, RS1} = Req:call(X),
-    put(reqstate, RS1),
+    put(reqdata, RS1),
     Response.
 
 resource_call(Fun) ->
     Resource = get(resource),
-    {Reply, NewResource, NewRS} = Resource:do(Fun,get()),
+    ReqData  = get(reqdata),
+    {Reply, NewResource, NewReqData} = Resource:do(Fun, ReqData),
     put(resource, NewResource),
-    put(reqstate, NewRS),
+    put(reqdata, NewReqData),
     Reply.
 
 get_header_val(H) -> wrcall({get_req_header, H}).
@@ -65,9 +67,9 @@ respond(Code) ->
 	404 ->
 	    {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
 	    Reason = {none, none, []},
-	    {ErrorHTML,ReqState} = ErrorHandler:render_error(
-                          Code, {webmachine_request,get(reqstate)}, Reason),
-            put(reqstate, ReqState),
+	    ReqData = get(reqdata),
+	    {ErrorHTML,ReqData} = ErrorHandler:render_error(Code, {webmachine_request,ReqData}, Reason),
+            put(reqdata, ReqData),
             wrcall({set_resp_body, ErrorHTML});
         304 ->
             wrcall({remove_resp_header, "Content-Type"}),
@@ -90,8 +92,7 @@ respond(Code) ->
     wrcall({send_response, Code}),
     RMod = wrcall({get_metadata, 'resource_module'}),
     LogData0 = wrcall(log_data),
-    LogData = LogData0#wm_log_data{resource_module=RMod,
-				   end_time=EndTime},
+    LogData = LogData0#wm_log_data{resource_module=RMod, end_time=EndTime},
     spawn(fun() -> do_log(LogData) end),
     Resource:stop().
 
@@ -101,9 +102,9 @@ respond(Code, Headers) ->
 
 error_response(Code, Reason) ->
     {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
-    {ErrorHTML, ReqState} = ErrorHandler:render_error(
-                                Code, {webmachine_request,get(reqstate)}, Reason),
-    put(reqstate, ReqState),
+    ReqData = get(reqdata),
+    {ErrorHTML, ReqData1} = ErrorHandler:render_error(Code, {webmachine_request, ReqData}, Reason),
+    put(reqdata, ReqData1),
     wrcall({set_resp_body, ErrorHTML}),
     respond(Code).
 error_response(Reason) ->
