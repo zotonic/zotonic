@@ -20,9 +20,6 @@
 -export([wrap/2]).
 -export([do/2,log_d/1,stop/0]).
 
--include_lib("include/wm_reqdata.hrl").
--include_lib("include/wm_reqstate.hrl").
-
 default(ping) ->
     no_default;
 default(service_available) ->
@@ -117,69 +114,48 @@ wrap(Mod, Args) ->
 	    {stop, bad_init_arg}
     end.
 
-do(Fun, ReqProps) when is_atom(Fun) andalso is_list(ReqProps) ->
-    RState0 = proplists:get_value(reqstate, ReqProps),
-    put(tmp_reqstate, empty),
-    {Reply, ReqData, NewModState} = handle_wm_call(Fun, 
-                    (RState0#reqstate.reqdata)#wm_reqdata{wm_state=RState0}),
-    ReqState = case get(tmp_reqstate) of
-                   empty -> RState0;
-                   X -> X
-               end,
-    {Reply,
-     webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace),
-     ReqState#reqstate{reqdata=ReqData}}.
+do(Fun, ReqData) when is_atom(Fun) ->
+    {Reply, ReqData1, NewModState} = handle_wm_call(Fun, RD0),
+    {Reply, webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace), ReqData1}.
 
 handle_wm_call(Fun, ReqData) ->
-    case default(Fun) of
-        no_default ->
+    case dict:is_key(Fun, R_ModExports) of
+        true ->
             resource_call(Fun, ReqData);
-        Default ->
-            case dict:is_key(Fun, R_ModExports) of
-                true ->
+        false ->
+            case default(Fun) of
+                no_default -> 
                     resource_call(Fun, ReqData);
-                false ->
-                    if is_pid(R_Trace) ->
-                            log_call(R_Trace,
-                                     not_exported,
-                                     R_Mod, Fun, [ReqData, R_ModState]);
-                       true -> ok
-                    end,
+                Default ->
+                    log_call(R_Trace, not_exported, R_Mod, Fun, [ReqData, R_ModState]),
                     {Default, ReqData, R_ModState}
             end
     end.
 
-trim_trace([{M,F,[RD = #wm_reqdata{},S]}|STRest]) ->
-    TrimState = (RD#wm_reqdata.wm_state)#reqstate{reqdata='REQDATA'},
-    TrimRD = RD#wm_reqdata{wm_state=TrimState},
-    [{M,F,[TrimRD,S]}|STRest];
-trim_trace(X) -> X.
-
 resource_call(F, ReqData) ->
-    case R_Trace of
-        false -> nop;
-        _ -> log_call(R_Trace, attempt, R_Mod, F, [ReqData, R_ModState])
-    end,
+    log_call(R_Trace, attempt, R_Mod, F, [ReqData, R_ModState]),
     Result = try
         apply(R_Mod, F, [ReqData, R_ModState])
     catch C:R ->
-	    Reason = {C, R, trim_trace(erlang:get_stacktrace())},
+            Reason = {C, R, erlang:get_stacktrace()},
             {{error, Reason}, ReqData, R_ModState}
     end,
-        case R_Trace of
-        false -> nop;
-        _ -> log_call(R_Trace, result, R_Mod, F, Result)
-    end,
+    log_call(R_Trace, result, R_Mod, F, Result),
     Result.
 
 log_d(DecisionID) ->
-    case R_Trace of
-        false -> nop;
-        _ -> log_decision(R_Trace, DecisionID)
-    end.
+    log_decision(R_Trace, DecisionID).
 
 stop() -> close_log_file(R_Trace).
-    
+
+
+log_decision(false, _DecisionID) ->
+    nop;
+log_decision(File, DecisionID) ->
+    io:format(File, "{decision, ~p}.~n", [DecisionID]).
+
+log_call(false, _Type, _M, _F, _Data) ->
+    nop;
 log_call(File, Type, M, F, Data) ->
     io:format(File,
               "{~p, ~p, ~p,~n ~p}.~n",
@@ -197,10 +173,6 @@ escape_trace_data(Port) when is_port(Port) ->
     {'WMTRACE_ESCAPED_PORT', erlang:port_to_list(Port)};
 escape_trace_data(List) when is_list(List) ->
     escape_trace_list(List, []);
-escape_trace_data(R=#reqstate{}) ->
-    list_to_tuple(
-      escape_trace_data(
-        tuple_to_list(R#reqstate{reqdata='WMTRACE_NESTED_REQDATA'})));
 escape_trace_data(Tuple) when is_tuple(Tuple) ->
     list_to_tuple(escape_trace_data(tuple_to_list(Tuple)));
 escape_trace_data(Other) ->
@@ -214,9 +186,6 @@ escape_trace_list([], Acc) ->
 escape_trace_list(Final, Acc) ->
     %% non-nil-terminated list, like the dict module uses
     lists:reverse(tl(Acc))++[hd(Acc)|escape_trace_data(Final)].
-
-log_decision(File, DecisionID) ->
-    io:format(File, "{decision, ~p}.~n", [DecisionID]).
 
 open_log_file(Dir, Mod) ->
     Now = {_,_,US} = now(),
