@@ -197,10 +197,10 @@ install_comment_table(false, Context) ->
                 on delete cascade on update cascade,
             constraint fk_comment_user_id foreign key (user_id)
                 references rsc(id)
-                on set null cascade on update cascade,
+                on delete set null on update cascade,
             constraint fk_comment_visitor_id foreign key (visitor_id)
                 references visitor(id)
-                on set null cascade on update cascade
+                on delete set null on update cascade
         )
     ", Context),
     Indices = [
