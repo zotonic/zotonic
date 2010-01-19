@@ -141,10 +141,14 @@ handle_cast({module_ready, _NotifyContext}, State) ->
         lib        = proplists:get_value(lib, Scanned),
         services   = proplists:get_value(service, Scanned)
     },
-    % Reset the template server after reindexing the templates, the templates might originate now from
-    % different modules than before, or are using templates that are not available anymore.
-    z_template:reset(State#state.context),
-    {noreply, State1};
+    case State =/= State1 of
+        true ->
+            % Reset the template server when the templates are changed
+            z_template:reset(State1#state.context),
+            {noreply, State1};
+        false ->
+            {noreply, State}
+    end;
 
 
 %% @doc Trap unknown casts
