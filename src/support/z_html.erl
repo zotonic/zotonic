@@ -28,7 +28,9 @@
     unescape/1,
     strip/1,
 	sanitize/1,
-	noscript/1
+	noscript/1,
+    escape_link/1,
+    nl2br/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -65,13 +67,13 @@ escape_props(Props) ->
 
 
 %% @doc Escape a string so that it is valid within HTML/ XML.
-%% @spec escape(iolist()) -> iolist()
+%% @spec escape(iolist()) -> binary()
 escape(undefined) -> 
     undefined;
 escape(<<>>) -> 
     <<>>;
 escape([]) ->
-    [];
+    <<>>;
 escape(L) when is_list(L) ->
     escape(list_to_binary(L));
 escape(B) when is_binary(B) ->
@@ -96,13 +98,13 @@ escape(B) when is_binary(B) ->
 
 
 %% @doc Unescape - reverses the effect of escape.
-%% @spec escape(iolist()) -> iolist()
+%% @spec escape(iolist()) -> binary()
 unescape(undefined) -> 
     undefined;
 unescape(<<>>) -> 
     <<>>;
 unescape([]) ->
-    [];
+    <<>>;
 unescape(L) when is_list(L) ->
     unescape(list_to_binary(L));
 unescape(B) when is_binary(B) ->
@@ -124,6 +126,34 @@ unescape(B) when is_binary(B) ->
         unescape(T, <<Acc/binary, "€">>);
     unescape(<<C, T/binary>>, Acc) ->
         unescape(T, <<Acc/binary, C>>).
+
+
+%% @doc Escape a text. Expands any urls to links with a nofollow attribute.
+%% @spec escape_link(Text) -> binary()
+escape_link(undefined) ->
+    undefined;
+escape_link(<<>>) ->
+    <<>>;
+escape_link([]) ->
+    <<>>;
+escape_link(Text) ->
+    case re:run(Text, "\\b(([\\w-]+://?|www[.])[^\\s()<>]+(?:\\([\\w\\d]+\\)|([^[:punct:]\\s]|/)))", [{capture, first, index}, global]) of
+        {match, Matches} ->
+            Matches1 = [ hd(M) || M <- Matches ],
+            nl2br(iolist_to_binary(make_links1(0, Matches1, z_convert:to_list(Text), [])));
+        nomatch ->
+            nl2br(escape(Text))
+    end.
+
+    make_links1(_Offset, [], Text, Acc) ->
+        lists:reverse([escape(Text) | Acc]);
+    make_links1(Offset, [{Offset, Len}|Rest], Text, Acc) ->
+        {Link, Text1} = lists:split(Len, Text),
+        Link1 = escape(noscript(Link)),
+        make_links1(Offset+Len, Rest, Text1, [["<a href=\"",Link1,"\" rel=\"nofollow\">",Link1,"</a>"] | Acc]);
+    make_links1(Offset, [{MatchOffs,_}|_] = Matches, Text, Acc) ->
+        {Text1,Text2} = lists:split(MatchOffs-Offset, Text),
+        make_links1(MatchOffs, Matches, Text2, [escape(Text1)|Acc]).
 
 
 %% @doc Strip all html elements from the text. Simple parsing is applied to find the elements. Does not escape the end result.
@@ -409,3 +439,30 @@ noscript(Url) ->
 	nows([$\\|T], Acc) -> nows(T, Acc);
 	nows([C|T], Acc) -> nows(T, [C|Acc]).
 
+
+%% @doc Translate any newlines to html br entities.
+nl2br(B) when is_binary(B) ->
+    nl2br_bin(B, <<>>);
+nl2br(L) ->
+    nl2br(L, []).
+
+    nl2br([], Acc) ->
+        lists:reverse(Acc);
+    nl2br("\r\n" ++ Rest, Acc) ->
+        nl2br(Rest, lists:reverse("<br />", Acc));
+    nl2br("\n" ++ Rest, Acc) ->
+        nl2br(Rest, lists:reverse("<br />", Acc));
+    nl2br([C | Rest], Acc) ->
+        nl2br(Rest, [C | Acc]).
+
+    nl2br_bin(<<>>, Acc) ->
+        Acc;
+    nl2br_bin(<<$\r, $\n, Post/binary>>, Acc) ->
+        nl2br_bin(Post, <<Acc/binary, "<br />">>);
+    nl2br_bin(<<$\r, Post/binary>>, Acc) ->
+        nl2br_bin(Post, <<Acc/binary, "<br />">>);
+    nl2br_bin(<<$\n, Post/binary>>, Acc) ->
+        nl2br_bin(Post, <<Acc/binary, "<br />">>);
+    nl2br_bin(<<C, Post/binary>>, Acc) ->
+        nl2br_bin(Post, <<Acc/binary, C>>).
+        

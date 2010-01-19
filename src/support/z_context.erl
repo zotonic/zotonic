@@ -74,6 +74,7 @@
     get_page/2,
     incr_page/3,
 
+    visitor_id/1,
     set_visitor/3,
     get_visitor/2,
 
@@ -529,6 +530,12 @@ spawn_link_page(Module, Func, Args, Context) ->
 ensure_visitor_id(Context) ->
     Context1 = ensure_visitor(Context),
     {z_visitor:ensure_visitor_id(Context1#context.visitor_pid), Context1}.
+
+%% @doc Return the visitor id, if any
+visitor_id(#context{visitor_pid=undefined}) ->
+    undefined;
+visitor_id(Context) ->
+    z_visitor:ensure_visitor_id(Context#context.visitor_pid).
 
 
 %% ------------------------------------------------------------------------------------

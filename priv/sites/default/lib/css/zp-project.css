@@ -203,6 +203,10 @@ fieldset {
 		color: #888;
 	}
 	
+	.comments-list li img {
+	    border: 1px solid #ccc;
+	}
+	
 .z_validation_message {
 	display: none;
 }

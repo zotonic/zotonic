@@ -1,0 +1,2 @@
+<image src="http://www.gravatar.com/avatar/{{ comment.gravatar_code }}?s={{ size|default:80|format_integer }}&amp;d=monsterid" 
+	class="avatar" alt="avatar" width="{{ size|default:80|format_integer }}" height="{{ size|default:80|format_integer }}" />
