@@ -88,6 +88,7 @@
 
 			<div class="zp-50">
 
+                {% if m.rsc['location'].id %}
 				<div class="padding last">
 					<div id="dashboard-pages">
 						<h3 class="above-list">
@@ -120,7 +121,9 @@
 						</ul>
 					</div>
 				</div>
+                {% endif %}
 
+                {% if m.rsc['event'].id %}
 				<div class="padding last">
 					<div id="dashboard-pages">
 						<h3 class="above-list">
@@ -153,6 +156,7 @@
 						</ul>
 					</div>
 				</div>
+                {% endif %}
 
 				<div class="padding last">
 					<div id="dashboard-media">
