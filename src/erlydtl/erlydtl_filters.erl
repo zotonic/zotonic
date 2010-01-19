@@ -499,6 +499,9 @@ slugify(Input, _Context) ->
     z_string:to_slug(Input).
 
 
+join(Input, Context) ->
+    join(Input, "", Context).
+
 join(Input, Separator, Context) when is_binary(Input) ->
     join(binary_to_list(Input), Separator, Context);
 join(Input, Separator, _Context) when is_list(Input) ->
