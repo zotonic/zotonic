@@ -31,7 +31,10 @@
     
     list_rsc/2,
     get/2,
-    insert/5
+    insert/5,
+    delete/2,
+    
+    search/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -77,6 +80,7 @@ get(CommentId, Context) ->
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
 %% @spec insert(Id:int(), Name::string(), Email::string(), Message::string(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
+%% @todo Access control, only allow comment when resource is visible for the current user
 insert(RscId, Name, Email, Message, Context) ->
     Email = z_string:trim(Email),
     Name1 = z_html:escape(z_string:trim(Name)),
@@ -104,9 +108,34 @@ insert(RscId, Name, Email, Message, Context) ->
     end.
 
 
+%% @doc Delete a comment.  Only possible if the user has edit permission on the page.
+delete(CommentId, Context) ->
+    case z_db:q1("select rsc_id from comment where id = $1", [CommentId], Context) of
+        undefined -> {error, enoent};
+        RscId ->
+            case z_acl:rsc_editable(RscId, Context) of
+                true ->
+                    z_db:q("delete from comment where id = $1", [CommentId], Context),
+                    z_depcache:flush({comment_rsc, RscId}, Context),
+                    ok;
+                false ->
+                    {error, eacces}
+            end
+    end.
+
+
 %% @doc Return the gravatar code of an email address. See also http://gravatar.com/
 %% @spec gravatar_code(Email) -> list()
 gravatar_code(Email) ->
     z_string:to_lower(z_utils:hex_encode(erlang:md5(z_string:to_lower(Email)))).
 
 
+
+%% @doc Return the search as used by z_search and the search model.
+search({recent_comments, []}, _OfffsetLimit, _Context) ->
+    #search_sql{
+        select="c.*",
+        from="comment c",
+        order="c.created desc",
+        assoc=true
+    }.

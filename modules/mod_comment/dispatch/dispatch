@@ -1,0 +1,3 @@
+[
+	{admin_comments, ["admin", "comments"], resource_admin_comments, []}
+].
