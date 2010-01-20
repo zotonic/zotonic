@@ -55,11 +55,9 @@ convert(InFile, OutFile, Filters, Context) ->
                     z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
                     z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
                     Args1   = lists:flatten(z_utils:combine(32, CmdArgs)),
-                    ?DEBUG(Mime),
                     Cmd     = ["convert ", z_utils:os_filename(InFile++infile_suffix(Mime)), " ", Args1, " ", z_utils:os_filename(OutFile)],
                     file:delete(OutFile),
                     ok = filelib:ensure_dir(OutFile),
-                    ?DEBUG(lists:flatten(Cmd)),
                     Result  = z_media_preview_server:exec(lists:flatten(Cmd), OutFile),
                     case filelib:is_regular(OutFile) of
                         true ->
