@@ -161,6 +161,7 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
 
             Props = [
                 {title, Title},
+                {is_published, true},
                 {category, video},
                 {group_id, GroupId},
                 {video_embed_service, EmbedService},
