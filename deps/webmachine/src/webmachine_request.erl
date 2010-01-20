@@ -17,62 +17,61 @@
 
 %% @doc Webmachine HTTP Request Abstraction.
 
--module(webmachine_request, [ReqData]).
+-module(webmachine_request).
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 
--export([get_peer/0]). % used in initialization
--export([call/1]). % internal switching interface, used by wrcall
+-export([get_peer/1]). % used in initialization
 
 % actual interface for resource functions
 -export([
-         get_reqdata/0,
-         set_reqdata/1,
-	 socket/0,
-	 method/0,
-	 version/0,
-         disp_path/0,
-	 path/0,
-	 raw_path/0,
-         get_req_header/1,
-	 req_headers/0,
-	 req_body/1,
-	 stream_req_body/1,
-	 headers/0,
-	 resp_headers/0,
-	 out_headers/0,
-	 get_out_header/1,
-	 has_out_header/1,
-	 peer/0,
-	 get_header_value/1,
-	 add_response_header/2,
-	 add_response_headers/1,
-	 remove_response_header/1,
-	 merge_response_headers/1,
-	 append_to_response_body/1,
-	 send_response/1,
-	 response_code/0,
-	 set_response_code/1,
-         set_resp_body/1,
-	 response_body/0,
-	 has_response_body/0,
-         do_redirect/0,
-         resp_redirect/0,
-	 set_metadata/2,
-	 get_metadata/1,
-	 get_path_info/0,
-	 get_path_info/1,
-	 load_dispatch_data/6,
-	 get_path_tokens/0,
-	 get_app_root/0,
-	 parse_cookie/0,
-	 get_cookie_value/1,
-	 parse_qs/0,
-	 get_qs_value/1,
-	 get_qs_value/2,
-         range/0,
-	 log_data/0
-	 ]).
+     socket/1,
+     method/1,
+     version/1,
+     disp_path/1,
+     path/1,
+     raw_path/1,
+     get_req_header/2,
+     req_headers/1,
+     req_body/2,
+     stream_req_body/2,
+     headers/1,
+     resp_headers/1,
+     out_headers/1,
+     get_out_header/2,
+     has_out_header/2,
+     peer/1,
+     get_header_value/2,
+     add_response_header/3,
+     add_response_headers/2,
+     remove_response_header/2,
+     merge_response_headers/2,
+     append_to_response_body/2,
+     send_response_code/2,
+     send_response/2,
+     response_code/1,
+     set_response_code/2,
+     set_resp_body/2,
+     response_body/1,
+     has_response_body/1,
+     has_resp_body/1,
+     do_redirect/1,
+     resp_redirect/1,
+     set_metadata/3,
+     get_metadata/2,
+     get_path_info/1,
+     get_path_info/2,
+     load_dispatch_data/7,
+     get_path_tokens/1,
+     get_app_root/1,
+     parse_cookie/1,
+     get_cookie_value/2,
+     parse_qs/1,
+     get_qs_value/2,
+     get_qs_value/3,
+     range/1,
+     log_data/1
+     ]).
 
 -include("webmachine_logger.hrl").
 -include_lib("include/wm_reqdata.hrl").
@@ -81,144 +80,36 @@
 -define(QUIP, "that tip is the fix").
 -define(IDLE_TIMEOUT, infinity).
 
-get_peer() ->
+get_peer(ReqData) ->
     case ReqData#wm_reqdata.peer of
-	undefined ->
+    	undefined ->
             Socket = ReqData#wm_reqdata.socket,
-	    Peer = case inet:peername(Socket) of 
-		{ok, {Addr={10, _, _, _}, _Port}} ->
-		    case get_header_value("x-forwarded-for") of
-			{undefined, _} ->
-			    inet_parse:ntoa(Addr);
-			{Hosts, _} ->
-			    string:strip(lists:last(string:tokens(Hosts, ",")))
-		    end;
-		{ok, {{127, 0, 0, 1}, _Port}} ->
-		    case get_header_value("x-forwarded-for") of
-			{undefined, _} ->
-			    "127.0.0.1";
-			{Hosts, _} ->
-			    string:strip(lists:last(string:tokens(Hosts, ",")))
-		    end;
-		{ok, {Addr, _Port}} ->
-		    inet_parse:ntoa(Addr)
+            Peer = case inet:peername(Socket) of 
+                {ok, {Addr={10, _, _, _}, _Port}} ->
+                    case get_header_value("x-forwarded-for", ReqData) of
+                        undefined -> inet_parse:ntoa(Addr);
+                        Hosts -> string:strip(lists:last(string:tokens(Hosts, ",")))
+                    end;
+                {ok, {{127, 0, 0, 1}, _Port}} ->
+                    case get_header_value("x-forwarded-for", ReqData) of
+                        undefined -> "127.0.0.1";
+                        Hosts -> string:strip(lists:last(string:tokens(Hosts, ",")))
+                    end;
+                {ok, {Addr, _Port}} ->
+                    inet_parse:ntoa(Addr)
             end,
             NewReqData = ReqData#wm_reqdata{peer=Peer},
-	    {Peer, NewReqData};
-	_ ->
-	    {ReqData#wm_reqdata.peer, ReqData}
+            {Peer, NewReqData};
+    	_ ->
+    	    {ReqData#wm_reqdata.peer, ReqData}
     end.
 
-call(socket) -> {ReqData#wm_reqdata.socket,ReqData};
-call(get_reqdata) -> {ReqData, ReqData};
-call({set_reqdata, RD}) -> {ok, RD};
-call(method) -> {wrq:method(ReqData), ReqData};
-call(version) -> {wrq:version(ReqData), ReqData};
-call(raw_path) -> {wrq:raw_path(ReqData), ReqData};
-call(req_headers) -> {wrq:req_headers(ReqData), ReqData};
-call({req_body, MaxRecvBody}) ->
-    case ReqData#wm_reqdata.bodyfetch of
-        stream ->
-            {stream_conflict, ReqData};
-        _ ->
-            NewReqData = ReqData#wm_reqdata{max_recv_body=MaxRecvBody},
-            case NewReqData#wm_reqdata.req_body of
-                not_fetched_yet ->
-                    NewBody = do_recv_body(NewReqData),
-                    NewRD = NewReqData#wm_reqdata{req_body=NewBody,bodyfetch=standard},
-                    {NewBody, NewRD};
-                X ->
-                    {X, ReqData#wm_reqdata{bodyfetch=standard}}
-            end
-    end;
-call({stream_req_body, MaxHunk}) ->
-    case ReqData#wm_reqdata.bodyfetch of
-        standard ->
-            {stream_conflict, ReqData};
-        _ ->
-            {recv_stream_body(ReqData, MaxHunk),
-             ReqData#wm_reqdata{bodyfetch=stream}}
-    end;
-call(resp_headers) -> {wrq:resp_headers(ReqData), ReqData};
-call(resp_redirect) -> {wrq:resp_redirect(ReqData), ReqData};
-call({get_resp_header, HdrName}) ->
-    Reply = mochiweb_headers:get_value(HdrName, wrq:resp_headers(ReqData)),
-    {Reply, ReqData};
-call(get_path_info) ->
-    PropList = dict:to_list(wrq:path_info(ReqData)),
-    {PropList, ReqData};
-call({get_path_info, Key}) ->
-    {wrq:path_info(Key, ReqData), ReqData};
-call(peer) -> get_peer();
-call(range) -> get_range();
-call(response_code) -> {wrq:response_code(ReqData), ReqData};
-call(app_root) -> {wrq:app_root(ReqData), ReqData};
-call(disp_path) -> {wrq:disp_path(ReqData), ReqData};
-call(path) -> {wrq:path(ReqData), ReqData};
-call({get_req_header, K}) ->
-    {wrq:get_req_header(K, ReqData), ReqData};
-call({set_response_code, Code}) ->
-    {ok, wrq:set_response_code(Code, ReqData)};
-call({set_resp_header, K, V}) ->
-    {ok, wrq:set_resp_header(K, V, ReqData)};
-call({set_resp_headers, Hdrs}) ->
-    {ok, wrq:set_resp_headers(Hdrs, ReqData)};
-call({remove_resp_header, K}) ->
-    {ok, wrq:remove_resp_header(K, ReqData)};
-call({merge_resp_headers, Hdrs}) ->
-    {ok, wrq:merge_resp_headers(Hdrs, ReqData)};
-call({append_to_response_body, Data}) ->
-    {ok, wrq:append_to_response_body(Data, ReqData)};
-call({set_disp_path, P}) ->
-    {ok, wrq:set_disp_path(P, ReqData)};
-call(do_redirect) ->
-    {ok, wrq:do_redirect(true, ReqData)};
-call({send_response, Code}) ->
-    {Reply, NewState} = 
-	case Code of
-	    200 -> send_ok_response();
-	    _ -> send_response(Code)
-	end,
-    LogData = NewState#wm_reqdata.log_data,
-    NewLogData = LogData#wm_log_data{finish_time=now()},
-    {Reply, NewState#wm_reqdata{log_data=NewLogData}};
-call(resp_body) -> {wrq:resp_body(ReqData), ReqData};
-call({set_resp_body, Body}) ->
-    {ok, wrq:set_resp_body(Body, ReqData)};
-call(has_resp_body) ->
-    Reply = case wrq:resp_body(ReqData) of
-                undefined -> false;
-                <<>> -> false;
-                [] -> false;
-                _ -> true
-            end,
-    {Reply, ReqData};
-call({get_metadata, Key}) ->
-    Reply = case dict:find(Key, ReqData#wm_reqdata.metadata) of
-		{ok, Value} -> Value;
-		error -> undefined
-	    end,
-    {Reply, ReqData};
-call({set_metadata, Key, Value}) ->
-    NewDict = dict:store(Key, Value, ReqData#wm_reqdata.metadata),
-    {ok, ReqData#wm_reqdata{metadata=NewDict}};
-call(path_tokens) -> {wrq:path_tokens(ReqData), ReqData};
-call(req_cookie) -> {wrq:req_cookie(ReqData), ReqData};
-call(req_qs) -> {wrq:req_qs(ReqData), ReqData};
-call({load_dispatch_data, PathProps, HostTokens, Port,
-      PathTokens, AppRoot, DispPath}) ->
-    PathInfo = dict:from_list(PathProps),
-    NewState = wrq:load_dispatch_data(
-                        PathInfo,HostTokens,Port,PathTokens,AppRoot,
-                        DispPath,ReqData),
-    {ok, NewState};
-call(log_data) -> {ReqData#wm_reqdata.log_data, ReqData}.
 
-get_header_value(K) ->
-    {wrq:get_req_header(K, ReqData), ReqData}.
+get_header_value(K, ReqData) ->
+    wrq:get_req_header(K, ReqData).
 
-get_outheader_value(K) ->
-    {mochiweb_headers:get_value(K, wrq:resp_headers(ReqData)), ReqData}.
+get_outheader_value(K, ReqData) ->
+    mochiweb_headers:get_value(K, wrq:resp_headers(ReqData)).
 
 send(Socket, Data) ->
     case gen_tcp:send(Socket, iolist_to_binary(Data)) of
@@ -262,72 +153,82 @@ send_chunk(Socket, Data) ->
     send(Socket, <<"\r\n">>),
     Size.
 
-send_ok_response() ->
-    {Range, RangeRD} = get_range(),
+
+send_response_code(Code, ReqData) ->
+	{Reply, RD1} = case Code of
+        200 -> send_ok_response(ReqData);
+        _ -> send_response(Code, ReqData)
+    end,
+    LogData = RD1#wm_reqdata.log_data,
+    NewLogData = LogData#wm_log_data{finish_time=now()},
+    {Reply, RD1#wm_reqdata{log_data=NewLogData}}.
+
+send_ok_response(ReqData) ->
+    {Range, RangeRD} = get_range(ReqData),
     case Range of
 	X when X =:= undefined; X =:= fail ->
-	    send_response(200);
+	    send_response(200, RangeRD);
 	Ranges ->
 	    {PartList, Size} = range_parts(RangeRD, Ranges),
 	    case PartList of
 		[] -> %% no valid ranges
 		    %% could be 416, for now we'll just return 200
-		    send_response(200);
+		    send_response(200, RangeRD);
 		PartList ->
-		    {RangeHeaders, RangeBody} = parts_to_body(PartList, Size),
-		    RespHdrsRD = wrq:set_resp_headers([{"Accept-Ranges", "bytes"} | RangeHeaders], RangeRD),
-                    RespBodyRD = wrq:set_resp_body(RangeBody, RespHdrsRD),
+		    {RangeHeaders, RangeBody} = parts_to_body(PartList, Size, RangeRD),
+            RespHdrsRD = wrq:set_resp_headers([{"Accept-Ranges", "bytes"} | RangeHeaders], RangeRD),
+            RespBodyRD = wrq:set_resp_body(RangeBody, RespHdrsRD),
 		    send_response(206, RespBodyRD)
 	    end
     end.
 
-send_response(Code) -> send_response(Code,ReqData).
-send_response(Code, PassedState) ->
-    Body0 = wrq:resp_body(PassedState),
+send_response(Code, ReqData) ->
+    Body0 = wrq:resp_body(ReqData),
     {Body,Length} = case Body0 of
         {stream, StreamBody} -> {{stream, StreamBody}, chunked};
         {writer, WriteBody} -> {{writer, WriteBody}, chunked};
         _ -> {Body0, iolist_size([Body0])}
     end,
-    send(PassedState#wm_reqdata.socket,
-	 [make_version(wrq:version(PassedState)),
-          make_code(Code), <<"\r\n">> | 
-         make_headers(Code, Length, PassedState)]),
-    FinalLength = case wrq:method(PassedState) of 
-	'HEAD' -> Length;
+    send(ReqData#wm_reqdata.socket,
+        [make_version(wrq:version(ReqData)),
+         make_code(Code), <<"\r\n">> | 
+         make_headers(Code, Length, ReqData)]),
+    FinalLength = case wrq:method(ReqData) of 
+	'HEAD' ->
+	    Length;
 	_ -> 
-            case Body of
-                {stream, Body2} ->
-                    send_stream_body(PassedState#wm_reqdata.socket, Body2);
-                {writer, Body2} ->
-                    send_writer_body(PassedState#wm_reqdata.socket, Body2);
-                _ ->
-                    send(PassedState#wm_reqdata.socket, Body),
-                    Length
-            end
+        case Body of
+            {stream, Body2} ->
+                send_stream_body(ReqData#wm_reqdata.socket, Body2);
+            {writer, Body2} ->
+                send_writer_body(ReqData#wm_reqdata.socket, Body2);
+            _ ->
+                send(ReqData#wm_reqdata.socket, Body),
+                Length
+        end
     end,
-    InitLogData = PassedState#wm_reqdata.log_data,
+    InitLogData = ReqData#wm_reqdata.log_data,
     FinalLogData = InitLogData#wm_log_data{response_code=Code,response_length=FinalLength},
-    PassedState1 = wrq:set_response_code(Code, PassedState),
-    {ok, PassedState1#wm_reqdata{log_data=FinalLogData}}.
+    ReqData1 = wrq:set_response_code(Code, ReqData),
+    {ok, ReqData1#wm_reqdata{log_data=FinalLogData}}.
 
 %% @doc  Infer body length from transfer-encoding and content-length headers.
-body_length() ->
-    case get_header_value("transfer-encoding") of
-        {undefined, _} ->
-            case get_header_value("content-length") of
-                {undefined, _} -> undefined;
-                {Length, _} -> list_to_integer(Length)
+body_length(ReqData) ->
+    case get_header_value("transfer-encoding", ReqData) of
+        undefined ->
+            case get_header_value("content-length", ReqData) of
+                undefined -> undefined;
+                Length -> list_to_integer(Length)
             end;
-        {"chunked", _} -> chunked;
+        "chunked" -> chunked;
         Unknown -> {unknown_transfer_encoding, Unknown}
     end.
 
 %% @doc Receive the body of the HTTP request (defined by Content-Length).
 %%      Will only receive up to the default max-body length
-do_recv_body(PassedState) ->
-    MRB = PassedState#wm_reqdata.max_recv_body,
-    read_whole_stream(recv_stream_body(PassedState, MRB), [], MRB, 0).
+do_recv_body(ReqData) ->
+    MRB = ReqData#wm_reqdata.max_recv_body,
+    read_whole_stream(recv_stream_body(ReqData, MRB), [], MRB, 0).
 
 read_whole_stream({Hunk,_}, _, MaxRecvBody, SizeAcc)
   when SizeAcc + byte_size(Hunk) > MaxRecvBody -> 
@@ -344,21 +245,19 @@ read_whole_stream({Hunk,Next}, Acc0, MaxRecvBody, SizeAcc) ->
             end
     end.
 
-recv_stream_body(PassedState, MaxHunkSize) ->
-    case get_header_value("expect") of
-	{"100-continue", _} ->
-	    send(PassedState#wm_reqdata.socket, 
-		 [make_version(wrq:version(PassedState)),
-                  make_code(100), <<"\r\n">>]);
+recv_stream_body(ReqData, MaxHunkSize) ->
+    case get_header_value("expect", ReqData) of
+	"100-continue" ->
+	    send(ReqData#wm_reqdata.socket, [make_version(wrq:version(ReqData)), make_code(100), <<"\r\n">>]);
 	_Else ->
 	    ok
     end,
-    case body_length() of
+    case body_length(ReqData) of
         {unknown_transfer_encoding, X} -> exit({unknown_transfer_encoding, X});
         undefined -> {<<>>, done};
         0 -> {<<>>, done};
-        chunked -> recv_chunked_body(PassedState#wm_reqdata.socket, MaxHunkSize);
-        Length -> recv_unchunked_body(PassedState#wm_reqdata.socket, MaxHunkSize, Length)
+        chunked -> recv_chunked_body(ReqData#wm_reqdata.socket, MaxHunkSize);
+        Length -> recv_unchunked_body(ReqData#wm_reqdata.socket, MaxHunkSize, Length)
     end.
 
 recv_unchunked_body(Socket, MaxHunk, DataLeft) ->
@@ -409,11 +308,11 @@ read_chunk_length(Socket) ->
             exit(normal)
     end.
 
-get_range() ->
-    case get_header_value("range") of
-	{undefined, _} ->
+get_range(ReqData) ->
+    case get_header_value("range", ReqData) of
+	undefined ->
 	    {undefined, ReqData#wm_reqdata{range=undefined}};
-	{RawRange, _} ->
+	RawRange ->
 	    Range = parse_range_request(RawRange),
 	    {Range, ReqData#wm_reqdata{range=Range}}
     end.
@@ -491,14 +390,12 @@ parse_range_request(RawRange) when is_list(RawRange) ->
             fail
     end.
 
-parts_to_body([{Start, End, Body}], Size) ->
+parts_to_body([{Start, End, Body}], Size, ReqData) ->
     %% return body for a range reponse with a single body
     ContentType = 
-	case get_outheader_value("content-type") of
-	    {undefined, _} ->
-		"text/html";
-	    {CT, _} ->
-		CT
+	case get_outheader_value("content-type", ReqData) of
+	    undefined -> "text/html";
+	    CT -> CT
 	end,
     HeaderList = [{"Content-Type", ContentType},
                   {"Content-Range",
@@ -506,16 +403,14 @@ parts_to_body([{Start, End, Body}], Size) ->
                     make_io(Start), "-", make_io(End),
                     "/", make_io(Size)]}],
     {HeaderList, Body};
-parts_to_body(BodyList, Size) when is_list(BodyList) ->
+parts_to_body(BodyList, Size, ReqData) when is_list(BodyList) ->
     %% return
     %% header Content-Type: multipart/byteranges; boundary=441934886133bdee4
     %% and multipart body
     ContentType = 
-	case get_outheader_value("content-type") of
-	    {undefined, _} ->
-		"text/html";
-	    {CT, _} ->
-		CT
+	case get_outheader_value("content-type", ReqData) of
+	    undefined -> "text/html";
+	    CT -> CT
 	end,
     Boundary = mochihex:to_hex(crypto:rand_bytes(8)),
     HeaderList = [{"Content-Type",
@@ -586,101 +481,136 @@ make_headers(Code, Length, RD) ->
 	end,
     lists:foldl(F, [<<"\r\n">>], mochiweb_headers:to_list(Hdrs)).
 
-get_reqdata() -> call(get_reqdata).
+socket(ReqData) -> ReqData#wm_reqdata.socket.
 
-set_reqdata(RD) -> call({set_reqdata, RD}).
+method(ReqData) -> wrq:method(ReqData).
 
-socket() -> call(socket).
+version(ReqData) -> wrq:version(ReqData).
 
-method() -> call(method).
+disp_path(ReqData) -> wrq:disp_path(ReqData).
 
-version() -> call(version).
+path(ReqData) -> wrq:path(ReqData).
 
-disp_path() -> call(disp_path).
+raw_path(ReqData) -> wrq:raw_path(ReqData).
 
-path() -> call(path).
+req_headers(ReqData) -> wrq:req_headers(ReqData).
+headers(ReqData) -> req_headers(ReqData).
 
-raw_path() -> call(raw_path).
+req_body(MaxRecvBody, ReqData) ->
+    case ReqData#wm_reqdata.bodyfetch of
+        stream ->
+            {stream_conflict, ReqData};
+        _ ->
+            NewReqData = ReqData#wm_reqdata{max_recv_body=MaxRecvBody},
+            case NewReqData#wm_reqdata.req_body of
+                not_fetched_yet ->
+                    NewBody = do_recv_body(NewReqData),
+                    NewRD = NewReqData#wm_reqdata{req_body=NewBody,bodyfetch=standard},
+                    {NewBody, NewRD};
+                X ->
+                    {X, ReqData#wm_reqdata{bodyfetch=standard}}
+            end
+    end.
 
-req_headers() -> call(req_headers).
-headers() -> req_headers().
+stream_req_body(MaxHunk, ReqData) -> 
+    case ReqData#wm_reqdata.bodyfetch of
+        standard ->
+            {stream_conflict, ReqData};
+        _ ->
+            {recv_stream_body(ReqData, MaxHunk), ReqData#wm_reqdata{bodyfetch=stream}}
+    end.
 
-req_body(MaxRevBody) -> call({req_body,MaxRevBody}).
-stream_req_body(MaxHunk) -> call({stream_req_body, MaxHunk}).
+resp_headers(ReqData) -> wrq:resp_headers(ReqData).
+out_headers(ReqData) -> resp_headers(ReqData).
 
-resp_headers() -> call(resp_headers).
-out_headers() -> resp_headers().
+get_resp_header(HdrName, ReqData) -> mochiweb_headers:get_value(HdrName, wrq:resp_headers(ReqData)).
+get_out_header(HeaderName, ReqData) -> get_resp_header(HeaderName, ReqData).
 
-get_resp_header(HeaderName) -> call({get_resp_header, HeaderName}).
-get_out_header(HeaderName) -> get_resp_header(HeaderName).
-
-has_resp_header(HeaderName) ->
-    case get_out_header(HeaderName) of
+has_resp_header(HeaderName, ReqData) ->
+    case get_out_header(HeaderName, ReqData) of
         undefined -> false;
         _ -> true
     end.
-has_out_header(HeaderName) -> has_resp_header(HeaderName).
+has_out_header(HeaderName, ReqData) -> has_resp_header(HeaderName, ReqData).
 
-has_resp_body() -> call(has_resp_body).
-has_response_body() -> has_resp_body().
+has_resp_body(ReqData) ->
+    case wrq:resp_body(ReqData) of
+        undefined -> false;
+        <<>> -> false;
+        [] -> false;
+        _ -> true
+    end.
+has_response_body(ReqData) -> 
+    has_resp_body(ReqData).
 
-response_code() -> call(response_code).
-set_response_code(Code) -> call({set_response_code, Code}).
+response_code(ReqData) -> wrq:response_code(ReqData).
+set_response_code(Code, ReqData) -> wrq:set_response_code(Code, ReqData).
 
-peer() -> call(peer).
+peer(ReqData) -> get_peer(ReqData).
 
-range() -> call(range).
+range(ReqData) -> get_range(ReqData).
 
-req_cookie() -> call(req_cookie).
-parse_cookie() -> req_cookie().
-get_cookie_value(Key) -> proplists:get_value(Key, req_cookie()).
+req_cookie(ReqData) -> wrq:req_cookie(ReqData).
+parse_cookie(ReqData) -> req_cookie(ReqData).
+get_cookie_value(Key, ReqData) -> proplists:get_value(Key, req_cookie(ReqData)).
 
-req_qs() -> call(req_qs).
-parse_qs() -> req_qs().
-get_qs_value(Key) -> proplists:get_value(Key, req_qs()).
-get_qs_value(Key, Default) -> proplists:get_value(Key, req_qs(), Default).
+req_qs(ReqData) -> wrq:req_qs(ReqData).
+parse_qs(ReqData) -> req_qs(ReqData).
+get_qs_value(Key, ReqData) -> proplists:get_value(Key, req_qs(ReqData)).
+get_qs_value(Key, Default, ReqData) -> proplists:get_value(Key, req_qs(ReqData), Default).
 
-set_resp_body(Body) -> call({set_resp_body, Body}).
-resp_body() -> call(resp_body).
-response_body() -> resp_body().
+set_resp_body(Body, ReqData) -> wrq:set_resp_body(Body, ReqData).
 
-get_req_header(K) -> call({get_req_header, K}).
+resp_body(ReqData) -> wrq:resp_body(ReqData).
+response_body(ReqData) -> resp_body(ReqData).
 
-set_resp_header(K, V) -> call({set_resp_header, K, V}).
-add_response_header(K, V) -> set_resp_header(K, V).
+get_req_header(K, ReqData) -> wrq:get_req_header(K, ReqData).
 
-set_resp_headers(Hdrs) -> call({set_resp_headers, Hdrs}).
-add_response_headers(Hdrs) -> set_resp_headers(Hdrs).
+set_resp_header(K, V, ReqData) -> wrq:set_resp_header(K, V, ReqData).
+add_response_header(K, V, ReqData) -> set_resp_header(K, V, ReqData).
 
-remove_resp_header(K) -> call({remove_resp_header, K}).
-remove_response_header(K) -> remove_resp_header(K).
+set_resp_headers(Hdrs, ReqData) ->  wrq:set_resp_headers(Hdrs, ReqData).
+add_response_headers(Hdrs, ReqData) -> set_resp_headers(Hdrs, ReqData).
 
-merge_resp_headers(Hdrs) -> call({merge_resp_headers, Hdrs}).
-merge_response_headers(Hdrs) -> merge_resp_headers(Hdrs).
+remove_resp_header(K, ReqData) -> wrq:remove_resp_header(K, ReqData).
+remove_response_header(K, ReqData) -> remove_resp_header(K, ReqData).
 
-append_to_response_body(Data) -> call({append_to_response_body, Data}).
+merge_resp_headers(Hdrs, ReqData) -> wrq:merge_resp_headers(Hdrs, ReqData).
+merge_response_headers(Hdrs, ReqData) -> merge_resp_headers(Hdrs, ReqData).
 
-do_redirect() -> call({do_redirect}).
+append_to_response_body(Data, ReqData) -> wrq:append_to_response_body(Data, ReqData).
 
-resp_redirect() -> call({resp_redirect}).
+do_redirect(ReqData) -> wrq:do_redirect(true, ReqData).
 
-get_metadata(Key) -> call({get_metadata, Key}).
+resp_redirect(ReqData) -> wrq:resp_redirect(ReqData).
 
-set_metadata(Key, Value) -> call({set_metadata, Key, Value}).
+get_metadata(Key, ReqData) ->
+    case dict:find(Key, ReqData#wm_reqdata.metadata) of
+		{ok, Value} -> Value;
+		error -> undefined
+	end.
 
-get_path_info() -> call(get_path_info).
+set_metadata(Key, Value, ReqData) ->
+    NewDict = dict:store(Key, Value, ReqData#wm_reqdata.metadata),
+    {ok, ReqData#wm_reqdata{metadata=NewDict}}.
 
-get_path_info(Key) -> call({get_path_info, Key}).
+get_path_info(ReqData) -> dict:to_list(wrq:path_info(ReqData)).
 
-path_tokens() -> call(path_tokens).
-get_path_tokens() -> path_tokens().
+get_path_info(Key, ReqData) -> wrq:path_info(Key, ReqData).
 
-app_root() -> call(app_root).
-get_app_root() -> app_root().
+path_tokens(ReqData) -> wrq:path_tokens(ReqData).
+get_path_tokens(ReqData) -> path_tokens(ReqData).
 
-load_dispatch_data(Bindings, HostTokens, Port, PathTokens,
-                   AppRoot, DispPath) ->
-    call({load_dispatch_data, Bindings, HostTokens, Port,
-          PathTokens, AppRoot, DispPath}).
+app_root(ReqData) -> wrq:app_root(ReqData).
+get_app_root(ReqData) -> app_root(ReqData).
 
-log_data() -> call(log_data).
+load_dispatch_data(Bindings, HostTokens, Port, PathTokens, AppRoot, DispPath, ReqData) ->
+    PathInfo = dict:from_list(Bindings),
+    RD1 = wrq:load_dispatch_data(
+                        PathInfo,HostTokens,Port,PathTokens,AppRoot,
+                        DispPath,ReqData),
+    {ok, RD1}.
+
+
+log_data(ReqData) ->
+    ReqData#wm_reqdata.log_data.

@@ -115,7 +115,7 @@ wrap(Mod, Args) ->
     end.
 
 do(Fun, ReqData) when is_atom(Fun) ->
-    {Reply, ReqData1, NewModState} = handle_wm_call(Fun, RD0),
+    {Reply, ReqData1, NewModState} = handle_wm_call(Fun, ReqData),
     {Reply, webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace), ReqData1}.
 
 handle_wm_call(Fun, ReqData) ->

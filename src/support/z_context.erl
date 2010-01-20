@@ -702,10 +702,10 @@ parse_form_urlencoded(Context) ->
     case wrq:get_req_header("content-type", ReqData) of
         "application/x-www-form-urlencoded" ++ _ ->
             case wrq:req_body(ReqData) of
-                undefined ->
-                     {[], Context};
-                Binary ->
-                     {mochiweb_util:parse_qs(Binary), Context}
+                {undefined, ReqData1} ->
+                     {[], set_reqdata(ReqData1, Context)};
+                {Binary, ReqData1} ->
+                     {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context)}
             end;
         "multipart/form-data" ++ _ ->
             {Form, ContextRcv} = z_parse_multipart:recv_parse(Context),

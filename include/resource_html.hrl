@@ -43,5 +43,5 @@ charsets_provided(ReqData, Context) ->
 to_html(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    {Html, HtmlContext} = html(Context2),
-    ?WM_REPLY(Html, HtmlContext).
+    {Result, ResultContext} = html(Context2),
+    ?WM_REPLY(Result, ResultContext).

@@ -25,41 +25,40 @@
 
 -export([render_error/3]).
 
-render_error(Code, Req, Reason) ->
-    case Req:has_response_body() of
-        {true,_} -> Req:response_body();
-        {false,_} -> render_error_body(Code, Req, Reason)
+render_error(Code, ReqData, Reason) ->
+    case webmachine_request:has_response_body(ReqData) of
+        {true,_} -> {webmachine_request:response_body(ReqData), ReqData};
+        {false,_} -> render_error_body(Code, ReqData, Reason)
     end.
 
-render_error_body(404, Req, _Reason) ->
-    {ok, ReqState} = Req:add_response_header("Content-Type", "text/html"),
-    {<<"<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY><H1>Not Found</H1>The requested document was not found on this server.<P><HR><ADDRESS>mochiweb+webmachine web server</ADDRESS></BODY></HTML>">>, ReqState};
+render_error_body(404, ReqData, _Reason) ->
+    ReqData1 = wrq:set_resp_header("Content-Type", "text/html", ReqData),
+    {<<"<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY><H1>Not Found</H1>The requested document was not found on this server.<P><HR><ADDRESS>mochiweb+webmachine web server</ADDRESS></BODY></HTML>">>, ReqData1};
 
-render_error_body(500, Req, Reason) ->
-    {ok, ReqState} = Req:add_response_header("Content-Type", "text/html"),
-    {Path,_} = Req:path(),
+render_error_body(500, ReqData, Reason) ->
+    ReqData1 = wrq:set_resp_header("Content-Type", "text/html", ReqData),
+    Path = wrq:path(ReqData),
     error_logger:error_msg("webmachine error: path=~p~n~p~n", [Path, Reason]),
     STString = io_lib:format("~p", [Reason]),
     ErrorStart = "<html><head><title>500 Internal Server Error</title></head><body><h1>Internal Server Error</h1>The server encountered an error while processing this request:<br><pre>",
     ErrorEnd = "</pre><P><HR><ADDRESS>mochiweb+webmachine web server</ADDRESS></body></html>",
     ErrorIOList = [ErrorStart,STString,ErrorEnd],
-    {erlang:iolist_to_binary(ErrorIOList), ReqState};
+    {erlang:iolist_to_binary(ErrorIOList), ReqData1};
 
-render_error_body(501, Req, _Reason) ->
-    {ok, ReqState} = Req:add_response_header("Content-Type", "text/html"),
-    {Method,_} = Req:method(),
-    error_logger:error_msg("Webmachine does not support method ~p~n",
-                           [Method]),
+render_error_body(501, ReqData, _Reason) ->
+    ReqData1 = wrq:set_resp_header("Content-Type", "text/html", ReqData),
+    Method = wrq:method(ReqData),
+    error_logger:error_msg("Webmachine does not support method ~p~n", [Method]),
     ErrorStr = io_lib:format("<html><head><title>501 Not Implemented</title>"
                              "</head><body><h1>Internal Server Error</h1>"
                              "The server does not support the ~p method.<br>"
                              "<P><HR><ADDRESS>mochiweb+webmachine web server"
                              "</ADDRESS></body></html>",
                              [Method]),
-    {erlang:iolist_to_binary(ErrorStr), ReqState};
+    {erlang:iolist_to_binary(ErrorStr), ReqData1};
 
-render_error_body(503, Req, _Reason) ->
-    {ok, ReqState} = Req:add_response_header("Content-Type", "text/html"),
+render_error_body(503, ReqData, _Reason) ->
+    ReqData1 = wrq:set_resp_header("Content-Type", "text/html", ReqData),
     error_logger:error_msg("Webmachine cannot fulfill"
                            " the request at this time"),
     ErrorStr = "<html><head><title>503 Service Unavailable</title>"
@@ -69,5 +68,5 @@ render_error_body(503, Req, _Reason) ->
                "or maintenance of the server.<br>"
                "<P><HR><ADDRESS>mochiweb+webmachine web server"
                "</ADDRESS></body></html>",
-    {list_to_binary(ErrorStr), ReqState}.
+    {list_to_binary(ErrorStr), ReqData1}.
 
