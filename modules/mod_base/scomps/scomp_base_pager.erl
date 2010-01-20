@@ -38,7 +38,7 @@ render(Params, _Vars, Context, _State) ->
     Result       = proplists:get_value(result, Params),
     Dispatch     = proplists:get_value(dispatch, Params, search),
     HideSinglePage  = proplists:get_value(hide_single_page, Params),
-    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(onepage_hide, Params))),
+    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
     
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
         true -> CleanedArgs;
