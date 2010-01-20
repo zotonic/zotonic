@@ -38,8 +38,7 @@ html(Context) ->
 
 html(Context, Vars) ->
 	ContextLogon = z_auth:output_logon(Context, Vars),
-    ReqData = z_context:get_reqdata(ContextLogon),
-    {{halt, 401}, ReqData, Context}.
+    {{halt, 401}, ContextLogon}.
 
 
 process_post(ReqData, Context) ->

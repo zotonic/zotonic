@@ -18,7 +18,7 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 -export([start/0, stop/0]).
--export([new_request/2]).
+-export([init_reqdata/2]).
 
 -include("webmachine_logger.hrl").
 -include_lib("include/wm_reqdata.hrl").
@@ -35,16 +35,15 @@ start() ->
 stop() ->
     application:stop(webmachine).
 
-new_request(mochiweb, Request) ->
+init_reqdata(mochiweb, Request) ->
     Socket = Request:get(socket),
     Method = Request:get(method),
     RawPath = Request:get(raw_path), 
     Version = Request:get(version),
     Headers = Request:get(headers),
     InitState0 = wrq:create(Method,Version,RawPath,Headers),
-    InitState = InitState0#wm_reqdata{socket=Socket}, 
-    InitReq = {webmachine_request,InitState},
-    {Peer, ReqData} = InitReq:get_peer(),
+    InitReq = InitState0#wm_reqdata{socket=Socket}, 
+    {Peer, ReqData} = webmachine_request:get_peer(InitReq),
     PeerState = wrq:set_peer(Peer, ReqData),
     LogData = #wm_log_data{start_time=now(),
 			   method=Method,
@@ -54,7 +53,7 @@ new_request(mochiweb, Request) ->
 			   version=Version,
 			   response_code=404,
 			   response_length=0},
-    webmachine_request:new(PeerState#wm_reqdata{log_data=LogData}).
+    PeerState#wm_reqdata{log_data=LogData}.
 
 
 

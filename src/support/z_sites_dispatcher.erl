@@ -49,12 +49,12 @@ start_link(Args) when is_list(Args) ->
 
 
 %% @doc Match the host and path to a dispatch rule.
-%% @spec dispatch(Host::string(), Path::string(), Req::webmachine_request) -> {dispatch(), Req2::webmachine_request}
+%% @spec dispatch(Host::string(), Path::string(), ReqData::wm_reqdata) -> {dispatch(), NewReqData}
 %% @type dispatch() -> {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens}
 %%                   | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                   | handled
-dispatch(Host, Path, Req) ->
-    gen_server:call(?MODULE, {dispatch, Host, Path, Req}).
+dispatch(Host, Path, ReqData) ->
+    gen_server:call(?MODULE, {dispatch, Host, Path, ReqData}).
 
 
 %% @doc Store a new set of dispatch rules, called when a site refreshes its modules or when a site is restarted.
@@ -83,35 +83,32 @@ init(_Args) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
-handle_call({dispatch, HostAsString, PathAsString, Req}, _From, State) ->
-    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, Req) of
+handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
+    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, ReqData) of
         {ok, Host, DispatchList} ->
-            {ok, Req1a} = Req:set_metadata(zotonic_host, Host),
-            Req1b = {webmachine_request, Req1a},
+            {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
             case webmachine_dispatcher:dispatch(PathAsString, DispatchList) of
                 {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
-                    {{no_dispatch_match, undefined, undefined}, Req1b};
+                    {{no_dispatch_match, undefined, undefined}, RDHost};
                 {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath} ->
-                    {{Mod, ModOpts, HostTokens, Port, PathTokens, [{zotonic_host, Host}|Bindings], AppRoot, StringPath}, Req1b}
+                    {{Mod, ModOpts, HostTokens, Port, PathTokens, [{zotonic_host, Host}|Bindings], AppRoot, StringPath}, RDHost}
             end;
         {redirect, Hostname} ->
             %% Redirect to another host name.
-            {RawPath, _} = Req:raw_path(),
+            RawPath = wrq:raw_path(ReqData),
             Uri = "http://" ++ Hostname ++ RawPath,
-            {ok, Req1a} = Req:add_response_header("Location", Uri),
-            Req1b = {webmachine_request, Req1a},
-            {ok, Req2a} = Req1b:send_response(301),
-            Req2b = {webmachine_request, Req2a},
-            {LogData, _} = Req2b:log_data(),
+            {ok, RD1} = wrq:add_response_header("Location", Uri, ReqData),
+            {ok, RD2} = webmachine_request:send_response_code(301, RD1),
+            LogData = webmachine_request:log_data(RD2),
             LogModule = 
                 case application:get_env(webmachine,webmachine_logger_module) of
                     {ok, Val} -> Val;
                     _ -> webmachine_logger
                 end,
             spawn(LogModule, log_access, [LogData]),
-            {handled, Req2b};
+            {handled, RD2};
         no_host_match ->
-            {{no_dispatch_match, undefined, undefined}, Req}
+            {{no_dispatch_match, undefined, undefined}, ReqData}
     end,
     {reply, Reply, State};
 

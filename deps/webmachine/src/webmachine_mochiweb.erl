@@ -49,30 +49,26 @@ stop() ->
     mochiweb_http:stop(?MODULE).
 
 loop(MochiReq) ->
-    Req = webmachine:new_request(mochiweb, MochiReq),
-    Host = case host_headers(Req) of
+    ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
+    Host = case host_headers(ReqData) of
                [H|_] -> H;
                [] -> []
            end,
-    {Path, _} = Req:path(),
+    Path = wrq:path(ReqData),
     {Dispatch, ReqDispatch} = case application:get_env(webmachine, dispatcher) of
         {ok, Dispatcher} ->
-            Dispatcher:dispatch(Host, Path, Req);
+            Dispatcher:dispatch(Host, Path, ReqData);
         undefined ->
             {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
-            {webmachine_dispatcher:dispatch(Host, Path, DispatchList), Req}
+            {webmachine_dispatcher:dispatch(Host, Path, DispatchList), ReqData}
     end,
     case Dispatch of
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
-            {ErrorHTML,ReqState1} = 
-                ErrorHandler:render_error(404, ReqDispatch, {none, none, []}),
-            Req1 = {webmachine_request,ReqState1},
-            {ok,ReqState2} = Req1:append_to_response_body(ErrorHTML),
-            Req2 = {webmachine_request,ReqState2},
-            {ok,ReqState3} = Req2:send_response(404),
-            Req3 = {webmachine_request,ReqState3},
-            {LogData,_ReqState4} = Req3:log_data(),
+            {ErrorHTML,ReqState1} = ErrorHandler:render_error(404, ReqDispatch, {none, none, []}),
+            {ok,ReqState2} = webmachine_request:append_to_response_body(ErrorHTML, ReqState1),
+            {ok,ReqState3} = webmachine_request:send_response(404, ReqState2),
+            LogData = webmachine_request:log_data(ReqState3),
             case application:get_env(webmachine,webmachine_logger_module) of
                 {ok, LogModule} ->
                     spawn(LogModule, log_access, [LogData]);
@@ -81,18 +77,15 @@ loop(MochiReq) ->
         {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath} ->
             BootstrapResource = webmachine_resource:new(x,x,x,x),
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
-            {ok,RS1} = ReqDispatch:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath),
-            XReq1 = {webmachine_request,RS1},
-            {ok,RS2} = XReq1:set_metadata('resource_module', Mod),
+            {ok,RD1} = webmachine_request:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath,ReqDispatch),
+            {ok,RD2} = webmachine_request:set_metadata('resource_module', Mod, RD1),
             try 
-                webmachine_decision_core:handle_request(Resource, RS2)
+                webmachine_decision_core:handle_request(Resource, RD2)
             catch
                 error:_ -> 
                     ?DBG({error, erlang:get_stacktrace()}),
-                    FailReq = {webmachine_request,RS2},
-                    {ok,RS3} = FailReq:send_response(500),
-                    PostFailReq = {webmachine_request,RS3},
-                    {LogData,_RS4} = PostFailReq:log_data(),
+                    {ok,RD3} = webmachine_request:send_response(500, RD2),
+                    LogData = webmachine_request:log_data(RD3),
                     case application:get_env(webmachine, webmachine_logger_module) of
                         {ok, LogModule} ->
                             spawn(LogModule, log_access, [LogData]);
@@ -106,8 +99,8 @@ loop(MochiReq) ->
 get_option(Option, Options) ->
     {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
 
-host_headers(Req) ->
-    [ V || {V,_ReqState} <- [Req:get_header_value(H)
+host_headers(ReqData) ->
+    [ V || V <- [webmachine_request:get_header_value(H, ReqData)
                              || H <- ["x-forwarded-host",
                                       "x-forwarded-server",
                                       "host"]],

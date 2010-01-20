@@ -134,7 +134,8 @@ parse_multipart_request(ProgressFunction, Callback, Context) ->
     Boundary = iolist_to_binary(get_boundary(wrq:get_req_header("content-type", ReqData))),
     Prefix = <<"\r\n--", Boundary/binary>>,
     BS = size(Boundary),
-    {Chunk, Next} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),
+    {{Chunk, Next}, ReqData1} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),
+    Context1 = z_context:set_reqdata(ReqData1, Context),
     Length1 = Length - size(Chunk),
     <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> = Chunk,
     feed_mp(headers, #mp{boundary=Prefix,
@@ -144,7 +145,7 @@ parse_multipart_request(ProgressFunction, Callback, Context) ->
                          callback=Callback,
                          progress=ProgressFunction,
                          next_chunk=Next,
-                         context=Context}).
+                         context=Context1}).
 
 
 feed_mp(headers, State=#mp{buffer=Buffer, callback=Callback}) ->

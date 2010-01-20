@@ -96,17 +96,14 @@ req_qs(_RD = #wm_reqdata{req_qs=QS}) when is_list(QS) -> QS.
 
 req_headers(_RD = #wm_reqdata{req_headers=ReqH}) -> ReqH. % mochiheaders
 
-req_body(ReqState0 = #wm_reqdata{max_recv_body=MRB}) ->
-    Req = webmachine_request:new(ReqState0),
-    {ReqResp, ReqState} = Req:req_body(MRB),
-    put(tmp_reqstate, ReqState),
-    maybe_conflict_body(ReqResp).
+req_body(ReqData = #wm_reqdata{max_recv_body=MRB}) ->
+    {ReqResp, ReqData1} = webmachine_request:req_body(MRB, ReqData),
+    {maybe_conflict_body(ReqResp), ReqData1}.
 
-stream_req_body(ReqState0 = #wm_reqdata{}, MaxHunk) ->
-    Req = webmachine_request:new(ReqState0),
-    {ReqResp, ReqState} = Req:stream_req_body(MaxHunk),
-    put(tmp_reqstate, ReqState),
-    maybe_conflict_body(ReqResp).
+stream_req_body(ReqData = #wm_reqdata{}, MaxHunk) ->
+    {ReqResp, ReqData1} = webmachine_request:stream_req_body(MaxHunk, ReqData),
+    %put(tmp_reqstate, ReqState),
+    {maybe_conflict_body(ReqResp), ReqData1}.
 
 max_recv_body(_RD = #wm_reqdata{max_recv_body=X}) when is_integer(X) -> X.
 

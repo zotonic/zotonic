@@ -27,31 +27,31 @@
 -include_lib("zotonic.hrl").
 
 
-render_error(Code=404, Req, _Reason) ->
-    ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("Resource not found: ~p", [Req:raw_path()]))),
-    Type = Req:get_metadata('content-type'),
-    error_handler(Type, Req, Code, ErrorDump);
+render_error(Code=404, ReqData, _Reason) ->
+    ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("Resource not found: ~p", [wrq:raw_path(ReqData)]))),
+    Type = webmachine_request:get_metadata('content-type', ReqData),
+    error_handler(Type, ReqData, Code, ErrorDump);
 
-render_error(Code=500, Req, Reason) ->
-    error_logger:error_msg("webmachine error: path=~p~n~p~n", [Req:path(), Reason]),
+render_error(Code=500, ReqData, Reason) ->
+    error_logger:error_msg("webmachine error: path=~p~n~p~n", [wrq:path(ReqData), Reason]),
     ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("~p", [Reason]))),
-    Type = Req:get_metadata('content-type'),
-    error_handler(Type, Req, Code, ErrorDump).
+    Type = webmachine_request:get_metadata('content-type', ReqData),
+    error_handler(Type, ReqData, Code, ErrorDump).
 
 
-error_handler("application/json", Req, Code, ErrorDump) ->
-    Req:add_response_header("Content-Type", "application/json; charset=utf-8"),
-    Req:add_response_header("Content-Encoding", "identity"),
+error_handler("application/json", ReqData, Code, ErrorDump) ->
+    RD1 = wrq:set_resp_header("Content-Type", "application/json; charset=utf-8", ReqData),
+    RD2 = wrq:set_resp_header("Content-Encoding", "identity", RD1),
     JS = {struct, [{error_code, Code}, {error_dump, ErrorDump}]},
-    mochijson:encode(JS);
+    {mochijson:encode(JS), RD2};
 
-error_handler(_Default, Req, Code, ErrorDump) ->
-    Req:add_response_header("Content-Type", "text/html; charset=utf-8"),
-    Req:add_response_header("Content-Encoding", "identity"),
-    {Host, Req1} = Req:get_metadata('zotonic_host'),
+error_handler(_Default, ReqData, Code, ErrorDump) ->
+    RD1 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", ReqData),
+    RD2 = wrq:set_resp_header("Content-Encoding", "identity", RD1),
+    Host = webmachine_request:get_metadata('zotonic_host', RD2),
     Context = z_context:new(Host),
     Vars = [{error_code, Code}, {error_dump, ErrorDump}],
     Html = z_template:render("error.tpl", Vars, Context),
     {Output, _} = z_context:output(Html, Context),
-    {Output, Req1}.
+    {Output, RD2}.
 
