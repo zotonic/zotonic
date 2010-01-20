@@ -37,8 +37,9 @@ terminate(_State, _Context) -> ok.
 render(Params, _Vars, Context, _State) ->
     Result       = proplists:get_value(result, Params),
     Dispatch     = proplists:get_value(dispatch, Params, search),
-    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, Params)),
-         
+    OnePageHide  = proplists:get_value(onepage_hide, Params, search),
+    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(onepage_hide, Params))),
+    
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
         true -> CleanedArgs;
         false -> [{qargs,true}|CleanedArgs]
@@ -56,6 +57,8 @@ render(Params, _Vars, Context, _State) ->
             {ok, ""};
         #m_search_result{result=#search_result{pages=0}} ->
             {ok, ""};
+        #m_search_result{result=#search_result{pages=1}} ->
+            {ok, "\n<ul class=\"pager block\"></ul>\n"};
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
             Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
