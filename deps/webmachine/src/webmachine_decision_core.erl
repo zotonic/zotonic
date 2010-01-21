@@ -654,3 +654,4 @@ variances(Rs, Rd) ->
     {Variances, Rs4, Rd4} = resource_call(variances, Rs3, Rd3),
     {Accept ++ AcceptEncoding ++ AcceptCharset ++ Variances, Rs4, Rd4}.
     
+    

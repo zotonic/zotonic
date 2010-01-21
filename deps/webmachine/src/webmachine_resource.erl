@@ -101,8 +101,8 @@ default(_) ->
 wrap(Mod, Args) ->
     case Mod:init(Args) of
 	{ok, ModState} ->
-	    {ok, webmachine_resource:new(Mod, ModState, 
-                           dict:from_list(Mod:module_info(exports)), false)};
+	    Exports = Mod:module_info(exports),
+	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Exports ], false)};
         {{trace, Dir}, ModState} ->
             {ok, File} = open_log_file(Dir, Mod),
             log_decision(File, v3b14),
@@ -119,7 +119,7 @@ do(Fun, ReqData) when is_atom(Fun) ->
     {Reply, webmachine_resource:new(R_Mod, NewModState, R_ModExports, R_Trace), ReqData1}.
 
 handle_wm_call(Fun, ReqData) ->
-    case dict:is_key(Fun, R_ModExports) of
+    case lists:member(Fun, R_ModExports) of
         true ->
             resource_call(Fun, ReqData);
         false ->
