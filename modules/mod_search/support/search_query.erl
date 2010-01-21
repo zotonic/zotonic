@@ -239,7 +239,8 @@ parse_query([{text, Text}|Rest], Context, Result) ->
                         from=Result2#search_sql.from ++ ", to_tsquery(" ++ LArg ++ ", " ++ QArg ++ ") txtquery"
                        },
             Result4 = add_where("txtquery @@ rsc.pivot_tsv", Result3),
-            parse_query(Rest, Context, Result4)
+            Result5 = add_order_unsafe("ts_rank_cd(rsc.pivot_tsv, txtquery, 32)", Result4),
+            parse_query(Rest, Context, Result5)
     end;
 
 %% date_start_after=date
@@ -330,7 +331,7 @@ add_where(Clause, Search) ->
     end.
 
 
-%% Add an AND clause to the WHERE of a #search_sql
+%% Add an ORDER clause.
 add_order(Sort, Search) ->
     Clause = case Sort of 
                  "random" ->
@@ -343,6 +344,10 @@ add_order(Sort, Search) ->
                          _ -> sql_safe(Sort) ++ " ASC"
                      end
              end,
+    add_order_unsafe(Clause, Search).
+
+%% Add an ORDER clause without checking on SQL safety.
+add_order_unsafe(Clause, Search) ->
     case Search#search_sql.order of
         [] ->
             Search#search_sql{order=Clause};
