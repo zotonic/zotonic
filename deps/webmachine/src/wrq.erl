@@ -33,29 +33,32 @@
 -include_lib("include/wm_reqdata.hrl").
 
 create(Method,Version,RawPath,Headers) ->
-    create(#wm_reqdata{method=Method,version=Version,
-                       raw_path=RawPath,req_headers=Headers,
-      path="defined_in_create",
-      req_cookie=defined_in_create,
-      req_qs=defined_in_create,
-      peer="defined_in_wm_req_srv_init",
-      req_body=not_fetched_yet,
-      max_recv_body=(50*(1024*1024)),
-      app_root="defined_in_load_dispatch_data",
-      path_info=dict:new(),
-      path_tokens=defined_in_load_dispatch_data,
-      disp_path=defined_in_load_dispatch_data,
-      resp_redirect=false, resp_headers=mochiweb_headers:empty(),
-      resp_body = <<>>, response_code=500}).
+    create(#wm_reqdata{
+                method=Method,version=Version,
+                raw_path=RawPath,req_headers=prepare_headers(Headers),
+                path="defined_in_create",
+                req_cookie=defined_in_create,
+                req_qs=defined_in_create,
+                peer="defined_in_wm_req_srv_init",
+                req_body=not_fetched_yet,
+                max_recv_body=(50*(1024*1024)),
+                app_root="defined_in_load_dispatch_data",
+                path_info=dict:new(),
+                path_tokens=defined_in_load_dispatch_data,
+                disp_path=defined_in_load_dispatch_data,
+                resp_redirect=false, resp_headers=mochiweb_headers:empty(),
+                resp_body = <<>>, response_code=500}).
+
 create(RD = #wm_reqdata{raw_path=RawPath}) ->
     {Path, _, _} = mochiweb_util:urlsplit_path(RawPath),
     Cookie = case get_req_header("cookie", RD) of
-	undefined -> [];
-	Value -> mochiweb_cookies:parse_cookie(Value)
+        undefined -> [];
+        Value -> mochiweb_cookies:parse_cookie(Value)
     end,
     {_, QueryString, _} = mochiweb_util:urlsplit_path(RawPath),
     ReqQS = mochiweb_util:parse_qs(QueryString),
     RD#wm_reqdata{path=Path,req_cookie=Cookie,req_qs=ReqQS}.
+
 load_dispatch_data(PathInfo, HostTokens, Port, PathTokens, AppRoot,
                    DispPath, RD) ->
     RD#wm_reqdata{path_info=PathInfo,host_tokens=HostTokens,
@@ -140,8 +143,8 @@ path_info(Key, RD) when is_atom(Key) ->
         error -> undefined
     end.
 
-get_req_header(HdrName, RD) -> % string->string
-    mochiweb_headers:get_value(HdrName, req_headers(RD)).
+get_req_header(HdrName, #wm_reqdata{req_headers=ReqH}) -> % string->string
+    proplists:get_value(HdrName, ReqH).
 
 do_redirect(true, RD) ->  RD#wm_reqdata{resp_redirect=true};
 do_redirect(false, RD) -> RD#wm_reqdata{resp_redirect=false}.
@@ -199,3 +202,13 @@ get_qs_value(Key, Default, RD) when is_list(Key) ->
     proplists:get_value(Key, req_qs(RD), Default).
 
 
+
+%% @doc prepare the headers for quick(er) lookups of headers used in the webmachine decision core.
+prepare_headers(Hdrs) ->
+    List = gb_trees:to_list(Hdrs),
+    [ {LowerName, prepare_header_value(Value)} || {LowerName, {_HeaderName, Value}} <- List ].
+
+prepare_header_value({array, L}) ->
+    mochiweb_util:join(lists:reverse(L), ", ");
+prepare_header_value(V) ->
+    V.
