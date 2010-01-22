@@ -169,7 +169,7 @@ check_request_logon(ReqData, Context) ->
 %%
 request_is_signed(ReqData) ->
     HasSig = not(wrq:get_qs_value("oauth_signature", ReqData) == undefined),
-    Header = wrq:get_req_header("authorization", ReqData),
+    Header = wrq:get_req_header_lc("authorization", ReqData),
     HasSig orelse (not(Header == undefined) andalso lists:prefix("OAuth", Header)).
 
 
@@ -190,7 +190,7 @@ strip_params([H|T]) ->
 %%
 to_oauth_params(ReqData) ->
     Req = wrq:req_qs(ReqData),
-    AuthHeader = wrq:get_req_header("authorization", ReqData),
+    AuthHeader = wrq:get_req_header_lc("authorization", ReqData),
     Params = case not(AuthHeader == undefined) andalso lists:prefix("OAuth", AuthHeader) of
                  false ->
                      Req;
@@ -216,7 +216,7 @@ oauth_param_auth_header(Param, AuthHeader) ->
 
 oauth_param(Param, ReqData) ->
     % check authorization header
-    AuthHeader = wrq:get_req_header("authorization", ReqData),
+    AuthHeader = wrq:get_req_header_lc("authorization", ReqData),
     case not(AuthHeader == undefined) andalso lists:prefix("OAuth", AuthHeader) of
         false ->
             wrq:get_qs_value(Param, ReqData);
@@ -238,7 +238,7 @@ serve_oauth(ReqData, Context, Fun) ->
                     authenticate("Consumer key not found.", ReqData, Context);
                 Consumer ->
                     Signature = oauth_param("oauth_signature", ReqData),
-                    URL = "http://" ++ wrq:get_req_header("host", ReqData) ++ wrq:path(ReqData),
+                    URL = "http://" ++ wrq:get_req_header_lc("host", ReqData) ++ wrq:path(ReqData),
                     Fun(URL, to_oauth_params(ReqData), Consumer, Signature)
             end;
         _ ->

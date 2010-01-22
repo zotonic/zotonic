@@ -28,7 +28,7 @@ to_html(ReqData, Context) ->
 is_authorized(ReqData, Context) ->
     case wrq:disp_path(ReqData) of
         "authdemo" -> 
-            case wrq:get_req_header("authorization", ReqData) of
+            case wrq:get_req_header_lc("authorization", ReqData) of
                 "Basic "++Base64 ->
                     Str = base64:mime_decode_to_string(Base64),
                     case string:tokens(Str, ":") of

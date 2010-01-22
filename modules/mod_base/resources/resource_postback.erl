@@ -83,7 +83,7 @@ process_post(ReqData, Context) ->
     CometScript = z_session_page:get_scripts(EventContext#context.page_pid),
 
     RD  = z_context:get_reqdata(EventContext),
-    RD1 = case wrq:get_req_header("content-type", ReqData) of
+    RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
         "multipart/form-data" ++ _ ->
             RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
             wrq:append_to_resp_body(["<textarea>", Script, CometScript, "</textarea>"], RDct);
