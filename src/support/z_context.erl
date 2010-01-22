@@ -699,7 +699,7 @@ get_resp_header(Header, #context{wm_reqdata=ReqData}) ->
 %% @doc Return the keys in the body of the request, only if the request is application/x-www-form-urlencoded
 parse_form_urlencoded(Context) ->
     ReqData = get_reqdata(Context),
-    case wrq:get_req_header("content-type", ReqData) of
+    case wrq:get_req_header_lc("content-type", ReqData) of
         "application/x-www-form-urlencoded" ++ _ ->
             case wrq:req_body(ReqData) of
                 {undefined, ReqData1} ->
