@@ -21,7 +21,7 @@
          response_code/1,req_cookie/1,req_qs/1,req_headers/1,req_body/1,
          stream_req_body/2,resp_redirect/1,resp_headers/1,resp_body/1,
          app_root/1,path_tokens/1, host_tokens/1, port/1]).
--export([path_info/2,get_req_header/2,do_redirect/2,fresh_resp_headers/2,
+-export([path_info/2,get_req_header/2,get_req_header_lc/2,do_redirect/2,fresh_resp_headers/2,
          get_resp_header/2,set_resp_header/3,set_resp_headers/2,
          set_disp_path/2,set_req_body/2,set_resp_body/2,set_response_code/2,
          merge_resp_headers/2,remove_resp_header/2,
@@ -143,7 +143,10 @@ path_info(Key, RD) when is_atom(Key) ->
         error -> undefined
     end.
 
-get_req_header(HdrName, #wm_reqdata{req_headers=ReqH}) -> % string->string
+get_req_header(HdrName, ReqData) -> % string->string
+	get_req_header_lc(string:to_lower(HdrName), ReqData).
+
+get_req_header_lc(HdrName, #wm_reqdata{req_headers=ReqH}) -> % string->string
     proplists:get_value(HdrName, ReqH).
 
 do_redirect(true, RD) ->  RD#wm_reqdata{resp_redirect=true};
