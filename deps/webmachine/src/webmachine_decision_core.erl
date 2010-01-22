@@ -60,7 +60,7 @@ cacheable(_) -> false.
 
 
 get_header_val(H, Rd) -> 
-    wrq:get_req_header(H, Rd).
+    wrq:get_req_header_lc(H, Rd).
 
 method(Rd) ->
     wrq:method(Rd).
