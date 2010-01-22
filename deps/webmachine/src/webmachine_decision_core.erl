@@ -35,17 +35,29 @@ handle_request(Resource, ReqData) ->
             error_response(erlang:get_stacktrace(), Resource, ReqData)
     end.
 
-%wrcall(X) ->
-%    RS0 = get(reqdata),
-%    Req = webmachine_request:new(RS0),
-%    {Response, RS1} = Req:call(X),
-%    put(reqdata, RS1),
-%    Response.
-
 %% @doc Call the resource or a default.
 %% @spec resource_call(atom(), Resource, ReqData) -> {term(), NewResource, NewReqData}
 resource_call(Fun, Rs, Rd) ->
-    Rs:do(Fun, Rd).
+	case cacheable(Fun) of
+		true ->
+			case proplists:lookup(Fun, Rd#wm_reqdata.cache) of
+				none -> 
+					{T, Rs1, Rd1} = Rs:do(Fun, Rd),
+					{T, Rs1, Rd1#wm_reqdata{cache=[{Fun,T}|Rd1#wm_reqdata.cache]}};
+				{Fun, Cached} -> 
+					{Cached, Rs, Rd}
+			end;
+		false ->
+    		Rs:do(Fun, Rd)
+	end.
+
+cacheable(charsets_provided) -> true;
+cacheable(content_types_provided) -> true;
+cacheable(encodings_provided) -> true;
+cacheable(last_modified) -> true;
+cacheable(generate_etag) -> true;
+cacheable(_) -> false.
+
 
 get_header_val(H, Rd) -> 
     wrq:get_req_header(H, Rd).
@@ -54,12 +66,10 @@ method(Rd) ->
     wrq:method(Rd).
 
 d(DecisionID, Rs, Rd) ->
-    put(decision, DecisionID),
     Rs:log_d(DecisionID),
     decision(DecisionID, Rs, Rd).
 
 respond(Code, Rs, Rd) ->
-    EndTime = now(),
     {RsCode, RdCode} = case Code of
     	404 ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
@@ -82,15 +92,8 @@ respond(Code, Rs, Rd) ->
     	_ -> 
     	    {Rs, Rd}
     end,
-    put(code, Code),
     RdRespCode = wrq:set_response_code(Code, RdCode),
-    {_, RsFin, RdFin} = resource_call(finish_request, RsCode, RdRespCode),
-    {_, RdResp} = webmachine_request:send_response_code(Code, RdFin),
-    RMod = webmachine_request:get_metadata('resource_module', RdResp),
-    LogData0 = webmachine_request:log_data(RdResp),
-    LogData = LogData0#wm_log_data{resource_module=RMod, end_time=EndTime},
-    spawn(fun() -> do_log(LogData) end),
-    {RsFin:stop(), RsFin, RdResp}.
+    resource_call(finish_request, RsCode, RdRespCode).
 
 respond(Code, Headers, Rs, Rd) ->
     RdHs = wrq:set_resp_headers(Headers, Rd),
@@ -483,7 +486,7 @@ decision(v3o18, Rs, Rd) ->
                 LM -> wrq:set_resp_header("Last-Modified", httpd_util:rfc1123_date(calendar:universal_time_to_local_time(LM)), RdLM0)
             end,
 
-            {Expires, RsExp, RdExp0} = resource_call(last_modified, RsLM, RdLM),
+            {Expires, RsExp, RdExp0} = resource_call(expires, RsLM, RdLM),
             RdExp = case Expires of
                 undefined -> RdExp0;
                 Exp -> wrq:set_resp_header("Expires", httpd_util:rfc1123_date(calendar:universal_time_to_local_time(Exp)), RdExp0)

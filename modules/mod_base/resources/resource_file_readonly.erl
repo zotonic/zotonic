@@ -319,17 +319,11 @@ ensure_preview(ReqData, Path, State) ->
 
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_binary(Data) ->
-    Gzip = zlib:gzip(Data),
-    Size = size(Data),
-    <<Size:32, Data/binary, Gzip/binary>>.
+	{Data, zlib:gzip(Data)}.
 
-decode_data(identity, Data) ->
-    <<Size:32, _Rest/binary>> = Data,
-    <<Size:32, Identity:Size/binary, _Gzip/binary>> = Data,
-    Identity;
-decode_data(gzip, Data) ->
-    <<Size:32, _Rest/binary>> = Data,
-    <<Size:32, _Identity:Size/binary, Gzip/binary>> = Data,
-    Gzip.
+decode_data(identity, {Data, _Gzip}) ->
+	Data;
+decode_data(gzip, {_Data, Gzip}) ->
+	Gzip.
 
     

@@ -47,7 +47,7 @@
      remove_response_header/2,
      merge_response_headers/2,
      append_to_response_body/2,
-     send_response_code/2,
+     send_response/1,
      send_response/2,
      response_code/1,
      set_response_code/2,
@@ -111,6 +111,8 @@ get_header_value(K, ReqData) ->
 get_outheader_value(K, ReqData) ->
     mochiweb_headers:get_value(K, wrq:resp_headers(ReqData)).
 
+send(undefined, _Data) ->
+    ok;
 send(Socket, Data) ->
     case gen_tcp:send(Socket, iolist_to_binary(Data)) of
 	ok -> ok;
@@ -154,10 +156,10 @@ send_chunk(Socket, Data) ->
     Size.
 
 
-send_response_code(Code, ReqData) ->
-	{Reply, RD1} = case Code of
+send_response(ReqData) ->
+	{Reply, RD1} = case ReqData#wm_reqdata.response_code of
         200 -> send_ok_response(ReqData);
-        _ -> send_response(Code, ReqData)
+        Code -> send_response(Code, ReqData)
     end,
     LogData = RD1#wm_reqdata.log_data,
     NewLogData = LogData#wm_log_data{finish_time=now()},

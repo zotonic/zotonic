@@ -69,17 +69,19 @@ allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
 
 content_types_provided(ReqData, State) ->
-    case State#state.mime of
+	State1 = lookup_path(ReqData, State),
+    case State1#state.mime of
         undefined ->
             Path = mochiweb_util:unquote(wrq:disp_path(ReqData)),
             CT = z_media_identify:guess_mime(Path),
-            {[{CT, provide_content}], ReqData, State#state{mime=CT}};
+            {[{CT, provide_content}], ReqData, State1#state{mime=CT}};
         Mime -> 
-            {[{Mime, provide_content}], ReqData, State}
+            {[{Mime, provide_content}], ReqData, State1}
     end.
 
 encodings_provided(ReqData, State) ->
-    Encodings = case State#state.mime of
+	State1 = lookup_path(ReqData, State),
+    Encodings = case State1#state.mime of
         "image/jpeg" -> 
             [{"identity", fun(Data) -> Data end}];
         _ -> 
@@ -87,53 +89,33 @@ encodings_provided(ReqData, State) ->
              {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
     end,
     EncodeData = length(Encodings) > 1,
-    {Encodings, ReqData, State#state{encode_data=EncodeData}}.
+    {Encodings, ReqData, State1#state{encode_data=EncodeData}}.
 
 
 resource_exists(ReqData, State) ->
-    Context = z_context:new(ReqData, ?MODULE),
-    Path   = mochiweb_util:unquote(wrq:disp_path(ReqData)),
-    Cached = case State#state.use_cache of
-        true -> z_depcache:get(cache_key(Path), Context);
-        _    -> undefined
-    end,
-    case Cached of
-        undefined ->
-            Paths = z_lib_include:uncollapse(Path),
-            FullPaths = [ file_exists(State, P, Context) || P <- Paths ],
-            case lists:member(false, FullPaths) of
-                true ->
-                    {false, ReqData, State};
-                false ->
-                    FullPaths1 = [ P || {true, P} <- FullPaths ],
-                    {true, ReqData, State#state{path=Path, fullpaths=FullPaths1}}
-            end;
-        {ok, Cache} ->
-            {true, ReqData, State#state{
-                            is_cached=true,
-                            path=Cache#cache.path,
-                            fullpaths=Cache#cache.fullpaths,
-                            mime=Cache#cache.mime,
-                            last_modified=Cache#cache.last_modified,
-                            body=Cache#cache.body
-                        }}
-    end.
+	State1 = lookup_path(ReqData, State),
+	case State1#state.path of
+		none -> {false, ReqData, State1};
+		_  -> {true, ReqData, State1}
+	end.
 
 charsets_provided(ReqData, State) ->
-    case is_text(State#state.mime) of
-        true -> {[{"utf-8", fun(X) -> X end}], ReqData, State};
-        _ -> {no_charset, ReqData, State}
+	State1 = lookup_path(ReqData, State),
+    case is_text(State1#state.mime) of
+        true -> {[{"utf-8", fun(X) -> X end}], ReqData, State1};
+        _ -> {no_charset, ReqData, State1}
     end.
     
 last_modified(ReqData, State) ->
+	State1 = lookup_path(ReqData, State),
     RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
-    case State#state.last_modified of
+    case State1#state.last_modified of
         undefined -> 
-            LMod = max_last_modified(State#state.fullpaths, {{1970,1,1},{12,0,0}}),
+            LMod = max_last_modified(State1#state.fullpaths, {{1970,1,1},{12,0,0}}),
 			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
-            {LModUTC, RD1, State#state{last_modified=LModUTC}};
+            {LModUTC, RD1, State1#state{last_modified=LModUTC}};
         LModUTC ->
-            {LModUTC, RD1, State}
+            {LModUTC, RD1, State1}
     end.
 
     %% @doc Find the latest modification time of a list of files.
@@ -152,28 +134,29 @@ expires(ReqData, State) ->
     {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, State}.
 
 provide_content(ReqData, State) ->
-    RD1 = case State#state.content_disposition of
+	State1 = lookup_path(ReqData, State),
+    RD1 = case State1#state.content_disposition of
         inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
         attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
         undefined ->  ReqData
     end,
-    {Content, State1} = case State#state.body of
+    {Content, State2} = case State1#state.body of
         undefined ->
-            Data = [ read_data(F) || F <- State#state.fullpaths ],
-            Data1 = case State#state.mime of
+            Data = [ read_data(F) || F <- State1#state.fullpaths ],
+            Data1 = case State1#state.mime of
                 "text/javascript" -> z_utils:combine([$;, $\n], Data);
                 "application/x-javascript" -> z_utils:combine([$;, $\n], Data);
                 _ -> z_utils:combine($\n, Data)
             end,
-            Body = case State#state.encode_data of 
+            Body = case State1#state.encode_data of 
                 true -> encode_data(Data1);
                 false -> Data1
             end,
-            {Body, State#state{body=Body}};
+            {Body, State1#state{body=Body}};
         Body -> 
-            {Body, State}
+            {Body, State1}
     end,
-    {Content, RD1, State1}.
+    {Content, RD1, State2}.
     
     read_data(F) ->
         {ok, Data} = file:read_file(F),
@@ -259,19 +242,46 @@ is_text(_Mime) -> false.
 
 
 
+lookup_path(ReqData, State = #state{path=undefined}) ->
+    Context = z_context:new(ReqData, ?MODULE),
+    Path   = mochiweb_util:unquote(wrq:disp_path(ReqData)),
+    Cached = case State#state.use_cache of
+        true -> z_depcache:get(cache_key(Path), Context);
+        _    -> undefined
+    end,
+    case Cached of
+        undefined ->
+            Paths = z_lib_include:uncollapse(Path),
+            FullPaths = [ file_exists(State, P, Context) || P <- Paths ],
+            case lists:member(false, FullPaths) of
+                true ->
+                    State#state{path=none};
+                false ->
+                    FullPaths1 = [ P || {true, P} <- FullPaths ],
+                    State#state{path=Path, fullpaths=FullPaths1}
+            end;
+        {ok, Cache} ->
+            State#state{
+                 is_cached=true,
+                 path=Cache#cache.path,
+                 fullpaths=Cache#cache.fullpaths,
+                 mime=Cache#cache.mime,
+                 last_modified=Cache#cache.last_modified,
+                 body=Cache#cache.body
+             }
+    end;
+lookup_path(_ReqData, State) ->
+	State.
+
+
+
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_list(Data) ->
     encode_data(iolist_to_binary(Data));
 encode_data(Data) when is_binary(Data) ->
-    Gzip = zlib:gzip(Data),
-    Size = size(Data),
-    <<Size:32, Data/binary, Gzip/binary>>.
+    {Data, zlib:gzip(Data)}.
 
-decode_data(identity, Data) ->
-    <<Size:32, _Rest/binary>> = Data,
-    <<Size:32, Identity:Size/binary, _Gzip/binary>> = Data,
-    Identity;
-decode_data(gzip, Data) ->
-    <<Size:32, _Rest/binary>> = Data,
-    <<Size:32, _Identity:Size/binary, Gzip/binary>> = Data,
-    Gzip.
+decode_data(identity, {Data, _Gzip}) ->
+	Data;
+decode_data(gzip, {_Data, Gzip}) ->
+	Gzip.
