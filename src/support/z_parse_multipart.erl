@@ -130,8 +130,8 @@ callback(Next, Form) ->
 %% @doc Parse the multipart request
 parse_multipart_request(ProgressFunction, Callback, Context) ->
     ReqData  = z_context:get_reqdata(Context),
-    Length   = list_to_integer(wrq:get_req_header("content-length", ReqData)),
-    Boundary = iolist_to_binary(get_boundary(wrq:get_req_header("content-type", ReqData))),
+    Length   = list_to_integer(wrq:get_req_header_lc("content-length", ReqData)),
+    Boundary = iolist_to_binary(get_boundary(wrq:get_req_header_lc("content-type", ReqData))),
     Prefix = <<"\r\n--", Boundary/binary>>,
     BS = size(Boundary),
     {{Chunk, Next}, ReqData1} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),

@@ -78,7 +78,7 @@ content_types_provided(ReqData, Context) ->
      Context#context{metadata=[{'content-type', CT}|Context#context.metadata]}}.
 
 content_types_accepted(ReqData, Context) ->
-    CT = case wrq:get_req_header("content-type", ReqData) of
+    CT = case wrq:get_req_header_lc("content-type", ReqData) of
              undefined -> "application/octet-stream";
              X -> X
          end,
@@ -95,7 +95,7 @@ accept_content(ReqData, Context) ->
             ReqData;
 	_ ->
             LOC = "http://" ++
-                   wrq:get_req_header("host", ReqData) ++
+                   wrq:get_req_header_lc("host", ReqData) ++
                    "/fs/" ++ Path,
             wrq:set_resp_header("Location", LOC, ReqData)
     end,
@@ -111,7 +111,7 @@ post_is_create(ReqData, Context) ->
     {true, ReqData, Context}.
 
 create_path(ReqData, Context) ->
-    case wrq:get_req_header("slug", ReqData) of
+    case wrq:get_req_header_lc("slug", ReqData) of
         undefined -> {undefined, ReqData, Context};
         Slug ->
             case file_exists(Context, Slug) of
