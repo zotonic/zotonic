@@ -97,8 +97,8 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
             %% Redirect to another host name.
             RawPath = wrq:raw_path(ReqData),
             Uri = "http://" ++ Hostname ++ RawPath,
-            {ok, RD1} = wrq:add_response_header("Location", Uri, ReqData),
-            {ok, RD2} = webmachine_request:send_response_code(301, RD1),
+            RD1 = wrq:set_resp_header("Location", Uri, ReqData),
+            {ok, RD2} = webmachine_request:send_response(301, RD1),
             LogData = webmachine_request:log_data(RD2),
             LogModule = 
                 case application:get_env(webmachine,webmachine_logger_module) of
@@ -159,7 +159,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Fetch the host and dispatch list for the request
 %% @spec get_host_dispatch_list(webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
-get_host_dispatch_list(WMHost, DispatchList, Req) ->
+get_host_dispatch_list(WMHost, DispatchList, ReqData) ->
     case DispatchList of
         [#wm_host_dispatch_list{}|_] ->
             {Host, Port} = split_host(WMHost),
@@ -174,7 +174,7 @@ get_host_dispatch_list(WMHost, DispatchList, Req) ->
                                 end,
                     case FoundHost of
                         {ok, DL} ->
-                            {Method, _} = Req:method(),
+                            Method = wrq:method(ReqData),
                             case DL#wm_host_dispatch_list.redirect andalso is_hostname(DL#wm_host_dispatch_list.hostname) andalso Method =:= 'GET' of
                                 true ->
                                     % Redirect, keep the port number

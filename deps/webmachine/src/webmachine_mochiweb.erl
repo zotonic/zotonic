@@ -19,7 +19,9 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 -export([start/1, stop/0, loop/1]).
+-export([t/0, t2/0]).
 
+-include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
 
 start(Options) ->
@@ -49,6 +51,7 @@ stop() ->
     mochiweb_http:stop(?MODULE).
 
 loop(MochiReq) ->
+    %?DBG(MochiReq),
     ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
     Host = case host_headers(ReqData) of
                [H|_] -> H;
@@ -80,15 +83,24 @@ loop(MochiReq) ->
             {ok,RD1} = webmachine_request:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath,ReqDispatch),
             {ok,RD2} = webmachine_request:set_metadata('resource_module', Mod, RD1),
             try 
-                webmachine_decision_core:handle_request(Resource, RD2)
+                {_, RsFin, RdFin} = webmachine_decision_core:handle_request(Resource, RD2),
+                EndTime = now(),
+                {_, RdResp} = webmachine_request:send_response(RdFin),
+                
+                %% Log this request
+                RMod = webmachine_request:get_metadata('resource_module', RdResp),
+                LogData0 = webmachine_request:log_data(RdResp),
+                spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=RMod, end_time=EndTime}) end),
+                
+                %% Halt the request, cleanup
+                RsFin:stop()
             catch
                 error:_ -> 
                     ?DBG({error, erlang:get_stacktrace()}),
                     {ok,RD3} = webmachine_request:send_response(500, RD2),
-                    LogData = webmachine_request:log_data(RD3),
                     case application:get_env(webmachine, webmachine_logger_module) of
                         {ok, LogModule} ->
-                            spawn(LogModule, log_access, [LogData]);
+                            spawn(LogModule, log_access, [webmachine_request:log_data(RD3)]);
                         _ -> nop
                     end
             end;
@@ -105,3 +117,70 @@ host_headers(ReqData) ->
                                       "x-forwarded-server",
                                       "host"]],
            V /= undefined].
+           
+           
+
+
+
+t() ->
+    MochiReq =  {mochiweb_request, undefined, 'GET',
+                                    "/helloworld",
+                                    {1,1},
+                                    {7,
+                                     {"host",
+                                      {'Host',"127.0.0.1:8000"},
+                                      {"accept",
+                                       {'Accept',
+                                        "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
+                                       nil,
+                                       {"accept-language",
+                                        {'Accept-Language',"en-us"},
+                                        {"accept-encoding",
+                                         {'Accept-Encoding',"gzip, deflate"},
+                                         nil,nil},
+                                        {"cookie",
+                                         {'Cookie',"z_pid=JosyWAQNrnxcrom9NaGC"},
+                                         {"connection",
+                                          {'Connection',"keep-alive"},
+                                          nil,nil},
+                                         nil}}},
+                                      {"user-agent",
+                                       {'User-Agent',
+                                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10"},
+                                       nil,nil}}}},
+    loop(MochiReq).
+
+
+t2() ->
+    MochiReq = {mochiweb_request,undefined,'GET',
+									"/media/inline/koe.jpg",
+                                    %"/lib/images/dropdown.jpg",
+                                    %"/lib/js/apps/zotonic-1.0.js",
+                                    {1,1},
+                                    {8,
+                                     {"host",
+                                      {'Host',"127.0.0.1:8000"},
+                                      {"cache-control",
+                                       {'Cache-Control',"max-age=0"},
+                                       {"accept",
+                                        {'Accept',
+                                         "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
+                                        nil,
+                                        {"accept-language",
+                                         {'Accept-Language',"en-us"},
+                                         {"accept-encoding",
+                                          {'Accept-Encoding',"gzip, deflate"},
+                                          nil,nil},
+                                         nil}},
+                                       {"cookie",
+                                        {'Cookie',"z_pid=JosyWAQNrnxcrom9NaGC"},
+                                        {"connection",
+                                         {'Connection',"keep-alive"},
+                                         nil,nil},
+                                        nil}},
+                                      {"user-agent",
+                                       {'User-Agent',
+                                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10"},
+                                       nil,nil}}}},
+    loop(MochiReq).
+
