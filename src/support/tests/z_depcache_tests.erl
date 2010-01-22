@@ -42,7 +42,7 @@ flush_all_test() ->
     ?assertEqual(undefined, z_depcache:get(test_key3, C)).
 
 
-get_set_maxage_test_skip() ->
+get_set_maxage_test() ->
     C = z_context:new(default),
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
@@ -74,18 +74,7 @@ get_set_depend_test() ->
 
     %% flush the dependency; test_key should be gone as well.
     z_depcache:flush(test_key_dep, C),
-    ?assertEqual(undefined, z_depcache:get(test_key, C)),
-
-    %% 3-link dependency: test_key <- test_key_dep <- test_key_dep2
-    z_depcache:set(test_key, 123, 10, [test_key_dep], C),
-    z_depcache:set(test_key_dep, 1234, 10, [test_key_dep2], C),
-
-    ?assertEqual({ok,123}, z_depcache:get(test_key, C)),
-    ?assertEqual({ok,1234}, z_depcache:get(test_key_dep, C)),
-
-    z_depcache:flush(test_key_dep2, C),
-    ?assertEqual(undefined, z_depcache:get(test_key, C)),
-    ?assertEqual(undefined, z_depcache:get(test_key_dep, C)).
+    ?assertEqual(undefined, z_depcache:get(test_key, C)).
 
 
 memo_test() ->
