@@ -46,7 +46,7 @@
 % @doc Find the multipart boundary for a request.
 % @spec find_boundary(wrq:wm_reqdata()) -> boundary()
 find_boundary(ReqData) ->
-    ContentType = wrq:get_req_header("content-type", ReqData),
+    ContentType = wrq:get_req_header_lc("content-type", ReqData),
     string:substr(ContentType, string:str(ContentType, "boundary=") 
                   + length("boundary=")).
 
