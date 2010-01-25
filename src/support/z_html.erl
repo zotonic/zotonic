@@ -173,7 +173,7 @@ strip(<<>>, _, Acc) -> Acc;
 strip(<<$<,T/binary>>, in_text, Acc) ->
     strip(T, in_tag, Acc);
 strip(<<$>,T/binary>>, in_tag, Acc) ->
-    strip(T, in_text, Acc);
+    strip(T, in_text, <<Acc/binary, 32>>);
 strip(<<$>,T/binary>>, State, Acc) ->
     strip(T, State, Acc);
 strip(<<$<,T/binary>>, State, Acc) ->
