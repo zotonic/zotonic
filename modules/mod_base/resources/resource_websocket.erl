@@ -22,7 +22,7 @@
 -export([
     init/1, 
     upgrades_provided/2,
-	websocket_start/1,
+	websocket_start/2,
 	loop/4,
 	send_loop/2,
 	
@@ -42,7 +42,7 @@ upgrades_provided(ReqData, State) ->
 
 
 %% @doc Initiate the websocket connection upgrade
-websocket_start(ReqData) ->
+websocket_start(ReqData, _State) ->
     Context = z_context:new(ReqData),
     Context1 = z_context:ensure_all(Context),
     Socket = webmachine_request:socket(ReqData),
