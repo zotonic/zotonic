@@ -19,6 +19,7 @@
 -author('Andy Gross <andy@basho.com>').
 -export([wrap/2]).
 -export([do/2,log_d/1,stop/0]).
+-export([modstate/0]).
 
 default(ping) ->
     no_default;
@@ -115,6 +116,9 @@ wrap(Mod, Args) ->
 	_ ->
 	    {stop, bad_init_arg}
     end.
+
+modstate() ->
+    R_ModState.
 
 do(Fun, ReqData) when is_atom(Fun) ->
     {Reply, ReqData1, NewModState} = handle_wm_call(Fun, ReqData),

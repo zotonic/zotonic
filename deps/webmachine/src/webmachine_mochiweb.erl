@@ -19,7 +19,6 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 -export([start/1, stop/0, loop/1]).
--export([t/0, t2/0, t3/0]).
 
 -include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
@@ -93,7 +92,7 @@ loop(MochiReq) ->
 						ok;
 					{upgrade, UpgradeFun, RsFin, RdFin} ->
 		                RsFin:stop(),
-						{upgrade, UpgradeFun, RdFin}
+						{upgrade, UpgradeFun, RdFin, RsFin:modstate()}
 				end
             catch
                 error:_ -> 
@@ -110,7 +109,7 @@ loop(MochiReq) ->
 			%% Used for protocol upgrades.
 			case Result of
 				ok -> ok;
-				{upgrade, Fun, RdUpgrade} -> Mod:Fun(RdUpgrade)
+				{upgrade, Fun, RdUpgrade, ModState} -> Mod:Fun(RdUpgrade, ModState)
 			end;
         handled ->
             nop
@@ -126,85 +125,3 @@ host_headers(ReqData) ->
                                       "host"]],
            V /= undefined].
            
-           
-
-
-
-t() ->
-    MochiReq =  {mochiweb_request, undefined, 'GET',
-                                    "/helloworld",
-                                    {1,1},
-                                    {7,
-                                     {"host",
-                                      {'Host',"127.0.0.1:8000"},
-                                      {"accept",
-                                       {'Accept',
-                                        "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
-                                       nil,
-                                       {"accept-language",
-                                        {'Accept-Language',"en-us"},
-                                        {"accept-encoding",
-                                         {'Accept-Encoding',"gzip, deflate"},
-                                         nil,nil},
-                                        {"cookie",
-                                         {'Cookie',"z_pid=JosyWAQNrnxcrom9NaGC"},
-                                         {"connection",
-                                          {'Connection',"keep-alive"},
-                                          nil,nil},
-                                         nil}}},
-                                      {"user-agent",
-                                       {'User-Agent',
-                                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10"},
-                                       nil,nil}}}},
-    loop(MochiReq).
-
-
-t2() ->
-    MochiReq = {mochiweb_request,undefined,'GET',
-									"/media/inline/koe.jpg",
-                                    %"/lib/images/dropdown.jpg",
-                                    %"/lib/js/apps/zotonic-1.0.js",
-                                    {1,1},
-                                    {8,
-                                     {"host",
-                                      {'Host',"127.0.0.1:8000"},
-                                      {"cache-control",
-                                       {'Cache-Control',"max-age=0"},
-                                       {"accept",
-                                        {'Accept',
-                                         "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
-                                        nil,
-                                        {"accept-language",
-                                         {'Accept-Language',"en-us"},
-                                         {"accept-encoding",
-                                          {'Accept-Encoding',"gzip, deflate"},
-                                          nil,nil},
-                                         nil}},
-                                       {"cookie",
-                                        {'Cookie',"z_pid=JosyWAQNrnxcrom9NaGC"},
-                                        {"connection",
-                                         {'Connection',"keep-alive"},
-                                         nil,nil},
-                                        nil}},
-                                      {"user-agent",
-                                       {'User-Agent',
-                                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10"},
-                                       nil,nil}}}},
-    loop(MochiReq).
-
-
-t3() ->
-	Headers = [
-		{"Upgrade", "WebSocket"},
-		{"Connection", "Upgrade"},
-		{"Host", "example.com"},
-		{"Origin", "http://example.com"},
-		{"WebSocket-Protocol", "sample"}
-	],
-    MochiReq = {mochiweb_request,undefined,'GET',
-									"/websocket",
-                                    {1,1},
-									mochiweb_headers:make(Headers)
-				},
-    loop(MochiReq).
-
