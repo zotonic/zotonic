@@ -23,9 +23,12 @@
     init/1, 
     upgrades_provided/2,
 	websocket_start/1,
-	loop/3,
-	send_loop/2
-    ]).
+	loop/4,
+	send_loop/2,
+	
+	pack_length/1,
+	unpack_length/1
+]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
@@ -53,30 +56,82 @@ websocket_start(ReqData) ->
             13, 10],
     ok = send(Socket, Data),
     spawn_link(fun() -> start_send_loop(Socket, Context1) end),
-    loop(none, Socket, Context1).
+    loop(none, nolength, Socket, Context1).
 
 
 %% @doc Start receiving messages from the websocket
-loop(Buff, Socket, Context) ->
+loop(Buff, Length, Socket, Context) ->
     case gen_tcp:recv(Socket, 0) of
         {ok, Received} ->
-            handle_data(Buff, Received, Socket, Context);
+            handle_data(Buff, Length, Received, Socket, Context);
         {error, Reason} ->
             {error, Reason}
     end.
 
 %% @doc Upack any data frames, send them to the handling functions.
-handle_data(none, <<0,T/binary>>, Socket, Context) ->
-    handle_data(<<>>, T, Socket, Context);
-handle_data(none, <<>>, Socket, Context) ->
-    resource_websocket:loop(none, Socket, Context);
-handle_data(Msg, <<255,T/binary>>, Socket, Context) ->
+handle_data(none, nolength, <<0,T/binary>>, Socket, Context) ->
+    <<Type, _/binary>> = T,
+    case Type =< 127 of
+        true -> 
+            handle_data(<<>>, nolength, T, Socket, Context);
+        false ->
+    	    {Length, LenBytes} = unpack_length(T),
+    	    <<_:LenBytes/bytes, Rest:Length/bytes>> = T,
+    	    handle_data(<<>>, Length, Rest, Socket, Context)
+    end;
+
+%% Extract frame ending with 255
+handle_data(none, nolength, <<>>, Socket, Context) ->
+    resource_websocket:loop(none, nolength, Socket, Context);
+handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
     handle_message(Msg, Context),
-    handle_data(none, T, Socket, Context);
-handle_data(Msg, <<H,T/binary>>, Socket, Context) ->
-    handle_data(<<Msg/binary, H>>, T, Socket, Context);
-handle_data(Msg, <<>>, Socket, Context) ->
-    resource_websocket:loop(Msg, Socket, Context).
+    handle_data(none, nolength, T, Socket, Context);
+handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
+    handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
+
+%% Extract frame with length bytes
+handle_data(Msg, 0, T, Socket, Context) ->
+    handle_message(Msg, Context),
+    handle_data(none, nolength, T, Socket, Context);
+handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
+    handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
+
+%% Data ended before the end of the frame, loop to fetch more
+handle_data(Msg, Length, <<>>, Socket, Context) ->
+    resource_websocket:loop(Msg, Length, Socket, Context).
+
+
+%% @doc Unpack the length bytes
+%% @author Davide Marquês (From yaws_websockets.erl)
+unpack_length(Binary) ->
+    unpack_length(Binary, 0, 0).
+unpack_length(Binary, LenBytes, Length) ->
+    <<_:LenBytes/bytes, B, _/bitstring>> = Binary,
+    B_v = B band 16#7F,
+    NewLength = (Length * 128) + B_v,
+    case B band 16#80 of
+	16#80 ->
+	    unpack_length(Binary, LenBytes + 1, NewLength);
+	0 ->
+	    {NewLength, LenBytes + 1}
+    end.
+
+%% @doc Pack the length in 7 bits bytes
+pack_length(N) ->
+    pack_length(N, []).
+
+pack_length(N, Acc) ->
+    N1 = N div 128,
+    B = N rem 128,
+    case Acc of
+        [] ->
+            pack_length(N1, [B|Acc]);
+        _ ->
+            case N1 of
+                0 -> [B+128|Acc];
+                _ -> pack_length(N1, [B+128|Acc])
+            end
+    end.
 
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
