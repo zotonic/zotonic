@@ -49,8 +49,6 @@ get_page_startup_script(Context) ->
                 <<"\nz_postback_loop();\n">>
             ];
         PageId ->
-            %% When the browsers start to support enough connections then we can also start the comet loop here.
-            %% To start the comet loop, call: z_comet_start().
             [   ?SESSION_PAGE_Q, $=, $", PageId, $", $;, 
                 <<"\nz_postback_loop();\n">>
             ]

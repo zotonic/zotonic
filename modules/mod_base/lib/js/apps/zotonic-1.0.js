@@ -191,19 +191,19 @@ function z_ajax(params)
 }
 
 
-/* Comet long poll
+/* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
-function z_comet_start(hostname)
+function z_stream_start(hostname)
 {
     if (!z_ws && !z_comet_is_running)
     {
-    	if ("WebSocket" in window) {
+    	if ("WebSocket" in window) 
+    	{
     		z_ws = new WebSocket("ws://"+hostname+"/websocket");
 
-    		z_ws.onopen = function() {
-    			// Web Socket is connected. You can send data by send() method.
-    		};
+    		z_ws.onopen = function() {};
+    		z_ws.onclose = function() {};
 
     		z_ws.onmessage = function (evt)
     		{
@@ -217,10 +217,6 @@ function z_comet_start(hostname)
     				$.misc.error("Error evaluating ajax return value: " + data);
     				$.misc.warn(e);
     			}
-    		};
-
-    		z_ws.onclose = function()
-    		{
     		};
     	}
         else
