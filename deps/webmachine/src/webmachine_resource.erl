@@ -32,6 +32,8 @@ default(is_authorized) ->
     true;
 default(forbidden) ->
     false;
+default(upgrades_provided) ->
+    [];
 default(allow_missing_post) ->
     false;
 default(malformed_request) ->

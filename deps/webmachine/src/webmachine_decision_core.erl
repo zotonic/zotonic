@@ -182,7 +182,32 @@ decision(v3b8, Rs, Rd) ->
     end;
 %% "Forbidden?"
 decision(v3b7, Rs, Rd) ->
-    decision_test(resource_call(forbidden, Rs, Rd), true, 403, v3b6);
+    decision_test(resource_call(forbidden, Rs, Rd), true, 403, v3b6_upgrade);
+%% "Upgrade?"
+decision(v3b6_upgrade, Rs, Rd) ->
+    case get_header_val("upgrade", Rd) of
+		undefined ->
+			decision(v3b6, Rs, Rd);
+		UpgradeHdr ->
+		    case get_header_val("connection", Rd) of
+				undefined ->
+					decision(v3b6, Rs, Rd);
+				Connection ->
+					case string:strip(string:to_lower(Connection)) of
+						"upgrade" ->
+							{Choosen, Rs1, Rd1} = choose_upgrade(UpgradeHdr, Rs, Rd),
+							case Choosen of
+								none ->
+									decision(v3b6, Rs1, Rd1);
+								{_Protocol, UpgradeFunc} ->
+									%% TODO: log the upgrade action
+									{upgrade, UpgradeFunc, Rs1, Rd1}
+							end;
+						_ ->
+							decision(v3b6, Rs, Rd)
+					end
+			end
+	end;
 %% "Okay Content-* Headers?"
 decision(v3b6, Rs, Rd) ->
     decision_test(resource_call(valid_content_headers, Rs, Rd), true, v3b5, 501);
@@ -629,6 +654,23 @@ choose_charset(AccCharHdr, Rs, Rd) ->
                     {Charset, Rs1, RdCSet}
             end
     end.
+
+choose_upgrade(UpgradeHdr, Rs, Rd) ->
+    {UpgradesProvided, Rs1, Rd1} = resource_call(upgrades_provided, Rs, Rd),
+	Provided1 = [ {string:to_lower(Prot), Prot, PFun} || {Prot, PFun} <- UpgradesProvided],
+	Requested = [ string:to_lower(string:strip(Up)) || Up <- string:tokens(UpgradeHdr, ",") ],
+	{choose_upgrade1(Requested, Provided1), Rs1, Rd1}.
+
+	choose_upgrade1([], _) ->
+		none;
+	choose_upgrade1([Req|Requested], Provided) ->
+		case lists:keysearch(Req, 1, Provided) of
+			false ->
+				choose_upgrade1(Requested, Provided);
+			{value, {_, Protocol, UpgradeFun}} ->
+				{Protocol, UpgradeFun}
+		end.
+
 
 variances(Rs, Rd) ->
     {ContentTypesProvided, Rs1, Rd1} = resource_call(content_types_provided, Rs, Rd),

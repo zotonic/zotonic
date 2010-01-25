@@ -19,7 +19,7 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 -export([start/1, stop/0, loop/1]).
--export([t/0, t2/0]).
+-export([t/0, t2/0, t3/0]).
 
 -include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
@@ -82,18 +82,19 @@ loop(MochiReq) ->
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
             {ok,RD1} = webmachine_request:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath,ReqDispatch),
             {ok,RD2} = webmachine_request:set_metadata('resource_module', Mod, RD1),
-            try 
-                {_, RsFin, RdFin} = webmachine_decision_core:handle_request(Resource, RD2),
-                EndTime = now(),
-                {_, RdResp} = webmachine_request:send_response(RdFin),
-                
-                %% Log this request
-                RMod = webmachine_request:get_metadata('resource_module', RdResp),
-                LogData0 = webmachine_request:log_data(RdResp),
-                spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=RMod, end_time=EndTime}) end),
-                
-                %% Halt the request, cleanup
-                RsFin:stop()
+            Result = try 
+				case webmachine_decision_core:handle_request(Resource, RD2) of
+	                {_, RsFin, RdFin} ->
+		                EndTime = now(),
+		                {_, RdResp} = webmachine_request:send_response(RdFin),
+		                LogData0 = webmachine_request:log_data(RdResp),
+		                spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=Mod, end_time=EndTime}) end),
+		                RsFin:stop(),
+						ok;
+					{upgrade, UpgradeFun, RsFin, RdFin} ->
+		                RsFin:stop(),
+						{upgrade, UpgradeFun, RdFin}
+				end
             catch
                 error:_ -> 
                     ?DBG({error, erlang:get_stacktrace()}),
@@ -103,7 +104,14 @@ loop(MochiReq) ->
                             spawn(LogModule, log_access, [webmachine_request:log_data(RD3)]);
                         _ -> nop
                     end
-            end;
+            end,
+			
+			%% Optional tail continuation to a function that takes over the request.
+			%% Used for protocol upgrades.
+			case Result of
+				ok -> ok;
+				{upgrade, Fun, RdUpgrade} -> Mod:Fun(RdUpgrade)
+			end;
         handled ->
             nop
     end.
@@ -182,5 +190,21 @@ t2() ->
                                        {'User-Agent',
                                         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10"},
                                        nil,nil}}}},
+    loop(MochiReq).
+
+
+t3() ->
+	Headers = [
+		{"Upgrade", "WebSocket"},
+		{"Connection", "Upgrade"},
+		{"Host", "example.com"},
+		{"Origin", "http://example.com"},
+		{"WebSocket-Protocol", "sample"}
+	],
+    MochiReq = {mochiweb_request,undefined,'GET',
+									"/websocket",
+                                    {1,1},
+									mochiweb_headers:make(Headers)
+				},
     loop(MochiReq).
 
