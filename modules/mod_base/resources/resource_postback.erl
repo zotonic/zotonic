@@ -59,7 +59,7 @@ content_types_provided(ReqData, Context) ->
 process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Postback = z_context:get_q("postback", Context1),
-    {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context),
+    {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
 
     TriggerId1 = case TriggerId of
         undefined -> z_context:get_q("z_trigger_id", Context1);

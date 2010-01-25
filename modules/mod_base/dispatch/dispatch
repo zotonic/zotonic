@@ -6,6 +6,9 @@
     %% Comet connection, used with long polls from the browser.
     {comet,    ["comet"],     resource_comet, []},
     
+    %% WebSocket connection.
+    {websocket,    ["websocket"],     resource_websocket, []},
+    
     %% Postback of events from the browser to the server, dispatched from the postback resource.
     {postback, ["postback"],  resource_postback, []},
     

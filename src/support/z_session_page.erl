@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @doc Page session for interaction with the page displayed on the user agent. Support for comet polls.
+%% @doc Page session for interaction with the page displayed on the user agent. Support for comet polls and websocket.
 %%      The page session is the switchboard for getting data pushed to the user agent.  All queued requests 
-%%      can be sent via the current request being handled or via a comet poll.
+%%      can be sent via the current request being handled, via a comet poll or a websocket connection.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -44,6 +44,8 @@
     get_scripts/1,
     comet_attach/2,
     comet_detach/1,
+    websocket_attach/2,
+
     get_attach_state/1,
     
     check_timeout/1,
@@ -56,7 +58,8 @@
     session_pid,
     linked=[],
     comet_pid=undefined,
-    comet_queue=[],
+    websocket_pid=undefined,
+    script_queue=[],
     vars=[]
 }).
 
@@ -117,11 +120,19 @@ comet_attach(CometPid, Pid) ->
 comet_detach(Pid) ->
     gen_server:cast(Pid, comet_detach).
 
+%% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
+websocket_attach(WsPid, #context{page_pid=Pid}) ->
+    websocket_attach(WsPid, Pid);
+websocket_attach(WsPid, Pid) ->
+    gen_server:cast(Pid, {websocket_attach, WsPid}).
+
 %% @doc Called by the comet process or the page request to fetch any outstanding scripts
 get_scripts(Pid) ->
     gen_server:call(Pid, get_scripts).
 
 %% @doc Send a script to the user agent, will be queued and send when the comet process attaches
+add_script(Script, #context{page_pid=Pid}) ->
+    add_script(Script, Pid);
 add_script(Script, Pid) ->
     gen_server:cast(Pid, {add_script, Script}).
 
@@ -166,7 +177,6 @@ handle_cast({append, Key, Value}, State) ->
         {Key, L} -> L ++ [Value];
         none -> [Value]
     end, 
-    
     State1 = State#page_state{vars = z_utils:replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
 
@@ -175,7 +185,7 @@ handle_cast({comet_attach, CometPid}, State) ->
         true ->
             erlang:monitor(process, CometPid),
             StateComet = State#page_state{comet_pid=CometPid},
-            StatePing  = ping_comet(StateComet),
+            StatePing  = ping_comet_ws(StateComet),
             z_session:keepalive(State#page_state.session_pid),
             {noreply, StatePing};
         false ->
@@ -184,14 +194,25 @@ handle_cast({comet_attach, CometPid}, State) ->
 handle_cast(comet_detach, State) ->
     StateNoComet = State#page_state{comet_pid=undefined, last_detach=z_utils:now()},
     {noreply, StateNoComet};
+handle_cast({websocket_attach, WebsocketPid}, State) ->
+    case z_utils:is_process_alive(WebsocketPid) of
+        true ->
+            erlang:monitor(process, WebsocketPid),
+            StateWs = State#page_state{websocket_pid=WebsocketPid},
+            StatePing = ping_comet_ws(StateWs),
+            z_session:keepalive(State#page_state.session_pid),
+            {noreply, StatePing};
+        false ->
+            {noreply, State}
+    end;
 
 handle_cast({add_script, Script}, State) ->
-    StateQueued = State#page_state{comet_queue=[Script|State#page_state.comet_queue]},
-    StatePing   = ping_comet(StateQueued),
+    StateQueued = State#page_state{script_queue=[Script|State#page_state.script_queue]},
+    StatePing   = ping_comet_ws(StateQueued),
     {noreply, StatePing};
     
-%% @doc Do not timeout while there is a comet process attached
-handle_cast(check_timeout, State) when is_pid(State#page_state.comet_pid) ->
+%% @doc Do not timeout while there is a comet or websocket process attached
+handle_cast(check_timeout, State) when is_pid(State#page_state.comet_pid) or is_pid(State#page_state.websocket_pid)->
     {noreply, State};
 
 %% @doc Give the comet process some time to come back, timeout afterwards
@@ -225,8 +246,8 @@ handle_call({spawn_link, Module, Func, Args, Context}, _From, State) ->
     {reply, Pid, State#page_state{linked=Linked}};
 
 handle_call(get_scripts, _From, State) ->
-    Queue   = State#page_state.comet_queue,
-    State1  = State#page_state{comet_queue=[]},
+    Queue   = State#page_state.script_queue,
+    State1  = State#page_state{script_queue=[]},
     Scripts = lists:reverse(Queue),
     {reply, Scripts, State1};
 
@@ -242,6 +263,9 @@ handle_call({incr, Key, Delta}, _From, State) ->
     State1 = State#page_state{ vars = z_utils:prop_replace(Key, NV, State#page_state.vars) },
     {reply, NV, State1};
 
+
+handle_call(get_attach_state, _From, State) when is_pid(State#page_state.websocket_pid) ->
+    {reply, attached, State};
 handle_call(get_attach_state, _From, State) ->
     case State#page_state.comet_pid of
         undefined ->
@@ -259,6 +283,8 @@ handle_call(Message, _From, State) ->
 %%                                   {noreply, State, Timeout} |
 %%                                   {stop, Reason, State}
 
+handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) when Pid == State#page_state.websocket_pid ->
+    {noreply, State#page_state{websocket_pid=undefined, last_detach=z_utils:now()}};
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) when Pid == State#page_state.comet_pid ->
     {noreply, State#page_state{comet_pid=undefined, last_detach=z_utils:now()}};
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
@@ -289,11 +315,18 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 %% @doc Ping the comet process that we have a script queued
-ping_comet(#page_state{comet_queue=[]} = State) ->
+ping_comet_ws(#page_state{script_queue=[]} = State) ->
     State;
-ping_comet(#page_state{comet_pid=undefined} = State) ->
+ping_comet_ws(#page_state{comet_pid=undefined, websocket_pid=undefined} = State) ->
     State;
-ping_comet(State) ->
+ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
+    try
+        State#page_state.websocket_pid ! {send_data, lists:reverse(State#page_state.script_queue)},
+        State#page_state{script_queue=[]}
+    catch _M : _E ->
+        State#page_state{websocket_pid=undefined}
+    end;
+ping_comet_ws(State) ->
     try
         State#page_state.comet_pid ! script_queued,
         State

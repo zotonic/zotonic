@@ -5,7 +5,7 @@
 @Author:	Tim Benniks <tim@timbenniks.nl>
 @Author:	Marc Worrell <marc@worrell.nl>
 
-Copyright 2009 Tim Benniks, Marc Worrell
+Copyright 2009-2010 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
+var z_ws                    = false;
 var z_comet_is_running		= false;
 var z_starting_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -146,7 +147,14 @@ function z_do_postback(triggerID, postback, extraParams)
 		"&z_pageid=" + urlencode(z_pageid) + 
 		"&" + $.param(extraParams);
 	
-	z_ajax(params);
+	if (z_ws)
+	{
+	    z_ws.send(params);
+	}
+	else
+	{
+    	z_ajax(params);
+	}
 }
 
 function z_ajax(params)
@@ -186,13 +194,41 @@ function z_ajax(params)
 /* Comet long poll
 ---------------------------------------------------------- */
 
-function z_comet_start()
+function z_comet_start(hostname)
 {
-	if (!z_comet_is_running)
-	{
-		setTimeout("z_comet();", 2000);
-		z_comet_is_running = true;
-	}
+    if (!z_ws && !z_comet_is_running)
+    {
+    	if ("WebSocket" in window) {
+    		z_ws = new WebSocket("ws://"+hostname+"/websocket");
+
+    		z_ws.onopen = function() {
+    			// Web Socket is connected. You can send data by send() method.
+    		};
+
+    		z_ws.onmessage = function (evt)
+    		{
+    			try
+    			{
+    			    eval(evt.data);
+    				z_init_postback_forms();
+    			}
+    			catch (e)
+    			{
+    				$.misc.error("Error evaluating ajax return value: " + data);
+    				$.misc.warn(e);
+    			}
+    		};
+
+    		z_ws.onclose = function()
+    		{
+    		};
+    	}
+        else
+    	{
+    		setTimeout("z_comet();", 2000);
+    		z_comet_is_running = true;
+    	}
+    }
 }
 
 function z_comet() 
@@ -211,8 +247,8 @@ function z_comet()
 			} 
 			catch (e)
 			{
-				alert("Error evaluating Comet return value: " + data);
-				alert(e);
+				$.misc.error("Error evaluating ajax return value: " + data);
+				$.misc.warn(e);
 			}
 			setTimeout("z_comet();", 1000);
 		},

@@ -28,4 +28,5 @@ varies(_Params, _Context) -> undefined.
 terminate(_State, _Context) -> ok.
 
 render(_Params, _Vars, Context, _State) ->
-    {ok, z_script:add_script(<<"z_comet_start();">>, Context)}.
+    Hostname = m_site:get(hostname, Context),
+    {ok, z_script:add_script(["z_comet_start('",Hostname,"');"], Context)}.
