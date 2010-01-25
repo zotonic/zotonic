@@ -76,7 +76,7 @@
 	{% include "_admin_js_include.tpl" %}
 	{% block js_extra %}{% endblock %}
 	
-	{% comet %}
+	{% stream %}
 	{% script %}
 
 	{% block tinymce %}{% endblock %}

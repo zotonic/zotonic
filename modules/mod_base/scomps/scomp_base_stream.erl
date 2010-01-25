@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% @doc Start the comet loop, enabling push notifications from the server.
+%% @copyright 2009-2010 Marc Worrell
+%% @doc Start the websockets connection or comet loop, enabling push notifications from the server.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(scomp_base_comet).
+-module(scomp_base_stream).
 -behaviour(gen_scomp).
 
 -export([init/1, varies/2, terminate/2, render/4]).
@@ -29,4 +29,4 @@ terminate(_State, _Context) -> ok.
 
 render(_Params, _Vars, Context, _State) ->
     Hostname = m_site:get(hostname, Context),
-    {ok, z_script:add_script(["z_comet_start('",Hostname,"');"], Context)}.
+    {ok, z_script:add_script(["z_stream_start('",Hostname,"');"], Context)}.
