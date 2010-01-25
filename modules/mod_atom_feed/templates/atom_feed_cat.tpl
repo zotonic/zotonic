@@ -11,7 +11,7 @@
 		{% catinclude "_atom_entry.tpl" id upcoming=1 %}
 	{% endfor %}
     {% else %}
-	{% for id in m.search[{latest cat=cat}] %}
+	{% for id in m.search[{query cat=cat sort="-publication_start"}] %}
 		{% catinclude "_atom_entry.tpl" id %}
 	{% endfor %}
 	{% endif %}
