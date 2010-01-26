@@ -52,7 +52,7 @@ export HEART_COMMAND="$ZOTONIC_SH start"
 export ZOTONIC_IP=any
 export ZOTONIC_PORT=8000
 
-pushd $PWD >/dev/null
+pushd $ZOTONIC >/dev/null
 
 
 function start() {
