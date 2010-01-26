@@ -1,7 +1,7 @@
 %% This is the MIT license.
 %% 
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009 Marc Worrell
+%% Copyright (c) 2009-2010 Marc Worrell
 %% 
 %% Permission is hereby granted, free of charge, to any person obtaining a copy 
 %% of this software and associated documentation files (the "Software"), to deal 
@@ -26,7 +26,8 @@
 	add_script/2,
 	get_script/1,
 	get_page_startup_script/1,
-	add_content_script/2
+	add_content_script/2,
+	clean/1
 ]).
 
 
@@ -54,6 +55,13 @@ get_page_startup_script(Context) ->
             ]
     end.
 
+%% @doc Remove all scripts from the context, resetting it back to a clean sheet.
+%% @doc clean(Context1) -> Context2
+clean(Context) ->
+    Context#context{scripts=[], content_scripts=[], updates=[], actions=[], validators=[]}.
+
+%% @doc Collect all scripts in the context, returns an iolist with javascript.
+%% @spec get_script(Context) -> iolist()    
 get_script(Context) -> 
     Context1 = Context#context{scripts=[], content_scripts=[]},
 

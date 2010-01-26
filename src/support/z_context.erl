@@ -58,6 +58,9 @@
     get_q_all/2,
     get_q_validated/2,
 
+
+    add_script_session/1,
+    add_script_page/1,
     add_script_session/2,
     add_script_page/2,
 
@@ -90,6 +93,7 @@
 
     merge_scripts/2,
     copy_scripts/2,
+    clean_scripts/1,
 
     set_resp_header/3,
     get_resp_header/2
@@ -342,10 +346,15 @@ merge_scripts(C, Acc) ->
         wire=combine(Acc#context.wire, C#context.wire),
         validators=combine(Acc#context.validators, C#context.validators)
     }.
-
+    
 combine([],X) -> X;
 combine(X,[]) -> X;
 combine(X,Y) -> [X++Y].
+
+%% @doc Remove all scripts from the context
+%% @spec clean_scripts(Context) -> Context
+clean_scripts(C) ->
+    z_script:clean(C).
 
 
 %% @doc Overwrite the scripts in Context with the scripts in From
@@ -496,6 +505,18 @@ get_q_validated(Key, Context) ->
 %% ------------------------------------------------------------------------------------
 %% Communicate with pages, session and user processes
 %% ------------------------------------------------------------------------------------
+
+%% @doc Add the script from the context to all pages of the session.
+add_script_session(Context) ->
+    Script = z_script:get_script(Context),
+    add_script_session(Script, Context).
+
+
+%% @doc Add the script from the context to the page in the user agent.
+add_script_page(Context) ->
+    Script = z_script:get_script(Context),
+    add_script_page(Script, Context).
+
 
 %% @doc Add a script to the all pages of the session. Used for comet feeds.
 add_script_session(Script, Context) ->
