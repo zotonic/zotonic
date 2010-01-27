@@ -61,7 +61,8 @@ process_post(ReqData, Context) ->
 				{error, invalid_credentials},
 				{redirect, z_context:get_q("redirect", ContextLogon, "")}
 			],
-            html(ContextLogon, Vars)
+            {Reply, ContextHtml} = html(ContextLogon, Vars),
+            ?WM_REPLY(Reply, ContextHtml)
     end.
 
 
