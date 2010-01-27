@@ -20,7 +20,7 @@ Recent Comments
 					<span class="zp-15">Email</span>
 					<span class="zp-15">Options</span>
 				</li>
-			{% with m.search.paged[{recent_comments}] as result %}
+			{% with m.search.paged[{recent_comments page=q.page}] as result %}
 				{% for comment in result %}
 					{% with comment.id as id %}
 					<li {% if not comment.is_visible %}class="unpublished" {% endif %}>
