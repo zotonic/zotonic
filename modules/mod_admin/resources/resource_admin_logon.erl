@@ -51,7 +51,12 @@ process_post(ReqData, Context) ->
         {true, ContextLogon} -> 
 			Url = case z_context:get_q("redirect", ContextLogon, "") of
 				"" ->  z_dispatcher:url_for(admin, ContextLogon);
-				Redirect -> Redirect
+				Redirect -> 
+				    Me = lists:flatten(z_dispatcher:url_for(admin_logon, ContextLogon)),
+				    case lists:prefix(Me, Redirect) of
+				        true -> z_dispatcher:url_for(admin, ContextLogon);
+				        false -> Redirect
+				    end
 			end,
 			UrlAbs = z_context:abs_url(Url, ContextLogon),
 			ReqData1 = z_context:get_reqdata(ContextLogon),
