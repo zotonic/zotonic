@@ -24,8 +24,9 @@ $.widget("ui.tooltip",
 {
 	_init: function() 
 	{
-		self = this;
-		obj  = this.element;
+		var self = this;
+		var obj  = this.element;
+		var tip  = undefined;
 		
 		if(this.title == '')
 		{
@@ -76,6 +77,9 @@ $.widget("ui.tooltip",
 	},
 	destroy: function()
 	{
+	    var self = this;
+		var obj  = this.element;
+
 		obj.unbind(self.options.inevent, self.options.outevent);
 		$(document).unbind('mousemove');
 	}
