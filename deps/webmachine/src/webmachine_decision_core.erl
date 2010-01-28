@@ -31,7 +31,7 @@ handle_request(Resource, ReqData) ->
         d(v3b13, Resource, ReqData)
     catch
         error:X ->
-            ?DBG(X),            
+            ?WM_DBG(X),            
             error_response(erlang:get_stacktrace(), Resource, ReqData)
     end.
 
