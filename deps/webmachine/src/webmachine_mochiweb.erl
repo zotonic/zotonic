@@ -50,7 +50,7 @@ stop() ->
     mochiweb_http:stop(?MODULE).
 
 loop(MochiReq) ->
-    %?DBG(MochiReq),
+    %?WM_DBG(MochiReq),
     ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
     Host = case host_headers(ReqData) of
                [H|_] -> H;
@@ -96,7 +96,7 @@ loop(MochiReq) ->
 				end
             catch
                 error:_ -> 
-                    ?DBG({error, erlang:get_stacktrace()}),
+                    ?WM_DBG({error, erlang:get_stacktrace()}),
                     {ok,RD3} = webmachine_request:send_response(500, RD2),
                     case application:get_env(webmachine, webmachine_logger_module) of
                         {ok, LogModule} ->
