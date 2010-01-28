@@ -36,6 +36,9 @@
 	to_utc/1,
 	to_localtime/1,
 	to_datetime/1,
+    to_date/1,
+    to_time/1,
+    to_isotime/1,
     to_json/1
 ]).
 
@@ -138,29 +141,68 @@ to_localtime(D) ->
         LocalD -> LocalD
     end.
 
-%% @doc Convert an input to a datetime, very simplistic function.
+%% @doc Convert an input to a datetime, using to_date/1 and to_time/1.
 to_datetime({{_,_,_},{_,_,_}} = DT) -> DT;
 to_datetime({_,_,_} = D) -> {D, {0,0,0}};
 to_datetime(L) when is_list(L) ->
 	try
-		case string:tokens(L, " ") of
+		case string:tokens(L, " T") of
 			[Date,Time] ->
-				[Y,M,D] = string:tokens(Date, "-/"),
-				[H,I,S] = string:tokens(Time, ":."),
-				{{to_integer(Y),to_integer(M),to_integer(D)}, {to_integer(H),to_integer(I),to_integer(S)}};
+                WithTZ = fun(Tm, Tz, Mul) ->
+                                 TZTime = to_time(Tz),
+                                 Add = calendar:datetime_to_gregorian_seconds({{0,1,1},TZTime}),
+                                 Secs = calendar:datetime_to_gregorian_seconds({to_date(Date), to_time(Tm)}),
+                                 calendar:universal_time_to_local_time(calendar:gregorian_seconds_to_datetime(Secs+(Mul*Add)))
+                         end,
+                case string:tokens(Time, "+") of
+                    [Time1, TZ] ->
+                        %% Timestamp with positive time zone
+                        WithTZ(Time1, TZ, -1);
+                    _ ->
+                        case string:tokens(Time, "-") of
+                            [Time1, TZ] ->
+                                %% Timestamp with negative time zone
+                                WithTZ(Time1, TZ, 1);
+                            _ ->
+                                case lists:reverse(Time) of
+                                    [$Z|Rest] ->
+                                        %% Timestamp ending on Z (= UTC)
+                                        calendar:universal_time_to_local_time({to_date(Date), to_time(lists:reverse(Rest))});
+                                    _ ->
+                                        %% Timestamp without time zone
+                                        {to_date(Date), to_time(Time)}
+                                end
+                        end
+                end;
 			[Date] ->
-                case string:tokens(Date, "-/") of
-                    [D,M,Y] when length(Y) =:= 4 ->
-                        {{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}};
-                    [Y,M,D] ->
-                        {{to_integer(Y),to_integer(M),to_integer(D)}, {0,0,0}}
-                end
+                {to_date(Date), {0,0,0}}
         end
 	catch
 		_:_ -> undefined
 	end;
 to_datetime(undefined) ->
 	undefined.
+
+%% @doc Convert an input to a date.
+to_date({_,_,_} = D) -> D;
+to_date(L) when is_list(L) ->
+    case string:tokens(L, "-/") of
+        [D,M,Y] when length(Y) =:= 4 ->
+            {to_integer(Y),to_integer(M),to_integer(D)};
+        [Y,M,D] ->
+            {to_integer(Y),to_integer(M),to_integer(D)}
+    end.
+
+%% @doc Convert an input to a time.
+to_time({_,_,_} = D) -> D;
+to_time(L) when is_list(L) ->
+    [H,I,S|_] = lists:flatten([[to_integer(X) ||X <-  string:tokens(L, ":.")], 0, 0]),
+    {H,I,S}.
+
+%% @doc Convert a datetime (in local time) to an ISO time string (in universal time).
+to_isotime(DateTime) ->
+    erlydtl_dateformat:format(hd(calendar:local_time_to_universal_time_dst(DateTime)), "Y-m-d\\TH:i:s\\Z", #context{}).
+
 
 %%
 %% @doc Convert an Erlang structure to a format that can be serialized by mochijson.
