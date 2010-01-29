@@ -68,7 +68,9 @@ encodings_provided(ReqData, Context) ->
 
 
 content_types_provided(ReqData, Context) ->
-    {[{"application/atom+xml", provide_content}], ReqData, Context}.
+    {[{"application/atom+xml;type=entry", provide_content},
+      {"application/atom+xml", provide_content}],
+     ReqData, Context}.
 
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
@@ -104,10 +106,8 @@ expires(ReqData, State) ->
 provide_content(ReqData, Context) ->
     Context1 = z_context:set_reqdata(ReqData, Context),
     Id = get_id(Context1),
-    Props0 = m_rsc:get_raw(m_rsc:rid(Id, Context1), Context1),
-    Props1 = [{resource_uri, m_rsc:p(Id, resource_uri, Context1)}] ++ Props0,
-    Rsc = [{rsc, Props1}],
-    Content = atom_convert:resource_to_atom(Rsc),
+    RscExport = m_rsc_export:full(Id, Context1),
+    Content = atom_convert:resource_to_atom(RscExport),
     ?WM_REPLY(Content, Context1).
 
 

@@ -30,12 +30,13 @@
 
 -define(ATOM_NS, 'http://www.w3.org/2005/Atom').
 
-
-resource_to_atom(X) ->
-    Rsc = proplists:get_value(rsc, X),
+%% @doc Export a resource to Atom XML.
+%% @spec resource(rsc_export()) -> string().
+resource_to_atom(RscExport) ->
+    Rsc = proplists:get_value(rsc, RscExport),
 
     Content0 = [
-                {id, [binary_to_list(proplists:get_value(resource_uri, Rsc))]},
+                {id, [binary_to_list(proplists:get_value(resource_uri, RscExport))]},
                 {title, [{type, "html"}], [binary_to_list(proplists:get_value(title, Rsc))]},
                 {published, [z_convert:to_isotime(proplists:get_value(publication_start, Rsc))]},
                 {updated, [z_convert:to_isotime(proplists:get_value(modified, Rsc))]}
@@ -62,49 +63,52 @@ resource_to_atom(X) ->
     lists:flatten(xmerl:export_simple([RootElem], xmerl_xml)).
 
 
--define(simpleContent(Expr, Elem), collapse_xmltext((hd(xmerl_xpath:string(Expr, Elem)))#xmlElement.content) ).
 
+%% @doc Export a resource to Atom XML.
+%% @spec resource(string()) -> rsc_export().
 atom_to_resource(Xml) ->
     {RootElem,_} = xmerl_scan:string(Xml),
 
     %% Atom required elements
-    Props0 = case xmerl_xpath:string("/entry/id", RootElem) of
-                 [] -> [];
+    RscUri = case xmerl_xpath:string("/entry/id", RootElem) of
+                 [] -> undefined;
                  [#xmlElement{content=Uri}] ->
-                     [{resource_uri, list_to_binary(collapse_xmltext(Uri))}]
+                     list_to_binary(collapse_xmltext(Uri))
              end,
 
-    Props1 = case xmerl_xpath:string("/entry/title", RootElem) of
-                 [] -> Props0 ++ [{title, <<>>}];
+    RscProps1 = case xmerl_xpath:string("/entry/title", RootElem) of
+                 [] -> [{title, <<>>}];
                  [#xmlElement{content=Title}] ->
-                     Props0 ++ [{title, list_to_binary(collapse_xmltext(Title))}]
+                     [{title, list_to_binary(collapse_xmltext(Title))}]
              end,
 
-    Props2 = case xmerl_xpath:string("/entry/updated", RootElem) of
-                 [] -> Props1;
+    RscProps2 = case xmerl_xpath:string("/entry/updated", RootElem) of
+                 [] -> RscProps1;
                  [#xmlElement{content=Updated}] ->
-                     Props1 ++ [{modified, z_convert:to_datetime(collapse_xmltext(Updated))}]
+                     RscProps1 ++ [{modified, z_convert:to_datetime(collapse_xmltext(Updated))}]
              end,
 
-    Props3 = case xmerl_xpath:string("/entry/published", RootElem) of
-                 [] -> Props2;
+    RscProps3 = case xmerl_xpath:string("/entry/published", RootElem) of
+                 [] -> RscProps2;
                  [#xmlElement{content=Published}] ->
-                     Props2 ++ [{publication_start, z_convert:to_datetime(collapse_xmltext(Published))}]
+                     RscProps2 ++ [{publication_start, z_convert:to_datetime(collapse_xmltext(Published))}]
              end,
 
-    Props4 = case xmerl_xpath:string("/entry/summary", RootElem) of
-               [] -> Props3;
+    RscProps4 = case xmerl_xpath:string("/entry/summary", RootElem) of
+               [] -> RscProps3;
                [#xmlElement{content=Summary}] ->
-                   Props3 ++ [{summary, list_to_binary(collapse_xmltext(Summary))}]
+                   RscProps3 ++ [{summary, list_to_binary(collapse_xmltext(Summary))}]
            end,
 
-    Props5 = case xmerl_xpath:string("/entry/content", RootElem) of
-               [] -> Props4;
+    RscProps5 = case xmerl_xpath:string("/entry/content", RootElem) of
+               [] -> RscProps4;
                [#xmlElement{content=Body}] ->
-                   Props4 ++ [{body, list_to_binary(collapse_xmltext(Body))}]
+                   RscProps4 ++ [{body, list_to_binary(collapse_xmltext(Body))}]
            end,
 
-    [{rsc, Props5}].
+    [{resource_uri, RscUri},
+     {rsc, RscProps5}
+    ].
 
 
 collapse_xmltext(Content) ->

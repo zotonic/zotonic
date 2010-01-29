@@ -32,7 +32,10 @@
 
 %% interface functions
 -export([
+         content_types_dispatch/3
 ]).
+
+-record(state, {context}).
 
 -include_lib("zotonic.hrl").
 
@@ -42,7 +45,7 @@
 %% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, [Args], []).
+    gen_server:start_link(?MODULE, Args, []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -53,9 +56,11 @@ start_link(Args) when is_list(Args) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(_Args) ->
+init(Args) ->
     process_flag(trap_exit, true),
-    {ok, []}.
+    {context, Context} = proplists:lookup(context, Args),
+    z_notifier:observe(content_types_dispatch, {?MODULE, content_types_dispatch}, Context),
+	{ok, #state{context=z_context:new(Context)}}.
 
 %% Description: Handling call messages
 %% @doc Trap unknown calls
@@ -74,7 +79,8 @@ handle_info(_Info, State) ->
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    z_notifier:detach(content_types_dispatch, {?MODULE, content_types_dispatch}, State#state.context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -86,3 +92,6 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+%% Dispatch to the atom representation.
+content_types_dispatch(content_types_dispatch, Acc, _Context) ->
+    [{"application/atom+xml", atom_entry} | Acc].

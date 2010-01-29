@@ -13,10 +13,12 @@
 rsc1() ->
     %% We need the calendar:universal_time_to_local_time functions
     %% here because we want the tests to be timezone independent.
-    [{rsc, [ {resource_uri, <<"http://localhost/id/222">>},
-             {title, <<"Resource 1">>},
+    [{resource_uri, <<"http://localhost/id/222">>},
+     {rsc,  [{title, <<"Resource 1">>},
              {publication_start, calendar:universal_time_to_local_time({{2010,1,1},{12,11,0}})},
-             {modified, calendar:universal_time_to_local_time({{2010,1,28},{12,14,4}})}
+             {modified, calendar:universal_time_to_local_time({{2010,1,28},{12,14,4}})},
+             {summary, <<"This is a summary.">>},
+             {body, <<"This is the body.">>}
             ]
      }
     ].
@@ -46,6 +48,14 @@ resource_to_atom_test() ->
     %% Check the existence of the updated field
     [UpdElem] = xmerl_xpath:string("/entry/updated", Elem),
     ?assertContent(UpdElem, "2010-01-28T12:14:04Z"),
+
+    %% Check the existence of the summary field
+    [SumElem] = xmerl_xpath:string("/entry/summary", Elem),
+    ?assertContent(SumElem, "This is a summary."),
+
+    %% Check the existence of the content field
+    [BodyElem] = xmerl_xpath:string("/entry/content", Elem),
+    ?assertContent(BodyElem, "This is the body."),
     ok.
 
 
@@ -65,20 +75,25 @@ atom_to_resource_test() ->
   <link rel=\"enclosure\" type=\"image/jpeg\" title=\"FIGURE\" href=\"http://fast.mediamatic.nl/f/sjnh/image/766/27597-480-480-scale.jpg\" />
   <author><name>-</name></author></entry>",
 
-    [{rsc, Rsc}] = atom_convert:atom_to_resource(Atom1),
+    ImportedRsc = atom_convert:atom_to_resource(Atom1),
+    ?assertEqual(proplists:get_value(resource_uri, ImportedRsc), <<"http://www.mediamatic.net/id/22661">>),
+
+    Rsc = proplists:get_value(rsc, ImportedRsc),
     ?assertEqual(proplists:get_value(title, Rsc), <<"Arjan Scherpenisse">>),
-    ?assertEqual(proplists:get_value(resource_uri, Rsc), <<"http://www.mediamatic.net/id/22661">>),
     ?assertEqual(proplists:get_value(modified, Rsc), calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}})),
     ok.
 
 
 resource_to_resource_test() ->
-    [{rsc, Rsc1}] = rsc1(),
-    [{rsc, Rsc2}] = atom_convert:atom_to_resource(atom_convert:resource_to_atom(rsc1())),
+    Rsc1 = rsc1(),
+    Rsc2 = atom_convert:atom_to_resource(atom_convert:resource_to_atom(rsc1())),
 
-    %% Verify the equality of the following elements:
-    L = [title, resource_uri, modified, publication_start],
-
+    %% Verify the equality of base elements
+    L = [resource_uri],
     [?assertEqual(proplists:get_value(X, Rsc1), proplists:get_value(X, Rsc2)) || X <- L],
+
+    %% Verify the equality of the rsc elements
+    L2 = [title, resource_uri, modified, publication_start],
+    [?assertEqual(proplists:get_value(X, proplists:get_value(rsc, Rsc1)), proplists:get_value(X, proplists:get_value(rsc, Rsc2))) || X <- L2],
     ok.
 
