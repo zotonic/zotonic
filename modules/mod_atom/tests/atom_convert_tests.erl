@@ -20,6 +20,17 @@ rsc1() ->
              {summary, <<"This is a summary.">>},
              {body, <<"This is the body.">>}
             ]
+     },
+
+     {edges, [
+              [{object_id, 111},
+               {object_uri, <<"http://localhost/id/111">>},
+               {object_title, <<"An author">>},
+               {predicate_id, 11},
+               {predicate_uri, <<"http://localhost/id/11">>},
+               {predicate_name, <<"author">>}
+              ]
+             ]
      }
     ].
 
@@ -56,6 +67,14 @@ resource_to_atom_test() ->
     %% Check the existence of the content field
     [BodyElem] = xmerl_xpath:string("/entry/content", Elem),
     ?assertContent(BodyElem, "This is the body."),
+
+    %% Check the existence of the author/name field
+    [AuthorName] = xmerl_xpath:string("/entry/author/name", Elem),
+    ?assertContent(AuthorName, "An author"),
+
+    %% Check the existence of the author/name field
+    [AuthorUri] = xmerl_xpath:string("/entry/author/uri", Elem),
+    ?assertContent(AuthorUri, "http://localhost/id/111"),
     ok.
 
 
@@ -73,7 +92,9 @@ atom_to_resource_test() ->
     <title type=\"html\">Arjan Scherpenisse</title>
   </anymeta:alternate>
   <link rel=\"enclosure\" type=\"image/jpeg\" title=\"FIGURE\" href=\"http://fast.mediamatic.nl/f/sjnh/image/766/27597-480-480-scale.jpg\" />
-  <author><name>-</name></author></entry>",
+  <author><name>Arjan</name></author>
+  <author><name>AnotherAuthor</name><uri>http://foo.com/</uri></author>
+  </entry>",
 
     ImportedRsc = atom_convert:atom_to_resource(Atom1),
     ?assertEqual(proplists:get_value(resource_uri, ImportedRsc), <<"http://www.mediamatic.net/id/22661">>),
@@ -81,7 +102,20 @@ atom_to_resource_test() ->
     Rsc = proplists:get_value(rsc, ImportedRsc),
     ?assertEqual(proplists:get_value(title, Rsc), <<"Arjan Scherpenisse">>),
     ?assertEqual(proplists:get_value(modified, Rsc), calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}})),
+
+    Edges = proplists:get_value(edges, ImportedRsc),
+    ?assertEqual(filter_edges(Edges, <<"author">>),
+                 [ [{predicate_name, <<"author">>}, {object_uri, <<>>}, {object_title, <<"Arjan">>}],
+                   [{predicate_name, <<"author">>}, {object_uri, <<"http://foo.com/">>}, {object_title, <<"AnotherAuthor">>}]
+                  ]),
+
+    ?assertEqual(filter_edges(Edges, <<"depiction">>),
+                 [ [{predicate_name, <<"depiction">>}, {object_uri, <<"http://fast.mediamatic.nl/f/sjnh/image/766/27597-480-480-scale.jpg">>}, {object_title, <<"FIGURE">>}]]),
+
     ok.
+
+filter_edges(Edges, PredicateName) ->
+    lists:filter(fun(X) -> proplists:get_value(predicate_name, X) == PredicateName end, Edges).
 
 
 resource_to_resource_test() ->

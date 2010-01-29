@@ -56,11 +56,33 @@ resource_to_atom(RscExport) ->
                        Content1 ++ [{summary, [{type, "html"}], [binary_to_list(Summary)]}]
                end,
 
+    Content3 = Content2 ++ author_element(RscExport),
+
     RootElem = #xmlElement{name=entry, 
                            namespace=#xmlNamespace{default=?ATOM_NS},
                            attributes=[#xmlAttribute{name=xmlns, value=?ATOM_NS}],
-                           content=Content2},
+                           content=Content3},
     lists:flatten(xmerl:export_simple([RootElem], xmerl_xml)).
+
+
+%% @doc Construct the Atom author element.
+%% @spec author_element(rsc_export()) -> [#xmlElement]
+author_element(Export) ->
+    case proplists:get_value(edges, Export) of
+        X when X =:= undefined orelse X =:= [] ->
+            [];
+        Edges ->
+            [#xmlElement{name=author, content=[
+                         #xmlElement{name=name, content=[#xmlText{value=proplists:get_value(object_title, E)}]},
+                         #xmlElement{name=uri, content=[#xmlText{value=proplists:get_value(object_uri, E)}]}]}
+             || E <- filter_edges(Edges, <<"author">>)]
+    end.
+
+
+%% @doc Given a list of edges, filter out the ones which have the given predicate name.
+%% @spec filter_edges([edge()], atom()) -> [edge()].
+filter_edges(Edges, PredicateName) ->
+    lists:filter(fun(X) -> proplists:get_value(predicate_name, X) == PredicateName end, Edges).
 
 
 
@@ -106,11 +128,65 @@ atom_to_resource(Xml) ->
                    RscProps4 ++ [{body, list_to_binary(collapse_xmltext(Body))}]
            end,
 
-    [{resource_uri, RscUri},
-     {rsc, RscProps5}
-    ].
+    Edges = [],
+
+    Edges1 = Edges ++ find_author(RootElem),
+    Edges2 = Edges1 ++ find_depiction(RootElem),
+
+    Import = [{resource_uri, RscUri},
+              {rsc, RscProps5},
+              {edges, Edges2}
+             ],
+    lists:filter(fun({_,L}) -> not(L == []) end, Import).
 
 
+%% @doc Given an Atom entry, get a list of all the authors formatted as author edges.
+%% @spec find_author(#xmlElement) -> [edge()]
+find_author(Elem) ->
+    case xmerl_xpath:string("/entry/author", Elem) of
+        [] -> []; % no author found
+        Authors ->
+            lists:map(fun(A) ->
+                              Name = case xmerl_xpath:string("/author/name", A) of 
+                                         [] -> <<>>;
+                                         [#xmlElement{content=[#xmlText{value=N}]}] ->
+                                             list_to_binary(N)
+                                     end,
+                              Uri = case xmerl_xpath:string("/author/uri", A) of 
+                                        [] -> <<>>;
+                                        [#xmlElement{content=[#xmlText{value=U}]}] ->
+                                            list_to_binary(U)
+                                    end,
+                              [{predicate_name, <<"author">>},
+                               {object_uri, Uri},
+                               {object_title, Name}]
+                      end, Authors)
+    end.
+
+
+%% @doc Find the enclosure and store as depiction edge.
+%% @doc find_depiction(#xmlElement) -> [edge()]
+find_depiction(Elem) ->
+    case xmerl_xpath:string("/entry/link[@rel=\"enclosure\"]", Elem) of
+        [] -> []; % no depiction found
+        [Enclosure|_] ->
+            [ [{predicate_name, <<"depiction">>},
+               {object_uri, xml_attrib(href, Enclosure)},
+               {object_title, xml_attrib(title, Enclosure)}
+               ] ]
+    end.
+
+%% @doc Given an XML element, get the value of an attribute.
+%% @spec xml_attrib(atom(), #xmlElement) -> binary() | undefined
+xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
+    case lists:filter(fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end, Attrs) of
+        [] -> undefined;
+        [#xmlAttribute{value=Value}|_] ->
+            list_to_binary(Value)
+    end.
+
+%% @doc Given a list of XML test, implode it into one list.
+%% @spec collapse_xmltext([#xmlText]) -> string()
 collapse_xmltext(Content) ->
     lists:flatten([X#xmlText.value || X <- Content]).
 
