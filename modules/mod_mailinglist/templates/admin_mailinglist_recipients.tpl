@@ -20,8 +20,8 @@
 
 		<hr class="clear" />
 		<p>All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. <br/><a href="{% url admin_edit_rsc id=id %}">Edit the mailing list &raquo;</a></p>
-		{% with m.search.paged[{mailinglist_recipients id=id pagelen=150}] as recipients %}
-			{% pager result=recipients dispatch="mailinglist_recipients" id=id qargs %}
+		{% with m.search.paged[{mailinglist_recipients id=id pagelen=150 page=q.page}] as recipients %}
+			{% pager result=recipients dispatch="admin_mailinglist_recipients" id=id qargs %}
 			{% for list in recipients|vsplit_in:3 %}
 				<div class="zp-30">
 					<h3 class="above-list ">Recipients</h3>
