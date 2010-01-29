@@ -21,7 +21,7 @@
 			{% endfor %}
 
 			<title>{{ r.title|escapexml }}</title>
-			<summary>{{ r.intro|escapexml }}</summary>
+			<summary>{{ r.summary|escapexml }}</summary>
 			<content type="text/html">{{ r.body|escapexml }}</content>
 			{% if medium.filename %}
 				<content type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" /> 
