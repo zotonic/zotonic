@@ -250,7 +250,7 @@ read_whole_stream({Hunk,Next}, Acc0, MaxRecvBody, SizeAcc) ->
 recv_stream_body(ReqData, MaxHunkSize) ->
     case get_header_value("expect", ReqData) of
 	"100-continue" ->
-	    send(ReqData#wm_reqdata.socket, [make_version(wrq:version(ReqData)), make_code(100), <<"\r\n">>]);
+	    send(ReqData#wm_reqdata.socket, [make_version(wrq:version(ReqData)), make_code(100), <<"\r\n\r\n">>]);
 	_Else ->
 	    ok
     end,

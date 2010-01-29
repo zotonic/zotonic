@@ -594,7 +594,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 			}
 		}, 10);
 
-		var nullCheckFlag = 0;
+        var domCheckCount = 3;
 
 		function cb() {
 			if (cbInvoked++) return;
@@ -607,19 +607,24 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 				// extract the server response from the iframe
 				var data, doc;
 
-				doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
+                doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
+                if (doc.body == null || doc.body.innerHTML == '') {
+                    if (--domCheckCount) {
+                        // in some browsers (Opera) the iframe DOM is not always traversable when
+                        // the onload callback fires, so we loop a bit to accommodate
 
-				if ((doc.body == null || doc.body.innerHTML == '') && !nullCheckFlag) {
-					// in some browsers (cough, Opera 9.2.x) the iframe DOM is not always traversable when
-					// the onload callback fires, so we give them a 2nd chance
-					nullCheckFlag = 1;
-					cbInvoked--;
-					setTimeout(cb, 100);
-					return;
-				}
+                        // MW: looks like this is not a timing issue but Opera triggering a
+                        //     load event on the 100 continue.
+                        cbInvoked = 0;
+                        io.addEventListener('load', cb, false);
+                        return;
+                    }
+                    log('Could not access iframe DOM after 50 tries.');
+                    return;
+                }
 
 				xhr.responseText = doc.body ? doc.body.innerHTML : null;
-
+				
 				xhr.getResponseHeader = function(header){
 					var headers = {'content-type': opts.dataType};
 					return headers[header];
