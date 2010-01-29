@@ -20,8 +20,8 @@
 				<link rel="enclosure" type="image/jpeg" href="{{ site_url }}{% image_url media_id width=400 height=400 %}" />
 			{% endfor %}
 
-			<title>{{ r.title|escapexml }}</title>
-			<summary>{{ r.summary|escapexml }}</summary>
+			<title>{{ r.title }}</title>
+			<summary>{{ r.summary }}</summary>
 			<content type="text/html">{{ r.body|escapexml }}</content>
 			{% if medium.filename %}
 				<content type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" /> 
