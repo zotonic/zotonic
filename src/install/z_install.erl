@@ -27,24 +27,47 @@
 
 %% interface functions
 -export([
+    pre_install/1,
     install/1
 ]).
 
+-include_lib("zotonic.hrl").
+
 %% @doc Install the database on the database connection supplied
 %% @spec install(Host) -> ok
+
+pre_install(testsandbox) ->
+    %% The test sandbox needs cleanup first:
+    {ok, C} = pgsql_pool:get_connection(testsandbox),
+    %Database = proplists:get_value(dbdatabase, SiteProps),
+
+    %% Drop all tables
+    pgsql:equery(C, "DROP SCHEMA public CASCADE"),
+    pgsql:equery(C, "CREATE SCHEMA public"),
+
+    %% Remove all files
+    FilesDir = z_utils:os_filename(filename:join([z_utils:lib_dir(priv), "sites", testsandbox, "files"])),
+    os:cmd("rm -rf " ++ FilesDir),
+    os:cmd("mkdir -p " ++ FilesDir),
+    ok;
+
+pre_install(_) ->
+    ok.
+
+
 install(Host) ->
     {ok, C} = pgsql_pool:get_connection(Host),
-    ok = pgsql:with_transaction(C, fun install_all/1),
+    ok = pgsql:with_transaction(C, fun (C2) ->
+                                           install_sql_list(C, model_pgsql()),
+                                           z_install_data:install(Host, C2),
+                                           ok 
+                                   end
+                               ),
     pgsql_pool:return_connection(Host, C),
     Context = z_context:new(Host),
     m_category:renumber(Context),
     ok.
 
-
-install_all(C) ->
-    install_sql_list(C, model_pgsql()),
-    z_install_data:install(C),
-    ok.
 
 install_sql_list(C, Model) ->
     [ {ok, [], []} = pgsql:squery(C, Sql) || Sql <- Model ].

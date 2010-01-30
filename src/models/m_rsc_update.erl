@@ -62,7 +62,7 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
                     delete_nocheck(Id, Context)
             end;
         false ->
-            {error, eacces}
+            throw({error, eacces})
     end.
 
 
@@ -126,7 +126,7 @@ duplicate(Id, DupProps, Context) ->
                     {error, Reason}
             end;
         false ->
-            {error, eacces}
+            throw({error, eacces})
     end.
 
 
@@ -256,7 +256,7 @@ update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_
                     {error, Reason}
             end;
         false ->
-            {error, eacces}
+            throw({error, eacces})
     end.
 
 
