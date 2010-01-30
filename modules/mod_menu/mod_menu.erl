@@ -30,7 +30,23 @@
 
 %% interface functions
 -export([
+    observe/2
 ]).
+
+-record(state, {context}).
+
+
+observe(menu_get_rsc_ids, Context) ->
+    Menu = scomp_menu_menu:get_menu(Context),
+    {ok, menu_ids(Menu, [])}.
+    
+    menu_ids([], Acc) ->
+        Acc;
+    menu_ids([{Id,SubMenu}|T], Acc) ->
+        Acc1 = menu_ids(SubMenu, [Id|Acc]),
+        menu_ids(T, Acc1);
+    menu_ids([H|T], Acc) ->
+        menu_ids(T, [H|Acc]).
 
 
 %%====================================================================
@@ -50,9 +66,11 @@ start_link(Args) when is_list(Args) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(_Args) ->
+init(Args) ->
     process_flag(trap_exit, true),
-    {ok, []}.
+    Context = z_context:new(proplists:get_value(context, Args)),
+    z_notifier:observe(menu_get_rsc_ids, {?MODULE, observe}, Context),
+    {ok, #state{context=Context}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -87,7 +105,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    z_notifier:detach(menu_get_rsc_ids, {?MODULE, observe}, State#state.context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
