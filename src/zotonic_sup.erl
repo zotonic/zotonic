@@ -70,6 +70,7 @@ init([]) ->
 		 {dispatch, []},
 		 {backlog, 500}
 	],
+    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
 
     % Listen to the ip address and port for all sites.
     Webmachine = {webmachine_mochiweb,
