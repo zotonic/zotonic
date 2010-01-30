@@ -273,7 +273,7 @@ replace_file(File, RscId, Props, Context) ->
                         Error
                 end
             end,
-            
+
             Depicts = depicts(RscId, Context),
             {ok, Id} = z_db:transaction(F, Context),
             [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
@@ -284,52 +284,22 @@ replace_file(File, RscId, Props, Context) ->
     end.
 
 
-replace_url(File, RscId, Props, Context) ->
-    ?DEBUG("Replacing url!"),
-    ?DEBUG(File),
+replace_url(Url, RscId, Props, Context) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
-            OriginalFilename = proplists:get_value(original_filename, Props, File),
-            PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-            SafeRootName = z_string:to_rootname(OriginalFilename),
-            SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
-            ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
-            RootName = filename:rootname(filename:basename(ArchiveFile)),
-            MediumRowProps = [
-                {id, RscId}, 
-                {filename, ArchiveFile}, 
-                {rootname, RootName}, 
-                {is_deletable_file, not z_media_archive:is_archived(File, Context)}
-                | PropsMedia
-            ],
-
-            F = fun(Ctx) ->
-                z_db:delete(medium, RscId, Context),
-                case z_db:insert(medium, MediumRowProps, Ctx) of
-                    {ok, _MediaId} ->
-                        % When the resource is in the media category, then move it to the correct sub-category depending
-                        % on the mime type of the uploaded file.
-                        case rsc_is_media_cat(RscId, Context) of
-                            true ->
-                                case proplists:get_value(mime, PropsMedia) of
-                                    "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Ctx);
-                                    "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Ctx);
-                                    "sound/" ++ _ -> m_rsc:update(RscId, [{category, sound}], Ctx);
-                                    _ -> nop
-                                end;
-                            false -> nop
-                        end,
-                        {ok, RscId};
-                    Error ->
-                        Error
-                end
-            end,
-            
-            Depicts = depicts(RscId, Context),
-            {ok, Id} = z_db:transaction(F, Context),
-            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
-            z_depcache:flush(Id, Context),
-            {ok, Id};
+            Props1 = [{original_filename, filename:basename(Url)} | Props],
+            File = z_utils:tempfile(),
+            case http:request(get, 
+                              {Url, []},
+                              [],
+                              [{stream, File}]) of
+                {ok, saved_to_file} ->
+                    {ok, RscId} = replace_file(File, RscId, Props1, Context),
+                    ok = file:delete(File),
+                    {ok, RscId};
+                {error, E} ->
+                    {error, E}
+            end;
         false ->
             {error, eacces}
     end.
