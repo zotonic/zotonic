@@ -41,6 +41,9 @@ install_check(SiteProps) ->
     Name     = proplists:get_value(host, SiteProps),
     Database = proplists:get_value(dbdatabase, SiteProps),
     {ok, C}  = pgsql_pool:get_connection(Name),
+
+    z_install:pre_install(Name),
+
     {ok, HasConfig} = pgsql:equery1(C, "
             select count(*) 
             from information_schema.tables 

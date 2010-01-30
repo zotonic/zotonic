@@ -1,0 +1,28 @@
+How to Unit test a Zotonic install.
+---------------------------------
+
+Basic tests:
+
+./runtests.sh 
+
+This starts the zotonic system and executes all EUnit tests. 
+
+However, you will see a lot of failing tests, since the sandboxed test
+environment is not started by default, since this needs some setup
+regarding the database and hostname.
+
+The sandbox test environment is located at priv/sites/testsandbox, and
+behaves just like a regular zotonic site. Create a database like this:
+
+CREATE DATABASE zotonic_testsandbox  WITH OWNER = zotonic ENCODING = 'UTF8';
+GRANT ALL ON database zotonic_testsandbox TO zotonic;
+
+Rename the priv/sites/testsandbox/config.in file to config, and edit
+it to setenabled = true, and adjust the database settings.
+
+Now, create a hosts entry pointing to localhost:
+127.0.0.1    testsandbox
+
+Now, when you start ./runtests.sh the tests which involve the
+testsandbox will be included. At this point you can also point your
+browser to http://testsandbox:8000/ to see the sandbox site.

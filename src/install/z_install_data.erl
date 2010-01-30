@@ -23,7 +23,7 @@
 
 %% interface functions
 -export([
-    install/1,
+    install/2,
     install_category/1
 ]).
 
@@ -31,9 +31,9 @@
 
 %% @doc Insert boot data into the database.
 %% @spec install(Connection) -> ok
-install(C) ->
+install(Host, C) ->
     ok = install_config(C),
-    ok = install_modules(C),
+    ok = install_modules(Host, C),
     ok = install_group(C),
     ok = install_category(C),
     ok = install_rsc(C),
@@ -56,10 +56,9 @@ install_config(C) ->
     ok.
 
 
-install_modules(C) ->
+install_modules(Host, C) ->
     ?DEBUG("Inserting modules"),
     Modules = [
-        "mod_test",
         "mod_base",
         "mod_emailer",
         "mod_menu",
@@ -68,7 +67,7 @@ install_modules(C) ->
         "mod_video_embed",
         "mod_atom_feed",
 		"mod_broadcast",
-        
+
         "mod_seo",
         "mod_seo_google",
         "mod_seo_sitemap",
@@ -84,8 +83,8 @@ install_modules(C) ->
         "mod_admin_person",
         "mod_admin_predicate",
 
-        % The default site
-        "default"
+        % The site-specific site
+        atom_to_list(Host)
     ],
     [
         {ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [M]) || M <- Modules
