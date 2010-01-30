@@ -83,7 +83,7 @@
 				</div>
 
 				<div class="form-item clearfix">
-					<button type="submit">Make media item</button>
+					<button type="submit">{% if not id %}Make media item{% else %}Replace media item{% endif %}</button>
 					{% button action={dialog_close} text="Cancel" %}
 				</div>
 			</div>

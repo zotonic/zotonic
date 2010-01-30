@@ -23,53 +23,54 @@
 -include("zotonic.hrl").
 
 -export ([
-	lib_dir/0,
-	lib_dir/1,
-    now/0,
-    now_msec/0,
-	get_seconds/0,
-	f/1,
-	f/2,
-	encode/2,
-	decode/2,
-	hex_encode/1,
-	hex_decode/1,
+	are_equal/2,
+	assert/2,
 	checksum/2,
 	checksum_assert/3,
-	pickle/2,
+	coalesce/1,
+	combine/2,
+	combine_defined/2,
+	decode/2,
 	depickle/2,
-	url_encode/1,
-	os_filename/1,
-	os_escape/1,
+	encode/2,
+	f/1,
+	f/2,
+	get_seconds/0,
+	group_by/3,
+	group_proplists/2,
+	hex_decode/1,
+	hex_encode/1,
+	index_proplist/2,
+	is_process_alive/1,
+	is_true/1,
 	js_escape/1,
 	js_object/1,
 	js_object/2,
-	combine/2,
-	combine_defined/2,
-	only_letters/1,
+	lib_dir/0,
+	lib_dir/1,
+	list_dir_recursive/1,
+	name_for_host/2,
 	only_digits/1,
+	only_letters/1,
+	os_escape/1,
+	os_filename/1,
+	pickle/2,
 	prefix/2,
-	coalesce/1,
-	is_process_alive/1,
-	is_true/1,
-	assert/2,
-	prop_replace/3,
 	prop_delete/2,
-	group_proplists/2,
-	index_proplist/2,
+	prop_replace/3,
 	randomize/1,
 	randomize/2,
+	replace1/3,
 	split/2,
 	split_in/2,
+	url_encode/1,
 	vsplit_in/2,
-	group_by/3,
-	replace1/3,
-	list_dir_recursive/1,
-	are_equal/2,
-	name_for_host/2,
-    url_valid_char/1,
+    now/0,
+    now_msec/0,
+    tempfile/0,
     url_reserved_char/1,
-    url_unreserved_char/1
+    url_unreserved_char/1,
+    url_valid_char/1
 ]).
 
 %%% FORMAT %%%
@@ -677,3 +678,11 @@ are_equal(_Arg1, _Arg2) ->
 %% @spec name_for_host(atom(), atom()) -> atom().
 name_for_host(Name, Host) ->
     z_convert:to_atom(z_convert:to_list(Name) ++ [$$, z_convert:to_list(Host)]).
+
+
+%% @doc return a unique temporary filename.
+%% @spec tempfile() -> string()
+tempfile() ->
+    {A,B,C}=erlang:now(),
+    lists:flatten(io_lib:format("/tmp/ztmp-~p-~p.~p.~p",[node(),A,B,C])).
+

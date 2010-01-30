@@ -85,14 +85,12 @@ event({submit, {media_upload, EventProps}, _TriggerId, _TargetId}, Context) ->
 
 event({submit, {media_url, EventProps}, _TriggerId, _TargetId}, Context) ->
     Url = z_context:get_q("url", Context),
-    OriginalFilename = filename:basename(Url),
     Props = case proplists:get_value(id, EventProps) of
                 undefined ->
                     [{title, z_context:get_q_validated("new_media_title_url", Context)},
-                     {group_id, list_to_integer(z_context:get_q("group_id_url", Context))},
-                     {original_filename, OriginalFilename}];
+                     {group_id, list_to_integer(z_context:get_q("group_id_url", Context))}];
                 _ ->
-                    [{original_filename, OriginalFilename}]
+                    []
             end,
     ContextUpload = handle_media_upload(EventProps, Context,
                                         %% insert fun
