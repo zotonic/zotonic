@@ -20,6 +20,7 @@
 -behaviour(gen_scomp).
 
 -export([init/1, varies/2, terminate/2, render/4]).
+-export([get_menu/1]).
 
 -include("zotonic.hrl").
 
