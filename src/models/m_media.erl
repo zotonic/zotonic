@@ -39,6 +39,9 @@
     insert_file/3,
     replace_file/3,
     replace_file/4,
+    insert_url/2,
+    insert_url/3,
+    replace_url/4,
 	save_preview/4
 ]).
 
@@ -181,9 +184,21 @@ replace(Id, Props, Context) ->
 %% @doc Make a new resource for the file, when the file is not in the archive dir then a copy is made in the archive dir
 %% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
 insert_file(File, Context) ->
-    insert_file(File, [], Context).
+    insert_generic([], Context, fun(Id, Props, Ctx) -> replace_file(File, Id, Props, Ctx) end).
 
 insert_file(File, Props, Context) ->
+    insert_generic(Props, Context, fun(Id, Props2, Ctx) -> replace_file(File, Id, Props2, Ctx) end).
+
+%% @doc Make a new resource for the file based on a URL.
+%% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
+insert_url(Url, Context) ->
+    insert_generic([], Context, fun(Id, Props, Ctx) -> replace_url(Url, Id, Props, Ctx) end).
+
+insert_url(Url, Props, Context) ->
+    insert_generic(Props, Context, fun(Id, Props2, Ctx) -> replace_url(Url, Id, Props2, Ctx) end).
+
+%% Generic function for shared functionality between insert_file/2,3 and insert_url/2,3
+insert_generic(Props, Context, ReplaceFun) ->
     Props1 = case proplists:get_value(category_id, Props, proplists:get_value(category, Props)) of
         undefined ->
             [{category, media} | Props];
@@ -199,11 +214,11 @@ insert_file(File, Props, Context) ->
     InsertFun = fun(Ctx) ->
         case m_rsc:insert(Props2, Ctx) of
             {ok, Id} ->
-                replace_file(File, Id, Props2, Ctx);
+                ReplaceFun(Id, Props2, Ctx);
             Error ->
                 Error
         end
-    end, 
+    end,
     case z_db:transaction(InsertFun, Context) of
         {ok, Id} ->
             CatList = m_rsc:is_a(Id, Context),
@@ -221,6 +236,57 @@ replace_file(File, RscId, Context) ->
     replace_file(File, RscId, [], Context).
 
 replace_file(File, RscId, Props, Context) ->
+    case z_acl:rsc_editable(RscId, Context) of
+        true ->
+            OriginalFilename = proplists:get_value(original_filename, Props, File),
+            PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+            SafeRootName = z_string:to_rootname(OriginalFilename),
+            SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
+            ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
+            RootName = filename:rootname(filename:basename(ArchiveFile)),
+            MediumRowProps = [
+                {id, RscId}, 
+                {filename, ArchiveFile}, 
+                {rootname, RootName}, 
+                {is_deletable_file, not z_media_archive:is_archived(File, Context)}
+                | PropsMedia
+            ],
+
+            F = fun(Ctx) ->
+                z_db:delete(medium, RscId, Context),
+                case z_db:insert(medium, MediumRowProps, Ctx) of
+                    {ok, _MediaId} ->
+                        % When the resource is in the media category, then move it to the correct sub-category depending
+                        % on the mime type of the uploaded file.
+                        case rsc_is_media_cat(RscId, Context) of
+                            true ->
+                                case proplists:get_value(mime, PropsMedia) of
+                                    "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Ctx);
+                                    "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Ctx);
+                                    "sound/" ++ _ -> m_rsc:update(RscId, [{category, sound}], Ctx);
+                                    _ -> nop
+                                end;
+                            false -> nop
+                        end,
+                        {ok, RscId};
+                    Error ->
+                        Error
+                end
+            end,
+            
+            Depicts = depicts(RscId, Context),
+            {ok, Id} = z_db:transaction(F, Context),
+            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+            z_depcache:flush(Id, Context),
+            {ok, Id};
+        false ->
+            {error, eacces}
+    end.
+
+
+replace_url(File, RscId, Props, Context) ->
+    ?DEBUG("Replacing url!"),
+    ?DEBUG(File),
     case z_acl:rsc_editable(RscId, Context) of
         true ->
             OriginalFilename = proplists:get_value(original_filename, Props, File),

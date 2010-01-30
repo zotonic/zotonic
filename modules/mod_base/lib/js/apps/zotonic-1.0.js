@@ -720,7 +720,8 @@ function z_add_validator(id, type, args)
 			case 'confirmation':	v.add(Validate.Confirmation, args); break;
 			case 'acceptance':		v.add(Validate.Acceptance, args);	break;
 			case 'length':			v.add(Validate.Length, args);		break;
-			case 'format':			v.add(Validate.Format, args);		break;
+			case 'format':			args['pattern'] = new RegExp(args['pattern']);
+									v.add(Validate.Format, args);		break;
 			case 'numericality':	v.add(Validate.Numericality, args); break;
 			default:				$.misc.error("unknown validation: "+type);
 		}

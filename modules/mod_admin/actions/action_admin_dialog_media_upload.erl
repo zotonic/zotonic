@@ -59,23 +59,64 @@ event({postback, {media_upload_dialog, Title, Id, SubjectId, GroupId, Predicate,
 
 
 event({submit, {media_upload, EventProps}, _TriggerId, _TargetId}, Context) ->
+    File = z_context:get_q_validated("upload_file", Context),
+    ContextUpload = case File of
+                        #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
+                            Props = case proplists:get_value(id, EventProps) of
+                                        undefined ->
+                                            [{title, z_context:get_q_validated("new_media_title", Context)},
+                                             {group_id, list_to_integer(z_context:get_q("group_id", Context))},
+                                             {original_filename, OriginalFilename}];
+                                        _ ->
+                                            [{original_filename, OriginalFilename}]
+                                    end,
+                            handle_media_upload(EventProps, Context,
+                                                %% insert fun
+                                                fun(Ctx) -> m_media:insert_file(TmpFile, Props, Ctx) end,
+                                                %% replace fun
+                                                fun(Id, Ctx) -> m_media:replace_file(TmpFile, Id, Props, Ctx) end);
+                        _ ->
+                            z_render:growl("No file specified.", Context)
+                    end,
+
+    %% Close the dialog and optionally perform the post upload actions
+    z_render:wire({dialog_close, []}, ContextUpload);
+
+
+event({submit, {media_url, EventProps}, _TriggerId, _TargetId}, Context) ->
+    Url = z_context:get_q("url", Context),
+    OriginalFilename = filename:basename(Url),
+    Props = case proplists:get_value(id, EventProps) of
+                undefined ->
+                    [{title, z_context:get_q_validated("new_media_title_url", Context)},
+                     {group_id, list_to_integer(z_context:get_q("group_id_url", Context))},
+                     {original_filename, OriginalFilename}];
+                _ ->
+                    [{original_filename, OriginalFilename}]
+            end,
+    ContextUpload = handle_media_upload(EventProps, Context,
+                                        %% insert fun
+                                        fun(Ctx) -> m_media:insert_url(Url, Props, Ctx) end,
+                                        %% replace fun
+                                        fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Ctx) end),
+
+    %% Close the dialog and optionally perform the post upload actions
+    z_render:wire({dialog_close, []}, ContextUpload).
+
+
+
+%% Handling the media upload.
+handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
-    File = z_context:get_q_validated("upload_file", Context),
-    ContextUpload = case File of
-        #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
-            case Id of
-                %% Create a new media page
-                undefined ->
-                    SubjectId = proplists:get_value(subject_id, EventProps),
-                    Predicate = proplists:get_value(predicate, EventProps, depiction),
-                    Title   = z_context:get_q_validated("new_media_title", Context),
-                    GroupId = list_to_integer(z_context:get_q("group_id", Context)),
-
-                    Props = [{title, Title}, {original_filename, OriginalFilename}, {group_id, GroupId}],
-                    F = fun(Ctx) ->
-                        case m_media:insert_file(TmpFile, Props, Ctx) of
+    case Id of
+        %% Create a new media page
+        undefined ->
+            SubjectId = proplists:get_value(subject_id, EventProps),
+            Predicate = proplists:get_value(predicate, EventProps, depiction),
+            F = fun(Ctx) ->
+                        case InsertFun(Ctx) of
                             {ok, MediaRscId} ->
                                 case SubjectId of
                                     undefined -> 
@@ -87,44 +128,37 @@ event({submit, {media_upload, EventProps}, _TriggerId, _TargetId}, Context) ->
                             Error -> 
                                 Error
                         end
-                    end,
-                    Result = z_db:transaction(F, Context),
+                end,
+            Result = z_db:transaction(F, Context),
             
-                    case Result of
-                        {ok, MediaId} ->
-                            ContextRedirect = case SubjectId of
-                                undefined -> 
-                                    case Stay of
-                                        true -> Context;
-                                        false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context)
-                                    end;
-                                _ -> Context
+            case Result of
+                {ok, MediaId} ->
+                    ContextRedirect = case SubjectId of
+                                          undefined -> 
+                                              case Stay of
+                                                  true -> Context;
+                                                  false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context)
+                                              end;
+                                          _ -> Context
                             end,
-                            Actions2 = [add_arg_to_action({id, MediaId}, A) || A <- Actions],
-                            z_render:wire([{growl, [{text, "Uploaded the file."}]} | Actions2], ContextRedirect);
-                        {error, _Error} ->
-                            z_render:growl_error("Error uploading the file.", Context)
-                    end;
-                
-                %% Replace attached medium with the uploaded file (skip any edge requests)
-                N when is_integer(N) -> 
-                    Props = [ {original_filename, OriginalFilename} ],
-                    case m_media:replace_file(TmpFile, Id, Props, Context) of
-                        {ok, _} ->
-                            Context1 = z_render:wire(Actions, Context),
-                            z_render:growl("Uploaded the file.", Context1);
-                        {error, eacces} ->
-                            z_render:growl_error("You don't have permission to change this page.", Context);
-                        {error, _} ->
-                            z_render:growl_error("Error uploading the file.", Context)
-                    end
+                    Actions2 = [add_arg_to_action({id, MediaId}, A) || A <- Actions],
+                    z_render:wire([{growl, [{text, "Uploaded the file."}]} | Actions2], ContextRedirect);
+                {error, _Error} ->
+                    z_render:growl_error("Error uploading the file.", Context)
             end;
-        _ ->
-            z_render:growl("No file specified.", Context)
-    end,
-
-    % Close the dialog and optionally perform the post upload actions
-    z_render:wire({dialog_close, []}, ContextUpload).
+        
+        %% Replace attached medium with the uploaded file (skip any edge requests)
+        N when is_integer(N) -> 
+            case ReplaceFun(Id, Context) of
+                {ok, _} ->
+                    Context1 = z_render:wire(Actions, Context),
+                            z_render:growl("Uploaded the file.", Context1);
+                {error, eacces} ->
+                            z_render:growl_error("You don't have permission to change this page.", Context);
+                {error, _} ->
+                    z_render:growl_error("Error uploading the file.", Context)
+            end
+    end.
 
 
 % Add an extra argument to a postback / submit action.
