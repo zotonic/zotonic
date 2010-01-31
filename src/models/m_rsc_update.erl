@@ -243,8 +243,8 @@ update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_
 
                             % Notify that a new resource has been inserted, or that an existing one is updated
                             case Id of
-                                insert_rsc -> z_notifier:notify({rsc_update_done, update, NewId, OldCatList, NewCatList}, Context);
-                                _ ->          z_notifier:notify({rsc_update_done, insert, NewId, OldCatList, NewCatList}, Context)
+                                insert_rsc -> z_notifier:notify({rsc_update_done, insert, NewId, OldCatList, NewCatList}, Context);
+                                _ ->          z_notifier:notify({rsc_update_done, update, NewId, OldCatList, NewCatList}, Context)
                             end,
                             
                             % Return the updated or inserted id
