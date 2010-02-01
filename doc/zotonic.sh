@@ -57,7 +57,7 @@ pushd $ZOTONIC >/dev/null
 
 function start() {
     echo  "Starting zotonic $SNAME"
-    make >/dev/null
+    make -C $ZOTONIC >/dev/null
     $ERL -pa $PA -sname $SNAME -boot start_sasl -heart -detached -s zotonic
 }
 
