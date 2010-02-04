@@ -117,7 +117,7 @@ new(ReqData) ->
 	%% This is the requesting thread, enable simple memo functionality.
 	z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, host=site(ReqData)}),
-    Context#context{language=z_trans:default_language(Context)}.
+    set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
 
 %% @doc Create a new context record for the current request and resource module
@@ -125,8 +125,14 @@ new(ReqData, Module) ->
 	%% This is the requesting thread, enable simple memo functionality.
 	z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, resource_module=Module, host=site(ReqData)}),
-    Context#context{language=z_trans:default_language(Context)}.
+    set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
+%% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'
+set_dispatch_from_path(Context) ->
+    case dict:find(zotonic_dispatch, wrq:path_info(Context#context.wm_reqdata)) of
+        {ok, Dispatch} -> set(zotonic_dispatch, Dispatch, Context);
+        error -> Context
+    end.
 
 %% @doc Set all server names for the given host.
 %% @spec set_server_names(Context1) -> Context2

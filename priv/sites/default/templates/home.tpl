@@ -17,7 +17,7 @@
 		{% for id in result %}
 			{% include "_article_summary.tpl" id=id %}
 		{% endfor %}
-			{% pager result=result dispatch='home' %}
+			{% pager result=result %}
 	{% endwith %}
 
 {% endblock %}

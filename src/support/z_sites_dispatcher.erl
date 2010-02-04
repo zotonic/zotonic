@@ -97,10 +97,11 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                 {no_dispatch_match, _UnmatchedPathTokens} ->
                     {{no_dispatch_match, undefined, undefined}, RDHost};
                 {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
-                    {ok, RDDpName} = webmachine_request:set_metadata(zotonic_dispatch, DispatchName, RDHost),
-                    {{Mod, ModOpts, [], none, PathTokens, 
-                        [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], AppRoot, StringPath}, 
-                     RDDpName}
+                    {{Mod, ModOpts, 
+                        [], none, % Host info
+                        PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
+                        AppRoot, StringPath}, 
+                     RDHost}
             end;
         {redirect, Hostname} ->
             %% Redirect to another host name.
