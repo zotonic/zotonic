@@ -36,7 +36,10 @@ terminate(_State, _Context) -> ok.
 
 render(Params, _Vars, Context, _State) ->
     Result       = proplists:get_value(result, Params),
-    Dispatch     = proplists:get_value(dispatch, Params, search),
+    Dispatch     = case proplists:get_value(dispatch, Params) of
+                        undefined -> z_context:get(zotonic_dispatch, Context, search);
+                        Dp -> Dp
+                   end,
     HideSinglePage  = proplists:get_value(hide_single_page, Params),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
     
