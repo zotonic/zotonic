@@ -19,6 +19,12 @@
 
 -module(z_sites_dispatcher).
 -author("Marc Worrell <marc@worrell.nl>").
+
+% Authors of the Webmachine dispatch matcher.
+-author('Robert Ahrens <rahrens@basho.com>').
+-author('Justin Sheehy <justin@basho.com>').
+-author('Bryan Fink <bryan@basho.com>').
+
 -behaviour(gen_server).
 
 %% gen_server exports
@@ -87,11 +93,14 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
     Reply = case get_host_dispatch_list(HostAsString, State#state.rules, ReqData) of
         {ok, Host, DispatchList} ->
             {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
-            case webmachine_dispatcher:dispatch(PathAsString, DispatchList) of
-                {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
+            case dispatch(PathAsString, DispatchList) of
+                {no_dispatch_match, _UnmatchedPathTokens} ->
                     {{no_dispatch_match, undefined, undefined}, RDHost};
-                {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath} ->
-                    {{Mod, ModOpts, HostTokens, Port, PathTokens, [{zotonic_host, Host}|Bindings], AppRoot, StringPath}, RDHost}
+                {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
+                    {ok, RDDpName} = webmachine_request:set_metadata(zotonic_dispatch, DispatchName, RDHost),
+                    {{Mod, ModOpts, [], none, PathTokens, 
+                        [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], AppRoot, StringPath}, 
+                     RDDpName}
             end;
         {redirect, Hostname} ->
             %% Redirect to another host name.
@@ -244,3 +253,74 @@ is_hostname("") -> false;
 is_hostname("localhost") -> false;
 is_hostname("127.0.0.1") -> false;
 is_hostname(_) -> true.
+
+
+
+%%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
+% Main difference is that we want to know which dispatch rule was choosen.
+
+%% @author Robert Ahrens <rahrens@basho.com>
+%% @author Justin Sheehy <justin@basho.com>
+%% @copyright 2007-2009 Basho Technologies
+%%
+%%    Licensed under the Apache License, Version 2.0 (the "License");
+%%    you may not use this file except in compliance with the License.
+%%    You may obtain a copy of the License at
+%%
+%%        http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%    Unless required by applicable law or agreed to in writing, software
+%%    distributed under the License is distributed on an "AS IS" BASIS,
+%%    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%    See the License for the specific language governing permissions and
+%%    limitations under the License.
+
+-define(SEPARATOR, $\/).
+-define(MATCH_ALL, '*').
+
+%% @spec dispatch(Path::string(), DispatchList::[matchterm()]) ->
+%%                                            dispterm() | dispfail()
+%% @doc Interface for URL dispatching.
+%% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
+dispatch(PathAsString, DispatchList) ->
+    Path = string:tokens(PathAsString, [?SEPARATOR]),
+    % URIs that end with a trailing slash are implicitly one token
+    % "deeper" than we otherwise might think as we are "inside"
+    % a directory named by the last token.
+    ExtraDepth = case lists:last(PathAsString) == ?SEPARATOR of
+		     true -> 1;
+		     _ -> 0
+		 end,
+    try_path_binding(DispatchList, Path, [], ExtraDepth).
+
+try_path_binding([], PathTokens, _, _) ->
+    {no_dispatch_match, PathTokens};
+try_path_binding([{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
+    case bind(PathSchema, PathTokens, Bindings, 0) of
+        {ok, Remainder, NewBindings, Depth} ->
+            {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)};
+        fail -> 
+            try_path_binding(Rest, PathTokens, Bindings, ExtraDepth)
+    end.
+
+bind([], [], Bindings, Depth) ->
+    {ok, [], Bindings, Depth};
+bind([?MATCH_ALL], Rest, Bindings, Depth) when is_list(Rest) ->
+    {ok, Rest, Bindings, Depth + length(Rest)};
+bind(_, [], _, _) ->
+    fail;
+bind([Token|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+    bind(RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
+bind([Token|RestToken], [Token|RestMatch], Bindings, Depth) ->
+    bind(RestToken, RestMatch, Bindings, Depth + 1);
+bind(_, _, _, _) ->
+    fail.
+
+reconstitute([]) -> "";
+reconstitute(UnmatchedTokens) -> string:join(UnmatchedTokens, [?SEPARATOR]).
+
+calculate_app_root(1) -> ".";
+calculate_app_root(N) when N > 1 ->
+    string:join(lists:duplicate(N, ".."), [?SEPARATOR]).
+
+

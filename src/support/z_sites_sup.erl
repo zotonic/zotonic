@@ -54,8 +54,7 @@ update_dispatchinfo() ->
     fetch_dispatchinfo(Site) ->
         Name = z_utils:name_for_host(z_dispatcher, Site),
         {Host, Hostname, Hostalias, DispatchList} = z_dispatcher:dispatchinfo(Name),
-        WMList = [list_to_tuple(tl(tuple_to_list(Disp))) || Disp <- DispatchList],
-        #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=true, dispatch_list=WMList}.
+        #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=true, dispatch_list=DispatchList}.
 
 
 %% @doc Return a list of site names.
