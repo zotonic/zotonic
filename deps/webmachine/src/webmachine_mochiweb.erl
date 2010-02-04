@@ -68,7 +68,7 @@ loop(MochiReq) ->
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
             {ErrorHTML,ReqState1} = ErrorHandler:render_error(404, ReqDispatch, {none, none, []}),
-            {ok,ReqState2} = webmachine_request:append_to_response_body(ErrorHTML, ReqState1),
+            ReqState2 = webmachine_request:append_to_response_body(ErrorHTML, ReqState1),
             {ok,ReqState3} = webmachine_request:send_response(404, ReqState2),
             LogData = webmachine_request:log_data(ReqState3),
             case application:get_env(webmachine,webmachine_logger_module) of
