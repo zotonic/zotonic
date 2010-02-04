@@ -60,7 +60,21 @@ start_link(Args) when is_list(Args) ->
 %%                   | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                   | handled
 dispatch(Host, Path, ReqData) ->
-    gen_server:call(?MODULE, {dispatch, Host, Path, ReqData}).
+    case gen_server:call(?MODULE, {dispatch, Host, Path, ReqData}) of
+        {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqData1} when MatchedHost =/= undefined ->
+            %% Check if there is a matching resource page_path for the host
+            Context = z_context:new(MatchedHost),
+            case m_rsc:page_path_to_id(Path, Context) of
+                {ok, Id} ->
+                    %% We found the id, lookup the page uri
+                    DefaultPagePath = lists:flatten(m_rsc:p_no_acl(Id, default_page_url, Context)),
+                    gen_server:call(?MODULE, {dispatch, Host, DefaultPagePath, ReqData});
+                {error, _} ->
+                    {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqData1}
+            end;
+        Result ->
+            Result
+    end.
 
 
 %% @doc Store a new set of dispatch rules, called when a site refreshes its modules or when a site is restarted.
@@ -94,8 +108,8 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
         {ok, Host, DispatchList} ->
             {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
             case dispatch(PathAsString, DispatchList) of
-                {no_dispatch_match, _UnmatchedPathTokens} ->
-                    {{no_dispatch_match, undefined, undefined}, RDHost};
+                {no_dispatch_match, UnmatchedPathTokens} ->
+                    {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
                 {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
                     {{Mod, ModOpts, 
                         [], none, % Host info

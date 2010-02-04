@@ -65,10 +65,10 @@
                                             {root,[lib]}, 
                                             {use_cache, false},
                                             {content_disposition, inline}
-                                        ]},
+                                        ]}
     
     %% "Last resort" we check the request path against the page_path of resources and redirect to
     %% the page configured for the page path.
-    {page_path, ['*'], resource_page_path, []}
+    %% {page_path, ['*'], resource_page_path, []}
 
 ].
