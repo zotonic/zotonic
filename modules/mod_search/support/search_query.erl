@@ -47,6 +47,8 @@ parse_request_args([], Acc) ->
     Acc;
 parse_request_args([{"zotonic_host",_}|Rest], Acc) ->
     parse_request_args(Rest, Acc);
+parse_request_args([{"zotonic_dispatch",_}|Rest], Acc) ->
+    parse_request_args(Rest, Acc);
 parse_request_args([{K,V}|Rest], Acc) ->
     NewVal = V,
     parse_request_args(Rest, [{request_arg(K),NewVal}|Acc]).
@@ -79,6 +81,7 @@ request_arg("query_id")            -> query_id;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
+request_arg("authoritative")       -> authoritative;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -194,6 +197,13 @@ parse_query([{upcoming, "true"}|Rest], Context, Result) ->
 parse_query([{upcoming, true}|Rest], Context, Result) ->
      Result1 = add_where("rsc.pivot_date_end >= current_date", Result),
      parse_query(Rest, Context, Result1);
+
+%% authoritative={true|false}
+%% Filter on items which are authoritative or not
+parse_query([{authoritative, Boolean}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(Boolean, Result),
+     Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
+     parse_query(Rest, Context, Result2);
 
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
