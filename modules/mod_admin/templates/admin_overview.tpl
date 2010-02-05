@@ -60,7 +60,7 @@
 					<span class="zp-10">Options</span>
 				</li>
 
-            {% with m.search.paged[{query cat=q.qcat cat_exclude="meta" text=q.qs page=q.page}] as result %}
+            {% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page}] as result %}
 
 			{% for id in result %}
 				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
