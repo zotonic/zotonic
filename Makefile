@@ -4,7 +4,7 @@ EBIN_DIRS    := $(wildcard deps/*/ebin)
 APP          := zotonic
 PARSER        =src/erlydtl/erlydtl_parser
 
-all: mochiweb webmachine erlang-oauth $(PARSER).erl erl ebin/$(APP).app 
+all: mochiweb webmachine erlang-oauth exmpp $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -21,6 +21,9 @@ webmachine:
 
 erlang-oauth:
 	(cd deps/erlang-oauth; make)
+
+exmpp:
+	(cd deps/exmpp; make)
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'

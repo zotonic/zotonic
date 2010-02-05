@@ -17,6 +17,7 @@
  [	{i, "include"},
 	{i, "src/dbdrivers/postgresql/include"},
 	{i, "deps/webmachine/include"},
+	{i, "deps/exmpp/include"},
   	{outdir, "ebin"},
   	debug_info
  ]

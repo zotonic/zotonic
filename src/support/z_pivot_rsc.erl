@@ -183,8 +183,15 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
 	case poll_task(Context) of
-		{Module, Function, Args} -> 
-			erlang:apply(Module, Function, Args ++ [Context]);
+		{Module, Function, Key, Args} -> 
+            try 
+                erlang:apply(Module, Function, Args ++ [Context])
+            catch
+                _:_ -> 
+                    ?DEBUG("Failing task; requeueing."),
+                    ?LOG("~p:~p~n", [Module, Function]),
+                    insert_task(Module, Function, Key, Args, Context)
+            end;
 		empty ->
 		    Qs = fetch_queue(Context),
 		    F = fun(Ctx) ->
@@ -196,15 +203,15 @@ do_poll(Context) ->
 	
 	%% @doc Fetch the next task uit de task queue, if any.
 	poll_task(Context) ->
-		case z_db:q_row("select id, module, function, props from pivot_task_queue order by id asc limit 1", Context) of
-			{Id,Module,Function,Props} ->
+		case z_db:q_row("select id, module, function, key, props from pivot_task_queue order by id asc limit 1", Context) of
+			{Id,Module,Function,Key,Props} ->
 				Args = case Props of
 					[{args,Args0}] -> Args0;
 					_ -> []
 				end,
 				%% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
 				z_db:q("delete from pivot_task_queue where id = $1", [Id], Context),
-				{z_convert:to_atom(Module), z_convert:to_atom(Function), Args};
+				{z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
 			undefined ->
 				empty
 		end.

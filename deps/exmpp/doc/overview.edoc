@@ -1,0 +1,49 @@
+@author Jean-Sébastien Pédron <js.pedron@meetic-corp.com>
+@author Pablo Polvorin <pablo.polvorin@process-one.net>
+@version {@vsn}
+@title exmpp
+@copyright ProcessOne 2006-2010
+
+@doc
+<p>
+This library is composed of modules providing <strong>utilities to
+ease</strong> the <strong>development</strong> of an <strong>XMPP
+entity</strong> (a client or a server for instance).
+</p>
+
+<h2>Goals</h2>
+<p>
+The code was derivated from
+<a href="http://www.process-one.net/en/ejabberd/">ejabberd</a> 1.1.1. The
+reason was that several new projects were based on ejabberd directly,
+resulting in a lot of code duplication.
+</p>
+<p>
+The need for an independant library was clear. <strong>exmpp</strong>
+is a toolbox containing modules to help XMPP client and server
+developers. The library is made with the following objectives in mind:
+</p>
+<ul>
+  <li>Full XMPP 1.0 support</li>
+  <li>API cleanup</li>
+  <li>Testsuite and documentation</li>
+</ul>
+<p>
+To be clear, modules found in this toolkit will only provide functions
+to build and interpret XML stanzas. They won't take care of neither the
+communication with a remote entity, nor the logical stanzas flow.
+</p>
+
+<h2>TODO</h2>
+<h3>Possible bugs</h3>
+<ul>
+  <li>Fix `maxsize' handling in the parser.</li>
+</ul>
+<h3>Improvements</h3>
+<ul>
+  <li>Rework {@link exmpp_xml:node_to_iolist/3} serializer to transform
+  directly {@link exmpp_xml:xmlel()} to text without converting it to
+  {@link exmpp_xml:xmlel_old()} first.</li>
+</ul>
+<h3>New features</h3>
+<!-- vim:set ft=xhtml: -->
