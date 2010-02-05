@@ -46,7 +46,7 @@ full(Id, Context) when is_integer(Id) ->
             Export = [
                       %% Essential fields
                       {id, Id},
-                      {resource_uri, m_rsc:p(Id, resource_uri, Context)},
+                      {uri, m_rsc:p(Id, uri, Context)},
                       %% Parts
                       {rsc, Rsc},
                       {medium, Medium},
@@ -65,9 +65,9 @@ full(Id, Context) ->
 
 %% @doc Given an edge record, add the resource uris for the object and the predicate.
 edge_details(Edge, Context) ->
-    Edge ++ [{predicate_uri, m_rsc:p(proplists:get_value(predicate_id, Edge), resource_uri, Context)},
+    Edge ++ [{predicate_uri, m_rsc:p(proplists:get_value(predicate_id, Edge), uri, Context)},
              {predicate_title, m_rsc:p(proplists:get_value(predicate_id, Edge), title, Context)},
-             {object_uri, m_rsc:p(proplists:get_value(object_id, Edge), resource_uri, Context)},
+             {object_uri, m_rsc:p(proplists:get_value(object_id, Edge), uri, Context)},
              {object_title, m_rsc:p(proplists:get_value(object_id, Edge), title, Context)}].
 
 

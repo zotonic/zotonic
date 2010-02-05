@@ -10,3 +10,9 @@ priv/sites/default/files/*
 priv/sites/*/config
 *.orig
 zotonic.tmproj
+*.o
+*.lo
+*.la
+*.lai
+*.so
+*.Plo

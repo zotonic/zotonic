@@ -73,7 +73,7 @@ decode([], Decoded) ->
   lists:reverse(Decoded);
 decode([$%,A,B|Etc], Decoded) when ?is_hex(A), ?is_hex(B) ->
   decode(Etc, [erlang:list_to_integer([A,B], 16)|Decoded]);
-decode([C|Etc], Decoded) when ?is_unreserved(C) ->
+decode([C|Etc], Decoded) ->
   decode(Etc, [C|Decoded]).
 
 encode(Chars) ->

@@ -58,7 +58,10 @@
 	sp/2, s/2, s/3, s/4,
 	media/2,
 	page_url/2,
-	rid/2
+	rid/2,
+
+    name_lookup/2,
+    uri_lookup/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -107,7 +110,7 @@ name_to_id(Name, Context) ->
         true ->
             {ok, z_convert:to_integer(Name)};
         false ->
-            case rid_name(Name, Context) of
+            case name_lookup(Name, Context) of
                 Id when is_integer(Id) -> {ok, Id};
                 _ -> {error, {unknown_rsc, Name}}
             end
@@ -177,12 +180,14 @@ get_raw(Id, Context) when is_integer(Id) ->
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
         case z_db:q_row("
-            select is_published, visible_for, group_id, publication_start, publication_end 
+            select is_published, is_authoritative, visible_for,
+                group_id, publication_start, publication_end
             from rsc 
             where id = $1", [Id], Context) of
     
-            {IsPub, Vis, Group, PubS, PubE} ->
-                #acl_props{is_published=IsPub, visible_for=Vis, group_id=Group, publication_start=PubS, publication_end=PubE};
+            {IsPub, IsAuth, Vis, Group, PubS, PubE} ->
+                #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis, 
+                           group_id=Group, publication_start=PubS, publication_end=PubE};
             undefined ->
                 #acl_props{is_published=false, visible_for=3, group_id=0}
         end
@@ -228,7 +233,7 @@ touch(Id, Context) when is_integer(Id) ->
     
 
 exists([C|_] = Name, Context) when is_list(Name) and is_integer(C) ->
-    case rid_name(Name, Context) of
+    case name_lookup(Name, Context) of
         undefined -> 
             case z_utils:only_digits(Name) of
                 true -> exists(list_to_integer(Name), Context);
@@ -237,7 +242,7 @@ exists([C|_] = Name, Context) when is_list(Name) and is_integer(C) ->
         _ -> true
     end;
 exists(Name, Context) when is_binary(Name) ->
-    case rid_name(Name, Context) of
+    case name_lookup(Name, Context) of
         undefined -> false;
         _ -> true
     end;
@@ -298,6 +303,7 @@ p(Id, Property, Context)
 	when Property =:= category_id orelse Property =:= page_url 
 	orelse Property =:= group orelse Property =:= category 
 	orelse Property =:= category_id orelse Property =:= is_a 
+	orelse Property =:= uri orelse Property =:= is_authoritative
 	orelse Property =:= default_page_url ->
 		p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->
@@ -330,10 +336,10 @@ p_no_acl(Id, page_url, Context) ->
         PagePath -> PagePath
     end;
 p_no_acl(Id, default_page_url, Context) -> page_url(Id, Context);
-p_no_acl(Id, resource_uri, Context) ->
+p_no_acl(Id, uri, Context) ->
     case p_no_acl(Id, is_authoritative, Context) of
         true ->  iolist_to_binary(z_context:abs_url(z_dispatcher:url_for(id, [{id, Id}], Context), Context));
-        false -> p_cached(Id, resource_uri, Context) 
+        false -> p_cached(Id, uri, Context) 
     end;
 p_no_acl(Id, group, Context) -> 
     case p_no_acl(Id, group_id, Context) of
@@ -460,23 +466,20 @@ rid(#rsc_list{list=[]}, _Context) ->
 rid([C|_] = UniqueName, Context) when is_integer(C) ->
     case z_utils:only_digits(UniqueName) of
         true -> list_to_integer(UniqueName);
-        false -> rid_name(UniqueName, Context)
+        false -> name_lookup(UniqueName, Context)
     end;
 rid(UniqueName, Context) when is_binary(UniqueName) ->
-    rid_name(binary_to_list(UniqueName), Context);
+    name_lookup(binary_to_list(UniqueName), Context);
 rid(undefined, _Context) -> 
 	undefined;
 rid(UniqueName, Context) when is_atom(UniqueName) -> 
-    rid_name(atom_to_list(UniqueName), Context);
+    name_lookup(atom_to_list(UniqueName), Context);
 rid(<<>>, _Context) -> 
 	undefined.
 
-
 %% @doc Return the id of the resource with a certain unique name.
-%% rid_name(Name, Context) -> int() | undefined
-rid_name(Name, _Context) when is_integer(Name) ->
-    Name;
-rid_name(Name, Context) ->
+%% name_lookup(Name, Context) -> int() | undefined
+name_lookup(Name, Context) ->
     Lower = z_string:to_name(Name),
     case z_depcache:get({rsc_name, Lower}, Context) of
         {ok, undefined} ->
@@ -489,6 +492,25 @@ rid_name(Name, Context) ->
                 Value -> Value
             end,
             z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
+            Id
+    end.
+
+
+%% @doc Return the id of the resource with a certain uri.
+%% uri_lookup(string(), Context) -> int() | undefined
+uri_lookup(Uri, Context) ->
+    Uri1 = z_convert:to_list(Uri),
+    case z_depcache:get({rsc_uri, Uri1}, Context) of
+        {ok, undefined} ->
+            undefined;
+        {ok, Id} ->
+            Id;
+        undefined ->
+            Id = case z_db:q1("select id from rsc where uri = $1", [Uri1], Context) of
+                undefined -> undefined;
+                Value -> Value
+            end,
+            z_depcache:set({rsc_uri, Uri1}, Id, ?DAY, [Id, {rsc_uri, Uri1}], Context),
             Id
     end.
 

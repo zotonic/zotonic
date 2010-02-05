@@ -13,7 +13,7 @@
 rsc1() ->
     %% We need the calendar:universal_time_to_local_time functions
     %% here because we want the tests to be timezone independent.
-    [{resource_uri, <<"http://localhost/id/222">>},
+    [{uri, <<"http://localhost/id/222">>},
      {rsc,  [{title, <<"Resource 1">>},
              {publication_start, calendar:universal_time_to_local_time({{2010,1,1},{12,11,0}})},
              {modified, calendar:universal_time_to_local_time({{2010,1,28},{12,14,4}})},
@@ -97,11 +97,11 @@ atom_to_resource_test() ->
   </entry>",
 
     ImportedRsc = atom_convert:atom_to_resource(Atom1),
-    ?assertEqual(proplists:get_value(resource_uri, ImportedRsc), <<"http://www.mediamatic.net/id/22661">>),
+    ?assertEqual(<<"http://www.mediamatic.net/id/22661">>, proplists:get_value(uri, ImportedRsc)),
 
     Rsc = proplists:get_value(rsc, ImportedRsc),
-    ?assertEqual(proplists:get_value(title, Rsc), <<"Arjan Scherpenisse">>),
-    ?assertEqual(proplists:get_value(modified, Rsc), calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}})),
+    ?assertEqual(<<"Arjan Scherpenisse">>, proplists:get_value(title, Rsc)),
+    ?assertEqual(calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}}), proplists:get_value(modified, Rsc)),
 
     Edges = proplists:get_value(edges, ImportedRsc),
     ?assertEqual(filter_edges(Edges, <<"author">>),
@@ -123,11 +123,11 @@ resource_to_resource_test() ->
     Rsc2 = atom_convert:atom_to_resource(atom_convert:resource_to_atom(rsc1())),
 
     %% Verify the equality of base elements
-    L = [resource_uri],
+    L = [uri],
     [?assertEqual(proplists:get_value(X, Rsc1), proplists:get_value(X, Rsc2)) || X <- L],
 
     %% Verify the equality of the rsc elements
-    L2 = [title, resource_uri, modified, publication_start],
+    L2 = [title, uri, modified, publication_start],
     [?assertEqual(proplists:get_value(X, proplists:get_value(rsc, Rsc1)), proplists:get_value(X, proplists:get_value(rsc, Rsc2))) || X <- L2],
     ok.
 

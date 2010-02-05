@@ -90,6 +90,7 @@
 %% This is used for fetching the acl fields from a resource record.
 -record(acl_props, {
     is_published=true,
+    is_authoritative=true,
     group_id=1,
     visible_for=0,
     publication_start={{1900,1,1},{0,0,0}},

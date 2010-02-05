@@ -30,7 +30,8 @@
 	sanitize/1,
 	noscript/1,
     escape_link/1,
-    nl2br/1
+    nl2br/1,
+    scrape_link_elements/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -466,3 +467,18 @@ nl2br(L) ->
     nl2br_bin(<<C, Post/binary>>, Acc) ->
         nl2br_bin(Post, <<Acc/binary, C>>).
         
+
+%% @doc Given a HTML list, scrape all <link> elements and return their attributes. Attribute names are lowercased.
+%% @spec scrape_link_elements(string()) -> [LinkAttributes]
+scrape_link_elements(Html) ->
+    case re:run(Html, "<link[^>]+>", [global, caseless, {capture,all,list}]) of
+        {match, Elements} ->
+            F = fun(El) ->
+                        H = iolist_to_binary(["<p>", El, "</p>"]),
+                        {<<"p">>, [], [{_, Attrs, []}]} = mochiweb_html:parse(H),
+                        [{z_string:to_lower(binary_to_list(K)),binary_to_list(V)} || {K,V} <- lists:flatten(Attrs)]
+                end,
+            [F(El) || [El] <- Elements];
+        nomatch ->
+            []
+    end.

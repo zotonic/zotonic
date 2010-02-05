@@ -36,7 +36,7 @@ resource_to_atom(RscExport) ->
     Rsc = proplists:get_value(rsc, RscExport),
 
     Content0 = [
-                {id, [binary_to_list(proplists:get_value(resource_uri, RscExport))]},
+                {id, [binary_to_list(proplists:get_value(uri, RscExport))]},
                 {title, [{type, "html"}], [binary_to_list(proplists:get_value(title, Rsc))]},
                 {published, [z_convert:to_isotime(proplists:get_value(publication_start, Rsc))]},
                 {updated, [z_convert:to_isotime(proplists:get_value(modified, Rsc))]}
@@ -88,6 +88,9 @@ filter_edges(Edges, PredicateName) ->
 
 %% @doc Export a resource to Atom XML.
 %% @spec resource(string()) -> rsc_export().
+atom_to_resource(Xml) when is_binary(Xml) ->
+    atom_to_resource(binary_to_list(Xml));
+
 atom_to_resource(Xml) ->
     {RootElem,_} = xmerl_scan:string(Xml),
 
@@ -133,7 +136,7 @@ atom_to_resource(Xml) ->
     Edges1 = Edges ++ find_author(RootElem),
     Edges2 = Edges1 ++ find_depiction(RootElem),
 
-    Import = [{resource_uri, RscUri},
+    Import = [{uri, RscUri},
               {rsc, RscProps5},
               {edges, Edges2}
              ],

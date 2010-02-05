@@ -144,9 +144,9 @@
 				<div class="zp-67" id="poststuff">
 					<div class="padding">
 
-                        {% all catinclude "_admin_edit_basics.tpl" id %}
+                        {% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable %}
 
-						{% all catinclude "_admin_edit_content.tpl" id %}
+						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable %}
 
 						{% if r.is_a.media %}
 						<div class="item-wrapper">
@@ -182,6 +182,8 @@
 
 						{% endif %}
 
+
+                        {% if is_editable or m.rsc[id].depiction %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 								<span class="title">Attached media</span>
@@ -211,6 +213,7 @@
 								</div>
 							</div>
 						</div>
+                        {% endif %}
 
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.is_a.meta|not }} }">
@@ -222,15 +225,16 @@
 
 									<div class="form-item clearfix">
 										<label for="field-short-title">Short title</label>
-										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" />
+										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" disabled="{{ is_editable|not }}" />
 									</div>
 
+                                    {% if m.rsc[id].is_authoritative %}
 									{% if m.acl.is_admin or m.acl.is_public_publisher %}
 									<div class="path-unique-name-wrapper clearfix">
 										<div class="zp-50">
 											<div class="form-item clearfix">
 												<label for="field-page-path">Page path, default is <em>{{ r.default_page_url|escape }}</em></label>
-												<input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" />
+												<input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" disabled="{{ is_editable|not }}" />
 											</div>
 										</div>
 
@@ -250,12 +254,13 @@
 										{% endif %}
 									</div>
 									{% endif %}
+                                    {% endif %}
 
 									{% if m.acl.is_admin %}
 										{% if r.is_a.meta or not r.is_authoritative %}
 											<div class="form-item clearfix">
 												<label for="field-name">Unique uri</label>
-												<input type="text" id="field-name" name="uri" value="{{ r.uri }}" />
+												<input type="text" id="field-name" name="uri" value="{{ r.uri }}" disabled="{{ is_editable|not }}" />
 											</div>
 										{% endif %}
 									{% endif %}

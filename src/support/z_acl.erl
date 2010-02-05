@@ -436,11 +436,16 @@ acl_visible(Acl, Context) ->
 %% @doc Check if something with the given #acl fields is editable.
 %% @spec acl_editable(#acl_props, #context) -> bool()
 acl_editable(Acl, Context) ->
-    case has_role(admin, Context) of
+    case Acl#acl_props.is_authoritative of
+        false -> 
+            false;
         true ->
-            true;
-        false ->
-            % Must be in one of our groups
-            Gs = groups_member(Context),
-            lists:member(Acl#acl_props.group_id, Gs)
+            case has_role(admin, Context) of
+                true ->
+                    true;
+                false ->
+                                                % Must be in one of our groups
+                    Gs = groups_member(Context),
+                    lists:member(Acl#acl_props.group_id, Gs)
+            end
     end.

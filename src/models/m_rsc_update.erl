@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,10 +29,10 @@
     update/3,
     update/4,
     duplicate/3,
-    
+
     delete_nocheck/2,
     props_filter/3,
-    
+
     test/0
 ]).
 
@@ -48,7 +48,7 @@ insert(Props, EscapeTexts, Context) ->
     PropsAcl = z_acl:add_defaults(Props, Context),
     PropsDefaults = props_defaults(PropsAcl, Context),
     update(insert_rsc, PropsDefaults, EscapeTexts, Context).
-    
+
 
 %% @doc Delete a resource
 %% @spec delete(Props, Context) -> ok | {error, Reason}
@@ -67,7 +67,7 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 
 
 %% @doc Delete a resource, no check on rights etc is made. This is called by m_category:delete/3
-%% @spec delete_nocheck(Id, Context) -> ok | {error, Reason}
+%% @spec delete_nocheck(Id, Context) -> ok | throw:{error, Reason}
 delete_nocheck(Id, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
@@ -77,29 +77,24 @@ delete_nocheck(Id, Context) ->
         z_db:delete(rsc, Id, Ctx)
     end,
 
-    case z_db:transaction(F, Context) of
-        {ok, _RowsDeleted} ->
-            % After inserting a category we need to renumber the categories
-            case lists:member(category, CatList) of
-                true ->  m_category:renumber(Context);
-                false -> nop
-            end,
-    
-            % Flush all cached entries depending on this entry, one of its subjects or its categories.
-            z_depcache:flush(Id, Context),
-            [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
-            [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
-    
-            % Notify all modules that the rsc has been deleted
-            z_notifier:notify({rsc_update_done, delete, Id, CatList, []}, Context),
-            ok;
-        {error, Reason} ->
-            {error, Reason}
-    end.
+    {ok, _RowsDeleted} = z_db:transaction(F, Context),
+    %% After inserting a category we need to renumber the categories
+    case lists:member(category, CatList) of
+        true ->  m_category:renumber(Context);
+        false -> nop
+    end,
+
+    %% Flush all cached entries depending on this entry, one of its subjects or its categories.
+    z_depcache:flush(Id, Context),
+    [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
+    [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
+    %% Notify all modules that the rsc has been deleted
+    z_notifier:notify({rsc_update_done, delete, Id, CatList, []}, Context),
+    ok.
 
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
-%% @spec duplicate(int(), PropList, Context) -> {ok, int()} | {error, Reason}
+%% @spec duplicate(int(), PropList, Context) -> {ok, int()} | throw:{error, Reason}
 %% @todo Also duplicate the attached medium.
 duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
@@ -117,26 +112,35 @@ duplicate(Id, DupProps, Context) ->
                                 {is_authoritative,true}, {is_protected,false},
                                 {slug,undefined}
                             ]),
-            case insert(InsProps, false, Context) of
-                {ok, NewId} ->
-                    % Duplicate all edges
-                    m_edge:duplicate(Id, NewId, Context),
-                    {ok, NewId};
-                {error, Reason} ->
-                    {error, Reason}
-            end;
+            {ok, NewId} = insert(InsProps, false, Context),
+            %% Duplicate all edges
+            m_edge:duplicate(Id, NewId, Context),
+            {ok, NewId};
         false ->
             throw({error, eacces})
     end.
 
 
 %% @doc Update a resource
-%% @spec update(Id, Props, Context) -> {ok, Id} | {error, Reason}
+%% @spec update(Id, Props, Context) -> {ok, Id} | throw:{error, Reason}
 update(Id, Props, Context) ->
-    update(Id, Props, true, Context).
+    update(Id, Props, [], Context).
 
-update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_rsc ->
-    case Id == insert_rsc orelse z_acl:rsc_editable(Id, Context) of
+%% @doc Backward comp.
+update(Id, Props, false, Context) ->
+    update(Id, Props, [{escape_texts, false}], Context);
+update(Id, Props, true, Context) ->
+    update(Id, Props, [{escape_texts, true}], Context);
+
+%% @doc Resource updater function
+%% @spec update(Id, Props, Options, Context)
+%% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
+update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc ->
+    EscapeTexts = proplists:get_value(escape_texts, Options, true),
+    AclCheck = proplists:get_value(acl_check, Options, true),
+    IsEditable = Id == insert_rsc orelse z_acl:rsc_editable(Id, Context) orelse not(AclCheck),
+
+    case IsEditable of
         true ->
             TextProps = recombine_dates(Props),
             AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- TextProps ],
@@ -146,117 +150,117 @@ update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_
                 true -> z_html:escape_props(EditableProps);
                 false -> EditableProps
             end,
-            case preflight_check(Id, SafeProps, Context) of
-                ok ->
-                    % This function will be executed in a transaction
-                    TransactionF = fun(Ctx) ->
-                        {RscId, UpdateProps, BeforeProps, BeforeCatList, RenumberCats} = case Id of
-                            insert_rsc ->
-                                CategoryId = proplists:get_value(category_id, SafeProps),
-                                GroupId = proplists:get_value(group_id, SafeProps),
-                                InsProps = [{category_id, CategoryId}, {group_id, GroupId}, {version, 0}],
+            ok = preflight_check(Id, SafeProps, Context),
 
-                                % Allow the insertion props to be modified.
-                                InsPropsN = z_notifier:foldr({rsc_insert}, InsProps, Ctx),
-                                
-                                % Check if the user is allowed to add to the group of the new rsc, if so proceed
-                                GroupIdN = proplists:get_value(group_id, InsPropsN),
-                                case z_acl:group_editable(GroupIdN, Ctx) of
-                                    true ->
-                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx),
+            %% This function will be executed in a transaction
+            TransactionF = fun(Ctx) ->
+                {RscId, UpdateProps, BeforeProps, BeforeCatList, RenumberCats} = case Id of
+                    insert_rsc ->
+                        CategoryId = proplists:get_value(category_id, SafeProps),
+                        GroupId = proplists:get_value(group_id, SafeProps),
+                        InsProps = [{category_id, CategoryId}, {group_id, GroupId}, {version, 0}],
+                         % Allow the insertion props to be modified.
+                        InsPropsN = z_notifier:foldr({rsc_insert}, InsProps, Ctx),
 
-                                        % Insert a category record for categories. Categories are so low level that we want
-                                        % to make sure that all categories always have a category record attached.
-                                        InsertCatList = [ CategoryId | m_category:get_path(CategoryId, Ctx) ],
-                                        IsACat = case lists:member(m_category:name_to_id_check(category, Ctx), InsertCatList) of
-                                            true ->
-                                                1 = z_db:q("insert into category (id, seq) values ($1, 1)", [InsId], Ctx),
-                                                true;
-                                            false ->
-                                                false
-                                        end,
-
-                                        % Place the inserted properties over the update properties, replacing duplicates.
-                                        SafePropsN = lists:foldl(
-                                                                fun
-                                                                    ({version, _}, Acc) -> Acc;
-                                                                    ({P,V}, Acc) -> z_utils:prop_replace(P, V, Acc) 
-                                                                end,
-                                                                SafeProps, 
-                                                                InsPropsN),
-                                        {InsId, SafePropsN, InsPropsN, [], IsACat};
-                                    false ->
-                                        throw({error, eacces})
-                                end;
-                            _ ->
-                                {Id, SafeProps, m_rsc:get(Id, Ctx), m_rsc:is_a(Id, Ctx), false}
-                        end,
-                    
-                        UpdateProps1 = [
-                            {version, z_db:q1("select version+1 from rsc where id = $1", [RscId], Ctx)},
-                            {modifier_id, z_acl:user(Ctx)},
-                            {modified, calendar:local_time()}
-                            | UpdateProps
-                        ],
-                        
-                        % Allow the update props to be modified.
-                        {Changed, UpdatePropsN} = z_notifier:foldr({rsc_update, RscId, BeforeProps}, {false, UpdateProps1}, Ctx),
-                        UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
-                            undefined ->
-                                UpdatePropsN;
-                            CatId ->
-                                CatNr = z_db:q1("select nr from category where id = $1", [CatId], Ctx),
-                                [ {pivot_category_nr, CatNr} | UpdatePropsN]
-                        end,
-                        
-                        case Id == insert_rsc orelse Changed orelse is_changed(RscId, UpdatePropsN1, Ctx) of
+                        % Check if the user is allowed to add to the group of the new rsc, if so proceed
+                        GroupIdN = proplists:get_value(group_id, InsPropsN),
+                        case z_acl:group_editable(GroupIdN, Ctx) orelse not(AclCheck) of
                             true ->
-                                {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsN1, Ctx),
-                                {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
+                                {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx),
+                                 % Insert a category record for categories. Categories are so low level that we want
+                                % to make sure that all categories always have a category record attached.
+                                InsertCatList = [ CategoryId | m_category:get_path(CategoryId, Ctx) ],
+                                IsACat = case lists:member(m_category:name_to_id_check(category, Ctx), InsertCatList) of
+                                    true ->
+                                        1 = z_db:q("insert into category (id, seq) values ($1, 1)", [InsId], Ctx),
+                                        true;
+                                    false ->
+                                        false
+                                end,
+                                 % Place the inserted properties over the update properties, replacing duplicates.
+                                SafePropsN = lists:foldl(
+                                                        fun
+                                                            ({version, _}, Acc) -> Acc;
+                                                            ({P,V}, Acc) -> z_utils:prop_replace(P, V, Acc)
+                                                        end,
+                                                        SafeProps,
+                                                        InsPropsN),
+                                {InsId, SafePropsN, InsPropsN, [], IsACat};
                             false ->
-                                {ok, RscId, notchanged}
-                        end
+                                throw({error, eacces})
+                        end;
+                    _ ->
+                       {Id, SafeProps, m_rsc:get(Id, Ctx), m_rsc:is_a(Id, Ctx), false}
+                end,
+
+                UpdateProps1 = [
+                    {version, z_db:q1("select version+1 from rsc where id = $1", [RscId], Ctx)},
+                    {modifier_id, z_acl:user(Ctx)},
+                    {modified, calendar:local_time()}
+                    | UpdateProps
+                ],
+
+                % Allow the update props to be modified.
+                {Changed, UpdatePropsN} = z_notifier:foldr({rsc_update, RscId, BeforeProps}, {false, UpdateProps1}, Ctx),
+                UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
+                    undefined ->
+                        UpdatePropsN;
+                    CatId ->
+                        CatNr = z_db:q1("select nr from category where id = $1", [CatId], Ctx),
+                        [ {pivot_category_nr, CatNr} | UpdatePropsN]
+                end,
+
+                case Id == insert_rsc orelse Changed orelse is_changed(RscId, UpdatePropsN1, Ctx) of
+                    true ->
+                        {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsN1, Ctx),
+                        {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
+                    false ->
+                        {ok, RscId, notchanged}
+                end
+            end,
+            % End of transaction function
+
+            case z_db:transaction(TransactionF, Context) of
+                {ok, NewId, notchanged} ->
+                    {ok, NewId};
+                {ok, NewId, NewProps, OldCatList, RenumberCats} ->
+                    z_depcache:flush(NewId, Context),
+                    case proplists:get_value(name, NewProps) of
+                        undefined -> nop;
+                        Name -> z_depcache:flush({rsc_name, z_convert:to_list(Name)}, Context)
                     end,
-                    % End of transaction function
-                    
-                    case z_db:transaction(TransactionF, Context) of
-                        {ok, NewId, notchanged} ->
-                            {ok, NewId};
-                        {ok, NewId, NewProps, OldCatList, RenumberCats} ->    
-                            z_depcache:flush(NewId, Context),
-                            case proplists:get_value(name, NewProps) of
-                                undefined -> nop;
-                                Name -> z_depcache:flush({rsc_name, z_convert:to_list(Name)}, Context)
-                            end,
+                    case proplists:get_value(uri, NewProps) of
+                        undefined -> nop;
+                        Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
+                    end,
+                     NewCatList = m_rsc:is_a(NewId, Context),
+                    AllCatList = lists:usort(NewCatList ++ OldCatList),
 
-                            NewCatList = m_rsc:is_a(NewId, Context),
-                            AllCatList = lists:usort(NewCatList ++ OldCatList),
-                            
-                            % After inserting a category we need to renumber the categories
-                            case RenumberCats of
-                                true ->  m_category:renumber(Context);
-                                false -> nop
-                            end,
-                            
-                            % Flush all cached content that is depending on one of the updated categories
-                            [ z_depcache:flush(Cat, Context) || Cat <- AllCatList ],
+                    % After inserting a category we need to renumber the categories
+                    case RenumberCats of
+                        true ->  m_category:renumber(Context);
+                        false -> nop
+                    end,
 
-                            % Notify that a new resource has been inserted, or that an existing one is updated
-                            case Id of
-                                insert_rsc -> z_notifier:notify({rsc_update_done, insert, NewId, OldCatList, NewCatList}, Context);
-                                _ ->          z_notifier:notify({rsc_update_done, update, NewId, OldCatList, NewCatList}, Context)
-                            end,
-                            
-                            % Return the updated or inserted id
-                            {ok, NewId};
-                        {error, Reason} ->
-                            {error, Reason}
-                    end;
-                {error, Reason} ->
-                    {error, Reason}
+                    % Flush all cached content that is depending on one of the updated categories
+                    [ z_depcache:flush(Cat, Context) || Cat <- AllCatList ],
+                     % Notify that a new resource has been inserted, or that an existing one is updated
+                    case Id of
+                        insert_rsc -> z_notifier:notify({rsc_update_done, insert, NewId, OldCatList, NewCatList}, Context);
+                        _ ->          z_notifier:notify({rsc_update_done, update, NewId, OldCatList, NewCatList}, Context)
+                    end,
+
+                    % Return the updated or inserted id
+                    {ok, NewId};
+                {rollback, {Why, _}} ->
+                    throw(Why)
             end;
         false ->
-            throw({error, eacces})
+            E = case m_rsc:p(Id, is_authoritative, Context) of
+                false -> {error, non_authoritative};
+                true -> {error, eacces}
+            end,
+            throw(E)
     end.
 
 
@@ -265,7 +269,7 @@ update(Id, Props, EscapeTexts, Context) when is_integer(Id) orelse Id == insert_
 is_changed(Id, Props, Context) ->
     Current = m_rsc:get_raw(Id, Context),
     is_prop_changed(Props, Current).
-    
+
     is_prop_changed([], _Current) ->
         false;
     is_prop_changed([{version, _}|Rest], Current) ->
@@ -282,8 +286,8 @@ is_changed(Id, Props, Context) ->
             false -> true  % The property Prop has been changed.
         end.
 
-        
-    
+
+
 %% @doc Check if all props are acceptable. Examples are unique name, uri etc.
 %% @spec preflight_check(Id, Props, Context) -> ok | {error, Reason}
 preflight_check(insert_rsc, Props, Context) ->
@@ -293,17 +297,17 @@ preflight_check(_Id, [], _Context) ->
 preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
     case z_db:q1("select count(*) from rsc where name = $1 and id <> $2", [Name, Id], Context) of
         0 ->  preflight_check(Id, T, Context);
-        _N -> {error, {duplicate_name, Name}}
+        _N -> throw({error, {duplicate_name, Name}})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
     case z_db:q1("select count(*) from rsc where page_path = $1 and id <> $2", [Path, Id], Context) of
         0 ->  preflight_check(Id, T, Context);
-        _N -> {error, duplicate_page_path}
+        _N -> throw({error, duplicate_page_path})
     end;
 preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
     case z_db:q1("select count(*) from rsc where uri = $1 and id <> $2", [Uri, Id], Context) of
         0 ->  preflight_check(Id, T, Context);
-        _N -> {error, duplicate_uri}
+        _N -> throw({error, duplicate_uri})
     end;
 preflight_check(Id, [{'query', Query}|T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
@@ -317,8 +321,8 @@ preflight_check(Id, [{'query', Query}|T], Context) ->
                 false -> true
             end,
     case Valid of
-        false -> {error, invalid_query};
-        true -> preflight_check(Id, T, Context)
+        true -> preflight_check(Id, T, Context);
+        false -> throw({error, invalid_query})
     end;
 preflight_check(Id, [_H|T], Context) ->
     preflight_check(Id, T, Context).
@@ -333,7 +337,7 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
     case z_acl:has_role(admin, Context) of
         true ->
             case Uri of
-                Empty when Empty == undefined; Empty == []; Empty == <<>> -> 
+                Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{uri, undefined} | Acc], Context);
                 _ ->
                     props_filter(T, [{uri, Uri} | Acc], Context)
@@ -346,7 +350,7 @@ props_filter([{name, Name}|T], Acc, Context) ->
     case z_acl:has_role(admin, Context) of
         true ->
             case Name of
-                Empty when Empty == undefined; Empty == []; Empty == <<>> -> 
+                Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{name, undefined} | Acc], Context);
                 _ ->
                     props_filter(T, [{name, z_string:to_name(Name)} | Acc], Context)
@@ -359,7 +363,7 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
     case z_acl:has_role(public_publisher, Context) of
         true ->
             case Path of
-                Empty when Empty == undefined; Empty == []; Empty == <<>> -> 
+                Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{page_path, undefined} | Acc], Context);
                 _ ->
                     Tokens = string:tokens(z_convert:to_list(Path), "/"),
@@ -404,7 +408,7 @@ props_filter([{visible_for, Vis}|T], Acc, Context) ->
     case VisibleFor of
         N when N==0; N==1; N==2 ->
             case N >= z_acl:publish_level(Context) of
-                true -> 
+                true ->
                     props_filter(T, [{visible_for, N} | Acc], Context);
                 false ->
                     % Do not let the user upgrade visibility beyond his permissions
@@ -417,7 +421,7 @@ props_filter([{visible_for, Vis}|T], Acc, Context) ->
 props_filter([{group_id, GId}|T], Acc, Context) ->
     GroupId = z_convert:to_integer(GId),
     case GroupId of
-        undefined -> 
+        undefined ->
             props_filter(T, Acc, Context);
         N when N > 0 ->
             case z_acl:has_role(admin, Context) of
@@ -454,7 +458,7 @@ props_defaults(Props, _Context) ->
                     Slug = z_string:to_slug(Text),
                     lists:keystore(slug, 1, Props, {slug, Slug})
             end;
-        _ -> 
+        _ ->
             Props
     end.
 
@@ -507,7 +511,7 @@ collect_empty_date_groups([], Acc, Null) ->
 collect_empty_date_groups([{"publication", _} = R|T], Acc, Null) ->
     collect_empty_date_groups(T, [R|Acc], Null);
 collect_empty_date_groups([{Name, {
-                            {{undefined, undefined, undefined}, {undefined, undefined, undefined}}, 
+                            {{undefined, undefined, undefined}, {undefined, undefined, undefined}},
                             {{undefined, undefined, undefined}, {undefined, undefined, undefined}}
                             }}|T], Acc, Null) ->
     collect_empty_date_groups(T, Acc, [{Name++"_start", undefined}, {Name++"_end", undefined} | Null]);
@@ -522,9 +526,9 @@ collect_empty_dates([{Name, {{undefined, undefined, undefined}, {undefined, unde
     collect_empty_dates(T, Acc, [{Name, undefined}|Null]);
 collect_empty_dates([H|T], Acc, Null) ->
     collect_empty_dates(T, [H|Acc], Null).
-    
 
-    
+
+
 recombine_dates([], Dates, Acc) ->
     {Dates, Acc};
 recombine_dates([{"dt:"++K,V}|T], Dates, Acc) ->
@@ -536,7 +540,7 @@ recombine_dates([H|T], Dates, Acc) ->
 
     recombine_date(Part, _End, Name, V, Dates) ->
         Date = case proplists:get_value(Name, Dates) of
-            undefined -> 
+            undefined ->
                 {{undefined, undefined, undefined}, {undefined, undefined, undefined}};
             D ->
                 D
@@ -578,7 +582,7 @@ group_dates(Dates) ->
             true ->
                 Base = lists:sublist(Name, length(Name) - 6),
                 Range = case proplists:get_value(Base, Groups) of
-                    {_Start, End} -> 
+                    {_Start, End} ->
                         { D, End };
                     undefined ->
                         { D, {{undefined, undefined, undefined}, {undefined, undefined, undefined}} }
@@ -591,7 +595,7 @@ group_dates(Dates) ->
                     true ->
                         Base = lists:sublist(Name, length(Name) - 4),
                         Range = case proplists:get_value(Base, Groups) of
-                            {Start, _End} -> 
+                            {Start, _End} ->
                                 { Start, D };
                             undefined ->
                                 { {{undefined, undefined, undefined}, {0, 0, 0}}, D }
@@ -603,7 +607,7 @@ group_dates(Dates) ->
                         group_dates(T, Groups, [T|Acc])
                 end
         end.
-    
+
 
 dategroup_fill_parts( S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
     {S, ?ST_JUTTEMIS};
@@ -642,7 +646,7 @@ date_from_default( _S, {{Ye,Me,De},{He,Ie,Se}} ) ->
 
 to_int("") ->
     undefined;
-to_int(A) -> 
+to_int(A) ->
     try
         list_to_integer(A)
     catch
