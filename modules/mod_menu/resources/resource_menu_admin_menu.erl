@@ -55,8 +55,7 @@ event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
     Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}], Context1),
     z_render:update("menu-editor", Html, Context1);
 
-event(Event, Context) ->
-    ?DEBUG(Event),
+event(_Event, Context) ->
     Context.
 
 %% @doc Fetch the menu from the site configuration.
@@ -117,6 +116,11 @@ handle_drop(Menu, [Nr], ["after", DropNr]) when is_integer(Nr), is_integer(DropN
         false -> after_nth(DropNr-1, DragMenu, Menu1)
     end;
 
+% Menu item "after" another menu item
+handle_drop(Menu, ["new", Id], ["after", DropNr]) when is_integer(DropNr) ->
+    DragMenu = {Id, []},
+    after_nth(DropNr, DragMenu, Menu);
+
 % Sub menu item "after" another main-menu item
 handle_drop(Menu, [Nr, SubNr], ["after", DropNr]) when is_integer(Nr), is_integer(DropNr) ->
     {DragId, DragSubMenu} = lists:nth(Nr, Menu),
@@ -166,7 +170,7 @@ handle_drop(Menu, [Nr], [DropNr]) when is_integer(Nr), is_integer(DropNr) ->
 
 % drag main menu to sub-menu - refuse
 handle_drop(Menu, _From, _To) ->
-    % ?DEBUG({_From, _To}),
+    ?DEBUG({_From, _To}),
     Menu.
 
 
