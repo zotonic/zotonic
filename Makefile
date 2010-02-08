@@ -23,7 +23,7 @@ erlang-oauth:
 	(cd deps/erlang-oauth; make)
 
 exmpp:
-	(cd deps/exmpp; make)
+	(cd deps/exmpp; test -f Makefile || ./configure --disable-documentation; make)
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
