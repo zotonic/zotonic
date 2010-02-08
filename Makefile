@@ -14,16 +14,16 @@ $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
 
 mochiweb:
-	(cd deps/mochiweb; make)
+	cd deps/mochiweb && make
 
 webmachine:
-	(cd deps/webmachine; make)
+	cd deps/webmachine && make
 
 erlang-oauth:
-	(cd deps/erlang-oauth; make)
+	cd deps/erlang-oauth && make
 
 exmpp:
-	(cd deps/exmpp; test -f Makefile || ./configure --disable-documentation; make)
+	cd deps/exmpp && (test -f Makefile || ./configure --disable-documentation) &&  make
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'

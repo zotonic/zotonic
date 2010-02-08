@@ -1,0 +1,194 @@
+#!@ESCRIPT@
+
+%% @doc
+%% When this script is called without arguments, it'll run the EUnit
+%% test based on the script name. Our homebrew eunit_tty will not print
+%% anything but will indicate if the test was successful or not. The
+%% exit code is based on that.
+
+main([]) ->
+    case filename:basename(escript:script_name()) of
+        "etest" -> main(usage);
+        _       -> main([filename:join(["@srcdir@", escript:script_name()])])
+    end;
+
+%% @doc
+%% When called with "junit" as the first argument, following arguments
+%% are EUnit test names. They are all executed and a JUnit-compatible
+%% XML file is written by our eunit_tty. This always exits with 0.
+
+main(["-junit" | Tests]) ->
+    code:add_patha(filename:join(["@top_builddir@", "ebin"])),
+    Test_Set = make_junit_testset(Tests, [@EMKOPTS@]),
+    Ret = eunit:test(Test_Set, [{mode, junit}]),
+    stop(Ret);
+
+%% @doc
+%% A single argument is considered as the test name. See main([]).
+
+main([Test]) ->
+    code:add_patha(filename:join(["@top_builddir@", "ebin"])),
+    Ret = run_test(Test, [@EMKOPTS@]),
+    stop(Ret);
+
+%% @doc
+%% In all other cases, we print the usage.
+
+main(Bad_Args) ->
+    usage(filename:basename(escript:script_name())),
+    case Bad_Args of
+        usage -> stop(ok);
+        _     -> stop(error)
+    end.
+
+stop(ok) ->
+    halt(0);
+stop(skipped) ->
+    halt(77);
+stop(error) ->
+    halt(1);
+stop(Other) ->
+    io:format("Bad return value from eunit_tty: ~p~n", [Other]),
+    halt(1).
+
+% --------------------------------------------------------------------
+% Single test run.
+% --------------------------------------------------------------------
+
+%% @spec (Test, Compiler_Options) -> ok | skipped | error
+%%     Test = string()
+%%     Compiler_Options = list()
+%% @doc Compile and run a single EUnit test.
+
+run_test(Test, Compiler_Options) ->
+    case load_test(Test, Compiler_Options) of
+        {error, compile, Errors, Warnings} ->
+            print_compile_errors(Test, Errors, Warnings),
+            error;
+        {error, load, Module, Reason} ->
+            print_load_error(Test, Module, Reason),
+            error;
+        {ok, Module, []} ->
+            Module:test();
+        {ok, _Module, Warnings} ->
+            print_compile_errors(Test, [], Warnings),
+            error
+    end.
+
+%% @spec (Test, Compiler_Options) -> Success | Error
+%%     Test = string()
+%%     Compiler_Options = list()
+%%     Success = {ok, Module, Warnings}
+%%     Module = atom()
+%%     Error = {error, compile, Errors, Warnings} |
+%%             {error, load, Module, Reason}
+%%     Errors = list()
+%%     Warnings = list()
+%%     Reason = Term()
+%% @doc Compile and load the module from `Test'.
+%%
+%% Options `binary', `debug_info' and `return' are prepended to
+%% `Compiler_Options'.
+
+load_test(Test, Compiler_Options) ->
+    Default_Options = [
+      binary,
+      debug_info,
+      return,
+      {i, "@top_srcdir@/include"},
+      {i, "@top_builddir@/include"}
+    ],
+    Compiler_Options1 = Compiler_Options --
+        [report, report_errors, report_warnings],
+    Options = Default_Options ++ Compiler_Options1,
+    case compile:file(Test, Options) of
+        {ok, Module, Binary, Warnings} ->
+            case code:load_binary(Module, Test, Binary) of
+                {module, Module} ->
+                    {ok, Module, Warnings};
+                {error, Reason} ->
+                    {error, load, Module, Reason}
+            end;
+        {error, Errors, Warnings} ->
+            {error, compile, Errors, Warnings}
+    end.
+
+% --------------------------------------------------------------------
+% JUnit mode.
+% --------------------------------------------------------------------
+
+make_junit_testset(Tests, Compiler_Options) ->
+    make_junit_testset2(Tests, Compiler_Options, []).
+
+make_junit_testset2([Test | Rest], Compiler_Options, Test_Set) ->
+    % We compile and load the test module now but the return value is
+    % handled by a generator.
+    Compile_Ret = load_test(filename:join(["@srcdir@", Test]),
+      Compiler_Options),
+    % The generator will either return the Module name or return a dummy
+    % test that always throw an exception to report the compile/load
+    % errors.
+    Generator = fun() ->
+        case Compile_Ret of
+            {ok, Module, []} ->
+                Module;
+            _ ->
+                {Test, fun() -> raise_error(Test, Compile_Ret) end}
+        end
+    end,
+    make_junit_testset2(Rest, Compiler_Options,
+      [{generator, Generator} | Test_Set]);
+make_junit_testset2([], _Compiler_Options, Test_Set) ->
+    lists:reverse(Test_Set).
+
+% --------------------------------------------------------------------
+% Error reporting.
+% --------------------------------------------------------------------
+
+print_compile_errors(Test, [{File, Error_Infos} | Rest], Warnings) ->
+    print_error_infos(File, Error_Infos),
+    print_compile_errors(Test, Rest, Warnings);
+print_compile_errors(Test, [], [{File, Warning_Infos} | Rest]) ->
+    print_warning_infos(File, Warning_Infos),
+    print_compile_errors(Test, [], Rest);
+print_compile_errors(_Test, [], []) ->
+    ok.
+
+print_error_infos(File, [{Line, IO_Module, Desc} | Rest]) ->
+    io:format("~s:~p: ~s~n",
+      [File, Line, IO_Module:format_error(Desc)]),
+    print_error_infos(File, Rest);
+print_error_infos(_File, []) ->
+    ok.
+
+print_warning_infos(File, [{Line, IO_Module, Desc} | Rest]) ->
+    io:format("~s:~p: Warning: ~s~n",
+      [File, Line, IO_Module:format_warning(Desc)]),
+    print_warning_infos(File, Rest);
+print_warning_infos(_File, []) ->
+    ok.
+
+print_load_error(Test, Module, Reason) ->
+    io:format("Can't load module ~s (~s): ~p~n",
+      [Module, Test ++ ".erl", Reason]).
+
+raise_error(Test, Error) ->
+    throw({load_error, Test, Error}).
+
+% --------------------------------------------------------------------
+% Usage.
+% --------------------------------------------------------------------
+
+version() ->
+    io:format("~s testsuite - ~s~n",
+      ["@PACKAGE_STRING@", "$Revision: 805 $"]).
+
+usage(Prog_Name) ->
+    version(),
+    io:format(
+      "~n"
+      "Usage: ~s <TESTNAME>~n"
+      "       ~s -junit [<TESTNAME>, ...]~n",
+      [Prog_Name, Prog_Name]).
+
+% vim:ft=erlang:
