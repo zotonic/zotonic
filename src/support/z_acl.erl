@@ -28,6 +28,7 @@
 -export([
     rsc_visible/2,
     rsc_editable/2,
+    rsc_deletable/2,
     rsc_ingroup/2,
     group_editable/2,
     sudo/1,
@@ -95,6 +96,14 @@ rsc_editable(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(
     true;
 rsc_editable(Id, Context) ->
     acl_editable(m_rsc:get_acl_props(Id, Context), Context).
+
+%% @doc Check if the resource is deletable by the current user
+rsc_deletable(_Id, #context{user_id=undefined}) ->
+    % Anonymous visitors can't delete anything
+    false;
+rsc_deletable(Id, Context) ->
+    acl_deletable(m_rsc:get_acl_props(Id, Context), Context).
+
 
 %% @doc Check if the group of the resource is in one of the groups of the user
 rsc_ingroup(_Id, #context{user_id=undefined}) ->
@@ -440,6 +449,24 @@ acl_editable(Acl, Context) ->
         false -> 
             false;
         true ->
+            case has_role(admin, Context) of
+                true ->
+                    true;
+                false ->
+                                                % Must be in one of our groups
+                    Gs = groups_member(Context),
+                    lists:member(Acl#acl_props.group_id, Gs)
+            end
+    end.
+
+
+%% @doc Check if something with the given #acl fields is editable.
+%% @spec acl_editable(#acl_props, #context) -> bool()
+acl_deletable(Acl, Context) ->
+    case Acl#acl_props.is_authoritative of
+        true -> 
+            acl_editable(Acl, Context);
+        false ->
             case has_role(admin, Context) of
                 true ->
                     true;

@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Delete a media.  After the deletion the user is redirected, and/or some items on the page are faded out.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {delete_media, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
+    case z_acl:rsc_deletable(Id, Context) of
         true ->
             ok = m_media:delete(Id, Context),
             lists:foldl(
