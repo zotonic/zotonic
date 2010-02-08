@@ -74,24 +74,20 @@ Ubuntu 9.04 (jaunty)
 You'll need to build erlang from source. Before building, make sure
 you install these packages:
 
-sudo apt-get install unixodbc-dev libncurses-dev libssl-dev
+sudo apt-get install build-essential unixodbc-dev libncurses-dev libssl-dev libxml2-dev libexpat1-dev
 
 PostgreSQL and Imagemagick are available on Ubuntu as packages:
 
 sudo apt-get install postgresql-8.4 imagemagick
 
 
-
 Ubuntu 9.10 (karmic)
 --------------------
-Instead of compiling erlang, you can install the following erlang packages:
+Follow the instructions for Ubuntu 9.04, but instead of compiling
+erlang, you can just install Erlang but you need the ssl and xml dev
+libraries as well for XMPP:
 
-sudo apt-get install erlang-base erlang-crypto erlang-dev erlang-docbuilder \
-erlang-edoc erlang-et erlang-eunit erlang-gs erlang-inets \
-erlang-mnesia erlang-observer erlang-odbc erlang-parsetools \
-erlang-public-key erlang-runtime-tools erlang-ssl \
-erlang-syntax-tools erlang-tools erlang-webtool erlang-xmerl
-
+sudo apt-get install erlang build-essential libxml2-dev libexpat1-dev
 
 
 Windows
