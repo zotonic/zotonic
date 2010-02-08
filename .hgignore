@@ -16,3 +16,4 @@ zotonic.tmproj
 *.lai
 *.so
 *.Plo
+deps/exmpp/autom4te.cache/
