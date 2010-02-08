@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the media
 %% @spec event(Event, Context1) -> Context2
 event({postback, {delete_media_dialog, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:media_editable(Id, Context) of
+    case z_acl:media_deletable(Id, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess},
