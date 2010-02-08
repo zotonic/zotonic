@@ -73,7 +73,13 @@ init(Args) ->
     z_notifier:observe(subscribe_to_url, self(), Context),
 
     Domain = m_config:get_value(?MODULE, pubsub_domain, "pubsub." ++ z_dispatcher:hostname(Context), Context),
-    State = connect(#state{context=z_acl:sudo(z_context:new(Context)), pubsub_domain=Domain}),
+    State = case exmpp_jid:parse(m_config:get_value(?MODULE, jid, Context)) of
+                undefined ->
+                    C1 = z_session_manager:broadcast(#broadcast{type="error", message="Module has not been configured, not starting pubsub client.", title="Pubsub", stay=false}, Context),
+                    #state{context=z_context:new(C1)};
+                _ ->
+                    connect(#state{context=z_acl:sudo(z_context:new(Context)), pubsub_domain=Domain})
+            end,
 	{ok, State}.
 
 
