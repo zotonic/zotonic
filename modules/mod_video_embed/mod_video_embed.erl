@@ -129,6 +129,7 @@ media_stillimage({media_stillimage, Props}, Context) ->
 		            case proplists:get_value(video_embed_service, Props) of
 		                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
 		                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
+		                <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
 		                _ -> {ok, "lib/images/embed.jpg"}
 		            end;
 				DepictionProps ->
@@ -296,6 +297,8 @@ preview_create(MediaId, InsertProps, Context) ->
 	case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
 		"youtube" -> 
 			spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
+		"yandex" -> 
+			spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
 		_ -> nop
 	end.
 
@@ -320,3 +323,27 @@ preview_youtube(MediaId, InsertProps, Context) ->
 					nop
 			end
 	end.
+
+
+%% @doc Fetch the preview image of a yandex video. The preview is located at:
+%% http://static.video.yandex.ru/get/[user]/[code]/1.m450x334.jpg
+%% @todo Make this more robust wrt http errors.
+preview_yandex(MediaId, InsertProps, Context) ->
+    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
+        [] -> nop;
+        Embed ->
+            case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/]+)", [{capture, [1, 2], list}]) of
+                {match, [User, Code]} ->
+                    Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
+                    case http:request(Url) of
+                        {ok, {_StatusLine, _Header, Data}} ->
+                            %% Received the preview image, move it to a file.
+                            m_media:save_preview(MediaId, Data, "image/jpeg", Context);
+                        {error, _Reason} ->
+                            %% Too bad - no preview available - ignore for now (see todo above)
+                            nop
+                    end;
+                _ ->
+                    nop
+            end
+    end.
