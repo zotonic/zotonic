@@ -66,17 +66,17 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    zotonic:ensure_started(exmpp),
-    z_notifier:observe(rsc_update_done, self(), Context),
-    z_notifier:observe(rsc_delete, self(), Context),
-
-    z_notifier:observe(subscribe_to_url, self(), Context),
 
     case m_config:get_value(?MODULE, jid, Context) of
         undefined ->
             z_session_manager:broadcast(#broadcast{type="error", message="Module has not been configured, not starting pubsub client. Please configure pubsub and then activate the module again.", title="Pubsub", stay=true}, Context),
             ignore;
         _ ->
+            zotonic:ensure_started(exmpp),
+            z_notifier:observe(rsc_update_done, self(), Context),
+            z_notifier:observe(rsc_delete, self(), Context),
+            z_notifier:observe(subscribe_to_url, self(), Context),
+
             Domain = m_config:get_value(?MODULE, pubsub_domain, "pubsub." ++ z_dispatcher:hostname(Context), Context),
             {ok, connect(#state{context=z_acl:sudo(z_context:new(Context)), pubsub_domain=Domain})}
     end.
