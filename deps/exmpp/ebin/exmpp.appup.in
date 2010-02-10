@@ -1,0 +1,9 @@
+{ "@VERSION@",
+  [
+    % To upgrade from the specified version to current one.
+  ], [
+    % To downgrade from the current version to the specified one.
+  ]
+}.
+
+% vim:ft=erlang:
