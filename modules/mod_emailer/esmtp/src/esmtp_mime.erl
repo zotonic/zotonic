@@ -98,12 +98,14 @@ encode_header({Header, [V|Vs]}) when is_list(V) ->
                     end,
                     [V|Vs]),
     Header ++ ": " ++ join(Hdr, ";\r\n  ");
-encode_header({"Subject", Value}) ->
-	"Subject: " ++ rfc2047:encode(Value);
-encode_header({Header, Value}) when is_list(Header), is_list(Value) ->
+encode_header({Header, Value}) when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To"; Header =:= "Cc"; Header =:= "Bcc" ->
+    % Assume e-mail headers are already encoded
     Header ++ ": " ++ Value;
+encode_header({Header, Value}) when is_list(Header), is_list(Value) ->
+    % Encode all other headers according to rfc2047
+    Header ++ ": " ++ rfc2047:encode(Value);
 encode_header({Header, Value}) when is_atom(Header), is_list(Value) ->
-    atom_to_list(Header) ++ ": " ++ Value.
+    atom_to_list(Header) ++ ": " ++ rfc2047:encode(Value).
 
 encode_headers(PropList) ->
     join(lists:map(fun encode_header/1,

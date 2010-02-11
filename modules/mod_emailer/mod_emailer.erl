@@ -245,7 +245,8 @@ mark_retry(Id, Retry, Context) ->
 %% Send the e-mail with sendmail
 sendemail(Msg = #mime_msg{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
 	Message = esmtp_mime:encode(Msg),
-	SendmailFrom = Sendmail ++ " -f" ++ emstp_mime:from(Msg),
+	{_FromName, FromEmail} = z_email:split_name_email(emstp_mime:from(Msg)),
+	SendmailFrom = Sendmail ++ " -f" ++ FromEmail,
 	P = open_port({spawn, SendmailFrom}, [use_stdio]),
 	port_command(P, Message),
 	port_close(P);
@@ -267,15 +268,19 @@ sendemail(Msg = #mime_msg{}, State) ->
     sendemail(MX, Ehlo, esmtp_mime:from(Msg), esmtp_mime:to(Msg), esmtp_mime:encode(Msg)).
     
 sendemail({Host,Port,SSL,Login}, Ehlo, From, To, Msg) ->
+    ?DEBUG({{Host,Port,SSL,Login}, Ehlo, From, To}),
     To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
+    {_ToName, ToEmail} = z_email:split_name_email(To1),
+    {_FromName, FromEmail} = z_email:split_name_email(From),
     {ok, Fsm} = esmtp_fsm:start_link(Host, Port, SSL),
     {ok, _} = esmtp_fsm:ehlo(Fsm, Ehlo),
     case Login of
         {User,Pass} -> {ok, _} = esmtp_fsm:login(Fsm,User,Pass);
         no_login -> ok
     end,
-    {ok, _} = esmtp_fsm:mail_from(Fsm, From),
-    {ok, _} = esmtp_fsm:rcpt_to(Fsm,To1),
+    {ok, _} = esmtp_fsm:mail_from(Fsm,FromEmail),
+    {ok, _} = esmtp_fsm:rcpt_to(Fsm,ToEmail),
     {ok, _} = esmtp_fsm:message(Fsm,Msg),
-    ok = esmtp_fsm:close(Fsm).
+    ok = esmtp_fsm:close(Fsm),
+    ?DEBUG(ok).
 

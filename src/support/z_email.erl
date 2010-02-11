@@ -34,7 +34,10 @@
 
     sendq/4,
     sendq_render/4,
-    sendq_render/5
+    sendq_render/5,
+    
+    split_name_email/1,
+    combine_name_email/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -94,7 +97,8 @@ send_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Send a html and text message to an email address, render the message using two templates.
 send_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_notifier:notify1(#email{queue=false, to=To, html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	z_notifier:notify1(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
+	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 %% @doc Queue a html message to an email address, render the message using a template.
 sendq_render(To, HtmlTemplate, Vars, Context) ->
@@ -102,5 +106,59 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Queue a html and text message to an email address, render the message using two templates.
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_notifier:notify1(#email{queue=true, to=To, html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	z_notifier:notify1(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
+	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
+
+
+%% @doc Combine a name and an email address to the format "jan janssen <jan@example.com>"
+combine_name_email(Name, Email) ->
+    Name1 = z_convert:to_list(Name),
+    Email1 = z_convert:to_list(Email),
+    case Name1 of
+        [] -> Email1;
+        _ -> [$"|rfc2047:encode(filter_name(Name1))] ++ "\" <" ++ Email1 ++ ">"
+    end.
+    
+    filter_name(Name) ->
+        filter_name(Name, []).
+    filter_name([], Acc) ->
+        lists:reverse(Acc);
+    filter_name([$"|T], Acc) ->
+        filter_name(T, [32|Acc]);
+    filter_name([$<|T], Acc) ->
+        filter_name(T, [32|Acc]);
+    filter_name([H|T], Acc) when H < 32 ->
+        filter_name(T, [32|Acc]);
+    filter_name([H|T], Acc) ->
+        filter_name(T, [H|Acc]).
+
+%% @doc Split the name and email from the format "jan janssen <jan@example.com>"
+%% @todo Allow multiple email addresses to be found
+split_name_email(Email) ->
+    Email1 = string:strip(rfc2047:decode(Email)),
+    case split_ne(Email1, in_name, [], []) of
+        {N, []} ->
+            {[], N};
+        {E, N} ->
+            {E, N}
+    end.
+
+split_ne([], _, [], Acc) ->
+    {[], lists:reverse(Acc)};
+split_ne([], _, Name, Acc) ->
+    {Name, lists:reverse(Acc)};
+split_ne([$<|T], to_email, Name, []) ->
+    split_ne(T, in_email, Name, []);
+split_ne([$<|T], in_name, Name, []) ->
+    split_ne(T, in_email, Name, []);
+split_ne([$>|_], in_email, Name, Acc) ->
+    {Name, lists:reverse(Acc)};
+split_ne([$"|T], in_name, [], Acc) ->
+    split_ne(T, in_qname, [], Acc);
+split_ne([$"|T], in_qname, [], Acc) ->
+    split_ne(T, to_email, lists:reverse(Acc), []);
+split_ne([H|T], to_email, Name, Acc) ->
+    split_ne(T, to_email, Name, [H|Acc]);
+split_ne([H|T], State, Name, Acc) ->
+    split_ne(T, State, Name, [H|Acc]).
