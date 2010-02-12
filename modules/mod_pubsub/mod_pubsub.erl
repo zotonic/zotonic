@@ -32,7 +32,8 @@
 
 %% interface functions
 -export([
-         subscribe_to_url/2
+         subscribe_to_url/2,
+         do_custom_pivot/2
 ]).
 
 -record(state, {context, session, jid, pubsub_domain}).
@@ -66,6 +67,9 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+
+    z_notifier:observe(custom_pivot,   {?MODULE, do_custom_pivot}, Context),
+    z_pivot_rsc:define_custom_pivot(?MODULE, [{pub_node, "varchar(255)"}, {sub_xmpp_uri, "varchar(255)"}, {sub_subid, "varchar(255)"}], Context),
 
     case m_config:get_value(?MODULE, jid, Context) of
         undefined ->
@@ -107,7 +111,7 @@ handle_cast({{rsc_update_done, _, Id, _, _}, _Ctx}, State=#state{context=Context
                     {noreply, State};
                 _Node ->
                     %% Unpublish
-                    ok = delete_notification(Id, false, State),
+                    ok = send_delete_notification(Id, false, State),
                     {noreply, State}
             end;
         true ->
@@ -134,7 +138,7 @@ handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context}) ->
                         undefined ->
                             {noreply, State};
                         _Node ->
-                            ok = delete_notification(Id, true, State),
+                            ok = send_delete_notification(Id, true, State),
                             {noreply, State}
                     end
             end;
@@ -145,13 +149,15 @@ handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context}) ->
                 undefined ->
                     {noreply, State};
                 Uri ->
-                    ?DEBUG("Unsubscribing!"),
                     {Jid, _Action, Args} = z_xmpp:parse_xmpp_uri(Uri),
                     Node = proplists:get_value("node", Args),
                     SubId = m_rsc:p(Id, pubsub_subscription_subid, Context),
                     ok = unsubscribe_node(SubId, exmpp_jid:to_list(Jid), Node, State),
                     {noreply, State}
-            end
+            end;
+        undefined ->
+            %% Edge case, is_authoritative is undefined when deleting the rsc that was a (non-auth) subscription.
+            {noreply, State}
     end;
 
 %% handle_cast({{subscribe_to_url, Url}, _Ctx}, State) ->
@@ -182,6 +188,7 @@ terminate(_Reason, #state{session=Session,context=Context}) ->
     z_notifier:detach(rsc_update_done, self(), Context),
     z_notifier:detach(rsc_delete, self(), Context),
     z_notifier:detach(subscribe_to_url, self(), Context),
+    z_notifier:detach(custom_pivot, {?MODULE, do_custom_pivot}, Context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -192,6 +199,20 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+do_custom_pivot({custom_pivot, Id}, Context) ->
+    case m_rsc:p(Id, is_authoritative, Context) of
+        true ->
+            case get_pubsub_node(Id, Context) of
+                undefined ->
+                    none;
+                Node ->
+                    {?MODULE, [{pub_node, Node}]}
+            end;
+        false ->
+            {?MODULE, [{sub_xmpp_uri, m_rsc:p(Id, pubsub_xmpp_uri, Context)}, 
+                       {sub_subid, m_rsc:p(Id, pubsub_subscription_subid, Context)}]}
+    end.
 
 
 connect(State) ->
@@ -281,7 +302,6 @@ publish(Id, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}
     PacketId = binary_to_list(exmpp_session:send_packet(Session, exmpp_stanza:set_sender(IQ, JID))),
     receive
         #received_packet{id=PacketId, raw_packet=Raw} ->
-            ?DEBUG(Raw),
             case exmpp_iq:is_error(Raw) of
                 true -> error;
                 _ -> ok
@@ -289,10 +309,8 @@ publish(Id, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}
     end.
 
 
-delete_notification(Id, RscIsDeleted, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}) ->
+send_delete_notification(Id, RscIsDeleted, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}) ->
     Node = get_pubsub_node(Id, Context),
-    ?DEBUG("DELETE NOTIFICATION"),
-    ?LOG("~p - ~p~n", [Id, Node]),
     IQ = exmpp_client_pubsub:delete_node(Domain, Node),
     PacketId = binary_to_list(exmpp_session:send_packet(Session, exmpp_stanza:set_sender(IQ, JID))),
     receive
@@ -308,7 +326,7 @@ delete_notification(Id, RscIsDeleted, #state{jid=JID,session=Session,context=Con
                         false -> set_pubsub_node(Id, undefined, Context);
                         true -> ok
                     end,
-                    ?DEBUG("Delete OK"),
+                    ?DEBUG("Send delete notification"),
                     ok
             end
     end.
@@ -378,9 +396,8 @@ subscribe_node(Service, Node, #state{jid=JID,session=Session}) ->
                     ?DEBUG(Raw),
                     error;
                 _ ->
-                    ?DEBUG("Subscribe OK"),
                     {SubId, <<"subscribed">>} = subscribe_results(Raw),
-                    ?DEBUG(SubId),
+                    ?DEBUG("Subscribe OK"),
                     {subscribed, SubId}
             end
     end.
@@ -435,12 +452,24 @@ process_received_packet(#received_packet{raw_packet=Raw}, State) ->
                 items ->
                     exmpp_xml:foreach(fun(_, Item) -> process_pubsub_item(Item, State) end, Element);
                 delete ->
-                    ?DEBUG("Delete notification"),
-                    ?DEBUG(Element)
-                    %% TODO - we get the pubsub node here which has
-                    %% been deleted; look it up in the rsc table
-                    %% (reverse lookup - custom pivot?) and delete
+                    %% We get the pubsub node here which has been
+                    %% deleted; look it up in the rsc table (reverse
+                    %% lookup - custom pivot?) and delete
                     %% corresponding rsc.
+
+                    %% Construct XMPP URI from 'from' and 'node' elements in the received XML.
+                    Node = exmpp_xml:get_attribute_as_list(Element, node, undefined),
+                    From = exmpp_xml:get_attribute_as_list(Raw, from, undefined),
+                    XmppUri = "xmpp:" ++ From ++ "?;node=" ++ Node,
+                    %% Reverse lookup xmpp uri -> rsc id
+                    case z_pivot_rsc:lookup_custom_pivot(?MODULE, sub_xmpp_uri, XmppUri, State#state.context) of
+                        undefined ->
+                            ?LOG("Got delete notification but no subscription found for '~p'", [XmppUri]);
+                        RscId ->
+                            ok = m_rsc:delete(RscId, State#state.context),
+                            ?DEBUG("Got delete notification; removed subscription and item.")
+                    end,
+                    ok
             end
     end.
 
@@ -480,35 +509,16 @@ process_pubsub_item(Item, #state{context=Context}) ->
     end.
 
 
-
+%% @doc Create unsubscribe IQ. Adaptation from exmpp_client_pubsub:unsubscribe/4. This version can handle an optional 'subid' attribute.
 exmpp_unsubscribe(SubId, From, Service, Node) ->
-    %% Make the <subscribe/> element.
-    Unsubscribe = exmpp_xml:set_attributes(
-		  #xmlel{ns = ?NS_PUBSUB, name = 'unsubscribe'},
-		  [{'node', Node},
-		   {'jid', From},
-           {'subid', SubId}]),
+    %% Make the <subscribe/> element, with optional subid= attribute.
+    Attr = [{'node', Node}, {'jid', From}],
+    Attr1 = case SubId of
+                undefined -> Attr;
+                _ -> [{'subid', SubId} | Attr]
+            end,
+    Unsubscribe = exmpp_xml:set_attributes(#xmlel{ns = ?NS_PUBSUB, name = 'unsubscribe'}, Attr1),
     %% Prepare the final <iq/>.
     Pubsub = #xmlel{ns = ?NS_PUBSUB, name = 'pubsub', children = [Unsubscribe]},
     Iq = ?IQ_SET(Service, "pubsub-" ++ integer_to_list(random:uniform(65536 * 65536))),
     exmpp_xml:append_child(Iq, Pubsub).
-
-
-%%node_name(Id) ->
-%%    lists:flatten(io_lib:format("/home/testsandbox/zotonic/id-~p", [Id])).
-
-
-%% DEBUG: mod_pubsub:198  {xmlel,'jabber:client',[],iq,
-%%                         [{xmlattr,undefined,from,<<"pubsub.testsandbox">>},
-%%                          {xmlattr,undefined,to,
-%%                           <<"zotonic@testsandbox/PubSub">>},
-%%                          {xmlattr,undefined,id,<<"pubsub-396429316">>},
-%%                          {xmlattr,undefined,type,<<"result">>}],
-%%                         [{xmlel,'http://jabber.org/protocol/pubsub',
-%%                           [{'http://jabber.org/protocol/pubsub',none}],
-%%                           pubsub,[],
-%%                           [{xmlel,'http://jabber.org/protocol/pubsub',[],
-%%                             create,
-%%                             [{xmlattr,undefined,node,
-%%                               <<"/home/testsandbox/zotonic/286723704">>}],
-%%                             []}]}]}
