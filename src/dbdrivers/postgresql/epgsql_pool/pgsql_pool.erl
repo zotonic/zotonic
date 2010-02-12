@@ -66,13 +66,20 @@ init({Name, Size, Opts}) ->
 			undefined -> self();
 			_Name -> Name
 		 end,
-    {ok, Connection} = connect(Opts),
+    Connections =
+        case connect(Opts) of
+            {ok, Connection} ->
+                [{Connection, now_secs()}];
+            {error, econnrefused} ->
+                error_logger:error_msg("Connection to PostgreSQL server refused."),
+                []
+        end,
 	{ok, TRef} = timer:send_interval(60000, close_unused),
     State = #state{
       id          = Id,
       size        = Size,
       opts        = Opts,
-      connections = [{Connection, now_secs()}],
+      connections = Connections,
       monitors    = [],
       waiting     = queue:new(),
       timer       = TRef},
