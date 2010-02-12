@@ -55,10 +55,12 @@ from(#mime_msg{headers=H}) ->
     proplists:get_value("From", H, undefined).
 
 add_text_part(Msg = #mime_msg{parts=Parts}, Text) ->
-    Msg#mime_msg{parts=Parts ++ [#mime_part{data=Text, encoding={"8bit", "text/plain", "utf-8"}}]}.
+    TextEncoded = z_quoted_printable:encode(Text),
+    Msg#mime_msg{parts=Parts ++ [#mime_part{data=TextEncoded, encoding={"quoted-printable", "text/plain", "utf-8"}}]}.
 
 add_html_part(Msg = #mime_msg{parts=Parts}, Html) ->
-    Msg#mime_msg{parts=Parts ++ [#mime_part{data=Html, encoding={"8bit", "text/html", "utf-8"}}]}.
+    HtmlEncoded = z_quoted_printable:encode(Html),
+    Msg#mime_msg{parts=Parts ++ [#mime_part{data=HtmlEncoded, encoding={"quoted-printable", "text/html", "utf-8"}}]}.
 
 add_header(Msg = #mime_msg{headers=H}, Header) ->
     Msg#mime_msg{headers=H++[Header]}.
@@ -118,7 +120,7 @@ encode_parts(#mime_msg{parts=Parts, boundary=Boundary}) ->
 encode_part(#mime_part{data=Data} = P, Boundary) ->
     "--" ++ Boundary ++ "\r\n" ++
     encode_headers(part_headers(P)) ++ "\r\n\r\n" ++
-    Data ++ "\r\n".
+    z_convert:to_list(Data) ++ "\r\n".
 
 part_headers(#mime_part{type=undefined, encoding={Enc, MimeType, Charset},
                         name=undefined}) ->
