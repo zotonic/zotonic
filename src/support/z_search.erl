@@ -244,7 +244,7 @@ add_acl_check1(Table, Alias, Args, Context) ->
             end,
             N = length(Args),
             Sql2 = "((" ++ Sql1 ++ ") or "++Alias++".id = $"++integer_to_list(N+1)
-                    ++" or group_id in (select rg.group_id from rsc_group rg where rg.rsc_id = $"++integer_to_list(N+1)++"))",
+                    ++" or " ++ Alias ++ ".group_id in (select rg.group_id from rsc_group rg where rg.rsc_id = $"++integer_to_list(N+1)++"))",
             {Sql2, Args ++ [Context#context.user_id]}
     end.
 
