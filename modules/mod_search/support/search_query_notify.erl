@@ -76,8 +76,6 @@ cat_matches([Cat|Rest], Props) ->
 send_notifications(_Id, [], _Context) ->
     ok;
 send_notifications(Id, [QueryId|Rest], Context) ->
-    ?DEBUG("notify!!"),
-    ?DEBUG(QueryId),
     z_notifier:notify({rsc_query_item, QueryId, Id}, Context),
     send_notifications(Id, Rest, Context).
 
