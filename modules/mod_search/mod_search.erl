@@ -38,7 +38,7 @@
 
 -include("zotonic.hrl").
 
--record(state, {context}).
+-record(state, {context, query_watches=[]}).
 
 
 observe({search_query, Req, OffsetLimit}, Context) ->
@@ -67,7 +67,13 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     z_notifier:observe(search_query, {?MODULE, observe}, Context),
-    {ok, #state{context=z_context:new(Context)}}.
+
+    %% Watch for changes to resources
+    z_notifier:observe(rsc_update_done, self(), Context),
+    z_notifier:observe(rsc_delete, self(), Context),
+
+    Watches = search_query_notify:init(Context),
+    {ok, #state{context=z_acl:sudo(z_context:new(Context)),query_watches=Watches}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -80,10 +86,54 @@ init(Args) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
+handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
+    Watches1 = case proplists:get_value('query', m_rsc:p(Id, is_a, Context)) of
+                   undefined -> Watches;
+                   true -> search_query_notify:watches_remove(Id, Watches, Context)
+               end,
+    {noreply, State#state{query_watches=Watches1}};
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
+%% @doc Casts for updates to resources
+handle_cast({{rsc_update_done, delete, _Id, _, _}, _Ctx}, State) ->
+    {noreply, State};
+handle_cast({{rsc_update_done, _, Id, Cats, Cats}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
+    %% Update; categories have not changed.
+    Watches1 = case lists:member('query', Cats) of
+                   false -> Watches;
+                   true -> search_query_notify:watches_update(Id, Watches, Context)
+               end,
+    %% Item updated; send notifications for matched queries.
+    search_query_notify:send_notifications(Id, search_query_notify:check_rsc(Id, Watches1, Context), Context),
+    {noreply, State#state{query_watches=Watches1}};
+
+handle_cast({{rsc_update_done, _, Id, CatsOld, CatsNew}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
+    %% Update; categories *have* changed.
+    Watches1 = case lists:member('query', CatsOld) of
+                   true ->
+                       case lists:member('query', CatsNew) of
+                           true ->
+                               %% It still is a query; but might have changes; update watches.
+                               search_query_notify:watches_update(Id, Watches, Context);
+                           false ->
+                               %% Its no longer a query; remove from watches.
+                               search_query_notify:watches_remove(Id, Watches, Context)
+                       end;
+                   false ->
+                       case lists:member('query', CatsNew) of
+                           true ->
+                               %% It has become a query
+                               search_query_notify:watches_update(Id, Watches, Context);
+                           false ->
+                               %% It has not been a query
+                               Watches
+                       end
+               end,
+    search_query_notify:send_notifications(Id, search_query_notify:check_rsc(Id, Watches1, Context), Context),
+    {noreply, State#state{query_watches=Watches1}};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -103,7 +153,10 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:detach(search_query, {?MODULE, observe}, State#state.context),
+    Context = State#state.context,
+    z_notifier:detach(search_query, {?MODULE, observe}, Context),
+    z_notifier:detach(rsc_update_done, self(), Context),
+    z_notifier:detach(rsc_delete, self(), Context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

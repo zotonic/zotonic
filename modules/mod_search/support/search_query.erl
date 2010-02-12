@@ -68,6 +68,7 @@ parse_query_text(Text) ->
 
 % Convert request arguments to atom. Doing it this way avoids atom
 % table overflows.
+request_arg("authoritative")       -> authoritative;
 request_arg("cat")                 -> cat;
 request_arg("cat_exclude")         -> cat_exclude;
 request_arg("custompivot")         -> custompivot;
@@ -75,13 +76,14 @@ request_arg("hasobject")           -> hasobject;
 request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
+request_arg("is_featured")         -> is_featured;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
 request_arg("query_id")            -> query_id;
+request_arg("rsc_id")              -> rsc_id;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
-request_arg("authoritative")       -> authoritative;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -186,22 +188,23 @@ parse_query([{hassubjectpredicate, Predicate}|Rest], Context, Result) ->
 %% is_featured or is_featured={false,true}
 %% Filter on whether an item is featured or not.
 parse_query([{is_featured, Boolean}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(Boolean, Result),
-     Result2 = add_where("rsc.is_featured = " ++ Arg, Result1),
-     parse_query(Rest, Context, Result2);
+    {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
+    Result2 = add_where("rsc.is_featured = " ++ Arg, Result1),
+    parse_query(Rest, Context, Result2);
 
 %% upcoming
 %% Filter on items whose end date lies in the future
-parse_query([{upcoming, "true"}|Rest], Context, Result) ->
-    parse_query([{upcoming, true}|Rest], Context, Result);
-parse_query([{upcoming, true}|Rest], Context, Result) ->
-     Result1 = add_where("rsc.pivot_date_end >= current_date", Result),
-     parse_query(Rest, Context, Result1);
+parse_query([{upcoming, Boolean}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(Boolean) of
+                  true -> add_where("rsc.pivot_date_end >= current_date", Result);
+                  false -> Result
+              end,
+    parse_query(Rest, Context, Result1);
 
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not
 parse_query([{authoritative, Boolean}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(Boolean, Result),
+    {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
      Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
      parse_query(Rest, Context, Result2);
 
@@ -215,6 +218,13 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
         false ->
             throw({error, {invalid_query_id, Id}})
     end;
+
+%% rsc_id=<rsc id>
+%% Filter to *only* include the given rsc id. Can be used for resource existence check.
+parse_query([{rsc_id, Id}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(Id, Result),
+     Result2 = add_where("rsc.id = " ++ Arg, Result1),
+     parse_query(Rest, Context, Result2);
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.

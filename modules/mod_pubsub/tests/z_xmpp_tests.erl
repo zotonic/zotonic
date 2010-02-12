@@ -5,6 +5,8 @@
 
 
 parse_xmpp_uri_test() ->
+    zotonic:ensure_started(exmpp),
+
     Jid = exmpp_jid:parse("foo"),
     ?assertEqual({Jid, [], [{"bar", true}]}, z_xmpp:parse_xmpp_uri("xmpp:foo?;bar")),
     ?assertEqual({Jid, [], []}, z_xmpp:parse_xmpp_uri("xmpp:foo")),
