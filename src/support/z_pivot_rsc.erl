@@ -40,7 +40,8 @@
     pivot_resource/2,
     pg_lang/1,
 
-    define_custom_pivot/3
+    define_custom_pivot/3,
+    lookup_custom_pivot/4
 ]).
 
 -include("zotonic.hrl").
@@ -506,5 +507,15 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
             {ok, _} = z_db:update(TableName, Id, Columns, Context)
     end,
     ok.
-            
 
+
+%% @doc Lookup a custom pivot; give back the Id based on a column. Will always return the first Id found.
+%% @spec lookup_custom_pivot(Module, Column, Value, Context) -> Id | undefined
+lookup_custom_pivot(Module, Column, Value, Context) ->
+    TableName = "pivot_" ++ z_convert:to_list(Module),
+    Column1 = z_convert:to_list(Column),
+    Query = "SELECT id FROM " ++ TableName ++ " WHERE " ++ Column1 ++ " = $1",
+    case z_db:q(Query, [Value], Context) of
+        [] -> undefined;
+        [{Id}|_] -> Id
+    end.
