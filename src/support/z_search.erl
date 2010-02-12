@@ -27,6 +27,7 @@
     search_pager/3,
     search_pager/4,
     search_result/3,
+    query_/2,
     pager/3,
     pager/4
 ]).
@@ -131,7 +132,7 @@ search_result(#search_sql{} = Q, Limit, Context) ->
     end.
 
 
-concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=GroupBy, order=Order, limit=Limit, args=Args}, {OffsetN, LimitN}) ->
+concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=GroupBy, order=Order, limit=SearchLimit, args=Args}, Limit1) ->
     Where1 = case Where of
         [] -> [];
         _ -> "where " ++ Where
@@ -144,14 +145,20 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
         [] -> [];
         _ -> "group by "++GroupBy
     end,
-    {Parts, FinalArgs} = case Limit of
-        undefined ->
-            N = length(Args),
-            Args1 = Args ++ [OffsetN-1, LimitN],
-            {["select", Select, "from", From, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1};
-        _ ->
-            {["select", Select, "from", From, Where1, GroupBy1, Order1, Limit], Args}
-    end,
+    {Parts, FinalArgs} = case SearchLimit of
+                             undefined ->
+                                 case Limit1 of
+                                     undefined ->
+                                         %% No limit. Use with care.
+                                         {["select", Select, "from", From, Where1, GroupBy1, Order1], Args};
+                                     {OffsetN, LimitN} ->
+                                         N = length(Args),
+                                         Args1 = Args ++ [OffsetN-1, LimitN],
+                                         {["select", Select, "from", From, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
+                                 end;
+                             _ ->
+                                 {["select", Select, "from", From, Where1, GroupBy1, Order1, SearchLimit], Args}
+                         end,
     {string:join(Parts, " "), FinalArgs}.
     
 
@@ -266,3 +273,10 @@ add_cat_check(Alias, Exclude, Cats, Context) ->
     cat_check1(Alias, true, {From,To}) ->
         [$(|Alias] ++ ".pivot_category_nr < " ++ integer_to_list(From)
         ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To) ++ ")".
+
+
+%% @doc Given a query as proplist, return all results.
+%% @spec search_query(Props, Context) -> [Id] | []
+query_(Props, Context) ->
+    S = search({'query', Props}, undefined, Context),
+    S#search_result.result.
