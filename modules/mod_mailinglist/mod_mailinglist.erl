@@ -250,12 +250,28 @@ send_mailing(ListId, PageId, Context) ->
 send_mailing_process(ListId, PageId, Context) ->
 	Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
 	{Direct,Queued} = split_list(20, Recipients),
+	FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
+        	    Empty when Empty =:= undefined; Empty =:= <<>> ->
+        	        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
+        	    RT ->
+        	        z_convert:to_list(RT)
+    	     end,
+    FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
+                  undefined -> [];
+                  <<>> -> []; 
+                  SenderName -> z_convert:to_list(SenderName)
+               end,
+    From = z_email:combine_name_email(FromName, FromEmail),
+    Options = [
+        {id,PageId}, {list_id, ListId}, {email_from, From}
+    ],
+    
 	[
-		z_email:send_render(Email, "mailing_page.tpl", [{id,PageId}, {email,Email}, {list_id, ListId}], Context)
+		z_email:send_render(Email, "mailing_page.tpl", [{email,Email}|Options], Context)
 		|| Email <- Direct
 	],
 	[
-		z_email:sendq_render(Email, "mailing_page.tpl", [{id,PageId}, {email,Email}, {list_id, ListId}], Context)
+		z_email:sendq_render(Email, "mailing_page.tpl", [{email,Email}|Options], Context)
 		|| Email <- Queued
 	],
 	ok.
