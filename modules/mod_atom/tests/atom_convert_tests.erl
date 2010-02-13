@@ -85,7 +85,7 @@ atom_to_resource_test() ->
   <link rel=\"alternate\" type=\"text/html\" href=\"http://www.mediamatic.net/person/22661/en\"/>
   <link rel=\"alternate\" type=\"text/html\" hreflang='nl' href=\"http://www.mediamatic.net/person/22661/nl\"/>
   <link rel=\"alternate\" type=\"application/rdf+xml\" href=\"http://www.mediamatic.net/foaf/22661\"/>
-  <title type=\"html\">Arjan Scherpenisse</title>
+  <title type=\"html\">Arjan &lt;em&gt;Scherpenisse&lt;/em&gt;</title>
   <subtitle type=\"html\">new media artist, researcher, developer.</subtitle>
   <summary type=\"html\">&#60;p&#62;Besides being an Unstable Media student at the Gerrit Rietveld Academie, I work at Mediamatic Lab as software engineer. In this role I work on the anyMeta system, on fancy new technologies like XMPP and OpenID, and as general techie with the Mediamatic Foundation.&#60;br/&#62; &#60;br/&#62;My main interests are new media and technology (both software and hardware) and its relation to art. Keywords: soldering, A.I., max/msp/pd, ipod touch, wiimote, software development, OpenCV, OSC, Processing, face recognition.&#60;/p&#62;</summary>
   <anymeta:alternate xml:lang='nl'>
@@ -100,7 +100,7 @@ atom_to_resource_test() ->
     ?assertEqual(<<"http://www.mediamatic.net/id/22661">>, proplists:get_value(uri, ImportedRsc)),
 
     Rsc = proplists:get_value(rsc, ImportedRsc),
-    ?assertEqual(<<"Arjan Scherpenisse">>, proplists:get_value(title, Rsc)),
+    ?assertEqual(<<"Arjan  Scherpenisse ">>, proplists:get_value(title, Rsc)), %% note the strange spaces; z_html:strip gives use these..
     ?assertEqual(calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}}), proplists:get_value(modified, Rsc)),
 
     Edges = proplists:get_value(edges, ImportedRsc),

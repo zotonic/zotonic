@@ -37,7 +37,7 @@ resource_to_atom(RscExport) ->
 
     Content0 = [
                 {id, [binary_to_list(proplists:get_value(uri, RscExport))]},
-                {title, [{type, "html"}], [binary_to_list(proplists:get_value(title, Rsc))]},
+                {title, [{type, "text"}], [binary_to_list(proplists:get_value(title, Rsc))]},
                 {published, [z_convert:to_isotime(proplists:get_value(publication_start, Rsc))]},
                 {updated, [z_convert:to_isotime(proplists:get_value(modified, Rsc))]}
                ],
@@ -53,7 +53,7 @@ resource_to_atom(RscExport) ->
                    true ->
                        Content1;
                    false ->
-                       Content1 ++ [{summary, [{type, "html"}], [binary_to_list(Summary)]}]
+                       Content1 ++ [{summary, [{type, "text"}], [binary_to_list(Summary)]}]
                end,
 
     Content3 = Content2 ++ author_element(RscExport),
@@ -103,8 +103,8 @@ atom_to_resource(Xml) ->
 
     RscProps1 = case xmerl_xpath:string("/entry/title", RootElem) of
                  [] -> [{title, <<>>}];
-                 [#xmlElement{content=Title}] ->
-                     [{title, list_to_binary(collapse_xmltext(Title))}]
+                 [Title] ->
+                     [{title, get_xmltext(Title, true)}]
              end,
 
     RscProps2 = case xmerl_xpath:string("/entry/updated", RootElem) of
@@ -121,14 +121,14 @@ atom_to_resource(Xml) ->
 
     RscProps4 = case xmerl_xpath:string("/entry/summary", RootElem) of
                [] -> RscProps3;
-               [#xmlElement{content=Summary}] ->
-                   RscProps3 ++ [{summary, list_to_binary(collapse_xmltext(Summary))}]
+               [Summary] ->
+                   RscProps3 ++ [{summary, get_xmltext(Summary, true)}]
            end,
 
     RscProps5 = case xmerl_xpath:string("/entry/content", RootElem) of
                [] -> RscProps4;
-               [#xmlElement{content=Body}] ->
-                   RscProps4 ++ [{body, list_to_binary(collapse_xmltext(Body))}]
+               [Body] ->
+                   RscProps4 ++ [{body, get_xmltext(Body, false)}]
            end,
 
     Edges = [],
@@ -192,6 +192,26 @@ xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
 %% @spec collapse_xmltext([#xmlText]) -> string()
 collapse_xmltext(Content) ->
     lists:flatten([X#xmlText.value || X <- Content]).
+
+
+%% @doc Given an element, get its XML text. If "strip" attribute is
+%% set, text is stripped of (x)html constructs if type attribute is
+%% html or xhtml.
+get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
+    Text = collapse_xmltext(Content),
+    Text2 = case Strip of
+                false -> Text;
+                true ->
+                    case xml_attrib(type, Element) of
+                        B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
+                            %% Strip tags
+                            z_html:strip(Text);
+                        B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
+                            %% Do not strip.
+                            Text
+                    end
+            end,
+    z_convert:to_binary(Text2).
 
 
 empty(<<>>) -> true;
