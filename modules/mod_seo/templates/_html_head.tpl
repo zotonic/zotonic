@@ -8,17 +8,17 @@
 			{% else %}
 				{% with m.rsc[id].seo_keywords as seo_keywords %}
 					{% if seo_keywords %}
-						<meta name="keywords" content="{{ seo_keywords }}, {{ keywords }}" />
+						<meta name="keywords" content="{{ seo_keywords|striptags }}, {{ keywords|striptags }}" />
 					{% else %}
-						<meta name="keywords" content="{% for predicate in m.rsc[id].op %}{% ifnotequal predicate "depiction" %}{% for oid in m.rsc[id].o[predicate] %}{{ m.rsc[oid].title }}, {% endfor %}{% endifnotequal %}{% endfor %}{{ keywords }}" />
+						<meta name="keywords" content="{% for predicate in m.rsc[id].op %}{% ifnotequal predicate "depiction" %}{% for oid in m.rsc[id].o[predicate] %}{{ m.rsc[oid].title|striptags }}, {% endfor %}{% endifnotequal %}{% endfor %}{{ keywords }}" />
 					{% endif %}
-					<meta name="description" content="{{ m.rsc[id].seo_desc|default:m.rsc[id].summary }} {{ description }}" />
+					<meta name="description" content="{{ m.rsc[id].seo_desc|default:m.rsc[id].summary|striptags }} {{ description|striptags }}" />
 				{% endwith %}
 			{% endif %}
 		{% else %}
 			{% if keywords or description %}
-				<meta name="keywords" content="{{ keywords }}" />
-				<meta name="description" content="{{ description }}" />
+				<meta name="keywords" content="{{ keywords|striptags }}" />
+				<meta name="description" content="{{ description|striptags }}" />
 			{% endif %}
 		{% endif %}
 	{% endwith %}
