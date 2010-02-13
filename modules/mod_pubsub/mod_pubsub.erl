@@ -269,12 +269,13 @@ set_pubsub_node(Id, Node, Context) ->
 
 %% @doc Create the pubsub node for given id.
 create_pubsub_node(Id, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}) ->
-    IQ = exmpp_client_pubsub:create_instant_node(Domain),
+    IQ = exmpp_create_instant_node(Domain),
     PacketId = binary_to_list(exmpp_session:send_packet(Session, exmpp_stanza:set_sender(IQ, JID))),
     receive
         #received_packet{id=PacketId, raw_packet=Raw} ->
             case exmpp_iq:is_error(Raw) of
                 true -> 
+                    ?DEBUG(exmpp_stanza:set_sender(IQ, JID)),
                     ?DEBUG(Raw),
                     error;
                 _ ->
@@ -520,5 +521,19 @@ exmpp_unsubscribe(SubId, From, Service, Node) ->
     Unsubscribe = exmpp_xml:set_attributes(#xmlel{ns = ?NS_PUBSUB, name = 'unsubscribe'}, Attr1),
     %% Prepare the final <iq/>.
     Pubsub = #xmlel{ns = ?NS_PUBSUB, name = 'pubsub', children = [Unsubscribe]},
-    Iq = ?IQ_SET(Service, "pubsub-" ++ integer_to_list(random:uniform(65536 * 65536))),
+    Iq = ?IQ_SET(Service, exmpp_pubsub_id()),
     exmpp_xml:append_child(Iq, Pubsub).
+
+
+%% @doc Create an instant node. Also include an empty <configure/>
+%% element to deal with old ejabberd version.
+exmpp_create_instant_node(Service) ->
+    Create = #xmlel{ns = ?NS_PUBSUB, name = 'create'},
+    Configure = #xmlel{ns = ?NS_PUBSUB, name = 'configure'},
+    Pubsub = #xmlel{ns = ?NS_PUBSUB, name = 'pubsub', children = [Create, Configure]},
+    Iq = ?IQ_SET(Service, exmpp_pubsub_id()),
+    exmpp_xml:append_child(Iq, Pubsub).
+
+
+exmpp_pubsub_id() ->
+    "pubsub-" ++ integer_to_list(random:uniform(65536 * 65536)).    
