@@ -299,7 +299,7 @@ publish(Id, #state{jid=JID,session=Session,context=Context,pubsub_domain=Domain}
     Atom = atom_convert:resource_to_atom(m_rsc_export:full(Id, Context)),
     Entry = exmpp_xml:parse_document(Atom),
     Node = get_pubsub_node(Id, Context),
-    IQ = exmpp_client_pubsub:publish(Domain, Node, Entry),
+    IQ = exmpp_publish(Domain, Node, <<"current">>, Entry),
     PacketId = binary_to_list(exmpp_session:send_packet(Session, exmpp_stanza:set_sender(IQ, JID))),
     receive
         #received_packet{id=PacketId, raw_packet=Raw} ->
@@ -537,3 +537,19 @@ exmpp_create_instant_node(Service) ->
 
 exmpp_pubsub_id() ->
     "pubsub-" ++ integer_to_list(random:uniform(65536 * 65536)).    
+
+exmpp_publish(Service, Node, ItemID, Payload) ->
+    %% Prepare item.
+    Item = exmpp_xml:set_attributes(
+             #xmlel{ns = ?NS_PUBSUB, name = 'item', children = Payload},
+             [{'id', ItemID}]),
+    %% Make the <publish/> element.
+    Publish = exmpp_xml:set_attributes(
+                #xmlel{ns = ?NS_PUBSUB, name = 'publish',
+                       children = [Item]},
+                [{'node', Node}]),
+    %% Prepare the final <iq/>.
+    Pubsub = #xmlel{ns = ?NS_PUBSUB, name = 'pubsub', children = [Publish]},
+    Iq = ?IQ_SET(Service, exmpp_pubsub_id()),
+    exmpp_xml:append_child(Iq, Pubsub).
+    
