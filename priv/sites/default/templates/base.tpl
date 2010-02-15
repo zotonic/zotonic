@@ -18,7 +18,7 @@
 
 	{% lib "css/zp-compressed.css" "css/zp-project.css" %}
 	<!--[if IE]>{% lib "css/zp-ie.css" %}<![endif]-->
-
+	{% lib "js/apps/modernizr.js" %}
 </head>
 <body class="{% block page_class %}page{% endblock %}">
 
