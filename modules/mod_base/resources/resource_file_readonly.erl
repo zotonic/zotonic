@@ -28,6 +28,7 @@
 -export([init/1]).
 -export([allowed_methods/2,
 	 resource_exists/2,
+	 forbidden/2,
 	 last_modified/2,
 	 expires/2,
 	 content_types_provided/2,
@@ -47,6 +48,7 @@
         is_media_preview=false,
         content_disposition=undefined,
         use_cache=false,
+        acl=false,
         encode_data=false,
         fullpath=undefined,
         is_cached=false,
@@ -69,18 +71,18 @@
 
 init(ConfigProps) ->
     %% Possible predefined file to serve. For example the favicon.ico
-    Path           = proplists:get_value(path, ConfigProps),
+    Path     = proplists:get_value(path, ConfigProps),
     %% You can overule the media preview (root) and archive (media_path) paths.
-    Root           = proplists:get_value(root, ConfigProps),
-    MediaPath      = proplists:get_value(media_path, ConfigProps),
+    Root     = proplists:get_value(root, ConfigProps),
+    MediaPath= proplists:get_value(media_path, ConfigProps),
     %% Misc settings, note that caching can be turned of when you use Varnish
-    UseCache       = proplists:get_value(use_cache, ConfigProps, false),
+    UseCache = proplists:get_value(use_cache, ConfigProps, false),
     IsMediaPreview = proplists:get_value(is_media_preview, ConfigProps, false),
     ContentDisposition = proplists:get_value(content_disposition, ConfigProps),
-    {ok, #state{path=Path, root=Root, use_cache=UseCache, 
+    {ok, #state{path=Path, root=Root, use_cache=UseCache,
                 is_media_preview=IsMediaPreview, media_path=MediaPath, 
                 content_disposition=ContentDisposition}}.
-    
+
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
 
@@ -96,6 +98,18 @@ content_types_provided(ReqData, State) ->
         Mime -> 
             {[{Mime, provide_content}], ReqData, State}
     end.
+
+
+%% @doc Oversimplified stub for access checks.
+forbidden(ReqData, State) ->
+    case State#state.root of
+        [{module, Module}] -> 
+            Context = z_context:continue_session(z_context:new(ReqData, ?MODULE)),
+            {Module:file_forbidden(State#state.fullpath, Context), ReqData, State};
+        _ ->
+            true
+    end.
+
 
 encodings_provided(ReqData, State) ->
     Encodings = case State#state.mime of
@@ -252,6 +266,11 @@ file_exists1([ModuleIndex|T], RelName, Context) when is_atom(ModuleIndex) ->
     case z_module_indexer:find(ModuleIndex, RelName, Context) of
         {ok, File} -> {true, File};
         {error, _} -> file_exists1(T, RelName, Context)
+    end;
+file_exists1([{module, Module}|T], RelName, Context) ->
+    case Module:file_exists(RelName, Context) of
+        false -> file_exists1(T, RelName, Context);
+        Result -> Result
     end;
 file_exists1([DirName|T], RelName, Context) ->
     NamePath = filename:join([DirName,RelName]),
