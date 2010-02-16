@@ -35,6 +35,7 @@
 
 %% External exports
 -export([
+    continue_session/1,
     ensure_session/1, 
     stop_session/1, 
     rename_session/1, 
@@ -59,11 +60,21 @@ start_link(SiteProps) ->
     Name = z_utils:name_for_host(?MODULE, Host),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
+%% @spec start_session(Context) -> Context
+%% @doc Continue an existing session
+continue_session(#context{session_manager=SessionManager} = Context) ->
+    case get_session_id(Context) of
+        undefined -> {error, no_session_id};
+        _ -> gen_server:call(SessionManager, {ensure_session, false, Context})
+    end.
 
 %% @spec start_session(Context) -> Context
 %% @doc Start a new session or continue an existing session
 ensure_session(#context{session_manager=SessionManager} = Context) ->
-    gen_server:call(SessionManager, {ensure_session, Context}).
+    case gen_server:call(SessionManager, {ensure_session, true, Context}) of
+        {ok, Context1} -> Context1;
+        {error, _} -> Context
+    end.
 
 %% @spec stop_session(Context) -> Context
 %% @doc Explicitly stop an existing session
@@ -125,11 +136,15 @@ init(_SiteProps) ->
     {ok, State}.
 
 %% Ensure that the request has a session attached, pings the session
-handle_call({ensure_session, Context}, _From, State) ->
+handle_call({ensure_session, AllowNew, Context}, _From, State) ->
     SessionId = get_session_id(Context),
-    Pid       = session_find_pid(SessionId, State),
-    {_Pid1, Context1, State1} = ensure_session1(SessionId, Pid, Context, State),
-    {reply, Context1, State1};
+    case session_find_pid(SessionId, State) of
+        Pid when is_pid(Pid) orelse AllowNew ->
+            {_Pid1, Context1, State1} = ensure_session1(SessionId, Pid, Context, State),
+            {reply, {ok, Context1}, State1};
+        undefined ->
+            {reply, {error, no_session_pid}, State}
+    end;
 
 %% Stop the session from the context or the request props
 handle_call({stop_session, Context}, _From, State) ->

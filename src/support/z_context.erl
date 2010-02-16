@@ -40,6 +40,8 @@
 
     combine_results/2,
 
+    continue_session/1,
+    
     ensure_all/1,
     ensure_session/1,
     ensure_visitor/1,
@@ -374,6 +376,22 @@ copy_scripts(From, Context) ->
         wire=From#context.wire,
         validators=From#context.validators
     }.
+
+
+%% @doc Continue an existing session, if the session id is in the request.
+continue_session(Context) ->
+    case Context#context.session_pid of
+        undefined ->
+            case z_session_manager:continue_session(Context) of
+                {ok, Context1} ->
+                    z_auth:logon_from_session(Context1);
+                {error, _} ->
+                    Context
+            end;
+        _ ->
+            {ok, Context}
+    end.
+
 
 %% @doc Ensure session and page session and fetch&parse the query string
 ensure_all(Context) ->
