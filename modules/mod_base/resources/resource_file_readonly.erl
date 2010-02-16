@@ -57,29 +57,25 @@ init(ConfigProps) ->
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set(ConfigProps, z_context:new(ReqData)),
     Context1 = z_context:continue_session(Context),
-    case ensure_file_info(ReqData, Context1) of
-         {true, ReqData1, ContextFile} ->
-            ContextMime = case z_context:get(mime, ContextFile) of
-                undefined ->
-                    Path = case z_context:get(path, Context) of
-                        undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
-                        ConfiguredPath -> ConfiguredPath
-                    end, 
-                    CT = z_media_identify:guess_mime(Path),
-                    z_context:set(mime, CT, ContextFile);
-                _Mime -> 
-                    ContextFile
-            end,
-            
-            case filelib:file_size(z_context:get(fullpath, ContextMime)) of
-                N when N > ?CHUNKED_CONTENT_LENGTH ->
-                    ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
-                    ?WM_REPLY(true, ContextChunked);
-                _ ->
-                    ?WM_REPLY(true, ContextMime)
-            end;
-        {false, _ReqData1, ContextFile} ->
-            ?WM_REPLY(true, ContextFile)
+    {_, ReqData1, ContextFile} = ensure_file_info(ReqData, Context1),
+    ContextMime = case z_context:get(mime, ContextFile) of
+        undefined ->
+            Path = case z_context:get(path, Context) of
+                undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
+                ConfiguredPath -> ConfiguredPath
+            end, 
+            CT = z_media_identify:guess_mime(Path),
+            z_context:set(mime, CT, ContextFile);
+        _Mime -> 
+            ContextFile
+    end,
+    
+    case filelib:file_size(z_context:get(fullpath, ContextMime)) of
+        N when N > ?CHUNKED_CONTENT_LENGTH ->
+            ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
+            ?WM_REPLY(true, ContextChunked);
+        _ ->
+            ?WM_REPLY(true, ContextMime)
     end.
 
 
