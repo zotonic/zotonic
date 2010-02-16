@@ -186,11 +186,10 @@ do_poll(Context) ->
 	case poll_task(Context) of
 		{Module, Function, Key, Args} -> 
             try 
-                erlang:apply(Module, Function, Args ++ [Context])
+                erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context])
             catch
-                _:_ -> 
-                    ?DEBUG("Failing task; requeueing."),
-                    ?LOG("~p:~p~n", [Module, Function]),
+                Error:Reason -> 
+                    ?LOG("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]),
                     insert_task(Module, Function, Key, Args, Context)
             end;
 		empty ->

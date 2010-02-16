@@ -57,7 +57,7 @@
     tree_depth/2,
     tree_depth/3,
     renumber/1,
-    renumber_pivot_task/1,
+    renumber_pivot_task/2,
     enumerate/1,
     boundaries/2      
 ]).
@@ -604,16 +604,35 @@ renumber_transaction(Context) ->
         ], Context)
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],
-	z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", Context),
+	z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [1], Context),
     ok.
 
 %% @doc Resync all ids that have their category nr changed.
-%% @todo Do this in batches, which won't block the db too long for larger rsc quantities.
-renumber_pivot_task(Context) ->
-    z_db:q("update rsc r
-            set pivot_category_nr = c.nr from category c
-            where c.id = r.category_id 
-              and (r.pivot_category_nr is null or r.pivot_category_nr <> c.nr)", Context).
+renumber_pivot_task(LowId, Context) ->
+    Nrs = z_db:q("select r.id, c.nr
+                 from rsc r, category c
+                 where r.id >= $1
+                   and c.id = r.category_id
+                   and (r.pivot_category_nr is null or r.pivot_category_nr <> c.nr)
+                 order by r.id
+                 limit 500", [LowId], Context),
+    case Nrs of
+        [] ->
+            case LowId of
+                1 -> ok;
+                _ -> m_category:renumber_pivot_task(1, Context)
+            end;
+        Ids ->
+            ok = z_db:transaction(fun(Ctx) ->
+                    [
+                        z_db:q("update rsc set pivot_category_nr = $2 where id = $1", [Id, CatNr], Ctx)
+                        || {Id,CatNr} <- Ids
+                    ],
+                    ok
+                end, Context),
+            {HighestId,_} = lists:last(Ids),
+            z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [HighestId+1], Context)
+    end.
 
 
 %% @doc Take a category list and make it into a tree, recalculating the left/right and lvl nrs
