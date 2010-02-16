@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2010 Marc Worrell
 %%
 %% @doc Serve static (image) files from a configured list of directories or template lookup keys.  Caches files in the local depcache.
 %% Is also able to generate previews (if configured to do so).
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,219 +25,201 @@
 %% /media/attachment/<filepath>
 
 -module(resource_file_readonly).
--export([init/1]).
--export([allowed_methods/2,
-	 resource_exists/2,
-	 forbidden/2,
-	 last_modified/2,
-	 expires/2,
-	 content_types_provided/2,
-	 charsets_provided/2,
-	 encodings_provided/2,
-	 provide_content/2,
-	 finish_request/2
-	 ]).
+-export([
+    init/1,
+    service_available/2,
+    allowed_methods/2,
+    resource_exists/2,
+    forbidden/2,
+    last_modified/2,
+    expires/2,
+    content_types_provided/2,
+    charsets_provided/2,
+    encodings_provided/2,
+    provide_content/2,
+    finish_request/2
+]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("zotonic.hrl").
 
-%% These are used for file serving (move to metadata)
--record(state, {
-        root=undefined,                 % Preconfigured media preview directory
-        media_path=undefined,           % Preconfigured media archive directory
-        is_media_preview=false,
-        content_disposition=undefined,
-        use_cache=false,
-        acl=false,
-        encode_data=false,
-        fullpath=undefined,
-        is_cached=false,
-        path=undefined,                 % Preconfigured file to serve
-        mime=undefined,
-        last_modified=undefined,
-        body=undefined
-    }).
-
--record(cache, {
-    path=undefined,
-    fullpath=undefined,
-    mime=undefined,
-    last_modified=undefined,
-    body=undefined
-    }).
+-record(cache, {path, fullpath, mime, last_modified, body}).
 
 -define(MAX_AGE, 315360000).
 
-
 init(ConfigProps) ->
-    %% Possible predefined file to serve. For example the favicon.ico
-    Path     = proplists:get_value(path, ConfigProps),
-    %% You can overule the media preview (root) and archive (media_path) paths.
-    Root     = proplists:get_value(root, ConfigProps),
-    MediaPath= proplists:get_value(media_path, ConfigProps),
-    %% Misc settings, note that caching can be turned of when you use Varnish
-    UseCache = proplists:get_value(use_cache, ConfigProps, false),
-    IsMediaPreview = proplists:get_value(is_media_preview, ConfigProps, false),
-    ContentDisposition = proplists:get_value(content_disposition, ConfigProps),
-    {ok, #state{path=Path, root=Root, use_cache=UseCache,
-                is_media_preview=IsMediaPreview, media_path=MediaPath, 
-                content_disposition=ContentDisposition}}.
+    {ok, ConfigProps}.
 
-allowed_methods(ReqData, State) ->
-    {['HEAD', 'GET'], ReqData, State}.
 
-content_types_provided(ReqData, State) ->
-    case State#state.mime of
+%% @doc Initialize the context for the request. Continue session when available.
+service_available(ReqData, ConfigProps) ->
+    Context = z_context:set(ConfigProps, z_context:new(ReqData)),
+    Context1 = z_context:continue_session(Context),
+    {_Found, _ReqData1, ContextFile} = ensure_file_info(ReqData, Context1),
+    ContextMime = case z_context:get(mime, ContextFile) of
         undefined ->
-            Path = case State#state.path of
+            Path = case z_context:get(path, Context) of
                 undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData));
                 ConfiguredPath -> ConfiguredPath
             end, 
             CT = z_media_identify:guess_mime(Path),
-            {[{CT, provide_content}], ReqData, State#state{mime=CT}};
-        Mime -> 
-            {[{Mime, provide_content}], ReqData, State}
-    end.
+            z_context:set(mime, CT, ContextFile);
+        _Mime -> 
+            ContextFile
+    end,
+    ?WM_REPLY(true, ContextMime).
+
+
+allowed_methods(ReqData, Context) ->
+    {['HEAD', 'GET'], ReqData, Context}.
+
+content_types_provided(ReqData, Context) ->
+    {[{z_context:get(mime, Context), provide_content}], ReqData, Context}.
 
 
 %% @doc Oversimplified stub for access checks.
-forbidden(ReqData, State) ->
-    case State#state.root of
+forbidden(ReqData, Context) ->
+    case z_context:get(root, Context) of
         [{module, Module}] -> 
-            Context = z_context:continue_session(z_context:new(ReqData, ?MODULE)),
-            {Module:file_forbidden(State#state.fullpath, Context), ReqData, State};
+            {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
         _ ->
-            true
+            {false, ReqData, Context}
     end.
 
 
-encodings_provided(ReqData, State) ->
-    Encodings = case State#state.mime of
-        "image/jpeg" -> 
+encodings_provided(ReqData, Context) ->
+    Encodings = case z_context:get(mime, Context) of
+        "image/" ++ _ -> 
             [{"identity", fun(Data) -> Data end}];
         _ -> 
             [{"identity", fun(Data) -> decode_data(identity, Data) end},
              {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
     end,
-    EncodeData = length(Encodings) > 1,
-    {Encodings, ReqData, State#state{encode_data=EncodeData}}.
+    {Encodings, ReqData, z_context:set(encode_data, length(Encodings) > 1, Context)}.
 
 
-resource_exists(ReqData, State) ->
-    Context = z_context:new(ReqData, ?MODULE),
-    Path = case State#state.path of
+resource_exists(ReqData, Context) ->
+    {z_context:get(fullpath, Context) =/= undefined, ReqData, Context}.
+
+charsets_provided(ReqData, Context) ->
+    case is_text(z_context:get(mime, Context)) of
+        true -> {[{"utf-8", fun(X) -> X end}], ReqData, Context};
+        _ -> {no_charset, ReqData, Context}
+    end.
+    
+last_modified(ReqData, Context) ->
+    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
+    case z_context:get(last_modified, Context) of
+        undefined -> 
+            LMod = filelib:last_modified(z_context:get(fullpath, Context)),
+			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+            {LModUTC, RD1, z_context:set(last_modified, LModUTC, Context)};
+        LModUTC ->
+            {LModUTC, RD1, Context}
+    end.
+
+expires(ReqData, Context) ->
+    NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
+    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, Context}.
+
+provide_content(ReqData, Context) ->
+    RD1 = case z_context:get(content_disposition, Context) of
+        inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
+        attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
+        undefined ->  ReqData
+    end,
+    {Content, Context1} = case z_context:get(body, Context) of
+        undefined ->
+            {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
+            Body = case z_context:get(encode_data, Context, false) of 
+                true -> encode_data(Data);
+                false -> Data
+            end,
+            {Body, z_context:set(body, Body, Context)};
+        Body -> 
+            {Body, Context}
+    end,
+    {Content, RD1, Context1}.
+    
+    
+finish_request(ReqData, Context) ->
+    case z_context:get(is_cached, Context) of
+        false ->
+            case z_context:get(body, Context) of
+                undefined ->  
+                    {ok, ReqData, Context};
+                Body ->
+                    case z_context:get(use_cache, Context, false) andalso z_context:get(encode_data, Context, false) of
+                        true ->
+                            % Cache the served file in the depcache.  Cache it for 3600 secs.
+                            Path = z_context:get(path, Context),
+                            Cache = #cache{
+                                        path=Path,
+                                        fullpath=z_context:get(fullpath, Context),
+                                        mime=z_context:get(mime, Context),
+                                        last_modified=z_context:get(last_modified, Context),
+                                        body=Body
+                                    },
+                            z_depcache:set(cache_key(Path), Cache, Context),
+                            {ok, ReqData, Context};
+                        _ ->
+                            % No cache or no gzip'ed version (file system cache is fast enough for image serving)
+                            {ok, ReqData, Context}
+                    end
+            end;
+        true ->
+            {ok, ReqData, Context}
+    end.
+
+
+%%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%
+
+%% @doc Find the file referred to by the reqdata or the preconfigured path
+ensure_file_info(ReqData, Context) ->
+    Path = case z_context:get(path, Context) of
         undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData));
         ConfiguredPath -> ConfiguredPath
     end, 
-    Cached = case State#state.use_cache of
+    Cached = case z_context:get(use_cache, Context) of
         true -> z_depcache:get(cache_key(Path), Context);
         _    -> undefined
     end,
     case Cached of
         undefined ->
-            case file_exists(State, Path, Context) of 
+            case file_exists(Path, Context) of 
             	{true, FullPath} -> 
-            	    {true, ReqData, State#state{path=Path, fullpath=FullPath}};
+            	    Context1 = z_context:set([ {path, Path}, {fullpath, FullPath} ], Context),
+            	    {true, ReqData, Context1};
             	_ -> 
             	    %% We might be able to generate a new preview
-            	    case State#state.is_media_preview of
+            	    case z_context:get(is_media_preview, Context, false) of
             	        true ->
             	            % Generate a preview, recurse on success
-            	            ensure_preview(ReqData, Path, State);
+            	            ensure_preview(ReqData, Path, Context);
             	        false ->
-                    	    {false, ReqData, State}
+                    	    {false, ReqData, Context}
             	    end
             end;
         {ok, Cache} ->
-            {true, ReqData, State#state{
-                            is_cached=true,
-                            path=Cache#cache.path,
-                            fullpath=Cache#cache.fullpath,
-                            mime=Cache#cache.mime,
-                            last_modified=Cache#cache.last_modified,
-                            body=Cache#cache.body
-                        }}
-    end.
-
-charsets_provided(ReqData, State) ->
-    case is_text(State#state.mime) of
-        true -> {[{"utf-8", fun(X) -> X end}], ReqData, State};
-        _ -> {no_charset, ReqData, State}
-    end.
-    
-last_modified(ReqData, State) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
-    case State#state.last_modified of
-        undefined -> 
-            LMod = filelib:last_modified(State#state.fullpath),
-			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
-            {LModUTC, RD1, State#state{last_modified=LModUTC}};
-        LModUTC ->
-            {LModUTC, RD1, State}
-    end.
-
-expires(ReqData, State) ->
-    NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, State}.
-
-provide_content(ReqData, State) ->
-    RD1 = case State#state.content_disposition of
-        inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
-        attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
-        undefined ->  ReqData
-    end,
-    {Content, State1} = case State#state.body of
-        undefined ->
-            {ok, Data} = file:read_file(State#state.fullpath),
-            Body = case State#state.encode_data of 
-                true -> encode_data(Data);
-                false -> Data
-            end,
-            {Body, State#state{body=Body}};
-        Body -> 
-            {Body, State}
-    end,
-    {Content, RD1, State1}.
-    
-    
-finish_request(ReqData, State) ->
-    case State#state.is_cached of
-        false ->
-            case State#state.body of
-                undefined ->  
-                    {ok, ReqData, State};
-                _ ->
-                    case State#state.use_cache andalso State#state.encode_data of
-                        true ->
-                            % Cache the served file in the depcache.  Cache it for 3600 secs.
-                            Cache = #cache{
-                                        path=State#state.path,
-                                        fullpath=State#state.fullpath,
-                                        mime=State#state.mime,
-                                        last_modified=State#state.last_modified,
-                                        body=State#state.body
-                                    },
-                            Context = z_context:new(ReqData, ?MODULE),
-                            z_depcache:set(cache_key(State#state.path), Cache, Context),
-                            {ok, ReqData, State};
-                        _ ->
-                            % No cache or no gzip'ed version (file system cache is fast enough for image serving)
-                            {ok, ReqData, State}
-                    end
-            end;
-        true ->
-            {ok, ReqData, State}
+            ContextCached = z_context:set([
+                            {is_cached, true},
+                            {path, Cache#cache.path},
+                            {fullpath, Cache#cache.fullpath},
+                            {mime, Cache#cache.mime},
+                            {last_modified, Cache#cache.last_modified},
+                            {body, Cache#cache.body}
+                        ],
+                        Context),
+            {true, ReqData, ContextCached}
     end.
 
 
-%%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%
-    
 cache_key(Path) ->
     {resource_file, Path}.
 
-file_exists(_State, [], _Context) ->
+file_exists([], _Context) ->
     false;
-file_exists(State, Name, Context) ->
+file_exists(Name, Context) ->
     RelName = case hd(Name) of
         $/ -> tl(Name);
         _ -> Name
@@ -249,9 +231,9 @@ file_exists(State, Name, Context) ->
                 "/" -> tl(SafePath);
                 _ -> SafePath
             end,
-            Root = case State#state.root of
+            Root = case z_context:get(root, Context) of
                 undefined -> 
-                    case State#state.is_media_preview of
+                    case z_context:get(is_media_preview, Context, false) of
                         true  -> [z_path:media_preview(Context)];
                         false -> [z_path:media_archive(Context)]
                     end;
@@ -291,19 +273,18 @@ is_text("application/xml") -> true;
 is_text(_Mime) -> false.
 
 
-%% @spec ensure_preview(ReqData, Path, State) -> {Boolean, State}
+%% @spec ensure_preview(ReqData, Path, Context) -> {Boolean, NewReqData, NewContext}
 %% @doc Generate the file on the path from an archived media file.
 %% The path is like: 2007/03/31/wedding.jpg(300x300)(crop-center)(709a-a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% The original media should be in State#media_path (or z_path:media_archive)
 %% The generated image should be created in State#root (or z_path:media_preview)
-ensure_preview(ReqData, Path, State) ->
-    Context = z_context:new(ReqData, ?MODULE), 
+ensure_preview(ReqData, Path, Context) ->
     {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = z_media_tag:url2props(Path, Context),
     case mochiweb_util:safe_relative_path(Filepath) of
         undefined ->
-            {false, ReqData, State};
+            {false, ReqData, Context};
         Safepath  ->
-            MediaPath = case State#state.media_path of
+            MediaPath = case z_context:get(media_path, Context) of
                 undefined -> z_path:media_archive(Context);
                 ConfMediaPath -> ConfMediaPath
             end,
@@ -320,20 +301,19 @@ ensure_preview(ReqData, Path, State) ->
             case filelib:is_regular(MediaFile) of
                 true ->
                     % Media file exists, perform the resize
-                    Root = case State#state.root of
+                    Root = case z_context:get(root, Context) of
                         [ConfRoot|_] -> ConfRoot;
                         _ -> z_path:media_preview(Context)
                     end,
                     PreviewFile = filename:join(Root, Path),
                     case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
-                        ok -> resource_exists(ReqData, State);
+                        ok -> {true, ReqData, z_context:set(fullpath, PreviewFile, Context)};
                         {error, Reason} -> throw(Reason)
                     end;
                 false ->
-                    {false, ReqData, State}
+                    {false, ReqData, Context}
             end
     end.
-
 
 
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
