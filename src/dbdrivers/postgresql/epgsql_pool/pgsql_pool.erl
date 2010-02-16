@@ -2,7 +2,7 @@
 
 -export([start_link/2, start_link/3, stop/1]).
 -export([get_connection/1, get_connection/2, return_connection/2]).
--export([get_database/1]).
+-export([get_database/1, status/1]).
 
 -export([init/1, code_change/3, terminate/2]). 
 -export([handle_call/3, handle_cast/2, handle_info/2]).
@@ -58,6 +58,12 @@ get_database(P) ->
     return_connection(P, C),
     {ok, Db}.
 
+
+%% @doc Return the current status of the connection pool.
+status(P) ->
+    gen_server:call(P, status).
+    
+
 %% -- gen_server implementation --
 
 init({Name, Size, Opts}) ->
@@ -103,6 +109,10 @@ handle_call(get_connection, From, #state{connections = Connections, waiting = Wa
 			end
     end;
 
+%% Return the status of the connection pool
+handle_call(status, _From, State) ->
+    {reply, [{free, length(State#state.connections)}, {in_use, length(State#state.monitors)}], State};
+    
 %% Trap unsupported calls
 handle_call(Request, _From, State) ->
     {stop, {unsupported_call, Request}, State}.
