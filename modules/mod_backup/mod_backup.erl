@@ -162,13 +162,8 @@ handle_info(periodic_backup, State) ->
     case Time >= {3,0,0} andalso Time =< {6,0,0} of
         true ->
             DoStart = case list_backup_files(State#state.context) of
-                [{_, LastBackupDate}|_] ->
-                    case LastBackupDate >= {Date, {0,0,0}} of
-                        true -> false;
-                        false -> true
-                    end;
-                [] -> 
-                    true
+                [{_, LastBackupDate}|_] -> LastBackupDate < {Date, {0,0,0}};
+                [] -> true
             end,
             case DoStart of
                 true ->
