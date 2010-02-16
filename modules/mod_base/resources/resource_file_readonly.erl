@@ -46,6 +46,8 @@
 -record(cache, {path, fullpath, mime, last_modified, body}).
 
 -define(MAX_AGE, 315360000).
+-define(CHUNKED_CONTENT_LENGTH, 1048576).
+-define(CHUNK_LENGTH, 65536).
 
 init(ConfigProps) ->
     {ok, ConfigProps}.
@@ -55,19 +57,30 @@ init(ConfigProps) ->
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set(ConfigProps, z_context:new(ReqData)),
     Context1 = z_context:continue_session(Context),
-    {_Found, _ReqData1, ContextFile} = ensure_file_info(ReqData, Context1),
-    ContextMime = case z_context:get(mime, ContextFile) of
-        undefined ->
-            Path = case z_context:get(path, Context) of
-                undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData));
-                ConfiguredPath -> ConfiguredPath
-            end, 
-            CT = z_media_identify:guess_mime(Path),
-            z_context:set(mime, CT, ContextFile);
-        _Mime -> 
-            ContextFile
-    end,
-    ?WM_REPLY(true, ContextMime).
+    case ensure_file_info(ReqData, Context1) of
+         {true, ReqData1, ContextFile} ->
+            ContextMime = case z_context:get(mime, ContextFile) of
+                undefined ->
+                    Path = case z_context:get(path, Context) of
+                        undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
+                        ConfiguredPath -> ConfiguredPath
+                    end, 
+                    CT = z_media_identify:guess_mime(Path),
+                    z_context:set(mime, CT, ContextFile);
+                _Mime -> 
+                    ContextFile
+            end,
+            
+            case filelib:file_size(z_context:get(fullpath, ContextMime)) of
+                N when N > ?CHUNKED_CONTENT_LENGTH ->
+                    ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
+                    ?WM_REPLY(true, ContextChunked);
+                _ ->
+                    ?WM_REPLY(true, ContextMime)
+            end;
+        {false, _ReqData1, ContextFile} ->
+            ?WM_REPLY(true, ContextFile)
+    end.
 
 
 allowed_methods(ReqData, Context) ->
@@ -88,12 +101,20 @@ forbidden(ReqData, Context) ->
 
 
 encodings_provided(ReqData, Context) ->
-    Encodings = case z_context:get(mime, Context) of
-        "image/" ++ _ -> 
+    Encodings = case z_context:get(chunked, Context) of
+        true ->
             [{"identity", fun(Data) -> Data end}];
-        _ -> 
-            [{"identity", fun(Data) -> decode_data(identity, Data) end},
-             {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+        _ ->
+            case z_context:get(mime, Context) of
+                "image/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                "video/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                "audio/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                "application/x-gzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
+                "applicationzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
+                _ -> 
+                    [{"identity", fun(Data) -> decode_data(identity, Data) end},
+                     {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+            end
     end,
     {Encodings, ReqData, z_context:set(encode_data, length(Encodings) > 1, Context)}.
 
@@ -128,20 +149,40 @@ provide_content(ReqData, Context) ->
         attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
         undefined ->  ReqData
     end,
-    {Content, Context1} = case z_context:get(body, Context) of
+    case z_context:get(body, Context) of
         undefined ->
-            {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
-            Body = case z_context:get(encode_data, Context, false) of 
-                true -> encode_data(Data);
-                false -> Data
-            end,
-            {Body, z_context:set(body, Body, Context)};
+            case z_context:get(chunked, Context) of
+                true ->
+                    {ok, Device} = file:open(z_context:get(fullpath, Context), [read,raw,binary]),
+                    FileSize = z_context:get(file_size, Context),
+                    {   {stream, read_chunk(0, FileSize, Device)}, 
+                        wrq:set_resp_header("Content-Length", integer_to_list(FileSize), ReqData),
+                        z_context:set(use_cache, false, Context) };
+                _ ->
+                    {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
+                    Body = case z_context:get(encode_data, Context, false) of 
+                        true -> encode_data(Data);
+                        false -> Data
+                    end,
+                    {Body, RD1, z_context:set(body, Body, Context)}
+            end;
         Body -> 
-            {Body, Context}
-    end,
-    {Content, RD1, Context1}.
+            {Body, RD1, Context}
+    end.
     
     
+    read_chunk(Offset, Size, Device) when Offset =:= Size ->
+        file:close(Device),
+        {<<>>, done};
+    read_chunk(Offset, Size, Device) when Size - Offset =< ?CHUNK_LENGTH ->
+        {ok, Data} = file:read(Device, Size - Offset),
+        file:close(Device),
+        {Data, done};
+    read_chunk(Offset, Size, Device) ->
+        {ok, Data} = file:read(Device, ?CHUNK_LENGTH),
+        {Data, fun() -> read_chunk(Offset+?CHUNK_LENGTH, Size, Device) end}.
+
+
 finish_request(ReqData, Context) ->
     case z_context:get(is_cached, Context) of
         false ->
@@ -320,6 +361,10 @@ ensure_preview(ReqData, Path, Context) ->
 encode_data(Data) when is_binary(Data) ->
 	{Data, zlib:gzip(Data)}.
 
+decode_data(gzip, Data) when is_binary(Data) ->
+    zlib:gzip(Data);
+decode_data(identity, Data) when is_binary(Data) ->
+    Data;
 decode_data(identity, {Data, _Gzip}) ->
 	Data;
 decode_data(gzip, {_Data, Gzip}) ->
