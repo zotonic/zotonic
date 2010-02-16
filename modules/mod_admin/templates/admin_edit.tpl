@@ -242,7 +242,7 @@
 											<div class="zp-50">
 												<div class="form-item clearfix">
 													<label for="field-name">Unique name</label>
-													<input type="text" id="field-name" name="name" value="{{ r.name }}" />
+													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
 												</div>
 											</div>
 										{% else %}
@@ -335,13 +335,14 @@
 										<input type="checkbox" class="do_fieldreplace" id="is_featured" name="is_featured" value="1" {% if r.is_featured %}checked="checked"{% endif %}/>
 										<label for="is_featured" class="left">Featured</label>
 
-										<input type="checkbox" class="do_fieldreplace" id="is_protected" name="is_protected" value="1" {% if r.is_protected %}checked="checked"{% endif %}/>
+										<input type="checkbox" class="do_fieldreplace" id="is_protected" name="is_protected" value="1" {% if r.is_protected %}checked="checked"{% endif %} {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
 										<label for="is_protected" class="left">Protect from deletion</label>
 									</div>
 
 									<div class="form-item clearfix">
-										{% button class="discard-resource do_tooltip" disabled=r.is_protected|ornot:m.rsc[id].is_deletable id="delete-button" text="delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title="Delete this page." %}
-
+										{% ifnotequal id 1 %}
+											{% button class="discard-resource do_tooltip" disabled=r.is_protected|ornot:m.rsc[id].is_deletable id="delete-button" text="delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title="Delete this page." %}
+										{% endifnotequal %}
 										{% if is_editable %}
 											{% button type="submit" id="save_duplicate" class="save-resource do_tooltip" text="duplicate" title="Duplicate this page." %}
 										{% else %}
