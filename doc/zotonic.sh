@@ -58,7 +58,7 @@ pushd $ZOTONIC >/dev/null
 function start() {
     echo  "Starting zotonic $SNAME"
     make -C $ZOTONIC >/dev/null
-    $ERL -pa $PA -sname $SNAME -boot start_sasl -heart -detached -s zotonic
+    $ERL -pa $PA -sname $SNAME@$HOSTNAME -boot start_sasl -heart -detached -s zotonic
 }
 
 function stop() {
@@ -79,7 +79,7 @@ case $1 in
     ;;
  
   debug)
-    $ERL +P 10000000 +K true -pa $PA -sname $SNAME -boot start_sasl -s zotonic
+    $ERL +P 10000000 +K true -pa $PA -sname $SNAME@$HOSTNAME -boot start_sasl -s zotonic
     ;;
  
   stop)
