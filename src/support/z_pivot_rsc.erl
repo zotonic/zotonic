@@ -228,7 +228,7 @@ do_pivot(Id, Context) ->
 %% pivot request might come in while we are pivoting.
 %% @spec fetch_queue(Context) -> [{Id,Serial}, ...]
 fetch_queue(Context) ->
-    z_db:q("select rsc_id, serial from rsc_pivot_queue order by is_update, due limit $1", [?POLL_BATCH], Context).
+    z_db:q("select rsc_id, serial from rsc_pivot_queue where due < now() - '10 second'::interval order by is_update, due limit $1", [?POLL_BATCH], Context).
 
 %% @doc Fetch the serial of id's queue record
 fetch_queue_id(Id, Context) ->
