@@ -134,22 +134,11 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
         {ok, Id} ->
             case m_rsc:p(Id, installed_by, Context) of
                 Module ->
-                    %% Resource exists and has been installed by us.
-                    %% FIXME Check if it needs updating!
-                    case m_rsc:p(Id, managed_props, Context) of
-                        Props ->
-                            %% The props are equal, do nothing.
-                            nothing;
-                        _ ->
-                            %% Different props, update it.
-                            m_rsc:update(Id, [{managed_props, Props} | Props], Context)
-                    end,
-                    {ok, Id};
+                    {ok};
                 _ ->
                     %% Resource exists but is not installed by us!
-                    ?DEBUG("manage_resource: resource exists but is not managed by us."),
-                    ?DEBUG(Id),
-                    ?DEBUG(Name),
+                    Msg = io_lib:format("manage_resource: resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
+                    ?DEBUG(lists:flatten(Msg)),
                     {ok}
             end;
         {error, {unknown_rsc, _}} ->
