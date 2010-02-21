@@ -40,7 +40,7 @@
 
 %% interface functions
 -export([
-         fetch/4, event/2
+         fetch/4, event/2, receive_chunk/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -285,7 +285,6 @@ process_data(Data, Context) ->
                                 %% Create edge
                                 {ok, _} = m_edge:insert(UserId, tweeted, TweetId, AdminContext),
 
-                                ?DEBUG("New tweet."),
                                 Message = proplists:get_value("screen_name", User) ++ ": " ++ proplists:get_value("text", Tweet),
                                 z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
                                 TweetId
@@ -305,6 +304,7 @@ receive_chunk(RequestId, Context) ->
         {http, {RequestId, {error, Reason}}} when(Reason =:= etimedout) orelse(Reason =:= timeout) ->
             exit({error, timeout});
         {http, {RequestId, {{_, 401, _} = Status, Headers, _}}} ->
+            z_session_manager:broadcast(#broadcast{type="error", message="Twitter says the username/password is unauthorized.", title="Twitter module", stay=false}, z_acl:sudo(Context)),
             exit({error, {unauthorized, {Status, Headers}}});
         {http, {RequestId, Result}} ->
             exit({error, Result});
@@ -312,14 +312,14 @@ receive_chunk(RequestId, Context) ->
         %% start of streaming data
         {http,{RequestId, stream_start, Headers}} ->
             error_logger:info_msg("Streaming data start ~p ~n",[Headers]),
-            receive_chunk(RequestId, Context);
+            ?MODULE:receive_chunk(RequestId, Context);
 
         %% streaming chunk of data
         %% this is where we will be looping around,
         %% we spawn this off to a seperate process as soon as we get the chunk and go back to receiving the tweets
         {http,{RequestId, stream, Data}} ->
             process_data(Data, Context),
-            receive_chunk(RequestId, Context);
+            ?MODULE:receive_chunk(RequestId, Context);
 
         %% end of streaming data
         {http,{RequestId, stream_end, Headers}} ->
