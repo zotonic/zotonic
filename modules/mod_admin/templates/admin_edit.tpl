@@ -225,7 +225,7 @@
 
 									<div class="form-item clearfix">
 										<label for="field-short-title">Short title</label>
-										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" disabled="{{ is_editable|not }}" />
+										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 									</div>
 
                                     {% if m.rsc[id].is_authoritative %}
@@ -234,7 +234,7 @@
 										<div class="zp-50">
 											<div class="form-item clearfix">
 												<label for="field-page-path">Page path, default is <em>{{ r.default_page_url|escape }}</em></label>
-												<input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" disabled="{{ is_editable|not }}" />
+												<input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 											</div>
 										</div>
 
@@ -242,7 +242,7 @@
 											<div class="zp-50">
 												<div class="form-item clearfix">
 													<label for="field-name">Unique name</label>
-													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
+													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id|eq:"1" %}disabled="disabled"{% endif %} />
 												</div>
 											</div>
 										{% else %}
@@ -260,7 +260,7 @@
 										{% if r.is_a.meta or not r.is_authoritative %}
 											<div class="form-item clearfix">
 												<label for="field-name">Unique uri</label>
-												<input type="text" id="field-name" name="uri" value="{{ r.uri }}" disabled="{{ is_editable|not }}" />
+												<input type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 											</div>
 										{% endif %}
 									{% endif %}
