@@ -73,7 +73,16 @@ import(RscImport, Context) ->
 
             Opts = [{escape_texts, false}, {acl_check, false}],
             {ok, Id} = m_rsc_update:update(Id, Props1, Opts, Context),
+
             %% Import medium
+            {ok, Id} = case proplists:get_value(medium, RscImport) of
+                           undefined ->
+                               {ok, Id};
+                           MediumProps ->
+                               Url = proplists:get_value(url, MediumProps),
+                               m_media:replace_url(Url, Id, MediumProps, Context)
+                       end,
+
             %% Import category
             %% Import group
             %% Import Edges

@@ -103,6 +103,10 @@ atom_to_resource_test() ->
     ?assertEqual(<<"Arjan  Scherpenisse ">>, proplists:get_value(title, Rsc)), %% note the strange spaces; z_html:strip gives use these..
     ?assertEqual(calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}}), proplists:get_value(modified, Rsc)),
 
+    Medium = proplists:get_value(medium, ImportedRsc),
+    ?assertEqual(<<"image/jpeg">>, proplists:get_value(mime, Medium)),
+    ?assertEqual(<<"http://fast.mediamatic.nl/f/sjnh/image/766/27597-480-480-scale.jpg">>, proplists:get_value(url, Medium)),
+
     Edges = proplists:get_value(edges, ImportedRsc),
     ?assertEqual(filter_edges(Edges, <<"author">>),
                  [ [{predicate_name, <<"author">>}, {object_uri, <<>>}, {object_title, <<"Arjan">>}],

@@ -27,5 +27,5 @@ for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
 #exec erl -noshell -pa ebin -eval "eunit:test([$ALL],[verbose]),init:stop()"
 
 echo $ALL
-exec erl erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -s zotonic -eval "eunit:test([$ALL],[verbose]),init:stop()"
+exec erl erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -sasl errlog_type error -s zotonic -eval "eunit:test([$ALL],[verbose]),init:stop()"
 
