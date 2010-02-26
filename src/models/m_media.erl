@@ -236,7 +236,7 @@ replace_file(File, RscId, Context) ->
     replace_file(File, RscId, [], Context).
 
 replace_file(File, RscId, Props, Context) ->
-    case z_acl:rsc_editable(RscId, Context) of
+    case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
             OriginalFilename = proplists:get_value(original_filename, Props, File),
             PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
@@ -285,12 +285,13 @@ replace_file(File, RscId, Props, Context) ->
 
 
 replace_url(Url, RscId, Props, Context) ->
-    case z_acl:rsc_editable(RscId, Context) of
+    case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
-            Props1 = [{original_filename, filename:basename(Url)} | Props],
+            Url1 = z_convert:to_list(Url),
+            Props1 = [{original_filename, filename:basename(Url1)} | Props],
             File = z_utils:tempfile(),
             case http:request(get, 
-                              {Url, []},
+                              {Url1, []},
                               [],
                               [{stream, File}]) of
                 {ok, saved_to_file} ->

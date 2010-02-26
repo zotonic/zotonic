@@ -131,13 +131,26 @@ atom_to_resource(Xml) ->
                    RscProps4 ++ [{body, get_xmltext(Body, false)}]
            end,
 
+    %% Edges
+
     Edges = [],
 
     Edges1 = Edges ++ find_author(RootElem),
     Edges2 = Edges1 ++ find_depiction(RootElem),
 
+    %% Medium
+
+    Medium = case xmerl_xpath:string("/entry/link[@rel=\"enclosure\"]", RootElem) of
+               [] -> undefined;
+               [Enc] ->
+                     [{mime, xml_attrib(type, Enc)},
+                      {url, xml_attrib(href, Enc)}]
+           end,
+
+    %% Combine all into rsc_export() structure
     Import = [{uri, RscUri},
               {rsc, RscProps5},
+              {medium, Medium},
               {edges, Edges2}
              ],
     lists:filter(fun({_,L}) -> not(L == []) end, Import).

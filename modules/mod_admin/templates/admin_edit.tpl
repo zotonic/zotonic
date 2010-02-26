@@ -148,7 +148,7 @@
 
 						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable %}
 
-						{% if r.is_a.media %}
+						{% if r.is_a.media|or:r.medium %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 								<span class="title">File / media content</span>
@@ -160,11 +160,12 @@
 										{% include "_admin_edit_media_view.tpl" id=id %}
 									</div>
 
-									{% button text="Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} %}
+									{% button text="Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=is_editable|not %}
 								{% endwith %}
 							</div>
 						</div>
 
+                        {% if is_editable %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
 								<span class="title">Website</span>
@@ -179,8 +180,8 @@
 								</fieldset>
 							</div>
 						</div>
-
-						{% endif %}
+                        {% endif %}{# website #}
+						{% endif %}{# medium #}
 
 
                         {% if is_editable or m.rsc[id].depiction %}
