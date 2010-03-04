@@ -157,6 +157,9 @@ day_buckets([{Day,Event}|Rest]) ->
 
 
 %% Split event into sub events, one per calendar day in the day range.
+split_event(#calendar_event{date_start={StartDate, {0,0,0}}, date_end={StartDate, {0,0,0}}} = Event, _DayBorder) ->
+    % Assume whole day event for the start day in the calendar when start=end and time is {0,0,0}
+    {StartDate, Event};
 split_event(#calendar_event{date_start=Start, date_end=End} = Event, DayBorder) ->	
 	StartDay = calday(Start, DayBorder),
 	EndDay = calday(End, DayBorder),
