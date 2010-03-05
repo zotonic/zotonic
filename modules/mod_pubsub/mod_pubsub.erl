@@ -77,7 +77,7 @@ init(Args) ->
             ignore;
         _ ->
             zotonic:ensure_started(exmpp),
-            z_notifier:observe(rsc_update_done, self(), Context),
+            z_notifier:observe(rsc_pivot_done, self(), Context),
             z_notifier:observe(rsc_delete, self(), Context),
             z_notifier:observe(subscribe_to_url, self(), Context),
 
@@ -97,12 +97,8 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @doc Trap unknown casts
-handle_cast({{rsc_update_done, delete, _Id, _, _}, _Ctx}, State) ->
-    %% After delete; do nothing.
-    {noreply, State};
-
-handle_cast({{rsc_update_done, _, Id, _, _}, _Ctx}, State=#state{context=Context}) ->
+%% @doc Pivotting a resource
+handle_cast({{rsc_pivot_done, Id, _IsA}, _Ctx}, State=#state{context=Context}) ->
     case is_publishable(Id, Context) of
         false ->
             %% Check if has node
