@@ -309,6 +309,9 @@ pivot_resource(Id, Context) ->
     z_db:q(Sql, SqlArgs, Context),
     Results = z_notifier:map({custom_pivot, Id}, Context),
     [ok = update_custom_pivot(Id, Res, Context) || Res <- Results],
+
+    IsA = m_rsc:is_a(Id, Context),
+    z_notifier:notify({rsc_pivot_done, Id, IsA}, Context),
     ok.
 
 
