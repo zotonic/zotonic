@@ -1,4 +1,4 @@
-<div class="calender clearfix">
+<div class="calendar clearfix">
 
 	<ol class="programme-day-titles clearfix">
 		<li class="programme-empty-first-cell">&nbsp;</li>
