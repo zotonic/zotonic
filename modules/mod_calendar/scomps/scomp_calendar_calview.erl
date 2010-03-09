@@ -29,32 +29,52 @@ init(_Args) -> {ok, []}.
 varies(_Params, _Context) -> undefined.
 terminate(_State, _Context) -> ok.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, Vars, Context, _State) ->
 	WeekStartConf = m_config:get_value(mod_calendar, weekstart, 1, Context),
 	DayStartConf = m_config:get_value(mod_calendar, daystart, 0, Context),
 	Date = z_convert:to_datetime(proplists:get_value(date, Params)),
 	WeekStart = z_convert:to_integer(proplists:get_value(weekstart, Params, WeekStartConf)),
 	DayStart = z_convert:to_integer(proplists:get_value(daystart, Params, DayStartConf)),
 	DateFormat = z_convert:to_list(proplists:get_value(date_format, Params, "b j")),
+    Period = proplists:get_value(period, Vars, week),
 	
 	Date1 = case Date of
 		undefined -> erlang:localtime();
 		_ -> Date
 	end,
 	
-	%% Calculate the datetime range for the weekview.
-	{StartDate, EndDate} = z_datetime:week_boundaries(Date1, WeekStart),
-	{StartDate1, EndDate1} = case DayStart of
-									0 -> 
-										{StartDate, EndDate};
-									H ->
-										{SD,_ST} = StartDate,
-										{ED,_ET} = z_datetime:next_day(EndDate),
-										{{SD,{H,0,0}}, {ED, {H-1,59,59}}}
-								 end,
+	case Period of
+	    week ->
+        	%% Calculate the datetime range for the weekview.
+        	{StartDate, EndDate} = z_datetime:week_boundaries(Date1, WeekStart),
+        	{StartDate1, EndDate1} = case DayStart of
+        									0 -> 
+        										{StartDate, EndDate};
+        									H ->
+        										{SD,_ST} = StartDate,
+        										{ED,_ET} = z_datetime:next_day(EndDate),
+        										{{SD,{H,0,0}}, {ED, {H-1,59,59}}}
+        								 end,
+        	PeriodVars = [];
+        month ->
+            {StartDate, EndDate} = z_datetime:month_boundaries(Date1),
+        	{StartDateWeek, _} = z_datetime:week_boundaries(StartDate, WeekStart),
+        	{_, EndDateWeek} = z_datetime:week_boundaries(EndDate, WeekStart),
+            {StartDate1, EndDate1} = case DayStart of
+        									0 -> 
+        										{StartDateWeek, EndDateWeek};
+        									H ->
+        										{SD,_ST} = StartDateWeek,
+        										{ED,_ET} = z_datetime:next_day(EndDateWeek),
+        										{{SD,{H,0,0}}, {ED, {H-1,59,59}}}
+        								 end,
+        	PeriodVars = [
+        	    {month_dates, month_dates(StartDate1, EndDate1)}
+        	]
+    end,
 	
 	%% Search all events within the range
-    #search_result{result=Result} = z_search:search({events, [{start, StartDate1}, {'end', EndDate1}]}, Context),
+    #search_result{result=Result} = z_search:search({events, [{start, StartDate1}, {'end', EndDate1}]}, {1,2000}, Context),
 
 	%% Prepare for displaying, crop events to the week.
 	{Calendar, WholeDay} = group_by_day(Result, DayStart),
@@ -69,14 +89,17 @@ render(Params, _Vars, Context, _State) ->
 	EventDivs = [ {D,event2div(Evs)} || {D,Evs} <- WeekCalendar ],
 	WholeDayProps = [ {D,[calevent_to_proplist(E2) || E2 <- Evs]} || {D,Evs} <- WeekWholeDay ],
 
-	Vars = [
+	TemplateVars = PeriodVars ++ [
 		{day_hours, DayHours},
 		{week_dates, WeekDates},
 		{event_divs, EventDivs},
 		{date_format, DateFormat},
-        {whole_day, WholeDayProps}
+        {whole_day, WholeDayProps},
+        {period, Period}
 	],
-	Html = z_template:render("_calview_week.tpl", Vars, Context),
+	
+	Template = case Period of week -> "_calview_week.tpl"; month -> "_calview_month.tpl" end,
+	Html = z_template:render(Template, TemplateVars, Context),
     {ok, Html}.
     
 
@@ -139,5 +162,14 @@ week_dates(Date) ->
 		lists:reverse([Date|Acc]);
 	week_dates(N, Date, Acc) ->
 		week_dates(N-1, z_datetime:next_day(Date), [Date|Acc]).
-		
-	
+
+
+month_dates(S, E) ->
+    month_dates(S, E, []).
+    
+    month_dates(S, E, Acc) when S > E ->
+        lists:reverse(Acc);	
+    month_dates(S, E, Acc) ->
+        month_dates(z_datetime:next_day(S), E, [S|Acc]).
+
+    

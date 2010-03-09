@@ -30,12 +30,16 @@
 resource_exists(ReqData, Context) ->
 	Context1 = ?WM_REQ(ReqData, Context),
 	Context2 = z_context:ensure_all(Context1),
-	WeekStart = weekstart(Context2),
-	case z_context:get_q("date", Context2, []) of
+	Period = z_context:get(period, Context2, week),
+	setup_period(Period, Context2).
+	
+setup_period(week, Context) ->
+	WeekStart = weekstart(Context),
+	case z_context:get_q("date", Context, []) of
 		[] ->
 			{Date,_} = z_datetime:week_boundaries(erlang:localtime(), WeekStart),
-			Context3 = z_context:set(date, Date, Context2),
-			?WM_REPLY(false, Context3);
+			Context1 = z_context:set(date, Date, Context),
+			?WM_REPLY(false, Context1);
 		Date ->
 			case z_utils:only_digits(Date) andalso length(Date) == 8 of
 				true ->
@@ -47,19 +51,44 @@ resource_exists(ReqData, Context) ->
 						D = Num rem 100,
 						case z_datetime:week_boundaries({{Y,M,D},{0,0,0}}, WeekStart) of
 							{{{Y,M,D},_} = Date1,_} ->
-								Context3 = z_context:set(date, Date1, Context2),
-								?WM_REPLY(true, Context3);
+								Context1 = z_context:set(date, Date1, Context),
+								?WM_REPLY(true, Context1);
 							{StartOfWeek, _} ->
-								Context3 = z_context:set(date, StartOfWeek, Context2),
-								?WM_REPLY(false, Context3)
+								Context1 = z_context:set(date, StartOfWeek, Context),
+								?WM_REPLY(false, Context1)
 						end
 					catch 
-						_:_ -> ?WM_REPLY(false, Context2)
+						_:_ -> ?WM_REPLY(false, Context)
 					end;
 				false ->
-					?WM_REPLY(false, Context2)
+					?WM_REPLY(false, Context)
+			end
+	end;
+setup_period(month, Context) ->
+	case z_context:get_q("date", Context, []) of
+		[] ->
+		    {{Y,M,_}, _} = erlang:localtime(),
+			Context1 = z_context:set(date, {{Y,M,1},{0,0,0}}, Context),
+			?WM_REPLY(false, Context1);
+		Date ->
+			case z_utils:only_digits(Date) andalso length(Date) == 6 of
+				true ->
+					%% Date given, check if is the start of a month.
+					try
+						Num = list_to_integer(Date),
+						Y = Num div 100,
+						M = Num rem 100,
+						true = (M >= 1 andalso M =< 12),
+						Context1 = z_context:set(date, {{Y,M,1},{0,0,0}}, Context),
+    					?WM_REPLY(true, Context1)
+					catch 
+						_:_ -> ?WM_REPLY(false, Context)
+					end;
+				false ->
+					?WM_REPLY(false, Context)
 			end
 	end.
+
 
 previously_existed(ReqData, Context) ->
 	case z_context:get(date, Context) of
@@ -68,26 +97,37 @@ previously_existed(ReqData, Context) ->
 	end.
 
 moved_temporarily(ReqData, Context) ->
-	{{Y,M,D},_} = z_context:get(date, Context),
-	Date = integer_to_list(Y*10000 + M*100 + D),
-	Location = z_dispatcher:url_for(calendar, [{date, Date}], Context),
-	{{true, z_context:abs_url(Location, Context)}, ReqData, Context}.
-	
+    case z_context:get(period, Context, week) of
+        week ->
+        	{{Y,M,D},_} = z_context:get(date, Context),
+        	Date = integer_to_list(Y*10000 + M*100 + D),
+        	Location = z_dispatcher:url_for(calendar, [{date, Date}], Context),
+        	{{true, z_context:abs_url(Location, Context)}, ReqData, Context};
+        month ->
+        	{{Y,M,_},_} = z_context:get(date, Context),
+        	Date = integer_to_list(Y*100 + M),
+        	Location = z_dispatcher:url_for(calendar_month, [{date, Date}], Context),
+        	{{true, z_context:abs_url(Location, Context)}, ReqData, Context}
+    end.
+
 
 %% @doc Show the page.
 html(Context) ->
-	Template = z_context:get(template, Context, "calendar_week.tpl"),
-	Vars = [
+    Template = case z_context:get(period, Context, week) of
+            week  -> z_context:get(template, Context, "calendar_week.tpl");
+            month -> z_context:get(template, Context, "calendar_month.tpl")
+        end,
+    Vars = [
 		{weekstart, weekstart(Context)},
 		{daystart, daystart(Context)},
+		{period, z_context:get(period, Context, week)},
 		{date, z_context:get(date, Context)}
 	],
 	Html = z_template:render(Template, Vars, Context),
 	z_context:output(Html, Context).
-	
+
 weekstart(Context) ->
 	z_convert:to_integer(m_config:get_value(mod_calendar, weekstart, 1, Context)).
 	
 daystart(Context) ->
 	z_convert:to_integer(m_config:get_value(mod_calendar, daystart, 0, Context)).
-	
