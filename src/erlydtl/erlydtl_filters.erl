@@ -207,6 +207,8 @@ ge(Input, Number, _Context) ->
 
 eq(undefined, _Number, _Context) ->
     undefined;
+eq(A, B, _Context) when is_tuple(A), is_tuple(B) ->
+    A == B;
 eq(Input, Number, _Context) ->
     try
         z_convert:to_list(Input) == z_convert:to_list(Number)
@@ -217,6 +219,8 @@ eq(Input, Number, _Context) ->
 
 ne(undefined, _Number, _Context) ->
     undefined;
+ne(A, B, _Context) when is_tuple(A), is_tuple(B) ->
+    A /= B;
 ne(Input, Number, _Context) ->
     try
         z_convert:to_list(Input) /= z_convert:to_list(Number)
@@ -438,6 +442,24 @@ is_defined(_V, _Context) ->
 
 is_undefined(V, Context) ->
     not(is_defined(V, Context)).
+
+chunk(undefined, _N, _Context) ->
+    undefined;
+chunk(In, N, Context) ->
+    chunk1(erlydtl_runtime:to_list(In, Context), N, []).
+    
+    chunk1([], _, Acc) ->
+        lists:reverse(Acc);
+    chunk1(List, N, Acc) ->
+        {Chunk, List1} = chunk_take(List, N, []),
+        chunk1(List1, N, [Chunk|Acc]).
+
+    chunk_take([], _, Acc) ->
+        {lists:reverse(Acc), []};
+    chunk_take(L, 0, Acc) ->
+        {lists:reverse(Acc), L};
+    chunk_take([H|T], N, Acc) ->
+        chunk_take(T, N-1, [H|Acc]).
 
 
 split_in(undefined, _N, _Context) ->
