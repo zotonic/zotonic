@@ -456,7 +456,12 @@ to_name("Ğ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
 to_name("ğ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
 to_name("İ"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
 to_name("ı"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
-
+% Some entities - we might want to add generic code here, depends
+% on where to_name/1 is used (can we assume that the input is always html?)
+to_name("&amp;"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("&lt;"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("&gt;"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
+to_name("&#39;"++T, Acc, I) -> to_name(T, [$_|Acc], I+1);
 % Other sequences of characters are mapped to $_
 to_name([_C|T], [$_|_] = Acc, I) ->
     to_name(T, Acc, I+1);
@@ -555,12 +560,12 @@ truncate(L, N, Append) ->
 	insert_acc([H|T], Acc) ->
 		insert_acc(T, [H|Acc]).
 	
-	get_entity([], Acc) ->
-		{[],Acc};
-	get_entity([$;|Rest], Acc) ->
-		{Rest,[$;|Acc]};
-	get_entity([C|Rest], Acc) ->
-		get_entity(Rest, [C|Acc]).
+    get_entity([], Acc) ->
+    	{[],Acc};
+    get_entity([$;|Rest], Acc) ->
+    	{Rest,[$;|Acc]};
+    get_entity([C|Rest], Acc) ->
+    	get_entity(Rest, [C|Acc]).
 
 
 %% @doc Split the binary into lines. Line seperators can be \r, \n or \r\n.
