@@ -46,12 +46,10 @@ get_page_startup_script(Context) ->
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
             [   
-                ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $;, 
-                <<"\nz_postback_loop();\n">>
+                ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $;
             ];
         PageId ->
-            [   ?SESSION_PAGE_Q, $=, $", PageId, $", $;, 
-                <<"\nz_postback_loop();\n">>
+            [   ?SESSION_PAGE_Q, $=, $", PageId, $", $;
             ]
     end.
 
