@@ -3,6 +3,12 @@
 %% @date 2009-04-26
 %% @doc String related functions
 
+%% @todo Check valid chars for filenames, allow chinese, japanese, etc?
+%% CJK Unified Ideographs Extension A: Range: 3400-4DBF
+%% CJK Unified Ideographs: Range: 4E00-9FAF
+%% Kangxi Radicals: Range 2F00-2FDF
+%% See also: http://www.utf8-chartable.de/
+
 %% Copyright 2009 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +42,8 @@
 	truncate/2,
 	truncate/3,
 	split_lines/1,
-	escape_ical/1
+	escape_ical/1,
+	test/0
 ]).
 
 -include_lib("include/zotonic.hrl").
@@ -181,6 +188,10 @@ to_lower(L) when is_list(L) ->
 	to_lower("Ś"++T, Acc) -> to_lower(T, [155,197|Acc]);
 	to_lower("Ź"++T, Acc) -> to_lower(T, [186,197|Acc]);
 	to_lower("Ż"++T, Acc) -> to_lower(T, [188,197|Acc]);
+    % Turkish support
+	to_lower("Ş"++T, Acc) -> to_lower(T, [159,197|Acc]);
+	to_lower("Ğ"++T, Acc) -> to_lower(T, [159,196|Acc]);
+	to_lower("İ"++T, Acc) -> to_lower(T, [177,196|Acc]);
 	% Other characters are taken as-is
 	to_lower([H|T], Acc) -> to_lower(T, [H|Acc]).
 
@@ -268,6 +279,11 @@ to_upper(L) when is_list(L) ->
 	to_upper("ś"++T, Acc) -> to_upper(T, [154,197|Acc]);
 	to_upper("ź"++T, Acc) -> to_upper(T, [185,197|Acc]);
 	to_upper("ż"++T, Acc) -> to_upper(T, [187,197|Acc]);
+	% Turkish support
+	to_upper("ş"++T, Acc) -> to_upper(T, [158,197|Acc]);
+	to_upper("ğ"++T, Acc) -> to_upper(T, [158,196|Acc]);
+	to_upper("ı"++T, Acc) -> to_upper(T, [176,196|Acc]);
+
 	% Other chars are taken as-is
 	to_upper([H|T], Acc) -> to_upper(T, [H|Acc]).
 
@@ -433,6 +449,14 @@ to_name("Ź"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
 to_name("ź"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
 to_name("Ż"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
 to_name("ż"++T, Acc, I) -> to_name(T, [$z|Acc], I+1);
+% Turkish support
+to_name("Ş"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("ş"++T, Acc, I) -> to_name(T, [$s|Acc], I+1);
+to_name("Ğ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("ğ"++T, Acc, I) -> to_name(T, [$g|Acc], I+1);
+to_name("İ"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+to_name("ı"++T, Acc, I) -> to_name(T, [$i|Acc], I+1);
+
 % Other sequences of characters are mapped to $_
 to_name([_C|T], [$_|_] = Acc, I) ->
     to_name(T, Acc, I+1);
@@ -574,3 +598,11 @@ escape_ical(A) when is_atom(A) ->
 	escape_ical(<<$;, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $;>>, N+2);
 	escape_ical(<<$\\, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $\\>>, N+2);
 	escape_ical(<<C, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, C>>, N+1).
+
+
+
+test() ->
+    A = "üçgen",
+    A = to_lower(to_upper(A)),
+    "ucgen" = to_name(A),
+    ok.
