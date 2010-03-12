@@ -25,7 +25,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws                    = false;
 var z_comet_is_running		= false;
-var z_starting_postback		= false;
+var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
 var z_postbacks				= [];
 var z_default_form_postback = false;
@@ -79,23 +79,19 @@ function z_growl_close()
 /* Postback loop
 ---------------------------------------------------------- */
 
-function z_postback_loop() 
+function z_postback_check() 
 {
-	if (!z_starting_postback && z_spinner_show_ct == 0 && z_postbacks.length > 0) 
+    if (!z_postbacks.length)
+    {
+        z_doing_postback = false;
+    }
+	if (z_postbacks.length > 0)
 	{
 		// Send only a single postback at a time.
-		z_starting_postback = true;
+		z_doing_postback = true;
 
 		var o = z_postbacks.shift();
 		z_do_postback(o.triggerID, o.postback, o.extraParams);
-
-		z_starting_postback = false;
-
-		setTimeout("z_postback_loop()", 10);
-	}
-	else
-	{
-		setTimeout("z_postback_loop()", 20);
 	}
 }
 
@@ -136,6 +132,7 @@ function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
 	o.extraParams	= extraParams;
 	
 	z_postbacks.push(o);
+    z_postback_check();
 }
 
 function z_do_postback(triggerID, postback, extraParams) 
@@ -180,6 +177,7 @@ function z_ajax(params)
 				$.misc.error("Error evaluating ajax return value: " + data);
 				$.misc.warn(e);
 			}
+            setTimeout("z_postback_check()", 0);
 		},
 		error: function(xmlHttpRequest, textStatus, errorThrown) 
 		{
@@ -217,6 +215,7 @@ function z_stream_start(hostname)
     				$.misc.error("Error evaluating ajax return value: " + data);
     				$.misc.warn(e);
     			}
+                setTimeout("z_postback_check()", 0);
     		};
     	}
         else
