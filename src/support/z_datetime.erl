@@ -44,6 +44,7 @@
 	
 	diff/2,
 
+    month_boundaries/1,
     week_boundaries/1,
     week_boundaries/2
 ]).
@@ -201,6 +202,13 @@ diff({{Y1,M1,D1},T1}, {{_,M2,_},_} = Date2) when M2 > M1 ->
 
 diff({{Y1,M1,D1},{H1,I1,S1}}, {{Y2,M2,D2},{H2,I2,S2}}) ->
 	{{Y1-Y2, M1-M2, D1-D2}, {H1-H2, I1-I2, S1-S2}}.
+
+
+%% @doc Return the month-boundaries of a given date
+month_boundaries({{Y,M,_}, _}) ->
+    Start = {{Y,M,1}, {0,0,0}},
+    {End,_} = prev_day(next_month(Start)),
+    {Start, {End, {23,59,59}}}.
 
 
 %% @doc Return the week-boundaries of a given date.

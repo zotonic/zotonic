@@ -20,7 +20,14 @@
 -module(z_trans).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([trans/2, default_language/1, is_language/1, lc2/1, lc2descr/1]).
+-export([
+    trans/2, 
+    default_language/1, 
+    is_language/1, 
+    language_list/1,
+    lc2/1, 
+    lc2descr/1
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -46,6 +53,11 @@ trans(String, Language) ->
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
+
+%% @doc Return the list of languages selected for this site
+%% @todo Make this configurable
+language_list(_Context) ->
+    [ en, nl ].
 
 %% @doc check if the two letter code is a valid language
 %% @spec is_language(LanguageString) -> bool()
