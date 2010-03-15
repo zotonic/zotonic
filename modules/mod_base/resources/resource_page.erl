@@ -32,7 +32,14 @@ resource_exists(ReqData, Context) ->
     Context1  = ?WM_REQ(ReqData, Context),
     ContextQs = z_context:ensure_qs(Context1),
     try
-        ?WM_REPLY(m_rsc:exists(get_id(ContextQs), ContextQs), ContextQs)
+        Id = get_id(ContextQs),
+        true = m_rsc:exists(Id, ContextQs),
+        case z_context:get(cat, ContextQs) of
+            undefined ->
+                ?WM_REPLY(true, ContextQs);
+            Cat ->
+                ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs)
+        end
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
     end.
