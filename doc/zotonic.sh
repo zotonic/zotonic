@@ -41,9 +41,13 @@ ERL="/usr/local/bin/erl"
 # The include path for the erlang vm, add when needed for your application.
 PA="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin"
 
-# The name of the Erlang node, change to 'localhost' when you have problems with your hostname.
-HOSTNAME=`hostname`
+# The name of the Erlang node, this must be unique on your host.
 SNAME=zotonic001
+
+# Set the hostname to the fully qualified domain name of your host, or leave it as localhost.
+# HOSTNAME=`hostname`
+# HOSTNAME=your.domain.com
+HOSTNAME=localhost
 
 # The command used to restart zotonic when crashed, only used after a "zotonic.sh start"
 export HEART_COMMAND="$ZOTONIC_SH start"
@@ -58,7 +62,7 @@ pushd $ZOTONIC >/dev/null
 function start() {
     echo  "Starting zotonic $SNAME"
     make -C $ZOTONIC >/dev/null
-    $ERL -pa $PA -sname $SNAME@$HOSTNAME -boot start_sasl -heart -detached -s zotonic
+    $ERL -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -heart -detached -s zotonic
 }
 
 function stop() {
@@ -79,7 +83,7 @@ case $1 in
     ;;
  
   debug)
-    $ERL +P 10000000 +K true -pa $PA -sname $SNAME@$HOSTNAME -boot start_sasl -s zotonic
+    $ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -s zotonic
     ;;
  
   stop)
