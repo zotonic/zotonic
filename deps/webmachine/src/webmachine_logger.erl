@@ -108,7 +108,10 @@ format_req(#wm_log_data{method=Method,
     User = "-",
     Time = fmtnow(),
     Status = integer_to_list(ResponseCode),
-    Length = integer_to_list(ResponseLength),
+    Length = case is_atom(ResponseLength) of 
+        true -> atom_to_list(ResponseLength); 
+        false -> integer_to_list(ResponseLength) 
+    end,
     Referer = 
 	case mochiweb_headers:get_value("Referer", Headers) of
 	    undefined -> "";

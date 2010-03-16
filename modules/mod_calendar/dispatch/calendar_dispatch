@@ -1,6 +1,8 @@
 [
 	{calendar, ["calendar"], resource_calendar, []},
-	{calendar, ["calendar", "week"], resource_calendar, []},
-	{calendar, ["calendar", "week", date], resource_calendar, []},
+	{calendar, ["calendar", "week"], resource_calendar, [{period, week}]},
+	{calendar, ["calendar", "week", date], resource_calendar, [{period, week}]},
+	{calendar_month, ["calendar", "month"], resource_calendar, [{period, month}]},
+	{calendar_month, ["calendar", "month", date], resource_calendar, [{period, month}]},
     {icalendar_feed, ["icalendar", cat], resource_calendar_feed_cat, [] }
 ].

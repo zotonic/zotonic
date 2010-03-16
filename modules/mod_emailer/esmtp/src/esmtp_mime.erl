@@ -20,7 +20,8 @@
 
 -export([test_msg/0,
          send_test/4,
-         test/0
+         test/0,
+         double_dot/1
 ]).
 
 %%====================================================================
@@ -120,7 +121,7 @@ encode_parts(#mime_msg{parts=Parts, boundary=Boundary}) ->
 encode_part(#mime_part{data=Data} = P, Boundary) ->
     "--" ++ Boundary ++ "\r\n" ++
     encode_headers(part_headers(P)) ++ "\r\n\r\n" ++
-    z_convert:to_list(Data) ++ "\r\n".
+    double_dot(z_convert:to_list(Data)) ++ "\r\n".
 
 part_headers(#mime_part{type=undefined, encoding={Enc, MimeType, Charset},
                         name=undefined}) ->
@@ -151,7 +152,6 @@ headers(#mime_msg{headers=H, boundary=Boundary} = Msg) ->
 	is_mixed([#mime_part{encoding={_, "text/html", _}}|T]) -> is_mixed(T);
 	is_mixed(_) -> true.
 	
-
 invent_mime_boundary() ->
     string:copies("=", 10) ++ list_rand(boundary_chars(), 30).
         
@@ -168,6 +168,20 @@ boundary_chars() ->
     "0123456789"
 %    "'()+_,-./=?"
     .
+
+%% Double dots at the start of a line, conform to Section 4.5.2 of RFC 2821
+double_dot([$.|T]) ->
+    double_dot(T, [$., $.]);
+double_dot(L) ->
+    double_dot(L, []).
+
+    double_dot([], Acc) ->
+        lists:reverse(Acc);
+    double_dot([13, 10, $. | T], Acc) ->
+        double_dot(T, [$., $., 10, 13|Acc]);
+    double_dot([H|T], Acc) ->
+        double_dot(T, [H|Acc]).
+
 
 join([H1, H2| T], S) when is_list(H1), is_list(H2), is_list(S) ->
     H1 ++ S ++ join([H2| T], S);

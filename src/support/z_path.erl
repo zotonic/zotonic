@@ -22,17 +22,31 @@
 
 -export([
     media_preview/1,
-    media_archive/1
+    media_archive/1,
+    files_subdir/2,
+    files_subdir_ensure/2
 ]).
 
 -include("zotonic.hrl").
 
 %% @doc Return the path to the media preview directory
 %% @spec media_preview(#context) -> filename()
-media_preview(#context{host=Host}) ->
-    filename:join([z_utils:lib_dir(priv), "sites", Host, "files", "preview"]).
+media_preview(Context) ->
+    files_subdir("preview", Context).
 
 %% @doc Return the path to the media archive directory
 %% @spec media_archive(#context) -> filename()
-media_archive(#context{host=Host}) ->
-    filename:join([z_utils:lib_dir(priv), "sites", Host, "files", "archive"]).
+media_archive(Context) ->
+    files_subdir("archive", Context).
+
+%% @doc Return the path to a files subdirectory
+%% @spec media_archive(#context) -> filename()
+files_subdir(SubDir, #context{host=Host}) ->
+        filename:join([z_utils:lib_dir(priv), "sites", Host, "files", z_convert:to_list(SubDir)]).
+
+%% @doc Return the path to a files subdirectory and ensure that the directory is present
+%% @spec files(SubDir, #context) -> filename()
+files_subdir_ensure(SubDir, Context) ->
+    Dir = files_subdir(SubDir, Context),
+    ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
+    Dir.
