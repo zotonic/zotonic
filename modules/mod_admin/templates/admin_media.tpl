@@ -2,6 +2,18 @@
 
 {% block title %} Admin Media {% endblock %}
 
+{% block search %}
+<div class="right search">
+    <form action="{% url admin_media %}" method="get">
+        <input type="hidden" name="qsort" value="{{ q.qsort }}" />
+        <input type="hidden" name="qcat" value="{{ q.qcat }}" />
+        <div class="search-wrapper">
+            <input type="text" name="qs" value="{{q.qs|escape}}" />
+        </div>
+    </form>
+</div>
+{% endblock %}
+
 {% block content %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
@@ -19,7 +31,7 @@
 			
 			<p>Media encompasses all uploaded images, movies and documents. Media can be attached to pages.</p>
 			
-			{% with m.search.paged[{fulltext cat="media" text=q.qs page=q.page}] as result %}
+			{% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=q.qsort|default:"-created"}] as result %}
 
 				{% pager result=result dispatch="admin_media" qargs %}
 				<h3 class="above-list">Media overview</h3>
@@ -27,15 +39,15 @@
 				<ul class="media-list short-list">
 					<li class="headers clearfix">
 						<span class="zp-10">Preview</span>
-						<span class="zp-20">Title</span>
+ 						<span class="zp-20">{% include "_admin_sort_header.tpl" field="pivot_title" caption="Title" %}</span>
 						<span class="zp-15">Type</span>
 						<span class="zp-25">Filename</span>
 						<span class="zp-10">Dimensions</span>
-						<span class="zp-10">Uploaded</span>
+						<span class="zp-10">{% include "_admin_sort_header.tpl" field="created" caption="Uploaded" %}</span>
 						<span class="zp-10">Actions</span>
 					</li>
 
-				{% for id, rank in result %}
+				{% for id in result %}
 					{% with m.rsc[id] as r %}
 						{% with r.medium as medium %}
 						<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
