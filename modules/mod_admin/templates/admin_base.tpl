@@ -37,7 +37,7 @@
 			
 			{% block search %}
 			<div class="right search">
-				<form action="/admin/overview" method="get">
+				<form action="{% url admin_overview_rsc %}" method="get">
                     <input type="hidden" name="qsort" value="{{ q.qsort }}" />
                     <input type="hidden" name="qcat" value="{{ q.qcat }}" />
 					<div class="search-wrapper">
