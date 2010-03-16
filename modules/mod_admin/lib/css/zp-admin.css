@@ -125,8 +125,10 @@ hr {
 			color: #000;
 		}
 
-	.short-list li.headers {
+	.short-list li.headers  {
 		font-weight: bold;
+    }
+	.short-list li.headers a {
 		color: #0C8DB2;
 	}
 	

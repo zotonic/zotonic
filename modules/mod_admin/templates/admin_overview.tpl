@@ -19,6 +19,8 @@
 		<hr />
 		
 			<form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}">
+				<input type="hidden" name="qsort" value="{{ q.qsort }}" />
+				<input type="hidden" name="qs" value="{{ q.qs }}" />
 				<h3 class="above-list ">
 					Pages overview{% if q.qs %}, 
 						matching “{{ q.qs|escape }}”
@@ -43,6 +45,8 @@
 			</form>
 
 			<ul class="short-list">
+				{% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
+
 				<li class="headers clearfix">
 					{% if is_event %}
 						<span class="zp-20">Title</span>
@@ -52,15 +56,13 @@
 						<span class="zp-15">Modified on</span>
 						<span class="zp-15">Modified by</span>
 					{% else %}
-						<span class="zp-35">Title</span>
-						<span class="zp-15">Category</span>
-						<span class="zp-20">Modified on</span>
-						<span class="zp-20">Modified by</span>
+						<span class="zp-35">{% include "_admin_sort_header.tpl" field="pivot_title" caption="Title" %}</span>
+						<span class="zp-15">{% include "_admin_sort_header.tpl" field="category_id" caption="Category" %}</span>
+						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modified" caption="Modified on" %}</span>
+						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modifier_id" caption="Modified by" %}</span>
 					{% endif %}
 					<span class="zp-10">Options</span>
 				</li>
-
-            {% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page}] as result %}
 
 			{% for id in result %}
 				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
@@ -79,7 +81,7 @@
 							<span class="zp-20">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
 						{% endif %}
 						<span class="zp-10">
-                            {% button text="view" action={redirect id=id} %}
+							{% button text="view" action={redirect id=id} %}
 							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						</span>
 					</a>
