@@ -239,7 +239,7 @@ get_cookie(Context) ->
 set_cookie(VisitorCookieId, Context) ->
     RD = z_context:get_reqdata(Context),
     %% TODO: set the {domain,"example.com"} of the session cookie
-    Options = [{max_age, ?VISITOR_COOKIE_MAX_AGE}, {path, "/"}],
+    Options = [{max_age, ?VISITOR_COOKIE_MAX_AGE}, {path, "/"}, {http_only, true}],
     Hdr = mochiweb_cookies:cookie(?VISITOR_COOKIE, VisitorCookieId, Options),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
