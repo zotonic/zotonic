@@ -710,8 +710,12 @@ function z_add_validator(id, type, args)
 {
 	var v = $('#'+id).data("z_live_validation");
 
-	if(v)
+	if (v)
 	{
+	    if (args['pattern'])
+	    {
+	        args['pattern'] = new RegExp(args['pattern']);
+	    }
 		switch (type)
 		{
 			case 'email':			v.add(Validate.Email, args);		break;
@@ -719,10 +723,15 @@ function z_add_validator(id, type, args)
 			case 'confirmation':	v.add(Validate.Confirmation, args); break;
 			case 'acceptance':		v.add(Validate.Acceptance, args);	break;
 			case 'length':			v.add(Validate.Length, args);		break;
-			case 'format':			args['pattern'] = new RegExp(args['pattern']);
-									v.add(Validate.Format, args);		break;
+			case 'format':          v.add(Validate.Format, args);       break;
 			case 'numericality':	v.add(Validate.Numericality, args); break;
-			default:				$.misc.error("unknown validation: "+type);
+			case 'postback':        
+			    args['z_id'] = id;
+			    v.add(Validate.Postback, args);
+			    break;
+			default:
+			    $.misc.error("unknown validation: "+type);
+			    break;
 		}
 	}
 }
@@ -742,6 +751,18 @@ function z_set_validator_postback(id, postback)
 	}
 }
 
+
+function z_async_validation_result(id, isValid, testedValue)
+{
+	var v = $('#'+id).data("z_live_validation");
+
+	if (v && $('#'+id).val() == testedValue)
+	{
+	    v.asyncValidationResult(isValid, testedValue);
+    }
+}
+
+// Called by the server on validation errors
 function z_validation_error(id, error)
 {
 	if (error == 'invalid')

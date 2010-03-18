@@ -73,6 +73,7 @@ process_post(ReqData, Context) ->
                 {ok, ContextEval} ->   
                     Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
                 {error, ContextEval} ->
+                    %% Posted form did not validate, return any errors.
                     ContextEval
             end;
         _ -> 
