@@ -23,6 +23,7 @@
     {dbuser, "zotonic"},
     {dbpassword, ""},
     {dbdatabase, "zotonic"},
+    {dbschema, "public"},
     
     % Admin password, used during installation. You can change it later
     {adminpassword, "admin"},

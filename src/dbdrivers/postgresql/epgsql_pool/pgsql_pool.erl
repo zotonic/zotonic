@@ -16,7 +16,8 @@ opts(Opts) ->
                 {port, 5432},
                 {password, ""},
                 {username, "zotonic"},
-                {database, "zotonic"}],
+                {database, "zotonic"},
+                {schema, "public"}],
     Opts2 = lists:ukeysort(1, proplists:unfold(Opts)),
     proplists:normalize(lists:ukeymerge(1, Opts2, Defaults), []).
 
@@ -184,9 +185,12 @@ connect(Opts) ->
     Host     = proplists:get_value(host, Opts),
     Username = proplists:get_value(username, Opts),
     Password = proplists:get_value(password, Opts),
-    pgsql:connect(Host, Username, Password, Opts).
+    {ok, Conn} = pgsql:connect(Host, Username, Password, Opts),
+    {ok, [], []} = pgsql:squery(Conn, "SET search_path TO " ++ proplists:get_value(schema, Opts)),
+    {ok, Conn}.
 
 deliver({Pid,_Tag} = From, C, #state{monitors=Monitors} = State) ->
+    %%error_logger:info_msg("Deliver"),
     M = erlang:monitor(process, Pid),
 	gen_server:reply(From, {ok, C}),
 	State#state{ monitors=[{C, M} | Monitors] }.

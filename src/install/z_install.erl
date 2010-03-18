@@ -27,7 +27,7 @@
 
 %% interface functions
 -export([
-    pre_install/1,
+    pre_install/2,
     install/1
 ]).
 
@@ -36,14 +36,14 @@
 %% @doc Install the database on the database connection supplied
 %% @spec install(Host) -> ok
 
-pre_install(testsandbox) ->
+pre_install(testsandbox, SiteProps) ->
     %% The test sandbox needs cleanup first:
     {ok, C} = pgsql_pool:get_connection(testsandbox),
-    %Database = proplists:get_value(dbdatabase, SiteProps),
+    Schema = proplists:get_value(dbschema, SiteProps, "public"),
 
     %% Drop all tables
-    pgsql:equery(C, "DROP SCHEMA public CASCADE"),
-    pgsql:equery(C, "CREATE SCHEMA public"),
+    pgsql:equery(C, "DROP SCHEMA " ++ Schema ++ " CASCADE"),
+    pgsql:equery(C, "CREATE SCHEMA " ++ Schema),
 
     %% Remove all files
     FilesDir = z_utils:os_filename(filename:join([z_utils:lib_dir(priv), "sites", testsandbox, "files"])),
@@ -51,7 +51,7 @@ pre_install(testsandbox) ->
     os:cmd("mkdir -p " ++ FilesDir),
     ok;
 
-pre_install(_) ->
+pre_install(_, _) ->
     ok.
 
 
