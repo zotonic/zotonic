@@ -40,16 +40,18 @@ install_check(SiteProps) ->
     % Check if the config table exists, if so then assume that all is ok
     Name     = proplists:get_value(host, SiteProps),
     Database = proplists:get_value(dbdatabase, SiteProps),
+    Schema   = proplists:get_value(dbschema, SiteProps, "public"),
     {ok, C}  = pgsql_pool:get_connection(Name),
 
-    z_install:pre_install(Name),
+    z_install:pre_install(Name, SiteProps),
 
     {ok, HasConfig} = pgsql:equery1(C, "
             select count(*) 
             from information_schema.tables 
             where table_catalog = $1 
               and table_name = 'config' 
-              and table_type = 'BASE TABLE'", [Database]),
+              and table_schema = $2
+              and table_type = 'BASE TABLE'", [Database, Schema]),
     pgsql_pool:return_connection(Name, C),
 
     case HasConfig of
