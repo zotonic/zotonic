@@ -23,14 +23,14 @@
 render_validator(format, TriggerId, _TargetId, Args, Context)  ->
     Pattern  = proplists:get_value(pattern, Args),
     Negate   = proplists:get_value(negate, Args, false),
-	JsObject = z_utils:js_object(Args),
+	JsObject = z_utils:js_object(z_validation:rename_args(Args)),
 	Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"format\", ">>, JsObject, <<");\n">>],
 	{[z_utils:is_true(Negate),Pattern], Script, Context}.
 
 
-%% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptableValues} | {error,Id,Error}
+%% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
-validate(format, Id, Value, [Negate,Pattern], _Context) ->
+validate(format, Id, Value, [Negate,Pattern], Context) ->
     {Re,Options} = pattern_to_re(Pattern),
     Ok = not Negate,
     Match = case re:run(Value, Re, Options) of
@@ -38,8 +38,8 @@ validate(format, Id, Value, [Negate,Pattern], _Context) ->
                 nomatch -> false
             end,
     case Match of
-        Ok -> {ok, Value};
-        _  -> {error, Id, invalid}
+        Ok -> {{ok, Value}, Context};
+        _  -> {{error, Id, invalid}, Context}
     end.
     
 %% @doc Translate a regular expression in javascript format to erlang re module format

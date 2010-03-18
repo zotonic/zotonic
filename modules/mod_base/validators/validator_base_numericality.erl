@@ -27,29 +27,29 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
                     undefined -> { proplists:get_value(minimum, Args), proplists:get_value(maximum, Args) };
                     _ -> {Is,Is}
                 end,
-	JsObject   = z_utils:js_object([{onlyInt,true}|Args]),
+	JsObject   = z_utils:js_object([{onlyInt,true}|z_validation:rename_args(Args)]),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"numericality\", ">>, JsObject, <<");\n">>],
 	{[to_number(Min),to_number(Max)], Script, Context}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptableValues} | {error,Id,Error}
+%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
-validate(numericality, Id, Value, [Min,Max], _Context) ->
+validate(numericality, Id, Value, [Min,Max], Context) ->
     Trimmed = z_string:trim(Value),
     case string:to_integer(Trimmed) of
         {error,_Error} -> 
             % Not a number
-            {error, Id, invalid};
+            {{error, Id, invalid}, Context};
         {Num,[]} ->
             MinOK = (Min == -1 orelse Num >= Min),
             MaxOK = (Max == -1 orelse Num =< Max),
             case MinOK andalso MaxOK of
-                true  -> {ok, Value};
-                false -> {error, Id, invalid}
+                true  -> {{ok, Value}, Context};
+                false -> {{error, Id, invalid}, Context}
             end;
         {_Num, _} ->
             % Has some trailing information 
-            {error, Id, invalid}
+            {{error, Id, invalid}, Context}
     end.
 
 

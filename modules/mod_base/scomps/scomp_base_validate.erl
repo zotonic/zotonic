@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2010 Marc Worrell
 %% @doc Add a validation to an element
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,5 +31,5 @@ terminate(_State, _Context) -> ok.
 render(Params, _Vars, Context, _State) ->
     Id       = proplists:get_value(id, Params, <<>>),
     TargetId = proplists:get_value(target,Params,Id),
-    Context1 = z_render:validator(Id, TargetId, Params, Context),
+    Context1 = z_render:validator(Id, TargetId, z_validation:rename_args(Params), Context),
     {ok, Context1}.

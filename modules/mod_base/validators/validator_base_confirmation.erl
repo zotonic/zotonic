@@ -22,16 +22,16 @@
 
 render_validator(confirmation, TriggerId, _TargetId, Args, Context)  ->
     MatchField = proplists:get_value(match, Args),
-	JsObject   = z_utils:js_object(Args), 
+	JsObject   = z_utils:js_object(z_validation:rename_args(Args)), 
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"confirmation\", ">>, JsObject, <<");\n">>],
 	{[MatchField], Script, Context}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptableValues} | {error,Id,Error}
+%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
 validate(confirmation, Id, Value, [MatchField], Context) ->
     MatchValue = z_context:get_q(MatchField, Context),
     if 
-        MatchValue =:= Value -> {ok, Value};
-        true -> {error, Id, invalid}
+        MatchValue =:= Value -> {{ok, Value}, Context};
+        true -> {{error, Id, invalid}, Context}
     end.
