@@ -51,7 +51,8 @@ init(SiteProps) ->
             DbUser     = proplists:get_value(dbuser,     SiteProps, "zotonic"),
             DbPassword = proplists:get_value(dbpassword, SiteProps, ""),
             DbDatabase = proplists:get_value(dbdatabase, SiteProps, DefaultDatabase),
-            DbOpts     = [{host, DbHost}, {port, DbPort}, {username, DbUser}, {password, DbPassword}, {database, DbDatabase}],
+            DbSchema   = proplists:get_value(dbschema,   SiteProps, "public"),
+            DbOpts     = [{host, DbHost}, {port, DbPort}, {username, DbUser}, {password, DbPassword}, {database, DbDatabase}, {schema, DbSchema}],
 
             epgsql_pool:start_pool(Host, 10, DbOpts);
         Pid when is_pid(Pid) -> 
