@@ -23,20 +23,20 @@
 render_validator(length, TriggerId, _TargetId, Args, Context)  ->
     Min        = proplists:get_value(minimum, Args),
     Max        = proplists:get_value(maximum, Args),
-	JsObject   = z_utils:js_object(Args),
+	JsObject   = z_utils:js_object(z_validation:rename_args(Args)),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"length\", ">>, JsObject, <<");\n">>],
 	{[to_number(Min),to_number(Max)], Script, Context}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptableValues} | {error,Id,Error}
+%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
-validate(length, Id, Value, [Min,Max], _Context) ->
+validate(length, Id, Value, [Min,Max], Context) ->
     Len   = length(Value),
     MinOK = (Min == -1 orelse Len >= Min),
     MaxOK = (Max == -1 orelse Len =< Max),
     case MinOK andalso MaxOK of
-        true  -> {ok, Value};
-        false -> {error, Id, invalid}
+        true  -> {{ok, Value}, Context};
+        false -> {{error, Id, invalid}, Context}
     end.
 
 to_number(undefined) -> 

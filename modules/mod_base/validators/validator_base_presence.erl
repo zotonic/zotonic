@@ -21,19 +21,21 @@
 -export([render_validator/5, validate/5]).
 
 render_validator(presence, TriggerId, _TargetId, Args, Context)  ->
-	JsObject = z_utils:js_object(Args), 
+	JsObject = z_utils:js_object(z_validation:rename_args(Args)), 
 	Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"presence\", ">>, JsObject, <<");\n">>],
 	{[], Script, Context}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptableValues} | {error,Id,Error}
+%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
-validate(presence, Id, undefined, _Args, _Context) -> {error, Id, novalue};
-validate(presence, Id, [],        _Args, _Context) -> {error, Id, novalue};
-validate(presence, _Id, #upload{} = Value, _Args, _Context) ->
-    {ok, Value};
-validate(presence, Id, Value,     _Args, _Context) ->
+validate(presence, Id, undefined, _Args, Context) -> 
+    {{error, Id, novalue}, Context};
+validate(presence, Id, [], _Args, Context) ->
+    {{error, Id, novalue}, Context};
+validate(presence, _Id, #upload{} = Value, _Args, Context) ->
+    {{ok, Value}, Context};
+validate(presence, Id, Value,     _Args, Context) ->
     case z_string:trim(Value) of
-        [] -> {error, Id, invalid};
-        _Trimmed -> {ok, Value}
+        [] -> {{error, Id, invalid}, Context};
+        _Trimmed -> {{ok, Value}, Context}
     end.
