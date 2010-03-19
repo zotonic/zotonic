@@ -24,6 +24,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 ---------------------------------------------------------- */
 
 var z_ws                    = false;
+var z_ws_opened             = false;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -198,25 +199,7 @@ function z_stream_start(hostname)
     {
     	if ("WebSocket" in window) 
     	{
-    		z_ws = new WebSocket("ws://"+hostname+"/websocket");
-
-    		z_ws.onopen = function() {};
-    		z_ws.onclose = function() {};
-
-    		z_ws.onmessage = function (evt)
-    		{
-    			try
-    			{
-    			    eval(evt.data);
-    				z_init_postback_forms();
-    			}
-    			catch (e)
-    			{
-    				$.misc.error("Error evaluating ajax return value: " + data);
-    				$.misc.warn(e);
-    			}
-                setTimeout("z_postback_check()", 0);
-    		};
+    	    z_websocket_start(hostname);
     	}
         else
     	{
@@ -253,6 +236,47 @@ function z_comet()
 		}
 	});
 	return;
+}
+
+
+function z_websocket_start(hostname)
+{
+	z_ws = new WebSocket("ws://"+hostname+"/websocket");
+
+	z_ws.onopen = function() { z_ws_opened = true; };
+	z_ws.onerror = function() {};
+
+	z_ws.onclose = function (evt) 
+	{
+	    if (z_ws_opened)
+	    {
+	        // Try to reopen, might be closed to error upstream
+	        alert('reopen');
+	        setTimeout(function() { z_websocket_start(hostname); }, 10);
+	    }
+	    else
+	    {
+	        // Failed opening websocket connection - try to start comet
+	        z_ws = undefined;
+    		setTimeout("z_comet();", 2000);
+    		z_comet_is_running = true;
+	    }
+	};
+
+	z_ws.onmessage = function (evt)
+	{
+		try
+		{
+		    eval(evt.data);
+			z_init_postback_forms();
+		}
+		catch (e)
+		{
+			$.misc.error("Error evaluating ajax return value: " + data);
+			$.misc.warn(e);
+		}
+        setTimeout("z_postback_check()", 0);
+	};
 }
 
 
