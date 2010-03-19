@@ -22,34 +22,43 @@
 </head>
 <body class="{% block page_class %}page{% endblock %}">
 
+	<section class="skip">
+		<a href="#content-area" title="Go directly to page content">Go to page content</a>
+	</section>
+
     <section class="zp-wrapper">
 
-        <header>
-            <nav>{% menu id=id %}</nav>
-            {% block featured %}<div class="featured-empty"></div>{% endblock %}
+        <header class="clearfix">
+            <h1 class="left">{{ m.site.title }}</h1>
+            <nav class="right">{% menu id=id %}</nav>
         </header>
 
         <section id="content-area" class="clearfix">
 
-            <article id="content" class="zp-75">
+			{% block chapeau %}{% endblock %}
+
+            <article id="content" class="zp-65">
                 <div class="padding">
                     {% block content %}
-					The default content goes here.
+						<!-- The default content goes here. -->
                     {% endblock %}
                 </div>
             </article>
 
-            <aside class="zp-25 last">
+            <section id="sidebar" class="zp-35 last">
                 {% block sidebar %}
-				{% include "_sidebar.tpl" %}
-                {% endblock %}
-            </aside>
+					{% include "_sidebar.tpl" %}
+    	        {% endblock %}
+            </section>
 
         </section>
 
-        <footer>
-            Website powered by <a href="http://zotonic.com">Zotonic</a>, the Erlang CMS.
-        </footer>
+        <footer class="clearfix">
+			<nav class="left">{% menu id=id %}</nav>
+			<section class="right">
+				<p class="footer-blog-title">Website powered by <a href="http://zotonic.com">Zotonic</a>, the Erlang CMS.</p>
+			</section>
+		</footer>
 
     </section>
 

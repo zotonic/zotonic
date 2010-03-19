@@ -1,12 +1,12 @@
 /* Styling for default blog template.
 ----------------------------------------------------------
 
-@package:	atatonic CSS framework 2009	
-@Author: 	Arjan Scherpenisse <arjan@scherpenisse.net>
+@package:	Atatonic CSS framework 2009	
+@Author: 	Tim Benniks <tim@timbenniks.nl>
 @Created: 	10-12-2009
-@Changed:	15-12-2009
+@Changed:	19-03-2010
 
-Copyright 2009 Arjan Scherpenisse <arjan@scherpenisse.net>
+Copyright 2010 Tim Benniks <tim@timbenniks.nl>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,197 +23,339 @@ limitations under the License.
 ---------------------------------------------------------- */
 
 body {
-	background: #eee;
+	background: #fff url(../images/bg.png) repeat-x left top;
+	color: #333;
+	font: 14px/24px Georgia, Times, serif;
 }
 
-header, article, aside, nav, figure, footer {
+aside, header, footer, figure, article {
 	display: block !important;
 }
 
-.zp-wrapper {
-	border: none;
-	background: #fff;
+
+/* Typography
+---------------------------------------------------------- */
+
+h1 {
+	color: #163a51;
+	font-size: 18px;
+	line-height: 24px;
+	margin: 0 0 12px 0;
+	font-style: normal;
 }
 
-a, a:focus {
-    color: #666;
-}
-
-a:hover, a:active {
-    color: #004;
-}
-
-h1.listpage {
-	margin: 0 0 8px 0;
-	padding: 0 0 9px 0;
-	border-bottom: 1px solid #eee;
-}
-
-h2 {
-	line-height: 27px;
-}	
-
-p.summary {
-    font-weight: bold;
-}
-
-.post p.summary {
-    font-weight: normal;
-}
-
-header nav {
-    background: #eee;
-}
-
-	#navigation {
-		display: block;
+	header h1 {
+		color: #fff;
+		margin: 11px 0 0 0;
+		font-size: 27px;
 	}
 
+h2 {
+	color: #163a51;
+	margin: 0 0 12px 0;
+	font-size: 16px;
+	line-height: 24px;
+	font-style: normal;
+}
+
+	#sidebar h2 {
+		color: #333;
+		margin: 0;
+	}
+
+h3 {
+	font-family: georgia, times, serif;
+	font-size: 12px;
+	line-height: 24px;
+	font-style: normal;
+	font-weight: bold;
+	color: #333;
+}
+
+h5.chapeau {
+	font-variant: small-caps;
+	color: #333;
+	border-bottom: 1px dotted #333;
+	text-transform: uppercase;
+	font-size: 12px;
+	line-height: 24px;
+	margin: 0 0 24px 0;
+}
+
+
+a, a:focus {
+	color: #154868;
+	text-decoration: none;
+	border-bottom: 1px dotted #154868;
+}
+
+a:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+p {
+	margin: 0 0 18px 0;
+}
+
+	p.summary {
+		font-style: italic;
+	}
+	
+	p.summary:first-letter {
+		font-size: inherit;
+		font-weight: normal;
+		line-height: inherit;
+		letter-spacing: 0;
+		float: none;
+		padding: 0;
+		width: auto;
+	}
+	
+	p.summary:first-line,
+	p.important:first-line {
+		font-variant: normal;
+	}
+	
+	p.important:first-letter {
+		font-size: 51px;
+		font-weight: normal;
+		line-height: 32px;
+		letter-spacing: 5px;
+		float: left;
+		padding: 6px 0 0 0;
+		width: auto;
+		color: #154868;
+		font-family: Georgia, Times, serif;
+	}
+	
+	p.keywords {
+		font-size: 12px;
+		font-style: italic;
+	}
+	
+.italic {
+	font-style: italic;
+}
+
+.author {
+	font-style: italic;
+	font-variant: normal;
+	text-transform: none;
+}
+
+p img, li img {
+	margin: 6px 6px 0 0;
+}
+
+p img.right, li img.right {
+	margin: 6px 0 0 9px;
+}
+
+p img.block {
+	display: block;
+	float: none;
+	margin: 0 0 18px 0;
+}
+
+
+/* navigation
+---------------------------------------------------------- */
+
+#navigation {
+	float: right;
+	margin: 17px 0 0 0;
+}
+
 	#navigation li {
-	    float: left;
+		display: inline;
 	}
 
 	#navigation li a {
-	    margin: 0 9px 4px 0;
-		line-height: 1;
-		padding: 6px 0;
-		display: block;
-		float: left;
-		font-size: 11px;
+		font-variant: small-caps;
+		text-transform: lowercase;
+		color: #fff;
 		text-decoration: none;
+		border: none;
+		margin: 0 0 0 6px;
 	}
 	
-		#navigation li a.current {
-			text-decoration: underline;
-		}
-
-header .featured {
-    color: white;
-    padding: 18px;
-    background: #004;
-}
-
-	header .featured p {
-		margin: 0;
+	#navigation li a:hover,
+	#navigation li a.current {
+		text-decoration: underline;
 	}
 
-header .featured-empty {
-    border-bottom: 2px solid #004;
+
+/* Grid
+---------------------------------------------------------- */
+
+.zp-wrapper {
+	width: 900px;
 }
 
-#content-area {
-	padding: 18px 9px 9px;
-	margin: 0 0 18px 0;
+header {
+	height: 48px;
+	margin: 0 0 24px 0;
 }
 
-	#content .padding {
-	    padding: 0 60px 0 0;
-	}
+#content .padding {
+	padding: 0 140px 0 0;
+}
 
-		.post {
-			margin: 0 0 8px 0;
-			padding: 0 0 9px 0;
-			border-bottom: 1px solid #eee;
-		}
-	
-		.article-meta {
-			font-size: 10px;
-			color: #666;
-		}
-		
-			.post .article-meta {
-				margin: 0;
-			}
-		
-		.pager li {
-		    display: inline;
-		}
-
-			.pager a {
-                text-decoration: none;
-            }
-			.pager .current a {
-			    text-decoration: underline;
-			}
-			
-	aside ul {
-	    margin: 0 0 18px 0;
-	}
 
 footer {
-    margin: 0;
-    padding: 10px;
-    border-top: 2px solid #004;
-    background: #f9f9f9;
-	font-size: 11px;
+
+	margin: 47px 0;
+	border-top: 1px dotted #333;
+	padding: 9px 0 0 0;
+
 }
 
-img.block, p img.block {
-    float: none;
-}
-
-div.prevnext div.next {
-    float: right;
-}
-
-div.prevnext div.prev {
-    float: left;
-}
-
-.form-item:last-child {
+footer #navigation {
 	margin: 0;
 }
 
-.form-item label {
-	display: block;
-	float: none;
-	font-size: 11px;
+footer #navigation li a {
+	font-size: 12px;
+	font-variant: small-caps;
+	text-transform: lowercase;
+	color: #666;
+	border: none;
+	margin: 0 6px 0 0;
+}
+
+	footer #navigation li a:hover {
+		color: #154868;
+	}
+
+footer p.footer-blog-title {
+	margin: 0;
+	font-size: 12px;
+	font-variant: small-caps;
+	text-transform: lowercase;
 	color: #666;
 }
 
-textarea {
-	font-family: "Lucida Grande", helvetica, sans-serif;
+
+/* Lists
+---------------------------------------------------------- */
+
+.item-list p {
+	font-size: 12px;
+	margin: 0;
 }
 
-fieldset {
-	background: #f9f9f9;
-	border: solid #004;
-	border-width: 0 0 2px 0;
-}
-
-.comments-list {
-	margin: 0 0 18px 0;
-}
-
-	.comments-list li {
-		padding: 6px;
-		border-bottom: 2px solid #ccc;
+	.item-list li {
 		margin: 0 0 18px 0;
-		background: #f9f9f9;
+	}
+
+
+.simple-list {
+	margin: 0 0 18px 0;
+}	
+
+	.simple-list li a {
+		font-size: 12px;	
 	}
 	
-	.comments-list li p.comment-meta,
-	.comments-list li p.comment-body {
-		font-size: 11px;
+.pager li {
+	display: inline;
+}
+
+	.pager li.disabled {
+		display: none;
+	}
+	
+
+/* Posts
+---------------------------------------------------------- */	
+	
+.post {
+	margin: 0 0 36px 0;
+}
+
+.post h1 {
+	margin: 0;
+}
+	
+	.post h1 a {
+		border: none;
+	}
+
+.post p:last-child {
+	margin: 0;
+}
+
+.post .article-meta {
+	font-size: 12px;
+	font-style: italic;
+	margin: 0;
+	color: #666;	
+}
+
+.prevnext {
+	margin: 36px 0 0 0;
+	overflow: hidden; /* clearfix hack */
+}
+
+	.prevnext a {
+		font-size: 12px;
+		color: #333;
+	}
+	
+		.prevnext a:hover {
+			color: #154868;
+		}
+
+	.prevnext .prev {
+		float: left;
+	}
+	
+	.prevnext .next {
+		float: right;
+	}
+
+
+/* Images
+---------------------------------------------------------- */
+
+figure.image-wrapper {
+	margin: 0 0 18px 0;
+	width: 100%;
+}
+
+	.block-level-image img {
+		display: block;
 		margin: 0;
 	}
-	
-	.comments-list li p.comment-meta {
-		margin: 0 0 6px 0;
-		color: #888;
-	}
-	
-	.comments-list li img {
-	    border: 1px solid #ccc;
-	}
-	
-.z_validation_message {
-	display: none;
+
+p.image-caption {
+	display: block;
+	font: 11px/18px arial, helvetica, sans-serif;
+	margin: 0;
+	color: #666;
 }
 
-ul.list li.listitem {
-    width: 32%;
-    float: left;
-    height: 130px;
-    overflow: hidden;
+
+/* Misc
+---------------------------------------------------------- */
+
+#ie6-upgrade {
+	padding: 5px 10px;
 }
+
+#ie6-upgrade h4 {
+	color: #000;
+	font-weight: bold;
+}
+
+#ie6-upgrade a {
+	color: #000;
+	text-decoration: underline;
+	border: none;
+}
+
+	#ie6-upgrade a:hover {
+		border: none;
+		color: #444;
+	}
