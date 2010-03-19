@@ -789,12 +789,16 @@ function z_async_validation_result(id, isValid, testedValue)
 // Called by the server on validation errors
 function z_validation_error(id, error)
 {
-	if (error == 'invalid')
+	var v = $('#'+id).data("z_live_validation");
+	if (v)
 	{
-		// Generic error - handle it ourselves
-		error = "please correct";
-	}
-	$('#'+id).addClass("form-field-error");
+    	if (error == 'invalid')
+    	{
+    		// Generic error - handle it ourselves
+    		error = "please correct";
+    	}
+	    v.showErrorMessage(error);
+    }
 }
 
 // URL encode function that is more RFC compatible.	 Also encodes +, *, / and @.

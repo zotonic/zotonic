@@ -418,6 +418,13 @@ LiveValidation.prototype =
         return span;
     },
     
+    /**
+     * Show an error message
+     */
+    showErrorMessage: function(message){
+        this.message = message;
+        this.onInvalid();
+    },
     
     /** 
      * Insert a spinner in the message element.
