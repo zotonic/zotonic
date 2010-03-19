@@ -21,6 +21,7 @@
 
 -export([
     init/1, 
+    forbidden/2,
     upgrades_provided/2,
 	websocket_start/2,
 	loop/4,
@@ -35,16 +36,24 @@
 
 init([]) -> {ok, []}.
 
-upgrades_provided(ReqData, State) ->
+
+%% @doc The request must have a valid session cookie.
+forbidden(ReqData, _State) ->
+    Context = z_context:new(ReqData),
+    Context1 = z_context:continue_session(Context),
+    ?WM_REPLY(not z_context:has_session(Context1), Context1).
+
+%% @doc Possible connection upgrades
+upgrades_provided(ReqData, Context) ->
     {[
         {"WebSocket", websocket_start}
-    ], ReqData, State}.
+    ], ReqData, Context}.
 
 
 %% @doc Initiate the websocket connection upgrade
-websocket_start(ReqData, _State) ->
-    Context = z_context:new(ReqData),
-    Context1 = z_context:ensure_all(Context),
+websocket_start(ReqData, Context) ->
+    ContextReq = ?WM_REQ(ReqData, Context),
+    Context1 = z_context:ensure_all(ContextReq),
     Socket = webmachine_request:socket(ReqData),
     Hostname = m_site:get(hostname, Context1),
     WebSocketPath = z_dispatcher:url_for(websocket, Context1),

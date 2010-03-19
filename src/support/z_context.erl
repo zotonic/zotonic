@@ -41,6 +41,7 @@
     combine_results/2,
 
     continue_session/1,
+    has_session/1,
     
     ensure_all/1,
     ensure_session/1,
@@ -59,7 +60,6 @@
     get_q_all/1,
     get_q_all/2,
     get_q_validated/2,
-
 
     add_script_session/1,
     add_script_page/1,
@@ -389,8 +389,15 @@ continue_session(Context) ->
                     Context
             end;
         _ ->
-            {ok, Context}
+            Context
     end.
+    
+
+%% @doc Check if the current context has a session attached
+has_session(#context{session_pid=SessionPid}) when is_pid(SessionPid) ->
+    true;
+has_session(_) ->
+    false.
 
 
 %% @doc Ensure session and page session and fetch&parse the query string
