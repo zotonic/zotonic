@@ -1,0 +1,1 @@
+<h5 class="chapeau">{{ m.rsc[m.rsc[id].category_id].title }} &mdash; <span class="author">{% if m.rsc[id].author %} by {{ m.rsc[id].author.title }}{% endif %}, {{ m.rsc[id].publication_start|date:"d F Y"}}</span></h5>

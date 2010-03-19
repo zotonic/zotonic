@@ -3,18 +3,24 @@
 {% block title %}{{ m.rsc[id].title }}{% endblock %}
 
 {% block content %}
-<div class="zp-100">
+
     <h1>{{ m.rsc[id].title }}</h1>
 
     <p class="summary">
         {{ m.rsc[id].summary }}
     </p>
 
-    {% if m.rsc[id].medium %}<p>{% image id width=400 class="block" %}</p>{% endif %}
+    {% if m.rsc[id].medium %}
+    
+    	<figure class="image-wrapper block-level-image">
+			{% image id width=445 %}
+			<p class="image-caption">This is a lady with a guitar.</p>
+		</figure>
+    
+    {% endif %}
 
     {{ m.rsc[id].body|show_media }}
-</div>
 
-{% block below_body %}{% endblock %}
+	{% block below_body %}{% endblock %}
 
 {% endblock %}
