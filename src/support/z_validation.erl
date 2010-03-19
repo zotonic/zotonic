@@ -20,6 +20,7 @@
 -module(z_validation).
 -export([
     validate_query_args/1,
+    report_errors/2,
     rename_args/1
 ]).
 
@@ -112,7 +113,7 @@ report_errors([{_Id, {error, _ErrId, {script, Script}}}|T], Context) ->
     Context1 = z_script:add_script(Script, Context),
     report_errors(T, Context1);
 report_errors([{_Id, {error, ErrId, Error}}|T], Context) ->
-    Script   = [<<"z_validation_error('">>, ErrId, <<"', \"">>, z_utils:js_escape(atom_to_list(Error)),<<"\");\n">>],
+    Script   = [<<"z_validation_error('">>, ErrId, <<"', \"">>, z_utils:js_escape(z_convert:to_list(Error)),<<"\");\n">>],
     Context1 = z_script:add_script(Script, Context),
     report_errors(T, Context1).
 

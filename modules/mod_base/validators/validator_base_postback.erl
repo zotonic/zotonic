@@ -46,7 +46,7 @@ validate(postback, Id, Value, Args, Context) ->
                     end
             end;
         Delegate ->
-            Delegate:validate(custom, Id, Value, Args, Context)
+            Delegate:validate(postback, Id, Value, Args, Context)
     end.
 
 
@@ -55,7 +55,10 @@ validate(postback, Id, Value, Args, Context) ->
 event({postback, {validate, Args}, TriggerId, _TargetId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     IsValid = case validate(postback, TriggerId, Value, Args, Context) of
-        {{ok, _},ContextValidated} -> "true";
-        {{error, _, _},ContextValidated} -> "false"
+        {{ok, _},ContextValidated} -> 
+            "true";
+        {{error, Id, _} = Error, ContextScript} -> 
+            ContextValidated = z_validation:report_errors([{Id,Error}], ContextScript),
+            "false"
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
