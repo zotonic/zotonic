@@ -251,7 +251,6 @@ function z_websocket_start(hostname)
 	    if (z_ws_opened)
 	    {
 	        // Try to reopen, might be closed to error upstream
-	        alert('reopen');
 	        setTimeout(function() { z_websocket_start(hostname); }, 10);
 	    }
 	    else
