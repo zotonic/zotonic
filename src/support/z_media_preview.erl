@@ -175,13 +175,11 @@ is_blurred([_|Rest]) -> is_blurred(Rest).
 out_mime("image/gif", _) ->
     %% gif is gif, daar kan je gif op innemen
     {"image/gif", ".gif"};
-out_mime(Mime, Options) when Mime == "image/png" orelse Mime == "image/gif" orelse Mime == "application/pdf" -> 
+out_mime(_Mime, Options) ->
 	case lists:member("lossless", Options) orelse proplists:is_defined(lossless, Options) of
 		false -> {"image/jpeg", ".jpg"};
 		true  -> {"image/png", ".png"}
-	end;
-out_mime(_Mime, _Options) ->
-	{"image/jpeg", ".jpg"}.
+	end.
 
 
 %% @spec filter2arg(Filter, Width, Height) -> 
@@ -264,7 +262,15 @@ filter2arg({quality}, Width, Height) ->
             Pix > ?PIX50 -> 50;
             true -> 100 - round(50 * (Pix - ?PIX100) / (?PIX50 - ?PIX100))
           end,
-    {Width,Height, ["-quality ",integer_to_list(Q)]}.
+    {Width,Height, ["-quality ",integer_to_list(Q)]};
+filter2arg({removebg, Fuzz}, Width, Height) ->
+    {Width, Height, ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
+                     "-draw 'matte 0,0 floodfill' ",
+                     "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
+                     "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
+                     "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
+                    ]}.
+
 
 %% @spec fetch_crop(Filters) -> {Crop, Filters}
 %% @doc Split the filters into size/crop and image manipulation filters.
@@ -364,7 +370,11 @@ string2filter("quality", Arg) ->
 string2filter("background", Arg) ->
     {background,Arg};
 string2filter("lossless", []) ->
-    {lossless}.
+    {lossless};
+string2filter("removebg", []) ->
+    {removebg, 5};
+string2filter("removebg", Arg) ->
+    {removebg, list_to_integer(Arg)}.
 
 
 % simple ceil for positive numbers
