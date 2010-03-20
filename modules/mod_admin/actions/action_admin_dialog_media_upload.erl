@@ -135,8 +135,7 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
                                           undefined -> 
                                               case Stay of
                                                   true -> Context;
-                                                  false -> z_depcache:flush(MediaId, Context), 
-                                                           z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context)
+                                                  false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context)
                                               end;
                                           _ -> Context
                             end,

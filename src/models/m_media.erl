@@ -252,22 +252,23 @@ replace_file(File, RscId, Props, Context) ->
                 | PropsMedia
             ],
 
+            %% When the resource is in the media category, then move it to the correct sub-category depending
+            %% on the mime type of the uploaded file.
+            case rsc_is_media_cat(RscId, Context) of
+                true ->
+                    case proplists:get_value(mime, PropsMedia) of
+                        "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Context);
+                        "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Context);
+                        "audio/" ++ _ -> m_rsc:update(RscId, [{category, audio}], Context);
+                        _ -> nop
+                    end;
+                false -> nop
+            end,
+
             F = fun(Ctx) ->
                 z_db:delete(medium, RscId, Context),
                 case z_db:insert(medium, MediumRowProps, Ctx) of
                     {ok, _MediaId} ->
-                        % When the resource is in the media category, then move it to the correct sub-category depending
-                        % on the mime type of the uploaded file.
-                        case rsc_is_media_cat(RscId, Context) of
-                            true ->
-                                case proplists:get_value(mime, PropsMedia) of
-                                    "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Ctx);
-                                    "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Ctx);
-                                    "sound/" ++ _ -> m_rsc:update(RscId, [{category, sound}], Ctx);
-                                    _ -> nop
-                                end;
-                            false -> nop
-                        end,
                         {ok, RscId};
                     Error ->
                         Error
@@ -278,6 +279,8 @@ replace_file(File, RscId, Props, Context) ->
             {ok, Id} = z_db:transaction(F, Context),
             [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
             z_depcache:flush(Id, Context),
+            %% Pass the medium record along in the notification; this also fills the depcache (side effect).
+            z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
             {ok, Id};
         false ->
             {error, eacces}
