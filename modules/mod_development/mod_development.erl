@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
+%% @author Bryan Fink <bryan@basho.com>
 %% @copyright 2009 Marc Worrell
 %% @date 2009-11-01
 %% @doc Development server.  Periodically performs a "make" and loads new files.
 %% When new files are loaded the caches are emptied.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,6 +33,8 @@
 
 %% interface functions
 -export([
+    wmtrace/1,
+    wmtrace_dir/0,
 	reload/1,
 	make/1
 ]).
@@ -47,6 +50,7 @@
 %%====================================================================
 %% API
 %%====================================================================
+
 %% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
@@ -59,6 +63,17 @@ reload(Context) ->
 make(Context) ->
 	z_notifier:notify(development_make, Context).
 
+
+%% @doc Start a trace of a resource, called by the resources's init/2 function.
+wmtrace(State) ->
+    {{trace, wmtrace_dir()}, State}.
+
+%% @doc Return 
+wmtrace_dir() ->
+    Dir = z_utils:lib_dir("priv/wmtrace"),
+    ok = filelib:ensure_dir(filename:join(Dir, "test")),
+    Dir.
+    
 
 %%====================================================================
 %% gen_server callbacks

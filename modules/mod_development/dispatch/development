@@ -1,0 +1,4 @@
+[
+	{wmtrace, ["wmtrace"],      resource_wmtrace, []},
+	{wmtrace, ["wmtrace", '*'], resource_wmtrace, []}
+].
