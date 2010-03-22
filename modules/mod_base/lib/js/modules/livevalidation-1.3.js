@@ -733,11 +733,11 @@ var Validate = {
         var minimum = ((paramsObj.minimum) || (paramsObj.minimum == 0)) ? paramsObj.minimum : null;;
         var maximum = ((paramsObj.maximum) || (paramsObj.maximum == 0)) ? paramsObj.maximum : null;
         var is = ((paramsObj.is) || (paramsObj.is == 0)) ? paramsObj.is : null;
-        var notANumberMessage = paramsObj.notANumberMessage || "Must be a number!";
-        var notAnIntegerMessage = paramsObj.notAnIntegerMessage || "Must be an integer!";
-        var wrongNumberMessage = paramsObj.wrongNumberMessage || "Must be " + is + "!";
-        var tooLowMessage = paramsObj.tooLowMessage || "Must not be less than " + minimum + "!";
-        var tooHighMessage = paramsObj.tooHighMessage || "Must not be more than " + maximum + "!";
+        var notANumberMessage = paramsObj.notANumberMessage || "Must be a number.";
+        var notAnIntegerMessage = paramsObj.notAnIntegerMessage || "Must be an integer.";
+        var wrongNumberMessage = paramsObj.wrongNumberMessage || "Must be " + is + ".";
+        var tooLowMessage = paramsObj.tooLowMessage || "Must not be less than " + minimum + ".";
+        var tooHighMessage = paramsObj.tooHighMessage || "Must not be more than " + maximum + ".";
         
         if (!isFinite(value)) 
             Validate.fail(notANumberMessage);
@@ -782,7 +782,7 @@ var Validate = {
     Format: function(value, paramsObj){
       var value = String(value);
       var paramsObj = paramsObj || {};
-      var message = paramsObj.failureMessage || "Not valid!";
+      var message = paramsObj.failureMessage || "Not valid.";
       var pattern = paramsObj.pattern || /./;
       var negate = paramsObj.negate || false;
       if(!negate && !pattern.test(value)) Validate.fail(message); // normal
@@ -832,9 +832,9 @@ var Validate = {
         var minimum = ((paramsObj.minimum) || (paramsObj.minimum == 0)) ? paramsObj.minimum : null;
         var maximum = ((paramsObj.maximum) || (paramsObj.maximum == 0)) ? paramsObj.maximum : null;
         var is = ((paramsObj.is) || (paramsObj.is == 0)) ? paramsObj.is : null;
-        var wrongLengthMessage = paramsObj.wrongLengthMessage || "Must be " + is + " characters long";
-        var tooShortMessage = paramsObj.tooShortMessage || "Must not be less than " + minimum + " characters long";
-        var tooLongMessage = paramsObj.tooLongMessage || "Must not be more than " + maximum + " characters long";
+        var wrongLengthMessage = paramsObj.wrongLengthMessage || "Must be " + is + " characters long.";
+        var tooShortMessage = paramsObj.tooShortMessage || "Must not be less than " + minimum + " characters long.";
+        var tooLongMessage = paramsObj.tooLongMessage || "Must not be more than " + maximum + " characters long.";
         switch(true){
             case (is !== null):
                 if( value.length != Number(is) ) Validate.fail(wrongLengthMessage);
@@ -945,7 +945,7 @@ var Validate = {
         if(!paramsObj.match) 
             throw new Error("Validate::Confirmation - Error validating confirmation: Id of element to match must be provided");
         var paramsObj = paramsObj || {};
-        var message = paramsObj.failureMessage || "Does not match!";
+        var message = paramsObj.failureMessage || "Does not match.";
         var match = paramsObj.match.nodeName ? paramsObj.match : document.getElementById(paramsObj.match);
         if(!match) 
             throw new Error("Validate::Confirmation - There is no reference with name of, or element with id of '" + paramsObj.match + "'");
@@ -967,7 +967,7 @@ var Validate = {
      */
     Acceptance: function(value, paramsObj){
         var paramsObj = paramsObj || {};
-        var message = paramsObj.failureMessage || "Must be accepted!";
+        var message = paramsObj.failureMessage || "Must be accepted.";
         if(!value){ 
         Validate.fail(message);
         }
@@ -992,7 +992,7 @@ var Validate = {
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
-        var message = paramsObj.failureMessage || "Not valid!";
+        var message = paramsObj.failureMessage || "Not valid.";
         if(!against(value, args)) Validate.fail(message);
         return true;
     },
@@ -1006,7 +1006,7 @@ var Validate = {
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
-        var message = paramsObj.failureMessage || "Not valid!";
+        var message = paramsObj.failureMessage || "Not valid.";
 
         if (!against(value, args)) {
             Validate.fail(message);
