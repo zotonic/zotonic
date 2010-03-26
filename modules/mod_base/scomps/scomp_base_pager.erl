@@ -29,6 +29,9 @@
 -define(DELTA, 2).
 -define(SLIDE, ?DELTA + ?DELTA + 1).
 
+-define(TRANS_PAGER_NEXT, {trans, [{en, "next"}, {nl, "volgende"}]}).
+-define(TRANS_PAGER_PREV, {trans, [{en, "previous"}, {nl, "vorige"}]}).
+
 
 init(_Args) -> {ok, []}.
 varies(_Params, _Context) -> undefined.
@@ -92,17 +95,17 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
         "\n</ul>"
     ].
 
-prev(Page, _Pages, _Dispatch, _DispatchArgs, _Context) when Page =< 1 ->
-    ["\n<li class=\"disabled\">&laquo; prev</li>"];
+prev(Page, _Pages, _Dispatch, _DispatchArgs, Context) when Page =< 1 ->
+    ["\n<li class=\"disabled\">&laquo; ", z_trans:trans(?TRANS_PAGER_PREV, Context), "</li>"];
 prev(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     Url = z_dispatcher:url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context),
-    ["\n<li><a href=\"",Url,"\">&laquo; prev</a></li>"].
+    ["\n<li><a href=\"",Url,"\">&laquo; ", z_trans:trans(?TRANS_PAGER_PREV, Context), "</a></li>"].
 
-next(Page, Pages, _Dispatch, _DispatchArgs, _Context) when Page >= Pages ->
-    ["\n<li class=\"disabled\">next &raquo;</li>"];
+next(Page, Pages, _Dispatch, _DispatchArgs, Context) when Page >= Pages ->
+    ["\n<li class=\"disabled\">", z_trans:trans(?TRANS_PAGER_NEXT, Context), " &raquo;</li>"];
 next(Page, _Pages, Dispatch, DispatchArgs, Context) ->
     Url = z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context),
-    ["\n<li><a href=\"",Url,"\">next &raquo;</a></li>"].
+    ["\n<li><a href=\"",Url,"\">", z_trans:trans(?TRANS_PAGER_NEXT, Context), " &raquo;</a></li>"].
 
 
 url_to_li(sep, _, _) ->
