@@ -21,7 +21,8 @@
 -export([
     validate_query_args/1,
     report_errors/2,
-    rename_args/1
+    rename_args/1,
+    get_q/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -135,3 +136,17 @@ validate(Val, Context) ->
                 end,
     {Validated, Context1} = lists:foldl(ValidateF, {{ok,Value}, Context}, Validations),
     {{Name, Validated}, Context1}.
+
+
+%% @doc Simple utility function to get the 'q' value of an argument. When the argument has a generated unique prefix then
+%% the prefix is stripped.
+get_q(Name, Context) ->
+    case z_context:get_q(Name, Context) of
+        undefined ->
+            case string:tokens(Name, "-") of
+                [_Prefix, Name1] -> z_context:get_q(Name1, Context);
+                _ -> undefined
+            end;
+        Value -> Value
+    end.
+
