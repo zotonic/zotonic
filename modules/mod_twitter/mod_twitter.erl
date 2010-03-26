@@ -77,9 +77,14 @@ init(Args) ->
     z_notifier:observe(restart_twitter, self(), Context),
 
     %% Start the twitter process
-    Pid = start_following(Context),
+    case start_following(Context) of
+        Pid when is_pid(Pid) ->
+            {ok, #state{context=z_context:new(Context),twitter_pid=Pid}};
+        undefined ->
+            z_session_manager:broadcast(#broadcast{type="error", message="No configuration (username/password) found, not starting.", title="Twitter follower", stay=true}, z_acl:sudo(Context)),
+            ignore
+    end.
 
-    {ok, #state{context=z_context:new(Context),twitter_pid=Pid}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -212,7 +217,6 @@ start_following(Context) ->
                     Follow = z_utils:combine(",", Follow1),
                     Body = lists:flatten("follow=" ++ Follow),
                     z_session_manager:broadcast(#broadcast{type="notice", message="Now waiting for tweets to arrive...", title="Twitter", stay=false}, Context),
-                    ?DEBUG("Started the Twitter follower."),
                     spawn_link(?MODULE, fetch, [URL, Body, 5, Context])
             end
     end.

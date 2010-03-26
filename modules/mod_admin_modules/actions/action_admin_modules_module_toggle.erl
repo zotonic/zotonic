@@ -47,9 +47,13 @@ event({postback, {module_toggle, Module}, TriggerId, _TargetId}, Context) ->
                     Context1 = z_render:update(TriggerId, "Activate", Context),
                     z_render:growl(["Deactivated ", atom_to_list(Module), "."], Context1);
                 false ->
-                    z_module_sup:activate(Module, Context),
-                    Context1 = z_render:update(TriggerId, "Deactivate", Context),
-                    z_render:growl(["Activated ", atom_to_list(Module), "."], Context1)
+                    case z_module_sup:activate(Module, Context) of
+                        true ->
+                            Context1 = z_render:update(TriggerId, "Deactivate", Context),
+                            z_render:growl(["Activated ", atom_to_list(Module), "."], Context1);
+                        false ->
+                            z_render:growl_error(["Error activating ", atom_to_list(Module), "."], Context)
+                    end
             end;
         false ->
             z_render:growl_error("You are not allowed to activate or deactivate modules.", Context)
