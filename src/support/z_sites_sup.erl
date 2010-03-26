@@ -107,6 +107,10 @@ init([]) ->
                     {z_site_sup, start_link, [SiteProps]},
                     permanent, 5000, worker, dynamic
                 },
+                case z_sites_dispatcher:get_fallback_site() of
+                    undefined -> z_sites_dispatcher:set_fallback_site(Name);
+                    _ -> nop
+                end,
                 sites_to_spec(Rest, [Spec|Acc]);
             false ->
                 sites_to_spec(Rest, Acc)
