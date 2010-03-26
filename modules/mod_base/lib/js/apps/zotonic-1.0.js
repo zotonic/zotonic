@@ -859,6 +859,7 @@ $.fn.formToArray = function(semantic) {
 		var el = els[i];
 		var n = el.name;
 		if (!n) continue;
+	    if ($(el).hasClass("nosubmit")) continue;
 
 		var v = $.fieldValue(el, true);
 		if (v && v.constructor == Array) {
