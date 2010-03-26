@@ -30,7 +30,7 @@ render_validator(confirmation, TriggerId, _TargetId, Args, Context)  ->
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
 validate(confirmation, Id, Value, [MatchField], Context) ->
-    MatchValue = z_context:get_q(MatchField, Context),
+    MatchValue = z_validation:get_q(MatchField, Context),
     if 
         MatchValue =:= Value -> {{ok, Value}, Context};
         true -> {{error, Id, invalid}, Context}
