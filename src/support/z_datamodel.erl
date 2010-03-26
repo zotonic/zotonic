@@ -253,8 +253,14 @@ manage_menu(Module, M, Context) ->
 
 
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->
-    Subject = m_rsc:name_to_id_check(SubjectName, Context),
-    Predicate = m_predicate:name_to_id_check(PredicateName, Context),
-    Object = m_rsc:name_to_id_check(ObjectName, Context),
-    m_edge:insert(Subject, Predicate, Object, Context).
+    Subject = m_rsc:name_to_id(SubjectName, Context),
+    Predicate = m_predicate:name_to_id(PredicateName, Context),
+    Object = m_rsc:name_to_id(ObjectName, Context),
+    case {Subject, Predicate, Object} of
+        {{ok, SubjectId}, {ok, PredicateId}, {ok,ObjectId}} ->
+            m_edge:insert(SubjectId, PredicateId, ObjectId, Context);
+        _ ->
+            skip %% One part of the triple was MIA
+    end.
+
 
