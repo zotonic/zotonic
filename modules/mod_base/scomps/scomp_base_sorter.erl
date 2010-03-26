@@ -53,7 +53,7 @@ render(Params, _Vars, Context, _State) ->
 
 			Delegate1	 = case Delegate of
 							undefined -> z_context:get_resource_module(Context);
-							_ -> Delegate
+							_ -> z_convert:to_atom(Delegate)
 						   end,
 
 			PickledPostbackInfo = z_render:make_postback_info({Tag,Delegate1}, sort, Id, Id, ?MODULE, Context),

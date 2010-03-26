@@ -41,7 +41,7 @@ render(Params, _Vars, Context, _State) ->
 	% Get properties...
 	Delegate1    = case Delegate of
 	                undefined -> z_context:get_resource_module(Context);
-	                _ -> Delegate
+	                _ -> z_convert:to_atom(Delegate)
 	               end,
 
    case Id of

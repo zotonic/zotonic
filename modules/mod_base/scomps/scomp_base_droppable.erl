@@ -47,7 +47,7 @@ render(Params, _Vars, Context, _State) ->
         _ ->
             Delegate1 = case Delegate of
                             undefined -> z_context:get_resource_module(Context);
-                            _ -> Delegate
+                            _ -> z_convert:to_atom(Delegate)
                         end,
 
         	AcceptGroups1       = groups_to_accept(AcceptGroups),
@@ -71,6 +71,8 @@ event({postback, {DropTag,DropDelegate}, TriggerId, _TargetId}, Context) ->
     Drag = #dragdrop{tag=DragTag, delegate=DragDelegate, id=DragId},
 
 	try
+	    ?DEBUG(DropDelegate),
+	    ?DEBUG({drop, Drag, Drop}),
 	    Context1 = DropDelegate:event({drop, Drag, Drop}, z_context:set_resource_module(DropDelegate, Context)),
 	    
 	    % also notify the dragged element that it has been dragged
@@ -92,6 +94,5 @@ groups_to_accept([]) -> "*";
 groups_to_accept(["all"]) -> "*";
 groups_to_accept(["none"]) -> "";
 groups_to_accept(Groups) ->
-	Groups1 = lists:flatten([Groups]),
-	Groups2 = [".drag_group_" ++ z_convert:to_list(X) || X <- Groups1],
-	string:join(Groups2, ", ").
+	Groups1 = [".drag_group_" ++ z_convert:to_list(X) || X <- Groups],
+	string:join(Groups1, ", ").
