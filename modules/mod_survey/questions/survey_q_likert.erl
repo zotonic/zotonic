@@ -43,11 +43,11 @@ render(Q) ->
             "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
             "<p class=\"likert\">
                 Strongly Disagree
-                <input type=\"radio\" name=\"",Name,"\" value=\"1\"/> 1 
-                <input type=\"radio\" name=\"",Name,"\" value=\"2\"/> 2
-                <input type=\"radio\" name=\"",Name,"\" value=\"3\"/> 3 
-                <input type=\"radio\" name=\"",Name,"\" value=\"4\"/> 4 
-                <input type=\"radio\" name=\"",Name,"\" value=\"5\"/> 5
+                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"1\"/> 1 
+                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"2\"/> 2
+                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"3\"/> 3 
+                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"4\"/> 4 
+                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"5\"/> 5
                 Strongly Agree
             <p>"
             ])

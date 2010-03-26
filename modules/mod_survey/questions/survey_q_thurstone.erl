@@ -64,7 +64,7 @@ radio([], _N, _Name, Acc) ->
 radio([""|T], N, Name, Acc) ->
     radio(T, N, Name, Acc);
 radio([H|T], N, Name, Acc) ->
-    R = ["<input type=\"radio\" name=\"",Name,"\" value=\"", integer_to_list(N),"\"> ", z_html:escape(H), "<br />"],
+    R = ["<input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"", integer_to_list(N),"\"> ", z_html:escape(H), "<br />"],
     radio(T, N+1, Name, [R|Acc]).
 
     

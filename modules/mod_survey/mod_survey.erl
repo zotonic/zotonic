@@ -194,7 +194,8 @@ has_new_q([_|T]) ->
 %% @doc Generate the html for the survey editor in the admin, update the displayed survey.
 redraw_questions(Id, Context) ->
     Html = z_template:render("_admin_survey_questions_edit.tpl", [{id, Id}], Context),
-    z_render:update("survey", Html, Context).
+    Context1 = z_render:update("survey", Html, Context),
+    
 
 
 %% @doc Return the default state for each item type.

@@ -43,7 +43,7 @@ render(Q) ->
         html = iolist_to_binary([
             "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
             "<p class=\"longanswer\">",
-            "<textarea name=\"",Name,"\"></textarea>"
+            "<textarea class=\"survey-q\" name=\"",Name,"\"></textarea>"
             "<p>"
             ])
     }.

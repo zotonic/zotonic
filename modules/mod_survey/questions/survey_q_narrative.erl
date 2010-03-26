@@ -75,7 +75,7 @@ is_select([_|T]) -> is_select(T).
 build_select(I) ->
     {Name, Options} = split_select(I),
     [
-        "<select class=\"inline\" name=\"",z_html:escape(Name),"\">",
+        "<select class=\"survey-q inline\" name=\"",z_html:escape(Name),"\">",
         options(Options, []),
         "</select>"
     ].
@@ -84,7 +84,7 @@ build_input(I) ->
     Name = z_string:trim(I),
     Length = length(I),
     [
-        "<input class=\"inline\" name=\"",z_html:escape(Name),"\" size=\"",integer_to_list(Length),"\" value=\"\" />"
+        "<input class=\"survey-q inline\" name=\"",z_html:escape(Name),"\" size=\"",integer_to_list(Length),"\" value=\"\" />"
     ].
 
 options([], Acc) ->
