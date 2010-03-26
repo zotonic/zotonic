@@ -195,7 +195,7 @@ has_new_q([_|T]) ->
 redraw_questions(Id, Context) ->
     Html = z_template:render("_admin_survey_questions_edit.tpl", [{id, Id}], Context),
     Context1 = z_render:update("survey", Html, Context),
-    
+    Context1.
 
 
 %% @doc Return the default state for each item type.
