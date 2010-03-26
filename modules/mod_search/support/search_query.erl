@@ -127,20 +127,24 @@ parse_query([{hassubject, [Id]}|Rest], Context, Result) ->
     Result3 = add_where(A ++ ".object_id = " ++ Arg, Result2),
     parse_query(Rest, Context, Result3);
 
-%% hassubject=[id,predicate]
+%% hassubject=[id,predicate,[alias]]
 %% Give all things which have an outgoing edge to Id with the given predicate
 parse_query([{hassubject, [Id, Predicate]}|Rest], Context, Result) ->
-    {A, Result1} = add_edge_join("subject_id", Result),
-
-    {Arg1, Result2} = add_arg(Id, Result1),
-    Result3 = add_where(A ++ ".object_id = " ++ Arg1, Result2),
+    parse_query([{hassubject, [Id, Predicate, "rsc"]}|Rest], Context, Result);
+parse_query([{hassubject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
+    {A, Result1} = add_edge_join(Alias, "subject_id", Result),
+    Result2 = case Id of
+                  undefined -> Result1;
+                  _ -> {Arg1, R} = add_arg(Id, Result1),
+                       add_where(A ++ ".object_id = " ++ Arg1, R)
+              end,
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
-    {Arg2, Result4} = add_arg(PredicateId, Result3),
-    Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
-    parse_query(Rest, Context, Result5);
-
+    {Arg2, Result3} = add_arg(PredicateId, Result2),
+    Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
+    parse_query(Rest, Context, Result4);
 parse_query([{hassubject, Id}|Rest], Context, Result) when is_list(Id) ->
     parse_query([{hassubject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
+
 
 %% hasobject=[id]
 %% Give all things which have an outgoing edge to Id
@@ -152,20 +156,24 @@ parse_query([{hasobject, [Id]}|Rest], Context, Result) ->
     Result3 = add_where(A ++ ".subject_id = " ++ Arg, Result2),
     parse_query(Rest, Context, Result3);
 
-%% hasobject=[id,predicate]
+%% hasobject=[id,predicate,[alias]]
 %% Give all things which have an outgoing edge to Id with the given predicate
 parse_query([{hasobject, [Id, Predicate]}|Rest], Context, Result) ->
-    {A, Result1} = add_edge_join("object_id", Result),
-
-    {Arg1, Result2} = add_arg(Id, Result1),
-    Result3 = add_where(A ++ ".subject_id = " ++ Arg1, Result2),
+    parse_query([{hasobject, [Id, Predicate, "rsc"]}|Rest], Context, Result);
+parse_query([{hasobject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
+    {A, Result1} = add_edge_join(Alias, "object_id", Result),
+    Result2 = case Id of
+                  undefined -> Result1;
+                  _ -> {Arg1, R} = add_arg(Id, Result1),
+                       add_where(A ++ ".subject_id = " ++ Arg1, R)
+              end,
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
-    {Arg2, Result4} = add_arg(PredicateId, Result3),
-    Result5 = add_where(A ++ ".predicate_id = " ++ Arg2, Result4),
-    parse_query(Rest, Context, Result5);
-
+    {Arg2, Result3} = add_arg(PredicateId, Result2),
+    Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
+    parse_query(Rest, Context, Result4);
 parse_query([{hasobject, Id}|Rest], Context, Result) when is_list(Id) ->
     parse_query([{hasobject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
+
 
 %% hasobjectpredicate=predicate
 %% Give all things which have any outgoing edge with given predicate
