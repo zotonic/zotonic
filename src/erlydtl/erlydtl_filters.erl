@@ -491,6 +491,22 @@ rand(Max, _Context) when is_integer(Max) ->
 rand(_, _Context) ->
 	undefined.
 
+
+random([], _Context) ->
+    undefined;
+random(In, Context) when is_list(In) ->
+    M = rand(length(In), Context),
+    hd(lists:nthtail(M-1, In));
+random(_, _Context) ->
+    undefined.
+
+replace(undefined, _, _Context) ->
+    undefined;
+replace(In, [A,B], _Context) when is_binary(A) orelse is_list(A) ->
+    iolist_to_binary(re:replace(In, A, B, [global]));
+replace(In, A, _Context) ->
+    iolist_to_binary(re:replace(In, A, [], [global])).
+    
 	
 striptags(undefined, _Context) ->
     undefined;

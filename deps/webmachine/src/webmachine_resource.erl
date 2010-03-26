@@ -104,15 +104,13 @@ default(_) ->
 wrap(Mod, Args) ->
     case Mod:init(Args) of
 	{ok, ModState} ->
-	    Exports = Mod:module_info(exports),
-	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Exports ], false)};
-        {{trace, Dir}, ModState} ->
-            {ok, File} = open_log_file(Dir, Mod),
-            log_decision(File, v3b14),
-            log_call(File, attempt, Mod, init, Args),
-            log_call(File, result, Mod, init, {{trace, Dir}, ModState}),
-            {ok, webmachine_resource:new(Mod, ModState,
-			dict:from_list(Mod:module_info(exports)), File)};
+	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
+    {{trace, Dir}, ModState} ->
+        {ok, File} = open_log_file(Dir, Mod),
+        log_decision(File, v3b14),
+        log_call(File, attempt, Mod, init, Args),
+        log_call(File, result, Mod, init, {{trace, Dir}, ModState}),
+        {ok, webmachine_resource:new(Mod, ModState,	[ F || {F,_} <- Mod:module_info(exports) ], File)};
 	_ ->
 	    {stop, bad_init_arg}
     end.
