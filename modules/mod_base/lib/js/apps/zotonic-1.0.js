@@ -31,6 +31,7 @@ var z_spinner_show_ct		= 0;
 var z_postbacks				= [];
 var z_default_form_postback = false;
 var z_input_updater			= false;
+var z_drag_tag              = [];
 
 /* 
 We need to set the domain of the session cookie to 'test'
@@ -315,7 +316,8 @@ function z_stop_spinner()
 
 function z_draggable(dragObj, dragOptions, dragTag) 
 {
-	$(dragObj).draggable(dragOptions).data("z_drag_tag", dragTag);	
+	dragObj.draggable(dragOptions).data("z_drag_tag", dragTag);
+	z_drag_tag[dragObj.attr('id')] = dragTag;
 }
 
 function z_droppable(dropObj, dropOptions, dropPostbackInfo) 
@@ -335,9 +337,9 @@ function z_droppable(dropObj, dropOptions, dropPostbackInfo)
 /* Sorter and sortables interface to the postback
 ---------------------------------------------------------- */
 
-function z_sortable(sortableItem, sortTag) 
+function z_sortable(sortableObj, sortTag) 
 {
-	$(sortableItem).data("z_sort_tag", sortTag);
+	sortableObj.data("z_sort_tag", sortTag);
 }
 
 function z_sorter(sortBlock, sortOptions, sortPostbackInfo) 
@@ -348,7 +350,11 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 
 		for (var i = 0; i < this.childNodes.length; i++) 
 		{
-			var sortTag = $(this.childNodes[i]).data("z_sort_tag");
+			var sortTag = $(this.childNodes[i]).data("z_sort_tag") 
+			if (!sortTag && this.childNodes[i].id)
+			{
+			    sortTag = z_drag_tag[this.childNodes[i].id];
+			}
 			if (sortTag)
 			{
 				if (sortItems != "") 
@@ -364,7 +370,7 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 		
 		z_queue_postback(this.id, sortPostbackInfo, sortItem, true);
 	};
-	
+
 	$(sortBlock).sortable(sortOptions);
 }
 
