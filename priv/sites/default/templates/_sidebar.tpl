@@ -24,4 +24,8 @@
     {% endfor %}
 </ul>
 
+{% if m.rsc[id].is_editable %}
+	{% button text=_"edit this page" action={redirect dispatch="admin_edit_rsc" id=id} %}
+{% endif %}
+
 {% endcache %}
