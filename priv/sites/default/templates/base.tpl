@@ -29,7 +29,7 @@
     <section class="zp-wrapper">
 
         <header class="clearfix">
-            <h1 class="left">{{ m.site.title }}</h1>
+        	<h1 class="left"><a href="/">{{ m.site.title }}</a></h1>
             <nav class="right">{% menu id=id %}</nav>
         </header>
 

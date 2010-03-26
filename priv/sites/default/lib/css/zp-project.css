@@ -49,6 +49,16 @@ h1 {
 		margin: 11px 0 0 0;
 		font-size: 27px;
 	}
+	
+	header h1 a,
+	header h1 a:focus {
+		color: #fff;
+		border: none;
+	}
+	
+	header h1 a:hover {
+		color: #eee;
+	}
 
 h2 {
 	color: #163a51;
@@ -134,10 +144,6 @@ p {
 		font-style: italic;
 	}
 	
-.italic {
-	font-style: italic;
-}
-
 .author {
 	font-style: italic;
 	font-variant: normal;
@@ -202,13 +208,10 @@ header {
 	padding: 0 140px 0 0;
 }
 
-
 footer {
-
 	margin: 47px 0;
 	border-top: 1px dotted #333;
 	padding: 9px 0 0 0;
-
 }
 
 footer #navigation {
@@ -359,3 +362,50 @@ p.image-caption {
 		border: none;
 		color: #444;
 	}
+
+
+/* Comments
+---------------------------------------------------------- */
+input {
+	width: 109px;
+	margin: 0;
+}
+
+textarea {
+	width: 288px;
+	margin: 0;
+}
+
+label {
+	float: none;
+	display: block;
+	
+}
+	
+	.comments-list li {
+		border-bottom: 1px dotted #aaa;
+		margin: 0 0 18px 0;
+		padding: 0 0 17px 0;
+	}
+	
+		.comments-list li p {
+			margin: 0;
+		}
+		
+		.comments-list li h3 {
+			font-weight: normal;
+			font-style: italic;
+			color: #555;
+			font-size: 16px;
+			line-height: 1;
+		}
+		
+		.comments-list li img {
+			margin: 2px 6px 0 0;
+		}
+		
+		.comments-list li .comment-meta {
+			font-size: 12px;
+			color: #666;
+			line-height: 18px;
+		}
