@@ -43,7 +43,7 @@ render(Q) ->
         html = iolist_to_binary([
             "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
             "<p class=\"shortanswer\">",
-            "<input type=\"text\" name=\"",Name,"\" value=\"\" /> "
+            "<input class=\"survey-q\" type=\"text\" name=\"",Name,"\" value=\"\" /> "
             "<p>"
             ])
     }.

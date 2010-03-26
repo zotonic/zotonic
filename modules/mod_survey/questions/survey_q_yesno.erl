@@ -43,8 +43,8 @@ render(Q) ->
         html = iolist_to_binary([
             "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
             "<p class=\"binary\">",
-            "<input type=\"radio\" name=\"",Name,"\" value=\"yes\">Yes "
-            "<input type=\"radio\" name=\"",Name,"\" value=\"no\">No"
+            "<input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"yes\">Yes "
+            "<input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"no\">No"
             "<p>"
             ])
     }.

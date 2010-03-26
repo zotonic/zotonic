@@ -35,11 +35,11 @@
 <p class="question">Type: Likert scale - Weasels make great pets.<p>
 <p class="likert">
 <p>Strongly Disagree
-<input type="radio" name="likert" value=1> 1 
-<input type="radio" name="likert" value=2> 2
-<input type="radio" name="likert" value=3> 3 
-<input type="radio" name="likert" value=4> 4 
-<input type="radio" name="likert" value=5> 5
+<input class="nosubmit" type="radio" name="likert" value=1> 1 
+<input class="nosubmit" type="radio" name="likert" value=2> 2
+<input class="nosubmit" type="radio" name="likert" value=3> 3 
+<input class="nosubmit" type="radio" name="likert" value=4> 4 
+<input class="nosubmit" type="radio" name="likert" value=5> 5
 Strongly Agree<p>
 <p>
 </li>
@@ -49,11 +49,11 @@ Strongly Agree<p>
 <li id="ci8">
 <p class="question">Type: Thurstone scale.<p>
 <p class="thurstone">
-<input type="radio" name="thurstone" value=1> This editor is very intuitive.<br />
-<input type="radio" name="thurstone" value=2> This editor is fairly easy to use.<br />
-<input type="radio" name="thurstone" value=3> This editor is gets the job done.<br />
-<input type="radio" name="thurstone" value=4> This editor is not that easy to use.<br />
-<input type="radio" name="thurstone" value=5> This editor is very confusing.<br />
+<input class="nosubmit" type="radio" name="thurstone" value=1> This editor is very intuitive.<br />
+<input class="nosubmit" type="radio" name="thurstone" value=2> This editor is fairly easy to use.<br />
+<input class="nosubmit" type="radio" name="thurstone" value=3> This editor is gets the job done.<br />
+<input class="nosubmit" type="radio" name="thurstone" value=4> This editor is not that easy to use.<br />
+<input class="nosubmit" type="radio" name="thurstone" value=5> This editor is very confusing.<br />
 <p>
 </li>
 {% draggable id="ci8" tag={q type="thurstone"} to_sorter="survey" %}
@@ -62,7 +62,7 @@ Strongly Agree<p>
 <li id="ci9">
 <p class="question">Type: short-answer open-ended question - Please enter your name.<p>
 <p class="shortAnswer">
-<input name="name" SIZE=12>
+<input class="nosubmit" name="name" SIZE=12>
 <p>
 </li>
 {% draggable id="ci9" tag={q type="shortanswer"} to_sorter="survey" %}
@@ -71,7 +71,7 @@ Strongly Agree<p>
 <li id="ci10">
 <p class="question">Type: long answer open-ended question - Please write an essay.<p>
 <p class="longAnswer">
-<textarea name="longAnswer">
+<textarea class="nosubmit" name="longAnswer">
 </textarea>
 <p>
 </li>
@@ -80,7 +80,7 @@ Strongly Agree<p>
 
 <li id="ci11">
 <p class="narrative">Type: narrative sequence - 
-I am <input name="age" size=3> years old. I like <select name="flavor"><option>Vanilla <option>Strawberry <option>Chocolate <option>Other </select> ice cream and my favorite color is <input name="color" size=12>.
+I am <input class="nosubmit" name="age" size=3> years old. I like <select class="nosubmit" name="flavor"><option>Vanilla <option>Strawberry <option>Chocolate <option>Other </select> ice cream and my favorite color is <input class="nosubmit" name="color" size=12>.
 </p>
 </li>
 {% draggable id="ci11" tag={q type="narrative"} to_sorter="survey" %}
