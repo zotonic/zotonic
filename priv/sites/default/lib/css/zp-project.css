@@ -296,6 +296,12 @@ footer p.footer-blog-title {
 	color: #666;	
 }
 
+.post img {
+	margin: 6px 6px 0 0;
+	display: block;
+	float: left;
+}
+
 .prevnext {
 	margin: 36px 0 0 0;
 	overflow: hidden; /* clearfix hack */
