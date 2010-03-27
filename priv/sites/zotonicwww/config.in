@@ -5,7 +5,7 @@
     {enabled, true},
     
     % Atomic hostname, MUST be equal to the directory name of this site.
-    {host, zotonic},
+    {host, zotonicwww},
 
     % Hostname for virtual host support
     {hostname, "zotonic.local:8000"},
