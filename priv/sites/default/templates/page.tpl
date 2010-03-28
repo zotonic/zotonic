@@ -13,8 +13,7 @@
     {% if m.rsc[id].medium %}
     
     	<figure class="image-wrapper block-level-image">
-			{% image id width=445 %}
-			<p class="image-caption">This is a lady with a guitar.</p>
+			{% media m.rsc[id].medium width=445 crop class=align alt=m.rsc[id].title %}
 		</figure>
     
     {% endif %}
