@@ -1,6 +1,6 @@
 {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" %}
 <form id="comments-form" method="post" action="postback">
-	<fieldset>
+	<fieldset class="zp-100">
 		<div class="zp-30">
 			<div class="form-item">
 				<label for="name">Name</label>

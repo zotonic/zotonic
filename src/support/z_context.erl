@@ -111,7 +111,10 @@ new(#context{host=Host}) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{language=z_trans:default_language(Context)};
 new(undefined) ->
-    new(default);
+    case z_sites_dispatcher:get_fallback_site() of
+        undefined -> throw({error, no_site_enabled});
+        Site -> new(Site)
+    end;
 new(Host) when is_atom(Host) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{language=z_trans:default_language(Context)};
@@ -165,7 +168,7 @@ site(ReqData = #wm_reqdata{}) ->
     PathInfo = wrq:path_info(ReqData),
     case dict:find(zotonic_host, PathInfo) of
         {ok, Host} -> Host;
-        error -> default
+        error -> z_sites_dispatcher:get_fallback_site()
     end.
 
 

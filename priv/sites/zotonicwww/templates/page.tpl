@@ -27,6 +27,11 @@
 				{{ m.rsc[id].body|show_media }}
 			{% endwith %}
 		</div>
+
+        <section id="comments">
+            {% include "_comments.tpl" id=id %}
+        </section>
+
 	</article>
 
 {% endblock %}

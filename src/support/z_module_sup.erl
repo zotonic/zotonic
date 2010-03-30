@@ -61,6 +61,7 @@ upgrade(Context) ->
     Old  = sets:from_list([Name || {Name, _, _, _} <- supervisor:which_children(ModuleSup)]),
     New  = sets:from_list([Name || {Name, _, _, _, _, _} <- Specs]),
     Kill = sets:subtract(Old, New),
+    Create = sets:to_list(sets:subtract(New, Old)),
 
     sets:fold(fun (Id, ok) ->
 		      supervisor:terminate_child(ModuleSup, Id),
@@ -68,18 +69,27 @@ upgrade(Context) ->
 		      ok
 	      end, ok, Kill),
 
-    [ start_child(ModuleSup, Spec) || Spec <- Specs ],
-
-    sets:fold(fun(Id, ok) -> 
-                z_notifier:notify({module_activate, Id}, Context), 
-                ok
-            end, ok, New),
     sets:fold(fun(Id, ok) -> 
                 z_notifier:notify({module_deactivate, Id}, Context), 
                 ok 
             end, ok, Kill),
+
+    CreateSpecs = [lists:keyfind(C, 1, Specs) || C <- Create],
+    CreateResult = [ start_child(ModuleSup, Spec) || Spec <- CreateSpecs ],
+
+    lists:foldl(fun(Id, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
+                        z_notifier:notify({module_activate, Id}, Context), 
+                        Rest;
+                   (Id, [{ok,undefined}|Rest]) -> 
+                        %% module did not start
+                        supervisor:delete_child(ModuleSup, Id),
+                        Rest;
+                   (_, [_|Rest]) -> 
+                        Rest
+                end, CreateResult, Create),
+
     z_notifier:notify(module_ready, Context),
-    ok.
+    CreateResult.
 
 
     %% @doc Try to start the child, do not crash on missing modules.
@@ -134,9 +144,16 @@ activate(Module, Context) ->
         end
     end,
     z_db:transaction(F, Context),
-    upgrade(Context).
-    
-    
+    case upgrade(Context) of
+        [{ok, Pid}] when is_pid(Pid) ->
+            %% OK
+            true;
+        _ ->
+            %% Error / not configured
+            1 = z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context),
+            false
+    end.
+
 
 %% @doc Return the list of active modules.
 %% @spec active(context()) -> [ atom() ]

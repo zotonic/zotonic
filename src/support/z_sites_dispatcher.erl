@@ -34,13 +34,15 @@
 %% interface functions
 -export([
 	dispatch/3,
-	set_dispatch_rules/1
+	set_dispatch_rules/1,
+	set_fallback_site/1,
+	get_fallback_site/0
 ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
 
--record(state, {rules}).
+-record(state, {rules, fallback_site}).
 
 %%====================================================================
 %% API
@@ -81,6 +83,14 @@ dispatch(Host, Path, ReqData) ->
 set_dispatch_rules(DispatchRules) ->
 	gen_server:cast(?MODULE, {set_dispatch_rules, DispatchRules}).
 
+%% @doc Store the fallback site.
+set_fallback_site(Site) ->
+	gen_server:cast(?MODULE, {set_fallback_site, Site}).
+
+%% @doc Store the fallback site.
+get_fallback_site() ->
+	gen_server:call(?MODULE, {get_fallback_site}).
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -104,7 +114,7 @@ init(_Args) ->
 %% Description: Handling call messages
 %% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
 handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
-    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, ReqData) of
+    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, ReqData) of
         {ok, Host, DispatchList} ->
             {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
             case dispatch(PathAsString, DispatchList) of
@@ -136,6 +146,10 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
     end,
     {reply, Reply, State};
 
+%% @doc Return the fallback site
+handle_call({get_fallback_site}, _From, State) ->
+    {reply, State#state.fallback_site, State};
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -147,6 +161,10 @@ handle_call(Message, _From, State) ->
 %% @doc Load a new set of dispatch rules.
 handle_cast({set_dispatch_rules, Rules}, State) ->
     {noreply, State#state{rules=Rules}};
+
+%% @doc Set the fallback site
+handle_cast({set_fallback_site, Site}, State) ->
+    {noreply, State#state{fallback_site=Site}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -183,7 +201,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Fetch the host and dispatch list for the request
 %% @spec get_host_dispatch_list(webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
-get_host_dispatch_list(WMHost, DispatchList, ReqData) ->
+get_host_dispatch_list(WMHost, DispatchList, Fallback, ReqData) ->
     case DispatchList of
         [#wm_host_dispatch_list{}|_] ->
             {Host, Port} = split_host(WMHost),
@@ -194,7 +212,7 @@ get_host_dispatch_list(WMHost, DispatchList, ReqData) ->
                 undefined ->
                     FoundHost = case get_dispatch_alias(Host, DispatchList) of
                                     {ok, _} = Found -> Found;
-                                    undefined -> get_dispatch_default(DispatchList)
+                                    undefined -> get_dispatch_fallback(DispatchList, Fallback)
                                 end,
                     case FoundHost of
                         {ok, DL} ->
@@ -216,7 +234,7 @@ get_host_dispatch_list(WMHost, DispatchList, ReqData) ->
                     end
             end;
         _ ->
-            {ok, default, DispatchList} 
+            {ok, Fallback, DispatchList} 
     end.
 
 
@@ -253,13 +271,13 @@ get_dispatch_alias(Host, [#wm_host_dispatch_list{hostalias=Alias} = DL|Rest]) ->
     end.
 
 
-%% @doc Search the host with the name 'default' for fallback of unknown hostnames.
-get_dispatch_default([]) ->
+%% @doc Retrieve the dispatch list of the fallback site for unknown hostnames.
+get_dispatch_fallback([], _FallbackHost) ->
     undefined;
-get_dispatch_default([#wm_host_dispatch_list{host=default} = DL|_]) ->
+get_dispatch_fallback([#wm_host_dispatch_list{host=FallbackHost} = DL|_], FallbackHost) ->
     {ok, DL};
-get_dispatch_default([_|Rest]) ->
-    get_dispatch_default(Rest).
+get_dispatch_fallback([_|Rest], FallbackHost) ->
+    get_dispatch_fallback(Rest, FallbackHost).
 
 
 %% @doc Check if the hostname is a hostname suitable to redirect to
