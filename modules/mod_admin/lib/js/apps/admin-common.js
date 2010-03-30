@@ -41,11 +41,15 @@ tinyInit = {
 	convert_urls: "", 
 	apply_source_formatting: "", 
 	remove_linebreaks: "1", 
-	paste_convert_middot_lists: "1", 
-	paste_remove_spans: "1",
-	paste_auto_cleanup_on_paste: "1", 
-	paste_remove_styles: "1", 
 	gecko_spellcheck: "1", 
+
+	/* Cleanup pasted html code */
+    paste_auto_cleanup_on_paste : true,
+	paste_convert_middot_lists: true, 
+	paste_remove_spans: true,
+    paste_remove_styles: true,
+    paste_remove_styles_if_webkit: true,
+    paste_strip_class_attributes: true,
 
 	/* below is a workaround for problem where tinyMCE setEntities skips the ones below and the doesn't initialize the entityLookup array
 	 * which results in an error in the _encode function.
@@ -57,9 +61,9 @@ tinyInit = {
 	tab_focus: ":prev,:next", 
 	content_css: "/lib/js/modules/tinymce/zotonic.css", 
 	wpeditimage_disable_captions: "", 
-	plugins: "preelementfix,safari,table,zmedia,zmore",
+	plugins: "paste,preelementfix,safari,table,zmedia,zmore",
 	table_row_limit: 100,
-	table_col_limit: 10
+	table_col_limit: 10	
 }
 
 $('.do_datepicker').datepicker(
