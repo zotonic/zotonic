@@ -44,6 +44,8 @@
 	
 	diff/2,
 
+    format/3,
+
     month_boundaries/1,
     week_boundaries/1,
     week_boundaries/2
@@ -51,6 +53,11 @@
 
 
 -include_lib("include/zotonic.hrl").
+
+
+%% @doc Format a date/time. Convenience function which calls erlydtl.
+format(Date, FormatString, Context) ->
+    erlydtl_dateformat:format(Date, FormatString, Context).
 
 
 %% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
