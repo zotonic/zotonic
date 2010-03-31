@@ -7,6 +7,12 @@
 
 -include_lib("zotonic.hrl").
 
+
+opttrans({trans, _}=Trans, LanguageOrContext) ->
+	z_trans:trans(Trans, LanguageOrContext);
+opttrans(V, _LanguageOrContext) ->
+	V.
+
 % Finde the value of a model value
 find_value(<<>>, #m{}, _Context) ->
     undefined;
