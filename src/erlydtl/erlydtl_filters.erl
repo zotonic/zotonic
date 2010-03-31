@@ -640,6 +640,35 @@ member(_S, _L, _Context) ->
     undefined.
 
 
+before(undefined, _, _Context) ->
+    undefined;
+before(_, undefined, _Context) ->
+    undefined;
+before(L, V, Context) ->
+    prev_of1(erlydtl_runtime:to_list(L, Context), V).
+    
+    prev_of1([], _V) ->
+        undefined;
+    prev_of1([P,V|_T], V) ->
+        P;
+    prev_of1([_|T], V) ->
+        prev_of1(T, V).
+
+'after'(undefined, _, _Context) ->
+    undefined;
+'after'(_, undefined, _Context) ->
+    undefined;
+'after'(L, V, Context) ->
+    next_of1(erlydtl_runtime:to_list(L, Context), V).
+
+    next_of1([], _V) ->
+        undefined;
+    next_of1([V,N|_T], V) ->
+        N;
+    next_of1([_|T], V) ->
+        next_of1(T, V).
+
+
 nthtail(In, N, Context) ->
     case erlydtl_runtime:to_list(In, Context) of
         L when is_list(L) ->
