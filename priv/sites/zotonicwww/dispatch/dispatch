@@ -6,6 +6,8 @@
     {team,      ["zotonic-team"],           resource_page,  [ { template, "zotonic_team.tpl"}, {id, zotonic_team} ]},
     {collection,["collection", id],         resource_page,  [ {template, "collection.tpl"} ]},
     {collection,["collection", id, slug],   resource_page,  [ {template, "collection.tpl"} ]},
+    {manual,    ["manual", id],             resource_page,  [ {template, "manual.tpl"} ]},
+    {manual,    ["manual", id, slug],       resource_page,  [ {template, "manual.tpl"} ]},
     {category,  ["category", id],           resource_page,  [ {template, "category.tpl"} ]},
     {category,  ["category", id, slug],     resource_page,  [ {template, "category.tpl"} ]},
     {documentation,  ["documentation", id],       resource_page,  [ {template, "documentation.tpl"} ]},
