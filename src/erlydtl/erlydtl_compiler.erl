@@ -593,7 +593,7 @@ filter_ast(Variable, Filter, Context, TreeWalker) ->
     case search_for_escape_filter(Variable, Filter, Context) of
         on ->
             {{erl_syntax:application(
-                    erl_syntax:atom(erlydtl_filters), 
+                    erl_syntax:atom(filter_force_escape), 
                     erl_syntax:atom(force_escape), 
                     [UnescapedAst, z_context_ast(Context)]), 
                 Info}, TreeWalker2};
@@ -609,7 +609,7 @@ filter_ast_noescape(Variable, Filter, Context, TreeWalker) ->
     {{FilterAst, merge_info(Info, Info2)}, TreeWalker3}.
 
 filter_ast1([{identifier, _, Name}], VariableAst, Context, TreeWalker) ->
-    FilterAst = erl_syntax:application(erl_syntax:atom(erlydtl_filters), erl_syntax:atom(Name), [VariableAst, z_context_ast(Context)]),
+    FilterAst = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Name)), erl_syntax:atom(Name), [VariableAst, z_context_ast(Context)]),
     {{FilterAst, #ast_info{}}, TreeWalker};
 filter_ast1([{identifier, _, "default"}, Arg], VariableAst, Context, TreeWalker) ->
     {{ArgAst, Info},TreeWalker1} = value_ast(Arg, false, Context, TreeWalker),
@@ -635,7 +635,7 @@ filter_ast1([{identifier, Pos, "default_if_undefined"}, Arg], VariableAst, Conte
     filter_ast1([{identifier, Pos, "default_if_none"}, Arg], VariableAst, Context, TreeWalker);
 filter_ast1([{identifier, _, Name}, Arg], VariableAst, Context, TreeWalker) ->
     {{ArgAst, Info},TreeWalker2} = value_ast(Arg, false, Context, TreeWalker),
-    FilterAst = erl_syntax:application(erl_syntax:atom(erlydtl_filters), erl_syntax:atom(Name), [VariableAst, ArgAst, z_context_ast(Context)]),
+    FilterAst = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Name)), erl_syntax:atom(Name), [VariableAst, ArgAst, z_context_ast(Context)]),
     {{FilterAst, Info}, TreeWalker2}.
     
  
@@ -713,7 +713,7 @@ resolve_indexvariable_ast(VarTuple, Context, TreeWalker) ->
 
 opttrans_variable_ast({{Ast, VarName, Info}, TreeWalker}, Context) ->
     Ast1 = erl_syntax:application(
-            erl_syntax:atom(erlydtl_filters), 
+            erl_syntax:atom(erlydtl_runtime), 
             erl_syntax:atom(opttrans),
 			[
 				Ast,
@@ -806,13 +806,13 @@ format(Ast, Context) ->
     auto_escape(stringify(Ast, Context), Context).
 
 stringify(Ast, Context) ->
-    erl_syntax:application(erl_syntax:atom(erlydtl_filters), erl_syntax:atom(stringify),
+    erl_syntax:application(erl_syntax:atom(filter_stringify), erl_syntax:atom(stringify),
         [Ast, z_context_ast(Context)]).
 
 auto_escape(Value, Context) ->
     case Context#dtl_context.auto_escape of
         on ->
-            erl_syntax:application(erl_syntax:atom(erlydtl_filters), erl_syntax:atom(force_escape),
+            erl_syntax:application(erl_syntax:atom(filter_force_escape), erl_syntax:atom(force_escape),
                 [Value, z_context_ast(Context)]);
         _ ->
             Value

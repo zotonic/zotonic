@@ -8,7 +8,7 @@
 	</div>
 
 	<div class="zp-33">
-		<p>zotonic.com &copy; 2009</p>
+		<p>zotonic.com &copy; 2009–2010</p>
 		{% include "_edit_button.tpl" %}
 	</div>
 </div>
