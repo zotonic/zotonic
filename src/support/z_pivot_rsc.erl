@@ -39,6 +39,7 @@
     
     pivot_resource/2,
     pg_lang/1,
+    get_pivot_data/2,
 
     define_custom_pivot/3,
     lookup_custom_pivot/4
@@ -253,12 +254,7 @@ delete_queue(Id, Serial, Context) ->
 %% @todo Also add the property tag/values
 %% @spec pivot(Id, Context) -> void()
 pivot_resource(Id, Context) ->
-    R = m_rsc:get(Id, Context),
-    {A,B} = lists:foldl(fun fetch_texts/2, {[],[]}, R),
-    {ObjIds, ObjTexts} = related(Id, Context),
-    {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
-    Split = [ (split_lang(Ts, Context)) || Ts <- [A, B, CatTexts, ObjTexts] ],
-    [TA,TB,TC,TD] = [ [ {Lng,list_to_binary(z_utils:combine(32, Ts))} || {Lng,Ts} <- Ps] || Ps <- Split ],
+    {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, Context),
 
     {SqlA, ArgsA} = to_tsv(TA, $A, []),
     {SqlB, ArgsB} = to_tsv(TB, $B, ArgsA),
@@ -271,6 +267,7 @@ pivot_resource(Id, Context) ->
     TsvCat = [ [" zpc",integer_to_list(CId)] || CId <- CatIds ],
     TsvIds = list_to_binary([TsvObj,TsvCat]),
 
+    R = m_rsc:get(Id, Context),
     {DateStart, DateEnd} = pivot_date(R),
     
     N = length(ArgsD),
@@ -363,6 +360,15 @@ get_pivot_title(Props) ->
         T -> T
     end.    
 
+%% get_pivot_data {objids, catids, [ta,tb,tc,td]}
+get_pivot_data(Id, Context) ->
+    R = m_rsc:get(Id, Context),
+    {A,B} = lists:foldl(fun fetch_texts/2, {[],[]}, R),
+    {ObjIds, ObjTexts} = related(Id, Context),
+    {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
+    Split = [ (split_lang(Ts, Context)) || Ts <- [A, B, CatTexts, ObjTexts] ],
+    {ObjIds, CatIds, [ [ {Lng,list_to_binary(z_utils:combine(32, Ts))} || {Lng,Ts} <- Ps] || Ps <- Split ]}.
+    
 
 %% @doc Split texts into different languages
 split_lang(Texts, Context) ->

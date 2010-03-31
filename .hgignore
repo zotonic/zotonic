@@ -36,3 +36,6 @@ deps/exmpp/src/exmpp_known_nss.erl
 deps/exmpp/stamp-h1
 deps/exmpp/testsuite/Makefile
 deps/exmpp/testsuite/etest
+
+modules/mod_search_solr/solr/*
+
