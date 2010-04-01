@@ -9,7 +9,7 @@
 
 -mod_title("Solr Search Queries").
 -mod_description("Use Solr for extended content searches in Zotonic.").
--mod_prio(1000).
+-mod_prio(900).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -45,18 +45,27 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
-    
-    {ok, Solr} = esolr:start_link(),
-    esolr:set_auto_commit({time, 3000}, Solr),
 
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(search_query, self(), Context),
 
-    %% Watch for changes to resources
-    z_notifier:observe(rsc_pivot_done, self(), Context),
-    z_notifier:observe(rsc_delete, self(), Context),
+    case m_config:get_value(?MODULE, solr, false, Context) of
+        false ->
+            z_session_manager:broadcast(#broadcast{type="error", message="Not configured yet, not starting.", title="Solr Index", stay=true}, z_acl:sudo(Context)),
+            ignore;
 
-    {ok, #state{context=z_context:new(Context),solr=Solr}}.
+        _SolrUrl ->
+            {ok, Solr} = esolr:start_link(),
+            esolr:set_auto_commit({time, 3000}, Solr),
+
+            %% Hook into z_search
+            z_notifier:observe(search_query, self(), Context),
+
+            %% Watch for changes to resources
+            z_notifier:observe(rsc_pivot_done, self(), Context),
+            z_notifier:observe(rsc_delete, self(), Context),
+
+            {ok, #state{context=z_context:new(Context),solr=Solr}}
+    end.
 
 
 %% @doc Trap unknown calls

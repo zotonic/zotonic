@@ -118,16 +118,12 @@
         <field name="publication_start" type="date" indexed="true" stored="true"/>
         <field name="publication_end" type="date" indexed="true" stored="true"/>
 
-        <!-- rsc category, the "is-a" trail: "cat/subcat/subsubcat" (for efficient wilcard matching) 
-             for a rsc in a/b/c, it will store "a", "a/b", "a/b/c", for nice facetting.
+        <!-- rsc category, for a rsc in a/b/c, it will store ids of all a, b, c for nice facetting.
              -->
         <field name="category" type="string" indexed="true" stored="true" multiValued="true" />
 
-
-        <!-- subjects / objects are stored as "cat/subcat/subsubcat/12321" -->
-        <!-- not (yet) needed -->
-        <!-- <field name="subjects" type="string" indexed="true" multiValued="true" stored="true" /> -->
-        <!-- <field name="objects" type="string" indexed="true" multiValued="true" stored="true" /> -->
+        <!-- primary rsc category -->
+        <field name="category_id" type="int" indexed="true" stored="true" />
 
 
         <!-- text fields -->
@@ -158,6 +154,18 @@
         <field name="state" type="string" indexed="true" stored="true"/>
         <field name="country" type="string" indexed="true" stored="true"/>
         <field name="geocode" type="string" indexed="true" stored="true"/>
+
+
+        <!-- edges -->
+
+        <!-- all subjects/objects -->
+        <field name="s" type="int" multiValued="true" stored="true" />
+        <field name="o" type="int" multiValued="true" stored="true" />
+
+        <!-- edges by predicate name, eg s_related -->
+        <dynamicField name="s_*" type="int" indexed="true" multiValued="true" stored="true" />
+        <dynamicField name="o_*" type="int" indexed="true" multiValued="true" stored="true" />
+
 
 
         <!-- extra fields can be added (by zotonic modules hooking into the solr module) -->
