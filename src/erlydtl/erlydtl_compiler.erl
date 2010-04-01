@@ -1018,7 +1018,7 @@ trans_ast(TransLiteral, _Context, TreeWalker) ->
 
 
 trans_ext_ast(String, Args, Context, TreeWalker) ->
-	Lit = unescape_string_literal(string:strip(String, both, 34), [], noslash),
+	Lit = unescape_string_literal(String, [], noslash),
 	{ArgsTrans, TreeWalker1} = interpreted_args(Args, Context, TreeWalker),
 	ArgsTransAst = [
 		erl_syntax:tuple([erl_syntax:atom(Lang), Ast]) || {Lang,Ast} <- ArgsTrans
@@ -1042,17 +1042,14 @@ trans_ext_ast(String, Args, Context, TreeWalker) ->
 now_ast(FormatString, Context, TreeWalker) ->
     % Note: we can't use unescape_string_literal here
     % because we want to allow escaping in the format string.
-    % We only want to remove the surrounding escapes,
-    % i.e. \"foo\" becomes "foo"
-    UnescapeOuter = string:strip(FormatString, both, 34),
     {{erl_syntax:application(
         erl_syntax:atom(erlydtl_dateformat),
         erl_syntax:atom(format),
-        [erl_syntax:string(UnescapeOuter), z_context_ast(Context)]),
+        [erl_syntax:string(FormatString), z_context_ast(Context)]),
         #ast_info{}}, TreeWalker}.
 
 unescape_string_literal(String) ->
-    unescape_string_literal(string:strip(String, both, 34), [], noslash).
+    unescape_string_literal(String, [], noslash).
 
 unescape_string_literal([], Acc, noslash) ->
     lists:reverse(Acc);
