@@ -14,7 +14,8 @@ put(Id, Context, Solr) ->
         undefined ->
             nop;
         Doc ->
-            Doc1 = lists:filter(fun({_,undefined})->false; (_)->true end, Doc),
+            Doc1 = lists:filter(fun({_,undefined})->false; ({_,[]})->false; (_)->true end, Doc),
+            ?DEBUG(Doc1),
             esolr:add([{doc, Doc1}], Solr)
     end.
 
@@ -44,12 +45,18 @@ convert(Id, Context) ->
                  [ z_convert:to_list(X) || {_, X} <- TC ], " ",
                  [ z_convert:to_list(X) || {_, X} <- TD ]]),
 
+
+    %% Module-based fields (starting with x_)
+    ModuleProps = z_notifier:foldl({solr_props, Id}, [], Context),
+
+    ?DEBUG(m_rsc:is_a(Id, Context)),
+
     %% The returned document.
     []
         ++
 
         %% Regular rsc fields
-        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path]]
+        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path, category_id]]
         ++
         [{F, Bool(F)} || F <- [is_authoritative, is_published, is_featured, is_protected]]
         ++
@@ -57,7 +64,7 @@ convert(Id, Context) ->
         ++
         
         %% rsc category
-        [{category, C} || C <- categories(m_rsc:is_a(Id, Context))]
+        [{category, z_convert:to_list(C)} || C <- m_rsc:is_a(Id, Context)]
         ++
         
         %% Text fields
@@ -71,18 +78,27 @@ convert(Id, Context) ->
         %% Some more fields
         [{F, StrVal(F)} || F <- [first_name, surname, gender, street,
                                 city, postcode, state, country, geocode]]
+        ++
+
+        %% Edges
+        [{o, z_convert:to_list(C)} || C <- m_edge:objects(Id, Context)]
+        ++
+        [{s, z_convert:to_list(C)} || C <- m_edge:subjects(Id, Context)]
+        ++
+        lists:flatten(
+          [[{list_to_atom("s_" ++ atom_to_list(Pred)), z_convert:to_list(Edg)}
+            || Edg <- m_edge:subjects(Id, Pred, Context)]
+           || Pred <- m_edge:subject_predicates(Id, Context)])
+        ++
+        lists:flatten(
+          [[{list_to_atom("o_" ++ atom_to_list(Pred)), z_convert:to_list(Edg)}
+           || Edg <- m_edge:objects(Id, Pred, Context)]
+          || Pred <- m_edge:object_predicates(Id, Context)])
+        ++
+        
+        %% Module-based solr_props
+        ModuleProps
         .
-
-
-%% @doc categories([foo,bar,baz]) -> ["foo", "foo/bar", "foo/bar/baz"]
-categories(IsA) ->
-    categories(lists:reverse(IsA), []).
-
-categories([], Acc) ->
-     Acc;
-categories(L=[_|Cats], Acc) ->
-    New = string:join([z_convert:to_list(X)||X<-lists:reverse(L)],"/"),
-    categories(Cats, [New|Acc]).
 
 
 %% @doc Get the first translation from a text for use in a string field.
