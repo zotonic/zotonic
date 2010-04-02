@@ -373,9 +373,9 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 load_ast(Names, Context, TreeWalkerAcc);
             ({'tag', {'identifier', _, Name}, Args, All}, TreeWalkerAcc) ->
                 tag_ast(Name, Args, All, Context, TreeWalkerAcc);
-            ({'call', {'identifier', _, Name}}, TreeWalkerAcc) ->
-            	call_ast(Name, Context, TreeWalkerAcc);
-            ({'call', {'identifier', _, Name}, With}, TreeWalkerAcc) ->
+            ({'call_args', {'identifier', _, Name}, Args}, TreeWalkerAcc) ->
+            	call_ast(Name, Args, Context, TreeWalkerAcc);
+            ({'call_with', {'identifier', _, Name}, With}, TreeWalkerAcc) ->
             	call_with_ast(Name, With, Context, TreeWalkerAcc);
             ({'cycle', Names}, TreeWalkerAcc) ->
                 cycle_ast(Names, Context, TreeWalkerAcc);
@@ -444,11 +444,11 @@ merge_info(Info1, Info2) ->
                 Info2#ast_info.pre_render_asts)}.
 
 
-with_dependencies([], Args) ->
-    Args;
-with_dependencies([H, T], Args) ->
-     with_dependencies(T, with_dependency(H, Args)).
-        
+%with_dependencies([], Args) ->
+%    Args;
+%with_dependencies([H, T], Args) ->
+%     with_dependencies(T, with_dependency(H, Args)).
+%        
 with_dependency(FilePath, {{Ast, Info}, TreeWalker}) ->
     {{Ast, Info#ast_info{dependencies = [{FilePath, filelib:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
 
@@ -1018,7 +1018,7 @@ trans_ast(TransLiteral, _Context, TreeWalker) ->
 
 
 trans_ext_ast(String, Args, Context, TreeWalker) ->
-	Lit = unescape_string_literal(string:strip(String, both, 34), [], noslash),
+	Lit = unescape_string_literal(String, [], noslash),
 	{ArgsTrans, TreeWalker1} = interpreted_args(Args, Context, TreeWalker),
 	ArgsTransAst = [
 		erl_syntax:tuple([erl_syntax:atom(Lang), Ast]) || {Lang,Ast} <- ArgsTrans
@@ -1042,17 +1042,14 @@ trans_ext_ast(String, Args, Context, TreeWalker) ->
 now_ast(FormatString, Context, TreeWalker) ->
     % Note: we can't use unescape_string_literal here
     % because we want to allow escaping in the format string.
-    % We only want to remove the surrounding escapes,
-    % i.e. \"foo\" becomes "foo"
-    UnescapeOuter = string:strip(FormatString, both, 34),
     {{erl_syntax:application(
         erl_syntax:atom(erlydtl_dateformat),
         erl_syntax:atom(format),
-        [erl_syntax:string(UnescapeOuter), z_context_ast(Context)]),
+        [erl_syntax:string(FormatString), z_context_ast(Context)]),
         #ast_info{}}, TreeWalker}.
 
 unescape_string_literal(String) ->
-    unescape_string_literal(string:strip(String, both, 34), [], noslash).
+    unescape_string_literal(String, [], noslash).
 
 unescape_string_literal([], Acc, noslash) ->
     lists:reverse(Acc);
@@ -1127,18 +1124,20 @@ tag_ast(Name, Args, All, Context, TreeWalker) ->
         parse_trail = [ Source | Context#dtl_context.parse_trail ]}, TreeWalker)).
 
 
-call_ast(Module, Context, TreeWalkerAcc) ->
-    call_ast(Module, erl_syntax:variable("Variables"), #ast_info{}, Context, TreeWalkerAcc).
+call_ast(Module, Args, Context, TreeWalker) ->
+    {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
+    call_ast(Module, ArgsAst, #ast_info{}, Context, TreeWalker1).
 
 call_with_ast(Module, Variable, Context, TreeWalker) ->
     {{VarAst, VarName, VarInfo}, TreeWalker1} = resolve_variable_ast(Variable, Context, TreeWalker),
     call_ast(Module, VarAst, merge_info(VarInfo, #ast_info{var_names=[VarName]}), Context, TreeWalker1).
         
-call_ast(Module, Variable, AstInfo, Context, TreeWalker) ->
+call_ast(Module, ArgAst, AstInfo, Context, TreeWalker) ->
      AppAst = erl_syntax:application(
 		erl_syntax:atom(Module),
 		erl_syntax:atom(render),
-		[   Variable,
+		[   ArgAst,
+		    erl_syntax:variable("Variables"),
 		    z_context_ast(Context)
 		]),
     RenderedAst = erl_syntax:variable("Rendered"),
@@ -1156,8 +1155,7 @@ call_ast(Module, Variable, AstInfo, Context, TreeWalker) ->
 		 none,
 		 [ErrStrAst]),
     CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),   
-    Module2 = list_to_atom(Module),
-    with_dependencies(Module2:dependencies(), {{CallAst, AstInfo}, TreeWalker}).
+    {{CallAst, AstInfo}, TreeWalker}.
 
 
 %% @author Marc Worrell

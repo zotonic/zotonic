@@ -335,8 +335,8 @@ Literal -> number_literal : '$1'.
 
 CustomTag -> open_tag OptionalAll identifier Args close_tag : {tag, '$3', '$4', '$2'}.
 
-CallTag -> open_tag call_keyword identifier close_tag : {call, '$3'}.
-CallWithTag -> open_tag call_keyword identifier with_keyword Value close_tag : {call, '$3', '$5'}.
+CallTag -> open_tag call_keyword identifier Args close_tag : {call_args, '$3', '$4'}.
+CallWithTag -> open_tag call_keyword identifier with_keyword Value close_tag : {call_with, '$3', '$5'}.
 
 ImageTag -> open_tag image_keyword Value Args close_tag : {image, '$3', '$4' }.
 ImageUrlTag -> open_tag image_url_keyword Value Args close_tag : {image_url, '$3', '$4' }.
