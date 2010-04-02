@@ -128,8 +128,8 @@
 
         <!-- text fields -->
 
-        <field name="title" type="text" indexed="true" stored="true" omitNorms="true" />
-        <field name="summary" type="text" indexed="true" stored="true" />
+        <field name="title" type="text" indexed="true" stored="true" omitNorms="true" termVectors="true" />
+        <field name="summary" type="text" indexed="true" stored="true" termVectors="true" />
         <field name="body" type="text" indexed="true" />
 
         <!-- all text, collected -->
@@ -160,7 +160,7 @@
 
         <!-- all subjects/objects -->
         <field name="s" type="int" multiValued="true" stored="true" />
-        <field name="o" type="int" multiValued="true" stored="true" />
+        <field name="o" type="int" multiValued="true" stored="true" termVectors="true" /><!-- for "more like this"; will match on similar objects. -->
 
         <!-- edges by predicate name, eg s_related -->
         <dynamicField name="s_*" type="int" indexed="true" multiValued="true" stored="true" />

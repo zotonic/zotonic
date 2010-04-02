@@ -71,6 +71,10 @@ find_value(Key, #rsc_list{list=[H|_T]}, Context) ->
 find_value(_Key, #rsc_list{list=[]}, _Context) ->
 	undefined;
 
+%% JSON-decoded proplist structure
+find_value(Key, {obj, Props}, _Context) ->
+    proplists:get_value(z_convert:to_list(Key), Props);
+
 % Index of tuple with an integer like "a[2]"
 find_value(Key, T, _Context) when is_integer(Key) andalso is_tuple(T) ->
     case element(1,T) of
