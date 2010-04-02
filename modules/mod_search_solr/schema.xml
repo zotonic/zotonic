@@ -128,7 +128,7 @@
 
         <!-- text fields -->
 
-        <field name="title" type="text" indexed="true" stored="true" omitNorms="true" termVectors="true" />
+        <field name="title" type="text" indexed="true" stored="true" omitNorms="true"  />
         <field name="summary" type="text" indexed="true" stored="true" termVectors="true" />
         <field name="body" type="text" indexed="true" />
 
@@ -167,6 +167,10 @@
         <dynamicField name="o_*" type="int" indexed="true" multiValued="true" stored="true" />
 
 
+        <!-- special field for matching on title -->
+        <field name="match_title" type="text" indexed="true" termVectors="true" />
+
+
 
         <!-- extra fields can be added (by zotonic modules hooking into the solr module) -->
         <dynamicField name="x_*" type="text" stored="true" multiValued="true" />
@@ -188,6 +192,7 @@
          is added to the index.  It's used either to index the same field differently,
          or to add multiple fields to the same field for easier/faster searching.  -->
 
+    <copyField source="title" dest="match_title"/>
     <!--
     <copyField source="title" dest="text"/>
     <copyField source="summary" dest="text"/>

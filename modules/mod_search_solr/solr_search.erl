@@ -173,6 +173,18 @@ map_search_field({text, Text}, _Context) ->
     {["", z_convert:to_list(Text)],
      []};
 
+%% sort=..
+%% Sort the result.
+map_search_field({sort, Sort}, _Context) ->
+    [FirstChar|F1] = z_convert:to_list(Sort),
+    {Field, Order} = case FirstChar of
+                         $- -> {F1, desc};
+                         $+ -> {F1, asc};
+                         _ -> {z_convert:to_list(Sort), asc}
+                     end,
+    {[],
+     [{sort, [{Field, Order}]}]
+    };
 
 %%
 %% Solr-specific search options start here.
@@ -201,7 +213,7 @@ map_search_field({facet, Field}, _Context) ->
 %% Give more documents which are similar to <Id>  (solr only)
 map_search_field({morelikethis_id, [Id, Amount]}, _Context) ->
     {["id:", z_convert:to_list(Id), " -category:meta"],
-     [{morelikethis, "o,title,summary,category", Amount}]}.
+     [{morelikethis, "o,match_title,summary,category", Amount}]}.
 
 
 

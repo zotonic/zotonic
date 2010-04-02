@@ -4,7 +4,7 @@
 %% @doc Store Zotonic rsc documents in Solr.
 -module(solr_store).
 
--export([put/3]).
+-export([put/3, delete/3]).
 
 -include("zotonic.hrl").
 
@@ -18,6 +18,12 @@ put(Id, Context, Solr) ->
             ?DEBUG(Doc1),
             esolr:add([{doc, Doc1}], Solr)
     end.
+
+
+delete(Id, _Context, Solr) ->
+    ok = esolr:delete({id, z_convert:to_list(Id)}, Solr).
+
+
 
 %% See schema.xml to see which fields need to be put into Solr.
 convert(Id, Context) ->
@@ -38,7 +44,7 @@ convert(Id, Context) ->
 
     %% Gather all text in the rsc, using the pivot routines.
     {_ObjIds, _CatIds, [TA,TB,TC,TD]} = z_pivot_rsc:get_pivot_data(Id, Context),
-    AllText = lists:flatten( 
+    AllText = lists:flatten(
                 [
                  [ z_convert:to_list(X) || {_, X} <- TA ], " ",
                  [ z_convert:to_list(X) || {_, X} <- TB ], " ",
@@ -62,11 +68,11 @@ convert(Id, Context) ->
         ++
         [{F, Date(F)} || F <- [publication_start, publication_end, date_start, date_end]]
         ++
-        
+
         %% rsc category
         [{category, z_convert:to_list(C)} || C <- m_rsc:is_a(Id, Context)]
         ++
-        
+
         %% Text fields
         [{F, StrVal(F)} || F <- [title, summary, body]]
         ++
@@ -95,7 +101,7 @@ convert(Id, Context) ->
            || Edg <- m_edge:objects(Id, Pred, Context)]
           || Pred <- m_edge:object_predicates(Id, Context)])
         ++
-        
+
         %% Module-based solr_props
         ModuleProps
         .

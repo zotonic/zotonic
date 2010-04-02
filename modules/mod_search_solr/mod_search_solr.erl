@@ -91,6 +91,11 @@ handle_cast({{rsc_pivot_done, Id, _IsA}, _Ctx}, State=#state{context=Context,sol
     ok = solr_store:put(Id, Context, Solr),
     {noreply, State};
 
+handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,solr=Solr}) ->
+    ?DEBUG("Deleting!"),?DEBUG(Id),
+    ok = solr_store:delete(Id, Context, Solr),
+    {noreply, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
