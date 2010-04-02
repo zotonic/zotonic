@@ -51,11 +51,10 @@ convert(Id, Context) ->
                  [ z_convert:to_list(X) || {_, X} <- TC ], " ",
                  [ z_convert:to_list(X) || {_, X} <- TD ]]),
 
+    IsA = m_rsc:is_a(Id, Context),
 
     %% Module-based fields (starting with x_)
-    ModuleProps = z_notifier:foldl({solr_props, Id}, [], Context),
-
-    ?DEBUG(m_rsc:is_a(Id, Context)),
+    ModuleProps = lists:flatten(z_notifier:foldl({solr_props, Id, IsA}, [], Context)),
 
     %% The returned document.
     []
@@ -70,7 +69,7 @@ convert(Id, Context) ->
         ++
 
         %% rsc category
-        [{category, z_convert:to_list(C)} || C <- m_rsc:is_a(Id, Context)]
+        [{category, z_convert:to_list(C)} || C <- IsA]
         ++
 
         %% Text fields
