@@ -17,7 +17,6 @@
 
 %% interface functions
 -export([
-         search/4
 ]).
 
 -include("zotonic.hrl").
@@ -68,20 +67,31 @@ init(Args) ->
     end.
 
 
-%% @doc Trap unknown calls
-handle_call({{search_query, Search, Limit}, Context}, _From, State=#state{solr=Solr}) ->
-    Reply = ?MODULE:search(Search, Limit, Context, Solr),
+%% @doc A generic Solr query
+handle_call({{search_query, {solr, Query}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
+    Reply = solr_search:search(Query, Limit, Solr, Context),
     {reply, Reply, State};
+
+%% A "match" query (for sidebars and such)
+handle_call({{search_query, {match, [{id,Id}]}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
+    Reply = solr_search:match(Id, Limit, Solr, Context),
+    {reply, Reply, State};
+
+%% @doc Pass other search queries through
+handle_call({{search_query, _, _}, _Context}, _From, State) ->
+    {reply, undefined, State};
+
+%% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
-    ?DEBUG(111),
     {stop, {unknown_call, Message}, State}.
 
 
-%% @doc Trap unknown casts
+%% @doc Pivot-hook for putting document in solr.
 handle_cast({{rsc_pivot_done, Id, _IsA}, _Ctx}, State=#state{context=Context,solr=Solr}) ->
-    ?DEBUG("putting"),
     ok = solr_store:put(Id, Context, Solr),
     {noreply, State};
+
+%% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
@@ -112,14 +122,3 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
-
-%% Retrieve the previous id (on publication date) 
-search({solr, Query}, _OffsetLimit, _Context, Solr) ->
-    ?DEBUG("SOLR!"),
-    {ok, RespAttrs, Docs, _AdditionalInfo} = esolr:search("search", Query, Solr),
-    ?DEBUG(RespAttrs),
-    ?DEBUG(Docs),
-    undefined;
-
-search(_, _, _, _) ->
-    undefined.

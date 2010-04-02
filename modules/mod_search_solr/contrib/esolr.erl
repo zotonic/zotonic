@@ -437,8 +437,8 @@ encode_search_option({fields,Fields}) ->
 encode_search_option({start,Start}) ->
 	["start=",integer_to_list(Start)];
 
-encode_search_option({count,Count}) ->	
-	["count=",integer_to_list(Count)];
+encode_search_option({rows,Count}) ->	
+	["rows=",integer_to_list(Count)];
 	
 encode_search_option({sort,SortFields}) ->		
 	S = [ [atom_to_list(Name), "+", atom_to_list(Order)] || {Name,Order} <- SortFields],
@@ -446,7 +446,14 @@ encode_search_option({sort,SortFields}) ->
 
 
 encode_search_option({highlight,Highlight}) ->
-	["hl=on&hl.fl=",url_encode(Highlight)].
+	["hl=on&hl.fl=",url_encode(Highlight)];
+
+encode_search_option({facet,Field}) ->
+	["facet=on&facet.mincount=1&facet.field=",url_encode(Field)];
+
+encode_search_option({morelikethis,Fields,Count}) ->
+	["mlt=on&mlt.count=",integer_to_list(Count),"&mlt.fl=",Fields,
+     "&mlt.mindf=1&mlt.mintf=1"].
 
 
 encode_delete({id,Id})->
