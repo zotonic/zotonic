@@ -5,7 +5,7 @@
 {% block tinymce %}
 	<script type="text/javascript" src="/lib/js/modules/tinymce/tiny_mce.js"></script>
 	<script type="text/javascript">
-		tinyMCE.init(tinyInit);
+		$(document).ready(function(){tinyMCE.init(tinyInit);});
 	</script>
 {% endblock %}
 
