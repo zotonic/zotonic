@@ -20,15 +20,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(gen_scomp).
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id       = proplists:get_value(id, Params, <<>>),
     TargetId = proplists:get_value(target,Params,Id),
     Context1 = z_render:validator(Id, TargetId, z_validation:rename_args(Params), Context),

@@ -23,17 +23,15 @@
 -module(scomp_base_draggable).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
 %% -record(draggable, {?ELEMENT_BASE(element_draggable), tag, body=[], group, handle, clone=true, revert=true}).
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id      = proplists:get_value(id, Params),
     Tag     = proplists:get_value(tag, Params),
     Clone   = proplists:get_value(clone, Params, false),

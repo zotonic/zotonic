@@ -17,20 +17,14 @@
 %%
 %% @doc Scomp behaviour definition.  A scomp is a screen component that can optionally be cached.
 %%      
-%%      init(Args) -> {ok, State} | {error, Error}
-%%      render(Params, Vars, Context, State) -> {ok, NewContext} | {ok, io_list()} | {error, Error}
-%%      terminate(State, Context) -> ok
+%%      render(Params, Vars, Context) -> {ok, NewContext} | {ok, io_list()} | {error, Error}
 %%      
-%%      	State = term()
-%%      	Params = proplist()
-%%      	Context = context()
-%%      
-%%      varies(Params, Context) -> {EssentialParams, MaxAge, Varies} | undefined
+%%      vary(Params, Context) -> {EssentialParams, MaxAge, Vary} | nocache | default
 %%      
 %%      	Params = proplist()
-%%          EssentialParams = proplist()
+%%          EssentialParams = proplist()  (proplist with params that make differences in the cache key)
 %%      	MaxAge = integer()
-%%          Varies = TermList  (used as dependencies for the depcache)
+%%          Vary = TermList  (used as dependencies for the depcache)
 
 
 -module(gen_scomp).
@@ -39,10 +33,8 @@
 
 behaviour_info(callbacks) ->
     [
-        {init,1},
-        {render, 4},
-        {terminate, 2},
-        {varies, 2}
+        {render, 3},
+        {vary, 2}
      ];
 behaviour_info(_Other) ->
     undefined.

@@ -23,13 +23,11 @@
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> default.
 
-render(Params, Vars, Context, State) ->
-    scomp_base_chart_pie:render([{threed,true}|Params], Vars, Context, State).
+render(Params, Vars, Context) ->
+    scomp_base_chart_pie:render([{threed,true}|Params], Vars, Context).

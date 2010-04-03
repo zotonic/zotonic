@@ -19,15 +19,13 @@
 -module(scomp_admin_dialog_link_add).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id        = z_ids:optid(proplists:get_value(id, Params)),
     SubjectId = z_convert:to_integer(proplists:get_value(subject_id, Params)), 
     Predicate = proplists:get_value(predicate, Params), 
