@@ -236,6 +236,7 @@ map_info(_X) ->
     {undefined, undefined}.
 
 
+
 %% Helper functions
 filter_empty(Q) ->
     lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
@@ -250,8 +251,8 @@ empty_term(_) ->
 
 %% @spec list_to_proplist([key, val, key2, val2]) -> [{key, val}, {key2, val2}].
 list_to_proplist(L) ->
-    list_to_proplist(L, []).
+    {obj, list_to_proplist(L, [])}.
 list_to_proplist([], Acc) ->
     lists:reverse(Acc);
 list_to_proplist([K,V|Rest], Acc) ->
-    list_to_proplist(Rest, [{K,V}|Acc]).
+    list_to_proplist(Rest, [{z_convert:to_list(K),V}|Acc]).
