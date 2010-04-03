@@ -14,25 +14,25 @@ $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
 
 mochiweb:
-	cd deps/mochiweb && make
+	cd deps/mochiweb && $(MAKE)
 
 webmachine:
-	cd deps/webmachine && make
+	cd deps/webmachine && $(MAKE)
 
 erlang-oauth:
-	cd deps/erlang-oauth && make
+	cd deps/erlang-oauth && $(MAKE)
 
 exmpp:
-	cd deps/exmpp && (test -f Makefile || ./configure --disable-documentation) &&  make
+	cd deps/exmpp && (test -f Makefile || ./configure --disable-documentation) && $(MAKE)
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
 
 clean: 
 	@echo "removing:"
-	(cd deps/mochiweb; make clean)
-	(cd deps/webmachine; make clean)
-	(cd deps/erlang-oauth; make clean)
+	(cd deps/mochiweb; $(MAKE) clean)
+	(cd deps/webmachine; $(MAKE) clean)
+	(cd deps/erlang-oauth; $(MAKE) clean)
 	@rm -fv ebin/*.beam ebin/*.app
 	@rm -fv erl_crash.dump $(PARSER).erl
 	@rm -fv priv/log/*
