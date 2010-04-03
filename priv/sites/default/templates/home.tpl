@@ -22,15 +22,7 @@
 
 		{% for id in result %}
 			
-			{% if forloop.first %}
-
-				{% include "_article_summary.tpl" id=id big=1 %}
-
-			{% else %}
-				
-				{% include "_article_summary.tpl" id=id %}
-			
-			{% endif %}
+			{% include "_article_summary.tpl" id=id big=forloop.first %}
 			
 		{% endfor %}
 		

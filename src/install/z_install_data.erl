@@ -83,6 +83,9 @@ install_modules(Host, C) ->
         "mod_admin_person",
         "mod_admin_predicate",
 
+        %% Enable comments
+        "mod_comment",
+
         % The site-specific site
         atom_to_list(Host)
     ],
