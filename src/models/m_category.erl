@@ -50,6 +50,7 @@
     move_before/3,
     update_sequence/2,
     all_flat/1,
+    all_flat/2,
     all_flat_meta/1,
     ranges/2,
     tree/1,
@@ -95,6 +96,8 @@ m_find_value(path, #m{value={cat, Id}}, Context) ->
     get_path(Id, Context);
 m_find_value(image, #m{value={cat, Id}}, Context) ->
     image(Id, Context);
+m_find_value(all_flat, #m{value={cat, Id}}, Context) ->
+    all_flat(Id, Context);
 m_find_value(Key, #m{value={cat, Id}}, Context) ->
     proplists:get_value(Key, get(Id, Context));
 m_find_value(_Key, _Value, _Context) ->
@@ -498,6 +501,15 @@ all_flat1(Context, ShowMeta) ->
     is_not_meta({_Id, _Lvl, Name, _Props}) ->
         Name /= <<"meta">> andalso Name /= <<"predicate">> andalso Name /= <<"category">> andalso Name /= <<"group">>.
     
+
+all_flat(CatId, Context) ->
+    F = fun() ->
+                {L,R} = boundaries(CatId, Context),
+                z_db:q("select c.id, c.lvl, r.name, c.props from category c join rsc r on r.id = c.id where $1 <= c.nr and c.nr <= $2 order by c.nr", [L, R], Context)
+        end,
+    All = z_depcache:memo(F, {category_flat, CatId}, ?WEEK, [category], Context),
+    [ {Id, Lvl, string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Lvl-1), flat_title(Name, Props)} || {Id, Lvl, Name, Props} <- All ].
+
 
 %% @doc Return the tree of all categories
 %% @spec tree(Context) -> Tree
