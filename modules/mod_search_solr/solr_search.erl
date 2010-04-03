@@ -96,13 +96,13 @@ map_search_field({cat_exclude, Cat}, _Context) ->
 map_search_field({hasobject, Id}, _Context) when is_integer(Id) ->
     map_search_field({hasobject, [Id]}, _Context);
 map_search_field({hasobject, [Id]}, _Context) ->
-    {["o:", z_convert:to_list(Id)],
+    {["+o:", z_convert:to_list(Id)],
      []};
 
 %% hasobject=[id,predicate]
 %% Give all things which have an outgoing edge to Id with the given predicate
 map_search_field({hasobject, [Id, Predicate]}, _Context) ->
-    {["o_", z_convert:to_list(Predicate), ":", z_convert:to_list(Id)],
+    {["+o_", z_convert:to_list(Predicate), ":", z_convert:to_list(Id)],
      []};
 map_search_field({hasobject, L}, _Context) when is_list(L) ->
     map_search_field({hasobject, [z_convert:to_integer(L)]}, _Context);
@@ -112,13 +112,13 @@ map_search_field({hasobject, L}, _Context) when is_list(L) ->
 map_search_field({hassubject, Id}, _Context) when is_integer(Id) ->
     map_search_field({hassubject, [Id]}, _Context);
 map_search_field({hassubject, [Id]}, _Context) ->
-    {["s:", z_convert:to_list(Id)],
+    {["+s:", z_convert:to_list(Id)],
      []};
 
 %% hassubject=[id,predicate,[alias]]
 %% Give all things which have an outgoing edge to Id with the given predicate
 map_search_field({hassubject, [Id, Predicate]}, _Context) ->
-    {["s_", z_convert:to_list(Predicate), ":", z_convert:to_list(Id)],
+    {["+s_", z_convert:to_list(Predicate), ":", z_convert:to_list(Id)],
      []};
 map_search_field({hassubject, L}, _Context) when is_list(L) ->
     map_search_field({hassubject, [z_convert:to_integer(L)]}, _Context);
@@ -126,24 +126,24 @@ map_search_field({hassubject, L}, _Context) when is_list(L) ->
 %% hasobjectpredicate=predicate
 %% Give all things which have any outgoing edge with given predicate
 map_search_field({hasobjectpredicate, Predicate}, _Context) ->
-    {["o_", z_convert:to_list(Predicate), ":[* TO *]"], []};
+    {["+o_", z_convert:to_list(Predicate), ":[* TO *]"], []};
 
 %% hassubjectpredicate=predicate
 %% Give all things which have any incoming edge with given predicate
 map_search_field({hassubjectpredicate, Predicate}, _Context) ->
-    {["s_", z_convert:to_list(Predicate), ":[* TO *]"], []};
+    {["+s_", z_convert:to_list(Predicate), ":[* TO *]"], []};
 
 %% is_featured or is_featured={false,true}
 %% Filter on whether an item is featured or not.
 map_search_field({is_featured, Bool}, _Context) ->
-    {["is_featured:", z_convert:to_bool(Bool)],
+    {["+is_featured:", z_convert:to_bool(Bool)],
      []};
 
 %% upcoming
 %% Filter on items whose end date lies in the future
 map_search_field({upcoming, Boolean}, _Context) ->
     case z_convert:to_bool(Boolean) of
-        true -> {["date_start:[",
+        true -> {["+date_start:[",
                   z_convert:to_isotime(erlang:localtime()), " TO *]"],
                  []};
         false -> {[], []}
@@ -152,7 +152,7 @@ map_search_field({upcoming, Boolean}, _Context) ->
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not
 map_search_field({authoritative, Bool}, _Context) ->
-    {["is_authoritative:", z_convert:to_bool(Bool)],
+    {["+is_authoritative:", z_convert:to_bool(Bool)],
      []};
 
 %% query_id=<rsc id>
@@ -191,8 +191,11 @@ map_search_field({sort, Sort}, _Context) ->
 %%
 
 %% solrfield=field:value
+map_search_field({solr_field, [_, Value]}, _Context)
+  when Value =:= undefined orelse Value =:= [] ->
+    {[], []};
 map_search_field({solr_field, [Field, Value]}, _Context) ->
-    {["", z_convert:to_list(Field), ":", z_convert:to_list(Value)],
+    {["+", z_convert:to_list(Field), ":", z_convert:to_list(Value)],
      []};
 
 %% highlight=<field>
