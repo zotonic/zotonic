@@ -58,9 +58,6 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
                        Context
                end,
 
-    ScrollJS = ["$('html,body').animate({scrollTop: $(\"#", TriggerId, "\").offset().top}, 300);"],
-    z_context:add_script_page(ScrollJS, Context1),
-
     lists:foldr(fun (Id, Ctx) ->
                         Html = z_template:render(Template, [{id, Id}], Ctx),
                         z_render:appear_bottom(TargetId, Html, Ctx)
