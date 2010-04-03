@@ -29,7 +29,8 @@
 	update_dispatchinfo/0,
 	get_sites/0,
 	get_site_contexts/0,
-	get_site_config/1
+	get_site_config/1,
+    get_fallback_site/0
 ]).
 
 %% supervisor callbacks
@@ -107,10 +108,6 @@ init([]) ->
                     {z_site_sup, start_link, [SiteProps]},
                     permanent, 5000, worker, dynamic
                 },
-                case z_sites_dispatcher:get_fallback_site() of
-                    undefined -> z_sites_dispatcher:set_fallback_site(Name);
-                    _ -> nop
-                end,
                 sites_to_spec(Rest, [Spec|Acc]);
             false ->
                 sites_to_spec(Rest, Acc)
@@ -140,3 +137,18 @@ get_site_config(Site) ->
     ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
     parse_config(ConfigFile).
 
+get_fallback_site() ->
+    Sites = scan_sites(),
+    get_fallback_site(Sites).
+
+get_fallback_site([]) ->
+    undefined;
+get_fallback_site([SiteProps|Rest]) ->
+    case proplists:get_value(enabled, SiteProps, false) of
+        true ->
+            {host, Name} = proplists:lookup(host, SiteProps),
+            Name;
+        false ->
+            get_fallback_site(Rest)
+    end.
+    
