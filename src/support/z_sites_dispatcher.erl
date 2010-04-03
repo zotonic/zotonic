@@ -35,7 +35,6 @@
 -export([
 	dispatch/3,
 	set_dispatch_rules/1,
-	set_fallback_site/1,
 	get_fallback_site/0
 ]).
 
@@ -83,11 +82,7 @@ dispatch(Host, Path, ReqData) ->
 set_dispatch_rules(DispatchRules) ->
 	gen_server:cast(?MODULE, {set_dispatch_rules, DispatchRules}).
 
-%% @doc Store the fallback site.
-set_fallback_site(Site) ->
-	gen_server:cast(?MODULE, {set_fallback_site, Site}).
-
-%% @doc Store the fallback site.
+%% @doc Retrieve the fallback site.
 get_fallback_site() ->
 	gen_server:call(?MODULE, {get_fallback_site}).
 
@@ -103,7 +98,7 @@ get_fallback_site() ->
 %% @doc Initiates the server.
 init(_Args) ->
     application:set_env(webmachine, dispatcher, ?MODULE),
-    {ok, #state{rules=[]}}.
+    {ok, #state{rules=[], fallback_site=z_sites_sup:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -161,10 +156,6 @@ handle_call(Message, _From, State) ->
 %% @doc Load a new set of dispatch rules.
 handle_cast({set_dispatch_rules, Rules}, State) ->
     {noreply, State#state{rules=Rules}};
-
-%% @doc Set the fallback site
-handle_cast({set_fallback_site, Site}, State) ->
-    {noreply, State#state{fallback_site=Site}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -241,6 +232,8 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, ReqData) ->
 split_host(Host) ->
     case Host of
         undefined -> 
+            {"", "80"};
+        [] -> 
             {"", "80"};
         _ -> 
             % Split the optional port number from the host name
