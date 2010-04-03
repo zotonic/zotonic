@@ -107,7 +107,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 datamodel() ->
-    Now = {{2009,12,15},{23,27,9}},
+    Now = {{2010,04,03},{9,12,0}},
     [
      {resources,
       [
@@ -179,6 +179,11 @@ datamodel() ->
         [{title, <<"A bunch of computer books">>},
          {summary, <<"Taken by Sibi from Flickr, licensed Attribution-Noncommercial-No Derivative Works 2.0.">>}]
        },
+       {media_welcome,
+        filename:join([z_utils:lib_dir(priv), "sites", ?MODULE, "demodata", "welcome.jpg"]),
+        [{title, <<"Rocky sunrise">>},
+         {summary, <<"Taken by Grant MacDonald from Flickr, CC licensed Attribution-Noncommercial 2.0.">>}]
+       },
        {media_video,
         {<<"vimeo">>, <<"<object width=\"400\" height=\"225\"><param name=\"allowfullscreen\" value=\"true\" /><param name=\"allowscriptaccess\" value=\"always\" /><param name=\"movie\" value=\"http://vimeo.com/moogaloop.swf?clip_id=7630916&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=&amp;fullscreen=1\" /><embed src=\"http://vimeo.com/moogaloop.swf?clip_id=7630916&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=&amp;fullscreen=1\" type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" allowscriptaccess=\"always\" width=\"400\" height=\"225\"></embed></object>">>},
         [{title, <<"Zotonic introduction video">>}]
@@ -201,8 +206,9 @@ datamodel() ->
        {blog_article_welcome, subject, kw_support},
        {blog_article_welcome, subject, kw_announcement},
 
+       {blog_article_welcome, depiction, media_welcome},
        {blog_article_learnmore, depiction, media_learning},
-       {blog_article_demo, depiction, media_learning}
+       {blog_article_demo, depiction, media_welcome}
 
       ]
      }
