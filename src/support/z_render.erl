@@ -44,6 +44,7 @@
 	update/3,
 	insert_top/3,
 	insert_bottom/3,
+	appear_bottom/3,
 	set_value/3,
 	
 	dialog/4,
@@ -215,6 +216,13 @@ insert_bottom(_TargetId, undefined, Context) ->
     Context;
 insert_bottom(TargetId, Html, Context) -> 
     Script = "$('#~s').append(\"~s\");",
+    add_update(TargetId, Html, Script, Context).
+
+%% @doc Append a html fragment at the bottom of the contents of an element, fading it in.
+appear_bottom(_TargetId, undefined, Context) -> 
+    Context;
+appear_bottom(TargetId, Html, Context) -> 
+    Script = "$('#~s').append($(\"~s\").fadeIn());",
     add_update(TargetId, Html, Script, Context).
 
 %% @doc Set the value of an input element.
