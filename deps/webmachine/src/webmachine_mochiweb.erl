@@ -18,7 +18,7 @@
 -module(webmachine_mochiweb).
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
--export([start/1, stop/0, loop/1]).
+-export([start/1, stop/0, stop/1, loop/1]).
 
 -include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
@@ -42,12 +42,17 @@ start(Options) ->
         _ ->
             ignore
     end,
+    {Name, Options5} = get_option(name, Options4, ?MODULE),
     application:set_env(webmachine, dispatch_list, DispatchList),
     application:set_env(webmachine, error_handler, ErrorHandler),
-    mochiweb_http:start([{name, ?MODULE}, {loop, fun loop/1} | Options4]).
+    mochiweb_http:start([{name, Name}, {loop, fun loop/1} | Options5]).
 
 stop() ->
-    mochiweb_http:stop(?MODULE).
+    stop(?MODULE).
+
+stop(Name) ->
+    mochiweb_http:stop(Name).
+    
 
 loop(MochiReq) ->
     %?WM_DBG(MochiReq),
@@ -116,8 +121,11 @@ loop(MochiReq) ->
     end.
 
 get_option(Option, Options) ->
-    {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
+    get_option(Option, Options, undefined).
 
+get_option(Option, Options, Default) ->
+    {proplists:get_value(Option, Options, Default), proplists:delete(Option, Options)}.
+    
 host_headers(ReqData) ->
     [ V || V <- [wrq:get_req_header_lc(H, ReqData)
                              || H <- ["x-forwarded-host",
