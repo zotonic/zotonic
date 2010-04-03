@@ -1,2 +1,4 @@
 [
+	{survey, ["survey", id],       resource_page, [ {template, "survey.tpl"}  ]},
+	{survey, ["survey", id, slug], resource_page, [ {template, "survey.tpl"} ]}
 ].
