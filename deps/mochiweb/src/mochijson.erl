@@ -8,7 +8,6 @@
 -export([decoder/1, decode/1]).
 -export([binary_encoder/1, binary_encode/1]).
 -export([binary_decoder/1, binary_decode/1]).
--export([test/0]).
 
 % This is a macro to placate syntax highlighters..
 -define(Q, $\").
@@ -90,10 +89,6 @@ binary_encode(Any) ->
 %%      binaries for strings.
 binary_decode(S) ->
     mochijson2:decode(S).
-
-test() ->
-    test_all(),
-    mochijson2:test().
 
 %% Internal API
 
@@ -186,7 +181,8 @@ json_encode_string_utf8_1([C | Cs]) when C >= 0, C =< 16#7f ->
            end,
     [NewC | json_encode_string_utf8_1(Cs)];
 json_encode_string_utf8_1(All=[C | _]) when C >= 16#80, C =< 16#10FFFF ->
-    json_encode_string_unicode(xmerl_ucs:from_utf8(All));
+    [?Q | Rest] = json_encode_string_unicode(xmerl_ucs:from_utf8(All)),
+    Rest;
 json_encode_string_utf8_1([]) ->
     "\"".
 
@@ -406,6 +402,13 @@ tokenize(L=[C | _], S) when C >= $0, C =< $9; C == $- ->
             {{const, list_to_float(Float)}, Rest, S1}
     end.
 
+
+%%
+%% Tests
+%%
+-include_lib("eunit/include/eunit.hrl").
+-ifdef(TEST).
+
 %% testing constructs borrowed from the Yaws JSON implementation.
 
 %% Create an object from a list of Key/Value pairs.
@@ -459,15 +462,16 @@ equiv_object(Props1, Props2) ->
 equiv_list([], []) ->
     true;
 equiv_list([V1 | L1], [V2 | L2]) ->
-    case equiv(V1, V2) of
-        true ->
-            equiv_list(L1, L2);
-        false ->
-            false
-    end.
+    equiv(V1, V2) andalso equiv_list(L1, L2).
 
-test_all() ->
+e2j_vec_test() ->
     test_one(e2j_test_vec(utf8), 1).
+
+issue33_test() ->
+    %% http://code.google.com/p/mochiweb/issues/detail?id=33
+    Js = {struct, [{"key", [194, 163]}]},
+    Encoder = encoder([{input_encoding, utf8}]),
+    "{\"key\":\"\\u00a3\"}" = lists:flatten(Encoder(Js)).
 
 test_one([], _N) ->
     %% io:format("~p tests passed~n", [N-1]),
@@ -478,10 +482,6 @@ test_one([{E, J} | Rest], N) ->
     true = equiv(E, decode(encode(E))),
     test_one(Rest, 1+N).
 
-e2j_test_vec(unicode) -> 
-    [
-     {"foo" ++ [500] ++ "bar", [$", $f, $o, $o, 500, $b, $a, $r, $"]}
-    ];
 e2j_test_vec(utf8) ->
     [
     {1, "1"},
@@ -527,3 +527,5 @@ e2j_test_vec(utf8) ->
     {{array, [-123, "foo", obj_from_list([{"bar", {array, []}}]), null]},
      "[-123,\"foo\",{\"bar\":[]},null]"}
     ].
+
+-endif.
