@@ -38,5 +38,5 @@ clean:
 	@rm -fv priv/log/*
 
 ebin/$(APP).app:
-	@cp -v src/$(APP).app $@
+	cp src/$(APP).app $@
 

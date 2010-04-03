@@ -19,4 +19,4 @@ clean:
 	@rm -fv ebin/*.beam ebin/*.app
 
 ebin/$(APP).app: src/$(APP).app
-	@cp -v src/$(APP).app $@
+	cp src/$(APP).app $@
