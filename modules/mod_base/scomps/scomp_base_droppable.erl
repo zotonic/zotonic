@@ -23,17 +23,15 @@
 -module(scomp_base_droppable).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4, event/2]).
+-export([vary/2, render/3, event/2]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
 %% -record(droppable, {?ELEMENT_BASE(element_droppable), tag, body=[], accept_groups=all, active_class=active, hover_class=hover}).
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id           = proplists:get_value(id, Params),
     Tag          = proplists:get_value(tag, Params),
     ActiveClass  = proplists:get_value(active_class, Params, "active"),

@@ -19,14 +19,12 @@
 -module(scomp_base_spinner).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, _Context, _State) ->
+render(Params, _Vars, _Context) ->
     Image = proplists:get_value(image, Params, <<"/lib/images/spinner.gif">>),
     {ok, <<"<div id=\"spinner\" class=\"spinner\" style=\"display: none\"><img alt=\"activity indicator\" src=\"">>,Image,<<"\" /></div>">>}.

@@ -20,7 +20,7 @@
 -module(scomp_base_pager).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 -export([test/0]).
 
 -include("zotonic.hrl").
@@ -33,11 +33,9 @@
 -define(TRANS_PAGER_PREV, {trans, [{en, "previous"}, {nl, "vorige"}]}).
 
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Result       = proplists:get_value(result, Params),
     Dispatch     = case proplists:get_value(dispatch, Params) of
                         undefined -> z_context:get(zotonic_dispatch, Context, search);
@@ -180,6 +178,6 @@ max(_,B) -> B.
 test() ->
     C = z_context:new(default),
     R = #search_result{result=[a], pages=100, page=10},
-    {ok, H} = render([{result,R}], [], C, []),
+    {ok, H} = render([{result,R}], [], C),
     list_to_binary(H).
     

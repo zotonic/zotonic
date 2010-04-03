@@ -19,15 +19,13 @@
 -module(scomp_base_wire_args).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id        = proplists:get_value(id, Params, <<>>),
     Type      = proplists:get_value(type,Params,click),
     TargetId  = proplists:get_value(target,Params,Id),

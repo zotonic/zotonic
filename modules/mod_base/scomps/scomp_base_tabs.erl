@@ -20,15 +20,13 @@
 -module(scomp_base_tabs).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Id = proplists:get_value(id, Params),
     Script = [ "$('#", z_convert:to_list(Id), "').tabs();" ],
     {ok, z_render:wire({script, [{script, Script}]}, Context)}.

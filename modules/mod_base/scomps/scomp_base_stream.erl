@@ -19,14 +19,12 @@
 -module(scomp_base_stream).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> nocache.
 
-render(_Params, _Vars, Context, _State) ->
+render(_Params, _Vars, Context) ->
     Hostname = m_site:get(hostname, Context),
     {ok, z_script:add_script(["z_stream_start('",Hostname,"');"], Context)}.

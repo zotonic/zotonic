@@ -19,7 +19,7 @@
 -module(scomp_menu_menu).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 -export([get_menu/1]).
 
 -include("zotonic.hrl").
@@ -39,11 +39,9 @@
 % </ul>
 
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> default.
 
-render(Params, _Vars, Context, _State) ->
+render(Params, _Vars, Context) ->
     Menu = get_menu(Context),
     Id = proplists:get_value(id, Params),
     CurrentId = find_id(Id, Menu),

@@ -24,26 +24,13 @@
 -module(scomp_base_catinclude).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(Params, _Context) -> 
-    MaxAge = proplists:get_value(maxage, Params),
-    case z_convert:to_integer(MaxAge) of
-        undefined -> 
-            undefined; 
-        Max ->
-            Vary    = proplists:get_all_values(vary, Params),
-            Params1 = proplists:delete(maxage, Params),
-            Params2 = proplists:delete(vary, Params1),
-            {Params2, Max, Vary}
-    end.
+vary(_Params, _Context) -> default.
 
-terminate(_State, _Context) -> ok.
-
-render(Params, Vars, Context, _State) ->
+render(Params, Vars, Context) ->
 	All = proplists:get_value('$all', Params, false),
     File = proplists:get_value('$file', Params),
 	Id = proplists:get_value('id', Params),

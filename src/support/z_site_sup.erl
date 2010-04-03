@@ -87,10 +87,6 @@ init(SiteProps) ->
                 {z_template, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
-    Scomp = {z_scomp,
-                {z_scomp, start_link, [SiteProps]}, 
-                permanent, 5000, worker, dynamic},
-
     DropBox = {z_dropbox,
                 {z_dropbox, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
@@ -109,7 +105,7 @@ init(SiteProps) ->
 
     Processes = [
             Depcache, Notifier, Installer, Session, Visitor, 
-            Dispatcher, Template, Scomp, DropBox, Pivot,
+            Dispatcher, Template, DropBox, Pivot,
             ModuleIndexer, Modules
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.

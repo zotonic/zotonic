@@ -20,16 +20,14 @@
 -module(scomp_calendar_calview).
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include_lib("zotonic.hrl").
 -include_lib("../include/mod_calendar.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> default.
 
-render(Params, Vars, Context, _State) ->
+render(Params, Vars, Context) ->
 	WeekStartConf = m_config:get_value(mod_calendar, weekstart, 1, Context),
 	DayStartConf = m_config:get_value(mod_calendar, daystart, 0, Context),
 	Date = z_convert:to_datetime(proplists:get_value(date, Params)),

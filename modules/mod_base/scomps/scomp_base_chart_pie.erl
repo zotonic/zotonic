@@ -23,15 +23,13 @@
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(gen_scomp).
 
--export([init/1, varies/2, terminate/2, render/4]).
+-export([vary/2, render/3]).
 
 -include("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-varies(_Params, _Context) -> undefined.
-terminate(_State, _Context) -> ok.
+vary(_Params, _Context) -> default.
 
-render(Params, Vars, Context, State) ->
+render(Params, Vars, Context) ->
     Data   = proplists:get_value(data, Params, []),
     Colors = proplists:get_value(colors, Params),
     ThreeD = proplists:get_value(threed, Params, false),
@@ -58,4 +56,4 @@ render(Params, Vars, Context, State) ->
     end,
     
     Params2 = [{axes,Axes}, {type,Type}, {data,Data2} | Params1],
-    scomp_base_google_chart:render(Params2, Vars, Context, State).
+    scomp_base_google_chart:render(Params2, Vars, Context).
