@@ -18,8 +18,8 @@
 			font-style: italic;
 		}
 		
-		#survey .shortanswer input {
-			width: 80%;
+		#survey .shortanswer input, #survey-qs .shortanswer input {
+			width: 90%;
 		}
 		
 		#survey-qs {

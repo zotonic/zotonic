@@ -55,28 +55,6 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    % Listen to IP address and Port
-    WebIp      = case os:getenv("ZOTONIC_IP")   of
-        Any when Any == false; Any == []; Any == "*"; Any == "any" -> any;
-        ConfIP -> ConfIP 
-    end,   
-    WebPort    = case os:getenv("ZOTONIC_PORT") of false -> 8000; Anyport -> list_to_integer(Anyport) end,   
-
-    WebConfig = [
-		 {ip, WebIp},
-		 {port, WebPort},
-		 {error_handler, z_webmachine_error_handler},
-         {log_dir, filename:join([z_utils:lib_dir(priv), "log"])},
-		 {dispatch, []},
-		 {backlog, 500}
-	],
-    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
-
-    % Listen to the ip address and port for all sites.
-    Webmachine = {webmachine_mochiweb,
-	            {webmachine_mochiweb, start, [WebConfig]}, 
-	            permanent, 5000, worker, dynamic},
-
     % Random id generation
     Ids     = {z_ids,
 	            {z_ids, start_link, []}, 
@@ -103,7 +81,43 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-            Webmachine, Ids, Postgres, PreviewServer, Dispatcher, SitesSup
+            Ids, Postgres, PreviewServer, Dispatcher, SitesSup
     ],
-    {ok, {{one_for_one, 1000, 10}, Processes}}.
+
+    % Listen to IP address and Port
+    WebIp = case os:getenv("ZOTONIC_IP")   of
+        Any when Any == false; Any == []; Any == "*"; Any == "any" -> any;
+        ConfIP -> ConfIP 
+    end,   
+    WebPort = case os:getenv("ZOTONIC_PORT") of false -> 8000; Anyport -> list_to_integer(Anyport) end,   
+
+    WebConfig = [
+		 {port, WebPort},
+		 {error_handler, z_webmachine_error_handler},
+         {log_dir, filename:join([z_utils:lib_dir(priv), "log"])},
+		 {dispatch, []},
+		 {backlog, 500}
+	],
+    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
+
+    % Listen to the ip address and port for all sites.
+    Processes1 = Processes ++ [{webmachine_mochiweb,
+                	            {webmachine_mochiweb, start, [[{ip,WebIp}|WebConfig]]}, 
+                	            permanent, 5000, worker, dynamic}],
+    
+    Processes2 = case WebIp of
+        any -> 
+            %% Check if ipv6 is supported
+            case (catch inet:getaddr("localhost", inet6)) of
+                {ok, _Addr} ->
+                    Processes1 ++ [{webmachine_mochiweb_v6,
+                            	            {webmachine_mochiweb, start, [[{name,webmachine_mochiweb_v6},{ip,any6}|WebConfig]]}, 
+                            	            permanent, 5000, worker, dynamic}];
+                {error, _} ->
+                    Processes1
+            end;
+        _ -> Processes1
+    end,
+
+    {ok, {{one_for_one, 1000, 10}, Processes2}}.
 
