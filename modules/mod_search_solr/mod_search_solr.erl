@@ -52,9 +52,13 @@ init(Args) ->
             z_session_manager:broadcast(#broadcast{type="error", message="Not configured yet, not starting.", title="Solr Index", stay=true}, z_acl:sudo(Context)),
             ignore;
 
-        _SolrUrl ->
-            {ok, Solr} = esolr:start_link(),
-            esolr:set_auto_commit({time, 3000}, Solr),
+        SolrUrl ->
+            SearchUrl = z_convert:to_list(SolrUrl) ++ "select",
+            UpdateUrl = z_convert:to_list(SolrUrl) ++ "update",
+            {ok, Solr} = esolr:start_link([{select_url, SearchUrl}, {update_url, UpdateUrl}]),
+
+            AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
+            esolr:set_auto_commit({time, AutoCommit}, Solr),
 
             %% Hook into z_search
             z_notifier:observe(search_query, self(), Context),

@@ -175,6 +175,9 @@
         <!-- extra fields can be added (by zotonic modules hooking into the solr module) -->
         <dynamicField name="x_*" type="text" stored="true" multiValued="true" />
 
+        <!-- integers -->
+        <dynamicField name="x_int_*" type="int" />
+
     </fields>
 
     <!-- Field to use to determine and enforce document uniqueness. 
