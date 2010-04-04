@@ -15,7 +15,7 @@ put(Id, Context, Solr) ->
             nop;
         Doc ->
             Doc1 = lists:filter(fun({_,undefined})->false; ({_,[]})->false; (_)->true end, Doc),
-            ?DEBUG(Doc1),
+            %%?DEBUG(Doc1),
             esolr:add([{doc, Doc1}], Solr)
     end.
 
