@@ -82,7 +82,7 @@ start_link() ->
 %      If not specified, the default url used for search is "http://localhost:8983/solr/select", 
 %      and for updates http://localhost:8983/solr/update 
 % @spec start(Options::[Option]) -> Result
-%       Option = {search_url,URL}|{update_url,URL}| {add_timeout,integer()} | {search_timeout,integer()} 
+%       Option = {select_url,URL}|{update_url,URL}| {add_timeout,integer()} | {search_timeout,integer()} 
 %                |{delete_timeout,integer()} | {commit_timeout,integer()} | {optimize_timeout,integer()}
 %       URL = string()
 start(Options) ->
