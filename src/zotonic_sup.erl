@@ -119,5 +119,5 @@ init([]) ->
         _ -> Processes1
     end,
 
-    {ok, {{one_for_one, 1000, 10}, Processes2}}.
+    {ok, {{one_for_one, 1000, 10}, Processes1}}.
 
