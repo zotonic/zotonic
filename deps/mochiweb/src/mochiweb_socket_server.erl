@@ -9,6 +9,9 @@
 
 -include("internal.hrl").
 
+-define(IPPROTO_IPV6, 41).
+-define(IPV6_V6ONLY, 26).
+
 -export([start/1, stop/1]).
 -export([init/1, handle_call/3, handle_cast/2, terminate/2, code_change/3,
          handle_info/2]).
@@ -136,7 +139,7 @@ init(State=#mochiweb_socket_server{ip=Ip, port=Port, backlog=Backlog}) ->
             [inet | BaseOpts];
         any6 ->
             case ipv6_supported() of % IPv6 if supported
-                true -> [inet6 | BaseOpts];
+                true -> [inet6, {raw, ?IPPROTO_IPV6, ?IPV6_V6ONLY, <<1:32/native>>} | BaseOpts];
                 _ -> BaseOpts
             end;
         {_, _, _, _} -> % IPv4

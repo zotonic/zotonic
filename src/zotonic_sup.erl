@@ -108,16 +108,23 @@ init([]) ->
     Processes2 = case WebIp of
         any -> 
             %% Check if ipv6 is supported
-            case (catch inet:getaddr("localhost", inet6)) of
-                {ok, _Addr} ->
+            case ipv6_supported() of
+                true ->
                     Processes1 ++ [{webmachine_mochiweb_v6,
                             	            {webmachine_mochiweb, start, [[{name,webmachine_mochiweb_v6},{ip,any6}|WebConfig]]}, 
                             	            permanent, 5000, worker, dynamic}];
-                {error, _} ->
+                false ->
                     Processes1
             end;
         _ -> Processes1
     end,
 
-    {ok, {{one_for_one, 1000, 10}, Processes1}}.
+    {ok, {{one_for_one, 1000, 10}, Processes2}}.
 
+
+%% @todo Exclude platforms that do not support raw ipv6 socket options
+ipv6_supported() ->
+    case (catch inet:getaddr("localhost", inet6)) of
+        {ok, _Addr} -> true;
+        {error, _} -> false
+    end.
