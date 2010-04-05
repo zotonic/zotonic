@@ -31,7 +31,7 @@ render_validator(email, TriggerId, _TargetId, Args, Context)  ->
 %%          Error -> invalid | novalue | {script, Script}
 validate(email, Id, Value, _Args, Context) ->
     case z_string:trim(Value) of
-        [] -> {ok, []};
+        [] -> {{ok, []}, Context};
         Trimmed ->
             case re:run(Trimmed, re(), [extended]) of
                 nomatch   -> {{error, Id, invalid}, Context};
