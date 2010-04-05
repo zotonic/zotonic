@@ -5,15 +5,25 @@ You will need to:
 
 1. Install Erlang R12B (13B might also work). Build it from source, or
    use packages (see platform-specific notes below)
-2. Install ImageMagick 'convert' and 'identify' tools (also install
-   libjpeg, -tiff, -png and other required libraries).  Make sure that
-   the convert and identify tools are in your path so that zotonic can
-   find them.
+
+2. Install ImageMagick (version 6.5 or higher) for the 'convert' and
+   'identify' tools (also install libjpeg, -tiff, -png and other
+   required libraries).  Make sure that the convert and identify tools
+   are in your path so that zotonic can find them. For auto-rotation
+   to work you'll need the "exif" utility as well.
+
 3. Install PostgreSQL (preferably 8.3 or newer).
+
 4. Obtain a copy of the Zotonic source code.
 
 
-Steps:
+
+
+Steps to install Zotonic
+------------------------
+
+Make sure you put the zotonic source in a directory named 'zotonic'
+(important for now; we're working on a solution for this).
 
 1. Type "make" in the root of zotonic (there where the Makefile is located). (*1)
 
@@ -90,9 +100,18 @@ libraries as well for XMPP:
 sudo apt-get install erlang build-essential libxml2-dev libexpat1-dev
 
 
+Debian (lenny)
+--------------------
+You'll need to build erlang from source. Before building, make sure
+you install these packages:
+
+sudo apt-get install build-essential libncurses5-dev m4
+sudo apt-get install openssl libssl-dev
+sudo apt-get install unixodbc-dev
+
+
 Windows
 -------
-
 Currently, Zotonic has not been tested on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
 ImageMagick do work on Windows, so, if you're adventurous, it should
