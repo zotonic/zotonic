@@ -102,16 +102,16 @@ init([]) ->
 
     % Listen to the ip address and port for all sites.
     Processes1 = Processes ++ [{webmachine_mochiweb,
-                	            {webmachine_mochiweb, start, [[{ip,WebIp}|WebConfig]]}, 
+                	            {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]}, 
                 	            permanent, 5000, worker, dynamic}],
     
+    %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
     Processes2 = case WebIp of
         any -> 
-            %% Check if ipv6 is supported
             case ipv6_supported() of
                 true ->
                     Processes1 ++ [{webmachine_mochiweb_v6,
-                            	            {webmachine_mochiweb, start, [[{name,webmachine_mochiweb_v6},{ip,any6}|WebConfig]]}, 
+                            	            {webmachine_mochiweb, start, [webmachine_mochiweb_v6, [{ip,any6}|WebConfig]]}, 
                             	            permanent, 5000, worker, dynamic}];
                 false ->
                     Processes1
