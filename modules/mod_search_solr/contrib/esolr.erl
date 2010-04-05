@@ -279,7 +279,7 @@ handle_call(optimize,From,State=#esolr{optimize_timeout=T}) ->
 handle_call({search,Query,Options},From,State=#esolr{search_url=URL,pending=P,search_timeout=Timeout}) ->	
 	RequestParams = encode_search(Query,Options),
 	SearchURL = lists:flatten([URL,"?wt=json&"|RequestParams]),
-	{ok,RequestId} = http:request(get,{SearchURL,[]},[{timeout,Timeout}],[{sync,false}]),
+	{ok,RequestId} = http:request(get,{SearchURL,[{"connection", "close"}]},[{timeout,Timeout}],[{sync,false}]),
 	Pendings = gb_trees:insert(RequestId,{From,search},P),
 	{noreply,State#esolr{pending=Pendings}};
 
@@ -288,12 +288,12 @@ handle_call(stop,_From,State) ->
 	
 
 make_post_request(Request,PendingInfo,State=#esolr{update_url=URL,pending=P,auto_commit=AC,dirty=Dirty},Timeout) ->
-	{ok,RequestId} = http:request(post,{URL,[],"text/xml",Request},[{timeout,Timeout}],[{sync,false}]),
+	{ok,RequestId} = http:request(post,{URL,[{"connection", "close"}],"text/xml",Request},[{timeout,Timeout}],[{sync,false}]),
 	Pendings = gb_trees:insert(RequestId,PendingInfo,P),
 	if 
 		(AC == always) and Dirty ->  
 				  CommitRequest = encode_commit(),
-				  {ok,C_RequestId} = http:request(post,{URL,[],"text/xml",CommitRequest},
+				  {ok,C_RequestId} = http:request(post,{URL,[{"connection", "close"}],"text/xml",CommitRequest},
 				  					     [{timeout,State#esolr.commit_timeout}],[{sync,false}]),
 				  Pendings2 = gb_trees:insert(C_RequestId,{auto,auto_commit},Pendings),
 				  error_logger:info_report([{auto_commit,send}]),
