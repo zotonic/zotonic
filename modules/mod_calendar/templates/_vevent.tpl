@@ -5,7 +5,7 @@ LAST-MODIFIED:{{ r.modified|utc|date:"Ymd\\THis" }}Z
 UID:{{ r.resource_uri|unescape|escape_ical }}
 {% ifequal dtstart|date:"His" "000000" %}
 {% if dtend|date:"His"|eq:"235959" or dtend|is_undefined %}
-{% with dtstart|utc|date:"Ymd" as date_start %}
+{% with dtstart|date:"Ymd" as date_start %}
 DTSTART;VALUE=DATE:{{ date_start }}
 DTEND;VALUE=DATE:{{ dtend|date:"Ymd"|default:date_start }}
 {% endwith %}
