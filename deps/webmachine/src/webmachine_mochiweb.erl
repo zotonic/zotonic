@@ -18,12 +18,15 @@
 -module(webmachine_mochiweb).
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
--export([start/1, stop/0, stop/1, loop/1]).
+-export([start/1, start/2, stop/0, stop/1, loop/1]).
 
 -include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
 
 start(Options) ->
+    start(?MODULE, Options).
+    
+start(Name, Options) ->
     {DispatchList, Options1} = get_option(dispatch, Options),
     {ErrorHandler0, Options2} = get_option(error_handler, Options1),
     {EnablePerfLog, Options3} = get_option(enable_perf_logger, Options2),
@@ -42,10 +45,9 @@ start(Options) ->
         _ ->
             ignore
     end,
-    {Name, Options5} = get_option(name, Options4, ?MODULE),
     application:set_env(webmachine, dispatch_list, DispatchList),
     application:set_env(webmachine, error_handler, ErrorHandler),
-    mochiweb_http:start([{name, Name}, {loop, fun loop/1} | Options5]).
+    mochiweb_http:start([{name, Name}, {loop, fun loop/1} | Options4]).
 
 stop() ->
     stop(?MODULE).
