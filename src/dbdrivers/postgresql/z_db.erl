@@ -409,11 +409,13 @@ update_sequence(Table, Ids, Context) ->
 %% @spec table_exists(TableName, Context) -> bool()
 table_exists(Table, Context) ->
     {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
     case q1("   select count(*) 
                 from information_schema.tables 
                 where table_catalog = $1 
                   and table_name = $2 
-                  and table_type = 'BASE TABLE'", [Db, Table], Context) of
+                  and table_schema = $3
+                  and table_type = 'BASE TABLE'", [Db, Table, Schema], Context) of
         1 -> true;
         0 -> false
     end.
