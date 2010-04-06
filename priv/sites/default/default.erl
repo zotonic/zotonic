@@ -127,6 +127,13 @@ datamodel() ->
          {summary, <<"This is your blog. It would be wise to type some text here on what you will be writing about. Ofcourse, this page is just a demo page and can be deleted just as well.">>}]
        },
 
+       {page_contact,
+        text,
+        [{title, <<"Contact">>},
+         {summary, <<"Get in contact with us! Use the form below to send this site's administrator some feedback on how you perceive this site.">>},
+         {page_path, <<"/contact">>}]
+       },
+
 
        %% BLOG ENTRIES
 
@@ -192,7 +199,7 @@ datamodel() ->
      },
 
      {menu,
-      [page_home, page_about]
+      [page_home, page_about, page_contact]
      },
 
      {edges,
