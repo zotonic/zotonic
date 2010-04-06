@@ -142,7 +142,7 @@ handle_call({ensure_session, AllowNew, Context}, _From, State) ->
         Pid when is_pid(Pid) orelse AllowNew ->
             {_Pid1, Context1, State1} = ensure_session1(SessionId, Pid, Context, State),
             {reply, {ok, Context1}, State1};
-        undefined ->
+        error ->
             {reply, {error, no_session_pid}, State}
     end;
 
