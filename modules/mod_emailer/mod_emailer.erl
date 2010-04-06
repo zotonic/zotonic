@@ -245,8 +245,8 @@ mark_retry(Id, Retry, Context) ->
 %% Send the e-mail with sendmail
 sendemail(Msg = #mime_msg{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
 	Message = esmtp_mime:encode(Msg),
-	{_FromName, FromEmail} = z_email:split_name_email(esmtp_mime:from(Msg)),
-	SendmailFrom = Sendmail ++ " -f" ++ FromEmail ++ " " ++ esmtp_mime:to(Msg),
+	{_FromName, FromEmail} = z_email:split_name_email(emstp_mime:from(Msg)),
+	SendmailFrom = Sendmail ++ " -f" ++ FromEmail,
 	P = open_port({spawn, SendmailFrom}, [use_stdio]),
 	port_command(P, Message),
 	port_close(P);
