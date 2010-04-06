@@ -2,7 +2,7 @@
 
 -export([start_link/2, start_link/3, stop/1]).
 -export([get_connection/1, get_connection/2, return_connection/2]).
--export([get_database/1, status/1]).
+-export([get_database/1, status/1, get_database_opt/2]).
 
 -export([init/1, code_change/3, terminate/2]). 
 -export([handle_call/3, handle_cast/2, handle_info/2]).
@@ -59,6 +59,9 @@ get_database(P) ->
     return_connection(P, C),
     {ok, Db}.
 
+get_database_opt(Opt, P) ->
+    R = gen_server:call(P, {get_database_opt, Opt}),
+    {ok, R}.
 
 %% @doc Return the current status of the connection pool.
 status(P) ->
@@ -109,6 +112,10 @@ handle_call(get_connection, From, #state{connections = Connections, waiting = Wa
 	 				{noreply, State#state{waiting = queue:in(From, Waiting)}}
 			end
     end;
+
+%% Return the status of the connection pool
+handle_call({get_database_opt, Opt}, _From, State=#state{opts=Opts}) ->
+    {reply, proplists:get_value(Opt, Opts), State};
 
 %% Return the status of the connection pool
 handle_call(status, _From, State) ->
