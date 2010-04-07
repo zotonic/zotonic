@@ -1,9 +1,9 @@
 {% ifequal align "left" %}
-	{% media m.rsc[id].medium width=203 height=203 crop class=align alt=m.rsc[id].title %}
+	{% media m.rsc[id].medium width=174 height=174 crop class=align alt=m.rsc[id].title %}
 {% endifequal %}
 
 {% ifequal align "right" %}
-	{% media m.rsc[id].medium width=203 height=203 crop class=align alt=m.rsc[id].title %}
+	{% media m.rsc[id].medium width=174 height=174 crop class=align alt=m.rsc[id].title %}
 {% endifequal %}
 
 {% ifequal align "block" %}
