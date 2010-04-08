@@ -16,7 +16,8 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--define(ZOTONIC_VERSION, "0.4-dev").
+%% The release information
+-include("zotonic_release.hrl").
 
 -include_lib("deps/webmachine/include/wm_reqdata.hrl").
 

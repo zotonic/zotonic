@@ -21,6 +21,8 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 
+-include("../../../include/zotonic_release.hrl").
+
 -export([get_peer/1]). % used in initialization
 
 % actual interface for resource functions
@@ -471,7 +473,7 @@ make_headers(Code, Length, RD) ->
                       mochiweb_headers:make(wrq:resp_headers(RD)))
             end
     end,
-    ServerHeader = "MochiWeb/1.1 WebMachine/" ++ ?WMVSN ++ " (" ++ ?QUIP ++ ")",
+    ServerHeader = "MochiWeb/1.1 WebMachine/" ++ ?WMVSN ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
     WithSrv = mochiweb_headers:enter("Server", ServerHeader, Hdrs0),
     Hdrs = case mochiweb_headers:get_value("date", WithSrv) of
 	undefined ->
