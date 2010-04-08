@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc 'mult' filter, multiply a number with a value
+%% @doc 'modulo' filter, return remainder of division
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -16,22 +16,24 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_mult).
--export([mult/3]).
+-module(filter_modulo).
+-export([modulo/3]).
 
-mult(undefined, _Number, _Context) ->
+modulo(undefined, _Number, _Context) ->
     undefined;
-mult(Input, Number, Context) when is_binary(Input) ->
-    z_convert:to_binary(mult(binary_to_list(Input), Number, Context));
-mult(Input, Number, Context) when is_list(Input) ->
-    z_convert:to_list(mult(list_to_integer(Input), Number, Context));
-mult(Input, Number, _Context) when is_integer(Input) ->
+modulo(Input, Number, Context) when is_binary(Input) ->
+    z_convert:to_binary(modulo(binary_to_list(Input), Number, Context));
+modulo(Input, Number, Context) when is_list(Input) ->
+    z_convert:to_list(modulo(list_to_integer(Input), Number, Context));
+modulo(Input, Number, _Context) when is_integer(Input) ->
     case z_convert:to_integer(Number) of
         undefined -> undefined;
-        N -> Input * N
+        0 -> undefined;
+        N -> Input rem N
     end;
-mult(Input, Number, _Context) when is_float(Input) ->
-    case z_convert:to_float(Number) of
+modulo(Input, Number, _Context) when is_float(Input) ->
+    case z_convert:to_integer(Number) of
         undefined -> undefined;
-        N -> Input * N
+        0 -> undefined;
+        N -> z_convert:to_integer(Input) rem N
     end.

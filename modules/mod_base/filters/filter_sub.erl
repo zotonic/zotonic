@@ -20,4 +20,4 @@
 -export([sub/3]).
 
 sub(Input, Number, Context) ->
-	filter_add:add(Input, 0-Number, Context).
+	filter_add:add(Input, 0-z_convert:to_integer(Number), Context).
