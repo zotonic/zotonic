@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc 'mult' filter, multiply a number with a value
+%% @doc 'divide' filter, divide a number with a value
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -16,22 +16,24 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_mult).
--export([mult/3]).
+-module(filter_divide).
+-export([divide/3]).
 
-mult(undefined, _Number, _Context) ->
+divide(undefined, _Number, _Context) ->
     undefined;
-mult(Input, Number, Context) when is_binary(Input) ->
-    z_convert:to_binary(mult(binary_to_list(Input), Number, Context));
-mult(Input, Number, Context) when is_list(Input) ->
-    z_convert:to_list(mult(list_to_integer(Input), Number, Context));
-mult(Input, Number, _Context) when is_integer(Input) ->
+divide(Input, Number, Context) when is_binary(Input) ->
+    z_convert:to_binary(divide(binary_to_list(Input), Number, Context));
+divide(Input, Number, Context) when is_list(Input) ->
+    z_convert:to_list(divide(list_to_integer(Input), Number, Context));
+divide(Input, Number, _Context) when is_integer(Input) ->
     case z_convert:to_integer(Number) of
         undefined -> undefined;
-        N -> Input * N
+        0 -> undefined;
+        N -> Input / N
     end;
-mult(Input, Number, _Context) when is_float(Input) ->
+divide(Input, Number, _Context) when is_float(Input) ->
     case z_convert:to_float(Number) of
         undefined -> undefined;
-        N -> Input * N
+        0 -> undefined;
+        N -> Input / N
     end.

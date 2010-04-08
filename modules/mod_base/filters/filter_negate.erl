@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc 'mult' filter, multiply a number with a value
+%% @doc 'negate' filter
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -16,22 +16,15 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_mult).
--export([mult/3]).
+-module(filter_negate).
+-export([negate/2]).
 
-mult(undefined, _Number, _Context) ->
-    undefined;
-mult(Input, Number, Context) when is_binary(Input) ->
-    z_convert:to_binary(mult(binary_to_list(Input), Number, Context));
-mult(Input, Number, Context) when is_list(Input) ->
-    z_convert:to_list(mult(list_to_integer(Input), Number, Context));
-mult(Input, Number, _Context) when is_integer(Input) ->
-    case z_convert:to_integer(Number) of
+negate(Input, _Context) when is_list(Input); is_binary(Input) ->
+    case z_convert:to_integer(Input) of
         undefined -> undefined;
-        N -> Input * N
+        N -> integer_to_list(0 - N)
     end;
-mult(Input, Number, _Context) when is_float(Input) ->
-    case z_convert:to_float(Number) of
-        undefined -> undefined;
-        N -> Input * N
-    end.
+negate(Input, _Context) when is_float(Input) ->
+    0.0 - Input;
+negate(Input, _Context) when is_integer(Input) ->
+    0 - Input.
