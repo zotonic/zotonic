@@ -293,7 +293,7 @@ body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, T
             throw({error, "Could not find the template for extends: '" ++ Extends ++ "'"}),
             {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
     end;
-
+    
     
 body_ast(DjangoParseTree, Context, TreeWalker) ->
     {AstInfoList, TreeWalker2} = lists:mapfoldl(
@@ -323,30 +323,22 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 include_ast(unescape_string_literal(File), Args, All, Context, TreeWalkerAcc);
             ({'catinclude', {string_literal, _, File}, RscId, Args, All}, TreeWalkerAcc) ->
                 catinclude_ast(unescape_string_literal(File), RscId, Args, All, Context, TreeWalkerAcc);
-            ({'if', {'expr', {'not', Variable}, 'none'}, Contents}, TreeWalkerAcc) ->
+            ({'if', {'expr', "b_not", E}, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = empty_ast(TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(Contents, Context, TreeWalker1),
-                ifelse_ast(Variable, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'if', {'expr', Variable, none}, Contents}, TreeWalkerAcc) ->
+                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
+            ({'if', E, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
-                ifelse_ast(Variable, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'ifelse', {'expr', {'not', Variable}, 'none'}, IfContents, ElseContents}, TreeWalkerAcc) ->
+                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
+            ({'ifelse', {'expr', "b_not", E}, IfContents, ElseContents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(ElseContents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(IfContents, Context, TreeWalker1),
-                ifelse_ast(Variable, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                  
-            ({'ifelse', {'expr', Variable, none}, IfContents, ElseContents}, TreeWalkerAcc) ->
+                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                  
+            ({'ifelse', E, IfContents, ElseContents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(IfContents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(ElseContents, Context, TreeWalker1),
-                ifelse_ast(Variable, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'if', Expression, IfContents}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = body_ast(IfContents, Context, TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
-                ifexpr_ast(Expression, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'ifelse', Expression, IfContents, ElseContents}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = body_ast(IfContents, Context, TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = body_ast(ElseContents, Context, TreeWalker1),
-                ifexpr_ast(Expression, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
+                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
             ({'ifequal', Args, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
@@ -459,6 +451,19 @@ empty_ast(TreeWalker) ->
 
 value_ast(ValueToken, AsString, Context, TreeWalker) ->
     case ValueToken of
+        {'expr', Operator, Value} ->
+            {{ValueAst,InfoValue}, TreeWalker1} = value_ast(Value, false, Context, TreeWalker),
+            Ast = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Operator)), 
+                                         erl_syntax:atom(Operator), 
+                                         [ValueAst, z_context_ast(Context)]),
+            {{Ast, InfoValue}, TreeWalker1};
+        {'expr', Operator, Value1, Value2} ->
+            {{Value1Ast,InfoValue1}, TreeWalker1} = value_ast(Value1, false, Context, TreeWalker),
+            {{Value2Ast,InfoValue2}, TreeWalker2} = value_ast(Value2, false, Context, TreeWalker1),
+            Ast = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Operator)), 
+                                         erl_syntax:atom(Operator), 
+                                         [Value1Ast, Value2Ast, z_context_ast(Context)]),
+            {{Ast, merge_info(InfoValue1,InfoValue2)}, TreeWalker2};
         {'string_literal', _Pos, String} ->
             {{auto_escape(erl_syntax:string(unescape_string_literal(String)), Context), 
                     #ast_info{}}, TreeWalker};
@@ -654,52 +659,6 @@ search_for_escape_filter(_Variable, _Filter) ->
     off.
 
 
-% Create an expression that returns 'false' for the 'if' section and 'true' for the 'else' section
-% @todo Optimize the runtime evaluation so that we only evaluate expression that need evaluation (for the 'or' case).
-resolve_ifexpression_ast({expr, Expr, {AndOr, ExprList}}, Context, TreeWalker) ->
-    {ExprAstList, Info, TreeWalker1} = ifexpression_ast_list([Expr|ExprList], Context, TreeWalker),
-    PredAst = erl_syntax:fun_expr(
-                [
-                    erl_syntax:clause(
-                        [ erl_syntax:variable("IfX") ], 
-                        none, 
-                        [ erl_syntax:application(
-                            erl_syntax:atom(erlydtl_runtime),
-                            erl_syntax:atom(is_false),
-                            [ erl_syntax:variable("IfX") ])
-                        ])
-                ]
-            ),
-    ExprAstListAst = erl_syntax:list(ExprAstList),
-    Ast = case AndOr of
-        % lists:all(fun(X) -> erlydtl_runtime:is_false(X) end, ExprList)
-        'or'  -> erl_syntax:application(erl_syntax:atom(lists), erl_syntax:atom(all),[ PredAst, ExprAstListAst ]);
-        % lists:any(fun(X) -> erlydtl_runtime:is_false(X) end, ExprList)
-        'and' -> erl_syntax:application(erl_syntax:atom(lists), erl_syntax:atom(any),[ PredAst, ExprAstListAst ])
-    end,
-    {{Ast, Info}, TreeWalker1}.
-    
-    ifexpression_ast_expr({'not', Variable}, Context, TreeWalker) ->
-        {{Ast, Info}, TreeWalker1} = ifexpression_ast_expr(Variable, Context, TreeWalker),
-        Ast1 = erl_syntax:application(
-            erl_syntax:atom(erlydtl_runtime),
-            erl_syntax:atom(is_false),
-            [ Ast ]),
-        {{Ast1, Info}, TreeWalker1};
-    ifexpression_ast_expr(Variable, Context, TreeWalker) ->
-        {{Ast, VarName, Info}, TreeWalker1} = resolve_ifvariable_ast(Variable, Context, TreeWalker),
-        Info1 = Info#ast_info{var_names = [VarName | Info#ast_info.var_names]},
-        {{Ast, Info1}, TreeWalker1}.
-
-    ifexpression_ast_list(ExprList, Context, TreeWalker) ->
-        lists:foldr(
-                fun(Expr, {Acc, Info, TW}) ->
-                    {{Ast, AstInfo}, TW1} = ifexpression_ast_expr(Expr, Context, TW),
-                    {[Ast|Acc], merge_info(Info, AstInfo), TW1}
-                end,
-                {[], #ast_info{}, TreeWalker},
-                ExprList).
-
 
 resolve_variable_ast(VarTuple, Context, TreeWalker) ->
     opttrans_variable_ast(resolve_variable_ast(VarTuple, Context, TreeWalker, 'fetch_value'), Context).
@@ -820,8 +779,8 @@ auto_escape(Value, Context) ->
 
 ifexpr_ast(Expression, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
     Info = merge_info(IfContentsInfo, ElseContentsInfo),
-    {{ExpressionAst, ExpressionInfo}, TreeWalker1} = resolve_ifexpression_ast(Expression, Context, TreeWalker),
-    {{erl_syntax:case_expr(ExpressionAst,
+    {{Ast, ExpressionInfo}, TreeWalker1} = value_ast(Expression, false, Context, TreeWalker),
+    {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(is_false), [Ast]),
         [erl_syntax:clause([erl_syntax:atom(true)], none, 
                 [ElseContentsAst]),
         erl_syntax:clause([erl_syntax:underscore()], none,
@@ -829,18 +788,6 @@ ifexpr_ast(Expression, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseCo
         ]), merge_info(ExpressionInfo, Info)}, TreeWalker1}.
     
 
-ifelse_ast(Variable, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
-    Info = merge_info(IfContentsInfo, ElseContentsInfo),
-    VarNames = Info#ast_info.var_names,
-    {{Ast, VarName, VarInfo}, TreeWalker1} = resolve_ifvariable_ast(Variable, Context, TreeWalker),
-    {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(is_false), [Ast]),
-        [erl_syntax:clause([erl_syntax:atom(true)], none, 
-                [ElseContentsAst]),
-            erl_syntax:clause([erl_syntax:underscore()], none,
-                [IfContentsAst])
-        ]), merge_info(VarInfo, Info#ast_info{var_names = [VarName | VarNames]})}, TreeWalker1}.
-
-        
 ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
     Info = merge_info(IfContentsInfo, ElseContentsInfo),
     {[Arg1Ast, Arg2Ast], VarNames, Info1, TreeWalker1} = lists:foldl(fun

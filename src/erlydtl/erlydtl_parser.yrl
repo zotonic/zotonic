@@ -69,15 +69,9 @@ Nonterminals
 
     IfBlock
     IfBraced
-    IfExpression
     ElseBraced
     EndIfBraced
 
-	IfSimpleExpression
-	IfAndOrExpression
-	IfOrExpression
-	IfAndExpression
-    
     IfEqualBlock
     IfEqualBraced
     IfEqualExpression
@@ -128,7 +122,11 @@ Nonterminals
 	TransExtTag
 	ValueList
 
-	OptionalAll.
+	OptionalAll
+	
+	E
+	Uminus
+	Unot.
 
 Terminals
 	all_keyword
@@ -192,11 +190,24 @@ Terminals
 	or_keyword
 	and_keyword
 	'__keyword'
- 	hash.
+ 	hash
+	'==' '/=' '<' '>' '=<' '>='
+	'+' '-'
+	'*' '/' '%'
+	'(' ')'.
 
 Rootsymbol
     Elements.
 
+%% Operator precedences for the E non terminal
+Left 100 or_keyword.
+Left 110 and_keyword.
+Nonassoc 300 '==' '/=' '<' '>' '=<' '>='.
+Left 400 '+' '-'.
+Left 500 '*' '/' '%'.
+Unary 600 Uminus Unot.
+
+%% Expected shift/reduce conflicts
 Expect 1.
 
 Elements -> '$empty' : [].
@@ -230,13 +241,13 @@ Elements -> Elements WithBlock : '$1' ++ ['$2'].
 Elements -> Elements CacheBlock : '$1' ++ ['$2'].
 
 
-ValueBraced -> open_var Value close_var : '$2'.
+ValueBraced -> open_var E close_var : '$2'.
 
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag '__keyword' string_literal Args close_tag : {trans_ext, '$3', '$4'}.
 ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 IncludeTag -> open_tag OptionalAll include_keyword string_literal Args close_tag : {include, '$4', '$5', '$2'}.
-CatIncludeTag -> open_tag OptionalAll catinclude_keyword string_literal Value Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
+CatIncludeTag -> open_tag OptionalAll catinclude_keyword string_literal E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
 NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
 
 OptionalAll -> all_keyword : true.
@@ -273,42 +284,27 @@ ForBlock -> ForBraced Elements EmptyBraced Elements EndForBraced : {for, '$1', '
 EmptyBraced -> open_tag empty_keyword close_tag.
 ForBraced -> open_tag for_keyword ForExpression close_tag : '$3'.
 EndForBraced -> open_tag endfor_keyword close_tag.
-ForExpression -> ForGroup in_keyword Value : {'in', '$1', '$3'}.
+ForExpression -> ForGroup in_keyword E : {'in', '$1', '$3'}.
 ForGroup -> identifier : ['$1'].
 ForGroup -> ForGroup comma identifier : '$1' ++ ['$3'].
 
 IfBlock -> IfBraced Elements ElseBraced Elements EndIfBraced : {ifelse, '$1', '$2', '$4'}.
 IfBlock -> IfBraced Elements EndIfBraced : {'if', '$1', '$2'}.
-IfBraced -> open_tag if_keyword IfExpression close_tag : '$3'.
-
-IfExpression -> IfSimpleExpression IfAndOrExpression : {'expr', '$1', '$2'}.
-
-IfAndOrExpression -> '$empty' : none.
-IfAndOrExpression -> or_keyword IfSimpleExpression IfOrExpression : {'or', ['$2' | '$3']}.
-IfAndOrExpression -> and_keyword IfSimpleExpression IfAndExpression : {'and', ['$2' | '$3']}.
-
-IfOrExpression -> '$empty' : [].
-IfOrExpression -> or_keyword IfSimpleExpression IfOrExpression : ['$2' | '$3'].
-
-IfAndExpression -> '$empty' : [].
-IfAndExpression -> and_keyword IfSimpleExpression IfAndExpression : ['$2' | '$3'].
-
-IfSimpleExpression -> not_keyword IfSimpleExpression : {'not', '$2'}.
-IfSimpleExpression -> Value : '$1'.
+IfBraced -> open_tag if_keyword E close_tag : '$3'.
 
 ElseBraced -> open_tag else_keyword close_tag.
 EndIfBraced -> open_tag endif_keyword close_tag.
 
 IfEqualBlock -> IfEqualBraced Elements ElseBraced Elements EndIfEqualBraced : {ifequalelse, '$1', '$2', '$4'}.
 IfEqualBlock -> IfEqualBraced Elements EndIfEqualBraced : {ifequal, '$1', '$2'}.
-IfEqualBraced -> open_tag ifequal_keyword IfEqualExpression Value close_tag : ['$3', '$4'].
-IfEqualExpression -> Value : '$1'.
+IfEqualBraced -> open_tag ifequal_keyword IfEqualExpression E close_tag : ['$3', '$4'].
+IfEqualExpression -> E : '$1'.
 EndIfEqualBraced -> open_tag endifequal_keyword close_tag.
 
 IfNotEqualBlock -> IfNotEqualBraced Elements ElseBraced Elements EndIfNotEqualBraced : {ifnotequalelse, '$1', '$2', '$4'}.
 IfNotEqualBlock -> IfNotEqualBraced Elements EndIfNotEqualBraced : {ifnotequal, '$1', '$2'}.
-IfNotEqualBraced -> open_tag ifnotequal_keyword IfNotEqualExpression Value close_tag : ['$3', '$4'].
-IfNotEqualExpression -> Value : '$1'.
+IfNotEqualBraced -> open_tag ifnotequal_keyword IfNotEqualExpression E close_tag : ['$3', '$4'].
+IfNotEqualExpression -> E : '$1'.
 EndIfNotEqualBraced -> open_tag endifnotequal_keyword close_tag.
 
 AutoEscapeBlock -> AutoEscapeBraced Elements EndAutoEscapeBraced : {autoescape, '$1', '$2'}.
@@ -316,7 +312,7 @@ AutoEscapeBraced -> open_tag autoescape_keyword identifier close_tag : '$3'.
 EndAutoEscapeBraced -> open_tag endautoescape_keyword close_tag.
 
 WithBlock -> WithBraced Elements EndWithBraced : {with, '$1', '$2'}.
-WithBraced -> open_tag with_keyword Value as_keyword ForGroup close_tag : ['$3', '$5'].
+WithBraced -> open_tag with_keyword E as_keyword ForGroup close_tag : ['$3', '$5'].
 EndWithBraced -> open_tag endwith_keyword close_tag.
 
 CacheBlock -> CacheBraced Elements EndCacheBraced : {cache, '$1', '$2'}.
@@ -336,24 +332,25 @@ Literal -> number_literal : '$1'.
 CustomTag -> open_tag OptionalAll identifier Args close_tag : {tag, '$3', '$4', '$2'}.
 
 CallTag -> open_tag call_keyword identifier Args close_tag : {call_args, '$3', '$4'}.
-CallWithTag -> open_tag call_keyword identifier with_keyword Value close_tag : {call_with, '$3', '$5'}.
+CallWithTag -> open_tag call_keyword identifier with_keyword E close_tag : {call_with, '$3', '$5'}.
 
-ImageTag -> open_tag image_keyword Value Args close_tag : {image, '$3', '$4' }.
+ImageTag -> open_tag image_keyword E Args close_tag : {image, '$3', '$4' }.
 ImageUrlTag -> open_tag image_url_keyword Value Args close_tag : {image_url, '$3', '$4' }.
 
-MediaTag -> open_tag media_keyword Value Args close_tag : {media, '$3', '$4' }.
+MediaTag -> open_tag media_keyword E Args close_tag : {media, '$3', '$4' }.
 
 UrlTag -> open_tag url_keyword identifier Args close_tag : {url, '$3', '$4'}.
 
-PrintTag -> open_tag print_keyword Value close_tag : {print, '$3'}.
+PrintTag -> open_tag print_keyword E close_tag : {print, '$3'}.
 
 Args -> '$empty' : [].
 Args -> Args identifier : '$1' ++ [{'$2', true}].
-Args -> Args identifier equal Value : '$1' ++ [{'$2', '$4'}].
+Args -> Args identifier equal E : '$1' ++ [{'$2', '$4'}].
 
 Value -> Value pipe Filter : {apply_filter, '$1', '$3'}.
 Value -> TermValue : '$1'.
 
+TermValue -> '(' E ')' : '$2'.
 TermValue -> Variable : '$1'.
 TermValue -> Literal : '$1'.
 TermValue -> hash AutoId : {auto_id, '$2'}.
@@ -367,5 +364,27 @@ Variable -> identifier : {variable, '$1'}.
 Variable -> Variable open_bracket Value close_bracket : {index_value, '$1', '$3'}.
 Variable -> Variable dot identifier : {attribute, {'$3', '$1'}}.
 
-ValueList -> Value : ['$1'].
-ValueList -> ValueList comma Value : '$1' ++ ['$3'].
+ValueList -> E : ['$1'].
+ValueList -> ValueList comma E : '$1' ++ ['$3'].
+
+%%% Expressions
+
+E -> E or_keyword E  : {expr, "b_or", '$1', '$3'}.
+E -> E and_keyword E  : {expr, "b_and", '$1', '$3'}.
+E -> E '==' E  : {expr, "eq", '$1', '$3'}.
+E -> E '/=' E  : {expr, "ne", '$1', '$3'}.
+E -> E '<' E  : {expr, "lt", '$1', '$3'}.
+E -> E '>' E  : {expr, "gt", '$1', '$3'}.
+E -> E '=<' E  : {expr, "le", '$1', '$3'}.
+E -> E '>=' E  : {expr, "ge", '$1', '$3'}.
+E -> E '+' E  : {expr, "add", '$1', '$3'}.
+E -> E '-' E  : {expr, "sub", '$1', '$3'}.
+E -> E '*' E  : {expr, "mult", '$1', '$3'}.
+E -> E '/' E  : {expr, "divide", '$1', '$3'}.
+E -> E '%' E  : {expr, "modulo", '$1', '$3'}.
+E -> Uminus : '$1'.
+E -> Unot : '$1'.
+E -> Value : '$1'.
+
+Uminus -> '-' E : {expr, "negate", '$2'}.
+Unot -> not_keyword E : {expr, "b_not", '$2'}.

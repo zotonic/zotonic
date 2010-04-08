@@ -372,17 +372,17 @@ p.image-caption {
 
 /* Comments
 ---------------------------------------------------------- */
-input {
+#comments-form input {
 	width: 109px;
 	margin: 0;
 }
 
-textarea {
+#comments-form textarea {
 	width: 288px;
 	margin: 0;
 }
 
-label {
+#comments-form label {
 	float: none;
 	display: block;
 	
