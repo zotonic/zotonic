@@ -3,7 +3,8 @@
 -export([
     new/0,
     question_props/1,
-    render/1
+    render/1,
+    answer/2
 ]).
 
 -include("../survey.hrl").
@@ -11,7 +12,7 @@
 new() ->
     Q = #survey_question{
         type= yesno, 
-        name = "",
+        name = z_ids:identifier(5),
         text = "", 
         question = <<"Do you like split pea soup?">>
     },
@@ -49,3 +50,9 @@ render(Q) ->
             ])
     }.
 
+answer(#survey_question{name=Name}, Context) ->
+    case z_context:get_q(Name, Context) of
+        "yes" -> {ok, [{Name, yes}]};
+        "no" -> {ok, [{Name, no}]};
+        undefined -> {error, missing}
+    end.

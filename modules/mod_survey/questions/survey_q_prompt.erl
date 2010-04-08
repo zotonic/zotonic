@@ -3,7 +3,8 @@
 -export([
     new/0,
     question_props/1,
-    render/1
+    render/1,
+    answer/2
 ]).
 
 -include("../survey.hrl").
@@ -41,4 +42,7 @@ render(Q) ->
         question = iolist_to_binary(Q#survey_question.question),
         html = iolist_to_binary(["<p class=\"prompt\">", z_html:escape(Q#survey_question.question), "</p>"])
     }.
+
+answer(_Q, _Context) ->
+    {ok, []}.
 
