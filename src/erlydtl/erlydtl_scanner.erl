@@ -144,6 +144,9 @@ scan("#}-->" ++ T, Scanned, {Row, Column}, {in_comment, "#}-->"}) ->
 scan("#}" ++ T, Scanned, {Row, Column}, {in_comment, "#}"}) ->
     scan(T, Scanned, {Row, Column + 2}, in_text);
 
+scan([_ | T], Scanned, {Row, Column}, {in_comment, Closer}) ->
+    scan(T, Scanned, {Row, Column + 1}, {in_comment, Closer});
+
 scan("<!--{%" ++ T, Scanned, {Row, Column}, in_text) ->
     scan(T, [{open_tag, {Row, Column}, lists:reverse("<!--{%")} | Scanned], 
         {Row, Column + length("<!--{%")}, {in_code, "%}-->"});
@@ -152,14 +155,14 @@ scan("{%" ++ T, Scanned, {Row, Column}, in_text) ->
     scan(T, [{open_tag, {Row, Column}, lists:reverse("{%")} | Scanned], 
         {Row, Column + 2}, {in_code, "%}"});
 
-scan([_ | T], Scanned, {Row, Column}, {in_comment, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_comment, Closer});
-
 scan([H | T], Scanned, {Row, Column}, {in_trans, Closer}) ->
     scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_trans, Closer});
 
 scan("\n" ++ T, Scanned, {Row, Column}, in_text) ->
     scan(T, append_text_char(Scanned, {Row, Column}, $\n), {Row + 1, 1}, in_text);
+
+scan("\n" ++ T, Scanned, {Row, _Column}, {in_code, Closer}) ->
+    scan(T, Scanned, {Row + 1, 1}, {in_code, Closer});
 
 scan([H | T], Scanned, {Row, Column}, in_text) ->
     scan(T, append_text_char(Scanned, {Row, Column}, H), {Row, Column + 1}, in_text);
@@ -208,6 +211,69 @@ scan([H | T], Scanned, {Row, Column}, {in_double_quote, Closer}) ->
 scan([H | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
     scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_single_quote, Closer});
 
+% Closing code blocks
+scan("%}-->" ++ T, Scanned, {Row, Column}, {_, "%}-->"}) ->
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], 
+        {Row, Column + 2}, in_text);
+
+scan("%}" ++ T, Scanned, {Row, Column}, {_, "%}"}) ->
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], 
+        {Row, Column + 2}, in_text);
+
+scan("}}-->" ++ T, Scanned, {Row, Column}, {_, "}}-->"}) ->
+    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], 
+        {Row, Column + 2}, in_text);
+
+scan("}}" ++ T, Scanned, {Row, Column}, {_, "}}"}) ->
+    scan(T, [{close_var, {Row, Column}, "}}"} | Scanned], {Row, Column + 2}, in_text);
+
+% Expression operators
+scan("==" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'==', {Row, Column}, "=="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan("/=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'/=', {Row, Column}, "/="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan("!=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'/=', {Row, Column}, "!="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan(">=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'>=', {Row, Column}, ">="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan("=<" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'=<', {Row, Column}, "=<"} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan("<=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'=<', {Row, Column}, "<="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+
+scan("<" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'<', {Row, Column}, "<"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan(">" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'>', {Row, Column}, ">"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("-" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'-', {Row, Column}, "-"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("+" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'+', {Row, Column}, "+"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("*" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'*', {Row, Column}, "*"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("/" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'/', {Row, Column}, "/"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("%" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'%', {Row, Column}, "%"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan("("++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{'(', {Row, Column}, "("} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+scan(")" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
+    scan(T, [{')', {Row, Column}, ")"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+
+% Other
 scan("," ++ T, Scanned, {Row, Column}, {_, Closer}) ->
     scan(T, [{comma, {Row, Column}, ","} | Scanned], {Row, Column + 1}, {in_code, Closer});
 
@@ -246,21 +312,6 @@ scan("[" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
 
 scan("]" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
     scan(T, [{close_bracket, {Row, Column}, "]"} | Scanned], {Row, Column + 1}, {in_code, Closer});
-
-scan("}}-->" ++ T, Scanned, {Row, Column}, {_, "}}-->"}) ->
-    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
-
-scan("}}" ++ T, Scanned, {Row, Column}, {_, "}}"}) ->
-    scan(T, [{close_var, {Row, Column}, "}}"} | Scanned], {Row, Column + 2}, in_text);
-
-scan("%}-->" ++ T, Scanned, {Row, Column}, {_, "%}-->"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
-
-scan("%}" ++ T, Scanned, {Row, Column}, {_, "%}"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], 
-        {Row, Column + 2}, in_text);
 
 scan("{" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
     scan(T, [{open_curly, {Row, Column}, "{"} | Scanned], {Row, Column + 1}, {in_code, Closer});
