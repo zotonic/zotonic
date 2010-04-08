@@ -38,8 +38,8 @@
 			{% block search %}
 			<div class="right search">
 				<form action="{% url admin_overview_rsc %}" method="get">
-                    <input type="hidden" name="qsort" value="{{ q.qsort }}" />
-                    <input type="hidden" name="qcat" value="{{ q.qcat }}" />
+                    <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
+                    <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
 					<div class="search-wrapper">
 						<input type="text" name="qs" value="{{q.qs|escape}}">
 					</div>
