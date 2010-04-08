@@ -51,7 +51,7 @@ event({postback, {dialog_survey_question, Id, QuestionId}, _TriggerId, _TargetId
 event({submit, {survey_question_save, ActionProps}, _TriggerId, _TargetId}, Context) ->
     Id = proplists:get_value(id, ActionProps),
     QuestionId = proplists:get_value(question_id, ActionProps),
-    Name = z_string:trim(z_context:get_q("name", Context, "")),
+    Name = z_string:to_slug(z_string:trim(z_context:get_q("name", Context, ""))),
     Question = z_string:trim(z_context:get_q("question", Context, "")),
     Text = z_string:trim(z_context:get_q("text", Context, "")),
     Q = get_question(Id, QuestionId, Context),

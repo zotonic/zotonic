@@ -3,7 +3,8 @@
 -export([
     new/0,
     question_props/1,
-    render/1
+    render/1,
+    answer/2
 ]).
 
 -include("../survey.hrl").
@@ -11,7 +12,7 @@
 new() ->
     Q = #survey_question{
         type = shortanswer, 
-        name = "",
+        name = z_ids:identifier(5),
         text = "", 
         question = <<"Please enter your name.">>
     },
@@ -47,4 +48,15 @@ render(Q) ->
             "<p>"
             ])
     }.
+
+answer(Q, Context) ->
+    Name = Q#survey_question.name,
+    case z_context:get_q(Name, Context) of
+        undefined -> {error, missing};
+        Value -> case z_string:trim(Value) of
+                    [] -> {error, missing};
+                    V -> {ok, [{Name, V}]}
+                 end
+    end.
+
 

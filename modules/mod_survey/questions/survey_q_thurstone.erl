@@ -3,7 +3,8 @@
 -export([
     new/0,
     question_props/1,
-    render/1
+    render/1,
+    answer/2
 ]).
 
 -include("../survey.hrl").
@@ -11,11 +12,11 @@
 new() ->
     Q = #survey_question{
         type = thurstone, 
-        name = "",
+        name = z_ids:identifier(5),
         question = "",
         text = "This editor is very intuitive.
 This editor is fairly easy to use.
-This editor is gets the job done.
+This editor gets the job done.
 This editor is not that easy to use.
 This editor is very confusing."
     },
@@ -66,5 +67,14 @@ radio([""|T], N, Name, Acc) ->
 radio([H|T], N, Name, Acc) ->
     R = ["<input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"", integer_to_list(N),"\"> ", z_html:escape(H), "<br />"],
     radio(T, N+1, Name, [R|Acc]).
+
+
+answer(Q, Context) ->
+    Name = Q#survey_question.name,
+    Options = split_options(Q#survey_question.text),
+    case z_context:get_q(Name, Context) of
+        undefined -> {error, missing};
+        N -> {ok, [{Name, lists:nth(list_to_integer(N), Options)}]}
+    end.
 
     

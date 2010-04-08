@@ -42,7 +42,9 @@
 
 %% @doc Handle drag/drop events from the survey admin
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
-    event_sort(Id, Items, Context).
+    event_sort(Id, Items, Context);
+event({submit, {survey_submit, [{id,SurveyId}]}, FormId, _FormId}, Context) ->
+    survey_submit:submit(SurveyId, FormId, Context).
 
 
 %%====================================================================
@@ -202,7 +204,6 @@ redraw_questions(Id, Context) ->
 new_question(Type) ->
     Mod = list_to_atom("survey_q_"++z_convert:to_list(Type)),
     Mod:new().
-
 
 %% @doc Install the survey models
 install(Context) ->

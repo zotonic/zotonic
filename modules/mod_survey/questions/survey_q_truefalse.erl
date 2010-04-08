@@ -3,7 +3,8 @@
 -export([
     new/0,
     question_props/1,
-    render/1
+    render/1,
+    answer/2
 ]).
 
 -include("../survey.hrl").
@@ -11,7 +12,7 @@
 new() ->
     Q = #survey_question{
         type = truefalse, 
-        name = "",
+        name = z_ids:identifier(5),
         text = "", 
         question = <<"The earth is flat.">>
     },
@@ -47,4 +48,11 @@ render(Q) ->
             "<p>"
             ])
     }.
+
+answer(#survey_question{name=Name}, Context) ->
+    case z_context:get_q(Name, Context) of
+        "true" -> {ok, [{Name, true}]};
+        "false" -> {ok, [{Name, false}]};
+        undefined -> {error, missing}
+    end.
 
