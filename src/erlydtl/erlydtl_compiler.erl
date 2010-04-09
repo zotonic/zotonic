@@ -453,14 +453,14 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
     case ValueToken of
         {'expr', Operator, Value} ->
             {{ValueAst,InfoValue}, TreeWalker1} = value_ast(Value, false, Context, TreeWalker),
-            Ast = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Operator)), 
+            Ast = erl_syntax:application(erl_syntax:atom(erlydtl_operators), 
                                          erl_syntax:atom(Operator), 
                                          [ValueAst, z_context_ast(Context)]),
             {{Ast, InfoValue}, TreeWalker1};
         {'expr', Operator, Value1, Value2} ->
             {{Value1Ast,InfoValue1}, TreeWalker1} = value_ast(Value1, false, Context, TreeWalker),
             {{Value2Ast,InfoValue2}, TreeWalker2} = value_ast(Value2, false, Context, TreeWalker1),
-            Ast = erl_syntax:application(erl_syntax:atom(list_to_atom("filter_"++Operator)), 
+            Ast = erl_syntax:application(erl_syntax:atom(erlydtl_operators), 
                                          erl_syntax:atom(Operator), 
                                          [Value1Ast, Value2Ast, z_context_ast(Context)]),
             {{Ast, merge_info(InfoValue1,InfoValue2)}, TreeWalker2};
