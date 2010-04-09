@@ -369,8 +369,8 @@ ValueList -> ValueList comma E : '$1' ++ ['$3'].
 
 %%% Expressions
 
-E -> E or_keyword E  : {expr, "b_or", '$1', '$3'}.
-E -> E and_keyword E  : {expr, "b_and", '$1', '$3'}.
+E -> E or_keyword E  : {expr, "or", '$1', '$3'}.
+E -> E and_keyword E  : {expr, "and", '$1', '$3'}.
 E -> E '==' E  : {expr, "eq", '$1', '$3'}.
 E -> E '/=' E  : {expr, "ne", '$1', '$3'}.
 E -> E '<' E  : {expr, "lt", '$1', '$3'}.
@@ -379,7 +379,7 @@ E -> E '=<' E  : {expr, "le", '$1', '$3'}.
 E -> E '>=' E  : {expr, "ge", '$1', '$3'}.
 E -> E '+' E  : {expr, "add", '$1', '$3'}.
 E -> E '-' E  : {expr, "sub", '$1', '$3'}.
-E -> E '*' E  : {expr, "mult", '$1', '$3'}.
+E -> E '*' E  : {expr, "multiply", '$1', '$3'}.
 E -> E '/' E  : {expr, "divide", '$1', '$3'}.
 E -> E '%' E  : {expr, "modulo", '$1', '$3'}.
 E -> Uminus : '$1'.
@@ -387,4 +387,4 @@ E -> Unot : '$1'.
 E -> Value : '$1'.
 
 Uminus -> '-' E : {expr, "negate", '$2'}.
-Unot -> not_keyword E : {expr, "b_not", '$2'}.
+Unot -> not_keyword E : {expr, "not", '$2'}.
