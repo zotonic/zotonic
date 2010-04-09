@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% with q.qcat|eq:"event" as is_event %}
+{% with q.qcat == "event" as is_event %}
 
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
@@ -35,7 +35,7 @@
 								<span class="zp-35">{{ c.value|escape|default:"-" }}</span>
 								<span class="zp-20">{{ c.modified|date:"d M Y, H:i" }}</span>
 								<span class="zp-10">
-									{% button text="delete" disabled=module|eq:"zotonic" action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#li.id}} %}
+									{% button text="delete" disabled=(module=="zotonic") action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#li.id}} %}
 
 									{% button text="edit" action={dialog_config_edit module=module key=key on_success={reload}} %}
 								</span>

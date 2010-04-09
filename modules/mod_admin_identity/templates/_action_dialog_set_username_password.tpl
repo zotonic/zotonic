@@ -1,7 +1,7 @@
 
 <p>
 	Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them.
-	{% if username and not id|eq:1 %}
+	{% if username and id /= 1 %}
 		<br/>Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore.
 	{% endif %}
 </p>
@@ -28,7 +28,7 @@
 		
 		{% button action={dialog_close} text="Cancel" %}
 		
-		{% if username and not id|eq:1 %}
+		{% if username and id /= 1 %}
 			{% button action={dialog_delete_username id=id on_success=on_delete} text="delete" %}
 		{% endif %}
 	</div>

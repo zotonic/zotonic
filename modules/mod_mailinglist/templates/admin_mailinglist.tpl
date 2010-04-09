@@ -35,13 +35,13 @@
 						<span class="zp-10">{{ stats[2]|length|format_number }}</span>
 					{% endwith %}
 					<span class="zp-20">
-						{% button text="recipients" action={redirect dispatch="admin_mailinglist_recipients" id=id} disabled=enabled|not %}
+						{% button text="recipients" action={redirect dispatch="admin_mailinglist_recipients" id=id} disabled=not enabled %}
 						{% if enabled %}
 							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						{% else %}
 							{% button text="view" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						{% endif %}
-						{% button text="delete" postback={mailinglist_delete_confirm id=id} disabled=enabled|not %}
+						{% button text="delete" postback={mailinglist_delete_confirm id=id} disabled=not enabled %}
 					</span>
 				</a>
 				{% endwith %}

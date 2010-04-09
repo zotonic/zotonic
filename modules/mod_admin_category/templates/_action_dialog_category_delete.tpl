@@ -23,7 +23,7 @@
 			<select id="{{ #transfer_id }}" name="transfer_id">
 				<option value=""></option>
 				{% for cat_id, level, indent, name in m.category.all_flat %}
-					<option value="{{cat_id}}" {% if cat_id|eq:id %}disabled="disabled" {% endif %}>
+					<option value="{{cat_id}}" {% if cat_id == id %}disabled="disabled" {% endif %}>
 						{{ indent }}{{ m.rsc[cat_id].title|default:name }}
 					</option>
 				{% endfor %}

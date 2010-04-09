@@ -9,12 +9,12 @@
             <input type="hidden" name="id" value="{{ id }}" />
             <div class="form-item clearfix">
                 <label for="field-title">Title</label>
-                <input type="text" id="field-title" name="title" value="{{ r.title }}" {% if is_editable|not %}disabled="disabled"{% endif %}/>
+                <input type="text" id="field-title" name="title" value="{{ r.title }}" {% if not is_editable %}disabled="disabled"{% endif %}/>
             </div>
 
             <div class="form-item clearfix">
                 <label for="field-summary">Summary</label>
-                <textarea rows="2" cols="10" id="field-summary" name="summary" class="intro" {% if is_editable|not %}disabled="disabled"{% endif %}>{{ r.summary }}</textarea>
+                <textarea rows="2" cols="10" id="field-summary" name="summary" class="intro" {% if not is_editable %}disabled="disabled"{% endif %}>{{ r.summary }}</textarea>
             </div>
 
             {% button action={zmedia id=id media_div_id=#media subject_id=id} text="Add media to body" id="zmedia-open-dialog" style="display:none" %}

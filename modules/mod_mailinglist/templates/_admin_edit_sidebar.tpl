@@ -11,7 +11,7 @@
 
 		{% button text="Send mailing" title="Select a mailing list to send this page to." class="do_tooltip" action={dialog_mailing_page id=id} %}
 		
-		{% button text="Send test mailing" class="do_tooltip" disabled=m.rsc.mailinglist_test.is_visible|not title="Send this page to the test mailing list." action={mailing_page_test id=id} %}
+		{% button text="Send test mailing" class="do_tooltip" disabled=not m.rsc.mailinglist_test.is_visible title="Send this page to the test mailing list." action={mailing_page_test id=id} %}
 
 		{% button text="Email page" title="Send this page to an e-mail address." class="do_tooltip" action={dialog_email_page id=id} %}
 
