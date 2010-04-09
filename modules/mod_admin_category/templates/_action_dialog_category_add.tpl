@@ -34,7 +34,7 @@
 			<label for="{{ #group_id }}">Group</label>
 			<select id="{{ #group_id }}" name="group_id">
 			{% for group_id in m.acl.member %}
-				<option value="{{ group_id }}" {% if m.rsc[group_id].name|eq:"admins" %}selected="selected"{% endif %}>
+				<option value="{{ group_id }}" {% if m.rsc[group_id].name == "admins" %}selected="selected"{% endif %}>
 					{{ m.rsc[group_id].title }}
 				</option>
 			{% endfor %}

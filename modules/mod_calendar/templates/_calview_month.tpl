@@ -15,9 +15,9 @@
 			<li class="programme-day">
 				{% with event_divs[day]|length|default:0 as ev_len %}
 				{% with whole_day[day]|length|default:0 as wd_len %}
-				<ol class="{% if ev_len|add:wd_len|gt:5 %}long-list{% endif %}">
+				<ol class="{% if ev_len + wd_len > 5 %}long-list{% endif %}">
 				<li class="programme-day-date">
-					{% if day[3]|eq:1 or month_dates[1][1]|eq:day %}
+					{% if day[3] == 1 or month_dates[1][1] == day %}
 						{{ day|date:"F d" }}
 					{% else %}
 						{{ day|date:"d" }}

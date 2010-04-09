@@ -48,12 +48,12 @@
 				<li id="{{ #li.id }}">
 					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
 						<span class="zp-20">{{ m.rsc[id].title|striptags }}</span>
-						<span class="zp-15">{{ m.identity[id].username|escape }}{% if id|eq:me %}  <strong>(that's you)</strong>{% endif %}</span>
+						<span class="zp-15">{{ m.identity[id].username|escape }}{% if id == me %}  <strong>(that's you)</strong>{% endif %}</span>
 						<span class="zp-10">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
 						<span class="zp-10">{{ m.rsc[id].created|date:"d M, H:i" }}</span>
 						<span class="zp-30">
 							{% button action={dialog_set_username_password id=id} text="set username/ password" on_delete={slide_fade_out target=#li.id} %}
-							{% if id|ne:1 %}
+							{% if id /= 1 %}
 								{% button text="delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#li.id}} %}
 							{% endif %}
 							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}

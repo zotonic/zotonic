@@ -12,7 +12,7 @@
 				{% button text="Cancel" class="do_tooltip" title="Cancel this mailing." 
 						postback={dialog_mailing_cancel_confirm mailinglist_id=mailinglist_id page_id=id} 
 						delegate="mod_mailinglist" 
-						disabled=m.rsc[mailinglist_id].is_editable|not 
+						disabled=not m.rsc[mailinglist_id].is_editable 
 				%}
 			</li>
 		{% endfor %}

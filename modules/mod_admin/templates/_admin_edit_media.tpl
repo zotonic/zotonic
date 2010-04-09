@@ -9,7 +9,7 @@
 	</p>
     {% if medium.width and medium.height %}
     <div class="edit_media">
-	{% if medium.width|lt:606  %}
+	{% if medium.width < 606  %}
 		{% media medium %}
 	{% else %}
 		{% media medium width=606 height=606 %}

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% with q.qcat|eq:"event" as is_event %}
+{% with q.qcat == "event" as is_event %}
 
 	<div id="content" class="zp-85">
 		<div class="block clearfix">

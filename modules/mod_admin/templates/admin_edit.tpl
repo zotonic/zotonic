@@ -160,7 +160,7 @@
 										{% include "_admin_edit_media_view.tpl" id=id %}
 									</div>
 
-									{% button text="Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=is_editable|not %}
+									{% button text="Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
 								{% endwith %}
 							</div>
 						</div>
@@ -217,7 +217,7 @@
                         {% endif %}
 
 						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.is_a.meta|not }} }">
+							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.meta }} }">
 								<span class="title">Advanced</span>
 								<span class="arrow">make smaller</span>
 							</h3>
@@ -243,7 +243,7 @@
 											<div class="zp-50">
 												<div class="form-item clearfix">
 													<label for="field-name">Unique name</label>
-													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id|eq:"1" %}disabled="disabled"{% endif %} />
+													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} />
 												</div>
 											</div>
 										{% else %}
@@ -318,7 +318,7 @@
 							<div class="item clearfix">
 								<div class="admin-form ">
 									<div class="form-item clearfix">
-										{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save" title="Save this page." disabled=is_editable|not %}
+										{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save" title="Save this page." disabled=not is_editable %}
 										{% if is_editable %}
 											{% button type="submit" id="save_view" class="save-resource do_tooltip" text="save &amp; view" title="Save and view the page." %}
 										{% else %}
@@ -431,7 +431,7 @@
 						</div>
 
 						<div class="item-wrapper" id="sort-date">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.is_a.event|not }} }">
+							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.event }} }">
 								<span class="title">Date range</span>
 								<span class="arrow">make smaller</span>
 							</h3>
@@ -461,7 +461,7 @@
 						{% endif %}
 
 						<div class="item-wrapper" id="sort-connections">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.is_a.collection|not }} }">
+							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.collection }} }">
 								<span class="title">Page connections</span>
 								<span class="arrow">make smaller</span>
 							</h3>
@@ -528,7 +528,7 @@
 								</p>
 
 								<div class="form-item clearfix">
-									{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save this page" title="Save this page and change category." disabled=is_editable|not %}
+									{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save this page" title="Save this page and change category." disabled=not is_editable %}
 									{% button class="discard-resource" text="cancel" action={redirect back} %}
 								</div>
 							</div>
