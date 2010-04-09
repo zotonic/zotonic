@@ -63,7 +63,7 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToke
     RevString = lists:reverse(String),
     Keywords = ["for", "empty", "endfor", "in", "include", "catinclude", "block", "endblock",
         "extends", "autoescape", "endautoescape", "if", "else", "endif",
-        "not", "or", "and", "comment", "endcomment", "cycle", "firstof",
+        "not", "or", "and", "xor", "comment", "endcomment", "cycle", "firstof",
         "ifchanged", "ifequal", "endifequal", "ifnotequal", "endifnotequal",
         "now", "regroup", "rsc", "spaceless", "endspaceless", "ssi", "templatetag",
         "load", "call", "with", "url", "print", "image", "image_url", "media", "_", "with", "endwith", 
