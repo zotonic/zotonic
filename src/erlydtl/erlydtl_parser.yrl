@@ -188,6 +188,7 @@ Terminals
 	close_trans
 	trans_literal
 	or_keyword
+	xor_keyword
 	and_keyword
 	'__keyword'
  	hash
@@ -201,6 +202,7 @@ Rootsymbol
 
 %% Operator precedences for the E non terminal
 Left 100 or_keyword.
+Left 105 xor_keyword.
 Left 110 and_keyword.
 Nonassoc 300 '==' '/=' '<' '>' '=<' '>='.
 Left 400 '+' '-'.
@@ -370,6 +372,7 @@ ValueList -> ValueList comma E : '$1' ++ ['$3'].
 %%% Expressions
 
 E -> E or_keyword E  : {expr, "or", '$1', '$3'}.
+E -> E xor_keyword E  : {expr, "xor", '$1', '$3'}.
 E -> E and_keyword E  : {expr, "and", '$1', '$3'}.
 E -> E '==' E  : {expr, "eq", '$1', '$3'}.
 E -> E '/=' E  : {expr, "ne", '$1', '$3'}.
