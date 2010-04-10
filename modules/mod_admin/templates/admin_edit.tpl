@@ -148,7 +148,7 @@
 
 						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable %}
 
-						{% if r.is_a.media|or:r.medium %}
+						{% if r.is_a.media or r.medium %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 								<span class="title">File / media content</span>
@@ -342,7 +342,7 @@
 
 									<div class="form-item clearfix">
 										{% ifnotequal id 1 %}
-											{% button class="discard-resource do_tooltip" disabled=r.is_protected|ornot:m.rsc[id].is_deletable id="delete-button" text="delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title="Delete this page." %}
+											{% button class="discard-resource do_tooltip" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text="delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title="Delete this page." %}
 										{% endifnotequal %}
 										{% if is_editable %}
 											{% button type="submit" id="save_duplicate" class="save-resource do_tooltip" text="duplicate" title="Duplicate this page." %}
