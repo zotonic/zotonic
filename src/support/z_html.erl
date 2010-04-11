@@ -317,6 +317,7 @@ allow_once(<<"var">>) -> true;
 allow_once(_) -> false.
 
 %% @doc Allowed elements (see also allow_once/1 above)
+allow_elt(<<"audio">>) -> true;
 allow_elt(<<"blockquote">>) -> true;
 allow_elt(<<"caption">>) -> true;
 allow_elt(<<"col">>) -> true;
@@ -337,6 +338,7 @@ allow_elt(<<"legend">>) -> true;
 allow_elt(<<"map">>) -> true;
 allow_elt(<<"ol">>) -> true;
 allow_elt(<<"samp">>) -> true;
+allow_elt(<<"source">>) -> true;
 allow_elt(<<"span">>) -> true;
 allow_elt(<<"table">>) -> true;
 allow_elt(<<"tbody">>) -> true;
@@ -346,23 +348,29 @@ allow_elt(<<"td">>) -> true;
 allow_elt(<<"th">>) -> true;
 allow_elt(<<"tr">>) -> true;
 allow_elt(<<"ul">>) -> true;
+allow_elt(<<"video">>) -> true;
 allow_elt(_) -> false.
 
 %% @doc Allowed attributes
 allow_attr(<<"align">>) -> true;
 allow_attr(<<"alt">>) -> true;
+allow_attr(<<"autoplay">>) -> true;
 allow_attr(<<"border">>) -> true;
 allow_attr(<<"borderspacing">>) -> true;
 allow_attr(<<"cellpadding">>) -> true;
 allow_attr(<<"cellspacing">>) -> true;
 allow_attr(<<"class">>) -> true;
 allow_attr(<<"colspan">>) -> true;
+allow_attr(<<"controls">>) -> true;
 allow_attr(<<"coords">>) -> true;
 allow_attr(<<"dir">>) -> true;
 allow_attr(<<"height">>) -> true;
 allow_attr(<<"href">>) -> true;
 %allow_attr(<<"id">>) -> true;
+allow_attr(<<"loop">>) -> true;
 allow_attr(<<"name">>) -> true;
+allow_attr(<<"poster">>) -> true;
+allow_attr(<<"preload">>) -> true;
 allow_attr(<<"rowspan">>) -> true;
 allow_attr(<<"shape">>) -> true;
 allow_attr(<<"src">>) -> true;
@@ -377,6 +385,7 @@ allow_attr(_) -> false.
 %% @doc Check if the attribute might contain an url
 is_url_attr(<<"src">>) -> true;
 is_url_attr(<<"href">>) -> true;
+is_url_attr(<<"poster">>) -> true;
 is_url_attr(_) -> false.
 
 %% @doc Elements that shouldn't use a open and close tag.
