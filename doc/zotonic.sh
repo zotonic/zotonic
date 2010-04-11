@@ -56,6 +56,9 @@ export HEART_COMMAND="$ZOTONIC_SH start"
 export ZOTONIC_IP=any
 export ZOTONIC_PORT=8000
 
+# The filename where zotonic writes its unix process Id to, for monitoring applications.
+export ZOTONIC_PIDFILE=$BASE/zotonic.pid
+
 pushd $ZOTONIC >/dev/null
 
 
