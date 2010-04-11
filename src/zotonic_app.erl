@@ -33,6 +33,7 @@ ensure_started(App) ->
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for zotonic.
 start(_Type, _StartArgs) ->
+    write_pidfile(),
 	set_path(),
     ensure_started(crypto),
     ensure_started(ssl),
@@ -44,6 +45,7 @@ start(_Type, _StartArgs) ->
 %% @spec stop(_State) -> ServerRet
 %% @doc application stop callback for zotonic.
 stop(_State) ->
+    remove_pidfile(),
     ok.
 
 set_path() ->
@@ -54,4 +56,20 @@ set_path() ->
 get_path() ->
 	application:get_env(zotonic, lib_dir).
 
-	
+
+%% Pid-file handling
+
+get_pidfile() ->
+    case os:getenv("ZOTONIC_PIDFILE") of 
+        false -> {ok, Cwd} = file:get_cwd(),
+                 filename:join(Cwd, "zotonic.pid");
+        File -> File
+    end.
+
+write_pidfile() ->
+    {ok, F} = file:open(get_pidfile(), [write]),
+    ok = file:write(F, os:getpid()),
+    ok = file:close(F).
+
+remove_pidfile() ->
+    ok = file:delete(get_pidfile()).
