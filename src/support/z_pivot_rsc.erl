@@ -29,6 +29,7 @@
 -export([
     poll/1,
     pivot/2,
+    queue_all/1,
 
     get_pivot_title/1,
     get_pivot_title/2,
@@ -66,6 +67,10 @@ poll(Context) ->
 %% @spec pivot(Id, Context) -> void()
 pivot(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot, Id}).
+
+%% @doc Rebuild the search index by queueing all resources for pivot.
+queue_all(Context) ->
+    z_db:q("UPDATE rsc SET version=version+1", Context).
 
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
