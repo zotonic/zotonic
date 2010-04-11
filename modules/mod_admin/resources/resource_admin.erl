@@ -30,5 +30,7 @@ is_authorized(ReqData, Context) ->
 
 
 html(Context) ->
-    Html = z_template:render("admin.tpl", [{page_dashboard, true}], Context),
+    Template = z_context:get(template, Context, "admin.tpl"),
+    Selected = z_context:get(selected, Context, "dashboard"),
+    Html = z_template:render(Template, [{selected, Selected}], Context),
 	z_context:output(Html, Context).

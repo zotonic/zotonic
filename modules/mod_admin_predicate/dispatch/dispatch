@@ -1,4 +1,5 @@
 %% Dispatch rule for a predicate list page
 [
-    {admin_predicate,       ["admin", "predicate"],                 resource_admin_predicate,[]}
+    {admin_predicate,       ["admin", "predicate"],                 resource_admin, [{template, "admin_predicate.tpl"}, {selected, "predicate"}]},
+    {admin_predicate_edit,  ["admin", "predicate", id],             resource_admin_predicate_edit,	[]}
 ].

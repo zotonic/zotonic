@@ -61,9 +61,9 @@
 			{% wire id="zp-logoff" action={logoff} %}
 		
 			<ul id="navigation" class="zp-10" style="margin: 0 10px 0 0;">
-				<li><a href="/admin/" {% if page_dashboard %}class="current"{% endif %}>Dashboard</a></li>
-				<li><a href="/admin/overview/" {% if page_overview %}class="current"{% endif %}>Pages</a></li>
-				<li><a href="{% url admin_media %}" {% if page_media %}class="current"{% endif %}>Media</a></li>
+				<li><a href="/admin/" {% ifequal selected "dashboard" %}class="current"{% endifequal %}>Dashboard</a></li>
+				<li><a href="/admin/overview/" {% ifequal selected "overview" %}class="current"{% endifequal %}>Pages</a></li>
+				<li><a href="{% url admin_media %}" {% ifequal selected "media" %}class="current"{% endifequal %}>Media</a></li>
 			
 				{% all include "_admin_menu_module.tpl" %}
 
