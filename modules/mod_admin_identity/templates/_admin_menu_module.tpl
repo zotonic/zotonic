@@ -1,1 +1,1 @@
-<li><a href="{% url admin_user %}" {% if page_admin_user %}class="current"{% endif %}>Users</a></li>
+<li><a href="{% url admin_user %}" {% ifequal selected "users" %}class="current"{% endifequal %}>Users</a></li>

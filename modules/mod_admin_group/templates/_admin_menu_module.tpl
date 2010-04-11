@@ -1,1 +1,1 @@
-<li><a href="{% url admin_group %}" {% if page_admin_group %}class="current"{% endif %}>Groups</a></li>
+<li><a href="{% url admin_group %}" {% ifequal selected "group" %}class="current"{% endifequal %}>Groups</a></li>
