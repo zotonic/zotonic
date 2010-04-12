@@ -22,7 +22,8 @@
 	<![endif]-->
 	
 	{% lib
-		"/js/modules/cufon.js"
+		"js/modules/cufon.js"
+		"js/apps/modernizr.js"
 	%}
 </head>
 <body class="{% block page_class %}{% endblock %}">
