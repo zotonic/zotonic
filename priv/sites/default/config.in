@@ -45,7 +45,7 @@
     %% Title of your site
     {title, <<"Your first blog">>},
     %% Subtitle
-    {subtitle, <<"Built with Zotonic, the Erlang CMS.">>},
+    {subtitle, <<"built with Zotonic, the Erlang CMS.">>},
 
     %% Page length
     {pagelen, 5}
