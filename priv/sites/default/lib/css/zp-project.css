@@ -59,6 +59,11 @@ h1 {
 	header h1 a:hover {
 		color: #eee;
 	}
+	
+	header h1 span {
+		font-style: italic;
+		font-size: .6em;
+	}
 
 h2 {
 	color: #163a51;
