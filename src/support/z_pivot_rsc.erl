@@ -144,6 +144,7 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% Poll the queue for the default host
 handle_cast(poll, State) ->
+    flush(),
     do_poll(State#state.context),
     {noreply, State};
 
@@ -531,4 +532,13 @@ lookup_custom_pivot(Module, Column, Value, Context) ->
     case z_db:q(Query, [Value], Context) of
         [] -> undefined;
         [{Id}|_] -> Id
+    end.
+
+
+%% @doc Flush all 'poll' messages in the message queue.  This is needed when waking up after sleep.
+flush() ->
+    receive
+        {'$gen_cast', poll} -> flush()
+    after 
+        0 -> ok
     end.
