@@ -131,6 +131,7 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Scan for all scomps etc. for the context given.
 handle_cast({module_ready, _NotifyContext}, State) ->
+    flush(),
     Scanned = scan(State#state.context),
     State1 = State#state{
         scomps     = proplists:get_value(scomp, Scanned),
@@ -284,3 +285,13 @@ scan_subdir(Subdir, Prefix, Extension, Context) ->
     scan_remove_prefix_ext(Filename, PrefixLen, Ext) ->
         Basename = filename:basename(Filename, Ext),
         lists:nthtail(PrefixLen, Basename).
+
+
+
+%% @doc Flush all 'module_ready' messages in the message queue.  This is needed when waking up after sleep.
+flush() ->
+    receive
+        {'$gen_cast', {module_ready, _Context}} -> flush()
+    after 
+        0 -> ok
+    end.
