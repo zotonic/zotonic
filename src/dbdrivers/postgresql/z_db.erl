@@ -216,7 +216,7 @@ insert(Table, Props, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Props, Context);
 insert(Table, Props, Context) ->  
     assert_table_name(Table),
-    Cols = columns(Table, Context),
+    Cols = column_names(Table, Context),
     InsertProps = prepare_cols(Cols, Props),
     C = get_connection(Context),
 
@@ -235,7 +235,7 @@ insert(Table, Props, Context) ->
              ++ string:join([ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(Parameters)) ], ", ")
              ++ ")",
 
-    FinalSql = case proplists:is_defined(id, Cols) of
+    FinalSql = case lists:member(id, Cols) of
         true -> Sql ++ " returning id";
         false -> Sql
     end,
@@ -254,7 +254,7 @@ update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
     assert_table_name(Table),
-    Cols         = columns(Table, Context),
+    Cols         = column_names(Table, Context),
     UpdateProps  = prepare_cols(Cols, Parameters),
     C            = get_connection(Context),
     UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
@@ -363,10 +363,10 @@ prepare_cols(Cols, Props) ->
     end.
 
 split_props(Props, Cols) ->
-    {CProps, PProps} = lists:partition(fun ({P,_V,_M}) -> proplists:is_defined(P, Cols) end, Props),
+    {CProps, PProps} = lists:partition(fun ({P,_V}) -> lists:member(P, Cols) end, Props),
     case PProps of
         [] -> ok;
-        _  -> z_utils:assert(proplists:is_defined(props, Cols), {unknown_column, PProps})
+        _  -> z_utils:assert(lists:member(props, Cols), {unknown_column, PProps})
     end,
     {CProps, PProps}.
 
