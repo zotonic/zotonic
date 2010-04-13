@@ -8,7 +8,6 @@
 
 -export([connect/2, connect/3, connect/4, close/1]).
 -export([last_id/2, reset_id/2, squery1/2, equery1/2, equery1/3, assoc/2, assoc/3]).
--export([columns/2]).
 -export([get_parameter/2, squery/2, equery/2, equery/3]).
 -export([parse/2, parse/3, parse/4, describe/2, describe/3]).
 -export([bind/3, bind/4, execute/2, execute/3, execute/4]).
@@ -38,13 +37,6 @@ close(C) when is_pid(C) ->
 
 get_parameter(C, Name) ->
     pgsql_connection:get_parameter(C, Name).
-
-columns(C, Table) when is_atom(Table) ->
-    columns(C, atom_to_list(Table));
-columns(C, Table) ->
-    %% Should use information_schema for this, but then we have to dig for the database name.
-    {ok, Columns, _Rows} = equery(C, "select * from \""++Table++"\" limit 1"),
-    [{list_to_atom(binary_to_list(Name)),Type} || #column{name=Name,type=Type} <- Columns].
 
 last_id(C, Table) when is_atom(Table) ->
     last_id(C, atom_to_list(Table));

@@ -51,11 +51,15 @@
     column_names/2,
     update_sequence/3,
     table_exists/2,
+    ensure_table/3,
+    drop_table/2,
     
     assert_table_name/1,
     prepare_cols/2
 ]).
 
+
+-include_lib("pgsql.hrl").
 -include_lib("zotonic.hrl").
 
 
@@ -359,7 +363,7 @@ prepare_cols(Cols, Props) ->
     end.
 
 split_props(Props, Cols) ->
-    {CProps, PProps} = lists:partition(fun ({P,_V}) -> proplists:is_defined(P, Cols) end, Props),
+    {CProps, PProps} = lists:partition(fun ({P,_V,_M}) -> proplists:is_defined(P, Cols) end, Props),
     case PProps of
         [] -> ok;
         _  -> z_utils:assert(proplists:is_defined(props, Cols), {unknown_column, PProps})
@@ -367,27 +371,56 @@ split_props(Props, Cols) ->
     {CProps, PProps}.
 
 
-%% @doc Return a property list with all columns of the table. (example: [{id,int4},...])
-%% @spec columns(Table, Context) -> PropList
+%% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
+%% @spec columns(Table, Context) -> [ #column ]
 columns(Table, Context) when is_atom(Table) ->
     columns(atom_to_list(Table), Context);
 columns(Table, Context) ->
-    Db = Context#context.host,
-    case z_depcache:get({columns, Db, Table}, Context) of
+    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    case z_depcache:get({columns, Db, Schema, Table}, Context) of
         {ok, Cols} -> 
             Cols;
         _ ->
-            C = get_connection(Context),
-            Cols = pgsql:columns(C, Table),
-            return_connection(C, Context),
-            z_depcache:set({columns, Db, Table}, Cols, ?YEAR, [{database, Db}], Context),
-            Cols
+            Cols = q("  select column_name, data_type, character_maximum_length, is_nullable, column_default
+                        from information_schema.columns
+                        where table_catalog = $1
+                          and table_schema = $2
+                          and table_name = $3
+                        order by ordinal_position", [Db, Schema, Table], Context),
+            Cols1 = [ columns1(Col) || Col <- Cols ],
+            z_depcache:set({columns, Db, Schema, Table}, Cols1, ?YEAR, [{database, Db}], Context),
+            Cols1
     end.
+    
+
+    columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>}) ->
+        #column_def{
+            name = id,
+            type = "serial",
+            length = undefined,
+            is_nullable = z_convert:to_bool(Nullable),
+            default = undefined
+        };
+    columns1({Name,Type,MaxLength,Nullable,Default}) ->
+        #column_def{
+            name = z_convert:to_atom(Name),
+            type = z_convert:to_list(Type),
+            length = MaxLength,
+            is_nullable = z_convert:to_bool(Nullable),
+            default = column_default(Default)
+        }.
+    
+    column_default(undefined) -> undefined;
+    column_default(<<"nextval(", _/binary>>) -> undefined;
+    column_default(Default) -> binary_to_list(Default).
+
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
 %% @spec column_names(Table, Context) -> [ atom, ... ]
 column_names(Table, Context) ->
-    lists:sort(proplists:get_keys(columns(Table, Context))).
+    Names = [ C#column_def.name || C <- columns(Table, Context)],
+    lists:sort(Names).
 
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
@@ -419,7 +452,93 @@ table_exists(Table, Context) ->
         1 -> true;
         0 -> false
     end.
+
+
+%% @doc Make sure that a table is dropped, only when the table exists
+drop_table(Name, Context) when is_atom(Name) ->
+    drop_table(atom_to_list(Name), Context);
+drop_table(Name, Context) ->
+    case table_exists(Name, Context) of
+        true -> q("drop table \""++Name++"\"", Context);
+        false -> ok
+    end.
+
+
+%% @doc Ensure that a table with the given columns exists, alter any existing table
+%% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
+%% when creating the table.
+ensure_table(Table, Cols, Context) when is_atom(Table) ->
+    ensure_table(atom_to_list(Table), Cols, Context);
+ensure_table(Table, Cols, Context) ->
+    case table_exists(Table, Context) of
+        false ->
+            ensure_table_create(Table, Cols, Context);
+        true ->
+            ExistingCols = lists:sort(columns(Table, Context)),
+            WantedCols = lists:sort(Cols),
+            case ensure_table_alter_cols(WantedCols, ExistingCols, []) of
+                [] -> ok;
+                Diff ->
+                    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
+                    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+                    z_db:q("ALTER TABLE \""++Table++"\" " ++ string:join(Diff, ","), Context),
+                    z_depcache:flush({columns, Db, Schema, Table}, Context),
+                    ok
+            end
+    end.
+
+    ensure_table_create(Name, Cols, Context) ->
+        ColsSQL = ensure_table_create_cols(Cols, []),
+        z_db:q("CREATE TABLE \""++Name++"\" ("++string:join(ColsSQL, ",") ++ table_create_primary_key(Cols) ++ ")", Context),
+        ok.
+
+    table_create_primary_key([]) -> [];
+    table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
+    table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
+
+    ensure_table_create_cols([], Acc) ->
+        lists:reverse(Acc);
+    ensure_table_create_cols([C|Cols], Acc) ->
+        M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
+        ensure_table_create_cols(Cols, [M|Acc]).
+
+
+    ensure_table_alter_cols([], [], Acc) ->
+        lists:reverse(Acc);
+    ensure_table_alter_cols([N|Ns], [N|Es], Acc) ->
+        ensure_table_alter_cols(Ns, Es, Acc);
+    ensure_table_alter_cols([N|Ns], [E|Es], Acc) when N#column_def.name == E#column_def.name ->
+        M = lists:flatten(["ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" TYPE ", column_spec(N)]),
+        M1 = case N#column_def.is_nullable of 
+                true  -> M ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" DROP NOT NULL"]);
+                false -> M ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" SET NOT NULL"])
+             end,
+        M2 = case N#column_def.default of
+                undefined -> M1 ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" DROP DEFAULT"]);
+                Default -> M1 ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" SET DEFAULT ", Default])
+             end,
+        ensure_table_alter_cols(Ns, Es, [M2|Acc]);
+    ensure_table_alter_cols([N|Ns], Es, Acc) when Es == [] orelse N < hd(Es) ->
+        M = lists:flatten(["ADD COLUMN \"", atom_to_list(N#column_def.name), "\" ", 
+                            column_spec(N), 
+                            column_spec_nullable(N#column_def.is_nullable), 
+                            column_spec_default(N#column_def.default)]),
+        ensure_table_alter_cols(Ns, Es, [M|Acc]);
+    ensure_table_alter_cols(Ns, [E|Es], Acc) when Ns == [] orelse E < hd(Ns) ->
+        M = lists:flatten(["DROP COLUMN \"", atom_to_list(E#column_def.name), "\""]),
+        ensure_table_alter_cols(Ns, Es, [M|Acc]).
+
+    column_spec(#column_def{type=Type, length=undefined}) ->
+        Type;
+    column_spec(#column_def{type=Type, length=Length}) ->
+        lists:flatten([Type, $(, integer_to_list(Length), $)]).
     
+    column_spec_nullable(true) -> "";
+    column_spec_nullable(false) -> " not null".
+    
+    column_spec_default(undefined) -> "";
+    column_spec_default(Default) -> [32, Default].
+
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
 %% @spec check_table_name(String) -> true
