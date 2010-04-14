@@ -8,6 +8,13 @@ modify_rsc_test() ->
     C = z_context:new(testsandbox),
     AdminC = z_acl:sudo(C),
 
+    %% cleanup eventual remains of earlier failed tests
+    case m_rsc:uri_lookup("http://foo.com/id/333", AdminC) of
+        undefined -> nop;
+        ExistingId -> ?assertEqual(ok, m_rsc:delete(ExistingId, AdminC))
+    end,
+
+    %% perform the tests
     ?assertThrow({error, eacces}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
 
     {ok, Id} = m_rsc_import:create_empty("http://foo.com/id/333", AdminC),
