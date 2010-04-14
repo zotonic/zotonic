@@ -54,12 +54,14 @@ answer(Q, Context) ->
 
 answer_inputs([], _Context, Acc) ->
     {ok, Acc};
-answer_inputs([Name|Rest], Context, Acc) ->
+answer_inputs([{IsSelect,Name}|Rest], Context, Acc) ->
     case z_context:get_q(Name, Context) of
         undefined -> {error, missing};
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};
-                    V -> answer_inputs(Rest, Context, [{Name, V}|Acc])
+                    V ->
+                        V1 = case IsSelect of true -> V; false -> {text, V} end, 
+                        answer_inputs(Rest, Context, [{Name,V1}|Acc])
                  end
     end.
 
@@ -73,11 +75,12 @@ parse([$[|T], in_text, [], Acc, InputAcc) ->
     parse(T, in_input, [], Acc, InputAcc);
 parse([$]|T], in_input, Input, Acc, InputAcc) ->
     Input1 = lists:reverse(Input),
-    {Name, Elt} = case is_select(Input1) of
+    IsSelect = is_select(Input1),
+    {Name, Elt} = case IsSelect of
         true -> build_select(Input1);
         false -> build_input(Input1)
     end,
-    parse(T, in_text, [], [Elt|Acc], [Name|InputAcc]);
+    parse(T, in_text, [], [Elt|Acc], [{IsSelect, Name}|InputAcc]);
 parse([H|T], in_input, Input, Acc, InputAcc) ->
     parse(T, in_input, [H|Input], Acc, InputAcc);
 parse([10|T], in_text, [], Acc, InputAcc) ->

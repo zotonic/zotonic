@@ -16,8 +16,17 @@ submit(SurveyId, FormId, Context) ->
             z_render:growl_error("Could not read survey information.", Context);
         {survey, QIds, Qs} ->
             {Answers, Missing, Accepted} = collect_answers(QIds, Qs, Context),
-            ?DEBUG({Answers, Missing}),
-            mark_accepted(Accepted, mark_missing(Missing, Context))
+            case Missing of
+                [] ->
+                    m_survey:insert_survey_submission(SurveyId, Answers, Context),
+                    Context1 = mark_accepted(Accepted, mark_missing(Missing, Context)),
+                    z_render:wire([
+                            {slide_up, [{target, FormId}]},
+                            {slide_down, [{target, FormId ++ "-success"}]}
+                        ], Context1);
+                _ -> 
+                    mark_accepted(Accepted, mark_missing(Missing, Context))
+            end
     end.
 
 
@@ -40,7 +49,7 @@ collect_answers(QIds, Qs, Context) ->
     collect_answers(QIds, Qs, Context, [], [], []).
 
 
-collect_answers([], Qs, Context, Answers, Missing, Accepted) ->
+collect_answers([], _Qs, _Context, Answers, Missing, Accepted) ->
     {Answers, Missing, Accepted};
 collect_answers([QId|QIds], Qs, Context, Answers, Missing, Accepted) ->
     Q = proplists:get_value(QId, Qs),

@@ -19,6 +19,10 @@
 
 {% wire id=#survey type="submit" postback={survey_submit id=id} delegate="mod_survey" %}
 <form id="{{ #survey }}" class="survey" method="POST" action="postback">
+	<p>
+		{{ m.rsc[id].summary }}
+	</p>
+
 	{% for q_id, q in m.survey.questions[id] %}
 	<div id="{{ q_id }}" class="survey-question clear-fix">
 		{{ q.html }}
@@ -29,5 +33,9 @@
 
 	<button class="survey-submit">Ready</button>
 </form>
+
+<div id="{{ #survey }}-success" style="display: none">
+	{{ m.rsc[id].body|show_media }}
+</div>
 
 {% endblock %}

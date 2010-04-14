@@ -55,7 +55,7 @@ answer(Q, Context) ->
         undefined -> {error, missing};
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};
-                    V -> {ok, [{Name, V}]}
+                    V -> {ok, [{Name, {text, V}}]}
                  end
     end.
 
