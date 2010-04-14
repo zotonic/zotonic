@@ -42,6 +42,8 @@
     q1/3,
     q_row/2,
     q_row/3,
+    equery/2,
+    equery/3,
     insert/2,
     insert/3,
     update/4,
@@ -194,6 +196,15 @@ q_row(Sql, Args, Context) ->
         [] -> undefined
     end.
 
+
+equery(Sql, Context) ->
+    equery(Sql, [], Context).
+    
+equery(Sql, Parameters, Context) ->
+    C = get_connection(Context),
+    R = pgsql:equery(C, Sql, Parameters),
+    return_connection(C, Context),
+    R.
 
 %% @doc Insert a new row in a table, use only default values.
 %% @spec insert(Table, Context) -> {ok, Id}
