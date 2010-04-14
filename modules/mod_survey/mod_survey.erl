@@ -207,6 +207,7 @@ new_question(Type) ->
 
 %% @doc Install the survey models
 install(Context) ->
+    m_survey:install(Context),
     z_datamodel:manage(?MODULE, datamodel(), Context).
 
 datamodel() ->

@@ -27,7 +27,11 @@
 -export([
     m_find_value/3,
     m_to_list/2,
-    m_value/2
+    m_value/2,
+    
+    insert_survey_submission/3,
+    survey_stats/2,
+    install/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -68,3 +72,92 @@ question_to_value([Id|Ids], Qs, Acc) ->
         {Id, [{id, Id}, {type, Type}, {name, Name}, {html, Html}]};
     question_to_value1(Id, undefined) ->
         {Id, [{id, Id}, {type, undefined}]}.
+
+
+
+%% @doc Save a survey, connect to the current visitor and user (if any)
+insert_survey_submission(SurveyId, Answers, Context) ->
+    UserId = z_acl:user(Context),
+    %% Delete previous answers of this user, if any
+    case UserId of
+        undefined -> nop;
+        _Other -> z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context)
+    end,
+    insert_questions(SurveyId, UserId, Answers, Context).
+
+    insert_questions(_SurveyId, _UserId, [], _Context) ->
+        ok;
+    insert_questions(SurveyId, UserId, [{QuestionId, Answers}|Rest], Context) ->
+        insert_answers(SurveyId, UserId, QuestionId, Answers, Context),
+        insert_questions(SurveyId, UserId, Rest, Context).
+        
+    insert_answers(_SurveyId, _UserId, _QuestionId, [], _Context) ->
+        ok;
+    insert_answers(SurveyId, UserId, QuestionId, [{Name, Answer}|As], Context) ->
+        Args = case Answer of
+            {text, Text} -> [SurveyId, UserId, QuestionId, Name, undefined, Text];
+            Value -> [SurveyId, UserId, QuestionId, Name, z_convert:to_list(Value), undefined]
+        end,
+        z_db:q("insert into survey_answer (survey_id, user_id, question, name, value, text) values ($1, $2, $3, $4, $5, $6)", Args, Context),
+        insert_answers(SurveyId, UserId, QuestionId, As, Context).
+
+
+%% @doc Fetch the aggregate answers of a survey, omitting the open text answers. 
+%% @spec survey_stats(int(), Context) -> [ {QuestionId, [{Name, [{Value,Count}] }] } ]
+survey_stats(SurveyId, Context) ->
+    Rows = z_db:q("
+                select question, name, value, count(*) 
+                from survey_answer 
+                where survey_id = $1 and value is not null
+                group by question, name, value 
+                order by question, name, value", [SurveyId], Context),
+    group_questions(Rows, []).
+    
+    group_questions([], Acc) ->
+        lists:reverse(Acc);
+    group_questions([{Question,_,_,_}|_] = Answers, Acc) ->
+        {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q == Question end, Answers),
+        NVs = case Qs of
+            [{_, Name, Value, Count}|QsTail] -> group_values(Name, [{Value, Count}], QsTail, []);
+            [] -> []
+        end,
+        group_questions(Answers1, [{Question,NVs}|Acc]).
+        
+    group_values(Name, Values, [], Acc) ->
+        [{Name, Values}|Acc];
+    group_values(Name, Values, [{_,Name,V,C}|Rs], Acc) ->
+        group_values(Name, [{V,C}|Values], Rs, Acc);
+    group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
+        group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
+
+
+%% @doc Install tables used for storing survey results
+install(Context) ->
+    z_db:ensure_table(survey_answer, [
+                #column_def{name=id, type="serial", is_nullable=false},
+                #column_def{name=survey_id, type="integer", is_nullable=false},
+                #column_def{name=user_id, type="integer", is_nullable=true},
+                #column_def{name=question, type="character varying", length=32, is_nullable=false},
+                #column_def{name=name, type="character varying", length=32, is_nullable=false},
+                #column_def{name=value, type="character varying", length=80, is_nullable=true},
+                #column_def{name=text, type="bytea", is_nullable=true}
+            ], Context),
+            
+    % Add some indices and foreign keys, ignore errors
+    z_db:equery("create index fki_survey_answer_survey_id on survey_answer(survey_id)", Context),
+    z_db:equery("alter table survey_answer add 
+                constraint fk_survey_answer_survey_id foreign key (survey_id) references rsc(id) 
+                on update cascade on delete cascade", Context),
+
+    z_db:equery("create index fki_survey_answer_user_id on survey_answer(user_id)", Context),
+    z_db:equery("alter table survey_answer add 
+                constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id) 
+                on update cascade on delete cascade", Context),
+                
+    %% For aggregating answers to survey questions (group by name)
+    z_db:equery("create index survey_answer_survey_name_key on survey_answer(survey_id, name)", Context),
+    z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
+    z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
+
+    ok.
+
