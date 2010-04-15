@@ -273,7 +273,25 @@ footer p.footer-blog-title {
 	.pager li.disabled {
 		display: none;
 	}
+
+.images-list {
+	margin: 0 0 18px 0;
+}
+
+	.images-list li {
+		margin: 0 0 18px 0;
+	}
 	
+	.images-list li:last-child {
+		margin: 0;
+	}
+
+	.images-list li img {
+		float: none;
+		display: block;
+		margin: 0;
+	}
+
 
 /* Posts
 ---------------------------------------------------------- */	

@@ -22,3 +22,7 @@
 	{% include "_article_prevnext.tpl" id=id %}
 
 {% endblock %}
+
+{% block sidebar %}
+	{% include "_article_sidebar.tpl" %}
+{% endblock %}

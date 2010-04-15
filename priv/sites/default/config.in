@@ -21,7 +21,7 @@
     {dbhost, "127.0.0.1"},
     {dbport, 5432},
     {dbuser, "zotonic"},
-    {dbpassword, ""},
+    {dbpassword, "zotonic"},
     {dbdatabase, "zotonic"},
     {dbschema, "public"},
     
