@@ -1,31 +1,52 @@
 {# Cache the sidebar, depending on the stuff in the 'article' category #}
 {% cache 3600 cat='article' %}
-
-{% include "_article_keywords.tpl" %}
-
-<h2>Archive</h2>
-<ul class="simple-list">
-	{% for year, months in m.search[{archive_year_month cat='article'}] %}
-    	<li>
-        	<a href="{% url archives_y year=year %}">{{ year }}</a>
-	        <ul>
-    	        {% for row in months %}
-        	    	<li><a href="{% url archives_m year=year month=row.month %}">{{ row.month_as_date|date:"F" }}</a> ({{ row.count }})</li>
-	           	{% endfor %}
-    	    </ul>
-    	</li>
-    {% endfor %}
-</ul>     
-
-<h2>Keywords</h2>
-<ul class="simple-list">
-    {% for id, count in m.search[{keyword_cloud cat='article'}] %}
-    	<li><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a> ({{ count }})</li>
-    {% endfor %}
-</ul>
-
-{% if m.rsc[id].is_editable %}
-	{% button text=_"edit this page" action={redirect dispatch="admin_edit_rsc" id=id} %}
-{% endif %}
+	
+	{% if m.category.tweet %}
+	
+		{% with m.search[{latest cat='tweet' pagelen=4}] as r %}
+			<h2>Tweets</h2>
+			{% if r.result %}
+				<ul class="shouts-list">
+					{% for tw in r.result %}
+						<li>
+							<p>
+								<img width="31" height="31" src="{{ m.rsc[tw].tweet['user'][2]['profile_image_url'] }}" />
+								<span class="tweet-body">{{ m.rsc[tw].body|twitter }}</span>
+								<span class="tweet-date-time">from {{ m.rsc[tw].tweet["source"] }} by {{ m.rsc[tw].tweet['user'][2]['screen_name'] }}</span>
+							</p>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+	
+	{% endif %}
+	
+	<h2>Archive</h2>
+	<ul class="simple-list">
+		{% for year, months in m.search[{archive_year_month cat='article'}] %}
+	    	<li>
+	        	<a href="{% url archives_y year=year %}">{{ year }}</a>
+		        <ul>
+	    	        {% for row in months %}
+	        	    	<li><a href="{% url archives_m year=year month=row.month %}">{{ row.month_as_date|date:"F" }}</a> ({{ row.count }})</li>
+		           	{% endfor %}
+	    	    </ul>
+	    	</li>
+	    {% endfor %}
+	</ul>
+	
+	{% if show_cloud %}
+		<h2>Keywords</h2>
+		<ul class="simple-list">
+		    {% for id, count in m.search[{keyword_cloud cat='article'}] %}
+		    	<li><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a> ({{ count }})</li>
+		    {% endfor %}
+		</ul>
+	{% endif %}
+	
+	{% if m.rsc[id].is_editable %}
+		{% button text=_"edit this page" action={redirect dispatch="admin_edit_rsc" id=id} %}
+	{% endif %}
 
 {% endcache %}

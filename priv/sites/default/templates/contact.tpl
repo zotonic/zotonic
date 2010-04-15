@@ -5,20 +5,25 @@
 {% wire id="contact-form" type="submit" postback={contact} delegate="resource_default_contact" %}
 <form id="contact-form" method="post" action="postback">
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
+  	<div class="form-item">
+		<label for="name">Name</label>
+    	<input type="text" name="name" id="name" />
+   	</div>
 
-    <label for="email">E-mail</label>
-    <input type="text" name="mail" id="mail" />
-    {% validate id="mail" type={email} type={presence} %}
+	<div class="form-item">
+		<label for="email">E-mail</label>
+    	<input type="text" name="mail" id="mail" />
+    	{% validate id="mail" type={email} type={presence} %}
+	</div>
+	
+	<div class="form-item">
+	    <label for="message">Message</label>
+	    <textarea name="message" id="message" cols="60" rows="8"></textarea>
+    	{% validate id="message" type={presence} %}
+	</div>
 
-    <label for="message">Message</label>
-    <textarea name="message" id="message" cols="60" rows="8"></textarea>
-    {% validate id="message" type={presence} %}
-
-    <input type="submit" value="Send" />
+    <button type="submit">Send</button>
 
 </form>
 
 {% endblock %}
-

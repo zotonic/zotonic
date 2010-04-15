@@ -19,3 +19,7 @@
 	{% endwith %}
 
 {% endblock %}
+
+{% block sidebar %}
+	{% include "_sidebar.tpl" show_cloud=1 %}
+{% endblock %}
