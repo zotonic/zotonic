@@ -81,7 +81,9 @@ init(Args) ->
         Pid when is_pid(Pid) ->
             {ok, #state{context=z_context:new(Context),twitter_pid=Pid}};
         undefined ->
-            z_session_manager:broadcast(#broadcast{type="error", message="No configuration (username/password) found, not starting.", title="Twitter follower", stay=true}, z_acl:sudo(Context)),
+            {ok, #state{context=z_context:new(Context)}};
+        not_configured ->
+            z_session_manager:broadcast(#broadcast{type="error", message="No configuration (mod_twitter.api_login / mod_twitter.api_password) found, not starting.", title="Twitter", stay=true}, z_acl:sudo(Context)),
             ignore
     end.
 
@@ -190,27 +192,27 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 start_following(Context) ->
-    %% Get list of twitter ids to follow
-    Follow1 = [binary_to_list(V) || {V} <- z_db:q("SELECT key FROM identity WHERE type = 'twitter_id' LIMIT 400", Context)],
-
-    case Follow1 of
-        [] ->
-            error_logger:info_msg("No follow configuration for mod_twitter. ~n"),
-            undefined;
+    Login = case m_config:get_value(?MODULE, api_login, false, Context) of
+                LB when is_binary(LB) ->
+                    binary_to_list(LB);
+                L -> L
+            end,
+    Pass  = case m_config:get_value(?MODULE, api_password, false, Context) of
+                LP when is_binary(LP) ->
+                    binary_to_list(LP);
+                P -> P
+            end,
+    case Login of
+        false ->
+            error_logger:info_msg("No username/password configuration for mod_twitter. ~n"),
+            not_configured;
         _ ->
-            Login = case m_config:get_value(?MODULE, api_login, false, Context) of
-                        LB when is_binary(LB) ->
-                            binary_to_list(LB);
-                        L -> L
-                    end,
-            Pass  = case m_config:get_value(?MODULE, api_password, false, Context) of
-                        LP when is_binary(LP) ->
-                            binary_to_list(LP);
-                        P -> P
-                    end,
-            case Login of
-                false ->
-                    error_logger:info_msg("No username/password configuration for mod_twitter. ~n"),
+            %% Get list of twitter ids to follow
+            Follow1 = [binary_to_list(V) || {V} <- z_db:q("SELECT key FROM identity WHERE type = 'twitter_id' LIMIT 400", Context)],
+
+            case Follow1 of
+                [] ->
+                    error_logger:info_msg("No follow configuration for mod_twitter. ~n"),
                     undefined;
                 _ ->
                     URL = "http://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
@@ -220,6 +222,7 @@ start_following(Context) ->
                     spawn_link(?MODULE, fetch, [URL, Body, 5, Context])
             end
     end.
+
 
 %%
 %% Main fetch process
