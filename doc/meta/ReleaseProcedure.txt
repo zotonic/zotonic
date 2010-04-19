@@ -11,7 +11,7 @@ New feature release:
 
 * Commit to this branch
 
-* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.0.zip
+* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.0.zip 
 
 * Change to default branch: hg update default
 
@@ -21,9 +21,16 @@ New feature release:
 
 * Push
 
+* Upload zipfile to google code, making it keywords: featured, type-source and os-all; un-feature the previuos release
+
+* Update the zotonic.com website:
+  * Convert release notes to HTML put on zotonic.com site
+  * Change download graphic (release nr)
+  * Change download page to link to new release
+
 * Announce on zotonic-users, zotonic-developers, erlang-questions
 
-
+* Change zotonic.com website
 
 
 
