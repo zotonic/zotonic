@@ -18,16 +18,16 @@
 
 	{% endif %}
 
-	{% with m.search.paged[{query cat='article' sort='-publication_start' page=q.page pagelen=m.config.site.pagelen.value}] as result %}
+	{% with m.search[{query cat='article' sort='-publication_start' pagelen=2}] as result %}
 
+		<div id="results">
 		{% for id in result %}
-			
 			{% include "_article_summary.tpl" id=id big=forloop.first %}
-			
 		{% endfor %}
-		
-		{% pager result=result %}
+		</div>
 
+		{% wire id="more" action={moreresults result=result target="results" template="_article_summary.tpl"} %}
+		<p><a href="javascript:;" id="more">Read more...</a></p>
 	{% endwith %}
 
 {% endblock %}

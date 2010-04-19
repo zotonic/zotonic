@@ -53,7 +53,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
                        z_context:add_script_page(RebindJS, Ctx),
                        Ctx;
                    true ->
-                       JS2 = ["$(\"#", TriggerId, "\").unbind(\"click\").attr(\"disabled\", \"disabled\");"],
+                       JS2 = ["$(\"#", TriggerId, "\").fadeOut();"],
                        z_context:add_script_page(JS2, Context),
                        Context
                end,
