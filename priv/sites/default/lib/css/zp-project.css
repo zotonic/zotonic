@@ -248,6 +248,21 @@ footer p.footer-blog-title {
 /* Lists
 ---------------------------------------------------------- */
 
+#content ul,
+#content ol {
+	margin: 0 0 18px 0;
+	list-style-position: inside;
+	list-style-type: disc;
+}
+
+	#content ol {
+		list-style-type: decimal;
+	}
+
+.comments-list {
+	list-style: none;
+}
+
 .item-list p {
 	font-size: 12px;
 	margin: 0;
@@ -276,6 +291,7 @@ footer p.footer-blog-title {
 
 .images-list {
 	margin: 0 0 18px 0;
+	list-style: none;
 }
 
 	.images-list li {
@@ -292,6 +308,15 @@ footer p.footer-blog-title {
 		margin: 0;
 	}
 
+.shouts-list {
+	font-size: 12px;
+	list-style: none;
+}
+
+	.shouts-list .tweet-date-time {
+		font-style: italic;
+		color: #888;
+	}
 
 /* Posts
 ---------------------------------------------------------- */	
