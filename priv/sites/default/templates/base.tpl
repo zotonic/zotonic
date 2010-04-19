@@ -16,7 +16,7 @@
 
 	{% all include "_html_head.tpl" %}
 
-	{% lib "css/zp-compressed.css" "css/zp-project.css" %}
+	{% lib "css/zp-compressed.css" "css/zp-project.css" "css/zp-menu.css"  %}
 	<!--[if IE]>{% lib "css/zp-ie.css" %}<![endif]-->
 	{% lib "js/apps/modernizr.js" %}
 </head>
