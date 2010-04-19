@@ -1,0 +1,29 @@
+New feature release:
+
+* Update the release notes file. Add relevant new modules and
+  features, plus overview of all fixed bugs. Also take commit log for
+  the tip into consideration, extracting relevant commits.
+
+* Make a release branch:
+  hg branch release-0.4.x
+
+* Update the files RELEASE and include/zotonic_version.hrl to include the new version nr., say 0.4.0
+
+* Commit to this branch
+
+* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.0.zip
+
+* Change to default branch: hg update default
+
+* Update the files RELEASE and include/zotonic_version.hrl to include the higher version, say 0.5-dev
+
+* Commit
+
+* Push
+
+* Announce on zotonic-users, zotonic-developers, erlang-questions
+
+
+
+
+
