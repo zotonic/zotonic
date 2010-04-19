@@ -46,14 +46,14 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
     Result = R#m_search_result.result,
     Ids = Result#search_result.result,
 
-    Context1 = case Page*PageLen > Result#search_result.total orelse length(Ids) =:= 0 of
+    Context1 = case length(Ids) < PageLen of
                    false ->
                        {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, Template, TriggerId, TargetId, Context),
                        RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "});"],
                        z_context:add_script_page(RebindJS, Ctx),
                        Ctx;
                    true ->
-                       JS2 = ["$(\"#", TriggerId, "\").fadeOut();"],
+                       JS2 = ["$(\"#", TriggerId, "\").remove();"],
                        z_context:add_script_page(JS2, Context),
                        Context
                end,
