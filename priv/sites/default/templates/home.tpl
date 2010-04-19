@@ -27,7 +27,7 @@
 		</div>
 
 		{% wire id="more" action={moreresults result=result target="results" template="_article_summary.tpl"} %}
-		<p><a href="javascript:;" id="more">Read more...</a></p>
+		<p><a href="javascript:;" id="more">More results...</a></p>
 	{% endwith %}
 
 {% endblock %}
