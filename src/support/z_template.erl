@@ -132,6 +132,8 @@ compile(File, Context) ->
 %% When the file is an absolute path, then do nothing and assume the file exists.
 find_template([$/|_] = File, _Context) ->
     {ok, File};
+find_template([_,$:,$/|_] = File, _Context) ->
+    {ok, File};
 find_template(File, Context) ->
     z_module_indexer:find(template, File, Context).
 
