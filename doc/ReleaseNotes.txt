@@ -29,9 +29,19 @@ Release 0.4.0, released on 2010-04-19
 ** Windows support
    Initial support for building and running Zotonic on the Windows platform.
 
+** Database schema support
+   Multiple sites running inside one Postgres database is now possible
+   thanks to Postgres' support for multiple table namespaces (schema's)
+
+** Template expressions
+   It is now possible to use full boolean and arithmetic expressions in the ErlyDTL templates.
+
+** Webserver IPv6 support 
 ** Yandex.Video support in mod_video_embed module (#52)
 ** PID-file for zotonic (#74)
 ** Support for HTML5 audio/video tags in TinyMCE editor (#75)
+** Newer TinyMCE 3.3.2 release from upstream (#69)
+** Newer Mochiweb r153 release from upstream
 
 * Bugfixes:
 
@@ -45,7 +55,6 @@ Release 0.4.0, released on 2010-04-19
 ** Buttons and "Logoff" link problems in Chrome (#63)
 ** Comment form breaks on new default site (#64)
 ** Getting an unknown_rsc error on startup (#66)
-** copy/paste from summary field in admin results in dimmed text (zotonicwww site) (#69)
 ** Zotonic fails to (re)start if an existing admin panel is open with browser supporting WebSockets (#70)
 ** Can't save location without e-mail (#71)
 ** Improve the default styles to include list bullets/numbers (#72)
