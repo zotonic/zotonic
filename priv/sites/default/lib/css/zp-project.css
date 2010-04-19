@@ -170,33 +170,6 @@ p img.block {
 }
 
 
-/* navigation
----------------------------------------------------------- */
-
-#navigation {
-	float: right;
-	margin: 17px 0 0 0;
-}
-
-	#navigation li {
-		display: inline;
-	}
-
-	#navigation li a {
-		font-variant: small-caps;
-		text-transform: lowercase;
-		color: #fff;
-		text-decoration: none;
-		border: none;
-		margin: 0 0 0 6px;
-	}
-	
-	#navigation li a:hover,
-	#navigation li a.current {
-		text-decoration: underline;
-	}
-
-
 /* Grid
 ---------------------------------------------------------- */
 
@@ -213,28 +186,15 @@ header {
 	padding: 0 90px 0 0;
 }
 
+
+/* Footer - see footer navigation styles in the zp-menu.css
+------------------------------------------------------ */
+
 footer {
 	margin: 47px 0;
 	border-top: 1px dotted #333;
 	padding: 9px 0 0 0;
 }
-
-footer #navigation {
-	margin: 0;
-}
-
-footer #navigation li a {
-	font-size: 12px;
-	font-variant: small-caps;
-	text-transform: lowercase;
-	color: #666;
-	border: none;
-	margin: 0 6px 0 0;
-}
-
-	footer #navigation li a:hover {
-		color: #154868;
-	}
 
 footer p.footer-blog-title {
 	margin: 0;
@@ -318,6 +278,7 @@ footer p.footer-blog-title {
 		font-style: italic;
 		color: #888;
 	}
+
 
 /* Posts
 ---------------------------------------------------------- */	
