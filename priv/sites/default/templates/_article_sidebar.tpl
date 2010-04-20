@@ -4,7 +4,18 @@
 	{% if media %}
 		<ul class="images-list">
 			{% for m in media %}
-				<li>{% media m width=315 crop %}</li>
+				<li>
+					{% ifequal m.rsc[m].medium.mime "text/html-video-embed" %}
+						<section class="video-wrapper">
+							{% media m.rsc[m].medium %}
+						</section>
+					{% else %}
+						<figure class="image-wrapper block-level-image">
+							{% media m width=315 crop %}
+							{% if m.rsc[m].summary %}<p class="image-caption">{{ m.rsc[id].summary }}</p>{% endif %}
+						</figure>	
+					{% endifequal %}
+				</li>
 			{% endfor %}
 		</ul>
 	{% endif %}	
