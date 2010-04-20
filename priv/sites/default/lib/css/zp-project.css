@@ -219,7 +219,7 @@ footer p.footer-blog-title {
 		list-style-type: decimal;
 	}
 
-.comments-list {
+#content .comments-list {
 	list-style: none;
 }
 
