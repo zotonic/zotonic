@@ -4,8 +4,8 @@
 	{% if m.category.tweet %}
 	
 		{% with m.search[{latest cat='tweet' pagelen=4}] as r %}
-			<h2>Tweets</h2>
 			{% if r.result %}
+				<h2>Tweets</h2>
 				<ul class="shouts-list">
 					{% for tw in r.result %}
 						<li>
