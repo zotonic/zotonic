@@ -27,7 +27,9 @@
 {% else %}
 	
 	<section class="post clearfix">
-		{% image m.rsc[id].media[1] height=108 width=120 crop %}
+		<a href="{{m.rsc[id].page_url }}" title="{{ m.rsc[id].title }}">
+			{% image m.rsc[id].media[1] height=108 width=120 crop %}
+		</a>
 		<h1><a href="{{m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h1>
 		{% include "_article_meta.tpl" id=id %}
 		<p class="summary">
