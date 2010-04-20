@@ -12,7 +12,7 @@
 					{% else %}
 						<figure class="image-wrapper block-level-image">
 							{% media m width=315 crop %}
-							{% if m.rsc[m].summary %}<p class="image-caption">{{ m.rsc[id].summary }}</p>{% endif %}
+							{% if m.rsc[m].summary %}<p class="image-caption">{{ m.rsc[m].summary }}</p>{% endif %}
 						</figure>	
 					{% endifequal %}
 				</li>
