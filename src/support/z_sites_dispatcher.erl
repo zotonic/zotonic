@@ -305,33 +305,22 @@ compile_re_path([{Token, RE}|Rest], Acc) ->
     {ok, MP} = re:compile(RE),
     compile_re_path(Rest, [{Token, MP}|Acc]);
 compile_re_path([{Token, RE, Options}|Rest], Acc) ->
-    {ok, MP} = re:compile(RE, re_filter(Options, [])),
-    compile_re_path(Rest, [{Token, MP, Options}|Acc]);
+    {CompileOpt,RunOpt} = lists:partition(fun is_compile_opt/1, Options),
+    {ok, MP} = re:compile(RE, CompileOpt),
+    compile_re_path(Rest, [{Token, MP, RunOpt}|Acc]);
 compile_re_path([Token|Rest], Acc) ->
     compile_re_path(Rest, [Token|Acc]).
 
     %% Only allow options valid for the re:compile/3 function.
-    re_filter([], Acc) ->
-        lists:reverse(Acc);
-    re_filter([unicode|Options], Acc) ->
-        re_filter(Options, [unicode|Acc]);
-    re_filter([anchored|Options], Acc) ->
-        re_filter(Options, [anchored|Acc]);
-    re_filter([caseless|Options], Acc) ->
-        re_filter(Options, [caseless|Acc]);
-    re_filter([dotall|Options], Acc) ->
-        re_filter(Options, [dotall|Acc]);
-    re_filter([extended|Options], Acc) ->
-        re_filter(Options, [extended|Acc]);
-    re_filter([ungreedy|Options], Acc) ->
-        re_filter(Options, [ungreedy|Acc]);
-    re_filter([no_auto_capture|Options], Acc) ->
-        re_filter(Options, [no_auto_capture|Acc]);
-    re_filter([dupnames|Options], Acc) ->
-        re_filter(Options, [dupnames|Acc]);
-    re_filter([_|Options], Acc) ->
-        re_filter(Options, Acc).
-
+    is_compile_opt(unicode) -> true;
+    is_compile_opt(anchored) -> true;
+    is_compile_opt(caseless) -> true;
+    is_compile_opt(dotall) -> true;
+    is_compile_opt(extended) -> true;
+    is_compile_opt(ungreedy) -> true;
+    is_compile_opt(no_auto_capture) -> true;
+    is_compile_opt(dupnames) -> true;
+    is_compile_opt(_) -> false.
 
 
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
@@ -404,6 +393,9 @@ bind(Host, [{Token, RegExp}|RestToken],[Match|RestMatch],Bindings,Depth) when is
     end;
 bind(Host, [{Token, RegExp, Options}|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
     case re:run(Match, RegExp, Options) of
+        {match, []} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        {match, [T|_]} when is_tuple(T) -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        {match, [Captured]} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1);
         {match, Captured} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1);
         match -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
         nomatch -> fail
