@@ -112,7 +112,7 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
     Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, ReqData) of
         {ok, Host, DispatchList} ->
             {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
-            case dispatch(PathAsString, DispatchList) of
+            case wm_dispatch(Host, PathAsString, DispatchList) of
                 {no_dispatch_match, UnmatchedPathTokens} ->
                     {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
                 {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
@@ -155,7 +155,7 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Load a new set of dispatch rules.
 handle_cast({set_dispatch_rules, Rules}, State) ->
-    {noreply, State#state{rules=Rules}};
+    {noreply, State#state{rules=compile_regexps_hosts(Rules)}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -281,9 +281,62 @@ is_hostname("127.0.0.1") -> false;
 is_hostname(_) -> true.
 
 
+%% @doc Compile all regexps in the dispatch lists
+compile_regexps_hosts(DLs) ->
+    compile_regexps_hosts(DLs, []).
+
+compile_regexps_hosts([], Acc) ->
+    lists:reverse(Acc);
+compile_regexps_hosts([#wm_host_dispatch_list{dispatch_list=DispatchList} = DL|Rest], Acc) ->
+    DispatchList1 = compile_regexps(DispatchList, []),
+    compile_regexps_hosts(Rest, [DL#wm_host_dispatch_list{dispatch_list=DispatchList1}|Acc]).
+
+compile_regexps([], Acc) ->
+    lists:reverse(Acc);
+compile_regexps([{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
+    PathSchema1 = compile_re_path(PathSchema, []),
+    compile_regexps(Rest, [{DispatchName, PathSchema1, Mod, Props}|Acc]).
+
+compile_re_path([], Acc) ->
+    lists:reverse(Acc);
+compile_re_path([{Token, {Mod, Fun}}|Rest], Acc) ->
+    compile_re_path(Rest, [{Token, {Mod,Fun}}|Acc]);
+compile_re_path([{Token, RE}|Rest], Acc) ->
+    {ok, MP} = re:compile(RE),
+    compile_re_path(Rest, [{Token, MP}|Acc]);
+compile_re_path([{Token, RE, Options}|Rest], Acc) ->
+    {ok, MP} = re:compile(RE, re_filter(Options, [])),
+    compile_re_path(Rest, [{Token, MP, Options}|Acc]);
+compile_re_path([Token|Rest], Acc) ->
+    compile_re_path(Rest, [Token|Acc]).
+
+    %% Only allow options valid for the re:compile/3 function.
+    re_filter([], Acc) ->
+        lists:reverse(Acc);
+    re_filter([unicode|Options], Acc) ->
+        re_filter(Options, [unicode|Acc]);
+    re_filter([anchored|Options], Acc) ->
+        re_filter(Options, [anchored|Acc]);
+    re_filter([caseless|Options], Acc) ->
+        re_filter(Options, [caseless|Acc]);
+    re_filter([dotall|Options], Acc) ->
+        re_filter(Options, [dotall|Acc]);
+    re_filter([extended|Options], Acc) ->
+        re_filter(Options, [extended|Acc]);
+    re_filter([ungreedy|Options], Acc) ->
+        re_filter(Options, [ungreedy|Acc]);
+    re_filter([no_auto_capture|Options], Acc) ->
+        re_filter(Options, [no_auto_capture|Acc]);
+    re_filter([dupnames|Options], Acc) ->
+        re_filter(Options, [dupnames|Acc]);
+    re_filter([_|Options], Acc) ->
+        re_filter(Options, Acc).
+
+
 
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
 % Main difference is that we want to know which dispatch rule was choosen.
+% We also added check functions and regular expressions to match vars.
 
 %% @author Robert Ahrens <rahrens@basho.com>
 %% @author Justin Sheehy <justin@basho.com>
@@ -304,11 +357,11 @@ is_hostname(_) -> true.
 -define(SEPARATOR, $\/).
 -define(MATCH_ALL, '*').
 
-%% @spec dispatch(Path::string(), DispatchList::[matchterm()]) ->
+%% @spec wm_dispatch(Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
 %%                                            dispterm() | dispfail()
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
-dispatch(PathAsString, DispatchList) ->
+wm_dispatch(Host, PathAsString, DispatchList) ->
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     % URIs that end with a trailing slash are implicitly one token
     % "deeper" than we otherwise might think as we are "inside"
@@ -317,29 +370,47 @@ dispatch(PathAsString, DispatchList) ->
 		     true -> 1;
 		     _ -> 0
 		 end,
-    try_path_binding(DispatchList, Path, [], ExtraDepth).
+    try_path_binding(Host, DispatchList, Path, [], ExtraDepth).
 
-try_path_binding([], PathTokens, _, _) ->
+try_path_binding(_Host, [], PathTokens, _, _) ->
     {no_dispatch_match, PathTokens};
-try_path_binding([{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
-    case bind(PathSchema, PathTokens, Bindings, 0) of
+try_path_binding(Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
+    case bind(Host, PathSchema, PathTokens, Bindings, 0) of
         {ok, Remainder, NewBindings, Depth} ->
             {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)};
         fail -> 
-            try_path_binding(Rest, PathTokens, Bindings, ExtraDepth)
+            try_path_binding(Host, Rest, PathTokens, Bindings, ExtraDepth)
     end.
 
-bind([], [], Bindings, Depth) ->
+bind(_Host, [], [], Bindings, Depth) ->
     {ok, [], Bindings, Depth};
-bind([?MATCH_ALL], Rest, Bindings, Depth) when is_list(Rest) ->
+bind(_Host, [?MATCH_ALL], Rest, Bindings, Depth) when is_list(Rest) ->
     {ok, Rest, Bindings, Depth + length(Rest)};
-bind(_, [], _, _) ->
+bind(_Host, _, [], _, _) ->
     fail;
-bind([Token|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
-    bind(RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
-bind([Token|RestToken], [Token|RestMatch], Bindings, Depth) ->
-    bind(RestToken, RestMatch, Bindings, Depth + 1);
-bind(_, _, _, _) ->
+bind(Host, [Token|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+    bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
+bind(Host, [{Token, {Module,Function}}|RestToken],[Match|RestMatch],Bindings,Depth) 
+    when is_atom(Token), is_atom(Module), is_atom(Function) ->
+    case Module:Function(Match, z_context:new(Host)) of
+        true -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
+        false -> fail;
+        {ok, Value} -> bind(Host, RestToken, RestMatch, [{Token, Value}|Bindings], Depth+1)
+    end;
+bind(Host, [{Token, RegExp}|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+    case re:run(Match, RegExp) of
+        {match, _} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        nomatch -> fail
+    end;
+bind(Host, [{Token, RegExp, Options}|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+    case re:run(Match, RegExp, Options) of
+        {match, Captured} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1);
+        match -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        nomatch -> fail
+    end;
+bind(Host, [Token|RestToken], [Token|RestMatch], Bindings, Depth) ->
+    bind(Host, RestToken, RestMatch, Bindings, Depth + 1);
+bind(_Host, _, _, _, _) ->
     fail.
 
 reconstitute([]) -> "";
