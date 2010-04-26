@@ -279,8 +279,10 @@ make_postback(undefined, _EventType, _TriggerId, _TargetId, _Delegate, _Context)
     {[],[]};
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
 	PickledPostbackInfo = make_postback_info(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context),
-	{[<<"z_queue_postback('">>,TriggerId,<<"', '">>,PickledPostbackInfo,<<"');">>], PickledPostbackInfo}.
+	{[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"');">>], PickledPostbackInfo}.
 
+    ensure_iolist(A) when is_atom(A) -> atom_to_list(A);
+    ensure_iolist(L) -> L.
 
 make_validation_postback(Validator, Context) ->
     make_validation_postback(Validator, {}, Context).
