@@ -11,7 +11,7 @@
 		<!--[if IE]><link href="/lib/css/zp-ie.css" type="text/css" media="screen" rel="stylesheet" /><![endif]--> 
     </head>
 
-    <body>
+    <body>{% wire type="unload" postback={alert text="Bye"} %}
 		<div class="zp-wrapper"> 
 	        <h1>Hello, new world {{ helloworld_counter }}</h1>
 		
