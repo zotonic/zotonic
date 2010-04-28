@@ -1,0 +1,19 @@
+SUBDIRS = internal.dir
+CLEAN = $(SUBDIRS:.dir=.clean)
+MAKEFILE = Makefile.win32
+
+all: $(SUBDIRS)
+
+clean: $(CLEAN)
+
+$(SUBDIRS):
+	@echo Making all in $*
+	@cd $*
+	@$(MAKE) /nologo /f $(MAKEFILE) /$(MAKEFLAGS)
+	@cd ..
+
+$(CLEAN):
+	@echo Making clean in $*
+	@cd $*
+	@$(MAKE) /nologo /f $(MAKEFILE) /$(MAKEFLAGS) clean
+	@cd ..

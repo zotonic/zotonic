@@ -1,7 +1,7 @@
 {application, exmpp, [
     {description, "XMPP/Jabber protocol oriented XML library"},
     {vsn, "@VERSION@"},
-    {id, "$Id: exmpp.app.in 893 2009-12-15 20:45:56Z jpcarlino $"},
+    {id, "$Id$"},
     {modules, [
         exmpp,
         exmpp_component,

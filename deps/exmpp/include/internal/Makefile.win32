@@ -1,0 +1,11 @@
+BUILT_SOURCES = exmpp_known_nss.hrl exmpp_known_elems.hrl exmpp_known_attrs.hrl
+
+all: $(BUILT_SOURCES)
+
+clean:
+	-del $(BUILT_SOURCES)
+
+.in.hrl:
+	cscript /nologo $*.hrl.js $*.in > $*.hrl
+
+.SUFFIXES: .in .hrl

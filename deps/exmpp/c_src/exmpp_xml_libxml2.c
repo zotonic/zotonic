@@ -260,7 +260,7 @@ exmpp_xml_control(ErlDrvData drv_data, unsigned int command,
 			return (-1);
 
 		ret = RET_OK;
-		ei_x_encode_string(to_return, "$Revision: 899 $");
+		ei_x_encode_string(to_return, "$Revision$");
 
 		break;
 

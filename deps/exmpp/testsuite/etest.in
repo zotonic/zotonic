@@ -181,7 +181,7 @@ raise_error(Test, Error) ->
 
 version() ->
     io:format("~s testsuite - ~s~n",
-      ["@PACKAGE_STRING@", "$Revision: 805 $"]).
+      ["@PACKAGE_STRING@", "$Revision$"]).
 
 usage(Prog_Name) ->
     version(),

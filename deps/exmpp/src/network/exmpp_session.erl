@@ -182,30 +182,27 @@ auth_basic_digest(Session, JID, Password)
 
 
 
-%% Initiate standard TCP XMPP server connection
-%% If the domain is not passed we expect to find it in the authentication
+%% Initiate standard TCP XMPP server connection.
+%% Shortcut for  connect_TCP(Session, Server, Port, []).
+%% As the domain is not passed we expect to find it in the authentication
 %% method. It should thus be set before.
 %% Returns {ok,StreamId::String} | {ok, StreamId::string(), Features :: xmlel{}}
-connect_TCP(Session, Server, Port)
-  when is_pid(Session),
-       is_list(Server),
-       is_integer(Port) ->
-    case gen_fsm:sync_send_event(Session, {connect_tcp, Server, Port},
-				 ?TIMEOUT) of
-	{ok, StreamId} -> {ok, StreamId};
-    {ok, StreamId, Features} -> {ok, StreamId, Features};
-	Error when is_tuple(Error) -> erlang:throw(Error)
-    end.
+connect_TCP(Session, Server, Port) ->
+	connect_TCP(Session, Server, Port, []).
 
 %% Initiate standard TCP XMPP server connection
 %% Returns {ok,StreamId::String} | {ok, StreamId::string(), Features :: xmlel{}}
-connect_TCP(Session, Server, Port, Domain)
+%%  Option() = {local_ip, IP} | {local_port, fun() -> integer()}   bind sockets to this local ip / port.
+%%      | {domain, Domain}
+%% If the domain is not passed we expect to find it in the authentication
+%% method. It should thus be set before.
+connect_TCP(Session, Server, Port, Options)
   when is_pid(Session),
        is_list(Server),
        is_integer(Port),
-       is_list(Domain) ->
+       is_list(Options) ->
     case gen_fsm:sync_send_event(Session,
-				 {connect_tcp, Server, Port, Domain},
+				 {connect_tcp, Server, Port, Options},
 				 ?TIMEOUT) of
 	{ok, StreamId} -> {ok, StreamId};
     {ok, StreamId, Features} -> {ok, StreamId, Features};
@@ -231,29 +228,24 @@ connect_BOSH(Session, URL, Server, Options)
     end.
 
 %% Initiate SSL XMPP server connection
-%% If the domain is not passed we expect to find it in the authentication
+%% Shortcut for  connect_SSL(Session, Server, Port, []).
+%% As the domain is not passed we expect to find it in the authentication
 %% method. It should thus be set before.
 %% Returns {ok,StreamId::String} | {ok, StreamId::string(), Features :: xmlel{}}
-connect_SSL(Session, Server, Port)
-  when is_pid(Session),
-       is_list(Server),
-       is_integer(Port) ->
-    case gen_fsm:sync_send_event(Session, {connect_ssl, Server, Port},
-				 ?TIMEOUT) of
-	{ok, Streamid} -> {ok, Streamid};
-    {ok, Streamid, Features} -> {ok, Streamid, Features};
-	Error when is_tuple(Error) -> erlang:throw(Error)
-    end.
+connect_SSL(Session, Server, Port) ->
+	connect_SSL(Session, Server, Port, []).
 
 %% Initiate SSL XMPP server connection
 %% Returns {ok,StreamId::String} | {ok, StreamId::string(), Features :: xmlel{}}
-connect_SSL(Session, Server, Port, Domain)
+%%  Options = [option()]
+%%  Option() = {local_ip, IP} | {local_port, fun() -> integer()}  bind sockets to this local ip / port.
+connect_SSL(Session, Server, Port, Options)
   when is_pid(Session),
        is_list(Server),
        is_integer(Port),
-       is_list(Domain) ->
+       is_list(Options) ->
     case gen_fsm:sync_send_event(Session,
-				 {connect_ssl, Server, Port, Domain},
+				 {connect_ssl, Server, Port, Options},
 				 ?TIMEOUT) of
 	{ok, Streamid} -> {ok, Streamid};
     {ok, Streamid, Features} -> {ok, Streamid, Features};
@@ -402,16 +394,16 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 %% Define JID and authentication method
 setup({set_auth, Auth}, _From, State) when is_tuple(Auth) ->
     {reply, ok, setup, State#state{auth_method=Auth}};
-setup({connect_tcp, Host, Port}, From, State) ->
-    case State#state.auth_method of
-	undefined ->
+setup({connect_tcp, Host, Port, Options}, From, State) ->
+    case {proplists:get_value(domain, Options, undefined), State#state.auth_method} of
+	{undefined, undefined} ->
 	    {reply, {connect_error,
 		     authentication_or_domain_undefined}, setup, State};
-	_Other ->
-	    connect(exmpp_tcp, {Host, Port}, From, State)
+	{undefined, _Other} ->
+	    connect(exmpp_tcp, {Host, Port, Options}, From, State);
+	{Domain, _Any} ->
+    	    connect(exmpp_tcp, {Host, Port, Options}, Domain, From, State)
     end;
-setup({connect_tcp, Host, Port, Domain}, From, State) ->
-    connect(exmpp_tcp, {Host, Port}, Domain, From, State);
 setup({connect_bosh, URL, Host, Port}, From, State) ->
     case State#state.auth_method of
         undefined ->
@@ -420,10 +412,16 @@ setup({connect_bosh, URL, Host, Port}, From, State) ->
         _Other ->
             connect(exmpp_bosh, {URL, Host, Port}, From, State)
     end;
-setup({connect_ssl, Host, Port}, From, State) ->
-    connect(exmpp_ssl, {Host, Port}, From, State);
-setup({connect_ssl, Host, Port, Domain}, From, State) ->
-    connect(exmpp_ssl, {Host, Port}, Domain, From, State);
+setup({connect_ssl, Host, Port, Options}, From, State) ->
+    case {proplists:get_value(domain, Options, undefined), State#state.auth_method} of
+	{undefined, undefined} ->
+	    {reply, {connect_error,
+		     authentication_or_domain_undefined}, setup, State};
+	{undefined, _Other} ->
+	    connect(exmpp_ssl, {Host, Port, Options}, From, State);
+	{Domain, _Any} ->
+    	    connect(exmpp_ssl, {Host, Port, Options}, Domain, From, State)
+    end;
 setup({presence, _Status, _Show}, _From, State) ->
     {reply, {error, not_connected}, setup, State};
 setup(_UnknownMessage, _From, State) ->

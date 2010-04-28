@@ -2,7 +2,7 @@ dnl ------------------------------------------------------------------
 dnl Autoconf initialization.
 dnl ------------------------------------------------------------------
 
-AC_INIT([exmpp], [0.9.2], [js.pedron@meetic-corp.com], [exmpp])
+AC_INIT([exmpp], [0.9.3], [js.pedron@meetic-corp.com], [exmpp])
 AC_CONFIG_SRCDIR([include/exmpp.hrl])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([ac-aux])
@@ -11,7 +11,7 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([foreign])
 
 AC_PREREQ([2.60])
-AC_REVISION([$Revision: 890 $])
+AC_REVISION([$Revision$])
 
 dnl ------------------------------------------------------------------
 dnl Internal functions for this configure script.

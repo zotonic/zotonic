@@ -286,7 +286,7 @@ exmpp_compress_zlib_control(ErlDrvData drv_data, unsigned int command,
 		to_send = exmpp_new_xbuf();
 		if (to_send == NULL)
 			return (-1);
-		ei_x_encode_string(to_send, "$Revision: 899 $");
+		ei_x_encode_string(to_send, "$Revision$");
 
 		COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
 
