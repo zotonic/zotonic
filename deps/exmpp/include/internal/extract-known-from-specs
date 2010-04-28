@@ -46,7 +46,7 @@ sub main {
 
 	# Print header.
 	my $script = basename($0);
-	my $revision = '$Revision: 805 $' =~ /Revision: ([\d]+)/ ? $1 : 0;
+	my $revision = '$Revision$' =~ /Revision: ([\d]+)/ ? $1 : 0;
 	my $now = strftime "%Y-%m-%dT%H:%M:%SZ", gmtime;
 
 	my $header = << "EOF";

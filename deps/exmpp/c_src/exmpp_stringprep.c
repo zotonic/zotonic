@@ -173,9 +173,9 @@ exmpp_stringprep_control(ErlDrvData drv_data, unsigned int command,
 		rstring[0] = 1;
 		rstring[1] = 0;
 #if defined(_MSC_VER)
-		strcat_s(rstring, size, "$Revision: 899 $");
+		strcat_s(rstring, size, "$Revision$");
 #else
-		strcat(rstring, "$Revision: 899 $");
+		strcat(rstring, "$Revision$");
 #endif
 		*rbuf = rstring;
 		driver_free(str32);

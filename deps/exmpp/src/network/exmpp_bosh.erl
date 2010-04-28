@@ -1,35 +1,35 @@
-%% Copyright ProcessOne 2006-2009. All Rights Reserved.          
-%%                                                               
+%% Copyright ProcessOne 2006-2010. All Rights Reserved.
+%%
 %% The contents of this file are subject to the Erlang Public License,
-%% Version 1.1, (the "License"); you may not use this file except in  
+%% Version 1.1, (the "License"); you may not use this file except in
 %% compliance with the License. You should have received a copy of the
-%% Erlang Public License along with this software. If not, it can be  
-%% retrieved online at http://www.erlang.org/.                        
-%%                                                                    
+%% Erlang Public License along with this software. If not, it can be
+%% retrieved online at http://www.erlang.org/.
+%%
 %% Software distributed under the License is distributed on an "AS IS"
 %% basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
 %% the License for the specific language governing rights and limitations
-%% under the License.                                                    
+%% under the License.
 
 %% @author Mickael Remond <mickael.remond@process-one.net>
 
 %% @doc
 %% The module <strong>{@module}</strong> manages XMPP over HTTP connection
-%% according to the BOSH protocol (XEP-0124: Bidirectional-streams Over   
-%% Synchronous HTTP)                                                      
-%%                                                                        
-%% <p>                                                                    
-%% This module is not intended to be used directly by client developers.  
-%% </p>                                                                   
-%%                                                                        
-%%                                                                        
+%% according to the BOSH protocol (XEP-0124: Bidirectional-streams Over
+%% Synchronous HTTP)
+%%
+%% <p>
+%% This module is not intended to be used directly by client developers.
+%% </p>
+%%
 %% This module uses HTTP parsing functions based on the lhttpc library.
-%% http://bitbucket.org/etc/lhttpc/wiki/Home 
-%% http://bitbucket.org/etc/lhttpc/src/tip/LICENCE 
+%% http://bitbucket.org/etc/lhttpc/wiki/Home
+%% http://bitbucket.org/etc/lhttpc/src/tip/LICENCE
+
 -module(exmpp_bosh).
 
 %-include_lib("exmpp/include/exmpp.hrl").
--include("exmpp.hrl").                   
+-include("exmpp.hrl").
 
 %% Behaviour exmpp_gen_transport ?
 -export([connect/3,  send/2, close/2, reset_parser/1]).
@@ -46,23 +46,18 @@
 
 -record(state, {
         parsed_bosh_url, 
-           % {Host::string(), Port:integer(), Path::string(), Ssl::boolean()}
+           % {Host::string(), Port:integer(), Path::string(), Ssl::bool()}
         domain="",                                                   
         sid = <<>>,                                                  
         rid = 0,                                                     
         auth_id = <<>>,                                              
         client_pid,                                                  
         stream_ref,                                                  
-        max_requests,                                                        
-        polling,  %% This attribute specifies the shortest allowable polling interval (in seconds)
-        queue, %% stanzas that have been queued because we reach the limit of requets or the polling
-        last_request_timestamp,                                                                     
+        max_requests, %TODO: use this, now fixed on 2
+        queue, %% stanzas that have been queued because we reach the limit of requets
         new = true,                                                                                 
-        max_inactivity,                                                                             
         open, % [{Rid, Socket}]                                                                     
         free,  %[socket()] free keep-alive connections                                              
-        last_response,                                                                              
-        socket,                                                                                     
         local_ip,  %ip to bind sockets to                                                           
         local_port                                                                                  
         }).                                                                                  
@@ -94,7 +89,7 @@ init([ClientPid, StreamRef, URL, Domain, Options]) ->
             rid = Rid,                                                          
             open = 0,                                                           
             client_pid = ClientPid,                                             
-            queue = queue:new(),                                                
+            queue = [],                                                
             free = [],                                                          
             local_ip = IP,                                                      
             local_port = Port,                                                  
@@ -155,7 +150,7 @@ handle_info({http, Socket, {http_response, Vsn, 200, <<"OK">>}}, State) ->
                         %io:format("Making empty request\n"),                                        
                         ok = make_empty_request(Socket,Sid, Rid, Queue, Host, Path),                 
                         inet:setopts(Socket, [{packet, http_bin}, {active, once}]),                  
-                        State#state{open = [{Socket, Rid}], rid = Rid +1, queue = queue:new()};      
+                        State#state{open = [{Socket, Rid}], rid = Rid +1, queue = []};      
                      true ->                                                                         
                         %io:format("Closing the socket\n"),                                          
                         NewState = return_socket(State, Socket),                                     
@@ -185,7 +180,7 @@ code_change(_Old, State, _Extra) ->
 
 
 make_empty_request(Socket, Sid, Rid, Queue, Host, Path) ->
-    StanzasText = [exmpp_xml:document_to_iolist(I) || I <- queue:to_list(Queue)],
+    StanzasText = [exmpp_xml:document_to_iolist(I) || I <- lists:reverse(Queue)],
     Body = stanzas_msg(Sid, Rid, StanzasText),                                   
     make_request(Socket, Host, Path, Body).                                      
 
@@ -193,7 +188,7 @@ make_raw_request(Socket, Host, Path, Body) ->
     make_request(Socket, Host, Path, Body).  
 
 make_request(Socket, Sid, Rid, Queue, Host, Path, Packet) when is_record(Packet, xmlel) ->
-    StanzasText = [exmpp_xml:document_to_iolist(I) || I <- queue:to_list(queue:in(Packet,Queue))],
+    StanzasText = [exmpp_xml:document_to_iolist(I) || I <- lists:reverse([Packet|Queue])],
     Body = stanzas_msg(Sid, Rid, StanzasText),                                                    
     make_request(Socket, Host, Path, Body).                                                       
                                                                                                   
@@ -224,8 +219,6 @@ do_send(#xmlel{ns=?NS_XMPP, name='stream'}, State) ->
     SID = exmpp_xml:get_attribute_as_binary(BodyEl, sid, undefined),
     AuthID = exmpp_xml:get_attribute_as_binary(BodyEl,authid,undefined),
     Requests = list_to_integer(exmpp_xml:get_attribute_as_list(BodyEl,requests,undefined)),
-    Inactivity = list_to_integer(exmpp_xml:get_attribute_as_list(BodyEl,inactivity,undefined)) * 1000, %sec -> millisecond
-    Polling = list_to_integer(exmpp_xml:get_attribute_as_list(BodyEl,polling,undefined)) * 1000, %sec -> millisecond      
     Events = [{xmlstreamelement, El} || El <- exmpp_xml:get_child_elements(BodyEl)],                                      
 
     % first return a fake stream response, then anything found inside the <body/> element (possibly nothing)
@@ -240,8 +233,6 @@ do_send(#xmlel{ns=?NS_XMPP, name='stream'}, State) ->
                           open = [],                                                                        
                           sid = SID,                                                                        
                           max_requests = Requests,                                                          
-                          max_inactivity = Inactivity, %%TODO: not used                                     
-                          polling = Polling,                                                                
                           auth_id = AuthID}};                                                               
 
 do_send(Packet, State) ->
@@ -250,7 +241,6 @@ do_send(Packet, State) ->
           sid = Sid,     
           parsed_bosh_url = {Host, _Port, Path, _}, 
           queue = Queue} = State,                   
-    Now = now(),                                    
     Result = if                                     
                 Open == []  -> send;                
                 true ->                             
@@ -267,11 +257,11 @@ do_send(Packet, State) ->
          send ->   
               {NewState, Socket} = new_socket(State, once),
               ok = make_request(Socket, Sid, Rid, Queue, Host, Path, Packet), 
-              {noreply, NewState#state{last_request_timestamp=Now, rid = Rid +1, open = [{Socket, Rid}|Open]}, hibernate};
+              {noreply, NewState#state{rid = Rid +1, open = [{Socket, Rid}|Open]}, hibernate};
          queue ->                                                                                                         
                 %io:format("Queuing request.    Open = ~p    Rid= ~p \n", [Open, Rid]),                                   
                 Queue = State#state.queue,                                                                                
-                NewQueue =  queue:in(Packet, Queue),                                                                      
+                NewQueue =  [Packet|Queue],                                                                      
                {noreply, State#state{queue = NewQueue}}                                                                   
     end.                                                                                                                  
 

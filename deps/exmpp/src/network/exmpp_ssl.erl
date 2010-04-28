@@ -31,7 +31,7 @@
 
 
 %% Internal export
--export([receiver/4]).
+-export([receiver/3]).
 
 reset_parser(ReceiverPid) when is_pid(ReceiverPid) ->
     ReceiverPid ! reset_parser.
@@ -40,18 +40,23 @@ reset_parser(ReceiverPid) when is_pid(ReceiverPid) ->
 %% Returns:
 %% Ref or throw error
 %% Ref is a socket
-connect(ClientPid, StreamRef, {Host, Port}) ->
-    DefaultOptions = [{packet,0}, binary, {active, once}],
-    {SetOptsModule,Opts} =
-	case check_new_ssl() of
-	    true ->  {inet,[{reuseaddr,true}|DefaultOptions]};
-	    false -> {ssl,DefaultOptions}
-	end,
+connect(ClientPid, StreamRef, {Host, Port, Options}) ->
+    LocalIP = proplists:get_value(local_ip, Options, undefined),                     
+    LocalPort= proplists:get_value(local_port, Options, undefined),                  
+    IPOptions = case LocalIP of                                                                                          
+                        undefined -> [];                                           
+                        _ ->  case LocalPort of                                                                        
+                                undefined -> [{ip, LocalIP}];                     
+                                _ -> [{ip, LocalIP}, {port, LocalPort()}]         
+                              end                                                                                      
+                end,                                                                                                   
+    DefaultOptions = [{packet,0}, binary, {active, once}] ++ IPOptions,
+    Opts = [{reuseaddr,true}|DefaultOptions],
     case ssl:connect(Host, Port, Opts, 30000) of
 	{ok, Socket} ->
 	    %% TODO: Hide receiver failures in API
 	    ReceiverPid = spawn_link(?MODULE, receiver,
-				     [ClientPid, Socket,SetOptsModule, StreamRef]),
+				     [ClientPid, Socket, StreamRef]),
 	    ssl:controlling_process(Socket, ReceiverPid),
 	    {Socket, ReceiverPid};
 	{error, Reason} ->
@@ -80,34 +85,23 @@ send(Socket, XMLPacket) ->
 %%--------------------------------------------------------------------
 %% Internal functions
 %%--------------------------------------------------------------------
-receiver(ClientPid, Socket,SetOptsModule, StreamRef) ->
-    receiver_loop(ClientPid, Socket,SetOptsModule, StreamRef).
+receiver(ClientPid, Socket, StreamRef) ->
+    receiver_loop(ClientPid, Socket, StreamRef).
 
-receiver_loop(ClientPid, Socket,SetOptsModule, StreamRef) ->
-    SetOptsModule:setopts(Socket, [{active, once}]),
+receiver_loop(ClientPid, Socket, StreamRef) ->
+    ssl:setopts(Socket, [{active, once}]),
     receive
 	stop ->
 	    ok;
 	{ssl, Socket, Data} ->
 	    {ok, NewStreamRef} = exmpp_xmlstream:parse(StreamRef, Data),
-	    receiver_loop(ClientPid, Socket,SetOptsModule, NewStreamRef);
+	    receiver_loop(ClientPid, Socket, NewStreamRef);
 	{ssl_closed, Socket} ->
 	    gen_fsm:send_all_state_event(ClientPid, tcp_closed);
 	{ssl_error,Socket,Reason} ->
 	    error_logger:warning_msg([ssl_error,{ssl_socket,Socket},Reason]),
 	    gen_fsm:send_all_state_event(ClientPid, tcp_closed);
     reset_parser ->
-        receiver_loop(ClientPid, Socket, SetOptsModule, exmpp_xmlstream:reset(StreamRef))
+        receiver_loop(ClientPid, Socket, exmpp_xmlstream:reset(StreamRef))
     end.
 
-
-%% In R12, inet:setopts/2 doesn't accept the new ssl sockets
-check_new_ssl() ->
-    case erlang:system_info(version) of
-        [$5,$.,Maj] when Maj < $6  ->
-            false;
-        [$5,$.,Maj, $.,_Min] when ( Maj < $6 ) ->
-            false;
-        _  ->
-            true
-    end.

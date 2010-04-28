@@ -238,7 +238,7 @@ setup({connect_tcp, Host, Port}, From, State) ->
 	    {reply, {connect_error,
 		     authentication_or_domain_undefined}, setup, State};
 	_Other ->
-	    connect(exmpp_tcp, {Host, Port}, From, State)
+	    connect(exmpp_tcp, {Host, Port, []}, From, State)
     end.
 
 %% ---------------------------

@@ -37,11 +37,20 @@ reset_parser(ReceiverPid) when is_pid(ReceiverPid) ->
 %% Connect to XMPP server
 %% Returns:
 %% Ref or throw error
-connect(ClientPid, StreamRef, {Host, Port}) ->
+connect(ClientPid, StreamRef, {Host, Port, Options}) ->
+    LocalIP = proplists:get_value(local_ip, Options, undefined),                     
+    LocalPort= proplists:get_value(local_port, Options, undefined),                  
+    IPOptions = case LocalIP of                                                                                          
+                        undefined -> [];                                           
+                        _ ->  case LocalPort of                                                                        
+                                undefined -> [{ip, LocalIP}];                     
+                                _ -> [{ip, LocalIP}, {port, LocalPort()}]         
+                              end                                                                                      
+                end,                                                                                                   
     case gen_tcp:connect(Host, Port, [{packet,0},
 				      binary,
 				      {active, false},
-				      {reuseaddr, true}], 30000) of
+				      {reuseaddr, true}] ++ IPOptions, 30000) of
 	{ok, Socket} ->
 	    %% TODO: Hide receiver failures in API
 	    ReceiverPid = spawn_link(?MODULE, receiver,
