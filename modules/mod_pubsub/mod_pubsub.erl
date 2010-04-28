@@ -219,14 +219,19 @@ connect(State) ->
 
     ServerHost = z_convert:to_list(m_config:get_value(?MODULE, server_host, exmpp_jid:domain(JID), State#state.context)),
     ServerPort = z_convert:to_integer(m_config:get_value(?MODULE, server_port, "5222", State#state.context)),
+    ServerTls = z_convert:to_bool(m_config:get_value(?MODULE, server_tls, false, State#state.context)),
 
     exmpp_session:auth_basic_digest(Session, JID, Password),
     State1 = State#state{session=Session, jid=JID},
 
     %% Connect in standard TCP:
     try
-            exmpp_session:connect_TCP(Session, ServerHost, ServerPort),
-            login(State1)
+        if ServerTls ->
+                exmpp_session:connect_SSL(Session, ServerHost, ServerPort);
+           true ->
+                exmpp_session:connect_TCP(Session, ServerHost, ServerPort)
+        end,
+        login(State1)
     catch
         throw:{socket_error, econnrefused} ->
             z_session_manager:broadcast(#broadcast{type="error", message="Connection failure. Will try again in 30 seconds.", title="Pubsub", stay=false}, State#state.context),
