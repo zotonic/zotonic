@@ -104,7 +104,7 @@ m_value(#m{value=V}, _Context) ->
     V.
 
 %% @doc Return the id of the resource with the name
-% @spec name_to_id(NameString, Context) -> int() | {error, Reason}
+% @spec name_to_id(NameString, Context) -> {ok, int()} | {error, Reason}
 name_to_id(Name, Context) ->
     case is_list(Name) andalso z_utils:only_digits(Name) of
         true ->
