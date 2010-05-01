@@ -217,7 +217,7 @@ map_prop(Value, _Context) ->
 
 
 manage_menu(Module, M, Context) ->
-    Menu = [{m_rsc:name_to_id_check(Nm, Context), []} || Nm <- M],
+    Menu = menu_names_to_id(M, Context, []),
     case m_config:get(menu, menu_default, Context) of
         undefined ->
             m_config:set_prop(menu, menu_default, installed_by, Module, Context),
@@ -250,6 +250,14 @@ manage_menu(Module, M, Context) ->
     end,
     {ok, []}.
 
+
+    menu_names_to_id([], _Context, Acc) ->
+        lists:reverse(Acc);
+    menu_names_to_id([Name|Ms], Context, Acc) ->
+        case m_rsc:name_to_id(Name, Context) of
+            {ok, Id} -> menu_names_to_id(Ms, Context, [Id|Acc]);
+            {error, _Reason} -> menu_names_to_id(Ms, Context, Acc)
+        end.        
 
 
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->
