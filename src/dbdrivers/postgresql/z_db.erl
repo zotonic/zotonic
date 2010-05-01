@@ -55,6 +55,7 @@
     table_exists/2,
     ensure_table/3,
     drop_table/2,
+    flush/1,
     
     assert_table_name/1,
     prepare_cols/2
@@ -433,6 +434,12 @@ column_names(Table, Context) ->
     Names = [ C#column_def.name || C <- columns(Table, Context)],
     lists:sort(Names).
 
+
+%% @doc Flush all cached information about the database.
+flush(Context) ->
+    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
+    z_depcache:flush({database, Db}, Context).
+    
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @spec update_sequence(Table, IdList, Context) -> void()
