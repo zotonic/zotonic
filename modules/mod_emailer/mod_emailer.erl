@@ -268,7 +268,6 @@ sendemail(Msg = #mime_msg{}, State) ->
     sendemail(MX, Ehlo, esmtp_mime:from(Msg), esmtp_mime:to(Msg), esmtp_mime:encode(Msg)).
     
 sendemail({Host,Port,SSL,Login}, Ehlo, From, To, Msg) ->
-    ?DEBUG({{Host,Port,SSL,Login}, Ehlo, From, To}),
     To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
     {_ToName, ToEmail} = z_email:split_name_email(To1),
     {_FromName, FromEmail} = z_email:split_name_email(From),
@@ -282,5 +281,5 @@ sendemail({Host,Port,SSL,Login}, Ehlo, From, To, Msg) ->
     {ok, _} = esmtp_fsm:rcpt_to(Fsm,ToEmail),
     {ok, _} = esmtp_fsm:message(Fsm,Msg),
     ok = esmtp_fsm:close(Fsm),
-    ?DEBUG(ok).
+    ok.
 

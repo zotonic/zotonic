@@ -1,4 +1,8 @@
 [
+	%% Normal page to show a resource.
+	{mailinglist,    ["mailinglist", id],       resource_page, [ {template, {cat, "mailinglist.tpl"}} ]},
+	{mailinglist,    ["mailinglist", id, slug], resource_page, [ {template, {cat, "mailinglist.tpl"}} ]},
+
 	{admin_mailinglist, ["admin", "mailinglists"], resource_admin_mailinglist, []},
 	{admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], resource_admin_mailinglist_recipients, []},
 	

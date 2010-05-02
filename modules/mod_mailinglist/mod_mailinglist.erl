@@ -56,6 +56,8 @@ search_query(_, _) ->
 
 
 %% @doc Send status messages to a recipient.
+send_message({mailinglist_message, silent, _ListId, _Email}, _Context) ->
+	ok;
 send_message({mailinglist_message, send_goodbye, ListId, Email}, Context) ->
 	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}], Context),
 	ok;
