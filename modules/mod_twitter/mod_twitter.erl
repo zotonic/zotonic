@@ -273,17 +273,13 @@ process_data(Data, Context) ->
                                 z_session_manager:broadcast(#broadcast{type="error", message="Received a tweet for an unknown user.", title="Unknown user", stay=false}, Context);
                             Row ->
                                 UserId = proplists:get_value(rsc_id, Row),
-
-                                GroupId = m_rsc:p(UserId, group_id, AsyncContext),
-
                                 CategoryId = m_category:name_to_id_check(tweet, AsyncContext),
                                 Props = [{title, proplists:get_value("screen_name", User) ++ " tweeted on " ++ proplists:get_value("created_at", Tweet)},
                                          {body, proplists:get_value("text", Tweet)},
                                          {source, proplists:get_value("source", Tweet)},
                                          {category_id, CategoryId},
                                          {tweet, Tweet},
-                                         {is_published, true},
-                                         {group_id, GroupId}],
+                                         {is_published, true}],
 
                                 AdminContext = z_acl:sudo(AsyncContext),
                                 %% Create rsc

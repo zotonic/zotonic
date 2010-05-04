@@ -45,7 +45,7 @@
     
 	exists/2, 
 	
-	is_visible/2, is_editable/2, is_deletable/2, is_ingroup/2, is_me/2, 
+	is_visible/2, is_editable/2, is_deletable/2, is_me/2, 
 	is_cat/3,
 	is_a/2,
 	is_a_id/2,
@@ -169,7 +169,7 @@ get_raw(Id, Context) when is_integer(Id) ->
                 id, uri, name, page_path, 
                 is_authoritative, is_published, is_featured, is_protected,
                 publication_start, publication_end,
-                group_id, creator_id, modifier_id, version, category_id,
+                creator_id, modifier_id, version, category_id,
                 visible_for, slug, props, created, modified
             from rsc
             where id = $1", [Id], Context).
@@ -179,17 +179,17 @@ get_raw(Id, Context) when is_integer(Id) ->
 %% @spec get_acl_fields(Id, #context) -> #acl_props
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
-        case z_db:q_row("
-            select is_published, is_authoritative, visible_for,
-                group_id, publication_start, publication_end
-            from rsc 
-            where id = $1", [Id], Context) of
+	        case z_db:q_row("
+	            select is_published, is_authoritative, visible_for,
+	                publication_start, publication_end
+	            from rsc 
+	            where id = $1", [Id], Context) of
     
-            {IsPub, IsAuth, Vis, Group, PubS, PubE} ->
+            {IsPub, IsAuth, Vis, PubS, PubE} ->
                 #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis, 
-                           group_id=Group, publication_start=PubS, publication_end=PubE};
+                           publication_start=PubS, publication_end=PubE};
             undefined ->
-                #acl_props{is_published=false, visible_for=3, group_id=0}
+                #acl_props{is_published=false, visible_for=3}
         end
     end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
@@ -287,14 +287,6 @@ is_deletable(Id, Context) ->
             false
     end.
     
-is_ingroup(Id, Context) -> 
-    case rid(Id, Context) of
-        RscId when is_integer(RscId) ->
-            z_acl:rsc_ingroup(RscId, Context);
-        _ ->
-            false
-    end.
-
 is_me(Id, Context) -> 
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
@@ -308,10 +300,12 @@ is_me(Id, Context) ->
 %% exist or the user does not have access rights to the property then return 'undefined'.
 %% p(ResourceId, atom(), Context) -> term() | undefined
 p(Id, Property, Context) 
-	when Property =:= category_id orelse Property =:= page_url 
-	orelse Property =:= group orelse Property =:= category 
-	orelse Property =:= category_id orelse Property =:= is_a 
-	orelse Property =:= uri orelse Property =:= is_authoritative
+	when   Property =:= category_id 
+	orelse Property =:= page_url 
+	orelse Property =:= category 
+	orelse Property =:= is_a 
+	orelse Property =:= uri 
+	orelse Property =:= is_authoritative
 	orelse Property =:= default_page_url ->
 		p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->
@@ -336,7 +330,6 @@ p_no_acl(Id, is_me, Context) -> is_me(Id, Context);
 p_no_acl(Id, is_visible, Context) -> is_visible(Id, Context);
 p_no_acl(Id, is_editable, Context) -> is_editable(Id, Context);
 p_no_acl(Id, is_deletable, Context) -> is_deletable(Id, Context);
-p_no_acl(Id, is_ingroup, Context) -> is_ingroup(Id, Context);
 p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);
 p_no_acl(Id, page_url, Context) -> 
@@ -349,11 +342,6 @@ p_no_acl(Id, uri, Context) ->
     case p_no_acl(Id, is_authoritative, Context) of
         true ->  iolist_to_binary(z_context:abs_url(z_dispatcher:url_for(id, [{id, Id}], Context), Context));
         false -> p_cached(Id, uri, Context) 
-    end;
-p_no_acl(Id, group, Context) -> 
-    case p_no_acl(Id, group_id, Context) of
-        undefined -> undefined;
-        GroupId -> m_group:get(GroupId, Context)
     end;
 p_no_acl(Id, category, Context) -> 
     m_category:get(p_no_acl(Id, category_id, Context), Context);

@@ -21,7 +21,7 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 %% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
 %% @spec event(Event, Context1) -> Context2
 event({postback, {admin_flush}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             z_pivot_rsc:queue_all(Context),
             z_render:growl("The search index is rebuilding. Depending on the database size, this can take a long time.", Context);

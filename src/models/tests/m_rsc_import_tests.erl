@@ -6,8 +6,9 @@
 
 modify_rsc_test() ->
     C = z_context:new(testsandbox),
-    AdminC = z_acl:sudo(C),
-
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
+	SudoC = z_acl:sudo(C),
+	
     %% cleanup eventual remains of earlier failed tests
     case m_rsc:uri_lookup("http://foo.com/id/333", AdminC) of
         undefined -> nop;
@@ -48,7 +49,7 @@ modify_rsc_test() ->
                 ],
     ?assertThrow({error, eacces}, m_rsc_import:import(RscImport, C)),
 
-    {ok, NewId} = m_rsc_import:import(RscImport, AdminC),
+    {ok, NewId} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),
 
     ?assertEqual(<<"Hello!">>, m_rsc:p(Id, title, AdminC)),

@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 event({postback, {dialog_user_add, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(insert, identity, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess}
@@ -49,7 +49,7 @@ event({postback, {dialog_user_add, OnSuccess}, _TriggerId, _TargetId}, Context) 
 %% @doc Delete an username from an user.
 %% @spec event(Event, Context1) -> Context2
 event({submit, {user_add, Props}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(insert, identity, Context) of
         true ->
             NameFirst = z_context:get_q_validated("name_first", Context),
             NamePrefix = z_context:get_q("surprefix", Context),
@@ -66,8 +66,7 @@ event({submit, {user_add, Props}, _TriggerId, _TargetId}, Context) ->
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},
-                {email, z_context:get_q_validated("email", Context)},
-                {group_id, list_to_integer(z_context:get_q("group_id", Context))}
+                {email, z_context:get_q_validated("email", Context)}
             ],
             
             F = fun(Ctx) ->

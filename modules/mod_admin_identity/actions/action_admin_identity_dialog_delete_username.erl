@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the username from the user id.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {dialog_delete_username, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(delete, Id, Context) of
         true ->
             case m_identity:get_username(Id, Context) of
                 undefined ->

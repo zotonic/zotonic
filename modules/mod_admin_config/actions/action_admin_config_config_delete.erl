@@ -37,10 +37,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, Context}.
 
 
-%% @doc Delete a group.
+%% @doc Delete a config key.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {config_delete, Module, Key, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             ok = m_config:delete(Module, Key, Context),
             z_render:wire(OnSuccess, Context);

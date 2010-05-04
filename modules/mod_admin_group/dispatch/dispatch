@@ -1,5 +1,0 @@
-%% Dispatch rule for a group list page
-[
-    {admin_group,         ["admin", "group"],                   resource_admin, [{template, "admin_group.tpl"}, {selected, "group"}]},
-    {admin_group_members, ["admin", "group", "members", id],    resource_admin_group_members, []}
-].

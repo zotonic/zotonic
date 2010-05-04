@@ -198,7 +198,7 @@
 									{% if is_editable %}
 										{% button
 												text="add a new media item"
-												action={dialog_media_upload subject_id=id group_id=r.group_id stay
+												action={dialog_media_upload subject_id=id stay
 													action={postback postback={reload_media rsc_id=id div_id=#media} delegate="resource_admin_edit"}}
 										%}
 
@@ -384,18 +384,6 @@
 												{% else %}{% if not m.acl.is_community_publisher %}disabled="disabled"{% endif %}
 												{% endifequal %}>Community members</option>
 											<option value="2" {% ifequal 2 r.visible_for %}selected="selected"{% endifequal %}>Group members</option>
-										</select>
-									</div>
-
-									<div class="form-item  zp-50">
-										<label for="group_id">Belongs to the group</label>
-										<select id="group_id" name="group_id">
-											<option value="{{ r.group_id }}">{{ m.rsc[r.group_id].title }}</option>
-										{% for group_id in m.acl.member %}
-											{% ifnotequal r.group_id group_id %}
-											<option value="{{ group_id }}">{{ m.rsc[group_id].title }}</option>
-											{% endifnotequal %}
-										{% endfor %}
 										</select>
 									</div>
 								</div>

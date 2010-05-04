@@ -87,17 +87,6 @@
 
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).
 
-%% ACL fields for an acl check. Fields are initialized for the visible resource.
-%% This is used for fetching the acl fields from a resource record.
--record(acl_props, {
-    is_published=true,
-    is_authoritative=true,
-    group_id=1,
-    visible_for=0,
-    publication_start={{1900,1,1},{0,0,0}},
-    publication_end=?ST_JUTTEMIS
-}).
-
 %% Record used for parsing multipart body (see z_parse_multipart)
 -record(multipart_form, {name, data, filename, tmpfile, file, files=[], args=[]}).
 -record(upload, {filename, tmpfile}).
@@ -119,11 +108,29 @@
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default}).
 
+%% ACL administrator user id
+-define(ACL_ADMIN_USER_ID, 1).
+-define(ACL_ANONYMOUS_USER_ID, -1).
+
 %% ACL visibility levels
 -define(ACL_VIS_USER, 3).
 -define(ACL_VIS_GROUP, 2).
 -define(ACL_VIS_COMMUNITY, 1).
 -define(ACL_VIS_PUBLIC, 0).
+
+%% ACL objects
+-record(acl_rsc, {category, mime, size}).
+-record(acl_edge, {subject_id, predicate, object_id}).
+
+%% ACL fields for an acl check. Fields are initialized for the visible resource.
+%% This is used for fetching the acl fields from a resource record.
+-record(acl_props, {
+    is_published=true,
+    is_authoritative=true,
+    visible_for=?ACL_VIS_PUBLIC,
+    publication_start={{1900,1,1},{0,0,0}},
+    publication_end=?ST_JUTTEMIS
+}).
 
 %% @doc drag and drop event message
 -record(dragdrop, {tag, delegate, id}).

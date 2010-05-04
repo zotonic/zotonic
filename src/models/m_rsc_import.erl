@@ -31,13 +31,8 @@
 create_empty(Uri, Context) ->    
     create_empty(Uri, [], Context).
 
-create_empty(Uri, Props, Context) ->    
-    GroupId = case z_acl:groups_member(Context) of
-                  [] -> throw({error, eacces});
-                  Gs -> hd(Gs)
-              end,
-    Props1 = [{group_id, GroupId},
-              {category_id, m_category:name_to_id_check(other, Context)},
+create_empty(Uri, Props, Context) -> 
+    Props1 = [{category_id, m_category:name_to_id_check(other, Context)},
               {note, "Pending import"},
               {is_published, false},
               {uri, Uri},
@@ -54,13 +49,10 @@ import(RscImport, Context) ->
              undefined -> throw({error, {unknown_rsc, Uri}});
              TheId -> TheId
          end,
-
-    %% You can only import a thing when you're in the same group.
-    case z_acl:rsc_ingroup(Id, Context) of
-        false ->throw({error, eacces});
-        _ -> ok
-    end,
-
+	case z_acl:rsc_editable(Id, Context) of
+		false -> throw({error, eacces});
+		true -> ok
+	end,
     case m_rsc:p(Id, is_authoritative, Context) of
         false ->
             %% Import rsc
@@ -71,7 +63,7 @@ import(RscImport, Context) ->
                          _ -> [{is_published, true}|proplists:delete(is_published, Props)]
                      end,
 
-            Opts = [{escape_texts, false}, {acl_check, false}],
+            Opts = [{escape_texts, false}],
             {ok, Id} = m_rsc_update:update(Id, Props1, Opts, Context),
 
             %% Import medium
@@ -90,3 +82,4 @@ import(RscImport, Context) ->
         true ->
             {error, cannot_import_authoritative_rsc}
     end.
+			

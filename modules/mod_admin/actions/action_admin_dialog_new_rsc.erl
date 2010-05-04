@@ -65,7 +65,6 @@ event({postback, {new_rsc_dialog, Title, Cat, Redirect, SubjectId, Predicate}, _
 
 event({submit, new_page, _TriggerId, _TargetId}, Context) ->
     Title   = z_context:get_q("new_rsc_title", Context),
-    GroupId = list_to_integer(z_context:get_q("group_id", Context)),
     CatId   = list_to_integer(z_context:get_q("category_id", Context)),
     Redirect = z_context:get_q("redirect", Context),
     SubjectId = z_context:get_q("subject_id", Context),
@@ -74,7 +73,6 @@ event({submit, new_page, _TriggerId, _TargetId}, Context) ->
 
     Props = [
         {category_id, CatId},
-        {group_id, GroupId},
         {title, Title},
         {is_published, IsPublished}
     ],

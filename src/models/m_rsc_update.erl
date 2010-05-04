@@ -45,8 +45,7 @@ insert(Props, Context) ->
     insert(Props, true, Context).
 
 insert(Props, EscapeTexts, Context) ->
-    PropsAcl = z_acl:add_defaults(Props, Context),
-    PropsDefaults = props_defaults(PropsAcl, Context),
+    PropsDefaults = props_defaults(Props, Context),
     update(insert_rsc, PropsDefaults, EscapeTexts, Context).
 
 
@@ -146,25 +145,28 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- TextProps ],
             FilteredProps = props_filter(AtomProps, [], Context),
             EditableProps = props_filter_protected(FilteredProps),
+			AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
+				L when is_list(L) -> L;
+				{error, Reason} -> throw({error, Reason})
+			end,
             SafeProps = case EscapeTexts of
-                true -> z_html:escape_props(EditableProps);
-                false -> EditableProps
+                true -> z_html:escape_props(AclCheckedProps);
+                false -> AclCheckedProps
             end,
             ok = preflight_check(Id, SafeProps, Context),
-
+				
             %% This function will be executed in a transaction
             TransactionF = fun(Ctx) ->
                 {RscId, UpdateProps, BeforeProps, BeforeCatList, RenumberCats} = case Id of
                     insert_rsc ->
                         CategoryId = proplists:get_value(category_id, SafeProps),
-                        GroupId = proplists:get_value(group_id, SafeProps),
-                        InsProps = [{category_id, CategoryId}, {group_id, GroupId}, {version, 0}],
+						CategoryName = m_category:id_to_name(CategoryId, Ctx),
+                        InsProps = [{category_id, CategoryId}, {version, 0}],
                          % Allow the insertion props to be modified.
                         InsPropsN = z_notifier:foldr({rsc_insert}, InsProps, Ctx),
 
-                        % Check if the user is allowed to add to the group of the new rsc, if so proceed
-                        GroupIdN = proplists:get_value(group_id, InsPropsN),
-                        case z_acl:group_editable(GroupIdN, Ctx) orelse not(AclCheck) of
+                        % Check if the user is allowed to create the resource
+                        case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Ctx) orelse not(AclCheck) of
                             true ->
                                 {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx),
                                  % Insert a category record for categories. Categories are so low level that we want
@@ -334,7 +336,7 @@ props_filter([], Acc, _Context) ->
     Acc;
 
 props_filter([{uri, Uri}|T], Acc, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             case Uri of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -347,7 +349,7 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
     end;
 
 props_filter([{name, Name}|T], Acc, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             case Name of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -360,7 +362,7 @@ props_filter([{name, Name}|T], Acc, Context) ->
     end;
 
 props_filter([{page_path, Path}|T], Acc, Context) ->
-    case z_acl:has_role(public_publisher, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             case Path of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -387,14 +389,14 @@ props_filter([{slug, Slug}|T], Acc, Context) ->
     props_filter(T, [{slug, z_string:to_slug(Slug)} | Acc], Context);
 
 props_filter([{is_published, P}|T], Acc, Context) ->
-    case z_acl:has_role(public_publisher, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             props_filter(T, [{is_published, z_convert:to_bool(P)} | Acc], Context);
         false ->
             props_filter(T, Acc, Context)
     end;
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             props_filter(T, [{is_authoritative, z_convert:to_bool(P)} | Acc], Context);
         false ->
@@ -407,36 +409,10 @@ props_filter([{visible_for, Vis}|T], Acc, Context) ->
     VisibleFor = z_convert:to_integer(Vis),
     case VisibleFor of
         N when N==0; N==1; N==2 ->
-            case N >= z_acl:publish_level(Context) of
-                true ->
-                    props_filter(T, [{visible_for, N} | Acc], Context);
-                false ->
-                    % Do not let the user upgrade visibility beyond his permissions
-                    props_filter(T, Acc, Context)
-            end;
+			props_filter(T, [{visible_for, N} | Acc], Context);
         _ ->
             props_filter(T, Acc, Context)
     end;
-
-props_filter([{group_id, GId}|T], Acc, Context) ->
-    GroupId = z_convert:to_integer(GId),
-    case GroupId of
-        undefined ->
-            props_filter(T, Acc, Context);
-        N when N > 0 ->
-            case z_acl:has_role(admin, Context) of
-                true ->
-                    props_filter(T, [{group_id, GroupId}|Acc], Context);
-                false ->
-                    Gs = z_acl:groups_member(Context),
-                    case lists:member(GroupId, Gs) of
-                        true -> props_filter(T, [{group_id, GroupId}|Acc], Context);
-                        false -> throw({error, eacces})
-                    end
-            end
-    end;
-props_filter([{group, GroupName}|T], Acc, Context) ->
-    props_filter([{group_id, m_group:name_to_id_check(GroupName, Context)} | T], Acc, Context);
 
 props_filter([{category, CatName}|T], Acc, Context) ->
     props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);

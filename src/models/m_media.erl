@@ -3,6 +3,7 @@
 %% @date 2009-04-09
 %%
 %% @doc Model for medium database
+%% @todo Add ACL checks for the mime types.
 
 %% Copyright 2009 Marc Worrell
 %%

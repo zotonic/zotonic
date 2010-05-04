@@ -34,7 +34,6 @@
 install(Host, C) ->
     ok = install_config(C),
     ok = install_modules(Host, C),
-    ok = install_group(C),
     ok = install_category(C),
     ok = install_rsc(C),
     ok = install_identity(C),
@@ -72,12 +71,13 @@ install_modules(Host, C) ->
         "mod_seo_google",
         "mod_seo_sitemap",
 
+		"mod_acl_adminonly",
+
         "mod_admin",
         "mod_admin_address",
         "mod_admin_category",
         "mod_admin_config",
         "mod_admin_event",
-        "mod_admin_group",
         "mod_admin_identity",
         "mod_admin_modules",
         "mod_admin_person",
@@ -94,25 +94,6 @@ install_modules(Host, C) ->
     ],
     ok.
 
-
-%% @doc Install the default admin, editor, supervisor, community and public groups
-%% The resources will be inserted later, which is possible because the fk check is deferred till commit time.
-install_group(C) ->
-    ?DEBUG("Inserting groups"),
-    Groups = [
-        %   rsc admin  spvsr  cpub   ppub
-        [204,  true,  true,  true,  true  ],
-        [205,  false, false, true,  true  ],
-        [206,  false, false, true,  false ],
-        [207,  false, true,  false, false ],
-        [208,  false, false, false, false ]
-    ],
-    
-    [ {ok,1} = pgsql:equery(C, "
-            insert into \"group\" (id, is_admin, is_supervisor, is_community_publisher, is_public_publisher) 
-            values ($1, $2, $3, $4, $5)", R) || R <- Groups],
-    ok.
-
 install_category(C) ->
     ?DEBUG("Inserting categories"),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
@@ -124,24 +105,23 @@ install_category(C) ->
 
     %% "http://purl.org/dc/terms/DCMIType" ?
     {ok, 1} = pgsql:equery(C, "
-            insert into rsc (id, is_protected, visible_for, group_id, category_id, name, uri, props)
-            values (116, true, 0, 204, 116, 'category', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
+            values (116, true, 0, 116, 'category', $1, $2)
             ", [    undefined, 
                     [{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}] 
                 ]),
 
     {ok, 1} = pgsql:equery(C, "
-            insert into rsc (id, is_protected, visible_for, group_id, category_id, name, uri, props)
-            values (115, true, 0, 204, 116, 'meta', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
+            values (115, true, 0, 116, 'meta', $1, $2)
             ", [    undefined, 
                     [{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}] 
                 ]),
     
     %% Now that we have the category "category" we can insert all other categories.
     Cats = [
-        % Meta categories for defining categories, predicates and groups.
+        % Meta categories for defining categories, predicates.
             {117,115,    2, predicate,   true,  undefined,                                   [{title, {trans, [{en, <<"Predicate">>},     {nl, <<"Predikaat">>}]}}] },
-            {118,115,    3, group,       true,  undefined,                                   [{title, {trans, [{en, <<"User Group">>},    {nl, <<"Gebruikersgroep">>}]}}] },
 
         %% Other categories
         {101,undefined,  1, other,       true,  undefined,                                   [{title, {trans, [{en, <<"Uncategorized">>}, {nl, <<"Zonder categorie">>}]}}] },
@@ -178,8 +158,8 @@ install_category(C) ->
 
     InsertCat = fun({Id, ParentId, Seq, Name, Protected, Uri, Props}) ->
         {ok, 1} = pgsql:equery(C, "
-                insert into rsc (id, visible_for, group_id, category_id, is_protected, name, uri, props)
-                values ($1, 0, 204, 116, $2, $3, $4, $5)
+                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props)
+                values ($1, 0, 116, $2, $3, $4, $5)
                 ", [ Id, Protected, Name, Uri, Props ]),
         {ok, 1} = pgsql:equery(C, "
                 insert into category (id, parent_id, seq)
@@ -194,37 +174,18 @@ install_category(C) ->
 %% @doc Install some initial resources, most important is the system administrator
 %% @todo Add the hostname to the uri
 install_rsc(C) ->
-    ?DEBUG("Inserting base resources (group, admin, etc.)"),
+    ?DEBUG("Inserting base resources (admin, etc.)"),
     Rsc = [
-        % id  vsfr  grp    cat   protect name,         props
-        [ 204,  0,  204,   118,  true,   "admins",     [{title,<<"Administrators">>}] ],
-        [ 205,  0,  205,   118,  false,  "editors",    [{title,<<"Site Editors">>}] ],
-        [ 206,  0,  206,   118,  false,  "communityeditors", [{title,<<"Community Editors">>}] ],
-        [ 207,  0,  207,   118,  false,  "supervisors", [{title,<<"Supervisors">>}] ],
-        [ 208,  0,  208,   118,  false,  "content",    [{title,<<"Content">>}] ],
-
-        [   1,  0,  204,   102,  true,    "administrator",   [{title,<<"Site Administrator">>}] ]
+        % id  vsfr  cat   protect name,         props
+        [   1,  0,  102,  true,    "administrator",   [{title,<<"Site Administrator">>}] ]
     ],
     
     [ {ok,1} = pgsql:equery(C, "
-            insert into rsc (id, visible_for, group_id, category_id, is_protected, name, props)
-            values ($1, $2, $3, $4, $5, $6, $7)
+            insert into rsc (id, visible_for, category_id, is_protected, name, props)
+            values ($1, $2, $3, $4, $5, $6)
             ", R) || R <- Rsc ],
     {ok, _} = pgsql:squery(C, "update rsc set creator_id = 1, modifier_id = 1, is_published = true"),
-
     pgsql:reset_id(C, "rsc"),
-
-    % Connect person resources to the correct groups
-    RscGroup = [
-        % Id, Rsc  Grp    obsvr   leader
-        [ 1,  1,   204,   false,  true ]
-    ],
-
-    [ {ok,1} = pgsql:equery(C, "
-            insert into rsc_group (id, rsc_id, group_id, is_observer, is_leader)
-            values ($1, $2, $3, $4, $5)
-            ", R) || R <- RscGroup ],
-    pgsql:reset_id(C, "rsc_group"),
     ok.
 
 
@@ -256,12 +217,11 @@ install_predicate(C) ->
     ],
 
     {ok, CatId}   = pgsql:squery1(C, "select id from rsc where name = 'predicate'"),
-    {ok, GroupId} = pgsql:squery1(C, "select id from rsc where name = 'admins'"),
     
     [ {ok,1} = pgsql:equery(C, "
-            insert into rsc (id, visible_for, is_protected, name, uri, props, group_id, category_id, is_published, creator_id, modifier_id)
-            values ($1, 0, $2, $3, $4, $5, $6, $7, true, 1, 1)
-            ", R ++ [GroupId,CatId]) || R <- Preds],
+            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id)
+            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1)
+            ", R ++ [CatId]) || R <- Preds],
     pgsql:reset_id(C, "rsc"),
 
     ObjSubj = [

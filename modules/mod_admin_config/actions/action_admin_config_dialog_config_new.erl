@@ -46,7 +46,7 @@ event({postback, {config_new_dialog, OnSuccess}, _TriggerId, _TargetId}, Context
 
 
 event({submit, {config_new, Args}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             Module = z_string:to_name(z_context:get_q_validated("module", Context)),
             Key = z_string:to_name(z_context:get_q_validated("key", Context)),

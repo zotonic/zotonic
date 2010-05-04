@@ -31,17 +31,6 @@
 		</div>
 
 		<div class="form-item clearfix">
-			<label for="{{ #group_id }}">Group</label>
-			<select id="{{ #group_id }}" name="group_id">
-			{% for group_id in m.acl.member %}
-				<option value="{{ group_id }}" {% if m.rsc[group_id].name == "admins" %}selected="selected"{% endif %}>
-					{{ m.rsc[group_id].title }}
-				</option>
-			{% endfor %}
-			</select>
-		</div>
-
-		<div class="form-item clearfix">
 			<button type="submit">Make category</button>
 			{% button text="Cancel" action={dialog_close} %}
 		</div>

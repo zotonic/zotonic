@@ -69,7 +69,7 @@ get_menu(Context) ->
 %% @doc Save the menu to the site configuration.
 %% @spec save_menu(list(), Context) -> ok
 save_menu(Menu, Context) ->
-    case z_acl:has_role(public_publisher, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             m_config:set_prop(menu, menu_default, menu, Menu, Context), 
             z_depcache:flush(menu, Context),

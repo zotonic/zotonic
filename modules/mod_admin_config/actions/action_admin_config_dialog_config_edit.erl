@@ -51,7 +51,7 @@ event({postback, {config_edit_dialog, Module, Key, OnSuccess}, _TriggerId, _Targ
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
 %% @spec event(Event, Context1) -> Context2
 event({submit, {config_edit, Args}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             Value = z_context:get_q("val", Context, ""),
             Module = proplists:get_value(module, Args),

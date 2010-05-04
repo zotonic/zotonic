@@ -23,15 +23,6 @@
 						<input type="text" id="new_media_title" name="new_media_title" value="{{ title|escape }}" />
 						{% validate id="new_media_title" type={presence} %}
 					</div>
-		
-					<div class="form-item clearfix">
-						<label for="{{ #group_id }}">Group</label>
-						<select id="{{ #group_id }}" name="group_id">
-						{% for id in m.acl.member %}
-							<option value="{{ id }}" {% ifequal group_id id %}selected="selected"{% endifequal %}>{{ m.rsc[id].title }}</option>
-						{% endfor %}
-						</select>
-					</div>
 				{% endif %}
 				
 				<div class="form-item clearfix">
@@ -64,15 +55,6 @@
 						<label for="new_media_title" style="color:white">Media title</label>
 						<input type="text" id="new_media_title_url" name="new_media_title_url" value="{{ title|escape }}" />
 						{% validate id="new_media_title_url" type={presence} %}
-					</div>
-		
-					<div class="form-item clearfix">
-						<label for="{{ #group_id_url }}">Group</label>
-						<select id="{{ #group_id_url }}" name="group_id_url">
-						{% for id in m.acl.member %}
-							<option value="{{ id }}" {% ifequal group_id id %}selected="selected"{% endifequal %}>{{ m.rsc[id].title }}</option>
-						{% endfor %}
-						</select>
 					</div>
 				{% endif %}
 

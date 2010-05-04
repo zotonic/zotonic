@@ -41,21 +41,11 @@ install_check(SiteProps) ->
     Name     = proplists:get_value(host, SiteProps),
     Database = proplists:get_value(dbdatabase, SiteProps),
     Schema   = proplists:get_value(dbschema, SiteProps, "public"),
-    {ok, C}  = pgsql_pool:get_connection(Name),
 
     z_install:pre_install(Name, SiteProps),
-
-    {ok, HasConfig} = pgsql:equery1(C, "
-            select count(*) 
-            from information_schema.tables 
-            where table_catalog = $1 
-              and table_name = 'config' 
-              and table_schema = $2
-              and table_type = 'BASE TABLE'", [Database, Schema]),
-    pgsql_pool:return_connection(Name, C),
-
-    case HasConfig of
-        0 ->
+	
+    case has_table("config", Name, Database, Schema) of
+        false ->
             ?LOG("Installing database ~p@~p:~p ~p", [
                         proplists:get_value(dbuser, SiteProps),
                         proplists:get_value(dbhost, SiteProps),
@@ -63,8 +53,48 @@ install_check(SiteProps) ->
                         Database
                         ]),
             z_install:install(Name);
-        1 -> 
-            ok
+        true -> 
+			upgrade(Name, Database, Schema)
     end.
 
+
+%% Check if a table exists by querying the information schema.
+has_table(Table, Name, Database, Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Name),
+    {ok, HasTable} = pgsql:equery1(C, "
+            select count(*) 
+            from information_schema.tables 
+            where table_catalog = $1 
+              and table_name = $3 
+              and table_schema = $2
+              and table_type = 'BASE TABLE'", [Database, Schema, Table]),
+	pgsql_pool:return_connection(Name, C),
+	HasTable == 1.
+
+
+
+%% Upgrade older Zotonic versions.
+upgrade(Name, Database, Schema) ->
+	%% Remove group, rsc_group, group_id
+	HasRscGroup = has_table("rsc_group", Name, Database, Schema),
+	HasGroup = has_table("group", Name, Database, Schema),
+	case HasRscGroup andalso HasGroup of
+		true ->
+		    {ok, C}  = pgsql_pool:get_connection(Name),
+			{ok, [], []} = pgsql:squery(C, "BEGIN"),
+			pgsql:squery(C, "alter table rsc drop column group_id cascade"),
+			pgsql:squery(C, "drop table rsc_group cascade"),
+			pgsql:squery(C, "drop table \"group\" cascade"),
+			pgsql:squery(C, "delete from module where name='mod_admin_group'"),
+			{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", ["mod_acl_adminonly"]),
+			{ok, [], []} = pgsql:squery(C, "COMMIT"),
+			ok;
+		false ->
+			ok
+	end.
+
+	
+	
+	
+	
     

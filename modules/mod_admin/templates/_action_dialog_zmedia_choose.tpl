@@ -15,7 +15,7 @@
         <div class="form-item clearfix">
         {% button
                 text="add a new media item" 
-                action={dialog_media_upload subject_id=id group_id=r.group_id stay
+                action={dialog_media_upload subject_id=id stay
                         action={postback 
                                 postback={zmedia_choose} 
                                           delegate="action_admin_zmedia_choose"}

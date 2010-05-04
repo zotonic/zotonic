@@ -85,7 +85,10 @@ trim_right(L) ->
 %% @doc Check if the variable is a one dimensional list, probably a string
 is_string([]) -> 
     true;
-is_string([C|Rest]) when is_integer(C) andalso (C >= 32 orelse C == 9 orelse C == 10 orelse C == 12 orelse C == 13) ->
+is_string([C|Rest]) when 
+		is_integer(C)
+		andalso C =< 255
+		andalso (C >= 32 orelse C == 9 orelse C == 10 orelse C == 12 orelse C == 13) ->
     is_string(Rest);
 is_string(_) -> 
     false.
