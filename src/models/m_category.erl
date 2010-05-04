@@ -38,7 +38,7 @@
     last_modified/2,
     is_a/2,
     is_a/3,
-    insert/5,
+    insert/4,
     get_page_count/2,
     delete/3,
 	image/2,
@@ -252,7 +252,7 @@ last_modified(Cat, Context) ->
 %% @doc Move the category below another category, placing it at the end of the children of that category.
 %% @spec move_end(CatId::int(), NewParentId::int(), Context) -> ok | {error, Reason}
 move_below(Id, ParentId, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(update, Id, Context) of
         true ->
             PathParentId = [ParentId | get_path(ParentId, Context)],
             case lists:member(Id, PathParentId) of
@@ -273,7 +273,7 @@ move_below(Id, ParentId, Context) ->
 %% @doc Move the category to the end of all categories, making it a top category in the process
 %% @spec move_end(CatId::int(), Context) -> ok | {error, Reason}
 move_end(Id, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(update, Id, Context) of
         true ->
             F = fun(Ctx) ->
                 z_db:q("update category set parent_id = null, seq = 10000 where id = $1", [Id], Context),
@@ -289,7 +289,7 @@ move_end(Id, Context) ->
 %% the parent of the other category.
 %% @spec move_before(CatId::int(), BeforeCatId::int(), Context) -> ok | {error, Reason}
 move_before(Id, BeforeId, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(update, Id, Context) of
         true ->
             F = fun(Ctx) ->
                     {ParentId, Seq} = z_db:q_row("select parent_id, seq from category where id = $1", [BeforeId], Context),
@@ -322,7 +322,7 @@ move_before(Id, BeforeId, Context) ->
 
 
 update_sequence(Ids, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             F = fun(Ctx) ->
                 z_db:update_sequence(category, Ids, Ctx),
@@ -342,7 +342,7 @@ delete(Id, TransferId, Context) ->
     case z_db:q("select name from rsc where id = $1", [Id], Context) of
         N when N == <<"other">>; N == <<"category">> -> {error, is_system_category};
         _ ->
-            case z_acl:has_role(admin, Context) of
+            case z_acl:is_allowed(delete, Id, Context) of
                 true ->
                     F = fun(Ctx) ->
                         ToId = case TransferId of
@@ -675,10 +675,10 @@ flatten_tree({Level, _NodeSeq, {NodeId,_Parent,_Seq}, SubTrees, Path}, NodesAcc,
 
 
 %% Insert a category
-insert(ParentId, Name, GroupId, Props, Context) ->
+insert(ParentId, Name, Props, Context) ->
     {ok, CatId} = name_to_id("category", Context),
     F = fun(Ctx) ->
-                {ok, Id} = m_rsc_update:insert(Props ++ [{name, Name}, {category_id, CatId}, {group_id, GroupId}], Ctx),
+                {ok, Id} = m_rsc_update:insert(Props ++ [{name, Name}, {category_id, CatId}], Ctx),
                 case ParentId of 
                     undefined ->
                         Id;

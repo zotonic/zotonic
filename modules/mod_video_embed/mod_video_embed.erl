@@ -158,13 +158,10 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
             SubjectId = proplists:get_value(subject_id, EventProps),
             Predicate = proplists:get_value(predicate, EventProps, depiction),
             Title   = z_context:get_q_validated("title", Context),
-            GroupId = list_to_integer(z_context:get_q("group_id", Context)),
-
             Props = [
                 {title, Title},
                 {is_published, true},
                 {category, video},
-                {group_id, GroupId},
                 {video_embed_service, EmbedService},
                 {video_embed_code, EmbedCode}
             ],

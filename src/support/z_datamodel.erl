@@ -158,7 +158,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
 
             {Result, NewNames} = case lists:member(Name, ManagedNames) of
                                      false ->
-                                         Props1 = [{name, Name}, {group_id, m_group:name_to_id_check(admins, Context)}, {category_id, CatId},
+                                         Props1 = [{name, Name}, {category_id, CatId},
                                                    {installed_by, Module}, {managed_props, Props}] ++ Props,
                                          Props2 = case proplists:get_value(is_published, Props1) of
                                                       undefined ->

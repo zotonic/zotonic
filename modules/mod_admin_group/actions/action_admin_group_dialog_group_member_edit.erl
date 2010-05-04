@@ -49,9 +49,9 @@ event({postback, {group_member_edit_dialog, Id, MemberId}, _TriggerId, _TargetId
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
 %% @spec event(Event, Context1) -> Context2
 event({submit, group_member_edit, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    GroupId  = z_convert:to_integer(z_context:get_q("id", Context)),
+    case z_acl:is_allowed(update, GroupId, Context) of
         true ->
-            GroupId  = z_convert:to_integer(z_context:get_q("id", Context)),
             MemberId = z_convert:to_integer(z_context:get_q("member_id", Context)),
             case z_context:get_q("member", Context) of
                 "leader"   -> m_group:add_leader(GroupId, MemberId, Context);

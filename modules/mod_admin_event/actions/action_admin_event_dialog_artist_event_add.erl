@@ -51,14 +51,12 @@ event({submit, {event_add, Props}, _TriggerId, _TargetId}, Context) ->
     Title = z_context:get_q_validated("title", Context),
     Venue = z_context:get_q("venue", Context),
     Genres = z_context:get_q_all("genre", Context),
-    GroupId = list_to_integer(z_context:get_q("group_id", Context)),
 
     EventProps = [
         {is_published, true},
         {visible_for, 0},
         {category, event},
-        {title, lists:flatten(Title)},
-        {group_id, GroupId}
+        {title, lists:flatten(Title)}
     ],
     
     F = fun(Ctx) ->

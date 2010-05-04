@@ -6,17 +6,13 @@
 
 modify_rsc_test() ->
     C = z_context:new(testsandbox),
-    AdminC = z_acl:sudo(C),
-
-    GroupId = m_rsc:rid(admins, C),
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 
-    ?assertThrow({error, e_user_without_group}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {group_id, GroupId}], C)),
+    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}], C)),
+    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
 
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {group_id, GroupId}, {category_id, CatId}], C)),
-
-    {ok, Id} = m_rsc:insert([{title, "Hello."}, {group_id, GroupId}, {category_id, CatId}], AdminC),
+    {ok, Id} = m_rsc:insert([{title, "Hello."}, {category_id, CatId}], AdminC),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),
@@ -41,6 +37,8 @@ modify_rsc_test() ->
     ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
     ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)),
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
+
+?DEBUG(Id),
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, C)), %% also visible for anonymous now
 
 

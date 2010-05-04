@@ -33,15 +33,6 @@
 		</div>
 		
 		<div class="form-item clearfix">
-			<label for="{{ #group_id }}">Group</label>
-			<select id="{{ #group_id }}" name="group_id">
-			{% for group_id in m.acl.member %}
-				<option value="{{ group_id }}">{{ m.rsc[group_id].title }}</option>
-			{% endfor %}
-			</select>
-		</div>
-		
-		<div class="form-item clearfix">
 			<button type="submit">Make {{catname}}</button>
 			{% button action={dialog_close} text="Cancel" %}
 		</div>

@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 %% @doc Download a backup.
 %% @spec event(Event, Context1) -> Context2
 event({postback, backup_start, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) or z_acl:has_role(supervisor, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             case mod_backup:start_backup(Context) of
                 ok ->
@@ -40,6 +40,6 @@ event({postback, backup_start, _TriggerId, _TargetId}, Context) ->
         	        z_render:growl_error("Could not start the backup because a backup is already in progress.", Context)
         	end;
         false ->
-            z_render:growl_error("Only administrators and supervisors can start a backup.", Context)
+            z_render:growl_error("Only administrators can start a backup.", Context)
     end.
 

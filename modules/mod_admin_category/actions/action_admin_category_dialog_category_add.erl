@@ -38,26 +38,24 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the category.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {dialog_category_add, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(insert, #acl_rsc{category=category}, Context) of
         true ->
             Vars = [ {on_success, OnSuccess} ],
             z_render:dialog("Add category", "_action_dialog_category_add.tpl", Vars, Context);
         false ->
-            z_render:growl_error("Only administrators can add categories.", Context)
+            z_render:growl_error("You are not allowed to add categories.", Context)
     end;
 
 %% @doc Handle the form postback. Optionally renaming existing categories.
 event({submit, {category_add, Options}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(insert, #acl_rsc{category=category}, Context) of
         true ->
             Title    = z_context:get_q_validated("title", Context),
             Name     = z_context:get_q_validated("name", Context),
-            GroupId  = z_convert:to_integer(z_context:get_q("group_id", Context, undefined)),
             ParentId = z_convert:to_integer(z_context:get_q("category_id", Context, undefined)),
             
             Props = [
                 {is_published, true},
-                {group_id, GroupId},
                 {category, category},
                 {name, Name},
                 {title, Title}
@@ -77,5 +75,5 @@ event({submit, {category_add, Options}, _TriggerId, _TargetId}, Context) ->
                     z_render:growl_error(Error, Context)
             end;
         false ->
-            z_render:growl_error("Only administrators can delete categories.", Context)
+            z_render:growl_error("You are not allowed to add categories.", Context)
     end.

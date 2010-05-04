@@ -40,7 +40,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @todo Check if the predicate is in use, if so show text that the predicate is in use and can't be deleted
 %% @spec event(Event, Context1) -> Context2
 event({postback, {delete_predicate_dialog, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(admin, site, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess},

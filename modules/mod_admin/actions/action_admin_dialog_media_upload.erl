@@ -32,23 +32,21 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Title = proplists:get_value(title, Args),
     Id = proplists:get_value(id, Args),
     SubjectId = proplists:get_value(subject_id, Args),
-    GroupId = proplists:get_value(group_id, Args),
     Predicate = proplists:get_value(predicate, Args, depiction),
     Actions = proplists:get_all_values(action, Args),
     Stay = proplists:get_value(stay, Args, false),
-    Postback = {media_upload_dialog, Title, Id, SubjectId, GroupId, Predicate, Stay, Actions},
+    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Actions},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {media_upload_dialog, Title, Id, SubjectId, GroupId, Predicate, Stay, Actions}, _TriggerId, _TargetId}, Context) ->
+event({postback, {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Actions}, _TriggerId, _TargetId}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, Id },
         {subject_id, SubjectId },
-        {group_id, GroupId},
         {title, Title},
         {actions, Actions},
         {predicate, Predicate},
@@ -65,7 +63,6 @@ event({submit, {media_upload, EventProps}, _TriggerId, _TargetId}, Context) ->
                             Props = case proplists:get_value(id, EventProps) of
                                         undefined ->
                                             [{title, z_context:get_q_validated("new_media_title", Context)},
-                                             {group_id, list_to_integer(z_context:get_q("group_id", Context))},
                                              {original_filename, OriginalFilename}];
                                         _ ->
                                             [{original_filename, OriginalFilename}]
@@ -87,8 +84,7 @@ event({submit, {media_url, EventProps}, _TriggerId, _TargetId}, Context) ->
     Url = z_context:get_q("url", Context),
     Props = case proplists:get_value(id, EventProps) of
                 undefined ->
-                    [{title, z_context:get_q_validated("new_media_title_url", Context)},
-                     {group_id, list_to_integer(z_context:get_q("group_id_url", Context))}];
+                    [{title, z_context:get_q_validated("new_media_title_url", Context)}];
                 _ ->
                     []
             end,

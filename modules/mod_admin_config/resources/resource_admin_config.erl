@@ -29,7 +29,7 @@
 is_authorized(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1), 
-    case z_acl:has_role(admin, Context2) of
+    case z_acl:is_allowed(admin, site, Context2) of
         false -> z_auth:wm_output_logon(Context2);
         true ->  ?WM_REPLY(true, Context2)
     end.

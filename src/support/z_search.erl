@@ -211,10 +211,11 @@ add_acl_check(_, Args, _Context) ->
 
 %% @doc Create extra 'where' conditions for checking the access control
 %% @spec add_acl_check1(Table, Alias, Args, Context) -> {Where, NewArgs}
+%% @todo THIS NEEDS TO BE CHANGED FOR THE PLUGGABLE ACL
 add_acl_check1(Table, Alias, Args, Context) ->
     % N = length(Args),
     case z_acl:can_see(Context) of
-        ?ACL_VIS_GROUP ->
+        ?ACL_VIS_USER ->
             % Admin or supervisor, can see everything
             {[], Args};
         ?ACL_VIS_PUBLIC -> 
@@ -229,8 +230,21 @@ add_acl_check1(Table, Alias, Args, Context) ->
                 _ ->
                     Sql
             end,
+           {Sql1, Args};
+        ?ACL_VIS_COMMUNITY -> 
+            % Only see published public or community content
+            Sql = Alias ++ ".visible_for in (0,1)",
+            Sql1 = case Table of
+                rsc ->
+                    Sql++" and "
+                    ++Alias++".is_published and "
+                    ++Alias++".publication_start <= now() and "
+                    ++Alias++".publication_end >= now()";
+                _ ->
+                    Sql
+            end,
             {Sql1, Args};
-        ?ACL_VIS_COMMUNITY ->
+        ?ACL_VIS_GROUP ->
             % Can see published community and public content or any content from one of the user's groups
             Sql = Alias ++ ".visible_for in (0,1) ",
             Sql1 = case Table of
@@ -242,10 +256,9 @@ add_acl_check1(Table, Alias, Args, Context) ->
                 _ ->
                     Sql
             end,
-            N = length(Args),
-            Sql2 = "((" ++ Sql1 ++ ") or "++Alias++".id = $"++integer_to_list(N+1)
-                    ++" or " ++ Alias ++ ".group_id in (select rg.group_id from rsc_group rg where rg.rsc_id = $"++integer_to_list(N+1)++"))",
-            {Sql2, Args ++ [Context#context.user_id]}
+			N = length(Args),
+			Sql2 = "((" ++ Sql1 ++ ") or "++Alias++".id = $"++integer_to_list(N+1),
+   			{Sql2, Args ++ [z_acl:user(Context)]}
     end.
 
 

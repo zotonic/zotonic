@@ -12,15 +12,6 @@
 					<input type="text" id="{{ #title }}" name="title" value="{{ title|escape }}" />
 					{% validate id=#title name="title" type={presence} %}
 				</div>
-	
-				<div class="form-item clearfix">
-					<label for="{{ #group_id }}">Group</label>
-					<select id="{{ #group_id }}" name="group_id">
-					{% for id in m.acl.member %}
-						<option value="{{ id }}" {% ifequal group_id id %}selected="selected"{% endifequal %}>{{ m.rsc[id].title }}</option>
-					{% endfor %}
-					</select>
-				</div>
 			{% endif %}
 
 			<div class="form-item clearfix">

@@ -39,20 +39,20 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the category.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {delete_category_dialog, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    case z_acl:is_allowed(delete, Id, Context) of
         true ->
             Count = m_category:get_page_count(Id, Context),
             Vars = [ {on_success, OnSuccess}, {id, Id}, {page_count, Count} ],
             z_render:dialog("Confirm delete", "_action_dialog_category_delete.tpl", Vars, Context);
         false ->
-            z_render:growl_error("Only administrators can delete categories.", Context)
+            z_render:growl_error("You are not allowed to delete this category.", Context)
     end;
 
 %% @doc Handle the form postback. Optionally renaming existing categories.
 event({submit, {delete_category, _Props}, _TriggerId, _TargetId}, Context) ->
-    case z_acl:has_role(admin, Context) of
+    Id = z_convert:to_integer(z_context:get_q("id", Context)),
+    case z_acl:is_allowed(delete, Id, Context) of
         true ->
-            Id = list_to_integer(z_context:get_q("id", Context)),
             TransferId = case z_context:get_q("transfer_id", Context) of
                 [] -> undefined;
                 undefined -> undefined;
@@ -67,5 +67,5 @@ event({submit, {delete_category, _Props}, _TriggerId, _TargetId}, Context) ->
                     z_render:growl_error(Error, Context)
             end;
         false ->
-            z_render:growl_error("Only administrators can delete categories.", Context)
+            z_render:growl_error("You are not allowed to delete this category.", Context)
     end.

@@ -13,8 +13,8 @@
 		
 
 		<div class="form-item">
-			<label for="{{ #group_id }}">Venue</label>
-			<select name="venue">
+			<label for="{{ #venue_id }}">Venue</label>
+			<select id="{{ #venue_id }}" name="venue">
 			{% for title, id in m.search[{all_bytitle cat="venue"}] %}
 				<option value="{{ id }}">{{ title }}</option>
 			{% endfor %}
@@ -29,19 +29,6 @@
 			<label for="{{ #genre.id}}">{{ title }}</label><br/>
 		{% endfor %}
 		</div>
-
-		<h3>Group for event</h3>
-
-		{% with m.rsc[id].group_id as gid %}
-			<div class="form-item">
-				<label for="{{ #group_id }}">Editable by</label>
-				<select id="{{ #group_id }}" name="group_id">
-				{% for group_id in m.acl.member %}
-					<option value="{{ group_id }}" {% ifequal gid group_id %}selected="selected" {% endifequal %}>{{ m.rsc[group_id].title }}</option>
-				{% endfor %}
-				</select>
-			</div>
-		{% endwith %}
 
 		<button type="submit">Add event</button>
 		{% button action={dialog_close} text="Cancel" %}

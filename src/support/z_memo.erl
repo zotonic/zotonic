@@ -51,7 +51,9 @@ set_userid(AuthUserId) ->
 		_ -> error
 	end.
 
-%% @doc Check if memoization is enabled for the current user/process.
+%% @doc Check if memoization is enabled for the current user/process.  Disabled when in a sudo action.
+is_enabled(#context{acl=admin}) ->
+	false;
 is_enabled(#context{user_id=UserId}) ->
 	case erlang:get(memo_userid) of
 		{ok, UserId} -> true;
@@ -77,7 +79,4 @@ set(Key, Value, Context) ->
 		true -> erlang:put(Key, Value);
 		false -> error
 	end.
-
-
-
 

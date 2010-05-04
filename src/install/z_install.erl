@@ -127,7 +127,6 @@ model_pgsql() ->
         is_protected boolean NOT NULL DEFAULT false,
         publication_start timestamp with time zone NOT NULL DEFAULT now(),
         publication_end timestamp with time zone NOT NULL DEFAULT '9999-06-01 00:00:00'::timestamp with time zone,
-        group_id int NOT NULL,
         creator_id int,
         modifier_id int,
         version int NOT NULL DEFAULT 1,
@@ -244,57 +243,6 @@ model_pgsql() ->
     "CREATE INDEX fki_edge_object_id ON edge (object_id)",
     "CREATE INDEX fki_edge_creator_id ON edge (creator_id)",
     "CREATE INDEX edge_sp_seq_key ON edge (subject_id, predicate_id, seq)",
-
-    % Table: group
-    % A group is the form in which people work together on content. 
-    % Every resource is part of exactly one group (one and only one).
-
-    "CREATE TABLE \"group\"
-    (
-      id int NOT NULL,
-      is_admin boolean NOT NULL DEFAULT false,
-      is_supervisor boolean NOT NULL DEFAULT false,
-      is_community_publisher boolean NOT NULL DEFAULT false,
-      is_public_publisher boolean NOT NULL DEFAULT false,
-
-      CONSTRAINT group_pkey PRIMARY KEY (id),
-      CONSTRAINT fk_group_id FOREIGN KEY (id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-        DEFERRABLE INITIALLY DEFERRED
-    )",
-
-    % Now that we have the group table we can add group foreign key to the rsc table
-    "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_group FOREIGN KEY (group_id)
-      REFERENCES \"group\"(id)
-      ON UPDATE CASCADE ON DELETE RESTRICT",
-    
-    "CREATE INDEX fki_rsc_group ON rsc (group_id)",
-
-    % Table rsc_group
-    % Members of a group, every user can be member of multiple groups
-    % When is_observer is set then the group member can only view and comment on content
-
-    "CREATE TABLE rsc_group
-    (
-      id serial NOT NULL,
-      rsc_id int NOT NULL,
-      group_id int NOT NULL,
-      is_observer boolean NOT NULL DEFAULT false,
-      is_leader boolean NOT NULL DEFAULT false,
-
-      CONSTRAINT rsc_group_pkey PRIMARY KEY (id),
-      CONSTRAINT rsc_group_rsc_id_group_id_key UNIQUE (rsc_id, group_id),
-      CONSTRAINT fk_rsc_group_rsc_id FOREIGN KEY (rsc_id)
-        REFERENCES rsc (id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT fk_rsc_group_group_id FOREIGN KEY (group_id)
-        REFERENCES \"group\" (id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_rsc_group_rsc_id ON rsc_group (rsc_id)",
-    "CREATE INDEX fki_rsc_group_group_id ON rsc_group (group_id)",
 
 
     % Table medium
