@@ -74,11 +74,6 @@ event({submit, {user_add, Props}, _TriggerId, _TargetId}, Context) ->
                     {ok, PersonId} ->
                         Username = z_context:get_q_validated("new_username", Ctx),
                         Password = z_context:get_q_validated("new_password", Ctx),
-                        MemberId = list_to_integer(z_context:get_q("member_id", Ctx)),
-                        case m_group:add_member(MemberId, PersonId, Ctx) of
-                            {ok, _RscGroupId} -> nop;
-                            {error, MemberReason} -> throw({error, MemberReason})
-                        end,
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
                             ok -> {ok, PersonId};
                             {error, PWReason} -> throw({error, PWReason})
