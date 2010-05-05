@@ -11,7 +11,10 @@
 			<div class="clearfix">
 				{% all include "_admin_make_page_buttons.tpl" %}
 				{% button class="" text="Make a new page" action={dialog_new_rsc title=""} %}
-				{% button class="" text="Make a new media item" action={dialog_media_upload title=""} %}
+				{% button class=""
+						text="Make a new media item"
+						action={dialog_media_upload title=""}
+						disabled=(not m.acl.insert.media and not m.acl.insert.image) %}
 			</div>
 
 			<hr class="clear" />

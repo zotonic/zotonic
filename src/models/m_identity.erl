@@ -100,7 +100,7 @@ delete_username(Id, Context) when is_integer(Id), Id /= 1 ->
 %% @doc Change the username of the resource id, only possible if there is already an username/password set
 %% @spec set_username(ResourceId, Username, Context) -> ok | {error, Reason}
 set_username(Id, Username, Context) ->
-    case z_acl:is_allowed(insert, identity, Context) orelse z_acl:user(Context) == Id of
+    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             F = fun(Ctx) ->
                 UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username], Ctx),
@@ -124,7 +124,7 @@ set_username(Id, Username, Context) ->
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
 %% @spec set_username_pw(RscId, Username, Password) -> ok | {error, Reason}
 set_username_pw(Id, Username, Password, Context) ->
-    case z_acl:is_allowed(insert, identity, Context) orelse z_acl:user(Context) == Id of
+    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             Username1 = string:to_lower(Username),
             Hash = hash(Password),

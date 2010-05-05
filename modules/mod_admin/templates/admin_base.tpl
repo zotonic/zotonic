@@ -67,8 +67,9 @@
 			
 				{% all include "_admin_menu_module.tpl" %}
 
-				<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>System</a></li>
-
+				{% if m.acl.is_admin %}
+					<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>System</a></li>
+				{% endif %}
 				<li><a id="zp-logoff" href="#">Logoff</a></li>
 			</ul>
 		
