@@ -236,4 +236,8 @@ valid(M, Context) ->
 %% Get the title of a module.
 %%    
 title(M) ->
-    proplists:get_value(mod_title, M:module_info(attributes)).
+    try
+        proplists:get_value(mod_title, M:module_info(attributes))
+    catch
+        _M:_E -> undefined
+    end.
