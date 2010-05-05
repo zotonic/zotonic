@@ -69,8 +69,6 @@ event({postback, {DropTag,DropDelegate}, TriggerId, _TargetId}, Context) ->
     Drag = #dragdrop{tag=DragTag, delegate=DragDelegate, id=DragId},
 
 	try
-	    ?DEBUG(DropDelegate),
-	    ?DEBUG({drop, Drag, Drop}),
 	    Context1 = DropDelegate:event({drop, Drag, Drop}, z_context:set_resource_module(DropDelegate, Context)),
 	    
 	    % also notify the dragged element that it has been dragged
