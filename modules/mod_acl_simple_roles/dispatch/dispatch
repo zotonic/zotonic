@@ -1,0 +1,4 @@
+%% Dispatch rule for a predicate list page
+[
+    {admin_acl,  ["admin", "acl"],  resource_admin, [{template, "admin_acl.tpl"}, {selected, "acl"}]}
+].

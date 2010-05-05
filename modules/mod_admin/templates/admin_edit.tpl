@@ -230,7 +230,7 @@
 									</div>
 
                                     {% if m.rsc[id].is_authoritative %}
-									{% if m.acl.is_admin or m.acl.is_public_publisher %}
+									{% if m.acl.is_admin %}
 									<div class="path-unique-name-wrapper clearfix">
 										<div class="zp-50">
 											<div class="form-item clearfix">
@@ -347,7 +347,11 @@
 										{% if is_editable %}
 											{% button type="submit" id="save_duplicate" class="save-resource do_tooltip" text="duplicate" title="Duplicate this page." %}
 										{% else %}
-											{% button class="save-resource do_tooltip" text="duplicate" action={dialog_duplicate_rsc id=id}  title="Duplicate this page." %}
+											{% button class="save-resource do_tooltip" 
+													text="duplicate" 
+													action={dialog_duplicate_rsc id=id} 
+													title="Duplicate this page."
+													disabled=(not m.acl.insert[r.category.name]) %}
 										{% endif %}
 
                                         {% for id in m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}] %}
@@ -377,11 +381,9 @@
 										<select id="visible_for" name="visible_for">
 											<option value="0"
 												{% ifequal 0 r.visible_for %}selected="selected"
-												{% else %}{% if not m.acl.is_public_publisher %}disabled="disabled"{% endif %}
 												{% endifequal %}>The whole world</option>
 											<option value="1"
 												{% ifequal 1 r.visible_for %}selected="selected"
-												{% else %}{% if not m.acl.is_community_publisher %}disabled="disabled"{% endif %}
 												{% endifequal %}>Community members</option>
 											<option value="2" {% ifequal 2 r.visible_for %}selected="selected"{% endifequal %}>Group members</option>
 										</select>

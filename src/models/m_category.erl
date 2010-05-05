@@ -499,7 +499,7 @@ all_flat1(Context, ShowMeta) ->
         end.
 
     is_not_meta({_Id, _Lvl, Name, _Props}) ->
-        Name /= <<"meta">> andalso Name /= <<"predicate">> andalso Name /= <<"category">> andalso Name /= <<"group">>.
+        Name /= <<"meta">> andalso Name /= <<"predicate">> andalso Name /= <<"category">> andalso Name /= <<"acl_role">>.
     
 
 all_flat(CatId, Context) ->

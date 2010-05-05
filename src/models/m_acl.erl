@@ -39,8 +39,19 @@ m_find_value(user, #m{value=undefined}, Context) ->
     z_acl:user(Context);
 m_find_value(is_admin, #m{value=undefined}, Context) ->
     z_acl:is_allowed(admin, site, Context);
-m_find_value(_Key, #m{value=undefined}, _Context) ->
-   undefined.
+m_find_value(Action, #m{value=undefined} = M, _Context) 
+    when Action == use orelse Action == admin orelse Action == view
+    orelse Action == delete orelse Action == update orelse Action == insert ->
+    M#m{value={is_allowed, Action}};
+m_find_value(is_allowed, #m{value=undefined} = M, _Context) ->
+    M#m{value=is_allowed};
+m_find_value(Action, #m{value=is_allowed} = M, _Context) ->
+    M#m{value={is_allowed, Action}};
+m_find_value(Object, #m{value={is_allowed, Action}}, Context) when is_binary(Object) ->
+    z_acl:is_allowed(Action, z_convert:to_atom(Object), Context);
+m_find_value(Object, #m{value={is_allowed, Action}}, Context) ->
+    z_acl:is_allowed(Action, Object, Context).
+
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context)

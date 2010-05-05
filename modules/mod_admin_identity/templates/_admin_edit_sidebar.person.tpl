@@ -17,7 +17,9 @@
 			</strong>
 		</div>
 
-		{% button action={dialog_set_username_password id=id} text="Set username / password" %}
+		{% if m.acl.is_allowed.use.mod_admin_identity or id == m.acl.user %}
+			{% button action={dialog_set_username_password id=id} text="Set username / password" %}
+		{% endif %}
 		
 	</div>
 </div>

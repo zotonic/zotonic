@@ -59,7 +59,7 @@ event({submit, set_username_password, _TriggerId, _TargetId}, Context) ->
     Username = z_context:get_q_validated("new_username", Context),
     Password = z_context:get_q_validated("new_password", Context),
     
-    case z_acl:is_allowed(insert, identity, Context) orelse z_acl:user(Context) == Id of
+    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             case Password of
                 ?PASSWORD_DOTS ->

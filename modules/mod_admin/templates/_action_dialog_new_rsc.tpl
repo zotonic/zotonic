@@ -4,7 +4,7 @@
 		$('.do_fieldreplace').fieldreplace();
 	});
 </script>
-<p>Please fill in the title and the category of the new page.  You also have to select the group you will share the page with.</p>
+<p>Please fill in the title {% if not nocatselect %}and the category of the new page.{% else %}of the new {{ catname }}.{% endif %} </p>
 
 {% wire id=#form type="submit" postback="new_page" delegate=delegate %}
 <form id="{{ #form }}" method="POST" action="postback">
@@ -18,13 +18,20 @@
 
 		<div class="form-item clearfix">
 			<label for="{{ #category }}">Category</label>
-			<select id="{{ #category }}" name="category_id">
-			{% for cat_id, level, indent, name in m.category.all_flat %}
-				<option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
-					{{ indent }}{{ m.rsc[cat_id].title|default:name }}
-				</option>
-			{% endfor %}
-			</select>
+			{% if cat and nocatselect %}
+				<strong>{{ m.rsc[cat].title }}</strong>
+				<input type="hidden" name="category_id" value="{{ cat }}"/>
+			{% else %}
+				<select id="{{ #category }}" name="category_id">
+				{% for cat_id, level, indent, name in m.category.all_flat %}
+					{% if m.acl.insert[name|as_atom] %}
+						<option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
+							{{ indent }}{{ m.rsc[cat_id].title|default:name }}
+						</option>
+					{% endif %}
+				{% endfor %}
+				</select>
+			{% endif %}
 		</div>
 
 		<div class="form-item clearfix">
