@@ -255,7 +255,7 @@ manage_menu(Module, M, Context) ->
         lists:reverse(Acc);
     menu_names_to_id([Name|Ms], Context, Acc) ->
         case m_rsc:name_to_id(Name, Context) of
-            {ok, Id} -> menu_names_to_id(Ms, Context, [Id|Acc]);
+            {ok, Id} -> menu_names_to_id(Ms, Context, [{Id,[]}|Acc]);
             {error, _Reason} -> menu_names_to_id(Ms, Context, Acc)
         end.        
 
