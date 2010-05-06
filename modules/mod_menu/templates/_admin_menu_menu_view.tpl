@@ -3,7 +3,7 @@
 	<li id="top" class="header">
 		Drop pages here or drop them on one of the menu items.
 	</li>
-	
+
 	{% for m_id, sub in menu %}
 		{% with forloop.counter as m_nr %}
 			<li class="header">

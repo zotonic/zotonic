@@ -63,8 +63,15 @@ event(_Event, Context) ->
 get_menu(Context) ->
     case m_config:get(menu, menu_default, Context) of
         undefined -> [];
-        Props -> proplists:get_value(menu, Props, [])
+        Props -> validate(proplists:get_value(menu, Props, []), [])
     end.
+
+	validate([], Acc) ->
+		lists:reverse(Acc);
+	validate([{_M,_L} = M|Ms], Acc) ->
+		validate(Ms, [M|Acc]);
+	validate([M|Ms], Acc) ->
+		validate(Ms, [{M,[]}|Acc]).
 
 %% @doc Save the menu to the site configuration.
 %% @spec save_menu(list(), Context) -> ok
