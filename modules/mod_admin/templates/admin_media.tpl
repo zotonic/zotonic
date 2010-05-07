@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Admin Media {% endblock %}
+{% block title %} Media {% endblock %}
 
 {% block search %}
 <div class="right search">

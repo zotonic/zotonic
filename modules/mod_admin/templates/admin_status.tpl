@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} system status {% endblock %}
+{% block title %} System Status {% endblock %}
 
 {% block content %}
 
