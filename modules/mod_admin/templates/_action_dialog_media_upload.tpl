@@ -10,7 +10,7 @@
 		<p>
 			Upload a file from your computer.
 			{% if not id %}
-				You have to specify a description of the file to make it easier to find and share.  You also have to specify with which group you want to share the uploaded file.
+				You have to specify a description of the file to make it easier to find and share.
 			{% endif %}
 		</p>
 
@@ -43,7 +43,7 @@
 		<p>
 			Upload a file which is already on the internet.
 			{% if not id %}
-				You have to specify a description of the file to make it easier to find and share.  You also have to specify with which group you want to share the uploaded file.
+				You have to specify a description of the file to make it easier to find and share.
 			{% endif %}
 		</p>
 
