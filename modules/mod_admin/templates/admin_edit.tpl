@@ -183,6 +183,7 @@
                         {% endif %}{# website #}
 						{% endif %}{# medium #}
 
+						{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable %}
 
                         {% if is_editable or m.rsc[id].depiction %}
 						<div class="item-wrapper">
