@@ -7,7 +7,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Zotonic Predicates</h2>
+			<h2>Predicates</h2>
 
 			{% if editable %}
 			<div class="clearfix">

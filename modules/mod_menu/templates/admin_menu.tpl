@@ -6,7 +6,7 @@
 <div id="content" class="zp-85">
 	<div class="block clearfix">
 
-		<h2>Zotonic Menu Editor</h2>
+		<h2>Menu Editor</h2>
 
 		<p>
 			Here you can change the menu of your site.  Select pages on the right hand side and drag them to the menu on the left.

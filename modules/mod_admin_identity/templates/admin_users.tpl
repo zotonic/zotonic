@@ -6,7 +6,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>Zotonic User Overview</h2>
+		<h2>User Overview</h2>
 	
 		{% if m.acl.is_admin %}
 			{% button text="Make a new user" action={dialog_user_add on_success={reload}} %}
@@ -31,10 +31,10 @@
 		{% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
 			<h3 class="above-list ">
-				Users overview{% if q.qs %}, 
+				Users{% if q.qs %}, 
 					matching “{{ q.qs|escape }}”
 					{% button text="show all" action={redirect dispatch="admin_user"} %}
-				{% endif %}
+				{% else %} overview{% endif %}
 			</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">

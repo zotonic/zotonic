@@ -7,9 +7,9 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Zotonic backups</h2>
+			<h2>Backups</h2>
 
-			<p>At any moment you can make a backup of your Zotonic system. The backup comprises two parts, the database and the uploaded files.<br/> 
+			<p>At any moment you can make a backup of your system. The backup comprises two parts, the database and the uploaded files.<br/> 
 				You can have 10 backups, older ones will be deleted automatically.</p>
 			
 			{% if m.acl.is_admin %}

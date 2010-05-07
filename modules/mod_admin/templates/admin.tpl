@@ -6,7 +6,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Zotonic Dashboard</h2>
+			<h2>Dashboard</h2>
 
 			<div class="clearfix">
 				{% all include "_admin_make_page_buttons.tpl" %}
