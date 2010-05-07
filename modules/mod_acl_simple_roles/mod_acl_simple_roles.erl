@@ -117,7 +117,7 @@ rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
         true ->
             Cats = proplists:get_all_values(acl_cat, Props),
             Mods = proplists:get_all_values(acl_mod, Props),
-            ReadAll = z_convert:to_bool(proplists:get_all_values(acl_view_all, Props)),
+            ReadAll = z_convert:to_bool(proplists:get_value(acl_view_all, Props, false)),
             Cats1 = [ z_convert:to_atom(C) || C <- Cats, C /= <<>> ],
             Mods1 = [ z_convert:to_atom(M) || M <- Mods, M /= <<>> ],
             Props1 = proplists:delete(acl_cat, 
