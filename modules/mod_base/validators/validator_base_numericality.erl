@@ -36,20 +36,25 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
 %%          Error -> invalid | novalue | {script, Script}
 validate(numericality, Id, Value, [Min,Max], Context) ->
     Trimmed = z_string:trim(Value),
-    case string:to_integer(Trimmed) of
-        {error,_Error} -> 
-            % Not a number
-            {{error, Id, invalid}, Context};
-        {Num,[]} ->
-            MinOK = (Min == -1 orelse Num >= Min),
-            MaxOK = (Max == -1 orelse Num =< Max),
-            case MinOK andalso MaxOK of
-                true  -> {{ok, Value}, Context};
-                false -> {{error, Id, invalid}, Context}
-            end;
-        {_Num, _} ->
-            % Has some trailing information 
-            {{error, Id, invalid}, Context}
+    case Trimmed of
+        [] -> 
+            {{ok, Trimmed}, Context};
+        _ ->
+            case string:to_integer(Trimmed) of
+                {error,_Error} -> 
+                    % Not a number
+                    {{error, Id, invalid}, Context};
+                {Num,[]} ->
+                    MinOK = (Min == -1 orelse Num >= Min),
+                    MaxOK = (Max == -1 orelse Num =< Max),
+                    case MinOK andalso MaxOK of
+                        true  -> {{ok, Value}, Context};
+                        false -> {{error, Id, invalid}, Context}
+                    end;
+                {_Num, _} ->
+                    % Has some trailing information 
+                    {{error, Id, invalid}, Context}
+            end
     end.
 
 
