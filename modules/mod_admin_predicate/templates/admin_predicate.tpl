@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Admin Predicates {% endblock %}
+{% block title %} Predicates {% endblock %}
 
 {% block content %}
 {% with m.acl.is_admin as editable %}

@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} users overview {% endblock %}
+{% block title %} Users {% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">

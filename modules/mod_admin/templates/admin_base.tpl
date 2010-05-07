@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title>Zotonic {% block title %}Admin{% endblock %}</title>
+	<title>{% block title %}Admin{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
 
 	<meta name="author" content="Tim Benniks" />
 	

@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Admin Config {% endblock %}
+{% block title %} Configuration {% endblock %}
 
 {% block content %}
 

@@ -1,8 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}
-Category Hierarchy
-{% endblock %}
+{% block title %}Category Hierarchy{% endblock %}
 
 {% block content %}
 {% with m.acl.is_admin as editable %}
