@@ -389,12 +389,12 @@ props_filter([{slug, Slug}|T], Acc, Context) ->
     props_filter(T, [{slug, z_string:to_slug(Slug)} | Acc], Context);
 
 props_filter([{is_published, P}|T], Acc, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
-        true ->
+%    case z_acl:is_allowed(admin, site, Context) of
+%        true ->
             props_filter(T, [{is_published, z_convert:to_bool(P)} | Acc], Context);
-        false ->
-            props_filter(T, Acc, Context)
-    end;
+%        false ->
+%            props_filter(T, Acc, Context)
+%    end;
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
     case z_acl:is_allowed(admin, site, Context) of
         true ->
