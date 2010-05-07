@@ -26,7 +26,7 @@
 
 			<div class="clearfix">
                 {% button class="" text="Rebuild search indices" action={admin_pivot_all} %}
-                <span class="expl">Rebuild all search-indices by putting all data from the Zotonic database in the indexer queue. This can take a long time!</span>
+                <span class="expl">Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!</span>
 
             </div>
 

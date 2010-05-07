@@ -9,7 +9,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Zotonic System Configuration</h2>
+			<h2>System Configuration</h2>
 			<div class="clearfix">
 				{% button class="" text="make a new config setting" action={dialog_config_new on_success={reload}} %}
 			</div>

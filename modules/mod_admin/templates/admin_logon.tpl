@@ -7,7 +7,7 @@
 		<div class="clearfix">
 			<div class="zp-33">&nbsp;</div>
 			<div class="zp-33 block">
-				<h2>Logon to Zotonic</h2>
+				<h2>Logon</h2>
 
 				<p>To administer your system you need to logon.</p>
 

@@ -29,7 +29,7 @@
         
 		<h2>Registered OAuth applications</h2>
         <p>
-            This page allows you to register API keys with which 3rd parties can gain access to specific parts of the Zotonic API and database.
+            This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database.
         </p>
 
         <ul id="oauth-apps">

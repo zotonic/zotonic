@@ -6,7 +6,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>Zotonic Modules</h2>
+		<h2>Modules</h2>
 
 		{% button text="Rescan modules" action={module_rescan} %}
 

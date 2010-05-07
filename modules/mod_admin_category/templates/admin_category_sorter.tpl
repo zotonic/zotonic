@@ -9,7 +9,7 @@ Category Hierarchy
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Zotonic Categories</h2>
+			<h2>Page Categories</h2>
 
 			{% if editable %}
 				{% button text="Make a new category" action={dialog_category_add on_success={reload}} %}
