@@ -54,7 +54,8 @@ install_check(SiteProps) ->
                         ]),
             z_install:install(Name);
         true -> 
-			upgrade(Name, Database, Schema)
+			ok = upgrade(Name, Database, Schema),
+			sanity_check(Name, Database, Schema)
     end.
 
 
@@ -88,13 +89,29 @@ upgrade(Name, Database, Schema) ->
 			pgsql:squery(C, "delete from module where name='mod_admin_group'"),
 			{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", ["mod_acl_adminonly"]),
 			{ok, [], []} = pgsql:squery(C, "COMMIT"),
+        	pgsql_pool:return_connection(Name, C),
 			ok;
 		false ->
 			ok
 	end.
 
+% Perform some simple sanity checks
+sanity_check(Name, _Database, _Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Name),
+	{ok, [], []} = pgsql:squery(C, "BEGIN"),
+    ensure_module_active(C, "mod_authentication"),
+	{ok, [], []} = pgsql:squery(C, "COMMIT"),
+	pgsql_pool:return_connection(Name, C),
+    ok.
 	
-	
-	
-	
-    
+
+
+ensure_module_active(C, Module) ->
+    case pgsql:equery(C, "select is_active from module where name = $1", [Module]) of
+        {ok, _, [{true}]} ->
+            ok;
+        {ok, _, [{false}]} ->
+            {ok, 1} = pgsql:equery(C, "update module set is_active = 1 where name = $1", [Module]);
+        _ ->
+    		{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [Module])
+    end.

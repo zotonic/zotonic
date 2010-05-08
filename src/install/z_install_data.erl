@@ -71,6 +71,7 @@ install_modules(Host, C) ->
         "mod_seo_google",
         "mod_seo_sitemap",
 
+        "mod_authentication",
 		"mod_acl_adminonly",
 
         "mod_admin",

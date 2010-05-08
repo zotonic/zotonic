@@ -29,21 +29,17 @@
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->
-    z_auth:wm_is_authorized(true, visible, "id", ReqData, Context).
+    {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], ReqData, Context2).
 
 
 resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
-    Id = z_context:get_q("id", Context2),
-    try
-        IdN = list_to_integer(Id),
-        Context3 = z_context:set(id, IdN, Context2),
-        ?WM_REPLY(m_rsc:exists(IdN, Context3), Context3)
-    catch
-        _:_ -> ?WM_REPLY(false, Context2)
+    {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+    case Id of
+        undefined -> ?WM_REPLY(false, Context2);
+        _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
     end.
-
+        
 
 html(Context) ->
     Vars = [
@@ -51,6 +47,22 @@ html(Context) ->
     ],
     Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
 	z_context:output(Html, Context).
+
+
+%% @doc Fetch the (numerical) page id from the request
+ensure_id(Context) ->
+    Context2 = z_context:ensure_all(Context),
+    case z_context:get(id, Context2) of
+        N when is_integer(N) ->
+            {Context2, N};
+        undefined ->
+            try
+                IdN = list_to_integer(z_context:get_q("id", Context2)),
+                {z_context:set(id, IdN, Context2), IdN}
+            catch
+                _:_ -> {Context2, undefined}
+            end
+    end.
 
 
 %% @doc Handle the submit of the resource edit form

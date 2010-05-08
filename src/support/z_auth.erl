@@ -25,18 +25,11 @@
 -export([
     is_auth/1,
     is_auth_recent/1,
-    output_logon/1,
-    output_logon/2,
     
+    logon/2,
     logon_pw/3,
     logoff/1,
-    logon_from_session/1,
-    
-    wm_is_authorized/2,
-    wm_is_authorized/5,
-    wm_output_logon/1,
-    
-    event/2
+    logon_from_session/1    
 ]).
 
 -include_lib("zotonic.hrl").
@@ -59,138 +52,53 @@ is_auth_recent(_) ->
 %% @spec logon_pw(Username, Password, Context) -> {bool(), NewContext}
 logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
-        {ok, Id} ->
-            Context1 = z_acl:logon(Id, Context),
-			Context2 = z_session_manager:rename_session(Context1),
-            z_context:set_session(auth_user_id, Id, Context2),
-            z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-            {true, Context2};
-        {error, _Reason} ->
-            {false, Context}
+        {ok, Id} -> {true, logon(Id, Context)};
+        {error, _Reason} -> {false, Context}
     end.
+
+
+%% @doc Logon an user whose id we know
+logon(UserId, Context) ->
+    Context1 = z_acl:logon(UserId, Context),
+	Context2 = z_session_manager:rename_session(Context1),
+    z_context:set_session(auth_user_id, UserId, Context2),
+    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+    Context2.
 
 
 %% @doc Forget about the user being logged on.
 %% @spec logoff(Context) -> NewContext
 logoff(Context) ->
-    z_context:set_session(auth_user_id, undefined, Context),
+    z_context:set_session(auth_user_id, none, Context),
     z_acl:logoff(Context).
     
     
-%% @doc Check if the session contains an authenticated user id. Called after z_context:ensure_session. When found
-%% then the user_id of the context is set.
+%% @doc Called after z_context:ensure_session. 
+%% Check if the session contains an authenticated user id. 
+%% When found then the user_id of the context is set.
+%% Also checks any automatic logon methods like "remember me" cookies.
 %% @spec logon_from_session(#context) -> #context
 logon_from_session(Context) ->
 	% Enable simple memo functionality
 	AuthUserId = z_context:get_session(auth_user_id, Context),
-	z_memo:set_userid(AuthUserId),
 	% When there is an user, perform the user logon
     case AuthUserId of
-        undefined -> Context;
-        UserId -> z_acl:logon(UserId, Context)
+        none ->
+        	z_memo:set_userid(undefined),
+            Context;
+        undefined ->
+            % New session, check if some module wants to log on
+        	case z_notifier:first(auth_autologon, Context) of
+        	    undefined -> 
+            	    z_memo:set_userid(undefined),
+        	        z_context:set_session(auth_user_id, none, Context);
+        	    {ok, UserId} ->
+            	    z_memo:set_userid(UserId),
+                    logon(UserId, Context)
+            end;
+        UserId ->
+        	z_memo:set_userid(UserId),
+            z_acl:logon(UserId, Context)
     end.
 
 
-%% @doc Convenience function to be called from the is_authorized/2 callback in webmachine resources.
-wm_is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1), 
-    case Context2#context.user_id of
-        undefined -> 
-            ContextLogon = output_logon(Context2), 
-            ?WM_REPLY(?WWW_AUTHENTICATE, ContextLogon);
-        _ -> 
-            ?WM_REPLY(true, Context2)
-    end.    
-
-
-%% @doc Convenience function to be called from the is_authorized/2 callback in webmachine resources.
-%% The ArgName is the name of the id in the query string or other parameters.  When it is an atom
-%% then the context is checked before the query args are checked.
-wm_is_authorized(NeedAuth, What, ArgName, ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1), 
-    case NeedAuth andalso Context2#context.user_id == undefined of
-        true -> 
-            ContextLogon = output_logon(Context2), 
-            ?WM_REPLY(?WWW_AUTHENTICATE, ContextLogon);
-
-        false -> 
-            Id = case ArgName of
-                N when is_integer(N) ->
-                    N;
-                A when is_atom(A) -> 
-                    case z_context:get(A, Context2) of
-                        undefined ->
-                            z_convert:to_integer(z_context:get_q(A, Context2));
-                        FromDisp ->
-                            case m_rsc:name_to_id(FromDisp, Context2) of
-                                {ok, FromDispId} -> FromDispId;
-                                {error, _Reason} -> undefined
-                            end
-                    end;
-                _ ->
-                    z_convert:to_integer(z_context:get_q(ArgName, Context2))
-            end,
-            case m_rsc:exists(Id, Context2) of
-                false -> 
-                    ?WM_REPLY(true, Context2);
-                true ->
-                    Allow = case What of
-                        visible -> z_acl:rsc_visible(Id, Context2);
-                        editable -> z_acl:rsc_editable(Id, Context2)
-                    end,
-                    case Allow of
-                        false ->
-                            ContextLogon = output_logon(Context2), 
-                            ?WM_REPLY(?WWW_AUTHENTICATE, ContextLogon);
-                        true ->  
-                            ?WM_REPLY(true, Context2)
-                    end
-            end
-    end.
-
-
-%% @doc Render the logon screen and return the www_authenticate response for webmachine.
-%% @spec wm_output_logon(Context) -> {bool(), ReqData, NewContext}
-wm_output_logon(Context) ->
-    ContextLogon = output_logon(Context), 
-    ?WM_REPLY(?WWW_AUTHENTICATE, ContextLogon).
-
-
-%% @doc Render the logon screen to the reqdata of the context.
-%% @spec output_logon(Context) -> LogonContext
-output_logon(Context) ->
-	output_logon(Context, []).
-output_logon(Context, Vars) ->
-    RD1 = z_context:get_reqdata(Context),
-	Redirect = case z_context:get_q("redirect", Context) of
-		undefined -> wrq:raw_path(RD1);
-		Redir -> Redir
-	end,
-	Vars1 = [
-		{zp_username, z_context:get_q("zp-username", Context)},
-		{redirect, Redirect} | Vars
-	],
-    Html = z_template:render("admin_logon.tpl", Vars1, Context),
-    {Data, ContextOut} = z_context:output(Html, Context),
-    RD2 = wrq:append_to_resp_body(Data, RD1),
-    RD3 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD2),
-    z_context:set_reqdata(RD3, ContextOut).
-
-
-
-%% @doc Handle logon events. When successful then reload the current page. Can be used as a postback
-%% from a logon form.
-%% @spec event(Event, Context) -> NewContext
-event({submit, logon, _TriggerId, _TargetId}, Context) ->
-    Context1 = z_session_manager:rename_session(Context),
-    Username = z_context:get_q("zp-username", Context1),
-    Password = z_context:get_q("zp-password", Context1),
-    case logon_pw(Username, Password, Context1) of
-        {true, ContextLogon} -> 
-            z_render:wire({reload, []}, ContextLogon);
-        {_, ContextLogon} ->
-            z_render:growl("Unknown username or password. Please try again.", ContextLogon)
-    end.
-    

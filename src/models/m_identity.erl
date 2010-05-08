@@ -74,7 +74,6 @@ m_value(#m{value=V}, _Context) ->
     V.
 
 
-
 %% @doc Check if the resource has any credentials that will make him/her an user
 is_user(Id, Context) ->
     case z_db:q1("select count(*) from identity where rsc_id = $1 and type in ('username_pw', 'openid')", [Id], Context) of

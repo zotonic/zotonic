@@ -88,7 +88,7 @@ resource_exists(ReqData, Context) ->
 is_authorized(ReqData, Context) ->
     Context1  = ?WM_REQ(ReqData, Context),
     ContextQs = z_context:ensure_qs(Context1),
-    z_auth:wm_is_authorized(false, visible, get_id(ContextQs), ReqData, Context).
+    z_acl:wm_is_authorized(view, get_id(ContextQs), ContextQs).
 
 
 last_modified(ReqData, Context) ->

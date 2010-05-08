@@ -27,12 +27,7 @@
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1), 
-    case z_acl:is_allowed(admin, site, Context2) of
-        false -> z_auth:wm_output_logon(Context2);
-        true ->  ?WM_REPLY(true, Context2)
-    end.
+    z_acl:wm_is_authorized(admin, site, ReqData, Context).
 
 
 html(Context) ->
