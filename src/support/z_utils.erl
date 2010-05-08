@@ -25,6 +25,10 @@
 -export ([
 	are_equal/2,
 	assert/2,
+    encode_value/2,
+    decode_value/2,
+    encode_value_expire/3,
+    decode_value_expire/2,
 	checksum/2,
 	checksum_assert/3,
 	coalesce/1,
@@ -114,6 +118,7 @@ is_process_alive(Pid) ->
 			end;
 		_ -> false
 	end.
+	
 
 %%% HEX ENCODE and HEX DECODE
 
@@ -143,6 +148,33 @@ inner_decode(Data, Base) when is_list(Data) ->
 			[]
 	end.
 
+
+%% Encode value securely, for use in cookies.
+
+%% 50 usec on core2duo 2GHz
+encode_value(Value, Context) ->
+    Salt = z_ids:id(),
+	Secret = z_ids:sign_key(Context),
+    base64:encode(
+        term_to_binary({Value, Salt, crypto:sha_mac(Secret, term_to_binary([Value, Salt]))})
+    ).
+
+%% 23 usec on core2duo 2GHz
+decode_value(Data, Context) ->
+    Secret = z_ids:sign_key(Context),
+    {Value, Salt, Sign} = binary_to_term(base64:decode(Data)),
+    Sign = crypto:sha_mac(Secret, term_to_binary([Value, Salt])),
+    Value.
+
+encode_value_expire(Value, Date, Context) ->
+    encode_value({Value, Date}, Context).
+
+decode_value_expire(Data, Context) ->
+    {Value, Expire} = decode_value(Data, Context),
+    case Expire >= calendar:local_time() of
+        false -> {error, expired};
+        true -> {ok, Value}
+    end.
 
 %%% CHECKSUM %%%
 
