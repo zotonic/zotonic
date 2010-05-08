@@ -252,7 +252,7 @@ wm_is_authorized(Action, Object, ReqData, Context) ->
                     {view, undefined} ->
                         true;
                     {view, Id} when is_integer(Id) ->
-                        not m_rsc:exists(Object, Id);
+                        not m_rsc:exists(Id, Context);
                     _ ->
                         false
                 end
