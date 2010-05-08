@@ -86,8 +86,8 @@ provide_content(ReqData, Context) ->
 event({submit, [], _Trigger, _Target}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first({logon_submit, Args}, Context) of
-        undefined -> z_render:wire({show, [{target, "error"}]}, Context);
-        {error, _Reason} -> z_render:wire({show, [{target, "error"}]}, Context);
+        undefined -> z_render:wire({fade_in, [{target, "error"}]}, Context);
+        {error, _Reason} -> z_render:wire({fade_in, [{target, "error"}]}, Context);
         {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
     end.
 
