@@ -21,16 +21,15 @@ ul#logon_methods {
 div#logon_box {
 	width: 300px;
 	margin: 0 auto;
-	background: #fff;  
 	padding: 10px 30px 10px;
 	border: 1px solid #aaa;
+
 	border-radius: 8px;
-	box-shadow: 0 0 6px #999;
-
 	-webkit-border-radius: 8px;
-	-webkit-box-shadow: 0 0 6px #999;
-
 	-moz-border-radius: 8px;
+
+	box-shadow: 0 0 6px #999;
+	-webkit-box-shadow: 0 0 6px #999;
 	-moz-box-shadow: 0 0 6px #999;
 
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999')";
@@ -59,7 +58,7 @@ p.do_inputoverlay {
 p.do_inputoverlay input {
 	position: absolute;
 	left: 0px;
-	background: none;
+	background: none !important;
 	font-size: 18px;
 }
 
