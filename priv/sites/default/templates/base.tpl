@@ -35,6 +35,7 @@
 
         <section id="content-area" class="clearfix">
 
+			{% block content_area %}
 			{% block chapeau %}{% endblock %}
 
             <article id="content" class="zp-65">
@@ -51,6 +52,8 @@
     	        {% endblock %}
             </section>
 
+			{% endblock %}
+
         </section>
 
         <footer class="clearfix">
@@ -63,8 +66,15 @@
     </section>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
 
-    {% lib "js/apps/zotonic-1.0.js" "js/apps/z.widgetmanager.js" "js/modules/livevalidation-1.3.js" %}
+
+    {% lib 
+			"js/apps/zotonic-1.0.js" 
+			"js/apps/z.widgetmanager.js" 
+			"js/modules/livevalidation-1.3.js" 
+			"js/modules/z.inputoverlay.js"
+	%}
 
     <script type="text/javascript">
         $(function() { $.widgetManager(); });
