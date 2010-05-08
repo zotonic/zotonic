@@ -501,7 +501,7 @@ get_q(Key, Context) ->
 get_q(Key, Context, Default) ->
     case proplists:lookup('q', Context#context.props) of
         {'q', Qs} -> proplists:get_value(z_convert:to_list(Key), Qs, Default);
-        none -> undefined
+        none -> Default
     end.
 
 
