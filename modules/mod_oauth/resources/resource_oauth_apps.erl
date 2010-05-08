@@ -29,7 +29,7 @@
 
 
 is_authorized(ReqData, Context) ->
-    z_auth:wm_is_authorized(ReqData, Context).
+    z_acl:wm_is_authorized(use, mod_admin, ReqData, Context).
 
 
 html(Context) ->

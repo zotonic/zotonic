@@ -71,15 +71,14 @@ allowed_methods(ReqData, Context) ->
     
 
 is_authorized(ReqData, Context) ->
-
     %% Check if we are authorized via a regular session.
-    SessionAuthorized = z_auth:wm_is_authorized(ReqData, Context),
-    case SessionAuthorized of
-        {true, _, _} ->
+    Context2 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
+    case z_auth:is_auth(Context2) of
+        true ->
             %% Yep; use these credentials.
-            SessionAuthorized;
+            ?WM_REPLY(true, Context2);
 
-        _ ->
+        false ->
             %% No; see if we can use OAuth.
             Module = z_context:get("module", Context),
             case mod_oauth:check_request_logon(ReqData, Context) of

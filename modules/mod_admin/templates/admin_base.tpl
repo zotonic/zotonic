@@ -53,8 +53,6 @@
 
 		{% block navigation %}
 		
-			{% wire id="zp-logoff" action={logoff} %}
-		
 			<ul id="navigation" class="zp-10" style="margin: 0 10px 0 0;">
 				<li><a href="/admin/" {% ifequal selected "dashboard" %}class="current"{% endifequal %}>Dashboard</a></li>
 				<li><a href="/admin/overview/" {% ifequal selected "overview" %}class="current"{% endifequal %}>Pages</a></li>
@@ -65,7 +63,7 @@
 				{% if m.acl.is_admin %}
 					<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>System</a></li>
 				{% endif %}
-				<li><a id="zp-logoff" href="#">Logoff</a></li>
+				<li><a id="zp-logoff" href="{% url logoff %}">Logoff</a></li>
 			</ul>
 		
 		{% endblock %}

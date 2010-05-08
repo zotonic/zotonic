@@ -26,7 +26,11 @@
     anondo/1,
     anondo/2,
     logon/2,
-    logoff/1
+    logoff/1,
+
+    wm_is_authorized/2,
+    wm_is_authorized/3,
+    wm_is_authorized/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -205,4 +209,53 @@ logoff(Context) ->
 		undefined -> Context#context{user_id=undefined, acl=undefined};
 		#context{} = NewContext -> NewContext
 	end.
+
+
+
+
+%% @doc Convenience function, check if the current user has enough permissions, if not then
+%% redirect to the logon page.
+wm_is_authorized(Allowed, Context) when is_boolean(Allowed) ->
+    case Allowed of
+        true -> 
+            ?WM_REPLY(true, Context);
+        false ->
+            RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
+            Location = z_dispatcher:url_for(logon, [{p,RequestPath}], Context),
+            ContextLocation = z_context:set_resp_header("Location", Location, Context),
+            ?WM_REPLY({halt, 302}, ContextLocation)
+    end;
+wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
+    ContextEnsured = z_context:ensure_all(Context),
+    wm_is_authorized(wm_is_allowed(ACLs, ContextEnsured), Context). 
+
+wm_is_authorized(ACLs, ReqData, Context) when is_list(ACLs) ->
+    wm_is_authorized(ACLs, ?WM_REQ(ReqData, Context));
+wm_is_authorized(Action, Object, Context) ->
+    wm_is_authorized([{Action, Object}], Context).
+
+wm_is_authorized(Action, Object, ReqData, Context) ->
+    wm_is_authorized([{Action, Object}], ?WM_REQ(ReqData, Context)).
+
+
+    % Check a list of {Action,Object} ACL pairs
+    wm_is_allowed([], _Context) ->
+        true;
+    wm_is_allowed([{Action,Object}|ACLs], Context) ->
+        case is_allowed(Action, Object, Context) of
+            true ->
+                wm_is_allowed(ACLs, Context);
+            false ->
+                %% When the resource doesn't exist then we let the request through
+                %% This will enable a 404 response later in the http flow checks.
+                case {Action, Object} of
+                    {view, undefined} ->
+                        true;
+                    {view, Id} when is_integer(Id) ->
+                        not m_rsc:exists(Object, Id);
+                    _ ->
+                        false
+                end
+        end.
+
 

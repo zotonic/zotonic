@@ -1,0 +1,4 @@
+[
+	{logon, ["logon"], resource_logon, []},
+	{logoff, ["logoff"], resource_logoff, []}
+].

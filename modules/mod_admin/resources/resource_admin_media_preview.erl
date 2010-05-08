@@ -33,10 +33,9 @@
 init([]) -> {ok, []}.
 
 
-is_authorized(ReqData, _Context) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_auth:wm_is_authorized(ReqData, Context).
-
+is_authorized(ReqData, _Args) ->
+    Context = z_context:new(ReqData, ?MODULE),
+    z_acl:wm_is_authorized(use, mod_admin, ReqData, Context).
 
 resource_exists(ReqData, Context) ->
     case z_context:get_q("id", Context) of
