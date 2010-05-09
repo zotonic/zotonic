@@ -43,14 +43,14 @@
 all(Context) ->
     Active  = z_module_sup:active(Context),
     Modules = z_module_sup:scan(Context),
-    Descrs  = [ add_sort_key({z_module_sup:prio(M), M, [{active, lists:member(M, Active)}, {path, Path} | descr(M)]}) || {M, Path} <- Modules ],
+    Descrs  = [ add_sort_key({z_module_sup:prio(M), M, [{is_active, lists:member(M, Active)}, {path, Path} | descr(M)]}) || {M, Path} <- Modules ],
     lists:sort(Descrs).
 
 
     add_sort_key({Prio, M, Props}) ->
         SortKey = case atom_to_list(M) of
-                    "mod_" ++ _ -> {2, z_string:to_name(proplists:get_value(mod_title, Props))};
-                    _ -> {1, proplists:get_value(mod_title, Props)}
+                    "mod_" ++ _ -> {not proplists:get_value(is_active, Props), 2, z_string:to_name(proplists:get_value(mod_title, Props))};
+                    _ -> {not proplists:get_value(is_active, Props), 1, proplists:get_value(mod_title, Props)}
                   end,
         {SortKey, Prio, M, Props}.
         
