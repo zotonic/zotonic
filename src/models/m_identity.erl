@@ -42,6 +42,7 @@
     lookup_by_type_and_key/3,
 
     insert/4,
+    insert_unique/4,
     delete/2
 ]).
 
@@ -204,6 +205,11 @@ hash_is_equal(_, _) ->
 %% @doc Create an identity record.
 insert(RscId, Type, Key, Context) ->
     Props = [{rsc_id, RscId}, {type, Type}, {key, Key}],
+    z_db:insert(identity, Props, Context).
+
+%% @doc Create an unique identity record.
+insert_unique(RscId, Type, Key, Context) ->
+    Props = [{rsc_id, RscId}, {is_unique, true}, {type, Type}, {key, Key}],
     z_db:insert(identity, Props, Context).
 
 delete(IdnId, Context) ->
