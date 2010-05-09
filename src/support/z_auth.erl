@@ -63,6 +63,7 @@ logon(UserId, Context) ->
 	Context2 = z_session_manager:rename_session(Context1),
     z_context:set_session(auth_user_id, UserId, Context2),
     z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+    z_notifier:notify(auth_logon, Context),
     Context2.
 
 
@@ -70,6 +71,7 @@ logon(UserId, Context) ->
 %% @spec logoff(Context) -> NewContext
 logoff(Context) ->
     z_context:set_session(auth_user_id, none, Context),
+    z_notifier:notify(auth_logoff, Context),
     z_acl:logoff(Context).
     
     
@@ -79,10 +81,7 @@ logoff(Context) ->
 %% Also checks any automatic logon methods like "remember me" cookies.
 %% @spec logon_from_session(#context) -> #context
 logon_from_session(Context) ->
-	% Enable simple memo functionality
-	AuthUserId = z_context:get_session(auth_user_id, Context),
-	% When there is an user, perform the user logon
-    case AuthUserId of
+    case z_context:get_session(auth_user_id, Context) of
         none ->
         	z_memo:set_userid(undefined),
             Context;
