@@ -24,7 +24,7 @@
 				<span class="zp-20">Author</span>
 				<span class="zp-10">Activate</span>
 			</li>
-		{% for prio, module, props in modules %}
+		{% for sort, prio, module, props in modules %}
 			<li id="{{ #li.module }}" {% if not props.active %}class="unpublished" {% endif %}>
 				<a href="#" class="clearfix">
 					<span class="zp-20">{{ props.mod_title|default:props.title }}</span>
