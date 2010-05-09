@@ -134,12 +134,12 @@ h1#logon_header {
 
 	{% wire action={script script="$('#username').focus();"} %}
 	
-<!--
 	<ul id="logon_methods">
+	<!--
 		<li><a href="#">Log on using OpenID</a></li>
-		<li><a href="#">Log on using Facebook</a></li>
+	-->
+		{% all include "_logon_extra.tpl" %}
 	</ul>
--->
 </div>
 
 {% endblock %}
