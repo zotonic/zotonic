@@ -39,7 +39,12 @@
     get_rsc/2,
     get_rsc/3,
 
+	lookup_by_username/2,
     lookup_by_type_and_key/3,
+
+	set_props/5,
+	get_props/4,
+	set_by_type/4,
 
     insert/4,
     insert_unique/4,
@@ -212,8 +217,39 @@ insert_unique(RscId, Type, Key, Context) ->
     Props = [{rsc_id, RscId}, {is_unique, true}, {type, Type}, {key, Key}],
     z_db:insert(identity, Props, Context).
 
+%% @doc Replace any existing identity property with a new value
+set_props(RscId, Type, Key, Props, Context) ->
+	F = fun(Ctx) -> 
+		case z_db:q("update identity set props = $4 where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key, Props], Ctx) of
+			1 -> ok;
+			0 -> z_db:q("insert into identity (rsc_id, type, key, props) values ($1,$2,$3,$4)", [RscId, Type, Key, Props], Ctx)
+		end
+	end,
+	z_db:transaction(F, Context).
+	
+get_props(RscId, Type, Key, Context) ->
+	case z_db:q1("select props from identity where rsc_id = $1 and key = $2 and type = $3", [RscId, Key, Type], Context) of
+		undefined -> [];
+		Props -> Props
+	end.
+
+
+set_by_type(RscId, Type, Key, Context) ->
+	F = fun(Ctx) -> 
+		case z_db:q("update identity set key = $3 where rsc_id = $1 and type = $2", [RscId, Type, Key], Ctx) of
+			1 -> ok;
+			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3,$4)", [RscId, Type, Key], Ctx)
+		end
+	end,
+	z_db:transaction(F, Context).
+
+
 delete(IdnId, Context) ->
     z_db:delete(identity, IdnId, Context).
+
+
+lookup_by_username(Key, Context) ->
+	lookup_by_type_and_key("username_pw", Key, Context).
 
 lookup_by_type_and_key(Type, Key, Context) ->
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).
