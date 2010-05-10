@@ -124,7 +124,7 @@ get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
         Cfg -> proplists:get_value(value, Cfg)
     end,
 	case Value of
-		undefind -> m_site:get(Module, Key, Context);
+		undefined -> m_site:get(Module, Key, Context);
 		_ -> Value
 	end.
 
