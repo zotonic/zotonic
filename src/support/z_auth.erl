@@ -70,9 +70,9 @@ logon(UserId, Context) ->
 %% @doc Forget about the user being logged on.
 %% @spec logoff(Context) -> NewContext
 logoff(Context) ->
-    z_context:set_session(auth_user_id, none, Context),
-    z_notifier:notify(auth_logoff, Context),
-    z_acl:logoff(Context).
+    ContextLogOff = z_notifier:foldl(auth_logoff, Context, Context),
+    z_context:set_session(auth_user_id, none, ContextLogOff),
+    z_acl:logoff(ContextLogOff).
     
     
 %% @doc Called after z_context:ensure_session. 
