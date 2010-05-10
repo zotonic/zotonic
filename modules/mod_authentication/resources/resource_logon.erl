@@ -170,8 +170,7 @@ set_rememberme_cookie(UserId, Context) ->
 % @doc Reset the rememberme cookie.
 reset_rememberme_cookie(Context) ->
     RD = z_context:get_reqdata(Context),
-    Path = lists:flatten(z_dispatcher:url_for(logon, Context)),
-    Options = [{path, Path}, {http_only, true}],
+    Options = [{path, "/"}, {http_only, true}],
     Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, "", Options),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
