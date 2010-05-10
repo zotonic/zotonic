@@ -38,6 +38,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
 		'hide'          -> io_lib:format("hide(~p);", [Speed]);
 		'slide_toggle'  -> io_lib:format("slideToggle(~p);", [Speed]);
 		'toggle'        -> <<"toggle();">>;
+		'set_class'     -> io_lib:format("attr('class','~s');", [Class]);
 		'add_class'     -> io_lib:format("addClass('~s');", [Class]);
 		'remove_class'  -> io_lib:format("removeClass('~s');", [Class]);
 		'toggle_class'  -> io_lib:format("toggleClass('~s');", [Class]);
