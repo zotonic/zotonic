@@ -20,7 +20,7 @@
 -module(resource_logoff).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
+-export([init/1, service_available/2, charsets_provided/2, content_types_provided/2, provide_content/2]).
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
 
 -include_lib("webmachine_resource.hrl").
@@ -32,7 +32,9 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:ensure_all(Context1),
-    ?WM_REPLY(true, Context2).
+    ContextNoCookie = resource_logon:reset_rememberme_cookie(Context2),
+    ContextLogOff = z_auth:logoff(ContextNoCookie),
+    ?WM_REPLY(true, ContextLogOff).
 
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
@@ -41,15 +43,32 @@ content_types_provided(ReqData, Context) ->
     {[{"text/html", provide_content}], ReqData, Context}.
 
 resource_exists(ReqData, Context) ->
-    {false, ReqData, Context}.
+    % TODO: when there is javascript in the context, then return the javascript to be executed, together with a
+    % redirect action.  This is the case when we have a Facebook connect log off.
+    case lists:flatten(z_script:get_script(Context)) of
+        [] -> {false, ReqData, Context};
+        _Script -> {true, ReqData, Context}
+    end.
 
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
 
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    ContextNoCookie = resource_logon:reset_rememberme_cookie(Context1),
-    ContextLogOff = z_auth:logoff(ContextNoCookie),
-    Location = z_context:get_q("p", ContextLogOff, "/"),
-    ?WM_REPLY({true, Location}, ContextLogOff).
+    Location = z_context:get_q("p", Context1, "/"),
+    ?WM_REPLY({true, Location}, Context1).
 
+provide_content(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = case z_context:get(logoff_add_redirect, Context1, true) of
+        true ->
+            Location = z_context:get_q("p", Context1, "/"),
+            z_render:wire({redirect, [{location, Location}]}, Context1);
+        false ->
+            Context1
+    end,
+    Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
+    Rendered = z_template:render("logoff.tpl", [], Context3),
+    {Output, OutputContext} = z_context:output(Rendered, Context3),
+    ?WM_REPLY(Output, OutputContext).
+    
