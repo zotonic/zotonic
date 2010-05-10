@@ -161,13 +161,16 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                                          Props1 = [{name, Name}, {category_id, CatId},
                                                    {installed_by, Module}, {managed_props, Props}] ++ Props,
                                          Props2 = case proplists:get_value(is_published, Props1) of
-                                                      undefined ->
-                                                          [{is_published, true} | Props1];
+                                                      undefined -> [{is_published, true} | Props1];
                                                       _ -> Props1
+                                                  end,
+                                         Props3 = case proplists:get_value(visible_for, Props2) of
+                                                      undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
+                                                      _ -> Props2
                                                   end,
                                          ?DEBUG("New resource"),
                                          ?DEBUG(Props2),
-                                         {m_rsc:insert(Props2, Context), [Name | ManagedNames ]};
+                                         {m_rsc:insert(Props3, Context), [Name | ManagedNames ]};
                                      true ->
                                          ?DEBUG("resource was deleted."),
                                          {{ok}, ManagedNames}
