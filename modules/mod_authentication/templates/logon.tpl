@@ -188,6 +188,10 @@ p.logon_link {
 	margin: 0;
 }
 
+#logon_methods img {
+	float: none;
+}
+
 </style>
 
 
@@ -213,9 +217,6 @@ p.logon_link {
 	{% wire action={script script="$('#username').focus();"} %}
 	
 	<ul id="logon_methods">
-	<!--
-		<li><a href="#">Log on using OpenID</a></li>
-	-->
 		{% all include "_logon_extra.tpl" %}
 	</ul>
 	
