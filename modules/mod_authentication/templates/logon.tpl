@@ -1,8 +1,6 @@
-{% extends "base.tpl" %}
+{% extends "logon_base.tpl" %}
 
-{% block title %}Log on{% endblock %}
-
-{% block content_area %}
+{% block logon_area %}
 
 <style>
 div#logon_outer {
@@ -19,6 +17,7 @@ ul#logon_methods {
 }
 
 div#logon_box {
+	text-align: left;
 	width: 300px;
 	margin: 0 auto;
 	padding: 10px 30px 10px;
@@ -34,6 +33,105 @@ div#logon_box {
 
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999')";
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
+}
+
+.logon_error div#logon_box {
+	width: 600px;
+}
+
+div#logon_error {
+	display: none;
+	margin: 18px 18px 18px 0px;
+	padding-right: 18px;
+	border-right: 1px solid #ccc;
+	width: 260px; 
+	float: left; 
+	text-align: left;	
+}
+
+.logon_error div#logon_error {
+	display: block;
+}
+
+div#logon_pw {
+	display: none;
+}
+
+.logon_pw div#logon_pw {
+	display: block;
+}
+
+div#logon_reminder {
+	display: none;
+}
+
+.logon_reminder div#logon_reminder {
+	display: block;
+}
+
+.logon_reminder div#logon_form_box {
+	display: none;
+}
+
+div#logon_reminder_sent {
+	display: none;
+}
+
+.logon_reminder_sent div#logon_reminder_sent {
+	display: block;
+}
+
+.logon_reminder_sent form#logon_reminder_form {
+	display: none;
+}
+
+a#logon_pw_link {
+	display: none;
+}
+
+a#logon_reminder_link {
+	display: inline;
+}
+
+.logon_reminder a#logon_pw_link {
+	display: inline;
+}
+
+.logon_reminder a#logon_reminder_link {
+	display: none;
+}
+
+
+div#logon_error_pw {
+	display: none;
+}
+
+div#logon_error_reminder {
+	display: none;
+}
+
+.logon_pw div#logon_error_pw {
+	display: block;
+}
+
+.logon_reminder div#logon_error_reminder {
+	display: block;
+}
+
+div#logon_error h2 {
+	color: #d80000;
+}
+
+div#logon_form_box {
+	width: 300px;
+}
+
+div#logon_reminder {
+	width: 300px;
+}
+
+div#logon_button {
+	text-align: center;
 }
 
 div#logon_button button {
@@ -77,7 +175,7 @@ p.do_inputoverlay span.hidden {
 	display: none;
 }
 
-h1#logon_header {
+h1.logon_header {
 	margin: 18px 0px;
 }
 
@@ -86,50 +184,30 @@ h1#logon_header {
 	display: inline;
 }
 
+p.logon_link {
+	margin: 0;
+}
+
 </style>
 
 
-<div id="logon_outer">
+<div id="logon_outer" class="logon_pw">
 	{% if logon_reason %}
 	<p id="logon_reason">{{ logon_reason }}</p>
 	{% endif %}
 
-	<div id="logon_box">
-		<div id="logon_dialog" class="clearfix">
-			<form id="logon_form" method="post" action="postback">
-				<h1 id="logon_header">Log on using your <span>{{ m.config.site.title.value|default:"Zotonic" }} ID</span></h1>
-			
-				<p class="error" style="display: none" id="error">Unknown username or password.</p>
-
-				<input type="hidden" name="page" value="{{ page|escape }}" />
-				<input type="hidden" name="handler" value="username" />
-
-				<div id="logon_username">
-					<p class="do_inputoverlay">
-						<span>Username</span>
-						<input type="text" id="username" name="username" value="" autocapitalize="off" autocomplete="on" />
-					</p>
-				</div>
-
-				<div id="logon_password">
-					<p class="do_inputoverlay">
-						<span>Password</span>
-						<input type="password" id="password" name="password" value="" autocomplete="on" />
-					</p>
-				</div>
+	<div id="logon_box" class="">
 		
-				<div id="logon_rememberme">
-					<input type="checkbox" id="rememberme" name="rememberme" value="1" />
-					<label for="rememberme">Remember me for two weeks</label>
-				</div>
-		
-				<div class="clearfix"></div>
-		
-				<div id="logon_button">
-					<button>Log On</button>
-				</div>
-			</form>
+		<div id="logon_error">
+			{% include "_logon_error.tpl" %}
 		</div>
+
+		<div id="logon_dialog" style="float: left">
+			{% include "_logon_form_box.tpl" %}
+			{% include "_logon_password_reminder.tpl" %}
+		</div>
+		
+		<div style="clear: both"></div>
 	</div>
 
 	{% wire action={script script="$('#username').focus();"} %}
@@ -140,9 +218,13 @@ h1#logon_header {
 	-->
 		{% all include "_logon_extra.tpl" %}
 	</ul>
+	
+	<p class="logon_link"><a id="logon_reminder_link" href="">I forgot my username or password.</a></p>
+	{% wire id="logon_reminder_link" action={set_class target="logon_outer" class="logon_reminder"} %}
+
+	<p class="logon_link"><a id="logon_pw_link" href="">Please show me the log on form.</a></p>
+	{% wire id="logon_pw_link" action={set_class target="logon_outer" class="logon_pw"} %}
+
 </div>
 
 {% endblock %}
-
-{% block sidebar %}{% endblock %}
-{% block navigation %}{% endblock %}
