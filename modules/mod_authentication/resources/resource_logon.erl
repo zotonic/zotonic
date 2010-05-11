@@ -66,7 +66,7 @@ moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
     ContextUser = z_auth:logon(z_context:get(user_id, Context2), Context2),
-    Location = z_context:get_q("p", ContextUser, "/"),
+    Location = get_page(ContextUser),
     ?WM_REPLY({true, Location}, ContextUser).
 
 
@@ -76,7 +76,7 @@ provide_content(ReqData, Context) ->
     Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
 	IsPasswordReset = z_context:get(is_password_reset, Context3),
     Vars = [
-        {page, z_context:get_q("p", Context3)},
+        {page, get_page(Context3)},
 		{is_password_reset, IsPasswordReset}
     ],
 	Vars1 = case IsPasswordReset of
@@ -96,6 +96,26 @@ provide_content(ReqData, Context) ->
     Rendered = z_template:render("logon.tpl", Vars1, Context3),
     {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
+
+
+%% @doc Get the page we should redirect to after a successful log on.
+get_page(Context) ->
+    case z_context:get_q("p", Context, []) of
+        [] ->
+            Me = lists:flatten(z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)),
+            RD = z_context:get_reqdata(Context),
+            case wrq:get_req_header("referer", RD) of
+                undefined -> "/";
+                "/logon" ++ _ -> "/";
+                Referrer -> 
+                    case lists:prefix(Me, Referrer) of
+                        true -> "/";
+                        false -> Referrer
+                    end
+            end;
+        Other ->
+            Other
+    end.
 
 
 %% @doc Handle the submit of the logon form, this will be handed over to the
