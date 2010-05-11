@@ -63,7 +63,7 @@
 				{% if m.acl.is_admin %}
 					<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>System</a></li>
 				{% endif %}
-				<li><a id="zp-logoff" href="{% url logoff %}">Logoff</a></li>
+				<li>{% include "_logon_off.tpl" %}</li>
 			</ul>
 		
 		{% endblock %}
@@ -78,6 +78,8 @@
 	{% script %}
 
 	{% block tinymce %}{% endblock %}
+	
+	{% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
 	
 </body>
 </html>
