@@ -45,7 +45,8 @@
 	set_props/5,
 	get_props/4,
 	set_by_type/4,
-
+	delete_by_type/3,
+	
     insert/4,
     insert_unique/4,
     delete/2
@@ -238,14 +239,16 @@ set_by_type(RscId, Type, Key, Context) ->
 	F = fun(Ctx) -> 
 		case z_db:q("update identity set key = $3 where rsc_id = $1 and type = $2", [RscId, Type, Key], Ctx) of
 			1 -> ok;
-			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3,$4)", [RscId, Type, Key], Ctx)
+			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3)", [RscId, Type, Key], Ctx)
 		end
 	end,
 	z_db:transaction(F, Context).
 
-
 delete(IdnId, Context) ->
     z_db:delete(identity, IdnId, Context).
+
+delete_by_type(RscId, Type, Context) ->
+	z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context).
 
 
 lookup_by_username(Key, Context) ->

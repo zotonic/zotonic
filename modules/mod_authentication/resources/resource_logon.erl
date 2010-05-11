@@ -55,12 +55,13 @@ resource_exists(ReqData, Context) ->
             ContextUser =  z_context:set(user_id, UserId, Context1),
             ?WM_REPLY(false, ContextUser);
         undefined -> 
-            ?WM_REPLY(true, Context1)
+       		?WM_REPLY(true, Context1)
     end.
 
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
 
+%% @doc Temporary redirect if we have an automatic log on due to a rememberme cookie
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
@@ -73,16 +74,60 @@ provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
     Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
+	IsPasswordReset = z_context:get(is_password_reset, Context3),
     Vars = [
-        {page, z_context:get_q("p", Context3)}
+        {page, z_context:get_q("p", Context3)},
+		{is_password_reset, IsPasswordReset}
     ],
-    Rendered = z_template:render("logon.tpl", Vars, Context3),
+	Vars1 = case IsPasswordReset of
+		true -> 
+			Secret = z_context:get_q("secret", Context3),
+			case get_by_reminder_secret(Secret, Context3) of
+				{ok, UserId} -> 
+					[ {user_id, UserId}, 
+					  {secret, Secret},
+					  {username, m_identity:get_username(UserId, Context3)} | Vars ];
+				undefined -> 
+					Vars
+			end;
+		_ ->
+			Vars
+	end,
+    Rendered = z_template:render("logon.tpl", Vars1, Context3),
     {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
 
 
 %% @doc Handle the submit of the logon form, this will be handed over to the
 %% different authentication handlers.
+event({submit, [], "logon_password_reset_form", _Target}, Context) ->
+	Secret = z_context:get_q("secret", Context),
+	Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
+	Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
+	case {Password1,Password2} of
+		{A,_} when length(A) < 6 ->
+			z_render:wire([
+					{remove_class, [{target, "logon_outer"}, {class, "logon_error_password_unequal"}]},
+					{add_class, [{target, "logon_outer"}, {class, "logon_error"}]},
+					{add_class, [{target, "logon_outer"}, {class, "logon_error_password_tooshort"}]}
+					], Context);
+		{P,P} ->
+			{ok, UserId} = get_by_reminder_secret(Secret, Context),
+			case m_identity:get_username(UserId, Context) of
+				undefined ->
+					throw({error, "User does not have an username defined."});
+				Username ->
+					delete_reminder_secret(UserId, Context),
+					m_identity:set_username_pw(UserId, Username, Password1, Context),
+					logon_user(UserId, Context)
+			end;
+		{_,_} ->
+			z_render:wire([
+					{remove_class, [{target, "logon_outer"}, {class, "logon_error_password_tooshort"}]},
+					{add_class, [{target, "logon_outer"}, {class, "logon_error"}]},
+					{add_class, [{target, "logon_outer"}, {class, "logon_error_password_unequal"}]}
+					], Context)
+	end;
 event({submit, [], "logon_reminder_form", _Target}, Context) ->
 	case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
 		[] ->
@@ -92,8 +137,7 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 				[] -> 
 					logon_error(Context);
 				Identities ->
-					% @todo TODO sent reminder e-mails to the found identities, check if 
-					% reminder could be sent (maybe there is no e-mail address)
+					% @todo TODO check if reminder could be sent (maybe there is no e-mail address)
 					?DEBUG(Identities),
 					send_reminder(Identities, Context),
 					reminder_success(Context)
@@ -208,21 +252,25 @@ send_reminder([Id|Ids], Context, Acc) ->
 		Email -> 
 			Vars = [
 				{id, Id},
-				{reminder, set_reminder_secret(Id, Context)},
+				{secret, set_reminder_secret(Id, Context)},
+				{username, m_identity:get_username(Id, Context)},
 				{email, Email}
 			],
-			send_email(Id, Email, Context)
+			send_email(Email, Vars, Context)
 	end.
 
 
 %% @doc Find all e-mail addresses of an user.
-%% @todo TODO
 find_email(Id, Context) ->
-	[].
+	case m_rsc:p(Id, email, Context) of
+		undefined -> [];
+		Email -> [Email]
+	end.
 
 %% @doc Sent the reminder e-mail to the user.
-%% @todo TODO
-send_email(Id, Email, Context) ->
+send_email(Email, Vars, Context) ->
+	?DEBUG({Email, Vars}),
+	z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
 	ok.
 
 
@@ -232,9 +280,14 @@ set_reminder_secret(Id, Context) ->
 	m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
 	Code.
 
+%% @doc Delete the reminder secret of the user
+delete_reminder_secret(Id, Context) ->
+	m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
+	
+
 get_by_reminder_secret(Code, Context) ->
 	case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
-		undefined -> {error, enoent};
+		undefined -> undefined;
 		Row -> {ok, proplists:get_value(rsc_id, Row)}
 	end.
 

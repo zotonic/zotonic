@@ -19,9 +19,9 @@
 			</p>
 		</div>
 
-		<div id="logon_rememberme">
-			<input type="checkbox" id="rememberme" name="rememberme" value="1" />
-			<label for="rememberme">Remember me for two weeks</label>
+		<div id="logon_rememberme" class="rememberme">
+			<input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
+			<label for="{{ #rememberme }}">Remember me for two weeks</label>
 		</div>
 
 		<div class="clearfix"></div>
