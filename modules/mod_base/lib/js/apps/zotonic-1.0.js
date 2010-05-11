@@ -467,14 +467,21 @@ function z_init_postback_forms()
 		var files = $('input:file', this).fieldValue();
 		var found = false;
 
-		for (var j=0; j < files.length; j++)
-		{
-			if (files[j])
-			{
-				found = true;
-			}
-		}
-
+        if (z_only_post_forms)
+        {
+            found = true;
+        }
+        else
+        {
+    		for (var j=0; j < files.length && !found; j++)
+    		{
+    			if (files[j])
+    			{
+    				found = true;
+    			}
+    		}
+        }
+        
 		if(found) 
 		{
 			$(this).postbackFileForm(form_id, postback, validations);
