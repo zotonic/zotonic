@@ -18,3 +18,17 @@
 	<p>We can only send you an e-mail when we have the e-mail address of your account.</p>
 	<p>To find your account	you need to enter either your username or the e-mail address you gave us.</p>
 </div>
+
+<div id="logon_error_password_tooshort">
+	<h2>Your new password is too short.</h2>
+
+	<p>Passwords should have at least six characters.<p>
+	<p>Use some non alphabetical characters or digits to make it harder to guess.</p>
+</div>
+
+<div id="logon_error_password_unequal">
+	<h2>The two passwords should be equal. Please retype them.</h2>
+
+	<p>Passwords should have at least six characters.<p>
+	<p>Use some non alphabetical characters or digits to make it harder to guess.</p>
+</div>

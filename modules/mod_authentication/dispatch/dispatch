@@ -1,4 +1,5 @@
 [
 	{logon, ["logon"], resource_logon, []},
-	{logoff, ["logoff"], resource_logoff, []}
+	{logoff, ["logoff"], resource_logoff, []},
+	{password_reset, ["password", "reset", secret], resource_logon, [{is_password_reset, true}]}
 ].

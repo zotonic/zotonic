@@ -2,7 +2,10 @@
 
 {% block logon_area %}
 
-<style>
+<style type="text/css">
+
+/* Design CSS */
+
 div#logon_outer {
 	text-align: center;
 	margin: 100px auto 20px;
@@ -40,7 +43,6 @@ div#logon_box {
 }
 
 div#logon_error {
-	display: none;
 	margin: 18px 18px 18px 0px;
 	padding-right: 18px;
 	border-right: 1px solid #ccc;
@@ -49,83 +51,13 @@ div#logon_error {
 	text-align: left;	
 }
 
-.logon_error div#logon_error {
-	display: block;
-}
-
-div#logon_pw {
-	display: none;
-}
-
-.logon_pw div#logon_pw {
-	display: block;
-}
-
-div#logon_reminder {
-	display: none;
-}
-
-.logon_reminder div#logon_reminder {
-	display: block;
-}
-
-.logon_reminder div#logon_form_box {
-	display: none;
-}
-
-div#logon_reminder_sent {
-	display: none;
-}
-
-.logon_reminder_sent div#logon_reminder_sent {
-	display: block;
-}
-
-.logon_reminder_sent form#logon_reminder_form {
-	display: none;
-}
-
-a#logon_pw_link {
-	display: none;
-}
-
-a#logon_reminder_link {
-	display: inline;
-}
-
-.logon_reminder a#logon_pw_link {
-	display: inline;
-}
-
-.logon_reminder a#logon_reminder_link {
-	display: none;
-}
-
-
-div#logon_error_pw {
-	display: none;
-}
-
-div#logon_error_reminder {
-	display: none;
-}
-
-.logon_pw div#logon_error_pw {
-	display: block;
-}
-
-.logon_reminder div#logon_error_reminder {
-	display: block;
-}
 
 div#logon_error h2 {
 	color: #d80000;
 }
 
-div#logon_form_box {
-	width: 300px;
-}
-
+div#logon_form_box,
+div#logon_password_reset,
 div#logon_reminder {
 	width: 300px;
 }
@@ -141,9 +73,30 @@ div#logon_button button {
 	padding: 4px 10px;
 }
 
-div#logon_rememberme {
+h1.logon_header {
+	margin: 18px 0px;
+}
+
+div.rememberme {
 	margin-top: 9px;
 }
+
+div.rememberme label {
+	float: none;
+	display: inline;
+}
+
+p.logon_link {
+	margin: 0;
+}
+
+#logon_methods img {
+	float: none;
+}
+
+
+/* Overlay label and input element */
+/* This should be part of the z.inputoverlay.js module. */
 
 p.do_inputoverlay {
 	margin: 0px;
@@ -175,32 +128,84 @@ p.do_inputoverlay span.hidden {
 	display: none;
 }
 
-h1.logon_header {
-	margin: 18px 0px;
+
+/* Display logic, hide/show forms depending on page state */
+
+div#logon_error {
+	display: none;
 }
 
-#logon_rememberme label {
-	float: none;
+.logon_error div#logon_error {
+	display: block;
+}
+
+div#logon_pw,
+div#logon_form_box,
+div#logon_reminder,
+div#logon_reminder_sent,
+div#logon_password_reset {
+	display: none;
+}
+
+.logon_pw div#logon_pw,
+.logon_pw div#logon_form_box,
+.logon_reminder div#logon_reminder,
+.logon_reminder_sent div#logon_reminder_sent,
+.logon_password_reset div#logon_password_reset {
+	display: block;
+}
+
+.logon_reminder_sent form#logon_reminder_form {
+	display: none;
+}
+
+a#logon_pw_link {
+	display: none;
+}
+
+a#logon_reminder_link {
 	display: inline;
 }
 
-p.logon_link {
-	margin: 0;
+.logon_reminder a#logon_pw_link {
+	display: inline;
 }
 
-#logon_methods img {
-	float: none;
+.logon_reminder a#logon_reminder_link {
+	display: none;
+}
+
+.logon_password_reset a#logon_pw_link {
+	display: inline;
+}
+
+.logon_password_reset a#logon_reminder_link {
+	display: none;
+}
+
+div#logon_error_pw,
+div#logon_error_reminder,
+div#logon_error_password_tooshort,
+div#logon_error_password_unequal {
+	display: none;
+}
+
+.logon_pw div#logon_error_pw,
+.logon_reminder div#logon_error_reminder,
+.logon_error_password_tooshort div#logon_error_password_tooshort,
+.logon_error_password_unequal div#logon_error_password_unequal {
+	display: block;
 }
 
 </style>
 
 
-<div id="logon_outer" class="logon_pw">
+<div id="logon_outer" class="{% if is_password_reset %}logon_password_reset{% else %}logon_pw{% endif %}">
 	{% if logon_reason %}
 	<p id="logon_reason">{{ logon_reason }}</p>
 	{% endif %}
 
-	<div id="logon_box" class="">
+	<div id="logon_box">
 		
 		<div id="logon_error">
 			{% include "_logon_error.tpl" %}
@@ -209,6 +214,9 @@ p.logon_link {
 		<div id="logon_dialog" style="float: left">
 			{% include "_logon_form_box.tpl" %}
 			{% include "_logon_password_reminder.tpl" %}
+			{% if is_password_reset %}
+				{% include "_logon_password_reset.tpl" %}
+			{% endif %}
 		</div>
 		
 		<div style="clear: both"></div>
