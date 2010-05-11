@@ -236,4 +236,8 @@ div#logon_error_password_unequal {
 
 </div>
 
+{# Use a real post for all forms on this page, and not AJAX or Websockets.
+   This will enforce all cookies to be set correctly. #}
+{% wire action={script script="z_only_post_forms = true;"} %}
+
 {% endblock %}
