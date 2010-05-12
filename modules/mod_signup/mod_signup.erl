@@ -39,8 +39,10 @@
 
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
-observe({signup_url, _Props, _SignupProps}, Context) ->
-    undefined.
+observe({signup_url, Props, SignupProps}, Context) ->
+    CheckId = z_ids:id(),
+    z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
+    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))}.
 
 %% @doc Sign up a new user.
 %% @spec signup(proplist(), proplist(), Context) -> {ok, UserId} | {error, Reason}
