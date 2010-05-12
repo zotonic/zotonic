@@ -39,14 +39,27 @@ div#signup_tos label {
 }
 </style>
 
+{% if m.acl.user %}
+<h1>You are already a member</h1>
+
+<p>When you want to sign up a new member, then first <a href="{% url logoff %}">log off from your current account</a>.</p>
+
+{% else %}
+
 <h1>Sign up and become a member</h1>
 
 <p>If you have already an account, <a href="{% url logon %}">log on now</a>.</p>
 
+{% if xs_props %}
+<p>You can also <a href="{% url signup %}">sign up for a username and password</a>.</p>
+
+{% else %}
 <ul id="signup_services" class="clearfix">
 	{% all include "_signup_services.tpl" %}
 </ul>
+{% endif %}
 
+{% wire id="signup_form" type="submit" postback={signup xs_props=xs_props} %}
 <form id="signup_form" method="post" action="postback">
 
 	<h2>Create your account</h2>
@@ -55,8 +68,12 @@ div#signup_tos label {
 
 	<div id="signup_name_first">
 		<label for="name_first">First name</label>
-		<input id="name_first" name="name_first" type="text" value="" />
-		{% validate id="name_first" type={presence} %}
+		{% if name_first %}
+			<span>{{ name_first|escape }}</span>
+		{% else %}
+			<input id="name_first" name="name_first" type="text" value="{{ name_first|escape }}" />
+			{% validate id="name_first" type={presence} %}
+		{% endif %}
 	</div>
 
 {# Enable this for nl, de and be sites
@@ -68,45 +85,55 @@ div#signup_tos label {
 
 	<div id="signup_name_surname">
 		<label for="name_surname">Last name</label>
-		<input id="name_surname" name="name_surname" type="text" value="" />
-		{% validate id="name_surname" type={presence} %}
+		{% if email %}
+			<span>{{ name_surname|escape }}</span>
+		{% else %}
+			<input id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" />
+			{% validate id="name_surname" type={presence} %}
+		{% endif %}
 	</div>
 
 	<div id="signup_email">
 		<label for="email">E-mail</label>
-		<input id="email" name="email" type="text" value="" />
-		{% validate id="email" type={email} type={presence} %}
+		{% if email %}
+			<span>{{ email|escape }}</span>
+		{% else %}
+			<input id="email" name="email" type="text" value="{{ email|escape }}" />
+			{% validate id="email" type={email} type={presence} %}
+		{% endif %}
 	</div>
 
 	<p class="clear"></p>
 
-	<h3>Choose a username and password</h3>
+	{% if not xs_props %}
+		<h3>Choose a username and password</h3>
 
-	<p id="signup_error_duplicate_username" class="error">Sorry, this username is already in use. Please try another one.</p>
+		<p id="signup_error_duplicate_username" class="error">Sorry, this username is already in use. Please try another one.</p>
 
-	<div id="signup_username">
-		<label for="username">Username</label>
-		<input id="username" name="username" type="text" value="" />
-		{% validate id="username" type={presence} %}
-	</div>
+		<div id="signup_username">
+			<label for="username">Username</label>
+			<input id="username" name="username" type="text" value="" />
+			{% validate id="username" type={presence} %}
+		</div>
 
-	<div id="signup_password1">
-		<label for="password1">Password</label>
-		<input id="password1" name="password1" type="password" value="" />
-		{% validate id="password1" 
-			type={presence} 
-			type={length minimum=6 too_short_message="Too short, use 6 or more."} 
-			type={confirmation match="password2"} %}
-	</div>
+		<div id="signup_password1">
+			<label for="password1">Password</label>
+			<input id="password1" name="password1" type="password" value="" />
+			{% validate id="password1" 
+				type={presence} 
+				type={length minimum=6 too_short_message="Too short, use 6 or more."} 
+				type={confirmation match="password2"} %}
+		</div>
 
-	<div id="signup_password2">
-		<label for="password2">Verify password</label>
-		<input id="password2" name="password2" type="password" value="" />
-		{% validate id="password2" type={presence} %}
-	</div>
+		<div id="signup_password2">
+			<label for="password2">Verify password</label>
+			<input id="password2" name="password2" type="password" value="" />
+			{% validate id="password2" type={presence} %}
+		</div>
 
-	<p class="clear"></p>
-
+		<p class="clear"></p>
+	{% endif %}
+	
 	<h3>Check our Terms of Service and Privacy policies</h3>
 
 	<div id="signup_tos">
@@ -135,5 +162,7 @@ div#signup_tos label {
 		<button>Sign Up</button>
 	</div>
 </form>
+
+{% endif %}
 
 {% endblock %}

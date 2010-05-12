@@ -45,42 +45,86 @@ content_types_provided(ReqData, Context) ->
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    Vars = [
-    ],
+    Vars = case z_context:get_q("xs", Context2) of
+                undefined ->
+                    [];
+                Check ->
+                    case z_session:get(signup_xs, Context2) of
+                        {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
+                        _ -> []
+                    end
+            end,
+    z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render("signup.tpl", Vars, Context2),
     {Output, OutputContext} = z_context:output(Rendered, Context2),
     ?WM_REPLY(Output, OutputContext).
 
 
 %% @doc Handle the submit of the signup form.
-event({submit, [], "signup_form", _Target}, Context) ->
-    ?DEBUG(z_context:get_q_all(Context)),
+event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
+    {XsProps,XsSignupProps} = case Xs of
+        {A,B} -> {A,B};
+        undefined -> {undefined, undefined}
+    end,
     Agree = z_context:get_q_validated("signup_tos_agree", Context),
     case Agree of
         "1" ->
-            Email = z_string:trim(z_context:get_q_validated("email", Context)),
+            Email = fetch_prop(email, true, XsProps, Context),
             Props = [
-                {name_first, z_string:trim(z_context:get_q_validated("name_first", Context))},
-                {name_surname_prefix, z_string:trim(z_context:get_q("surprefix", Context, ""))},
-                {name_surname, z_string:trim(z_context:get_q_validated("name_surname", Context))},
+                {name_first, fetch_prop(name_first, true, XsProps, Context)},
+                {name_surname_prefix, fetch_prop(name_surname_prefix, false, XsProps, Context)},
+                {name_surname, fetch_prop(name_surname, true, XsProps, Context)},
                 {email, Email}
             ],
             IsVerified = not z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, false, Context)),
-            SignupProps = [
-                {identity, {username, 
-                            {z_context:get_q_validated("username", Context), z_context:get_q_validated("password1", Context)},
-                            true,
-                            IsVerified}}
-            ],
+            SignupProps = case is_set(XsSignupProps) of
+                                true ->
+                                    XsSignupProps;
+                                false ->
+                                    [ {identity, {username, 
+                                            {z_context:get_q_validated("username", Context), 
+                                             z_context:get_q_validated("password1", Context)},
+                                            true,
+                                            IsVerified}}
+                                    ]
+                            end,
             SignupProps1 = case Email of
                 [] -> SignupProps;
                 <<>> -> SignupProps;
-                _ ->  [ {identity, {email, Email, false, false}} | SignupProps ]
+                _ ->  case has_email_identity(Email, SignupProps) of
+                        false -> [ {identity, {email, Email, false, false}} | SignupProps ];
+                        true -> SignupProps
+                      end
             end,
             signup(Props, SignupProps1, Context);
         _ ->
             show_errors([error_tos_agree], Context)
     end.
+
+
+    fetch_prop(Prop, Validated, SignupProps, Context) ->
+        case proplists:get_value(Prop, SignupProps) of
+            undefined ->
+                V = case Validated of
+                    true -> z_context:get_q_validated(Prop, Context);
+                    false -> z_context:get_q(Prop, Context, "")
+                end,
+                V1 = case {V,Prop} of
+                    {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context, "");
+                    _ -> V
+                end,
+                z_string:trim(V1);
+            V -> V
+        end.
+    
+    is_set(undefined) -> false;
+    is_set([]) -> false;
+    is_set(<<>>) -> false;
+    is_set(_) -> true.
+
+    has_email_identity(_Email, []) -> false;
+    has_email_identity(Email, [{identity, {email, Email, _, _}}|_]) -> true;
+    has_email_identity(Email, [_|Rest]) -> has_email_identity(Email, Rest).
 
 
 %% @doc Sign up a new user. Check if the identity is available.
@@ -98,7 +142,7 @@ signup(Props, SignupProps, Context) ->
             show_errors([error_duplicate_username], Context);
         {error, {identity_in_use, _}} ->
             show_errors([error_duplicate_identity], Context);
-        {error, Reason} ->
+        {error, _Reason} ->
             show_errors([error_signup], Context)
     end.
     
