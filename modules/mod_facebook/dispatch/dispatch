@@ -1,0 +1,4 @@
+[
+	{facebook_authorize, ["facebook", "authorize"], resource_facebook_authorize, []},
+	{facebook_redirect,  ["facebook", "redirect"], resource_facebook_redirect, []}
+].
