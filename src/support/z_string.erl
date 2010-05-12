@@ -32,6 +32,7 @@
 	trim_left/1,
 	trim_right/1,
     is_string/1,
+    nospaces/1,
     line/1,
     to_rootname/1,
     to_name/1,
@@ -92,6 +93,20 @@ is_string([C|Rest]) when
     is_string(Rest);
 is_string(_) -> 
     false.
+
+%% @doc Remove all spaces and control characters from a string.
+nospaces(B) when is_binary(B) ->
+    nospaces(binary_to_list(B));
+nospaces(L) ->
+    nospaces(L, []).
+
+nospaces([], Acc) ->
+    lists:reverse(Acc);
+nospaces([C|Rest], Acc) when C =< 32 ->
+    nospaces(Rest, Acc);
+nospaces([C|Rest], Acc) ->
+    nospaces(Rest, [C|Acc]).
+
 
 
 %% @doc Make sure that the string is on one line only, replace control characters with spaces

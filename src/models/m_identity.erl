@@ -252,7 +252,7 @@ delete_by_type(RscId, Type, Context) ->
 
 
 lookup_by_username(Key, Context) ->
-	lookup_by_type_and_key("username_pw", Key, Context).
+	lookup_by_type_and_key("username_pw", z_string:to_lower(Key), Context).
 
 lookup_by_type_and_key(Type, Key, Context) ->
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).

@@ -1,0 +1,3 @@
+[
+	{signup, ["signup"], resource_signup, []}
+].
