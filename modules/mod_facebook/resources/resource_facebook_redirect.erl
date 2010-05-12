@@ -138,9 +138,21 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
             end;
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
-            update_user(UserId, Props, Context),
-            {ok, UserId}
+            ContextUser = z_auth:logon(UserId, Context),
+            update_user(UserId, Props, ContextUser),
+            Location = case has_location(LocationAfterSignup) of
+                            false -> m_rsc:p(UserId, page_url, ContextUser);
+                            true -> LocationAfterSignup
+                        end,
+            LocationAbs = z_context:abs_url(Location, ContextUser),
+            ?WM_REPLY({true, LocationAbs}, ContextUser)
     end.
+    
+    has_location(undefined) -> false;
+    has_location([]) -> false;
+    has_location(<<>>) -> false;
+    has_location("/") -> false;
+    has_location(_) -> true.
 
 
 generate_username(Props, Context) ->
