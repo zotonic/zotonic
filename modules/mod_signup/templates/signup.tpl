@@ -37,6 +37,11 @@ div#signup_tos label {
 .error_duplicate_identity #signup_error_duplicate_identity {
 	display: block;
 }
+
+.z_validation_message {        
+	color: red;
+    padding: 0 0 0 9px;
+}
 </style>
 
 {% if m.acl.user %}
