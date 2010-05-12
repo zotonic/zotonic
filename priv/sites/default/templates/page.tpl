@@ -32,6 +32,5 @@
 {% pager result=result dispatch='page' id=id %}
 
 {% endwith %}
-xxx
 
 {% endblock %}
