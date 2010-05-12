@@ -73,7 +73,7 @@ m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
         undefined -> undefined;
         RId -> 
-			case z_acl:rsc_visible(Id, Context) of
+			case z_acl:rsc_visible(RId, Context) of
 				true ->
 					M#m{value=RId};
 				false -> 
