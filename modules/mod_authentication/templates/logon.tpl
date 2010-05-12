@@ -234,6 +234,8 @@ div#logon_error_password_unequal {
 	<p class="logon_link"><a id="logon_pw_link" href="">Please show me the log on form.</a></p>
 	{% wire id="logon_pw_link" action={set_class target="logon_outer" class="logon_pw"} %}
 
+	{% all include "_logon_link.tpl" %}
+
 </div>
 
 {# Use a real post for all forms on this page, and not AJAX or Websockets.
