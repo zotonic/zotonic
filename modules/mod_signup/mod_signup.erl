@@ -181,7 +181,7 @@ props_to_rsc(Props, Context) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     VisibleFor = z_convert:to_integer(m_config:get_value(mod_signup, member_visible_for, 0, Context)),
     Props1 = [
-        {published, true},
+        {is_published, true},
         {visible_for, VisibleFor},
         {category, Category}
         | Props
