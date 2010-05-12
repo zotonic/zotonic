@@ -47,8 +47,8 @@ observe(auth_logoff, AccContext, _Context) ->
 
 %% @doc Return the facebook appid and secret
 get_appid_secret(Context) ->
-    { m_config:get_value(mod_facebook, appid, ?FACEBOOK_APPID, Context),
-      m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context) }.
+    { z_convert:to_list(m_config:get_value(mod_facebook, appid, ?FACEBOOK_APPID, Context)),
+      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context)) }.
 
 
 %%====================================================================
