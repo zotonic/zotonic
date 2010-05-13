@@ -31,6 +31,7 @@
 	   	document.createElement('article');
    	</script>
 
+	{% block html_head_extra %}{% endblock %}
 </head>
 
 <body class="{% block page_class %}{% endblock %}">
