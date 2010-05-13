@@ -121,6 +121,7 @@
 %% ACL objects
 -record(acl_rsc, {category, mime, size}).
 -record(acl_edge, {subject_id, predicate, object_id}).
+-record(acl_media, {mime, size}).
 
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
 %% This is used for fetching the acl fields from a resource record.

@@ -241,49 +241,55 @@ replace_file(File, RscId, Props, Context) ->
         true ->
             OriginalFilename = proplists:get_value(original_filename, Props, File),
             PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-            SafeRootName = z_string:to_rootname(OriginalFilename),
-            SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
-            ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
-            RootName = filename:rootname(filename:basename(ArchiveFile)),
-            MediumRowProps = [
-                {id, RscId}, 
-                {filename, ArchiveFile}, 
-                {rootname, RootName}, 
-                {is_deletable_file, not z_media_archive:is_archived(File, Context)}
-                | PropsMedia
-            ],
-
-            %% When the resource is in the media category, then move it to the correct sub-category depending
-            %% on the mime type of the uploaded file.
-            case rsc_is_media_cat(RscId, Context) of
+            Mime = proplists:get_value(mime, PropsMedia),
+            case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
                 true ->
-                    case proplists:get_value(mime, PropsMedia) of
-                        "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Context);
-                        "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Context);
-                        "audio/" ++ _ -> m_rsc:update(RscId, [{category, audio}], Context);
-                        _ -> nop
-                    end;
-                false -> nop
-            end,
+                    SafeRootName = z_string:to_rootname(OriginalFilename),
+                    SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
+                    ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
+                    RootName = filename:rootname(filename:basename(ArchiveFile)),
+                    MediumRowProps = [
+                        {id, RscId}, 
+                        {filename, ArchiveFile}, 
+                        {rootname, RootName}, 
+                        {is_deletable_file, not z_media_archive:is_archived(File, Context)}
+                        | PropsMedia
+                    ],
 
-            F = fun(Ctx) ->
-                z_db:delete(medium, RscId, Context),
-                case z_db:insert(medium, MediumRowProps, Ctx) of
-                    {ok, _MediaId} ->
-                        {ok, RscId};
-                    Error ->
-                        Error
-                end
-            end,
+                    %% When the resource is in the media category, then move it to the correct sub-category depending
+                    %% on the mime type of the uploaded file.
+                    case rsc_is_media_cat(RscId, Context) of
+                        true ->
+                            case Mime of
+                                "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Context);
+                                "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Context);
+                                "audio/" ++ _ -> m_rsc:update(RscId, [{category, audio}], Context);
+                                _ -> nop
+                            end;
+                        false -> nop
+                    end,
 
-            Depicts = depicts(RscId, Context),
-            {ok, Id} = z_db:transaction(F, Context),
-            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
-            z_depcache:flush(Id, Context),
-            m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
-            %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-            z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
-            {ok, Id};
+                    F = fun(Ctx) ->
+                        z_db:delete(medium, RscId, Context),
+                        case z_db:insert(medium, MediumRowProps, Ctx) of
+                            {ok, _MediaId} ->
+                                {ok, RscId};
+                            Error ->
+                                Error
+                        end
+                    end,
+
+                    Depicts = depicts(RscId, Context),
+                    {ok, Id} = z_db:transaction(F, Context),
+                    [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+                    z_depcache:flush(Id, Context),
+                    m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+                    %% Pass the medium record along in the notification; this also fills the depcache (side effect).
+                    z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
+                    {ok, Id};
+                false ->
+                    {error, file_not_allowed}
+            end;
         false ->
             {error, eacces}
     end.
