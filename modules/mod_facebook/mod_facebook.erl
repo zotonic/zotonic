@@ -41,8 +41,16 @@
 
 %% @doc Reset the received facebook access token (as set in the session)
 observe(auth_logoff, AccContext, _Context) ->
-    z_context:set_session(facebook_logon, false, AccContext),
-    z_context:set_session(facebook_access_token, undefined, AccContext).
+    AccContext1 = case z_context:get_session(facebook_logon, AccContext) of
+        true ->
+            z_script:add_script(
+                        "FB.logout(function() { window.location = '/';})", 
+                        AccContext);
+        _ ->
+            AccContext
+    end,
+    z_context:set_session(facebook_logon, false, AccContext1),
+    z_context:set_session(facebook_access_token, undefined, AccContext1).
 
 
 %% @doc Return the facebook appid and secret
