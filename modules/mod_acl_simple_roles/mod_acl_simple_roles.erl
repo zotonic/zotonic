@@ -52,6 +52,14 @@ observe({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
 % Logged on users
 observe({acl_is_allowed, view, Id}, Context) when is_integer(Id) ->
     can_view(Id, Context);
+observe({acl_is_allowed, insert, #acl_media{mime=Mime, size=_Size}}, Context) -> 
+    case Mime of
+        "image/" ++ _ -> can_insert(image, Context);
+        "audio/" ++ _ -> can_insert(audio, Context);
+        "video/" ++ _ -> can_insert(video, Context);
+        "text/" ++ _ -> can_insert(document, Context);
+        _ -> can_insert(media, Context)
+    end;
 observe({acl_is_allowed, insert, #acl_rsc{category=Cat}}, Context) -> 
     can_insert(Cat, Context);
 observe({acl_is_allowed, insert, Cat}, Context) when is_atom(Cat) -> 
@@ -239,9 +247,9 @@ logon(UserId, Context) ->
 
 %% @doc Check if an user can see something
 can_view(Id, Context) ->
-    case can_view_all(Context)
-        orelse can_edit(Id, Context)
-        orelse is_view_public(Id, Context) of
+    case can_view_all(Context) == true
+        orelse can_edit(Id, Context) == true
+        orelse is_view_public(Id, Context) == true of
         true -> true;
         false -> undefined
     end.
@@ -325,15 +333,15 @@ is_view_public(Id, Context) ->
 can_edge(_, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_edge(#acl_edge{predicate=acl_role_member, subject_id=SubjectId, object_id=ObjectId}, Context) ->
-    case can_insert(acl_role, Context)
-        andalso can_edit(SubjectId, Context) 
-        andalso can_view(ObjectId, Context) of
+    case can_insert(acl_role, Context) == true
+        andalso can_edit(SubjectId, Context) == true 
+        andalso can_view(ObjectId, Context) == true of
         true -> true;
         false -> undefined
     end;
 can_edge(#acl_edge{subject_id=SubjectId, object_id=ObjectId}, Context) ->
-    case can_edit(SubjectId, Context) 
-        andalso can_view(ObjectId, Context) of
+    case can_edit(SubjectId, Context) == true
+        andalso can_view(ObjectId, Context) == true of
         true -> true;
         false -> undefined
     end.
