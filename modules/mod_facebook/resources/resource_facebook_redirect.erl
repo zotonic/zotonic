@@ -132,7 +132,8 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
             ],
             case z_notifier:first({signup_url, Props, SignupProps}, Context) of
                 {ok, Location} ->
-                    ?WM_REPLY({true, Location}, Context);
+                    use_see_other(Location, Context);
+                    %?WM_REPLY({true, Location}, Context);
                 undefined ->
                     throw({error, {?MODULE, "No result from signup_url notification handler"}})
             end;
@@ -145,7 +146,8 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
                             true -> LocationAfterSignup
                         end,
             LocationAbs = z_context:abs_url(Location, ContextUser),
-            ?WM_REPLY({true, LocationAbs}, ContextUser)
+            use_see_other(LocationAbs, ContextUser)
+            %?WM_REPLY({true, LocationAbs}, ContextUser)
     end.
     
     has_location(undefined) -> false;
@@ -153,7 +155,15 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
     has_location(<<>>) -> false;
     has_location("/") -> false;
     has_location(_) -> true.
-
+    
+    %% HACK ALERT!
+    %% We use a 303 See Other here as there is a serious bug in Safari 4.0.5
+    %% When we use a 307 then the orginal login post at Facebook will be posted
+    %% to our redirect location. Including the Facebook username and password....
+    use_see_other(Location, Context) ->
+        ContextLoc = z_context:set_resp_header("Location", Location, Context),
+        ?WM_REPLY({halt, 303}, ContextLoc).
+        
 
 generate_username(Props, Context) ->
     case proplists:get_value(title, Props) of

@@ -25,6 +25,7 @@
 		"js/modules/cufon.js"
 		"js/apps/modernizr.js"
 	%}
+	{% block html_head_extra %}{% endblock %}
 </head>
 <body class="{% block page_class %}{% endblock %}">
 

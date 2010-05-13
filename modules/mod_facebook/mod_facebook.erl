@@ -44,7 +44,7 @@ observe(auth_logoff, AccContext, _Context) ->
     AccContext1 = case z_context:get_session(facebook_logon, AccContext) of
         true ->
             z_script:add_script(
-                        "FB.logout(function() { window.location = '/';})", 
+                        "FB.logout(function() { window.location = '/'; }); setTimeout(function() { window.location='/'; }, 8000)", 
                         AccContext);
         _ ->
             AccContext
