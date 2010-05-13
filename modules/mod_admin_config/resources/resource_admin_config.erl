@@ -27,7 +27,7 @@
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(admin, site, ReqData, Context).
+    z_acl:wm_is_authorized(use, mod_admin_config, ReqData, Context).
 
 
 html(Context) ->

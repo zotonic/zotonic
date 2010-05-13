@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Delete a media.  After the deletion the user is redirected, and/or some items on the page are faded out.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {module_toggle, Module}, TriggerId, _TargetId}, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_admin_modules, Context) of
         true ->
             Active = z_module_sup:active(Context),
             case lists:member(Module, Active) of

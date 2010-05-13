@@ -59,7 +59,7 @@ observe({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
 observe({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
 	case m_rsc:p(Id, is_authoritative, Context) of
 		true -> true;
-		_ -> false
+		_ -> undefined
 	end;
 observe({acl_is_allowed, _Action, _Object}, _Context) ->
 	true;

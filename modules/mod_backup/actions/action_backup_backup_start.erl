@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 %% @doc Download a backup.
 %% @spec event(Event, Context1) -> Context2
 event({postback, backup_start, _TriggerId, _TargetId}, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
             case mod_backup:start_backup(Context) of
                 ok ->
