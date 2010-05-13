@@ -336,7 +336,7 @@ props_filter([], Acc, _Context) ->
     Acc;
 
 props_filter([{uri, Uri}|T], Acc, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             case Uri of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -349,7 +349,7 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
     end;
 
 props_filter([{name, Name}|T], Acc, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case Name of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -362,7 +362,7 @@ props_filter([{name, Name}|T], Acc, Context) ->
     end;
 
 props_filter([{page_path, Path}|T], Acc, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             case Path of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -389,14 +389,14 @@ props_filter([{slug, Slug}|T], Acc, Context) ->
     props_filter(T, [{slug, z_string:to_slug(Slug)} | Acc], Context);
 
 props_filter([{is_published, P}|T], Acc, Context) ->
-%    case z_acl:is_allowed(admin, site, Context) of
+%    case z_acl:is_allowed(use, mod_admin_config, Context) of
 %        true ->
             props_filter(T, [{is_published, z_convert:to_bool(P)} | Acc], Context);
 %        false ->
 %            props_filter(T, Acc, Context)
 %    end;
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             props_filter(T, [{is_authoritative, z_convert:to_bool(P)} | Acc], Context);
         false ->

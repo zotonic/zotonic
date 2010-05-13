@@ -48,7 +48,7 @@
 observe({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
     is_view_public(Id, Context);
 observe({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
-	false;
+	undefined;
 % Logged on users
 observe({acl_is_allowed, view, Id}, Context) when is_integer(Id) ->
     can_view(Id, Context);
@@ -59,7 +59,7 @@ observe({acl_is_allowed, insert, Cat}, Context) when is_atom(Cat) ->
 observe({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
 	case m_rsc:p(Id, is_authoritative, Context) of
 		true -> can_edit(Id, Context);
-		_ -> false
+		_ -> undefined
 	end;
 observe({acl_is_allowed, delete, Id}, Context) when is_integer(Id) ->
 	can_edit(Id, Context);
@@ -68,7 +68,7 @@ observe({acl_is_allowed, Action, ModuleName}, Context) when Action == use; Actio
 observe({acl_is_allowed, _Action, #acl_edge{} = Edge}, Context) ->
     can_edge(Edge, Context);
 observe({acl_is_allowed, _Action, _Object}, _Context) ->
-    false;
+    undefined;
 
 %% @doc Return the max visible_for an user can see, used for pruning during searches
 observe({acl_can_see, _Action, _Object}, #context{user_id=undefined}) ->
@@ -239,16 +239,22 @@ logon(UserId, Context) ->
 
 %% @doc Check if an user can see something
 can_view(Id, Context) ->
-    can_view_all(Context)
-    orelse can_edit(Id, Context)
-    orelse is_view_public(Id, Context).
+    case can_view_all(Context)
+        orelse can_edit(Id, Context)
+        orelse is_view_public(Id, Context) of
+        true -> true;
+        false -> undefined
+    end.
 
 
 %% @doc Check if the user has 'view_all' permission
 can_view_all(#context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_view_all(#context{acl=Acl}) ->
-    Acl#acl_user.view_all.
+    case Acl#acl_user.view_all of 
+        true -> true;
+        _ -> undefined
+    end.
 
 
 %% @doc Check if the user can edit a rsc id
@@ -258,20 +264,23 @@ can_edit(Id, #context{acl=Acl} = Context) ->
     IsA = m_rsc:p(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
 
-    can_edit1([], _Allowed) -> false;
+    can_edit1([], _Allowed) -> undefined;
     can_edit1([{Cat,_}|Cats], Allowed) -> 
         case lists:member(Cat, Allowed) of
             true -> true;
             false -> can_edit1(Cats, Allowed)
         end.
 
-%% @doc Check if the user can administrate a module
+%% @doc Check if the user can use a module
 can_module(_Action, _Module, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_module(use, Module, #context{acl=Acl}) ->
-    lists:member(Module, Acl#acl_user.modules);
+    case lists:member(Module, Acl#acl_user.modules) of
+        true -> true;
+        false -> undefined
+    end;
 can_module(_Action, _Module, _Context) ->
-    false.
+    undefined.
 
 
 
@@ -288,7 +297,7 @@ can_insert(Cat, #context{acl=Acl} = Context) ->
     end.
     
     can_insert1([], _Allowed) ->
-        false;
+        undefined;
     can_insert1([Cat|Cats], Allowed) ->
         case lists:member(Cat, Allowed) of
             true -> true;
@@ -316,12 +325,18 @@ is_view_public(Id, Context) ->
 can_edge(_, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_edge(#acl_edge{predicate=acl_role_member, subject_id=SubjectId, object_id=ObjectId}, Context) ->
-    can_insert(acl_role, Context)
-    andalso can_edit(SubjectId, Context) 
-    andalso can_view(ObjectId, Context);
+    case can_insert(acl_role, Context)
+        andalso can_edit(SubjectId, Context) 
+        andalso can_view(ObjectId, Context) of
+        true -> true;
+        false -> undefined
+    end;
 can_edge(#acl_edge{subject_id=SubjectId, object_id=ObjectId}, Context) ->
-    can_edit(SubjectId, Context) 
-    andalso can_view(ObjectId, Context).
+    case can_edit(SubjectId, Context) 
+        andalso can_view(ObjectId, Context) of
+        true -> true;
+        false -> undefined
+    end.
 
 
 %% @doc The datamodel for the role based ACL

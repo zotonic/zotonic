@@ -44,7 +44,7 @@ event({postback, dialog_broadcast, _TriggerId, _TargetId}, Context) ->
 
 %% @doc Send a broadcast to all users.
 event({submit, broadcast, _TriggerId, _TargetId}, Context) ->
-	case z_acl:is_allowed(admin, site, Context) of
+	case z_acl:is_allowed(use, mod_broadcast, Context) of
 		true ->
 		    Title = z_context:get_q_validated("title", Context),
 		    Message = z_context:get_q_validated("message", Context),

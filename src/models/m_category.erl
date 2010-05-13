@@ -322,7 +322,7 @@ move_before(Id, BeforeId, Context) ->
 
 
 update_sequence(Ids, Context) ->
-    case z_acl:is_allowed(admin, site, Context) of
+    case z_acl:is_allowed(insert, category, Context) of
         true ->
             F = fun(Ctx) ->
                 z_db:update_sequence(category, Ids, Ctx),
