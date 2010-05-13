@@ -6,4 +6,6 @@
 	<h1>One moment please, logging off…</h1>
 	
 	<p>You will be redirected to the home page.</p>
+	
+	{% all include "_logoff_extra.tpl" %}
 {% endblock %}
