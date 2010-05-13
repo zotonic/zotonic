@@ -215,7 +215,7 @@ datamodel() ->
 [
     {resources, [
 		{signup_tos, text, [
-                        {published, true},
+                        {is_published, true},
 						{visible_for, 0},
 						{page_path, "/terms"},
 						{title, "Terms of Service"},
@@ -223,7 +223,7 @@ datamodel() ->
 					    {body, "<h2>INSERT YOUR TERMS OF SERVICE HERE</h2>"}
 					]},
 		{signup_privacy, text, [
-		                {published, true},
+		                {is_published, true},
                 		{visible_for, 0},
                 		{page_path, "/privacy"},
                 		{title, "Privacy Policy"},
