@@ -326,7 +326,7 @@ output1([{script}|Rest], Context, Acc) ->
             <<"\n\n<script type='text/javascript'>\n$(function() {\n">>,
                 z_script:get_page_startup_script(Context),
                 z_script:get_script(Context),
-                <<"z_init_postback_forms();\nz_only_post_forms = false;\nz_default_form_postback = \"">>, DefaultFormPostback, $", $;,
+                <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $;,
             <<"\n});\n</script>\n">>
            ],
     output1(Rest, Context, [Script|Acc]);
