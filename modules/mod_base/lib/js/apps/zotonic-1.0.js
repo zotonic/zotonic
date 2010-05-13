@@ -467,7 +467,7 @@ function z_init_postback_forms()
 		var files = $('input:file', this).fieldValue();
 		var found = false;
 
-        if (z_only_post_forms)
+        if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
         {
             found = true;
         }
