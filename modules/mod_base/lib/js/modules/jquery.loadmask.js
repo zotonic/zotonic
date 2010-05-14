@@ -63,8 +63,6 @@
 		
 		element.addClass("masked");
 		
-		/* MW: In zotonic we just add opacity to the form element.
-		
 		var maskDiv = $('<div class="loadmask"></div>');
 		
 		//auto height fix for IE
@@ -72,14 +70,13 @@
 			maskDiv.height(element.height() + parseInt(element.css("padding-top")) + parseInt(element.css("padding-bottom")));
 			maskDiv.width(element.width() + parseInt(element.css("padding-left")) + parseInt(element.css("padding-right")));
 		}
-		*/
 		
 		//fix for z-index bug with selects in IE6
 		if(navigator.userAgent.toLowerCase().indexOf("msie 6") > -1){
 			element.find("select").addClass("masked-hidden");
 		}
 		
-		//element.append(maskDiv);
+		element.append(maskDiv);
 		
 		if(label !== undefined) {
 			var maskMsgDiv = $('<div class="loadmask-msg" style="display:none;"></div>');
