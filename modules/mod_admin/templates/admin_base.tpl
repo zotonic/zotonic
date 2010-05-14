@@ -14,6 +14,7 @@
 		"css/zp-formreplace.css"
 		"css/zp-growl.css"
 		"css/zp-datepicker.css"
+		"css/jquery.loadmask.css"
 	%}
 	
 	<!--[if IE]>

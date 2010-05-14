@@ -15,6 +15,7 @@
 	"js/modules/z.formreplace.js"
 	"js/modules/z.maps.js"
 	"js/modules/livevalidation-1.3.js"
+	"js/modules/jquery.loadmask.js"
 %}
 
 <script type="text/javascript">
