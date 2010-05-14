@@ -60,7 +60,7 @@ div#signup_tos label {
 
 {% else %}
 <ul id="signup_services" class="clearfix">
-	{% all include "_signup_services.tpl" %}
+	{% all include "_signup_services.tpl" mask_target="signup_form" %}
 </ul>
 {% endif %}
 
