@@ -16,7 +16,7 @@
 
 	{% all include "_html_head.tpl" %}
 
-	{% lib "css/zp-compressed.css" "css/zp-project.css" "css/zp-menu.css"  %}
+	{% lib "css/zp-compressed.css" "css/zp-project.css" "css/zp-menu.css" "css/jquery.loadmask.css"  %}
 	<!--[if IE]>{% lib "css/zp-ie.css" %}<![endif]-->
 	{% lib "js/apps/modernizr.js" %}
 	{% block html_head_extra %}{% endblock %}
@@ -75,6 +75,7 @@
 			"js/apps/z.widgetmanager.js" 
 			"js/modules/livevalidation-1.3.js" 
 			"js/modules/z.inputoverlay.js"
+			"js/modules/jquery.loadmask.js"
 	%}
 
     <script type="text/javascript">
