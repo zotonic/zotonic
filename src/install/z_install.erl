@@ -377,11 +377,12 @@ model_pgsql() ->
       type character varying(32) NOT NULL DEFAULT ''::character varying,
       key character varying(200) NOT NULL DEFAULT ''::character varying,
       is_unique boolean,          -- set to true when the type/key should be unique
+      is_verified boolean not null default false,
+      verify_key character varying(32),
       propb bytea,
       prop1 character varying(200) NOT NULL DEFAULT ''::character varying,
       prop2 character varying(200) NOT NULL DEFAULT ''::character varying,
       prop3 character varying(200) NOT NULL DEFAULT ''::character varying,
-      is_verified boolean NOT NULL DEFAULT false,
       created timestamp with time zone NOT NULL DEFAULT now(),
       modified timestamp with time zone NOT NULL DEFAULT now(),
       visited timestamp with time zone,
@@ -390,7 +391,8 @@ model_pgsql() ->
       CONSTRAINT pk_auth_rsc_id FOREIGN KEY (rsc_id)
         REFERENCES rsc (id)
         ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT identity_type_key_unique UNIQUE (type, key, is_unique)
+      CONSTRAINT identity_type_key_unique UNIQUE (type, key, is_unique),
+      CONSTRAINT identity_verify_key_unique UNIQUE (verify_key)
     )",
 
     "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",

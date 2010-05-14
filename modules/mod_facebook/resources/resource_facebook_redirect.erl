@@ -125,7 +125,7 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
         undefined ->
             % Register the Facebook identities as verified
             SignupProps = [
-                {identity, {username, {generate_username(Props, Context), z_ids:id(6)}, true, true}},
+                {identity, {username_pw, {generate_username(Props, Context), z_ids:id(6)}, true, true}},
                 {identity, {facebook, UID, true, true}},
                 {identity, {email, proplists:get_value(email, FacebookProps), true, true}},
                 {ready_page, LocationAfterSignup}

@@ -31,7 +31,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([observe/2]).
--export([signup/3]).
+-export([signup/4, request_verification/2]).
 
 -include("zotonic.hrl").
 
@@ -42,16 +42,37 @@
 observe({signup_url, Props, SignupProps}, Context) ->
     CheckId = z_ids:id(),
     z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
-    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))}.
+    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))};
+observe({identity_verification, UserId, Ident}, Context) ->
+    case proplists:get_value(type, Ident) of
+        <<"email">> -> send_verify_email(UserId, Ident, Context);
+        _ -> false
+    end.
 
 %% @doc Sign up a new user.
 %% @spec signup(proplist(), proplist(), Context) -> {ok, UserId} | {error, Reason}
-signup(Props, SignupProps, Context) ->
+signup(Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
-        ok -> z_db:transaction(fun(Ctx) -> do_signup(Props, SignupProps, Ctx) end, ContextSudo);
+        ok -> z_db:transaction(fun(Ctx) -> do_signup(Props, SignupProps, RequestConfirm, Ctx) end, ContextSudo);
         {error, _} = Error -> Error
     end.
+
+
+%% @doc Sent verification requests to non verified identities
+request_verification(UserId, Context) ->
+    Unverified = [ R || R <- m_identity:get_rsc(UserId, Context), proplists:get_value(is_verified, R) == false ],
+    request_verification(UserId, Unverified, false, Context).
+    
+    request_verification(_, [], false, _Context) ->
+        {error, no_verifiable_identities};
+    request_verification(_, [], true, _Context) ->
+        ok;
+    request_verification(UserId, [Ident|Rest], Requested, Context) ->
+        case z_notifier:first({identity_verification, UserId, Ident}, Context) of
+            ok -> request_verification(UserId, Rest, true, Context);
+            _ -> request_verification(UserId, Rest, Requested, Context)
+        end.
 
 
 %%====================================================================
@@ -76,6 +97,7 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     ContextSudo = z_acl:sudo(Context),
     z_notifier:observe(signup_url, {?MODULE, observe}, Context),
+    z_notifier:observe(identity_verification, {?MODULE, observe}, Context),
     z_datamodel:manage(?MODULE, datamodel(), ContextSudo),
     {ok, #state{context=ContextSudo}}.
 
@@ -108,6 +130,7 @@ handle_info(_Info, State) ->
 %% The return value is ignored.
 terminate(_Reason, State) ->
     z_notifier:detach(signup_url, {?MODULE, observe}, State#state.context),
+    z_notifier:detach(identity_verification, {?MODULE, observe}, State#state.context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -138,7 +161,7 @@ check_props(_Props, _Context) ->
 %% @doc Preflight check on identities, prevent double identity keys.
 check_identity([], _Context) ->
     ok;
-check_identity([{identity, {username, {Username, _Password}, true, _Verified}}|Idents], Context) ->
+check_identity([{identity, {username_pw, {Username, _Password}, true, _Verified}}|Idents], Context) ->
     case username_exists(Username, Context) of
         false -> check_identity(Idents, Context);
         true -> {error, {identity_in_use, username}}
@@ -156,8 +179,9 @@ check_identity([_|Idents], Context) ->
 %% a preflight check and users sign up slowly (ie. no race condition)
 %% This function is called with a 'sudo' context within a transaction. We throw errors to
 %% force a rollback of the transaction.
-do_signup(Props, SignupProps, Context) ->
-    case m_rsc:insert(props_to_rsc(Props, Context), Context) of
+do_signup(Props, SignupProps, RequestConfirm, Context) ->
+    IsVerified = not RequestConfirm orelse has_verified_identity(SignupProps),
+    case m_rsc:insert(props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, Id} ->
             [ insert_identity(Id, Ident, Context) || {K,Ident} <- SignupProps, K == identity ],
             {ok, Id};
@@ -165,23 +189,28 @@ do_signup(Props, SignupProps, Context) ->
             throw({error, Reason})
     end.
 
+    
+    has_verified_identity([]) -> false;
+    has_verified_identity([{identity, {Type, _, _, true}}|_Is]) when Type /= username_pw -> true;
+    has_verified_identity([_|Is]) -> has_verified_identity(Is).
 
-insert_identity(Id, {username, {Username, Password}, true, _Verified}, Context) ->
+
+insert_identity(Id, {username_pw, {Username, Password}, true, true}, Context) ->
     case m_identity:set_username_pw(Id, Username, Password, Context) of
         ok -> ok;
         Error -> throw(Error)
     end;
-insert_identity(Id, {Type, Key, true, _Verified}, Context) when is_binary(Key); is_list(Key) ->
-    m_identity:insert_unique(Id, Type, Key, Context);
-insert_identity(Id, {Type, Key, false, _Verified}, Context) when is_binary(Key); is_list(Key) ->
-    m_identity:insert(Id, Type, Key, Context).
+insert_identity(Id, {Type, Key, true, Verified}, Context) when is_binary(Key); is_list(Key) ->
+    m_identity:insert_unique(Id, Type, Key, [{is_verified, Verified}], Context);
+insert_identity(Id, {Type, Key, false, Verified}, Context) when is_binary(Key); is_list(Key) ->
+    m_identity:insert(Id, Type, Key, [{is_verified, Verified}], Context).
 
 
-props_to_rsc(Props, Context) ->
+props_to_rsc(Props, IsVerified, Context) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     VisibleFor = z_convert:to_integer(m_config:get_value(mod_signup, member_visible_for, 0, Context)),
     Props1 = [
-        {is_published, true},
+        {is_published, IsVerified},
         {visible_for, VisibleFor},
         {category, Category}
         | Props
@@ -209,7 +238,19 @@ identity_exists(Type, Key, Context) ->
         undefined -> false;
         _Props -> true
     end.
-        
+
+
+send_verify_email(UserId, Ident, Context) ->
+    Email = proplists:get_value(key, Ident),
+    {ok, Key} = m_identity:set_verify_key(proplists:get_value(id, Ident), Context),
+    Vars = [
+        {user_id, UserId},
+        {email, Email},
+        {verify_key, Key}
+    ],
+    z_email:send_render(Email, "email_verify.tpl", Vars, z_acl:sudo(Context)),
+    ok.
+
 
 datamodel() ->
 [

@@ -1,3 +1,5 @@
 [
-	{signup, ["signup"], resource_signup, []}
+	{signup, ["signup"], resource_signup, []},
+	{signup_confirm, ["signup", "confirm"], resource_signup_confirm, []},
+	{signup_confirm, ["signup", "confirm", key], resource_signup_confirm, []}
 ].
