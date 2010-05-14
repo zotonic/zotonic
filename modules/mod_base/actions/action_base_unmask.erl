@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc Mask an element or the whole page with a busy indicator.
+%% @doc Unmask an element previously masked by the mask action
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(action_base_mask).
+-module(action_base_unmask).
 -include("zotonic.hrl").
 -export([render_action/4]).
 
@@ -30,10 +30,5 @@ render_action(_TriggerId, TargetId, Args, Context) ->
                 Id -> [$", $#, Id, $"]
              end
     end,
-    Message = proplists:get_value(message, Args, ""),
-    Delay = proplists:get_value(delay, Args, 0),
-    Script = [ <<"try { $(">>,Selector,<<").mask('">>, 
-                z_utils:js_escape(Message), $',$,,
-                z_convert:to_list(Delay),
-                <<"); } catch (e) {};">>],
+    Script = [ <<"try { $(">>,Selector,<<").unmask(); } catch (e) {};">>],
 	{Script, Context}.
