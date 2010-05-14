@@ -40,6 +40,7 @@
     get_rsc/3,
 
 	lookup_by_username/2,
+	lookup_by_verify_key/2,
     lookup_by_type_and_key/3,
 
 	set_props/5,
@@ -48,7 +49,15 @@
 	delete_by_type/3,
 	
     insert/4,
+    insert/5,
     insert_unique/4,
+    insert_unique/5,
+
+	set_verify_key/2,
+    set_verified/2,
+    set_verified/4,
+    is_verified/2,
+    
     delete/2
 ]).
 
@@ -139,6 +148,7 @@ set_username_pw(Id, Username, Password, Context) ->
                             update identity 
                             set key = $2,
                                 propb = $3,
+                                is_verified = true,
                                 modified = now()
                             where type = 'username_pw' and rsc_id = $1", [Id, Username1, Hash], Ctx),
                 case Rupd of
@@ -146,7 +156,7 @@ set_username_pw(Id, Username, Password, Context) ->
                         UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username], Ctx),
                         case UniqueTest of
                             0 ->
-                                z_db:q("insert into identity (rsc_id, is_unique, type, key, propb) values ($1, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx);
+                                z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx);
                             _Other ->
                                 throw({error, eexist})
                         end;
@@ -210,13 +220,31 @@ hash_is_equal(_, _) ->
 
 %% @doc Create an identity record.
 insert(RscId, Type, Key, Context) ->
-    Props = [{rsc_id, RscId}, {type, Type}, {key, Key}],
-    z_db:insert(identity, Props, Context).
+    insert(RscId, Type, Key, [], Context).
+insert(RscId, Type, Key, Props, Context) ->
+    Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
+    z_db:insert(identity, Props1, Context).
 
 %% @doc Create an unique identity record.
 insert_unique(RscId, Type, Key, Context) ->
-    Props = [{rsc_id, RscId}, {is_unique, true}, {type, Type}, {key, Key}],
-    z_db:insert(identity, Props, Context).
+    insert(RscId, Type, Key, [{is_unique, true}], Context).
+insert_unique(RscId, Type, Key, Props, Context) ->
+    insert(RscId, Type, Key, [{is_unique, true}|Props], Context).
+
+%% @doc Set the verified flag on a record.
+set_verified(Id, Context) ->
+    z_db:q("update identity set is_verified = true, verify_key = null where id = $1", [Id], Context).
+set_verified(RscId, Type, Key, Context) ->
+    z_db:q("update identity set is_verified = true, verify_key = null where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context).
+    
+%% @doc Check if there is a verified identity for the user, beyond the username_pw
+is_verified(RscId, Context) ->
+    case z_db:q1("select id from identity where rsc_id = $1 and is_verified = true and type <> 'username_pw'", 
+                [RscId], Context) of
+        undefined -> false;
+        _ -> true
+    end.
+
 
 %% @doc Replace any existing identity property with a new value
 set_props(RscId, Type, Key, Props, Context) ->
@@ -256,3 +284,17 @@ lookup_by_username(Key, Context) ->
 
 lookup_by_type_and_key(Type, Key, Context) ->
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).
+
+lookup_by_verify_key(Key, Context) ->
+    z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
+
+set_verify_key(Id, Context) ->
+    N = z_ids:id(10),
+    case lookup_by_verify_key(N, Context) of
+        undefined ->
+            z_db:q("update identity set verify_key = $2 where id = $1", [Id, N], Context),
+            {ok, N};
+        _ ->
+            set_verify_key(Id, Context)
+    end.
+

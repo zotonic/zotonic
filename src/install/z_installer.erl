@@ -72,10 +72,28 @@ has_table(Table, Name, Database, Schema) ->
 	pgsql_pool:return_connection(Name, C),
 	HasTable == 1.
 
+%% Check if a column in a table exists by querying the information schema.
+has_column(Table, Column, Name, Database, Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Name),
+    {ok, HasColumn} = pgsql:equery1(C, "
+            select count(*) 
+            from information_schema.columns 
+            where table_catalog = $1 
+              and table_schema = $2
+              and table_name = $3 
+              and column_name = $4", [Database, Schema, Table, Column]),
+	pgsql_pool:return_connection(Name, C),
+	HasColumn == 1.
 
 
 %% Upgrade older Zotonic versions.
 upgrade(Name, Database, Schema) ->
+    ok = install_acl(Name, Database, Schema),
+    ok = install_identity_verified(Name, Database, Schema),
+    ok.
+
+
+install_acl(Name, Database, Schema) ->
 	%% Remove group, rsc_group, group_id
 	HasRscGroup = has_table("rsc_group", Name, Database, Schema),
 	HasGroup = has_table("group", Name, Database, Schema),
@@ -94,6 +112,24 @@ upgrade(Name, Database, Schema) ->
 		false ->
 			ok
 	end.
+
+install_identity_verified(Name, Database, Schema) ->
+    case has_column("identity", "is_verified", Name, Database, Schema) of
+        true -> 
+            ok;
+        false ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+			{ok, [], []} = pgsql:squery(C, "BEGIN"),
+			pgsql:squery(C, "alter table identity "
+			                "add column is_verified boolean not null default false, "
+			                "add column verify_key character varying(32), "
+			                "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
+			pgsql:squery(C, "update identity set is_verified = true where key = 'username_pw'"),
+			{ok, [], []} = pgsql:squery(C, "COMMIT"),
+        	pgsql_pool:return_connection(Name, C),
+			ok
+    end.
+    
 
 % Perform some simple sanity checks
 sanity_check(Name, _Database, _Schema) ->

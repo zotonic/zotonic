@@ -62,10 +62,12 @@ provide_content(ReqData, Context) ->
 
 %% @doc Handle the submit of the signup form.
 event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
-    {XsProps,XsSignupProps} = case Xs of
+    {XsProps0,XsSignupProps} = case Xs of
         {A,B} -> {A,B};
         undefined -> {undefined, undefined}
     end,
+    XsProps = case XsProps0 of undefined -> []; _ -> XsProps0 end,
+    
     Agree = z_context:get_q_validated("signup_tos_agree", Context),
     case Agree of
         "1" ->
@@ -76,16 +78,16 @@ event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
                 {name_surname, fetch_prop(name_surname, true, XsProps, Context)},
                 {email, Email}
             ],
-            IsVerified = not z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, false, Context)),
+            RequestConfirm = z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, true, Context)),
             SignupProps = case is_set(XsSignupProps) of
                                 true ->
                                     XsSignupProps;
                                 false ->
-                                    [ {identity, {username, 
+                                    [ {identity, {username_pw, 
                                             {z_context:get_q_validated("username", Context), 
                                              z_context:get_q_validated("password1", Context)},
                                             true,
-                                            IsVerified}}
+                                            true}}
                                     ]
                             end,
             SignupProps1 = case Email of
@@ -96,7 +98,7 @@ event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
                         true -> SignupProps
                       end
             end,
-            signup(Props, SignupProps1, Context);
+            signup(Props, SignupProps1, RequestConfirm, Context);
         _ ->
             show_errors([error_tos_agree], Context)
     end.
@@ -128,16 +130,33 @@ event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
 
 
 %% @doc Sign up a new user. Check if the identity is available.
-signup(Props, SignupProps, Context) ->
-    case mod_signup:signup(Props, SignupProps, Context) of
+signup(Props, SignupProps, RequestConfirm, Context) ->
+    case mod_signup:signup(Props, SignupProps, RequestConfirm, Context) of
         {ok, UserId} ->
-            % @todo when user is not yet confirmed, do not log on as user.
-            ContextUser = z_auth:logon(UserId, Context),
-            Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
-                [] -> m_rsc:p(UserId, page_url, ContextUser);
-                Url -> Url
-            end,
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            case not RequestConfirm orelse m_identity:is_verified(UserId, Context) of
+                true ->
+                    ensure_published(UserId, Context),
+                    ContextUser = z_auth:logon(UserId, Context),
+                    Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
+                        [] -> m_rsc:p(UserId, page_url, ContextUser);
+                        Url -> Url
+                    end,
+                    z_render:wire({redirect, [{location, Location}]}, ContextUser);
+                false ->
+                    % @todo when user is not yet confirmed, do not log on as user.
+                    % User is not yet verified, send a verification message to the user's external identities
+                    case mod_signup:request_verification(UserId, Context) of
+                        {error, no_verifiable_identities} ->
+                            % Problem, no email address or other identity that could be verified
+                            show_errors([error_need_verification], Context);
+                        ok ->
+                            % Show feedback that we sent a confirmation message
+                            Context1 = show_errors([], Context),
+                            z_render:wire([ {hide, [{target, "signup_area"}]},
+                                            {show, [{target, "signup_verify"}]},
+                                            {redirect, [{location, "#signup_verify"}]}], Context1)
+                    end
+            end;
         {error, {identity_in_use, username}} ->
             show_errors([error_duplicate_username], Context);
         {error, {identity_in_use, _}} ->
@@ -145,7 +164,14 @@ signup(Props, SignupProps, Context) ->
         {error, _Reason} ->
             show_errors([error_signup], Context)
     end.
-    
+
+
+ensure_published(UserId, Context) ->
+    case m_rsc:p(UserId, is_published, Context) of
+        true -> {ok, UserId};
+        false -> m_rsc:update(UserId, [{is_published, true}], Context)
+    end.
+
 
 show_errors(Errors, Context) ->
     Errors1 = [ z_convert:to_list(E) || E <- Errors ],
