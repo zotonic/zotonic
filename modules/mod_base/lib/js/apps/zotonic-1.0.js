@@ -190,6 +190,19 @@ function z_ajax(params)
 	});
 }
 
+function z_unmask(id)
+{
+    if (id)
+    {
+    	var trigger = $('#'+id).get(0);
+	
+    	if (trigger.nodeName.toLowerCase() == 'form') 
+    	{
+        	try { $(trigger).unmask(); } catch (e) {};
+    	}
+    }
+}
+
 
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
@@ -440,6 +453,8 @@ function z_init_postback_forms()
 	})
 	.submit(function(event)
 	{
+	    try { $(this).mask("", 100); } catch (e) {};
+	    
 		if ($('.tinymce', this).length > 0 && tinyMCE)
 		{
 			tinyMCE.triggerSave(true,true);
@@ -673,7 +688,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 				ok = false;
 				$.handleError(opts, xhr, 'error', e);
 			}
-
+			
 			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
 			if (ok) {
 				eval(data);

@@ -82,14 +82,22 @@ process_post(ReqData, Context) ->
 
     Script      = z_script:get_script(EventContext),
     CometScript = z_session_page:get_scripts(EventContext#context.page_pid),
-
+    
+    % Remove the busy mask from the element that triggered this event.
+    Script1 = case TriggerId1 of 
+        undefined -> Script;
+        FormId -> [Script, " z_unmask('",z_utils:js_escape(FormId),"');" ]
+    end,
+    
+    % Send back all the javascript.
     RD  = z_context:get_reqdata(EventContext),
     RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
         "multipart/form-data" ++ _ ->
             RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
-            wrq:append_to_resp_body(["<textarea>", Script, CometScript, "</textarea>"], RDct);
+            wrq:append_to_resp_body(["<textarea>", Script1, CometScript, "</textarea>"], RDct);
         _ ->
-            wrq:append_to_resp_body([Script, CometScript], RD)
+            wrq:append_to_resp_body([Script1, CometScript], RD)
     end,
+
     ReplyContext = z_context:set_reqdata(RD1, EventContext),
     ?WM_REPLY(true, ReplyContext).
