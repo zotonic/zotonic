@@ -58,7 +58,9 @@ div#logon_error h2 {
 
 div#logon_form_box,
 div#logon_password_reset,
-div#logon_reminder {
+div#logon_reminder,
+div#logon_verification_pending,
+div#logon_verification_sent {
 	width: 300px;
 }
 
@@ -143,7 +145,9 @@ div#logon_pw,
 div#logon_form_box,
 div#logon_reminder,
 div#logon_reminder_sent,
-div#logon_password_reset {
+div#logon_password_reset,
+div#logon_verification_pending,
+div#logon_verification_sent {
 	display: none;
 }
 
@@ -151,7 +155,9 @@ div#logon_password_reset {
 .logon_pw div#logon_form_box,
 .logon_reminder div#logon_reminder,
 .logon_reminder_sent div#logon_reminder_sent,
-.logon_password_reset div#logon_password_reset {
+.logon_password_reset div#logon_password_reset,
+.logon_verification_pending div#logon_verification_pending,
+.logon_verification_sent div#logon_verification_sent {
 	display: block;
 }
 
@@ -167,7 +173,9 @@ a#logon_reminder_link {
 	display: inline;
 }
 
-.logon_reminder a#logon_pw_link {
+.logon_reminder a#logon_pw_link,
+.logon_verification_pending a#logon_pw_link,
+.logon_verification_sent a#logon_pw_link {
 	display: inline;
 }
 
@@ -179,21 +187,25 @@ a#logon_reminder_link {
 	display: inline;
 }
 
-.logon_password_reset a#logon_reminder_link {
+.logon_password_reset a#logon_reminder_link,
+.logon_verification_pending a#logon_reminder_link,
+.logon_verification_sent a#logon_reminder_link {
 	display: none;
 }
 
 div#logon_error_pw,
 div#logon_error_reminder,
 div#logon_error_password_tooshort,
-div#logon_error_password_unequal {
+div#logon_error_password_unequal,
+div#logon_error_verification {
 	display: none;
 }
 
 .logon_pw div#logon_error_pw,
 .logon_reminder div#logon_error_reminder,
 .logon_error_password_tooshort div#logon_error_password_tooshort,
-.logon_error_password_unequal div#logon_error_password_unequal {
+.logon_error_password_unequal div#logon_error_password_unequal,
+.logon_error_verification div#logon_error_verification {
 	display: block;
 }
 
@@ -214,6 +226,7 @@ div#logon_error_password_unequal {
 		<div id="logon_dialog" style="float: left">
 			{% include "_logon_form_box.tpl" %}
 			{% include "_logon_password_reminder.tpl" %}
+			{% include "_logon_verification.tpl" %}
 			{% if is_password_reset %}
 				{% include "_logon_password_reset.tpl" %}
 			{% endif %}

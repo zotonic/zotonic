@@ -32,3 +32,9 @@
 	<p>Passwords should have at least six characters.<p>
 	<p>Use some non alphabetical characters or digits to make it harder to guess.</p>
 </div>
+
+<div id="logon_error_verification">
+	<h2>Sorry, could not send the verification message.</h2>
+	
+	<p>We don’t seem to have any valid e-mail address or other electronic communication address of you.</p>
+</div>

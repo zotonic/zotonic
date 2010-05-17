@@ -47,7 +47,10 @@ observe({identity_verification, UserId, Ident}, Context) ->
     case proplists:get_value(type, Ident) of
         <<"email">> -> send_verify_email(UserId, Ident, Context);
         _ -> false
-    end.
+    end;
+observe({identity_verification, UserId}, Context) ->
+    request_verification(UserId, Context).
+
 
 %% @doc Sign up a new user.
 %% @spec signup(proplist(), proplist(), Context) -> {ok, UserId} | {error, Reason}
@@ -212,7 +215,8 @@ props_to_rsc(Props, IsVerified, Context) ->
     Props1 = [
         {is_published, IsVerified},
         {visible_for, VisibleFor},
-        {category, Category}
+        {category, Category},
+		{is_verified_account, IsVerified}
         | Props
     ],
     case proplists:is_defined(title, Props1) of

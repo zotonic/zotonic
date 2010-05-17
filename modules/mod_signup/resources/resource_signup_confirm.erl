@@ -78,7 +78,7 @@ confirm(Key, Context) ->
             {error, unknown_key};
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
-            {ok, UserId} = m_rsc:update(UserId, [{is_published, true}], z_acl:sudo(Context)),
+            {ok, UserId} = m_rsc:update(UserId, [{is_published, true},{is_verified_account, true}], z_acl:sudo(Context)),
             m_identity:set_verified(proplists:get_value(id, Row), Context),
             {ok, UserId}
     end.

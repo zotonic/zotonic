@@ -96,9 +96,14 @@ provide_content(ReqData, Context) ->
 		_ ->
 			Vars
 	end,
-    Rendered = z_template:render("logon.tpl", Vars1, Context3),
-    {Output, OutputContext} = z_context:output(Rendered, Context3),
-    ?WM_REPLY(Output, OutputContext).
+	ErrorUId = z_context:get_q("error_uid", Context3),
+	ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
+		false -> Context3;
+		true -> check_verified(list_to_integer(ErrorUId), Context3)
+	end,
+	Rendered = z_template:render("logon.tpl", Vars1, ContextVerify),
+    {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
+	?WM_REPLY(Output, OutputContext).
 
 
 %% @doc Get the page we should redirect to after a successful log on.
@@ -166,6 +171,12 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 					reminder_success(Context)
 			end
 	end;
+event({submit, [], "logon_verification_form", _Target}, Context) ->
+	UserId = list_to_integer(z_context:get_q("user_id", Context)),
+	case z_notifier:first({identity_verification, UserId}, Context) of
+		ok -> verification_sent(Context);
+		_Other -> verification_error(Context)
+	end;
 event({submit, [], _Trigger, _Target}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first({logon_submit, Args}, Context) of
@@ -188,6 +199,18 @@ event({submit, [], _Trigger, _Target}, Context) ->
 		Context1 = remove_logon_error(Context),
 		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_reminder_sent"}]}, Context1).
 
+	verification_pending(UserId, Context) ->
+		z_render:wire([{set_value, [{target, "logon_verification_user_id"}, {value, integer_to_list(UserId)}]},
+					   {set_class, [{target, "logon_outer"}, {class, "logon_verification_pending"}]}], Context).
+
+	verification_sent(Context) ->
+		z_render:wire({set_class, [{target, "logon_outer"}, {class, "logon_verification_sent"}]}, Context).
+
+	verification_error(Context) ->
+		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_error_verification"}]}, logon_error(Context)).
+
+
+
 logon_user(UserId, Context) ->
     case z_auth:logon(UserId, Context) of
 		{ok, ContextUser} ->
@@ -199,8 +222,23 @@ logon_user(UserId, Context) ->
 		        [] ->  z_render:wire({redirect, [{location, "/"}]}, ContextRemember);
 		        Url -> z_render:wire({redirect, [{location, Url}]}, ContextRemember)
 		    end;
-		{error, Reason} ->
-			{error, Reason}
+		{error, user_not_enabled} ->
+			check_verified(UserId, Context);
+		{error, _Reason} ->
+			% Could not log on, some error occured
+			logon_error(Context)
+	end.
+
+
+check_verified(UserId, Context) ->
+	case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
+		false ->
+			% The account is awaiting verification
+			verification_pending(UserId, Context);
+		V when V == true orelse V == undefined ->
+			% The account has been disabled after verification, or
+			% verification flag not set, account didn't need verification
+			logon_error(Context)
 	end.
 
 
