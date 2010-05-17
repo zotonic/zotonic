@@ -120,10 +120,11 @@ install_identity_verified(Name, Database, Schema) ->
         false ->
             {ok, C}  = pgsql_pool:get_connection(Name),
 			{ok, [], []} = pgsql:squery(C, "BEGIN"),
-			pgsql:squery(C, "alter table identity "
+			A = pgsql:squery(C, "alter table identity "
 			                "add column is_verified boolean not null default false, "
 			                "add column verify_key character varying(32), "
 			                "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
+			?DEBUG(A),
 			pgsql:squery(C, "update identity set is_verified = true where key = 'username_pw'"),
 			{ok, [], []} = pgsql:squery(C, "COMMIT"),
         	pgsql_pool:return_connection(Name, C),
