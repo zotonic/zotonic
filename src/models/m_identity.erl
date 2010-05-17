@@ -245,7 +245,6 @@ is_verified(RscId, Context) ->
         _ -> true
     end.
 
-
 %% @doc Replace any existing identity property with a new value
 set_props(RscId, Type, Key, Props, Context) ->
 	F = fun(Ctx) -> 

@@ -139,21 +139,19 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
             end;
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
-			case z_auth:logon(UserId, Context) of
+			{Location,Context1} = case z_auth:logon(UserId, Context) of
 				{ok, ContextUser} ->
 		            update_user(UserId, Props, ContextUser),
-		            Location = case has_location(LocationAfterSignup) of
-		                            false -> m_rsc:p(UserId, page_url, ContextUser);
-		                            true -> LocationAfterSignup
-		                        end,
-		            LocationAbs = z_context:abs_url(Location, ContextUser),
-		            use_see_other(LocationAbs, ContextUser);
+		            case has_location(LocationAfterSignup) of
+		            	false -> {m_rsc:p(UserId, page_url, ContextUser), ContextUser};
+		                true -> {LocationAfterSignup, ContextUser}
+		        	end;
 				{error, _Reason} ->
-					Location = z_dispatcher:url_for(logon, [{error,"disabled"}], Context),
-					LocationAbs = z_context:abs_url(Location, Context),
-					use_see_other(LocationAbs, Context)
-			end
-            %?WM_REPLY({true, LocationAbs}, ContextUser)
+					{z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
+			end,
+            LocationAbs = lists:flatten(z_context:abs_url(Location, Context1)),
+            use_see_other(LocationAbs, Context1)
+            %?WM_REPLY({true, LocationAbs}, Context1)
     end.
     
     has_location(undefined) -> false;
