@@ -52,8 +52,12 @@ resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     case get_rememberme_cookie(Context1) of
         {ok, UserId} ->
-            ContextUser =  z_context:set(user_id, UserId, Context1),
-            ?WM_REPLY(false, ContextUser);
+		    Context2 = z_context:ensure_all(Context1),
+            Context3 = z_context:set(user_id, UserId, Context2),
+		    case z_auth:logon(UserId, Context3) of
+				{ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
+				{error, _Reason} -> ?WM_REPLY(true, Context3)
+			end;
         undefined -> 
        		?WM_REPLY(true, Context1)
     end.
@@ -65,9 +69,8 @@ previously_existed(ReqData, Context) ->
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    ContextUser = z_auth:logon(z_context:get(user_id, Context2), Context2),
-    Location = get_page(ContextUser),
-    ?WM_REPLY({true, Location}, ContextUser).
+    Location = get_page(Context2),
+    ?WM_REPLY({true, Location}, Context2).
 
 
 provide_content(ReqData, Context) ->
@@ -166,7 +169,11 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 event({submit, [], _Trigger, _Target}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first({logon_submit, Args}, Context) of
-        undefined -> logon_error(Context);
+        undefined -> 
+			case logon_error(Context) of
+				{ok, ContextUser} -> ContextUser;
+				{error, _Reason} -> logon_error(Context)
+			end;
         {error, _Reason} -> logon_error(Context);
         {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
     end.
@@ -182,15 +189,19 @@ event({submit, [], _Trigger, _Target}, Context) ->
 		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_reminder_sent"}]}, Context1).
 
 logon_user(UserId, Context) ->
-    ContextUser = z_auth:logon(UserId, Context),
-    ContextRemember = case z_context:get_q("rememberme", Context, []) of
-        [] -> ContextUser;
-        _ -> set_rememberme_cookie(UserId, ContextUser)
-    end,
-    case z_context:get_q("page", ContextRemember, []) of
-        [] ->  z_render:wire({redirect, [{location, "/"}]}, ContextRemember);
-        Url -> z_render:wire({redirect, [{location, Url}]}, ContextRemember)
-    end.
+    case z_auth:logon(UserId, Context) of
+		{ok, ContextUser} ->
+		    ContextRemember = case z_context:get_q("rememberme", Context, []) of
+		        [] -> ContextUser;
+		        _ -> set_rememberme_cookie(UserId, ContextUser)
+		    end,
+		    case z_context:get_q("page", ContextRemember, []) of
+		        [] ->  z_render:wire({redirect, [{location, "/"}]}, ContextRemember);
+		        Url -> z_render:wire({redirect, [{location, Url}]}, ContextRemember)
+		    end;
+		{error, Reason} ->
+			{error, Reason}
+	end.
 
 
 %% @doc Check if there is a "rememberme" cookie.  If so then return the user id
@@ -207,7 +218,10 @@ get_rememberme_cookie(Context) ->
                     {error, expired} -> 
                         undefined;
                     {ok, UserId} when is_integer(UserId) ->
-                        {ok, UserId}
+						case z_auth:is_enabled(UserId, Context) of
+							true -> {ok, UserId};
+							false -> undefined
+						end
                 end
             catch
                 _:_ -> undefined

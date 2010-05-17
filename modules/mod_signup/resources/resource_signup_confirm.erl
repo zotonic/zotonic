@@ -65,7 +65,7 @@ event({submit, _, _Trigger, _Target}, Context) ->
     Key = z_context:get_q(key, Context, []),
     case confirm(Key, Context) of
         {ok, UserId} ->
-            ContextUser = z_auth:logon(UserId, Context),
+            {ok, ContextUser} = z_auth:logon(UserId, Context),
             z_render:wire({redirect, [{location, m_rsc:p(UserId, page_url, ContextUser)}]}, Context);
         {error, _Reason} -> 
             z_render:wire({show, [{target,"confirm_error"}]}, Context)

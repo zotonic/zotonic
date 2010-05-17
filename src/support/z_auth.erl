@@ -29,7 +29,9 @@
     logon/2,
     logon_pw/3,
     logoff/1,
-    logon_from_session/1    
+    logon_from_session/1,
+
+	is_enabled/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -52,19 +54,28 @@ is_auth_recent(_) ->
 %% @spec logon_pw(Username, Password, Context) -> {bool(), NewContext}
 logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
-        {ok, Id} -> {true, logon(Id, Context)};
+        {ok, Id} ->
+			case logon(Id, Context) of
+				{ok, Context1} -> Context1;
+				{error, _Reason} -> {false, Context}
+			end;
         {error, _Reason} -> {false, Context}
     end.
 
 
 %% @doc Logon an user whose id we know
 logon(UserId, Context) ->
-    Context1 = z_acl:logon(UserId, Context),
-	Context2 = z_session_manager:rename_session(Context1),
-    z_context:set_session(auth_user_id, UserId, Context2),
-    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-    z_notifier:notify(auth_logon, Context),
-    Context2.
+	case is_enabled(UserId, Context) of
+		true ->
+		    Context1 = z_acl:logon(UserId, Context),
+			Context2 = z_session_manager:rename_session(Context1),
+		    z_context:set_session(auth_user_id, UserId, Context2),
+		    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+		    z_notifier:notify(auth_logon, Context),
+		    {ok, Context2};
+		false ->
+			{error, user_not_enabled}
+	end.
 
 
 %% @doc Forget about the user being logged on.
@@ -92,12 +103,29 @@ logon_from_session(Context) ->
             	    z_memo:set_userid(undefined),
         	        z_context:set_session(auth_user_id, none, Context);
         	    {ok, UserId} ->
-            	    z_memo:set_userid(UserId),
-                    logon(UserId, Context)
+					case logon(UserId, Context) of
+						{ok, ContextLogon} -> 
+	            	    	z_memo:set_userid(UserId),
+							ContextLogon;
+						{error, _Reason} -> 
+							z_memo:set_userid(undefined),
+				        	Context
+					end
             end;
         UserId ->
         	z_memo:set_userid(UserId),
             z_acl:logon(UserId, Context)
     end.
 
+
+%% @doc Check if the user is enabled, an user is enabled when the rsc is published and within its publication date range.
+is_enabled(UserId, Context) ->
+	Acl = m_rsc:get_acl_props(UserId, Context),
+    case Acl#acl_props.is_published of
+        false -> 
+            false;
+        true ->
+            Date = calendar:local_time(),
+            Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
+    end.
 
