@@ -423,14 +423,14 @@ props_filter([{_Prop, _V}=H|T], Acc, Context) ->
 
 %% @doc Fill in some defaults for empty props.
 %% @spec props_defaults(Props1, Context) -> Props2
-props_defaults(Props, _Context) ->
+props_defaults(Props, Context) ->
     case proplists:get_value(slug, Props) of
         undefined ->
             case proplists:get_value(title, Props) of
                 undefined ->
                     Props;
                 Title ->
-                    Text = ?__(Title, en),
+                    Text = ?__(Title, Context),
                     Slug = z_string:to_slug(Text),
                     lists:keystore(slug, 1, Props, {slug, Slug})
             end;

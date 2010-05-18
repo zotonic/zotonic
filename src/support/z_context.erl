@@ -154,7 +154,8 @@ set_server_names(#context{host=Host} = Context) ->
         dropbox_server=list_to_atom("z_dropbox"++HostAsList),
         pivot_server=list_to_atom("z_pivot_rsc"++HostAsList),
         module_indexer=list_to_atom("z_module_indexer"++HostAsList),
-        module_sup=list_to_atom("z_module_sup"++HostAsList)
+        module_sup=list_to_atom("z_module_sup"++HostAsList),
+        translation_table=z_trans_server:table(Host)
     }.
 
 

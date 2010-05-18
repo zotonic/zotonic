@@ -50,7 +50,7 @@
         pivot_server,
         module_indexer,
         module_sup,
-        
+        translation_table,
         
         %% The database connection used for (nested) transactions, see z_db
         dbc=undefined,
@@ -145,8 +145,8 @@
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 
-%% @doc Call the translate function, 2nd parameter is either language or context
--define(__(T,L), z_trans:trans(T,L)).
+%% @doc Call the translate function, 2nd parameter is context
+-define(__(T,Context), z_trans:trans(T,Context)).
 
 %% The name of the session request parameter
 -define(SESSION_PAGE_Q, "z_pageid").
