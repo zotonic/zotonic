@@ -31,6 +31,7 @@
 %% interface functions
 -export([
     reindex/1,
+    translations/1,
     find/3,
     find_all/3
 ]).
@@ -54,6 +55,12 @@ start_link(SiteProps) ->
 reindex(Context) ->
     gen_server:cast(Context#context.module_indexer, {module_ready, Context}).
 
+
+%% @doc Find all .po files in all modules and the active site.
+%% This is an active scan, not designed to be fast.
+%% @spec translations(#context{}) -> [ {module, {ModuleDirectory, [{Language,File}, ...]}}, ... ]
+translations(Context) ->
+    translations1(Context).
 
 %% @doc Find a scomp, validator etc.
 %% @spec find(What, Name, Context) -> {ok, term()} | {error, Reason}
@@ -183,6 +190,12 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+translations1(Context) ->
+    [{M,lang_to_atom(X)} || {M,X} <- z_module_sup:prio_sort(scan_subdir("translations", "", ".po", Context))].
+
+    lang_to_atom({ModDir,LangFiles}) -> 
+        {ModDir, [{list_to_atom(Lang), File} || {Lang,File} <- LangFiles]}.
 
 %% @doc Find a scomp etc in a lookup list
 lookup(Name, List) ->

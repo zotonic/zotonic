@@ -59,6 +59,10 @@ init(SiteProps) ->
             ok
     end,
 
+    Translation = {z_trans_server, 
+                {z_trans_server, start_link, [SiteProps]},
+                permanent, 5000, worker, dynamic},
+
     Depcache = {z_depcache,
                 {z_depcache, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
@@ -103,10 +107,15 @@ init(SiteProps) ->
                 {z_module_sup, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
+    PostStartup = {z_site_startup,
+                    {z_site_startup, start_link, [SiteProps]},
+                    permanent, 5000, worker, dynamic},
+
     Processes = [
-            Depcache, Notifier, Installer, Session, Visitor, 
+            Translation, Depcache, Notifier, Installer, Session, Visitor, 
             Dispatcher, Template, DropBox, Pivot,
-            ModuleIndexer, Modules
+            ModuleIndexer, Modules,
+            PostStartup
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 

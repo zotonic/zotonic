@@ -188,11 +188,11 @@ init(SiteProps) ->
 
 
 %% @spec check_modified(File) -> {ok, Module} | {error, Reason}
-%% @doc Compile the template if its has been modified, return the template module for rendering.
+%% @doc Compile the template if it has been modified, return the template module for rendering.
 handle_call({check_modified, File}, _From, State) ->
     ModuleName = filename_to_modulename(File, State#state.host),
     Module = list_to_atom(ModuleName),
-    Result = case template_is_modified(Module, State#state.reset_counter) of
+    Result = case template_is_modified(Module, State#state.reset_counter, State#state.host) of
                 true  -> modified;
                 false -> {ok, Module}
              end,
@@ -207,7 +207,10 @@ handle_call({compile, File, Context}, _From, State) ->
     end,
     ModuleName = filename_to_modulename(File, State#state.host),
     Module     = list_to_atom(ModuleName),
-    ErlyResult = case erlydtl:compile(File, Module, [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter}]) of
+    ErlyResult = case erlydtl:compile(  File,
+                                        Module, 
+                                        [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter}],
+                                        Context) of
                     {ok, Module1} -> {ok, Module1};
                     Error -> Error
                  end,
@@ -249,13 +252,18 @@ savechar(_C) ->
 
 %% Check if the template or one of the by the template included files is modified since compilation
 %% or if the template has been compiled before a reset of all compiled templates.
-template_is_modified(Module, ResetCounter) ->
+template_is_modified(Module, ResetCounter, Host) ->
     case catch Module:template_reset_counter() < ResetCounter of
         true ->
             true;
         false ->
-            Deps = Module:dependencies(),
-            is_modified(Deps);
+            case Module:trans_table() /= z_trans_server:table(Host) of
+                true ->
+                    true;
+                false ->
+                    Deps = Module:dependencies(),
+                    is_modified(Deps)
+            end;
         _Error -> 
             true
     end.

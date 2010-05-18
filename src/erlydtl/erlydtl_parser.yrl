@@ -104,6 +104,7 @@ Nonterminals
     
     CustomTag
     Args
+	TransArgs
 
     CallTag
     CallWithTag
@@ -190,7 +191,7 @@ Terminals
 	or_keyword
 	xor_keyword
 	and_keyword
-	'__keyword'
+	__keyword
  	hash
 	'==' '/=' '<' '>' '=<' '>='
 	'+' '-'
@@ -216,6 +217,7 @@ Elements -> '$empty' : [].
 Elements -> Elements text : '$1' ++ ['$2'].
 Elements -> Elements ValueBraced : '$1' ++ ['$2'].
 Elements -> Elements TransTag : '$1' ++ ['$2'].
+Elements -> Elements TransExtTag : '$1' ++ ['$2'].
 Elements -> Elements ExtendsTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
 Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
@@ -238,7 +240,6 @@ Elements -> Elements PrintTag : '$1' ++ ['$2'].
 Elements -> Elements ImageTag : '$1' ++ ['$2'].
 Elements -> Elements ImageUrlTag : '$1' ++ ['$2'].
 Elements -> Elements MediaTag : '$1' ++ ['$2'].
-Elements -> Elements TransExtTag : '$1' ++ ['$2'].
 Elements -> Elements WithBlock : '$1' ++ ['$2'].
 Elements -> Elements CacheBlock : '$1' ++ ['$2'].
 
@@ -246,7 +247,7 @@ Elements -> Elements CacheBlock : '$1' ++ ['$2'].
 ValueBraced -> open_var E close_var : '$2'.
 
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
-TransExtTag -> open_tag '__keyword' string_literal Args close_tag : {trans_ext, '$3', '$4'}.
+TransExtTag -> open_tag __keyword string_literal TransArgs close_tag : {trans_ext, '$3', '$4'}.
 ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 IncludeTag -> open_tag OptionalAll include_keyword string_literal Args close_tag : {include, '$4', '$5', '$2'}.
 CatIncludeTag -> open_tag OptionalAll catinclude_keyword string_literal E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
@@ -344,6 +345,9 @@ MediaTag -> open_tag media_keyword E Args close_tag : {media, '$3', '$4' }.
 UrlTag -> open_tag url_keyword identifier Args close_tag : {url, '$3', '$4'}.
 
 PrintTag -> open_tag print_keyword E close_tag : {print, '$3'}.
+
+TransArgs -> '$empty' : [].
+TransArgs -> TransArgs identifier equal string_literal : '$1' ++ [{'$2', '$4'}].
 
 Args -> '$empty' : [].
 Args -> Args identifier : '$1' ++ [{'$2', true}].

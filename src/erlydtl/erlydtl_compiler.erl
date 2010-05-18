@@ -45,7 +45,7 @@
 %% --------------------------------------------------------------------
 %% Definitions
 %% --------------------------------------------------------------------
--export([compile/2, compile/3, parse/1]).
+-export([compile/3, compile/4, parse/1]).
 
 -record(dtl_context, {
     local_scopes = [], 
@@ -58,7 +58,8 @@
     finder = undefined,
     module = [],
     compiler_options = [verbose, report_errors],
-    force_recompile = false}).
+    force_recompile = false,
+    z_context = undefined}).
 
 -record(ast_info, {
     dependencies = [],
@@ -70,18 +71,21 @@
     has_auto_id = false,
     custom_tags = []}).    
 
-compile(Binary, Module) when is_binary(Binary) ->
-    compile(Binary, Module, []);
+compile(Binary, Module, ZContext) when is_binary(Binary) ->
+    compile(Binary, Module, [], ZContext);
 
-compile(File, Module) ->
-    compile(File, Module, []).
+compile(File, Module, ZContext) ->
+    compile(File, Module, [], ZContext).
 
-compile(Binary, Module, Options) when is_binary(Binary) ->
+compile(Binary, Module, Options, ZContext) when is_binary(Binary) ->
     File = "",
     TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(Binary) of
         {ok, DjangoParseTree} ->
-            case compile_to_binary(File, DjangoParseTree, init_dtl_context(File, Module, Options), TemplateResetCounter) of
+            case compile_to_binary( File,
+                                    DjangoParseTree, 
+                                    init_dtl_context(File, Module, Options, ZContext),
+                                    TemplateResetCounter) of
                 {ok, Module1, _Bin} ->
                     {ok, Module1};
                 Err ->
@@ -91,8 +95,8 @@ compile(Binary, Module, Options) when is_binary(Binary) ->
             Err
     end;
     
-compile(File, Module, Options) ->  
-    Context = init_dtl_context(File, Module, Options),
+compile(File, Module, Options, ZContext) ->  
+    Context = init_dtl_context(File, Module, Options, ZContext),
     TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(File, Context) of  
         {ok, DjangoParseTree} ->
@@ -136,9 +140,9 @@ compile_to_binary(File, DjangoParseTree, Context, TemplateResetCounter) ->
         throw:Error -> Error
     end.
                 
-init_dtl_context(File, Module, Options) when is_list(Module) ->
-    init_dtl_context(File, list_to_atom(Module), Options);
-init_dtl_context(File, Module, Options) ->
+init_dtl_context(File, Module, Options, ZContext) when is_list(Module) ->
+    init_dtl_context(File, list_to_atom(Module), Options, ZContext);
+init_dtl_context(File, Module, Options, ZContext) ->
     Ctx = #dtl_context{},
     #dtl_context{
         local_scopes = [ [{'$autoid', erl_syntax:variable("AutoId_"++z_ids:identifier())}] ],
@@ -149,7 +153,8 @@ init_dtl_context(File, Module, Options) ->
         reader = proplists:get_value(reader, Options, Ctx#dtl_context.reader),
         finder = proplists:get_value(finder, Options, Ctx#dtl_context.finder),
         compiler_options = proplists:get_value(compiler_options, Options, Ctx#dtl_context.compiler_options),
-        force_recompile = proplists:get_value(force_recompile, Options, Ctx#dtl_context.force_recompile)}.   
+        force_recompile = proplists:get_value(force_recompile, Options, Ctx#dtl_context.force_recompile),
+        z_context = ZContext}.   
     
 parse(File, Context) ->  
     {M,F} = Context#dtl_context.reader,
@@ -180,6 +185,15 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
                     [],
                     none,
                     [erl_syntax:integer(TemplateResetCounter)]
+                    )
+            ]),
+
+    TransTableFunctionAst = erl_syntax:function(
+        erl_syntax:atom(trans_table),
+            [ erl_syntax:clause(
+                    [],
+                    none,
+                    [erl_syntax:abstract(z_trans_server:table(Context#dtl_context.z_context))]
                     )
             ]),
 
@@ -253,11 +267,12 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
     ExportAst = erl_syntax:attribute(erl_syntax:atom(export),
         [erl_syntax:list([
 		            erl_syntax:arity_qualifier(erl_syntax:atom(template_reset_counter), erl_syntax:integer(0)),
+		            erl_syntax:arity_qualifier(erl_syntax:atom(trans_table), erl_syntax:integer(0)),
 					erl_syntax:arity_qualifier(erl_syntax:atom(render), erl_syntax:integer(2)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(source), erl_syntax:integer(0)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(dependencies), erl_syntax:integer(0))])]),
 
-    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TemplateResetCounterFunctionAst,
+    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TemplateResetCounterFunctionAst, TransTableFunctionAst,
             Render2FunctionAst, SourceFunctionAst, DependenciesFunctionAst, RenderInternalFunctionAst
             | BodyInfo#ast_info.pre_render_asts]].    
 
@@ -468,7 +483,7 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
             {{auto_escape(erl_syntax:string(unescape_string_literal(String)), Context), 
                     #ast_info{}}, TreeWalker};
 		{'trans_literal', _Pos, String} ->
-            {{auto_escape(trans_literal_ast(String), Context), 
+            {{auto_escape(trans_literal_ast(String, Context), Context), 
                     #ast_info{}}, TreeWalker};
         {'number_literal', _Pos, Number} ->
             case AsString of
@@ -506,7 +521,6 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
 string_ast(String, TreeWalker) ->
     % {{erl_syntax:string(String), #ast_info{}}, TreeWalker}. %% less verbose AST, better for development and debugging
     {{erl_syntax:binary([erl_syntax:binary_field(erl_syntax:integer(X)) || X <- String]), #ast_info{}}, TreeWalker}.       
-
 
 catinclude_ast(File, Id, Args, All, Context, TreeWalker) ->
     Args1 = [ {{identifier, none, "$file"},{string_literal, none, File}},
@@ -796,7 +810,7 @@ ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseCon
 					{string_literal, _, Literal} ->
 					    {[erl_syntax:string(unescape_string_literal(Literal)) | Asts], AccVarNames, Inf, TW};
 				    {trans_literal, _, Literal} ->
-				        {[trans_literal_ast(Literal) | Asts], AccVarNames, Inf, TW};
+				        {[trans_literal_ast(Literal, Context) | Asts], AccVarNames, Inf, TW};
                     {number_literal, _, Literal} ->
                         {[erl_syntax:integer(list_to_integer(Literal)) | Asts], AccVarNames, Inf, TW};
                     Variable ->
@@ -915,7 +929,7 @@ cycle_ast(Names, Context, TreeWalker) ->
                         ({string_literal, _, Str}, {Acc,TW}) ->
                             {[ erl_syntax:string(unescape_string_literal(Str)) | Acc], TW};
 						({trans_literal, _, Str}, {Acc,TW}) ->
-						  	{[ trans_literal_ast(Str) | Acc ], TW};
+						  	{[ trans_literal_ast(Str, Context) | Acc ], TW};
                         ({number_literal, _, Num}, {Acc,TW}) ->
                             V = format(erl_syntax:integer(Num), Context),
                             {[ V | Acc ], TW};
@@ -944,45 +958,42 @@ cycle_compat_ast(Names, _Context, TreeWalker) ->
 
 
 %% @author Marc Worrell
-%% @doc Output the trans record with the translation call to z_trans 
-%% @todo Optimization for the situation where all parameters are constants
-trans_ast(TransLiteral, _Context, TreeWalker) ->
+%% @doc Output the trans record with the translation call to z_trans
+trans_ast(TransLiteral, Context, TreeWalker) ->
 	% Remove the first and the last character, these were separating the string from the {_ and _} tokens
-	Lit = lists:reverse(tl(lists:reverse(tl(TransLiteral)))),
-	{{erl_syntax:application(
-		erl_syntax:atom(z_trans),
-		erl_syntax:atom(trans),
-		[
-			erl_syntax:tuple([
-				erl_syntax:atom(trans),
-				erl_syntax:list([
-					erl_syntax:tuple([ erl_syntax:atom('en'), erl_syntax:string(Lit) ])
-				])
-			]),
-			erl_syntax:variable("Language")
-		]
-	), #ast_info{}}, TreeWalker}.
-
+	{{trans_ast1(z_string:trim(TransLiteral), Context), #ast_info{}}, TreeWalker}.
 
 trans_ext_ast(String, Args, Context, TreeWalker) ->
 	Lit = unescape_string_literal(String, [], noslash),
-	{ArgsTrans, TreeWalker1} = interpreted_args(Args, Context, TreeWalker),
-	ArgsTransAst = [
-		erl_syntax:tuple([erl_syntax:atom(Lang), Ast]) || {Lang,Ast} <- ArgsTrans
-	],
-	{{erl_syntax:application(
-		erl_syntax:atom(z_trans),
-		erl_syntax:atom(trans),
-		[
-			erl_syntax:tuple([
-				erl_syntax:atom(trans),
-				erl_syntax:list([
-					erl_syntax:tuple([erl_syntax:atom('en'), erl_syntax:string(Lit)]) | ArgsTransAst
-				])
-			]),
-			erl_syntax:variable("Language")
-		]
-	), #ast_info{}}, TreeWalker1}.
+	ArgsTrans = [ trans_arg(A) || A <- Args ],
+	{{trans_ast1({trans, [{en,Lit}|ArgsTrans]}, Context), #ast_info{}}, TreeWalker}.
+
+    trans_arg({{identifier,_,Lang}, {string_literal,_,String}}) ->
+        {list_to_atom(Lang), String}.
+        
+trans_literal_ast(String, Context) ->
+	Lit = unescape_string_literal(String),
+	trans_ast1(Lit, Context).
+
+
+%% @doc Fetch the translations and put them into the compiled template.  We will need to
+%% re-compile templates when translations are changed.
+trans_ast1(Arg, Context) ->
+    case z_trans:translations(Arg, Context#dtl_context.z_context) of
+        {trans, Tr} ->
+        	Tr1 = [ {z_convert:to_atom(Lang), z_convert:to_binary(S)} || {Lang,S} <- Tr ],
+        	erl_syntax:application(
+        		erl_syntax:atom(z_trans),
+        		erl_syntax:atom(trans),
+        		[
+        			erl_syntax:abstract({trans, Tr1}),
+        			z_context_ast(Context)
+        		]);
+        S when is_binary(S) ->
+            erl_syntax:abstract(S);
+        L when is_list(L) ->
+            erl_syntax:abstract(list_to_binary(L))
+    end.
 	
 
 
@@ -1392,8 +1403,8 @@ interpreted_argval({number_literal, _, Value}, _Context, TreeWalker) ->
     {erl_syntax:integer(list_to_integer(Value)), TreeWalker};
 interpreted_argval({string_literal, _, Value}, _Context, TreeWalker) -> 
     {erl_syntax:string(unescape_string_literal(Value)), TreeWalker};
-interpreted_argval({trans_literal, _, Value}, _Context, TreeWalker) ->
-    {trans_literal_ast(Value), TreeWalker};
+interpreted_argval({trans_literal, _, Value}, Context, TreeWalker) ->
+    {trans_literal_ast(Value, Context), TreeWalker};
 interpreted_argval({auto_id, Name}, Context, TreeWalker) ->
     {{V, _}, TreeWalker1} = auto_id_ast(Name, Context, TreeWalker), 
     {V, TreeWalker1};
@@ -1416,21 +1427,3 @@ interpreted_argval(Value, Context, TreeWalker) ->
     {{Ast, _VarName, _VarInfo}, TreeWalker1} = resolve_variable_ast(Value, Context, TreeWalker),
     {Ast, TreeWalker1}.
 
-trans_literal_ast(String) ->
-	Lit = unescape_string_literal(String),
-	erl_syntax:application(
-		erl_syntax:atom(z_trans),
-		erl_syntax:atom(trans),
-		[
-			erl_syntax:tuple([
-				erl_syntax:atom(trans),
-				erl_syntax:list([
-					erl_syntax:tuple([
-						erl_syntax:atom('en'),
-						erl_syntax:string(Lit)
-					])
-				])
-			]),
-			erl_syntax:variable("Language")
-		]
-	).

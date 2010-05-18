@@ -36,10 +36,10 @@
 -author('emmiller@gmail.com').
 
 %% API
--export([compile/2, compile/3]).
+-export([compile/3, compile/4]).
 
-compile(FileOrBinary, Module) ->
-    erlydtl_compiler:compile(FileOrBinary, Module).
+compile(FileOrBinary, Module, ZContext) ->
+    erlydtl_compiler:compile(FileOrBinary, Module, ZContext).
 
-compile(FileOrBinary, Module, Options) ->
-    erlydtl_compiler:compile(FileOrBinary, Module, Options).
+compile(FileOrBinary, Module, Options, ZContext) ->
+    erlydtl_compiler:compile(FileOrBinary, Module, Options, ZContext).
