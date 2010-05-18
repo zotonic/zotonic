@@ -3,7 +3,7 @@
 {% block title %}Edit “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block tinymce %}
-	<script type="text/javascript" src="/lib/js/modules/tinymce/tiny_mce.js"></script>
+	<script type="text/javascript" src="/lib/js/modules/tinymce3.3.2a/tiny_mce.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){tinyMCE.init(tinyInit);});
 	</script>
