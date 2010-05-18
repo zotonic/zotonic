@@ -5185,15 +5185,16 @@ window.tinymce.dom.Sizzle = Sizzle;
 							}
 
 							point.push(offset);
-						} else {
+						} else if (container.childNodes.length > 0) {
+						    // MW 2010-05-18  Added above check to prevent js error on empty texts
 							childNodes = container.childNodes;
 							
 							if (offset >= childNodes.length) {
 								after = 1;
 								offset = childNodes.length - 1;
 							}
-
-							point.push(t.dom.nodeIndex(childNodes[offset], normalized) + after);
+                            
+					        point.push(t.dom.nodeIndex(childNodes[offset], normalized) + after);
 						}
 
 						for (; container && container != root; container = container.parentNode)
