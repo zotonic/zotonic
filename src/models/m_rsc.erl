@@ -52,6 +52,7 @@
 	is_a/3,
 	
 	p/3,
+	p/4,
 	p_no_acl/3,
 	
 	op/2, o/2, o/3, o/4,
@@ -318,6 +319,13 @@ p(Id, Property, Context) ->
 				false -> undefined
 			end
 	end.
+%% Fetch property from a resource; but return a default value if not found.
+p(Id, Property, DefaultValue, Context) ->
+    case p(Id, Property, Context) of
+        undefined -> DefaultValue;
+        Value -> Value
+    end.
+
 
 %% @doc Fetch a property from a resource, no ACL check is done.
 p_no_acl(undefined, _Predicate, _Context) -> undefined;
