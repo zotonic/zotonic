@@ -37,89 +37,10 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
--export([parse_po/1, lc2lang/1, quotes/1,
-	 parse_po_bin/1, all_lang/0, 
-	 key2str/1, key2str/2, key2str/3, 
-	 all_lcs/0, all_lcs/1,
-	 reload_custom_lang/1, reload_custom_lang/2,
-	 unload_custom_lang/1, unload_custom_lang/2,
-	 recreate_db/0, recreate_db/1,
-	 store_pofile/2, store_pofile/3, 
-	 lang2cset/1, lang2cset/2]).
+-export([parse_po/1, parse_po_bin/1]).
 
 
--define(DEFAULT_SERVER, gettext_server).
 -define(GETTEXT_HEADER_INFO, header).
-
-%%% --------------------------------------------------------------------
-%%% This is the lookup routine.
-%%% --------------------------------------------------------------------
-%%% Hopefully, the surrounding code has done its job and
-%%% put the language to be used in the process dictionary.
-key2str(Key) -> 
-    key2str(Key, get(gettext_language)).
-
-key2str(Key, Lang) when is_list(Key) -> 
-    key2str(?DEFAULT_SERVER, Key, Lang);
-key2str(Server, Key) when is_atom(Server) ->
-    key2str(Server, Key, get(gettext_language)).
-
-key2str(Server, Key, Lang) ->
-    gen_server:call(Server, {key2str, Key, Lang}, infinity).
-
-%%% --------------------------------------------------------------------
-
-reload_custom_lang(Lang) ->
-    reload_custom_lang(?DEFAULT_SERVER, Lang).
-
-reload_custom_lang(Server, Lang) ->
-    gen_server:call(Server, {reload_custom_lang, Lang}, infinity).
-
-unload_custom_lang(Lang) ->
-    unload_custom_lang(?DEFAULT_SERVER, Lang).
-
-unload_custom_lang(Server, Lang) ->
-    gen_server:call(Server, {unload_custom_lang, Lang}, infinity).
-
-all_lcs() ->
-    all_lcs(?DEFAULT_SERVER).
-
-all_lcs(Server) ->
-    gen_server:call(Server, all_lcs, infinity).
-
-
-recreate_db() ->
-    recreate_db(?DEFAULT_SERVER). 
-   
-recreate_db(Server) ->
-    gen_server:call(Server, recreate_db, infinity).
-
-%%--------------------------------------------------------------------
-
-store_pofile(Lang, File) when is_binary(File) ->
-    store_pofile(?DEFAULT_SERVER, Lang, File).
-
-store_pofile(Server, Lang, File) when is_binary(File) ->
-    gen_server:call(Server, {store_pofile, Lang, File}, infinity).
-
-%%--------------------------------------------------------------------
-
-lang2cset(Lang) ->
-    lang2cset(?DEFAULT_SERVER, Lang).
-
-lang2cset(Server, Lang) ->
-    gen_server:call(Server, {lang2cset, Lang}, infinity).
-
-
-%%% --------------------------------------------------------------------
-%%% In case the string is used in a javascript context,
-%%% we need to take care of quotes.
-%%% --------------------------------------------------------------------
-
-quotes([$'|T]) -> [$\\,$' | quotes(T)];
-quotes([$"|T]) -> [$\\,$" | quotes(T)];
-quotes([H|T])  -> [H      | quotes(T)];
-quotes([])     -> [].
 
 
 %%% --------------------------------------------------------------------
@@ -190,16 +111,3 @@ to_list(I) when is_integer(I) -> integer_to_list(I);
 to_list(B) when is_binary(B)  -> binary_to_list(B);
 to_list(L) when is_list(L)    -> L.
 
-
-%%% --------------------------------------------------------------------
-%%% Language Codes
-%%% --------------------------------------------------------------------
-
-lc2lang(LC) -> 
-    case iso639:lc3lang(LC) of
-	""   -> iso639:lc2lang(LC);  % backward compatible
-	Lang -> Lang
-    end.
-    
-
-all_lang() -> iso639:all3lang().
