@@ -66,6 +66,7 @@ install_modules(Host, C) ->
         "mod_video_embed",
         "mod_atom_feed",
 		"mod_broadcast",
+        "mod_translation",
 
         "mod_seo",
         "mod_seo_google",
