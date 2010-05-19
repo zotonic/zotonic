@@ -40,7 +40,7 @@
 %%%----------------------------------------------------------------------
 
 -module(z_gettext_compile).
--export([parse_transform/2, epot2po/0]).
+-export([generate/2, parse_transform/2]).
 
 -ifdef(debug).
 %%-define(debug(S,A), io:format( S, A)).
@@ -52,40 +52,32 @@
 
 -define(EPOT_TABLE, gettext_table).
 
+-include_lib("zotonic.hrl").
 
-%%% --------------------------------------------------------------------
-%%% From the Erlang po-Template file, create a GNU po-file.
-%%% --------------------------------------------------------------------
-epot2po() ->
-    {Gettext_App_Name, GtxtDir, DefLang} = get_env(),
-    open_epot_file(Gettext_App_Name, GtxtDir),
-    Es = lists:keysort(1, get_epot_data()),
-    close_epot_file(),
-    open_po_file(Gettext_App_Name, GtxtDir, DefLang),
-    write_header(),
-    write_entries(Es),
-    close_file(),
-    init:stop().
+%% @doc Generate a .po file from the given label/translation pairs
+%% The labels are {Label, Translation, Finfo}
+%% @author Marc Worrell
+%% @date 2010-05-19
+generate(Filename, Labels) ->
+    {ok,Fd} = file:open(Filename, [write]),
+    write_header(Fd),
+    write_entries(Fd, Labels),
+    ok = file:close(Fd).
 
-
-write_entries(L) ->
-    Fd = get(fd),
-    F = fun({Id,Finfo}) ->
-		Fi = fmt_fileinfo(Finfo),
-		io:format(Fd, "~n#: ~s~n", [Fi]),
-		file:write(Fd, "msgid \"\"\n"),
-		write_pretty(Id),
-		file:write(Fd, "msgstr \"\"\n"),
-		write_pretty(Id)
-	end,
+write_entries(Fd, L) ->
+    LibDir = z_utils:lib_dir(),
+    F = fun({Id,Trans,Finfo}) ->
+            io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
+    		file:write(Fd, "msgid \"\"\n"),
+    		write_pretty(Id, Fd),
+    		file:write(Fd, "msgstr \"\"\n"),
+    		write_pretty(Trans, Fd)
+    	end,
     lists:foreach(F, L).
 
 -define(ENDCOL, 72).
 -define(PIVOT, 4).
 -define(SEP, $\s).
-
-write_pretty(Str) ->
-    write_pretty(Str, get(fd)).
 
 write_pretty([], _) ->
     true;
@@ -166,16 +158,20 @@ split_string([], _End, _N, Acc) ->
     
 
 
-fmt_fileinfo(Finfo) ->
+fmt_fileinfo(Finfo, LibDir) ->
     F = fun({Fname,LineNo}, Acc) ->
-		Fname ++ ":" ++ to_list(LineNo) ++ [$\s|Acc]
+        Fname1 = case lists:prefix(LibDir, Fname) of
+                    true -> [$.|lists:nthtail(length(LibDir), Fname)];
+                    false -> Fname
+                 end,
+		Fname1 ++ ":" ++ to_list(LineNo) ++ [$\s|Acc]
 	end,
     lists:foldr(F,[],Finfo).
 		
 
    
-write_header() ->
-    io:format(get(fd),
+write_header(Fd) ->
+    file:write(Fd,
 	      "# SOME DESCRIPTIVE TITLE.\n"
 	      "# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER\n"
 	      "# This file is distributed under the same license as the PACKAGE package.\n"
@@ -188,15 +184,20 @@ write_header() ->
 	      "msgid \"\"\n"
 	      "msgstr \"\"\n"
 	      "\"Project-Id-Version: PACKAGE VERSION\\n\"\n"
-	      "\"POT-Creation-Date: 2003-10-21 16:45+0200\\n\"\n"
+	      "\"POT-Creation-Date: "++print_date()++"\\n\"\n"
 	      "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n"
 	      "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n"
 	      "\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n"
 	      "\"MIME-Version: 1.0\\n\"\n"
 	      "\"Content-Type: text/plain; charset=utf-8\\n\"\n"
-	      "\"Content-Transfer-Encoding: 8bit\\n\"\n",
-	      []).
+	      "\"Content-Transfer-Encoding: 8bit\\n\"\n").
 
+
+print_date() ->
+    % 2003-10-21 16:45+0200
+    {{Y,M,D},{H,I,_S}} = erlang:universaltime(),
+    lists:flatten(io_lib:format("~4..0B-~2..0B-~2..0B ~2..0B:~2..0B+0000", [Y,M,D,H,I])).
+    
  
 %%% --------------------------------------------------------------------
 %%% NB: We assume that the surrounding code does some preparations:
@@ -212,12 +213,12 @@ write_header() ->
 parse_transform(Form,Opts) ->
     case lists:member(gettext, Opts) of
 	true ->
-	    {Gettext_App_Name, GtxtDir, _} = get_env(),
-	    open_epot_file(Gettext_App_Name, GtxtDir),
+	    {_Gettext_App_Name, _GtxtDir, _} = get_env(),
+	    %open_epot_file(Gettext_App_Name, GtxtDir),
 	    ?debug( "--- Opts --- ~p~n",[Opts]),
 	    ?debug("--- Env --- isd_type=~p , gettext_dir=~p~n", [Gettext_App_Name,GtxtDir]),
 	    pt(Form, Opts),
-	    close_file(),
+	    %close_file(),
 	    Form;
 	_ ->
 	    Form
@@ -313,34 +314,8 @@ escape_chars(Str) ->
 	end,
     lists:foldr(F, [], Str).
 
-open_epot_file(Gettext_App_Name, GtxtDir) ->
-    Fname = mk_epot_fname(Gettext_App_Name, GtxtDir),
-    filelib:ensure_dir(Fname),
-    {ok, _} = dets:open_file(?EPOT_TABLE, [{file, Fname}]).
-
-close_epot_file() ->
-    dets:close(?EPOT_TABLE).
-
-get_epot_data() ->
-    dets:foldl(fun(E, Acc) -> [E|Acc] end, [], ?EPOT_TABLE).
-
-mk_epot_fname(Gettext_App_Name, GtxtDir) ->
-    GtxtDir ++ "/lang/" ++ Gettext_App_Name ++ "/epot.dets".
-
-open_po_file(Gettext_App_Name, GtxtDir, DefLang) ->
-    DefDir = filename:join([GtxtDir, "lang", Gettext_App_Name, DefLang]),
-    Fname = filename:join([DefDir, "gettext.po"]),
-    filelib:ensure_dir(Fname),
-    {ok,Fd} = file:open(Fname, [write]),
-    put(fd,Fd).
-
-close_file() ->
-    file:close(get(fd)).
 
 to_list(A) when is_atom(A)    -> atom_to_list(A);
 to_list(I) when is_integer(I) -> integer_to_list(I);
 to_list(B) when is_binary(B)  -> binary_to_list(B);
 to_list(L) when is_list(L)    -> L.
-
-
-

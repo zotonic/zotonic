@@ -33,7 +33,8 @@
     reindex/1,
     translations/1,
     find/3,
-    find_all/3
+    find_all/3,
+    all/2
 ]).
 
 -record(state, {context, scomps=[], actions=[], validators=[], models=[], templates=[], lib=[], services=[]}).
@@ -72,6 +73,10 @@ find(What, Name, Context) ->
 %% @spec find_all(What, Name, Context) -> list()
 find_all(What, Name, Context) ->
     gen_server:call(Context#context.module_indexer, {find_all, What, Name}).
+
+%% @doc Return a list of all templates, scomps etc per module
+all(What, Context) ->
+    scan_all(What, Context).
 
 
 %%====================================================================
@@ -233,15 +238,24 @@ scan1(What, Context) ->
     end,
     lists:foldr(FlattenFun, [], Sorted).
 
-subdir(scomp)     -> { "scomps",     "scomp_",     ".erl" };
-subdir(action)    -> { "actions",    "action_",    ".erl" };
-subdir(validator) -> { "validators", "validator_", ".erl" };
-subdir(model)     -> { "models",     "m_",         ".erl" };
-subdir(service)   -> { "services",   "service_",   ".erl" }.
+subdir(translation)-> { "translations","",           ".po" };
+subdir(template)   -> { "templates",   "",           ".tpl" };
+subdir(lib)        -> { "lib",         "",           "" };
+subdir(scomp)      -> { "scomps",      "scomp_",     ".erl" };
+subdir(action)     -> { "actions",     "action_",    ".erl" };
+subdir(validator)  -> { "validators",  "validator_", ".erl" };
+subdir(model)      -> { "models",      "m_",         ".erl" };
+subdir(service)    -> { "services",    "service_",   ".erl" }.
 
 file2index(_, {NoPrefixExt, File}) ->
     ModuleName = list_to_atom(filename:basename(File, ".erl")),
     {list_to_atom(NoPrefixExt), ModuleName}.
+
+%% @doc Find all files, for the all/2 function.
+scan_all(What, Context) ->
+    {Subdir, Prefix, Extension} = subdir(What),
+    Scan = scan_subdir(Subdir, Prefix, Extension, Context), 
+    z_module_sup:prio_sort(Scan).
 
 
 %% @doc Scan the whole subdir hierarchy for files, used for templates and lib folders.
