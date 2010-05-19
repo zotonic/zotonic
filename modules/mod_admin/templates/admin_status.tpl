@@ -30,6 +30,8 @@
 
             </div>
 
+			{% all include "_admin_status.tpl" %}
+
 		</div>
 		
 		<hr />
