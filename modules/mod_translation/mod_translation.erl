@@ -42,6 +42,14 @@ event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
             z_render:growl("Started building the .po templates. This may take a while.", Context);
         false ->
             z_render:growl_error("Sorry, you don't have permission to scan for translations.", Context)
+    end;
+event({postback, translation_reload, _TriggerId, _TargetId}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            spawn(fun() -> z_trans_server:load_translations(Context) end),
+            z_render:growl("Reloading all .po template in the background.", Context);
+        false ->
+            z_render:growl_error("Sorry, you don't have permission to reload translations.", Context)
     end.
 
 % @doc Generate all .po templates for the given site
