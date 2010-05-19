@@ -28,7 +28,7 @@
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
--export([event/2]).
+-export([event/2, generate/1]).
 
 -include("zotonic.hrl").
 
@@ -38,11 +38,17 @@
 event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            spawn(fun() -> translation_po:generate(translation_scan:scan(Context)) end),
+            spawn(fun() -> generate(Context) end),
             z_render:growl("Started building the .po templates. This may take a while.", Context);
         false ->
             z_render:growl_error("Sorry, you don't have permission to scan for translations.", Context)
     end.
+
+% @doc Generate all .po templates for the given site
+generate(#context{} = Context) ->
+    translation_po:generate(translation_scan:scan(Context));
+generate(Host) when is_atom(Host) ->
+    translation_po:generate(translation_scan:scan(z_context:new(Host))).
 
 
 %%====================================================================
