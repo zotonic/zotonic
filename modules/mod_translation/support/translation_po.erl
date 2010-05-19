@@ -24,8 +24,6 @@
 
 -include_lib("zotonic.hrl").
 
--define(PODIR, "translations.template").
-
 
 %% @doc Take the list of found labels per module and generate all po files for those labels in the module directories.
 generate(ModLabs) ->
@@ -34,7 +32,7 @@ generate(ModLabs) ->
 generate1([]) ->
     ok;
 generate1([{_Module, ModDir, Labels}|ModLabs]) ->
-    Dir = filename:join([ModDir, ?PODIR]),
+    Dir = filename:join([ModDir, "translations", "template"]),
     case filelib:ensure_dir(filename:join([Dir, "empty"])) of
         ok ->
             delete_po_files(Dir),
