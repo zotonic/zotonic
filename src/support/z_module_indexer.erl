@@ -200,7 +200,12 @@ translations1(Context) ->
     [{M,lang_to_atom(X)} || {M,X} <- z_module_sup:prio_sort(scan_subdir("translations", "", ".po", Context))].
 
     lang_to_atom({ModDir,LangFiles}) -> 
-        {ModDir, [{list_to_atom(Lang), File} || {Lang,File} <- LangFiles]}.
+        {ModDir, [{list_to_atom(extract_lang(Lang)), File} || {Lang,File} <- LangFiles]}.
+
+    extract_lang(Basename) ->
+        [Lang|_] = string:tokens(Basename, "."),
+        Lang.
+
 
 %% @doc Find a scomp etc in a lookup list
 lookup(Name, List) ->
