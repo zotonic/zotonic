@@ -56,8 +56,10 @@
 		{% block banner %}{% endblock %}
 		
 		<section id="content-area" class="clear clearfix">
+		{% block content_area %}
 			{% block content %}{% endblock %}
 			{% block sidebar %}{% endblock %}
+		{% endblock %}
 		</section>
 
 		<div class="push"><!-- push down --></div>
