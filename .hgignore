@@ -10,6 +10,8 @@ priv/sites/default/files/*
 priv/sites/*/config
 *.orig
 zotonic.tmproj
+.DS_Store
+*.beam
 *.o
 *.lo
 *.la
