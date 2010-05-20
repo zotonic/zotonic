@@ -45,7 +45,7 @@ generate1([{_Module, ModDir, Labels}|ModLabs]) ->
 
 %% Delete all existing po files in a directory
 delete_po_files(Dir) ->
-    Files = filelib:wildcard(filename:join(Dir, "*.po")),
+    Files = filelib:wildcard(filename:join(Dir, "*.po")) ++ filelib:wildcard(filename:join(Dir, "*.pot")),
     [ file:delete(F) || F <- Files ].
 
 %% Generate po files for all languages found in the labels.
@@ -70,7 +70,7 @@ extract_languages([{_Text, Args, _Pos}|Labels], Acc) ->
 
 
 generate_po_file(Lang, Dir, Labels) ->
-    Filename = filename:join([Dir, atom_to_list(Lang) ++ ".po"]),
+    Filename = filename:join([Dir, atom_to_list(Lang) ++ case Lang of en -> ".pot"; _ -> ".po" end]),
     PoLabels = extract_labels(Lang, Labels, []),
     z_gettext_compile:generate(Filename, lists:sort(PoLabels)).
 
