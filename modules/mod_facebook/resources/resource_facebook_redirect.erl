@@ -114,13 +114,13 @@ fetch_user_data(AccessToken) ->
 %% @doc Check if the user exists, if not then hand over control to the auth_signup resource.
 logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
     Props = [
-        {title, proplists:get_value(name, FacebookProps)},
-        {name_first, proplists:get_value(first_name, FacebookProps)},
-        {name_surname, proplists:get_value(last_name, FacebookProps)},
-        {website, proplists:get_value(link, FacebookProps)},
-        {email, proplists:get_value(email, FacebookProps)}
+        {title, unicode:characters_to_binary(proplists:get_value(name, FacebookProps))},
+        {name_first, unicode:characters_to_binary(proplists:get_value(first_name, FacebookProps))},
+        {name_surname, unicode:characters_to_binary(proplists:get_value(last_name, FacebookProps))},
+        {website, unicode:characters_to_binary(proplists:get_value(link, FacebookProps))},
+        {email, unicode:characters_to_binary(proplists:get_value(email, FacebookProps))}
     ],
-    UID = proplists:get_value(id, FacebookProps),
+    UID = unicode:characters_to_binary(proplists:get_value(id, FacebookProps)),
     case m_identity:lookup_by_type_and_key("facebook", UID, Context) of
         undefined ->
             % Register the Facebook identities as verified
