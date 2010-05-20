@@ -88,7 +88,7 @@
 		element.append(maskDiv);
 		
 		if ($(element).progressbar != undefined) {
-			var maskProgressDiv = $('<div class="loadmask-progress" style="display:block;"></div>');
+			var maskProgressDiv = $('<div class="loadmask-progress" style="display:none;"></div>');
 			element.append(maskProgressDiv);
 			element.find(".loadmask-progress").progressbar({value: 0});
 		}
@@ -113,7 +113,6 @@
 	};
 	
 	$.unmaskElement = function(element){
-		return;
 		//if this element has delayed mask scheduled then remove it
 		if (element.data("_mask_timeout") !== undefined) {
 			clearTimeout(element.data("_mask_timeout"));
