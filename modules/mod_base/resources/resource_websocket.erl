@@ -168,7 +168,12 @@ handle_message(Msg, Context) ->
             Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
     end,
     Script = iolist_to_binary(z_script:get_script(EventContext)),
-    z_session_page:add_script(Script, EventContext).
+    % Remove the busy mask from the element that triggered this event.
+    Script1 = case TriggerId1 of 
+        undefined -> Script;
+        FormId -> [Script, " z_unmask('",z_utils:js_escape(FormId),"');" ]
+    end,
+    z_session_page:add_script(Script1, EventContext).
     
 
 %% @doc Start the loop passing data (scripts) from the page to the browser
