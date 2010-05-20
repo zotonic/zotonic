@@ -56,7 +56,7 @@ websocket_start(ReqData, Context) ->
     Context1 = z_context:ensure_all(ContextReq),
     Socket = webmachine_request:socket(ReqData),
     Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = z_dispatcher:url_for(websocket, Context1),
+    WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}], Context1),
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
             "Upgrade: WebSocket", 13, 10,
             "Connection: Upgrade", 13, 10,

@@ -269,7 +269,7 @@ function z_comet()
 
 function z_websocket_start(hostname)
 {
-	z_ws = new WebSocket("ws://"+hostname+"/websocket");
+	z_ws = new WebSocket("ws://"+hostname+"/websocket?z_pageid="+z_pageid);
 
 	z_ws.onopen = function() { z_ws_opened = true; };
 	z_ws.onerror = function() {};
