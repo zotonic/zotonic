@@ -131,7 +131,7 @@ get(PredId, Context) when is_integer(PredId) ->
 		{ok, Name} -> get(Name, Context)
     end;
 get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
-    get(list_to_atom(string:to_lower(Pred)), Context);
+    get(list_to_atom(z_string:to_lower(Pred)), Context);
 get(Pred, Context) ->
     case z_depcache:get(predicate, Pred, Context) of
         {ok, undefined} ->

@@ -122,7 +122,7 @@ archive_filename(Filename, Context) ->
 safe_filename([$.|Rest]) ->
     safe_filename([$_|Rest]);
 safe_filename(Filename) ->
-    safe_filename(string:to_lower(Filename), []).
+    safe_filename(z_string:to_name(Filename), []).
 safe_filename([], Acc) ->
     lists:reverse(Acc);
 safe_filename([C|Rest], Acc) 
