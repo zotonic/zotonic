@@ -406,10 +406,11 @@ has_session(_) ->
 
 %% @doc Ensure session and page session and fetch&parse the query string
 ensure_all(Context) ->
-    Context1 = ensure_session(Context),
-    Context2 = ensure_visitor(Context1),
-    Context3 = ensure_page_session(Context2),
-    ensure_qs(Context3).
+    ensure_page_session(
+        ensure_visitor(
+            ensure_session(
+                ensure_qs(Context)))).
+
 
 %% @doc Ensure that we have a session, start a new session process when needed
 ensure_session(Context) ->
