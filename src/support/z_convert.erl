@@ -48,7 +48,7 @@
 
 %%% CONVERSION %%%
 
-clean_lower(L) -> string:strip(string:to_lower(to_list(L))).
+clean_lower(L) -> string:strip(z_string:to_lower(to_list(L))).
 
 to_list(undefined) -> [];
 to_list(<<>>) -> [];

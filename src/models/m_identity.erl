@@ -117,11 +117,12 @@ delete_username(Id, Context) when is_integer(Id), Id /= 1 ->
 set_username(Id, Username, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
+            Username1 = z_string:to_lower(Username),
             F = fun(Ctx) ->
-                UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username], Ctx),
+                UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username1], Ctx),
                 case UniqueTest of
                     0 ->
-                        case z_db:q("update identity set key = $2 where rsc_id = $1 and type = 'username_pw'", [Id, Username], Ctx) of
+                        case z_db:q("update identity set key = $2 where rsc_id = $1 and type = 'username_pw'", [Id, Username1], Ctx) of
                             1 -> ok;
                             0 -> {error, enoent};
                             {error, _} -> {error, eexist} % assume duplicate key error?
@@ -141,7 +142,7 @@ set_username(Id, Username, Context) ->
 set_username_pw(Id, Username, Password, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
-            Username1 = string:to_lower(Username),
+            Username1 = z_string:to_lower(Username),
             Hash = hash(Password),
             F = fun(Ctx) ->
                 Rupd = z_db:q("
@@ -153,7 +154,7 @@ set_username_pw(Id, Username, Password, Context) ->
                             where type = 'username_pw' and rsc_id = $1", [Id, Username1, Hash], Ctx),
                 case Rupd of
                     0 ->
-                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username], Ctx),
+                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username1], Ctx),
                         case UniqueTest of
                             0 ->
                                 z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx);
@@ -176,7 +177,7 @@ set_username_pw(Id, Username, Password, Context) ->
 %% @doc Return the rsc_id with the given username/password.  When succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_username_pw(Username, Password, Context) -> {ok, Id} | {error, Reason}
 check_username_pw(Username, Password, Context) ->
-    Username1 = string:to_lower(Username),
+    Username1 = z_string:to_lower(Username),
     Row = z_db:q_row("select id, rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
     case Row of
         undefined ->
