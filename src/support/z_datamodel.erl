@@ -120,63 +120,62 @@ manage_predicate(Module, {Name, Props, ValidFor}, Context) ->
     end.
 
 
-
 manage_resource(Module, {Name, Category, Props0}, Context) ->
+    case m_category:name_to_id(Category, Context) of
+        {ok, CatId} -> 
+            Props = map_props(Props0, Context),
+            case m_rsc:name_to_id(Name, Context) of
+                {ok, Id} ->
+                    case m_rsc:p(Id, installed_by, Context) of
+                        Module ->
+                            {ok};
+                        _ ->
+                            %% Resource exists but is not installed by us!
+                            Msg = io_lib:format("manage_resource: resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
+                            ?DEBUG(lists:flatten(Msg)),
+                            {ok}
+                    end;
+                {error, {unknown_rsc, _}} ->
+                    %% new resource, or old resource
 
-    CatId = case m_category:name_to_id(Category, Context) of
-                {ok, CId} -> CId;
-                _ -> throw({error, {nonexisting_category, Category}})
-            end,
-
-    Props = map_props(Props0, Context),
-
-    case m_rsc:name_to_id(Name, Context) of
-        {ok, Id} ->
-            case m_rsc:p(Id, installed_by, Context) of
-                Module ->
-                    {ok};
-                _ ->
-                    %% Resource exists but is not installed by us!
-                    Msg = io_lib:format("manage_resource: resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
-                    ?DEBUG(lists:flatten(Msg)),
-                    {ok}
-            end;
-        {error, {unknown_rsc, _}} ->
-            %% new resource, or old resource
-
-            %% Check if name was previously inserted.
-            ManagedNames = case m_config:get(Module, datamodel, Context) of
-                               undefined ->
-                                   [];
-                               Cfg ->
-                                   case proplists:get_value(managed_resources, Cfg) of
+                    %% Check if name was previously inserted.
+                    ManagedNames = case m_config:get(Module, datamodel, Context) of
                                        undefined ->
                                            [];
-                                       N -> N
-                                   end
-                           end,
+                                       Cfg ->
+                                           case proplists:get_value(managed_resources, Cfg) of
+                                               undefined ->
+                                                   [];
+                                               N -> N
+                                           end
+                                   end,
 
-            {Result, NewNames} = case lists:member(Name, ManagedNames) of
-                                     false ->
-                                         Props1 = [{name, Name}, {category_id, CatId},
-                                                   {installed_by, Module}, {managed_props, Props}] ++ Props,
-                                         Props2 = case proplists:get_value(is_published, Props1) of
-                                                      undefined -> [{is_published, true} | Props1];
-                                                      _ -> Props1
-                                                  end,
-                                         Props3 = case proplists:get_value(visible_for, Props2) of
-                                                      undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
-                                                      _ -> Props2
-                                                  end,
-                                         ?DEBUG("New resource"),
-                                         ?DEBUG(Props2),
-                                         {m_rsc:insert(Props3, Context), [Name | ManagedNames ]};
-                                     true ->
-                                         ?DEBUG("resource was deleted."),
-                                         {{ok}, ManagedNames}
-                                 end,
-            m_config:set_prop(Module, datamodel, managed_resources, NewNames, Context),
-            Result
+                    {Result, NewNames} = case lists:member(Name, ManagedNames) of
+                                             false ->
+                                                 Props1 = [{name, Name}, {category_id, CatId},
+                                                           {installed_by, Module}, {managed_props, Props}] ++ Props,
+                                                 Props2 = case proplists:get_value(is_published, Props1) of
+                                                              undefined -> [{is_published, true} | Props1];
+                                                              _ -> Props1
+                                                          end,
+                                                 Props3 = case proplists:get_value(visible_for, Props2) of
+                                                              undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
+                                                              _ -> Props2
+                                                          end,
+                                                 ?DEBUG("New resource"),
+                                                 ?DEBUG(Props2),
+                                                 {m_rsc:insert(Props3, Context), [Name | ManagedNames ]};
+                                             true ->
+                                                 ?DEBUG("resource was deleted."),
+                                                 {{ok}, ManagedNames}
+                                         end,
+                    m_config:set_prop(Module, datamodel, managed_resources, NewNames, Context),
+                    Result
+            end;
+        {error, _} ->
+            Msg = io_lib:format("manage_resource: resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
+            ?DEBUG(lists:flatten(Msg)),
+            {ok}
     end.
 
 
