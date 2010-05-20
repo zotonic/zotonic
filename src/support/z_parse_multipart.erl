@@ -63,7 +63,7 @@ recv_parse(Context) ->
 
 
 %% @doc Report progress back to the page.
-progress(Percentage, _ContentLength, _ReceivedLength, Context) ->
+progress(Percentage, ContentLength, _ReceivedLength, Context) when ContentLength > ?CHUNKSIZE*5 ->
 	case {	z_convert:to_bool(z_context:get_q("z_comet", Context)),
 			z_context:get_q("z_pageid", Context), 
 			z_context:get_q("z_trigger_id", Context)} of
@@ -73,7 +73,9 @@ progress(Percentage, _ContentLength, _ReceivedLength, Context) ->
 						++z_utils:js_escape(TriggerId)++"',"
 						++integer_to_list(Percentage)++");", ContextEnsured);
 		_ -> nop
-	end.
+	end;
+progress(_, _, _, _) ->
+    nop.
 	
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
