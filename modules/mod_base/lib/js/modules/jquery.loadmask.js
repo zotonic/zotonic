@@ -45,6 +45,15 @@
 		return this.hasClass("masked");
 	};
 
+	/**
+	 * Show or update the upload progressbar
+	 */
+	$.fn.maskProgress = function(value){
+		$(this).each(function() {
+			$.maskProgress($(this), value);
+		});
+	};
+
 	$.maskElement = function(element, label){
 	
 		//if this element has delayed mask scheduled then remove it and display the new one
@@ -78,6 +87,11 @@
 		
 		element.append(maskDiv);
 		
+		if ($(element).progressbar != undefined) {
+			var maskProgressDiv = $('<div class="loadmask-progress" style="display:block;"></div>');
+			element.append(maskProgressDiv);
+			element.find(".loadmask-progress").progressbar({value: 0});
+		}
 		if(label !== undefined) {
 			var maskMsgDiv = $('<div class="loadmask-msg" style="display:none;"></div>');
 			maskMsgDiv.append('<div>' + label + '</div>');
@@ -89,17 +103,24 @@
 			
 			maskMsgDiv.show();
 		}
-		
+	};
+	
+	$.maskProgress = function(element, value){
+		if ($(element).progressbar != undefined) {
+			element.find(".loadmask-progress").show().progressbar('option', 'value', value);
+			element.find(".loadmask-msg").hide();
+		}
 	};
 	
 	$.unmaskElement = function(element){
+		return;
 		//if this element has delayed mask scheduled then remove it
 		if (element.data("_mask_timeout") !== undefined) {
 			clearTimeout(element.data("_mask_timeout"));
 			element.removeData("_mask_timeout");
 		}
 		
-		element.find(".loadmask-msg,.loadmask").remove();
+		element.find(".loadmask-msg,.loadmask-progress,.loadmask").remove();
 		element.removeClass("masked");
 		element.removeClass("masked-relative");
 		element.find("select").removeClass("masked-hidden");

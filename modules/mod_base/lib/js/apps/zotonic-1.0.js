@@ -204,6 +204,20 @@ function z_unmask(id)
 }
 
 
+function z_progress(id, value)
+{
+	if (id)
+	{
+    	var trigger = $('#'+id).get(0);
+	
+    	if (trigger.nodeName.toLowerCase() == 'form') 
+    	{
+        	try { $(trigger).maskProgress(value); } catch (e) {};
+    	}
+		
+	}
+}
+
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
@@ -519,7 +533,8 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 	a.push({name: "postback", value: postback});
 	a.push({name: "z_trigger_id", value: trigger_id});
 	a.push({name: "z_pageid", value: z_pageid});
-
+	a.push({name: "z_comet", value: z_comet_is_running || z_ws});
+	
 	var $form = this;
 	var options = {
 		url:  '/postback?' + $.param(a),

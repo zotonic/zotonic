@@ -26,6 +26,21 @@
     font:normal 11px tahoma, arial, helvetica, sans-serif;
     cursor:wait;
 }
+.loadmask-progress {
+	position: absolute;
+    top: 40%;
+    left: 25%;
+	width: 50%;
+	height: 12px;
+	z-index: 20002;
+	background-color: white;
+	padding: 1px;
+	border: 1px solid #222;
+}
+.loadmask-progress .ui-progressbar-value {
+	background-color: #222;
+	height: 100%;
+}
 .masked {
     overflow: hidden !important;
     -moz-opacity: 0.6;

@@ -43,7 +43,8 @@
 
 -define(CHUNKSIZE, 4096).
 
--record(mp, {state, boundary, content_length, length, buffer, next_chunk, callback, progress, context}).
+-record(mp, {state, boundary, content_length, length, percentage=0, 
+			 buffer, next_chunk, callback, progress, context}).
 
 
 %% @doc Receive and parse the form data in the request body.  
@@ -51,7 +52,7 @@
 %% @spec recv_parse(Context) -> {form(), NewContext}
 recv_parse(Context) ->
     Callback = fun(N) -> callback(N, #multipart_form{}) end,
-    {_LengthRemaining, _RestData, Form, ContextParsed} = parse_multipart_request(undefined, Callback, Context),
+    {_LengthRemaining, _RestData, Form, ContextParsed} = parse_multipart_request(fun progress/4, Callback, Context),
     if Form#multipart_form.file =/= undefined ->
         % Premature end
         file:close(Form#multipart_form.file);
@@ -60,6 +61,20 @@ recv_parse(Context) ->
     end,
     {Form, ContextParsed}.
 
+
+%% @doc Report progress back to the page.
+progress(Percentage, _ContentLength, _ReceivedLength, Context) ->
+	case {	z_convert:to_bool(z_context:get_q("z_comet", Context)),
+			z_context:get_q("z_pageid", Context), 
+			z_context:get_q("z_trigger_id", Context)} of
+		{true, PageId, TriggerId} when PageId /= undefined; TriggerId /= undefined ->
+			ContextEnsured = z_context:ensure_all(Context),
+			z_session_page:add_script("z_progress('"
+						++z_utils:js_escape(TriggerId)++"',"
+						++integer_to_list(Percentage)++");", ContextEnsured);
+		_ -> nop
+	end.
+	
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
 %% @spec callback(fun(), form()) -> fun() | form()
@@ -136,10 +151,9 @@ parse_multipart_request(ProgressFunction, Callback, Context) ->
     BS = size(Boundary),
     {{Chunk, Next}, ReqData1} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),
     Context1 = z_context:set_reqdata(ReqData1, Context),
-    Length1 = Length - size(Chunk),
     <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> = Chunk,
     feed_mp(headers, #mp{boundary=Prefix,
-                         length=Length1,
+                         length=size(Chunk),
                          content_length=Length,
                          buffer=Rest,
                          callback=Callback,
@@ -185,15 +199,31 @@ feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
 
 %% @doc Read more data for the feed_mp functions.
 %% @spec read_more(mp()) -> mp()
-%% @todo Call the progress function with the newly received data sizes
 read_more(State=#mp{next_chunk=done, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
 read_more(State=#mp{next_chunk=done} = State) ->
     throw({error, wrong_content_length});
-read_more(State=#mp{length=Length, buffer=Buffer, next_chunk=Next}) ->
+read_more(State=#mp{length=Length, content_length=ContentLength, 
+				percentage=Percentage,
+				buffer=Buffer, next_chunk=Next, context=Context,
+				progress=ProgressFunction}) ->
     {Data, Next1} = Next(),
     Buffer1 = <<Buffer/binary, Data/binary>>,
-    State#mp{length=Length - size(Data), buffer=Buffer1, next_chunk=Next1}.
+	Length1 = Length + size(Data),
+	NewPercentage = case ContentLength of
+						0 -> 100;
+						_ -> (Length1 * 100) div ContentLength
+					end,
+	case NewPercentage > Percentage of
+		true ->
+			case ProgressFunction of
+				undefined -> nop;
+				F -> F(NewPercentage, ContentLength, Length1, Context)
+			end;
+		_ ->
+			nop
+	end,
+    State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage}.
 
 
 %% @doc Parse the headers of a part in the form data

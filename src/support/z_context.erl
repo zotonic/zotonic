@@ -449,17 +449,17 @@ ensure_qs(Context) ->
             Context;
         none ->
             ReqData  = Context#context.wm_reqdata,
+            Query    = wrq:req_qs(ReqData),
             PathDict = wrq:path_info(ReqData),
             PathArgs = lists:map(
                             fun ({T,V}) when is_atom(V) -> {atom_to_list(T),atom_to_list(V)};
                                 ({T,V})                 -> {atom_to_list(T),mochiweb_util:unquote(V)}
                             end,
                             dict:to_list(PathDict)),
-            {Body, ContextParsed} = parse_form_urlencoded(Context),
-            Query    = wrq:req_qs(ReqData),
-            Combined = PathArgs ++ Body ++ Query,
-            QProps = z_utils:prop_replace('q', Combined, ContextParsed#context.props),
-            ContextParsed#context{props=QProps}
+            QPropsUrl = z_utils:prop_replace('q', PathArgs++Query, Context#context.props),
+            {Body, ContextParsed} = parse_form_urlencoded(Context#context{props=QPropsUrl}),
+            QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
+            ContextParsed#context{props=QPropsAll}
     end.
 
 
