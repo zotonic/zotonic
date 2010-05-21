@@ -25,5 +25,5 @@
 -include("zotonic.hrl").
 
 vary(_Params, _Context) -> nocache.
-render(_Params, _Vars, _Context) ->
-    {ok, {script}}.
+render(Params, _Vars, _Context) ->
+    {ok, {script, Params}}.
