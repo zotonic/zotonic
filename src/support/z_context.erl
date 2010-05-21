@@ -321,16 +321,8 @@ output1([], Context, Acc) ->
 output1([#context{}=C|Rest], Context, Acc) ->
     {Rendered, Context1} = output1(C#context.render, Context, []),
     output1(Rest, merge_scripts(C, Context1), [Rendered|Acc]);
-output1([{script}|Rest], Context, Acc) ->
-    DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
-    Script = [
-            <<"\n\n<script type='text/javascript'>\n$(function() {\n">>,
-                z_script:get_page_startup_script(Context),
-                z_script:get_script(Context),
-                <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $;,
-            <<"\n});\n</script>\n">>
-           ],
-    output1(Rest, Context, [Script|Acc]);
+output1([{script, Args}|Rest], Context, Acc) ->
+    output1(Rest, Context, [render_script(Args, Context)|Acc]);
 output1([List|Rest], Context, Acc) when is_list(List) ->
     {Rendered, Context1} = output1(List, Context, []),
     output1(Rest, Context1, [Rendered|Acc]);
@@ -338,6 +330,24 @@ output1([undefined|Rest], Context, Acc) ->
     output1(Rest, Context, Acc);
 output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
+    
+    render_script(Args, Context) ->
+        DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
+        Script = case z_convert:to_bool(proplists:get_value(nostartup, Args, false)) of
+            false ->
+                [ z_script:get_page_startup_script(Context),
+                  z_script:get_script(Context),
+                  <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
+            true ->
+                z_script:get_script(Context)
+        end,
+        case proplists:get_value(format, Args, "html") of
+            "html" ->
+                [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
+            "escapejs" ->
+                z_utils:js_escape(Script)
+        end.
+        
 
 %% @spec combine_results(Context1, Context2) -> Context
 %% @doc Merge the scripts and the rendered content of two contexts into Context1
