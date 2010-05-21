@@ -40,6 +40,7 @@
     insert_file/3,
     replace_file/3,
     replace_file/4,
+    replace_file/5,
     insert_url/2,
     insert_url/3,
     replace_url/4,
@@ -185,37 +186,52 @@ replace(Id, Props, Context) ->
 %% @doc Make a new resource for the file, when the file is not in the archive dir then a copy is made in the archive dir
 %% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
 insert_file(File, Context) ->
-    insert_generic([], Context, fun(Id, Props, Ctx) -> replace_file(File, Id, Props, Ctx) end).
+    insert_file(File, [], Context).
 
 insert_file(File, Props, Context) ->
-    insert_generic(Props, Context, fun(Id, Props2, Ctx) -> replace_file(File, Id, Props2, Ctx) end).
+    OriginalFilename = proplists:get_value(original_filename, Props, File),
+    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    insert_file(File, Props, PropsMedia, Context).
+
+insert_file(File, Props, PropsMedia, Context) ->
+    Mime = proplists:get_value(mime, PropsMedia),
+    case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
+        true ->
+            insert_file_mime_ok(File, Props, PropsMedia, Context);
+        false ->
+            {error, file_not_allowed}
+    end.
 
 %% @doc Make a new resource for the file based on a URL.
 %% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
 insert_url(Url, Context) ->
-    insert_generic([], Context, fun(Id, Props, Ctx) -> replace_url(Url, Id, Props, Ctx) end).
-
+    insert_url(Url, [], Context).
 insert_url(Url, Props, Context) ->
-    insert_generic(Props, Context, fun(Id, Props2, Ctx) -> replace_url(Url, Id, Props2, Ctx) end).
+    case download_file(Url) of
+        {ok, File} ->
+            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], Context),
+            file:delete(File),
+            Result;
+        {error, Reason} ->
+            {error, Reason}
+    end.
 
-%% Generic function for shared functionality between insert_file/2,3 and insert_url/2,3
-insert_generic(Props, Context, ReplaceFun) ->
+
+%% Perform the resource management around inserting a file. The ACL is already checked for the mime type.
+%% Runs the final insert inside a transaction so that we can rollback.
+insert_file_mime_ok(File, Props, PropsMedia, Context) ->
     Props1 = case proplists:get_value(category_id, Props, proplists:get_value(category, Props)) of
-        undefined ->
-            [{category, media} | Props];
-        _ ->
-            Props
+        undefined -> [{category, mime_to_category(proplists:get_value(mime, PropsMedia))} | Props];
+        _ -> Props
     end,
     Props2 = case proplists:get_value(is_published, Props1) of
-        undefined ->
-            [{is_published, true} | Props1];
-        _ ->
-            Props1
+        undefined -> [{is_published, true} | Props1];
+        _ -> Props1
     end,
     InsertFun = fun(Ctx) ->
         case m_rsc:insert(Props2, Ctx) of
             {ok, Id} ->
-                ReplaceFun(Id, Props2, Ctx);
+                replace_file_mime_ok(File, Id, Props2, PropsMedia, Ctx);
             Error ->
                 Error
         end
@@ -237,78 +253,75 @@ replace_file(File, RscId, Context) ->
     replace_file(File, RscId, [], Context).
 
 replace_file(File, RscId, Props, Context) ->
-    case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+    OriginalFilename = proplists:get_value(original_filename, Props, File),
+    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    replace_file(File, RscId, Props, PropsMedia, Context).
+
+replace_file(File, RscId, Props, PropsMedia, Context) ->
+    Mime = proplists:get_value(mime, PropsMedia),
+    case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
         true ->
-            OriginalFilename = proplists:get_value(original_filename, Props, File),
-            PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-            Mime = proplists:get_value(mime, PropsMedia),
-            case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
-                true ->
-                    SafeRootName = z_string:to_rootname(OriginalFilename),
-                    SafeFilename = SafeRootName ++ z_media_identify:extension(proplists:get_value(mime, PropsMedia)),
-                    ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
-                    RootName = filename:rootname(filename:basename(ArchiveFile)),
-                    MediumRowProps = [
-                        {id, RscId}, 
-                        {filename, ArchiveFile}, 
-                        {rootname, RootName}, 
-                        {is_deletable_file, not z_media_archive:is_archived(File, Context)}
-                        | PropsMedia
-                    ],
-
-                    %% When the resource is in the media category, then move it to the correct sub-category depending
-                    %% on the mime type of the uploaded file.
-                    case rsc_is_media_cat(RscId, Context) of
-                        true ->
-                            case Mime of
-                                "image/" ++ _ -> m_rsc:update(RscId, [{category, image}], Context);
-                                "video/" ++ _ -> m_rsc:update(RscId, [{category, video}], Context);
-                                "audio/" ++ _ -> m_rsc:update(RscId, [{category, audio}], Context);
-                                _ -> nop
-                            end;
-                        false -> nop
-                    end,
-
-                    F = fun(Ctx) ->
-                        z_db:delete(medium, RscId, Context),
-                        case z_db:insert(medium, MediumRowProps, Ctx) of
-                            {ok, _MediaId} ->
-                                {ok, RscId};
-                            Error ->
-                                Error
-                        end
-                    end,
-
-                    Depicts = depicts(RscId, Context),
-                    {ok, Id} = z_db:transaction(F, Context),
-                    [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
-                    z_depcache:flush(Id, Context),
-                    m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
-                    %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-                    z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
-                    {ok, Id};
-                false ->
-                    {error, file_not_allowed}
-            end;
+            replace_file_mime_ok(File, RscId, Props, PropsMedia, Context);
         false ->
-            {error, eacces}
+            {error, file_not_allowed}
     end.
+
+    %% @doc Replace the file, no mime check needed.
+    replace_file_mime_ok(File, RscId, Props, PropsMedia, Context) ->
+        ?DEBUG({replace_file_mime_ok, File, RscId, Props, PropsMedia}),
+        case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+            true ->
+                Mime = proplists:get_value(mime, PropsMedia),
+                SafeRootName = z_string:to_rootname(proplists:get_value(original_filename, Props, File)),
+                SafeFilename = SafeRootName ++ z_media_identify:extension(Mime),
+                ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
+                RootName = filename:rootname(filename:basename(ArchiveFile)),
+                MediumRowProps = [
+                    {id, RscId}, 
+                    {filename, ArchiveFile}, 
+                    {rootname, RootName}, 
+                    {is_deletable_file, not z_media_archive:is_archived(File, Context)}
+                    | PropsMedia
+                ],
+
+                %% When the resource is in the media category, then move it to the correct sub-category depending
+                %% on the mime type of the uploaded file.
+                case rsc_is_media_cat(RscId, Context) of
+                    true -> m_rsc:update(RscId, [{category, mime_to_category(Mime)}], Context);
+                    false -> m_rsc:touch(RscId, Context)
+                end,
+
+                F = fun(Ctx) ->
+                    z_db:delete(medium, RscId, Context),
+                    case z_db:insert(medium, MediumRowProps, Ctx) of
+                        {ok, _MediaId} ->
+                            {ok, RscId};
+                        Error ->
+                            Error
+                    end
+                end,
+
+                Depicts = depicts(RscId, Context),
+                {ok, Id} = z_db:transaction(F, Context),
+                [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+                z_depcache:flush(Id, Context),
+                m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+                %% Pass the medium record along in the notification; this also fills the depcache (side effect).
+                z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
+                {ok, Id};
+            false ->
+                {error, eacces}
+        end.
 
 
 replace_url(Url, RscId, Props, Context) ->
     case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
-            Url1 = z_convert:to_list(Url),
-            Props1 = [{original_filename, filename:basename(Url1)} | Props],
-            File = z_utils:tempfile(),
-            case http:request(get, 
-                              {Url1, []},
-                              [],
-                              [{stream, File}]) of
-                {ok, saved_to_file} ->
-                    {ok, RscId} = replace_file(File, RscId, Props1, Context),
-                    ok = file:delete(File),
-                    {ok, RscId};
+            case download_file(Url) of
+                {ok, File} ->
+                    Result = replace_file(File, RscId, [{original_filename, filename:basename(Url)}|Props], Context),
+                    file:delete(File),
+                    Result;
                 {error, E} ->
                     {error, E}
             end;
@@ -317,15 +330,37 @@ replace_url(Url, RscId, Props, Context) ->
     end.
 
 
-    rsc_is_media_cat(Id, Context) ->
-        case z_db:q1("select c.name from rsc c join rsc r on r.category_id = c.id where r.id = $1", [Id], Context) of
-            <<"media">> -> true;
-            <<"image">> -> true;
-            <<"audio">> -> true;
-            <<"video">> -> true;
-            _ -> false
-        end.
+rsc_is_media_cat(Id, Context) ->
+    case z_db:q1("select c.name from rsc c join rsc r on r.category_id = c.id where r.id = $1", [Id], Context) of
+        <<"media">> -> true;
+        <<"image">> -> true;
+        <<"audio">> -> true;
+        <<"video">> -> true;
+        _ -> false
+    end.
 
+mime_to_category(Mime) ->
+    case Mime of
+        "image/" ++ _ -> image;
+        "video/" ++ _ -> video;
+        "audio/" ++ _ -> audio;
+        _ -> media
+    end.
+
+
+%% @doc Download a file from a http url.
+download_file(Url) ->
+    File = z_utils:tempfile(),
+    case http:request(get, 
+                      {z_convert:to_list(Url), []},
+                      [],
+                      [{stream, File}]) of
+        {ok, saved_to_file} ->
+            {ok, File};
+        {error, E} ->
+            file:delete(File),
+            {error, E}
+    end.
 
 
 %% @doc Fetch the medium information of the file, if they are not set in the Props
