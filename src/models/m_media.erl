@@ -268,7 +268,6 @@ replace_file(File, RscId, Props, PropsMedia, Context) ->
 
     %% @doc Replace the file, no mime check needed.
     replace_file_mime_ok(File, RscId, Props, PropsMedia, Context) ->
-        ?DEBUG({replace_file_mime_ok, File, RscId, Props, PropsMedia}),
         case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
             true ->
                 Mime = proplists:get_value(mime, PropsMedia),
