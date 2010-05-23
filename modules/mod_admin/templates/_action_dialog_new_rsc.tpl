@@ -4,20 +4,20 @@
 		$('.do_fieldreplace').fieldreplace();
 	});
 </script>
-<p>Please fill in the title {% if not nocatselect %}and the category of the new page.{% else %}of the new {{ catname }}.{% endif %} </p>
+<p>{_ Please fill in the title _} {% if not nocatselect %}{_ and the category of the new page._}{% else %}{_ of the new _}{{ catname }}.{% endif %} </p>
 
 {% wire id=#form type="submit" postback="new_page" delegate=delegate %}
 <form id="{{ #form }}" method="POST" action="postback">
 
 	<div class="new-rsc-wrapper">
 		<div class="form-item clearfix">
-			<label for="new_rsc_title">Page title</label>
+			<label for="new_rsc_title">{_ Page title _}</label>
 			<input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ title|escape }}" />
 			{% validate id="new_rsc_title" type={presence} %}
 		</div>
 
 		<div class="form-item clearfix">
-			<label for="{{ #category }}">Category</label>
+			<label for="{{ #category }}">{_ Category _}</label>
 			{% if cat and nocatselect %}
 				<strong>{{ m.rsc[cat].title }}</strong>
 				<input type="hidden" name="category_id" value="{{ cat }}"/>
@@ -36,12 +36,12 @@
 
 		<div class="form-item clearfix">
 			<input type="checkbox" id="{{ #published }}" name="is_published" value="1" {% if subject_id %}checked="checked"{% endif %} />
-			<label for="{{ #published }}" class="left">Published</label>
+			<label for="{{ #published }}" class="left">{_ Published _}</label>
 		</div>
 		
 		<div class="form-item clearfix">
-			<button type="submit">Make {{catname}}</button>
-			{% button action={dialog_close} text="Cancel" %}
+			<button type="submit">{_ Make _}{{catname}}</button>
+			{% button action={dialog_close} text=_"Cancel" %}
 		</div>
 		
 		<input type="hidden" name="subject_id" value="{{ subject_id }}" />

@@ -1,15 +1,15 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Logon {% endblock %}
+{% block title %}{_ Logon _}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
 		<div class="clearfix">
 			<div class="zp-33">&nbsp;</div>
 			<div class="zp-33 block">
-				<h2>Logon to {{ m.config.site.title.value|default:"Zotonic" }}</h2>
+				<h2>{_ Logon to _}{{ m.config.site.title.value|default:"Zotonic" }}</h2>
 
-				<p>To administer your system you need to logon.</p>
+				<p>{_ To administer your system you need to logon. _}</p>
 
 				{% include "_logon.tpl" %}
 

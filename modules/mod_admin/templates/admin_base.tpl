@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title>{% block title %}Admin{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
+	<title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
 
 	<meta name="author" content="Tim Benniks" />
 	
@@ -55,14 +55,14 @@
 		{% block navigation %}
 		
 			<ul id="navigation" class="zp-10" style="margin: 0 10px 0 0;">
-				<li><a href="/admin/" {% ifequal selected "dashboard" %}class="current"{% endifequal %}>Dashboard</a></li>
-				<li><a href="/admin/overview/" {% ifequal selected "overview" %}class="current"{% endifequal %}>Pages</a></li>
-				<li><a href="{% url admin_media %}" {% ifequal selected "media" %}class="current"{% endifequal %}>Media</a></li>
+				<li><a href="/admin/" {% ifequal selected "dashboard" %}class="current"{% endifequal %}>{_ Dashboard _}</a></li>
+				<li><a href="/admin/overview/" {% ifequal selected "overview" %}class="current"{% endifequal %}>{_ Pages _}</a></li>
+				<li><a href="{% url admin_media %}" {% ifequal selected "media" %}class="current"{% endifequal %}>{_ Media _}</a></li>
 			
 				{% all include "_admin_menu_module.tpl" %}
 
 				{% if m.acl.is_admin %}
-					<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>System</a></li>
+					<li><a href="{% url admin_status %}" {% ifequal selected "status" %}class="current"{% endifequal %}>{_ System _}</a></li>
 				{% endif %}
 				<li>{% include "_logon_off.tpl" %}</li>
 			</ul>

@@ -1,32 +1,32 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Referrers of {{ m.rsc[q.id].title }} {% endblock %}
+{% block title %}{_ Referrers of {{ m.rsc[q.id].title }} _}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Referrers to “{{ m.rsc[q.id].title }}”</h2>
+			<h2>{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
 			
 		{% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
 
 			{% ifequal result.total 0 %}
-				<p>There are no pages with a connection to the page “{{ m.rsc[q.id].title }}”</p>
+				<p>{_ There are no pages with a connection to the page _} “{{ m.rsc[q.id].title }}”</p>
 			{% else %}
-				<p>The following {% ifequal result.total 1 %}page has{% else %}{{ result.total }} pages have{% endifequal %} a connection to the page “{{ m.rsc[q.id].title }}”.</p>
+				<p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %} {_ a connection to the page _} “{{ m.rsc[q.id].title }}”.</p>
 			{% endifequal %}
 
 			{% pager result=result dispatch="admin_referrers" id=q.id qargs %}
 			
-			<h3 class="above-list">Referrers</h3>
+			<h3 class="above-list">{_ Referrers _}</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">
-					<span class="zp-30">Title</span>
-					<span class="zp-15">Predicate</span>
-					<span class="zp-15">Category</span>
-					<span class="zp-15">Modified on</span>
-					<span class="zp-15">Modified by</span>
-					<span class="zp-10">Options</span>
+					<span class="zp-30">{_ Title _}</span>
+					<span class="zp-15">{_ Predicate _}</span>
+					<span class="zp-15">{_ Category _}</span>
+					<span class="zp-15">{_ Modified on _}</span>
+					<span class="zp-15">{_ Modified by _}</span>
+					<span class="zp-10">{_ Options _}</span>
 				</li>
 			{% for id, pred_id in result %}
 				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
@@ -37,14 +37,14 @@
 						<span class="zp-15">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
 						<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
 						<span class="zp-10">
-							{% button text="delete" disabled=m.rsc[id].is_protected action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
-							{% button text="edit &raquo;" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							{% button text=_"delete" disabled=m.rsc[id].is_protected action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
+							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						</span>
 					</a>
 				</li>
 			{% empty %}
 				<li>
-					No referrers found
+					{_ No referrers found. _}
 				</li>
 			{% endfor %}
 			</ul>
