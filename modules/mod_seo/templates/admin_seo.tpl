@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Admin SEO {% endblock %}
+{% block title %}{_ Search Engine Optimization _}{% endblock %}
 
 {% block content %}
 
@@ -9,20 +9,20 @@
 
 	{% wire id="admin-seo" type="submit" postback="admin_seo" %}
 	<form name="admin-seo" id="admin-seo" method="POST" action="postback">
-		<h2>Search Engine Optimization</h2>
-		<p>Here you find settings to optimize the indexing of your site by search engines.</p>
+		<h2>{_ Search Engine Optimization _}</h2>
+		<p>{_ Here you find settings to optimize the indexing of your site by search engines. _}</p>
 
 		<div class="item-wrapper">
-			<h3 class="above-item">General SEO Optimization</h3>
+			<h3 class="above-item">{_ General SEO Optimization _}</h3>
 			<div class="item">
 				<fieldset class="admin-form">
 					<div class="form-item clearfix">
-						<label for="seo-keywords">Keywords to include on every page. Separate keywords with a ","</label>
+						<label for="seo-keywords">{_ Keywords to include on every page. Separate keywords with a "," _}</label>
 						<input type="text" id="seo-keywords" name="seo-keywords" value="{{ m.config.seo.keywords.value|escape }}" />
 					</div>
 
 					<div class="form-item clearfix">
-						<label for="seo-description">Description to include on every page</label>
+						<label for="seo-description">{_ Description to include on every page _}</label>
 						<input type="text" id="seo-description" name="seo-description" value="{{ m.config.seo.description.value|escape }}" />
 					</div>
 
@@ -33,7 +33,7 @@
 		{% all include "_admin_seo_config.tpl" %}
 		
 		<div class="form-item clearfix">
-			<button type="submit">Save SEO settings</button>
+			<button type="submit">{_ Save SEO settings _}</button>
 		</div>
 	</form>
 
