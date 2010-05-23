@@ -28,12 +28,7 @@
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1), 
-    case z_acl:is_allowed(use, mod_admin_seo, Context2) of
-        false -> z_auth:wm_output_logon(Context2);
-        true ->  ?WM_REPLY(true, Context2)
-    end.
+    z_acl:wm_is_authorized(use, mod_seo, ReqData, Context).
 
 
 html(Context) ->
@@ -45,12 +40,12 @@ html(Context) ->
 
 
 event({submit, admin_seo, _TriggerId, _TargetId}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_seo, Context) of
+    case z_acl:is_allowed(use, mod_seo, Context) of
         true ->
             save_settings(z_context:get_q_all(Context), Context),
             z_render:growl("Saved the SEO settings.", Context);
         false ->
-            z_render:growl("Only administrators can change the SEO settings.", Context)
+            z_render:growl("You don't have permission to change the SEO settings.", Context)
     end.
 
 
