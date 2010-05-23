@@ -21,5 +21,8 @@
 			{% button action={dialog_set_username_password id=id} text="Set username / password" %}
 		{% endif %}
 		
+		<div class="clear"></div>
+		
+		{% all include "_admin_edit_sidebar_identity.tpl" %}
 	</div>
 </div>

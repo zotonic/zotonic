@@ -390,7 +390,7 @@ datamodel() ->
      {resources,
          [
             {?ROLE_MEMBER, acl_role,
-             [{visible_for, 2},
+             [{visible_for, 1},
               {title, "ACL role for members"},
               {summary, "The rights of this role are assigned to members (logged on) when they are not member of any other ACL role.  Make the user member of another role to overrule this role."},
               {acl, [{view_all, false},{categories,[]},{modules,[]}]}
