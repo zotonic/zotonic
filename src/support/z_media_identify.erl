@@ -233,6 +233,7 @@ extension_mime() ->
 		{".png", "image/png"},
 		{".ppt", "application/vnd.ms-powerpoint"},
 		{".ps", "application/postscript"},
+		{".psd", "image/vnd.adobe.photoshop"},
 		{".sh", "text/x-shellscript"},
 		{".sit", "application/x-stuffit"},
 		{".svg", "image/svg+xml"},
