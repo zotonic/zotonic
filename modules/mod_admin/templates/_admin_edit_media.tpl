@@ -2,10 +2,10 @@
 	<p>
 		{{ medium.mime }} 
         {% if medium.width and medium.height %}
-		&mdash; {{ medium.width }} x {{ medium.height }} pixels
+		&mdash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
         {% endif %}
 		&mdash; {{ medium.filename }}
-		&mdash; uploaded on {{ medium.created|date:"Y-m-d H:i:s" }}
+		&mdash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
 	</p>
     {% if medium.width and medium.height %}
     <div class="edit_media">
@@ -17,6 +17,6 @@
 	</div>
 	{% endif %}
 	<div>
-		{% button text="download" action={redirect dispatch="media_attachment" star=medium.filename} %}
+		{% button text=_"download" action={redirect dispatch="media_attachment" star=medium.filename} %}
 	</div>
 {% endif %}

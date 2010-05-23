@@ -1,12 +1,12 @@
 {% tabs id=#tabs %}
 <div id="{{ #tabs }}">
 	<ul class="clearfix">
-		<li><a href="#{{ #tab }}-media">Media on this page</a></li>
-		<li><a href="#{{ #tab }}-search">Search other media</a></li>
+		<li><a href="#{{ #tab }}-media">{_ Media on this page _}</a></li>
+		<li><a href="#{{ #tab }}-search">{_ Search other media _}</a></li>
 	</ul>
 
 	<div id="{{ #tab }}-media">
-		<p>Choose a media item from this page to insert in the body text.</p>
+		<p>{_ Choose a media item from this page to insert in the body text._}</p>
 
 		{% with m.rsc[id].o.depiction as ids %}
 		{% include "_choose_media.tpl" %}
@@ -14,7 +14,7 @@
 
         <div class="form-item clearfix">
         {% button
-                text="add a new media item" 
+                text=_"Add a new media item" 
                 action={dialog_media_upload subject_id=id stay
                         action={postback 
                                 postback={zmedia_choose} 
@@ -32,7 +32,7 @@
 		<div class="form-item clearfix">
 
 
-            <p>Use the autocompleter to search the media in this site.</p>
+            <p>{_ Use the autocompleter to search the media in this site. _}</p>
 
             <div class="form-item autocomplete-wrapper clear">
                 <input id="{{#input}}" class="autocompleter" type="text" value="" />

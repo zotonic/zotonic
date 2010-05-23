@@ -1,16 +1,16 @@
 {% tabs id=#tabs %}
 <div id="{{ #tabs }}">
 	<ul class="clearfix">
-		<li><a href="#{{ #tab }}-upload">Upload</a></li>
-		<li><a href="#{{ #tab }}-url">URL</a></li>
+		<li><a href="#{{ #tab }}-upload">{_ Upload _}</a></li>
+		<li><a href="#{{ #tab }}-url">{_ URL _}</a></li>
 		{% all include "_media_upload_tab.tpl" tab=#tab %}
 	</ul>
 	
 	<div id="{{ #tab }}-upload">
 		<p>
-			Upload a file from your computer.
+			{_ Upload a file from your computer. _}
 			{% if not id %}
-				You have to specify a description of the file to make it easier to find and share.
+				{_ You have to specify a description of the file to make it easier to find and share. _}
 			{% endif %}
 		</p>
 
@@ -19,20 +19,20 @@
 			<div class="new-media-wrapper">
 				{% if not id %}
 					<div class="form-item clearfix">
-						<label for="new_media_title" style="color:white">Media title</label>
+						<label for="new_media_title" style="color:white">{_ Media title _}</label>
 						<input type="text" id="new_media_title" name="new_media_title" value="{{ title|escape }}" />
 						{% validate id="new_media_title" type={presence} %}
 					</div>
 				{% endif %}
 				
 				<div class="form-item clearfix">
-					<label for="upload_file">Media file</label>
+					<label for="upload_file">{_ Media file _}</label>
 					<input type="file" id="upload_file" name="upload_file" />
 					{% validate id="upload_file" type={presence} %}
 				</div>
 		
 				<div class="form-item clearfix">
-					<button type="submit">Upload file</button>
+					<button type="submit">{_ Upload file _}</button>
 					{% button action={dialog_close} text="Cancel" %}
 				</div>
 			</div>
@@ -41,9 +41,9 @@
 
 	<div id="{{ #tab }}-url">
 		<p>
-			Upload a file which is already on the internet.
+			{_ Upload a file which is already on the internet. _}
 			{% if not id %}
-				You have to specify a description of the file to make it easier to find and share.
+				{_ You have to specify a description of the file to make it easier to find and share. _}
 			{% endif %}
 		</p>
 
@@ -52,21 +52,21 @@
 			<div class="new-media-wrapper">
 				{% if not id %}
 					<div class="form-item clearfix">
-						<label for="new_media_title" style="color:white">Media title</label>
+						<label for="new_media_title" style="color:white">{_ Media title _}</label>
 						<input type="text" id="new_media_title_url" name="new_media_title_url" value="{{ title|escape }}" />
 						{% validate id="new_media_title_url" type={presence} %}
 					</div>
 				{% endif %}
 
 				<div class="form-item clearfix">
-					<label for="upload_file">Media URL</label>
+					<label for="upload_file">{_ Media URL _}</label>
 					<input type="text" id="url" name="url" />
 					{% validate id="url" type={presence} type={format pattern="^https?://.+"} %}
 				</div>
 
 				<div class="form-item clearfix">
-					<button type="submit">{% if not id %}Make media item{% else %}Replace media item{% endif %}</button>
-					{% button action={dialog_close} text="Cancel" %}
+					<button type="submit">{% if not id %}{_ Make media item _}{% else %}{_ Replace media item _}{% endif %}</button>
+					{% button action={dialog_close} text=_"Cancel" %}
 				</div>
 			</div>
 		</form>

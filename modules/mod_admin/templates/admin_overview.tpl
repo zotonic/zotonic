@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Pages {% endblock %}
+{% block title %}{_ Pages _}{% endblock %}
 
 {% block content %}
 
@@ -12,8 +12,8 @@
 		<h2>Page Overview</h2>
 		<div class="clearfix">
 			{% all include "_admin_make_page_buttons.tpl" %}
-			{% button class="" text="Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
-			{% button class="" text="Make a new media item" action={dialog_media_upload title=""} %}
+			{% button class="" text=_"Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
+			{% button class="" text=_"Make a new media item" action={dialog_media_upload title=""} %}
 		</div>
 		
 		<hr />
@@ -22,16 +22,16 @@
 				<input type="hidden" name="qsort" value="{{ q.qsort }}" />
 				<input type="hidden" name="qs" value="{{ q.qs }}" />
 				<h3 class="above-list ">
-					Pages overview{% if q.qs %}, 
-						matching “{{ q.qs|escape }}”
+					{_ Pages overview _}{% if q.qs %}, 
+						{_ matching _} “{{ q.qs|escape }}”
 						{% button text="show all" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
 						<input type="hidden" name="qs" value="{{ q.qs|escape }}" />
 					{% endif %}
 
 					{% with q.qcat as qcat %}
-						&mdash; filter on category
+						&mdash; {_ filter on category _}
 						<select id="{{ #category }}" name="qcat">
-							<option value="">All Categories</option>
+							<option value="">{_ All Categories _}</option>
 							<option disabled="disabled"></option>
 						{% for cat_id, level, indent, name in m.category.all_flat %}
 							<option value="{{ name }}" {% ifequal name qcat %}selected="selected" {% endifequal %}>
@@ -49,19 +49,19 @@
 
 				<li class="headers clearfix">
 					{% if is_event %}
-						<span class="zp-20">Title</span>
-						<span class="zp-15">Performer</span>
-						<span class="zp-15">Start date</span>
-						<span class="zp-10">Category</span>
-						<span class="zp-15">Modified on</span>
-						<span class="zp-15">Modified by</span>
+						<span class="zp-20">{_ Title _}</span>
+						<span class="zp-15">{_ Performer _}</span>
+						<span class="zp-15">{_ Start date _}</span>
+						<span class="zp-10">{_ Category _}</span>
+						<span class="zp-15">{_ Modified on _}</span>
+						<span class="zp-15">{_ Modified by _}</span>
 					{% else %}
-						<span class="zp-35">{% include "_admin_sort_header.tpl" field="pivot_title" caption="Title" %}</span>
-						<span class="zp-15">{% include "_admin_sort_header.tpl" field="category_id" caption="Category" %}</span>
-						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modified" caption="Modified on" %}</span>
-						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modifier_id" caption="Modified by" %}</span>
+						<span class="zp-35">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</span>
+						<span class="zp-15">{% include "_admin_sort_header.tpl" field="category_id" caption=_"Category" %}</span>
+						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" %}</span>
+						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}</span>
 					{% endif %}
-					<span class="zp-10">Options</span>
+					<span class="zp-10">{_ Options _}</span>
 				</li>
 
 			{% for id in result %}
@@ -81,14 +81,14 @@
 							<span class="zp-20">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
 						{% endif %}
 						<span class="zp-10">
-							{% button text="view" action={redirect id=id} %}
-							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							{% button text=_"view" action={redirect id=id} %}
+							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						</span>
 					</a>
 				</li>
 			{% empty %}
 				<li>
-					No pages found.
+					{_ No pages found. _}
 				</li>
 			{% endfor %}
 			</ul>

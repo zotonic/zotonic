@@ -10,12 +10,12 @@
 				{% with m.rsc[media_id].medium as medium %}
 					{% image medium width=187 height=200 crop %}
 
-					{% with m.rsc[media_id].title|striptags|default:"untitled" as title %}
+					{% with m.rsc[media_id].title|striptags|default:_"untitled" as title %}
 					<div class="media-unlink-wrapper">
 						<div class="rsc-edge do_unlink">
 							<span class="clearfix">
 								<span class="unlink-mover"></span>
-								<span id="{{ #unlink.media_id }}" class="unlink-cross do_tooltip" title="Disconnect {{title}}."></span>
+								<span id="{{ #unlink.media_id }}" class="unlink-cross do_tooltip" title="{_ Disconnect _} {{title}}."></span>
 								<span class="unlink-item"><a href="{% url admin_edit_rsc id=media_id %}">{{ title }}</a></span>
 							</span>
 						</div>

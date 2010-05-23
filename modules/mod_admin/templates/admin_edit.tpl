@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}Edit “{{ m.rsc[id].title }}”{% endblock %}
+{% block title %}{_ Edit _} “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block tinymce %}
 	<script type="text/javascript" src="/lib/js/modules/tinymce3.3.2a/tiny_mce.js"></script>
@@ -124,17 +124,17 @@
 
 			{% if not is_editable %}
 				<h2>
-					You are not allowed to edit the {{ m.rsc[r.category_id].title|lower }} “{{ r.title|striptags }}”
+					{_ You are not allowed to edit the _} {{ m.rsc[r.category_id].title|lower }} “{{ r.title|striptags }}”
 				</h2>
 			{% else %}
-				<p class="admin-chapeau">editing:
+				<p class="admin-chapeau">{_ editing _}:
 					<span class="right" style="text-align: right">
-						Modified {{ r.modified|timesince }}.<br/>
-						By {{ m.rsc[r.modifier_id].title }}.
+						{_ Modified _} {{ r.modified|timesince }}.<br/>
+						{_ By _} {{ m.rsc[r.modifier_id].title }}.
 					</span>
 				</p>
 				<h2>{{ r.title|striptags|default:"<em>untitled</em>" }}
-					<span>{{ m.rsc[r.category_id].title|lower }} <a href="#category">change</a></span>
+					<span>{{ m.rsc[r.category_id].title|lower }} <a href="#category">{_ change _}</a></span>
 				</h2>
 			{% endif %}
 
@@ -151,8 +151,8 @@
 						{% if r.is_a.media or r.medium %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-								<span class="title">File / media content</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ File / media content _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								{% with r.medium as medium %}
@@ -160,7 +160,7 @@
 										{% include "_admin_edit_media_view.tpl" id=id %}
 									</div>
 
-									{% button text="Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
+									{% button text=_"Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
 								{% endwith %}
 							</div>
 						</div>
@@ -168,13 +168,13 @@
                         {% if is_editable %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
-								<span class="title">Website</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Website _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item">
 								<fieldset class="admin-form">
 									<div class="form-item clearfix">
-										<label for="media-website">Website for clicks on image</label>
+										<label for="media-website">{_ Website for clicks on image _}</label>
 										<input type="text" id="media-website" name="website" class="zp-100" value="{{ r.website }}"/>
 									</div>
 								</fieldset>
@@ -188,8 +188,8 @@
                         {% if is_editable or m.rsc[id].depiction %}
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-								<span class="title">Attached media</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Attached media _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div id="{{ #media }}">
@@ -198,12 +198,12 @@
 								<div class="clear">
 									{% if is_editable %}
 										{% button
-												text="add a new media item"
+												text=_"add a new media item"
 												action={dialog_media_upload subject_id=id stay
 													action={postback postback={reload_media rsc_id=id div_id=#media} delegate="resource_admin_edit"}}
 										%}
 
-										{% button text="add existing media item"
+										{% button text=_"add existing media item"
 											action={dialog_link subject_id=id predicate="depiction"
 												action={postback
 															postback={reload_media rsc_id=id div_id=#media}
@@ -219,14 +219,14 @@
 
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.meta }} }">
-								<span class="title">Advanced</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Advanced _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<fieldset class="admin-form">
 
 									<div class="form-item clearfix">
-										<label for="field-short-title">Short title</label>
+										<label for="field-short-title">{_ Short title _}</label>
 										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 									</div>
 
@@ -235,7 +235,7 @@
 									<div class="path-unique-name-wrapper clearfix">
 										<div class="zp-50">
 											<div class="form-item clearfix">
-												<label for="field-page-path">Page path, default is <em>{{ r.default_page_url|escape }}</em></label>
+												<label for="field-page-path">{_ Page path, default is _} <em>{{ r.default_page_url|escape }}</em></label>
 												<input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 											</div>
 										</div>
@@ -243,7 +243,7 @@
 										{% if m.acl.is_admin %}
 											<div class="zp-50">
 												<div class="form-item clearfix">
-													<label for="field-name">Unique name</label>
+													<label for="field-name">{_ Unique name _}</label>
 													<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} />
 												</div>
 											</div>
@@ -261,7 +261,7 @@
 									{% if m.acl.is_admin %}
 										{% if r.is_a.meta or not r.is_authoritative %}
 											<div class="form-item clearfix">
-												<label for="field-name">Unique uri</label>
+												<label for="field-name">{_ Unique uri _}</label>
 												<input type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
 											</div>
 										{% endif %}
@@ -273,33 +273,33 @@
 
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
-								<span class="title">Seo content</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Seo content _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<fieldset class="admin-form">
 									<div class="form-item clearfix">
 										<input id="no-google" type="checkbox" class="do_fieldreplace" name="seo_noindex" {% if r.seo_noindex %}checked="checked"{% endif %} value="1" />
-										<label for="no-google">Ask google to not index this page</label>
+										<label for="no-google">{_ Ask google to not index this page _}</label>
 									</div>
 
 									<div class="form-item clearfix">
-										<label for="seo_title">Page title</label>
+										<label for="seo_title">{_ Page title _}</label>
 										<input type="text" id="seo_title" name="seo_title" class="zp-100" value="{{ r.seo_title }}"/>
 									</div>
 
 									<div class="form-item clearfix">
-										<label for="title">Page slug</label>
+										<label for="title">{_ Page slug _}</label>
 										<input type="text" id="slug" name="slug" class="zp-100" value="{{ r.slug }}"/>
 									</div>
 
 									<div class="form-item clearfix">
-										<label for="seo_keywords">Page keywords</label>
+										<label for="seo_keywords">{_ Page keywords _}</label>
 										<input type="text" id="seo_keywords" name="seo_keywords" class="zp-100" value="{{ r.seo_keywords }}"/>
 									</div>
 
 									<div class="form-item clearfix">
-										<label for="seo_desc">Page description</label>
+										<label for="seo_desc">{_ Page description _}</label>
 										<textarea rows="2" cols="10" id="seo_desc" name="seo_desc" class="seo-desc zp-100">{{ r.seo_desc }}</textarea>
 									</div>
 
@@ -315,51 +315,51 @@
 					<div class="padding" id="sort">
 
 						<div class="item-wrapper" id="sort-publish">
-							<h3 class="above-item">Publish this page</h3>
+							<h3 class="above-item">{_ Publish this page _}</h3>
 							<div class="item clearfix">
 								<div class="admin-form ">
 									<div class="form-item clearfix">
-										{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save" title="Save this page." disabled=not is_editable %}
+										{% button type="submit" id="save_stay" class="save-resource do_tooltip" text=_"save" title=_"Save this page." disabled=not is_editable %}
 										{% if is_editable %}
-											{% button type="submit" id="save_view" class="save-resource do_tooltip" text="save &amp; view" title="Save and view the page." %}
+											{% button type="submit" id="save_view" class="save-resource do_tooltip" text=_"save &amp; view" title=_"Save and view the page." %}
 										{% else %}
-											{% button id="save_view" class="save-resource do_tooltip" text="view" title="View this page." action={redirect id=id} %}
+											{% button id="save_view" class="save-resource do_tooltip" text=_"view" title=_"View this page." action={redirect id=id} %}
 										{% endif %}
 
-										{% button class="discard-resource right do_tooltip" text="cancel" action={redirect back} title="Go back." %}
+										{% button class="discard-resource right do_tooltip" text=_"Cancel" action={redirect back} title=_"Go back." %}
 
 									</div>
 
 									<div class="form-item clearfix">
 										<input type="checkbox" class="do_fieldreplace" id="is_published" name="is_published" value="1" {% if r.is_published %}checked="checked"{% endif %}/>
-										<label for="is_published" class="left">Published</label>
+										<label for="is_published" class="left">{_ Published _}</label>
 
 										<input type="checkbox" class="do_fieldreplace" id="is_featured" name="is_featured" value="1" {% if r.is_featured %}checked="checked"{% endif %}/>
-										<label for="is_featured" class="left">Featured</label>
+										<label for="is_featured" class="left">{_ Featured _}</label>
 
 										<input type="checkbox" class="do_fieldreplace" id="is_protected" name="is_protected" value="1" {% if r.is_protected %}checked="checked"{% endif %} {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
-										<label for="is_protected" class="left">Protect from deletion</label>
+										<label for="is_protected" class="left">{_ Protect from deletion _}</label>
 									</div>
 
 									<div class="form-item clearfix">
 										{% ifnotequal id 1 %}
-											{% button class="discard-resource do_tooltip" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text="delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title="Delete this page." %}
+											{% button class="discard-resource do_tooltip" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title=_"Delete this page." %}
 										{% endifnotequal %}
 										{% if is_editable %}
-											{% button type="submit" id="save_duplicate" class="save-resource do_tooltip" text="duplicate" title="Duplicate this page." %}
+											{% button type="submit" id="save_duplicate" class="save-resource do_tooltip" text=_"Duplicate" title=_"Duplicate this page." %}
 										{% else %}
 											{% button class="save-resource do_tooltip" 
-													text="duplicate" 
+													text=_"Duplicate" 
 													action={dialog_duplicate_rsc id=id} 
-													title="Duplicate this page."
+													title=_"Duplicate this page."
 													disabled=(not m.acl.insert[r.category.name]) %}
 										{% endif %}
 
                                         {% for id in m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}] %}
-										{% button class="goto-resource right do_tooltip" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title="Next in category: "|append:m.rsc[id].title %}
+										{% button class="goto-resource right do_tooltip" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
                                         {% endfor %}
                                         {% for id in m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}] %}
-										{% button class="goto-resource right do_tooltip" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title="Previous in category: "|append:m.rsc[id].title %}
+										{% button class="goto-resource right do_tooltip" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
                                         {% endfor %}
 									</div>
 								</div>
@@ -368,25 +368,25 @@
 
 						<div class="item-wrapper" id="sort-access">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
-								<span class="title">Access control</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Access control _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div class="admin-form clearfix">
 									<div class="notification notice">
-										Define who can see or edit this page.
+										{_ Define who can see or edit this page. _}
 									</div>
 
 									<div class="form-item zp-50">
-										<label for="visible_for">Visible for</label>
+										<label for="visible_for">{_ Visible for _}</label>
 										<select id="visible_for" name="visible_for">
 											<option value="0"
 												{% ifequal 0 r.visible_for %}selected="selected"
-												{% endifequal %}>The whole world</option>
+												{% endifequal %}>{_ The whole world _}</option>
 											<option value="1"
 												{% ifequal 1 r.visible_for %}selected="selected"
-												{% endifequal %}>Community members</option>
-											<option value="2" {% ifequal 2 r.visible_for %}selected="selected"{% endifequal %}>Group members</option>
+												{% endifequal %}>{_ Community members _}</option>
+											<option value="2" {% ifequal 2 r.visible_for %}selected="selected"{% endifequal %}>{_ Group members _}</option>
 										</select>
 									</div>
 								</div>
@@ -398,22 +398,22 @@
 						{% if not r.is_a.meta %}
 						<div class="item-wrapper" id="sort-date">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
-								<span class="title">Publication period</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Publication period _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div class="admin-form form-item">
 									<div class="notification notice">
-										Show this article only between the two dates.
-										<a href="javascript:void(0)" class="do_dialog {title: 'Help about publication date range.', text: 'When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it.', width: '450px'}">Need more help?</a>
+										{_ Show this article only between the two dates. _}
+										<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about publication date range. _}', text: '{_ When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it._}', width: '450px'}">{_ Need more help? _}</a>
 									</div>
 									<fieldset>
 										<div class="form-item">
-											<label>Visible from</label>
+											<label>{_ Visible from _}</label>
 											{% include "_edit_date.tpl" date=r.publication_start name="publication_start" is_end=0 %}
 										</div>
 										<div class="form-item">
-											<label>Visible till</label>
+											<label>{_ Visible till _}</label>
 											{% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
 										</div>
 									</fieldset>
@@ -423,26 +423,26 @@
 
 						<div class="item-wrapper" id="sort-date">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.event }} }">
-								<span class="title">Date range</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Date range _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div class="admin-form form-item">
 									<div class="notification notice">
-										Used for events and other periods.
-										<a href="javascript:void(0)" class="do_dialog {title: 'Help about dateranges.', text: 'Every page can have a date range. For example if the page is an event or description of someone\'s life.', width: '450px'}">Need more help?</a>
+										{_ Used for events and other periods. _}
+										<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about date ranges. _}', text: '{_ Every page can have a date range. For example if the page is an event or description of someone\'s life. _}', width: '450px'}">{_ Need more help? _}</a>
 									</div>
 									<fieldset>
 										<div class="form-item">
-											<label>From</label>
+											<label>{_ From _}</label>
 											{% include "_edit_date.tpl" date=r.date_start name="date_start" is_end=0 %}
 										</div>
 										<div class="form-item">
-											<label>Till</label>
+											<label>{_ Till _}</label>
 											{% include "_edit_date.tpl" date=r.date_end name="date_end" is_end=1 %}
 										</div>
 										<div class="form-item clear">
-											<label>Remarks</label>
+											<label>{_ Remarks _}</label>
 											<input type="text" name="date_remarks" value="{{ r.date_remarks }}" />
 										</div>
 									</fieldset>
@@ -453,13 +453,13 @@
 
 						<div class="item-wrapper" id="sort-connections">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-								<span class="title">Page connections</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Page connections _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div class="notification notice">
-									This page is able to connect to others. For example you can connect it to an actor or a brand.
-									<a href="javascript:void(0)" class="do_dialog {title: 'Help about page connections.', text: 'This page is able to connect to others. For example you can connect it to an actor or a brand.', width: '450px'}">Need more help?</a>
+									{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}
+									<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about page connections. _}', text: '{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}', width: '450px'}">{_ Need more help? _}</a>
 								</div>
 
 								<div id="unlink-undo-message"></div>
@@ -489,7 +489,7 @@
 								{% endwith %}
 
 								<div class="button-wrapper clearfix">
-									{% button action={redirect dispatch="admin_referrers" id=id} text="View all referrers"%}
+									{% button action={redirect dispatch="admin_referrers" id=id} text=_"View all referrers"%}
 								</div>
 							</div>
 						</div>
@@ -499,12 +499,12 @@
 						<div class="item-wrapper" id="sort-category">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
 								<a name="category"></a>
-								<span class="title">Category</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Category _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix admin-form">
 								<div class="notification notice">
-									The category defines what the page represents. <a href="javascript:void(0)" class="do_dialog {title: 'Help about category.', text: 'Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle.', width: '450px'}">Need more help?</a>
+									{_ The category defines what the page represents. _} <a href="javascript:void(0)" class="do_dialog {title: '{_ Help about category. _}', text: '{_ Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}', width: '450px'}">{_ Need more help? _}</a>
 								</div>
 								<p>
 									{% with r.category_id as r_cat %}
@@ -519,22 +519,22 @@
 								</p>
 
 								<div class="form-item clearfix">
-									{% button type="submit" id="save_stay" class="save-resource do_tooltip" text="save this page" title="Save this page and change category." disabled=not is_editable %}
-									{% button class="discard-resource" text="cancel" action={redirect back} %}
+									{% button type="submit" id="save_stay" class="save-resource do_tooltip" text=_"Save this page" title=_"Save this page and change category." disabled=not is_editable %}
+									{% button class="discard-resource" text=_"Cancel" action={redirect back} %}
 								</div>
 							</div>
 						</div>
 						{% else %}
 						<div class="item-wrapper" id="sort-category">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
-								<span class="title">Category</span>
-								<span class="arrow">make smaller</span>
+								<span class="title">{_ Category _}</span>
+								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix admin-form">
 
 								<div class="notification notice">
-									This page is a {{ m.rsc[r.category_id].title }}.
-									Predicates, groups and categories can't be changed into another category.
+									{_ This page is a _} {{ m.rsc[r.category_id].title }}.
+									{_ Predicates, groups and categories can't be changed into another category. _}
 								</div>
 							</div>
 						</div>
