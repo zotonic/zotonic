@@ -39,7 +39,7 @@
 
 -include("zotonic.hrl").
 
--record(acl_user, {modules, categories, roles, view_all}).
+-record(acl_user, {modules, categories, roles, view_all, only_update_own, file_mimes, file_size}).
 -record(state, {context}).
 
 -define(ROLE_MEMBER, role_member).
@@ -54,14 +54,8 @@ observe({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
 % Logged on users
 observe({acl_is_allowed, view, Id}, Context) when is_integer(Id) ->
     can_view(Id, Context);
-observe({acl_is_allowed, insert, #acl_media{mime=Mime, size=_Size}}, Context) -> 
-    case Mime of
-        "image/" ++ _ -> can_insert(image, Context);
-        "audio/" ++ _ -> can_insert(audio, Context);
-        "video/" ++ _ -> can_insert(video, Context);
-        "text/" ++ _ -> can_insert(document, Context);
-        _ -> can_insert(media, Context)
-    end;
+observe({acl_is_allowed, insert, #acl_media{mime=Mime, size=Size}}, Context) -> 
+    can_media(Mime, Size, Context);
 observe({acl_is_allowed, insert, #acl_rsc{category=Cat}}, Context) -> 
     can_insert(Cat, Context);
 observe({acl_is_allowed, insert, Cat}, Context) when is_atom(Cat) -> 
@@ -122,17 +116,34 @@ observe({acl_rsc_update_check, _id}, Props, _Context) ->
 rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
     case       proplists:is_defined(acl_cat, Props) 
         orelse proplists:is_defined(acl_mod, Props) 
-        orelse proplists:is_defined(acl_view_all, Props) of
+        orelse proplists:is_defined(acl_mime, Props) 
+        orelse proplists:is_defined(acl_view_all, Props)
+        orelse proplists:is_defined(acl_file_upload_size, Props)
+        orelse proplists:is_defined(acl_only_update_own, Props) of
 
         true ->
             Cats = proplists:get_all_values(acl_cat, Props),
             Mods = proplists:get_all_values(acl_mod, Props),
+            Mimes = proplists:get_all_values(acl_mime, Props),
+            FileSize = z_convert:to_integer(proplists:get_value(acl_file_upload_size, Props, 0)),
             ReadAll = z_convert:to_bool(proplists:get_value(acl_view_all, Props, false)),
+            OnlyOwn = z_convert:to_bool(proplists:get_value(acl_only_update_own, Props, false)),
             Cats1 = [ z_convert:to_atom(C) || C <- Cats, C /= <<>> ],
             Mods1 = [ z_convert:to_atom(M) || M <- Mods, M /= <<>> ],
+            Mimes1 = [ z_convert:to_binary(M) || M <- Mimes, M /= <<>> ],
             Props1 = proplists:delete(acl_cat, 
-                        proplists:delete(acl_mod, Props)),
-            Props2 = [{acl, [{categories, Cats1}, {modules, Mods1}, {view_all,ReadAll}]} | Props1],
+                        proplists:delete(acl_mod,
+                            proplists:delete(acl_file_upload_size,
+                                proplists:delete(acl_view_all,
+                                    proplists:delete(acl_only_update_own,
+                                        proplists:delete(acl_mime, Props)))))),
+            Props2 = [{acl, [   {categories, Cats1}, 
+                                {modules, Mods1}, 
+                                {view_all,ReadAll},
+                                {only_update_own, OnlyOwn},
+                                {file_upload_size, FileSize},
+                                {file_mime, Mimes1}
+                            ]} | Props1],
             {true, Props2};
         false ->
             {Changed, Props}
@@ -242,23 +253,36 @@ logon(UserId, Context) ->
                                 m_rsc:p(R, is_published, ContextAdmin) ],
         % Merge all role's categories and modules
         ACLs = [ m_rsc:p(R, acl, ContextAdmin) || R <- RolesFiltered ],
-        {Cats, Mods, ViewAll} = combine(ACLs, [], [], false),
+        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime} = combine(ACLs, [], [], false, undefined, 0, []),
         Context#context{user_id=UserId,
                         acl=#acl_user{categories=lists:flatten(Cats), 
                                       modules=lists:flatten(Mods),
                                       roles=RolesFiltered,
-                                      view_all=ViewAll}}.
+                                      view_all=ViewAll,
+                                      only_update_own=OnlyOwn,
+                                      file_size=FileSize,
+                                      file_mimes=lists:flatten(FileMime)}}.
 
-    combine([], Cats, Mods, ViewAll) ->
-        {Cats, Mods, ViewAll};
-    combine([undefined|Rest], Cats, Mods, ViewAll) ->
-        combine(Rest, Cats, Mods, ViewAll);
-    combine([ACL|Rest], Cats, Mods, ViewAll) ->
+    combine([], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
+        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime};
+    combine([undefined|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
+        combine(Rest, Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime);
+    combine([ACL|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
+        OnlyOwn1 = case {OnlyOwn, proplists:get_value(only_update_own, ACL, false)} of
+                        {undefined, UpdOwn} -> UpdOwn;
+                        {true, true} -> true;
+                        {_, _} -> false
+                   end,
         combine(Rest,
                 [proplists:get_value(categories, ACL, [])|Cats],
                 [proplists:get_value(modules, ACL, [])|Mods],
-                ViewAll orelse proplists:get_value(view_all, ACL, false)).
+                ViewAll orelse proplists:get_value(view_all, ACL, false),
+                OnlyOwn1,
+                max(proplists:get_value(file_upload_size, ACL, 0), FileSize),
+                [proplists:get_value(file_mime, ACL, [])|FileMime]).
 
+        max(A,B) when A >= B -> A;
+        max(_,B) -> B.
 
 %% @doc Check if an user can see something
 can_view(Id, Context) ->
@@ -287,6 +311,11 @@ can_edit(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_edit(_Id, #context{acl=undefined}) ->
     undefined;
+can_edit(Id, #context{user_id=UserId, acl=#acl_user{only_update_own=true}} = Context) when UserId /= undefined ->
+    case m:rsc(Id, creator_id, Context) of
+        UserId -> true;
+        _ -> undefined
+    end;
 can_edit(Id, #context{acl=Acl} = Context) ->
     IsA = m_rsc:p(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
@@ -368,6 +397,32 @@ can_edge(#acl_edge{subject_id=SubjectId, object_id=ObjectId}, Context) ->
         true -> true;
         false -> undefined
     end.
+    
+
+can_media(Mime, Size, #context{acl=ACL}) ->
+    case ACL of
+        #acl_user{file_size=MaxSize, file_mimes=Allowed} ->
+            case Size =< MaxSize * 1024 of
+                true ->
+                    case lists:member(<<"*/*">>, Allowed)
+                         orelse lists:member(z_convert:to_binary(Mime), Allowed) of
+                        true -> true;
+                        false ->
+                            case lists:member(make_wildcard(Mime), Allowed) of
+                                true -> true;
+                                false -> undefined
+                            end
+                    end;
+                false ->
+                    undefined
+            end;
+        _ -> undefined
+    end.
+    
+    make_wildcard(Mime) ->
+        [Type|_] = string:tokens(z_convert:to_list(Mime), "/"),
+        list_to_binary(Type ++ "/*").
+
 
 
 %% @doc The datamodel for the role based ACL
@@ -393,7 +448,12 @@ datamodel() ->
              [{visible_for, 1},
               {title, "ACL role for members"},
               {summary, "The rights of this role are assigned to members (logged on) when they are not member of any other ACL role.  Make the user member of another role to overrule this role."},
-              {acl, [{view_all, false},{categories,[]},{modules,[]}]}
+              {acl, [   {view_all, false},
+                        {only_update_own, false},
+                        {file_upload_size, 1024},
+                        {file_mime,["image/jpeg", "image/png", "image/gif"]},
+                        {categories,[article,image]},
+                        {modules,[]}]}
              ]
             }
          ]
