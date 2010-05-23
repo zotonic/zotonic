@@ -40,8 +40,10 @@
 -include("zotonic.hrl").
 
 -record(acl_user, {modules, categories, roles, view_all}).
-
 -record(state, {context}).
+
+-define(ROLE_MEMBER, role_member).
+
 
 %% @doc Check if the user is allowed to perform Action on Object
 %% @todo #acl_edge
@@ -207,7 +209,6 @@ terminate(_Reason, State) ->
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -223,26 +224,40 @@ code_change(_OldVsn, State, _Extra) ->
 logon(UserId, Context) ->
     % Fetch roles the user is member of
     ContextAdmin = z_acl:sudo(Context),
-    Roles = m_edge:subjects(UserId, acl_role_member, ContextAdmin),
-    RolesFiltered = [ R || R <- Roles, 
-                            m_rsc:is_a(R, acl_role, ContextAdmin),
-                            m_rsc:p(R, is_published, ContextAdmin) ],
-    % Merge all role's categories and modules
-    ACLs = [ m_rsc:p(R, acl, ContextAdmin) || R <- RolesFiltered ],
-    {Cats, Mods, ReadAll} = combine(ACLs, [], [], false),
-    Context#context{user_id=UserId,
-                    acl=#acl_user{categories=lists:flatten(Cats), 
-                                  modules=lists:flatten(Mods),
-                                  roles=RolesFiltered,
-                                  view_all=ReadAll}}.
+    case m_edge:subjects(UserId, acl_role_member, ContextAdmin) of
+        [] ->
+            %% When not member of a role then fallback to the member or anonymous role.
+            case m_rsc:name_to_id(?ROLE_MEMBER, Context) of
+                {ok, RoleMember} -> logon_roles(UserId, [RoleMember], Context, ContextAdmin);
+                {error, _} -> logon_roles(UserId, [], Context, ContextAdmin)
+            end;
+        Roles ->
+            logon_roles(UserId, Roles, Context, ContextAdmin)
+    end.
 
-    combine([], Cats, Mods, ReadAll) ->
-        {Cats, Mods, ReadAll};
-    combine([ACL|Rest], Cats, Mods, ReadAll) ->
+
+    logon_roles(UserId, Roles, Context, ContextAdmin) ->
+        RolesFiltered = [ R || R <- Roles, 
+                                m_rsc:is_a(R, acl_role, ContextAdmin),
+                                m_rsc:p(R, is_published, ContextAdmin) ],
+        % Merge all role's categories and modules
+        ACLs = [ m_rsc:p(R, acl, ContextAdmin) || R <- RolesFiltered ],
+        {Cats, Mods, ViewAll} = combine(ACLs, [], [], false),
+        Context#context{user_id=UserId,
+                        acl=#acl_user{categories=lists:flatten(Cats), 
+                                      modules=lists:flatten(Mods),
+                                      roles=RolesFiltered,
+                                      view_all=ViewAll}}.
+
+    combine([], Cats, Mods, ViewAll) ->
+        {Cats, Mods, ViewAll};
+    combine([undefined|Rest], Cats, Mods, ViewAll) ->
+        combine(Rest, Cats, Mods, ViewAll);
+    combine([ACL|Rest], Cats, Mods, ViewAll) ->
         combine(Rest,
                 [proplists:get_value(categories, ACL, [])|Cats],
                 [proplists:get_value(modules, ACL, [])|Mods],
-                ReadAll orelse proplists:get_value(view_all, ACL, false)).
+                ViewAll orelse proplists:get_value(view_all, ACL, false)).
 
 
 %% @doc Check if an user can see something
@@ -258,6 +273,8 @@ can_view(Id, Context) ->
 %% @doc Check if the user has 'view_all' permission
 can_view_all(#context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
+can_view_all(#context{acl=undefined}) ->
+    undefined;
 can_view_all(#context{acl=Acl}) ->
     case Acl#acl_user.view_all of 
         true -> true;
@@ -268,6 +285,8 @@ can_view_all(#context{acl=Acl}) ->
 %% @doc Check if the user can edit a rsc id
 can_edit(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
+can_edit(_Id, #context{acl=undefined}) ->
+    undefined;
 can_edit(Id, #context{acl=Acl} = Context) ->
     IsA = m_rsc:p(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
@@ -282,6 +301,8 @@ can_edit(Id, #context{acl=Acl} = Context) ->
 %% @doc Check if the user can use a module
 can_module(_Action, _Module, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
+can_module(_Action, _Module, #context{acl=undefined}) ->
+    undefined;
 can_module(use, Module, #context{acl=Acl}) ->
     case lists:member(Module, Acl#acl_user.modules) of
         true -> true;
@@ -295,6 +316,8 @@ can_module(_Action, _Module, _Context) ->
 %% @doc Check if the category (or one of its parents) is in the category access list of the user
 can_insert(_Cat, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
+can_insert(_Cat, #context{acl=undefined}) ->
+    undefined;
 can_insert(Cat, #context{acl=Acl} = Context) ->
     case lists:member(Cat, Acl#acl_user.categories) of
         true -> 
@@ -362,6 +385,18 @@ datamodel() ->
         [{title, <<"ACL Role Member">>}],
         [{acl_role, person}]
        }]
+     },
+     
+     {resources,
+         [
+            {?ROLE_MEMBER, acl_role,
+             [{visible_for, 2},
+              {title, "ACL role for members"},
+              {summary, "The rights of this role are assigned to members (logged on) when they are not member of any other ACL role.  Make the user member of another role to overrule this role."},
+              {acl, [{view_all, false},{categories,[]},{modules,[]}]}
+             ]
+            }
+         ]
      }
     ].
 
