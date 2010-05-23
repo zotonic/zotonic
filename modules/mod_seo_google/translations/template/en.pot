@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-05-23 19:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
+msgid ""
+"Google Analytics tracking id.<br/>
+					You find this id in the tracking "
+"script, it has the format <strong>UA-123456-1</strong>. 
+					<a "
+"href="http://www.google.com/support/googleanalytics/bin/answer.py?hl=en"
+"&amp;answer=55603" title="Google Analytics Help">Where can I find my "
+"tracking script?</a>"
+msgstr ""
+"Google Analytics tracking id.<br/>
+					You find this id in the tracking "
+"script, it has the format <strong>UA-123456-1</strong>. 
+					<a "
+"href="http://www.google.com/support/googleanalytics/bin/answer.py?hl=en"
+"&amp;answer=55603" title="Google Analytics Help">Where can I find my "
+"tracking script?</a>"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:12 
+msgid ""
+"Google Webmaster Tools<br/>
+					Enter here the verification code for <a "
+"href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. "
+"Copy the content of the meta tag provided by Google."
+msgstr ""
+"Google Webmaster Tools<br/>
+					Enter here the verification code for <a "
+"href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. "
+"Copy the content of the meta tag provided by Google."
