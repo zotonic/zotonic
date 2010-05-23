@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-05-23 19:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:25 
+msgid ""
+"Description to include on every page"
+msgstr ""
+"Description to include on every page"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:16 
+msgid ""
+"General SEO Optimization"
+msgstr ""
+"General SEO Optimization"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:13 
+msgid ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+msgstr ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:20 
+msgid ""
+"Keywords to include on every page. Separate keywords with a ",""
+msgstr ""
+"Keywords to include on every page. Separate keywords with a ",""
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:36 
+msgid ""
+"Save SEO settings"
+msgstr ""
+"Save SEO settings"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:3 ./modules/mod_seo/templates/admin_seo.tpl:12 
+msgid ""
+"Search Engine Optimization"
+msgstr ""
+"Search Engine Optimization"
