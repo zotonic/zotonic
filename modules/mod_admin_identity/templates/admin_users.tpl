@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Users {% endblock %}
+{% block title %}{_ Users _}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
@@ -9,18 +9,18 @@
 		<h2>User Overview</h2>
 	
 		{% if m.acl.is_admin %}
-			{% button text="Make a new user" action={dialog_user_add on_success={reload}} %}
+			{% button text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
 		{% else %}
-			<p>You need to be an administrator to add users.</p>
+			<p>{_ You need to be an administrator to add users. _}</p>
 		{% endif %}
 		
 		<hr class="clear" />
 
 		<div class="clearfix">
 			<p>
-				Every page/person can be made into a user on the edit page.
+			 {_ Every page/person can be made into a user on the edit page.
 				The difference between a user and a normal page is only
-				that the former has logon credentials attached to its page record.
+				that the former has logon credentials attached to its page record. _}
 			</p>
 
 		</div>
@@ -31,18 +31,18 @@
 		{% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
 			<h3 class="above-list ">
-				Users{% if q.qs %}, 
-					matching “{{ q.qs|escape }}”
-					{% button text="show all" action={redirect dispatch="admin_user"} %}
-				{% else %} overview{% endif %}
+				{_ Users _}{% if q.qs %}, 
+					{_ matching _} “{{ q.qs|escape }}”
+					{% button text=_"show all" action={redirect dispatch="admin_user"} %}
+				{% else %} {_ overview _}{% endif %}
 			</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">
-					<span class="zp-20">Name</span>
-					<span class="zp-15">Username</span>
-					<span class="zp-10">Modified on</span>
-					<span class="zp-10">Created on</span>
-					<span class="zp-30">Options</span>
+					<span class="zp-20">{_ Name _}</span>
+					<span class="zp-15">{_ Username _}</span>
+					<span class="zp-10">{_ Modified on _}</span>
+					<span class="zp-10">{_ Created on _}</span>
+					<span class="zp-30">{_ Options _}</span>
 				</li>
 			{% for id, rank in result %}
 				<li id="{{ #li.id }}">
@@ -52,17 +52,17 @@
 						<span class="zp-10">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
 						<span class="zp-10">{{ m.rsc[id].created|date:"d M, H:i" }}</span>
 						<span class="zp-30">
-							{% button action={dialog_set_username_password id=id} text="set username/ password" on_delete={slide_fade_out target=#li.id} %}
+							{% button action={dialog_set_username_password id=id} text=_"set username/ password" on_delete={slide_fade_out target=#li.id} %}
 							{% if id /= 1 %}
-								{% button text="delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#li.id}} %}
+								{% button text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#li.id}} %}
 							{% endif %}
-							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						</span>
 					</a>
 				</li>
 			{% empty %}
 				<li>
-					No users found.
+					{_ No users found. _}
 				</li>
 			{% endfor %}
 			</ul>
