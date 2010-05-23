@@ -184,7 +184,7 @@ write_header(Fd) ->
 	      "msgid \"\"\n"
 	      "msgstr \"\"\n"
 	      "\"Project-Id-Version: PACKAGE VERSION\\n\"\n"
-	      "\"POT-Creation-Date: "++print_date()++"\\n\"\n"
+	      "\"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n"
 	      "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n"
 	      "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n"
 	      "\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n"
@@ -193,10 +193,10 @@ write_header(Fd) ->
 	      "\"Content-Transfer-Encoding: 8bit\\n\"\n").
 
 
-print_date() ->
-    % 2003-10-21 16:45+0200
-    {{Y,M,D},{H,I,_S}} = erlang:universaltime(),
-    lists:flatten(io_lib:format("~4..0B-~2..0B-~2..0B ~2..0B:~2..0B+0000", [Y,M,D,H,I])).
+%print_date() ->
+%    % 2003-10-21 16:45+0200
+%    {{Y,M,D},{H,I,_S}} = erlang:universaltime(),
+%    lists:flatten(io_lib:format("~4..0B-~2..0B-~2..0B ~2..0B:~2..0B+0000", [Y,M,D,H,I])).
     
  
 %%% --------------------------------------------------------------------
