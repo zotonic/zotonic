@@ -3,17 +3,17 @@
 <form id="{{ #form }}" method="POST" action="postback">
 	<div class="new-user-wrapper">
 
-		<p>Add a new event where “{{ m.rsc[id].title }}” will be performing.</p>
+		<p>{_ Add a new event where _} “{{ m.rsc[id].title }}” {_ will be performing. _}</p>
 		
 		<div class="form-item">
-			<label for="{{ #title }}" style="color:white">Event title</label>
+			<label for="{{ #title }}" style="color:white">{_ Event title _}</label>
 			<input type="text" id="{{ #title }}" name="title" value="" />
 		</div>
 		{% validate id=#title name="title" type={presence} %}
 		
 
 		<div class="form-item">
-			<label for="{{ #venue_id }}">Venue</label>
+			<label for="{{ #venue_id }}">{_ Venue _}</label>
 			<select id="{{ #venue_id }}" name="venue">
 			{% for title, id in m.search[{all_bytitle cat="venue"}] %}
 				<option value="{{ id }}">{{ title }}</option>
@@ -21,7 +21,7 @@
 			</select>
 		</div>
 
-		<h3>Genre</h3>
+		<h3>{_ Genre _}</h3>
 		
 		<div class="form-item">
 		{% for title, id in m.search[{all_bytitle cat="genre"}] %}
@@ -30,8 +30,8 @@
 		{% endfor %}
 		</div>
 
-		<button type="submit">Add event</button>
-		{% button action={dialog_close} text="Cancel" %}
+		<button type="submit">{_ Add event _}</button>
+		{% button action={dialog_close} text=_"Cancel" %}
 	</div>
 </form>
 
