@@ -1,6 +1,6 @@
 <div id="logon_form_box">
 	<form id="logon_form" method="post" action="postback">
-		<h1 class="logon_header">{_ Log on using your _}<span>{{ m.config.site.title.value|default:"Zotonic" }} ID</span></h1>
+		<h1 class="logon_header">{_ Log on using your _} <span>{{ m.config.site.title.value|default:"Zotonic" }} ID</span></h1>
 
 		<input type="hidden" name="page" value="{{ page|escape }}" />
 		<input type="hidden" name="handler" value="username" />
