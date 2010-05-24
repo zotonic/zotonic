@@ -2,27 +2,42 @@
 
 		<div class="item-wrapper">
 			<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-				<span class="title">Permissions</span>
-				<span class="arrow">make smaller</span>
+				<span class="title">{_ Permissions _}</span>
+				<span class="arrow">{_ make smaller _}</span>
 			</h3>
 			<div class="item">
 				<fieldset class="admin-form">
 					<div class="notification notice">
-						Check below what people that are member of this role are allowed to do. <a href="javascript:void(0)" class="do_dialog {title: 'Help about ACL roles.', text: 'Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules.', width: '450px'}">Need more help?</a>
+						{_ Check below what people that are member of this role are allowed to do. _}<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about ACL roles. _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}', width: '450px'}">{_ Need more help? _}</a>
 					</div>
 
 					<div class="form-item clearfix">
 						<input id="field-view-all" type="checkbox" class="do_fieldreplace" name="acl_view_all" {% if acl.view_all %}checked="checked"{% endif %} value="1" />
-						<label for="field-view-all">All members are allowed to view all content.  (Check this for supervisors.)</label>
+						<label for="field-view-all">{_ All members are allowed to view all content.  (Check this for supervisors.) _}</label>
 					</div>
 
 					<div class="form-item clearfix">
 						<input id="field-update-own" type="checkbox" class="do_fieldreplace" name="acl_only_update_own" {% if acl.only_update_own %}checked="checked"{% endif %} value="1" />
-						<label for="field-update-own">Only allow to update content created by the user himself. (Check for user generated content sites.)</label>
+						<label for="field-update-own">{_ Only allow to update content created by the user himself. (Check for user generated content sites.) _}</label>
 					</div>
+
+					<div class="form-item clearfix">
+						<label>{_ Maximum visibility (user can’t change visibility to higher level than this) _}</label>
+						<select id="acl_visible_for" name="acl_visible_for">
+							<option value="0"
+								{% ifequal 0 acl.visible_for %}selected="selected"
+								{% endifequal %}>{_ The whole world _}</option>
+							<option value="1"
+								{% ifequal 1 acl.visible_for %}selected="selected"
+								{% endifequal %}>{_ Community members _}</option>
+							<option value="2" {% ifequal 2 acl.visible_for %}selected="selected"{% endifequal %}>{_ Group members _}</option>
+						</select>
+					</div>
+					
+					<hr/>
 				
 					<div class="zp-40">
-						<h4>Allow editing of category</h4>
+						<h4>{_ Allow editing of category _}</h4>
 						<p>
 							{% for cat_id, level, indent, title in m.category.all_flat_meta %}
 							<label for="{{ #category.cat_id }}">
@@ -37,7 +52,7 @@
 					</div>
 				
 					<div class="zp-50">
-						<h4>Manage modules</h4>
+						<h4>{_ Manage modules _}</h4>
 						<p>
 						{% with m.modules.all as modules %}
 							{% for mod in m.modules.enabled %}
@@ -52,16 +67,16 @@
 					<hr style="clear:left" />
 
 
-					<h4>File uploads</h4>
+					<h4>{_ File uploads _}</h4>
 					<div class="form-item clearfix">
-						<label for="field-file-upload-size">Maximum allowed file size for uploads (in KB)</label>
-						<input id="field-file-upload-size" style="width: 100px" type="text" name="acl_file_upload_size" value="{{ acl.file_upload_size|default:4096 }}" />
+						<label for="field-file-upload-size">{_ Maximum allowed file size for uploads (in KB) _}</label>
+						<input id="field-file-upload-size" style="width: 100px" type="text" name="acl_file_upload_size" value="{{ acl.file_upload_size|default:4096|escape }}" />
 						{% validate id="field-file-upload-size" name="acl_file_upload_size" type={numericality} %}
 					</div>
 					
-					<h4>File types allowed to be uploaded</h4>
+					<h4>{_ File types allowed to be uploaded _}</h4>
 					
-					<p><strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data.</p>
+					<p>{_ <strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data. _}</p>
 					
 					{% for mimes in [
 								"image/jpeg",
