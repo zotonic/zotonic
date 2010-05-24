@@ -92,6 +92,8 @@ $.widget("ui.inputoverlay",
 		    func(true);
 		}).blur(function() {
 		    func(false);
+		}).keydown(function() {
+		    setTimeout(function(){func(true);},10);
 		}).keyup(function() {
 		    func(true);
 		});
@@ -103,7 +105,7 @@ $.widget("ui.inputoverlay",
     		    } else {
     		        $(span).addClass('hidden');
     		    }
-    		}, 500);
+    		}, 100);
 		}
     }    
 });
