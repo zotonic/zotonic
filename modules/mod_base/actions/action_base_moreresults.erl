@@ -44,7 +44,11 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
     SearchProps1 = [{page, Page}|SearchProps],
     R = m_search:search({SearchName, SearchProps1}, Context),
     Result = R#m_search_result.result,
-    Ids = Result#search_result.result,
+    Ids = case proplists:get_value(ids, Result#search_result.result) of
+              undefined ->
+                  Result#search_result.result;
+              X -> X
+          end,
 
     Context1 = case length(Ids) < PageLen of
                    false ->
