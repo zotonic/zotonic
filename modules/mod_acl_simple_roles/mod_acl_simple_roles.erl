@@ -39,7 +39,7 @@
 
 -include("zotonic.hrl").
 
--record(acl_user, {modules, categories, roles, view_all, only_update_own, file_mimes, file_size}).
+-record(acl_user, {modules, categories, roles, view_all, only_update_own, file_mimes, file_size, visible_for}).
 -record(state, {context}).
 
 -define(ROLE_MEMBER, role_member).
@@ -92,22 +92,52 @@ observe({acl_logoff}, Context) ->
 %% the tuple {error, Reason}
 observe({acl_rsc_update_check, _Id}, {error, Reason}, _Context) ->
 	{error, Reason};
-observe({acl_rsc_update_check, insert_rsc}, Props, _Context) ->
+observe({acl_rsc_update_check, insert_rsc}, Props, Context) ->
 	PropsPubl = case proplists:get_value(is_published, Props) of
 		undefined -> z_utils:prop_replace(is_published, false, Props);
 		_ -> Props
 	end,
-	PropsVis = case proplists:get_value(visible_for, PropsPubl) of
-		undefined -> z_utils:prop_replace(visible_for, ?ACL_VIS_PUBLIC, PropsPubl);
-		_ -> PropsPubl
-	end,
+	PropsVis = constrain_visible_for(insert_rsc, PropsPubl, Context),
 	case proplists:get_value(is_authoritative, PropsVis) of
 		undefined -> z_utils:prop_replace(is_authoritative, true, PropsVis);
 		_ -> PropsVis
 	end;
-observe({acl_rsc_update_check, _id}, Props, _Context) ->
-	Props.
+observe({acl_rsc_update_check, Id}, Props, Context) ->
+	constrain_visible_for(Id, Props, Context).
 
+    % Make sure that the user doesn't try to change the visibility beyond what that user is allowed to do.
+    % Retain any visibility the rsc already had.
+    constrain_visible_for(Id, Props, Context) ->
+        case proplists:get_value(visible_for, Props) of
+    		undefined ->
+    		    z_utils:prop_replace(visible_for, min_visible(Context), Props);
+    		Vis -> 
+    		    CurrVis = case Id of 
+    		                insert_rsc -> ?ACL_VIS_USER;
+    		                _ -> m_rsc:p(Id, visible_for, Context)
+    		              end,
+    		    NewVis = z_convert:to_integer(Vis),
+    		    case NewVis < CurrVis of
+    		        true ->
+            		    case min_visible(Context) of
+            		        N when is_integer(N) ->
+            		            z_utils:prop_replace(visible_for, max(N, NewVis), Props);
+            		        undefined ->
+            		            Props
+            		    end;
+            		false ->
+            		    Props
+            	end
+    	end.
+
+    min_visible(#context{user_id=?ACL_ADMIN_USER_ID}) ->
+        ?ACL_VIS_PUBLIC;
+    min_visible(#context{acl=ACL}) ->
+        case ACL of
+            #acl_user{visible_for=VisFor} -> VisFor;
+            _ -> undefined
+        end.
+        
 
 
 %% @doc Check if the update contains information for a acl role.  If so then modify the acl role
@@ -125,6 +155,7 @@ rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
             Cats = proplists:get_all_values(acl_cat, Props),
             Mods = proplists:get_all_values(acl_mod, Props),
             Mimes = proplists:get_all_values(acl_mime, Props),
+            VisibleFor = z_convert:to_integer(proplists:get_value(acl_visible_for, Props, 0)),
             FileSize = z_convert:to_integer(proplists:get_value(acl_file_upload_size, Props, 0)),
             ReadAll = z_convert:to_bool(proplists:get_value(acl_view_all, Props, false)),
             OnlyOwn = z_convert:to_bool(proplists:get_value(acl_only_update_own, Props, false)),
@@ -135,14 +166,16 @@ rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
                         proplists:delete(acl_mod,
                             proplists:delete(acl_file_upload_size,
                                 proplists:delete(acl_view_all,
-                                    proplists:delete(acl_only_update_own,
-                                        proplists:delete(acl_mime, Props)))))),
+                                    proplists:delete(acl_visible_for,
+                                        proplists:delete(acl_only_update_own,
+                                            proplists:delete(acl_mime, Props))))))),
             Props2 = [{acl, [   {categories, Cats1}, 
                                 {modules, Mods1}, 
                                 {view_all,ReadAll},
                                 {only_update_own, OnlyOwn},
                                 {file_upload_size, FileSize},
-                                {file_mime, Mimes1}
+                                {file_mime, Mimes1},
+                                {visible_for, VisibleFor}
                             ]} | Props1],
             {true, Props2};
         false ->
@@ -253,7 +286,8 @@ logon(UserId, Context) ->
                                 m_rsc:p(R, is_published, ContextAdmin) ],
         % Merge all role's categories and modules
         ACLs = [ m_rsc:p(R, acl, ContextAdmin) || R <- RolesFiltered ],
-        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime} = combine(ACLs, [], [], false, undefined, 0, []),
+        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor} 
+                = combine(ACLs, [], [], false, undefined, 0, [], 3),
         Context#context{user_id=UserId,
                         acl=#acl_user{categories=lists:flatten(Cats), 
                                       modules=lists:flatten(Mods),
@@ -261,13 +295,14 @@ logon(UserId, Context) ->
                                       view_all=ViewAll,
                                       only_update_own=OnlyOwn,
                                       file_size=FileSize,
-                                      file_mimes=lists:flatten(FileMime)}}.
+                                      file_mimes=lists:flatten(FileMime),
+                                      visible_for=VisibleFor}}.
 
-    combine([], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
-        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime};
-    combine([undefined|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
-        combine(Rest, Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime);
-    combine([ACL|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime) ->
+    combine([], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor) ->
+        {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor};
+    combine([undefined|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor) ->
+        combine(Rest, Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor);
+    combine([ACL|Rest], Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor) ->
         OnlyOwn1 = case {OnlyOwn, proplists:get_value(only_update_own, ACL, false)} of
                         {undefined, UpdOwn} -> UpdOwn;
                         {true, true} -> true;
@@ -279,10 +314,15 @@ logon(UserId, Context) ->
                 ViewAll orelse proplists:get_value(view_all, ACL, false),
                 OnlyOwn1,
                 max(proplists:get_value(file_upload_size, ACL, 0), FileSize),
-                [proplists:get_value(file_mime, ACL, [])|FileMime]).
+                [proplists:get_value(file_mime, ACL, [])|FileMime],
+                min(proplists:get_value(visible_for, ACL, 0), VisibleFor)).
 
         max(A,B) when A >= B -> A;
         max(_,B) -> B.
+
+        min(A,B) when A =< B -> A;
+        min(_,B) -> B.
+
 
 %% @doc Check if an user can see something
 can_view(Id, Context) ->

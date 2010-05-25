@@ -86,9 +86,10 @@ event({submit, rscform, _FormId, _TargetId}, Context) ->
                             Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context1), Context1),
                             Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context1), Context2),
                             Context4 = z_render:set_value("slug",  m_rsc:p(Id, slug, Context3), Context3),
-                            Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4)) of
-                                true ->  z_render:wire("delete-button", {disable, []}, Context4);
-                                false -> z_render:wire("delete-button", {enable, []}, Context4)
+                            Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context4)), Context4),
+                            Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4b)) of
+                                true ->  z_render:wire("delete-button", {disable, []}, Context4b);
+                                false -> z_render:wire("delete-button", {enable, []}, Context4b)
                             end,
                             Context6 = z_render:growl(["Saved ",z_html:strip(Title),"."], Context5),
                             case proplists:is_defined("save_duplicate", Post) of
