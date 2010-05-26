@@ -317,7 +317,7 @@ handle_info(_, Session) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 %% Terminate all processes coupled to the session.
-terminate(Reason, Session) ->
+terminate(_Reason, Session) ->
 	save_persist(Session),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
     ok.
