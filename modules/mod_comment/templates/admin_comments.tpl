@@ -28,8 +28,12 @@ Recent Comments
 							<span class="zp-15">{{ comment.created|date:"d M Y, H:i" }}</span>
 							<span class="zp-15">{{ m.rsc[comment.rsc_id].title|truncate:20 }}</span>
 							<span class="zp-25">{{ comment.message|striptags|truncate:40 }}</span>
-							<span class="zp-15">{{ comment.name|truncate:20 }}</span>
-							<span class="zp-15">{{ comment.email|truncate:20|escape }}</span>
+							{% if comment.user_id %}
+								<span class="zp-30">{{ m.rsc[comment.user_id].title }} [#{{ comment.user_id }}]</span>
+							{% else %}
+								<span class="zp-15">{{ comment.name|truncate:20 }}</span>
+								<span class="zp-15" title="{{ comment.email|truncate }}">{{ comment.email|truncate:20|escape }}</span>
+							{% endif %}
 							<span class="zp-15">
 	                            {% button text="view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
 								{% button text="delete" postback={comment_delete id=id on_success={slide_fade_out id=#comment.id}} %}
