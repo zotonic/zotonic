@@ -43,8 +43,14 @@
 %% @doc Handle the submit event of a new comment
 event({submit, {newcomment, Args}, _TriggerId, _TargetId}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
-    Name = z_context:get_q_validated("name", Context),
-    Email = z_context:get_q_validated("mail", Context),
+    case z_auth:is_auth(Context) of
+        false ->
+            Name = z_context:get_q_validated("name", Context),
+            Email = z_context:get_q_validated("mail", Context);
+        true ->
+            Name = "",
+            Email = ""
+    end,
     Message = z_context:get_q_validated("message", Context),
     case m_comment:insert(Id, Name, Email, Message, Context) of
         {ok, CommentId} ->

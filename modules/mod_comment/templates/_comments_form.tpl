@@ -1,6 +1,10 @@
+{% with m.acl.user as user_id %}
+
 {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" %}
 <form id="comments-form" method="post" action="postback">
 	<fieldset class="zp-100">
+
+		{% if not user_id %}
 		<div class="zp-30">
 			<div class="form-item">
 				<label for="name">Name</label>
@@ -13,6 +17,8 @@
 				{% validate id="mail" type={presence} type={email} %}
 			</div>
 		</div>
+		{% endif %}
+
 		<div class="zp-70 last">
 			<div class="form-item">
 				<label for="message">Message</label>
@@ -25,3 +31,5 @@
 		</div>
 	</fieldset>
 </form>
+
+{% endwith %}

@@ -33,6 +33,7 @@
     get/2,
     insert/5,
     delete/2,
+    gravatar_code/1,
     
     search/3
 ]).
