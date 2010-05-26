@@ -336,8 +336,8 @@ get_session_id(Context) ->
 set_session_id(SessionId, Context) ->
     RD = z_context:get_reqdata(Context),
     %% TODO: set the {domain,"example.com"} of the session cookie
-    {K,V}    = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [{path, "/"}, {http_only, true}]),
-    RD1 = wrq:set_resp_header(K, V, RD),
+    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [{path, "/"}, {http_only, true}]),
+    RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
 
 

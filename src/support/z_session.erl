@@ -125,6 +125,8 @@ keepalive(Pid) ->
     gen_server:cast(Pid, keepalive).
 
 %% @doc Reset the timeout counter of the page and session according to the current tick
+keepalive(undefined, Pid) ->
+    keepalive(Pid);
 keepalive(PageId, Pid) ->
     gen_server:cast(Pid, {keepalive, PageId}).
 
@@ -189,8 +191,8 @@ handle_cast({check_expire, Now}, Session) ->
     case length(Session#session.pages) of
         0 ->
             if 
-                Session#session.expire < Now ->  {stop, normal, Session};
-                true ->  {noreply, Session}
+                Session#session.expire < Now -> {stop, normal, Session};
+                true -> {noreply, Session}
             end;
         _ ->
             Expire   = Now + ?SESSION_PAGE_TIMEOUT,
@@ -315,7 +317,7 @@ handle_info(_, Session) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 %% Terminate all processes coupled to the session.
-terminate(_Reason, Session) ->
+terminate(Reason, Session) ->
 	save_persist(Session),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
     ok.
@@ -352,12 +354,12 @@ restart_session(Session) ->
 
 %% @doc Load the persistent data from the database, used on session start.
 load_persist(Session) ->
-	case z_db:assoc_props_row("select props from persistent where id = $1", 
-	                        [Session#session.persist_id], 
-	                        Session#session.context) of
+	case z_db:q1("select props from persistent where id = $1", 
+	                [Session#session.persist_id], 
+	                Session#session.context) of
 		L when is_list(L) ->
 			Session#session{ props_persist = L, persist_is_dirty = false, persist_is_saved = true };
-		undefined ->
+		_ ->
 			Session#session{ props_persist = [], persist_is_dirty = false, persist_is_saved = false }
 	end.
 
