@@ -39,7 +39,7 @@
 %% @doc Check if an action is allowed for the current actor.
 is_allowed(_Action, _Object, #context{acl=admin}) ->
 	true;
-is_allowed(use, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed(Action, Object, Context) ->
 	case z_notifier:first({acl_is_allowed, Action, Object}, Context) of
