@@ -79,10 +79,6 @@ init(SiteProps) ->
                 {z_session_manager, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
-    Visitor = {z_visitor_manager,
-                {z_visitor_manager, start_link, [SiteProps]}, 
-                permanent, 5000, worker, dynamic},
-
     Dispatcher = {z_dispatcher,
                 {z_dispatcher, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
@@ -112,7 +108,7 @@ init(SiteProps) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Translation, Depcache, Notifier, Installer, Session, Visitor, 
+            Translation, Depcache, Notifier, Installer, Session, 
             Dispatcher, Template, DropBox, Pivot,
             ModuleIndexer, Modules,
             PostStartup

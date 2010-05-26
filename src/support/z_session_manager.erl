@@ -29,6 +29,12 @@
 %% The name of the session cookie
 -define(SESSION_COOKIE, "z_sid").
 
+%% The name of the persistent data cookie
+-define(PERSIST_COOKIE, "z_pid").
+
+%% Max age of the person cookie, 10 years or so.
+-define(PERSIST_COOKIE_MAX_AGE, 3600*24*52*10).
+
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
@@ -50,7 +56,7 @@
 -include_lib("zotonic.hrl").
 
 %% The session server state
--record(session_srv, {key2pid, pid2key}).
+-record(session_srv, {key2pid, pid2key, persist2pid, pid2persist}).
 
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
@@ -130,7 +136,7 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
 %% @doc Initialize the session server with an empty session table.  We make the session manager a system process
 %%      so that crashes in sessions are isolated from each other.
 init(_SiteProps) ->
-    State = #session_srv{key2pid=dict:new(), pid2key=dict:new()},
+    State = #session_srv{key2pid=dict:new(), pid2key=dict:new(), persist2pid=dict:new(), pid2persist=dict:new()},
     timer:apply_interval(?SESSION_CHECK_EXPIRE * 1000, ?MODULE, tick, [self()]),
     process_flag(trap_exit, true),
     {ok, State}.
@@ -168,14 +174,8 @@ handle_call({rename_session, Context}, _From, State) ->
         undefined -> 
             {reply, Context, State};
         Pid -> 
-            % Remove old session-id from the lookup tables
-            State1 = erase_session_pid(Pid, State),
-            
-            % Generate a new session id and set cookie
-            SessionId = z_ids:id(),
-            Context1  = set_session_id(SessionId, Context),
-            State2    = store_session_pid(SessionId, Pid, State1),
-            {reply, Context1, State2}
+			{Context1, State1} = rename_session(Pid, Context, State),
+            {reply, Context1, State1}
     end;
 
 %% Return the number of sessions
@@ -220,17 +220,36 @@ code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
 %% Make sure that the session cookie is set and that the session process has been started.
 ensure_session1(S, P, Context, State) when S == undefined orelse P == error ->
-    Pid       = spawn_session(State),
-    SessionId = z_ids:id(),
-    Context1  = set_session_id(SessionId, Context),
-    State1    = store_session_pid(SessionId, Pid, State),
-    Context2  = Context1#context{session_pid = Pid},
-	z_notifier:notify(session_init, Context2),
-    {Pid, Context2, State1};
+	{PersistId, Context1} = ensure_persist_cookie(Context),
+	case dict:find(PersistId, State#session_srv.persist2pid) of
+		{ok, Pid} ->
+			% Browser restart, though session still alive
+			z_session:restart(Pid),
+			{Context2, State1} = rename_session(Pid, Context1, State),
+			{Pid, Context2, State1};
+		error ->
+		    Pid       = spawn_session(PersistId, Context1),
+		    SessionId = z_ids:id(),
+		    Context2  = set_session_id(SessionId, Context1),
+			State1    = store_persist_pid(PersistId, Pid, store_session_pid(SessionId, Pid, State)),
+		    Context3  = Context2#context{session_pid = Pid},
+			z_notifier:notify(session_init, Context3),
+		    {Pid, Context3, State1}
+	end;
 ensure_session1(_SessionId, Pid, Context, State) ->
     z_session:keepalive(Context#context.page_pid, Pid),
     Context1  = Context#context{session_pid = Pid},
     {Pid, Context1, State}.
+
+
+rename_session(Pid, Context, State) ->
+    % Remove old session-id from the lookup tables
+    State1 = erase_session_pid(Pid, State),
+    % Generate a new session id and set cookie
+    SessionId = z_ids:id(),
+    Context1  = set_session_id(SessionId, Context),
+    State2    = store_session_pid(SessionId, Pid, State1),
+	{Context1, State2}.
 
 
 %% @spec erase_session_pid(pid(), State) -> State
@@ -238,22 +257,41 @@ ensure_session1(_SessionId, Pid, Context, State) ->
 erase_session_pid(Pid, State) ->
     case dict:find(Pid, State#session_srv.pid2key) of
         {ok, Key} ->
-            State#session_srv{
+			State1 = State#session_srv{
                     pid2key = dict:erase(Pid, State#session_srv.pid2key),
                     key2pid = dict:erase(Key, State#session_srv.key2pid)
-                };
+                },
+			case dict:find(Pid, State1#session_srv.pid2persist) of
+				{ok, Persist} ->
+					State1#session_srv{
+						persist2pid = dict:erase(Persist, State#session_srv.persist2pid),
+						pid2persist = dict:erase(Pid, State#session_srv.pid2persist)
+					};
+				error ->
+					State1
+			end;
         error ->
             State
     end.
 
 
-%% @spec store_session_pid(pid(), State) -> State
+%% @spec store_session_pid(SessionId, pid(), State) -> State
 %% @doc Add the pid to the session state
 store_session_pid(SessionId, Pid, State) ->
     State#session_srv{
             pid2key = dict:store(Pid, SessionId, State#session_srv.pid2key),
             key2pid = dict:store(SessionId, Pid, State#session_srv.key2pid)
         }.
+
+
+%% @spec store_persist_pid(PersistId, pid(), State) -> State
+%% @doc Add the pid to the persist state
+store_persist_pid(PersistId, Pid, State) ->
+    State#session_srv{
+            pid2persist = dict:store(Pid, PersistId, State#session_srv.pid2persist),
+            persist2pid = dict:store(PersistId, Pid, State#session_srv.persist2pid)
+        }.
+
 
 %% @spec forget_session_id(SessionId::string(), State) -> true | error
 %% @doc Stop the session process linked to the session id
@@ -279,14 +317,12 @@ session_find_pid(SessionId, State) ->
     end.
 
 
-%% @spec new_session(State::state()) -> pid()
+%% @spec new_session(PersistId, Context) -> pid()
 %% @doc Spawn a new session, monitor the pid as we want to know about normal exits
-spawn_session(_State) ->
-    case z_session:start_link() of
-        {ok, Pid} ->
-                erlang:monitor(process, Pid),
-                Pid
-    end.
+spawn_session(PersistId, Context) ->
+    {ok, Pid} = z_session:start_link(PersistId, Context),
+    erlang:monitor(process, Pid),
+    Pid.
 
 
 %% @spec get_session_id(Context) -> undefined | string()
@@ -313,4 +349,22 @@ clear_session_id(Context) ->
     Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, "", [{max_age, 0}, {path, "/"}, {http_only, true}]),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context#context{session_pid=undefined}).
+
+
+
+%% @doc Ensure that there is a persistent cookie set at the browser, return the updated context and the id.
+%% We need to do this on first visit as the user might communicate further via websockets.
+ensure_persist_cookie(Context) ->
+    RD = z_context:get_reqdata(Context),
+    case wrq:get_cookie_value(?PERSIST_COOKIE, RD) of
+		undefined ->
+			NewPersistCookieId = z_ids:id(),
+		    Options = [{max_age, ?PERSIST_COOKIE_MAX_AGE}, {path, "/"}, {http_only, true}],
+		    Hdr = mochiweb_cookies:cookie(?PERSIST_COOKIE, NewPersistCookieId, Options),
+		    RD1 = wrq:merge_resp_headers([Hdr], RD),
+		    {NewPersistCookieId, z_context:set_reqdata(RD1, Context)};
+		PersistCookie ->
+			{PersistCookie, Context}
+	end.
+
 

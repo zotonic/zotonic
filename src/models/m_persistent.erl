@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% @date 2009-11-20
 %%
-%% @doc Model for accessing the visitor variables from a template.
+%% @doc Model for accessing the persistent variables from a template.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -18,7 +18,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(m_visitor).
+-module(m_persistent).
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(gen_model).
@@ -35,7 +35,7 @@
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(Key, #m{value=undefined}, Context) ->
-    z_context:get_visitor(Key, Context).
+    z_context:get_persistent(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context)

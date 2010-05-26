@@ -4,10 +4,10 @@
 %%
 %% @doc Set a value in the zotonic visitor record.
 
--module(service_base_visitor_get).
+-module(service_base_persistent_set).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--svc_title("Retrieve a value from the Zotonic visitor record.").
+-svc_title("Set a value in the Zotonic persistent record.").
 -svc_needauth(false).
 
 -export([process_get/2]).
@@ -20,8 +20,13 @@ process_get(_ReqData, Context) ->
         X when X =:= undefined orelse X =:= [] ->
             {error, missing_arg, "key"};
         Key ->
-            R = [{key, Key}, {value, z_context:get_visitor(list_to_atom(Key), Context)}],
-            z_convert:to_json(R)
+            case z_context:get_q("value", Context) of
+                X when X =:= undefined orelse X =:= [] ->
+                    {error, missing_arg, "value"};
+                Value ->
+                    z_context:set_persistent(list_to_atom(Key), Value, Context),
+                    z_convert:to_json([{key, Key}, {value, Value}])
+            end
     end.
 
 

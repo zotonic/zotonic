@@ -90,6 +90,8 @@ has_column(Table, Column, Name, Database, Schema) ->
 upgrade(Name, Database, Schema) ->
     ok = install_acl(Name, Database, Schema),
     ok = install_identity_verified(Name, Database, Schema),
+	ok = install_persist(Name, Database, Schema),
+	ok = drop_visitor(Name, Database, Schema),
     ok.
 
 
@@ -112,6 +114,43 @@ install_acl(Name, Database, Schema) ->
 		false ->
 			ok
 	end.
+
+
+install_persist(Name, Database, Schema) ->
+	case has_table("persistent", Name, Database, Schema) of
+		false ->
+		    {ok, C}  = pgsql_pool:get_connection(Name),
+			{ok,[],[]} = pgsql:squery(C, "create table persistent ( "
+							"  id character varying(32) not null,"
+							"  props bytea,"
+					      	"  created timestamp with time zone NOT NULL DEFAULT now(),"
+							"  modified timestamp with time zone NOT NULL DEFAULT now(),"
+					      	"  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
+							")"),
+        	pgsql_pool:return_connection(Name, C),
+			ok;
+		true ->
+			ok
+	end.
+
+
+drop_visitor(Name, Database, Schema) ->
+	case has_table("visitor_cookie", Name, Database, Schema) of
+		true ->
+		    {ok, C}  = pgsql_pool:get_connection(Name),
+			{ok, [], []} = pgsql:squery(C, "BEGIN"),
+			{ok, _N} = pgsql:squery(C, 
+					"insert into persistent (id,props) "
+					"select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
+			pgsql:squery(C, "drop table visitor_cookie cascade"),
+			pgsql:squery(C, "drop table visitor cascade"),
+			{ok, [], []} = pgsql:squery(C, "COMMIT"),
+        	pgsql_pool:return_connection(Name, C),
+			ok;
+		false ->
+			ok
+	end.
+
 
 install_identity_verified(Name, Database, Schema) ->
     case has_column("identity", "is_verified", Name, Database, Schema) of
