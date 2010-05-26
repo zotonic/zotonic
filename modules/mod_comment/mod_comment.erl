@@ -181,6 +181,14 @@ install_comment_table(true, Context) ->
         [created,creator_id,id,ip_address,notify_id,props,rating,rsc_id] ->
             z_db:q("drop table comment", Context),
             install_comment_table(false, Context);
+        [created,id,email,gravatar_code,ip_address,is_visible,keep_informed,
+         name,props,rsc_id,user_agent,user_id,visitor_id] ->
+            z_db:q("alter table comment drop column visitor_id cascade, "
+                   "add column persistent_id character varying (32), "
+                   "add constraint fk_comment_persistent_id foreign key (persistent_id) "
+                   "  references persistent(id) on delete set null on update cascade", Context),
+            z_db:q("create index fki_comment_persistent_id on comment(persistent_id)", Context),
+            ok;
         _ ->
             % todo: add list of current fields here
             ok
@@ -192,7 +200,7 @@ install_comment_table(false, Context) ->
             is_visible boolean not null default true,
             rsc_id int not null,
             user_id int,
-            visitor_id bigint,
+            persistent_id character varying(32),
             gravatar_code character varying(40) not null default ''::character varying,
             email character varying(80) not null default ''::character varying,
             name character varying(80) not null default ''::character varying,
@@ -209,15 +217,15 @@ install_comment_table(false, Context) ->
             constraint fk_comment_user_id foreign key (user_id)
                 references rsc(id)
                 on delete set null on update cascade,
-            constraint fk_comment_visitor_id foreign key (visitor_id)
-                references visitor(id)
+            constraint fk_comment_persistent_id foreign key (persistent_id)
+                references persistent(id)
                 on delete set null on update cascade
         )
     ", Context),
     Indices = [
         {"fki_comment_rsc_id", "rsc_id"},
         {"fki_comment_user_id", "user_id"},
-        {"fki_comment_visitor_id", "visitor_id"},
+        {"fki_comment_persistent_id", "persistent_id"},
         {"fki_comment_ip_address", "ip_address"},
         {"comment_rsc_created_key", "rsc_id, created"},
         {"comment_created_key", "created"}

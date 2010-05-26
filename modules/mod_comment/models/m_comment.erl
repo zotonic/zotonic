@@ -90,7 +90,7 @@ insert(RscId, Name, Email, Message, Context) ->
         {rsc_id, z_convert:to_integer(RscId)},
         {is_visible, true},
         {user_id, z_acl:user(Context)},
-        {visitor_id, z_context:visitor_id(Context)},
+        {persistent_id, z_context:persistent_id(Context)},
         {name, Name1},
         {message, Message1},
         {email, Email},

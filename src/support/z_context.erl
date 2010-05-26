@@ -45,8 +45,6 @@
     
     ensure_all/1,
     ensure_session/1,
-    ensure_visitor/1,
-    ensure_visitor_id/1,
     ensure_page_session/1,
     ensure_qs/1,
 
@@ -79,9 +77,9 @@
     get_page/2,
     incr_page/3,
 
-    visitor_id/1,
-    set_visitor/3,
-    get_visitor/2,
+    persistent_id/1,
+    set_persistent/3,
+    get_persistent/2,
 
     set/3,
     set/2,
@@ -147,7 +145,6 @@ set_server_names(#context{host=Host} = Context) ->
         depcache=list_to_atom("z_depcache"++HostAsList),
         notifier=list_to_atom("z_notifier"++HostAsList),
         session_manager=list_to_atom("z_session_manager"++HostAsList),
-        visitor_manager=list_to_atom("z_visitor_manager"++HostAsList),
         dispatcher=list_to_atom("z_dispatcher"++HostAsList),
         template_server=list_to_atom("z_template"++HostAsList),
         scomp_server=list_to_atom("z_scomp"++HostAsList),
@@ -200,7 +197,6 @@ prune_for_async(#context{} = Context) ->
         wm_reqdata=Context#context.wm_reqdata,
         host=Context#context.host,
 		user_id=Context#context.user_id,
-		visitor_pid=Context#context.visitor_pid,
 		session_pid=Context#context.session_pid,
 		page_pid=Context#context.page_pid,
         acl=Context#context.acl,
@@ -208,7 +204,6 @@ prune_for_async(#context{} = Context) ->
         depcache=Context#context.depcache,
         notifier=Context#context.notifier,
         session_manager=Context#context.session_manager,
-        visitor_manager=Context#context.visitor_manager,
         dispatcher=Context#context.dispatcher,
         template_server=Context#context.template_server,
         scomp_server=Context#context.scomp_server,
@@ -243,7 +238,6 @@ prune_for_database(Context) ->
         depcache=Context#context.depcache,
         notifier=Context#context.notifier,
         session_manager=Context#context.session_manager,
-        visitor_manager=Context#context.visitor_manager,
         dispatcher=Context#context.dispatcher,
         template_server=Context#context.template_server,
         scomp_server=Context#context.scomp_server,
@@ -417,9 +411,8 @@ has_session(_) ->
 %% @doc Ensure session and page session and fetch&parse the query string
 ensure_all(Context) ->
     ensure_page_session(
-        ensure_visitor(
-            ensure_session(
-                ensure_qs(Context)))).
+        ensure_session(
+            ensure_qs(Context))).
 
 
 %% @doc Ensure that we have a session, start a new session process when needed
@@ -427,18 +420,8 @@ ensure_session(Context) ->
     case Context#context.session_pid of
         undefined ->
             Context1 = z_session_manager:ensure_session(Context),
-            z_visitor:associate_session(Context1#context.visitor_pid, Context1#context.session_pid),
             Context2 = z_auth:logon_from_session(Context1),
             add_nocache_headers(Context2);
-        _ ->
-            Context
-    end.
-
-%% @doc Ensure that we have a visitor, start a new visitor process when needed
-ensure_visitor(Context) ->
-    case Context#context.visitor_pid of
-        undefined ->
-            z_visitor_manager:ensure_visitor(Context);
         _ ->
             Context
     end.
@@ -448,7 +431,7 @@ ensure_page_session(Context) ->
     case Context#context.page_pid of
         undefined ->
             Context1 = ensure_session(Context),
-            z_session:ensure_page_session(Context1, Context#context.session_pid);
+            z_session:ensure_page_session(Context1);
         _ ->
             Context
     end.
@@ -577,7 +560,6 @@ add_script_page(Script, Context) ->
 %% @doc Spawn a new process, link it to the session process.
 spawn_link_session(Module, Func, Args, Context) ->
     LinkContext = #context{
-                    visitor_pid  = Context#context.visitor_pid,
                     session_pid = Context#context.session_pid,
                     page_pid    = Context#context.page_pid
                 },
@@ -586,23 +568,10 @@ spawn_link_session(Module, Func, Args, Context) ->
 %% @doc Spawn a new process, link it to the page process.  Used for comet feeds.
 spawn_link_page(Module, Func, Args, Context) ->
     LinkContext = #context{
-                    visitor_pid  = Context#context.visitor_pid,
                     session_pid = Context#context.session_pid,
                     page_pid    = Context#context.page_pid
                 },
     z_session_page:spawn_link(Module, Func, Args, LinkContext).
-
-
-%% @doc Ensure that we have an id for the visitor
-ensure_visitor_id(Context) ->
-    Context1 = ensure_visitor(Context),
-    {z_visitor:ensure_visitor_id(Context1#context.visitor_pid), Context1}.
-
-%% @doc Return the visitor id, if any
-visitor_id(#context{visitor_pid=undefined}) ->
-    undefined;
-visitor_id(Context) ->
-    z_visitor:ensure_visitor_id(Context#context.visitor_pid).
 
 
 %% ------------------------------------------------------------------------------------
@@ -611,7 +580,7 @@ visitor_id(Context) ->
 
 
 %% @spec get_value(Key::string(), Context) -> Value | undefined
-%% @spec Find a key in the context, page, session or visitor state.
+%% @spec Find a key in the context, page, session or persistent state.
 %% @todo Add page and user lookup
 get_value(Key, Context) ->
     case get(Key, Context) of
@@ -619,7 +588,7 @@ get_value(Key, Context) ->
             case get_page(Key, Context) of
                 undefined ->
                     case get_session(Key, Context) of
-                        undefined -> get_visitor(Key, Context);
+                        undefined -> get_persistent(Key, Context);
                         Value -> Value
                     end;
                 Value ->
@@ -630,18 +599,20 @@ get_value(Key, Context) ->
     end.
 
 
+%% @doc Ensure that we have an id for the visitor
+persistent_id(Context) ->
+	z_session:persistent_id(Context).
+
 %% @spec set_visitor(Key, Value, Context) -> Context
 %% @doc Set the value of the visitor variable Key to Value
-set_visitor(Key, Value, Context) ->
-    z_visitor:set(Key, Value, Context#context.visitor_pid),
+set_persistent(Key, Value, Context) ->
+    z_session:set_persistent(Key, Value, Context),
     Context.
 
-%% @spec get_visitor(Key, Context) -> Value
+%% @spec get_persistent(Key, Context) -> Value
 %% @doc Fetch the value of the visitor variable Key
-get_visitor(_Key, #context{visitor_pid=undefined}) ->
-    undefined;
-get_visitor(Key, Context) ->
-    z_visitor:get(Key, Context#context.visitor_pid).
+get_persistent(Key, Context) ->
+    z_session:get_persistent(Key, Context).
 
 
 %% @spec set_session(Key, Value, Context) -> Context

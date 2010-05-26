@@ -332,40 +332,18 @@ model_pgsql() ->
     "CREATE INDEX fki_predicate_category_predicate_id ON predicate_category (predicate_id)",
     "CREATE INDEX fki_predicate_category_category_id ON predicate_category (category_id)",
 
-    % Table visitor
-    % Holds information of a visitor.  Can be shopping cart, click history etc
+    % Table persistent
+    % Holds persistent information coupled to an user agent.  Can be shopping cart, click history etc
 
-    "CREATE TABLE visitor
-    (
-      id bigserial NOT NULL,
-      rsc_id int,
-      props bytea,
-      created timestamp with time zone NOT NULL DEFAULT now(),
-      modified timestamp with time zone NOT NULL DEFAULT now(),
-      CONSTRAINT visitor_pkey PRIMARY KEY (id),
-      CONSTRAINT fk_visitor_rsc_id FOREIGN KEY (rsc_id)
-        REFERENCES rsc (id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_visitor_rsc_id ON visitor (rsc_id)",
-
-    % Table visitor_cookie
-    % Cookies that couple an user agent to a known visitor
-
-    "CREATE TABLE visitor_cookie
-    (
-      cookie character varying (64) NOT NULL,
-      visitor_id bigint NOT NULL,
-      autologon_expire timestamp with time zone NOT NULL DEFAULT '2000-01-01 00:00:00+01'::timestamp with time zone,
-      created timestamp with time zone NOT NULL DEFAULT now(),
-      CONSTRAINT visitor_cookie_pkey PRIMARY KEY (cookie),
-      CONSTRAINT fk_visitor_id FOREIGN KEY (visitor_id)
-        REFERENCES visitor (id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_visitor_id ON visitor_cookie (visitor_id)",
+	"CREATE TABLE persistent 
+	 (
+	  id character varying(32) not null,
+	  props bytea,
+	  created timestamp with time zone NOT NULL DEFAULT now(),
+	  modified timestamp with time zone NOT NULL DEFAULT now(),
+	  CONSTRAINT persistent_pkey PRIMARY KEY (id)
+	)",
+	
 
     % Table identity
     % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.

@@ -30,8 +30,7 @@
         resource_module,
         
         %% The page (comet), session- and visitor processes associated with the current request
-        visitor_pid=undefined,  % might be present on multiple browsers & computers
-        session_pid=undefined,  % one session per browser
+        session_pid=undefined,  % one session per browser (also manages the persistent data)
         page_pid=undefined,     % multiple pages per session
         page_id=undefined,
 
@@ -42,7 +41,6 @@
         depcache,
         notifier,
         session_manager,
-        visitor_manager,
         dispatcher,
         template_server,
         scomp_server,

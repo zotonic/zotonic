@@ -30,15 +30,18 @@
 
 %% session exports
 -export([
-    start_link/0,
-    start_link/1,
+    start_link/2,
     stop/1, 
     set/3,
     get/2, 
     incr/3, 
+	persistent_id/1,
+    set_persistent/3,
+    get_persistent/2, 
+	restart/1,
     keepalive/1, 
     keepalive/2, 
-    ensure_page_session/2,
+    ensure_page_session/1,
     add_script/2,
     check_expire/2,
     dump/1,
@@ -49,10 +52,14 @@
 %% The session state
 -record(session, {
             expire,
-            timer_ref,
-            pages,
-            linked,
-            props=[]
+            pages=[],
+            linked=[],
+			persist_id,
+			persist_is_saved = false,
+			persist_is_dirty = false,
+            props=[],
+			props_persist=[],
+			context
             }).
 
 %% The state per page
@@ -64,10 +71,8 @@
 -define(PAGEID_OFFSET, 2).
 
 
-start_link() ->
-    start_link([]).
-start_link(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
+start_link(PersistId, Context) ->
+    gen_server:start_link(?MODULE, {PersistId, z_context:new(Context)}, []).
 
 stop(Pid) ->
     try
@@ -92,6 +97,22 @@ incr(Key, Value, #context{session_pid=Pid}) ->
 incr(Key, Value, Pid) ->
     gen_server:call(Pid, {incr, Key, Value}).
 
+
+persistent_id(Context) ->
+	gen_server:call(Context#context.session_pid, persistent_id).
+
+set_persistent(Key, Value, Context) ->
+    gen_server:cast(Context#context.session_pid, {set_persistent, Key, Value}).
+
+get_persistent(Key, Context) ->
+	gen_server:call(Context#context.session_pid, {get_persistent, Key}).
+
+
+%% @doc Reset the session contents, keep the persistent data. Used in the case where an user restarts his browser.
+restart(Pid) ->
+	gen_server:cast(Pid, restart).
+
+
 %% @spec add_script(Script::io_list(), PageId::list(), Pid::pid()) -> none()
 %% @doc Send a script to all session pages
 add_script(Script, #context{session_pid=Pid}) ->
@@ -108,11 +129,11 @@ keepalive(PageId, Pid) ->
     gen_server:cast(Pid, {keepalive, PageId}).
 
 
-%% @spec ensure_page_session(Context::#context, Pid::pid()) -> #context
+%% @spec ensure_page_session(Context::#context) -> #context
 %% @doc Make sure that the request has a page session, when the page session was alive then
 %%      adjust the expiration of the page.  Returns a new context with the page id set.
-ensure_page_session(Context, Pid) ->
-    gen_server:call(Pid, {ensure_page_session, Context}).
+ensure_page_session(Context) ->
+    gen_server:call(Context#context.session_pid, {ensure_page_session, Context}).
 
 
 %% @spec check_expire(Now::integer(), Pid::pid()) -> none()
@@ -133,12 +154,16 @@ spawn_link(Module, Func, Args, Context) ->
 
 %% Gen_server callbacks
 
-init(Args) ->
-    Session = new_session(Args),
+init({PersistId,Context}) ->
+    Session = new_session(PersistId, Context),
     {ok, Session}.
 
 handle_cast(stop, Session) ->
     {stop, normal, Session};
+
+%% @doc Reinitialize the complete session, cleanup the old pages, retain the persistent data.
+handle_cast(restart, Session) ->
+    {noreply, restart_session(Session)};
 
 %% @doc Reset the timeout counter for the session and, optionally, a specific page
 handle_cast(keepalive, Session) ->
@@ -196,6 +221,13 @@ handle_cast({add_script, Script}, Session) ->
     {noreply, Session};
 
 %% @doc Set the session variable, replaces any old value
+handle_cast({set_persistent, Key, Value}, Session) ->
+    {noreply, Session#session{ 
+					props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
+					persist_is_dirty = true
+			}};
+
+%% @doc Set the session variable, replaces any old value
 handle_cast({set, Key, Value}, Session) ->
     {noreply, Session#session{ props = z_utils:prop_replace(Key, Value, Session#session.props) }};
 
@@ -214,6 +246,16 @@ handle_cast(Msg, Session) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
+
+handle_call(persistent_id, _From, Session) ->
+	PersistedSession = case Session#session.persist_is_saved of
+		true -> Session;
+		false -> save_persist(Session#session{persist_is_dirty=true}) 
+	end,
+	{reply, PersistedSession#session.persist_id, PersistedSession};
+
+handle_call({get_persistent, Key}, _From, Session) ->
+    {reply, proplists:get_value(Key, Session#session.props_persist), Session};
 
 handle_call({get, Key}, _From, Session) ->
     {reply, proplists:get_value(Key, Session#session.props), Session};
@@ -274,6 +316,7 @@ handle_info(_, Session) ->
 %% The return value is ignored.
 %% Terminate all processes coupled to the session.
 terminate(_Reason, Session) ->
+	save_persist(Session),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
     ok.
 
@@ -289,15 +332,53 @@ code_change(_OldVsn, Session, _Extra) ->
 
 
 %% @doc Initialize a new session record
-new_session(_Args) ->
-    Now = z_utils:now(),
-    #session{
-            expire=Now + ?SESSION_EXPIRE_1,
-            timer_ref=undefined,
+new_session(PersistId, Context) ->
+    load_persist(#session{
+            expire=z_utils:now() + ?SESSION_EXPIRE_1,
+			persist_id = PersistId,
+			context=Context
+            }).
+
+
+% @todo: perform unlinks?
+restart_session(Session) ->
+	[ z_session_page:stop(Pid) || Pid <- Session#session.pages ],
+	Session#session{
+            expire=z_utils:now() + ?SESSION_EXPIRE_1,
             pages=[],
-            linked=[],
             props=[]
-            }.
+         }.
+
+
+%% @doc Load the persistent data from the database, used on session start.
+load_persist(Session) ->
+	case z_db:assoc_props_row("select props from persistent where id = $1", 
+	                        [Session#session.persist_id], 
+	                        Session#session.context) of
+		L when is_list(L) ->
+			Session#session{ props_persist = L, persist_is_dirty = false, persist_is_saved = true };
+		undefined ->
+			Session#session{ props_persist = [], persist_is_dirty = false, persist_is_saved = false }
+	end.
+
+%% @doc Save the persistent data to the database, when it is changed. Reset the dirty flag.
+save_persist(Session) ->
+	case Session#session.persist_is_dirty of
+		true ->
+			case z_db:q("update persistent set props = $2, modified = now() where id = $1", 
+						[Session#session.persist_id, Session#session.props_persist], 
+						Session#session.context) of
+				0 ->
+					z_db:q("insert into persistent (id,props,created,modified) values ($1,$2,now(),now())", 
+							[Session#session.persist_id, Session#session.props_persist], 
+							Session#session.context);
+				1 ->
+					ok
+			end,
+			Session#session{persist_is_dirty = false, persist_is_saved = true};
+		false ->
+			Session
+	end.
 
 %% @doc Return a new page record, monitor the started page process because we want to know about normal exits
 page_start(PageId) ->
