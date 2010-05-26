@@ -227,7 +227,7 @@ wm_is_authorized(Allowed, Context) when is_boolean(Allowed) ->
     end;
 wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
     ContextEnsured = z_context:ensure_all(Context),
-    wm_is_authorized(wm_is_allowed(ACLs, ContextEnsured), Context). 
+    wm_is_authorized(wm_is_allowed(ACLs, ContextEnsured), ContextEnsured). 
 
 wm_is_authorized(ACLs, ReqData, Context) when is_list(ACLs) ->
     wm_is_authorized(ACLs, ?WM_REQ(ReqData, Context));
