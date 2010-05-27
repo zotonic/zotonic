@@ -28,6 +28,7 @@
 	identify/3,
 	identify_file/2,
 	identify_file/3,
+	identify_file_direct/2,
     extension/1,
 	guess_mime/1
 ]).
@@ -51,7 +52,8 @@ identify(File, OriginalFilename, Context) ->
 
 
 %% @spec identify(File, Context) -> {ok, PropList} | {error, Reason}
-%% @doc Fetch information about a file, returns mime, width, height, type, etc.
+%% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
+%% has a specific identification methods.
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
 identify_file(File, OriginalFilename, Context) ->
@@ -59,21 +61,28 @@ identify_file(File, OriginalFilename, Context) ->
         {ok, Props} ->
 			{ok, Props};
         undefined -> 
-            {OsFamily, _} = os:type(),
-			case identify_file_os(OsFamily, File, OriginalFilename) of
-				{error, _} ->
-					%% Last resort, give ImageMagick a try
-					identify_file_imagemagick(File);
-				{ok, Props} ->
-					%% Images, pdf and ps are further investigated by ImageMagick
-					case proplists:get_value(mime, Props) of
-						"image/" ++ _ -> identify_file_imagemagick(File);
-						"application/pdf" -> identify_file_imagemagick(File);
-						"application/postscript" -> identify_file_imagemagick(File);
-						_Mime -> {ok, Props}
-					end
+			identify_file_direct(File, OriginalFilename)
+	end.
+
+
+%% @spec identify_file_direct(File, OriginalFilename) -> {ok, PropList} | {error, Reason}
+%% @doc Fetch information about a file, returns mime, width, height, type, etc.
+identify_file_direct(File, OriginalFilename) ->
+    {OsFamily, _} = os:type(),
+	case identify_file_os(OsFamily, File, OriginalFilename) of
+		{error, _} ->
+			%% Last resort, give ImageMagick a try
+			identify_file_imagemagick(File);
+		{ok, Props} ->
+			%% Images, pdf and ps are further investigated by ImageMagick
+			case proplists:get_value(mime, Props) of
+				"image/" ++ _ -> identify_file_imagemagick(File);
+				"application/pdf" -> identify_file_imagemagick(File);
+				"application/postscript" -> identify_file_imagemagick(File);
+				_Mime -> {ok, Props}
 			end
 	end.
+
 
 %% @spec identify_file_os(OsFamily::atom(), File::string(), OriginalFilename::string()) -> {ok, PropList} | {error, Reason}
 %% @doc Identify the mime type of a file using the unix "file" command.
