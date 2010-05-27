@@ -15,6 +15,7 @@
 	{% lib
 		"css/zp-compressed.css"
 		"css/zp-project.css"
+		"css/zp-menu.css"
 		"css/jquery.loadmask.css" 
 	%}
 
