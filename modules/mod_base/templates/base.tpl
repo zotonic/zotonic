@@ -15,21 +15,15 @@
 	{% lib
 		"css/zp-compressed.css"
 		"css/zp-project.css"
+		"css/jquery.loadmask.css" 
 	%}
 
 	<!--[if IE]>
 	{% lib	"css/zp-ie.css" %}
 	<![endif]-->
 	
-	<!-- Make ie6 understand html5 -->
-	<script>
-		document.createElement('header');
-	   	document.createElement('footer');
-	   	document.createElement('section');
-	   	document.createElement('aside');
-	   	document.createElement('nav');
-	   	document.createElement('article');
-   	</script>
+	<!-- Make ie understand html5 -->
+	{% lib "js/apps/modernizr.js" %}
 
 	{% block html_head_extra %}{% endblock %}
 </head>
