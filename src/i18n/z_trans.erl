@@ -89,12 +89,15 @@ parse_translations(Context) ->
         case dict:find(LabelB, Dict) of
             {ok, Ts} ->
                 case proplists:get_value(Lang, Ts) of
-                    undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,list_to_binary(Trans)}|Ts]));
+                    undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,list_to_binary(Trans)}|Ts], Dict));
                     _PrevTrans -> add_labels(Lang, Rest, Dict)
                 end;
             error -> 
-                add_labels(Lang, Rest, dict:store(LabelB,[{Lang,list_to_binary(Trans)}],Dict))
+                add_labels(Lang, Rest, dict:store(LabelB,[{Lang,to_binary(Trans)}],Dict))
         end.
+        
+        to_binary(header) -> "";
+        to_binary(L) -> list_to_binary(L).
             
 
 

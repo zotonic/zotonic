@@ -1,0 +1,267 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_signup/templates/signup.tpl:163 
+msgid ""
+"And sign up"
+msgstr ""
+"And sign up"
+
+#: ./modules/mod_signup/templates/signup.tpl:142 
+msgid ""
+"Check our Terms of Service and Privacy policies"
+msgstr ""
+"Check our Terms of Service and Privacy policies"
+
+#: ./modules/mod_signup/templates/signup.tpl:114 
+msgid ""
+"Choose a username and password"
+msgstr ""
+"Choose a username and password"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:12 
+msgid ""
+"Confirm my account."
+msgstr ""
+"Confirm my account."
+
+#: ./modules/mod_signup/templates/signup.tpl:75 
+msgid ""
+"Create your account"
+msgstr ""
+"Create your account"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:6 
+msgid ""
+"Dear"
+msgstr ""
+"Dear"
+
+#: ./modules/mod_signup/templates/signup.tpl:102 
+msgid ""
+"E-mail"
+msgstr ""
+"E-mail"
+
+#: ./modules/mod_signup/templates/signup.tpl:80 
+msgid ""
+"First name"
+msgstr ""
+"First name"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:16 
+msgid ""
+"Hope to see you soon."
+msgstr ""
+"Hope to see you soon."
+
+#: ./modules/mod_signup/templates/signup.tpl:156 
+msgid ""
+"I agree to the"
+msgstr ""
+"I agree to the"
+
+#: ./modules/mod_signup/templates/_logon_link.tpl:1 
+msgid ""
+"I don’t have an account, please sign me up."
+msgstr ""
+"I don’t have an account, please sign me up."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid ""
+"If the link does not work then you can go to"
+msgstr ""
+"If the link does not work then you can go to"
+
+#: ./modules/mod_signup/templates/signup.tpl:62 
+msgid ""
+"If you have already an account,"
+msgstr ""
+"If you have already an account,"
+
+#: ./modules/mod_signup/templates/signup.tpl:92 
+msgid ""
+"Last name"
+msgstr ""
+"Last name"
+
+#: ./modules/mod_signup/templates/signup.tpl:125 
+msgid ""
+"Password"
+msgstr ""
+"Password"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:3 
+msgid ""
+"Please confirm your account."
+msgstr ""
+"Please confirm your account."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:10 
+msgid ""
+"Please follow the link below."
+msgstr ""
+"Please follow the link below."
+
+#: ./modules/mod_signup/templates/signup.tpl:157 
+msgid ""
+"Privacy policies"
+msgstr ""
+"Privacy policies"
+
+#: ./modules/mod_signup/templates/signup.tpl:166 
+msgid ""
+"Sign Up"
+msgstr ""
+"Sign Up"
+
+#: ./modules/mod_signup/templates/signup.tpl:60 
+msgid ""
+"Sign up and become a member"
+msgstr ""
+"Sign up and become a member"
+
+#: ./modules/mod_signup/templates/signup.tpl:77 
+msgid ""
+"Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+msgstr ""
+"Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+
+#: ./modules/mod_signup/templates/signup.tpl:116 
+msgid ""
+"Sorry, this username is already in use. Please try another one."
+msgstr ""
+"Sorry, this username is already in use. Please try another one."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:8 
+msgid ""
+"Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+msgstr ""
+"Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+
+#: ./modules/mod_signup/templates/signup.tpl:153 
+msgid ""
+"To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr ""
+"To sign up you must agree with the Terms of Service and Privacy policies."
+
+#: ./modules/mod_signup/templates/signup.tpl:119 
+msgid ""
+"Username"
+msgstr ""
+"Username"
+
+#: ./modules/mod_signup/templates/signup.tpl:134 
+msgid ""
+"Verify password"
+msgstr ""
+"Verify password"
+
+#: ./modules/mod_signup/templates/signup.tpl:175 
+msgid ""
+"We have sent you an e-mail. In the e-mail you will find instructions on "
+"how to confirm your account."
+msgstr ""
+"We have sent you an e-mail. In the e-mail you will find instructions on "
+"how to confirm your account."
+
+#: ./modules/mod_signup/templates/signup.tpl:145 
+msgid ""
+"We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission.
+			We do have some "
+"rules that we need you to agree with."
+msgstr ""
+"We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission.
+			We do have some "
+"rules that we need you to agree with."
+
+#: ./modules/mod_signup/templates/signup.tpl:177 
+msgid ""
+"When you don’t receive the e-mail within a few minutes then be sure to "
+"check your spam filter and spam folders."
+msgstr ""
+"When you don’t receive the e-mail within a few minutes then be sure to "
+"check your spam filter and spam folders."
+
+#: ./modules/mod_signup/templates/signup.tpl:54 
+msgid ""
+"When you want to sign up a new member, then first"
+msgstr ""
+"When you want to sign up a new member, then first"
+
+#: ./modules/mod_signup/templates/signup.tpl:173 
+msgid ""
+"You are almost there!"
+msgstr ""
+"You are almost there!"
+
+#: ./modules/mod_signup/templates/signup.tpl:52 
+msgid ""
+"You are already a member"
+msgstr ""
+"You are already a member"
+
+#: ./modules/mod_signup/templates/signup.tpl:65 
+msgid ""
+"You can also"
+msgstr ""
+"You can also"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid ""
+"and enter the key"
+msgstr ""
+"and enter the key"
+
+#: ./modules/mod_signup/templates/signup.tpl:157 
+msgid ""
+"and the"
+msgstr ""
+"and the"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid ""
+"in the input field."
+msgstr ""
+"in the input field."
+
+#: ./modules/mod_signup/templates/signup.tpl:54 
+msgid ""
+"log off from your current account"
+msgstr ""
+"log off from your current account"
+
+#: ./modules/mod_signup/templates/signup.tpl:62 
+msgid ""
+"log on now"
+msgstr ""
+"log on now"
+
+#: ./modules/mod_signup/templates/signup.tpl:65 
+msgid ""
+"sign up for a username and password"
+msgstr ""
+"sign up for a username and password"
