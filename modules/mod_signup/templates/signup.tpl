@@ -48,10 +48,12 @@ div#signup_tos label {
 }
 </style>
 
-{% if m.acl.user %}
-<h1>{_ You are already a member _}</h1>
+<section class="article-wrapper">
 
-<p>{_ When you want to sign up a new member, then first _} <a href="{% url logoff %}">{_ log off from your current account _}</a>.</p>
+{% if m.acl.user %}
+	<h1>{_ You are already a member _}</h1>
+
+	<p>{_ When you want to sign up a new member, then first _} <a href="{% url logoff %}">{_ log off from your current account _}</a>.</p>
 
 {% else %}
 
@@ -184,5 +186,7 @@ div#signup_tos label {
 </div>
 
 {% endif %}
+
+</section>
 
 {% endblock %}
