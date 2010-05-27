@@ -40,7 +40,7 @@
 		</div>
 		
 		<div class="form-item clearfix">
-			<button type="submit">{_ Make _}{{catname}}</button>
+			<button type="submit">{_ Make _} {{ catname }}</button>
 			{% button action={dialog_close} text=_"Cancel" %}
 		</div>
 		
