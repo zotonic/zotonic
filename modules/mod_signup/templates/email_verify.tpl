@@ -1,18 +1,18 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}Please confirm your account.{% endblock %}
+{% block title %}{_ Please confirm your account. _}{% endblock %}
 
 {% block body %}
-<p>Dear {{ m.rsc[user_id].title|default:m.rsc[user_id].name_first }},</p>
+<p>{_ Dear _} {{ m.rsc[user_id].title|default:m.rsc[user_id].name_first }},</p>
 
-<p>Thank you for registering at our site. We request you to confirm your account before you can use it.</p>
+<p>{_ Thank you for registering at our site. We request you to confirm your account before you can use it. _}</p>
 
-<p>Please follow the link below.</p>
+<p>{_ Please follow the link below. _}</p>
 
-<p><a href="{% url signup_confirm key=verify_key %}">Confirm my account.</a></p>
+<p><a href="{% url signup_confirm key=verify_key %}">{_ Confirm my account. _}</a></p>
 
-<p>If the link does not work then you can go to <a href="http://{{ m.site.hostname }}{% url signup_confirm %}">http://{{ m.site.hostname }}{% url signup_confirm %}</a> and enter the key <strong>{{ verify_key }}</strong> in the input field.</p>
+<p>{_ If the link does not work then you can go to _} <a href="http://{{ m.site.hostname }}{% url signup_confirm %}">http://{{ m.site.hostname }}{% url signup_confirm %}</a> {_ and enter the key _} <strong>{{ verify_key }}</strong> {_ in the input field. _}</p>
 
-<p>Hope to see you soon.</p>
+<p>{_ Hope to see you soon. _}</p>
 
 {% endblock %}
