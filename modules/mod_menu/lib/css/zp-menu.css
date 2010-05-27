@@ -1,4 +1,4 @@
-/* Styling for menu's in the default blog template.
+/* Styling for menus for Zotonic base sites
 ----------------------------------------------------------
 
 @package:	Atatonic CSS framework 2009	
@@ -34,9 +34,6 @@ limitations under the License.
 	}
 
 	#navigation li a {
-		font-variant: small-caps;
-		text-transform: lowercase;
-		color: #fff;
 		text-decoration: none;
 		border: none;
 		margin: 0 0 0 6px;
@@ -47,23 +44,3 @@ limitations under the License.
 		text-decoration: underline;
 	}
 
-
-/* Footer navigation styles
----------------------------------------------------------- */
-
-footer #navigation {
-	margin: 0;
-}
-
-footer #navigation li a {
-	font-size: 12px;
-	font-variant: small-caps;
-	text-transform: lowercase;
-	color: #666;
-	border: none;
-	margin: 0 6px 0 0;
-}
-
-	footer #navigation li a:hover {
-		color: #154868;
-	}
