@@ -1,3 +1,4 @@
+
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @date 2010-05-05
@@ -352,7 +353,7 @@ can_edit(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
 can_edit(_Id, #context{acl=undefined}) ->
     undefined;
 can_edit(Id, #context{user_id=UserId, acl=#acl_user{only_update_own=true}} = Context) when UserId /= undefined ->
-    case m:rsc(Id, creator_id, Context) of
+    case m_rsc:p(Id, creator_id, Context) of
         UserId -> true;
         _ -> undefined
     end;
