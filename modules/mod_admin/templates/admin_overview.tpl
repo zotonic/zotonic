@@ -65,6 +65,7 @@
 				</li>
 
 			{% for id in result %}
+				{% if m.rsc[id].is_visible %}
 				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
 					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
 						{% if is_event %}
@@ -86,6 +87,7 @@
 						</span>
 					</a>
 				</li>
+				{% endif %}
 			{% empty %}
 				<li>
 					{_ No pages found. _}
