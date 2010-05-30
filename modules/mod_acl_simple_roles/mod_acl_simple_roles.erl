@@ -62,7 +62,7 @@ observe({acl_is_allowed, insert, #acl_rsc{category=Cat}}, Context) ->
 observe({acl_is_allowed, insert, Cat}, Context) when is_atom(Cat) -> 
     can_insert(Cat, Context);
 observe({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
-	case m_rsc:p(Id, is_authoritative, Context) of
+	case m_rsc:p_no_acl(Id, is_authoritative, Context) of
 		true -> can_edit(Id, Context);
 		_ -> undefined
 	end;
@@ -115,7 +115,7 @@ observe({acl_rsc_update_check, Id}, Props, Context) ->
     		Vis -> 
     		    CurrVis = case Id of 
     		                insert_rsc -> ?ACL_VIS_USER;
-    		                _ -> m_rsc:p(Id, visible_for, Context)
+    		                _ -> m_rsc:p_no_acl(Id, visible_for, Context)
     		              end,
     		    NewVis = z_convert:to_integer(Vis),
     		    case NewVis < CurrVis of
@@ -284,9 +284,9 @@ logon(UserId, Context) ->
     logon_roles(UserId, Roles, Context, ContextAdmin) ->
         RolesFiltered = [ R || R <- Roles, 
                                 m_rsc:is_a(R, acl_role, ContextAdmin),
-                                m_rsc:p(R, is_published, ContextAdmin) ],
+                                m_rsc:p_no_acl(R, is_published, ContextAdmin) ],
         % Merge all role's categories and modules
-        ACLs = [ m_rsc:p(R, acl, ContextAdmin) || R <- RolesFiltered ],
+        ACLs = [ m_rsc:p_no_acl(R, acl, ContextAdmin) || R <- RolesFiltered ],
         {Cats, Mods, ViewAll, OnlyOwn, FileSize, FileMime, VisibleFor} 
                 = combine(ACLs, [], [], false, undefined, 0, [], 3),
         Context#context{user_id=UserId,
@@ -353,12 +353,12 @@ can_edit(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
 can_edit(_Id, #context{acl=undefined}) ->
     undefined;
 can_edit(Id, #context{user_id=UserId, acl=#acl_user{only_update_own=true}} = Context) when UserId /= undefined ->
-    case m_rsc:p(Id, creator_id, Context) of
+    case m_rsc:p_no_acl(Id, creator_id, Context) of
         UserId -> true;
         _ -> undefined
     end;
 can_edit(Id, #context{acl=Acl} = Context) ->
-    IsA = m_rsc:p(Id, is_a, Context),
+    IsA = m_rsc:p_no_acl(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
 
     can_edit1([], _Allowed) -> undefined;
