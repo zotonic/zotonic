@@ -48,6 +48,7 @@
 					</li>
 
 				{% for id in result %}
+					{% if m.rsc[id].is_visible %}
 					{% with m.rsc[id] as r %}
 						{% with r.medium as medium %}
 						<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
@@ -66,6 +67,7 @@
 						</li>
 						{% endwith %}
 					{% endwith %}
+					{% endif %}
 				{% empty %}
 					<li>
 						{_ No media found. _}
