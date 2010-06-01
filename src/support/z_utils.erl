@@ -45,6 +45,10 @@
 	hex_decode/1,
 	hex_encode/1,
 	index_proplist/2,
+	nested_proplist/1,
+	nested_proplist/2,
+	get_nth/2,
+	set_nth/3,
 	is_process_alive/1,
 	is_true/1,
 	js_escape/1,
@@ -56,6 +60,8 @@
 	name_for_host/2,
 	only_digits/1,
 	only_letters/1,
+	is_iolist/1,
+	is_proplist/1,
 	os_escape/1,
 	os_filename/1,
 	pickle/2,
@@ -446,6 +452,15 @@ only_digits(B) when is_binary(B) ->
     only_digits1(_) ->
         false.
 
+is_iolist(C) when is_integer(C) andalso C >= 0 andalso C =< 255 -> true;
+is_iolist(B) when is_binary(B) -> true;
+is_iolist([H|L]) -> is_iolist(H) andalso is_iolist(L);
+is_iolist(_) -> false.
+
+is_proplist([]) -> true;
+is_proplist([{K,_}|R]) when is_atom(K) -> is_proplist(R);
+is_proplist(_) -> false.
+
 
 combine_defined(Sep, List) ->
     List2 = lists:filter(fun(X) -> X /= undefined end, List),
@@ -473,12 +488,18 @@ coalesce([H|_]) -> H.
 %% @doc Check if the parameter could represent the logical value of "true"
 is_true([$t|_T]) -> true;
 is_true([$y|_T]) -> true;
+is_true([$T|_T]) -> true;
+is_true([$Y|_T]) -> true;
 is_true("on") -> true;
+is_true("ON") -> true;
 is_true("1") -> true;
 
 is_true(<<"true">>) -> true;
 is_true(<<"yes">>) -> true;
 is_true(<<"on">>) -> true;
+is_true(<<"TRUE">>) -> true;
+is_true(<<"YES">>) -> true;
+is_true(<<"ON">>) -> true;
 is_true(<<"1">>) -> true;
 
 is_true(true) -> true;
@@ -540,6 +561,60 @@ index_proplist(_Prop, [], Acc) ->
     lists:reverse(Acc);
 index_proplist(Prop, [L|Rest], Acc) ->
     index_proplist(Prop, Rest, [{z_convert:to_atom(proplists:get_value(Prop,L)),L}|Acc]).
+
+
+%% @doc Scan the props of a proplist, when the prop is a list with a $. characters in it then split the prop.
+nested_proplist(Props) ->
+    nested_proplist(Props, []).
+
+nested_proplist([], Acc) ->
+    lists:reverse(Acc);
+nested_proplist([{K,V}|T], Acc) when is_list(K) ->
+    case string:tokens(K, ".") of
+        [K0] -> nested_proplist(T, [{K0,V}|Acc]);
+        List -> nested_proplist(T, nested_props_assign(List, V, Acc))
+    end;
+nested_proplist([H|T], Acc) ->
+    nested_proplist(T, [H|Acc]).
+
+
+    nested_props_assign([K], V, Acc) ->
+        case only_digits(K) of
+            true ->  set_nth(list_to_integer(K), V, Acc);
+            false -> prop_replace(z_convert:to_atom(K), V, Acc)
+        end;
+    nested_props_assign([H|T], V, Acc) ->
+        case only_digits(H) of
+            true -> 
+                Index = list_to_integer(H),
+                NewV = case get_nth(Index, Acc) of
+                           L when is_list(L) -> nested_props_assign(T, V, L);
+                           _ -> nested_props_assign(T, V, [])
+                       end,
+                set_nth(Index, NewV, Acc);
+            false ->
+                K = z_convert:to_atom(H),
+                NewV = case proplists:get_value(K, Acc) of
+                    L when is_list(L) -> nested_props_assign(T, V, L);
+                    _ -> nested_props_assign(T, V, [])
+                end,
+                prop_replace(K, NewV, Acc)
+        end.
+
+
+get_nth(N, L) when N >= 1 ->
+    try lists:nth(N, L) catch _:_ -> undefined end.
+
+set_nth(N, V, L) when N >= 1 ->
+    try 
+        case lists:split(N-1, L) of
+            {Pre, []} -> Pre ++ [V];
+            {Pre, [_|T]} -> Pre ++ [V|T]
+        end
+    catch _:_ ->
+        set_nth(N, V, L ++ [undefined])
+    end.
+
 
 
 %% @doc Simple randomize of a list. Not good quality, but good enough for us
