@@ -423,7 +423,7 @@ props_filter([{_Prop, _V}=H|T], Acc, Context) ->
 
 %% @doc Fill in some defaults for empty props.
 %% @spec props_defaults(Props1, Context) -> Props2
-props_defaults(Props, Context) ->
+props_defaults(Props, _Context) ->
     case proplists:get_value(slug, Props) of
         undefined ->
             case proplists:get_value(title, Props) of
