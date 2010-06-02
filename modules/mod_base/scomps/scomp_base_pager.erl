@@ -53,7 +53,7 @@ render(Params, _Vars, Context) ->
         #m{model=m_search, value=MResult} -> MResult;
         _ -> Result
     end,
-    
+
     case Result1 of
         #m_search_result{result=[]} ->
             {ok, ""};

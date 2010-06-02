@@ -185,3 +185,6 @@
 -define(DEBUG(Msg), error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [?MODULE, ?LINE, Msg])).
 -define(ERROR(Msg, Args), error_logger:error_msg("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
 
+-define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zWarning(Msg, Context), z:warning(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
