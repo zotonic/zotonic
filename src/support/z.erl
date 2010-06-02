@@ -28,7 +28,14 @@
     m/0,
     flush/0,
 	flush/1,
-    restart/0
+    restart/0,
+
+    debug/2,
+    debug/3,
+    info/2,
+    info/3,
+    warning/2,
+    warning/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -61,3 +68,21 @@ restart() ->
     zotonic:stop(),
     zotonic:start().
 
+    
+
+%% @doc Log a debug message, with extra props.
+debug(Msg, Context)        -> log(debug, Msg, [], Context).
+debug(Msg, Props, Context) -> log(debug, Msg, Props, Context).
+
+%% @doc Log an informational message.
+info(Msg, Context)         -> log(info, Msg, [], Context).
+info(Msg, Props, Context)  -> log(info, Msg, Props, Context).
+
+%% @doc Log a warning.
+warning(Msg, Context)         -> log(warning, Msg, [], Context).
+warning(Msg, Props, Context)  -> log(warning, Msg, Props, Context).
+
+
+log(Type, Msg, Props, Context) ->
+    Msg1 = erlang:iolist_to_binary(Msg),
+    z_notifier:notify({log, Type, Msg1, Props}, Context).
