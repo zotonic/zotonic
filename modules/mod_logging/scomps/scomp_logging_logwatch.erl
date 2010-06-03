@@ -24,5 +24,5 @@
 
 vary(_Params, _Context) -> nocache.
 render(_Params, _Vars, Context) ->
-    mod_log:add_admin_log_page(Context),
+    mod_logging:add_admin_log_page(Context),
     {ok, []}.
