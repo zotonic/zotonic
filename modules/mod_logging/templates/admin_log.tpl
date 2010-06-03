@@ -21,8 +21,8 @@
             <ul class="short-list">
                 <li class="headers clearfix" id="log-headers">
                     <span class="zp-5">{_ Type _}</span>
-                    <span class="zp-10">{_ Module _}</span>
-                    <span class="zp-60">{_ Message _}</span>
+                    <span class="zp-25">{_ Module _}</span>
+                    <span class="zp-45">{_ Message _}</span>
                     <span class="zp-15">{_ User _}</span>
                     <span class="zp-10">{_ Date _}</span>
                 </li>
