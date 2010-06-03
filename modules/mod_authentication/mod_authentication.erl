@@ -41,7 +41,17 @@ observe({logon_submit, Args}, Context) ->
     Password = proplists:get_value("password", Args),
     case Username /= undefined andalso Password /= undefined of
         true ->
-            m_identity:check_username_pw(Username, Password, Context);
+            case m_identity:check_username_pw(Username, Password, Context) of
+                {ok, Id} ->
+                    case Password of
+                        [] ->
+                            %% When empty password existed in identity table, prompt for a new password.
+                            %% FIXME do real password expiration here.
+                            {expired, Id};
+                        _ -> {ok, Id}
+                    end;
+                E -> E
+            end;
         false ->
             undefined
     end;
