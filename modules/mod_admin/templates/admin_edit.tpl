@@ -290,7 +290,10 @@
 
 									<div class="form-item clearfix">
 										<label for="title">{_ Page slug _}</label>
-										<input type="text" id="slug" name="slug" class="zp-100" value="{{ r.slug }}"/>
+										<input type="text" id="slug" name="slug" class="zp-100" value="{{ r.slug }}" {% if not r.custom_slug %}disabled="disabled"{% endif %} />
+										<input id="custom-slug" type="checkbox" class="do_fieldreplace" name="custom_slug" {% if r.custom_slug %}checked="checked"{% endif %} 
+                                               value="1" onclick="$('#slug').attr('disabled', $('#custom-slug:checked').val() ? '' : 'disabled');" />
+										<label for="custom-slug">{_ Customize page slug _}</label>
 									</div>
 
 									<div class="form-item clearfix">
