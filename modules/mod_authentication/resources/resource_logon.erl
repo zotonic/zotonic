@@ -128,6 +128,10 @@ get_page(Context) ->
 
 %% @doc Handle the submit of the logon form, this will be handed over to the
 %% different authentication handlers.
+
+event({submit, [], "logon_password_expired_form", _Target}, Context) ->
+    event({submit, [], "logon_password_reset_form", _Target}, Context);
+
 event({submit, [], "logon_password_reset_form", _Target}, Context) ->
 	Secret = z_context:get_q("secret", Context),
 	Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
@@ -145,9 +149,10 @@ event({submit, [], "logon_password_reset_form", _Target}, Context) ->
 				undefined ->
 					throw({error, "User does not have an username defined."});
 				Username ->
-					delete_reminder_secret(UserId, Context),
-					m_identity:set_username_pw(UserId, Username, Password1, Context),
-					logon_user(UserId, Context)
+                    ContextLoggedon = logon_user(UserId, Context),
+					delete_reminder_secret(UserId, ContextLoggedon),
+					m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
+                    ContextLoggedon
 			end;
 		{_,_} ->
 			z_render:wire([
@@ -186,6 +191,7 @@ event({submit, [], _Trigger, _Target}, Context) ->
 				{error, _Reason} -> logon_error(Context)
 			end;
         {error, _Reason} -> logon_error(Context);
+        {expired, UserId} when is_integer(UserId) -> password_expired(UserId, Context);
         {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
     end.
 
@@ -198,6 +204,10 @@ event({submit, [], _Trigger, _Target}, Context) ->
 	reminder_success(Context) ->
 		Context1 = remove_logon_error(Context),
 		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_reminder_sent"}]}, Context1).
+
+	password_expired(UserId, Context) ->
+		z_render:wire([{set_value, [{target, "logon_password_expired_secret"}, {value, set_reminder_secret(UserId, Context)}]},
+					   {set_class, [{target, "logon_outer"}, {class, "logon_password_expired"}]}], Context).
 
 	verification_pending(UserId, Context) ->
 		z_render:wire([{set_value, [{target, "logon_verification_user_id"}, {value, integer_to_list(UserId)}]},
@@ -305,7 +315,7 @@ lookup_by_username(Handle, Context) ->
 
 %% @doc Find all users with a certain e-mail address
 %% @todo TODO
-lookup_by_email(Handle, Context) ->
+lookup_by_email(_Handle, _Context) ->
 	[].
 
 

@@ -193,9 +193,8 @@ install_rsc(C) ->
 
 %% @doc Install the admin user as an user.  Uses the hard coded password "admin" when no password defined in the environment.
 install_identity(C) ->
-    ?DEBUG("Inserting username/password for the admin"),
-    Password = case os:getenv("ZOTONIC_ADMINPASSWORD") of false -> "admin"; PW -> PW end,
-    Hash = m_identity:hash(Password),
+    ?DEBUG("Inserting username for the admin"),
+    Hash = m_identity:hash([]),
     {ok, 1} = pgsql:equery(C, "
         insert into identity (rsc_id, type, key, is_unique, propb)
         values (1, 'username_pw', 'admin', true, $1)", [Hash]),

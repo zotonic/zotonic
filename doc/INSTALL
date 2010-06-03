@@ -55,9 +55,11 @@ CREATE LANGUAGE "plpgsql";
 	
     http://localhost:8000/
 	
-   or logon as admin (the default password is 'admin') at: 
+   or logon as user 'admin' (the default password is empty) at: 
 
     http://localhost:8000/admin/
+
+   You will be asked to change the admin password before you can proceed into the admin.
 
 9. When all done, then you can stop the erlang shell with:
 

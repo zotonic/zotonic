@@ -21,9 +21,6 @@
     {dbpassword, ""},
     {dbdatabase, "zotonic"},
     
-    % Admin password, used during installation. You can change it later
-    {adminpassword, "admin"},
-    
     % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
     % A new key will also forces regenerating images, which takes cpu time and will fill your hard disk.
     {sign_key_simple, <<"--change-me--">>},
