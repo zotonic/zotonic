@@ -1,13 +1,13 @@
 [
-	%% Normal page to show a resource.
-	{mailinglist,    ["mailinglist", id],       resource_page, [ {template, {cat, "mailinglist.tpl"}} ]},
-	{mailinglist,    ["mailinglist", id, slug], resource_page, [ {template, {cat, "mailinglist.tpl"}} ]},
-
 	{admin_mailinglist, ["admin", "mailinglists"], resource_admin_mailinglist, []},
 	{admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], resource_admin_mailinglist_recipients, []},
 	
 	{mailinglist_confirm, ["mailinglist", "confirm", confirm_key], resource_template, [{template, "mailinglist_confirm.tpl"}]},
 	{mailinglist_unsubscribe, ["mailinglist", "unsubscribe", confirm_key], resource_template, [{template, "mailinglist_unsubscribe.tpl"}]},
 	
-	{mailinglist_export, ["mailinglist", "export", id], resource_mailinglist_export, []}
+	{mailinglist_export, ["mailinglist", "export", id], resource_mailinglist_export, []},
+
+	%% Normal page to show a resource.
+	{mailinglist,    ["mailinglist", id],       resource_page, [ {template, {cat, "mailinglist.tpl"}} ]},
+	{mailinglist,    ["mailinglist", id, slug], resource_page, [ {template, {cat, "mailinglist.tpl"}} ]}
 ].
