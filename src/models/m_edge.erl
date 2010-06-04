@@ -35,6 +35,7 @@
     delete/2,
     delete/4,
     duplicate/3,
+    update_nth/5,
     object/4,
     subject/4,
     objects/3,
@@ -209,7 +210,45 @@ duplicate(Id, ToId, Context) ->
             {error, {eacces, Id}}
     end.
     
-    
+
+%% @doc Update the nth edge of a subject.  Set a new object, keep the predicate.
+%% When there are not enough edges then an error is returned. The first edge is nr 1.
+%% @spec update_nth(int(), Predicate, int(), Context) -> {ok, EdgeId} | {error, Reason}
+update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
+    PredId = m_predicate:name_to_id_check(Predicate, Context),
+	{ok, PredName} = m_predicate:id_to_name(PredId, Context),
+    F = fun(Ctx) ->
+        case z_db:q("select id, object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id limit 1 offset $3", 
+                    [SubjectId, PredId, Nth-1], 
+                    Ctx) of
+            [] -> 
+                {error, enoent};
+            [{EdgeId,OldObjectId}] ->
+                case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=OldObjectId}, Ctx) of
+                    true ->
+                        1 = z_db:q("update edge set object_id = $1, creator_id = $3, created = now() where id = $2", 
+                                   [ObjectId,EdgeId,z_acl:user(Ctx)], 
+                                   Ctx),
+                        m_rsc:touch(SubjectId, Ctx),
+                        {ok, EdgeId};
+                    false ->
+                        {error, eacces}
+                end
+        end
+    end,
+    case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
+        true -> 
+            case z_db:transaction(F, Context) of
+                {ok,EdgeId} ->
+                    z_depcache:flush(SubjectId, Context),
+                    {ok, EdgeId};
+                {error, Reason} ->
+                    {error, Reason}
+            end;
+        false ->
+            {error, eacces}
+    end.
+
 
 %% @doc Return the Nth object with a certaing predicate of a subject.
 object(Id, Pred, N, Context) ->
