@@ -297,9 +297,9 @@ lines_to_recipients([Line|Lines], Acc) ->
         Items ->
             R = case length(Items) of
                     1 -> [{email, hd(Items)}];
-                    2 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}];
-                    3 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}, {name_surname, hd(tl(tl(Items)))}];
-                    _ -> [{email, hd(Items)}, {name_first, hd(tl(Items))}, {name_surname_prefix, hd(tl(tl(Items)))}, {name_surname, hd(tl(tl(tl(Items()))))}]
+                    2 -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}];
+                    3 -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}, {name_surname, lists:nth(3, Items)}];
+                    _ -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}, {name_surname, lists:nth(3, Items)}, {name_surname_prefix, lists:nth(4, Items)}]
                 end,
             lines_to_recipients(Lines, [R|Acc])
     end.
