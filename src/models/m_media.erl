@@ -228,10 +228,14 @@ insert_file_mime_ok(File, Props, PropsMedia, Context) ->
         undefined -> [{is_published, true} | Props1];
         _ -> Props1
     end,
+    Props3 = case proplists:get_value(title, Props2) of
+        undefined -> [{title, proplists:get_value(original_filename, Props2)}|Props2];
+        _ -> Props2
+    end,
     InsertFun = fun(Ctx) ->
-        case m_rsc:insert(Props2, Ctx) of
+        case m_rsc:insert(Props3, Ctx) of
             {ok, Id} ->
-                replace_file_mime_ok(File, Id, Props2, PropsMedia, Ctx);
+                replace_file_mime_ok(File, Id, Props3, PropsMedia, Ctx);
             Error ->
                 Error
         end
