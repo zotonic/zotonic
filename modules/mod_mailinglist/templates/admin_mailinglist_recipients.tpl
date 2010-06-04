@@ -33,7 +33,7 @@
 						</li>
 					{% for rcpt_id, email, is_enabled in list %}
 						<li id="recipient-{{rcpt_id}}">
-							<a href="#" class="clearfix">
+							<a href="#" class="clearfix" id="{{ #item.rcpt_id }}">
 								<span class="zp-10"><input id="{{ #enabled.rcpt_id }}" title="Check to activate the e-mail address." type="checkbox" value="{{ rcpt_id }}" {% if is_enabled %}checked="checked"{% endif %} /></span>
 								<span class="zp-70">{{ email|escape|default:"-" }}</span>
 								<span class="zp-20">
@@ -43,6 +43,7 @@
 						</li>
 						
 						{% wire id=#enabled.rcpt_id postback={recipient_is_enabled_toggle recipient_id=rcpt_id} %}
+						{% wire id=#item.rcpt_id postback={dialog_recipient_edit id=id recipient_id=rcpt_id} %}
 					{% endfor %}
 					</ul>
 				</div>

@@ -5,7 +5,7 @@
 	</p>
 
 	<div id="mailinglist_subscribe_form" class="clearfix">
-		{% include "_mailinglist_subscribe_form.tpl" id=id make_person=make_person %}
+		{% include "_mailinglist_subscribe_form.tpl" id=id recipient_id=recipient_id make_person=make_person %}
 	</div>
 
 	<div id="mailinglist_subscribe_done" style="display:none">
