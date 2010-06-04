@@ -54,8 +54,12 @@
 {% endif %}
 
 <div style="clear: both">
+    {% if recipient_id %}
+	{% button text="edit" %}
+    {% else %}
 	{% button text="subscribe" %}
-	
+	{% endif %}
+
 	{% if in_admin %}
 		{% button text="cancel" action={dialog_close} %}
 	{% endif %}

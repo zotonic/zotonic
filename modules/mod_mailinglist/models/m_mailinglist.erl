@@ -136,7 +136,7 @@ recipient_delete(RecipientId, Context) ->
 	
 	recipient_delete1(RecipientProps, Context) ->
 		RecipientId = proplists:get_value(id, RecipientProps),
-		z_db:q("delete from mailinglist_recipient where id = $1", [RecipientId], Context),
+        z_db:delete(mailinglist_recipient, RecipientId, Context),
 		ListId = proplists:get_value(mailinglist_id, RecipientProps),
 		Email = proplists:get_value(email, RecipientProps),
 		z_notifier:notify1({mailinglist_message, send_goodbye, ListId, Email}, Context),
@@ -236,7 +236,8 @@ update_recipient(RcptId, Props, Context) ->
 %% @doc Replace all recipients found in the binary file. One recipient per line.
 replace_recipients(ListId, Bin, Context) when is_binary(Bin) ->
 	Lines = z_string:split_lines(Bin),
-	replace_recipients(ListId, Lines, Context);
+    Rcpts = lines_to_recipients(Lines),
+	replace_recipients(ListId, Rcpts, Context);
 
 %% @doc Replace all recipients of the mailinglist. Do not send welcome messages to the recipients.
 %% @spec replace_recipients(ListId::int(), Recipients::list(), Context) -> ok | {error, Error}
@@ -257,28 +258,52 @@ replace_recipients(ListId, Recipients, Context) ->
 			  and timestamp < $2", [ListId, Now], Context),
 		ok.
 	
-	replace_recipient(ListId, Recipient, Now, Context) ->
-		case z_string:trim(z_string:to_lower(Recipient)) of
-			"" ->
-				skip;
-			Recipient1 ->
-				case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", 
-							[ListId, Recipient1], Context) of
-					undefined -> 
-						ConfirmKey = z_ids:id(20),
-						z_db:q("
-							insert into mailinglist_recipient (is_enabled, mailinglist_id, email, timestamp, confirm_key)
-							values (true, $1, $2, $3, $4)", [ListId, Recipient1, Now, ConfirmKey], Context);
-					RecipientId ->
-						z_db:q("
-							update mailinglist_recipient 
-							set timestamp = $1,
-							    is_enabled = true
-							where id = $2", [Now, RecipientId], Context)
-				end
-		end.
+replace_recipient(ListId, Recipient, Now, Context) when is_binary(Recipient) ->
+    replace_recipient(ListId, Recipient, [], Now, Context);
+replace_recipient(ListId, Recipient, Now, Context) ->
+    replace_recipient(ListId, proplists:get_value(email, Recipient), proplists:delete(email, Recipient), Now, Context).
 
 
+replace_recipient(ListId, Email, Props, Now, Context) ->
+    case z_string:trim(z_string:to_lower(Email)) of
+        "" ->
+            skip;
+        Email1 ->
+            case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", 
+                         [ListId, Email1], Context) of
+                undefined -> 
+                    ConfirmKey = z_ids:id(20),
+                    Props1 = [{confirm_key, ConfirmKey},
+                              {email, Email1},
+                              {timestamp, Now},
+                              {mailinglist_id, ListId},
+                              {is_enabled, true}] ++ Props,
+                    z_db:insert(mailinglist_recipient, Props1, Context);
+                EmailId ->
+                    z_db:update(mailinglist_recipient, EmailId, [{timestamp, Now}, {is_enabled, true}] ++ Props, Context)
+            end
+    end.
+
+
+lines_to_recipients(Lines) ->
+    lines_to_recipients(Lines, []).
+lines_to_recipients([], Acc) -> Acc;
+lines_to_recipients([Line|Lines], Acc) ->
+    %% Split every line on tab
+    case string:tokens(z_string:trim(binary_to_list(Line)), [9]) of
+        [] ->
+            %% Skip
+            lines_to_recipients(Lines, Acc);
+        Items ->
+            R = case length(Items) of
+                    1 -> [{email, hd(Items)}];
+                    2 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}];
+                    3 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}, {name_surname, hd(tl(tl(Items)))}];
+                    _ -> [{email, hd(Items)}, {name_first, hd(hd(Items))}, {name_surname_prefix, hd(hd(hd(Items)))}, {name_surname, hd(hd(hd(hd(Items()))))}]
+                end,
+            lines_to_recipients(Lines, [R|Acc])
+    end.
+            
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->
 	true = z_acl:rsc_editable(ListId, Context),
