@@ -53,6 +53,7 @@ div#logon_error h2 {
 div#logon_form_box,
 div#logon_password_reset,
 div#logon_reminder,
+div#logon_password_expired,
 div#logon_verification_pending,
 div#logon_verification_sent {
 	width: 300px;
