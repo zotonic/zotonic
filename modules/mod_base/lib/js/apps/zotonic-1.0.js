@@ -196,7 +196,7 @@ function z_unmask(id)
     {
     	var trigger = $('#'+id).get(0);
 	
-    	if (trigger.nodeName.toLowerCase() == 'form') 
+    	if (trigger && trigger.nodeName.toLowerCase() == 'form') 
     	{
         	try { $(trigger).unmask(); } catch (e) {};
     	}
