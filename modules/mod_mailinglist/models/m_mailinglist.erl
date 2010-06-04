@@ -299,7 +299,7 @@ lines_to_recipients([Line|Lines], Acc) ->
                     1 -> [{email, hd(Items)}];
                     2 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}];
                     3 -> [{email, hd(Items)}, {name_first, hd(tl(Items))}, {name_surname, hd(tl(tl(Items)))}];
-                    _ -> [{email, hd(Items)}, {name_first, hd(hd(Items))}, {name_surname_prefix, hd(hd(hd(Items)))}, {name_surname, hd(hd(hd(hd(Items()))))}]
+                    _ -> [{email, hd(Items)}, {name_first, hd(tl(Items))}, {name_surname_prefix, hd(tl(tl(Items)))}, {name_surname, hd(tl(tl(tl(Items()))))}]
                 end,
             lines_to_recipients(Lines, [R|Acc])
     end.
