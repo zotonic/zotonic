@@ -160,7 +160,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             TransactionF = fun(Ctx) ->
                 {RscId, UpdateProps, BeforeProps, BeforeCatList, RenumberCats} = case Id of
                     insert_rsc ->
-                        CategoryId = proplists:get_value(category_id, SafeProps),
+                        CategoryId = z_convert:to_integer(proplists:get_value(category_id, SafeProps)),
 						CategoryName = m_category:id_to_name(CategoryId, Ctx),
                         InsProps = [{category_id, CategoryId}, {version, 0}],
                          % Allow the insertion props to be modified.
