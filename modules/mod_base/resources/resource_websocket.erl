@@ -155,25 +155,36 @@ handle_message(Msg, Context) ->
         _         -> TriggerId
     end,
 
-    ContextRsc = z_context:set_resource_module(Module, Context1),
-    EventContext = case EventType of
-        "submit" -> 
-            case z_validation:validate_query_args(ContextRsc) of
-                {ok, ContextEval} ->   
-                    Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
-                {error, ContextEval} ->
-                    ContextEval
-            end;
-        _ -> 
-            Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+    {ResultScript, ResultContext} = try
+        ContextRsc = z_context:set_resource_module(Module, Context1),
+        EventContext = case EventType of
+            "submit" -> 
+                case z_validation:validate_query_args(ContextRsc) of
+                    {ok, ContextEval} ->   
+                        Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
+                    {error, ContextEval} ->
+                        ContextEval
+                end;
+            _ -> 
+                Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+        end,
+        Script = iolist_to_binary(z_script:get_script(EventContext)),
+        % Remove the busy mask from the element that triggered this event.
+        {case TriggerId1 of 
+            undefined -> Script;
+            _ -> [Script, " z_unmask('",z_utils:js_escape(TriggerId1),"');" ]
+         end, 
+         EventContext}
+    catch
+        Error:X ->
+            ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context1),
+            {case TriggerId1 of 
+                undefined -> [];
+                _ -> [" z_unmask_error('",z_utils:js_escape(TriggerId1),"');"]
+             end, 
+             Context1}
     end,
-    Script = iolist_to_binary(z_script:get_script(EventContext)),
-    % Remove the busy mask from the element that triggered this event.
-    Script1 = case TriggerId1 of 
-        undefined -> Script;
-        FormId -> [Script, " z_unmask('",z_utils:js_escape(FormId),"');" ]
-    end,
-    z_session_page:add_script(Script1, EventContext).
+    z_session_page:add_script(ResultScript, ResultContext).
     
 
 %% @doc Start the loop passing data (scripts) from the page to the browser
