@@ -152,11 +152,11 @@ function z_do_postback(triggerID, postback, extraParams)
 	}
 	else
 	{
-    	z_ajax(params);
+    	z_ajax(triggerID, params);
 	}
 }
 
-function z_ajax(params)
+function z_ajax(triggerID, params)
 {
 	z_start_spinner();
 
@@ -186,6 +186,7 @@ function z_ajax(params)
 			z_stop_spinner();
 			
 			$.misc.error("FAIL: " + textStatus);
+			z_unmask_error(triggerID);
 		}
 	});
 }
@@ -200,6 +201,17 @@ function z_unmask(id)
     	{
         	try { $(trigger).unmask(); } catch (e) {};
     	}
+        $(trigger).removeClass("z_error_upload");
+    }
+}
+
+
+function z_unmask_error(id)
+{
+    if (id)
+    {
+        z_unmask(id);
+        $('#'+id).addClass("z_error_upload");
     }
 }
 
@@ -706,11 +718,17 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 			
 			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
 			if (ok) {
-				eval(data);
+			    try {
+    				eval(data);
+			    } catch (e) {
+			        z_unmask_error(form.id);
+			    }
 				if (g) 
 				{
 					$.event.trigger("ajaxSuccess", [xhr, opts]);
 				}
+			} else {
+			    z_unmask_error(form.id);
 			}
 			if (g) $.event.trigger("ajaxComplete", [xhr, opts]);
 			if (g && ! --$.active) $.event.trigger("ajaxStop");
