@@ -3,4 +3,4 @@
 	The name of the recipient is optional.
 </p>
 
-{% mailinglist_subscribe id=id in_admin %}
+{% mailinglist_subscribe id=id recipient_id=recipient_id in_admin %}

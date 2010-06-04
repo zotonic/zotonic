@@ -34,6 +34,8 @@
 	replace_recipients/3,
 	insert_recipient/4,
 	insert_recipient/5,
+
+	update_recipient/3,
 	
 	recipient_get/2,
 	recipient_get/3,
@@ -59,6 +61,10 @@ m_find_value(stats, #m{value=undefined} = M, _Context) ->
    M#m{value=stats};
 m_find_value(Id, #m{value=stats}, Context) ->
    get_stats(Id, Context);
+m_find_value(recipient, #m{value=undefined} = M, _Context) ->
+   M#m{value=recipient};
+m_find_value(Id, #m{value=recipient}, Context) ->
+   recipient_get(Id, Context);
 m_find_value(scheduled, #m{value=undefined} = M, _Context) ->
    M#m{value=scheduled};
 m_find_value(Id, #m{value=scheduled}, Context) ->
@@ -219,6 +225,12 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 		_ -> z_notifier:notify({mailinglist_message, WelcomeMessageType1, ListId, RecipientId}, Context)
 	end,
 	ok.
+
+
+%% @doc Update a single recipient; changing e-mail address or name details.
+update_recipient(RcptId, Props, Context) ->
+    {ok, _} = z_db:update(mailinglist_recipient, RcptId, Props, Context),
+    ok.
 
 
 %% @doc Replace all recipients found in the binary file. One recipient per line.

@@ -41,7 +41,14 @@ event({postback, {dialog_recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Cont
 	Vars = [
 		{id, Id}
 	],
-	z_render:dialog("Add recipient.", "_dialog_mailinglist_recipient_add.tpl", Vars, Context);
+	z_render:dialog("Add recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
+
+event({postback, {dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+	Vars = [
+            {id, Id},
+            {recipient_id, RcptId}
+	],
+	z_render:dialog("Edit recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
 
 event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
