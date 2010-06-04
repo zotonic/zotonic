@@ -56,7 +56,10 @@ render_action(_TriggerId, TargetId, Args, Context) ->
 		'animate'       -> io_lib:format("animate(~s, ~p, '~s');", [Options, Speed, Easing])
 	end,
 
-	Script2 = [<<"$('#">>,Id,<<"').">>,Script],
+    Script2 = case Id of
+        [32|CssSelector] -> [<<"$('">>,CssSelector,<<"').">>,Script];
+        _ -> [<<"$('#">>,Id,<<"').">>,Script]
+    end,
 	
 	{Script2, Context}.
 
