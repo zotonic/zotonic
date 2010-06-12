@@ -57,6 +57,7 @@
     get_q/3,
     get_q_all/1,
     get_q_all/2,
+    get_q_all_noz/1,
     get_q_validated/2,
 
     add_script_session/1,
@@ -518,6 +519,23 @@ get_q_all(Key, Context) ->
     {'q', Qs} = proplists:lookup('q', Context#context.props),
     proplists:get_all_values(z_convert:to_list(Key), Qs).
 
+
+%% @spec get_q_all_noz(Context) -> Values
+%%        Key -> string()
+%%        Values -> list()
+%% @doc Get all query/post args, filter the zotonic internal args.
+get_q_all_noz(Context) ->
+    lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
+    
+    is_zotonic_arg("zotonic_host") -> true;
+    is_zotonic_arg("zotonic_dispatch") -> true;
+    is_zotonic_arg("postback") -> true;
+    is_zotonic_arg("triggervalue") -> true;
+    is_zotonic_arg("z_trigger_id") -> true;
+    is_zotonic_arg("z_pageid") -> true;
+    is_zotonic_arg("z_v") -> true;
+    is_zotonic_arg(_) -> false.
+    
 
 %% @spec get_q_validated(Key, Context) -> Value
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
