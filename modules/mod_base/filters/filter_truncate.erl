@@ -17,8 +17,10 @@
 %% limitations under the License.
 
 -module(filter_truncate).
--export([truncate/3]).
+-export([truncate/2, truncate/3]).
 
+truncate(In, Context) ->
+	truncate(In, 20, Context).
 
 truncate(undefined, _N, _Context) ->
 	undefined;
