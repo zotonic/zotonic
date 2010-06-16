@@ -1,4 +1,4 @@
-<h2>Comments</h2>
+<h2>{_ Comments _}</h2>
 
 {% with m.rsc[id].creator_id as creator_id %}
 <ul id="comments-list" class="comments-list">
