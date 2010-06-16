@@ -81,32 +81,38 @@ get(CommentId, Context) ->
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
 %% @spec insert(Id:int(), Name::string(), Email::string(), Message::string(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
-%% @todo Access control, only allow comment when resource is visible for the current user
 insert(RscId, Name, Email, Message, Context) ->
-    Email = z_string:trim(Email),
-    Name1 = z_html:escape(z_string:trim(Name)),
-    Message1 = z_html:escape_link(z_string:trim(Message)),
-    KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
-    Props = [
-        {rsc_id, z_convert:to_integer(RscId)},
-        {is_visible, true},
-        {user_id, z_acl:user(Context)},
-        {persistent_id, z_context:persistent_id(Context)},
-        {name, Name1},
-        {message, Message1},
-        {email, Email},
-        {gravatar_code, gravatar_code(Email)},
-        {keep_informed, KeepInformed},
-        {ip_address, ""},
-        {user_agent, ""}
-    ],
-    case z_db:insert(comment, Props, Context) of
-        {ok, _CommentId} = Result ->
-            z_depcache:flush({comment_rsc, RscId}, Context),
-            Result;
-        {error, _} = Error ->
-            Error
-    end.
+	case z_acl:rsc_visible(RscId, Context) 
+		and (z_auth:is_auth(Context) 
+			orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
+		true ->
+		    Email = z_string:trim(Email),
+		    Name1 = z_html:escape(z_string:trim(Name)),
+		    Message1 = z_html:escape_link(z_string:trim(Message)),
+		    KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
+		    Props = [
+		        {rsc_id, z_convert:to_integer(RscId)},
+		        {is_visible, true},
+		        {user_id, z_acl:user(Context)},
+		        {persistent_id, z_context:persistent_id(Context)},
+		        {name, Name1},
+		        {message, Message1},
+		        {email, Email},
+		        {gravatar_code, gravatar_code(Email)},
+		        {keep_informed, KeepInformed},
+		        {ip_address, ""},
+		        {user_agent, ""}
+		    ],
+		    case z_db:insert(comment, Props, Context) of
+		        {ok, _CommentId} = Result ->
+		            z_depcache:flush({comment_rsc, RscId}, Context),
+		            Result;
+		        {error, _} = Error ->
+		            Error
+		    end;
+		false ->
+			{error, eacces}
+	end.
 
 
 %% @doc Delete a comment.  Only possible if the user has edit permission on the page.
