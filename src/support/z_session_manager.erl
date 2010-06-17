@@ -50,13 +50,14 @@
     count/1, 
     dump/1, 
     tick/1,
+    foreach/2,
     broadcast/2
 ]).
 
 -include_lib("zotonic.hrl").
 
 %% The session server state
--record(session_srv, {key2pid, pid2key, persist2pid, pid2persist}).
+-record(session_srv, {context, key2pid, pid2key, persist2pid, pid2persist}).
 
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
@@ -94,14 +95,14 @@ rename_session(#context{session_manager=SessionManager} = Context) ->
 
 %% @spec add_script(Context) -> none()
 %% @doc Send the scripts in the context to all pages of all sessions
-add_script(#context{session_manager=SessionManager} = Context) ->
-	Script = z_script:get_script(Context),
-    gen_server:cast(SessionManager, {add_script, Script}).
+add_script(Context) ->
+    Script = z_script:get_script(Context),
+    add_script(Script, Context).
 
 %% @spec add_script(Script::io_list(), Context) -> none()
 %% @doc Send a script to all pages of all sessions
-add_script(Script, #context{session_manager=SessionManager}) ->
-    gen_server:cast(SessionManager, {add_script, Script}).
+add_script(Script, Context) ->
+    foreach(fun(Pid) -> z_session:add_script(Script, Pid) end, Context).
 
 %% @spec count(Context) -> Int
 %% @doc Return the number of open sessions
@@ -115,8 +116,16 @@ dump(#context{session_manager=SessionManager}) ->
 
 %% @spec tick(pid()) -> void()
 %% @doc Periodic tick used for cleaning up sessions
-tick(Pid) when is_pid(Pid) ->
-    gen_server:cast(Pid, tick).
+tick(SessionManager) when is_pid(SessionManager) ->
+    Tick = z_utils:now(),
+    foreach(fun(Pid) -> z_session:check_expire(Tick, Pid) end, SessionManager).
+
+%% @spec foreach(?) -> void()
+%% @doc Apply function to all sessions
+foreach(Function, #context{session_manager=SessionManager}) when is_function(Function) ->
+    foreach(Function, SessionManager);
+foreach(Function, SessionManager) when is_function(Function) ->
+    gen_server:cast(SessionManager, {foreach, Function}).
 
 %% @spec broadcast(#broadcast, Context) -> ok
 %% @doc Broadcast a notification message to all open sessions.
@@ -135,8 +144,15 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
 %% @spec init(SiteProps) -> {ok, State}
 %% @doc Initialize the session server with an empty session table.  We make the session manager a system process
 %%      so that crashes in sessions are isolated from each other.
-init(_SiteProps) ->
-    State = #session_srv{key2pid=dict:new(), pid2key=dict:new(), persist2pid=dict:new(), pid2persist=dict:new()},
+init(SiteProps) ->
+	{host, Host} = proplists:lookup(host, SiteProps),
+    State = #session_srv{
+					context=z_acl:sudo(z_context:new(Host)),
+					key2pid=dict:new(), 
+					pid2key=dict:new(), 
+					persist2pid=dict:new(), 
+					pid2persist=dict:new()
+			},
     timer:apply_interval(?SESSION_CHECK_EXPIRE * 1000, ?MODULE, tick, [self()]),
     process_flag(trap_exit, true),
     {ok, State}.
@@ -192,7 +208,6 @@ handle_call(dump, _From, State) ->
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
-
 %% Handle the down message from a stopped session, remove it from the session admin
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
     State1 = erase_session_pid(Pid, State),
@@ -200,16 +215,16 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
 handle_info(_Msg, State) -> 
     {noreply, State}.
 
-%% Add a script to all pages of all sessions
-handle_cast({add_script, Script}, State) ->
-    SesPids = dict:fetch_keys(State#session_srv.pid2key),
-    lists:foreach(fun(Pid) -> z_session:add_script(Script, Pid) end, SesPids),
-	{noreply, State};
-
-handle_cast(tick, State) ->
-    Tick    = z_utils:now(),
-    SesPids = dict:fetch_keys(State#session_srv.pid2key),
-    lists:foreach(fun(Pid) -> z_session:check_expire(Tick, Pid) end, SesPids),
+%% Apply Function to all sessions. The function application is spawned to support slow
+%% running functions and to protect the session manager from crashes.
+handle_cast({foreach, Function}, #session_srv{context=Context, pid2key=Pid2Key} = State) ->
+    SesPids = dict:fetch_keys(Pid2Key),
+	if 
+		is_function(Function, 1) ->
+		    spawn(fun() -> lists:foreach(fun(Pid) -> Function(Pid) end, SesPids) end);
+		is_function(Function, 2) ->
+		    spawn(fun() -> lists:foreach(fun(Pid) -> Function(Pid, Context#context{session_pid=Pid}) end, SesPids) end)
+	end,
     {noreply, State};
 
 handle_cast(_Msg, State) -> {noreply, State}.
