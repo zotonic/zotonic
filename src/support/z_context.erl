@@ -98,7 +98,9 @@
 
     set_resp_header/3,
     get_resp_header/2,
-    get_req_header/2
+    get_req_header/2,
+
+	get_req_path/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -754,6 +756,13 @@ get_req_header(Header, Context) ->
     ReqData = get_reqdata(Context),
     wrq:get_req_header(Header, ReqData).
 
+
+%% @doc Return the request path
+%% @spec get_req_path(Context) -> list()
+get_req_path(Context) ->
+	ReqData = get_reqdata(Context),
+	wrq:raw_path(ReqData).
+	
 
 %% ------------------------------------------------------------------------------------
 %% Local helper functions
