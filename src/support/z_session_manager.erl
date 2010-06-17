@@ -201,8 +201,8 @@ handle_call(count, _From, State) ->
 
 %% Dump all sessions to stdout
 handle_call(dump, _From, State) ->
-    SesPids = dict:fetch_keys(State#session_srv.pid2key),
-    lists:foreach(fun(Pid) -> z_session:dump(Pid) end, SesPids),
+    SesPids = dict:to_list(State#session_srv.pid2key),
+    lists:foreach(fun({Pid,Key}) -> io:format("sid:~p~n", [Key]), z_session:dump(Pid) end, SesPids),
     {reply, ok, State};
     
 handle_call(Msg, _From, State) ->
@@ -241,7 +241,8 @@ ensure_session1(S, P, Context, State) when S == undefined orelse P == error ->
 			% Browser restart, though session still alive
 			z_session:restart(Pid),
 			{Context2, State1} = rename_session(Pid, Context1, State),
-			{Pid, Context2, State1};
+		    Context3 = Context2#context{session_pid = Pid},
+			{Pid, Context3, State1};
 		error ->
 		    Pid       = spawn_session(PersistId, Context1),
 		    SessionId = z_ids:id(),
@@ -258,13 +259,18 @@ ensure_session1(_SessionId, Pid, Context, State) ->
 
 
 rename_session(Pid, Context, State) ->
-    % Remove old session-id from the lookup tables
-    State1 = erase_session_pid(Pid, State),
-    % Generate a new session id and set cookie
-    SessionId = z_ids:id(),
-    Context1  = set_session_id(SessionId, Context),
-    State2    = store_session_pid(SessionId, Pid, State1),
-	{Context1, State2}.
+	case z_context:get(set_session_id, Context) of
+		true ->
+			{Context, State};
+		_ ->
+		    % Remove old session-id from the lookup tables
+		    State1 = erase_session_pid(Pid, State),
+		    % Generate a new session id and set cookie
+		    SessionId = z_ids:id(),
+		    Context1  = set_session_id(SessionId, Context),
+		    State2    = store_session_pid(SessionId, Pid, State1),
+			{Context1, State2}
+	end.
 
 
 %% @spec erase_session_pid(pid(), State) -> State
@@ -341,7 +347,7 @@ spawn_session(PersistId, Context) ->
 
 
 %% @spec get_session_id(Context) -> undefined | string()
-%% @doc fetch the session id from the request, return error when not found
+%% @doc fetch the session id from the request, return 'undefined' when not found
 get_session_id(Context) ->
     ReqData = z_context:get_reqdata(Context),
     wrq:get_cookie_value(?SESSION_COOKIE, ReqData).
@@ -353,7 +359,7 @@ set_session_id(SessionId, Context) ->
     %% TODO: set the {domain,"example.com"} of the session cookie
     Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [{path, "/"}, {http_only, true}]),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set_reqdata(RD1, Context).
+    z_context:set(set_session_id, true, z_context:set_reqdata(RD1, Context)).
 
 
 %% @spec clear_session_id(Context::#context) -> #context
