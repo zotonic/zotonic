@@ -198,6 +198,8 @@ function z_stream_start(hostname)
 {
     if (!z_ws && !z_comet_is_running)
     {
+        /* Problem with Safari 5, disabled till update to newer version of Zotonic
+         *
     	if ("WebSocket" in window) 
     	{
     		z_ws = new WebSocket("ws://"+hostname+"/websocket");
@@ -220,6 +222,7 @@ function z_stream_start(hostname)
     		};
     	}
         else
+        */
     	{
     		setTimeout("z_comet();", 2000);
     		z_comet_is_running = true;
