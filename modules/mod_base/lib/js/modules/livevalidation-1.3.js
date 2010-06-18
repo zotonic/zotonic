@@ -472,10 +472,10 @@ LiveValidation.prototype =
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
-                if(this.element.className.indexOf(this.validFieldClass) == -1) this.element.className += ' ' + this.validFieldClass;
+                $(this.element).addClass(this.validFieldClass);
             }
         }else{
-            if(this.element.className.indexOf(this.invalidFieldClass) == -1) this.element.className += ' ' + this.invalidFieldClass;
+            $(this.element).addClass(this.invalidFieldClass);
         }
     },
     
@@ -496,11 +496,10 @@ LiveValidation.prototype =
     },
     
     /**
-     *  removes the class that has been applied to the field to indicte if valid or not
+     *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-      if(this.element.className.indexOf(this.invalidFieldClass) != -1) this.element.className = this.element.className.split(this.invalidFieldClass).join('');
-      if(this.element.className.indexOf(this.validFieldClass) != -1) this.element.className = this.element.className.split(this.validFieldClass).join(' ');
+        $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
     },
         
     /**
@@ -545,9 +544,11 @@ LiveValidationForm.instances = {};
    */
 LiveValidationForm.getInstance = function(element){
   var rand = Math.random() * Math.random();
-  if(!element.id) element.id = 'formId_' + rand.toString().replace(/\./, '') + new Date().valueOf();
-  if(!LiveValidationForm.instances[element.id]) LiveValidationForm.instances[element.id] = new LiveValidationForm(element);
-  return LiveValidationForm.instances[element.id];
+  if(!$(element).attr("id"))
+    $(element).attr("id", 'formId_' + rand.toString().replace(/\./, '') + new Date().valueOf());
+  if(!LiveValidationForm.instances[$(element).attr("id")])
+    LiveValidationForm.instances[$(element).attr("id")] = new LiveValidationForm(element);
+  return LiveValidationForm.instances[$(element).attr("id")];
 }
 
 LiveValidationForm.prototype = {
@@ -558,7 +559,7 @@ LiveValidationForm.prototype = {
    *  @var element {HTMLFormElement} - a dom element reference to the form to turn into a LiveValidationForm
    */
   initialize: function(element){
-    this.name = element.id;
+    this.name = $(element).attr("id");
     this.element = element;
     this.fields = [];
     this.skipValidations = 0;
