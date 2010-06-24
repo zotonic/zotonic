@@ -557,9 +557,14 @@ is_a(Id, Cat, Context) ->
 page_url(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
-            Args = [{id,RscId}, {slug, p(RscId, slug, Context)}],
             CatPath = lists:reverse(is_a(Id, Context)),
-            page_url_path(CatPath, Args, Context);
+			case z_notifier:first({page_url, RscId, CatPath}, Context) of
+				{ok, Url} -> 
+					Url;
+				undefined ->
+		            Args = [{id,RscId}, {slug, p(RscId, slug, Context)}],
+		            page_url_path(CatPath, Args, Context)
+			end;
         _ ->
             undefined
     end.
