@@ -1,5 +1,4 @@
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+{% include "_js_include_jquery.tpl" %}
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 {% lib 
@@ -14,6 +13,7 @@
 	"js/modules/z.dialog.js"
 	"js/modules/z.formreplace.js"
 	"js/modules/z.maps.js"
+	"js/modules/z.datepicker.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/jquery.loadmask.js"
 %}
