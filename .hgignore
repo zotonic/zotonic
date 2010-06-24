@@ -39,6 +39,9 @@ deps/exmpp/stamp-h1
 deps/exmpp/testsuite/Makefile
 deps/exmpp/testsuite/etest
 deps/exmpp/.git
+deps/exmpp/doc/*.html
+deps/exmpp/doc/edoc-info
+deps/exmpp/doc/erlang.png
 modules/mod_search_solr/solr/*
 deps/exmpp/include/internal/exmpp_known_attrs.hrl
 deps/exmpp/include/internal/exmpp_known_elems.hrl
