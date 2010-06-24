@@ -78,9 +78,11 @@ provide_content(ReqData, Context) ->
     Context2 = z_context:ensure_all(Context1),
     Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
 	IsPasswordReset = z_context:get(is_password_reset, Context3),
+	IsPasswordReminder = z_context:get(is_password_reminder, Context3),
     Vars = [
         {page, get_page(Context3)},
-		{is_password_reset, IsPasswordReset}
+		{is_password_reset, IsPasswordReset},
+		{is_password_reminder, IsPasswordReminder}
     ],
 	Vars1 = case IsPasswordReset of
 		true -> 

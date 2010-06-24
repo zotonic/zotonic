@@ -2,13 +2,7 @@
 
 {% block logon_area %}
 
-<style type="text/css">
-
-
-</style>
-
-
-<div id="logon_outer" class="{% if is_password_reset %}logon_password_reset{% else %}logon_pw{% endif %}">
+<div id="logon_outer" class="{% if is_password_reset %}logon_password_reset{% else %}{% if is_password_reminder %}logon_reminder{% else %}logon_pw{% endif %}{% endif %}">
 	{% if logon_reason %}
 	<p id="logon_reason">{{ logon_reason }}</p>
 	{% endif %}
