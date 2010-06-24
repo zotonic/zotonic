@@ -1,33 +1,33 @@
 {% extends "base.tpl" %}
 
-{% block title %}Confirm my account{% endblock %}
+{% block title %}{_ Confirm my account _}{% endblock %}
 
 {% block content %}
 
 {% if user_id %}
-	<h1>Welcome {{ m.rsc[user_id].title }}</h1>
+	<h1>{_ Welcome _} {{ m.rsc[user_id].title }}</h1>
 	
-	<p>Your account is confirmed. You can now continue on our site.</p>
+	<p>{_ Your account is confirmed. You can now continue on our site. _}</p>
 	
-	<p><a href="{{ m.rsc[user_id].page_url }}">Bring me to my profile page</a>.</p>
+	<p><a href="{{ m.rsc[user_id].page_url }}">{_ Bring me to my profile page _}</a>.</p>
 
 {% else %}
-	<h1>Confirm my account</h1>
+	<h1>{_ Confirm my account _}</h1>
 
-	<p>In your e-mail you received a confirmation key. Please copy it in the input field below.</p>
+	<p>{_ In your e-mail you received a confirmation key. Please copy it in the input field below. _}</p>
 
 	<p id="confirm_error" class="error" {% if not error %}style="display: none"{% endif %}>
-		Sorry, I don't know that confirmation code. Did you copy it correctly?
+		{_ Sorry, I don't know that confirmation code. Did you copy it correctly? _}
 	</p>
 
 	<form id="signup_confirm_form" method="post" action="postback">
 		
 		<p id="confirm_key">
-			<label for="key">Confirm key</label>
+			<label for="key">{_ Confirm key _}</label>
 			<input type="text" id="key" name="key" value="{{ q.key|escape }}" />
 		</p>
 		
-		<button>Confirm my account</button>
+		<button>{_ Confirm my account _}</button>
 	</form>
 {% endif %}
 		

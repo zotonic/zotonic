@@ -39,7 +39,7 @@ limitations under the License.
 					
 					if(typeof $(element)[functionName] == "function")
 					{
-						if($.ui && typeof $.ui[functionName] == "function")
+						if($.ui && $.ui[functionName] && $.ui[functionName].defaults)
 						{
 							defaults = $.ui[functionName].defaults;
 						}
