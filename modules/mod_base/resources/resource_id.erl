@@ -54,13 +54,16 @@ see_other(ReqData, Context) ->
 	Mime = z_context:get_resp_header("Content-Type", Context1),
 	{CT,Context2} = get_content_types(Context1),
     Id = z_context:get_q("id", Context2),
-	Location = case proplists:get_value(Mime, CT) of
-					page_url -> m_rsc:p_no_acl(Id, page_url, Context2);
-					Dispatch -> z_dispatcher:url_for(Dispatch, [{id,Id}], Context2)
-			   end,
-	AbsUrl = z_context:abs_url(Location, Context2),
-    Context3 = z_context:set_resp_header("Location", AbsUrl, Context2),
-	?WM_REPLY({halt, 303}, Context3).
+	{Location,Context3} = case proplists:get_value(Mime, CT) of
+							page_url ->
+								ContextSession = z_context:continue_session(Context2),
+								{m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
+							Dispatch -> 
+								{z_dispatcher:url_for(Dispatch, [{id,Id}], Context2), Context2}
+						  end,
+	AbsUrl = z_context:abs_url(Location, Context3),
+    Context4 = z_context:set_resp_header("Location", AbsUrl, Context3),
+	?WM_REPLY({halt, 303}, Context4).
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
