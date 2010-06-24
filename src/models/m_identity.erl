@@ -29,6 +29,7 @@
     m_value/2,
     
     is_user/2,
+    get_username/1,
     get_username/2,
     delete_username/2,
     set_username/3,
@@ -96,6 +97,14 @@ is_user(Id, Context) ->
         0 -> false;
         _ -> true
     end.
+
+%% @doc Return the username of the current user
+%% @spec get_username(Context) -> Username | undefined
+get_username(Context) ->
+	case z_acl:user(Context) of
+		undefined -> undefined;
+		UserId -> get_username(UserId, Context)
+	end.
 
 %% @doc Return the username of the resource id, undefined if no username
 %% @spec get_username(ResourceId, Context) -> Username | undefined
