@@ -1,5 +1,6 @@
 [
 	{logon, ["logon"], resource_logon, []},
 	{logoff, ["logoff"], resource_logoff, []},
+	{password_reminder, ["password", "reminder"], resource_logon, [{is_password_reminder, true}]},
 	{password_reset, ["password", "reset", secret], resource_logon, [{is_password_reset, true}]}
 ].
