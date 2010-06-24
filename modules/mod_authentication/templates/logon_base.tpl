@@ -5,7 +5,9 @@
 {% block navigation %}{% endblock %}
 
 {% block html_head_extra %}
-{% lib "css/logon.css" %}
+{% lib "css/logon.css"
+ 	   "css/logon_logic.css"
+%}
 {% endblock %}
 
 {% block content_area %}
