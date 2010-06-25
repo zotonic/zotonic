@@ -44,6 +44,7 @@
 	update/3,
 	insert_top/3,
 	insert_bottom/3,
+	appear_top/3,
 	appear_bottom/3,
 	set_value/3,
 	
@@ -202,28 +203,47 @@ update(TargetId, undefined, Context) ->
     add_update(TargetId, "", Script, Context);
 update(TargetId, Html, Context) -> 
     Script = "$('#~s').html(\"~s\").widgetManager();",
-    add_update(TargetId, Html, Script, Context).
+    {Html1, Context1} = render_html(Html, Context),
+    add_update(TargetId, Html1, Script, Context1).
     
 %% @doc Insert a html fragment at the top of the contents of an element
 insert_top(_TargetId, undefined, Context) -> 
     Context;
 insert_top(TargetId, Html, Context) -> 
     Script = "$('#~s').prepend(\"~s\");",
-    add_update(TargetId, Html, Script, Context).
+    {Html1, Context1} = render_html(Html, Context),
+    add_update(TargetId, Html1, Script, Context1).
 
 %% @doc Append a html fragment at the bottom of the contents of an element
 insert_bottom(_TargetId, undefined, Context) -> 
     Context;
 insert_bottom(TargetId, Html, Context) -> 
     Script = "$('#~s').append(\"~s\");",
-    add_update(TargetId, Html, Script, Context).
+    {Html1, Context1} = render_html(Html, Context),
+    add_update(TargetId, Html1, Script, Context1).
+
+%% @doc Insert a html fragment at the top of the contents of an element, fading it in.
+appear_top(_TargetId, undefined, Context) -> 
+    Context;
+appear_top(TargetId, Html, Context) -> 
+    Script = "$('#~s').prepend($(\"~s\").fadeIn());",
+    {Html1, Context1} = render_html(Html, Context),
+    add_update(TargetId, Html1, Script, Context1).
 
 %% @doc Append a html fragment at the bottom of the contents of an element, fading it in.
 appear_bottom(_TargetId, undefined, Context) -> 
     Context;
 appear_bottom(TargetId, Html, Context) -> 
     Script = "$('#~s').append($(\"~s\").fadeIn());",
-    add_update(TargetId, Html, Script, Context).
+    {Html1, Context1} = render_html(Html, Context),
+    add_update(TargetId, Html1, Script, Context1).
+    
+    
+    render_html(#render{template=Template, vars=Vars}, Context) ->
+        {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
+        {iolist_to_binary(Html), Context1};
+    render_html(Html, Context) ->
+        {Html, Context}.
 
 %% @doc Set the value of an input element.
 set_value(TargetId, undefined, Context) ->
