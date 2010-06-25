@@ -140,6 +140,9 @@
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 
+%% @doc Template definition for z_render:update/insert (and others)
+-record(render, {template, vars=[]}).
+
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 

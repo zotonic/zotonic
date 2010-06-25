@@ -23,12 +23,18 @@
 -module(z_script).
 -include("zotonic.hrl").
 -export ([
+    split/1,
 	add_script/2,
 	get_script/1,
 	get_page_startup_script/1,
 	add_content_script/2,
 	clean/1
 ]).
+
+
+%% @doc Split the scripts from the context. Returns the scripts and a cleaned context.
+split(Context) ->
+    {iolist_to_binary(get_script(Context)), clean(Context)}.
 
 
 add_content_script([], Context) -> 
