@@ -278,10 +278,11 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
             false ->
                 gen_server:cast(Pid, {Msg, Context})
         end
-    catch _M:_E ->
+    catch M:E ->
         ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
         Event = element(1, Msg),
-        detach(Event, Pid, Context)
+        detach(Event, Pid, Context),
+        {error, {notify_observer, Pid, Msg, M, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F}}, _IsCall, Context) ->
     M:F(Msg, Context).
@@ -295,10 +296,11 @@ notify_observer_fold(Msg, {_Prio, Fun}, Acc, Context) when is_function(Fun) ->
 notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
     try
         gen_server:call(Pid, {Msg, Acc, Context}, ?TIMEOUT)
-    catch _M:_E ->
+    catch M:E ->
         ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
         Event = element(1, Msg),
-        detach(Event, Pid, Context)
+        detach(Event, Pid, Context),
+        {error, {notify_observer_fold, Pid, Msg, M, E}}
     end;
 notify_observer_fold(Msg, {_Prio, {M,F}}, Acc, Context) ->
     M:F(Msg, Acc, Context).
