@@ -368,7 +368,8 @@ get_pivot_title(Props) ->
 
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
 get_pivot_data(Id, Context) ->
-    R = m_rsc:get(Id, Context),
+    Rsc = m_rsc:get(Id, Context),
+	R = z_notifier:foldr({pivot_get, Id}, Rsc, Context),
     {A,B} = lists:foldl(fun fetch_texts/2, {[],[]}, R),
     {ObjIds, ObjTexts} = related(Id, Context),
     {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
@@ -399,8 +400,9 @@ split_lang([Text|Rest], Dict, Context) ->
 %% @doc Fetch the title of all things related to the resource
 related(Id, Context) ->
     Ids = m_edge:objects(Id, Context),
-    Texts = [ m_rsc:p(R, title, Context) || R <- Ids ],
-    {Ids, Texts}.
+	Ids1 = z_notifier:foldr({pivot_related, Id}, Ids, Context),
+    Texts = [ m_rsc:p(R, title, Context) || R <- Ids1 ],
+    {Ids1, Texts}.
     
 
 %% @doc Fetch the names of all categories in the category path
