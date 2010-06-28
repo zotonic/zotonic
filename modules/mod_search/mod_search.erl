@@ -301,6 +301,12 @@ search({all, [{cat, Cat}]}, OffsetLimit, Context) ->
 search({featured, [{cat,Cat},{object,ObjectId},{predicate,Predicate}]}, OffsetLimit, Context) ->
     search({'query', [{cat, Cat}, {hassubject, [ObjectId, Predicate]}]}, OffsetLimit, Context);
 
+search({published, []}, OffsetLimit, Context) ->
+    search({'query', [{sort, '-rsc.publication_start'}]}, OffsetLimit, Context);
+
+search({published, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{cat, Cat}, {sort, '-rsc.publication_start'}]}, OffsetLimit, Context);
+
 search({latest, []}, OffsetLimit, Context) ->
     search({'query', [{sort, '-rsc.modified'}]}, OffsetLimit, Context);
 
