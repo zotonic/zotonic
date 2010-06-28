@@ -44,9 +44,14 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event({postback, {typeselect, Cats, Template, Actions, ActionsWithId}, _TriggerId, TargetId}, Context) ->
     Text = z_context:get_q("triggervalue", Context),
-    SearchResult = z_search:search({autocomplete, [{cat,Cats}, {text, Text}]}, {1,20}, Context),
+	Props = [{cat,Cats}, {text, Text}],
+    Result = z_search:search({autocomplete, Props}, {1,20}, Context),
+	M = #m{
+		model=m_search,
+		value=#m_search_result{result=Result, total=20, search_name=autocomplete, search_props=Props}
+	},
     Vars = [
-        {result, SearchResult#search_result.result},
+        {result, M},
         {action, Actions},
         {action_with_id, ActionsWithId}
     ],

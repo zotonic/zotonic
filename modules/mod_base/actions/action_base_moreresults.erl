@@ -21,17 +21,16 @@
 -export([render_action/4, event/2]).
 
 render_action(TriggerId, TargetId, Args, Context) ->
-    Model = proplists:get_value(result, Args),
-    Result = Model#m.value,
+    Result = case proplists:get_value(result, Args) of
+				#m{model=m_search, value=V} -> V;
+				#m_search_result{} = M -> M
+			end,
 
     SearchName = Result#m_search_result.search_name,
     SearchProps = proplists:delete(page, Result#m_search_result.search_props),
 
-    Page = case proplists:get_value(page, Result#m_search_result.search_props) of
-               undefined -> 2;
-               P         -> z_convert:to_integer(P)+1
-           end,
-    PageLen = proplists:get_value(pagelen, SearchProps, 20),
+    Page = z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1))+1,
+    PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
 
     Template = proplists:get_value(template, Args),
     make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context).
@@ -62,11 +61,20 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
                        Context
                end,
 
-    lists:foldr(fun (Id, Ctx) ->
-                        Html = z_template:render(Template, [{id, Id}], Ctx),
-                        z_render:appear_bottom(TargetId, Html, Ctx)
-                end, Context1, Ids).
+	FirstRow = PageLen*(Page-1)+1,
+	Ids1 = lists:zip(lists:map(fun to_id/1, Ids), lists:seq(FirstRow, FirstRow+length(Ids)-1)),
+	Html = lists:map(fun({Id,RowNr}) -> 
+						Vars = [
+							{id, Id}, {row, RowNr}, {is_first, RowNr == FirstRow}
+						],
+						z_template:render(Template, Vars, Context1)
+					end, Ids1),
+	z_render:appear_bottom(TargetId, Html, Context1).
 
+
+	to_id(Id) when is_integer(Id) -> Id;
+	to_id({Id,_}) when is_integer(Id) -> Id;
+	to_id({_,Id}) when is_integer(Id) -> Id.
 
 make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context) ->
     Postback = {moreresults, SearchName, SearchProps, Page, PageLen, Template},
