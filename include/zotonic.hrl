@@ -143,6 +143,9 @@
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {template, vars=[]}).
 
+%% @doc Data import definition. See also mod_import_csv.
+-record(import_data_def, {colsep=$\t, skip_first_row=true, record, importdef}).
+
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 
