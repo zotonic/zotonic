@@ -10,6 +10,7 @@
 	"modules/*/*/*/*",
 	"priv/sites/*/*",
 	"priv/sites/*/*/*",
+	"priv/sites/*/support/*/*",
 	"priv/sites/*/modules/*",
 	"priv/sites/*/modules/*/*",
 	"priv/sites/*/modules/*/*/*"
