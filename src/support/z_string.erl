@@ -1,7 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2010 Marc Worrell
 %% @date 2009-04-26
 %% @doc String related functions
+%% @todo Make this UTF-8 safe
 
 %% @todo Check valid chars for filenames, allow chinese, japanese, etc?
 %% CJK Unified Ideographs Extension A: Range: 3400-4DBF
@@ -9,7 +10,7 @@
 %% Kangxi Radicals: Range 2F00-2FDF
 %% See also: http://www.utf8-chartable.de/
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,9 +30,16 @@
 %% interface functions
 -export([
     trim/1,
-	trim_left/1,
-	trim_right/1,
+    trim_left/1,
+    trim_right/1,
+    trim/2,
+    trim_left/2,
+    trim_right/2,
     is_string/1,
+    first_char/1,
+    last_char/1,
+    unquote/1,
+    unquote/2,
     nospaces/1,
     line/1,
     to_rootname/1,
@@ -40,11 +48,11 @@
     to_lower/1,
     to_upper/1,
     replace/3,
-	truncate/2,
-	truncate/3,
-	split_lines/1,
-	escape_ical/1,
-	test/0
+    truncate/2,
+    truncate/3,
+    split_lines/1,
+    escape_ical/1,
+    test/0
 ]).
 
 -include_lib("include/zotonic.hrl").
@@ -56,17 +64,35 @@ trim(B) when is_binary(B) ->
 trim(L) when is_list(L) ->
 	binary_to_list(trim(iolist_to_binary(L))).
 
+%% @doc Remove all occurences of a character at the start and end of a string.
+trim(B, Char) when is_binary(B) ->
+	trim_right(trim_left(B, Char), Char);
+trim(L, Char) when is_list(L) ->
+	binary_to_list(trim(iolist_to_binary(L), Char)).
+
 
 %% @doc Remove whitespace at the start the string
 trim_left(<<C, Rest/binary>> = Bin) ->
 	case C of
-		W when W=:=10; W=:=13; W=:=9; W=:=32 -> trim(Rest);
+		W when W =< 32 -> trim_left(Rest);
 		_ -> Bin
 	end;
 trim_left(<<>>) ->
 	<<>>;
 trim_left(L) ->
 	binary_to_list(trim_left(iolist_to_binary(L))).
+
+%% @doc Remove all occurences of a char at the start of a string
+trim_left(<<C, Rest/binary>> = Bin, Char) ->
+	case C of
+		Char -> trim_left(Rest, Char);
+		_ -> Bin
+	end;
+trim_left(<<>>, _Char) ->
+	<<>>;
+trim_left(L, Char) ->
+	binary_to_list(trim_left(iolist_to_binary(L), Char)).
+
 	
 %% @doc Remove whitespace at the end of the string
 trim_right(B) when is_binary(B) ->
@@ -76,12 +102,25 @@ trim_right(L) ->
 
 	trim_right(<<C, Rest/binary>>, WS, Acc) ->
 		case C of
-			W when W=:=10; W=:=13; W=:=9; W=:=32 -> trim_right(Rest, <<WS/binary, C>>, Acc);
+			W when W =< 32 -> trim_right(Rest, <<WS/binary, C>>, Acc);
 			_ -> trim_right(Rest, <<>>, <<Acc/binary, WS/binary, C>>)
 		end;
 	trim_right(<<>>, _WS, Acc) ->
 		Acc.
 
+%% @doc Remove all occurences of a char at the end of the string
+trim_right(B, Char) when is_binary(B) ->
+	trim_right(B, Char, <<>>, <<>>);
+trim_right(L, Char) ->
+	binary_to_list(trim_right(iolist_to_binary(L), Char)).
+
+	trim_right(<<C, Rest/binary>>, Char, WS, Acc) ->
+		case C of
+			Char -> trim_right(Rest, Char, <<WS/binary, C>>, Acc);
+			_ -> trim_right(Rest, Char, <<>>, <<Acc/binary, WS/binary, C>>)
+		end;
+	trim_right(<<>>, _Char, _WS, Acc) ->
+		Acc.
 
 %% @doc Check if the variable is a one dimensional list, probably a string
 is_string([]) -> 
@@ -93,6 +132,44 @@ is_string([C|Rest]) when
     is_string(Rest);
 is_string(_) -> 
     false.
+
+
+%% @doc Return the first character of a string.
+%% @todo Make this UTF-8 safe
+first_char([]) -> undefined;
+first_char([H|_]) -> H;
+first_char(<<>>) -> undefined;
+first_char(<<C, _/binary>>) -> C.
+
+
+%% @doc Return the last character of a string
+last_char([]) -> undefined;
+last_char([C]) -> C;
+last_char([_|R]) -> last_char(R);
+last_char(<<>>) -> undefined;
+last_char(<<C>>) -> C;
+last_char(<<_, R/binary>>) -> last_char(R).
+
+
+%% @doc Remove the first and last char if they are double quotes.
+unquote(S) ->
+    unquote(S, $").
+
+unquote(S, Q) ->
+    case S of
+        <<Q, R/binary>> -> unquote1(R, <<>>, Q, S);
+        [Q|R] -> unquote1(R, [], Q, S);
+        _ -> S
+    end.
+    
+    unquote1([], _Acc, _Q, S) -> S;
+    unquote1([Q], Acc, Q, _S) -> lists:reverse(Acc);
+    unquote1([H|T], Acc, Q, S) -> unquote1(T, [H|Acc], Q, S);
+
+    unquote1(<<>>, _Acc, _Q, S) -> S;
+    unquote1(<<Q>>, Acc, Q, _S) -> Acc;
+    unquote1(<<C,R/binary>>, Acc, Q, S) -> unquote1(R, <<Acc/binary, C>>, Q, S).
+
 
 %% @doc Remove all spaces and control characters from a string.
 nospaces(B) when is_binary(B) ->
