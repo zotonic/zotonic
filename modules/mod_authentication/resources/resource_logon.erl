@@ -198,7 +198,8 @@ event({submit, [], _Trigger, _Target}, Context) ->
     end.
 
 	logon_error(Context) ->
-		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_error"}]}, Context).
+		Context1 = z_render:set_value("password", "", Context),
+		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_error"}]}, Context1).
 
 	remove_logon_error(Context) ->
 		z_render:wire({remove_class, [{target, "logon_outer"}, {class, "logon_error"}]}, Context).
