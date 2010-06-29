@@ -28,12 +28,19 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     SearchName = Result#m_search_result.search_name,
     SearchProps = proplists:delete(page, Result#m_search_result.search_props),
-
+	SearchResult = Result#m_search_result.result,
+	
     Page = z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1))+1,
     PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
+	
+	case length(SearchResult#search_result.result) < PageLen of
+		true ->
+            {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
+		false ->
+		    Template = proplists:get_value(template, Args),
+		    make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context)
+	end.
 
-    Template = proplists:get_value(template, Args),
-    make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context).
 
 
 
@@ -53,12 +60,10 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
                    false ->
                        {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, Template, TriggerId, TargetId, Context),
                        RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "});"],
-                       z_context:add_script_page(RebindJS, Ctx),
-                       Ctx;
+                       z_script:add_script(RebindJS, Ctx);
                    true ->
-                       JS2 = ["$(\"#", TriggerId, "\").remove();"],
-                       z_context:add_script_page(JS2, Context),
-                       Context
+                       RemoveJS = ["$(\"#", TriggerId, "\").remove();"],
+                       z_script:add_script(RemoveJS, Context)
                end,
 
 	FirstRow = PageLen*(Page-1)+1,
