@@ -3,6 +3,7 @@
 // LiveValidation is licensed under the terms of the MIT License
 
 // MW: 20100316: Adapted for async usage with Zotonic.
+// MW: 20100629: Added support for presence check on radio buttons
 
 
 /*********************************************** LiveValidation class ***********************************/
@@ -46,6 +47,7 @@ LiveValidation.PASSWORD = 3;
 LiveValidation.CHECKBOX = 4;
 LiveValidation.SELECT   = 5;
 LiveValidation.FILE     = 6;
+LiveValidation.RADIO    = 7;
 
 
 /****** prototype ******/
@@ -104,6 +106,7 @@ LiveValidation.prototype =
       this.element.onfocus = function(e){ self.doOnFocus(e); return self.oldOnFocus.call(this, e); }
       if(!this.onlyOnSubmit){
         switch(this.elementType){
+          case LiveValidation.RADIO:
           case LiveValidation.CHECKBOX:
             this.element.onclick = function(e){ self.validate(); return self.oldOnClick.call(this, e); }
           // let it run into the next to add a change event too
@@ -132,6 +135,7 @@ LiveValidation.prototype =
         this.element.onfocus = this.oldOnFocus;
         if(!this.onlyOnSubmit){
             switch(this.elementType){
+              case LiveValidation.RADIO:
               case LiveValidation.CHECKBOX:
                 this.element.onclick = this.oldOnClick;
               // let it run into the next to add a change event too
@@ -226,6 +230,8 @@ LiveValidation.prototype =
             return LiveValidation.CHECKBOX;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'FILE')
             return LiveValidation.FILE;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'RADIO')
+            return LiveValidation.RADIO;
         if (nodeName == 'SELECT')
             return LiveValidation.SELECT;
         if (nodeName == 'INPUT')
@@ -316,10 +322,18 @@ LiveValidation.prototype =
     },
     
     
-    getValue: function(){
-        return (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;     
+    getValue: function() {
+		switch (this.elementType) {
+		case LiveValidation.SELECT:
+			return this.element.options[this.element.selectedIndex].value;
+		case LiveValidation.RADIO:
+			var val = $('input[name='+this.element.name+']:checked').val();
+			return val;
+		default:
+			return this.element.value;
+		}
     },
-    
+
     /**
      * Do all the validations and fires off the onValid or onInvalid callbacks
      *
@@ -451,17 +465,19 @@ LiveValidation.prototype =
      */
     insertMessage: function(elementToInsert){
         this.removeMessage();
-        if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-            || this.element.value != '' ){
+		if (this.elementType != LiveValidation.RADIO) {
+	        if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
+	            || this.element.value != '' ){
             
-            var className = this.validationFailed ? this.invalidClass : this.validClass;
-            elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-            if(this.insertAfterWhatNode.nextSibling){
-              this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-            }else{
-                  this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-            }
-      }
+	            var className = this.validationFailed ? this.invalidClass : this.validClass;
+	            elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+	            if(this.insertAfterWhatNode.nextSibling){
+	              this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+	            }else{
+	                  this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+	            }
+			 }
+	      }
     },
     
     
@@ -472,10 +488,24 @@ LiveValidation.prototype =
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
-                $(this.element).addClass(this.validFieldClass);
+				switch (this.elementType) {
+				case LiveValidation.RADIO:
+	            	$('input[name='+this.element.name+']').closest('label').addClass(this.validFieldClass);
+					break;
+				default:
+                	$(this.element).addClass(this.validFieldClass);
+					break;
+				}
             }
         }else{
-            $(this.element).addClass(this.invalidFieldClass);
+			switch (this.elementType) {
+			case LiveValidation.RADIO:
+            	$('input[name='+this.element.name+']').closest('label').addClass(this.invalidFieldClass);
+				break;
+			default:
+            	$(this.element).addClass(this.invalidFieldClass);
+				break;
+			}
         }
     },
     
@@ -499,7 +529,14 @@ LiveValidation.prototype =
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-        $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+		switch (this.elementType) {
+		case LiveValidation.RADIO:
+        	$('input[name='+this.element.name+']').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+			break;
+		default:
+    		$(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+			break;
+		}
     },
         
     /**
