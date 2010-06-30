@@ -31,14 +31,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	SearchResult = Result#m_search_result.result,
 	
     Page = z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1))+1,
-    PageLen = z_convert:to_integer(proplists:get_value(pagelen, Args, proplists:get_value(pagelen, SearchProps, 20))),
+    PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
+	MorePageLen = proplists:get_value(pagelen, Args, PageLen),
 	
 	case length(SearchResult#search_result.result) < PageLen of
 		true ->
             {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
 		false ->
 		    Template = proplists:get_value(template, Args),
-		    make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context)
+		    make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Template, TriggerId, TargetId, Context)
 	end.
 
 
@@ -46,7 +47,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Show more results.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}, TriggerId, TargetId}, Context) ->
+%% @todo Handle the "MorePageLen" argument correctly.
+event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Template}, TriggerId, TargetId}, Context) ->
     SearchProps1 = [{page, Page}|SearchProps],
     R = m_search:search({SearchName, SearchProps1}, Context),
     Result = R#m_search_result.result,
@@ -58,7 +60,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
 
     Context1 = case length(Ids) < PageLen of
                    false ->
-                       {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, Template, TriggerId, TargetId, Context),
+                       {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Template, TriggerId, TargetId, Context),
                        RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "});"],
                        z_script:add_script(RebindJS, Ctx);
                    true ->
@@ -81,7 +83,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, Template}
 	to_id({Id,_}) when is_integer(Id) -> Id;
 	to_id({_,Id}) when is_integer(Id) -> Id.
 
-make_postback(SearchName, SearchProps, Page, PageLen, Template, TriggerId, TargetId, Context) ->
-    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, Template},
+make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Template, TriggerId, TargetId, Context) ->
+    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Template},
 	{PostbackJS, _PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackJS, Context}.
