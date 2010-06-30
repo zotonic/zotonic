@@ -232,6 +232,10 @@ LiveValidation.prototype =
             return LiveValidation.FILE;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'RADIO')
             return LiveValidation.RADIO;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'EMAIL')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'PHONE')
+            return LiveValidation.TEXT;
         if (nodeName == 'SELECT')
             return LiveValidation.SELECT;
         if (nodeName == 'INPUT')
