@@ -32,7 +32,10 @@ member(S, [H|_] = L, _Context) when is_list(S) andalso is_integer(H) ->
     end;
 member(S, L, _Context) when is_list(L) ->
     lists:member(S, L);
-member(_S, _L, _Context) ->
-    undefined.
+member(S, Value, Context) ->
+	case erlydtl_runtime:to_list(Value, Context) of
+		L when is_list(L) -> member(S, L, Context);
+		_ -> undefined
+	end.
 
 
