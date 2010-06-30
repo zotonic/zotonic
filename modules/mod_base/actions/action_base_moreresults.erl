@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	SearchResult = Result#m_search_result.result,
 	
     Page = z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1))+1,
-    PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
+    PageLen = z_convert:to_integer(proplists:get_value(pagelen, Args, proplists:get_value(pagelen, SearchProps, 20))),
 	
 	case length(SearchResult#search_result.result) < PageLen of
 		true ->
