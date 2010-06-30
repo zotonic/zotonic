@@ -77,6 +77,10 @@ textarea.form-field-error {
 	color: #8A1F11;
 }
 
+label.form-field-error {
+	color: #8A1F11;
+}
+
 input.form-field-notice,
 textarea.form-field-notice {
 	border-style: solid;

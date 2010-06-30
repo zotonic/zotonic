@@ -778,7 +778,14 @@ function z_init_validator(id, args)
 	var elt = $('#'+id);
 	if (elt)
 	{
-		if (!$(elt).data("z_live_validation"))
+		if (elt.attr('type') == 'radio')
+		{
+			$('input[name='+elt.attr('name')+']').each(function() {
+				if (!$(this).data("z_live_validation"))
+					$(this).data("z_live_validation", new LiveValidation($(this).attr('id'), args));
+			});
+		}
+		else if (!$(elt).data("z_live_validation"))
 		{
 			$(elt).data("z_live_validation", new LiveValidation(id, args));
 		}
@@ -792,32 +799,39 @@ function z_init_validator(id, args)
 // Add a validator to the input field
 function z_add_validator(id, type, args)
 {
-	var v = $('#'+id).data("z_live_validation");
+	var elt = $('#'+id);
+	
+	if (elt.attr('type') == 'radio')
+		elt = $('input[name='+elt.attr('name')+']');
 
-	if (v)
-	{
-	    if (args['pattern'])
-	    {
-	        args['pattern'] = new RegExp(args['pattern']);
-	    }
-		switch (type)
+	elt.each(function() {
+		var v = $(this).data("z_live_validation");
+
+		if (v)
 		{
-			case 'email':			v.add(Validate.Email, args);		break;
-			case 'presence':		v.add(Validate.Presence, args);		break;
-			case 'confirmation':	v.add(Validate.Confirmation, args); break;
-			case 'acceptance':		v.add(Validate.Acceptance, args);	break;
-			case 'length':			v.add(Validate.Length, args);		break;
-			case 'format':          v.add(Validate.Format, args);       break;
-			case 'numericality':	v.add(Validate.Numericality, args); break;
-			case 'postback':        
-			    args['z_id'] = id;
-			    v.add(Validate.Postback, args);
-			    break;
-			default:
-			    $.misc.error("unknown validation: "+type);
-			    break;
+		    if (args['pattern'])
+		    {
+		        args['pattern'] = new RegExp(args['pattern']);
+		    }
+			switch (type)
+			{
+				case 'email':			v.add(Validate.Email, args);		break;
+				case 'presence':		v.add(Validate.Presence, args);		break;
+				case 'confirmation':	v.add(Validate.Confirmation, args); break;
+				case 'acceptance':		v.add(Validate.Acceptance, args);	break;
+				case 'length':			v.add(Validate.Length, args);		break;
+				case 'format':          v.add(Validate.Format, args);       break;
+				case 'numericality':	v.add(Validate.Numericality, args); break;
+				case 'postback':        
+				    args['z_id'] = id;
+				    v.add(Validate.Postback, args);
+				    break;
+				default:
+				    $.misc.error("unknown validation: "+type);
+				    break;
+			}
 		}
-	}
+	});
 }
 
 function z_set_validator_postback(id, postback)
@@ -1131,6 +1145,6 @@ $.fn.selected = function(select) {
 // helper fn for console logging
 // set $.fn.ajaxSubmit.debug to true to enable debug logging
 function log() {
-	if ($.fn.ajaxSubmit.debug && window.console && window.console.log)
+	if (window.console && window.console.log)
 		window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
 }
