@@ -25,7 +25,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
     Id      = proplists:get_value(id, Args, TargetId),
 	Type    = proplists:get_value(type, Args),
 	Effect  = proplists:get_value(effect, Args),
-	Speed   = proplists:get_value(speed, Args, 250),
+	Speed   = proplists:get_value(speed, Args, 500),
 	Class   = proplists:get_value(class, Args),
 	Easing  = proplists:get_value(easing, Args),
 	Effect  = proplists:get_value(effect, Args),
