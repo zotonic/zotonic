@@ -30,6 +30,8 @@
 	flush/1,
     restart/0,
 
+	debug_msg/3,
+	
     debug/2,
     debug/3,
     info/2,
@@ -68,7 +70,11 @@ restart() ->
     zotonic:stop(),
     zotonic:start().
 
-    
+
+%% @doc Echo and return a debugging value
+debug_msg(Module, Line, Msg) ->
+	error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [Module, Line, Msg]),
+	Msg.
 
 %% @doc Log a debug message, with extra props.
 debug(Msg, Context)        -> log(debug, Msg, [], Context).

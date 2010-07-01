@@ -183,10 +183,10 @@
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
-%% Below is copied from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
+%% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %%% LOGGING %%%
--define(DEBUG(Msg), fun() -> X = Msg, error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [?MODULE, ?LINE, X]), X end()).
+-define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).
 -define(PRINT(Var), error_logger:info_msg("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
 -define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
 -define(ERROR(Msg, Args), error_logger:error_msg("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
