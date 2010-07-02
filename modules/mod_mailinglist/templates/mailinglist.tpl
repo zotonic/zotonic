@@ -9,7 +9,7 @@
 		<div class="padding">
 			<h1>{{ m.rsc[id].title }}</h1>
 	
-			<p class="summary">{{ m.rsc[confirm.mailinglist_id].summary }}</p>
+			<p class="summary">{{ m.rsc[id].summary }}</p>
 
 			{% mailinglist_subscribe id=id %}
 
