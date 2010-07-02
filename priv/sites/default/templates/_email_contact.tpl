@@ -5,11 +5,11 @@
     <body>
         <p>Hello, the contact form of the site has been submitted.</p>
 
-        <p>Name: {{ name }}</p>
-        <p>E-mail: {{ mail }}</p>
+        <p>Name: {{ name|escape }}</p>
+        <p>E-mail: {{ mail|escape }}</p>
 
         <p>The contents of the message was this:</p>
-        <pre>{{ message }}</pre>
+        <pre>{{ message|escape|linebreaksbr }}</pre>
 
         <p>Regards, your website.</p>
     </body>
