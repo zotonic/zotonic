@@ -27,7 +27,7 @@
 
 vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
-    {ok, Id} = m_rsc:name_to_id(proplists:get_value(id, Params), Context),
+    Id = m_rsc:rid(proplists:get_value(id, Params), Context),
     RcptId = proplists:get_value(recipient_id, Params),
     InAdmin = proplists:get_value(in_admin, Params, false),
     Template = proplists:get_value(template, Params, "_scomp_mailinglist_subscribe.tpl"),
