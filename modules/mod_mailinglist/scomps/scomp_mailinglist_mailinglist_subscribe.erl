@@ -27,9 +27,10 @@
 
 vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
-    Id = proplists:get_value(id, Params),
+    {ok, Id} = m_rsc:name_to_id(proplists:get_value(id, Params), Context),
     RcptId = proplists:get_value(recipient_id, Params),
     InAdmin = proplists:get_value(in_admin, Params, false),
+    Template = proplists:get_value(template, Params, "_scomp_mailinglist_subscribe.tpl"),
     UserId = z_acl:user(Context),
     Props = [
         {id, Id},
@@ -38,7 +39,7 @@ render(Params, _Vars, Context) ->
         {in_admin, InAdmin},
         {delegate, ?MODULE}
     ],
-    {ok, z_template:render("_scomp_mailinglist_subscribe.tpl", Props, Context)}.
+    {ok, z_template:render(Template, Props, Context)}.
 
 
 event({submit, {recipient_add, Props}, _TriggerId, _TargetId}, Context) ->
@@ -66,15 +67,15 @@ event({submit, {recipient_add, Props}, _TriggerId, _TargetId}, Context) ->
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
-					        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_done"}]},
-					                        {slide_up, [{target, "mailinglist_subscribe_form"}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_done"}]},
+					                        {slide_fade_out, [{target, "mailinglist_subscribe_form"}]}], Context)
         			end;
 				{error, _Reason} ->
 				    case InAdmin of
 				        true ->
 					        z_render:growl_error("Could not add the recipient.", Context);
 					    false ->
-					        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error"}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
 					end
 			end;
 		false ->
@@ -82,7 +83,7 @@ event({submit, {recipient_add, Props}, _TriggerId, _TargetId}, Context) ->
 		        true ->
 			        z_render:growl_error("You are not allowed to add or enable recipients.", Context);
 			    false ->
-			        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error"}]}], Context)
+			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
 			end
 	end;
 
