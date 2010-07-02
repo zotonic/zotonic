@@ -113,7 +113,15 @@ tag(Filename, Options, Context) when is_list(Filename) ->
                         undefined -> [{alt,""}|TagOpts1];
                         _ -> TagOpts1
                     end,
-        {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])}.
+        % Filter some opts
+        case proplists:get_value(link, TagOpts) of
+            Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+                {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])};
+            Link ->
+                HRef = get_link(MediaRef, Link, Context),
+                Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
+                {ok, z_tags:render_tag("a", [{href,HRef}], Tag)}
+        end.
 
 
 	mediaprops_filename(Props, Context) ->
@@ -126,6 +134,22 @@ tag(Filename, Options, Context) when is_list(Filename) ->
 			Filename -> Filename
 		end.
 			
+
+    get_link(Media, true, Context) ->
+        Id = media_id(Media),
+        case m_rsc:p(Id, website, Context) of
+            Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+                m_rsc:p(Id, page_url, Context);
+            Website ->
+                Website
+        end;
+    get_link(_Media, Id, Context) when is_integer(Id) ->
+        m_rsc:p(Id, page_url, Context);
+    get_link(_Media, HRef, _Context) when is_binary(HRef); is_list(HRef) ->
+        HRef.
+
+    media_id([{_,_}|_] = List) ->
+        proplists:get_value(id, List).
 
 %% @doc Give the filepath for the filename being served.
 %% @todo Ensure the file is really in the given directory (ie. no ..'s)
@@ -189,6 +213,7 @@ url1(Filename, Options, Context) ->
           ImageOpts}.
 
 
+is_tagopt({link,  _}) -> true;
 is_tagopt({alt,   _}) -> true;
 is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
