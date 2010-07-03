@@ -28,7 +28,10 @@
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
--export([observe/2, add_admin_log_page/1]).
+-export([
+    observe_search_query/2, 
+    add_admin_log_page/1
+]).
 
 %% interface functions
 
@@ -39,7 +42,7 @@
 
 
 
-observe({search_query, Req, OffsetLimit}, Context) ->
+observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
 
 
@@ -67,9 +70,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-
     Context1 = z_acl:sudo(z_context:new(Context)),
-    z_notifier:observe(search_query, {?MODULE, observe}, Context),
     z_notifier:observe(add_admin_log_page, self(), Context),
 
     install_check(Context1),
@@ -129,7 +130,6 @@ handle_info(_Info, State) ->
 %% The return value is ignored.
 terminate(_Reason, State) ->
     Context = State#state.context,
-    z_notifier:detach(search_query, {?MODULE, observe}, Context),
     z_notifier:detach(add_admin_log_page, self(), Context),
     z_notifier:detach(log, self(), Context),
     ok.

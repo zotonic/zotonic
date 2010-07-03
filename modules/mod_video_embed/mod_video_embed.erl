@@ -33,9 +33,9 @@
 
 %% interface functions
 -export([
-    rsc_update/3,
-    media_viewer/2,
-    media_stillimage/2,
+    observe_rsc_update/3,
+    observe_media_viewer/2,
+    observe_media_stillimage/2,
     event/2
 ]).
 
@@ -48,7 +48,7 @@
 
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
 %% @spec rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
+observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     case proplists:is_defined(video_embed_code, Props) of
         true -> 
             EmbedChanged = case proplists:get_value(video_embed_code, Props) of
@@ -78,7 +78,7 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
                     case m_media:get(Id, Context) of
                         undefined ->
                             ok = m_media:replace(Id, MediaProps, Context),
-							preview_create(Id, MediaProps, Context),
+                            preview_create(Id, MediaProps, Context),
                             true;
                         OldMediaProps ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
@@ -91,7 +91,7 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
                                 false -> 
                                     %% Changed, update the medium record
                                     ok = m_media:replace(Id, MediaProps, Context),
-									preview_create(Id, MediaProps, Context),
+                                    preview_create(Id, MediaProps, Context),
                                     true
                             end
                     end
@@ -107,7 +107,7 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec media_viewer(Notification, Context) -> undefined | {ok, Html}
-media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
+observe_media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case proplists:get_value(video_embed_code, Props) of
@@ -121,7 +121,7 @@ media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-media_stillimage({media_stillimage, Props}, Context) ->
+observe_media_stillimage({media_stillimage, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
 			case m_rsc:p(proplists:get_value(id, Props), depiction, Context) of
@@ -233,9 +233,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(rsc_update, {?MODULE, rsc_update}, Context),
-    z_notifier:observe(media_viewer, {?MODULE, media_viewer}, Context),
-    z_notifier:observe(media_stillimage, {?MODULE, media_stillimage}, Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 
@@ -272,10 +269,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(rsc_update, {?MODULE, rsc_update}, State#state.context),
-    z_notifier:detach(media_viewer, {?MODULE, media_viewer}, State#state.context),
-    z_notifier:detach(media_stillimage, {?MODULE, media_stillimage}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

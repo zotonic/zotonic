@@ -97,9 +97,9 @@ search({SearchName, Props} = Search, Limit, Context) ->
     PropsSorted = lists:keysort(1, Props2),
     case z_notifier:first({search_query, {SearchName, PropsSorted}, Limit}, Context) of
         undefined -> 
-            ?LOG("Unknown search query ~p", [Search]),
+            ?LOG("Unknown search query ~p~n~p~n", [Search, erlang:get_stacktrace()]),
             #search_result{};
-        Result -> 
+        Result when Result /= undefined -> 
             search_result(Result, Limit, Context)
     end;
 search(Name, Limit, Context) ->

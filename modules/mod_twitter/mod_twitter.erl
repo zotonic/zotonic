@@ -40,12 +40,48 @@
 
 %% interface functions
 -export([
-         fetch/4, event/2, receive_chunk/2
+         fetch/4, 
+         observe_rsc_update_done/2,
+         receive_chunk/2
 ]).
 
 -include_lib("zotonic.hrl").
 
 -record(state, {context, twitter_pid=undefined}).
+
+
+observe_rsc_update_done({rsc_update_done, _Type, Id, _, _}, Context) ->
+    case m_rsc:p(Id, twitter_id, Context) of
+        undefined ->
+            ok;
+        TwitterId ->
+
+            NonEmptyNewId = case TwitterId of
+                                X when X =:= [] orelse X =:= <<>> orelse X =:= undefined -> false;
+                                _ -> true
+                            end,
+            Restart = case m_identity:get_rsc(Id, twitter_id, Context) of
+                          L when is_list(L) ->
+                              case proplists:get_value(key, L) of
+                                  TwitterId ->
+                                      %% not changed
+                                      false;
+                                  _ ->
+                                      m_identity:delete(proplists:get_value(id, L), Context),
+                                      true
+                              end;
+                          _ -> NonEmptyNewId
+                      end,
+            case NonEmptyNewId of
+                true -> m_identity:insert(Id, twitter_id, TwitterId, Context);
+                _    -> ignore
+            end,
+            case Restart of
+                true  -> 
+                    z_notifier:notify(restart_twitter, Context);
+                false -> ok
+            end
+    end.
 
 
 %%====================================================================
@@ -72,8 +108,6 @@ init(Args) ->
     %% Manage our data model
     z_datamodel:manage(?MODULE, datamodel(), Context),
 
-    %% Listen to resource-change events
-    z_notifier:observe(rsc_update_done,   {?MODULE, event}, Context),
     z_notifier:observe(restart_twitter, self(), Context),
 
     %% Start the twitter process
@@ -143,45 +177,8 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:detach(rsc_update_done, {?MODULE, event}, State#state.context),
     z_notifier:observe(restart_twitter, self(), State#state.context),
     ok.
-
-
-%% Handle z_notifier events
-
-event({rsc_update_done, _Type, Id, _, _}, Context) ->
-    case m_rsc:p(Id, twitter_id, Context) of
-        undefined ->
-            ok;
-        TwitterId ->
-
-            NonEmptyNewId = case TwitterId of
-                                X when X =:= [] orelse X =:= <<>> orelse X =:= undefined -> false;
-                                _ -> true
-                            end,
-            Restart = case m_identity:get_rsc(Id, twitter_id, Context) of
-                          L when is_list(L) ->
-                              case proplists:get_value(key, L) of
-                                  TwitterId ->
-                                      %% not changed
-                                      false;
-                                  _ ->
-                                      m_identity:delete(proplists:get_value(id, L), Context),
-                                      true
-                              end;
-                          _ -> NonEmptyNewId
-                      end,
-            case NonEmptyNewId of
-                true -> m_identity:insert(Id, twitter_id, TwitterId, Context);
-                _    -> ignore
-            end,
-            case Restart of
-                true  -> 
-                    z_notifier:notify(restart_twitter, Context);
-                false -> ok
-            end
-    end.
 
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -190,6 +187,10 @@ event({rsc_update_done, _Type, Id, _, _}, Context) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
 
 start_following(Context) ->
     Login = case m_config:get_value(?MODULE, api_login, false, Context) of

@@ -28,7 +28,10 @@
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
--export([observe/2]).
+-export([
+    observe_logon_submit/2,
+    observe_auth_autologon/2
+]).
 
 -include("zotonic.hrl").
 
@@ -36,7 +39,7 @@
 
 
 %% @doc Check the logon event for the Zotonic native username/password registration.
-observe({logon_submit, Args}, Context) ->
+observe_logon_submit({logon_submit, Args}, Context) ->
     Username = proplists:get_value("username", Args),
     Password = proplists:get_value("password", Args),
     case Username /= undefined andalso Password /= undefined of
@@ -54,8 +57,9 @@ observe({logon_submit, Args}, Context) ->
             end;
         false ->
             undefined
-    end;
-observe(auth_autologon, Context) ->
+    end.
+    
+observe_auth_autologon(auth_autologon, Context) ->
     case resource_logon:get_rememberme_cookie(Context) of
         undefined -> undefined;
         {ok, UserId} -> {ok, UserId}
@@ -83,9 +87,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    ContextSudo = z_acl:sudo(Context),
-    z_notifier:observe(logon_submit, {?MODULE, observe}, Context),
-    z_notifier:observe(auth_autologon, {?MODULE, observe}, Context),
+    ContextSudo = z_acl:sudo(z_context:new(Context)),
     {ok, #state{context=ContextSudo}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -115,9 +117,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(logon_submit, {?MODULE, observe}, State#state.context),
-    z_notifier:detach(auth_autologon, {?MODULE, observe}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

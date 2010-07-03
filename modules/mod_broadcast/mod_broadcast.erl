@@ -31,7 +31,7 @@
 
 %% interface functions
 -export([
-	broadcast/2
+	observe_broadcast/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -40,7 +40,7 @@
 
 
 %% @doc Notification handler for sending broadcasts.
-broadcast(B=#broadcast{}, Context) ->
+observe_broadcast(B=#broadcast{}, Context) ->
     z_session_manager:broadcast(B, Context),
     ok.
 
@@ -65,7 +65,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-	z_notifier:observe(#broadcast{}, {?MODULE, broadcast}, Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 
@@ -102,8 +101,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-	z_notifier:detach(#broadcast{}, {?MODULE, broadcast}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

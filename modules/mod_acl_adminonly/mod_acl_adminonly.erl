@@ -31,8 +31,11 @@
 
 %% interface functions
 -export([
-    observe/2,
-	observe/3
+    observe_acl_is_allowed/2,
+    observe_acl_can_see/2,
+    observe_acl_logon/2,
+    observe_acl_logoff/2,
+    observe_acl_rsc_update_check/3
 ]).
 
 -include("zotonic.hrl").
@@ -40,7 +43,7 @@
 -record(state, {context}).
 
 %% @doc Check if the user is allowed to perform Action on Object
-observe({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
+observe_acl_is_allowed({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
 	Acl = m_rsc:get_acl_props(Id, Context),
     case Acl#acl_props.is_published of
         false -> 
@@ -54,35 +57,35 @@ observe({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when 
                     Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
             end
     end;	
-observe({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
 	false;
-observe({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
 	case m_rsc:p(Id, is_authoritative, Context) of
 		true -> true;
 		_ -> undefined
 	end;
-observe({acl_is_allowed, _Action, _Object}, _Context) ->
-	true;
+observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, _Context) ->
+	true.
 
 %% @doc Return the max visible_for an user can see, used for pruning during searches
-observe({acl_can_see, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_can_see({acl_can_see, _Action, _Object}, #context{user_id=undefined}) ->
 	?ACL_VIS_PUBLIC;
-observe({acl_can_see}, _Context) ->
-	?ACL_VIS_USER;
+observe_acl_can_see({acl_can_see}, _Context) ->
+	?ACL_VIS_USER.
 	
 %% @doc Let the user log on, this is the moment to start caching information.
-observe({acl_logon, UserId}, Context) ->
-	Context#context{acl=?MODULE, user_id=UserId};
-	
+observe_acl_logon({acl_logon, UserId}, Context) ->
+	Context#context{acl=?MODULE, user_id=UserId}.
+
 %% @doc Let the user log off, clean up any cached information.
-observe({acl_logoff}, Context) ->
+observe_acl_logoff({acl_logoff}, Context) ->
 	Context#context{acl=undefined, user_id=undefined}.
 
 %% @doc Filter the properties before an update. Return filtered/updated resource proplist or
 %% the tuple {error, Reason}
-observe({acl_rsc_update_check, _Id}, {error, Reason}, _Context) ->
+observe_acl_rsc_update_check({acl_rsc_update_check, _Id}, {error, Reason}, _Context) ->
 	{error, Reason};
-observe({acl_rsc_update_check, insert_rsc}, Props, _Context) ->
+observe_acl_rsc_update_check({acl_rsc_update_check, insert_rsc}, Props, _Context) ->
 	PropsPubl = case proplists:get_value(is_published, Props) of
 		undefined -> z_utils:prop_replace(is_published, false, Props);
 		_ -> Props
@@ -95,7 +98,7 @@ observe({acl_rsc_update_check, insert_rsc}, Props, _Context) ->
 		undefined -> z_utils:prop_replace(is_authoritative, true, PropsVis);
 		_ -> PropsVis
 	end;
-observe({acl_rsc_update_check, _id}, Props, _Context) ->
+observe_acl_rsc_update_check({acl_rsc_update_check, _id}, Props, _Context) ->
 	Props.
 
 %%====================================================================
@@ -118,12 +121,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(acl_is_allowed, {?MODULE, observe}, Context),
-    z_notifier:observe(acl_logon, {?MODULE, observe}, Context),
-    z_notifier:observe(acl_logoff, {?MODULE, observe}, Context),
-    z_notifier:observe(acl_rsc_update_check, {?MODULE, observe}, Context),
-    z_notifier:observe(acl_can_see, {?MODULE, observe}, Context),
-    {ok, #state{context=Context}}.
+    {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -152,12 +150,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(acl_is_allowed, {?MODULE, observe}, State#state.context),
-    z_notifier:detach(acl_logon, {?MODULE, observe}, State#state.context),
-    z_notifier:detach(acl_logoff, {?MODULE, observe}, State#state.context),
-    z_notifier:detach(acl_rsc_update_check, {?MODULE, observe}, State#state.context),
-    z_notifier:detach(acl_can_see, {?MODULE, observe}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
