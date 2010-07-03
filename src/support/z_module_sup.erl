@@ -36,6 +36,7 @@
 -define(MOD_PRIO, 500).
 
 
+
 %% @spec start_link(Args) -> ServerRet
 %% @doc API for starting the module supervisor.
 start_link(SiteProps) ->
@@ -51,9 +52,7 @@ start_link(SiteProps) ->
 %% @spec upgrade(context()) -> ok
 %% @doc Reload the list of all modules, add processes if necessary.
 upgrade(Context) ->
-	Site = z_context:site(Context),
-	SiteProps = z_sites_sup:get_site_config(Site),
-    {ok, {_, Specs}} = init([{context, Context} | SiteProps]),
+    Specs = module_specs(Context),
     ModuleSup = Context#context.module_sup,
 
     z_depcache:flush(z_modules, Context),
@@ -64,10 +63,11 @@ upgrade(Context) ->
     Create = sets:to_list(sets:subtract(New, Old)),
 
     sets:fold(fun (Id, ok) ->
-		      supervisor:terminate_child(ModuleSup, Id),
-		      supervisor:delete_child(ModuleSup, Id),
-		      ok
-	      end, ok, Kill),
+              remove_observers(Id, Context),
+              supervisor:terminate_child(ModuleSup, Id),
+              supervisor:delete_child(ModuleSup, Id),
+              ok
+          end, ok, Kill),
 
     sets:fold(fun(Id, ok) -> 
                 z_notifier:notify({module_deactivate, Id}, Context), 
@@ -78,6 +78,7 @@ upgrade(Context) ->
     CreateResult = [ start_child(ModuleSup, Spec) || Spec <- CreateSpecs ],
 
     lists:foldl(fun(Id, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
+                        add_observers(Id, Context),
                         z_notifier:notify({module_activate, Id}, Context), 
                         Rest;
                    (Id, [{ok,undefined}|Rest]) -> 
@@ -111,16 +112,21 @@ upgrade(Context) ->
 
 %% @spec init(proplist()) -> SupervisorTree
 %% @doc supervisor callback.  The proplist is the concatenation of {context,_} and the site configuration.
-init(Args) ->
-    {context, Context} = proplists:lookup(context, Args),
+%% This does not start any modules, they are started by a call to upgrade/1 from z_site_startup.
+init(_Args) ->
+    {ok, {{one_for_one, 1000, 10}, []}}.
+
+
+%% @doc Get process specs for all modules
+module_specs(Context) ->
+    Args = [ {context, Context} | z_sites_sup:get_site_config(z_context:site(Context))],
     Ms0 = lists:filter(fun module_exists/1, active(Context)),
     Ms  = lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0),
-    Processes = [
+    [
         {M, 
             {M, start_link, [Args]},
             permanent, 5000, worker, [M]} || M <- Ms
-    ],
-    {ok, {{one_for_one, 1000, 10}, Processes}}.
+    ].
 
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
@@ -221,16 +227,17 @@ prio_sort(ModuleProps) ->
     [ X || {_Prio, X} <- Sorted ].
 
 
+%% @doc Check whether given module is valid for the given host
+%% @spec valid(atom(), context()) -> bool()
+valid(M, Context) ->
+    lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
+
+
 module_exists(M) ->
     case code:ensure_loaded(M) of
         {module,M} -> true;
         {error, _} -> false
     end.
-
-%% @doc Check whether given module is valid for the given host
-%% @spec valid(atom(), context()) -> bool()
-valid(M, Context) ->
-    lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
 %%
 %% Get the title of a module.
@@ -241,3 +248,31 @@ title(M) ->
     catch
         _M:_E -> undefined
     end.
+
+
+%% @doc Add the observers for a module, called after module has been activated
+add_observers(Module, Context) ->
+    [ z_notifier:observe(Message, Handler, Context) || {Message, Handler} <- observes(Module) ].
+
+
+%% @doc Remove the observers for a module, called before module is deactivated
+remove_observers(Module, Context) ->
+    [ z_notifier:detach(Message, Handler, Context) || {Message, Handler} <- lists:reverse(observes(Module)) ].
+
+
+%% @doc Get the list of events the module observes.
+%% The event functions should be called: observe_<event>
+%% observe_xxx/2 functions observer map/notify and observe_xxx/3 functions observe folds.
+%% @spec observes(atom()) -> [{atom(), Handler}]
+observes(Module) ->
+    observes(Module, erlang:get_module_info(Module, exports), []).
+    
+    observes(_, [], Acc) ->
+        Acc;
+    observes(Module, [{F,Arity}|Rest], Acc) when Arity == 2; Arity == 3 ->
+        case atom_to_list(F) of
+            "observe_" ++ Message -> observes(Module, Rest, [{list_to_atom(Message), {Module, F}}|Acc]);
+            _ -> observes(Module, Rest, Acc)
+        end;
+    observes(Module, [_|Rest], Acc) -> 
+        observes(Module, Rest, Acc).
