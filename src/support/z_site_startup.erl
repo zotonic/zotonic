@@ -28,6 +28,13 @@
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Context = z_context:new(Host),
+
+    % Make sure all modules are started
+    z_module_sup:upgrade(Context),
+
+    % Load all translations
     spawn(fun() -> z_trans_server:load_translations(Context) end),
+    
+    % Let the module handle their startup code, the whole site is now up and running.
     z_notifier:notify(site_startup, Context),
     ignore.
