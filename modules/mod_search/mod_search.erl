@@ -33,7 +33,9 @@
 
 %% interface functions
 -export([
-    observe/2, to_tsquery/2
+    observe_search_query/2,
+    observe_module_activate/2,
+    to_tsquery/2
 ]).
 
 -include("zotonic.hrl").
@@ -41,9 +43,13 @@
 -record(state, {context, query_watches=[]}).
 
 
-observe({search_query, Req, OffsetLimit}, Context) ->
+observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
 
+observe_module_activate({module_activate, ?MODULE, Pid}, _Context) ->
+    gen_server:cast(Pid, init_query_watches);
+observe_module_activate(_, _Context) ->
+    ok.
 
 
 %%====================================================================
@@ -66,14 +72,11 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(search_query, {?MODULE, observe}, Context),
 
     %% Watch for changes to resources
     z_notifier:observe(rsc_update_done, self(), Context),
     z_notifier:observe(rsc_delete, self(), Context),
-
-    Watches = search_query_notify:init(Context),
-    {ok, #state{context=z_acl:sudo(z_context:new(Context)),query_watches=Watches}}.
+    {ok, #state{context=z_acl:sudo(z_context:new(Context))}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -86,6 +89,10 @@ init(Args) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
+%% @spec handle_cast(Msg, State) -> {noreply, State} |
+%%                                  {noreply, State, Timeout} |
+%%                                  {stop, Reason, State}
+%% @doc Casts for updates to resources
 handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
     Watches1 = case proplists:get_value('query', m_rsc:p(Id, is_a, Context)) of
                    undefined -> Watches;
@@ -93,10 +100,10 @@ handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,query_watches
                end,
     {noreply, State#state{query_watches=Watches1}};
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Casts for updates to resources
+handle_cast(init_query_watches, State) ->
+    Watches = search_query_notify:init(State#state.context),
+    {noreply, State#state{query_watches=Watches}};
+
 handle_cast({{rsc_update_done, delete, _Id, _, _}, _Ctx}, State) ->
     {noreply, State};
 handle_cast({{rsc_update_done, _, Id, Cats, Cats}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
@@ -154,7 +161,6 @@ handle_info(_Info, State) ->
 %% The return value is ignored.
 terminate(_Reason, State) ->
     Context = State#state.context,
-    z_notifier:detach(search_query, {?MODULE, observe}, Context),
     z_notifier:detach(rsc_update_done, self(), Context),
     z_notifier:detach(rsc_delete, self(), Context),
     ok.

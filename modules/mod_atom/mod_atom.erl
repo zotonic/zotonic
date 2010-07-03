@@ -32,12 +32,17 @@
 
 %% interface functions
 -export([
-         content_types_dispatch/3
+    observe_content_types_dispatch/3
 ]).
 
 -record(state, {context}).
 
 -include_lib("zotonic.hrl").
+
+
+%% Dispatch to the atom representation.
+observe_content_types_dispatch(content_types_dispatch, Acc, _Context) ->
+    [{"application/atom+xml", atom_entry} | Acc].
 
 
 %%====================================================================
@@ -60,7 +65,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(content_types_dispatch, {?MODULE, content_types_dispatch}, Context),
 	{ok, #state{context=z_context:new(Context)}}.
 
 %% Description: Handling call messages
@@ -74,14 +78,12 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
-terminate(_Reason, State) ->
-    z_notifier:detach(content_types_dispatch, {?MODULE, content_types_dispatch}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -92,7 +94,3 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
-
-%% Dispatch to the atom representation.
-content_types_dispatch(content_types_dispatch, Acc, _Context) ->
-    [{"application/atom+xml", atom_entry} | Acc].

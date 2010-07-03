@@ -31,8 +31,8 @@
 
 %% interface functions
 -export([
-	search_query/2,
-	send_message/2,
+	observe_search_query/2,
+	observe_mailinglist_message/2,
 	event/2,
 	update_scheduled_list/2
 ]).
@@ -42,7 +42,7 @@
 -record(state, {context}).
 
 
-search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
+observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
     #search_sql{
         select="id, email, is_enabled",
         from="mailinglist_recipient",
@@ -51,17 +51,17 @@ search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, 
         order="email",
         tables=[]
     };
-search_query(_, _) ->
+observe_search_query(_, _) ->
 	undefined.
 
 
 %% @doc Send status messages to a recipient.
-send_message({mailinglist_message, silent, _ListId, _Email}, _Context) ->
+observe_mailinglist_message({mailinglist_message, silent, _ListId, _Email}, _Context) ->
 	ok;
-send_message({mailinglist_message, send_goodbye, ListId, Email}, Context) ->
+observe_mailinglist_message({mailinglist_message, send_goodbye, ListId, Email}, Context) ->
 	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}], Context),
 	ok;
-send_message({mailinglist_message, Message, ListId, RecipientId}, Context) ->
+observe_mailinglist_message({mailinglist_message, Message, ListId, RecipientId}, Context) ->
 	Template = case Message of
 		send_welcome -> "email_mailinglist_welcome.tpl";
 		send_confirm -> "email_mailinglist_confirm.tpl"
@@ -132,14 +132,12 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-	m_mailinglist:install(Context),
-    z_notifier:observe(search_query, {?MODULE, search_query}, Context),
-    z_notifier:observe(mailinglist_message, {?MODULE, send_message}, Context),
+    m_mailinglist:install(Context),
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(180000, poll),
-	{ok, #state{context=z_context:new(Context)}}.
-	
+    {ok, #state{context=z_context:new(Context)}}.
+
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -207,8 +205,6 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:detach(search_query, {?MODULE, search_query}, State#state.context),
-    z_notifier:detach(mailinglist_message, {?MODULE, send_message}, State#state.context),
     z_notifier:detach(mailinglist_mailing, self(), State#state.context),
     z_notifier:detach(dropbox_file, self(), State#state.context),
     ok.

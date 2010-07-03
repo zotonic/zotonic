@@ -30,7 +30,10 @@
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
--export([observe/2]).
+-export([
+    observe_signup_url/2,
+    observe_identity_verification/2
+]).
 -export([signup/4, request_verification/2]).
 
 -include("zotonic.hrl").
@@ -39,16 +42,17 @@
 
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
-observe({signup_url, Props, SignupProps}, Context) ->
+observe_signup_url({signup_url, Props, SignupProps}, Context) ->
     CheckId = z_ids:id(),
     z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
-    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))};
-observe({identity_verification, UserId, Ident}, Context) ->
+    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))}.
+
+observe_identity_verification({identity_verification, UserId, Ident}, Context) ->
     case proplists:get_value(type, Ident) of
         <<"email">> -> send_verify_email(UserId, Ident, Context);
         _ -> false
     end;
-observe({identity_verification, UserId}, Context) ->
+observe_identity_verification({identity_verification, UserId}, Context) ->
     request_verification(UserId, Context).
 
 
@@ -99,8 +103,6 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     ContextSudo = z_acl:sudo(Context),
-    z_notifier:observe(signup_url, {?MODULE, observe}, Context),
-    z_notifier:observe(identity_verification, {?MODULE, observe}, Context),
     z_datamodel:manage(?MODULE, datamodel(), ContextSudo),
     {ok, #state{context=ContextSudo}}.
 

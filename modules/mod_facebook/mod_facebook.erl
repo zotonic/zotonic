@@ -28,7 +28,10 @@
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
--export([observe/3]).
+
+-export([
+    observe_auth_logoff/3
+]).
 -export([get_appid_secret/1]).
 
 -include("zotonic.hrl").
@@ -40,7 +43,7 @@
 -define(FACEBOOK_APPSECRET, "50fb8d9d1ea8013c4c1640632c3ab706").
 
 %% @doc Reset the received facebook access token (as set in the session)
-observe(auth_logoff, AccContext, _Context) ->
+observe_auth_logoff(auth_logoff, AccContext, _Context) ->
     AccContext1 = case z_context:get_session(facebook_logon, AccContext) of
         true ->
             z_script:add_script(
@@ -80,7 +83,6 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     ContextSudo = z_acl:sudo(Context),
-    z_notifier:observe(auth_logoff, {?MODULE, observe}, Context),
     {ok, #state{context=ContextSudo}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -110,8 +112,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(auth_logoff, {?MODULE, observe}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

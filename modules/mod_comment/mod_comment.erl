@@ -32,7 +32,7 @@
 -export([
     install/1,
     event/2,
-    search/2
+    observe_search_query/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -74,9 +74,9 @@ event({submit, {newcomment, Args}, _TriggerId, _TargetId}, Context) ->
 
 
 %% @doc Return the list of recent comments.  Returned values are the complete records.
-search({search_query, {recent_comments, []}, OffsetLimit}, Context) ->
+observe_search_query({search_query, {recent_comments, []}, OffsetLimit}, Context) ->
     m_comment:search({recent_comments, []}, OffsetLimit, Context);
-search(_, _Context) ->
+observe_search_query(_, _Context) ->
     undefined.
 
 %%====================================================================
@@ -100,7 +100,6 @@ init(Args) ->
     process_flag(trap_exit, true),
     Context = proplists:get_value(context, Args),
     Context1 = z_context:new(Context),
-    z_notifier:observe(search_query, {?MODULE, search}, Context),
     install(Context1),
     {ok, #state{context=Context1}}.
 
@@ -137,8 +136,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:observe(search_query, {?MODULE, search}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

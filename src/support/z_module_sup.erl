@@ -79,7 +79,7 @@ upgrade(Context) ->
 
     lists:foldl(fun(Id, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
                         add_observers(Id, Context),
-                        z_notifier:notify({module_activate, Id}, Context), 
+                        z_notifier:notify({module_activate, Id, Pid}, Context), 
                         Rest;
                    (Id, [{ok,undefined}|Rest]) -> 
                         %% module did not start
