@@ -27,7 +27,7 @@
                             window.z_choose_zmedia = function(id) {
                                 if (!id) return;
                                 
-                                var res = self._zMediaHtml(id, {align: "left"});
+                                var res = self._zMediaHtml(id, {align: "left", size: "middle", crop: '', link: ''});
                                 ed.execCommand('mceInsertContent', false, res['html'], {});
                             }
                         }
@@ -62,19 +62,37 @@
 
                 $.dialogAdd({title: 'Media properties',
                             text: '<div class="z-tinymce-media-options"><img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" />' + 
-                            '<p>Choose the alignment of the image:</p>' + 
+                            '<p>Choose the properties of the image:</p>' + 
+
                             '<div class="form-item clearfix left">' +
                             '<label for="a-block"><input type="radio" name="align" ' + (opts.align=='block'?'checked="checked"':'') + ' value="block" id="a-block"> Between text</label>' +
                             '<label for="a-left"><input type="radio" name="align" ' + (opts.align=='left'?'checked="checked"':'') + 'value="left" id="a-left"> Aligned left</label>' +
                             '<label for="a-right"><input type="radio" name="align" ' + (opts.align=='right'?'checked="checked"':'') + 'value="right" id="a-right"> Aligned right</label>' +
                             '</div>' +
-                            '<div class="form-item clearfix clear">' +
+
+                            '<div class="form-item clearfix left" style="padding-left: 8px">' +
+                            '<label for="a-small"><input type="radio" name="size" ' + (opts.size=='small'?'checked="checked"':'') + ' value="small" id="a-small"> Small</label>' +
+                            '<label for="a-middle"><input type="radio" name="size" ' + (opts.size=='middle' || opts.size == undefined?'checked="checked"':'') + 'value="middle" id="a-middle"> Middle</label>' +
+                            '<label for="a-large"><input type="radio" name="size" ' + (opts.size=='large'?'checked="checked"':'') + 'value="large" id="a-large"> Large</label>' +
+                            '</div>' +
+
+                            '<div class="form-item clearfix left" style="padding-left: 8px">' +
+                            '<label for="a-crop"><input type="checkbox" name="crop" ' + (opts.crop=='crop'?'checked="checked"':'') + ' value="crop" id="a-crop"> Crop image</label>' +
+                            '<label for="a-link"><input type="checkbox" name="link" ' + (opts.link=='link'?'checked="checked"':'') + ' value="crop" id="a-link"> Make link</label>' +
+                            '<br/><br/>' +
                             '<button onclick="window.z_media_props();">Submit</button>' +
                             '<button onclick="$.dialogRemove($(\'.dialog\'));">Cancel</button>' +
-                            '</div></div>'});
+                            '</div>' +
+
+                            '</div>'});
 
                 window.z_media_props = function() {
-                    opts = {'align': $('input[type="radio"]:checked', $('.dialog')).val() };
+                    opts = {
+                        'align': $('input[name="align"]:checked', $('.dialog')).val(),
+                        'size': $('input[name="size"]:checked', $('.dialog')).val(),
+                        'crop': $('input[name="crop"]:checked', $('.dialog')).val() ? "crop" : "",
+                        'link': $('input[name="link"]:checked', $('.dialog')).val() ? "link" : ""
+                    };
 
                     var cls = "z-tinymce-media ";
                     for (k in opts) {

@@ -1,11 +1,3 @@
-{% ifequal align "left" %}
-	{% media m.rsc[id].medium width=156 height=156 crop class=align alt=m.rsc[id].title %}
-{% endifequal %}
-
-{% ifequal align "right" %}
-	{% media m.rsc[id].medium width=156 height=156 crop class=align alt=m.rsc[id].title %}
-{% endifequal %}
-
 {% ifequal align "block" %}
 	{% ifequal m.rsc[id].medium.mime "text/html-video-embed" %}
 		<section class="video-wrapper">
@@ -13,8 +5,10 @@
 		</section>
 	{% else %}
 		<figure class="image-wrapper block-level-image">
-			{% media m.rsc[id].medium width=445 crop class=align alt=m.rsc[id].title %}
+			{% media m.rsc[id].medium width=size crop=crop class=align link=link alt=m.rsc[id].title %}
 			{% if m.rsc[id].summary %}<p class="image-caption">{{ m.rsc[id].summary }}</p>{% endif %}
 		</figure>	
 	{% endifequal %}
+{% else %}
+	{% media m.rsc[id].medium width=size crop=crop class=align link=link alt=m.rsc[id].title %}
 {% endifequal %}
