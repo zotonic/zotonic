@@ -33,7 +33,7 @@
 %% interface functions
 -export([
          subscribe_to_url/2,
-         do_custom_pivot/2
+         observe_custom_pivot/2
 ]).
 
 -record(state, {context, session, jid, pubsub_domain}).
@@ -68,7 +68,6 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
 
-    z_notifier:observe(custom_pivot,   {?MODULE, do_custom_pivot}, Context),
     z_pivot_rsc:define_custom_pivot(?MODULE, [{pub_node, "varchar(255)"}, {sub_xmpp_uri, "varchar(255)"}, {sub_subid, "varchar(255)"}], Context),
 
     case m_config:get_value(?MODULE, jid, Context) of
@@ -184,7 +183,6 @@ terminate(_Reason, #state{session=Session,context=Context}) ->
     z_notifier:detach(rsc_update_done, self(), Context),
     z_notifier:detach(rsc_delete, self(), Context),
     z_notifier:detach(subscribe_to_url, self(), Context),
-    z_notifier:detach(custom_pivot, {?MODULE, do_custom_pivot}, Context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -196,7 +194,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-do_custom_pivot({custom_pivot, Id}, Context) ->
+observe_custom_pivot({custom_pivot, Id}, Context) ->
     case m_rsc:p(Id, is_authoritative, Context) of
         true ->
             case get_pubsub_node(Id, Context) of

@@ -17,6 +17,9 @@
 
 %% interface functions
 -export([
+    pid_observe_search_query/3,
+    pid_observe_rsc_pivot_done/3,
+    pid_observe_rsc_delete/3
 ]).
 
 -include("zotonic.hrl").
@@ -32,6 +35,21 @@
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
+
+
+pid_observe_search_query(Pid, {search_query, {solr, _Query}, _Limit} = Search, Context) ->
+    gen_server:call(Pid, {Search, Context});
+pid_observe_search_query(Pid, {search_query, {match, [{id,_Id}]}, _Limit} = Search, Context) ->
+    gen_server:call(Pid, {Search, Context});
+pid_observe_search_query(_Pid, _Query, _Context) ->
+    undefined.
+
+pid_observe_rsc_pivot_done(Pid, Msg, _Context) ->
+    gen_server:cast(Pid, Msg).
+
+pid_observe_rsc_delete(Pid, Msg, _Context) ->
+    gen_server:cast(Pid, Msg).
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -59,14 +77,6 @@ init(Args) ->
 
             AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
             esolr:set_auto_commit({time, AutoCommit}, Solr),
-
-            %% Hook into z_search
-            z_notifier:observe(search_query, self(), Context),
-
-            %% Watch for changes to resources
-            z_notifier:observe(rsc_pivot_done, self(), Context),
-            z_notifier:observe(rsc_delete, self(), Context),
-
             {ok, #state{context=z_context:new(Context),solr=Solr}}
     end.
 
@@ -81,21 +91,17 @@ handle_call({{search_query, {match, [{id,Id}]}, Limit}, Context}, _From, State=#
     Reply = solr_search:match(Id, Limit, Solr, Context),
     {reply, Reply, State};
 
-%% @doc Pass other search queries through
-handle_call({{search_query, _, _}, _Context}, _From, State) ->
-    {reply, undefined, State};
-
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
 %% @doc Pivot-hook for putting document in solr.
-handle_cast({{rsc_pivot_done, Id, _IsA}, _Ctx}, State=#state{context=Context,solr=Solr}) ->
+handle_cast({rsc_pivot_done, Id, _IsA}, State=#state{context=Context,solr=Solr}) ->
     ok = solr_store:put(Id, Context, Solr),
     {noreply, State};
 
-handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,solr=Solr}) ->
+handle_cast({rsc_delete, Id}, State=#state{context=Context,solr=Solr}) ->
     ?DEBUG("Deleting!"),?DEBUG(Id),
     ok = solr_store:delete(Id, Context, Solr),
     {noreply, State};
@@ -114,11 +120,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    Context = State#state.context,
-    z_notifier:detach(search_query, self(), Context),
-    z_notifier:detach(rsc_pivot_done, self(), Context),
-    z_notifier:detach(rsc_delete, self(), Context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

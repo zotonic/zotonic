@@ -57,33 +57,35 @@ upgrade(Context) ->
 
     z_depcache:flush(z_modules, Context),
     
-    Old  = sets:from_list([Name || {Name, _, _, _} <- supervisor:which_children(ModuleSup)]),
+    Children = supervisor:which_children(ModuleSup),
+    Old  = sets:from_list([Name || {Name, _, _, _} <- Children]),
+    OldPid = [{Name,Pid} || {Name, Pid, _, _, _} <- Children],
     New  = sets:from_list([Name || {Name, _, _, _, _, _} <- Specs]),
     Kill = sets:subtract(Old, New),
     Create = sets:to_list(sets:subtract(New, Old)),
 
-    sets:fold(fun (Id, ok) ->
-              remove_observers(Id, Context),
-              supervisor:terminate_child(ModuleSup, Id),
-              supervisor:delete_child(ModuleSup, Id),
+    sets:fold(fun (Module, ok) ->
+              remove_observers(Module, proplists:get_value(Module, OldPid), Context),
+              supervisor:terminate_child(ModuleSup, Module),
+              supervisor:delete_child(ModuleSup, Module),
               ok
           end, ok, Kill),
 
-    sets:fold(fun(Id, ok) -> 
-                z_notifier:notify({module_deactivate, Id}, Context), 
+    sets:fold(fun(Module, ok) -> 
+                z_notifier:notify({module_deactivate, Module}, Context), 
                 ok 
             end, ok, Kill),
 
     CreateSpecs = [lists:keyfind(C, 1, Specs) || C <- Create],
     CreateResult = [ start_child(ModuleSup, Spec) || Spec <- CreateSpecs ],
 
-    lists:foldl(fun(Id, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
-                        add_observers(Id, Context),
-                        z_notifier:notify({module_activate, Id, Pid}, Context), 
+    lists:foldl(fun(Module, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
+                        add_observers(Module, Pid, Context),
+                        z_notifier:notify({module_activate, Module, Pid}, Context), 
                         Rest;
-                   (Id, [{ok,undefined}|Rest]) -> 
+                   (Module, [{ok,undefined}|Rest]) -> 
                         %% module did not start
-                        supervisor:delete_child(ModuleSup, Id),
+                        supervisor:delete_child(ModuleSup, Module),
                         Rest;
                    (_, [_|Rest]) -> 
                         Rest
@@ -251,28 +253,32 @@ title(M) ->
 
 
 %% @doc Add the observers for a module, called after module has been activated
-add_observers(Module, Context) ->
-    [ z_notifier:observe(Message, Handler, Context) || {Message, Handler} <- observes(Module) ].
+add_observers(Module, Pid, Context) ->
+    [ z_notifier:observe(Message, Handler, Context) || {Message, Handler} <- observes(Module, Pid) ].
 
 
 %% @doc Remove the observers for a module, called before module is deactivated
-remove_observers(Module, Context) ->
-    [ z_notifier:detach(Message, Handler, Context) || {Message, Handler} <- lists:reverse(observes(Module)) ].
+remove_observers(Module, Pid, Context) ->
+    [ z_notifier:detach(Message, Handler, Context) || {Message, Handler} <- lists:reverse(observes(Module, Pid)) ].
 
 
 %% @doc Get the list of events the module observes.
 %% The event functions should be called: observe_<event>
 %% observe_xxx/2 functions observer map/notify and observe_xxx/3 functions observe folds.
-%% @spec observes(atom()) -> [{atom(), Handler}]
-observes(Module) ->
-    observes(Module, erlang:get_module_info(Module, exports), []).
+%% @spec observes(atom(), pid()) -> [{atom(), Handler}]
+observes(Module, Pid) ->
+    observes(Module, Pid, erlang:get_module_info(Module, exports), []).
     
-    observes(_, [], Acc) ->
+    observes(_Module, _Pid, [], Acc) ->
         Acc;
-    observes(Module, [{F,Arity}|Rest], Acc) when Arity == 2; Arity == 3 ->
+    observes(Module, Pid, [{F,Arity}|Rest], Acc) ->
         case atom_to_list(F) of
-            "observe_" ++ Message -> observes(Module, Rest, [{list_to_atom(Message), {Module, F}}|Acc]);
-            _ -> observes(Module, Rest, Acc)
+            "observe_" ++ Message when Arity == 2; Arity == 3 ->
+                observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
+            "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
+                observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
+            _ -> 
+                observes(Module, Pid, Rest, Acc)
         end;
-    observes(Module, [_|Rest], Acc) -> 
-        observes(Module, Rest, Acc).
+    observes(Module, Pid, [_|Rest], Acc) -> 
+        observes(Module, Pid, Rest, Acc).

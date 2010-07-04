@@ -280,13 +280,21 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
         end
     catch M:E ->
         ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
-        Event = element(1, Msg),
-        detach(Event, Pid, Context),
+        detach(msg_event(Msg), Pid, Context),
         {error, {notify_observer, Pid, Msg, M, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F}}, _IsCall, Context) ->
-    M:F(Msg, Context).
-
+    M:F(Msg, Context);
+notify_observer(Msg, {_Prio, {M,F,[Pid]}}, _IsCall, Context) when is_pid(Pid) ->
+    try
+        M:F(Pid, Msg, Context)
+    catch EM:E ->
+        ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
+        detach(msg_event(Msg), {M,F,[Pid]}, Context),
+        {error, {notify_observer, Pid, Msg, EM, E}}
+    end;
+notify_observer(Msg, {_Prio, {M,F,Args}}, _IsCall, Context) ->
+    erlang:apply(M, F, Args++[Msg, Context]).
 
 
 %% @doc Notify an observer of an event, used in fold operations.  The receiving function should accept the message, the
@@ -298,9 +306,24 @@ notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
         gen_server:call(Pid, {Msg, Acc, Context}, ?TIMEOUT)
     catch M:E ->
         ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
-        Event = element(1, Msg),
-        detach(Event, Pid, Context),
+        detach(msg_event(Msg), Pid, Context),
         {error, {notify_observer_fold, Pid, Msg, M, E}}
     end;
 notify_observer_fold(Msg, {_Prio, {M,F}}, Acc, Context) ->
-    M:F(Msg, Acc, Context).
+    M:F(Msg, Acc, Context);
+notify_observer_fold(Msg, {_Prio, {M,F,[Pid]}}, Acc, Context) when is_pid(Pid) ->
+    try
+        M:F(Pid, Msg, Acc, Context)
+    catch EM:E ->
+        ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
+        detach(msg_event(Msg), {M,F,[Pid]}, Context),
+        {error, {notify_observer, Pid, Msg, EM, E}}
+    end;
+notify_observer_fold(Msg, {_Prio, {M,F,Args}}, Acc, Context) ->
+    erlang:apply(M, F, Args++[Msg, Acc, Context]).
+
+
+
+msg_event(E) when is_atom(E) -> E;
+msg_event(Msg) -> element(1, Msg).
+

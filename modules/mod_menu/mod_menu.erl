@@ -30,13 +30,13 @@
 
 %% interface functions
 -export([
-    observe/2
+    observe_menu_get_rsc_ids/2
 ]).
 
 -record(state, {context}).
 
 
-observe(menu_get_rsc_ids, Context) ->
+observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
     Menu = scomp_menu_menu:get_menu(Context),
     {ok, menu_ids(Menu, [])}.
     
@@ -69,7 +69,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     Context = z_context:new(proplists:get_value(context, Args)),
-    z_notifier:observe(menu_get_rsc_ids, {?MODULE, observe}, Context),
     {ok, #state{context=Context}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -105,8 +104,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(menu_get_rsc_ids, {?MODULE, observe}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

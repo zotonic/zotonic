@@ -33,14 +33,14 @@
 
 %% interface functions
 -export([
-	media_stillimage/2
+	observe_media_stillimage/2
 ]).
 
 -record(state, {context}).
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-media_stillimage({media_stillimage, Props}, Context) ->
+observe_media_stillimage({media_stillimage, Props}, Context) ->
     Mime = proplists:get_value(mime, Props),
 	case z_media_preview:can_generate_preview(Mime) of
 		true ->
@@ -80,7 +80,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(media_stillimage, {?MODULE, media_stillimage}, Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -116,8 +115,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(media_stillimage, {?MODULE, media_stillimage}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

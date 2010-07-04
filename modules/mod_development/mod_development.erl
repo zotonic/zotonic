@@ -35,8 +35,10 @@
 -export([
     wmtrace/1,
     wmtrace_dir/0,
-	reload/1,
-	make/1
+    reload/1,
+    make/1,
+    pid_observe_development_reload/3,
+    pid_observe_development_make/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -58,10 +60,10 @@ start_link(Args) when is_list(Args) ->
 
 
 reload(Context) ->
-	z_notifier:notify(development_reload, Context).
+    z_notifier:notify(development_reload, Context).
 
 make(Context) ->
-	z_notifier:notify(development_make, Context).
+    z_notifier:notify(development_make, Context).
 
 
 %% @doc Start a trace of a resource, called by the resources's init/2 function.
@@ -74,6 +76,15 @@ wmtrace_dir() ->
     ok = filelib:ensure_dir(filename:join(Dir, "test")),
     Dir.
     
+
+
+pid_observe_development_reload(Pid, development_reload, _Context) ->
+    gen_server:cast(Pid, development_reload).
+
+
+pid_observe_development_make(Pid, development_make, _Context) ->
+     gen_server:cast(Pid, development_make).
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -88,8 +99,6 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
-	z_notifier:observe(development_reload, self(), Context),
-	z_notifier:observe(development_make, self(), Context),
     {ok, #state{
         context  = z_context:new(Context)
     }}.
@@ -110,14 +119,14 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-handle_cast({development_reload, _Context}, State) ->
-	ensure_dev_server(),
-	z_development_server:reload(),
+handle_cast(development_reload, State) ->
+    ensure_dev_server(),
+    z_development_server:reload(),
     {noreply, State};
 
-handle_cast({development_make, _Context}, State) ->
-	ensure_dev_server(),
-	z_development_server:make(),
+handle_cast(development_make, State) ->
+    ensure_dev_server(),
+    z_development_server:make(),
     {noreply, State};
 
 %% @doc Trap unknown casts
@@ -130,7 +139,7 @@ handle_cast(Message, State) ->
 %%                                       {stop, Reason, State}
 %% @doc Periodic check if the dev server is still running.
 handle_info(ensure_server, State) ->
-	ensure_dev_server(),
+    ensure_dev_server(),
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
@@ -142,9 +151,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-	z_notifier:detach(development_reload, self(), State#state.context),
-	z_notifier:detach(development_make, self(), State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

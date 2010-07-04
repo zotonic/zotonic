@@ -32,8 +32,8 @@
 
 %% interface functions
 -export([
-    rsc_update/3,
-    predicate_flush/2
+    observe_rsc_update/3,
+    observe_rsc_update_done/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -44,7 +44,7 @@
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
 %% @spec rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
+observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     case       proplists:is_defined(predicate_subject, Props) 
         orelse proplists:is_defined(predicate_object, Props) of
 
@@ -61,7 +61,7 @@ rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     end.
 
 %% @doc Whenever a predicate has been updated we have to flush the predicate cache.
-predicate_flush({rsc_update_done, _UpdateAction, _Id, BeforeCatList, CatList}, Context) ->
+observe_rsc_update_done({rsc_update_done, _UpdateAction, _Id, BeforeCatList, CatList}, Context) ->
     case lists:member(predicate, CatList) orelse lists:member(predicate, BeforeCatList) of
         true -> m_predicate:flush(Context);
         false -> ok
@@ -88,8 +88,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    z_notifier:observe(rsc_update,      {?MODULE, rsc_update},      Context),
-    z_notifier:observe(rsc_update_done, {?MODULE, predicate_flush}, Context),
     {ok, #state{context=z_context:new(Context)}}.
 
 
@@ -126,9 +124,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(rsc_update,      {?MODULE, rsc_update},      State#state.context),
-    z_notifier:detach(rsc_update_done, {?MODULE, rsc_update_done}, State#state.context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
