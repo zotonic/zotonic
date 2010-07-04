@@ -19,6 +19,8 @@
 -module(filter_show_media).
 -export([show_media/2]).
 
+-include_lib("zotonic.hrl").
+
 
 show_media(undefined, _Context) ->
     undefined;
@@ -75,9 +77,40 @@ show_media_html(Id, Context) ->
     show_media_html(Id, {struct, []}, Context).
 
 show_media_html(Id, {struct, Args}, Context) ->
-	Template = "_body_media.tpl",
+    Template = "_body_media.tpl",
     Args2 = [ {list_to_atom(A), B} || {A,B} <- Args],
-    z_template:render(Template, [ {id, Id} | Args2 ++ z_context:get_all(Context)  ], Context).
+    Args3 = filter_args(Args2, false, [], Context),
+    z_template:render(Template, [ {id, Id} | Args3 ++ z_context:get_all(Context) ], Context).
+
+filter_args([], true, Acc, _Context) ->
+    Acc;
+filter_args([], false, Acc, Context) ->
+    [_S,M,_L] = get_sizes(Context),
+    [{size,M}|Acc];
+filter_args([{size,Size}|Args], _, Acc, Context) ->
+    [S,M,L] = get_sizes(Context),
+    P = case Size of
+            "large" -> L;
+            "small" -> S;
+            _ -> M
+        end,
+    filter_args(Args, true, [{size,P}|Acc], Context);
+filter_args([{crop,"crop"}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{crop,true}|Acc], Context);
+filter_args([{crop,_}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{crop,undefined}|Acc], Context);
+filter_args([{link,"link"}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{link,true}|Acc], Context);
+filter_args([{link,_}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
+filter_args([P|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [P|Acc], Context).
+
+    
+        
+get_sizes(Context) ->
+    [   z_convert:to_integer(z_string:trim(S)) ||
+        S <- string:tokens(m_config:get_value(site, media_width, "200,300,500", Context), ",") ].
 
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->

@@ -277,6 +277,7 @@ filter2arg({removebg, Fuzz}, Width, Height) ->
 fetch_crop(Filters) ->
     {Crop,OtherFilters} = lists:partition(fun (F) -> element(1,F) == 'crop' end, Filters),
     CropPar = case Crop of
+                  [{crop,undefined}] -> none;
                   [{crop,Gravity}] -> Gravity; % center or one of the wind directions
                   _ -> none
               end,
@@ -293,6 +294,12 @@ calc_size(undefined, undefined, ImageWidth, ImageHeight, _CropPar, _Orientation)
 calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation) ->
     Width = round((ImageWidth / ImageHeight) * Height),
     calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation);
+
+calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation) when CropPar /= none ->
+    calc_size(Width, Width, ImageWidth, ImageHeight, CropPar, Orientation);
+
+calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation) when CropPar /= none ->
+    calc_size(Height, Height, ImageWidth, ImageHeight, CropPar, Orientation);
 
 calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation) ->
     Height = round((ImageHeight / ImageWidth) * Width),

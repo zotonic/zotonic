@@ -118,7 +118,7 @@ tag(Filename, Options, Context) when is_list(Filename) ->
             Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                 {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])};
             Link ->
-                HRef = get_link(MediaRef, Link, Context),
+                HRef = list_to_binary(get_link(MediaRef, Link, Context)),
                 Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
                 {ok, z_tags:render_tag("a", [{href,HRef}], Tag)}
         end.
@@ -239,6 +239,8 @@ props2url([{height,Height}|Rest], Width, _Height, Acc) ->
     props2url(Rest, Width, z_convert:to_integer(Height), Acc);
 props2url([{Prop}|Rest], Width, Height, Acc) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc]);
+props2url([{_Prop,undefined}|Rest], Width, Height, Acc) ->
+    props2url(Rest, Width, Height, Acc);
 props2url([{Prop,true}|Rest], Width, Height, Acc) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc]);
 props2url([{Prop,Value}|Rest], Width, Height, Acc) ->
@@ -256,8 +258,8 @@ url2props(Url, Context) ->
     {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
     Check1 = string:strip(Check, right, $)),
     PropList = string:tokens(Props, ")("),
-	FileMime = z_media_identify:guess_mime(Rest),
-	{_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
+    FileMime = z_media_identify:guess_mime(Rest),
+    {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
     z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
     PropList1       = case PropList of
                         [] -> [];
