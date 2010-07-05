@@ -293,7 +293,6 @@ archive(Name, Context) ->
                     "tar -c -z ",
                     "-f '", DumpFile, "' ",
                     "-C '", ArchiveDir, "' ",
-                    "--exclude 'preview' ",
                     " ."]),
     [] = os:cmd(Command),
     ok.
