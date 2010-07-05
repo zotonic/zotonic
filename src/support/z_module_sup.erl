@@ -80,6 +80,7 @@ upgrade(Context) ->
     CreateResult = [ start_child(ModuleSup, Spec) || Spec <- CreateSpecs ],
 
     lists:foldl(fun(Module, [{ok,Pid}|Rest]) when is_pid(Pid) -> 
+						dummy_module_init(Module, Context),
                         add_observers(Module, Pid, Context),
                         z_notifier:notify({module_activate, Module, Pid}, Context), 
                         Rest;
@@ -110,7 +111,7 @@ upgrade(Context) ->
             error ->
                 error
         end.
-        
+
 
 %% @spec init(proplist()) -> SupervisorTree
 %% @doc supervisor callback.  The proplist is the concatenation of {context,_} and the site configuration.
@@ -133,18 +134,32 @@ module_specs(Context) ->
  		end, Ms).
 
 	
-	%% When a module does not implement a gen_server then we use a dummy gen_server.
-	gen_server_module(M) ->
-		case proplists:get_value(behaviour, erlang:get_module_info(M, attributes)) of
-			L when is_list(L) ->
-				case lists:member(gen_server, L) of
-					true -> M;
-					false -> z_module_dummy
-				end;
-			undefined ->
-				z_module_dummy
-		end.
-			
+%% When a module does not implement a gen_server then we use a dummy gen_server.
+gen_server_module(M) ->
+	case proplists:get_value(behaviour, erlang:get_module_info(M, attributes)) of
+		L when is_list(L) ->
+			case lists:member(gen_server, L) of
+				true -> M;
+				false -> z_module_dummy
+			end;
+		undefined ->
+			z_module_dummy
+	end.
+
+
+%% @doc When a module doesn't implement a gen_server then check if it exports an init/1 function,
+%% if so then call that function with a fresh sudo context.
+dummy_module_init(Module, Context) ->
+	case gen_server_module(Module) of
+		Module -> 
+			nop;
+		z_module_dummy ->
+			case lists:member({init,1}, erlang:get_module_info(Module, exports)) of
+				true -> Module:init(z_acl:sudo(z_context:new(Context)));
+				false -> nop
+			end
+	end.
+	
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
 %% @spec deactivate(Module, context()) -> ok
@@ -222,7 +237,8 @@ scan(#context{host=Host}) ->
     [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
 
 
-%% @doc Return the priority of a module. Default priority is 500, lower is higher priority.  Never crash on a missing module.
+%% @doc Return the priority of a module. Default priority is 500, lower is higher priority. 
+%% Never crash on a missing module.
 %% @spec prio(Module) -> integer()
 prio(Module) ->
     try
@@ -236,7 +252,8 @@ prio(Module) ->
     end.
 
 
-%% @doc Sort the results of a scan on module priority first, module name next. The list is made up of {module, Values} tuples
+%% @doc Sort the results of a scan on module priority first, module name next. 
+%% The list is made up of {module, Values} tuples
 %% @spec prio_sort(proplist()) -> proplist()
 prio_sort(ModuleProps) ->
     WithPrio = [ {z_module_sup:prio(M), {M, X}} || {M, X} <- ModuleProps ],

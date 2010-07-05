@@ -19,25 +19,20 @@
 
 -module(mod_comment).
 -author("Marc Worrell <marc@worrell.nl>").
--behaviour(gen_server).
 
 -mod_title("Comments").
 -mod_description("Comments for pages. Implements a simple comment system with comments stored locally.").
 
 %% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
+-export([init/1]).
 
 %% interface functions
 -export([
-    install/1,
     event/2,
     observe_search_query/2
 ]).
 
 -include_lib("zotonic.hrl").
-
--record(state, {context}).
 
 
 %% @doc Handle the submit event of a new comment
@@ -79,81 +74,10 @@ observe_search_query({search_query, {recent_comments, []}, OffsetLimit}, Context
 observe_search_query(_, _Context) ->
     undefined.
 
-%%====================================================================
-%% API
-%%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
-%% @doc Starts the server
-start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
-
-%%====================================================================
-%% gen_server callbacks
-%%====================================================================
-
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
-%% @doc Initiates the server.
-init(Args) ->
-    process_flag(trap_exit, true),
-    Context = proplists:get_value(context, Args),
-    Context1 = z_context:new(Context),
-    install(Context1),
-    {ok, #state{context=Context1}}.
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% Description: Handling call messages
-%% @doc Trap unknown calls
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
-handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State}.
-
-
-
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-terminate(_Reason, _State) ->
-    ok.
-
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
-
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
-
-
-%%====================================================================
-%% support functions
-%%====================================================================
-
 
 %% @doc Check the installation of the comment table. A bit more complicated because 0.1 and 0.2 had a table
 %% in the default installer, this module installs a different table.
-install(Context) ->
+init(Context) ->
     ok = z_db:transaction(fun install1/1, Context),
     z_depcache:flush(Context),
     ok.
