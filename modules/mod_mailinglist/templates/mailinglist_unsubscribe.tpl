@@ -10,7 +10,7 @@
 		<div class="padding">
 		{% if sub and m.rsc[sub.mailinglist_id].is_a.mailinglist %}
 			<h1>Unsubscribe from {{ m.rsc[sub.mailinglist_id].title|default:"mailing list" }}</h1>
-			<p>Please click the button below to unsubscribe from the mailing list.</p>
+			<p>Click <strong>unsubscribe</strong> to remove yourself from the mailing list.</p>
 			<div id="confirm">
 				{% button text=["Unsubscribe ", sub.email|force_escape] 
 						action={mailinglist_unsubscribe id=sub.id 
