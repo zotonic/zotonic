@@ -19,78 +19,18 @@
 
 -module(mod_atom).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
--behaviour(gen_server).
 
 -mod_title("Atom module").
 -mod_description("Provides atom (RFC 4287) representations for resources.").
 -mod_prio(1000).
-
-
-%% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
 
 %% interface functions
 -export([
     observe_content_types_dispatch/3
 ]).
 
--record(state, {context}).
-
 -include_lib("zotonic.hrl").
-
 
 %% Dispatch to the atom representation.
 observe_content_types_dispatch(content_types_dispatch, Acc, _Context) ->
     [{"application/atom+xml", atom_entry} | Acc].
-
-
-%%====================================================================
-%% API
-%%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
-%% @doc Starts the server
-start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
-
-%%====================================================================
-%% gen_server callbacks
-%%====================================================================
-
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
-%% @doc Initiates the server.
-init(Args) ->
-    process_flag(trap_exit, true),
-    {context, Context} = proplists:lookup(context, Args),
-	{ok, #state{context=z_context:new(Context)}}.
-
-%% Description: Handling call messages
-%% @doc Trap unknown calls
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-
-%% @doc Trap unknown casts
-handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State}.
-
-
-%% @doc Handling all non call/cast messages
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-%% @spec terminate(Reason, State) -> void()
-terminate(_Reason, _State) ->
-    ok.
-
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
-
-
-%%====================================================================
-%% support functions
-%%====================================================================

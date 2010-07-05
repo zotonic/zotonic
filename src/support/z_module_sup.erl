@@ -124,12 +124,27 @@ module_specs(Context) ->
     Args = [ {context, Context} | z_sites_sup:get_site_config(z_context:site(Context))],
     Ms0 = lists:filter(fun module_exists/1, active(Context)),
     Ms  = lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0),
-    [
-        {M, 
-            {M, start_link, [Args]},
-            permanent, 5000, worker, [M]} || M <- Ms
-    ].
+    lists:map(
+		fun(M) ->
+			GenServerModule = gen_server_module(M),
+	        {M, 
+	            {GenServerModule, start_link, [Args]},
+	            permanent, 5000, worker, [GenServerModule]}
+ 		end, Ms).
 
+	
+	%% When a module does not implement a gen_server then we use a dummy gen_server.
+	gen_server_module(M) ->
+		case proplists:get_value(behaviour, erlang:get_module_info(M, attributes)) of
+			L when is_list(L) ->
+				case lists:member(gen_server, L) of
+					true -> M;
+					false -> z_module_dummy
+				end;
+			undefined ->
+				z_module_dummy
+		end.
+			
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
 %% @spec deactivate(Module, context()) -> ok
