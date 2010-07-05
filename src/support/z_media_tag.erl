@@ -118,7 +118,7 @@ tag(Filename, Options, Context) when is_list(Filename) ->
             Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                 {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])};
             Link ->
-                HRef = list_to_binary(get_link(MediaRef, Link, Context)),
+                HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
                 Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
                 {ok, z_tags:render_tag("a", [{href,HRef}], Tag)}
         end.

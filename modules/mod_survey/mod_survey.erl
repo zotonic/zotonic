@@ -19,14 +19,11 @@
 
 -module(mod_survey).
 -author("Marc Worrell <marc@worrell.nl>").
--behaviour(gen_server).
 
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 
-%% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
+-export([init/1]).
 
 %% interface functions
 -export([
@@ -38,80 +35,16 @@
 -include_lib("zotonic.hrl").
 -include("survey.hrl").
 
--record(state, {context}).
+%% @doc Initilize the data model.
+init(Context) ->
+    m_survey:install(Context),
+    z_datamodel:manage(?MODULE, datamodel(), Context).
 
 %% @doc Handle drag/drop events from the survey admin
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
     event_sort(Id, Items, Context);
 event({submit, {survey_submit, [{id,SurveyId}]}, FormId, _FormId}, Context) ->
     survey_submit:submit(SurveyId, FormId, Context).
-
-
-%%====================================================================
-%% API
-%%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
-%% @doc Starts the server
-start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
-
-%%====================================================================
-%% gen_server callbacks
-%%====================================================================
-
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
-%% @doc Initiates the server.
-init(Args) ->
-    process_flag(trap_exit, true),
-    Context = z_context:new(proplists:get_value(context, Args)),
-    install(Context),
-    {ok, #state{context=Context}}.
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% Description: Handling call messages
-%% @doc Trap unknown calls
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
-handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State}.
-
-
-
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-terminate(_Reason, _State) ->
-    ok.
-
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
-
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
-
 
 %%====================================================================
 %% support functions
@@ -205,10 +138,6 @@ new_question(Type) ->
     Mod = list_to_atom("survey_q_"++z_convert:to_list(Type)),
     Mod:new().
 
-%% @doc Install the survey models
-install(Context) ->
-    m_survey:install(Context),
-    z_datamodel:manage(?MODULE, datamodel(), Context).
 
 datamodel() ->
     [

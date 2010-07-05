@@ -7,11 +7,14 @@
 
 <hr/>
 
-<h1>{{m.rsc[id].title}}</h1>
+<h1>{{ m.rsc[id].title }}</h1>
 
-<p><strong>{{m.rsc[id].summary}}</strong></p>
-
-{{ m.rsc[id].body }}
+{% if m.rsc[id].body %}
+	<p><strong>{{ m.rsc[id].summary|linebreaksbr }}</strong></p>
+	{{ m.rsc[id].body }}
+{% else %}
+	<p>{{ m.rsc[id].summary|linebreaksbr }}</p>
+{% endif %}
 
 <p><a href="{{ m.rsc[id].page_url }}">Read this page on the web.</a></p>
 

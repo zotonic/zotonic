@@ -471,6 +471,20 @@ pre {
 }
 
 
+/* Logon
+---------------------------------------------------------- */
+
+div#logon_box {
+	background-color: #323f47;
+	border: 1px solid #323f47 !important;
+}
+
+div#logon_box input[type=text], div#logon_box input[type=password] {
+	border: 1px solid #333;
+	color: white;
+}
+
+
 /* Pages - features
 ---------------------------------------------------------- */
 
