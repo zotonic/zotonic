@@ -274,7 +274,7 @@ smtp_conn(noop, _Pid, Info) ->
 	    {stop, conn_error, {conn_error, Error}, []}
     end;
 smtp_conn({mfrom, Address}, _Pid, Info) ->
-    Msg = ["mail from:", Address, "\r\n"],
+    Msg = ["mail from:<", Address, ">\r\n"],
     ok = socket_send(Info#info.socket, Msg),
     case get_response(Info#info.socket) of
 	{"250", Resp} -> 
@@ -285,7 +285,7 @@ smtp_conn({mfrom, Address}, _Pid, Info) ->
 	    {stop, conn_error, {conn_error, Error}, []}
     end;
 smtp_conn({rcpt_to, Address}, _Pid, Info) ->
-    Msg = ["rcpt to:", Address, "\r\n"],
+    Msg = ["rcpt to:<", Address, ">\r\n"],
     ok = socket_send(Info#info.socket, Msg),
     case get_response(Info#info.socket) of
 	{"250", Resp} -> 
