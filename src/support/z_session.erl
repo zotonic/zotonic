@@ -43,6 +43,7 @@
     keepalive/2, 
     ensure_page_session/1,
     add_script/2,
+    add_script/1,
     check_expire/2,
     dump/1,
     spawn_link/4
@@ -113,12 +114,21 @@ restart(Pid) ->
 	gen_server:cast(Pid, restart).
 
 
-%% @spec add_script(Script::io_list(), PageId::list(), Pid::pid()) -> none()
+%% @spec add_script(Script::io_list(), PagePid::pid()) -> none()
 %% @doc Send a script to all session pages
 add_script(Script, #context{session_pid=Pid}) ->
 	add_script(Script, Pid);
 add_script(Script, Pid) ->
     gen_server:cast(Pid, {add_script, Script}).
+
+
+%% @spec add_script(Context) -> Context1
+%% @doc Split the scripts from the context and add the scripts to the session pages.
+add_script(Context) ->
+    {Scripts, CleanContext} = z_script:split(Context),
+    add_script(Scripts, CleanContext),
+    CleanContext.
+
 
 %% @doc Reset the expire counter of the session, called from the page process when comet attaches
 keepalive(Pid) ->

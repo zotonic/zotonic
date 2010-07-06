@@ -41,6 +41,7 @@
     append/3,
     
     add_script/2,
+    add_script/1,
     get_scripts/1,
     comet_attach/2,
     comet_detach/1,
@@ -135,6 +136,13 @@ add_script(Script, #context{page_pid=Pid}) ->
     add_script(Script, Pid);
 add_script(Script, Pid) ->
     gen_server:cast(Pid, {add_script, Script}).
+
+%% @doc Split the scripts from the context and add the scripts to the page.
+add_script(Context) ->
+    {Scripts, CleanContext} = z_script:split(Context),
+    add_script(Scripts, CleanContext),
+    CleanContext.
+
 
 %% @doc Spawn a new process, linked to the page pid
 spawn_link(Module, Func, Args, Context) ->
