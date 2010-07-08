@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Contact form</title>
+        <title>{{ name|escape }} - Contact form</title>
     </head>
     <body>
         <p>Hello, the contact form of the site has been submitted.</p>
@@ -9,7 +9,7 @@
         <p>E-mail: {{ mail|escape }}</p>
 
         <p>The contents of the message was this:</p>
-        <pre>{{ message|escape|linebreaksbr }}</pre>
+        <pre>{{ message|force_escape|linebreaksbr }}</pre>
 
         <p>Regards, your website.</p>
     </body>
