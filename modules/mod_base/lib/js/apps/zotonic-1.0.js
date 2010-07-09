@@ -146,7 +146,8 @@ function z_do_postback(triggerID, postback, extraParams)
 		"&z_pageid=" + urlencode(z_pageid) + 
 		"&" + $.param(extraParams);
 	
-	if (z_ws)
+	// The logon_form is always posted, as it will set cookies.
+	if (z_ws && triggerID != "logon_form")
 	{
 	    z_ws.send(params);
 	}
