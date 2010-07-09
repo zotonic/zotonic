@@ -29,8 +29,7 @@
 	update_dispatchinfo/0,
 	get_sites/0,
 	get_site_contexts/0,
-	get_site_config/1,
-    get_fallback_site/0
+	get_site_config/1
 ]).
 
 %% supervisor callbacks
@@ -58,7 +57,7 @@ update_dispatchinfo() ->
         #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=true, dispatch_list=DispatchList}.
 
 
-%% @doc Return a list of site names.
+%% @doc Return a list of active site names.
 %% @spec get_sites -> [ atom() ]
 get_sites() ->
 	[Name || {Name, _, _, _} <- supervisor:which_children(?MODULE)]. 
@@ -136,19 +135,4 @@ scan_sites() ->
 get_site_config(Site) ->
     ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
     parse_config(ConfigFile).
-
-get_fallback_site() ->
-    Sites = scan_sites(),
-    get_fallback_site(Sites).
-
-get_fallback_site([]) ->
-    undefined;
-get_fallback_site([SiteProps|Rest]) ->
-    case proplists:get_value(enabled, SiteProps, false) of
-        true ->
-            {host, Name} = proplists:lookup(host, SiteProps),
-            Name;
-        false ->
-            get_fallback_site(Rest)
-    end.
-    
+ 

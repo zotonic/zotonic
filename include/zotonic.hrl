@@ -103,6 +103,11 @@
 -record(m_search_result, {search_name, search_props, result, page, pagelen, total, pages, next, prev}).
 -record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[], cats=[], cats_exclude=[], run_func, extra, assoc=false}).
 
+%% For z_supervisor, process definitions.
+-record(child_spec, {name, mfa, status, pid, crashes=5, period=60, 
+					 period_retry=600, period_retries=10, eternal_retry=7200,
+					 shutdown=5000}).
+
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default}).
 

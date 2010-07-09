@@ -103,7 +103,7 @@ update(#context{dispatcher=Dispatcher}) ->
 %% @doc Reload all dispatch lists.  Finds new dispatch lists and adds them to the dispatcher
 reload(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'reload'),
-    z_sites_sup:update_dispatchinfo().
+    z_sites_manager:update_dispatchinfo().
 
 reload(module_ready, Context) ->
     reload(Context).
@@ -137,6 +137,8 @@ init(SiteProps) ->
     {ok, State}.
 
 
+	drop_port(none) ->
+		"localhost";
     drop_port(Hostname) ->
         hd(string:tokens(Hostname, ":")).
 

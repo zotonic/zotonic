@@ -57,9 +57,14 @@ upgrade() ->
 init([]) ->
     % Random id generation
     Ids     = {z_ids,
-	            {z_ids, start_link, []}, 
-	            permanent, 5000, worker, dynamic},
+                {z_ids, start_link, []}, 
+                permanent, 5000, worker, dynamic},
     
+    % File based configuration, manages the file priv/config
+    Config  = {z_config,
+                {z_config, start_link, []},
+                permanent, 5000, worker, dynamic},
+
     % Database connection, connections are made by z_site_sup instances.
     Postgres = {epgsql_pool,
                 {epgsql_pool, start_link, [[]]},
@@ -76,12 +81,12 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites
-    SitesSup = {z_sites_sup,
-                {z_sites_sup, start_link, []},
+    SitesSup = {z_sites_manager,
+                {z_sites_manager, start_link, []},
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-            Ids, Postgres, PreviewServer, Dispatcher, SitesSup
+            Ids, Config, Postgres, PreviewServer, Dispatcher, SitesSup
     ],
 
     % Listen to IP address and Port

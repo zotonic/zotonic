@@ -42,21 +42,26 @@ install_check(SiteProps) ->
     Database = proplists:get_value(dbdatabase, SiteProps),
     Schema   = proplists:get_value(dbschema, SiteProps, "public"),
 
-    z_install:pre_install(Name, SiteProps),
+	case Database of
+		none ->
+			ignore;
+		_ ->
+		    z_install:pre_install(Name, SiteProps),
 	
-    case has_table("config", Name, Database, Schema) of
-        false ->
-            ?LOG("Installing database ~p@~p:~p ~p", [
-                        proplists:get_value(dbuser, SiteProps),
-                        proplists:get_value(dbhost, SiteProps),
-                        proplists:get_value(dbport, SiteProps),
-                        Database
-                        ]),
-            z_install:install(Name);
-        true -> 
-			ok = upgrade(Name, Database, Schema),
-			sanity_check(Name, Database, Schema)
-    end.
+		    case has_table("config", Name, Database, Schema) of
+		        false ->
+		            ?LOG("Installing database ~p@~p:~p ~p", [
+		                        proplists:get_value(dbuser, SiteProps),
+		                        proplists:get_value(dbhost, SiteProps),
+		                        proplists:get_value(dbport, SiteProps),
+		                        Database
+		                        ]),
+		            z_install:install(Name);
+		        true -> 
+					ok = upgrade(Name, Database, Schema),
+					sanity_check(Name, Database, Schema)
+		    end
+	end.
 
 
 %% Check if a table exists by querying the information schema.

@@ -27,11 +27,11 @@
     n1/2,
     m/0,
     flush/0,
-	flush/1,
+    flush/1,
     restart/0,
 
-	debug_msg/3,
-	
+    debug_msg/3,
+
     debug/2,
     debug/3,
     info/2,
@@ -57,8 +57,8 @@ m() ->
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
-	[ flush(C) || C <- z_sites_sup:get_site_contexts() ],
-	z_sites_sup:update_dispatchinfo().
+	[ flush(C) || C <- z_sites_manager:get_site_contexts() ],
+	z_sites_manager:update_dispatchinfo().
 	
 flush(Context) ->
    	z_depcache:flush(Context),

@@ -23,6 +23,7 @@
 
 %% interface functions
 -export([
+	has_connection/1,
     transaction/2,
     transaction_clear/1,
     set/3,
@@ -69,21 +70,26 @@
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
 transaction(Function, #context{dbc=undefined} = Context) ->
-    Host     = Context#context.host,
-    {ok, C}  = pgsql_pool:get_connection(Host),
-    Context1 = Context#context{dbc=C},
-    Result = try
-                {ok, [], []} = pgsql:squery(C, "BEGIN"),
-                R = Function(Context1),
-                {ok, [], []} = pgsql:squery(C, "COMMIT"),
-                R
-             catch
-                _:Why ->
-                    pgsql:squery(C, "ROLLBACK"),
-                    {rollback, {Why, erlang:get_stacktrace()}}
-             end,
-    pgsql_pool:return_connection(Host, C),
-    Result;
+	case has_connection(Context) of
+		true ->
+		    Host     = Context#context.host,
+		    {ok, C}  = pgsql_pool:get_connection(Host),
+		    Context1 = Context#context{dbc=C},
+		    Result = try
+		                {ok, [], []} = pgsql:squery(C, "BEGIN"),
+		                R = Function(Context1),
+		                {ok, [], []} = pgsql:squery(C, "COMMIT"),
+		                R
+		             catch
+		                _:Why ->
+		                    pgsql:squery(C, "ROLLBACK"),
+		                    {rollback, {Why, erlang:get_stacktrace()}}
+		             end,
+		    pgsql_pool:return_connection(Host, C),
+		    Result;
+		false ->
+			{rollback, {no_database_connection, erlang:get_stacktrace()}}
+	end;
 transaction(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
     Function(Context).
@@ -93,7 +99,6 @@ transaction_clear(#context{dbc=undefined} = Context) ->
 	Context;
 transaction_clear(Context) ->
 	Context#context{dbc=undefined}.
-	
 
 
 %% @doc Simple get/set functions for db property lists
@@ -103,10 +108,20 @@ get(Key, Props) ->
     proplists:get_value(Key, Props).
 
 
+%% @doc Check if we have database connection
+has_connection(#context{host=Host}) ->
+	is_pid(erlang:whereis(Host)).
+
+
 %% @doc Transaction handler safe function for fetching a db connection
-get_connection(#context{dbc=undefined, host=Host}) ->
-    {ok, C} = pgsql_pool:get_connection(Host),
-    C;
+get_connection(#context{dbc=undefined, host=Host} = Context) ->
+	case has_connection(Context) of
+		true ->
+		    {ok, C} = pgsql_pool:get_connection(Host),
+		    C;
+		false ->
+			none
+	end;
 get_connection(Context) ->
     Context#context.dbc.
 
@@ -149,44 +164,57 @@ assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
 assoc(Sql, Parameters, Context) ->
-    C = get_connection(Context),
-    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
-    return_connection(C, Context),
-    Result.
+	case get_connection(Context) of
+		none -> [];
+		C ->
+		    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+		    return_connection(C, Context),
+    		Result
+	end.
 
 
 assoc_props(Sql, Context) ->
     assoc_props(Sql, [], Context).
 
 assoc_props(Sql, Parameters, Context) ->
-    C = get_connection(Context),
-    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
-    return_connection(C, Context),
-    merge_props(Result).
+    case get_connection(Context) of
+		none -> [];
+		C ->
+		    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+		    return_connection(C, Context),
+		    merge_props(Result)
+	end.
+
 
 q(Sql, Context) ->
     q(Sql, [], Context).
 
 q(Sql, Parameters, Context) ->
-    C = get_connection(Context),
-    Result = case pgsql:equery(C, Sql, Parameters) of
-                {ok, _Cols, Rows} -> Rows;
-                {ok, Rows} -> Rows
-              end,
-    return_connection(C, Context),
-    Result.
+    case get_connection(Context) of
+		none -> [];
+		C ->
+		    Result = case pgsql:equery(C, Sql, Parameters) of
+		                {ok, _Cols, Rows} -> Rows;
+		                {ok, Rows} -> Rows
+		              end,
+		    return_connection(C, Context),
+		    Result
+	end.
 
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
 q1(Sql, Parameters, Context) ->
-    C = get_connection(Context),
-    V = case pgsql:equery1(C, Sql, Parameters) of
-            {ok, Value} -> Value;
-            {error, noresult} -> undefined
-        end,
-    return_connection(C, Context),
-    V.
+    case get_connection(Context) of
+		none -> undefined;
+		C ->
+		    V = case pgsql:equery1(C, Sql, Parameters) of
+		            {ok, Value} -> Value;
+		            {error, noresult} -> undefined
+		        end,
+		    return_connection(C, Context),
+		    V
+	end.
 
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
@@ -202,10 +230,14 @@ equery(Sql, Context) ->
     equery(Sql, [], Context).
     
 equery(Sql, Parameters, Context) ->
-    C = get_connection(Context),
-    R = pgsql:equery(C, Sql, Parameters),
-    return_connection(C, Context),
-    R.
+	case get_connection(Context) of
+		none -> 
+			{error, noresult};
+		C ->
+		    R = pgsql:equery(C, Sql, Parameters),
+		    return_connection(C, Context),
+		    R
+	end.
 
 %% @doc Insert a new row in a table, use only default values.
 %% @spec insert(Table, Context) -> {ok, Id}
@@ -213,10 +245,10 @@ insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
     assert_table_name(Table),
-    C = get_connection(Context),
-    {ok, Id} = pgsql:equery1(C, "insert into \""++Table++"\" default values returning id"),
-    return_connection(C, Context),
-    {ok, Id}.
+	C = get_connection(Context),
+	{ok, Id} = pgsql:equery1(C, "insert into \""++Table++"\" default values returning id"),
+	return_connection(C, Context),
+	{ok, Id}.
 
 
 %% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
