@@ -8,6 +8,7 @@ src/erlydtl/erlydtl_parser.erl
 priv/log/*
 priv/sites/default/files/*
 priv/sites/*/config
+priv/config
 *.orig
 zotonic.tmproj
 .DS_Store
