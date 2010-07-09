@@ -120,12 +120,18 @@ logon_from_session(Context) ->
 
 %% @doc Check if the user is enabled, an user is enabled when the rsc is published and within its publication date range.
 is_enabled(UserId, Context) ->
-	Acl = m_rsc:get_acl_props(UserId, Context),
-    case Acl#acl_props.is_published of
-        false -> 
-            false;
-        true ->
-            Date = calendar:local_time(),
-            Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
-    end.
+	case z_notifier:first({user_is_enabled, UserId}, Context) of
+		undefined ->
+			Acl = m_rsc:get_acl_props(UserId, Context),
+		    case Acl#acl_props.is_published of
+		        false -> 
+		            false;
+		        true ->
+		            Date = calendar:local_time(),
+		            Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
+		    end;
+		Other when is_boolean(Other) ->
+			Other
+	end.
+
 

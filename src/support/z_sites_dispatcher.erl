@@ -98,7 +98,7 @@ get_fallback_site() ->
 %% @doc Initiates the server.
 init(_Args) ->
     application:set_env(webmachine, dispatcher, ?MODULE),
-    {ok, #state{rules=[], fallback_site=z_sites_sup:get_fallback_site()}}.
+    {ok, #state{rules=[], fallback_site=z_sites_manager:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -221,7 +221,8 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, ReqData) ->
                                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
                             end;
                         undefined ->
-                            no_host_match
+							%% Always fallback to the zotonic host
+                            zotonic
                     end
             end;
         _ ->

@@ -59,7 +59,7 @@ m_value(#m{value=undefined}, Context) ->
 %% @doc Return the complete site configuration
 all(Context) ->
     F = fun() ->
-        z_sites_sup:get_site_config(Context#context.host)
+        z_sites_manager:get_site_config(Context#context.host)
     end,
     z_depcache:memo(F, site_config, Context).
 
@@ -68,12 +68,31 @@ get(Key, Context) when is_atom(Key) ->
     case z_depcache:get(site_config, Key, Context) of
         {ok, undefined} ->
             undefined;
+        {ok, none} when Key == hostname ->
+            sanitize_host(z_context:get_req_header("host", Context));
         {ok, Cs} ->
             Cs;
         undefined ->
             All = all(Context),
             proplists:get_value(Key, All)
     end.
+    
+    sanitize_host(Host) ->
+        sanitize_host(Host, []).
+
+    sanitize_host([], Acc) ->
+        lists:reverse(Acc);
+    sanitize_host([C|Rest], Acc)
+        when (C >= $a andalso C =< $z)
+        orelse (C >= $A andalso C =< $Z)
+        orelse (C >= $0 andalso C =< $9)
+        orelse C =:= $-
+        orelse C =:= $: ->
+            sanitize_host(Rest, [C|Acc]);
+    sanitize_host(_, _Acc) ->
+        [].
+
+        
 
 %% @doc Fetch a nested key from the site configuration
 get(site, Key, Context) when is_atom(Key) ->

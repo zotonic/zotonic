@@ -122,7 +122,7 @@ init(_Args) ->
 
 %% @doc Get process specs for all modules
 module_specs(Context) ->
-    Args = [ {context, Context} | z_sites_sup:get_site_config(z_context:site(Context))],
+    Args = [ {context, Context} | z_sites_manager:get_site_config(z_context:site(Context))],
     Ms0 = lists:filter(fun module_exists/1, active(Context)),
     Ms  = lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0),
     lists:map(
@@ -196,19 +196,31 @@ activate(Module, Context) ->
 %% @doc Return the list of active modules.
 %% @spec active(context()) -> [ atom() ]
 active(Context) ->
-    Modules = z_db:q("select name from module where is_active = true order by name", Context),
-    [ z_convert:to_atom(M) || {M} <- Modules ].
+	case z_db:has_connection(Context) of
+		true ->
+		    Modules = z_db:q("select name from module where is_active = true order by name", Context),
+		    [ z_convert:to_atom(M) || {M} <- Modules ];
+		false ->
+			case m_site:get(modules, Context) of
+				L when is_list(L) -> L;
+				_ -> []
+			end
+	end.
+
 
 
 %% @doc Return whether a specific module is active.
 %% @spec active(context()) -> [ atom() ]
 active(Module, Context) ->
-    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
-        [{true}] ->
-            true;
-        _ ->
-            false
-    end.
+	case z_db:has_connection(Context) of
+		true ->
+		    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
+		        [{true}] -> true;
+		        _ -> false
+		    end;
+		false ->
+			lists:member(Module, active(Context))
+	end.
 
 
 %% @doc Return the list of all active modules and their directories
