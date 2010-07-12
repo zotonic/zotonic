@@ -40,26 +40,6 @@ start_link(SiteProps) ->
 init(SiteProps) ->
     % Default site name
     {host, Host} = proplists:lookup(host, SiteProps),
-    DefaultDatabase = case Host of default -> "zotonic"; _ -> atom_to_list(Host) end,
-	case proplists:get_value(dbdatabase, SiteProps, DefaultDatabase) of
-		none -> nop;
-		DbDatabase ->
-		    % Make sure that the database is added to the db pool
-		    case whereis(Host) of
-		        undefined ->
-            
-		            DbHost     = proplists:get_value(dbhost,     SiteProps, "localhost"),
-		            DbPort     = proplists:get_value(dbport,     SiteProps, 5432),
-		            DbUser     = proplists:get_value(dbuser,     SiteProps, "zotonic"),
-		            DbPassword = proplists:get_value(dbpassword, SiteProps, ""),
-		            DbSchema   = proplists:get_value(dbschema,   SiteProps, "public"),
-		            DbOpts     = [{host, DbHost}, {port, DbPort}, {username, DbUser}, {password, DbPassword}, {database, DbDatabase}, {schema, DbSchema}],
-
-					epgsql_pool:start_pool(Host, 10, DbOpts);
-		        Pid when is_pid(Pid) -> 
-		            ok
-		    end
-	end,
 
     Translation = {z_trans_server, 
                 {z_trans_server, start_link, [SiteProps]},
@@ -103,7 +83,7 @@ init(SiteProps) ->
 
     Modules = {z_module_sup,
                 {z_module_sup, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
+                permanent, 5000, supervisor, dynamic},
 
     PostStartup = {z_site_startup,
                     {z_site_startup, start_link, [SiteProps]},
@@ -115,4 +95,31 @@ init(SiteProps) ->
             ModuleIndexer, Modules,
             PostStartup
     ],
-    {ok, {{one_for_one, 1000, 10}, Processes}}.
+    {ok, {{one_for_all, 2, 1}, add_db_pool(Host, Processes, SiteProps)}}.
+
+
+%% @doc Optionally add the db pool connection
+add_db_pool(Host, Processes, SiteProps) ->
+    DefaultDatabase = case Host of 
+                          default -> "zotonic";
+                          _ -> atom_to_list(Host) 
+                      end,
+    case proplists:get_value(dbdatabase, SiteProps, DefaultDatabase) of
+        none -> 
+            %% No database connection needed
+            Processes;
+        DbDatabase ->
+            % Add a db pool to the site's processes
+            DbHost     = proplists:get_value(dbhost,     SiteProps, "localhost"),
+            DbPort     = proplists:get_value(dbport,     SiteProps, 5432),
+            DbUser     = proplists:get_value(dbuser,     SiteProps, "zotonic"),
+            DbPassword = proplists:get_value(dbpassword, SiteProps, ""),
+            DbSchema   = proplists:get_value(dbschema,   SiteProps, "public"),
+            DbOpts     = [ {host, DbHost}, {port, DbPort}, 
+                           {username, DbUser}, {password, DbPassword}, 
+                           {database, DbDatabase}, {schema, DbSchema} ],
+
+            [ {Host, 
+                {pgsql_pool, start_link, [Host, 10, DbOpts]},
+                permanent, 5000, worker, dynamic} ] ++ Processes
+    end.
