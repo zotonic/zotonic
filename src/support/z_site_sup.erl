@@ -110,11 +110,11 @@ add_db_pool(Host, Processes, SiteProps) ->
             Processes;
         DbDatabase ->
             % Add a db pool to the site's processes
-            DbHost     = proplists:get_value(dbhost,     SiteProps, "localhost"),
-            DbPort     = proplists:get_value(dbport,     SiteProps, 5432),
-            DbUser     = proplists:get_value(dbuser,     SiteProps, "zotonic"),
-            DbPassword = proplists:get_value(dbpassword, SiteProps, ""),
-            DbSchema   = proplists:get_value(dbschema,   SiteProps, "public"),
+            DbHost     = proplists:get_value(dbhost,     SiteProps, z_config:get(dbhost)),
+            DbPort     = proplists:get_value(dbport,     SiteProps, z_config:get(dbport)),
+            DbUser     = proplists:get_value(dbuser,     SiteProps, z_config:get(dbuser)),
+            DbPassword = proplists:get_value(dbpassword, SiteProps, z_config:get(dbpassword)),
+            DbSchema   = proplists:get_value(dbschema,   SiteProps, z_config:get(dbschema)),
             DbOpts     = [ {host, DbHost}, {port, DbPort}, 
                            {username, DbUser}, {password, DbPassword}, 
                            {database, DbDatabase}, {schema, DbSchema} ],
