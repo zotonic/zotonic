@@ -269,7 +269,7 @@ add_sites_to_sup(_Sup, []) ->
 add_sites_to_sup(Sup, [SiteProps|Rest]) ->
     case proplists:lookup(host, SiteProps) of
         {host, Name} ->
-            Spec = #child_spec{name=Name, mfa={z_site_sup, start_link, [SiteProps]}},
+            Spec = #child_spec{name=Name, mfa={z_site_sup, start_link, [Name]}},
             ok = z_supervisor:add_child(Sup, Spec),
             case proplists:get_value(enabled, SiteProps, false) of
                 true -> z_supervisor:start_child(Sup, Name);
