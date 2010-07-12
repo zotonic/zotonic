@@ -29,15 +29,18 @@
 
 -include_lib("zotonic.hrl").
 
-%% @spec start_link(SiteProps) -> ServerRet
+%% @spec start_link(Host) -> ServerRet
 %% @doc API for starting the site supervisor.
-start_link(SiteProps) ->
-    supervisor:start_link(?MODULE, SiteProps).
+start_link(Host) ->
+    supervisor:start_link(?MODULE, Host).
 
 
-%% @spec init(SiteProps) -> SupervisorTree
+%% @spec init(Host) -> SupervisorTree
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
-init(SiteProps) ->
+init(Host) ->
+    % On (re)start we use the newest site config.
+    SiteProps = z_sites_manager:get_site_config(Host),
+
     % Default site name
     {host, Host} = proplists:lookup(host, SiteProps),
 
