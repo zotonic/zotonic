@@ -65,11 +65,6 @@ init([]) ->
                 {z_config, start_link, []},
                 permanent, 5000, worker, dynamic},
 
-    % Database connection, connections are made by z_site_sup instances.
-    Postgres = {epgsql_pool,
-                {epgsql_pool, start_link, [[]]},
-                permanent, 5000, worker, dynamic},
-    
     % Image resizer, prevents to many images to be resized at once, bogging the processor.
     PreviewServer = {z_media_preview_server,
                 {z_media_preview_server, start_link, []}, 
@@ -86,7 +81,7 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-            Ids, Config, Postgres, PreviewServer, Dispatcher, SitesSup
+            Ids, Config, PreviewServer, Dispatcher, SitesSup
     ],
 
     % Listen to IP address and Port
