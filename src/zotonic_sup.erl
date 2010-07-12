@@ -44,10 +44,10 @@ upgrade() ->
     Kill = sets:subtract(Old, New),
 
     sets:fold(fun (Id, ok) ->
-		      supervisor:terminate_child(?MODULE, Id),
-		      supervisor:delete_child(?MODULE, Id),
-		      ok
-	      end, ok, Kill),
+              supervisor:terminate_child(?MODULE, Id),
+              supervisor:delete_child(?MODULE, Id),
+              ok
+          end, ok, Kill),
 
     [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
     ok.
@@ -55,6 +55,9 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
+    {A1,A2,A3} = erlang:now(),
+    random:seed(A1, A2, A3),
+
     % Random id generation
     Ids     = {z_ids,
                 {z_ids, start_link, []}, 
@@ -85,25 +88,31 @@ init([]) ->
     ],
 
     % Listen to IP address and Port
-    WebIp = case os:getenv("ZOTONIC_IP")   of
-        Any when Any == false; Any == []; Any == "*"; Any == "any" -> any;
+    WebIp = case os:getenv("ZOTONIC_IP") of
+        false -> z_config:get_dirty(listen_ip);
+        Any when Any == []; Any == "*"; Any == "any" -> any;
         ConfIP -> ConfIP 
     end,   
-    WebPort = case os:getenv("ZOTONIC_PORT") of false -> 8000; Anyport -> list_to_integer(Anyport) end,   
+    WebPort = case os:getenv("ZOTONIC_PORT") of
+        false -> z_config:get_dirty(listen_port); 
+        Anyport -> list_to_integer(Anyport) 
+    end,
+    z_config:set_dirty(listen_ip, WebIp),
+    z_config:set_dirty(listen_port, WebPort),
 
     WebConfig = [
-		 {port, WebPort},
-		 {error_handler, z_webmachine_error_handler},
-         {log_dir, filename:join([z_utils:lib_dir(priv), "log"])},
-		 {dispatch, []},
-		 {backlog, 500}
-	],
+         {port, WebPort},
+         {error_handler, z_config:get_dirty(webmachine_error_handler)},
+         {log_dir, z_config:get_dirty(log_dir)},
+         {dispatch, []},
+         {backlog, z_config:get_dirty(inet_backlog)}
+    ],
     application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
 
     % Listen to the ip address and port for all sites.
     Processes1 = Processes ++ [{webmachine_mochiweb,
-                	            {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]}, 
-                	            permanent, 5000, worker, dynamic}],
+                                {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]}, 
+                                permanent, 5000, worker, dynamic}],
     
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
     Processes2 = case WebIp of
@@ -111,8 +120,8 @@ init([]) ->
             case ipv6_supported() of
                 true ->
                     Processes1 ++ [{webmachine_mochiweb_v6,
-                            	            {webmachine_mochiweb, start, [webmachine_mochiweb_v6, [{ip,any6}|WebConfig]]}, 
-                            	            permanent, 5000, worker, dynamic}];
+                                    {webmachine_mochiweb, start, [webmachine_mochiweb_v6, [{ip,any6}|WebConfig]]}, 
+                                    permanent, 5000, worker, dynamic}];
                 false ->
                     Processes1
             end;

@@ -1,0 +1,60 @@
+%% This is a sample config file for Zotonic.
+%%
+%% The configurations are for the Zotonic system itself.
+%% Site configuration is found in each site's config file.
+%% The site config files are in the subdirectories of priv/sites/.
+%%
+%% To use this configuration file:
+%% 1. Make sure Zotonic is NOT running
+%% 2. Copy this file to "config" (in this "priv" directory)
+%% 3. Change (and uncomment) any setting you want to modify
+%% 4. Start Zotonic.
+%% 5. Check if Zotonic is using your new settings.
+%%    - When not then you have made a configuration error, start Zotonic
+%%      in debug mode with "./start.sh" or "zotonic.sh debug" 
+%%
+%%
+%% Zotonic will rewrite the file when settings are changed by Zotonic.
+%% Zotonic will ensure that there is a 'password' entry, adding it when necessary.
+%%
+%% Rarely used configurations are commented out, change at your own risk.
+%% The given values are the defaults for the options.
+%%
+%% Be careful with the comma after each option, exclude it after the last option.
+
+[
+
+ %% PostgeSQL database defaults.
+ %% These are the defaults for the equally named options in your site's config file.
+ {dbschema,"public"},
+ {dbpassword,[]},
+ {dbuser,"zotonic"},
+ {dbport,5432},
+ {dbhost,"localhost"},
+
+ %% IP address Zotonic will listen on for HTTP requests
+ %% Always overruled by the environment variable ZOTONIC_IP
+ %% Use 'any' for all IP addresses
+ {listen_ip,any},
+ 
+ %% Port Zotonic will listen on for HTTP requests.
+ %% Always overruled by the environment variable ZOTONIC_PORT
+ {listen_port,8000}
+
+ %% Password for the sites administration site (zotonic_status)
+ %% Zotonic will generate a secure password for you, so you don't need to enable this.  
+ %% When you enable this you MUST select a secure password!!!
+ % {password, ""}
+ 
+ %% inet request backlog, enlarge when requests are dropped
+ % {inet_backlog,500},
+ 
+ %% Directory where log files are written
+ % {log_dir,"priv/log"},
+
+ %% Webmachine error handler, you can use your own.
+ % {webmachine_error_handler,z_webmachine_error_handler},
+
+ % Date this file was created/updated
+ {modify_date, {{2010,7,12},{12,28,30}}}
+].
