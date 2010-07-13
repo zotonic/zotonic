@@ -267,7 +267,11 @@ check_resource(ReqData, State) ->
             "/" ++ RelFile -> RelFile;
             _ -> File
         end,
-        RelName1 = filename:join(Root, RelName),
+        Root1 = case Root of
+            "/" ++ _ -> Root;
+            _ -> filename:join(z_utils:lib_dir(Context),Root)
+        end,
+        RelName1 = filename:join(Root1, RelName),
         T = [RelName1, RelName1 ++ ".tpl", filename:join(RelName1, "index.html.tpl"), filename:join(RelName1, "index.html")],
         find_file1(T, Context).
 
