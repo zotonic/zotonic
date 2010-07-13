@@ -267,19 +267,41 @@ check_resource(ReqData, State) ->
             "/" ++ RelFile -> RelFile;
             _ -> File
         end,
-        Root1 = case Root of
-            "/" ++ _ -> Root;
-            _ -> filename:join(z_utils:lib_dir(Context),Root)
-        end,
-        RelName1 = filename:join(Root1, RelName),
-        T = [RelName1, RelName1 ++ ".tpl", filename:join(RelName1, "index.html.tpl"), filename:join(RelName1, "index.html")],
-        find_file1(T, Context).
+        T = [ RelName, 
+              RelName ++ ".tpl", 
+              filename:join(RelName, "index.html.tpl"), 
+              filename:join(RelName, "index.html")
+            ],
+        case find_template(T, Context) of
+            {error, enoent} ->
+                Root1 = case Root of
+                    "/" ++ _ -> Root;
+                    _ -> filename:join(z_path:site_dir(Context),Root)
+                end,
+                RelName1 = filename:join(Root1, RelName),
+                T1 = [  RelName1,
+                        RelName1 ++ ".tpl", 
+                        filename:join(RelName1, "index.html.tpl"),
+                        filename:join(RelName1, "index.html") 
+                     ],
+                find_file1(T1);
+            Found -> 
+                Found
+        end.
 
-    find_file1([], _Context) ->
+    find_file1([]) ->
         {error, enoent};
-    find_file1([F|R], Context) ->
+    find_file1([F|R]) ->
+        case filelib:is_regular(F) of
+            true -> {ok, F};
+            false -> find_file1(R)
+        end.
+
+    find_template([], _Context) ->
+        {error, enoent};
+    find_template([F|R], Context) ->
         case z_module_indexer:find(template, F, Context) of
-            {error, enoent} -> find_file1(R, Context);
+            {error, enoent} -> find_template(R, Context);
             {ok, _AbsPath} = Found -> Found
         end.
 
