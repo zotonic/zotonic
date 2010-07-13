@@ -42,76 +42,50 @@
 vary(_Params, _Context) -> default.
 
 render(Params, _Vars, Context) ->
-    Menu = get_menu(Context),
     Id = proplists:get_value(id, Params),
-    CurrentId = find_id(Id, Menu),
-    case z_depcache:get({menu, CurrentId, Context#context.language}, Context) of
-        {ok, CachedMenu} ->
-            {ok, CachedMenu};
-        undefined ->
-            {IdAcc, LIs} = build_menu(Menu, CurrentId, 1, [], [], z_acl:anondo(Context)),
-            UL = ["<ul id=\"navigation\" class=\"clearfix at-menu do_superfish\">", LIs, "</ul>"],
-            NewMenu = iolist_to_binary(UL),
-            z_depcache:set({menu, CurrentId, Context#context.language}, NewMenu, ?DAY, [CurrentId, menu | IdAcc], Context),
-            {ok, NewMenu}
-    end.
+    Menu = remove_invisible(get_menu(Context), [], Context),
+    Path = find_id(Menu, Id, []),
+    Traversal = traverse_menu(Menu, 1, 1, []),
+    Vars = [
+        {menu, lists:reverse(Traversal)},
+        {path, Path}
+        | Params
+    ],
+    {ok, z_template:render("_menu.tpl", Vars, Context)}.
 
 
-build_menu([], _Id, _Nr, IdAcc, Acc, _Context) ->
-    {IdAcc, lists:reverse(Acc)};
-build_menu([{N,[]} | T], Id, Nr, IdAcc, Acc, Context) ->
-    LI = menu_item(N, T, Id, Nr, Context),
-    build_menu(T, Id, Nr+1, [N|IdAcc], [ [LI,"</li>"] | Acc ], Context);
-build_menu([{N,SubMenu} | T], Id, Nr, IdAcc, Acc, Context) ->
-    LI = menu_item(N, T, Id, Nr, Context),
-    {IdAcc1, SubLIs} = build_menu(SubMenu, Id, 1, IdAcc, [], Context),
-    build_menu(T, Id, Nr+1, [N|IdAcc1], [ [LI,"<ul>",SubLIs,"</ul></li>"] | Acc ], Context);
-build_menu([N | T], Id, Nr, IdAcc, Acc, Context) when is_integer(N) ->
-    LI = menu_item(N, T, Id, Nr, Context),
-    build_menu(T, Id, Nr+1, [N|IdAcc], [ [LI,"</li>"] | Acc ], Context).
-
-
-%% @doc Check if the id is in the menu. Return undefined when not found, otherwise the Id.
-find_id(undefined, _Menu) ->
-    undefined;
-find_id(_Id, []) ->
-    undefined;
-find_id(Id, [{Id,_}|_]) ->
-    Id;
-find_id(Id, [Id|_]) ->
-    Id;
-find_id(Id, [{_,S}|T]) ->
-    case find_id(Id, S) of
-        undefined ->
-            find_id(Id, T);
-        Id ->
-            Id
+%% Remove invisible menu items
+remove_invisible([], Acc, _Context) ->
+    lists:reverse(Acc);
+remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
+    case m_rsc:is_visible(Id, Context) of
+        true ->  remove_invisible(Rest, [{Id,remove_invisible(Sub, [], Context)} | Acc], Context);
+        false -> remove_invisible(Rest, Acc, Context)
     end;
-find_id(Id, [_|T]) ->
-    find_id(Id, T).
-
-
-menu_item(N, T, Id, Nr, Context) ->
-    case m_rsc:exists(N, Context) andalso m_rsc:is_visible(N, Context) of
-        true ->
-            First = case Nr of 1 -> " first "; _ -> [] end,
-            Last  = case T of [] -> " last "; _ -> [] end,
-            Current = case N == Id of true -> " current "; _ -> [] end,
-            [
-                "<li id=\"nav-item-", integer_to_list(Nr), "\" class=\"",First,Last,"\">",
-                    "<a href=\"", m_rsc:p(N, page_url, Context), "\" class=\"", Current, z_convert:to_binary(m_rsc:p(N, name, Context)), "\">",
-                        get_title(N, Context),
-                "</a>"
-            ];
-        false ->
-            []
+remove_invisible([Id|Rest], Acc, Context) ->
+    case m_rsc:is_visible(Id, Context) of
+        true ->  remove_invisible(Rest, [Id | Acc], Context);
+        false -> remove_invisible(Rest, Acc, Context)
     end.
 
-get_title(Id, Context) ->
-	case ?__(m_rsc:p(Id, short_title, Context), Context) of
-		N when N == [] orelse N == <<"">> orelse N == undefined -> ?__(m_rsc:p(Id, title, Context), Context);
-		Title -> Title
-	end.
+
+%% Traverse the menu, build a flat list that can be used for the template routines
+traverse_menu([], _Nr, _Depth, Acc) ->
+    Acc;
+traverse_menu([{Id,Sub}], Nr, Depth, Acc) ->
+    traverse_menu(Sub, 1, Depth+1, [menu_item(Id, Nr, Depth, true)|Acc]);
+traverse_menu([Id], Nr, Depth, Acc) ->
+    [menu_item(Id, Nr, Depth, true) | Acc];
+traverse_menu([{Id,Sub}|Rest], Nr, Depth, Acc) ->
+    Acc1 = traverse_menu(Sub, 1, Depth+1, [menu_item(Id, Nr, Depth, false)|Acc]),
+    traverse_menu(Rest, Nr+1, Depth, Acc1);
+traverse_menu([Id|Rest], Nr, Depth, Acc) ->
+    traverse_menu(Rest, Nr+1, Depth, [menu_item(Id, Nr, Depth, false)|Acc]).
+
+
+menu_item(Id, Nr, Depth, IsLast) ->
+    [Id, Depth, Nr =:= 1, IsLast].
+
 
 %% @doc Fetch the menu from the site configuration.
 %% @spec get_menu(Context) -> list()
@@ -120,3 +94,23 @@ get_menu(Context) ->
         undefined -> [];
         Props -> proplists:get_value(menu, Props, [])
     end.
+
+
+%% Find the path to the id, if any.
+find_id(_Menu, undefined, _Path) ->
+    [];
+find_id([], _Id, _Path) ->
+    [];
+find_id([Id|_], Id, Path) ->
+    [Id|Path];
+find_id([{Id,_}|_], Id, Path) ->
+    [Id|Path];
+find_id([{MId,Sub}|Rest], Id, Path) ->
+    case find_id(Sub, Id, [MId|Path]) of
+        [] -> find_id(Rest, Id, Path);
+        Result -> Result
+    end;
+find_id([_|Rest], Id, Path) ->
+    find_id(Rest, Id, Path).
+
+
