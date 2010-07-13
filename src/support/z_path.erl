@@ -21,6 +21,7 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
+    site_dir/1,
     media_preview/1,
     media_archive/1,
     files_subdir/2,
@@ -28,6 +29,11 @@
 ]).
 
 -include("zotonic.hrl").
+
+%% @doc Return the path to a files subdirectory
+%% @spec media_archive(#context) -> filename()
+site_dir(#context{host=Host}) ->
+        filename:join([z_utils:lib_dir(priv), "sites", Host]).
 
 %% @doc Return the path to the media preview directory
 %% @spec media_preview(#context) -> filename()
