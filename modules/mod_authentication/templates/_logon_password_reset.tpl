@@ -11,6 +11,7 @@
 			<p class="do_inputoverlay">
 				<span>{_ New password _}</span>
 				<input type="password" id="password_reset1" name="password_reset1" value="" autocomplete="off" />
+				{% validate id="password_reset1" type={presence} %}
 			</p>
 		</div>
 
@@ -18,6 +19,7 @@
 			<p class="do_inputoverlay">
 				<span>{_ Repeat password _}</span>
 				<input type="password" id="password_reset2" name="password_reset2" value="" autocomplete="off" />
+				{% validate id="password_reset2" type={presence} type={confirmation match="password_reset1"} %}
 			</p>
 		</div>
 

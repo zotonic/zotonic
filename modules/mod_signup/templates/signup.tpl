@@ -130,17 +130,18 @@ div#signup_tos label {
 
 			<div id="signup_password1">
 				<label for="password1">{_ Password _}</label>
-				<input id="password1" name="password1" type="password" value="" />
+				<input id="password1" name="password1" type="password" value="" autocomplete="off" />
 				{% validate id="password1" 
 					type={presence} 
-					type={length minimum=6 too_short_message="Too short, use 6 or more."} 
-					type={confirmation match="password2"} %}
+					type={length minimum=6 too_short_message="Too short, use 6 or more."} %}
 			</div>
 
 			<div id="signup_password2">
 				<label for="password2">{_ Verify password _}</label>
-				<input id="password2" name="password2" type="password" value="" />
-				{% validate id="password2" type={presence} %}
+				<input id="password2" name="password2" type="password" value="" autocomplete="off" />
+				{% validate id="password2" 
+				    type={presence} 
+				    type={confirmation match="password1"} %}
 			</div>
 
 			<p class="clear"></p>
