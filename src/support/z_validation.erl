@@ -58,6 +58,10 @@ rename_args([{case_sensitive, Msg}|T], Acc) ->
     rename_args(T, [{caseSensitive, Msg}|Acc]);
 rename_args([{allow_null, Msg}|T], Acc) ->
     rename_args(T, [{allowNull, Msg}|Acc]);
+rename_args([{only_on_submit, Value}|T], Acc) ->
+    rename_args(T, [{onlyOnSubmit, Value}|Acc]);
+rename_args([{only_on_blur, Value}|T], Acc) ->
+    rename_args(T, [{onlyOnBlur, Value}|Acc]);
 rename_args([H|T], Acc) ->
     rename_args(T, [H|Acc]).
 
