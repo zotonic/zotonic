@@ -20,7 +20,7 @@
 		{_ Sorry, I don't know that confirmation code. Did you copy it correctly? _}
 	</p>
 
-	<form id="signup_confirm_form" method="post" action="postback">
+	<form class="setcookie" id="signup_confirm_form" method="post" action="postback">
 		
 		<p id="confirm_key">
 			<label for="key">{_ Confirm key _}</label>
