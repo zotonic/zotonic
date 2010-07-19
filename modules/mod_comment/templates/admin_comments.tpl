@@ -1,24 +1,24 @@
 {% extends "admin_base.tpl" %}
 
 {% block title %}
-Recent Comments
+{_ Recent Comments _}
 {% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Comments</h2>
+			<h2>{_ Comments _}</h2>
 
-			<h3 class="above-list">Recent comments</h3>
+			<h3 class="above-list">{_ Recent comments _}</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">
-					<span class="zp-15">Added on</span>
-					<span class="zp-15">Page</span>
-					<span class="zp-25">Message</span>
-					<span class="zp-15">Name</span>
-					<span class="zp-15">Email</span>
-					<span class="zp-15">Options</span>
+					<span class="zp-15">{_ Added on _}</span>
+					<span class="zp-15">{_ Page _}</span>
+					<span class="zp-25">{_ Message _}</span>
+					<span class="zp-15">{_ Name _}</span>
+					<span class="zp-15">{_ Email _}</span>
+					<span class="zp-15">{_ Options _}</span>
 				</li>
 			{% with m.search.paged[{recent_comments page=q.page}] as result %}
 				{% for comment in result %}
@@ -35,14 +35,14 @@ Recent Comments
 								<span class="zp-15" title="{{ comment.email|truncate }}">{{ comment.email|truncate:20|escape }}</span>
 							{% endif %}
 							<span class="zp-15">
-	                            {% button text="view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
-								{% button text="delete" postback={comment_delete id=id on_success={slide_fade_out id=#comment.id}} %}
+	                            {% button text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
+								{% button text=_"delete" postback={comment_delete id=id on_success={slide_fade_out id=#comment.id}} %}
 							</span>
 						</a>
 					</li>
 					{% endwith %}
 				{% empty %}
-					<li>There are no comments.</li>
+					<li>{_ There are no comments. _}</li>
 				{% endfor %}
 				</ul>
 			

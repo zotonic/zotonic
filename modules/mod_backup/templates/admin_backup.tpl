@@ -1,30 +1,30 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Admin Backups {% endblock %}
+{% block title %} {_ Admin Backups _} {% endblock %}
 
 {% block content %}
 {% with m.acl.is_admin as editable %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>Backups</h2>
+			<h2>{_ Backups _}</h2>
 
-			<p>At any moment you can make a backup of your system. The backup comprises two parts, the database and the uploaded files.<br/> 
-				You can have 10 backups, older ones will be deleted automatically.</p>
+			<p>{_ At any moment you can make a backup of your system. _} {_ The backup comprises two parts, the database and the uploaded files. _}<br/> 
+				{_ You can have 10 backups, older ones will be deleted automatically. _}</p>
 			
 			{% if m.acl.is_admin %}
 			<p>
-				You can start a backup immediately, whilst the backup is running you can continue working.
-				 {% button text="Start backup now" action={backup_start} %}
+				{_ You can start a backup immediately, whilst the backup is running you can continue working. _}
+				 {% button text=_"Start backup now" action={backup_start} %}
 			</p>
 			{% endif %}
 			
 			<div class="zp-50 last">
-				<h3 class="above-list clearfix">Backups</h3>
+				<h3 class="above-list clearfix">{_ Backups _}</h3>
 				<ul class="short-list">
 					<li class="headers clearfix">
-						<span class="zp-40">Date</span>
-						<span class="zp-60 last">Actions</span>
+						<span class="zp-40">{_ Date _}</span>
+						<span class="zp-60 last">{_ Actions _}</span>
 					</li>
 
 				{% for id,date,in_progress in backups %}
@@ -35,17 +35,17 @@
 							</span>
 							<span class="zp-60 last">
 								{% if in_progress %}
-									<span class="notice">this backup is in progress</span>
+									<span class="notice">{_ this backup is in progress _}</span>
 								{% else %}
-									{% button text="download database" action={redirect dispatch="backup_download" star=[id, ".sql"]} %}
-									{% button text="download files" action={redirect dispatch="backup_download" star=[id, ".tar.gz"]} %}
+									{% button text=_"download database" action={redirect dispatch="backup_download" star=[id, ".sql"]} %}
+									{% button text=_"download files" action={redirect dispatch="backup_download" star=[id, ".tar.gz"]} %}
 								{% endif %}
 							</span>
 						</a>
 					</li>
 				{% empty %}
 					<li>
-						No backups present.
+						{_ No backups present. _}
 					</li>
 				{% endfor %}
 				</ul>

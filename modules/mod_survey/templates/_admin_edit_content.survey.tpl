@@ -32,24 +32,24 @@
 		}
 	</style>
 	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-		<span class="title">Survey</span>
-		<span class="arrow">make smaller</span>
+		<span class="title">{_ Survey _}</span>
+		<span class="arrow">{_ make smaller _}</span>
 	</h3>
 	<div class="item">
 		<fieldset class="admin-form survey-editor">
 			<div class="notification notice">
-				Below you can define your survey. Drag items from the left to the right. <a href="javascript:void(0)" class="do_dialog {title: 'Help about predicates.', text: 'You can create your survey by dragging the Question templates to the survey on the right.', width: '450px'}">Need more help?</a>
+				{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog {title: 'Help about predicates.', text: '{_ You can create your survey by dragging the Question templates to the survey on the right. _}', width: '450px'}">Need more help?</a>
 			</div>
 			
 			<div class="zp-30">
-				<h4>Question Templates</h4>
+				<h4>{_ Question Templates _}</h4>
 				<ul id="survey-qs">
 					{% include "_admin_survey_questions.tpl" %}
 				</ul>
 			</div>
 			
 			<div class="zp-70 last">
-				<h4>Your survey</h4>
+				<h4>{_ Your survey _}</h4>
 				{% sorter id="survey" tag={survey id=id} group="survey" delegate="mod_survey" %}
 				<ul id="survey" style="min-height:400px">
 					{% include "_admin_survey_questions_edit.tpl" id=id %}

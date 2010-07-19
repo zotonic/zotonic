@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2010-07-05 11:54+0100\n"
+"Last-Translator: Lambert <lambert_elise@hotmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:26
+msgid "Actions"
+msgstr "Actions"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:3
+msgid "Admin Backups"
+msgstr "Sauvegardes"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:12
+msgid "At any moment you can make a backup of your system."
+msgstr "Vous pouvez faire des sauvegardes de votre système à tous moments."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:10
+#: ./modules/mod_backup/templates/admin_backup.tpl:22
+#: ./modules/mod_backup/templates/_admin_menu_module.tpl:2
+msgid "Backups"
+msgstr "Sauvegardes"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:25
+msgid "Date"
+msgstr "Date"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:47
+msgid "No backups present."
+msgstr "Aucune sauvegarde"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:16
+msgid "You can start a backup immediately, whilst the backup is running you can continue working."
+msgstr "Vous pouvez commencer une sauvegarde immediatement, tout en continuant de travailler"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:37
+msgid "this backup is in progress"
+msgstr "Sauvegarde en cours"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:17 
+msgid ""
+"Start backup now"
+msgstr ""
+"Commencer la sauvegarde"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:16 
+msgid ""
+"You can start a backup immediately, whilst the backup is running you can "
+"continue working."
+msgstr ""
+"Commencez la sauvegarde dès maintenant tout en continuant de travailler."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:39 
+msgid ""
+"download database"
+msgstr ""
+"Télécharger la base de données"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:40 
+msgid ""
+"download files"
+msgstr ""
+"Télécharger les fichiers"
