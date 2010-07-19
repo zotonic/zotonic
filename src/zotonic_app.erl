@@ -36,6 +36,7 @@ start(_Type, _StartArgs) ->
     write_pidfile(),
 	set_path(),
     ensure_started(crypto),
+    ensure_started(public_key),
     ensure_started(ssl),
 	ensure_started(inets),
 	inets:start(httpc,[{profile,zotonic}]),
