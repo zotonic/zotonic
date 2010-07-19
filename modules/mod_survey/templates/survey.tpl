@@ -28,10 +28,10 @@
 		{{ q.html }}
 	</div>
 	{% empty %}
-		<p>Sorry, this survey doesn't have any questions.</p>
+		<p>{_ Sorry, this survey doesn't have any questions. _}</p>
 	{% endfor %}
 
-	<button class="survey-submit">Ready</button>
+	<button class="survey-submit">{_ Ready _}</button>
 </form>
 
 <div id="{{ #survey }}-success" style="display: none">
