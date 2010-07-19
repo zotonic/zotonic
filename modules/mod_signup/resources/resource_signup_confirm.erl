@@ -46,17 +46,20 @@ provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
     Key = z_context:get_q(key, Context2, []),
-    Vars = case Key of
-                [] -> 
-                    [];
-                _ ->
-                    case confirm(Key, Context2) of
-                        {ok, UserId} -> [ {user_id, UserId} ];
-                        {error, _Reason} -> [ {error, true} ]
-                    end
-          end,
-    Rendered = z_template:render("signup_confirm.tpl", Vars, Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
+    {Vars, ContextConfirm} = case Key of
+                                [] -> 
+                                    {[], Context2};
+                                _ ->
+                                    case confirm(Key, Context2) of
+                                        {ok, UserId} -> 
+                                            {ok, ContextUser} = z_auth:logon(UserId, Context2),
+                                            {[{user_id, UserId}], ContextUser};
+                                        {error, _Reason} ->
+                                            {[{error, true}], Context2}
+                                    end
+                              end,
+    Rendered = z_template:render("signup_confirm.tpl", Vars, ContextConfirm),
+    {Output, OutputContext} = z_context:output(Rendered, ContextConfirm),
     ?WM_REPLY(Output, OutputContext).
 
 
