@@ -49,6 +49,7 @@
 	nested_proplist/2,
 	get_nth/2,
 	set_nth/3,
+	is_empty/1,
 	is_process_alive/1,
 	is_true/1,
 	js_escape/1,
@@ -484,6 +485,12 @@ coalesce([undefined|T]) -> coalesce(T);
 coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
+
+%% @doc Check if a value is 'empty'
+is_empty(undefined) -> true;
+is_empty([]) -> true;
+is_empty(<<>>) -> true;
+is_empty(_) -> false.
 
 %% @doc Check if the parameter could represent the logical value of "true"
 is_true([$t|_T]) -> true;
