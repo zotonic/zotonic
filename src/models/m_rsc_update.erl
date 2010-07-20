@@ -440,16 +440,22 @@ props_autogenerate(Id, Props, Context) ->
 %% @doc Fill in some defaults for empty props on insert.
 %% @spec props_defaults(Props1, Context) -> Props2
 props_defaults(Props, _Context) ->
-    case proplists:get_value(slug, Props) of
-        undefined ->
-            case proplists:get_value(title, Props) of
+    % Generate slug from the title (when there is a title)
+    Props1 = case proplists:get_value(slug, Props) of
                 undefined ->
-                    Props;
-                Title ->
-                    lists:keystore(slug, 1, Props, {slug, z_string:to_slug(Title)})
-            end;
-        _ ->
-            Props
+                    case proplists:get_value(title, Props) of
+                        undefined ->
+                            Props;
+                        Title ->
+                            lists:keystore(slug, 1, Props, {slug, z_string:to_slug(Title)})
+                    end;
+                _ ->
+                    Props
+             end,
+    % Assume content is authoritative, unless stated otherwise
+    case proplists:get_value(is_authoritative, Props1) of
+        undefined -> [{is_authoritative, true}|Props1];
+        _ -> Props
     end.
 
 

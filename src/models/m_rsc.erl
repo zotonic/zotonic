@@ -348,8 +348,17 @@ p_no_acl(Id, page_url, Context) ->
 p_no_acl(Id, default_page_url, Context) -> page_url(Id, Context);
 p_no_acl(Id, uri, Context) ->
     case p_no_acl(Id, is_authoritative, Context) of
-        true ->  iolist_to_binary(z_context:abs_url(z_dispatcher:url_for(id, [{id, Id}], Context), Context));
-        false -> p_cached(Id, uri, Context) 
+        true ->
+            authoritative_uri(Id, Context);
+        false -> 
+            case p_cached(Id, uri, Context) of
+                Empty when Empty == <<>>; Empty == undefined ->
+                    authoritative_uri(Id, Context);
+                Uri ->
+                    Uri
+            end;
+        undefined ->
+            undefined
     end;
 p_no_acl(Id, category, Context) -> 
     m_category:get(p_no_acl(Id, category_id, Context), Context);
@@ -383,6 +392,10 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
             _ ->
                 Value
         end.
+
+
+        authoritative_uri(Id, Context) ->
+            iolist_to_binary(z_context:abs_url(z_dispatcher:url_for(id, [{id, Id}], Context), Context)).
 
 
 %% Return a list of all edge predicates of this resource
