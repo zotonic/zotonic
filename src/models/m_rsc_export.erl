@@ -30,7 +30,7 @@ full(Id, Context) when is_integer(Id) ->
         false -> undefined;
         true ->
 
-            Rsc = m_rsc:get_raw(m_rsc:rid(Id, Context), Context),
+            Rsc = m_rsc:get_raw(Id, Context),
             %% This should probably be encapsulated in m_edges.
             Edges0 = z_db:assoc("
                                 select e.predicate_id, p.name as predicate_name, e.object_id, e.seq
@@ -41,7 +41,6 @@ full(Id, Context) when is_integer(Id) ->
 
             {ok, Category} = z_db:select(category, Id, Context),
             {ok, Medium} = z_db:select(medium, Id, Context),
-            {ok, Group} = z_db:select(group, Id, Context),
 
             Export = [
                       %% Essential fields
@@ -51,7 +50,6 @@ full(Id, Context) when is_integer(Id) ->
                       {rsc, Rsc},
                       {medium, Medium},
                       {category, Category},
-                      {group, Group},
                       {edges, Edges}
                      ],
 

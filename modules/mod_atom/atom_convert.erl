@@ -34,7 +34,6 @@
 %% @spec resource(rsc_export()) -> string().
 resource_to_atom(RscExport) ->
     Rsc = proplists:get_value(rsc, RscExport),
-
     Content0 = [
                 {id, [binary_to_list(proplists:get_value(uri, RscExport))]},
                 {title, [{type, "text"}], [binary_to_list(proplists:get_value(title, Rsc))]},

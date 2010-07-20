@@ -1,13 +1,13 @@
 {% with m.rsc[id] as r %}
 	{% with r.medium as medium %}
 		<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" xml:lang="en">
-			<id>{{ r.resource_uri }}</id>
+			<id>{{ r.uri|escapexml }}</id>
 			<updated>{{ r.modified|date:"c" }}</updated>
 			<published>{% if upcoming %}{{ r.date_start|date:"c" }}{% else %}{{ r.publication_start|date:"c" }}{% endif %}</published>
 			<author>
 				{% with r.o.author[1] as author_id %}
 				<name>{{ m.rsc[author_id|default:r.creator_id].title|escapexml }}</name>
-				<uri>{{ m.rsc[author_id|default:r.creator_id].resource_uri|escapexml }}</uri>
+				<uri>{{ m.rsc[author_id|default:r.creator_id].uri|escapexml }}</uri>
 				{% endwith %}
 			</author>
 			
@@ -22,8 +22,13 @@
 			{% endfor %}
 
 			<title>{{ r.title }}</title>
-			<summary>{{ r.summary }}</summary>
-			<content type="text/html">{{ r.body|escapexml }}</content>
+			{% if r.body %}
+    			<summary>{{ r.summary }}</summary>
+    			<content type="text/html">{{ r.body|escapexml }}</content>
+    		{% else %}
+			    <summary></summary>
+			    <content type="text/html">{{ r.summary|linebreaksbr|escapexml }}</content>
+    		{% endif %}
 			{% if medium.filename %}
 				<content type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" /> 
 			{% endif %}
