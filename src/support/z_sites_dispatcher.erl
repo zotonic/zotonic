@@ -221,7 +221,7 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, ReqData) ->
                                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
                             end;
                         undefined ->
-							%% Always fallback to the zotonic host
+                            %% Always fallback to the zotonic host
                             zotonic
                     end
             end;

@@ -111,13 +111,14 @@ start_stream(SitesStatus, Context) ->
 updater(SitesStatus, Context) ->
     Context1 = z_auth:logon_from_session(Context),
     timer:sleep(1000),
+    z_sites_manager:upgrade(),
     NewStatus = z_sites_manager:get_sites_status(),
     case NewStatus /= SitesStatus of
         true ->
             Context2 = render_update(NewStatus, Context1),
-            updater(NewStatus, Context2);
+            ?MODULE:updater(NewStatus, Context2);
         false ->
-            updater(SitesStatus, Context1)
+            ?MODULE:updater(SitesStatus, Context1)
     end.
 
 
