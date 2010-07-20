@@ -566,13 +566,11 @@ span.stopped {
 	display: none;
 }
 
-.retrying button.stop,
 .retrying button.restart,
 .retrying button.flush,
 .stopped button.stop,
 .stopped button.restart,
 .stopped button.flush,
-.failed button.stop, 
 .failed button.restart, 
 .failed button.flush,
 .stopped button.stop, 
