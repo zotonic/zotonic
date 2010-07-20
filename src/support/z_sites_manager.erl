@@ -72,8 +72,8 @@ update_dispatchinfo() ->
 
     fetch_dispatchinfo(Site) ->
         Name = z_utils:name_for_host(z_dispatcher, Site),
-        {Host, Hostname, Hostalias, DispatchList} = z_dispatcher:dispatchinfo(Name),
-        #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=true, dispatch_list=DispatchList}.
+        {Host, Hostname, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
+        #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=Redirect, dispatch_list=DispatchList}.
 
 
 %% @doc Return a list of active site names.
@@ -276,7 +276,7 @@ add_sites_to_sup(Sup, [SiteProps|Rest]) ->
                 false -> leave_in_stop_state
             end;
         _ ->
-            ?DEBUG({error, {missing_hostname, SiteProps}})
+            ?DEBUG({error, {missing_host, SiteProps}})
     end,
     add_sites_to_sup(Sup, Rest).
 
@@ -296,12 +296,11 @@ handle_upgrade(State) ->
               end, ok, Kill),
 
     sets:fold(fun (Name, ok) ->
-                {ok, Props} = find_siteprops(Name, SiteProps),
-                CS = #child_spec{name=Name, mfa={Name, start_link, [Props]}},
+                CS = #child_spec{name=Name, mfa={z_site_sup, start_link, [Name]}},
                 z_supervisor:add_child(State#state.sup, CS),
                 ok
               end, ok, Add),
-    ok.
+    State.
 
 
 supervised_sites(Sup) ->
@@ -310,19 +309,10 @@ supervised_sites(Sup) ->
     names([], Acc) ->
         Acc;
     names([{_RunState,CS}|Rest], Acc) ->
-        Names = [ C#child_spec.name || C <- CS ],
+        Names = [ Name || {Name, _Child, _Pid, _Time} <- CS ],
         names(Rest, Acc ++ Names).
 
 hosted_sites(SiteProps) ->
-    L = [ proplists:get_value(name, Props) || Props <- SiteProps ],
+    L = [ proplists:get_value(host, Props) || Props <- SiteProps ],
     [ Name || Name <- L, Name /= undefined ].
-
-
-find_siteprops(_Name, []) ->
-    error;
-find_siteprops(Name, [Props|Rest]) ->
-    case proplists:lookup(name, Props) of
-        Name -> {ok, Props};
-        _ -> find_siteprops(Name, Rest)
-    end.
 

@@ -41,7 +41,8 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {dispatchlist=undefined, lookup=undefined, context, host, hostname, hostname_port, hostalias}).
+-record(state, {dispatchlist=undefined, lookup=undefined, context, 
+                host, hostname, hostname_port, hostalias, redirect=true}).
 
 %%====================================================================
 %% API
@@ -130,8 +131,9 @@ init(SiteProps) ->
                 context=Context, 
                 host=Host, 
                 hostname=drop_port(Hostname),
-				hostname_port=Hostname,
-                hostalias=[ drop_port(Alias) || Alias <- HostAlias ]
+                hostname_port=Hostname,
+                hostalias=[ drop_port(Alias) || Alias <- HostAlias ],
+                redirect=z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
     },
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
     {ok, State}.
@@ -165,7 +167,7 @@ handle_call('hostname_port', _From, State) ->
 
 %% @doc Return the dispatchinfo for the site  {host, hostname, hostaliases, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
-    {reply, {State#state.host, State#state.hostname, State#state.hostalias, State#state.dispatchlist}, State};
+    {reply, {State#state.host, State#state.hostname, State#state.hostalias, State#state.redirect, State#state.dispatchlist}, State};
 
 %% @doc Reload the dispatch list, signal the sites supervisor that the dispatch list has been changed.
 %% The site supervisor will collect all dispatch lists and send them at once to webmachine.
