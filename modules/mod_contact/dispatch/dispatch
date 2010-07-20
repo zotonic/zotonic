@@ -1,0 +1,3 @@
+[
+    {contact, ["contact"], resource_page, [{template, "contact.tpl"}, {id, page_contact}]}
+].
