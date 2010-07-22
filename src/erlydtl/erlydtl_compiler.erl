@@ -280,7 +280,7 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
 % child templates should only consist of blocks at the top level
 body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, TreeWalker) ->
     Extends = unescape_string_literal(String),
-    case full_path(Extends, Context#dtl_context.finder) of
+    case full_path(Extends, Context) of
         {ok, File} ->
             case lists:member(File, Context#dtl_context.parse_trail) of
                 true ->
@@ -586,7 +586,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
             end,
 
             % Compile all included files, put them in a block expr with a single assignment of the argument vars at the start.
-            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(File, All, Context#dtl_context.finder)) of
+            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(File, All, Context)) of
                 {[], _, TreeWalkerN} ->
                     case All of
                         false -> ?LOG("include_ast: could not find template ~p", [File]);
@@ -1025,14 +1025,22 @@ unescape_string_literal([C | Rest], Acc, slash) ->
     unescape_string_literal(Rest, [C | Acc], noslash).
 
 
-full_path(File, FinderFun) ->
-    case full_path(File, false, FinderFun) of
+full_path(File, Context) ->
+    case full_path(File, false, Context) of
         [Filename] -> {ok, Filename};
         [] -> {error, enoent}
     end.
 
-full_path(File, All, FinderFun) ->
-    FinderFun(File, All).
+full_path(File, All, Context) ->
+    case Context#dtl_context.finder of
+        undefined ->
+            case Context#dtl_context.z_context of
+                undefined -> [];
+                ZContext -> z_template:find_template(File, All, ZContext)
+            end;
+        FinderFun ->
+            FinderFun(File, All)
+    end.
 
 
 %%-------------------------------------------------------------------
