@@ -2,7 +2,10 @@
 
 {% block below_body %}
 
-{% wire id="contact-form" type="submit" postback={contact} delegate="mod_contact" %}
+{% wire id="contact-form" 
+        type="submit" 
+        postback={contact email_template="email_contact.tpl"} 
+        delegate="mod_contact" %}
 <form id="contact-form" method="post" action="postback">
  	<div class="form-item">
 		<label for="name">{_ Name _}</label>

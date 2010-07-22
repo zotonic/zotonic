@@ -39,17 +39,19 @@ init(Context) ->
 
 
 %% @doc Handle the contact form submit.
-event({submit, {contact, []}, TriggerId, _TargetId}, Context) ->
-    Email = m_config:get_value(mod_config, email, Context),
+event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
+    Template = proplists:get_value(email_template, Args, "email_contact.tpl"),
+    Email = proplists:get_value(to, Args, m_config:get_value(mod_config, email, Context)),
     To = case z_utils:is_empty(Email) of
             true -> z_email:get_admin_email(Context);
             false -> Email
          end,
-    Vars = [{mail, z_context:get_q("mail", Context)},
+    From = z_context:get_q_validated("mail", Context),
+    Vars = [{email_from, From},
             {name, z_context:get_q("name", Context)},
             {message, z_context:get_q("message", Context)},
             {fields, z_context:get_q_all_noz(Context)}],
-    z_email:send_render(To, "email_contact.tpl", Vars, Context),
+    z_email:send_render(To, Template, Vars, Context),
     z_render:wire([ {slide_up, [{target, TriggerId}]},
                     {slide_down, [{target,"contact-form-sent"}]}], 
                   Context).
