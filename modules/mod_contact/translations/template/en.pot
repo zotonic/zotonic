@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_contact/templates/email_contact.tpl:13 ./modules/mod_contact/templates/contact.tpl:13 
+#: ./modules/mod_contact/templates/email_contact.tpl:13 ./modules/mod_contact/templates/contact.tpl:16 
 msgid ""
 "E-mail"
 msgstr ""
@@ -30,31 +30,31 @@ msgid ""
 msgstr ""
 "Hello, the contact form of"
 
-#: ./modules/mod_contact/templates/email_contact.tpl:16 ./modules/mod_contact/templates/contact.tpl:19 
+#: ./modules/mod_contact/templates/email_contact.tpl:16 ./modules/mod_contact/templates/contact.tpl:22 
 msgid ""
 "Message"
 msgstr ""
 "Message"
 
-#: ./modules/mod_contact/templates/email_contact.tpl:10 ./modules/mod_contact/templates/contact.tpl:8 
+#: ./modules/mod_contact/templates/email_contact.tpl:10 ./modules/mod_contact/templates/contact.tpl:11 
 msgid ""
 "Name"
 msgstr ""
 "Name"
 
-#: ./modules/mod_contact/templates/contact.tpl:24 
+#: ./modules/mod_contact/templates/contact.tpl:27 
 msgid ""
 "Send"
 msgstr ""
 "Send"
 
-#: ./modules/mod_contact/templates/contact.tpl:29 
+#: ./modules/mod_contact/templates/contact.tpl:32 
 msgid ""
 "Thank you!"
 msgstr ""
 "Thank you!"
 
-#: ./modules/mod_contact/templates/contact.tpl:30 
+#: ./modules/mod_contact/templates/contact.tpl:33 
 msgid ""
 "Your message has been submitted! We’ll get in touch soon."
 msgstr ""

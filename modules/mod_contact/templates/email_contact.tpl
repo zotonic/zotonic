@@ -10,7 +10,7 @@
     <td><strong>{_ Name _}</strong></td><td>{{ name|escape }}</td>
 </tr>
 <tr>
-    <td><strong>{_ E-mail _}</strong></td><td>{{ mail|escape }}</td>
+    <td><strong>{_ E-mail _}</strong></td><td>{{ email_from|escape }}</td>
 </tr>
 <tr>
     <td><strong>{_ Message _}</strong></td>
