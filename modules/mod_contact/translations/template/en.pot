@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_contact/templates/email_contact.tpl:9 ./modules/mod_contact/templates/contact.tpl:13 
+msgid ""
+"E-mail"
+msgstr ""
+"E-mail"
+
+#: ./modules/mod_contact/templates/email_contact.tpl:6 
+msgid ""
+"Hello, the contact form of"
+msgstr ""
+"Hello, the contact form of"
+
+#: ./modules/mod_contact/templates/contact.tpl:19 
+msgid ""
+"Message"
+msgstr ""
+"Message"
+
+#: ./modules/mod_contact/templates/email_contact.tpl:8 ./modules/mod_contact/templates/contact.tpl:8 
+msgid ""
+"Name"
+msgstr ""
+"Name"
+
+#: ./modules/mod_contact/templates/contact.tpl:24 
+msgid ""
+"Send"
+msgstr ""
+"Send"
+
+#: ./modules/mod_contact/templates/contact.tpl:29 
+msgid ""
+"Thank you!"
+msgstr ""
+"Thank you!"
+
+#: ./modules/mod_contact/templates/email_contact.tpl:11 
+msgid ""
+"The contents of the message was:"
+msgstr ""
+"The contents of the message was:"
+
+#: ./modules/mod_contact/templates/contact.tpl:30 
+msgid ""
+"Your message has been submitted! We’ll get in touch soon."
+msgstr ""
+"Your message has been submitted! We’ll get in touch soon."
+
+#: ./modules/mod_contact/templates/email_contact.tpl:3 
+msgid ""
+"contact form on"
+msgstr ""
+"contact form on"
+
+#: ./modules/mod_contact/templates/email_contact.tpl:6 
+msgid ""
+"has been submitted."
+msgstr ""
+"has been submitted."
