@@ -204,7 +204,7 @@ parse_query([{is_featured, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose end date lies in the future
 parse_query([{upcoming, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("rsc.pivot_date_end >= current_date", Result);
+                  true -> add_where("rsc.pivot_date_start >= current_date", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
