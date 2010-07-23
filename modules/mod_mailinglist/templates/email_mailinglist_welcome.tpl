@@ -1,6 +1,6 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}Welcome to {{ m.rsc[list_id].title }}{% endblock %}
+{% block title %}{_ Welcome to _}{{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
 	<p>Hello,</p>
