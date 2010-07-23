@@ -221,7 +221,7 @@ optional_render(undefined, undefined, _Vars, _Context) ->
 optional_render(Text, undefined, _Vars, _Context) ->
 	Text;
 optional_render(undefined, Template, Vars, Context) ->
-    {Output, _Context} = z_template:render_to_iolist(z_convert:to_list(Template), Vars, Context),
+    {Output, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     binary_to_list(iolist_to_binary(Output)).
 
 

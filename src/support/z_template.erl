@@ -73,12 +73,13 @@ render({cat, File}, Variables, Context) ->
             throw({error, {template_not_found, File, Reason}})
     end;
 render(File, Variables, Context) ->
-    case find_template(File, Context) of
+    File1 = z_convert:to_list(File),
+    case find_template(File1, Context) of
         {ok, FoundFile} ->
-            render1(File, FoundFile, Variables, Context);
+            render1(File1, FoundFile, Variables, Context);
         {error, Reason} ->
-            ?LOG("Could not find template: ~s (~p)", [File, Reason]),
-            throw({error, {template_not_found, File, Reason}})
+            ?LOG("Could not find template: ~s (~p)", [File1, Reason]),
+            throw({error, {template_not_found, File1, Reason}})
     end.
 
     %% Render the found template

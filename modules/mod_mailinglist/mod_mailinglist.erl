@@ -265,11 +265,11 @@ send_mailing_process(ListId, PageId, Context) ->
     ],
     
 	[
-		z_email:send_render(Email, "mailing_page.tpl", [{email,Email}|Options], Context)
+		z_email:send_render(Email, {cat, "mailing_page.tpl"}, [{email,Email}|Options], Context)
 		|| Email <- Direct
 	],
 	[
-		z_email:sendq_render(Email, "mailing_page.tpl", [{email,Email}|Options], Context)
+		z_email:sendq_render(Email, {cat, "mailing_page.tpl"}, [{email,Email}|Options], Context)
 		|| Email <- Queued
 	],
 	ok.
