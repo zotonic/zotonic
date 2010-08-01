@@ -497,6 +497,8 @@
 							</div>
 						</div>
 
+                        {% if m.acl.insert[r.category.name|as_atom] %}
+
 						{# meta categories (predicate, category and group) cannot be changed #}
 						{% if not r.is_a.meta %}
 						<div class="item-wrapper" id="sort-category">
@@ -513,9 +515,11 @@
 									{% with r.category_id as r_cat %}
 										<select id="category_id" name="category_id">
 										{% for cat_id, level, indent, name in m.category.all_flat %}
+                                            {% if m.acl.insert[name|as_atom] %}
 											<option value="{{cat_id}}" {% ifequal r_cat cat_id %}selected="selected"{% endifequal %}>
 												{{ indent }}{{ m.rsc[cat_id].title|default:name }}
 											</option>
+                                            {% endif %}
 										{% endfor %}
 										</select>
 									{% endwith %}
@@ -542,7 +546,7 @@
 							</div>
 						</div>
 						{% endif %}
-
+                        {% endif %}{# acl check #}
 					</div>
 				</div>
 			</form>

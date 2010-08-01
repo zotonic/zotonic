@@ -95,7 +95,7 @@
 
 			<div class="zp-50">
 
-                {% if m.rsc['location'].id %}
+                {% if m.rsc['location'].id and m.acl.view['location'] %}
 				<div class="padding last">
 					<div id="dashboard-pages">
 						<h3 class="above-list">
@@ -132,7 +132,7 @@
 				</div>
                 {% endif %}
 
-                {% if m.rsc['event'].id %}
+                {% if m.rsc['event'].id and m.acl.view['event'] %}
 				<div class="padding last">
 					<div id="dashboard-pages">
 						<h3 class="above-list">
