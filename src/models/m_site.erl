@@ -69,7 +69,10 @@ get(Key, Context) when is_atom(Key) ->
         {ok, undefined} ->
             undefined;
         {ok, none} when Key == hostname ->
-            sanitize_host(z_context:get_req_header("host", Context));
+            case z_context:is_request(Context) of
+                true -> sanitize_host(z_context:get_req_header("host", Context));
+                false -> undefined
+            end;
         {ok, Cs} ->
             Cs;
         undefined ->
