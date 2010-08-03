@@ -27,6 +27,8 @@
     hostname/1,
     hostname_port/1,
 
+    is_request/1,
+
     prune_for_async/1,
     prune_for_template/1,
     prune_for_database/1,
@@ -193,6 +195,11 @@ hostname_port(Context) ->
         Hostname ->
             Hostname
     end.
+
+
+%% @doc Check if the current context is a request context
+is_request(#context{wm_reqdata=undefined}) -> false;
+is_request(_Context) -> true.
 
 
 %% @doc Make the context safe to use in a async message. This removes buffers and the db transaction.
