@@ -16,7 +16,7 @@ edoc:
 
 clean: 
 	@echo "removing:"
-	@rm -fv ebin/*.beam ebin/*.app
+	rm -f ebin/*.beam ebin/*.app
 
 ebin/$(APP).app: src/$(APP).app
 	cp src/$(APP).app $@
