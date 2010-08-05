@@ -312,7 +312,7 @@ function z_websocket_start(hostname)
 		}
 		catch (e)
 		{
-			$.misc.error("Error evaluating ajax return value: " + data);
+			$.misc.error("Error evaluating ajax return value: " + evt.data);
 			$.misc.warn(e);
 		}
         setTimeout("z_postback_check()", 0);

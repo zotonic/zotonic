@@ -1,9 +1,9 @@
 /* Styling for menus for Zotonic base sites
 ----------------------------------------------------------
 
-@package:	Atatonic CSS framework 2009	
-@Author: 	Tim Benniks <tim@timbenniks.nl>
-@Created: 	10-12-2009
+@package:	Atatonic CSS framework 2009 
+@Author:	Tim Benniks <tim@timbenniks.nl>
+@Created:	10-12-2009
 @Changed:	19-03-2010
 
 Copyright 2010 Tim Benniks <tim@timbenniks.nl>
@@ -43,4 +43,28 @@ limitations under the License.
 	#navigation li a.current {
 		text-decoration: underline;
 	}
+
+	/* Handle submenus */
+	
+	#navigation ul {
+		border: #ccc solid 1px;
+		padding: 0;
+		padding-left: 4px;
+		margin: -4px 0 0 0;
+		list-style: none;
+	}
+
+	#navigation li ul {
+		position: absolute;
+		left: -999em;
+	}
+
+	#navigation li:hover ul {
+		left: auto;
+	}
+
+		#navigation li ul li {
+			display: block;
+		}
+
 

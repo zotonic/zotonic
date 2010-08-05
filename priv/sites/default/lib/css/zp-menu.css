@@ -31,6 +31,7 @@ limitations under the License.
 
 	#navigation li {
 		display: inline;
+		position: relative;
 	}
 
 	#navigation li a {
@@ -47,6 +48,35 @@ limitations under the License.
 		text-decoration: underline;
 	}
 
+	/* Handle submenus */
+	
+	#navigation li ul {
+	    background-color: white;
+		border: #ccc solid 1px;
+		padding: 0;
+		padding-left: 4px;
+		margin: -4px 0 0 0;
+		list-style: none;
+		width: 12em;
+	}
+	
+	#navigation li ul li {
+	    display: block;
+	}
+
+	#navigation li ul {
+		position: absolute;
+		left: -999em;
+	}
+
+	#navigation li:hover ul {
+		left: auto;
+	}
+
+	#navigation ul li a {
+		color: black;
+    }
+    
 
 /* Footer navigation styles
 ---------------------------------------------------------- */
