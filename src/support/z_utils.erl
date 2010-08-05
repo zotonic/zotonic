@@ -75,6 +75,7 @@
 	split/2,
 	split_in/2,
 	url_encode/1,
+	url_decode/1,
 	vsplit_in/2,
     now/0,
     now_msec/0,
@@ -316,6 +317,18 @@ os_escape(win32, [C|Rest], Acc) ->
     os_escape(win32, Rest, [C|Acc]).
 
 
+url_decode(S) ->
+    lists:reverse(url_decode(S, [])).
+
+url_decode([], Acc) -> 
+    Acc;
+url_decode([$%, A, B|Rest], Acc) ->
+    Ch = (A-$0)*16 + (B-$0),
+    url_decode(Rest, [Ch|Acc]);
+url_decode([$+|Rest], Acc) ->
+    url_decode(Rest, [32|Acc]);
+url_decode([Ch|Rest], Acc) ->
+    url_decode(Rest, [Ch|Acc]).
 
 %% VALID URL CHARACTERS
 %% RFC 3986
