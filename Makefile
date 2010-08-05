@@ -33,9 +33,9 @@ clean:
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
 	(cd deps/erlang-oauth; $(MAKE) clean)
-	@rm -fv ebin/*.beam ebin/*.app
-	@rm -fv erl_crash.dump $(PARSER).erl
-	@rm -fv priv/log/*
+	rm -f ebin/*.beam ebin/*.app
+	rm -f erl_crash.dump $(PARSER).erl
+	rm -f priv/log/*
 
 ebin/$(APP).app:
 	cp src/$(APP).app $@
