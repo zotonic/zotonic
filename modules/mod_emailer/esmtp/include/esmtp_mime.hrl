@@ -8,10 +8,11 @@
 -ifndef(esmtp_mime).
 -define(esmtp_mime, true).
 
--record(mime_msg, {headers = [], boundary, parts = []}).
+-record(mime_multipart, {headers = [], boundary, parts = [], multipart_type = alternative}).
 -record(mime_part, {type,
                     encoding = {"8bit", "text/plain","utf-8"},
                     name,
+                    headers = [],
                     data}).
 
 -endif.
