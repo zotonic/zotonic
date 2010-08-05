@@ -1,8 +1,6 @@
 %% Admin dispatch rules
 
 [
-	{admin_logon,   		["admin", "logon"],						resource_admin_logon,			[]},
-
 	{admin,   				["admin"],								resource_admin,					[]},
 	{admin_overview_rsc,  	["admin", "overview"],					resource_admin,					[{template, "admin_overview.tpl"}, {selected, "overview"}]},
     {admin_media,           ["admin", "media"],                     resource_admin,					[{template, "admin_media.tpl"}, {selected, "media"}]},
