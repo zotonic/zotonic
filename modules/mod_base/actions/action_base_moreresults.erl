@@ -30,7 +30,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
     SearchProps = proplists:delete(page, Result#m_search_result.search_props),
 	SearchResult = Result#m_search_result.result,
 	
-    Page = z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1))+1,
+    Page = case z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1)) of
+               undefined -> 1;
+               P -> P+1
+           end,
     PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
 	MorePageLen = proplists:get_value(pagelen, Args, PageLen),
 	
