@@ -130,9 +130,9 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                         Module ->
                             {ok};
                         _ ->
-                            %% Resource exists but is not installed by us!
-                            Msg = io_lib:format("manage_resource: resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
-                            ?DEBUG(lists:flatten(Msg)),
+                            %% Resource exists but is not installed by us.
+                            Msg = io_lib:format("Resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
+                            ?zInfo(Msg, Context),
                             {ok}
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -162,19 +162,18 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                                                               undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
                                                               _ -> Props2
                                                           end,
-                                                 ?DEBUG("New resource"),
-                                                 ?DEBUG(Props2),
+                                                 ?zInfo(io_lib:format("Creating new resource '~p'", [Name]), Context),
                                                  {m_rsc:insert(Props3, Context), [Name | ManagedNames ]};
                                              true ->
-                                                 ?DEBUG("resource was deleted."),
+                                                 ?zInfo(io_lib:format("Resource '~p' was deleted", [Name]), Context),
                                                  {{ok}, ManagedNames}
                                          end,
                     m_config:set_prop(Module, datamodel, managed_resources, NewNames, Context),
                     Result
             end;
         {error, _} ->
-            Msg = io_lib:format("manage_resource: resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
-            ?DEBUG(lists:flatten(Msg)),
+            Msg = io_lib:format("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
+            ?zWarning(Msg, Context),
             {ok}
     end.
 
