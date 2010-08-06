@@ -42,7 +42,7 @@
 % Maximum times we retry to send a message before we mark it as failed.
 -define(MAX_RETRY, 7).
 
--record(state, {sendmail, from, ehlo, host, ssl, port, username, password, context}).
+-record(state, {sendmail, from, ehlo, host, ssl, port, username, password, override, context}).
 
 %%====================================================================
 %% API
@@ -151,7 +151,8 @@ update_config(State) ->
         ssl      = z_convert:to_bool(m_config:get_value(?MODULE, smtp_ssl, false, State#state.context)),
         ehlo     = z_convert:to_list(m_config:get_value(?MODULE, smtp_ehlo, "localhost", State#state.context)),
         username = z_convert:to_list(m_config:get_value(?MODULE, smtp_username, State#state.context)),
-        password = z_convert:to_list(m_config:get_value(?MODULE, smtp_password, State#state.context))
+        password = z_convert:to_list(m_config:get_value(?MODULE, smtp_password, State#state.context)),
+        override = z_convert:to_list(m_config:get_value(?MODULE, email_override, State#state.context))
     }.
 
 
@@ -183,7 +184,10 @@ send_queued(Cols, State) ->
 
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
-	    To = Email#email.to,
+	    To = case State#state.override of 
+                 O when O =:= [] orelse O =:= undefined -> Email#email.to; 
+                 Override -> Override
+             end,
 		From = case Email#email.from of L when L =:= [] orelse L =:= undefined -> State#state.from; EmailFrom -> EmailFrom end,
 
 		% Optionally render the text and html body
