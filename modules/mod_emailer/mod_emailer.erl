@@ -101,6 +101,7 @@ handle_cast({#email{} = Email, Context}, State) ->
 	end,
     {noreply, State1};
 
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -201,16 +202,23 @@ spawn_send(Id, Email, Context, State) ->
 
         % Build the message and send it
         MimeMsg = esmtp_mime:msg(z_convert:to_list(To), z_convert:to_list(From), z_convert:to_list(Subject)),
-        MimeMsg0 = esmtp_mime:add_header(MimeMsg, {"X-Mailer", "Zotonic " ?ZOTONIC_VERSION " (http://zotonic.com)"}),
-        MimeMsg1 = case Text of
-            [] -> MimeMsg0;
-            _ -> esmtp_mime:add_text_part(MimeMsg0, z_convert:to_list(Text))
+        MimeMsg1 = esmtp_mime:add_header(MimeMsg, {"X-Mailer", "Zotonic " ?ZOTONIC_VERSION " (http://zotonic.com)"}),
+        MimeMsg2 = esmtp_mime:set_multipart_type(MimeMsg1, related),
+        MimeTxt = esmtp_mime:create_multipart(),
+                
+        MimeTxt1 = case Text of
+            [] -> MimeTxt;
+            _ -> esmtp_mime:add_part(MimeTxt, esmtp_mime:create_text_part(z_convert:to_list(Text)))
         end,
-        MimeMsg2 = case Html of
-            [] -> MimeMsg1;
-            _ -> esmtp_mime:add_html_part(MimeMsg1, z_convert:to_list(Html))
+        MimeBase = case Html of
+            [] -> esmtp_mime:add_part(MimeMsg2, MimeTxt1);
+            _ -> 
+                 {Parts, Html1} = mod_emailer_embed:embed_images(z_convert:to_list(Html), Context),
+                 MimeTxt2 = esmtp_mime:add_part(MimeTxt1, esmtp_mime:create_html_part(Html1)),
+                 MimeMsg3 = esmtp_mime:add_part(MimeMsg2, MimeTxt2),
+                 lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeMsg3, Parts)                          
         end,
-        sendemail(MimeMsg2, State),
+        sendemail(MimeBase, State),
         mark_sent(Id, Context)
     end,
     spawn(F).
@@ -243,7 +251,7 @@ mark_retry(Id, Retry, Context) ->
 
 
 %% Send the e-mail with sendmail
-sendemail(Msg = #mime_msg{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
+sendemail(Msg = #mime_multipart{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
 	Message = esmtp_mime:encode(Msg),
 	{_FromName, FromEmail} = z_email:split_name_email(esmtp_mime:from(Msg)),
 	SendmailFrom = Sendmail ++ " -f" ++ z_utils:os_escape(FromEmail) ++ " " ++ z_utils:os_escape(esmtp_mime:to(Msg)),
@@ -252,7 +260,7 @@ sendemail(Msg = #mime_msg{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
 	port_close(P);
 
 %% Send the e-mail with smtp
-sendemail(Msg = #mime_msg{}, State) ->
+sendemail(Msg = #mime_multipart{}, State) ->
     Login = case State#state.username of
         undefined -> no_login;
 		[] -> no_login;
