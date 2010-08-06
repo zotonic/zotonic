@@ -139,19 +139,19 @@ split_name_email(Email) ->
     Email1 = string:strip(rfc2047:decode(Email)),
     case split_ne(Email1, in_name, [], []) of
         {N, []} ->
-            {[], N};
+            {[], z_string:trim(N)};
         {E, N} ->
-            {E, N}
+            {z_string:trim(E), z_string:trim(N)}
     end.
 
 split_ne([], _, [], Acc) ->
     {[], lists:reverse(Acc)};
 split_ne([], _, Name, Acc) ->
     {Name, lists:reverse(Acc)};
-split_ne([$<|T], to_email, Name, []) ->
-    split_ne(T, in_email, Name, []);
-split_ne([$<|T], in_name, Name, []) ->
-    split_ne(T, in_email, Name, []);
+split_ne([$<|T], to_email, Name, Acc) ->
+    split_ne(T, in_email, Name++lists:reverse(Acc), []);
+split_ne([$<|T], in_name, Name, Acc) ->
+    split_ne(T, in_email, Name++lists:reverse(Acc), []);
 split_ne([$>|_], in_email, Name, Acc) ->
     {Name, lists:reverse(Acc)};
 split_ne([$"|T], in_name, [], Acc) ->
