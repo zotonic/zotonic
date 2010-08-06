@@ -186,7 +186,7 @@ spawn_send(Id, Email, Context, State) ->
     F = fun() ->
 	    To = case State#state.override of 
                  O when O =:= [] orelse O =:= undefined -> Email#email.to; 
-                 Override -> Override
+                 Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
              end,
 		From = case Email#email.from of L when L =:= [] orelse L =:= undefined -> State#state.from; EmailFrom -> EmailFrom end,
 
