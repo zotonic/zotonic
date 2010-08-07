@@ -139,11 +139,15 @@ cmd_args(FileProps, Filters) ->
                     {resize, ResizeWidth, ResizeHeight}, 
                     {crop, CropArgs},
                     {colorspace, "RGB"} | Filters1],
-    Filters3 = case is_blurred(Filters2) of
-                    true ->  Filters2 ++ [{quality}];
+    Filters2b = case {CropArgs,is_enabled(extent, Filters)} of
+                    {none,true} -> Filters2 ++ [{extent, ReqWidth, ReqHeight}];
+                    _ -> Filters2
+                end,
+    Filters3 = case is_blurred(Filters2b) of
+                    true ->  Filters2b ++ [quality];
                     false -> case Mime of
-                                 "image/gif" -> Filters2 ++ [{quality}];
-                                 _ -> Filters2 ++ [{sharpen_small}, {quality}]
+                                 "image/gif" -> Filters2b ++ [quality];
+                                 _ -> Filters2b ++ [sharpen_small, quality]
                              end
                end,
     Filters4 = case proplists:get_value(background, Filters3) of
@@ -160,14 +164,20 @@ cmd_args(FileProps, Filters) ->
     {EndWidth, EndHeight, lists:reverse(Args)}.
 
 
-default_background("image/gif") -> [{coalesce}];
+default_background("image/gif") -> [coalesce];
 default_background(_) -> [{background,"white"}, {layers,"flatten"}].
 
 %% @doc Check if there is a blurring filter that prevents us from sharpening the resulting image
 is_blurred([]) -> false;
-is_blurred([{blur}|_]) -> true;
+is_blurred([blur|_]) -> true;
 is_blurred([{blur, _}|_]) -> true;
 is_blurred([_|Rest]) -> is_blurred(Rest).
+
+
+is_enabled(_F, []) -> false;
+is_enabled(F, [F|_]) -> true;
+is_enabled(F, [{F, Val}|_]) -> z_convert:to_bool(Val);
+is_enabled(F, [_|R]) -> is_enabled(F, R).
 
 
 %% @spec out_mime(Mime, Options) -> {Mime, Extension}
@@ -188,7 +198,7 @@ out_mime(_Mime, Options) ->
 filter2arg({make_image, "application/pdf"}, Width, Height) ->
     RArg = ["-resize ", integer_to_list(Width),$x,integer_to_list(Height)],
     {Width, Height, RArg};
-filter2arg({coalesce}, Width, Height) ->
+filter2arg(coalesce, Width, Height) ->
     {Width, Height, "-coalesce"};
 filter2arg({make_image, _Mime}, Width, Height) ->
     {Width, Height, []};
@@ -220,6 +230,10 @@ filter2arg({resize, EndWidth, EndHeight}, Width, Height) when Width < EndWidth a
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
+filter2arg({extent, EndWidth, EndHeight}, Width, Height) when Width /= EndWidth orelse Height /= EndHeight ->
+    GArg = "-gravity Center",
+    EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
+    {EndWidth, EndHeight, [GArg, 32, EArg]};
 filter2arg({resize, EndWidth, EndHeight}, _Width, _Height) ->
     GArg = "-gravity NorthWest",
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
@@ -232,15 +246,15 @@ filter2arg({crop, {CropL, CropT, CropWidth, CropHeight}}, _Width, _Height) ->
                         $+,integer_to_list(CropL),$+,integer_to_list(CropT)],
     RArg = "+repage",
     {CropWidth, CropHeight, [GArg,32,CArg,32,RArg]};
-filter2arg({grey}, Width, Height) ->
+filter2arg(grey, Width, Height) ->
     {Width, Height, "-colorspace Gray"};
-filter2arg({mono}, Width, Height) ->
+filter2arg(mono, Width, Height) ->
     {Width, Height, "-monochrome"};
-filter2arg({flip}, Width, Height) ->
+filter2arg(flip, Width, Height) ->
     {Width, Height, "-flip"};
-filter2arg({flop}, Width, Height) ->
+filter2arg(flop, Width, Height) ->
     {Width, Height, "-flop"};
-filter2arg({blur}, Width, Height) ->
+filter2arg(blur, Width, Height) ->
     filter2arg({blur, 10}, Width, Height);
 filter2arg({blur, Blur}, Width, Height) when is_integer(Blur) ->
     {Width, Height, ["-blur ", integer_to_list(Blur)]};
@@ -249,13 +263,13 @@ filter2arg({blur, Blur}, Width, Height) when is_list(Blur) ->
         [A,B] -> {Width, Height, ["-blur ", ensure_integer(A), $x, ensure_integer(B)]};
         [A] ->   {Width, Height, ["-blur ", ensure_integer(A)]}
     end;
-filter2arg({sharpen_small}, Width, Height) when Width < 400 andalso Height < 400 ->
+filter2arg(sharpen_small, Width, Height) when Width < 400 andalso Height < 400 ->
     {Width, Height, "-unsharp 0.3x0.7 "}; % 6x3+1+0
-filter2arg({sharpen_small}, Width, Height) ->
+filter2arg(sharpen_small, Width, Height) ->
     {Width, Height, []};
-filter2arg({lossless}, Width, Height) ->
+filter2arg(lossless, Width, Height) ->
     {Width, Height, []};
-filter2arg({quality}, Width, Height) ->
+filter2arg(quality, Width, Height) ->
     Pix = Width * Height,
     Q   = if 
             Pix < ?PIX100 -> 100;
@@ -269,13 +283,22 @@ filter2arg({removebg, Fuzz}, Width, Height) ->
                      "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
                      "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
                      "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                    ]}.
+                    ]};
+% Ignore these (are already handled as other filter args)
+filter2arg(extent, Width, Height) ->
+    {Width, Height, []};
+filter2arg({extent, _}, Width, Height) ->
+    {Width, Height, []}.
 
 
 %% @spec fetch_crop(Filters) -> {Crop, Filters}
 %% @doc Split the filters into size/crop and image manipulation filters.
 fetch_crop(Filters) ->
-    {Crop,OtherFilters} = lists:partition(fun (F) -> element(1,F) == 'crop' end, Filters),
+    {Crop,OtherFilters} = lists:partition(
+                                fun (crop) -> true;
+                                    (F) when is_tuple(F) -> element(1,F) == 'crop';
+                                    (_) -> false
+                                end, Filters),
     CropPar = case Crop of
                   [{crop,undefined}] -> none;
                   [{crop,Gravity}] -> Gravity; % center or one of the wind directions
@@ -361,15 +384,17 @@ string2filter("crop", Where) ->
           end,
     {crop,Dir};
 string2filter("grey",[]) ->
-    {grey};
+    grey;
 string2filter("mono",[]) ->
-    {mono};
+    mono;
 string2filter("flip",[]) ->
-    {flip};
+    flip;
 string2filter("flop",[]) ->
-    {flop};
+    flop;
+string2filter("extent",[]) ->
+    extent;
 string2filter("blur",[]) ->
-    {blur};
+    blur;
 string2filter("blur",Arg) ->
     {blur,Arg};
 string2filter("quality", Arg) ->
@@ -377,7 +402,7 @@ string2filter("quality", Arg) ->
 string2filter("background", Arg) ->
     {background,Arg};
 string2filter("lossless", []) ->
-    {lossless};
+    lossless;
 string2filter("removebg", []) ->
     {removebg, 5};
 string2filter("removebg", Arg) ->
