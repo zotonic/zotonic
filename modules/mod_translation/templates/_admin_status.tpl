@@ -1,5 +1,6 @@
 {% if m.acl.use.mod_translation %}
-	<h3>Translations</h3>
+<div class="clearfix">
+	<h2>Translations</h2>
 	
 	<div class="clearfix">
 	    {% button text="Generate .po Templates" 
@@ -12,5 +13,5 @@
 				  action={postback postback="translation_reload" delegate="mod_translation"} %}
 	    <span class="expl">Reload all translations from the modules and site. All templates will be recompiled.</span>
 	</div>
-	
+</div>	
 {% endif %}
