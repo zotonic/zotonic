@@ -46,5 +46,5 @@ event({submit, {email_page, Args}, _TriggerId, _TargetId}, Context) ->
 	Id = proplists:get_value(id, Args),
 	OnSuccess = proplists:get_all_values(on_success, Args),
 	Email = z_context:get_q_validated("email", Context),
-	z_email:send_render(Email, "email_page.tpl", [{id,Id}, {email,Email}], Context),
+	z_email:send_render(Email, {cat, "email_page.tpl"}, [{id,Id}, {email,Email}], Context),
 	z_render:wire(OnSuccess, Context).
