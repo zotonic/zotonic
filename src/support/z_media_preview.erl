@@ -110,7 +110,7 @@ size(InFile, Filters, Context) ->
                         case is_enabled(extent, Filters) of
                             true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
                                 {size, ReqWidth, ReqHeight, "image/jpeg"};
-                            false ->
+                            _ ->
                                 {size, ResizeWidth, ResizeHeight, "image/jpeg"}
                         end;
                     {_CropL, _CropT, CropWidth, CropHeight} -> {size, CropWidth, CropHeight, "image/jpeg"}
