@@ -200,14 +200,16 @@ do_poll(Context) ->
                     insert_task(Module, Function, Key, Args, Context)
             end;
 		empty ->
-		    Qs = fetch_queue(Context),
-		    F = fun(Ctx) ->
+            nop
+    end,
+    Qs = fetch_queue(Context),
+    F = fun(Ctx) ->
 		        [ pivot_resource(Id, Ctx) || {Id,_Serial} <- Qs]
-		    end,
-		    z_db:transaction(F, Context),
-		    delete_queue(Qs, Context)
-	end.
-	
+        end,
+    z_db:transaction(F, Context),
+    delete_queue(Qs, Context).
+
+
 	%% @doc Fetch the next task uit de task queue, if any.
 	poll_task(Context) ->
 		case z_db:q_row("select id, module, function, key, props from pivot_task_queue order by id asc limit 1", Context) of
