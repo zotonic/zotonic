@@ -294,7 +294,8 @@ lines_to_recipients([Line|Lines], Acc) ->
         [] ->
             %% Skip
             lines_to_recipients(Lines, Acc);
-        Items ->
+        Items0 ->
+            Items = [z_string:unquote(z_string:unquote(I, $'), $") || I <- Items0],
             R = case length(Items) of
                     1 -> [{email, hd(Items)}];
                     2 -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}];
