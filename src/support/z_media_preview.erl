@@ -106,7 +106,13 @@ size(InFile, Filters, Context) ->
                 {CropPar,_Filters1} = fetch_crop(Filters),
                 {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation),
                 case CropArgs of
-                    none -> {size, ResizeWidth, ResizeHeight, "image/jpeg"};
+                    none -> 
+                        case is_enabled(extent, Filters) of
+                            true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
+                                {size, ReqWidth, ReqHeight, "image/jpeg"};
+                            false ->
+                                {size, ResizeWidth, ResizeHeight, "image/jpeg"}
+                        end;
                     {_CropL, _CropT, CropWidth, CropHeight} -> {size, CropWidth, CropHeight, "image/jpeg"}
                 end;
             false ->
