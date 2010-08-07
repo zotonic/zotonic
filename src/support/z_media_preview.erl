@@ -296,6 +296,8 @@ filter2arg({removebg, Fuzz}, Width, Height) ->
 filter2arg(extent, Width, Height) ->
     {Width, Height, []};
 filter2arg({extent, _}, Width, Height) ->
+    {Width, Height, []};
+filter2arg({extent, _, _}, Width, Height) ->
     {Width, Height, []}.
 
 
