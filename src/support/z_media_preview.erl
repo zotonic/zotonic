@@ -230,6 +230,8 @@ filter2arg({resize, EndWidth, EndHeight}, Width, Height) when Width < EndWidth a
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
+filter2arg({extent, EndWidth, EndHeight}, Width, Height) when EndWidth == undefined orelse EndHeight == undefined ->
+    {Width, Height, []};
 filter2arg({extent, EndWidth, EndHeight}, Width, Height) when Width /= EndWidth orelse Height /= EndHeight ->
     GArg = "-gravity Center",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
