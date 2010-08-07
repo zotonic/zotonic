@@ -1,4 +1,3 @@
-{% with m.rsc[user_id] as r %}
 {% with m.mailinglist.recipient[recipient_id] as rcpt %}
 
 {% if recipient_id %}
@@ -66,6 +65,5 @@
 </div>
 
 </form>
-{% endwith %}
 {% endwith %}
 

@@ -5,7 +5,13 @@
 	</p>
 
 	<div id="mailinglist_subscribe_form" class="clearfix">
+        {% if in_admin %}
 		{% include "_mailinglist_subscribe_form.tpl" id=id recipient_id=recipient_id make_person=make_person %}
+        {% else %}
+        {% with m.rsc[user_id] as r %}
+		{% include "_mailinglist_subscribe_form.tpl" id=id recipient_id=recipient_id make_person=make_person r=r %}
+        {% endwith %}
+        {% endif %}
 	</div>
 
 	<div id="mailinglist_subscribe_done" style="display:none">
