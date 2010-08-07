@@ -15,6 +15,8 @@
 %% @doc Execute a query on the solr instance.
 search(Query, {Offset, PageLen}, Solr, Context) ->
     {Q, SearchOptions} = map_search(Query, Context),
+    ?DEBUG(Query),
+    ?DEBUG(Q),
     {ok, RespAttrs, Docs, Info} = esolr:search(Q, [{fields, "id"}, {start, Offset-1}, {rows, PageLen} | SearchOptions], Solr),
 
     %% Get the ids

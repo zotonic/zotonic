@@ -36,8 +36,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
            end,
     PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
 	MorePageLen = proplists:get_value(pagelen, Args, PageLen),
-	
-	case length(SearchResult#search_result.result) < PageLen of
+
+    ResultLen = case proplists:get_value(ids, SearchResult#search_result.result) of
+                    undefined -> length(SearchResult#search_result.result);
+                    Ids -> length(Ids)
+                end,
+	case ResultLen < PageLen of
 		true ->
             {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
 		false ->
