@@ -94,6 +94,7 @@ Nonterminals
 	TermValue
     Variable
     Filter
+    FilterArgs
 	AutoId
 	
 	LibTag
@@ -325,8 +326,9 @@ EndCacheBraced -> open_tag endcache_keyword close_tag.
 OptCacheTime -> '$empty' : undefined.
 OptCacheTime -> number_literal : '$1'.
 
-Filter -> identifier : ['$1'].
-Filter -> identifier colon TermValue : ['$1', '$3'].
+Filter -> identifier FilterArgs: {filter, '$1', '$2'}.
+FilterArgs -> '$empty' : [].
+FilterArgs -> FilterArgs colon TermValue : '$1' ++ ['$3'].
 
 Literal -> string_literal : '$1'.
 Literal -> trans_literal  : '$1'.
