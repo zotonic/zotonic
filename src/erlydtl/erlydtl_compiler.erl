@@ -650,8 +650,8 @@ filter_ast1({filter, {identifier, _, "default_if_none"}, [Arg]}, VariableAst, Co
                 [VarAst])
         ]),
     {{CaseAst, Info}, TreeWalker1};
-filter_ast1({filter, {identifier, Pos, "default_if_undefined"}, [Arg]}, VariableAst, Context, TreeWalker) ->
-    filter_ast1([{identifier, Pos, "default_if_none"}, Arg], VariableAst, Context, TreeWalker);
+filter_ast1({filter, {identifier, Pos, "default_if_undefined"}, Args}, VariableAst, Context, TreeWalker) ->
+    filter_ast1({filter, {identifier, Pos, "default_if_none"}, Args}, VariableAst, Context, TreeWalker);
 filter_ast1({filter, {identifier, _, Name}, Args}, VariableAst, Context, TreeWalker) ->
     {{ArgAsts, Info}, TreeWalker2} = lists:foldr(
                         fun(Arg, {{As,In},Tw}) ->
