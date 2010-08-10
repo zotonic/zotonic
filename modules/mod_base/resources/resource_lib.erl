@@ -255,10 +255,8 @@ lookup_path(ReqData, State = #state{path=undefined}) ->
             FullPaths = [ file_exists(State, P, Context) || P <- Paths ],
             FullPaths1 = [ P || {true, P} <- FullPaths ], 
             case FullPaths1 of
-                [] ->
-                    ?DEBUG(nope), State#state{path=none};
-                _ ->
-                    State#state{path=Path, fullpaths=FullPaths1}
+                [] -> State#state{path=none};
+                _ -> State#state{path=Path, fullpaths=FullPaths1}
             end;
         {ok, Cache} ->
             State#state{
