@@ -70,10 +70,14 @@ find_depiction([Id|Rest], Context) ->
     end.
 
 find_depiction_1(Id, Context) ->
-    case m_rsc:depiction(Id, Context) of
+    case m_media:depiction(Id, Context) of
         L when is_list(L) ->
             case z_convert:to_list(proplists:get_value(preview_filename, L)) of
-                [] -> undefined;
+                [] ->
+                    case z_media_preview:can_generate_preview(proplists:get_value(mime, L)) of
+                        true -> {ok, z_convert:to_list(proplists:get_value(filename, L))};
+                        false -> undefined
+                    end;
                 PreviewFilename -> {ok, PreviewFilename}
             end;
         undefined ->

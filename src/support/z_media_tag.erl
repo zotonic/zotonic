@@ -94,6 +94,11 @@ tag(undefined, _Options, _Context) ->
     {ok, []};
 tag([], _Options, _Context) ->
     {ok, []};
+tag(Name, Options, Context) when is_atom(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} -> tag(Id, Options, Context);
+        _ -> {ok, []}
+    end;
 tag(Id, Options, Context) when is_integer(Id) ->
     case m_media:get(Id, Context) of
         Props when is_list(Props) ->
@@ -103,7 +108,7 @@ tag(Id, Options, Context) when is_integer(Id) ->
             end;
         undefined ->
             case z_notifier:first({media_stillimage, Id, []}, Context) of
-                {ok, Filename} -> tag1([], Filename, Options, Context);
+                {ok, Filename} -> tag(Filename, Options, Context);
                 _ -> {ok, []}
             end
     end;

@@ -2,10 +2,7 @@
 ---------------------------------------------------------- */
 
 .slideshow-viewer {
-	margin: 0 0 10px 0;
 	position: relative;
-	width: 920px;
-	height: 222px;
 }
 	.slideshow-viewer-image-wrapper {
 		overflow: hidden;
