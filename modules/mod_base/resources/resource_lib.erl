@@ -253,11 +253,11 @@ lookup_path(ReqData, State = #state{path=undefined}) ->
         undefined ->
             Paths = z_lib_include:uncollapse(Path),
             FullPaths = [ file_exists(State, P, Context) || P <- Paths ],
-            case lists:member(false, FullPaths) of
-                true ->
-                    State#state{path=none};
-                false ->
-                    FullPaths1 = [ P || {true, P} <- FullPaths ],
+            FullPaths1 = [ P || {true, P} <- FullPaths ], 
+            case FullPaths1 of
+                [] ->
+                    ?DEBUG(nope), State#state{path=none};
+                _ ->
                     State#state{path=Path, fullpaths=FullPaths1}
             end;
         {ok, Cache} ->
