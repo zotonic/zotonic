@@ -675,7 +675,7 @@ search_for_escape_filter(_, _, #dtl_context{auto_escape = did}) ->
 search_for_escape_filter(Variable, Filter, _) ->
     search_for_escape_filter(Variable, Filter).
 
-search_for_escape_filter(_, [{identifier, _, "escape"}]) ->
+search_for_escape_filter(_, {filter, {identifier, _, "escape"}, []}) ->
     on;
 search_for_escape_filter({apply_filter, Variable, Filter}, _) ->
     search_for_escape_filter(Variable, Filter);
