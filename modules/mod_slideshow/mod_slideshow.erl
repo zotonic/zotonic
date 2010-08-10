@@ -26,11 +26,30 @@
 
 %% interface functions
 -export([
+    init/1,
     observe_media_viewer/2,
     observe_media_stillimage/2
 ]).
 
 -include_lib("zotonic.hrl").
+
+
+%% Add 'collection' as a valid depiction for articles etc.
+init(Context) ->
+    case {m_category:name_to_id(collection, Context), m_predicate:name_to_id(depiction, Context)} of
+        {{ok, CollId}, {ok, DepictId}} ->
+            Objects = m_predicate:objects(DepictId, Context),
+            case lists:member(CollId, Objects) of
+                true -> nop;
+                false -> 
+                    Subjects = m_predicate:subjects(DepictId, Context),
+                    Objects1 = [CollId|Objects],
+                    m_predicate:update_noflush(DepictId, Subjects, Objects1, Context),
+                    m_predicate:flush(Context)
+            end;
+        _ ->
+            ok
+    end.
 
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
