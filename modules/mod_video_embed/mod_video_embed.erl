@@ -101,7 +101,7 @@ observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
+observe_media_viewer({media_viewer, _Id, Props, _Filename, _Options}, _Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case proplists:get_value(video_embed_code, Props) of
@@ -115,23 +115,23 @@ observe_media_viewer({media_viewer, Props, _Filename, _Options}, _Context) ->
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage({media_stillimage, Props}, Context) ->
+observe_media_stillimage({media_stillimage, Id, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
-			case m_rsc:p(proplists:get_value(id, Props), depiction, Context) of
-				undefined ->
-		            case proplists:get_value(video_embed_service, Props) of
-		                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
-		                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
-		                <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
-		                _ -> {ok, "lib/images/embed.jpg"}
-		            end;
-				DepictionProps ->
-					case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
-						[] -> undefined;
-						Filename -> {ok, Filename}
-					end
-			end;
+            case m_rsc:p(Id, depiction, Context) of
+                undefined ->
+                    case proplists:get_value(video_embed_service, Props) of
+                        <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
+                        <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
+                        <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
+                        _ -> {ok, "lib/images/embed.jpg"}
+                    end;
+                DepictionProps ->
+                    case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
+                        [] -> undefined;
+                        Filename -> {ok, Filename}
+                    end
+            end;
         _ ->
             undefined
     end.
@@ -175,7 +175,7 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
     
             case z_db:transaction(F, Context) of
                 {ok, MediaId} ->
-					spawn(fun() -> preview_create(MediaId, Props, Context) end),
+                    spawn(fun() -> preview_create(MediaId, Props, Context) end),
                     ContextRedirect = case SubjectId of
                         undefined ->
                             case Stay of
@@ -212,35 +212,35 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
 
 %% Fetch or create a preview for the movie
 preview_create(MediaId, InsertProps, Context) ->
-	case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
-		"youtube" -> 
-			spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-		"yandex" -> 
-			spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-		_ -> nop
-	end.
+    case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
+        "youtube" -> 
+            spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
+        "yandex" -> 
+            spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
+        _ -> nop
+    end.
 
 % @doc Fetch the preview image of a youtube video. The preview is located at: http://img.youtube.com/vi/[code]/0.jpg
 % @todo Make this more robust wrt http errors.
 preview_youtube(MediaId, InsertProps, Context) ->
-	case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
-		[] -> nop;
-		Embed ->
-			case re:run(Embed, "youtube\\.com/v/([^\"'&]+)", [{capture,[1],list}]) of
-				{match, [Code]} ->
-					Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
-					case http:request(Url) of
-						{ok, {_StatusLine, _Header, Data}} ->
-							%% Received the preview image, move it to a file.
-							m_media:save_preview(MediaId, Data, "image/jpeg", Context);
-						{error, _Reason} ->
-							%% Too bad - no preview available - ignore for now (see todo above)
-							nop
-					end;
-				_ ->
-					nop
-			end
-	end.
+    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
+        [] -> nop;
+        Embed ->
+            case re:run(Embed, "youtube\\.com/v/([^\"'&]+)", [{capture,[1],list}]) of
+                {match, [Code]} ->
+                    Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
+                    case http:request(Url) of
+                        {ok, {_StatusLine, _Header, Data}} ->
+                            %% Received the preview image, move it to a file.
+                            m_media:save_preview(MediaId, Data, "image/jpeg", Context);
+                        {error, _Reason} ->
+                            %% Too bad - no preview available - ignore for now (see todo above)
+                            nop
+                    end;
+                _ ->
+                    nop
+            end
+    end.
 
 
 %% @doc Fetch the preview image of a yandex video. The preview is located at:
