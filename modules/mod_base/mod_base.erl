@@ -33,7 +33,7 @@
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage({media_stillimage, Props}, Context) ->
+observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
     Mime = proplists:get_value(mime, Props),
 	case z_media_preview:can_generate_preview(Mime) of
 		true ->

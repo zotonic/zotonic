@@ -45,15 +45,24 @@ viewer(undefined, _Options, _Context) ->
     {ok, []};
 viewer([], _Options, _Context) ->
     {ok, []};
+viewer(Name, Options, Context) when is_atom(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} -> viewer(Id, Options, Context);
+        _ -> {ok, []}
+    end;
 viewer(Id, Options, Context) when is_integer(Id) ->
-    viewer(m_media:get(Id, Context), Options, Context);
+    case m_media:get(Id, Context) of
+        MediaProps when is_list(MediaProps) -> viewer(MediaProps, Options, Context);
+        undefined -> viewer1(Id, [], undefined, Options, Context)
+    end;
 viewer([{_Prop, _Value}|_] = Props, Options, Context) ->
+    Id = proplists:get_value(id, Props),
     case z_convert:to_list(proplists:get_value(filename, Props)) of
         None when None == []; None == undefined ->
-            viewer1(Props, undefined, Options, Context);
+            viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),
-            viewer1(Props, FilePath, Options, Context)
+            viewer1(Id, Props, FilePath, Options, Context)
     end;
 viewer(Filename, Options, Context) when is_binary(Filename) ->
     viewer(binary_to_list(Filename), Options, Context);
@@ -61,7 +70,7 @@ viewer(Filename, Options, Context) when is_list(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
     case z_media_identify:identify(FilePath) of
         {ok, Props} ->
-            viewer1(Props, FilePath, Options, Context);
+            viewer1(undefined, Props, FilePath, Options, Context);
         {error, _} -> 
             % Unknown content type, we just can't display it.
             {ok, []}
@@ -70,8 +79,8 @@ viewer(Filename, Options, Context) when is_list(Filename) ->
     
     %% @doc Try to generate Html for the media reference.  First check if a module can do this, then 
     %% check the normal image tag.
-    viewer1(Props, FilePath, Options, Context) ->
-        case z_notifier:first({media_viewer, Props, FilePath, Options}, Context) of
+    viewer1(Id, Props, FilePath, Options, Context) ->
+        case z_notifier:first({media_viewer, Id, Props, FilePath, Options}, Context) of
             {ok, Html} -> {ok, Html};
             undefined -> tag(Props, Options, Context)
         end.
@@ -86,9 +95,20 @@ tag(undefined, _Options, _Context) ->
 tag([], _Options, _Context) ->
     {ok, []};
 tag(Id, Options, Context) when is_integer(Id) ->
-    tag(m_media:get(Id, Context), Options, Context);
+    case m_media:get(Id, Context) of
+        Props when is_list(Props) ->
+            case mediaprops_filename(Id, Props, Context) of
+                [] -> {ok, []};
+                Filename -> tag1(Props, Filename, Options, Context)
+            end;
+        undefined ->
+            case z_notifier:first({media_stillimage, Id, []}, Context) of
+                {ok, Filename} -> tag1([], Filename, Options, Context);
+                _ -> {ok, []}
+            end
+    end;
 tag([{_Prop, _Value}|_] = Props, Options, Context) ->
-    case mediaprops_filename(Props, Context) of
+    case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
         [] -> {ok, []};
         Filename -> tag1(Props, Filename, Options, Context)
     end;
@@ -124,16 +144,22 @@ tag(Filename, Options, Context) when is_list(Filename) ->
         end.
 
 
-	mediaprops_filename(Props, Context) ->
-	    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-			[] ->
-            	case z_notifier:first({media_stillimage, Props}, Context) of
-	                {ok, Filename} -> Filename;
-					_ -> z_convert:to_list(proplists:get_value(filename, Props))
-				end;
-			Filename -> Filename
-		end.
-			
+    % Given the media properties of an id, find the depicting file
+    mediaprops_filename(Id, undefined, Context) ->
+        case z_notifier:first({media_stillimage, Id, []}, Context) of
+            {ok, Filename} -> Filename;
+            undefined -> undefined
+        end;
+    mediaprops_filename(Id, Props, Context) ->
+        case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+            [] ->
+                case z_notifier:first({media_stillimage, Id, Props}, Context) of
+                    {ok, Filename} -> Filename;
+                    _ -> z_convert:to_list(proplists:get_value(filename, Props))
+                end;
+            Filename -> Filename
+        end.
+            
 
     get_link(Media, true, Context) ->
         Id = media_id(Media),
@@ -257,7 +283,10 @@ url2props(Url, Context) ->
     LastParen = string:rchr(PropsRoot, $(),
     {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
     Check1 = string:strip(Check, right, $)),
-    PropList = string:tokens(Props, ")("),
+    PropList = case Props of
+                   "()" ++ _ -> [""|string:tokens(Props, ")(")];
+                   _ -> string:tokens(Props, ")(")
+               end,
     FileMime = z_media_identify:guess_mime(Rest),
     {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
     z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
