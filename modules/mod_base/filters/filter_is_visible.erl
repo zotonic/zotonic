@@ -17,10 +17,24 @@
 %% limitations under the License.
 
 -module(filter_is_visible).
--export([is_visible/2]).
+-export([is_visible/2, is_visible/3]).
 
 
 is_visible(Id, Context) when is_integer(Id) ->
     z_acl:rsc_visible(Id, Context);
-is_visible(List, Context) when is_list(List) ->
+is_visible(List, Context) ->
     lists:filter(fun(Id) -> z_acl:rsc_visible(Id, Context) end,  erlydtl_runtime:to_list(List, Context)).
+
+is_visible(List, N, Context) ->
+    is_visible1(erlydtl_runtime:to_list(List, Context), N, Context, []).
+
+is_visible1([], _N, _Context, Acc) ->
+    lists:reverse(Acc);
+is_visible1(_List, 0, _Context, Acc) ->
+    lists:reverse(Acc);
+is_visible1([Id|Rest], N, Context, Acc) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> is_visible1(Rest, N-1, Context, [Id|Acc]);
+        false -> is_visible1(Rest, N, Context, Acc)
+    end.
+    
