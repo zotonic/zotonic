@@ -22,6 +22,7 @@
 -export([render_action/4]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
+    ?DEBUG(Args),
     Id      = proplists:get_value(id, Args, TargetId),
 	Type    = proplists:get_value(type, Args),
 	Effect  = proplists:get_value(effect, Args),
