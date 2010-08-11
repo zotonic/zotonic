@@ -23,12 +23,12 @@
     init/1, 
     forbidden/2,
     upgrades_provided/2,
-	websocket_start/2,
-	loop/4,
-	send_loop/2,
-	
-	pack_length/1,
-	unpack_length/1
+    websocket_start/2,
+    loop/4,
+    send_loop/2,
+    
+    pack_length/1,
+    unpack_length/1
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -54,19 +54,29 @@ upgrades_provided(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
+
+    %% Sec-Websocket stuff
+    Key1 = process_key(z_context:get_req_header("sec-websocket-key1", Context1)),
+    Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
     Socket = webmachine_request:socket(ReqData),
+    {ok, Body} = gen_tcp:recv(Socket, 8),
+    SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
+
+    %% Send the handshake
     Hostname = m_site:get(hostname, Context1),
     WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}], Context1),
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
             "Upgrade: WebSocket", 13, 10,
             "Connection: Upgrade", 13, 10,
-            "WebSocket-Origin: http://", Hostname, 13, 10,
-            "WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10, 
-            13, 10],
+            "Sec-WebSocket-Origin: http://", Hostname, 13, 10,
+            "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
+            "Sec-WebSocket-Protocol: zotonic", 13, 10,
+            13, 10,
+            <<SignKey/binary>>
+            ],
     ok = send(Socket, Data),
     spawn_link(fun() -> start_send_loop(Socket, Context1) end),
     loop(none, nolength, Socket, Context1).
-
 
 %% @doc Start receiving messages from the websocket
 loop(Buff, Length, Socket, Context) ->
@@ -84,14 +94,17 @@ handle_data(none, nolength, <<0,T/binary>>, Socket, Context) ->
         true -> 
             handle_data(<<>>, nolength, T, Socket, Context);
         false ->
-    	    {Length, LenBytes} = unpack_length(T),
-    	    <<_:LenBytes/bytes, Rest:Length/bytes>> = T,
-    	    handle_data(<<>>, Length, Rest, Socket, Context)
+            {Length, LenBytes} = unpack_length(T),
+            <<_:LenBytes/bytes, Rest:Length/bytes>> = T,
+            handle_data(<<>>, Length, Rest, Socket, Context)
     end;
 
 %% Extract frame ending with 255
 handle_data(none, nolength, <<>>, Socket, Context) ->
     resource_websocket:loop(none, nolength, Socket, Context);
+handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
+    % A packet of <<0,255>> signifies that the ua wants to close the connection
+    ua_close_request;
 handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
     handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
@@ -119,10 +132,10 @@ unpack_length(Binary, LenBytes, Length) ->
     B_v = B band 16#7F,
     NewLength = (Length * 128) + B_v,
     case B band 16#80 of
-	16#80 ->
-	    unpack_length(Binary, LenBytes + 1, NewLength);
-	0 ->
-	    {NewLength, LenBytes + 1}
+    16#80 ->
+        unpack_length(Binary, LenBytes + 1, NewLength);
+    0 ->
+        {NewLength, LenBytes + 1}
     end.
 
 %% @doc Pack the length in 7 bits bytes
@@ -213,3 +226,22 @@ send(Socket, Data) ->
         {error, closed} -> closed;
         _ -> exit(normal)
     end.
+
+
+%% Process a key from the websockey handshake, return an integere
+%% @spec process_key(string()) -> integer
+process_key(L) ->
+    {Number,Spaces} = split_key(L, [], 0),
+    Number div Spaces.
+
+    split_key([], DAcc, Spaces) ->
+        {list_to_integer(lists:reverse(DAcc)), Spaces};
+    split_key([C|Rest], DAcc, Spaces) when C >= $0, C =< $9 ->
+        split_key(Rest, [C|DAcc], Spaces);
+    split_key([32|Rest], DAcc, Spaces) ->
+        split_key(Rest, DAcc, Spaces+1);
+    split_key([_|Rest], DAcc, Spaces) ->
+        split_key(Rest, DAcc, Spaces).
+
+
+
