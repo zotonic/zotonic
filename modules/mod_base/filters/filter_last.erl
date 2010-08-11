@@ -19,9 +19,12 @@
 -module(filter_last).
 -export([last/2]).
 
+-include("zotonic.hrl").
 
 last(undefined, _Context) ->
     undefined;
+last(#m{value=#m_search_result{result=#search_result{result=R}}}, _Context) when is_list(R) andalso length(R)>0 ->
+    lists:last(R);
 last(Input, _Context) when is_binary(Input) ->
     case size(Input) of
         0 -> Input;
