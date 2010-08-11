@@ -26,5 +26,4 @@ render_action(TriggerId, TargetId, Args, Context) ->
                 undefined -> [{speed, "normal"}|Args];
                 _ -> Args
             end,
-    ?DEBUG(Args1),
     action_base_jquery_effect:render_action(TriggerId, TargetId, [{type,hide}|Args1], Context).
