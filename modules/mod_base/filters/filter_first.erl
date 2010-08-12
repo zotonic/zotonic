@@ -23,11 +23,11 @@
 
 first(undefined, _Context) ->
     undefined;
-first(#m{value=#m_search_result{result=#search_result{result=R}}}, _Context) when is_list(R) andalso length(R)>0 ->
-    hd(R);
-first([First|_Rest], _Context) ->
-    [First];
 first(<<First, _/binary>>, _Context) ->
     <<First>>;
-first(_Other, _Context) ->
-    <<>>.
+first(Other, Context) ->
+    case erlydtl_runtime:to_list(Other, Context) of
+        [] -> <<>>;
+        [H|_] -> H
+    end.
+

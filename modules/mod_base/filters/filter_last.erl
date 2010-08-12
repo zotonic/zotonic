@@ -23,8 +23,6 @@
 
 last(undefined, _Context) ->
     undefined;
-last(#m{value=#m_search_result{result=#search_result{result=R}}}, _Context) when is_list(R) andalso length(R)>0 ->
-    lists:last(R);
 last(Input, _Context) when is_binary(Input) ->
     case size(Input) of
         0 -> Input;
@@ -33,7 +31,8 @@ last(Input, _Context) when is_binary(Input) ->
             <<_:Offset/binary, Byte/binary>> = Input,
             Byte
     end;
-last(Input, _Context) when is_list(Input) ->
-    [lists:last(Input)];
-last(Input, _Context) ->
-    Input.
+last(Other, Context) ->
+    case erlydtl_runtime:to_list(Other, Context) of
+        [] -> <<>>;
+        L -> lists:last(L)
+    end.
