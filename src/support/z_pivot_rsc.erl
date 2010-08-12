@@ -34,9 +34,9 @@
     get_pivot_title/1,
     get_pivot_title/2,
 
-	insert_task/3,
-	insert_task/4,
-	insert_task/5,
+    insert_task/3,
+    insert_task/4,
+    insert_task/5,
     
     pivot_resource/2,
     pg_lang/1,
@@ -70,33 +70,57 @@ pivot(Id, Context) ->
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
-    z_db:q("UPDATE rsc SET version=version+1", Context).
+    erlang:spawn(fun() ->
+                    queue_all(0, Context)
+                 end).
 
+    queue_all(FromId, Context) ->
+        case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+            [] ->
+                done;
+            Ids ->
+                F = fun(Ctx) ->
+                        [ insert_queue(Id, Ctx) || {Id} <- Ids ]
+                    end,
+                z_db:transaction(F, Context),
+                {LastId} = lists:last(Ids),
+                queue_all(LastId, Context)
+        end.
+                
+%% @doc Insert a rsc_id in the pivot queue
+insert_queue(Id, Context) ->
+    case z_db:q("update rsc_pivot_queue 
+                 set serial = serial + 1
+                 where rsc_id = $1", [Id], Context) of
+        1 -> ok;
+        0 -> z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) values ($1, now(), true)", [Id], Context)
+    end.
+    
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
-	insert_task(Module, Function, z_ids:id(), [], Context).
+    insert_task(Module, Function, z_ids:id(), [], Context).
 
 %% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks.
 insert_task(Module, Function, UniqueKey, Context) ->
-	insert_task(Module, Function, UniqueKey, [], Context).
-	
+    insert_task(Module, Function, UniqueKey, [], Context).
+    
 %% @doc Insert a slow running pivot task with unique key and arguments.
 insert_task(Module, Function, UniqueKey, Args, Context) ->
-	z_db:transaction(fun(Ctx) -> insert_transaction(Module, Function, UniqueKey, Args, Ctx) end, Context).
+    z_db:transaction(fun(Ctx) -> insert_transaction(Module, Function, UniqueKey, Args, Ctx) end, Context).
 
-	insert_transaction(Module, Function, UniqueKey, Args, Context) ->
-		Fields = [
-			{module, Module},
-			{function, Function},
-			{key, UniqueKey},
-			{args, Args}
-		],
-		case z_db:q1("select id from pivot_task_queue where module = $1 and function = $2 and key = $3", 
-					[Module, Function, UniqueKey], Context) of
-			undefined -> z_db:insert(pivot_task_queue, Fields, Context);
-			Id -> {ok, Id}
-		end.
+    insert_transaction(Module, Function, UniqueKey, Args, Context) ->
+        Fields = [
+            {module, Module},
+            {function, Function},
+            {key, UniqueKey},
+            {args, Args}
+        ],
+        case z_db:q1("select id from pivot_task_queue where module = $1 and function = $2 and key = $3", 
+                    [Module, Function, UniqueKey], Context) of
+            undefined -> z_db:insert(pivot_task_queue, Fields, Context);
+            Id -> {ok, Id}
+        end.
 
 
 
@@ -190,8 +214,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
-	case poll_task(Context) of
-		{Module, Function, Key, Args} -> 
+    % Perform some queued tasks
+    case poll_task(Context) of
+        {Module, Function, Key, Args} -> 
             try 
                 erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context])
             catch
@@ -199,32 +224,38 @@ do_poll(Context) ->
                     ?LOG("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]),
                     insert_task(Module, Function, Key, Args, Context)
             end;
-		empty ->
+        empty ->
             nop
     end,
-    Qs = fetch_queue(Context),
-    F = fun(Ctx) ->
-		        [ pivot_resource(Id, Ctx) || {Id,_Serial} <- Qs]
-        end,
-    z_db:transaction(F, Context),
-    delete_queue(Qs, Context).
+    % Pivot some resources
+    case fetch_queue(Context) of
+        [] -> ok;
+        Qs ->
+            F = fun(Ctx) ->
+                        [ pivot_resource(Id, Ctx) || {Id,_Serial} <- Qs]
+                end,
+            case z_db:transaction(F, Context) of
+                {rollback, PivotError} -> ?LOG("Pivot error: ~p~n", [PivotError]);
+                L when is_list(L) -> delete_queue(Qs, Context)
+            end
+    end.
 
 
-	%% @doc Fetch the next task uit de task queue, if any.
-	poll_task(Context) ->
-		case z_db:q_row("select id, module, function, key, props from pivot_task_queue order by id asc limit 1", Context) of
-			{Id,Module,Function,Key,Props} ->
-				Args = case Props of
-					[{args,Args0}] -> Args0;
-					_ -> []
-				end,
-				%% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
-				z_db:q("delete from pivot_task_queue where id = $1", [Id], Context),
-				{z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
-			undefined ->
-				empty
-		end.
-	
+    %% @doc Fetch the next task uit de task queue, if any.
+    poll_task(Context) ->
+        case z_db:q_row("select id, module, function, key, props from pivot_task_queue order by id asc limit 1", Context) of
+            {Id,Module,Function,Key,Props} ->
+                Args = case Props of
+                    [{args,Args0}] -> Args0;
+                    _ -> []
+                end,
+                %% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
+                z_db:q("delete from pivot_task_queue where id = $1", [Id], Context),
+                {z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
+            undefined ->
+                empty
+        end.
+    
 
 %% @doc Pivot a specific id, delete its queue record if present
 do_pivot(Id, Context) ->
@@ -371,8 +402,8 @@ get_pivot_title(Props) ->
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
 get_pivot_data(Id, Context) ->
     Rsc = m_rsc:get(Id, Context),
-	R = z_notifier:foldr({pivot_get, Id}, Rsc, Context),
-    {A,B} = lists:foldl(fun fetch_texts/2, {[],[]}, R),
+    R = z_notifier:foldr({pivot_get, Id}, Rsc, Context),
+    {A,B} = lists:foldl(fun(Res,Acc) -> fetch_texts(Res, Acc, Context) end, {[],[]}, R),
     {ObjIds, ObjTexts} = related(Id, Context),
     {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
     Split = [ (split_lang(Ts, Context)) || Ts <- [A, B, CatTexts, ObjTexts] ],
@@ -401,9 +432,10 @@ split_lang([Text|Rest], Dict, Context) ->
 
 %% @doc Fetch the title of all things related to the resource
 related(Id, Context) ->
-    Ids = m_edge:objects(Id, Context),
-	Ids1 = z_notifier:foldr({pivot_related, Id}, Ids, Context),
-    Texts = [ m_rsc:p(R, title, Context) || R <- Ids1 ],
+    Ids = lists:usort(m_edge:objects(Id, Context)),
+    Ids1 = z_notifier:foldr({pivot_related, Id}, Ids, Context),
+    IdsTexts = z_notifier:foldr({pivot_related_text_ids, Id}, Ids, Context),
+    Texts = [ m_rsc:p(R, title, Context) || R <- IdsTexts ],
     {Ids1, Texts}.
     
 
@@ -415,31 +447,31 @@ category(CatId, Context) ->
     {Ids, Names}.
 
 
-fetch_texts({title, Value}, {A,B}) ->
+fetch_texts({title, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({subtitle, Value}, {A,B}) ->
+fetch_texts({subtitle, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({surname, Value}, {A,B}) ->
+fetch_texts({surname, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({first_name, Value}, {A,B}) ->
+fetch_texts({first_name, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({given_name, Value}, {A,B}) ->
+fetch_texts({given_name, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({F, Value}, {A,B}) when is_binary(Value) ->
+fetch_texts({F, Value}, {A,B}, _Context) when is_binary(Value) ->
     case do_pivot_field(F) of
         false -> {A,B};
         true -> {A, [Value|B]}
     end;
-fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc)
+fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc, Context)
     when is_integer(Y) andalso is_integer(M) andalso is_integer(D) 
         andalso is_integer(H) andalso is_integer(Min) andalso is_integer(S) ->
     case do_pivot_field(F) of
         false -> Acc;
-        true -> {A, [erlydtl_dateformat:format(Date, "Y m d H i s F l h", en)|B]}
+        true -> {A, [erlydtl_dateformat:format(Date, "Y m d H i s F l h", Context)|B]}
     end;
-fetch_texts({_, {trans, _} = V}, {A,B}) ->
+fetch_texts({_, {trans, _} = V}, {A,B}, _Context) ->
     {A, [V|B]};
-fetch_texts({F, V}, {A,B} = Acc) ->
+fetch_texts({F, V}, {A,B} = Acc, _Context) ->
     case do_pivot_field(F) of
         false -> Acc;
         true ->
