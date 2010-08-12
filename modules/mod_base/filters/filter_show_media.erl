@@ -106,11 +106,14 @@ filter_args([{link,_}|Args], HasSize, Acc, Context) ->
 filter_args([P|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 
-    
-        
+
+
 get_sizes(Context) ->
-    [   z_convert:to_integer(z_string:trim(S)) ||
-        S <- string:tokens(z_convert:to_list(m_config:get_value(site, media_width, "200,300,500", Context)), ",") ].
+    Int = fun(S) -> z_convert:to_integer(z_string:trim(S)) end,
+    %% Get sizes from site.media_dimensions
+    WidthHeightString = z_convert:to_list(m_config:get_value(site, media_dimensions, "200x200,300x300,500x500", Context)),
+    [   [{width, Int(W)}, {height, Int(H)}] ||
+        [W,H] <- [string:tokens(P, "x") || P <- string:tokens(WidthHeightString, ",")] ].
 
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->
