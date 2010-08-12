@@ -119,10 +119,13 @@ function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
 	if (triggerID != '' && !noTriggerValue)
 	{
 		var trigger = $('#'+triggerID).get(0);
-		var nodeName = trigger.nodeName.toLowerCase();
+		if (trigger)
+		{
+			var nodeName = trigger.nodeName.toLowerCase();
 		
-		if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select')
-			triggerValue = $('#'+triggerID).val() || '';
+			if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select')
+				triggerValue = $('#'+triggerID).val() || '';
+		}
 	}
 
 	extraParams = extraParams || new Array(); 
