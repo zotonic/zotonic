@@ -267,7 +267,7 @@ parse_query([{text, Text}|Rest], Context, Result) ->
                         from=Result2#search_sql.from ++ ", to_tsquery(" ++ LArg ++ ", " ++ QArg ++ ") txtquery"
                        },
             Result4 = add_where("txtquery @@ rsc.pivot_tsv", Result3),
-            Result5 = add_order_unsafe("ts_rank_cd(rsc.pivot_tsv, txtquery, 32)", Result4),
+            Result5 = add_order_unsafe("ts_rank_cd(rsc.pivot_tsv, txtquery, 32) desc", Result4),
             parse_query(Rest, Context, Result5)
     end;
 
