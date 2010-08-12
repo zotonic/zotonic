@@ -209,7 +209,17 @@ filename_to_urlpath(Filename) ->
 url(undefined, _Options, _Context) ->
     {error, enoent};
 url(Id, Options, Context) when is_integer(Id) ->
-    url(m_media:get(Id, Context), Options, Context);
+    case m_media:get(Id, Context) of
+        Props when is_list(Props) ->
+            url(Props, Options, Context);
+        undefined ->
+            case z_notifier:first({media_stillimage, Id, []}, Context) of
+                {ok, Filename} ->
+                    {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
+                    {ok, Url};
+                _ -> {ok, []}
+            end
+    end;
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
     case z_convert:to_list(proplists:get_value(filename, Props)) of
         None when None == undefined; None == <<>>; None == [] -> 
