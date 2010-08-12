@@ -377,7 +377,7 @@ truncate(S, Len) -> truncate(S, Len, Len).
         "";
     truncate(S, Utf8Len, Bytes) ->
         case z_string:truncate(S, Utf8Len, "") of
-            S when length(S) > Bytes -> truncate(S, Utf8Len-1, Bytes);
+            T when length(T) > Bytes -> truncate(T, Utf8Len-1, Bytes);
             L -> L
         end.
     
