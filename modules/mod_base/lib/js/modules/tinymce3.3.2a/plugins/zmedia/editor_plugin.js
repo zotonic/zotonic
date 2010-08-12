@@ -26,8 +26,7 @@
                             document.getElementById('zmedia-open-dialog').click();
                             window.z_choose_zmedia = function(id) {
                                 if (!id) return;
-                                
-                                var res = self._zMediaHtml(id, {align: "left", size: "middle", crop: '', link: ''});
+                                var res = self._zMediaHtml(id, {align: "block", size: "middle", crop: '', link: ''});
                                 ed.execCommand('mceInsertContent', false, res['html'], {});
                             }
                         }
@@ -35,18 +34,18 @@
                     });
 
                 ed.onLoadContent.add(function(ed, o) {
-                        //alert(o.content);
-                        ed.setContent(self._zMarkersToMediaHtml(o.content));
+                    ed.setContent(self._zMarkersToMediaHtml(o.content));
+                                         
+                    ed.onPostProcess.add(function(ed, o) {
+                        o.content = self._MediaHtmlToMarkers(o.content);
+                        });
+
                     });
 
                 ed.onSetContent.add(function(ed, o) {
                     });
 
-                setTimeout( function() {
-                        ed.onPostProcess.add(function(ed, o) {
-                                o.content = self._MediaHtmlToMarkers(o.content);
-                            }); }, 200);
-                
+            
             
                 // Register buttons
                 ed.addButton('zmedia', {
@@ -201,7 +200,6 @@
                     var id = m[1];
                     var opts = eval("(" + m[2] + ")");
                     var repl = this._zMediaHtml(id, opts);
-
                     html = html.substr(0, re.lastIndex - m[0].length) + repl['html'] + html.substr(re.lastIndex);
                     re.lastIndex = re.lastIndex - m[0].length + repl.length;
                 }

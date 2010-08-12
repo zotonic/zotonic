@@ -110,7 +110,7 @@ filter_args([P|Args], HasSize, Acc, Context) ->
         
 get_sizes(Context) ->
     [   z_convert:to_integer(z_string:trim(S)) ||
-        S <- string:tokens(m_config:get_value(site, media_width, "200,300,500", Context), ",") ].
+        S <- string:tokens(z_convert:to_list(m_config:get_value(site, media_width, "200,300,500", Context)), ",") ].
 
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->
