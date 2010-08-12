@@ -221,7 +221,7 @@ do_poll(Context) ->
                 erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context])
             catch
                 Error:Reason -> 
-                    ?LOG("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]),
+                    ?ERROR("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]),
                     insert_task(Module, Function, Key, Args, Context)
             end;
         empty ->
@@ -235,7 +235,7 @@ do_poll(Context) ->
                         [ pivot_resource(Id, Ctx) || {Id,_Serial} <- Qs]
                 end,
             case z_db:transaction(F, Context) of
-                {rollback, PivotError} -> ?LOG("Pivot error: ~p~n", [PivotError]);
+                {rollback, PivotError} -> ?ERROR("Pivot error: ~p: ~p~n", [PivotError, Qs]);
                 L when is_list(L) -> delete_queue(Qs, Context)
             end
     end.
@@ -329,17 +329,17 @@ pivot_resource(Id, Context) ->
 
     SqlArgs = ArgsD ++ [
         TsvIds,
-        proplists:get_value(street, R),
-        proplists:get_value(city, R),
-        proplists:get_value(postcode, R),
-        proplists:get_value(state, R),
-        proplists:get_value(country, R),
-        proplists:get_value(name_first, R),
-        proplists:get_value(name_surname, R),
-        proplists:get_value(gender, R),
+        truncate(proplists:get_value(street, R), 120),
+        truncate(proplists:get_value(city, R), 100),
+        truncate(proplists:get_value(postcode, R), 30),
+        truncate(proplists:get_value(state, R), 50),
+        truncate(proplists:get_value(country, R), 80),
+        truncate(proplists:get_value(name_first, R), 100),
+        truncate(proplists:get_value(name_surname, R), 100),
+        truncate(proplists:get_value(gender, R), 1),
         DateStart,
         DateEnd,
-        get_pivot_title(R),
+        truncate(get_pivot_title(R), 100),
         Id
     ],
     z_db:q(Sql, SqlArgs, Context),
@@ -369,6 +369,18 @@ pivot_resource(Id, Context) ->
     %        setweight(to_tsvector('pg_catalog.english', coalesce(new.title_en,'')), 'A') || 
     %        setweight(to_tsvector('pg_catalog.english', coalesce(new.desc_en,'')),  'D'); 
 
+
+truncate(undefined, _Len) -> undefined;
+truncate(S, Len) -> truncate(S, Len, Len).
+    
+    truncate(_S, 0, _Bytes) ->
+        "";
+    truncate(S, Utf8Len, Bytes) ->
+        case z_string:truncate(S, Utf8Len, "") of
+            S when length(S) > Bytes -> truncate(S, Utf8Len-1, Bytes);
+            L -> L
+        end.
+    
 
 %% @doc Fetch the date range from the record
 pivot_date(R) ->
@@ -406,7 +418,7 @@ get_pivot_data(Id, Context) ->
     {A,B} = lists:foldl(fun(Res,Acc) -> fetch_texts(Res, Acc, Context) end, {[],[]}, R),
     {ObjIds, ObjTexts} = related(Id, Context),
     {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
-    Split = [ (split_lang(Ts, Context)) || Ts <- [A, B, CatTexts, ObjTexts] ],
+    Split = [ (split_lang(Ts, Context)) || Ts <- [A, [], B++CatTexts, ObjTexts] ],
     {ObjIds, CatIds, [ [ {Lng,list_to_binary(z_utils:combine(32, Ts))} || {Lng,Ts} <- Ps] || Ps <- Split ]}.
     
 
