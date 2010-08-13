@@ -54,29 +54,48 @@ upgrades_provided(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
-
-    %% Sec-Websocket stuff
-    Key1 = process_key(z_context:get_req_header("sec-websocket-key1", Context1)),
-    Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
-    Socket = webmachine_request:socket(ReqData),
-    {ok, Body} = gen_tcp:recv(Socket, 8),
-    SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
-
-    %% Send the handshake
     Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}], Context1),
-    Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
-            "Upgrade: WebSocket", 13, 10,
-            "Connection: Upgrade", 13, 10,
-            "Sec-WebSocket-Origin: http://", Hostname, 13, 10,
-            "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
-            "Sec-WebSocket-Protocol: zotonic", 13, 10,
-            13, 10,
-            <<SignKey/binary>>
-            ],
-    ok = send(Socket, Data),
-    spawn_link(fun() -> start_send_loop(Socket, Context1) end),
-    loop(none, nolength, Socket, Context1).
+    WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}],Context1),
+    Socket = webmachine_request:socket(ReqData),
+
+    case z_context:get_req_header("sec-websocket-key1", Context1) of
+        undefined ->
+            % First draft protocol version, this code should be removed in due time.
+            %% Send the handshake
+            Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
+                    "Upgrade: WebSocket", 13, 10,
+                    "Connection: Upgrade", 13, 10,
+                    "WebSocket-Origin: http://", Hostname, 13, 10,
+                    "WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
+                    13, 10
+                    ],
+            ok = send(Socket, Data),
+            spawn_link(fun() -> start_send_loop(Socket, Context1) end),
+            loop(none, nolength, Socket, Context1);
+            
+        WsKey1 ->
+            % Protocol draft 76
+
+            %% Sec-Websocket stuff
+            Key1 = process_key(WsKey1),
+            Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
+            {ok, Body} = gen_tcp:recv(Socket, 8),
+            SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
+
+            %% Send the handshake
+            Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
+                    "Upgrade: WebSocket", 13, 10,
+                    "Connection: Upgrade", 13, 10,
+                    "Sec-WebSocket-Origin: http://", Hostname, 13, 10,
+                    "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
+                    "Sec-WebSocket-Protocol: zotonic", 13, 10,
+                    13, 10,
+                    <<SignKey/binary>>
+                    ],
+            ok = send(Socket, Data),
+            spawn_link(fun() -> start_send_loop(Socket, Context1) end),
+            loop(none, nolength, Socket, Context1)
+    end.
 
 %% @doc Start receiving messages from the websocket
 loop(Buff, Length, Socket, Context) ->
