@@ -137,7 +137,8 @@ is_string(_) ->
 %% @doc Return the first character of a string.
 %% @todo Make this UTF-8 safe
 first_char([]) -> undefined;
-first_char([H|_]) -> H;
+first_char([H|T]) when is_integer(H) ->
+    truncate([H|T], 1, "");
 first_char(<<>>) -> undefined;
 first_char(<<C, _/binary>>) -> C.
 
@@ -705,4 +706,8 @@ test() ->
     A = "üçgen",
     A = to_lower(to_upper(A)),
     "ucgen" = to_name(A),
+
+    "a" = first_char("aap"),
+    "Ж" = first_char("ЖЖЖxx"),
+    "ć" = first_char("ćaap"),
     ok.
