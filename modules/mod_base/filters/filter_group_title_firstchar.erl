@@ -29,7 +29,7 @@ group_title_firstchar(In, Cols, Context) ->
     First = [ [{first, firstchar_title(Id, Context)}, {id, Id}] || Id <- Ids],
     F = z_utils:group_by(First, first, Context),
     
-    X = [ [{first, [proplists:get_value(first, hd(P))]}, 
+    X = [ [{first, [proplists:get_value(first, z_string:first_char(P))]}, 
            {result, [proplists:get_value(id, Pl) || Pl <- P]}]
           || P <- F],
     Grouped = grouped(X, Max),
