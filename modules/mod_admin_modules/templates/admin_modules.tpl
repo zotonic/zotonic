@@ -27,15 +27,19 @@
 		{% for sort, prio, module, props in modules %}
 			<li id="{{ #li.module }}" {% if not props.is_active %}class="unpublished" {% endif %}>
 				<a href="#" class="clearfix">
-					<span class="zp-20">{{ props.mod_title|default:props.title }}</span>
+					<span class="zp-20">{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</span>
 					<span class="zp-45">{{ props.mod_description|default:"-" }}</span>
 					<span class="zp-5">{{ prio }}</span>
 					<span class="zp-20">{{ props.author|escape|default:"-" }}</span>
 					<span class="zp-10">
 						{% if props.is_active %}
-							{% button text="Deactivate" action={module_toggle module=module} action={toggle_class id=#li.module class="enabled"} %}
+							{% button text="Deactivate" 
+									action={module_toggle module=module status_id=#status.module}
+									action={toggle_class id=#li.module class="enabled"} %}
 						{% else %}
-							{% button text="Activate" action={module_toggle module=module} action={toggle_class id=#li.module class="enabled"} %}
+							{% button text="Activate"
+									action={module_toggle module=module status_id=#status.module} 
+									action={toggle_class id=#li.module class="enabled"} %}
 						{% endif %}
 					</span>
 				</a>
