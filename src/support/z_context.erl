@@ -102,7 +102,7 @@
     get_resp_header/2,
     get_req_header/2,
 
-	get_req_path/1
+    get_req_path/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -123,16 +123,16 @@ new(Host) when is_atom(Host) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{language=z_trans:default_language(Context)};
 new(ReqData) ->
-	%% This is the requesting thread, enable simple memo functionality.
-	z_memo:enable(),
+    %% This is the requesting thread, enable simple memo functionality.
+    z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
 
 %% @doc Create a new context record for the current request and resource module
 new(ReqData, Module) ->
-	%% This is the requesting thread, enable simple memo functionality.
-	z_memo:enable(),
+    %% This is the requesting thread, enable simple memo functionality.
+    z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, resource_module=Module, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
@@ -157,7 +157,6 @@ set_server_names(#context{host=Host} = Context) ->
         dropbox_server=list_to_atom("z_dropbox"++HostAsList),
         pivot_server=list_to_atom("z_pivot_rsc"++HostAsList),
         module_indexer=list_to_atom("z_module_indexer"++HostAsList),
-        module_sup=list_to_atom("z_module_sup"++HostAsList),
         translation_table=z_trans_server:table(Host)
     }.
 
@@ -207,9 +206,9 @@ prune_for_async(#context{} = Context) ->
     #context{
         wm_reqdata=Context#context.wm_reqdata,
         host=Context#context.host,
-		user_id=Context#context.user_id,
-		session_pid=Context#context.session_pid,
-		page_pid=Context#context.page_pid,
+        user_id=Context#context.user_id,
+        session_pid=Context#context.session_pid,
+        page_pid=Context#context.page_pid,
         acl=Context#context.acl,
         props=Context#context.props,
         depcache=Context#context.depcache,
@@ -220,8 +219,7 @@ prune_for_async(#context{} = Context) ->
         scomp_server=Context#context.scomp_server,
         dropbox_server=Context#context.dropbox_server,
         pivot_server=Context#context.pivot_server,
-        module_indexer=Context#context.module_indexer,
-        module_sup=Context#context.module_sup
+        module_indexer=Context#context.module_indexer
     }.
 
 
@@ -254,8 +252,7 @@ prune_for_database(Context) ->
         scomp_server=Context#context.scomp_server,
         dropbox_server=Context#context.dropbox_server,
         pivot_server=Context#context.pivot_server,
-        module_indexer=Context#context.module_indexer,
-        module_sup=Context#context.module_sup
+        module_indexer=Context#context.module_indexer
     }.
 
 
@@ -264,14 +261,14 @@ prune_for_database(Context) ->
 prune_for_scomp(VisibleFor, Context) ->
     z_acl:set_visible_for(VisibleFor, Context#context{
         dbc=undefined,
-	    wm_reqdata=undefined,
-		updates=[],
-		actions=[],
-		content_scripts=[],
-		scripts=[],
-		wire=[],
-		validators=[],
-		render=[]
+        wm_reqdata=undefined,
+        updates=[],
+        actions=[],
+        content_scripts=[],
+        scripts=[],
+        wire=[],
+        validators=[],
+        render=[]
     }).
 
 
@@ -357,7 +354,7 @@ output1([C|Rest], Context, Acc) ->
 %% @spec combine_results(Context1, Context2) -> Context
 %% @doc Merge the scripts and the rendered content of two contexts into Context1
 combine_results(C1, C2) ->
-	Merged = merge_scripts(C2, C1),
+    Merged = merge_scripts(C2, C1),
     Merged#context{
         render=combine(C1#context.render, C2#context.render)
     }.
@@ -629,7 +626,7 @@ get_value(Key, Context) ->
 
 %% @doc Ensure that we have an id for the visitor
 persistent_id(Context) ->
-	z_session:persistent_id(Context).
+    z_session:persistent_id(Context).
 
 %% @spec set_visitor(Key, Value, Context) -> Context
 %% @doc Set the value of the visitor variable Key to Value
@@ -754,7 +751,7 @@ set_resp_header(Header, Value, Context = #context{wm_reqdata=ReqData}) ->
 %% @doc Get a response header
 %% @spec get_resp_header(Header, Context) -> Value
 get_resp_header(Header, #context{wm_reqdata=ReqData}) ->
-	wrq:get_resp_header(Header, ReqData).
+    wrq:get_resp_header(Header, ReqData).
 
 
 %% @doc Get a request header
@@ -767,9 +764,9 @@ get_req_header(Header, Context) ->
 %% @doc Return the request path
 %% @spec get_req_path(Context) -> list()
 get_req_path(Context) ->
-	ReqData = get_reqdata(Context),
-	wrq:raw_path(ReqData).
-	
+    ReqData = get_reqdata(Context),
+    wrq:raw_path(ReqData).
+    
 
 %% ------------------------------------------------------------------------------------
 %% Local helper functions
