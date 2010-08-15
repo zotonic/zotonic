@@ -61,24 +61,20 @@ pid_observe_rsc_delete(Pid, Msg, _Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-    process_flag(trap_exit, true),
-
     {context, Context} = proplists:lookup(context, Args),
+    DefaultConnection = "http://127.0.0.1:8983/solr/" ++ z_convert:to_list(z_context:site(Context)) ++ "/",
 
-    case m_config:get_value(?MODULE, solr, false, Context) of
-        false ->
-            z_session_manager:broadcast(#broadcast{type="error", message="Not configured yet, not starting.", title="Solr Index", stay=true}, z_acl:sudo(Context)),
-            ignore;
+    SolrUrl = m_config:get_value(?MODULE, solr, DefaultConnection, Context),
+    SearchUrl = z_convert:to_list(SolrUrl) ++ "select",
+    UpdateUrl = z_convert:to_list(SolrUrl) ++ "update",
+    {ok, Solr} = esolr:start_link([{select_url, SearchUrl}, {update_url, UpdateUrl}]),
 
-        SolrUrl ->
-            SearchUrl = z_convert:to_list(SolrUrl) ++ "select",
-            UpdateUrl = z_convert:to_list(SolrUrl) ++ "update",
-            {ok, Solr} = esolr:start_link([{select_url, SearchUrl}, {update_url, UpdateUrl}]),
-
-            AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
-            esolr:set_auto_commit({time, AutoCommit}, Solr),
-            {ok, #state{context=z_context:new(Context),solr=Solr}}
-    end.
+    AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
+    esolr:set_auto_commit({time, AutoCommit}, Solr),
+    %% Test the connection.. this will crash when there is no valid connection
+    solr_search:match(1, {0, 1}, Solr, Context),
+    %% Ready
+    {ok, #state{context=z_context:new(Context),solr=Solr}}.
 
 
 %% @doc A generic Solr query
@@ -88,7 +84,7 @@ handle_call({{search_query, {solr, Query}, Limit}, Context}, _From, State=#state
 
 %% A "match" query (for sidebars and such)
 handle_call({{search_query, {match, [{id,Id}]}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
-    Reply = solr_search:match(Id, Limit, Solr, Context),
+    Reply = solr_search:search(Id, Limit, Solr, Context),
     {reply, Reply, State};
 
 %% @doc Trap unknown calls
@@ -102,7 +98,6 @@ handle_cast({rsc_pivot_done, Id, _IsA}, State=#state{context=Context,solr=Solr})
     {noreply, State};
 
 handle_cast({rsc_delete, Id}, State=#state{context=Context,solr=Solr}) ->
-    ?DEBUG("Deleting!"),?DEBUG(Id),
     ok = solr_store:delete(Id, Context, Solr),
     {noreply, State};
 
