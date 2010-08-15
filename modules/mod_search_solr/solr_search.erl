@@ -15,41 +15,46 @@
 %% @doc Execute a query on the solr instance.
 search(Query, {Offset, PageLen}, Solr, Context) ->
     {Q, SearchOptions} = map_search(Query, Context),
-    {ok, RespAttrs, Docs, Info} = esolr:search(Q, [{fields, "id"}, {start, Offset-1}, {rows, PageLen} | SearchOptions], Solr),
+    case Q of
+        [] ->
+            #search_result{result=[]};
+        _ ->
+            {ok, RespAttrs, Docs, Info} = esolr:search(Q, [{fields, "id"}, {start, Offset-1}, {rows, PageLen} | SearchOptions], Solr),
 
-    %% Get the ids
-    Ids = [Id || {doc, [{"id", Id}]} <- Docs],
+            %% Get the ids
+            Ids = [Id || {doc, [{"id", Id}]} <- Docs],
 
-    %% Map the extended info into a handy format
-    Info1 = filter_empty(lists:flatten([map_info(I) || I <- Info])),
+            %% Map the extended info into a handy format
+            Info1 = filter_empty(lists:flatten([map_info(I) || I <- Info])),
 
-    %% Decide on result format
-    Result = case Info1 of
-                 [] ->
-                     %% No extended info was returned. The result array is just a list of ids.
-                     Ids;
-                 _ ->
-                     %% If extended info was returned, the document
-                     %% ids are in the ".ids" subproperty, alongside
-                     %% the other info (e.g. facetting, highlighting)
-                     [{ids, Ids} | Info1]
-             end,
+            %% Decide on result format
+            Result = case Info1 of
+                         [] ->
+                             %% No extended info was returned. The result array is just a list of ids.
+                             Ids;
+                         _ ->
+                             %% If extended info was returned, the document
+                             %% ids are in the ".ids" subproperty, alongside
+                             %% the other info (e.g. facetting, highlighting)
+                             [{ids, Ids} | Info1]
+                     end,
 
-    %% Compute paging counters
-    {"numFound", Total} = proplists:lookup("numFound", RespAttrs),
-    Pages = mochinum:int_ceil(Total / PageLen),
-    Page = mochinum:int_ceil(Offset / PageLen),
-    Next = if Offset + PageLen < Total -> false; true -> Page+1 end,
-    Prev = if Page > 1 -> Page-1; true -> 1 end,
+            %% Compute paging counters
+            {"numFound", Total} = proplists:lookup("numFound", RespAttrs),
+            Pages = mochinum:int_ceil(Total / PageLen),
+            Page = mochinum:int_ceil(Offset / PageLen),
+            Next = if Offset + PageLen < Total -> false; true -> Page+1 end,
+            Prev = if Page > 1 -> Page-1; true -> 1 end,
 
-    %% Construct the final search result
-    #search_result{result=Result, 
-                   total=Total,
-                   pages=Pages,
-                   page=Page,
-                   next=Next,
-                   prev=Prev
-                  }.
+            %% Construct the final search result
+            #search_result{result=Result, 
+                           total=Total,
+                           pages=Pages,
+                           page=Page,
+                           next=Next,
+                           prev=Prev
+                          }
+    end.
 
 
 %% @doc Given an rsc id, construct a list of matching rsc records. Uses Solrs "MoreLikeThis" feature.
