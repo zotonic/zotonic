@@ -219,6 +219,8 @@ preview_create(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
         "youtube" -> 
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
+        "vimeo" -> 
+            spawn(fun() -> preview_vimeo(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         "yandex" -> 
             spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         _ -> nop
@@ -237,6 +239,41 @@ preview_youtube(MediaId, InsertProps, Context) ->
                         {ok, {_StatusLine, _Header, Data}} ->
                             %% Received the preview image, move it to a file.
                             m_media:save_preview(MediaId, Data, "image/jpeg", Context);
+                        {error, _Reason} ->
+                            %% Too bad - no preview available - ignore for now (see todo above)
+                            nop
+                    end;
+                _ ->
+                    nop
+            end
+    end.
+
+
+% @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+% @todo Make this more robust wrt http errors.
+preview_vimeo(MediaId, InsertProps, Context) ->
+    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
+        [] -> nop;
+        Embed ->
+            case re:run(Embed, "clip_id=([0-9]+)", [{capture,[1],list}]) of
+                {match, [Code]} ->
+                    JsonUrl = "http://vimeo.com/api/v2/video/" ++ Code ++ ".json",
+                    case http:request(JsonUrl) of
+                        {ok, {_StatusLine, _Header, Data}} ->
+                            {array, [{struct, Props}]} = mochijson:decode(Data),
+                            case proplists:get_value("thumbnail_large", Props) of
+                                undefined ->
+                                    nop;
+                                ImgUrl ->
+                                    case http:request(ImgUrl) of
+                                        {ok, {_StatusLine1, _Header1, ImgData}} ->
+                                            %% Received the preview image, move it to a file.
+                                            m_media:save_preview(MediaId, ImgData, "image/jpeg", Context);
+                                        {error, _Reason} ->
+                                            %% Error retrieving preview
+                                            nop
+                                    end
+                            end;
                         {error, _Reason} ->
                             %% Too bad - no preview available - ignore for now (see todo above)
                             nop
