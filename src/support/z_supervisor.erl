@@ -281,8 +281,10 @@ handle_retrying_children(#state{retrying=[]} = State) ->
 handle_retrying_children(#state{retrying=Retrying} = State) ->
     Now = z_utils:now(),
     {Start,Wait} = lists:partition(fun(CS) -> is_ready_for_retry(CS, Now) end, Retrying),
-    lists:foldl(fun(#child_spec{mfa=MFA} = CS, S) ->
-                    case start_child_mfa(MFA) of
+    lists:foldl(fun(#child_state{child=Child} = CS, S) ->
+                    case start_child_mfa(Child#child_spec.mfa) of
+                        {ok, undefined} ->
+                            S#state{failed=[CS|S#state.failed]};
                         {ok, Pid} ->
                             CS1 = CS#child_state{state=running_from_retry, pid=Pid, time=erlang:localtime()},
                             S#state{running=[CS1|S#state.running]};
@@ -301,8 +303,11 @@ handle_failed_children(#state{failed=[]} = State) ->
 handle_failed_children(#state{failed=Failed} = State) ->
     Now = z_utils:now(),
     {Start,Fail} = lists:partition(fun(CS) -> is_ready_for_unfail(CS, Now) end, Failed),
-    lists:foldl(fun(#child_spec{mfa=MFA} = CS, S) ->
-                    case start_child_mfa(MFA) of
+    lists:foldl(fun(#child_state{child=Child} = CS, S) ->
+                    case start_child_mfa(Child#child_spec.mfa) of
+                        {ok, undefined} ->
+                            CS1 = CS#child_state{fail_time=Now},
+                            S#state{failed=[CS1|S#state.failed]};
                         {ok, Pid} ->
                             CS1 = CS#child_state{state=running_from_failed, pid=Pid, time=erlang:localtime()},
                             S#state{running=[CS1|S#state.running]};
