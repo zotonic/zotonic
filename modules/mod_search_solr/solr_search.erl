@@ -83,7 +83,7 @@ map_search(Query, Context) ->
     Query1 = filter_empty(Query),
     L = [map_search_field(Part, Context) || Part <- lists:reverse(Query1)],
     {SolrQuery, SearchOptions} = lists:unzip(L),
-    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", X|Acc] end, [], SolrQuery),
+    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", z_convert:to_list(X)|Acc] end, [], SolrQuery),
     {lists:flatten(SolrQuery1), lists:flatten(SearchOptions)}.
 
 %% cat=categoryname
