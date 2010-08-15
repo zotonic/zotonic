@@ -43,13 +43,14 @@
     restart_child/2,
     which_children/1,
     running_children/1,
-    check_children/1
+    check_children/1,
+    set_manager_pid/2
 ]).
 
 % -record(supervised, {name, mfa, status, pid, crashes = 5, period = 60, period_retry = 1800, period_retries=10}).
 
 -define(INTERVAL, 1000).
--record(state, {waiting=[], running=[], retrying=[], failed=[], stopped=[], timer_ref}).
+-record(state, {waiting=[], running=[], retrying=[], failed=[], stopped=[], timer_ref, manager_pid}).
 
 -record(child_state, {name, pid,
                       state=waiting, time,
@@ -104,6 +105,10 @@ running_children(Pid) ->
 check_children(Pid) ->
     gen_server:cast(Pid, check_children).
 
+
+%% @doc Set the manager pid for this supervisor
+set_manager_pid(Pid, ManagerPid) ->
+    gen_server:cast(Pid, {set_manager_pid, ManagerPid}).
 
 %%====================================================================
 %% gen_server callbacks
@@ -160,7 +165,7 @@ handle_call({start_child, Name}, _From, State) ->
 handle_call({restart_child, Name}, _From, State) ->
     case do_remove_child(Name, State) of
         {CS,State1} ->
-            shutdown(CS),
+            shutdown_child(CS, State),
             {reply, ok, do_start_child(CS, State1)};
         error ->
             %% Unknown child
@@ -194,7 +199,7 @@ handle_call(Message, _From, State) ->
 handle_cast({stop_child, Name}, State) ->
     case do_remove_child(Name, State) of
         {CS,State1} ->
-            shutdown(CS),
+            shutdown_child(CS, State1),
             CS1 = CS#child_state{state=stopped, time=erlang:localtime(), pid=undefined},
             {noreply, State1#state{stopped=[CS1|State1#state.stopped]}};
         error ->
@@ -206,7 +211,7 @@ handle_cast({stop_child, Name}, State) ->
 handle_cast({delete_child, Name}, State) ->
     case do_remove_child(Name, State) of
         {CS,State1} ->
-            shutdown(CS),
+            shutdown_child(CS, State1),
             {noreply, State1};
         error ->
             %% Unknown child
@@ -219,6 +224,10 @@ handle_cast(check_children, State) ->
     State2 = handle_retrying_children(State1),
     State3 = handle_failed_children(State2),
     {noreply, State3};
+
+%% @doc Set the manager pid of this supervisor
+handle_cast({set_manager_pid, Pid}, State) ->
+    {noreply, State#state{manager_pid=Pid}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -329,6 +338,7 @@ do_start_child(#child_state{child=Child} = CS, State) ->
     case start_child_mfa(MFA) of
         {ok, Pid} ->
             CS1 = CS#child_state{state=running, pid=Pid, time=erlang:localtime()},
+            notify_start(CS1, State),
             State#state{running=[CS1|State#state.running]};
         {error, _What} ->
             do_maybe_restart(CS, State)
@@ -446,8 +456,11 @@ append_stopped(CS, State) ->
 %% @doc Remove a child from the running list
 remove_running_pid(Pid, State) ->
     case remove_by_pid(Pid, State#state.running, []) of
-        {CS, Running} -> {CS#child_state{pid=undefined}, State#state{running=Running}};
-        error -> error
+        {CS, Running} -> 
+            notify_exit(CS, State),
+            {CS#child_state{pid=undefined}, State#state{running=Running}};
+        error ->
+            error
     end.
 
 
@@ -487,10 +500,26 @@ is_member(Name, [_|Rest]) -> is_member(Name, Rest).
 
 
 %% @doc Kill the child process when it is running
-shutdown(#child_state{pid=Pid, child=Child}) when is_pid(Pid) ->
+shutdown_child(#child_state{pid=Pid, child=Child} = CS, State) when is_pid(Pid) ->
+    notify_exit(CS, State),
     shutdown(Pid, Child#child_spec.shutdown);
-shutdown(_) ->
+shutdown_child(_, _State) ->
     {error, no_process}.
+
+
+%% @doc Notify the manager that a child has stopped
+notify_exit(_ChildState, #state{manager_pid=undefined}) ->
+    nop;
+notify_exit(ChildState, #state{manager_pid=ManagerPid}) ->
+    gen_server:cast(ManagerPid, {supervisor_child_stopped, ChildState#child_state.child, ChildState#child_state.pid}).
+
+
+%% @doc Notify the manager that a child has started
+notify_start(_ChildState, #state{manager_pid=undefined}) ->
+    nop;
+notify_start(ChildState, #state{manager_pid=ManagerPid}) ->
+    gen_server:cast(ManagerPid, {supervisor_child_started, ChildState#child_state.child, ChildState#child_state.pid}).
+
 
 %%-----------------------------------------------------------------
 %% shutdown/2 and monitor_child/1 are from supervisor.erl

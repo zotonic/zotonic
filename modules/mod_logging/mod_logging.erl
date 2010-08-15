@@ -101,14 +101,29 @@ handle_cast({{log, Type, Msg, Props}, Ctx}, State=#state{context=Context}) ->
                                  {type, Type},
                                  {message, Msg}] ++ Props, Context),
 
-    {Tpl, _Ctx} = z_template:render_to_iolist("_admin_log_row.tpl", [{id, Id}], Context),
-    Tpl2 = lists:reverse(lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl)))),
-    F = fun(Pid) ->
-                z_session_page:add_script(["$('", Tpl2, "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
-                                           log_color(Type), "'}).animate({backgroundColor:'", log_color(bg), "'}, 8000, 'linear');"], Pid)
-        end,
-    [F(P) || P <- State#state.admin_log_pages],
-
+    % Notify admins of any updates
+    case State#state.admin_log_pages of
+        [] -> nop;
+        AdminPages ->
+            case catch z_template:render_to_iolist("_admin_log_row.tpl", [{id, Id}], Context) of
+                {error, {template_not_found,"_admin_log_row.tpl",enoent}} ->
+                    % We can get a template_not_found error when the system is still starting.
+                    nop;
+                {error, Reason} ->
+                    ?DEBUG(Reason),
+                    nop;
+                {Tpl, _Ctx} ->
+                    Tpl2 = lists:reverse(lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl)))),
+                    F = fun(Pid) ->
+                                z_session_page:add_script([
+                                    "$('", Tpl2, 
+                                    "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
+                                   log_color(Type), "'}).animate({backgroundColor:'", 
+                                   log_color(bg), "'}, 8000, 'linear');"], Pid)
+                        end,
+                    [F(P) || P <- AdminPages]
+            end
+    end,
     {noreply, State};
 
 %% @doc Trap unknown casts

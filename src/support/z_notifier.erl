@@ -69,7 +69,7 @@ start_link(SiteProps) when is_list(SiteProps) ->
 
 %% @doc Subscribe to an event. Observer is a {M,F} or pid()
 observe(Event, {Module, Function}, Context) ->
-    observe(Event, {Module, Function}, z_module_sup:prio(Module), Context);
+    observe(Event, {Module, Function}, z_module_manager:prio(Module), Context);
 observe(Event, Observer, Context) ->
     observe(Event, Observer, ?NOTIFIER_DEFAULT_PRIORITY, Context).
 
