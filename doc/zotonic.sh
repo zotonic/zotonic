@@ -97,6 +97,10 @@ case $1 in
     update
     ;;
 
+  shell)
+    $ERL -sname zotonic_shell -remsh $SNAME@$HOSTNAME
+    ;;
+
   restart)
     echo "Restarting zotonic"
     stop

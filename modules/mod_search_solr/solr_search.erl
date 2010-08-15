@@ -62,7 +62,12 @@ match(Id, {_, Amount}, Solr, Context) ->
     %% "More like this id" gives us a search result with 1 doc, but
     %% the interesting stuff is in the 'morelikethis' property of the
     %% search.
-    {obj, [{IdS, {obj, Props}}]} = proplists:get_value(morelikethis, Result#search_result.result),
+    Props = case proplists:get_value(morelikethis, Result#search_result.result) of
+                {obj, []} ->
+                    [{"numFound", "0"}, {"docs", []}];
+                {obj, [{IdS, {obj, Props0}}]} ->
+                    Props0
+            end,
 
     %% Extract the matching ids and the total number found
     Ids = [DocId || {obj, [{"id", DocId}]} <- proplists:get_value("docs", Props)],
