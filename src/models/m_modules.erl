@@ -55,16 +55,16 @@ m_value(#m{value=undefined}, Context) ->
 
 %% @doc Return the list of modules
 all(Context) ->
-    All = lists:sort(z_module_sup:all(Context)),
-    All1 = lists:filter(fun(M) -> z_module_sup:module_exists(M) end, All),
-    [ {Name, z_module_sup:title(Name)} || Name <- All1 ].
+    All = lists:sort(z_module_manager:all(Context)),
+    All1 = lists:filter(fun(M) -> z_module_manager:module_exists(M) end, All),
+    [ {Name, z_module_manager:title(Name)} || Name <- All1 ].
 
 enabled(Context) ->
-    Mods = z_module_sup:active(Context),
-    lists:filter(fun(M) -> z_module_sup:module_exists(M) end, Mods).
+    Mods = z_module_manager:active(Context),
+    lists:filter(fun(M) -> z_module_manager:module_exists(M) end, Mods).
 
 disabled(Context) ->
-    All = z_module_sup:all(Context),
-    Active = z_module_sup:active(Context),
-    lists:filter(fun(M) -> (not lists:member(M, Active)) andalso z_module_sup:module_exists(M) end, All).
+    All = z_module_manager:all(Context),
+    Active = z_module_manager:active(Context),
+    lists:filter(fun(M) -> (not lists:member(M, Active)) andalso z_module_manager:module_exists(M) end, All).
 

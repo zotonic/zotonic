@@ -42,7 +42,7 @@
 all(Context) ->
     F = fun() ->
                   {_Ms, Services} = lists:unzip(z_module_indexer:find_all(service, true, Context)),
-                  lists:filter(fun(S) -> z_module_sup:active(module(S), Context) end, Services)
+                  lists:filter(fun(S) -> z_module_manager:active(module(S), Context) end, Services)
           end,
     z_depcache:memo(F, {z_services}, ?WEEK, [z_modules], Context).
 
@@ -124,7 +124,7 @@ module(Service) ->
     S = atom_to_list(Service),
     [M|_Rest] = string:tokens(string:substr(S, 9), "_"),
     Mod = list_to_atom("mod_" ++ M),
-    case z_module_sup:module_exists(Mod) of
+    case z_module_manager:module_exists(Mod) of
         true ->
             Mod;
         false ->

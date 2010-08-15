@@ -187,11 +187,7 @@ event({submit, [], "logon_verification_form", _Target}, Context) ->
 event({submit, [], _Trigger, _Target}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first({logon_submit, Args}, Context) of
-        undefined -> 
-			case logon_error(Context) of
-				{ok, ContextUser} -> ContextUser;
-				{error, _Reason} -> logon_error(Context)
-			end;
+        undefined -> logon_error(Context); % No handler for posted args
         {error, _Reason} -> logon_error(Context);
         {expired, UserId} when is_integer(UserId) -> password_expired(UserId, Context);
         {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
