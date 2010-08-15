@@ -38,9 +38,9 @@ start_link(Args) when is_list(Args) ->
 
 
 pid_observe_search_query(Pid, {search_query, {solr, _Query}, _Limit} = Search, Context) ->
-    gen_server:call(Pid, {Search, Context});
+    gen_server:call(Pid, {Search, Context}, infinity);
 pid_observe_search_query(Pid, {search_query, {match, [{id,_Id}]}, _Limit} = Search, Context) ->
-    gen_server:call(Pid, {Search, Context});
+    gen_server:call(Pid, {Search, Context}, infinity);
 pid_observe_search_query(_Pid, _Query, _Context) ->
     undefined.
 
@@ -84,7 +84,7 @@ handle_call({{search_query, {solr, Query}, Limit}, Context}, _From, State=#state
 
 %% A "match" query (for sidebars and such)
 handle_call({{search_query, {match, [{id,Id}]}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
-    Reply = solr_search:search(Id, Limit, Solr, Context),
+    Reply = solr_search:match(Id, Limit, Solr, Context),
     {reply, Reply, State};
 
 %% @doc Trap unknown calls

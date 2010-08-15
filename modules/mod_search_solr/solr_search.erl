@@ -15,8 +15,6 @@
 %% @doc Execute a query on the solr instance.
 search(Query, {Offset, PageLen}, Solr, Context) ->
     {Q, SearchOptions} = map_search(Query, Context),
-    ?DEBUG(Query),
-    ?DEBUG(Q),
     {ok, RespAttrs, Docs, Info} = esolr:search(Q, [{fields, "id"}, {start, Offset-1}, {rows, PageLen} | SearchOptions], Solr),
 
     %% Get the ids
@@ -83,7 +81,7 @@ map_search(Query, Context) ->
     Query1 = filter_empty(Query),
     L = [map_search_field(Part, Context) || Part <- lists:reverse(Query1)],
     {SolrQuery, SearchOptions} = lists:unzip(L),
-    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", z_convert:to_list(X)|Acc] end, [], SolrQuery),
+    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", X|Acc] end, [], SolrQuery),
     {lists:flatten(SolrQuery1), lists:flatten(SearchOptions)}.
 
 %% cat=categoryname
