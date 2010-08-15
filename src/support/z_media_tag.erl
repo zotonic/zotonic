@@ -156,15 +156,14 @@ tag(Filename, Options, Context) when is_list(Filename) ->
             undefined -> undefined
         end;
     mediaprops_filename(Id, Props, Context) ->
-        case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-            [] ->
-                case z_notifier:first({media_stillimage, Id, Props}, Context) of
-                    {ok, Filename} -> Filename;
-                    _ -> z_convert:to_list(proplists:get_value(filename, Props))
-                end;
-            Filename -> Filename
+        case z_notifier:first({media_stillimage, Id, Props}, Context) of
+            {ok, Filename} -> Filename;
+            _ -> case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+                     [] -> z_convert:to_list(proplists:get_value(filename, Props));
+                     Filename -> Filename
+                 end
         end.
-            
+
 
     get_link(Media, true, Context) ->
         Id = media_id(Media),
