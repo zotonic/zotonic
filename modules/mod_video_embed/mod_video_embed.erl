@@ -120,11 +120,15 @@ observe_media_stillimage({media_stillimage, Id, Props}, Context) ->
         ?EMBED_MIME ->
             case m_rsc:p(Id, depiction, Context) of
                 undefined ->
-                    case proplists:get_value(video_embed_service, Props) of
-                        <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
-                        <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
-                        <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
-                        _ -> {ok, "lib/images/embed.jpg"}
+                    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+                        [] ->
+                            case proplists:get_value(video_embed_service, Props) of
+                                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
+                                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
+                                <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
+                                _ -> {ok, "lib/images/embed.jpg"}
+                            end;
+                        PreviewFile -> {ok, PreviewFile}
                     end;
                 DepictionProps ->
                     case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
@@ -226,7 +230,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
         [] -> nop;
         Embed ->
-            case re:run(Embed, "youtube\\.com/v/([^\"'&]+)", [{capture,[1],list}]) of
+            case re:run(Embed, "youtube(\-nocookie)?\\.com/v/([^\?\"'&]+)", [{capture,[2],list}]) of
                 {match, [Code]} ->
                     Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
                     case http:request(Url) of
