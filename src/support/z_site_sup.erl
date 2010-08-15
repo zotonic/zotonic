@@ -84,9 +84,9 @@ init(Host) ->
                 {z_module_indexer, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
-    Modules = {z_module_sup,
-                {z_module_sup, start_link, [SiteProps]},
-                permanent, 5000, supervisor, dynamic},
+    Modules = {z_module_manager,
+                {z_module_manager, start_link, [SiteProps]},
+                permanent, 5000, worker, dynamic},
 
     PostStartup = {z_site_startup,
                     {z_site_startup, start_link, [SiteProps]},

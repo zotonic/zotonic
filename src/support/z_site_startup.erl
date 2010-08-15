@@ -30,7 +30,7 @@ start_link(SiteProps) ->
     Context = z_context:new(Host),
 
     % Make sure all modules are started
-    z_module_sup:upgrade(Context),
+    z_module_manager:upgrade(Context),
 
     % Load all translations
     spawn(fun() -> z_trans_server:load_translations(Context) end),
