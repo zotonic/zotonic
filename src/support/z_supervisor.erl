@@ -283,13 +283,19 @@ handle_retrying_children(#state{retrying=Retrying} = State) ->
     {Start,Wait} = lists:partition(fun(CS) -> is_ready_for_retry(CS, Now) end, Retrying),
     lists:foldl(fun(#child_state{child=Child} = CS, S) ->
                     case start_child_mfa(Child#child_spec.mfa) of
-                        {ok, undefined} ->
-                            S#state{failed=[CS|S#state.failed]};
                         {ok, Pid} ->
                             CS1 = CS#child_state{state=running_from_retry, pid=Pid, time=erlang:localtime()},
                             S#state{running=[CS1|S#state.running]};
                         {error, _What} ->
-                            S#state{failed=[CS|S#state.failed]}
+                            % Move the child to the failed state when it crashed too often
+                            case CS#child_state.retries >= Child#child_spec.period_retries of
+                                true ->
+                                    CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=Now},
+                                    S#state{failed=[CS1|S#state.failed]};
+                                false ->
+                                    CS1 = CS#child_state{retries=CS#child_state.retries+1, retry_time=Now},
+                                    S#state{retrying=[CS1|S#state.retrying]}
+                            end
                     end
                 end,
                 State#state{retrying=Wait}, Start).
@@ -305,14 +311,11 @@ handle_failed_children(#state{failed=Failed} = State) ->
     {Start,Fail} = lists:partition(fun(CS) -> is_ready_for_unfail(CS, Now) end, Failed),
     lists:foldl(fun(#child_state{child=Child} = CS, S) ->
                     case start_child_mfa(Child#child_spec.mfa) of
-                        {ok, undefined} ->
-                            CS1 = CS#child_state{fail_time=Now},
-                            S#state{failed=[CS1|S#state.failed]};
                         {ok, Pid} ->
                             CS1 = CS#child_state{state=running_from_failed, pid=Pid, time=erlang:localtime()},
                             S#state{running=[CS1|S#state.running]};
                         {error, _What} ->
-                            CS1 = CS#child_state{fail_time=Now},
+                            CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=Now},
                             S#state{failed=[CS1|S#state.failed]}
                     end
                 end,
@@ -369,7 +372,7 @@ do_maybe_restart(CS, State) ->
                             retries=CS#child_state.retries+1, retry_time=z_utils:now()},
             State#state{retrying=[CS1|State#state.retrying]};
         fail ->
-            CS1 = CS#child_state{state=failed, time=erlang:localtime()},
+            CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=z_utils:now()},
             State#state{failed=[CS1|State#state.failed]}
     end.
 
