@@ -47,7 +47,6 @@
         dropbox_server,
         pivot_server,
         module_indexer,
-        module_sup,
         translation_table,
         
         %% The database connection used for (nested) transactions, see z_db
