@@ -99,6 +99,9 @@ function z_postback_check()
 
 function z_opt_cancel(obj)
 {
+	if(typeof obj.nodeName == 'undefined')
+		return false;
+
 	var nodeName = obj.nodeName.toLowerCase();
 	var nodeType = $(obj).attr("type");
 
