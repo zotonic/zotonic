@@ -23,20 +23,20 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
-var z_ws                    = false;
-var z_ws_opened             = false;
+var z_ws					= false;
+var z_ws_opened				= false;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
 var z_postbacks				= [];
 var z_default_form_postback = false;
 var z_input_updater			= false;
-var z_drag_tag              = [];
+var z_drag_tag				= [];
 
 /* 
 We need to set the domain of the session cookie to 'test'
 Then we can try to make an xhr request to 0.test, 1.test etc.
-document.domain  = 'test';
+document.domain	 = 'test';
 var z_xhr_domain = 'test';
 */
 
@@ -83,17 +83,24 @@ function z_growl_close()
 
 function z_postback_check() 
 {
-    if (!z_postbacks.length)
-    {
-        z_doing_postback = false;
-    }
-	if (z_postbacks.length > 0 && z_postback_connected())
+	if (z_postbacks.length == 0)
 	{
-		// Send only a single postback at a time.
-		z_doing_postback = true;
+		z_doing_postback = false;
+	}
+	else
+	{
+		if (z_postback_connected())
+		{
+			// Send only a single postback at a time.
+			z_doing_postback = true;
 
-		var o = z_postbacks.shift();
-		z_do_postback(o.triggerID, o.postback, o.extraParams);
+			var o = z_postbacks.shift();
+			z_do_postback(o.triggerID, o.postback, o.extraParams);
+		}
+		else
+		{
+			setTimeout("z_postback_check()", 10);
+		}
 	}
 }
 
@@ -162,15 +169,15 @@ function z_do_postback(triggerID, postback, extraParams)
 	
 	// logon_form and .setcookie forms are always posted, as they will set cookies.
 	if (   z_ws
-	    && z_ws.readyState == 1 
-	    && triggerID != "logon_form" 
-	    && (triggerID == '' || !$('#'+triggerID).hasClass("setcookie")))
+		&& z_ws.readyState == 1 
+		&& triggerID != "logon_form" 
+		&& (triggerID == '' || !$('#'+triggerID).hasClass("setcookie")))
 	{
-	    z_ws.send(params);
+		z_ws.send(params);
 	}
 	else
 	{
-    	z_ajax(triggerID, params);
+		z_ajax(triggerID, params);
 	}
 }
 
@@ -197,7 +204,7 @@ function z_ajax(triggerID, params)
 				$.misc.error("Error evaluating ajax return value: " + data);
 				$.misc.warn(e);
 			}
-            setTimeout("z_postback_check()", 0);
+			setTimeout("z_postback_check()", 0);
 		},
 		error: function(xmlHttpRequest, textStatus, errorThrown) 
 		{
@@ -211,26 +218,26 @@ function z_ajax(triggerID, params)
 
 function z_unmask(id)
 {
-    if (id)
-    {
-    	var trigger = $('#'+id).get(0);
+	if (id)
+	{
+		var trigger = $('#'+id).get(0);
 	
-    	if (trigger && trigger.nodeName.toLowerCase() == 'form') 
-    	{
-        	try { $(trigger).unmask(); } catch (e) {};
-    	}
-        $(trigger).removeClass("z_error_upload");
-    }
+		if (trigger && trigger.nodeName.toLowerCase() == 'form') 
+		{
+			try { $(trigger).unmask(); } catch (e) {};
+		}
+		$(trigger).removeClass("z_error_upload");
+	}
 }
 
 
 function z_unmask_error(id)
 {
-    if (id)
-    {
-        z_unmask(id);
-        $('#'+id).addClass("z_error_upload");
-    }
+	if (id)
+	{
+		z_unmask(id);
+		$('#'+id).addClass("z_error_upload");
+	}
 }
 
 
@@ -238,12 +245,12 @@ function z_progress(id, value)
 {
 	if (id)
 	{
-    	var trigger = $('#'+id).get(0);
+		var trigger = $('#'+id).get(0);
 	
-    	if (trigger.nodeName.toLowerCase() == 'form') 
-    	{
-        	try { $(trigger).maskProgress(value); } catch (e) {};
-    	}
+		if (trigger.nodeName.toLowerCase() == 'form') 
+		{
+			try { $(trigger).maskProgress(value); } catch (e) {};
+		}
 		
 	}
 }
@@ -253,18 +260,18 @@ function z_progress(id, value)
 
 function z_stream_start(hostname)
 {
-    if (!z_ws && !z_comet_is_running)
-    {
-    	if ("WebSocket" in window) 
-    	{
-    	    z_websocket_start(hostname);
-    	}
-        else
-    	{
-    		setTimeout("z_comet();", 2000);
-    		z_comet_is_running = true;
-    	}
-    }
+	if (!z_ws && !z_comet_is_running)
+	{
+		if ("WebSocket" in window) 
+		{
+			z_websocket_start(hostname);
+		}
+		else
+		{
+			setTimeout("z_comet();", 2000);
+			z_comet_is_running = true;
+		}
+	}
 }
 
 function z_comet() 
@@ -306,25 +313,25 @@ function z_websocket_start(hostname)
 
 	z_ws.onclose = function (evt) 
 	{
-	    if (z_ws_opened)
-	    {
-	        // Try to reopen, might be closed to error upstream
-	        setTimeout(function() { z_websocket_start(hostname); }, 10);
-	    }
-	    else
-	    {
-	        // Failed opening websocket connection - try to start comet
-	        z_ws = undefined;
-    		setTimeout("z_comet();", 2000);
-    		z_comet_is_running = true;
-	    }
+		if (z_ws_opened)
+		{
+			// Try to reopen, might be closed to error upstream
+			setTimeout(function() { z_websocket_start(hostname); }, 10);
+		}
+		else
+		{
+			// Failed opening websocket connection - try to start comet
+			z_ws = undefined;
+			setTimeout("z_comet();", 2000);
+			z_comet_is_running = true;
+		}
 	};
 
 	z_ws.onmessage = function (evt)
 	{
 		try
 		{
-		    eval(evt.data);
+			eval(evt.data);
 			z_init_postback_forms();
 		}
 		catch (e)
@@ -332,7 +339,7 @@ function z_websocket_start(hostname)
 			$.misc.error("Error evaluating ajax return value: " + evt.data);
 			$.misc.warn(e);
 		}
-        setTimeout("z_postback_check()", 0);
+		setTimeout("z_postback_check()", 0);
 	};
 }
 
@@ -410,7 +417,7 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 			var sortTag = $(this.childNodes[i]).data("z_sort_tag") 
 			if (!sortTag && this.childNodes[i].id)
 			{
-			    sortTag = z_drag_tag[this.childNodes[i].id];
+				sortTag = z_drag_tag[this.childNodes[i].id];
 			}
 			if (sortTag)
 			{
@@ -497,8 +504,8 @@ function z_init_postback_forms()
 	})
 	.submit(function(event)
 	{
-	    try { $(this).mask("", 100); } catch (e) {};
-	    
+		try { $(this).mask("", 100); } catch (e) {};
+		
 		if ($('.tinymce', this).length > 0 && tinyMCE)
 		{
 			tinyMCE.triggerSave(true,true);
@@ -526,21 +533,21 @@ function z_init_postback_forms()
 		var files = $('input:file', this).fieldValue();
 		var found = false;
 
-        if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
-        {
-            found = true;
-        }
-        else
-        {
-    		for (var j=0; j < files.length && !found; j++)
-    		{
-    			if (files[j])
-    			{
-    				found = true;
-    			}
-    		}
-        }
-        
+		if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
+		{
+			found = true;
+		}
+		else
+		{
+			for (var j=0; j < files.length && !found; j++)
+			{
+				if (files[j])
+				{
+					found = true;
+				}
+			}
+		}
+		
 		if(found) 
 		{
 			$(this).postbackFileForm(form_id, postback, validations);
@@ -689,7 +696,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 			}
 		}, 10);
 
-        var domCheckCount = 3;
+		var domCheckCount = 3;
 
 		function cb() {
 			if (cbInvoked++) return;
@@ -702,21 +709,21 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 				// extract the server response from the iframe
 				var data, doc;
 
-                doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
-                if (doc.body == null || doc.body.innerHTML == '') {
-                    if (--domCheckCount) {
-                        // in some browsers (Opera) the iframe DOM is not always traversable when
-                        // the onload callback fires, so we loop a bit to accommodate
+				doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
+				if (doc.body == null || doc.body.innerHTML == '') {
+					if (--domCheckCount) {
+						// in some browsers (Opera) the iframe DOM is not always traversable when
+						// the onload callback fires, so we loop a bit to accommodate
 
-                        // MW: looks like this is not a timing issue but Opera triggering a
-                        //     load event on the 100 continue.
-                        cbInvoked = 0;
-                        io.addEventListener('load', cb, false);
-                        return;
-                    }
-                    log('Could not access iframe DOM after 50 tries.');
-                    return;
-                }
+						// MW: looks like this is not a timing issue but Opera triggering a
+						//	   load event on the 100 continue.
+						cbInvoked = 0;
+						io.addEventListener('load', cb, false);
+						return;
+					}
+					log('Could not access iframe DOM after 50 tries.');
+					return;
+				}
 
 				xhr.responseText = doc.body ? doc.body.innerHTML : null;
 				
@@ -736,17 +743,17 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 			
 			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
 			if (ok) {
-			    try {
-    				eval(data);
-			    } catch (e) {
-			        z_unmask_error(form.id);
-			    }
+				try {
+					eval(data);
+				} catch (e) {
+					z_unmask_error(form.id);
+				}
 				if (g) 
 				{
 					$.event.trigger("ajaxSuccess", [xhr, opts]);
 				}
 			} else {
-			    z_unmask_error(form.id);
+				z_unmask_error(form.id);
 			}
 			if (g) $.event.trigger("ajaxComplete", [xhr, opts]);
 			if (g && ! --$.active) $.event.trigger("ajaxStop");
@@ -827,10 +834,10 @@ function z_add_validator(id, type, args)
 
 		if (v)
 		{
-		    if (args['pattern'])
-		    {
-		        args['pattern'] = new RegExp(args['pattern']);
-		    }
+			if (args['pattern'])
+			{
+				args['pattern'] = new RegExp(args['pattern']);
+			}
 			switch (type)
 			{
 				case 'email':			v.add(Validate.Email, args);		break;
@@ -838,15 +845,15 @@ function z_add_validator(id, type, args)
 				case 'confirmation':	v.add(Validate.Confirmation, args); break;
 				case 'acceptance':		v.add(Validate.Acceptance, args);	break;
 				case 'length':			v.add(Validate.Length, args);		break;
-				case 'format':          v.add(Validate.Format, args);       break;
+				case 'format':			v.add(Validate.Format, args);		break;
 				case 'numericality':	v.add(Validate.Numericality, args); break;
-				case 'postback':        
-				    args['z_id'] = id;
-				    v.add(Validate.Postback, args);
-				    break;
+				case 'postback':		
+					args['z_id'] = id;
+					v.add(Validate.Postback, args);
+					break;
 				default:
-				    $.misc.error("unknown validation: "+type);
-				    break;
+					$.misc.error("unknown validation: "+type);
+					break;
 			}
 		}
 	});
@@ -874,8 +881,8 @@ function z_async_validation_result(id, isValid, testedValue)
 
 	if (v && $('#'+id).val() == testedValue)
 	{
-	    v.asyncValidationResult(isValid, testedValue);
-    }
+		v.asyncValidationResult(isValid, testedValue);
+	}
 }
 
 // Called by the server on validation errors
@@ -884,13 +891,13 @@ function z_validation_error(id, error)
 	var v = $('#'+id).data("z_live_validation");
 	if (v)
 	{
-    	if (error == 'invalid')
-    	{
-    		// Generic error - handle it ourselves
-    		error = "please correct";
-    	}
-	    v.showErrorMessage(error);
-    }
+		if (error == 'invalid')
+		{
+			// Generic error - handle it ourselves
+			error = "please correct";
+		}
+		v.showErrorMessage(error);
+	}
 }
 
 // URL encode function that is more RFC compatible.	 Also encodes +, *, / and @.
@@ -946,7 +953,7 @@ $.fn.formToArray = function(semantic) {
 		var el = els[i];
 		var n = el.name;
 		if (!n) continue;
-	    if ($(el).hasClass("nosubmit")) continue;
+		if ($(el).hasClass("nosubmit")) continue;
 
 		var v = $.fieldValue(el, true);
 		if (v && v.constructor == Array) {
