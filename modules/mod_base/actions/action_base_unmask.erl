@@ -23,12 +23,11 @@
 render_action(_TriggerId, TargetId, Args, Context) -> 
     Selector = case proplists:get_value(body, Args) of
         true -> "body";
-        _ -> case proplists:get_value(target, Args, TargetId) of
-                undefined -> "body";
+        _ -> 
+            case z_render:css_selector(TargetId, Args) of
                 [] -> "body";
-                <<>> -> "body";
-                Id -> [$", $#, Id, $"]
-             end
+                S -> S
+            end
     end,
     Script = [ <<"try { $(">>,Selector,<<").unmask(); } catch (e) {};">>],
-	{Script, Context}.
+    {Script, Context}.

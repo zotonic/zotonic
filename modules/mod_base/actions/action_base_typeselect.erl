@@ -33,23 +33,23 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Cats = proplists:get_all_values(cat, Args),
     Template = proplists:get_value(template, Args, "_action_typeselect_result.tpl"),
     Postback = {typeselect, Cats, Template, Actions, ActionsWithId},
-	{_PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
-	JS = [
-	    <<"z_typeselect(\"">>, TriggerId, $",$,,$", PickledPostback, <<"\");">>
-	],
-	{JS, Context}.
+    {_PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
+    JS = [
+        <<"z_typeselect(\"">>, TriggerId, $",$,,$", PickledPostback, <<"\");">>
+    ],
+    {JS, Context}.
 
 
 %% @doc Show possible completions of the search text using a template.
 %% @spec event(Event, Context1) -> Context2
 event({postback, {typeselect, Cats, Template, Actions, ActionsWithId}, _TriggerId, TargetId}, Context) ->
     Text = z_context:get_q("triggervalue", Context),
-	Props = [{cat,Cats}, {text, Text}],
+    Props = [{cat,Cats}, {text, Text}],
     Result = z_search:search({autocomplete, Props}, {1,20}, Context),
-	M = #m{
-		model=m_search,
-		value=#m_search_result{result=Result, total=20, search_name=autocomplete, search_props=Props}
-	},
+    M = #m{
+        model=m_search,
+        value=#m_search_result{result=Result, total=20, search_name=autocomplete, search_props=Props}
+    },
     Vars = [
         {result, M},
         {action, Actions},

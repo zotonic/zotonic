@@ -21,7 +21,8 @@
 -export([render_action/4]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
-    Id = proplists:get_value(id, Args, TargetId),
+    CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
     Value = proplists:get_value(value, Args, ""),
-    ValueString = z_convert:to_list(Value),
-    {[ $$, $(, $", $#, z_utils:js_escape(Id), <<"\").val(\"">>, z_utils:js_escape(ValueString), $", $), $;  ], Context}.
+    {[ $$, $(, $', CssSelector, $', $), 
+       <<".val(\"">>, z_utils:js_escape(Value), $", $), 
+       $;], Context}.
