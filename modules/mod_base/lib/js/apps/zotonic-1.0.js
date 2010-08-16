@@ -87,7 +87,7 @@ function z_postback_check()
     {
         z_doing_postback = false;
     }
-	if (z_postbacks.length > 0)
+	if (z_postbacks.length > 0 && z_postback_connected())
 	{
 		// Send only a single postback at a time.
 		z_doing_postback = true;
@@ -140,8 +140,16 @@ function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
 	o.extraParams	= extraParams;
 	
 	z_postbacks.push(o);
-    z_postback_check();
+	z_postback_check();
 }
+
+
+// Wait with sending postbacks till the websocket connection is open
+function z_postback_connected()
+{
+	return !z_ws || z_ws.readyState != 0;
+}
+
 
 function z_do_postback(triggerID, postback, extraParams) 
 {
@@ -152,8 +160,11 @@ function z_do_postback(triggerID, postback, extraParams)
 		"&z_pageid=" + urlencode(z_pageid) + 
 		"&" + $.param(extraParams);
 	
-	// logon_form and .ajax forms are always posted, as they will set cookies.
-	if (z_ws && triggerID != "logon_form" && (triggerID == '' || !$('#'+triggerID).hasClass("setcookie")))
+	// logon_form and .setcookie forms are always posted, as they will set cookies.
+	if (   z_ws
+	    && z_ws.readyState == 1 
+	    && triggerID != "logon_form" 
+	    && (triggerID == '' || !$('#'+triggerID).hasClass("setcookie")))
 	{
 	    z_ws.send(params);
 	}
