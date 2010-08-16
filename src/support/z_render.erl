@@ -34,33 +34,49 @@
 -include("zotonic.hrl").
 
 -export ([
-	render/2,
-	render_actions/4,
-	render_to_iolist/2,
-	
-	validator/4,
-	render_validator/4,
+    render/2,
+    render_actions/4,
+    render_to_iolist/2,
+    
+    validator/4,
+    render_validator/4,
 
-	update/3,
-	insert_top/3,
-	insert_bottom/3,
-	appear_top/3,
-	appear_bottom/3,
-	set_value/3,
-	
-	dialog/4,
-	dialog_close/1,
+    update/3,
+    insert_top/3,
+    insert_bottom/3,
 
-	growl/2,
-	growl_error/2,
-	growl/4,
-	
-	make_postback/6,
-	make_postback_info/6,
-	make_validation_postback/2,
-	make_validation_postback/3,
-	
-	wire/2, wire/3, wire/4
+    appear/3,
+    appear_top/3,
+    appear_bottom/3,
+
+    update_selector/3,
+    insert_top_selector/3,
+    insert_bottom_selector/3,
+
+    appear_selector/3,
+    appear_top_selector/3,
+    appear_bottom_selector/3,
+
+    set_value/3,
+    set_value_selector/3,
+    
+    css_selector/1,
+    css_selector/2,
+    quote_css_selector/1,
+    
+    dialog/4,
+    dialog_close/1,
+
+    growl/2,
+    growl_error/2,
+    growl/4,
+    
+    make_postback/6,
+    make_postback_info/6,
+    make_validation_postback/2,
+    make_validation_postback/3,
+
+    wire/2, wire/3, wire/4
 ]).
 
 
@@ -72,11 +88,11 @@ render(<<>>, Context) ->
 render([], Context) -> 
     Context;
 render({script}, Context) -> 
-	%% Renders the script tag - might not be correct as it adds everything collected in Context and not what was collected
-	%% in the added iolist().  So maybe we should just ignore the {script} tag here.
-	%% When the script tag should be rendered then it is better to call z_context:output/2 instead of z_render:render/2.
-	{Html,Context1} = z_context:output([{script}], Context),
-	Context1#context{render=[Context1#context.render, Html]};
+    %% Renders the script tag - might not be correct as it adds everything collected in Context and not what was collected
+    %% in the added iolist().  So maybe we should just ignore the {script} tag here.
+    %% When the script tag should be rendered then it is better to call z_context:output/2 instead of z_render:render/2.
+    {Html,Context1} = z_context:output([{script}], Context),
+    Context1#context{render=[Context1#context.render, Html]};
 render(#context{} = C, Context) ->
     C1 = render(C#context.render, Context),
     C2 = z_context:merge_scripts(C, C1),
@@ -118,20 +134,20 @@ render_actions(TriggerId, TargetId, [H|T], Context) ->
     {Script2, Context2} = render_actions(TriggerId, TargetId, T, Context1),
     {[Script1,Script2], Context2};
 render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
-	case z_utils:is_true(proplists:get_value(show_if, Args, true)) of 
-		true -> 
-            Trigger      = proplists:get_value(trigger, Args, TriggerId),
-	        Target       = proplists:get_value(target,  Args, TargetId),
-	        case z_module_indexer:find(action, Action, Context) of
-	            {ok, ActionModule} ->
-			        ActionModule:render_action(Trigger, Target, Args, Context);
-			    {error, enoent} ->
-			        ?LOG("No action enabled for \"~p\"", [Action]),
-			        {[], Context}
-			end;
-		false -> 
-			{[],Context}
-	end.
+    case z_utils:is_true(proplists:get_value(show_if, Args, true)) of 
+        true -> 
+            Trigger = proplists:get_value(trigger, Args, TriggerId),
+            Target = proplists:get_value(target,  Args, TargetId),
+            case z_module_indexer:find(action, Action, Context) of
+                {ok, ActionModule} ->
+                    ActionModule:render_action(Trigger, Target, Args, Context);
+                {error, enoent} ->
+                    ?LOG("No action enabled for \"~p\"", [Action]),
+                    {[], Context}
+            end;
+        false -> 
+            {[],Context}
+    end.
 
 
 %% @spec validator(TriggerID::string(), TargetID::string(), Validator::#validator, Context::#context) -> #context
@@ -139,10 +155,8 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
 validator(TriggerId, TargetId, Validator, Context) ->
     V = {TriggerId, TargetId, Validator},
     case lists:member(V, Context#context.validators) of
-        true ->
-            Context;
-        false ->
-            Context#context{validators=[V|Context#context.validators]}
+        true -> Context;
+        false -> Context#context{validators=[V|Context#context.validators]}
     end.
 
 
@@ -166,10 +180,8 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                     VMod = case proplists:get_value(delegate, VArgs) of
                                 undefined -> 
                                     case z_module_indexer:find(validator, VType, Context) of
-                                        {ok, Mod} ->
-                                            {ok, Mod};
-                                        {error, enoent} ->
-                                            ?LOG("No validator found for \"~p\"", [VType])
+                                        {ok, Mod} -> {ok, Mod};
+                                        {error, enoent} -> ?LOG("No validator found for \"~p\"", [VType])
                                     end;
                                 Delegate  -> 
                                     {ok, Delegate}
@@ -197,67 +209,79 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 
 %%% AJAX UPDATES %%%
 
-%% @doc Set the contents of an element to the the html fragment	
-update(TargetId, undefined, Context) -> 
-    Script = "$('#~s').html(\"~s\").widgetManager();",
-    add_update(TargetId, "", Script, Context);
-update(TargetId, Html, Context) -> 
-    Script = "$('#~s').html(\"~s\").widgetManager();",
-    {Html1, Context1} = render_html(Html, Context),
-    add_update(TargetId, Html1, Script, Context1).
+%% @doc Set the contents of an element to the the html fragment 
+update(TargetId, Html, Context) ->
+    update_selector(css_selector(TargetId), Html, Context).
     
 %% @doc Insert a html fragment at the top of the contents of an element
-insert_top(_TargetId, undefined, Context) -> 
-    Context;
-insert_top(TargetId, Html, Context) -> 
-    Script = "$('#~s').prepend(\"~s\");",
-    {Html1, Context1} = render_html(Html, Context),
-    add_update(TargetId, Html1, Script, Context1).
+insert_top(TargetId, Html, Context) ->
+    insert_top_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Append a html fragment at the bottom of the contents of an element
-insert_bottom(_TargetId, undefined, Context) -> 
-    Context;
-insert_bottom(TargetId, Html, Context) -> 
-    Script = "$('#~s').append(\"~s\");",
-    {Html1, Context1} = render_html(Html, Context),
-    add_update(TargetId, Html1, Script, Context1).
+insert_bottom(TargetId, Html, Context) ->
+    insert_bottom_selector(css_selector(TargetId), Html, Context).
 
-%% @doc Insert a html fragment at the top of the contents of an element, fading it in.
-appear_top(_TargetId, undefined, Context) -> 
-    Context;
-appear_top(TargetId, Html, Context) -> 
-    Script = "$('#~s').prepend($(\"~s\").fadeIn());",
-    {Html1, Context1} = render_html(Html, Context),
-    add_update(TargetId, Html1, Script, Context1).
+%% @doc Set the contents of an element to the the html fragment 
+appear(TargetId, Html, Context) ->
+    appear_selector(css_selector(TargetId), Html, Context).
 
-%% @doc Append a html fragment at the bottom of the contents of an element, fading it in.
-appear_bottom(_TargetId, undefined, Context) -> 
-    Context;
-appear_bottom(TargetId, Html, Context) -> 
-    Script = "$('#~s').append($(\"~s\").fadeIn());",
+%% @doc Insert a html fragment at the top of the contents of an element
+appear_top(TargetId, Html, Context) ->
+    appear_top_selector(css_selector(TargetId), Html, Context).
+
+%% @doc Append a html fragment at the bottom of the contents of an element
+appear_bottom(TargetId, Html, Context) ->
+    appear_bottom_selector(css_selector(TargetId), Html, Context).
+
+
+%% @doc Set the contents of all elements matching the css selector to the the html fragment 
+update_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
+
+insert_top_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"prepend">>, "", Context).
+
+insert_bottom_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"append">>, "", Context).
+
+appear_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
+
+appear_top_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>, Context).
+
+appear_bottom_selector(CssSelector, Html, Context) ->
+    add_update(CssSelector, Html, <<"append">>, <<".fadeIn()">>, Context).
+
+%% @doc Set the value of an input element.
+set_value(TargetId, Value, Context) ->
+    set_value_selector(css_selector(TargetId), Value, Context).
+
+set_value_selector(CssSelector, undefined, Context) ->
+    set_value_selector(CssSelector, "", Context);
+set_value_selector(CssSelector, Value, Context) ->
+    add_update(CssSelector, Value, <<"val">>, "", Context).
+
+
+%% @doc Helper functions for the insert/appear/set_value functions
+add_update(CssSelector, Html, Function, AfterEffects, Context) ->
     {Html1, Context1} = render_html(Html, Context),
-    add_update(TargetId, Html1, Script, Context1).
-    
-    
+    Update = [ $$, $(, quote_css_selector(CssSelector), $), 
+               $., Function, $(, $", z_utils:js_escape(Html1), $", $), 
+               AfterEffects, 
+               $;],
+    Context1#context{updates=[{Update}|Context1#context.updates]}.
+
     render_html(#render{template=Template, vars=Vars}, Context) ->
         {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
         {iolist_to_binary(Html), Context1};
+    render_html(undefined, Context) ->
+        {"", Context};
+    render_html(Html, Context) when is_binary(Html) ->
+        {"", Context};
     render_html(Html, Context) ->
-        {Html, Context}.
-
-%% @doc Set the value of an input element.
-set_value(TargetId, undefined, Context) ->
-    Script = "$('#~s').val(\"~s\");",
-    add_update(TargetId, "", Script, Context);
-set_value(TargetId, Value, Context) ->
-    Value1 = z_html:escape(Value),
-    Script = "$('#~s').val(\"~s\");",
-    add_update(TargetId, Value1, Script, Context).
-
-
-%% @doc Internal function to add updates to the update queue for rendering
-add_update(TargetId, Html, JSFormatString, Context) ->
-	Context#context{updates=[{TargetId, Html, JSFormatString}|Context#context.updates]}.
+        {Html1, Context1} = render_to_iolist(Html, Context),
+        {iolist_to_binary(Html1), Context1}.
 
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
@@ -267,7 +291,7 @@ dialog(Title, Template, Vars, Context) ->
     z_render:wire({dialog, [{title, Title}, {text, Html}]}, Context1).
 
 dialog_close(Context) ->
-	z_render:wire({dialog_close, []}, Context).
+    z_render:wire({dialog_close, []}, Context).
 
 growl(Text, Context) ->
     z_render:wire({growl, [{text, Text}]}, Context).
@@ -284,12 +308,12 @@ growl(Text, Type, Stay, Context) ->
 
 %% @doc Make an encoded string containing information which module and function to call.
 make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
-	Delegate1 = case Delegate of
-            		undefined -> z_context:get_resource_module(Context);
-            		_         -> z_convert:to_atom(Delegate)
-            	end,
-	PostbackInfo = {EventType, TriggerId, TargetId, Tag, Delegate1},
-	z_utils:pickle(PostbackInfo, Context).
+    Delegate1 = case Delegate of
+                    undefined -> z_context:get_resource_module(Context);
+                    _         -> z_convert:to_atom(Delegate)
+                end,
+    PostbackInfo = {EventType, TriggerId, TargetId, Tag, Delegate1},
+    z_utils:pickle(PostbackInfo, Context).
 
 
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information. 
@@ -298,8 +322,8 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
 make_postback(undefined, _EventType, _TriggerId, _TargetId, _Delegate, _Context) ->
     {[],[]};
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
-	PickledPostbackInfo = make_postback_info(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context),
-	{[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"');">>], PickledPostbackInfo}.
+    PickledPostbackInfo = make_postback_info(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context),
+    {[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"');">>], PickledPostbackInfo}.
 
     ensure_iolist(A) when is_atom(A) -> atom_to_list(A);
     ensure_iolist(L) -> L.
@@ -315,12 +339,12 @@ make_validation_postback(Validator, Args, Context) ->
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
 wire(Actions, Context) -> 
-	wire(<<>>, <<>>, Actions, Context).
+    wire(<<>>, <<>>, Actions, Context).
 
-wire(undefined, Actions, Context) ->	
-	wire(<<>>, <<>>, Actions, Context);
-wire(TriggerId, Actions, Context) ->	
-	wire(TriggerId, TriggerId, Actions, Context).
+wire(undefined, Actions, Context) ->    
+    wire(<<>>, <<>>, Actions, Context);
+wire(TriggerId, Actions, Context) ->    
+    wire(TriggerId, TriggerId, Actions, Context).
 
 wire(undefined, TargetId, Actions, Context) ->
     wire(<<>>, TargetId, Actions, Context);
@@ -335,4 +359,36 @@ wire(TriggerId, TargetId, Actions, Context) ->
         lists:flatten(L);
     flatten_list(Other) ->
         Other.
+
+
+%% @doc Map a target id to a css selector
+css_selector(TargetId) ->
+    css_selector(TargetId, []).
+
+%% @doc Map a target id to a css selector, check the Args proplist for additional selectors
+css_selector(TargetId, Args) ->
+    case proplists:get_value(selector, Args) of
+        Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+            case TargetId of
+                window -> window;
+                "window" -> window;
+                undefined -> [];
+                [] -> [];
+                <<>> -> [];
+                [32|Selector] -> Selector;
+                [$#|_] = Selector -> Selector;
+                Id when is_list(Id); is_binary(Id)-> [$#|Id]
+            end;
+        "window" ->
+            window;
+        Selector ->
+            Selector
+    end.
+
+%% @doc Quote a css selector (assume no escaping needed...)
+quote_css_selector(window) -> "window";
+quote_css_selector([]) -> [];
+quote_css_selector([$'|_] = S) -> S;
+quote_css_selector([$"|_] = S) -> S;
+quote_css_selector(S) -> [$", S, $"].
 

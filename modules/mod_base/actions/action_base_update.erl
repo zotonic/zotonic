@@ -22,11 +22,11 @@
 -export([render_action/4]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
-    Update = proplists:get_value(update, Args, TargetId),
-    {Html, ContextHtml} = case proplists:get_value(template, Args) of
-        undefined ->
-            { proplists:get_value(text, Args, ""), Context };
-        Template ->
-            z_template:render_to_iolist(Template, Args, Context)
+    Html = case proplists:get_value(template, Args) of
+        undefined -> proplists:get_value(text, Args, "");
+        Template -> #render{template=Template, vars=Args}
     end,
-    {[], z_render:update(Update, Html, ContextHtml)}.
+    case proplists:get_value(appear, Args) of
+        true -> {[], z_render:appear_selector(z_render:css_selector(TargetId, Args), Html, Context)};
+        _ -> {[], z_render:update_selector(z_render:css_selector(TargetId, Args), Html, Context)}
+    end.

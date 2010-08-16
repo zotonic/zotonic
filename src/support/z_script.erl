@@ -24,11 +24,11 @@
 -include("zotonic.hrl").
 -export ([
     split/1,
-	add_script/2,
-	get_script/1,
-	get_page_startup_script/1,
-	add_content_script/2,
-	clean/1
+    add_script/2,
+    get_script/1,
+    get_page_startup_script/1,
+    add_content_script/2,
+    clean/1
 ]).
 
 
@@ -69,24 +69,26 @@ clean(Context) ->
 get_script(Context) -> 
     Context1 = Context#context{scripts=[], content_scripts=[]},
 
-	% Translate updates to content scripts
-	Update2Script = fun({TargetId, Terms, JSFormatString}, C) ->
-            		    {Html,C1} = z_render:render_to_iolist(Terms, C),
-            		    Script    = io_lib:format(JSFormatString, [TargetId, z_utils:js_escape(Html)]),
-            		    add_content_script(Script, C1)
-            	    end,
+    % Translate updates to content scripts
+    Update2Script = fun({TargetId, Terms, JSFormatString}, C) ->
+                            {Html,C1} = z_render:render_to_iolist(Terms, C),
+                            Script    = io_lib:format(JSFormatString, [TargetId, z_utils:js_escape(Html)]),
+                            add_content_script(Script, C1);
+                        ({Script}, C) ->
+                            add_content_script(Script, C)
+                    end,
 
     Context2 = lists:foldl(Update2Script, Context1#context{updates=[]}, lists:flatten(Context1#context.updates)),
 
-	% Translate actions to scripts
-	Action2Script = fun({TriggerID, TargetID, Actions}, C) ->
-		                {Script,C1} = z_render:render_actions(TriggerID, TargetID, Actions, C),
-		                add_script(Script, C1)
-	                end,
+    % Translate actions to scripts
+    Action2Script = fun({TriggerID, TargetID, Actions}, C) ->
+                        {Script,C1} = z_render:render_actions(TriggerID, TargetID, Actions, C),
+                        add_script(Script, C1)
+                    end,
 
     Context3 = lists:foldl(Action2Script, Context2#context{actions=[]}, lists:flatten(Context2#context.actions)),
     
-	% Translate validators to scripts
+    % Translate validators to scripts
     Validator2Script = fun({TriggerId, TargetId, Validator}, C) ->
                             {Script,C1} = z_render:render_validator(TriggerId, TargetId, Validator, C),
                             add_script(Script, C1)

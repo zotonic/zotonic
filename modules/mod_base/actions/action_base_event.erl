@@ -21,29 +21,31 @@
 -include("zotonic.hrl").
 -export([render_action/4]).
 
-render_action(TriggerId, TargetId, Args, Context) -> 
-	EventType = proplists:get_value(type, Args),
-	Postback  = proplists:get_value(postback, Args),
+render_action(TriggerId, TargetId, Args, Context) ->
+    Trigger   = proplists:get_value(id, Args, TriggerId),
+    EventType = proplists:get_value(type, Args),
+    Postback  = proplists:get_value(postback, Args),
     Delegate  = proplists:get_value(delegate, Args),
     Actions   = proplists:get_all_values(action, Args),
 
-	{PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, TriggerId, TargetId, Delegate, Context),
-	{ActionsJS,Context1} = z_render:render_actions(TriggerId, TargetId, Actions, Context),
+    {PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, Trigger, TargetId, Delegate, Context),
+    {ActionsJS,Context1} = z_render:render_actions(Trigger, TargetId, Actions, Context),
 
     Script = if
-        		EventType == enterkey orelse EventType == "enterkey" ->
-        			[
-        	            <<"$('#">>, TriggerId, <<"').bind('keypress', ">>,
-        	            <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, <<"; return false; } } );\n">>
-        			];
+                EventType == enterkey orelse EventType == "enterkey" ->
+                    [
+                        $$, $(, z_render:quote_css_selector(z_render:css_selector(Trigger, Args)), 
+                        <<"').bind('keypress', ">>,
+                        <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, <<"; return false; } } );\n">>
+                    ];
 
-        		EventType == interval   orelse EventType == continuation orelse
-        		EventType == "interval" orelse EventType == "continuation" ->
-        		    Interval = proplists:get_value(interval, Args, 250),
-        		    [
-        		        <<"setTimeout(\"">>,z_utils:js_escape(PostbackMsgJS), z_utils:js_escape(ActionsJS), <<"\", ">>,
-        		        io_lib:format("~p", [Interval]), <<");\n">>
-        		    ];
+                EventType == interval   orelse EventType == continuation orelse
+                EventType == "interval" orelse EventType == "continuation" ->
+                    Interval = proplists:get_value(interval, Args, 250),
+                    [
+                        <<"setTimeout(\"">>,z_utils:js_escape(PostbackMsgJS), z_utils:js_escape(ActionsJS), <<"\", ">>,
+                        io_lib:format("~p", [Interval]), <<");\n">>
+                    ];
 
                 EventType == submit orelse EventType == "submit" ->
                     SubmitPostback = [
@@ -56,20 +58,17 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
                 EventType == undefined orelse EventType == "none" orelse
                 EventType == inline orelse EventType == "inline" orelse
-				EventType == load orelse EventType == "load" ->
+                EventType == load orelse EventType == "load" ->
                     [
                         PostbackMsgJS, ActionsJS
                     ];
                     
-        		true ->
-        		    [
-						case TriggerId of
-							window -> <<"$(window)">>;
-							_ -> [<<"$('#">>, TriggerId, $', $)]
-						end,
-    	                <<".bind('">>, z_convert:to_list(EventType), <<"', ">>,
-        	            <<"function(event) { ">>, PostbackMsgJS, ActionsJS, <<" return z_opt_cancel(this); } );\n">>
-        	        ]
-        	end,
+                true ->
+                    [
+                        $$, $(, z_render:quote_css_selector(z_render:css_selector(Trigger, Args)),
+                        <<").bind('">>, z_convert:to_list(EventType), <<"', ">>,
+                        <<"function(event) { ">>, PostbackMsgJS, ActionsJS, <<" return z_opt_cancel(this); } );\n">>
+                    ]
+            end,
 
-	{Script,Context1}.
+    {Script,Context1}.

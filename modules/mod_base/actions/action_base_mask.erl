@@ -23,17 +23,16 @@
 render_action(_TriggerId, TargetId, Args, Context) -> 
     Selector = case proplists:get_value(body, Args) of
         true -> "body";
-        _ -> case proplists:get_value(target, Args, TargetId) of
-                undefined -> "body";
+        _ -> 
+            case z_render:css_selector(TargetId, Args) of
                 [] -> "body";
-                <<>> -> "body";
-                Id -> [$", $#, Id, $"]
-             end
+                S -> S
+            end
     end,
     Message = proplists:get_value(message, Args, ""),
     Delay = proplists:get_value(delay, Args, 0),
-    Script = [ <<"try { $(">>,Selector,<<").mask('">>, 
+    Script = [ <<"try { $(">>, Selector ,<<").mask('">>, 
                 z_utils:js_escape(Message), $',$,,
                 z_convert:to_list(Delay),
                 <<"); } catch (e) {};">>],
-	{Script, Context}.
+    {Script, Context}.
