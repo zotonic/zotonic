@@ -15,17 +15,14 @@
 # limitations under the License.
 cd `dirname $0`
 
-ERL=erl
-
 case "$1" in
 erlydtl)
     # Test only erlydtl
     MODULES=`ls ebin/erly*tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
     echo $MODULES
-    ALL="-s init stop"
+    ALL=""
     for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
-    echo $ALL
-    exec erl $(ERL) -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL
+    exec erl erl -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL -s init stop
 ;;
 *)    
     # Find all tests
