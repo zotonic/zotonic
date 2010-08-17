@@ -116,7 +116,7 @@ handle_cast({{log, Type, Msg, Props}, Ctx}, State=#state{context=Context}) ->
                     Tpl2 = lists:reverse(lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl)))),
                     F = fun(Pid) ->
                                 z_session_page:add_script([
-                                    "$('", Tpl2, 
+                                    "$('", z_utils:js_escape(Tpl2), 
                                     "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
                                    log_color(Type), "'}).animate({backgroundColor:'", 
                                    log_color(bg), "'}, 8000, 'linear');"], Pid)
