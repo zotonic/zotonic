@@ -109,6 +109,13 @@ find_value(Key, #search_result{} = S, _Context) ->
         pages -> S#search_result.pages
     end;
 
+% gbtree lookup
+find_value(Key, {GBSize, GBData}, _Context) when is_integer(GBSize) ->
+    case gb_trees:lookup(Key, {GBSize, GBData}) of
+        {value, Val} -> Val;
+        _ -> undefined
+    end;
+
 %% Other cases: context, dict or parametrized module lookup.
 find_value(Key, Tuple, Context) when is_tuple(Tuple) ->
     Module = element(1, Tuple),
