@@ -878,7 +878,7 @@ with_ast(ValueList, Variables, Contents, Context, TreeWalker) ->
     VarAsts = lists:map(fun({identifier, _, V}) -> 
                             erl_syntax:variable("With_" ++ V ++ [$_|Postfix]) 
                         end, Variables),
-    {{ValueAsts, ValueInfo}, TreeWalker1} = lists:foldl(
+    {{ValueAsts, ValueInfo}, TreeWalker1} = lists:foldr(
                         fun (V,{{Vs,Inf},TW}) ->
                             {{VAst, VInfo}, TW1} = value_ast(V, false, Context, TW),
                             {{[VAst|Vs], merge_info(VInfo,Inf)}, TW1}
