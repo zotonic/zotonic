@@ -360,6 +360,8 @@ add_where(Clause, Search) ->
 
 
 %% Add an ORDER clause.
+add_order("seq", Search) ->
+    add_order(proplists:get_value(edge, Search#search_sql.tables) ++ ".seq", Search);
 add_order(Sort, Search) ->
     Clause = case Sort of 
                  "random" ->
