@@ -232,14 +232,20 @@ do_poll(Context) ->
         [] -> ok;
         Qs ->
             F = fun(Ctx) ->
-                        [ pivot_resource(Id, Ctx) || {Id,_Serial} <- Qs]
+                        [ {Id, catch pivot_resource(Id, Ctx)} || {Id,_Serial} <- Qs]
                 end,
             case z_db:transaction(F, Context) of
                 {rollback, PivotError} -> ?ERROR("Pivot error: ~p: ~p~n", [PivotError, Qs]);
-                L when is_list(L) -> delete_queue(Qs, Context)
+                L when is_list(L) -> 
+                    lists:map(fun({_Id, ok}) -> ok; 
+                                 ({Id,Error}) -> log_error(Id, Error, Context) end, 
+                              L),
+                    delete_queue(Qs, Context)
             end
     end.
 
+    log_error(Id, Error, Context) ->
+        ?zWarning(io_lib:format("Pivot error ~p: ~p", [Id, Error]), Context).
 
     %% @doc Fetch the next task uit de task queue, if any.
     poll_task(Context) ->
