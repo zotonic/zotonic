@@ -42,12 +42,17 @@
 
 test_list() ->
 % order is important.
-    [   "autoescape", "comment", "extends", "filters", "for", "for_list",
-        "for_tuple", "for_records",
-        "include", "if", "ifequal",
-        "ifnotequal", "now",
-        "var", "var_error", "cycle", "custom_tag",
-        "custom_tag_error", "custom_call"
+    [   "autoescape", "comment", "extends", 
+        "filters", 
+        "for", "for_list", "for_tuple", "for_records",
+        "include", 
+        "if", "ifequal", "ifnotequal", 
+        %"now",
+        "var", "cycle", 
+        "custom_tag", 
+        % "custom_tag_error",
+        "custom_call",
+        "with_multiple"
     ].
 
 % Not supported for now (due to compile vars)
@@ -144,9 +149,6 @@ setup("var") ->
 setup("var_preset") ->
     RenderVars = [{var1, "foostring1"}, {var2, "foostring2"}],
     {ok, RenderVars}; 
-setup("var_error") ->
-    RenderVars = [{var1, "foostring1"}],   
-    {error, RenderVars};
 setup("cycle") ->
     RenderVars = [{test, [integer_to_list(X) || X <- lists:seq(1, 20)]},
                   {a, "Apple"}, {b, "Banana"}, {c, "Cherry"}],
@@ -222,7 +224,7 @@ test_compile_render(Name) ->
                 {force_recompile, true},
                 {finder, {?MODULE,find_file}}],
             io:format(" Template: ~p, ... compiling ... ", [Name]),
-            case erlydtl:compile(File, Module, Options, context()) of
+            case catch erlydtl:compile(File, Module, Options, context()) of
                 {ok, ModuleName} ->
                     case CompileStatus of
                         ok -> test_render(Name, ModuleName);
@@ -301,7 +303,9 @@ templates_docroot() ->
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "docroot"]).
 
 templates_outdir() ->   
-    filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "rendered_output"]).
+    Dir = filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "rendered_output"]),
+    ok = filelib:ensure_dir(filename:join([Dir,"test"])),
+    Dir.
 
 templates_expectdir() ->   
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "expected_output"]).
@@ -311,6 +315,7 @@ context() ->
     z_context:new_tests().
 
 %% Used by the test 'custom_call'
-render(_Args, Vars, _Context) ->
+render(Args, Vars, _Context) ->
+    io:format("********** ~p ********", [Args]),
     {ok, proplists:get_value(var1, Vars, "") ++ "-ok."}.
     
