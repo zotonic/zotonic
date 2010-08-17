@@ -53,6 +53,15 @@ tests() ->
                 {"Render integer",
                     <<"{{ 5 }}">>, [], <<"5">>}
             ]},
+        {"expressions", [
+                {"Add", <<"{{ 5+5 }}">>, [], <<"10">>},
+                {"Sub", <<"{{ 5-3 }}">>, [], <<"2">>},
+                {"Multiply", <<"{{ 5*3 }}">>, [], <<"15">>},
+                {"Modulo", <<"{{ 7 % 3 }}">>, [], <<"1">>},
+                {"Divide", <<"{{ 6/3 }}">>, [], <<"2.0">>},
+                {"Unary minus", <<"{{ -5 }}">>, [], <<"-5">>},
+                {"Nested", <<"{{ 1 + (3-2) }}">>, [], <<"2">>}
+            ]},
         {"variable", [
                 {"Render variable",
                     <<"{{ var1 }} is my game">>, [{var1, "bar"}], <<"bar is my game">>},
@@ -139,6 +148,31 @@ tests() ->
                 {"Access parent loop counters",
                     <<"{% for outer in list %}{% for inner in outer %}({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }})\n{% endfor %}{% endfor %}">>,
                     [{'list', [["One", "two"], ["One", "two"]]}], <<"(0, 0)\n(0, 1)\n(1, 0)\n(1, 1)\n">>}
+            ]},
+        {"for-empty", [
+                {"Empty loop",
+                    <<"{% for x in list %}{{ x }}{% empty %}empty{% endfor %}">>, [{'list', []}],
+                    <<"empty">>},
+                {"Non empty loop",
+                    <<"{% for x in list %}{{ x }}{% empty %}empty{% endfor %}">>, [{'list', [1]}],
+                    <<"1">>}
+            ]},
+        {"with", [
+                {"With", 
+                    <<"{% with a as b %}{{ b }}{% endwith %}">>, [{a,"a"}],
+                    <<"a">>},
+                {"With list", 
+                    <<"{% with a as b,c %}{{ b }}{{ c }}{% endwith %}">>, [{a,["a","b"]}],
+                    <<"ab">>},
+                {"With record", 
+                    <<"{% with a as b,c %}{{ b }}{{ c }}{% endwith %}">>, [{a,{"a","b"}}],
+                    <<"ab">>},
+                {"With list", 
+                    <<"{% with a,b as c,d %}{{ c }}{{ d }}{% endwith %}">>, [{a,"a"}, {b,"b"}],
+                    <<"ab">>},
+                {"With list nested vars", 
+                    <<"{% with a,b as b,a %}{{ a }}{{ b }}{% endwith %}">>, [{a,"a"}, {b,"b"}],
+                    <<"ba">>}
             ]},
         {"ifequal", [
                 {"Compare variable to literal",
