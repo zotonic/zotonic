@@ -5,6 +5,7 @@ erl_crash.dump
 ebin/*
 deps/mochiweb/doc/*
 src/erlydtl/erlydtl_parser.erl
+src/tests/erlydtl/rendered_output/*
 priv/log/*
 priv/sites/default/files/*
 priv/sites/*/config

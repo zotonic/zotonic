@@ -32,6 +32,8 @@
 
 %% id server exports
 -export([
+    start_tests/0,
+    start_link/0,
     unique/0, 
     id/0,
     id/1,
@@ -41,12 +43,12 @@
     sign_key/1,
     sign_key_simple/1,
     number/0,
-    number/1,
-    start_link/0
+    number/1
 ]).
 
 -record(state, {sign_key, sign_key_simple}).
 
+start_tests() -> gen_server:start({local, ?MODULE}, ?MODULE, [], []).
 start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %% @doc Return an unique id to be used in javascript or html.  No randomness, just unique in the cluster.
