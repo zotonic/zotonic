@@ -36,18 +36,23 @@
 
 
 %% API
--export([run_tests/0, run_test/1]).
+-export([run_tests/0, run_test/1, find_file/1, find_file/2]).
+
+-export([render/3]).
 
 test_list() ->
 % order is important.
-    ["autoescape", "comment", "extends", "filters", "for", "for_list",
-        "for_tuple", "for_list_preset", "for_preset", "for_records",
-        "for_records_preset", "include", "if", "if_preset", "ifequal",
-        "ifequal_preset", "ifnotequal", "ifnotequal_preset", "now",
-        "var", "var_preset", "var_error", "cycle", "custom_tag",
-        "custom_tag_error", "custom_call", 
-        "include_template", "include_path",
-        "extends_path", "extends_path2" ].
+    [   "autoescape", "comment", "extends", "filters", "for", "for_list",
+        "for_tuple", "for_records",
+        "include", "if", "ifequal",
+        "ifnotequal", "now",
+        "var", "var_error", "cycle", "custom_tag",
+        "custom_tag_error", "custom_call"
+    ].
+
+% Not supported for now (due to compile vars)
+% "for_list_preset", "for_preset", "for_records_preset", "if_preset", "ifnotequal_preset", 
+% "ifequal_preset", "var_preset", 
 
 setup_compile("for_list_preset") ->
     CompileVars = [{fruit_list, [["apple", "apples"], ["banana", "bananas"], ["coconut", "coconuts"]]}],
@@ -214,13 +219,14 @@ test_compile_render(Name) ->
         {CompileStatus, CompileVars} ->
             Options = [
                 {vars, CompileVars}, 
-                {force_recompile, true}],
+                {force_recompile, true},
+                {finder, {?MODULE,find_file}}],
             io:format(" Template: ~p, ... compiling ... ", [Name]),
-            case erlydtl:compile(File, Module, Options) of
-                ok ->
+            case erlydtl:compile(File, Module, Options, context()) of
+                {ok, ModuleName} ->
                     case CompileStatus of
-                        ok -> test_render(Name, list_to_atom(Module));
-                        _ -> {error, "compiling should have failed :" ++ File}
+                        ok -> test_render(Name, ModuleName);
+                        _ -> io:format("~n"), {error, "compiling should have failed :" ++ File}
                     end;
                 {error, Err} ->
                     case CompileStatus of
@@ -228,7 +234,7 @@ test_compile_render(Name) ->
                             io:format("~n"),  
                             ok;
                         _ ->
-                            io:format("~nCompile errror: ~p~n",[Err]), 
+                            io:format("~nCompile errror: ~p~n",[lists:flatten(Err)]), 
                             Err
                     end
             end;
@@ -242,27 +248,38 @@ test_compile_render(Name) ->
 test_render(Name, Module) ->
     File = filename:join([templates_docroot(), Name]),
     {RenderStatus, Vars} = setup(Name),
-    case catch Module:render(Vars) of
+    case catch Module:render(Vars, context()) of
         {ok, Data} ->
             io:format("rendering~n"), 
             case RenderStatus of
                 ok ->
-                    {File, _} = Module:source(),
+                    File = Module:source(),
                     OutFile = filename:join([templates_outdir(), filename:basename(File)]),
                     case file:open(OutFile, [write]) of
                         {ok, IoDev} ->
                             file:write(IoDev, Data),
                             file:close(IoDev),
-                            ok;    
+
+                            ExpectedFile = filename:join([templates_expectdir(), filename:basename(File)]),
+                            case file:read_file(ExpectedFile) of
+                                {ok, Expected} ->
+                                    case iolist_to_binary(Data) of
+                                        Expected -> ok;
+                                        _Other -> {error, "Does not match expected output"}
+                                    end;
+                                {error, _} ->
+                                    io:format(" NO FILE WITH EXPECTED OUTPUT (~p).~n", [ExpectedFile]),
+                                    ok
+                            end;
                         Err ->
-                            Err
+                            {error, {file, OutFile, Err}}
                     end;
                 _ ->
                     {error, "rendering should have failed :" ++ File}
             end;
-        {'EXIT', _} ->
+        {'EXIT', E} ->
             io:format("~n"),
-            {error, "failed invoking render method:" ++ Module};
+            {error, {"failed invoking render method: " ++ z_convert:to_list(Module), E}};
         Err ->
             io:format("~n"),
             case RenderStatus of
@@ -271,9 +288,29 @@ test_render(Name, Module) ->
             end
     end.   
 
+find_file(File) ->
+    hd(find_file(File, false)).
+find_file(File, _All) ->
+    DocRoot = templates_docroot(),
+    case lists:prefix(DocRoot, File) of
+        true -> [File];
+        false -> [filename:join([templates_docroot(), File])]
+    end.
 
 templates_docroot() ->
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "docroot"]).
 
 templates_outdir() ->   
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "rendered_output"]).
+
+templates_expectdir() ->   
+    filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "expected_output"]).
+
+
+context() ->
+    z_context:new_tests().
+
+%% Used by the test 'custom_call'
+render(_Args, Vars, _Context) ->
+    {ok, proplists:get_value(var1, Vars, "") ++ "-ok."}.
+    

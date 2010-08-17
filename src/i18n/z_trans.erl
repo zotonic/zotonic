@@ -105,6 +105,10 @@ parse_translations(Context) ->
 %% @spec trans(From, Language) -> String
 %%   From = #trans{} | String
 %%   Language = atom()
+trans({trans, Tr}, Lang) when is_atom(Lang) ->
+    proplists:get_value(Lang, Tr);
+trans(Text, Lang) when is_atom(Lang) ->
+    Text;
 trans(Text, Context) ->
     trans(Text, Context#context.language, Context).
 

@@ -15,17 +15,33 @@
 # limitations under the License.
 cd `dirname $0`
 
-# Find all tests
-MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
+ERL=erl
 
-# Skip postgres tests
-MODULES=`echo $MODULES|sed 's/pgsql_pool_tests//'|sed 's/pgsql_tests//'`
+case "$1" in
+erlydtl)
+    # Test only erlydtl
+    MODULES=`ls ebin/erly*tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
+    echo $MODULES
+    ALL="-s init stop"
+    for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
+    echo $ALL
+    exec erl $(ERL) -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL
+;;
+*)    
+    # Find all tests
+    MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
+    ALL="zotonic"
 
-# Run the tests
-ALL="zotonic"
-for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
-#exec erl -noshell -pa ebin -eval "eunit:test([$ALL],[verbose]),init:stop()"
+    # Skip postgres tests
+    MODULES=`echo $MODULES|sed 's/pgsql_pool_tests//'|sed 's/pgsql_tests//'`
 
-echo $ALL
-exec erl erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -sasl errlog_type error -s zotonic -eval "eunit:test([$ALL],[verbose]),init:stop()"
+    # Run the tests
+    for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
+    ALL=`echo $ALL|sed 's/^,//'`
+    #exec erl -noshell -pa ebin -eval "eunit:test([$ALL],[verbose]),init:stop()"
+
+    echo $ALL
+    exec erl erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -sasl errlog_type error -s zotonic -eval "eunit:test([$ALL],[verbose]),init:stop()"
+;;
+esac
 

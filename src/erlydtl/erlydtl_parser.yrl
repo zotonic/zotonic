@@ -316,7 +316,7 @@ AutoEscapeBraced -> open_tag autoescape_keyword identifier close_tag : '$3'.
 EndAutoEscapeBraced -> open_tag endautoescape_keyword close_tag.
 
 WithBlock -> WithBraced Elements EndWithBraced : {with, '$1', '$2'}.
-WithBraced -> open_tag with_keyword E as_keyword ForGroup close_tag : ['$3', '$5'].
+WithBraced -> open_tag with_keyword ValueList as_keyword ForGroup close_tag : ['$3', '$5'].
 EndWithBraced -> open_tag endwith_keyword close_tag.
 
 CacheBlock -> CacheBraced Elements EndCacheBraced : {cache, '$1', '$2'}.

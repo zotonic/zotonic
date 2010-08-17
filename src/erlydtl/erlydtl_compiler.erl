@@ -107,7 +107,7 @@ compile(File, Module, Options, ZContext) ->
                     Err
             end;
         {error, {ErrLineCol, ErrModule, ["syntax error before: " = ErrMsg, [$[,Text,$]]]}} when is_list(Text) ->
-			Text1 = [ list_to_integer(C) || C <- Text, is_list(C) ],
+            Text1 = [ list_to_integer(C) || C <- Text, is_list(C) ],
             {error, {ErrLineCol, ErrModule, ErrMsg ++ Text1}};
         {error, {ErrLineCol, ErrModule, ErrMsg}} ->
             {error, {ErrLineCol, ErrModule, lists:flatten(ErrMsg)}};
@@ -370,8 +370,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 {IfAstInfo, TreeWalker1} = body_ast(ElseContents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(IfContents, Context, TreeWalker1),
                 ifequalelse_ast(Args, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                    
-            ({'with', [Expr, Identifiers], WithContents}, TreeWalkerAcc) ->
-                with_ast(Expr, Identifiers, WithContents, Context, TreeWalkerAcc);
+            ({'with', [ExprList, Identifiers], WithContents}, TreeWalkerAcc) ->
+                with_ast(ExprList, Identifiers, WithContents, Context, TreeWalkerAcc);
             ({'for', {'in', IteratorList, Value}, Contents}, TreeWalkerAcc) ->
                 for_loop_ast(IteratorList, Value, Contents, none, Context, TreeWalkerAcc);
             ({'for', {'in', IteratorList, Value}, Contents, EmptyPartContents}, TreeWalkerAcc) ->
@@ -840,7 +840,7 @@ ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseCon
 
 
 %% With statement with only a single variable, easy & quick match.
-with_ast(Value, [{identifier, _, V}], Contents, Context, TreeWalker) ->
+with_ast([Value], [{identifier, _, V}], Contents, Context, TreeWalker) ->
     Postfix = z_ids:identifier(),
     VarAst  = erl_syntax:variable("With_" ++ V ++ [$_|Postfix]),
     {{ValueAst, ValueInfo}, TreeWalker1} = value_ast(Value, false, Context, TreeWalker),
@@ -853,7 +853,7 @@ with_ast(Value, [{identifier, _, V}], Contents, Context, TreeWalker) ->
     {{WithAst, merge_info(ValueInfo,InnerInfo)}, TreeWalker2};
     
 %% With statement with multiple vars, match against tuples and lists.
-with_ast(Value, Variables, Contents, Context, TreeWalker) ->
+with_ast([Value], Variables, Contents, Context, TreeWalker) ->
     Postfix = z_ids:identifier(),
     VarAsts = lists:map(fun({identifier, _, V}) -> 
                     erl_syntax:variable("With_" ++ V ++ [$_|Postfix]) 
@@ -870,9 +870,34 @@ with_ast(Value, Variables, Contents, Context, TreeWalker) ->
     ListClauseAst = erl_syntax:clause([erl_syntax:list(VarAsts)], none, [InnerAst]),
     TupleClauseAst = erl_syntax:clause([erl_syntax:tuple(VarAsts)], none, [InnerAst]),
     WithAst = erl_syntax:case_expr(ValueAst, [ListClauseAst, TupleClauseAst]),
+    {{WithAst, merge_info(ValueInfo,InnerInfo)}, TreeWalker2};
+
+%% With statement with multiple expressions and multiple vars
+with_ast(ValueList, Variables, Contents, Context, TreeWalker) ->
+    Postfix = z_ids:identifier(),
+    VarAsts = lists:map(fun({identifier, _, V}) -> 
+                            erl_syntax:variable("With_" ++ V ++ [$_|Postfix]) 
+                        end, Variables),
+    {{ValueAsts, ValueInfo}, TreeWalker1} = lists:foldl(
+                        fun (V,{{Vs,Inf},TW}) ->
+                            {{VAst, VInfo}, TW1} = value_ast(V, false, Context, TW),
+                            {{[VAst|Vs], merge_info(VInfo,Inf)}, TW1}
+                        end,
+                        {{[],#ast_info{}}, TreeWalker},
+                        ValueList),
+    LocalScope = lists:map( fun({identifier, _, V}) ->
+                                {list_to_atom(V), erl_syntax:variable("With_" ++ V ++ [$_|Postfix]) } 
+                            end, Variables),
+    {{InnerAst, InnerInfo}, TreeWalker2} = body_ast(
+            Contents,
+            Context#dtl_context{local_scopes=[LocalScope | Context#dtl_context.local_scopes]}, 
+            TreeWalker1),
+    Assignments = [ erl_syntax:match_expr(Var,Val) || {Var,Val} <- lists:zip(VarAsts,ValueAsts) ],
+    WithAst = erl_syntax:block_expr(Assignments ++ [InnerAst]),
     {{WithAst, merge_info(ValueInfo,InnerInfo)}, TreeWalker2}.
-    
-    
+
+
+
 for_loop_ast(IteratorList, LoopValue, Contents, EmptyPartContents, Context, TreeWalker) ->
     Vars = lists:map(fun({identifier, _, Iterator}) -> 
                     erl_syntax:variable("Var_" ++ Iterator) 
@@ -960,11 +985,11 @@ cycle_ast(Names, Context, TreeWalker) ->
         [erl_syntax:tuple(NamesTuple), erl_syntax:variable("Counters"), z_context_ast(Context)]), #ast_info{}}, TreeWalker1}.
 
 %% Older Django templates treat cycle with comma-delimited elements as strings
-cycle_compat_ast(Names, _Context, TreeWalker) ->
+cycle_compat_ast(Names, Context, TreeWalker) ->
     NamesTuple = [erl_syntax:string(X) || {identifier, _, X} <- Names],
     {{erl_syntax:application(
         erl_syntax:atom('erlydtl_runtime'), erl_syntax:atom('cycle'),
-        [erl_syntax:tuple(NamesTuple), erl_syntax:variable("Counters")]), #ast_info{}}, TreeWalker}.
+        [erl_syntax:tuple(NamesTuple), erl_syntax:variable("Counters"), z_context_ast(Context)]), #ast_info{}}, TreeWalker}.
 
 
 %% @author Marc Worrell

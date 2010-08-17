@@ -23,7 +23,7 @@
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
+-export([start_tests/0,start_link/1]).
 
 %% interface functions
 -export([
@@ -40,6 +40,11 @@
 %%====================================================================
 %% API
 %%====================================================================
+
+start_tests() ->
+    io:format("Starting trans server.~n"),
+    gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, [], []).
+    
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->

@@ -22,6 +22,8 @@
 -export([
     new/1,
     new/2,
+    
+    new_tests/0,
 
     site/1,
     hostname/1,
@@ -135,6 +137,12 @@ new(ReqData, Module) ->
     z_memo:enable(),
     Context = set_server_names(#context{wm_reqdata=ReqData, resource_module=Module, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
+
+
+% @doc Create a new context used when testing parts of zotonic
+new_tests() ->
+    z_trans_server:set_context_table(#context{host=test, language=en}).
+
 
 %% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'
 set_dispatch_from_path(Context) ->
