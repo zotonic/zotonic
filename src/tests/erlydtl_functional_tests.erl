@@ -315,7 +315,8 @@ context() ->
     z_context:new_tests().
 
 %% Used by the test 'custom_call'
-render(Args, Vars, _Context) ->
-    io:format("********** ~p ********", [Args]),
-    {ok, proplists:get_value(var1, Vars, "") ++ "-ok."}.
+render(undefined, Vars, _Context) ->
+    {ok, "<<undefined>>-" ++ proplists:get_value(var1, Vars, "") ++ "-ok."};
+render(Arg, Vars, _Context) ->
+    {ok, Arg ++ "-" ++ proplists:get_value(var1, Vars, "") ++ "-ok."}.
     
