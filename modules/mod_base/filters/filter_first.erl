@@ -24,7 +24,7 @@
 first(undefined, _Context) ->
     undefined;
 first(<<First, _/binary>>, _Context) ->
-    <<First>>;
+    First;
 first(Other, Context) ->
     case erlydtl_runtime:to_list(Other, Context) of
         [] -> <<>>;

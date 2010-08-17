@@ -28,7 +28,7 @@ last(Input, _Context) when is_binary(Input) ->
         0 -> Input;
         N ->
             Offset = N - 1,
-            <<_:Offset/binary, Byte/binary>> = Input,
+            <<_:Offset/binary, Byte>> = Input,
             Byte
     end;
 last(Other, Context) ->
