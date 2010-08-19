@@ -45,8 +45,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 		true ->
             {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
 		false ->
-		    Template = proplists:get_value(template, Args),
-		    make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Template, TriggerId, TargetId, Context)
+		    make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
 	end.
 
 
@@ -55,7 +54,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Show more results.
 %% @spec event(Event, Context1) -> Context2
 %% @todo Handle the "MorePageLen" argument correctly.
-event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Template}, TriggerId, TargetId}, Context) ->
+event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, TriggerId, TargetId}, Context) ->
     SearchProps1 = [{page, Page}|SearchProps],
     R = m_search:search({SearchName, SearchProps1}, Context),
     Result = R#m_search_result.result,
@@ -67,7 +66,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
 
     Context1 = case length(Ids) < PageLen of
                    false ->
-                       {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Template, TriggerId, TargetId, Context),
+                       {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
                        RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "});"],
                        z_script:add_script(RebindJS, Ctx);
                    true ->
@@ -79,9 +78,10 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
 	Ids1 = lists:zip(lists:map(fun to_id/1, Ids), lists:seq(FirstRow, FirstRow+length(Ids)-1)),
 	Html = lists:map(fun({Id,RowNr}) -> 
 						Vars = [
-							{id, Id}, {row, RowNr}, {is_first, RowNr == FirstRow}
-						],
-						z_template:render(Template, Vars, Context1)
+                                {id, Id}, {row, RowNr}, {is_first, RowNr == FirstRow}
+                               ] ++ Args,
+                             Template = proplists:get_value(template, Args),
+                             z_template:render(Template, Vars, Context1)
 					end, Ids1),
 	z_render:appear_bottom(TargetId, Html, Context1).
 
@@ -90,7 +90,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
 	to_id({Id,_}) when is_integer(Id) -> Id;
 	to_id({_,Id}) when is_integer(Id) -> Id.
 
-make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Template, TriggerId, TargetId, Context) ->
-    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Template},
+make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context) ->
+    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args},
 	{PostbackJS, _PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackJS, Context}.
