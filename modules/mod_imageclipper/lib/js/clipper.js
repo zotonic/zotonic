@@ -8,7 +8,7 @@ window.ZotonicImageClipper =
          self.popup = $("<div>")
              .appendTo(document.body)
              .hide()
-             .css({position: "fixed", width: "400px", top: 5, right: 5, "background-color": "white", border: "1px solid #666"})
+             .css({position: "fixed", width: "400px", top: 5, right: 5, "background-color": "white", border: "1px solid #666", "z-index": 2000})
              .fadeIn();
          self.popup.append($("<h2>")
                            .text("Click an image to import it in Zotonic")
@@ -31,8 +31,8 @@ window.ZotonicImageClipper =
              .appendTo(self.buttonContainer);
 
          $("<span>")
-             .html($.browser.msie ? "x" : "&#10799;")
-             .css({cursor: "pointer", "font-weight": "bold", color: "red", position: "absolute", top: 0, right: 5})
+             .text("x")
+             .css({"font-family": "Verdana", cursor: "pointer", "font-weight": "bold", color: "red", position: "absolute", top: 0, right: 5})
              .attr("title", "Close image clipper")
              .click(function(){self.destroy();})
              .appendTo(self.popup);
@@ -43,6 +43,7 @@ window.ZotonicImageClipper =
      self.run = function()
      {
          self.images = [];
+         self.seen = [];
          if (self.popup)
          {
              self.destroy();
@@ -55,7 +56,7 @@ window.ZotonicImageClipper =
          {
              self.selection = $("<div>")
                  .hide()
-                 .click(function(){self.addImage(self.currentImage);return false;})
+                 .click(function(){self.selection.hide();self.addImage(self.currentImage);return false;})
                  .appendTo(document.body)
                  .css({position: "absolute", border: "5px solid red", "z-index": 1000, cursor: "pointer"});
              $(document.body).css({position:"relative"});
@@ -65,7 +66,7 @@ window.ZotonicImageClipper =
          $("img").bind("mouseover.clipper", function() {
                            var im = $(this);var o=im.offset();
                            var w=im.outerWidth(true);var h=im.outerHeight(true);
-                           if (w<100&&h<100) return;
+                           if ((w<100&&h<100) || $.inArray(im.attr("src"), self.seen)!=-1) return;
                            self.selection.css({top:o.top-5,left:o.left-5,width:w,height:h});
                            self.selection.show();
                            self.currentImage = im;
@@ -91,7 +92,7 @@ window.ZotonicImageClipper =
      {
          self.buttonContainer.show();
          self.imageContainer.show();
-
+         
          var src = null;
          // First check if image links to a big picture
          if (im.parents("a:first").length) {
@@ -117,6 +118,8 @@ window.ZotonicImageClipper =
          }
 
          self.images.push(src);
+         self.seen.push(im.attr("src"));
+
          $("<input>").css({visibility:"hidden",position:"absolute",top:0,left:0}).attr("name", "url").val(src).appendTo(self.form);
          var h = 60;
 
