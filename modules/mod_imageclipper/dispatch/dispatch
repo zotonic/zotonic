@@ -1,0 +1,4 @@
+[
+ {imageclipper_post, ["clipper", "post"], resource_imageclipper_post, []},
+ {imageclipper_post, ["clipper", "help"], resource_template, [{template, "page_imageclipper.tpl"}]}
+].
