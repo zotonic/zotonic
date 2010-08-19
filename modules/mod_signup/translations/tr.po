@@ -1,0 +1,178 @@
+# Zotonic.
+# Copyright (C) Zotonic
+# This file is distributed under the same license as the alldergisi package.
+#
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2010-06-10\n"
+"PO-Revision-Date: 2010-06-11 01:49+0200\n"
+"Last-Translator: Kunthar <kunthar@gmail.com>\n"
+"Language-Team: Zotonic Translation Team <tr@zotonic.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Turkish\n"
+"X-Poedit-Country: TURKEY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ./modules/mod_signup/templates/signup.tpl:163
+msgid "And sign up"
+msgstr "Üye olun"
+
+#: ./modules/mod_signup/templates/signup.tpl:142
+msgid "Check our Terms of Service and Privacy policies"
+msgstr "Lütfen kullanım ve gizlilik koşullarımızı okuyun"
+
+#: ./modules/mod_signup/templates/signup.tpl:114
+msgid "Choose a username and password"
+msgstr "Kullanıcı adı ve şifre seçin"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:12
+msgid "Confirm my account."
+msgstr "Hesabımı onayla"
+
+#: ./modules/mod_signup/templates/signup.tpl:75
+msgid "Create your account"
+msgstr "Bize katılın"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:6
+msgid "Dear"
+msgstr "Sayın"
+
+#: ./modules/mod_signup/templates/signup.tpl:102
+msgid "E-mail"
+msgstr "E-posta"
+
+#: ./modules/mod_signup/templates/signup.tpl:80
+msgid "First name"
+msgstr "Adı"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:16
+msgid "Hope to see you soon."
+msgstr "Görüşmek üzere"
+
+#: ./modules/mod_signup/templates/signup.tpl:156
+msgid "I agree to the"
+msgstr "Kabul ediyorum"
+
+#: ./modules/mod_signup/templates/_logon_link.tpl:1
+msgid "I don’t have an account, please sign me up."
+msgstr "Madem bir hesabım yok, üye olayım"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "If the link does not work then you can go to"
+msgstr "Eğer link çalışmazsa"
+
+#: ./modules/mod_signup/templates/signup.tpl:62
+msgid "If you have already an account,"
+msgstr "Eğer zaten hesabınız varsa"
+
+#: ./modules/mod_signup/templates/signup.tpl:92
+msgid "Last name"
+msgstr "Soyadı"
+
+#: ./modules/mod_signup/templates/signup.tpl:125
+msgid "Password"
+msgstr "Şifre"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:3
+msgid "Please confirm your account."
+msgstr "Lütfen hesabınızı onaylayın"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:10
+msgid "Please follow the link below."
+msgstr "Lütfen aşağıdaki linki takip edin"
+
+#: ./modules/mod_signup/templates/signup.tpl:157
+msgid "Privacy policies"
+msgstr "Gizlilik politikası"
+
+#: ./modules/mod_signup/templates/signup.tpl:166
+msgid "Sign Up"
+msgstr "Sign Up"
+
+#: ./modules/mod_signup/templates/signup.tpl:60
+msgid "Sign up and become a member"
+msgstr "Sign up and become a member"
+
+#: ./modules/mod_signup/templates/signup.tpl:77
+msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
+msgstr "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
+
+#: ./modules/mod_signup/templates/signup.tpl:116
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr "Sorry, this username is already in use. Please try another one."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:8
+msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
+msgstr "Thank you for registering at our site. We request you to confirm your account before you can use it."
+
+#: ./modules/mod_signup/templates/signup.tpl:153
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "To sign up you must agree with the Terms of Service and Privacy policies."
+
+#: ./modules/mod_signup/templates/signup.tpl:119
+msgid "Username"
+msgstr "Username"
+
+#: ./modules/mod_signup/templates/signup.tpl:134
+msgid "Verify password"
+msgstr "Verify password"
+
+#: ./modules/mod_signup/templates/signup.tpl:175
+msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
+msgstr "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
+
+#: ./modules/mod_signup/templates/signup.tpl:145
+msgid "We will be very careful with all the information given to us and will never "
+msgstr "We will be very careful with all the information given to us and will never "
+
+#: ./modules/mod_signup/templates/signup.tpl:177
+msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
+msgstr "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
+
+#: ./modules/mod_signup/templates/signup.tpl:54
+msgid "When you want to sign up a new member, then first"
+msgstr "When you want to sign up a new member, then first"
+
+#: ./modules/mod_signup/templates/signup.tpl:173
+msgid "You are almost there!"
+msgstr "You are almost there!"
+
+#: ./modules/mod_signup/templates/signup.tpl:52
+msgid "You are already a member"
+msgstr "You are already a member"
+
+#: ./modules/mod_signup/templates/signup.tpl:65
+msgid "You can also"
+msgstr "You can also"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "and enter the key"
+msgstr "and enter the key"
+
+#: ./modules/mod_signup/templates/signup.tpl:157
+msgid "and the"
+msgstr "and the"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "in the input field."
+msgstr "in the input field."
+
+#: ./modules/mod_signup/templates/signup.tpl:54
+msgid "log off from your current account"
+msgstr "log off from your current account"
+
+#: ./modules/mod_signup/templates/signup.tpl:62
+msgid "log on now"
+msgstr "log on now"
+
+#: ./modules/mod_signup/templates/signup.tpl:65
+msgid "sign up for a username and password"
+msgstr "sign up for a username and password"
+
