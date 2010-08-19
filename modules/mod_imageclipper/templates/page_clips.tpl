@@ -7,8 +7,8 @@
 
 {% with m.session.new_imageclipper_items as new %}
 <style type="text/css">
-    ul.clippings img { padding: 4px; border: 1px solid #e0e0e0; margin: 0px; }
-    ul.clippings img.new { background-color: #ffff99; }
+    #clippings img { padding: 4px; border: 1px solid #e0e0e0; margin: 0px; }
+    #clippings img.new { background-color: #ffff99; }
     p.new { background-color: #ffff99; padding: 5px; border: 1px solid #e0e0e0; }
 </style>
 
@@ -20,16 +20,17 @@
     {_ You have the following image clippings: _}
 </p>
 
-<ul class="clippings">
-    {% for id in m.search[{query cat="clipping" hassubject=[m.acl.user, 'author'] sort="-rsc.modified"}] %}
-    {% if id|member:new %}
-    {% image m.rsc[id].medium width=100 height=100 extent class="new" %}
-    {% else %}
-    {% image m.rsc[id].medium width=100 height=100 extent %}
-    {% endif %}
+{% with m.search[{query cat="clipping" hassubject=[m.acl.user, 'author'] sort="-rsc.modified" pagelen=32}] as result %}
+<ul id="clippings">
+    {% for id in result %}
+    {% include "_clipping.tpl" new=id|member:new %}
     {% endfor %}
-
 </ul>
+
+<div class="clearfix">
+    {% button text=_"More" action={moreresults result=result target="clippings" template="_clipping.tpl"} %}
+</div>
+{% endwith %}
 {% endwith %}
 
 {% endblock %}
