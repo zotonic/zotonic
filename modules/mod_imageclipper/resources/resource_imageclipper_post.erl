@@ -61,7 +61,7 @@ process_post(ReqData, Context) ->
     z_session:set(new_imageclipper_items, Ids, Context1),
     ?DEBUG(Ids),
 
-    Redirect = "/",
+    Redirect = "/clipper/clips",
     ReqData1 = wrq:set_resp_header("Location", Redirect, ReqData),
     {{halt, 301}, ReqData1, Context}.
 
