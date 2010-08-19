@@ -43,12 +43,13 @@
     sign_key/1,
     sign_key_simple/1,
     number/0,
-    number/1
+    number/1,
+    fix_seed/0
 ]).
 
 -record(state, {sign_key, sign_key_simple}).
 
-start_tests() -> gen_server:start({local, ?MODULE}, ?MODULE, [], []).
+start_tests() -> gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
 start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %% @doc Return an unique id to be used in javascript or html.  No randomness, just unique in the cluster.
@@ -103,10 +104,17 @@ number() ->
 number(Max) ->
     gen_server:call(?MODULE, {number, Max}).
 
+%% @doc Fix the seed of the random number generator, used for tests
+fix_seed() ->
+    gen_server:cast(?MODULE, fix_seed).
 
-init([]) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
+
+init(Props) ->
+    {A1,A2,A3} = case proplists:get_value(fixed_seed, Props, false) of
+                     true -> {1,2,3};
+                     false -> erlang:now()
+                 end,
+    random:seed(A1,A2,A3),
     {ok, #state{}}.
 
 
@@ -155,7 +163,11 @@ handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
 
+handle_cast(fix_seed, State) -> 
+    random:seed(1,2,3),
+    {noreply, State};
 handle_cast(_Msg, State) -> {noreply, State}.
+
 handle_info(_Msg, State) -> {noreply, State}.
 terminate(_Reason, _State) -> ok.
 code_change(_OldVersion, State, _Extra) -> {ok, State}.

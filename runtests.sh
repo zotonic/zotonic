@@ -32,6 +32,9 @@ erlydtl)
     # Skip postgres tests
     MODULES=`echo $MODULES|sed 's/pgsql_pool_tests//'|sed 's/pgsql_tests//'`
 
+    # Skip erlydtl tests (must be run differently, see above)
+    MODULES=`echo $MODULES|sed 's/erlydtl_[^\\s]*//'`
+
     # Run the tests
     for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
     ALL=`echo $ALL|sed 's/^,//'`
