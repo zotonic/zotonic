@@ -57,7 +57,8 @@ window.ZotonicImageClipper =
                  .hide()
                  .click(function(){self.addImage(self.currentImage);return false;})
                  .appendTo(document.body)
-                 .css({position: "absolute", border: "5px solid red", "z-index": 1000000, cursor: "pointer"});
+                 .css({position: "absolute", border: "5px solid red", "z-index": 1000, cursor: "pointer"});
+             $(document.body).css({position:"relative"});
          }
 
 
@@ -116,8 +117,7 @@ window.ZotonicImageClipper =
          }
 
          self.images.push(src);
-         self.form.append($("<input type=\"hidden\">").attr("name", "url").val(src));
-
+         $("<input>").css({visibility:"hidden",position:"absolute",top:0,left:0}).attr("name", "url").val(src).appendTo(self.form);
          var h = 60;
 
          $("<img>")
