@@ -11,7 +11,7 @@
 						</section>
 					{% else %}
 						<figure class="image-wrapper block-level-image">
-							{% media m width=315 crop %}
+							{% media m width=315 extent %}
 							{% if m.rsc[m].summary %}<p class="image-caption">{{ m.rsc[m].summary }}</p>{% endif %}
 						</figure>	
 					{% endifequal %}
