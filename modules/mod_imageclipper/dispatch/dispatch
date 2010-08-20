@@ -1,5 +1,6 @@
 [
- {imageclipper_post, ["clipper", "post"], resource_imageclipper_post, []},
- {imageclipper_post, ["clipper", "help"], resource_template, [{template, "page_imageclipper.tpl"}]},
- {imageclipper_post, ["clipper", "clips"], resource_template, [{template, "page_clips.tpl"}]}
+ {imageclipper_go, [	"clipper", "go"], 		resource_imageclipper_go, 	[]},
+ {imageclipper_post, 	["clipper", "post"], 	resource_imageclipper_post, []},
+ {imageclipper_help, 	["clipper", "help"], 	resource_template, 			[{template, "page_imageclipper.tpl"}]},
+ {imageclipper_clips, 	["clipper", "clips"], 	resource_template, 			[{template, "page_clips.tpl"}]}
 ].
