@@ -358,7 +358,7 @@ pivot_resource(Id, Context) ->
 
 
     %% Make the setweight(to_tsvector()) parts of the update statement
-    to_tsv([], _Level, Args) -> {"''", Args};
+    to_tsv([], _Level, Args) -> {"tsvector('')", Args};
     to_tsv(List, Level, Args) -> 
         {Sql1, Args1} = lists:foldl(fun ({Lang,Text}, {Sql, As}) -> 
                 N   = length(As) + 1,
