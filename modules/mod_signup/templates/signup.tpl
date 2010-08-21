@@ -72,7 +72,7 @@ div#signup_tos label {
 	{% endif %}
 
 	{% wire id="signup_form" type="submit" postback={signup xs_props=xs_props} %}
-	<form id="signup_form" method="post" action="postback">
+	<form id="signup_form" class="setcookie" method="post" action="postback">
 
 		<h2>{_ Create your account _}</h2>
 
