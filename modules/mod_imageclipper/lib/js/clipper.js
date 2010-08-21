@@ -11,7 +11,7 @@ window.ZotonicImageClipper =
              .css({position: "fixed", width: "400px", top: 5, right: 5, "background-color": "white", border: "1px solid #666", "z-index": 2000})
              .fadeIn();
          self.popup.append($("<h2>")
-                           .text("Click an image to import it in Zotonic")
+                           .text(window._clipper.c)
                            .css({padding:20,"font": "16px Verdana",color:"#666"})
                           );
 
@@ -24,11 +24,16 @@ window.ZotonicImageClipper =
              .hide()
              .appendTo(self.popup);
 
+         // 1111
          self.form = $("<form>")
-             .attr("method", "post")
-             .attr("action", window._clipper)
-             .append($("<button>").text("Upload to Zotonic"))
+             .attr("method", "post") 
+             .attr("action", window._clipper.u)
+             .append($("<button>").text(window._clipper.b))
              .appendTo(self.buttonContainer);
+         $("<input type=\"hidden\">")
+             .attr("name", "referer")
+             .val(document.location.href)
+             .appendTo(self.form);
 
          $("<span>")
              .text("x")
