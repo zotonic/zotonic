@@ -19,14 +19,24 @@
 -module(resource_imageclipper_go).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
+-export([init/1, to_html/2, service_available/2, charsets_provided/2]).
 -export([
+         expires/2,
          is_authorized/2,
          allowed_methods/2,
          process_post/2,
          event/2
 ]).
 
--include_lib("resource_html.hrl").
+-include_lib("webmachine_resource.hrl").
+-include_lib("include/zotonic.hrl").
+
+init(DispatchArgs) -> {ok, DispatchArgs}.
+
+
+expires(ReqData, Context) ->
+    {{{2000,1,1},{0,0,0}}, ReqData, Context}.
+
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, _Context) ->
@@ -50,14 +60,31 @@ process_post(ReqData, _Context) ->
     {{halt, 301}, ReqData1, Context}.
 
 
-html(Context) ->
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
+    Context  = z_context:new(ReqData, ?MODULE),
+    Context1 = z_context:set(DispatchArgs, Context),
+    ?WM_REPLY(true, Context1).
+
+charsets_provided(ReqData, Context) ->
+    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+
+to_html(ReqData, Context0) ->
+    Context = z_context:ensure_all(?WM_REQ(ReqData, Context0)),
     Referer = z_context:get_persistent(clipper_referer, Context),
     Urls = z_context:get_persistent(clipper_urls, Context),
-    Vars = [{postback, z_render:make_postback_info({go, Urls, Referer, []}, go, undefined, undefined, ?MODULE, Context)},
-            {aspects, [z_convert:to_float(A) || A <- z_context:get_persistent(clipper_aspects, Context)]}
-           ],
-    Html = z_template:render({cat, "clipper_go.tpl"}, Vars, Context),
-	z_context:output(Html, Context).
+    case Urls of
+        [] -> 
+            ReqData1 = wrq:set_resp_header("Location", "http://" ++ z_context:hostname_port(Context) ++ "/", ReqData),
+            {{halt, 301}, ReqData1, Context};
+        Urls ->
+
+            Vars = [{postback, z_render:make_postback_info({go, Urls, Referer, []}, go, undefined, undefined, ?MODULE, Context)},
+                    {aspects, [z_convert:to_float(A) || A <- z_context:get_persistent(clipper_aspects, Context)]}
+                   ],
+            Html = z_template:render({cat, "clipper_go.tpl"}, Vars, Context),
+            {Result, ResultContext} = z_context:output(Html, Context),
+            ?WM_REPLY(Result, ResultContext)
+    end.
 
 
 allowed_methods(ReqData, Context) ->
