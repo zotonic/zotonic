@@ -89,7 +89,11 @@ to_float(A) when is_atom(A) -> to_float(atom_to_list(A));
 to_float(B) when is_binary(B) -> to_float(binary_to_list(B));
 to_float(I) when is_integer(I) -> I + 0.0;
 to_float(F) when is_float(F) -> F;
-to_float(L) when is_list(L) -> list_to_float(L).
+to_float(L) when is_list(L) -> 
+    case lists:member($., L) of
+        true -> list_to_float(L);
+        false -> list_to_float(L++".0")  %% list_to_float("1") gives a badarg
+    end.
 
 to_bool(undefined) -> false;
 to_bool(false) -> false;
