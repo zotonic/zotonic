@@ -24,20 +24,15 @@ erlydtl)
     for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
     exec erl erl -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL -s init stop
 ;;
-*)    
+*)
     # Find all tests
-    MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
+    MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'|grep -v pgsql|grep -v erlydtl`
     ALL="zotonic"
-
-    # Skip postgres tests
-    MODULES=`echo $MODULES|sed 's/pgsql_pool_tests//'|sed 's/pgsql_tests//'`
-
-    # Skip erlydtl tests (must be run differently, see above)
-    MODULES=`echo $MODULES|sed 's/erlydtl_[^\\s]*//'`
 
     # Run the tests
     for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
     ALL=`echo $ALL|sed 's/^,//'`
+
     #exec erl -noshell -pa ebin -eval "eunit:test([$ALL],[verbose]),init:stop()"
 
     echo $ALL
