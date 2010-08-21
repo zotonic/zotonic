@@ -74,7 +74,7 @@ function z_growl_add(message, stay, type)
 
 function z_growl_close()
 {
-	jQuery. jQuery.noticeRemove($('.notice-item-wrapper'), 400);
+	$.noticeRemove($('.notice-item-wrapper'), 400);
 }
 
 
