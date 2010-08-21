@@ -24,7 +24,6 @@ window.ZotonicImageClipper =
              .hide()
              .appendTo(self.popup);
 
-         // 1111
          self.form = $("<form>")
              .attr("method", "post") 
              .attr("action", window._clipper.u)
@@ -126,6 +125,7 @@ window.ZotonicImageClipper =
          self.seen.push(im.attr("src"));
 
          $("<input>").css({visibility:"hidden",position:"absolute",top:0,left:0}).attr("name", "url").val(src).appendTo(self.form);
+         $("<input>").css({visibility:"hidden",position:"absolute",top:0,left:0}).attr("name", "aspect").val(im.width()/im.height()).appendTo(self.form);
          var h = 60;
 
          $("<img>")
