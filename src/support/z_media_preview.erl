@@ -142,7 +142,7 @@ cmd_args(FileProps, Filters) ->
     {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation),
     Filters2   = [  {make_image, Mime},
                     {correct_orientation, Orientation},
-                    {resize, ResizeWidth, ResizeHeight}, 
+                    {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)}, 
                     {crop, CropArgs},
                     {colorspace, "RGB"} | Filters1],
     Filters2b = case {CropArgs,is_enabled(extent, Filters)} of
@@ -229,20 +229,25 @@ filter2arg({width, _}, Width, Height) ->
     {Width, Height, []};
 filter2arg({height, _}, Width, Height) ->
     {Width, Height, []};
-filter2arg({resize, EndWidth, EndHeight}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
+filter2arg({resize, EndWidth, EndHeight, false}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
     % Prevent scaling up, perform an extent instead
     GArg = "-gravity West",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
+filter2arg({resize, EndWidth, EndHeight, true}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
+    % Scale up
+    EArg = ["-resize ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
+    RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
+    {EndWidth, EndHeight, [EArg, 32, RArg]};
 filter2arg({extent, EndWidth, EndHeight}, Width, Height) when EndWidth == undefined orelse EndHeight == undefined ->
     {Width, Height, []};
 filter2arg({extent, EndWidth, EndHeight}, Width, Height) when Width /= EndWidth orelse Height /= EndHeight ->
     GArg = "-gravity Center",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     {EndWidth, EndHeight, [GArg, 32, EArg]};
-filter2arg({resize, EndWidth, EndHeight}, _Width, _Height) ->
+filter2arg({resize, EndWidth, EndHeight, _}, _Width, _Height) ->
     GArg = "-gravity NorthWest",
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, RArg]};
@@ -298,6 +303,8 @@ filter2arg(extent, Width, Height) ->
 filter2arg({extent, _}, Width, Height) ->
     {Width, Height, []};
 filter2arg({extent, _, _}, Width, Height) ->
+    {Width, Height, []};
+filter2arg(upscale, Width, Height) ->
     {Width, Height, []}.
 
 
@@ -369,7 +376,7 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation) ->
     	                Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
     	                _ -> ceil((H - Height) / 2)
 	                end,
-	        
+
 	        % @todo Prevent scaleup of the image, but preserve the result size
 	        % The crop is relative to the original image
 	        {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
@@ -403,6 +410,8 @@ string2filter("flop",[]) ->
     flop;
 string2filter("extent",[]) ->
     extent;
+string2filter("upscale",[]) ->
+    upscale;
 string2filter("blur",[]) ->
     blur;
 string2filter("blur",Arg) ->
