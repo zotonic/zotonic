@@ -55,3 +55,12 @@ modify_rsc_test() ->
 
     ok.
 
+
+page_path_test() ->
+    C = z_context:new(testsandbox),
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
+
+    {ok, Id} = m_rsc:insert([{title, "Hello."}, {category, text}, {page_path, "/foo/bar"}], AdminC),
+    ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
+
+    ok.
