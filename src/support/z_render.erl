@@ -278,7 +278,7 @@ add_update(CssSelector, Html, Function, AfterEffects, Context) ->
     render_html(undefined, Context) ->
         {"", Context};
     render_html(Html, Context) when is_binary(Html) ->
-        {"", Context};
+        {Html, Context};
     render_html(Html, Context) ->
         {Html1, Context1} = render_to_iolist(Html, Context),
         {iolist_to_binary(Html1), Context1}.
