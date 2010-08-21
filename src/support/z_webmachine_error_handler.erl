@@ -49,9 +49,13 @@ error_handler(_Default, ReqData, Code, ErrorDump) ->
     RD1 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", ReqData),
     RD2 = wrq:set_resp_header("Content-Encoding", "identity", RD1),
     Host = webmachine_request:get_metadata('zotonic_host', RD2),
-    Context = z_context:new(Host),
-    Vars = [{error_code, Code}, {error_dump, ErrorDump}],
-    Html = z_template:render("error.tpl", Vars, Context),
-    {Output, _} = z_context:output(Html, Context),
-    {Output, RD2}.
+    try 
+        Context = z_context:new(Host),
+        Vars = [{error_code, Code}, {error_dump, ErrorDump}],
+        Html = z_template:render("error.tpl", Vars, Context),
+        {Output, _} = z_context:output(Html, Context),
+        {Output, RD2}
+    catch
+        _:_ -> {<<>>,RD2}
+    end.
 
