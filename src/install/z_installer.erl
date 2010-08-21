@@ -94,7 +94,8 @@ has_column(Table, Column, Name, Database, Schema) ->
 %% Upgrade older Zotonic versions.
 upgrade(Name, Database, Schema) ->
     ok = install_acl(Name, Database, Schema),
-    ok = install_identity_verified(Name, Database, Schema),
+    ok = install_identity_is_verified(Name, Database, Schema),
+    ok = install_identity_verify_key(Name, Database, Schema),
 	ok = install_persist(Name, Database, Schema),
 	ok = drop_visitor(Name, Database, Schema),
     ok.
@@ -157,24 +158,37 @@ drop_visitor(Name, Database, Schema) ->
 	end.
 
 
-install_identity_verified(Name, Database, Schema) ->
+install_identity_is_verified(Name, Database, Schema) ->
     case has_column("identity", "is_verified", Name, Database, Schema) of
         true -> 
             ok;
         false ->
             {ok, C}  = pgsql_pool:get_connection(Name),
-			{ok, [], []} = pgsql:squery(C, "BEGIN"),
-			A = pgsql:squery(C, "alter table identity "
-			                "add column is_verified boolean not null default false, "
-			                "add column verify_key character varying(32), "
-			                "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
-			?DEBUG(A),
-			pgsql:squery(C, "update identity set is_verified = true where key = 'username_pw'"),
-			{ok, [], []} = pgsql:squery(C, "COMMIT"),
-        	pgsql_pool:return_connection(Name, C),
-			ok
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            pgsql:squery(C, "alter table identity "
+                            "add column is_verified boolean not null default false"),
+            pgsql:squery(C, "update identity set is_verified = true where key = 'username_pw'"),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok
     end.
-    
+
+install_identity_verify_key(Name, Database, Schema) ->
+    case has_column("identity", "verify_key", Name, Database, Schema) of
+        true -> 
+            ok;
+        false ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            A = pgsql:squery(C, "alter table identity "
+                            "add column verify_key character varying(32), "
+                            "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
+            ?DEBUG(A),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok
+    end.
+
 
 % Perform some simple sanity checks
 sanity_check(Name, _Database, _Schema) ->
