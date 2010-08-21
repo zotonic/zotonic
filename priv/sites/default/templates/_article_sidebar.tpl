@@ -1,6 +1,6 @@
 {% include "_article_keywords.tpl" %}
 
-{% with m.rsc[id].media as media %} 
+{% with m.rsc[id].media|without_embedded_media:id as media %} 
 	{% if media %}
 		<ul class="images-list">
 			{% for m in media %}
