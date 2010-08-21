@@ -197,7 +197,7 @@ logon(UserId, Context) ->
     case m_edge:subjects(UserId, acl_role_member, ContextAdmin) of
         [] ->
             %% When not member of a role then fallback to the member or anonymous role.
-            case m_rsc:name_to_id(?ROLE_MEMBER, Context) of
+            case m_rsc:name_to_id(?ROLE_MEMBER, ContextAdmin) of
                 {ok, RoleMember} -> logon_roles(UserId, [RoleMember], Context, ContextAdmin);
                 {error, _} -> logon_roles(UserId, [], Context, ContextAdmin)
             end;
