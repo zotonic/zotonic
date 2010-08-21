@@ -67,20 +67,26 @@ allowed_methods(ReqData, Context) ->
 event({postback, {go, [], Referer, Ids}, _TriggerId, _TargetId}, Context) ->
     %% All urls processed; do administration and redirect.
     z_context:set_persistent(clipper_referer, undefined, Context),
-    z_context:set_persistent(clipper_urls, undefined, Context),
+    z_context:set_persistent(clipper_urls, [], Context),
     z_context:set_persistent(clipper_aspects, undefined, Context),
     z_session:set(new_imageclipper_items, Ids, Context),
     z_context:add_script_page(["document.location.href=\"", Referer, "\";"], Context);
 
 event({postback, {go, [Url|Rest], Referer, Ids}, TriggerId, _TargetId}, Context) ->
-    %% Get the file and process it
-    Id = upload(Url, Context),
-    %% Feedback to the user
-    z_context:add_script_page(["$('#img-",z_convert:to_list(length(Ids)),"').append($('<img>').attr('height', '100').attr('src', '", Url, "').hide().fadeIn());"], Context),
-    %% Process the next
-    Next = z_render:make_postback_info({go, Rest, Referer, [Id|Ids]}, go, undefined, undefined, ?MODULE, Context),
-    z_context:add_script_page(["z_queue_postback('",TriggerId,"', '", Next,"', [], true);"], Context),
-    Context.
+    case z_context:get_persistent(clipper_urls, Context) of
+        [] ->
+            %% "Back" button pressed
+            z_context:add_script_page(["document.location.href=\"", Referer, "\";"], Context);
+        _ ->
+            %% Get the file and process it
+            Id = upload(Url, Context),
+            %% Feedback to the user
+            z_context:add_script_page(["$('#img-",z_convert:to_list(length(Ids)),"').append($('<img>').attr('height', '100').attr('src', '", Url, "').hide().fadeIn());"], Context),
+            %% Process the next
+            Next = z_render:make_postback_info({go, Rest, Referer, [Id|Ids]}, go, undefined, undefined, ?MODULE, Context),
+            z_context:add_script_page(["z_queue_postback('",TriggerId,"', '", Next,"', [], true);"], Context),
+            Context
+    end.
 
 
 upload(Url, Context) ->
