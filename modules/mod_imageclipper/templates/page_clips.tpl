@@ -20,7 +20,7 @@
     {_ You have the following image clippings: _}
 </p>
 
-{% with m.search[{query cat="clipping" hassubject=[m.acl.user, 'author'] sort="-rsc.modified" pagelen=32}] as result %}
+{% with m.search[{query cat="clipping" hasobject=[m.acl.user, 'author'] sort="-rsc.modified" pagelen=32}] as result %}
 <ul id="clippings">
     {% for id in result %}
     {% include "_clipping.tpl" new=id|member:new %}
