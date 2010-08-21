@@ -23,7 +23,7 @@
 	{% block below_body %}{% endblock %}
 
 
-{% with m.search.paged[{query hasobject=[id, 'haspart']  sort='seq' pagelen=1 page=q.page}] as result %}
+{% with m.search.paged[{query hassubject=[id, 'haspart']  sort='seq' pagelen=1 page=q.page}] as result %}
 {% for id in result %}
 
 {{ m.rsc[id].title }}
