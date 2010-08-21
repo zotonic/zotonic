@@ -43,7 +43,8 @@ is_authorized(ReqData, _Context) ->
 
 
 %% POST just redirect to the GET variant ( the post variables have been stored in the session )
-process_post(ReqData, Context) ->
+process_post(ReqData, _Context) ->
+    Context = z_context:new(ReqData, ?MODULE),
     Redirect = "/clipper/go",
     ReqData1 = wrq:set_resp_header("Location", Redirect, ReqData),
     {{halt, 301}, ReqData1, Context}.
