@@ -24,7 +24,8 @@
 	service_available/2,
 	resource_exists/2,
 	previously_existed/2,
-	moved_temporarily/2
+	moved_temporarily/2,
+	moved_permanently/2
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -45,6 +46,19 @@ previously_existed(ReqData, Context) ->
 	{true, ReqData, Context}.
 
 moved_temporarily(ReqData, Context) ->
+    case z_context:get(is_permanent, Context, false) of
+        true -> {false, ReqData, Context};
+        false -> do_redirect(ReqData, Context)
+    end.
+
+moved_permanently(ReqData, Context) ->
+    case z_context:get(is_permanent, Context, false) of
+        true -> do_redirect(ReqData, Context);
+        false -> {false, ReqData, Context}
+    end.
+
+
+do_redirect(ReqData, Context) ->
 	Location = case z_context:get(url, Context) of
 		undefined ->
 			case z_context:get(dispatch, Context) of
