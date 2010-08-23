@@ -42,7 +42,7 @@
 
 test_list() ->
 % order is important.
-    [   "autoescape", "comment", "extends", 
+    [   "autoescape", "comment", "extends", "overrules",
         "filters", 
         "for", "for_list", "for_tuple", "for_records",
         "include", 
@@ -224,7 +224,7 @@ test_compile_render(Name) ->
                 {force_recompile, true},
                 {finder, {?MODULE,find_file}}],
             io:format(" Template: ~p, ... compiling ... ", [Name]),
-            case catch erlydtl:compile(File, Module, Options, context()) of
+            case catch erlydtl:compile(File, Name, Module, Options, context()) of
                 {ok, ModuleName} ->
                     case CompileStatus of
                         ok -> test_render(Name, ModuleName);
@@ -291,16 +291,32 @@ test_render(Name, Module) ->
     end.   
 
 find_file(File) ->
-    hd(find_file(File, false)).
-find_file(File, _All) ->
+    hd(find_file(File, true)).
+
+find_file(File, false) ->
     DocRoot = templates_docroot(),
-    case lists:prefix(DocRoot, File) of
+    DocRoot2 = templates_docroot2(),
+    case lists:prefix(DocRoot, File) or lists:prefix(DocRoot2, File) of
         true -> [File];
-        false -> [filename:join([templates_docroot(), File])]
+        false -> [filename:join([DocRoot, File])]
+    end;
+find_file(File, true) ->
+    DocRoot = templates_docroot(),
+    DocRoot2 = templates_docroot2(),
+    case lists:prefix(DocRoot, File) or lists:prefix(DocRoot2, File) of
+        true -> 
+            [File];
+        false -> 
+            lists:filter(fun(F) -> filelib:is_file(F) end, 
+                        [ filename:join([DocRoot, File]),
+                          filename:join([DocRoot2, File]) ])
     end.
 
 templates_docroot() ->
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "docroot"]).
+
+templates_docroot2() ->
+    filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "docroot2"]).
 
 templates_outdir() ->   
     Dir = filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "rendered_output"]),

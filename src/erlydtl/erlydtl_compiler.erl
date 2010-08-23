@@ -45,13 +45,14 @@
 %% --------------------------------------------------------------------
 %% Definitions
 %% --------------------------------------------------------------------
--export([compile/3, compile/4, parse/1]).
+-export([compile/3, compile/4, compile/5, parse/1]).
 
 -record(dtl_context, {
     local_scopes = [], 
     block_dict = dict:new(), 
     auto_escape = off, 
     parse_trail = [],
+    extends_trail = [],
     vars = [],
     custom_tags_dir = [],
     reader = {file, read_file},
@@ -75,16 +76,21 @@ compile(Binary, Module, ZContext) when is_binary(Binary) ->
     compile(Binary, Module, [], ZContext);
 
 compile(File, Module, ZContext) ->
-    compile(File, Module, [], ZContext).
+    compile(File, File, Module, [], ZContext).
 
 compile(Binary, Module, Options, ZContext) when is_binary(Binary) ->
-    File = "",
+    compile(Binary, [], Module, Options, ZContext);
+    
+compile(File, Module, Options, ZContext) ->  
+    compile(File, filename:basename(File), Module, Options, ZContext).
+
+compile(Binary, BaseFile, Module, Options, ZContext) when is_binary(Binary) ->
     TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(Binary) of
         {ok, DjangoParseTree} ->
-            case compile_to_binary( File,
+            case compile_to_binary( BaseFile,
                                     DjangoParseTree, 
-                                    init_dtl_context(File, Module, Options, ZContext),
+                                    init_dtl_context(BaseFile, BaseFile, Module, Options, ZContext),
                                     TemplateResetCounter) of
                 {ok, Module1, _Bin} ->
                     {ok, Module1};
@@ -94,9 +100,9 @@ compile(Binary, Module, Options, ZContext) when is_binary(Binary) ->
         Err ->
             Err
     end;
-    
-compile(File, Module, Options, ZContext) ->  
-    Context = init_dtl_context(File, Module, Options, ZContext),
+
+compile(File, BaseFile, Module, Options, ZContext) ->  
+    Context = init_dtl_context(File, BaseFile, Module, Options, ZContext),
     TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(File, Context) of  
         {ok, DjangoParseTree} ->
@@ -139,14 +145,16 @@ compile_to_binary(File, DjangoParseTree, Context, TemplateResetCounter) ->
     catch 
         throw:Error -> Error
     end.
-                
-init_dtl_context(File, Module, Options, ZContext) when is_list(Module) ->
-    init_dtl_context(File, list_to_atom(Module), Options, ZContext);
-init_dtl_context(File, Module, Options, ZContext) ->
+
+
+init_dtl_context(File, BaseFile, Module, Options, ZContext) when is_list(Module) ->
+    init_dtl_context(File, BaseFile, list_to_atom(Module), Options, ZContext);
+init_dtl_context(File, BaseFile, Module, Options, ZContext) ->
     Ctx = #dtl_context{},
     #dtl_context{
         local_scopes = [ [{'$autoid', erl_syntax:variable("AutoId_"++z_ids:identifier())}] ],
         parse_trail = [File], 
+        extends_trail = [BaseFile],
         module = Module,
         custom_tags_dir = proplists:get_value(custom_tags_dir, Options, Ctx#dtl_context.custom_tags_dir),
         vars = proplists:get_value(vars, Options, Ctx#dtl_context.vars), 
@@ -276,39 +284,61 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
             Render2FunctionAst, SourceFunctionAst, DependenciesFunctionAst, RenderInternalFunctionAst
             | BodyInfo#ast_info.pre_render_asts]].    
 
-        
+
+find_next([], _Find) -> error;
+find_next([Find,Next|_], Find) -> {ok, Next};
+find_next([_|Rest], Find) -> find_next(Rest, Find).
+
 % child templates should only consist of blocks at the top level
+body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
+    case lists:member(File, Context#dtl_context.parse_trail) of
+        true ->
+            throw({error, "Circular file inclusion: " ++ File});
+        _ ->
+            case parse(File, Context) of
+                {ok, ParentParseTree} ->
+                    BlockDict = lists:foldl(
+                        fun
+                            ({block, {identifier, _, Name}, Contents}, Dict) ->
+                                dict:store(Name, Contents, Dict);
+                            (_, Dict) ->
+                                Dict
+                        end, dict:new(), ThisParseTree),
+                    with_dependency(File, body_ast(ParentParseTree, Context#dtl_context{
+                        block_dict = dict:merge(fun(_Key, _ParentVal, ChildVal) -> ChildVal end,
+                                                BlockDict,
+                                                Context#dtl_context.block_dict),
+                        parse_trail = [File | Context#dtl_context.parse_trail],
+                        extends_trail = [Extends | Context#dtl_context.extends_trail]}, TreeWalker));
+                Err ->
+                    throw(Err)
+            end        
+    end.
+
+body_ast([overrules | ThisParseTree], Context, TreeWalker) ->
+    CurrentExtend = hd(Context#dtl_context.extends_trail),
+    CurrentFile = hd(Context#dtl_context.parse_trail),
+    Files = full_path(CurrentExtend, true, Context),
+    % Find the first file after the current file
+    case find_next(Files, CurrentFile) of
+        {ok, File} ->
+            body_extends(CurrentExtend, File, ThisParseTree, Context, TreeWalker);
+        error ->
+            ?ERROR("body_ast: could not find overruled template for \"~p\" (~p)", [CurrentExtend,CurrentFile]),
+            throw({error, "Could not find the template for overrules: '" ++ CurrentExtend ++ "'"}),
+            {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
+    end;
+    
 body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, TreeWalker) ->
     Extends = unescape_string_literal(String),
     case full_path(Extends, Context) of
         {ok, File} ->
-            case lists:member(File, Context#dtl_context.parse_trail) of
-                true ->
-                    throw({error, "Circular file inclusion: " ++ File});
-                _ ->
-                    case parse(File, Context) of
-                        {ok, ParentParseTree} ->
-                            BlockDict = lists:foldl(
-                                fun
-                                    ({block, {identifier, _, Name}, Contents}, Dict) ->
-                                        dict:store(Name, Contents, Dict);
-                                    (_, Dict) ->
-                                        Dict
-                                end, dict:new(), ThisParseTree),
-                            with_dependency(File, body_ast(ParentParseTree, Context#dtl_context{
-                                block_dict = dict:merge(fun(_Key, _ParentVal, ChildVal) -> ChildVal end,
-                                    BlockDict, Context#dtl_context.block_dict),
-                                        parse_trail = [File | Context#dtl_context.parse_trail]}, TreeWalker));
-                        Err ->
-                            throw(Err)
-                    end        
-            end;
-        {error, Reason} ->
+            body_extends(Extends, File, ThisParseTree, Context, TreeWalker);
+       {error, Reason} ->
             ?ERROR("body_ast: could not find template ~p (~p)", [Extends, Reason]),
             throw({error, "Could not find the template for extends: '" ++ Extends ++ "'"}),
             {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
     end;
-    
     
 body_ast(DjangoParseTree, Context, TreeWalker) ->
     {AstInfoList, TreeWalker2} = lists:mapfoldl(

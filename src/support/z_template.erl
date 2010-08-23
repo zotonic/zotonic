@@ -85,7 +85,7 @@ render(File, Variables, Context) ->
     %% Render the found template
     render1(File, FoundFile, Variables, Context) ->
         Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
-            modified -> compile(FoundFile, Context);
+            modified -> compile(File, FoundFile, Context);
             Other -> Other
         end,
 
@@ -122,10 +122,13 @@ render_to_iolist(File, Vars, Context) ->
 compile(File, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
-            gen_server:call(Context#context.template_server, {compile, FoundFile, Context}, ?TIMEOUT);
+            compile(File, FoundFile, Context);
         {error, Reason} ->
             {error, Reason}
     end.
+
+compile(File, FoundFile, Context) ->
+    gen_server:call(Context#context.template_server, {compile, File, FoundFile, Context}, ?TIMEOUT).
 
 
 %% @spec find_template(File, Context) -> {ok, filename()} | {error, code} 
@@ -202,13 +205,14 @@ handle_call({check_modified, File}, _From, State) ->
 
 %% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
 %% one template at a time to prevent overloading the server on restarts.
-handle_call({compile, File, Context}, _From, State) ->
+handle_call({compile, File, FoundFile, Context}, _From, State) ->
     FinderFun  = fun(FinderFile, All) ->
         ?MODULE:find_template(FinderFile, All, Context)
     end,
     ModuleName = filename_to_modulename(File, State#state.host),
     Module     = list_to_atom(ModuleName),
-    ErlyResult = case erlydtl:compile(  File,
+    ErlyResult = case erlydtl:compile(  FoundFile,
+                                        File,
                                         Module, 
                                         [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter}],
                                         Context) of

@@ -44,6 +44,8 @@ Nonterminals
     ValueBraced
 
     ExtendsTag
+    OverrulesTag
+    
     IncludeTag
     CatIncludeTag
     NowTag
@@ -175,6 +177,7 @@ Terminals
     number_literal
     open_tag
     open_var
+    overrules_keyword
     pipe
     print_keyword
     string_literal
@@ -220,6 +223,7 @@ Elements -> Elements ValueBraced : '$1' ++ ['$2'].
 Elements -> Elements TransTag : '$1' ++ ['$2'].
 Elements -> Elements TransExtTag : '$1' ++ ['$2'].
 Elements -> Elements ExtendsTag : '$1' ++ ['$2'].
+Elements -> Elements OverrulesTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
 Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
 Elements -> Elements NowTag : '$1' ++ ['$2'].
@@ -247,9 +251,11 @@ Elements -> Elements CacheBlock : '$1' ++ ['$2'].
 
 ValueBraced -> open_var E close_var : '$2'.
 
+ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
+OverrulesTag -> open_tag overrules_keyword close_tag : overrules.
+
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag __keyword string_literal TransArgs close_tag : {trans_ext, '$3', '$4'}.
-ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 IncludeTag -> open_tag OptionalAll include_keyword string_literal Args close_tag : {include, '$4', '$5', '$2'}.
 CatIncludeTag -> open_tag OptionalAll catinclude_keyword string_literal E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
 NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
