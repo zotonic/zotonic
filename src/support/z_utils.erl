@@ -74,6 +74,7 @@
 	replace1/3,
 	split/2,
 	split_in/2,
+	url_path_encode/1,
 	url_encode/1,
 	url_decode/1,
 	vsplit_in/2,
@@ -215,6 +216,7 @@ depickle(Data, Context) ->
         _M:_E -> erlang:throw("Postback data invalid, could not depickle: "++Data)
     end.
 
+
 %%% URL ENCODE %%%
 
 url_encode(S) -> quote_plus(S).
@@ -248,6 +250,35 @@ quote_plus([$\s | Rest], Acc) ->
 quote_plus([C | Rest], Acc) ->
     <<Hi:4, Lo:4>> = <<C>>,
     quote_plus(Rest, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc]).
+
+
+%%% URL PATH ENCODE %%%
+
+%% url spec for path part
+url_path_encode(L) when is_list(L) ->
+    url_path_encode(L, []);
+url_path_encode(L) ->
+    url_path_encode(z_convert:to_list(L)).
+
+-define(URL_SAFE(C), (C==$$ orelse C==$- orelse C==$- orelse C==$@ orelse C==$. orelse C==$& orelse C==$+ orelse C==$-)).
+-define(URL_EXTRA(C), (C==$! orelse $C==$* orelse C==$" orelse C==$' orelse C==$( orelse C==$) orelse C==$,)).
+
+url_path_encode([], Acc) ->
+    lists:reverse(Acc);
+url_path_encode([$/|R], Acc) ->
+    url_path_encode(R, [$/|Acc]);
+url_path_encode([C|R], Acc) when ((C>=$a andalso C =< $z) orelse
+                             (C>=$A andalso C =< $Z) orelse
+                             (C>=$0 andalso C =< $9)) ->
+    url_path_encode(R, [C|Acc]);
+url_path_encode([C|R], Acc) when ?URL_SAFE(C) ->
+    url_path_encode(R, [C|Acc]);
+url_path_encode([C|R], Acc) when ?URL_EXTRA(C) ->
+    url_path_encode(R, [C|Acc]);
+url_path_encode([C|R], Acc) ->
+    <<Hi:4, Lo:4>> = <<C>>,
+    url_path_encode(R, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc]).
+
 
 %% @spec os_filename(String) -> String
 %% @doc Simple escape function for filenames as commandline arguments.
