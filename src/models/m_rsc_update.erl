@@ -369,9 +369,7 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{page_path, undefined} | Acc], Context);
                 _ ->
-                    Tokens = string:tokens(z_convert:to_list(Path), "/"),
-                    AsSlug = lists:map(fun(X) -> z_string:to_slug(X) end, Tokens),
-                    case [$/ | string:strip(string:join(AsSlug, "/"), both, $/)] of
+                    case [$/ | string:strip(z_utils:url_path_encode(Path), both, $/)] of
                         [] -> props_filter(T, [{page_path, undefined} | Acc], Context);
                         P  -> props_filter(T, [{page_path, P} | Acc], Context)
                     end
