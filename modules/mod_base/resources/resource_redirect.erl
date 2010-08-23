@@ -70,7 +70,7 @@ do_redirect(ReqData, Context) ->
 				Dispatch -> 
 					%% @todo add, on demand, qargs into the dispatch arg list.
 					Args = z_context:get_all(Context),
-					Args1 = proplists:delete(dispatch, Args),
+					Args1 = proplists:delete(is_permanent, proplists:delete(dispatch, Args)),
 					z_dispatcher:url_for(Dispatch, Args1, Context)
 			end;
 		Url ->
