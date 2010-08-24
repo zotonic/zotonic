@@ -351,7 +351,7 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
             ({'block', {identifier, _, Name}, Contents}, TreeWalkerAcc) ->
                 CurrentFile = case Context#dtl_context.block_trail of
                                     [] -> hd(Context#dtl_context.parse_trail);
-                                    [{_, F}] -> F
+                                    [{_, F}|_] -> F
                               end,
                 % remember this block for an 'inherit' tag
                 Context1 = Context#dtl_context{
