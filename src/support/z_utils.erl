@@ -260,24 +260,20 @@ url_path_encode(L) when is_list(L) ->
 url_path_encode(L) ->
     url_path_encode(z_convert:to_list(L)).
 
--define(URL_SAFE(C), (C==$$ orelse C==$- orelse C==$- orelse C==$@ orelse C==$. orelse C==$& orelse C==$+ orelse C==$-)).
--define(URL_EXTRA(C), (C==$! orelse $C==$* orelse C==$" orelse C==$' orelse C==$( orelse C==$) orelse C==$,)).
-
 url_path_encode([], Acc) ->
     lists:reverse(Acc);
 url_path_encode([$/|R], Acc) ->
     url_path_encode(R, [$/|Acc]);
-url_path_encode([C|R], Acc) when ((C>=$a andalso C =< $z) orelse
-                             (C>=$A andalso C =< $Z) orelse
-                             (C>=$0 andalso C =< $9)) ->
+url_path_encode([C|R], Acc) when (C==$: orelse C==$@ orelse C==$& orelse C==$= orelse C==$+ orelse C==$$ orelse C==$ orelse C==$;) ->
     url_path_encode(R, [C|Acc]);
-url_path_encode([C|R], Acc) when ?URL_SAFE(C) ->
-    url_path_encode(R, [C|Acc]);
-url_path_encode([C|R], Acc) when ?URL_EXTRA(C) ->
-    url_path_encode(R, [C|Acc]);
-url_path_encode([C|R], Acc) ->
-    <<Hi:4, Lo:4>> = <<C>>,
-    url_path_encode(R, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc]).
+url_path_encode([C|R], Acc)->
+    case url_unreserved_char(C) of
+        true ->
+            url_path_encode(R, [C|Acc]);
+        false ->
+            <<Hi:4, Lo:4>> = <<C>>,
+            url_path_encode(R, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc])
+    end.
 
 
 %% @spec os_filename(String) -> String
