@@ -42,7 +42,7 @@
 
 test_list() ->
 % order is important.
-    [   "autoescape", "comment", "extends", "overrules",
+    [   "inherit", "autoescape", "comment", "extends", "overrules",
         "filters", 
         "for", "for_list", "for_tuple", "for_records",
         "include", 
