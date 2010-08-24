@@ -53,6 +53,7 @@
     auto_escape = off, 
     parse_trail = [],
     extends_trail = [],
+    block_trail = [],
     vars = [],
     custom_tags_dir = [],
     reader = {file, read_file},
@@ -289,6 +290,7 @@ find_next([], _Find) -> error;
 find_next([Find,Next|_], Find) -> {ok, Next};
 find_next([_|Rest], Find) -> find_next(Rest, Find).
 
+
 % child templates should only consist of blocks at the top level
 body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
     case lists:member(File, Context#dtl_context.parse_trail) of
@@ -297,10 +299,12 @@ body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
         _ ->
             case parse(File, Context) of
                 {ok, ParentParseTree} ->
+                    ThisFile = hd(Context#dtl_context.parse_trail),
                     BlockDict = lists:foldl(
                         fun
                             ({block, {identifier, _, Name}, Contents}, Dict) ->
-                                dict:store(Name, Contents, Dict);
+                                Dict1 = dict:store(Name, {ThisFile, Contents}, Dict),
+                                dict:store({Name, ThisFile}, Contents, Dict1);
                             (_, Dict) ->
                                 Dict
                         end, dict:new(), ThisParseTree),
@@ -308,6 +312,7 @@ body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
                         block_dict = dict:merge(fun(_Key, _ParentVal, ChildVal) -> ChildVal end,
                                                 BlockDict,
                                                 Context#dtl_context.block_dict),
+                        block_trail = [],
                         parse_trail = [File | Context#dtl_context.parse_trail],
                         extends_trail = [Extends | Context#dtl_context.extends_trail]}, TreeWalker));
                 Err ->
@@ -339,18 +344,31 @@ body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, T
             throw({error, "Could not find the template for extends: '" ++ Extends ++ "'"}),
             {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
     end;
-    
+
 body_ast(DjangoParseTree, Context, TreeWalker) ->
     {AstInfoList, TreeWalker2} = lists:mapfoldl(
         fun
             ({'block', {identifier, _, Name}, Contents}, TreeWalkerAcc) ->
-                Block = case dict:find(Name, Context#dtl_context.block_dict) of
-                    {ok, ChildBlock} ->
-                        ChildBlock;
-                    _ ->
-                        Contents
+                CurrentFile = case Context#dtl_context.block_trail of
+                                    [] -> hd(Context#dtl_context.parse_trail);
+                                    [{_, F}] -> F
+                              end,
+                % remember this block for an 'inherit' tag
+                Context1 = Context#dtl_context{
+                    block_dict=dict:store({Name,CurrentFile}, Contents, Context#dtl_context.block_dict)
+                },
+                % See if this block has been overruled
+                {BlockFile, Block} = case dict:find(Name, Context#dtl_context.block_dict) of
+                    {ok, {_ChildFile, _ChildBlock} = B} ->
+                        B;
+                    error ->
+                        {CurrentFile, Contents}
                 end,
-                body_ast(Block, Context, TreeWalkerAcc);
+                body_ast(Block,
+                         Context1#dtl_context{block_trail=[{Name,BlockFile}|Context1#dtl_context.block_trail]}, 
+                         TreeWalkerAcc);
+            ('inherit', TreeWalkerAcc) ->
+                inherit_ast(Context, TreeWalkerAcc);
             ({'comment', _Contents}, TreeWalkerAcc) ->
                 empty_ast(TreeWalkerAcc);
 			({'trans', {trans_text, _Pos, TransLiteral}}, TreeWalkerAcc) ->
@@ -488,6 +506,25 @@ merge_info(Info1, Info2) ->
 %        
 with_dependency(FilePath, {{Ast, Info}, TreeWalker}) ->
     {{Ast, Info#ast_info{dependencies = [{FilePath, filelib:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
+
+
+
+inherit_ast(Context, TreeWalker) ->
+    {BlockName,BlockFile} = hd(Context#dtl_context.block_trail),
+    Inherited = [ {F, dict:find({BlockName,F}, Context#dtl_context.block_dict)} 
+                || F <- find_prev_all(Context#dtl_context.parse_trail, BlockFile, []) ],
+    case [ {F,C} || {F,{ok, C}} <- Inherited ] of
+        [{InheritedFile,Content}|_] ->
+            body_ast(Content,
+                     Context#dtl_context{block_trail=[{BlockName,InheritedFile}|Context#dtl_context.block_trail]}, 
+                     TreeWalker);
+        [] ->
+            {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
+    end.
+
+    find_prev_all([], _Find, Acc) -> Acc;
+    find_prev_all([Find|_], Find, Acc) -> Acc;
+    find_prev_all([F|Rest], Find, Acc) -> find_prev_all(Rest, Find, [F|Acc]).
 
 
 empty_ast(TreeWalker) ->

@@ -45,6 +45,7 @@ Nonterminals
 
     ExtendsTag
     OverrulesTag
+    InheritTag
     
     IncludeTag
     CatIncludeTag
@@ -169,6 +170,7 @@ Terminals
 	image_url_keyword
     in_keyword
     include_keyword
+    inherit_keyword
 	lib_keyword
     load_keyword
 	media_keyword
@@ -224,6 +226,7 @@ Elements -> Elements TransTag : '$1' ++ ['$2'].
 Elements -> Elements TransExtTag : '$1' ++ ['$2'].
 Elements -> Elements ExtendsTag : '$1' ++ ['$2'].
 Elements -> Elements OverrulesTag : '$1' ++ ['$2'].
+Elements -> Elements InheritTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
 Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
 Elements -> Elements NowTag : '$1' ++ ['$2'].
@@ -253,6 +256,7 @@ ValueBraced -> open_var E close_var : '$2'.
 
 ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 OverrulesTag -> open_tag overrules_keyword close_tag : overrules.
+InheritTag -> open_tag inherit_keyword close_tag : inherit.
 
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag __keyword string_literal TransArgs close_tag : {trans_ext, '$3', '$4'}.
