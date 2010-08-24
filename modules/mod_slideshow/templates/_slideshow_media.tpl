@@ -9,7 +9,7 @@
 		<div class="slideshow-viewer-left-arrow"></div>
 		<div class="slideshow-viewer-right-arrow"></div>
 
-		<ul class="slideshow-viewer-image-wrapper do_cycle { pause: true, timeout: {{ slide_timeout|default:800 }}, speed: {{ slide_speed|default:2000 }}, fx: '{{ slide_fx|default:'scrollHorz' }}', easing: '{{ slide_easing|default:'easeInOutQuad' }}', prev: '.slideshow-viewer-left-arrow', next: '.slideshow-viewer-right-arrow'}" style="{% if slide_width|default:width %}width: {{ slide_width|default:width }}px;{% endif %}{% if slide_height|default:height %}height: {{ slide_height|default:height }}px; overflow:hidden;{% endif %}">
+		<ul class="slideshow-viewer-image-wrapper do_cycle { pause: true, timeout: {{ slide_timeout|default:(m.config.mod_slideshow.timeout.value)|default:2000 }}, speed: {{ slide_speed|default:(m.config.mod_slideshow.speed.value)|default:2000 }}, fx: '{{ slide_fx|default:'scrollHorz' }}', easing: '{{ slide_easing|default:'easeInOutQuad' }}', prev: '.slideshow-viewer-left-arrow', next: '.slideshow-viewer-right-arrow'}" style="{% if slide_width|default:width %}width: {{ slide_width|default:width }}px;{% endif %}{% if slide_height|default:height %}height: {{ slide_height|default:height }}px; overflow:hidden;{% endif %}">
 			{% for p_id in parts %}
 				{% if m.rsc[p_id].is_visible %}
 					{% catinclude "_slideshow_part.tpl" p_id %}
