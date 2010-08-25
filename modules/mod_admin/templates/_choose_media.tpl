@@ -7,7 +7,7 @@
 				{% with m.rsc[media_id].medium as medium %}
 					{% with m.rsc[media_id].title|striptags|default:_"untitled" as title %}
 						<span id="{{ #choose.media_id }}" style="cursor: pointer">
-							{% image medium width=80 height=80 crop title=title %}
+							{% image media_id width=80 height=80 crop title=title %}
 						</span>
 					{% endwith %}
 				
