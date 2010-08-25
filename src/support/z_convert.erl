@@ -32,6 +32,7 @@
 	to_binary/1, 
 	to_integer/1,
 	to_float/1,
+	to_bool_strict/1,
 	to_bool/1,
 	to_utc/1,
 	to_localtime/1,
@@ -95,16 +96,8 @@ to_float(L) when is_list(L) ->
         false -> list_to_float(L++".0")  %% list_to_float("1") gives a badarg
     end.
 
-to_bool(undefined) -> false;
-to_bool(false) -> false;
-to_bool(0) -> false;
-to_bool(0.0) -> false;
-to_bool(<<>>) -> false;
-to_bool(<<0>>) -> false;
-to_bool(<<"0">>) -> false;
-to_bool([]) -> false;
-to_bool("0") -> false;
-to_bool([0]) -> false;
+
+%% @doc Quite loose conversion of values to boolean
 to_bool("false") -> false;
 to_bool("FALSE") -> false;
 to_bool("n") -> false;
@@ -119,7 +112,24 @@ to_bool("disabled") -> false;
 to_bool(<<"disabled">>) -> false;
 to_bool("DISABLED") -> false;
 to_bool(<<"DISABLED">>) -> false;
-to_bool(_) -> true.
+to_bool([0]) -> false;
+to_bool(V) -> to_bool_strict(V).
+
+% @doc Convert values to boolean values according to the Django rules
+to_bool_strict(undefined) -> false;
+to_bool_strict(false) -> false;
+to_bool_strict(0) -> false;
+to_bool_strict(0.0) -> false;
+to_bool_strict(<<>>) -> false;
+to_bool_strict(<<0>>) -> false;
+to_bool_strict([]) -> false;
+to_bool_strict({rsc_list, []}) -> false;
+to_bool_strict(#m{value=V}) -> to_bool(V);
+to_bool_strict(#m_search_result{result=V}) -> to_bool(V);
+to_bool_strict(#search_result{result=[]}) -> false;
+to_bool_strict("0") -> false;
+to_bool_strict(<<"0">>) -> false;
+to_bool_strict(_) -> true.
 
 
 %% @doc Convert a local date time to utc
