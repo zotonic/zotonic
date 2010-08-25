@@ -29,10 +29,10 @@ without_embedded_media(Input, Id, Context) ->
         [] -> [];
         Ids ->
             Body = m_rsc:p(Id, body, Context),
-            case re:run(Body, "\<\!-- z-media ([0-9]+) ", [{capture, all_but_first, list}]) of
+            case re:run(Body, "\<\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, list}]) of
                 nomatch -> Ids;
                 {match, L} ->
-                    S = [z_convert:to_integer(I) || I <- L],
+                    S = [z_convert:to_integer(I) || [I] <- L],
                     lists:filter(fun(I) -> not(lists:member(I, S)) end, Ids)
             end
     end.
