@@ -60,7 +60,9 @@ tests() ->
                 {"Modulo", <<"{{ 7 % 3 }}">>, [], <<"1">>},
                 {"Divide", <<"{{ 6/3 }}">>, [], <<"2.0">>},
                 {"Unary minus", <<"{{ -5 }}">>, [], <<"-5">>},
-                {"Nested", <<"{{ 1 + (3-2) }}">>, [], <<"2">>}
+                {"Nested", <<"{{ 1 + (3-2) }}">>, [], <<"2">>},
+                {"And - empty rsc_list", <<"{{ 1 and rsc_list }}">>, [{rsc_list,{rsc_list,[]}}], <<"false">>},
+                {"And - filled rsc_list", <<"{{ 1 and rsc_list }}">>, [{rsc_list,{rsc_list,[1]}}], <<"true">>}
             ]},
         {"variable", [
                 {"Render variable",
@@ -97,7 +99,8 @@ tests() ->
                 {"If false",
                     <<"{% if var1 %}boo{% endif %}">>, [{var1, false}], <<>>},
                 {"If false string",
-                    <<"{% if var1 %}boo{% endif %}">>, [{var1, "false"}], <<"boo">>},
+                    % This test differs from Django, we also accept "false" as boolean false
+                    <<"{% if var1 %}boo{% endif %}">>, [{var1, "false"}], <<>>},
                 {"If undefined",
                     <<"{% if var1 %}boo{% endif %}">>, [{var1, undefined}], <<>>},
                 {"If other atom",

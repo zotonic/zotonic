@@ -161,31 +161,11 @@ fetch_value(Key, Data, Context) ->
 are_equal(Arg1, Arg2) ->
     z_utils:are_equal(Arg1, Arg2).
     
-is_false([]) ->
-    true;
-is_false(false) ->
-    true;
-is_false(undefined) ->
-    true;
-is_false(0) ->
-    true;
-is_false("0") ->
-    true;
-is_false(<<"0">>) ->
-    true;
-is_false(<<>>) ->
-    true;
-is_false({rsc_list, []}) ->
-    true;
-is_false(#m{value=V}) ->
-    is_false(V);
-is_false(#m_search_result{result=V}) ->
-    is_false(V);
-is_false(#search_result{result=[]}) ->
-    true;
-is_false(_) ->
-    false.
+is_false(A) ->
+    not z_convert:to_bool(A).
 
+is_true(A) ->
+    z_convert:to_bool(A).
 
 init_counter_stats(List) ->
     init_counter_stats(List, undefined).

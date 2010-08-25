@@ -43,16 +43,16 @@
 
 
 'and'(A, B, _Context) ->
-    z_convert:to_bool(A) and z_convert:to_bool(B).
+    erlydtl_runtime:is_true(A) and erlydtl_runtime:is_true(B).
 
 'not'(A, _Context) ->
-    not z_convert:to_bool(A).
+    not erlydtl_runtime:is_true(A).
 
 'or'(A, B, _Context) ->
-    z_convert:to_bool(A) or z_convert:to_bool(B).
+    erlydtl_runtime:is_true(A) or erlydtl_runtime:is_true(B).
 
 'xor'(A, B, _Context) ->
-    z_convert:to_bool(A) xor z_convert:to_bool(B).
+    erlydtl_runtime:is_true(A) xor erlydtl_runtime:is_true(B).
 
 
 add(A, B, _Context) ->
