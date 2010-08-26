@@ -57,6 +57,14 @@
     appear_top_selector/3,
     appear_bottom_selector/3,
 
+    update_selector_js/2,
+    insert_top_selector_js/2,
+    insert_bottom_selector_js/2,
+
+    appear_selector_js/2,
+    appear_top_selector_js/2,
+    appear_bottom_selector_js/2,
+
     set_value/3,
     set_value_selector/3,
     
@@ -236,22 +244,23 @@ appear_bottom(TargetId, Html, Context) ->
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment 
 update_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
+    update_context(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
 
 insert_top_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"prepend">>, "", Context).
+    update_context(CssSelector, Html, <<"prepend">>, <<"">>, Context).
 
 insert_bottom_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"append">>, "", Context).
+    update_context(CssSelector, Html, <<"append">>, <<"">>, Context).
 
 appear_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_top_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>, Context).
+    update_context(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>, Context).
 
 appear_bottom_selector(CssSelector, Html, Context) ->
-    add_update(CssSelector, Html, <<"append">>, <<".fadeIn()">>, Context).
+    update_context(CssSelector, Html, <<"append">>, <<".fadeIn()">>, Context).
+
 
 %% @doc Set the value of an input element.
 set_value(TargetId, Value, Context) ->
@@ -260,17 +269,42 @@ set_value(TargetId, Value, Context) ->
 set_value_selector(CssSelector, undefined, Context) ->
     set_value_selector(CssSelector, "", Context);
 set_value_selector(CssSelector, Value, Context) ->
-    add_update(CssSelector, Value, <<"val">>, "", Context).
+    update_context(CssSelector, Value, <<"val">>, "", Context).
+
+
+%% @doc Render an update js as into the context
+update_context(CssSelector, Html, Function, AfterEffects, Context) ->
+    {Html1, Context1} = render_html(Html, Context),
+    Update = update_js(CssSelector, Html1, Function, AfterEffects),
+    Context1#context{updates=[{Update}|Context1#context.updates]}.
+    
+
+%% @doc Set the contents of all elements matching the css selector to the the html fragment 
+update_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"html">>, <<".widgetManager()">>).
+
+insert_top_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"prepend">>, <<"">>).
+
+insert_bottom_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"append">>, <<"">>).
+
+appear_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>).
+
+appear_top_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>).
+
+appear_bottom_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"append">>, <<".fadeIn()">>).
 
 
 %% @doc Helper functions for the insert/appear/set_value functions
-add_update(CssSelector, Html, Function, AfterEffects, Context) ->
-    {Html1, Context1} = render_html(Html, Context),
-    Update = [ $$, $(, quote_css_selector(CssSelector), $), 
-               $., Function, $(, $", z_utils:js_escape(Html1), $", $), 
-               AfterEffects, 
-               $;],
-    Context1#context{updates=[{Update}|Context1#context.updates]}.
+update_js(CssSelector, Html, Function, AfterEffects) ->
+    [ $$, $(, quote_css_selector(CssSelector), $), 
+       $., Function, $(, $", z_utils:js_escape(Html), $", $), 
+       AfterEffects, 
+       $;].
 
     render_html(#render{template=Template, vars=Vars}, Context) ->
         {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
