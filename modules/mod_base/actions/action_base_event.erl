@@ -30,7 +30,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     {PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, Trigger, TargetId, Delegate, Context),
     {ActionsJS,Context1} = z_render:render_actions(Trigger, TargetId, Actions, Context),
-
+    
     Script = if
                 EventType == enterkey orelse EventType == "enterkey" ->
                     [
