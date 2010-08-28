@@ -352,12 +352,12 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
 
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information. 
 %% The PostbackTag is send to the server, EventType is normally the atom 'postback'.
-%% @spec make_postback(PostbackTag, EventType, TriggerId, TargetId, Deletegate, Context) -> {JavascriptString, PickledPostback}
+%% @spec make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) -> {JavascriptString, PickledPostback}
 make_postback(undefined, _EventType, _TriggerId, _TargetId, _Delegate, _Context) ->
     {[],[]};
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
     PickledPostbackInfo = make_postback_info(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context),
-    {[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"');">>], PickledPostbackInfo}.
+    {[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"', typeof(zEvtArgs) != 'undefined' ? zEvtArgs : undefined);">>], PickledPostbackInfo}.
 
     ensure_iolist(A) when is_atom(A) -> atom_to_list(A);
     ensure_iolist(L) -> L.
