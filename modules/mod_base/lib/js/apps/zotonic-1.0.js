@@ -32,6 +32,8 @@ var z_postbacks				= [];
 var z_default_form_postback = false;
 var z_input_updater			= false;
 var z_drag_tag				= [];
+var z_registered_events		= new Object();
+
 
 /* 
 We need to set the domain of the session cookie to 'test'
@@ -77,6 +79,26 @@ function z_growl_close()
 	$.noticeRemove($('.notice-item-wrapper'), 400);
 }
 
+
+/* Registered events for javascript triggered actions/postbacks
+---------------------------------------------------------- */
+
+function z_event_register(name, func)
+{
+    z_registered_events[name] = func;
+}
+
+function z_event(name, extraParams)
+{
+	if (z_registered_events[name])
+	{
+		z_registered_events[name](ensure_name_value(extraParams));
+	}
+	else if (window.console)
+	{
+		console.error("z_event: no registered event named: '"+name+"'");
+	}
+}
 
 /* Postback loop
 ---------------------------------------------------------- */
@@ -918,6 +940,24 @@ function html_escape(s)
 }
 
 
+// Convert an object to an array with {name: xxx, value: yyy} pairs
+function ensure_name_value(a)
+{
+	if ((typeof a == 'object') && !(a instanceof Array))
+	{
+		var n = []
+		for (var prop in a)
+		{
+			n.push({name: prop, value: a[prop]});
+		}
+		return n;
+	}
+	else
+	{
+		return a;
+	}
+}
+
 // From: http://malsup.com/jquery/form/jquery.form.js
 
 /*
@@ -1173,3 +1213,4 @@ function log() {
 	if (window.console && window.console.log)
 		window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
 }
+

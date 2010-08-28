@@ -35,10 +35,13 @@ render(Params, _Vars, Context) ->
 
     Options   = [{action,X} || X <- Actions],
     Options1  = case Postback of
-                	undefined -> Options;
-                	Postback  -> [{postback,Postback} | Options]
+                    undefined -> Options;
+                    Postback  -> [{postback,Postback} | Options]
                 end,
-
+    Options2  = case proplists:get_value(name, Params) of
+                    undefined -> [{type,Type}|Options1];
+                    Name -> [{type,named},{name,Name}|Options1]
+                end,
     Delegate1 = case Delegate of
         undefined -> undefined;
         _ -> z_convert:to_atom(Delegate)
@@ -46,5 +49,5 @@ render(Params, _Vars, Context) ->
 
     case Options1 of
         [] -> {error, "scomp wire: please give either an <em>action</em> or a <em>postback</em> parameter."};
-        _  -> {ok, z_render:wire(Id, TargetId, {event,[{type,Type},{delegate,Delegate1}|Options1]}, Context)}
+        _  -> {ok, z_render:wire(Id, TargetId, {event,[{delegate,Delegate1}|Options2]}, Context)}
     end.

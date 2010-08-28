@@ -56,6 +56,13 @@ render_action(TriggerId, TargetId, Args, Context) ->
                         _  -> [SubmitPostback, <<".data('z_submit_action', \"">>, z_utils:js_escape(ActionsJS), <<"\");\n">>]
                     end;
 
+                EventType == named orelse EventType == "named" ->
+                    Name = proplists:get_value(name, Args, Trigger),
+                    [
+                        <<"z_event_register(\"">>,z_utils:js_escape(Name),<<"\", function(zEvtArgs) {">>,
+                            PostbackMsgJS, ActionsJS, <<"});\n">>
+                    ];
+
                 EventType == undefined orelse EventType == "none" orelse
                 EventType == inline orelse EventType == "inline" orelse
                 EventType == load orelse EventType == "load" ->
