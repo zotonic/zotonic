@@ -25,7 +25,7 @@
 -export([
     render_action/4,
     event/2,
-    do_link/4
+    do_link/5
 ]).
 
 render_action(TriggerId, TargetId, Args, Context) ->
@@ -33,23 +33,24 @@ render_action(TriggerId, TargetId, Args, Context) ->
     ObjectId = z_convert:to_integer(proplists:get_value(object_id, Args)),
     Predicate = proplists:get_value(predicate, Args),
     ElementId = proplists:get_value(element_id, Args),
+    EdgeTemplate = proplists:get_value(edge_template, Args),
     Action = proplists:get_all_values(action, Args),
     
-    Postback = {link, SubjectId, Predicate, ObjectId, ElementId, Action},
+    Postback = {link, SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
 
 %% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
 %% @spec event(Event, Context1) -> Context2
-event({postback, {link, SubjectId, Predicate, ObjectId, ElementId, Action}, _TriggerId, _TargetId}, Context) ->
-    do_link(SubjectId, Predicate, ObjectId, ElementId, Action, Context).
+event({postback, {link, SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action}, _TriggerId, _TargetId}, Context) ->
+    do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action, Context).
 
 
-do_link(SubjectId, Predicate, ObjectId, Context) ->
-    do_link(SubjectId, Predicate, ObjectId, undefined, [], Context).
+do_link(SubjectId, Predicate, ObjectId, EdgeTemplate, Context) ->
+    do_link(SubjectId, Predicate, ObjectId, undefined, EdgeTemplate, [], Context).
 
-do_link(SubjectId, Predicate, ObjectId, ElementId, Action, Context) ->
+do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action, Context) ->
     case z_acl:rsc_editable(SubjectId, Context) of
         true ->
             {ok, EdgeId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
@@ -57,9 +58,11 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, Action, Context) ->
                 {subject_id, SubjectId},
                 {predicate, Predicate},
                 {object_id, ObjectId},
-				{edge_id, EdgeId}
+                {edge_id, EdgeId}
             ],
-            Html  = z_template:render("_rsc_edge.tpl", Vars, Context),
+            Html  = z_template:render(case EdgeTemplate of undefined -> "_rsc_edge.tpl"; _ -> EdgeTemplate end,
+                                      Vars,
+                                      Context),
             Title = z_html:strip(?__(m_rsc:p(ObjectId, title, Context), Context)),
             ElementId1 = case ElementId of
                 undefined -> "links-"++z_convert:to_list(SubjectId)++"-"++z_convert:to_list(Predicate);
