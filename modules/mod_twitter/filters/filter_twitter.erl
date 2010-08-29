@@ -56,7 +56,7 @@ twitter1_url(Pre, Input, Index, Context) ->
                     process_binary_match(<<>>, [Html, Char], size(Post), twitter1(Post, 0, Context))
             end;
         <<Url:Index/binary>> ->
-            Html = ["<a href=\"", Url, "\">", Url, "</a>"],
+            Html = ["<a href=\"", Pre, Url, "\">", Pre, Url, "</a>"],
             process_binary_match(<<>>, Html, 0, <<>>);
         _ ->
             Input
