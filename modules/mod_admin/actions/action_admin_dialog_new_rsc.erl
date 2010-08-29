@@ -35,14 +35,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Redirect = proplists:get_value(redirect, Args, true),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
-    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate},
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-	{PostbackMsgJS, Context}.
+    EdgeTemplate = proplists:get_value(edge_template, Args),
+    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate},
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate}, _TriggerId, _TargetId}, Context) ->
+event({postback, {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate}, _TriggerId, _TargetId}, Context) ->
     CatName = case Cat of
         undefined -> "page";
         _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
@@ -60,17 +61,19 @@ event({postback, {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, 
         {title, Title},
         {cat, CatId},
         {nocatselect, NoCatSelect},
-        {catname, CatName}
+        {catname, CatName},
+        {edge_template, EdgeTemplate}
     ],
     z_render:dialog("Make a new "++CatName++".", "_action_dialog_new_rsc.tpl", Vars, Context);
 
 
-event({submit, new_page, _TriggerId, _TargetId}, Context) ->
+event({submit, {new_page, Args}, _TriggerId, _TargetId}, Context) ->
     Title   = z_context:get_q("new_rsc_title", Context),
     CatId   = list_to_integer(z_context:get_q("category_id", Context)),
-    Redirect = z_context:get_q("redirect", Context),
-    SubjectId = z_context:get_q("subject_id", Context),
-    Predicate = z_context:get_q("predicate", Context),
+    Redirect = proplists:get_value(redirect, Args),
+    SubjectId = proplists:get_value(subject_id, Args),
+    Predicate = proplists:get_value(predicate, Args),
+    EdgeTemplate = proplists:get_value(edge_template, Args),
     IsPublished = z_context:get_q("is_published", Context),
 
     Props = [
@@ -84,8 +87,8 @@ event({submit, new_page, _TriggerId, _TargetId}, Context) ->
     Context1 = case SubjectId of
         [] -> 
             Context;
-        L when is_list(L) ->
-            action_admin_link:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Context);
+        L when is_list(L); is_integer(L) ->
+            action_admin_link:do_link(z_convert:to_integer(SubjectId), Predicate, Id, EdgeTemplate, Context);
         _ ->
             Context
     end,

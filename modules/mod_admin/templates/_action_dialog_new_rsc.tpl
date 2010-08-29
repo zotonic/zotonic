@@ -6,7 +6,10 @@
 </script>
 <p>{_ Please fill in the title _} {% if not nocatselect %}{_ and the category of the new page._}{% else %}{_ of the new _}{{ catname }}.{% endif %} </p>
 
-{% wire id=#form type="submit" postback="new_page" delegate=delegate %}
+{% wire id=#form type="submit" 
+	postback={new_page subject_id=subject_id predicate=predicate redirect=redirect edge_template=edge_template} 
+	delegate=delegate 
+%}
 <form id="{{ #form }}" method="POST" action="postback">
 
 	<div class="new-rsc-wrapper">
@@ -43,10 +46,6 @@
 			<button type="submit">{_ Make _} {{ catname }}</button>
 			{% button action={dialog_close} text=_"Cancel" %}
 		</div>
-		
-		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
-		<input type="hidden" name="predicate" value="{{ predicate }}" />
-		<input type="hidden" name="redirect" value="{{ redirect }}" />
 	</div>
 </form>
 
