@@ -342,14 +342,15 @@ output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
     
     render_script(Args, Context) ->
-        DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
-        Script = case z_convert:to_bool(proplists:get_value(nostartup, Args, false)) of
+        NoStartup = z_convert:to_bool(proplists:get_value(nostartup, Args, false)),
+        Extra = [ S || S <- z_notifier:map({scomp_script_render, NoStartup, Args}, Context), S /= undefined ],
+        Script = case NoStartup of
             false ->
                 [ z_script:get_page_startup_script(Context),
-                  z_script:get_script(Context),
-                  <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
+                  Extra,
+                  z_script:get_script(Context) ];
             true ->
-                z_script:get_script(Context)
+                [z_script:get_script(Context), Extra]
         end,
         case proplists:get_value(format, Args, "html") of
             "html" ->
@@ -548,6 +549,7 @@ get_q_all_noz(Context) ->
     is_zotonic_arg("z_trigger_id") -> true;
     is_zotonic_arg("z_pageid") -> true;
     is_zotonic_arg("z_v") -> true;
+    is_zotonic_arg("z_msg") -> true;
     is_zotonic_arg(_) -> false.
     
 
