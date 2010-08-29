@@ -100,6 +100,20 @@ function z_event(name, extraParams)
 	}
 }
 
+/* Call the server side notifier for {postback_notify, Message, Context}
+---------------------------------------------------------- */
+
+function z_notify(message, extraParams)
+{
+	var extra = ensure_name_value(extraParams);
+	if (typeof extra != 'object')
+	{
+		extra = [];
+	}
+	extra.push({name: 'z_msg', value: message});
+	z_queue_postback('', z_default_notify_postback, extra, true);
+}
+
 /* Postback loop
 ---------------------------------------------------------- */
 
