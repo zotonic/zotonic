@@ -19,14 +19,64 @@
 
 -module(action_base_update).
 -include("zotonic.hrl").
--export([render_action/4]).
+-export([
+    render_action/4,
+    render_update/4,
+    event/2
+]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
+    render_update(update, TargetId, Args, Context).
+    
+render_update(Method, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
         undefined -> proplists:get_value(text, Args, "");
         Template -> #render{template=Template, vars=Args}
     end,
-    case proplists:get_value(appear, Args) of
-        true -> {[], z_render:appear_selector(z_render:css_selector(TargetId, Args), Html, Context)};
-        _ -> {[], z_render:update_selector(z_render:css_selector(TargetId, Args), Html, Context)}
+    case {TargetId, Html} of
+        {undefined,_} -> render_inline(Method, TargetId, Html, Args, Context);
+        {_,#render{}} -> render_postback(Method, TargetId, Html, Args, Context);
+        {_,_} -> render_static(Method, TargetId, Html, Args, Context)
     end.
+
+render_inline(Method, TargetId, Html, Args, Context) ->
+    Sel = z_render:css_selector(TargetId, Args),
+    case proplists:get_value(appear, Args) of
+        true ->
+            case Method of
+                update -> {[], z_render:appear_selector(Sel, Html, Context)};
+                insert_top -> {[], z_render:appear_top_selector(Sel, Html, Context)};
+                insert_bottom -> {[], z_render:appear_bottom_selector(Sel, Html, Context)}
+            end;
+        _ -> 
+            case Method of
+                update -> {[], z_render:update_selector(Sel, Html, Context)};
+                insert_top -> {[], z_render:insert_top_selector(Sel, Html, Context)};
+                insert_bottom -> {[], z_render:insert_bottom_selector(Sel, Html, Context)}
+            end
+    end.
+
+render_static(Method, TargetId, Html, Args, Context) ->
+    Sel = z_render:css_selector(TargetId, Args),
+    case proplists:get_value(appear, Args) of
+        true -> 
+            case Method of
+                update -> {z_render:appear_selector_js(Sel, Html), Context};
+                insert_top -> {z_render:appear_top_selector_js(Sel, Html), Context};
+                insert_bottom -> {z_render:appear_bottom_selector_js(Sel, Html), Context}
+            end;
+        _ -> 
+            case Method of 
+                update -> {z_render:update_selector_js(Sel, Html), Context};
+                insert_top -> {z_render:insert_top_selector_js(Sel, Html), Context};
+                insert_bottom -> {z_render:insert_bottom_selector_js(Sel, Html), Context}
+            end
+    end.
+
+render_postback(Method, TargetId, Html, Args, Context) ->
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback({render, Method, Html, Args}, undefined, TargetId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
+
+event({postback, {render, Method, Html, Args}, _TriggerId, TargetId}, Context) ->
+    {[], Context1} = render_inline(Method, TargetId, Html, Args, Context),
+    Context1.

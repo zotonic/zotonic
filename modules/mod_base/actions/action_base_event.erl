@@ -30,7 +30,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     {PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, Trigger, TargetId, Delegate, Context),
     {ActionsJS,Context1} = z_render:render_actions(Trigger, TargetId, Actions, Context),
-
+    
     Script = if
                 EventType == enterkey orelse EventType == "enterkey" ->
                     [
@@ -55,6 +55,13 @@ render_action(TriggerId, TargetId, Args, Context) ->
                         [] -> [SubmitPostback, $;, $\n];
                         _  -> [SubmitPostback, <<".data('z_submit_action', \"">>, z_utils:js_escape(ActionsJS), <<"\");\n">>]
                     end;
+
+                EventType == named orelse EventType == "named" ->
+                    Name = proplists:get_value(name, Args, Trigger),
+                    [
+                        <<"z_event_register(\"">>,z_utils:js_escape(Name),<<"\", function(zEvtArgs) {">>,
+                            PostbackMsgJS, ActionsJS, <<"});\n">>
+                    ];
 
                 EventType == undefined orelse EventType == "none" orelse
                 EventType == inline orelse EventType == "inline" orelse

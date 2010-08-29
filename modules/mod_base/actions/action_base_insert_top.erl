@@ -19,14 +19,9 @@
 
 -module(action_base_insert_top).
 -include("zotonic.hrl").
--export([render_action/4]).
+-export([
+    render_action/4
+]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
-    Html = case proplists:get_value(template, Args) of
-        undefined -> proplists:get_value(text, Args, "");
-        Template -> #render{template=Template, vars=Args}
-    end,
-    case proplists:get_value(appear, Args) of
-        true -> {[], z_render:appear_top_selector(z_render:css_selector(TargetId, Args), Html, Context)};
-        _ -> {[], z_render:insert_top_selector(z_render:css_selector(TargetId, Args), Html, Context)}
-    end.
+    action_base_update:render_update(insert_top, TargetId, Args, Context).
