@@ -57,7 +57,6 @@ stop(Name) ->
     
 
 loop(MochiReq) ->
-    %?WM_DBG(MochiReq),
     ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
     Host = case host_headers(ReqData) of
                [H|_] -> H;
@@ -88,36 +87,31 @@ loop(MochiReq) ->
             {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
             {ok,RD1} = webmachine_request:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath,ReqDispatch),
             {ok,RD2} = webmachine_request:set_metadata('resource_module', Mod, RD1),
-            Result = try 
-				case webmachine_decision_core:handle_request(Resource, RD2) of
-	                {_, RsFin, RdFin} ->
-		                EndTime = now(),
-		                {_, RdResp} = webmachine_request:send_response(RdFin),
-		                LogData0 = webmachine_request:log_data(RdResp),
-		                spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=Mod, end_time=EndTime}) end),
-		                RsFin:stop(),
-						ok;
-					{upgrade, UpgradeFun, RsFin, RdFin} ->
-		                RsFin:stop(),
-						{upgrade, UpgradeFun, RdFin, RsFin:modstate()}
-				end
+            try 
+                case webmachine_decision_core:handle_request(Resource, RD2) of
+                    {_, RsFin, RdFin} ->
+                        EndTime = now(),
+                        {_, RdResp} = webmachine_request:send_response(RdFin),
+                        LogData0 = webmachine_request:log_data(RdResp),
+                        spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=Mod, end_time=EndTime}) end),
+                        RsFin:stop(),
+                        ok;
+                    {upgrade, UpgradeFun, RsFin, RdFin} ->
+                        RsFin:stop(),
+                        Mod:UpgradeFun(RdFin, RsFin:modstate()),
+                        erlang:put(mochiweb_request_force_close, true)
+                end
             catch
                 error:_ -> 
                     ?WM_DBG({error, erlang:get_stacktrace()}),
                     {ok,RD3} = webmachine_request:send_response(500, RD2),
                     case application:get_env(webmachine, webmachine_logger_module) of
-                        {ok, LogModule} ->
+                        {ok, LogModule} -> 
                             spawn(LogModule, log_access, [webmachine_request:log_data(RD3)]);
-                        _ -> nop
+                        _ ->
+                            nop
                     end
-            end,
-			
-			%% Optional tail continuation to a function that takes over the request.
-			%% Used for protocol upgrades.
-			case Result of
-				ok -> ok;
-				{upgrade, Fun, RdUpgrade, ModState} -> Mod:Fun(RdUpgrade, ModState)
-			end;
+            end;
         handled ->
             nop
     end.
