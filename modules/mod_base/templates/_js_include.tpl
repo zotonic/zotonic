@@ -12,6 +12,8 @@
 	"js/modules/jquery.loadmask.js"
 %}
 
+{% block _js_include_extra}{% endblock %}
+
 <script type="text/javascript">
 	$(function()
 	{
