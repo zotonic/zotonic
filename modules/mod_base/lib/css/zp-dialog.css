@@ -280,3 +280,9 @@ h5.dialog-title {
 		margin: 0 0 16px 0;
 		min-height: 40px;
 	}
+
+	.ui-tabs-hide {
+		display: none !important; 
+	}
+
+
