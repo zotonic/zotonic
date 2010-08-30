@@ -91,7 +91,18 @@ map_search(Query, Context) ->
 
 %% cat=categoryname
 %% Filter results on a certain category.
+map_search_field({cat, Cats}, _Context) when is_list(Cats) ->
+    case z_string:is_string(hd(Cats)) of
+        true ->
+            {["+(category:", string:join(Cats, ", category:"), ")"], []};
+        false ->
+            {["+category:", z_convert:to_list(Cats)], []}
+    end;
+
+%% cat=category1,category2
+%% Filter results on a certain category.
 map_search_field({cat, Cat}, _Context) ->
+    ?DEBUG(Cat),
     {["+category:", z_convert:to_list(Cat)],
      []};
 
