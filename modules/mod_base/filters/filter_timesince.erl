@@ -20,8 +20,12 @@
 -export([timesince/2, timesince/3]).
 
 
+timesince(undefined, _Context) ->
+    undefined;
 timesince(Date, Context) ->
 	z_datetime:timesince(Date, Context).
+timesince(undefined, _Base, _Context) ->
+    undefined;
 timesince(Date, Base, Context) ->
 	z_datetime:timesince(Date, Base, Context).
 
