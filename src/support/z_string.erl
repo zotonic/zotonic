@@ -52,6 +52,9 @@
     truncate/3,
     split_lines/1,
     escape_ical/1,
+    starts_with/2,
+    ends_with/2,
+    contains/2,
     test/0
 ]).
 
@@ -700,6 +703,44 @@ escape_ical(A) when is_atom(A) ->
 	escape_ical(<<$\\, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, $\\, $\\>>, N+2);
 	escape_ical(<<C, Rest/binary>>, Acc, N) -> escape_ical(Rest, <<Acc/binary, C>>, N+1).
 
+%% @doc Return true if Start is a prefix of Word
+%% @spec starts_with(String, String) -> bool()
+starts_with(Start, B) when is_binary(Start), is_binary(B) ->
+    StartSize = size(Start),
+    case B of
+        <<Start:StartSize/binary, _/binary>> -> true;
+        _ -> false
+    end;
+starts_with(Start, String) ->
+    starts_with(iolist_to_binary(Start), iolist_to_binary(String)).
+
+
+%% @doc Return true iff Word ends with End
+%% @spec ends_with(String, String) -> bool()
+ends_with(End, B) when is_binary(End), is_binary(B) ->
+    StartSize = size(B) - size(End),
+    case B of
+        <<_:StartSize/binary, End/binary>> -> true;
+        _ ->false
+    end;
+ends_with(End, String) ->
+    ends_with(iolist_to_binary(End), iolist_to_binary(String)).
+
+
+%% @doc Return true iff What is found in the string
+%% @spec ends_with(String, String) -> bool()
+contains(What, B) when is_binary(What), is_binary(B) ->
+    contains(What, size(What), B, 0);
+contains(What, String) ->
+    contains(iolist_to_binary(What), iolist_to_binary(String)).
+
+    contains(_What, _SizeWhat, B, C) when C > size(B) ->
+        false;
+    contains(What, SizeWhat, B, C) ->
+        case B of
+            <<_:C/binary, What:SizeWhat/binary, _/binary>> ->true;
+            _ ->contains(What, SizeWhat, B, C + 1)
+        end.
 
 
 test() ->
