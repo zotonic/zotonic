@@ -599,13 +599,18 @@ ul.media-sorter li {
 		color: #eee;
 		padding: 4px 4px 10px;
 	}
+
+	    .suggestions-list li.suggestions-result a span {
+            color: #ccc;
+        }
 	
+		.suggestions-list li.suggestions-result a:hover span,
 		.suggestions-list li.suggestions-result a:hover {
 			background: #eee;
 			color: #444;
 		}
 	
-	.suggestions-list li.suggestions-result a:last-child {
+	.suggestions-list li.suggestions-result:last-child a {
 		-moz-border-radius-bottomleft: 5px;
 		-moz-border-radius-bottomright: 5px;
 		-webkit-border-bottom-left-radius: 5px;

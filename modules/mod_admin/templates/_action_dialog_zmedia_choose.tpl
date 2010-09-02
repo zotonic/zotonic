@@ -49,7 +49,7 @@
             action_with_id={with_args action={zmedia_has_chosen} arg={id select_id}}
             action={dialog_close}
 
-            cat=m.predicate.object_category[predicate]
+            cat=m.predicate.object_category["depiction"]
 			}
             %}
 
