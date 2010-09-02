@@ -1,7 +1,11 @@
 {% for id, rank in result %}
 	<li class="suggestions-result clearfix">
 		{% with m.rsc[id] as r %}
-		<a id="{{ #connect.id }}" href="#add-connection">{% image r.depiction width=40 height=18 crop %} {{ r.title }} (in <span>{{ r.category.title|default:r.category.name }})</span></a>
+		<a id="{{ #connect.id }}" href="#add-connection">
+            {% image r.depiction width=40 height=18 crop %} 
+            {{ r.title }}
+            <span>&mdash; {{ m.rsc[r.category.id].title|default:r.category.name }}</span>
+        </a>
 		{% endwith %}
 	</li>
 
