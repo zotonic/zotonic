@@ -25,7 +25,11 @@ $.widget("ui.fieldreplace",
 	_init: function() 
 	{		
 		//if(!this.element.is(':checkbox, :radio')) return false;
-
+        if ($(this).data("fieldreplaced"))
+        {
+            return false;
+        }
+        $(this).data("fieldreplaced", true);
 		var fieldWrapper, replacedField, self = this, obj = this.element;
 
 		fieldWrapper 	= $('<span></span>').addClass('zp-field-wrapper zp-' + obj.get(0).type);
