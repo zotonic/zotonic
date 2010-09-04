@@ -3,7 +3,7 @@ Zotonic installation
 
 You will need to:
 
-1. Install Erlang R12B (13B might also work). Build it from source, or
+1. Install Erlang 13B or newer. Build it from source, or
    use packages (see platform-specific notes below)
 
 2. Install ImageMagick (version 6.5 or higher) for the 'convert' and
