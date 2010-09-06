@@ -221,6 +221,8 @@ handle_message(Msg, Context) ->
 
 %% @doc Start the loop passing data (scripts) from the page to the browser
 start_send_loop(Socket, Context) ->
+    % We want to receive any exit signal (including 'normal') from the socket's process.
+    process_flag(trap_exit, true),
     z_session_page:websocket_attach(self(), Context),
     send_loop(Socket, Context).
 
@@ -231,6 +233,9 @@ send_loop(Socket, Context) ->
                 ok -> resource_websocket:send_loop(Socket, Context);
                 closed -> closed
             end;
+        {'EXIT', _FromPid, _Reason} ->
+            % Exit of the socket's process, stop sending data.
+            exit;
         _ ->
             resource_websocket:send_loop(Socket, Context)
     end.
