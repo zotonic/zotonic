@@ -209,7 +209,7 @@ handle_call({compile, File, FoundFile, Context}, _From, State) ->
     FinderFun  = fun(FinderFile, All) ->
         ?MODULE:find_template(FinderFile, All, Context)
     end,
-    ModuleName = filename_to_modulename(File, State#state.host),
+    ModuleName = filename_to_modulename(FoundFile, State#state.host),
     Module     = list_to_atom(ModuleName),
     ErlyResult = case erlydtl:compile(  FoundFile,
                                         File,
