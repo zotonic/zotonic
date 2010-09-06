@@ -133,15 +133,6 @@ limitations under the License.
 		background-position: bottom;
 	}
 
-.dialog-sizer {
-	background: transparent url(/lib/images/sizer.png) no-repeat top;
-	width: 11px;
-	height: 11px;
-	right: -16px;
-	top: 21px;
-	position: absolute;
-}
-
 h5.dialog-title {
 	display: block;
 	font-size: 11px;
