@@ -127,7 +127,7 @@ format_req(#wm_log_data{method=Method,
 
 fmt_method(M) when is_atom(M) -> atom_to_list(M);
 fmt_method(M) when is_list(M) -> M.
-    
+
 
 %% Seek backwards to the last valid log entry
 fix_log(_FD, 0) ->
@@ -173,10 +173,10 @@ suffix({Y, M, D, H}) ->
 
 fmt_alog(Time, Ip, User, Method, Path, {VM,Vm},
 	 Status,  Length, Referrer, UserAgent) ->
-    [fmt_ip(Ip), " - ", User, [$\s], Time, [$\s, $"], Method, " ", Path,
+    [fmt_ip(Ip), " - ", sanitize(User), [$\s], Time, [$\s, $"], sanitize(Method), " ", sanitize(Path),
      " HTTP/", integer_to_list(VM), ".", integer_to_list(Vm), [$",$\s],
-     Status, [$\s], Length, [$\s,$"], Referrer,
-     [$",$\s,$"], UserAgent, [$",$\n]].
+     Status, [$\s], Length, [$\s,$"], sanitize(Referrer),
+     [$",$\s,$"], sanitize(UserAgent), [$",$\n]].
 
 month(1) ->
     "Jan";
@@ -226,3 +226,16 @@ fmtnow() ->
     {{Year, Month, Date}, {Hour, Min, Sec}} = calendar:local_time(),
     io_lib:format("[~2..0w/~s/~4..0w:~2..0w:~2..0w:~2..0w ~s]",
 		  [Date,month(Month),Year, Hour, Min, Sec, zone()]).
+
+
+% @doc Prevent escape characters to be shown in the log file.
+% @seealso http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-4487
+sanitize(S) ->
+    sanitize(S, []).
+
+sanitize([], Acc) ->
+    lists:reverse(Acc);
+sanitize([C|S], Acc) when C < 32 ->
+    sanitize(S, [C+$A, $^ | Acc]);
+sanitize([C|S], Acc) ->
+    sanitize(S, [C|Acc]).
