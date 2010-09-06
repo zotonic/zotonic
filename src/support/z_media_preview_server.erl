@@ -31,12 +31,13 @@
     exec/2
 ]).
 
+-define(PREVIEW_TIMEOUT, 55000).
 
 %% @doc Handle the resize command prepared by z_media_preview.  Checks if the result file is already present, if so
 %% then the command is not executed.
 %% @spec exec(OSCommand, ResultFile) -> string()
 exec(OSCommand, ResultFile) ->
-    gen_server:call(?MODULE, {exec, OSCommand, ResultFile}).
+    gen_server:call(?MODULE, {exec, OSCommand, ResultFile}, ?PREVIEW_TIMEOUT).
 
 
 %%====================================================================
