@@ -36,7 +36,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
+    Context1 = z_context:set(DispatchArgs, z_context:ensure_qs(Context)),
     ?WM_REPLY(true, Context1).
 
 resource_exists(ReqData, Context) ->
@@ -68,10 +68,16 @@ do_redirect(ReqData, Context) ->
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
 				Dispatch -> 
-					%% @todo add, on demand, qargs into the dispatch arg list.
-					Args = z_context:get_all(Context),
-					Args1 = proplists:delete(is_permanent, proplists:delete(dispatch, Args)),
-					z_dispatcher:url_for(Dispatch, Args1, Context)
+                    Args = z_context:get_all(Context),
+
+                    Args1 = case z_context:get(qargs, Context) of
+                                undefined -> Args;
+                                ArgList when is_list(ArgList) ->
+                                    A = z_context:get_q_all(Context),
+                                    lists:foldl(fun(K, Acc) -> [{K, proplists:get_value(atom_to_list(K), A)}|Acc] end, Args, ArgList)
+                            end,
+					Args2 = lists:foldl(fun(K, Acc) -> proplists:delete(K, Acc) end, Args1, [is_permanent, dispatch, q, qargs, zotonic_dispatch]),
+					z_dispatcher:url_for(Dispatch, Args2, Context)
 			end;
 		Url ->
 			Url
