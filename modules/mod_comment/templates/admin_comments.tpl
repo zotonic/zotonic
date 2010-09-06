@@ -36,7 +36,7 @@
 							{% endif %}
 							<span class="zp-15">
 	                            {% button text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
-								{% button text=_"delete" postback={comment_delete id=id on_success={slide_fade_out id=#comment.id}} %}
+								{% button text=_"delete" postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}} %}
 							</span>
 						</a>
 					</li>
