@@ -160,7 +160,7 @@
 										{% include "_admin_edit_media_view.tpl" id=id %}
 									</div>
 
-									{% button text=_"Replace this media item" action={dialog_media_upload id=id action={update update="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
+									{% button text=_"Replace this media item" action={dialog_media_upload id=id action={update target="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
 								{% endwith %}
 							</div>
 						</div>
