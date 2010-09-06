@@ -38,14 +38,15 @@
 
 %% @doc Check if an action is allowed for the current actor.
 is_allowed(_Action, _Object, #context{acl=admin}) ->
-	true;
+    true;
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed(Action, Object, Context) ->
-	case z_notifier:first({acl_is_allowed, Action, Object}, Context) of
-		undefined -> false;
-		Answer -> Answer
-	end.
+    case z_notifier:first({acl_is_allowed, Action, Object}, Context) of
+        true -> true;
+        _Other when is_integer(Object), Action == 'view' -> not m_rsc:exists(Object, Context);
+        _Other -> false
+    end.
 
 
 %% @doc Check if the resource is visible for the current user
