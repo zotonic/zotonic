@@ -124,6 +124,12 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 
 
 
+count_queue(Context) ->
+    z_db:q1("select count(*) from rsc_pivot_queue", Context).
+
+count_task(Context) ->
+    z_db:q1("select count(*) from pivot_task_queue", Context).
+
 
 %%====================================================================
 %% API
@@ -217,12 +223,17 @@ do_poll(Context) ->
     % Perform some queued tasks
     case poll_task(Context) of
         {Module, Function, Key, Args} -> 
-            try 
+            try
+                ?zInfo(io_lib:format("Executing task: ~p:~p( ~p )", [Module, Function, Args]), Context),
                 erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context])
             catch
                 Error:Reason -> 
-                    ?ERROR("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]),
+                    ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]), Context),
                     insert_task(Module, Function, Key, Args, Context)
+            end,
+            case count_task(Context) of
+                0 -> nop;
+                N1 -> ?zInfo(io_lib:format("Task queue size: ~p", [N1]), Context)
             end;
         empty ->
             nop
@@ -241,6 +252,10 @@ do_poll(Context) ->
                                  ({Id,Error}) -> log_error(Id, Error, Context) end, 
                               L),
                     delete_queue(Qs, Context)
+            end,
+            case count_queue(Context) of
+                0 -> nop;
+                N2 -> ?zInfo(io_lib:format("Pivot queue size: ~p", [N2]), Context)
             end
     end.
 
