@@ -28,7 +28,7 @@ limitations under the License.
 			if(!$('.dialog').length)
 			{
 				// declare varaibles
-				var options, dialogWrapper, dialogTop, dialogTitle, dialogTLC, dialogTRC, dialogClose, dialogContent, dialogInnerContent, dialogRightContent, dialogBottom, dialogBLC, dialogBRC, dialogSizer, leftPos, topPos;
+				var options, dialogWrapper, dialogTop, dialogTitle, dialogTLC, dialogTRC, dialogClose, dialogContent, dialogInnerContent, dialogRightContent, dialogBottom, dialogBLC, dialogBRC, leftPos, topPos;
 				
 				options = $.extend({}, $.ui.dialog.defaults, options);
 				
@@ -36,17 +36,16 @@ limitations under the License.
 				dialogTLC			= $('<span></span>').addClass('dialog-top-left');
 				dialogTRC			= $('<span></span>').addClass('dialog-top-right');
 				dialogClose			= $('<span></span>').addClass('dialog-close').click(function(){ $.dialogRemove(dialogWrapper); });
-				dialogInnerContent	= $('<div></div>').addClass('dialog-inner-content').html(options.text).resizable({handles: 'se', alsoResize: '.dialog', maxWidth: 700, minWidth: 450, minHeight: 50});
+				dialogInnerContent	= $('<div></div>').addClass('dialog-inner-content').html(options.text);
 				dialogRightContent	= $('<span></span>').addClass('dialog-content-right');
 				dialogBLC			= $('<span></span>').addClass('dialog-bottom-left');
 				dialogBRC			= $('<span></span>').addClass('dialog-bottom-right');
-				dialogSizer			= $('<span></span>').addClass('dialog-sizer');
 				leftPos				= Math.floor((parseInt($(window).width()) / 2) - (parseInt(options.width) / 2));
 				topPos				= $(window).scrollTop() + 100;
 			
 				dialogTop			= $('<div></div>').addClass('dialog-top').append(dialogTitle, dialogTLC, dialogTRC, dialogClose);
 				dialogContent		= $('<div></div>').addClass('dialog-content clearfix').append(dialogInnerContent, dialogRightContent);
-				dialogBottom		= $('<div></div>').addClass('dialog-bottom').append(dialogBLC, dialogBRC, dialogSizer);
+				dialogBottom		= $('<div></div>').addClass('dialog-bottom').append(dialogBLC, dialogBRC);
 			
 				dialogWrapper		= $('<div></div>')
 										.addClass('dialog')
