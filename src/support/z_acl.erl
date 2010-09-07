@@ -43,9 +43,8 @@ is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed(Action, Object, Context) ->
     case z_notifier:first({acl_is_allowed, Action, Object}, Context) of
-        true -> true;
-        _Other when is_integer(Object), Action == 'view' -> not m_rsc:exists(Object, Context);
-        _Other -> false
+        undefined -> false;
+        Other -> Other
     end.
 
 
@@ -250,12 +249,10 @@ wm_is_authorized(Action, Object, ReqData, Context) ->
                 %% When the resource doesn't exist then we let the request through
                 %% This will enable a 404 response later in the http flow checks.
                 case {Action, Object} of
-                    {view, undefined} ->
-                        true;
-                    {view, Id} when is_integer(Id) ->
-                        not m_rsc:exists(Id, Context);
-                    _ ->
-                        false
+                    {view, undefined} -> true;
+                    {view, false} -> true;
+                    {view, Id} when is_integer(Id) -> not m_rsc:exists(Id, Context);
+                    _ -> false
                 end
         end.
 
