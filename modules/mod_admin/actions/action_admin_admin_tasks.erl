@@ -23,6 +23,11 @@ render_action(TriggerId, TargetId, Args, Context) ->
 event({postback, {admin_tasks, [{task, "flush"}]}, _TriggerId, _TargetId}, Context) ->
     do(fun z:flush/0, "Caches have been flushed.", Context);
 
+%% @doc Reset templates.
+event({postback, {admin_tasks, [{task, "templates_reset"}]}, _TriggerId, _TargetId}, Context) ->
+    do(fun() -> z_template:reset(Context) end, "Templates will be recompiled.", Context);
+
+
 %% @doc Pivot everything
 event({postback, {admin_tasks, [{task, "pivot_all"}]}, _TriggerId, _TargetId}, Context) ->
     do(fun() -> z_pivot_rsc:queue_all(Context) end, 
