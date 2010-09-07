@@ -37,8 +37,14 @@
     wmtrace_dir/0,
     reload/1,
     make/1,
+    debug_stream/3,
+    observe_debug_stream/2,
     pid_observe_development_reload/3,
-    pid_observe_development_make/3
+    pid_observe_development_make/3,
+    
+    % internal (for spawn)
+    page_debug_stream/3,
+    page_debug_stream_loop/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -65,6 +71,9 @@ reload(Context) ->
 make(Context) ->
     z_notifier:notify(development_make, Context).
 
+%% @doc Stream specific debug information to an area on the current page.
+debug_stream(TargetId, What, Context) ->
+    z_notifier:notify1({debug_stream, TargetId, What}, Context).
 
 %% @doc Start a trace of a resource, called by the resources's init/2 function.
 wmtrace(State) ->
@@ -75,12 +84,13 @@ wmtrace_dir() ->
     Dir = z_utils:lib_dir("priv/wmtrace"),
     ok = filelib:ensure_dir(filename:join(Dir, "test")),
     Dir.
-    
 
+%% @doc Stream all debug information of a certain kind to the target id on the user agent.
+observe_debug_stream({debug_stream, TargetId, What}, Context) ->
+    start_debug_stream(TargetId, What, Context).
 
 pid_observe_development_reload(Pid, development_reload, _Context) ->
     gen_server:cast(Pid, development_reload).
-
 
 pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
@@ -172,3 +182,30 @@ ensure_dev_server() ->
 		undefined -> z_development_server:start_link();
 		_Pid -> ok
 	end.
+
+
+%% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.
+start_debug_stream(TargetId, What, Context) ->
+    Context1 = z_context:prune_for_async(Context),
+    z_session_page:spawn_link(?MODULE, page_debug_stream, [TargetId, What, Context1], Context1).
+
+%% @doc Process started and linked to the current page, subscribes to debug notifications
+page_debug_stream(TargetId, What, Context) ->
+    process_flag(trap_exit, true),
+    z_notifier:observe(debug, self(), Context),
+    ?MODULE:page_debug_stream_loop(TargetId, What, Context).
+    
+    page_debug_stream_loop(TargetId, What, Context) ->
+        receive
+            {'EXIT', _} ->
+                z_notifier:detach(debug, self(), Context),
+                done;
+            {'$gen_cast', {{debug, What, Args}, _Context}} ->
+                %% Update the target id with a dump of this debug message
+                S = io_lib:format("~p: ~p~n", [What, Args]),
+                z_session_page:add_script(z_render:insert_top(TargetId, S, Context)),
+                ?MODULE:page_debug_stream_loop(TargetId, What, Context);
+            {'$gen_cast', {{debug, _Other, _Args}, _Context}} ->
+                ?MODULE:page_debug_stream_loop(TargetId, What, Context)
+        end.
+        
