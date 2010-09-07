@@ -35,6 +35,20 @@
 
 %% @doc Generate the link and/or script tags for the given files.
 tag(Files, Context) ->
+    case m_config:get_value(mod_development, libsep, Context) of
+        Empty when Empty == []; Empty == <<>> ->
+            tag1(Files, Context);
+        _Other ->
+            lists:foldr(fun(F, [Css,Js]) ->
+                            [C,J] = tag1([F], Context),
+                            [[C|Css], [J|Js]]
+                         end,
+                         [[],[]],
+                         Files)
+    end.
+
+
+tag1(Files, Context) ->
     {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
     LinkElement = case CssPath of
         [] ->
