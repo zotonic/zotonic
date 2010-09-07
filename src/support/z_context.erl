@@ -594,19 +594,11 @@ add_script_page(Script, Context) ->
 
 %% @doc Spawn a new process, link it to the session process.
 spawn_link_session(Module, Func, Args, Context) ->
-    LinkContext = #context{
-                    session_pid = Context#context.session_pid,
-                    page_pid    = Context#context.page_pid
-                },
-    z_session:spawn_link(Module, Func, Args, LinkContext).
+    z_session:spawn_link(Module, Func, Args, Context).
 
 %% @doc Spawn a new process, link it to the page process.  Used for comet feeds.
 spawn_link_page(Module, Func, Args, Context) ->
-    LinkContext = #context{
-                    session_pid = Context#context.session_pid,
-                    page_pid    = Context#context.page_pid
-                },
-    z_session_page:spawn_link(Module, Func, Args, LinkContext).
+    z_session_page:spawn_link(Module, Func, Args, Context).
 
 
 %% ------------------------------------------------------------------------------------

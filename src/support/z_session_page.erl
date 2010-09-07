@@ -146,7 +146,7 @@ add_script(Context) ->
 
 %% @doc Spawn a new process, linked to the page pid
 spawn_link(Module, Func, Args, Context) ->
-    gen_server:call(Context#context.page_pid, {spawn_link, Module, Func, Args, Context}).
+    gen_server:call(Context#context.page_pid, {spawn_link, Module, Func, Args}).
 
 
 %% @doc Kill this page when timeout has been reached
@@ -247,8 +247,8 @@ handle_cast(Message, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 
-handle_call({spawn_link, Module, Func, Args, Context}, _From, State) ->
-    Pid    = spawn_link(Module, Func, [Args, Context]),
+handle_call({spawn_link, Module, Func, Args}, _From, State) ->
+    Pid    = spawn_link(Module, Func, Args),
     Linked = [Pid | State#page_state.linked],
     erlang:monitor(process, Pid),
     {reply, Pid, State#page_state{linked=Linked}};

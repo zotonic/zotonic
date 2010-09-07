@@ -161,7 +161,7 @@ dump(Pid) ->
 
 %% @doc Spawn a new process, linked to the session pid
 spawn_link(Module, Func, Args, Context) ->
-    gen_server:call(Context#context.session_pid, {spawn_link, Module, Func, Args, Context}).
+    gen_server:call(Context#context.session_pid, {spawn_link, Module, Func, Args}).
 
 
 %% Gen_server callbacks
@@ -279,8 +279,8 @@ handle_call({incr, Key, Delta}, _From, Session) ->
     end,
     {reply, NV, Session#session{props = z_utils:prop_replace(Key, NV, Session#session.props)}};
 
-handle_call({spawn_link, Module, Func, Args, Context}, _From, Session) ->
-    Pid    = spawn_link(Module, Func, [Args, Context]),
+handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
+    Pid    = spawn_link(Module, Func, Args),
     Linked = [Pid | Session#session.linked],
     erlang:monitor(process, Pid),
     {reply, Pid, Session#session{linked=Linked}};
