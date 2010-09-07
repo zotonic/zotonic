@@ -29,7 +29,8 @@
     can_generate_preview/1,
 	out_mime/2,
     string2filter/2,
-    cmd_args/2
+    cmd_args/2,
+    calc_size/7
 ]).
 
 -define(MAX_WIDTH,  5000).
@@ -104,7 +105,7 @@ size(InFile, Filters, Context) ->
                 ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
                 ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
                 {CropPar,_Filters1} = fetch_crop(Filters),
-                {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation),
+                {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
                 case CropArgs of
                     none -> 
                         case is_enabled(extent, Filters) of
@@ -139,7 +140,7 @@ cmd_args(FileProps, Filters) ->
     ReqWidth   = proplists:get_value(width, Filters),
     ReqHeight  = proplists:get_value(height, Filters),
     {CropPar,Filters1} = fetch_crop(Filters),
-    {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation),
+    {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
     Filters2   = [  {make_image, Mime},
                     {correct_orientation, Orientation},
                     {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)}, 
@@ -229,14 +230,18 @@ filter2arg({width, _}, Width, Height) ->
     {Width, Height, []};
 filter2arg({height, _}, Width, Height) ->
     {Width, Height, []};
-filter2arg({resize, EndWidth, EndHeight, false}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
+filter2arg({resize, Width, Height, _}, Width, Height) ->
+    {Width, Height, []};
+filter2arg({resize, EndWidth, EndHeight, false}, Width, Height) 
+  when Width =< EndWidth andalso Height =< EndHeight ->
     % Prevent scaling up, perform an extent instead
     GArg = "-gravity West",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
-filter2arg({resize, EndWidth, EndHeight, true}, Width, Height) when Width < EndWidth andalso Height < EndHeight ->
+filter2arg({resize, EndWidth, EndHeight, true}, Width, Height) 
+  when Width < EndWidth andalso Height < EndHeight ->
     % Scale up
     EArg = ["-resize ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
@@ -325,27 +330,35 @@ fetch_crop(Filters) ->
 
 
 %%@doc Calculate the size of the resulting image, depends on the crop and the original image size
-calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation) when Orientation >= 5 ->
-    calc_size(Width, Height, ImageHeight, ImageWidth, CropPar, 1);
+calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) when Orientation >= 5 ->
+    calc_size(Width, Height, ImageHeight, ImageWidth, CropPar, 1, IsUpscale);
 
-calc_size(undefined, undefined, ImageWidth, ImageHeight, _CropPar, _Orientation) ->
+calc_size(undefined, undefined, ImageWidth, ImageHeight, _CropPar, _Orientation, _IsUpscale) ->
     {ImageWidth, ImageHeight, none};
 
-calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation) ->
+calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) when CropPar /= none ->
+    calc_size(Width, Width, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
+
+calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) when CropPar /= none ->
+    calc_size(Height, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
+
+calc_size(undefined, Height, ImageWidth, ImageHeight, none, 1, false) when ImageHeight < Height ->
+    % Image will be extented
+    {ImageWidth, Height, none};
+
+calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) ->
     Width = round((ImageWidth / ImageHeight) * Height),
-    calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation);
+    calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
 
-calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation) when CropPar /= none ->
-    calc_size(Width, Width, ImageWidth, ImageHeight, CropPar, Orientation);
+calc_size(Width, undefined, ImageWidth, ImageHeight, none, 1, false) when ImageWidth < Width ->
+    % Image will be extented
+    {Width, ImageHeight, none};
 
-calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation) when CropPar /= none ->
-    calc_size(Height, Height, ImageWidth, ImageHeight, CropPar, Orientation);
-
-calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation) ->
+calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) ->
     Height = round((ImageHeight / ImageWidth) * Width),
-    calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation);
+    calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
 
-calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation) ->
+calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpscale) ->
     ImageAspect = ImageWidth / ImageHeight,
     Aspect      = Width / Height,
     case CropPar of
