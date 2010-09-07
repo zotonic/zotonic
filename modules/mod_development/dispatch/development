@@ -1,4 +1,5 @@
 [
-	{wmtrace, ["wmtrace"],      resource_wmtrace, []},
-	{wmtrace, ["wmtrace", '*'], resource_wmtrace, []}
+    {admin_development, ["admin", "development"],  resource_admin, [{template, "admin_development.tpl"}, {selected, "development"}]},
+    {wmtrace, ["wmtrace"],      resource_wmtrace, []},
+    {wmtrace, ["wmtrace", '*'], resource_wmtrace, []}
 ].
