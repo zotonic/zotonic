@@ -167,10 +167,20 @@ function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
 		var trigger = $('#'+triggerID).get(0);
 		if (trigger)
 		{
-			var nodeName = trigger.nodeName.toLowerCase();
+			if ($(trigger).is(":checkbox") || $(trigger).is(":radio"))
+			{
+				if ($(trigger).is(":checked"))
+				{
+					triggerValue = $(trigger).val() || 'on';
+				}
+			}
+			else
+			{
+				var nodeName = trigger.nodeName.toLowerCase();
 		
-			if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select')
-				triggerValue = $('#'+triggerID).val() || '';
+				if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select')
+					triggerValue = $(trigger).val() || '';
+			}
 		}
 	}
 
