@@ -9,7 +9,10 @@
 		
 		<p>Below you see in real time which templates are compiled and included.</p>
 		
-		<pre id="dev_templates" class="clearfix">
+		{% button text="Recompile Templates" action={admin_tasks task="templates_reset"} %}
+		{% button text="Empty Log" action={update target="dev_templates" text=""} %}
+		
+		<pre id="dev_templates" class="clearfix" style="clear:left">
 		</pre>
 
 		<div>&nbsp;</div>
