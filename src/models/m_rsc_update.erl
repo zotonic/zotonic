@@ -350,7 +350,7 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
     end;
 
 props_filter([{name, Name}|T], Acc, Context) ->
-    case z_acl:is_allowed(use, mod_admin, Context) of
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             case Name of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -363,7 +363,7 @@ props_filter([{name, Name}|T], Acc, Context) ->
     end;
 
 props_filter([{page_path, Path}|T], Acc, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case Path of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
