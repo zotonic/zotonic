@@ -231,7 +231,6 @@
 									</div>
 
                                     {% if m.rsc[id].is_authoritative %}
-									{% if m.acl.is_admin %}
 									<div class="path-unique-name-wrapper clearfix">
 										<div class="zp-50">
 											<div class="form-item clearfix">
@@ -256,7 +255,6 @@
 										{% endif %}
 									</div>
 									{% endif %}
-                                    {% endif %}
 
 									{% if m.acl.is_admin %}
 										{% if r.is_a.meta or not r.is_authoritative %}
