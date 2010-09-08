@@ -239,7 +239,7 @@
 											</div>
 										</div>
 
-										{% if m.acl.is_admin %}
+										{% if m.acl.use.mod_admin_config %}
 											<div class="zp-50">
 												<div class="form-item clearfix">
 													<label for="field-name">{_ Unique name _}</label>
@@ -256,7 +256,7 @@
 									</div>
 									{% endif %}
 
-									{% if m.acl.is_admin %}
+									{% if m.acl.use.mod_admin_config %}
 										{% if r.is_a.meta or not r.is_authoritative %}
 											<div class="form-item clearfix">
 												<label for="field-name">{_ Unique uri _}</label>
