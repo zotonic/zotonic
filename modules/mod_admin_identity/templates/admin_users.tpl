@@ -67,7 +67,7 @@
 			{% endfor %}
 			</ul>
 
-			{% pager result=result dispatch="admin_overview_rsc" qargs %}
+			{% pager result=result dispatch="admin_user" qargs %}
 
 		{% endwith %}
 
