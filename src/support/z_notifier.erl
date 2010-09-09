@@ -30,6 +30,7 @@
 
 %% interface functions
 -export([
+    start_tests/0,
     observe/3,
     observe/4,
     detach/3,
@@ -61,6 +62,12 @@ start_link(SiteProps) when is_list(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+
+
+%% @doc Start a notifier server for unit testing
+start_tests() ->
+    io:format("Starting notifier server.~n"),
+    gen_server:start_link({local, 'z_notifier$test'}, ?MODULE, [], []).
 
 
 %%====================================================================

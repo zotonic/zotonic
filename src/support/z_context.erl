@@ -141,7 +141,7 @@ new(ReqData, Module) ->
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->
-    z_trans_server:set_context_table(#context{host=test, language=en}).
+    z_trans_server:set_context_table(#context{host=test, language=en, notifier='z_notifier$test'}).
 
 
 %% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'
