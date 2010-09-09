@@ -322,7 +322,7 @@ fetch_crop(Filters) ->
                                     (_) -> false
                                 end, Filters),
     CropPar = case Crop of
-                  [{crop,undefined}] -> none;
+                  [{crop,None}] when None == false; None == undefined; None == ""; None == <<>> -> none;
                   [{crop,Gravity}] -> Gravity; % center or one of the wind directions
                   _ -> none
               end,
@@ -357,6 +357,10 @@ calc_size(Width, undefined, ImageWidth, ImageHeight, none, 1, false) when ImageW
 calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale) ->
     Height = round((ImageHeight / ImageWidth) * Width),
     calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
+
+calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, false) 
+    when CropPar /= none, Width > ImageWidth, Height > ImageHeight ->
+    {Width, Height, none};
 
 calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpscale) ->
     ImageAspect = ImageWidth / ImageHeight,
