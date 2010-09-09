@@ -273,6 +273,8 @@ props2url([], Width, Height, Acc) ->
             end,
     lists:flatten([$(, z_utils:combine(")(", [Size|lists:reverse(Acc)]), $)]);
 
+props2url([{crop,None}|Rest], Width, Height, Acc) when None == false; None == undefined; None == <<>>; None == [] ->
+    props2url(Rest, Width, Height, Acc);
 props2url([{width,Width}|Rest], _Width, Height, Acc) ->
     props2url(Rest, z_convert:to_integer(Width), Height, Acc);
 props2url([{height,Height}|Rest], Width, _Height, Acc) ->
