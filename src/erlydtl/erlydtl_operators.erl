@@ -132,19 +132,12 @@ lt(Input, Value, _Context) ->
     end.
 
 eq(Input, Value, _Context) ->
-    case to_values(Input, Value) of
-        {undefined, _} -> undefined;
-        {_, undefined} -> undefined;
-        {A, B} -> A == B
-    end.
+    {A, B} = to_values(Input, Value),
+    A == B.
 
 ne(Input, Value, _Context) ->
-    case to_values(Input, Value) of
-        {undefined, _} -> undefined;
-        {_, undefined} -> undefined;
-        {A, B} -> A /= B
-    end.
-
+    {A, B} = to_values(Input, Value),
+    A /= B.
 
 
 %% @doc Convert the two parameters to compatible values
