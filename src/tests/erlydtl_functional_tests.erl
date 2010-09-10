@@ -51,6 +51,7 @@ test_list() ->
         "var", "cycle", 
         "custom_tag", 
         % "custom_tag_error",
+        "block_recurse_error",
         "custom_call",
         "with_multiple"
     ].
@@ -84,6 +85,9 @@ setup_compile("var_preset") ->
     CompileVars = [{preset_var1, "preset-var1"}, {preset_var2, "preset-var2"}],
     {ok, CompileVars};
 setup_compile("custom_tag_error") ->
+    CompileVars  = [],
+    {error, CompileVars};
+setup_compile("block_recurse_error") ->
     CompileVars  = [],
     {error, CompileVars};
 setup_compile(_) ->
