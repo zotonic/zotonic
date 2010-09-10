@@ -1,0 +1,7 @@
+{% extends "base" %}
+
+{% block content %}
+    foo
+    {% block content %}oof{% endblock %}
+    bar
+{% endblock %}

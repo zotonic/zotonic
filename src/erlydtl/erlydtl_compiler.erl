@@ -364,9 +364,16 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                     error ->
                         {CurrentFile, Contents}
                 end,
-                body_ast(Block,
-                         Context1#dtl_context{block_trail=[{Name,BlockFile}|Context1#dtl_context.block_trail]}, 
-                         TreeWalkerAcc);
+                % Check if we have a recursive definition
+                case lists:member({Name,BlockFile}, Context#dtl_context.block_trail) of
+                    true ->
+                        ?ERROR("body_ast: recursive block ~p (~p)", [Name, BlockFile]),
+                        throw({error, "Recursive block definition of '" ++ Name ++ "' (" ++ BlockFile ++ ")"});
+                    false ->
+                        body_ast(Block,
+                            Context1#dtl_context{block_trail=[{Name,BlockFile}|Context1#dtl_context.block_trail]}, 
+                            TreeWalkerAcc)
+                end;
             ('inherit', TreeWalkerAcc) ->
                 inherit_ast(Context, TreeWalkerAcc);
             ({'comment', _Contents}, TreeWalkerAcc) ->
