@@ -11,3 +11,5 @@ Upgrading to 0.5.x
 * meaning of hassubject', 'hasobject', 'hassubjectpredicate' and 'hasobjectpredicate' has been reversed:
   m.search[{query hasobject=id}]           becomes  m.search[{query hassubject=id}]          (and reverse)
   m.search[{query hasobjectpredicate=id}]  becomes  m.search[{query hassubjectpredicate=id}] (and reverse)
+* resource_staticfile's root dir has changed from site/templates/xx to site/xx
+* m_group model no longer exists

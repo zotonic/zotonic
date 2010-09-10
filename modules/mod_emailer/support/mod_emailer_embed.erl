@@ -39,7 +39,8 @@ embed_lib_images(Html, Context) ->
         nomatch -> 
             {[], Html};
         {match, Matches} ->
-            {P, H, _C} = lists:foldl(fun embed_lib_image_match/2, {[], Html, Context}, Matches),
+            UniqueMatches = sets:to_list(sets:from_list(Matches)),
+            {P, H, _C} = lists:foldl(fun embed_lib_image_match/2, {[], Html, Context}, UniqueMatches),
             {P, H}
     end.
 
@@ -63,7 +64,8 @@ embed_generated_images(Html, Context) ->
         nomatch -> 
             {[], Html};
         {match, Matches} ->
-            {P, H, _C} = lists:foldl(fun embed_generated_image_match/2, {[], Html, Context}, Matches),
+            UniqueMatches = sets:to_list(sets:from_list(Matches)),
+            {P, H, _C} = lists:foldl(fun embed_generated_image_match/2, {[], Html, Context}, UniqueMatches),
             {P, H}
     end.
 
