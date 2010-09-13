@@ -48,6 +48,8 @@
 							class="flush" 
 							title=_"Flush and reload all settings, templates etc." 
 							postback={site_flush site=name} %}
+					
+					{% all include "_z_status_button.tpl" %}
 				</td>
 				{% endif %}
 			</tr>
