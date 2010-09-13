@@ -12,6 +12,7 @@
 	{% lib
 		"css/zp-compressed.css"
 		"css/zp-project.css"
+		"css/zp-growl.css"
 		"css/jquery.loadmask.css" 
 	%}
 
@@ -72,9 +73,6 @@
 
 	{% include "_js_include.tpl" %}
 	<script type="text/javascript">Cufon.now();</script>
-
-	{% stream %}
-	{% script %}
 
 </body>
 </html>

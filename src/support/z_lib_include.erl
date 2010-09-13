@@ -36,7 +36,7 @@
 %% @doc Generate the link and/or script tags for the given files.
 tag(Files, Context) ->
     case m_config:get_value(mod_development, libsep, Context) of
-        Empty when Empty == []; Empty == <<>> ->
+        Empty when Empty == []; Empty == <<>>; Empty == undefined ->
             tag1(Files, Context);
         _Other ->
             lists:foldr(fun(F, [Css,Js]) ->

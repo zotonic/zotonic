@@ -59,7 +59,8 @@ provide_content(ReqData, Context) ->
         {sites, SitesStatus}
         | z_context:get_all(Context2)
     ],
-    Rendered = z_template:render(Template, Vars, Context2),
+    Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
+    Rendered = z_template:render(Template, Vars1, Context2),
     {Output, OutputContext} = z_context:output(Rendered, Context2),
     start_stream(SitesStatus, OutputContext),
     ?WM_REPLY(Output, OutputContext).
@@ -128,7 +129,8 @@ render_update(SitesStatus, Context) ->
         {configs, [ {Site, z_sites_manager:get_site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
         {sites, SitesStatus}
     ],
-    Context1 = z_render:update("sites", #render{template="_sites.tpl", vars=Vars}, Context),
+    Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
+    Context1 = z_render:update("sites", #render{template="_sites.tpl", vars=Vars1}, Context),
     z_session_page:add_script(Context1).
     
 

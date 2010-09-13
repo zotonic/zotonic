@@ -7,6 +7,7 @@
 	"js/cufon.anja.js"
 %}
 
+{% stream %}
 {% script %}
 
 <script type="text/javascript">
