@@ -45,6 +45,11 @@
 			</div>
 		</form>
 	</div>
+	{% else %}
+	<div>
+		{% all include "_z_system_button.tpl" %}
+	</div>
+	<div style="clear:left" id="notices"></div>
 	{% endif %}
 </aside>
 {% endblock %}
