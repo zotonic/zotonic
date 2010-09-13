@@ -11,7 +11,7 @@
 			<tbody>
 {% for status, ss in sites %}
 	{% for name,childspec,pid,time in ss %}
-		{% if name /= 'zotonic_status' %}
+		{% if name /= 'zotonic_status' and (has_user or not configs[name].hidden) %}
 			<tr id="site-{{ name }}" class="{{ status }}">
 				<td>
 					<a href="http://{{ configs[name].hostname|escape }}/">http://{{ configs[name].hostname|escape }}/</a>
