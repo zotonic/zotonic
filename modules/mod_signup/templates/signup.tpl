@@ -51,10 +51,7 @@ div#signup_tos label {
 <section class="article-wrapper">
 
 {% if m.acl.user %}
-	<h1>{_ You are already a member _}</h1>
-
-	<p>{_ When you want to sign up a new member, then first _} <a href="{% url logoff %}">{_ log off from your current account _}</a>.</p>
-
+	{% wire action={redirect location=m.rsc[m.acl.user].page_url} %}
 {% else %}
 
 <div id="signup_area">

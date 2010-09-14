@@ -50,26 +50,35 @@ content_types_provided(ReqData, Context) ->
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    case get_rememberme_cookie(Context1) of
+    Context2 = z_context:ensure_all(Context1),
+    case get_rememberme_cookie(Context2) of
         {ok, UserId} ->
-		    Context2 = z_context:ensure_all(Context1),
             Context3 = z_context:set(user_id, UserId, Context2),
-		    case z_auth:logon(UserId, Context3) of
-				{ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
-				{error, _Reason} -> ?WM_REPLY(true, Context3)
-			end;
-        undefined -> 
-       		?WM_REPLY(true, Context1)
+            case z_auth:logon(UserId, Context3) of
+                {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
+                {error, _Reason} -> ?WM_REPLY(true, Context3)
+            end;
+        undefined ->
+            case z_auth:is_auth(Context2) of
+                true ->
+                    case z_context:get_q("p", Context2) of
+                        [] -> ?WM_REPLY(false, Context2);
+                        _P -> ?WM_REPLY(true, Context2)
+                    end;
+                false ->
+                    ?WM_REPLY(true, Context2)
+            end
     end.
 
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
 
-%% @doc Temporary redirect if we have an automatic log on due to a rememberme cookie
+%% @doc Temporary redirect if we have an automatic log on due to a rememberme cookie or if
+%% the user was already logged on and we don't have a redirect page.
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    Location = get_page(Context2),
+    Location = z_context:abs_url(get_page(Context2), Context2),
     ?WM_REPLY({true, Location}, Context2).
 
 
@@ -110,21 +119,33 @@ provide_content(ReqData, Context) ->
 
 %% @doc Get the page we should redirect to after a successful log on.
 get_page(Context) ->
+    HasBackArg = z_convert:to_bool(z_context:get_q("back", Context)),
     case z_context:get_q("p", Context, []) of
-        [] ->
-            Me = lists:flatten(z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)),
+        [] when HasBackArg ->
             RD = z_context:get_reqdata(Context),
             case wrq:get_req_header("referer", RD) of
-                undefined -> "/";
-                "/logon" ++ _ -> "/";
-                Referrer -> 
-                    case lists:prefix(Me, Referrer) of
-                        true -> "/";
-                        false -> Referrer
-                    end
+                undefined -> get_page_default(Context);
+                Referrer -> z_html:noscript(Referrer)
             end;
         Other ->
-            Other
+            z_html:noscript(Other)
+    end.
+
+get_page_default(Context) ->
+    case z_auth:is_auth(Context) of
+        true ->
+            case z_dispatcher:url_for(signup, Context) of
+                undefined -> "/";
+                _HasSignup -> m_rsc:p(z_acl:user(Context), page_url, Context)
+            end;
+        false ->
+            "/"
+    end.
+
+get_ready_page(Context) ->
+    case z_context:get_q("page", Context, []) of
+        [] -> get_page_default(Context);
+        Url -> z_html:noscript(Url)
     end.
 
 
@@ -227,10 +248,7 @@ logon_user(UserId, Context) ->
 		        [] -> ContextUser;
 		        _ -> set_rememberme_cookie(UserId, ContextUser)
 		    end,
-		    case z_context:get_q("page", ContextRemember, []) of
-		        [] ->  z_render:wire({redirect, [{location, "/"}]}, ContextRemember);
-		        Url -> z_render:wire({redirect, [{location, Url}]}, ContextRemember)
-		    end;
+		    z_render:wire({redirect, [{location, get_ready_page(ContextRemember)}]}, ContextRemember);
 		{error, user_not_enabled} ->
 			check_verified(UserId, Context);
 		{error, _Reason} ->
