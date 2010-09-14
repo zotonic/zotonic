@@ -32,7 +32,6 @@
 		</fieldset>
 	</form>
 {% else %}
-	{# TODO: set the 'page' argument of the logon to the current url #}
-	<p id="comments-logon"><a href="{% url logon %}">{_ Log on or sign up to comment _}</a>.</p>
+	<p id="comments-logon"><a href="{% url logon back %}">{_ Log on or sign up to comment _}</a>.</p>
 {% endif %}
 {% endwith %}
