@@ -61,7 +61,7 @@ resource_exists(ReqData, Context) ->
         undefined ->
             case z_auth:is_auth(Context2) of
                 true ->
-                    case z_context:get_q("p", Context2) of
+                    case z_context:get_q("p", Context2, []) of
                         [] -> ?WM_REPLY(false, Context2);
                         _P -> ?WM_REPLY(true, Context2)
                     end;
@@ -127,6 +127,8 @@ get_page(Context) ->
                 undefined -> get_page_default(Context);
                 Referrer -> z_html:noscript(Referrer)
             end;
+        [] ->
+            get_page_default(Context);
         Other ->
             z_html:noscript(Other)
     end.
