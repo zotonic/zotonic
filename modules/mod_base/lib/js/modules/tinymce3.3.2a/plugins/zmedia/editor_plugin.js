@@ -23,7 +23,7 @@
                         } 
                         else {
                             // Open "insert" dialog
-                            document.getElementById('zmedia-open-dialog').click();
+                            z_event('zmedia');
                             window.z_choose_zmedia = function(id) {
                                 if (!id) return;
                                 var res = self._zMediaHtml(id, {align: "block", size: "middle", crop: '', link: ''});
