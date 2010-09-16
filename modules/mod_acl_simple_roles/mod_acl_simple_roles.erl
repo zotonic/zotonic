@@ -250,11 +250,11 @@ logon(UserId, Context) ->
         min(_,B) -> B.
 
 
-%% @doc Check if an user can see something
+%% @doc Check if an user can see something (only called for authenticated users)
 can_view(Id, Context) ->
     case can_view_all(Context) == true
         orelse can_edit(Id, Context) == true
-        orelse is_view_public(Id, Context) == true of
+        orelse is_view_community(Id, Context) == true of
         true -> true;
         false -> undefined
     end.
@@ -332,12 +332,18 @@ can_insert(Cat, #context{acl=Acl} = Context) ->
 
 %% @doc Check if a rsc is public viewable
 is_view_public(Id, Context) ->
-	Acl = m_rsc:get_acl_props(Id, Context),
+    is_view_level(Id, 0, Context).
+
+is_view_community(Id, Context) ->
+    is_view_level(Id, 1, Context).
+    
+is_view_level(Id, Level, Context) ->
+    Acl = m_rsc:get_acl_props(Id, Context),
     case Acl#acl_props.is_published of
         false -> 
             false;
         true ->
-            case Acl#acl_props.visible_for == 0 of
+            case Acl#acl_props.visible_for =< Level of
                 false ->
                     false;
                 true ->
