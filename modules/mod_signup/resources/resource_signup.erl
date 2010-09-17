@@ -161,6 +161,8 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
             show_errors([error_duplicate_username], Context);
         {error, {identity_in_use, _}} ->
             show_errors([error_duplicate_identity], Context);
+        {error, #context{} = ContextError} ->
+            show_errors([error_signup], ContextError);
         {error, _Reason} ->
             show_errors([error_signup], Context)
     end.

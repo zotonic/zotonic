@@ -83,5 +83,6 @@ confirm(Key, Context) ->
             UserId = proplists:get_value(rsc_id, Row),
             {ok, UserId} = m_rsc:update(UserId, [{is_published, true},{is_verified_account, true}], z_acl:sudo(Context)),
             m_identity:set_verified(proplists:get_value(id, Row), Context),
+            z_notifier:map({signup_confirm, UserId}, Context),
             {ok, UserId}
     end.
