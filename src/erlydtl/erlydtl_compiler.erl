@@ -790,6 +790,20 @@ resolve_variable_ast({index_value, Variable, Index}, Context, TreeWalker, Finder
             [IndexAst, VarAst, z_context_ast(Context)]),
     {{Ast, VarName, merge_info(Info, Info2)}, TreeWalker3};
 
+resolve_variable_ast({attribute, {{identifier, _, Arg}, {variable, {identifier, _, "q"}}}}, Context, TreeWalker, _FinderFunction) ->
+    Ast = erl_syntax:application(
+            erl_syntax:atom(z_context), 
+            erl_syntax:atom(get_q),
+            [erl_syntax:string(Arg), z_context_ast(Context)]),
+    {{Ast, "q", #ast_info{}}, TreeWalker};
+
+resolve_variable_ast({attribute, {{identifier, _, Arg}, {variable, {identifier, _, "q_validated"}}}}, Context, TreeWalker, _FinderFunction) ->
+    Ast = erl_syntax:application(
+            erl_syntax:atom(z_context), 
+            erl_syntax:atom(get_q_validated),
+            [erl_syntax:string(Arg), z_context_ast(Context)]),
+    {{Ast, "q", #ast_info{}}, TreeWalker};
+
 resolve_variable_ast({attribute, {{identifier, _, Model}, {variable, {identifier, _, "m"}}}}, _Context, TreeWalker, _FinderFunction) ->
     Ast = erl_syntax:tuple([
             erl_syntax:atom(m),
@@ -809,15 +823,15 @@ resolve_variable_ast({attribute, {{identifier, _, AttrName}, Variable}}, Context
 resolve_variable_ast({variable, {identifier, _, "now"}}, Context, TreeWalker, _FinderFunction) ->
     Ast = case resolve_scoped_variable_ast("now", Context) of
         undefined ->
-			erl_syntax:application(
-				erl_syntax:atom(erlang),
-				erl_syntax:atom(localtime),
-				[]);
+            erl_syntax:application(
+                erl_syntax:atom(erlang),
+                erl_syntax:atom(localtime),
+                []);
         Val ->
             Val
     end,
-	{{Ast, "now", #ast_info{}}, TreeWalker};
-	
+    {{Ast, "now", #ast_info{}}, TreeWalker};
+
 resolve_variable_ast({variable, {identifier, _, VarName}}, Context, TreeWalker, FinderFunction) ->
     Ast = case resolve_scoped_variable_ast(VarName, Context) of
         undefined ->
