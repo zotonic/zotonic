@@ -145,9 +145,14 @@ get_page_default(Context) ->
     end.
 
 get_ready_page(Context) ->
-    case z_context:get_q("page", Context, []) of
-        [] -> get_page_default(Context);
-        Url -> z_html:noscript(Url)
+    case z_notifier:first(logon_ready_page, Context) of
+        undefined ->
+            case z_context:get_q("page", Context, []) of
+                [] -> get_page_default(Context);
+                Url -> z_html:noscript(Url)
+            end;
+        Url ->
+            z_html:noscript(Url)
     end.
 
 
