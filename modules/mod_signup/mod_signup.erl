@@ -86,11 +86,16 @@ request_verification(UserId, Context) ->
 %% @doc Preflight checks on a signup
 %% This function is called with a 'sudo' context.
 check_signup(Props, SignupProps, Context) ->
-    case check_identity(SignupProps, Context) of
-        ok -> check_props(Props, Context);
-        {error, _} = Error -> Error
+    case z_notifier:foldl(signup_check, {ok, Props, SignupProps}, Context) of
+        {ok, Props1, SignupProps1} ->
+            case check_identity(SignupProps1, Context) of
+                ok -> check_props(Props1, Context);
+                {error, _} = Error -> Error
+            end;
+        {error, _ContextOrReason} = Error ->
+            Error
     end.
-    
+
 
 %% @doc Preflight check if the props are ok.
 %% @todo Add some checks on name, title etc.
@@ -123,6 +128,11 @@ do_signup(Props, SignupProps, RequestConfirm, Context) ->
     case m_rsc:insert(props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, Id} ->
             [ insert_identity(Id, Ident, Context) || {K,Ident} <- SignupProps, K == identity ],
+            z_notifier:map({signup_done, Id, IsVerified, Props, SignupProps}, Context),
+            case IsVerified of
+                true -> z_notifier:map({signup_confirm, Id}, Context);
+                false -> nop
+            end,    
             {ok, Id};
         {error, Reason} ->
             throw({error, Reason})

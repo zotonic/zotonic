@@ -2,52 +2,48 @@
 
 {% block title %}{_ Sign Up _}{% endblock %}
 
+{% block html_head_extra %}
+	{% inherit %}
+	<style type="text/css">
+		div#signup_verify {
+			display: none;
+		}
+
+		ul#signup_services li {
+			list-style-type: none;
+		}
+
+		input#surprefix {
+			width: 50px;
+		}
+
+		div#signup_tos label {
+			float: none;
+			display: inline;
+		}
+
+		#signup_error_tos_agree,
+		#signup_error_duplicate_username,
+		#signup_error_duplicate_identity {
+			display: none;
+		}
+
+		.error_tos_agree #signup_error_tos_agree,
+		.error_duplicate_username #signup_error_duplicate_username,
+		.error_duplicate_identity #signup_error_duplicate_identity,
+		.error_custom_1 #signup_error_custom_1,
+		.error_custom_2 #signup_error_custom_2 {
+			display: block;
+		}
+
+		.z_validation_message {        
+			color: red;
+		    padding: 0 0 0 9px;
+		}
+	</style>
+{% endblock %}
+
 {% block content %}
-
-<style type="text/css">
-div#signup_verify {
-	display: none;
-}
-
-ul#signup_services li {
-	list-style-type: none;
-}
-
-input#surprefix {
-	width: 50px;
-}
-
-div#signup_tos_text {
-	height: 100px;
-	overflow-y: scroll;
-	margin-bottom: 10px;
-	padding: 4px;
-	border: 1px solid #ccc;
-}
-
-div#signup_tos label {
-	float: none;
-	display: inline;
-}
-
-#signup_error_tos_agree,
-#signup_error_duplicate_username,
-#signup_error_duplicate_identity {
-	display: none;
-}
-
-.error_tos_agree #signup_error_tos_agree,
-.error_duplicate_username #signup_error_duplicate_username,
-.error_duplicate_identity #signup_error_duplicate_identity {
-	display: block;
-}
-
-.z_validation_message {        
-	color: red;
-    padding: 0 0 0 9px;
-}
-</style>
-
 <section class="article-wrapper">
 
 {% if m.acl.user %}
@@ -143,6 +139,8 @@ div#signup_tos label {
 
 			<p class="clear"></p>
 		{% endif %}
+
+		{% all include "_signup_extra.tpl" %}
 	
 		<h3>{_ Check our Terms of Service and Privacy policies _}</h3>
 
@@ -150,12 +148,6 @@ div#signup_tos label {
 			<p>{_ We will be very careful with all the information given to us and will never give your name or address away without your permission.
 			We do have some rules that we need you to agree with. _}</p>
 	
-			<div id="signup_tos_text">
-				<h3>{{ m.rsc.signup_tos.title }}</h3>
-				<p class="summary">{{ m.rsc.signup_tos.summary }}</p>
-				{{ m.rsc.signup_tos.body }}
-			</div>
-
 			<p id="signup_error_tos_agree" class="error">{_ To sign up you must agree with the Terms of Service and Privacy policies. _}</p>
 	
 			<input type="checkbox" name="signup_tos_agree" id="signup_tos_agree" value="1" />
