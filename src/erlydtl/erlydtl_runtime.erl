@@ -9,9 +9,9 @@
 
 
 opttrans({trans, _}=Trans, LanguageOrContext) ->
-	z_trans:trans(Trans, LanguageOrContext);
+    z_trans:trans(Trans, LanguageOrContext);
 opttrans(V, _LanguageOrContext) ->
-	V.
+    V.
 
 % Finde the value of a model value
 find_value(<<>>, #m{}, _Context) ->
@@ -29,31 +29,13 @@ find_value(Key, L, _Context) when is_integer(Key), is_list(L) ->
         _:_ -> undefined
     end;
 
-%% q and q_validated are indexed with strings, this because the indices are from
-%% the query string and post. Wrap them in a 'q' tuple to force a subsequent lookup.
-find_value(Key, q, Context) ->
-    z_context:get_q(z_convert:to_list(Key), Context);
-find_value(Key, q_validated, Context) ->
-    z_context:get_q_validated(z_convert:to_list(Key), Context);
-find_value(q, _Vars, _Context) ->
-    q;
-find_value(q_validated, _Vars, _Context) ->
-    q_validated;
-
 %% Assume a predicate/property lookup in a list of ids, map to lookup of first entry
 find_value(Key, [N|_], Context) when is_atom(Key), is_integer(N) ->
-	m_rsc:p(N, Key, Context);
+    m_rsc:p(N, Key, Context);
 
 %% Property of a resource, just assume an integer is a rsc id
 find_value(Key, Id, Context) when is_integer(Id) ->
-	m_rsc:p(Id, Key, Context);
-
-%% Lookup current date/time, defaults to calendar:local_time/0
-find_value(now, L, _Context) when is_list(L) ->
-    case proplists:get_value(now, L) of
-        undefined -> calendar:local_time();
-        Now -> Now
-    end;
+    m_rsc:p(Id, Key, Context);
 
 %% Regular proplist lookup
 find_value(Key, L, _Context) when is_list(L) ->
@@ -67,9 +49,9 @@ find_value(Key, #rsc_list{list=L}, _Context) when is_integer(Key) ->
         _:_ -> undefined
     end;
 find_value(Key, #rsc_list{list=[H|_T]}, Context) ->
-	find_value(Key, H, Context);
+    find_value(Key, H, Context);
 find_value(_Key, #rsc_list{list=[]}, _Context) ->
-	undefined;
+    undefined;
 
 %% JSON-decoded proplist structure
 find_value(Key, {obj, Props}, _Context) ->
@@ -150,9 +132,9 @@ find_value(Key, F, _Context) when is_function(F, 1) ->
 
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
-	undefined;
+    undefined;
 find_value(_Key, <<>>, _Context) ->
-	undefined.
+    undefined.
 
 %% This used to translate undefined into <<>>, this translation is now done by z_render:render/2
 fetch_value(Key, Data, Context) ->
