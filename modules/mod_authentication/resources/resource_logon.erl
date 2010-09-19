@@ -78,7 +78,7 @@ previously_existed(ReqData, Context) ->
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    Location = z_context:abs_url(get_page(Context2), Context2),
+    Location = z_context:abs_url(cleanup_url(get_page(Context2)), Context2),
     ?WM_REPLY({true, Location}, Context2).
 
 
@@ -118,6 +118,7 @@ provide_content(ReqData, Context) ->
 
 
 %% @doc Get the page we should redirect to after a successful log on.
+%%      This location will be stored in the logon form ("page" on submit).
 get_page(Context) ->
     HasBackArg = z_convert:to_bool(z_context:get_q("back", Context)),
     case z_context:get_q("p", Context, []) of
@@ -130,30 +131,37 @@ get_page(Context) ->
         [] ->
             get_page_default(Context);
         Other ->
-            z_html:noscript(Other)
+            Other
     end.
 
+%% @doc Fetch the default page to show. When users can sign up then 
+%%      the user's home page, otherwise the site's home page.
 get_page_default(Context) ->
     case z_auth:is_auth(Context) of
         true ->
             case z_dispatcher:url_for(signup, Context) of
-                undefined -> "/";
+                undefined -> [];
                 _HasSignup -> m_rsc:p(z_acl:user(Context), page_url, Context)
             end;
         false ->
-            "/"
+            []
     end.
 
+%% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
-    case z_notifier:first(logon_ready_page, Context) of
-        undefined ->
-            case z_context:get_q("page", Context, []) of
-                [] -> get_page_default(Context);
-                Url -> z_html:noscript(Url)
+    case z_context:get_q("page", Context, []) of
+        [] ->
+            case z_notifier:first(logon_ready_page, Context) of
+                undefined -> get_page_default(Context);
+                Url -> Url
             end;
         Url ->
-            z_html:noscript(Url)
+            Url
     end.
+
+
+cleanup_url([]) -> "/";
+cleanup_url(Url) -> z_html:noscript(Url).
 
 
 %% @doc Handle the submit of the logon form, this will be handed over to the
@@ -255,7 +263,7 @@ logon_user(UserId, Context) ->
 		        [] -> ContextUser;
 		        _ -> set_rememberme_cookie(UserId, ContextUser)
 		    end,
-		    z_render:wire({redirect, [{location, get_ready_page(ContextRemember)}]}, ContextRemember);
+		    z_render:wire({redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}, ContextRemember);
 		{error, user_not_enabled} ->
 			check_verified(UserId, Context);
 		{error, _Reason} ->
@@ -375,7 +383,6 @@ find_email(Id, Context) ->
 
 %% @doc Sent the reminder e-mail to the user.
 send_email(Email, Vars, Context) ->
-	?DEBUG({Email, Vars}),
 	z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
 	ok.
 
