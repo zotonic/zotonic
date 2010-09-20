@@ -605,16 +605,21 @@ catinclude_ast(File, Id, Args, All, Context, TreeWalker) ->
 
 
 include_ast(File, Args, All, Context, TreeWalker) ->
-    UseScomp = lists:foldl( fun({{identifier, _, Key}, _}, IsC) -> 
+    {UseScomp, IsSudo} = lists:foldl( fun({{identifier, _, Key}, Val}, {IsC,IsSu}) -> 
                                 case Key of
-                                    "maxage" -> true;
-                                    "vary"   -> true;
-                                    "scomp"  -> true;
-                                    "visible_for" -> true;
-                                    _ -> IsC
+                                    "maxage" -> {true, IsSu};
+                                    "vary"   -> {true, IsSu};
+                                    "scomp"  -> {true, IsSu};
+                                    "visible_for" -> {true, IsSu};
+                                    "sudo" ->
+                                        case Val of
+                                            true -> {IsC, true};
+                                            _ -> {IsC, IsSu}
+                                        end;
+                                    _ -> {IsC, IsSu}
                                 end
                             end,
-                            false,
+                            {false, false},
                             Args),
     case UseScomp of
         false ->
@@ -628,10 +633,27 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                 {[], []},
                 InterpretedArgs),
 
+            {ContextInclude,ArgAsts1} = case IsSudo of
+                                true -> 
+                                    V = "ZpContext_" ++ z_ids:id(10), 
+                                    ZpContextAst = erl_syntax:match_expr(
+                                                        erl_syntax:variable(V),
+                                                        erl_syntax:application(
+                                                                    erl_syntax:atom(z_acl),
+                                                                    erl_syntax:atom(sudo),
+                                                                    [z_context_ast(Context)])),
+                                    LocalScope = [{'ZpContext', erl_syntax:variable(V)}],
+                                    { Context#dtl_context{local_scopes=[LocalScope|Context#dtl_context.local_scopes]},
+                                      [ZpContextAst|ArgAsts] 
+                                    };
+                                false -> 
+                                    {Context, ArgAsts}
+                             end,
+
             % {AstList, Info, TreeWalker}
             IncludeFun = fun(FilePath, {AstList, InclInfo, TreeW}) ->
-                    z_notifier:notify({debug, template, {include, File, FilePath}}, Context#dtl_context.z_context),
-                    case parse(FilePath, Context) of
+                    z_notifier:notify({debug, template, {include, File, FilePath}}, ContextInclude#dtl_context.z_context),
+                    case parse(FilePath, ContextInclude) of
                         {ok, InclusionParseTree} ->
                             AutoIdVar = "AutoId_"++z_ids:identifier(),
                             IncludeScope = [ {'$autoid', erl_syntax:variable(AutoIdVar)} | ScopedArgs ],
@@ -641,8 +663,8 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                                                     body_ast(
                                                         InclusionParseTree,
                                                         Context#dtl_context{
-                                                                local_scopes = [ IncludeScope | Context#dtl_context.local_scopes ],
-                                                                parse_trail = [FilePath | Context#dtl_context.parse_trail]}, 
+                                                                local_scopes = [ IncludeScope | ContextInclude#dtl_context.local_scopes ],
+                                                                parse_trail = [FilePath | ContextInclude#dtl_context.parse_trail]}, 
                                                         TreeW#treewalker{has_auto_id=false})),
                             Ast1 = case InclTW2#treewalker.has_auto_id of
                                 false -> Ast;
@@ -671,7 +693,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                     end,
                     {{erl_syntax:string(""), #ast_info{}}, TreeWalkerN};
                 {AstList, AstInfo, TreeWalkerN} ->
-                    AstN = erl_syntax:block_expr(ArgAsts ++ [erl_syntax:list(lists:reverse(AstList))]),
+                    AstN = erl_syntax:block_expr(ArgAsts1 ++ [erl_syntax:list(lists:reverse(AstList))]),
                     {{AstN, AstInfo}, TreeWalkerN}
             end;
         true ->
