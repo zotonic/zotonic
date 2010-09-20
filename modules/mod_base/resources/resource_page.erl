@@ -48,9 +48,9 @@ resource_exists(ReqData, Context) ->
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->
     Context1  = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
-    Action = z_context:get(acl_action, ContextQs, view),
-    z_acl:wm_is_authorized(Action, get_id(ContextQs), ContextQs).
+    ContextAll = z_context:ensure_all(Context1),
+    Action = z_context:get(acl_action, ContextAll, view),
+    z_acl:wm_is_authorized(Action, get_id(ContextAll), ContextAll).
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
