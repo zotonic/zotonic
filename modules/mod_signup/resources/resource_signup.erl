@@ -138,8 +138,13 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
                     ensure_published(UserId, Context),
                     {ok, ContextUser} = z_auth:logon(UserId, Context),
                     Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
-                        [] -> m_rsc:p(UserId, page_url, ContextUser);
-                        Url -> Url
+                        [] -> 
+                            case z_notifier:first({signup_confirm_redirect, UserId}, ContextUser) of
+                                undefined -> m_rsc:p(UserId, page_url, ContextUser);
+                                Loc -> Loc
+                            end;
+                        Url ->
+                            Url
                     end,
                     z_render:wire({redirect, [{location, Location}]}, ContextUser);
                 false ->
