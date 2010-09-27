@@ -84,7 +84,7 @@ event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
                                     XsSignupProps;
                                 false ->
                                     [ {identity, {username_pw, 
-                                            {z_context:get_q_validated("username", Context), 
+                                            {z_string:trim(z_context:get_q_validated("username", Context)), 
                                              z_context:get_q_validated("password1", Context)},
                                             true,
                                             true}}
