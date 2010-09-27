@@ -29,7 +29,8 @@
 -export([init/1]).
 -export([
     observe_signup_url/2,
-    observe_identity_verification/2
+    observe_identity_verification/2,
+    observe_logon_ready_page/2
 ]).
 -export([signup/4, request_verification/2]).
 
@@ -54,13 +55,25 @@ observe_identity_verification({identity_verification, UserId}, Context) ->
     request_verification(UserId, Context).
 
 
+%% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
+observe_logon_ready_page({logon_ready_page, []}, Context) ->
+    case z_auth:is_auth(Context) of
+        true -> m_rsc:p(z_acl:user(Context), page_url, Context);
+        false -> []
+    end;
+observe_logon_ready_page({logon_ready_page, Url}, _Context) ->
+    Url.
+
+
 %% @doc Sign up a new user.
 %% @spec signup(proplist(), proplist(), Context) -> {ok, UserId} | {error, Reason}
 signup(Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
-        ok -> z_db:transaction(fun(Ctx) -> do_signup(Props, SignupProps, RequestConfirm, Ctx) end, ContextSudo);
-        {error, _} = Error -> Error
+        {ok, Props1, SignupProps1} ->
+            z_db:transaction(fun(Ctx) -> do_signup(Props1, SignupProps1, RequestConfirm, Ctx) end, ContextSudo);
+        {error, _} = Error ->
+            Error
     end.
 
 
@@ -89,8 +102,13 @@ check_signup(Props, SignupProps, Context) ->
     case z_notifier:foldl(signup_check, {ok, Props, SignupProps}, Context) of
         {ok, Props1, SignupProps1} ->
             case check_identity(SignupProps1, Context) of
-                ok -> check_props(Props1, Context);
-                {error, _} = Error -> Error
+                ok -> 
+                    case check_props(Props1, Context) of
+                        ok -> {ok, Props1, SignupProps1};
+                        {error, _} = Error -> Error
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, _ContextOrReason} = Error ->
             Error
