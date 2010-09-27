@@ -125,41 +125,23 @@ get_page(Context) ->
         [] when HasBackArg ->
             RD = z_context:get_reqdata(Context),
             case wrq:get_req_header("referer", RD) of
-                undefined -> get_page_default(Context);
+                undefined -> [];
                 Referrer -> z_html:noscript(Referrer)
             end;
-        [] ->
-            get_page_default(Context);
         Other ->
             Other
     end.
 
-%% @doc Fetch the default page to show. When users can sign up then 
-%%      the user's home page, otherwise the site's home page.
-get_page_default(Context) ->
-    case z_auth:is_auth(Context) of
-        true ->
-            case z_dispatcher:url_for(signup, Context) of
-                undefined -> [];
-                _HasSignup -> m_rsc:p(z_acl:user(Context), page_url, Context)
-            end;
-        false ->
-            []
-    end.
-
 %% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
-    case z_context:get_q("page", Context, []) of
-        [] ->
-            case z_notifier:first(logon_ready_page, Context) of
-                undefined -> get_page_default(Context);
-                Url -> Url
-            end;
-        Url ->
-            Url
+    Page = z_context:get_q("page", Context, []),
+    case z_notifier:first({logon_ready_page, Page}, Context) of
+        undefined -> Page;
+        Url -> Url
     end.
 
 
+cleanup_url(undefined) -> "/";
 cleanup_url([]) -> "/";
 cleanup_url(Url) -> z_html:noscript(Url).
 
