@@ -25,6 +25,7 @@
 -export([
     timesince/2,
 	timesince/3,
+	 timesince/4,
 	
 	days_in_year/1,
 	
@@ -68,15 +69,42 @@ timesince(Date, Context) ->
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, Context) -> string()
 %% @todo Use the language in the context for translations.
-timesince(Date, Base, _Context) when Date == Base ->
-	"now";
-timesince(Date, Base, _Context) when Date > Base ->
-	"in " ++ combine(reldate(Base, Date));
-timesince(Date, Base, _Context) ->
-	combine(reldate(Date, Base)) ++ " ago".	
+timesince(Date, Base, Context) ->
+    timesince(Date, Base, "ago", "now", "in", Context).
 
-	combine({A,""}) -> A;
-	combine({A,B}) -> A ++ [$,, 32 | B].
+%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
+%% @spec timesince(Date, BaseDate, WhenText, Context) -> string()
+%% WhenText is a string containing a maximum of three tokens. Example "ago, now, in"
+%% @todo Use the language in the context for translations.
+timesince(Date, Base, IndicatorStrings, Context) ->
+    %% strip the tokens, so the user can specify the text more flexible.
+    case [string:strip(S, both) || S <- string:tokens(IndicatorStrings, ",")] of
+	[AgoText, NowText, InText] ->
+	    timesince(Date, Base, AgoText, NowText, InText, Context);
+	[AgoText, NowText] ->
+	    timesince(Date, Base, AgoText, NowText, "", Context);
+	[AgoText] ->
+	    timesince(Date, Base, AgoText, "", "", Context);
+	[] ->
+	    timesince(Date, Base, "", "", "", Context)
+    end.
+
+%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
+%% @spec timesince(Date, BaseDate, NowText, InText, AgoText, Context) -> string()
+%% @todo Use the language in the context for translations.
+timesince(Date, Base, _AgoText, NowText, _InText, _Context) when Date == Base ->
+    NowText;
+timesince(Date, Base, _AgoText, _NowText, InText, _Context) when Date > Base ->
+    combine({InText, combine(reldate(Base, Date))}, " ");
+timesince(Date, Base, AgoText, _NowText, _InText, _Context) ->
+    combine({combine(reldate(Date, Base)), AgoText}, " ").
+
+    combine(Tup) -> combine(Tup, ", ").
+
+    combine({"", B}, _Sep) -> B;
+    combine({A,""}, _Sep) -> A;
+    combine({A,B}, Sep) -> A ++ Sep ++ B.
+
 
 
 %% @doc Return a string describing the relative date difference.
