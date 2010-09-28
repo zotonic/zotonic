@@ -224,7 +224,12 @@ sanitize1(Html) ->
 					Attrs2,
 					[ sanitize(Encl, Stack1) || Encl <- Enclosed ]};
 			false ->
-				{nop, [ sanitize(Encl, Stack) || Encl <- Enclosed ]}
+				case skip_contents(Lower) of
+					false ->
+						{nop, [ sanitize(Encl, Stack) || Encl <- Enclosed ]};
+					true ->
+						{nop, []}
+				end
 		end.
 
 	%% @doc Flatten the sanitized html tree to 
@@ -393,6 +398,11 @@ is_selfclosing(<<"br">>) -> true;
 is_selfclosing(<<"hr">>) -> true;
 is_selfclosing(<<"img">>) -> true;
 is_selfclosing(_) -> false.
+
+%% @doc Disallowed elements whose contents should be skipped
+skip_contents(<<"style">>) -> true;
+skip_contents(<<"script">>) -> true;
+skip_contents(_) -> false.
 
 %% @doc Simple filter for css. Removes parts between () and quoted strings. 
 filter_css(undefined) ->

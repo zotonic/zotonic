@@ -39,10 +39,16 @@ render(Params, Vars, Context) ->
                     Vs
             end,
     Vars1 = lists:foldl(AddC, Vars, Params),
-	case proplists:get_value('$all', Params, false) of
-		false ->
-			{ok, z_template:render(File, Vars1, Context)};
-		true ->
-			Templates = z_template:find_template(File, true, Context),
-			{ok, [ z_template:render(Tpl, Vars1, Context) || Tpl <- Templates ]}
-	end.
+
+    Context1 = case proplists:get_value(sudo, Params) of
+        true -> z_acl:sudo(Context);
+        _ -> Context
+    end,
+    
+    case proplists:get_value('$all', Params, false) of
+        false ->
+            {ok, z_template:render(File, Vars1, Context1)};
+        true ->
+            Templates = z_template:find_template(File, true, Context1),
+            {ok, [ z_template:render(Tpl, Vars1, Context1) || Tpl <- Templates ]}
+    end.

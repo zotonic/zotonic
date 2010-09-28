@@ -31,20 +31,26 @@
 vary(_Params, _Context) -> default.
 
 render(Params, Vars, Context) ->
-	All = proplists:get_value('$all', Params, false),
+    All = proplists:get_value('$all', Params, false),
     File = proplists:get_value('$file', Params),
-	Id = proplists:get_value('id', Params),
-	Params1 = Params ++ Vars,
-	case All of
-		false ->
-		    {ok, z_template:render({cat, File}, Params1, Context)};
-		
-		true ->
-			% Collect all templates, then render them
-        	IsA = m_rsc:is_a(Id, Context),
-        	Root = filename:rootname(File),
-        	Ext = filename:extension(File),
-			Templates = lists:foldr(fun(Cat, Templates) -> Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context) end, [], IsA),
-			Templates1 = Templates ++ z_template:find_template(File, true, Context),
-			{ok, [ z_template:render(Tpl, Params1, Context) || Tpl <- Templates1 ]}
-	end.
+    Id = proplists:get_value('id', Params),
+
+    Context1 = case proplists:get_value(sudo, Params) of
+        true -> z_acl:sudo(Context);
+        _ -> Context
+    end,
+
+    Params1 = Params ++ Vars,
+    case All of
+        false ->
+            {ok, z_template:render({cat, File}, Params1, Context1)};
+        
+        true ->
+            % Collect all templates, then render them
+            IsA = m_rsc:is_a(Id, Context),
+            Root = filename:rootname(File),
+            Ext = filename:extension(File),
+            Templates = lists:foldr(fun(Cat, Templates) -> Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context1) end, [], IsA),
+            Templates1 = Templates ++ z_template:find_template(File, true, Context1),
+            {ok, [ z_template:render(Tpl, Params1, Context1) || Tpl <- Templates1 ]}
+    end.

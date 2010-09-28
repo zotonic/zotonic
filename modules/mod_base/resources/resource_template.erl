@@ -19,8 +19,14 @@
 -module(resource_template).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
--export([provide_content/2]).
+-export([
+    init/1,
+    service_available/2,
+    charsets_provided/2,
+    content_types_provided/2,
+    is_authorized/2,
+    provide_content/2
+]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
@@ -44,13 +50,32 @@ content_types_provided(ReqData, Context) ->
             {[{Mime, provide_content}], ReqData, Context}
     end.
 
+%% @doc Check if the current user is allowed to view the resource. 
+is_authorized(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    case z_context:get(acl, Context1) of
+        undefined -> 
+            ?WM_REPLY(true, Context1);
+        is_auth -> 
+            Context2 = z_context:ensure_all(Context1),
+            z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2);
+        Acl -> 
+            Context2 = z_context:ensure_all(Context1),
+            z_acl:wm_is_authorized(Acl, Context2)
+    end.
+
+
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = case z_context:get(anonymous, Context) of
         true -> z_context:ensure_qs(Context1);
         _ -> z_context:ensure_all(Context1)
     end,
-    Template = z_context:get(template, Context2),
-    Rendered = z_template:render(Template, z_context:get_all(Context), Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
+    Context3 = case z_context:get(seo_noindex, Context2) of
+        true ->  z_context:set_resp_header("X-Robots-Tag", "noindex", Context2);
+        _ -> Context2
+    end,
+    Template = z_context:get(template, Context3),
+    Rendered = z_template:render(Template, z_context:get_all(Context), Context3),
+    {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
