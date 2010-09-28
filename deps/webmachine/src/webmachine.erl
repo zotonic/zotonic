@@ -36,6 +36,7 @@ stop() ->
     application:stop(webmachine).
 
 init_reqdata(mochiweb, Request) ->
+    ReqId = webmachine_id:generate(),
     Socket = Request:get(socket),
     Method = Request:get(method),
     RawPath = Request:get(raw_path), 
@@ -45,7 +46,8 @@ init_reqdata(mochiweb, Request) ->
     InitReq = InitState0#wm_reqdata{socket=Socket}, 
     {Peer, ReqData} = webmachine_request:get_peer(InitReq),
     PeerState = wrq:set_peer(Peer, ReqData),
-    LogData = #wm_log_data{start_time=now(),
+    LogData = #wm_log_data{req_id=ReqId,
+                           start_time=now(),
 			   method=Method,
 			   headers=Headers,
 			   peer=PeerState#wm_reqdata.peer,

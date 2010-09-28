@@ -98,7 +98,8 @@ maybe_rotate(State, Time) ->
 	    State#state{hourstamp=ThisHour, handle=Handle}
     end.    
 
-format_req(#wm_log_data{method=Method, 
+format_req(#wm_log_data{req_id=ReqId,
+                        method=Method, 
 			headers=Headers, 
 			peer=Peer, 
 			path=Path,
@@ -122,7 +123,7 @@ format_req(#wm_log_data{method=Method,
 	    undefined -> "";
 	    U -> U
 	end,
-    fmt_alog(Time, Peer, User, fmt_method(Method), Path, Version,
+    fmt_alog(Time, ReqId, Peer, User, fmt_method(Method), Path, Version,
 	     Status, Length, Referer, UserAgent).
 
 fmt_method(M) when is_atom(M) -> atom_to_list(M);
@@ -171,12 +172,12 @@ suffix({Y, M, D, H}) ->
     HS = zeropad(H, 2),
     lists:flatten([$., YS, $_, MS, $_, DS, $_, HS]).
 
-fmt_alog(Time, Ip, User, Method, Path, {VM,Vm},
+fmt_alog(Time, ReqId, Ip, User, Method, Path, {VM,Vm},
 	 Status,  Length, Referrer, UserAgent) ->
     [fmt_ip(Ip), " - ", sanitize(User), [$\s], Time, [$\s, $"], sanitize(Method), " ", sanitize(Path),
      " HTTP/", integer_to_list(VM), ".", integer_to_list(Vm), [$",$\s],
      Status, [$\s], Length, [$\s,$"], sanitize(Referrer),
-     [$",$\s,$"], sanitize(UserAgent), [$",$\n]].
+     [$",$\s,$"], sanitize(UserAgent), [$",$\s], integer_to_list(ReqId), [$\n]].
 
 month(1) ->
     "Jan";

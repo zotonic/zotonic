@@ -103,6 +103,7 @@ init([]) ->
     WebConfig = [
          {port, WebPort},
          {error_handler, z_config:get_dirty(webmachine_error_handler)},
+         {enable_perf_logger, z_config:get_dirty(enable_perf_logger)},
          {log_dir, z_config:get_dirty(log_dir)},
          {dispatch, []},
          {backlog, z_config:get_dirty(inet_backlog)}
@@ -111,7 +112,7 @@ init([]) ->
 
     % Listen to the ip address and port for all sites.
     Processes1 = Processes ++ [{webmachine_mochiweb,
-                                {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]}, 
+                                {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]},
                                 permanent, 5000, worker, dynamic}],
     
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses

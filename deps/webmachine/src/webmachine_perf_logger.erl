@@ -94,7 +94,8 @@ maybe_rotate(State, Time) ->
 	    State#state{hourstamp=ThisHour, handle=Handle}
     end.    
 
-format_req(#wm_log_data{resource_module=Mod,
+format_req(#wm_log_data{req_id=ReqId,
+                        resource_module=Mod,
 			start_time=StartTime,
 			method=Method, 
 			peer=Peer, 
@@ -109,7 +110,7 @@ format_req(#wm_log_data{resource_module=Mod,
     Length = integer_to_list(ResponseLength),
     TTPD = webmachine_util:now_diff_milliseconds(EndTime, StartTime),
     TTPS = webmachine_util:now_diff_milliseconds(FinishTime, EndTime),
-    fmt_plog(Time, Peer, atom_to_list(Method), Path, Version,
+    fmt_plog(Time, ReqId, Peer, atom_to_list(Method), Path, Version,
 	     Status, Length, atom_to_list(Mod), integer_to_list(TTPD),
 	     integer_to_list(TTPS)).
 
@@ -155,10 +156,10 @@ suffix({Y, M, D, H}) ->
     HS = zeropad(H, 2),
     lists:flatten([$., YS, $_, MS, $_, DS, $_, HS]).
 
-fmt_plog(Time, Ip,  Method, Path, {VM,Vm}, Status, Length, Mod, TTPD, TTPS) ->
+fmt_plog(Time, ReqId, Ip,  Method, Path, {VM,Vm}, Status, Length, Mod, TTPD, TTPS) ->
     [fmt_ip(Ip), " - ", [$\s], Time, [$\s, $"], Method, " ", Path,
      " HTTP/", integer_to_list(VM), ".", integer_to_list(Vm), [$",$\s],
-     Status, [$\s], Length, " " , Mod, " ", TTPD, " ", TTPS, $\n].
+     Status, [$\s], Length, " " , Mod, " ", TTPD, " ", integer_to_list(ReqId), $\n].
 
 month(1) ->
     "Jan";

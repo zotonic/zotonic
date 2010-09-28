@@ -1,5 +1,6 @@
 -record(wm_log_data, 
-	{resource_module :: atom(),
+	{req_id :: integer(),
+         resource_module :: atom(),
 	 start_time :: tuple(),
 	 method :: atom(),
 	 headers,
