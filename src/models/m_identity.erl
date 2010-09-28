@@ -43,6 +43,7 @@
 	lookup_by_username/2,
 	lookup_by_verify_key/2,
     lookup_by_type_and_key/3,
+    lookup_by_type_and_key_multi/3,
 
 	set_props/5,
 	get_props/4,
@@ -293,6 +294,9 @@ lookup_by_username(Key, Context) ->
 
 lookup_by_type_and_key(Type, Key, Context) ->
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).
+
+lookup_by_type_and_key_multi(Type, Key, Context) ->
+    z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key], Context).
 
 lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
