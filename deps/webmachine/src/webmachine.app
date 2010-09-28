@@ -23,5 +23,5 @@
   ]},
   {registered, []},
   {mod, {webmachine_app, []}},
-  {env, []},
+  {env, [{node_id, 1}]},
   {applications, [kernel, stdlib, crypto]}]}.
