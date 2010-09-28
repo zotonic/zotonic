@@ -19,7 +19,7 @@
 
 -module(validator_base_email).
 -include("zotonic.hrl").
--export([render_validator/5, validate/5]).
+-export([render_validator/5, validate/5, re/0]).
 
 render_validator(email, TriggerId, _TargetId, Args, Context)  ->
 	JsObject = z_utils:js_object(z_validation:rename_args(Args)), 
@@ -33,7 +33,7 @@ validate(email, Id, Value, _Args, Context) ->
     case z_string:trim(Value) of
         [] -> {{ok, []}, Context};
         Trimmed ->
-            case re:run(Trimmed, re(), [extended]) of
+            case re:run(Trimmed, [$^|re()]++"$", [extended]) of
                 nomatch   -> {{error, Id, invalid}, Context};
                 {match,_} -> {{ok, Trimmed}, Context}
             end
@@ -41,7 +41,7 @@ validate(email, Id, Value, _Args, Context) ->
 
 
 re() ->
-    "^(
+    "(
             (\"[^\"\\f\\n\\r\\t\\v\\b]+\")
         |   ([\\w\\!\\#\\$\\%\\&\'\\*\\+\\-\\~\\/\\^\\`\\|\\{\\}]+
                 (\\.[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\\~\\/\^\`\\|\\{\\}]+)*
@@ -53,7 +53,7 @@ re() ->
             ([A-Za-z0-9\\-])+\\.
         )+
         [A-Za-z\\-]{2,}
-    )$".
+    )".
 
 %% Rusty's regexp: "([^@\"\'\\s]+)@(([-a-z0-9]+\\.)+[a-z]{2,})".
 %% Complete regexp:
