@@ -976,27 +976,28 @@ with_ast(ValueList, Variables, Contents, Context, TreeWalker) ->
 
 
 for_loop_ast(IteratorList, LoopValue, Contents, EmptyPartContents, Context, TreeWalker) ->
+    PostFix = z_ids:identifier(),
     Vars = lists:map(fun({identifier, _, Iterator}) -> 
-                    erl_syntax:variable("Var_" ++ Iterator) 
+                    erl_syntax:variable("Var_" ++ Iterator ++ PostFix) 
             end, IteratorList),
     {{InnerAst, Info}, TreeWalker2} = body_ast(Contents,
         Context#dtl_context{local_scopes = [
                 [{'forloop', erl_syntax:variable("Counters")} | lists:map(
                     fun({identifier, _, Iterator}) ->
-                            {list_to_atom(Iterator), erl_syntax:variable("Var_" ++ Iterator)} 
+                            {list_to_atom(Iterator), erl_syntax:variable("Var_" ++ Iterator ++ PostFix)} 
                     end, IteratorList)] | Context#dtl_context.local_scopes]}, TreeWalker),
     CounterAst = erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
         erl_syntax:atom(increment_counter_stats), [erl_syntax:variable("Counters")]),
 
     {{LoopValueAst, LoopValueInfo}, TreeWalker3} = value_ast(LoopValue, false, Context, TreeWalker2),
-
     ListAst = erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(to_list), [LoopValueAst, z_context_ast(Context)]),
+    ListVarAst = erl_syntax:variable("LoopVar_"++z_ids:identifier()),
 
     CounterVars0 = case resolve_scoped_variable_ast("forloop", Context) of
         undefined ->
-            erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(init_counter_stats), [ListAst]);
+            erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(init_counter_stats), [ListVarAst]);
         ForLoopValue ->
-            erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(init_counter_stats), [ListAst, ForLoopValue])
+            erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(init_counter_stats), [ListVarAst, ForLoopValue])
     end,
 
     ForLoopF = fun(BaseListAst) -> erl_syntax:application(
@@ -1015,10 +1016,10 @@ for_loop_ast(IteratorList, LoopValue, Contents, EmptyPartContents, Context, Tree
 
     {CompleteForLoopAst, Info2, TreeWalker4} = case EmptyPartContents of
         none ->
-            {ForLoopF(ListAst), Info, TreeWalker3};
+            {ForLoopF(ListVarAst), Info, TreeWalker3};
         _ -> 
             {{EmptyPartAst, EmptyPartInfo}, EmptyWalker} = body_ast(EmptyPartContents, Context, TreeWalker3),
-            LAst = erl_syntax:variable("L"),
+            LAst = erl_syntax:variable("L_"++z_ids:identifier()),
             EmptyClauseAst = erl_syntax:clause(
         		 [erl_syntax:list([])], 
         		 none,
@@ -1027,9 +1028,12 @@ for_loop_ast(IteratorList, LoopValue, Contents, EmptyPartContents, Context, Tree
                 [LAst],
                 none,
                 [ForLoopF(LAst)]),
-            {erl_syntax:case_expr(ListAst, [EmptyClauseAst, LoopClauseAst]), merge_info(Info,EmptyPartInfo), EmptyWalker} 
+            {erl_syntax:case_expr(ListVarAst, [EmptyClauseAst, LoopClauseAst]), merge_info(Info,EmptyPartInfo), EmptyWalker} 
     end,
-    {{CompleteForLoopAst, merge_info(LoopValueInfo, Info2)}, TreeWalker4}.
+    ForBlockAst = erl_syntax:block_expr([
+                        erl_syntax:match_expr(ListVarAst, ListAst),
+                        CompleteForLoopAst]),
+    {{ForBlockAst, merge_info(LoopValueInfo, Info2)}, TreeWalker4}.
 
 load_ast(Names, _Context, TreeWalker) ->
     CustomTags = lists:merge([X || {identifier, _ , X} <- Names], TreeWalker#treewalker.custom_tags),
