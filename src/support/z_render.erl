@@ -71,6 +71,7 @@
     css_selector/1,
     css_selector/2,
     quote_css_selector/1,
+    render_css_selector/1,
     
     dialog/4,
     dialog_close/1,
@@ -424,5 +425,14 @@ quote_css_selector(window) -> "window";
 quote_css_selector([]) -> [];
 quote_css_selector([$'|_] = S) -> S;
 quote_css_selector([$"|_] = S) -> S;
+quote_css_selector([$$|_] = S) -> S;
 quote_css_selector(S) -> [$", S, $"].
+
+
+%% @doc Render a css selector, allow direct expressions like 
+render_css_selector(Selector) ->
+    case quote_css_selector(Selector) of
+        [$$|_] = Sel -> Sel;
+        CssSel -> [$$, $(, CssSel, $)]
+    end.
 
