@@ -15,7 +15,7 @@
 		<p>
 			<label for="new_username" style="color:white">{_ Username _}</label>
 			<input type="text" id="new_username" name="new_username" value="{{ username|escape }}" />
-			{% validate id="new_username" type={presence} %}
+			{% validate id="new_username" wait=400 type={presence} type={username_unique id=id} %}
 		</p>
 
 		<p>
