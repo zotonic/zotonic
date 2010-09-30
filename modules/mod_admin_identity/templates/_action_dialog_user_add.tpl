@@ -43,7 +43,7 @@
 		<div class="form-item">
 			<label for="new_username" style="color:white">{_ Username _}</label>
 			<input type="text" id="new_username" name="new_username" value="" />
-			{% validate id="new_username" type={presence} %}
+			{% validate id="new_username" wait=400 type={presence} type={username_unique} %}
 		</div>
 
 		<div class="form-item">
