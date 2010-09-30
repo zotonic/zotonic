@@ -34,8 +34,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Script = if
                 EventType == enterkey orelse EventType == "enterkey" ->
                     [
-                        $$, $(, z_render:quote_css_selector(z_render:css_selector(Trigger, Args)), 
-                        <<"').bind('keypress', ">>,
+                        z_render:render_css_selector(z_render:css_selector(Trigger, Args)), 
+                        <<"'.bind('keypress', ">>,
                         <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, <<"; return false; } } );\n">>
                     ];
 
@@ -72,8 +72,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
                     
                 true ->
                     [
-                        $$, $(, z_render:quote_css_selector(z_render:css_selector(Trigger, Args)),
-                        <<").bind('">>, z_convert:to_list(EventType), <<"', ">>,
+                        z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
+                        <<".bind('">>, z_convert:to_list(EventType), <<"', ">>,
                         <<"function(event) { ">>, PostbackMsgJS, ActionsJS, <<" return z_opt_cancel(this); } );\n">>
                     ]
             end,

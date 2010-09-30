@@ -31,7 +31,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
     end,
     Message = proplists:get_value(message, Args, ""),
     Delay = proplists:get_value(delay, Args, 0),
-    Script = [ <<"try { $(">>, z_render:quote_css_selector(Selector) ,<<").mask('">>, 
+    Script = [ <<"try { ">>, z_render:render_css_selector(Selector) ,<<".mask('">>, 
                 z_utils:js_escape(Message), $',$,,
                 z_convert:to_list(Delay),
                 <<"); } catch (e) {};">>],

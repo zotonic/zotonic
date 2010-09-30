@@ -29,5 +29,5 @@ render_action(_TriggerId, TargetId, Args, Context) ->
                 S -> S
             end
     end,
-    Script = [ <<"try { $(">>,z_render:quote_css_selector(Selector),<<").unmask(); } catch (e) {};">>],
+    Script = [ <<"try { ">>,z_render:render_css_selector(Selector),<<".unmask(); } catch (e) {};">>],
     {Script, Context}.
