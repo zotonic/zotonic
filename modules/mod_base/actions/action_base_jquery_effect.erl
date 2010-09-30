@@ -54,7 +54,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
         'animate'       -> io_lib:format("animate(~s, ~p, '~s');", [Options, map_speed_default(Speed), Easing])
     end,
     case z_render:css_selector(TargetId, Args) of
-        undefined -> {Script, Context};
+        Empty when Empty == undefined; Empty == []; Empty == <<>> -> {Script, Context};
         Selector -> {[z_render:render_css_selector(Selector),$.,Script], Context}
     end.
 
