@@ -35,6 +35,7 @@
     trim/2,
     trim_left/2,
     trim_right/2,
+    trim_left_func/2,
     is_string/1,
     first_char/1,
     last_char/1,
@@ -50,6 +51,8 @@
     replace/3,
     truncate/2,
     truncate/3,
+    truncatewords/2,
+    truncatewords/3,
     split_lines/1,
     escape_ical/1,
     starts_with/2,
@@ -75,27 +78,34 @@ trim(L, Char) when is_list(L) ->
 
 
 %% @doc Remove whitespace at the start the string
-trim_left(<<C, Rest/binary>> = Bin) ->
-	case C of
-		W when W =< 32 -> trim_left(Rest);
-		_ -> Bin
-	end;
-trim_left(<<>>) ->
-	<<>>;
-trim_left(L) ->
-	binary_to_list(trim_left(iolist_to_binary(L))).
+trim_left(S) ->
+    trim_left_func(S, fun(C) -> C =< 32 end).
 
 %% @doc Remove all occurences of a char at the start of a string
-trim_left(<<C, Rest/binary>> = Bin, Char) ->
-	case C of
-		Char -> trim_left(Rest, Char);
-		_ -> Bin
-	end;
-trim_left(<<>>, _Char) ->
-	<<>>;
-trim_left(L, Char) ->
-	binary_to_list(trim_left(iolist_to_binary(L), Char)).
+trim_left(S, Char) ->
+    trim_left_func(S, fun(C) -> C == Char end).
 
+
+trim_left_func(<<Char, Rest/binary>> = Bin, F) ->
+    case F(Char) of
+        true -> trim_left_func(Rest, F);
+        false -> Bin
+    end;
+trim_left_func([Char|Rest] = L, F) when is_integer(Char) ->
+    case F(Char) of
+        true -> trim_left(Rest, F);
+        false -> L
+    end;
+trim_left_func([L|Rest], F) when is_list(L); is_binary(L) ->
+    case trim_left_func(L, F) of
+        [] -> trim_left_func(Rest, F);
+        <<>> -> trim_left_func(Rest, F);
+        Other -> [Other|Rest]
+    end;
+trim_left_func(Other, _F) ->
+    Other.
+
+    
 	
 %% @doc Remove whitespace at the end of the string
 trim_right(B) when is_binary(B) ->
@@ -665,6 +675,38 @@ truncate(L, N, Append) ->
     	{Rest,[$;|Acc]};
     get_entity([C|Rest], Acc) ->
     	get_entity(Rest, [C|Acc]).
+
+
+truncatewords(S, Words) ->
+    truncatewords(S, Words, "…").
+truncatewords(S, Words, Append) when is_binary(S) ->
+    truncatewords(z_convert:to_list(S), in_space, Words, Append, []);
+truncatewords(S, Words, Append) when is_list(S) ->
+    truncatewords(S, in_space, Words, Append, []).
+
+    truncatewords(_S, _State, 0, Append, Acc) ->
+        lists:reverse(trim_left_func(Acc, fun iswordsep/1), Append);
+    truncatewords([], _State, _Words, _Append, Acc) ->
+        lists:reverse(Acc);
+    truncatewords([C|Rest], in_space, Words, Append, Acc) ->
+        case iswordsep(C) of
+            true -> truncatewords(Rest, in_space, Words, Append, [C|Acc]);
+            false -> truncatewords(Rest, in_word, Words, Append, [C|Acc])
+        end;
+    truncatewords([C|Rest], in_word, Words, Append, Acc) ->
+        case iswordsep(C) of
+            true -> truncatewords(Rest, in_space, Words-1, Append, [C|Acc]);
+            false -> truncatewords(Rest, in_word, Words, Append, [C|Acc])
+        end.
+
+    iswordsep($\s) -> true;
+    iswordsep($\n) -> true;
+    iswordsep($\r) -> true;
+    iswordsep($\t) -> true;
+    iswordsep($,) -> true;
+    iswordsep($:) -> true;
+    iswordsep($;) -> true;
+    iswordsep(_) -> false.
 
 
 %% @doc Split the binary into lines. Line seperators can be \r, \n or \r\n.
