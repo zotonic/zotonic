@@ -118,7 +118,7 @@
 			<div id="signup_username">
 				<label for="username">{_ Username _}</label>
 				<input id="username" name="username" type="text" value="" />
-				{% validate id="username" type={presence} %}
+				{% validate id="username" type={presence} type={username_unique} %}
 			</div>
 
 			<div id="signup_password1">
