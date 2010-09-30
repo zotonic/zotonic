@@ -55,7 +55,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
     end,
     case z_render:css_selector(TargetId, Args) of
         undefined -> {Script, Context};
-        Selector -> {[<<"$('">>,Selector,<<"').">>,Script], Context}
+        Selector -> {[z_render:render_css_selector(Selector),$.,Script], Context}
     end.
 
 
