@@ -32,14 +32,13 @@ render_validator(email_unique, TriggerId, TargetId, Args, Context)  ->
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {{ok,AcceptedValue}, NewContext} | {{error,Id,Error}, NewContext}
 %%          Error -> invalid | novalue | {script, Script} | novalidator | string()
-validate(postback, Id, Value, Args, Context) ->
+validate(email_unique, Id, Value, Args, Context) ->
     UserId = z_convert:to_integer(proplists:get_value(id, Args)),
     Email = z_string:to_lower(z_string:trim(Value)),
     case Email of
         [] ->
             {{ok, []}, Context};
         _ ->
-            % @todo Check all identities?  The email identity is not necessary unique.
             case m_identity:lookup_by_type_and_key_multi(email, Email, Context) of
                 [] ->
                     {{ok, Email}, Context};
@@ -55,11 +54,11 @@ validate(postback, Id, Value, Args, Context) ->
 %% @doc Handle the validation during form entry.
 event({postback, {validate, Args}, TriggerId, _TargetId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
-    IsValid = case validate(postback, TriggerId, Value, Args, Context) of
-        {{ok, _},ContextValidated} -> 
-            "true";
+    {IsValid, ContextValidated} = case validate(email_unique, TriggerId, Value, Args, Context) of
+        {{ok, _}, ContextOk} -> 
+            {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_email_unique_error"}]}, ContextOk)};
         {{error, Id, _} = Error, ContextScript} -> 
-            ContextValidated = z_validation:report_errors([{Id,Error}], ContextScript),
-            "false"
+            {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_email_unique_error"}]},
+                                    z_validation:report_errors([{Id,Error}], ContextScript))}
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
