@@ -550,64 +550,104 @@ function z_init_postback_forms()
 	})
 	.submit(function(event)
 	{
-		try { $(this).mask("", 100); } catch (e) {};
+		theForm = this;
 		
-		if ($('.tinymce', this).length > 0 && tinyMCE)
+		if ($('.tinymce', theForm).length > 0 && tinyMCE)
 		{
 			tinyMCE.triggerSave(true,true);
 		}
-
-		var arguments = $(this).formToArray();
-
-		this.clk = this.clk_x = this.clk_y = null;
-
-		var postback	= $(this).data("z_submit_postback");
-		var action		= $(this).data("z_submit_action");
-		var form_id		= $(this).attr('id');
-		var validations = $(this).formValidationPostback();
 		
-		if(!postback) 
-		{
-			postback = z_default_form_postback;
-		}
+		submitFunction = function(ev) {
+			var arguments = $(theForm).formToArray();
+
+			try { $(theForm).mask("", 100); } catch (e) {};
+			theForm.clk = theForm.clk_x = theForm.clk_y = null;
+
+			var postback	= $(theForm).data("z_submit_postback");
+			var action		= $(theForm).data("z_submit_action");
+			var form_id		= $(theForm).attr('id');
+			var validations = $(theForm).formValidationPostback();
 		
-		if(action) 
-		{
-			setTimeout(action, 10);
-		}
-
-		var files = $('input:file', this).fieldValue();
-		var found = false;
-
-		if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
-		{
-			found = true;
-		}
-		else
-		{
-			for (var j=0; j < files.length && !found; j++)
+			if(!postback) 
 			{
-				if (files[j])
+				postback = z_default_form_postback;
+			}
+		
+			if(action) 
+			{
+				setTimeout(action, 10);
+			}
+
+			var use_post = false;
+			if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
+			{
+				use_post = true;
+			}
+			else
+			{
+				var files = $('input:file', theForm).fieldValue();
+				for (var j=0; j < files.length && !found; j++) 
 				{
-					found = true;
+					if (files[j])
+					{
+						use_post = true;
+					}
 				}
 			}
-		}
 		
-		if(found) 
-		{
-			$(this).postbackFileForm(form_id, postback, validations);
-		}
-		else
-		{
-			z_queue_postback(form_id, postback, arguments.concat(validations)); 
-		}
-
-		event.stopPropagation();
-		return false;
+			if (use_post) 
+			{
+				$(theForm).postbackFileForm(form_id, postback, validations);
+			}
+			else
+			{
+				z_queue_postback(form_id, postback, arguments.concat(validations)); 
+			}
+			ev.stopPropagation();
+			return false;
+		};
+		
+		return z_form_submit_validated_delay(theForm, event, submitFunction);
 	})
 	.attr('action', 'pb:installed');
 }
+
+function z_form_submit_validated_delay(theForm, event, submitFunction) 
+{
+	var validations = $(theForm).formValidationPostback();
+	
+	if (validations.length > 0 && !event.zIsValidated)
+	{
+		// There are form validations and they are not done yet.
+		if (!event.zAfterValidation) 
+		{
+			event.zAfterValidation = new Array();
+		}
+		event.zAfterValidation.push({ func: submitFunction, context: theForm });
+		return true;
+	}
+	else
+	{
+		// No form validations, or already validated
+		return submitFunction.call(theForm, event);
+	}
+}
+
+function z_form_submit_validated_do(event)
+{
+	var ret = true;
+	
+	if (event.zAfterValidation)
+	{
+		for (var f in event.zAfterValidation) 
+		{
+			ret = event.zAfterValidation[f].func.call(f.context, event) && ret;
+		}
+		event.zAfterValidation = new Array();
+	}
+	return ret;
+}
+
 
 $.fn.postbackFileForm = function(trigger_id, postback, validations)
 {

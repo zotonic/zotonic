@@ -613,7 +613,8 @@ LiveValidationForm.prototype = {
     var self = this;
 
     $(element).submit(function(event) {
-        if (self.skipValidations <= 0){
+        event.zIsValidated = true;
+        if (self.skipValidations == 0) {
             var result = true;
             var async = new Array();
 
@@ -628,7 +629,8 @@ LiveValidationForm.prototype = {
             }
 
             if (async.length > 0){
-                self.submitWaitForAsync = async;
+                if (result)
+                    self.submitWaitForAsync = async;
                 for(var i=0; i<async.length; i++){
                     async[i].validate(true);
                 }
@@ -640,11 +642,14 @@ LiveValidationForm.prototype = {
                 event.stopImmediatePropagation();
                 return false;
             } else {
-                return true;
+                return z_form_submit_validated_do(event);
             }
         } else {
             self.skipValidations--;
-            return true;
+            if (self.skipValidations == 0)
+                return z_form_submit_validated_do(event);
+            else
+                return false;
         }
     })
   },
