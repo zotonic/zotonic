@@ -31,7 +31,9 @@
 -include_lib("include/zotonic.hrl").
 
 %% To enable wmtrace, return: mod_development:wmtrace(DispatchArgs). 
-init(DispatchArgs) -> mod_development:wmtrace(DispatchArgs). %{ok, DispatchArgs}.
+init(DispatchArgs) -> 
+    {ok, DispatchArgs}.
+    % mod_development:wmtrace(DispatchArgs).
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
