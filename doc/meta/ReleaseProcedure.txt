@@ -6,6 +6,9 @@ New feature release:
 
 * Copy the RELEASE file into the NEWS file.
 
+* Check/change download graphic in priv/sites/zotonicwww/lib/images/download_zotonic.xcf,
+  and export to .png in the same dir.
+
 * Make a release branch:
   hg branch release-0.4.x
 
@@ -31,8 +34,7 @@ New feature release:
 
 * Update the zotonic.com website:
   * Convert release notes to HTML put on zotonic.com site
-  * Change download graphic (release nr)
-  * Change download page to link to new release
+  * hg up on miffy for zotonic.com (download graphic)
 
 * Announce on zotonic-users, zotonic-developers, erlang-questions
 
