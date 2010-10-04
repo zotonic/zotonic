@@ -586,7 +586,7 @@ function z_init_postback_forms()
 			else
 			{
 				var files = $('input:file', theForm).fieldValue();
-				for (var j=0; j < files.length && !found; j++) 
+				for (var j=0; j < files.length && !use_post; j++) 
 				{
 					if (files[j])
 					{
