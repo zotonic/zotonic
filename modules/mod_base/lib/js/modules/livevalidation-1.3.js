@@ -252,7 +252,7 @@ LiveValidation.prototype =
      * @var validationParamsObj {Object} - parameters for doing the validation, if wanted or necessary
      * @return {Boolean} - whether the all the validations passed or if one failed
      */
-    doValidations: function(isSubmit){
+    doValidations: function(isSubmit, submitTrigger){
         var result;
         
         this.validationFailed = false;
@@ -264,10 +264,10 @@ LiveValidation.prototype =
                 case Validate.Confirmation:
                 case Validate.Acceptance:
                   this.displayMessageWhenEmpty = true;
-                  result = this.validateElement(validation.type, validation.params, isSubmit); 
+                  result = this.validateElement(validation.type, validation.params, isSubmit, submitTrigger); 
                   break;
                 default:
-                  result = this.validateElement(validation.type, validation.params, isSubmit);
+                  result = this.validateElement(validation.type, validation.params, isSubmit, submitTrigger);
                   break;
             }
             this.validationFailed = !result;
@@ -294,9 +294,11 @@ LiveValidation.prototype =
      *
      * @var validationFunction {Function} - validation function to be used (ie Validate.Presence )
      * @var validationParamsObj {Object} - parameters for doing the validation, if wanted or necessary
+     * @var isSubmit {Boolean} - is this a form submit or an individual field check
+     * @var submitTrigger {Object} - the element that triggered the submit
      * @return {Boolean} or {"async"} - whether the validation has passed, failed or waits for an async server side check
      */
-    validateElement: function(validationFunction, validationParamsObj, isSubmit){
+    validateElement: function(validationFunction, validationParamsObj, isSubmit, submitTrigger){
         var value = this.getValue();
         if(validationFunction == Validate.Acceptance){
             if(this.elementType != LiveValidation.CHECKBOX) 
@@ -305,12 +307,9 @@ LiveValidation.prototype =
         }
         var isValid = true;
         try {
-            isValid = validationFunction(value, validationParamsObj);
+            isValid = validationFunction(value, validationParamsObj, isSubmit, submitTrigger);
             if (isValid == 'async') {
                 this.validationAsync = true;
-                if (isSubmit){
-                    
-                }
             }
         } 
         catch(error) {
@@ -343,11 +342,13 @@ LiveValidation.prototype =
     /**
      * Do all the validations and fires off the onValid or onInvalid callbacks
      *
+     * @var isSubmit {Boolean} - is this a form submit or an individual field check
+     * @var submitTrigger {Object} - the element that triggered the submit
      * @return {Boolean} - whether all the validations passed or if one failed
      */
-    validate: function(isSubmit){
+    validate: function(isSubmit, submitTrigger){
         if(!this.element.disabled) {
-            var isValid = this.doValidations(isSubmit);
+            var isValid = this.doValidations(isSubmit, submitTrigger);
             if (this.validationAsync) {
                 this.onAsync();
                 return false;
@@ -607,7 +608,7 @@ LiveValidationForm.prototype = {
     this.fields = [];
     this.skipValidations = 0;
     this.submitWaitForAsync = new Array();
-    
+
     // preserve the old onsubmit event
     this.oldOnSubmit = this.element.onsubmit || function(){};
     var self = this;
@@ -619,12 +620,14 @@ LiveValidationForm.prototype = {
             var async = new Array();
 
             for(var i = 0, len = self.fields.length; i < len; ++i ) {
-                if (self.fields[i].isAsync()){
-                    async.push(self.fields[i]);
-                } else {
-                    var valid = self.fields[i].validate(true);
-                    if(result) 
-                        result = valid;
+                if (!self.fields[i].element.disabled) {
+                    if (self.fields[i].isAsync()) {
+                        async.push(self.fields[i]);
+                    } else {
+                        var valid = self.fields[i].validate(true, this.clk);
+                        if(result) 
+                            result = valid;
+                    }
                 }
             }
 
@@ -632,7 +635,7 @@ LiveValidationForm.prototype = {
                 if (result)
                     self.submitWaitForAsync = async;
                 for(var i=0; i<async.length; i++){
-                    async[i].validate(true);
+                    async[i].validate(true, this.clk);
                 }
                 result = false;
             }
@@ -1037,12 +1040,12 @@ var Validate = {
      *              args {Object}     - an object of named arguments that will be passed to the custom function so are accessible through this object within it 
      *                            (DEFAULT: {})
      */
-    Custom: function(value, paramsObj){
+    Custom: function(value, paramsObj, isSubmit, submitTrigger){
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
         var message = paramsObj.failureMessage || "Not valid.";
-        if(!against(value, args)) Validate.fail(message);
+        if(!against(value, args, isSubmit, submitTrigger)) Validate.fail(message);
         return true;
     },
 
@@ -1051,18 +1054,20 @@ var Validate = {
      * Performs a postback, delays the check till the postback is returned. till then a spinner is shown
      * next to the input element. 
      */
-    Postback: function(value, paramsObj, validateSeqNr) {
+    Postback: function(value, paramsObj, isSubmit, submitTrigger) {
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
         var message = paramsObj.failureMessage || "Not valid.";
 
-        if (!against(value, args)) {
+        if (!against(value, args, isSubmit, submitTrigger)) {
             Validate.fail(message);
         } else if (paramsObj.z_postback) {
             // Perform the async postback
             extraParams = new Array();
-            extraParams.push({name: 'validate_seq_nr', value: validateSeqNr+''})
+            if (isSubmit) {
+                extraParams.push({name: 'z_submitter', value: (submitTrigger && submitTrigger.name) ? submitTrigger.name : ''});
+            }
             z_queue_postback(paramsObj.z_id, paramsObj.z_postback, extraParams); 
             return 'async';
         } else {
