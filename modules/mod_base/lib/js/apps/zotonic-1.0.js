@@ -871,7 +871,7 @@ $.fn.formValidationPostback = function()
 		var el = els[i];
 		var n  = el.name;
 
-		if (n)
+		if (n && !el.disabled)
 		{
 			var v = $(el).data("z_postback_validation");
 			if (v)
@@ -1058,6 +1058,7 @@ $.fn.formToArray = function(semantic) {
 		var n = el.name;
 		if (!n) continue;
 		if ($(el).hasClass("nosubmit")) continue;
+		if ($(el).attr("type") == 'submit') continue;
 
 		var v = $.fieldValue(el, true);
 		if (v && v.constructor == Array) {
@@ -1074,9 +1075,9 @@ $.fn.formToArray = function(semantic) {
 		var n = sub.name;
 		if (n && !sub.disabled) {
 			a.push({name: n, value: ''});
+			a.push({name: 'z_submitter', value: n});
 		}
 	}
-
 
 	return a;
 };
