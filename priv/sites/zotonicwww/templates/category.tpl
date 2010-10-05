@@ -29,6 +29,9 @@
 			<h1>{{ m.rsc[id].title }}</h1>
 			{% if m.rsc[id].summary %}<p class="summary">{{ m.rsc[id].summary }}</p>{% endif %}
 			{{ m.rsc[id].body }}
+
+            <hr />
+            {% include "_block_search.tpl" %}
 		</div>
 	</article>
 	
