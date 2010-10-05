@@ -55,5 +55,5 @@ render(Params, Vars, Context) ->
         false -> [{data, [{values, Values}]}]
     end,
     
-    Params2 = [{axes,Axes}, {type,Type}, {data,Data2} | Params1],
+    Params2 = [{axis,Axes}, {type,Type}, {data,Data2} | Params1],
     scomp_base_google_chart:render(Params2, Vars, Context).
