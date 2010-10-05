@@ -13,5 +13,7 @@
     {documentation,  ["documentation", id],       resource_page,  [ {template, "documentation.tpl"} ]},
     {documentation,  ["documentation", id, slug], resource_page,  [ {template, "documentation.tpl"} ]},
     {gallery,   ["gallery", id],            resource_page,  [ {template, "gallery.tpl"} ]},
-    {gallery,   ["gallery", id, slug],      resource_page,  [ {template, "gallery.tpl"} ]}
+    {gallery,   ["gallery", id, slug],      resource_page,  [ {template, "gallery.tpl"} ]},
+    %% Search results
+    {search,   ["search"],      resource_template,  [ {template, "search.tpl"} ]}
 ].

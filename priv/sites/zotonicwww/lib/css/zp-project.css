@@ -514,3 +514,12 @@ div#logon_box input[type=text], div#logon_box input[type=password] {
 		.last-feature {
 			margin: 0;
 		}
+
+.pager li {
+	display: inline;
+	margin: 0 6px 0 0;
+}
+
+.pager li.current {
+    font-weight: bold;
+}
