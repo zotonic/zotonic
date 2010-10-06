@@ -3,9 +3,15 @@ body {
     padding:0px;
 }
 
-canvas#v3map {
+canvas#v3map {    
     margin-top:2em;
     z-index: 1;
+}
+
+div#canvaspanel {
+    overflow:auto;
+    height:600;
+    width:700;
 }
 
 div#sizetest {
