@@ -8,7 +8,7 @@
 
 -module(z_tracer).
 -author('Atilla Erdodi <atilla@maximonster.com>').
--export([start/0, start/1, stop/0]). % API
+-export([start/0, start/1, stop/0, get_tracer/0]). % API
 -export([do_log/1]). % logger callback function 
 -export([tracefun/2]). % dbg callback function
 
@@ -37,6 +37,9 @@ start(DoLogCallback) when is_function(DoLogCallback) ->
 
 stop() ->
     dbg:stop_clear().
+
+get_tracer() ->
+    dbg:get_tracer().
    
 traced_funs() ->
     [{notify, 2}, {notify1, 2}, 
