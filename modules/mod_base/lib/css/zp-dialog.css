@@ -26,6 +26,7 @@ limitations under the License.
 	top: 200px;
 	width: 450px;
 	height: auto;
+	z-index: 998;
 }
 
 .dialog-top {
@@ -94,7 +95,7 @@ limitations under the License.
 	position: relative;
 	top: 0;
 	width: 100%;
-	z-index: 3;
+	z-index: 999;
 }
 
 .dialog-bottom-left {
