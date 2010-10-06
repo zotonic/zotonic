@@ -17,9 +17,12 @@
 -module(webmachine_resource, [R_Mod, R_ModState, R_ModExports, R_Trace]).
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
--export([wrap/2]).
+-export([wrap/3]).
 -export([do/2,log_d/1,stop/0]).
 -export([modstate/0]).
+
+-include_lib("wm_reqdata.hrl").
+-include_lib("webmachine_logger.hrl").
 
 default(ping) ->
     no_default;
@@ -101,12 +104,14 @@ default(finish_request) ->
 default(_) ->
     no_default.
           
-wrap(Mod, Args) ->
+wrap(ReqData, Mod, Args) ->
     case Mod:init(Args) of
 	{ok, ModState} ->
 	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
     {{trace, Dir}, ModState} ->
         {ok, File} = open_log_file(Dir, Mod),
+        ReqId = (ReqData#wm_reqdata.log_data)#wm_log_data.req_id,
+        log_reqid(File, ReqId),
         log_decision(File, v3b14),
         log_call(File, attempt, Mod, init, Args),
         log_call(File, result, Mod, init, {{trace, Dir}, ModState}),
@@ -152,6 +157,11 @@ log_d(DecisionID) ->
 
 stop() -> close_log_file(R_Trace).
 
+
+log_reqid(false, _ReqId) ->
+    nop;
+log_reqid(File, ReqId) ->
+    io:format(File, "{req_id, ~p}.~n", [ReqId]).
 
 log_decision(false, _DecisionID) ->
     nop;
