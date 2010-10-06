@@ -29,5 +29,16 @@ vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
     Id       = proplists:get_value(id, Params, <<>>),
     TargetId = proplists:get_value(target,Params,Id),
-    Context1 = z_render:validator(Id, TargetId, z_validation:rename_args(Params), Context),
-    {ok, Context1}.
+    case proplists:get_all_values(on_form_invalid, Params) of
+        [] ->
+            {ok, z_render:validator(Id, TargetId, z_validation:rename_args(Params), Context)};
+        OnInvalid ->
+            ContextWire = lists:foldl(
+                                fun (Act, Ctx) ->
+                                    z_render:wire(Act, Ctx)
+                                end,
+                                z_context:new(Context),
+                                lists:flatten(OnInvalid)),
+            Script = iolist_to_binary(z_script:get_script(ContextWire)),
+            {ok, z_script:add_script(["z_validation_on_invalid('",Id,"', function() {",Script,"});"], Context)}
+   end.
