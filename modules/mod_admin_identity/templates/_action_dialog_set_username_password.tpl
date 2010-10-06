@@ -21,7 +21,11 @@
 		<p>
 			<label for="new_password" style="color:white">{_ Password _}</label>
 			<input type="text" id="new_password" name="new_password" value="{{ password|escape }}" />
-			{% validate id="new_password" type={presence} %}
+			{% if m.config.mod_admin_identity.password_regex.value %}
+				{% validate id="new_password" type={presence} type={format pattern=m.config.mod_admin_identity.password_regex.value} %}
+			{% else %}
+				{% validate id="new_password" type={presence} %}
+			{% endif %}
 		</p>
 		
 		<button type="submit">{_ Save _}</button>
