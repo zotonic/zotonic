@@ -960,6 +960,17 @@ function z_set_validator_postback(id, postback)
 	}
 }
 
+function z_validation_on_invalid(id, on_invalid)
+{
+	$('#'+id).each(function() {
+		if (this.tagName.toLowerCase() == 'form')
+		{
+			var formObj = LiveValidationForm.getInstance(this);
+			formObj.onInvalid = on_invalid;
+		}
+	});
+}
+
 
 function z_async_validation_result(id, isValid, testedValue)
 {
