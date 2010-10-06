@@ -64,12 +64,12 @@ loop(MochiReq) ->
            end,
     Path = wrq:path(ReqData),
     {Dispatch, ReqDispatch} = case application:get_env(webmachine, dispatcher) of
-        {ok, Dispatcher} ->
-            Dispatcher:dispatch(Host, Path, ReqData);
-        undefined ->
-            {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
-            {webmachine_dispatcher:dispatch(Host, Path, DispatchList), ReqData}
-    end,
+                                  {ok, Dispatcher} ->
+                                      Dispatcher:dispatch(Host, Path, ReqData);
+                                  undefined ->
+                                      {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
+                                      {webmachine_dispatcher:dispatch(Host, Path, DispatchList), ReqData}
+                              end,
     case Dispatch of
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
@@ -84,7 +84,7 @@ loop(MochiReq) ->
             end;
         {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath} ->
             BootstrapResource = webmachine_resource:new(x,x,x,x),
-            {ok, Resource} = BootstrapResource:wrap(Mod, ModOpts),
+            {ok, Resource} = BootstrapResource:wrap(ReqData, Mod, ModOpts),
             {ok,RD1} = webmachine_request:load_dispatch_data(Bindings,HostTokens,Port,PathTokens,AppRoot,StringPath,ReqDispatch),
             {ok,RD2} = webmachine_request:set_metadata('resource_module', Mod, RD1),
             try 
@@ -124,8 +124,8 @@ get_option(Option, Options, Default) ->
     
 host_headers(ReqData) ->
     [ V || V <- [wrq:get_req_header_lc(H, ReqData)
-                             || H <- ["x-forwarded-host",
-                                      "x-forwarded-server",
-                                      "host"]],
-           V /= undefined].
+                 || H <- ["x-forwarded-host",
+                          "x-forwarded-server",
+                          "host"]],
+     V /= undefined].
            

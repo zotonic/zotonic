@@ -48,6 +48,7 @@
 	{% else %}
 	<div>
 		{% all include "_z_system_button.tpl" %}
+                {% all include "_z_trace_button.tpl" %}
 	</div>
 	<div style="clear:left" id="notices"></div>
 	{% endif %}

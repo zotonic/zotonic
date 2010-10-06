@@ -608,6 +608,7 @@ LiveValidationForm.prototype = {
     this.fields = [];
     this.skipValidations = 0;
     this.submitWaitForAsync = new Array();
+    this.onInvalid = function(){};
 
     // preserve the old onsubmit event
     this.oldOnSubmit = this.element.onsubmit || function(){};
@@ -639,6 +640,9 @@ LiveValidationForm.prototype = {
                 }
                 result = false;
             }
+			else if (!result) {
+				this.onInvalid.call(this);
+			}
             
             if (!result) {
                 // Either validation failed or we are waiting for more async results.
@@ -708,6 +712,9 @@ LiveValidationForm.prototype = {
               }
           }
       } else {
+		  if (this.submitWaitForAsync.length > 0) {
+			 this.onInvalid.call(this);
+		  }
           this.submitWaitForAsync = new Array();
       }
   }
