@@ -622,8 +622,12 @@ window.onload = function() {
     var scale = 0.25;
     var coy = canvas.offsetTop;
     function findDecision(ev) {
-        var x = (ev.clientX+window.pageXOffset)/scale;
-        var y = (ev.clientY+window.pageYOffset-coy)/scale;
+        var canvaspanel = document.getElementById('canvaspanel');
+        var scroll_x = canvaspanel.scrollLeft;
+        var scroll_y = canvaspanel.scrollTop;
+        
+        var x = (ev.clientX+window.pageXOffset)/scale+scroll_x;
+        var y = (ev.clientY+window.pageYOffset-coy)/scale+scroll_y;
 
         for (var i = trace.length-1; i >= 0; i--) {
             if (x >= trace[i].x-19 && x <= trace[i].x+19 &&
