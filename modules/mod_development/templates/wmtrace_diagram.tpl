@@ -20,7 +20,9 @@
 		<button id="zoomout">zoom out</button>
 		<button id="zoomin">zoom in</button>
 
-		<canvas id="v3map" width="3138" height="2184"></canvas>
+		<div id="canvaspanel">
+                    <canvas id="v3map" width="3138" height="2184"></canvas>
+                </div>
 		
 		<div id="sizetest"></div>
 		<div id="preview">

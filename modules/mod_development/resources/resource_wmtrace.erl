@@ -24,11 +24,10 @@
 
 -export([
     resource_exists/2
-]).
+        ]).
 
 
 -include_lib("resource_html.hrl").
-
 
 resource_exists(RD, Ctx) ->
     case wrq:disp_path(RD) of
@@ -55,29 +54,30 @@ html(Context) ->
         undefined ->
             TraceDir = mod_development:wmtrace_dir(),
             Files = lists:reverse(
-                      lists:sort(
-                        filelib:fold_files(TraceDir,
-                                           ".*\.wmtrace",
-                                           false,
-                                           fun(F, Acc) ->
-                                                   [filename:basename(F)|Acc]
-                                           end,
-                                           []))),
+                lists:sort(
+                filelib:fold_files(TraceDir,
+                                   ".*\.wmtrace",
+                                   false,
+                                   fun(F, Acc) ->
+                                           [filename:basename(F)|Acc]
+                                   end,
+                                   []))),
             Vars = [{files, Files}, {page_admin_wmtrace, true}],
             Html = z_template:render("wmtrace_list.tpl", Vars, Context),
-        	z_context:output(Html, Context);
+            z_context:output(Html, Context);
         TraceFile ->
             Filename = filename:absname(TraceFile),
             {ok, Data} = file:consult(Filename),
-            {Request, Response, Trace} = encode_trace(Data),
+            {Request, Response, {TrReqId, Trace}} = encode_trace(Data),
             Vars = [
                 {filename, filename:basename(TraceFile)},
                 {request, Request},
                 {response, Response},
+                {trace_req_id, TrReqId},
                 {trace, Trace}
-            ],
+                   ],
             Html = z_template:render("wmtrace_diagram.tpl", Vars, Context),
-        	z_context:output(Html, Context)
+            z_context:output(Html, Context)
     end.
 
 
@@ -87,16 +87,21 @@ html(Context) ->
 %%
 
 encode_trace(Data) ->
-    {Request, Response, Trace} = aggregate_trace(Data),
+    {Request, Response, {TrReqId, Trace}} = aggregate_trace(Data),
     {json_encode(encode_request(Request)),
      json_encode(encode_response(Response)),
-     json_encode({array, [ encode_trace_part(P) || P <- Trace ]})}.
+     {TrReqId, json_encode({array, [ encode_trace_part(P) || P <- Trace ]})}}.
 
 aggregate_trace(RawTrace) ->
+    {TrReqId, RestRawTrace} = case RawTrace of        
+                                  [{req_id, ReqId} | RestRawTrace_] -> 
+                                      {ReqId, RestRawTrace_};
+                                  RawTrace_ -> {undefined, RawTrace_}
+                              end,
     {Request, Response, Trace} = lists:foldl(fun aggregate_trace_part/2,
                                              {undefined, 500, []},
-                                             RawTrace),
-    {Request, Response, lists:reverse(Trace)}.
+                                             RestRawTrace),
+    {Request, Response, {TrReqId, lists:reverse(Trace)}}.
 
 aggregate_trace_part({decision, Decision}, {Q, R, Acc}) ->
     BDN = base_decision_name(Decision),
@@ -144,7 +149,7 @@ base_decision_name(Decision) ->
 
 encode_request(ReqData) when is_record(ReqData, wm_reqdata) ->
     {struct, [{"method", atom_to_list(
-                           wrq:method(ReqData))},
+        wrq:method(ReqData))},
               {"path", wrq:raw_path(ReqData)},
               {"headers", encode_headers(wrq:req_headers(ReqData))},
               {"body", case ReqData#wm_reqdata.req_body of
@@ -156,7 +161,7 @@ encode_request(ReqData) when is_record(ReqData, wm_reqdata) ->
     
 encode_response(ReqData) ->
     {struct, [{"code", integer_to_list(
-                         wrq:response_code(ReqData))},
+        wrq:response_code(ReqData))},
               {"headers", encode_headers(wrq:resp_headers(ReqData))},
               {"body", lists:flatten(io_lib:format("~s", [wrq:resp_body(ReqData)]))}]}.
 
@@ -173,8 +178,8 @@ encode_trace_part({Decision, Calls}) ->
                            {"function", Function},
                            {"input", encode_trace_io(Input)},
                            {"output", encode_trace_io(Output)}]}
-                         || {Module, Function, Input, Output}
-                                <- lists:reverse(Calls) ]}}]}.
+                        || {Module, Function, Input, Output}
+                        <- lists:reverse(Calls) ]}}]}.
 
 encode_trace_io(wmtrace_null) -> null;
 encode_trace_io(wmtrace_not_exported) -> "wmtrace_not_exported";
