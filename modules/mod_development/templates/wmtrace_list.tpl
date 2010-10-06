@@ -20,7 +20,7 @@
 					<a href="{% url wmtrace star=filename %}" class="clearfix">
 						<span class="zp-90">{{ filename|escape }}</span>
 						<span class="zp-10">
-							{% button text="view" action={redirect dispatch=wmtrace star=filename} %}
+							{% button text="view" action={redirect dispatch="wmtrace" star=filename} %}
 						</span>
 					</a>
 				</li>
