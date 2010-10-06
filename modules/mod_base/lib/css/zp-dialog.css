@@ -228,17 +228,17 @@ h5.dialog-title {
 /* tabs in dialog
 ------------------------------------------------------- */
 
-.ui-tabs-nav {
+.dialog .ui-tabs-nav {
 	margin: 0;
 }
 
-.ui-tabs-nav li {
+.dialog .ui-tabs-nav li {
 	display: block;
 	float: left;
 	margin: 0 1px 0 0;
 }
 
-	.ui-tabs-nav li a {
+	.dialog .ui-tabs-nav li a {
 		color: #fff;
 		padding: 4px 8px;
 		-moz-border-radius-topright: 6px;
@@ -251,12 +251,12 @@ h5.dialog-title {
 		font-size: 11px;
 	}
 	
-	li.ui-state-active a {
+	.dialog li.ui-state-active a {
 		text-shadow: 1px 2px 2px #000;
 		color: #fff;
 	}
 	
-	.ui-tabs-panel {
+	.dialog .ui-tabs-panel {
 		padding: 9px;
 		-moz-border-radius-bottomleft: 6px;
 		-moz-border-radius-bottomright: 6px;
@@ -272,7 +272,7 @@ h5.dialog-title {
 		min-height: 40px;
 	}
 
-	.ui-tabs-hide {
+	.dialog .ui-tabs-hide {
 		display: none !important; 
 	}
 
