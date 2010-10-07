@@ -34,7 +34,8 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context2 = z_context:ensure_all(Context1),
     ContextNoCookie = resource_logon:reset_rememberme_cookie(Context2),
     ContextLogOff = z_auth:logoff(ContextNoCookie),
-    ?WM_REPLY(true, ContextLogOff).
+    ContextNoSession = z_session_manager:stop_session(ContextLogOff),
+    ?WM_REPLY(true, ContextNoSession).
 
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
