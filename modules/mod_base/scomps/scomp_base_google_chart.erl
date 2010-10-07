@@ -5,7 +5,7 @@
 %%
 %% @doc Generate a google chart for a dataset
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2010 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -116,10 +116,11 @@ render(Params, _Vars, Context) ->
     		<<>>        -> <<>>;
     		AxesRecords ->			
     			ProcessedAxes = [process_axis(N - 1, lists:nth(N, AxesRecords), Context) || N <- lists:seq(1, length(AxesRecords))],
+    			
     			AxesPositions = "&chxt=" ++ string:join([X || [X, _, _] <- ProcessedAxes], ","),
-    			AxesLabels    = "&chxl=" ++ string:join([X || [_, X, _] <- ProcessedAxes], "|"),
+    			AxesScaling   =                         [X || [_, X, _] <- ProcessedAxes]     ,
     			AxesColors    = "&chxs=" ++ string:join([X || [_, _, X] <- ProcessedAxes], "|"),
-    			AxesPositions ++ AxesLabels ++ AxesColors
+    			AxesPositions ++ AxesScaling ++ AxesColors
     	end,
 	
 	% Data...
@@ -188,10 +189,20 @@ process_axis(N, {axis, Axis}, Context) ->
             		OtherPosition -> erlang:error({unknown_axis_position, OtherPosition})
             	end,
 
-	StringLabels = [make_label(X, Context) || X <- proplists:get_value(labels, Axis, [])],
-	Labels       = integer_to_list(N) ++ ":|" ++ string:join(StringLabels, "|"),
 	Style        = io_lib:format("~b,~s,~b", [N, z_convert:to_list(Color), FontSize]),
-	[Position, Labels, Style].
+	Scaling      = case {proplists:get_value(labels, Axis, []), proplists:get_value(range, Axis, [])} of
+	    {LabelsP, []} when is_list(LabelsP) -> 
+		StringLabels = [make_label(X, Context) || X <- LabelsP],
+		Labels       = integer_to_list(N) ++ ":|" ++ string:join(StringLabels, "|"),
+		"&chxl=" ++ Labels;
+		
+	    {[],  Range} when is_list(Range)  -> 
+		Format = string:join(["~p" || _X <- [c | Range] ], ","),
+		"&chxr=" ++ io_lib:format(Format, [N | Range]);
+		
+	    _ -> ""  end,
+	[Position, Scaling, Style].
+	
 	
 process_data(_N, {data, Data}) ->
     LineWidth    = proplists:get_value(line_width,  Data, 1),
