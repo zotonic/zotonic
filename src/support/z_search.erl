@@ -109,6 +109,8 @@ search(Name, Limit, Context) ->
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
 %% @spec search_result(Result, Limit, Context) -> #search_result
+search_result(L, _Limit, _Context) when is_list(L) ->
+    #search_result{result=L};
 search_result(#search_result{} = S, _Limit, _Context) ->
     S;
 search_result(#search_sql{} = Q, Limit, Context) ->
