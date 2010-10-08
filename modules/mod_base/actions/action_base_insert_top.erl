@@ -23,5 +23,5 @@
     render_action/4
 ]).
 
-render_action(_TriggerId, TargetId, Args, Context) ->
-    action_base_update:render_update(insert_top, TargetId, Args, Context).
+render_action(TriggerId, TargetId, Args, Context) ->
+    action_base_update:render_update(insert_top, TriggerId, TargetId, Args, Context).

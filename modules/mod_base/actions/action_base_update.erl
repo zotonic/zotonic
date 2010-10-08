@@ -21,21 +21,21 @@
 -include("zotonic.hrl").
 -export([
     render_action/4,
-    render_update/4,
+    render_update/5,
     event/2
 ]).
 
-render_action(_TriggerId, TargetId, Args, Context) ->
-    render_update(update, TargetId, Args, Context).
+render_action(TriggerId, TargetId, Args, Context) ->
+    render_update(update, TriggerId, TargetId, Args, Context).
     
-render_update(Method, TargetId, Args, Context) ->
+render_update(Method, TriggerId, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
         undefined -> proplists:get_value(text, Args, "");
         Template -> #render{template=Template, vars=Args}
     end,
     case {TargetId, Html} of
         {undefined,_} -> render_inline(Method, TargetId, Html, Args, Context);
-        {_,#render{}} -> render_postback(Method, TargetId, Html, Args, Context);
+        {_,#render{}} -> render_postback(Method, TriggerId, TargetId, Html, Args, Context);
         {_,_} -> render_static(Method, TargetId, Html, Args, Context)
     end.
 
@@ -73,8 +73,8 @@ render_static(Method, TargetId, Html, Args, Context) ->
             end
     end.
 
-render_postback(Method, TargetId, Html, Args, Context) ->
-    {PostbackMsgJS, _PickledPostback} = z_render:make_postback({render, Method, Html, Args}, undefined, TargetId, TargetId, ?MODULE, Context),
+render_postback(Method, TriggerId, TargetId, Html, Args, Context) ->
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback({render, Method, Html, Args}, undefined, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 event({postback, {render, Method, Html, Args}, _TriggerId, TargetId}, Context) ->
