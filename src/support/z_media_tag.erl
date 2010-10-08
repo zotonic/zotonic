@@ -187,8 +187,8 @@ filename_to_filepath(Filename, #context{host=Host} = Context) ->
     case Filename of
         "/" ++ _ ->
             Filename;
-        "lib/" ++ _ -> 
-            case z_module_indexer:find(lib, Filename, Context) of
+        "lib/" ++ RelFilename -> 
+            case z_module_indexer:find(lib, RelFilename, Context) of
                 {ok, Libfile} -> Libfile;
                 _ -> Filename
             end;
