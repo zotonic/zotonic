@@ -23,6 +23,9 @@
     init/1, 
     forbidden/2,
     upgrades_provided/2,
+    charsets_provided/2,
+    content_types_provided/2,
+    provide_content/2,
     websocket_start/2,
     loop/4,
     send_loop/2,
@@ -49,6 +52,19 @@ upgrades_provided(ReqData, Context) ->
         {"WebSocket", websocket_start}
     ], ReqData, Context}.
 
+charsets_provided(ReqData, Context) ->
+    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+
+content_types_provided(ReqData, Context) ->
+    {[{"text/html", provide_content}], ReqData, Context}.
+
+provide_content(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_qs(Context1),
+    Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
+    Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context), Context3),
+    {Output, OutputContext} = z_context:output(Rendered, Context3),
+    ?WM_REPLY(Output, OutputContext).
 
 %% @doc Initiate the websocket connection upgrade
 websocket_start(ReqData, Context) ->
