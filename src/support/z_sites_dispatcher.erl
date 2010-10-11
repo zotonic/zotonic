@@ -251,11 +251,13 @@ get_dispatch_host(_Host, []) ->
     undefined;
 get_dispatch_host(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
     {ok, DL};
+get_dispatch_host(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
+    {ok, DL};
 get_dispatch_host(Host, [_|Rest]) ->
     get_dispatch_host(Host, Rest).
 
 
-%% @doc Search the host where the req hostname is an alias of main host
+%% @doc Search the host where the req hostname is an alias of main host.
 get_dispatch_alias(_Host, []) ->
     undefined;
 get_dispatch_alias(Host, [#wm_host_dispatch_list{hostalias=Alias} = DL|Rest]) ->

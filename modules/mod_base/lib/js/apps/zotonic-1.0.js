@@ -304,23 +304,40 @@ function z_progress(id, value)
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
-function z_stream_start(hostname)
+function z_stream_start(host)
 {
 	if (!z_ws && !z_comet_is_running)
 	{
 		if ("WebSocket" in window) 
 		{
-			z_websocket_start(hostname);
+			z_websocket_start(host);
 		}
 		else
 		{
-			setTimeout("z_comet();", 2000);
+			setTimeout(function() { z_comet(host); }, 2000);
 			z_comet_is_running = true;
 		}
 	}
 }
 
-function z_comet() 
+function z_comet(host) 
+{
+	if (host != window.location.host)
+	{
+		document.domain = window.location.host;
+
+		var url = 'http://' + host + "/comet/subdomain?z_pageid" + urlencode(z_pageid);
+		var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
+		comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+		comet.appendTo("body");
+	}
+	else
+	{
+		z_comet_host()
+	}
+}
+
+function z_comet_host()
 {
 	$.ajax({ 
 		url: '/comet',
@@ -329,30 +346,35 @@ function z_comet()
 		dataType: 'text',
 		success: function(data, textStatus) 
 		{
-			try 
-			{
-				eval(data);
-				z_init_postback_forms();
-			} 
-			catch (e)
-			{
-				$.misc.error("Error evaluating ajax return value: " + data);
-				$.misc.warn(e);
-			}
-			setTimeout("z_comet();", 1000);
+			z_comet_data(data);
+			setTimeout(function() { z_comet_host(); }, 1000);
 		},
 		error: function(xmlHttpRequest, textStatus, errorThrown) 
 		{
-			setTimeout("z_comet();", 1000);
+			setTimeout(function() { z_comet_host(); }, 1000);
 		}
 	});
-	return;
 }
 
 
-function z_websocket_start(hostname)
+function z_comet_data(data)
 {
-	z_ws = new WebSocket("ws://"+hostname+"/websocket?z_pageid="+z_pageid);
+	try 
+	{
+		eval(data);
+		z_init_postback_forms();
+	} 
+	catch (e)
+	{
+		$.misc.error("Error evaluating ajax return value: " + data);
+		$.misc.warn(e);
+	}
+}
+
+
+function z_websocket_start(host)
+{
+	z_ws = new WebSocket("ws://"+host+"/websocket?z_pageid="+z_pageid);
 
 	z_ws.onopen = function() { z_ws_opened = true; };
 	z_ws.onerror = function() {};
@@ -375,16 +397,7 @@ function z_websocket_start(hostname)
 
 	z_ws.onmessage = function (evt)
 	{
-		try
-		{
-			eval(evt.data);
-			z_init_postback_forms();
-		}
-		catch (e)
-		{
-			$.misc.error("Error evaluating ajax return value: " + evt.data);
-			$.misc.warn(e);
-		}
+		z_comet_data(evt.data);
 		setTimeout("z_postback_check()", 0);
 	};
 }

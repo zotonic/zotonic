@@ -23,6 +23,8 @@
 
 %% interface functions
 -export([
+    c/1,
+    
     n/2,
     n1/2,
     m/0,
@@ -41,6 +43,10 @@
 ]).
 
 -include_lib("zotonic.hrl").
+
+% @doc Return a new context
+c(Site) ->
+    z_context:new(Site).
 
 %% @doc Send a notification
 n(Msg, Context) ->
