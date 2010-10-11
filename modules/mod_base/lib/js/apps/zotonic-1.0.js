@@ -42,10 +42,10 @@ document.domain	 = 'test';
 var z_xhr_domain = 'test';
 */
 
-function z_dialog_open(title, text)
+function z_dialog_open(options)
 {
 	$('.dialog').remove();
-	$.dialogAdd({title: title, text: text});
+	$.dialogAdd(options);
 }
 
 function z_dialog_close()

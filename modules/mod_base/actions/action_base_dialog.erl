@@ -27,9 +27,5 @@
 -include("zotonic.hrl").
 
 render_action(_TriggerId, _TargetId, Args, Context) -> 
-    Title  = proplists:get_value(title, Args, ""),
-    Text   = proplists:get_value(text, Args, ""),
-	Script = [<<"z_dialog_open(\"">>,
-	          z_utils:js_escape(Title), $", $,, $",
-	          z_utils:js_escape(Text), $", $), $; ],
+	Script = [<<"z_dialog_open(">>, z_utils:js_object(Args), $), $; ],
 	{Script, Context}.
