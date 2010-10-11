@@ -323,7 +323,12 @@ update_js(CssSelector, Html, Function, AfterEffects) ->
 
 dialog(Title, Template, Vars, Context) ->
     {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
-    z_render:wire({dialog, [{title, Title}, {text, Html}]}, Context1).
+    Args = [{title, Title}, {text, Html}],
+    Args1 = case proplists:get_value(width, Vars) of
+                undefined -> Args;
+                Width -> [{width, Width} | Args]
+            end,
+    z_render:wire({dialog, Args1}, Context1).
 
 dialog_close(Context) ->
     z_render:wire({dialog_close, []}, Context).
