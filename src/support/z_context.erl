@@ -104,7 +104,10 @@
     get_resp_header/2,
     get_req_header/2,
 
-    get_req_path/1
+    get_req_path/1,
+
+    cookie_domain/1,
+    stream_host/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -187,7 +190,7 @@ site(ReqData = #wm_reqdata{}) ->
 %% @spec hostname(Context) -> string()
 hostname(Context) ->
     case z_dispatcher:hostname(Context) of
-        Empty when Empty == undefined; Empty == [] ->
+        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
             "localhost";
         Hostname ->
             Hostname
@@ -768,7 +771,53 @@ get_req_header(Header, Context) ->
 get_req_path(Context) ->
     ReqData = get_reqdata(Context),
     wrq:raw_path(ReqData).
+
+
+%% @doc Fetch the cookie domain, defaults to 'undefined' which will equal the domain
+%% to the domain of the current request.
+%% @spec cookie_domain(Context) -> list() | undefined
+cookie_domain(Context) ->
+    case m_site:get(cookie_domain, Context) of
+        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+            %% When there is a stream domain, the check if the stream domain is a subdomain
+            %% of the hostname, if so then set a wildcard
+            case m_site:get(stream_host, Context) of
+                None when None == undefined; None == []; None == <<>> ->
+                    undefined;
+                StreamDomain ->
+                    [StreamDomain1|_] = string:tokens(z_convert:to_list(StreamDomain), ":"),
+                    Hostname = hostname(Context),
+                    case postfix(Hostname, StreamDomain1) of
+                        [] -> Hostname;
+                        [$.|_] = Prefix -> Prefix;
+                        Prefix -> [$.|Prefix]
+                    end
+            end;
+        Domain ->
+            z_convert:to_list(Domain)
+    end.
+
+
+    %% Return the longest matching postfix of two lists.
+    postfix(A, B) ->
+        postfix(lists:reverse(z_convert:to_list(A)), lists:reverse(z_convert:to_list(B)), []).
     
+    postfix([X|A], [X|B], Acc) ->
+        postfix(A, B, [X|Acc]);
+    postfix(_A, _B, Acc) ->
+        Acc.
+
+
+%% @doc Fetch the domain and port for stream (comet/websocket) connections
+%% @spec streamhost(Context) -> list()
+stream_host(Context) ->
+    case m_site:get(stream_host, Context) of
+        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+            hostname_port(Context);
+        Domain ->
+            Domain
+    end.
+
 
 %% ------------------------------------------------------------------------------------
 %% Local helper functions

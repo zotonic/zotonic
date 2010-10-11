@@ -296,7 +296,12 @@ set_rememberme_cookie(UserId, Context) ->
     Expire = add_days(?LOGON_REMEMBERME_DAYS, calendar:local_time()),
     Value = z_utils:url_encode(z_convert:to_list(z_utils:encode_value_expire(UserId, Expire, Context))),
     RD = z_context:get_reqdata(Context),
-    Options = [{max_age, ?LOGON_REMEMBERME_DAYS*3600*24}, {path, "/"}, {http_only, true}],
+    Options = [
+        {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
+        {path, "/"},
+        {http_only, true},
+        {domain, z_context:cookie_domain(Context)}
+    ],
     Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
@@ -310,7 +315,11 @@ set_rememberme_cookie(UserId, Context) ->
 % @doc Reset the rememberme cookie.
 reset_rememberme_cookie(Context) ->
     RD = z_context:get_reqdata(Context),
-    Options = [{path, "/"}, {http_only, true}],
+    Options = [
+        {path, "/"},
+        {http_only, true},
+        {domain, z_context:cookie_domain(Context)}
+    ],
     Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, "", Options),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).

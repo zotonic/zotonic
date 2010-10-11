@@ -72,8 +72,11 @@ update_dispatchinfo() ->
 
     fetch_dispatchinfo(Site) ->
         Name = z_utils:name_for_host(z_dispatcher, Site),
-        {Host, Hostname, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
-        #wm_host_dispatch_list{host=Host, hostname=Hostname, hostalias=Hostalias, redirect=Redirect, dispatch_list=DispatchList}.
+        {Host, Hostname, Streamhost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
+        #wm_host_dispatch_list{
+            host=Host, hostname=Hostname, streamhost=Streamhost, hostalias=Hostalias,
+            redirect=Redirect, dispatch_list=DispatchList
+        }.
 
 
 %% @doc Return a list of active site names.

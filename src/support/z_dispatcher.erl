@@ -42,7 +42,7 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {dispatchlist=undefined, lookup=undefined, context, 
-                host, hostname, hostname_port, hostalias, redirect=true}).
+                host, hostname, hostname_port, streamhost, hostalias, redirect=true}).
 
 %%====================================================================
 %% API
@@ -122,6 +122,7 @@ reload(module_ready, Context) ->
 init(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     {hostname, Hostname} = proplists:lookup(hostname, SiteProps),
+    Streamhost = proplists:get_value(streamhost, SiteProps),
     HostAlias = proplists:get_all_values(hostalias, SiteProps),
     Context = z_context:new(Host),
     process_flag(trap_exit, true),
@@ -130,6 +131,7 @@ init(SiteProps) ->
                 lookup=dict:new(),
                 context=Context, 
                 host=Host, 
+                streamhost=drop_port(Streamhost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
                 hostalias=[ drop_port(Alias) || Alias <- HostAlias ],
@@ -139,8 +141,10 @@ init(SiteProps) ->
     {ok, State}.
 
 
-	drop_port(none) ->
-		"localhost";
+    drop_port(undefined) ->
+        undefined;
+    drop_port(none) ->
+        "localhost";
     drop_port(Hostname) ->
         hd(string:tokens(Hostname, ":")).
 
@@ -165,9 +169,12 @@ handle_call('hostname', _From, State) ->
 handle_call('hostname_port', _From, State) ->
     {reply, State#state.hostname_port, State};
 
-%% @doc Return the dispatchinfo for the site  {host, hostname, hostaliases, dispatchlist}
+%% @doc Return the dispatchinfo for the site  {host, hostname, streamhost, hostaliases, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
-    {reply, {State#state.host, State#state.hostname, State#state.hostalias, State#state.redirect, State#state.dispatchlist}, State};
+    {reply,
+     {State#state.host, State#state.hostname, State#state.streamhost, 
+      State#state.hostalias, State#state.redirect, State#state.dispatchlist}, 
+     State};
 
 %% @doc Reload the dispatch list, signal the sites supervisor that the dispatch list has been changed.
 %% The site supervisor will collect all dispatch lists and send them at once to webmachine.

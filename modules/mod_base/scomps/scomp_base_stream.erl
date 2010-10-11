@@ -26,5 +26,21 @@
 vary(_Params, _Context) -> nocache.
 
 render(_Params, _Vars, Context) ->
-    Hostname = m_site:get(hostname, Context),
-    {ok, z_script:add_script(["z_stream_start('",Hostname,"');"], Context)}.
+    {ok, z_script:add_script(
+                ["z_stream_start('",
+                 add_subdomain(z_context:stream_host(Context)),
+                 "');"], 
+                Context)
+    }.
+
+
+add_subdomain([$*|Hostname]) ->
+    z_ids:id(3) ++ Hostname;
+add_subdomain(<<$*,Hostname/binary>>) ->
+    [z_ids:id(3), Hostname];
+add_subdomain([$.|_] = Hostname) ->
+    z_ids:id(3) ++ Hostname;
+add_subdomain(<<$.,_/binary>> = Hostname) ->
+    [z_ids:id(3), Hostname];
+add_subdomain(Hostname) ->
+    Hostname.

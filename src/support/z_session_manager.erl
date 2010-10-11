@@ -357,7 +357,11 @@ get_session_id(Context) ->
 set_session_id(SessionId, Context) ->
     RD = z_context:get_reqdata(Context),
     %% TODO: set the {domain,"example.com"} of the session cookie
-    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [{path, "/"}, {http_only, true}]),
+    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [
+                {path, "/"},
+                {http_only, true},
+                {domain, z_context:cookie_domain(Context)}
+                ]),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set(set_session_id, true, z_context:set_reqdata(RD1, Context)).
 
@@ -367,7 +371,12 @@ set_session_id(SessionId, Context) ->
 clear_session_id(Context) ->
     RD = z_context:get_reqdata(Context),
     %% TODO: set the {domain,"example.com"} of the session cookie
-    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, "", [{max_age, 0}, {path, "/"}, {http_only, true}]),
+    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, "", [
+                {max_age, 0}, 
+                {path, "/"}, 
+                {http_only, true},
+                {domain, z_context:cookie_domain(Context)}
+                ]),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context#context{session_pid=undefined}).
 
@@ -378,14 +387,19 @@ clear_session_id(Context) ->
 ensure_persist_cookie(Context) ->
     RD = z_context:get_reqdata(Context),
     case wrq:get_cookie_value(?PERSIST_COOKIE, RD) of
-		undefined ->
-			NewPersistCookieId = z_ids:id(),
-		    Options = [{max_age, ?PERSIST_COOKIE_MAX_AGE}, {path, "/"}, {http_only, true}],
-		    Hdr = mochiweb_cookies:cookie(?PERSIST_COOKIE, NewPersistCookieId, Options),
-		    RD1 = wrq:merge_resp_headers([Hdr], RD),
-		    {NewPersistCookieId, z_context:set_reqdata(RD1, Context)};
-		PersistCookie ->
-			{PersistCookie, Context}
-	end.
+        undefined ->
+            NewPersistCookieId = z_ids:id(),
+            Options = [
+                {max_age, ?PERSIST_COOKIE_MAX_AGE}, 
+                {path, "/"},
+                {http_only, true},
+                {domain, z_context:cookie_domain(Context)}
+                ],
+            Hdr = mochiweb_cookies:cookie(?PERSIST_COOKIE, NewPersistCookieId, Options),
+            RD1 = wrq:merge_resp_headers([Hdr], RD),
+            {NewPersistCookieId, z_context:set_reqdata(RD1, Context)};
+        PersistCookie ->
+            {PersistCookie, Context}
+    end.
 
 
