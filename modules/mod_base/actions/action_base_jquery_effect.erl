@@ -34,6 +34,11 @@ render_action(_TriggerId, TargetId, Args, Context) ->
     Script = case z_convert:to_atom(Type) of
         'show'          -> [<<"show(">>, map_speed(Speed), $), $;];
         'hide'          -> [<<"hide(">>, map_speed(Speed), $), $;];
+        'remove'        -> 
+            case proplists:get_value(fadeout, Args) of
+                true -> [<<"fadeOut(">>, map_speed_default(Speed), <<",function() { $(this).remove(); });">>];
+                _ -> <<"remove();">>
+            end;
         'slide_toggle'  -> [<<"slideToggle(">>, map_speed(Speed), $), $;];
         'toggle'        -> <<"toggle();">>;
         'set_class'     -> [<<"attr('class','">>, Class, $', $), $;];
