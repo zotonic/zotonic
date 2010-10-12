@@ -83,7 +83,7 @@ list_rsc(RscId, Context) when is_integer(RscId) ->
 %% @spec list_rsc(int(), Context) -> [ PropList ]
 count_rsc(RscId, Context) when is_integer(RscId) ->
     F = fun() ->
-        z_db:q1("select count(*) from comment where rsc_id = $1 order by created asc", [RscId], Context)
+        z_db:q1("select count(*) from comment where rsc_id = $1", [RscId], Context)
     end,
     z_depcache:memo(F, {comment_rsc_count, RscId}, ?MAXAGE_COMMENT, [{comment_rsc, RscId}], Context).
     
