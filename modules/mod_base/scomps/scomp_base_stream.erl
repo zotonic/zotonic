@@ -42,5 +42,7 @@ add_subdomain([$.|_] = Hostname) ->
     z_ids:id(3) ++ Hostname;
 add_subdomain(<<$.,_/binary>> = Hostname) ->
     [z_ids:id(3), Hostname];
+add_subdomain(none) ->
+    "window.location.host";
 add_subdomain(Hostname) ->
     Hostname.
