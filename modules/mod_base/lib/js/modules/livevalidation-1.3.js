@@ -641,7 +641,7 @@ LiveValidationForm.prototype = {
                 result = false;
             }
 			else if (!result) {
-				this.onInvalid.call(this);
+				self.onInvalid.call(this);
 			}
             
             if (!result) {
