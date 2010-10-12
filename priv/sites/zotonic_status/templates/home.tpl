@@ -26,7 +26,7 @@
 		<form id="logon_form" action="postback">
 			<p class="error">The password does not match.  Please retry.</p>
 			<div id="logon_password">
-				<p class="do_inputoverlay">
+				<p>
 					<span>{_ Password _}</span>
 					<input type="password" id="password" name="password" value="" autocapitalize="off" autocomplete="off" />
 				</p>
