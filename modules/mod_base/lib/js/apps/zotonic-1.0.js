@@ -390,7 +390,7 @@ function z_websocket_start(host)
 		{
 			// Failed opening websocket connection - try to start comet
 			z_ws = undefined;
-			setTimeout(function{} { z_comet(host); }, 2000);
+			setTimeout(function() { z_comet(host); }, 2000);
 			z_comet_is_running = true;
 		}
 	};
