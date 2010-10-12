@@ -40,6 +40,9 @@
 
 -include_lib("zotonic.hrl").
 
+%% @doc Cache time for comment listings and comment counts.
+-define(MAXAGE_COMMENT, 7200).
+
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -48,6 +51,10 @@ m_find_value(rsc, #m{value=undefined} = M, _Context) ->
 m_find_value(Id, #m{value=rsc}, Context) ->
     % All comments of the resource.
     list_rsc(Id, Context);
+m_find_value(count, #m{value=undefined} = M, _Context) ->
+    M#m{value=count};
+m_find_value(Id, #m{value=count}, Context) ->
+    count_rsc(Id, Context);
 m_find_value(_Key, #m{value=undefined}, _Context) ->
    undefined.
 
@@ -69,8 +76,17 @@ list_rsc(RscId, Context) when is_integer(RscId) ->
     F = fun() ->
         z_db:assoc_props("select * from comment where rsc_id = $1 order by created asc", [RscId], Context)
     end,
-    z_depcache:memo(F, {comment_rsc, RscId}, 0, Context).
+    z_depcache:memo(F, {comment_rsc, RscId}, ?MAXAGE_COMMENT, Context).
 
+
+%% @doc List all comments of the resource.
+%% @spec list_rsc(int(), Context) -> [ PropList ]
+count_rsc(RscId, Context) when is_integer(RscId) ->
+    F = fun() ->
+        z_db:q1("select count(*) from comment where rsc_id = $1 order by created asc", [RscId], Context)
+    end,
+    z_depcache:memo(F, {comment_rsc_count, RscId}, ?MAXAGE_COMMENT, [{comment_rsc, RscId}], Context).
+    
 
 %% @spec Fetch a specific comment from the database.
 %% @spec get(int(), Context) -> PropList
