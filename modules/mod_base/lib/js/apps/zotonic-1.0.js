@@ -384,13 +384,13 @@ function z_websocket_start(host)
 		if (z_ws_opened)
 		{
 			// Try to reopen, might be closed to error upstream
-			setTimeout(function() { z_websocket_start(hostname); }, 10);
+			setTimeout(function() { z_websocket_start(host); }, 10);
 		}
 		else
 		{
 			// Failed opening websocket connection - try to start comet
 			z_ws = undefined;
-			setTimeout("z_comet();", 2000);
+			setTimeout(function{} { z_comet(host); }, 2000);
 			z_comet_is_running = true;
 		}
 	};
