@@ -402,6 +402,7 @@ url_unreserved_char(_)  -> false.
 js_escape(undefined) -> [];
 js_escape([]) -> [];
 js_escape(<<>>) -> [];
+js_escape(Value) when is_integer(Value) -> integer_to_list(Value);
 js_escape(Value) when is_atom(Value) ->  js_escape(atom_to_list(Value), []);
 js_escape(Value) when is_binary(Value) -> js_escape(binary_to_list(Value), []);
 js_escape(Value) -> js_escape(Value, []).
@@ -468,7 +469,7 @@ js_prop_value(pattern, [$/|T]=List) ->
                     end
             end
     end;
-js_prop_value(_, Int) when is_integer(Int) -> io_lib:write(Int);
+js_prop_value(_, Int) when is_integer(Int) -> integer_to_list(Int);
 js_prop_value(_, Value) -> [$",js_escape(Value),$"].
 
 
