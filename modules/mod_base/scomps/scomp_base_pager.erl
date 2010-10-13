@@ -64,7 +64,7 @@ render(Params, _Vars, Context) ->
         #m_search_result{result=#search_result{page=Page, pages=1}} ->
             case z_convert:to_bool(HideSinglePage) of
                 true ->
-                    {ok, "\n<ul class=\"pager block\"></ul>\n"};
+                    {ok, []};
                 false ->
                     {ok, build_html(Page, 1, Dispatch, DispatchArgs, Context)}
             end;
