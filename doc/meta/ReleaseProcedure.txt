@@ -12,7 +12,7 @@ New feature release:
 * Make a release branch:
   hg branch release-0.4.x
 
-* Update the files RELEASE and include/zotonic_release.hrl to include the new version nr., say 0.4.0
+* Update the include/zotonic_release.hrl and src/zotonic.app to include the new version nr., say 0.4.0
 
 * Commit to this branch
 
