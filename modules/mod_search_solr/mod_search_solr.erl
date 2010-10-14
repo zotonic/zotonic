@@ -24,8 +24,7 @@
 
 -include("zotonic.hrl").
 
--record(state, {context, solr}).
-
+-record(state, {context, solr, default_search=true}).
 
 
 %%====================================================================
@@ -37,12 +36,8 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 
-pid_observe_search_query(Pid, {search_query, {solr, _Query}, _Limit} = Search, Context) ->
-    gen_server:call(Pid, {Search, Context}, infinity);
-pid_observe_search_query(Pid, {search_query, {match, [{id,_Id}]}, _Limit} = Search, Context) ->
-    gen_server:call(Pid, {Search, Context}, infinity);
-pid_observe_search_query(_Pid, _Query, _Context) ->
-    undefined.
+pid_observe_search_query(Pid, {search_query, _Query, _Limit} = Search, Context) ->
+    gen_server:call(Pid, {Search, Context}, infinity).
 
 pid_observe_rsc_pivot_done(Pid, Msg, _Context) ->
     gen_server:cast(Pid, Msg).
@@ -71,21 +66,18 @@ init(Args) ->
 
     AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
     esolr:set_auto_commit({time, AutoCommit}, Solr),
+
+    DefaultSearch = z_convert:to_bool(m_config:get_value(?MODULE, default_search, 1, Context)),
+
     %% Test the connection.. this will crash when there is no valid connection
     solr_search:match(1, {0, 1}, Solr, Context),
     %% Ready
-    {ok, #state{context=z_context:new(Context),solr=Solr}}.
+    {ok, #state{context=z_context:new(Context),solr=Solr,default_search=DefaultSearch}}.
 
 
 %% @doc A generic Solr query
-handle_call({{search_query, {solr, Query}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
-    Reply = solr_search:search(Query, Limit, Solr, Context),
-    {reply, Reply, State};
-
-%% A "match" query (for sidebars and such)
-handle_call({{search_query, {match, [{id,Id}]}, Limit}, Context}, _From, State=#state{solr=Solr}) ->
-    Reply = solr_search:match(Id, Limit, Solr, Context),
-    {reply, Reply, State};
+handle_call({{search_query, Query, Limit}, Context}, _From, State) ->
+    {reply, search(Query, Limit, Context, State), State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -128,3 +120,40 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+search({solr, Query}, Limit, Context, #state{solr=Solr}) ->
+    solr_search:search(Query, Limit, Solr, Context);
+search({match, [{id,Id}]}, Limit, Context, #state{solr=Solr}) ->
+    solr_search:match(Id, Limit, Solr, Context);
+search({Type, Args}, Limit, Context, #state{default_search=true,solr=Solr}) ->
+    case map_search(Type, Args) of
+        undefined ->
+            undefined;
+        Query ->
+            solr_search:search(Query, Limit, Solr, Context)
+    end;
+search(_, _Limit, _Context, _State) ->
+    undefined.
+
+
+%%
+%% Map the simpler (e.g., the ones using 'query') search functions
+%% from mod_search.erl onto Solr:
+%%
+
+map_search(featured, [])                             -> [{is_featured, true}];
+map_search(featured, [{cat, Cat}])                   -> [{is_featured, true}, {cat, Cat}];
+map_search(all, [])                                  -> [];
+map_search(all, [{cat, Cat}])                        -> [{cat, Cat}];
+map_search(published, [])                            -> [{sort, "-publication_start"}];
+map_search(published, [{cat, Cat}])                  -> [{sort, "-publication_start"}, {cat, Cat}];
+map_search(latest, [])                               -> [{sort, "-modified"}];
+map_search(latest, [{cat, Cat}])                     -> [{sort, "-modified"}, {cat, Cat}];
+map_search(upcoming, [{cat, Cat}])                   -> [{sort, "date_start"}, {upcoming, true}, {cat, Cat}];
+map_search(autocomplete, [{text, Text}])             -> [{text, z_convert:to_list(Text)++"*"}];
+map_search(autocomplete, [{cat, Cat}, {text, Text}]) -> [{cat, Cat}, {text, z_convert:to_list(Text)++"*"}, {return_format, ranked}];
+map_search(fulltext, [{text, Text}])             -> [{text, Text}];
+map_search(fulltext, [{cat, Cat}, {text, Text}]) -> [{cat, Cat}, {text, Text}, {return_format, ranked}];
+map_search('query', Query)                           -> Query;
+map_search(_, _)                                     -> undefined.

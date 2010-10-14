@@ -61,18 +61,23 @@ convert(Id, Context) ->
         ++
 
         %% Regular rsc fields
-        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path, category_id]]
+        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path, category_id, modifier_id, creator_id]]
         ++
         [{F, Bool(F)} || F <- [is_authoritative, is_published, is_featured, is_protected]]
         ++
-        [{F, Date(F)} || F <- [publication_start, publication_end, date_start, date_end]]
+        [{F, Date(F)} || F <- [modified, created, publication_start, publication_end, date_start, date_end]]
         ++
 
-        %% rsc category
+        %% rsc category name
         [{category, z_convert:to_list(C)} || C <- IsA]
+        ++
+        %% rsc category id
+        [{category, z_convert:to_list(m_rsc:name_to_id_check(C, Context))} || C <- IsA]
         ++
 
         %% Text fields
+        [{pivot_title, StrVal(title)}]
+        ++
         [{F, StrVal(F)} || F <- [title, summary, body]]
         ++
 
