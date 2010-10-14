@@ -67,6 +67,7 @@ install_modules(Host, C) ->
         "mod_atom_feed",
 		"mod_broadcast",
         "mod_translation",
+        "mod_log",
 
         "mod_seo",
         "mod_seo_google",
