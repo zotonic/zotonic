@@ -42,6 +42,7 @@
     keepalive/1, 
     keepalive/2, 
     ensure_page_session/1,
+    get_attach_state/1,
     add_script/2,
     add_script/1,
     check_expire/2,
@@ -152,6 +153,14 @@ ensure_page_session(Context) ->
 %% @doc Check session and page expiration, periodically called by the session manager
 check_expire(Now, Pid) ->
     gen_server:cast(Pid, {check_expire, Now}).
+
+
+%% @spec get_attach_state(Context::#context) -> [] attach states
+%% @doc Check the state of all the attached pages.
+get_attach_state(Pid) when is_pid(Pid) ->
+    gen_server:call(Pid, get_attach_state);
+get_attach_state(Context) ->
+    get_attach_state(Context#context.session_pid).
 
 
 %% @doc Dump the session details
@@ -306,6 +315,9 @@ handle_call({ensure_page_session, Context}, _From, Session) ->
     Context2 = Context1#context{page_id=NewPageId, page_pid=NewPage#page.page_pid},
     {reply, Context2, Session1};
 
+handle_call(get_attach_state, _From, Session) ->
+    {reply, [z_session_page:get_attach_state(Pid) ||  #page{page_pid=Pid} <- Session#session.pages], Session};
+
 handle_call(Msg, _From, Session) ->
     {stop, {unknown_cast, Msg}, Session}.
 
@@ -406,3 +418,4 @@ find_page(PageId, Session) ->
         {value, Page} -> Page;
         false -> undefined
     end.
+
