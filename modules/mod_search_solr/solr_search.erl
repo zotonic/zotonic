@@ -46,8 +46,16 @@ search(Query, {Offset, PageLen}, Solr, Context) ->
             Next = if Offset + PageLen < Total -> false; true -> Page+1 end,
             Prev = if Page > 1 -> Page-1; true -> 1 end,
 
+            Result1 = case proplists:get_value(return_format, Query) of
+                          ranked ->
+                              %% FIXME how to retrieve the ranked value from solr?
+                              [{Id, 1.0} || Id <- Result]; 
+                          _ ->
+                              Result
+                      end,
+
             %% Construct the final search result
-            #search_result{result=Result, 
+            #search_result{result=Result1, 
                            total=Total,
                            pages=Pages,
                            page=Page,
@@ -91,25 +99,33 @@ map_search(Query, Context) ->
 
 %% cat=categoryname
 %% Filter results on a certain category.
+map_search_field({cat, C}, _Context) when C =:= [] orelse C =:= [[]]->
+    {[], []};
+map_search_field({cat, [Cats]}, _Context) when is_list(Cats) ->
+    map_search_field({cat, Cats}, _Context);
 map_search_field({cat, Cats}, _Context) when is_list(Cats) ->
-    case z_string:is_string(hd(Cats)) of
+    case z_string:is_string(Cats) of
         true ->
-            {["+(category:", string:join(Cats, ", category:"), ")"], []};
+            {["+category:", as_category(Cats)], []};
         false ->
-            {["+category:", z_convert:to_list(Cats)], []}
+            case lists:filter(fun(X) -> not(empty_term(X)) end, Cats) of
+                [] -> {[], []};
+                Cats1 ->
+                    {["+(category:", string:join([as_category(C) || C <- Cats1], ", category:"), ")"], []}
+            end
     end;
 
 %% cat=category1,category2
 %% Filter results on a certain category.
 map_search_field({cat, Cat}, _Context) ->
     ?DEBUG(Cat),
-    {["+category:", z_convert:to_list(Cat)],
+    {["+category:", as_category(Cat)],
      []};
 
 %% cat_exclude=categoryname
 %% Filter results outside a certain category.
 map_search_field({cat_exclude, Cat}, _Context) ->
-    {["-category:", z_convert:to_list(Cat)],
+    {["-category:", as_category(Cat)],
      []};
 
 %% hasobject=[id]
@@ -157,7 +173,7 @@ map_search_field({hassubjectpredicate, Predicate}, _Context) ->
 %% is_featured or is_featured={false,true}
 %% Filter on whether an item is featured or not.
 map_search_field({is_featured, Bool}, _Context) ->
-    {["+is_featured:", z_convert:to_bool(Bool)],
+    {["+is_featured:", atom_to_list(z_convert:to_bool(Bool))],
      []};
 
 %% upcoming
@@ -173,7 +189,7 @@ map_search_field({upcoming, Boolean}, _Context) ->
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not
 map_search_field({authoritative, Bool}, _Context) ->
-    {["+is_authoritative:", z_convert:to_bool(Bool)],
+    {["+is_authoritative:", atom_to_list(z_convert:to_bool(Bool))],
      []};
 
 %% query_id=<rsc id>
@@ -190,8 +206,10 @@ map_search_field({query_id, QueryId}, Context) ->
 
 %% text=...
 %% Perform a fulltext search
+map_search_field({text, Text}, _Context) when Text =:= [] orelse Text =:= undefined orelse Text =:= <<>> ->
+    {[], []};
 map_search_field({text, Text}, _Context) ->
-    {["", z_convert:to_list(Text)],
+    {["+(", z_convert:to_list(Text),")"],
      []};
 
 %% sort=..
@@ -237,7 +255,11 @@ map_search_field({facet, Field}, _Context) ->
 %% Give more documents which are similar to <Id>  (solr only)
 map_search_field({morelikethis_id, [Id, Amount]}, _Context) ->
     {["id:", z_convert:to_list(Id), " -category:meta"],
-     [{morelikethis, "o,match_title,summary,category", Amount}]}.
+     [{morelikethis, "o,match_title,summary,category", Amount}]};
+
+%% Specifying the return format. Either 'default' (empty) or 'ranked'.
+map_search_field({return_format, _}, _Context) ->
+    {[], []}.
 
 
 
@@ -277,3 +299,8 @@ list_to_proplist([], Acc) ->
     lists:reverse(Acc);
 list_to_proplist([K,V|Rest], Acc) ->
     list_to_proplist(Rest, [{z_convert:to_list(K),V}|Acc]).
+
+as_category({Id}) -> as_category(Id);
+as_category(Id) when is_integer(Id) ->
+    integer_to_list(Id);
+as_category(Cat) -> z_convert:to_list(Cat).

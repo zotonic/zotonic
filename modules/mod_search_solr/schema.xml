@@ -115,6 +115,11 @@
         <field name="is_featured" type="boolean" indexed="true" stored="true"  />
         <field name="is_protected" type="boolean" indexed="true" stored="true"  />
 
+        <field name="modified" type="date" indexed="true" stored="true"/>
+        <field name="created" type="date" indexed="true" stored="true"/>
+        <field name="modifier_id" type="int" indexed="true" stored="true" />
+        <field name="creator_id" type="int" indexed="true" stored="true" />
+
         <field name="publication_start" type="date" indexed="true" stored="true"/>
         <field name="publication_end" type="date" indexed="true" stored="true"/>
 
@@ -124,6 +129,7 @@
 
         <!-- primary rsc category -->
         <field name="category_id" type="int" indexed="true" stored="true" />
+
 
 
         <!-- text fields -->
@@ -136,6 +142,8 @@
         <field name="text" type="text" indexed="true" multiValued="true" />
 
         <!-- pivot -->
+        <field name="pivot_title" type="string" indexed="true" />
+
         <field name="first_name" type="text" indexed="true" stored="true"/>
         <field name="surname" type="text" indexed="true" stored="true"/>
         <field name="gender" type="string" indexed="true" stored="true"/>
