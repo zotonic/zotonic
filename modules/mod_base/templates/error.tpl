@@ -21,9 +21,7 @@
 				for the fact that you got here. It seems you where looking for a page that does not exist
 				in this system. It could have been moved or deleted. Please use our search to find anything you like. Or go the the <a href="/" title="home">homepage</a>.
 			</p>
-			{% endif %}
-			
-			{% if error_code == 500 %}
+			{% else %}
 			<p>
 				The system had to handle something it couldn't handle. A mail is now send to the system administrator.
 			</p>
