@@ -27,16 +27,17 @@
 -include_lib("zotonic.hrl").
 
 
-render_error(Code, ReqData, _Reason) when Code == 403; Code == 404 ->
-    ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("Resource not found: ~p", [wrq:raw_path(ReqData)]))),
-    Type = webmachine_request:get_metadata('content-type', ReqData),
-    error_handler(Type, ReqData, Code, ErrorDump);
-
-render_error(Code=500, ReqData, Reason) ->
+render_error(Code = 500, ReqData, Reason) ->
     error_logger:error_msg("webmachine error: path=~p~n~p~n", [wrq:path(ReqData), Reason]),
     ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("~p", [Reason]))),
     Type = webmachine_request:get_metadata('content-type', ReqData),
+    error_handler(Type, ReqData, Code, ErrorDump);
+
+render_error(Code, ReqData, _Reason) ->
+    ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("Resource not found: ~p", [wrq:raw_path(ReqData)]))),
+    Type = webmachine_request:get_metadata('content-type', ReqData),
     error_handler(Type, ReqData, Code, ErrorDump).
+
 
 
 error_handler("application/json", ReqData, Code, ErrorDump) ->
@@ -45,7 +46,21 @@ error_handler("application/json", ReqData, Code, ErrorDump) ->
     JS = {struct, [{error_code, Code}, {error_dump, ErrorDump}]},
     {mochijson:encode(JS), RD2};
 
-error_handler(_Default, ReqData, Code, ErrorDump) ->
+% Check the extension of the path to see what the resource could have been.
+error_handler(_, ReqData, Code, ErrorDump) ->
+    case z_media_identify:guess_mime(wrq:raw_path(ReqData)) of
+        "application/octet-stream" -> show_template(ReqData, Code, ErrorDump);
+        "application/xhtml+xml" -> show_template(ReqData, Code, ErrorDump);
+        "application/" ++ _ -> {<<>>, ReqData};
+        "audio/" ++ _ -> {<<>>, ReqData};
+        "video/" ++ _ -> {<<>>, ReqData};
+        "image/" ++ _ -> {<<>>, ReqData};
+        "text/css" -> {<<>>, ReqData};
+        _ -> show_template(ReqData, Code, ErrorDump)
+    end.
+
+
+show_template(ReqData, Code, ErrorDump) ->
     RD1 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", ReqData),
     RD2 = wrq:set_resp_header("Content-Encoding", "identity", RD1),
     Host = webmachine_request:get_metadata('zotonic_host', RD2),
