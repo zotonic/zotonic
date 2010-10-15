@@ -56,25 +56,25 @@ start_link(SiteProps) ->
 
 
 %% @spec url_for(atom(), Context) -> iolist()
-%% @doc Construct an uri from a named dispatch, assuming no parameters
-url_for(Name, #context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, {'url_for', Name, [], html}).
+%% @doc Construct an uri from a named dispatch, assuming no parameters. Use html escape.
+url_for(Name, #context{dispatcher=Dispatcher} = Context) ->
+    gen_server:call(Dispatcher, {'url_for', Name, [], default_args(Context), html}).
 
 
 %% @spec url_for(atom(), Args, Context) -> iolist()
 %%        type Args = PropList
-%% @doc Construct an uri from a named dispatch and the parameters
+%% @doc Construct an uri from a named dispatch and the parameters. Use html escape.
 url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
-    Args1 = append_qargs(Args, Context),
-    gen_server:call(Dispatcher, {'url_for', Name, Args1, html}).
+    Args1 = append_extra_args(Args, Context),
+    gen_server:call(Dispatcher, {'url_for', Name, Args1, default_args(Context), html}).
 
 
-%% @spec url_for(atom(), Args, bool(), Context) -> iolist()
+%% @spec url_for(atom(), Args, atom(), Context) -> iolist()
 %%        type Args = PropList
 %% @doc Construct an uri from a named dispatch and the parameters
 url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
-    Args1 = append_qargs(Args, Context),
-    gen_server:call(Dispatcher, {'url_for', Name, Args1, Escape}).
+    Args1 = append_extra_args(Args, Context),
+    gen_server:call(Dispatcher, {'url_for', Name, Args1, default_args(Context), Escape}).
 
 
 %% @spec hostname(Context) -> iolist()
@@ -157,8 +157,8 @@ init(SiteProps) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %% @doc Create the url for the dispatch rule with name and arguments Args.
-handle_call({'url_for', Name, Args, Escape}, _From, State) ->
-    Uri = make_url_for(Name, Args, Escape, State#state.lookup),
+handle_call({'url_for', Name, Args, Defaults, Escape}, _From, State) ->
+    Uri = make_url_for(Name, Args, Escape, State#state.lookup, Defaults),
     {reply, Uri, State};
 
 %% @doc Return the preferred hostname for the site
@@ -291,7 +291,7 @@ dispatch_for_uri_lookup1([{Name, Pattern, _Resource, _Args}|T], Dict) ->
 
 
 %% @doc Make an uri for the named dispatch with the given parameters
-make_url_for(Name, Args, Escape, UriLookup) ->
+make_url_for(Name, Args, Escape, UriLookup, Defaults) ->
     Name1 = z_convert:to_atom(Name),
     Args1 = lists:filter(fun
             ({_, <<>>}) -> false;
@@ -300,18 +300,18 @@ make_url_for(Name, Args, Escape, UriLookup) ->
             (_) -> true
         end, Args),
     case dict:find(Name1, UriLookup) of
-        {ok, Patterns} -> make_url_for1(Args1, Patterns, Escape, undefined);
+        {ok, Patterns} -> make_url_for1(Args1, Patterns, Escape, undefined, Defaults);
         error -> undefined
     end.
 
 
 %% @doc Try to match all patterns with the arguments
-make_url_for1(_Args, [], _Escape, undefined) ->
+make_url_for1(_Args, [], _Escape, undefined, _Defaults) ->
     undefined;
-make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern}) -> 
+make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern}, Defaults) -> 
     ReplArgs =  fun 
                     ('*') -> proplists:get_value(star, Args);
-                    (V) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
+                    (V) when is_atom(V) -> mochiweb_util:quote_plus(arg_value(V, Args, Defaults));
                     (S) -> S
                 end,
     UriParts = lists:map(ReplArgs, Pattern), 
@@ -326,27 +326,44 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern}) ->
                   end,
             [Uri, $?, urlencode(QueryStringArgs, Sep)]
     end;
-make_url_for1(Args, [Pattern|T], Escape, Best) ->
-    Best1 = select_best_pattern(Args, Pattern, Best),
-    make_url_for1(Args, T, Escape, Best1).
+make_url_for1(Args, [Pattern|T], Escape, Best, Defaults) ->
+    Best1 = select_best_pattern(Args, Pattern, Best, Defaults),
+    make_url_for1(Args, T, Escape, Best1, Defaults).
+    
+    
+    % Find a value in the args, when not found then check the defaults.
+    arg_value(V, Args, Defaults) ->
+        case proplists:lookup(V, Args) of
+            {V, Value} -> Value;
+            none -> proplists:get_value(V, Defaults)
+        end.
 
 
-select_best_pattern(Args, {PCount, PArgs, Pattern}, Best) ->
+select_best_pattern(Args, {PCount, PArgs, Pattern}, Best, Defaults) ->
     if 
-        length(Args) >= PCount ->
+        length(Args)+length(Defaults) >= PCount ->
             %% Check if all PArgs are part of Args
             {PathArgs, QueryStringArgs} = lists:partition(
                                             fun
                                                 ({star,_}) -> lists:member('*', PArgs);
-                                                ({A,_}) -> lists:member(A, PArgs) 
+                                                ({A,_}) -> lists:member(A, PArgs)
                                             end, Args),
             case length(PathArgs) of
                 PCount ->
                     % Could fill all path args, this match satisfies
                     select_best_pattern1({QueryStringArgs,Pattern}, Best);
                 _ ->
-                    % Could not fill all path args, try other patterns
-                    Best
+                    % Check if there are defaults for the missing path args
+                    case lists:foldl(fun(PArg, HasDefaults) ->
+                                        HasDefaults andalso 
+                                            (        lists:keymember(PArg, 1, PathArgs)
+                                              orelse lists:keymember(PArg, 1, Defaults))
+                                     end,
+                                     true,
+                                     PArgs) of
+                        true -> select_best_pattern1({QueryStringArgs, Pattern}, Best);
+                        false -> Best
+                    end
             end;
         true ->
             Best
@@ -377,6 +394,11 @@ revjoin([S | Rest], Separator, Acc) ->
     revjoin(Rest, Separator, [S, Separator | Acc]).
 
 
+%% @spec Append extra arguments to the url, depending if 'qargs' or 'varargs' is set.
+append_extra_args(Args, Context) ->
+    append_qargs(append_varargs(Args, Context), Context).
+
+
 %% @spec Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
 append_qargs(Args, Context) ->
     case proplists:get_value(qargs, Args) of
@@ -398,4 +420,34 @@ append_qargs(Args, Context) ->
                         end,
                         Args1,
                         Qs)
+    end.
+
+%% @spec List the default arguments for any dispatch rule, these are extracted from the request context.
+default_args(Context) ->
+    [{language, z_context:language(Context)}].
+
+%% @spec Append all varargs argument, names are given in a list.
+append_varargs(Args, Context) ->
+    case proplists:get_value(varargs, Args) of
+        undefined ->
+            Args;
+        Varargs ->
+            append_varargs(Varargs, proplists:delete(varargs, Args), Context)
+    end.
+
+append_varargs([], Args, _Context) ->
+    Args;
+append_varargs([{Name, Value}|Varargs], Args, Context) ->
+    append_varargs(Varargs, append_vararg(Name, Value, Args), Context);
+append_varargs([[Name, Value]|Varargs], Args, Context) ->
+    append_varargs(Varargs, append_vararg(Name, Value, Args), Context);
+append_varargs([Name|Varargs], Args, Context) ->
+    Key = z_convert:to_atom(Name),
+    append_varargs(Varargs, append_vararg(Key, z_context:get(Key, Context), Args), Context).
+
+append_vararg(Name, Value, Args) ->
+    Key = z_convert:to_atom(Name),
+    case proplists:is_defined(Key, Args) of
+        true -> Args;
+        false -> [{Key, Value}|Args]
     end.
