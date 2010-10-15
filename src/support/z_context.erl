@@ -502,6 +502,15 @@ set_resource_module(Module, Context) ->
 %%       Value -> string()
 %%       Key -> string()
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
+get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
+    lists:foldl(fun(K, Acc) ->
+                    case get_q(K, Context) of
+                        undefined -> Acc;
+                        Value -> [{z_convert:to_atom(K), Value}|Acc]
+                    end
+                end,
+                [],
+                Keys);
 get_q(Key, Context) ->
     case proplists:lookup('q', Context#context.props) of
         {'q', Qs} -> proplists:get_value(z_convert:to_list(Key), Qs);
@@ -559,6 +568,15 @@ get_q_all_noz(Context) ->
 %% @spec get_q_validated(Key, Context) -> Value
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.
+get_q_validated([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
+    lists:foldl(fun (K, Acc) ->
+                    case get_q_validated(K, Context) of
+                        undefined -> Acc;
+                        Value -> [{z_convert:to_atom(K), Value}|Acc]
+                    end
+                end,
+                [],
+                Keys);
 get_q_validated(Key, Context) ->
     case proplists:lookup('q_validated', Context#context.props) of
         {'q_validated', Qs} ->
