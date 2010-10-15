@@ -27,7 +27,7 @@
 -include_lib("zotonic.hrl").
 
 
-render_error(Code=404, ReqData, _Reason) ->
+render_error(Code, ReqData, _Reason) when Code == 403; Code == 404 ->
     ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("Resource not found: ~p", [wrq:raw_path(ReqData)]))),
     Type = webmachine_request:get_metadata('content-type', ReqData),
     error_handler(Type, ReqData, Code, ErrorDump);
@@ -51,7 +51,10 @@ error_handler(_Default, ReqData, Code, ErrorDump) ->
     Host = webmachine_request:get_metadata('zotonic_host', RD2),
     try 
         Context = z_context:new(Host),
-        Vars = [{error_code, Code}, {error_dump, ErrorDump}],
+        Vars = [
+            {error_code, Code}, 
+            {error_dump, ErrorDump}
+        ],
         Html = z_template:render("error.tpl", Vars, Context),
         {Output, _} = z_context:output(Html, Context),
         {Output, RD2}

@@ -71,7 +71,7 @@ d(DecisionID, Rs, Rd) ->
 
 respond(Code, Rs, Rd) ->
     {RsCode, RdCode} = case Code of
-    	404 ->
+        Code when Code == 403; Code == 404 ->
             {ok, ErrorHandler} = application:get_env(webmachine, error_handler),
             Reason = {none, none, []},
             {ErrorHTML, RdError} = ErrorHandler:render_error(Code, Rd, Reason),
@@ -89,8 +89,8 @@ respond(Code, Rs, Rd) ->
                 Exp -> wrq:set_resp_header("Expires", httpd_util:rfc1123_date(calendar:universal_time_to_local_time(Exp)), RdExp0)
             end,
             {RsExp, RdExp};
-    	_ -> 
-    	    {Rs, Rd}
+        _ -> 
+            {Rs, Rd}
     end,
     RdRespCode = wrq:set_response_code(Code, RdCode),
     resource_call(finish_request, RsCode, RdRespCode).
