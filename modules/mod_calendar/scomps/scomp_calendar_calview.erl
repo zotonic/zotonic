@@ -93,7 +93,7 @@ render(Params, Vars, Context) ->
 		{event_divs, EventDivs},
 		{date_format, DateFormat},
         {whole_day, WholeDayProps},
-        {period, Period}
+        {period, Period} | Params
 	],
 	
 	Template = case Period of week -> "_calview_week.tpl"; month -> "_calview_month.tpl" end,
