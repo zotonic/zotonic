@@ -165,15 +165,17 @@ get(Id, Context) ->
 
 %% @doc Get the resource from the database, do not fetch the pivot fields.
 get_raw(Id, Context) when is_integer(Id) ->
-    z_db:assoc_props_row("
-            select
-                id, uri, name, page_path, 
-                is_authoritative, is_published, is_featured, is_protected,
-                publication_start, publication_end,
-                creator_id, modifier_id, version, category_id,
-                visible_for, slug, props, created, modified
-            from rsc
-            where id = $1", [Id], Context).
+    SQL = case z_memo:get(rsc_raw_sql) of
+            undefined ->
+                AllCols = [ z_convert:to_list(C) || C <- z_db:column_names(rsc, Context) ],
+                DataCols = lists:filter(fun("pivot_" ++ _) -> false; (_) -> true end, AllCols),
+                Query = "select "++string:join(DataCols, ",") ++ " from rsc where id = $1",
+                z_memo:set(rsc_raw_sql, Query),
+                Query;
+            Memo ->
+                Memo
+          end,
+    z_db:assoc_props_row(SQL, [Id], Context).
 
 
 %% @doc Get the ACL fields for the resource with the id. The id must be an integer
