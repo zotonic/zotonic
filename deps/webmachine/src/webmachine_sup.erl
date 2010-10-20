@@ -72,5 +72,6 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
+    ets:new(wmtrace_conf, [set, public, named_table]),
     Processes = [],
     {ok, {{one_for_one, 9, 10}, Processes}}.

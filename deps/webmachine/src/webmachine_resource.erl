@@ -105,17 +105,19 @@ default(_) ->
     no_default.
           
 wrap(ReqData, Mod, Args) ->
-    case Mod:init(Args) of
-	{ok, ModState} ->
+    {ok, ModState} = Mod:init(Args),
+    case ets:lookup(wmtrace_conf, Mod) of
+	[] ->
 	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
-    {{trace, Dir}, ModState} ->
-        {ok, File} = open_log_file(Dir, Mod),
-        ReqId = (ReqData#wm_reqdata.log_data)#wm_log_data.req_id,
-        log_reqid(File, ReqId),
-        log_decision(File, v3b14),
-        log_call(File, attempt, Mod, init, Args),
-        log_call(File, result, Mod, init, {{trace, Dir}, ModState}),
-        {ok, webmachine_resource:new(Mod, ModState,	[ F || {F,_} <- Mod:module_info(exports) ], File)};
+        [{Mod, {Dir, Eagerness, LogLevel}}] ->
+        
+            {ok, LoggerProc} = start_log_proc(Dir, Mod, Eagerness, LogLevel),
+            ReqId = (ReqData#wm_reqdata.log_data)#wm_log_data.req_id,        
+            log_reqid(LoggerProc, ReqId),
+            log_decision(LoggerProc, v3b14),
+            log_call(LoggerProc, attempt, Mod, init, Args),
+            log_call(LoggerProc, result, Mod, init, {{trace, Dir}, ModState}),
+            {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], LoggerProc)};
 	_ ->
 	    {stop, bad_init_arg}
     end.
@@ -144,36 +146,36 @@ handle_wm_call(Fun, ReqData) ->
 resource_call(F, ReqData) ->
     log_call(R_Trace, attempt, R_Mod, F, [ReqData, R_ModState]),
     Result = try
-        apply(R_Mod, F, [ReqData, R_ModState])
-    catch C:R ->
-            Reason = {C, R, erlang:get_stacktrace()},
-            {{error, Reason}, ReqData, R_ModState}
-    end,
+                 apply(R_Mod, F, [ReqData, R_ModState])
+             catch C:R ->
+                     Reason = {C, R, erlang:get_stacktrace()},
+                     {{error, Reason}, ReqData, R_ModState}
+             end,
     log_call(R_Trace, result, R_Mod, F, Result),
     Result.
 
 log_d(DecisionID) ->
     log_decision(R_Trace, DecisionID).
 
-stop() -> close_log_file(R_Trace).
+stop() -> stop_log_proc(R_Trace).
 
 
 log_reqid(false, _ReqId) ->
     nop;
-log_reqid(File, ReqId) ->
-    io:format(File, "{req_id, ~p}.~n", [ReqId]).
+log_reqid(LoggerProc, ReqId) ->
+    z_logger:log(LoggerProc, 5, "{req_id, ~p}.~n", [ReqId]).
 
 log_decision(false, _DecisionID) ->
     nop;
-log_decision(File, DecisionID) ->
-    io:format(File, "{decision, ~p}.~n", [DecisionID]).
+log_decision(LoggerProc, DecisionID) ->
+    z_logger:log(LoggerProc, 5, "{decision, ~p}.~n", [DecisionID]).
 
 log_call(false, _Type, _M, _F, _Data) ->
     nop;
-log_call(File, Type, M, F, Data) ->
-    io:format(File,
-              "{~p, ~p, ~p,~n ~p}.~n",
-              [Type, M, F, escape_trace_data(Data)]).
+log_call(LoggerProc, Type, M, F, Data) ->
+    z_logger:log(LoggerProc, 5,
+                 "{~p, ~p, ~p,~n ~p}.~n",
+                 [Type, M, F, escape_trace_data(Data)]).
 
 escape_trace_data(Fun) when is_function(Fun) ->
     {'WMTRACE_ESCAPED_FUN',
@@ -201,16 +203,18 @@ escape_trace_list(Final, Acc) ->
     %% non-nil-terminated list, like the dict module uses
     lists:reverse(tl(Acc))++[hd(Acc)|escape_trace_data(Final)].
 
-open_log_file(Dir, Mod) ->
+start_log_proc(Dir, Mod, Eagerness, Loglevel) ->
     Now = {_,_,US} = now(),
     {{Y,M,D},{H,I,S}} = calendar:now_to_universal_time(Now),
     Filename = io_lib:format(
-                 "~s/~p-~4..0B-~2..0B-~2..0B"
-                 "-~2..0B-~2..0B-~2..0B.~6..0B.wmtrace",
-                 [Dir, Mod, Y, M, D, H, I, S, US]),
-    file:open(Filename, [write]).
+        "~s/~p-~4..0B-~2..0B-~2..0B"
+        "-~2..0B-~2..0B-~2..0B.~6..0B.wmtrace",
+        [Dir, Mod, Y, M, D, H, I, S, US]),
+    z_logger:start([{output, {file, Filename}},
+                    {eagerness, Eagerness}, {loglevel, Loglevel}]).
 
-close_log_file(File) when is_pid(File) ->
-    file:close(File);
-close_log_file(_) ->
+stop_log_proc(LogProc) when is_pid(LogProc) ->
+    %% TODO: decide if log information should be dropped
+    z_logger:flush_and_stop(LogProc);
+stop_log_proc(_) ->
     ok.
