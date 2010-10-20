@@ -1,3 +1,5 @@
+-define(WMTRACE_CONF_TBL, wmtrace_conf).
+
 -record(wm_log_data, 
 	{req_id :: integer(),
          resource_module :: atom(),

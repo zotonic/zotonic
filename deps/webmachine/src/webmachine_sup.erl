@@ -27,6 +27,8 @@
 %% supervisor callbacks
 -export([init/1]).
 
+-include_lib("webmachine_logger.hrl").
+
 %% @spec start_link() -> ServerRet
 %% @doc API for starting the supervisor.
 start_link() ->
@@ -71,7 +73,13 @@ upgrade() ->
 
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
-init([]) ->
-    ets:new(wmtrace_conf, [set, public, named_table]),
+init([]) ->    
+    init_wmtrace(),
     Processes = [],
     {ok, {{one_for_one, 9, 10}, Processes}}.
+    
+init_wmtrace() ->
+    Dir = "priv/wmtrace", %%TODO: move it to config file...
+    ok = filelib:ensure_dir(filename:join(Dir, "test")),		
+    ets:new(?WMTRACE_CONF_TBL, [set, public, named_table]),
+    ets:insert(?WMTRACE_CONF_TBL, {trace_dir, Dir}).
