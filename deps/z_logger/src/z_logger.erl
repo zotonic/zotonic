@@ -121,7 +121,7 @@ fmt_timestamp(binary) ->
 fmt_timestamp(text, Format) ->
     {{Y, M, D}, {H, Mm, S}} = calendar:local_time(),
     io_lib:format(Format,
-                 [Y, M, D, H, Mm, S]);
+                 [Y, M, D, H, Mm, S]).
 
 fmt_log(binary, LogTimestamp, Binary) when is_binary(Binary) ->
     case LogTimestamp of
@@ -155,12 +155,12 @@ do_log({file, File}, Eagerness, ToLog, Buffer) ->
             ok = file:write(File, ToLog),
             [ToLog | Buffer]
     end;    
-do_log({udp, {Socket, Address, Port}}, Eagerness, ToLog, Buffer) ->    
+do_log({udp, {Socket, Address, Port}}, _Eagerness, ToLog, Buffer) ->    
     %% TODO: buffering?
     gen_udp:send(Socket, Address, Port, ToLog),
     Buffer.
     
 close({file, File}) ->
     file:close(File);
-close({udp, {Socket, _, _}}) ->
+close({udp, {_Socket, _, _}}) ->
     ok. % TODO: the udp connection is shared???
