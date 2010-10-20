@@ -28,7 +28,7 @@ vary(_Params, _Context) -> nocache.
 render(_Params, _Vars, Context) ->
     {ok, z_script:add_script(
                 ["z_stream_start('",
-                 add_subdomain(z_context:stream_host(Context)),
+                 add_subdomain(z_context:streamhost(Context)),
                  "');"], 
                 Context)
     }.

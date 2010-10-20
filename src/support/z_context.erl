@@ -107,7 +107,7 @@
     get_req_path/1,
 
     cookie_domain/1,
-    stream_host/1
+    streamhost/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -799,7 +799,7 @@ cookie_domain(Context) ->
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
             %% When there is a stream domain, the check if the stream domain is a subdomain
             %% of the hostname, if so then set a wildcard
-            case m_site:get(stream_host, Context) of
+            case m_site:get(streamhost, Context) of
                 None when None == undefined; None == []; None == <<>> ->
                     undefined;
                 StreamDomain ->
@@ -828,8 +828,8 @@ cookie_domain(Context) ->
 
 %% @doc Fetch the domain and port for stream (comet/websocket) connections
 %% @spec streamhost(Context) -> list()
-stream_host(Context) ->
-    case m_site:get(stream_host, Context) of
+streamhost(Context) ->
+    case m_site:get(streamhost, Context) of
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
             hostname_port(Context);
         Domain ->
