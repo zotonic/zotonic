@@ -241,7 +241,7 @@ event({submit, [], _Trigger, _Target}, Context) ->
 logon_user(UserId, Context) ->
     case z_auth:logon(UserId, Context) of
 		{ok, ContextUser} ->
-		    ContextRemember = case z_context:get_q("rememberme", Context, []) of
+		    ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
 		        [] -> ContextUser;
 		        _ -> set_rememberme_cookie(UserId, ContextUser)
 		    end,

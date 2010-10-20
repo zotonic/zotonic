@@ -1,6 +1,6 @@
 <html>
   <head>	
-	<title>Comet subdomain handler</title>
+	<title>Comet subdomain handler of: {{ m.site.title }} </title>
   </head>
 
   <body>
