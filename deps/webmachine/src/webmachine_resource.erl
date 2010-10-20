@@ -106,10 +106,11 @@ default(_) ->
           
 wrap(ReqData, Mod, Args) ->
     {ok, ModState} = Mod:init(Args),
-    case ets:lookup(wmtrace_conf, Mod) of
+    [{trace_dir, Dir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
+    case ets:lookup(?WMTRACE_CONF_TBL, Mod) of
 	[] ->
 	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
-        [{Mod, {Dir, Eagerness, LogLevel}}] ->
+        [{Mod, {Eagerness, LogLevel}}] ->
         
             {ok, LoggerProc} = start_log_proc(Dir, Mod, Eagerness, LogLevel),
             ReqId = (ReqData#wm_reqdata.log_data)#wm_log_data.req_id,        

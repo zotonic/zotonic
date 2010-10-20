@@ -28,6 +28,7 @@
 
 
 -include_lib("resource_html.hrl").
+-include_lib("webmachine_logger.hrl").
 
 resource_exists(RD, Ctx) ->
     case wrq:disp_path(RD) of
@@ -44,7 +45,7 @@ resource_exists(RD, Ctx) ->
             end;
         TraceName ->
             Rootname = filename:rootname(filename:basename(TraceName)), 
-            TraceDir = mod_development:wmtrace_dir(),
+            [{trace_dir, TraceDir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
             TracePath = filename:join([TraceDir, Rootname ++ ".wmtrace"]),
             {filelib:is_file(TracePath), RD, z_context:set(trace, TracePath, Ctx)}
     end.
@@ -52,7 +53,7 @@ resource_exists(RD, Ctx) ->
 html(Context) ->
     case z_context:get(trace, Context) of
         undefined ->
-            TraceDir = mod_development:wmtrace_dir(),
+            [{trace_dir, TraceDir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
             Files = lists:reverse(
                 lists:sort(
                 filelib:fold_files(TraceDir,
