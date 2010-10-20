@@ -33,8 +33,6 @@
 
 %% interface functions
 -export([
-    wmtrace/1,
-    wmtrace_dir/0,
     reload/1,
     make/1,
     debug_stream/3,
@@ -74,16 +72,6 @@ make(Context) ->
 %% @doc Stream specific debug information to an area on the current page.
 debug_stream(TargetId, What, Context) ->
     z_notifier:notify1({debug_stream, TargetId, What}, Context).
-
-%% @doc Start a trace of a resource, called by the resources's init/2 function.
-wmtrace(State) ->
-    {{trace, wmtrace_dir()}, State}.
-
-%% @doc Return 
-wmtrace_dir() ->
-    Dir = z_utils:lib_dir("priv/wmtrace"),
-    ok = filelib:ensure_dir(filename:join(Dir, "test")),
-    Dir.
 
 %% @doc Stream all debug information of a certain kind to the target id on the user agent.
 observe_debug_stream({debug_stream, TargetId, What}, Context) ->
