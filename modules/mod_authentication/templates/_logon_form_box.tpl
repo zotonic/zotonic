@@ -27,7 +27,7 @@
 		<div class="clearfix"></div>
 
 		<div id="logon_button">
-			<button>{_ Log On _}</button>
+			<button type="submit">{_ Log On _}</button>
 		</div>
 	</form>
 </div>
