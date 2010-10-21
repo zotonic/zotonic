@@ -95,10 +95,12 @@ event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
 %% @doc Handle upload of a new recipients list
 event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) ->
 	{upload, _OriginalFilename, TmpFile} = z_context:get_q_validated("file", Context),
-	{ok, Data} = file:read_file(TmpFile),
-	file:delete(TmpFile),
-	m_mailinglist:replace_recipients(Id, Data, Context),
-	z_render:wire([{dialog_close, []}, {reload, []}], Context).
+    case import_file(TmpFile, Id, Context) of
+        ok ->
+            z_render:wire([{dialog_close, []}, {reload, []}], Context);
+        {error, Msg} ->
+            z_render:growl(Msg, "error", true, Context)
+    end.
 
 %% @doc Update the list with the mailings scheduled for this page.
 update_scheduled_list(Id, Context) ->
@@ -160,12 +162,14 @@ handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
 		ListId ->
 			HandleF = fun() ->
 				C = z_acl:sudo(State#state.context),
-				{ok, Data} = file:read_file(File),
-				m_mailinglist:replace_recipients(ListId, Data, C),
-				z_email:send_admin(
-							"mod_mailinglist: Import from dropbox",
-							["Replaced all recipients of ", m_rsc:p(ListId, title, C), " with the contents of ", File, "."], State#state.context),
-				file:delete(File)
+                case import_file(File, ListId, C) of
+                    ok ->
+        				z_email:send_admin(
+                          "mod_mailinglist: Import from dropbox",
+                          ["Replaced all recipients of ", m_rsc:p(ListId, title, C), " with the contents of ", File, "."], State#state.context);
+                    {error, Msg} ->
+        				z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, State#state.context)
+                end
 			end,
 			spawn(HandleF),
 			{reply, ok, State}
@@ -218,6 +222,22 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc Import a file, replacing the recipients of the list.
+import_file(TmpFile, Id, Context) ->
+	{ok, Data} = file:read_file(TmpFile),
+	file:delete(TmpFile),
+    try
+        ok = m_mailinglist:replace_recipients(Id, Data, Context)
+    catch
+        _: {badmatch, {rollback, {{case_clause, {error, {error, error, <<"22021">>, _, _}}},_}}}->
+            {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
+        _: _ ->
+            {error, "Something unexpected went wrong while importing the recipients list."}
+    end.
+
+
 
 %% @doc Check if there are any scheduled mailings waiting.
 poll_scheduled(Context) ->
