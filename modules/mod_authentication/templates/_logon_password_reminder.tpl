@@ -14,7 +14,7 @@
 		<div class="clearfix"></div>
 
 		<div id="logon_button">
-			<button>{_ Send me instructions _}</button>
+			<button type="submit">{_ Send me instructions _}</button>
 		</div>
 	</form>
 

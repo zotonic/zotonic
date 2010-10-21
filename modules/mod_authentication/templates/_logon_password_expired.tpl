@@ -28,7 +28,7 @@
 		<div class="clearfix"></div>
 
 		<div id="logon_reset_button">
-			<button>{_ Change password and Log on _}</button>
+			<button type="submit">{_ Change password and Log on _}</button>
 		</div>
 
 	</form>
