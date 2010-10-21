@@ -5,7 +5,7 @@
 
 	<form id="logon_verification_form" method="POST" action="postback">
 		<input id="logon_verification_user_id" type="hidden" name="user_id" value="" />
-		<button>{_ Send Verification Message _}</button>
+		<button type="submit">{_ Send Verification Message _}</button>
 	</form>
 </div>
 
