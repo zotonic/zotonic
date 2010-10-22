@@ -34,6 +34,7 @@
     insert/4,
     delete/2,
     delete/4,
+    delete_multiple/4,
     duplicate/3,
     update_nth/5,
     object/4,
@@ -173,21 +174,54 @@ delete(Id, Context) ->
 %% @doc Delete an edge by subject, object and predicate id
 delete(SubjectId, Pred, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Pred, Context),
-	{ok, PredName} = m_predicate:id_to_name(PredId, Context),
-	case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
-		true ->
-		    F = fun(Ctx) ->
-		        m_rsc:touch(SubjectId, Ctx),
-		        z_db:q("delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",  [SubjectId, ObjectId, PredId], Context)
-		    end,
-    
-		    z_db:transaction(F, Context),
-		    z_depcache:flush(SubjectId, Context),
-		    z_depcache:flush(ObjectId, Context),
-		    ok;
-		AclError ->
-			{error, {acl, AclError}}
-	end.
+    {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+    case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
+        true ->
+            F = fun(Ctx) ->
+                m_rsc:touch(SubjectId, Ctx),
+                z_db:q("delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",  [SubjectId, ObjectId, PredId], Ctx)
+            end,
+
+            z_db:transaction(F, Context),
+            z_depcache:flush(SubjectId, Context),
+            z_depcache:flush(ObjectId, Context),
+            ok;
+        AclError ->
+            {error, {acl, AclError}}
+    end.
+
+
+%% @doc Delete multiple edges between the subject and the object
+delete_multiple(SubjectId, Preds, ObjectId, Context) ->
+    PredIds = [ m_predicate:name_to_id_check(Pred, Context) || Pred <- Preds ],
+    PredNames = [ m_predicate:id_to_name(PredId, Context) || PredId <- PredIds ],
+    Allowed = [ z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context)
+                || {ok, PredName} <- PredNames ],
+    case is_allowed(Allowed) of
+        true ->
+            F = fun(Ctx) ->
+                m_rsc:touch(SubjectId, Ctx),
+                z_db:q("delete from edge where subject_id = $1 and object_id = $2 and predicate_id in ("
+                        ++ string:join(lists:map(fun erlang:integer_to_list/1, PredIds), ",")
+                        ++ ")",
+                        [SubjectId, ObjectId], Ctx)
+            end,
+
+            case z_db:transaction(F, Context) of
+                N when is_integer(N) -> 
+                    z_depcache:flush(SubjectId, Context),
+                    z_depcache:flush(ObjectId, Context),
+                    ok;
+                Error -> 
+                    Error
+            end;
+        AclError ->
+            {error, {acl, AclError}}
+    end.
+        
+    is_allowed([]) -> true;
+    is_allowed([true|Rest]) -> is_allowed(Rest);
+    is_allowed([Error|_]) -> Error. 
 
 
 %% @doc Duplicate all edges from one id to another id.  Skip all edges that give ACL errors.
