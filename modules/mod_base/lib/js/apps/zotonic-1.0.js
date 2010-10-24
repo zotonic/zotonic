@@ -34,7 +34,7 @@ var z_input_updater			= false;
 var z_drag_tag				= [];
 var z_registered_events		= new Object();
 
-document.domain	 = document.domain;
+// document.domain	 = document.domain;
 
 
 function z_dialog_open(options)
