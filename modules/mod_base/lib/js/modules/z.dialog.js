@@ -72,6 +72,9 @@ limitations under the License.
 				});
 				
 				$('body').append(dialogWrapper);
+				if (typeof($.widgetManager) != 'undefined') {
+					$('.dialog').widgetManager();
+				}
 				$('.dialog input').eq(0).focus();
 			}
 		},
