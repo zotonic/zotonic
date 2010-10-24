@@ -405,8 +405,8 @@ truncate(S, Len) -> truncate(S, Len, Len).
 
 %% @doc Fetch the date range from the record
 pivot_date(R) ->
-    DateStart = proplists:get_value(date_start, R),
-    DateEnd   = proplists:get_value(date_end, R),
+    DateStart = undefined_if_invalid_date(proplists:get_value(date_start, R)),
+    DateEnd   = undefined_if_invalid_date(proplists:get_value(date_end, R)),
     pivot_date1(DateStart, DateEnd).
 
     pivot_date1(S, E) when not is_tuple(S) andalso not is_tuple(E) ->
@@ -418,6 +418,44 @@ pivot_date(R) ->
     pivot_date1(S, E) when is_tuple(S) andalso is_tuple(E) ->
         {S, E}.
 
+
+    undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
+        is_integer(Y), is_integer(M), is_integer(D),
+        is_integer(H), is_integer(I), is_integer(S),
+        H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 59,
+        M >= 1, M =< 12, D >= 1, Y >= -4713, Y =< 9999
+        ->
+            MaxDays = case M of
+                        1 -> 31;
+                        3 -> 31;
+                        5 -> 31;
+                        7 -> 31;
+                        8 -> 31;
+                        10 -> 31;
+                        12 -> 31;
+                        2 ->
+                            case Y rem 400 of
+                                0 -> 29;
+                                _ -> 
+                                    case Y rem 100 of 
+                                        0 -> 28;
+                                        _ ->
+                                            case Y rem 4 of
+                                                0 -> 29; 
+                                                _ -> 28
+                                            end
+                                    end
+                            end;
+                        _ -> 
+                            30
+                      end,
+            case D =< MaxDays of
+                true -> Date;
+                false -> undefined 
+            end;
+    undefined_if_invalid_date(_) ->
+        undefined.
+            
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
