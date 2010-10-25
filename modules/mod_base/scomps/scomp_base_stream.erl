@@ -27,22 +27,22 @@ vary(_Params, _Context) -> nocache.
 
 render(_Params, _Vars, Context) ->
     {ok, z_script:add_script(
-                ["z_stream_start('",
+                ["z_stream_start(",
                  add_subdomain(z_context:streamhost(Context)),
-                 "');"], 
+                 ");"], 
                 Context)
     }.
 
 
 add_subdomain([$*|Hostname]) ->
-    z_ids:id(3) ++ Hostname;
+    [$', z_ids:id(3),Hostname,$'];
 add_subdomain(<<$*,Hostname/binary>>) ->
-    [z_ids:id(3), Hostname];
+    [$', z_ids:id(3), Hostname, $'];
 add_subdomain([$.|_] = Hostname) ->
-    z_ids:id(3) ++ Hostname;
+    [$', z_ids:id(3), Hostname, $'];
 add_subdomain(<<$.,_/binary>> = Hostname) ->
-    [z_ids:id(3), Hostname];
+    [$', z_ids:id(3), Hostname, $'];
 add_subdomain(none) ->
     "window.location.host";
 add_subdomain(Hostname) ->
-    Hostname.
+    [$', Hostname, $'].
