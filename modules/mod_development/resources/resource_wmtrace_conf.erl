@@ -23,6 +23,7 @@
 -module(resource_wmtrace_conf).
 
 -export([
+    is_authorized/2,
     event/2
         ]).
 
@@ -38,27 +39,47 @@
 %% always
 
 
+is_authorized(ReqData, Context) ->
+    z_acl:wm_is_authorized(use, mod_development, ReqData, Context).
+
 event({submit, {add, _Args}, _TriggerId, _TargetId}, Context) ->
-    Res  = z_context:get_q("resource", Context),
-    case ets:lookup(?WMTRACE_CONF_TBL, Res) of
-        [] ->
-            Eagerness = immediate,
-            ets:insert(?WMTRACE_CONF_TBL, {list_to_atom(Res), Eagerness}),
-            ok;
-        _ ->
-            already_added
-    end,
-    z_render:wire({reload, []}, Context);
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Res  = z_context:get_q("resource", Context),
+            case ets:lookup(?WMTRACE_CONF_TBL, Res) of
+                [] ->
+                    Eagerness = immediate,
+                    ets:insert(?WMTRACE_CONF_TBL, {list_to_atom(Res), Eagerness}),
+                    ok;
+                _ ->
+                    already_added
+            end,
+            z_render:wire({reload, []}, Context);
+        false ->
+            z_render:growl("You don't have permission to change tracing settings.", Context)
+    end;
 event({postback, {set_global, _Args}, _TriggerId, _TargetId}, Context) ->
-    Policy = list_to_atom(z_context:get_q("triggervalue", Context)),
-    case Policy of
-        disabled ->
-            ets:delete(?WMTRACE_CONF_TBL, trace_global);
-        Policy_ ->
-            ets:delete(?WMTRACE_CONF_TBL, trace_global),
-            ets:insert(?WMTRACE_CONF_TBL, {trace_global, Policy_})
-    end,
-    z_render:growl("Changed global resource tracing setting.", Context);
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Policy = list_to_atom(z_context:get_q("triggervalue", Context)),
+            case Policy of
+                disabled ->
+                    io:format("1.\n"),
+                    ets:delete(?WMTRACE_CONF_TBL, trace_global),
+                    io:format("2.\n");
+                Policy_ ->
+                    io:format("3.\n"),
+                    ets:delete(?WMTRACE_CONF_TBL, trace_global),
+                    io:format("4.\n"),
+                    ets:insert(?WMTRACE_CONF_TBL, {trace_global, Policy_}),
+                    io:format("5.\n")
+            end,
+            io:format("6.\n"),
+            z_render:growl("Changed global resource tracing setting.", Context);
+        false ->
+            io:format("7.\n"),
+            z_render:growl("You don't have permission to change tracing settings.", Context)
+    end;
 event({postback, {edit, _Args}, _TriggerId, _TargetId}, Context) ->
     %% not used yet, since it is only meaningful if we need 
     %% more trace options for per-resource tracing
@@ -68,9 +89,15 @@ event({postback, {edit, _Args}, _TriggerId, _TargetId}, Context) ->
     % ets:insert(?WMTRACE_CONF_TBL, {Res, NewOpts}),    
     Context;
 event({postback, {delete, Args}, _TriggerId, _TargetId}, Context) ->    
-    Res  = proplists:get_value(res_to_del, Args),
-    ets:delete(?WMTRACE_CONF_TBL, Res),
-    z_render:wire({reload, []}, Context).
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+    
+            Res  = proplists:get_value(res_to_del, Args),
+            ets:delete(?WMTRACE_CONF_TBL, Res),
+            z_render:wire({reload, []}, Context);
+        false ->
+            z_render:growl("You don't have permission to change tracing settings.", Context)
+    end.
 
 
 html(Context) ->
