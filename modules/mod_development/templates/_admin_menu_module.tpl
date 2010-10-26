@@ -3,4 +3,5 @@
 {% endif %}
 
 
+<li><a href="{% url wmtrace_conf star='' %}" {% if page_admin_wmtrace_conf %}class="current"{% endif %}>WM Trace Config</a></li>
 <li><a href="{% url wmtrace star='' %}" {% if page_admin_wmtrace %}class="current"{% endif %}>Webmachine Trace</a></li>
