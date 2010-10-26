@@ -52,7 +52,9 @@
     week_boundaries/2,
     
     timestamp_to_datetime/1,
-    datetime_to_timestamp/1
+    datetime_to_timestamp/1,
+    
+    undefined_if_invalid_date/1
 ]).
 
 
@@ -291,3 +293,42 @@ datetime_to_timestamp(undefined) ->
 datetime_to_timestamp(DT) ->
     BaseDate = calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
     calendar:datetime_to_gregorian_seconds(hd(calendar:local_time_to_universal_time_dst(DT))) - BaseDate.
+
+
+%% @doc Return 'undefined' if a given date is invalid
+undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S),
+    H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 59,
+    M >= 1, M =< 12, D >= 1, Y >= -4713, Y =< 9999
+    ->
+        MaxDays = case M of
+                    1 -> 31;
+                    3 -> 31;
+                    5 -> 31;
+                    7 -> 31;
+                    8 -> 31;
+                    10 -> 31;
+                    12 -> 31;
+                    2 ->
+                        case Y rem 400 of
+                            0 -> 29;
+                            _ -> 
+                                case Y rem 100 of 
+                                    0 -> 28;
+                                    _ ->
+                                        case Y rem 4 of
+                                            0 -> 29; 
+                                            _ -> 28
+                                        end
+                                end
+                        end;
+                    _ -> 
+                        30
+                  end,
+        case D =< MaxDays of
+            true -> Date;
+            false -> undefined 
+        end;
+undefined_if_invalid_date(_) ->
+    undefined.
