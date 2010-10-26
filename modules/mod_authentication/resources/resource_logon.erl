@@ -51,14 +51,10 @@ content_types_provided(ReqData, Context) ->
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    case get_rememberme_cookie(Context2) of
-        {ok, UserId} ->
-            Context3 = z_context:set(user_id, UserId, Context2),
-            case z_auth:logon(UserId, Context3) of
-                {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
-                {error, _Reason} -> ?WM_REPLY(true, Context3)
-            end;
-        undefined ->
+    case is_password_reset(Context2) of
+        true ->
+            ?WM_REPLY(true, Context2);
+        false ->
             case z_auth:is_auth(Context2) of
                 true ->
                     case z_context:get_q("p", Context2, []) of
@@ -66,9 +62,23 @@ resource_exists(ReqData, Context) ->
                         _P -> ?WM_REPLY(true, Context2)
                     end;
                 false ->
-                    ?WM_REPLY(true, Context2)
+                    case get_rememberme_cookie(Context2) of
+                        {ok, UserId} ->
+                            Context3 = z_context:set(user_id, UserId, Context2),
+                            case z_auth:logon(UserId, Context3) of
+                                {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
+                                {error, _Reason} -> ?WM_REPLY(true, Context3)
+                            end;
+                        undefined ->
+                            ?WM_REPLY(true, Context2)
+                    end
             end
     end.
+    
+    is_password_reset(Context) ->
+               z_context:get(is_password_reset, Context, false)
+        orelse z_context:get(is_password_reminder, Context, false).
+
 
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.

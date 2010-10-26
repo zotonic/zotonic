@@ -35,8 +35,10 @@
 	<p class="logon_link"><a id="logon_reminder_link" href="">{_ I forgot my username or password _}.</a></p>
 	{% wire id="logon_reminder_link" action={set_class target="logon_outer" class="logon_reminder"} %}
 
-	<p class="logon_link"><a id="logon_pw_link" href="">{_ Please show me the log on form _}.</a></p>
-	{% wire id="logon_pw_link" action={set_class target="logon_outer" class="logon_pw"} %}
+	{% if not m.acl.user %}
+		<p class="logon_link"><a id="logon_pw_link" href="">{_ Please show me the log on form _}.</a></p>
+		{% wire id="logon_pw_link" action={set_class target="logon_outer" class="logon_pw"} %}
+	{% endif %}
 
 	{% all include "_logon_link.tpl" %}
 </div>
