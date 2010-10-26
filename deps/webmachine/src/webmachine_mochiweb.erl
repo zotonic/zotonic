@@ -92,9 +92,9 @@ loop(MochiReq) ->
                     {_, RsFin, RdFin} ->
                         EndTime = now(),
                         {_, RdResp} = webmachine_request:send_response(RdFin),
+                        RsFin:stop(RdResp),                       
                         LogData0 = webmachine_request:log_data(RdResp),
-                        spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=Mod, end_time=EndTime}) end),
-                        RsFin:stop(RdResp),
+                        spawn(fun() -> webmachine_decision_core:do_log(LogData0#wm_log_data{resource_module=Mod, end_time=EndTime}) end),                        
                         ok;
                     {upgrade, UpgradeFun, RsFin, RdFin} ->
                         %%TODO: wmtracing 4xx result codes should ignore protocol upgrades? (because the code is 404 by default...)
@@ -106,6 +106,7 @@ loop(MochiReq) ->
                 error:_ -> 
                     ?WM_DBG({error, erlang:get_stacktrace()}),
                     {ok,RD3} = webmachine_request:send_response(500, RD2),
+                    Resource:stop(RD3),
                     case application:get_env(webmachine, webmachine_logger_module) of
                         {ok, LogModule} -> 
                             spawn(LogModule, log_access, [webmachine_request:log_data(RD3)]);
