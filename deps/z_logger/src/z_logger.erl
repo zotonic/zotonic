@@ -27,7 +27,7 @@
 
 -behaviour(gen_server).
 
--export([start/1, flush_and_stop/1, drop_and_stop/1, log/3, log/4, set_loglevel/2]).
+-export([start/1, stop/2, flush_and_stop/1, drop_and_stop/1, log/3, log/4, set_loglevel/2]).
 -export([init/1, terminate/2, handle_call/3, handle_cast/2]).
 
 -record(state, {output, loglevel, log_timestamp, format, eagerness, buffer = []}).
@@ -38,10 +38,15 @@
 %%
 %%
 
+%% @doc Spawns a new logger process
 start(Args) ->
     Options = [],
     gen_server:start(?MODULE, Args, Options).
-    
+
+%% @doc Stops a logger process.
+stop(LoggerProc, PolicyFunParam) ->
+    gen_server:call(LoggerProc, {stop, PolicyFunParam}).
+
 flush_and_stop(LoggerProc) ->
     gen_server:call(LoggerProc, flush_and_stop).
 
@@ -65,24 +70,48 @@ init(Args) ->
     Format = proplists:get_value(format, Args, text),
     Eagerness = proplists:get_value(eagerness, Args, immediate),
     Output = proplists:get_value(output, Args, {file, "zotonic_"
-                                                        ++ pid_to_list(self())
-                                                        ++ ".log"}),
-    Output2 = case Output of
-                  {file, FileName} ->
+        ++ pid_to_list(self())
+                                                ++ ".log"}),
+    Output2 = case {Eagerness, Output} of
+                  {{at_once, _Fun}, _} ->
+                      Output; % do not open the file until it needed!
+                  {_, {file, FileName}} ->
                       {ok, File} = file:open(FileName, [write, raw]),
                       {file, File};
-                  {udp, {Socket, Address, Port}} ->
+                  {_, {udp, {Socket, Address, Port}}} ->
                       {udp, {Socket, Address, Port}};
-                  {udp, {Address, Port}} ->
+                  {_, {udp, {Address, Port}}} ->
                       {ok, Socket} = gen_udp:open(0),
                       {udp, {Socket, Address, Port}}
               end,            
     {ok, #state{loglevel=LogLevel, log_timestamp=LogTimestamp,
                 format=Format, eagerness=Eagerness, output=Output2}}.
-            
+
 terminate(_Reason, _State) ->
     ok.
 
+handle_call({stop, PolicyFunParam}, _From, State) ->
+    Output = State#state.output,    
+    {at_once, PolicyFun} = State#state.eagerness, % will fail when called with wrong policy settings
+    case PolicyFun(PolicyFunParam) of
+        flush ->
+            Buffer = lists:reverse(State#state.buffer),
+            Output2 = case Output of
+                          {file, FileName} ->
+                              {ok, File} = file:open(FileName, [write, raw]),
+                              {file, File};
+                          {udp, {Socket, Address, Port}} ->
+                              {udp, {Socket, Address, Port}};
+                          {udp, {Address, Port}} ->
+                              {ok, Socket} = gen_udp:open(0),
+                              {udp, {Socket, Address, Port}}
+                      end,                    
+            [do_log(Output2, immediate, ToLog, []) || ToLog <- Buffer],            
+            close(Output2);
+        drop ->
+            drop
+    end,    
+    {stop, normal, ok, State};
 handle_call(flush_and_stop, _From, State) ->
     Output = State#state.output,
     Buffer = lists:reverse(State#state.buffer),
@@ -121,7 +150,7 @@ fmt_timestamp(binary) ->
 fmt_timestamp(text, Format) ->
     {{Y, M, D}, {H, Mm, S}} = calendar:local_time(),
     io_lib:format(Format,
-                 [Y, M, D, H, Mm, S]).
+                  [Y, M, D, H, Mm, S]).
 
 fmt_log(binary, LogTimestamp, Binary) when is_binary(Binary) ->
     case LogTimestamp of
@@ -139,27 +168,26 @@ fmt_log(text, LogTimestamp, {Text, Data}) ->
         {true, Format} ->
             Timestamp = fmt_timestamp(text, Format),
             io_lib:format(Timestamp ++ Text, Data);
-        false ->            
+        false ->
             io_lib:format(Text, Data)
     end.
 
+do_log(_Output, {at_once, _Fun}, ToLog, Buffer) ->
+    [ToLog | Buffer];
 do_log({file, File}, Eagerness, ToLog, Buffer) ->
     case Eagerness of
-        immediate -> 
+        immediate ->
             ok = file:write(File, ToLog),
             Buffer;
         delayed ->
             %% TODO
-            ok = file:write(File, ToLog);
-        at_once ->
-            ok = file:write(File, ToLog),
-            [ToLog | Buffer]
-    end;    
-do_log({udp, {Socket, Address, Port}}, _Eagerness, ToLog, Buffer) ->    
+            ok = file:write(File, ToLog)
+    end;
+do_log({udp, {Socket, Address, Port}}, _Eagerness, ToLog, Buffer) ->
     %% TODO: buffering?
     gen_udp:send(Socket, Address, Port, ToLog),
     Buffer.
-    
+
 close({file, File}) ->
     file:close(File);
 close({udp, {_Socket, _, _}}) ->

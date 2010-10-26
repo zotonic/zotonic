@@ -18,7 +18,7 @@
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 -export([wrap/3]).
--export([do/2,log_d/1,stop/0]).
+-export([do/2,log_d/1,stop/1]).
 -export([modstate/0]).
 
 -include_lib("wm_reqdata.hrl").
@@ -107,20 +107,48 @@ default(_) ->
 wrap(ReqData, Mod, Args) ->
     {ok, ModState} = Mod:init(Args),
     [{trace_dir, Dir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
-    case ets:lookup(?WMTRACE_CONF_TBL, Mod) of
-	[] ->
-	    {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
-        [{Mod, {Eagerness, LogLevel}}] ->
-        
-            {ok, LoggerProc} = start_log_proc(Dir, Mod, Eagerness, LogLevel),
+    ToTrace = case {ets:lookup(?WMTRACE_CONF_TBL, trace_global), ets:lookup(?WMTRACE_CONF_TBL, Mod)} of
+                  {_, [{Mod, Eagerness_}]} ->
+                      {true, Eagerness_};
+                  {[{trace_global, Policy}], _} ->
+                      PolicyFun = 
+                          case Policy of
+                              '5xx' ->
+                                  fun(RspCode) ->
+                                          if 
+                                              RspCode >= 500  
+                                                  andalso RspCode =< 599 -> 
+                                                  flush;
+                                              true -> drop
+                                          end
+                                  end;
+                              '4xx&5xx' -> 
+                                  fun(RspCode) ->
+                                          if 
+                                              RspCode >= 400  
+                                                  andalso RspCode =< 599 -> 
+                                                  flush;
+                                              true -> drop
+                                          end
+                                  end                                 
+                          end,
+                      {true, {at_once, PolicyFun}};
+                  {_, _} ->
+                      false
+              end,
+    case ToTrace of
+        false ->
+            {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], false)};
+        {true, Eagerness} ->
+            {ok, LoggerProc} = start_log_proc(Dir, Mod, Eagerness),
             ReqId = (ReqData#wm_reqdata.log_data)#wm_log_data.req_id,        
             log_reqid(LoggerProc, ReqId),
             log_decision(LoggerProc, v3b14),
             log_call(LoggerProc, attempt, Mod, init, Args),
             log_call(LoggerProc, result, Mod, init, {{trace, Dir}, ModState}),
             {ok, webmachine_resource:new(Mod, ModState, [ F || {F,_} <- Mod:module_info(exports) ], LoggerProc)};
-	_ ->
-	    {stop, bad_init_arg}
+        _ ->
+            {stop, bad_init_arg}
     end.
 
 modstate() ->
@@ -158,7 +186,7 @@ resource_call(F, ReqData) ->
 log_d(DecisionID) ->
     log_decision(R_Trace, DecisionID).
 
-stop() -> stop_log_proc(R_Trace).
+stop(ReqData) -> stop_log_proc(R_Trace, ReqData).
 
 
 log_reqid(false, _ReqId) ->
@@ -204,7 +232,7 @@ escape_trace_list(Final, Acc) ->
     %% non-nil-terminated list, like the dict module uses
     lists:reverse(tl(Acc))++[hd(Acc)|escape_trace_data(Final)].
 
-start_log_proc(Dir, Mod, Eagerness, Loglevel) ->
+start_log_proc(Dir, Mod, Eagerness) ->
     Now = {_,_,US} = now(),
     {{Y,M,D},{H,I,S}} = calendar:now_to_universal_time(Now),
     Filename = io_lib:format(
@@ -212,10 +240,11 @@ start_log_proc(Dir, Mod, Eagerness, Loglevel) ->
         "-~2..0B-~2..0B-~2..0B.~6..0B.wmtrace",
         [Dir, Mod, Y, M, D, H, I, S, US]),
     z_logger:start([{output, {file, Filename}},
-                    {eagerness, Eagerness}, {loglevel, Loglevel}]).
+                    {eagerness, Eagerness}, {loglevel, 5}]).
 
-stop_log_proc(LogProc) when is_pid(LogProc) ->
+stop_log_proc(LogProc, ReqData) when is_pid(LogProc) and is_tuple(ReqData) ->
     %% TODO: decide if log information should be dropped
-    z_logger:flush_and_stop(LogProc);
-stop_log_proc(_) ->
+    ResponseCode = (ReqData#wm_reqdata.log_data)#wm_log_data.response_code,
+    z_logger:stop(LogProc, ResponseCode);
+stop_log_proc(_, _) ->
     ok.
