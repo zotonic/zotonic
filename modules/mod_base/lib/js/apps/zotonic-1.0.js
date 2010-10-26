@@ -34,13 +34,8 @@ var z_input_updater			= false;
 var z_drag_tag				= [];
 var z_registered_events		= new Object();
 
+// document.domain	 = document.domain;
 
-/* 
-We need to set the domain of the session cookie to 'test'
-Then we can try to make an xhr request to 0.test, 1.test etc.
-document.domain	 = 'test';
-var z_xhr_domain = 'test';
-*/
 
 function z_dialog_open(options)
 {
@@ -324,8 +319,6 @@ function z_comet(host)
 {
 	if (host != window.location.host)
 	{
-		document.domain = window.location.host;
-
 		var url = 'http://' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
 		var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
 		comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });

@@ -72,13 +72,29 @@ limitations under the License.
 				});
 				
 				$('body').append(dialogWrapper);
-				$('.dialog input').eq(0).focus();
+
+				if (typeof($.widgetManager) != 'undefined') {
+					dialogWrapper.widgetManager();
+				}
+
+				if (typeof(tinyMCE) != 'undefined') {
+					$("textarea.tinymce", dialogWrapper).each( function() { 
+						var mce_id = $(this).attr('id');
+						setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+					} );
+				}
+
+				$('input', dialogWrapper).eq(0).focus();
 			}
 		},
 		
 		dialogRemove: function(obj)
 		{
 			obj = obj || $('.dialog');
+			
+			if (typeof(tinyMCE) != 'undefined') {
+				$("textarea.tinymce", obj).each( function() { tinyMCE.execCommand('mceRemoveControl',false, $(this).attr('id')); } );
+			}
 			
 			obj.draggable('destroy').resizable('destroy').fadeOut(300, function()
 			{
