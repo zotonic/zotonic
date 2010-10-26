@@ -30,6 +30,5 @@ date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, Context) ->
      erlydtl_dateformat:format({Date, Time}, FormatStr, Context);
 date({_,_,_} = Date, FormatStr, Context) ->
     erlydtl_dateformat:format(Date, FormatStr, Context);
-date(Input, _FormatStr, _Context) when is_list(Input) ->
-    io:format("Unexpected date parameter : ~p~n", [Input]),
-    "".
+date(_Input, _FormatStr, _Context) ->
+    undefined.
