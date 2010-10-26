@@ -215,7 +215,8 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 
                 case Id == insert_rsc orelse Changed orelse is_changed(RscId, UpdatePropsN1, Ctx) of
                     true ->
-                        {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsN1, Ctx),
+                        UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(UpdatePropsN1),
+                        {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
                         {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
                     false ->
                         {ok, RscId, notchanged}

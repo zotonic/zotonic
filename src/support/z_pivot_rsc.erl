@@ -29,6 +29,7 @@
 -export([
     poll/1,
     pivot/2,
+    pivot_resource_update/1,
     queue_all/1,
 
     get_pivot_title/1,
@@ -54,6 +55,10 @@
 % Number of queued ids taken from the queue at one go
 -define(POLL_BATCH, 100).
 
+%% Minimum day, inserted for date start search ranges
+-define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
+
+
 -record(state, {context, timer}).
 
 
@@ -67,6 +72,23 @@ poll(Context) ->
 %% @spec pivot(Id, Context) -> void()
 pivot(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot, Id}).
+
+
+%% @doc Return a modified property list with fields that need immediate pivoting on an update.
+pivot_resource_update(Props) ->
+    {DateStart, DateEnd} = pivot_date(Props),
+    [
+        {pivot_date_start, DateStart},
+        {pivot_date_end, DateEnd},
+        {pivot_date_start_month_day, month_day(DateStart)},
+        {pivot_date_end_month_day, month_day(DateEnd)}
+        | Props
+    ].
+    
+    month_day(?EPOCH_START) -> undefined;
+    month_day(?ST_JUTTEMIS) -> undefined;
+    month_day({{_Y,M,D}, _}) -> M*100+D.
+
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
@@ -328,8 +350,6 @@ pivot_resource(Id, Context) ->
     TsvIds = list_to_binary([TsvObj,TsvCat]),
 
     R = m_rsc:get(Id, Context),
-    {DateStart, DateEnd} = pivot_date(R),
-    
     N = length(ArgsD),
     Sql = list_to_binary([
             "update rsc set pivot_tsv = ",TsvSql,
@@ -342,10 +362,8 @@ pivot_resource(Id, Context) ->
             ", pivot_first_name=$",integer_to_list(N+7),
             ", pivot_surname  = $",integer_to_list(N+8),
             ", pivot_gender   = $",integer_to_list(N+9),
-            ", pivot_date_start= $",integer_to_list(N+10),
-            ", pivot_date_end  = $",integer_to_list(N+11),
-            ", pivot_title     = $",integer_to_list(N+12),
-            " where id = $",integer_to_list(N+13)
+            ", pivot_title     = $",integer_to_list(N+10),
+            " where id = $",integer_to_list(N+11)
         ]),
 
     SqlArgs = ArgsD ++ [
@@ -358,8 +376,6 @@ pivot_resource(Id, Context) ->
         truncate(proplists:get_value(name_first, R), 100),
         truncate(proplists:get_value(name_surname, R), 100),
         truncate(proplists:get_value(gender, R), 1),
-        DateStart,
-        DateEnd,
         truncate(get_pivot_title(R), 100),
         Id
     ],
@@ -405,57 +421,19 @@ truncate(S, Len) -> truncate(S, Len, Len).
 
 %% @doc Fetch the date range from the record
 pivot_date(R) ->
-    DateStart = undefined_if_invalid_date(proplists:get_value(date_start, R)),
-    DateEnd   = undefined_if_invalid_date(proplists:get_value(date_end, R)),
+    DateStart = z_datetime:undefined_if_invalid_date(proplists:get_value(date_start, R)),
+    DateEnd   = z_datetime:undefined_if_invalid_date(proplists:get_value(date_end, R)),
     pivot_date1(DateStart, DateEnd).
 
     pivot_date1(S, E) when not is_tuple(S) andalso not is_tuple(E) ->
         {undefined, undefined};
     pivot_date1(S, E) when not is_tuple(S) andalso is_tuple(E) ->
-        { {{-4000,0,0},{0,0,0}}, E};
+        { ?EPOCH_START, E};
     pivot_date1(S, E) when is_tuple(S) andalso not is_tuple(E) ->
         {S, ?ST_JUTTEMIS};
     pivot_date1(S, E) when is_tuple(S) andalso is_tuple(E) ->
         {S, E}.
 
-
-    undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
-        is_integer(Y), is_integer(M), is_integer(D),
-        is_integer(H), is_integer(I), is_integer(S),
-        H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 59,
-        M >= 1, M =< 12, D >= 1, Y >= -4713, Y =< 9999
-        ->
-            MaxDays = case M of
-                        1 -> 31;
-                        3 -> 31;
-                        5 -> 31;
-                        7 -> 31;
-                        8 -> 31;
-                        10 -> 31;
-                        12 -> 31;
-                        2 ->
-                            case Y rem 400 of
-                                0 -> 29;
-                                _ -> 
-                                    case Y rem 100 of 
-                                        0 -> 28;
-                                        _ ->
-                                            case Y rem 4 of
-                                                0 -> 29; 
-                                                _ -> 28
-                                            end
-                                    end
-                            end;
-                        _ -> 
-                            30
-                      end,
-            case D =< MaxDays of
-                true -> Date;
-                false -> undefined 
-            end;
-    undefined_if_invalid_date(_) ->
-        undefined.
-            
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
