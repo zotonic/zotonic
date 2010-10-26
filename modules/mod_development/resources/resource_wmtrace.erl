@@ -23,12 +23,16 @@
 -module(resource_wmtrace).
 
 -export([
+    is_authorized/2,
     resource_exists/2
         ]).
 
 
 -include_lib("resource_html.hrl").
 -include_lib("webmachine_logger.hrl").
+
+is_authorized(ReqData, Context) ->
+    z_acl:wm_is_authorized(use, mod_development, ReqData, Context).
 
 resource_exists(RD, Ctx) ->
     case wrq:disp_path(RD) of
