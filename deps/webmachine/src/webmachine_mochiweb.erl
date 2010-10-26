@@ -57,6 +57,7 @@ stop(Name) ->
     
 
 loop(MochiReq) ->
+    reset_process_dictionary(),
     ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
     Host = case host_headers(ReqData) of
                [H|_] -> H;
@@ -130,4 +131,26 @@ host_headers(ReqData) ->
                           "x-forwarded-server",
                           "host"]],
      V /= undefined].
-           
+
+   
+%% @doc Sometimes a connection gets re-used for different sites. Make sure that no information
+%% leaks from on request to another.
+reset_process_dictionary() ->
+    Keys = [
+        mochiweb_request_qs,
+        mochiweb_request_path,
+        mochiweb_request_recv,
+        mochiweb_request_body,
+        mochiweb_request_body_length,
+        mochiweb_request_post,
+        mochiweb_request_cookie,
+        mochiweb_request_force_close
+    ],
+    ProcessDict = erlang:erase(),
+    lists:map(fun({K,V}) ->
+                    case lists:member(K, Keys) of
+                        true -> erlang:put(K, V);
+                        false -> nop
+                    end
+              end,
+              ProcessDict).
