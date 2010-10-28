@@ -57,7 +57,7 @@
 			{% endfor %}
 			
 			<div class="clear"></div>
-			{% pager result=recipients dispatch="mailinglist_recipients" id=id qargs %}
+			{% pager result=recipients dispatch="admin_mailinglist_recipients" id=id qargs %}
 		{% endwith %}
 	{% endif %}
 	</div>
