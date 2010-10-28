@@ -63,21 +63,14 @@ event({postback, {set_global, _Args}, _TriggerId, _TargetId}, Context) ->
         true ->
             Policy = list_to_atom(z_context:get_q("triggervalue", Context)),
             case Policy of
-                disabled ->
-                    io:format("1.\n"),
-                    ets:delete(?WMTRACE_CONF_TBL, trace_global),
-                    io:format("2.\n");
+                disable ->
+                    ets:delete(?WMTRACE_CONF_TBL, trace_global);
                 Policy_ ->
-                    io:format("3.\n"),
                     ets:delete(?WMTRACE_CONF_TBL, trace_global),
-                    io:format("4.\n"),
-                    ets:insert(?WMTRACE_CONF_TBL, {trace_global, Policy_}),
-                    io:format("5.\n")
+                    ets:insert(?WMTRACE_CONF_TBL, {trace_global, Policy_})
             end,
-            io:format("6.\n"),
             z_render:growl("Changed global resource tracing setting.", Context);
         false ->
-            io:format("7.\n"),
             z_render:growl("You don't have permission to change tracing settings.", Context)
     end;
 event({postback, {edit, _Args}, _TriggerId, _TargetId}, Context) ->
