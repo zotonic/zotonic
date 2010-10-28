@@ -30,7 +30,7 @@
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->
     {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
-    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], ReqData, Context2).
+    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], Context2).
 
 
 resource_exists(ReqData, Context) ->
