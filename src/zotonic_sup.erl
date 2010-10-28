@@ -44,10 +44,10 @@ upgrade() ->
     Kill = sets:subtract(Old, New),
 
     sets:fold(fun (Id, ok) ->
-              supervisor:terminate_child(?MODULE, Id),
-              supervisor:delete_child(?MODULE, Id),
-              ok
-          end, ok, Kill),
+                      supervisor:terminate_child(?MODULE, Id),
+                      supervisor:delete_child(?MODULE, Id),
+                      ok
+              end, ok, Kill),
 
     [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
     ok.
@@ -60,23 +60,23 @@ init([]) ->
 
     % Random id generation
     Ids     = {z_ids,
-                {z_ids, start_link, []}, 
-                permanent, 5000, worker, dynamic},
+               {z_ids, start_link, []}, 
+               permanent, 5000, worker, dynamic},
     
     % File based configuration, manages the file priv/config
     Config  = {z_config,
-                {z_config, start_link, []},
-                permanent, 5000, worker, dynamic},
+               {z_config, start_link, []},
+               permanent, 5000, worker, dynamic},
 
     % Image resizer, prevents to many images to be resized at once, bogging the processor.
     PreviewServer = {z_media_preview_server,
-                {z_media_preview_server, start_link, []}, 
-                permanent, 5000, worker, dynamic},
+                     {z_media_preview_server, start_link, []}, 
+                     permanent, 5000, worker, dynamic},
 
     % Sites disapatcher, matches hosts and paths to sites and resources.
     Dispatcher = {z_sites_dispatcher,
-                {z_sites_dispatcher, start_link, []},
-                permanent, 5000, worker, dynamic},
+                  {z_sites_dispatcher, start_link, []},
+                  permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_manager,
@@ -84,53 +84,105 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-            Ids, Config, PreviewServer, Dispatcher, SitesSup
-    ],
+        Ids, Config, PreviewServer, Dispatcher, SitesSup
+                ],
 
     % Listen to IP address and Port
     WebIp = case os:getenv("ZOTONIC_IP") of
-        false -> z_config:get_dirty(listen_ip);
-        Any when Any == []; Any == "*"; Any == "any" -> any;
-        ConfIP -> ConfIP 
-    end,   
+                false -> z_config:get_dirty(listen_ip);
+                Any when Any == []; Any == "*"; Any == "any" -> any;
+                ConfIP -> ConfIP 
+            end,   
     WebPort = case os:getenv("ZOTONIC_PORT") of
-        false -> z_config:get_dirty(listen_port); 
-        Anyport -> list_to_integer(Anyport) 
-    end,
+                  false -> z_config:get_dirty(listen_port); 
+                  Anyport -> list_to_integer(Anyport) 
+              end,
+    WebPortSSL = case os:getenv("ZOTONIC_PORT_SSL") of
+                     false -> z_config:get_dirty(listen_port_ssl); 
+                     Anyport_ -> list_to_integer(Anyport_)
+                 end,      
     z_config:set_dirty(listen_ip, WebIp),
     z_config:set_dirty(listen_port, WebPort),
+    z_config:set_dirty(listen_port_ssl, WebPortSSL),    
 
-    WebConfig = [
-         {port, WebPort},
-         {error_handler, z_config:get_dirty(webmachine_error_handler)},
-         {enable_perf_logger, z_config:get_dirty(enable_perf_logger)},
-         {log_dir, z_config:get_dirty(log_dir)},
-         {dispatch, []},
-         {backlog, z_config:get_dirty(inet_backlog)}
-    ],
-    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
-
-    % Listen to the ip address and port for all sites.
-    Processes1 = Processes ++ [{webmachine_mochiweb,
-                                {webmachine_mochiweb, start, [webmachine_mochiweb, [{ip,WebIp}|WebConfig]]},
-                                permanent, 5000, worker, dynamic}],
+    WebConfig = [ 
+        {dispatcher, z_sites_dispatcher},
+        {dispatch_list, []},
+        {backlog, z_config:get_dirty(inet_backlog)}
+                ],
     
+    NonSSLOpts = [{port, WebPort}],
+    SSLOpts = [
+        {port, WebPortSSL},
+        {ssl, true},  
+        {ssl_opts, 
+         [{certfile, z_config:get_dirty(ssl_certfile)}, 
+          {keyfile, z_config:get_dirty(ssl_keyfile)}]}
+              ],
+
+    IPv4Opts = [{ip, WebIp}], % Listen to the ip address and port for all sites.
+    IPv6Opts = [{ip, any6}],
+
+    % Webmachine/Mochiweb processes
+    [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
+        [[{Name,
+           {webmachine_mochiweb, start,
+            [Name, Opts]},                                 
+           permanent, 5000, worker, dynamic}]
+         || {Name, Opts} 
+         <- [{webmachine_mochiweb, IPv4Opts ++ NonSSLOpts ++ WebConfig},
+             {webmachine_mochiweb_ssl, IPv4Opts ++ SSLOpts ++ WebConfig},
+             {webmachine_mochiweb_v6, IPv6Opts ++ NonSSLOpts ++ WebConfig},
+             {webmachine_mochiweb_v6_ssl, IPv6Opts ++ SSLOpts ++ WebConfig}]],
+
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
-    Processes2 = case WebIp of
-        any -> 
-            case ipv6_supported() of
-                true ->
-                    Processes1 ++ [{webmachine_mochiweb_v6,
-                                    {webmachine_mochiweb, start, [webmachine_mochiweb_v6, [{ip,any6}|WebConfig]]}, 
-                                    permanent, 5000, worker, dynamic}];
-                false ->
-                    Processes1
-            end;
-        _ -> Processes1
-    end,
+    EnableIPv6 = case WebIp of
+                     any -> ipv6_supported();
+                     _ -> false
+                 end,
+    EnableSSL = z_config:get_dirty(ssl),
+   
+    Processes1 = 
+        case {EnableIPv6, EnableSSL} of
+            {true, true} ->
+                Processes ++ IPv4Proc ++ IPv4SSLProc ++ IPv6Proc ++ IPv6SSLProc;
+            {true, false} ->
+                Processes ++ IPv4Proc ++ IPv6Proc;
+            {false, true} ->
+                Processes ++ IPv4Proc ++ IPv4SSLProc;
+            {false, false} ->
+                Processes ++ IPv4Proc
+        end,
 
-    {ok, {{one_for_one, 1000, 10}, Processes2}}.
+    init_webmachine(),
 
+    {ok, {{one_for_one, 1000, 10}, Processes1}}.
+
+%% @doc Sets the application parameters for webmachine and starts the logger processes.
+%%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
+%%      messing with application parameters when starting up a new wm-mochiweb process.
+init_webmachine() -> 
+    ErrorHandler0 = z_config:get_dirty(webmachine_error_handler),        
+    ErrorHandler = 
+        case ErrorHandler0 of 
+            undefined ->
+                webmachine_error_handler;
+            EH -> EH
+        end,
+       application:set_env(webmachine, error_handler, ErrorHandler),        
+        
+    LogDir = z_config:get_dirty(log_dir),
+    
+    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
+    webmachine_sup:start_logger(LogDir),
+    
+    case z_config:get_dirty(enable_perf_logger) of
+        true ->
+            application:set_env(webmachine, enable_perf_logger, true),
+            webmachine_sup:start_perf_logger(LogDir);
+        _ ->
+            ignore
+    end.
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 ipv6_supported() ->

@@ -41,6 +41,15 @@
  %% Always overruled by the environment variable ZOTONIC_PORT
  {listen_port,8000}
 
+ %% Port Zotonic will listen on for HTTPS requests.
+ %% Always overruled by the environment variable ZOTONIC_PORT_SSL
+ % {listen_port,8443}
+ 
+ %% SSL options
+ % {ssl, true},
+ % {ssl_certfile, "priv/ssl/server.crt"},
+ % {ssl_keyfile, "priv/ssl/server.key"},
+
  %% Password for the sites administration site (zotonic_status)
  %% Zotonic will generate a secure password for you, so you don't need to enable this.  
  %% When you enable this you MUST select a secure password!!!
@@ -51,6 +60,9 @@
  
  %% Directory where log files are written
  % {log_dir,"priv/log"},
+
+ %% Enable performance logging (in addition to request logging)
+ % {enable_perf_logger, true},
 
  %% Webmachine error handler, you can use your own.
  % {webmachine_error_handler,z_webmachine_error_handler},
