@@ -18,36 +18,25 @@
 -module(webmachine_mochiweb).
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
--export([start/1, start/2, stop/0, stop/1, loop/1]).
+-export([start/1, start/2, stop/0, stop/1, loop/2]).
 
 -include("webmachine_logger.hrl").
 -include_lib("wm_reqdata.hrl").
 
 start(Options) ->
     start(?MODULE, Options).
-    
+
 start(Name, Options) ->
-    {DispatchList, Options1} = get_option(dispatch, Options),
-    {ErrorHandler0, Options2} = get_option(error_handler, Options1),
-    {EnablePerfLog, Options3} = get_option(enable_perf_logger, Options2),
-    ErrorHandler = 
-        case ErrorHandler0 of 
-            undefined ->
-                webmachine_error_handler;
-            EH -> EH
-        end,
-    {LogDir, Options4} = get_option(log_dir, Options3),
-    webmachine_sup:start_logger(LogDir),
-    case EnablePerfLog of
-        true ->
-            application:set_env(webmachine, enable_perf_logger, true),
-            webmachine_sup:start_perf_logger(LogDir);
-        _ ->
-            ignore
-    end,
-    application:set_env(webmachine, dispatch_list, DispatchList),
-    application:set_env(webmachine, error_handler, ErrorHandler),
-    mochiweb_http:start([{name, Name}, {loop, fun loop/1} | Options4]).
+    {DispatchList, Options1} = get_option(dispatch_list, Options),
+    {Dispatcher, Options2} = get_option(dispatcher, Options1),    
+
+    LoopOpts = [{dispatch_list, DispatchList},
+                {dispatcher, Dispatcher}],
+
+    mochiweb_http:start([{name, Name},
+                         {loop, fun(MochiReq) -> 
+                                        loop(MochiReq, LoopOpts)
+                                end} | Options2]).
 
 stop() ->
     stop(?MODULE).
@@ -56,7 +45,7 @@ stop(Name) ->
     mochiweb_http:stop(Name).
     
 
-loop(MochiReq) ->
+loop(MochiReq, LoopOpts) ->
     reset_process_dictionary(),
     ReqData = webmachine:init_reqdata(mochiweb, MochiReq),
     Host = case host_headers(ReqData) of
@@ -64,12 +53,12 @@ loop(MochiReq) ->
                [] -> []
            end,
     Path = wrq:path(ReqData),
-    {Dispatch, ReqDispatch} = case application:get_env(webmachine, dispatcher) of
-                                  {ok, Dispatcher} ->
-                                      Dispatcher:dispatch(Host, Path, ReqData);
+    {Dispatch, ReqDispatch} = case proplists:get_value(dispatcher, LoopOpts) of
                                   undefined ->
-                                      {ok, DispatchList} = application:get_env(webmachine, dispatch_list),
-                                      {webmachine_dispatcher:dispatch(Host, Path, DispatchList), ReqData}
+                                      DispatchList = proplists:get_vaule(dispatch_list, LoopOpts, []),
+                                      {webmachine_dispatcher:dispatch(Host, Path, DispatchList), ReqData};
+                                  Dispatcher ->
+                                      Dispatcher:dispatch(Host, Path, ReqData)                                      
                               end,
     case Dispatch of
         {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens} ->
@@ -145,12 +134,12 @@ reset_process_dictionary() ->
         mochiweb_request_post,
         mochiweb_request_cookie,
         mochiweb_request_force_close
-    ],
+           ],
     ProcessDict = erlang:erase(),
     lists:map(fun({K,V}) ->
-                    case lists:member(K, Keys) of
-                        true -> erlang:put(K, V);
-                        false -> nop
-                    end
+                      case lists:member(K, Keys) of
+                          true -> erlang:put(K, V);
+                          false -> nop
+                      end
               end,
               ProcessDict).

@@ -97,7 +97,6 @@ get_fallback_site() ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    application:set_env(webmachine, dispatcher, ?MODULE),
     {ok, #state{rules=[], fallback_site=z_sites_manager:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
