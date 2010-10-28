@@ -225,8 +225,12 @@ handle_get(Prop, State) ->
     end.
 
 
+default(ssl) -> {ok, false};
+default(ssl_cert) -> {ok, filename:join([z_utils:lib_dir(priv), "ssl"])};
+default(ssl_key) -> {ok, filename:join([z_utils:lib_dir(priv), "ssl"])};
 default(password) -> {ok, generate_id(8)};
 default(listen_port) -> {ok, 8000};
+default(listen_port_ssl) -> {ok, 8443};
 default(listen_ip) -> {ok, any};
 default(log_dir) -> {ok, filename:join([z_utils:lib_dir(priv), "log"])};
 default(inet_backlog) -> {ok, 500};

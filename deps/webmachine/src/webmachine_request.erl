@@ -86,7 +86,7 @@ get_peer(ReqData) ->
     case ReqData#wm_reqdata.peer of
     	undefined ->
             Socket = ReqData#wm_reqdata.socket,
-            Peer = case inet:peername(Socket) of 
+            Peer = case mochiweb_socket:peername(Socket) of 
                 {ok, {Addr={10, _, _, _}, _Port}} ->
                     case get_header_value("x-forwarded-for", ReqData) of
                         undefined -> inet_parse:ntoa(Addr);
@@ -116,7 +116,7 @@ get_outheader_value(K, ReqData) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    case gen_tcp:send(Socket, iolist_to_binary(Data)) of
+    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
 	ok -> ok;
 	{error,closed} -> ok;
 	_ -> exit(normal)
@@ -268,10 +268,10 @@ recv_stream_body(ReqData, MaxHunkSize) ->
 recv_unchunked_body(Socket, MaxHunk, DataLeft) ->
     case MaxHunk >= DataLeft of
         true ->
-            {ok,Data1} = gen_tcp:recv(Socket,DataLeft,?IDLE_TIMEOUT),
+            {ok,Data1} = mochiweb_socket:recv(Socket,DataLeft,?IDLE_TIMEOUT),
             {Data1, done};
         false ->
-            {ok,Data2} = gen_tcp:recv(Socket,MaxHunk,?IDLE_TIMEOUT),
+            {ok,Data2} = mochiweb_socket:recv(Socket,MaxHunk,?IDLE_TIMEOUT),
             {Data2,
              fun() -> recv_unchunked_body(Socket, MaxHunk, DataLeft-MaxHunk)
              end}
@@ -285,12 +285,12 @@ recv_chunked_body(Socket, MaxHunk) ->
 recv_chunked_body(Socket, MaxHunk, LeftInChunk) ->
     case MaxHunk >= LeftInChunk of
         true ->
-            {ok,Data1} = gen_tcp:recv(Socket,LeftInChunk,?IDLE_TIMEOUT),
+            {ok,Data1} = mochiweb_socket:recv(Socket,LeftInChunk,?IDLE_TIMEOUT),
             {Data1,
              fun() -> recv_chunked_body(Socket, MaxHunk)
              end};
         false ->
-            {ok,Data2} = gen_tcp:recv(Socket,MaxHunk,?IDLE_TIMEOUT),
+            {ok,Data2} = mochiweb_socket:recv(Socket,MaxHunk,?IDLE_TIMEOUT),
             {Data2,
              fun() -> recv_chunked_body(Socket, MaxHunk, LeftInChunk-MaxHunk)
              end}
@@ -298,7 +298,7 @@ recv_chunked_body(Socket, MaxHunk, LeftInChunk) ->
 
 read_chunk_length(Socket) ->
     inet:setopts(Socket, [{packet, line}]),
-    case gen_tcp:recv(Socket, 0, ?IDLE_TIMEOUT) of
+    case mochiweb_socket:recv(Socket, 0, ?IDLE_TIMEOUT) of
         {ok, Header} ->
             inet:setopts(Socket, [{packet, raw}]),
             Splitter = fun (C) ->
