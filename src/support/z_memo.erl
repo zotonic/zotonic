@@ -72,11 +72,13 @@ get(Key, Context) ->
 
 %% @doc Store a key if memoization is set.
 set(Key, Value) ->
-	erlang:put(Key, Value).
+	erlang:put(Key, Value),
+	Value.
 
 set(Key, Value, Context) ->
 	case is_enabled(Context) of
 		true -> erlang:put(Key, Value);
-		false -> error
-	end.
+		false -> nop
+	end,
+	Value.
 
