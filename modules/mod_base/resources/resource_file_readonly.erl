@@ -56,7 +56,7 @@ init(ConfigProps) ->
 %% @doc Initialize the context for the request. Continue session when available.
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set(ConfigProps, z_context:new(ReqData)),
-    Context1 = z_context:continue_session(Context),
+    Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     {_, ReqData1, ContextFile} = ensure_file_info(ReqData, Context1),
     ContextMime = case z_context:get(mime, ContextFile) of
         undefined ->
@@ -88,11 +88,16 @@ content_types_provided(ReqData, Context) ->
 
 %% @doc Oversimplified stub for access checks.
 forbidden(ReqData, Context) ->
-    case z_context:get(root, Context) of
-        [{module, Module}] -> 
-            {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
-        _ ->
-            {false, ReqData, Context}
+    case z_context:get(id, Context) of
+        undefined ->
+            case z_context:get(root, Context) of
+                [{module, Module}] -> 
+                    {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
+                _ ->
+                    {false, ReqData, Context}
+            end;
+        RscId ->
+            {not z_acl:rsc_visible(RscId, Context), ReqData, Context}
     end.
 
 
@@ -213,28 +218,37 @@ finish_request(ReqData, Context) ->
 
 %% @doc Find the file referred to by the reqdata or the preconfigured path
 ensure_file_info(ReqData, Context) ->
-    Path = case z_context:get(path, Context) of
-        undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData));
-        ConfiguredPath -> ConfiguredPath
-    end, 
-    Cached = case z_context:get(use_cache, Context) of
-        true -> z_depcache:get(cache_key(Path), Context);
+    {Path,ContextPath} = case z_context:get(path, Context) of
+                            undefined ->
+                                mochiweb_util:unquote(wrq:disp_path(ReqData));
+                            id -> 
+                                RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
+                                ContextRsc = z_context:set(id, RscId, Context),
+                                case m_media:get(RscId, ContextRsc) of
+                                    undefined -> {undefined, ContextRsc};
+                                    Media -> {z_convert:to_list(proplists:get_value(filename, Media)), ContextRsc}
+                                end;
+                            ConfiguredPath ->
+                                {ConfiguredPath, Context}
+                        end, 
+    Cached = case z_context:get(use_cache, ContextPath) of
+        true -> z_depcache:get(cache_key(Path), ContextPath);
         _    -> undefined
     end,
     case Cached of
         undefined ->
-            case file_exists(Path, Context) of 
+            case file_exists(Path, ContextPath) of 
             	{true, FullPath} -> 
-            	    Context1 = z_context:set([ {path, Path}, {fullpath, FullPath} ], Context),
+            	    Context1 = z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextPath),
             	    {true, ReqData, Context1};
             	_ -> 
             	    %% We might be able to generate a new preview
-            	    case z_context:get(is_media_preview, Context, false) of
+            	    case z_context:get(is_media_preview, ContextPath, false) of
             	        true ->
             	            % Generate a preview, recurse on success
-            	            ensure_preview(ReqData, Path, Context);
+            	            ensure_preview(ReqData, Path, ContextPath);
             	        false ->
-                    	    {false, ReqData, Context}
+                    	    {false, ReqData, ContextPath}
             	    end
             end;
         {ok, Cache} ->
@@ -246,7 +260,7 @@ ensure_file_info(ReqData, Context) ->
                             {last_modified, Cache#cache.last_modified},
                             {body, Cache#cache.body}
                         ],
-                        Context),
+                        ContextPath),
             {true, ReqData, ContextCached}
     end.
 
@@ -254,6 +268,8 @@ ensure_file_info(ReqData, Context) ->
 cache_key(Path) ->
     {resource_file, Path}.
 
+file_exists(undefined, _Context) ->
+    false;
 file_exists([], _Context) ->
     false;
 file_exists(Name, Context) ->
