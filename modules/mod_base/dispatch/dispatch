@@ -37,7 +37,21 @@
                                             {use_cache, false},
                                             {is_media_preview, true}
                                         ]},
-    
+
+    %% Download of an image, attached to a media rsc
+    {media_attachment, ["media","attachment","id",id], resource_file_readonly, [ 
+                                            {path, id},
+                                            {use_cache, false},
+                                            {content_disposition, attachment}
+                                        ]},
+
+    %% Download of an image, attached to a media rsc
+    {media_inline, ["media","inline","id",id], resource_file_readonly, [ 
+                                            {path, id},
+                                            {use_cache, false},
+                                            {content_disposition, inline}
+                                        ]},
+
     %% Inline display of original uploaded files. Assumes the files are in the root folder.
     {media_inline, ["media","inline",'*'], resource_file_readonly, [
                                             {use_cache, false},
