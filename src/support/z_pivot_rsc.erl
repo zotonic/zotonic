@@ -85,6 +85,7 @@ pivot_resource_update(Props) ->
         | Props
     ].
     
+    month_day(undefined) -> undefined;
     month_day(?EPOCH_START) -> undefined;
     month_day(?ST_JUTTEMIS) -> undefined;
     month_day({{_Y,M,D}, _}) -> M*100+D.
