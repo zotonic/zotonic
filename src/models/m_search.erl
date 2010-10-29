@@ -40,6 +40,7 @@
     m_value/2,
     
     search/2,
+    search_pager/2,
     get_result/3
 ]).
 

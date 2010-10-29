@@ -166,6 +166,7 @@ init_counter_stats(List, Parent) ->
 to_list(#m{model=Model} = M, Context) -> Model:m_to_list(M, Context);
 to_list(#rsc_list{list=L}, _Context) -> L;
 to_list(#search_result{result=L}, _Context) -> L;
+to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
 to_list(L, _Context) when is_list(L) -> L;
@@ -174,6 +175,8 @@ to_list(N, _Context) -> z_convert:to_list(N).
 
 to_value(#m{model=Model} = M, Context) ->
     Model:m_value(M, Context);
+to_value(#m_search_result{result=#search_result{result=Result}}, _Context) ->
+    Result;
 to_value(V, _Context) ->
     V.
     
