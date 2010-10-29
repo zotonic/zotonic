@@ -220,13 +220,16 @@ finish_request(ReqData, Context) ->
 ensure_file_info(ReqData, Context) ->
     {Path,ContextPath} = case z_context:get(path, Context) of
                             undefined ->
-                                mochiweb_util:unquote(wrq:disp_path(ReqData));
+                                {mochiweb_util:unquote(wrq:disp_path(ReqData)), Context};
                             id -> 
                                 RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
                                 ContextRsc = z_context:set(id, RscId, Context),
                                 case m_media:get(RscId, ContextRsc) of
-                                    undefined -> {undefined, ContextRsc};
-                                    Media -> {z_convert:to_list(proplists:get_value(filename, Media)), ContextRsc}
+                                    undefined ->
+                                        {undefined, ContextRsc};
+                                    Media -> 
+                                        {z_convert:to_list(proplists:get_value(filename, Media)), 
+                                         z_context:set(mime, z_convert:to_list(proplists:get_value(mime, Media)), ContextRsc)}
                                 end;
                             ConfiguredPath ->
                                 {ConfiguredPath, Context}
