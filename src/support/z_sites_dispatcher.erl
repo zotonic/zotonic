@@ -382,15 +382,15 @@ try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Pro
         {ok, Remainder, NewBindings, Depth} ->
             case {proplists:get_value(ssl, Props), IsSSL} of
                 {undefined, true} ->
-                    Port = z_config:get_dirty(listen_port),
+                    Port = z_config:get(listen_port),
                     Host1 = set_port(Port, HostAsString),
                     {redirect, "http", Host1};
                 {false, true} ->
-                    Port = z_config:get_dirty(listen_port),
+                    Port = z_config:get(listen_port),
                     Host1 = set_port(Port, HostAsString),
                     {redirect, "http", Host1};            
                 {true, false} ->
-                    Port = z_config:get_dirty(listen_port_ssl),
+                    Port = z_config:get(listen_port_ssl),
                     Host1 = set_port(Port, HostAsString),
                     {redirect, "https", Host1};
                 _ ->
