@@ -33,10 +33,10 @@
 
 %% interface functions
 -export([
-	dispatch/3,
-	set_dispatch_rules/1,
-	get_fallback_site/0
-]).
+    dispatch/3,
+    set_dispatch_rules/1,
+    get_fallback_site/0
+        ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
@@ -80,11 +80,11 @@ dispatch(Host, Path, ReqData) ->
 
 %% @doc Store a new set of dispatch rules, called when a site refreshes its modules or when a site is restarted.
 set_dispatch_rules(DispatchRules) ->
-	gen_server:cast(?MODULE, {set_dispatch_rules, DispatchRules}).
+    gen_server:cast(?MODULE, {set_dispatch_rules, DispatchRules}).
 
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->
-	gen_server:call(?MODULE, {get_fallback_site}).
+    gen_server:call(?MODULE, {get_fallback_site}).
 
 
 %%====================================================================
@@ -109,35 +109,32 @@ init(_Args) ->
 %% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
 handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
     Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, ReqData) of
-        {ok, Host, DispatchList} ->
-            {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
-            case wm_dispatch(Host, PathAsString, DispatchList) of
-                {no_dispatch_match, UnmatchedPathTokens} ->
-                    {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
-                {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
-                    {{Mod, ModOpts, 
-                        [], none, % Host info
-                        PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
-                        AppRoot, StringPath}, 
-                     RDHost}
-            end;
-        {redirect, Hostname} ->
-            %% Redirect to another host name.
-            RawPath = wrq:raw_path(ReqData),
-            Uri = "http://" ++ Hostname ++ RawPath,
-            RD1 = wrq:set_resp_header("Location", Uri, ReqData),
-            {ok, RD2} = webmachine_request:send_response(301, RD1),
-            LogData = webmachine_request:log_data(RD2),
-            LogModule = 
-                case application:get_env(webmachine,webmachine_logger_module) of
-                    {ok, Val} -> Val;
-                    _ -> webmachine_logger
-                end,
-            spawn(LogModule, log_access, [LogData]),
-            {handled, RD2};
-        no_host_match ->
-            {{no_dispatch_match, undefined, undefined}, ReqData}
-    end,
+                {ok, Host, DispatchList} ->
+                    {ok, RDHost} = webmachine_request:set_metadata(zotonic_host, Host, ReqData),
+                    IsSSL = wrq:is_ssl(RDHost),
+                    case wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) of
+                        {redirect, ProtocolAsString, Hostname} ->
+                            {handled, redirect(ProtocolAsString, Hostname, ReqData)};
+                        {no_dispatch_match, UnmatchedPathTokens} ->
+                            {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
+                        {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
+                            {{Mod, ModOpts, 
+                              [], none, % Host info
+                              PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
+                              AppRoot, StringPath}, 
+                             RDHost}
+                    end;
+                {redirect, Hostname} ->
+                    ProtocolAsString = case wrq:is_ssl(ReqData) of
+                                           true ->
+                                               "https";
+                                           false ->
+                                               "http"
+                                       end,
+                    {handled, redirect(ProtocolAsString, Hostname, ReqData)};
+                no_host_match ->
+                    {{no_dispatch_match, undefined, undefined}, ReqData}
+            end,
     {reply, Reply, State};
 
 %% @doc Return the fallback site
@@ -188,6 +185,21 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+
+%% @doc Redirect to another host name.
+redirect(ProtocolAsString, Hostname, ReqData) ->
+    RawPath = wrq:raw_path(ReqData),
+    Uri = ProtocolAsString ++ "://" ++ Hostname ++ RawPath,
+    RD1 = wrq:set_resp_header("Location", Uri, ReqData),
+    {ok, RD2} = webmachine_request:send_response(301, RD1),
+    LogData = webmachine_request:log_data(RD2),
+    LogModule = 
+        case application:get_env(webmachine,webmachine_logger_module) of
+            {ok, Val} -> Val;
+            _ -> webmachine_logger
+        end,
+    spawn(LogModule, log_access, [LogData]),
+    RD2.
 
 %% @doc Fetch the host and dispatch list for the request
 %% @spec get_host_dispatch_list(webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
@@ -313,16 +325,16 @@ compile_re_path([{Token, RE, Options}|Rest], Acc) ->
 compile_re_path([Token|Rest], Acc) ->
     compile_re_path(Rest, [Token|Acc]).
 
-    %% Only allow options valid for the re:compile/3 function.
-    is_compile_opt(unicode) -> true;
-    is_compile_opt(anchored) -> true;
-    is_compile_opt(caseless) -> true;
-    is_compile_opt(dotall) -> true;
-    is_compile_opt(extended) -> true;
-    is_compile_opt(ungreedy) -> true;
-    is_compile_opt(no_auto_capture) -> true;
-    is_compile_opt(dupnames) -> true;
-    is_compile_opt(_) -> false.
+%% Only allow options valid for the re:compile/3 function.
+is_compile_opt(unicode) -> true;
+is_compile_opt(anchored) -> true;
+is_compile_opt(caseless) -> true;
+is_compile_opt(dotall) -> true;
+is_compile_opt(extended) -> true;
+is_compile_opt(ungreedy) -> true;
+is_compile_opt(no_auto_capture) -> true;
+is_compile_opt(dupnames) -> true;
+is_compile_opt(_) -> false.
 
 
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
@@ -352,7 +364,7 @@ compile_re_path([Token|Rest], Acc) ->
 %%                                            dispterm() | dispfail()
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
-wm_dispatch(Host, PathAsString, DispatchList) ->
+wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     % URIs that end with a trailing slash are implicitly one token
     % "deeper" than we otherwise might think as we are "inside"
@@ -361,17 +373,37 @@ wm_dispatch(Host, PathAsString, DispatchList) ->
 		     true -> 1;
 		     _ -> 0
 		 end,
-    try_path_binding(Host, DispatchList, Path, [], ExtraDepth).
+    try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path, [], ExtraDepth).
 
-try_path_binding(_Host, [], PathTokens, _, _) ->
+try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, _, _) ->
     {no_dispatch_match, PathTokens};
-try_path_binding(Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
+try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
     case bind(Host, PathSchema, PathTokens, Bindings, 0) of
         {ok, Remainder, NewBindings, Depth} ->
-            {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)};
+            case {proplists:get_value(ssl, Props), IsSSL} of
+                {undefined, true} ->
+                    Port = z_config:get_dirty(listen_port),
+                    Host1 = set_port(Port, HostAsString),
+                    {redirect, "http", Host1};
+                {false, true} ->
+                    Port = z_config:get_dirty(listen_port),
+                    Host1 = set_port(Port, HostAsString),
+                    {redirect, "http", Host1};            
+                {true, false} ->
+                    Port = z_config:get_dirty(listen_port_ssl),
+                    Host1 = set_port(Port, HostAsString),
+                    {redirect, "https", Host1};
+                _ ->
+                    {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)}
+            end;
         fail -> 
-            try_path_binding(Host, Rest, PathTokens, Bindings, ExtraDepth)
+            try_path_binding(IsSSL, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth)
+         
     end.
+    
+set_port(Port, Host) ->
+    {Host_, _OldPort} = split_host(Host),
+    Host_ ++ [$: | integer_to_list(Port)].
 
 bind(_Host, [], [], Bindings, Depth) ->
     {ok, [], Bindings, Depth};
@@ -382,7 +414,7 @@ bind(_Host, _, [], _, _) ->
 bind(Host, [Token|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
     bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
 bind(Host, [{Token, {Module,Function}}|RestToken],[Match|RestMatch],Bindings,Depth) 
-    when is_atom(Token), is_atom(Module), is_atom(Function) ->
+when is_atom(Token), is_atom(Module), is_atom(Function) ->
     case Module:Function(Match, z_context:new(Host)) of
         true -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
         false -> fail;
