@@ -20,7 +20,7 @@
 -export([method/1,version/1,peer/1,disp_path/1,path/1,raw_path/1,path_info/1,
          response_code/1,req_cookie/1,req_qs/1,req_headers/1,req_body/1,
          stream_req_body/2,resp_redirect/1,resp_headers/1,resp_body/1,
-         app_root/1,path_tokens/1, host_tokens/1, port/1]).
+         app_root/1,path_tokens/1, host_tokens/1, port/1, is_ssl/1]).
 -export([path_info/2,get_req_header/2,get_req_header_lc/2,do_redirect/2,fresh_resp_headers/2,
          get_resp_header/2,set_resp_header/3,set_resp_headers/2,
          set_disp_path/2,set_req_body/2,set_resp_body/2,set_response_code/2,
@@ -89,6 +89,12 @@ path_tokens(_RD = #wm_reqdata{path_tokens=PathT}) -> PathT. % list of strings
 host_tokens(_RD = #wm_reqdata{host_tokens=HostT}) -> HostT. % list of strings
 
 port(_RD = #wm_reqdata{port=Port}) -> Port. % integer
+
+is_ssl(_RD = #wm_reqdata{socket=Socket}) ->
+    case mochiweb_socket:type(Socket) of
+        ssl -> true;
+        plain -> false
+    end.
 
 response_code(_RD = #wm_reqdata{response_code=C}) when is_integer(C) -> C.
 
