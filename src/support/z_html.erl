@@ -31,7 +31,8 @@
 	noscript/1,
     escape_link/1,
     nl2br/1,
-    scrape_link_elements/1
+    scrape_link_elements/1,
+    ensure_escaped_amp/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -205,12 +206,12 @@ sanitize(Html) when is_list(Html) ->
 	sanitize1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"])).
 
 sanitize1(Html) ->
-	Parsed = mochiweb_html:parse(Html),
+	Parsed = mochiweb_html:parse(ensure_escaped_amp(Html)),
 	Sanitized = sanitize(Parsed, []),
 	flatten(Sanitized).
 
 	sanitize(B, _Stack) when is_binary(B) ->
-		B;
+		escape(B);
 	sanitize({comment, Text}, _Stack) ->
 		{comment, Text};
 	sanitize({Elt,Attrs,Enclosed}, Stack) ->
@@ -501,3 +502,51 @@ scrape_link_elements(Html) ->
         nomatch ->
             []
     end.
+
+
+%% @doc Ensure that &-characters are properly escaped inside a html string.
+ensure_escaped_amp(B) ->
+    ensure_escaped_amp(B, <<>>).
+
+ensure_escaped_amp(<<>>, Acc) ->
+    Acc;
+ensure_escaped_amp(<<$&, Rest/binary>>, Acc) ->
+    case try_amp(Rest, in_amp, <<>>) of
+        {Amp,Rest1} -> ensure_escaped_amp(Rest1, <<Acc/binary, $&, Amp/binary>>);
+        false -> ensure_escaped_amp(Rest, <<Acc/binary, "&amp;">>)
+    end;
+ensure_escaped_amp(<<C, Rest/binary>>, Acc) ->
+    ensure_escaped_amp(Rest, <<Acc/binary, C>>).
+
+
+    try_amp(<<$;,Rest/binary>>, in_ent_name, Acc) ->
+        {<<Acc/binary,$;>>, Rest};
+    try_amp(<<$;,Rest/binary>>, in_ent_val, Acc) ->
+        {<<Acc/binary,$;>>, Rest};
+    try_amp(<<$#,Rest/binary>>, in_amp, <<>>) -> 
+        try_amp(Rest, in_ent_val, <<$#>>);
+    try_amp(<<C,Rest/binary>>, in_ent_val, Acc) ->
+        case is_valid_ent_val(C) of
+            true -> try_amp(Rest, in_ent_val, <<Acc/binary,C>>);
+            false -> false
+        end;
+    try_amp(<<C,Rest/binary>>, in_amp, <<>>) ->
+        case is_valid_ent_char(C) of
+            true -> try_amp(Rest, in_ent_name, <<C>>);
+            false -> false
+        end;
+    try_amp(<<C,Rest/binary>>, in_ent_name, Acc) ->
+        case is_valid_ent_char(C) of
+            true -> try_amp(Rest, in_ent_name, <<Acc/binary, C>>);
+            false -> false
+        end;
+    try_amp(_B, _, _Acc) -> 
+        false.
+
+
+    is_valid_ent_char(C) ->
+        (C >= $a andalso C =< $z) orelse (C >= $A andalso C =< $Z).
+
+    is_valid_ent_val(C) -> 
+        (C >= $a andalso C =< $f) orelse (C >= $A andalso C =< $F)
+        orelse (C >= $0 andalso C =< $9).
