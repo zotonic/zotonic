@@ -82,6 +82,7 @@ to_integer(A) when is_atom(A) -> to_integer(atom_to_list(A));
 to_integer(B) when is_binary(B) -> to_integer(binary_to_list(B));
 to_integer(I) when is_integer(I) -> I;
 to_integer(F) when is_float(F) -> erlang:round(F);
+to_integer([C]) when is_integer(C) andalso (C > $9 orelse C < $0) -> C;
 to_integer(L) when is_list(L) -> list_to_integer(L).
 
 to_float(undefined) -> undefined;
