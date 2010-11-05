@@ -82,7 +82,7 @@ all(Context) ->
 
 %% @doc Get the list of configuration key for the module.
 get(Module, Context) when is_atom(Module) ->
-    ConfigProps = case z_depcache:get(config, Module, Context) of
+    ConfigProps = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
             [];
         {ok, Cs} ->
@@ -98,7 +98,7 @@ get(Module, Context) when is_atom(Module) ->
 	
 
 get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
-    Value = case z_depcache:get(config, Module, Context) of
+    Value = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
             undefined;
         {ok, Cs} ->

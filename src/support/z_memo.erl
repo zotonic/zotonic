@@ -39,8 +39,9 @@
 enable() ->
 	erlang:put(is_memo, true).
 
-%% @doc Disable memoization for this process.
+%% @doc Disable memoization for this process, also cleans up the possible depcache memoization.
 disable() ->
+    z_depcache:flush_process_dict(),
 	erlang:erase(is_memo),
 	erlang:erase(memo_userid).
 
