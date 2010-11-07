@@ -28,13 +28,6 @@ msgid ""
 "&amp;answer=55603" title="Google Analytics Help">Where can I find my "
 "tracking script?</a>"
 msgstr ""
-"Google Analytics tracking id.<br/>
-					You find this id in the tracking "
-"script, it has the format <strong>UA-123456-1</strong>. 
-					<a "
-"href="http://www.google.com/support/googleanalytics/bin/answer.py?hl=en"
-"&amp;answer=55603" title="Google Analytics Help">Where can I find my "
-"tracking script?</a>"
 
 #: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:12 
 msgid ""
@@ -43,7 +36,3 @@ msgid ""
 "href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. "
 "Copy the content of the meta tag provided by Google."
 msgstr ""
-"Google Webmaster Tools<br/>
-					Enter here the verification code for <a "
-"href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. "
-"Copy the content of the meta tag provided by Google."

@@ -22,79 +22,66 @@ msgstr ""
 msgid ""
 "Add a new event where"
 msgstr ""
-"Add a new event where"
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:33 
 msgid ""
 "Add event"
 msgstr ""
-"Add event"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:8 
 msgid ""
 "Add event for this artist."
 msgstr ""
-"Add event for this artist."
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:34 
 msgid ""
 "Cancel"
 msgstr ""
-"Cancel"
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:9 
 msgid ""
 "Event title"
 msgstr ""
-"Event title"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:3 
 msgid ""
 "Events for this artist"
 msgstr ""
-"Events for this artist"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:11 
 msgid ""
 "Existing events"
 msgstr ""
-"Existing events"
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:24 
 msgid ""
 "Genre"
 msgstr ""
-"Genre"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:8 
 msgid ""
 "Help about artist\'s events."
 msgstr ""
-"Help about artist\'s events."
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:9 
 msgid ""
 "Make a new event"
 msgstr ""
-"Make a new event"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:8 
 msgid ""
 "Need more help?"
 msgstr ""
-"Need more help?"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:27 
 msgid ""
 "No performances yet."
 msgstr ""
-"No performances yet."
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:16 
 msgid ""
 "Venue"
 msgstr ""
-"Venue"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:8 
 msgid ""
@@ -102,24 +89,18 @@ msgid ""
 "event, then click on the name of the event and delete it on the event\'s "
 "edit page."
 msgstr ""
-"You can quickly add events for this artist.  When you want to delete an "
-"event, then click on the name of the event and delete it on the event\'s "
-"edit page."
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:4 
 msgid ""
 "make smaller"
 msgstr ""
-"make smaller"
 
 #: ./modules/mod_admin_event/templates/_admin_edit_sidebar.artist.tpl:18 
 msgid ""
 "untitled event"
 msgstr ""
-"untitled event"
 
 #: ./modules/mod_admin_event/templates/_action_dialog_artist_event_add.tpl:6 
 msgid ""
 "will be performing."
 msgstr ""
-"will be performing."
