@@ -22,36 +22,29 @@ msgstr ""
 msgid ""
 "Description to include on every page"
 msgstr ""
-"Description to include on every page"
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:16 
 msgid ""
 "General SEO Optimization"
 msgstr ""
-"General SEO Optimization"
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:13 
 msgid ""
 "Here you find settings to optimize the indexing of your site by search "
 "engines."
 msgstr ""
-"Here you find settings to optimize the indexing of your site by search "
-"engines."
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:20 
 msgid ""
 "Keywords to include on every page. Separate keywords with a ",""
 msgstr ""
-"Keywords to include on every page. Separate keywords with a ",""
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:36 
 msgid ""
 "Save SEO settings"
 msgstr ""
-"Save SEO settings"
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:3 ./modules/mod_seo/templates/admin_seo.tpl:12 
 msgid ""
 "Search Engine Optimization"
 msgstr ""
-"Search Engine Optimization"

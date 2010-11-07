@@ -77,5 +77,7 @@ generate_po_file(Lang, Dir, Labels) ->
 
 extract_labels(_Lang, [], Acc) ->
     Acc;
+extract_labels(en, [{Lab, _Trans, Pos}|Labels], Acc) ->
+    extract_labels(en, Labels, [{Lab, "", Pos}|Acc]);
 extract_labels(Lang, [{Lab, Trans, Pos}|Labels], Acc) ->
     extract_labels(Lang, Labels, [{Lab, proplists:get_value(Lang, Trans, Lab), Pos}|Acc]).

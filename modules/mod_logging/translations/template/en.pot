@@ -22,46 +22,38 @@ msgstr ""
 msgid ""
 "Date"
 msgstr ""
-"Date"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Log"
 msgstr ""
-"Log"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:25 
 msgid ""
 "Message"
 msgstr ""
-"Message"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:24 
 msgid ""
 "Module"
 msgstr ""
-"Module"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:16 
 msgid ""
 "Most recent messages"
 msgstr ""
-"Most recent messages"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:37 
 msgid ""
 "No log messages."
 msgstr ""
-"No log messages."
 
 #: ./modules/mod_logging/templates/admin_log.tpl:23 
 msgid ""
 "Type"
 msgstr ""
-"Type"
 
 #: ./modules/mod_logging/templates/admin_log.tpl:26 
 msgid ""
 "User"
 msgstr ""
-"User"
