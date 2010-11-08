@@ -28,6 +28,11 @@ msgid ""
 "Log"
 msgstr ""
 
+#: ./modules/mod_logging/templates/admin_log.tpl:10 
+msgid ""
+"Log messages"
+msgstr ""
+
 #: ./modules/mod_logging/templates/admin_log.tpl:25 
 msgid ""
 "Message"
