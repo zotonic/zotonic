@@ -43,6 +43,10 @@
 				</form>
 			</div>
 			{% endblock %}
+
+			<div class="right language-switch">
+				{% include "_language_switch.tpl" %}
+			</div>
 		</div>
 
 		<!--[if lte IE 6]>

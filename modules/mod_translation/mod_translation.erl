@@ -24,9 +24,47 @@
 -mod_description("Generate .po files containing translatable texts by scanning templates.").
 -mod_prio(500).
 
--export([event/2, generate/1]).
+-export([
+    init/1, 
+    event/2,
+    generate/1
+]).
 
 -include("zotonic.hrl").
+
+
+%% @doc Make sure that we have the i18n.language_list setting when the site starts up.
+init(Context) ->
+    case m_config:get(i18n, language_list, Context) of
+        undefined ->
+            m_config:set_prop(i18n, language_list, list, [
+                    {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                    {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
+                    {nl, [ {language, <<"Nederlands">>}, {is_enabled, false}]},
+                    {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
+                ], Context);
+        _Exists ->
+            ok
+    end.
+
+
+%% @doc Set the current session language, reload the user agent's page.
+event({postback, {set_language, _Args}, _TriggerId, _TargetId}, Context) ->
+    Code = z_context:get_q("triggervalue", Context),
+    List = get_language_config(Context),
+    Context1 = set_language(Code, List, Context),
+    z_render:wire({reload, []}, Context1);
+
+%% @doc Set the default language.
+event({postback, {language_default, Args}, _TriggerId, _TargetId}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            {code, Code} = proplists:lookup(code, Args),
+            m_config:set_value(i18n, language, z_convert:to_binary(Code), Context),
+            Context;
+        false ->
+            z_render:growl_error("Sorry, you don't have permission to set the default language.", Context)
+    end;
 
 %% @doc Start rescanning all templates for translation tags.
 event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
@@ -44,7 +82,93 @@ event({postback, translation_reload, _TriggerId, _TargetId}, Context) ->
             z_render:growl("Reloading all .po template in the background.", Context);
         false ->
             z_render:growl_error("Sorry, you don't have permission to reload translations.", Context)
+    end;
+
+event({submit, {language_edit, Args}, _TriggerId, _TargetId}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            OldCode = proplists:get_value(code, Args, '$empty'),
+            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), 
+                        z_context:get_q("is_enabled", Context), Context),
+            Context1 = z_render:dialog_close(Context),
+            z_render:wire({reload, []}, Context1);
+        false ->
+            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+    end;
+
+event({postback, {language_delete, Args}, _TriggerId, _TargetId}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            {code, Code} = proplists:lookup(code, Args),
+            language_delete(Code, Context),
+            Context1 = z_render:dialog_close(Context),
+            z_render:wire({reload, []}, Context1);
+        false ->
+            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+    end;
+
+event({postback, {language_enable, Args}, _TriggerId, _TargetId}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            {code, Code} = proplists:lookup(code, Args),
+            language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context),
+            Context;
+        false ->
+            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
     end.
+
+
+%% @doc Set the language of the current user/session
+set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
+    case z_convert:to_list(CodeAtom) of
+        Code ->
+            Context1 = z_context:set_language(CodeAtom, Context),
+            z_context:set_session(language, CodeAtom, Context1),
+            z_notifier:notify({language, CodeAtom}, Context1),
+            Context1;
+        _Other ->
+            set_language(Code, Other, Context)
+    end.
+
+
+%% @doc Add a language to the i18n configuration
+language_add(OldIsoCode, NewIsoCode, Language, IsEnabled, Context) ->
+    IsoCodeNewAtom = z_convert:to_atom(z_string:to_slug(z_string:trim(NewIsoCode))),
+    Languages = get_language_config(Context),
+    Languages1 = proplists:delete(OldIsoCode, Languages),
+    Languages2 = lists:usort([{IsoCodeNewAtom, 
+                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
+                                 {is_enabled, z_convert:to_bool(IsEnabled)}
+                                ]} | Languages1]),
+    set_language_config(Languages2, Context).
+
+
+%% @doc Remove a language from the i18n configuration
+language_delete(IsoCode, Context) ->
+    Languages = get_language_config(Context),
+    Languages1 = proplists:delete(IsoCode, Languages),
+    set_language_config(Languages1, Context).
+
+%% @doc Set/reset the is_enabled flag of a language.
+language_enable(Code, IsEnabled, Context) ->
+    Languages = get_language_config(Context),
+    Lang = proplists:get_value(Code, Languages),
+    Lang1 = [{is_enabled, IsEnabled} | proplists:delete(is_enabled, Lang)],
+    Languages1 = lists:usort([{Code, Lang1} | proplists:delete(Code, Languages)]),
+    set_language_config(Languages1, Context).
+
+
+%% @doc Get the list of languages
+get_language_config(Context) ->
+    case m_config:get(i18n, language_list, Context) of
+        undefined -> [];
+        LanguageConfig -> proplists:get_value(list, LanguageConfig, [])
+    end.
+
+
+set_language_config(NewConfig, Context) ->
+    m_config:set_prop(i18n, language_list, list, NewConfig, Context).
+
 
 % @doc Generate all .po templates for the given site
 generate(#context{} = Context) ->
