@@ -1,10 +1,10 @@
 /* Specific styles for Zotonic admin
 ----------------------------------------------------------
 
-@package:	atatonic CSS framework 2009	
+@package:	Zotonic admin CSS
 @Author: 	Tim Benniks <tim@timbenniks.nl>
 
-Copyright 2009 Tim Benniks
+Copyright 2009,2010 Tim Benniks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -306,12 +306,24 @@ a:focus {
 	#header h1 span a:hover {
 		text-decoration: underline;
 	}
-	
-	
-	#header .right {
-		margin-top: 20px;
-		margin-right: 20px;
-	}
+
+#header .right {
+    position: absolute;
+    right: 49px;
+    top: 20px;
+}
+
+#header .right .headeritem select {
+    background-color: #6b6f7b;
+    color: white;
+    border-color: #060606;
+    margin: 1px;
+}
+
+#header .right .headeritem {
+    float: left;
+    margin-left: 10px;
+}
 
 /* navigation
 ---------------------------------------------------------- */
@@ -364,17 +376,15 @@ a:focus {
 /* Search
 ---------------------------------------------------------- */	
 
-	.search .search-wrapper {
-		position: relative;
-		margin-right: 40px;
+	#header .right .search-wrapper {
 		height: 22px;
 		width: 173px;
 		background: transparent url(../images/admin_search.png) no-repeat;
 	}
 
-	.search input,
-	.search input:focus,
-	.search input:active {
+	#header .search-wrapper input,
+	#header .search-wrapper input:focus,
+	#header .search-wrapper input:active {
 		background: none;
 		border: none;
 		color: #fff;
