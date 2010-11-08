@@ -197,8 +197,9 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                              end,
                      case VMod of
                         {ok, ValidatorModule} ->
-                            {VPostback,VScript,VCtx} = ValidatorModule:render_validator(VType, Trigger, Target, VArgs, Ctx),
-                            {[{VType,ValidatorModule,VPostback}|PostbackAcc],[VScript|ScriptAcc],VCtx};
+                            ValidatorModuleAsAtom = z_convert:to_atom(ValidatorModule),
+                            {VPostback,VScript,VCtx} = ValidatorModuleAsAtom:render_validator(VType, Trigger, Target, VArgs, Ctx),
+                            {[{VType,ValidatorModuleAsAtom,VPostback}|PostbackAcc],[VScript|ScriptAcc],VCtx};
                         _ ->
                             {PostbackAcc, ScriptAcc, Ctx}
                      end
