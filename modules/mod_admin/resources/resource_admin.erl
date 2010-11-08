@@ -26,11 +26,11 @@
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_admin, ReqData, Context).
+    z_acl:wm_is_authorized(use, z_context:get(acl_module, Context, mod_admin), ReqData, Context).
 
 
 html(Context) ->
     Template = z_context:get(template, Context, "admin.tpl"),
     Selected = z_context:get(selected, Context, "dashboard"),
     Html = z_template:render(Template, [{selected, Selected}], Context),
-	z_context:output(Html, Context).
+    z_context:output(Html, Context).

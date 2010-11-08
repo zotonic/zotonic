@@ -441,7 +441,11 @@ ensure_session(Context) ->
         undefined ->
             Context1 = z_session_manager:ensure_session(Context),
             Context2 = z_auth:logon_from_session(Context1),
-            add_nocache_headers(Context2);
+            Context3 = case get_session(language, Context2) of
+                           undefined -> Context2;
+                           Language -> Context2#context{language=Language}
+                       end,
+            add_nocache_headers(Context3);
         _ ->
             Context
     end.
@@ -763,7 +767,6 @@ language(Context) ->
 %% @spec set_language(atom(), context()) -> context()
 set_language(Lang, Context) ->
     Context#context{language=Lang}.
-
 
 %% @doc Add a response header to the request in the context.
 %% @spec add_resp_header(Header, Value, Context) -> NewContext

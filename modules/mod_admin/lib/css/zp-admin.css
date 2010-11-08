@@ -306,6 +306,12 @@ a:focus {
 	#header h1 span a:hover {
 		text-decoration: underline;
 	}
+	
+	
+	#header .right {
+		margin-top: 20px;
+		margin-right: 20px;
+	}
 
 /* navigation
 ---------------------------------------------------------- */
@@ -359,9 +365,8 @@ a:focus {
 ---------------------------------------------------------- */	
 
 	.search .search-wrapper {
-		position: absolute;
-		top: 20px;
-		right: 49px;
+		position: relative;
+		margin-right: 40px;
 		height: 22px;
 		width: 173px;
 		background: transparent url(../images/admin_search.png) no-repeat;
