@@ -31,22 +31,22 @@
 	<div class="zp-wrapper">
 		<div id="header" class="clearfix">
 			{% include "_admin_header_title.tpl" %}
-			
+
 			{% block search %}
-			<div class="right search">
-				<form action="{% url admin_overview_rsc %}" method="get">
+			<div class="right">
+                {% all include "_admin_headeritem.tpl" %}
+				<form class="headeritem" action="{% url admin_overview_rsc %}" method="get">
                     <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
                     <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
 					<div class="search-wrapper">
 						<input type="text" name="qs" value="{{q.qs|escape}}">
 					</div>
 				</form>
+
+
+
 			</div>
 			{% endblock %}
-
-			<div class="right language-switch">
-				{% include "_language_switch.tpl" %}
-			</div>
 		</div>
 
 		<!--[if lte IE 6]>
