@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}OAuth applications{% endblock %}
+{% block title %}{_ OAuth applications _}{% endblock %}
 
 {% block content %}
 <style type="text/css">
@@ -27,9 +27,9 @@
 <div id="content" class="zp-85">
     <div class="block clearfix">
         
-		<h2>Registered OAuth applications</h2>
+		<h2>{_ Registered OAuth applications _}</h2>
         <p>
-            This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database.
+            {_ This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database. _}
         </p>
 
         <ul id="oauth-apps">

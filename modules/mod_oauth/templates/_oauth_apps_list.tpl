@@ -1,11 +1,11 @@
-<h3 class="above-list ">Registered applications</h3>
+<h3 class="above-list ">{_ Registered applications _}</h3>
 
 <ul class="short-list">
     <li class="headers clearfix">
-        <span class="zp-15">Title</span>
-        <span class="zp-30">Access to</span>
-        <span class="zp-20">Consumer key</span>
-        <span class="zp-20">Consumer secret</span>
+        <span class="zp-15">{_ Title _}</span>
+        <span class="zp-30">{_ Access to _}</span>
+        <span class="zp-20">{_ Consumer key _}</span>
+        <span class="zp-20">{_ Consumer secret _}</span>
         <span class="zp-15">&nbsp;</span>
     </li>
 
@@ -23,9 +23,9 @@
         <span class="zp-20"><tt style="font-size: 80%">{{ app.consumer_key }}</tt></span>
         <span class="zp-20"><tt style="font-size: 80%">{{ app.consumer_secret }}</tt></span>
         <span class="zp-15">
-            {% button text="Edit" postback={start_edit_app id=app.id} title="Change the title, description and access permissions of this application." %}
-            {% button text="Users" postback={start_tokens id=app.id} title="Show applications/users that are using this key" %}
-            {% button text="Delete" postback={start_del_app id=app.id} %}
+            {% button text=_"Edit" postback={start_edit_app id=app.id} title=_"Change the title, description and access permissions of this application." %}
+            {% button text=_"Users" postback={start_tokens id=app.id} title=_"Show applications/users that are using this key" %}
+            {% button text=_"Delete" postback={start_del_app id=app.id} %}
         </span>
         </a>
     </li>
