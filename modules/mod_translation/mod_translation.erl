@@ -35,24 +35,32 @@
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
-    case m_config:get(i18n, language_list, Context) of
-        undefined ->
-            m_config:set_prop(i18n, language_list, list, [
-                    {en, [ {language, <<"English">>}, {is_enabled, true}]},
-                    {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
-                    {nl, [ {language, <<"Nederlands">>}, {is_enabled, false}]},
-                    {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
-                ], Context);
-        _Exists ->
-            ok
+    case Context#context.host of
+        zotonic_status -> 
+            ok;
+        _Other ->
+            case m_config:get(i18n, language_list, Context) of
+                undefined ->
+                    m_config:set_prop(i18n, language_list, list, [
+                            {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                            {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
+                            {nl, [ {language, <<"Nederlands">>}, {is_enabled, false}]},
+                            {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
+                        ], Context);
+                _Exists ->
+                    ok
+            end
     end.
 
 
 %% @doc Set the current session language, reload the user agent's page.
-event({postback, {set_language, _Args}, _TriggerId, _TargetId}, Context) ->
-    Code = z_context:get_q("triggervalue", Context),
+event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
+    Code = case proplists:get_value(code, Args) of
+                undefined -> z_context:get_q("triggervalue", Context);
+                ArgCode -> ArgCode
+            end,
     List = get_language_config(Context),
-    Context1 = set_language(Code, List, Context),
+    Context1 = set_language(z_convert:to_list(Code), List, Context),
     z_render:wire({reload, []}, Context1);
 
 %% @doc Set the default language.
