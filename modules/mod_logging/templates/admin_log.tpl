@@ -7,7 +7,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>Log messages</h2>
+		<h2>{_ Log messages _}</h2>
 
 		<form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}">
 			<input type="hidden" name="qsort" value="{{ q.qsort }}" />
