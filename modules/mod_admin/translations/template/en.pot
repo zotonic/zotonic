@@ -137,7 +137,7 @@ msgid ""
 "Customize page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_base.tpl:59 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
+#: ./modules/mod_admin/templates/admin_base.tpl:63 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
 msgid ""
 "Dashboard"
 msgstr ""
@@ -388,7 +388,7 @@ msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:21 ./modules/mod_admin/templates/admin_base.tpl:61 
+#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:21 ./modules/mod_admin/templates/admin_base.tpl:65 
 msgid ""
 "Media"
 msgstr ""
@@ -524,7 +524,7 @@ msgid ""
 "Page title"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/templates/admin_base.tpl:60 
+#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/templates/admin_base.tpl:64 
 msgid ""
 "Pages"
 msgstr ""
@@ -740,7 +740,7 @@ msgid ""
 "Surname"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_base.tpl:66 
+#: ./modules/mod_admin/templates/admin_base.tpl:70 
 msgid ""
 "System"
 msgstr ""
