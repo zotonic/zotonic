@@ -1,3 +1,3 @@
 {% if m.acl.use.mod_translation %}
-	<li><a href="{% url admin_translation %}" {% if page_admin_translation %}class="current"{% endif %}>{_ Translation _}</a></li>
+	<li><a href="{% url admin_translation %}" {% ifequal selected "translation" %}class="current"{% endifequal %}>{_ Translation _}</a></li>
 {% endif %}

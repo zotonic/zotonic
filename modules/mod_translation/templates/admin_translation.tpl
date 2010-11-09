@@ -21,6 +21,11 @@
 		    <span class="expl">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
 		</div>
 
+		<div class="clearfix">
+		    <a href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
+		    <span class="expl">{_ Show per module how much of the templates a translated. _}</span>
+		</div>
+
 		<hr />
 
 		<h3>{_ Languages overview _}</h3>

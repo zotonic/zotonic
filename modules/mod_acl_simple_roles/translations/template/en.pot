@@ -24,103 +24,83 @@ msgid ""
 "of this role will be able to obtain full access to your whole site and all "
 "underlying data."
 msgstr ""
-"<strong>Security notice</strong>: When you allow */* files then all members "
-"of this role will be able to obtain full access to your whole site and all "
-"underlying data."
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16 
 msgid ""
 "All members are allowed to view all content.  (Check this for supervisors.)"
 msgstr ""
-"All members are allowed to view all content.  (Check this for supervisors.)"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40 
 msgid ""
 "Allow editing of category"
 msgstr ""
-"Allow editing of category"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
 msgid ""
 "Check below what people that are member of this role are allowed to do."
 msgstr ""
-"Check below what people that are member of this role are allowed to do."
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32 
 msgid ""
 "Community members"
 msgstr ""
-"Community members"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77 
 msgid ""
 "File types allowed to be uploaded"
 msgstr ""
-"File types allowed to be uploaded"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70 
 msgid ""
 "File uploads"
 msgstr ""
-"File uploads"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33 
 msgid ""
 "Group members"
 msgstr ""
-"Group members"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
 msgid ""
 "Help about ACL roles."
 msgstr ""
-"Help about ACL roles."
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55 
 msgid ""
 "Manage modules"
 msgstr ""
-"Manage modules"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72 
 msgid ""
 "Maximum allowed file size for uploads (in KB)"
 msgstr ""
-"Maximum allowed file size for uploads (in KB)"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25 
 msgid ""
 "Maximum visibility (user can’t change visibility to higher level than "
 "this)"
 msgstr ""
-"Maximum visibility (user can’t change visibility to higher level than "
-"this)"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
 msgid ""
 "Need more help?"
 msgstr ""
-"Need more help?"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21 
 msgid ""
 "Only allow to update content created by the user himself. (Check for user "
 "generated content sites.)"
 msgstr ""
-"Only allow to update content created by the user himself. (Check for user "
-"generated content sites.)"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5 
 msgid ""
 "Permissions"
 msgstr ""
-"Permissions"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29 
 msgid ""
 "The whole world"
 msgstr ""
-"The whole world"
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
 msgid ""
@@ -128,12 +108,8 @@ msgid ""
 "allowed to create and edit certain categories or is able to manage certain "
 "modules."
 msgstr ""
-"Users can be member of multiple roles. Depending on the roles an user is "
-"allowed to create and edit certain categories or is able to manage certain "
-"modules."
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6 
 msgid ""
 "make smaller"
 msgstr ""
-"make smaller"
