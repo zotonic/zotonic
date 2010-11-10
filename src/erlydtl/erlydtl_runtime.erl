@@ -164,6 +164,7 @@ to_list(#search_result{result=L}, _Context) -> L;
 to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
+to_list({trans, _} = Trans, Context) -> to_list(z_trans:lookup_fallback(Trans, Context), Context);
 to_list(L, _Context) when is_list(L) -> L;
 to_list(T, _Context) when is_tuple(T) -> tuple_to_list(T);
 to_list(N, _Context) -> z_convert:to_list(N).
