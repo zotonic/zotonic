@@ -122,9 +122,10 @@
 			$(".translations").bind('tabsshow', function(event, ui) {
 				$(".tinymce-init", ui.panel).each(function() { 
 					var mce_id = $(this).attr('id');
-					console.log(mce_id);
 					setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
 				}).removeClass('tinymce-init').addClass('tinymce');
+				
+				$(".translations").tabs("select", ui.index);
 			})
 		}
 		);
