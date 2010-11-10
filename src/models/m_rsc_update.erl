@@ -143,7 +143,6 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
         true ->
             DateProps = recombine_dates(Props),
             TextProps = recombine_languages(DateProps, Context),
-            ?DEBUG(TextProps),
             AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- TextProps ],
             FilteredProps = props_filter(AtomProps, [], Context),
             EditableProps = props_filter_protected(FilteredProps),
