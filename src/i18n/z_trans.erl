@@ -24,7 +24,10 @@
     translations/2,
     parse_translations/1,
     trans/2,
+    lookup/2,
     lookup/3,
+    lookup_fallback/2,
+    lookup_fallback/3,
     default_language/1, 
     is_language/1, 
     language_list/1,
@@ -103,6 +106,9 @@ parse_translations(Context) ->
 
 
 %% @doc Strict translation lookup of a language version
+lookup(Trans, Context) ->
+    lookup(Trans, z_context:language(Context), Context).
+    
 lookup({trans, Tr}, Lang, _Context) ->
     proplists:get_value(Lang, Tr);
 lookup(Text, Lang, Context) ->
@@ -110,6 +116,39 @@ lookup(Text, Lang, Context) ->
         Lang -> Text;
         _ -> undefined
     end.
+
+%% @doc Non strict translation lookup of a language version.
+%%      In order check: requested language, default configured language, english, any
+lookup_fallback(Trans, Context) ->
+    lookup_fallback(Trans, z_context:language(Context), Context).
+
+lookup_fallback({trans, Tr}, Lang, Context) ->
+    case proplists:get_value(Lang, Tr) of
+        undefined ->
+            case default_language(Context) of
+                undefined -> take_english_or_first(Tr);
+                CfgLang ->
+                    case proplists:get_value(z_convert:to_atom(CfgLang), Tr) of
+                        undefined -> take_english_or_first(Tr);
+                        Text -> Text
+                    end
+            end;
+        Text -> 
+            Text
+    end;
+lookup_fallback(Text, _Lang, _Context) ->
+    Text.
+    
+    take_english_or_first(Tr) ->
+        case proplists:get_value(en, Tr) of
+            undefined ->
+                case Tr of
+                    [{_,Text}|_] -> Text;
+                    _ -> undefined
+                end;
+            EnglishText -> 
+                EnglishText
+        end.
 
 
 %% @doc translate a string or trans record into another language
@@ -124,15 +163,19 @@ trans(Text, Context) ->
     trans(Text, Context#context.language, Context).
 
 trans({trans, Tr0}, Language, Context) ->
-    {en, Text} = proplists:lookup(en, Tr0),
-    case translations(Text, Context) of
-        {trans, Tr} ->
-            case proplists:get_value(Language, Tr) of
-                undefined -> proplists:get_value(Language, Tr0, Text);
-                Translated -> Translated
+    case proplists:lookup(en, Tr0) of
+        {en, Text} ->
+            case translations(Text, Context) of
+                {trans, Tr} ->
+                    case proplists:get_value(Language, Tr) of
+                        undefined -> proplists:get_value(Language, Tr0, Text);
+                        Translated -> Translated
+                    end;
+                _ ->
+                    proplists:get_value(Language, Tr0, Text)
             end;
-        _ ->
-            proplists:get_value(Language, Tr0, Text)
+        none ->
+            proplists:get_value(Language, Tr0)
     end;
 trans(Text, Language, Context) ->
     case translations(Text, Context) of
