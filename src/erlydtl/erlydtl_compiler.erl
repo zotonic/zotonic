@@ -795,8 +795,8 @@ resolve_indexvariable_ast(VarTuple, Context, TreeWalker) ->
 
 opttrans_variable_ast({{Ast, VarName, Info}, TreeWalker}, Context) ->
     Ast1 = erl_syntax:application(
-            erl_syntax:atom(erlydtl_runtime), 
-            erl_syntax:atom(opttrans),
+            erl_syntax:atom(z_trans), 
+            erl_syntax:atom(lookup_fallback),
 			[
 				Ast,
 				z_context_ast(Context)
