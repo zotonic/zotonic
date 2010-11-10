@@ -134,9 +134,14 @@
 				tab_index = $(".translations ul.ui-tabs-nav li:visible").attr('data-index');
 			}
 			if (typeof(tab_index) != "undefined") {
-				console.log("select" + tab_index)
 				$(".translations").tabs("select", parseInt(tab_index));
 			}
+			
+			/* Initialize all non-initialized tinymce controls */
+			$(".tinymce-init:visible").each(function() { 
+				var mce_id = $(this).attr('id');
+				setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+			}).removeClass('tinymce-init').addClass('tinymce');
 		}
 		);
 	</script>
