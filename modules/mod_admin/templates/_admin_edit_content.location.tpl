@@ -1,7 +1,7 @@
 {# A Location has an a map interface and an address #}
 
 <div class="item-wrapper">
-	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
 		<span class="title">{_ Geodata _}</span>
 		<span class="arrow">{_ make smaller _}</span>
 	</h3>

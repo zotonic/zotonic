@@ -17,8 +17,6 @@
 			var t = this;
 			var tbId = ed.getParam('zotonic_more_toolbar', 'toolbar2')
 			
-			ed.settings.zotonic_more_toolbar = 1;
-		
 			// Hides the specified toolbar and resizes the iframe
 			ed.onPostRender.add(function() 
 			{

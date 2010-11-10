@@ -23,7 +23,8 @@
 -export([
     translations/2,
     parse_translations/1,
-    trans/2, 
+    trans/2,
+    lookup/3,
     default_language/1, 
     is_language/1, 
     language_list/1,
@@ -99,6 +100,16 @@ parse_translations(Context) ->
         to_binary(header) -> "";
         to_binary(L) -> list_to_binary(L).
             
+
+
+%% @doc Strict translation lookup of a language version
+lookup({trans, Tr}, Lang, _Context) ->
+    proplists:get_value(Lang, Tr);
+lookup(Text, Lang, Context) ->
+    case z_context:language(Context) of
+        Lang -> Text;
+        _ -> undefined
+    end.
 
 
 %% @doc translate a string or trans record into another language

@@ -27,8 +27,8 @@
     escape/1,
     unescape/1,
     strip/1,
-	sanitize/1,
-	noscript/1,
+    sanitize/1,
+    noscript/1,
     escape_link/1,
     nl2br/1,
     scrape_link_elements/1,
@@ -70,6 +70,8 @@ escape_props(Props) ->
 
 %% @doc Escape a string so that it is valid within HTML/ XML.
 %% @spec escape(iolist()) -> binary()
+escape({trans, Tr}) ->
+    {trans, [{Lang, escape(V)} || {Lang,V} <- Tr]};
 escape(undefined) -> 
     undefined;
 escape(<<>>) -> 
@@ -101,6 +103,8 @@ escape(B) when is_binary(B) ->
 
 %% @doc Unescape - reverses the effect of escape.
 %% @spec escape(iolist()) -> binary()
+unescape({trans, Tr}) ->
+    {trans, [{Lang, unescape(V)} || {Lang,V} <- Tr]};
 unescape(undefined) -> 
     undefined;
 unescape(<<>>) -> 
@@ -160,6 +164,8 @@ escape_link(Text) ->
 
 %% @doc Strip all html elements from the text. Simple parsing is applied to find the elements. Does not escape the end result.
 %% @spec strip(iolist()) -> iolist()
+strip({trans, Tr}) ->
+    {trans, [{Lang, strip(V)} || {Lang,V} <- Tr]};
 strip(undefined) ->
     [];
 strip(<<>>) ->
@@ -200,6 +206,8 @@ strip(<<_,T/binary>>, State, Acc) ->
 
 %% @doc Sanitize a (X)HTML string. Remove elements and attributes that might be harmful.
 %% @type sanitize(binary()) -> binary()
+sanitize({trans, Tr}) ->
+    {trans, [{Lang, sanitize(V)} || {Lang,V} <- Tr]};
 sanitize(Html) when is_binary(Html) ->
 	sanitize1(<<"<sanitize>",Html/binary,"</sanitize>">>);
 sanitize(Html) when is_list(Html) ->

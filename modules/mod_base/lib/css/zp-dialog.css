@@ -237,7 +237,10 @@ h5.dialog-title {
 .dialog .ui-tabs-nav li {
 	display: block;
 	float: left;
+	background-color: transparent;
 	margin: 0 1px 0 0;
+	border: 0;
+	padding: 0;
 }
 
 	.dialog .ui-tabs-nav li a {
@@ -278,4 +281,7 @@ h5.dialog-title {
 		display: none !important; 
 	}
 
+	.dialog .ui-tabs .ui-tabs-selected {
+		font-weight: normal;
+	}
 
