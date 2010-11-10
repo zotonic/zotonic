@@ -43,23 +43,23 @@
     duplicate/3,
     touch/2,
     
-	exists/2, 
-	
-	is_visible/2, is_editable/2, is_deletable/2, is_me/2, 
-	is_cat/3,
-	is_a/2,
-	is_a_id/2,
-	is_a/3,
-	
-	p/3,
-	p/4,
-	p_no_acl/3,
-	
-	op/2, o/2, o/3, o/4,
-	sp/2, s/2, s/3, s/4,
-	media/2,
-	page_url/2,
-	rid/2,
+    exists/2, 
+    
+    is_visible/2, is_editable/2, is_deletable/2, is_me/2, 
+    is_cat/3,
+    is_a/2,
+    is_a_id/2,
+    is_a/3,
+    
+    p/3,
+    p/4,
+    p_no_acl/3,
+    
+    op/2, o/2, o/3, o/4,
+    sp/2, s/2, s/3, s/4,
+    media/2,
+    page_url/2,
+    rid/2,
 
     name_lookup/2,
     uri_lookup/2
@@ -74,14 +74,14 @@ m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
         undefined -> undefined;
         RId -> 
-			case z_acl:rsc_visible(RId, Context) of
-				true ->
-					M#m{value=RId};
-				false -> 
-					fun(is_a, C) -> is_a(RId, C);
-					   (_, _C) -> undefined
-					end
-			end
+            case z_acl:rsc_visible(RId, Context) of
+                true ->
+                    M#m{value=RId};
+                false -> 
+                    fun(is_a, C) -> is_a(RId, C);
+                       (_, _C) -> undefined
+                    end
+            end
     end;
 m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) -> 
     M#m{value={is_cat, Id}};
@@ -182,11 +182,11 @@ get_raw(Id, Context) when is_integer(Id) ->
 %% @spec get_acl_fields(Id, #context) -> #acl_props
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
-	        case z_db:q_row("
-	            select is_published, is_authoritative, visible_for,
-	                publication_start, publication_end
-	            from rsc 
-	            where id = $1", [Id], Context) of
+            case z_db:q_row("
+                select is_published, is_authoritative, visible_for,
+                    publication_start, publication_end
+                from rsc 
+                where id = $1", [Id], Context) of
     
             {IsPub, IsAuth, Vis, PubS, PubE} ->
                 #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis, 
@@ -303,24 +303,24 @@ is_me(Id, Context) ->
 %% exist or the user does not have access rights to the property then return 'undefined'.
 %% p(ResourceId, atom(), Context) -> term() | undefined
 p(Id, Property, Context) 
-	when   Property =:= category_id 
-	orelse Property =:= page_url 
-	orelse Property =:= category 
-	orelse Property =:= is_a 
-	orelse Property =:= uri 
-	orelse Property =:= is_authoritative
-	orelse Property =:= default_page_url ->
-		p_no_acl(rid(Id, Context), Property, Context);
+    when   Property =:= category_id 
+    orelse Property =:= page_url 
+    orelse Property =:= category 
+    orelse Property =:= is_a 
+    orelse Property =:= uri 
+    orelse Property =:= is_authoritative
+    orelse Property =:= default_page_url ->
+        p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->
     case rid(Id, Context) of
         undefined -> 
-			undefined;
-		RId ->
-			case z_acl:rsc_visible(RId, Context) of
-				true -> p_no_acl(RId, Property, Context);
-				false -> undefined
-			end
-	end.
+            undefined;
+        RId ->
+            case z_acl:rsc_visible(RId, Context) of
+                true -> p_no_acl(RId, Property, Context);
+                false -> undefined
+            end
+    end.
 %% Fetch property from a resource; but return a default value if not found.
 p(Id, Property, DefaultValue, Context) ->
     case p(Id, Property, Context) of
@@ -347,6 +347,8 @@ p_no_acl(Id, page_url, Context) ->
         undefined -> page_url(Id, Context);
         PagePath -> PagePath
     end;
+p_no_acl(Id, translation, Context) ->
+    fun(Code) -> fun(Prop) -> z_trans:lookup(p_no_acl(Id, Prop, Context), Code, Context) end end;
 p_no_acl(Id, default_page_url, Context) -> page_url(Id, Context);
 p_no_acl(Id, uri, Context) ->
     case p_no_acl(Id, is_authoritative, Context) of
@@ -380,7 +382,7 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
                 V;
             undefined ->
                 case get(Id, Context) of
-					undefined -> undefined;
+                    undefined -> undefined;
                     PropList ->  proplists:get_value(Predicate, PropList)
                 end
         end,
@@ -410,11 +412,11 @@ op(Id, Context) ->
 
 %% Used for dereferencing object edges inside template expressions
 o(Id, _Context) ->
-	fun(P, Context) -> o(Id, P, Context) end.
+    fun(P, Context) -> o(Id, P, Context) end.
 
 %% Return the list of objects with a certain predicate
 o(Id, Predicate, Context) when is_integer(Id) ->
-	#rsc_list{list=m_edge:objects(Id, Predicate, Context)};
+    #rsc_list{list=m_edge:objects(Id, Predicate, Context)};
 o(undefined, _Predicate, _Context) ->
     #rsc_list{list=[]};
 o(Id, Predicate, Context) ->
@@ -432,7 +434,7 @@ o(undefined, _Predicate, _N, _Context) ->
 o(Id, Predicate, N, Context) ->
     o(rid(Id, Context), Predicate, N, Context).
 
-	
+    
 %% Return a list of all edge predicates to this resource
 sp(Id, Context) when is_integer(Id) ->
     m_edge:subject_predicates(Id, Context);
@@ -443,11 +445,11 @@ sp(Id, Context) ->
 
 %% Used for dereferencing subject edges inside template expressions
 s(Id, _Context) ->
-	fun(P, Context) -> s(Id, P, Context) end.
+    fun(P, Context) -> s(Id, P, Context) end.
 
 %% Return the list of subjects with a certain predicate
 s(Id, Predicate, Context) when is_integer(Id) ->
-	#rsc_list{list=m_edge:subjects(Id, Predicate, Context)};
+    #rsc_list{list=m_edge:subjects(Id, Predicate, Context)};
 s(undefined, _Predicate, _Context) ->
     #rsc_list{list=[]};
 s(Id, Predicate, Context) ->
@@ -469,20 +471,20 @@ s(Id, Predicate, N, Context) ->
 media(Id, Context) when is_integer(Id) -> 
     m_edge:objects(Id, depiction, Context);
 media(undefined, _Context) -> 
-	[];
+    [];
 media(Id, Context) -> 
-	media(rid(Id, Context), Context).
+    media(rid(Id, Context), Context).
 
-	
+    
 %% @doc Fetch a resource id from any input
 rid(Id, _Context) when is_integer(Id) ->
-	Id;
+    Id;
 rid({Id}, _Context) when is_integer(Id) ->
     Id;
 rid(#rsc_list{list=[R|_]}, _Context) ->
-	R;
+    R;
 rid(#rsc_list{list=[]}, _Context) ->
-	undefined;
+    undefined;
 rid([C|_] = UniqueName, Context) when is_integer(C) ->
     case z_utils:only_digits(UniqueName) of
         true -> list_to_integer(UniqueName);
@@ -491,11 +493,11 @@ rid([C|_] = UniqueName, Context) when is_integer(C) ->
 rid(UniqueName, Context) when is_binary(UniqueName) ->
     name_lookup(binary_to_list(UniqueName), Context);
 rid(undefined, _Context) -> 
-	undefined;
+    undefined;
 rid(UniqueName, Context) when is_atom(UniqueName) -> 
     name_lookup(atom_to_list(UniqueName), Context);
 rid(<<>>, _Context) -> 
-	undefined.
+    undefined.
 
 %% @doc Return the id of the resource with a certain unique name.
 %% name_lookup(Name, Context) -> int() | undefined
@@ -560,7 +562,7 @@ is_a(Id, Context) ->
 %% @spec is_a(int(), Context) -> list()
 is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
-	[ RscCatId | m_category:get_path(RscCatId, Context)].
+    [ RscCatId | m_category:get_path(RscCatId, Context)].
 
 %% @doc Check if the resource is in a categorie.
 %% @spec is_a(int(), atom(), Context) -> bool()
@@ -573,13 +575,13 @@ page_url(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
             CatPath = lists:reverse(is_a(Id, Context)),
-			case z_notifier:first({page_url, RscId, CatPath}, Context) of
-				{ok, Url} -> 
-					Url;
-				undefined ->
-		            Args = [{id,RscId}, {slug, p(RscId, slug, Context)}],
-		            page_url_path(CatPath, Args, Context)
-			end;
+            case z_notifier:first({page_url, RscId, CatPath}, Context) of
+                {ok, Url} -> 
+                    Url;
+                undefined ->
+                    Args = [{id,RscId}, {slug, p(RscId, slug, Context)}],
+                    page_url_path(CatPath, Args, Context)
+            end;
         _ ->
             undefined
     end.

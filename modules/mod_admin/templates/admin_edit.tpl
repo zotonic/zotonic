@@ -15,7 +15,7 @@
 		{
 			if($('#map_canvas').length)
 			{
-				googleMapsControl.buildMap({lat: 0, lng: 0, mapId: 'map_canvas', zoom: 1});
+				googleMapsControl.buildMap({lat: 70.0, lng: -50.0, mapId: 'map_canvas', zoom: 2});
 
 				window.marker = false; 
 				var map = googleMapsControl.getMap();
@@ -26,7 +26,11 @@
 				
 				$('#fill-geo').click(function()
 				{
-					var position = googleMapsControl.getGeoForAddress($('#field-title').val());
+					var address = $('#address_street_1').val() + ", "
+								+ $('#address_city').val() + ", "
+								+ $('#address_state').val() + ", "
+								+ $('#address_country').val();
+					var position = googleMapsControl.getGeoForAddress(address);
 					
 					googleMapsControl.getGeoForAddress($('#field-title').val(), function(data)
 					{
@@ -112,13 +116,25 @@
 			{
 				google.maps.event.trigger(marker, "click");
 			}
-		});
+			
+			
+			/* Handle translations tabs with tinymce controls in it. */
+			$(".translations").bind('tabsshow', function(event, ui) {
+				$(".tinymce-init", ui.panel).each(function() { 
+					var mce_id = $(this).attr('id');
+					console.log(mce_id);
+					setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+				}).removeClass('tinymce-init').addClass('tinymce');
+			})
+		}
+		);
 	</script>
 {% endblock %}
 
 {% block content %}
 {% with m.rsc[id] as r %}
   {% with r.is_editable as is_editable %}
+	{% with m.config.i18n.language_list.list as languages %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
@@ -140,13 +156,14 @@
 
 			{% wire id="rscform" type="submit" postback="rscform" %}
 			<form id="rscform" method="post" action="postback">
+				<input type="hidden" name="id" value="{{ id }}" />
 
 				<div class="zp-67" id="poststuff">
 					<div class="padding">
 
-                        {% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable %}
+						{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
 
-						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable %}
+						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
 
 						{% if r.is_a.media or r.medium %}
 						<div class="item-wrapper">
@@ -157,7 +174,7 @@
 							<div class="item clearfix">
 								{% with r.medium as medium %}
 									<div id="media-edit-view">
-										{% include "_admin_edit_media_view.tpl" id=id %}
+										{% include "_admin_edit_media_view.tpl" id=id languages=languages %}
 									</div>
 
 									{% button text=_"Replace this media item" action={dialog_media_upload id=id action={update target="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} disabled=not is_editable %}
@@ -183,7 +200,7 @@
                         {% endif %}{# website #}
 						{% endif %}{# medium #}
 
-						{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable %}
+						{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
 
                         {% if is_editable or m.rsc[id].depiction %}
 						<div class="item-wrapper">
@@ -224,11 +241,6 @@
 							</h3>
 							<div class="item clearfix">
 								<fieldset class="admin-form">
-
-									<div class="form-item clearfix">
-										<label for="field-short-title">{_ Short title _}</label>
-										<input type="text" id="field-short-title" name="short_title" value="{{ r.short_title }}" {% if not is_editable %}disabled="disabled"{% endif %} />
-									</div>
 
                                     {% if m.rsc[id].is_authoritative %}
 									<div class="path-unique-name-wrapper clearfix">
@@ -394,11 +406,9 @@
 							</div>
 						</div>
 
-						{% all catinclude "_admin_edit_sidebar.tpl" id %}
-
 						{% if not r.is_a.meta %}
 						<div class="item-wrapper" id="sort-date">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.publication_start|in_past and r.publication_end|in_future }} }">
 								<span class="title">{_ Publication period _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -451,6 +461,9 @@
 							</div>
 						</div>
 						{% endif %}
+
+						{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
+
 
 						<div class="item-wrapper" id="sort-connections">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
@@ -550,6 +563,7 @@
 			</form>
 		</div>
 	</div>
+	{% endwith %}
   {% endwith %}
 {% endwith %}
 {% endblock %}

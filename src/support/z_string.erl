@@ -411,6 +411,15 @@ to_slug(Title) ->
 
 %% @doc Map a string to a value that can be used as a name or slug. Maps all characters to lowercase and remove non digalpha chars
 %% @spec to_name(String) -> String
+to_name({trans, Tr}) ->
+    case proplists:get_value(en, Tr) of
+        undefined -> 
+            case Tr of
+                [{_,V}|_] -> to_name(V);
+                _ -> to_name([])
+            end;
+        V -> to_name(V)
+    end;
 to_name(Name) when is_binary(Name) ->
     to_name(binary_to_list(Name));
 to_name(Name) when is_atom(Name) ->

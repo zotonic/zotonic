@@ -18,17 +18,22 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:24 
+msgid ""
+"Active modules"
+msgstr ""
+
 #: ./modules/mod_translation/templates/_dialog_language_edit.tpl:3 
 msgid ""
 "Add a new language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:33 
+#: ./modules/mod_translation/templates/admin_translation.tpl:38 
 msgid ""
 "Add language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:28 
+#: ./modules/mod_translation/templates/admin_translation.tpl:33 
 msgid ""
 "All languages known to the system. You can add or remove languages."
 msgstr ""
@@ -43,12 +48,12 @@ msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:42 
+#: ./modules/mod_translation/templates/admin_translation.tpl:47 
 msgid ""
 "Default"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:66 ./modules/mod_translation/templates/_dialog_language_delete.tpl:5 
+#: ./modules/mod_translation/templates/admin_translation.tpl:71 ./modules/mod_translation/templates/_dialog_language_delete.tpl:5 
 msgid ""
 "Delete language"
 msgstr ""
@@ -58,17 +63,17 @@ msgid ""
 "Edit"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:73 ./modules/mod_translation/templates/admin_translation.tpl:80 
+#: ./modules/mod_translation/templates/admin_translation.tpl:78 ./modules/mod_translation/templates/admin_translation.tpl:85 
 msgid ""
 "Edit language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:41 
+#: ./modules/mod_translation/templates/admin_translation.tpl:46 
 msgid ""
 "Enabled"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:29 
+#: ./modules/mod_translation/templates/admin_translation.tpl:34 
 msgid ""
 "Enabled languages show up in the language selection menu. The default "
 "language is used for new visitors without a selected language."
@@ -86,27 +91,37 @@ msgid ""
 "Generate .pot files"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:43 ./modules/mod_translation/templates/_dialog_language_edit.tpl:13 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Help about translations."
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:48 ./modules/mod_translation/templates/_dialog_language_edit.tpl:13 
 msgid ""
 "ISO Code"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:44 ./modules/mod_translation/templates/_dialog_language_edit.tpl:19 
+#: ./modules/mod_translation/templates/admin_translation.tpl:49 ./modules/mod_translation/templates/_dialog_language_edit.tpl:19 
 msgid ""
 "Language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:26 ./modules/mod_translation/templates/admin_translation.tpl:37 
+#: ./modules/mod_translation/templates/admin_translation.tpl:31 ./modules/mod_translation/templates/admin_translation.tpl:42 
 msgid ""
 "Languages overview"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:86 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Need more help?"
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:91 
 msgid ""
 "No languages configured."
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:45 
+#: ./modules/mod_translation/templates/admin_translation.tpl:50 
 msgid ""
 "Options"
 msgstr ""
@@ -138,11 +153,38 @@ msgid ""
 "Show in menu"
 msgstr ""
 
+#: ./modules/mod_translation/templates/admin_translation.tpl:26 
+msgid ""
+"Show per module how much of the templates a translated."
+msgstr ""
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"The title, body and other texts can be translated in different languages. "
+"Here you can select which languages will be used."
+msgstr ""
+
 #: ./modules/mod_translation/templates/_dialog_language_delete.tpl:3 
 msgid ""
 "This will not affect any translations in the database or .po files. This "
 "only removes the reference to the language, making it impossible to select "
 "or edit content written in the delete language."
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:27 
+msgid ""
+"Title"
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:22 
+msgid ""
+"To view the up-to-date version of this module, please run "generate .pot "
+"files" first from the translation overview."
+msgstr ""
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Translate this page in other languages."
 msgstr ""
 
 #: ./modules/mod_translation/templates/admin_translation.tpl:3 ./modules/mod_translation/templates/_admin_menu_module.tpl:2 
@@ -153,4 +195,24 @@ msgstr ""
 #: ./modules/mod_translation/templates/admin_translation.tpl:10 
 msgid ""
 "Translation configuration and tools"
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:3 ./modules/mod_translation/templates/admin_translation.tpl:25 
+msgid ""
+"Translation status"
+msgstr ""
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:20 
+msgid ""
+"Translation status per module"
+msgstr ""
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:4 
+msgid ""
+"Translations"
+msgstr ""
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:5 
+msgid ""
+"make smaller"
 msgstr ""

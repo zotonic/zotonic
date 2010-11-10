@@ -141,7 +141,7 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
 
 %% @doc Add a language to the i18n configuration
 language_add(OldIsoCode, NewIsoCode, Language, IsEnabled, Context) ->
-    IsoCodeNewAtom = z_convert:to_atom(z_string:to_slug(z_string:trim(NewIsoCode))),
+    IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
     Languages2 = lists:usort([{IsoCodeNewAtom, 
