@@ -28,7 +28,7 @@ without_embedded_media(Input, Id, Context) ->
     case erlydtl_runtime:to_list(Input, Context) of
         [] -> [];
         Ids ->
-            Body = m_rsc:p(Id, body, Context),
+            Body = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Id, body, Context), Context)),
             case re:run(Body, "\<\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, list}]) of
                 nomatch -> Ids;
                 {match, L} ->
