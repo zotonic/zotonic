@@ -97,6 +97,10 @@ timesince(Date, Base, IndicatorStrings, Context) ->
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, NowText, InText, AgoText, Context) -> string()
 %% @todo Use the language in the context for translations.
+timesince(undefined, _, _AgoText, _NowText, _InText, _Context) ->
+    "";
+timesince(_, undefined, _AgoText, _NowText, _InText, _Context) ->
+    "";
 timesince(Date, Base, _AgoText, NowText, _InText, _Context) when Date == Base ->
     NowText;
 timesince(Date, Base, _AgoText, _NowText, InText, Context) when Date > Base ->
