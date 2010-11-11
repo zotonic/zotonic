@@ -83,7 +83,7 @@ timesince(Date, Base, Context) ->
 %% @todo Use the language in the context for translations.
 timesince(Date, Base, IndicatorStrings, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.
-    case [string:strip(S, both) || S <- string:tokens(IndicatorStrings, ",")] of
+    case [string:strip(S, both) || S <- string:tokens(z_convert:to_list(IndicatorStrings), ",")] of
 	[AgoText, NowText, InText] ->
 	    timesince(Date, Base, AgoText, NowText, InText, Context);
 	[AgoText, NowText] ->
