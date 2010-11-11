@@ -30,12 +30,15 @@ $.widget("ui.blockminifier",
 		if(self.options.minifiedOnInit)
 		{
 			self.element.addClass('above-item-all-corners');
-            self.item.hide();
+			self.item.hide();
 			
 			self.element.toggle(function()
 			{
 				self.element.removeClass('above-item-all-corners');
-                self.item.slideDown(200);
+				self.item.slideDown(200);
+				$("#map_canvas", self.item).each(function() {
+					google.maps.event.trigger(googleMapsControl.getMap(), 'resize');
+				});
 			},
 			function()
 			{
@@ -57,7 +60,10 @@ $.widget("ui.blockminifier",
 			function()
 			{
 				self.element.removeClass('above-item-all-corners');
-                self.item.slideDown(200);
+				self.item.slideDown(200);
+				$("#map_canvas", self.item).each(function() {
+					google.maps.event.trigger(googleMapsControl.getMap(), 'resize');
+				});
 			});
 		}
 	}

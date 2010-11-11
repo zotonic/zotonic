@@ -1,3 +1,3 @@
 {% if m.acl.is_admin %}
-<li><a href="{% url admin_modules %}" {% if page_admin_modules %}class="current"{% endif %}>Modules</a></li>
+<li><a href="{% url admin_modules %}" {% ifequal selected "modules" %}class="current"{% endifequal %}>Modules</a></li>
 {% endif %}

@@ -1,15 +1,15 @@
 {% extends "base.tpl" %}
 
-{% block title %} Authorize this request {% endblock %}
+{% block title %}{_ Authorization finished _}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-100">
-        <h1>Authorized!</h1>
+        <h1>{_ Authorized! _}</h1>
 
-        <p>You have granted the application <em>{{ token.application_title|default:"Untitled" }}</em> access your account.</p>
+        <p>{_ You have granted the application _} <em>{{ token.application_title|default:"Untitled" }}</em> {_ access your account. _}</p>
 
-        <p>You can now safely close this window.</p>
-        
+        <p>{_ You can now safely close this window. _}</p>
+
 	</div>
 {% endblock %}
 

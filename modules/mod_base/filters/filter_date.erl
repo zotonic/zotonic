@@ -25,7 +25,7 @@ date(undefined, _FormatStr, _Context) ->
 date(Input, FormatStr, Context) when is_binary(FormatStr) ->
     date(Input, binary_to_list(FormatStr), Context);
 date(Input, FormatStr, Context) when is_binary(Input) ->
-    list_to_binary(date(binary_to_list(Input), FormatStr, Context));
+    z_convert:to_binary(date(binary_to_list(Input), FormatStr, Context));
 date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, Context) ->
      erlydtl_dateformat:format({Date, Time}, FormatStr, Context);
 date({_,_,_} = Date, FormatStr, Context) ->

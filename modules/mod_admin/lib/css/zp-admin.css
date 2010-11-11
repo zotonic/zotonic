@@ -1,10 +1,10 @@
 /* Specific styles for Zotonic admin
 ----------------------------------------------------------
 
-@package:	atatonic CSS framework 2009	
+@package:	Zotonic admin CSS
 @Author: 	Tim Benniks <tim@timbenniks.nl>
 
-Copyright 2009 Tim Benniks
+Copyright 2009,2010 Tim Benniks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -307,6 +307,24 @@ a:focus {
 		text-decoration: underline;
 	}
 
+#header .right {
+    position: absolute;
+    right: 49px;
+    top: 20px;
+}
+
+#header .right .headeritem select {
+    background-color: #6b6f7b;
+    color: white;
+    border-color: #060606;
+    margin: 1px;
+}
+
+#header .right .headeritem {
+    float: left;
+    margin-left: 10px;
+}
+
 /* navigation
 ---------------------------------------------------------- */
 
@@ -358,18 +376,15 @@ a:focus {
 /* Search
 ---------------------------------------------------------- */	
 
-	.search .search-wrapper {
-		position: absolute;
-		top: 20px;
-		right: 49px;
+	#header .right .search-wrapper {
 		height: 22px;
 		width: 173px;
 		background: transparent url(../images/admin_search.png) no-repeat;
 	}
 
-	.search input,
-	.search input:focus,
-	.search input:active {
+	#header .search-wrapper input,
+	#header .search-wrapper input:focus,
+	#header .search-wrapper input:active {
 		background: none;
 		border: none;
 		color: #fff;
@@ -390,6 +405,19 @@ fieldset {
 	padding: 0;
 	border: none;
 }
+
+	fieldset legend {
+		display: none;
+	}
+
+	fieldset.translation {
+		border-top: 1px solid #aaa;
+	}
+	
+		fieldset.translation legend {
+			display: block;
+			padding: 0px 8px 4px 0px;
+		}
 
 button, 
 a.button {
@@ -926,4 +954,60 @@ body.wait button {
 	margin: 0 0 9px 0;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
+}
+
+
+/* tabs
+-------------------------------------------------------------- */
+
+.ui-tabs-nav {
+	overflow: hidden;
+	background-color: none;
+	margin-top: 4px;
+}
+
+	.ui-tabs-nav li {
+		float: left;
+		margin-right: 8px;
+		padding: 4px;
+		border: 1px solid #bbb;
+		background-color: #f1f1f1;
+		border-bottom: none;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		-moz-border-top-left-radius: 6px;
+		-moz-border-top-right-radius: 6px;
+		-webkit-border-top-left-radius: 6px;
+		-webkit-border-top-right-radius: 6px;
+	}
+	
+	.ui-tabs-nav li a {
+		text-decoration: none;
+	}
+
+	.ui-tabs-nav .ui-state-hover {
+		border-color: #999;
+		background-color: #e4e4e4;
+	}
+	
+	.ui-tabs-nav .ui-tabs-selected {
+		font-weight: bold;
+		border-color: #999;
+		background-color: #e4e4e4;
+	}
+
+.ui-tabs-hide {
+	display: none;
+}
+
+
+
+div.translations table.mceLayout {
+	border-top: solid 1px #bbb;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	-moz-border-top-left-radius: 0px;
+	-moz-border-top-right-radius: 0px;
+	-webkit-border-top-left-radius: 0px;
+	-webkit-border-top-right-radius: 0px;
 }

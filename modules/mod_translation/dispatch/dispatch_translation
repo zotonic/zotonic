@@ -1,0 +1,6 @@
+[
+    {admin_translation, ["admin", "translation"], resource_admin, 
+        [{acl_module, mod_translation}, {template, "admin_translation.tpl"}, {selected, translation}]},
+    {admin_translation_status, ["admin", "translation", "status"], resource_admin_module_manager, 
+        [{acl_module, mod_translation}, {template, "admin_translation_status.tpl"}, {selected, translation}]}
+].

@@ -795,8 +795,8 @@ resolve_indexvariable_ast(VarTuple, Context, TreeWalker) ->
 
 opttrans_variable_ast({{Ast, VarName, Info}, TreeWalker}, Context) ->
     Ast1 = erl_syntax:application(
-            erl_syntax:atom(erlydtl_runtime), 
-            erl_syntax:atom(opttrans),
+            erl_syntax:atom(z_trans), 
+            erl_syntax:atom(lookup_fallback),
 			[
 				Ast,
 				z_context_ast(Context)
@@ -853,6 +853,19 @@ resolve_variable_ast({variable, {identifier, _, "now"}}, Context, TreeWalker, _F
             Val
     end,
     {{Ast, "now", #ast_info{}}, TreeWalker};
+
+resolve_variable_ast({variable, {identifier, _, "z_language"}}, Context, TreeWalker, _FinderFunction) ->
+    Ast = case resolve_scoped_variable_ast("z_language", Context) of
+        undefined ->
+            erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(language),
+                [z_context_ast(Context)]);
+        Val ->
+            Val
+    end,
+    {{Ast, "z_language", #ast_info{}}, TreeWalker};
+
 
 resolve_variable_ast({variable, {identifier, _, VarName}}, Context, TreeWalker, FinderFunction) ->
     Ast = case resolve_scoped_variable_ast(VarName, Context) of

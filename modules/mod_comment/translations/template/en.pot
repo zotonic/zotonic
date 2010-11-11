@@ -22,94 +22,78 @@ msgstr ""
 msgid ""
 "Added on"
 msgstr ""
-"Added on"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:11 ./modules/mod_comment/templates/_comments.tpl:1 ./modules/mod_comment/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Comments"
 msgstr ""
-"Comments"
 
 #: ./modules/mod_comment/templates/_comments_form.tpl:15 
 msgid ""
 "E-mail"
 msgstr ""
-"E-mail"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:20 
 msgid ""
 "Email"
 msgstr ""
-"Email"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:36 
+#: ./modules/mod_comment/templates/_comments_form.tpl:35 
 msgid ""
 "Log on or sign up to comment"
 msgstr ""
-"Log on or sign up to comment"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:18 ./modules/mod_comment/templates/_comments_form.tpl:24 
 msgid ""
 "Message"
 msgstr ""
-"Message"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:19 ./modules/mod_comment/templates/_comments_form.tpl:10 
 msgid ""
 "Name"
 msgstr ""
-"Name"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:21 
 msgid ""
 "Options"
 msgstr ""
-"Options"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:17 
 msgid ""
 "Page"
 msgstr ""
-"Page"
 
 #: ./modules/mod_comment/templates/_comments_comment.tpl:4 
 msgid ""
 "Posted"
 msgstr ""
-"Posted"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:4 
 msgid ""
 "Recent Comments"
 msgstr ""
-"Recent Comments"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:13 
 msgid ""
 "Recent comments"
 msgstr ""
-"Recent comments"
 
 #: ./modules/mod_comment/templates/_comments_form.tpl:29 
 msgid ""
 "Send"
 msgstr ""
-"Send"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:45 
 msgid ""
 "There are no comments."
 msgstr ""
-"There are no comments."
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:39 
 msgid ""
 "delete"
 msgstr ""
-"delete"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:38 
 msgid ""
 "view"
 msgstr ""
-"view"

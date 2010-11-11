@@ -22,52 +22,43 @@ msgstr ""
 msgid ""
 "Click images to import them in"
 msgstr ""
-"Click images to import them in"
 
 #: ./modules/mod_imageclipper/templates/page_imageclipper.tpl:9 
 msgid ""
 "Clip to"
 msgstr ""
-"Clip to"
 
 #: ./modules/mod_imageclipper/templates/page_imageclipper.tpl:3 ./modules/mod_imageclipper/templates/page_imageclipper.tpl:6 ./modules/mod_imageclipper/templates/page_clips.tpl:3 ./modules/mod_imageclipper/templates/clipper_go.tpl:2 
 msgid ""
 "Image clipper"
 msgstr ""
-"Image clipper"
 
 #: ./modules/mod_imageclipper/templates/page_clips.tpl:31 
 msgid ""
 "More"
 msgstr ""
-"More"
 
 #: ./modules/mod_imageclipper/templates/page_clips.tpl:6 
 msgid ""
 "My Image clippings"
 msgstr ""
-"My Image clippings"
 
 #: ./modules/mod_imageclipper/templates/page_clips.tpl:16 
 msgid ""
 "The clippings were successfully added to your profile!"
 msgstr ""
-"The clippings were successfully added to your profile!"
 
 #: ./modules/mod_imageclipper/templates/page_imageclipper.tpl:8 
 msgid ""
 "To use the clipper, drag the following link to your bookmarks bar:"
 msgstr ""
-"To use the clipper, drag the following link to your bookmarks bar:"
 
 #: ./modules/mod_imageclipper/templates/_clipper_bookmarklet.tpl:1 
 msgid ""
 "Upload"
 msgstr ""
-"Upload"
 
 #: ./modules/mod_imageclipper/templates/page_clips.tpl:20 
 msgid ""
 "You have the following image clippings:"
 msgstr ""
-"You have the following image clippings:"

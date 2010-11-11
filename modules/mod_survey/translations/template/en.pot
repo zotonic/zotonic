@@ -22,110 +22,90 @@ msgstr ""
 msgid ""
 "Are you sure you want to delete this question?"
 msgstr ""
-"Are you sure you want to delete this question?"
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:41 
 msgid ""
 "Below you can define your survey. Drag items from the left to the right."
 msgstr ""
-"Below you can define your survey. Drag items from the left to the right."
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:25 
 msgid ""
 "Cancel"
 msgstr ""
-"Cancel"
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:20 
 msgid ""
 "Choices"
 msgstr ""
-"Choices"
 
 #: ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:13 
 msgid ""
 "Drag questions here."
 msgstr ""
-"Drag questions here."
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:4 
 msgid ""
 "Edit"
 msgstr ""
-"Edit"
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:9 
 msgid ""
 "Name"
 msgstr ""
-"Name"
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:6 
 msgid ""
 "Please enter a name of your question (for reporting), and the question that "
 "will be shown to the people surveyed."
 msgstr ""
-"Please enter a name of your question (for reporting), and the question that "
-"will be shown to the people surveyed."
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:14 
 msgid ""
 "Question"
 msgstr ""
-"Question"
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:45 
 msgid ""
 "Question Templates"
 msgstr ""
-"Question Templates"
 
 #: ./modules/mod_survey/templates/survey.tpl:34 
 msgid ""
 "Ready"
 msgstr ""
-"Ready"
 
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:24 
 msgid ""
 "Save"
 msgstr ""
-"Save"
 
 #: ./modules/mod_survey/templates/survey.tpl:31 
 msgid ""
 "Sorry, this survey doesn't have any questions."
 msgstr ""
-"Sorry, this survey doesn't have any questions."
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:35 
 msgid ""
 "Survey"
 msgstr ""
-"Survey"
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:41 
 msgid ""
 "You can create your survey by dragging the Question templates to the survey "
 "on the right."
 msgstr ""
-"You can create your survey by dragging the Question templates to the survey "
-"on the right."
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:52 
 msgid ""
 "Your survey"
 msgstr ""
-"Your survey"
 
 #: ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4 
 msgid ""
 "edit"
 msgstr ""
-"edit"
 
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:36 
 msgid ""
 "make smaller"
 msgstr ""
-"make smaller"

@@ -67,9 +67,9 @@ ensure_id(Context) ->
 
 %% @doc Handle the submit of the resource edit form
 event({submit, rscform, _FormId, _TargetId}, Context) ->
-    Post = z_context:get_q_all(Context),
+    Post = z_context:get_q_all_noz(Context),
     Props = filter_props(Post),
-    Title = ?__(proplists:get_value("title", Props), Context),
+    Title = ?__(get_title(Props), Context),
     Id = z_convert:to_integer(proplists:get_value("id", Props)),
     Props1 = proplists:delete("id", Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
@@ -91,7 +91,7 @@ event({submit, rscform, _FormId, _TargetId}, Context) ->
                                 true ->  z_render:wire("delete-button", {disable, []}, Context4b);
                                 false -> z_render:wire("delete-button", {enable, []}, Context4b)
                             end,
-                            Context6 = z_render:growl(["Saved ",z_html:strip(Title),"."], Context5),
+                            Context6 = z_render:growl(["Saved ",z_html:escape(Title),"."], Context5),
                             case proplists:is_defined("save_duplicate", Post) of
                                 true ->
                                     z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
@@ -148,6 +148,7 @@ filter_props(Fs) ->
         "postback",
         "z_trigger_id",
         "z_pageid",
+        "z_submitter",
         "trigger_value",
         "save_view",
         "save_duplicate",
@@ -155,3 +156,8 @@ filter_props(Fs) ->
     ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
     %[ {list_to_existing_atom(K), list_to_binary(V)} || {K,V} <- Props ].
+
+
+get_title([]) -> "untitled";
+get_title([{"title" ++ _, Title}|_]) -> Title;
+get_title([_|Rest]) -> get_title(Rest).

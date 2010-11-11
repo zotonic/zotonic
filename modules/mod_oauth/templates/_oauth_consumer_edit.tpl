@@ -4,32 +4,32 @@
     {% tabs id=#tabs %}
     <div id="{{ #tabs }}">
         <ul class="clearfix">
-            <li><a href="#{{ #tab }}-details">Details</a></li>
-            <li><a href="#{{ #tab }}-auth">Authorization</a></li>
+            <li><a href="#{{ #tab }}-details">{_ Details _}</a></li>
+            <li><a href="#{{ #tab }}-auth">{_ Authorization _}</a></li>
         </ul>
 
         <div id="{{ #tab }}-details">
 
             <div class="form-item clearfix">
-                <label>Application title:
+                <label>{_ Application title _}:
                     <input type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
                 </label>
             </div>
 
             <div class="form-item clearfix">
-                <label>Homepage:
+                <label>{_ Homepage _}:
                     <input type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
                 </label>
             </div>
 
             <div class="form-item clearfix">
-                <label>Description:
+                <label>{_ Description _}:
                     <textarea name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
                 </label>
             </div>
 
             <div class="form-item clearfix">
-                <label>Callback URL:
+                <label>{_ Callback URL _}:
                     <input type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
                 </label>
             </div>
@@ -39,7 +39,7 @@
                 {% button type="submit" text="Update" %}
                 {% button action={dialog_close} text="Cancel" %}
                 {% else %}
-                When done, go to the authorization tab to set permissions.
+                {_ When done, go to the authorization tab to set permissions. _}
                 {% endif %}
                 
             </div>
@@ -66,11 +66,11 @@
 
             <div class="form-item clearfix">
                 {% if consumer.id %}
-                {% button type="submit" text="Update" %}
+                {% button type="submit" text=_"Update" %}
                 {% else %}
-                {% button type="submit" text="Add application" %}
+                {% button type="submit" text=_"Add application" %}
                 {% endif %}
-                {% button action={dialog_close} text="Cancel" %}
+                {% button action={dialog_close} text=_"Cancel" %}
             </div>
         </div>
     </div>

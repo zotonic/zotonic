@@ -232,7 +232,8 @@ handle_message(Msg, Context) ->
              end, 
              Context1}
     end,
-    z_session_page:add_script(ResultScript, ResultContext).
+    z_session_page:add_script(ResultScript, ResultContext),
+    erlang:erase().
     
 
 %% @doc Start the loop passing data (scripts) from the page to the browser

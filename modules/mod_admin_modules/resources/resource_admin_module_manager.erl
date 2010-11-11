@@ -31,15 +31,17 @@ is_authorized(ReqData, Context) ->
 
 html(Context) ->
     Status = z_module_manager:get_modules_status(Context),
+    Selected = z_context:get(selected, Context, "modules"),
     Status1 = lists:flatten(
                     [ 
                         [ {Module, atom_to_list(State)} || {Module, _, _Pid, _Date} <- Specs ] 
                         || {State, Specs} <- Status 
                     ]),
     Vars = [
-        {page_admin_modules, true},
+        {selected, Selected},
         {modules, mod_admin_modules:all(Context)},
         {status, Status1}
     ],
-	Html = z_template:render("admin_modules.tpl", Vars, Context),
+    Template = z_context:get(template, Context, "admin_modules.tpl"),
+	Html = z_template:render(Template, Vars, Context),
 	z_context:output(Html, Context).
