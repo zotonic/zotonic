@@ -77,6 +77,15 @@ init([]) ->
     Dispatcher = {z_sites_dispatcher,
                   {z_sites_dispatcher, start_link, []},
                   permanent, 5000, worker, dynamic},
+              
+    % SMTP gen_servers: one for encoding and sending mails, the other for bounces
+    %SmtpServer = {z_email_server,
+    %              {z_email_server, start_link, []},
+    %              permanent, 5000, worker, dynamic},
+    
+    %SmtpBounceServer = {z_email_bounce_server,
+    %                    {z_email_bounce_server, start_link, []},
+    %                    permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_manager,
@@ -84,7 +93,9 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-        Ids, Config, PreviewServer, Dispatcher, SitesSup
+        Ids, Config, PreviewServer, Dispatcher,
+        %SmtpServer, SmtpBounceServer, 
+        SitesSup
                 ],
 
     % Listen to IP address and Port
@@ -112,12 +123,16 @@ init([]) ->
                 ],
     
     NonSSLOpts = [{port, WebPort}],
+    SSLCertOpts = [{certfile, z_config:get_dirty(ssl_certfile)}, 
+                   {keyfile, z_config:get_dirty(ssl_keyfile)}],
+    SSLCertOpts2 = case z_config:get_dirty(ssl_cacertfile) of
+                       undefined -> SSLCertOpts;
+                       CACertFile -> [{cacertfile, CACertFile} | SSLCertOpts]
+                   end,
     SSLOpts = [
         {port, WebPortSSL},
         {ssl, true},  
-        {ssl_opts, 
-         [{certfile, z_config:get_dirty(ssl_certfile)}, 
-          {keyfile, z_config:get_dirty(ssl_keyfile)}]}
+        {ssl_opts, SSLCertOpts2}
               ],
 
     IPv4Opts = [{ip, WebIp}], % Listen to the ip address and port for all sites.
@@ -169,7 +184,7 @@ init_webmachine() ->
                 webmachine_error_handler;
             EH -> EH
         end,
-       application:set_env(webmachine, error_handler, ErrorHandler),        
+    application:set_env(webmachine, error_handler, ErrorHandler),        
         
     LogDir = z_config:get_dirty(log_dir),
     
