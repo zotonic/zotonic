@@ -325,10 +325,14 @@ depickle({pickled_context, Host, UserId, Language, _VisitorId}) ->
 %% @doc Replace the contexts in the output with their rendered content and collect all scripts
 output(<<>>, Context) ->
     {[], Context};
+output(B, Context) when is_binary(B) ->
+    {B, Context};
 output(List, Context) ->
     output1(List, Context, []).
 
 %% @doc Recursively walk through the output, replacing all context placeholders with their rendered output
+output1(B, Context, Acc) when is_binary(B) ->
+    {[lists:reverse(Acc),B], Context};
 output1([], Context, Acc) ->
     {lists:reverse(Acc), Context};
 output1([#context{}=C|Rest], Context, Acc) ->
