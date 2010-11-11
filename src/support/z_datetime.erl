@@ -75,7 +75,7 @@ timesince(Date, Context) ->
 %% @spec timesince(Date, BaseDate, Context) -> string()
 %% @todo Use the language in the context for translations.
 timesince(Date, Base, Context) ->
-    timesince(Date, Base, "ago", "now", "in", Context).
+    timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), Context).
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, WhenText, Context) -> string()
@@ -99,30 +99,38 @@ timesince(Date, Base, IndicatorStrings, Context) ->
 %% @todo Use the language in the context for translations.
 timesince(Date, Base, _AgoText, NowText, _InText, _Context) when Date == Base ->
     NowText;
-timesince(Date, Base, _AgoText, _NowText, InText, _Context) when Date > Base ->
-    combine({InText, combine(reldate(Base, Date))}, " ");
-timesince(Date, Base, AgoText, _NowText, _InText, _Context) ->
-    combine({combine(reldate(Date, Base)), AgoText}, " ").
+timesince(Date, Base, _AgoText, _NowText, InText, Context) when Date > Base ->
+    combine({InText, combine(reldate(Base, Date, Context))}, " ");
+timesince(Date, Base, AgoText, _NowText, _InText, Context) ->
+    combine({combine(reldate(Date, Base, Context)), AgoText}, " ").
 
     combine(Tup) -> combine(Tup, ", ").
 
-    combine({"", B}, _Sep) -> B;
-    combine({A,""}, _Sep) -> A;
-    combine({A,B}, Sep) -> A ++ Sep ++ B.
+    combine({"", B},   _Sep) -> B;
+    combine({A,""},    _Sep) -> A;
+    combine({<<>>, B}, _Sep) -> B;
+    combine({A,<<>>},  _Sep) -> A;
+    combine({A,B}, Sep) -> [A,Sep,B].
 
 
 
 %% @doc Return a string describing the relative date difference.
-reldate(D1,D2) ->
+reldate(D1, D2, Context) ->
 	case diff(D1,D2) of
 		{{0,0,0},{0,0,0}} -> {"now",[]};
-		{{0,0,0},{0,0,S}} when S < 10 -> {"moments",[]};
-		{{0,0,0},{0,0,S}} -> {plural(S, "second", "seconds"), []};
-		{{0,0,0},{0,I,S}} -> {plural(I, "minute", "minutes"), plural(S, "second", "seconds")};
-		{{0,0,0},{H,I,_}} -> {plural(H, "hour", "hours"), plural(I, "minute", "minutes")};
-		{{0,0,D},{H,_,_}} -> {plural(D, "day", "days"), plural(H, "hour", "hours")};
-		{{0,M,D},{_,_,_}} -> {plural(M, "month", "months"), plural(D, "day", "days")};
-		{{Y,M,_},{_,_,_}} -> {plural(Y, "year", "years"), plural(M, "month", "months")}
+		{{0,0,0},{0,0,S}} when S < 10 -> {?__(<<"moments">>,Context),[]};
+		{{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)), 
+		                      []};
+		{{0,0,0},{0,I,S}} -> {plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context)), 
+		                      plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context))};
+		{{0,0,0},{H,I,_}} -> {plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context)), 
+		                      plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context))};
+		{{0,0,D},{H,_,_}} -> {plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context)),
+		                      plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context))};
+		{{0,M,D},{_,_,_}} -> {plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context)), 
+		                      plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context))};
+		{{Y,M,_},{_,_,_}} -> {plural(Y, ?__(<<"year">>,Context),   ?__(<<"years">>,Context)), 
+		                      plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context))}
 	end.
 		
 
