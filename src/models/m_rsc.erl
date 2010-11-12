@@ -370,7 +370,17 @@ p_no_acl(Id, media, Context) -> media(Id, Context);
 p_no_acl(Id, medium, Context) -> m_media:get(Id, Context);
 p_no_acl(Id, depiction, Context) -> m_media:depiction(Id, Context);
 p_no_acl(Id, predicates_edit, Context) -> predicates_edit(Id, Context);
-    
+p_no_acl(Id, day_start, Context) ->
+    case p_cached(Id, date_start, Context) of
+        {{_,_,_} = Date, _} -> Date;
+        _Other -> undefined
+    end;
+p_no_acl(Id, day_end, Context) ->
+    case p_cached(Id, date_end, Context) of
+        {{_,_,_} = Date, _} -> Date;
+        _Other -> undefined
+    end;
+
 % Check if the requested predicate is a readily available property or an edge
 p_no_acl(Id, Predicate, Context) when is_integer(Id) -> 
     p_cached(Id, Predicate, Context).
