@@ -31,7 +31,7 @@
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
 
-init([]) -> {ok, []}.
+init(_Args) -> {ok, []}.
 
 malformed_request(ReqData, _Context) ->
     Context1 = z_context:new(ReqData, ?MODULE),
