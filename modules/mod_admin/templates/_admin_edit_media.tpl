@@ -17,6 +17,6 @@
 	</div>
 	{% endif %}
 	<div>
-		{% button text=_"download" action={redirect dispatch="media_attachment" star=medium.filename} %}
+		<a href="{% url media_attachment star=medium.filename %}" class="button">{_ download _}</a>
 	</div>
 {% endif %}
