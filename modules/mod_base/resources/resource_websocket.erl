@@ -73,7 +73,8 @@ websocket_start(ReqData, Context) ->
     Hostname = m_site:get(hostname, Context1),
     WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}],Context1),
     Socket = webmachine_request:socket(ReqData),
-
+    Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
+    
     case z_context:get_req_header("sec-websocket-key1", Context1) of
         undefined ->
             % First draft protocol version, this code should be removed in due time.
@@ -81,7 +82,7 @@ websocket_start(ReqData, Context) ->
             Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
                     "Upgrade: WebSocket", 13, 10,
                     "Connection: Upgrade", 13, 10,
-                    "WebSocket-Origin: http://", Hostname, 13, 10,
+                    "WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
                     "WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
                     13, 10
                     ],
@@ -102,7 +103,7 @@ websocket_start(ReqData, Context) ->
             Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
                     "Upgrade: WebSocket", 13, 10,
                     "Connection: Upgrade", 13, 10,
-                    "Sec-WebSocket-Origin: http://", Hostname, 13, 10,
+                    "Sec-WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
                     "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
                     "Sec-WebSocket-Protocol: zotonic", 13, 10,
                     13, 10,

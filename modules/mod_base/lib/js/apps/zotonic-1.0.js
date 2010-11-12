@@ -319,7 +319,8 @@ function z_comet(host)
 {
 	if (host != window.location.host)
 	{
-		var url = 'http://' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
+		
+		var url = window.location.protocol + '://' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
 		var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
 		comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
 		comet.appendTo("body");
