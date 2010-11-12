@@ -37,7 +37,7 @@
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
 
-init([]) -> {ok, []}.
+init(_Args) -> {ok, []}.
 
 
 %% @doc The request must have a valid session cookie.

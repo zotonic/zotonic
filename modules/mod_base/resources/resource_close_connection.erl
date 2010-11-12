@@ -28,7 +28,7 @@
 -include_lib("webmachine_resource.hrl").
 -include_lib("zotonic.hrl").
 
-init([]) -> {ok, []}.
+init(_Args) -> {ok, []}.
 
 to_html(ReqData, State) ->
     ReqData2 = wrq:set_resp_header("Connection", "close", ReqData),
