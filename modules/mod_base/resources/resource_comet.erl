@@ -39,7 +39,7 @@
 -define(COMET_FLUSH_DATA,  50).
 
 
-init([]) -> {ok, []}.
+init(_Args) -> {ok, []}.
 
 malformed_request(ReqData, _Context) ->
     Context = z_context:new(ReqData),
