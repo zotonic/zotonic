@@ -303,7 +303,7 @@ function z_stream_start(host)
 {
 	if (!z_ws && !z_comet_is_running)
 	{
-		if ("WebSocket" in window) 
+		if ("WebSocket" in window && window.location.protocol == "http:") 
 		{
 			z_websocket_start(host);
 		}
@@ -319,8 +319,7 @@ function z_comet(host)
 {
 	if (host != window.location.host)
 	{
-		
-		var url = window.location.protocol + '://' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
+		var url = window.location.protocol + '//' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
 		var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
 		comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
 		comet.appendTo("body");
@@ -334,7 +333,7 @@ function z_comet(host)
 function z_comet_host()
 {
 	$.ajax({ 
-		url: '/comet',
+		url: window.location.protocol + '//' + window.location.host + '/comet',
 		type:'post',
 		data: "z_pageid=" + urlencode(z_pageid),
 		dataType: 'text',
