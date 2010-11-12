@@ -215,52 +215,57 @@ add_acl_check(_, Args, _Context) ->
 %% @spec add_acl_check1(Table, Alias, Args, Context) -> {Where, NewArgs}
 %% @todo THIS NEEDS TO BE CHANGED FOR THE PLUGGABLE ACL
 add_acl_check1(Table, Alias, Args, Context) ->
-    % N = length(Args),
-    case z_acl:can_see(Context) of
-        ?ACL_VIS_USER ->
-            % Admin or supervisor, can see everything
-            {[], Args};
-        ?ACL_VIS_PUBLIC -> 
-            % Anonymous users can only see public published content
-            Sql = Alias ++ ".visible_for = 0",
-            Sql1 = case Table of
-                rsc ->
-                    Sql++" and "
-                    ++Alias++".is_published and "
-                    ++Alias++".publication_start <= now() and "
-                    ++Alias++".publication_end >= now()";
-                _ ->
-                    Sql
-            end,
-           {Sql1, Args};
-        ?ACL_VIS_COMMUNITY -> 
-            % Only see published public or community content
-            Sql = Alias ++ ".visible_for in (0,1)",
-            Sql1 = case Table of
-                rsc ->
-                    Sql++" and "
-                    ++Alias++".is_published and "
-                    ++Alias++".publication_start <= now() and "
-                    ++Alias++".publication_end >= now()";
-                _ ->
-                    Sql
-            end,
-            {Sql1, Args};
-        ?ACL_VIS_GROUP ->
-            % Can see published community and public content or any content from one of the user's groups
-            Sql = Alias ++ ".visible_for in (0,1) ",
-            Sql1 = case Table of
-                rsc ->
-                    Sql++" and "
-                    ++Alias++".is_published and "
-                    ++Alias++".publication_start <= now() and "
-                    ++Alias++".publication_end >= now()";
-                _ ->
-                    Sql
-            end,
-			N = length(Args),
-			Sql2 = "((" ++ Sql1 ++ ") or "++Alias++".id = $"++integer_to_list(N+1),
-   			{Sql2, Args ++ [z_acl:user(Context)]}
+    case z_notifier:first({acl_add_sql_check, Alias, Args}, Context) of
+        undefined ->
+            % N = length(Args),
+            case z_acl:can_see(Context) of
+                ?ACL_VIS_USER ->
+                    % Admin or supervisor, can see everything
+                    {[], Args};
+                ?ACL_VIS_PUBLIC -> 
+                    % Anonymous users can only see public published content
+                    Sql = Alias ++ ".visible_for = 0",
+                    Sql1 = case Table of
+                        rsc ->
+                            Sql++" and "
+                            ++Alias++".is_published and "
+                            ++Alias++".publication_start <= now() and "
+                            ++Alias++".publication_end >= now()";
+                        _ ->
+                            Sql
+                    end,
+                   {Sql1, Args};
+                ?ACL_VIS_COMMUNITY -> 
+                    % Only see published public or community content
+                    Sql = Alias ++ ".visible_for in (0,1)",
+                    Sql1 = case Table of
+                        rsc ->
+                            Sql++" and "
+                            ++Alias++".is_published and "
+                            ++Alias++".publication_start <= now() and "
+                            ++Alias++".publication_end >= now()";
+                        _ ->
+                            Sql
+                    end,
+                    {Sql1, Args};
+                ?ACL_VIS_GROUP ->
+                    % Can see published community and public content or any content from one of the user's groups
+                    Sql = Alias ++ ".visible_for in (0,1) ",
+                    Sql1 = case Table of
+                        rsc ->
+                            Sql++" and "
+                            ++Alias++".is_published and "
+                            ++Alias++".publication_start <= now() and "
+                            ++Alias++".publication_end >= now()";
+                        _ ->
+                            Sql
+                    end,
+                    N = length(Args),
+                    Sql2 = "((" ++ Sql1 ++ ") or "++Alias++".id = $"++integer_to_list(N+1),
+                    {Sql2, Args ++ [z_acl:user(Context)]}
+            end;
+        {_NewSql, _NewArgs} = Result ->
+            Result
     end.
 
 
