@@ -85,7 +85,7 @@ search(Search, Context) ->
 
 %% @doc Perform the named search and its arguments
 %% @spec search({Name, SearchPropList}, {Offset, Limit}, Context) -> #search_result
-search({SearchName, Props} = Search, Limit, Context) ->
+search({SearchName, Props} = Search, OffsetLimit, Context) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
         Cats -> [{cat, Cats} | proplists:delete(cat, Props)]
@@ -95,15 +95,15 @@ search({SearchName, Props} = Search, Limit, Context) ->
         CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
     end,
     PropsSorted = lists:keysort(1, Props2),
-    case z_notifier:first({search_query, {SearchName, PropsSorted}, Limit}, Context) of
+    case z_notifier:first({search_query, {SearchName, PropsSorted}, OffsetLimit}, Context) of
         undefined -> 
             ?LOG("Unknown search query ~p~n~p~n", [Search, erlang:get_stacktrace()]),
             #search_result{};
         Result when Result /= undefined -> 
-            search_result(Result, Limit, Context)
+            search_result(Result, OffsetLimit, Context)
     end;
-search(Name, Limit, Context) ->
-    search({z_convert:to_atom(Name), []}, Limit, Context).
+search(Name, OffsetLimit, Context) ->
+    search({z_convert:to_atom(Name), []}, OffsetLimit, Context).
 
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
@@ -298,5 +298,5 @@ add_cat_check(Alias, Exclude, Cats, Context) ->
 %% @doc Given a query as proplist, return all results.
 %% @spec search_query(Props, Context) -> [Id] | []
 query_(Props, Context) ->
-    S = search({'query', Props}, undefined, Context),
+    S = search({'query', Props}, ?OFFSET_PAGING, Context),
     S#search_result.result.
