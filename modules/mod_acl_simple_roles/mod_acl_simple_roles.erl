@@ -279,11 +279,17 @@ can_edit(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 can_edit(_Id, #context{acl=undefined}) ->
     undefined;
+
+%% @doc A user can edit himself 
+can_edit(UserId, #context{user_id=UserId, acl=#acl_user{only_update_own=true}}) when UserId /= undefined ->
+    true;
+%% @doc A user can edit content he created
 can_edit(Id, #context{user_id=UserId, acl=#acl_user{only_update_own=true}} = Context) when UserId /= undefined ->
     case m_rsc:p_no_acl(Id, creator_id, Context) of
         UserId -> true;
         _ -> undefined
     end;
+
 can_edit(Id, #context{acl=Acl} = Context) ->
     IsA = m_rsc:p_no_acl(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
