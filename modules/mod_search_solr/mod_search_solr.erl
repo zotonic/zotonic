@@ -67,7 +67,7 @@ init(Args) ->
     AutoCommit = z_convert:to_integer(m_config:get_value(?MODULE, autocommit_time, 3000, Context)),
     esolr:set_auto_commit({time, AutoCommit}, Solr),
 
-    DefaultSearch = z_convert:to_bool(m_config:get_value(?MODULE, default_search, 1, Context)),
+    DefaultSearch = z_convert:to_bool(m_config:get_value(?MODULE, default_search, false, Context)),
 
     %% Test the connection.. this will crash when there is no valid connection
     solr_search:match(1, {0, 1}, Solr, Context),
@@ -144,16 +144,20 @@ search(_, _Limit, _Context, _State) ->
 
 map_search(featured, [])                             -> [{is_featured, true}];
 map_search(featured, [{cat, Cat}])                   -> [{is_featured, true}, {cat, Cat}];
-map_search(all, [])                                  -> [];
-map_search(all, [{cat, Cat}])                        -> [{cat, Cat}];
+%map_search(all, [])                                 -> [];
+%map_search(all, [{cat, Cat}])                       -> [{cat, Cat}];
 map_search(published, [])                            -> [{sort, "-publication_start"}];
 map_search(published, [{cat, Cat}])                  -> [{sort, "-publication_start"}, {cat, Cat}];
-map_search(latest, [])                               -> [{sort, "-modified"}];
-map_search(latest, [{cat, Cat}])                     -> [{sort, "-modified"}, {cat, Cat}];
-map_search(upcoming, [{cat, Cat}])                   -> [{sort, "date_start"}, {upcoming, true}, {cat, Cat}];
+%map_search(latest, [])                              -> [{sort, "-modified"}];
+%map_search(latest, [{cat, Cat}])                    -> [{sort, "-modified"}, {cat, Cat}];
+%map_search(upcoming, [{cat, Cat}])                  -> [{sort, "date_start"}, {upcoming, true}, {cat, Cat}];
 map_search(autocomplete, [{text, Text}])             -> [{text, z_convert:to_list(Text)++"*"}];
 map_search(autocomplete, [{cat, Cat}, {text, Text}]) -> [{cat, Cat}, {text, z_convert:to_list(Text)++"*"}, {return_format, ranked}];
-map_search(fulltext, [{text, Text}])             -> [{text, Text}];
-map_search(fulltext, [{cat, Cat}, {text, Text}]) -> [{cat, Cat}, {text, Text}, {return_format, ranked}];
+map_search(fulltext, [{text, Text}])                 -> [{text, Text}];
+map_search(fulltext, [{cat, Cat}, {text, Text}])     -> [{cat, Cat}, {text, Text}, {return_format, ranked}];
+map_search('query',[{hasobject,_},{sort,_}])         -> undefined;
+map_search('query',[{hassubject,_},{sort,_}])        -> undefined;
+map_search('query',[{hasobject,_}])                  -> undefined;
+map_search('query',[{hassubject,_}])                 -> undefined;
 map_search('query', Query)                           -> Query;
 map_search(_, _)                                     -> undefined.
