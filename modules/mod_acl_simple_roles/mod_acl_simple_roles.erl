@@ -132,10 +132,12 @@ observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
 
     min_visible(#context{user_id=?ACL_ADMIN_USER_ID}) ->
         ?ACL_VIS_PUBLIC;
+    min_visible(#context{acl=admin}) ->
+        ?ACL_VIS_PUBLIC;
     min_visible(#context{acl=ACL}) ->
         case ACL of
             #acl_user{visible_for=VisFor} -> VisFor;
-            _ -> undefined
+            _ -> ?ACL_VIS_USER
         end.
         
 
