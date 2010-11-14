@@ -59,7 +59,7 @@ moved_temporarily(ReqData, Context) ->
 
             case fetch_user_data(AccessToken) of
                 {ok, UserProps} ->
-                    logon_fb_user(UserProps, z_context:get_q("page", Context1), Context1);
+                    logon_fb_user(UserProps, z_context:get_q("p", Context1), Context1);
                 {error, Reason} ->
                     redirect_error(Reason, Context1)
             end;
