@@ -120,6 +120,8 @@
         <field name="modifier_id" type="int" indexed="true" stored="true" />
         <field name="creator_id" type="int" indexed="true" stored="true" />
 
+        <field name="visible_for" type="int" />
+
         <field name="publication_start" type="date" indexed="true" stored="true"/>
         <field name="publication_end" type="date" indexed="true" stored="true"/>
 

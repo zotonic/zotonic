@@ -61,7 +61,7 @@ convert(Id, Context) ->
         ++
 
         %% Regular rsc fields
-        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path, category_id, modifier_id, creator_id]]
+        [{F, StrVal(F)} || F <- [id, version, uri, name, page_path, category_id, modifier_id, creator_id, visible_for]]
         ++
         [{F, Bool(F)} || F <- [is_authoritative, is_published, is_featured, is_protected]]
         ++

@@ -93,8 +93,28 @@ map_search(Query, Context) ->
     Query1 = filter_empty(Query),
     L = [map_search_field(Part, Context) || Part <- lists:reverse(Query1)],
     {SolrQuery, SearchOptions} = lists:unzip(L),
-    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", X|Acc] end, [], SolrQuery),
+    AclQuery = add_publication_check(Context),
+    SolrQuery1 = lists:foldl(fun(X, Acc) -> [" ", X|Acc] end, [], AclQuery++SolrQuery),
     {lists:flatten(SolrQuery1), lists:flatten(SearchOptions)}.
+
+
+%% @doc Return the lucene query syntax parts that add the the published check to the search query.
+add_publication_check(Context) ->
+    case z_acl:can_see(Context) of
+        ?ACL_VIS_USER ->
+            %% Admin or supervisor, can see everything
+            [];
+        ?ACL_VIS_PUBLIC -> 
+            %% Anonymous users can only see public published content
+            ["+visible_for:0 +is_published:true",
+             "+publication_start:[* TO " ++ z_convert:to_isotime(erlang:localtime()) ++ "]",
+             "+publication_end:[" ++ z_convert:to_isotime(erlang:localtime()) ++ " TO *]"];
+        _ -> %% ?ACL_VIS_COMMUNITY -> 
+            ["+(visible_for:0 OR visible_for:1) +is_published:true",
+             "+publication_start:[* TO " ++ z_convert:to_isotime(erlang:localtime()) ++ "]",
+             "+publication_end:[" ++ z_convert:to_isotime(erlang:localtime()) ++ " TO *]"]
+    end.
+
 
 %% cat=categoryname
 %% Filter results on a certain category.
