@@ -15,6 +15,9 @@ find_value(undefined, #m{}, _Context) ->
     undefined;
 find_value(Key, #m{model=Model} = M, Context) ->
     Model:m_find_value(Key, M, Context);
+
+find_value(Key, [{Nr,_}|_] = L, _Context) when is_integer(Key), is_integer(Nr) ->
+    proplists:get_value(Key, L);
     
 % Index of list with an integer like "a[2]"
 find_value(Key, L, _Context) when is_integer(Key), is_list(L) ->
