@@ -359,6 +359,10 @@ output1([List|Rest], Context, Acc) when is_list(List) ->
     output1(Rest, Context1, [Rendered|Acc]);
 output1([undefined|Rest], Context, Acc) ->
     output1(Rest, Context, Acc);
+output1([C|Rest], Context, Acc) when is_atom(C) ->
+    output1(Rest, Context, [atom_to_list(C)|Acc]);
+output1([{trans, _} = Trans|Rest], Context, Acc) ->
+    output1(Rest, Context, [?__(Trans, Context)|Acc]);
 output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
     
