@@ -406,7 +406,7 @@ props_filter([{is_featured, P}|T], Acc, Context) ->
 props_filter([{visible_for, Vis}|T], Acc, Context) ->
     VisibleFor = z_convert:to_integer(Vis),
     case VisibleFor of
-        N when N==0; N==1; N==2 ->
+        N when N >= 0 ->
             props_filter(T, [{visible_for, N} | Acc], Context);
         _ ->
             props_filter(T, Acc, Context)
