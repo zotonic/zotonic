@@ -116,9 +116,21 @@
 %% @doc Return a new empty context, no request is initialized.
 %% @spec new(HostDescr) -> Context2
 %%      HostDescr = Context | atom() | ReqData
-new(#context{host=Host}) ->
-    Context = set_server_names(#context{host=Host}),
-    Context#context{language=z_trans:default_language(Context)};
+new(#context{} = C) ->
+    #context{
+        host=C#context.host,
+        language=C#context.language,
+        depcache=C#context.depcache,
+        notifier=C#context.notifier,
+        session_manager=C#context.session_manager,
+        dispatcher=C#context.dispatcher,
+        template_server=C#context.template_server,
+        scomp_server=C#context.scomp_server,
+        dropbox_server=C#context.dropbox_server,
+        pivot_server=C#context.pivot_server,
+        module_indexer=C#context.module_indexer,
+        translation_table=C#context.translation_table
+    };
 new(undefined) ->
     case z_sites_dispatcher:get_fallback_site() of
         undefined -> throw({error, no_site_enabled});
@@ -230,7 +242,9 @@ prune_for_async(#context{} = Context) ->
         scomp_server=Context#context.scomp_server,
         dropbox_server=Context#context.dropbox_server,
         pivot_server=Context#context.pivot_server,
-        module_indexer=Context#context.module_indexer
+        module_indexer=Context#context.module_indexer,
+        translation_table=Context#context.translation_table,
+        language=Context#context.language
     }.
 
 
