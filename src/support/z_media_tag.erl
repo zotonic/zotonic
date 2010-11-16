@@ -222,7 +222,7 @@ url(Id, Options, Context) when is_integer(Id) ->
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
     case z_convert:to_list(proplists:get_value(filename, Props)) of
         None when None == undefined; None == <<>>; None == [] -> 
-            case z_notifier:first({media_stillimage, Props}, Context) of
+            case z_notifier:first({media_stillimage, proplists:get_value(id, Props), Props}, Context) of
                 {ok, Filename} ->
                     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
                     {ok, Url};
@@ -236,7 +236,7 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
 url(Filename, Options, Context) ->
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
-
+    
 
 %% @spec url1(Filename, Options, Context) -> {url, Url, TagOptions, ImageOpts} | {error, Reason}
 %% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
