@@ -234,7 +234,9 @@ LiveValidation.prototype =
             return LiveValidation.RADIO;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'EMAIL')
             return LiveValidation.TEXT;
-        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'PHONE')
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'TEL')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'NUMBER')
             return LiveValidation.TEXT;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'URL')
             return LiveValidation.TEXT;
