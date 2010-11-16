@@ -38,7 +38,7 @@
     encodings_provided/2,
     provide_content/2,
     finish_request/2
-]).
+        ]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("zotonic.hrl").
@@ -57,25 +57,35 @@ init(ConfigProps) ->
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set(ConfigProps, z_context:new(ReqData)),
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
-    {_, ReqData1, ContextFile} = ensure_file_info(ReqData, Context1),
-    ContextMime = case z_context:get(mime, ContextFile) of
-        undefined ->
-            Path = case z_context:get(path, Context) of
-                undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
-                ConfiguredPath -> ConfiguredPath
-            end, 
-            CT = z_media_identify:guess_mime(Path),
-            z_context:set(mime, CT, ContextFile);
-        _Mime -> 
-            ContextFile
-    end,
     
-    case filelib:file_size(z_context:get(fullpath, ContextMime)) of
-        N when N > ?CHUNKED_CONTENT_LENGTH ->
-            ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
-            ?WM_REPLY(true, ContextChunked);
-        _ ->
-            ?WM_REPLY(true, ContextMime)
+    try ensure_file_info(ReqData, Context1) of
+        {_, ReqData1, ContextFile} ->
+            ContextMime = case z_context:get(mime, ContextFile) of
+                              undefined ->
+                                  Path = case z_context:get(path, Context) of
+                                             undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
+                                             ConfiguredPath -> ConfiguredPath
+                                         end, 
+                                  CT = z_media_identify:guess_mime(Path),
+                                  z_context:set(mime, CT, ContextFile);
+                              _Mime -> 
+                                  ContextFile
+                          end,
+    
+            case filelib:file_size(z_context:get(fullpath, ContextMime)) of
+                N when N > ?CHUNKED_CONTENT_LENGTH ->
+                    ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
+                    ?WM_REPLY(true, ContextChunked);
+                _ ->
+                    ?WM_REPLY(true, ContextMime)
+            end
+    catch 
+        _:checksum_invalid ->
+            %% Not a nice solution, but since 'resource_exists'
+            %% are checked much later in the wm flow, we would otherwise 
+            %% have to break the logical flow, and introduce some ugly
+            %% condition checking in the intermediate callback functions.            
+            ?WM_REPLY(false, Context1)
     end.
 
 
@@ -85,16 +95,23 @@ allowed_methods(ReqData, Context) ->
 content_types_provided(ReqData, Context) ->
     {[{z_context:get(mime, Context), provide_content}], ReqData, Context}.
 
-
 %% @doc Oversimplified stub for access checks.
 forbidden(ReqData, Context) ->
     case z_context:get(id, Context) of
         undefined ->
             case z_context:get(root, Context) of
-                [{module, Module}] -> 
+                [{module, Module}] ->
                     {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
                 _ ->
-                    {false, ReqData, Context}
+                    FullPath = z_context:get(fullpath, Context),
+                    case FullPath of
+                        undefined ->
+                            {false, ReqData, Context};
+                        _ ->
+                            {ok, Props} = z_media_identify:identify(FullPath, Context),
+                            Id = proplists:get_value(id, Props),                                                      
+                            {not z_acl:rsc_visible(Id, Context), ReqData, Context}
+                    end
             end;
         RscId ->
             {not z_acl:rsc_visible(RscId, Context), ReqData, Context}
@@ -103,22 +120,21 @@ forbidden(ReqData, Context) ->
 
 encodings_provided(ReqData, Context) ->
     Encodings = case z_context:get(chunked, Context) of
-        true ->
-            [{"identity", fun(Data) -> Data end}];
-        _ ->
-            case z_context:get(mime, Context) of
-                "image/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                "video/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                "audio/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                "application/x-gzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
-                "applicationzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
-                _ -> 
-                    [{"identity", fun(Data) -> decode_data(identity, Data) end},
-                     {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
-            end
-    end,
+                    true ->
+                        [{"identity", fun(Data) -> Data end}];
+                    _ ->
+                        case z_context:get(mime, Context) of
+                            "image/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                            "video/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                            "audio/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
+                            "application/x-gzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
+                            "applicationzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
+                            _ -> 
+                                [{"identity", fun(Data) -> decode_data(identity, Data) end},
+                                 {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+                        end
+                end,
     {Encodings, ReqData, z_context:set(encode_data, length(Encodings) > 1, Context)}.
-
 
 resource_exists(ReqData, Context) ->
     {z_context:get(fullpath, Context) =/= undefined, ReqData, Context}.
@@ -134,7 +150,7 @@ last_modified(ReqData, Context) ->
     case z_context:get(last_modified, Context) of
         undefined -> 
             LMod = filelib:last_modified(z_context:get(fullpath, Context)),
-			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+            [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
             {LModUTC, RD1, z_context:set(last_modified, LModUTC, Context)};
         LModUTC ->
             {LModUTC, RD1, Context}
@@ -146,10 +162,10 @@ expires(ReqData, Context) ->
 
 provide_content(ReqData, Context) ->
     RD1 = case z_context:get(content_disposition, Context) of
-        inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
-        attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
-        undefined ->  ReqData
-    end,
+              inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
+              attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
+              undefined ->  ReqData
+          end,
     case z_context:get(body, Context) of
         undefined ->
             case z_context:get(chunked, Context) of
@@ -157,14 +173,14 @@ provide_content(ReqData, Context) ->
                     {ok, Device} = file:open(z_context:get(fullpath, Context), [read,raw,binary]),
                     FileSize = z_context:get(file_size, Context),
                     {   {stream, read_chunk(0, FileSize, Device)}, 
-                        wrq:set_resp_header("Content-Length", integer_to_list(FileSize), ReqData),
-                        z_context:set(use_cache, false, Context) };
+                     wrq:set_resp_header("Content-Length", integer_to_list(FileSize), ReqData),
+                     z_context:set(use_cache, false, Context) };
                 _ ->
                     {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
                     Body = case z_context:get(encode_data, Context, false) of 
-                        true -> encode_data(Data);
-                        false -> Data
-                    end,
+                               true -> encode_data(Data);
+                               false -> Data
+                           end,
                     {Body, RD1, z_context:set(body, Body, Context)}
             end;
         Body -> 
@@ -172,16 +188,16 @@ provide_content(ReqData, Context) ->
     end.
     
     
-    read_chunk(Offset, Size, Device) when Offset =:= Size ->
-        file:close(Device),
-        {<<>>, done};
-    read_chunk(Offset, Size, Device) when Size - Offset =< ?CHUNK_LENGTH ->
-        {ok, Data} = file:read(Device, Size - Offset),
-        file:close(Device),
-        {Data, done};
-    read_chunk(Offset, Size, Device) ->
-        {ok, Data} = file:read(Device, ?CHUNK_LENGTH),
-        {Data, fun() -> read_chunk(Offset+?CHUNK_LENGTH, Size, Device) end}.
+read_chunk(Offset, Size, Device) when Offset =:= Size ->
+    file:close(Device),
+    {<<>>, done};
+read_chunk(Offset, Size, Device) when Size - Offset =< ?CHUNK_LENGTH ->
+    {ok, Data} = file:read(Device, Size - Offset),
+    file:close(Device),
+    {Data, done};
+read_chunk(Offset, Size, Device) ->
+    {ok, Data} = file:read(Device, ?CHUNK_LENGTH),
+    {Data, fun() -> read_chunk(Offset+?CHUNK_LENGTH, Size, Device) end}.
 
 
 finish_request(ReqData, Context) ->
@@ -196,12 +212,12 @@ finish_request(ReqData, Context) ->
                             % Cache the served file in the depcache.  Cache it for 3600 secs.
                             Path = z_context:get(path, Context),
                             Cache = #cache{
-                                        path=Path,
-                                        fullpath=z_context:get(fullpath, Context),
-                                        mime=z_context:get(mime, Context),
-                                        last_modified=z_context:get(last_modified, Context),
-                                        body=Body
-                                    },
+                                path=Path,
+                                fullpath=z_context:get(fullpath, Context),
+                                mime=z_context:get(mime, Context),
+                                last_modified=z_context:get(last_modified, Context),
+                                body=Body
+                                          },
                             z_depcache:set(cache_key(Path), Cache, Context),
                             {ok, ReqData, Context};
                         _ ->
@@ -219,25 +235,30 @@ finish_request(ReqData, Context) ->
 %% @doc Find the file referred to by the reqdata or the preconfigured path
 ensure_file_info(ReqData, Context) ->
     {Path,ContextPath} = case z_context:get(path, Context) of
-                            undefined ->
-                                {mochiweb_util:unquote(wrq:disp_path(ReqData)), Context};
-                            id -> 
-                                RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
-                                ContextRsc = z_context:set(id, RscId, Context),
-                                case m_media:get(RscId, ContextRsc) of
-                                    undefined ->
-                                        {undefined, ContextRsc};
-                                    Media -> 
-                                        {z_convert:to_list(proplists:get_value(filename, Media)), 
-                                         z_context:set(mime, z_convert:to_list(proplists:get_value(mime, Media)), ContextRsc)}
-                                end;
-                            ConfiguredPath ->
-                                {ConfiguredPath, Context}
-                        end, 
+                             undefined ->
+                                 FilePath = mochiweb_util:unquote(wrq:disp_path(ReqData)),
+                                 %{File, Proplists, Check, Prop} = z_media_tag:url2props(FilePath, Context),
+                                 %{ok, Id} = m_rsc:page_path_to_id(File, Context),
+                                 %io:format("~p   ~p\n", [File, z_media_tag:url2props(FilePath, Context)]),
+                                
+                                 {FilePath, Context};
+                             id -> 
+                                 RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
+                                 ContextRsc = z_context:set(id, RscId, Context),
+                                 case m_media:get(RscId, ContextRsc) of
+                                     undefined ->
+                                         {undefined, ContextRsc};
+                                     Media ->
+                                         {z_convert:to_list(proplists:get_value(filename, Media)),
+                                          z_context:set(mime, z_convert:to_list(proplists:get_value(mime, Media)), ContextRsc)}
+                                 end;
+                             ConfiguredPath ->
+                                 {ConfiguredPath, Context}
+                         end,
     Cached = case z_context:get(use_cache, ContextPath) of
-        true -> z_depcache:get(cache_key(Path), ContextPath);
-        _    -> undefined
-    end,
+                 true -> z_depcache:get(cache_key(Path), ContextPath);
+                 _    -> undefined
+             end,
     case Cached of
         undefined ->
             case file_exists(Path, ContextPath) of 
@@ -256,14 +277,14 @@ ensure_file_info(ReqData, Context) ->
             end;
         {ok, Cache} ->
             ContextCached = z_context:set([
-                            {is_cached, true},
-                            {path, Cache#cache.path},
-                            {fullpath, Cache#cache.fullpath},
-                            {mime, Cache#cache.mime},
-                            {last_modified, Cache#cache.last_modified},
-                            {body, Cache#cache.body}
-                        ],
-                        ContextPath),
+                {is_cached, true},
+                {path, Cache#cache.path},
+                {fullpath, Cache#cache.fullpath},
+                {mime, Cache#cache.mime},
+                {last_modified, Cache#cache.last_modified},
+                {body, Cache#cache.body}
+                                          ],
+                                          ContextPath),
             {true, ReqData, ContextCached}
     end.
 
@@ -277,24 +298,24 @@ file_exists([], _Context) ->
     false;
 file_exists(Name, Context) ->
     RelName = case hd(Name) of
-        $/ -> tl(Name);
-        _ -> Name
-    end,
+                  $/ -> tl(Name);
+                  _ -> Name
+              end,
     case mochiweb_util:safe_relative_path(RelName) of
         undefined -> false;
         SafePath ->
             RelName = case hd(SafePath) of
-                "/" -> tl(SafePath);
-                _ -> SafePath
-            end,
+                          "/" -> tl(SafePath);
+                          _ -> SafePath
+                      end,
             Root = case z_context:get(root, Context) of
-                undefined -> 
-                    case z_context:get(is_media_preview, Context, false) of
-                        true  -> [z_path:media_preview(Context)];
-                        false -> [z_path:media_archive(Context)]
-                    end;
-                ConfRoot -> ConfRoot
-            end,
+                       undefined -> 
+                           case z_context:get(is_media_preview, Context, false) of
+                               true  -> [z_path:media_preview(Context)];
+                               false -> [z_path:media_archive(Context)]
+                           end;
+                       ConfRoot -> ConfRoot
+                   end,
             file_exists1(Root, RelName, Context)
     end.
 
@@ -341,26 +362,26 @@ ensure_preview(ReqData, Path, Context) ->
             {false, ReqData, Context};
         Safepath  ->
             MediaPath = case z_context:get(media_path, Context) of
-                undefined -> z_path:media_archive(Context);
-                ConfMediaPath -> ConfMediaPath
-            end,
+                            undefined -> z_path:media_archive(Context);
+                            ConfMediaPath -> ConfMediaPath
+                        end,
             
             MediaFile = case Safepath of 
-                    "lib/" ++ LibPath ->  
-                        case z_module_indexer:find(lib, LibPath, Context) of 
-                            {ok, ModuleFilename} -> ModuleFilename; 
-                            {error, _} -> filename:join(MediaPath, Safepath) 
-                        end; 
-                    _ -> 
-                        filename:join(MediaPath, Safepath) 
-            end,
+                            "lib/" ++ LibPath ->  
+                                case z_module_indexer:find(lib, LibPath, Context) of 
+                                    {ok, ModuleFilename} -> ModuleFilename; 
+                                    {error, _} -> filename:join(MediaPath, Safepath) 
+                                end; 
+                            _ -> 
+                                filename:join(MediaPath, Safepath) 
+                        end,
             case filelib:is_regular(MediaFile) of
                 true ->
                     % Media file exists, perform the resize
                     Root = case z_context:get(root, Context) of
-                        [ConfRoot|_] -> ConfRoot;
-                        _ -> z_path:media_preview(Context)
-                    end,
+                               [ConfRoot|_] -> ConfRoot;
+                               _ -> z_path:media_preview(Context)
+                           end,
                     PreviewFile = filename:join(Root, Path),
                     case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
                         ok -> {true, ReqData, z_context:set(fullpath, PreviewFile, Context)};
@@ -374,15 +395,15 @@ ensure_preview(ReqData, Path, Context) ->
 
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_binary(Data) ->
-	{Data, zlib:gzip(Data)}.
+    {Data, zlib:gzip(Data)}.
 
 decode_data(gzip, Data) when is_binary(Data) ->
     zlib:gzip(Data);
 decode_data(identity, Data) when is_binary(Data) ->
     Data;
 decode_data(identity, {Data, _Gzip}) ->
-	Data;
+    Data;
 decode_data(gzip, {_Data, Gzip}) ->
-	Gzip.
+    Gzip.
 
     
