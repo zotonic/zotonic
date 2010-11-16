@@ -36,6 +36,8 @@ rename_args([], Acc) ->
     Acc;
 rename_args([{failure_message, Msg}|T], Acc) ->
     rename_args(T, [{failureMessage, Msg}|Acc]);
+rename_args([{valid_message, Msg}|T], Acc) ->
+    rename_args(T, [{validMessage, Msg}|Acc]);
 rename_args([{not_a_number_message, Msg}|T], Acc) ->
     rename_args(T, [{notANumberMessage, Msg}|Acc]);
 rename_args([{not_an_integer_message, Msg}|T], Acc) ->
