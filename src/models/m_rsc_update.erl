@@ -170,7 +170,14 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                         % Check if the user is allowed to create the resource
                         case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Ctx) orelse not(AclCheck) of
                             true ->
-                                {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx),
+                                case proplists:get_value(creator_id, Props) of
+                                    self ->
+                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, undefined} | InsPropsN], Ctx),
+                                        z_db:q("update rsc set creator_id = id where id = $1", [InsId], Ctx);
+                                    undefined ->
+                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx)
+                                end,
+                                
                                  % Insert a category record for categories. Categories are so low level that we want
                                 % to make sure that all categories always have a category record attached.
                                 InsertCatList = [ CategoryId | m_category:get_path(CategoryId, Ctx) ],
@@ -534,6 +541,8 @@ recombine_dates([{"dt:"++K,V}|T], Dates, Acc) ->
 recombine_dates([H|T], Dates, Acc) ->
     recombine_dates(T, Dates, [H|Acc]).
 
+    recombine_date(Part, End, Name, undefined, Dates) ->
+        recombine_date(Part, End, Name, "", Dates);
     recombine_date(Part, _End, Name, V, Dates) ->
         Date = case proplists:get_value(Name, Dates) of
             undefined ->
