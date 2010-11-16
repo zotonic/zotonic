@@ -38,7 +38,7 @@
     encodings_provided/2,
     provide_content/2,
     finish_request/2
-        ]).
+]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("zotonic.hrl").
@@ -71,7 +71,6 @@ service_available(ReqData, ConfigProps) ->
                               _Mime -> 
                                   ContextFile
                           end,
-    
             case filelib:file_size(z_context:get(fullpath, ContextMime)) of
                 N when N > ?CHUNKED_CONTENT_LENGTH ->
                     ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
@@ -236,12 +235,26 @@ finish_request(ReqData, Context) ->
 ensure_file_info(ReqData, Context) ->
     {Path,ContextPath} = case z_context:get(path, Context) of
                              undefined ->
-                                 FilePath = mochiweb_util:unquote(wrq:disp_path(ReqData)),
-                                 %{File, Proplists, Check, Prop} = z_media_tag:url2props(FilePath, Context),
-                                 %{ok, Id} = m_rsc:page_path_to_id(File, Context),
-                                 %io:format("~p   ~p\n", [File, z_media_tag:url2props(FilePath, Context)]),
-                                
-                                 {FilePath, Context};
+                                 FilePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(wrq:disp_path(ReqData))),
+                                 case lists:member($(, FilePath) of
+                                     true ->
+                                         {File, Proplists, Check, Prop} = z_media_tag:url2props(FilePath, Context),
+                                         case m_media:get_by_filename(File, Context) of
+                                             undefined ->
+                                                 {undefined, Context};
+                                             Media ->
+                                                 ContextRsc = z_context:set([
+                                                                    {id, proplists:get_value(id, Media)},
+                                                                    {mime, z_convert:to_list(proplists:get_value(mime, Media))},
+                                                                    {media_tag_url2props, {File, Proplists, Check, Prop}}
+                                                                ],
+                                                                Context),
+                                                 {FilePath, ContextRsc}
+                                         end;
+                                     false ->
+                                         %% @TODO check m_media also for non preview files
+                                         {FilePath, Context}
+                                 end;
                              id -> 
                                  RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
                                  ContextRsc = z_context:set(id, RscId, Context),
@@ -356,7 +369,11 @@ is_text(_Mime) -> false.
 %% The original media should be in State#media_path (or z_path:media_archive)
 %% The generated image should be created in State#root (or z_path:media_preview)
 ensure_preview(ReqData, Path, Context) ->
-    {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = z_media_tag:url2props(Path, Context),
+    {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = 
+                    case z_context:get(media_tag_url2props,Context) of
+                        undefined -> z_media_tag:url2props(Path, Context);
+                        MediaInfo -> MediaInfo
+                    end,
     case mochiweb_util:safe_relative_path(Filepath) of
         undefined ->
             {false, ReqData, Context};
