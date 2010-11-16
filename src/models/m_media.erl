@@ -31,6 +31,7 @@
     m_value/2,
     identify/2,
     get/2,
+    get_by_filename/2,
     exists/2,
     depiction/2,
     depicts/2,
@@ -116,6 +117,21 @@ get(Id, Context) ->
     F = fun() -> z_db:assoc_props_row("select * from medium where id = $1", [Id], Context) end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
+%% @doc Fetch a medium by filename
+get_by_filename(Filename, Context) ->
+    case z_depcache:get({medium, Filename}, Context) of
+        undefined ->
+            Row = z_db:assoc_props_row("select * from medium where filename = $1", [Filename], Context),
+            case Row of
+                undefined ->
+                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context);
+                _L ->
+                    z_depcache:set({medium, Filename}, Row, ?HOUR, [proplists:get_value(id, Row)], Context)
+            end,
+            Row;
+        {ok, Row} ->
+            Row
+    end.
 
 %% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, when 
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
