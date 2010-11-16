@@ -66,7 +66,8 @@ event({submit, {user_add, Props}, _TriggerId, _TargetId}, Context) ->
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},
-                {email, z_context:get_q_validated("email", Context)}
+                {email, z_context:get_q_validated("email", Context)},
+                {creator_id, self}
             ],
             
             F = fun(Ctx) ->

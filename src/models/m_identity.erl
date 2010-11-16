@@ -167,7 +167,9 @@ set_username_pw(Id, Username, Password, Context) ->
                         UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username1], Ctx),
                         case UniqueTest of
                             0 ->
-                                z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx);
+                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx),
+                                z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
+                                Rows;
                             _Other ->
                                 throw({error, eexist})
                         end;
@@ -176,8 +178,11 @@ set_username_pw(Id, Username, Password, Context) ->
                 end
             end,
             case z_db:transaction(F, Context) of
-                1 -> ok;
-                R -> R
+                1 ->
+                    z_depcache:flush(Id, Context),
+                    ok;
+                R ->
+                    R
             end;
         false ->
             {error, eacces}
