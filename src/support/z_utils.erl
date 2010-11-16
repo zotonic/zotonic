@@ -320,9 +320,6 @@ os_escape(unix, [C|Rest], Acc) when
          orelse C == $-
          orelse C == $+
          orelse C == $/
-         orelse C == $(
-         orelse C == $)
-         orelse C == 32
     ->
     os_escape(unix, Rest, [C|Acc]);
 os_escape(unix, [C|Rest], Acc) when
@@ -336,8 +333,16 @@ os_escape(unix, [C|Rest], Acc) when
 %% Win32 escaping, see: http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/ntcmds_shelloverview.mspx
 os_escape(win32, [C|Rest], Acc) when C == $&
          orelse C == $|
+         orelse C == $;
+         orelse C == $,
+         orelse C == $%
          orelse C == $(
          orelse C == $)
+         orelse C == $"
+         orelse C == $'
+         orelse C == $=
+         orelse C == $^
+         orelse C == 32
     ->
     os_escape(win32, Rest, [C,$^|Acc]);
 os_escape(win32, [C|Rest], Acc) ->
