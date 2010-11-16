@@ -135,7 +135,7 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
         {ok, UserId} ->
             case not RequestConfirm orelse m_identity:is_verified(UserId, Context) of
                 true ->
-                    ensure_published(UserId, Context),
+                    ensure_published(UserId, z_acl:sudo(Context)),
                     {ok, ContextUser} = z_auth:logon(UserId, Context),
                     Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
                         [] -> 
