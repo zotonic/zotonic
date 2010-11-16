@@ -241,7 +241,7 @@ ensure_file_info(ReqData, Context) ->
                                          {File, Proplists, Check, Prop} = z_media_tag:url2props(FilePath, Context),
                                          case m_media:get_by_filename(File, Context) of
                                              undefined ->
-                                                 {undefined, Context};
+                                                 {FilePath, z_context:set(media_tag_url2props, {File, Proplists, Check, Prop}, Context)};
                                              Media ->
                                                  ContextRsc = z_context:set([
                                                                     {id, proplists:get_value(id, Media)},
