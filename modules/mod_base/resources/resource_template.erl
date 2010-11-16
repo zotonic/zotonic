@@ -59,6 +59,15 @@ is_authorized(ReqData, Context) ->
         is_auth -> 
             Context2 = z_context:ensure_all(Context1),
             z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2);
+        logoff ->
+            Context2 = z_context:ensure_all(Context1),
+            case z_auth:is_auth(Context2) of
+                true ->
+                    Context3 = z_auth:logoff(Context2),
+                    ?WM_REPLY(true, Context3);
+                false ->
+                    ?WM_REPLY(true, Context2)
+            end;
         Acl -> 
             Context2 = z_context:ensure_all(Context1),
             z_acl:wm_is_authorized(Acl, Context2)
