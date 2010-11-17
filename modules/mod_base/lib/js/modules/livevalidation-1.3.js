@@ -703,7 +703,7 @@ LiveValidationForm.prototype = {
   
   asyncResult: function(Validation, isValid){
       if (isValid){
-          var index = this.submitWaitForAsync.indexOf(Validation);
+          var index = $.inArray(Validation, this.submitWaitForAsync);
           if (index >= 0){
               this.submitWaitForAsync.splice(index, 1);
               if (this.submitWaitForAsync.length == 0){
