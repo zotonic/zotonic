@@ -36,19 +36,6 @@ var z_registered_events		= new Object();
 
 // document.domain	 = document.domain;
 
-// Fix missing parts in IE
-if(!Array.indexOf){
-	Array.prototype.indexOf = function(obj){
-		for(var i=0; i<this.length; i++){
-			if(this[i]==obj){
-				return i;
-			}
-		}
-		return -1;
-	}
-}
-
-
 /* Non modal dialogs
 ---------------------------------------------------------- */
 
