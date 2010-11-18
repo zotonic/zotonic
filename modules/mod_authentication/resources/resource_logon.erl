@@ -201,7 +201,6 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 					logon_error(Context);
 				Identities ->
 					% @todo TODO check if reminder could be sent (maybe there is no e-mail address)
-					?DEBUG(Identities),
 					send_reminder(Identities, Context),
 					reminder_success(Context)
 			end
@@ -337,7 +336,8 @@ reset_rememberme_cookie(Context) ->
 
 % @doc Find all identities with the given handle.  The handle is either an e-mail address or an username.
 lookup_identities(Handle, Context) ->
-	lookup_by_username(Handle, Context) ++ lookup_by_email(Handle, Context).
+    Handle1 = z_string:trim(Handle),
+	lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context).
 
 lookup_by_username(Handle, Context) ->
 	case m_identity:lookup_by_username(Handle, Context) of
@@ -347,9 +347,14 @@ lookup_by_username(Handle, Context) ->
 
 
 %% @doc Find all users with a certain e-mail address
-%% @todo TODO
-lookup_by_email(_Handle, _Context) ->
-	[].
+lookup_by_email(Handle, Context) ->
+    case lists:member($@, Handle) of
+        true -> 
+            Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
+            [ proplists:get_value(rsc_id, Row) || Row <- Rows ];
+        false ->
+            []
+    end.
 
 
 %% Send an e-mail reminder to the listed ids.
