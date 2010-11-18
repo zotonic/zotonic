@@ -114,7 +114,7 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                     IsSSL = wrq:is_ssl(RDHost),
                     case wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) of
                         {redirect, ProtocolAsString, Hostname} ->
-                            {handled, redirect(ProtocolAsString, Hostname, ReqData)};
+                            {handled, redirect(false, ProtocolAsString, Hostname, ReqData)};
                         {no_dispatch_match, UnmatchedPathTokens} ->
                             {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
                         {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
@@ -131,7 +131,7 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                                            false ->
                                                "http"
                                        end,
-                    {handled, redirect(ProtocolAsString, Hostname, ReqData)};
+                    {handled, redirect(true, ProtocolAsString, Hostname, ReqData)};
                 no_host_match ->
                     {{no_dispatch_match, undefined, undefined}, ReqData}
             end,
@@ -150,8 +150,10 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Load a new set of dispatch rules.
+%% @todo Do SSL filtering per host (instead of on a system wide basis).
 handle_cast({set_dispatch_rules, Rules}, State) ->
-    {noreply, State#state{rules=compile_regexps_hosts(Rules)}};
+    Rules1 = filter_ssl(z_config:get(ssl), Rules),
+    {noreply, State#state{rules=compile_regexps_hosts(Rules1)}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -187,11 +189,11 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %% @doc Redirect to another host name.
-redirect(ProtocolAsString, Hostname, ReqData) ->
+redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
     RawPath = wrq:raw_path(ReqData),
     Uri = ProtocolAsString ++ "://" ++ Hostname ++ RawPath,
     RD1 = wrq:set_resp_header("Location", Uri, ReqData),
-    {ok, RD2} = webmachine_request:send_response(301, RD1),
+    {ok, RD2} = webmachine_request:send_response(case IsPermanent of true -> 301; false -> 302 end, RD1),
     LogData = webmachine_request:log_data(RD2),
     LogModule = 
         case application:get_env(webmachine,webmachine_logger_module) of
@@ -337,6 +339,28 @@ is_compile_opt(dupnames) -> true;
 is_compile_opt(_) -> false.
 
 
+%% @doc When SSL is not enabled, then remove any ssl option from all dispatch rules.
+filter_ssl(true, Rules) ->
+    Rules;
+filter_ssl(_, Rules) ->
+    filter_ssl_hosts(Rules).
+
+    filter_ssl_hosts(DLs) ->
+        filter_ssl_hosts(DLs, []).
+
+    filter_ssl_hosts([], Acc) ->
+        lists:reverse(Acc);
+    filter_ssl_hosts([#wm_host_dispatch_list{dispatch_list=DispatchList} = DL|Rest], Acc) ->
+        DispatchList1 = filter_ssl_hosts_dispatch(DispatchList, []),
+        filter_ssl_hosts(Rest, [DL#wm_host_dispatch_list{dispatch_list=DispatchList1}|Acc]).
+
+    filter_ssl_hosts_dispatch([], Acc) ->
+        lists:reverse(Acc);
+    filter_ssl_hosts_dispatch([{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
+        Props1 = proplists:delete(ssl, Props),
+        filter_ssl_hosts_dispatch(Rest, [{DispatchName, PathSchema, Mod, Props1}|Acc]).
+
+
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
 % Main difference is that we want to know which dispatch rule was choosen.
 % We also added check functions and regular expressions to match vars.
@@ -382,17 +406,17 @@ try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Pro
         {ok, Remainder, NewBindings, Depth} ->
             case {proplists:get_value(ssl, Props), IsSSL} of
                 {undefined, true} ->
-                    Port = z_config:get(listen_port),
+                    %Port = z_config:get(listen_port),
                     %Host1 = set_port(Port, HostAsString),
                     {Host1, _Port} = split_host(HostAsString),
                     {redirect, "http", Host1};
                 {false, true} ->
-                    Port = z_config:get(listen_port),
+                    %Port = z_config:get(listen_port),
                     %Host1 = set_port(Port, HostAsString),
                     {Host1, _Port} = split_host(HostAsString),
                     {redirect, "http", Host1};            
                 {true, false} ->
-                    Port = z_config:get(listen_port_ssl),
+                    %Port = z_config:get(listen_port_ssl),
                     %Host1 = set_port(Port, HostAsString),
                     {Host1, _Port} = split_host(HostAsString),
                     {redirect, "https", Host1};
