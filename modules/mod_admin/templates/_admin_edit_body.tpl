@@ -4,7 +4,7 @@
 	<div class="translations ui-tabs" id="{{ #tabs }}">
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
 		
-		{% for code,lang in m.config.i18n.language_list.list %}
+		{% for code,lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 		    <div id="{{ #prefix }}-{{ code }}" class="ui-tabs-hide">
 		        <fieldset class="admin-form">
 		            {% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
