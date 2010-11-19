@@ -138,6 +138,9 @@ send_stream_body(Socket, {Data, Next}, SoFar) ->
     Size = send_chunk(Socket, Data),
     send_stream_body(Socket, Next(), Size + SoFar).
 
+
+%% @todo Remove usage of the put/get to get the number of bytes written
+%%       Use a separate process to accumulate these counts
 send_writer_body(Socket, {Encoder, Charsetter, BodyFun}) ->
     put(bytes_written, 0),
     Writer = fun(Data) ->
@@ -149,6 +152,9 @@ send_writer_body(Socket, {Encoder, Charsetter, BodyFun}) ->
     send_chunk(Socket, <<>>),
     get(bytes_written).
 
+
+%% @todo Distinguish between HTTP/1.0 and 1.1
+%%       HTTP/1.0 should not add the size (and transfer-encoding: chunked)
 send_chunk(Socket, Data) ->
     Size = iolist_size(Data),
     send(Socket, mochihex:to_hex(Size)),
