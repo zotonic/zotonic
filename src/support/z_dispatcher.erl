@@ -312,6 +312,7 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern}, Defaults) ->
     ReplArgs =  fun 
                     ('*') -> proplists:get_value(star, Args);
                     (V) when is_atom(V) -> mochiweb_util:quote_plus(arg_value(V, Args, Defaults));
+                    ({V, _Pattern}) when is_atom(V) -> mochiweb_util:quote_plus(arg_value(V, Args, Defaults));
                     (S) -> S
                 end,
     UriParts = lists:map(ReplArgs, Pattern), 
