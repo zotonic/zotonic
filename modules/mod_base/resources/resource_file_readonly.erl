@@ -59,24 +59,25 @@ service_available(ReqData, ConfigProps) ->
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     
     try ensure_file_info(ReqData, Context1) of
-        {_, ReqData1, ContextFile} ->
-            ContextMime = case z_context:get(mime, ContextFile) of
-                              undefined ->
-                                  Path = case z_context:get(path, Context) of
-                                             undefined -> mochiweb_util:unquote(wrq:disp_path(ReqData1));
-                                             ConfiguredPath -> ConfiguredPath
-                                         end, 
-                                  CT = z_media_identify:guess_mime(Path),
-                                  z_context:set(mime, CT, ContextFile);
-                              _Mime -> 
-                                  ContextFile
-                          end,
-            case filelib:file_size(z_context:get(fullpath, ContextMime)) of
-                N when N > ?CHUNKED_CONTENT_LENGTH ->
-                    ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextMime), 
-                    ?WM_REPLY(true, ContextChunked);
-                _ ->
-                    ?WM_REPLY(true, ContextMime)
+        {_, ContextFile} ->
+            % Use chunks for large files
+            case z_context:get(fullpath, ContextFile) of
+                undefined -> 
+                    ?WM_REPLY(true, ContextFile);
+                FullPath ->
+                    case catch filelib:file_size(FullPath) of
+                        N when is_integer(N) ->
+                            case N > ?CHUNKED_CONTENT_LENGTH of
+                                true -> 
+                                    ContextChunked = z_context:set([{chunked, true}, {file_size, N}], ContextFile), 
+                                    ?WM_REPLY(true, ContextChunked);
+                                false ->
+                                    ContextSize = z_context:set([{file_size, N}], ContextFile), 
+                                    ?WM_REPLY(true, ContextSize)
+                            end;
+                        _ ->
+                            ?WM_REPLY(true, ContextFile)
+                    end
             end
     catch 
         _:checksum_invalid ->
@@ -94,7 +95,7 @@ allowed_methods(ReqData, Context) ->
 content_types_provided(ReqData, Context) ->
     {[{z_context:get(mime, Context), provide_content}], ReqData, Context}.
 
-%% @doc Oversimplified stub for access checks.
+%% @doc Simple access control for rsc based files
 forbidden(ReqData, Context) ->
     case z_context:get(id, Context) of
         undefined ->
@@ -102,17 +103,9 @@ forbidden(ReqData, Context) ->
                 [{module, Module}] ->
                     {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
                 _ ->
-                    FullPath = z_context:get(fullpath, Context),
-                    case FullPath of
-                        undefined ->
-                            {false, ReqData, Context};
-                        _ ->
-                            {ok, Props} = z_media_identify:identify(FullPath, Context),
-                            Id = proplists:get_value(id, Props),                                                      
-                            {not z_acl:rsc_visible(Id, Context), ReqData, Context}
-                    end
+                    {false, ReqData, Context}
             end;
-        RscId ->
+        RscId when is_integer(RscId) ->
             {not z_acl:rsc_visible(RscId, Context), ReqData, Context}
     end.
 
@@ -216,7 +209,7 @@ finish_request(ReqData, Context) ->
                                 mime=z_context:get(mime, Context),
                                 last_modified=z_context:get(last_modified, Context),
                                 body=Body
-                                          },
+                            },
                             z_depcache:set(cache_key(Path), Cache, Context),
                             {ok, ReqData, Context};
                         _ ->
@@ -233,29 +226,11 @@ finish_request(ReqData, Context) ->
 
 %% @doc Find the file referred to by the reqdata or the preconfigured path
 ensure_file_info(ReqData, Context) ->
-    {Path,ContextPath} = case z_context:get(path, Context) of
+    {Path, ContextPath} = case z_context:get(path, Context) of
                              undefined ->
                                  FilePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(wrq:disp_path(ReqData))),
-                                 case lists:member($(, FilePath) of
-                                     true ->
-                                         {File, Proplists, Check, Prop} = z_media_tag:url2props(FilePath, Context),
-                                         case m_media:get_by_filename(File, Context) of
-                                             undefined ->
-                                                 {FilePath, z_context:set(media_tag_url2props, {File, Proplists, Check, Prop}, Context)};
-                                             Media ->
-                                                 ContextRsc = z_context:set([
-                                                                    {id, proplists:get_value(id, Media)},
-                                                                    {mime, z_convert:to_list(proplists:get_value(mime, Media))},
-                                                                    {media_tag_url2props, {File, Proplists, Check, Prop}}
-                                                                ],
-                                                                Context),
-                                                 {FilePath, ContextRsc}
-                                         end;
-                                     false ->
-                                         %% @TODO check m_media also for non preview files
-                                         {FilePath, Context}
-                                 end;
-                             id -> 
+                                 rsc_media_check(FilePath, Context);
+                             id ->
                                  RscId = m_rsc:rid(z_context:get_q("id", Context), Context),
                                  ContextRsc = z_context:set(id, RscId, Context),
                                  case m_media:get(RscId, ContextRsc) of
@@ -268,38 +243,68 @@ ensure_file_info(ReqData, Context) ->
                              ConfiguredPath ->
                                  {ConfiguredPath, Context}
                          end,
+
     Cached = case z_context:get(use_cache, ContextPath) of
                  true -> z_depcache:get(cache_key(Path), ContextPath);
                  _    -> undefined
              end,
     case Cached of
         undefined ->
-            case file_exists(Path, ContextPath) of 
-            	{true, FullPath} -> 
-            	    Context1 = z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextPath),
-            	    {true, ReqData, Context1};
-            	_ -> 
-            	    %% We might be able to generate a new preview
-            	    case z_context:get(is_media_preview, ContextPath, false) of
-            	        true ->
-            	            % Generate a preview, recurse on success
-            	            ensure_preview(ReqData, Path, ContextPath);
-            	        false ->
-                    	    {false, ReqData, ContextPath}
-            	    end
+            ContextMime = case z_context:get(mime, ContextPath) of
+                              undefined -> z_context:set(mime, z_media_identify:guess_mime(Path), ContextPath);
+                              _Mime -> ContextPath
+                          end,
+            case file_exists(Path, ContextMime) of 
+                {true, FullPath} ->
+                    {true, z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextMime)};
+                _ -> 
+                    %% We might be able to generate a new preview
+                    case z_context:get(is_media_preview, ContextMime, false) of
+                        true ->
+                            % Generate a preview, recurse on success
+                            ensure_preview(Path, ContextMime);
+                        false ->
+                            {false, ContextMime}
+                    end
             end;
         {ok, Cache} ->
-            ContextCached = z_context:set([
-                {is_cached, true},
-                {path, Cache#cache.path},
-                {fullpath, Cache#cache.fullpath},
-                {mime, Cache#cache.mime},
-                {last_modified, Cache#cache.last_modified},
-                {body, Cache#cache.body}
+            {true, z_context:set([ {is_cached, true},
+                                            {path, Cache#cache.path},
+                                            {fullpath, Cache#cache.fullpath},
+                                            {mime, Cache#cache.mime},
+                                            {last_modified, Cache#cache.last_modified},
+                                            {body, Cache#cache.body}
                                           ],
-                                          ContextPath),
-            {true, ReqData, ContextCached}
+                                          ContextPath)}
     end.
+
+
+rsc_media_check(undefined, Context) ->
+    {undefined, Context};
+rsc_media_check(File, Context) ->
+    {BaseFile, IsResized, Context1} = case lists:member($(, File) of
+                            true ->
+                                {File1, Proplists, Check, Prop} = z_media_tag:url2props(File, Context),
+                                {File1, true, z_context:set(media_tag_url2props, {File1, Proplists, Check, Prop}, Context)};
+                            false ->
+                                {File, false, Context}
+                          end,
+    case m_media:get_by_filename(BaseFile, Context1) of
+        undefined ->
+            {File, Context1};
+        Media ->
+            MimeOriginal = z_convert:to_list(proplists:get_value(mime, Media)),
+            Props = [
+                {id, proplists:get_value(id, Media)},
+                {mime_original, MimeOriginal}
+            ],
+            Props1 = case IsResized of 
+                        true -> [ {mime, z_media_identify:guess_mime(File)} | Props ];
+                        false -> [ {mime, MimeOriginal} | Props ]
+                     end,
+            {File, z_context:set(Props1, Context1)}
+    end.
+
 
 
 cache_key(Path) ->
@@ -363,12 +368,12 @@ is_text("application/xml") -> true;
 is_text(_Mime) -> false.
 
 
-%% @spec ensure_preview(ReqData, Path, Context) -> {Boolean, NewReqData, NewContext}
+%% @spec ensure_preview(ReqData, Path, Context) -> {Boolean, NewContext}
 %% @doc Generate the file on the path from an archived media file.
 %% The path is like: 2007/03/31/wedding.jpg(300x300)(crop-center)(709a-a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% The original media should be in State#media_path (or z_path:media_archive)
 %% The generated image should be created in State#root (or z_path:media_preview)
-ensure_preview(ReqData, Path, Context) ->
+ensure_preview(Path, Context) ->
     {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = 
                     case z_context:get(media_tag_url2props,Context) of
                         undefined -> z_media_tag:url2props(Path, Context);
@@ -376,7 +381,7 @@ ensure_preview(ReqData, Path, Context) ->
                     end,
     case mochiweb_util:safe_relative_path(Filepath) of
         undefined ->
-            {false, ReqData, Context};
+            {false, Context};
         Safepath  ->
             MediaPath = case z_context:get(media_path, Context) of
                             undefined -> z_path:media_archive(Context);
@@ -401,11 +406,11 @@ ensure_preview(ReqData, Path, Context) ->
                            end,
                     PreviewFile = filename:join(Root, Path),
                     case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
-                        ok -> {true, ReqData, z_context:set(fullpath, PreviewFile, Context)};
+                        ok -> {true, z_context:set(fullpath, PreviewFile, Context)};
                         {error, Reason} -> throw(Reason)
                     end;
                 false ->
-                    {false, ReqData, Context}
+                    {false, Context}
             end
     end.
 
