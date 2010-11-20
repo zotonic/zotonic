@@ -27,22 +27,31 @@ vary(_Params, _Context) -> nocache.
 
 render(_Params, _Vars, Context) ->
     {ok, z_script:add_script(
-                ["z_stream_start(",
-                 add_subdomain(z_context:streamhost(Context)),
-                 ");"], 
-                Context)
+                    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), ");"], 
+                    Context)
     }.
 
 
+% Add random number 0-9
+add_subdomain([$?|Hostname]) ->
+    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
+add_subdomain(<<$?,Hostname/binary>>) ->
+    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
+
+% Add random number, no real limits
 add_subdomain([$*|Hostname]) ->
-    [$', z_ids:id(3),Hostname,$'];
+    [$', integer_to_list(z_ids:number()),Hostname,$'];
 add_subdomain(<<$*,Hostname/binary>>) ->
-    [$', z_ids:id(3), Hostname, $'];
+    [$',integer_to_list(z_ids:number()), Hostname, $'];
 add_subdomain([$.|_] = Hostname) ->
-    [$', z_ids:id(3), Hostname, $'];
+    [$',integer_to_list(z_ids:number()), Hostname, $'];
 add_subdomain(<<$.,_/binary>> = Hostname) ->
-    [$', z_ids:id(3), Hostname, $'];
+    [$', integer_to_list(z_ids:number()), Hostname, $'];
+    
+% special case for the zotonic_status site
 add_subdomain(none) ->
     "window.location.host";
+    
+% Just connect to the hostname itself
 add_subdomain(Hostname) ->
     [$', Hostname, $'].

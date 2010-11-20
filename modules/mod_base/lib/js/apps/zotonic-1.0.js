@@ -34,7 +34,6 @@ var z_input_updater			= false;
 var z_drag_tag				= [];
 var z_registered_events		= new Object();
 
-// document.domain	 = document.domain;
 
 /* Non modal dialogs
 ---------------------------------------------------------- */
@@ -369,7 +368,7 @@ function z_comet_data(data)
 
 function z_websocket_start(host)
 {
-	z_ws = new WebSocket("ws://"+host+"/websocket?z_pageid="+z_pageid);
+	z_ws = new WebSocket("ws://"+document.location.host+"/websocket?z_pageid="+z_pageid);
 
 	z_ws.onopen = function() { z_ws_opened = true; };
 	z_ws.onerror = function() {};

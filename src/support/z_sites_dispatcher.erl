@@ -153,7 +153,8 @@ handle_call(Message, _From, State) ->
 %% @todo Do SSL filtering per host (instead of on a system wide basis).
 handle_cast({set_dispatch_rules, Rules}, State) ->
     Rules1 = filter_ssl(z_config:get(ssl), Rules),
-    {noreply, State#state{rules=compile_regexps_hosts(Rules1)}};
+    Rules2 = normalize_streamhosts(Rules1),
+    {noreply, State#state{rules=compile_regexps_hosts(Rules2)}};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -260,14 +261,24 @@ split_host(Host) ->
 
 
 %% @doc Search the host where the main hostname matches the requested host
-get_dispatch_host(_Host, []) ->
-    undefined;
-get_dispatch_host(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
-    {ok, DL};
-get_dispatch_host(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
-    {ok, DL};
-get_dispatch_host(Host, [_|Rest]) ->
-    get_dispatch_host(Host, Rest).
+get_dispatch_host(Host, DLs) ->
+    case get_dispatch_host1(Host, DLs) of
+        undefined ->
+            case make_streamhost(Host) of
+                Host -> undefined;
+                StreamHost -> get_dispatch_host1(StreamHost, DLs)
+            end;
+        Found -> Found
+    end.
+
+    get_dispatch_host1(_Host, []) ->
+        undefined;
+    get_dispatch_host1(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
+        {ok, DL};
+    get_dispatch_host1(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
+        {ok, DL};
+    get_dispatch_host1(Host, [_|Rest]) ->
+        get_dispatch_host1(Host, Rest).
 
 
 %% @doc Search the host where the req hostname is an alias of main host.
@@ -337,6 +348,33 @@ is_compile_opt(ungreedy) -> true;
 is_compile_opt(no_auto_capture) -> true;
 is_compile_opt(dupnames) -> true;
 is_compile_opt(_) -> false.
+
+
+%% @doc Normalize streamhosts, remove any prepending # or *
+normalize_streamhosts(DLs) ->
+    normalize_streamhosts(DLs, []).
+
+    normalize_streamhosts([], Acc) ->
+        lists:reverse(Acc);
+    normalize_streamhosts([#wm_host_dispatch_list{streamhost=Host} = DL|Rest], Acc) ->
+        normalize_streamhosts(Rest, [DL#wm_host_dispatch_list{streamhost=make_streamhost(Host)}|Acc]).
+
+make_streamhost(Hostname) ->
+    case make_streamhost1(Hostname) of
+        false -> Hostname;
+        Other -> Other
+    end.
+
+    make_streamhost1([C|Hostname]) when C >= $0 andalso C =< $9 ->
+        make_streamhost1(Hostname);
+    make_streamhost1([$?|Hostname]) ->
+        Hostname;
+    make_streamhost1([$*|Hostname]) ->
+        Hostname;
+    make_streamhost1([$.|_] = Hostname) ->
+        Hostname;
+    make_streamhost1(_) -> 
+        false.
 
 
 %% @doc When SSL is not enabled, then remove any ssl option from all dispatch rules.

@@ -42,6 +42,10 @@ m_find_value(all, #m{value=undefined} = M, _Context) ->
     M#m{value=all};
 m_find_value(Key, #m{value=all}, Context) ->
     get_all(Key, Context);
+m_find_value(hostname_no_port, #m{value=undefined}, Context) ->
+    z_dispatcher:drop_port(get(hostname, Context));
+m_find_value(document_domain, #m{value=undefined}, Context) ->
+    z_context:document_domain(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 
@@ -69,15 +73,15 @@ get(Key, Context) when is_atom(Key) ->
         {ok, undefined} ->
             undefined;
         {ok, none} when Key == hostname ->
-            case z_context:is_request(Context) of
-                true -> sanitize_host(z_context:get_req_header("host", Context));
-                false -> undefined
-            end;
+	    case z_context:is_request(Context) of
+		true -> sanitize_host(z_context:get_req_header("host", Context));
+		false -> undefined
+	    end;
         {ok, Cs} ->
             Cs;
         undefined ->
-            All = all(Context),
-            proplists:get_value(Key, All)
+	    All = all(Context),
+	    proplists:get_value(Key, All)
     end.
     
     sanitize_host(Host) ->

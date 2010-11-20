@@ -107,6 +107,7 @@
     get_req_path/1,
 
     cookie_domain/1,
+    document_domain/1,
     streamhost/1
 ]).
 
@@ -850,6 +851,12 @@ cookie_domain(Context) ->
     postfix(_A, _B, Acc) ->
         Acc.
 
+%% @doc The document domain used for cross domain iframe javascripts
+document_domain(Context) ->
+    case cookie_domain(Context) of
+        [$.|Domain] -> Domain;
+        Domain -> Domain
+    end.
 
 %% @doc Fetch the domain and port for stream (comet/websocket) connections
 %% @spec streamhost(Context) -> list()

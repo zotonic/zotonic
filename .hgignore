@@ -20,6 +20,7 @@ zotonic.tmproj
 *.lai
 *.so
 *.Plo
+*.wmtrace
 deps/exmpp/autom4te.cache/
 deps/exmpp/Makefile
 deps/exmpp/c_src/Makefile
