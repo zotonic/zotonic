@@ -36,7 +36,8 @@
 	dispatchinfo/1,
 	update/1,
 	reload/1,
-	reload/2
+	reload/2,
+	drop_port/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -140,13 +141,14 @@ init(SiteProps) ->
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
     {ok, State}.
 
-
-    drop_port(undefined) ->
-        undefined;
-    drop_port(none) ->
-        "localhost";
-    drop_port(Hostname) ->
-        hd(string:tokens(Hostname, ":")).
+% @doc Drop the portnumber from the hostname
+%
+drop_port(undefined) ->
+    undefined;
+drop_port(none) ->
+    "localhost";
+drop_port(Hostname) ->
+    hd(string:tokens(Hostname, ":")).
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

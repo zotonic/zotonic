@@ -23,7 +23,7 @@
 				var old_domain = document.domain;
 				try 
 				{
-					document.domain = "{{ m.site.hostname }}";
+					document.domain = "{{ m.site.document_domain }}";
 					window.parent.z_comet_data(data);
 				} 
 				catch (e)

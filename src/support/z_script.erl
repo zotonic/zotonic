@@ -48,15 +48,23 @@ add_script(Script, Context) ->
     Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
 
 get_page_startup_script(Context) ->
-    case Context#context.page_id of
+    case z_context:document_domain(Context) of
         undefined ->
-            %% No page id, so no comet loop started and generated random page id for postback loop
-            [   
-                ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $;
-            ];
-        PageId ->
-            [   ?SESSION_PAGE_Q, $=, $", PageId, $", $;
-            ]
+            case Context#context.page_id of
+                undefined ->
+                    %% No page id, so no comet loop started and generated random page id for postback loop
+                    [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $; ];
+                PageId ->
+                    [ ?SESSION_PAGE_Q, $=, $", PageId, $", $; ]
+            end;
+        DocumentDomain ->
+            case Context#context.page_id of
+                undefined ->
+                    %% No page id, so no comet loop started and generated random page id for postback loop
+                    [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), <<"\"; document.domain=\"">>, DocumentDomain, $", $; ];
+                PageId ->
+                    [ ?SESSION_PAGE_Q, $=, $", PageId, <<"\"; document.domain=\"">>, DocumentDomain ,$", $; ]
+            end
     end.
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.

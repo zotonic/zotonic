@@ -94,7 +94,17 @@ process_post(ReqData, Context) ->
     RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
         "multipart/form-data" ++ _ ->
             RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
-            wrq:append_to_resp_body(["<textarea>", Script1, CometScript, "</textarea>"], RDct);
+            case z_context:document_domain(EventContext) of
+                undefined ->
+                    wrq:append_to_resp_body([
+                            "<textarea>", Script1, CometScript, "</textarea>"
+                            ], RDct);
+                DocumentDomain ->
+                    wrq:append_to_resp_body([
+                            <<"<script>document.domain=\"">>, DocumentDomain,<<"\";</script><textarea>">>,
+                            Script1, CometScript, "</textarea>"
+                            ], RDct)
+            end;
         _ ->
             wrq:append_to_resp_body([Script1, CometScript], RD)
     end,
