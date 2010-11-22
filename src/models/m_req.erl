@@ -27,7 +27,9 @@
 -export([
     m_find_value/3,
     m_to_list/2,
-    m_value/2
+    m_value/2,
+    
+    get/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -49,6 +51,8 @@ m_value(#m{value=undefined}, Context) ->
 
 
 %% @doc Fetch the field from the wrq interface.
+get(What, #context{} = Context) -> get(What, z_context:get_reqdata(Context));
+get(_What, undefined) -> undefined;
 get(method, RD) -> wrq:method(RD);
 get(version, RD) -> wrq:version(RD);
 get(peer, RD) -> wrq:peer(RD);
@@ -62,6 +66,7 @@ get(raw_path, RD) -> wrq:raw_path(RD);
 get(path, RD) -> wrq:path(RD);
 get(qs, RD) -> wrq:req_qs(RD);
 get(headers, RD) -> wrq:req_headers(RD);
+get(user_agent, RD) -> proplists:get_value("user-agent", wrq:req_headers(RD));
 get(_Key, _RD) -> undefined.
 
 
