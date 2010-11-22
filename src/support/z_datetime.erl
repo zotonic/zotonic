@@ -141,9 +141,9 @@ reldate(D1, D2, Context) ->
 plural(0,_Single,_Plural) ->
 	"";
 plural(1,Single,_Plural) ->
-	"1 " ++ Single;
+	[$1, 32, Single];
 plural(N,_Single,Plural) ->
-	integer_to_list(N) ++ [32 | Plural].
+	[integer_to_list(N), 32, Plural].
 
 
 %% @doc Return the date one year earlier.
