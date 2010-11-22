@@ -76,14 +76,7 @@ limitations under the License.
 				if (typeof($.widgetManager) != 'undefined') {
 					dialogWrapper.widgetManager();
 				}
-
-				if (typeof(tinyMCE) != 'undefined') {
-					$("textarea.tinymce", dialogWrapper).each( function() { 
-						var mce_id = $(this).attr('id');
-						setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
-					} );
-				}
-
+				z_tinymce_add(dialogWrapper);
 				$('input', dialogWrapper).eq(0).focus();
 			}
 		},
@@ -91,11 +84,7 @@ limitations under the License.
 		dialogRemove: function(obj)
 		{
 			obj = obj || $('.dialog');
-			
-			if (typeof(tinyMCE) != 'undefined') {
-				$("textarea.tinymce", obj).each( function() { tinyMCE.execCommand('mceRemoveControl',false, $(this).attr('id')); } );
-			}
-			
+			z_tinymce_remove(obj);
 			obj.draggable('destroy').resizable('destroy').fadeOut(300, function()
 			{
 				$(this).remove();
