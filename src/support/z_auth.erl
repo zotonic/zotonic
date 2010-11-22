@@ -71,8 +71,8 @@ logon(UserId, Context) ->
 			Context2 = z_session_manager:rename_session(Context1),
 		    z_context:set_session(auth_user_id, UserId, Context2),
 		    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-		    z_notifier:notify(auth_logon, Context),
-		    {ok, Context2};
+		    Context3 = z_notifier:foldl(auth_logon, Context2, Context2),
+		    {ok, Context3};
 		false ->
 			{error, user_not_enabled}
 	end.
