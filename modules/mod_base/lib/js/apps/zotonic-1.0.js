@@ -297,6 +297,29 @@ function z_progress(id, value)
 	}
 }
 
+/* tinyMCE stuff
+---------------------------------------------------------- */
+
+function z_tinymce_add(element) 
+{
+	if (typeof(tinyMCE) != 'undefined') {
+		$("textarea.tinymce", element).each( function() { 
+			var mce_id = $(this).attr('id');
+			setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+		} );
+	}
+}
+
+function z_tinymce_remove(element) 
+{
+	if (typeof(tinyMCE) != 'undefined') {
+		$("textarea.tinymce", element).each( function() {
+			tinyMCE.execCommand('mceRemoveControl',false, $(this).attr('id')); 
+		} );
+	}
+}
+
+
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
