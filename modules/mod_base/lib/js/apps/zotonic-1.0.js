@@ -318,7 +318,7 @@ function z_stream_start(host)
 
 function z_comet(host) 
 {
-	if (host != window.location.host)
+	if (host != window.location.host && window.location.protocol == "http:")
 	{
 		var url = window.location.protocol + '//' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
 		var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
