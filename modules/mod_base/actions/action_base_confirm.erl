@@ -19,21 +19,28 @@
 
 -module(action_base_confirm).
 -include("zotonic.hrl").
--export([render_action/4]).
+-export([
+    render_action/4,
+    event/2
+]).
 
-render_action(TriggerId, TargetId, Args, Context) ->
-    Postback  = proplists:get_value(postback, Args),
-    Actions   = proplists:get_all_values(action, Args),
-    Text      = proplists:get_value(text, Args, ""),
-	Delegate  = proplists:get_value(delegate, Args),
-    
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, confirm, TriggerId, TargetId, Delegate, Context),
-	{ActionJS,Context1} = z_render:render_actions(TriggerId, TargetId, Actions, Context),
-	Script           = [
-	                        <<"if (confirm(\"">>,z_utils:js_escape(Text),<<"\")) {">>,
-    	                        PostbackMsgJS,
-    	                        ActionJS,
-	                        $}
-	                    ],
-	{Script,Context1}.
-	
+
+render_action(TriggerId, TargetId, Args, Context) -> 
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback({confirm, Args}, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
+
+%% @doc Fill the dialog with the confirmation template.
+%% @spec event(Event, Context1) -> Context2
+event({postback, {confirm, Args}, _TriggerId, _TargetId}, Context) ->
+    Title = proplists:get_value(title, Args, ?__(<<"Confirm">>, Context)),
+    Vars = [
+        {title, Title},
+        {text, proplists:get_value(text, Args, "")},
+        {ok, proplists:get_value(ok, Args)},
+        {cancel, proplists:get_value(cancel, Args)},
+        {action, proplists:get_all_values(action, Args)},
+        {on_cancel, proplists:get_all_values(on_cancel, Args)},
+        {postback, proplists:get_value(postback, Args)},
+        {delegate, proplists:get_value(delegate, Args)}
+    ],
+    z_render:dialog(Title, "_action_dialog_confirm.tpl", Vars, Context).
