@@ -319,6 +319,27 @@ search({latest, []}, OffsetLimit, Context) ->
 search({latest, [{cat, Cat}]}, OffsetLimit, Context) ->
     search({'query', [{cat, Cat}, {sort, '-rsc.modified'}]}, OffsetLimit, Context);
 
+search({latest, [{creator_id,CreatorId}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+        where="r.creator_id = $1",
+        order="r.modified desc",
+        args=[CreatorId],
+        tables=[{rsc,"r"}]
+    };
+
+search({latest, [{cat, Cat}, {creator_id,CreatorId}]}, _OffsetLimit, _Context) ->
+    #search_sql{
+        select="r.id",
+        from="rsc r",
+        where="r.creator_id = $1",
+        order="r.modified desc",
+        args=[CreatorId],
+        cats=[{"r", Cat}],
+        tables=[{rsc,"r"}]
+    };
+
 search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
     search({'query', [{upcoming, true}, {cat, Cat}, {sort, 'rsc.pivot_date_start'}]}, OffsetLimit, Context);
 
