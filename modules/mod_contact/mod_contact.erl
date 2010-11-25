@@ -41,7 +41,7 @@ init(Context) ->
 %% @doc Handle the contact form submit.
 event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
     Template = proplists:get_value(email_template, Args, "email_contact.tpl"),
-    Email = proplists:get_value(to, Args, m_config:get_value(mod_config, email, Context)),
+    Email = proplists:get_value(to, Args, m_config:get_value(?MODULE, email, Context)),
     To = case z_utils:is_empty(Email) of
             true -> z_email:get_admin_email(Context);
             false -> Email
