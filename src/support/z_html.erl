@@ -385,6 +385,7 @@ allow_attr(<<"loop">>) -> true;
 allow_attr(<<"name">>) -> true;
 allow_attr(<<"poster">>) -> true;
 allow_attr(<<"preload">>) -> true;
+allow_attr(<<"rel">>) -> true;
 allow_attr(<<"rowspan">>) -> true;
 allow_attr(<<"shape">>) -> true;
 allow_attr(<<"src">>) -> true;
