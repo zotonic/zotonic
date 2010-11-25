@@ -91,10 +91,14 @@ render(File, Variables, Context) ->
 
         case Result of
             {ok, Module} ->
+                %% @todo Move the in_process caching to the template compiler?
+                OldCaching = z_depcache:in_process(true),
                 case Module:render(Variables, Context) of
                     {ok, Output}   -> 
+                        z_depcache:in_process(OldCaching),
                         Output;
                     {error, Reason} ->
+                        z_depcache:in_process(OldCaching),
                         ?ERROR("Error rendering template: ~p (~p)", [File, Reason]),
                         throw({error, {template_rendering_error, File, Reason}})
                  end;

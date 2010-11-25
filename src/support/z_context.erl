@@ -143,6 +143,7 @@ new(Host) when is_atom(Host) ->
 new(ReqData) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
+    z_depcache:in_process(true),
     Context = set_server_names(#context{wm_reqdata=ReqData, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
@@ -151,6 +152,7 @@ new(ReqData) ->
 new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
+    z_depcache:in_process(true),
     Context = set_server_names(#context{wm_reqdata=ReqData, resource_module=Module, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
