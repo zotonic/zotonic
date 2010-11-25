@@ -135,6 +135,15 @@ search_result(#search_sql{} = Q, Limit, Context) ->
 
 
 concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=GroupBy, order=Order, limit=SearchLimit, args=Args}, Limit1) ->
+    From1  = case From of
+	#search_sql{} ->
+	    case concat_sql_query(From, undefined) of
+		{SQL, []} -> "(" ++ SQL ++ ") AS ___aaaaaa"; %% postgres wants to see "AS ..." after inner select in from
+		{SQL, [{as, Alias}]} when is_list(Alias) -> "(" ++ SQL ++ ") AS " ++ Alias;
+		{_SQL, A} -> throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
+	    end;
+	_ -> From
+    end,
     Where1 = case Where of
         [] -> [];
         _ -> "where " ++ Where
@@ -152,14 +161,14 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
                                  case Limit1 of
                                      undefined ->
                                          %% No limit. Use with care.
-                                         {["select", Select, "from", From, Where1, GroupBy1, Order1], Args};
+                                         {["select", Select, "from", From1, Where1, GroupBy1, Order1], Args};
                                      {OffsetN, LimitN} ->
                                          N = length(Args),
                                          Args1 = Args ++ [OffsetN-1, LimitN],
-                                         {["select", Select, "from", From, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
+                                         {["select", Select, "from", From1, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
                                  end;
                              _ ->
-                                 {["select", Select, "from", From, Where1, GroupBy1, Order1, SearchLimit], Args}
+                                 {["select", Select, "from", From1, Where1, GroupBy1, Order1, SearchLimit], Args}
                          end,
     {string:join(Parts, " "), FinalArgs}.
     
