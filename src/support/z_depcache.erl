@@ -28,7 +28,7 @@
 %% depcache exports
 -export([set/3, set/4, set/5, get/2, get_wait/2, get/3, get_subkey/3, flush/2, flush/1, tick/1, size/1]).
 -export([memo/2, memo/3, memo/4, memo/5]).
--export([flush_process_dict/0]).
+-export([in_process/0, in_process/1, flush_process_dict/0]).
 
 %% internal export
 -export([cleanup/4, cleanup/8]).
@@ -133,7 +133,7 @@ set(Key, Data, MaxAge, Depend, #context{depcache=Depcache}) ->
 %% the key is updated and receive the key's new value.
 get_wait(Key, Context) ->
     case get_process_dict(Key, Context) of
-        undefined ->
+        NoValue when NoValue =:= undefined orelse NoValue =:= depcache_disabled ->
             gen_server:call(Context#context.depcache, {get_wait, Key}, ?MAX_GET_WAIT*1000);
         Other ->
             Other
@@ -151,19 +151,27 @@ get_waiting_pids(Key, #context{depcache=Depcache}) ->
 %% @spec get(Key, SubKey, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
 get(Key, Context) ->
-    get_process_dict(Key, Context).
+    case get_process_dict(Key, Context) of
+        depcache_disabled -> gen_server:call(Context#context.depcache, {get, Key});
+        Value -> Value
+    end.
 
 
-%% @spec get_nomemo(Key, SubKey, Context) -> {ok, Data} | undefined
+%% @spec get_subkey(Key, SubKey, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
 get_subkey(Key, SubKey, Context) ->
-    case erlang:get({depcache, {subkey, Key, SubKey}}) of
-        {memo, Value} ->
-            Value;
-        undefined ->
-            Value = gen_server:call(Context#context.depcache, {get, Key, SubKey}),
-            erlang:put({depcache, {subkey, Key, SubKey}}, {memo, Value}),
-            Value
+    case in_process() of
+        true ->
+            case erlang:get({depcache, {subkey, Key, SubKey}}) of
+                {memo, Value} ->
+                    Value;
+                undefined ->
+                    Value = gen_server:call(Context#context.depcache, {get, Key, SubKey}),
+                    erlang:put({depcache, {subkey, Key, SubKey}}, {memo, Value}),
+                    Value
+            end;
+        false ->
+            gen_server:call(Context#context.depcache, {get, Key, SubKey})
     end.
 
 
@@ -173,6 +181,8 @@ get(Key, SubKey, Context) ->
     case get_process_dict(Key, Context) of
         undefined -> 
             undefined;
+        depcache_disabled ->
+            gen_server:call(Context#context.depcache, {get, Key, SubKey});
         {ok, Value} ->
             {ok, find_value(SubKey, Value)}
     end.
@@ -205,7 +215,7 @@ size(Context) ->
     ets:info(Data, memory).
 
 
-%% @doc Fetch the depcache tables. Returns the tables and current serial.
+%% @doc Fetch the depcache tables.
 get_tables(#context{host=Host} = Context) ->
     case erlang:get(depcache_tables) of
         {ok, Host, Tables} ->
@@ -223,23 +233,28 @@ get_tables(#context{host=Host} = Context) ->
         Tables.
 
 
-%% @doc Fetch a value from the dependency cache, using the in-process cached serial and tables.
+%% @doc Fetch a value from the dependency cache, using the in-process cached tables.
 get_process_dict(Key, Context) ->
-    case erlang:get({depcache, Key}) of
-        {memo, Value} ->
-            Value;
-        undefined ->
-            % Prevent the process dict memo from blowing up the process size
-            case z_utils:now() > erlang:get(depcache_now)
-                  orelse erlang:get(depcache_count) > ?PROCESS_DICT_THRESHOLD of
-                true -> flush_process_dict();
-                false -> nop
-            end,
+    case in_process() of
+        true ->
+            case erlang:get({depcache, Key}) of
+                {memo, Value} ->
+                    Value;
+                undefined ->
+                    % Prevent the process dict memo from blowing up the process size
+                    case z_utils:now() > erlang:get(depcache_now)
+                          orelse erlang:get(depcache_count) > ?PROCESS_DICT_THRESHOLD of
+                        true -> flush_process_dict();
+                        false -> nop
+                    end,
 
-            Value = get_ets(Key, Context),
-            erlang:put({depcache, Key}, {memo, Value}),
-            erlang:put(depcache_count, erlang:get(depcache_count) + 1),
-            Value
+                    Value = get_ets(Key, Context),
+                    erlang:put({depcache, Key}, {memo, Value}),
+                    erlang:put(depcache_count, incr(erlang:get(depcache_count))),
+                    Value
+            end;
+        false ->
+            depcache_disabled
     end.
 
 
@@ -255,6 +270,19 @@ get_ets(Key, Context) ->
             Found
     end.
 
+
+%% @doc Check if we use a local process dict cache
+in_process() ->
+    erlang:get(depcache_in_process) =:= true.
+
+%% @doc Enable or disable the in-process caching using the process dictionary
+in_process(true) ->
+    erlang:put(depcache_in_process, true);
+in_process(false) ->
+    erlang:erase(depache_in_process),
+    flush_process_dict();
+in_process(undefined) ->
+    in_process(false).
 
 %% @doc Flush all items memoized in the process dictionary.
 flush_process_dict() ->
@@ -352,33 +380,19 @@ handle_call({get_waiting_pids, Key}, _From, State) ->
 
 %% @doc Fetch a key from the cache, returns undefined when not found.
 handle_call({get, Key}, _From, State) ->
-    case get_concurrent(Key, State#state.now, State#state.meta_table, State#state.deps_table, State#state.data_table) of
-        flush ->
-            flush_key(Key, State),
-            {reply, undefined, State};
-        undefined ->
-            {reply, undefined, State};
-        {ok, _Value} = Found ->
-            {reply, Found, State}
-    end;
-
+    {reply, get_in_depcache(Key, State), State};
 
 %% @doc Fetch a subkey from a key from the cache, returns undefined when not found.
 %% This is useful when the cached data is very large and the fetched data is small in comparison.
 handle_call({get, Key, SubKey}, _From, State) ->
-    case get_concurrent(Key, State#state.now, State#state.meta_table, State#state.deps_table, State#state.data_table) of
-        flush -> 
-            flush_key(Key, State),
-            {reply, undefined, State};
-        undefined ->
-            {reply, undefined, State};
-        {ok, Value} ->
-            {reply, {ok, find_value(SubKey, Value)}, State}
+    case get_in_depcache(Key, State) of
+        undefined -> {reply, undefined, State};
+        {ok, Value} -> {reply, {ok, find_value(SubKey, Value)}, State}
     end;
-
 
 %% Add an entry to the cache table
 handle_call({set, Key, Data, MaxAge, Depend}, _From, State) ->
+    erlang:erase(),
     State1 = State#state{serial=State#state.serial+1},
     case MaxAge of
         0 ->
@@ -419,6 +433,7 @@ handle_call(flush, _From, State) ->
     ets:delete_all_objects(State#state.data_table),
     ets:delete_all_objects(State#state.meta_table),
     ets:delete_all_objects(State#state.deps_table),
+    erlang:erase(),
     {reply, ok, State}.
 
 
@@ -438,9 +453,11 @@ handle_cast(flush, State) ->
     ets:delete_all_objects(State#state.data_table),
     ets:delete_all_objects(State#state.meta_table),
     ets:delete_all_objects(State#state.deps_table),
+    erlang:erase(),
     {noreply, State};
 
 handle_cast(tick, State) ->
+    erlang:erase(),
     {noreply, State#state{now=z_utils:now()}};
 
 handle_cast(_Msg, State) ->
@@ -452,6 +469,37 @@ handle_info(_Msg, State) ->
 terminate(_Reason, _State) -> ok.
 code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
+
+%% @doc Fetch a value, from within the depcache process.  Cache the value in the process dictionary of the depcache.
+get_in_depcache(Key, State) ->
+    case erlang:get({depcache, Key}) of
+        {memo, Value} ->
+            Value;
+        undefined ->
+            % Prevent the process dict memo from blowing up the process size
+            case erlang:get(depcache_count) > ?PROCESS_DICT_THRESHOLD of
+                true -> erlang:erase();
+                false -> nop
+            end,
+            Value = get_in_depcache_ets(Key, State),
+            erlang:put({depcache, Key}, {memo, Value}),
+            erlang:put(depcache_count, incr(erlang:get(depcache_count))),
+            Value
+    end.
+    
+incr(undefined) -> 1;
+incr(N) -> N+1.
+
+get_in_depcache_ets(Key, State) ->
+    case get_concurrent(Key, State#state.now, State#state.meta_table, State#state.deps_table, State#state.data_table) of
+        flush -> 
+            flush_key(Key, State),
+            undefined;
+        undefined ->
+            undefined;
+        {ok, Value} ->
+            {ok, Value}
+    end.
 
 
 %% @doc Get a value from the depache.  Called by the depcache and other processes.
@@ -490,11 +538,12 @@ is_simple_key(_Key) ->
     true.
 
 
-%% @doc Flush a key from the cache
+%% @doc Flush a key from the cache, reset the in-process cache as well (we don't know if any cached value had a dependency)
 flush_key(Key, State) ->
     ets:delete(State#state.data_table, Key),
     ets:delete(State#state.deps_table, Key),
-    ets:delete(State#state.meta_table, Key).
+    ets:delete(State#state.meta_table, Key),
+    erlang:erase().
 
 
 %% @doc Check if all dependencies are still valid, that is they have a serial before or equal to the serial of the entry

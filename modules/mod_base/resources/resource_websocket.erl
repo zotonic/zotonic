@@ -205,6 +205,10 @@ handle_message(Msg, Context) ->
     end,
 
     {ResultScript, ResultContext} = try
+        % Enable caching lookup values, essential for fast data handling
+        z_depcache:in_process(true),
+
+        % Set the context resource and call the resource
         ContextRsc = z_context:set_resource_module(Module, Context1),
         EventContext = case EventType of
             "submit" -> 
@@ -217,6 +221,10 @@ handle_message(Msg, Context) ->
             _ -> 
                 Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
         end,
+        
+        % Cleanup process dict, so our process heap is smaller between calls
+        z_depcache:flush_process_dict(),
+
         Script = iolist_to_binary(z_script:get_script(EventContext)),
         % Remove the busy mask from the element that triggered this event.
         {case TriggerId1 of 
