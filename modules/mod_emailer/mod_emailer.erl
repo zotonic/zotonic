@@ -65,10 +65,10 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     z_notifier:observe(#email{}, self(), Context),
-    timer:send_interval(60000, poll),
-	State = update_config(#state{context=z_context:new(Context)}),
-	{ok, State}.
-	
+    timer:send_interval(5000, poll),
+    State = update_config(#state{context=z_context:new(Context)}),
+    {ok, State}.
+
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
