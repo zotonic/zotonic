@@ -13,22 +13,22 @@
 	
 				<p class="summary">{{ m.rsc[confirm.mailinglist_id].summary }}</p>
 				
-				<h2>Please confirm your subscription</h2>
+				<h2>{_ Please confirm your subscription _}</h2>
 				
-				<p>Click the button below to confirm your subscription to this mailing list.</p>
+				<p>{_ Click the button below to confirm your subscription to this mailing list. _}</p>
 				 
 				<div id="confirm">
-					{% button text=["Subscribe ", confirm.email|force_escape] 
+					{% button text=[_"Subscribe ", confirm.email|force_escape] 
 							action={mailinglist_confirm confirm_key=q.confirm_key 
-									on_success={update target="confirm" text="<p>Thank you. You are now subscribed.</p>"}
-									on_error={update target="confirm" text="<p>Sorry, something went wrong. Please try to re-subscribe.</p>"}} %}
+									on_success={update target="confirm" text=_"<p>Thank you. You are now subscribed.</p>"}
+									on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try to re-subscribe.</p>"}} %}
 				</div>
 				
 			{% else %}
-				<h1>Sorry, can’t confirm your subscription</h1>
+				<h1>{_ Sorry, can’t confirm your subscription _}</h1>
 				
-				<p>The confirmation key is unknown. Either you already confirmed or something else went wrong.</p>
-				<p>You can try to re-subscribe to one of our mailing lists in the side column.</p>
+				<p>{_ The confirmation key is unknown. Either you already confirmed or something else went wrong. _}</p>
+				<p>{_ You can try to re-subscribe to one of our mailing lists in the side column. _}</p>
 
 			{% endif %}
 		{% endwith %}
@@ -36,7 +36,7 @@
 	</article>
 	
 	<aside id="sidebar" class="zp-20">
-		<h2>Mailing lists</h2>
+		<h2>{_ Mailing lists _}</h2>
 		
 		<ul>
 		{% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
@@ -47,7 +47,7 @@
 				</li>
 			{% endifnotequal %}
 		{% empty %}
-			<li>No mailing lists</li>
+			<li>{_ No mailing lists _}</li>
 		{% endfor %}
 		</ul>
 	</aside>

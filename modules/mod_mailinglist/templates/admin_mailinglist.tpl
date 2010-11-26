@@ -1,28 +1,28 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}Mailing Lists{% endblock %}
+{% block title %}{_ Mailing Lists _}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>Mailing lists</h2>
+		<h2>{_ Mailing lists _}</h2>
 
-		{% button text="New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
+		{% button text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 
 		<hr class="clear" />
 		<p>
-			Any page can be send as a mailing. You can send a mailing from any edit page, here you can add or remove mailing lists and recipients.
+			{_ Any page can be send as a mailing. You can send a mailing from any edit page, here you can add or remove mailing lists and recipients. _}
 		</p>
 
-		<h3 class="above-list ">Mailing list overview</h3>
+		<h3 class="above-list ">{_ Mailing list overview _}</h3>
 		<ul class="short-list">
 			<li class="headers clearfix">
-				<span class="zp-20">Title</span>
-				<span class="zp-40">Description</span>
-				<span class="zp-10">Recipients</span>
-				<span class="zp-10">Scheduled</span>
-				<span class="zp-20">Actions</span>
+				<span class="zp-20">{_ Title _}</span>
+				<span class="zp-40">{_ Description _}</span>
+				<span class="zp-10">{_ Recipients _}</span>
+				<span class="zp-10">{_ Scheduled _}</span>
+				<span class="zp-20">{_ Actions _}</span>
 			</li>
 		{% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
 			<li id="mailinglist-{{id}}">
@@ -35,20 +35,20 @@
 						<span class="zp-10">{{ stats[2]|length|format_number }}</span>
 					{% endwith %}
 					<span class="zp-20">
-						{% button text="recipients" action={redirect dispatch="admin_mailinglist_recipients" id=id} disabled=not enabled %}
+						{% button text=_"recipients" action={redirect dispatch="admin_mailinglist_recipients" id=id} disabled=not enabled %}
 						{% if enabled %}
-							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						{% else %}
-							{% button text="view" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							{% button text=_"view" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						{% endif %}
-						{% button text="delete" postback={mailinglist_delete_confirm id=id} disabled=not enabled %}
+						{% button text=_"delete" postback={mailinglist_delete_confirm id=id} disabled=not enabled %}
 					</span>
 				</a>
 				{% endwith %}
 			</li>
 		{% empty %}
 			<li>
-				No items found
+				{_ No items found _}
 			</li>
 		{% endfor %}
 		</ul>

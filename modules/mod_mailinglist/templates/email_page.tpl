@@ -3,8 +3,8 @@
 {% block title %}{{ m.rsc[id].title }}{% endblock %}
 
 {% block body %}
-<p>This mail was send to you because someone visiting {{ m.site.hostname }} thought you would be interested.</p>
-<p>You can <a href="{{ m.rsc[id].page_url }}">read the full article online.</a></p>
+<p>{_ This mail was sent to you because someone visiting _} {{ m.site.hostname }} {_ thought you would be interested. _}</p>
+<p>{_ You can _}<a href="{{ m.rsc[id].page_url }}">{_ read the full article online. _}</a></p>
 
 <hr/>
 
