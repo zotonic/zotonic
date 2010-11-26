@@ -51,7 +51,7 @@ resource_exists(ReqData, Context) ->
                             ?WM_REPLY(false, ContextQs);
                         Url ->
                             %% Redirect to the website.
-                            AbsUrl = z_context:abs_url(Url, ContextQs),
+                            AbsUrl = binary_to_list(filter_unescape:unescape(z_context:abs_url(Url, ContextQs), Context)),
                             Context3 = z_context:set_resp_header("Location", AbsUrl, ContextQs),
                             ?WM_REPLY({halt, 301}, Context3)
                     end;
