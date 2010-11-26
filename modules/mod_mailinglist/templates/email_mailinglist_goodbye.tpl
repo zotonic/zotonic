@@ -1,14 +1,14 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}You are now unsubscribed from {{ m.rsc[list_id].title }}{% endblock %}
+{% block title %}{_ You are now unsubscribed from _}{{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
-<p>Goodbye,</p>
+<p>{_ Goodbye,</p>
 
-<p>You are now unsubscribed from the mailing list <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a>.
-<br/>Hope to see you again.</p>
+<p>{_ You are now unsubscribed from the mailing list _} <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a>.
+<br/>{_ Hope to see you again. _}</p>
 
-<p>Kind Regards,</p>
+<p>{_ Kind Regards, _}</p>
 
 <p><a href="/">{{ m.site.hostname }}</a></p>
 

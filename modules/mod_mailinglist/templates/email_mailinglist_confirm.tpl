@@ -1,20 +1,20 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}Please confirm your subscription on {{ m.rsc[list_id].title }}{% endblock %}
+{% block title %}{_ Please confirm your subscription on _} {{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
-	<p>Hello,</p>
+	<p>{_ Hello, _}</p>
 
-	<p>You, or someone else, added your e-mail address to our mailing list <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a>.
-	Before you will receive any further mail you need to confirm your subscription.</p>
+	<p>{_ You, or someone else, added your e-mail address to our mailing list _} <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a>.
+	{_ Before you will receive any further mail you need to confirm your subscription. _}</p>
 
-	<p>Please follow <a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key %}">this link to confirm</a>, or copy and paste the address below in your browser.</p>
+	<p>{_ Please follow _} <a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key %}">{_ this link to confirm _}</a>, {_ or copy and paste the address below in your browser. _}</p>
 
 	<p><a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key %}">http://{{m.site.hostname}}{% url mailinglist_confirm confirm_key=recipient.confirm_key %}</a></p>
 
-	<p>When you don’t want to receive any mail then please ignore this message.</p>
+	<p>{_ When you don’t want to receive any mail then please ignore this message. _}</p>
 
-	<p>Kind Regards,</p>
+	<p>{_ Kind Regards, _}</p>
 
 	<p><a href="/">{{ m.site.hostname }}</a></p>
 {% endblock %}

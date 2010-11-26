@@ -3,13 +3,13 @@
 {% block title %}{_ Welcome to _}{{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
-	<p>Hello,</p>
+	<p>{_ Hello,</p>
 
-	<p>You are now subscribed to our mailing list <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a> with your e-mail address {{ recipient.email|escape }}. From now on you will receive mail from our mailing list.</p>
+	<p>{_ You are now subscribed to our mailing list _} <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a> {_ with your e-mail address _} {{ recipient.email|escape }}. {_ From now on you will receive mail from our mailing list. _}</p>
 
-	<p>When you don’t want to receive any more mail then <a href="{% url mailinglist_unsubscribe confirm_key=recipient.confirm_key %}">click here to unsubscribe.</a></p>
+	<p>{_ When you don’t want to receive any more mail then _} <a href="{% url mailinglist_unsubscribe confirm_key=recipient.confirm_key %}">{_ click here to unsubscribe. _}</a></p>
 
-	<p>Kind Regards,</p>
+	<p>{_ Kind Regards, _}</p>
 
 	<p><a href="/">{{ m.site.hostname }}</a></p>
 {% endblock %}
