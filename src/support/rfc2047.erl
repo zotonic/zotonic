@@ -22,18 +22,19 @@ encode(Text) ->
     encode([H|T], Text) when H >= 32 andalso H =< 126 andalso H /= $= ->
         encode(T, Text);
     encode(_, Text) ->
-	    "=?UTF-8?Q?" ++ encode(Text, [], 0) ++ "?=".
+        "=?UTF-8?Q?" ++ encode(Text, [], 0) ++ "?=".
 
 encode([], Acc, _WordLen) ->
-	lists:reverse(Acc);
+    lists:reverse(Acc);
 encode(T, Acc, WordLen) when WordLen >= 55 ->
-	%% Make sure that the individual encoded words are not longer than 76 chars (including charset etc)
-	encode(T, [$?,$Q,$?,$8,$-,$F,$T,$U,$?,$=,32,10,13,$=,$?|Acc], 0);
-encode([C|T], Acc, WordLen) when C > 32 andalso C < 127 andalso C /= 32 andalso C /= $? andalso C /= $_ andalso C /= $= ->
-	encode(T, [C|Acc], WordLen+1);
+    %% Make sure that the individual encoded words are not longer than 76 chars (including charset etc)
+    encode(T, [$?,$Q,$?,$8,$-,$F,$T,$U,$?,$=,32,10,13,$=,$?|Acc], 0);
+encode([C|T], Acc, WordLen) when C > 32 andalso C < 127 andalso C /= 32 
+    andalso C /= $? andalso C /= $_ andalso C /= $= andalso C /= $. ->
+    encode(T, [C|Acc], WordLen+1);
 encode([C|T], Acc, WordLen) ->
-	encode(T, [hex(C rem 16), hex(C div 16), $= | Acc], WordLen+4).
-	
+    encode(T, [hex(C rem 16), hex(C div 16), $= | Acc], WordLen+3).
+
 decode(B) when is_binary(B) ->
     decode(binary_to_list(B));
 decode(Text) ->
