@@ -66,26 +66,30 @@ search(Query, {Offset, PageLen}, Solr, Context) ->
 
 %% @doc Given an rsc id, construct a list of matching rsc records. Uses Solrs "MoreLikeThis" feature.
 match(Id, {_, Amount}, Solr, Context) ->
-    Result = search([{morelikethis_id, [Id, Amount]}], {1,1}, Solr, Context),
-    IdS = z_convert:to_list(Id),
+    case m_rsc:rid(Id, Context) of
+        undefined -> #search_result{result=[], total=0};
+        RscId ->
+            Result = search([{morelikethis_id, [RscId, Amount]}], {1,1}, Solr, Context),
+            IdS = z_convert:to_list(RscId),
 
-    %% "More like this id" gives us a search result with 1 doc, but
-    %% the interesting stuff is in the 'morelikethis' property of the
-    %% search.
-    Props = case proplists:get_value(morelikethis, Result#search_result.result) of
-                {obj, []} ->
-                    [{"numFound", "0"}, {"docs", []}];
-                {obj, [{IdS, {obj, Props0}}]} ->
-                    Props0
-            end,
+            %% "More like this id" gives us a search result with 1 doc, but
+            %% the interesting stuff is in the 'morelikethis' property of the
+            %% search.
+            Props = case proplists:get_value(morelikethis, Result#search_result.result) of
+                        {obj, []} ->
+                            [{"numFound", "0"}, {"docs", []}];
+                        {obj, [{IdS, {obj, Props0}}]} ->
+                            Props0
+                    end,
 
-    %% Extract the matching ids and the total number found
-    Ids = [DocId || {obj, [{"id", DocId}]} <- proplists:get_value("docs", Props)],
-    {"numFound", Total} = proplists:lookup("numFound", Props),
+            %% Extract the matching ids and the total number found
+            Ids = [DocId || {obj, [{"id", DocId}]} <- proplists:get_value("docs", Props)],
+            {"numFound", Total} = proplists:lookup("numFound", Props),
 
-    %% Construct the final result
-    #search_result{result=Ids,
-                   total=Total}.
+            %% Construct the final result
+            #search_result{result=Ids,
+                           total=Total}
+    end.
 
 
 %% @doc Map search results into terms / lucene syntax that solr and esolr understand.
