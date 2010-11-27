@@ -138,7 +138,7 @@ parse_query([{hassubject, Id}|Rest], Context, Result) when is_integer(Id) ->
     parse_query([{hassubject, [Id]}|Rest], Context, Result);
 parse_query([{hassubject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("object_id", Result),
-    {Arg, Result2} = add_arg(Id, Result1),
+    {Arg, Result2} = add_arg(m_rsc:rid(Id,Context), Result1),
     Result3 = add_where(A ++ ".subject_id = " ++ Arg, Result2),
     parse_query(Rest, Context, Result3);
 
@@ -150,7 +150,7 @@ parse_query([{hassubject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join(Alias, "object_id", Result),
     Result2 = case Id of
                   undefined -> Result1;
-                  _ -> {Arg1, R} = add_arg(Id, Result1),
+                  _ -> {Arg1, R} = add_arg(m_rsc:rid(Id,Context), Result1),
                        add_where(A ++ ".subject_id = " ++ Arg1, R)
               end,
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
@@ -158,7 +158,7 @@ parse_query([{hassubject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
     Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
     parse_query(Rest, Context, Result4);
 parse_query([{hassubject, Id}|Rest], Context, Result) when is_list(Id) ->
-    parse_query([{hassubject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
+    parse_query([{hassubject, [m_rsc:rid(Id,Context)]}|Rest], Context, Result);
 
 
 %% hasobject=[id]
@@ -167,7 +167,7 @@ parse_query([{hasobject, Id}|Rest], Context, Result) when is_integer(Id) ->
     parse_query([{hasobject, [Id]}|Rest], Context, Result);
 parse_query([{hasobject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("subject_id", Result),
-    {Arg, Result2} = add_arg(Id, Result1),
+    {Arg, Result2} = add_arg(m_rsc:rid(Id,Context), Result1),
     Result3 = add_where(A ++ ".object_id = " ++ Arg, Result2),
     parse_query(Rest, Context, Result3);
 
@@ -179,7 +179,7 @@ parse_query([{hasobject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join(Alias, "subject_id", Result),
     Result2 = case Id of
                   undefined -> Result1;
-                  _ -> {Arg1, R} = add_arg(Id, Result1),
+                  _ -> {Arg1, R} = add_arg(m_rsc:rid(Id,Context), Result1),
                        add_where(A ++ ".object_id = " ++ Arg1, R)
               end,
     PredicateId = m_predicate:name_to_id_check(Predicate, Context),
@@ -187,7 +187,7 @@ parse_query([{hasobject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
     Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
     parse_query(Rest, Context, Result4);
 parse_query([{hasobject, Id}|Rest], Context, Result) when is_list(Id) ->
-    parse_query([{hasobject, [z_convert:to_integer(Id)]}|Rest], Context, Result);
+    parse_query([{hasobject, [m_rsc:rid(Id,Context)]}|Rest], Context, Result);
 
 
 %% hasobjectpredicate=predicate

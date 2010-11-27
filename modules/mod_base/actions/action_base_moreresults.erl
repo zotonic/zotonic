@@ -81,7 +81,10 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
                                 {id, Id}, {row, RowNr}, {is_first, RowNr == FirstRow}
                                ] ++ Args,
                              Template = proplists:get_value(template, Args),
-                             z_template:render(Template, Vars, Context1)
+                             case proplists:get_value(catinclude, Args) of
+                                 true -> z_template:render({cat, Template}, Vars, Context1);
+                                 _ -> z_template:render(Template, Vars, Context1)
+                             end
 					end, Ids1),
 	z_render:appear_bottom(TargetId, Html, Context1).
 
