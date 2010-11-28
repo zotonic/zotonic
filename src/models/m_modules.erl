@@ -40,7 +40,16 @@ m_find_value(all, #m{value=undefined}, Context) ->
 m_find_value(enabled, #m{value=undefined}, Context) ->
     enabled(Context);
 m_find_value(disabled, #m{value=undefined}, Context) ->
-    disabled(Context).
+    disabled(Context);
+m_find_value(info, #m{value=undefined} = M, _Context) ->
+    M#m{value=info};
+m_find_value(Module, #m{value=info}, Context) ->
+    M = z_convert:to_atom(Module),
+    [{enabled, lists:member(M, enabled(Context))},
+     {active, z_module_manager:active(M, Context)},
+     {title, z_module_manager:title(M)},
+     {prio, z_module_manager:prio(M)}].
+
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context)
