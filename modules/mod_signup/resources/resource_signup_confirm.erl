@@ -51,9 +51,10 @@ provide_content(ReqData, Context) ->
                                     {[], Context2};
                                 _ ->
                                     case confirm(Key, Context2) of
-                                        {ok, UserId} -> 
+                                        {ok, UserId} ->
                                             {ok, ContextUser} = z_auth:logon(UserId, Context2),
-                                            {[{user_id, UserId}], ContextUser};
+                                            Location = confirm_location(UserId, ContextUser),
+                                            {[{user_id, UserId}, {location,Location}], ContextUser};
                                         {error, _Reason} ->
                                             {[{error, true}], Context2}
                                     end
@@ -69,10 +70,7 @@ event({submit, _, _Trigger, _Target}, Context) ->
     case confirm(Key, Context) of
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
-            Location = case z_notifier:first({signup_confirm_redirect, UserId}, ContextUser) of
-                            undefined -> m_rsc:p(UserId, page_url, ContextUser);
-                            Loc -> Loc
-                       end,
+            Location = confirm_location(UserId, ContextUser),
             z_render:wire({redirect, [{location, Location}]}, ContextUser);
         {error, _Reason} -> 
             z_render:wire({show, [{target,"confirm_error"}]}, Context)
@@ -89,4 +87,10 @@ confirm(Key, Context) ->
             m_identity:set_verified(proplists:get_value(id, Row), Context),
             z_notifier:map({signup_confirm, UserId}, Context),
             {ok, UserId}
+    end.
+
+confirm_location(UserId, Context) ->
+    case z_notifier:first({signup_confirm_redirect, UserId}, Context) of
+        undefined -> m_rsc:p(UserId, page_url, Context);
+        Loc -> Loc
     end.
