@@ -43,7 +43,7 @@
 m_find_value(Type, #m{value=undefined} = M, _Context) ->
     M#m{value=Type};
 m_find_value(Key, #m{value=Type}, Context) ->
-    get(Key, Type, Context).
+    get(Type, Key, Context).
 
 %% @doc Transform a value to a list, used for template loops
 %% @spec m_to_list(Source, Context)
