@@ -22,78 +22,64 @@ msgstr ""
 msgid ""
 "Actions"
 msgstr ""
-"Actions"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:3 
 msgid ""
 "Admin Backups"
 msgstr ""
-"Admin Backups"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:12 
 msgid ""
 "At any moment you can make a backup of your system."
 msgstr ""
-"At any moment you can make a backup of your system."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:10 ./modules/mod_backup/templates/admin_backup.tpl:23 ./modules/mod_backup/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Backups"
 msgstr ""
-"Backups"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:26 
 msgid ""
 "Date"
 msgstr ""
-"Date"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:48 
 msgid ""
 "No backups present."
 msgstr ""
-"No backups present."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:18 
 msgid ""
 "Start backup now"
 msgstr ""
-"Start backup now"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:12 
 msgid ""
 "The backup comprises two parts, the database and the uploaded files."
 msgstr ""
-"The backup comprises two parts, the database and the uploaded files."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:13 
 msgid ""
 "You can have 10 backups, older ones will be deleted automatically."
 msgstr ""
-"You can have 10 backups, older ones will be deleted automatically."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:17 
 msgid ""
 "You can start a backup immediately, whilst the backup is running you can "
 "continue working."
 msgstr ""
-"You can start a backup immediately, whilst the backup is running you can "
-"continue working."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:40 
 msgid ""
 "download database"
 msgstr ""
-"download database"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:41 
 msgid ""
 "download files"
 msgstr ""
-"download files"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:38 
 msgid ""
 "this backup is in progress"
 msgstr ""
-"this backup is in progress"
