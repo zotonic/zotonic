@@ -9,7 +9,7 @@
 	
 	<p>{_ Your account is confirmed. You can now continue on our site. _}</p>
 	
-	<p><a href="{{ m.rsc[user_id].page_url }}">{_ Bring me to my profile page _}</a>.</p>
+	<p><a href="{{ location|default:m.rsc[user_id].page_url }}">{_ Bring me to my profile page _}</a>.</p>
 
 {% else %}
 	<h1>{_ Confirm my account _}</h1>

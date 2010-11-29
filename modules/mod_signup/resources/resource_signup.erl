@@ -148,7 +148,6 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
                     end,
                     z_render:wire({redirect, [{location, Location}]}, ContextUser);
                 false ->
-                    % @todo when user is not yet confirmed, do not log on as user.
                     % User is not yet verified, send a verification message to the user's external identities
                     case mod_signup:request_verification(UserId, Context) of
                         {error, no_verifiable_identities} ->
