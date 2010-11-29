@@ -21,7 +21,7 @@
 
 		<div id="logon_rememberme" class="rememberme">
 			<input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-			<label for="{{ #rememberme }}">{_ Remember me for two weeks. _}</label>
+			<label for="{{ #rememberme }}">{_ Stay logged in for two weeks unless I log out. _}</label>
 		</div>
 
 		<div class="clearfix"></div>

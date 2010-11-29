@@ -42,7 +42,7 @@ msgid ""
 "Add a new media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:10 
+#: ./modules/mod_admin/templates/_admin_edit_body.tpl:11 ./modules/mod_admin/templates/_admin_edit_body.tpl:41 
 msgid ""
 "Add media to body"
 msgstr ""
@@ -92,6 +92,11 @@ msgid ""
 "Attached media"
 msgstr ""
 
+#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:36 
+msgid ""
+"Basic"
+msgstr ""
+
 #: ./modules/mod_admin/templates/admin_edit.tpl:165 
 msgid ""
 "By"
@@ -120,6 +125,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:6 
 msgid ""
 "Community members"
+msgstr ""
+
+#: ./modules/mod_admin/templates/_admin_edit_body.tpl:36 
+msgid ""
+"Content"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:80 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:114 
@@ -690,7 +700,7 @@ msgid ""
 "Seo content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:21 
+#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:22 ./modules/mod_admin/templates/_admin_edit_basics.tpl:52 
 msgid ""
 "Short title"
 msgstr ""
@@ -720,7 +730,7 @@ msgid ""
 "Street Line 2"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:16 
+#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:17 ./modules/mod_admin/templates/_admin_edit_basics.tpl:47 
 msgid ""
 "Summary"
 msgstr ""
@@ -806,7 +816,7 @@ msgid ""
 "Till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_overview.tpl:54 ./modules/mod_admin/templates/admin_overview.tpl:61 ./modules/mod_admin/templates/admin_media.tpl:42 ./modules/mod_admin/templates/admin.tpl:32 ./modules/mod_admin/templates/admin.tpl:67 ./modules/mod_admin/templates/admin.tpl:107 ./modules/mod_admin/templates/admin.tpl:144 ./modules/mod_admin/templates/admin.tpl:181 ./modules/mod_admin/templates/_admin_edit_basics.tpl:11 
+#: ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_overview.tpl:54 ./modules/mod_admin/templates/admin_overview.tpl:61 ./modules/mod_admin/templates/admin_media.tpl:42 ./modules/mod_admin/templates/admin.tpl:32 ./modules/mod_admin/templates/admin.tpl:67 ./modules/mod_admin/templates/admin.tpl:107 ./modules/mod_admin/templates/admin.tpl:144 ./modules/mod_admin/templates/admin.tpl:181 ./modules/mod_admin/templates/_admin_edit_basics.tpl:12 ./modules/mod_admin/templates/_admin_edit_basics.tpl:42 
 msgid ""
 "Title"
 msgstr ""
@@ -1010,7 +1020,7 @@ msgid ""
 "has been disconnected."
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:188 ./modules/mod_admin/templates/admin_edit.tpl:205 ./modules/mod_admin/templates/admin_edit.tpl:225 ./modules/mod_admin/templates/admin_edit.tpl:256 ./modules/mod_admin/templates/admin_edit.tpl:303 ./modules/mod_admin/templates/admin_edit.tpl:401 ./modules/mod_admin/templates/admin_edit.tpl:418 ./modules/mod_admin/templates/admin_edit.tpl:443 ./modules/mod_admin/templates/admin_edit.tpl:476 ./modules/mod_admin/templates/admin_edit.tpl:524 ./modules/mod_admin/templates/admin_edit.tpl:554 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.query.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.person.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.location.tpl:6 
+#: ./modules/mod_admin/templates/admin_edit.tpl:188 ./modules/mod_admin/templates/admin_edit.tpl:205 ./modules/mod_admin/templates/admin_edit.tpl:225 ./modules/mod_admin/templates/admin_edit.tpl:256 ./modules/mod_admin/templates/admin_edit.tpl:303 ./modules/mod_admin/templates/admin_edit.tpl:401 ./modules/mod_admin/templates/admin_edit.tpl:418 ./modules/mod_admin/templates/admin_edit.tpl:443 ./modules/mod_admin/templates/admin_edit.tpl:476 ./modules/mod_admin/templates/admin_edit.tpl:524 ./modules/mod_admin/templates/admin_edit.tpl:554 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.query.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.person.tpl:6 ./modules/mod_admin/templates/_admin_edit_content.location.tpl:6 ./modules/mod_admin/templates/_admin_edit_body.tpl:37 ./modules/mod_admin/templates/_admin_edit_basics.tpl:37 
 msgid ""
 "make smaller"
 msgstr ""
