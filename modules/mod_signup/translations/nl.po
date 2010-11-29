@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Zotonic mod_signup\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2010-11-29 16:59+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: Maximonster Interactive Things BV\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ./modules/mod_signup/templates/signup.tpl:155
+msgid "And sign up"
+msgstr "En registreer"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:12
+msgid "Bring me to my profile page"
+msgstr "Terug naar mijn profielpagina"
+
+#: ./modules/mod_signup/templates/signup.tpl:140
+msgid "Check our Terms of Service and Privacy policies"
+msgstr "Lees onze voorwaarden en privacy reglement"
+
+#: ./modules/mod_signup/templates/signup.tpl:109
+msgid "Choose a username and password"
+msgstr "Kies een gebruikersnaam en wachtwoord"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:26
+msgid "Confirm key"
+msgstr "Bevestigingscode"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:3
+#: ./modules/mod_signup/templates/signup_confirm.tpl:15
+#: ./modules/mod_signup/templates/signup_confirm.tpl:30
+msgid "Confirm my account"
+msgstr "Bevestig mijn account"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:12
+msgid "Confirm my account."
+msgstr "Bevestig mijn account."
+
+#: ./modules/mod_signup/templates/signup.tpl:70
+msgid "Create your account"
+msgstr "Maak een account"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:6
+msgid "Dear"
+msgstr "Beste"
+
+#: ./modules/mod_signup/templates/signup.tpl:97
+msgid "E-mail"
+msgstr "E-mail"
+
+#: ./modules/mod_signup/templates/signup.tpl:75
+msgid "First name"
+msgstr "Voornaam"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:16
+msgid "Hope to see you soon."
+msgstr "Hopelijk tot snel."
+
+#: ./modules/mod_signup/templates/signup.tpl:148
+msgid "I agree to the"
+msgstr "Ik ga akkoord met"
+
+#: ./modules/mod_signup/templates/_logon_link.tpl:2
+msgid "I don’t have an account, please sign me up."
+msgstr "Ik heb geen account, registreer mij."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "If the link does not work then you can go to"
+msgstr "Indien de link niet werkt dan kan je gaan naar"
+
+#: ./modules/mod_signup/templates/signup.tpl:57
+msgid "If you have already an account,"
+msgstr "Wanneer je al een account hebt"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:17
+msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
+msgstr "In je e-mail heb je een bevestigingscode ontvangen.  Kopiëer die code in het onderstaande veld."
+
+#: ./modules/mod_signup/templates/signup.tpl:87
+msgid "Last name"
+msgstr "Achternaam"
+
+#: ./modules/mod_signup/templates/signup.tpl:120
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:3
+msgid "Please confirm your account."
+msgstr "Bevestig mijn account."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:10
+msgid "Please follow the link below."
+msgstr "Gelieve de onderstaande link te volgen."
+
+#: ./modules/mod_signup/templates/signup.tpl:149
+msgid "Privacy policies"
+msgstr "Privacy reglement"
+
+#: ./modules/mod_signup/templates/signup.tpl:3
+#: ./modules/mod_signup/templates/signup.tpl:158
+msgid "Sign Up"
+msgstr "Registreer"
+
+#: ./modules/mod_signup/templates/signup.tpl:55
+msgid "Sign up and become a member"
+msgstr "Registreer en wordt lid"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:20
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr "Sorry, de bevestigingscode is onbekend. Is hij correct gekopiëerd?"
+
+#: ./modules/mod_signup/templates/signup.tpl:72
+msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
+msgstr "Sorry, er is hier al een account gekoppeld aan het account van de service provider.  Misschien is het account hier geblokkeerd."
+
+#: ./modules/mod_signup/templates/signup.tpl:111
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere naam."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:8
+msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
+msgstr "Bedank voor het registreren bij onze website.  Wij verzoeken je om je account te bevestigen voordat je het kan gebruiken."
+
+#: ./modules/mod_signup/templates/signup.tpl:145
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "Om te registreren moet je akkoord gaan met de gebruiksvoorwaarden en het privacy reglement."
+
+#: ./modules/mod_signup/templates/signup.tpl:114
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: ./modules/mod_signup/templates/signup.tpl:128
+msgid "Verify password"
+msgstr "Bevestig wachtwoord"
+
+#: ./modules/mod_signup/templates/signup.tpl:167
+msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
+msgstr "We hebben je een e-mail gestuurd.  In de e-mail vind je instructies hoe je je account kan bevestigen."
+
+#: ./modules/mod_signup/templates/signup.tpl:143
+msgid "We will be very careful with all the information given to us and will never "
+msgstr "Wij zijn voorzichtig met al je gegevens en zullen je nooit"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:8
+msgid "Welcome"
+msgstr "Welkom"
+
+#: ./modules/mod_signup/templates/signup.tpl:169
+msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
+msgstr "Wanneer je binnen een paar minuten geen e-mail ontvangt, controleer dan je spam filters en spam mappen."
+
+#: ./modules/mod_signup/templates/signup.tpl:165
+msgid "You are almost there!"
+msgstr "Je bent er bijna!"
+
+#: ./modules/mod_signup/templates/signup.tpl:60
+msgid "You can also"
+msgstr "Je kan ook"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:10
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr "Je account is bevestigd. Je kan nu verder gaan op onze website."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "and enter the key"
+msgstr "en vul de code in"
+
+#: ./modules/mod_signup/templates/signup.tpl:149
+msgid "and the"
+msgstr "en de"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14
+msgid "in the input field."
+msgstr "in het invoerveld"
+
+#: ./modules/mod_signup/templates/signup.tpl:57
+msgid "log on now"
+msgstr "log nu in"
+
+#: ./modules/mod_signup/templates/signup.tpl:60
+msgid "sign up for a username and password"
+msgstr "registreer voor een gebruikersnaam en wachtwoord"
+
