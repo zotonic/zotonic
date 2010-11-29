@@ -61,6 +61,11 @@ pid_observe_tkvstore_put(Pid, {tkvstore_put, _Type, _Key, _Data} = Message, _Con
 pid_observe_tkvstore_get(Pid, {tkvstore_get, _Type, _Key} = Message, _Context) ->
     gen_server:call(Pid, Message).
 
+%% @doc Delete the persistent data of a type/key
+pid_observe_tkvstore_delete(Pid, {tkvstore_delete, _Type, _Key} = Message, _Context) ->
+    gen_server:cast(Pid, Message).
+
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -111,7 +116,12 @@ handle_call(Message, _From, State) ->
 handle_cast({tkvstore_put, Type, Key, Data}, State) ->
     State#state.writer_pid ! {data, Type, Key, Data},
     {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
-    
+
+%% @doc Delete a value from the tkvstoe    
+handle_cast({tkvstore_delete, Type, Key, Data}, State) ->
+    State#state.writer_pid ! {delete, Type, Key},
+    {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
+
 %% @doc Writer loop wrote the data, remove our local copy
 handle_cast({written, Type, Key}, State) ->
     {noreply, State#state{ data=dict:erase({Type, Key}, State#state.data) }};
@@ -155,6 +165,10 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Simple writer loop, started as a process
 writer_loop(KVStorePid, Context) ->
     receive
+        {delete, Type, Key} ->
+            m_tkvstore:delete(Type, Key, Context),
+            gen_server:cast(KVStorePid, {written, Type, Key}),
+            ?MODULE:writer_loop(KVStorePid, Context);
         {data, Type, Key, Data} ->
             m_tkvstore:put(Type, Key, Data, Context),
             gen_server:cast(KVStorePid, {written, Type, Key}),
