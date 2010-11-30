@@ -36,11 +36,15 @@
     sendq_render/4,
     sendq_render/5,
     
+    bounced/1,
+    
     split_name_email/1,
     combine_name_email/2
 ]).
 
 -include_lib("zotonic.hrl").
+
+-define(EMAIL_SRV, z_email_server).
 
 
 %% @doc Fetch the e-mail address of the site administrator
@@ -76,20 +80,20 @@ send_admin(Subject, Message, Context) ->
 				"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
 				z_context:abs_url("/", Context)
 			],
-			z_notifier:notify1(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
+			gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=Email, subject=Subject1, text=Message1}, Context})
 	end.
 
 %% @doc Send an email message defined by the email record.
 send(#email{} = Email, Context) ->
-	z_notifier:notify1(Email, Context).
+	gen_server:call(?EMAIL_SRV, {send, Email, Context}).
 
 %% @doc Send a simple text message to an email address
 send(To, Subject, Message, Context) ->
-	z_notifier:notify1(#email{queue=false, to=To, subject=Subject, text=Message}, Context).
+	gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=To, subject=Subject, text=Message}, Context}).
 
 %% @doc Queue a simple text message to an email address
 sendq(To, Subject, Message, Context) ->
-	z_notifier:notify1(#email{queue=true, to=To, subject=Subject, text=Message}, Context).
+	gen_server:call(?EMAIL_SRV, {send, #email{queue=true, to=To, subject=Subject, text=Message}, Context}).
 
 %% @doc Send a html message to an email address, render the message using a template.
 send_render(To, HtmlTemplate, Vars, Context) ->
@@ -97,8 +101,8 @@ send_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Send a html and text message to an email address, render the message using two templates.
 send_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_notifier:notify1(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
-	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
+	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context}).
 
 %% @doc Queue a html message to an email address, render the message using a template.
 sendq_render(To, HtmlTemplate, Vars, Context) ->
@@ -106,9 +110,13 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Queue a html and text message to an email address, render the message using two templates.
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_notifier:notify1(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
-	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	gen_server:call(?EMAIL_SRV, {send, #email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
+	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context}).
 
+
+%% @doc Inform the mail sender gen_server about a bounced message.
+bounced(MsgId) ->
+    gen_server:cast(?EMAIL_SRV, {bounced, MsgId}).
 
 
 %% @doc Combine a name and an email address to the format "jan janssen <jan@example.com>"

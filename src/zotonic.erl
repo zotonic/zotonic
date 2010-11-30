@@ -37,15 +37,17 @@ start() -> start([]).
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
-    zotonic_deps:ensure(),
+    zotonic_deps:ensure(),    
     ensure_started(crypto),
     ensure_started(webmachine),
+    ensure_started(mnesia),
     application:start(zotonic).
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
     Res = application:stop(zotonic),
+    application:stop(mnesia),
     application:stop(webmachine),
     application:stop(crypto),
     Res.

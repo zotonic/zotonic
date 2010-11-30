@@ -4,7 +4,7 @@ EBIN_DIRS    := $(wildcard deps/*/ebin)
 APP          := zotonic
 PARSER        =src/erlydtl/erlydtl_parser
 
-all: z_logger mochiweb webmachine erlang-oauth exmpp $(PARSER).erl erl ebin/$(APP).app 
+all: gen_smtp z_logger mochiweb webmachine erlang-oauth exmpp $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -12,6 +12,9 @@ erl:
 
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
+
+gen_smtp:
+	cd deps/gen_smtp && $(MAKE)
 
 z_logger:
 	cd deps/z_logger && $(MAKE)
@@ -33,11 +36,11 @@ docs:
 
 clean: 
 	@echo "removing:"
+	(cd deps/gen_smtp; $(MAKE) clean)
 	(cd deps/z_logger; $(MAKE) clean)
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
 	(cd deps/erlang-oauth; $(MAKE) clean)
-	(cd deps/exmpp; $(MAKE) clean)
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
 	rm -f priv/log/*

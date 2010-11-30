@@ -17,14 +17,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(mod_emailer_embed).
+-module(z_email_embed).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 %% interface functions
 -export([embed_images/2]).
 
 -include_lib("zotonic.hrl").
--include_lib("../esmtp/include/esmtp_mime.hrl").
 
 %% Given a HTML message, extract images (starting with /lib/ or /image/) and
 embed_images(Html, Context) ->
@@ -49,7 +48,8 @@ embed_lib_image_match([Match], {Parts, Html, Context}) ->
     case filelib:is_file(File) of
         true ->
             ContentType = z_media_identify:guess_mime(File),
-            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+            create_attachment,
+            {Part, Cid} = {[], 1}, %esmtp_mime:create_attachment(File, ContentType, inline),
             Html1 = re:replace(Html, "/lib/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
             {[Part|Parts], Html1, Context};
         _ ->
@@ -81,6 +81,7 @@ embed_generated_image_match([Match], {Parts, Html, Context}) ->
             {ok, {{_, 200, _}, _, _}} = http:request(Url)
     end,
     ContentType = z_media_identify:guess_mime(File),
-    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+    create_attachment,
+    {Part, Cid} = {[], 1}, %esmtp_mime:create_attachment(File, ContentType, inline),
     Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
     {[Part|Parts], Html1, Context}.

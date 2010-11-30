@@ -43,12 +43,17 @@
 
  %% Port Zotonic will listen on for HTTPS requests.
  %% Always overruled by the environment variable ZOTONIC_PORT_SSL
- % {listen_port,8443}
+ % {listen_port_ssl,8443}
  
  %% SSL options
  % {ssl, true},
  % {ssl_certfile, "priv/ssl/server.crt"},
  % {ssl_keyfile, "priv/ssl/server.key"},
+
+%% SMTP options
+{smtp_host, "localhost"},
+{smtp_port, 2525},
+{smtp_ssl, false},
 
  %% Password for the sites administration site (zotonic_status)
  %% Zotonic will generate a secure password for you, so you don't need to enable this.  

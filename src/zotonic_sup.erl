@@ -79,13 +79,13 @@ init([]) ->
                   permanent, 5000, worker, dynamic},
               
     % SMTP gen_servers: one for encoding and sending mails, the other for bounces
-    %SmtpServer = {z_email_server,
-    %              {z_email_server, start_link, []},
-    %              permanent, 5000, worker, dynamic},
+    SmtpServer = {z_email_server,
+                  {z_email_server, start_link, []},
+                  permanent, 5000, worker, dynamic},
     
-    %SmtpBounceServer = {z_email_bounce_server,
-    %                    {z_email_bounce_server, start_link, []},
-    %                    permanent, 5000, worker, dynamic},
+    SmtpBounceServer = {z_email_bounce_server,
+                        {z_email_bounce_server, start_link, []},
+                        permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_manager,
@@ -94,7 +94,7 @@ init([]) ->
                 
     Processes = [
         Ids, Config, PreviewServer, Dispatcher,
-        %SmtpServer, SmtpBounceServer, 
+        SmtpServer, SmtpBounceServer, 
         SitesSup
                 ],
 

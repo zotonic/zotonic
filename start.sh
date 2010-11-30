@@ -15,4 +15,4 @@
 # limitations under the License.
 
 cd `dirname $0`
-exec erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -sname zotonic$$ -boot start_sasl -sasl errlog_type error -s zotonic
+exec erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -sname zotonic$$ -boot start_sasl -sasl errlog_type  all -s zotonic
