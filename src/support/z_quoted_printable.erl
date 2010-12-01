@@ -23,7 +23,7 @@ encode(B) when is_binary(B) ->
         Acc;
     encode(B, Len, Acc) when Len >= 72 ->
         encode(B, 0, <<Acc/binary, $=, 13, 10>>);
-    encode(<<C,Rest/binary>>, Len, Acc) when C < 32 orelse C >= 127 orelse C =:= $= ->
+    encode(<<C,Rest/binary>>, Len, Acc) when C < 32 orelse C >= 127 orelse C =:= $= orelse C =:= $. ->
         H1 = to_hex(C div 16),
         H2 = to_hex(C rem 16),
         encode(Rest, Len+3, <<Acc/binary, $=, H1, H2>>);
