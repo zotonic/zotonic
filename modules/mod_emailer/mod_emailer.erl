@@ -223,7 +223,7 @@ spawn_send(Id, Email, Context, State) ->
                  lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeMsg3, Parts)                          
         end,
         sendemail(MimeBase, State),
-        mark_sent(Id, Context)
+        mark_sent(Id, State#state.context)
     end,
     spawn(F).
 
