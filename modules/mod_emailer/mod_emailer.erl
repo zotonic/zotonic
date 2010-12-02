@@ -166,8 +166,8 @@ poll_queued(State) ->
 		[] -> 
 			State;
 		_  ->
-			State1 = update_config(State), 
-    		[ send_queued(M, State) || M <- Ms ],
+			State1 = update_config(State),
+		    [ send_queued(M, State1) || M <- Ms ],
 			State1
 	end.
 
