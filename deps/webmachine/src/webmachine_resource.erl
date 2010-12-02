@@ -107,7 +107,8 @@ default(_) ->
 wrap(ReqData, Mod, Args) ->
     {ok, ModState} = Mod:init(Args),
     [{trace_dir, Dir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
-    ToTrace = case {ets:lookup(?WMTRACE_CONF_TBL, trace_global), ets:lookup(?WMTRACE_CONF_TBL, Mod)} of
+    ToTrace = case {ets:lookup(?WMTRACE_CONF_TBL, trace_global), 
+                    ets:lookup(?WMTRACE_CONF_TBL, Mod)} of
                   {_, [{Mod, Eagerness_}]} ->
                       {true, Eagerness_};
                   {[{trace_global, Policy}], _} ->
@@ -243,7 +244,6 @@ start_log_proc(Dir, Mod, Eagerness) ->
                     {eagerness, Eagerness}, {loglevel, 5}]).
 
 stop_log_proc(LogProc, ReqData) when is_pid(LogProc) and is_tuple(ReqData) ->
-    %% TODO: decide if log information should be dropped
     ResponseCode = (ReqData#wm_reqdata.log_data)#wm_log_data.response_code,
     z_logger:stop(LogProc, ResponseCode);
 stop_log_proc(_, _) ->
