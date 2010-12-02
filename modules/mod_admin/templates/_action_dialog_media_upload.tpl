@@ -72,6 +72,6 @@
 		</form>
 	</div>
 	
-	{% all include "_media_upload_panel.tpl" tab=#tab %}
+	{% all include "_media_upload_panel.tpl" tab=#tab tabs=#tabs %}
 
 </div>

@@ -1,4 +1,6 @@
 {# Panel for defining the embed code #}
+{% with id.medium as medium %}
+{% with medium.mime == "text/html-video-embed" as is_video_embed %}
 <div id="{{ tab }}-embed">
 	<p>Embed a video or other media. Here you can paste embed code from YouTube, Vimeo or other services.</p>
 
@@ -17,13 +19,13 @@
 			<div class="form-item clearfix">
 				<label for="{{ #service }}">From site</label>
 				<select id="{{ #service }}" name="video_embed_service">
-					{% include "_video_embed_service_options.tpl" %}
+					{% include "_video_embed_service_options.tpl" service=medium.video_embed_service %}
 				</select>
 			</div>
 	
 			<div class="form-item clearfix">
 				<label for="{{ #embed_code }}">Embed code</label>
-				<textarea id="{{ #embed_code }}" name="video_embed_code"></textarea>
+				<textarea id="{{ #embed_code }}" name="video_embed_code" rows="10">{% if is_video_embed %}{{ medium.video_embed_code|escape }}{% endif %}</textarea>
 				{% validate id=#embed_code name="video_embed_code" type={presence} %}
 			</div>
 	
@@ -34,3 +36,10 @@
 		</div>
 	</form>
 </div>
+
+{% if is_video_embed %}
+	{% wire action={script script=["$('#",tabs,"').tabs().tabs('select', '#",#tab,"-embed')"]} %}
+{% endif %}
+
+{% endwith %}
+{% endwith %}
