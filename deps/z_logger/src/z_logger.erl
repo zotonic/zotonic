@@ -8,6 +8,8 @@
 %%      Note, this module should be used to log lower level events.
 %%      High level log messages (e.g. events by Zotonic modules) should be
 %%      handled by 'mod_logging' and logged into the database.
+%%      General log messages, such as those emitted by this module
+%%      should be logged by the standard error_logger (todo).
 
 %% Copyright 2010 Maximonster Interactive Things
 %%
@@ -28,14 +30,32 @@
 -behaviour(gen_server).
 
 -export([start/1, stop/2, flush_and_stop/1, drop_and_stop/1, log/3, log/4, set_loglevel/2]).
--export([init/1, terminate/2, handle_call/3, handle_cast/2]).
+-export([init/1, terminate/2, handle_call/3, handle_cast/2, handle_info/2, code_change/3]).
 
 -record(state, {output, loglevel, log_timestamp, format, eagerness, buffer = []}).
 
+%% Configuration defaults
+-define(DEFAULT_LOGLEVEL, 0).
+-define(DEFAULT_LOGTS, false).
+-define(DEFAULT_FORMAT, text).
+-define(DEFAULT_POLICY, immediate).
+-define(DEFAULT_OUTPUT, {file, "zotonic_" ++ pid_to_list(self()) ++ ".log"}).
+
+%% Timestamp format string - obviously only applicable when format == text
+-define(TS_FORMATSTR, "~4.10.0B-~2.10.0B-~2.10.0B ~2.10.0B:~2.10.0B:~2.10.0B ").
+
+%% The limit of the buffer size after it should be flushed
+-define(BUFFER_SIZE_N, 8). %% TODO: shouldn't be hardcoded!
+
+%% Overload protection settings
+-define(MEM_SOFTLIMIT,  268435456). %% TODO: shouldn't be hardcoded!
+-define(MEM_HARDLIMIT, 1073741824). %% TODO: shouldn't be hardcoded!
+-define(MEM_SOFTL_CHKINTERVAL, 1000).
+-define(MEM_HARDL_CHKINTERVAL, 5000).
+
 
 %% 
-%%
-%%
+%% API functions
 %%
 
 %% @doc Spawns a new logger process
@@ -62,86 +82,115 @@ log(LoggerProc, LogLevel, Text, Data) ->
 set_loglevel(LoggerProc, LogLevel) ->
     gen_server:cast(LoggerProc, {set_loglevel, LogLevel}).
 
-%% --------------------
+%%
+%% gen_server callbacks
+%%
 
 init(Args) ->
-    LogLevel = proplists:get_value(loglevel, Args, 0),
-    LogTimestamp = proplists:get_value(log_timestamp, Args, false),
-    Format = proplists:get_value(format, Args, text),
-    Eagerness = proplists:get_value(eagerness, Args, immediate),
-    Output = proplists:get_value(output, Args, {file, "zotonic_"
-        ++ pid_to_list(self())
-                                                ++ ".log"}),
-    Output2 = case {Eagerness, Output} of
-                  {{at_once, _Fun}, _} ->
+    [LogLevel, LogTimestamp, Format, Eagerness, Output] =
+        [proplists:get_value(Key, Args, Default) 
+         || {Key, Default} <- [{loglevel, ?DEFAULT_LOGLEVEL}, 
+                               {log_timestamp, ?DEFAULT_LOGTS},
+                               {format, ?DEFAULT_FORMAT}, 
+                               {eagerness, ?DEFAULT_POLICY},
+                               {output, ?DEFAULT_OUTPUT}]],
+    
+    Output2 = case Eagerness of
+                  {at_once, _PolicyFun} ->
                       Output; % do not open the file until it needed!
-                  {_, {file, FileName}} ->
-                      {ok, File} = file:open(FileName, [write, raw]),
-                      {file, File};
-                  {_, {udp, {Socket, Address, Port}}} ->
-                      {udp, {Socket, Address, Port}};
-                  {_, {udp, {Address, Port}}} ->
-                      {ok, Socket} = gen_udp:open(0),
-                      {udp, {Socket, Address, Port}}
-              end,            
+                  _ ->
+                      open(Output)
+              end,
+              
+    timer:send_interval(?MEM_SOFTL_CHKINTERVAL, check_softlimit),
+    timer:send_interval(?MEM_HARDL_CHKINTERVAL, check_hardlimit),
+
     {ok, #state{loglevel=LogLevel, log_timestamp=LogTimestamp,
                 format=Format, eagerness=Eagerness, output=Output2}}.
 
 terminate(_Reason, _State) ->
     ok.
 
-handle_call({stop, PolicyFunParam}, _From, State) ->
-    Output = State#state.output,    
-    {at_once, PolicyFun} = State#state.eagerness, % will fail when called with wrong policy settings
-    case PolicyFun(PolicyFunParam) of
+handle_call({stop, PolicyFunParam}, _From, State=#state{output=Output, 
+                                                        eagerness=Eagerness, 
+                                                        buffer=Buffer}) ->
+    WhatToDo = case Eagerness of
+                   {at_once, PolicyFun} ->
+                       PolicyFun(PolicyFunParam);
+                   _ -> flush
+               end,
+    case  WhatToDo of
         flush ->
-            Buffer = lists:reverse(State#state.buffer),
-            Output2 = case Output of
-                          {file, FileName} ->
-                              {ok, File} = file:open(FileName, [write, raw]),
-                              {file, File};
-                          {udp, {Socket, Address, Port}} ->
-                              {udp, {Socket, Address, Port}};
-                          {udp, {Address, Port}} ->
-                              {ok, Socket} = gen_udp:open(0),
-                              {udp, {Socket, Address, Port}}
-                      end,                    
-            [do_log(Output2, immediate, ToLog, []) || ToLog <- Buffer],            
+            Output2 = open(Output),                      
+            flush(Output2, Buffer),
             close(Output2);
         drop ->
             drop
     end,    
     {stop, normal, ok, State};
-handle_call(flush_and_stop, _From, State) ->
-    Output = State#state.output,
-    Buffer = lists:reverse(State#state.buffer),
-    [do_log(Output, immediate, ToLog, []) || ToLog <- Buffer],
-    close(Output),
+handle_call(flush_and_stop, _From, State=#state{output=Output, buffer=Buffer}) ->
+    Output2 = open(Output),
+    flush(Output2, Buffer),
+    close(Output2),
     {stop, normal, ok, State};
-handle_call(drop_and_stop, _From, State) ->
-    Output = State#state.output,
+handle_call(drop_and_stop, _From, State=#state{output=Output}) ->
     close(Output),
     {stop, normal, ok, State}.    
 
-handle_cast({log, MsgLogLevel, _Text, _Data}, State=#state{loglevel=LogLevel})
-when MsgLogLevel > LogLevel ->
+handle_cast({log, MsgLogLevel, _Text, _Data}, 
+            State=#state{loglevel=LogLevel}) when MsgLogLevel > LogLevel ->
     {noreply, State};
-handle_cast({log, _MsgLogLevel, Text, Data}, State=#state{output=Output,
-                                                          log_timestamp=LogTimestamp,
-                                                          format=Format, 
-                                                          eagerness=Eagerness, 
-                                                          buffer=Buffer}) ->    
+handle_cast({log, _MsgLogLevel, Text, Data}, 
+            State=#state{output=Output,
+                         log_timestamp=LogTimestamp,
+                         format=Format, 
+                         eagerness=Eagerness, 
+                         buffer=Buffer}) ->    
     ToLog = fmt_log(Format, LogTimestamp, {Text, Data}),
     Buffer2 = do_log(Output, Eagerness, ToLog, Buffer),
     {noreply, State#state{buffer=Buffer2}};
 handle_cast({set_loglevel, LogLevel}, State) ->
     {noreply, State#state{loglevel=LogLevel}}.
+    
 
-%% -----------------------------
+%% Overload protection
+handle_info(check_softlimit, State) ->
+    {memory, Mem} = process_info(self(), memory),
+    if 
+        Mem < ?MEM_SOFTLIMIT ->
+            {noreply, State};
+        Mem >= ?MEM_SOFTLIMIT ->
+            % it should be logged properly...
+            io:format("Logger process ~p exceeded its soft memory limit. Cleaning up...\n", [self()]),
+            % flush the process mailbox
+            clear_mbox(),
+            % force garbage collection
+            % (we can't clean up the buffer yet, as the gen_server 
+            %  process still holds a reference to it)
+            garbage_collect(),
+            % clear the buffer, hopefully it will be garbage collected soon
+            {noreply, State#state{buffer=[]}}
+    end;
+handle_info(check_hardlimit, State=#state{output=Output}) ->
+    {memory, Mem} = process_info(self(), memory),
+    if 
+        Mem < ?MEM_HARDLIMIT ->
+            {noreply, State};
+        Mem >= ?MEM_HARDLIMIT -> %% very unlikely...
+            close(Output),
+            {stop, mem_hardlimit_exceeded, State}
+    end.
+%% TODO: check CPU/IO/etc usage
+    
+code_change(_OldVsn, State, _Extra) -> {ok, State}.
 
-fmt_timestamp(text) -> %TODO: specify timestamp format?
+%% 
+%% Internal functions
+%%
+
+fmt_timestamp(text) ->
     {{Y, M, D}, {H, Mm, S}} = calendar:local_time(),
-    io_lib:format("~4.10.0B-~2.10.0B-~2.10.0B ~2.10.0B:~2.10.0B:~2.10.0B ",
+    io_lib:format(?TS_FORMATSTR,
                   [Y, M, D, H, Mm, S]);
 fmt_timestamp(binary) ->
     Now = now(),
@@ -174,21 +223,60 @@ fmt_log(text, LogTimestamp, {Text, Data}) ->
 
 do_log(_Output, {at_once, _Fun}, ToLog, Buffer) ->
     [ToLog | Buffer];
-do_log({file, File}, Eagerness, ToLog, Buffer) ->
-    case Eagerness of
-        immediate ->
-            ok = file:write(File, ToLog),
-            Buffer;
-        delayed ->
-            %% TODO
-            ok = file:write(File, ToLog)
-    end;
-do_log({udp, {Socket, Address, Port}}, _Eagerness, ToLog, Buffer) ->
-    %% TODO: buffering?
+do_log(_Output, delayed, ToLog, Buffer) when length(Buffer) < ?BUFFER_SIZE_N ->
+    [ToLog | Buffer];
+do_log(Output, delayed, ToLog, Buffer) ->
+    flush(Output, [ToLog | Buffer]),
+    [];
+do_log({file, {io_device, File}}, immediate, ToLog, Buffer) ->
+    ok = file:write(File, ToLog),
+    Buffer;
+do_log({udp, {Socket, Address, Port}}, immediate, ToLog, Buffer) ->
     gen_udp:send(Socket, Address, Port, ToLog),
     Buffer.
 
-close({file, File}) ->
+open(Output) ->
+    case Output of
+        {file, {io_device, File}} ->
+            {file, {io_device, File}};
+        {file, FileName} ->
+            {ok, File} = file:open(FileName, [write, raw]),
+            {file, {io_device, File}};
+        {udp, {Socket, Address, Port}} ->
+            {udp, {Socket, Address, Port}};
+        {udp, {Address, Port}} ->
+            {ok, Socket} = gen_udp:open(0),
+            {udp, {Socket, Address, Port}}
+    end.
+
+flush(Output, Buffer) ->
+    Buffer2 = lists:reverse(Buffer),
+    [do_log(Output, immediate, ToLog, []) || ToLog <- Buffer2].
+    
+close({file, {io_device, File}}) ->
     file:close(File);
 close({udp, {_Socket, _, _}}) ->
-    ok. % TODO: the udp connection is shared???
+    ok; % TODO: the udp connection is shared???
+close(_) ->
+    ok.
+
+%%
+%% Overload protection - Internal functions
+%%
+
+clear_mbox() ->
+    receive _ -> clear_mbox() after 0 -> ok end.
+
+overload_test() ->
+    MessagesAtOnce = 50000,
+    N = 10000,
+    {ok, P} = z_logger:start([{eagerness, {at_once, fun(_) -> drop end}}]),
+    [begin
+         [z_logger:log(P, 0, "text ~p ~p ~n",
+                [atom, I]) || I <- lists:seq(1, MessagesAtOnce)],
+            
+         io:format("[~p bytes]", [element(2, process_info(P, memory))])
+     end
+     || _ <- lists:seq(1, N)].
+
+
