@@ -46,7 +46,7 @@ insert_thousands_separator(Sep, Input) when is_integer(Input) ->
 format_price(Input, DSep, TSep, _Context) when is_integer(Input) ->
     case Input rem 100 of
         0 -> 
-            integer_to_list(Input div 100);
+            [insert_thousands_separator(TSep, Input div 100), DSep, $0, $0 ];
         Cents when Cents < 10 -> 
             [insert_thousands_separator(TSep, Input div 100), DSep, $0, Cents + $0 ];
         Cents -> 
