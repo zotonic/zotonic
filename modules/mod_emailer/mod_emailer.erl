@@ -166,8 +166,8 @@ poll_queued(State) ->
 		[] -> 
 			State;
 		_  ->
-			State1 = update_config(State), 
-    		[ send_queued(M, State) || M <- Ms ],
+			State1 = update_config(State),
+		    [ send_queued(M, State1) || M <- Ms ],
 			State1
 	end.
 
@@ -223,7 +223,7 @@ spawn_send(Id, Email, Context, State) ->
                  lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeMsg3, Parts)                          
         end,
         sendemail(MimeBase, State),
-        mark_sent(Id, Context)
+        mark_sent(Id, State#state.context)
     end,
     spawn(F).
 
