@@ -122,45 +122,53 @@ send(Socket, Data) ->
 	_ -> exit(normal)
     end.
 
-send_stream_body(Socket, X) -> send_stream_body(Socket, X, 0).
-send_stream_body(Socket, {<<>>, done}, SoFar) ->
-    send_chunk(Socket, <<>>),
+send_stream_body(Socket, IsChunked, X) -> 
+    send_stream_body(Socket, IsChunked, X, 0).
+
+send_stream_body(Socket, IsChunked, {<<>>, done}, SoFar) ->
+    send_chunk(Socket, IsChunked, <<>>),
     SoFar;
-send_stream_body(Socket, {Data, done}, SoFar) ->
-    Size = send_chunk(Socket, Data),
-    send_chunk(Socket, <<>>),
+send_stream_body(Socket, IsChunked, {Data, done}, SoFar) ->
+    Size = send_chunk(Socket, IsChunked, Data),
+    send_chunk(Socket, IsChunked, <<>>),
     Size + SoFar;
-send_stream_body(Socket, {<<>>, Next}, SoFar) ->
-    send_stream_body(Socket, Next(), SoFar);
-send_stream_body(Socket, {[], Next}, SoFar) ->
-    send_stream_body(Socket, Next(), SoFar);
-send_stream_body(Socket, {Data, Next}, SoFar) ->
-    Size = send_chunk(Socket, Data),
-    send_stream_body(Socket, Next(), Size + SoFar).
+send_stream_body(Socket, IsChunked, {<<>>, Next}, SoFar) ->
+    send_stream_body(Socket, IsChunked, Next(), SoFar);
+send_stream_body(Socket, IsChunked, {[], Next}, SoFar) ->
+    send_stream_body(Socket, IsChunked, Next(), SoFar);
+send_stream_body(Socket, IsChunked, {Data, Next}, SoFar) ->
+    Size = send_chunk(Socket, IsChunked, Data),
+    send_stream_body(Socket, IsChunked, Next(), Size + SoFar).
 
 
 %% @todo Remove usage of the put/get to get the number of bytes written
 %%       Use a separate process to accumulate these counts
-send_writer_body(Socket, {Encoder, Charsetter, BodyFun}) ->
+send_writer_body(Socket, IsChunked, {Encoder, Charsetter, BodyFun}) ->
     put(bytes_written, 0),
     Writer = fun(Data) ->
-        Size = send_chunk(Socket, Encoder(Charsetter(Data))),
+        Size = send_chunk(Socket, IsChunked, Encoder(Charsetter(Data))),
         put(bytes_written, get(bytes_written) + Size),
         Size
     end,
     BodyFun(Writer),
-    send_chunk(Socket, <<>>),
+    send_chunk(Socket, IsChunked, <<>>),
     get(bytes_written).
 
 
 %% @todo Distinguish between HTTP/1.0 and 1.1
 %%       HTTP/1.0 should not add the size (and transfer-encoding: chunked)
-send_chunk(Socket, Data) ->
+send_chunk(Socket, true, Data) ->
     Size = iolist_size(Data),
     send(Socket, mochihex:to_hex(Size)),
     send(Socket, <<"\r\n">>),
     send(Socket, Data),
     send(Socket, <<"\r\n">>),
+    Size;
+send_chunk(_Socket, false, <<>>) ->
+    0;
+send_chunk(Socket, false, Data) ->
+    Size = iolist_size(Data),
+    send(Socket, Data),
     Size.
 
 
@@ -194,24 +202,26 @@ send_ok_response(ReqData) ->
 
 send_response(Code, ReqData) ->
     Body0 = wrq:resp_body(ReqData),
-    {Body,Length} = case Body0 of
-        {stream, StreamBody} -> {{stream, StreamBody}, chunked};
-        {writer, WriteBody} -> {{writer, WriteBody}, chunked};
-        _ -> {Body0, iolist_size([Body0])}
+    {Body, Transfer, Length} = case Body0 of
+        {stream, StreamBody} -> {{stream, StreamBody}, chunked, undefined};
+        {writer, WriteBody} -> {{writer, WriteBody}, chunked, undefined};
+        {stream, StreamBody, KnownLength} -> {{stream, StreamBody}, chunked, KnownLength};
+        {writer, WriteBody, KnownLength} -> {{writer, WriteBody}, chunked, KnownLength};
+        _ -> {Body0, undefined, iolist_size([Body0])}
     end,
     send(ReqData#wm_reqdata.socket,
         [make_version(wrq:version(ReqData)),
          make_code(Code), <<"\r\n">> | 
-         make_headers(Code, Length, ReqData)]),
+         make_headers(Code, Transfer, Length, ReqData)]),
     FinalLength = case wrq:method(ReqData) of 
 	'HEAD' ->
 	    Length;
 	_ -> 
         case Body of
             {stream, Body2} ->
-                send_stream_body(ReqData#wm_reqdata.socket, Body2);
+                send_stream_body(ReqData#wm_reqdata.socket, is_chunked_transfer(wrq:version(ReqData), Transfer), Body2);
             {writer, Body2} ->
-                send_writer_body(ReqData#wm_reqdata.socket, Body2);
+                send_writer_body(ReqData#wm_reqdata.socket, is_chunked_transfer(wrq:version(ReqData), Transfer), Body2);
             _ ->
                 send(ReqData#wm_reqdata.socket, Body),
                 Length
@@ -221,6 +231,8 @@ send_response(Code, ReqData) ->
     FinalLogData = InitLogData#wm_log_data{response_code=Code,response_length=FinalLength},
     ReqData1 = wrq:set_response_code(Code, ReqData),
     {ok, ReqData1#wm_reqdata{log_data=FinalLogData}}.
+    
+
 
 %% @doc  Infer body length from transfer-encoding and content-length headers.
 body_length(ReqData) ->
@@ -463,20 +475,27 @@ make_version({1, 0}) ->
 make_version(_) ->
     <<"HTTP/1.1 ">>.
 
-make_headers(Code, Length, RD) ->
+make_headers(Code, Transfer, Length, RD) ->
     Hdrs0 = case Code of
         304 ->
             mochiweb_headers:make(wrq:resp_headers(RD));
         _ -> 
-            case Length of
-                chunked ->
-                    mochiweb_headers:enter(
-                      "Transfer-Encoding","chunked",
-                      mochiweb_headers:make(wrq:resp_headers(RD)));
-                _ ->
+            LengthHeaders = case Length of
+                undefined ->
+                    mochiweb_headers:make(wrq:resp_headers(RD));
+                _Length -> 
                     mochiweb_headers:enter(
                       "Content-Length",integer_to_list(Length),
                       mochiweb_headers:make(wrq:resp_headers(RD)))
+            end,
+            
+            case is_chunked_transfer(wrq:version(RD), Transfer) of
+                true ->
+                    mochiweb_headers:enter(
+                      "Transfer-Encoding","chunked",
+                      LengthHeaders);
+                false ->
+                    LengthHeaders
             end
     end,
     ServerHeader = "MochiWeb/1.1 WebMachine/" ++ ?WMVSN ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
@@ -491,6 +510,11 @@ make_headers(Code, Length, RD) ->
 		[make_io(K), <<": ">>, V, <<"\r\n">> | Acc]
 	end,
     lists:foldl(F, [<<"\r\n">>], mochiweb_headers:to_list(Hdrs)).
+
+
+is_chunked_transfer(HttpVersion, chunked) when HttpVersion > {1,0} -> true;
+is_chunked_transfer(_, _) -> false.
+
 
 socket(ReqData) -> ReqData#wm_reqdata.socket.
 
