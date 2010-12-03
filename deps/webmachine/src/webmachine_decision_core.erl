@@ -299,9 +299,10 @@ decision(v3g9, Rs, Rd) ->
 decision(v3g11, Rs, Rd) ->
     ReqETag = webmachine_util:unquote_header(get_header_val("if-match", Rd)),
     decision_test(resource_call(generate_etag, Rs, Rd), ReqETag, v3h10, 412);
-%% "If-Match: * exists"
+%% "If-Match: exists"
+%% (note: need to reflect this change at in next version of diagram)
 decision(v3h7, Rs, Rd) ->
-    decision_test(get_header_val("if-match", Rd), "*", 412, v3i7, Rs, Rd);
+    decision_test(get_header_val("if-match", Rd), undefined, v3i7, 412, Rs, Rd);
 %% "If-unmodified-since exists?"
 decision(v3h10, Rs, Rd) ->
     decision_test(get_header_val("if-unmodified-since", Rd), undefined, v3i12, v3h11, Rs, Rd);
