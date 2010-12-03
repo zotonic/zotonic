@@ -86,24 +86,30 @@ get_peer(ReqData) ->
     case ReqData#wm_reqdata.peer of
     	undefined ->
             Socket = ReqData#wm_reqdata.socket,
-            Peer = case mochiweb_socket:peername(Socket) of 
-                {ok, {Addr={10, _, _, _}, _Port}} ->
-                    case get_header_value("x-forwarded-for", ReqData) of
-                        undefined -> inet_parse:ntoa(Addr);
-                        Hosts -> string:strip(lists:last(string:tokens(Hosts, ",")))
-                    end;
-                {ok, {{127, 0, 0, 1}, _Port}} ->
-                    case get_header_value("x-forwarded-for", ReqData) of
-                        undefined -> "127.0.0.1";
-                        Hosts -> string:strip(lists:last(string:tokens(Hosts, ",")))
-                    end;
-                {ok, {Addr, _Port}} ->
-                    inet_parse:ntoa(Addr)
-            end,
+            Peer = peer_from_peername(mochiweb_socket:peername(Socket), ReqData),
             NewReqData = ReqData#wm_reqdata{peer=Peer},
             {Peer, NewReqData};
     	_ ->
     	    {ReqData#wm_reqdata.peer, ReqData}
+    end.
+
+peer_from_peername({ok, {Addr={10, _, _, _}, _Port}}, ReqData) ->  
+    x_peername(inet_parse:ntoa(Addr), ReqData);
+peer_from_peername({ok, {Addr={172, Second, _, _}, _Port}}, ReqData) when (Second > 15) andalso (Second < 32) ->
+    x_peername(inet_parse:ntoa(Addr), ReqData);
+peer_from_peername({ok, {Addr={192, 168, _, _}, _Port}}, ReqData) ->
+    x_peername(inet_parse:ntoa(Addr), ReqData);
+peer_from_peername({ok, {{127, 0, 0, 1}, _Port}}, ReqData) ->
+    x_peername("127.0.0.1", ReqData);
+peer_from_peername({ok, {Addr, _Port}}, _ReqData) ->
+    inet_parse:ntoa(Addr).
+
+x_peername(Default, ReqData) ->
+    case get_header_value("x-forwarded-for", ReqData) of
+    undefined ->
+        Default;
+    Hosts ->
+        string:strip(lists:last(string:tokens(Hosts, ",")))
     end.
 
 
