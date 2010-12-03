@@ -78,8 +78,8 @@
 -include("webmachine_logger.hrl").
 -include_lib("include/wm_reqdata.hrl").
 
--define(WMVSN, "1.5.1").
--define(QUIP, "that tip is the fix").
+-define(WMVSN, "1.7.3 (compat)").
+-define(QUIP, "humming along").
 -define(IDLE_TIMEOUT, infinity).
 
 get_peer(ReqData) ->
