@@ -205,8 +205,7 @@ send_response(Code, ReqData) ->
     {Body, Transfer, Length} = case Body0 of
         {stream, StreamBody} -> {{stream, StreamBody}, chunked, undefined};
         {writer, WriteBody} -> {{writer, WriteBody}, chunked, undefined};
-        {stream, StreamBody, KnownLength} -> {{stream, StreamBody}, chunked, KnownLength};
-        {writer, WriteBody, KnownLength} -> {{writer, WriteBody}, chunked, KnownLength};
+        {stream, Size, Fun} -> {{stream, Fun(0, Size-1)}, chunked, undefined};
         _ -> {Body0, undefined, iolist_size([Body0])}
     end,
     send(ReqData#wm_reqdata.socket,
@@ -340,6 +339,7 @@ get_range(ReqData) ->
 	    {Range, ReqData#wm_reqdata{range=Range}}
     end.
 
+
 range_parts(_RD=#wm_reqdata{resp_body={file, IoDevice}}, Ranges) ->
     Size = iodevice_size(IoDevice),
     F = fun (Spec, Acc) ->
@@ -362,6 +362,11 @@ range_parts(RD=#wm_reqdata{resp_body={stream, {Hunk,Next}}}, Ranges) ->
     % for now, streamed bodies are read in full for range requests
     MRB = RD#wm_reqdata.max_recv_body,
     range_parts(read_whole_stream({Hunk,Next}, [], MRB, 0), Ranges);
+
+range_parts(_RD=#wm_reqdata{resp_body={stream, Size, StreamFun}}, Ranges) ->
+    SkipLengths = [ range_skip_length(R, Size) || R <- Ranges],
+    {[ {Skip, Skip+Length-1, StreamFun} || {Skip, Length} <- SkipLengths ],
+     Size};
 
 range_parts(_RD=#wm_reqdata{resp_body=Body0}, Ranges) ->
     Body = iolist_to_binary(Body0),
@@ -413,7 +418,7 @@ parse_range_request(RawRange) when is_list(RawRange) ->
             fail
     end.
 
-parts_to_body([{Start, End, Body}], Size, ReqData) ->
+parts_to_body([{Start, End, Body0}], Size, ReqData) ->
     %% return body for a range reponse with a single body
     ContentType = 
 	case get_outheader_value("content-type", ReqData) of
@@ -425,6 +430,11 @@ parts_to_body([{Start, End, Body}], Size, ReqData) ->
                    ["bytes ",
                     make_io(Start), "-", make_io(End),
                     "/", make_io(Size)]}],
+    Body = if is_function(Body0) ->
+                   {stream, Body0(Start, End)};
+              true ->
+                   Body0
+           end,
     {HeaderList, Body};
 parts_to_body(BodyList, Size, ReqData) when is_list(BodyList) ->
     %% return
@@ -439,19 +449,66 @@ parts_to_body(BodyList, Size, ReqData) when is_list(BodyList) ->
     HeaderList = [{"Content-Type",
                    ["multipart/byteranges; ",
                     "boundary=", Boundary]}],
-    MultiPartBody = multipart_body(BodyList, ContentType, Boundary, Size),
+    MultiPartBody = case hd(BodyList) of
+                        {_, _, Fun} when is_function(Fun) ->
+                            stream_multipart_body(BodyList, ContentType,
+                                                  Boundary, Size);
+                        _ ->
+                            multipart_body(BodyList, ContentType,
+                                           Boundary, Size)
+                    end,
     {HeaderList, MultiPartBody}.
 
 multipart_body([], _ContentType, Boundary, _Size) ->
-    ["--", Boundary, "--\r\n"];
+    end_boundary(Boundary);
 multipart_body([{Start, End, Body} | BodyList], ContentType, Boundary, Size) ->
-    ["--", Boundary, "\r\n",
-     "Content-Type: ", ContentType, "\r\n",
-     "Content-Range: ",
-         "bytes ", make_io(Start), "-", make_io(End),
-             "/", make_io(Size), "\r\n\r\n",
-     Body, "\r\n"
-     | multipart_body(BodyList, ContentType, Boundary, Size)].
+    [part_preamble(Boundary, ContentType, Start, End, Size),
+     Body, <<"\r\n">>
+      | multipart_body(BodyList, ContentType, Boundary, Size)].
+
+boundary(B)     -> [<<"--">>, B, <<"\r\n">>].
+end_boundary(B) -> [<<"--">>, B, <<"--\r\n">>].
+
+part_preamble(Boundary, CType, Start, End, Size) ->
+    [boundary(Boundary),
+     <<"Content-Type: ">>, CType, <<"\r\n">>,
+     <<"Content-Range: bytes ">>,
+     mochiweb_util:make_io(Start), <<"-">>, mochiweb_util:make_io(End),
+     <<"/">>, mochiweb_util:make_io(Size),
+     <<"\r\n\r\n">>].
+
+stream_multipart_body(BodyList, ContentType, Boundary, Size) ->
+    Helper = stream_multipart_body_helper(
+               BodyList, ContentType, Boundary, Size),
+    %% executing Helper() here is an optimization;
+    %% it's just as valid to say {<<>>, Helper}
+    {stream, Helper()}.
+
+stream_multipart_body_helper([], _CType, Boundary, _Size) ->
+    fun() -> {end_boundary(Boundary), done} end;
+stream_multipart_body_helper([{Start, End, Fun}|Rest],
+                             CType, Boundary, Size) ->
+    fun() ->
+            {part_preamble(Boundary, CType, Start, End, Size),
+             stream_multipart_part_helper(
+               fun() -> Fun(Start, End) end,
+               Rest, CType, Boundary, Size)}
+    end.
+
+stream_multipart_part_helper(Fun, Rest, CType, Boundary, Size) ->
+    fun() ->
+            case Fun() of
+                {Data, done} ->
+                    %% when this part is done, start the next part
+                    {[Data, <<"\r\n">>],
+                     stream_multipart_body_helper(
+                       Rest, CType, Boundary, Size)};
+                {Data, Next} ->
+                    %% this subpart has more data coming
+                    {Data, stream_multipart_part_helper(
+                             Next, Rest, CType, Boundary, Size)}
+            end
+    end.
 
 iodevice_size(IoDevice) ->
     {ok, Size} = file:position(IoDevice, eof),
