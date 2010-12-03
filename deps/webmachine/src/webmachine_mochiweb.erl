@@ -24,7 +24,11 @@
 -include_lib("wm_reqdata.hrl").
 
 start(Options) ->
-    start(?MODULE, Options).
+    {PName, Options1} = case get_option(name, Options) of
+      {undefined, _} -> {?MODULE, Options};
+      {PN, O1} -> {PN, O1}
+    end,
+    start(PName, Options1).
 
 start(Name, Options) ->
     {DispatchList, Options1} = get_option(dispatch_list, Options),
@@ -39,7 +43,8 @@ start(Name, Options) ->
                                 end} | Options2]).
 
 stop() ->
-    stop(?MODULE).
+    {registered_name, PName} = process_info(self(), registered_name),
+    stop(PName).
 
 stop(Name) ->
     mochiweb_http:stop(Name).
