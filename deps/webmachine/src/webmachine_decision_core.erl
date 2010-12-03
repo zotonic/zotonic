@@ -609,8 +609,12 @@ encode_body(Body, Rs, Rd) ->
     case Body of
         {stream, StreamBody} ->
             {{stream, make_encoder_stream(Encoder, Charsetter, StreamBody)}, Rs2, Rd2};
+        {stream, Size, Fun} ->
+            {stream, Size, make_size_encoder_stream(Encoder, Charsetter, Fun)};
         {writer, BodyFun} ->
             {{writer, {Encoder, Charsetter, BodyFun}}, Rs2, Rd2};
+        {writer, Size, BodyFun} ->
+            {{writer, Size, {Encoder, Charsetter, BodyFun}}, Rs2, Rd2};
         _ ->
             {Encoder(Charsetter(to_binary(Body))), Rs2, Rd2}
     end.
@@ -618,6 +622,10 @@ encode_body(Body, Rs, Rd) ->
     to_binary(Body) when is_tuple(Body) -> Body;
     to_binary(Body) -> iolist_to_binary(Body).
 
+make_size_encoder_stream(Encoder, Charsetter, Fun) ->
+    fun(Start, End) ->
+        make_encoder_stream(Encoder, Charsetter, Fun(Start, End))
+    end.
 
 make_encoder_stream(Encoder, Charsetter, {Body, done}) ->
     {Encoder(Charsetter(Body)), done};
