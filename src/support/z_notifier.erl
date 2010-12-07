@@ -51,7 +51,14 @@
 
 -define(TIMEOUT, 60000).
 
--record(state, {observers}).
+-define(TIMER_INTERVAL, [ {1, tick_1s}, 
+                          {60, tick_1m}, 
+                          {3600, tick_1h},
+                          {7200, tick_2h},
+                          {43200, tick_12h},
+                          {86400, tick_24h} ]).
+
+-record(state, {observers, timers, context}).
 
 %%====================================================================
 %% API
@@ -180,8 +187,10 @@ foldr(Msg, Acc0, Context) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server, creates a new observer list
-init(_Args) ->
-    State = #state{observers=dict:new()},
+init(Args) ->
+    {host, Host} = proplists:lookup(host, Args),
+    Timers = [ timer:send_interval(Time * 1000, {tick, Msg}) || {Time, Msg} <- ?TIMER_INTERVAL ],
+    State = #state{observers=dict:new(), timers=Timers, context=z_context:new(Host)},
     {ok, State}.
 
 
@@ -250,6 +259,12 @@ handle_cast(Message, State) ->
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
+%% @doc Handle timer ticks
+handle_info({tick, Msg}, State) ->
+    spawn(fun() -> ?MODULE:notify(Msg, State#state.context) end),
+    flush_info_message({tick, Msg}),
+    {noreply, State};
+    
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -260,7 +275,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    [ timer:cancel(TRef)  || {ok, TRef} <- State#state.timers ],
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -273,6 +289,14 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+%% @doc Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.
+flush_info_message(Msg) ->
+    receive
+        Msg -> flush_info_message(Msg)
+    after 0 ->
+        ok
+    end.
 
 %% @doc Notify an observer of an event
 notify_observer(Msg, {_Prio, Fun}, _IsCall, Context) when is_function(Fun) ->
