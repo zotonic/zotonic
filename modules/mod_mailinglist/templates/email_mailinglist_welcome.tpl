@@ -3,7 +3,7 @@
 {% block title %}{_ Welcome to _}{{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
-	<p>{_ Hello,</p>
+	<p>{_ Hello, _}</p>
 
 	<p>{_ You are now subscribed to our mailing list _} <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a> {_ with your e-mail address _} {{ recipient.email|escape }}. {_ From now on you will receive mail from our mailing list. _}</p>
 
