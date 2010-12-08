@@ -1,6 +1,6 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{_ You are now unsubscribed from _}{{ m.rsc[list_id].title }}{% endblock %}
+{% block title %}{_ You are now unsubscribed from _} {{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
 <p>{_ Goodbye, _}</p>
