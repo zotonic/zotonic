@@ -55,7 +55,7 @@ event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _Trigg
 	Context;
 
 event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
-	m_mailinglist:recipient_delete(RcptId, Context),
+	m_mailinglist:recipient_delete_quiet(RcptId, Context),
 	z_render:wire([ {growl, [{text, "Recipient deleted."}]},
 					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
 				], Context);

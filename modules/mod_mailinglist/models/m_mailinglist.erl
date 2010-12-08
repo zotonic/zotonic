@@ -41,6 +41,7 @@
 	recipient_get/3,
 	recipient_delete/2,
 	recipient_delete/3,
+	recipient_delete_quiet/2,
 	recipient_confirm/2,
 	recipient_is_enabled_toggle/2,
 	
@@ -127,26 +128,38 @@ recipient_get(RecipientId, Context) ->
 recipient_get(ListId, Email, Context) ->
 	z_db:assoc_row("select * from mailinglist_recipient where mailinglist_id = $1 and email = $2", [ListId, Email], Context).
 
-%% @doc Delete a recipient.
+
+%% @doc Delete a recipient without sending the recipient a goodbye e-mail.
+recipient_delete_quiet(RecipientId, Context) ->
+	case recipient_get(RecipientId, Context) of
+		undefined -> {error, enoent};
+		RecipientProps -> recipient_delete1(RecipientProps, true, Context)
+	end.
+
+%% @doc Delete a recipient and send the recipient a goodbye e-mail.
 recipient_delete(RecipientId, Context) ->
 	case recipient_get(RecipientId, Context) of
 		undefined -> {error, enoent};
-		RecipientProps -> recipient_delete1(RecipientProps, Context)
+		RecipientProps -> recipient_delete1(RecipientProps, false, Context)
 	end.
 	
-	recipient_delete1(RecipientProps, Context) ->
+	recipient_delete1(RecipientProps, Quiet, Context) ->
 		RecipientId = proplists:get_value(id, RecipientProps),
         z_db:delete(mailinglist_recipient, RecipientId, Context),
 		ListId = proplists:get_value(mailinglist_id, RecipientProps),
 		Email = proplists:get_value(email, RecipientProps),
-		z_notifier:notify1({mailinglist_message, send_goodbye, ListId, Email}, Context),
+		case Quiet of
+			false ->
+				z_notifier:notify1({mailinglist_message, send_goodbye, ListId, Email}, Context);
+			_ -> nop
+		end,
 		ok.
 
 %% @doc Delete a recipient by list id and email
 recipient_delete(ListId, Email, Context) ->
 	case recipient_get(ListId, Email, Context) of
 		undefined -> {error, enoent};
-		RecipientProps -> recipient_delete1(RecipientProps, Context)
+		RecipientProps -> recipient_delete1(RecipientProps, false, Context)
 	end.
 
 %% @doc Confirm the recipient with the given unique confirmation key.
