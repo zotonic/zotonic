@@ -17,7 +17,10 @@
 %% limitations under the License.
 
 -module(filter_first).
--export([first/2]).
+-export([
+    first/2,
+    first/3
+]).
 
 -include("zotonic.hrl").
 
@@ -30,4 +33,17 @@ first(Other, Context) ->
         [] -> <<>>;
         [H|_] -> H
     end.
+
+first(undefined, _Length, _Context) ->
+    undefined;
+first(Value, Length, Context) ->
+    first1(erlydtl_runtime:to_list(Value, Context), Length, []).
+
+
+first1([], _N, Acc) ->
+    lists:reverse(Acc);
+first1(_L, 0, Acc) ->
+    lists:reverse(Acc);
+first1([H|T], N, Acc) ->
+    first1(T, N-1, [H|Acc]).
 
