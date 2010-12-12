@@ -47,6 +47,8 @@
 
 -record(state, {sup}).
 
+-define(SITES_START_TIMEOUT,  3600000).  % 1 hour
+
 
 %%====================================================================
 %% API
@@ -54,7 +56,7 @@
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link() ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], [{timeout, ?SITES_START_TIMEOUT}]).
 
 
 %% @doc Sync the supervised sites with the sites in the sites directory.

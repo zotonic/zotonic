@@ -9,7 +9,9 @@
 
 -record(state, {id, size, connections, monitors, waiting, opts, timer}).
 
- %% -- client interface --
+-include("../include/pgsql.hrl").
+
+%% -- client interface --
 
 opts(Opts) ->
     Defaults = [{host, "localhost"},
@@ -23,20 +25,20 @@ opts(Opts) ->
 
 
 start_link(Size, Opts) ->
-    gen_server:start_link(?MODULE, {undefined, Size, opts(Opts)}, []).
+    gen_server:start_link(?MODULE, {undefined, Size, opts(Opts)}, [{timeout, ?PGSQL_START_TIMEOUT}]).
 
 start_link(undefined, Size, Opts) ->
     start_link(Size, Opts);
 start_link(Name, Size, Opts) ->
-    gen_server:start_link({local, Name}, ?MODULE, {Name, Size, opts(Opts)}, []).
+    gen_server:start_link({local, Name}, ?MODULE, {Name, Size, opts(Opts)}, [{timeout, ?PGSQL_START_TIMEOUT}]).
 
 %% @doc Stop the pool, close all db connections
 stop(P) ->
     gen_server:cast(P, stop).
 
-%% @doc Get a db connection, wait at most 10 seconds before giving up.
+%% @doc Get a db connection, wait at most ?PGSQL_CALL_TIMEOUT seconds before giving up.
 get_connection(P) ->
-    get_connection(P, 10000).
+    get_connection(P, ?PGSQL_CALL_TIMEOUT).
 
 %% @doc Get a db connection, wait at most Timeout seconds before giving up.
 get_connection(P, Timeout) ->
