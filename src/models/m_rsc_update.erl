@@ -201,7 +201,20 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                                 throw({error, eacces})
                         end;
                     _ ->
-                       {Id, SafeProps, m_rsc:get(Id, Ctx), m_rsc:is_a(Id, Ctx), false}
+                        SafeProps1 = case z_acl:is_admin(Context) of
+                            true ->
+                                case proplists:get_value(creator_id, Props) of
+                                    self ->
+                                        [{creator_id, Id} | SafeProps];
+                                    CreatorId when is_integer(CreatorId) ->
+                                        [{creator_id, CreatorId} | SafeProps];
+                                    undefined -> 
+                                        SafeProps
+                                end;
+                            false ->
+                                SafeProps
+                        end,
+                        {Id, SafeProps1, m_rsc:get(Id, Ctx), m_rsc:is_a(Id, Ctx), false}
                 end,
 
                 UpdateProps1 = [
