@@ -21,7 +21,8 @@
 	cache_key/1,
 	
     user/1,
-	sudo/1,
+    is_admin/1,
+    sudo/1,
     sudo/2,
     anondo/1,
     anondo/2,
@@ -174,6 +175,12 @@ sudo(Context) ->
         Context#context{acl=admin, user_id=?ACL_ADMIN_USER_ID};
     set_admin(Context) ->
         Context#context{acl=admin}.
+
+
+%% @doc Check if the current user is the admin or a sudo action
+is_admin(#context{user_id=?ACL_ADMIN_USER_ID}) -> true;
+is_admin(#context{acl=admin}) -> true;
+is_admin(_) -> false.
 
 
 %% @doc Call a function as the anonymous user.
