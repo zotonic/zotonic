@@ -186,7 +186,7 @@ spawn_send(Id, Email, Context, State) ->
     F = fun() ->
 	    To = case State#state.override of 
                  O when O =:= [] orelse O =:= undefined -> Email#email.to; 
-                 Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
+                 Override -> escape_email(z_convert:to_list(Email#email.to)) ++ " (override) <" ++ Override ++ ">"
              end,
 		From = case Email#email.from of L when L =:= [] orelse L =:= undefined -> State#state.from; EmailFrom -> EmailFrom end,
 
@@ -226,6 +226,16 @@ spawn_send(Id, Email, Context, State) ->
         mark_sent(Id, State#state.context)
     end,
     spawn(F).
+    
+    
+    escape_email(Email) ->
+        escape_email(Email, []).
+    escape_email([], Acc) ->
+        lists:reverse(Acc);
+    escape_email([$@|T], Acc) ->
+        escape_email(T, [$],$t,$a,$[|Acc]);
+    escape_email([H|T], Acc) ->
+        escape_email(T, [H|Acc]).
 
 
 optional_render(undefined, undefined, _Vars, _Context) ->
