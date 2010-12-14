@@ -233,7 +233,7 @@ spawn_send(Id, Email, Context, State) ->
     escape_email([], Acc) ->
         lists:reverse(Acc);
     escape_email([$@|T], Acc) ->
-        escape_email(T, [$],$t,$a,$[|Acc]);
+        escape_email(T, [$-,$t,$a,$-|Acc]);
     escape_email([H|T], Acc) ->
         escape_email(T, [H|Acc]).
 
