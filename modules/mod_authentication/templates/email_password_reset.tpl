@@ -7,7 +7,7 @@
 
 <p>{_ You requested a new password for _} <a href="http://{{ m.site.hostname }}">{{ m.site.hostname }}</a>. {_ Below are your account details and a link to set a new password. _}</p>
 
-<p>{_ Your account name is _} “<strong>{{ account_name|escape }}</strong>”.  {_ The e-mail address associated with your account is _} “<strong>{{ email|escape }}</strong>”.</p>
+<p>{_ Your account name is _} “<strong>{{ m.identity[id].username|escape }}</strong>”.  {_ The e-mail address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email)|escape }}</strong>”.</p>
 
 <p>{_ Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
 
