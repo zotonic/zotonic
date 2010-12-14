@@ -608,7 +608,7 @@ function z_init_postback_forms()
 				setTimeout(action, 10);
 			}
 
-			var use_post = false;
+			var use_post = $(theForm).hasClass("z_cookie_form");
 			if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
 			{
 				use_post = true;
@@ -639,7 +639,7 @@ function z_init_postback_forms()
 		
 		return z_form_submit_validated_delay(theForm, event, submitFunction);
 	})
-	.attr('action', 'pb:installed');
+	.attr('action', '#pb-installed');
 }
 
 function z_form_submit_validated_delay(theForm, event, submitFunction) 
