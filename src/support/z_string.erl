@@ -209,7 +209,7 @@ line(L) ->
     line1([], Acc) ->
         lists:reverse(Acc);
     line1([H|T], Acc) when H < 32 ->
-        line1(T, [32 , Acc]);
+        line1(T, [32|Acc]);
     line1([H|T], Acc) ->
         line1(T, [H|Acc]).
 
@@ -718,7 +718,7 @@ truncatewords(S, Words, Append) when is_list(S) ->
     iswordsep(_) -> false.
 
 
-%% @doc Split the binary into lines. Line seperators can be \r, \n or \r\n.
+%% @doc Split the binary into lines. Line separators can be \r, \n or \r\n.
 split_lines(B) when is_binary(B) ->
 	split_lines(B, <<>>, []).
 	
