@@ -23,7 +23,7 @@ msgid ""
 "<em>withheld</em>"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9 
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
 "click on the “show all recipients” link.</p><h3>Sender name and e-mail "
@@ -189,7 +189,7 @@ msgid ""
 "First name"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8 
 msgid ""
 "From now on you will receive mail from our mailing list."
 msgstr ""
@@ -207,29 +207,20 @@ msgstr ""
 
 #: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:6 
 msgid ""
-"Goodbye,</p>
-
-<p>{_ You are now unsubscribed from the mailing list"
+"Goodbye,"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:6 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:6 
 msgid ""
 "Hello,"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 
-msgid ""
-"Hello,</p>
-
-	<p>{_ You are now subscribed to our mailing list"
-msgstr ""
-
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9 
 msgid ""
 "Help about mailing lists."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:7 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:9 
 msgid ""
 "Hope to see you again."
 msgstr ""
@@ -239,7 +230,7 @@ msgid ""
 "Keep mailing"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10 ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:9 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:12 ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:11 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17 
 msgid ""
 "Kind Regards,"
 msgstr ""
@@ -249,7 +240,7 @@ msgid ""
 "Mailing Lists"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4 
 msgid ""
 "Mailing list"
 msgstr ""
@@ -259,7 +250,7 @@ msgid ""
 "Mailing list overview"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9 
 msgid ""
 "Mailing list settings."
 msgstr ""
@@ -269,7 +260,7 @@ msgid ""
 "Mailing lists"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -429,7 +420,7 @@ msgid ""
 "Sent the e-mail."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:11 
 msgid ""
 "Show all recipients &raquo;"
 msgstr ""
@@ -543,7 +534,7 @@ msgid ""
 "When you don’t want to receive any mail then please ignore this message."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10 
 msgid ""
 "When you don’t want to receive any more mail then"
 msgstr ""
@@ -554,9 +545,19 @@ msgid ""
 "edit permission on the mailing list to change and view the recipients."
 msgstr ""
 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8 
+msgid ""
+"You are now subscribed to our mailing list"
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:3 
 msgid ""
 "You are now unsubscribed from"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8 
+msgid ""
+"You are now unsubscribed from the mailing list"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/email_page.tpl:7 
@@ -604,7 +605,7 @@ msgid ""
 "cancel"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10 
 msgid ""
 "click here to unsubscribe."
 msgstr ""
@@ -624,7 +625,7 @@ msgid ""
 "edit"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:5 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:5 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:5 
 msgid ""
 "make smaller"
 msgstr ""
@@ -674,7 +675,7 @@ msgid ""
 "when you don't want to receive any further mail from this list."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8 
 msgid ""
 "with your e-mail address"
 msgstr ""
