@@ -864,6 +864,7 @@ var Validate = {
     Email: function(value, paramsObj){
       var paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "Incorrect E-mail";
+      value = $.trim(value);
       Validate.Format(value, { failureMessage: message, pattern: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i } );
       return true;
     },
