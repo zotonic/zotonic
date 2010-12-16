@@ -144,7 +144,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             DateProps = recombine_dates(Props),
             TextProps = recombine_languages(DateProps, Context),
             AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- TextProps ],
-            FilteredProps = props_filter(AtomProps, [], Context),
+            FilteredProps = props_filter(props_trim(AtomProps), [], Context),
             EditableProps = props_filter_protected(FilteredProps),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
                 L when is_list(L) -> L;
@@ -353,6 +353,18 @@ preflight_check(Id, [_H|T], Context) ->
     preflight_check(Id, T, Context).
 
 
+%% @doc Remove whitespace around some predefined fields
+props_trim(Props) ->
+    props_trim(Props, []).
+
+props_trim([], Acc) ->
+    lists:reverse(Acc);
+props_trim([{P,V}=Prop|T], Acc) ->
+    case is_trimmable(P,V) of
+        true -> props_trim(T, [{P, z_string:trim(V)}|Acc]);
+        false -> props_trim(T, [Prop|Acc])
+    end.
+
 %% @doc Remove properties the user is not allowed to change and convert some other to the correct data type
 %% @spec props_filter(Props1, Acc, Context) -> Props2
 props_filter([], Acc, _Context) ->
@@ -480,34 +492,45 @@ props_defaults(Props, _Context) ->
 
 
 props_filter_protected(Props) ->
-    lists:filter(fun({K,_V}) -> not protected(K) end, Props).
+    lists:filter(fun({K,_V}) -> not is_protected(K) end, Props).
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-protected(created)                    -> true;
-protected(creator_id)                 -> true;
-protected(id)                         -> true;
-protected(modified)                   -> true;
-protected(modifier_id)                -> true;
-protected(pivot_category_nr)          -> true;
-protected(pivot_city)                 -> true;
-protected(pivot_country)              -> true;
-protected(pivot_date_end)             -> true;
-protected(pivot_date_end_month_day)   -> true;
-protected(pivot_date_start)           -> true;
-protected(pivot_date_start_month_day) -> true;
-protected(pivot_first_name)           -> true;
-protected(pivot_gender)               -> true;
-protected(pivot_geocode)              -> true;
-protected(pivot_postcode)             -> true;
-protected(pivot_rtsv)                 -> true;
-protected(pivot_state)                -> true;
-protected(pivot_street)               -> true;
-protected(pivot_surname)              -> true;
-protected(pivot_title)                -> true;
-protected(pivot_tsv)                  -> true;
-protected(props)                      -> true;
-protected(version)                    -> true;
-protected(_)                          -> false.
+is_protected(created)                    -> true;
+is_protected(creator_id)                 -> true;
+is_protected(id)                         -> true;
+is_protected(modified)                   -> true;
+is_protected(modifier_id)                -> true;
+is_protected(pivot_category_nr)          -> true;
+is_protected(pivot_city)                 -> true;
+is_protected(pivot_country)              -> true;
+is_protected(pivot_date_end)             -> true;
+is_protected(pivot_date_end_month_day)   -> true;
+is_protected(pivot_date_start)           -> true;
+is_protected(pivot_date_start_month_day) -> true;
+is_protected(pivot_first_name)           -> true;
+is_protected(pivot_gender)               -> true;
+is_protected(pivot_geocode)              -> true;
+is_protected(pivot_postcode)             -> true;
+is_protected(pivot_rtsv)                 -> true;
+is_protected(pivot_state)                -> true;
+is_protected(pivot_street)               -> true;
+is_protected(pivot_surname)              -> true;
+is_protected(pivot_title)                -> true;
+is_protected(pivot_tsv)                  -> true;
+is_protected(props)                      -> true;
+is_protected(version)                    -> true;
+is_protected(_)                          -> false.
+
+
+is_trimmable(_, V) when not is_binary(V) and not is_list(V) -> false;
+is_trimmable(email, _)       -> true;
+is_trimmable(page_path, _)   -> true;
+is_trimmable(slug, _)        -> true;
+is_trimmable(custom_slug, _) -> true;
+is_trimmable(category, _)    -> true;
+is_trimmable(title, _)       -> true;
+is_trimmable(title_short, _) -> true;
+is_trimmable(_, _)           -> false.
 
 
 recombine_dates(Props) ->
