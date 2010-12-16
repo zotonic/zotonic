@@ -4,7 +4,7 @@
 			<link rel="shorturl" href="{% url id id=id %}" />
 			<link rel="canonical" href="{{ m.rsc[id].page_url }}" />
 			{% if m.rsc[id].seo_noindex %}
-				<meta name="robots" content="noindex" />
+				{% if not m.config.seo.noindex.value %}<meta name="robots" content="noindex" />{% endif %}
 			{% else %}
 				{% with m.rsc[id].seo_keywords as seo_keywords %}
 					{% if seo_keywords %}
@@ -23,3 +23,4 @@
 		{% endif %}
 	{% endwith %}
 {% endwith %}
+{% if m.config.seo.noindex.value %}<meta name="robots" content="noindex,nofollow" />{% endif %}

@@ -26,6 +26,13 @@
 						<input type="text" id="seo-description" name="seo-description" value="{{ m.config.seo.description.value|escape }}" />
 					</div>
 
+					<div class="form-item clearfix">
+						<label for="seo-noindex" title="{_ Add a noindex, nofollow element to all pages. _}">
+							<input type="checkbox" id="seo-noindex" name="seo-noindex" value="1" {% if m.config.seo.noindex.value %}check="checked"{% endif %} />
+							{_ Exclude this site from search engines _}
+						</label>
+					</div>
+
 				</fieldset>
 			</div>
 		</div>
