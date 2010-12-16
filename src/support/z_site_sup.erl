@@ -44,21 +44,23 @@ init(Host) ->
     % Default site name
     {host, Host} = proplists:lookup(host, SiteProps),
 
-    Translation = {z_trans_server, 
-                {z_trans_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
     Depcache = {z_depcache,
                 {z_depcache, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
-    Notifier = {z_notifier,
-                {z_notifier, start_link, [SiteProps]}, 
+    Translation = {z_trans_server, 
+                {z_trans_server, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
+    % The installer needs the database pool, depcache and translation.
     Installer = {z_installer,
                 {z_installer, start_link, [SiteProps]},
                 permanent, 1, worker, dynamic},
+
+    % Continue with the normal per-site servers
+    Notifier = {z_notifier,
+                {z_notifier, start_link, [SiteProps]}, 
+                permanent, 5000, worker, dynamic},
 
     Session = {z_session_manager,
                 {z_session_manager, start_link, [SiteProps]}, 
@@ -93,7 +95,7 @@ init(Host) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Translation, Depcache, Notifier, Installer, Session, 
+            Depcache, Translation, Installer, Notifier, Session, 
             Dispatcher, Template, DropBox, Pivot,
             ModuleIndexer, Modules,
             PostStartup

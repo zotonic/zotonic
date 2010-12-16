@@ -32,12 +32,14 @@
 %% @doc Insert boot data into the database.
 %% @spec install(Connection) -> ok
 install(Host, C) ->
+    ?DEBUG({Host, "Install start."}),
     ok = install_config(C),
     ok = install_modules(Host, C),
     ok = install_category(C),
     ok = install_rsc(C),
     ok = install_identity(C),
     ok = install_predicate(C),
+    ?DEBUG({Host, "Install done."}),
     ok.
 
 
