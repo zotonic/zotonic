@@ -606,17 +606,19 @@ renumber_transaction(Context) ->
     CatTuples = z_db:q("select id, parent_id, seq from category order by seq,id", Context),
     Enums = enumerate(CatTuples),
     [
-        z_db:update(category, CatId, [
-            {nr, Nr},
-            {seq, Nr},
-            {lvl, Level},
-            {lft, Left},
-            {rght, Right},
-            {path, {ok, Path}}
-        ], Context)
+        z_db:q("update category
+                set nr = $2,
+                    seq = $2,
+                    lvl = $3,
+                    lft = $4,
+                    rght = $5,
+                    props = $6
+                where id = $1", 
+                [CatId, Nr, Level, Left, Right, [{path, {ok, Path}}]]
+                , Context)
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],
-	z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [1], Context),
+    z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [1], Context),
     ok.
 
 %% @doc Resync all ids that have their category nr changed.

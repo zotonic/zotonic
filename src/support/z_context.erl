@@ -148,6 +148,10 @@ new(ReqData) ->
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
 
+%% @doc Create a new context record for a host with a certain language.
+new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
+    Context = set_server_names(#context{host=Host}),
+    Context#context{language=Lang};
 %% @doc Create a new context record for the current request and resource module
 new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
