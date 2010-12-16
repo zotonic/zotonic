@@ -2,8 +2,8 @@
 	<p>{{ text }}</p>
 
 	<div class="buttons">
-		<button id="{{ #ok }}">{{ button|default:_"OK" }}</button>
-		<button id="{{ #cancel }}" class="cancel shy">{{ button|default:_"Cancel" }}</button>
+		<button id="{{ #ok }}">{{ ok|default:_"OK" }}</button>
+		<button id="{{ #cancel }}" class="cancel shy">{{ cancel|default:_"Cancel" }}</button>
 		{% wire id=#ok 
 				action={dialog_close}
 				action=action
