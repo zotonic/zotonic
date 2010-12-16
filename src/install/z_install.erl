@@ -64,8 +64,7 @@ install(Host) ->
                                    end
                                ),
     pgsql_pool:return_connection(Host, C),
-    Context = z_context:new(Host),
-    m_category:renumber(Context),
+    m_category:renumber(z_context:new(Host, en)),
     ok.
 
 
