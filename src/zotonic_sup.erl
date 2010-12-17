@@ -82,7 +82,25 @@ init([]) ->
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
                   permanent, 5000, worker, dynamic},
-    
+
+    % Smtp listen to IP address, Domain and Port
+    SmtpBounceDomain = case os:getenv("ZOTONIC_SMTP_BOUNCE_DOMAIN") of
+                false -> z_config:get_dirty(smtp_bounce_domain);
+                SmtpBounceDomain_ -> SmtpBounceDomain_
+            end,
+    SmtpBounceIp = case os:getenv("ZOTONIC_SMTP_BOUNCE_IP") of
+                false -> z_config:get_dirty(smtp_bounce_ip);
+                SmtpBounceAny when SmtpBounceAny == []; SmtpBounceAny == "*"; SmtpBounceAny == "any" -> any;
+                SmtpBounceIp_-> SmtpBounceIp_
+            end,   
+    SmtpBouncePort = case os:getenv("ZOTONIC_SMTP_BOUNCE_PORT") of
+                     false -> z_config:get_dirty(smtp_bounce_port);
+                     SmtpBouncePort_ -> list_to_integer(SmtpBouncePort_)
+                 end,
+    z_config:set_dirty(smtp_bounce_domain, SmtpBounceDomain),
+    z_config:set_dirty(smtp_bounce_ip, SmtpBounceIp),
+    z_config:set_dirty(smtp_bounce_port, SmtpBouncePort),
+
     SmtpBounceServer = {z_email_bounce_server,
                         {z_email_bounce_server, start_link, []},
                         permanent, 5000, worker, dynamic},

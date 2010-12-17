@@ -21,7 +21,24 @@
         
 
 start_link() ->
-    start_link([[]]).
+    %% Collect the configuration args of the bounce server 
+    Args1 = case z_config:get(smtp_bounce_domain) of
+        undefined -> [];
+        BounceDomain -> [{domain, BounceDomain}]
+    end,	
+    Args2 = case z_config:get(smtp_bounce_ip) of
+        undefined -> [];
+        any -> [{address, {0,0,0,0}} | Args1];
+        BounceIp -> 
+            {ok, Address} = inet:getaddr(BounceIp, inet),
+            [{address, Address} | Args1]
+    end,	
+    Args3 = case z_config:get(smtp_bounce_port) of
+        undefined -> Args2;
+        BouncePort -> [{port, BouncePort} | Args2]
+    end,	
+    start_link([Args3]).
+
 start_link(Args) when is_list(Args) ->
     gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).
 
