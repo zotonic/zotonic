@@ -55,6 +55,12 @@
 {smtp_port, 2525},
 {smtp_ssl, false},
 
+%% SMTP Bounce Server Options 
+%% Always overruled by the environment variables ZOTONIC_SMTP_BOUNCE_DOMAIN, ZOTONIC_SMTP_BOUNCE_IP and ZOTONIC_SMTP_BOUNCE_PORT
+{smtp_bounce_domain, undefined},
+{smtp_bounce_ip, "127.0.0.1"},
+{smtp_bounce_port, 2525},
+
  %% Password for the sites administration site (zotonic_status)
  %% Zotonic will generate a secure password for you, so you don't need to enable this.  
  %% When you enable this you MUST select a secure password!!!
