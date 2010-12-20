@@ -33,6 +33,10 @@ limitations under the License.
 				
 				options = $.extend({}, $.ui.dialog.defaults, options);
 				
+				var dialogClass = 'dialog'
+				if (typeof(options.addclass) == "string")
+					dialogClass = 'dialog '+options.addclass
+					
 				if (typeof(options.width) == "number")
 					width = options.width + "px";
 				else
@@ -54,7 +58,7 @@ limitations under the License.
 				dialogBottom		= $('<div></div>').addClass('dialog-bottom').append(dialogBLC, dialogBRC);
 			
 				dialogWrapper		= $('<div></div>')
-										.addClass('dialog')
+										.addClass(dialogClass)
 										.append(dialogTop, dialogContent, dialogBottom)
 										.fadeIn(300)
 										.css({left: leftPos, top: topPos, width: width})
