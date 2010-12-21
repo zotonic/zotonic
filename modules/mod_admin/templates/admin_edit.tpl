@@ -161,8 +161,9 @@
 			{% else %}
 				<p class="admin-chapeau">{_ editing _}:
 					<span class="right" style="text-align: right">
-						{_ Modified _} {{ r.modified|timesince }}.<br/>
-						{_ By _} {{ m.rsc[r.modifier_id].title }}.
+						{_ Modified _} {{ r.modified|timesince }}
+						{_ by _} {{ m.rsc[r.modifier_id].title }}.<br/>
+						{_ Created by _} {{ m.rsc[r.creator_id].title }}.<br/>
 					</span>
 				</p>
 				<h2>{{ r.title|striptags|default:"<em>untitled</em>" }}

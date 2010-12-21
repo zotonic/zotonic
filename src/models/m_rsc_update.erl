@@ -174,6 +174,9 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                                     self ->
                                         {ok, InsId} = z_db:insert(rsc, [{creator_id, undefined} | InsPropsN], Ctx),
                                         z_db:q("update rsc set creator_id = id where id = $1", [InsId], Ctx);
+                                    CreatorId when is_integer(CreatorId) ->
+                                        true = z_acl:is_admin(Ctx),
+                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, CreatorId} | InsPropsN], Ctx);
                                     undefined ->
                                         {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx)
                                 end,
