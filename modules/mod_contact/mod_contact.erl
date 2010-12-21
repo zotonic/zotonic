@@ -46,7 +46,10 @@ event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
             true -> z_email:get_admin_email(Context);
             false -> Email
          end,
-    From = z_context:get_q_validated("mail", Context),
+    From = case proplists:get_value(from, Args, m_config:get_value(?MODULE, from, Context)) of
+	undefined -> z_context:get_q_validated("mail", Context);
+	From_ -> From_
+    end,
     Vars = [{email_from, From},
             {name, z_context:get_q("name", Context)},
             {message, z_context:get_q("message", Context)},
