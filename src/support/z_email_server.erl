@@ -161,9 +161,14 @@ update_config(State) ->
 
 generate_message_id(Context) ->
     FQDN = smtp_util:guess_FQDN(),
-    [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),
+    BounceDomain = case z_config:get('smtp_bounce_domain') of
+		     undefined ->
+			 [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),
+			 Hostname;
+		     BounceDomain_ -> BounceDomain_
+		     end,
     Md5 = [io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary([erlang:now(), FQDN]))],
-    lists:flatten(io_lib:format("<noreply+~s@~s>", [Md5, Hostname])).
+    lists:flatten(io_lib:format("<noreply+~s@~s>", [Md5, BounceDomain])).
 
 %% =========================
 %% SENDING related functions
