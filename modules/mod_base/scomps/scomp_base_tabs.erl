@@ -31,6 +31,5 @@ render(Params, _Vars, Context) ->
     Script = [ 
         "$('#", z_convert:to_list(Id), "').tabs({ select: function(event, ui) { window.location.hash = ui.tab.hash; }});" 
     ],
-    Script = [ "$('#", z_convert:to_list(Id), "').tabs();" ],
     {ok, z_render:wire({script, [{script, Script}]}, Context)}.
 
