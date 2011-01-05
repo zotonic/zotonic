@@ -254,7 +254,7 @@ model_pgsql() ->
       id int NOT NULL,
       filename character varying(400),
       rootname character varying(100),
-      mime character varying(64) NOT NULL DEFAULT 'application/octet-stream'::character varying,
+      mime character varying(128) NOT NULL DEFAULT 'application/octet-stream'::character varying,
       width int NOT NULL DEFAULT 0,
       height int NOT NULL DEFAULT 0,
       orientation int NOT NULL DEFAULT 1,

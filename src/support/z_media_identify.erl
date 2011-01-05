@@ -112,6 +112,14 @@ identify_file_os(unix, File, OriginalFilename) ->
 						".tgz" -> {ok, [{mime, "application/x-gzip+tar"}]};
 						_ -> {ok, [{mime, "application/x-gzip"}]}
 					end;
+				"application/zip" ->
+				    %% Special case for zip'ed office files
+				    case guess_mime(OriginalFilename) of
+				        "application/vnd.openxmlformats-officedocument." ++ _ = OfficeMime ->
+				            {ok, [{mime, OfficeMime}]};
+				        _ ->
+				            {ok, [{mime, "application/zip"}]}
+				    end;
 				_ ->
 					{ok, [{mime, Mime}]}
 			end
@@ -213,6 +221,7 @@ extension_mime() ->
 		{".css", "text/css"},
 		{".diff", "text/x-diff"},
 		{".doc", "application/msword"},
+		{".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 		{".dot", "application/x-dot"},
 		{".dvi", "application/x-dvi"},
 		{".dwg", "application/acad"},
@@ -241,6 +250,7 @@ extension_mime() ->
 		{".php", "text/x-php"},
 		{".png", "image/png"},
 		{".ppt", "application/vnd.ms-powerpoint"},
+		{".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
 		{".ps", "application/postscript"},
 		{".psd", "image/vnd.adobe.photoshop"},
 		{".sh", "text/x-shellscript"},
@@ -256,6 +266,7 @@ extension_mime() ->
 		{".wmf", "application/x-msmetafile"},
 		{".xhtml", "application/xhtml+xml"},
 		{".xls", "application/vnd.ms-excel"},
+		{".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
 		{".xml", "application/xml"},
 		{".z", "application/x-compress"},
 		{".zip", "application/zip"},
