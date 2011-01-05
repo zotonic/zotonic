@@ -455,8 +455,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 url_ast(Name, Args, Context, TreeWalkerAcc);
             ({'print', Value}, TreeWalkerAcc) ->
                 print_ast(Value, Context, TreeWalkerAcc);
-            ({'lib', LibList}, TreeWalkerAcc) ->
-                lib_ast(LibList, Context, TreeWalkerAcc);
+            ({'lib', LibList, Args}, TreeWalkerAcc) ->
+                lib_ast(LibList, Args, Context, TreeWalkerAcc);
             ({'cache', [MaxAge, Args], CacheContents}, TreeWalkerAcc) ->
                 cache_ast(MaxAge, Args, CacheContents, Context, TreeWalkerAcc);
             (ValueToken, TreeWalkerAcc) -> 
@@ -1428,16 +1428,18 @@ print_ast(Value, Context, TreeWalker) ->
     {{PreAst, #ast_info{}}, TreeWalker}. 
 
 
-lib_ast(LibList, Context, TreeWalker) ->
+lib_ast(LibList, Args, Context, TreeWalker) ->
     Libs = [ unescape_string_literal(V) || {string_literal, _, V} <- LibList ],
     LibsAst = erl_syntax:list([ erl_syntax:string(L) || L <- Libs ]),
+    {ArgList, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_lib_include),
                 erl_syntax:atom(tag),
                 [   LibsAst,
+		    ArgList,
                     z_context_ast(Context)
                 ]),
-    {{Ast, #ast_info{}}, TreeWalker}.
+    {{Ast, #ast_info{}}, TreeWalker1}.
 
 
 cache_ast(MaxAge, Args, Body, Context, TreeWalker) ->

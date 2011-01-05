@@ -268,7 +268,7 @@ NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
 OptionalAll -> all_keyword : true.
 OptionalAll -> '$empty' : false.
 
-LibTag -> open_tag lib_keyword LibList close_tag : {lib, '$3'}.
+LibTag -> open_tag lib_keyword LibList Args close_tag : {lib, '$3', '$4'}.
 LibList -> string_literal : ['$1'].
 LibList -> LibList string_literal : '$1' ++ ['$2'].
 

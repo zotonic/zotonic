@@ -28,6 +28,7 @@
 
 -export([
     tag/2,
+    tag/3,
     uncollapse/1
 ]).
 
@@ -35,12 +36,16 @@
 
 %% @doc Generate the link and/or script tags for the given files.
 tag(Files, Context) ->
+    tag(Files, [], Context).
+
+%% @doc Generate the link and/or script tags for the given files.
+tag(Files, Args, Context) ->
     case m_config:get_value(mod_development, libsep, Context) of
         Empty when Empty == []; Empty == <<>>; Empty == undefined ->
-            tag1(Files, Context);
+            tag1(Files, Args, Context);
         _Other ->
             lists:foldr(fun(F, [Css,Js]) ->
-                            [C,J] = tag1([F], Context),
+                            [C,J] = tag1([F], Args, Context),
                             [[C|Css], [J|Js]]
                          end,
                          [[],[]],
@@ -48,21 +53,25 @@ tag(Files, Context) ->
     end.
 
 
-tag1(Files, Context) ->
+tag1(Files, Args, Context) ->
     {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
+    UrlPrefix = case proplists:get_bool(use_absolute_url, Args) of
+		    true -> [<<"http://">>, z_context:hostname_port(Context), <<"/lib">>];
+		    false -> <<"/lib">>
+    end,
     LinkElement = case CssPath of
         [] ->
             [];
         _ -> 
             ModCss = newest(Css, {{1970,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<link href=\"/lib">>, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>])
+            iolist_to_binary([ <<"<link href=\"">>, UrlPrefix, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>])
     end,
     ScriptElement = case JsPath of
         [] ->
             [];
         _ -> 
             ModJs = newest(Js, {{1970,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<script src=\"/lib">>, JsPath, ?SEP, integer_to_list(ModJs), <<".js\" type=\"text/javascript\"></script>">>])
+            iolist_to_binary([ <<"<script src=\"">>, UrlPrefix, JsPath, ?SEP, integer_to_list(ModJs), <<".js\" type=\"text/javascript\"></script>">>])
     end,
     [LinkElement, ScriptElement].
 
