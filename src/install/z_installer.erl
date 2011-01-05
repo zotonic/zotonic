@@ -98,6 +98,7 @@ upgrade(Name, Database, Schema) ->
     ok = install_identity_verify_key(Name, Database, Schema),
 	ok = install_persist(Name, Database, Schema),
 	ok = drop_visitor(Name, Database, Schema),
+	ok = extent_mime(Name, Database, Schema),
     ok.
 
 
@@ -157,6 +158,25 @@ drop_visitor(Name, Database, Schema) ->
 			ok
 	end.
 
+
+extent_mime(Name, Database, Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Name),
+    {ok, Length} = pgsql:equery1(C, "
+            select character_maximum_length 
+            from information_schema.columns 
+            where table_catalog = $1 
+              and table_schema = $2
+              and table_name = $3 
+              and column_name = $4", [Database, Schema, "medium", "mime"]),
+    case Length < 128 of
+        true ->
+            {ok, [], []} = pgsql:squery(C, "alter table medium alter column mime type character varying(128)");
+        false ->
+            nop
+    end,
+    pgsql_pool:return_connection(Name, C),
+    ok.
+    
 
 install_identity_is_verified(Name, Database, Schema) ->
     case has_column("identity", "is_verified", Name, Database, Schema) of
