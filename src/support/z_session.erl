@@ -243,10 +243,15 @@ handle_cast({add_script, Script}, Session) ->
 
 %% @doc Set the session variable, replaces any old value
 handle_cast({set_persistent, Key, Value}, Session) ->
-    {noreply, Session#session{ 
-					props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
-					persist_is_dirty = true
-			}};
+    case proplists:get_value(Key, Session#session.props_persist) of
+        Value ->
+            {noreply, Session};
+        _Other ->
+            {noreply, Session#session{ 
+                            props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
+                            persist_is_dirty = true
+                    }}
+    end;
 
 %% @doc Set the session variable, replaces any old value
 handle_cast({set, Key, Value}, Session) ->
