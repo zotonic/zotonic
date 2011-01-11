@@ -4,20 +4,16 @@ CREATED:{{ r.created|utc|date:"Ymd\\THis" }}Z
 LAST-MODIFIED:{{ r.modified|utc|date:"Ymd\\THis" }}Z
 UID:{{ r.resource_uri|unescape|escape_ical }}
 {% ifequal dtstart|date:"His" "000000" %}
-{% if dtend|date:"His" == "235959" or dtend|is_undefined %}
-{% with dtstart|date:"Ymd" as date_start %}
-DTSTART;VALUE=DATE:{{ date_start }}
-DTEND;VALUE=DATE:{{ dtend|date:"Ymd"|default:date_start }}
-{% endwith %}
+{% if dtend|is_undefined or dtend|date:"His" == "235959" %}
+DTSTART;VALUE=DATE:{{ dtstart|date:"Ymd" }}
+DTEND;VALUE=DATE:{{ dtend|default:dtstart|date:"Ymd" }}
 {% else %}
 DTSTART:{{ dtstart|utc|date:"Ymd\\THis" }}Z
 DTEND:{{ dtend|utc|date:"Ymd\\THis" }}Z
 {% endif %}
 {% else %}
-{% with dtstart|utc|date:"Ymd\\THis" as date_start %}
-DTSTART:{{ date_start }}Z
-DTEND:{{ dtend|utc|date:"Ymd\\THis"|default:date_start }}Z
-{% endwith %}
+DTSTART:{{ dtstart|utc|date:"Ymd\\THis" }}Z
+DTEND:{{ dtend|default:dtstart|utc|date:"Ymd\\THis" }}Z
 {% endifequal %}
 TRANSP:OPAQUE
 SUMMARY:{{ r.title|unescape|escape_ical }}
