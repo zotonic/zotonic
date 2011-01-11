@@ -38,7 +38,7 @@ m_find_value(Name, #m{value={_SignalType, SignalProps}}, _Context) ->
 m_find_value(type, #m{value=undefined}=M, _Context) ->
     M#m{value=type};
 m_find_value(props, #m{value=undefined}=M, _Context) ->
-    M#m{value=type};
+    M#m{value=props};
 m_find_value({SignalType, _SignalProps}, #m{value=type}, _Context) ->
     SignalType;
 m_find_value({_SignalType, SignalProps}, #m{value=props}, _Context) ->
