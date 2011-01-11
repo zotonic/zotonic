@@ -563,7 +563,7 @@ decision(v3p11, Rs, Rd) ->
     end.
 
 accept_helper(Rs, Rd) ->
-    CT = case get_header_val("Content-Type", Rd) of
+    CT = case get_header_val("content-type", Rd) of
              undefined -> "application/octet-stream";
              Other -> Other
          end,
