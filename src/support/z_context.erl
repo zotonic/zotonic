@@ -470,10 +470,7 @@ ensure_session(Context) ->
         undefined ->
             Context1 = z_session_manager:ensure_session(Context),
             Context2 = z_auth:logon_from_session(Context1),
-            Context3 = case get_session(language, Context2) of
-                           undefined -> Context2;
-                           Language -> Context2#context{language=Language}
-                       end,
+            Context3 = z_notifier:foldl(session_context, Context2, Context2),
             add_nocache_headers(Context3);
         _ ->
             Context

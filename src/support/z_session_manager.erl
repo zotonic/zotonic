@@ -250,7 +250,8 @@ ensure_session1(S, P, Context, State) when S == undefined orelse P == error ->
 			State1    = store_persist_pid(PersistId, Pid, store_session_pid(SessionId, Pid, State)),
 		    Context3  = Context2#context{session_pid = Pid},
 			z_notifier:notify(session_init, Context3),
-		    {Pid, Context3, State1}
+			Context4 = z_notifier:foldl(session_init_fold, Context3, Context3),
+		    {Pid, Context4, State1}
 	end;
 ensure_session1(_SessionId, Pid, Context, State) ->
     z_session:keepalive(Context#context.page_pid, Pid),

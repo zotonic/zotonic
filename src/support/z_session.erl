@@ -247,10 +247,13 @@ handle_cast({set_persistent, Key, Value}, Session) ->
         Value ->
             {noreply, Session};
         _Other ->
-            {noreply, Session#session{ 
+            % @todo Save the persistent state on tick, and not every time it is changed.
+            %       For now (and for testing) this is ok.
+            Session1 = Session#session{ 
                             props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
                             persist_is_dirty = true
-                    }}
+                    },
+            {noreply, save_persist(Session1)}
     end;
 
 %% @doc Set the session variable, replaces any old value
