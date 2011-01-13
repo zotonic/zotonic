@@ -23,7 +23,7 @@
 
 %% interface functions
 -export([
-	has_connection/1,
+    has_connection/1,
     transaction/2,
     transaction_clear/1,
     set/3,
@@ -70,35 +70,35 @@
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
 transaction(Function, #context{dbc=undefined} = Context) ->
-	case has_connection(Context) of
-		true ->
-		    Host     = Context#context.host,
-		    {ok, C}  = pgsql_pool:get_connection(Host),
-		    Context1 = Context#context{dbc=C},
-		    Result = try
-		                {ok, [], []} = pgsql:squery(C, "BEGIN"),
-		                R = Function(Context1),
-		                {ok, [], []} = pgsql:squery(C, "COMMIT"),
-		                R
-		             catch
-		                _:Why ->
-		                    pgsql:squery(C, "ROLLBACK"),
-		                    {rollback, {Why, erlang:get_stacktrace()}}
-		             end,
-		    pgsql_pool:return_connection(Host, C),
-		    Result;
-		false ->
-			{rollback, {no_database_connection, erlang:get_stacktrace()}}
-	end;
+    case has_connection(Context) of
+        true ->
+            Host     = Context#context.host,
+            {ok, C}  = pgsql_pool:get_connection(Host),
+            Context1 = Context#context{dbc=C},
+            Result = try
+                        {ok, [], []} = pgsql:squery(C, "BEGIN"),
+                        R = Function(Context1),
+                        {ok, [], []} = pgsql:squery(C, "COMMIT"),
+                        R
+                     catch
+                        _:Why ->
+                            pgsql:squery(C, "ROLLBACK"),
+                            {rollback, {Why, erlang:get_stacktrace()}}
+                     end,
+            pgsql_pool:return_connection(Host, C),
+            Result;
+        false ->
+            {rollback, {no_database_connection, erlang:get_stacktrace()}}
+    end;
 transaction(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
     Function(Context).
 
 %% @doc Clear any transaction in the context, useful when starting a thread with this context.
 transaction_clear(#context{dbc=undefined} = Context) ->
-	Context;
+    Context;
 transaction_clear(Context) ->
-	Context#context{dbc=undefined}.
+    Context#context{dbc=undefined}.
 
 
 %% @doc Simple get/set functions for db property lists
@@ -110,18 +110,18 @@ get(Key, Props) ->
 
 %% @doc Check if we have database connection
 has_connection(#context{host=Host}) ->
-	is_pid(erlang:whereis(Host)).
+    is_pid(erlang:whereis(Host)).
 
 
 %% @doc Transaction handler safe function for fetching a db connection
 get_connection(#context{dbc=undefined, host=Host} = Context) ->
-	case has_connection(Context) of
-		true ->
-		    {ok, C} = pgsql_pool:get_connection(Host),
-		    C;
-		false ->
-			none
-	end;
+    case has_connection(Context) of
+        true ->
+            {ok, C} = pgsql_pool:get_connection(Host),
+            C;
+        false ->
+            none
+    end;
 get_connection(Context) ->
     Context#context.dbc.
 
@@ -153,9 +153,12 @@ assoc_props_row(Sql, Parameters, Context) ->
 
 get_parameter(Parameter, Context) ->
     C = get_connection(Context),
-    {ok, Result} = pgsql:get_parameter(C, z_convert:to_binary(Parameter)),
-    return_connection(C, Context),
-    Result.
+    try
+        {ok, Result} = pgsql:get_parameter(C, z_convert:to_binary(Parameter)),
+        Result
+    after
+        return_connection(C, Context)
+    end.
     
 
 %% @doc Return property lists of the results of a query on the database in the Context
@@ -164,13 +167,16 @@ assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
 assoc(Sql, Parameters, Context) ->
-	case get_connection(Context) of
-		none -> [];
-		C ->
-		    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
-		    return_connection(C, Context),
-    		Result
-	end.
+    case get_connection(Context) of
+        none -> [];
+        C ->
+            try
+                {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+                Result
+            after
+                return_connection(C, Context)
+            end
+    end.
 
 
 assoc_props(Sql, Context) ->
@@ -178,12 +184,15 @@ assoc_props(Sql, Context) ->
 
 assoc_props(Sql, Parameters, Context) ->
     case get_connection(Context) of
-		none -> [];
-		C ->
-		    {ok, Result} = pgsql:assoc(C, Sql, Parameters),
-		    return_connection(C, Context),
-		    merge_props(Result)
-	end.
+        none -> [];
+        C ->
+            try
+                {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+                merge_props(Result)
+            after
+                return_connection(C, Context)
+            end
+    end.
 
 
 q(Sql, Context) ->
@@ -191,30 +200,34 @@ q(Sql, Context) ->
 
 q(Sql, Parameters, Context) ->
     case get_connection(Context) of
-		none -> [];
-		C ->
-		    Result = case pgsql:equery(C, Sql, Parameters) of
-		                {ok, _Cols, Rows} -> Rows;
-		                {ok, Rows} -> Rows
-		              end,
-		    return_connection(C, Context),
-		    Result
-	end.
+        none -> [];
+        C ->
+            try
+                case pgsql:equery(C, Sql, Parameters) of
+                    {ok, _Cols, Rows} -> Rows;
+                    {ok, Rows} -> Rows
+                end
+            after
+                return_connection(C, Context)
+            end
+    end.
 
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
 q1(Sql, Parameters, Context) ->
     case get_connection(Context) of
-		none -> undefined;
-		C ->
-		    V = case pgsql:equery1(C, Sql, Parameters) of
-		            {ok, Value} -> Value;
-		            {error, noresult} -> undefined
-		        end,
-		    return_connection(C, Context),
-		    V
-	end.
+        none -> undefined;
+        C ->
+            try
+                case pgsql:equery1(C, Sql, Parameters) of
+                    {ok, Value} -> Value;
+                    {error, noresult} -> undefined
+                end
+            after
+                return_connection(C, Context)
+            end
+    end.
 
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
@@ -230,14 +243,16 @@ equery(Sql, Context) ->
     equery(Sql, [], Context).
     
 equery(Sql, Parameters, Context) ->
-	case get_connection(Context) of
-		none -> 
-			{error, noresult};
-		C ->
-		    R = pgsql:equery(C, Sql, Parameters),
-		    return_connection(C, Context),
-		    R
-	end.
+    case get_connection(Context) of
+        none -> 
+            {error, noresult};
+        C ->
+            try
+                pgsql:equery(C, Sql, Parameters)
+            after
+                return_connection(C, Context)
+            end
+    end.
 
 %% @doc Insert a new row in a table, use only default values.
 %% @spec insert(Table, Context) -> {ok, Id}
@@ -245,10 +260,12 @@ insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
     assert_table_name(Table),
-	C = get_connection(Context),
-	{ok, Id} = pgsql:equery1(C, "insert into \""++Table++"\" default values returning id"),
-	return_connection(C, Context),
-	{ok, Id}.
+    C = get_connection(Context),
+    try
+        pgsql:equery1(C, "insert into \""++Table++"\" default values returning id")
+    after
+        return_connection(C, Context)
+    end.
 
 
 %% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
@@ -262,7 +279,6 @@ insert(Table, Props, Context) ->
     assert_table_name(Table),
     Cols = column_names(Table, Context),
     InsertProps = prepare_cols(Cols, Props),
-    C = get_connection(Context),
 
     InsertProps1 = case proplists:get_value(props, InsertProps) of
         undefined ->
@@ -284,13 +300,16 @@ insert(Table, Props, Context) ->
         false -> Sql
     end,
 
-    Id = case pgsql:equery1(C, FinalSql, Parameters) of
-            {ok, IdVal} -> IdVal;
-            {error, noresult} -> undefined
-         end,
-    return_connection(C, Context),
-    {ok, Id}.
-
+    C = get_connection(Context),
+    try
+        Id = case pgsql:equery1(C, FinalSql, Parameters) of
+                {ok, IdVal} -> IdVal;
+                {error, noresult} -> undefined
+             end,
+         {ok, Id}
+    after
+        return_connection(C, Context)
+    end.
 
 %% @doc Update a row in a table, merging the props list with any new props values
 %% @spec update(Table, Id, Parameters, Context) -> {ok, RowsUpdated}
@@ -301,31 +320,34 @@ update(Table, Id, Parameters, Context) ->
     Cols         = column_names(Table, Context),
     UpdateProps  = prepare_cols(Cols, Parameters),
     C            = get_connection(Context),
-    UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
-        true ->
-            % Merge the new props with the props in the database
-            {ok, OldProps} = pgsql:equery1(C, "select props from \""++Table++"\" where id = $1", [Id]),
-            case is_list(OldProps) of
-                true ->
-                    FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
-                    NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props, UpdateProps)),
-                    lists:keystore(props, 1, UpdateProps, {props, cleanup_props(NewProps)});
-                false ->
-                    UpdateProps
-            end;
-        false ->
-            UpdateProps
-    end,
+    try
+        UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
+            true ->
+                % Merge the new props with the props in the database
+                {ok, OldProps} = pgsql:equery1(C, "select props from \""++Table++"\" where id = $1", [Id]),
+                case is_list(OldProps) of
+                    true ->
+                        FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
+                        NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props, UpdateProps)),
+                        lists:keystore(props, 1, UpdateProps, {props, cleanup_props(NewProps)});
+                    false ->
+                        UpdateProps
+                end;
+            false ->
+                UpdateProps
+        end,
 
-    {ColNames,Params} = lists:unzip(UpdateProps1),
-    ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
+        {ColNames,Params} = lists:unzip(UpdateProps1),
+        ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
 
-    Sql = "update \""++Table++"\" set " 
-             ++ string:join([ "\"" ++ atom_to_list(ColName) ++ "\" = $" ++ integer_to_list(Nr) || {ColName, Nr} <- ColNamesNr ], ", ")
-             ++ " where id = $1",
-    {ok, RowsUpdated} = pgsql:equery1(C, Sql, [Id | Params]),
-    return_connection(C, Context),
-    {ok, RowsUpdated}.
+        Sql = "update \""++Table++"\" set " 
+                 ++ string:join([ "\"" ++ atom_to_list(ColName) ++ "\" = $" ++ integer_to_list(Nr) || {ColName, Nr} <- ColNamesNr ], ", ")
+                 ++ " where id = $1",
+        {ok, RowsUpdated} = pgsql:equery1(C, Sql, [Id | Params]),
+        {ok, RowsUpdated}
+    after
+        return_connection(C, Context)
+    end.
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
@@ -334,11 +356,14 @@ delete(Table, Id, Context) when is_atom(Table) ->
     delete(atom_to_list(Table), Id, Context);
 delete(Table, Id, Context) ->
     assert_table_name(Table),
-    C   = get_connection(Context),
-    Sql = "delete from \""++Table++"\" where id = $1", 
-    {ok, RowsDeleted} = pgsql:equery1(C, Sql, [Id]),
-    return_connection(C, Context),
-    {ok, RowsDeleted}.
+    C = get_connection(Context),
+    try
+        Sql = "delete from \""++Table++"\" where id = $1", 
+        {ok, RowsDeleted} = pgsql:equery1(C, Sql, [Id]),
+        {ok, RowsDeleted}
+    after
+        return_connection(C, Context)
+    end.
 
 
 
@@ -349,11 +374,14 @@ select(Table, Id, Context) when is_atom(Table) ->
     select(atom_to_list(Table), Id, Context);
 select(Table, Id, Context) ->
     assert_table_name(Table),
-    C   = get_connection(Context),
-    Sql = "select * from \""++Table++"\" where id = $1 limit 1", 
-    {ok, Row} = pgsql:assoc(C, Sql, [Id]),
-    return_connection(C, Context),
-
+    C = get_connection(Context),
+    {ok, Row} = try
+        Sql = "select * from \""++Table++"\" where id = $1 limit 1", 
+        pgsql:assoc(C, Sql, [Id])
+    after
+        return_connection(C, Context)
+    end,
+    
     Props = case Row of
         [R] ->
             case proplists:get_value(props, R) of
@@ -482,8 +510,11 @@ update_sequence(Table, Ids, Context) ->
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
     Updater = fun(Ctx) -> 
                 C = get_connection(Ctx),
-                [ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ],
-                return_connection(C, Ctx)
+                try
+                    [ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
+                after
+                    return_connection(C, Ctx)
+                end
             end,
     ok = transaction(Updater, Context).
 

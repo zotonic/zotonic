@@ -42,13 +42,13 @@ get_connection(P) ->
 
 %% @doc Get a db connection, wait at most Timeout seconds before giving up.
 get_connection(P, Timeout) ->
-	try
-    	gen_server:call(P, get_connection, Timeout)
-	catch 
-		_:_ ->
+    try
+        gen_server:call(P, get_connection, Timeout)
+    catch 
+        _:_ ->
             gen_server:cast(P, {cancel_wait, self()}),
             {error, timeout}
-	end.
+    end.
 
 %% @doc Return a db connection back to the connection pool.
 return_connection(P, C) ->
@@ -75,9 +75,9 @@ status(P) ->
 init({Name, Size, Opts}) ->
     process_flag(trap_exit, true),
     Id = case Name of 
-			undefined -> self();
-			_Name -> Name
-		 end,
+            undefined -> self();
+            _Name -> Name
+         end,
     Connections =
         case connect(Opts) of
             {ok, Connection} ->
@@ -86,7 +86,7 @@ init({Name, Size, Opts}) ->
                 error_logger:error_msg("Connection to PostgreSQL server refused."),
                 []
         end,
-	{ok, TRef} = timer:send_interval(60000, close_unused),
+    {ok, TRef} = timer:send_interval(60000, close_unused),
     State = #state{
       id          = Id,
       size        = Size,
@@ -101,18 +101,18 @@ init({Name, Size, Opts}) ->
 handle_call(get_connection, From, #state{connections = Connections, waiting = Waiting} = State) ->
     case Connections of
         [{C,_} | T] -> 
-			% Return existing unused connection
-			{noreply, deliver(From, C, State#state{connections = T})};
+            % Return existing unused connection
+            {noreply, deliver(From, C, State#state{connections = T})};
         [] ->
-			case length(State#state.monitors) < State#state.size of
-				true ->
-					% Allocate a new connection and return it.
-					{ok, C} = connect(State#state.opts),
-				    {noreply, deliver(From, C, State)};
-				false ->
-					% Reached max connections, let the requestor wait
-	 				{noreply, State#state{waiting = queue:in(From, Waiting)}}
-			end
+            case length(State#state.monitors) < State#state.size of
+                true ->
+                    % Allocate a new connection and return it.
+                    {ok, C} = connect(State#state.opts),
+                    {noreply, deliver(From, C, State)};
+                false ->
+                    % Reached max connections, let the requestor wait
+                    {noreply, State#state{waiting = queue:in(From, Waiting)}}
+            end
     end;
 
 %% Return the status of the connection pool
@@ -152,27 +152,32 @@ handle_cast(Request, State) ->
 
 %% Close all connections that are unused for longer than a minute.
 handle_info(close_unused, State) ->
-	Old = now_secs() - 60,
-	{Unused, Used} = lists:partition(fun({_C,Time}) -> Time < Old end, State#state.connections),
-	[ pgsql:close(C) || {C,_} <- Unused ],
-	{noreply, State#state{connections=Used}};
+    Old = now_secs() - 60,
+    {Unused, Used} = lists:partition(fun({_C,Time}) -> Time < Old end, State#state.connections),
+    [ pgsql:close(C) || {C,_} <- Unused ],
+    {noreply, State#state{connections=Used}};
 
 %% Requestor we are monitoring went down. Kill the associated connection, as it might be in an unknown state.
 handle_info({'DOWN', M, process, _Pid, _Info}, #state{monitors = Monitors} = State) ->
     case lists:keytake(M, 2, Monitors) of
         {value, {C, M}, Monitors2} ->
-			pgsql:close(C),
+            erlang:demonitor(M),
+            pgsql:close(C),
             {noreply, State#state{monitors = Monitors2}};
         false ->
             {noreply, State}
     end;
 
-%% One of our database connections went down. Clean up our administration.
+%% One of our database connections crashed. Clean up our administration.
 handle_info({'EXIT', ConnectionPid, _Reason}, State) ->
+    % Demonitor the process holding the connection
     #state{connections = Connections, monitors = Monitors} = State,
     Connections2 = proplists:delete(ConnectionPid, Connections),
-    F = fun({C, M}) when C == ConnectionPid -> erlang:demonitor(M), false;
-           ({_, _}) -> true
+    F = fun({C, M}) when C == ConnectionPid -> 
+                erlang:demonitor(M), 
+                false;
+           ({_, _}) ->
+                true
         end,
     Monitors2 = lists:filter(F, Monitors),
     {noreply, State#state{connections = Connections2, monitors = Monitors2}};
@@ -182,7 +187,7 @@ handle_info(Info, State) ->
     {stop, {unsupported_info, Info}, State}.
 
 terminate(_Reason, State) ->
-	timer:cancel(State#state.timer),
+    timer:cancel(State#state.timer),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -199,19 +204,21 @@ connect(Opts) ->
     {ok, Conn}.
 
 deliver({Pid,_Tag} = From, C, #state{monitors=Monitors} = State) ->
-    %%error_logger:info_msg("Deliver"),
+    % Monitor the requesting process, demonitor is done on {return_connection, C}
     M = erlang:monitor(process, Pid),
-	gen_server:reply(From, {ok, C}),
-	State#state{ monitors=[{C, M} | Monitors] }.
+    gen_server:reply(From, {ok, C}),
+    State#state{ monitors=[{C, M} | Monitors] }.
 
 return(C, #state{connections = Connections, waiting = Waiting} = State) ->
     case queue:out(Waiting) of
         {{value, From}, Waiting2} ->
+            % Reached max connections, give connection to the next waiting
             State2 = deliver(From, C, State),
             State2#state{waiting = Waiting2};
         {empty, _Waiting} ->
+            % No process waiting for connection, put back in connection pool
             Connections2 = [{C, now_secs()} | Connections],
-            State#state{connections = Connections2}
+            State#state{connections=Connections2}
     end.
 
 
