@@ -34,7 +34,7 @@
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
 observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         undefined -> undefined;
@@ -45,16 +45,25 @@ observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
                     %% Let media preview handle this.
                     undefined;
                 false ->
-                    %% Serve an existing icon.
+                    %% Serve an icon representing the mime type.
                     [A,B] = string:tokens(z_convert:to_list(Mime), "/"),
-                    case z_module_indexer:find(lib, "images/mimeicons/"++A++[$-,B]++".png", Context) of
-                        {ok, File} -> {ok, File};
-                        {error, enoent} ->
-                            case z_module_indexer:find(lib, "images/mimeicons/"++A++".png", Context) of
-                                {ok, File} -> {ok, File};
-                                {error, enoent} -> {ok, "lib/images/mimeicons/application-octet-stream.png"}
-                            end
-                    end
+                    Files = [
+                        "images/mimeicons/"++A++[$-,B]++".png",
+                        "images/mimeicons/"++A++".png",
+                        "images/mimeicons/application-octet-stream.png"
+                    ],
+                    
+                    lists:foldl(
+                        fun(F, undefined) ->
+                                case z_module_indexer:find(lib, F, Context) of
+                                    {ok, File} -> {ok, {filepath, "lib/"++F, File}};
+                                    {error, enoent} -> undefined
+                                end;
+                           (_F, Result) ->
+                               Result
+                        end,
+                        undefined,
+                        Files)
             end
     end.
 

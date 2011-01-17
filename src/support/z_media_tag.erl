@@ -66,7 +66,7 @@ viewer([{_Prop, _Value}|_] = Props, Options, Context) ->
     end;
 viewer(Filename, Options, Context) when is_binary(Filename) ->
     viewer(binary_to_list(Filename), Options, Context);
-viewer(Filename, Options, Context) when is_list(Filename) ->
+viewer(Filename, Options, Context) ->
     FilePath = filename_to_filepath(Filename, Context),
     case z_media_identify:identify(FilePath) of
         {ok, Props} ->
@@ -121,9 +121,13 @@ tag(Filename, Options, Context) when is_binary(Filename) ->
     tag(binary_to_list(Filename), Options, Context);
 tag(Filename, Options, Context) when is_list(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
+    tag1(FilePath, Filename, Options, Context);
+tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
     
 
+    tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
+        tag1(FilePath, Filename, Options, Context);
     tag1(MediaRef, Filename, Options, Context) ->
         {url, Url, TagOpts, ImageOpts} = url1(Filename, Options, Context),
         % Calculate the real size of the image using the options
