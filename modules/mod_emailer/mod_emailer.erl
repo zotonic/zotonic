@@ -174,12 +174,21 @@ poll_queued(State) ->
 
 send_queued(Cols, State) ->
     {id, Id} = proplists:lookup(id, Cols),
-	{email, Email} = proplists:lookup(email, Cols),
+    {email, Email} = proplists:lookup(email, Cols),
     {context, PickledContext} = proplists:lookup(context, Cols),
     Context = z_context:depickle(PickledContext),
+    Context1 = case z_acl:user(Context) of
+                    undefined ->
+                        Context;
+                    UserId ->
+                        case m_rsc:p_no_acl(UserId, pref_language, Context) of
+                            undefined -> Context;
+                            Code -> z_context:set_language(Code, Context)
+                        end
+               end,
     {retry, Retry} = proplists:lookup(retry, Cols),
-    mark_retry(Id, Retry, Context),
-	spawn_send(Id, Email, Context, State).
+    mark_retry(Id, Retry, Context1),
+    spawn_send(Id, Email, Context1, State).
 
 
 spawn_send(Id, Email, Context, State) ->
