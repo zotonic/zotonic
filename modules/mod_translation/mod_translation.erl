@@ -27,6 +27,7 @@
 -export([
     observe_session_init_fold/3,
     observe_session_context/3,
+    observe_auth_logon/3,
     
     init/1, 
     event/2,
@@ -92,8 +93,22 @@ observe_session_context(session_context, Context, _Context) ->
         Language -> Context#context{language=Language}
     end.
 
+observe_auth_logon(auth_logon, Context, _Context) ->
+    UserId = z_acl:user(Context),
+    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+        undefined ->
+            % Ensure that the user has a default language
+            catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
+            Context;
+        Code -> 
+            % Switch the session to the default language of the user
+            List = get_language_config(Context),
+            Context1 = set_language(z_convert:to_list(Code), List, Context),
+            z_context:set_persistent(language, z_context:language(Context1), Context1),
+            Context1
+    end.
 
-%% @doc Set the current session language, reload the user agent's page.
+%% @doc Set the current session (and user) language, reload the user agent's page.
 event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
     Code = case proplists:get_value(code, Args) of
                 undefined -> z_context:get_q("triggervalue", Context);
@@ -102,6 +117,15 @@ event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
     List = get_language_config(Context),
     Context1 = set_language(z_convert:to_list(Code), List, Context),
     z_context:set_persistent(language, z_context:language(Context1), Context1),
+    case z_acl:user(Context1) of
+        undefined -> 
+            nop;
+        UserId ->
+            case m_rsc:p_no_acl(UserId, pref_language, Context1) of
+                Code -> nop;
+                _ -> catch m_rsc:update(UserId, [{pref_language, Code}], Context1)
+            end
+    end,
     z_render:wire({reload, []}, Context1);
 
 %% @doc Set the default language.
