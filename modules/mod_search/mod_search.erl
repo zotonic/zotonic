@@ -218,7 +218,7 @@ search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
 
 search({archive_year_month, [{cat,Cat}]}, OffsetLimit, Context) ->
     Q = #search_sql{
-      select="date_part('year', r.publication_start)::varchar as year, date_part('month', r.publication_start)::varchar as month, count(*) as count",
+      select="date_part('year', r.publication_start)::int as year, date_part('month', r.publication_start)::int as month, count(*) as count",
       from="rsc r",
       tables=[{rsc, "r"}],
       assoc=true,
