@@ -37,5 +37,7 @@ filesizeformat(N, _Context) when is_integer(N) ->
     case N2 of
         0 -> [integer_to_list(N1), " MB"];
         _ -> [integer_to_list(N1),$.,integer_to_list(N2), " MB"]
-    end.
+    end;
+filesizeformat(_, _Context) ->
+    undefined.
     
