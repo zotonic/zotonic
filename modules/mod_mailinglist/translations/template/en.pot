@@ -85,6 +85,11 @@ msgid ""
 "After publication this page will be send to the following mailing lists:"
 msgstr ""
 
+#: ./modules/mod_mailinglist/templates/mailinglist.tpl:18 
+msgid ""
+"All mailing lists"
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22 
 msgid ""
 "All recipients of the mailing list. You can upload or download this list, "
@@ -255,7 +260,7 @@ msgid ""
 "Mailing list settings."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:30 ./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:39 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:9 ./modules/mod_mailinglist/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:9 ./modules/mod_mailinglist/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Mailing lists"
 msgstr ""
@@ -273,11 +278,6 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:51 
 msgid ""
 "No items found"
-msgstr ""
-
-#: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:41 ./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:50 
-msgid ""
-"No mailing lists"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56 
@@ -443,7 +443,7 @@ msgstr ""
 
 #: ./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:21 
 msgid ""
-"Subscribe "
+"Subscribe"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36 
@@ -496,6 +496,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:21 
 msgid ""
 "Title"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:15 
+msgid ""
+"Unsubscribe"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12 
@@ -623,6 +628,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:40 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57 
 msgid ""
 "edit"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12 
+msgid ""
+"mailing list"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:5 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:5 

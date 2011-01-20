@@ -15,7 +15,7 @@
 
 			{{ m.rsc[id].body }}
 			
-			<h2>All mailing lists</h2>
+			<h2>{_ All mailing lists _}</h2>
 
 			{% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
 				{% ifnotequal m.rsc[id].name "mailinglist_test" %}

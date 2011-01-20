@@ -5,7 +5,7 @@
 {% block content %}
 
 <section id="content-wrapper" class="clearfix">
-	<article id="content" class="zp-80">
+	<article id="content" class="zp-100">
 		<div class="padding">
 		{% with m.mailinglist.confirm_key[q.confirm_key] as confirm %}
 			{% if confirm.mailinglist_id and confirm.email %}
@@ -18,7 +18,7 @@
 				<p>{_ Click the button below to confirm your subscription to this mailing list. _}</p>
 				 
 				<div id="confirm">
-					{% button text=[_"Subscribe ", confirm.email|force_escape] 
+					{% button text=_"Subscribe"
 							action={mailinglist_confirm confirm_key=q.confirm_key 
 									on_success={update target="confirm" text=_"<p>Thank you. You are now subscribed.</p>"}
 									on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try to re-subscribe.</p>"}} %}
@@ -34,23 +34,6 @@
 		{% endwith %}
 		</div>
 	</article>
-	
-	<aside id="sidebar" class="zp-20">
-		<h2>{_ Mailing lists _}</h2>
-		
-		<ul>
-		{% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
-			{% ifnotequal m.rsc[id].name "mailinglist_test" %}
-				<li>
-					<h3><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h3>
-					<p>{{ m.rsc[id].summary }}</p>
-				</li>
-			{% endifnotequal %}
-		{% empty %}
-			<li>{_ No mailing lists _}</li>
-		{% endfor %}
-		</ul>
-	</aside>
 </section>
 
 {% endblock %}
