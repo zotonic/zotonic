@@ -28,7 +28,6 @@
 	{modules, [
 			zotonic_status,
 			mod_base,
-			mod_translation,
 			mod_zotonic_status_mercurial,
                         mod_zotonic_tracer
 		]},
