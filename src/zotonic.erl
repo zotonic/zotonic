@@ -40,7 +40,7 @@ start(_Args) ->
     zotonic_deps:ensure(),
     ensure_started(crypto),
     ensure_started(webmachine),
-    application:start(zotonic).
+    ok = application:start(zotonic).
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
