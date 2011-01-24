@@ -181,7 +181,8 @@ props_to_rsc(Props, IsVerified, Context) ->
         {visible_for, VisibleFor},
         {category, Category},
         {is_verified_account, IsVerified},
-        {creator_id, self}
+        {creator_id, self},
+        {pref_language, z_context:language(Context)}
         | Props
     ],
     case proplists:is_defined(title, Props1) of
