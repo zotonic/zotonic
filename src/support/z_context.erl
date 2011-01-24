@@ -689,6 +689,8 @@ set_persistent(Key, Value, Context) ->
 
 %% @spec get_persistent(Key, Context) -> Value
 %% @doc Fetch the value of the visitor variable Key
+get_persistent(_Key, #context{session_pid=undefined}) ->
+    undefined;
 get_persistent(Key, Context) ->
     z_session:get_persistent(Key, Context).
 
