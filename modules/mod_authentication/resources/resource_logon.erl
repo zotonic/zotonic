@@ -371,6 +371,7 @@ send_reminder([Id|Ids], Context, Acc) ->
 		[] -> send_reminder(Ids, Context, Acc);
 		Email -> 
 			Vars = [
+			    {recipient_id, Id},
 				{id, Id},
 				{secret, set_reminder_secret(Id, Context)},
 				{username, m_identity:get_username(Id, Context)},

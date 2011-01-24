@@ -177,14 +177,14 @@ send_queued(Cols, State) ->
     {email, Email} = proplists:lookup(email, Cols),
     {context, PickledContext} = proplists:lookup(context, Cols),
     Context = z_context:depickle(PickledContext),
-    Context1 = case z_acl:user(Context) of
-                    undefined ->
-                        Context;
-                    UserId ->
+    Context1 = case proplists:get_value(recipient_id, Email#email.vars) of
+                    UserId when is_integer(UserId) ->
                         case m_rsc:p_no_acl(UserId, pref_language, Context) of
-                            undefined -> Context;
-                            Code -> z_context:set_language(Code, Context)
-                        end
+                            Code when is_atom(Code), Code /= undefined -> z_context:set_language(Code, Context);
+                            _ -> Context
+                        end;
+                    _Other ->
+                        Context
                end,
     {retry, Retry} = proplists:lookup(retry, Cols),
     mark_retry(Id, Retry, Context1),
