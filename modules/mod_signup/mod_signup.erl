@@ -213,6 +213,7 @@ send_verify_email(UserId, Ident, Context) ->
     Email = proplists:get_value(key, Ident),
     {ok, Key} = m_identity:set_verify_key(proplists:get_value(id, Ident), Context),
     Vars = [
+        {recipient_id, UserId},
         {user_id, UserId},
         {email, Email},
         {verify_key, Key}
