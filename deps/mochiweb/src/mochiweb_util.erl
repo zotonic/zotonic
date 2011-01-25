@@ -9,7 +9,7 @@
 -export([path_split/1]).
 -export([urlsplit/1, urlsplit_path/1, urlunsplit/1, urlunsplit_path/1]).
 -export([guess_mime/1, parse_header/1]).
--export([shell_quote/1, cmd/1, cmd_string/1, cmd_port/2]).
+-export([shell_quote/1, cmd/1, cmd_string/1, cmd_port/2, cmd_status/1, cmd_status/2]).
 -export([record_to_proplist/2, record_to_proplist/3]).
 -export([safe_relative_path/1, partition/2]).
 -export([parse_qvalues/1, pick_accepted_encodings/3]).
@@ -117,12 +117,49 @@ cmd(Argv) ->
 cmd_string(Argv) ->
     string:join([shell_quote(X) || X <- Argv], " ").
 
-%% @spec join([string()], Separator) -> string()
-%% @doc Deprecated, use string:join/2.
-join(Strings, Separator) when is_integer(Separator) ->
-    lists:flatten(string:join(Strings, [Separator]));
-join(Strings, Separator) when is_list(Separator) ->
-    lists:flatten(string:join(Strings, Separator)).
+%% @spec cmd_status([string()]) -> {ExitStatus::integer(), Stdout::binary()}
+%% @doc Accumulate the output and exit status from the given application,
+%%      will be spawned with cmd_port/2.
+cmd_status(Argv) ->
+    cmd_status(Argv, []).
+
+%% @spec cmd_status([string()], [atom()]) -> {ExitStatus::integer(), Stdout::binary()}
+%% @doc Accumulate the output and exit status from the given application,
+%%      will be spawned with cmd_port/2.
+cmd_status(Argv, Options) ->
+    Port = cmd_port(Argv, [exit_status, stderr_to_stdout,
+                           use_stdio, binary | Options]),
+    try cmd_loop(Port, [])
+    after catch port_close(Port)
+    end.
+
+%% @spec cmd_loop(port(), list()) -> {ExitStatus::integer(), Stdout::binary()}
+%% @doc Accumulate the output and exit status from a port.
+cmd_loop(Port, Acc) ->
+    receive
+        {Port, {exit_status, Status}} ->
+            {Status, iolist_to_binary(lists:reverse(Acc))};
+        {Port, {data, Data}} ->
+            cmd_loop(Port, [Data | Acc])
+    end.
+
+%% @spec join([iolist()], iolist()) -> iolist()
+%% @doc Join a list of strings or binaries together with the given separator
+%%      string or char or binary. The output is flattened, but may be an
+%%      iolist() instead of a string() if any of the inputs are binary().
+join([], _Separator) ->
+    [];
+join([S], _Separator) ->
+    lists:flatten(S);
+join(Strings, Separator) ->
+    lists:flatten(revjoin(lists:reverse(Strings), Separator, [])).
+
+revjoin([], _Separator, Acc) ->
+    Acc;
+revjoin([S | Rest], Separator, []) ->
+    revjoin(Rest, Separator, [S]);
+revjoin([S | Rest], Separator, Acc) ->
+    revjoin(Rest, Separator, [S, Separator | Acc]).
 
 %% @spec quote_plus(atom() | integer() | float() | string() | binary()) -> string()
 %% @doc URL safe encoding of the given term.
@@ -383,7 +420,8 @@ shell_quote([C | Rest], Acc) ->
     shell_quote(Rest, [C | Acc]).
 
 %% @spec parse_qvalues(string()) -> [qvalue()] | invalid_qvalue_string
-%% @type qvalue() = {encoding(), float()}.
+%% @type qvalue() = {media_type() | encoding() , float()}.
+%% @type media_type() = string().
 %% @type encoding() = string().
 %%
 %% @doc Parses a list (given as a string) of elements with Q values associated
@@ -391,7 +429,7 @@ shell_quote([C | Rest], Acc) ->
 %%      from its Q value by a semicolon. Q values are optional but when missing
 %%      the value of an element is considered as 1.0. A Q value is always in the
 %%      range [0.0, 1.0]. A Q value list is used for example as the value of the
-%%      HTTP "Accept-Encoding" header.
+%%      HTTP "Accept" and "Accept-Encoding" headers.
 %%
 %%      Q values are described in section 2.9 of the RFC 2616 (HTTP 1.1).
 %%
@@ -402,35 +440,58 @@ shell_quote([C | Rest], Acc) ->
 %%
 parse_qvalues(QValuesStr) ->
     try
-        {ok, Re} = re:compile("^\\s*q\\s*=\\s*((?:0|1)(?:\\.\\d{1,3})?)\\s*$"),
         lists:map(
             fun(Pair) ->
-                case string:tokens(Pair, ";") of
-                    [Enc] ->
-                        {string:strip(Enc), 1.0};
-                    [Enc, QStr] ->
-                        case re:run(QStr, Re, [{capture, [1], list}]) of
-                            {match, [Q]} ->
-                                QVal = case Q of
-                                    "0" ->
-                                        0.0;
-                                    "1" ->
-                                        1.0;
-                                    Else ->
-                                        list_to_float(Else)
-                                end,
-                                case QVal < 0.0 orelse QVal > 1.0 of
-                                    false ->
-                                        {string:strip(Enc), QVal}
-                                end
-                        end
-                end
+                [Type | Params] = string:tokens(Pair, ";"),
+                NormParams = normalize_media_params(Params),
+                {Q, NonQParams} = extract_q(NormParams),
+                {string:join([string:strip(Type) | NonQParams], ";"), Q}
             end,
             string:tokens(string:to_lower(QValuesStr), ",")
         )
     catch
         _Type:_Error ->
             invalid_qvalue_string
+    end.
+
+normalize_media_params(Params) ->
+    {ok, Re} = re:compile("\\s"),
+    normalize_media_params(Re, Params, []).
+
+normalize_media_params(_Re, [], Acc) ->
+    lists:reverse(Acc);
+normalize_media_params(Re, [Param | Rest], Acc) ->
+    NormParam = re:replace(Param, Re, "", [global, {return, list}]),
+    normalize_media_params(Re, Rest, [NormParam | Acc]).
+
+extract_q(NormParams) ->
+    {ok, KVRe} = re:compile("^([^=]+)=([^=]+)$"),
+    {ok, QRe} = re:compile("^((?:0|1)(?:\\.\\d{1,3})?)$"),
+    extract_q(KVRe, QRe, NormParams, []).
+
+extract_q(_KVRe, _QRe, [], Acc) ->
+    {1.0, lists:reverse(Acc)};
+extract_q(KVRe, QRe, [Param | Rest], Acc) ->
+    case re:run(Param, KVRe, [{capture, [1, 2], list}]) of
+        {match, [Name, Value]} ->
+            case Name of
+            "q" ->
+                {match, [Q]} = re:run(Value, QRe, [{capture, [1], list}]),
+                QVal = case Q of
+                    "0" ->
+                        0.0;
+                    "1" ->
+                        1.0;
+                    Else ->
+                        list_to_float(Else)
+                end,
+                case QVal < 0.0 orelse QVal > 1.0 of
+                false ->
+                    {QVal, lists:reverse(Acc) ++ Rest}
+                end;
+            _ ->
+                extract_q(KVRe, QRe, Rest, [Param | Acc])
+            end
     end.
 
 %% @spec pick_accepted_encodings([qvalue()], [encoding()], encoding()) ->
@@ -517,8 +578,8 @@ make_io(Io) when is_list(Io); is_binary(Io) ->
 %%
 %% Tests
 %%
--include_lib("eunit/include/eunit.hrl").
 -ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
 
 make_io_test() ->
     ?assertEqual(
@@ -552,18 +613,20 @@ record_to_proplist_test() ->
     ok.
 
 shell_quote_test() ->
-    "\"foo \\$bar\\\"\\`' baz\"" = shell_quote("foo $bar\"`' baz"),
+    ?assertEqual(
+       "\"foo \\$bar\\\"\\`' baz\"",
+       shell_quote("foo $bar\"`' baz")),
     ok.
 
 cmd_port_test_spool(Port, Acc) ->
     receive
-	{Port, eof} ->
-	    Acc;
-	{Port, {data, {eol, Data}}} ->
+        {Port, eof} ->
+            Acc;
+        {Port, {data, {eol, Data}}} ->
             cmd_port_test_spool(Port, ["\n", Data | Acc]);
         {Port, Unknown} ->
             throw({unknown, Unknown})
-    after 100 ->
+    after 1000 ->
             throw(timeout)
     end.
 
@@ -585,12 +648,23 @@ cmd_port_test() ->
        Res).
 
 cmd_test() ->
-    "$bling$ `word`!\n" = cmd(["echo", "$bling$ `word`!"]),
+    ?assertEqual(
+       "$bling$ `word`!\n",
+       cmd(["echo", "$bling$ `word`!"])),
     ok.
 
 cmd_string_test() ->
-    "\"echo\" \"\\$bling\\$ \\`word\\`!\"" = cmd_string(["echo", "$bling$ `word`!"]),
+    ?assertEqual(
+       "\"echo\" \"\\$bling\\$ \\`word\\`!\"",
+       cmd_string(["echo", "$bling$ `word`!"])),
     ok.
+
+cmd_status_test() ->
+    ?assertEqual(
+       {0, <<"$bling$ `word`!\n">>},
+       cmd_status(["echo", "$bling$ `word`!"])),
+    ok.
+
 
 parse_header_test() ->
     ?assertEqual(
@@ -666,6 +740,12 @@ join_test() ->
                   join(["foo"], ",")),
     ?assertEqual("foobarbaz",
                   join(["foo", "bar", "baz"], "")),
+    ?assertEqual("foo" ++ [<<>>] ++ "bar" ++ [<<>>] ++ "baz",
+                 join(["foo", "bar", "baz"], <<>>)),
+    ?assertEqual("foobar" ++ [<<"baz">>],
+                 join(["foo", "bar", <<"baz">>], "")),
+    ?assertEqual("",
+                 join([], "any")),
     ok.
 
 quote_plus_test() ->
@@ -772,11 +852,20 @@ parse_qvalues_test() ->
     ),
     [{"gzip", 0.5}, {"deflate", 1.0}, {"identity", 1.0}, {"identity", 1.0}] =
         parse_qvalues("gzip; q=0.5,deflate,identity, identity "),
+    [{"text/html;level=1", 1.0}, {"text/plain", 0.5}] =
+        parse_qvalues("text/html;level=1, text/plain;q=0.5"),
+    [{"text/html;level=1", 0.3}, {"text/plain", 1.0}] =
+        parse_qvalues("text/html;level=1;q=0.3, text/plain"),
+    [{"text/html;level=1", 0.3}, {"text/plain", 1.0}] =
+        parse_qvalues("text/html; level = 1; q = 0.3, text/plain"),
+    [{"text/html;level=1", 0.3}, {"text/plain", 1.0}] =
+        parse_qvalues("text/html;q=0.3;level=1, text/plain"),
     invalid_qvalue_string = parse_qvalues("gzip; q=1.1, deflate"),
     invalid_qvalue_string = parse_qvalues("gzip; q=0.5, deflate;q=2"),
     invalid_qvalue_string = parse_qvalues("gzip, deflate;q=AB"),
     invalid_qvalue_string = parse_qvalues("gzip; q=2.1, deflate"),
     invalid_qvalue_string = parse_qvalues("gzip; q=0.1234, deflate"),
+    invalid_qvalue_string = parse_qvalues("text/html;level=1;q=0.3, text/html;level"),
     ok.
 
 pick_accepted_encodings_test() ->

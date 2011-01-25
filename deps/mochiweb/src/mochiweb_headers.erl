@@ -24,8 +24,8 @@ empty() ->
 %% @doc Construct a headers() from the given list.
 make(L) when is_list(L) ->
     from_list(L);
-%% assume a tuple is already mochiweb_headers.
-make(T) when is_tuple(T) ->
+%% assume a non-list is already mochiweb_headers.
+make(T) ->
     T.
 
 %% @spec from_binary(iolist()) -> headers()
@@ -195,8 +195,8 @@ any_to_list(V) when is_integer(V) ->
 %%
 %% Tests.
 %%
--include_lib("eunit/include/eunit.hrl").
 -ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
 
 make_test() ->
     Identity = make([{hdr, foo}]),
