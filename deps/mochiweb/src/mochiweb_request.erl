@@ -21,6 +21,7 @@
 -export([parse_cookie/0, get_cookie_value/1]).
 -export([serve_file/2, serve_file/3]).
 -export([accepted_encodings/1]).
+-export([accepts_content_type/1]).
 
 -define(SAVE_QS, mochiweb_request_qs).
 -define(SAVE_PATH, mochiweb_request_path).
@@ -39,8 +40,8 @@
 %% @type response(). A mochiweb_response parameterized module instance.
 %% @type ioheaders() = headers() | [{key(), value()}].
 
-% 10 second default idle timeout
--define(IDLE_TIMEOUT, 10000).
+% 5 minute default idle timeout
+-define(IDLE_TIMEOUT, 300000).
 
 % Maximum recv_body() length of 1MB
 -define(MAX_RECV_BODY, (1024*1024)).
@@ -95,7 +96,9 @@ get(peer) ->
                     string:strip(lists:last(string:tokens(Hosts, ",")))
             end;
         {ok, {Addr, _Port}} ->
-            inet_parse:ntoa(Addr)
+            inet_parse:ntoa(Addr);
+        {error, enotconn} ->
+            exit(normal)
     end;
 get(path) ->
     case erlang:get(?SAVE_PATH) of
@@ -189,20 +192,24 @@ recv_body() ->
 %% @doc Receive the body of the HTTP request (defined by Content-Length).
 %%      Will receive up to MaxBody bytes.
 recv_body(MaxBody) ->
-    % we could use a sane constant for max chunk size
-    Body = stream_body(?MAX_RECV_BODY, fun
-        ({0, _ChunkedFooter}, {_LengthAcc, BinAcc}) ->
-            iolist_to_binary(lists:reverse(BinAcc));
-        ({Length, Bin}, {LengthAcc, BinAcc}) ->
-            NewLength = Length + LengthAcc,
-            if NewLength > MaxBody ->
-                exit({body_too_large, chunked});
-            true ->
-                {NewLength, [Bin | BinAcc]}
-            end
-        end, {0, []}, MaxBody),
-    put(?SAVE_BODY, Body),
-    Body.
+    case erlang:get(?SAVE_BODY) of
+        undefined ->
+            % we could use a sane constant for max chunk size
+            Body = stream_body(?MAX_RECV_BODY, fun
+                ({0, _ChunkedFooter}, {_LengthAcc, BinAcc}) ->
+                    iolist_to_binary(lists:reverse(BinAcc));
+                ({Length, Bin}, {LengthAcc, BinAcc}) ->
+                    NewLength = Length + LengthAcc,
+                    if NewLength > MaxBody ->
+                        exit({body_too_large, chunked});
+                    true ->
+                        {NewLength, [Bin | BinAcc]}
+                    end
+                end, {0, []}, MaxBody),
+            put(?SAVE_BODY, Body),
+            Body;
+        Cached -> Cached
+    end.
 
 stream_body(MaxChunkSize, ChunkFun, FunState) ->
     stream_body(MaxChunkSize, ChunkFun, FunState, undefined).
@@ -238,9 +245,7 @@ stream_body(MaxChunkSize, ChunkFun, FunState, MaxBodyLength) ->
                 exit({body_too_large, content_length});
             _ ->
                 stream_unchunked_body(Length, ChunkFun, FunState)
-            end;
-        Length ->
-            exit({length_not_integer, Length})
+            end
     end.
 
 
@@ -375,8 +380,8 @@ ok({ContentType, ResponseHeaders, Body}) ->
 %% @doc Return true if the connection must be closed. If false, using
 %%      Keep-Alive should be safe.
 should_close() ->
-    ForceClose = erlang:get(mochiweb_request_force_close) =/= undefined,
-    DidNotRecv = erlang:get(mochiweb_request_recv) =:= undefined,
+    ForceClose = erlang:get(?SAVE_FORCE_CLOSE) =/= undefined,
+    DidNotRecv = erlang:get(?SAVE_RECV) =:= undefined,
     ForceClose orelse Version < {1, 0}
         %% Connection: close
         orelse get_header_value("connection") =:= "close"
@@ -398,6 +403,7 @@ cleanup() ->
                        ?SAVE_PATH,
                        ?SAVE_RECV,
                        ?SAVE_BODY,
+                       ?SAVE_BODY_LENGTH,
                        ?SAVE_POST,
                        ?SAVE_COOKIE,
                        ?SAVE_FORCE_CLOSE]],
@@ -701,9 +707,61 @@ accepted_encodings(SupportedEncodings) ->
             )
     end.
 
+%% @spec accepts_content_type(string() | binary()) -> boolean() | bad_accept_header
+%%
+%% @doc Determines whether a request accepts a given media type by analyzing its
+%%      "Accept" header.
+%%
+%%      Examples
+%%
+%%      1) For a missing "Accept" header:
+%%         accepts_content_type("application/json") -> true
+%%
+%%      2) For an "Accept" header with value "text/plain, application/*":
+%%         accepts_content_type("application/json") -> true
+%%
+%%      3) For an "Accept" header with value "text/plain, */*; q=0.0":
+%%         accepts_content_type("application/json") -> false
+%%
+%%      4) For an "Accept" header with value "text/plain; q=0.5, */*; q=0.1":
+%%         accepts_content_type("application/json") -> true
+%%
+%%      5) For an "Accept" header with value "text/*; q=0.0, */*":
+%%         accepts_content_type("text/plain") -> false
+%%
+accepts_content_type(ContentType) when is_binary(ContentType) ->
+    accepts_content_type(binary_to_list(ContentType));
+accepts_content_type(ContentType1) ->
+    ContentType = re:replace(ContentType1, "\\s", "", [global, {return, list}]),
+    AcceptHeader = case get_header_value("Accept") of
+        undefined ->
+            "*/*";
+        Value ->
+            Value
+    end,
+    case mochiweb_util:parse_qvalues(AcceptHeader) of
+        invalid_qvalue_string ->
+            bad_accept_header;
+        QList ->
+            [MainType, _SubType] = string:tokens(ContentType, "/"),
+            SuperType = MainType ++ "/*",
+            lists:any(
+                fun({"*/*", Q}) when Q > 0.0 ->
+                        true;
+                    ({Type, Q}) when Q > 0.0 ->
+                        Type =:= ContentType orelse Type =:= SuperType;
+                    (_) ->
+                        false
+                end,
+                QList
+            ) andalso
+            (not lists:member({ContentType, 0.0}, QList)) andalso
+            (not lists:member({SuperType, 0.0}, QList))
+    end.
+
 %%
 %% Tests
 %%
--include_lib("eunit/include/eunit.hrl").
 -ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
 -endif.
