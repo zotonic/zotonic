@@ -74,6 +74,6 @@ show_template(ReqData, Code, ErrorDump) ->
         {Output, _} = z_context:output(Html, Context),
         {Output, RD2}
     catch
-        _:_ -> {<<>>,RD2}
+        _:_Reason -> {<<>>,RD2}
     end.
 
