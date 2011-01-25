@@ -181,7 +181,8 @@ props_to_rsc(Props, IsVerified, Context) ->
         {visible_for, VisibleFor},
         {category, Category},
         {is_verified_account, IsVerified},
-        {creator_id, self}
+        {creator_id, self},
+        {pref_language, z_context:language(Context)}
         | Props
     ],
     case proplists:is_defined(title, Props1) of
@@ -213,6 +214,7 @@ send_verify_email(UserId, Ident, Context) ->
     Email = proplists:get_value(key, Ident),
     {ok, Key} = m_identity:set_verify_key(proplists:get_value(id, Ident), Context),
     Vars = [
+        {recipient_id, UserId},
         {user_id, UserId},
         {email, Email},
         {verify_key, Key}
