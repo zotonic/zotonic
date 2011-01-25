@@ -41,7 +41,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 event({postback, {config_toggle, Module, Key}, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            ok = m_config:set_value(Module, Key, z_context:get_q("triggervalue", Context), Context),
+            m_config:set_value(Module, Key, z_context:get_q("triggervalue", Context), Context),
             z_render:growl("Changed config setting.", Context);
         false ->
             z_render:growl_error("Only administrators can change configurations.", Context)
