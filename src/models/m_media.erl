@@ -204,6 +204,10 @@ replace(Id, Props, Context) ->
 insert_file(File, Context) ->
     insert_file(File, [], Context).
 
+insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, Context) ->
+    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    insert_file(TmpFile, [{original_filename, OriginalFilename}|Props], PropsMedia, Context);
+
 insert_file(File, Props, Context) ->
     OriginalFilename = proplists:get_value(original_filename, Props, File),
     PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
