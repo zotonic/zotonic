@@ -773,18 +773,14 @@ get_all(Context) ->
     Context#context.props.
 
 
-%% @spec incr_session(Key, Increment, Context) -> {NewValue,NewContext}
+%% @spec incr(Key, Increment, Context) -> {NewValue,NewContext}
 %% @doc Increment the context variable Key
 incr(Key, Value, Context) ->
-    case z_convert:to_integer(get(Key, Context)) of
-        undefined ->
-            set(Key, Value, Context),
-            Value;
-        N ->
-            R = N+Value,
-            set(Key, R, Context),
-            R
-    end.
+    R = case z_convert:to_integer(get(Key, Context)) of
+	    undefined -> Value;
+	    N -> N + Value
+	end,
+    {R, set(Key, R, Context)}.
 
 
 %% @doc Return the selected language of the Context
