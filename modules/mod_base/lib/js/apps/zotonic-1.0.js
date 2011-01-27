@@ -5,7 +5,7 @@
 @Author:	Tim Benniks <tim@timbenniks.nl>
 @Author:	Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2010 Tim Benniks, Marc Worrell
+Copyright 2009-2011 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ var z_default_form_postback = false;
 var z_input_updater			= false;
 var z_drag_tag				= [];
 var z_registered_events		= new Object();
+var z_on_visible_checks		= [];
+var z_on_visible_timer		= undefined;
 
 
 /* Non modal dialogs
@@ -538,6 +540,49 @@ function z_typeselect(ElementId, postbackInfo)
 	}, 400);
 }
 
+
+/* Lazy loading of content, based on visibility of an element
+---------------------------------------------------------- */
+
+function z_on_visible(CssSelector, Func)
+{
+	z_on_visible_checks.push({selector: CssSelector, func: Func});
+	if (z_on_visible_timer == undefined) {
+		z_on_visible_timer = setInterval(function() {
+			z_on_visible_check();
+		}, 350);
+	}
+}
+
+function z_on_visible_check()
+{
+	for (var i = z_on_visible_checks.length-1; i>=0; i--) {
+		var elt = $(z_on_visible_checks[i].selector).get(0);
+		if (elt != undefined) {
+			if ($(elt).is(":visible") && isScrolledIntoView(elt)) {
+				z_on_visible_checks[i].func.call(elt);
+				z_on_visible_checks.splice(i, 1);
+			}
+		}
+	}
+	if (z_on_visible_checks.length == 0) {
+		clearInterval(z_on_visible_timer);
+		z_on_visible_timer = undefined;
+	}
+}
+
+
+function isScrolledIntoView(elem)
+{
+	var docViewTop = $(window).scrollTop();
+	var docViewBottom = docViewTop + $(window).height();
+
+	var elemTop = $(elem).offset().top;
+	var elemBottom = elemTop + $(elem).height();
+
+	return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
+	// && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop);
+}
 
 /* Form element validations
 ----------------------------------------------------------
