@@ -70,6 +70,11 @@ render_action(TriggerId, TargetId, Args, Context) ->
                         PostbackMsgJS, ActionsJS
                     ];
                     
+                EventType == visible orelse EventType == "visible" ->
+                    [
+                        <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, PostbackMsgJS, ActionsJS, <<"});\n">>
+                    ];
+                    
                 true ->
                     [
                         z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
