@@ -22,6 +22,7 @@
 -include("zotonic.hrl").
 
 -record(state, {
+	     async,
           reader,
           sock,
           parameters = [],
@@ -87,6 +88,10 @@ handle_event({notice, Notice}, State_Name, State) ->
     notify(State, {notice, Notice}),
     {next_state, State_Name, State};
 
+handle_event({notification, _Channel, _Pid, _Payload} = Msg, State_Name, State) ->
+    notify_async(State, Msg),
+    {next_state, State_Name, State};
+
 handle_event({parameter_status, Name, Value}, State_Name, State) ->
     State1 = case {Name, Value} of
         {<<"integer_datetimes">>, <<"on">>} -> State#state{integer_datetimes=true};
@@ -127,6 +132,7 @@ code_change(_Old_Vsn, State_Name, State, _Extra) ->
 startup({connect, Host, Username, Password, Opts}, From, State) ->
     Port      = proplists:get_value(port, Opts, 5432),
     Sock_Opts = [{nodelay, true}, {active, false}, {packet, raw}, binary],
+    Async   = proplists:get_value(async, Opts, undefined),
     case gen_tcp:connect(Host, Port, Sock_Opts) of
         {ok, Sock} ->
             Reader = spawn_link(?MODULE, read, [self(), Sock, <<>>]),
@@ -142,6 +148,7 @@ startup({connect, Host, Username, Password, Opts}, From, State) ->
             State2 = State#state{reader   = Reader,
                                  sock     = Sock,
                                  reply_to = From,
+				                 async = Async,
                                  database = proplists:get_value(database, Opts, undefined)},
             send(State2, [<<196608:32>>, Opts3, 0]),
 
@@ -618,6 +625,12 @@ lower_atom(Str) when is_list(Str) ->
 to_binary(B) when is_binary(B) -> B;
 to_binary(L) when is_list(L)   -> list_to_binary(L).
 
+notify_async(#state{async = Pid}, Msg) ->
+    case is_pid(Pid) of
+        true  -> Pid ! {pgsql, self(), Msg};
+        false -> false
+    end.
+
 hex(Bin) ->
     HChar = fun(N) when N < 10 -> $0 + N;
                (N) when N < 16 -> $W + N
@@ -651,6 +664,14 @@ decode(Fsm, Sock, <<Type:8, Len:?int32, Rest/binary>> = Bin) ->
         <<Data:Len2/binary, Tail/binary>> when Type == $S ->
             [Name, Value] = decode_strings(Data),
             gen_fsm:send_all_state_event(Fsm, {parameter_status, Name, Value}),
+            decode(Fsm, Sock, Tail);
+        <<Data:Len2/binary, Tail/binary>> when Type == $A ->
+            <<Pid:?int32, Strings/binary>> = Data,
+            case decode_strings(Strings) of
+                [Channel, Payload] -> ok;
+                [Channel]          -> Payload = <<>>
+            end,
+            gen_fsm:send_all_state_event(Fsm, {notification, Channel, Pid, Payload}),
             decode(Fsm, Sock, Tail);
         <<Data:Len2/binary, Tail/binary>> ->
             gen_fsm:send_event(Fsm, {Type, Data}),
