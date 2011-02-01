@@ -130,7 +130,7 @@ identify_file_os(unix, File, OriginalFilename) ->
 %% @doc Try to identify the file using image magick
 identify_file_imagemagick(ImageFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
-    Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2>/dev/null"),
+    Result    = os:cmd("identify -quiet " ++ CleanedImageFile),
     % ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
     % sometimes:
     % test.jpg[0]=>test.jpg JPEG 2126x1484 2126x1484+0+0 DirectClass 8-bit 836.701kb 0.130u 0:02
