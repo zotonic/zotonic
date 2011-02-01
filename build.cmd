@@ -46,6 +46,21 @@ copy src\oauth.app ebin
 
 popd
 
+pushd .
+cd .\deps\gen_smtp\src
+@echo on
+@echo '------------------------------'
+@echo 'make gen_smtp'
+@echo '------------------------------'
+@echo off
+set EBIN_DIR = "..\ebin"
+if not exist "..\ebin" (
+  mkdir ..\ebin
+)
+for %%g in (*.erl) do cmd /c "%erlc%" -o ../ebin/ %%g
+copy *.app ..\ebin
+popd
+
 @echo on
 @echo '------------------------------'
 @echo 'make zotonic'
