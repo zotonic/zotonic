@@ -67,7 +67,7 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
     Context1 = case length(Ids) < PageLen of
                    false ->
                        {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
-                       RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "});"],
+                       RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "; return false; });"],
                        z_script:add_script(RebindJS, Ctx);
                    true ->
                        RemoveJS = ["$(\"#", TriggerId, "\").remove();"],
@@ -91,7 +91,8 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
 
 	to_id(Id) when is_integer(Id) -> Id;
 	to_id({Id,_}) when is_integer(Id) -> Id;
-	to_id({_,Id}) when is_integer(Id) -> Id.
+	to_id({_,Id}) when is_integer(Id) -> Id;
+	to_id(T) when is_tuple(T) -> element(1, T).
 
 make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context) ->
     Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args},
