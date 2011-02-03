@@ -118,6 +118,10 @@ render(List=[H|_], Context) when is_integer(H) orelse is_binary(H) ->
     {String,Rest} = lists:splitwith(F,List),
     Context1 = Context#context{render=[Context#context.render, String]},
     render(Rest, Context1);
+render({trans, _} = Tr, Context) ->
+    render(z_trans:lookup_fallback(Tr, Context), Context);
+render({{_,_,_},{_,_,_}} = D, Context) ->
+    render(filter_date:date(D, "Y-m-d H:i:s", Context), Context);
 render([H|T], Context) ->
     Context1 = render(H, Context),
     render(T, Context1).
