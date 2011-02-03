@@ -25,22 +25,31 @@
 render_action(_TriggerId, _TargetId, Args, Context) ->
     Script = case proplists:get_value(back, Args) of
         true ->
-            "history.go(-1);";
-        _ ->
-            Location = case proplists:get_value(dispatch, Args) of
+            case get_location(proplists:delete(back, Args), Context) of
                 undefined ->
-                    case proplists:get_value(id, Args) of
-                        undefined -> 
-                            proplists:get_value(location, Args, "/");
-                        Id ->
-                            m_rsc:p(Id, page_url, Context)
-                    end;
-                DispatchString ->
-                    Dispatch = z_convert:to_atom(DispatchString),
-                    Args1 = proplists:delete(dispatch, Args),
-                    z_dispatcher:url_for(Dispatch, Args1, none, Context)
-            end,
-        	[<<"window.location = \"">>,z_utils:js_escape(Location),$",$;]
+                    "history.go(-1);";
+                Location ->
+                    [<<"if (history.length > 1) history.go(-1); else window.location = \"">>,z_utils:js_escape(Location),$",$;]
+            end;
+        _ ->
+            Location = get_location(Args, Context),
+            [<<"window.location = \"">>,z_utils:js_escape(Location),$",$;]
     end,
-	{Script, Context}.
+    {Script, Context}.
+
+
+get_location(Args, Context) ->
+    case proplists:get_value(dispatch, Args) of
+        undefined ->
+            case proplists:get_value(id, Args) of
+                undefined -> 
+                    proplists:get_value(location, Args, "/");
+                Id ->
+                    m_rsc:p(Id, page_url, Context)
+            end;
+        DispatchString ->
+            Dispatch = z_convert:to_atom(DispatchString),
+            Args1 = proplists:delete(dispatch, Args),
+            z_dispatcher:url_for(Dispatch, Args1, none, Context)
+    end.
     
