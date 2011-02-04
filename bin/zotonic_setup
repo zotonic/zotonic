@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# Copyright 2011 Lloyd R. Prentice
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+BASE=${BASE:=/home/zotonic}
+ZOTONIC_SH=${ZOTONIC_SH:=$BASE/zotonic.sh}
+ZOTONIC=${ZOTONIC:=$BASE/zotonic}
+SITES=${SITES:=$ZOTONIC/priv/sites}
+
+# Path to the Erlang VM
+ERL=${ERL:=erl}
+
+# The include path for the erlang vm, add when needed for your application.
+PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin"}
+
+# The name of the Erlang node, this must be unique on your host.
+SNAME=${SNAME:=zotonic001}
+
+# Hostname to the fully qualified domain name of your host, or leave it as localhost.
+# HOSTNAME=`hostname`
+# HOSTNAME=your.domain.com
+HOSTNAME=${HOSTNAME:=localhost}
+
+# The command used to restart zotonic when crashed, only used after a "zotonic.sh start"
+export HEART_COMMAND="$ZOTONIC_BIN/zotonic start"
+
+## The port and IP address zotonic will bind to (defaults to all ip addresses and port 8000)
+export ZOTONIC_IP=any
+export ZOTONIC_PORT=${ZOTONIC_PORT:=8000}
+export ZOTONIC_PORT_SSL=${ZOTONIC_PORT_SSL:=8443}
+
+# The filename where zotonic writes its unix process Id to, for monitoring applications.
+export ZOTONIC_PIDFILE=$BASE/zotonic.pid
+
+pushd $ZOTONIC > /dev/null 2>&1

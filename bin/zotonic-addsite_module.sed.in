@@ -1,0 +1,2 @@
+s/-module(default)/-module(yoursite)/
+s/-mod_title([^)]*)/-mod_title("yoursite Name Here")/
