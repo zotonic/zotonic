@@ -1,0 +1,4 @@
+CREATE DATABASE zotonic_yoursite WITH OWNER = zotonic ENCODING = 'UTF8';
+GRANT ALL ON DATABASE zotonic_yoursite TO zotonic;
+\c zotonic_yoursite
+CREATE LANGUAGE "plpgsql";
