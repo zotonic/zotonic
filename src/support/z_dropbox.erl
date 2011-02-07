@@ -102,6 +102,7 @@ handle_call(Message, _From, State) ->
 %% @doc Scan the dropbox, broadcast found files.
 handle_cast(scan, State) ->
     do_scan(State),
+    z_utils:flush_message({'$gen_cast', scan}),
     {noreply, State};
     
 %% @doc Trap unknown casts

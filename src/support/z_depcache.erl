@@ -458,6 +458,7 @@ handle_cast(flush, State) ->
 
 handle_cast(tick, State) ->
     erlang:erase(),
+    z_utils:flush_message({'$gen_cast', tick}),
     {noreply, State#state{now=z_utils:now()}};
 
 handle_cast(_Msg, State) ->

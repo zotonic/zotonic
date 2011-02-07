@@ -156,6 +156,7 @@ handle_cast({set_loglevel, LogLevel}, State) ->
 %% Overload protection
 handle_info(check_softlimit, State) ->
     {memory, Mem} = process_info(self(), memory),
+    z_utils:flush_message(check_softlimit), 
     if 
         Mem < ?MEM_SOFTLIMIT ->
             {noreply, State};
@@ -173,6 +174,7 @@ handle_info(check_softlimit, State) ->
     end;
 handle_info(check_hardlimit, State=#state{output=Output}) ->
     {memory, Mem} = process_info(self(), memory),
+    z_utils:flush_message(check_hardlimit), 
     if 
         Mem < ?MEM_HARDLIMIT ->
             {noreply, State};

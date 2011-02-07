@@ -262,7 +262,7 @@ handle_cast(Message, State) ->
 %% @doc Handle timer ticks
 handle_info({tick, Msg}, State) ->
     spawn(fun() -> ?MODULE:notify(Msg, State#state.context) end),
-    flush_info_message({tick, Msg}),
+    z_utils:flush_message({tick, Msg}),
     {noreply, State};
     
 %% @doc Handling all non call/cast messages
@@ -289,14 +289,6 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
-
-%% @doc Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.
-flush_info_message(Msg) ->
-    receive
-        Msg -> flush_info_message(Msg)
-    after 0 ->
-        ok
-    end.
 
 %% @doc Notify an observer of an event
 notify_observer(Msg, {_Prio, Fun}, _IsCall, Context) when is_function(Fun) ->

@@ -197,6 +197,7 @@ handle_cast(Message, State) ->
 %% @doc Poll the database for scheduled mailings.
 handle_info(poll, State) ->
     poll_scheduled(z_acl:sudo(State#state.context)),
+    z_utils:flush_message(poll),    
     {noreply, State};
 
 %% @doc Handling all non call/cast messages

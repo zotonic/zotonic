@@ -138,6 +138,7 @@ handle_cast(Message, State) ->
 %% @doc Periodic check if the dev server is still running.
 handle_info(ensure_server, State) ->
     ensure_dev_server(),
+    z_utils:flush_message(ensure_server), 
     {noreply, State};
 
 %% @doc Handling all non call/cast messages

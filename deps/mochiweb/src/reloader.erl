@@ -60,6 +60,7 @@ handle_cast(_Req, State) ->
 handle_info(doit, State) ->
     Now = stamp(),
     doit(State#state.last, Now),
+    z_utils:flush_message(doit), 
     {noreply, State#state{last = Now}};
 handle_info(_Info, State) ->
     {noreply, State}.
