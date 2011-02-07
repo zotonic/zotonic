@@ -120,6 +120,7 @@ handle_cast(Message, State) ->
 %% @doc Poll the database queue for any retrys.
 handle_info(poll, State) ->
     State1 = poll_queued(State),
+    z_utils:flush_message(poll),
     {noreply, State1};
 
 %% @doc Handling all non call/cast messages
