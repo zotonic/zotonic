@@ -83,7 +83,8 @@
     tempfile/0,
     url_reserved_char/1,
     url_unreserved_char/1,
-    url_valid_char/1
+    url_valid_char/1,
+    flush_message/1
 ]).
 
 %%% FORMAT %%%
@@ -845,4 +846,12 @@ name_for_host(Name, Host) ->
 tempfile() ->
     {A,B,C}=erlang:now(),
     lists:flatten(io_lib:format("/tmp/ztmp-~p-~p.~p.~p",[node(),A,B,C])).
+    
+%% @doc Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.
+flush_message(Msg) ->
+    receive
+        Msg -> flush_message(Msg)
+    after 0 ->
+        ok
+    end.
 

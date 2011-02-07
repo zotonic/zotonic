@@ -155,6 +155,7 @@ handle_info(close_unused, State) ->
     Old = now_secs() - 60,
     {Unused, Used} = lists:partition(fun({_C,Time}) -> Time < Old end, State#state.connections),
     [ pgsql:close(C) || {C,_} <- Unused ],
+    z_utils:flush_message(close_unused),
     {noreply, State#state{connections=Used}};
 
 %% Requestor we are monitoring went down. Kill the associated connection, as it might be in an unknown state.

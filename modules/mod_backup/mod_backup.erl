@@ -155,9 +155,11 @@ handle_cast(Message, State) ->
 %%                                       {stop, Reason, State}
 %% @doc Periodic check if a scheduled backup should start
 handle_info(periodic_backup, #state{backup_pid=Pid} = State) when is_pid(Pid) ->
+    z_utils:flush_message(periodic_backup),
     {noreply, State};
 handle_info(periodic_backup, State) ->
     cleanup(State#state.context),
+    z_utils:flush_message(periodic_backup), 
     {Date, Time} = calendar:local_time(),
     case Time >= {3,0,0} andalso Time =< {6,0,0} of
         true ->

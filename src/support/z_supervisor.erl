@@ -223,6 +223,7 @@ handle_cast(check_children, State) ->
     State1 = handle_waiting_children(State),
     State2 = handle_retrying_children(State1),
     State3 = handle_failed_children(State2),
+    z_utils:flush_message({'$gen_cast', check_children}),
     {noreply, State3};
 
 %% @doc Set the manager pid of this supervisor

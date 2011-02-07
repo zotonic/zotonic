@@ -111,6 +111,7 @@ handle_cast(Message, State) ->
 %% @doc Periodic check for changed beam files.
 handle_info(reload_beams, State) ->
 	reload_all(),
+    z_utils:flush_message(reload_beams), 
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
