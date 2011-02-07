@@ -221,11 +221,13 @@ handle_cast({add_script, Script}, State) ->
     
 %% @doc Do not timeout while there is a comet or websocket process attached
 handle_cast(check_timeout, State) when is_pid(State#page_state.comet_pid) or is_pid(State#page_state.websocket_pid)->
+    z_utils:flush_message({'$gen_cast', check_timeout}),
     {noreply, State};
 
 %% @doc Give the comet process some time to come back, timeout afterwards
 handle_cast(check_timeout, State) ->
     Timeout = State#page_state.last_detach + ?SESSION_PAGE_TIMEOUT,
+    z_utils:flush_message({'$gen_cast', check_timeout}),
     case Timeout =< z_utils:now() of
         true ->  {stop, normal, State};
         false -> {noreply, State}

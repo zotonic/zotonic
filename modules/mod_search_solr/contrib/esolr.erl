@@ -325,20 +325,21 @@ handle_info(auto_commit,State = #esolr{dirty=true,commit_timeout=T}) ->
 	Request = encode_commit(),
 	R = make_post_request(Request,{auto,auto_commit},State#esolr{dirty=false},T),
 	error_logger:info_report([{auto_commit,send}]),
+    z_utils:flush_message(auto_commit), 
 	R;
 	
 	
 	
-handle_info(auto_commit,State = #esolr{dirty=false}) ->	
+handle_info(auto_commit,State = #esolr{dirty=false}) ->
+    z_utils:flush_message(auto_commit),	
 	{noreply,State};
 	
 handle_info(auto_optimize,State) ->
 	Request = encode_optimize(),
 	R = make_post_request(Request,{auto,auto_optimize},State,State#esolr.optimize_timeout),
 	error_logger:info_report([{auto_optimize,send}]),
+    z_utils:flush_message(auto_optimize),
 	R.
-
-	
 
  
 % @hidden
