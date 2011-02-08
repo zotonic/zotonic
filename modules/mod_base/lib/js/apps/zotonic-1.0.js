@@ -636,7 +636,6 @@ function z_init_postback_forms()
 			var arguments = $(theForm).formToArray();
 
 			try { $(theForm).mask("", 100); } catch (e) {};
-			theForm.clk = theForm.clk_x = theForm.clk_y = null;
 
 			var postback	= $(theForm).data("z_submit_postback");
 			var action		= $(theForm).data("z_submit_action");
@@ -676,6 +675,7 @@ function z_init_postback_forms()
 			}
 			else
 			{
+				theForm.clk = theForm.clk_x = theForm.clk_y = null;
 				z_queue_postback(form_id, postback, arguments.concat(validations)); 
 			}
 			ev.stopPropagation();
@@ -802,6 +802,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 			var n = sub.name;
 			if (n && !sub.disabled) {
 				options.extraData = options.extraData || {};
+				options.extraData['z_submitter'] = n;
 				options.extraData[n] = sub.value;
 				if (sub.type == "image") {
 					options.extraData[name+'.x'] = form.clk_x;
@@ -809,6 +810,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 				}
 			}
 		}
+		form.clk = form.clk_x = form.clk_y = null;
 
 		// take a breath so that pending repaints get some cpu time before the upload starts
 		setTimeout(function() {
@@ -1137,6 +1139,7 @@ $.fn.formToArray = function(semantic) {
 	if (this.length == 0) return a;
 
 	var form = this[0];
+
 	var els = semantic ? form.getElementsByTagName('*') : form.elements;
 	if (!els) return a;
 	for(var i=0, max=els.length; i < max; i++) {
