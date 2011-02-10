@@ -1,10 +1,11 @@
 Mission
 =======
 
-Provide a generic SMTP server and client framework that can be extended via
-callback modules in the OTP style. The goal is to make it easy to send and
-receive email in Erlang without the hassle of POP/IMAP. This is *not* a true
-mailserver - although you could build one with it.
+Provide a generic Erlang SMTP server framework that can be extended via
+callback modules in the OTP style. A pure Erlang SMTP client is also included.
+The goal is to make it easy to send and receive email in Erlang without the
+hassle of POP/IMAP. This is *not* a complete mailserver - although it includes
+most of the parts you'd need to build one.
 
 The SMTP server/client supports PLAIN, LOGIN, CRAM-MD5 authentication as well
 as STARTTLS and SSL (port 465).
@@ -20,8 +21,17 @@ thousand emails without leaking any RAM or crashing the erlang virtual machine.
 Current Participants
 ====================
 
-+ Andrew Thompson (andrew@hijacked.us)
-+ Jack Danger Canty (code@jackcanty.com)a
++ Andrew Thompson (andrew AT hijacked.us)
++ Jack Danger Canty (code AT jackcanty.com)
++ Micah Warren (micahw AT lordnull.com)
+
+Who is using it?
+================
+
++ gen_smtp is used to provide the email functionality of [OpenACD](http://github.com/Vagabond/OpenACD)
++ gen_smtp will be used as both the SMTP server and SMTP client for [Zotonic](http://zotonic.com) as of version 0.7
+
+If you'd like to share your usage of gen_smtp, please contact me.
 
 Client Example
 ==============
@@ -90,7 +100,7 @@ You can configure the server in general, each SMTP session, and the callback mod
 gen_smtp_server:start(smtp_server_example, [[{sessionoptions, [{allow_bare_newlines, fix}, {callbackoptions, [{parse, true}]}]}]]).
 </pre>
 
-This configures the session to fix bare newlines (other options are 'strip', 'true' and 'false', false rejects emails with bare newlines, true passes them through unmodified and strip removes them) and tells the callback module to run the MIME decoder on the email once its been received. The example callback module also supports the following options; relay - whether to relay email on, auth - whether to do SMTP authentication and parse - whether to invoke the MIME parser. The example callback module is included mainly as an example and are not intended for serious usage. You could easily create your own session options.
+This configures the session to fix bare newlines (other options are 'strip', 'true' and 'false', false rejects emails with bare newlines, true passes them through unmodified and strip removes them) and tells the callback module to run the MIME decoder on the email once its been received. The example callback module also supports the following options; relay - whether to relay email on, auth - whether to do SMTP authentication and parse - whether to invoke the MIME parser. The example callback module is included mainly as an example and are not intended for serious usage. You could easily create your own callback options.
 
 You can also start multiple SMTP listeners at once by passing more than 1 configuration:
 
@@ -106,7 +116,7 @@ You can connect and test this using the gen_smtp_client via something like:
 gen_smtp_client:send({"whatever@test.com", ["andrew@hijacked.us"], "Subject: testing\r\nFrom: Andrew Thompson \r\nTo: Some Dude \r\n\r\nThis is the email body"}, [{relay, "localhost"}, {port, 1465}, {ssl, true}]).
 </pre>
 
-If you want to listen on IPv6, you can use the {family, inet6} and {ip, "::"} options to enable listening on IPv6.
+If you want to listen on IPv6, you can use the {family, inet6} and {address, "::"} options to enable listening on IPv6.
 
 Live Instance
 =============

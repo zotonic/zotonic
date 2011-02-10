@@ -1047,7 +1047,7 @@ smtp_session_test_() ->
 											{tcp, CSock, "250 "++_Packet3} ->
 												socket:active_once(CSock),
 												ok;
-											_R ->
+											{tcp, CSock, _R} ->
 												socket:active_once(CSock),
 												error
 										end
@@ -1073,7 +1073,7 @@ smtp_session_test_() ->
 											{tcp, CSock, "250"++_Packet3} ->
 												socket:active_once(CSock),
 												ok;
-											_R ->
+											{tcp, CSock, _R} ->
 												socket:active_once(CSock),
 												error
 										end
