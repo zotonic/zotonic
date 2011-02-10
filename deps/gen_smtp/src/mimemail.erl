@@ -110,7 +110,10 @@ decode_header(Value, Charset) ->
 			Type = binstr:to_lower(binstr:substr(Value, TypeStart+1, 1)),
 			Data = binstr:substr(Value, DataStart+1, DataLen),
 
-			{ok, CD} = iconv:open(Charset, fix_encoding(Encoding)),
+			CD = case iconv:open(Charset, fix_encoding(Encoding)) of
+				{ok, Res} -> Res;
+				{error, einval} -> throw({bad_charset, fix_encoding(Encoding)})
+			end,
 
 			DecodedData = case Type of
 				<<"q">> ->
@@ -272,8 +275,10 @@ parse_content_disposition(String) ->
 split_body_by_boundary(Body, Boundary, MimeVsn, Options) ->
 	% find the indices of the first and last boundary
 	case [binstr:strpos(Body, Boundary), binstr:strpos(Body, list_to_binary([Boundary, "--"]))] of
-		[Start, End] when Start =:= 0; End =:= 0 ->
-			erlang:error(bad_boundary);
+		[0, _] ->
+			erlang:error(missing_boundary);
+		[_, 0] ->
+			erlang:error(missing_last_boundary);
 		[Start, End] ->
 			NewBody = binstr:substr(Body, Start + byte_size(Boundary), End - Start),
 			% from now on, we can be sure that each boundary is preceeded by a CRLF
@@ -365,8 +370,16 @@ decode_body(Type, Body, undefined, _OutEncoding) ->
 	decode_body(Type, << <<X/integer>> || <<X>> <= Body, X < 128 >>);
 decode_body(Type, Body, InEncoding, OutEncoding) ->
 	NewBody = decode_body(Type, Body),
-	{ok, CD} = iconv:open(OutEncoding, fix_encoding(InEncoding)),
-	{ok, Result} = iconv:conv_chunked(CD, NewBody),
+	CD = case iconv:open(OutEncoding, fix_encoding(InEncoding)) of
+		{ok, Res} -> Res;
+		{error, einval} -> throw({bad_charset, fix_encoding(InEncoding)})
+	end,
+	{ok, Result} = try iconv:conv_chunked(CD, NewBody) of
+		{ok, _} = Res2 -> Res2
+	catch
+		_:_ ->
+			iconv:conv(CD, NewBody)
+	end,
 	iconv:close(CD),
 	Result.
 
@@ -922,6 +935,11 @@ parse_example_mails_test_() ->
 				?assertEqual(<<"This message contains only plain text.\r\n">>, Body)
 			end
 		},
+		{"parse an email that says it is multipart but contains no boundaries",
+			fun() ->
+					?assertError(missing_boundary, Getmail("Plain-text-only-with-boundary-header.eml"))
+			end
+		},
 		{"parse a multipart email with no MIME header",
 			fun() ->
 					?assertError(non_mime_multipart, Getmail("rich-text-no-MIME.eml"))
@@ -962,12 +980,12 @@ parse_example_mails_test_() ->
 		},
 		{"rich text missing last boundary",
 			fun() ->
-				?assertError(bad_boundary, Getmail("rich-text-missing-last-boundary.eml"))
+				?assertError(missing_last_boundary, Getmail("rich-text-missing-last-boundary.eml"))
 			end
 		},
-		{"rich text missing last boundary",
+		{"rich text wrong last boundary",
 			fun() ->
-				?assertError(bad_boundary, Getmail("rich-text-broken-last-boundary.eml"))
+				?assertError(missing_last_boundary, Getmail("rich-text-broken-last-boundary.eml"))
 			end
 		},
 		{"rich text missing text content type",
