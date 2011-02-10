@@ -20,29 +20,20 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/2,
     event/2
 ]).
 
--include_lib("resource_html.hrl").
 
-is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_menu, ReqData, Context).
-
-
-html(Context) ->
-	Html = z_template:render("admin_menu.tpl", [{page_admin_menu, true}, {menu, mod_menu:get_menu(Context)}], Context),
-	z_context:output(Html, Context).
-
-event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, DropTag, _, _DropEltId}}, Context) ->
-    Menu  = mod_menu:get_menu(Context),
+event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, [MenuId|DropTag], _, _DropEltId}}, Context) ->
+    Menu  = mod_menu:get_menu(MenuId, Context),
     Menu1 = handle_drop(Menu, DragTag, DropTag),
-    save_menu(Menu1, Context),
-    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}], Context),
+    mod_menu:set_menu(MenuId, Menu1, Context),
+    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}, {id, MenuId}], Context),
     z_render:update("menu-editor", Html, Context);
 
 event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
-    Menu = mod_menu:get_menu(Context),
+    Id = proplists:get_value(id, Props),
+    Menu = mod_menu:get_menu(Id, Context),
     Menu1 = case proplists:get_value(item, Props) of
         [Nr] -> 
             remove_nth(Nr, Menu);
@@ -51,28 +42,16 @@ event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
             SubMenu1 = remove_nth(SubNr, SubMenu),
             set_nth(Nr, {MenuId, SubMenu1}, Menu)
     end,
-    Context1 = save_menu(Menu1, Context),
-    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}], Context1),
-    z_render:update("menu-editor", Html, Context1);
+    mod_menu:set_menu(Id, Menu1, Context),
+    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}, {id, Id}], Context),
+    z_render:update("menu-editor", Html, Context);
 
 event(_Event, Context) ->
     Context.
 
-%% @doc Save the menu to the site configuration.
-%% @spec save_menu(list(), Context) -> ok
-save_menu(Menu, Context) ->
-    case z_acl:is_allowed(use, mod_menu, Context) of
-        true ->
-            m_config:set_prop(menu, menu_default, menu, Menu, Context), 
-            z_depcache:flush(menu, Context),
-            Context;
-        false ->
-            z_render:growl_error("Sorry, you need to be public publisher to edit the menu.", Context)
-    end.
-
 
 %% @doc Handle the drop of an id on top of a menu item.
-handle_drop(Menu, ["new", Id], "top") when is_integer(Id) ->
+handle_drop(Menu, ["new", Id], ["top"]) when is_integer(Id) ->
     [ {Id, []} | Menu ];
 
 %% drag new item to a main-menu-item
@@ -87,13 +66,13 @@ handle_drop(Menu, ["new", Id], [DropNr, DropSubNr]) when is_integer(Id), is_inte
     set_nth(DropNr, {DropId, DropSubMenu1}, Menu);
 
 % drag main menu to top
-handle_drop(Menu, [Nr], "top") when is_integer(Nr) ->
+handle_drop(Menu, [Nr], ["top"]) when is_integer(Nr) ->
     {Id, Sub} = lists:nth(Nr, Menu),
     Menu1 = remove_nth(Nr, Menu),
     [ {Id, Sub} | Menu1 ];
 
 % drag sub-menu-item to top
-handle_drop(Menu, [Nr, SubNr], "top") when is_integer(Nr), is_integer(SubNr) ->
+handle_drop(Menu, [Nr, SubNr], ["top"]) when is_integer(Nr), is_integer(SubNr) ->
     {Id, SubMenu} = lists:nth(Nr, Menu),
     SubId = lists:nth(SubNr, SubMenu),
     SubMenu1 = remove_nth(SubNr, SubMenu),
@@ -162,7 +141,6 @@ handle_drop(Menu, [Nr], [DropNr]) when is_integer(Nr), is_integer(DropNr) ->
 
 % drag main menu to sub-menu - refuse
 handle_drop(Menu, _From, _To) ->
-    ?DEBUG({_From, _To}),
     Menu.
 
 
