@@ -171,6 +171,8 @@
 				</h2>
 			{% endif %}
 
+            {% block admin_edit_form_pre %}{% endblock %}
+
 			{% wire id="rscform" type="submit" postback="rscform" %}
 			<form id="rscform" method="post" action="postback">
 				<input type="hidden" name="id" value="{{ id }}" />
@@ -219,37 +221,7 @@
 
 						{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
 
-                        {% if is_editable or m.rsc[id].depiction %}
-						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-								<span class="title">{_ Attached media _}</span>
-								<span class="arrow">{_ make smaller _}</span>
-							</h3>
-							<div class="item clearfix">
-								<div id="{{ #media }}">
-									{% include "_edit_media.tpl" media=media div_id=#media %}
-								</div>
-								<div class="clear">
-									{% if is_editable %}
-										{% button
-												text=_"add a new media item"
-												action={dialog_media_upload subject_id=id stay
-													action={postback postback={reload_media rsc_id=id div_id=#media} delegate="resource_admin_edit"}}
-										%}
-
-										{% button text=_"add existing media item"
-											action={dialog_link subject_id=id predicate="depiction"
-												action={postback
-															postback={reload_media rsc_id=id div_id=#media}
-															delegate="resource_admin_edit"}
-											} %}
-									{% else %}
-										&nbsp;
-									{% endif %}
-								</div>
-							</div>
-						</div>
-                        {% endif %}
+						{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 
 						<div class="item-wrapper">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.meta }} }">
@@ -470,7 +442,6 @@
 
 						{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
 
-
 						<div class="item-wrapper" id="sort-connections">
 							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
 								<span class="title">{_ Page connections _}</span>
@@ -567,6 +538,9 @@
 					</div>
 				</div>
 			</form>
+
+            {% block admin_edit_form_post %}{% endblock %}
+
 		</div>
 	</div>
 	{% endwith %}

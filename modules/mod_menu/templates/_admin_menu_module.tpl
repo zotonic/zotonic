@@ -1,3 +1,3 @@
-{% if m.acl.use.mod_menu %}
-<li><a href="{% url admin_menu %}" {% if page_admin_menu %}class="current"{% endif %}>Menu</a></li>
+{% if m.acl.use.mod_menu and m.rsc.main_menu %}
+<li><a href="{% url admin_edit_rsc id=m.rsc.main_menu.id %}" {% if id == m.rsc.main_menu.id %}class="current"{% endif %}>Menu</a></li>
 {% endif %}
