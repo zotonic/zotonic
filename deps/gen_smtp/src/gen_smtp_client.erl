@@ -45,7 +45,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -compile(export_all).
 -else.
--export([send/2, send_it/2]).
+-export([send/2, send_blocking/2, send_it/2]).
 -endif.
 
 -spec send(Email :: {string(), [string(), ...], string()}, Options :: list()) -> {'ok', pid()} | {'error', any()}.
@@ -55,7 +55,7 @@ send(Email, Options) ->
 	case check_options(NewOptions) of
 		ok ->
 			Pid = spawn_link(fun () ->
-						(?MODULE):send_it(Email, NewOptions)
+						send_it_nonblock(Email, NewOptions)
 				end
 			),
 			{ok, Pid};
@@ -63,10 +63,33 @@ send(Email, Options) ->
 			{error, Reason}
 	end.
 
+send_blocking(Email, Options) ->
+	NewOptions = lists:ukeymerge(1, lists:sort(Options),
+		lists:sort(?DEFAULT_OPTIONS)),
+	case check_options(NewOptions) of
+		ok ->
+			send_it(Email, NewOptions);
+		{error, Reason} ->
+			{error, Reason}
+	end.
+
+send_it_nonblock(Email, Options) ->
+	case (?MODULE):send_it(Email, Options) of
+		{error, Type, Message} ->
+			erlang:exit({error, Type, Message});
+		_ ->
+			ok
+	end.
+
 -spec send_it(Email :: {string(), [string(), ...], string()}, Options :: list()) -> 'ok'.
 send_it(Email, Options) ->
 	RelayDomain = proplists:get_value(relay, Options),
-	MXRecords = smtp_util:mxlookup(RelayDomain),
+	MXRecords = case proplists:get_value(no_mx_lookups, Options) of
+		true ->
+			[];
+		_ ->
+			smtp_util:mxlookup(RelayDomain)
+	end,
 	%io:format("MX records for ~s are ~p~n", [RelayDomain, MXRecords]),
 	Hosts = case MXRecords of
 		[] ->
@@ -82,7 +105,7 @@ try_smtp_sessions([{Distance, Host} | Tail], Email, Options, RetryList) ->
 	catch
 		throw:{permanant_failure, Message} ->
 			% permanant failure means no retries, and don't even continue with other hosts
-			exit({error, no_more_hosts, {permanant_failure, Host, Message}});
+			{error, no_more_hosts, {permanant_failure, Host, Message}};
 		throw:{FailureType, Message} ->
 			case proplists:get_value(Host, RetryList) of
 				RetryCount when is_integer(RetryCount), RetryCount >= Retries ->
@@ -94,6 +117,10 @@ try_smtp_sessions([{Distance, Host} | Tail], Email, Options, RetryList) ->
 					%io:format("scheduling ~s for retry (~p of ~p)~n", [Host, RetryCount, Retries]),
 					NewHosts = Tail ++ [{Distance, Host}],
 					NewRetryList = lists:keydelete(Host, 1, RetryList) ++ [{Host, RetryCount + 1}];
+				_ when Retries == 0 ->
+					% done retrying completely
+					NewHosts = Tail,
+					NewRetryList = lists:keydelete(Host, 1, RetryList);
 				_ ->
 					% otherwise...
 					%io:format("scheduling ~s for retry (~p of ~p)~n", [Host, 1, Retries]),
@@ -102,7 +129,7 @@ try_smtp_sessions([{Distance, Host} | Tail], Email, Options, RetryList) ->
 			end,
 			case NewHosts of
 				[] ->
-					exit({error, retries_exceeded, {FailureType, Host, Message}});
+					{error, retries_exceeded, {FailureType, Host, Message}};
 				_ ->
 					try_smtp_sessions(NewHosts, Email, Options, NewRetryList)
 			end
@@ -118,9 +145,10 @@ do_smtp_session(Host, Email, Options) ->
 	%io:format("Extensions are ~p~n", [Extensions2]),
 	_Authed = try_AUTH(Socket2, Options, proplists:get_value(<<"AUTH">>, Extensions2)),
 	%io:format("Authentication status is ~p~n", [Authed]),
-	try_sending_it(Email, Socket2, Extensions2),
+	Receipt = try_sending_it(Email, Socket2, Extensions2),
 	%io:format("Mail sending successful~n"),
-	quit(Socket2).
+	quit(Socket2),
+	Receipt.
 
 try_sending_it({From, To, Body}, Socket, Extensions) ->
 	try_MAIL_FROM(From, Socket, Extensions),
@@ -159,8 +187,10 @@ try_RCPT_TO(["<" ++ _ = To | Tail], Socket, Extensions) ->
 		{ok, <<"251", _Rest/binary>>} ->
 			try_RCPT_TO(Tail, Socket, Extensions);
 		{ok, <<"4", _Rest/binary>> = Msg} ->
+			quit(Socket),
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
+			quit(Socket),
 			throw({permanant_failure, Msg})
 	end;
 try_RCPT_TO([To | Tail], Socket, Extensions) ->
@@ -173,30 +203,36 @@ try_DATA(Body, Socket, _Extensions) ->
 		{ok, <<"354", _Rest/binary>>} ->
 			socket:send(Socket, [Body, "\r\n.\r\n"]),
 			case read_possible_multiline_reply(Socket) of
-				{ok, <<"250", _Rest2/binary>>} ->
-					true;
+				{ok, <<"250", Receipt/binary>>} ->
+					Receipt;
 				{ok, <<"4", _Rest2/binary>> = Msg} ->
+					quit(Socket),
 					throw({temporary_failure, Msg});
 				{ok, Msg} ->
+					quit(Socket),
 					throw({permanant_failure, Msg})
 			end;
 		{ok, <<"4", _Rest/binary>> = Msg} ->
+			quit(Socket),
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
+			quit(Socket),
 			throw({permanant_failure, Msg})
 	end.
 
-try_AUTH(_Socket, Options, []) ->
+try_AUTH(Socket, Options, []) ->
 	case proplists:get_value(auth, Options) of
 		always ->
-			erlang:error(no_auth);
+			quit(Socket),
+			erlang:throw({missing_requirement, auth});
 		_ ->
 			false
 	end;
-try_AUTH(_Socket, Options, undefined) ->
+try_AUTH(Socket, Options, undefined) ->
 	case proplists:get_value(auth, Options) of
 		always ->
-			erlang:error(no_auth);
+			quit(Socket),
+			erlang:throw({missing_requirement, auth});
 		_ ->
 			false
 	end;
@@ -207,7 +243,8 @@ try_AUTH(Socket, Options, AuthTypes) ->
 		false ->
 			case proplists:get_value(auth, Options) of
 				always ->
-					erlang:error(no_auth);
+					quit(Socket),
+					erlang:throw({missing_requirement, auth});
 				_ ->
 					false
 			end;
@@ -220,7 +257,8 @@ try_AUTH(Socket, Options, AuthTypes) ->
 				false ->
 					case proplists:get_value(auth, Options) of
 						always ->
-							erlang:error(auth_failed);
+							quit(Socket),
+							erlang:throw({permanant_failure, auth_failed});
 						_ ->
 							false
 					end;
@@ -306,26 +344,9 @@ do_AUTH_each(Socket, Username, Password, [_Type | Tail]) ->
 	do_AUTH_each(Socket, Username, Password, Tail).
 
 try_EHLO(Socket, Options) ->
-	ok = socket:send(Socket, ["EHLO ", proplists:get_value(hostname, Options), "\r\n"]),
+	ok = socket:send(Socket, ["EHLO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
 	{ok, Reply} = read_possible_multiline_reply(Socket),
-	[_ | Reply2] = re:split(Reply, "\r\n", [{return, binary}, trim]),
-	Extensions = [
-		begin
-				Body = binstr:substr(Entry, 5),
-				case re:split(Body, " ",  [{return, binary}, trim, {parts, 2}]) of
-					[Verb, Parameters] ->
-						{binstr:to_upper(Verb), Parameters};
-					[Body] ->
-						case binstr:strchr(Body, $=) of
-							0 ->
-								{binstr:to_upper(Body), true};
-							_ ->
-								%io:format("discarding option ~p~n", [Body]),
-								[]
-						end
-				end
-		end  || Entry <- Reply2],
-	{ok, Extensions}.
+	{ok, parse_extensions(Reply)}.
 
 % check if we should try to do TLS
 try_STARTTLS(Socket, Options, Extensions) ->
@@ -336,7 +357,8 @@ try_STARTTLS(Socket, Options, Extensions) ->
 			case {do_STARTTLS(Socket, Options), Atom} of
 				{false, always} ->
 					%io:format("TLS failed~n"),
-					erlang:exit(no_tls);
+					quit(Socket),
+					erlang:throw({temporary_failure, tls_failed});
 				{false, if_available} ->
 					%io:format("TLS failed~n"),
 					{Socket, Extensions};
@@ -345,7 +367,8 @@ try_STARTTLS(Socket, Options, Extensions) ->
 					{S, E}
 			end;
 		{always, _} ->
-			erlang:exit(no_tls);
+			quit(Socket),
+			erlang:throw({missing_requirement, tls});
 		_ ->
 			{Socket, Extensions}
 	end.
@@ -355,7 +378,8 @@ do_STARTTLS(Socket, Options) ->
 	socket:send(Socket, "STARTTLS\r\n"),
 	case read_possible_multiline_reply(Socket) of
 		{ok, <<"220", _Rest/binary>>} ->
-			crypto:start(),
+			application:start(crypto),
+			application:start(public_key),
 			application:start(ssl),
 			case socket:to_ssl_client(Socket, [], 5000) of
 				{ok, NewSocket} ->
@@ -381,19 +405,20 @@ connect(Host, Options) ->
 	SockOpts = [binary, {packet, line}, {keepalive, true}, {active, false}],
 	Proto = case proplists:get_value(ssl, Options) of
 		true ->
-			crypto:start(),
+			application:start(crypto),
+			application:start(public_key),
 			application:start(ssl),
 			ssl;
-		false ->
+		_ ->
 			tcp
 	end,
 	Port = case proplists:get_value(port, Options) of
 		undefined when Proto =:= ssl ->
 			465;
-		undefined when Proto =:= tcp ->
-			25;
 		OPort when is_integer(OPort) ->
-			OPort
+			OPort;
+		_ ->
+			25
 	end,
 	case socket:connect(Proto, Host, Port, SockOpts, 5000) of
 		{ok, Socket} ->
@@ -466,6 +491,25 @@ check_options(Options) ->
 					ok
 			end
 	end.
+
+parse_extensions(Reply) ->
+	[_ | Reply2] = re:split(Reply, "\r\n", [{return, binary}, trim]),
+	[
+		begin
+				Body = binstr:substr(Entry, 5),
+				case re:split(Body, " ",  [{return, binary}, trim, {parts, 2}]) of
+					[Verb, Parameters] ->
+						{binstr:to_upper(Verb), Parameters};
+					[Body] ->
+						case binstr:strchr(Body, $=) of
+							0 ->
+								{binstr:to_upper(Body), true};
+							_ ->
+								%io:format("discarding option ~p~n", [Body]),
+								[]
+						end
+				end
+		end  || Entry <- Reply2].
 
 -ifdef(TEST).
 
@@ -782,6 +826,40 @@ session_start_test_() ->
 						end
 					}
 			end,
+			fun({ListenSock}) ->
+					{"should bail when AUTH is required but not provided",
+						fun() ->
+								Options = [{relay, <<"localhost">>}, {port, 9876}, {hostname, <<"testing">>}, {auth, always}, {username, <<"user">>}, {retries, 0}, {password, <<"pass">>}],
+								{ok, Pid} = send({<<"test@foo.com">>, [<<"foo@bar.com">>, <<"baz@bar.com">>], <<"hello world">>}, Options),
+								unlink(Pid),
+								Monitor = erlang:monitor(process, Pid),
+								{ok, X} = socket:accept(ListenSock, 1000),
+								socket:send(X, "220 Some banner\r\n"),
+								?assertMatch({ok, "EHLO testing\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250-hostname\r\n250 8BITMIME\r\n"),
+								?assertEqual({ok, "QUIT\r\n"}, socket:recv(X, 0, 1000)),
+								receive {'DOWN', Monitor, _, _, Error} -> ?assertMatch({error, retries_exceeded, {missing_requirement, _, auth}}, Error) end,
+								ok
+						end
+					}
+			end,
+			fun({ListenSock}) ->
+					{"should bail when AUTH is required but of an unsupported type",
+						fun() ->
+								Options = [{relay, <<"localhost">>}, {port, 9876}, {hostname, <<"testing">>}, {auth, always}, {username, <<"user">>}, {retries, 0}, {password, <<"pass">>}],
+								{ok, Pid} = send({<<"test@foo.com">>, [<<"foo@bar.com">>, <<"baz@bar.com">>], <<"hello world">>}, Options),
+								unlink(Pid),
+								Monitor = erlang:monitor(process, Pid),
+								{ok, X} = socket:accept(ListenSock, 1000),
+								socket:send(X, "220 Some banner\r\n"),
+								?assertMatch({ok, "EHLO testing\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250-hostname\r\n250-AUTH GSSAPI\r\n250 8BITMIME\r\n"),
+								?assertEqual({ok, "QUIT\r\n"}, socket:recv(X, 0, 1000)),
+								receive {'DOWN', Monitor, _, _, Error} -> ?assertMatch({error, no_more_hosts, {permanant_failure, _, auth_failed}}, Error) end,
+								ok
+						end
+					}
+			end,
 			fun({_ListenSock}) ->
 					{"Connecting to a SSL socket directly should work",
 						fun() ->
@@ -816,5 +894,24 @@ session_start_test_() ->
 		]
 	}.
 
+extension_parse_test_() ->
+	[
+		{"parse extensions",
+			fun() ->
+					Res = parse_extensions(<<"250-smtp.example.com\r\n250-PIPELINING\r\n250-SIZE 20971520\r\n250-VRFY\r\n250-ETRN\r\n250-STARTTLS\r\n250-AUTH CRAM-MD5 PLAIN DIGEST-MD5 LOGIN\r\n250-AUTH=CRAM-MD5 PLAIN DIGEST-MD5 LOGIN\r\n250-ENHANCEDSTATUSCODES\r\n250-8BITMIME\r\n250 DSN">>),
+					?assertEqual(true, proplists:get_value(<<"PIPELINING">>, Res)),
+					?assertEqual(<<"20971520">>, proplists:get_value(<<"SIZE">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"VRFY">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"ETRN">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"STARTTLS">>, Res)),
+					?assertEqual(<<"CRAM-MD5 PLAIN DIGEST-MD5 LOGIN">>, proplists:get_value(<<"AUTH">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"ENHANCEDSTATUSCODES">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"8BITMIME">>, Res)),
+					?assertEqual(true, proplists:get_value(<<"DSN">>, Res)),
+					?assertEqual(10, length(Res)),
+					ok
+			end
+		}
+	].
 
 -endif.
