@@ -443,7 +443,8 @@ continue_session(Context) ->
         undefined ->
             case z_session_manager:continue_session(Context) of
                 {ok, Context1} ->
-                    z_auth:logon_from_session(Context1);
+                    Context2 = z_auth:logon_from_session(Context1),
+                    z_notifier:foldl(session_context, Context2, Context2);
                 {error, _} ->
                     Context
             end;
@@ -889,7 +890,10 @@ parse_form_urlencoded(Context) ->
                      {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context)}
             end;
         "multipart/form-data" ++ _ ->
-            {Form, ContextRcv} = z_parse_multipart:recv_parse(Context),
+            FileCheckFun = fun(_Filename, _ContentType, _Size) ->
+                                ok
+                           end,
+            {Form, ContextRcv} = z_parse_multipart:recv_parse(FileCheckFun, Context),
             FileArgs = [ {Name, #upload{filename=Filename, tmpfile=TmpFile}} || {Name, Filename, TmpFile} <- Form#multipart_form.files ],
             {Form#multipart_form.args ++ FileArgs, ContextRcv};
         _Other ->
