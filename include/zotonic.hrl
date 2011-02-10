@@ -85,7 +85,7 @@
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).
 
 %% Record used for parsing multipart body (see z_parse_multipart)
--record(multipart_form, {name, data, filename, tmpfile, file, files=[], args=[]}).
+-record(multipart_form, {name, data, filename, tmpfile, content_type, content_length, file, files=[], args=[]}).
 -record(upload, {filename, tmpfile}).
 
 %% Model value interface for templates

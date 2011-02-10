@@ -36,7 +36,8 @@
 
 %% interface functions
 -export([
-   recv_parse/1
+   recv_parse/1,
+   recv_parse/2
 ]).
 
 -include("zotonic.hrl").
@@ -51,7 +52,11 @@
 %% The progress function should accept the parameters [Percentage, Context]
 %% @spec recv_parse(Context) -> {form(), NewContext}
 recv_parse(Context) ->
-    Callback = fun(N) -> callback(N, #multipart_form{}) end,
+    recv_parse(fun(_Filename, _ContentType, _Size) -> ok end, Context).
+
+%% @spec recv_parse(UploadCheckFun, Context) -> {form(), NewContext}
+recv_parse(UploadCheckFun, Context) ->
+    Callback = fun(N) -> callback(N, #multipart_form{}, UploadCheckFun) end,
     {_LengthRemaining, _RestData, Form, ContextParsed} = parse_multipart_request(fun progress/4, Callback, Context),
     if Form#multipart_form.file =/= undefined ->
         % Premature end
@@ -80,20 +85,32 @@ progress(_, _, _, _) ->
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
 %% @spec callback(fun(), form()) -> fun() | form()
-callback(Next, Form) ->
+callback(Next, Form, UploadCheckFun) ->
     case Next of
         {headers, Headers} ->
             % Find out if it is a file
             ContentDisposition = proplists:get_value("content-disposition", Headers),
-            NewForm = case ContentDisposition of
+            case ContentDisposition of
                 {"form-data", [{"name", Name}, {"filename",Filename}]} ->
-                    Form#multipart_form{name=Name, filename=Filename, tmpfile="/tmp/zp-"++z_ids:identifier()++".zptmp"};
+                    ContentLength = z_convert:to_integer(proplists:get_value("content-length", Headers)),
+                    ContentType = proplists:get_value("content-type", Headers),
+                    case UploadCheckFun(Filename, ContentType, ContentLength) of
+                        ok ->
+                            NF = Form#multipart_form{name=Name,
+                                                     filename=Filename, 
+                                                     content_length=ContentLength, 
+                                                     content_type=ContentType,
+                                                     tmpfile="/tmp/zp-"++z_ids:identifier()++".zptmp"},
+                            fun(N) -> callback(N, NF, UploadCheckFun) end;
+                        {error, _Reason} = Error ->
+                            throw(Error)
+                    end;
                 {"form-data",[{"name",Name}]} ->
-                    Form#multipart_form{name=Name, data=[]};
+                    NF = Form#multipart_form{name=Name, data=[]},
+                    fun(N) -> callback(N, NF, UploadCheckFun) end;
                 _ ->
-                    Form
-            end,
-            fun(N) -> callback(N, NewForm) end;
+                    fun(N) -> callback(N, Form, UploadCheckFun) end
+            end;
 
         {body, Data} ->
             if  Form#multipart_form.filename =/= undefined ->
@@ -114,7 +131,7 @@ callback(Next, Form) ->
             true ->
                 NewForm = Form#multipart_form{data=[binary_to_list(Data), Form#multipart_form.data]}
             end,
-            fun(N) -> callback(N, NewForm) end;
+            fun(N) -> callback(N, NewForm, UploadCheckFun) end;
 
          body_end ->
             NewForm = if Form#multipart_form.file =/= undefined ->
@@ -125,6 +142,8 @@ callback(Next, Form) ->
                                 file=undefined,
                                 tmpfile=undefined,
                                 filename=undefined,
+                                content_type=undefined,
+                                content_length=undefined,
                                 files=[{Form#multipart_form.name, Form#multipart_form.filename, Form#multipart_form.tmpfile}|Form#multipart_form.files]
                             };
                         Form#multipart_form.name =/= undefined ->
@@ -137,7 +156,7 @@ callback(Next, Form) ->
                         true ->
                             Form
                         end,
-            fun(N) -> callback(N, NewForm) end;
+            fun(N) -> callback(N, NewForm, UploadCheckFun) end;
         
         eof ->
             Form
