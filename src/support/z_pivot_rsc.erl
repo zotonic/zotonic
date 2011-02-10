@@ -77,11 +77,13 @@ pivot(Id, Context) ->
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
 pivot_resource_update(Props) ->
     {DateStart, DateEnd} = pivot_date(Props),
+    PivotTitle = truncate(get_pivot_title(Props), 100),
     [
         {pivot_date_start, DateStart},
         {pivot_date_end, DateEnd},
         {pivot_date_start_month_day, month_day(DateStart)},
-        {pivot_date_end_month_day, month_day(DateEnd)}
+        {pivot_date_end_month_day, month_day(DateEnd)},
+        {pivot_title, PivotTitle}
         | Props
     ].
     
@@ -363,8 +365,7 @@ pivot_resource(Id, Context) ->
             ", pivot_first_name=$",integer_to_list(N+7),
             ", pivot_surname  = $",integer_to_list(N+8),
             ", pivot_gender   = $",integer_to_list(N+9),
-            ", pivot_title     = $",integer_to_list(N+10),
-            " where id = $",integer_to_list(N+11)
+            " where id = $",integer_to_list(N+10)
         ]),
 
     SqlArgs = ArgsD ++ [
@@ -377,7 +378,6 @@ pivot_resource(Id, Context) ->
         truncate(proplists:get_value(name_first, R), 100),
         truncate(proplists:get_value(name_surname, R), 100),
         truncate(proplists:get_value(gender, R), 1),
-        truncate(get_pivot_title(R), 100),
         Id
     ],
     z_db:q(Sql, SqlArgs, Context),
@@ -392,11 +392,14 @@ pivot_resource(Id, Context) ->
     %% Make the setweight(to_tsvector()) parts of the update statement
     to_tsv([], _Level, Args) -> {"tsvector('')", Args};
     to_tsv(List, Level, Args) -> 
-        {Sql1, Args1} = lists:foldl(fun ({Lang,Text}, {Sql, As}) -> 
+        {Sql1, Args1} = lists:foldl(
+            fun ({Lang,Text}, {Sql, As}) -> 
                 N   = length(As) + 1,
                 As1 = As ++ [Text],
                 {[["setweight(to_tsvector('pg_catalog.",pg_lang(Lang),"', $",integer_to_list(N),"), '",Level,"')"] | Sql], As1}
-            end, {[], Args}, List),
+            end,
+            {[], Args},
+            List),
     
         {z_utils:combine(" || ", Sql1), Args1}.
             
@@ -438,16 +441,17 @@ pivot_date(R) ->
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
-    get_pivot_title([{title, m_rsc:p(Id, title, Context)}]).
+    z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])).
 
 get_pivot_title(Props) ->
     case proplists:get_value(title, Props) of
         {trans, []} ->
             "";
         {trans, [{_, Text}|_]} ->
-            Text;
-        T -> T
-    end.    
+            z_string:to_lower(Text);
+        T -> 
+            z_string:to_lower(T)
+    end.
 
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
 get_pivot_data(Id, Context) ->
@@ -501,11 +505,9 @@ fetch_texts({title, Value}, {A,B}, _Context) ->
     {[Value|A], B};
 fetch_texts({subtitle, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({surname, Value}, {A,B}, _Context) ->
+fetch_texts({name_surname, Value}, {A,B}, _Context) ->
     {[Value|A], B};
-fetch_texts({first_name, Value}, {A,B}, _Context) ->
-    {[Value|A], B};
-fetch_texts({given_name, Value}, {A,B}, _Context) ->
+fetch_texts({name_first, Value}, {A,B}, _Context) ->
     {[Value|A], B};
 fetch_texts({F, Value}, {A,B}, _Context) when is_binary(Value) ->
     case do_pivot_field(F) of
