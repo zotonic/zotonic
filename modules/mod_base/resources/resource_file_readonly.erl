@@ -138,7 +138,19 @@ charsets_provided(ReqData, Context) ->
     end.
     
 last_modified(ReqData, Context) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
+    RD1 = case z_context:get(id, Context) of
+        undefined ->
+            wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData);
+        RscId when is_integer(RscId) ->
+            case is_public(RscId, Context) of
+                true ->
+                    % Public
+                    wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData);
+                false ->
+                    % Not public
+                    wrq:set_resp_header("Cache-Control", "private, max-age=0, must-revalidate, post-check=0, pre-check=0", ReqData)
+            end
+    end,
     case z_context:get(last_modified, Context) of
         undefined -> 
             LMod = filelib:last_modified(z_context:get(fullpath, Context)),
@@ -165,7 +177,7 @@ provide_content(ReqData, Context) ->
                     {ok, Device} = file:open(z_context:get(fullpath, Context), [read,raw,binary]),
                     FileSize = z_context:get(file_size, Context),
                     {   {stream, read_chunk(0, FileSize, Device)}, 
-                     wrq:set_resp_header("Content-Length", integer_to_list(FileSize), ReqData),
+                     wrq:set_resp_header("Content-Length", integer_to_list(FileSize), RD1),
                      z_context:set(use_cache, false, Context) };
                 _ ->
                     {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
@@ -427,5 +439,10 @@ decode_data(identity, {Data, _Gzip}) ->
     Data;
 decode_data(gzip, {_Data, Gzip}) ->
     Gzip.
+
+
+%% @doc Check if a resource is publicly viewable
+is_public(RscId, Context) ->
+    z_acl:rsc_visible(RscId, z_context:new(Context)).
 
     
