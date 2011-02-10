@@ -20,7 +20,6 @@
 -behaviour(gen_scomp).
 
 -export([vary/2, render/3]).
--export([get_menu/1]).
 
 -include("zotonic.hrl").
 
@@ -43,7 +42,7 @@ vary(_Params, _Context) -> default.
 
 render(Params, _Vars, Context) ->
     Id = proplists:get_value(id, Params),
-    Menu = remove_invisible(get_menu(Context), [], Context),
+    Menu = mod_menu:get_menu(Context),
     Path = find_id(Menu, Id, []),
     Traversal = traverse_menu(Menu, 1, 1, []),
     Vars = [
@@ -53,20 +52,6 @@ render(Params, _Vars, Context) ->
     ],
     {ok, z_template:render("_menu.tpl", Vars, Context)}.
 
-
-%% Remove invisible menu items
-remove_invisible([], Acc, _Context) ->
-    lists:reverse(Acc);
-remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
-    case m_rsc:is_visible(Id, Context) of
-        true ->  remove_invisible(Rest, [{Id,remove_invisible(Sub, [], Context)} | Acc], Context);
-        false -> remove_invisible(Rest, Acc, Context)
-    end;
-remove_invisible([Id|Rest], Acc, Context) ->
-    case m_rsc:is_visible(Id, Context) of
-        true ->  remove_invisible(Rest, [Id | Acc], Context);
-        false -> remove_invisible(Rest, Acc, Context)
-    end.
 
 
 %% Traverse the menu, build a flat list that can be used for the template routines
@@ -83,15 +68,6 @@ traverse_menu([Id|Rest], Nr, Depth, Acc) ->
 
 menu_item(Id, Nr, Depth, HasSub) -> [Id, Depth, Nr, HasSub].
 menu_close(Depth) -> [undefined, Depth, undefined, false].
-
-
-%% @doc Fetch the menu from the site configuration.
-%% @spec get_menu(Context) -> list()
-get_menu(Context) ->
-    case m_config:get(menu, menu_default, Context) of
-        undefined -> [];
-        Props -> proplists:get_value(menu, Props, [])
-    end.
 
 
 %% Find the path to the id, if any.

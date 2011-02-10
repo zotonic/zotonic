@@ -25,13 +25,14 @@
 
 %% interface functions
 -export([
+    get_menu/1,
     observe_menu_get_rsc_ids/2
 ]).
 
 observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
-    Menu = scomp_menu_menu:get_menu(Context),
+    Menu = get_menu(Context),
     {ok, menu_ids(Menu, [])}.
-    
+
     menu_ids([], Acc) ->
         Acc;
     menu_ids([{Id,SubMenu}|T], Acc) ->
@@ -40,3 +41,33 @@ observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
     menu_ids([H|T], Acc) ->
         menu_ids(T, [H|Acc]).
 
+
+%% @doc Fetch the menu from the site configuration.
+%% @spec get_menu(Context) -> list()
+get_menu(Context) ->
+    case m_config:get(menu, menu_default, Context) of
+        undefined -> [];
+        Props -> remove_invisible(validate(proplists:get_value(menu, Props, []), []), [], Context)
+    end.
+
+	validate([], Acc) ->
+		lists:reverse(Acc);
+	validate([{_M,_L} = M|Ms], Acc) ->
+		validate(Ms, [M|Acc]);
+	validate([M|Ms], Acc) ->
+		validate(Ms, [{M,[]}|Acc]).
+
+
+%% Remove invisible menu items
+remove_invisible([], Acc, _Context) ->
+    lists:reverse(Acc);
+remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
+    case m_rsc:is_visible(Id, Context) of
+        true ->  remove_invisible(Rest, [{Id,remove_invisible(Sub, [], Context)} | Acc], Context);
+        false -> remove_invisible(Rest, Acc, Context)
+    end;
+remove_invisible([Id|Rest], Acc, Context) ->
+    case m_rsc:is_visible(Id, Context) of
+        true ->  remove_invisible(Rest, [Id | Acc], Context);
+        false -> remove_invisible(Rest, Acc, Context)
+    end.

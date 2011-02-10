@@ -2,6 +2,13 @@
 
 {% block title %}{{ m.rsc[id].title }}{% endblock %}
 
+{% block chapeau %}
+
+	{% include "_article_chapeau.tpl" %}
+
+{% endblock %}
+
+
 {% block content %}
 
     <h1>{{ m.rsc[id].title }}</h1>
