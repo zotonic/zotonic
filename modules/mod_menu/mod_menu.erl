@@ -23,12 +23,51 @@
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds amdin interface to define the menu.").
 
+-include("zotonic.hrl").
+
 %% interface functions
 -export([
+    init/1,
     get_menu/1,
+    get_menu/2,
+    set_menu/3,
     observe_menu_get_rsc_ids/2
 ]).
 
+
+init(Context) ->
+    z_datamodel:manage(?MODULE, datamodel(), Context),
+    case m_config:get(menu, menu_default, Context) of
+        undefined -> ok;
+        Props -> 
+            %% upgrade from previous menu
+            OldMenu = proplists:get_value(menu, Props, []),
+            ?zInfo("Upgrading old menu structure", Context),
+            set_menu(OldMenu, Context),
+            m_config:delete(menu, menu_default, Context)
+    end.
+
+
+datamodel() ->
+    [
+     {categories,
+      [
+       {menu, categorization,
+        [{title, <<"Page menu">>}]
+       }
+      ]
+     },
+     {resources,
+      [
+       {main_menu,
+        menu,
+        [{title, <<"Main menu">>}]
+       }
+      ]}
+    ].
+
+
+%% @doc Notifier handler to get all menu ids for the default menu.
 observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
     Menu = get_menu(Context),
     {ok, menu_ids(Menu, [])}.
@@ -45,9 +84,12 @@ observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
 %% @doc Fetch the menu from the site configuration.
 %% @spec get_menu(Context) -> list()
 get_menu(Context) ->
-    case m_config:get(menu, menu_default, Context) of
+    get_menu(m_rsc:rid(main_menu, Context), Context).
+
+get_menu(Id, Context) ->
+    case m_rsc:p(Id, menu, Context) of
         undefined -> [];
-        Props -> remove_invisible(validate(proplists:get_value(menu, Props, []), []), [], Context)
+        Menu -> remove_invisible(validate(Menu, []), [], Context)
     end.
 
 	validate([], Acc) ->
@@ -71,3 +113,14 @@ remove_invisible([Id|Rest], Acc, Context) ->
         true ->  remove_invisible(Rest, [Id | Acc], Context);
         false -> remove_invisible(Rest, Acc, Context)
     end.
+
+
+%% @doc Save the default menu.
+set_menu(Menu, Context) ->
+    Id = m_rsc:rid(main_menu, Context),
+    set_menu(Id, Menu, Context).
+
+
+%% @doc Save the current menu.
+set_menu(Id, Menu, Context) ->
+    m_rsc:update(Id, [{menu, Menu}], Context).

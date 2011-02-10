@@ -41,13 +41,11 @@
 vary(_Params, _Context) -> default.
 
 render(Params, _Vars, Context) ->
-    Id = proplists:get_value(id, Params),
-    Menu = mod_menu:get_menu(Context),
-    Path = find_id(Menu, Id, []),
+    MenuId = m_rsc:rid(proplists:get_value(menu_id, Params, main_menu), Context),
+    Menu = mod_menu:get_menu(MenuId, Context),
     Traversal = traverse_menu(Menu, 1, 1, []),
     Vars = [
-        {menu, lists:reverse(Traversal)},
-        {path, Path}
+        {menu, lists:reverse(Traversal)}
         | Params
     ],
     {ok, z_template:render("_menu.tpl", Vars, Context)}.
@@ -69,22 +67,5 @@ traverse_menu([Id|Rest], Nr, Depth, Acc) ->
 menu_item(Id, Nr, Depth, HasSub) -> [Id, Depth, Nr, HasSub].
 menu_close(Depth) -> [undefined, Depth, undefined, false].
 
-
-%% Find the path to the id, if any.
-find_id(_Menu, undefined, _Path) ->
-    [];
-find_id([], _Id, _Path) ->
-    [];
-find_id([Id|_], Id, Path) ->
-    [Id|Path];
-find_id([{Id,_}|_], Id, Path) ->
-    [Id|Path];
-find_id([{MId,Sub}|Rest], Id, Path) ->
-    case find_id(Sub, Id, [MId|Path]) of
-        [] -> find_id(Rest, Id, Path);
-        Result -> Result
-    end;
-find_id([_|Rest], Id, Path) ->
-    find_id(Rest, Id, Path).
 
 
