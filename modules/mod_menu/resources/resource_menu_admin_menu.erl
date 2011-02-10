@@ -31,18 +31,18 @@ is_authorized(ReqData, Context) ->
 
 
 html(Context) ->
-	Html = z_template:render("admin_menu.tpl", [{page_admin_menu, true}, {menu, get_menu(Context)}], Context),
+	Html = z_template:render("admin_menu.tpl", [{page_admin_menu, true}, {menu, mod_menu:get_menu(Context)}], Context),
 	z_context:output(Html, Context).
 
 event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, DropTag, _, _DropEltId}}, Context) ->
-    Menu  = get_menu(Context),
+    Menu  = mod_menu:get_menu(Context),
     Menu1 = handle_drop(Menu, DragTag, DropTag),
     save_menu(Menu1, Context),
     Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}], Context),
     z_render:update("menu-editor", Html, Context);
 
 event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
-    Menu = get_menu(Context),
+    Menu = mod_menu:get_menu(Context),
     Menu1 = case proplists:get_value(item, Props) of
         [Nr] -> 
             remove_nth(Nr, Menu);
@@ -57,21 +57,6 @@ event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
 
 event(_Event, Context) ->
     Context.
-
-%% @doc Fetch the menu from the site configuration.
-%% @spec get_menu(Context) -> list()
-get_menu(Context) ->
-    case m_config:get(menu, menu_default, Context) of
-        undefined -> [];
-        Props -> validate(proplists:get_value(menu, Props, []), [])
-    end.
-
-	validate([], Acc) ->
-		lists:reverse(Acc);
-	validate([{_M,_L} = M|Ms], Acc) ->
-		validate(Ms, [M|Acc]);
-	validate([M|Ms], Acc) ->
-		validate(Ms, [{M,[]}|Acc]).
 
 %% @doc Save the menu to the site configuration.
 %% @spec save_menu(list(), Context) -> ok
