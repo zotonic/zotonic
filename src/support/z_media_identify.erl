@@ -90,40 +90,61 @@ identify_file_os(win32, File, _OriginalFilename) ->
     {ok, [{mime, guess_mime(File)}]};
 
 identify_file_os(unix, File, OriginalFilename) ->
-	SafeFile = z_utils:os_filename(File),
-	Mime = z_string:trim(os:cmd("file -b --mime-type "++SafeFile)),
-	case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
-		nomatch -> 
-			{error, Mime};
-		{match, _} ->
-			case Mime of
-				"text/x-c" ->
-					%% "file" does a lousy job recognizing files with curly braces in them.
-					Mime2 = case guess_mime(OriginalFilename) of
-						"text/" ++ _ = MimeFilename -> MimeFilename;
-						"application/x-" ++ _ = MimeFilename -> MimeFilename;
-						"application/json" -> "application/json";
-						_ -> "text/plain"
-					end,
-					{ok, [{mime, Mime2}]};
-				"application/x-gzip" ->
-					%% Special case for the often used extension ".tgz" instead of ".tar.gz"
-					case filename:extension(OriginalFilename) of
-						".tgz" -> {ok, [{mime, "application/x-gzip+tar"}]};
-						_ -> {ok, [{mime, "application/x-gzip"}]}
-					end;
-				"application/zip" ->
-				    %% Special case for zip'ed office files
-				    case guess_mime(OriginalFilename) of
-				        "application/vnd.openxmlformats-officedocument." ++ _ = OfficeMime ->
-				            {ok, [{mime, OfficeMime}]};
-				        _ ->
-				            {ok, [{mime, "application/zip"}]}
-				    end;
-				_ ->
-					{ok, [{mime, Mime}]}
-			end
-	end.
+    SafeFile = z_utils:os_filename(File),
+    Mime = z_string:trim(os:cmd("file -b --mime-type "++SafeFile)),
+    case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
+        nomatch -> 
+            case Mime of 
+                "CDF V2 Document, corrupt:" ++ _ ->
+                    % Probably just a semi-illegal variation on a MS Office file, use the extension
+                    case guess_mime(OriginalFilename) of
+                        "application/msword" -> {ok, [{mime, "application/msword"}]};
+                        "application/vnd.ms-excel" -> {ok, [{mime, "application/vnd.ms-excel"}]};
+                        "application/vnd.ms-powerpoint" -> {ok, [{mime, "application/vnd.ms-powerpoint"}]};
+                        _ -> {error, Mime}
+                    end;
+                _ ->
+                    {error, Mime}
+            end;
+        {match, _} ->
+            case Mime of
+                "text/x-c" ->
+                    %% "file" does a lousy job recognizing files with curly braces in them.
+                    Mime2 = case guess_mime(OriginalFilename) of
+                        "text/" ++ _ = MimeFilename -> MimeFilename;
+                        "application/x-" ++ _ = MimeFilename -> MimeFilename;
+                        "application/json" -> "application/json";
+                        _ -> "text/plain"
+                    end,
+                    {ok, [{mime, Mime2}]};
+                "application/x-gzip" ->
+                    %% Special case for the often used extension ".tgz" instead of ".tar.gz"
+                    case filename:extension(OriginalFilename) of
+                        ".tgz" -> {ok, [{mime, "application/x-gzip+tar"}]};
+                        _ -> {ok, [{mime, "application/x-gzip"}]}
+                    end;
+                "application/zip" ->
+                    %% Special case for zip'ed office files
+                    case guess_mime(OriginalFilename) of
+                        "application/vnd.openxmlformats-officedocument." ++ _ = OfficeMime ->
+                            {ok, [{mime, OfficeMime}]};
+                        _ ->
+                            {ok, [{mime, "application/zip"}]}
+                    end;
+                "application/octet-stream" ->
+                    % The file utility does some miss-guessing
+                    case guess_mime(OriginalFilename) of
+                        "text/csv" ->
+                            {ok, [{mime, "text/csv"}]};
+                        "application/vnd.oasis.opendocument." ++ _ = ODF ->
+                            {ok, [{mime, ODF}]};
+                        _ ->
+                            {ok, [{mime, "application/octet-stream"}]}
+                    end;
+                _ ->
+                    {ok, [{mime, Mime}]}
+            end
+    end.
 
 
 %% @spec identify(ImageFile) -> {ok, PropList} | {error, Reason}
@@ -229,10 +250,12 @@ extension_mime() ->
 		{".c", "text/x-c"},
 		{".csh", "application/x-csh"},
 		{".css", "text/css"},
+		{".csv", "text/csv"},
 		{".diff", "text/x-diff"},
 		{".doc", "application/msword"},
 		{".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 		{".dot", "application/x-dot"},
+	    {".dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template"},
 		{".dvi", "application/x-dvi"},
 		{".dwg", "application/acad"},
 		{".gif", "image/gif"},
@@ -255,6 +278,22 @@ extension_mime() ->
 		{".mp4", "video/mp4"},
 		{".mpg", "video/mpeg"},
 		{".mpp", "application/vnd.ms-project"},
+		{".odc", "application/vnd.oasis.opendocument.chart"},
+		{".odf", "application/vnd.oasis.opendocument.formula"},
+		{".odg", "application/vnd.oasis.opendocument.graphics"},
+		{".odi", "application/vnd.oasis.opendocument.image"},
+		{".odm", "application/vnd.oasis.opendocument.text-master"},
+		{".odp", "application/vnd.oasis.opendocument.presentation"},
+		{".ods", "application/vnd.oasis.opendocument.spreadsheet"},
+		{".odt", "application/vnd.oasis.opendocument.text"},
+		{".otc", "application/vnd.oasis.opendocument.chart-template"},
+		{".otf", "application/vnd.oasis.opendocument.formula-template"},
+		{".otg", "application/vnd.oasis.opendocument.graphics-template"},
+		{".oth", "application/vnd.oasis.opendocument.text-web"},
+		{".oti", "application/vnd.oasis.opendocument.image-template"},
+		{".otp", "application/vnd.oasis.opendocument.presentation-template"},
+		{".ots", "application/vnd.oasis.opendocument.spreadsheet-template"},
+		{".ott", "application/vnd.oasis.opendocument.text-template"},
 		{".patch", "text/patch"},
 		{".pdf", "application/pdf"},
 		{".php", "text/x-php"},
@@ -264,6 +303,7 @@ extension_mime() ->
 		{".ps", "application/postscript"},
 		{".psd", "image/vnd.adobe.photoshop"},
 		{".rar", "application/x-rar"},
+        {".rtf", "text/rtf"},
 		{".sh", "text/x-shellscript"},
 		{".sit", "application/x-stuffit"},
 		{".svg", "image/svg+xml"},
