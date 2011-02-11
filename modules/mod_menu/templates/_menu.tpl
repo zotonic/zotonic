@@ -1,5 +1,5 @@
 {% if menu %}
-{% with id|menu_trail as parents %}
+{% with id|menu_trail:menu_id as parents %}
     <ul id="{{ id_prefix }}navigation" class="clearfix at-menu do_superfish">
     {% for mid,depth,nr,has_sub in menu %}
 		{% if not mid %}{% if depth > 1 %}</ul></li>{% endif %}
