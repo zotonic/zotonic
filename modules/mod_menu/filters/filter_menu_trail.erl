@@ -17,14 +17,17 @@
 %% limitations under the License.
 
 -module(filter_menu_trail).
--export([menu_trail/2]).
+-export([menu_trail/2, menu_trail/3]).
 
 
 menu_trail(undefined, _Context) ->
     undefined;
 menu_trail(Id, Context) ->
+    menu_trail(Id, main_menu, Context).
+
+menu_trail(Id, MenuId, Context) ->
     Current = z_convert:to_integer(Id),
-    Menu = mod_menu:get_menu(Context),
+    Menu = mod_menu:get_menu(MenuId, Context),
     trail(Current, Menu).
 
 
