@@ -36,7 +36,7 @@
 
 
 %% @doc Handle the submit event of a new comment
-event({submit, {newcomment, Args}, _TriggerId, _TargetId}, Context) ->
+event({submit, {newcomment, Args}, TriggerId, _TargetId}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_auth:is_auth(Context) of
         false ->
@@ -49,6 +49,8 @@ event({submit, {newcomment, Args}, _TriggerId, _TargetId}, Context) ->
     Message = z_context:get_q_validated("message", Context),
     case m_comment:insert(Id, Name, Email, Message, Context) of
         {ok, CommentId} ->
+            CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),
+            CommentTemplate = proplists:get_value(comment_template, Args, "_comments_comment.tpl"),
             Comment = m_comment:get(CommentId, Context),
             Props = [
                 {id, Id},
@@ -56,13 +58,16 @@ event({submit, {newcomment, Args}, _TriggerId, _TargetId}, Context) ->
                 {creator, m_rsc:p(Id, creator_id, Context)},
                 {hidden, true}
             ],
-            Html = z_template:render("_comments_comment.tpl", Props, Context),
-            Context1 = z_render:insert_bottom("comments-list", Html, Context),
-            z_render:wire([
-                {set_value, [{target, "message"}, {value, ""}]},
-                {slide_down, [{target, "comment-"++integer_to_list(CommentId)}]},
-                {redirect, [{location, "#comment-"++integer_to_list(CommentId)}]}
-                ], Context1);
+            Html = z_template:render(CommentTemplate, Props, Context),
+            Context1 = z_render:insert_bottom(CommentsListElt, Html, Context),
+            Context2 = z_render:wire([
+                            {set_value, [{selector, "#"++TriggerId++" input[name=\"message\"]"}, {value, ""}]},
+                            {slide_down, [{target, "comment-"++integer_to_list(CommentId)}]}
+                        ], Context1),
+            case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of
+                true -> z_render:wire({redirect, [{location, "#comment-"++integer_to_list(CommentId)}]}, Context2);
+                false -> Context2
+            end;
         {error, _} ->
             Context
     end.
