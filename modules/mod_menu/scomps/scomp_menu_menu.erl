@@ -45,7 +45,8 @@ render(Params, _Vars, Context) ->
     Menu = mod_menu:get_menu(MenuId, Context),
     Traversal = traverse_menu(Menu, 1, 1, []),
     Vars = [
-        {menu, lists:reverse(Traversal)}
+        {menu, lists:reverse(Traversal)},
+        {menu_id, MenuId}
         | Params
     ],
     {ok, z_template:render("_menu.tpl", Vars, Context)}.
