@@ -96,7 +96,7 @@ websocket_start(ReqData, Context) ->
             %% Sec-Websocket stuff
             Key1 = process_key(WsKey1),
             Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
-            {ok, Body} = gen_tcp:recv(Socket, 8),
+            {ok, Body} = mochiweb_socket:recv(Socket, 8, infinity),
             SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
 
             %% Send the handshake
@@ -116,7 +116,7 @@ websocket_start(ReqData, Context) ->
 
 %% @doc Start receiving messages from the websocket
 loop(Buff, Length, Socket, Context) ->
-    case gen_tcp:recv(Socket, 0) of
+    case mochiweb_socket:recv(Socket, 0, infinity) of
         {ok, Received} ->
             handle_data(Buff, Length, Received, Socket, Context);
         {error, Reason} ->
@@ -271,7 +271,7 @@ send_loop(Socket, Context) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    case gen_tcp:send(Socket, iolist_to_binary(Data)) of
+    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
         ok -> ok;
         {error, closed} -> closed;
         _ -> exit(normal)
