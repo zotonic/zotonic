@@ -19,7 +19,10 @@
 		{% button text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
 
 		<hr class="clear" />
-		<p>{_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}<br/><a href="{% url admin_edit_rsc id=id %}">{_ Edit the mailing list &raquo; _}</a></p>
+		<p>{_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}<br/>
+			<a href="{% url admin_edit_rsc id=id %}">{_ Edit the mailing list &raquo; _}</a><br/>
+			<a href="{% url admin_referrers id=id %}">{_ See the _}  {{ id.s.subscriberof|length }} {_ subscribing persons &raquo; _}</a>.
+		</p>
 		{% with m.search.paged[{mailinglist_recipients id=id pagelen=150 page=q.page}] as recipients %}
 			{% pager result=recipients dispatch="admin_mailinglist_recipients" id=id qargs %}
 			{% for list in recipients|vsplit_in:3 %}
