@@ -38,6 +38,8 @@
 
 %% @spec identify(File, Context) -> {ok, Meta} | {error, Error}
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
+identify(#upload{tmpfile=File, filename=Filename}, Context) ->
+	identify(File, Filename, Context);
 identify(File, Context) ->
 	identify(File, File, Context).
 identify(File, OriginalFilename, Context) ->
