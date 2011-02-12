@@ -25,8 +25,7 @@
 
 
 %% The datamodel manages parts of your datamodel. This includes
-%% categories and predicates, but also "default data" like resources
-%% and the menu.
+%% categories and predicates, but also "default data" like resources.
 %%
 %% The data model maintains a special property on this installed data,
 %% called 'installed_by'. This decides whether it can touch it.
@@ -53,10 +52,6 @@ manage(Module, Datamodel, Context) ->
     case proplists:get_value(media, Datamodel) of
         undefined -> ok;
         Ms        -> [manage_medium(Module, Medium, AdminContext) || Medium <- Ms]
-    end,
-    case proplists:get_value(menu, Datamodel) of
-        undefined -> ok;
-        Menu      -> manage_menu(Module, Menu, AdminContext)
     end,
     case proplists:get_value(edges, Datamodel) of
         undefined -> ok;
@@ -215,50 +210,6 @@ map_prop({file, Filepath}, _Context) ->
     Txt;
 map_prop(Value, _Context) ->
     Value.
-
-
-manage_menu(Module, M, Context) ->
-    Menu = menu_names_to_id(M, Context, []),
-    case m_config:get(menu, menu_default, Context) of
-        undefined ->
-            m_config:set_prop(menu, menu_default, installed_by, Module, Context),
-            m_config:set_prop(menu, menu_default, menu, Menu, Context),
-            m_config:set_prop(menu, menu_default, menu_orig, Menu, Context),
-            ok;
-        X ->
-            case proplists:get_value(installed_by, X) of
-                Module ->
-                    %% Menu is installed by us; update it, but only if it has not been changed.
-                    Orig = proplists:get_value(menu_orig, X),
-                    case proplists:get_value(menu, X) of
-                        Menu ->
-                            %% It is still the same as now. Bail out.
-                            ok;
-                        Orig ->
-                            %% It has not been changed in the admin, but it is different from what we have.
-                            %% Lets update it.
-                            m_config:set_prop(menu, menu_default, menu, Menu, Context),
-                            m_config:set_prop(menu, menu_default, menu_orig, Menu, Context),
-                            ok;
-                        _ ->
-                            %% Menu changed in the admin
-                            ok
-                    end;
-                _ ->
-                    %% Not touching the menu, it is not installed by us.
-                    ok
-            end
-    end,
-    {ok, []}.
-
-
-    menu_names_to_id([], _Context, Acc) ->
-        lists:reverse(Acc);
-    menu_names_to_id([Name|Ms], Context, Acc) ->
-        case m_rsc:name_to_id(Name, Context) of
-            {ok, Id} -> menu_names_to_id(Ms, Context, [{Id,[]}|Acc]);
-            {error, _Reason} -> menu_names_to_id(Ms, Context, Acc)
-        end.        
 
 
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->

@@ -61,7 +61,9 @@ datamodel() ->
       [
        {main_menu,
         menu,
-        [{title, <<"Main menu">>}]
+        [{title, <<"Main menu">>},
+         {menu, [{page_home, []}, {page_about, []}, {page_contact, []}]}
+        ]
        }
       ]}
     ].
