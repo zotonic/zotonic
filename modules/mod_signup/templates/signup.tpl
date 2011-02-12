@@ -81,16 +81,17 @@
 			{% endif %}
 		</div>
 
-	{# Enable this for nl, de and be sites
+		{# Enable this for nl, de and be sites #}
+		{% if z_language == 'nl' or z_language == 'de' %}
 		<div id="signup_surname_prefix">
 			<label for="surprefix">{_ Prefix _}</label>
 			<input id="surprefix" name="surprefix" type="text" value="" />
 		</div>
-	#}
+		{% endif %}
 
 		<div id="signup_name_surname">
 			<label for="name_surname">{_ Last name _}</label>
-			{% if email %}
+			{% if name_surname %}
 				<span>{{ name_surname|escape }}</span>
 			{% else %}
 				<input id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" />
