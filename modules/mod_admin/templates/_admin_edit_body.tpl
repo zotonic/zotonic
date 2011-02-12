@@ -30,13 +30,12 @@
 {% endwith %}
 {% else %} {# non-multilanguage content and translation module disabled #}
 
-<div class="item-wrapper" id="sort-category">
+<div class="item-wrapper">
     <h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
-        <a name="category"></a>
         <span class="title">{_ Content _}</span>
         <span class="arrow">{_ make smaller _}</span>
     </h3>
-    <div class="item clearfix admin-form">
+    <div class="item clearfix admin-form" style="margin: 0; padding: 0">
         <fieldset class="admin-form">
             {% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
             {% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
