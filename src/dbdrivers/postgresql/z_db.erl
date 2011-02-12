@@ -508,15 +508,16 @@ update_sequence(Table, Ids, Context) when is_atom(Table) ->
 update_sequence(Table, Ids, Context) ->
     assert_table_name(Table),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
-    Updater = fun(Ctx) -> 
-                C = get_connection(Ctx),
-                try
-                    [ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
-                after
-                    return_connection(C, Ctx)
-                end
-            end,
-    ok = transaction(Updater, Context).
+    case get_connection(Context) of
+        none -> [];
+        C ->
+	    try
+		[ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
+	    after
+		return_connection(C, Context)
+	    end
+    end.
+
 
 
 %% @doc Check the information schema if a certain table exists in the context database.
