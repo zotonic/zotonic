@@ -184,7 +184,7 @@ get_confirm_key(ConfirmKey, Context) ->
 
 %% @doc Insert a recipient in the mailing list, send a message to the recipient when needed.
 insert_recipient(ListId, Email, WelcomeMessageType, Context) ->
-    insert_recipient(ListId, Email, [{user_id, undefined}], WelcomeMessageType, Context).
+    insert_recipient(ListId, Email, [], WelcomeMessageType, Context).
 
 insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 	true = z_acl:rsc_visible(ListId, Context),
@@ -369,22 +369,21 @@ install(Context) ->
 		true ->
 		    case z_db:column_names(mailinglist_recipient, Context) of
 		        [confirm_key,email,id,is_enabled,mailinglist_id,timestamp] ->
-		            z_db:q("alter table mailinglist_recipient 
-		                        add column user_id int default null,
-		                        add column props bytea,
-		                        add constraint fk_mailinglist_user_id FOREIGN KEY (user_id) REFERENCES rsc (id) ON UPDATE CASCADE ON DELETE CASCADE", 
-		                    Context),
-		            z_db:equery("create index fk_mailinglist_recipient_user_id on mailinglist_recipient(user_id)", Context),
+		            z_db:q("alter table mailinglist_recipient
+		                        add column props bytea", Context),
 		            z_db:flush(Context),
                     ok;
 		        [confirm_key,email,id,is_enabled,mailinglist_id,props,timestamp,user_id] ->
+		            z_db:q("alter table mailinglist_recipient 
+		                        drop column user_id int default null", Context),
+		            z_db:flush(Context);
+                [confirm_key,email,id,is_enabled,mailinglist_id,props,timestamp] ->
 		            ok
 		    end;
 		false ->
 			z_db:q("
 				CREATE TABLE mailinglist_recipient (
 					id serial NOT NULL,
-					user_id int default NULL,
 					mailinglist_id INT NOT NULL,
 					email character varying (200) NOT NULL,
 					is_enabled boolean NOT NULL default true,
@@ -397,13 +396,8 @@ install(Context) ->
 			        CONSTRAINT confirm_key_key UNIQUE (confirm_key),
 					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
 				      REFERENCES rsc (id)
-				      ON UPDATE CASCADE ON DELETE CASCADE,
-  					CONSTRAINT fk_mailinglist_user_id FOREIGN KEY (user_id)
-  				      REFERENCES rsc (id)
-  				      ON UPDATE CASCADE ON DELETE CASCADE
+				      ON UPDATE CASCADE ON DELETE CASCADE
 				)", Context),
-
-            z_db:equery("create index fki_mailinglist_recipient_usr_id on mailinglist_recipient(user_id)", Context),
 
 			z_db:q("
 				CREATE TABLE mailinglist_scheduled (
@@ -428,6 +422,16 @@ datamodel() ->
 							{summary, "Mailing lists are used to send pages to groups of people."}
 						]}
 		]},
+
+        % Any resource with an e-mail address can be a subscriber of a mailinglist
+        {predicates, [
+            {subscriberof,
+                 [{title, <<"Subscriber of">>}],
+                 [{person, mailinglist}, {location, mailinglist}]},
+             {exsubscriberof,
+                  [{title, <<"Ex-subscriber of">>}],
+                  [{person, mailinglist}, {location, mailinglist}]}
+        ]},
 		
 		{resources, [
 			{mailinglist_test, mailinglist, [

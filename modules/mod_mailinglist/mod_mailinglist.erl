@@ -3,7 +3,7 @@
 %% @date 2009-11-23
 %% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -267,14 +267,15 @@ send_mailing(ListId, PageId, Context) ->
 	end.
 
 send_mailing_process(ListId, PageId, Context) ->
-	Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
-	{Direct,Queued} = split_list(20, Recipients),
-	FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
-        	    Empty when Empty =:= undefined; Empty =:= <<>> ->
-        	        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
-        	    RT ->
-        	        z_convert:to_list(RT)
-    	     end,
+    Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
+    SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
+    {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
+    FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
+                    Empty when Empty =:= undefined; Empty =:= <<>> ->
+                        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
+                    RT ->
+                        z_convert:to_list(RT)
+                end,
     FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
                   undefined -> [];
                   <<>> -> []; 
@@ -285,15 +286,26 @@ send_mailing_process(ListId, PageId, Context) ->
         {id,PageId}, {list_id, ListId}, {email_from, From}
     ],
     
-	[
-		z_email:send_render(Email, {cat, "mailing_page.tpl"}, [{email,Email}|Options], Context)
-		|| Email <- Direct
-	],
-	[
-		z_email:sendq_render(Email, {cat, "mailing_page.tpl"}, [{email,Email}|Options], Context)
-		|| Email <- Queued
-	],
-	ok.
+    [ send(true, Email, Options, Context) || Email <- Direct ],
+    [ send(false, Email, Options, Context) || Email <- Queued ],
+    ok.
+
+
+    send(_IsDirect, undefined, _Options, _Context) ->
+        skip;
+    send(IsDirect, Id, Options, Context) when is_integer(Id) ->
+        send(IsDirect, m_rsc:p_no_acl(Id, email, Context), [{recipient_id,Id}|Options], Context);
+    send(IsDirect, Email, Options, Context) ->
+        case z_convert:to_list(z_string:trim(Email)) of
+            [] -> skip;
+            Email1 ->
+                Options1 = [{email,Email1}|Options],
+                case IsDirect of
+                    true -> z_email:send_render(Email, {cat, "mailing_page.tpl"}, Options1, Context);
+                    false -> z_email:send_qrender(Email, {cat, "mailing_page.tpl"}, Options1, Context)
+                end
+        end.
+
 
 	split_list(N, List) ->
 		split_list(N, List, []).
