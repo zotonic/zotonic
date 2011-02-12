@@ -11,9 +11,8 @@
 		{% button text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 
 		<hr class="clear" />
-		<p>
-			{_ Any page can be send as a mailing. You can send a mailing from any edit page, here you can add or remove mailing lists and recipients. _}
-		</p>
+		<p>{_ Any page can be send as a mailing. You can send a mailing from any edit page, here you can add or remove mailing lists and recipients. _}<br/>
+		{_ Recipients can be e-mail only via a simple signup form, or subscribed person pages in the system. _}</p>
 
 		<h3 class="above-list ">{_ Mailing list overview _}</h3>
 		<ul class="short-list">
@@ -31,7 +30,7 @@
 					<span class="zp-20">{{ title|default:"untitled" }}</span>
 					<span class="zp-40">{{ m.rsc[id].summary|default:"-" }}</span>
 					{% with m.mailinglist.stats[id] as stats %}
-						<span class="zp-10">{{ stats[1]|format_number }}</span>
+						<span class="zp-10">{{ (stats[1] + id.s.subscriberof|length)|format_number }}</span>
 						<span class="zp-10">{{ stats[2]|length|format_number }}</span>
 					{% endwith %}
 					<span class="zp-20">

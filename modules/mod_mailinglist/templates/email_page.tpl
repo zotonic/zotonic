@@ -1,10 +1,10 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{{ m.rsc[id].title }}{% endblock %}
+{% block title %}{{ id.title }}{% endblock %}
 
 {% block body %}
 <p>{_ This mail was sent to you because someone visiting _} {{ m.site.hostname }} {_ thought you would be interested. _}</p>
-<p>{_ You can _} <a href="{{ m.rsc[id].page_url }}">{_ read the full article online. _}</a></p>
+<p>{_ You can _} <a href="http://{{ m.site.hostname }}{{ id.page_url }}">{_ read the full article online. _}</a></p>
 
 <hr/>
 
