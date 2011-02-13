@@ -45,13 +45,11 @@ show_media1(Input, Index, Context) when is_binary(Input) ->
 show_media1_id(Input, Index, Context) ->
     case Input of
         <<Id:Index/binary, " -->", Post/binary>> ->
-            Id2 = z_convert:to_integer(Id),
-            Html = show_media_html(Id2, Context),
+            Html = show_media_html(Id, Context),
             process_binary_match(<<>>, Html, size(Post), show_media1(Post, 0, Context));
 
         <<Id:Index/binary, " {", Post/binary>> ->
-            Id2 = z_convert:to_integer(Id),
-            process_binary_match(<<>>, <<>>, size(Post), show_media1_opts(Id2, Post, 0, Context));
+            process_binary_match(<<>>, <<>>, size(Post), show_media1_opts(Id, Post, 0, Context));
         <<_:Index/binary, _/binary>> ->
             show_media1_id(Input, Index + 1, Context);
         _ ->

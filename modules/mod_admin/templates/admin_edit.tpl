@@ -257,6 +257,10 @@
 									</div>
 									{% endif %}
 
+								    {% if r.installed_by %}
+								    <div>{_ This resource was created by the module _} <strong>{{ m.modules.info[r.installed_by].title|default:r.installed_by }}</strong></div>
+								    {% endif %}
+
 									{% if m.acl.use.mod_admin_config %}
 										{% if r.is_a.meta or not r.is_authoritative %}
 											<div class="form-item clearfix">

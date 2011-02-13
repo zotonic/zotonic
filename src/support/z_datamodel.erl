@@ -21,7 +21,7 @@
 -module(z_datamodel).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([manage/3]).
+-export([manage/3, reset_deleted/2]).
 
 
 %% The datamodel manages parts of your datamodel. This includes
@@ -34,29 +34,30 @@
 -include_lib("zotonic.hrl").
 
 
+%% @doc Reset the state of an imported datamodel, causing all deleted resources to be reimported
+reset_deleted(Module, Context) ->
+    m_config:delete(Module, datamodel, Context).
+
+
+
+manage(Module, Datamodel, Context) when is_list(Datamodel) ->
+    %% Backwards compatibility with old datamodel notation.
+    manage(Module,
+           #datamodel{categories=proplists:get_value(categories, Datamodel, []),
+                      predicates=proplists:get_value(predicates, Datamodel, []),
+                      resources=proplists:get_value(resources, Datamodel, []),
+                      media=proplists:get_value(media, Datamodel, []),
+                      edges=proplists:get_value(edges, Datamodel, [])
+                     },
+           Context);
 
 manage(Module, Datamodel, Context) ->
-	AdminContext = z_acl:sudo(Context),
-    case proplists:get_value(categories, Datamodel) of
-        undefined  -> ok;
-        Categories -> [manage_category(Module, Cat, AdminContext) || Cat <- Categories]
-    end,
-    case proplists:get_value(predicates, Datamodel) of
-        undefined -> ok;
-        Preds     -> [manage_predicate(Module, Pred, AdminContext) || Pred <- Preds]
-    end,
-    case proplists:get_value(resources, Datamodel) of
-        undefined -> ok;
-        Rs        -> [manage_resource(Module, R, AdminContext) || R <- Rs]
-    end,
-    case proplists:get_value(media, Datamodel) of
-        undefined -> ok;
-        Ms        -> [manage_medium(Module, Medium, AdminContext) || Medium <- Ms]
-    end,
-    case proplists:get_value(edges, Datamodel) of
-        undefined -> ok;
-        Edges     -> [manage_edge(Module, Edge, AdminContext) || Edge <- Edges]
-    end,
+    AdminContext = z_acl:sudo(Context),
+    [manage_category(Module, Cat, AdminContext) || Cat <- Datamodel#datamodel.categories],
+    [manage_predicate(Module, Pred, AdminContext) || Pred <- Datamodel#datamodel.predicates],
+    [manage_resource(Module, R, AdminContext) || R <- Datamodel#datamodel.resources],
+    [manage_medium(Module, Medium, AdminContext) || Medium <- Datamodel#datamodel.media],
+    [manage_edge(Module, Edge, AdminContext) || Edge <- Datamodel#datamodel.edges],
     ok.
 
 
@@ -123,11 +124,12 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                 {ok, Id} ->
                     case m_rsc:p(Id, installed_by, Context) of
                         Module ->
+                            NewProps = update_new_props(Module, Id, Props, Context),
+                            m_rsc:update(Id, [{managed_props, z_html:escape_props(Props)} | NewProps], Context),
                             {ok};
                         _ ->
                             %% Resource exists but is not installed by us.
-                            Msg = io_lib:format("Resource '~p' (~p) exists but is not managed by Zotonic.", [Name, Id]),
-                            ?zInfo(Msg, Context),
+                            ?zInfo(io_lib:format("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]), Context),
                             {ok}
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -148,7 +150,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                     {Result, NewNames} = case lists:member(Name, ManagedNames) of
                                              false ->
                                                  Props1 = [{name, Name}, {category_id, CatId},
-                                                           {installed_by, Module}, {managed_props, Props}] ++ Props,
+                                                           {installed_by, Module}, {managed_props, z_html:escape_props(Props)}] ++ Props,
                                                  Props2 = case proplists:get_value(is_published, Props1) of
                                                               undefined -> [{is_published, true} | Props1];
                                                               _ -> Props1
@@ -158,7 +160,20 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                                                               _ -> Props2
                                                           end,
                                                  ?zInfo(io_lib:format("Creating new resource '~p'", [Name]), Context),
-                                                 {m_rsc:insert(Props3, Context), [Name | ManagedNames ]};
+                                                 {ok, Id} = m_rsc:insert(Props3, Context),
+                                                 case proplists:get_value(media_url, Props3) of
+                                                     undefined ->
+                                                         nop;
+                                                     Url ->
+                                                         m_media:replace_url(Url, Id, [], Context)
+                                                 end,
+                                                 case proplists:get_value(media_file, Props3) of
+                                                     undefined ->
+                                                         nop;
+                                                     File ->
+                                                         m_media:replace_file(File, Id, Context)
+                                                 end,
+                                                 {{ok, Id}, [Name | ManagedNames ]};
                                              true ->
                                                  ?zInfo(io_lib:format("Resource '~p' was deleted", [Name]), Context),
                                                  {{ok}, ManagedNames}
@@ -171,6 +186,37 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
             ?zWarning(Msg, Context),
             {ok}
     end.
+
+update_new_props(Module, Id, NewProps, Context) ->
+    PreviousProps = m_rsc:p(Id, managed_props, Context),
+    lists:foldl(fun({K, V}, Props) ->
+                        case m_rsc:p(Id, K, Context) of
+                            V ->
+                                %% New value == current value
+                                Props;
+                            DbVal ->
+                                case proplists:get_value(K, PreviousProps) of 
+                                    DbVal ->
+                                        %% New value in NewProps, unchanged in DB
+                                        [{K,V} | Props];
+                                    PrevVal when is_binary(DbVal) ->
+                                        %% Compare with converted to list value
+                                        case z_convert:to_list(DbVal) of
+                                            V ->
+                                                Props;
+                                            _ ->
+                                                %% Changed by someone else
+                                                ?zInfo(io_lib:format("~p: ~p of ~p changed in database (~p != ~p), not updating.", [Module, K, Id, DbVal, PrevVal]), Context),
+                                                Props
+                                        end;
+                                    PrevVal2 ->
+
+                                        %% Changed by someone else
+                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database (~p != ~p), not updating.", [Module, K, Id, DbVal, PrevVal2]), Context),
+                                        Props
+                                end
+                        end
+                end, [], NewProps).
 
 
 manage_predicate_validfor(_Id, [], _Context) ->
@@ -208,6 +254,11 @@ map_props([{Key, Value}|Rest], Context, Acc) ->
 map_prop({file, Filepath}, _Context) ->
     {ok, Txt} = file:read_file(Filepath),
     Txt;
+map_prop({to_id, Name}, Context) ->
+    case m_rsc:name_to_id(Name, Context) of
+             {ok, Id} -> Id;
+             _ -> undefined
+    end;
 map_prop(Value, _Context) ->
     Value.
 

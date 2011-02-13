@@ -237,6 +237,10 @@ footer p.footer-blog-title {
 	margin: 0 0 18px 0;
 }	
 
+    .simple-list ul {
+	    margin-left: 9px;
+    }
+
 	.simple-list li a {
 		font-size: 12px;	
 	}
@@ -425,3 +429,25 @@ p.image-caption {
 			color: #666;
 			line-height: 18px;
 		}
+
+
+/* Inline list
+---------------------------------------------------------- */
+li a.caption {
+    font-weight: bold;
+}
+
+.inline-list {
+	margin: 0 0 18px 0;
+    clear: both;
+}	
+
+    .inline-list li {
+        float: left;
+        margin-right: 4px;
+    }
+
+
+	.inline-list li a {
+		font-size: 12px;	
+	}

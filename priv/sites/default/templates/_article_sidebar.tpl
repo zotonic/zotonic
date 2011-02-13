@@ -5,16 +5,7 @@
 		<ul class="images-list">
 			{% for m in media %}
 				<li>
-					{% ifequal m.rsc[m].medium.mime "text/html-video-embed" %}
-						<section class="video-wrapper">
-							{% media m.rsc[m].medium %}
-						</section>
-					{% else %}
-						<figure class="image-wrapper block-level-image">
-							{% media m width=315 extent %}
-							{% if m.rsc[m].summary %}<p class="image-caption">{{ m.rsc[m].summary }}</p>{% endif %}
-						</figure>	
-					{% endifequal %}
+                    {% include "_body_media.tpl" width=315 align="block" %}
 				</li>
 			{% endfor %}
 		</ul>
