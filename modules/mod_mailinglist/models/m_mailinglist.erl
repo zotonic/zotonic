@@ -372,11 +372,12 @@ install(Context) ->
 		            z_db:q("alter table mailinglist_recipient
 		                        add column props bytea", Context),
 		            z_db:flush(Context),
-                    ok;
+			    ok;
 		        [confirm_key,email,id,is_enabled,mailinglist_id,props,timestamp,user_id] ->
-		            z_db:q("alter table mailinglist_recipient 
-		                        drop column user_id int default null", Context),
-		            z_db:flush(Context);
+		            z_db:q("alter table mailinglist_recipient
+		                        drop column user_id", Context),
+		            z_db:flush(Context),
+			    ok;
                 [confirm_key,email,id,is_enabled,mailinglist_id,props,timestamp] ->
 		            ok
 		    end;
