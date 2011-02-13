@@ -16,6 +16,9 @@
     {dbuser, "zotonic"},
     {dbpassword, ""},
     {dbdatabase, "zotonic_testsandbox"},
+
+    % Admin password, used during installation. You can change it later
+    {admin_password, "admin"},
     
     {sign_key_simple, <<"testsandbox">>},
     {sign_key, <<"testsandbox">>}
