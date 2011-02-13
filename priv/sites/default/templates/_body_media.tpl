@@ -5,10 +5,10 @@
 		</section>
 	{% else %}
 		<figure class="image-wrapper block-level-image">
-			{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=m.rsc[id].title %}
-			{% if m.rsc[id].summary %}<p class="image-caption">{{ m.rsc[id].summary }}</p>{% endif %}
+			{% media m.rsc[id].medium width=size.width|default:width height=size.height|default:height crop=crop class=align link=link alt=m.rsc[id].title %}
+            {% with id|summary as summary %}{% if summary %}<p class="image-caption">{{ summary }}</p>{% endif %}{% endwith %}
 		</figure>	
 	{% endifequal %}
 {% else %}
-	{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=m.rsc[id].title %}
+	{% media m.rsc[id].medium width=size.width|default:width height=size.height|default:height crop=crop class=align link=link alt=m.rsc[id].title %}
 {% endifequal %}

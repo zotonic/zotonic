@@ -16,7 +16,7 @@
 		
 		{% endfor %}
 	
-		{% pager result=result dispatch='archives_y' year=q.year %}
+		{% pager result=result dispatch=zotonic_dispatch year=q.year month=q.month %}
 
 	{% endwith %}
 

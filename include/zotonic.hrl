@@ -110,6 +110,9 @@
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default}).
 
+%% For the datamodel: default resources to create.
+-record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[]}).
+
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).
 -define(ACL_ANONYMOUS_USER_ID, -1).
