@@ -1,0 +1,77 @@
+Zotonic Commands
+================
+The zotonic command can run a number of utility commands availble in
+zotonic/bin.
+
+OS X Compatibility Problem
+--------------------------
+If you symlink to zotonic/bin/zotonic, then you will need GNU coreutils on
+OS X or `readlink -e` will fail.  I could not find a clean work-around for
+this with built-in OS X CLI tools.  This is needed to traverse deeply
+symlinked commands.
+
+zotonic addsite [site_name]
+--------------------------
+Create a new site with [site_name] as its name.  This new site will be based
+on the current content of the default site.  It uses the default site as a
+template or skeleton.
+
+zotonic copysite [site_name] [source_server]
+--------------------------------------------
+Copy [site_name] and its database content from the [source_server] over SSH
+and load its content into the filesystem and database of the local machine.
+
+You will need to have created the database zotonic_[site_name] for this to
+work.
+
+Warning: This command will reset the content of the database to the content
+retrieved from the [source_server].  It does, however, generate and output
+a restore file in case this was run by accident and explains how to recover.
+
+zotonic createdb [site_name]
+----------------------------
+Create a database called zotonic_[site_name] with the basic setup in place to
+host a Zotonic datastore.
+
+This script will likely need to be run as postgres unless zotonic has been
+granted CREATEDB in postgres as follows:
+
+	ALTER ROLE zotonic WITH CREATEDB
+
+zotonic debug
+-------------
+Launch the Zotonic server interactively and get an EShell on the running
+instance.  This is very similar to running ./start.sh.
+
+zotonic restart
+---------------
+Restart the background Zotonic server instance.
+
+zotonic shell
+-------------
+Connect to the background Zotonic server instance and provide and EShell.
+
+zotonic sitedir [site_name]
+---------------------------
+Get the absolute path for a site based on [site_name]
+
+zotonic snapshot [site_name]
+----------------------------
+Take a version control snapshot of [site_name] including its database content.
+
+This works differently from mod_backup in that it consistently uses the same
+filename for the SQL backup to make revision-based full site rollbacks
+possible.
+
+zotonic start
+-------------
+Start the background Zotonic server instance.
+
+zotonic stop
+------------
+Stop the background Zotonic server instance.
+
+zotonic update
+--------------
+Update the server.  Compiles and loads any new code, flushes caches and
+rescans all modules.

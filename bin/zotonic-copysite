@@ -27,6 +27,7 @@ SERVER=$2
 if [ ! $SITE ]
 then
 	echo USAGE: $0 [site_name] [source_server] 1>&2
+	echo USAGE: See ZotonicCommands.txt 1>&2
 else
 	if [ ! $SERVER ]
 	then
