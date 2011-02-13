@@ -26,6 +26,7 @@ SITE=$1
 if [ ! "$SITE" ]
 then
 	echo USAGE: $0 [site_name] 1>&2
+	echo USAGE: See ZotonicCommands.txt 1>&2
 else
 	echo "$SITES/$SITE"
 fi

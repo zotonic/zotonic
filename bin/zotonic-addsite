@@ -6,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#     http://www.apache.org/licenses/LICENSE-2.0
+#	 http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,43 +25,44 @@ SITE=$1
 
 if [ ! $SITE ]
   then
-    echo USAGE: $0 [site_name] 1>&2
+	echo USAGE: $0 [site_name] 1>&2
+	echo USAGE: See ZotonicCommands.txt 1>&2
   else
-    if [ -e $SITES/$SITE ]
-      then
-        echo $0: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
-      else
-        # Copy the default site as a template
-        cp -R $SITES/default $SITES/$SITE
+	if [ -e $SITES/$SITE ]
+	  then
+		echo $0: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
+	  else
+		# Copy the default site as a template
+		cp -R $SITES/default $SITES/$SITE
 
-        # Remove duplicate module
-        rm $SITES/$SITE/default.erl
+		# Remove duplicate module
+		rm $SITES/$SITE/default.erl
 
-        # Generate Site Module refactor script
-        REFACTOR_MODULE=`tempfile`
-        sed s/yoursite/$SITE/g \
-            < $ZOTONIC_BIN/zotonic-addsite_module.sed.in \
-            > $REFACTOR_MODULE
+		# Generate Site Module refactor script
+		REFACTOR_MODULE=`tempfile`
+		sed s/yoursite/$SITE/g \
+			< $ZOTONIC_BIN/zotonic-addsite_module.sed.in \
+			> $REFACTOR_MODULE
 
-        # Refactor Site Module
-        sed -f "$REFACTOR_MODULE" \
-            < $SITES/default/default.erl \
-            > $SITES/$SITE/$SITE.erl
+		# Refactor Site Module
+		sed -f "$REFACTOR_MODULE" \
+			< $SITES/default/default.erl \
+			> $SITES/$SITE/$SITE.erl
 
-        # Generate Site Config refactor script
-        REFACTOR_CONFIG=`tempfile`
-        sed s/yoursite/$SITE/g \
-            < $ZOTONIC_BIN/zotonic-addsite_config.sed.in \
-            > $REFACTOR_CONFIG
+		# Generate Site Config refactor script
+		REFACTOR_CONFIG=`tempfile`
+		sed s/yoursite/$SITE/g \
+			< $ZOTONIC_BIN/zotonic-addsite_config.sed.in \
+			> $REFACTOR_CONFIG
 
-        # Refactor Site Config
-        sed -f $REFACTOR_CONFIG \
-            < $SITES/default/config.in \
-            > $SITES/$SITE/config
+		# Refactor Site Config
+		sed -f $REFACTOR_CONFIG \
+			< $SITES/default/config.in \
+			> $SITES/$SITE/config
 
-        # Make the new site
-        make --silent --directory=$ZOTONIC
-    fi
+		# Make the new site
+		make --silent --directory=$ZOTONIC
+	fi
 fi
 
 . $ZOTONIC_BIN/zotonic_teardown
