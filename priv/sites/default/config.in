@@ -25,7 +25,10 @@
     {dbdatabase, "zotonic"},
     {dbschema, "public"},
     
-	% Now you'll need to construct two keys. They should be short strings of random characters. Like good passwords, they should be hard to guess.
+    % Password for the 'admin' user.
+    {admin_password, "admin"},
+
+    % Now you'll need to construct two keys. They should be short strings of random characters. Like good passwords, they should be hard to guess.
 
     % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
     %  This key will help prevent denial of service attacks.

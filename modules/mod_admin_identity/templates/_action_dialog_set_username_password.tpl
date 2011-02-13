@@ -1,7 +1,11 @@
+{% if id == 1 %}
+<p>
+    {_ The password of the admin user cannot be changed in the database. Please edit your site's configuration file at _} <strong>priv/sites/{{ m.site.host }}/config</strong> {_ if you want to change the admin password. _}
 
+{% else %}
 <p>
 	{_ Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
-	{% if username and id /= 1 %}
+	{% if username %}
 		<br/>{_ Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore. _}
 	{% endif %}
 </p>
@@ -27,14 +31,14 @@
 				{% validate id="new_password" type={presence} %}
 			{% endif %}
 		</p>
-		
+
 		<button type="submit">{_ Save _}</button>
-		
+
 		{% button action={dialog_close} text=_"Cancel" %}
-		
-		{% if username and id /= 1 %}
+
+		{% if username %}
 			{% button action={dialog_delete_username id=id on_success=on_delete} text=_"Delete" %}
 		{% endif %}
 	</div>
 </form>
-
+{% endif %}
