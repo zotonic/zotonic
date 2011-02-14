@@ -82,7 +82,7 @@ is_authorized(ReqData, Context) ->
             %% No; see if we can use OAuth.
             Module = z_context:get("module", Context),
             case mod_oauth:check_request_logon(ReqData, Context) of
-                {none, Context2} ->
+                {none, Context} ->
                     case z_service:needauth(Module) of
                         false ->
                             %% No auth needed; so we're authorized.
@@ -92,15 +92,15 @@ is_authorized(ReqData, Context) ->
                             mod_oauth:authenticate(z_service:method(Module) ++ ": " ++ z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context2)
                     end;
 
-                {true, Context2} ->
+                {true, AuthorizedContext} ->
                     %% OAuth succeeded; check whether we are allowed to exec this module
-                    ConsumerId = proplists:get_value(id, z_context:get("oauth_consumer", Context2)),
-                    case mod_oauth:is_allowed(ConsumerId, Module, Context2) of
+                    ConsumerId = proplists:get_value(id, z_context:get("oauth_consumer", AuthorizedContext)),
+                    case mod_oauth:is_allowed(ConsumerId, Module, AuthorizedContext) of
                         true ->
-                            {true, ReqData, Context2};
+                            {true, ReqData, AuthorizedContext};
                         false ->
                             ReqData1 = wrq:set_resp_body("You are not authorized to execute this API call.\n", ReqData),
-                            {{halt, 403}, ReqData1, Context2}
+                            {{halt, 403}, ReqData1, AuthorizedContext}
                     end;
 
                 {false, Response} ->
@@ -115,8 +115,8 @@ resource_exists(ReqData, Context) ->
 
 
 content_types_provided(ReqData, Context) ->
-    {[{"text/javascript", to_json}, 
-      {"application/json", to_json}
+    {[{"application/json", to_json},
+      {"text/javascript", to_json}
      ], ReqData, Context}.
 
 
