@@ -40,8 +40,8 @@
 
 -include_lib("zotonic.hrl").
 
--include("exmpp.hrl"). 
--include("exmpp_client.hrl").
+-include("include/z_exmpp.hrl").
+-include("deps/exmpp/include/exmpp_client.hrl").
 
 
 -define(ATOM_NS, 'http://www.w3.org/2005/Atom').
