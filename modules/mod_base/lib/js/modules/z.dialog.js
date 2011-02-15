@@ -20,11 +20,13 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-(function(jQuery)
+(function($)
 {
 	$.extend({
 		dialogAdd: function(options)
 		{	
+			$('.dialog').remove(); 
+
 			if(!$('.dialog').length)
 			{
 				// declare varaibles
@@ -41,7 +43,7 @@ limitations under the License.
 					width = options.width + "px";
 				else
 					width = options.width;
-				
+
 				dialogTitle			= $('<h5></h5>').addClass('dialog-title').text(options.title);
 				dialogTLC			= $('<span></span>').addClass('dialog-top-left');
 				dialogTRC			= $('<span></span>').addClass('dialog-top-right');
@@ -84,6 +86,11 @@ limitations under the License.
 				$('input', dialogWrapper).eq(0).focus();
 			}
 		},
+
+		dialogClose: function()
+		{
+			$('.dialog-close').click();
+		},
 		
 		dialogRemove: function(obj)
 		{
@@ -96,7 +103,7 @@ limitations under the License.
 		}
 	});
 	
-	$.widget("ui.dialog", 
+	$.widget("ui.show_dialog", 
 	{
 		_init: function() 
 		{

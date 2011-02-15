@@ -42,13 +42,12 @@ var z_on_visible_timer		= undefined;
 
 function z_dialog_open(options)
 {
-	$('.dialog').remove();
 	$.dialogAdd(options);
 }
 
 function z_dialog_close()
 {
-	$('.dialog-close').click();
+	$.dialogClose();
 }
 
 /* Growl messages
