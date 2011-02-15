@@ -48,11 +48,11 @@ observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
                     %% Serve an icon representing the mime type.
                     [A,B] = string:tokens(z_convert:to_list(Mime), "/"),
                     Files = [
-                        "images/mimeicons/"++A++[$-,B]++".png",
+                        "images/mimeicons/"++A++[$-|B]++".png",
                         "images/mimeicons/"++A++".png",
                         "images/mimeicons/application-octet-stream.png"
                     ],
-                    
+
                     lists:foldl(
                         fun(F, undefined) ->
                                 case z_module_indexer:find(lib, F, Context) of
