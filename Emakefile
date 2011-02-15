@@ -6,6 +6,8 @@
 	"src/*/*/*/*",
 	"modules/*/*",
 	"modules/*/*/*",
+	"priv/modules/*/*",
+	"priv/modules/*/*/*",
 	"priv/sites/*/*",
 	"priv/sites/*/*/*",
 	"priv/sites/*/support/*/*",
