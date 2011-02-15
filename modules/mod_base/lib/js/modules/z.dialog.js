@@ -43,7 +43,7 @@ limitations under the License.
 					width = options.width + "px";
 				else
 					width = options.width;
-				
+
 				dialogTitle			= $('<h5></h5>').addClass('dialog-title').text(options.title);
 				dialogTLC			= $('<span></span>').addClass('dialog-top-left');
 				dialogTRC			= $('<span></span>').addClass('dialog-top-right');
@@ -103,7 +103,7 @@ limitations under the License.
 		}
 	});
 	
-	$.widget("ui.dialog", 
+	$.widget("ui.show_dialog", 
 	{
 		_init: function() 
 		{

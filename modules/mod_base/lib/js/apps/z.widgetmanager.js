@@ -36,6 +36,8 @@ limitations under the License.
 				if(element.className && (objectClass = new RegExp("do_([\\w_]+)", "g").exec(element.className)))
 				{
 					functionName = objectClass[1];
+
+					if('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
 					
 					if(typeof $(element)[functionName] == "function")
 					{
