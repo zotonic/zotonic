@@ -1,5 +1,0 @@
-[
- {imageclipper_go, [	"clipper", "go"], 		resource_imageclipper_go, 	[]},
- {imageclipper_help, 	["clipper", "help"], 	resource_template, 			[{template, "page_imageclipper.tpl"}]},
- {imageclipper_clips, 	["clipper", "clips"], 	resource_template, 			[{template, "page_clips.tpl"}]}
-].
