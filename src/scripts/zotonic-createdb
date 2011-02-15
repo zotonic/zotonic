@@ -26,6 +26,6 @@ then
 else
 	# Create the site database
 	sed s/yoursite/$SITE/g \
-		< zotonic-createdb_sql.in \
+		< $ZOTONIC_SCRIPTS/helpers/zotonic-createdb_sql.in \
 		| psql
 fi

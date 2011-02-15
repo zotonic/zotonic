@@ -38,7 +38,7 @@ if [ ! $SITE ]
 		# Generate Site Module refactor script
 		REFACTOR_MODULE=`tempfile`
 		sed s/yoursite/$SITE/g \
-			< $ZOTONIC_BIN/zotonic-addsite_module.sed.in \
+			< $ZOTONIC_SCRIPTS/helpers/zotonic-addsite_module.sed.in \
 			> $REFACTOR_MODULE
 
 		# Refactor Site Module
@@ -49,7 +49,7 @@ if [ ! $SITE ]
 		# Generate Site Config refactor script
 		REFACTOR_CONFIG=`tempfile`
 		sed s/yoursite/$SITE/g \
-			< $ZOTONIC_BIN/zotonic-addsite_config.sed.in \
+			< $ZOTONIC_SCRIPTS/helpers/zotonic-addsite_config.sed.in \
 			> $REFACTOR_CONFIG
 
 		# Refactor Site Config
