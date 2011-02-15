@@ -155,10 +155,11 @@ all(Context) ->
 %% the name of the directory is the same as the name of the module.
 %% @spec scan(context()) -> [ {atom(), dirname()} ]
 scan(#context{host=Host}) ->
-    Priv  = filename:join([z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"]),
+    Sites  = filename:join([z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"]),
+    Priv  = filename:join([z_utils:lib_dir(priv), "modules", "mod_*"]),
     Src   = filename:join([z_utils:lib_dir(modules), "mod_*"]),
     Site  = filename:join([z_utils:lib_dir(priv), "sites", Host]),
-    Files = filelib:wildcard(Priv) ++ filelib:wildcard(Src) ++ [Site],
+    Files = filelib:wildcard(Sites) ++ filelib:wildcard(Priv) ++ filelib:wildcard(Src) ++ [Site],
     [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
 
 

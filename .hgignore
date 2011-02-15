@@ -1,5 +1,6 @@
 syntax: glob
 
+zotonic.pid
 erl_crash.dump
 *~
 ebin/*
@@ -21,7 +22,6 @@ zotonic.tmproj
 *.so
 *.Plo
 *.wmtrace
-modules/mod_search_solr/solr/*
 
 modules/mod_pubsub/deps/exmpp/Makefile
 modules/mod_pubsub/deps/exmpp/Makefile.in

@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+#
+# Copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#	 http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Download and install a module from modules.zotonic.com
+#
+
+import os
+import sys
+import httplib
+import re
+from urlparse import urlparse
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+INSTALL_PATH = os.path.join(os.environ['ZOTONIC'], 'priv/modules')
+BASE_MODULE_PATH = os.path.join(os.environ['ZOTONIC'], 'modules')
+
+
+def install_module(modulename, moduleList):
+    if not re.match("^mod_[a-z_]+$", modulename):
+        # fixme - valid module name
+        print "** Invalid module name:", modulename
+        return False
+    
+    info  = [mod for mod in modules if mod['title'] == modulename]
+    if not info:
+        print "** Module not found:", modulename
+        return False
+    info = info[0]
+
+    clonepath = os.path.join(INSTALL_PATH, modulename)
+    if os.path.exists(clonepath):
+        print "** Target path already exists:", clonepath
+        return False
+
+    if os.path.exists(os.path.join(BASE_MODULE_PATH, modulename)):
+        print "** Module already exists in zotonic core:", clonepath
+        return False
+
+    if not info["repository"] or not urlparse(info["repository"])[0]: # check on URL scheme
+        # todo - check on valid URL
+        print "** Module has no valid repository URL"
+        return False
+
+    if info["scm"] not in ["hg", "git"]:
+        print "** Module has unsupported/unknown SCM:", scmcmd
+        return False
+
+    print "** Installing", modulename,"..."
+
+    cmd = "%s clone %s %s" % (info["scm"], info["repository"], clonepath)
+    os.system(cmd)
+    print "**", modulename, "OK"
+    return True
+
+
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option("-s", "--site", help="Repository site", default='modules.zotonic.com')
+
+(options, to_install) = parser.parse_args()
+
+if not to_install:
+    print "Specify at least one module"
+    exit(1)
+
+print "Getting module index"
+
+connection = httplib.HTTPConnection(options.site)
+url = "http://%s/api/zmr/repositories" % options.site
+connection.request("GET", url, headers={}) 
+response = connection.getresponse()
+
+try:
+    modules = json.loads(response.read())
+except:
+    print "Parse error while getting module list from " + url
+    exit(2)
+
+ok = False
+for module in to_install:
+    ok = ok or install_module(module, modules)
+    
+if ok:
+    os.system("make -j4")
+    os.system("%s update" % os.path.join(os.environ["ZOTONIC_BIN"], "zotonic"))
