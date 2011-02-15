@@ -523,7 +523,7 @@ fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc, Context)
         true -> 
             case catch erlydtl_dateformat:format(Date, "Y m d H i F l h", Context) of
                 {'EXIT', _} -> Acc;
-                Date -> {A, [Date|B]}
+                Formatted -> {A, [Formatted|B]}
             end
     end;
 fetch_texts({_, {trans, _} = V}, {A,B}, _Context) ->
