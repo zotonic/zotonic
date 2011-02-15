@@ -18,9 +18,6 @@
 # usage zotonic-sitedir [site_name]
 #
 
-ZOTONIC_BIN=`dirname $0 | xargs readlink -e`
-. $ZOTONIC_BIN/zotonic_setup
-
 SITE=$1
 
 if [ ! "$SITE" ]
@@ -30,5 +27,3 @@ then
 else
 	echo "$SITES/$SITE"
 fi
-
-. $ZOTONIC_BIN/zotonic_teardown

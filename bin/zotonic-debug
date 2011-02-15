@@ -18,9 +18,4 @@
 # usage zotonic-debug
 #
 
-ZOTONIC_BIN=`dirname $0 | xargs readlink -e`
-. $ZOTONIC_BIN/zotonic_setup
-
 $ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -s zotonic
-
-. $ZOTONIC_BIN/zotonic_teardown

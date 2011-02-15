@@ -18,10 +18,5 @@
 # usage zotonic-stop
 #
 
-ZOTONIC_BIN=`dirname $0 | xargs readlink -e`
-. $ZOTONIC_BIN/zotonic_setup
-
 echo "Stopping zotonic $SNAME@$HOSTNAME"
-$ERL -noshell -pa $PA -name ${SNAME}_stop -s zotonic stop $SNAME@$HOSTNAME
-
-. $ZOTONIC_BIN/zotonic_teardown
+$ERL -noshell -pa $PA -name ${SNAME}_stop@$HOSTNAME -s zotonic stop $SNAME@$HOSTNAME

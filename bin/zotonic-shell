@@ -18,9 +18,4 @@
 # usage zotonic-shell
 #
 
-ZOTONIC_BIN=`dirname $0 | xargs readlink -e`
-. $ZOTONIC_BIN/zotonic_setup
-
 $ERL -name zotonic_shell@$HOSTNAME -remsh $SNAME@$HOSTNAME
-
-. $ZOTONIC_BIN/zotonic_teardown

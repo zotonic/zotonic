@@ -18,9 +18,6 @@
 # usage zotonic-snapshot [site_name]
 #
 
-ZOTONIC_BIN=`dirname $0 | xargs readlink -e`
-. $ZOTONIC_BIN/zotonic_setup
-
 SITE=$1
 
 if [ ! $SITE ]
@@ -38,5 +35,3 @@ else
 	hg commit -m "Content Snapshot"
 	popd > /dev/null
 fi
-
-. $ZOTONIC_BIN/zotonic_teardown
