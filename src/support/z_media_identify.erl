@@ -140,6 +140,8 @@ identify_file_os(unix, File, OriginalFilename) ->
                             {ok, [{mime, "text/csv"}]};
                         "application/vnd.oasis.opendocument." ++ _ = ODF ->
                             {ok, [{mime, ODF}]};
+                        "application/inspire" ->
+                            {ok, [{mime, "application/inspire"}]};
                         _ ->
                             {ok, [{mime, "application/octet-stream"}]}
                     end;
@@ -230,7 +232,7 @@ extension(Mime) ->
 guess_mime(File) when is_binary(File) ->
 	guess_mime(binary_to_list(File));
 guess_mime(File) ->
-    case lists:keysearch(filename:extension(File), 1, extension_mime()) of
+    case lists:keysearch(z_string:to_lower(filename:extension(File)), 1, extension_mime()) of
 		{value,{_Ext,Mime}} -> 
 			Mime;
 		false ->
