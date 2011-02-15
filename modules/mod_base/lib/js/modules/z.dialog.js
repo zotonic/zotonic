@@ -20,11 +20,13 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-(function(jQuery)
+(function($)
 {
 	$.extend({
 		dialogAdd: function(options)
 		{	
+			$('.dialog').remove(); 
+
 			if(!$('.dialog').length)
 			{
 				// declare varaibles
@@ -83,6 +85,11 @@ limitations under the License.
 				z_tinymce_add(dialogWrapper);
 				$('input', dialogWrapper).eq(0).focus();
 			}
+		},
+
+		dialogClose: function()
+		{
+			$('.dialog-close').click();
 		},
 		
 		dialogRemove: function(obj)
