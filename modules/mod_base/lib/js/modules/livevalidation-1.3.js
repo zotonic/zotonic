@@ -332,7 +332,8 @@ LiveValidation.prototype =
     getValue: function() {
 		switch (this.elementType) {
 		case LiveValidation.SELECT:
-			return this.element.options[this.element.selectedIndex].value;
+			if (this.element.selectedIndex >= 0) return this.element.options[this.element.selectedIndex].value;
+			else return "";
 		case LiveValidation.RADIO:
 			var val = $('input[name='+this.element.name+']:checked').val();
 			return val;
