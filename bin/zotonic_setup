@@ -13,18 +13,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-ZOTONIC=${ZOTONIC:=`pwd`}
-ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
-SITES=${SITES:=$ZOTONIC/priv/sites}
+export ZOTONIC=${ZOTONIC:=`pwd`}
+export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
+export SITES=${SITES:=$ZOTONIC/priv/sites}
 
 # Path to the Erlang VM
-ERL=${ERL:=erl}
+export ERL=${ERL:=erl}
 
 # The include path for the erlang vm, add when needed for your application.
-PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin"}
+export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin"}
 
 # The name of the Erlang node, this must be unique on your host.
-SNAME=${SNAME:=zotonic001}
+export SNAME=${SNAME:=zotonic001}
 
 # Hostname to the fully qualified domain name of your host, or leave it as localhost.
 if [ "$HOSTNAME" != "localhost" ]; then
@@ -34,7 +34,7 @@ if [ "$HOSTNAME" != "localhost" ]; then
 	HOSTNAME=${HOSTNAME:=localhost}
     fi
 fi
-
+export HOSTNAME=$HOSTNAME
 
 # The command used to restart zotonic when crashed, only used after a "zotonic.sh start"
 export HEART_COMMAND="$ZOTONIC_BIN/zotonic start"
