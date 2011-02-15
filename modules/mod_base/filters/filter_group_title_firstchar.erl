@@ -38,7 +38,7 @@ group_title_firstchar(In, Cols, Context) ->
 
 
 firstchar_title(Id, Context) ->
-    case z_convert:to_list(m_rsc:p(Id, title, Context)) of
+    case z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context)) of
         [] -> undefined;
         L -> z_string:first_char(L)
     end.
