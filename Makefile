@@ -29,10 +29,10 @@ erlang-oauth:
 	cd deps/erlang-oauth && $(MAKE)
 
 module-deps:
-	if [ -e modules/*/Makefile ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
 
 priv-module-deps:
-	if [ -e modules/priv/*/Makefile ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
@@ -44,8 +44,8 @@ clean:
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
 	(cd deps/erlang-oauth; $(MAKE) clean)
-	if [ -e modules/*/Makefile ]; then for f in modules/*/Makefile; do make -C `dirname $$f` clean; done; fi
-	if [ -e modules/priv/*/Makefile ]; then for f in priv/modules/*/Makefile; do make -C `dirname $$f` clean; done; fi
+	if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
+	if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
 	rm -f priv/log/*
