@@ -36,4 +36,4 @@ summary(RId, N, Context) ->
                 Body = m_rsc:p(Id, body, Context),
                 z_html:strip(Body)
     end,
-    z_string:truncate(S, z_convert:to_integer(N)).
+    z_string:truncate(z_trans:lookup_fallback(S, z_convert:to_integer(N), Context)).
