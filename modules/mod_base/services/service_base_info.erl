@@ -31,13 +31,13 @@
 process_get(_ReqData, Context) ->
     Result = case z_auth:is_auth(Context) of
                  true ->
-                     z_convert:to_list(m_rsc:p(Context#context.user_id, title, Context));
+                     z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Context#context.user_id, title, Context), Context));
                  false ->
                      "Anonymous"
     end,
     {struct, [{"user", {struct, [{"user_name", z_convert:to_atom(Result)},
                                  {"user_id",   Context#context.user_id}]}},
-              {"site", {struct, [{"zotonic_version", cfg(zotonic, version, Context)},
+              {"site", {struct, [{"zotonic_version", ?ZOTONIC_VERSION},
                                  {"language",        cfg(i18n, language, Context)}]}}
              ]
     }.
