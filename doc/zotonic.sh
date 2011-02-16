@@ -39,7 +39,7 @@ ZOTONIC=$BASE/zotonic
 ERL="/usr/local/bin/erl"
 
 # The include path for the erlang vm, add when needed for your application.
-PA="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin"
+PA="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"
 
 # The name of the Erlang node, this must be unique on your host.
 SNAME=zotonic001
