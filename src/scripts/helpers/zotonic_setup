@@ -21,7 +21,7 @@ export SITES=${SITES:=$ZOTONIC/priv/sites}
 export ERL=${ERL:=erl}
 
 # The include path for the erlang vm, add when needed for your application.
-export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin"}
+export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
 # The name of the Erlang node, this must be unique on your host.
 export SNAME=${SNAME:=zotonic001}

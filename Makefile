@@ -4,7 +4,7 @@ EBIN_DIRS    := $(wildcard deps/*/ebin)
 APP          := zotonic
 PARSER        =src/erlydtl/erlydtl_parser
 
-all: gen_smtp z_logger mochiweb webmachine module-deps priv-module-deps $(PARSER).erl erl ebin/$(APP).app 
+all: gen_smtp z_logger mochiweb webmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -26,10 +26,9 @@ webmachine:
 	cd deps/webmachine && $(MAKE)
 
 module-deps:
-	if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
-
-priv-module-deps:
-	if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	@if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	@if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	@if [ "`find priv/sites/*/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/sites/*/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
@@ -40,8 +39,9 @@ clean:
 	(cd deps/z_logger; $(MAKE) clean)
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
-	if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
-	if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
+	@if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
+	@if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
+	@if [ "`find priv/sites/*/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/sites/*/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
 	rm -f priv/log/*
