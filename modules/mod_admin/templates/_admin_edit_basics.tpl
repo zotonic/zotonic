@@ -31,7 +31,7 @@
     {% else %} {# non-multilanguage content and translation module disabled #}
 
     <div class="item-wrapper" id="sort-category">
-        <h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+        <h3 class="above-item clearfix do_blockminifier">
             <a name="category"></a>
             <span class="title">{_ Basic _}</span>
             <span class="arrow">{_ make smaller _}</span>

@@ -5,7 +5,7 @@
 	</h3>
 	<div class="item clearfix">
 		<div class="admin-form">
-			<p>{_ Add event for this artist. _} <a href="javascript:void(0)" class="do_dialog {title: '{_ Help about artist\'s events._}', text: '{_ You can quickly add events for this artist.  When you want to delete an event, then click on the name of the event and delete it on the event\'s edit page. _}', width: '450px'}">{_ Need more help? _}</a></p>
+			<p>{_ Add event for this artist. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about artist\'s events._}', text: '{_ You can quickly add events for this artist.  When you want to delete an event, then click on the name of the event and delete it on the event\'s edit page. _}', width: '450px'">{_ Need more help? _}</a></p>
 			{% button action={dialog_artist_event_add id=id} text=_"Make a new event" %}
 	
 			<h3 class="clear">{_ Existing events _}</h3>
