@@ -20,4 +20,4 @@
 
 echo  "Starting zotonic $SNAME@$HOSTNAME"
 make -C $ZOTONIC >/dev/null
-$ERL -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -heart -detached -s zotonic
+$ERL -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -config $ZOTONIC/priv/erlang.config -heart -detached -s zotonic
