@@ -37,7 +37,7 @@
 % The time in minutes how long sent email should be kept in the queue.
 -define(DELETE_AFTER, 240).
 
--record(state, {smtp_relay, smtp_relay_opts, override}).
+-record(state, {smtp_relay, smtp_relay_opts, smtp_verp_as_from, override}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10),
                       retry=0, email, created=now(), sent, context}).
 
@@ -165,10 +165,12 @@ update_config(State) ->
                    end;
             false ->
                 []
-        end,  
+        end,
+    SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
     Override = z_config:get(email_override),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
+                smtp_verp_as_from=SmtpVerpAsFrom,
                 override=Override}.
 
 generate_message_id(Context) ->
@@ -195,10 +197,20 @@ spawn_send(Id, Email, Context, State) ->
                          Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
                      end,
             
-            From = case Email#email.from of 
-                           L when L =:= [] orelse L =:= undefined -> 
-                               get_email_from(Context); 
-                           EmailFrom -> EmailFrom end,
+            From1 = case Email#email.from of 
+                        L when L =:= [] orelse L =:= undefined -> 
+                            get_email_from(Context); 
+                        EmailFrom -> EmailFrom
+                    end,
+
+            From = case State#state.smtp_verp_as_from of
+                        true ->
+                            %% TODO: write a nice helper function?
+                            {FromName, _FromEmail} = z_email:split_name_email(From1),
+                            string:strip(FromName ++ " " ++ Id);
+                        _ ->
+                            From1
+                   end,
 
             % Optionally render the text and html body
             Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
