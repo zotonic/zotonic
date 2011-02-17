@@ -39,11 +39,6 @@ export HOSTNAME=$HOSTNAME
 # The command used to restart zotonic when crashed, only used after a "zotonic.sh start"
 export HEART_COMMAND="$ZOTONIC_BIN/zotonic start"
 
-## The port and IP address zotonic will bind to (defaults to all ip addresses and port 8000)
-export ZOTONIC_IP=any
-export ZOTONIC_PORT=${ZOTONIC_PORT:=8000}
-export ZOTONIC_PORT_SSL=${ZOTONIC_PORT_SSL:=8443}
-
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
