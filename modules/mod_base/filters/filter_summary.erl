@@ -19,6 +19,7 @@
 -module(filter_summary).
 -export([summary/2, summary/3]).
 
+-include("zotonic.hrl").
 
 summary(undefined, _Context) ->
     undefined;
@@ -36,4 +37,4 @@ summary(RId, N, Context) ->
                 Body = m_rsc:p(Id, body, Context),
                 z_html:strip(Body)
     end,
-    z_string:truncate(z_trans:lookup_fallback(S, z_convert:to_integer(N), Context)).
+    z_string:truncate(z_trans:lookup_fallback(S, Context), z_convert:to_integer(N)).
