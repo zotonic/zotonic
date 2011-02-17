@@ -1,7 +1,7 @@
 {# Show the edit fields to edit the name of a person #}
 {% with m.rsc[id] as r %}
 <div class="item-wrapper">
-	<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+	<h3 class="above-item clearfix do_blockminifier">
 		<span class="title">{_ Search query _}</span>
 		<span class="arrow">{_ make smaller _}</span>
 	</h3>

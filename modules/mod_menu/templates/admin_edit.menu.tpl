@@ -18,7 +18,7 @@
         <div class="notification notice">
             {_ Here you can change the menu of your site.  Select pages on the right hand side and drag them to the menu on the left. _}
             {# Type the name of the page you want in your menu in the box left of this note. When you get a result, you can drag that item onto the menu pane on the left side of the page. You can also move the menu items around to manage the way your navigations looks. A menu is at most two levels deep #}
-            <a href="javascript:void(0)" class="do_dialog {title: '{_ Help about editing menus. _}', text: '{_ xxx. _}', width: '450px'}">{_ Need more help? _}</a>
+            <a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about editing menus. _}', text: '{_ xxx. _}', width: '450px'">{_ Need more help? _}</a>
         </div>
         
         <p>Type your search terms to find pages. Then drag them on to the panel on your left.</p>

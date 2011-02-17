@@ -186,7 +186,7 @@
 
 						{% if r.is_a.media or r.medium %}
 						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+							<h3 class="above-item clearfix do_blockminifier">
 								<span class="title">{_ File / media content _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -203,7 +203,7 @@
 
                         {% if is_editable %}
 						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
 								<span class="title">{_ Website _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -224,7 +224,7 @@
 						{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 
 						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.meta }} }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ not r.is_a.meta }}">
 								<span class="title">{_ Advanced _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -275,7 +275,7 @@
 						</div>
 
 						<div class="item-wrapper">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
 								<span class="title">{_ Seo content _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -373,7 +373,7 @@
 						</div>
 
 						<div class="item-wrapper" id="sort-access">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
 								<span class="title">{_ Access control _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -390,7 +390,7 @@
 
 						{% if not r.is_a.meta %}
 						<div class="item-wrapper" id="sort-date">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ r.publication_start|in_past and r.publication_end|in_future }} }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ r.publication_start|in_past and r.publication_end|in_future }}">
 								<span class="title">{_ Publication period _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -398,7 +398,7 @@
 								<div class="admin-form form-item">
 									<div class="notification notice">
 										{_ Show this article only between the two dates. _}
-										<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about publication date range. _}', text: '{_ When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it._}', width: '450px'}">{_ Need more help? _}</a>
+										<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about publication date range. _}', text: '{_ When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it._}', width: '450px'">{_ Need more help? _}</a>
 									</div>
 									<fieldset>
 										<div class="form-item">
@@ -415,7 +415,7 @@
 						</div>
 
 						<div class="item-wrapper" id="sort-date">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: {{ not r.is_a.event }} }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ not r.is_a.event }}">
 								<span class="title">{_ Date range _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
@@ -423,7 +423,7 @@
 								<div class="admin-form form-item">
 									<div class="notification notice">
 										{_ Used for events and other periods. _}
-										<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about date ranges. _}', text: '{_ Every page can have a date range. For example if the page is an event or description of someone\'s life. _}', width: '450px'}">{_ Need more help? _}</a>
+										<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about date ranges. _}', text: '{_ Every page can have a date range. For example if the page is an event or description of someone\'s life. _}', width: '450px'">{_ Need more help? _}</a>
 									</div>
 									<fieldset>
 										<div class="form-item">
@@ -447,14 +447,14 @@
 						{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
 
 						<div class="item-wrapper" id="sort-connections">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+							<h3 class="above-item clearfix do_blockminifier">
 								<span class="title">{_ Page connections _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix">
 								<div class="notification notice">
 									{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}
-									<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about page connections. _}', text: '{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}', width: '450px'}">{_ Need more help? _}</a>
+									<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about page connections. _}', text: '{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}', width: '450px'">{_ Need more help? _}</a>
 								</div>
 
 								<div id="unlink-undo-message"></div>
@@ -494,14 +494,14 @@
 						{# meta categories (predicate, category and group) cannot be changed #}
 						{% if not r.is_a.meta %}
 						<div class="item-wrapper" id="sort-category">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
 								<a name="category"></a>
 								<span class="title">{_ Category _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
 							<div class="item clearfix admin-form">
 								<div class="notification notice">
-									{_ The category defines what the page represents. _} <a href="javascript:void(0)" class="do_dialog {title: '{_ Help about category. _}', text: '{_ Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}', width: '450px'}">{_ Need more help? _}</a>
+									{_ The category defines what the page represents. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about category. _}', text: '{_ Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}', width: '450px'">{_ Need more help? _}</a>
 								</div>
 								<p>
 									{% with r.category_id as r_cat %}
@@ -525,7 +525,7 @@
 						</div>
 						{% else %}
 						<div class="item-wrapper" id="sort-category">
-							<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: true }">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
 								<span class="title">{_ Category _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
