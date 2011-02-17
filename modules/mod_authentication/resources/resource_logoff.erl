@@ -31,7 +31,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_all(Context1),
+    Context2 = z_context:continue_session(Context1),
     ContextNoCookie = resource_logon:reset_rememberme_cookie(Context2),
     ContextLogOff = z_auth:logoff(ContextNoCookie),
     ContextNoSession = z_session_manager:stop_session(ContextLogOff),
