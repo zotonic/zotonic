@@ -66,12 +66,17 @@ event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageL
 
     Context1 = case length(Ids) < PageLen of
                    false ->
-                       {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
-                       RebindJS = ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "; return false; });"],
-                       z_script:add_script(RebindJS, Ctx);
+                        {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
+                        RebindJS = case proplists:get_value(visible, Args) of
+                           true ->
+                               [ <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, JS, <<"});\n">> ];
+                           _ ->
+                               ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "; return false; });"]
+                        end,
+                        z_script:add_script(RebindJS, Ctx);
                    true ->
-                       RemoveJS = ["$(\"#", TriggerId, "\").remove();"],
-                       z_script:add_script(RemoveJS, Context)
+                        RemoveJS = ["$(\"#", TriggerId, "\").remove();"],
+                        z_script:add_script(RemoveJS, Context)
                end,
 
 	FirstRow = PageLen*(Page-1)+1,
