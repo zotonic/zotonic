@@ -23,12 +23,11 @@
 
 			<title>{{ r.title }}</title>
 			{% if r.body %}
-    			<summary>{{ r.summary }}</summary>
-    			<content type="text/html">{{ r.body|escapexml }}</content>
-    		{% else %}
-			    <summary></summary>
-			    <content type="text/html">{{ r.summary|linebreaksbr|escapexml }}</content>
-    		{% endif %}
+				<summary>{{ r.summary }}</summary>
+				<content type="html">{{ r.body|escapexml }}</content>
+			{% else %}
+				<content type="text">{{ r.summary|escapexml }}</content>
+			{% endif %}
 			{% if medium.filename %}
 				<content type="{{ medium.mime }}" src="{{ site_url }}{% url media_attachment star=medium.filename %}" /> 
 			{% endif %}
