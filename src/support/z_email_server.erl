@@ -37,7 +37,7 @@
 % The time in minutes how long sent email should be kept in the queue.
 -define(DELETE_AFTER, 240).
 
--record(state, {smtp_relay, smtp_relay_opts, smtp_verp_as_from, override}).
+-record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups, smtp_verp_as_from, override}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10),
                       retry=0, email, created=now(), sent, context}).
 
@@ -166,10 +166,12 @@ update_config(State) ->
             false ->
                 []
         end,
+    SmtpNoMxLookups = z_config:get(smtp_no_mx_lookups),
     SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
     Override = z_config:get(email_override),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
+                smtp_no_mx_lookups=SmtpNoMxLookups,
                 smtp_verp_as_from=SmtpVerpAsFrom,
                 override=Override}.
 
@@ -272,9 +274,11 @@ spawn_send(Id, Email, Context, State) ->
             SmtpOpts = 
                 case State#state.smtp_relay of
                     true ->
-                        State#state.smtp_relay_opts;
+                        [{no_mx_lookups, State#state.smtp_no_mx_lookups} |
+                         State#state.smtp_relay_opts];
                     false ->
-                        [{relay, ToDomain}]
+                        [{no_mx_lookups, State#state.smtp_no_mx_lookups},
+                         {relay, ToDomain}]
                 end,
 
             %% use the unique id as 'envelope sender' (VERP)                    
