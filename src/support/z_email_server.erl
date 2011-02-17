@@ -100,15 +100,22 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 
 handle_cast({bounced, MsgId}, State) ->
-    check_if_msgid_is_vaild,
     TrFun = fun()-> 
                     [QEmail] = mnesia:read(email_queue, MsgId), 
                     mnesia:delete_object(QEmail),
                     {(QEmail#email_queue.email)#email.to, QEmail#email_queue.context}
             end,
-    {atomic, {Recipient, PickledContext}} = mnesia:transaction(TrFun),
-    Context = z_context:depickle(PickledContext),
-    z_notifier:first({email_failed, MsgId, Recipient}, Context), 
+    case mnesia:transaction(TrFun) of
+        {atomic, {Recipient, PickledContext}} ->
+            Context = z_context:depickle(PickledContext),
+            z_notifier:first({email_bounced, MsgId, Recipient}, Context);
+        _ ->
+            %% TODO: find out the host, but
+            %% custom bounce domains make this tricky...
+            %Context = z_context:new(Host),
+            %z_notifier:first({email_received, MsgId, Recipient}, Context)
+            ok
+    end,
     {noreply, State};
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
