@@ -190,8 +190,7 @@ generate_message_id(Context) ->
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
             process_flag(trap_exit, true), 
-            To = "a.erdodi@gmail.com",
-            To2 = case State#state.override of 
+            To = case State#state.override of 
                          O when O =:= [] orelse O =:= undefined -> Email#email.to; 
                          Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
                      end,
@@ -265,8 +264,6 @@ spawn_send(Id, Email, Context, State) ->
                     false ->
                         [{relay, ToDomain}]
                 end,
-                
-                io:format("SO what? ~p", [SmtpOpts]),
 
             %% use the unique id as 'envelope sender' (VERP)                    
             case gen_smtp_client:send_blocking({Id, [ToEmail], EncodedMail},
