@@ -232,6 +232,8 @@ default(password) -> {ok, generate_id(8)};
 default(listen_port) -> {ok, 8000};
 default(listen_port_ssl) -> {ok, 8443};
 default(listen_ip) -> {ok, any};
+default(smtp_verp_as_from) -> {ok, false};
+default(smtp_no_mx_lookups) -> {ok, false};
 default(smtp_relay) -> {ok, false};
 default(smtp_host) -> {ok, "localhost"};
 default(smtp_port) -> {ok, 2525};
