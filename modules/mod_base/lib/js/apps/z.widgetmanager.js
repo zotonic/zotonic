@@ -163,7 +163,7 @@ limitations under the License.
 				data = "";
 			}
 		}
-		data = eval("({" + data + "})");
+		data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
 		$(elem).data(data_name, data);
 		return data;
 	};
