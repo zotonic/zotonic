@@ -8,7 +8,6 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	
 	<meta name="author" content="Tim Benniks" />
-	{% include "_atom_feed_link.tpl" cat="blog" %}
 
 	{% all include "_html_head.tpl" %}
 
