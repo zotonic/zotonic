@@ -595,6 +595,7 @@ get_q_all_noz(Context) ->
     is_zotonic_arg("z_pageid") -> true;
     is_zotonic_arg("z_v") -> true;
     is_zotonic_arg("z_msg") -> true;
+    is_zotonic_arg("z_comet") -> true;
     is_zotonic_arg(_) -> false.
     
 
