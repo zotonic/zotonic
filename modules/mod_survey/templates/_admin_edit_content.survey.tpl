@@ -38,7 +38,7 @@
 	<div class="item">
 		<fieldset class="admin-form survey-editor">
 			<div class="notification notice">
-				{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog {title: 'Help about predicates.', text: '{_ You can create your survey by dragging the Question templates to the survey on the right. _}', width: '450px'}">Need more help?</a>
+				{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: 'Help about predicates.', text: '{_ You can create your survey by dragging the Question templates to the survey on the right. _}', width: '450px'">Need more help?</a>
 			</div>
 			
 			<div class="zp-30">
