@@ -253,19 +253,19 @@ update_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
 
 insert_top_selector(CssSelector, Html, Context) ->
-    update_context(CssSelector, Html, <<"prepend">>, <<"">>, Context).
+    update_context(CssSelector, Html, <<"prepend">>, <<".widgetManager()">>, Context).
 
 insert_bottom_selector(CssSelector, Html, Context) ->
-    update_context(CssSelector, Html, <<"append">>, <<"">>, Context).
+    update_context(CssSelector, Html, <<"append">>, <<".widgetManager()">>, Context).
 
 appear_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_top_selector(CssSelector, Html, Context) ->
-    update_context(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>, Context).
+    update_context(CssSelector, Html, <<"prepend">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_bottom_selector(CssSelector, Html, Context) ->
-    update_context(CssSelector, Html, <<"append">>, <<".fadeIn()">>, Context).
+    update_context(CssSelector, Html, <<"append">>, <<".fadeIn().widgetManager()">>, Context).
 
 
 %% @doc Set the value of an input element.
@@ -290,19 +290,19 @@ update_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".widgetManager()">>).
 
 insert_top_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"prepend">>, <<"">>).
+    update_js(CssSelector, Html, <<"prepend">>, <<".widgetManager()">>).
 
 insert_bottom_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"append">>, <<"">>).
+    update_js(CssSelector, Html, <<"append">>, <<".widgetManager()">>).
 
 appear_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>).
 
 appear_top_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"prepend">>, <<".fadeIn()">>).
+    update_js(CssSelector, Html, <<"prepend">>, <<".fadeIn().widgetManager()">>).
 
 appear_bottom_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"append">>, <<".fadeIn()">>).
+    update_js(CssSelector, Html, <<"append">>, <<".fadeIn().widgetManager()">>).
 
 
 %% @doc Helper functions for the insert/appear/set_value functions
