@@ -1,0 +1,9 @@
+[{kernel, [{error_logger, {file, "priv/sasl/zotonic.log"}}]},
+ {sasl,   [{error_logger_mf_dir, "priv/sasl/log_mf_h"},
+           {error_logger_mf_maxbytes, 16000000},
+           {error_logger_mf_maxfiles, 8},
+           {errlog_type, all},
+           {sasl_error_logger, {file, "priv/sasl/sasl.log"}}
+          ]}
+].
+

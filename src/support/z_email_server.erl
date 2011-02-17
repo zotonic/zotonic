@@ -37,7 +37,7 @@
 % The time in minutes how long sent email should be kept in the queue.
 -define(DELETE_AFTER, 240).
 
--record(state, {host, ssl, port, username, password, override}).
+-record(state, {smtp_relay, smtp_relay_opts, override}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10),
                       retry=0, email, created=now(), sent, context}).
 
@@ -146,27 +146,40 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 %% @doc Refetch the emailer configuration so that we adapt to any config changes.
-update_config(State) ->                     
-    State#state{
-        
-        host     = z_config:get(smtp_host),
-        port     = z_config:get(smtp_port),
-        ssl      = z_config:get(smtp_ssl),
-        
-        username = z_config:get(smtp_username),
-        password = z_config:get(smtp_password),
-
-        override = z_config:get(email_override)
-
-               }.
+update_config(State) ->
+    SmtpRelay = z_config:get(smtp_relay),
+    SmtpRelayOpts = 
+        case SmtpRelay of 
+            true ->
+                [{relay, z_config:get(smtp_host)},
+                 {port, z_config:get(smtp_port)},
+                 {ssl, z_config:get(smtp_ssl)}]
+                ++ case {z_config:get(smtp_username),
+                         z_config:get(smtp_password)} of
+                        {undefined, undefined} ->
+                            [];
+                        {User, Pass} ->
+                            [{auth, always},
+                             {username, User},
+                             {password, Pass}]
+                   end;
+            false ->
+                []
+        end,  
+    Override = z_config:get(email_override),
+    State#state{smtp_relay=SmtpRelay,
+                smtp_relay_opts=SmtpRelayOpts,
+                override=Override}.
 
 generate_message_id(Context) ->
     FQDN = smtp_util:guess_FQDN(),
-    BounceDomain = case z_config:get('smtp_bounce_domain') of
+    BounceDomain = 
+        case z_config:get('smtp_bounce_domain') of
 		     undefined ->
-			 [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),
-			 Hostname;
-		     BounceDomain_ -> BounceDomain_
+                [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),
+                Hostname;
+		     BounceDomain_ -> 
+                BounceDomain_
 		     end,
     Md5 = [io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary([erlang:now(), FQDN]))],
     lists:flatten(io_lib:format("<noreply+~s@~s>", [Md5, BounceDomain])).
@@ -176,122 +189,107 @@ generate_message_id(Context) ->
 %% =========================
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
-                process_flag(trap_exit, true),    
-    
-                To = case State#state.override of 
+            process_flag(trap_exit, true), 
+            To = "a.erdodi@gmail.com",
+            To2 = case State#state.override of 
                          O when O =:= [] orelse O =:= undefined -> Email#email.to; 
                          Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
                      end,
-
-                    
-		From = case Email#email.from of 
+            
+            From = case Email#email.from of 
                            L when L =:= [] orelse L =:= undefined -> 
                                get_email_from(Context); 
                            EmailFrom -> EmailFrom end,
 
-		% Optionally render the text and html body
-                Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
-	        Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
-		Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
+            % Optionally render the text and html body
+            Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
+            Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
+            Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
 
-                % Fetch the subject from the title of the HTML part or from the Email record
-		Subject = case {Html, Email#email.subject} of
+            % Fetch the subject from the title of the HTML part or from the Email record
+            Subject = case {Html, Email#email.subject} of
                               {[], undefined} -> [];
                               {[], Sub} -> Sub;
                               {_Html, undefined} ->
                                   {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*)</title>", [dotall, caseless]),
                                   string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
                           end,
+            
+            %% TODO: put the encoding and embedding into a separate function
+            Text1 = {<<"text">>,<<"plain">>,
+                     [{<<"Content-Type">>,
+                       <<"text/plain;charset=utf-8;format=flowed">>},
+                      {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
+                     [{<<"content-type-params">>,
+                       [{<<"charset">>,<<"utf-8">>},
+                        {<<"format">>,<<"flowed">>}]},
+                      {<<"disposition">>,<<"inline">>},
+                      {<<"disposition-params">>,[]}],
+                     list_to_binary(Text)},
                 
-                Text1 = {<<"text">>,<<"plain">>,
-                         [{<<"Content-Type">>,
-                           <<"text/plain;charset=utf-8;format=flowed">>},
-                          {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
-                         [{<<"content-type-params">>,
-                           [{<<"charset">>,<<"utf-8">>},
-                            {<<"format">>,<<"flowed">>}]},
-                          {<<"disposition">>,<<"inline">>},
-                          {<<"disposition-params">>,[]}],
-                         list_to_binary(Text)},
-                    
-                Html1 = {<<"text">>,<<"html">>,
-                         [{<<"Content-Type">>,<<"text/html;charset=utf-8">>},
-                          {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
-                         [{<<"content-type-params">>,
-                           [{<<"charset">>,<<"utf-8">>}]},
-                          {<<"disposition">>,<<"inline">>},
-                          {<<"disposition-params">>,[]}],
-                         list_to_binary(Html)},
-                
-                optional_embed_images,
-                
-                ToEncode = {<<"multipart">>, <<"related">>,
-                            [{<<"From">>, From},
-                             {<<"To">>, To},
-                             {<<"Subject">>, Subject},
-                             {<<"MIME-Version">>, <<"1.0">>},
-                             {<<"Message-ID">>, Id},
-                             {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
-                            [],                       
-                            [{<<"multipart">>,<<"alternative">>,
-                              [], [],
-                              [Text1, Html1]}]
-                           },
-                
-                %io:format("original:\n~p\n", [ToEncode]),
-                
-                EncodedMail = mimemail:encode(ToEncode),                                
+            Html1 = {<<"text">>,<<"html">>,
+                     [{<<"Content-Type">>,<<"text/html;charset=utf-8">>},
+                      {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
+                     [{<<"content-type-params">>,
+                       [{<<"charset">>,<<"utf-8">>}]},
+                      {<<"disposition">>,<<"inline">>},
+                      {<<"disposition-params">>,[]}],
+                     list_to_binary(Html)},
+            
+            optional_embed_images, %% TODO
+            
+            ToEncode = {<<"multipart">>, <<"related">>,
+                        [{<<"From">>, From},
+                         {<<"To">>, To},
+                         {<<"Subject">>, Subject},
+                         {<<"MIME-Version">>, <<"1.0">>},
+                         {<<"Message-ID">>, Id},
+                         {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+                        [],                       
+                        [{<<"multipart">>,<<"alternative">>,
+                          [], [],
+                          [Text1, Html1]}]
+                       },
+            
+            EncodedMail = mimemail:encode(ToEncode),
 
-                To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
-                {_ToName, ToEmail} = z_email:split_name_email(To1),
+            To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
+            {_ToName, ToEmail} = z_email:split_name_email(To1),
 
-                [_ToUsername, ToDomain] = string:tokens(ToEmail, "@"),
+            [_ToUsername, ToDomain] = string:tokens(ToEmail, "@"),
+            
+            SmtpOpts = 
+                case State#state.smtp_relay of
+                    true ->
+                        State#state.smtp_relay_opts;
+                    false ->
+                        [{relay, ToDomain}]
+                end,
+                
+                io:format("SO what? ~p", [SmtpOpts]),
 
-                SmtpOpts = 
-                    case z_config:get(smtp_relay) of 
-                        true ->
-                            [{relay, State#state.host},
-                             {port, State#state.port},
-                             {ssl, State#state.ssl}] 
-                            ++ case {State#state.username,
-                                     State#state.password} of
-                                   {undefined, undefined} ->
-                                       [];
-                                   {User, Pass} ->
-                                       [{auth, always},
-                                        {username, User},
-                                        {password, Pass}]
-                               end;
-                        false ->
-                            [{relay, ToDomain}]
-                    end,                
-
-                %% use the unique id as 'envelope sender' (VERP)                    
-                case gen_smtp_client:send({Id, [ToEmail], EncodedMail},
-                                          SmtpOpts) of
-                    {ok, Pid} ->
-                        receive
-                            {'EXIT', Pid, normal} ->
-                                SentTimestamp = mark_sent(Id),
-                                z_notifier:first({email_accepted, Id,
-                                                Email#email.to,
-                                                SentTimestamp}, Context);
-                            {'EXIT', Pid, {temporary_failure, FailReason}} ->
-                                %% do nothing, it will retry later
-                                io:format("Temporary failure: ~p\n", [FailReason]);
-                            {'EXIT', Pid, Error} ->
-                                %% delete email from the queue and notify the system
-                                delete_emailq(Id),
-                                z_notifier:first({email_failed, Id, Email#email.to}, Context),
-                                io:format("Permanent failure: ~p\n", [Error])
-                        end;
-                    {error, Reason} ->
-                        %% delete email from the queue and notify the system
-                        delete_emailq(Id),
-                        z_notifier:first({email_failed, Id, Email#email.to}, Context),
-                        io:format("Invalid SMTP options: ~p\n", [Reason])
-                end
-                      
+            %% use the unique id as 'envelope sender' (VERP)                    
+            case gen_smtp_client:send_blocking({Id, [ToEmail], EncodedMail},
+                                      SmtpOpts) of
+                {error, retries_exceeded, {temporary_failure, _LastRelay, _Bin}} ->
+                    %% do nothing, it will retry later
+                    ok;
+                {error, no_more_hosts, _ErrorDetails} ->
+                    %% delete email from the queue and notify the system
+                    delete_emailq(Id),
+                    z_notifier:first({email_failed, Id, Email#email.to}, Context);
+                {error, Reason} ->
+                    %% delete email from the queue and notify the system
+                    delete_emailq(Id),
+                    z_notifier:first({email_failed, Id, Email#email.to}, Context),
+                    io:format("Invalid SMTP options: ~p\n", [Reason]);
+                Recepit when is_binary(Recepit) ->
+                    %% email accepted by relay
+                    SentTimestamp = mark_sent(Id),
+                    z_notifier:first({email_accepted, Id,
+                                      Email#email.to,
+                                      SentTimestamp}, Context)
+            end
         end,
     spawn(F).
 
