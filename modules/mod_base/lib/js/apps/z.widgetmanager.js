@@ -1,10 +1,11 @@
 /* Admin widgetManager class
 ----------------------------------------------------------
 
-@package:	Zotonic 2009	
+@package:	Zotonic	
 @Author: 	Tim Benniks <tim@timbenniks.nl>
+@Author: 	Marc Worrell <marc@worrell.nl>
 
-Copyright 2009 Tim Benniks
+Copyright 2009-2011 Tim Benniks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,7 +49,7 @@ limitations under the License.
 							defaults = {}
 						}
 						
-						objectOptions = $.extend({}, defaults, $(element).metadata());
+						objectOptions = $.extend({}, defaults, $(element).metadata(functionName));
 						$(element)[functionName](objectOptions);
 					}
 				}
@@ -137,91 +138,37 @@ limitations under the License.
 					});
 				}
 			}
-		},
-		
-		metadata: 
-		{
-			defaults: {
-				type: 'class',
-				name: 'metadata',
-				cre: /({.*})/,
-				single: 'metadata'
-			},
-			
-			setType: function(type, name)
-			{
-				this.defaults.type = type;
-				this.defaults.name = name;
-			},
-			
-			get: function(elem, opts)
-			{
-				var settings = $.extend({}, this.defaults, opts);
-				
-				// check for empty string in single property
-				if(!settings.single.length)
-				{
-					settings.single = 'metadata';
-				}
-				
-				var data = $.data(elem, settings.single);
-				
-				// returned cached data if it already exists
-				if(data)
-				{
-					return data;
-				}
-				
-				data = "{}";
-				
-				if(settings.type == "class")
-				{
-					var m = settings.cre.exec(elem.className);
-					if(m)
-					{
-						data = m[1];
-					}
-				} 
-				else if(settings.type == "elem")
-				{
-					if(!elem.getElementsByTagName)
-					{
-						return;
-					}
-					
-					var e = elem.getElementsByTagName(settings.name);
-					
-					if(e.length)
-					{
-						data = $.trim(e[0].innerHTML);
-					}
-				} 
-				else if(elem.getAttribute != undefined)
-				{
-					var attr = elem.getAttribute(settings.name);
-					if(attr)
-					{
-						data = attr;
-					}
-				}
-				
-				if(data.indexOf( '{' ) < 0)
-				data = "{" + data + "}";
-				
-				data = eval("(" + data + ")");
-				
-				$.data(elem, settings.single, data);
-				return data;
-			}
 		}
 	});
 	
-	$.fn.metadata = function(opts)
+	$.fn.metadata = function(functionName)
 	{
-		return $.metadata.get( this[0], opts );
+		var elem = this[0];
+		var data_name = 'widget-'+functionName;
+		var data = $(elem).data(data_name);
+		if(data)
+		{
+			return data;
+		}
+		data = elem.getAttribute("data-"+functionName);
+		if(!data)
+		{
+			var m = /{(.*)}/.exec(elem.className);
+			if(m)
+			{
+				data = m[1];
+			}
+			else
+			{
+				data = "";
+			}
+		}
+		data = eval("({" + data + "})");
+		$(elem).data(data_name, data);
+		return data;
 	};
     
-	$.fn.widgetManager = function(opts)
+	$.fn.widgetManager = function()
 	{
 	    $.widgetManager(this[0]);
 	};

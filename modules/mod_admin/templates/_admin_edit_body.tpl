@@ -31,7 +31,7 @@
 {% else %} {# non-multilanguage content and translation module disabled #}
 
 <div class="item-wrapper">
-    <h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+    <h3 class="above-item clearfix do_blockminifier">
         <span class="title">{_ Content _}</span>
         <span class="arrow">{_ make smaller _}</span>
     </h3>

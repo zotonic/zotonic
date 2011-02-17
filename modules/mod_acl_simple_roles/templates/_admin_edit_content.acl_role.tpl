@@ -1,14 +1,14 @@
 {% with m.rsc[id].acl as acl %}
 
 		<div class="item-wrapper">
-			<h3 class="above-item clearfix do_blockminifier { minifiedOnInit: false }">
+			<h3 class="above-item clearfix do_blockminifier">
 				<span class="title">{_ Permissions _}</span>
 				<span class="arrow">{_ make smaller _}</span>
 			</h3>
 			<div class="item">
 				<fieldset class="admin-form">
 					<div class="notification notice">
-						{_ Check below what people that are member of this role are allowed to do. _}<a href="javascript:void(0)" class="do_dialog {title: '{_ Help about ACL roles. _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}', width: '450px'}">{_ Need more help? _}</a>
+						{_ Check below what people that are member of this role are allowed to do. _}<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about ACL roles. _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}', width: '450px'">{_ Need more help? _}</a>
 					</div>
 
 					<div class="form-item clearfix">
