@@ -1,4 +1,7 @@
 [
-	{survey, ["survey", id],       resource_page, [ {template, "survey.tpl"}  ]},
-	{survey, ["survey", id, slug], resource_page, [ {template, "survey.tpl"} ]}
+    {survey_results, ["survey", "results", id],       resource_page, [ {template, "survey_results.tpl"} ]},
+    {survey_results, ["survey", "results", id, slug], resource_page, [ {template, "survey_results.tpl"} ]},
+
+    {survey, ["survey", id],       resource_page, [ {template, "survey.tpl"} ]},
+    {survey, ["survey", id, slug], resource_page, [ {template, "survey.tpl"} ]}
 ].

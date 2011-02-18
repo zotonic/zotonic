@@ -4,7 +4,8 @@
     new/0,
     question_props/1,
     render/1,
-    answer/2
+    answer/2,
+    prep_chart/2
 ]).
 
 -include("../survey.hrl").
@@ -50,9 +51,24 @@ render(Q) ->
             ])
     }.
 
-answer(#survey_question{name=Name}, Context) ->
-    case z_context:get_q(Name, Context) of
-        "yes" -> {ok, [{Name, yes}]};
-        "no" -> {ok, [{Name, no}]};
+answer(#survey_question{name=Name}, Answers) ->
+    case proplists:get_value(Name, Answers) of
+        "1" -> {ok, [{Name, yes}]};
+        "0" -> {ok, [{Name, no}]};
         undefined -> {error, missing}
     end.
+
+
+prep_chart(_Q, []) ->
+    undefined;
+prep_chart(_Q, [{_, Vals}]) ->
+    Yes = proplists:get_value(<<"yes">>, Vals, 0),
+    No  = proplists:get_value(<<"no">>, Vals, 0),
+    Total = Yes + No,
+    YesP = round(Yes * 100 / Total),
+    NoP = 100 - YesP,
+    [
+     {values, [{"yes", Yes}, {"no", No}]},
+     {type, "pie"},
+     {data, [["yes", YesP], ["no", NoP]]}
+    ].

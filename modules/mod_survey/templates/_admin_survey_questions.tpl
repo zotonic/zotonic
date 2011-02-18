@@ -1,3 +1,9 @@
+<li id="ci1">
+	{% survey_example type="pagebreak" %}
+</li>
+{% draggable id="ci1" tag={q type="pagebreak"} to_sorter="survey" %}
+
+
 <li id="ci2">
 	{% survey_example type="textblock" %}
 </li>

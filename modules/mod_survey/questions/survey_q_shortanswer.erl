@@ -49,9 +49,9 @@ render(Q) ->
             ])
     }.
 
-answer(Q, Context) ->
+answer(Q, Answers) ->
     Name = Q#survey_question.name,
-    case z_context:get_q(Name, Context) of
+    case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};

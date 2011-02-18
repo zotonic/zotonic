@@ -4,9 +4,11 @@
     new/0,
     question_props/1,
     render/1,
-    answer/2
+    answer/2,
+    prep_chart/2
 ]).
 
+-include("zotonic.hrl").
 -include("../survey.hrl").
 
 new() ->
@@ -54,8 +56,24 @@ render(Q) ->
             ])
     }.
 
-answer(#survey_question{name=Name}, Context) ->
-    case z_context:get_q(Name, Context) of
+answer(#survey_question{name=Name}, Answers) ->
+    case proplists:get_value(Name, Answers) of
         [C] when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
         undefined -> {error, missing}
     end.
+
+
+prep_chart(_Q, []) ->
+    undefined;
+prep_chart(_Q, [{_, Vals}]) ->
+    Labels = [<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>],
+    LabelsDisplay = [<<"Strongly agree">>,<<"Agree">>,<<"Neutral">>,<<"Disagree">>,<<"Strongly disagree">>],
+
+    Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
+    Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+    Perc = [ round(V*100/Sum) || V <- Values ],
+    [
+        {values, lists:zip(LabelsDisplay, Values)},
+        {type, "pie"},
+        {data, lists:zip(LabelsDisplay, Perc)}
+    ].
