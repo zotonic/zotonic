@@ -100,7 +100,7 @@
 %% Used for search results
 -record(search_result, {result=[], page=1, pagelen, total, all, pages, next, prev}).
 -record(m_search_result, {search_name, search_props, result, page, pagelen, total, pages, next, prev}).
--record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[], cats=[], cats_exclude=[], run_func, extra, assoc=false}).
+-record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[], cats=[], cats_exclude=[], run_func, extra=[], assoc=false}).
 
 %% For z_supervisor, process definitions.
 -record(child_spec, {name, mfa, status, pid, crashes=5, period=60, 
@@ -124,6 +124,10 @@
 -record(acl_rsc, {category, mime, size}).
 -record(acl_edge, {subject_id, predicate, object_id}).
 -record(acl_media, {mime, size}).
+
+%% ACL notifications
+-record(acl_add_sql_check, {alias, args, search_sql}).
+
 
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
 %% This is used for fetching the acl fields from a resource record.
