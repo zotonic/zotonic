@@ -19,4 +19,4 @@
 
 
 %% @doc A question for in a survey
--record(survey_question, {type, name, question, text, html}).
+-record(survey_question, {type, name, question, text, html, parts=[], is_required=true}).

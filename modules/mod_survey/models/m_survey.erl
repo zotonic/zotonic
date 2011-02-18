@@ -47,7 +47,12 @@ m_find_value(Id, #m{value=questions}, Context) ->
             question_to_value(QuestionIds, Questions, []);
         undefined -> 
             undefined
-    end.
+    end;
+m_find_value(results, #m{value=undefined} = M, _Context) ->
+    M#m{value=results};
+m_find_value(Id, #m{value=results}, Context) ->
+    prepare_results(Id, Context).
+
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context)
@@ -61,45 +66,79 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 
-%% @doc Transform a list of survey questions to template friendly proplists
+%% @doc Transform a list of survey questions to admin template friendly proplists
 question_to_value([], _, Acc) ->
     lists:reverse(Acc);
 question_to_value([Id|Ids], Qs, Acc) ->
     Q = proplists:get_value(Id, Qs),
     question_to_value(Ids, Qs, [question_to_value1(Id, Q)|Acc]).
 
-    question_to_value1(Id, #survey_question{type=Type, name=Name, html=Html}) ->
-        {Id, [{id, Id}, {type, Type}, {name, Name}, {html, Html}]};
-    question_to_value1(Id, undefined) ->
-        {Id, [{id, Id}, {type, undefined}]}.
+    question_to_value1(Id, Q) ->
+        {Id, [{id, Id} | mod_survey:question_to_props(Q)]}.
 
 
 
-%% @doc Save a survey, connect to the current visitor and user (if any)
+%% @doc Save a survey, connect to the current user (if any)
 insert_survey_submission(SurveyId, Answers, Context) ->
     UserId = z_acl:user(Context),
     %% Delete previous answers of this user, if any
     case UserId of
-        undefined -> nop;
-        _Other -> z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context)
+        undefined ->
+            PersistentId = z_context:persistent_id(Context),
+            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PersistentId], Context);
+        _Other ->
+            z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context),
+            PersistentId = undefined
     end,
-    insert_questions(SurveyId, UserId, Answers, Context).
+    insert_questions(SurveyId, UserId, PersistentId, Answers, Context).
 
-    insert_questions(_SurveyId, _UserId, [], _Context) ->
+    insert_questions(_SurveyId, _UserId, _PersistentId, [], _Context) ->
         ok;
-    insert_questions(SurveyId, UserId, [{QuestionId, Answers}|Rest], Context) ->
-        insert_answers(SurveyId, UserId, QuestionId, Answers, Context),
-        insert_questions(SurveyId, UserId, Rest, Context).
+    insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], Context) ->
+        insert_answers(SurveyId, UserId, PersistentId, QuestionId, Answers, Context),
+        insert_questions(SurveyId, UserId, PersistentId, Rest, Context).
         
-    insert_answers(_SurveyId, _UserId, _QuestionId, [], _Context) ->
+    insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Context) ->
         ok;
-    insert_answers(SurveyId, UserId, QuestionId, [{Name, Answer}|As], Context) ->
+    insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Context) ->
         Args = case Answer of
-            {text, Text} -> [SurveyId, UserId, QuestionId, Name, undefined, Text];
-            Value -> [SurveyId, UserId, QuestionId, Name, z_convert:to_list(Value), undefined]
+            {text, Text} -> [SurveyId, UserId, PersistentId, QuestionId, Name, undefined, Text];
+            Value -> [SurveyId, UserId, PersistentId, QuestionId, Name, z_convert:to_list(Value), undefined]
         end,
-        z_db:q("insert into survey_answer (survey_id, user_id, question, name, value, text) values ($1, $2, $3, $4, $5, $6)", Args, Context),
-        insert_answers(SurveyId, UserId, QuestionId, As, Context).
+        z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text) 
+                values ($1, $2, $3, $4, $5, $6, $7)", 
+               Args,
+               Context),
+        insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Context).
+
+
+prepare_results(SurveyId, Context) ->
+    case m_rsc:p(SurveyId, survey, Context) of
+        {survey, QuestionIds, Questions} ->
+            Stats = survey_stats(SurveyId, Context),
+            [
+                prepare_result(proplists:get_value(QId, Questions), 
+                               proplists:get_value(z_convert:to_binary(QId), Stats)) 
+                || QId <- QuestionIds
+            ];
+        undefined -> 
+            undefined
+    end.
+    
+    prepare_result(Question, Stats) ->
+        [
+         Stats,
+         prep_chart(Question, Stats),
+         mod_survey:question_to_props(Question)
+        ].
+
+
+prep_chart(_Q, undefined) ->
+    undefined;
+prep_chart(Q, Stats) ->
+    M = mod_survey:module_name(Q),
+    M:prep_chart(Q, Stats).
+
 
 
 %% @doc Fetch the aggregate answers of a survey, omitting the open text answers. 
@@ -137,6 +176,7 @@ install(Context) ->
                 #column_def{name=id, type="serial", is_nullable=false},
                 #column_def{name=survey_id, type="integer", is_nullable=false},
                 #column_def{name=user_id, type="integer", is_nullable=true},
+                #column_def{name=persistent, type="character varying", length=32, is_nullable=true},
                 #column_def{name=question, type="character varying", length=32, is_nullable=false},
                 #column_def{name=name, type="character varying", length=32, is_nullable=false},
                 #column_def{name=value, type="character varying", length=80, is_nullable=true},
@@ -153,11 +193,12 @@ install(Context) ->
     z_db:equery("alter table survey_answer add 
                 constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id) 
                 on update cascade on delete cascade", Context),
-                
+
     %% For aggregating answers to survey questions (group by name)
     z_db:equery("create index survey_answer_survey_name_key on survey_answer(survey_id, name)", Context),
     z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
     z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
+    z_db:equery("create index survey_answer_survey_persistent_key on survey_answer(survey_id, persistent)", Context),
 
     ok.
 

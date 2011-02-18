@@ -43,6 +43,6 @@ render(Q) ->
         html = iolist_to_binary(["<p class=\"prompt\">", z_html:escape(Q#survey_question.question), "</p>"])
     }.
 
-answer(_Q, _Context) ->
-    {ok, []}.
+answer(_Q, _Answers) ->
+    {ok, none}.
 

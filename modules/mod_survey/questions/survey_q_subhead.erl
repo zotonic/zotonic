@@ -12,7 +12,7 @@
 new() ->
     Q = #survey_question{
         type = subhead, 
-        name = "", 
+        name = z_ids:identifier(5), 
         text = "", 
         question = <<"This is a subhead">>
     },
@@ -24,7 +24,7 @@ question_props(Q) ->
         
         {has_question, true},
         {has_text, false},
-        {has_name, false},
+        {has_name, true},
         
         {question_label, "Subhead"},
         {text_label, ""},
@@ -37,13 +37,12 @@ question_props(Q) ->
 
 render(Q) ->
     Q#survey_question{
-        name = "",
         text = "",
         question = iolist_to_binary(Q#survey_question.question),
         html = iolist_to_binary(["<h2>", z_html:escape(Q#survey_question.question), "</h2>"])
     }.
 
-answer(_Q, Context) ->
-    {ok, []}.
+answer(_Q, _Answers) ->
+    {ok, none}.
 
 
