@@ -4,9 +4,11 @@
     new/0,
     question_props/1,
     render/1,
-    answer/2
+    answer/2,
+    prep_chart/2
 ]).
 
+-include("zotonic.hrl").
 -include("../survey.hrl").
 
 new() ->
@@ -46,6 +48,7 @@ render(Q) ->
     Rs = radio(Options, 1, Name, []),
     Q#survey_question{
         question = iolist_to_binary(Q#survey_question.question),
+        parts = [ z_html:escape(Opt) || Opt <- Options ],
         html = iolist_to_binary([
             "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
             "<p class=\"thurstone\">",
@@ -69,12 +72,26 @@ radio([H|T], N, Name, Acc) ->
     radio(T, N+1, Name, [R|Acc]).
 
 
-answer(Q, Context) ->
+answer(Q, Answers) ->
     Name = Q#survey_question.name,
     Options = split_options(Q#survey_question.text),
-    case z_context:get_q(Name, Context) of
+    case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
         N -> {ok, [{Name, lists:nth(list_to_integer(N), Options)}]}
     end.
+
+
+prep_chart(_Q, []) ->
+    undefined;
+prep_chart(Q, [{_, Vals}]) ->
+    Labels = [ z_convert:to_binary(Lab) || Lab <- split_options(Q#survey_question.text) ],
+    Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
+    Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+    Perc = [ round(V*100/Sum) || V <- Values ],
+    [
+        {values, lists:zip(Labels, Values)},
+        {type, "pie"},
+        {data, lists:zip(Labels, Perc)}
+    ].
 
     

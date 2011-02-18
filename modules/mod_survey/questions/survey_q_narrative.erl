@@ -39,54 +39,65 @@ Use [name=first|second|third] for a drop down menu named \"name\" with the given
     ].
 
 render(Q) ->
-    {Html, _Inputs} = parse(z_convert:to_list(Q#survey_question.text)),
+    {Parts, _Inputs} = parse(z_convert:to_list(Q#survey_question.text)),
     Q#survey_question{
         name = "",
         text = iolist_to_binary(Q#survey_question.text),
         question = "",
-        html = iolist_to_binary(Html)
+        parts = Parts,
+        html = iolist_to_binary([build(P) || P <- Parts])
     }.
 
 
-answer(Q, Context) ->
+answer(Q, Answers) ->
     {_Html, Inputs} = parse(z_convert:to_list(Q#survey_question.text)),
-    answer_inputs(Inputs, Context, []).
+    answer_inputs(Inputs, Answers, []).
 
-answer_inputs([], _Context, Acc) ->
+answer_inputs([], _Answers, Acc) ->
     {ok, Acc};
-answer_inputs([{IsSelect,Name}|Rest], Context, Acc) ->
-    case z_context:get_q(Name, Context) of
+answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
+    case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};
                     V ->
                         V1 = case IsSelect of true -> V; false -> {text, V} end, 
-                        answer_inputs(Rest, Context, [{Name,V1}|Acc])
+                        answer_inputs(Rest, Answers, [{Name,V1}|Acc])
                  end
     end.
 
 
 parse(Text) ->
-    parse(Text, in_text, [], [], []).
+    parse(Text, [], []).
 
-parse([], _State, _Buff, Acc, InputAcc) ->
+parse([], Acc, InputAcc) ->
     {lists:reverse(Acc), InputAcc};
-parse([$[|T], in_text, [], Acc, InputAcc) ->
-    parse(T, in_input, [], Acc, InputAcc);
-parse([$]|T], in_input, Input, Acc, InputAcc) ->
-    Input1 = lists:reverse(Input),
+parse([$[|T], Acc, InputAcc) ->
+    {Input1,T1} = lists:splitwith(fun(C) -> C /= $] end, T),
     IsSelect = is_select(Input1),
-    {Name, Elt} = case IsSelect of
-        true -> build_select(Input1);
-        false -> build_input(Input1)
+    Elt = case IsSelect of
+        true -> 
+            {Name, Options} = split_select(Input1),
+            {select, Name, Options};
+        false -> 
+            Name = z_string:trim(Input1),
+            Length = length(Input1),
+            {input, Name, Length}
     end,
-    parse(T, in_text, [], [Elt|Acc], [{IsSelect, Name}|InputAcc]);
-parse([H|T], in_input, Input, Acc, InputAcc) ->
-    parse(T, in_input, [H|Input], Acc, InputAcc);
-parse([10|T], in_text, [], Acc, InputAcc) ->
-    parse(T, in_text, [], [10,"<br/>"|Acc], InputAcc);
-parse([H|T], in_text, [], Acc, InputAcc) ->
-    parse(T, in_text, [], [H|Acc], InputAcc).
+    Acc1 = [Elt|Acc],
+    InputAcc1 = [{IsSelect, Name}|InputAcc],
+    case T1 of
+        [] -> parse([], Acc1, InputAcc1);
+        [$]|T2] -> parse(T2, Acc1, InputAcc1)
+    end;
+parse(T, Acc, InputAcc) ->
+    {Text,Rest} = lists:splitwith(fun(C) -> C /= $[ end, T),
+    Text1 = lists:map(fun(10) -> "<br/>";
+                         (C) -> C
+                      end,
+                      z_convert:to_list(z_html:escape(Text))),
+    Acc1 = [{html, [], iolist_to_binary(Text1)}|Acc],
+    parse(Rest, Acc1, InputAcc).
 
 
 is_select([]) -> false;
@@ -94,20 +105,20 @@ is_select([$=|_]) -> true;
 is_select([$||_]) -> true;
 is_select([_|T]) -> is_select(T).
 
-build_select(I) ->
-    {Name, Options} = split_select(I),
-    {Name, [
+
+build({input, Name, Length}) -> 
+    [
+        "<input class=\"survey-q inline\" name=\"",z_html:escape(Name),"\" size=\"",integer_to_list(Length),"\" value=\"\" />"
+    ];
+build({select, Name, Options}) -> 
+    [
         "<select class=\"survey-q inline\" name=\"",z_html:escape(Name),"\">",
         options(Options, []),
         "</select>"
-    ]}.
+    ];
+build({html, [], Html}) -> 
+    Html.
 
-build_input(I) ->
-    Name = z_string:trim(I),
-    Length = length(I),
-    {Name, [
-        "<input class=\"survey-q inline\" name=\"",z_html:escape(Name),"\" size=\"",integer_to_list(Length),"\" value=\"\" />"
-    ]}.
 
 options([], Acc) ->
     lists:reverse(Acc);

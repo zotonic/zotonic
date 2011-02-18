@@ -1,9 +1,9 @@
-{% for q_id, q in m.survey.questions[id] %}
+{% for q_id, question in m.survey.questions[id] %}
 	<li id="{{ q_id }}"> 
 	    <p class="survey-info">{{ q.name|escape }}
 	        &nbsp; <button class="right" id="{{ #x.q_id }}">x</button><button class="right" id="{{ #e.q_id }}">{_ edit _}</button>
 		</p>
-		{{ q.html|replace:['class="', 'class="nosubmit '] }}
+		{{ question.html|replace:['class="', 'class="nosubmit '] }}
 	</li>
 	{% sortable id=q_id tag=q_id%}
 	{% wire id=#x.q_id delegate="mod_survey" action={dialog_survey_question_delete id=id question_id=q_id} %}

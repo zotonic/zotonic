@@ -43,7 +43,7 @@
 			
 			<div class="zp-30">
 				<h4>{_ Question Templates _}</h4>
-				<ul id="survey-qs">
+				<ul id="survey-qs" style="cursor: move;">
 					{% include "_admin_survey_questions.tpl" %}
 				</ul>
 			</div>
@@ -51,7 +51,7 @@
 			<div class="zp-70 last">
 				<h4>{_ Your survey _}</h4>
 				{% sorter id="survey" tag={survey id=id} group="survey" delegate="mod_survey" %}
-				<ul id="survey" style="min-height:400px">
+				<ul id="survey" style="cursor: move;" style="min-height:400px">
 					{% include "_admin_survey_questions_edit.tpl" id=id %}
 				</ul>
 			</div>

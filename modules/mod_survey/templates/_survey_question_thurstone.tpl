@@ -1,0 +1,12 @@
+{% with answers[name] as ans %}
+<ul>
+{% for n in question.parts %}
+	{% with forloop.counter as index %}
+		<li><label class="choices"><input id="{{ #thur.index }}" name="{{ name }}" type="radio" value="{{ index }}" {% if ans == index %}checked="checked" {% endif %}/> {{ n }}</label></li>
+		{% if forloop.first %}
+			{% validate id=#thur.index name=name type={presence} %}
+		{% endif %}
+	{% endwith %}
+{% endfor %}
+</ul>
+{% endwith %}
