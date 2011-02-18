@@ -80,6 +80,7 @@ request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
 request_arg("is_featured")         -> is_featured;
+request_arg("is_published")        -> is_published;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
 request_arg("query_id")            -> query_id;
@@ -214,6 +215,29 @@ parse_query([{is_featured, Boolean}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
     Result2 = add_where("rsc.is_featured = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
+
+%% is_published or is_published={false,true,all}
+%% Filter on whether an item is featured or not.
+parse_query([{is_published, Boolean}|Rest], Context, Result) ->
+    Result1 = Result#search_sql{extra=[no_publish_check,Result#search_sql.extra]},
+    case z_convert:to_list(Boolean) of
+        "all" ->
+            parse_query(Rest, Context, Result1);
+        _ ->
+            case z_convert:to_bool(Boolean) of
+                true ->
+                    Result2 = add_where("rsc.is_published and "
+                                    "rsc.publication_start <= now() and "
+                                    "rsc.publication_end >= now()",
+                                    Result1);
+                false ->
+                    Result2 = add_where("(not rsc.is_published or "
+                                    "rsc.publication_start > now() or "
+                                    "rsc.publication_end < now())",
+                                    Result1)
+            end,
+            parse_query(Rest, Context, Result2)
+    end;
 
 %% upcoming
 %% Filter on items whose end date lies in the future
