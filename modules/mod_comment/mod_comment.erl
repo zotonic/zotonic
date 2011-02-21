@@ -61,8 +61,8 @@ event({submit, {newcomment, Args}, TriggerId, _TargetId}, Context) ->
             Html = z_template:render(CommentTemplate, Props, Context),
             Context1 = z_render:insert_bottom(CommentsListElt, Html, Context),
             Context2 = z_render:wire([
-                            {set_value, [{selector, "#"++TriggerId++" input[name=\"message\"]"}, {value, ""}]},
-                            {slide_down, [{target, "comment-"++integer_to_list(CommentId)}]}
+                            {set_value, [{selector, "#"++TriggerId++" textarea[name=\"message\"]"}, {value, ""}]},
+                            {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
                         ], Context1),
             case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of
                 true -> z_render:wire({redirect, [{location, "#comment-"++integer_to_list(CommentId)}]}, Context2);
