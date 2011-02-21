@@ -145,6 +145,13 @@ identify_file_os(unix, File, OriginalFilename) ->
                         _ ->
                             {ok, [{mime, "application/octet-stream"}]}
                     end;
+                "application/vnd.ms-office" ->
+                    % Generic ms-office mime type, check if the filename is more specific
+                    case guess_mime(OriginalFilename) of
+                        "application/vnd.ms" ++ _ = M -> {ok, [{mime,M}]};
+                        "application/msword" -> {ok, [{mime,"application/msword"}]};
+                        _ -> {ok, [{mime, "application/vnd.ms-office"}]}
+                    end;
                 _ ->
                     {ok, [{mime, Mime}]}
             end
