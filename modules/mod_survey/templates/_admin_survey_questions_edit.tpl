@@ -1,6 +1,6 @@
 {% for q_id, question in m.survey.questions[id] %}
 	<li id="{{ q_id }}"> 
-	    <p class="survey-info">{{ q.name|escape }}
+	    <p class="survey-info">{{ question.name|escape }}
 	        &nbsp; <button class="right" id="{{ #x.q_id }}">x</button><button class="right" id="{{ #e.q_id }}">{_ edit _}</button>
 		</p>
 		{{ question.html|replace:['class="', 'class="nosubmit '] }}
