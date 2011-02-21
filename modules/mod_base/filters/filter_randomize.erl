@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'random' filter, return a random element of a list
+%% @copyright 2011 Marc Worrell
+%% @doc Randomize the order of elements in a list
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_random).
--export([random/2]).
+-module(filter_randomize).
+-export([randomize/2]).
 
 
-random([], _Context) ->
+randomize([], _Context) ->
     undefined;
-random(undefined, _Context) ->
+randomize(undefined, _Context) ->
     undefined;
-random(In, Context) when is_list(In) ->
-    M = filter_rand:rand(length(In), Context),
-    hd(lists:nthtail(M-1, In));
-random(In, Context) ->
-    random(erlydtl_runtime:to_list(In, Context), Context).
+randomize(In, _Context) when is_list(In) ->
+    z_utils:randomize(In);
+randomize(In, Context) ->
+    randomize(erlydtl_runtime:to_list(In, Context), Context).
