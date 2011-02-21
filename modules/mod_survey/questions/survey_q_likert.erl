@@ -65,7 +65,7 @@ answer(#survey_question{name=Name}, Answers) ->
 
 prep_chart(_Q, []) ->
     undefined;
-prep_chart(_Q, [{_, Vals}]) ->
+prep_chart(Q, [{_, Vals}]) ->
     Labels = [<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>],
     LabelsDisplay = [<<"Strongly agree">>,<<"Agree">>,<<"Neutral">>,<<"Disagree">>,<<"Strongly disagree">>],
 
@@ -73,7 +73,8 @@ prep_chart(_Q, [{_, Vals}]) ->
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
+        {question, z_html:escape(Q#survey_question.question)},
         {values, lists:zip(LabelsDisplay, Values)},
         {type, "pie"},
-        {data, lists:zip(LabelsDisplay, Perc)}
+        {data, [{L,P} || {L,P} <- lists:zip(LabelsDisplay, Perc), P /= 0]}
     ].

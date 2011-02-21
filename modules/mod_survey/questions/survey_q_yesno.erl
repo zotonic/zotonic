@@ -61,13 +61,14 @@ answer(#survey_question{name=Name}, Answers) ->
 
 prep_chart(_Q, []) ->
     undefined;
-prep_chart(_Q, [{_, Vals}]) ->
+prep_chart(Q, [{_, Vals}]) ->
     Yes = proplists:get_value(<<"yes">>, Vals, 0),
     No  = proplists:get_value(<<"no">>, Vals, 0),
     Total = Yes + No,
     YesP = round(Yes * 100 / Total),
     NoP = 100 - YesP,
     [
+     {question, z_html:escape(Q#survey_question.question)},
      {values, [{"yes", Yes}, {"no", No}]},
      {type, "pie"},
      {data, [["yes", YesP], ["no", NoP]]}

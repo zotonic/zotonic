@@ -40,6 +40,10 @@
 </li>
 {% draggable id="ci8" tag={q type="thurstone"} to_sorter="survey" %}
 
+<li id="ci12">
+	{% survey_example type="matching" %}
+</li>
+{% draggable id="ci12" tag={q type="matching"} to_sorter="survey" %}
 
 <li id="ci9">
 	{% survey_example type="shortanswer" %}

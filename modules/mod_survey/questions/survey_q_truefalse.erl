@@ -61,13 +61,14 @@ answer(#survey_question{name=Name}, Answers) ->
 
 prep_chart(_Q, []) ->
     undefined;
-prep_chart(_Q, [{_, Vals}]) ->
+prep_chart(Q, [{_, Vals}]) ->
     True = proplists:get_value(<<"true">>, Vals, 0),
     False = proplists:get_value(<<"false">>, Vals, 0),
     Total = True + False,
     TrueP = round(True * 100 / Total),
     FalseP = 100 - TrueP,
     [
+     {question, z_html:escape(Q#survey_question.question)},
      {values, [{"true", True}, {"false", False}]},
      {type, "pie"},
      {data, [["true", TrueP], ["false", FalseP]]}

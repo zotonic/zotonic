@@ -4,7 +4,8 @@
     new/0,
     question_props/1,
     render/1,
-    answer/2
+    answer/2,
+    prep_chart/2
 ]).
 
 -include("../survey.hrl").
@@ -65,6 +66,54 @@ answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
                         answer_inputs(Rest, Answers, [{Name,V1}|Acc])
                  end
     end.
+
+
+
+prep_chart(_Q, []) ->
+    undefined;
+prep_chart(Q, Answers) ->
+    [
+        {question, result_title(Q#survey_question.parts, [])},
+        {charts, [ prep_chart1(Q, Ans) || Ans <- Answers ]}
+    ].
+
+prep_chart1(Q, {Name, Vals}) ->
+    case find_select(Q#survey_question.parts, Name) of
+        {select, _, Labels} ->
+            LabelsB = [ z_convert:to_binary(Lab) || Lab <- Labels ],
+            Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
+            Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+            Perc = [ round(V*100/Sum) || V <- Values ],
+            [
+                {values, lists:zip(LabelsB, Values)},
+                {type, "pie"},
+                {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
+            ];
+        _ ->
+            undefined
+    end.
+
+
+find_select([], _Name) ->
+    undefined;
+find_select([{select, Sel, _} = S|Rest], Name) ->
+    case z_convert:to_binary(Sel) == Name of
+        true -> S;
+        false -> find_select(Rest, Name)
+    end;
+find_select([_|Rest], Name) ->
+    find_select(Rest, Name).
+    
+    
+result_title([], Acc) ->
+    lists:reverse(Acc);
+result_title([{input, _, _}|Parts], Acc) ->
+    result_title(Parts, ["…"|Acc]);
+result_title([{html, _, Html}|Parts], Acc) ->
+    result_title(Parts, [Html|Acc]);
+result_title([{select, _, _} = Sel|Parts], Acc) ->
+    result_title(Parts, [build(Sel)|Acc]).
+
 
 
 parse(Text) ->

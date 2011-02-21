@@ -89,9 +89,10 @@ prep_chart(Q, [{_, Vals}]) ->
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
+        {question, z_html:escape(Q#survey_question.question)},
         {values, lists:zip(Labels, Values)},
         {type, "pie"},
-        {data, lists:zip(Labels, Perc)}
+        {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]}
     ].
 
     

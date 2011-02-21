@@ -26,6 +26,9 @@
 			{% if t == "thurstone" %}
 				{% include "_survey_question_thurstone.tpl" question=question name=question.name %}
 			{% endif %}
+			{% if t == "matching" %}
+				{% include "_survey_question_matching.tpl" question=question name=question.name %}
+			{% endif %}
 			{% if t == "shortanswer" %}
 				{% include "_survey_question_shortanswer.tpl" question=question name=question.name %}
 			{% endif %}

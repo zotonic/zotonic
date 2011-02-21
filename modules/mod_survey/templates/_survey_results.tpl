@@ -3,23 +3,22 @@
 	{% if not result %}
 		{% if question.type == 'subhead' %}{% include "_survey_question_subhead.tpl" %}{% endif %}
 		{% if question.type == 'prompt' %}{% include "_survey_question_prompt.tpl" %}{% endif %}
-		{% if question.type == 'texblock' %}{% include "_survey_question_textblock.tpl" %}{% endif %}
+		{% if question.type == 'textblock' %}{% include "_survey_question_textblock.tpl" %}{% endif %}
 		{% if question.type == 'pagebreak' %}<hr/>{% endif %}
 	{% else %}
-		<div class="graph">
-		{% if chart.type == "pie" %}
-			<h4>{{ question.question }}</h4>
-			{% chart_pie3d height=100 width=400 data=chart.data %}
-			
-			<div class="values">
-				<table>
-				{% for label,value in chart.values %}
-					<tr><th>{{ label }}</th><td>{{ value }}</td></tr>
-				{% endfor %}
-				</table>
-			</div>
+		{% if chart.question %}
+			<h4>{{ chart.question }}</h4>
 		{% endif %}
-		</div>
+		{% if chart.charts %}
+			{% for c in chart.charts %}
+				{% if c.question %}
+					<h5>{{ c.question }}</h5>
+				{% endif %}
+				{% include "_survey_result_chart.tpl" chart=c %}
+			{% endfor %}
+		{% else %}
+			{% include "_survey_result_chart.tpl" %}
+		{% endif %}
 	{% endif %}
 </div>
 {% endfor %}

@@ -1,4 +1,7 @@
 {% with answers[name] as ans %}
+{% if question.question %}
+<p>{{ question.question|escape }}</p>
+{% endif %}
 <ul>
 {% for n in question.parts %}
 	{% with forloop.counter as index %}
