@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2011 Marc Worrell
 %% @date 2010-01-15
 %%
 %% @doc Model for managing the comments on a page.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@
     get/2,
     insert/5,
     delete/2,
+    toggle/2,
     gravatar_code/1,
     
     search/3
@@ -98,52 +99,78 @@ get(CommentId, Context) ->
 %% @spec insert(Id:int(), Name::string(), Email::string(), Message::string(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
 insert(RscId, Name, Email, Message, Context) ->
-	case z_acl:rsc_visible(RscId, Context) 
-		and (z_auth:is_auth(Context) 
-			orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
-		true ->
-		    Email = z_string:trim(Email),
-		    Name1 = z_html:escape(z_string:trim(Name)),
-		    Message1 = z_html:escape_link(z_string:trim(Message)),
-		    KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
-		    Props = [
-		        {rsc_id, z_convert:to_integer(RscId)},
-		        {is_visible, true},
-		        {user_id, z_acl:user(Context)},
-		        {persistent_id, z_context:persistent_id(Context)},
-		        {name, Name1},
-		        {message, Message1},
-		        {email, Email},
-		        {gravatar_code, gravatar_code(Email)},
-		        {keep_informed, KeepInformed},
-		        {ip_address, ""},
-		        {user_agent, ""}
-		    ],
-		    case z_db:insert(comment, Props, Context) of
-		        {ok, _CommentId} = Result ->
-		            z_depcache:flush({comment_rsc, RscId}, Context),
-		            Result;
-		        {error, _} = Error ->
-		            Error
-		    end;
-		false ->
-			{error, eacces}
-	end.
+    case z_acl:rsc_visible(RscId, Context) 
+        and (z_auth:is_auth(Context) 
+            orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
+        true ->
+            Email = z_string:trim(Email),
+            Name1 = z_html:escape(z_string:trim(Name)),
+            Message1 = z_html:escape_link(z_string:trim(Message)),
+            KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
+            Props = [
+                {rsc_id, z_convert:to_integer(RscId)},
+                {is_visible, true},
+                {user_id, z_acl:user(Context)},
+                {persistent_id, z_context:persistent_id(Context)},
+                {name, Name1},
+                {message, Message1},
+                {email, Email},
+                {gravatar_code, gravatar_code(Email)},
+                {keep_informed, KeepInformed},
+                {ip_address, ""},
+                {user_agent, ""}
+            ],
+            case z_db:insert(comment, Props, Context) of
+                {ok, _CommentId} = Result ->
+                    z_depcache:flush({comment_rsc, RscId}, Context),
+                    Result;
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, eacces}
+    end.
 
 
 %% @doc Delete a comment.  Only possible if the user has edit permission on the page.
 delete(CommentId, Context) ->
-    case z_db:q1("select rsc_id from comment where id = $1", [CommentId], Context) of
-        undefined -> {error, enoent};
-        RscId ->
-            case z_acl:rsc_editable(RscId, Context) of
-                true ->
-                    z_db:q("delete from comment where id = $1", [CommentId], Context),
-                    z_depcache:flush({comment_rsc, RscId}, Context),
-                    ok;
-                false ->
-                    {error, eacces}
-            end
+    case check_editable(CommentId, Context) of
+        {ok, RscId} ->
+            z_db:q("delete from comment where id = $1", [CommentId], Context),
+            z_depcache:flush({comment_rsc, RscId}, Context),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
+
+
+%% @doc Toggle the visibility of a comment, return the new visibility
+toggle(CommentId, Context) ->
+    case check_editable(CommentId, Context) of
+        {ok, RscId} ->
+            z_db:q("update comment 
+                    set is_visible = not is_visible
+                    where id = $1",
+                   [CommentId],
+                   Context),
+            z_depcache:flush({comment_rsc, RscId}, Context),
+            {ok, z_db:q1("select is_visible from comment where id = $1", [CommentId], Context)};
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Check if an user can edit the comment
+check_editable(CommentId, Context) ->
+    case z_db:q_row("select rsc_id, user_id from comment where id = $1", [CommentId], Context) of
+        {RscId, UserId} ->
+            case (UserId /= undefined andalso z_acl:user(Context) == UserId)
+                orelse z_acl:rsc_editable(RscId, Context)
+            of
+                true -> {ok, RscId};
+                false -> {error, eacces}
+            end;
+        _ ->
+            {error, enoent}
     end.
 
 
