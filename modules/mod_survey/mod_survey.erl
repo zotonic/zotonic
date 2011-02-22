@@ -47,9 +47,6 @@ init(Context) ->
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
     event_sort(Id, Items, Context);
 
-event({submit, {survey_submit, [{id,SurveyId}]}, FormId, _FormId}, Context) ->
-    survey_submit:submit(SurveyId, FormId, Context);
-
 event({postback, {survey_start, [{id, SurveyId}]}, _, _}, Context) ->
     render_next_page(SurveyId, 1, [], Context);
 
