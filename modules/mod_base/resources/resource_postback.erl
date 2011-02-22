@@ -58,26 +58,35 @@ content_types_provided(ReqData, Context) ->
 
 process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Postback = z_context:get_q("postback", Context1),
-    {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
-
-    TriggerId1 = case TriggerId of
-        undefined -> z_context:get_q("z_trigger_id", Context1);
-        _         -> TriggerId
-    end,
-
-    ContextRsc   = z_context:set_resource_module(Module, Context1),
-    EventContext = case EventType of
-        "submit" -> 
-            case z_validation:validate_query_args(ContextRsc) of
-                {ok, ContextEval} ->   
-                    Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
-                {error, ContextEval} ->
-                    %% Posted form did not validate, return any errors.
-                    ContextEval
+    EventContext = case z_context:get_q("postback", Context1) of
+        "notify" ->
+            Message = z_context:get_q("z_msg", Context),
+            TriggerId1 = undefined,
+            case z_notifier:first({postback_notify, Message}, Context) of
+                undefined -> Context;
+                #context{} = Context1 -> Context1
             end;
-        _ -> 
-            Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+        Postback ->
+            {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
+
+            TriggerId1 = case TriggerId of
+                undefined -> z_context:get_q("z_trigger_id", Context1);
+                _         -> TriggerId
+            end,
+
+            ContextRsc = z_context:set_resource_module(Module, Context1),
+            case EventType of
+                "submit" -> 
+                    case z_validation:validate_query_args(ContextRsc) of
+                        {ok, ContextEval} ->   
+                            Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
+                        {error, ContextEval} ->
+                            %% Posted form did not validate, return any errors.
+                            ContextEval
+                    end;
+                _ -> 
+                    Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+            end
     end,
 
     Script      = z_script:get_script(EventContext),
