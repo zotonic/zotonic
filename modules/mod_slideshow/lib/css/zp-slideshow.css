@@ -1,6 +1,11 @@
 /* Slideshow viewer
 ---------------------------------------------------------- */
 
+.slideshow-dialog .dialog-inner-content {
+	padding: 0;
+	max-height: 1000px;
+}
+
 .slideshow-viewer {
 	position: relative;
 }
@@ -11,6 +16,9 @@
 	ul.slideshow-viewer-image-wrapper > li {
 		display: block;
 		margin: 0px;
+		padding: 0px;
+		list-style-type: none;
+		background: none;
 	}
 
 		ul.slideshow-viewer-image-wrapper > li img {

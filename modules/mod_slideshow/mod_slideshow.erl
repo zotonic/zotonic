@@ -28,7 +28,8 @@
 -export([
     init/1,
     observe_media_viewer/2,
-    observe_media_stillimage/2
+    observe_media_stillimage/2,
+    observe_postback_notify/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -78,6 +79,32 @@ observe_media_stillimage({media_stillimage, Id, _Props}, Context) ->
         false ->
             undefined
     end.
+    
+%% @doc Handle a request for a slideshow popup
+observe_postback_notify({postback_notify, "slideshow"}, Context) ->
+    Ids = [ list_to_integer(Id) || Id <- z_context:get_q_all("id", Context) ],
+    Ids1 = [ Id || Id <- Ids, z_acl:rsc_visible(Id, Context) ],
+    StartId = case z_context:get_q("start_id", Context) of
+                [] -> undefined;
+                QStartId -> list_to_integer(QStartId)
+              end,
+    z_render:dialog("", 
+                    "_slideshow_dialog.tpl", 
+                    [
+                        {class, "slideshow-dialog"},
+                        {parts, reorder_ids(StartId, Ids1)},
+                        {width, 800}, 
+                        {height, 600}
+                    ],
+                    Context);
+observe_postback_notify(_, _Context) ->
+    undefined.
+
+    reorder_ids(undefined, Ids) ->
+        Ids;
+    reorder_ids(StartId, Ids) ->
+        {Before,After} = lists:splitwith(fun(N) -> N /= StartId end, Ids),
+        After ++ Before.
 
 
 find_depiction([], _Context) ->
