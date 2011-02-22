@@ -1,6 +1,10 @@
 /* Slideshow viewer
 ---------------------------------------------------------- */
 
+.do_slideshow {
+	cursor: pointer;
+}
+
 .slideshow-dialog .dialog-inner-content {
 	padding: 0;
 	max-height: 1000px;
