@@ -51,15 +51,19 @@
  % {ssl_keyfile, "priv/ssl/server.key"},
 
  %% SMTP outbound relay configuration
- % {smtp_relay, true}
+ % {smtp_relay, true},
  % {smtp_host, "localhost"},
  % {smtp_port, 2525},
  % {smtp_ssl, true},
 
  %% SMTP extra relay options:
  %% some picky/buggy/misconfigured relays might need one of these to be enabled
- % {smtp_no_mx_lookups, false}
- % {smtp_verp_as_from, false}
+ % {smtp_no_mx_lookups, false},
+ % {smtp_verp_as_from, false},
+
+%% SMTP debug options
+% {smtp_bcc, "bcc@localhost"},
+% {email_override, "override@localhost"},
 
  %% SMTP Bounce Server Options 
  %% Always overruled by the environment variables ZOTONIC_SMTP_BOUNCE_DOMAIN, ZOTONIC_SMTP_BOUNCE_IP and ZOTONIC_SMTP_BOUNCE_PORT

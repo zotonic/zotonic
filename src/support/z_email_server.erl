@@ -37,7 +37,7 @@
 % The time in minutes how long sent email should be kept in the queue.
 -define(DELETE_AFTER, 240).
 
--record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups, smtp_verp_as_from, override}).
+-record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups, smtp_verp_as_from, smtp_bcc, override}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10),
                       retry=0, email, created=now(), sent, context}).
 
@@ -175,11 +175,13 @@ update_config(State) ->
         end,
     SmtpNoMxLookups = z_config:get(smtp_no_mx_lookups),
     SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
+    SmtpBcc = z_config:get(smtp_bcc),
     Override = z_config:get(email_override),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
                 smtp_no_mx_lookups=SmtpNoMxLookups,
                 smtp_verp_as_from=SmtpVerpAsFrom,
+                smtp_bcc=SmtpBcc,
                 override=Override}.
 
 generate_message_id(Context) ->
@@ -200,9 +202,9 @@ generate_message_id(Context) ->
 %% =========================
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
-            process_flag(trap_exit, true), 
-            To = case State#state.override of 
-                         O when O =:= [] orelse O =:= undefined -> Email#email.to; 
+            process_flag(trap_exit, true),
+            To = case State#state.override of
+                         O when O =:= [] orelse O =:= undefined -> Email#email.to;
                          Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
                      end,
             
@@ -258,19 +260,20 @@ spawn_send(Id, Email, Context, State) ->
             
             optional_embed_images, %% TODO
             
+            Headers = [{<<"From">>, From},
+                       {<<"To">>, To},
+                       {<<"Subject">>, Subject},
+                       {<<"MIME-Version">>, <<"1.0">>},
+                       {<<"Message-ID">>, Id},
+                       {<<"X-Mailer">>,
+                          "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+
             ToEncode = {<<"multipart">>, <<"related">>,
-                        [{<<"From">>, From},
-                         {<<"To">>, To},
-                         {<<"Subject">>, Subject},
-                         {<<"MIME-Version">>, <<"1.0">>},
-                         {<<"Message-ID">>, Id},
-                         {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+                        Headers,
                         [],                       
                         [{<<"multipart">>,<<"alternative">>,
                           [], [],
-                          [Text1, Html1]}]
-                       },
-            
+                          [Text1, Html1]}]},
             EncodedMail = mimemail:encode(ToEncode),
 
             To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
@@ -306,6 +309,15 @@ spawn_send(Id, Email, Context, State) ->
                 Recepit when is_binary(Recepit) ->
                     %% email accepted by relay
                     SentTimestamp = mark_sent(Id),
+                    %% async send a copy for debugging if necessary
+                    case State#state.smtp_bcc of
+                            _BccTo when _BccTo =:= [] orelse _BccTo =:= undefined ->
+                                ok;
+                            BccTo ->
+                                catch gen_smtp_client:send({Id, [BccTo], EncodedMail},
+                                      SmtpOpts)
+                    end,
+                    %% notify the system
                     z_notifier:first({email_accepted, Id,
                                       Email#email.to,
                                       SentTimestamp}, Context)
