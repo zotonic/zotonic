@@ -30,6 +30,8 @@ render_validator(format, TriggerId, _TargetId, Args, Context)  ->
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error -> invalid | novalue | {script, Script}
+validate(format, _Id, [], _, Context) ->
+    {{ok, []}, Context};
 validate(format, Id, Value, [Negate,Pattern], Context) ->
     {Re,Options} = pattern_to_re(Pattern),
     Ok = not Negate,
