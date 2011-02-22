@@ -43,30 +43,9 @@ vary(_Params, _Context) -> default.
 render(Params, _Vars, Context) ->
     MenuId = m_rsc:rid(proplists:get_value(menu_id, Params, main_menu), Context),
     Menu = mod_menu:get_menu(MenuId, Context),
-    Traversal = traverse_menu(Menu, 1, 1, []),
     Vars = [
-        {menu, lists:reverse(Traversal)},
+        {menu, mod_menu:menu_flat(Menu)},
         {menu_id, MenuId}
         | Params
     ],
     {ok, z_template:render("_menu.tpl", Vars, Context)}.
-
-
-
-%% Traverse the menu, build a flat list that can be used for the template routines
-traverse_menu([], _Nr, Depth, Acc) ->
-    [ menu_close(Depth) | Acc ];
-traverse_menu([{Id,[]}|Rest], Nr, Depth, Acc) ->
-    traverse_menu(Rest, Nr+1, Depth, [menu_item(Id, Nr, Depth, false)|Acc]);
-traverse_menu([{Id,Sub}|Rest], Nr, Depth, Acc) ->
-    Acc1 = traverse_menu(Sub, 1, Depth+1, [menu_item(Id, Nr, Depth, true)|Acc]),
-    traverse_menu(Rest, Nr+1, Depth, Acc1);
-traverse_menu([Id|Rest], Nr, Depth, Acc) ->
-    traverse_menu(Rest, Nr+1, Depth, [menu_item(Id, Nr, Depth, false)|Acc]).
-
-
-menu_item(Id, Nr, Depth, HasSub) -> [Id, Depth, Nr, HasSub].
-menu_close(Depth) -> [undefined, Depth, undefined, false].
-
-
-

@@ -1,19 +1,41 @@
 <h3 class="above-list">Current menu</h3>
 <ul class="short-list navigation-manager">
-	<li id="top" class="header">
-		Drop pages here or drop them on one of the menu items.
-	</li>
 
-	{% for m_id, sub in m.rsc[id].menu %}
-		{% with forloop.counter as m_nr %}
-			<li class="header">
-				
-				<a id="{{ #menu.m_nr }}" href="#" class="clearfix">
+	{% for mid, path, action in m.rsc[id].menu|menu_flat %}
+        {% with forloop.counter as c %}
+        {% if mid %}
+			<li id="{{ #before.c }}" class="line"> &nbsp; </li>
+			{% droppable id=#before.c tag=[id, "before", path] delegate="resource_menu_admin_menu" %}
+
+            <li class="header" id="{{ #menu.c }}">
+				<a href="#" class="clearfix">
 					<span class="grippy"><img src="/lib/images/grippy.png" alt="Drag me" /></span>
-					<span>{{ m.rsc[m_id].title }}</span>
-					{% button text="x" style="float:right" action={postback postback={delete item=[m_nr] id=id} delegate="resource_menu_admin_menu"} %}
+					<span>{{ m.rsc[mid].title }}</span>
+					{% button text="x" style="float:right" action={postback postback={delete path=path menu_id=id} delegate="resource_menu_admin_menu"} %}
 				</a>
+            {% if action == "down" %}
 				<ul>
+            {% else %}
+                </li>
+  			    {% droppable id=#menu.c tag=[id, "on", path] delegate="resource_menu_admin_menu" %}
+            {% endif %}
+			{% draggable id=#menu.c tag=path  %}
+        {% else %}
+        </ul></li>
+        {% endif %}
+        {% endwith %}
+    {% empty %}
+    <li id="menu-first">
+		Drop a page here to start the menu.
+	</li>
+    {% droppable id="menu-first" tag=[id, "first"] delegate="resource_menu_admin_menu" %}
+
+    {% endfor %}
+</ul>
+
+
+{#
+
 					{% for s_id in sub %}
 						{% with forloop.counter as s_nr %}
 							{% with m_nr|append:"-"|append:s_nr as m_s_nr %}
@@ -34,9 +56,7 @@
 					{% endfor %}
 				</ul>
 			</li>
-			<li id="{{ #after.m_nr }}" class="line">
-				&nbsp;
-			</li>
+			<li id="{{ #after.m_nr }}" class="line">&nbsp;</li>
 
 			{% droppable id=#menu.m_nr tag=[id, m_nr] delegate="resource_menu_admin_menu" %}
 			{% draggable id=#menu.m_nr tag=[m_nr] clone axis="y" delegate="resource_menu_admin_menu" %}
@@ -44,6 +64,4 @@
 
 		{% endwith %}
 	{% endfor %}
-</ul>
-
-{% droppable id="top" tag=[id, "top"] delegate="resource_menu_admin_menu" %}
+#}

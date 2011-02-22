@@ -127,10 +127,6 @@ datamodel() ->
       ]
      },
 
-     {menu,
-      [page_home, page_about, page_contact]
-     },
-
      {edges,
       [
        {blog_article_learnmore, author, administrator},
