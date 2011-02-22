@@ -262,7 +262,25 @@ is_tagopt({alt,   _}) -> true;
 is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
 is_tagopt({style, _}) -> true;
-is_tagopt(_) -> false.
+% Some preview args we definitely know exist (just an optimization)
+is_tagopt({width, _}) -> false;
+is_tagopt({height, _}) -> false;
+is_tagopt({crop, _}) -> false;
+is_tagopt({gray, _}) -> false;
+is_tagopt({mono, _}) -> false;
+is_tagopt({extent, _}) -> false;
+is_tagopt({upscale, _}) -> false;
+is_tagopt({blur, _}) -> false;
+is_tagopt({quality, _}) -> false;
+is_tagopt({background, _}) -> false;
+is_tagopt({lossless, _}) -> false;
+is_tagopt({removebg, _}) -> false;
+% And be sure to keep the data-xxxx args in the tag
+is_tagopt({Prop, _}) ->
+    case z_convert:to_list(Prop) of
+        "data_"++_ -> true;
+        _ -> false
+    end.
 
 
 props2url(Props) -> 

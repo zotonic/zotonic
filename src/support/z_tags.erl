@@ -58,20 +58,20 @@ display_property({Prop, V}) when is_atom(Prop) ->
 display_property({_, []}) ->
     [];
 display_property({Prop, Value}) when is_integer(Value) ->
-    [32, Prop, $=, $', list_to_binary(integer_to_list(Value)), $'];
+    [32, correct_data(Prop), $=, $', list_to_binary(integer_to_list(Value)), $'];
 display_property({Prop, Value}) when is_float(Value) ->
-	[32, Prop, $=, $', list_to_binary(io_lib:format("~f",[Value])), $'];
+	[32, correct_data(Prop), $=, $', list_to_binary(io_lib:format("~f",[Value])), $'];
 display_property({Prop, Value}) when is_list(Value) ->
     case io_lib:char_list(Value) of
         true -> 
-            [32, Prop, $=, $', Value, $'];
+            [32, correct_data(Prop), $=, $', Value, $'];
         false ->
-            [32, Prop, $=, $', z_utils:combine_defined(32, Value), $']
+            [32, correct_data(Prop), $=, $', z_utils:combine_defined(32, Value), $']
 	end;
 display_property({Prop, Value}) when is_atom(Value) ->
-	[32, Prop, $=, $', atom_to_list(Value), $'];
+	[32, correct_data(Prop), $=, $', atom_to_list(Value), $'];
 display_property({Prop, Value}) ->
-	[32, Prop, $=, $', Value, $'].
+	[32, correct_data(Prop), $=, $', Value, $'].
 
 
 optional_escape_property({href, Uri}) -> {href, optional_escape(Uri)};
@@ -90,3 +90,9 @@ optional_escape(S) when is_list(S) ->
             end
     end;
 optional_escape(S) -> S.
+
+
+% @doc Correct data_xxxx attributes, so that they are generated as data-xxxx
+correct_data("data_"++P) -> "data-"++P;
+correct_data(<<"data_",P/binary>>) -> <<"data-",P/binary>>;
+correct_data(P) -> P.
