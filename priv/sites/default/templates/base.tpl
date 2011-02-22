@@ -30,8 +30,10 @@
 
         <header class="clearfix">
         	<h1 class="left"><a href="/">{{ m.config.site.title.value }} {% if m.config.site.subtitle.value %}<span>{{ m.config.site.subtitle.value }}</span>{% endif %}</a></h1>
-            <nav class="right">{% menu id=id %}</nav>
         </header>
+        <nav class="clearfix">
+            {% menu id=id %}
+        </nav>
 
         <section id="content-area" class="clearfix">
 
@@ -57,7 +59,7 @@
         </section>
 
         <footer class="clearfix">
-			<nav class="left">{% menu id=id %}</nav>
+			<nav class="left">{% menu id=id menu_id='footer_menu' %}</nav>
 			<section class="right">
 				<p class="footer-blog-title">Website powered by <a href="http://zotonic.com">Zotonic</a>, the Erlang CMS.</p>
 			</section>
@@ -72,6 +74,7 @@
 			"js/modules/livevalidation-1.3.js" 
 			"js/modules/z.inputoverlay.js"
 			"js/modules/jquery.loadmask.js"
+            "js/z.superfish.js" 
 	%}
 	
 	{% block _js_include_extra %}{% endblock %}

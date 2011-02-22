@@ -20,160 +20,113 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    event/2
+    event/2,
+    test/0
 ]).
 
+-include("zotonic.hrl").
 
-event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, [MenuId|DropTag], _, _DropEltId}}, Context) ->
-    Menu  = mod_menu:get_menu(MenuId, Context),
-    Menu1 = handle_drop(Menu, DragTag, DropTag),
-    mod_menu:set_menu(MenuId, Menu1, Context),
-    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}, {id, MenuId}], Context),
+event({drop, {dragdrop, ["new", Id], _, _DragEltId}, {dragdrop, [MenuId, "first"], _, _DropEltId}}, Context) ->
+    mod_menu:set_menu(MenuId, [{Id, []}], Context),
+    Html = z_template:render("_admin_menu_menu_view.tpl", [{id, MenuId}], Context),
     z_render:update("menu-editor", Html, Context);
 
+event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, [MenuId, "before", TP], _, _DropEltId}}, Context) ->
+    TargetPath = lists:reverse(TP),
+    Menu  = mod_menu:get_menu(MenuId, Context),
+    Menu2 = case DragTag of
+                ["new", NewId] ->
+                    insert_menuitem(Menu, {NewId, []}, TargetPath);
+                Path ->
+                    SourcePath = lists:reverse(Path),
+                    MenuItem = get_menuitem(Menu, SourcePath),
+                    Menu1 = delete_path(Menu, SourcePath),
+                    TargetPath1 = path_after_delete(TargetPath, SourcePath),
+                    insert_menuitem(Menu1, MenuItem, TargetPath1)
+            end,
+    mod_menu:set_menu(MenuId, Menu2, Context),
+    Html = z_template:render("_admin_menu_menu_view.tpl", [{id, MenuId}], Context),
+    z_render:update("menu-editor", Html, Context);
+
+event({drop, {dragdrop, DragTag, _, _DragEltId}, {dragdrop, [MenuId, "on", TargetPath], _, _DropEltId}}, Context) ->
+    event({drop, {dragdrop, DragTag, x, x}, {dragdrop, [MenuId, "before", [1|TargetPath]], x, x}}, Context);
+
 event({postback, {delete, Props}, _TriggerId, _TargetId}, Context) ->
-    Id = proplists:get_value(id, Props),
-    Menu = mod_menu:get_menu(Id, Context),
-    Menu1 = case proplists:get_value(item, Props) of
-        [Nr] -> 
-            remove_nth(Nr, Menu);
-        [Nr,SubNr] ->
-            {MenuId, SubMenu}  = lists:nth(Nr, Menu),
-            SubMenu1 = remove_nth(SubNr, SubMenu),
-            set_nth(Nr, {MenuId, SubMenu1}, Menu)
-    end,
-    mod_menu:set_menu(Id, Menu1, Context),
-    Html = z_template:render("_admin_menu_menu_view.tpl", [{menu, Menu1}, {id, Id}], Context),
+    MenuId = proplists:get_value(menu_id, Props),
+    Path = lists:reverse(proplists:get_value(path, Props)),
+    Menu = mod_menu:get_menu(MenuId, Context),
+    Menu1 = delete_path(Menu, Path),
+    mod_menu:set_menu(MenuId, Menu1, Context),
+    Html = z_template:render("_admin_menu_menu_view.tpl", [{id, MenuId}], Context),
     z_render:update("menu-editor", Html, Context);
 
 event(_Event, Context) ->
     Context.
 
 
-%% @doc Handle the drop of an id on top of a menu item.
-handle_drop(Menu, ["new", Id], ["top"]) when is_integer(Id) ->
-    [ {Id, []} | Menu ];
+delete_path(Menu, Path) ->
+    delete_path(Menu, Path, []).
+delete_path([_|Rest], [1], Acc) ->
+    lists:reverse(Acc) ++ Rest;
+delete_path([Item|Rest], [Idx], Acc) ->
+    delete_path(Rest, [Idx-1], [Item|Acc]);
+delete_path([{Id,SubMenu}|Rest], [1|Path], Acc) ->
+    lists:reverse(Acc)
+        ++ [{Id, delete_path(SubMenu, Path)} | Rest];
+delete_path([Item|Menu], [Idx|Path], Acc) ->
+    delete_path(Menu, [Idx-1|Path], [Item|Acc]).
 
-%% drag new item to a main-menu-item
-handle_drop(Menu, ["new", Id], [DropNr]) when is_integer(Id), is_integer(DropNr) ->
-    {DropId, DropSubMenu} = lists:nth(DropNr, Menu),
-    set_nth(DropNr, {DropId, [Id | DropSubMenu]}, Menu);
 
-%% drag new item to a sub-menu-item
-handle_drop(Menu, ["new", Id], [DropNr, DropSubNr]) when is_integer(Id), is_integer(DropNr), is_integer(DropSubNr) ->
-    {DropId, DropSubMenu} = lists:nth(DropNr, Menu),
-    DropSubMenu1 = after_nth(DropSubNr, Id, DropSubMenu),
-    set_nth(DropNr, {DropId, DropSubMenu1}, Menu);
+get_menuitem([Item|_Menu], [1]) ->
+    Item;
+get_menuitem([_Item|Menu], [Idx]) ->
+    get_menuitem(Menu, [Idx-1]);
+get_menuitem([{_, SubMenu}|_Rest], [1|PathRest]) ->
+    get_menuitem(SubMenu, PathRest);
+get_menuitem([_|Rest], [Idx|PathRest]) ->
+    get_menuitem(Rest, [Idx-1|PathRest]).
 
-% drag main menu to top
-handle_drop(Menu, [Nr], ["top"]) when is_integer(Nr) ->
-    {Id, Sub} = lists:nth(Nr, Menu),
-    Menu1 = remove_nth(Nr, Menu),
-    [ {Id, Sub} | Menu1 ];
 
-% drag sub-menu-item to top
-handle_drop(Menu, [Nr, SubNr], ["top"]) when is_integer(Nr), is_integer(SubNr) ->
-    {Id, SubMenu} = lists:nth(Nr, Menu),
-    SubId = lists:nth(SubNr, SubMenu),
-    SubMenu1 = remove_nth(SubNr, SubMenu),
-    [{SubId, []} | set_nth(Nr, {Id,SubMenu1}, Menu) ];
+insert_menuitem(Menu, Item, DestPath) ->
+    insert_menuitem(Menu, Item, DestPath, []).
+insert_menuitem(Menu, Item, [1], Acc) ->
+    lists:reverse(Acc) ++ [Item | Menu];
+insert_menuitem([First|Rest], Item, [Idx], Acc) ->
+    insert_menuitem(Rest, Item, [Idx-1], [First|Acc]);
+insert_menuitem([{Id, SubMenu} | MenuRest], Item, [1|Path], Acc) ->
+    lists:reverse(Acc) 
+        ++ [{Id, insert_menuitem(SubMenu, Item, Path, [])} | MenuRest];
+insert_menuitem([MenuItem|MenuRest], Item, [Idx|Path], Acc) ->
+    insert_menuitem(MenuRest, Item, [Idx-1|Path], [MenuItem|Acc]).
 
-% Menu item "after" another menu item
-handle_drop(Menu, [Nr], ["after", DropNr]) when is_integer(Nr), is_integer(DropNr) ->
-    DragMenu = lists:nth(Nr, Menu),
-    Menu1 = remove_nth(Nr, Menu),
-    case Nr > DropNr of
-        true -> after_nth(DropNr, DragMenu, Menu1);
-        false -> after_nth(DropNr-1, DragMenu, Menu1)
-    end;
 
-% Menu item "after" another menu item
-handle_drop(Menu, ["new", Id], ["after", DropNr]) when is_integer(DropNr) ->
-    DragMenu = {Id, []},
-    after_nth(DropNr, DragMenu, Menu);
+path_after_delete(Path, DeletePath) ->
+    path_after_delete(Path, DeletePath, []).
+path_after_delete([], _, Acc) ->
+    lists:reverse(Acc);
+path_after_delete(Path, [], Acc) ->
+    lists:reverse(Acc) ++ Path;
+path_after_delete([X|Rest], [Y|Rest2], Acc) when X > Y ->
+    path_after_delete(Rest, Rest2, [X-1|Acc]);
+path_after_delete([X|Rest], [_|Rest2], Acc) ->
+    path_after_delete(Rest, Rest2, [X|Acc]).
 
-% Sub menu item "after" another main-menu item
-handle_drop(Menu, [Nr, SubNr], ["after", DropNr]) when is_integer(Nr), is_integer(DropNr) ->
-    {DragId, DragSubMenu} = lists:nth(Nr, Menu),
-    DragSubId = lists:nth(SubNr, DragSubMenu),
-    Menu1 = set_nth(Nr, {DragId, remove_nth(SubNr, DragSubMenu)}, Menu),
-    after_nth(DropNr, {DragSubId, []}, Menu1);
+
+test() ->
+    [foo] = insert_menuitem([], foo, [1]),
+    [foo, bar] = insert_menuitem([bar], foo, [1]),
+    [bar, foo, baz] = insert_menuitem([bar, baz], foo, [2]),
+    [bar, baz, foo] = insert_menuitem([bar, baz], foo, [3]),
+    [{x, [foo]}, {y, []}] = insert_menuitem([{x, []}, {y, []}], foo, [1, 1]),
+    [{x, []}, {y, [foo]}] = insert_menuitem([{x, []}, {y, []}], foo, [2, 1]),
+    [{x, []}, {y, [{z, [bleh, foo]}]}] = insert_menuitem([{x, []}, {y, [{z, [bleh]}]}], foo, [2, 1, 2]),
     
-% drag sub-menu-item to main-menu-item
-handle_drop(Menu, [Nr, SubNr], [DropNr]) when is_integer(Nr), is_integer(SubNr), is_integer(DropNr)->
-    {Id, SubMenu} = lists:nth(Nr, Menu),
-    SubId = lists:nth(SubNr, SubMenu),
-    % Remove the dragged item from its submenu
-    SubMenu1 = remove_nth(SubNr, SubMenu),
-    Menu1 = set_nth(Nr, {Id,SubMenu1}, Menu),
-    % Add the item to the submenu of DropNr
-    {DropId, DropSubMenu} = lists:nth(DropNr, Menu1),
-    set_nth(DropNr, {DropId, [SubId | DropSubMenu]}, Menu1);
+    [b] = delete_path([a, b], [1]),
+    [a] = delete_path([a, b], [2]),
+    
+    [a, {b, []}, c] = delete_path([a, {b, [x]}, c], [2, 1]),
+    [a, {b, [x]}, c] = delete_path([a, {b, [x,y]}, c], [2, 2]).
+    
 
-% drag sub-menu-item to sub-menu-item in same menu but below the old position
-handle_drop(Menu, [Nr, SubNr], [Nr, DropSubNr]) when is_integer(Nr), is_integer(SubNr), DropSubNr > SubNr ->
-    {Id, SubMenu} = lists:nth(Nr, Menu),
-    SubId = lists:nth(SubNr, SubMenu),
-    DropSubMenu1 = after_nth(DropSubNr-1, SubId, remove_nth(SubNr, SubMenu)),
-    set_nth(Nr, {Id, DropSubMenu1}, Menu);
-
-% drag sub-menu-item to sub-menu-item
-handle_drop(Menu, [Nr, SubNr], [DropNr, DropSubNr]) when is_integer(Nr), is_integer(SubNr), is_integer(DropNr)->
-    {Id, SubMenu} = lists:nth(Nr, Menu),
-    SubId = lists:nth(SubNr, SubMenu),
-    % Remove the dragged item from its submenu
-    SubMenu1 = remove_nth(SubNr, SubMenu),
-    Menu1 = set_nth(Nr, {Id,SubMenu1}, Menu),
-    % Add the item to the submenu of DropNr
-    {DropId, DropSubMenu} = lists:nth(DropNr, Menu1),
-    DropSubMenu1 = after_nth(DropSubNr, SubId, DropSubMenu),
-    set_nth(DropNr, {DropId, DropSubMenu1}, Menu1);
-
-% drag main-menu to another main-menu
-handle_drop(Menu, [Nr], [DropNr]) when is_integer(Nr), is_integer(DropNr) ->
-    {DragId, DragSub} = lists:nth(Nr, Menu),
-    {DropId, DropSub} = lists:nth(DropNr, Menu),
-    NewSub = [DragId | DragSub ] ++ DropSub,
-    Menu1 = set_nth(DropNr, {DropId, NewSub}, Menu),
-    remove_nth(Nr, Menu1);
-
-
-
-% drag main menu to sub-menu - refuse
-handle_drop(Menu, _From, _To) ->
-    Menu.
-
-
-
-remove_nth(Nr, List) ->
-    remove_nth(Nr, List, []).
-
-remove_nth(_Nr, [], Acc) ->
-    lists:reverse(Acc);
-remove_nth(1, [_H|T], Acc) ->
-    lists:reverse(Acc, T);
-remove_nth(N, [H|T], Acc) ->
-    remove_nth(N-1, T, [H|Acc]).
-
-
-set_nth(Nr, Value, List) ->
-    set_nth(Nr, Value, List, []).
-
-set_nth(_Nr, _Value, [], Acc) ->
-    lists:reverse(Acc);
-set_nth(1, Value, [_H|T], Acc) ->
-    lists:reverse([Value|Acc], T);
-set_nth(N, Value, [H|T], Acc) ->
-    set_nth(N-1, Value, T, [H|Acc]).
-
-
-after_nth(Nr, Value, List) ->
-    after_nth(Nr, Value, List, []).
-
-after_nth(_Nr, Value, [], Acc) ->
-    lists:reverse([Value | Acc]);
-after_nth(1, Value, [H|T], Acc) ->
-    lists:reverse([Value, H | Acc], T);
-after_nth(N, Value, [H|T], Acc) ->
-    after_nth(N-1, Value, T, [H|Acc]).
-
+%%    [a, b] = move_menuitem([b, a], [1], [2]).
+    

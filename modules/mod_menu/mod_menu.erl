@@ -31,7 +31,9 @@
     get_menu/1,
     get_menu/2,
     set_menu/3,
-    observe_menu_get_rsc_ids/2
+    observe_menu_get_rsc_ids/2,
+    test/0,
+    menu_flat/1
 ]).
 
 
@@ -62,7 +64,7 @@ datamodel() ->
        {main_menu,
         menu,
         [{title, <<"Main menu">>},
-         {menu, [{page_home, []}, {page_about, []}, {page_contact, []}]}
+         {menu, [{312, []}, {313, []}, {314, []}]}
         ]
        }
       ]}
@@ -126,3 +128,49 @@ set_menu(Menu, Context) ->
 %% @doc Save the current menu.
 set_menu(Id, Menu, Context) ->
     m_rsc:update(Id, [{menu, Menu}], Context).
+
+
+
+menu_flat(undefined) ->
+    [];
+menu_flat(<<>>) ->
+    [];
+menu_flat(X) ->
+    menu_flat(X, [1], []).
+
+menu_flat([], _Path, Acc) ->
+    lists:reverse(Acc);
+menu_flat([ {MenuId, []} | Rest], [Idx|PR], Acc ) ->
+
+    [ {MenuId, [Idx|PR], undefined} ] 
+        ++ menu_flat(Rest, [Idx+1|PR], [])
+        ++  Acc;
+menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc ) ->
+
+    [ {MenuId, [Idx|PR], down} ] 
+        ++ menu_flat(Children, [1,Idx|PR], []) 
+        ++ [{undefined, undefined, up}]
+        ++ menu_flat(Rest, [Idx+1|PR], [])
+        ++  Acc.
+
+%%  111  [1]
+%%  - 44   [1,1]
+%%  - - 555  [1,1,1]
+%%  - - 666  [1,1,2]
+%%  222  [2]
+%%  - 333  [2,1]
+
+test() ->
+
+    [
+     {111, [1], down },
+     {444, [1,1], down},
+     {555, [1,1,1], undefined},
+     {666, [2,1,1], undefined},
+     {undefined, undefined, up},
+     {undefined, undefined, up},
+     {222, [2], down},
+     {333, [1,2], undefined},
+     {undefined, undefined, up}
+    ]
+        = menu_flat([{111, [{444, [{555, []}, {666, []} ]}]}, {222, [{333, []}]}]).

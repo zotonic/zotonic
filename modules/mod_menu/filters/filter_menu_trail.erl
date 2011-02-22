@@ -17,8 +17,7 @@
 %% limitations under the License.
 
 -module(filter_menu_trail).
--export([menu_trail/2, menu_trail/3]).
-
+-export([menu_trail/2, menu_trail/3, test/0]).
 
 menu_trail(undefined, _Context) ->
     undefined;
@@ -32,13 +31,22 @@ menu_trail(Id, MenuId, Context) ->
 
 
 trail(_Id, []) ->
-    [];
+    []; %% not found
 trail(Id, [{Id, _}|_]) ->
-    [Id];
-trail(Id, [{Parent, Ids}|Rest]) ->
-    case lists:member(Id, Ids) of
-        true ->
-            [Parent, Id];
-        false ->
-            trail(Id, Rest)
+    [Id]; %% found
+trail(Id, [{MenuId, Children}|Rest]) ->
+    case trail(Id, Children) of
+        [] ->
+            %% not found
+            trail(Id, Rest);
+        Path ->
+            %% Found
+            [MenuId|Path]
     end.
+
+
+
+test() ->
+    [1] = trail(1, [{1, []}]),
+    [] = trail(1, [{33, []}]),
+    [33,66] = trail(66, [{4, []}, {33, [{3, []}, {66, []}]}]).
