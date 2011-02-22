@@ -18,4 +18,4 @@
 # usage zotonic-debug
 #
 
-$ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -config $ZOTONIC/priv/erlang.config -s zotonic
+$ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -s zotonic
