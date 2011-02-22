@@ -31,12 +31,13 @@ limitations under the License.
 
 	#navigation li {
 		display: inline;
+        position: relative;
+		margin: 0 6px;
 	}
 
 	#navigation li a {
 		text-decoration: none;
 		border: none;
-		margin: 0 0 0 6px;
 	}
 	
 	#navigation li a:hover,
@@ -60,11 +61,12 @@ limitations under the License.
 	}
 
 	#navigation li:hover ul {
-		left: auto;
+		left: 0;
 	}
 
 		#navigation li ul li {
 			display: block;
+            width: 130px;
 		}
 
 
