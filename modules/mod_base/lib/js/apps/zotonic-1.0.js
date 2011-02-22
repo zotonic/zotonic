@@ -108,7 +108,7 @@ function z_notify(message, extraParams)
 		extra = [];
 	}
 	extra.push({name: 'z_msg', value: message});
-	z_queue_postback('', z_default_notify_postback, extra, true);
+	z_queue_postback('', 'notify', extra, true);
 }
 
 /* Postback loop

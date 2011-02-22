@@ -29,8 +29,7 @@
 %% interface functions
 -export([
     observe_media_stillimage/2,
-    observe_scomp_script_render/2,
-    event/2
+    observe_scomp_script_render/2
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
@@ -70,21 +69,10 @@ observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
 
 %% @doc Part of the {% script %} rendering in templates
 observe_scomp_script_render({scomp_script_render, false, _Args}, Context) ->
-    NotifyPostback = z_render:make_postback_info(postback_notify, "", undefined, undefined, ?MODULE, Context),
     DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
-    [<<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, 
-     <<"\";\nz_default_notify_postback = \"">>, NotifyPostback, $", $;];
+    [<<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
 observe_scomp_script_render({scomp_script_render, true, _Args}, _Context) ->
     [].
-
-
-%% @doc Handle the javascript event postback
-event({postback, postback_notify, _TriggerId, _TargetId}, Context) ->
-    Message = z_context:get_q("z_msg", Context), 
-    case z_notifier:first({postback_notify, Message, Context}, Context) of
-        undefined -> Context;
-        #context{} = Context1 -> Context1
-    end.
 
 
 %%====================================================================
