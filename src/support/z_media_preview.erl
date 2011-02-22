@@ -29,7 +29,7 @@
     can_generate_preview/1,
 	out_mime/2,
     string2filter/2,
-    cmd_args/2,
+    cmd_args/3,
     calc_size/7
 ]).
 
@@ -52,7 +52,8 @@ convert(InFile, OutFile, Filters, Context) ->
             {mime, Mime} = proplists:lookup(mime, FileProps),
             case can_generate_preview(Mime) of
                 true ->
-                    {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters),
+                    OutMime = z_media_identify:guess_mime(OutFile),
+                    {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
                     z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
                     z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
                     Args1   = lists:flatten(z_utils:combine(32, CmdArgs)),
@@ -131,7 +132,7 @@ can_generate_preview(_Mime) -> false.
 
 
 %% @doc Map filters to commandline options
-cmd_args(FileProps, Filters) ->
+cmd_args(FileProps, Filters, OutMime) ->
     {width, ImageWidth}   = proplists:lookup(width, FileProps),
     {height, ImageHeight} = proplists:lookup(height, FileProps),
     {mime, Mime0} = proplists:lookup(mime, FileProps),
@@ -158,7 +159,7 @@ cmd_args(FileProps, Filters) ->
                              end
                end,
     Filters4 = case proplists:get_value(background, Filters3) of
-                    undefined -> default_background(Mime) ++ Filters3;
+                    undefined -> default_background(OutMime) ++ Filters3;
                     _ -> Filters3
                end,
 
