@@ -196,35 +196,42 @@ pack_length(N, Acc) ->
 handle_message(Msg, Context) ->
     Qs = mochiweb_util:parse_qs(Msg),
     Context1 = z_context:set('q', Qs, Context),
-    Postback = z_context:get_q("postback", Context1),
-    {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
-
-    TriggerId1 = case TriggerId of
-        undefined -> z_context:get_q("z_trigger_id", Context1);
-        _         -> TriggerId
-    end,
 
     {ResultScript, ResultContext} = try
         % Enable caching lookup values, essential for fast data handling
         z_depcache:in_process(true),
 
-        % Set the context resource and call the resource
-        ContextRsc = z_context:set_resource_module(Module, Context1),
-        EventContext = case EventType of
-            "submit" -> 
-                case z_validation:validate_query_args(ContextRsc) of
-                    {ok, ContextEval} ->   
-                        Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
-                    {error, ContextEval} ->
-                        ContextEval
+        EventContext = case z_context:get_q("postback", Context1) of
+            "notify" ->
+                Message = z_context:get_q("z_msg", Context1),
+                TriggerId1 = undefined,
+                case z_notifier:first({postback_notify, Message}, Context1) of
+                    undefined -> Context1;
+                    #context{} = ContextNotify -> ContextNotify
                 end;
-            _ -> 
-                Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+            Postback ->
+                {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
+
+                TriggerId1 = case TriggerId of
+                    undefined -> z_context:get_q("z_trigger_id", Context1);
+                    _         -> TriggerId
+                end,
+
+                % Set the context resource and call the resource
+                ContextRsc = z_context:set_resource_module(Module, Context1),
+                case EventType of
+                    "submit" -> 
+                        case z_validation:validate_query_args(ContextRsc) of
+                            {ok, ContextEval} ->   
+                                Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
+                            {error, ContextEval} ->
+                                ContextEval
+                        end;
+                    _ -> 
+                        Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+                end
         end,
         
-        % Cleanup process dict, so our process heap is smaller between calls
-        z_depcache:flush_process_dict(),
-
         Script = iolist_to_binary(z_script:get_script(EventContext)),
         % Remove the busy mask from the element that triggered this event.
         {case TriggerId1 of 
@@ -235,12 +242,14 @@ handle_message(Msg, Context) ->
     catch
         Error:X ->
             ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context1),
-            {case TriggerId1 of 
+            {case z_context:get_q("z_trigger_id", Context1) of 
                 undefined -> [];
-                _ -> [" z_unmask_error('",z_utils:js_escape(TriggerId1),"');"]
+                ZTrigger -> [" z_unmask_error('",z_utils:js_escape(ZTrigger),"');"]
              end, 
              Context1}
     end,
+    % Cleanup process dict, so our process heap is smaller between calls
+    % z_depcache:flush_process_dict(),
     z_session_page:add_script(ResultScript, ResultContext),
     erlang:erase().
     
