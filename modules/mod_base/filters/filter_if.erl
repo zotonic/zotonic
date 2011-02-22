@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-03-26
-%% @doc Survey definitions.
+%% @doc 'if' filter, depending on input select first or second argument
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,6 +16,12 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+-module(filter_if).
+-export(['if'/4]).
 
-%% @doc A question for in a survey
--record(survey_question, {type, name, question, text, html, parts=[], is_required=true}).
+
+'if'(Input, A, B, _Context) ->
+    case z_convert:to_bool(Input) of
+        true -> A;
+        false -> B
+    end.

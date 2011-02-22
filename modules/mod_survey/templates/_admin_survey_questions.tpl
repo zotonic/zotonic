@@ -1,3 +1,9 @@
+<li id="ci1">
+	{% survey_example type="pagebreak" %}
+</li>
+{% draggable id="ci1" tag={q type="pagebreak"} to_sorter="survey" %}
+
+
 <li id="ci2">
 	{% survey_example type="textblock" %}
 </li>
@@ -34,6 +40,10 @@
 </li>
 {% draggable id="ci8" tag={q type="thurstone"} to_sorter="survey" %}
 
+<li id="ci12">
+	{% survey_example type="matching" %}
+</li>
+{% draggable id="ci12" tag={q type="matching"} to_sorter="survey" %}
 
 <li id="ci9">
 	{% survey_example type="shortanswer" %}

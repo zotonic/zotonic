@@ -41,9 +41,32 @@ event({postback, {comment_delete, Args}, _TriggerId, _TargetId}, Context) ->
         ok -> 
             OnSuccess = proplists:get_all_values(on_success, Args),
             Context1 = z_render:wire(OnSuccess, Context),
-            z_render:growl("The comment has been deleted.", Context1);
+            z_render:growl(?__("The comment has been deleted.", Context1), Context1);
         {error, _Reason} ->
             %% Assume permission problem.
-            z_render:growl_error("You are not allowed to delete the comment.", Context)
+            z_render:growl_error(?__("You are not allowed to delete the comment.", Context), Context)
+    end;
+
+event({postback, {comment_toggle, Args}, _TriggerId, _TargetId}, Context) ->
+    CommentId = proplists:get_value(id, Args),
+    case m_comment:toggle(CommentId, Context) of
+        {ok, IsVisible} ->
+            OnSuccess = proplists:get_all_values(on_success, Args),
+            Context1 = z_render:wire(OnSuccess, Context),
+            case proplists:get_value(element, Args) of
+                undefined ->
+                    Context1;
+                ElementId -> 
+                    case IsVisible of
+                        true ->
+                            z_render:wire({remove_class, [{target, ElementId},{class,"unpublished"}]}, Context1);
+                        false ->
+                            z_render:wire({add_class, [{target, ElementId},{class,"unpublished"}]}, Context1)
+                    end
+            end;
+        {error, _Reason} ->
+            %% Assume permission problem.
+            z_render:growl_error(?__("You are not allowed to toggle the comment.", Context), Context)
     end.
+
 

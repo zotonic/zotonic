@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @date 2010-03-26
-%% @doc Survey definitions.
+%% @copyright 2011 Marc Worrell
+%% @doc Randomize the order of elements in a list
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,6 +16,15 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+-module(filter_randomize).
+-export([randomize/2]).
 
-%% @doc A question for in a survey
--record(survey_question, {type, name, question, text, html, parts=[], is_required=true}).
+
+randomize([], _Context) ->
+    undefined;
+randomize(undefined, _Context) ->
+    undefined;
+randomize(In, _Context) when is_list(In) ->
+    z_utils:randomize(In);
+randomize(In, Context) ->
+    randomize(erlydtl_runtime:to_list(In, Context), Context).

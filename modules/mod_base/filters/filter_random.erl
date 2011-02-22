@@ -22,8 +22,10 @@
 
 random([], _Context) ->
     undefined;
+random(undefined, _Context) ->
+    undefined;
 random(In, Context) when is_list(In) ->
     M = filter_rand:rand(length(In), Context),
     hd(lists:nthtail(M-1, In));
-random(_, _Context) ->
-    undefined.
+random(In, Context) ->
+    random(erlydtl_runtime:to_list(In, Context), Context).

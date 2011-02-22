@@ -12,7 +12,7 @@
 new() ->
     Q = #survey_question{
         type= textblock, 
-        name = "",
+        name = z_ids:identifier(5),
         text = "", 
         question = <<"This is a paragraph-length textblock, useful for instructions. If you need more than one paragraph, simply select a textBlock for each paragraph.">>
     },
@@ -24,7 +24,7 @@ question_props(Q) ->
         
         {has_question, true},
         {has_text, false},
-        {has_name, false},
+        {has_name, true},
         
         {question_label, "Text"},
         {text_label, ""},
@@ -37,12 +37,11 @@ question_props(Q) ->
 
 render(Q) ->
     Q#survey_question{
-        name = "",
         text = "",
         question = iolist_to_binary(Q#survey_question.question),
         html = iolist_to_binary(["<p>", z_html:escape(Q#survey_question.question), "</p>"])
     }.
 
-answer(_Q, Context) ->
-    {ok, []}.
+answer(_Q, _Answers) ->
+    {ok, none}.
 
