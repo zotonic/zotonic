@@ -1,0 +1,25 @@
+#
+# Command-line completion for zotonic
+# ----------------------------------------
+# Copyright 2011 Arjan Scherpenisse
+#
+
+_complete_zotonic() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    if [ "${cur:0:1}" = "-" ]; then
+        COMPREPLY=( $(compgen -W "--help --version" -- ${cur}) )
+        return 0
+    fi
+    if [ "$prev" == "zotonic" ]; then
+        CMDS=`zotonic 2>&1|head -n 4|tail -n 1`
+        COMPREPLY=( $(compgen -W "$CMDS" -- ${cur}) )
+        return 0
+    fi
+
+}
+complete -F _complete_zotonic zotonic
