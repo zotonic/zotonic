@@ -8,9 +8,12 @@ deps/mochiweb/doc/*
 src/erlydtl/erlydtl_parser.erl
 src/tests/erlydtl/rendered_output/*
 priv/log/*
+priv/sasl/*
 priv/sites/default/files/*
 priv/sites/*/config
 priv/config
+priv/erlang.config
+priv/modules/*
 *.orig
 zotonic.tmproj
 .DS_Store
