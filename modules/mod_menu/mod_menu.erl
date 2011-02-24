@@ -87,14 +87,17 @@ observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
         menu_ids(T, [H|Acc]).
 
 
-%% @doc Fetch the menu from the site configuration.
+%% @doc Fetch the default menu. Performs validation/visibility checking on the menu items.
 %% @spec get_menu(Context) -> list()
 get_menu(Context) ->
     get_menu(m_rsc:rid(main_menu, Context), Context).
 
+%% @doc Fetch a menu structure from a rsc. Performs validation/visibility checking on the menu items.
+%% @spec get_menu(Id, Context) -> list()
 get_menu(Id, Context) ->
     case m_rsc:p(Id, menu, Context) of
         undefined -> [];
+        <<>> -> [];
         Menu -> remove_invisible(validate(Menu, []), [], Context)
     end.
 
