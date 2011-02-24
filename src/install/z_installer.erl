@@ -200,10 +200,9 @@ install_identity_verify_key(Name, Database, Schema) ->
         false ->
             {ok, C}  = pgsql_pool:get_connection(Name),
             {ok, [], []} = pgsql:squery(C, "BEGIN"),
-            A = pgsql:squery(C, "alter table identity "
+            pgsql:squery(C, "alter table identity "
                             "add column verify_key character varying(32), "
                             "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
-            ?DEBUG(A),
             {ok, [], []} = pgsql:squery(C, "COMMIT"),
             pgsql_pool:return_connection(Name, C),
             ok
