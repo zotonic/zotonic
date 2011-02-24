@@ -41,6 +41,7 @@ function do_addsite {
      # Copy the default site as a template
     cp -pR $SKELDIR $SITES/$SITE
 
+    pushd .
     cd $SITES/$SITE
 
     # Remove placeholder .empty files
@@ -63,6 +64,8 @@ function do_addsite {
         seds="s/%%$var%%/${!var}/g;$seds"
     done
     sed -i -e "$seds" $SITE.erl config
+
+    popd
 
     # Make the new site
     make -C $ZOTONIC
@@ -107,6 +110,10 @@ function check_options {
     if [ ! $SITE ]; then
         usage
     fi
+
+    # allow %%SITE%% syntax in db name and schema
+    DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"`
+    DBSCHEMA=`echo $DBSCHEMA|sed "s/%%SITE%%/$SITE/g"`
 
     if [ -e $SITES/$SITE ]; then
 	    echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2

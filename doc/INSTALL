@@ -13,7 +13,9 @@ You will need to:
 
 3. Install PostgreSQL (preferably 8.3 or newer).
 
-4. Obtain a copy of the Zotonic source code.
+4. Enable trust-authentication (username+password) in postgres.
+
+5. Obtain a copy of the Zotonic source code.
 
 
 
