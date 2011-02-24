@@ -137,7 +137,7 @@ install(blog, Context) ->
       ]
      },
 
-    ?DEBUG("Install blog"),
+    ?DEBUG("Installin blog data"),
     z_datamodel:manage(?MODULE, Datamodel, Context);
 
 
@@ -145,13 +145,17 @@ install(_, _) ->
     %% no/unknown skeleton = no default data
     ok.
 
+
 %% @doc Retrieve the default menu structure for a given skeleton site. Used by mod_menu to create the menu.
 default_menu(blog) ->
     [{page_home, []}, {page_about, []}, {page_contact, []}];
 
-default_menu(undefined) ->
+default_menu(_) ->
+    %% no/unknown skeleton = no default menu
     [].
 
 
+%% @doc Helper function for getting an absolute path to a data file
+%%      that is part of the default data for a site skeleton.
 datafile(Skeleton, Filename) ->
     filename:join([z_utils:lib_dir(src), "install", "defaultdata", Skeleton, Filename]).
