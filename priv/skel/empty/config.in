@@ -1,0 +1,41 @@
+% Zotonic site configuration for %%SITE%%.
+[
+    % This site is enabled or not.
+    {enabled, true},
+
+    % Atomic hostname, MUST be equal to the directory name of this site.
+    {host, %%SITE%%},
+
+    % Hostname on which this site runs
+    {hostname, "%%SITE%%:8000"},
+
+    % Aliases which should redirect to the primary hostname
+    %{hostalias, "www.example.com"},
+    %{hostalias, "example.com"},
+
+    % PostgreSQL database connection
+    {dbhost, "%%DBHOST%%"},
+    {dbport, %%DBPORT%%},
+    {dbuser, "%%DBUSER%%"},
+    {dbpassword, "%%DBPASSWORD%%"},
+    {dbdatabase, "%%DBDATABASE%%"},
+    {dbschema, "%%DBSCHEMA%%"},
+
+    % Password for the 'admin' user.
+    {admin_password, "admin"},
+
+    % What skeleton site this site is based on; for installing the initial data.
+    {skeleton, %%SKEL%%},
+
+    % Now you'll need to construct two keys. They should be short strings of random characters. Like good passwords, they should be hard to guess.
+
+    % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
+    %  This key will help prevent denial of service attacks.
+    % A new key will also forces regenerating images, which takes cpu time and will fill your hard disk.
+    {sign_key_simple, <<"--change-me--">>},
+
+    % Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
+    % When not defined, then zotonic will generate a new key on every restart.
+    % When a new key is generated then all postbacks from old html pages will fail.
+    {sign_key, <<"--change-me--">>}
+].

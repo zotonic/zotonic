@@ -42,7 +42,6 @@ install(Host, C) ->
     ?DEBUG({Host, "Install done."}),
     ok.
 
-
 %% @doc Install all configuration parameters with default values
 %% @spec install_config(Connection) -> ok
 install_config(C) ->
@@ -268,3 +267,4 @@ enumerate_categories(C) ->
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],
     ok.
+

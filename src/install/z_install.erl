@@ -64,7 +64,19 @@ install(Host) ->
                                    end
                                ),
     pgsql_pool:return_connection(Host, C),
-    m_category:renumber(z_context:new(Host, en)),
+    
+    InstallData = fun() ->
+                          timer:sleep(200), %% give other processes some time to start
+                          
+                          Context = z_context:new(Host, en),
+                          
+                          %% install the default data for the skeleton the site is based on
+                          z_install_defaultdata:install(m_site:get(skeleton, Context), Context),
+                          
+                          %% renumber the category tree.
+                          m_category:renumber(Context)
+                  end,
+    spawn(InstallData),
     ok.
 
 

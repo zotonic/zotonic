@@ -1,3 +1,0 @@
-s/{host, default},/{host, yoursite},/
-s/{dbdatabase, "zotonic"},/{dbdatabase, "zotonic_yoursite"},/
-s/{hostname, "127.0.0.1:8000"},/{hostname, "yoursite:8000"},/
