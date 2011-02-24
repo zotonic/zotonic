@@ -7,8 +7,7 @@ You will need to:
    use packages (see platform-specific notes below)
 
 2. Install ImageMagick (version 6.5 or higher) for the 'convert' and
-   'identify' tools (also install libjpeg, -tiff, -png and other
-   required libraries).  Make sure that the convert and identify tools
+   'identify' tools.  Make sure that the convert and identify tools
    are in your path so that zotonic can find them. For auto-rotation
    to work you'll need the "exif" utility as well.
 
@@ -22,49 +21,51 @@ You will need to:
 Steps to install Zotonic
 ------------------------
 
-Make sure you put the zotonic source in a directory named 'zotonic'
-(important for now; we're working on a solution for this).
-
 1. Type "make" in the root of zotonic (there where the Makefile is located). (*1)
 
-2. Create an user and database in PostgreSQL:
+2. Create an user and database in PostgreSQL (change the password for the user!):
 
-CREATE USER zotonic WITH PASSWORD 'yourdbpassword';
-CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
-GRANT ALL ON DATABASE zotonic TO zotonic;
-\c zotonic
-CREATE LANGUAGE "plpgsql";
+   CREATE USER zotonic WITH PASSWORD 'zotonic';
+   CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
+   GRANT ALL ON DATABASE zotonic TO zotonic;
+   \c zotonic
+   CREATE LANGUAGE "plpgsql";
 
-4. Create the configuration for the default site by copying
-   priv/sites/default/config.in to priv/sites/default/config
+3. Create a new zotonic site, based on the "blog" skeleton site:
 
-5. Edit this file; at least specify the credentials to the postgres database.
+   bin/zotonic addsite -s blog yoursite
 
-5. Make sure that the directory "priv/sites/default" and all its subdirectories are readable 
-   and writeable for the current user. (Which is the user zotonic will run under.)
+   This will add a site named yoursite. Its default URL will be
+   http://yoursite:8000/ so either put 'yoursite' in your hosts
+   file or change the {hostname} section of the config file.
 
-6. Start zotonic in debug mode:
+4. Edit the generated file priv/sites/yoursite/config, to make sure
+   your database credentials and the hostname are correct, and change
+   the password for the admin.
 
-  ./start.sh
+5. Start zotonic in debug mode:
 
-7. You see zotonic starting up, lots of messages pass by, and zotonic will install the initial database.
-   When something goes wrong here, then it is almost always a problem with the database connection. Check your 
-   database configuration in the zotonic.sh file.
+   bin/zotonic debug
+
+7. You see zotonic starting up, lots of messages pass by, and zotonic
+   will install the initial database.  When something goes wrong here,
+   then it is almost always a problem with the database
+   connection. Check your database configuration in the zotonic.sh
+   file.
 
 8. Point your browser to 
 	
-    http://localhost:8000/
+    http://yoursite:8000/
 	
-   or logon as user 'admin' (the default password is empty) at: 
+   or logon as user 'admin' (the default password is 'admin') at:
 
-    http://localhost:8000/admin/
-
-   You will be asked to change the admin password before you can proceed into the admin.
+    http://yoursite:8000/admin/
 
 9. When all done, then you can stop the erlang shell with:
 
     q().
-  
+
+   or pressing ctrl-c twice.
 
 
 
@@ -114,12 +115,26 @@ sudo apt-get install unixodbc-dev
 
 Windows
 -------
-Currently, Zotonic has not been tested on the Windows
+Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
 ImageMagick do work on Windows, so, if you're adventurous, it should
 be possible to get it running.
 
-For a start, you'll have to compile Zotonic and make a Windows version
-of start.sh, probably as a .bat file.... We'd love to hear your
-progress! Post a message to zotonic-developers@googlegroups.com to
-inform us of your progress.
+We have included user-contributed "start.cmd" and "build.cmd"
+batch-scripts which are supposed to work on Windows.
+
+
+Mac OS X
+--------
+
+With MacPorts you can install Erlang and ImageMagick using the
+following commands:
+
+  sudo port install erlang +ssl
+  sudo port install ImageMagick
+
+EnterpriseDB has an excellent PostgreSQL installer available at
+http://www.enterprisedb.com/products/pgdownload.do#osx
+
+For a very basic step-by-step installation on OSX, chick this
+http://timbenniks.nl/blog/712/step-by-step-guide-to-install-zotonic-on-osx.

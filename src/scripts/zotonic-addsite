@@ -5,9 +5,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #	 http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,46 +18,109 @@
 # usage zotonic-addsite [site_name]
 #
 
-SITE=$1
+function usage {
+    echo "Usage: `basename $0` [options] <site_name>" 1>&2
+    echo 1>&2
+    echo "  -s <skel>    Skeleton site ('blog' or 'empty'; default: $SKEL)" 1>&2
+    echo 1>&2
+    echo "  -h <host>    Database host (default: $DBHOST)" 1>&2
+    echo "  -p <port>    Database port (default: $DBPORT)" 1>&2
+    echo "  -u <user>    Database user (default: $DBUSER)" 1>&2
+    echo "  -P <pass>    Database password (default: $DBPASSWORD)" 1>&2
+    echo "  -d <name>    Database name (default: $DBDATABASE)" 1>&2
+    echo "  -n <schema>  Database schema (default: $DBSCHEMA)" 1>&2
+    echo 1>&2
+    #echo 1>&2
+    exit 1
+}
 
-if [ ! $SITE ]
-  then
-	echo USAGE: $0 [site_name] 1>&2
-	echo USAGE: See ZotonicCommands.txt 1>&2
-  else
-	if [ -e $SITES/$SITE ]
-	  then
-		echo $0: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
-	  else
-		# Copy the default site as a template
-		cp -R $SITES/default $SITES/$SITE
+#
+# Perform the actual adding of the site
+#
+function do_addsite {
+     # Copy the default site as a template
+    cp -pR $SKELDIR $SITES/$SITE
 
-		# Remove duplicate module
-		rm $SITES/$SITE/default.erl
+    cd $SITES/$SITE
 
-		# Generate Site Module refactor script
-		REFACTOR_MODULE=`tempfile`
-		sed s/yoursite/$SITE/g \
-			< $ZOTONIC_SCRIPTS/helpers/zotonic-addsite_module.sed.in \
-			> $REFACTOR_MODULE
+    # Remove placeholder .empty files
+    rm `find . -name .empty`
 
-		# Refactor Site Module
-		sed -f "$REFACTOR_MODULE" \
-			< $SITES/default/default.erl \
-			> $SITES/$SITE/$SITE.erl
+    # move site module in place
+    mv SITE.erl $SITE.erl
 
-		# Generate Site Config refactor script
-		REFACTOR_CONFIG=`tempfile`
-		sed s/yoursite/$SITE/g \
-			< $ZOTONIC_SCRIPTS/helpers/zotonic-addsite_config.sed.in \
-			> $REFACTOR_CONFIG
+    # move config in place
+    mv config.in config
 
-		# Refactor Site Config
-		sed -f $REFACTOR_CONFIG \
-			< $SITES/default/config.in \
-			> $SITES/$SITE/config
+    # Some handy variables
+    FULLNAME=`getent passwd "$USER" | cut -d ':' -f 5|cut -d ',' -f 1`
+    YEAR=`date +'%Y'`
+    DATE=`date +'%Y-%m-%d'`
 
-		# Make the new site
-		make --silent --directory=$ZOTONIC
-	fi
-fi
+    # simple key-value replace
+    seds=""
+    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA; do
+        seds="s/%%$var%%/${!var}/g;$seds"
+    done
+    sed -i -e "$seds" $SITE.erl config
+
+    # Make the new site
+    make -C $ZOTONIC
+
+    echo
+    echo "Added site $SITE. Now start zotonic and go to http://$SITE:${ZOTONIC_PORT:=8000}/ to view it."
+}
+
+
+#
+# Get the options for the addsite command.
+#
+function check_options {
+
+    if [ -f "$HOME/.zotonic-defaults" ]; then
+        source "$HOME/.zotonic-defaults"
+    fi
+
+    # The defaults
+    SKEL=${SKEL:=blog}
+    DBHOST=${DBHOST:=127.0.0.1}
+    DBPORT=${DBPORT:=5432}
+    DBUSER=${DBUSER:=zotonic}
+    DBPASSWORD=${DBPASSWORD:=zotonic}
+    DBDATABASE=${DBDATABASE:=zotonic}
+    DBSCHEMA=${DBSCHEMA:=public}
+
+    while getopts "s:d:h:p:u:P:n:" optionName; do
+        case "$optionName" in
+            s) SKEL="$OPTARG"; shift; shift ;;
+            h) DBHOST="$OPTARG"; shift; shift ;;
+            p) DBPORT="$OPTARG"; shift; shift ;;
+            u) DBUSER="$OPTARG"; shift; shift ;;
+            P) DBPASSWORD="$OPTARG"; shift; shift ;;
+            d) DBDATABASE="$OPTARG"; shift; shift ;;
+            n) DBSCHEMA="$OPTARG"; shift; shift ;;
+            [?]) exit
+        esac
+    done
+
+    SITE=$1
+    if [ ! $SITE ]; then
+        usage
+    fi
+
+    if [ -e $SITES/$SITE ]; then
+	    echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
+        exit 1
+    fi
+
+    SKELDIR="$ZOTONIC/priv/skel/$SKEL"
+    if [ ! -e $SKELDIR ]; then
+	    echo `basename $0`: skeleton site $SKEL does not exists 1>&2
+        exit 1
+    fi
+}
+
+
+check_options $*
+do_addsite
+
