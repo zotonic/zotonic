@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
-%% @date 2010-08-05
+%% Date: 2010-08-05
 %% @doc Email image embedding
 
 %% Copyright 2010 Arjan Scherpenisse <arjan@scherpenisse.net>

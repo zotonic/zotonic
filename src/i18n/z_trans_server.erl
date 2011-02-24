@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-18
+%% Date: 2010-05-18
 %% @doc Simple server to manage the translations, owns the ets table containing all translations.
 %% When new translations are read then the previous table is kept and the one before the previous is deleted.
 
@@ -45,7 +45,7 @@ start_tests() ->
     io:format("Starting trans server.~n"),
     gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, [], []).
     
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
@@ -96,7 +96,6 @@ init(_Opts) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Return the id of the current translation table
 handle_call(table, _From, State) ->
     {reply, {ok, State#state.table}, State};

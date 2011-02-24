@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-09
+%% Date: 2009-04-09
 %%
 %% @doc Model for the zotonic site configuration
 
@@ -50,7 +50,7 @@ m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> All
 m_to_list(#m{value=undefined}, Context) ->
     all(Context).
 

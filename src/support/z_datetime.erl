@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-04
+%% Date: 2009-11-04
 %%
 %% @doc Utility functions for datetime handling and representation.
 
@@ -77,9 +77,9 @@ timesince(Date, Context) ->
 timesince(Date, Base, Context) ->
     timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), Context).
 
-%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, WhenText, Context) -> string()
-%% WhenText is a string containing a maximum of three tokens. Example "ago, now, in"
+%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
+%% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
 %% @todo Use the language in the context for translations.
 timesince(Date, Base, IndicatorStrings, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.

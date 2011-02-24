@@ -179,7 +179,7 @@ get_raw(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Get the ACL fields for the resource with the id. The id must be an integer
-%% @spec get_acl_fields(Id, #context) -> #acl_props
+%% @spec get_acl_props(Id, #context{}) -> #acl_props{}
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
             case z_db:q_row("
@@ -569,7 +569,7 @@ is_a(Id, Context) ->
     m_category:is_a(RscCatId, Context).
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with category ids
-%% @spec is_a(int(), Context) -> list()
+%% @spec is_a_id(int(), Context) -> list()
 is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     [ RscCatId | m_category:get_path(RscCatId, Context)].
@@ -606,7 +606,7 @@ page_url_path([CatName|Rest], Args, Context) ->
 
 %% @doc Return the predicates that are valid combined with the predicates that are actually used by the subject.
 %% This list is to show which predicates are editable for the subject rsc.
-%% @spec predicate_edit
+%% @spec predicates_edit(Id, Context) -> [Predicate]
 predicates_edit(Id, Context) ->
     ByCategory = m_predicate:for_subject(Id, Context),
     Present = m_edge:object_predicate_ids(Id, Context),

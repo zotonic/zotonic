@@ -200,8 +200,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
-
 %% @doc Return the list of observers for an event. The event must be an atom.
 handle_call({'get_observers', Event}, _From, State) ->
     case dict:find(Event, State#state.observers) of
@@ -219,7 +217,6 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-
 %% @doc Add an observer to an event
 handle_cast({'observe', Event, Observer, Priority}, State) ->
 	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,

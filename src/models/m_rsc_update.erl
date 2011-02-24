@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
-%% @date 2009-04-24
+%% Date: 2009-04-24
 %%
 %% @doc Update routines for resources.  For use by the m_rsc module.
 
@@ -66,7 +66,8 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 
 
 %% @doc Delete a resource, no check on rights etc is made. This is called by m_category:delete/3
-%% @spec delete_nocheck(Id, Context) -> ok | throw:{error, Reason}
+%% @spec delete_nocheck(Id, Context) -> ok
+%% @throws {error, Reason}
 delete_nocheck(Id, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
@@ -93,7 +94,8 @@ delete_nocheck(Id, Context) ->
 
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
-%% @spec duplicate(int(), PropList, Context) -> {ok, int()} | throw:{error, Reason}
+%% @spec duplicate(int(), PropList, Context) -> {ok, int()}
+%% @throws {error, Reason}
 %% @todo Also duplicate the attached medium.
 duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
@@ -121,7 +123,8 @@ duplicate(Id, DupProps, Context) ->
 
 
 %% @doc Update a resource
-%% @spec update(Id, Props, Context) -> {ok, Id} | throw:{error, Reason}
+%% @spec update(Id, Props, Context) -> {ok, Id}
+%% @throws {error, Reason}
 update(Id, Props, Context) ->
     update(Id, Props, [], Context).
 

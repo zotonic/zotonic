@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-09
+%% Date: 2009-04-09
 %%
 %% Copyright 2009 Marc Worrell
 %%
@@ -76,7 +76,7 @@ m_find_value(_Key, #m{}, _Context) ->
     undefined.
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{}, _Context) ->
     [].
     
@@ -247,7 +247,7 @@ duplicate(Id, ToId, Context) ->
 
 %% @doc Update the nth edge of a subject.  Set a new object, keep the predicate.
 %% When there are not enough edges then an error is returned. The first edge is nr 1.
-%% @spec update_nth(int(), Predicate, int(), Context) -> {ok, EdgeId} | {error, Reason}
+%% @spec update_nth(int(), Predicate, int(), ObjectId, Context) -> {ok, EdgeId} | {error, Reason}
 update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Predicate, Context),
 	{ok, PredName} = m_predicate:id_to_name(PredId, Context),
@@ -364,7 +364,7 @@ subjects(Id, Context) ->
 
 
 %% @doc Return all object ids with the edge id for a predicate/subject_id
-%% @spec object_edge_ids(Id, Context) -> list()
+%% @spec object_edge_ids(Id, Predicate, Context) -> list()
 object_edge_ids(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -378,7 +378,7 @@ object_edge_ids(Id, Predicate, Context) ->
 
 
 %% @doc Return all subject ids with the edge id for a predicate/object_id
-%% @spec subject_edge_ids(Id, Context) -> list()
+%% @spec subject_edge_ids(Id, Predicate, Context) -> list()
 subject_edge_ids(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -513,7 +513,7 @@ update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
 
 
 %% @doc Return the list of predicates in use by edges to objects from the id
-%% @spec object_preds(Id, Context) -> List
+%% @spec object_predicates(Id, Context) -> List
 object_predicates(Id, Context) ->
     F = fun() ->
         Ps = z_db:q("select distinct p.name from edge e join rsc p on e.predicate_id = p.id where e.subject_id = $1 order by name", [Id], Context),
@@ -522,7 +522,7 @@ object_predicates(Id, Context) ->
     z_depcache:memo(F, {object_preds, Id}, ?DAY, [Id], Context).
 
 %% @doc Return the list of predicates is use by edges from subjects to the id
-%% @spec object_preds(Id, Context) -> List
+%% @spec subject_predicates(Id, Context) -> List
 subject_predicates(Id, Context) ->
     F = fun() ->
         Ps = z_db:q("select distinct p.name from edge e join rsc p on e.predicate_id = p.id where e.object_id = $1 order by name", [Id], Context),
@@ -531,13 +531,13 @@ subject_predicates(Id, Context) ->
     z_depcache:memo(F, {subject_preds, Id}, ?DAY, [Id], Context).
 
 %% @doc Return the list of predicate ids in use by edges to objects from the id
-%% @spec object_preds(Id, Context) -> List
+%% @spec object_predicate_ids(Id, Context) -> List
 object_predicate_ids(Id, Context) ->
     Ps = z_db:q("select distinct predicate_id from edge where subject_id = $1", [Id], Context),
     [ P || {P} <- Ps ].
 
 %% @doc Return the list of predicates is use by edges from subjects to the id
-%% @spec object_preds(Id, Context) -> List
+%% @spec subject_predicate_ids(Id, Context) -> List
 subject_predicate_ids(Id, Context) ->
     Ps = z_db:q("select distinct predicate_id from edge where object_id = $1", [Id], Context),
     [ P || {P} <- Ps ].

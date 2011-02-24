@@ -56,8 +56,8 @@
 
 %% @doc Generate a .po file from the given label/translation pairs
 %% The labels are {Label, Translation, Finfo}
-%% @author Marc Worrell
-%% @date 2010-05-19
+%% Author: Marc Worrell
+%% Date: 2010-05-19
 generate(Filename, Labels) ->
     {ok,Fd} = file:open(Filename, [write]),
     write_header(Fd),

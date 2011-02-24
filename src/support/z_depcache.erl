@@ -110,7 +110,7 @@ memo(F, Key, MaxAge, Dep, #context{} = Context) ->
         ok.
 
 
-%% @spec set(Key, Data, MaxAge, Context) -> void()
+%% @spec set(Key, Data, Context) -> void()
 %% @doc Add the key to the depcache, hold it for 3600 seconds and no dependencies
 set(Key, Data, Context) ->
     set(Key, Data, 3600, [], Context).
@@ -148,7 +148,7 @@ get_waiting_pids(Key, #context{depcache=Depcache}) ->
 
 
 
-%% @spec get(Key, SubKey, Context) -> {ok, Data} | undefined
+%% @spec get(Key, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
 get(Key, Context) ->
     case get_process_dict(Key, Context) of
@@ -188,27 +188,27 @@ get(Key, SubKey, Context) ->
     end.
 
 
-%% @spec flush(Key) -> void()
+%% @spec flush(Key, #context{}) -> void()
 %% @doc Flush the key and all keys depending on the key
 flush(Key, #context{depcache=Depcache}) ->
     gen_server:call(Depcache, {flush, Key}),
     flush_process_dict().
 
 
-%% @spec flush() -> void()
+%% @spec flush(#context{}) -> void()
 %% @doc Flush all keys from the caches
 flush(#context{depcache=Depcache}) ->
     gen_server:call(Depcache, flush),
     flush_process_dict().
 
 
-%% @spec tick() -> none()
+%% @spec tick(#context{}) -> none()
 %% @doc Periodic tick used for incrementing the clock
 tick(#context{depcache=Depcache}) ->
     gen_server:cast(Depcache, tick).
 
 
-%% @spec size() -> int()
+%% @spec size(#context{}) -> int()
 %% @doc Return the total memory size of all stored terms
 size(Context) ->
     {_Meta, _Deps, Data} = get_tables(Context),

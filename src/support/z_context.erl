@@ -425,7 +425,7 @@ clean_scripts(C) ->
 
 
 %% @doc Overwrite the scripts in Context with the scripts in From
-%% @spec set_scripts(From, Context) -> Context
+%% @spec copy_scripts(From, Context) -> Context
 copy_scripts(From, Context) ->
     Context#context{
         updates=From#context.updates,
@@ -460,7 +460,7 @@ has_session(_) ->
     false.
 
 
-%% @doc Ensure session and page session and fetch&parse the query string
+%% @doc Ensure session and page session and fetch and parse the query string
 ensure_all(Context) ->
     ensure_page_session(
         ensure_session(
@@ -510,12 +510,12 @@ ensure_qs(Context) ->
     end.
 
 
-%% @spec get_reqdata(Context) -> #wm_reqdata
+%% @spec get_reqdata(Context) -> #wm_reqdata{}
 %% @doc Return the webmachine request data of the context
 get_reqdata(Context) ->
     Context#context.wm_reqdata.
 
-%% @spec set_reqdata(ReqData, Context) -> #wm_reqdata
+%% @spec set_reqdata(ReqData, Context) -> #wm_reqdata{}
 %% @doc Set the webmachine request data of the context
 set_reqdata(ReqData = #wm_reqdata{}, Context) ->
     Context#context{wm_reqdata=ReqData}.
@@ -526,14 +526,12 @@ set_reqdata(ReqData = #wm_reqdata{}, Context) ->
 get_resource_module(Context) ->
     Context#context.resource_module.
 
-%% @spec set_resource_module(Context) -> NewContext
+%% @spec set_resource_module(Module::atom(), Context) -> NewContext
 set_resource_module(Module, Context) ->
     Context#context{resource_module=Module}.
 
 
-%% @spec get_q(Key, Context) -> Value | undefined
-%%       Value -> string()
-%%       Key -> string()
+%% @spec get_q(Key::string(), Context) -> Value::string() | undefined
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
     lists:foldl(fun(K, Acc) ->
@@ -551,9 +549,7 @@ get_q(Key, Context) ->
     end.
 
 
-%% @spec get_q(Key, Context, Default) -> Value
-%%       Value -> string()
-%%       Key -> string()
+%% @spec get_q(Key::string(), Context, Default) -> Value::string()
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 get_q(Key, Context, Default) ->
     case proplists:lookup('q', Context#context.props) of
@@ -562,31 +558,25 @@ get_q(Key, Context, Default) ->
     end.
 
 
-%% @spec get_q_all(Context) -> Values
-%%        Key -> string()
-%%        Values -> list()
+%% @spec get_q_all(Context) -> [{Key::string(), [Values]}]
 %% @doc Get all parameters.
 get_q_all(Context) ->
     {'q', Qs} = proplists:lookup('q', Context#context.props),
     Qs.
 
 
-%% @spec get_q_all(Key, Context) -> Values
-%%        Key -> string()
-%%        Values -> list()
+%% @spec get_q_all(Key::string(), Context) -> [Values]
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
 get_q_all(Key, Context) ->
     {'q', Qs} = proplists:lookup('q', Context#context.props),
     proplists:get_all_values(z_convert:to_list(Key), Qs).
 
 
-%% @spec get_q_all_noz(Context) -> Values
-%%        Key -> string()
-%%        Values -> list()
+%% @spec get_q_all_noz(Context) -> [{Key::string(), [Values]}]
 %% @doc Get all query/post args, filter the zotonic internal args.
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
-    
+
     is_zotonic_arg("zotonic_host") -> true;
     is_zotonic_arg("zotonic_dispatch") -> true;
     is_zotonic_arg("postback") -> true;
@@ -597,7 +587,7 @@ get_q_all_noz(Context) ->
     is_zotonic_arg("z_msg") -> true;
     is_zotonic_arg("z_comet") -> true;
     is_zotonic_arg(_) -> false.
-    
+
 
 %% @spec get_q_validated(Key, Context) -> Value
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
@@ -662,7 +652,7 @@ spawn_link_page(Module, Func, Args, Context) ->
 
 
 %% @spec get_value(Key::string(), Context) -> Value | undefined
-%% @spec Find a key in the context, page, session or persistent state.
+%% @doc Find a key in the context, page, session or persistent state.
 %% @todo Add page and user lookup
 get_value(Key, Context) ->
     case get(Key, Context) of
@@ -685,7 +675,7 @@ get_value(Key, Context) ->
 persistent_id(Context) ->
     z_session:persistent_id(Context).
 
-%% @spec set_visitor(Key, Value, Context) -> Context
+%% @spec set_persistent(Key, Value, Context) -> Context
 %% @doc Set the value of the visitor variable Key to Value
 set_persistent(Key, Value, Context) ->
     z_session:set_persistent(Key, Value, Context),
@@ -796,8 +786,8 @@ language(Context) ->
 set_language(Lang, Context) ->
     Context#context{language=Lang}.
 
-%% @doc Add a response header to the request in the context.
-%% @spec add_resp_header(Header, Value, Context) -> NewContext
+%% @doc Set a response header for the request in the context.
+%% @spec set_resp_header(Header, Value, Context) -> NewContext
 set_resp_header(Header, Value, Context = #context{wm_reqdata=ReqData}) ->
     RD1 = wrq:set_resp_header(Header, Value, ReqData),
     Context#context{wm_reqdata=RD1}.
@@ -902,10 +892,12 @@ parse_form_urlencoded(Context) ->
     end.
 
 
-%% @doc Some user agents have too aggressive client side caching.  These headers prevent
-%% the caching of content on the user agent iff the content generated has a session. You can prevent
-%% addition of these headers by not calling z_context:ensure_session/1, or z_context:ensure_all/1.
-%% @spec add_nocache_headers(#context) -> #context
+%% @doc Some user agents have too aggressive client side caching.
+%% These headers prevent the caching of content on the user agent iff
+%% the content generated has a session. You can prevent addition of
+%% these headers by not calling z_context:ensure_session/1, or
+%% z_context:ensure_all/1.
+%% @spec add_nocache_headers(#context{}) -> #context{}
 add_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     RD1 = wrq:set_resp_header("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0", ReqData),
     RD2 = wrq:set_resp_header("Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}}), RD1),

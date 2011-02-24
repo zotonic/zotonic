@@ -142,7 +142,7 @@ keepalive(PageId, Pid) ->
     gen_server:cast(Pid, {keepalive, PageId}).
 
 
-%% @spec ensure_page_session(Context::#context) -> #context
+%% @spec ensure_page_session(Context::#context{}) -> #context{}
 %% @doc Make sure that the request has a page session, when the page session was alive then
 %%      adjust the expiration of the page.  Returns a new context with the page id set.
 ensure_page_session(Context) ->
@@ -155,7 +155,7 @@ check_expire(Now, Pid) ->
     gen_server:cast(Pid, {check_expire, Now}).
 
 
-%% @spec get_attach_state(Context::#context) -> [] attach states
+%% @spec get_attach_state(Context::#context{}) -> [States]
 %% @doc Check the state of all the attached pages.
 get_attach_state(Pid) when is_pid(Pid) ->
     gen_server:call(Pid, get_attach_state);
@@ -274,8 +274,7 @@ handle_cast(Msg, Session) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
-
+%% @doc Handling call messages
 handle_call(persistent_id, _From, Session) ->
 	PersistedSession = case Session#session.persist_is_saved of
 		true -> Session;

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-07
+%% Date: 2009-04-07
 %%
 %% @doc Interface to database, uses database definition from Context
 
@@ -270,7 +270,7 @@ insert(Table, Context) ->
 
 %% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
 %% When the table has an 'id' column then the new id is returned.
-%% @spec insert(Database, Context) -> {ok, Id} | Error
+%% @spec insert(Table::atom(), Props::proplist(), Context) -> {ok, Id} | Error
 insert(Table, [], Context) ->  
     insert(Table, Context);
 insert(Table, Props, Context) when is_atom(Table) ->
@@ -444,7 +444,7 @@ split_props(Props, Cols) ->
 
 
 %% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
-%% @spec columns(Table, Context) -> [ #column ]
+%% @spec columns(Table, Context) -> [ #column_def{} ]
 columns(Table, Context) when is_atom(Table) ->
     columns(atom_to_list(Table), Context);
 columns(Table, Context) ->
@@ -489,7 +489,7 @@ columns(Table, Context) ->
 
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
-%% @spec column_names(Table, Context) -> [ atom, ... ]
+%% @spec column_names(Table, Context) -> [ atom() ]
 column_names(Table, Context) ->
     Names = [ C#column_def.name || C <- columns(Table, Context)],
     lists:sort(Names).
@@ -623,7 +623,7 @@ ensure_table(Table, Cols, Context) ->
 
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
-%% @spec check_table_name(String) -> true
+%% @spec assert_table_name(String) -> true
 assert_table_name([H|T]) when (H >= $a andalso H =< $z) orelse H == $_ ->
     assert_table_name1(T).
 assert_table_name1([]) ->

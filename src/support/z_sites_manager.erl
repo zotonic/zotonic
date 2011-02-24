@@ -82,23 +82,23 @@ update_dispatchinfo() ->
 
 
 %% @doc Return a list of active site names.
-%% @spec get_sites -> [ atom() ]
+%% @spec get_sites() -> [ atom() ]
 get_sites() ->
     gen_server:call(?MODULE, get_sites). 
 
-%% @doc Return a list of site names.
-%% @spec get_sites -> [ atom() ]
+%% @doc Return a list of all site names.
+%% @spec get_sites_all() -> [ atom() ]
 get_sites_all() ->
     gen_server:call(?MODULE, get_sites_all). 
 
 %% @doc Return a list of all sites and their status.
-%% @spec get_sites_status -> PropList
+%% @spec get_sites_status() -> PropList
 get_sites_status() ->
     gen_server:call(?MODULE, get_sites_status). 
 
 
 %% @doc Return a list of contexts initialized for all active sites.
-%% @spec get_site_contexts -> [ Context ]
+%% @spec get_site_contexts() -> [ Context ]
 get_site_contexts() ->
     [ z_context:new(Name) || Name <- get_sites() ].
 
@@ -226,7 +226,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %% @doc Scan all sites subdirectories for the site configurations.
-%% @spec scan_sites -> [ SiteProps ]
+%% @spec scan_sites() -> [ SiteProps ]
 scan_sites() ->
     SitesDir = filename:join([z_utils:lib_dir(priv), "sites", "*", "config"]),
     Configs = [ parse_config(C) || C <- filelib:wildcard(SitesDir) ],
@@ -242,7 +242,7 @@ scan_sites() ->
         end.
 
 %% @doc Fetch the configuration of a specific site.
-%% @spec site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
+%% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
 get_site_config(Site) ->
     ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
     parse_config(ConfigFile).
@@ -286,7 +286,7 @@ add_sites_to_sup(Sup, [SiteProps|Rest]) ->
     add_sites_to_sup(Sup, Rest).
 
 
-%% @spec upgrade() -> ok
+%% @spec handle_upgrade(State) -> ok
 %% @doc Add children if necessary, do not start them yet.
 handle_upgrade(State) ->
     SiteProps = scan_sites(),

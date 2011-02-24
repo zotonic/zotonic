@@ -1,3 +1,5 @@
+%% @hidden
+
 -module(pgsql_tests).
 
 -export([run_tests/0]).

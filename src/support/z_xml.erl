@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-04
+%% Date: 2009-08-04
 %% @doc Utility functions for xml processing.
 
 %% Copyright 2009 Marc Worrell
@@ -27,7 +27,7 @@
 
 
 %% @doc Escape a html text to valid a xml text so that it can be transported in XML.  Translates control characters to 
-%% spaces, except for TAB, CR and LF.  Escapes the characters $&, $<, $>, $" and $'.
+%% spaces, except for TAB, CR and LF. 
 %% @spec escape(iolist()) -> iolist()
 escape(undefined) -> 
     undefined;

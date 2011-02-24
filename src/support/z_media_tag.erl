@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-03-03
+%% Date: 2009-03-03
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -38,7 +38,7 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec media_viewer(MediaReference, Options, Context) -> {ok, HtmlFragMent} | {error, Reason}
+%% @spec viewer(MediaReference, Options, Context) -> {ok, HtmlFragMent} | {error, Reason}
 %%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
 viewer(undefined, _Options, _Context) ->

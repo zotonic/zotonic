@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-03-02
+%% Date: 2009-03-02
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, gray, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
@@ -42,7 +42,7 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec convert(InFile, OutFile, Filters) -> ok | {error, Reason}
+%% @spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason}
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 %% @todo Check if the conversion has been done
 %% @todo Check if the target /= source
@@ -76,12 +76,12 @@ convert(InFile, OutFile, Filters, Context) ->
     end.
 
 %% Return the ImageMagick input-file suffix.
-%% @spec infile_suffix(Mime) -> Suffix (string)
+%% @spec infile_suffix(Mime) -> Suffix::string()
 infile_suffix(<<"image/gif">>) -> [];
 infile_suffix(_) -> "[0]".
      
 
-%% @spec size(MediaRef, Filters) -> {size, Width, Height, ResizedMime} | {error, Reason}
+%% @spec size(MediaRef, Filters, Context) -> {size, Width, Height, ResizedMime} | {error, Reason}
 %%   MediaRef = Filename | MediaProps
 %% @doc Calculate the size of the resulting image.
 size([{_Prop, _Value}|_] = Props, Filters, _Context) ->
@@ -201,9 +201,8 @@ out_mime(_Mime, Options) ->
 	end.
 
 
-%% @spec filter2arg(Filter, Width, Height) -> 
+%% @spec filter2arg(Filter, Width, Height) -> {NewWidth, NewHeight, Filter::string}
 %% @doc Map filters to an ImageMagick argument
-
 filter2arg({make_image, "application/pdf"}, Width, Height) ->
     RArg = ["-resize ", integer_to_list(Width),$x,integer_to_list(Height)],
     {Width, Height, RArg};

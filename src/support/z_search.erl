@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-15
+%% Date: 2009-04-15
 %% @doc Search the database, interfaces to specific search routines.
 
 %% Copyright 2009 Marc Worrell
@@ -38,12 +38,12 @@
 -define(OFFSET_PAGING, {1,20000}).
 
 %% @doc Search items and handle the paging.  Uses the default page length.
-%% @spec search({Name, SearchPropList}, Page, #context) -> #search_result
+%% @spec search_pager({Name, SearchPropList}, Page, #context{}) -> #search_result{}
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
 
 %% @doc Search items and handle the paging
-%% @spec search_pager({Name, SearchPropList}, Page, PageLen, #context) -> #search_result
+%% @spec search_pager({Name, SearchPropList}, Page, PageLen, #context{}) -> #search_result{}
 search_pager(Search, Page, PageLen, Context) ->
     SearchResult = search(Search, ?OFFSET_PAGING, Context),
     pager(SearchResult, Page, PageLen, Context).
@@ -79,12 +79,12 @@ pager(#search_result{result=Result} = SearchResult, Page, PageLen, _Context) ->
     }.
 
 %% @doc Search with the question and return the results
-%% @spec search({Name, SearchPropList}, #context) -> #search_result
+%% @spec search({Name, SearchPropList}, #context{}) -> #search_result{}
 search(Search, Context) ->
     search(Search, ?OFFSET_LIMIT, Context).
 
 %% @doc Perform the named search and its arguments
-%% @spec search({Name, SearchPropList}, {Offset, Limit}, Context) -> #search_result
+%% @spec search({Name, SearchPropList}, {Offset, Limit}, #context{}) -> #search_result{}
 search({SearchName, Props} = Search, OffsetLimit, Context) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
@@ -108,7 +108,7 @@ search(Name, OffsetLimit, Context) ->
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
-%% @spec search_result(Result, Limit, Context) -> #search_result
+%% @spec search_result(Result, Limit, Context) -> #search_result{}
 search_result(L, _Limit, _Context) when is_list(L) ->
     #search_result{result=L};
 search_result(#search_result{} = S, _Limit, _Context) ->
@@ -174,7 +174,7 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
     
 
 %% @doc Inject the ACL checks in the SQL query.
-%% @spec reformat_sql_query(#search_sql, Context) -> #search_sql
+%% @spec reformat_sql_query(#search_sql{}, Context) -> #search_sql{}
 reformat_sql_query(#search_sql{where=Where, tables=Tables, args=Args, cats=TabCats, cats_exclude=TabCatsExclude} = Q, Context) ->
     {ExtraWhere, Args1} = lists:foldl(
                                 fun(Table, {Acc,As}) ->
@@ -213,7 +213,7 @@ concat_where([W|Rest], Acc) ->
     
 
 %% @doc Create extra 'where' conditions for checking the access control
-%% @spec add_acl_check({Table, Alias}, Args, Context) -> {Where, NewArgs}
+%% @spec add_acl_check({Table, Alias}, Args, Q, Context) -> {Where, NewArgs}
 add_acl_check({rsc, Alias}, Args, Q, Context) ->
     add_acl_check1(rsc, Alias, Args, Q, Context);
 add_acl_check(_, Args, _Q, _Context) ->
@@ -221,8 +221,8 @@ add_acl_check(_, Args, _Q, _Context) ->
 
 
 %% @doc Create extra 'where' conditions for checking the access control
-%% @spec add_acl_check1(Table, Alias, Args, Context) -> {Where, NewArgs}
-%% @todo THIS NEEDS TO BE CHANGED FOR THE PLUGGABLE ACL
+%% @spec add_acl_check1(Table, Alias, Args, SearchSQL, Context) -> {Where, NewArgs}
+%% @todo This needs to be changed for the pluggable ACL
 add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
     case z_notifier:first(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) of
         undefined ->
@@ -266,7 +266,7 @@ publish_check(_Table, _Alias, _SearchSql) ->
 
 
 %% @doc Create the 'where' conditions for the category check
-%% @spec add_cat_check(Alias, Cats, Context) -> Where
+%% @spec add_cat_check(Alias, Exclude, Cats, Context) -> Where
 add_cat_check(_Alias, _Exclude, [], _Context) ->
     [];
 add_cat_check(Alias, Exclude, Cats, Context) ->
@@ -292,7 +292,7 @@ add_cat_check(Alias, Exclude, Cats, Context) ->
 
 
 %% @doc Given a query as proplist, return all results.
-%% @spec search_query(Props, Context) -> [Id] | []
+%% @spec query_(Props, Context) -> [Id] | []
 query_(Props, Context) ->
     S = search({'query', Props}, ?OFFSET_PAGING, Context),
     S#search_result.result.

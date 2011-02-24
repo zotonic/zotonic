@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @date 2009-07-22
+%% Date: 2009-07-22
 %% @copyright (c) 2009 Marc Worrell
 %% @doc Support for the {% lib filename ... %} tag in the templates.
 %% Generates the <link /> or <script /> tag for css or js files.  Also

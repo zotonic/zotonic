@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-18
+%% Date: 2010-05-18
 %% @doc This module is started after the complete site_sup has been booted. 
 %% This is the moment for system wide initializations.
 
@@ -23,7 +23,7 @@
 
 -export([start_link/1]).
 
-%% @spec start_link() -> ignore
+%% @spec start_link(SiteProps::proplist()) -> ignore
 %% @doc Perform all site startup routines.
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),

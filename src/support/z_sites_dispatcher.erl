@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-12-15
+%% Date: 2009-12-15
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
 %% Copyright 2009 Marc Worrell
@@ -57,7 +57,7 @@ start_link(Args) when is_list(Args) ->
 
 %% @doc Match the host and path to a dispatch rule.
 %% @spec dispatch(Host::string(), Path::string(), ReqData::wm_reqdata) -> {dispatch(), NewReqData}
-%% @type dispatch() -> {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens}
+%% @type dispatch() = {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens}
 %%                   | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                   | handled
 dispatch(Host, Path, ReqData) ->
@@ -105,7 +105,6 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
 handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
     Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, ReqData) of
@@ -205,7 +204,7 @@ redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
     RD2.
 
 %% @doc Fetch the host and dispatch list for the request
-%% @spec get_host_dispatch_list(webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
+%% @spec get_host_dispatch_list(WMHost, DispatchList, Fallback, webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
 get_host_dispatch_list(WMHost, DispatchList, Fallback, ReqData) ->
     case DispatchList of
         [#wm_host_dispatch_list{}|_] ->
@@ -403,9 +402,9 @@ filter_ssl(_, Rules) ->
 % Main difference is that we want to know which dispatch rule was choosen.
 % We also added check functions and regular expressions to match vars.
 
-%% @author Robert Ahrens <rahrens@basho.com>
-%% @author Justin Sheehy <justin@basho.com>
-%% @copyright 2007-2009 Basho Technologies
+%% Author Robert Ahrens <rahrens@basho.com>
+%% Author Justin Sheehy <justin@basho.com>
+%% Copyright 2007-2009 Basho Technologies
 %%
 %%    Licensed under the Apache License, Version 2.0 (the "License");
 %%    you may not use this file except in compliance with the License.
@@ -422,7 +421,7 @@ filter_ssl(_, Rules) ->
 -define(SEPARATOR, $\/).
 -define(MATCH_ALL, '*').
 
-%% @spec wm_dispatch(Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
+%% @spec wm_dispatch(IsSSL, HostAsString, Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
 %%                                            dispterm() | dispfail()
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration

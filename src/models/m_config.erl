@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-09
+%% Date: 2009-04-09
 %%
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when 
 %% a key is not defined in the configuration table.
@@ -50,7 +50,7 @@ m_find_value(Key, #m{value=Module}, Context) ->
     get(Module, Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{value=undefined}, Context) ->
     all(Context);
 m_to_list(#m{value=Module}, Context) ->

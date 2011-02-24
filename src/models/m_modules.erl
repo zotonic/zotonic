@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-05
+%% Date: 2010-05-05
 %%
 %% @doc Model for the zotonic modules. List all modules, enabled or disabled.
 
@@ -52,7 +52,7 @@ m_find_value(Module, #m{value=info}, Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{value=undefined}, Context) ->
     all(Context).
 

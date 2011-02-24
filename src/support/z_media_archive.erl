@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-10
+%% Date: 2009-04-10
 %% @doc Media archiving utilities.  Manages the files/archive directory of sites.
 
 %% Copyright 2009 Marc Worrell
@@ -79,7 +79,7 @@ archive_file(Filename, NewBasename, Context) ->
     end.
 
 %% @doc Always archive a copy of a file in the archive directory
-%% @spec archive_file(Filename, Context) -> ArchivedFilename
+%% @spec archive_copy(Filename, Context) -> ArchivedFilename
 archive_copy(Filename, Context) ->
     archive_copy(Filename, filename:basename(Filename), Context).
 
@@ -92,7 +92,7 @@ archive_copy(Filename, NewBasename, Context) ->
     NewFile.
 
 %% @doc Optionally archive a copy of a file in the archive directory (when it is not archived yet)
-%% @spec archive_file(Filename, Context) -> ArchivedFilename
+%% @spec archive_copy_opt(Filename, Context) -> ArchivedFilename
 archive_copy_opt(Filename, Context) ->
     archive_copy_opt(Filename, filename:basename(Filename), Context).
 

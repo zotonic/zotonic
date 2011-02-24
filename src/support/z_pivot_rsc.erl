@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-17
+%% Date: 2009-04-17
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
 %% Copyright 2009 Marc Worrell
@@ -188,7 +188,6 @@ init(SiteProps) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -197,14 +196,14 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% Poll the queue for the default host
+%% @doc Poll the queue for the default host
 handle_cast(poll, State) ->
     flush(),
     do_poll(State#state.context),
     {noreply, State};
 
 
-%% Poll the queue for a particular database
+%% @doc Poll the queue for a particular database
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, State#state.context),
     {noreply, State};
@@ -312,7 +311,7 @@ do_pivot(Id, Context) ->
 
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.
-%% @spec fetch_queue(Context) -> [{Id,Serial}, ...]
+%% @spec fetch_queue(Context) -> [{Id,Serial}]
 fetch_queue(Context) ->
     z_db:q("select rsc_id, serial from rsc_pivot_queue where due < now() - '10 second'::interval order by is_update, due limit $1", [?POLL_BATCH], Context).
 
@@ -337,7 +336,7 @@ delete_queue(Id, Serial, Context) ->
 
 %% @doc Pivot a resource, collect all texts for indexing and some extra to be indexed fields.
 %% @todo Also add the property tag/values
-%% @spec pivot(Id, Context) -> void()
+%% @spec pivot_resource(Id, Context) -> void()
 pivot_resource(Id, Context) ->
     {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, Context),
 
@@ -572,10 +571,10 @@ pg_lang(fr) -> "french";
 pg_lang(_) -> "english".
 
 
-%% @doc Let a module define a custom pivot
 %% @spec define_custom_pivot(Module, columns(), Context) -> ok
+%% @doc Let a module define a custom pivot
 %% columns() -> [column()]
-%% column()  -> {atom colname, string colspec}
+%% column()  -> {ColumName::atom(), ColSpec::string()}
 define_custom_pivot(Module, Columns, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     case z_db:table_exists(TableName, Context) of

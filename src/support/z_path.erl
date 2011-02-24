@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-05
+%% Date: 2009-08-05
 %% @doc Defines all paths for files and directories of a site.
 
 %% Copyright 2009 Marc Worrell
@@ -30,28 +30,28 @@
 
 -include("zotonic.hrl").
 
-%% @doc Return the path to a files subdirectory
-%% @spec media_archive(#context) -> filename()
+%% @doc Return the path to the site folder of the given context.
+%% @spec site_dir(#context{}) -> filename()
 site_dir(#context{host=Host}) ->
         filename:join([z_utils:lib_dir(priv), "sites", Host]).
 
 %% @doc Return the path to the media preview directory
-%% @spec media_preview(#context) -> filename()
+%% @spec media_preview(#context{}) -> filename()
 media_preview(Context) ->
     files_subdir("preview", Context).
 
 %% @doc Return the path to the media archive directory
-%% @spec media_archive(#context) -> filename()
+%% @spec media_archive(#context{}) -> filename()
 media_archive(Context) ->
     files_subdir("archive", Context).
 
 %% @doc Return the path to a files subdirectory
-%% @spec media_archive(#context) -> filename()
+%% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
 files_subdir(SubDir, #context{host=Host}) ->
         filename:join([z_utils:lib_dir(priv), "sites", Host, "files", z_convert:to_list(SubDir)]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
-%% @spec files(SubDir, #context) -> filename()
+%% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()
 files_subdir_ensure(SubDir, Context) ->
     Dir = files_subdir(SubDir, Context),
     ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
