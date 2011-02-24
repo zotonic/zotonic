@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-08
+%% Date: 2009-04-08
 %%
 %% @doc Model for categories.  Add, change and re-order categories.
 
@@ -104,7 +104,7 @@ m_find_value(_Key, _Value, _Context) ->
     undefined.
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{value=undefined}, Context) ->
     tree(Context);
 m_to_list(#m{value={cat, Id}}, Context) ->
@@ -235,7 +235,7 @@ id_to_name(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Return the last modification date of the category. Returns false
-%% @spec last_modified(Cat::term(), Context) -> {ok, {{Y,M,D},{Hour,Min,Sec}}} | {error, Reason}.
+%% @spec last_modified(Cat::term(), Context) -> {ok, {{Y,M,D},{Hour,Min,Sec}}} | {error, Reason}
 last_modified(Cat, Context) ->
     case name_to_id(Cat, Context) of
         {ok, CatId} ->
@@ -250,7 +250,7 @@ last_modified(Cat, Context) ->
 
 
 %% @doc Move the category below another category, placing it at the end of the children of that category.
-%% @spec move_end(CatId::int(), NewParentId::int(), Context) -> ok | {error, Reason}
+%% @spec move_below(CatId::int(), NewParentId::int(), Context) -> ok | {error, Reason}
 move_below(Id, ParentId, Context) ->
     case z_acl:is_allowed(update, Id, Context) of
         true ->
@@ -336,7 +336,7 @@ update_sequence(Ids, Context) ->
 
 
 %% @doc Delete the category, move referring pages to another category. Fails when the transfer id is not a category.
-%% @spec delete(Id:int(), TransferId::int(), Context) -> ok | {error, Reason}
+%% @spec delete(Id::int(), TransferId::int(), Context) -> ok | {error, Reason}
 delete(Id, TransferId, Context) ->
     % fail when deleting 'other' or 'category'
     case z_db:q("select name from rsc where id = $1", [Id], Context) of
@@ -397,7 +397,7 @@ image(Id, Context) ->
 
     
 %% @doc Return the path from a root to the category (excluding the category itself)
-%% @spec path(Id, Context) -> [CatId]
+%% @spec get_path(Id, Context) -> [CatId]
 get_path(undefined, _Context) ->
     [];
 get_path(Id, Context) ->
@@ -650,10 +650,8 @@ renumber_pivot_task(LowId, Context) ->
 
 
 %% @doc Take a category list and make it into a tree, recalculating the left/right and lvl nrs
-%% @spec cat_enumerate(Cats) -> Sorts
-%%  Cats = [Cat]
+%% @spec enumerate([Cat]) -> [Sort]
 %%  Cat = {CatId, Parent, NodeSeq} 
-%%  Sorts = [Sort]
 %%  Sort = {CatId, Nr, Level, Left, Right, Path}
 enumerate(Cats) ->
     % Fetch all the roots of our forest
@@ -694,7 +692,7 @@ insert(ParentId, Name, Props, Context) ->
 
 %%
 %% Return the left/right boundaries of the given category.
-%% @spec bounds(Id, C) -> {Left, Right}
+%% @spec boundaries(Id, C) -> {Left, Right}
 boundaries(CatId, Context) ->
     F = fun() ->
                 case z_db:q_row("SELECT lft, rght FROM category WHERE id = $1", [CatId], Context) of

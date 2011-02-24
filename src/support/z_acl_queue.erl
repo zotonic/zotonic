@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-04
+%% Date: 2010-05-04
 %% @doc Queue acl requests for later handling.  For now a dummy module.
 %% The idea is that when an action is not allowed then the user can request another, more powerful user, to
 %% perform the action.  Suuch requests are queued per user or group.

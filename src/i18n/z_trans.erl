@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @doc Translate english sentences into other languages
-%% @seealso GNU gettext
+%% @doc Translate english sentences into other languages, following
+%% the GNU gettext principle.
 
 %% Copyright 2009 Marc Worrell
 %%

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-17
+%% Date: 2009-04-17
 %%
 %% @doc Utility functions for html processing.  Also used for property filtering (by m_rsc_update).
 
@@ -102,7 +102,7 @@ escape(B) when is_binary(B) ->
 
 
 %% @doc Unescape - reverses the effect of escape.
-%% @spec escape(iolist()) -> binary()
+%% @spec unescape(iolist()) -> binary()
 unescape({trans, Tr}) ->
     {trans, [{Lang, unescape(V)} || {Lang,V} <- Tr]};
 unescape(undefined) -> 
@@ -205,7 +205,7 @@ strip(<<_,T/binary>>, State, Acc) ->
 
 
 %% @doc Sanitize a (X)HTML string. Remove elements and attributes that might be harmful.
-%% @type sanitize(binary()) -> binary()
+%% @spec sanitize(binary()) -> binary()
 sanitize({trans, Tr}) ->
     {trans, [{Lang, sanitize(V)} || {Lang,V} <- Tr]};
 sanitize(Html) when is_binary(Html) ->
@@ -275,7 +275,7 @@ sanitize1(Html) ->
 		Value2 = escape(Value1, <<>>),
 		<<Attr/binary, $=, $", Value2/binary, $">>.
 
-	%% @doc Escape <, >, ' and " in texts (& is already removed or escaped).
+	%% @doc Escape smaller-than, greater-than, single and double quotes in texts (&amp; is already removed or escaped).
     escape_html_text(<<>>, Acc) -> 
         Acc;
     escape_html_text(<<$<, T/binary>>, Acc) ->
@@ -289,7 +289,7 @@ sanitize1(Html) ->
     escape_html_text(<<C, T/binary>>, Acc) ->
         escape_html_text(T, <<Acc/binary, C>>).
 
-	%% @doc Escape <, > (for in comments)
+	%% @doc Escape smaller-than, greater-than (for in comments)
     escape_html_comment(<<>>, Acc) -> 
         Acc;
     escape_html_comment(<<$<, T/binary>>, Acc) ->
@@ -497,7 +497,7 @@ nl2br(L) ->
         nl2br_bin(Post, <<Acc/binary, C>>).
         
 
-%% @doc Given a HTML list, scrape all <link> elements and return their attributes. Attribute names are lowercased.
+%% @doc Given a HTML list, scrape all `<link>' elements and return their attributes. Attribute names are lowercased.
 %% @spec scrape_link_elements(string()) -> [LinkAttributes]
 scrape_link_elements(Html) ->
     case re:run(Html, "<link[^>]+>", [global, caseless, {capture,all,list}]) of
@@ -513,7 +513,7 @@ scrape_link_elements(Html) ->
     end.
 
 
-%% @doc Ensure that &-characters are properly escaped inside a html string.
+%% @doc Ensure that `&'-characters are properly escaped inside a html string.
 ensure_escaped_amp(B) ->
     ensure_escaped_amp(B, <<>>).
 

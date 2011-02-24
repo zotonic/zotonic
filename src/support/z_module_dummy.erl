@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-07-05
+%% Date: 2010-07-05
 %% @doc Dummy gen_server for modules without any gen_server code.
 %% We use this dummy gen_server so that we still can use a simple otp supervisor to oversee the 
 %% running modules.
@@ -61,7 +61,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.

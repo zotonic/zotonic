@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-25
+%% Date: 2009-04-25
 %%
 %% @doc Manage identities of users.  An identity can be an username/password, openid, oauth credentials etc.
 
@@ -148,7 +148,7 @@ set_username(Id, Username, Context) ->
 
 
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
-%% @spec set_username_pw(RscId, Username, Password) -> ok | {error, Reason}
+%% @spec set_username_pw(RscId, Username, Password, Context) -> ok | {error, Reason}
 set_username_pw(1, _, _, _) ->
     throw({error, admin_password_cannot_be_set});
 
@@ -224,7 +224,7 @@ check_username_pw(Username, Password, Context) ->
 
 
 %% @doc Fetch all credentials belonging to the user "id"
-%% @spec get_credentials(integer(), context()) -> list()
+%% @spec get_rsc(integer(), context()) -> list()
 get_rsc(Id, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1", [Id], Context).
 

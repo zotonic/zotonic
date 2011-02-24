@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-09
+%% Date: 2009-04-09
 %%
 %% @doc Model for medium database
 %% @todo Add ACL checks for the mime types.
@@ -60,7 +60,7 @@ m_find_value(_Key, #m{}, _Context) ->
     undefined.
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{}, _Context) ->
     [].
     
@@ -181,7 +181,7 @@ delete(Id, Context) ->
 
 %% @doc Replace or insert a medium record for the page.  This is useful for non-file related media.
 %% Resets all non mentioned attributes.
-%% @spec insert(Id, Props, Context) -> ok | {error, Reason}
+%% @spec replace(Id, Props, Context) -> ok | {error, Reason}
 replace(Id, Props, Context) ->
     Depicts = depicts(Id, Context),
     F = fun(Ctx) ->
@@ -223,7 +223,7 @@ insert_file(File, Props, PropsMedia, Context) ->
     end.
 
 %% @doc Make a new resource for the file based on a URL.
-%% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
+%% @spec insert_url(File, Context) -> {ok, Id} | {error, Reason}
 insert_url(Url, Context) ->
     insert_url(Url, [], Context).
 insert_url(Url, Props, Context) ->
@@ -272,7 +272,7 @@ insert_file_mime_ok(File, Props, PropsMedia, Context) ->
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is made in the archive.
 %% When the resource is in the media category, then the category is adapted depending on the mime type of the uploaded file.
-%% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
+%% @spec replace_file(File, RscId, Context) -> {ok, Id} | {error, Reason}
 replace_file(File, RscId, Context) ->
     replace_file(File, RscId, [], Context).
 

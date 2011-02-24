@@ -67,7 +67,7 @@ start_link(SiteProps) ->
     Name = z_utils:name_for_host(?MODULE, Host),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
-%% @spec start_session(Context) -> Context
+%% @spec continue_session(Context) -> Context
 %% @doc Continue an existing session
 continue_session(#context{session_manager=SessionManager} = Context) ->
     case get_session_id(Context) of
@@ -75,7 +75,7 @@ continue_session(#context{session_manager=SessionManager} = Context) ->
         _ -> gen_server:call(SessionManager, {ensure_session, false, Context})
     end.
 
-%% @spec start_session(Context) -> Context
+%% @spec ensure_session(Context) -> Context
 %% @doc Start a new session or continue an existing session
 ensure_session(#context{session_manager=SessionManager} = Context) ->
     case gen_server:call(SessionManager, {ensure_session, true, Context}) of
@@ -120,14 +120,14 @@ tick(SessionManager) when is_pid(SessionManager) ->
     Tick = z_utils:now(),
     foreach(fun(Pid) -> z_session:check_expire(Tick, Pid) end, SessionManager).
 
-%% @spec foreach(?) -> void()
-%% @doc Apply function to all sessions
+%% @spec foreach(function(), #context{}) -> void()
+%% @doc Apply the given function to all sessions
 foreach(Function, #context{session_manager=SessionManager}) when is_function(Function) ->
     foreach(Function, SessionManager);
 foreach(Function, SessionManager) when is_function(Function) ->
     gen_server:cast(SessionManager, {foreach, Function}).
 
-%% @spec broadcast(#broadcast, Context) -> ok
+%% @spec broadcast(#broadcast{}, Context) -> ok
 %% @doc Broadcast a notification message to all open sessions.
 broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, stay=Stay}, Context) ->
 	Message1 = case IsHtml of
@@ -339,7 +339,7 @@ session_find_pid(SessionId, State) ->
     end.
 
 
-%% @spec new_session(PersistId, Context) -> pid()
+%% @spec spawn_session(PersistId, Context) -> pid()
 %% @doc Spawn a new session, monitor the pid as we want to know about normal exits
 spawn_session(PersistId, Context) ->
     {ok, Pid} = z_session:start_link(PersistId, Context),
@@ -353,7 +353,7 @@ get_session_id(Context) ->
     ReqData = z_context:get_reqdata(Context),
     wrq:get_cookie_value(?SESSION_COOKIE, ReqData).
 
-%% @spec set_session_id(SessionId::string(), Context::#context) -> #context
+%% @spec set_session_id(SessionId::string(), Context::#context{}) -> #context{}
 %% @doc Save the session id in a cookie on the user agent
 set_session_id(SessionId, Context) ->
     RD = z_context:get_reqdata(Context),
@@ -367,7 +367,7 @@ set_session_id(SessionId, Context) ->
     z_context:set(set_session_id, true, z_context:set_reqdata(RD1, Context)).
 
 
-%% @spec clear_session_id(Context::#context) -> #context
+%% @spec clear_session_id(Context::#context{}) -> #context{}
 %% @doc Remove the session id from the user agent and clear the session pid in the context
 clear_session_id(Context) ->
     RD = z_context:get_reqdata(Context),

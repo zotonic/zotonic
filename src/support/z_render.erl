@@ -163,7 +163,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
     end.
 
 
-%% @spec validator(TriggerID::string(), TargetID::string(), Validator::#validator, Context::#context) -> #context
+%% @spec validator(TriggerID::string(), TargetID::string(), Validator::#validator{}, Context::#context{}) -> #context{}
 %% @doc Add an input validator to the list of known validators, used when rendering custom validators
 validator(TriggerId, TargetId, Validator, Context) ->
     V = {TriggerId, TargetId, Validator},

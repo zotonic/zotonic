@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-20
+%% Date: 2009-11-20
 %%
 %% @doc Model for accessing the session variables from a template.
 
@@ -38,7 +38,7 @@ m_find_value(Key, #m{value=undefined}, Context) ->
     z_context:get_session(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{value=undefined}, _Context) ->
 	[].
 

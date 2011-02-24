@@ -27,7 +27,7 @@
 
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
-%% @spec create_empty(Uri, Context) -> {ok, Id} | {error, _}
+%% @spec create_empty(Uri, Context) -> {ok, Id} | {error, Reason}
 create_empty(Uri, Context) ->    
     create_empty(Uri, [], Context).
 
@@ -42,7 +42,7 @@ create_empty(Uri, Props, Context) ->
 
 %% @doc Import given resource. resource must already exist and be
 %% non-authoritative. URIs must match.
-%% @spec import_rsc(rsc_export(), Context) -> {ok, Id} | {error, ...}
+%% @spec import(rsc_export(), Context) -> {ok, Id} | {error, Reason}
 import(RscImport, Context) ->
     {uri, Uri} = proplists:lookup(uri, RscImport),
     Id = case m_rsc:uri_lookup(Uri, Context) of

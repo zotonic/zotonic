@@ -90,7 +90,6 @@ init(SiteProps) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -169,7 +168,7 @@ scan_directory(Dir) ->
     filelib:fold_files(Dir, "", true, fun(F,Acc) -> append_file(F, Acc) end, []).
 
 
-%% @Check if this is a file we are interested in, should not be part of a .svn or other directory
+%% @todo Check if this is a file we are interested in, should not be part of a .svn or other directory
 append_file([$.|_Rest], Acc) ->
     Acc;
 append_file(File, Acc) ->

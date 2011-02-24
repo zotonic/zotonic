@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
 %% @copyright 2010 Maximonster Interactive Things
-%% @date 2010-11-25
+%% Date: 2010-11-25
 %% @doc Email server.  Queues, renders and sends e-mails.
 
 %% Copyright 2010 Maximonster Interactive Things
@@ -44,10 +44,12 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link() ->
     start_link([]).
+%% @spec start_link(Args::list()) -> {ok,Pid} | ignore | {error,Error}
+%% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
@@ -75,7 +77,6 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Send an e-mail to an e-mail address.
 handle_call({send, #email{} = Email, Context}, _From, State) ->
     State1 = update_config(State),
@@ -134,7 +135,7 @@ handle_info(poll, State) ->
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(R    eason, State) -> void()
+%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.

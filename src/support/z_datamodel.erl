@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-11-08
+%% Date: 2009-11-08
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
 

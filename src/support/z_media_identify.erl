@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-03-02
+%% Date: 2009-03-02
 %%
 %% @doc Identify files, fetch metadata about an image
 %% @todo Recognize more files based on magic number, think of office files etc.
@@ -53,7 +53,7 @@ identify(File, OriginalFilename, Context) ->
     
 
 
-%% @spec identify(File, Context) -> {ok, PropList} | {error, Reason}
+%% @spec identify_file(File::filename(), Context) -> {ok, PropList} | {error, Reason}
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
 %% has a specific identification methods.
 identify_file(File, Context) ->
@@ -158,7 +158,7 @@ identify_file_os(unix, File, OriginalFilename) ->
     end.
 
 
-%% @spec identify(ImageFile) -> {ok, PropList} | {error, Reason}
+%% @spec identify_file_imagemagick(ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
 identify_file_imagemagick(ImageFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),

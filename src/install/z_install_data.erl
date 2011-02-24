@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-07
+%% Date: 2009-04-07
 %%
 %% @doc Initialize the database with start data.
 
@@ -30,7 +30,7 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Insert boot data into the database.
-%% @spec install(Connection) -> ok
+%% @spec install(Host::atom(), Connection) -> ok
 install(Host, C) ->
     ?DEBUG({Host, "Install start."}),
     ok = install_config(C),
@@ -204,8 +204,8 @@ install_identity(C) ->
     
 
 %% @doc Install some initial predicates, this list should be extended with common and useful predicates
+%% See http://dublincore.org/documents/dcmi-terms/
 %% @todo Extend and check this list.  Add allowed from/to categories.
-%% @seealso http://dublincore.org/documents/dcmi-terms/
 install_predicate(C) ->
     ?DEBUG("Inserting predicates"),
     Preds = [
@@ -257,7 +257,7 @@ install_predicate(C) ->
 
 
 %% @doc Enumerate all categories so that their left, right, level en nr are set correctly
-%% @type enumerate_categories(Connection) -> ok
+%% @spec enumerate_categories(Connection) -> ok
 enumerate_categories(C) ->
     ?DEBUG("Sorting the category hierarchy"),
     {ok, _, CatTuples} = pgsql:equery(C, "select id, parent_id, seq from category order by seq, id"),

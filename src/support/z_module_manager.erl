@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
-%% @date 2009-06-03
+%% Date: 2009-06-03
 
 %% @doc Module supervisor. Uses a z_supervisor.  Starts/restarts module processes.
 %% @todo Take module dependencies into account when starting/restarting modules.
@@ -65,14 +65,14 @@ start_link(SiteProps) ->
     gen_server:start_link({local, name(Context)}, ?MODULE, [{context, Context} | SiteProps], []).
 
 
-%% @spec upgrade(context()) -> ok
+%% @spec upgrade(#context{}) -> ok
 %% @doc Reload the list of all modules, add processes if necessary.
 upgrade(Context) ->
     gen_server:cast(name(Context), upgrade).
 
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
-%% @spec deactivate(Module, context()) -> ok
+%% @spec deactivate(Module, #context{}) -> ok
 deactivate(Module, Context) ->
     case z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context) of
         1 -> upgrade(Context);
@@ -82,7 +82,7 @@ deactivate(Module, Context) ->
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module z_supervisor.
 %% The module manager can be checked later to see if the module started or not.
-%% @spec deactivate(Module, context()) -> void
+%% @spec activate(Module, #context{}) -> void()
 activate(Module, Context) ->
     Scanned = scan(Context),
     {Module, _Dirname} = proplists:lookup(Module, Scanned),
@@ -97,7 +97,7 @@ activate(Module, Context) ->
 
 
 %% @doc Return the list of active modules.
-%% @spec active(context()) -> [ atom() ]
+%% @spec active(#context{}) -> [ atom() ]
 active(Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -113,7 +113,7 @@ active(Context) ->
 
 
 %% @doc Return whether a specific module is active.
-%% @spec active(context()) -> [ atom() ]
+%% @spec active(Module::atom(), #context{}) -> [ atom() ]
 active(Module, Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -127,7 +127,7 @@ active(Module, Context) ->
 
 
 %% @doc Return the list of all active modules and their directories
-%% @spec active_dir(context()) -> [ {atom, Dir}, ... ]
+%% @spec active_dir(#context{}) -> [ {atom, Dir} ]
 active_dir(Context) ->
     Active = active(Context),
     All    = scan(Context),
@@ -145,7 +145,7 @@ get_modules_status(Context) ->
 
 
 %% @doc Return the list of all modules in the database.
-%% @spec active(context()) -> [ atom() ]
+%% @spec all(#context{}) -> [ atom() ]
 all(Context) ->
    Modules = z_db:q("select name from module order by name", Context),
    [ z_convert:to_atom(M) || {M} <- Modules ].
@@ -153,7 +153,7 @@ all(Context) ->
 
 %% @doc Scan for a list of modules present in the site's module directories. A module is always a directory,
 %% the name of the directory is the same as the name of the module.
-%% @spec scan(context()) -> [ {atom(), dirname()} ]
+%% @spec scan(#context{}) -> [ {atom(), dirname()} ]
 scan(#context{host=Host}) ->
     Sites  = filename:join([z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"]),
     Priv  = filename:join([z_utils:lib_dir(priv), "modules", "mod_*"]),
@@ -402,7 +402,7 @@ dummy_module_init(Module, Context) ->
 
 
 %% @doc Check whether given module is valid for the given host
-%% @spec valid(atom(), context()) -> bool()
+%% @spec valid(atom(), #context{}) -> bool()
 valid(M, Context) ->
     lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
@@ -418,7 +418,7 @@ remove_observers(Module, Pid, Context) ->
 
 
 %% @doc Get the list of events the module observes.
-%% The event functions should be called: observe_<event>
+%% The event functions should be called: observe_(event)
 %% observe_xxx/2 functions observer map/notify and observe_xxx/3 functions observe folds.
 %% @spec observes(atom(), pid()) -> [{atom(), Handler}]
 observes(Module, Pid) ->

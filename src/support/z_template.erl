@@ -196,7 +196,7 @@ init(SiteProps) ->
     {ok, #state{reset_counter=z_utils:now_msec(), host=proplists:get_value(host, SiteProps)}}.
 
 
-%% @spec check_modified(File) -> {ok, Module} | {error, Reason}
+%% @spec handle_call({check_modified, File}, From, State) -> {ok, Module} | {error, Reason}
 %% @doc Compile the template if it has been modified, return the template module for rendering.
 handle_call({check_modified, File}, _From, State) ->
     ModuleName = filename_to_modulename(File, State#state.host),

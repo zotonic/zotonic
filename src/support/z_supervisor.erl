@@ -135,10 +135,6 @@ init(InitialChildren) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Add a child in the stopped state.
 handle_call({add_child, ChildSpec}, _From, State) ->
     case exists(ChildSpec#child_spec.name, State) of
@@ -417,7 +413,7 @@ start_child_mfa({M,F,A}) ->
 
 
 %% @doc Check if a child is not crashing or retrying too often.
-%% @spec may_restart(#child_state{}, IsRetrying) -> first_restart | restart | first_retry | retry | fail
+%% @spec may_restart(#child_state{}) -> first_restart | restart | first_retry | retry | fail
 may_restart(#child_state{state=running_from_fail, fail_time=FailTime, child=Child} = CS) ->
     #child_spec{eternal_retry=Period} = Child,
     case z_utils:now() - FailTime > Period of

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-07-22
+%% Date: 2010-07-22
 %%
 %% @doc Model for the accessing the request fields. Exposes Webmachine's wrq.erl
 
@@ -40,7 +40,7 @@ m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, z_context:get_reqdata(Context)).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(#m{value=undefined}, Context) ->
     values(z_context:get_reqdata(Context)).
 

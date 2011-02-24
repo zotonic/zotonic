@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-04-27
+%% Date: 2010-04-27
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 
 -module(z_acl).
@@ -132,7 +132,7 @@ can_see(Context) ->
 
 
 %% @doc Translate "visible_for" parameter to the appropriate visibility level.
-%% @spec visible_for(proplist()) -> 0 | 1 | 2 | 3
+%% @spec args_to_visible_for(proplist()) -> 0 | 1 | 2 | 3
 args_to_visible_for(Args) ->
     case proplists:get_value(visible_for, Args) of
         undefined   -> ?ACL_VIS_USER;
@@ -160,7 +160,7 @@ user(#context{user_id=UserId}) ->
 
 
 %% @doc Call a function with admin privileges.
-%% @spec sudo(FuncDef, #context) -> FuncResult
+%% @spec sudo(FuncDef, #context{}) -> FuncResult
 sudo({M,F}, Context) ->
     erlang:apply(M, F, [set_admin(Context)]);
 sudo({M,F,A}, Context) ->
@@ -184,7 +184,7 @@ is_admin(_) -> false.
 
 
 %% @doc Call a function as the anonymous user.
-%% @spec anondo(FuncDef, #context) -> FuncResult
+%% @spec anondo(FuncDef, #context{}) -> FuncResult
 anondo({M,F}, Context) ->
     erlang:apply(M, F, [set_anonymous(Context)]);
 anondo({M,F,A}, Context) ->
@@ -201,7 +201,7 @@ anondo(Context) ->
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
-%% @spec logon(int(), #context) -> #context
+%% @spec logon(integer(), #context{}) -> #context{}
 logon(Id, Context) ->
 	case z_notifier:first({acl_logon, Id}, Context) of
 		undefined -> Context#context{acl=undefined, user_id=Id};
@@ -210,7 +210,7 @@ logon(Id, Context) ->
 
 
 %% @doc Log off, reset the acl field of the context
-%% @spec logoff(#context) -> #context
+%% @spec logoff(#context{}) -> #context{}
 logoff(Context) ->
 	case z_notifier:first({acl_logoff}, Context) of
 		undefined -> Context#context{user_id=undefined, acl=undefined};

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-02
+%% Date: 2009-11-02
 %%
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
 
@@ -119,7 +119,7 @@ bounced(MsgId) ->
     gen_server:cast(?EMAIL_SRV, {bounced, MsgId}).
 
 
-%% @doc Combine a name and an email address to the format "jan janssen <jan@example.com>"
+%% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
 combine_name_email(Name, Email) ->
     Name1 = z_convert:to_list(Name),
     Email1 = z_convert:to_list(Email),
@@ -141,7 +141,7 @@ combine_name_email(Name, Email) ->
     filter_name([H|T], Acc) ->
         filter_name(T, [H|Acc]).
 
-%% @doc Split the name and email from the format "jan janssen <jan@example.com>"
+%% @doc Split the name and email from the format `jan janssen <jan@example.com>'
 %% @todo Allow multiple email addresses to be found
 split_name_email(Email) ->
     Email1 = string:strip(rfc2047:decode(Email)),

@@ -1,9 +1,9 @@
 %% @author Rusty Klophaus
-%% @copyright Copyright (c) 2008-2009 Rusty Klophaus
-%% @copyright Copyright (c) 2009 Marc Worrell
+%% @copyright Copyright (c) 2008-2009 Rusty Klophaus, Copyright (c) 2009 Marc Worrell
 %%
-%% @doc Conversion functions for all kinds of data types. 
-%% @doc Changes to Rusty's version: added date conversion, undefined handling and more to_bool cases.
+%% @doc Conversion functions for all kinds of data types. Changes to
+%% Rusty's version: added date conversion, undefined handling and more
+%% to_bool cases.
 
 %% Copyright 2009 Marc Worrell
 %%

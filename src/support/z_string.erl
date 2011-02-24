@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
-%% @date 2009-04-26
+%% Date: 2009-04-26
 %% @doc String related functions
 %% @todo Make this UTF-8 safe
 
@@ -588,7 +588,7 @@ to_name([_C|T], Acc, I) ->
 
 
 %% @doc Replace a string inside another string
-%% @copyright 2008 Rusty Klophaus  (Nitrogen, MIT License)
+%% Copyright 2008 Rusty Klophaus  (Nitrogen, MIT License)
 replace([], _, _) -> [];
 replace(String, S1, S2) when is_list(String), is_list(S1), is_list(S2) ->
 	Length = length(S1),
@@ -600,7 +600,7 @@ replace(String, S1, S2) when is_list(String), is_list(S1), is_list(S2) ->
 	end.
 
 
-%% @doc Truncate a string.  Append the '…' character at the place of break off.
+%% @doc Truncate a string.  Append the '...' character at the place of break off.
 %% @spec truncate(String, int()) -> String
 truncate(L, N) ->
 	truncate(L, N, "…").
@@ -779,7 +779,7 @@ ends_with(End, String) ->
 
 
 %% @doc Return true iff What is found in the string
-%% @spec ends_with(String, String) -> bool()
+%% @spec contains(String, String) -> bool()
 contains(What, B) when is_binary(What), is_binary(B) ->
     contains(What, size(What), B, 0);
 contains(What, String) ->

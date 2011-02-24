@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-08
+%% Date: 2009-04-08
 %%
 %% @doc Some easy shortcut functions.
 

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-09
+%% Date: 2009-04-09
 %%
 %% @doc Model for predicates
 
@@ -124,7 +124,7 @@ name_to_id_check(Name, Context) ->
 
 
 %% @doc Return the definition of the predicate
-%% @spec predicate(Pred, Context) -> PredicatePropList | undefined
+%% @spec get(PredId, Context) -> PredicatePropList | undefined
 get(PredId, Context) when is_integer(PredId) ->
     case id_to_name(PredId, Context) of
         {error, _} -> undefined;
@@ -201,7 +201,7 @@ flush(Context) ->
 
 
 %% @doc Update a predicate, save the reversed flag, reset the list of valid subjects and objects.
-%% @spec update(Id, Subjects, Objects, Context) -> void()
+%% @spec update_noflush(Id, Subjects, Objects, Context) -> void()
 update_noflush(Id, Subjects, Objects, Context) ->
     SubjectIds = [ z_convert:to_integer(N) || N <- Subjects, N /= [], N /= <<>> ],
     ObjectIds = [ z_convert:to_integer(N) || N <- Objects, N /= [], N /= <<>> ],

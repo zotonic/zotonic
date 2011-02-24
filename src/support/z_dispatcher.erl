@@ -63,7 +63,7 @@ url_for(Name, #context{dispatcher=Dispatcher} = Context) ->
 
 
 %% @spec url_for(atom(), Args, Context) -> iolist()
-%%        type Args = PropList
+%%    Args = proplist()
 %% @doc Construct an uri from a named dispatch and the parameters. Use html escape.
 url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
     Args1 = append_extra_args(Args, Context),
@@ -71,7 +71,7 @@ url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
 
 
 %% @spec url_for(atom(), Args, atom(), Context) -> iolist()
-%%        type Args = PropList
+%%        Args = proplist()
 %% @doc Construct an uri from a named dispatch and the parameters
 url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
     Args1 = append_extra_args(Args, Context),
@@ -83,7 +83,7 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
 hostname(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'hostname').
 
-%% @spec hostname(Context) -> iolist()
+%% @spec hostname_port(Context) -> iolist()
 %% @doc Fetch the preferred hostname, including port, for this site
 hostname_port(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'hostname_port').
@@ -157,7 +157,6 @@ drop_port(Hostname) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Create the url for the dispatch rule with name and arguments Args.
 handle_call({'url_for', Name, Args, Defaults, Escape}, _From, State) ->
     Uri = make_url_for(Name, Args, Escape, State#state.lookup, Defaults),
@@ -237,22 +236,8 @@ collect_dispatch_lists(Context) ->
     lists:flatten(Dispatch).
 
 
-%% @doc Fetch a dispatch list from a module (if the module exports dispatch/0)
-%get_module_dispatch(Mod) ->
-%    try
-%        Exports = Mod:module_info(exports),
-%        case proplists:is_defined(dispatch, Exports) of
-%            true -> Mod:dispatch();
-%            false -> []
-%        end
-%    catch 
-%        M:E ->
-%            ?ERROR("Module dispatch error: ~p  ~p", [Mod, {M,E}]),
-%            []
-%    end.
-
-
 %% @doc Read a dispatch file, the file should contain a valid Erlang dispatch datastructure.
+%% @spec get_file_dispatch(filename()) -> DispatchList
 get_file_dispatch(File) ->
     try
         case filelib:is_regular(File) of
@@ -381,7 +366,7 @@ select_best_pattern1({AQS, _APat}=A, {BQS, _BPat}=B) ->
     end.
 
 
-%% @spec urlencode([{Key, Value}]) -> string()
+%% @spec urlencode([{Key, Value}], Join) -> string()
 %% @doc URL encode the property list.
 urlencode(Props, Join) ->
     RevPairs = lists:foldl(fun ({K, V}, Acc) ->
@@ -397,12 +382,12 @@ revjoin([S | Rest], Separator, Acc) ->
     revjoin(Rest, Separator, [S, Separator | Acc]).
 
 
-%% @spec Append extra arguments to the url, depending if 'qargs' or 'varargs' is set.
+%% @doc Append extra arguments to the url, depending if 'qargs' or 'varargs' is set.
 append_extra_args(Args, Context) ->
     append_qargs(append_varargs(Args, Context), Context).
 
 
-%% @spec Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
+%% @doc Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
 append_qargs(Args, Context) ->
     case proplists:get_value(qargs, Args) of
         undefined ->
@@ -425,11 +410,11 @@ append_qargs(Args, Context) ->
                         Qs)
     end.
 
-%% @spec List the default arguments for any dispatch rule, these are extracted from the request context.
+%% @doc List the default arguments for any dispatch rule, these are extracted from the request context.
 default_args(Context) ->
     [{language, z_context:language(Context)}].
 
-%% @spec Append all varargs argument, names are given in a list.
+%% @doc Append all varargs argument, names are given in a list.
 append_varargs(Args, Context) ->
     case proplists:get_value(varargs, Args) of
         undefined ->

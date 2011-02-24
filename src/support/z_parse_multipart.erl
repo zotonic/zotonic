@@ -2,7 +2,7 @@
 %% @copyright 2007 Mochi Media, Inc.
 %%
 %% @author Marc Worrell <marc@worrell.nl>
-%% @date 2009-05-13
+%% Date: 2009-05-13
 %%
 %% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call 
 %% a progress function to report back the progress on receiving the data.
@@ -84,7 +84,7 @@ progress(_, _, _, _) ->
 	
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
-%% @spec callback(fun(), form()) -> fun() | form()
+%% @spec callback(Next, function(), form()) -> function() | form()
 callback(Next, Form, UploadCheckFun) ->
     case Next of
         {headers, Headers} ->

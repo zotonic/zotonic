@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-06
+%% Date: 2009-06-06
 %%
 %% @doc Implements the module extension mechanisms for scomps, templates, actions etc.  Scans all active modules
 %% for scomps (etc) and maintains lookup lists for when the system tries to find a scomp (etc).
@@ -44,7 +44,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
@@ -59,7 +59,7 @@ reindex(Context) ->
 
 %% @doc Find all .po files in all modules and the active site.
 %% This is an active scan, not designed to be fast.
-%% @spec translations(#context{}) -> [ {module, {ModuleDirectory, [{Language,File}, ...]}}, ... ]
+%% @spec translations(#context{}) -> [ {module, {ModuleDirectory, [{Language,File}]}} ]
 translations(Context) ->
     translations1(Context).
 
@@ -101,7 +101,6 @@ init(SiteProps) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Find a template definition
 handle_call({find, scomp, Name}, _From, State) ->
     {reply, lookup(Name, State#state.scomps), State};

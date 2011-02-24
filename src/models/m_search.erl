@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-15
+%% Date: 2009-04-15
 %% @doc Search model, used as an interface to the search functions of modules etc.
 
 %% Copyright 2009 Marc Worrell

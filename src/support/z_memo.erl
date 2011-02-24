@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-05
+%% Date: 2009-11-05
 %%
 %% @doc Simple memo functions.  Stores much used values in the process dictionary. Especially useful for
 %% ACL lookups.

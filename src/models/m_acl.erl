@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-27
+%% Date: 2009-04-27
 %%
 %% @doc Template access for access control functions and state
 
@@ -54,7 +54,7 @@ m_find_value(Object, #m{value={is_allowed, Action}}, Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> List
 m_to_list(_, _Context) ->
     [].
 

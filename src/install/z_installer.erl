@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-17
+%% Date: 2009-04-17
 %%
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
@@ -30,7 +30,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Install zotonic on the databases in the PoolOpts, skips when already installed.
 start_link(SiteProps) when is_list(SiteProps) ->
     install_check(SiteProps),

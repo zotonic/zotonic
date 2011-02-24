@@ -1122,8 +1122,8 @@ cycle_compat_ast(Names, Context, TreeWalker) ->
         [erl_syntax:tuple(NamesTuple), erl_syntax:variable("Counters"), z_context_ast(Context)]), #ast_info{}}, TreeWalker}.
 
 
-%% @author Marc Worrell
-%% @doc Output the trans record with the translation call to z_trans
+%% @doc Output the trans record with the translation call to z_trans.
+%% author: Marc Worrell
 trans_ast(TransLiteral, Context, TreeWalker) ->
 	% Remove the first and the last character, these were separating the string from the {_ and _} tokens
 	{{trans_ast1(z_string:trim(TransLiteral), Context), #ast_info{}}, TreeWalker}.
@@ -1289,9 +1289,9 @@ call_ast(Module, ArgAst, AstInfo, Context, TreeWalker) ->
     {{CallAst, AstInfo}, TreeWalker}.
 
 
-%% @author Marc Worrell
 %% @doc Generate html to show the media tag.  This is different in that the image tag can only
 %% display images using the <img /> tag.  This can also generate complete media viewers.
+%% Author: Marc Worrell
 %% @todo Optimization for the situation where all parameters are constants
 media_ast(FilenameValue, Args, Context, TreeWalker) ->
     FilenameAst = resolve_value_ast(FilenameValue, Context, TreeWalker),
@@ -1322,8 +1322,8 @@ media_ast(FilenameValue, Args, Context, TreeWalker) ->
     {{CallAst, #ast_info{}}, TreeWalker1}.
 
 
-%% @author Marc Worrell
 %% @doc Generate an image tag based on the image name and the arguments
+%% Author: Marc Worrell
 %% @todo Optimization for the situation where all parameters are constants
 image_ast(FilenameValue, Args, Context, TreeWalker) ->
     FilenameAst = resolve_value_ast(FilenameValue, Context, TreeWalker),
@@ -1354,8 +1354,8 @@ image_ast(FilenameValue, Args, Context, TreeWalker) ->
     {{CallAst, #ast_info{}}, TreeWalker1}.
 
 
-%% @author Marc Worrell
 %% @doc Generate an image url based on the image name and the arguments
+%% Author: Marc Worrell
 %% @todo Optimization for the situation where all parameters are constants
 image_url_ast(FilenameValue, Args, Context, TreeWalker) ->
     FilenameAst = resolve_value_ast(FilenameValue, Context, TreeWalker),

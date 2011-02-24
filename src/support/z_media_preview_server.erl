@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-22
+%% Date: 2009-07-22
 %% @doc Server to execute command line resizes. Prevents competing resize processes when an image on a "hot" page is replaced.
 %% Probably the smallest server built in a long while.
 
@@ -68,7 +68,6 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Execute an OS command, return the result.  Checks if the result file is already present, if so
 %% then the command is not executed.
 handle_call({exec, OSCommand, ResultFile}, _From, State) ->

@@ -247,7 +247,7 @@ handle_cast(Message, State) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
+%% @doc Handling call messages
 
 handle_call({spawn_link, Module, Func, Args}, _From, State) ->
     Pid    = spawn_link(Module, Func, Args),

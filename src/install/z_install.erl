@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-07
+%% Date: 2009-04-07
 %%
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
@@ -33,9 +33,8 @@
 
 -include_lib("zotonic.hrl").
 
-%% @doc Install the database on the database connection supplied
-%% @spec install(Host) -> ok
-
+%% @doc Perform pre-installation commands.
+%% @spec pre_install(Host, SiteProps) -> ok
 pre_install(testsandbox, SiteProps) ->
     %% The test sandbox needs cleanup first:
     {ok, C} = pgsql_pool:get_connection(testsandbox),
@@ -55,6 +54,8 @@ pre_install(_, _) ->
     ok.
 
 
+%% @doc Install the database for the given host.
+%% @spec install(Host) -> ok
 install(Host) ->
     {ok, C} = pgsql_pool:get_connection(Host),
     ok = pgsql:with_transaction(C, fun (C2) ->

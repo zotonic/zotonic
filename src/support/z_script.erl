@@ -68,7 +68,7 @@ get_page_startup_script(Context) ->
     end.
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
-%% @doc clean(Context1) -> Context2
+%% @spec clean(Context1) -> Context2
 clean(Context) ->
     Context#context{scripts=[], content_scripts=[], updates=[], actions=[], validators=[]}.
 

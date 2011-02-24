@@ -1,3 +1,6 @@
+%% @author Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @hidden
+
 -module(z_media_preview_tests).
 
 -include_lib("eunit/include/eunit.hrl").

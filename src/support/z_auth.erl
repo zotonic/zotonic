@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-24
+%% Date: 2009-04-24
 %%
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
 
@@ -38,7 +38,7 @@
 
 
 %% @doc Check if the visitor has been authenticated. Assumes a completely initalized context.
-%% @spec is_auth(#context) -> bool()
+%% @spec is_auth(#context{}) -> bool()
 is_auth(#context{user_id=undefined}) ->
     false;
 is_auth(_) ->
@@ -90,7 +90,7 @@ logoff(Context) ->
 %% Check if the session contains an authenticated user id. 
 %% When found then the user_id of the context is set.
 %% Also checks any automatic logon methods like "remember me" cookies.
-%% @spec logon_from_session(#context) -> #context
+%% @spec logon_from_session(#context{}) -> #context{}
 logon_from_session(Context) ->
     case z_context:get_session(auth_user_id, Context) of
         none ->

@@ -1,3 +1,6 @@
+%% @author Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @hidden
+
 -module(z_convert_tests).
 
 -include_lib("zotonic.hrl").
