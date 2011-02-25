@@ -22,7 +22,7 @@
     {dbschema, "%%DBSCHEMA%%"},
 
     % Password for the 'admin' user.
-    {admin_password, "admin"},
+    {admin_password, "%%ADMINPASSWORD%%"},
 
     % What skeleton site this site is based on; for installing the initial data.
     {skeleton, %%SKEL%%},
