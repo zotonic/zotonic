@@ -84,16 +84,20 @@ memo(F, Key, MaxAge, Dep, #context{} = Context) ->
         {ok, Value} ->
             Value;
         undefined ->
-            Value = case F of
-                {M,F,A} -> erlang:apply(M,F,A);
-                {M,F} -> M:F();
-                F when is_function(F) -> F()
-            end,
-            case MaxAge of
-                0 -> memo_send_replies(Key, Value, Context);
-                _ -> set(Key, Value, MaxAge, Dep, Context)
-            end,
-            Value
+            try
+                Value = case F of
+                    {M,F,A} -> erlang:apply(M,F,A);
+                    {M,F} -> M:F();
+                    F when is_function(F) -> F()
+                end,
+                case MaxAge of
+                    0 -> memo_send_replies(Key, Value, Context);
+                    _ -> set(Key, Value, MaxAge, Dep, Context)
+                end,
+                Value
+            catch
+                _: R ->  memo_send_errors(Key, R, Context)
+            end
     end.
 
     %% @doc Calculate the key used for memo functions.
@@ -108,6 +112,12 @@ memo(F, Key, MaxAge, Dep, #context{} = Context) ->
         Pids = get_waiting_pids(Key, Context),
         [ catch gen_server:reply(Pid, {ok, Value}) || Pid <- Pids ],
         ok.
+
+    %% @doc Send an error to the processes waiting for the result.
+    memo_send_errors(Key, Reason, Context) ->
+        Pids = get_waiting_pids(Key, Context),
+        [ catch gen_server:reply(Pid, {error, Reason}) || Pid <- Pids ],
+        error.
 
 
 %% @spec set(Key, Data, MaxAge, Context) -> void()
