@@ -27,18 +27,6 @@
     % What skeleton site this site is based on; for installing the initial data.
     {skeleton, %%SKEL%%},
  
-    % Now you'll need to construct two keys. They should be short strings of random characters. Like good passwords, they should be hard to guess.
-
-    % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
-    %  This key will help prevent denial of service attacks.
-    % A new key will also forces regenerating images, which takes cpu time and will fill your hard disk.
-    {sign_key_simple, <<"--change-me--">>},
-    
-    % Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
-    % When not defined, then zotonic will generate a new key on every restart.
-    % When a new key is generated then all postbacks from old html pages will fail.
-    {sign_key, <<"--change-me--">>},
-
     %% Specific options
 
     %% Title of your site

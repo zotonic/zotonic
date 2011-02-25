@@ -147,7 +147,8 @@ set_value(Module, Key, Value, Context) ->
         0 -> z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context);
         1 -> ok
     end,
-    z_depcache:flush(config, Context).
+    z_depcache:flush(config, Context),
+    ok.
 
 
 %% @doc Set a "complex" config value.
@@ -157,13 +158,16 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
         undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
         Id -> z_db:update(config, Id, [{Prop,PropValue}], Context)
     end,
-    z_depcache:flush(config, Context).
+    z_depcache:flush(config, Context),
+    ok.
 
 
 %% @doc Delete the specified module/key combination
+%% @spec delete(Module::atom(), Key::atom(), #context{}) -> ok
 delete(Module, Key, Context) ->
     z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
-    z_depcache:flush(config, Context).
+    z_depcache:flush(config, Context),
+    ok.
 
 
 %% @doc Lookup the unique id in the config table from the module/key combination.

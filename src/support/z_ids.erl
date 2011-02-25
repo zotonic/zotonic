@@ -47,7 +47,8 @@
     fix_seed/0
 ]).
 
--record(state, {sign_key, sign_key_simple}).
+-record(state, {}).
+-include("zotonic.hrl").
 
 start_tests() -> gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
 start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
@@ -78,9 +79,11 @@ optid(Id) -> Id.
 %% @spec sign_key(Context) -> binary()
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
-    case m_site:get(sign_key, Context) of
-        SiteKey when not is_binary(SiteKey) orelse SiteKey =:= <<"--change-me--">> -> 
-            gen_server:call(?MODULE, sign_key);
+    case m_config:get_value(site, sign_key, Context) of
+        undefined ->
+            Key = list_to_binary(generate_id(50)),
+            m_config:set_value(site, sign_key, Key, Context),
+            Key;
         SignKey -> 
             SignKey
     end.
@@ -89,11 +92,13 @@ sign_key(Context) ->
 %% @spec sign_key_simple(Context) -> binary()
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) -> 
-    case m_site:get(sign_key_simple, Context) of
-        SiteKey when not is_binary(SiteKey) -> 
-            gen_server:call(?MODULE, sign_key_simple);
-        SignKeySimple -> 
-            SignKeySimple
+    case m_config:get_value(site, sign_key_simple, Context) of
+        undefined ->
+            Key = list_to_binary(generate_id(10)),
+            m_config:set_value(site, sign_key_simple, Key, Context),
+            Key;
+        SignKey ->
+            SignKey
     end.
 
 
@@ -137,27 +142,6 @@ handle_call({identifier, Len}, _From, State) ->
 handle_call({id, Len}, _From, State) ->
     Id = generate_id(Len),
     {reply, Id, State};
-
-handle_call(sign_key, _From, State) ->
-    case State#state.sign_key of
-        undefined ->
-            Key = list_to_binary(generate_id(50)),
-            {reply, Key, State#state{sign_key=Key}};
-        Key -> 
-            {reply, Key, State}
-    end;
-
-handle_call(sign_key_simple, _From, State) ->
-    case State#state.sign_key_simple of
-        undefined ->
-            Key = list_to_binary(generate_id(10)),
-            {reply, Key, State#state{sign_key_simple=Key}};
-        Key -> 
-            {reply, Key, State}
-    end;
-
-handle_call({set_sign_key_simple, Key}, _From, State) ->
-    {reply, State#state.sign_key_simple, State#state{sign_key_simple = Key}};
 
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.

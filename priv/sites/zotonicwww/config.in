@@ -22,14 +22,5 @@
     {dbdatabase, "zotonic"},
     
     % Password for the 'admin' user.
-    {admin_password, "admin"},
-
-    % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
-    % A new key will also forces regenerating images, which takes cpu time and will fill your hard disk.
-    {sign_key_simple, <<"--change-me--">>},
-    
-    % Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
-    % When not defined, then zotonic will generate a new key on every restart.
-    % When a new key is generated then all postbacks from old html pages will fail.
-    {sign_key, <<"--change-me--">>}
+    {admin_password, "admin"}
 ].

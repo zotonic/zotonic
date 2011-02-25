@@ -39,7 +39,10 @@ start_link(SiteProps) ->
 
     % Put software version in database
     % @todo Check if current version != database version and run upgrader (and downgrader?)
-    m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context),
+    case z_context:site(Context) of
+        zotonic_status -> ok;
+        _ -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context)
+    end,
 
     % Let the module handle their startup code, the whole site is now up and running.
     z_notifier:notify(site_startup, Context),
