@@ -23,6 +23,8 @@
 
 -export([start_link/1]).
 
+-include_lib("zotonic.hrl").
+
 %% @spec start_link(SiteProps::proplist()) -> ignore
 %% @doc Perform all site startup routines.
 start_link(SiteProps) ->
@@ -34,7 +36,11 @@ start_link(SiteProps) ->
 
     % Load all translations
     spawn(fun() -> z_trans_server:load_translations(Context) end),
-    
+
+    % Put software version in database
+    % @todo Check if current version != database version and run upgrader (and downgrader?)
+    m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context),
+
     % Let the module handle their startup code, the whole site is now up and running.
     z_notifier:notify(site_startup, Context),
     ignore.
