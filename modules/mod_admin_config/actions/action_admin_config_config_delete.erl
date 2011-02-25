@@ -42,7 +42,9 @@ render_action(TriggerId, TargetId, Args, Context) ->
 event({postback, {config_delete, Module, Key, OnSuccess}, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
+            ?DEBUG(11),
             ok = m_config:delete(Module, Key, Context),
+            ?DEBUG(22),
             z_render:wire(OnSuccess, Context);
         false ->
             z_render:growl_error("Only administrators can delete configurations.", Context)

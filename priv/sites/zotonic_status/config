@@ -16,12 +16,7 @@
 	% This site doesn't use a database connection
 	{dbdatabase, none},
 
-    % Key used for signing image urls with image manipulations (crop, rotate, resize, etc.)
     {sign_key_simple, <<>>},
-    
-    % Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
-    % When not defined, then zotonic will generate a new key on every restart.
-    % When a new key is generated then all postbacks from old html pages will fail.
     {sign_key, <<>>},
 
 	% Installed modules, defined here as there is no database connection
