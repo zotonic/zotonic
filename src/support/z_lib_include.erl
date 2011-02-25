@@ -102,8 +102,13 @@ uncollapse(Path) ->
     uncollapse_dirs([]) ->
         [];
     uncollapse_dirs([File|Rest]) ->
-        uncollapse_dirs(Rest, filename:dirname(File), [File]).
-        
+        case filename:dirname(File) of
+            [X] when X =:= $. orelse X =:= $/ ->
+                uncollapse_dirs(Rest, [], [File]);
+            N ->
+                uncollapse_dirs(Rest, N, [File])
+        end.
+
         uncollapse_dirs([], _Dirname, Acc) ->
             Acc;
         uncollapse_dirs([[$/|_]=File|Rest], _Dirname, Acc) ->
