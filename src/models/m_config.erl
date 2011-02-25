@@ -96,7 +96,8 @@ get(Module, Context) when is_atom(Module) ->
 		_ -> ConfigProps
 	end.
 	
-
+%% @doc Get a configuration value for the given module/key combination.
+%% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
 get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
     Value = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
@@ -139,6 +140,8 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
     end.
 
 
+%% @doc Set a "simple" config value.
+%% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
 set_value(Module, Key, Value, Context) ->
     case z_db:q("update config set value = $1, modified = now() where module = $2 and key = $3", [Value, Module, Key], Context) of
         0 -> z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context);
@@ -147,6 +150,8 @@ set_value(Module, Key, Value, Context) ->
     z_depcache:flush(config, Context).
 
 
+%% @doc Set a "complex" config value.
+%% @spec set_value(Module::atom(), Key::atom(), Value::any(), #context{}) -> ok
 set_prop(Module, Key, Prop, PropValue, Context) ->
     case get_id(Module, Key, Context) of
         undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
@@ -154,11 +159,14 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
     end,
     z_depcache:flush(config, Context).
 
+
+%% @doc Delete the specified module/key combination
 delete(Module, Key, Context) ->
     z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
     z_depcache:flush(config, Context).
 
 
+%% @doc Lookup the unique id in the config table from the module/key combination.
 get_id(Module, Key, Context) ->
     z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).    
 
