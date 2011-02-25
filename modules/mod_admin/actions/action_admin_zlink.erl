@@ -21,7 +21,7 @@
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
     Id   = z_convert:to_integer(proplists:get_value(id, Args, "")),
-    Title = m_rsc:p(Id, title, Context),
+    Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context),
     Url = m_rsc:p(Id, page_url, Context),
 	Script = [<<"window.z_zlink(\"">>,z_utils:js_escape(Url),<<"\",\"">>, z_utils:js_escape(Title),<<"\");">>],
 	{Script, Context}.
