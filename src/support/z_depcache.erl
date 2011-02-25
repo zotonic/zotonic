@@ -288,7 +288,8 @@ in_process(undefined) ->
 flush_process_dict() ->
     [ erlang:erase({depcache, Key}) || {{depcache, Key},_Value} <- erlang:get() ],
     erlang:erase(depache_now),
-    erlang:put(depcache_count, 0).
+    erlang:put(depcache_count, 0),
+    ok.
 
 
 %% @doc Get the current system time in seconds
