@@ -29,6 +29,7 @@ function usage {
     echo "  -P <pass>    Database password (default: $DBPASSWORD)" 1>&2
     echo "  -d <name>    Database name (default: $DBDATABASE)" 1>&2
     echo "  -n <schema>  Database schema (default: $DBSCHEMA)" 1>&2
+    echo "  -a <pass>    Admin password (default: $ADMINPASSWORD)" 1>&2
     echo 1>&2
     #echo 1>&2
     exit 1
@@ -60,7 +61,7 @@ function do_addsite {
 
     # simple key-value replace
     seds=""
-    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA; do
+    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD; do
         seds="s/%%$var%%/${!var}/g;$seds"
     done
     sed -i -e "$seds" $SITE.erl config
@@ -92,8 +93,9 @@ function check_options {
     DBPASSWORD=${DBPASSWORD:=zotonic}
     DBDATABASE=${DBDATABASE:=zotonic}
     DBSCHEMA=${DBSCHEMA:=public}
+    ADMINPASSWORD=${ADMINPASSWORD:=admin}
 
-    while getopts "s:d:h:p:u:P:n:" optionName; do
+    while getopts "s:d:h:p:u:P:n:a:" optionName; do
         case "$optionName" in
             s) SKEL="$OPTARG"; shift; shift ;;
             h) DBHOST="$OPTARG"; shift; shift ;;
@@ -102,6 +104,7 @@ function check_options {
             P) DBPASSWORD="$OPTARG"; shift; shift ;;
             d) DBDATABASE="$OPTARG"; shift; shift ;;
             n) DBSCHEMA="$OPTARG"; shift; shift ;;
+            a) ADMINPASSWORD="$OPTARG"; shift; shift ;;
             [?]) exit
         esac
     done
