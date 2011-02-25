@@ -30,6 +30,7 @@ zotonic-addsite [options] <site_name>
   -P <pass>    Database password (default: zotonic)
   -d <name>    Database name (default: zotonic)
   -n <schema>  Database schema (default: public)
+  -a <pass>    Admin password (default: admin)
 
 
 zotonic copysite [site_name] [source_server]
