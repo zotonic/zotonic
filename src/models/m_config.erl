@@ -152,7 +152,7 @@ set_value(Module, Key, Value, Context) ->
 
 
 %% @doc Set a "complex" config value.
-%% @spec set_value(Module::atom(), Key::atom(), Value::any(), #context{}) -> ok
+%% @spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok
 set_prop(Module, Key, Prop, PropValue, Context) ->
     case get_id(Module, Key, Context) of
         undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
