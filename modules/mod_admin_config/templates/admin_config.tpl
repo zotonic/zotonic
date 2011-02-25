@@ -37,7 +37,7 @@
 								<span class="zp-10">
 									{% button text="delete" disabled=(module=="zotonic") action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#li.id}} %}
 
-									{% button text="edit" action={dialog_config_edit module=module key=key on_success={reload}} %}
+									{% button text="edit" disabled=(module=="zotonic") action={dialog_config_edit module=module key=key on_success={reload}} %}
 								</span>
 							</a>
 							{% wire id=#a.id action={dialog_config_edit module=module key=key on_success={reload}} %}
