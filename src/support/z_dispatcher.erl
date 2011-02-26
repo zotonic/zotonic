@@ -220,7 +220,13 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Reload the dispatch list and send it to the webmachine dispatcher.
 reload_dispatch_list(#state{context=Context} = State) ->
-    DispatchList = collect_dispatch_lists(Context),
+    DispatchList = try 
+                       collect_dispatch_lists(Context)
+                   catch
+                       _:{error, Msg} ->
+                           z_session_manager:broadcast(#broadcast{type="error", message="Dispatch error! " ++ Msg, title="Dispatcher", stay=false}, Context),
+                           State#state.dispatchlist
+                   end,
     LookupDict = dispatch_for_uri_lookup(DispatchList),
     State#state{dispatchlist=DispatchList, lookup=LookupDict}.
 
@@ -256,7 +262,7 @@ get_file_dispatch(File) ->
     catch 
         M:E ->
             ?ERROR("File dispatch error: ~p  ~p", [File, {M,E}]),
-            []
+            throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
 
