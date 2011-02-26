@@ -39,6 +39,5 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event({postback, {module_rescan, Actions}, _TriggerId, _TargetId}, Context) ->
     z_notifier:notify(module_ready, Context),
-    z_dispatcher:reload(Context),
     Context1 = z_render:growl("Module rescan is in progress.", Context),
     z_render:wire(Actions, Context1).
