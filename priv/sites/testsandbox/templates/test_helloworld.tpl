@@ -3,10 +3,14 @@
     <head>
         <title>zotonic</title>
 
-		<link href="/lib/css/zp-base.css" type="text/css" media="screen" rel="stylesheet" /> 
-		<link href="/lib/css/zp-type.css" type="text/css" media="screen" rel="stylesheet" /> 
-		<link href="/lib/css/zp-forms.css" type="text/css" media="screen" rel="stylesheet" /> 
-		<link href="/lib/css/zp-project.css" type="text/css" media="screen" rel="stylesheet" /> 
+        {% lib 
+        "/css/zp-base.css"
+        "/css/zp-type.css"
+        "/css/zp-forms.css"
+        "/css/zp-project.css"
+        "/css/zp-growl.css" 
+        "/css/zp-dialog.css" 
+        %}
 
 		<!--[if IE]><link href="/lib/css/zp-ie.css" type="text/css" media="screen" rel="stylesheet" /><![endif]--> 
     </head>
