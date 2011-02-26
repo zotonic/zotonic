@@ -155,6 +155,29 @@ function z_opt_cancel(obj)
 	}
 }
 
+function z_httpdata( xhr, type, s ) 
+{ 
+    // lifted from jq1.4.4
+    var ct = xhr.getResponseHeader("content-type") || "",
+      xml = type === "xml" || !type && ct.indexOf("xml") >= 0,
+      data = xml ? xhr.responseXML : xhr.responseText;
+
+    if ( xml && data.documentElement.nodeName === "parsererror" ) {
+      $.error( "parsererror" );
+    }
+    if ( s && s.dataFilter ) {
+      data = s.dataFilter( data, type );
+    }
+    if ( typeof data === "string" ) {
+      if ( type === "json" || !type && ct.indexOf("json") >= 0 ) {
+        data = $.parseJSON( data );
+      } else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
+        $.globalEval( data );
+      }
+    }
+    return data;
+}
+
 function z_queue_postback(triggerID, postback, extraParams, noTriggerValue) 
 {
 	var triggerValue = '';
@@ -896,11 +919,11 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 
 				var ta = doc.getElementsByTagName('textarea')[0];
 				xhr.responseText = ta ? ta.value : xhr.responseText;
-				data = $.httpData(xhr, opts.dataType);
+				data = z_httpdata(xhr, opts.dataType);
 			}
 			catch(e){
 				ok = false;
-				$.handleError(opts, xhr, 'error', e);
+				$.event.trigger("ajaxError", [xhr, opts, e]);
 			}
 			
 			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
