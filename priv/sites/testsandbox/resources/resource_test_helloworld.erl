@@ -16,7 +16,7 @@ html(Context) ->
 
 
 event({postback, show_confirm, _TriggerId, _TargetId}, Context) ->
-    z_render:wire({confirm, [{text,"This is a Javascript Confirm"},{postback,confirm_ok}]}, Context);
+    z_render:wire({confirm, [{text,"This is a Javascript Confirm"},{postback,confirm_ok}, {delegate, ?MODULE}]}, Context);
 event({postback, show_alert, _TriggerId, _TargetId}, Context) ->
     z_render:wire({alert, [{text,"This is a Javascript Alert"}]}, Context);
 event({postback, confirm_ok, _TriggerId, _TargetId}, Context) ->
