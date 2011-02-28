@@ -60,11 +60,11 @@ process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     EventContext = case z_context:get_q("postback", Context1) of
         "notify" ->
-            Message = z_context:get_q("z_msg", Context),
+            Message = z_context:get_q("z_msg", Context1),
             TriggerId1 = undefined,
-            case z_notifier:first({postback_notify, Message}, Context) of
-                undefined -> Context;
-                #context{} = Context1 -> Context1
+            case z_notifier:first({postback_notify, Message}, Context1) of
+                undefined -> Context1;
+                #context{} = ContextNotify -> ContextNotify
             end;
         Postback ->
             {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
