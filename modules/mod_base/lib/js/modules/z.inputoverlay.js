@@ -77,7 +77,6 @@ $.widget("ui.inputoverlay",
 		if (!input.length) {
 			input = $('textarea', obj);
 		}
-		console.log(input);
 
 	    var func = function(focus) {
 		    if ($(input).val() == "") {
