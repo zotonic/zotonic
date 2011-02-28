@@ -22,15 +22,15 @@
 
 render_action(TriggerId, _TargetId, Args, Context) ->
     case proplists:get_value(closest, Args) of
-		undefined ->
-		    case proplists:get_value(id, Args, proplists:get_value(target, Args)) of
-		        undefined -> 
-	            	{["$(\"#", TriggerId, "\").closest(\"form\")[0].submit();"], Context};
-		        Id ->
-		            {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(Id)), <<"\").submit();">> ], Context}
-		    end;
+        undefined ->
+            case proplists:get_value(id, Args, proplists:get_value(target, Args)) of
+                undefined -> 
+                    {["$(\"#", TriggerId, "\").closest(\"form\").submit();"], Context};
+                Id ->
+                    {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(Id)), <<"\").submit();">> ], Context}
+            end;
         true ->
-            {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(TriggerId)), <<"\").closest(\"form\")[0].submit();">> ], Context};
+            {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(TriggerId)), <<"\").closest(\"form\").submit();">> ], Context};
         CloseId ->
-            {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(CloseId)), <<"\").closest(\"form\")[0].submit();">> ], Context}
+            {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(CloseId)), <<"\").closest(\"form\").submit();">> ], Context}
     end.
