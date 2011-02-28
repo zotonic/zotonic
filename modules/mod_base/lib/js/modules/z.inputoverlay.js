@@ -98,6 +98,10 @@ $.widget("ui.inputoverlay",
 		    func(true);
 		});
 		
+		span.click(function() {
+			input.focus();
+		});
+		
 		if (input.attr('autocomplete') == 'on') {
     	    setInterval(function() {
     		    if ($(input).val() == "") {
