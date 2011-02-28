@@ -27,7 +27,7 @@ render_action(TriggerId, _TargetId, Args, Context) ->
                 undefined -> 
                     {["$(\"#", TriggerId, "\").closest(\"form\")[0].reset();"], Context};
                 Id ->
-                    {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(Id)), <<"\").reset();">> ], Context}
+                    {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(Id)), <<"\")[0].reset();">> ], Context}
             end;
         true ->
             {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(TriggerId)), <<"\").closest(\"form\")[0].reset();">> ], Context};
