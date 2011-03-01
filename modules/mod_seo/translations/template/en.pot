@@ -18,9 +18,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_seo/templates/admin_seo.tpl:30 
+msgid ""
+"Add a noindex, nofollow element to all pages."
+msgstr ""
+
 #: ./modules/mod_seo/templates/admin_seo.tpl:25 
 msgid ""
 "Description to include on every page"
+msgstr ""
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:32 
+msgid ""
+"Exclude this site from search engines"
 msgstr ""
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:16 
@@ -39,7 +49,7 @@ msgid ""
 "Keywords to include on every page. Separate keywords with a ",""
 msgstr ""
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:36 
+#: ./modules/mod_seo/templates/admin_seo.tpl:43 
 msgid ""
 "Save SEO settings"
 msgstr ""
