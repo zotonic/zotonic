@@ -5,7 +5,7 @@
 		<ul class="images-list">
 			{% for m in media %}
 				<li>
-                    {% include "_body_media.tpl" width=315 align="block" %}
+                    {% include "_body_media.tpl" width=315 align="block" id=m %}
 				</li>
 			{% endfor %}
 		</ul>
