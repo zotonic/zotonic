@@ -57,13 +57,25 @@
 						<span class="zp-10">{_ Category _}</span>
 						<span class="zp-15">{_ Modified on _}</span>
 						<span class="zp-15">{_ Modified by _}</span>
+						<span class="zp-10">{_ Options _}</span>
 					{% else %}
-						<span class="zp-35">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</span>
-						<span class="zp-15">{% include "_admin_sort_header.tpl" field="category_id" caption=_"Category" %}</span>
-						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" %}</span>
-						<span class="zp-20">{% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}</span>
+						<span class="zp-25">
+							{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
+						</span>
+						<span class="zp-15">
+							{% include "_admin_sort_header.tpl" field="category_id" caption=_"Category" %}
+						</span>
+						<span class="zp-15">
+							{% include "_admin_sort_header.tpl" field="created" caption=_"Created on" %}
+						</span>
+						<span class="zp-15">
+							{% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" %}
+						</span>
+						<span class="zp-15">
+							{% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}
+						</span>
+						<span class="zp-15">{_ Options _}</span>
 					{% endif %}
-					<span class="zp-10">{_ Options _}</span>
 				</li>
 
 			{% for id in result %}
@@ -77,16 +89,21 @@
 							<span class="zp-10">{{ m.rsc[m.rsc[id].category_id].title }}</span>
 							<span class="zp-15">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
 							<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
+							<span class="zp-10">
+								{% button text=_"view" action={redirect id=id} %}
+								{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							</span>
 						{% else %}
-							<span class="zp-35">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
+							<span class="zp-25">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
 							<span class="zp-15">{{ m.rsc[m.rsc[id].category_id].title }}</span>
-							<span class="zp-20">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
-							<span class="zp-20">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
+							<span class="zp-15">{{ m.rsc[id].created|date:"d M Y, H:i" }}</span>
+							<span class="zp-15">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
+							<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
+							<span class="zp-15">
+								{% button text=_"view" action={redirect id=id} %}
+								{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+							</span>
 						{% endif %}
-						<span class="zp-10">
-							{% button text=_"view" action={redirect id=id} %}
-							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
-						</span>
 					</a>
 				</li>
 				{% endif %}
