@@ -24,6 +24,7 @@
 render_action(TriggerId, TargetId, Args, Context) ->
     Trigger   = proplists:get_value(id, Args, TriggerId),
     EventType = proplists:get_value(type, Args),
+    Propagate = z_convert:to_bool(proplists:get_value(propagate, Args, false)),
     Postback  = proplists:get_value(postback, Args),
     Delegate  = proplists:get_value(delegate, Args),
     Actions   = proplists:get_all_values(action, Args),
@@ -36,7 +37,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
                     [
                         z_render:render_css_selector(z_render:css_selector(Trigger, Args)), 
                         <<"'.bind('keypress', ">>,
-                        <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, <<"; return false; } } );\n">>
+                        <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, 
+                        case Propagate of 
+                            true -> $;; 
+                            false -> <<"; return false;">>
+                        end,
+                        <<" } } );\n">>
                     ];
 
                 EventType == interval   orelse EventType == continuation orelse
@@ -79,7 +85,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
                     [
                         z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
                         <<".bind('">>, z_convert:to_list(EventType), <<"', ">>,
-                        <<"function(event) { ">>, PostbackMsgJS, ActionsJS, <<" return z_opt_cancel(this); } );\n">>
+                        <<"function(event) { ">>, PostbackMsgJS, ActionsJS, 
+                        case Propagate of 
+                            true -> <<>>; 
+                            false -> <<" return z_opt_cancel(this);">>
+                        end,
+                        <<" } );\n">>
                     ]
             end,
 

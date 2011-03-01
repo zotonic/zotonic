@@ -102,6 +102,10 @@ $.widget("ui.inputoverlay",
 		    func(true);
 		});
 		
+		input.closest("form").bind("reset", function() {
+		    setTimeout(function(){func(true);},10);
+		});
+		
 		span.click(function() {
 			input.focus();
 		});
