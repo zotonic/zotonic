@@ -17,7 +17,7 @@
 #
 # usage zotonic [command] [arguments...]
 #
-export ZOTONIC=${ZOTONIC:=`dirname $0 || readlink -e $0`/../}
+export ZOTONIC=${ZOTONIC:=`dirname $0 || readlink -e $0`/..}
 export ZOTONIC_SCRIPTS="$ZOTONIC/src/scripts"
 if [ ! $1 ]
 then
