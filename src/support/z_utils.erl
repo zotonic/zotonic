@@ -356,7 +356,7 @@ url_decode(S) ->
 url_decode([], Acc) -> 
     Acc;
 url_decode([$%, A, B|Rest], Acc) ->
-    Ch = (A-$0)*16 + (B-$0),
+    Ch = erlang:list_to_integer([A, B], 16),
     url_decode(Rest, [Ch|Acc]);
 url_decode([$+|Rest], Acc) ->
     url_decode(Rest, [32|Acc]);
