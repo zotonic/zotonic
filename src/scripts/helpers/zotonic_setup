@@ -42,8 +42,6 @@ export HEART_COMMAND="$ZOTONIC_BIN/zotonic start"
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
-pushd $ZOTONIC > /dev/null 2>&1
-
 # Make sure the erlang.config file exists
 if [ ! -e "$ZOTONIC/priv/erlang.config" -a -e "$ZOTONIC/priv/erlang.config.in" ]; then
     echo "Installing default erlang.config file"
