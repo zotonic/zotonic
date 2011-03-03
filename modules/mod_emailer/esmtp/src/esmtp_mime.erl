@@ -20,6 +20,7 @@
          add_header/2,
          create_attachment/2,
          create_attachment/3,
+         create_attachment/4,
          set_multipart_type/2
 ]).
 
@@ -88,16 +89,18 @@ create_attachment(Filename, ContentType) ->
     create_attachment(Filename, ContentType, undefined).
 
 create_attachment(Filename, ContentType, Type) ->
-    Part0 = create_attachment_part(Filename, ContentType, Type),
+    create_attachment(Filename, ContentType, Type, filename:basename(Filename)).
+
+create_attachment(Filename, ContentType, Type, Name) ->
+    Part0 = create_attachment_part(Filename, ContentType, Type, Name),
     ContentId = invent_content_id(),
     Part1 = add_header(Part0, {"Content-ID", ["<" ++ ContentId ++ ">"]}),
     {Part1, ContentId}.
 
-create_attachment_part(Filename, ContentType, Type) ->
-    Name = filename:basename(Filename),
+create_attachment_part(Filename, ContentType, Type, Name) ->
     {ok, Data} = file:read_file(Filename),
     DataEncoded = split_line(base64:encode_to_string(Data)),
-    #mime_part{name=Name, data=DataEncoded, type=Type, encoding={"base64", ContentType, "us-ascii"}}.
+    #mime_part{name=Name, data=DataEncoded, type=Type, encoding={"base64", ContentType, undefined}}.
 
 
 %%====================================================================
@@ -135,14 +138,29 @@ encode_part(#mime_part{data=Data, headers=Headers} = P, Boundary) ->
     encode_headers(part_headers(P)++Headers) ++ "\r\n\r\n" ++
     double_dot(z_convert:to_list(Data)) ++ "\r\n".
 
-part_headers(#mime_part{type=undefined, encoding={Enc, MimeType, Charset},
+part_headers(#mime_part{type=undefined, encoding={Enc, MimeType, undefined},
                         name=Name}) ->
     Nm = case Name of 
              undefined -> [];
-             Name -> ",name=" ++ Name
+             Name -> "name=" ++ Name
          end,
     [{"Content-Transfer-Encoding", Enc},
-     {"Content-Type", [MimeType, "charset=" ++ Charset ++ Nm]}];
+     {"Content-Type", [MimeType, Nm]}];
+ part_headers(#mime_part{type=undefined, encoding={Enc, MimeType, Charset},
+                         name=Name}) ->
+     Nm = case Name of 
+              undefined -> [];
+              Name -> ",name=" ++ Name
+          end,
+     [{"Content-Transfer-Encoding", Enc},
+      {"Content-Type", [MimeType, "charset=" ++ Charset ++ Nm]}];
+part_headers(#mime_part{type=Type, encoding={Enc, MimeType, undefined},
+                      name=Name}) when Type==inline; Type == attachment ->
+  [{"Content-Transfer-Encoding", Enc},
+   {"Content-Type", [MimeType, "name=" ++ Name]},
+   {"Content-Disposition", [atom_to_list(Type), 
+                            {"filename", 
+                            Name}]}];
 part_headers(#mime_part{type=Type, encoding={Enc, MimeType, Charset},
                         name=Name}) when Type==inline; Type == attachment ->
     [{"Content-Transfer-Encoding", Enc},

@@ -76,10 +76,11 @@ embed_generated_images(Html, Context) ->
 
 embed_generated_image_match([Match], {Parts, Html, Context}) ->
     case ensure_image_file(Match, Context) of
-        {true, Context1} ->
+        {true, BaseFile, Context1} ->
             File = z_context:get(fullpath, Context1),
             ContentType = z_context:get(mime, Context1),
-            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined),
+            BaseName = filename:rootname(filename:basename(BaseFile)) ++ z_media_identify:extension(ContentType),
+            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined, BaseName),
             Part1 = esmtp_mime:add_header(Part, {"X-Attachment-Id", [Cid]}),
             Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
             {[Part1|Parts], Html1, Context};
@@ -91,14 +92,14 @@ embed_generated_image_match([Match], {Parts, Html, Context}) ->
 
 ensure_image_file(RawPath, Context) ->
     FilePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(RawPath)),
-    {Path, ContextPath} = rsc_media_check(FilePath, Context),
+    {Path, BaseFile, ContextPath} = rsc_media_check(FilePath, Context),
     ContextMime = case z_context:get(mime, ContextPath) of
                       undefined -> z_context:set(mime, z_media_identify:guess_mime(Path), ContextPath);
                       _Mime -> ContextPath
                   end,
     case file_exists(Path, ContextMime) of 
         {true, FullPath} ->
-            {true, z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextMime)};
+            {true, BaseFile, z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextMime)};
         _ -> 
             %% We might be able to generate a new preview
             case z_context:get(is_media_preview, ContextMime, false) of
@@ -113,7 +114,7 @@ ensure_image_file(RawPath, Context) ->
 
 
 rsc_media_check(undefined, Context) ->
-    {undefined, Context};
+    {undefined, undefined, Context};
 rsc_media_check(File, Context) ->
     {BaseFile, IsResized, Context1} = case lists:member($(, File) of
                             true ->
@@ -124,7 +125,7 @@ rsc_media_check(File, Context) ->
                           end,
     case m_media:get_by_filename(BaseFile, Context1) of
         undefined ->
-            {File, Context1};
+            {File, BaseFile, Context1};
         Media ->
             MimeOriginal = z_convert:to_list(proplists:get_value(mime, Media)),
             Props = [
@@ -135,7 +136,7 @@ rsc_media_check(File, Context) ->
                         true -> [ {mime, z_media_identify:guess_mime(File)} | Props ];
                         false -> [ {mime, MimeOriginal} | Props ]
                      end,
-            {File, z_context:set(Props1, Context1)}
+            {File, BaseFile, z_context:set(Props1, Context1)}
     end.
 
 
@@ -199,7 +200,7 @@ ensure_preview(Path, Context) ->
                     % Media file exists, perform the resize
                     PreviewFile = filename:join(z_path:media_preview(Context), Path),
                     case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
-                        ok -> {true, z_context:set(fullpath, PreviewFile, Context)};
+                        ok -> {true, MediaFile, z_context:set(fullpath, PreviewFile, Context)};
                         {error, _Reason} = Error -> Error
                     end;
                 false ->

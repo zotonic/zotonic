@@ -221,20 +221,30 @@ spawn_send(Id, Email, Context, State) ->
         % Build the message and send it
         MimeMsg = esmtp_mime:msg(z_convert:to_list(To), z_convert:to_list(From), z_convert:to_list(Subject)),
         MimeMsg1 = esmtp_mime:add_header(MimeMsg, {"X-Mailer", "Zotonic " ?ZOTONIC_VERSION " (http://zotonic.com)"}),
-        MimeMsg2 = esmtp_mime:set_multipart_type(MimeMsg1, related),
-        MimeTxt = esmtp_mime:create_multipart(),
-                
-        MimeTxt1 = case Text of
-            [] -> MimeTxt;
-            _ -> esmtp_mime:add_part(MimeTxt, esmtp_mime:create_text_part(z_convert:to_list(Text)))
-        end,
-        MimeBase = case Html of
-            [] -> esmtp_mime:add_part(MimeMsg2, MimeTxt1);
+        MimeMsg2 = esmtp_mime:set_multipart_type(MimeMsg1, alternative),
+
+        MimeText = case Text of
+            [] ->
+                case Html of
+                    [] ->
+                        MimeMsg2;
+                    _ ->
+                        Markdown = z_markdown:to_markdown(Html),
+                        esmtp_mime:add_part(MimeMsg2, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
+                end;
             _ -> 
-                 {Parts, Html1} = mod_emailer_embed:embed_images(z_convert:to_list(Html), Context),
-                 MimeTxt2 = esmtp_mime:add_part(MimeTxt1, esmtp_mime:create_html_part(Html1)),
-                 MimeMsg3 = esmtp_mime:add_part(MimeMsg2, MimeTxt2),
-                 lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeMsg3, Parts)                          
+                esmtp_mime:add_part(MimeMsg2, esmtp_mime:create_text_part(z_convert:to_list(Text)))
+        end,
+
+        MimeBase = case Html of
+            [] -> 
+                MimeText;
+            _ -> 
+                {Parts, Html1} = mod_emailer_embed:embed_images(z_convert:to_list(Html), Context),
+                MimeHtml = esmtp_mime:set_multipart_type(esmtp_mime:create_multipart(), related),
+                MimeHtml2 = esmtp_mime:add_part(MimeHtml, esmtp_mime:create_html_part(Html1)),
+                MimeHtml3 = lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeHtml2, Parts),
+                esmtp_mime:add_part(MimeText, MimeHtml3)
         end,
         sendemail(MimeBase, State),
         mark_sent(Id, State#state.context)
