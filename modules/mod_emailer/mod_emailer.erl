@@ -194,6 +194,10 @@ send_queued(Cols, State) ->
 
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
+        % Seed the random number generator, needed for message ids etc.
+        {A,B,C} = now(),                                                            
+        random:seed(A,B,C),                                                         
+
 	    To = case State#state.override of 
                  O when O =:= [] orelse O =:= undefined -> Email#email.to; 
                  Override -> escape_email(z_convert:to_list(Email#email.to)) ++ " (override) <" ++ Override ++ ">"

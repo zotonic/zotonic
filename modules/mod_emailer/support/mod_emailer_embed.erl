@@ -45,15 +45,18 @@ embed_lib_images(Html, Context) ->
     end.
 
 embed_lib_image_match([Match], {Parts, Html, Context}) ->
-    File = filename:join([z_path:site_dir(Context), "lib", Match]),
-    case filelib:is_file(File) of
-        true ->
-            ContentType = z_media_identify:guess_mime(File),
-            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
-            Html1 = re:replace(Html, "/lib/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
-            {[Part|Parts], Html1, Context};
-        _ ->
-            ?DEBUG("Not found attachment"),
+    case z_module_indexer:find(lib, Match, Context) of
+        {ok, File} ->
+            case filelib:is_file(File) of
+                true ->
+                    ContentType = z_media_identify:guess_mime(File),
+                    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+                    Html1 = re:replace(Html, "/lib/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
+                    {[Part|Parts], Html1, Context};
+                _ ->
+                    {Parts, Html, Context}
+            end;
+        {error, _} ->
             {Parts, Html, Context}
     end.
 
@@ -71,16 +74,136 @@ embed_generated_images(Html, Context) ->
 
 
 embed_generated_image_match([Match], {Parts, Html, Context}) ->
-    File = z_utils:url_decode(filename:join([z_path:site_dir(Context), "files", "preview", Match])),
-    case filelib:is_file(File) of
-        true -> nop;
-        false ->
-            %% Try to get over HTTP
-            Url = lists:flatten(z_context:abs_url("/image/" ++ Match, Context)),
-            ?DEBUG("Downloading image"), ?DEBUG(Url),
-            {ok, {{_, 200, _}, _, _}} = http:request(Url)
-    end,
-    ContentType = z_media_identify:guess_mime(File),
-    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
-    Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
-    {[Part|Parts], Html1, Context}.
+    case ensure_image_file(Match, Context) of
+        {true, Context1} ->
+            File = z_context:get(fullpath, Context1),
+            ContentType = z_context:get(mime, Context1),
+            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+            Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
+            {[Part|Parts], Html1, Context};
+        {false, _} ->
+            {Parts, Html, Context};
+        {error, _} ->
+            {Parts, Html, Context}
+    end.
+
+ensure_image_file(RawPath, Context) ->
+    FilePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(RawPath)),
+    {Path, ContextPath} = rsc_media_check(FilePath, Context),
+    ContextMime = case z_context:get(mime, ContextPath) of
+                      undefined -> z_context:set(mime, z_media_identify:guess_mime(Path), ContextPath);
+                      _Mime -> ContextPath
+                  end,
+    case file_exists(Path, ContextMime) of 
+        {true, FullPath} ->
+            {true, z_context:set([ {path, Path}, {fullpath, FullPath} ], ContextMime)};
+        _ -> 
+            %% We might be able to generate a new preview
+            case z_context:get(is_media_preview, ContextMime, false) of
+                true ->
+                    % Generate a preview, recurse on success
+                    ensure_preview(Path, ContextMime);
+                false ->
+                    {false, ContextMime}
+            end
+    end.
+
+
+
+rsc_media_check(undefined, Context) ->
+    {undefined, Context};
+rsc_media_check(File, Context) ->
+    {BaseFile, IsResized, Context1} = case lists:member($(, File) of
+                            true ->
+                                {File1, Proplists, Check, Prop} = z_media_tag:url2props(File, Context),
+                                {File1, true, z_context:set(media_tag_url2props, {File1, Proplists, Check, Prop}, Context)};
+                            false ->
+                                {File, false, Context}
+                          end,
+    case m_media:get_by_filename(BaseFile, Context1) of
+        undefined ->
+            {File, Context1};
+        Media ->
+            MimeOriginal = z_convert:to_list(proplists:get_value(mime, Media)),
+            Props = [
+                {id, proplists:get_value(id, Media)},
+                {mime_original, MimeOriginal}
+            ],
+            Props1 = case IsResized of 
+                        true -> [ {mime, z_media_identify:guess_mime(File)} | Props ];
+                        false -> [ {mime, MimeOriginal} | Props ]
+                     end,
+            {File, z_context:set(Props1, Context1)}
+    end.
+
+
+file_exists(undefined, _Context) ->
+    false;
+file_exists([], _Context) ->
+    false;
+file_exists(Name, Context) ->
+    RelName = case hd(Name) of
+                  $/ -> tl(Name);
+                  _ -> Name
+              end,
+    case mochiweb_util:safe_relative_path(RelName) of
+        undefined ->
+            false;
+        SafePath ->
+            RelName = case hd(SafePath) of
+                          "/" -> tl(SafePath);
+                          _ -> SafePath
+                      end,
+            NamePath = filename:join([z_path:media_preview(Context),RelName]),
+            case filelib:is_regular(NamePath) of 
+                true -> {true, NamePath};
+                false -> false
+            end
+    end.
+
+
+
+%% @spec ensure_preview(ReqData, Path, Context) -> {Boolean, NewContext}
+%% @doc Generate the file on the path from an archived media file.
+%% The path is like: 2007/03/31/wedding.jpg(300x300)(crop-center)(709a-a3ab6605e5c8ce801ac77eb76289ac12).jpg
+%% The original media should be in State#media_path (or z_path:media_archive)
+%% The generated image should be created in State#root (or z_path:media_preview)
+ensure_preview(Path, Context) ->
+    {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = 
+                    case z_context:get(media_tag_url2props,Context) of
+                        undefined -> z_media_tag:url2props(Path, Context);
+                        MediaInfo -> MediaInfo
+                    end,
+    case mochiweb_util:safe_relative_path(Filepath) of
+        undefined ->
+            {false, Context};
+        Safepath  ->
+            MediaPath = case z_context:get(media_path, Context) of
+                            undefined -> z_path:media_archive(Context);
+                            ConfMediaPath -> ConfMediaPath
+                        end,
+
+            MediaFile = case Safepath of 
+                            "lib/" ++ LibPath ->  
+                                case z_module_indexer:find(lib, LibPath, Context) of 
+                                    {ok, ModuleFilename} -> ModuleFilename; 
+                                    {error, _} -> filename:join(MediaPath, Safepath) 
+                                end; 
+                            _ -> 
+                                filename:join(MediaPath, Safepath) 
+                        end,
+            case filelib:is_regular(MediaFile) of
+                true ->
+                    % Media file exists, perform the resize
+                    PreviewFile = filename:join(z_path:media_preview(Context), Path),
+                    case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
+                        ok -> {true, z_context:set(fullpath, PreviewFile, Context)};
+                        {error, _Reason} = Error -> Error
+                    end;
+                false ->
+                    {false, Context}
+            end
+    end.
+
+
+
