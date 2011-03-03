@@ -50,7 +50,7 @@ embed_lib_image_match([Match], {Parts, Html, Context}) ->
             case filelib:is_file(File) of
                 true ->
                     ContentType = z_media_identify:guess_mime(File),
-                    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+                    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined),
                     Html1 = re:replace(Html, "/lib/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
                     {[Part|Parts], Html1, Context};
                 _ ->
@@ -78,7 +78,7 @@ embed_generated_image_match([Match], {Parts, Html, Context}) ->
         {true, Context1} ->
             File = z_context:get(fullpath, Context1),
             ContentType = z_context:get(mime, Context1),
-            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, inline),
+            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined),
             Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
             {[Part|Parts], Html1, Context};
         {false, _} ->
