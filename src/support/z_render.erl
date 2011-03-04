@@ -209,7 +209,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                      end
                  end,
 
-    {Postback,Append,Context1} = lists:foldr(RValidation, {[],[],Context}, Validations),
+    {Postback,Append,Context1} = lists:foldl(RValidation, {[],[],Context}, Validations),
     case Postback of
         [] ->
             {[VldScript|Append], Context1};
