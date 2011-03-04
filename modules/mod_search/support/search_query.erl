@@ -81,6 +81,7 @@ request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
 request_arg("is_featured")         -> is_featured;
 request_arg("is_published")        -> is_published;
+request_arg("is_public")           -> is_public;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
 request_arg("query_id")            -> query_id;
@@ -88,6 +89,7 @@ request_arg("rsc_id")              -> rsc_id;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
+request_arg("ongoing")             -> ongoing;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -217,7 +219,7 @@ parse_query([{is_featured, Boolean}|Rest], Context, Result) ->
     parse_query(Rest, Context, Result2);
 
 %% is_published or is_published={false,true,all}
-%% Filter on whether an item is featured or not.
+%% Filter on whether an item is published or not.
 parse_query([{is_published, Boolean}|Rest], Context, Result) ->
     Result1 = Result#search_sql{extra=[no_publish_check,Result#search_sql.extra]},
     case z_convert:to_list(Boolean) of
@@ -239,14 +241,41 @@ parse_query([{is_published, Boolean}|Rest], Context, Result) ->
             parse_query(Rest, Context, Result2)
     end;
 
+
+%% is_public or is_public={false,true,all}
+%% Filter on whether an item is publicly visible or not.
+parse_query([{is_public, Boolean}|Rest], Context, Result) ->
+    case z_convert:to_list(Boolean) of
+        "all" ->
+            parse_query(Rest, Context, Result);
+        _ ->
+            case z_convert:to_bool(Boolean) of
+                true ->
+                    Result2 = add_where("rsc.visible_for = 0", Result);
+                false ->
+                    Result2 = add_where("rsc.visible_for > 0", Result)
+            end,
+            parse_query(Rest, Context, Result2)
+    end;
+
 %% upcoming
-%% Filter on items whose end date lies in the future
+%% Filter on items whose start date lies in the future
 parse_query([{upcoming, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
                   true -> add_where("rsc.pivot_date_start >= current_date", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
+
+%% ongoing
+%% Filter on items whose date range is around the current date
+parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(Boolean) of
+                  true -> add_where("rsc.pivot_date_start <= now() and rsc.pivot_date_end >= now()", Result);
+                  false -> Result
+              end,
+    parse_query(Rest, Context, Result1);
+
 
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not
