@@ -256,7 +256,7 @@ LiveValidation.prototype =
      */
     doValidations: function(isSubmit, submitTrigger){
         var result;
-        
+
         this.validationFailed = false;
         this.validationAsync = false;
         for(var i = 0, len = this.validations.length; i < len; ++i){
@@ -622,6 +622,7 @@ LiveValidationForm.prototype = {
         if (self.skipValidations == 0) {
             var result = true;
             var async = new Array();
+            var is_first = true;
 
             for(var i = 0, len = self.fields.length; i < len; ++i ) {
                 if (!self.fields[i].element.disabled) {
@@ -629,6 +630,13 @@ LiveValidationForm.prototype = {
                         async.push(self.fields[i]);
                     } else {
                         var valid = self.fields[i].validate(true, this.clk);
+                        if (!valid && is_first) {
+							var focus_element = self.fields[i].element;
+							$(focus_element).focus();
+							if ($(focus_element).effect) 
+                            	$(focus_element).effect('shake', {times:2}, 100, function() { this.focus(); } );
+                            is_first = false;
+                        }
                         if(result) 
                             result = valid;
                     }
@@ -636,7 +644,7 @@ LiveValidationForm.prototype = {
             }
 
             if (async.length > 0){
-                if (result)
+                if (result) 
                     self.submitWaitForAsync = async;
                 for(var i=0; i<async.length; i++){
                     async[i].validate(true, this.clk);
@@ -716,7 +724,14 @@ LiveValidationForm.prototype = {
           }
       } else {
 		  if (this.submitWaitForAsync.length > 0) {
-			 this.onInvalid.call(this);
+			var formObj = this.element;
+			setTimeout(function() {
+				$(formObj).focus();
+				if ($(formObj).effect)
+	            	$(formObj).effect('shake', {times:2}, 100, function() { this.focus(); } );
+				
+			}, 10);
+			this.onInvalid.call(this);
 		  }
           this.submitWaitForAsync = new Array();
       }
