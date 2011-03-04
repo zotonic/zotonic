@@ -35,6 +35,7 @@
 %% External exports
 -export([
     compile/2,
+    render/2,
     render/3,
     render_to_iolist/3,
     find_template/2,
@@ -59,6 +60,10 @@ start_link(SiteProps) ->
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
 reset(Context) ->
     gen_server:cast(Context#context.template_server, reset).
+
+
+render(#render{} = Render, Context) ->
+    render(Render#render.template, Render#render.vars, Context).
 
 
 %% @spec render(File, Variables, Context) -> list()
