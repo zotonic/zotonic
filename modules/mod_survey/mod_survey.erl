@@ -31,6 +31,7 @@
     redraw_questions/2,
     delete_question/3,
     
+    render_next_page/4,
     question_to_props/1,
     module_name/1
 ]).
@@ -47,26 +48,31 @@ init(Context) ->
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
     event_sort(Id, Items, Context);
 
-event({postback, {survey_start, [{id, SurveyId}]}, _, _}, Context) ->
-    render_next_page(SurveyId, 1, [], Context);
+event({postback, {survey_start, Args}, _, _}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    render_update(render_next_page(SurveyId, 1, [], Context), Args, Context);
 
 event({submit, {survey_next, Args}, _, _}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
-    render_next_page(SurveyId, PageNr+1, Answers, Context);
+    render_update(render_next_page(SurveyId, PageNr+1, Answers, Context), Args, Context);
 
 event({postback, {survey_back, Args}, _, _}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
-    render_next_page(SurveyId, PageNr-1, Answers, Context).
+    render_update(render_next_page(SurveyId, PageNr-1, Answers, Context), Args, Context).
 
 
 
 %%====================================================================
 %% support functions
 %%====================================================================
+
+render_update(Render, Args, Context) ->
+    TargetId = proplists:get_value(element_id, Args, "survey-question"),
+    z_render:update(TargetId, Render, Context).
 
 
 %% @doc Handle the sort of a list.  First check if there is any new item added.
@@ -177,19 +183,24 @@ render_next_page(Id, PageNr, Answers, Context) ->
                              {questions, [ question_to_props(Q) || Q <- L ]},
                              {pages, count_pages(Qs1)},
                              {answers, Answers2}],
-                    z_render:update("survey-question", #render{template="_survey_question_page.tpl", vars=Vars}, Context);
+                    #render{template="_survey_question_page.tpl", vars=Vars};
                 last ->
                     % That was the last page. Show a thank you and save the result.
                     case do_submit(Id, QuestionIds, Questions, Answers2, Context) of
                         ok ->
-                            z_render:update("survey-question", #render{template="_survey_end.tpl", vars=[{id,Id}]}, Context);
+                            case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
+                                true ->
+                                    #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}]};
+                                false ->
+                                    #render{template="_survey_end.tpl", vars=[{id,Id}]}
+                            end;
                         {error, _Reason} ->
-                            z_render:update("survey-question", #render{template="_survey_error.tpl", vars=[{id,Id}]}, Context)
+                            #render{template="_survey_error.tpl", vars=[{id,Id}]}
                     end
             end;
         _NoSurvey ->
             % No survey defined, show an error page.
-            z_render:update("survey-question", #render{template="_survey_empty.tpl", vars=[{id,Id}]}, Context)
+            #render{template="_survey_empty.tpl", vars=[{id,Id}]}
     end.
 
 
@@ -275,7 +286,8 @@ module_name(#survey_question{type=Type}) ->
 datamodel() ->
     [
         {categories, [
-                {survey, undefined, [{title, "Survey"}]}
+                {survey, undefined, [{title, "Survey"}]},
+                {poll, survey, [{title, "Poll"}]}
             ]}
     ].
 

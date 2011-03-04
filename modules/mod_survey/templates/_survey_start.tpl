@@ -14,9 +14,11 @@
 	%}
 </div>
 
+{% if id.is_editable or id.survey_show_results %}
 <div class="buttons">
 	<button id="{{ #survey_result }}" class="submit next">{_ Results _} &gt;</button>
 	{% wire id=#survey_result
 		action={redirect dispatch="survey_results" id=id}
 	%}
 </div>
+{% endif %}
