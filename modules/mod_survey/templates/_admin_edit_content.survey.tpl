@@ -40,6 +40,17 @@
 			<div class="notification notice">
 				{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: 'Help about predicates.', text: '{_ You can create your survey by dragging the Question templates to the survey on the right. _}', width: '450px'">Need more help?</a>
 			</div>
+
+			<div class="admin-form form-item">
+				<label>
+					<input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
+					{_ Show results to user after completion of survey. _}
+				</label>
+			</div>
+
+			<p><a href="{% url survey_results id=id %}">{_ Show survey results _}</a></p>
+
+			<hr/>
 			
 			<div class="zp-30">
 				<h4>{_ Question Templates _}</h4>

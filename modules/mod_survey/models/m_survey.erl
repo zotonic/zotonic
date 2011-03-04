@@ -41,6 +41,11 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(questions, #m{value=undefined} = M, _Context) ->
     M#m{value=questions};
+m_find_value(results, #m{value=undefined} = M, _Context) ->
+    M#m{value=results};
+m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
+    M#m{value=did_survey};
+
 m_find_value(Id, #m{value=questions}, Context) ->
     case m_rsc:p(Id, survey, Context) of
         {survey, QuestionIds, Questions} ->
@@ -48,10 +53,10 @@ m_find_value(Id, #m{value=questions}, Context) ->
         undefined -> 
             undefined
     end;
-m_find_value(results, #m{value=undefined} = M, _Context) ->
-    M#m{value=results};
 m_find_value(Id, #m{value=results}, Context) ->
-    prepare_results(Id, Context).
+    prepare_results(Id, Context);
+m_find_value(Id, #m{value=did_survey}, Context) ->
+    did_survey(Id, Context).
 
 
 %% @doc Transform a m_config value to a list, used for template loops
@@ -76,6 +81,30 @@ question_to_value([Id|Ids], Qs, Acc) ->
     question_to_value1(Id, Q) ->
         {Id, [{id, Id} | mod_survey:question_to_props(Q)]}.
 
+
+%% @doc Check if the current user/browser did the survey
+did_survey(SurveyId, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            PersistentId = z_context:persistent_id(Context),
+            case z_db:q1("select id 
+                          from survey_answer
+                          where survey_id = $1 
+                            and persistent = $2
+                          limit 1", [SurveyId, PersistentId], Context) of
+                undefined -> false;
+                _ -> true
+            end;
+        UserId ->
+            case z_db:q1("select id 
+                          from survey_answer
+                          where survey_id = $1 
+                            and user_id = $2
+                          limit 1", [SurveyId, UserId], Context) of
+                undefined -> false;
+                _ -> true
+            end
+    end.
 
 
 %% @doc Save a survey, connect to the current user (if any)

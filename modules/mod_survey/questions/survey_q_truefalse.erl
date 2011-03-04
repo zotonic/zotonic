@@ -69,7 +69,7 @@ prep_chart(Q, [{_, Vals}]) ->
     FalseP = 100 - TrueP,
     [
      {question, z_html:escape(Q#survey_question.question)},
-     {values, [{"true", True}, {"false", False}]},
+     {values, [ {Lab,Val} || {Lab,Val} <- [{"true", True}, {"false", False}], Val /= 0 ]},
      {type, "pie"},
-     {data, [["true", TrueP], ["false", FalseP]]}
+     {data, [ [Lab,Val] || [Lab,Val] <- [["true", TrueP], ["false", FalseP]], Val /= 0 ]}
     ].

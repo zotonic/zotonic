@@ -69,7 +69,8 @@ prep_chart(Q, [{_, Vals}]) ->
     NoP = 100 - YesP,
     [
      {question, z_html:escape(Q#survey_question.question)},
-     {values, [{"yes", Yes}, {"no", No}]},
+     {values, [ {Lab,Val} || {Lab,Val} <- [{"yes", Yes}, {"no", No}], Val /= 0 ]},
      {type, "pie"},
-     {data, [["yes", YesP], ["no", NoP]]}
+     {data, [ [Lab,Val] || [Lab,Val] <- [["yes", YesP], ["no", NoP]], Val /= 0 ]}
     ].
+
