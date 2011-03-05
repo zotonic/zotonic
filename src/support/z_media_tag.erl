@@ -207,7 +207,7 @@ filename_to_urlpath(Filename) ->
     filename:join("/image/", Filename).
 
 
-%% @spec url(MediaRef, Options, Context) -> {ok, Url} | {error, Reason}
+%% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
 %% @doc Generate the url for the image with the filename and options
 url(undefined, _Options, _Context) ->
     {error, enoent};
@@ -220,7 +220,7 @@ url(Id, Options, Context) when is_integer(Id) ->
                 {ok, Filename} ->
                     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
                     {ok, Url};
-                _ -> {ok, []}
+                _ -> {ok, <<>>}
             end
     end;
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
@@ -231,7 +231,7 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
                     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
                     {ok, Url};
                 _ ->
-                    {ok, []}
+                    {ok, <<>>}
             end;
         Filename -> 
             {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
@@ -242,7 +242,7 @@ url(Filename, Options, Context) ->
     {ok, Url}.
     
 
-%% @spec url1(Filename, Options, Context) -> {url, Url, TagOptions, ImageOpts} | {error, Reason}
+%% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
 %% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
 url1(Filename, Options, Context) ->
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
