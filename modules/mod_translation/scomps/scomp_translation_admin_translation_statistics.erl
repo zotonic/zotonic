@@ -24,12 +24,14 @@
 
 
 vary(_Params, _Context) -> nocache.
-render(Params, _Vars, _Context) ->
+render(Params, _Vars, Context) ->
     {module, Module} = proplists:lookup(module, Params),
     {lang, Lang} = proplists:lookup(lang, Params),
-    
-    BasePath = filename:join([z_utils:lib_dir(modules), z_convert:to_list(Module)]),
-                              
+
+    %% Lookup the path to the module
+    AllDirs = z_module_manager:active_dir(Context),
+    BasePath = proplists:get_value(z_convert:to_atom(Module), AllDirs),
+
     %% First check if module has a translations template file. If not, return "n/a"
     PotFile = filename:join([BasePath, "translations", "template", "en.pot"]),
     case filelib:is_regular(PotFile) of
