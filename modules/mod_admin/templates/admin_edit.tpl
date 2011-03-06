@@ -5,7 +5,37 @@
 {% block tinymce %}
 	<script type="text/javascript" src="/lib/js/modules/tinymce3.3.2a/tiny_mce.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){tinyMCE.init(tinyInit);});
+		$(document).ready(function(){
+			tinyMCE.init(tinyInit);
+
+			/* Initialize translation tabs, select correct language */
+			if ($(".translations").length)
+			{
+				$(".translations").tabs();
+
+				$(".translations").bind('tabsshow', function(event, ui) {
+					$(".tinymce-init", ui.panel).each(function() { 
+						var mce_id = $(this).attr('id');
+						setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+					}).removeClass('tinymce-init').addClass('tinymce');
+					$(".translations").tabs("select", ui.index);
+				});
+
+				var tab_index = $(".translations ul.ui-tabs-nav .tab-{{ z_language }}:visible").attr('data-index');
+				if (typeof(tab_index) == 'undefined') {
+					tab_index = $(".translations ul.ui-tabs-nav li:visible").attr('data-index');
+				}
+				if (typeof(tab_index) != "undefined") {
+					$(".translations").tabs("select", parseInt(tab_index));
+				}
+			}
+
+			/* Initialize all non-initialized tinymce controls */
+			$(".tinymce-init:visible").each(function() { 
+				var mce_id = $(this).attr('id');
+				setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+			}).removeClass('tinymce-init').addClass('tinymce');
+        });
 	</script>
 {% endblock %}
 
@@ -116,33 +146,7 @@
 			{
 				google.maps.event.trigger(marker, "click");
 			}
-			
-			
-			/* Initialize translation tabs, select correct language */
-			$(".translations").tabs();
-
-			$(".translations").bind('tabsshow', function(event, ui) {
-				$(".tinymce-init", ui.panel).each(function() { 
-					var mce_id = $(this).attr('id');
-					setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
-				}).removeClass('tinymce-init').addClass('tinymce');
-				$(".translations").tabs("select", ui.index);
-			});
-			
-			var tab_index = $(".translations ul.ui-tabs-nav .tab-{{ z_language }}:visible").attr('data-index');
-			if (typeof(tab_index) == 'undefined') {
-				tab_index = $(".translations ul.ui-tabs-nav li:visible").attr('data-index');
-			}
-			if (typeof(tab_index) != "undefined") {
-				$(".translations").tabs("select", parseInt(tab_index));
-			}
-			
-			/* Initialize all non-initialized tinymce controls */
-			$(".tinymce-init:visible").each(function() { 
-				var mce_id = $(this).attr('id');
-				setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
-			}).removeClass('tinymce-init').addClass('tinymce');
-		}
+        }
 		);
 	</script>
 {% endblock %}
