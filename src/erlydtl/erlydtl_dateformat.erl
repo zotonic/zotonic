@@ -184,11 +184,11 @@ tag_to_value($d, {_, _, D}, _, _Context) ->
 % Day of the week, textual, 3 letters; e.g. 'Fri'
 tag_to_value($D, Date, _, Context) ->
    Dow = calendar:day_of_the_week(Date),
-   ucfirst(string:sub_string(dayname(Dow, Context), 1, 3));
+   string:sub_string(dayname(Dow, Context), 1, 3);
 
 % Month, textual, long; e.g. 'January'
 tag_to_value($F, {_,M,_}, _, Context) ->
-   ucfirst(monthname(M, Context));
+   monthname(M, Context);
 
 % '1' if Daylight Savings Time, '0' otherwise.
 tag_to_value($I, _, _, _Context) ->
@@ -200,7 +200,7 @@ tag_to_value($j, {_, _, D}, _, _Context) ->
 
 % Day of the week, textual, long; e.g. 'Friday'
 tag_to_value($l, Date, _, Context) ->
-   ucfirst(dayname(calendar:day_of_the_week(Date), Context));
+   dayname(calendar:day_of_the_week(Date), Context);
 
 % Boolean for whether it is a leap year; i.e. True or False
 tag_to_value($L, {Y,_,_}, _, _Context) ->
@@ -215,7 +215,7 @@ tag_to_value($m, {_, M, _}, _, _Context) ->
 
 % Month, textual, 3 letters; e.g. 'Jan'
 tag_to_value($M, {_,M,_}, _, Context) ->
-   ucfirst(string:sub_string(monthname(M, Context), 1, 3));
+   string:sub_string(monthname(M, Context), 1, 3);
 
 % Month without leading zeros; i.e. '1' to '12'
 tag_to_value($n, {_, M, _}, _, _Context) ->
@@ -224,14 +224,14 @@ tag_to_value($n, {_, M, _}, _, _Context) ->
 % Month abbreviation in Associated Press style. Proprietary extension.
 tag_to_value($N, {_,M,_}, _, Context) when M =:= 9 ->
    % Special case - "Sept."
-   ucfirst(string:sub_string(monthname(M, Context), 1, 4)) ++ ".";
+   string:sub_string(monthname(M, Context), 1, 4) ++ ".";
 tag_to_value($N, {_,M,_}, _, Context) when M < 3 orelse M > 7 ->
    % Jan, Feb, Aug, Oct, Nov, Dec are all
    % abbreviated with a full-stop appended.
-   ucfirst(string:sub_string(monthname(M, Context), 1, 3)) ++ ".";
+   string:sub_string(monthname(M, Context), 1, 3) ++ ".";
 tag_to_value($N, {_,M,_}, _, Context) ->
    % The rest are the fullname.
-   ucfirst(monthname(M, Context));
+   monthname(M, Context);
 
 % Difference to Greenwich time in hours; e.g. '+0200'
 tag_to_value($O, Date, Time, _Context) ->
@@ -345,27 +345,27 @@ utc_diff(Date, Time) ->
        calendar:datetime_to_gregorian_seconds(UTime),
    trunc((DiffSecs / 3600) * 100).
 
-dayname(1, Context) -> ?__({trans, [{en,"monday"},{nl,"maandag"}]}, Context);
-dayname(2, Context) -> ?__({trans, [{en,"tuesday"},{nl,"dinsdag"}]}, Context);
-dayname(3, Context) -> ?__({trans, [{en,"wednesday"},{nl,"woensdag"}]}, Context);
-dayname(4, Context) -> ?__({trans, [{en,"thursday"},{nl,"donderdag"}]}, Context);
-dayname(5, Context) -> ?__({trans, [{en,"friday"},{nl,"vrijdag"}]}, Context);
-dayname(6, Context) -> ?__({trans, [{en,"saturday"},{nl,"zaterdag"}]}, Context);
-dayname(7, Context) -> ?__({trans, [{en,"sunday"},{nl,"zondag"}]}, Context);
+dayname(1, Context) -> ?__({trans, [{en,"Monday"},{nl,"maandag"}]}, Context);
+dayname(2, Context) -> ?__({trans, [{en,"Tuesday"},{nl,"dinsdag"}]}, Context);
+dayname(3, Context) -> ?__({trans, [{en,"Wednesday"},{nl,"woensdag"}]}, Context);
+dayname(4, Context) -> ?__({trans, [{en,"Thursday"},{nl,"donderdag"}]}, Context);
+dayname(5, Context) -> ?__({trans, [{en,"Friday"},{nl,"vrijdag"}]}, Context);
+dayname(6, Context) -> ?__({trans, [{en,"Saturday"},{nl,"zaterdag"}]}, Context);
+dayname(7, Context) -> ?__({trans, [{en,"Sunday"},{nl,"zondag"}]}, Context);
 dayname(_, _Context) -> "???".
 
-monthname(1, Context) ->  ?__({trans, [{en,"january"},{nl,"januari"}]}, Context);
-monthname(2, Context) ->  ?__({trans, [{en,"february"},{nl,"februari"}]}, Context);
-monthname(3, Context) ->  ?__({trans, [{en,"march"},{nl,"maart"}]}, Context);
-monthname(4, Context) ->  ?__({trans, [{en,"april"},{nl,"april"}]}, Context);
-monthname(5, Context) ->  ?__({trans, [{en,"may"},{nl,"mei"}]}, Context);
-monthname(6, Context) ->  ?__({trans, [{en,"june"},{nl,"juni"}]}, Context);
-monthname(7, Context) ->  ?__({trans, [{en,"july"},{nl,"juli"}]}, Context);
-monthname(8, Context) ->  ?__({trans, [{en,"august"},{nl,"augustus"}]}, Context);
-monthname(9, Context) ->  ?__({trans, [{en,"september"},{nl,"september"}]}, Context);
-monthname(10, Context) -> ?__({trans, [{en,"october"},{nl,"oktober"}]}, Context);
-monthname(11, Context) -> ?__({trans, [{en,"november"},{nl,"november"}]}, Context);
-monthname(12, Context) -> ?__({trans, [{en,"december"},{nl,"december"}]}, Context);
+monthname(1, Context) ->  ?__({trans, [{en,"January"},{nl,"januari"}]}, Context);
+monthname(2, Context) ->  ?__({trans, [{en,"February"},{nl,"februari"}]}, Context);
+monthname(3, Context) ->  ?__({trans, [{en,"March"},{nl,"maart"}]}, Context);
+monthname(4, Context) ->  ?__({trans, [{en,"April"},{nl,"april"}]}, Context);
+monthname(5, Context) ->  ?__({trans, [{en,"May"},{nl,"mei"}]}, Context);
+monthname(6, Context) ->  ?__({trans, [{en,"June"},{nl,"juni"}]}, Context);
+monthname(7, Context) ->  ?__({trans, [{en,"July"},{nl,"juli"}]}, Context);
+monthname(8, Context) ->  ?__({trans, [{en,"August"},{nl,"augustus"}]}, Context);
+monthname(9, Context) ->  ?__({trans, [{en,"September"},{nl,"september"}]}, Context);
+monthname(10, Context) -> ?__({trans, [{en,"October"},{nl,"oktober"}]}, Context);
+monthname(11, Context) -> ?__({trans, [{en,"November"},{nl,"november"}]}, Context);
+monthname(12, Context) -> ?__({trans, [{en,"December"},{nl,"december"}]}, Context);
 monthname(_, _Context) -> "???".
 
 % Utility functions
@@ -375,9 +375,3 @@ integer_to_list_zerofill(N) when N < 10 ->
     lists:flatten(io_lib:format("~2..0B", [N]));
 integer_to_list_zerofill(N) ->
     integer_to_list(N).
-
-ucfirst([First | Rest]) when First >= $a, First =< $z ->
-    [First-($a-$A) | Rest];
-ucfirst(Other) ->
-    Other.
-
