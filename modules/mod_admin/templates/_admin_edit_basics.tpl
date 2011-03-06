@@ -1,6 +1,6 @@
 {% with m.rsc[id] as r %}
 <div class="item-wrapper">
-    {% if r.language or m.modules.info.mod_translation.enabled %}
+    {% if m.modules.info.mod_translation.enabled %}
 	{% with r.language|default:[z_language] as r_language %}
 		<div class="translations ui-tabs" id="{{ #tabs }}">
 			{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
