@@ -18,8 +18,62 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./priv/sites/default/templates/_sidebar.tpl:49 ./priv/sites/default/templates/_article_sidebar.tpl:25 
+#: ./priv/sites/mediafonds/templates/archives.tpl:3 ./priv/sites/mediafonds/templates/_sidebar.tpl:25 
+msgid ""
+"Archive"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/archives.tpl:6 
+msgid ""
+"Archive for"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/by_keyword.tpl:6 
+msgid ""
+"Articles about"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/by_keyword.tpl:3 
+msgid ""
+"Articles for"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_sidebar.tpl:38 ./priv/sites/mediafonds/templates/_article_keywords.tpl:4 
+msgid ""
+"Keywords"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_article_prevnext.tpl:7 
+msgid ""
+"Next post"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_article_meta.tpl:1 
+msgid ""
+"Posted on"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_article_prevnext.tpl:13 
+msgid ""
+"Previous post"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_article_summary.tpl:21 ./priv/sites/mediafonds/templates/_article_summary.tpl:36 
+msgid ""
+"Read more"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/base.tpl:64 
+msgid ""
+"Website powered by"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_article_meta.tpl:2 
+msgid ""
+"by"
+msgstr ""
+
+#: ./priv/sites/mediafonds/templates/_sidebar.tpl:48 ./priv/sites/mediafonds/templates/_article_sidebar.tpl:16 
 msgid ""
 "edit this page"
 msgstr ""
-"edit this page"
