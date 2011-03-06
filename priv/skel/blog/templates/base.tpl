@@ -61,7 +61,7 @@
         <footer class="clearfix">
 			<nav class="left">{% menu id=id menu_id='footer_menu' %}</nav>
 			<section class="right">
-				<p class="footer-blog-title">Website powered by <a href="http://zotonic.com">Zotonic</a> {{ m.config.zotonic.version.value }}.</p>
+				<p class="footer-blog-title">{_ Website powered by _} <a href="http://zotonic.com">Zotonic</a> {{ m.config.zotonic.version.value }}.</p>
 			</section>
 		</footer>
 
