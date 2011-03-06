@@ -698,9 +698,24 @@ to_int(A) ->
     end.
 
 
+%% @doc get all languages encoded in proplists' keys.
+%% e.g. m_rsc_update:props_languages([{"foo$en", x}, {"bar$nl", x}]) -> ["en", "nl"]
+props_languages(Props) ->
+    lists:foldr(fun({Key, _}, Acc) ->
+                        case string:tokens(z_convert:to_list(Key), [$$]) of
+                            [_, Lang] ->
+                                case lists:member(Lang, Acc) of
+                                    true -> Acc;
+                                    false -> [Lang|Acc]
+                                end;
+                            _ -> Acc
+                        end
+                end, [], Props).
+
+
 %% @doc Combine language versions of texts. Assume we edit all texts or none.
 recombine_languages(Props, Context) ->
-    case proplists:get_all_values("language", Props) of
+    case props_languages(Props) of
         [] ->
             Props;
         L -> 
