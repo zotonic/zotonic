@@ -108,6 +108,8 @@ init(Args) ->
     %% Manage our data model
     z_datamodel:manage(?MODULE, datamodel(), Context),
 
+    handle_author_edges_upgrade(Context),
+
     z_notifier:observe(restart_twitter, self(), Context),
 
     %% Start the twitter process
@@ -287,7 +289,10 @@ process_data(Data, Context) ->
                                 {ok, TweetId} = m_rsc:insert(Props, AdminContext),
 
                                 %% Create edge
-                                {ok, _} = m_edge:insert(UserId, tweeted, TweetId, AdminContext),
+                                {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
+
+                                %% TODO - get images from the tweet and download them.
+                                %%?DEBUG(Tweet),
 
                                 Message = proplists:get_value("screen_name", User) ++ ": " ++ proplists:get_value("text", Tweet),
                                 z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
@@ -347,12 +352,22 @@ datamodel() ->
         text,
         [{title, <<"Tweet">>}]}
       ]
-     },
+     }].
 
-     {predicates,
-      [{tweeted,
-        [{title, <<"Tweeted">>}],
-        [{person, tweet}]
-       }]
-     }
-    ].
+
+
+%% handle_author_edges_upgrade(Context)
+%% @doc upgrade person->tweeted->tweet edges to tweed->author->person
+handle_author_edges_upgrade(C) ->
+    Context = z_acl:sudo(C),
+    case m_rsc:name_to_id_cat(tweeted, predicate, Context) of
+        {ok, Tweeted} ->
+            ?DEBUG("Found old 'tweeted' predicate, upgrading..."),
+            Author = m_rsc:name_to_id_cat_check(author, predicate, Context),
+            z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2", [Author, Tweeted], Context),
+            m_rsc:delete(Tweeted, Context),
+            ok;
+        _ ->
+            nop
+    end.
+
