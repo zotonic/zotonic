@@ -1,3 +1,3 @@
-<p class="article-meta">Posted on {{ m.rsc[id].publication_start|date:"d F Y"}}
-{% if m.rsc[id].author.id %}by {{ m.rsc[id].author.title }}{% endif %}
+<p class="article-meta">{_ Posted on _} {{ m.rsc[id].publication_start|date:"j F Y"}}
+{% if m.rsc[id].author.id %}{_ by _} {{ m.rsc[id].author.title }}{% endif %}
 </p>

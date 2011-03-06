@@ -1,9 +1,9 @@
 {% extends "base.tpl" %}
 
-{% block title %}Articles for "{{ m.rsc[q.id].title }}"{% endblock %}
+{% block title %}{_ Articles for _} "{{ m.rsc[q.id].title }}"{% endblock %}
 
 {% block chapeau %}
-	<h5 class="chapeau">Articles about: {{ m.rsc[q.id].title }}</h5>
+	<h5 class="chapeau">{_ Articles about _}: {{ m.rsc[q.id].title }}</h5>
 {% endblock %}
 
 {% block content %}
