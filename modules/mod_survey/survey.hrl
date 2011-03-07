@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @date 2010-03-26
+%% @copyright 2010-2011 Marc Worrell
 %% @doc Survey definitions.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
