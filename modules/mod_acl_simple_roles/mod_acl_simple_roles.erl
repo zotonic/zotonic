@@ -418,7 +418,7 @@ datamodel() ->
      {predicates,
       [{acl_role_member,
         [{title, <<"ACL Role Member">>}],
-        [{acl_role, person}]
+        [{acl_role, person}, {acl_role, institution}]
        }]
      },
      

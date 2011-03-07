@@ -1,5 +1,6 @@
+{% with m.identity[id].is_user as is_user %}
 <div class="item-wrapper" id="sort-user-credentials">
-	<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: true">
+	<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ not is_user }}">
 		<span class="title">{_ Username / password _}</span>
 		<span class="arrow">{_ make smaller _}</span>
 	</h3>
@@ -9,7 +10,7 @@
 			
 			<br />
 			<strong>
-			{% if m.identity[id].is_user %}
+			{% if is_user %}
 				{_ This person is also a user. _}
 			{% else %}
 				{_ This person is not yet a user. _}
@@ -26,3 +27,4 @@
 		{% all include "_admin_edit_sidebar_identity.tpl" %}
 	</div>
 </div>
+{% endwith %}
