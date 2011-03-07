@@ -71,6 +71,8 @@ format(DateTime, FormatString, _Context) ->
    ?DEBUG(io_lib:format("Unrecognised date parameter : ~p~n", [DateTime])),
    FormatString.
 
+replace_tags(Date, Time, Input, Context) when is_binary(Input) ->
+    replace_tags(Date, Time, binary_to_list(Input), Context);
 replace_tags(Date, Time, Input, Context) ->
     replace_tags(Date, Time, Input, [], noslash, Context).
 replace_tags(_Date, _Time, [], Out, _State, _Context) ->
