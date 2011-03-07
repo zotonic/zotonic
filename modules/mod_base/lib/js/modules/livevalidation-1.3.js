@@ -599,7 +599,9 @@ LiveValidationForm.getInstance = function(element){
 }
 
 LiveValidationForm.prototype = {
-  
+  validFormClass: 'z_form_valid',
+  invalidFormClass: 'z_form_invalid',
+
   /**
    *  constructor for LiveValidationForm - handles validation of LiveValidation fields belonging to this form on its submittal
    *  
@@ -611,11 +613,21 @@ LiveValidationForm.prototype = {
     this.fields = [];
     this.skipValidations = 0;
     this.submitWaitForAsync = new Array();
-    this.onInvalid = function(){};
 
     // preserve the old onsubmit event
     this.oldOnSubmit = this.element.onsubmit || function(){};
     var self = this;
+
+    this.onInvalid = function() { 
+		$(this).removeClass("z_form_valid").addClass("z_form_invalid"); 
+		$(".z_form_valid", this).hide();
+		$(".z_form_invalid", this).fadeIn();
+	};
+    this.onValid = function() { 
+		$(this).removeClass("z_form_invalid").addClass("z_form_valid");
+		$(".z_form_invalid", this).hide();
+		$(".z_form_valid", this).fadeIn();
+	};
 
     $(element).submit(function(event) {
         event.zIsValidated = true;
@@ -632,9 +644,6 @@ LiveValidationForm.prototype = {
                         var valid = self.fields[i].validate(true, this.clk);
                         if (!valid && is_first) {
 							var focus_element = self.fields[i].element;
-							$(focus_element).focus();
-							if ($(focus_element).effect) 
-                            	$(focus_element).effect('shake', {times:2}, 100, function() { this.focus(); } );
                             is_first = false;
                         }
                         if(result) 
@@ -644,8 +653,11 @@ LiveValidationForm.prototype = {
             }
 
             if (async.length > 0){
-                if (result) 
-                    self.submitWaitForAsync = async;
+                if (result)
+					self.submitWaitForAsync = async;
+				else 
+					self.onInvalid.call(this);
+
                 for(var i=0; i<async.length; i++){
                     async[i].validate(true, this.clk);
                 }
@@ -660,14 +672,17 @@ LiveValidationForm.prototype = {
                 event.stopImmediatePropagation();
                 return false;
             } else {
+				self.onValid.call(this);
                 return z_form_submit_validated_do(event);
             }
         } else {
             self.skipValidations--;
-            if (self.skipValidations == 0)
+            if (self.skipValidations == 0) {
+				self.onValid.call(this);
                 return z_form_submit_validated_do(event);
-            else
+            } else {
                 return false;
+			}
         }
     })
   },
@@ -719,18 +734,13 @@ LiveValidationForm.prototype = {
                   // All validations were successful, resubmit (and skip validations for once)
                   this.skipValidations = 1;
                   var formObj = this.element;
+				  this.onValid.call(this);
                   setTimeout(function(){ $(formObj).submit(); }, 0);
               }
           }
       } else {
 		  if (this.submitWaitForAsync.length > 0) {
 			var formObj = this.element;
-			setTimeout(function() {
-				$(formObj).focus();
-				if ($(formObj).effect)
-	            	$(formObj).effect('shake', {times:2}, 100, function() { this.focus(); } );
-				
-			}, 10);
 			this.onInvalid.call(this);
 		  }
           this.submitWaitForAsync = new Array();
