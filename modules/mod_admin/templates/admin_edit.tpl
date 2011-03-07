@@ -419,7 +419,9 @@
 						</div>
 
 						<div class="item-wrapper" id="sort-date">
-							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ not r.is_a.event }}">
+							<h3 class="above-item clearfix do_blockminifier" data-blockminifier="minifiedOnInit: {{ 
+										not ((r.date_start|in_past and r.date_end|in_future) or r.is_a.event or r.is_a.survey) 
+								}}">
 								<span class="title">{_ Date range _}</span>
 								<span class="arrow">{_ make smaller _}</span>
 							</h3>
