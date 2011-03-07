@@ -83,11 +83,10 @@ jQuery.fn.listfilter = function(options)
 
 	if(list.length) 
 	{
-
-		var rows = list.children('li')
+		var rows = list.children()
 		var cache = rows.map(function()
 		{
-			return $('span.title', $(this)).text().toLowerCase();
+			return $(this).text().toLowerCase();
 		});
 			
 		this.keyup(filter).keyup().parents('form').submit(function()
