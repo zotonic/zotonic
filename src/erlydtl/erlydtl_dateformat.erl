@@ -158,7 +158,7 @@ tag_to_value($s, _, {_,_,S}, _Context) ->
 
 % Month, textual, 3 letters, lowercase; e.g. 'jan'
 tag_to_value($b, {_,M,_}, _, Context) ->
-   string:sub_string(monthname(M, Context), 1, 3);
+   z_string:truncate(monthname(M, Context), 3, []);
 
 % ISO 8601 date format - 2004-02-12T15:19:21+00:00
 tag_to_value($c, Date, Time, Context) ->
@@ -184,7 +184,7 @@ tag_to_value($d, {_, _, D}, _, _Context) ->
 % Day of the week, textual, 3 letters; e.g. 'Fri'
 tag_to_value($D, Date, _, Context) ->
    Dow = calendar:day_of_the_week(Date),
-   string:sub_string(dayname(Dow, Context), 1, 3);
+   z_string:truncate(dayname(Dow, Context), 3, []);
 
 % Month, textual, long; e.g. 'January'
 tag_to_value($F, {_,M,_}, _, Context) ->
@@ -215,7 +215,7 @@ tag_to_value($m, {_, M, _}, _, _Context) ->
 
 % Month, textual, 3 letters; e.g. 'Jan'
 tag_to_value($M, {_,M,_}, _, Context) ->
-   string:sub_string(monthname(M, Context), 1, 3);
+   z_string:truncate(monthname(M, Context), 3, []);
 
 % Month without leading zeros; i.e. '1' to '12'
 tag_to_value($n, {_, M, _}, _, _Context) ->
@@ -224,11 +224,11 @@ tag_to_value($n, {_, M, _}, _, _Context) ->
 % Month abbreviation in Associated Press style. Proprietary extension.
 tag_to_value($N, {_,M,_}, _, Context) when M =:= 9 ->
    % Special case - "Sept."
-   string:sub_string(monthname(M, Context), 1, 4) ++ ".";
+   z_string:truncate(monthname(M, Context), 4, ".");
 tag_to_value($N, {_,M,_}, _, Context) when M < 3 orelse M > 7 ->
    % Jan, Feb, Aug, Oct, Nov, Dec are all
    % abbreviated with a full-stop appended.
-   string:sub_string(monthname(M, Context), 1, 3) ++ ".";
+   z_string:truncate(monthname(M, Context), 3, ".");
 tag_to_value($N, {_,M,_}, _, Context) ->
    % The rest are the fullname.
    monthname(M, Context);
@@ -285,7 +285,8 @@ tag_to_value($W, {Y,M,D}, _, _Context) ->
 
 % Year, 2 digits; e.g. '99'
 tag_to_value($y, {Y, _, _}, _, _Context) ->
-   string:sub_string(integer_to_list(Y), 3);
+   Y1 = Y rem 100,
+   [ Y1 div 10 + $0, Y1 rem 10 + $0];
 
 % Year, 4 digits; e.g. '1999'
 tag_to_value($Y, {Y, _, _}, _, _Context) ->
@@ -371,7 +372,7 @@ monthname(_, _Context) -> "???".
 % Utility functions
 integer_to_list_zerofill(N) when is_float(N) ->
     integer_to_list_zerofill(round(N));
-integer_to_list_zerofill(N) when N < 10 ->
-    lists:flatten(io_lib:format("~2..0B", [N]));
+integer_to_list_zerofill(N) when N < 100 ->
+    [ N div 10 + $0, N rem 10 + $0];
 integer_to_list_zerofill(N) ->
     integer_to_list(N).
