@@ -180,10 +180,12 @@ test_runner(DateParam, [{Input, Expect} | Rest], TestNum, PassCount) ->
     Text = "'" ++ Input ++ "' -> '" ++ Expect ++ "'",
     IsPass = is(TestNum, Text, erlydtl_dateformat:format(DateParam, Input, en), Expect),
     test_runner(DateParam, Rest, TestNum + 1, PassCount + IsPass).
-    
-is(TestNum, Text, Input1, Input2) when Input1 =:= Input2, ?DISPLAY_PASSES ->
-    io:format("~nok ~p - ~s", [TestNum, Text]),
-    1;
+
+is(TestNum, Text, Input1, Input2) when is_binary(Input1) ->
+    is(TestNum, Text, binary_to_list(Input1), Input2);
+% is(TestNum, Text, Input1, Input2) when Input1 =:= Input2, ?DISPLAY_PASSES ->
+%     io:format("~nok ~p - ~s", [TestNum, Text]),
+%     1;
 is(_TestNum, _Text, Input1, Input2) when Input1 =:= Input2 ->
     1;
 is(TestNum, Text, Input1, Input2) -> 
