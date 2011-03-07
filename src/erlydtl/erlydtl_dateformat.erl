@@ -78,8 +78,7 @@ replace_tags(Date, Time, Input, Context) ->
 replace_tags(_Date, _Time, [], Out, _State, _Context) ->
     lists:reverse(Out);
 replace_tags(Date, Time, [C|Rest], Out, noslash, Context) when ?TAG_SUPPORTED(C) ->
-    replace_tags(Date, Time, Rest,
-       lists:reverse(tag_to_value(C, Date, Time, Context)) ++ Out, noslash, Context);
+    replace_tags(Date, Time, Rest, [tag_to_value(C, Date, Time, Context)|Out], noslash, Context);
 replace_tags(Date, Time, [$\\|Rest], Out, noslash, Context) ->
     replace_tags(Date, Time, Rest, Out, slash, Context);
 replace_tags(Date, Time, [C|Rest], Out, slash, Context) ->
