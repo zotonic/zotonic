@@ -51,7 +51,7 @@
 %
 format(FormatString, #context{} = Context) ->
     {Date, Time} = erlang:localtime(),
-    replace_tags(Date, Time, FormatString, Context).
+    iolist_to_binary(replace_tags(Date, Time, FormatString, Context)).
 
 %
 % Format a tuple of the form {{Y,M,D},{H,M,S}}
@@ -61,12 +61,13 @@ format(FormatString, #context{} = Context) ->
 format({{9999,_,_},_}, _FormatString, _Context) ->
 	undefined;
 format({{_,_,_} = Date,{_,_,_} = Time}, FormatString, Context) ->
-   replace_tags(Date, Time, FormatString, Context);
+   iolist_to_binary(replace_tags(Date, Time, FormatString, Context));
+
 %
 % Format a tuple of the form {Y,M,D}
 %
 format({_,_,_} = Date, FormatString, Context) ->
-   replace_tags(Date, {0,0,0}, FormatString, Context);
+    iolist_to_binary(replace_tags(Date, {0,0,0}, FormatString, Context));
 format(DateTime, FormatString, _Context) ->
    ?DEBUG(io_lib:format("Unrecognised date parameter : ~p~n", [DateTime])),
    FormatString.

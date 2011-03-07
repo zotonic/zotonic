@@ -194,7 +194,7 @@ handle_info({'EXIT', Pid, _Error}, State) ->
             %% @todo send the error update to the page that started the backup
             %% @todo Log the error
             %% Remove all files of this backup
-            Name = erlydtl_dateformat:format(State#state.backup_start, "Ymd-His", State#state.context),
+            Name = z_convert:to_list(erlydtl_dateformat:format(State#state.backup_start, "Ymd-His", State#state.context)),
             [ file:delete(F) || F <- filelib:wildcard(filename:join(dir(State#state.context), Name++"*")) ],
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
