@@ -33,7 +33,7 @@
 -define(PERSIST_COOKIE, "z_pid").
 
 %% Max age of the person cookie, 10 years or so.
--define(PERSIST_COOKIE_MAX_AGE, 3600*24*52*10).
+-define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
