@@ -132,11 +132,6 @@ msgid ""
 "Please show me the log on form"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 
-msgid ""
-"Remember me for two weeks."
-msgstr ""
-
 #: ./modules/mod_authentication/templates/_logon_password_reset.tpl:20 ./modules/mod_authentication/templates/_logon_password_expired.tpl:18 
 msgid ""
 "Repeat password"
@@ -172,9 +167,9 @@ msgid ""
 "Sorry, your password reset code is unknown or expired"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_form_box.tpl:24 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 ./modules/mod_authentication/templates/_logon_form_box.tpl:24 
 msgid ""
-"Stay logged in for two weeks unless I log out."
+"Stay logged on unless I log off."
 msgstr ""
 
 #: ./modules/mod_authentication/templates/email_password_reset.tpl:18 

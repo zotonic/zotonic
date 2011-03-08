@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-11-29 16:14+0100\n"
-"Last-Translator: Joost Faber <joost@maxclass.com>\n"
+"PO-Revision-Date: 2011-03-08 16:56+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,12 +111,6 @@ msgstr "Wachtwoord moet minstens zes karakters bevatten"
 msgid "Please show me the log on form"
 msgstr "Ik wil graag inloggen"
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:28
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:25
-#: modules/mod_authentication/templates/_logon_form_box.tpl:24
-msgid "Stay logged in for two weeks unless I log out."
-msgstr "Blijf ingelogd gedurende twee weken, behalve als ik uitlog"
-
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:20
 #: modules/mod_authentication/templates/_logon_password_expired.tpl:18
 msgid "Repeat password"
@@ -145,6 +139,12 @@ msgstr "Sorry, het verificatie bericht kon niet worden verstuurd"
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:43
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Sorry de code waarmee je wachtwoord kan worden veranderd is onbekend of verlopen"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:28
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:25
+#: modules/mod_authentication/templates/_logon_form_box.tpl:24
+msgid "Stay logged on unless I log off."
+msgstr "Blijf ingelogd, behalve als ik uitlog"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:18
 msgid "Thank you,"
@@ -260,3 +260,5 @@ msgstr "e-mail een tijdelijk wachtwoord"
 msgid "request a new password reset code"
 msgstr "Vraag een nieuw wachtwoord aan"
 
+#~ msgid "Remember me for two weeks."
+#~ msgstr "Onthoud me gedurende twee weken"
