@@ -30,7 +30,7 @@
 -include_lib("include/zotonic.hrl").
 
 -define(LOGON_REMEMBERME_COOKIE, "z_logon").
--define(LOGON_REMEMBERME_DAYS, 14).
+-define(LOGON_REMEMBERME_DAYS, 3650).
 
 
 init(DispatchArgs) -> {ok, DispatchArgs}.
