@@ -1,5 +1,8 @@
 <div class="item-wrapper">
-	<style>
+	<style type="text/css">
+		.survey-editor ul {
+			min-height: 1300px;
+		}
 		.survey-editor ul li {
 			border: 1px solid #ddd;
 			border-left: 5px solid #ddd;
@@ -7,6 +10,7 @@
 			margin-bottom: 4px;
 			margin-right: 4px;
 			cursor: hand;
+			background-color: #f8f8f8;
 		}
 		
 		.survey-editor ul li textarea {
@@ -22,7 +26,7 @@
 			width: 90%;
 		}
 		
-		#survey-qs {
+		#survey-qs li {
 			font-size: 80%;
 		}
 		
@@ -43,7 +47,12 @@
 
 			<div class="admin-form form-item">
 				<label>
-					<input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
+					{% if id.is_a.poll %}
+						<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
+						<input type="checkbox" disabled="disabled" checked="checked" />
+					{% else %}
+						<input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
+					{% endif %}
 					{_ Show results to user after completion of survey. _}
 				</label>
 			</div>
