@@ -25,7 +25,7 @@
 
 		<div id="logon_password_reset_rememberme" class="rememberme">
 			<input type="checkbox" id="rememberme" name="rememberme" value="1" />
-			<label for="rememberme">{_ Remember me for two weeks. _}</label>
+			<label for="rememberme">{_ Stay logged on unless I log off. _}</label>
 		</div>
 
 		<div class="clearfix"></div>
