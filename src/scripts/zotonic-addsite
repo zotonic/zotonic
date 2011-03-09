@@ -55,13 +55,18 @@ function do_addsite {
     mv config.in config
 
     # Some handy variables
-    FULLNAME=`getent passwd "$USER" | cut -d ':' -f 5|cut -d ',' -f 1`
+    if [ `uname -s` = Darwin ]
+    then
+        FULLNAME=`dscl . -read /Users/$USER RealName | tail -1 | cut -c 2-`
+    else
+        FULLNAME=`getent passwd "$USER" | cut -d ':' -f 5|cut -d ',' -f 1`
+    fi
     YEAR=`date +'%Y'`
     DATE=`date +'%Y-%m-%d'`
 
     # simple key-value replace
     seds=""
-    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD; do
+    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
         seds="s/%%$var%%/${!var}/g;$seds"
     done
     sed -i -e "$seds" $SITE.erl config
