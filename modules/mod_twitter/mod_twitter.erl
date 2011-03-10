@@ -291,15 +291,18 @@ process_data(Data, Context) ->
                                 %% Create edge
                                 {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
 
-                                %% TODO - get images from the tweet and download them.
-                                %%?DEBUG(Tweet),
+                                %% Get images from the tweet and download them.
+                                Urls = extract_urls(Tweet),
+                                Ids = check_import_pictures(Urls, Context),
+                                %% Create edges
+                                [{ok, _} = m_edge:insert(TweetId, depiction, PictureId, Context) || PictureId <- Ids],
 
                                 Message = proplists:get_value("screen_name", User) ++ ": " ++ proplists:get_value("text", Tweet),
                                 z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
                                 TweetId
                         end
                 end,
-            spawn_link(F);
+            spawn(F);
         _ ->
             ok
     end.
@@ -352,6 +355,13 @@ datamodel() ->
         text,
         [{title, <<"Tweet">>}]}
       ]
+     },
+    {resources,
+      [
+       {from_twitter,
+        keyword,
+        [{title, <<"From Twitter">>}]}
+      ]
      }].
 
 
@@ -370,4 +380,76 @@ handle_author_edges_upgrade(C) ->
         _ ->
             nop
     end.
+
+
+extract_urls(Tweet) ->
+    {struct, Entitites} = proplists:get_value("entities", Tweet),
+    {array, Urls} = proplists:get_value("urls", Entitites),
+    [proplists:get_value("url", UO) || {struct, UO} <- Urls].
+    
+
+
+check_import_pictures([], _Context) ->
+    [];
+check_import_pictures(Urls, Context) ->
+    %% Get oEmbed info on all Urls
+    EmbedlyUrl = "http://api.embed.ly/1/oembed?urls=" ++ string:join([z_utils:url_encode(Url) || Url <- Urls], ","),
+    {ok, {{_Version, 200, _ReasonPhrase}, _Headers, Body}} =
+        http:request(EmbedlyUrl),
+    {array, Pictures} = mochijson:decode(Body),
+
+    Props = [P || {struct, P} <- Pictures],
+    UrlProps = lists:zip(Urls, Props),
+    %% Import pictures
+    Ids = lists:filter(fun (X) -> not(z_utils:is_empty(X)) end, [import_oembed(Url, Props1, Context) || {Url, Props1} <- UrlProps]),
+
+    %% Give 'em edges to the 'from twitter' keyword
+    [{ok, _} = m_edge:insert(Id, subject, m_rsc:rid(from_twitter, Context), Context) || Id <- Ids],
+    Ids.
+
+
+
+%% @doc Import oEmbed-compatible proplist as a rsc.
+%% @spec import_oembed(Props, Context) -> undefined | Id::integer.
+import_oembed(OriginalUrl, Props, Context) ->
+    case oembed_category(proplists:get_value("type", Props)) of
+        undefined ->
+            undefined;
+        Category ->
+            RscProps = [{category, Category},
+                        {title, proplists:get_value("title", Props)},
+                        {summary, proplists:get_value("description", Props)},
+                        {website, OriginalUrl},
+                        {oembed, Props}],
+            Url = proplists:get_value("url", Props),
+            {ok, Id} = m_media:insert_url(Url, RscProps, Context),
+            Id
+    end.
+
+
+%% @doc Mapping from oEmbed category to Zotonic category. undefined means: do not import.
+oembed_category("photo") -> image;
+oembed_category("image") -> image; %% not standard oEmbed, but returned by yfrog
+oembed_category(_) -> undefined.
+
+
+
+%% test() ->
+%%     Tweet = [{"entities",
+%%               {struct,
+%%                [{"urls",
+%%                  {array,
+%%                   [{struct,
+%%                     [{"indices",{array,[4,29]}},
+%%                      {"url","http://twitpic.com/441ivo"},
+%%                      {"expanded_url",null}]},
+%%                    {struct,
+%%                     [{"indices",{array,"$="}},
+%%                      {"url","http://twitpic.com/4801nb"},
+%%                      {"expanded_url",null}]}]}},
+%%                 {"hashtags",{array,[]}},
+%%                 {"user_mentions",{array,[]}}]}}],
+%%     ["http://twitpic.com/441ivo", "http://twitpic.com/4801nb"] = extract_urls(Tweet),
+%%     C = z_acl:sudo(z:c(scherpenisse)),
+%%     check_import_pictures(extract_urls(Tweet), C).
 
