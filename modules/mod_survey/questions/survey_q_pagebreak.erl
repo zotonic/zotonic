@@ -21,7 +21,9 @@
     new/0,
     question_props/1,
     render/1,
-    answer/2
+    answer/2,
+    prep_answer_header/1,
+    prep_answer/2
 ]).
 
 -include("../survey.hrl").
@@ -71,5 +73,13 @@ render(Q) ->
 
 answer(_Q, _Context) ->
     {ok, none}.
+
+
+prep_answer_header(_Q) ->
+    [].
+
+prep_answer(_Q, _Answer) ->
+    [].
+
 
 

@@ -22,9 +22,12 @@
     question_props/1,
     render/1,
     answer/2,
-    prep_chart/2
+    prep_chart/2,
+    prep_answer_header/1,
+    prep_answer/2
 ]).
 
+-include("zotonic.hrl").
 -include("../survey.hrl").
 
 new() ->
@@ -94,22 +97,39 @@ prep_chart(Q, Answers) ->
         {charts, [ prep_chart1(Q, Ans) || Ans <- Answers ]}
     ].
 
-prep_chart1(Q, {Name, Vals}) ->
-    case find_select(Q#survey_question.parts, Name) of
-        {select, _, Labels} ->
-            LabelsB = [ z_convert:to_binary(Lab) || Lab <- Labels ],
-            Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
-            Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
-            Perc = [ round(V*100/Sum) || V <- Values ],
-            [
-                {values, lists:zip(LabelsB, Values)},
-                {type, "pie"},
-                {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
-            ];
-        _ ->
-            undefined
-    end.
+    prep_chart1(Q, {Name, Vals}) ->
+        case find_select(Q#survey_question.parts, Name) of
+            {select, _, Labels} ->
+                LabelsB = [ z_convert:to_binary(Lab) || Lab <- Labels ],
+                Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
+                Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+                Perc = [ round(V*100/Sum) || V <- Values ],
+                [
+                    {values, lists:zip(LabelsB, Values)},
+                    {type, "pie"},
+                    {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
+                ];
+            _ ->
+                undefined
+        end.
 
+
+prep_answer_header(Q) ->
+    Parts = [ Part || Part <- Q#survey_question.parts, is_answerable(Part) ],
+    [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ].
+    
+prep_answer(Q, Answers) ->
+    Parts = [ Part || Part <- Q#survey_question.parts, is_answerable(Part) ],
+    Names = [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ],
+    [ z_convert:to_binary(value(proplists:get_value(Name, Answers))) || Name <- Names ].
+
+    is_answerable({html, _, _}) -> false;
+    is_answerable(_) -> true.
+
+    value(undefined) -> <<>>;
+    value({undefined, X}) -> X;
+    value({X, _}) -> X.
+    
 
 find_select([], _Name) ->
     undefined;

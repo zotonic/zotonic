@@ -30,6 +30,7 @@
     
     insert_survey_submission/3,
     survey_stats/2,
+    survey_results/2,
     install/1
 ]).
 
@@ -196,6 +197,74 @@ survey_stats(SurveyId, Context) ->
         group_values(Name, [{V,C}|Values], Rs, Acc);
     group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
         group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
+
+
+%% @doc Return all results of a survey
+survey_results(SurveyId, Context) ->
+    case m_rsc:p(SurveyId, survey, Context) of
+        {survey, QuestionIds, Questions} ->
+             Rows = z_db:q("select user_id, persistent, question, name, value, text 
+                            from survey_answer 
+                            where survey_id = $1", [SurveyId], Context),
+            Grouped = group_users(Rows),
+            QIds = [ z_convert:to_binary(QId) || QId <- QuestionIds ],
+            QsB = [ {z_convert:to_binary(QId), Q} || {QId, Q} <- Questions ],
+            [
+                lists:flatten([ <<"user_id">>, <<"anonymous">> | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]])
+                | [ user_answer_row(User, Answers, QIds, QsB) || {User, Answers} <- Grouped ]
+            ];
+        undefined ->
+            []
+    end.
+    
+    group_users([]) ->
+        [];
+    group_users([R|Rs]) ->
+        {User, Q} = unpack_user_row(R),
+        group_users(User, Rs, [Q], []).
+        
+    group_users(User, [], UserAcc, Acc) ->
+        [{User,UserAcc} | Acc];
+    group_users(User, [R|Rs], UserAcc, Acc) ->
+        {U, Q} = unpack_user_row(R),
+        case User of
+            U -> group_users(User, Rs, [Q|UserAcc], Acc);
+            _ -> group_users(U, Rs, [Q], [{User,UserAcc}|Acc])
+        end.
+
+
+    unpack_user_row({UserId, Persistent, Question, Name, Value, Text}) ->
+        {
+            {user, UserId, Persistent},
+            {Question, {Name, {Value, Text}}}
+        }.
+
+
+    user_answer_row({user, User, Persistent}, Answers, QuestionIds, Questions) ->
+        [
+            User,
+            Persistent
+            | answer_row(Answers, QuestionIds, Questions)
+        ].
+        
+    answer_row(Answers, QuestionIds, Questions) ->
+        lists:flatten([
+            answer_row_question(proplists:get_all_values(QId, Answers), 
+                                proplists:get_value(QId, Questions)) || QId <- QuestionIds
+        ]).
+    
+    answer_row_question(_Answer, undefined) ->
+        [];
+    answer_row_question(Answer, Q) ->
+        M = mod_survey:module_name(Q),
+        M:prep_answer(Q, Answer).
+
+
+    answer_header(undefined) ->
+        [];
+    answer_header(Q) ->
+        M = mod_survey:module_name(Q),
+        M:prep_answer_header(Q).
 
 
 %% @doc Install tables used for storing survey results
