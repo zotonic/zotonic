@@ -151,16 +151,21 @@ cmd_args(FileProps, Filters, OutMime) ->
                     {none,true} -> Filters2 ++ [{extent, ReqWidth, ReqHeight}];
                     _ -> Filters2
                 end,
-    Filters3 = case is_blurred(Filters2b) of
-                    true ->  Filters2b ++ [quality];
+    Filters3 = case OutMime of
+              "image/jpg" -> Filters2b ++ [quality];
+              _ -> Filters2b
+    end,
+    Filters4 = case is_blurred(Filters3) of
+                    true ->  Filters3;
                     false -> case Mime of
-                                 "image/gif" -> Filters2b ++ [quality];
-                                 _ -> Filters2b ++ [sharpen_small, quality]
+                                 "image/gif" -> Filters3;
+                                 "image/png" -> Filters3;
+                                 _ -> Filters3 ++ [sharpen_small]
                              end
                end,
-    Filters4 = case proplists:get_value(background, Filters3) of
-                    undefined -> default_background(OutMime) ++ Filters3;
-                    _ -> Filters3
+    Filters5 = case proplists:get_value(background, Filters4) of
+                    undefined -> default_background(OutMime) ++ Filters4;
+                    _ -> Filters4
                end,
 
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) -> 
@@ -168,7 +173,7 @@ cmd_args(FileProps, Filters, OutMime) ->
                                                 {NewW,NewH,[Arg|Acc]} 
                                             end,
                                             {ImageWidth,ImageHeight,[]},
-                                            Filters4),
+                                            Filters5),
     {EndWidth, EndHeight, lists:reverse(Args)}.
 
 
