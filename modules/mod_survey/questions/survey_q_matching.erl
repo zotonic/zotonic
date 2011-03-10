@@ -22,7 +22,9 @@
     question_props/1,
     render/1,
     answer/2,
-    prep_chart/2
+    prep_chart/2,
+    prep_answer_header/1,
+    prep_answer/2
 ]).
 
 -include("../survey.hrl").
@@ -148,18 +150,35 @@ prep_chart(Q, Answers) ->
                  ]}
     ].
 
+    prep_chart1(_ItemText, undefined, _LabelsB) ->
+        undefined;
+    prep_chart1(ItemText, Vals, LabelsB) ->
+        Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
+        Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+        Perc = [ round(V*100/Sum) || V <- Values ],
+        [
+            {question, ItemText},
+            {values, lists:zip(LabelsB, Values)},
+            {type, "pie"},
+            {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
+        ].
 
-prep_chart1(_ItemText, undefined, _LabelsB) ->
-    undefined;
-prep_chart1(ItemText, Vals, LabelsB) ->
-    Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
-    Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
-    Perc = [ round(V*100/Sum) || V <- Values ],
-    [
-        {question, ItemText},
-        {values, lists:zip(LabelsB, Values)},
-        {type, "pie"},
-        {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
-    ].
+
+prep_answer_header(Q) ->
+    Name = Q#survey_question.name,
+    Items = proplists:get_value(items, Q#survey_question.parts),
+    [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ].
+
+prep_answer(Q, Answers) ->
+    Name = Q#survey_question.name,
+    Items = proplists:get_value(items, Q#survey_question.parts),
+    ItemNames = [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
+    [ prep_answer1(Item, Answers) || Item <- ItemNames ].
+
+    prep_answer1(Item, Answers) ->
+        case proplists:get_value(Item, Answers) of
+            {V, _Text} -> V;
+            undefined -> <<>>
+        end.
 
 
