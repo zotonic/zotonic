@@ -22,7 +22,9 @@
     question_props/1,
     render/1,
     answer/2,
-    prep_chart/2
+    prep_chart/2,
+    prep_answer_header/1,
+    prep_answer/2
 ]).
 
 -include("../survey.hrl").
@@ -90,3 +92,11 @@ prep_chart(Q, [{_, Vals}]) ->
      {type, "pie"},
      {data, [ [Lab,Val] || [Lab,Val] <- [["true", TrueP], ["false", FalseP]], Val /= 0 ]}
     ].
+
+prep_answer_header(Q) ->
+    z_convert:to_binary(Q#survey_question.name).
+
+prep_answer(_Q, []) ->
+    <<>>;
+prep_answer(_Q, [{_Name, {Value, _Text}}]) ->
+    Value.
