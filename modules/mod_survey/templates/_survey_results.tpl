@@ -9,7 +9,7 @@
 	%}
 {% endif %}
 
-{% if id.is_editable or id.survey_show_results %}
+{% if id.survey_show_results or m.survey.is_allowed_results_download[id] %}
 	{% for result, chart, question in m.survey.results[id] %}
 	<div class="survey_result">
 		{% if not result %}
@@ -36,4 +36,6 @@
 		{% endif %}
 	</div>
 	{% endfor %}
+{% else %}
+	<p>{_ You are not allowed to see the results of this survey. _}</p>
 {% endif %}
