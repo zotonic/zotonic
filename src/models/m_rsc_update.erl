@@ -720,10 +720,16 @@ recombine_languages(Props, Context) ->
             Props;
         L -> 
             Cfg = [ atom_to_list(Code) || Code <- config_langs(Context) ],
-            L1 = filter_langs(L, Cfg),
+            L1 = filter_langs(edited_languages(Props, L), Cfg),
             {LangProps, OtherProps} = comb_lang(Props, L1, [], []),
             LangProps ++ [{language, [list_to_atom(Lang) || Lang <- L1]}|proplists:delete("language", OtherProps)]
     end.
+
+    edited_languages(Props, PropLangs) ->
+        case proplists:is_defined("language", Props) of
+            true -> proplists:get_all_values("language", Props);
+            false -> PropLangs
+        end.
 
     comb_lang([], _L1, LAcc, OAcc) ->
         {LAcc, OAcc};

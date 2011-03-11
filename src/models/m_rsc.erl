@@ -348,7 +348,14 @@ p_no_acl(Id, page_url, Context) ->
         PagePath -> PagePath
     end;
 p_no_acl(Id, translation, Context) ->
-    fun(Code) -> fun(Prop) -> z_trans:lookup(p_no_acl(Id, Prop, Context), Code, Context) end end;
+    fun(Code) ->
+        fun(Prop) ->
+            case p_no_acl(Id, Prop, Context) of
+                {trans, _} = Translated -> z_trans:lookup(Translated, Code, Context);
+                Value -> Value
+            end
+        end
+    end;
 p_no_acl(Id, default_page_url, Context) -> page_url(Id, Context);
 p_no_acl(Id, uri, Context) ->
     case p_no_acl(Id, is_authoritative, Context) of

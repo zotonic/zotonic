@@ -1,5 +1,5 @@
 {% with m.rsc[id] as r %}
-{% if r.language or m.modules.info.mod_translation.enabled %}
+{% if m.modules.info.mod_translation.enabled %}
 {% with r.language|default:[z_language] as r_language %}
 <div class="item-wrapper">
 	<div class="translations ui-tabs" id="{{ #tabs }}">
