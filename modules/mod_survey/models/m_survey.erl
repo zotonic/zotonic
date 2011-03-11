@@ -28,6 +28,7 @@
     m_to_list/2,
     m_value/2,
     
+    is_allowed_results_download/2,
     insert_survey_submission/3,
     survey_stats/2,
     survey_results/2,
@@ -45,6 +46,8 @@ m_find_value(results, #m{value=undefined} = M, _Context) ->
     M#m{value=results};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
+m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
+    M#m{value=is_allowed_results_download};
 
 m_find_value(Id, #m{value=questions}, Context) ->
     case m_rsc:p(Id, survey, Context) of
@@ -56,7 +59,9 @@ m_find_value(Id, #m{value=questions}, Context) ->
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(Id, Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
-    did_survey(Id, Context).
+    did_survey(Id, Context);
+m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
+    is_allowed_results_download(Id, Context).
 
 
 %% @doc Transform a m_config value to a list, used for template loops
@@ -69,6 +74,10 @@ m_to_list(#m{value=undefined}, _Context) ->
 m_value(#m{value=undefined}, _Context) ->
 	undefined.
 
+
+is_allowed_results_download(Id, Context) ->
+    z_acl:rsc_editable(Id, Context)
+    orelse z_notifier:first({survey_is_allowed_results_download, Id}, Context) == true.
 
 
 %% @doc Transform a list of survey questions to admin template friendly proplists
