@@ -14,7 +14,7 @@
 	%}
 </div>
 
-{% if id.is_editable or id.survey_show_results %}
+{% if id.survey_show_results or m.survey.is_allowed_results_download[id] %}
 <div class="buttons">
 	<button id="{{ #survey_result }}" class="submit next">{_ Results _} &gt;</button>
 	{% wire id=#survey_result
