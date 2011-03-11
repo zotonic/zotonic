@@ -2,6 +2,13 @@
 	<h2>{_ Results _}</h2>
 {% endif %}
 
+{% if m.survey.is_allowed_results_download[id] %}
+	<p><a id="{{ #download }}" href="{% url survey_results_download id=id %}">{_ Click here to download the results as a CSV file. _}</a></p>
+	{% wire id=#download propagate 
+			action={alert text=_"Download will start in the background. Please check your download window."}
+	%}
+{% endif %}
+
 {% if id.is_editable or id.survey_show_results %}
 	{% for result, chart, question in m.survey.results[id] %}
 	<div class="survey_result">
