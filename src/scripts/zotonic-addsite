@@ -22,6 +22,7 @@ function usage {
     echo "Usage: `basename $0` [options] <site_name>" 1>&2
     echo 1>&2
     echo "  -s <skel>    Skeleton site ('blog' or 'empty'; default: $SKEL)" 1>&2
+    echo "  -L           Create site in current directory and symlink it into Zotonic" 1>&2
     echo 1>&2
     echo "  -h <host>    Database host (default: $DBHOST)" 1>&2
     echo "  -p <port>    Database port (default: $DBPORT)" 1>&2
@@ -73,6 +74,12 @@ function do_addsite {
 
     popd
 
+    if [ "$DO_LINK" = "1" ]; then
+        # symlink site into zotonic
+        mv $SITES/$SITE .
+        ln -s $PWD/$SITE $SITES/$SITE
+    fi
+
     # Make the new site
     make -C $ZOTONIC
 
@@ -99,23 +106,27 @@ function check_options {
     DBDATABASE=${DBDATABASE:=zotonic}
     DBSCHEMA=${DBSCHEMA:=public}
     ADMINPASSWORD=${ADMINPASSWORD:=admin}
+    DO_LINK=0
 
-    while getopts "s:d:h:p:u:P:n:a:" optionName; do
+    while getopts "s:d:h:p:u:P:n:a:L" optionName; do
         case "$optionName" in
-            s) SKEL="$OPTARG"; shift; shift ;;
-            h) DBHOST="$OPTARG"; shift; shift ;;
-            p) DBPORT="$OPTARG"; shift; shift ;;
-            u) DBUSER="$OPTARG"; shift; shift ;;
-            P) DBPASSWORD="$OPTARG"; shift; shift ;;
-            d) DBDATABASE="$OPTARG"; shift; shift ;;
-            n) DBSCHEMA="$OPTARG"; shift; shift ;;
-            a) ADMINPASSWORD="$OPTARG"; shift; shift ;;
+            s) SKEL="$OPTARG";;
+            h) DBHOST="$OPTARG";;
+            p) DBPORT="$OPTARG";;
+            u) DBUSER="$OPTARG";;
+            P) DBPASSWORD="$OPTARG";;
+            d) DBDATABASE="$OPTARG";;
+            n) DBSCHEMA="$OPTARG";;
+            a) ADMINPASSWORD="$OPTARG";;
+            L) DO_LINK=1;;
             [?]) exit
         esac
+
     done
 
-    SITE=$1
-    if [ ! $SITE ]; then
+    SITE=${!OPTIND}
+
+    if [ $SITE == "" ]; then
         usage
     fi
 
@@ -124,15 +135,33 @@ function check_options {
     DBSCHEMA=`echo $DBSCHEMA|sed "s/%%SITE%%/$SITE/g"`
 
     if [ -e $SITES/$SITE ]; then
-	    echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
+        echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
         exit 1
     fi
 
     SKELDIR="$ZOTONIC/priv/skel/$SKEL"
     if [ ! -e $SKELDIR ]; then
-	    echo `basename $0`: skeleton site $SKEL does not exists 1>&2
+        echo `basename $0`: skeleton site $SKEL does not exists 1>&2
         exit 1
     fi
+
+    echo 1>&2
+    echo "==== Add site ====" 1>&2
+    echo 1>&2
+    echo " Site name: $SITE" 1>&2
+    echo " Site directory: $SITES/$SITE" 1>&2
+    echo " Skeleton site: $SKEL" 1>&2
+    echo 1>&2
+    echo " Database host: $DBHOST" 1>&2
+    echo " Database port: $DBPORT" 1>&2
+    echo " Database user: $DBUSER" 1>&2
+    echo " Database password: $DBPASSWORD" 1>&2
+    echo " Database name: $DBDATABASE" 1>&2
+    echo " Database schema: $DBSCHEMA" 1>&2
+    echo " Admin password: $ADMINPASSWORD" 1>&2
+    echo 1>&2
+
+    read -p '>>> Hit return to proceed...'
 }
 
 
