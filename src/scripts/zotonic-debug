@@ -18,4 +18,5 @@
 # usage zotonic-debug
 #
 
+cd $ZOTONIC
 $ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic 
