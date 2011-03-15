@@ -18,6 +18,26 @@ tests() ->
                     <<"{{var1}}">>,
                     [{var1, "foo"}], <<"foo">>}
             ]},
+        {"values", [
+                {"translatable",
+                    <<"{{ _'Text' }}">>,
+                    [], <<"Text">>},
+                {"array - empty", 
+                    <<"{{ [] }}">>,
+                    [], <<"">>},
+                {"array - values", 
+                    <<"{{ [1,2] }}">>,
+                    [], <<1,2>>},
+                {"array - undefined end",
+                    <<"{% print [1,] %}">>,
+                    [], <<"<pre>[1,undefined]</pre>">>},
+                {"array - undefined start",
+                    <<"{% print [,1] %}">>,
+                    [], <<"<pre>[undefined,1]</pre>">>},
+                {"array - undefined list",
+                    <<"{% print [,,,] %}">>,
+                    [], <<"<pre>[undefined,undefined,undefined,undefined]</pre>">>}
+            ]},
         {"comment", [
                 {"comment block is excised",
                     <<"bob {% comment %}(moron){% endcomment %} loblaw">>,

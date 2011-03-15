@@ -126,10 +126,12 @@ Nonterminals
 	TransTag
 	TransExtTag
 	ValueList
-	OptValueList
-
+    OptArrayList
+    ArrayList
+    
 	OptionalAll
 	
+	OptE
 	E
 	Uminus
 	Unot.
@@ -374,7 +376,7 @@ TermValue -> Variable : '$1'.
 TermValue -> Literal : '$1'.
 TermValue -> hash AutoId : {auto_id, '$2'}.
 TermValue -> open_curly identifier Args close_curly : {tuple_value, '$2', '$3'}.
-TermValue -> open_bracket OptValueList close_bracket : {value_list, '$2'}.
+TermValue -> open_bracket OptArrayList close_bracket : {value_list, '$2'}.
 
 AutoId -> identifier dot identifier : { '$1', '$3' }.
 AutoId -> identifier : '$1'.
@@ -383,11 +385,19 @@ Variable -> identifier : {variable, '$1'}.
 Variable -> Variable open_bracket Value close_bracket : {index_value, '$1', '$3'}.
 Variable -> Variable dot identifier : {attribute, {'$3', '$1'}}.
 
-OptValueList -> '$empty' : [].
-OptValueList -> ValueList: '$1'.
-
 ValueList -> E : ['$1'].
 ValueList -> ValueList comma E : '$1' ++ ['$3'].
+
+OptArrayList -> '$empty' : [].
+OptArrayList -> E comma ArrayList : ['$1'|'$3'].
+OptArrayList -> comma ArrayList : [undefined|'$2'].
+
+ArrayList -> OptE : ['$1'].
+ArrayList -> ArrayList comma OptE : '$1' ++ ['$3'].
+
+OptE -> '$empty': undefined.
+OptE -> E : '$1'.
+
 
 %%% Expressions
 

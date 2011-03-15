@@ -566,6 +566,8 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
                 true  -> string_ast(Number, TreeWalker);
                 false -> {{erl_syntax:integer(list_to_integer(Number)), #ast_info{}}, TreeWalker}
             end;
+        undefined ->
+            {{erl_syntax:atom(undefined), #ast_info{}}, TreeWalker};
         {'auto_id', Name} ->
             auto_id_ast(Name, Context, TreeWalker);
         {'apply_filter', Variable, Filter} ->
