@@ -22,6 +22,8 @@
 
 -export([scan/1]).
 
+-include("zotonic.hrl").
+
 scan(Context) ->
     ModTemplates = z_module_indexer:all(template, Context),
     [ scan_module(Mod) || Mod <- ModTemplates ].
@@ -62,7 +64,8 @@ scan_file(File) ->
         {ok, ParseTree} ->
             extract(ParseTree, [], File);
         {error, Reason} ->
-            {error, Reason}
+            ?ERROR("POT generation, template error in ~p: ~p~n", [File, Reason]),
+            []
     end.
 
 
