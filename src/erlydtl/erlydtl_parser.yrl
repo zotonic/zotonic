@@ -389,6 +389,7 @@ ValueList -> E : ['$1'].
 ValueList -> ValueList comma E : '$1' ++ ['$3'].
 
 OptArrayList -> '$empty' : [].
+OptArrayList -> E : ['$1'].
 OptArrayList -> E comma ArrayList : ['$1'|'$3'].
 OptArrayList -> comma ArrayList : [undefined|'$2'].
 
