@@ -52,17 +52,12 @@
 				
 				{% if m.rsc[id].location_lat and m.rsc[id].location_lng %}
 				addMarker(new google.maps.LatLng({{ m.rsc[id].location_lat }}, {{ m.rsc[id].location_lng }}));
+                setTimeout(function(){map.setCenter(window.marker.getPosition());},100);
 				{% endif %}
 				
 				$('#fill-geo').click(function()
 				{
-					var address = $('#address_street_1').val() + ", "
-								+ $('#address_city').val() + ", "
-								+ $('#address_state').val() + ", "
-								+ $('#address_country').val();
-					var position = googleMapsControl.getGeoForAddress(address);
-					
-					googleMapsControl.getGeoForAddress($('#field-title').val(), function(data)
+					googleMapsControl.getGeoForAddress($('#field-title').val() || $('#field-title\\${{ z_language }}').val(), function(data)
 					{
 						if(window.marker)
 						{
