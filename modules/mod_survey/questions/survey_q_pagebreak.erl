@@ -23,9 +23,11 @@
     render/1,
     answer/2,
     prep_answer_header/1,
-    prep_answer/2
+    prep_answer/2,
+    test/3
 ]).
 
+-include("zotonic.hrl").
 -include("../survey.hrl").
 
 new() ->
@@ -82,4 +84,27 @@ prep_answer(_Q, _Answer) ->
     [].
 
 
+%% @doc Evaluate the (optional) jump expression of a pagebreak
+test(#survey_question{text=Text, question=Question}, Answers, Context) ->
+    case z_string:trim(Text) of
+        <<>> -> ok;
+        [] -> ok;
+        Expr ->
+            case z_expression:parse(Expr) of
+                {ok, Tree} ->
+                    case z_convert:to_bool(
+                            z_expression:eval(Tree, 
+                                              fun(Var) -> answer_value(Var, Answers) end,
+                                              Context))
+                    of
+                        true -> {jump, Question};
+                        false -> ok
+                    end;
+                Error ->
+                    Error
+            end
+    end.
+
+answer_value(Var, Answers) ->
+    proplists:get_value(Var, Answers).
 

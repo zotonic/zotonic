@@ -3,7 +3,7 @@
 {% endif %}
 
 {% wire id=#q type="submit" 
-	postback={survey_next id=id page_nr=page_nr answers=answers element_id=element_id|default:"survey-question"}
+	postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 	delegate="mod_survey" 
 %}
 <form id="{{ #q }}" method="post" action="postback">
@@ -50,13 +50,14 @@
 	<div class="buttons">
 		{% if page_nr > 1 %}
 			<a id="{{ #back }}" href="#">&lt; {_ Back _}</a>
+			{% wire id=#back 
+					postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
+					delegate="mod_survey"
+			%}
 		{% else %}
 			{% if not id.is_a.poll %}
 				<a id="{{ #back }}" href="#">&lt; {_ Cancel _}</a>
-				{% wire id=#back 
-						postback={survey_back id=id page_nr=page_nr answers=answers element_id=element_id|default:"survey-question"}
-						delegate="mod_survey"
-				%}
+				{% wire id=#back action={redirect id} %}
 			{% endif %}
 		{% endif %}
 		<button type="submit" class="submit next">{_ Next _} &gt;</button>
