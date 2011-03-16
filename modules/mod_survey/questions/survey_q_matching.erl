@@ -116,7 +116,7 @@ answer(Q, Answers) ->
     Name = Q#survey_question.name,
     Count = length(proplists:get_value(items, Q#survey_question.parts)),
     Options = proplists:get_value(options, Q#survey_question.parts),
-    Names = [ lists:flatten([z_convert:to_list(Name), $., integer_to_list(N)]) || N <- lists:seq(1,Count) ],
+    Names = [ lists:flatten([z_convert:to_list(Name), $_, integer_to_list(N)]) || N <- lists:seq(1,Count) ],
     ensure_option(Names, Options, Answers, []).
 
 
@@ -140,7 +140,7 @@ prep_chart(_Q, []) ->
 prep_chart(Q, Answers) ->
     Name = Q#survey_question.name,
     Items = proplists:get_value(items, Q#survey_question.parts),
-    ItemNames = [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
+    ItemNames = [ iolist_to_binary([Name, $_, integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
     Labels = proplists:get_value(options, Q#survey_question.parts),
     LabelsB = [ z_convert:to_binary(Lab) || Lab <- Labels ],
     [
