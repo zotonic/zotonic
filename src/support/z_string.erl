@@ -58,6 +58,7 @@
     starts_with/2,
     ends_with/2,
     contains/2,
+    split/2,
     test/0
 ]).
 
@@ -792,7 +793,57 @@ contains(What, String) ->
             <<_:C/binary, What:SizeWhat/binary, _/binary>> ->true;
             _ ->contains(What, SizeWhat, B, C + 1)
         end.
+%% @doc Split a string, see http://www.erlang.org/pipermail/erlang-questions/2008-October/038896.html
+%% @spec split(String, String) -> list()
 
+split(String, []) ->
+     split0(String);
+split(String, [Sep]) when is_integer(Sep) ->
+     split1(String, Sep);
+split(String, [C1,C2|L]) when is_integer(C1), is_integer(C2) ->
+     split2(String, C1, C2, L).
+
+%% Split a string at "", which is deemed to occur _between_
+%% adjacent characters, but queerly, not at the beginning
+%% or the end.
+
+split0([C|Cs]) ->
+     [[C] | split0(Cs)];
+split0([]) ->
+     [].
+
+%% Split a string at a single character separator.
+
+split1(String, Sep) ->
+     split1_loop(String, Sep, "").
+
+split1_loop([Sep|String], Sep, Rev) ->
+     [lists:reverse(Rev) | split1(String, Sep)];
+split1_loop([Chr|String], Sep, Rev) ->
+     split1_loop(String, Sep, [Chr|Rev]);
+split1_loop([], _, Rev) ->
+     [lists:reverse(Rev)].
+
+%% Split a string at a multi-character separator
+%% [C1,C2|L].  These components are split out for
+%% a fast match.
+
+split2(String, C1, C2, L) ->
+     split2_loop(String, C1, C2, L, "").
+
+split2_loop([C1|S = [C2|String]], C1, C2, L, Rev) ->
+     case split_prefix(L, String)
+       of no   -> split2_loop(S, C1, C2, L, [C1|Rev])
+        ; Rest -> [lists:reverse(Rev) | split2(Rest, C1, C2, L)]
+     end;
+split2_loop([Chr|String], C1, C2, L, Rev) ->
+     split2_loop(String, C1, C2, L, [Chr|Rev]);
+split2_loop([], _, _, _, Rev) ->
+     [lists:reverse(Rev)].
+
+split_prefix([C|L], [C|S]) -> split_prefix(L, S);
+split_prefix([],    S)     -> S;
+split_prefix(_,     _)     -> no.
 
 test() ->
     A = "üçgen",
