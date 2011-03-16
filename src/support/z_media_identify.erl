@@ -136,14 +136,12 @@ identify_file_os(unix, File, OriginalFilename) ->
                 "application/octet-stream" ->
                     % The file utility does some miss-guessing
                     case guess_mime(OriginalFilename) of
-                        "text/csv" ->
-                            {ok, [{mime, "text/csv"}]};
-                        "application/vnd.oasis.opendocument." ++ _ = ODF ->
-                            {ok, [{mime, ODF}]};
-                        "application/inspire" ->
-                            {ok, [{mime, "application/inspire"}]};
-                        _ ->
-                            {ok, [{mime, "application/octet-stream"}]}
+                        "text/csv" -> {ok, [{mime, "text/csv"}]};
+                        "application/vnd.oasis.opendocument." ++ _ = ODF -> {ok, [{mime, ODF}]};
+                        "application/inspire" -> {ok, [{mime, "application/inspire"}]};
+                        "video/mpeg" -> {ok, [{mime, "video/mpeg"}]};
+                        "audio/mpeg" -> {ok, [{mime, "audio/mpeg"}]};
+                        _ -> {ok, [{mime, "application/octet-stream"}]}
                     end;
                 "application/vnd.ms-office" ->
                     % Generic ms-office mime type, check if the filename is more specific
