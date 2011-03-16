@@ -10,7 +10,7 @@
 				<label>
 					{{ n }}
 				</label>
-				{% with [name, ".", index|make_list]|join as nm %}
+				{% with [name, "_", index|make_list]|join as nm %}
 				{% with answers[nm] as ans %}
 				<select id="{{ #match.index }}" name="{{ nm }}">
 					<option></option>

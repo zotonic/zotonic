@@ -30,7 +30,7 @@
     redraw_questions/2,
     delete_question/3,
     
-    render_next_page/4,
+    render_next_page/6,
     question_to_props/1,
     module_name/1
 ]).
@@ -49,19 +49,26 @@ event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Conte
 
 event({postback, {survey_start, Args}, _, _}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    render_update(render_next_page(SurveyId, 1, [], Context), Args, Context);
+    render_update(render_next_page(SurveyId, 1, exact, [], [], Context), Args, Context);
 
 event({submit, {survey_next, Args}, _, _}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
-    render_update(render_next_page(SurveyId, PageNr+1, Answers, Context), Args, Context);
+    {history, History} = proplists:lookup(history, Args),
+    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Context), Args, Context);
 
 event({postback, {survey_back, Args}, _, _}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    {page_nr, PageNr} = proplists:lookup(page_nr, Args),
+    % {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
-    render_update(render_next_page(SurveyId, PageNr-1, Answers, Context), Args, Context).
+    {history, History} = proplists:lookup(history, Args),
+    case History of
+        [_,PageNr|History1] ->
+            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Context), Args, Context);
+        _History ->
+            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Context), Args, Context)
+    end.
 
 
 
@@ -163,9 +170,14 @@ new_question(Type) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
-render_next_page(Id, 0, Answers, Context) ->
-    z_render:update("survey-question", #render{template="_survey_start.tpl", vars=[{id,Id},{answers,Answers}]}, Context);
-render_next_page(Id, PageNr, Answers, Context) ->
+render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
+    z_render:update("survey-question", 
+                    #render{
+                        template="_survey_start.tpl", 
+                        vars=[{id,Id},{answers,Answers},{history,[]}]
+                    },
+                    Context);
+render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     As = z_context:get_q_all_noz(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ As,
@@ -174,14 +186,15 @@ render_next_page(Id, PageNr, Answers, Context) ->
             Qs = [ proplists:get_value(QId, Questions) || QId <- QuestionIds ],
             Qs1 = [ Q || Q <- Qs, Q /= undefined ],
 
-            case fetch_page(PageNr, Qs1) of
+            case go_page(PageNr, Qs1, Answers2, Direction, Context) of
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     Vars = [ {id, Id},
                              {page_nr, NewPageNr},
                              {questions, [ question_to_props(Q) || Q <- L ]},
                              {pages, count_pages(Qs1)},
-                             {answers, Answers2}],
+                             {answers, Answers2},
+                             {history, [NewPageNr|History]}],
                     #render{template="_survey_question_page.tpl", vars=Vars};
                 last ->
                     % That was the last page. Show a thank you and save the result.
@@ -189,12 +202,12 @@ render_next_page(Id, PageNr, Answers, Context) ->
                         ok ->
                             case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
                                 true ->
-                                    #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}]};
+                                    #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}]};
                                 false ->
-                                    #render{template="_survey_end.tpl", vars=[{id,Id}]}
+                                    #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}]}
                             end;
                         {error, _Reason} ->
-                            #render{template="_survey_error.tpl", vars=[{id,Id}]}
+                            #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}]}
                     end
             end;
         _NoSurvey ->
@@ -217,7 +230,52 @@ render_next_page(Id, PageNr, Answers, Context) ->
     count_pages([_|L], N) ->
         count_pages(L, N).
 
-    %% @doc Fetch the Nth page.  Could return another page due to jumps in the pagebreaks.
+
+    go_page(Nr, Qs, _Answers, exact, _Context) ->
+        case fetch_page(Nr, Qs) of
+            last ->
+                last;
+            {L,Nr1} ->
+                L1 = lists:dropwhile(fun(#survey_question{type=pagebreak}) -> true; (_) -> false end, L),
+                L2 = lists:takewhile(fun(#survey_question{type=pagebreak}) -> false; (_) -> true end, L1),
+                {L2,Nr1}
+        end;
+    go_page(Nr, Qs, Answers, forward, Context) ->
+        eval_page_jumps(fetch_page(Nr, Qs), Answers, Context).
+
+
+    eval_page_jumps({[#survey_question{type=pagebreak} = Q|L],Nr}, Answers, Context) ->
+        case survey_q_pagebreak:test(Q, Answers, Context) of
+            ok -> 
+                eval_page_jumps({L,Nr}, Answers, Context);
+            {jump, Name} ->
+                % Go to question 'name', count pagebreaks in between for the new page nr
+                % Only allow jumping forward to prevent endless loops.
+                eval_page_jumps(fetch_question_name(L, z_convert:to_list(Name), Nr, in_pagebreak), Answers, Context);
+            {error, Reason} ->
+                {error, Reason}
+        end;
+    eval_page_jumps({[], _Nr}, _Answers, _Context) ->
+        last;
+    eval_page_jumps(Other, _Answers, _Context) ->
+        Other.
+
+
+    fetch_question_name([], _Name, Nr, _State) ->
+        {[], Nr};
+    fetch_question_name([#survey_question{name=Name}|_] = Qs, Name, Nr, _State) ->
+        {Qs, Nr};
+    fetch_question_name([#survey_question{type=pagebreak}|Qs], Name, Nr, in_q) ->
+        fetch_question_name(Qs, Name, Nr+1, in_pagebreak);
+    fetch_question_name([#survey_question{type=pagebreak}|Qs], Name, Nr, in_pagebreak) ->
+        fetch_question_name(Qs, Name, Nr, in_pagebreak);
+    fetch_question_name([_|Qs], Name, Nr, _State) ->
+        fetch_question_name(Qs, Name, Nr, in_q).
+
+
+    %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
+    %%      Returns the question list at the point of the pagebreak, so any pagebreak jumps 
+    %%      can be made.
     fetch_page(_Nr, []) ->
         last;
     fetch_page(Nr, L) ->
@@ -226,8 +284,9 @@ render_next_page(Id, PageNr, Answers, Context) ->
     fetch_page(_, _, []) ->
         last;
     fetch_page(N, Nr, L) when N >= Nr ->
-        L1 = lists:takewhile(fun(#survey_question{type=pagebreak}) -> false; (_) -> true end, L),
-        {L1, N};
+        {L, N};
+    fetch_page(N, Nr, [#survey_question{type=pagebreak}|_] = L) when N == Nr - 1 ->
+        {L, Nr};
     fetch_page(N, Nr, [#survey_question{type=pagebreak}|L]) when N < Nr ->
         L1 = lists:dropwhile(fun(#survey_question{type=pagebreak}) -> true; (_) -> false end, L),
         fetch_page(N+1, Nr, L1);
