@@ -126,7 +126,7 @@ function check_options {
 
     SITE=${!OPTIND}
 
-    if [ $SITE == "" ]; then
+    if [ "$SITE" == "" ]; then
         usage
     fi
 
