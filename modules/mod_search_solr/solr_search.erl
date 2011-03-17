@@ -111,12 +111,12 @@ add_publication_check(Context) ->
         ?ACL_VIS_PUBLIC -> 
             %% Anonymous users can only see public published content
             ["+visible_for:0 +is_published:true",
-             "+publication_start:[* TO " ++ z_convert:to_isotime(erlang:localtime()) ++ "]",
-             "+publication_end:[" ++ z_convert:to_isotime(erlang:localtime()) ++ " TO *]"];
+             "+publication_start:[* TO " ++ z_convert:to_list(z_convert:to_isotime(erlang:localtime())) ++ "]",
+             "+publication_end:[" ++ z_convert:to_list(z_convert:to_isotime(erlang:localtime())) ++ " TO *]"];
         _ -> %% ?ACL_VIS_COMMUNITY -> 
             ["+(visible_for:0 OR visible_for:1) +is_published:true",
-             "+publication_start:[* TO " ++ z_convert:to_isotime(erlang:localtime()) ++ "]",
-             "+publication_end:[" ++ z_convert:to_isotime(erlang:localtime()) ++ " TO *]"]
+             "+publication_start:[* TO " ++ z_convert:to_list(z_convert:to_isotime(erlang:localtime())) ++ "]",
+             "+publication_end:[" ++ z_convert:to_list(z_convert:to_isotime(erlang:localtime())) ++ " TO *]"]
     end.
 
 
@@ -204,7 +204,7 @@ map_search_field({is_featured, Bool}, _Context) ->
 map_search_field({upcoming, Boolean}, _Context) ->
     case z_convert:to_bool(Boolean) of
         true -> {["+date_start:[",
-                  z_convert:to_isotime(erlang:localtime()), " TO *]"],
+                  z_convert:to_list(z_convert:to_isotime(erlang:localtime())), " TO *]"],
                  []};
         false -> {[], []}
     end;
