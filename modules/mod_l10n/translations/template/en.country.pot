@@ -1,0 +1,980 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Zotonic Localization\n"
+"POT-Creation-Date: 2011-03-17 14:53\n"
+"PO-Revision-Date: 2011-03-17 14:53\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: MaxClass\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid ""
+"Afghanistan"
+msgstr ""
+
+msgid ""
+"Albania"
+msgstr ""
+
+msgid ""
+"Algeria"
+msgstr ""
+
+msgid ""
+"American Samoa"
+msgstr ""
+
+msgid ""
+"Andorra"
+msgstr ""
+
+msgid ""
+"Angola"
+msgstr ""
+
+msgid ""
+"Anguilla"
+msgstr ""
+
+msgid ""
+"Antarctica"
+msgstr ""
+
+msgid ""
+"Antigua and Barbuda"
+msgstr ""
+
+msgid ""
+"Argentina"
+msgstr ""
+
+msgid ""
+"Armenia"
+msgstr ""
+
+msgid ""
+"Aruba"
+msgstr ""
+
+msgid ""
+"Australia"
+msgstr ""
+
+msgid ""
+"Austria"
+msgstr ""
+
+msgid ""
+"Azerbaijan"
+msgstr ""
+
+msgid ""
+"Bahamas"
+msgstr ""
+
+msgid ""
+"Bahrain"
+msgstr ""
+
+msgid ""
+"Bangladesh"
+msgstr ""
+
+msgid ""
+"Barbados"
+msgstr ""
+
+msgid ""
+"Belarus"
+msgstr ""
+
+msgid ""
+"Belgium"
+msgstr ""
+
+msgid ""
+"Belize"
+msgstr ""
+
+msgid ""
+"Benin"
+msgstr ""
+
+msgid ""
+"Bermuda"
+msgstr ""
+
+msgid ""
+"Bhutan"
+msgstr ""
+
+msgid ""
+"Bolivia"
+msgstr ""
+
+msgid ""
+"Bosnia-Herzegovina"
+msgstr ""
+
+msgid ""
+"Botswana"
+msgstr ""
+
+msgid ""
+"Bouvet Island"
+msgstr ""
+
+msgid ""
+"Brazil"
+msgstr ""
+
+msgid ""
+"British Indian Ocean Territory"
+msgstr ""
+
+msgid ""
+"Brunei Darussalam"
+msgstr ""
+
+msgid ""
+"Bulgaria"
+msgstr ""
+
+msgid ""
+"Burkina Faso"
+msgstr ""
+
+msgid ""
+"Burundi"
+msgstr ""
+
+msgid ""
+"Cambodia"
+msgstr ""
+
+msgid ""
+"Cameroon"
+msgstr ""
+
+msgid ""
+"Canada"
+msgstr ""
+
+msgid ""
+"Cape Verde"
+msgstr ""
+
+msgid ""
+"Cayman Islands"
+msgstr ""
+
+msgid ""
+"Central African Republic"
+msgstr ""
+
+msgid ""
+"Chad"
+msgstr ""
+
+msgid ""
+"Chile"
+msgstr ""
+
+msgid ""
+"China"
+msgstr ""
+
+msgid ""
+"Christmas Island"
+msgstr ""
+
+msgid ""
+"Cocos (Keeling) Islands"
+msgstr ""
+
+msgid ""
+"Colombia"
+msgstr ""
+
+msgid ""
+"Comoros"
+msgstr ""
+
+msgid ""
+"Congo"
+msgstr ""
+
+msgid ""
+"Congo, The Democratic Republic of the"
+msgstr ""
+
+msgid ""
+"Cook Islands"
+msgstr ""
+
+msgid ""
+"Costa Rica"
+msgstr ""
+
+msgid ""
+"Croatia"
+msgstr ""
+
+msgid ""
+"Cuba"
+msgstr ""
+
+msgid ""
+"Cyprus"
+msgstr ""
+
+msgid ""
+"Czech Republic"
+msgstr ""
+
+msgid ""
+"Denmark"
+msgstr ""
+
+msgid ""
+"Djibouti"
+msgstr ""
+
+msgid ""
+"Dominica"
+msgstr ""
+
+msgid ""
+"Dominican Republic"
+msgstr ""
+
+msgid ""
+"East Timor"
+msgstr ""
+
+msgid ""
+"Ecuador"
+msgstr ""
+
+msgid ""
+"Egypt"
+msgstr ""
+
+msgid ""
+"El Salvador"
+msgstr ""
+
+msgid ""
+"Equatorial Guinea"
+msgstr ""
+
+msgid ""
+"Eritrea"
+msgstr ""
+
+msgid ""
+"Estonia"
+msgstr ""
+
+msgid ""
+"Ethiopia"
+msgstr ""
+
+msgid ""
+"Falkland Islands"
+msgstr ""
+
+msgid ""
+"Faroe Islands"
+msgstr ""
+
+msgid ""
+"Fiji"
+msgstr ""
+
+msgid ""
+"Finland"
+msgstr ""
+
+msgid ""
+"France"
+msgstr ""
+
+msgid ""
+"French Guyana"
+msgstr ""
+
+msgid ""
+"Gabon"
+msgstr ""
+
+msgid ""
+"Gambia"
+msgstr ""
+
+msgid ""
+"Gaza Strip Administered by Israel"
+msgstr ""
+
+msgid ""
+"Georgia"
+msgstr ""
+
+msgid ""
+"Germany"
+msgstr ""
+
+msgid ""
+"Ghana"
+msgstr ""
+
+msgid ""
+"Gibraltar"
+msgstr ""
+
+msgid ""
+"Great Britain"
+msgstr ""
+
+msgid ""
+"Greece"
+msgstr ""
+
+msgid ""
+"Greenland"
+msgstr ""
+
+msgid ""
+"Grenada"
+msgstr ""
+
+msgid ""
+"Guadeloupe (French)"
+msgstr ""
+
+msgid ""
+"Guam (USA)"
+msgstr ""
+
+msgid ""
+"Guatemala"
+msgstr ""
+
+msgid ""
+"Guinea"
+msgstr ""
+
+msgid ""
+"Guinea Bissau"
+msgstr ""
+
+msgid ""
+"Guyana"
+msgstr ""
+
+msgid ""
+"Haiti"
+msgstr ""
+
+msgid ""
+"Heard and McDonald Islands"
+msgstr ""
+
+msgid ""
+"Holy See (Vatican City State)"
+msgstr ""
+
+msgid ""
+"Honduras"
+msgstr ""
+
+msgid ""
+"Hong Kong"
+msgstr ""
+
+msgid ""
+"Hungary"
+msgstr ""
+
+msgid ""
+"Iceland"
+msgstr ""
+
+msgid ""
+"India"
+msgstr ""
+
+msgid ""
+"Indonesia"
+msgstr ""
+
+msgid ""
+"Iran"
+msgstr ""
+
+msgid ""
+"Iraq"
+msgstr ""
+
+msgid ""
+"Ireland"
+msgstr ""
+
+msgid ""
+"Israel"
+msgstr ""
+
+msgid ""
+"Italy"
+msgstr ""
+
+msgid ""
+"Ivory Coast (Cote D'Ivoire)"
+msgstr ""
+
+msgid ""
+"Jamaica"
+msgstr ""
+
+msgid ""
+"Japan"
+msgstr ""
+
+msgid ""
+"Jordan"
+msgstr ""
+
+msgid ""
+"Kazakhstan"
+msgstr ""
+
+msgid ""
+"Kenya"
+msgstr ""
+
+msgid ""
+"Kiribati"
+msgstr ""
+
+msgid ""
+"Kuwait"
+msgstr ""
+
+msgid ""
+"Kyrgyz Republic (Kyrgyzstan)"
+msgstr ""
+
+msgid ""
+"Laos"
+msgstr ""
+
+msgid ""
+"Latvia"
+msgstr ""
+
+msgid ""
+"Lebanon"
+msgstr ""
+
+msgid ""
+"Lesotho"
+msgstr ""
+
+msgid ""
+"Liberia"
+msgstr ""
+
+msgid ""
+"Libya"
+msgstr ""
+
+msgid ""
+"Liechtenstein"
+msgstr ""
+
+msgid ""
+"Lithuania"
+msgstr ""
+
+msgid ""
+"Luxembourg"
+msgstr ""
+
+msgid ""
+"Macau"
+msgstr ""
+
+msgid ""
+"Macedonia"
+msgstr ""
+
+msgid ""
+"Madagascar"
+msgstr ""
+
+msgid ""
+"Malawi"
+msgstr ""
+
+msgid ""
+"Malaysia"
+msgstr ""
+
+msgid ""
+"Maldives"
+msgstr ""
+
+msgid ""
+"Mali"
+msgstr ""
+
+msgid ""
+"Malta"
+msgstr ""
+
+msgid ""
+"Marshall Islands"
+msgstr ""
+
+msgid ""
+"Martinique (French)"
+msgstr ""
+
+msgid ""
+"Mauritania"
+msgstr ""
+
+msgid ""
+"Mauritius"
+msgstr ""
+
+msgid ""
+"Mayotte"
+msgstr ""
+
+msgid ""
+"Mexico"
+msgstr ""
+
+msgid ""
+"Micronesia"
+msgstr ""
+
+msgid ""
+"Moldavia"
+msgstr ""
+
+msgid ""
+"Monaco"
+msgstr ""
+
+msgid ""
+"Mongolia"
+msgstr ""
+
+msgid ""
+"Montserrat"
+msgstr ""
+
+msgid ""
+"Morocco"
+msgstr ""
+
+msgid ""
+"Mozambique"
+msgstr ""
+
+msgid ""
+"Myanmar"
+msgstr ""
+
+msgid ""
+"Namibia"
+msgstr ""
+
+msgid ""
+"Nauru"
+msgstr ""
+
+msgid ""
+"Nepal"
+msgstr ""
+
+msgid ""
+"Netherlands"
+msgstr ""
+
+msgid ""
+"Netherlands Antilles"
+msgstr ""
+
+msgid ""
+"New Caledonia (French)"
+msgstr ""
+
+msgid ""
+"New Zealand"
+msgstr ""
+
+msgid ""
+"Nicaragua"
+msgstr ""
+
+msgid ""
+"Niger"
+msgstr ""
+
+msgid ""
+"Nigeria"
+msgstr ""
+
+msgid ""
+"Niue"
+msgstr ""
+
+msgid ""
+"Norfolk Island"
+msgstr ""
+
+msgid ""
+"North Korea"
+msgstr ""
+
+msgid ""
+"Northern Mariana Islands"
+msgstr ""
+
+msgid ""
+"Norway"
+msgstr ""
+
+msgid ""
+"Oman"
+msgstr ""
+
+msgid ""
+"Pakistan"
+msgstr ""
+
+msgid ""
+"Palau"
+msgstr ""
+
+msgid ""
+"Panama"
+msgstr ""
+
+msgid ""
+"Papua New Guinea"
+msgstr ""
+
+msgid ""
+"Paraguay"
+msgstr ""
+
+msgid ""
+"Peru"
+msgstr ""
+
+msgid ""
+"Philippines"
+msgstr ""
+
+msgid ""
+"Pitcairn Island"
+msgstr ""
+
+msgid ""
+"Poland"
+msgstr ""
+
+msgid ""
+"Polynesia (French)"
+msgstr ""
+
+msgid ""
+"Portugal"
+msgstr ""
+
+msgid ""
+"Puerto Rico"
+msgstr ""
+
+msgid ""
+"Qatar"
+msgstr ""
+
+msgid ""
+"Reunion (French)"
+msgstr ""
+
+msgid ""
+"Romania"
+msgstr ""
+
+msgid ""
+"Russian Federation"
+msgstr ""
+
+msgid ""
+"Rwanda"
+msgstr ""
+
+msgid ""
+"S. Georgia and S. Sandwich Isls."
+msgstr ""
+
+msgid ""
+"Saint Helena"
+msgstr ""
+
+msgid ""
+"Saint Kitts and Nevis Anguilla"
+msgstr ""
+
+msgid ""
+"Saint Lucia"
+msgstr ""
+
+msgid ""
+"Saint Pierre and Miquelon"
+msgstr ""
+
+msgid ""
+"Saint Tome (Sao Tome) and Principe"
+msgstr ""
+
+msgid ""
+"Saint Vincent and Grenadines"
+msgstr ""
+
+msgid ""
+"Samoa"
+msgstr ""
+
+msgid ""
+"San Marino"
+msgstr ""
+
+msgid ""
+"Saudi Arabia"
+msgstr ""
+
+msgid ""
+"Senegal"
+msgstr ""
+
+msgid ""
+"Seychelles"
+msgstr ""
+
+msgid ""
+"Sierra Leone"
+msgstr ""
+
+msgid ""
+"Singapore"
+msgstr ""
+
+msgid ""
+"Slovak Republic"
+msgstr ""
+
+msgid ""
+"Slovenia"
+msgstr ""
+
+msgid ""
+"Solomon Islands"
+msgstr ""
+
+msgid ""
+"Somalia"
+msgstr ""
+
+msgid ""
+"South Africa"
+msgstr ""
+
+msgid ""
+"South Korea"
+msgstr ""
+
+msgid ""
+"Spain"
+msgstr ""
+
+msgid ""
+"Sri Lanka"
+msgstr ""
+
+msgid ""
+"Sudan"
+msgstr ""
+
+msgid ""
+"Suriname"
+msgstr ""
+
+msgid ""
+"Svalbard and Jan Mayen Islands"
+msgstr ""
+
+msgid ""
+"Swaziland"
+msgstr ""
+
+msgid ""
+"Sweden"
+msgstr ""
+
+msgid ""
+"Switzerland"
+msgstr ""
+
+msgid ""
+"Syria"
+msgstr ""
+
+msgid ""
+"Tadjikistan"
+msgstr ""
+
+msgid ""
+"Taiwan"
+msgstr ""
+
+msgid ""
+"Tanzania"
+msgstr ""
+
+msgid ""
+"Thailand"
+msgstr ""
+
+msgid ""
+"Togo"
+msgstr ""
+
+msgid ""
+"Tokelau"
+msgstr ""
+
+msgid ""
+"Tonga"
+msgstr ""
+
+msgid ""
+"Trinidad and Tobago"
+msgstr ""
+
+msgid ""
+"Tunisia"
+msgstr ""
+
+msgid ""
+"Turkey"
+msgstr ""
+
+msgid ""
+"Turkmenistan"
+msgstr ""
+
+msgid ""
+"Turks and Caicos Islands"
+msgstr ""
+
+msgid ""
+"Tuvalu"
+msgstr ""
+
+msgid ""
+"Uganda"
+msgstr ""
+
+msgid ""
+"Ukraine"
+msgstr ""
+
+msgid ""
+"United Arab Emirates"
+msgstr ""
+
+msgid ""
+"United Kingdom"
+msgstr ""
+
+msgid ""
+"United States"
+msgstr ""
+
+msgid ""
+"Uruguay"
+msgstr ""
+
+msgid ""
+"Uzbekistan"
+msgstr ""
+
+msgid ""
+"Vanuatu"
+msgstr ""
+
+msgid ""
+"Venezuela"
+msgstr ""
+
+msgid ""
+"Vietnam"
+msgstr ""
+
+msgid ""
+"Virgin Islands (British)"
+msgstr ""
+
+msgid ""
+"Virgin Islands (USA)"
+msgstr ""
+
+msgid ""
+"Wallis and Futuna Islands"
+msgstr ""
+
+msgid ""
+"West Bank Administered by Israel"
+msgstr ""
+
+msgid ""
+"Western Sahara"
+msgstr ""
+
+msgid ""
+"Yemen"
+msgstr ""
+
+msgid ""
+"Serbia and Montenegro"
+msgstr ""
+
+msgid ""
+"Zaire"
+msgstr ""
+
+msgid ""
+"Zambia"
+msgstr ""
+
+msgid ""
+"Zimbabwe"
+msgstr ""
