@@ -51,21 +51,21 @@ query_hooks_test() ->
 search_query_notify_test() ->
     C = z_acl:sudo(z_context:new(testsandbox)),
 
-    Q = <<"cat=article\nis_featured">>,
+    Q = <<"cat=keyword\nis_featured">>,
 
     %% Create a new query
     {ok, Query1} = m_rsc:insert([{category, 'query'},
-                                 {title, <<"All featured articles">>},
+                                 {title, <<"All featured keywords">>},
                                  {'query', Q}], C),
 
     %% There's exactly one query
     Watches = search_query_notify:init(C),
-    ?assertEqual([{Query1, search_query:parse_query_text(Q)}], Watches),
+    ?assert(lists:member({Query1, search_query:parse_query_text(Q)}, Watches)),
 
     %% Create an item which fits the query
-    {ok, Id} = m_rsc:insert([{category, article},
+    {ok, Id} = m_rsc:insert([{category, keyword},
                              {is_featured, true},
-                             {title, <<"A test article">>}], C),
+                             {title, <<"A test keyword">>}], C),
 
     %% It should match
     ?assertEqual([Query1], search_query_notify:check_rsc(Id, Watches, C)),

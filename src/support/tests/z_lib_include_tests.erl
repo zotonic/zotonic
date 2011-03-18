@@ -19,7 +19,7 @@ uncollapse_test() ->
 
 
 tag_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual([_LinkElem = [], _ScriptElem = []],
                  z_lib_include:tag([], C)),
     ?assertEqual([_LinkElem = [], _ScriptElem = []],

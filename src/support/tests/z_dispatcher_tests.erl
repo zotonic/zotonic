@@ -10,7 +10,7 @@
 -define(assertEqualFlat(A, B), ?assertEqual(lists:flatten(A), lists:flatten(B))).
 
 %% test() ->
-%%     Ctx  = z_context:new(default),
+%%     Ctx  = z_context:new(testsandbox),
 %%     List = collect_dispatch_lists(Ctx),
 %%     Dict = dispatch_for_uri_lookup(List),
 %%     dict:to_list(Dict),
@@ -28,7 +28,7 @@
 
 
 url_for_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual(undefined, z_dispatcher:url_for(nonexisting_dispatch_rule, C)),
     %% these dispatch rules come from mod_base.
     ?assertEqualFlat("/", z_dispatcher:url_for(home, C)),
