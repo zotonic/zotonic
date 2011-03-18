@@ -78,7 +78,14 @@
 
 				<div class="form-item clearfix">
 					<label for="address_country">{_ Country _}</label>
-					<input id="address_country" type="text" name="address_country" value="{{ r.address_country }}" style="width: 285px" />
+					{% if m.modules.info.mod_l10n.enabled %}
+						<select id="address_country" name="address_country">
+							<option value=""></option>
+							{% include "_l10n_country_options.tpl" country=r.address_country %}
+						</select>
+					{% else %}
+						<input id="address_country" type="text" name="address_country" value="{{ r.address_country }}" style="width: 285px" />
+					{% endif %}
 				</div>
 			</div>
 
@@ -112,7 +119,14 @@
 
 				<div class="form-item clearfix">
 					<label for="mail_country">{_ Country _}</label>
-					<input id="mail_country" type="text" name="mail_country" value="{{ r.mail_country }}" style="width: 295px" />
+					{% if m.modules.info.mod_l10n.enabled %}
+						<select id="mail_country" name="mail_country">
+							<option value=""></option>
+							{% include "_l10n_country_options.tpl" country=r.mail_country %}
+						</select>
+					{% else %}
+						<input id="mail_country" type="text" name="mail_country" value="{{ r.mail_country }}" style="width: 285px" />
+					{% endif %}
 				</div>
 			</div>
 			

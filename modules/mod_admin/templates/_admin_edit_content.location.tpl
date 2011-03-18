@@ -9,7 +9,8 @@
 	<div class="item">
 		<fieldset class="admin-form">
 			<div class="notification notice">
-				{_ Here you add the latitude and longitude data. Please click on the map to select the location. _} <a href="javascript:;" id="fill-geo">{_ Try to fill the fields automatically _}</a>
+				{_ Please click on the map to select the location. _}
+                <a href="javascript:;" id="fill-geo">{_ Try to fill the fields automatically from the title of the location _}</a>
 			</div>
 			
 			<div class="zp-15">
