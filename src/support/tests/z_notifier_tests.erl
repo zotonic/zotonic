@@ -18,7 +18,7 @@ observer2({test_blaat, arg1, arg2}, _Context) ->
 
 %% @doc Test z_notifier:observe, z_notifier:get_observers, z_notifier:detach
 attach_detach_test() ->
-    Context = z_context:new(default),
+    Context = z_context:new(testsandbox),
     ?assertEqual([], z_notifier:get_observers(test_blaat, Context)),
     z_notifier:observe(test_blaat, {?MODULE, observer1}, Context),
     ?assertEqual([{?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer1}}],
@@ -29,7 +29,7 @@ attach_detach_test() ->
 
 %% @doc Test z_notifier:detach_all/2
 detach_all_test() ->
-    Context = z_context:new(default),
+    Context = z_context:new(testsandbox),
     ?assertEqual([], z_notifier:get_observers(test_blaat, Context)),
     z_notifier:observe(test_blaat, {?MODULE, observer1}, Context),
     z_notifier:observe(test_blaat, {?MODULE, observer2}, Context),
@@ -41,7 +41,7 @@ detach_all_test() ->
 
 %% @doc Test receiving a message using z_notifer:first
 z_notifier_first_test() ->
-    Context = z_context:new(default),
+    Context = z_context:new(testsandbox),
 
     ?assertEqual(undefined, z_notifier:first({test_blaat, arg1, arg2}, Context)),
 
@@ -55,7 +55,7 @@ z_notifier_first_test() ->
 
 %% @doc Test receiving a message using z_notifer:map
 z_notifier_map_test() ->
-    Context = z_context:new(default),
+    Context = z_context:new(testsandbox),
 
     ?assertEqual([], z_notifier:map({test_blaat, arg1, arg2}, Context)),
 

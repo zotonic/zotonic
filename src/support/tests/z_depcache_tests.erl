@@ -9,7 +9,7 @@
 
 
 %% simple_test() ->
-%% 	C = z_context:new(default),
+%% 	C = z_context:new(testsandbox),
 %% 	z_depcache:flush(test_m_key, C),
 %% 	[ test_m(C) || _N <- lists:seq(1,100) ],
 %% 	ok.
@@ -23,7 +23,7 @@
 
 
 get_set_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
     z_depcache:set(test_key, 123, C),
     ?assertEqual({ok,123}, z_depcache:get(test_key, C)),
@@ -32,7 +32,7 @@ get_set_test() ->
 
 
 flush_all_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     z_depcache:set(test_key, 123, C),
     z_depcache:set(test_key2, 123, C),
     z_depcache:set(test_key3, 123, C),
@@ -46,7 +46,7 @@ flush_all_test() ->
 
 
 get_set_maxage_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
     %% Set a key and hold it for one second.
@@ -59,7 +59,7 @@ get_set_maxage_test() ->
 
 
 get_set_maxage0_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
     %% Set a key and hold it for 0 seconds
@@ -68,7 +68,7 @@ get_set_maxage0_test() ->
 
 
 get_set_depend_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
     %% Set a key  and hold it for one second.
@@ -81,7 +81,7 @@ get_set_depend_test() ->
 
 
 memo_test() ->
-    C = z_context:new(default),
+    C = z_context:new(testsandbox),
     z_depcache:flush(C),
 
     IncreaserFun = fun() ->

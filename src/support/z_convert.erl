@@ -217,8 +217,9 @@ to_time(L) when is_list(L) ->
     {H,I,S}.
 
 %% @doc Convert a datetime (in local time) to an ISO time string (in universal time).
+%% @spec to_isotime(DateTime) -> string()
 to_isotime(DateTime) ->
-    erlydtl_dateformat:format(hd(calendar:local_time_to_universal_time_dst(DateTime)), "Y-m-d\\TH:i:s\\Z", #context{}).
+    z_convert:to_list(erlydtl_dateformat:format(hd(calendar:local_time_to_universal_time_dst(DateTime)), "Y-m-d\\TH:i:s\\Z", #context{})).
 
 
 %%
