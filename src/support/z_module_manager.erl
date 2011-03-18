@@ -38,6 +38,7 @@
     active_dir/1,
     get_modules/1,
     get_modules_status/1,
+    whereis/2,
     all/1,
     scan/1,
     prio/1,
@@ -144,6 +145,11 @@ get_modules_status(Context) ->
     gen_server:call(name(Context), get_modules_status).
 
 
+%% @doc Return the pid of a running module
+whereis(Module, Context) ->
+    gen_server:call(name(Context), {whereis, Module}).
+
+
 %% @doc Return the list of all modules in the database.
 %% @spec all(#context{}) -> [ atom() ]
 all(Context) ->
@@ -235,6 +241,15 @@ handle_call(get_modules, _From, State) ->
 %% @doc Return all running modules and their status
 handle_call(get_modules_status, _From, State) ->
     {reply, z_supervisor:which_children(State#state.sup), State};
+
+%% @doc Return the pid of a running module
+handle_call({whereis, Module}, _From, State) ->
+    Running = proplists:get_value(running, z_supervisor:which_children(State#state.sup)),
+    Ret = case lists:keysearch(Module, 1, Running) of
+        {value, {Module, _, Pid, _}} -> {ok, Pid};
+        false -> {error, enoent}
+    end,
+    {reply, Ret, State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
