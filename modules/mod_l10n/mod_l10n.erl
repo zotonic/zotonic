@@ -21,5 +21,5 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Localization").
--mod_descr("Localization support and translations for country names etc.").
+-mod_description("Localization support and translations for country names etc.").
 
