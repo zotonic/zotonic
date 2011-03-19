@@ -24,6 +24,8 @@
 
 get_set_test() ->
     C = z_context:new(testsandbox),
+    z_depcache:flush(C),
+
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
     z_depcache:set(test_key, 123, C),
     ?assertEqual({ok,123}, z_depcache:get(test_key, C)),
@@ -33,6 +35,8 @@ get_set_test() ->
 
 flush_all_test() ->
     C = z_context:new(testsandbox),
+    z_depcache:flush(C),
+
     z_depcache:set(test_key, 123, C),
     z_depcache:set(test_key2, 123, C),
     z_depcache:set(test_key3, 123, C),
@@ -47,19 +51,23 @@ flush_all_test() ->
 
 get_set_maxage_test() ->
     C = z_context:new(testsandbox),
-    ?assertEqual(undefined, z_depcache:get(test_key, C)),
+    z_depcache:flush(C),
+
+    ?assertEqual(undefined, z_depcache:get(xtest_key, C)),
 
     %% Set a key and hold it for one second.
-    z_depcache:set(test_key, 123, 1, C),
-    ?assertEqual({ok,123}, z_depcache:get(test_key, C)),
+    z_depcache:set(xtest_key, 123, 1, C),
+    ?assertEqual({ok,123}, z_depcache:get(xtest_key, C)),
 
     %% Let the depcache time out.
     receive after 2000 -> ok end,
-    ?assertEqual(undefined, z_depcache:get(test_key, C)).
+    ?assertEqual(undefined, z_depcache:get(xtest_key, C)).
 
 
 get_set_maxage0_test() ->
     C = z_context:new(testsandbox),
+    z_depcache:flush(C),
+
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
     %% Set a key and hold it for 0 seconds
@@ -69,6 +77,8 @@ get_set_maxage0_test() ->
 
 get_set_depend_test() ->
     C = z_context:new(testsandbox),
+    z_depcache:flush(C),
+
     ?assertEqual(undefined, z_depcache:get(test_key, C)),
 
     %% Set a key  and hold it for one second.

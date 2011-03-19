@@ -16,6 +16,9 @@
 
 cd $ZOTONIC
 
+SNAME="testsandbox"
+ZOTONIC_PORT=8040
+
 case "$1" in
 erlydtl)
     # Test only erlydtl
@@ -37,7 +40,7 @@ erlydtl)
     #exec erl -noshell -pa ebin -eval "eunit:test([$ALL],[verbose]),init:stop()"
 
     echo $ALL
-    exec erl erl +P 10000000 +K true -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -sasl errlog_type error -s zotonic -eval "eunit:test([$ALL],[]),init:stop()"
+    $ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),eunit:test([$ALL],[]),init:stop()"
 ;;
 esac
 
