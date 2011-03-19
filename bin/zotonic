@@ -5,9 +5,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,20 +21,23 @@ export ZOTONIC=${ZOTONIC:=`dirname $0 || readlink -e $0`/..}
 export ZOTONIC_SCRIPTS="$ZOTONIC/src/scripts"
 if [ ! $1 ]
 then
-	echo Usage: `basename $0` [command] 1>&2
-	echo 1>&2
-	echo Where [command] is one of: 1>&2
-	CMDS="`ls $ZOTONIC_SCRIPTS | grep zotonic- | grep -v _ | sed 's/zotonic-//g'`"
-	echo $CMDS 1>&2
-	echo 1>&2
-	echo see doc/ZotonicCommands.txt for more info 1>&2
-	echo 1>&2
+    echo Usage: `basename $0` [command] 1>&2
+    echo 1>&2
+    echo Where [command] is one of: 1>&2
+    CMDS="`ls $ZOTONIC_SCRIPTS | grep zotonic- | grep -v _ | sed 's/zotonic-//g'`"
+    echo $CMDS 1>&2
+    echo 1>&2
+    echo see doc/ZotonicCommands.txt for more info 1>&2
+    echo 1>&2
+    exit 127
 elif [ ! -f "$ZOTONIC_SCRIPTS/zotonic-$1" ]; then
-	echo Command not found: $1 1>&2
+    echo Command not found: $1 1>&2
+    exit 127
 else
     . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
-	$ZOTONIC_SCRIPTS/zotonic-$1 ${@:2}
+    $ZOTONIC_SCRIPTS/zotonic-$1 ${@:2}
+    EXIT="$?"
     . $ZOTONIC_SCRIPTS/helpers/zotonic_teardown
+    exit $EXIT
 fi
 
-exit 0
