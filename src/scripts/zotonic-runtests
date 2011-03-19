@@ -18,8 +18,10 @@ cd $ZOTONIC
 
 set -e
 
-SNAME="testsandbox"
-ZOTONIC_PORT=8040
+export SNAME="testsandbox"
+export ZOTONIC_PORT=8040
+export ZOTONIC_PORT_SSL=8043
+export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
 case "$1" in
 erlydtl)
