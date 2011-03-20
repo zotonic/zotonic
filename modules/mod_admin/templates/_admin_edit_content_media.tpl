@@ -3,6 +3,7 @@
 {# Widget for viewing/editing media/file content #}
 
 {% block widget_title %}{_ File / media content _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}

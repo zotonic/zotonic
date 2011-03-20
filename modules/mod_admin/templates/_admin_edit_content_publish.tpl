@@ -3,6 +3,7 @@
 {# Widget with main rsc controls: publish, delete, duplicate, etc  #}
 
 {% block widget_title %}{_ Publish this page _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}

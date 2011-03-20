@@ -53,8 +53,8 @@
 
 						{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 
-						{% include "_admin_edit_content_advanced.tpl" show_minimized %}
-						{% include "_admin_edit_content_seo.tpl" show_minimized %}
+						{% include "_admin_edit_content_advanced.tpl" %}
+						{% include "_admin_edit_content_seo.tpl" %}
 					</div>
 				</div>
 
@@ -65,16 +65,14 @@
 						{% include "_admin_edit_content_publish.tpl" headline="simple" %}
 
 						{# Access control #}
-						{% include "_admin_edit_content_acl.tpl" show_minimized %}
+						{% include "_admin_edit_content_acl.tpl" %}
 
 						{% if not r.is_a.meta %}
 							{# Publication period #}
-							{% include "_admin_edit_content_pub_period.tpl" 
-								    show_minimized=(r.publication_start|in_past and r.publication_end|in_future) %}
+							{% include "_admin_edit_content_pub_period.tpl" %}
 
 							{# Date range #}
-							{% include "_admin_edit_content_date_range.tpl" 
-								    show_minimized=(not ((r.date_start|in_past and r.date_end|in_future) or r.is_a.event or r.is_a.survey)) %}
+							{% include "_admin_edit_content_date_range.tpl" %}
 						{% endif %}	{# not r.is_a.meta #}
 
 						{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
@@ -83,7 +81,7 @@
 						{% include "_admin_edit_content_page_connections.tpl" %}
 
 						{% if m.acl.insert[r.category.name|as_atom] %}
-							{% include "_admin_edit_content_category.tpl" show_minimized %}
+							{% include "_admin_edit_content_category.tpl" %}
 						{% endif %}
 					</div>
 				</div>

@@ -3,6 +3,7 @@
 {# Widget for editing SEO preferences #}
 
 {% block widget_title %}{_ SEO Content _}{% endblock %}
+{% block widget_show_minimized %}true{% endblock %}
 
 
 {% block widget_content %}

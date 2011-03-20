@@ -4,6 +4,7 @@
 
 
 {% block widget_title %}{_ Person name _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}

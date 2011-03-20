@@ -8,10 +8,8 @@
 	{% endif %}
 
 	{% if headline == "normal" or not headline %}
-		<h3 class="above-item clearfix do_blockminifier 
-			{% if show_minimized %}above-item-all-corners{% endif %} 
-			{% block widget_headline_class %}{% endblock %}"
-			{% if show_minimized %}data-blockminifier="minifiedOnInit: true"{% endif %}>
+		<h3 class="above-item clearfix do_blockminifier {% block widget_headline_class %}{% endblock %}"
+			data-blockminifier="minifiedOnInit: {% block widget_show_minimized %}{% endblock %}">
 
 			<span class="title">{% block widget_title %}{% endblock %}</span>
 			<span class="arrow">{_ make smaller _}</span>

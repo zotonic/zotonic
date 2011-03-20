@@ -3,6 +3,7 @@
 {# Widget for editing connections between rscs #}
 
 {% block widget_title %}{_ Page connections _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}

@@ -4,6 +4,7 @@
 
 
 {% block widget_title %}{_ Geodata _}{% endblock %}
+{% block widget_show_minimized %}false{% enblock %}
 
 
 {% block widget_content %}

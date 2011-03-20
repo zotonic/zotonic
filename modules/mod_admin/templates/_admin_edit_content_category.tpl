@@ -3,6 +3,7 @@
 {# Widget for editing rsc category #}
 
 {% block widget_title %}{_ Category _}{% endblock %}
+{% block widget_show_minimized %}true{% endblock %}
 
 
 {% block widget_content %}
