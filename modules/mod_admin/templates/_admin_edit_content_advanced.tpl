@@ -4,6 +4,7 @@
 
 
 {% block widget_title %}{_ Advanced _}{% endblock %}
+{% block widget_show_minimized %}true{% endblock %}
 
 
 {% block widget_content %}

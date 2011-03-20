@@ -3,6 +3,7 @@
 {# Widget for editing rsc publication date_start/date_end #}
 
 {% block widget_title %}{_ Publication period _}{% endblock %}
+{% block widget_show_minimized %}{{ r.publication_start|in_past and r.publication_end|in_future }}{% endblock %}
 
 
 {% block widget_content %}

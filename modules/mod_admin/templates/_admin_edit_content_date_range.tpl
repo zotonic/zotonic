@@ -3,6 +3,7 @@
 {# Widget for editing abstract event date_start/date_end #}
 
 {% block widget_title %}{_ Date range _}{% endblock %}
+{% block widget_show_minimized %}{% with m.rsc[id] as r %}{{ not ((r.date_start|in_past and r.date_end|in_future) or r.is_a.event or r.is_a.survey) }}{% endwith %}{% endblock %}
 
 
 {% block widget_content %}

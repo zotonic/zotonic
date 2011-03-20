@@ -3,6 +3,7 @@
 {# Widget for editing access control to rsc  #}
 
 {% block widget_title %}{_ Access control _}{% endblock %}
+{% block widget_show_minimized %}true{% endblock %}
 
 
 {% block widget_content %}

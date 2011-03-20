@@ -3,6 +3,7 @@
 {# Show the edit fields to edit the name of a person #}
 
 {% block widget_title %}{_ Address _}{% endblock %}
+{% block widget_show_minimized %}true{% endblock %}
 
 
 {% block widget_content %}

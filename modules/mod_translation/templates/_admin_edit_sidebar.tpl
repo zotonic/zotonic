@@ -3,6 +3,7 @@
 {# Sidebar widget for editing rsc transalations #}
 
 {% block widget_title %}{_ Translations _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}
