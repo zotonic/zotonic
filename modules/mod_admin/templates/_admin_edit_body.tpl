@@ -1,58 +1,64 @@
+{% extends "admin_edit_widget_i18n.tpl" %}
+
+{% block widget_title %}{_ Content _}{% endblock %}
+
+
+{% block widget_content %}
 {% with m.rsc[id] as r %}
-{% if m.modules.info.mod_translation.enabled %}
-{% with r.language|default:[z_language] as r_language %}
-<div class="item-wrapper">
-	<div class="translations ui-tabs" id="{{ #tabs }}">
-		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
-		
-		{% for code,lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
-		    <div id="{{ #prefix }}-{{ code }}" class="ui-tabs-hide">
-		        <fieldset class="admin-form">
-		            {% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
-		            {% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
-		            {% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
+<fieldset class="admin-form">
+	{% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
+	{% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
+	{% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
 
-		            <div class="form-item clearfix">
-		                {% if is_editable %}
-		                <textarea rows="10" cols="10" id="rsc-body${{ code }}" name="body${{ code }}" class="body tinymce-init">{{ r.translation[code].body|escape }}</textarea>
-		                {% else %}
-		                {{ r.translation[code].body }}
-		                {% endif %}
-		            </div>
-		        </fieldset>
-
-		        {% include "_admin_save_buttons.tpl" %}
-
-		    </div>
-		{% endfor %}
+	<div class="form-item clearfix">
+	    {% with is_i18n|if:r.translation[lang_code].body:r.body  as  body %}
+		{% if is_editable %}
+		    <textarea rows="10" cols="10" id="rsc-body{{ lang_code_with_dollar }}" name="body{{ lang_code_with_dollar }}" class="body tinymce-init">{{ body|escape }}</textarea>
+		{% else %}
+		    {{ body }}
+		{% endif %}
+	    {% endwith %}
 	</div>
-</div>
+</fieldset>
+
+{% include "_admin_save_buttons.tpl" %}
 {% endwith %}
-{% else %} {# non-multilanguage content and translation module disabled #}
+{% endblock %}
 
-<div class="item-wrapper">
-    <h3 class="above-item clearfix do_blockminifier">
-        <span class="title">{_ Content _}</span>
-        <span class="arrow">{_ make smaller _}</span>
-    </h3>
-    <div class="item clearfix admin-form" style="margin: 0; padding: 0">
-        <fieldset class="admin-form">
-            {% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
-            {% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
-            {% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
 
-            <div class="form-item clearfix">
-                {% if is_editable %}
-                <textarea rows="10" cols="10" id="rsc-body" name="body" class="body tinymce-init">{{ r.body|escape }}</textarea>
-                {% else %}
-                {{ r.body }}
-                {% endif %}
-            </div>
-        </fieldset>
+{# some tinymce js #}
+{% block widget_after %}
+<script type="text/javascript" src="/lib/js/modules/tinymce3.3.2a/tiny_mce.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	tinyMCE.init(tinyInit);
 
-        {% include "_admin_save_buttons.tpl" %}
-    </div>
-</div>
+	/* Initialize translation tabs, select correct language */
+	if ($(".translations").length) {
+		$(".translations").tabs();
 
-{% endif %}
-{% endwith %}
+		$(".translations").bind('tabsshow', function(event, ui) {
+			$(".tinymce-init", ui.panel).each(function() { 
+				var mce_id = $(this).attr('id');
+				setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+			}).removeClass('tinymce-init').addClass('tinymce');
+			$(".translations").tabs("select", ui.index);
+		});
+
+		var tab_index = $(".translations ul.ui-tabs-nav .tab-{{ z_language }}:visible").attr('data-index');
+		if (typeof(tab_index) == 'undefined') {
+			tab_index = $(".translations ul.ui-tabs-nav li:visible").attr('data-index');
+		}
+		if (typeof(tab_index) != "undefined") {
+			$(".translations").tabs("select", parseInt(tab_index));
+		}
+	}
+
+	/* Initialize all non-initialized tinymce controls */
+	$(".tinymce-init:visible").each(function() { 
+		var mce_id = $(this).attr('id');
+		setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+	}).removeClass('tinymce-init').addClass('tinymce');
+});
+</script>
+{% endblock %}

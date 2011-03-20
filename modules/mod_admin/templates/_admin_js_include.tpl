@@ -1,6 +1,3 @@
-{% include "_js_include_jquery.tpl" %}
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-
 {% lib 
 	"js/apps/zotonic-1.0.js"
 	"js/apps/z.widgetmanager.js"

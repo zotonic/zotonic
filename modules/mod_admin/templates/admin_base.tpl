@@ -17,7 +17,8 @@
 		"css/zp-icon-status.css"
 		"css/jquery.loadmask.css"
 	%}
-	
+
+	{% include "_js_include_jquery.tpl" %}
 	<!--[if IE]>
 		{% lib
 			"css/zp-ie.css"
