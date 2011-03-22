@@ -67,6 +67,8 @@ map_country(Prop, Rsc) ->
     case proplists:get_value(Prop, Rsc) of
         <<>> -> Rsc;
         undefined -> Rsc;
+        <<A,B>> when A =< $Z orelse B =< $Z ->
+            [{Prop, z_convert:to_binary(z_string:to_lower([A,B]))} | Rsc];
         Country ->
             case z_string:to_lower(Country) of
                 "usa" -> [{Prop, <<"us">>} | Rsc];
