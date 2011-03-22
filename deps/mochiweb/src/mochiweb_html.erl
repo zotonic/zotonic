@@ -127,29 +127,38 @@ escape_attr(I) when is_integer(I) ->
 escape_attr(F) when is_float(F) ->
     escape_attr(mochinum:digits(F), []).
 
-to_html([], Acc) ->
+to_html(Tree, Acc) ->
+    to_html(Tree, Acc, true).
+
+to_html([], Acc, _Escape) ->
     lists:reverse(Acc);
-to_html([{'=', Content} | Rest], Acc) ->
-    to_html(Rest, [Content | Acc]);
-to_html([{pi, Bin} | Rest], Acc) ->
+to_html([{'=', Content} | Rest], Acc, Escape) ->
+    to_html(Rest, [Content | Acc], Escape);
+to_html([{pi, Bin} | Rest], Acc, Escape) ->
     Open = [<<"<?">>,
             Bin,
             <<"?>">>],
-    to_html(Rest, [Open | Acc]);
-to_html([{pi, Tag, Attrs} | Rest], Acc) ->
+    to_html(Rest, [Open | Acc], Escape);
+to_html([{pi, Tag, Attrs} | Rest], Acc, Escape) ->
     Open = [<<"<?">>,
             Tag,
             attrs_to_html(Attrs, []),
             <<"?>">>],
-    to_html(Rest, [Open | Acc]);
-to_html([{comment, Comment} | Rest], Acc) ->
-    to_html(Rest, [[<<"<!--">>, Comment, <<"-->">>] | Acc]);
-to_html([{doctype, Parts} | Rest], Acc) ->
+    to_html(Rest, [Open | Acc], Escape);
+to_html([{comment, Comment} | Rest], Acc, Escape) ->
+    to_html(Rest, [[<<"<!--">>, Comment, <<"-->">>] | Acc], Escape);
+to_html([{doctype, Parts} | Rest], Acc, Escape) ->
     Inside = doctype_to_html(Parts, Acc),
-    to_html(Rest, [[<<"<!DOCTYPE">>, Inside, <<">">>] | Acc]);
-to_html([{data, Data, _Whitespace} | Rest], Acc) ->
-    to_html(Rest, [escape(Data) | Acc]);
-to_html([{start_tag, Tag, Attrs, Singleton} | Rest], Acc) ->
+    to_html(Rest, [[<<"<!DOCTYPE">>, Inside, <<">">>] | Acc], Escape);
+to_html([{data, Data, _Whitespace} | Rest], Acc, true) ->
+    to_html(Rest, [escape(Data) | Acc], true);
+to_html([{data, Data, _Whitespace} | Rest], Acc, false) ->
+    to_html(Rest, [Data | Acc], false);
+to_html([{start_tag, Tag, Attrs, Singleton} | Rest], Acc, _Escape) ->
+    EscapeData = case Tag of 
+                     <<"script">> -> false;
+                     _ -> true
+                 end,
     Open = [<<"<">>,
             Tag,
             attrs_to_html(Attrs, []),
@@ -157,9 +166,9 @@ to_html([{start_tag, Tag, Attrs, Singleton} | Rest], Acc) ->
                 true -> <<" />">>;
                 false -> <<">">>
             end],
-    to_html(Rest, [Open | Acc]);
-to_html([{end_tag, Tag} | Rest], Acc) ->
-    to_html(Rest, [[<<"</">>, Tag, <<">">>] | Acc]).
+    to_html(Rest, [Open | Acc], EscapeData);
+to_html([{end_tag, Tag} | Rest], Acc, _Escape) ->
+    to_html(Rest, [[<<"</">>, Tag, <<">">>] | Acc], false).
 
 doctype_to_html([], Acc) ->
     lists:reverse(Acc);
@@ -609,15 +618,26 @@ tokenize_charref(Bin, S=#decoder{offset=O}, Start) ->
     case Bin of
         <<_:O/binary>> ->
             <<_:Start/binary, Raw/binary>> = Bin,
+	    io:fwrite(standard_error, "& gelezen?: ~p", [Raw]),
             {{data, Raw, false}, S};
         <<_:O/binary, C, _/binary>> when ?IS_WHITESPACE(C)
                                          orelse C =:= ?SQUOTE
                                          orelse C =:= ?QUOTE
                                          orelse C =:= $/
-                                         orelse C =:= $> ->
+                                         orelse C =:= $> 
+                                         orelse C =:= $& ->
             Len = O - Start,
             <<_:Start/binary, Raw:Len/binary, _/binary>> = Bin,
-            {{data, Raw, false}, S};
+	    Data = case mochiweb_charref:charref(Raw) of
+                       undefined ->
+                           Start1 = Start - 1,
+                           Len1 = Len + 1,
+                           <<_:Start1/binary, R:Len1/binary, _/binary>> = Bin,
+                           R;
+                       Unichar ->
+                           mochiutf8:codepoint_to_bytes(Unichar)
+                   end,
+            {{data, Data, false}, S};
         <<_:O/binary, $;, _/binary>> ->
             Len = O - Start,
             <<_:Start/binary, Raw:Len/binary, _/binary>> = Bin,
@@ -1239,6 +1259,34 @@ parse_missing_attr_name_test() ->
     ?assertEqual(
         {<<"html">>, [ { <<"=">>, <<"=">> }, { <<"black">>, <<"black">> } ], [] },
        mochiweb_html:parse(D0)),
+    ok.
+
+parse_amps_attr_test() ->
+    D0 = <<"<a href=\"/hello?test=1&amp;that=2\"></a>">>,
+    ?assertEqual(
+       {<<"a">>, [ { <<"href">>, <<"/hello?test=1&that=2">> }], [] },
+       mochiweb_html:parse(D0)),
+    
+    D1 = <<"<a href=\"/hello?test=1&that=2\"></a>">>,
+    ?assertEqual(
+       {<<"a">>, [ { <<"href">>, <<"/hello?test=1&that=2">> }], [] },
+       mochiweb_html:parse(D1)),
+
+    D2 = <<"<a href=\"/hello?test=123&that=2&amp;this=too\"></a>">>,
+    ?assertEqual(
+       {<<"a">>, [ { <<"href">>, <<"/hello?test=123&that=2&this=too">> }], [] },
+       mochiweb_html:parse(D2)),
+
+    D3 = <<"<a href=\"/product/54?c=hk-machine&id=1008&shop=auto-oko-74-H\"></a>">>,
+    ?assertEqual(
+       {<<"a">>, [ { <<"href">>, <<"/product/54?c=hk-machine&id=1008&shop=auto-oko-74-H">> }], [] },
+       mochiweb_html:parse(D3)),
+
+    D4 = <<"<a href=\"test?a=1&amp=1008\"></a>">>,
+    ?assertEqual(
+       {<<"a">>, [ { <<"href">>, <<"test?a=1&amp=1008">> }], [] },
+       mochiweb_html:parse(D4)),
+    
     ok.
 
 parse_broken_pi_test() ->
