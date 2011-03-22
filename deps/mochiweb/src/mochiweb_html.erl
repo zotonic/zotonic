@@ -618,7 +618,6 @@ tokenize_charref(Bin, S=#decoder{offset=O}, Start) ->
     case Bin of
         <<_:O/binary>> ->
             <<_:Start/binary, Raw/binary>> = Bin,
-	    io:fwrite(standard_error, "& gelezen?: ~p", [Raw]),
             {{data, Raw, false}, S};
         <<_:O/binary, C, _/binary>> when ?IS_WHITESPACE(C)
                                          orelse C =:= ?SQUOTE
