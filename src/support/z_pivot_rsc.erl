@@ -338,7 +338,8 @@ delete_queue(Id, Serial, Context) ->
 %% @todo Also add the property tag/values
 %% @spec pivot_resource(Id, Context) -> void()
 pivot_resource(Id, Context) ->
-    {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, Context),
+    R = get_pivot_rsc(Id, Context),
+    {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, R, Context),
 
     {SqlA, ArgsA} = to_tsv(TA, $A, []),
     {SqlB, ArgsB} = to_tsv(TB, $B, ArgsA),
@@ -351,7 +352,6 @@ pivot_resource(Id, Context) ->
     TsvCat = [ [" zpc",integer_to_list(CId)] || CId <- CatIds ],
     TsvIds = list_to_binary([TsvObj,TsvCat]),
 
-    R = m_rsc:get(Id, Context),
     N = length(ArgsD),
     Sql = list_to_binary([
             "update rsc set pivot_tsv = ",TsvSql,
@@ -369,11 +369,11 @@ pivot_resource(Id, Context) ->
 
     SqlArgs = ArgsD ++ [
         TsvIds,
-        truncate(proplists:get_value(street, R), 120),
-        truncate(proplists:get_value(city, R), 100),
-        truncate(proplists:get_value(postcode, R), 30),
-        truncate(proplists:get_value(state, R), 50),
-        truncate(proplists:get_value(country, R), 80),
+        truncate(proplists:get_value(address_street_1, R), 120),
+        truncate(proplists:get_value(address_city, R), 100),
+        truncate(proplists:get_value(address_postcode, R), 30),
+        truncate(proplists:get_value(address_state, R), 50),
+        truncate(proplists:get_value(address_country, R), 80),
         truncate(proplists:get_value(name_first, R), 100),
         truncate(proplists:get_value(name_surname, R), 100),
         truncate(proplists:get_value(gender, R), 1),
@@ -389,7 +389,8 @@ pivot_resource(Id, Context) ->
 
 
     %% Make the setweight(to_tsvector()) parts of the update statement
-    to_tsv([], _Level, Args) -> {"tsvector('')", Args};
+    to_tsv([], _Level, Args) ->
+        {"tsvector('')", Args};
     to_tsv(List, Level, Args) -> 
         {Sql1, Args1} = lists:foldl(
             fun ({Lang,Text}, {Sql, As}) -> 
@@ -452,9 +453,17 @@ get_pivot_title(Props) ->
             z_string:to_lower(T)
     end.
 
+
+%% @doc Return the data for the pivoter
+get_pivot_rsc(Id, Context) ->
+    z_notifier:foldl(pivot_rsc_data, m_rsc:get(Id, Context), Context).
+
+
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
 get_pivot_data(Id, Context) ->
-    Rsc = m_rsc:get(Id, Context),
+    get_pivot_data(Id, get_pivot_rsc(Id, Context), Context).
+    
+get_pivot_data(Id, Rsc, Context) ->
     R = z_notifier:foldr({pivot_get, Id}, Rsc, Context),
     {A,B} = lists:foldl(fun(Res,Acc) -> fetch_texts(Res, Acc, Context) end, {[],[]}, R),
     {ObjIds, ObjTexts} = related(Id, Context),
@@ -509,9 +518,14 @@ fetch_texts({name_surname, Value}, {A,B}, _Context) ->
 fetch_texts({name_first, Value}, {A,B}, _Context) ->
     {[Value|A], B};
 fetch_texts({F, Value}, {A,B}, _Context) when is_binary(Value) ->
-    case do_pivot_field(F) of
-        false -> {A,B};
-        true -> {A, [Value|B]}
+    case is_lang_neutral(F, Value) of
+        true ->
+            {A, [{trans, [{none, Value}]}|B]};
+        false ->
+            case do_pivot_field(F) of
+                false -> {A,B};
+                true -> {A, [Value|B]}
+            end
     end;
 fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc, Context)
     when is_integer(Y) andalso is_integer(M) andalso is_integer(D) 
@@ -562,12 +576,33 @@ do_pivot_field(modified) -> false;
 do_pivot_field(_) -> true.
 
 
+%% @doc some fields are taken as-is without any language processing
+is_lang_neutral(_, {trans, _}) -> false;
+is_lang_neutral(address_street_1, _) -> true;
+is_lang_neutral(address_street_2, _) -> true;
+is_lang_neutral(address_city, _) -> true;
+is_lang_neutral(address_postcode, _) -> true;
+is_lang_neutral(address_state, _) -> true;
+is_lang_neutral(address_country, _) -> true;
+is_lang_neutral(mail_street_1, _) -> true;
+is_lang_neutral(mail_street_2, _) -> true;
+is_lang_neutral(mail_city, _) -> true;
+is_lang_neutral(mail_postcode, _) -> true;
+is_lang_neutral(mail_state, _) -> true;
+is_lang_neutral(mail_country, _) -> true;
+is_lang_neutral(email, _) -> true;
+is_lang_neutral(phone, _) -> true;
+is_lang_neutral(phone_alt, _) -> true;
+is_lang_neutral(phone_emergency, _) -> true;
+is_lang_neutral(_, _) -> false.
+
+
 %% @doc Translate a language to a language string as used by postgresql
 %% @todo Add more languages
-pg_lang(en) -> "english";
-pg_lang(nl) -> "dutch";
-pg_lang(de) -> "german";
-pg_lang(fr) -> "french";
+% pg_lang(en) -> "english";
+% pg_lang(nl) -> "dutch";
+% pg_lang(de) -> "german";
+% pg_lang(fr) -> "french";
 pg_lang(_) -> "english".
 
 
