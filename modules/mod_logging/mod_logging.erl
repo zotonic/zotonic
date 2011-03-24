@@ -113,7 +113,7 @@ handle_cast({{log, Type, Msg, Props}, Ctx}, State=#state{context=Context}) ->
                     ?DEBUG(Reason),
                     nop;
                 {Tpl, _Ctx} ->
-                    Tpl2 = lists:reverse(lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl)))),
+                    Tpl2 = lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl))),
                     F = fun(Pid) ->
                                 z_session_page:add_script([
                                     "$('", z_utils:js_escape(Tpl2), 
