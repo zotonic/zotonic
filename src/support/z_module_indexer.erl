@@ -283,15 +283,16 @@ scan_subdir_files(Subdir, Context) ->
 %% @spec scan_subdir(Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
 scan_subdir(Subdir, Prefix, Extension, Context) ->
     Modules = z_module_manager:active_dir(Context),
+    ExtensionRe = case Extension of [] -> []; "."++_ -> "\\" ++ Extension ++ "$" end,
     Scan1 = fun({Module, Dir}, Acc) ->
-        {Pattern, PrefixLen} = case Prefix of
+        {Dir1, Pattern, PrefixLen} = case Prefix of
             [] -> 
-                {filename:join([Dir, Subdir, "*" ++ Extension]), 0};
+		{filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
             _ ->
                 Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
-                {filename:join([Dir, Subdir, Prefix1 ++ "*" ++ Extension]), length(Prefix1)}
+		{filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
         end,
-        Files = filelib:wildcard(Pattern),
+	Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
         case Files of
             [] -> Acc;
             _  -> 
