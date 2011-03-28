@@ -75,6 +75,7 @@ LiveValidation.prototype =
       if(!this.element) 
         throw new Error("LiveValidation::initialize - No element with reference or id of '" + element + "' exists!");
       // default properties that could not be initialised above
+      this.element_id = $(this.element).attr("id");
       this.validations = [];
       this.elementType = this.getElementType();
       this.form = this.element.form;
@@ -278,12 +279,12 @@ LiveValidation.prototype =
           this.message = this.validMessage;
           return true;
     },
-    
+
     /**
      * Check if there is an async validation.
      */
     isAsync: function (){
-        for(var i = 0, len = this.validations.length; i < len; ++i){
+        for(var i = 0, len = this.validations.length; i < len; ++i) {
             var validation = this.validations[i];
             if (validation.type == Validate.Postback)
                 return true;
@@ -635,6 +636,16 @@ LiveValidationForm.prototype = {
             var result = true;
             var async = new Array();
             var is_first = true;
+
+			var fields = [];
+	        for(var i = 0, len = self.fields.length; i < len; ++i) {
+				var element = $('#'+self.fields[i].element_id);
+				if (element.length > 0) {
+					self.fields[i].element = element[0];
+					fields.push(self.fields[i]);
+				}
+			}
+			self.fields = fields;
 
             for(var i = 0, len = self.fields.length; i < len; ++i ) {
                 if (!self.fields[i].element.disabled) {
