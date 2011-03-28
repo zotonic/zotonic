@@ -53,14 +53,12 @@ clean_lower(L) -> string:strip(z_string:to_lower(to_list(L))).
 
 to_list(undefined) -> [];
 to_list(<<>>) -> [];
-to_list(L) when is_list(L) -> inner_to_list(lists:flatten(L));
-to_list(A) -> inner_to_list(A).
-
-inner_to_list(A) when is_atom(A) -> atom_to_list(A);
-inner_to_list(B) when is_binary(B) -> binary_to_list(B);
-inner_to_list(I) when is_integer(I) -> integer_to_list(I);
-inner_to_list(F) when is_float(F) -> float_to_list(F);
-inner_to_list(L) when is_list(L) -> L.
+to_list({rsc_list, L}) -> L;
+to_list(L) when is_list(L) -> lists:flatten(L);
+to_list(A) when is_atom(A) -> atom_to_list(A);
+to_list(B) when is_binary(B) -> binary_to_list(B);
+to_list(I) when is_integer(I) -> integer_to_list(I);
+to_list(F) when is_float(F) -> float_to_list(F).
 
 to_atom(<<>>) -> undefined;
 to_atom([]) -> undefined;
