@@ -991,13 +991,12 @@ function z_init_validator(id, args)
 		if (elt.attr('type') == 'radio')
 		{
 			$('input[name='+elt.attr('name')+']').each(function() {
-				if (!$(this).data("z_live_validation"))
-					$(this).data("z_live_validation", new LiveValidation($(this).attr('id'), args));
+				addLiveValidation(this, args);
 			});
 		}
-		else if (!$(elt).data("z_live_validation"))
+		else
 		{
-			$(elt).data("z_live_validation", new LiveValidation(id, args));
+			addLiveValidation(elt, args);
 		}
 	}
 	else
@@ -1015,8 +1014,7 @@ function z_add_validator(id, type, args)
 		elt = $('input[name='+elt.attr('name')+']');
 
 	elt.each(function() {
-		var v = $(this).data("z_live_validation");
-
+		var v = getLiveValidation(this);
 		if (v)
 		{
 			if (args['pattern'])
@@ -1073,8 +1071,7 @@ function z_validation_on_invalid(id, on_invalid)
 
 function z_async_validation_result(id, isValid, testedValue)
 {
-	var v = $('#'+id).data("z_live_validation");
-
+	var v = getLiveValidation($('#'+id));
 	if (v && $('#'+id).val() == testedValue)
 	{
 		v.asyncValidationResult(isValid, testedValue);
@@ -1084,7 +1081,7 @@ function z_async_validation_result(id, isValid, testedValue)
 // Called by the server on validation errors
 function z_validation_error(id, error)
 {
-	var v = $('#'+id).data("z_live_validation");
+	var v = getLiveValidation($('#'+id));
 	if (v)
 	{
 		if (error == 'invalid')
