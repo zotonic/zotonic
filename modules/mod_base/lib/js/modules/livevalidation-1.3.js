@@ -4,9 +4,22 @@
 
 // MW: 20100316: Adapted for async usage with Zotonic.
 // MW: 20100629: Added support for presence check on radio buttons
-
+// MW: 20110329: Dynamically fetch the validation fields from the DOM, this makes it
+//               possible to add/remove fields dynamically.
 
 /*********************************************** LiveValidation class ***********************************/
+
+
+function addLiveValidation(element, args) {
+	if (!$(element).data("z_live_validation"))
+		$(element).data("z_live_validation", new LiveValidation($(element).attr('id'), args));
+}
+
+
+function getLiveValidation(element) {
+	return $(element).data("z_live_validation");
+}
+
 
 /**
  *  validates a form field in real-time based on validations you assign to it
@@ -75,7 +88,6 @@ LiveValidation.prototype =
       if(!this.element) 
         throw new Error("LiveValidation::initialize - No element with reference or id of '" + element + "' exists!");
       // default properties that could not be initialised above
-      this.element_id = $(this.element).attr("id");
       this.validations = [];
       this.elementType = this.getElementType();
       this.form = this.element.form;
@@ -92,11 +104,12 @@ LiveValidation.prototype =
       this.onlyOnSubmit = options.onlyOnSubmit || false;
       this.validationAsync = false;
       
-      // add to form if it has been provided
-      if(this.form){
-        this.formObj = LiveValidationForm.getInstance(this.form);
-        this.formObj.addField(this);
+      // Initialize the form hooks, remember the LiveValidationForm object.
+      var theForm = $(this.element).closest("form");
+      if(theForm.length){
+        this.formObj = LiveValidationForm.getInstance(theForm[0]);
       }
+
       // events
       // collect old events
       this.oldOnFocus = this.element.onfocus || function(){};
@@ -126,12 +139,6 @@ LiveValidation.prototype =
      *  destroys the instance's events (restoring previous ones) and removes it from any LiveValidationForms
      */
     destroy: function(){
-        if(this.formObj){
-            // remove the field from the LiveValidationForm
-            this.formObj.removeField(this);
-            // destroy the LiveValidationForm if no LiveValidation fields left in it
-            this.formObj.destroy();
-        }
         // remove events - set them back to the previous events
         this.element.onfocus = this.oldOnFocus;
         if(!this.onlyOnSubmit){
@@ -611,7 +618,6 @@ LiveValidationForm.prototype = {
   initialize: function(element){
     this.name = $(element).attr("id");
     this.element = element;
-    this.fields = [];
     this.skipValidations = 0;
     this.submitWaitForAsync = new Array();
 
@@ -637,28 +643,14 @@ LiveValidationForm.prototype = {
             var async = new Array();
             var is_first = true;
 
-			var fields = [];
-	        for(var i = 0, len = self.fields.length; i < len; ++i) {
-				var element = $('#'+self.fields[i].element_id);
-				if (element.length > 0) {
-					self.fields[i].element = element[0];
-					fields.push(self.fields[i]);
-				}
-			}
-			self.fields = fields;
-
-            for(var i = 0, len = self.fields.length; i < len; ++i ) {
-                if (!self.fields[i].element.disabled) {
-                    if (self.fields[i].isAsync()) {
-                        async.push(self.fields[i]);
+			var fields = self.getFields();
+            for(var i = 0, len = fields.length; i < len; ++i ) {
+                if (!fields[i].element.disabled) {
+                    if (fields[i].isAsync()) {
+                        async.push(fields[i]);
                     } else {
-                        var valid = self.fields[i].validate(true, this.clk);
-                        if (!valid && is_first) {
-							var focus_element = self.fields[i].element;
-                            is_first = false;
-                        }
-                        if(result) 
-                            result = valid;
+						var valid = fields[i].validate(true, this.clk);
+                        result = result && valid;
                     }
                 }
             }
@@ -699,43 +691,36 @@ LiveValidationForm.prototype = {
   },
   
   /**
-   *  adds a LiveValidation field to the forms fields array
-   *  
-   *  @var element {LiveValidation} - a LiveValidation object
-   */
-  addField: function(newField){
-    this.fields.push(newField);
-  },
-  
-  /**
-   *  removes a LiveValidation field from the forms fields array
-   *  
-   *  @var victim {LiveValidation} - a LiveValidation object
-   */
-  removeField: function(victim){
-    var victimless = [];
-    for( var i = 0, len = this.fields.length; i < len; i++){
-        if(this.fields[i] !== victim)
-            victimless.push(this.fields[i]);
-    }
-    this.fields = victimless;
-  },
-  
-  /**
    *  destroy this instance and its events
    *
-   * @var force {Boolean} - whether to force the detruction even if there are fields still associated
+   * @var force {Boolean} - whether to force the destruction even if there are fields still associated
    */
   destroy: function(force){
-    // only destroy if has no fields and not being forced
-    if (this.fields.length != 0 && !force) return false;
-    // remove events - set back to previous events
-    this.element.onsubmit = this.oldOnSubmit;
-    // remove from the instances namespace
-    LiveValidationForm.instances[this.name] = null;
-    return true;
+	if (force || this.getFields().length == 0) {
+	    // remove events - set back to previous events
+	    this.element.onsubmit = this.oldOnSubmit;
+	    // remove from the instances namespace
+	    LiveValidationForm.instances[this.name] = null;
+	    return true;
+	} else {
+		return false;
+	}
   },
   
+  /**
+   * get the to-be-validated fields
+   */
+  getFields: function() {
+	var fields = [];
+	$("input,select,textarea", this.element).each(function() {
+		var field = $(this).data('z_live_validation');
+		if (field) {
+			fields.push(field);
+		}
+	});
+	return fields;
+  },
+
   asyncResult: function(Validation, isValid){
       if (isValid){
           var index = $.inArray(Validation, this.submitWaitForAsync);
