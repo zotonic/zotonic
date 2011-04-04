@@ -1,6 +1,7 @@
 {% extends "admin_edit_widget_i18n.tpl" %}
 
 {% block widget_title %}{_ Content _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
 
 
 {% block widget_content %}
