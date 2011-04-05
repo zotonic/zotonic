@@ -43,7 +43,7 @@ msgid ""
 "Are you sure you want to delete the language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:31 ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 ./modules/mod_translation/templates/_dialog_language_edit.tpl:31 
 msgid ""
 "Cancel"
 msgstr ""
@@ -53,7 +53,7 @@ msgid ""
 "Default"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:71 ./modules/mod_translation/templates/_dialog_language_delete.tpl:5 
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:5 ./modules/mod_translation/templates/admin_translation.tpl:71 
 msgid ""
 "Delete language"
 msgstr ""
@@ -91,7 +91,7 @@ msgid ""
 "Generate .pot files"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13 
 msgid ""
 "Help about translations."
 msgstr ""
@@ -111,7 +111,7 @@ msgid ""
 "Languages overview"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -158,7 +158,7 @@ msgid ""
 "Show per module how much of the templates a translated."
 msgstr ""
 
-#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13 
 msgid ""
 "The title, body and other texts can be translated in different languages. "
 "Here you can select which languages will be used."
@@ -182,12 +182,12 @@ msgid ""
 "files" first from the translation overview."
 msgstr ""
 
-#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:9 
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:12 
 msgid ""
 "Translate this page in other languages."
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:3 ./modules/mod_translation/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_translation/templates/_admin_menu_module.tpl:2 ./modules/mod_translation/templates/admin_translation.tpl:3 
 msgid ""
 "Translation"
 msgstr ""
@@ -207,12 +207,7 @@ msgid ""
 "Translation status per module"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:4 
-msgid ""
-"Translations"
-msgstr ""
-
 #: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:5 
 msgid ""
-"make smaller"
+"Translations"
 msgstr ""
