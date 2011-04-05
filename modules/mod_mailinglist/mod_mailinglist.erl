@@ -302,7 +302,7 @@ send_mailing_process(ListId, PageId, Context) ->
                 Options1 = [{email,Email1}|Options],
                 case IsDirect of
                     true -> z_email:send_render(Email, {cat, "mailing_page.tpl"}, Options1, Context);
-                    false -> z_email:send_qrender(Email, {cat, "mailing_page.tpl"}, Options1, Context)
+                    false -> z_email:sendq_render(Email, {cat, "mailing_page.tpl"}, Options1, Context)
                 end
         end.
 
