@@ -9,7 +9,7 @@
 <fieldset class="admin-form">
 	<div class="form-item clearfix">
 		<label for="field-title{{ lang_code_with_dollar }}">{_ Title _} {{ lang_code_with_brackets }}</label>
-		<input type="text" id="field-title{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
+		<input type="text" class="field-title" id="field-title{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
 			value="{{ is_i18n|if : r.translation[lang_code].title : r.title }}"
 			{% if not is_editable %}disabled="disabled"{% endif %}/>
 	</div>

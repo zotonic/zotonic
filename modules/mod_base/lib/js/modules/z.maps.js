@@ -1,144 +1,146 @@
-var googleMapsControl =
+(function($)
 {
-	defaults:
-	{
-		zoom: 2,
-		disableDefaultUI: true,
-		mapTypeId: google.maps.MapTypeId.HYBRID,
-		navigationControl: true,
-		navigationControlOptions:
-		{
-			style: google.maps.NavigationControlStyle.SMALL
-		}
-	},
-	
-	opts: {},
-	
-	buildMap: function(options)
-	{
-		var self			= googleMapsControl;
-		self.opts			= $.extend({}, self.defaults, options);
-		self.opts.center 	= new google.maps.LatLng(self.opts.lat, self.opts.lng);
-		self.map			= new google.maps.Map($('#'+self.opts.mapId)[0], self.opts);
-		
-		self.fluster = new Fluster2(self.map, false);
-	
-		self.fluster.styles = 
-		{
-			0: 
-			{
-				image: '/lib/images/map_icon_cluster.png',
-				textColor: '#000',
-				width: 23,
-				height: 27
-			},
-
-			10: 
-			{
-				image: '/lib/images/map_icon_cluster.png',
-				textColor: '#000',
-				width: 23,
-				height: 27
-			},
-			
-			20: 
-			{
-				image: './lib/images/map_icon_cluster.png',
-				textColor: '#000',
-				width: 23,
-				height: 27
-			}
-		};
-		
-		self.fluster.initialize();
-	},
-	
-	getMap: function()
-	{
-		return googleMapsControl.map;
-	},
-	
-	getMarker: function()
-	{
-		return googleMapsControl.marker;
-	},
-	
-	addMarker: function(lat, lng, text)
-	{
-		var self = googleMapsControl;
-		
-		var marker = new google.maps.Marker(
-		{
-			position:	new google.maps.LatLng(lat, lng),
-			map: 		self.map,
-			title:		text,
-			icon:		'/lib/images/map_icon.png'
-		});
-		
-		self.fluster.addMarker(marker);
-		
-		google.maps.event.addListener(marker, 'click', function()
-		{
-			new InfoBox({latlng: marker.getPosition(), map: self.map, text: marker.getTitle()});
-		});
-	},
-	
-	addMarkerByAddress: function(address, title)
-	{
-		title = title || '';
-		
-		var self = googleMapsControl;
-		
-		self.geocoder = new google.maps.Geocoder();
-		self.geocoder.geocode({'address': address, 'partialmatch': true}, geocodeResult);
-		
-		function geocodeResult(results, status)
-		{
-			if(status == 'OK' && results.length > 0) 
-			{
-				self.addMarker(results[0].geometry.location.lat(), results[0].geometry.location.lng(), title)
-		    } 
-			else 
-			{
-				throw("Geocode was not successful for the following reason: " + status);
+    window.googleMapsControl =
+    {
+	    defaults:
+	    {
+		    zoom: 2,
+		    disableDefaultUI: true,
+		    mapTypeId: google.maps.MapTypeId.HYBRID,
+		    navigationControl: true,
+		    navigationControlOptions:
+		    {
+			    style: google.maps.NavigationControlStyle.SMALL
 		    }
-		}
-	},
-	
-	getGeoForAddress: function(address, callback)
-	{
-		var self = googleMapsControl;
+	    },
 
-		self.geocoder = new google.maps.Geocoder();
-		self.geocoder.geocode({'address': address, 'partialmatch': true}, function(results, status)
-		{
-			if(status == 'OK' && results.length > 0) 
-			{
-				if(callback) callback(results[0]);
-		    } 
-			else 
-			{
-				alert("Geocode was not successful for the following reason: " + status);
+	    opts: {},
+
+	    buildMap: function(options)
+	    {
+		    var self			= googleMapsControl;
+		    self.opts			= $.extend({}, self.defaults, options);
+		    self.opts.center 	= new google.maps.LatLng(self.opts.lat, self.opts.lng);
+		    self.map			= new google.maps.Map($('#'+self.opts.mapId)[0], self.opts);
+
+		    self.fluster = new Fluster2(self.map, false);
+
+		    self.fluster.styles =
+		        {
+			        0:
+			        {
+				        image: '/lib/images/map_icon_cluster.png',
+				        textColor: '#000',
+				        width: 23,
+				        height: 27
+			        },
+
+			        10:
+			        {
+				        image: '/lib/images/map_icon_cluster.png',
+				        textColor: '#000',
+				        width: 23,
+				height: 27
+			        },
+
+			        20:
+			        {
+				        image: './lib/images/map_icon_cluster.png',
+				        textColor: '#000',
+				        width: 23,
+				        height: 27
+			        }
+		        };
+
+		    self.fluster.initialize();
+	    },
+
+	    getMap: function()
+	    {
+		    return googleMapsControl.map;
+	    },
+
+	    getMarker: function()
+	    {
+		    return googleMapsControl.marker;
+	    },
+
+	    addMarker: function(lat, lng, text)
+	    {
+		    var self = googleMapsControl;
+
+		    var marker = new google.maps.Marker(
+		        {
+			        position:	new google.maps.LatLng(lat, lng),
+			        map: 		self.map,
+			        title:		text,
+			        icon:		'/lib/images/map_icon.png'
+		        });
+
+		    self.fluster.addMarker(marker);
+
+		    google.maps.event.addListener(marker, 'click', function()
+		                                  {
+			                                  new InfoBox({latlng: marker.getPosition(), map: self.map, text: marker.getTitle()});
+		                                  });
+	    },
+
+	    addMarkerByAddress: function(address, title)
+	    {
+		    title = title || '';
+
+		    var self = googleMapsControl;
+
+		    self.geocoder = new google.maps.Geocoder();
+		    self.geocoder.geocode({'address': address, 'partialmatch': true}, geocodeResult);
+
+		    function geocodeResult(results, status)
+		    {
+			    if(status == 'OK' && results.length > 0)
+			    {
+				    self.addMarker(results[0].geometry.location.lat(), results[0].geometry.location.lng(), title)
+		        }
+			    else
+			    {
+				    throw("Geocode was not successful for the following reason: " + status);
+		        }
 		    }
-		});
-	},
-	
-	drawLine: function(coordinates)
-	{
-		var self = googleMapsControl;
+	    },
 
-		self.linePath = new google.maps.Polyline(
-		{
-			path: coordinates,
-			strokeColor: "#fff",
-			strokeOpacity: 0.5,
-			strokeWeight: 3
-		});
+	    getGeoForAddress: function(address, callback)
+	    {
+		    var self = googleMapsControl;
 
-		self.linePath.setMap(self.map);
-	}
-}
+		    self.geocoder = new google.maps.Geocoder();
+		    self.geocoder.geocode({'address': address, 'partialmatch': true}, function(results, status)
+		                          {
+			                          if(status == 'OK' && results.length > 0)
+			                          {
+				                          if(callback) callback(results[0]);
+		                              }
+			                          else
+			                          {
+				                          alert("Geocode was not successful for the following reason: " + status);
+		                              }
+		                          });
+	    },
 
+	    drawLine: function(coordinates)
+	    {
+		    var self = googleMapsControl;
+
+		    self.linePath = new google.maps.Polyline(
+		        {
+			        path: coordinates,
+			        strokeColor: "#fff",
+			        strokeOpacity: 0.5,
+			        strokeWeight: 3
+		        });
+
+		    self.linePath.setMap(self.map);
+	    }
+    }
+})(jQuery);
 /*
  * Fluster2 0.1.0
  * Copyright (C) 2009 Fusonic GmbH
@@ -173,7 +175,7 @@ function Fluster2(_map, _debug)
 	var projection = new Fluster2ProjectionOverlay(map);
 	var me = this;
 	var clusters = {};
-	
+
 	// Properties
 	this.debugEnabled = _debug;
 	this.gridSize = 60;
@@ -199,17 +201,17 @@ function Fluster2(_map, _debug)
 			height: 65
 		}
 	};
-	
+
 	// Timeouts
 	var zoomChangedTimeout = null;
-	
+
 	/**
 	 * Create clusters for the current zoom level and assign markers.
 	 */
 	function createClusters()
 	{
 		var zoom = map.getZoom();
-		
+
 		if(clusters[zoom])
 		{
 			me.debug('Clusters for zoom level ' + zoom + ' already initialized.');
@@ -218,13 +220,13 @@ function Fluster2(_map, _debug)
 		{
 			// Create clusters array
 			clusters[zoom] = [];
-			
+
 			// Walk all markers
 			for(var i = 0; i < me.markers.length; i++)
 			{
 				var marker = me.markers[i];
 				var done = false;
-				
+
 				// Find a cluster which contains the marker
 				for(var j = clusters[zoom].length - 1; j >= 0; j--)
 				{
@@ -236,7 +238,7 @@ function Fluster2(_map, _debug)
 						break;
 					}
 				}
-				
+
 				if(!done)
 				{
 					// No cluster found, create a new one
@@ -244,10 +246,10 @@ function Fluster2(_map, _debug)
 					clusters[zoom].push(cluster);
 				}
 			}
-			
+
 			me.debug('Initialized ' + clusters[zoom].length + ' clusters for zoom level ' + zoom + '.');
 		}
-		
+
 		// Hide markers of previous zoom level
 		if(clusters[me.currentZoomLevel])
 		{
@@ -256,17 +258,17 @@ function Fluster2(_map, _debug)
 				clusters[me.currentZoomLevel][i].hide();
 			}
 		}
-		
+
 		// Show markers of current zoom level
 		for(var i = 0; i < clusters[zoom].length; i++)
 		{
 			clusters[zoom][i].show();
 		}
-		
+
 		// Set current zoom level
 		me.currentZoomLevel = zoom;
 	}
-	
+
 	/**
 	 * Callback which is executed 500ms after the map's zoom level has changed.
 	 */
@@ -275,7 +277,7 @@ function Fluster2(_map, _debug)
 		window.clearInterval(zoomChangedTimeout);
 		zoomChangedTimeout = window.setTimeout(createClusters, 500);
 	}
-	
+
 	/**
 	 * Returns the map assigned to this Fluster.
 	 */
@@ -283,7 +285,7 @@ function Fluster2(_map, _debug)
 	{
 		return map;
 	}
-	
+
 	/**
 	 * Returns the map projection.
 	 */
@@ -291,7 +293,7 @@ function Fluster2(_map, _debug)
 	{
 		return projection.getP();
 	}
-	
+
 	/**
 	 * Prints debug messages to console if debugging is enabled.
 	 */
@@ -302,7 +304,7 @@ function Fluster2(_map, _debug)
 			console.log('Fluster2: ' + message);
 		}
 	}
-	
+
 	/**
 	 * Adds a marker to the Fluster.
 	 */
@@ -310,7 +312,7 @@ function Fluster2(_map, _debug)
 	{
 		me.markers.push(_marker);
 	}
-	
+
 	/**
 	 * Returns the currently assigned styles.
 	 */
@@ -318,13 +320,13 @@ function Fluster2(_map, _debug)
 	{
 		return me.styles;
 	}
-	
+
 	/**
 	 * Sets map event handlers and setup's the markers for the current
 	 * map state.
 	 */
 	this.initialize = function()
-	{		
+	{
 		// Add event listeners
 		google.maps.event.addListener(map, 'zoom_changed', this.zoomChanged);
 
@@ -342,7 +344,7 @@ function Fluster2(_map, _debug)
  * @param {google.maps.Marker} the first marker
  */
 function Fluster2Cluster(_fluster, _marker)
-{	
+{
 	// Properties
 	this.fluster = _fluster;
 	this.markers = [];
@@ -351,9 +353,9 @@ function Fluster2Cluster(_fluster, _marker)
 	this.lngSum = 0;
 	this.latSum = 0;
 	this.center = _marker.getPosition();
-	
+
 	var me = this;
-	
+
 	// Calculate bounds
 	var position = _fluster.getProjection().fromLatLngToDivPixel(_marker.getPosition());
 	var positionSW = new google.maps.Point(
@@ -368,7 +370,7 @@ function Fluster2Cluster(_fluster, _marker)
 		_fluster.getProjection().fromDivPixelToLatLng(positionSW),
 		_fluster.getProjection().fromDivPixelToLatLng(positionNE)
 	);
-	
+
 	/**
 	 * Adds a marker to the cluster.
 	 */
@@ -394,21 +396,21 @@ function Fluster2Cluster(_fluster, _marker)
 			{
 				this.markers[i].setVisible(false);
 			}
-			
+
 			// Create marker
 			if(this.marker == null)
 			{
 				this.marker = new Fluster2ClusterMarker(this.fluster, this);
-				
+
 				google.maps.event.addListener(this.marker, 'mouseover', me.debugShowMarkers);
 				google.maps.event.addListener(this.marker, 'mouseout', me.debugHideMarkers);
 			}
-			
+
 			// Show marker
 			this.marker.show();
 		}
 	}
-	
+
 	/**
 	 * Hides the cluster
 	 */
@@ -419,7 +421,7 @@ function Fluster2Cluster(_fluster, _marker)
 			this.marker.hide();
 		}
 	}
-	
+
 	/**
 	 * Shows all markers included by this cluster (debugging only).
 	 */
@@ -430,7 +432,7 @@ function Fluster2Cluster(_fluster, _marker)
 			me.markers[i].setVisible(true);
 		}
 	}
-	
+
 	/**
 	 * Hides all markers included by this cluster (debugging only).
 	 */
@@ -441,7 +443,7 @@ function Fluster2Cluster(_fluster, _marker)
 			me.markers[i].setVisible(false);
 		}
 	}
-	
+
 	/**
 	 * Returns the number of markers in this cluster.
 	 */
@@ -449,7 +451,7 @@ function Fluster2Cluster(_fluster, _marker)
 	{
 		return this.markers.length;
 	}
-	
+
 	/**
 	 * Checks if the cluster bounds contains the given position.
 	 */
@@ -457,23 +459,23 @@ function Fluster2Cluster(_fluster, _marker)
 	{
 		return me.bounds.contains(_position);
 	}
-	
+
 	this.getPosition = function()
 	{
 		return this.markers[0].getPosition();
 	}
-	
+
 	this.getBounds = function()
 	{
 		return this.bounds;
 	}
-	
+
 	// Add the first marker
 	this.addMarker(_marker);
 }
 
 /**
- * A cluster marker which shows a background image and the marker count 
+ * A cluster marker which shows a background image and the marker count
  * of the assigned cluster.
  *
  * @constructor
@@ -490,7 +492,7 @@ function Fluster2ClusterMarker(_fluster, _cluster)
 	this.map = this.fluster.getMap();
 	this.style = null;
 	this.div = null;
-	
+
 	// Assign style
 	var styles = this.fluster.getStyles();
 	for(var i in styles)
@@ -504,11 +506,11 @@ function Fluster2ClusterMarker(_fluster, _cluster)
 			break;
 		}
 	}
-	
+
 	// Basics
 	google.maps.OverlayView.call(this);
 	this.setMap(this.map);
-	
+
 	// Draw
 	this.draw();
 };
@@ -520,10 +522,10 @@ Fluster2ClusterMarker.prototype.draw = function()
 	if(this.div == null)
 	{
 		var me = this;
-		
+
 		// Create div
 		this.div = document.createElement('div');
-		
+
 		// Set styles
 		this.div.style.position = 'absolute';
 		this.div.style.width = this.style.width + 'px';
@@ -531,7 +533,7 @@ Fluster2ClusterMarker.prototype.draw = function()
 		this.div.style.lineHeight = 23 + 'px';
 		this.div.style.background = 'transparent url("' + this.style.image + '") 50% 50% no-repeat';
 		this.div.style.color = this.style.textColor;
-		
+
 		// Marker count
 		this.div.style.textAlign = 'center';
 		this.div.style.fontFamily = 'Arial, Helvetica';
@@ -539,16 +541,16 @@ Fluster2ClusterMarker.prototype.draw = function()
 		this.div.style.fontWeight = 'bold';
 		this.div.style.zIndex = 9999;
 		this.div.innerHTML = this.markerCount;
-		
+
 		// Cursor and onlick
 		this.div.style.cursor = 'pointer';
 		google.maps.event.addDomListener(this.div, 'click', function() {
 			me.map.fitBounds(me.cluster.getBounds());
 		});
-		
+
 		this.getPanes().overlayLayer.appendChild(this.div);
 	}
-	
+
 	// Position
 	var position = this.getProjection().fromLatLngToDivPixel(this.position);
 	this.div.style.left = (position.x - parseInt(this.style.width / 2)) + 'px';
@@ -578,7 +580,7 @@ function Fluster2ProjectionOverlay(map)
 {
 	google.maps.OverlayView.call(this);
 	this.setMap(map);
-	
+
 	this.getP = function()
 	{
 		return this.getProjection();
@@ -612,7 +614,7 @@ Fluster2ProjectionOverlay.prototype.draw = function()
 * @param {Object} opts Passes configuration options - content,
 *   offsetVertical, offsetHorizontal, className, height, width
 */
-function InfoBox(opts) 
+function InfoBox(opts)
 {
 	google.maps.OverlayView.call(this);
 	this.latlng_ = opts.latlng;
@@ -625,7 +627,7 @@ function InfoBox(opts)
 
 	var me = this;
 	this.boundsChangedListener_ =
-	google.maps.event.addListener(this.map_, "bounds_changed", function() 
+	google.maps.event.addListener(this.map_, "bounds_changed", function()
 	{
 		return me.panMap.apply(me);
 	});
@@ -640,9 +642,9 @@ function InfoBox(opts)
 InfoBox.prototype = new google.maps.OverlayView();
 
 /* Creates the DIV representing this InfoBox */
-InfoBox.prototype.remove = function() 
+InfoBox.prototype.remove = function()
 {
-	if (this.div_) 
+	if (this.div_)
 	{
 		this.div_.parentNode.removeChild(this.div_);
 		this.div_ = null;
@@ -650,7 +652,7 @@ InfoBox.prototype.remove = function()
 };
 
 /* Redraw the Bar based on the current projection and zoom level */
-InfoBox.prototype.draw = function() 
+InfoBox.prototype.draw = function()
 {
 	// Creates the element if it doesn't exist already.
 	this.createElement();
@@ -676,13 +678,13 @@ InfoBox.prototype.draw = function()
 * Called from within draw.  Alternatively, this can be called specifically on
 * a panes_changed event.
 */
-InfoBox.prototype.createElement = function() 
+InfoBox.prototype.createElement = function()
 {
 	var panes = this.getPanes();
 	var div = this.div_;
 	var self = this;
-	
-	if (!div) 
+
+	if (!div)
 	{
 		// This does not handle changing panes. You can set the map to be null and
 		// then reset the map to move the div.
@@ -700,9 +702,9 @@ InfoBox.prototype.createElement = function()
 
 		var closer = $('.maps-dialog-close', contentDiv)[0];
 
-		function removeInfoBox(ib) 
+		function removeInfoBox(ib)
 		{
-			return function() 
+			return function()
 			{
 				ib.setMap(null);
 			};
@@ -714,21 +716,21 @@ InfoBox.prototype.createElement = function()
 		$(div).hide();
 		panes.floatPane.appendChild($(div)[0]);
 		this.panMap();
-	} 
-	else if (div.parentNode != panes.floatPane) 
+	}
+	else if (div.parentNode != panes.floatPane)
 	{
 		// The panes have changed.  Move the div.
 		div.parentNode.removeChild(div);
 		panes.floatPane.appendChild(div);
-	} 
-	else 
+	}
+	else
 	{
 		// The panes have not changed, so no need to create or move the div.
 	}
 }
 
 /* Pan the map to fit the InfoBox. */
-InfoBox.prototype.panMap = function() 
+InfoBox.prototype.panMap = function()
 {
 	// if we go beyond map, pan map
 	var map = this.map_;

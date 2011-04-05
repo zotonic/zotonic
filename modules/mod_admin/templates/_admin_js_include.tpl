@@ -9,7 +9,6 @@
 	"js/modules/z.blockminifier.js"
 	"js/modules/z.dialog.js"
 	"js/modules/z.formreplace.js"
-	"js/modules/z.maps.js"
 	"js/modules/z.datepicker.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/jquery.loadmask.js"
