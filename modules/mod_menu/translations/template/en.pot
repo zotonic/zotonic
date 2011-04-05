@@ -18,12 +18,23 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_base/templates/_action_dialog_confirm.tpl:6 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
 msgid ""
-"Cancel"
+"Help about editing menus."
 msgstr ""
 
-#: ./modules/mod_base/templates/_action_dialog_alert.tpl:5 ./modules/mod_base/templates/_action_dialog_confirm.tpl:5 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:19 
 msgid ""
-"OK"
+"Here you can change the menu of your site.  Select pages on the right hand "
+"side and drag them to the menu on the left."
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
+msgid ""
+"Need more help?"
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
+msgid ""
+"xxx."
 msgstr ""

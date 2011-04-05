@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:19 
+msgid ""
+"From category"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+msgid ""
+"Help about predicates."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+msgid ""
+"Need more help?"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15 
+msgid ""
+"The direction (from/to) of this predicate is reversed from the normal "
+"definition."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+msgid ""
+"This predicate can be used between two pages of the following categories."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35 
+msgid ""
+"To category"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3 
+msgid ""
+"Valid between"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+msgid ""
+"You can define for which categories the predicate is shown on the edit "
+"page.  You can also define which categories of objects will be found when "
+"searching for a page to connect to.  When you don\'t check anything then "
+"all categories are valid."
+msgstr ""

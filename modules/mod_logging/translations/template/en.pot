@@ -23,7 +23,7 @@ msgid ""
 "Date"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_logging/templates/_admin_menu_module.tpl:2 ./modules/mod_logging/templates/admin_log.tpl:3 
 msgid ""
 "Log"
 msgstr ""
