@@ -4,7 +4,7 @@
 %%
 %% Serves files like: /lib/<filepath>
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -80,11 +80,11 @@ content_types_provided(ReqData, State) ->
     end.
 
 encodings_provided(ReqData, State) ->
-	State1 = lookup_path(ReqData, State),
-    Encodings = case State1#state.mime of
-        "image/jpeg" -> 
+    State1 = lookup_path(ReqData, State),
+    Encodings = case z_media_identify:is_mime_compressed(State1#state.mime) of
+        true -> 
             [{"identity", fun(Data) -> Data end}];
-        _ -> 
+        false -> 
             [{"identity", fun(Data) -> decode_data(identity, Data) end},
              {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
     end,
