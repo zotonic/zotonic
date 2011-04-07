@@ -5,7 +5,7 @@
 %% @doc Identify files, fetch metadata about an image
 %% @todo Recognize more files based on magic number, think of office files etc.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@
 	identify_file/3,
 	identify_file_direct/2,
     extension/1,
-	guess_mime/1
+	guess_mime/1,
+    is_mime_compressed/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -264,7 +265,7 @@ extension_mime() ->
 		{".doc", "application/msword"},
 		{".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 		{".dot", "application/x-dot"},
-	    {".dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template"},
+		{".dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template"},
 		{".dvi", "application/x-dvi"},
 		{".dwg", "application/acad"},
 		{".flipchart", "application/inspire"},
@@ -312,7 +313,7 @@ extension_mime() ->
 		{".ps", "application/postscript"},
 		{".psd", "image/vnd.adobe.photoshop"},
 		{".rar", "application/x-rar"},
-        {".rtf", "text/rtf"},
+		{".rtf", "text/rtf"},
 		{".sh", "text/x-shellscript"},
 		{".sit", "application/x-stuffit"},
 		{".svg", "image/svg+xml"},
@@ -369,3 +370,22 @@ exif_orientation(InFile) ->
         _ -> 1
     end.
 
+
+%% @doc Given a mime type, return whether its file contents is already compressed or not.
+%% @spec is_mime_compressed(Mime::string()) -> bool()
+is_mime_compressed("text/"++_)                               -> false;
+is_mime_compressed("image/svgz"++_)                          -> true;
+is_mime_compressed("image/svg"++_)                           -> false;
+is_mime_compressed("image/"++_)                              -> true;
+is_mime_compressed("video/"++_)                              -> true;
+is_mime_compressed("audio/x-wav")                            -> false;
+is_mime_compressed("audio/"++_)                              -> true;
+is_mime_compressed("application/x-compres"++_)               -> true;
+is_mime_compressed("application/zip")                        -> true;
+is_mime_compressed("application/x-gz"++_)                    -> true;
+is_mime_compressed("application/x-rar")                      -> true;
+is_mime_compressed("application/x-bzip2")                    -> true;
+is_mime_compressed("application/vnd.oasis.opendocument."++_) -> true;
+is_mime_compressed("application/vnd.openxml"++_)             -> true;
+is_mime_compressed("application/x-shockwave-flash")          -> true;
+is_mime_compressed(_)                                        -> false.
