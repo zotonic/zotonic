@@ -424,8 +424,9 @@ function z_websocket_start(host)
 	{
 		if (z_ws_opened)
 		{
-			// Try to reopen, might be closed to error upstream
-			setTimeout(function() { z_websocket_start(host); }, 10);
+			// Try to reopen once, might be closed due to an server side error
+			z_ws_opened = false;
+			setTimeout(function() { z_websocket_start(host); }, 100);
 		}
 		else
 		{
