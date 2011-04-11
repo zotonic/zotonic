@@ -121,7 +121,7 @@ observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
     		        true ->
             		    case min_visible(Context) of
             		        N when is_integer(N) ->
-            		            z_utils:prop_replace(visible_for, max(N, NewVis), Props);
+            		            z_utils:prop_replace(visible_for, erlang:max(N, NewVis), Props);
             		        undefined ->
             		            Props
             		    end;
@@ -241,15 +241,9 @@ logon(UserId, Context) ->
                 [proplists:get_value(modules, ACL, [])|Mods],
                 ViewAll orelse proplists:get_value(view_all, ACL, false),
                 OnlyOwn1,
-                max(proplists:get_value(file_upload_size, ACL, 0), FileSize),
+                erlang:max(proplists:get_value(file_upload_size, ACL, 0), FileSize),
                 [proplists:get_value(file_mime, ACL, [])|FileMime],
-                min(proplists:get_value(visible_for, ACL, 0), VisibleFor)).
-
-        max(A,B) when A >= B -> A;
-        max(_,B) -> B.
-
-        min(A,B) when A =< B -> A;
-        min(_,B) -> B.
+                erlang:min(proplists:get_value(visible_for, ACL, 0), VisibleFor)).
 
 
 %% @doc Check if an user can see something (only called for authenticated users)
