@@ -120,11 +120,11 @@ pages(Page, Pages) ->
             [1];
         false ->
             % Together "1 .. "
-            seq(1, min(?SLIDE, Pages))
+            seq(1, erlang:min(?SLIDE, Pages))
     end,
     Middle = case Page - ?DELTA > 1 of
         true ->
-            seq(max(1,Page-?DELTA), min(Pages,Page+?DELTA));
+            seq(erlang:max(1,Page-?DELTA), erlang:min(Pages,Page+?DELTA));
         false ->
             []
     end,
@@ -166,13 +166,6 @@ max(L) -> lists:max(L).
 
 seq(A,B) when B < A -> [];
 seq(A,B) -> lists:seq(A,B).
-
-
-min(A,B) when A < B -> A;
-min(_,B) -> B.
-
-max(A,B) when A > B -> A;
-max(_,B) -> B.
 
 
 test() ->
