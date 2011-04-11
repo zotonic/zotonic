@@ -1,6 +1,7 @@
 % -*- mode: erlang -*-
 {[	"*",
 	"src/*",
+	"src/behaviours/*",
 	"src/*/*",
 	"src/*/*/*",
 	"src/*/*/*/*",
