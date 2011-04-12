@@ -170,7 +170,8 @@ limitations under the License.
     
 	$.fn.widgetManager = function()
 	{
-	    $.widgetManager(this[0]);
+		this.each(function() { $.widgetManager(this); });
+		return this;
 	};
 
 })(jQuery);
