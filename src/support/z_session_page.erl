@@ -35,6 +35,7 @@
     stop/1, 
     ping/1,
     
+    session_pid/1,
     set/3, 
     get/2, 
     incr/3, 
@@ -85,6 +86,9 @@ stop(Pid) ->
 %% @doc Receive a ping, makes sure that we stay alive
 ping(Pid) ->
     gen_server:cast(Pid, ping).
+
+session_pid(Pid) ->
+    gen_server:call(Pid, session_pid).
 
 get_attach_state(Pid) ->
     try
@@ -248,6 +252,9 @@ handle_cast(Message, State) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Handling call messages
+
+handle_call(session_pid, _From, State) ->
+    {reply, State#page_state.session_pid, State};
 
 handle_call({spawn_link, Module, Func, Args}, _From, State) ->
     Pid    = spawn_link(Module, Func, Args),
