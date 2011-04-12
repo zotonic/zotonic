@@ -31,7 +31,10 @@
     logoff/1,
     logon_from_session/1,
 
-	is_enabled/2
+    user_from_page/1,
+    user_from_session/1,
+
+    is_enabled/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -84,8 +87,15 @@ logoff(Context) ->
     ContextLogOff = z_notifier:foldl(auth_logoff, Context, Context),
     z_context:set_session(auth_user_id, none, ContextLogOff),
     z_acl:logoff(ContextLogOff).
-    
-    
+
+%% @doc Return the user_id from the session
+user_from_session(SessionPid) ->
+    z_session:get(auth_user_id, SessionPid).
+
+%% @doc Return the user_id from a page
+user_from_page(PagePid) ->
+    user_from_session(z_session_page:session_pid(PagePid)).
+
 %% @doc Called after z_context:ensure_session. 
 %% Check if the session contains an authenticated user id. 
 %% When found then the user_id of the context is set.
