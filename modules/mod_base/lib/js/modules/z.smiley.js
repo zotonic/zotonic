@@ -54,6 +54,7 @@ $.widget("ui.smiley", {
 
 $.ui.smiley.defaults = {
 	smileys: [
+		{ k:'(ff)', d:"big hug", u:"/lib/images/smileys/firefox.gif" },
 		{ k:'>:D<', d:"big hug", u:"http://l.yimg.com/us.yimg.com/i/mesg/emoticons7/6.gif" },
 		{ k:'#:-S', d:"whew!", u:"http://l.yimg.com/us.yimg.com/i/mesg/emoticons7/18.gif" },
 		{ k:'O:-)', d:"angel", u:"http://l.yimg.com/us.yimg.com/i/mesg/emoticons7/25.gif" },
