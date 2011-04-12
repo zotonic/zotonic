@@ -267,7 +267,6 @@ handle_cast(upgrade, State) ->
 %% @doc New child process started, add the event listeners
 handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
-    dummy_module_init(Module, State#state.context),
     add_observers(Module, Pid, State#state.context),
     z_notifier:notify({module_activate, Module, Pid}, State#state.context), 
     {noreply, State};
@@ -379,7 +378,7 @@ valid_modules(Context) ->
 
 %% @doc Return the z_supervisor child spec for a module
 module_spec(ModuleName, Context) ->
-    Args = [ {context, Context} | z_sites_manager:get_site_config(z_context:site(Context))],
+    Args = [ {context, Context}, {module, ModuleName} | z_sites_manager:get_site_config(z_context:site(Context))],
     GenServerModule = gen_server_module(ModuleName),
     #child_spec{
         name=ModuleName,
@@ -399,21 +398,6 @@ gen_server_module(M) ->
         undefined ->
             z_module_dummy
     end.
-
-
-%% @doc When a module doesn't implement a gen_server then check if it exports an init/1 function,
-%% if so then call that function with a fresh sudo context.
-dummy_module_init(Module, Context) ->
-    case gen_server_module(Module) of
-        Module -> 
-            nop;
-        z_module_dummy ->
-            case lists:member({init,1}, erlang:get_module_info(Module, exports)) of
-                true -> Module:init(z_acl:sudo(z_context:new(Context)));
-                false -> nop
-            end
-    end.
-    
 
 
 %% @doc Check whether given module is valid for the given host

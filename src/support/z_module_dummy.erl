@@ -39,7 +39,10 @@
 %% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
+    {ok, Pid} = gen_server:start_link(?MODULE, Args, []),
+    gen_server:cast(Pid, {init, proplists:get_value(module, Args)}),
+    {ok, Pid}.
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -69,6 +72,11 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
+%% @doc Handle the next step in the module initialization.
+handle_cast({init, Module}, State) ->
+    dummy_module_init(Module, State#state.context),
+    {noreply, State};
+    
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -100,4 +108,15 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc When a module doesn't implement a gen_server then check if it exports an init/1 function,
+%% if so then call that function with a fresh sudo context.
+dummy_module_init(Module, Context) ->
+    case lists:member({init,1}, erlang:get_module_info(Module, exports)) of
+        true -> Module:init(z_acl:sudo(Context));
+        false -> nop
+    end.
+    
+
 
