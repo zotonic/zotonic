@@ -25,7 +25,7 @@ limitations under the License.
 
 $.widget("ui.popupwindow", {
 	_init: function() {
-		self = this;
+		var self = this;
 		$(this.element).click(function() {
 			var windowFeatures =    'height=' + self.options.height +
 									',width=' + self.options.width +
