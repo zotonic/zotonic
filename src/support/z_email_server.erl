@@ -36,8 +36,11 @@
 -define(MAX_RETRY, 7).
 % The time in minutes how long sent email should be kept in the queue.
 -define(DELETE_AFTER, 240).
+% Timeout value for the connection of the spamassassin daemon
+-define(SPAMD_TIMEOUT, 10000).
 
--record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups, smtp_verp_as_from, smtp_bcc, override}).
+-record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
+                smtp_verp_as_from, smtp_bcc, override, smtp_spamd_ip, smtp_spamd_port}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10),
                       retry=0, email, created=now(), sent, context}).
 
@@ -178,12 +181,16 @@ update_config(State) ->
     SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
     SmtpBcc = z_config:get(smtp_bcc),
     Override = z_config:get(email_override),
+    SmtpSpamdIp = z_config:get(smtp_spamd_ip),
+    SmtpSpamdPort = z_config:get(smtp_spamd_port),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
                 smtp_no_mx_lookups=SmtpNoMxLookups,
                 smtp_verp_as_from=SmtpVerpAsFrom,
                 smtp_bcc=SmtpBcc,
-                override=Override}.
+                override=Override,
+                smtp_spamd_ip=SmtpSpamdIp,
+                smtp_spamd_port=SmtpSpamdPort}.
 
 generate_message_id(Context) ->
     FQDN = smtp_util:guess_FQDN(),
@@ -203,7 +210,6 @@ generate_message_id(Context) ->
 %% =========================
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
-            process_flag(trap_exit, true),
             To = case State#state.override of
                          O when O =:= [] orelse O =:= undefined -> Email#email.to;
                          Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
@@ -224,12 +230,12 @@ spawn_send(Id, Email, Context, State) ->
                             From1
                    end,
 
-            % Optionally render the text and html body
+            %% Optionally render the text and html body
             Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
             Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
             Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
 
-            % Fetch the subject from the title of the HTML part or from the Email record
+            %% Fetch the subject from the title of the HTML part or from the Email record
             Subject = case {Html, Email#email.subject} of
                               {[], undefined} -> [];
                               {[], Sub} -> Sub;
@@ -309,7 +315,7 @@ spawn_send(Id, Email, Context, State) ->
                     io:format("Invalid SMTP options: ~p\n", [Reason]);
                 Recepit when is_binary(Recepit) ->
                     %% email accepted by relay
-                    SentTimestamp = mark_sent(Id),
+                    mark_sent(Id),
                     %% async send a copy for debugging if necessary
                     case State#state.smtp_bcc of
                             _BccTo when _BccTo =:= [] orelse _BccTo =:= undefined ->
@@ -318,13 +324,93 @@ spawn_send(Id, Email, Context, State) ->
                                 catch gen_smtp_client:send({Id, [BccTo], EncodedMail},
                                       SmtpOpts)
                     end,
-                    %% notify the system
-                    z_notifier:first({email_accepted, Id,
-                                      Email#email.to,
-                                      SentTimestamp}, Context)
+                    %% check SpamAssassin spamscore
+                    case {State#state.smtp_spamd_ip, State#state.smtp_spamd_port} of
+                        {Addr, _Port} when Addr =:= [] orelse Addr =:= undefined ->
+                           ok;
+                        {Addr, Port} ->
+                            SpamStatus = spamcheck(EncodedMail, Addr, Port),
+                            z_notifier:first({email_spamstatus, Id, SpamStatus}, Context)
+                    end
+                            
             end
         end,
     spawn(F).
+
+
+
+spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
+    Email = binary_to_list(EncodedMail),
+    
+    {ok, Socket} = gen_tcp:connect(SpamDServer, SpamDPort, [list]),
+    gen_tcp:send(Socket, "HEADERS SPAMC/1.2\r\n"),
+    ContLen = integer_to_list(length(Email) + 2),
+    gen_tcp:send(Socket, "Content-length: " ++ ContLen ++ "\r\n"),
+    gen_tcp:send(Socket, "User: spamd\r\n"),
+    gen_tcp:send(Socket, "\r\n"),
+    gen_tcp:send(Socket, Email),
+    gen_tcp:send(Socket, "\r\n"),
+    
+    Response = recv_spamd(Socket, []),
+    gen_tcp:close(Socket),
+    
+    ParsedRes = parse_spamd_headers(Response),
+    SpamStatus = proplists:get_value("X-Spam-Status", ParsedRes),
+    IsSpam = case SpamStatus of
+        "Yes, " ++ RestStatus -> true;
+        "No, " ++ RestStatus -> false
+    end,
+    Results = [{is_spam, IsSpam} | [{list_to_atom(Field), Value} || [Field, Value] <- [string:tokens(Field, "=") || Field <- string:tokens(RestStatus, " ")]]],
+    
+    Results.
+
+parse_spamd_headers(L) ->
+    parse_spamd_headers(L, [], undefined).
+parse_spamd_headers([], Acc, _) ->
+    lists:reverse(Acc);
+parse_spamd_headers(L, Acc, undefined) ->
+    {FieldName, Rest} = parse_spamd_field_name(L, []),
+    parse_spamd_headers(Rest, Acc, FieldName);
+parse_spamd_headers(L, Acc, FieldName) ->
+    {FieldValue, Rest} = parse_spamd_field_value(L, [], empty),
+    parse_spamd_headers(Rest, [{FieldName, FieldValue} | Acc], undefined).
+
+
+parse_spamd_field_name([], _) -> % ignore trailing characters
+    {[], []};
+parse_spamd_field_name([$: | Rest], Acc) ->
+    {string:strip(lists:reverse(Acc)), Rest};
+parse_spamd_field_name([C | Rest], Acc) ->
+    parse_spamd_field_name(Rest, [C | Acc]).
+
+parse_spamd_field_value([$\r | [$\n | Rest]], Acc, rn) -> % omit multiple \r\n-s
+    parse_spamd_field_value(Rest, Acc, rn);
+parse_spamd_field_value([$\r | Rest], Acc, empty) -> % put \r to the stack
+    parse_spamd_field_value(Rest, Acc, r);
+parse_spamd_field_value([$\n | Rest], Acc, r) -> % put \n to the stack
+    parse_spamd_field_value(Rest, Acc, rn);
+parse_spamd_field_value([$\t | Rest], Acc, rn) -> % read-ahead rule for \t
+    parse_spamd_field_value(Rest, Acc, empty); % omit tabulator characters
+parse_spamd_field_value([C | Rest], Acc, r) -> % read-ahead rule for non \n chars after \r
+    parse_spamd_field_value(Rest, [C | [$\r | Acc]], empty);
+parse_spamd_field_value([C | Rest], Acc, empty) ->
+    parse_spamd_field_value(Rest, [C | Acc], empty);
+parse_spamd_field_value(Rest, Acc, rn) -> % terminate
+    {string:strip(lists:reverse(Acc)), Rest}.
+    
+recv_spamd(Socket, Res) ->
+    receive
+        {tcp, Socket, "SPAMD/1.1 0 EX_OK\r\n" ++ Data} ->
+            recv_spamd(Socket, Res ++ Data);
+        {tcp, Socket, Data} ->
+            recv_spamd(Socket, Res ++ Data);
+        {tcp_closed, Socket} ->
+            Res
+    after ?SPAMD_TIMEOUT ->
+            io:format("spamassassin timeout~n"),
+            Res
+    end.
+
 
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
@@ -372,35 +458,46 @@ delete_emailq(Id) ->
 
 %% @doc Fetch a new batch of queued e-mails. Deletes failed messages.
 poll_queued(State) ->
-    % Delete sent messages
+    %% delete sent messages
     DelTransFun = fun() -> 
                           DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                            timer:now_diff(
-                                                inc_timestamp(QEmail#email_queue.sent, ?DELETE_AFTER),
-                                                now()) < 0]),
+                                                      QEmail#email_queue.sent /= undefined andalso
+                                                        timer:now_diff(
+                                                            inc_timestamp(QEmail#email_queue.sent, ?DELETE_AFTER),
+                                                            now()) < 0
+                                            ]),
                           DelQueryRes = qlc:e(DelQuery),
-                          [mnesia:delete_object(QEmail)|| QEmail <- DelQueryRes]
+                          [ begin
+                                mnesia:delete_object(QEmail),
+                                {QEmail#email_queue.id,
+                                 (QEmail#email_queue.email)#email.to,
+                                 QEmail#email_queue.context}
+                            end || QEmail <- DelQueryRes ]
                   end,
-    mnesia:transaction(DelTransFun),    
+    {atomic, NotifyList1} = mnesia:transaction(DelTransFun),
+    %% notify the system that these emails were sucessfuly sent and (probably) received
+    [ z_notifier:first({email_sent, Id, Recipient}, z_context:depickle(PickledContext)) 
+     || {Id, Recipient, PickledContext} <- NotifyList1 ],
 
-    % Delete all messages with too high retry count
+    %% delete all messages with too high retry count
     SetFailTransFun = fun() ->
                               PollQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
                                                  QEmail#email_queue.sent == undefined,
                                                  QEmail#email_queue.retry > ?MAX_RETRY]),
                               PollQueryRes = qlc:e(PollQuery),
-                              [begin
-                                   mnesia:delete_object(QEmail),
-                                   {QEmail#email_queue.id,
-                                    (QEmail#email_queue.email)#email.to,
-                                    QEmail#email_queue.context}
-                               end || QEmail <- PollQueryRes]
+                              [ begin
+                                    mnesia:delete_object(QEmail),
+                                    {QEmail#email_queue.id,
+                                     (QEmail#email_queue.email)#email.to,
+                                     QEmail#email_queue.context}
+                                end || QEmail <- PollQueryRes ]
                       end,
-    {atomic, NotifyList} = mnesia:transaction(SetFailTransFun),
-    [z_notifier:first({failed_email, Id, Recipient}, z_context:depickle(PickledContext)) 
-     || {Id, Recipient, PickledContext} <- NotifyList],
+    {atomic, NotifyList2} = mnesia:transaction(SetFailTransFun),
+    %% notify the system that these emails were failed to be sent
+    [ z_notifier:first({email_failed, Id, Recipient}, z_context:depickle(PickledContext)) 
+     || {Id, Recipient, PickledContext} <- NotifyList2 ],
  
-    % Fetch a batch of messages for sending
+    %% fetch a batch of messages for sending
     FetchTransFun =
         fun() ->
                 Q = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
@@ -409,6 +506,7 @@ poll_queued(State) ->
                 qlc:e(Q)
         end,
     {atomic, Ms} = mnesia:transaction(FetchTransFun),
+    %% send the fetched messages
     case Ms of
         [] ->
             State;
