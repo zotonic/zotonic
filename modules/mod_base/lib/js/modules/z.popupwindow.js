@@ -29,33 +29,42 @@ $.widget("ui.popupwindow", {
 		$(this.element).click(function() {
 			var windowFeatures =    'height=' + self.options.height +
 									',width=' + self.options.width +
-									',toolbar=' + self.options.toolbar +
-									',scrollbars=' + self.options.scrollbars +
-									',status=' + self.options.status + 
-									',resizable=' + self.options.resizable +
-									',location=' + self.options.location +
-									',menuBar=' + self.options.menubar;
+									',toolbar=' + (self.options.toolbar?'yes':'no') +
+									',scrollbars=' + (self.options.scrollbars?'yes':'no') +
+									',status=' + (self.options.status?'yes':'no') + 
+									',resizable=' + (self.options.resizable?'yes':'no') +
+									',location=' + (self.options.location?'yes':'no') +
+									',menubar=' + (self.options.menubar?'yes':'no');
 
-			var windowName = this.name || self.options.windowName;
+			var windowName = self.options.windowName;
 			var windowURL = this.href || self.options.windowURL;
-			var centeredY, centeredX;
-	
+			var top, left;
+
 			if (self.options.centerBrowser) {
 				if ($.browser.msie) {
-					centeredY = (window.screenTop - 120) + ((((document.documentElement.clientHeight + 120)/2) - (self.options.height/2)));
-					centeredX = window.screenLeft + ((((document.body.offsetWidth + 20)/2) - (self.options.width/2)));
+					top = (window.screenTop - 120) + ((((document.documentElement.clientHeight + 120)/2) - (self.options.height/2)));
+					left = window.screenLeft + ((((document.documentElement.clientWidth + 20)/2) - (self.options.width/2)));
 				} else {
-					centeredY = window.screenY + (((window.outerHeight/2) - (self.options.height/2)));
-					centeredX = window.screenX + (((window.outerWidth/2) - (self.options.width/2)));
+					top = window.screenY + (((window.outerHeight/2) - (self.options.height/2)));
+					left = window.screenX + (((window.outerWidth/2) - (self.options.width/2)));
 				}
-				window.open(windowURL, windowName, windowFeatures+',left=' + centeredX +',top=' + centeredY).focus();
 			} else if (self.options.centerScreen) {
-				centeredY = (screen.height - self.options.height)/2;
-				centeredX = (screen.width - self.options.width)/2;
-				window.open(windowURL, windowName, windowFeatures+',left=' + centeredX +',top=' + centeredY).focus();
+				top = (screen.height - self.options.height)/2;
+				left = (screen.width - self.options.width)/2;
 			} else {
-				window.open(windowURL, windowName, windowFeatures+',left=' + self.options.left +',top=' + self.options.top).focus();	
+				top = self.options.top;
+				left = self.options.left;
 			}
+			
+			/* Remove non-alphanumeric characters for msie */
+			if (windowName) {
+				windowName = windowName.replace(/[^a-zA-Z0-9]/g,'_');
+			}
+			var w = window.open(windowURL, windowName, windowFeatures+',left='+Math.ceil(left)+',top='+Math.ceil(top));
+			if (w.innerWidth != undefined) {
+				w.resizeBy(self.options.width - w.innerWidth, self.options.height - w.innerHeight);
+			}
+			w.focus();
 			return false;
 		});
 	}
@@ -72,7 +81,7 @@ $.ui.popupwindow.defaults = {
 	scrollbars:0, // determines whether scrollbars appear on the window {1 (YES) or 0 (NO)}.
 	status:0, // whether a status line appears at the bottom of the window {1 (YES) or 0 (NO)}.
 	width:500, // sets the width in pixels of the window.
-	windowName:null, // name of window set from the name attribute of the element that invokes the click
+	windowName:null, // name of window
 	windowURL:null, // url used for the popup
 	top:0, // top position when the window appears.
 	toolbar:0 // determines whether a toolbar (includes the forward and back buttons) is displayed {1 (YES) or 0 (NO)}.
