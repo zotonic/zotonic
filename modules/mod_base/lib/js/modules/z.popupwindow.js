@@ -61,9 +61,11 @@ $.widget("ui.popupwindow", {
 				windowName = windowName.replace(/[^a-zA-Z0-9]/g,'_');
 			}
 			var w = window.open(windowURL, windowName, windowFeatures+',left='+Math.ceil(left)+',top='+Math.ceil(top));
-			if (w.innerWidth != undefined) {
-				w.resizeBy(self.options.width - w.innerWidth, self.options.height - w.innerHeight);
-			}
+			setTimeout(function() {
+						if (w.innerWidth != undefined && w.innerWidth > 0) {
+							w.resizeBy(self.options.width - w.innerWidth, self.options.height - w.innerHeight);
+						}
+					}, 500);
 			w.focus();
 			return false;
 		});
