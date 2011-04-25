@@ -44,15 +44,21 @@ render_inline(Method, TargetId, Html, Args, Context) ->
     case proplists:get_value(appear, Args) of
         true ->
             case Method of
-                update -> {[], z_render:appear_selector(Sel, Html, Context)};
-                insert_top -> {[], z_render:appear_top_selector(Sel, Html, Context)};
-                insert_bottom -> {[], z_render:appear_bottom_selector(Sel, Html, Context)}
+                update        -> {[], z_render:appear_selector(Sel, Html, Context)};
+		replace	      -> {[], z_render:appear_replace_selector(Sel, Html, Context)};
+                insert_top    -> {[], z_render:appear_top_selector(Sel, Html, Context)};
+                insert_bottom -> {[], z_render:appear_bottom_selector(Sel, Html, Context)};
+		insert_before -> {[], z_render:appear_before_selector(Sel, Html, Context)};
+		insert_after  -> {[], z_render:appear_after_selector(Sel, Html, Context)}
             end;
         _ -> 
             case Method of
-                update -> {[], z_render:update_selector(Sel, Html, Context)};
-                insert_top -> {[], z_render:insert_top_selector(Sel, Html, Context)};
-                insert_bottom -> {[], z_render:insert_bottom_selector(Sel, Html, Context)}
+                update        -> {[], z_render:update_selector(Sel, Html, Context)};
+		replace       -> {[], z_render:replace_selector(Sel, Html, Context)};
+                insert_top    -> {[], z_render:insert_top_selector(Sel, Html, Context)};
+                insert_bottom -> {[], z_render:insert_bottom_selector(Sel, Html, Context)};
+		insert_before -> {[], z_render:insert_before_selector(Sel, Html, Context)};
+		insert_after  -> {[], z_render:insert_after_selector(Sel, Html, Context)}
             end
     end.
 
@@ -61,15 +67,21 @@ render_static(Method, TargetId, Html, Args, Context) ->
     case proplists:get_value(appear, Args) of
         true -> 
             case Method of
-                update -> {z_render:appear_selector_js(Sel, Html), Context};
-                insert_top -> {z_render:appear_top_selector_js(Sel, Html), Context};
-                insert_bottom -> {z_render:appear_bottom_selector_js(Sel, Html), Context}
+                update        -> {z_render:appear_selector_js(Sel, Html), Context};
+		replace       -> {z_render:appear_replace_selector_js(Sel, Html), Context};
+                insert_top    -> {z_render:appear_top_selector_js(Sel, Html), Context};
+                insert_bottom -> {z_render:appear_bottom_selector_js(Sel, Html), Context};
+		insert_before -> {z_render:appear_before_selector_js(Sel, Html), Context};
+		insert_after  -> {z_render:appear_after_selector_js(Sel, Html), Context}
             end;
         _ -> 
             case Method of 
-                update -> {z_render:update_selector_js(Sel, Html), Context};
-                insert_top -> {z_render:insert_top_selector_js(Sel, Html), Context};
-                insert_bottom -> {z_render:insert_bottom_selector_js(Sel, Html), Context}
+                update        -> {z_render:update_selector_js(Sel, Html), Context};
+		    replace   -> {z_render:replace_selector_js(Sel, Html), Context};
+                insert_top    -> {z_render:insert_top_selector_js(Sel, Html), Context};
+                insert_bottom -> {z_render:insert_bottom_selector_js(Sel, Html), Context};
+		insert_before -> {z_render:insert_before_selector_js(Sel, Html), Context};
+		insert_after  -> {z_render:insert_after_selector_js(Sel, Html), Context}
             end
     end.
 

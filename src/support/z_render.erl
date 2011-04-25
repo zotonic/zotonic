@@ -42,28 +42,46 @@
     render_validator/4,
 
     update/3,
+    replace/3,
     insert_top/3,
     insert_bottom/3,
+    insert_before/3,
+    insert_after/3,
 
     appear/3,
+    appear_replace/3,
     appear_top/3,
     appear_bottom/3,
+    appear_before/3,
+    appear_after/3,
 
     update_selector/3,
+    replace_selector/3,
     insert_top_selector/3,
     insert_bottom_selector/3,
+    insert_before_selector/3,
+    insert_after_selector/3,
 
     appear_selector/3,
+    appear_replace_selector/3,
     appear_top_selector/3,
     appear_bottom_selector/3,
+    appear_before_selector/3,
+    appear_after_selector/3,
 
     update_selector_js/2,
+    replace_selector_js/2,
     insert_top_selector_js/2,
     insert_bottom_selector_js/2,
+    insert_before_selector_js/2,
+    insert_after_selector_js/2,
 
     appear_selector_js/2,
+    appear_replace_selector_js/2,
     appear_top_selector_js/2,
     appear_bottom_selector_js/2,
+    appear_before_selector_js/2,
+    appear_after_selector_js/2,
 
     set_value/3,
     set_value_selector/3,
@@ -226,6 +244,10 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 %% @doc Set the contents of an element to the the html fragment 
 update(TargetId, Html, Context) ->
     update_selector(css_selector(TargetId), Html, Context).
+
+%% @doc Replace an element to the the html fragment
+replace(TargetId, Html, Context) ->
+    replace_selector(css_selector(TargetId), Html, Context).
     
 %% @doc Insert a html fragment at the top of the contents of an element
 insert_top(TargetId, Html, Context) ->
@@ -235,9 +257,20 @@ insert_top(TargetId, Html, Context) ->
 insert_bottom(TargetId, Html, Context) ->
     insert_bottom_selector(css_selector(TargetId), Html, Context).
 
+%% @doc Add a html before the target element
+insert_before(TargetId, Html, Context) ->
+    insert_before_selector(css_selector(TargetId), Html, Context).
+
+%% @doc Add a html after the target element
+insert_after(TargetId, Html, Context) ->
+    insert_after_selector(css_selector(TargetId), Html, Context).
+
 %% @doc Set the contents of an element to the the html fragment 
 appear(TargetId, Html, Context) ->
     appear_selector(css_selector(TargetId), Html, Context).
+
+appear_replace(TargetId, Html, Context) ->
+    appear_replace_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Insert a html fragment at the top of the contents of an element
 appear_top(TargetId, Html, Context) ->
@@ -247,10 +280,27 @@ appear_top(TargetId, Html, Context) ->
 appear_bottom(TargetId, Html, Context) ->
     appear_bottom_selector(css_selector(TargetId), Html, Context).
 
+%% @doc Append a html fragment at the bottom of the contents of an element
+appear_before(TargetId, Html, Context) ->
+    appear_before_selector(css_selector(TargetId), Html, Context).
+
+%% @doc Add a html after the target element
+appear_after(TargetId, Html, Context) ->
+    appear_after_selector(css_selector(TargetId), Html, Context).
+
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment 
 update_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
+
+insert_before_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>, Context).
+
+insert_after_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, Context).
+
+replace_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, Context).
 
 insert_top_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, Context).
@@ -261,11 +311,20 @@ insert_bottom_selector(CssSelector, Html, Context) ->
 appear_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
+appear_replace_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, Context).
+
 appear_top_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_bottom_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>, Context).
+
+appear_before_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>, Context).
+
+appear_after_selector(CssSelector, Html, Context) ->
+    update_context(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>, Context).
 
 
 %% @doc Set the value of an input element.
@@ -289,20 +348,38 @@ update_context(CssSelector, Html, Function, AfterEffects, Context) ->
 update_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".widgetManager()">>).
 
+replace_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>).
+
 insert_top_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>).
 
 insert_bottom_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"appendTo">>, <<".widgetManager()">>).
 
+insert_before_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>).
+
+insert_after_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>).
+
 appear_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>).
+
+appear_replace_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>).
 
 appear_top_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>).
 
 appear_bottom_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>).
+
+appear_before_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>).
+
+appear_after_selector_js(CssSelector, Html) ->
+    update_js(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>).
 
 
 %% @doc Helper functions for the insert/appear/set_value functions
