@@ -32,7 +32,11 @@ render_action(TriggerId, TargetId, Args, Context) ->
     ActionsWithId = proplists:get_all_values(action_with_id, Args),
     Cats = proplists:get_all_values(cat, Args),
     Template = proplists:get_value(template, Args, "_action_typeselect_result.tpl"),
-    Postback = {typeselect, Cats, Template, Actions, ActionsWithId},
+    OtherArgs = proplists:delete(action, 
+                    proplists:delete(action_with_id, 
+                        proplists:delete(cat, 
+                            proplists:delete(template, Args)))),
+    Postback = {typeselect, Cats, Template, Actions, ActionsWithId, OtherArgs},
     {_PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
     JS = [
         <<"z_typeselect(\"">>, TriggerId, $",$,,$", PickledPostback, <<"\");">>
@@ -42,7 +46,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Show possible completions of the search text using a template.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {typeselect, Cats, Template, Actions, ActionsWithId}, _TriggerId, TargetId}, Context) ->
+event({postback, {typeselect, Cats, Template, Actions, ActionsWithId, OtherArgs}, _TriggerId, TargetId}, Context) ->
     Text = z_context:get_q("triggervalue", Context),
     Props = [{cat,Cats}, {text, Text}],
     Result = z_search:search({autocomplete, Props}, {1,20}, Context),
@@ -54,6 +58,7 @@ event({postback, {typeselect, Cats, Template, Actions, ActionsWithId}, _TriggerI
         {result, M},
         {action, Actions},
         {action_with_id, ActionsWithId}
+        | OtherArgs
     ],
     Html = z_template:render(Template, Vars, Context),
     z_render:update(TargetId, Html, Context).
