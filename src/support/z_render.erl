@@ -311,6 +311,11 @@ update_js(CssSelector, Html, <<"html">>, AfterEffects) ->
       <<").html(\"">>, z_utils:js_escape(Html), $", $), 
       AfterEffects, 
       $;];
+update_js(CssSelector, Html, <<"val">>, AfterEffects) ->
+    [ $$, $(, quote_css_selector(CssSelector), 
+      <<").val(\"">>, z_utils:js_escape(Html), $", $), 
+      AfterEffects, 
+      $;];
 update_js(CssSelector, Html, Function, AfterEffects) ->
     [ $$, $(, $", z_utils:js_escape(Html), $", $), 
       $., Function, $(, quote_css_selector(CssSelector), $), 
