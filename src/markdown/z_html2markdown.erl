@@ -22,7 +22,10 @@
 -module(z_html2markdown).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([convert/1]).
+-export([
+    convert/1,
+    convert/2
+]).
 
 -include("zotonic.hrl").
 
@@ -30,20 +33,28 @@
 -record(md, {a=[]}).
 
 % Recursive context dependent markdown state (context)
--record(ms, {li=none,indent=[]}).
+-record(ms, {li=none, indent=[], allow_html=true}).
 
 
+convert(Html) ->
+    convert(Html, []).
 
 %% @doc Convert a html text to markdown format. Assumes the html has been sanitized and normalized.
-convert(Html) when is_binary(Html) ->
-    convert1(<<"<sanitize>",Html/binary,"</sanitize>">>);
-convert(Html) when is_list(Html) ->
-    convert1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"])).
+convert(Html, Options) when is_binary(Html) ->
+    convert1(<<"<sanitize>",Html/binary,"</sanitize>">>, Options);
+convert(Html, Options) when is_list(Html) ->
+    convert1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"]), Options).
 
-convert1(Html) ->
+convert1(Html, Options) ->
     Parsed = mochiweb_html:parse(Html),
-    {Text, M} = to_md(Parsed, #md{}, #ms{}),
+    {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
     list_to_binary([trimnl(iolist_to_binary(Text)), expand_anchors(M)]).
+
+    set_options([], S) ->
+        S;
+    set_options([no_html|T], S) ->
+        set_options(T, S#ms{allow_html=false}).
+
 
 to_md(B, M, _S) when is_binary(B) ->
     {escape_html_text(B, <<>>), M};
@@ -121,9 +132,8 @@ to_md({<<"li">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=none, indent=[S#ms.li|S#ms.indent]}),
     {[nl(S), Bullet, 32, trl(EncText)], M1};
 
-to_md({<<"table">>, _Args, _Enclosed} = Html, M, _S) ->
+to_md({<<"table">>, _Args, _Enclosed} = Html, M, S) when S#ms.allow_html ->
     {flatten_html(Html), M};
-
 
 to_md({<<"head">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
@@ -269,6 +279,8 @@ expand_anchors(#md{a = As}) ->
 
 flatten_html(Text) when is_binary(Text) ->
     z_html:escape(Text);
+flatten_html({comment, _Text}) ->
+    [];
 flatten_html({Tag, Args, Enclosed}) ->
     case Enclosed == [] andalso is_self_closing(Tag) of
         true ->

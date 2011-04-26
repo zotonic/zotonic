@@ -21,12 +21,16 @@
 
 -export([
     to_html/1,
-    to_markdown/1
+    to_markdown/1,
+    to_markdown/2
 ]).
 
 
 to_markdown(Html) ->
     z_html2markdown:convert(Html).
+
+to_markdown(Html, Options) ->
+    z_html2markdown:convert(Html, Options).
 
 
 to_html(Markdown) when is_binary(Markdown) ->
