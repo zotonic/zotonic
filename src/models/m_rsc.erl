@@ -302,6 +302,8 @@ is_me(Id, Context) ->
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
 %% p(ResourceId, atom(), Context) -> term() | undefined
+p(Id, Property, Context) when is_list(Property) ->
+    p(Id, list_to_atom(Property), Context);
 p(Id, Property, Context) 
     when   Property =:= category_id 
     orelse Property =:= page_url 
