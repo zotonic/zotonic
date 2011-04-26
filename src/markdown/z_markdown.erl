@@ -29,6 +29,8 @@ to_markdown(Html) ->
     z_html2markdown:convert(Html).
 
 
+to_html(Markdown) when is_binary(Markdown) ->
+    markdown:conv(binary_to_list(Markdown));
 to_html(Markdown) ->
     markdown:conv(Markdown).
 

@@ -42,8 +42,8 @@ convert(Html) when is_list(Html) ->
 
 convert1(Html) ->
     Parsed = mochiweb_html:parse(Html),
-    {Text, _} = to_md(Parsed, #md{}, #ms{}),
-    trimnl(iolist_to_binary(Text)).
+    {Text, M} = to_md(Parsed, #md{}, #ms{}),
+    list_to_binary([trimnl(iolist_to_binary(Text)), expand_anchors(M)]).
 
 to_md(B, M, _S) when is_binary(B) ->
     {escape_html_text(B, <<>>), M};
@@ -79,6 +79,16 @@ to_md({<<"b">>, _Args, Enclosed}, M, S) ->
 to_md({<<"p">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[trl(EncText), nl(S), nl(S)], M1};
+
+to_md({<<"a">>, Args, Enclosed}, M, S) ->
+    case proplists:get_value(<<"href">>, Args) of
+        undefined ->
+            to_md(Enclosed, M, S);
+        Href ->
+            {EncText, M1} = to_md(Enclosed, M, S),
+            {M2,RefNr} = add_anchor(Href, M1),
+            {[ $[, trl(EncText), $],$[,integer_to_list(RefNr),$] ], M2}
+    end;
     
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
@@ -110,6 +120,10 @@ to_md({<<"li">>, _Args, Enclosed}, M, S) ->
              end,
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=none, indent=[S#ms.li|S#ms.indent]}),
     {[nl(S), Bullet, 32, trl(EncText)], M1};
+
+to_md({<<"table">>, _Args, _Enclosed} = Html, M, _S) ->
+    {flatten_html(Html), M};
+
 
 to_md({<<"head">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
@@ -223,3 +237,57 @@ trimnl(B) ->
 
 trl(B) ->
     z_string:trim_left(B).
+
+
+
+% @todo: check if the Href is already defined, if so return existing index
+add_anchor(Href, M) ->
+    case indexof(Href, M#md.a, 1) of
+        undefined ->
+            {M#md{a=M#md.a ++ [Href]}, length(M#md.a)+1};
+        N ->
+            {M, N}
+    end.
+    
+    indexof(_A, [], _N) -> undefined;
+    indexof(A, [A|_], N) -> N;
+    indexof(A, [_|R], N) -> indexof(A, R, N+1).
+
+
+expand_anchors(#md{a = []}) ->
+    [];
+expand_anchors(#md{a = As}) ->
+    [10 | expand_anchor(As, 1, []) ].
+    
+    expand_anchor([], _, Acc) ->
+        lists:reverse(Acc);
+    expand_anchor([A|As], N, Acc) ->
+        Link = [ 32, 32, $[, integer_to_list(N), $], $:, 32, A, 10 ],
+        expand_anchor(As, N+1, [Link|Acc]).
+
+        
+
+flatten_html(Text) when is_binary(Text) ->
+    z_html:escape(Text);
+flatten_html({Tag, Args, Enclosed}) ->
+    case Enclosed == [] andalso is_self_closing(Tag) of
+        true ->
+            [ $<, Tag, flatten_args(Args), $/, $> ];
+        false ->
+            [
+                $<, Tag, flatten_args(Args), $>,
+                [ flatten_html(Enc) || Enc <- Enclosed ],
+                $<, $/, Tag, $>
+            ]
+    end.
+    
+    is_self_closing(<<"img">>) -> true;
+    is_self_closing(<<"br">>) -> true;
+    is_self_closing(<<"hr">>) -> true;
+    is_self_closing(_) -> false.
+
+    flatten_args(Args) ->
+        [ flatten_arg(Arg) || Arg <- Args ].
+    
+    flatten_arg({Name, Value}) ->
+        [ 32, Name, $=, $", z_html:escape(Value), $" ].
