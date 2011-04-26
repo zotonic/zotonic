@@ -229,7 +229,7 @@ spawn_send(Id, Email, Context, State) ->
                     [] ->
                         MimeMsg2;
                     _ ->
-                        Markdown = z_markdown:to_markdown(Html),
+                        Markdown = z_markdown:to_markdown(Html, [no_html]),
                         esmtp_mime:add_part(MimeMsg2, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
                 end;
             _ -> 
