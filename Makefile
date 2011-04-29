@@ -1,8 +1,8 @@
-ERL          ?= erl
-ERLC          = erlc
-EBIN_DIRS    := $(wildcard deps/*/ebin)
-APP          := zotonic
-PARSER        =src/erlydtl/erlydtl_parser
+ERL           ?= erl
+ERLC_EMULATOR ?= erlc
+EBIN_DIRS     := $(wildcard deps/*/ebin)
+APP           := zotonic
+PARSER         =src/erlydtl/erlydtl_parser
 
 all: gen_smtp z_logger mochiweb webmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
 
@@ -11,7 +11,7 @@ erl:
 	  -eval 'case make:all() of up_to_date -> halt(0); error -> halt(1) end.'
 
 $(PARSER).erl: $(PARSER).yrl
-	$(ERLC) -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
+	$(ERLC_EMULATOR) -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
 
 gen_smtp:
 	cd deps/gen_smtp && $(MAKE)
