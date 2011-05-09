@@ -27,6 +27,21 @@ $.widget("ui.popupwindow", {
 	_init: function() {
 		var self = this;
 		$(this.element).click(function() {
+			if (self.options.full) {
+				self.options.toolbar = 1;
+				self.options.scrollbars = 1;
+				self.options.location = 1;
+				self.options.menubar = 1;
+				self.options.centerScreen = 1;
+				self.options.centerBrowser = 0;
+				if ($.browser.msie) {
+					self.options.width = document.documentElement.clientWidth;
+					self.options.height = document.documentElement.clientHeight;
+				} else {
+					self.options.width = window.innerWidth;
+					self.options.height = window.innerHeight;
+				}
+			}
 			var windowFeatures =    'height=' + self.options.height +
 									',width=' + self.options.width +
 									',toolbar=' + (self.options.toolbar?'yes':'no') +
@@ -40,7 +55,7 @@ $.widget("ui.popupwindow", {
 			var windowURL = this.href || self.options.windowURL;
 			var top, left;
 
-			if (self.options.centerBrowser) {
+			if (self.options.centerBrowser && !self.options.centerScreen) {
 				if ($.browser.msie) {
 					top = (window.screenTop - 120) + ((((document.documentElement.clientHeight + 120)/2) - (self.options.height/2)));
 					left = window.screenLeft + ((((document.documentElement.clientWidth + 20)/2) - (self.options.width/2)));
@@ -73,6 +88,7 @@ $.widget("ui.popupwindow", {
 });
 
 $.ui.popupwindow.defaults = {
+	full:0, // set the height/width to the current window, show scrollbars etc.
 	centerBrowser:1, // center window over browser window? {1 (YES) or 0 (NO)}. overrides top and left
 	centerScreen:0, // center window over entire screen? {1 (YES) or 0 (NO)}. overrides top and left
 	height:500, // sets the height in pixels of the window.
