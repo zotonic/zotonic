@@ -199,14 +199,16 @@ handle_call(Message, _From, State) ->
 %% @doc Poll the queue for the default host
 handle_cast(poll, State) ->
     flush(),
-    do_poll(State#state.context),
-    {noreply, State};
+	Context1 = z_trans_server:set_context_table(State#state.context),
+    do_poll(Context1),
+    {noreply, State#state{context=Context1}};
 
 
 %% @doc Poll the queue for a particular database
 handle_cast({pivot, Id}, State) ->
-    do_pivot(Id, State#state.context),
-    {noreply, State};
+	Context1 = z_trans_server:set_context_table(State#state.context),
+    do_pivot(Id, Context1),
+    {noreply, State#state{context=Context1}};
 
 
 %% @doc Trap unknown casts
