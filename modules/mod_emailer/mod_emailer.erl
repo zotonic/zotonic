@@ -198,10 +198,9 @@ spawn_send(Id, Email, Context, State) ->
         {A,B,C} = now(),                                                            
         random:seed(A,B,C),                                                         
 
-	    To = case State#state.override of 
-                 O when O =:= [] orelse O =:= undefined -> Email#email.to; 
-                 Override -> escape_email(z_convert:to_list(Email#email.to)) ++ " (override) <" ++ Override ++ ">"
-             end,
+	    To = check_override(Email#email.to, State),
+	    Cc = check_override(Email#email.cc, State),
+
 		From = case Email#email.from of L when L =:= [] orelse L =:= undefined -> State#state.from; EmailFrom -> EmailFrom end,
 
 		% Optionally render the text and html body
@@ -220,20 +219,24 @@ spawn_send(Id, Email, Context, State) ->
 
         % Build the message and send it
         MimeMsg = esmtp_mime:msg(z_convert:to_list(To), z_convert:to_list(From), z_convert:to_list(Subject)),
-        MimeMsg1 = esmtp_mime:add_header(MimeMsg, {"X-Mailer", "Zotonic " ?ZOTONIC_VERSION " (http://zotonic.com)"}),
-        MimeMsg2 = esmtp_mime:set_multipart_type(MimeMsg1, alternative),
+		MimeMsg1 = case Cc of
+						undefined -> MimeMsg;
+						_ -> esmtp_mime:add_header(MimeMsg, {"Cc",Cc})
+					end,
+        MimeMsg2 = esmtp_mime:add_header(MimeMsg1, {"X-Mailer", "Zotonic " ?ZOTONIC_VERSION " (http://zotonic.com)"}),
+        MimeMsg3 = esmtp_mime:set_multipart_type(MimeMsg2, alternative),
 
         MimeText = case Text of
             [] ->
                 case Html of
                     [] ->
-                        MimeMsg2;
+                        MimeMsg3;
                     _ ->
                         Markdown = z_markdown:to_markdown(Html, [no_html]),
-                        esmtp_mime:add_part(MimeMsg2, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
+                        esmtp_mime:add_part(MimeMsg3, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
                 end;
             _ -> 
-                esmtp_mime:add_part(MimeMsg2, esmtp_mime:create_text_part(z_convert:to_list(Text)))
+                esmtp_mime:add_part(MimeMsg3, esmtp_mime:create_text_part(z_convert:to_list(Text)))
         end,
 
         MimeBase = case Html of
@@ -260,6 +263,14 @@ spawn_send(Id, Email, Context, State) ->
         escape_email(T, [$-,$t,$a,$-|Acc]);
     escape_email([H|T], Acc) ->
         escape_email(T, [H|Acc]).
+
+
+	check_override(Email, _) when Email == undefined; Email == []; Email == <<>> ->
+		undefined;
+	check_override(Email, #state{override=Override}) when Override == undefined; Override == []; Override == <<>> ->
+		z_convert:to_list(Email);
+	check_override(Email, State) ->
+		escape_email(z_convert:to_list(Email)) ++ " (override) <" ++ State#state.override ++ ">".
 
 
 optional_render(undefined, undefined, _Vars, _Context) ->
@@ -292,7 +303,12 @@ mark_retry(Id, Retry, Context) ->
 sendemail(Msg = #mime_multipart{}, #state{sendmail=Sendmail}) when Sendmail /= [] ->
 	Message = esmtp_mime:encode(Msg),
 	{_FromName, FromEmail} = z_email:split_name_email(esmtp_mime:from(Msg)),
-	SendmailFrom = [ Sendmail, " -f", z_utils:os_escape(FromEmail), " ", z_utils:os_escape(esmtp_mime:to(Msg)) ],
+	SendmailFrom = [
+		Sendmail, 
+		" -f", z_utils:os_escape(FromEmail), 
+		" ", z_utils:os_escape(esmtp_mime:to(Msg)),
+		" ", z_utils:os_escape(esmtp_mime:cc(Msg)) 
+	],
 	SendmailFromAsList = binary_to_list(iolist_to_binary(SendmailFrom)),
 	P = open_port({spawn, SendmailFromAsList}, [use_stdio]),
 	port_command(P, Message),

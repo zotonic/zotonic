@@ -12,7 +12,7 @@
 %% API
 -export([encode/1, send/5,
          msg/0, msg/3, msg/4,
-         from/1, to/1,
+         from/1, to/1, cc/1,
          create_text_part/1,
          create_html_part/1,
          create_multipart/0,
@@ -59,6 +59,9 @@ encode(Msg) ->
 
 to(#mime_multipart{headers=H}) ->
     proplists:get_value("To", H, undefined).
+
+cc(#mime_multipart{headers=H}) ->
+    proplists:get_value("Cc", H, undefined).
 
 from(#mime_multipart{headers=H}) ->
     proplists:get_value("From", H, undefined).
