@@ -304,6 +304,8 @@ os_filename_bs([C|Rest], Acc) ->
 
 %% @spec os_escape(String) -> String
 %% @doc Simple escape function for command line arguments
+os_escape(undefined) ->
+	[];
 os_escape(A) when is_binary(A) ->
     os_escape(binary_to_list(A));
 os_escape(A) when is_list(A) ->
