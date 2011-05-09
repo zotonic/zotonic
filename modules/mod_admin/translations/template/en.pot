@@ -112,7 +112,7 @@ msgid ""
 "Choose a media item from this page to insert in the body text."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:65 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:99 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:65 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:106 
 msgid ""
 "City"
 msgstr ""
@@ -127,7 +127,7 @@ msgid ""
 "Content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:80 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:114 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:80 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:121 
 msgid ""
 "Country"
 msgstr ""
@@ -368,7 +368,7 @@ msgid ""
 "Longitude"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:86 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:93 
 msgid ""
 "Mailing address"
 msgstr ""
@@ -564,7 +564,7 @@ msgid ""
 "Please fill in the title of the new page."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:70 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:104 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:70 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:111 
 msgid ""
 "Postcode"
 msgstr ""
@@ -720,17 +720,17 @@ msgid ""
 "Start date"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:75 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:109 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:75 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:116 
 msgid ""
 "State"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:55 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:89 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:55 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:96 
 msgid ""
 "Street Line 1"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:60 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:94 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:60 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:101 
 msgid ""
 "Street Line 2"
 msgstr ""

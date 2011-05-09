@@ -31,20 +31,19 @@
 
 %% @doc Expand the two letter iso code country depending on the languages in the resource.
 observe_pivot_rsc_data(pivot_rsc_data, Rsc, Context) ->
-    Languages = [ default_language(Context) | resource_languages(Rsc) ],
+    Languages = lists:usort([ en, default_language(Context) | resource_languages(Rsc) ]),
     Rsc2 = expand_country(address_country, Rsc, Languages, Context),
     expand_country(mail_country, Rsc2, Languages, Context).
 
 expand_country(Prop, Rsc, Languages, Context) ->
-    Rsc1 = map_country(Prop, Rsc),
+	Rsc1 = map_country(Prop, Rsc),
     case proplists:get_value(Prop, Rsc1) of
         <<>> -> Rsc1;
         undefined -> Rsc1;
         <<_,_>> = Iso ->
             Countries = lists:map(
                             fun(Lang) -> 
-                                Context1 = z_context:set_language(Lang, Context),
-                                m_l10n:country_name(Iso, Context1)
+                                m_l10n:country_name(Iso, Lang, Context)
                             end,
                             Languages),
             add_alias(Iso, Rsc1 ++ [ {extra_pivot_data, C} || C <- lists:usort(Countries)]);
@@ -72,10 +71,13 @@ map_country(Prop, Rsc) ->
         Country ->
             case z_string:to_lower(Country) of
                 "usa" -> [{Prop, <<"us">>} | Rsc];
+                "holland" -> [{Prop, <<"nl">>} | Rsc];
                 "nederland" -> [{Prop, <<"nl">>} | Rsc];
                 "netherlands" -> [{Prop, <<"nl">>} | Rsc];
                 "the netherlands" -> [{Prop, <<"nl">>} | Rsc];
                 "belgië" -> [{Prop, <<"be">>} | Rsc];
+                "belgie" -> [{Prop, <<"be">>} | Rsc];
+                "belgique" -> [{Prop, <<"be">>} | Rsc];
                 % typos
                 "nethlerlands" -> [{Prop, <<"nl">>} | Rsc];
                 % just keep as-is
