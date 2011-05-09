@@ -28,7 +28,8 @@
     m_to_list/2,
     
     countries/1,
-    country_name/2
+    country_name/2,
+    country_name/3
 ]).
 
 -include("zotonic.hrl").
@@ -58,9 +59,15 @@ countries(Context) ->
 
 %% @doc Return the name of the country belonging to the code, use the language of the context
 country_name(Code, Context) ->
+	country_name(Code, z_context:language(Context), Context).
+
+country_name(Code, Language, Context) ->
     B = z_convert:to_binary(Code),
     case proplists:get_value(B, l10n_iso2country:iso2country()) of
-        undefined -> B;
-        Country -> ?__(Country, Context)
+        undefined -> 
+			B;
+        CountryEN -> 
+			z_trans:lookup_fallback(z_trans:translations(CountryEN, Context), Language, Context)
     end.
+	
 
