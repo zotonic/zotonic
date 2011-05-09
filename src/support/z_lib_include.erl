@@ -59,12 +59,19 @@ tag1(Files, Args, Context) ->
 		    true -> [<<"http://">>, z_context:hostname_port(Context), <<"/lib">>];
 		    false -> <<"/lib">>
     end,
+    TitleAttr = case proplists:get_value(title, Args) of
+		   undefined -> [];
+		   TitleValue -> [<<" title=\"">>, TitleValue, $"]
+	       end,
+    MediaAttr = [<<" media=\"">>, proplists:get_value(media, Args, "all"), $"],
+    RelAttr = [<<" rel=\"">>, proplists:get_value(rel, Args, "stylesheet"), $"],
+
     LinkElement = case CssPath of
         [] ->
             [];
         _ -> 
             ModCss = newest(Css, {{1970,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<link href=\"">>, UrlPrefix, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>])
+            iolist_to_binary([ <<"<link href=\"">>, UrlPrefix, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>])
     end,
     ScriptElement = case JsPath of
         [] ->
