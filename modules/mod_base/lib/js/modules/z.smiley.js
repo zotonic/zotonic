@@ -8,7 +8,7 @@ Incorporates code by Ben Alman:
 http://benalman.com/projects/jquery-replacetext-plugin/
 
 Copyright 2011 Marc Worrell
-Copyright 2009 Marc Worrell
+Copyright 2009 Ben Alman
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

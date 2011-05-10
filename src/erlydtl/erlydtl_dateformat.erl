@@ -271,8 +271,9 @@ tag_to_value($T, _, _, _Context) ->
 
 % Seconds since the Unix epoch (January 1 1970 00:00:00 GMT)
 tag_to_value($U, Date, Time, _Context) ->
-    EpochSecs = calendar:datetime_to_gregorian_seconds({Date, Time})
-       - calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
+	[UtcTime|_] = calendar:local_time_to_universal_time_dst({Date, Time}), 
+    EpochSecs = calendar:datetime_to_gregorian_seconds(UtcTime)
+       			- 62167219200, % calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
     integer_to_list(EpochSecs);
 
 % Day of the week, numeric, i.e. '0' (Sunday) to '6' (Saturday)

@@ -36,7 +36,6 @@ var z_registered_events		= new Object();
 var z_on_visible_checks		= [];
 var z_on_visible_timer		= undefined;
 
-
 /* Non modal dialogs
 ---------------------------------------------------------- */
 
@@ -317,9 +316,19 @@ function z_progress(id, value)
 		{
 			try { $(trigger).maskProgress(value); } catch (e) {};
 		}
-		
 	}
 }
+
+/* translations
+---------------------------------------------------------- */
+
+function z_translate(text)
+{
+	if (typeof z_translations != "undefined" && typeof z_translations[text] != "undefined")
+		return z_translations[text];
+	return text;
+}
+
 
 /* tinyMCE stuff
 ---------------------------------------------------------- */
