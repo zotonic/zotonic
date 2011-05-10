@@ -56,7 +56,7 @@ translations(From, Context) when is_binary(From) ->
 			% This can happen when translations are reloaded while requests are 'in flight'
 			% with old translation table references in the context.
 			% We retry with the current table.
-			case ets:lookup(z_trans_server:table(z_context:hostname(Context)), From) of
+			case ets:lookup(z_trans_server:table(z_context:site(Context)), From) of
 		        [] -> From;
 		        [{_, Trans}] -> {trans, Trans}
 			end
