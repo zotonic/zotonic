@@ -34,13 +34,8 @@ $.widget("ui.popupwindow", {
 				self.options.menubar = 1;
 				self.options.centerScreen = 1;
 				self.options.centerBrowser = 0;
-				if ($.browser.msie) {
-					self.options.width = document.documentElement.clientWidth;
-					self.options.height = document.documentElement.clientHeight;
-				} else {
-					self.options.width = window.innerWidth;
-					self.options.height = window.innerHeight;
-				}
+				self.options.width = screen.width-100;
+				self.options.height = screen.height-100;
 			}
 			var windowFeatures =    'height=' + self.options.height +
 									',width=' + self.options.width +
