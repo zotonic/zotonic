@@ -7,7 +7,7 @@
 		<div id="logon_reminder_email">
 			<p class="do_inputoverlay">
 				<span>{_ E-mail address or username _}</span>
-				<input type="text" id="reminder_address" name="reminder_address" value="{% if m.acl.user %}{{ m.identity[m.acl.user].username|escape }}{% endif %}" autocapitalize="off" autocomplete="on" />
+				<input type="text" id="reminder_address" name="reminder_address" value="{{ q.username|default:(m.identity[m.acl.user].username)|escape }}" autocapitalize="off" autocomplete="on" />
 			</p>
 		</div>
 
