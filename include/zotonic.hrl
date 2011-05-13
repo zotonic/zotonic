@@ -76,7 +76,7 @@
         props=[]
     }).
     
--record(activity, {version, posted_time, actor, verb=post, object, target}).
+-record(activity, {version=1, posted_time, actor, verb=post, object, target}).
     
 -define(WM_REQ(ReqData, Context), z_context:set_reqdata(ReqData, Context)).
 -define(WM_REPLY(Reply, Context), {Reply, Context#context.wm_reqdata, Context#context{wm_reqdata=undefined}}).
