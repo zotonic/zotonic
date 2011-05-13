@@ -143,6 +143,7 @@ insert(SubjectId, Pred, ObjectId, Context) ->
 		                {ok, EdgeId} = z_db:transaction(F, Context),
 		                z_depcache:flush(SubjectId, Context),
 		                z_depcache:flush(ObjectId, Context),
+						z_notifier:notify({edge_insert, SubjectId, PredName, ObjectId}, Context),
 		                {ok, EdgeId};
 					AclError ->
 						{error, {acl, AclError}}
@@ -166,6 +167,7 @@ delete(Id, Context) ->
             z_db:transaction(F, Context),
             z_depcache:flush(SubjectId, Context),
             z_depcache:flush(ObjectId, Context),
+			z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context),
             ok;
         AclError -> 
             {error, {acl, AclError}}
@@ -185,6 +187,7 @@ delete(SubjectId, Pred, ObjectId, Context) ->
             z_db:transaction(F, Context),
             z_depcache:flush(SubjectId, Context),
             z_depcache:flush(ObjectId, Context),
+			z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context),
             ok;
         AclError ->
             {error, {acl, AclError}}
@@ -208,9 +211,15 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
             end,
 
             case z_db:transaction(F, Context) of
+				0 -> 
+					ok;
                 N when is_integer(N) -> 
                     z_depcache:flush(SubjectId, Context),
                     z_depcache:flush(ObjectId, Context),
+					[
+						z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context)
+						|| PredName <- PredNames
+					],
                     ok;
                 Error -> 
                     Error
@@ -275,6 +284,7 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
             case z_db:transaction(F, Context) of
                 {ok,EdgeId} ->
                     z_depcache:flush(SubjectId, Context),
+					z_notifier:notify({edge_insert, SubjectId, PredName, ObjectId}, Context),
                     {ok, EdgeId};
                 {error, Reason} ->
                     {error, Reason}
