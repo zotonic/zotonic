@@ -54,6 +54,8 @@
 %% The session state
 -record(session, {
             expire,
+			expire_1,
+			expire_n,
             pages=[],
             linked=[],
 			persist_id,
@@ -189,13 +191,13 @@ handle_cast(restart, Session) ->
 %% @doc Reset the timeout counter for the session and, optionally, a specific page
 handle_cast(keepalive, Session) ->
     Now      = z_utils:now(),
-    Session1 = Session#session{expire=Now + ?SESSION_EXPIRE_N},
+    Session1 = Session#session{expire=Now + Session#session.expire_n},
     {noreply, Session1};
 
 %% @doc Reset the timeout counter, propagate to the page process.
 handle_cast({keepalive, PageId}, Session) ->
     Now      = z_utils:now(),
-    Session1 = Session#session{expire=Now + ?SESSION_EXPIRE_N},
+    Session1 = Session#session{expire=Now + Session#session.expire_n},
     case find_page(PageId, Session1) of
         #page{page_pid=Pid} -> 
             % Keep the page process alive
@@ -364,8 +366,12 @@ code_change(_OldVsn, Session, _Extra) ->
 
 %% @doc Initialize a new session record
 new_session(PersistId, Context) ->
+	Expire1 = z_convert:to_integer(m_config:get_value(site, session_expire_1, ?SESSION_EXPIRE_1, Context)),
+	ExpireN = z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)),
     load_persist(#session{
-            expire=z_utils:now() + ?SESSION_EXPIRE_1,
+            expire=z_utils:now() + Expire1,
+			expire_1 = Expire1,
+			expire_n = ExpireN,
 			persist_id = PersistId,
 			context=Context
             }).
@@ -375,7 +381,7 @@ new_session(PersistId, Context) ->
 restart_session(Session) ->
 	[ z_session_page:stop(Pid) || Pid <- Session#session.pages ],
 	Session#session{
-            expire=z_utils:now() + ?SESSION_EXPIRE_1,
+            expire=z_utils:now() + Session#session.expire_1,
             pages=[],
             props=[]
          }.
