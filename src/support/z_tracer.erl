@@ -47,7 +47,7 @@ traced_funs() ->
      {foldl, 3}, {foldr, 3}].
    
 ignored_events() ->
-    [debug].
+    [debug, tick_1s].
 
 %% @doc Default callback function for tracefun/2
 do_log({I, Pid, Fun, SessionPid, PagePid, ReqId, Msg}) ->
