@@ -47,19 +47,11 @@ translations({trans, Tr0} = Trans0, Context) ->
         _ -> Trans0
     end;
 translations(From, Context) when is_binary(From) ->
-    case catch ets:lookup(z_trans_server:table(Context), From) of
+    case ets:lookup(z_trans_server:table(Context), From) of
         [] ->
 			From;
         [{_, Trans}] ->
-			{trans, Trans};
-		{'EXIT',{badarg,[{ets,lookup,_}|_]}} ->
-			% This can happen when translations are reloaded while requests are 'in flight'
-			% with old translation table references in the context.
-			% We retry with the current table.
-			case ets:lookup(z_trans_server:table(z_context:site(Context)), From) of
-		        [] -> From;
-		        [{_, Trans}] -> {trans, Trans}
-			end
+			{trans, Trans}
     end;
 translations(From, Context) ->
     translations(z_convert:to_binary(From), Context).
