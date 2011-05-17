@@ -35,7 +35,7 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {table, old_table}).
+-record(state, {table}).
 
 %%====================================================================
 %% API
@@ -111,21 +111,16 @@ handle_call(Message, _From, State) ->
 %% @doc Rebuild the translations table. Call the template flush routines afterwards.
 %% Trans is a dict with all translations per translatable string.
 handle_cast({load_translations, Trans}, State) ->
-    Table = ets:new(translations, [set, protected]),
     F = fun(Key,Value,Acc) ->
             Value1 = case proplists:get_value(en, Value) of
                         undefined -> [{en,Key}|Value];
                         _ -> Value
                     end,
-            ets:insert(Table, {Key, Value1}),
-            Acc
+			[{Key,Value1}|Acc]
         end,
-    dict:fold(F, [], Trans),
-    case State#state.old_table of
-        undefined -> nop;
-        Tid -> ets:delete(Tid)
-    end,
-    {noreply, State#state{table=Table, old_table=State#state.table}};
+    List = dict:fold(F, [], Trans),
+	sync_to_table(List, State#state.table),
+    {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -152,10 +147,41 @@ terminate(_Reason, _State) ->
 %% @doc Convert process state when code is changed
 
 code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
+	case State of
+		{state, Table, _OldTable} ->
+			{ok, #state{table=Table}};
+		_ ->
+		    {ok, State}
+	end.
 
 
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc Sync a list of translations to the ets table containing all translations
+sync_to_table(List, Table) ->
+	LT = lists:sort(ets:tab2list(Table)),
+	List1 = lists:sort(List),
+	sync(List1, LT, Table).
+
+
+sync([], [], _Table) ->
+	ok;
+sync(L, [], Table) ->
+	ets:insert(Table, L);
+sync([], L, Table) ->
+	lists:map(fun({Key,_}) -> ets:delete(Table, Key) end, L);
+sync([H|NewList], [H|OldList], Table) ->
+	sync(NewList, OldList, Table);
+sync([{K,V}|NewList], [{K,_}|OldList], Table) ->
+	ets:insert(Table, [{K,V}]),
+	sync(NewList, OldList, Table);
+sync([{K1,V1}|NewList], [{K2,_}|_] = OldList, Table) when K1 < K2 ->
+	ets:insert(Table, [{K1,V1}]),
+	sync(NewList, OldList, Table);
+sync([{K1,_}|_] = NewList, [{K2,_}|OldList], Table) when K1 > K2 ->
+	ets:delete(Table, K2),
+	sync(NewList, OldList, Table).
 
