@@ -357,7 +357,26 @@ terminate(_Reason, Session) ->
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, Session, _Extra) ->
-    {ok, Session}.
+	case Session of 
+		{session, Pages, Linked, PersistId, PersistIsSaved, PersistIsDirty, Props, PropsPersist, Context} ->
+			Expire1 = z_convert:to_integer(m_config:get_value(site, session_expire_1, ?SESSION_EXPIRE_1, Context)),
+			ExpireN = z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)),
+			{ok, #session{
+				expire_1=Expire1,
+				expire_n=ExpireN,
+				pages=Pages,
+				linked=Linked,
+				persist_id=PersistId,
+				persist_is_saved=PersistIsSaved,
+				persist_is_dirty=PersistIsDirty,
+				props=Props,
+				props_persist=PropsPersist,
+				context=Context
+			}};
+		_ ->
+			{ok, Session}
+	end.
+
 
 
 %%====================================================================
