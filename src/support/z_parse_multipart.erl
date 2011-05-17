@@ -100,7 +100,7 @@ callback(Next, Form, UploadCheckFun) ->
                                                      filename=Filename, 
                                                      content_length=ContentLength, 
                                                      content_type=ContentType,
-                                                     tmpfile="/tmp/zp-"++z_ids:identifier()++".zptmp"},
+                                                     tmpfile=z_tempfile:new()},
                             fun(N) -> callback(N, NF, UploadCheckFun) end;
                         {error, _Reason} = Error ->
                             throw(Error)
