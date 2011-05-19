@@ -30,37 +30,42 @@ limitations under the License.
 			context 	= context || document.body;
 			var stack 	= [context];
 
-			while(stack.length > 0)
+			while (stack.length > 0)
 			{
-				var objectClass, objectOptions, functionName, defaults, element = stack.pop();
-				
-				if(element.className && (objectClass = new RegExp("do_([\\w_]+)", "g").exec(element.className)))
+				var objectOptions, defaults, element = stack.pop();
+				if (element.className) 
 				{
-					functionName = objectClass[1];
-
-					if('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
-					
-					if(typeof $(element)[functionName] == "function")
+					var objectClass = element.className.match(/do_[a-z0-9_]+/g);
+					if (objectClass) 
 					{
-						if($.ui && $.ui[functionName] && $.ui[functionName].defaults)
+						var n = objectClass.length;
+						for (var i=0; i<n; i++)
 						{
-							defaults = $.ui[functionName].defaults;
+							var functionName = objectClass[i].substring(3);
+
+							if ('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
+
+							if (typeof $(element)[functionName] == "function")
+							{
+								if ($.ui && $.ui[functionName] && $.ui[functionName].defaults)
+								{
+									defaults = $.ui[functionName].defaults;
+								}
+								else
+								{
+									defaults = {}
+								}
+								$(element)[functionName]( $.extend({}, defaults, $(element).metadata(functionName)) );
+							}
 						}
-						else
-						{
-							defaults = {}
-						}
-						
-						objectOptions = $.extend({}, defaults, $(element).metadata(functionName));
-						$(element)[functionName](objectOptions);
 					}
 				}
 
-				if(element.childNodes) 
+				if (element.childNodes) 
 				{
-				    for(var i = 0; i< element.childNodes.length; i++)
+				    for (var i = 0; i< element.childNodes.length; i++)
 					{
-						if(element.childNodes[i].nodeType != 3)
+						if (element.childNodes[i].nodeType != 3)
 						{
 							stack.unshift(element.childNodes[i]);
 						}
