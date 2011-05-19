@@ -130,7 +130,8 @@ rsc_media_check(File, Context) ->
             MimeOriginal = z_convert:to_list(proplists:get_value(mime, Media)),
             Props = [
                 {id, proplists:get_value(id, Media)},
-                {mime_original, MimeOriginal}
+                {mime_original, MimeOriginal},
+				{is_media_preview, IsResized}
             ],
             Props1 = case IsResized of 
                         true -> [ {mime, z_media_identify:guess_mime(File)} | Props ];
