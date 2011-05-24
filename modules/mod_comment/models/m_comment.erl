@@ -56,6 +56,11 @@ m_find_value(count, #m{value=undefined} = M, _Context) ->
     M#m{value=count};
 m_find_value(Id, #m{value=count}, Context) ->
     count_rsc(Id, Context);
+m_find_value(get, #m{value=undefined} = M, _Context) ->
+    M#m{value=get};
+m_find_value(CommentId, #m{value=get}, Context) ->
+    % Specific comment of the resource.
+    get(CommentId, Context);
 m_find_value(_Key, #m{value=undefined}, _Context) ->
    undefined.
 
