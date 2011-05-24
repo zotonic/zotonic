@@ -42,6 +42,7 @@
     keepalive/1, 
     keepalive/2, 
     ensure_page_session/1,
+	get_pages/1,
     get_attach_state/1,
     add_script/2,
     add_script/1,
@@ -163,6 +164,13 @@ get_attach_state(Pid) when is_pid(Pid) ->
     gen_server:call(Pid, get_attach_state);
 get_attach_state(Context) ->
     get_attach_state(Context#context.session_pid).
+
+
+%% @doc Get app page pid()'s that are attached to the session
+get_pages(Pid) when is_pid(Pid) ->
+	gen_server:call(Pid, get_pages);
+get_pages(Context) ->
+	get_pages(Context#context.session_pid).
 
 
 %% @doc Dump the session details
@@ -326,6 +334,9 @@ handle_call({ensure_page_session, Context}, _From, Session) ->
 
 handle_call(get_attach_state, _From, Session) ->
     {reply, [z_session_page:get_attach_state(Pid) ||  #page{page_pid=Pid} <- Session#session.pages], Session};
+
+handle_call(get_pages, _From, Session) ->
+    {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
 handle_call(Msg, _From, Session) ->
     {stop, {unknown_cast, Msg}, Session}.
