@@ -319,6 +319,17 @@ function z_progress(id, value)
 	}
 }
 
+function z_reload()
+{
+	var page = $('#logon_form input[name="page"]');
+
+	if (page.length > 0 && page.val() != "") {
+		window.location.href = window.location.protocol+"//"+window.location.host+page.val();
+	} else {
+		window.location.reload(true);
+	}
+}
+
 /* translations
 ---------------------------------------------------------- */
 
@@ -427,7 +438,7 @@ function z_websocket_start(host)
 	z_ws = new WebSocket("ws://"+document.location.host+"/websocket?z_pageid="+z_pageid);
 
 	z_ws.onopen = function() { z_ws_opened = true; };
-	z_ws.onerror = function() {};
+	z_ws.onerror = function() { };
 
 	z_ws.onclose = function (evt) 
 	{
