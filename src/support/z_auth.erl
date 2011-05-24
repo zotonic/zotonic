@@ -75,6 +75,7 @@ logon(UserId, Context) ->
 		    z_context:set_session(auth_user_id, UserId, Context2),
 		    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
 		    Context3 = z_notifier:foldl(auth_logon, Context2, Context2),
+		    z_notifier:notify(auth_logon_done, Context3),
 		    {ok, Context3};
 		false ->
 			{error, user_not_enabled}
@@ -86,6 +87,7 @@ logon(UserId, Context) ->
 logoff(Context) ->
     ContextLogOff = z_notifier:foldl(auth_logoff, Context, Context),
     z_context:set_session(auth_user_id, none, ContextLogOff),
+    z_notifier:notify(auth_logoff_done, ContextLogOff),
     z_acl:logoff(ContextLogOff).
 
 %% @doc Return the user_id from the session
