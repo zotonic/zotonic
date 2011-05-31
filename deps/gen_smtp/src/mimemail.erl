@@ -20,7 +20,33 @@
 %%% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 %%% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-%%% @doc A module for decoding/encoding MIME 1.0 email
+%% @doc A module for decoding/encoding MIME 1.0 email.
+%% The encoder and decoder operate on the same datastructure, which is as follows:
+%% A 5-tuple with the following elements: `{Type, SubType, Headers, Parameters, Body}'.
+%%
+%% `Type' and `SubType' are the MIME type of the email, examples are `text/plain' or
+%% `multipart/alternative'. The decoder splits these into 2 fields so you can filter by
+%% the main type or by the subtype.
+%%
+%% `Headers' consists of a list of key/value pairs of binary values eg.
+%% `{<<"From">>, <<"Andrew Thompson <andrew@hijacked.us>">>}'. There is no parsing of
+%% the header aside from un-wrapping the lines and splitting the header name from the
+%% header value.
+%%
+%% `Parameters' is a list of 3 key/value tuples. The 3 keys are `<<"content-type-params">>',
+%% `<<"dispisition">>' and `<<"disposition-params">>'.
+%% `content-type-params' is a key/value list of parameters on the content-type header, this
+%% usually consists of things like charset and the format parameters. `disposition' indicates
+%% how the data wants to be displayed, this is usually 'inline'. `disposition-params' is a list of
+%% disposition information, eg. the filename this section should be saved as, the modification
+%% date the file should be saved with, etc.
+%%
+%% Finally, `Body' can be one of several different types, depending on the structure of the email.
+%% For a simple email, the body will usually be a binary consisting of the message body, In the
+%% case of a multipart email, its a list of these 5-tuple MIME structures. The third possibility,
+%% in the case of a message/rfc822 attachment, body can be a single 5-tuple MIME structure.
+%% 
+%% You should see the relevant RFCs (2045, 2046, 2047, etc.) for more information.
 -module(mimemail).
 
 -ifdef(TEST).
@@ -36,17 +62,19 @@
 
 -type(mimetuple() :: {binary(), binary(), [{binary(), binary()}], [{binary(), binary()}], binary() | [{binary(), binary(), [{binary(), binary()}], [{binary(), binary()}], binary() | [tuple()]}] | tuple()}).
 
+-type(options() :: [{'encoding', binary()} | {'decode_attachment', boolean()}]).
+
 -spec(decode/1 :: (Email :: binary()) -> mimetuple()).
+%% @doc Decode a MIME email from a binary.
 decode(All) ->
 	{Headers, Body} = parse_headers(All),
 	decode(Headers, Body, ?DEFAULT_OPTIONS).
 
--spec(decode/2 :: (Headers :: [{binary(), binary()}], Body :: binary()) -> mimetuple()).
+-spec(decode/2 :: (Email :: binary(), Options :: options()) -> mimetuple()).
+%% @doc Decode with custom options
 decode(All, Options) when is_binary(All), is_list(Options) ->
 	{Headers, Body} = parse_headers(All),
-	decode(Headers, Body, Options);
-decode(Headers, Body) when is_list(Headers), is_binary(Body) ->
-	decode(Headers, Body, ?DEFAULT_OPTIONS).
+	decode(Headers, Body, Options).
 
 decode(OrigHeaders, Body, Options) ->
 	%io:format("headers: ~p~n", [Headers]),
@@ -78,6 +106,7 @@ decode(OrigHeaders, Body, Options) ->
 	end.
 
 -spec(encode/1 :: (MimeMail :: mimetuple()) -> binary()).
+%% @doc Encode a MIME tuple to a binary.
 encode({Type, Subtype, Headers, ContentTypeParams, Parts}) ->
 	{FixedParams, FixedHeaders} = ensure_content_headers(Type, Subtype, ContentTypeParams, Headers, Parts, true),
 	FixedHeaders2 = check_headers(FixedHeaders),
@@ -178,6 +207,7 @@ decode_component(_Headers, _Body, Other, _Options) ->
 	erlang:error({mime_version, Other}).
 
 -spec(get_header_value/3 :: (Needle :: binary(), Headers :: [{binary(), binary()}], Default :: any()) -> binary() | any()).
+%% @doc Do a case-insensitive header lookup to return that header's value, or the specified default.
 get_header_value(Needle, Headers, Default) ->
 	%io:format("Headers: ~p~n", [Headers]),
 	F =
@@ -193,6 +223,7 @@ get_header_value(Needle, Headers, Default) ->
 	end.
 
 -spec(get_header_value/2 :: (Needle :: binary(), Headers :: [{binary(), binary()}]) -> binary() | 'undefined').
+%% @doc Do a case-insensitive header lookup to return the header's value, or `undefined'.
 get_header_value(Needle, Headers) ->
 	get_header_value(Needle, Headers, undefined).
 
@@ -300,6 +331,7 @@ split_body_by_boundary_(Body, Boundary, Acc) ->
 	end.
 
 -spec(parse_headers/1 :: (Body :: binary()) -> {[{binary(), binary()}], binary()}).
+%% @doc Parse the headers off of a message and return a list of headers and the trailing body.
 parse_headers(Body) ->
 	case binstr:strpos(Body, "\r\n") of
 		0 ->
@@ -533,7 +565,7 @@ ensure_content_headers([Header | Tail], Type, SubType, Parameters, Headers, Body
 			end,
 
 			%CTP = proplists:get_value(<<"content-type-params">>, Parameters, [guess_charset(Body)]),
-			CTH = binstr:join([CT | encode_parameters(CTP)], ";\r\n\t"),
+			CTH = binstr:join([CT | encode_parameters(CTP)], ";"),
 			NewParameters = [{<<"content-type-params">>, CTP} | proplists:delete(<<"content-type-params">>, Parameters)],
 			ensure_content_headers(Tail, Type, SubType, NewParameters, [{<<"Content-Type">>, CTH} | Headers], Body, Toplevel);
 		undefined when Header == <<"Content-Type">> ->
@@ -550,7 +582,7 @@ ensure_content_headers([Header | Tail], Type, SubType, Parameters, Headers, Body
 					ensure_content_headers(Tail, Type, SubType, Parameters, Headers, Body, Toplevel);
 				_ ->
 					CTP = [{<<"charset">>, Charset} | proplists:delete(<<"charset">>, proplists:get_value(<<"content-type-params">>, Parameters, []))],
-					CTH = binstr:join([<<"text/plain">> | encode_parameters(CTP)], ";\r\n\t"),
+					CTH = binstr:join([<<"text/plain">> | encode_parameters(CTP)], ";"),
 					NewParameters = [{<<"content-type-params">>, CTP} | proplists:delete(<<"content-type-params">>, Parameters)],
 					ensure_content_headers(Tail, Type, SubType, NewParameters, [{<<"Content-Type">>, CTH} | Headers], Body, Toplevel)
 			end;
@@ -570,7 +602,7 @@ ensure_content_headers([Header | Tail], Type, SubType, Parameters, Headers, Body
 		undefined when Header == <<"Content-Disposition">>, Toplevel == false ->
 			CD = proplists:get_value(<<"disposition">>, Parameters, <<"inline">>),
 			CDP = proplists:get_value(<<"disposition-params">>, Parameters, []),
-			CDH = binstr:join([CD | encode_parameters(CDP)], ";\r\n\t"),
+			CDH = binstr:join([CD | encode_parameters(CDP)], ";"),
 			ensure_content_headers(Tail, Type, SubType, Parameters, [{<<"Content-Disposition">>, CDH} | Headers], Body, Toplevel);
 		_ ->
 			ensure_content_headers(Tail, Type, SubType, Parameters, Headers, Body, Toplevel)
@@ -1119,9 +1151,7 @@ parse_example_mails_test_() ->
 		{"no \\r\\n before first boundary",
 			fun() ->
 				{ok, Bin} = file:read_file("../testdata/html.eml"),
-				{Headers, B} = parse_headers(Bin),
-				Body = binstr:strip(binstr:strip(B, left, $\r), left, $\n),
-				Decoded = decode(Headers, Body),
+				Decoded = decode(Bin),
 				?assertEqual(2, length(element(5, Decoded)))
 			end
 		},
@@ -1325,7 +1355,7 @@ encode_quoted_printable_test_() ->
 		{"input with invisible non-ascii characters",
 			fun() ->
 					?assertEqual(<<"There's some stuff=C2=A0in=C2=A0here\r\n">>,
-						encode_quoted_printable(<<"There's some stuff in here\r\n">>, "", 0))
+						encode_quoted_printable(<<"There's some stuff in here\r\n">>, "", 0))
 			end
 		},
 		{"add soft newlines",
@@ -1616,7 +1646,7 @@ encoding_test_() ->
 							{<<"To">>, <<"you@example.com">>},
 							{<<"Subject">>, <<"This is a test">>}],
 						[],
-						<<"This is a text message with some invisible non-ascii characters\r\nso there">>},
+						<<"This is a text message with some invisible non-ascii characters\r\nso there">>},
 					Encoded3 = encode(Email3),
 					Result3 = decode(Encoded3),
 					?assertMatch(<<"text/html;charset=utf-8">>, proplists:get_value(<<"Content-Type">>, element(3, Result3)))
@@ -1629,7 +1659,7 @@ encoding_test_() ->
 							{<<"To">>, <<"you@example.com">>},
 							{<<"Subject">>, <<"This is a test">>}],
 						[],
-						[{<<"text">>, <<"plain">>, [], [], <<"This is a multipart message with some invisible non-ascii characters\r\nso there">>}]},
+						[{<<"text">>, <<"plain">>, [], [], <<"This is a multipart message with some invisible non-ascii characters\r\nso there">>}]},
 					Encoded4 = encode(Email4),
 					Result4 = decode(Encoded4),
 					?assertMatch(<<"text/plain;charset=utf-8">>, proplists:get_value(<<"Content-Type">>, element(3, lists:nth(1,element(5, Result4)))))
@@ -1741,4 +1771,3 @@ roundtrip_test_() ->
 
 
 -endif.
-
