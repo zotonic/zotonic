@@ -117,7 +117,7 @@ handle_DATA(From, To, Data, State) ->
 			end
     catch
         What:Why ->
-            error_logger:error("SMTP receive: Message decode FAILED with ~p:~p", [What, Why])
+            error_logger:error_msg("SMTP receive: Message decode FAILED with ~p:~p", [What, Why])
     end,
     % At this point, if we return ok, we've accepted responsibility for the email
     {ok, Reference, State}.
