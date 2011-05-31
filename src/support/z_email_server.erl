@@ -209,25 +209,9 @@ generate_message_id(Context) ->
 %% =========================
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
-            To = case State#state.override of
-                         O when O =:= [] orelse O =:= undefined -> Email#email.to;
-                         Override -> z_convert:to_list(Email#email.to) ++ " (override) <" ++ Override ++ ">"
-                     end,
-            
-            From1 = case Email#email.from of 
-                        L when L =:= [] orelse L =:= undefined -> 
-                            get_email_from(Context); 
-                        EmailFrom -> EmailFrom
-                    end,
-
-            From = case State#state.smtp_verp_as_from of
-                        true ->
-                            %% TODO: write a nice helper function?
-                            {FromName, _FromEmail} = z_email:split_name_email(From1),
-                            string:strip(FromName ++ " " ++ Id);
-                        _ ->
-                            From1
-                   end,
+            To = check_override(Email#email.to, State),
+	    Cc = check_override(Email#email.cc, State),            
+            From = get_email_from(Email#email.from, Id, State, Context),
 
             %% Optionally render the text and html body
             Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
@@ -242,49 +226,23 @@ spawn_send(Id, Email, Context, State) ->
                                   {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*)</title>", [dotall, caseless]),
                                   string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
                           end,
-            
-            %% TODO: put the encoding and embedding into a separate function
-            Text1 = {<<"text">>,<<"plain">>,
-                     [{<<"Content-Type">>,
-                       <<"text/plain;charset=utf-8;format=flowed">>},
-                      {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
-                     [{<<"content-type-params">>,
-                       [{<<"charset">>,<<"utf-8">>},
-                        {<<"format">>,<<"flowed">>}]},
-                      {<<"disposition">>,<<"inline">>},
-                      {<<"disposition-params">>,[]}],
-                     list_to_binary(Text)},
-                
-            Html1 = {<<"text">>,<<"html">>,
-                     [{<<"Content-Type">>,<<"text/html;charset=utf-8">>},
-                      {<<"Content-Transfer-Encoding">>,<<"quoted-printable">>}],
-                     [{<<"content-type-params">>,
-                       [{<<"charset">>,<<"utf-8">>}]},
-                      {<<"disposition">>,<<"inline">>},
-                      {<<"disposition-params">>,[]}],
-                     list_to_binary(Html)},
-            
-            optional_embed_images, %% TODO
-            
-            Headers = [{<<"From">>, From},
-                       {<<"To">>, To},
-                       {<<"Subject">>, Subject},
-                       {<<"MIME-Version">>, <<"1.0">>},
-                       {<<"Message-ID">>, Id},
-                       {<<"X-Mailer">>,
-                          "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
 
-            ToEncode = {<<"multipart">>, <<"related">>,
-                        Headers,
-                        [],                       
-                        [{<<"multipart">>,<<"alternative">>,
-                          [], [],
-                          [Text1, Html1]}]},
-            EncodedMail = mimemail:encode(ToEncode),
+            Headers = [{"From", From},
+                       {"To", To},
+                       {"Subject", Subject},
+                       {"MIME-Version", "1.0"},
+                       {"Message-ID", Id},
+                       {"X-Mailer",
+                          "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}]
+                        ++ case Cc of
+                            undefined -> [];
+                            _-> [{"Cc", Cc}]
+                        end,
+
+            EncodedMail = build_and_encode_mail(Headers, Text, Html, Context),  
 
             To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
             {_ToName, ToEmail} = z_email:split_name_email(To1),
-
             [_ToUsername, ToDomain] = string:tokens(ToEmail, "@"),
             
             SmtpOpts = 
@@ -306,6 +264,7 @@ spawn_send(Id, Email, Context, State) ->
                 {error, no_more_hosts, _ErrorDetails} ->
                     %% delete email from the queue and notify the system
                     delete_emailq(Id),
+                    ?DEBUG(_ErrorDetails),
                     z_notifier:first({email_failed, Id, Email#email.to}, Context);
                 {error, Reason} ->
                     %% delete email from the queue and notify the system
@@ -336,7 +295,37 @@ spawn_send(Id, Email, Context, State) ->
         end,
     spawn(F).
 
+build_and_encode_mail(Headers, Text, Html, Context) ->
+    ToEncode = esmtp_mime:create_multipart(),
+    ToEncode1 = lists:foldl(fun(Header, Acc) -> esmtp_mime:add_header(Acc, Header) end, ToEncode, Headers),
+    ToEncode2 = esmtp_mime:set_multipart_type(ToEncode1, alternative),
 
+    ToEncode3 = case Text of
+        [] ->
+            case Html of
+                [] ->
+                    ToEncode2;
+                _ ->
+                    Markdown = z_markdown:to_markdown(Html, [no_html]),
+                    esmtp_mime:add_part(ToEncode2, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
+            end;
+        _ -> 
+            esmtp_mime:add_part(ToEncode2, esmtp_mime:create_text_part(z_convert:to_list(Text)))
+        end,
+
+    ToEncode4 = case Html of
+        [] -> 
+            ToEncode3;
+        _ -> 
+            {Parts, Html1} = z_email_embed:embed_images(z_convert:to_list(Html), Context),
+            MimeHtml = esmtp_mime:set_multipart_type(esmtp_mime:create_multipart(), related),
+            MimeHtml2 = esmtp_mime:add_part(MimeHtml, esmtp_mime:create_html_part(Html1)),
+            MimeHtml3 = lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeHtml2, Parts),
+            esmtp_mime:add_part(ToEncode3, MimeHtml3)
+    end,
+    %EncodedMail = mimemail:encode(ToEncode4),
+    EncodedMail = esmtp_mime:encode(ToEncode4),
+    EncodedMail.
 
 spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
     Email = binary_to_list(EncodedMail),
@@ -410,6 +399,19 @@ recv_spamd(Socket, Res) ->
             Res
     end.
 
+get_email_from(EmailFrom, Id, State, Context) ->
+    From = case EmailFrom of 
+        L when L =:= [] orelse L =:= undefined -> 
+            get_email_from(Context); 
+        _ -> EmailFrom
+    end,
+    case State#state.smtp_verp_as_from of
+        true ->
+            {FromName, _FromEmail} = z_email:split_name_email(From),
+            string:strip(FromName ++ " " ++ Id);
+        _ ->
+            From
+    end.
 
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
@@ -421,6 +423,22 @@ get_email_from(Context) ->
         EmailFrom_ ->
             EmailFrom_
     end.
+    
+check_override(EmailAddr, _) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
+    undefined;
+check_override(EmailAddr, #state{override=Override}) when Override == undefined; Override == []; Override == <<>> ->
+    z_convert:to_list(EmailAddr);
+check_override(EmailAddr, State) ->
+    escape_email(z_convert:to_list(EmailAddr)) ++ " (override) <" ++ State#state.override ++ ">".
+
+escape_email(Email) ->
+   escape_email(Email, []).
+escape_email([], Acc) ->
+    lists:reverse(Acc);
+escape_email([$@|T], Acc) ->
+    escape_email(T, [$-,$t,$a,$-|Acc]);
+escape_email([H|T], Acc) ->
+    escape_email(T, [H|Acc]).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
     [];
@@ -429,7 +447,7 @@ optional_render(Text, undefined, _Vars, _Context) ->
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     binary_to_list(iolist_to_binary(Output)).
-
+    
 
 %% @doc Mark email as sent by adding the 'sent' timestamp. 
 %%      This will schedule it for deletion as well.
