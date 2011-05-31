@@ -154,7 +154,6 @@ merge_email(A, B) ->
 
 % Append two e-mails (used in multipart/mixed messages)
 append_email(A, B) ->
-	?DEBUG({append, A, B}),
 	A1 = generate_text(generate_html(A)),
 	B1 = generate_text(generate_html(B)),
 	#email{
