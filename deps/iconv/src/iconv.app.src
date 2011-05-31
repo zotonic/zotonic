@@ -1,0 +1,10 @@
+{application,iconv,
+ [{description,"Interface to the iconv character set convertion library"},
+  {vsn,"1.0.1"},
+  {modules,[]},
+  {registered,[iconv]},
+  {env, []},
+  {mod, {iconv_app, []}},
+  {applications, []},
+  {dependencies, []}]}.
+
