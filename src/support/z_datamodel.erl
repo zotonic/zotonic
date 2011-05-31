@@ -199,20 +199,20 @@ update_new_props(Module, Id, NewProps, Context) ->
                                     DbVal ->
                                         %% New value in NewProps, unchanged in DB
                                         [{K,V} | Props];
-                                    PrevVal when is_binary(DbVal) ->
+                                    _PrevVal when is_binary(DbVal) ->
                                         %% Compare with converted to list value
                                         case z_convert:to_list(DbVal) of
                                             V ->
                                                 Props;
                                             _ ->
                                                 %% Changed by someone else
-                                                ?zInfo(io_lib:format("~p: ~p of ~p changed in database (~p != ~p), not updating.", [Module, K, Id, DbVal, PrevVal]), Context),
+                                                ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
                                                 Props
                                         end;
-                                    PrevVal2 ->
+                                    _PrevVal2 ->
 
                                         %% Changed by someone else
-                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database (~p != ~p), not updating.", [Module, K, Id, DbVal, PrevVal2]), Context),
+                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
                                         Props
                                 end
                         end
