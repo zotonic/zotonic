@@ -43,7 +43,8 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {dispatchlist=undefined, lookup=undefined, context, 
-                host, hostname, hostname_port, streamhost, hostalias, redirect=true}).
+                host, hostname, hostname_port, streamhost, smtphost, hostalias, 
+				redirect=true}).
 
 %%====================================================================
 %% API
@@ -124,6 +125,7 @@ init(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     {hostname, Hostname} = proplists:lookup(hostname, SiteProps),
     Streamhost = proplists:get_value(streamhost, SiteProps),
+    Smtphost = proplists:get_value(smtphost, SiteProps),
     HostAlias = proplists:get_all_values(hostalias, SiteProps),
     Context = z_context:new(Host),
     process_flag(trap_exit, true),
@@ -133,6 +135,7 @@ init(SiteProps) ->
                 context=Context, 
                 host=Host, 
                 streamhost=drop_port(Streamhost),
+				smtphost=drop_port(Smtphost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
                 hostalias=[ drop_port(Alias) || Alias <- HostAlias ],
@@ -173,7 +176,7 @@ handle_call('hostname_port', _From, State) ->
 %% @doc Return the dispatchinfo for the site  {host, hostname, streamhost, hostaliases, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
     {reply,
-     {State#state.host, State#state.hostname, State#state.streamhost, 
+     {State#state.host, State#state.hostname, State#state.streamhost, State#state.smtphost,
       State#state.hostalias, State#state.redirect, State#state.dispatchlist}, 
      State};
 

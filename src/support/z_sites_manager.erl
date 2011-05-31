@@ -74,9 +74,10 @@ update_dispatchinfo() ->
 
     fetch_dispatchinfo(Site) ->
         Name = z_utils:name_for_host(z_dispatcher, Site),
-        {Host, Hostname, Streamhost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
+        {Host, Hostname, Streamhost, SmtpHost, Hostalias, Redirect, DispatchList} = 
+			z_dispatcher:dispatchinfo(Name),
         #wm_host_dispatch_list{
-            host=Host, hostname=Hostname, streamhost=Streamhost, hostalias=Hostalias,
+            host=Host, hostname=Hostname, streamhost=Streamhost, smtphost=SmtpHost, hostalias=Hostalias,
             redirect=Redirect, dispatch_list=DispatchList
         }.
 

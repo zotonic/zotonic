@@ -35,8 +35,9 @@
 -export([
     dispatch/3,
     set_dispatch_rules/1,
-    get_fallback_site/0
-        ]).
+    get_fallback_site/0,
+	get_host_for_domain/1
+]).
 
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
@@ -85,6 +86,12 @@ set_dispatch_rules(DispatchRules) ->
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->
     gen_server:call(?MODULE, {get_fallback_site}).
+
+%% @doc Fetch the host from the given domain name
+get_host_for_domain(Domain) when is_binary(Domain) ->
+	get_host_for_domain(binary_to_list(Domain));
+get_host_for_domain(Domain) ->
+	gen_server:call(?MODULE, {get_host_for_domain, Domain}).
 
 
 %%====================================================================
@@ -140,10 +147,14 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
 handle_call({get_fallback_site}, _From, State) ->
     {reply, State#state.fallback_site, State};
 
+
+%% @doc Find the host that handles the given domain name
+handle_call({get_host_for_domain, Domain}, _From, State) ->
+	{reply, handle_host_for_domain(Domain, State#state.rules), State};
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
-
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
@@ -202,6 +213,22 @@ redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
         end,
     spawn(LogModule, log_access, [LogData]),
     RD2.
+
+
+%% @doc Fetch the host for the given domain
+handle_host_for_domain(Domain, DispatchList) ->
+    {Host, _Port} = split_host(Domain),
+	case get_dispatch_host(Host, DispatchList) of
+		{ok, DL} ->
+			{ok, DL#wm_host_dispatch_list.host};
+		undefined ->
+			case get_dispatch_alias(Host, DispatchList) of
+				{ok, DL} ->
+					{ok, DL#wm_host_dispatch_list.host};
+				undefined ->
+					undefined
+			end
+	end.
 
 %% @doc Fetch the host and dispatch list for the request
 %% @spec get_host_dispatch_list(WMHost, DispatchList, Fallback, webmachine_request()) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
@@ -275,6 +302,8 @@ get_dispatch_host(Host, DLs) ->
     get_dispatch_host1(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
         {ok, DL};
     get_dispatch_host1(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
+        {ok, DL};
+    get_dispatch_host1(Host, [#wm_host_dispatch_list{smtphost=Host} = DL|_]) ->
         {ok, DL};
     get_dispatch_host1(Host, [_|Rest]) ->
         get_dispatch_host1(Host, Rest).
@@ -465,9 +494,9 @@ try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Pro
          
     end.
     
-set_port(Port, Host) ->
-    {Host_, _OldPort} = split_host(Host),
-    Host_ ++ [$: | integer_to_list(Port)].
+% set_port(Port, Host) ->
+%     {Host_, _OldPort} = split_host(Host),
+%     Host_ ++ [$: | integer_to_list(Port)].
 
 bind(_Host, [], [], Bindings, Depth) ->
     {ok, [], Bindings, Depth};

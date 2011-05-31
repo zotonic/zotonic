@@ -36,8 +36,6 @@
     sendq_render/4,
     sendq_render/5,
     
-    bounced/1,
-    
     split_name_email/1,
     combine_name_email/2
 ]).
@@ -112,11 +110,6 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 	gen_server:call(?EMAIL_SRV, {send, #email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
 	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context}).
-
-
-%% @doc Inform the mail sender gen_server about a bounced message.
-bounced(MsgId) ->
-    gen_server:cast(?EMAIL_SRV, {bounced, MsgId}).
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'

@@ -147,8 +147,13 @@
 %% @doc drag and drop event message
 -record(dragdrop, {tag, delegate, id}).
 
-%% @doc e-mail notification used by z_email and the mod_emailer.
--record(email, {to=[], cc=[], from=[], subject, text, html, text_tpl, html_tpl, vars=[], queue=false}).
+%% @doc e-mail notification used by z_email and z_email_server.
+-record(email, {to=[], cc=[], bcc=[], from=[], raw,
+				subject, text, html, text_tpl, html_tpl, 
+				vars=[], attachment=[], queue=false}).
+
+%% @doc Notification sent to a site when e-mail for that site is received
+-record(email_received, {to, from, localpart, domain, reference, email, headers}).
 
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
