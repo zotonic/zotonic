@@ -102,7 +102,6 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-
 handle_cast({bounced, MsgId}, State) ->
     TrFun = fun()-> 
                     [QEmail] = mnesia:read(email_queue, MsgId), 

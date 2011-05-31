@@ -7,4 +7,4 @@
 %% redirect   = boolean, set to true to redirect GET requests to the main host
 %% dispatch_list = list of {pathspec, resource, args}
 
--record(wm_host_dispatch_list, {host, hostname, streamhost, hostalias, redirect, dispatch_list}).
+-record(wm_host_dispatch_list, {host, hostname, streamhost, smtphost, hostalias, redirect, dispatch_list}).
