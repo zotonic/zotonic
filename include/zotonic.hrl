@@ -152,6 +152,8 @@
 				subject, text, html, text_tpl, html_tpl, 
 				vars=[], attachment=[], queue=false}).
 
+-record(email_attachment, {filename, data, mime}).
+
 %% @doc Notification sent to a site when e-mail for that site is received
 -record(email_received, {to, from, localpart, domain, reference, email, headers}).
 
