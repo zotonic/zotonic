@@ -37,9 +37,10 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 					},
 	[
 		case get_host(Recipient) of
-			{ok, LocalPart, Domain, Host} ->
+			{ok, LocalPart, LocalTags, Domain, Host} ->
 				z_notifier:notify(#email_received{
 										localpart=LocalPart,
+										localtags=LocalTags,
 										domain=Domain,
 										to=Recipient,
 										from=From,
@@ -57,9 +58,10 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 
 get_host(Recipient) ->
 	[Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
+	[LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
 	case z_sites_dispatcher:get_host_for_domain(Domain) of
 		{ok, Host} ->
-			{ok, Username, Domain, Host};
+			{ok, LocalPart, LocalTags, Domain, Host};
 		undefined ->
 			undefined
 	end.
@@ -167,7 +169,7 @@ append_email(A, B) ->
 take_defined(undefined, B) -> B;
 take_defined(A, _) -> A.
 
-append(undefind, B) -> B;
+append(undefined, B) -> B;
 append(A, undefined) -> A;
 append(A, B) -> <<A/binary, B/binary>>.
 
@@ -199,7 +201,7 @@ attachment({Type, SubType}, Params, Body) ->
 	DispParams = proplists:get_value(<<"disposition-params">>, Params, []),
 	#email{
 		attachment=[
-			#email_attachment{
+			#upload{
 				mime=append(Type, SubType),
 				data=Body,
 				filename=proplists:get_value(<<"filename">>, DispParams)
