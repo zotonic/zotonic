@@ -1,0 +1,47 @@
+#!/bin/bash
+ZOTONIC=/home/zotonic && \
+SHELL=/bin/bash && \
+apt-get install -y \
+        erlang \
+        build-essential \
+        rake \
+        libxml2-dev \
+        libexpat1-dev \
+        postgresql-8.4 \
+        imagemagick \
+        mercurial && \
+
+echo "CREATE USER zotonic WITH PASSWORD 'zotonic';
+ALTER ROLE zotonic WITH CREATEDB;
+CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
+\c zotonic
+CREATE LANGUAGE \"plpgsql\";" | su -l postgres -c psql && \
+echo "# Zotonic settings
+local   all         zotonic                           trust
+host    all         zotonic     127.0.0.1/32          trust
+host    all         zotonic     ::1/128               trust" >> /etc/postgresql/8.4/main/pg_hba.conf && \
+/etc/init.d/postgresql reload && \
+
+mkdir /home/zotonic &&\
+useradd -d $ZOTONIC -s /bin/bash zotonic && \
+chown -R zotonic:zotonic $ZOTONIC && \
+
+echo "hg clone https://zotonic.googlecode.com/hg/ zotonic && \
+cd zotonic/ && \
+make && \
+echo export PATH=\$PATH:\$HOME/zotonic/bin > \$HOME/.profile && \
+. \$HOME/.profile && \
+zotonic start" | su -l zotonic && \
+
+CONFIG=$ZOTONIC/zotonic/priv/config && \
+while [ ! -f $CONFIG ]
+do
+  sleep 2
+done && \
+PASSWORD=`cat $CONFIG | grep password | sed -E 's/^\s\{\s*password\s*,\s*"(.*?)".*/\1/'` && \
+echo "
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Zotonic has been successfully installed:
+- Visit http://locahost:8000/ to see the Sites administration page
+- The password for login to this page is $PASSWORD
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
