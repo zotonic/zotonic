@@ -652,6 +652,11 @@ parse_encoded_address(<<H, Tail/binary>>, Acc, {false, AB}) when H >= $a, H =< $
 	parse_encoded_address(Tail, [H | Acc], {false, AB}); % lowercase letters
 parse_encoded_address(<<H, Tail/binary>>, Acc, {false, AB}) when H =:= $-; H =:= $.; H =:= $_ ->
 	parse_encoded_address(Tail, [H | Acc], {false, AB}); % dash, dot, underscore
+% Allowed characters in the local name: ! # $ % & ' * + - / = ?  ^ _ ` . { | } ~
+parse_encoded_address(<<H, Tail/binary>>, Acc, {false, AB}) when H =:= $+;
+ 	H =:= $!; H =:= $#; H =:= $$; H =:= $%; H =:= $&; H =:= $'; H =:= $*; H =:= $=;
+	H =:= $/; H =:= $?; H =:= $^; H =:= $`; H =:= ${; H =:= $|; H =:= $}; H =:= $~ ->
+	parse_encoded_address(Tail, [H | Acc], {false, AB}); % other characters
 parse_encoded_address(_, _Acc, {false, _AB}) ->
 	error;
 parse_encoded_address(<<H, Tail/binary>>, Acc, Quotes) ->
