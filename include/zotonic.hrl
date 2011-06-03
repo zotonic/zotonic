@@ -88,7 +88,7 @@
 
 %% Record used for parsing multipart body (see z_parse_multipart)
 -record(multipart_form, {name, data, filename, tmpfile, content_type, content_length, file, files=[], args=[]}).
--record(upload, {filename, tmpfile}).
+-record(upload, {filename, tmpfile, data, mime}).
 
 %% Model value interface for templates
 -record(m, {model, value}).
@@ -152,10 +152,8 @@
 				subject, text, html, text_tpl, html_tpl, 
 				vars=[], attachment=[], queue=false}).
 
--record(email_attachment, {filename, data, mime}).
-
 %% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, domain, reference, email, headers}).
+-record(email_received, {to, from, localpart, localtags, domain, reference, email, headers}).
 
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
