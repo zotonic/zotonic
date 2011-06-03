@@ -19,7 +19,7 @@
 
 -module(zotonic).
 -author('Marc Worrell <marc@worrell.nl>').
--export([start/0, start/1, stop/0, stop/1, update/0, update/1, run_tests/0, ensure_started/1]).
+-export([start/0, start/1, stop/0, stop/1, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
 -revision("$Id$").
 
 ensure_started(App) ->
@@ -63,6 +63,12 @@ stop([Node]) ->
     end,
     init:stop().
 
+
+%% @spec status() -> ok
+%% @doc Get server status.  Gets the state of sites running.
+status([Node]) ->
+	io:format("~p~n", [rpc:call(Node, z_sites_manager, get_sites_status, [])]),
+	ok.
 
 %% @spec update() -> ok
 %% @doc Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
