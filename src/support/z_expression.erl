@@ -61,7 +61,7 @@ eval1({expr, Op, Expr}, Vars, Context) ->
 eval1({variable, Name}, Vars, Context) ->
     erlydtl_runtime:find_value(Name, Vars, Context);
 eval1({index_value, Array, Index}, Vars, Context) ->
-    erlydtl_runtime:find_value(eval1(Index, Vars, Context), eval1(Array, Vars, Context), Vars, Context);
+    erlydtl_runtime:find_value(eval1(Index, Vars, Context), eval1(Array, Vars, Context), Context);
 eval1({attribute, Attr, From}, Vars, Context) ->
     erlydtl_runtime:find_value(Attr, eval1(From, Vars, Context), Vars, Context);
 eval1({value_list, List}, Vars, Context) ->

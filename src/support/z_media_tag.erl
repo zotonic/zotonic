@@ -68,7 +68,7 @@ viewer(Filename, Options, Context) when is_binary(Filename) ->
     viewer(binary_to_list(Filename), Options, Context);
 viewer(Filename, Options, Context) ->
     FilePath = filename_to_filepath(Filename, Context),
-    case z_media_identify:identify(FilePath) of
+    case z_media_identify:identify(FilePath, Context) of
         {ok, Props} ->
             viewer1(undefined, Props, FilePath, Options, Context);
         {error, _} -> 
