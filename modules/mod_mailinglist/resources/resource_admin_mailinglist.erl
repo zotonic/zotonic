@@ -64,8 +64,4 @@ event({submit, mailinglist_editform, _TriggerId, _TargetId}, Context) ->
 		{is_public, z_convert:to_bool(z_context:get_q("is_public", Context, true)) },
 		{dropbox_file, z_context:get_q("dropbox_file", Context, "") }
 	],
-	case z_convert:to_integer(z_context:get_q("id", Context)) of
-		undefined -> m_mailinglist:insert_list(Props, Context);
-		Id -> m_mailinglist:update_list(Id, Props, Context)
-	end,
 	z_render:wire([{dialog_close, []}, {reload, []}], Context).

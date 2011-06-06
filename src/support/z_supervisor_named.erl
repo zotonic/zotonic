@@ -163,7 +163,7 @@ handle_call({start_child, Pid}, _From, State) when is_pid(Pid) ->
         error ->
             MonitorRef = erlang:monitor(process, Pid),
             State1 = State#state{ 
-                        dynamics=dict:insert(Pid, {'$MONITOR', MonitorRef}, State#state.dynamics)
+                        dynamics=dict:store(Pid, {'$MONITOR', MonitorRef}, State#state.dynamics)
                     },
             {reply, {ok, Pid}, State1}
     end;
