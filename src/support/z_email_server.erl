@@ -272,6 +272,7 @@ spawn_send(Id, Email, Context, State) ->
             Headers = [{"From", From},
                        {"To", To},
                        {"Subject", z_convert:to_flatlist(Subject)},
+					   {"Date", date(Context)},
                        {"MIME-Version", "1.0"},
                        {"Message-ID", VERP},
                        {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
@@ -337,6 +338,11 @@ spawn_send(Id, Email, Context, State) ->
             end
         end,
     spawn(F).
+
+
+	date(Context) ->
+		z_convert:to_list(erlydtl_dateformat:format("r", z_context:set_language(en, Context))).
+
 
 build_and_encode_mail(Headers, Text, Html, Context) ->
     ToEncode = esmtp_mime:create_multipart(),
