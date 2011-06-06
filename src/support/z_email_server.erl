@@ -83,7 +83,8 @@ init(_Args) ->
 %% @doc Send an e-mail to an e-mail address.
 handle_call({send, #email{} = Email, Context}, _From, State) ->
     State1 = update_config(State),
-    Id = generate_message_id(Context),
+	% TODO: split in To and Cc message, queue both independently
+    Id = generate_message_id(),
     PickledContext= z_context:pickle(Context),
     QEmail = #email_queue{id=Id, email=Email,
                           context=PickledContext},
@@ -191,27 +192,64 @@ update_config(State) ->
                 smtp_spamd_ip=SmtpSpamdIp,
                 smtp_spamd_port=SmtpSpamdPort}.
 
-generate_message_id(Context) ->
-    FQDN = smtp_util:guess_FQDN(),
-    BounceDomain = 
-        case z_config:get('smtp_bounce_domain') of
-		     undefined ->
-                [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),
-                Hostname;
-		     BounceDomain_ -> 
-                BounceDomain_
-		     end,
-    Md5 = [io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary([erlang:now(), FQDN]))],
-    lists:flatten(io_lib:format("<noreply+~s@~s>", [Md5, BounceDomain])).
+
+% Just a big random number which shouldn't repeat
+generate_message_id() ->
+	z_string:to_lower(z_ids:id(32)).
+
+% E-mail domain, depends on the smtp domain of the sending site
+
+bounce_email(MessageId, Context) ->
+	"noreply+"++MessageId++[$@ | bounce_domain(Context)].
+	
+% Bounces can be forced to a different e-mail server altogether
+bounce_domain(Context) ->
+	case z_config:get('smtp_bounce_domain') of
+		undefined -> email_domain(Context);
+		BounceDomain -> BounceDomain
+    end.
+
+% The email domain depends on the site sending the e-mail
+email_domain(Context) ->
+	case m_config:get_value(site, smtphost, Context) of
+		undefined -> z_context:hostname(Context);
+		SmtpHost -> SmtpHost
+	end.
+
+% The 'From' is either the message id (and bounce domain) or the set from.
+get_email_from(EmailFrom, VERP, State, Context) ->
+    From = case EmailFrom of 
+        L when L =:= [] orelse L =:= undefined -> 
+            get_email_from(Context); 
+        _ -> EmailFrom
+    end,
+    case State#state.smtp_verp_as_from of
+        true ->
+            {FromName, _FromEmail} = z_email:split_name_email(From),
+            string:strip(FromName ++ " " ++ VERP);
+        _ ->
+            From
+    end.
+
+% When the 'From' is not the VERP then the 'From' is derived from the site
+get_email_from(Context) ->
+    %% Let the default be overruled by the config setting
+    case m_config:get_value(site, email_from, Context) of
+        undefined -> "noreply@" ++ email_domain(Context);
+        EmailFrom -> EmailFrom
+    end.
+
+
 
 %% =========================
 %% SENDING related functions
 %% =========================
 spawn_send(Id, Email, Context, State) ->
     F = fun() ->
+			VERP = "<"++bounce_email(Id, Context)++">",
             To = check_override(Email#email.to, State),
-	    Cc = check_override(Email#email.cc, State),            
-            From = get_email_from(Email#email.from, Id, State, Context),
+	    	Cc = check_override(Email#email.cc, State),            
+            From = get_email_from(Email#email.from, VERP, State, Context),
 
             %% Optionally render the text and html body
             Vars = [{email_to, To}, {email_from, From} | Email#email.vars],
@@ -227,24 +265,31 @@ spawn_send(Id, Email, Context, State) ->
                                   string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
                           end,
 
+            To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
+            {_ToName, ToEmail} = z_email:split_name_email(To1),
+            [_ToUsername, ToDomain] = string:tokens(ToEmail, "@"),
+
             Headers = [{"From", From},
                        {"To", To},
                        {"Subject", z_convert:to_flatlist(Subject)},
                        {"MIME-Version", "1.0"},
-                       {"Message-ID", Id},
-                       {"X-Mailer",
-                          "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}]
-                        ++ case Cc of
-                            undefined -> [];
-                            _-> [{"Cc", Cc}]
-                        end,
+                       {"Message-ID", VERP},
+                       {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+			
+			Headers1 = case Cc of
+							undefined -> Headers;
+                            _-> Headers ++ [{"Cc", Cc}]
+					   end,
 
-            EncodedMail = build_and_encode_mail(Headers, Text, Html, Context),  
+			Headers2 = case Email#email.reply_to of
+							undefined -> Headers1;
+							<<>> -> [{"ReplyTo", "<>"} | Headers1];
+							message_id -> [{"ReplyTo", "<reply+"++Id++[$@|email_domain(Context)]++">"} | Headers1];
+							ReplyTo -> [{"ReplyTo", "<"++ReplyTo++">"} | Headers1]
+					   end,
+			
+            EncodedMail = build_and_encode_mail(Headers2, Text, Html, Context), 
 
-            To1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(To)))),
-            {_ToName, ToEmail} = z_email:split_name_email(To1),
-            [_ToUsername, ToDomain] = string:tokens(ToEmail, "@"),
-            
             SmtpOpts = 
                 case State#state.smtp_relay of
                     true ->
@@ -255,9 +300,8 @@ spawn_send(Id, Email, Context, State) ->
                          {relay, ToDomain}]
                 end,
 
-            %% use the unique id as 'envelope sender' (VERP)                    
-            case gen_smtp_client:send_blocking({Id, [ToEmail], EncodedMail},
-                                      SmtpOpts) of
+            %% use the unique id as 'envelope sender' (VERP)
+            case gen_smtp_client:send_blocking({VERP, [ToEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {temporary_failure, _LastRelay, _Bin}} ->
                     %% do nothing, it will retry later
                     ok;
@@ -275,17 +319,16 @@ spawn_send(Id, Email, Context, State) ->
                     %% email accepted by relay
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary
-                    case State#state.smtp_bcc of
-                            _BccTo when _BccTo =:= [] orelse _BccTo =:= undefined ->
-                                ok;
-                            BccTo ->
-                                catch gen_smtp_client:send({Id, [BccTo], EncodedMail},
-                                      SmtpOpts)
+                    case z_utils:is_empty(State#state.smtp_bcc) of
+						true -> 
+							ok;
+	                    false -> 
+							catch gen_smtp_client:send({VERP, [State#state.smtp_bcc], EncodedMail}, SmtpOpts)
                     end,
                     %% check SpamAssassin spamscore
                     case {State#state.smtp_spamd_ip, State#state.smtp_spamd_port} of
                         {Addr, _Port} when Addr =:= [] orelse Addr =:= undefined ->
-                           ok;
+                            ok;
                         {Addr, Port} ->
                             SpamStatus = spamcheck(EncodedMail, Addr, Port),
                             z_notifier:first({email_spamstatus, Id, SpamStatus}, Context)
@@ -398,32 +441,7 @@ recv_spamd(Socket, Res) ->
             io:format("spamassassin timeout~n"),
             Res
     end.
-
-get_email_from(EmailFrom, Id, State, Context) ->
-    From = case EmailFrom of 
-        L when L =:= [] orelse L =:= undefined -> 
-            get_email_from(Context); 
-        _ -> EmailFrom
-    end,
-    case State#state.smtp_verp_as_from of
-        true ->
-            {FromName, _FromEmail} = z_email:split_name_email(From),
-            string:strip(FromName ++ " " ++ Id);
-        _ ->
-            From
-    end.
-
-get_email_from(Context) ->
-    %% Let the default be overruled by the config setting
-    case m_site:get(email_from, Context) of
-        undefined ->
-            %% Make the default no-reply e-mail address for the main site url.            
-            [Hostname|_] = string:tokens(z_convert:to_list(m_site:get(hostname, Context)), ":"),            
-            "noreply@" ++ Hostname;
-        EmailFrom_ ->
-            EmailFrom_
-    end.
-    
+   
 check_override(EmailAddr, _) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
     undefined;
 check_override(EmailAddr, #state{override=Override}) when Override == undefined; Override == []; Override == <<>> ->

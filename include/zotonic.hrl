@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
         %% The resource responsible for handling this request
         resource_module,
         
-        %% The page (comet), session- and visitor processes associated with the current request
+        %% The page (comet) and session processes associated with the current request
         session_pid=undefined,  % one session per browser (also manages the persistent data)
         page_pid=undefined,     % multiple pages per session
         page_id=undefined,
@@ -148,7 +148,7 @@
 -record(dragdrop, {tag, delegate, id}).
 
 %% @doc e-mail notification used by z_email and z_email_server.
--record(email, {to=[], cc=[], bcc=[], from=[], raw,
+-record(email, {to=[], cc=[], bcc=[], from=[], reply_to, raw,
 				subject, text, html, text_tpl, html_tpl, 
 				vars=[], attachment=[], queue=false}).
 
