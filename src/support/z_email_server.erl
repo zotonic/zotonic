@@ -229,7 +229,7 @@ spawn_send(Id, Email, Context, State) ->
 
             Headers = [{"From", From},
                        {"To", To},
-                       {"Subject", lists:flatten(Subject)},
+                       {"Subject", z_convert:to_flatlist(Subject)},
                        {"MIME-Version", "1.0"},
                        {"Message-ID", Id},
                        {"X-Mailer",
