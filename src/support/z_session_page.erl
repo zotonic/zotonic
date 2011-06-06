@@ -185,11 +185,11 @@ handle_cast({set, Key, Value}, State) ->
     State1 = State#page_state{vars = z_utils:prop_replace(Key, Value, State#page_state.vars)},
     {noreply, State1};
 handle_cast({append, Key, Value}, State) ->
-    NewValue = case z_utils:lookup(Key, State#page_state.vars) of
+    NewValue = case proplists:lookup(Key, State#page_state.vars) of
         {Key, L} -> L ++ [Value];
         none -> [Value]
     end, 
-    State1 = State#page_state{vars = z_utils:replace(Key, NewValue, State#page_state.vars)},
+    State1 = State#page_state{vars = z_utils:prop_replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
 
 handle_cast({comet_attach, CometPid}, State) ->
