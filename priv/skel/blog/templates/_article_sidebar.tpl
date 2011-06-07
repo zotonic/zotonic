@@ -3,9 +3,9 @@
 {% with m.rsc[id].media|without_embedded_media:id as media %} 
 	{% if media %}
 		<ul class="images-list">
-			{% for m in media %}
+			{% for medium in media %}
 				<li>
-                    {% include "_body_media.tpl" width=315 align="block" id=m %}
+                    {% include "_body_media.tpl" width=315 align="block" id=medium %}
 				</li>
 			{% endfor %}
 		</ul>
