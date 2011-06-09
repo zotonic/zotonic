@@ -27,7 +27,8 @@
 
 -export ([
 	clean_lower/1,
-	to_list/1, 
+	to_list/1,
+	to_flatlist/1,
 	to_atom/1, 
 	to_binary/1, 
 	to_integer/1,
@@ -59,6 +60,15 @@ to_list(A) when is_atom(A) -> atom_to_list(A);
 to_list(B) when is_binary(B) -> binary_to_list(B);
 to_list(I) when is_integer(I) -> integer_to_list(I);
 to_list(F) when is_float(F) -> float_to_list(F).
+
+to_flatlist(L) when is_list(L) ->
+	case z_string:is_string(L) of
+		true -> L;
+		false -> to_list(iolist_to_binary(L))
+	end;
+to_flatlist(L) ->
+	to_list(L).
+
 
 to_atom(<<>>) -> undefined;
 to_atom([]) -> undefined;
