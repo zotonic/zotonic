@@ -94,8 +94,8 @@ handle_RCPT(_To, State) ->
 	% Check if the "To" address exists
 	% Check domain, check addressee in domain.
 	% For bounces:
-	% - To = <recipient-bounces@example.org> 
-	% - Return-Path header should be present and contain <>
+	% - To = <noreply+MSGID@example.org> 
+	% - Return-Path header should be present and contains <>
     {ok, State}.
 
 -spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}} | 'error'.
@@ -109,8 +109,9 @@ handle_DATA(From, To, Data, State) ->
         {Type, Subtype, Headers, Params, Body} ->
 			case find_bounce_id(To, Headers) of
 				{ok, MessageId} ->
-			    	gen_server:cast(z_email_server, {bounced, MessageId});
+					z_email_server:bounced(MessageId);
 				ok ->
+					% Bounced, but without a message id
 					nop;
 				no_bounce ->
 					z_email_receive:received(To, From, Reference, {Type, Subtype}, Headers, Params, Body, Data)
@@ -148,10 +149,10 @@ terminate(Reason, State) ->
 
 %% Internal functions
 
-%% @doc A message is classified as a bounce when the recipient is <foobar-bounces-MSGID@example.org>
+%% @doc A message is classified as a bounce when the recipient is <noreply+MSGID@example.org>
 %% OR when the Return-Path is set to <>
 find_bounce_id(Recipients, Headers) ->
-	case get_original_message_id(Recipients) of
+	case find_bounce_email(Recipients) of
 		{ok, _MessageId} = M -> 
 			M;
 		undefined ->
@@ -161,14 +162,14 @@ find_bounce_id(Recipients, Headers) ->
 			end
 	end.
 
-% Get the original message id from the recipient's bounce address
-% <noreply+MSGID@example.org>
-get_original_message_id([]) ->
+% Check if one of the recipients is a bounce address
+find_bounce_email([]) ->
 	undefined;
-get_original_message_id([<<"noreply+",_/binary>> = To|_Other]) ->
-	{ok, To};
-get_original_message_id([_|Other]) ->
-	get_original_message_id(Other).
+find_bounce_email([To|Other]) ->
+	case z_email_server:is_bounce_email(To) of
+		true -> {ok, To};
+		false -> find_bounce_email(Other)
+	end.
 
 
 	

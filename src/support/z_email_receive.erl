@@ -32,8 +32,7 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 	ParsedEmail2 = ParsedEmail1#email{
 						subject=proplists:get_value(<<"Subject">>, Headers),
 						to=Recipients,
-						from=From, 
-						raw=Data
+						from=From
 					},
 	[
 		case get_host(Recipient) of
@@ -46,7 +45,8 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 										from=From,
 										reference=Reference,
 										email=ParsedEmail2,
-										headers=Headers
+										headers=Headers,
+										raw=Data
 									}, 
 									z_context:new(Host));
 			undefined ->

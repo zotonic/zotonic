@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% Date: 2009-11-02
 %%
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
 	send_admin/3,
 	
 	send/2,
+	send/3,
 	
     send/4,
     send_render/4,
@@ -78,20 +79,23 @@ send_admin(Subject, Message, Context) ->
 				"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
 				z_context:abs_url("/", Context)
 			],
-			gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=Email, subject=Subject1, text=Message1}, Context})
+			z_email_server:send(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
 	end.
 
 %% @doc Send an email message defined by the email record.
 send(#email{} = Email, Context) ->
-	gen_server:call(?EMAIL_SRV, {send, Email, Context}).
+	z_email_server:send(Email, Context).
+
+send(MsgId, #email{} = Email, Context) ->
+	z_email_server:send(MsgId, Email, Context).
 
 %% @doc Send a simple text message to an email address
 send(To, Subject, Message, Context) ->
-	gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=To, subject=Subject, text=Message}, Context}).
+	z_email_server:send(#email{queue=false, to=To, subject=Subject, text=Message}, Context).
 
 %% @doc Queue a simple text message to an email address
 sendq(To, Subject, Message, Context) ->
-	gen_server:call(?EMAIL_SRV, {send, #email{queue=true, to=To, subject=Subject, text=Message}, Context}).
+	z_email_server:send(#email{queue=true, to=To, subject=Subject, text=Message}, Context).
 
 %% @doc Send a html message to an email address, render the message using a template.
 send_render(To, HtmlTemplate, Vars, Context) ->
@@ -99,8 +103,8 @@ send_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Send a html and text message to an email address, render the message using two templates.
 send_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	gen_server:call(?EMAIL_SRV, {send, #email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
-	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context}).
+	z_email_server:send(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
+	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 %% @doc Queue a html message to an email address, render the message using a template.
 sendq_render(To, HtmlTemplate, Vars, Context) ->
@@ -108,8 +112,8 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Queue a html and text message to an email address, render the message using two templates.
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	gen_server:call(?EMAIL_SRV, {send, #email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
-	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context}).
+	z_email_server:send(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
+	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
@@ -135,18 +139,23 @@ combine_name_email(Name, Email) ->
         filter_name(T, [H|Acc]).
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
-%% @todo Allow multiple email addresses to be found
 split_name_email(Email) ->
     Email1 = string:strip(rfc2047:decode(Email)),
     case split_ne(Email1, in_name, [], []) of
-        {N, []} ->
-            {[], z_string:trim(N)};
-        {E, N} ->
-            {z_string:trim(E), z_string:trim(N)}
+        {ends_in_name, E} ->
+			% Only e-mail
+            {[], z_string:trim(E)};
+        {N, E} ->
+			% E-mail and name
+            {z_string:trim(N), z_string:trim(E)}
     end.
 
-split_ne([], _, [], Acc) ->
-    {[], lists:reverse(Acc)};
+split_ne([], in_name, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
+split_ne([], in_qname, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
+split_ne([], to_email, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
 split_ne([], _, Name, Acc) ->
     {Name, lists:reverse(Acc)};
 split_ne([$<|T], to_email, Name, Acc) ->
