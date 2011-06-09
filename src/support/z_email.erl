@@ -27,6 +27,7 @@
 	send_admin/3,
 	
 	send/2,
+	send/3,
 	
     send/4,
     send_render/4,
@@ -78,6 +79,10 @@ send_admin(Subject, Message, Context) ->
 			],
 			z_notifier:notify1(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
 	end.
+
+% Only for compatibility with 0.7 code
+send(_MsgNr, #email{} = Email, Context) ->
+	z_notifier:notify1(Email, Context).
 
 %% @doc Send an email message defined by the email record.
 send(#email{} = Email, Context) ->
