@@ -133,19 +133,24 @@ combine_name_email(Name, Email) ->
     filter_name([H|T], Acc) ->
         filter_name(T, [H|Acc]).
 
-%% @doc Split the name and email from the format "jan janssen <jan@example.com>"
-%% @todo Allow multiple email addresses to be found
+%% @doc Split the name and email from the format `jan janssen <jan@example.com>'
 split_name_email(Email) ->
     Email1 = string:strip(rfc2047:decode(Email)),
     case split_ne(Email1, in_name, [], []) of
-        {N, []} ->
-            {[], z_string:trim(N)};
-        {E, N} ->
-            {z_string:trim(E), z_string:trim(N)}
+        {ends_in_name, E} ->
+			% Only e-mail
+            {[], z_string:trim(E)};
+        {N, E} ->
+			% E-mail and name
+            {z_string:trim(N), z_string:trim(E)}
     end.
 
-split_ne([], _, [], Acc) ->
-    {[], lists:reverse(Acc)};
+split_ne([], in_name, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
+split_ne([], in_qname, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
+split_ne([], to_email, [], Acc) ->
+    {ends_in_name, lists:reverse(Acc)};
 split_ne([], _, Name, Acc) ->
     {Name, lists:reverse(Acc)};
 split_ne([$<|T], to_email, Name, Acc) ->

@@ -72,6 +72,9 @@ m_find_value(s, #m{value=undefined}, _Context) ->
         end
     end;
 
+m_find_value(Id, #m{value=undefined}, Context) when is_integer(Id) ->
+	get(Id, Context);
+
 m_find_value(_Key, #m{}, _Context) ->
     undefined.
 
