@@ -690,7 +690,7 @@ encode_header({Header, Value})
 		 Header =:= "Cc"; Header =:= "Bcc"; Header =:= "Date";
 		 Header =:= "Content-Type"; Header =:= "Mime-Version"; Header =:= "MIME-Version";
 		 Header =:= "Content-Transfer-Encoding" ->
-	Value1 = lists:filter(fun(H) -> H >= 32 andalso H =< 126 andalso H /= $= end, Value),
+	Value1 = lists:filter(fun(H) -> H >= 32 andalso H =< 126 end, Value),
     Header ++ ": " ++ Value1;
 encode_header({Header, Value}) when is_list(Header), is_list(Value) ->
     % Encode all other headers according to rfc2047
