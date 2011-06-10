@@ -10,7 +10,7 @@
           pgsql_connection,pgsql_datetime,pgsql_pool,pgsql_types,rfc2047,z,
           z_acl,z_acl_queue,z_auth,z_config,z_context,z_convert,z_datamodel,
           z_datetime,z_db,z_depcache,z_dispatcher,z_dropbox,z_email,
-          z_email_bounce_server,z_email_embed,z_email_server,z_gettext,
+          z_email_receive_server,z_email_embed,z_email_server,z_gettext,
           z_gettext_compile,z_html,z_ids,z_install,z_install_data,
           z_install_defaultdata,z_installer,z_lib_include,z_media_archive,
           z_media_identify,z_media_preview,z_media_preview_server,z_media_tag,

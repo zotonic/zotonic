@@ -84,25 +84,25 @@ init([]) ->
                   permanent, 5000, worker, dynamic},
 
     % Smtp listen to IP address, Domain and Port
-    SmtpBounceDomain = case os:getenv("ZOTONIC_SMTP_BOUNCE_DOMAIN") of
-                false -> z_config:get_dirty(smtp_bounce_domain);
-                SmtpBounceDomain_ -> SmtpBounceDomain_
+    SmtpListenDomain = case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
+                false -> z_config:get_dirty(smtp_listen_domain);
+                SmtpListenDomain_ -> SmtpListenDomain_
             end,
-    SmtpBounceIp = case os:getenv("ZOTONIC_SMTP_BOUNCE_IP") of
-                false -> z_config:get_dirty(smtp_bounce_ip);
-                SmtpBounceAny when SmtpBounceAny == []; SmtpBounceAny == "*"; SmtpBounceAny == "any" -> any;
-                SmtpBounceIp_-> SmtpBounceIp_
+    SmtpListenIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
+                false -> z_config:get_dirty(smtp_listen_ip);
+                SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
+                SmtpListenIp_-> SmtpListenIp_
             end,   
-    SmtpBouncePort = case os:getenv("ZOTONIC_SMTP_BOUNCE_PORT") of
-                     false -> z_config:get_dirty(smtp_bounce_port);
-                     SmtpBouncePort_ -> list_to_integer(SmtpBouncePort_)
+    SmtpListenPort = case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
+                     false -> z_config:get_dirty(smtp_listen_port);
+                     SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
                  end,
-    z_config:set_dirty(smtp_bounce_domain, SmtpBounceDomain),
-    z_config:set_dirty(smtp_bounce_ip, SmtpBounceIp),
-    z_config:set_dirty(smtp_bounce_port, SmtpBouncePort),
+    z_config:set_dirty(smtp_listen_domain, SmtpListenDomain),
+    z_config:set_dirty(smtp_listen_ip, SmtpListenIp),
+    z_config:set_dirty(smtp_listen_port, SmtpListenPort),
 
-    SmtpBounceServer = {z_email_bounce_server,
-                        {z_email_bounce_server, start_link, []},
+    SmtpBounceServer = {z_email_receive_server,
+                        {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites

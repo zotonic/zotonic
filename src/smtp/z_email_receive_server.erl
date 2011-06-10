@@ -3,9 +3,24 @@
 %%      with gen_smtp. 
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010 Maximonster Interactive Things
+%% @copyright 2010-2011 Maximonster Interactive Things
 
--module(z_email_bounce_server).
+%% Copyright 2010-2011 Maximonster Interactive Things
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%% 
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%% 
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+
+-module(z_email_receive_server).
 -behaviour(gen_smtp_server_session).
 
 -include_lib("zotonic.hrl").
@@ -24,20 +39,20 @@
 
 start_link() ->
     %% Collect the configuration args of the bounce server 
-    Args1 = case z_config:get(smtp_bounce_domain) of
+    Args1 = case z_config:get(smtp_listen_domain) of
         undefined -> [];
-        BounceDomain -> [{domain, BounceDomain}]
+        ListenDomain -> [{domain, ListenDomain}]
     end,	
-    Args2 = case z_config:get(smtp_bounce_ip) of
+    Args2 = case z_config:get(smtp_listen_ip) of
         undefined -> [];
         any -> [{address, {0,0,0,0}} | Args1];
-        BounceIp -> 
-            {ok, Address} = inet:getaddr(BounceIp, inet),
+        ListenIp -> 
+            {ok, Address} = inet:getaddr(ListenIp, inet),
             [{address, Address} | Args1]
     end,	
-    Args3 = case z_config:get(smtp_bounce_port) of
+    Args3 = case z_config:get(smtp_listen_port) of
         undefined -> Args2;
-        BouncePort -> [{port, BouncePort} | Args2]
+        ListenPort -> [{port, ListenPort} | Args2]
     end,
     start_link([Args3]).
 
@@ -63,7 +78,7 @@ init(Hostname, SessionCount, _Address, Options) ->
 % handle_HELO(<<"trusted_host">>, State) ->
 %     {ok, State};
 handle_HELO(Hostname, State) ->
-	error_logger:info_msg("SMTP: HELO from ~s~n", [Hostname]),
+    % error_logger:info_msg("SMTP: HELO from ~s~n", [Hostname]),
     {ok, 655360, State}. % 640kb of HELO should be enough for anyone.
 %If {ok, State} was returned here, we'd use the default 10mb limit
 
