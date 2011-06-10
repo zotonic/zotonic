@@ -27,12 +27,12 @@
 
 %% interface functions
 -export([
-	start_link/0,
-	is_bounce_email/1,
-	bounced/1,
-	generate_message_id/0,
-	send/2,
-	send/3
+    start_link/0,
+    is_bounce_email/1,
+    bounced/1,
+    generate_message_id/0,
+    send/2,
+    send/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -48,8 +48,8 @@
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override, smtp_spamd_ip, smtp_spamd_port}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10), retry=0, 
-					  recipient, email, created=now(), sent, 
-					  pickled_context}).
+                      recipient, email, created=now(), sent, 
+                      pickled_context}).
 
 %%====================================================================
 %% API
@@ -71,24 +71,24 @@ is_bounce_email(_) -> false.
 
 %% @doc Handle a bounce
 bounced(NoReplyEmail) ->
-	gen_server:cast(?MODULE, {bounced, NoReplyEmail}).
-	
+    gen_server:cast(?MODULE, {bounced, NoReplyEmail}).
+    
 
 %% @doc Generate a new message id
 generate_message_id() ->
-	z_convert:to_binary(z_string:to_lower(z_ids:id(20))).
+    z_convert:to_binary(z_string:to_lower(z_ids:id(20))).
 
 
 %% @doc Send an email
 send(#email{} = Email, Context) ->
-	send(generate_message_id(), Email, Context).
+    send(generate_message_id(), Email, Context).
 
 %% @doc Send an email using a predefined unique id.
 send(Id, #email{} = Email, Context) ->
-	Id1 = z_convert:to_binary(Id),
-	Context1 = z_context:depickle(z_context:pickle(Context)),
-	gen_server:cast(?MODULE, {send, Id1, Email, Context1}),
-	{ok, Id1}.
+    Id1 = z_convert:to_binary(Id),
+    Context1 = z_context:depickle(z_context:pickle(Context)),
+    gen_server:cast(?MODULE, {send, Id1, Email, Context1}),
+    {ok, Id1}.
 
 
 %%====================================================================
@@ -106,7 +106,7 @@ init(_Args) ->
     timer:send_interval(5000, poll),
     State = #state{},
     {ok, State}.
-	
+    
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -125,27 +125,27 @@ handle_call(Message, _From, State) ->
 %% @doc Send an e-mail.
 handle_cast({send, Id, #email{} = Email, Context}, State) ->
     State1 = update_config(State),
-	case z_utils:is_empty(Email#email.to) of
-		true -> nop;
-		false -> send_email(Id, Email#email.to, Email, Context, State1)
-	end,
-	case z_utils:is_empty(Email#email.cc) of
-		true -> nop;
-		false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State1)
-	end,
-	case z_utils:is_empty(Email#email.bcc) of
-		true -> nop;
+    case z_utils:is_empty(Email#email.to) of
+        true -> nop;
+        false -> send_email(Id, Email#email.to, Email, Context, State1)
+    end,
+    case z_utils:is_empty(Email#email.cc) of
+        true -> nop;
+        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State1)
+    end,
+    case z_utils:is_empty(Email#email.bcc) of
+        true -> nop;
         false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State1)
-	end,
+    end,
     {noreply, State1};
 
 %%@ doc Handle a bounced email
 handle_cast({bounced, BounceEmail}, State) ->
-	% Fetch the MsgId from the bounce address
-	[BounceLocalName|_] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
-	<<"noreply+", MsgId/binary>> = BounceLocalName,
+    % Fetch the MsgId from the bounce address
+    [BounceLocalName|_] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
+    <<"noreply+", MsgId/binary>> = BounceLocalName,
 
-	% Find the original message in our database of recent sent e-mail
+    % Find the original message in our database of recent sent e-mail
     TrFun = fun()-> 
                     [QEmail] = mnesia:read(email_queue, MsgId), 
                     mnesia:delete_object(QEmail),
@@ -156,8 +156,8 @@ handle_cast({bounced, BounceEmail}, State) ->
             Context = z_context:depickle(PickledContext),
             z_notifier:first({email_bounced, MsgId, Recipient}, Context);
         _ ->
-			% We got a bounce, but we don't have the message anymore.
-			% Custom bounce domains make this difficult to process
+            % We got a bounce, but we don't have the message anymore.
+            % Custom bounce domains make this difficult to process
             ok
     end,
     {noreply, State};
@@ -236,34 +236,34 @@ update_config(State) ->
 % E-mail domain, depends on the smtp domain of the sending site
 
 bounce_email(MessageId, Context) ->
-	"noreply+"++z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
+    "noreply+"++z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
 
 reply_email(MessageId, Context) ->
-	"reply+"++z_convert:to_list(MessageId)++[$@ | email_domain(Context)].
+    "reply+"++z_convert:to_list(MessageId)++[$@ | email_domain(Context)].
 
 % Ensure that the sites's domain is attached to the email address.
 ensure_domain(Email, Context) when is_list(Email) ->
-	case lists:member($@, Email) of
-		true -> Email;
-		false -> Email ++ [$@|email_domain(Context)]
-	end;
+    case lists:member($@, Email) of
+        true -> Email;
+        false -> Email ++ [$@|email_domain(Context)]
+    end;
 ensure_domain(Email, Context) ->
-	ensure_domain(z_convert:to_list(Email), Context).
+    ensure_domain(z_convert:to_list(Email), Context).
 
 
 % Bounces can be forced to a different e-mail server altogether
 bounce_domain(Context) ->
-	case z_config:get('smtp_bounce_domain') of
-		undefined -> email_domain(Context);
-		BounceDomain -> BounceDomain
+    case z_config:get('smtp_bounce_domain') of
+        undefined -> email_domain(Context);
+        BounceDomain -> BounceDomain
     end.
 
 % The email domain depends on the site sending the e-mail
 email_domain(Context) ->
-	case m_config:get_value(site, smtphost, Context) of
-		undefined -> z_context:hostname(Context);
-		SmtpHost -> z_convert:to_list(SmtpHost)
-	end.
+    case m_config:get_value(site, smtphost, Context) of
+        undefined -> z_context:hostname(Context);
+        SmtpHost -> z_convert:to_list(SmtpHost)
+    end.
 
 % The 'From' is either the message id (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
@@ -278,10 +278,10 @@ get_email_from(EmailFrom, VERP, State, Context) ->
             string:strip(FromName ++ " " ++ VERP);
         _ ->
             {FromName, FromEmail} = z_email:split_name_email(From),
-			case FromEmail of
-				[] -> string:strip(FromName ++ " <" ++ get_email_from(Context) ++ ">");
-				_ -> From
-			end
+            case FromEmail of
+                [] -> string:strip(FromName ++ " <" ++ get_email_from(Context) ++ ">");
+                _ -> From
+            end
     end.
 
 % When the 'From' is not the VERP then the 'From' is derived from the site
@@ -301,8 +301,8 @@ get_email_from(Context) ->
 % Send an email
 send_email(Id, Recipient, Email, Context, State) ->
     QEmail = #email_queue{id=Id,
-						  recipient=Recipient,
-						  email=Email,
+                          recipient=Recipient,
+                          email=Email,
                           pickled_context=z_context:pickle(Context)},
     QEmailTransFun = fun() -> mnesia:write(QEmail) end,
     {atomic, ok} = mnesia:transaction(QEmailTransFun),        
@@ -314,49 +314,16 @@ send_email(Id, Recipient, Email, Context, State) ->
 
 spawn_send(Id, Recipient, Email, Context, State) ->
     F = fun() ->
-			VERP = "<"++bounce_email(Id, Context)++">",
+            VERP = "<"++bounce_email(Id, Context)++">",
 
             From = get_email_from(Email#email.from, VERP, State, Context),
-			Recipient1 = check_override(Recipient, State),
+            Recipient1 = check_override(Recipient, State),
             Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
             {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
             [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
 
-			EncodedMail = case Email#email.body of
-				undefined ->
-		            %% Optionally render the text and html body
-		            Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
-		            Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
-		            Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
-
-		            %% Fetch the subject from the title of the HTML part or from the Email record
-		            Subject = case {Html, Email#email.subject} of
-		                              {[], undefined} -> [];
-		                              {[], Sub} -> Sub;
-		                              {_Html, undefined} ->
-		                                  {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*)</title>", [dotall, caseless]),
-		                                  string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
-		                          end,
-		            Headers = [{"From", From},
-		                       {"To", z_convert:to_list(Email#email.to)},
-		                       {"Subject", z_convert:to_flatlist(Subject)},
-							   {"Date", date(Context)},
-		                       {"MIME-Version", "1.0"},
-		                       {"Message-ID", VERP},
-		                       {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
-					Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-		            build_and_encode_mail(Headers2, Text, Html, Context);
-
-				Body ->
-		            Headers = [{"From", From},
-		                       {"To", z_convert:to_list(Email#email.to)},
-		                       {"Message-ID", VERP},
-		                       {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
-							   | Email#email.headers ],
-					Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-					iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ])
-			end,
-			
+            EncodedMail = encode_email(Id, Email, VERP, From, Context),
+            
             SmtpOpts = 
                 case State#state.smtp_relay of
                     true ->
@@ -387,10 +354,10 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary
                     case z_utils:is_empty(State#state.smtp_bcc) of
-						true -> 
-							ok;
-	                    false -> 
-							catch gen_smtp_client:send({VERP, [State#state.smtp_bcc], EncodedMail}, SmtpOpts)
+                        true -> 
+                            ok;
+                        false -> 
+                            catch gen_smtp_client:send({VERP, [State#state.smtp_bcc], EncodedMail}, SmtpOpts)
                     end,
                     %% check SpamAssassin spamscore
                     case {State#state.smtp_spamd_ip, State#state.smtp_spamd_port} of
@@ -406,25 +373,62 @@ spawn_send(Id, Recipient, Email, Context, State) ->
     spawn(F).
 
 
-	date(Context) ->
-		z_convert:to_list(erlydtl_dateformat:format("r", z_context:set_language(en, Context))).
+encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is_binary(Raw) ->
+    z_convert:to_binary([
+        "X-Mailer: Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)\r\n", 
+        Raw
+    ]);
+encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
+    %% Optionally render the text and html body
+    Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
+    Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
+    Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
+
+    %% Fetch the subject from the title of the HTML part or from the Email record
+    Subject = case {Html, Email#email.subject} of
+                      {[], undefined} -> [];
+                      {[], Sub} -> Sub;
+                      {_Html, undefined} ->
+                          {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*)</title>", [dotall, caseless]),
+                          string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
+                  end,
+    Headers = [{"From", From},
+               {"To", z_convert:to_list(Email#email.to)},
+               {"Subject", z_convert:to_flatlist(Subject)},
+    {"Date", date(Context)},
+               {"MIME-Version", "1.0"},
+               {"Message-ID", VERP},
+               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+    Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
+    build_and_encode_mail(Headers2, Text, Html, Context);
+encode_email(Id, Email, VERP, From, Context) ->
+    Headers = [{"From", From},
+               {"To", z_convert:to_list(Email#email.to)},
+               {"Message-ID", VERP},
+               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+                | Email#email.headers ],
+    Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
+    iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Email#email.body ]).
+
+    date(Context) ->
+        z_convert:to_list(erlydtl_dateformat:format("r", z_context:set_language(en, Context))).
 
 
-	add_cc(#email{cc=undefined}, Headers) ->
-		Headers;
-	add_cc(#email{cc=[]}, Headers) ->
-		Headers;
-	add_cc(#email{cc=Cc}, Headers) ->
-		Headers ++ [{"Cc", Cc}].
+    add_cc(#email{cc=undefined}, Headers) ->
+        Headers;
+    add_cc(#email{cc=[]}, Headers) ->
+        Headers;
+    add_cc(#email{cc=Cc}, Headers) ->
+        Headers ++ [{"Cc", Cc}].
 
-	add_reply_to(_Id, #email{reply_to=undefined}, Headers, _Context) ->
-		Headers;
-	add_reply_to(_Id, #email{reply_to = <<>>}, Headers, _Context) ->
-		[{"Reply-To", "<>"} | Headers];
-	add_reply_to(Id, #email{reply_to=message_id}, Headers, Context) ->
-		[{"Reply-To", reply_email(Id, Context)} | Headers];
-	add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
-		[{"Reply-To", "<"++ensure_domain(ReplyTo,Context)++">"} | Headers].
+    add_reply_to(_Id, #email{reply_to=undefined}, Headers, _Context) ->
+        Headers;
+    add_reply_to(_Id, #email{reply_to = <<>>}, Headers, _Context) ->
+        [{"Reply-To", "<>"} | Headers];
+    add_reply_to(Id, #email{reply_to=message_id}, Headers, Context) ->
+        [{"Reply-To", reply_email(Id, Context)} | Headers];
+    add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
+        [{"Reply-To", "<"++ensure_domain(ReplyTo,Context)++">"} | Headers].
 
 
 build_and_encode_mail(Headers, Text, Html, Context) ->
@@ -640,7 +644,7 @@ poll_queued(State) ->
                   update_retry(QEmail),
                   spawn_send(QEmail#email_queue.id, 
                              QEmail#email_queue.recipient,
-							 QEmail#email_queue.email,
+                             QEmail#email_queue.email,
                              z_context:depickle(QEmail#email_queue.pickled_context), 
                              State1)
               end || QEmail <- Ms ],
@@ -686,11 +690,11 @@ encode_header({Header, [V|Vs]}) when is_list(V) ->
                     [V|Vs]),
     Header ++ ": " ++ string:join(Hdr, ";\r\n  ");
 encode_header({Header, Value})
-	when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To"; 
-		 Header =:= "Cc"; Header =:= "Bcc"; Header =:= "Date";
-		 Header =:= "Content-Type"; Header =:= "Mime-Version"; Header =:= "MIME-Version";
-		 Header =:= "Content-Transfer-Encoding" ->
-	Value1 = lists:filter(fun(H) -> H >= 32 andalso H =< 126 end, Value),
+    when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To"; 
+         Header =:= "Cc"; Header =:= "Bcc"; Header =:= "Date";
+         Header =:= "Content-Type"; Header =:= "Mime-Version"; Header =:= "MIME-Version";
+         Header =:= "Content-Transfer-Encoding" ->
+    Value1 = lists:filter(fun(H) -> H >= 32 andalso H =< 126 end, Value),
     Header ++ ": " ++ Value1;
 encode_header({Header, Value}) when is_list(Header), is_list(Value) ->
     % Encode all other headers according to rfc2047
