@@ -30,7 +30,6 @@
 
 	observe_email_ensure_handler/2,
 	observe_email_add_handler/2,
-	observe_email_find_handler/2,
 	observe_email_drop_handler/2,
 
 	observe_email_received/2
@@ -69,10 +68,6 @@ observe_email_ensure_handler({email_ensure_handler, Notification, UserId, Resour
 % @doc Add an email handler, returns the email address for the handler
 observe_email_add_handler({email_add_handler, Notification, UserId, ResourceId}, Context) ->
 	m_email_receive_recipient:insert(Notification, UserId, ResourceId, Context).
-
-% @doc Find email handlers
-observe_email_find_handler({email_find_handler, Notification, UserId, ResourceId}, Context) ->
-	{error, not_implemented}.
 
 % @doc Drop all handlers matching the parameters
 observe_email_drop_handler({email_drop_handler, Notification, UserId, ResourceId}, Context) ->

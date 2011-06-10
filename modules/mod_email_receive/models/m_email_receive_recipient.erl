@@ -124,6 +124,13 @@ delete(Notification, undefined, RscId, Context) ->
 		   [Notification, RscId],
 		   Context),
 	ok;
+delete(Notification, UserId, any, Context) ->
+	z_db:q("delete from email_receive_recipient
+			where notification = $1
+			  and user_id = $2",
+		   [Notification, UserId],
+		   Context),
+	ok;
 delete(Notification, UserId, ResourceId, Context) ->
 	z_db:q("delete from email_receive_recipient
 			where notification = $1
