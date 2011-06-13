@@ -17,7 +17,7 @@ gen_smtp:
 	cd deps/gen_smtp && $(MAKE)
 
 iconv:
-	cd deps/iconv && rake
+	cd deps/iconv && ./rebar compile
 
 z_logger:
 	cd deps/z_logger && $(MAKE)
@@ -42,7 +42,7 @@ clean:
 	(cd deps/z_logger; $(MAKE) clean)
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
-	(cd deps/iconv; rake clean)
+	(cd deps/iconv; ./rebar clean)
 	@if [ "`find modules/ -name Makefile`" != "" ]; then for f in "`ls modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	@if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	@if [ "`find priv/sites/*/modules/ -name Makefile`" != "" ]; then for f in "`ls priv/sites/*/modules/*/Makefile`"; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
