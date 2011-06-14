@@ -334,7 +334,10 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
           end, ok, Kill),
 
     [ start_child(ModuleSup, module_spec(C, Context)) || C <- Create ],
-    z_notifier:notify(module_ready, Context),
+    case {Kill, Create} of
+        {[], []} -> nop;
+        _ -> z_notifier:notify(module_ready, Context)
+    end,
     ok.
 
 
