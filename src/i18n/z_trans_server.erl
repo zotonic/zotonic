@@ -30,12 +30,13 @@
     load_translations/1,
     load_translations/2,
     table/1,
-    set_context_table/1
+    set_context_table/1,
+    observe_module_ready/2
 ]).
 
 -include_lib("zotonic.hrl").
 
--record(state, {table}).
+-record(state, {table, host}).
 
 %%====================================================================
 %% API
@@ -50,7 +51,7 @@ start_tests() ->
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Host, []).
 
 
 %% @doc Parse all .po files and reload the found translations in the trans server
@@ -76,6 +77,11 @@ table(#context{} = Context) ->
 set_context_table(#context{} = Context) ->
     Context#context{translation_table=table(z_context:site(Context))}.
 
+%% @doc Reload the translations when modules are changed.
+observe_module_ready(module_ready, Context) ->
+    load_translations(Context).
+
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -85,10 +91,11 @@ set_context_table(#context{} = Context) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(_Opts) ->
+init(Host) ->
     process_flag(trap_exit, true),
+    z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Host),
     Table = ets:new(translations, [set, protected]),
-    {ok, #state{table=Table}}.
+    {ok, #state{table=Table, host=Host}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -116,10 +123,11 @@ handle_cast({load_translations, Trans}, State) ->
                         undefined -> [{en,Key}|Value];
                         _ -> Value
                     end,
-			[{Key,Value1}|Acc]
+            [{Key,Value1}|Acc]
         end,
     List = dict:fold(F, [], Trans),
-	sync_to_table(List, State#state.table),
+    sync_to_table(List, State#state.table),
+    z_template:reset(State#state.host),
     {noreply, State};
 
 %% @doc Trap unknown casts
@@ -140,7 +148,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    z_notifier:detach(module_ready, {?MODULE, observe_module_ready}, State#state.host),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
