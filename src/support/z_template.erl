@@ -58,6 +58,9 @@ start_link(SiteProps) ->
 
 
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
+reset(Host) when is_atom(Host) ->
+    Name = z_utils:name_for_host(?MODULE, Host),
+    gen_server:cast(Name, reset);
 reset(Context) ->
     gen_server:cast(Context#context.template_server, reset).
 
