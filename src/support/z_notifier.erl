@@ -89,7 +89,11 @@ observe(Event, Observer, Context) ->
 
 %% @doc Subscribe to an event. Observer is a {M,F} or pid()
 observe(Event, Observer, Priority, #context{notifier=Notifier}) ->
+    gen_server:cast(Notifier, {'observe', Event, Observer, Priority});
+observe(Event, Observer, Priority, Host) when is_atom(Host) ->
+    Notifier = z_utils:name_for_host(?MODULE, Host),
     gen_server:cast(Notifier, {'observe', Event, Observer, Priority}).
+
 
 %% @doc Detach all observers and delete the event
 detach_all(Event, #context{notifier=Notifier}) ->
@@ -97,6 +101,9 @@ detach_all(Event, #context{notifier=Notifier}) ->
 
 %% @doc Unsubscribe from an event. Observer is a {M,F} or pid()
 detach(Event, Observer, #context{notifier=Notifier}) ->
+    gen_server:cast(Notifier, {'detach', Event, Observer});
+detach(Event, Observer, Host) when is_atom(Host) ->
+    Notifier = z_utils:name_for_host(?MODULE, Host),
     gen_server:cast(Notifier, {'detach', Event, Observer}).
 
 %% @doc Return all observers for a particular event
