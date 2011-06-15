@@ -32,7 +32,7 @@
 
 
 event({submit, {wxr_upload, []}, _TriggerId, _TargetId}, Context) ->
-    {upload, OriginalFilename, TmpFile} = z_context:get_q_validated("upload_file", Context),
+    #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
     Reset = z_convert:to_bool(z_context:get_q("reset", Context)),
 
     spawn(fun() ->
