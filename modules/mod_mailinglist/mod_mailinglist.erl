@@ -94,7 +94,7 @@ event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
 
 %% @doc Handle upload of a new recipients list
 event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) ->
-	{upload, _OriginalFilename, TmpFile} = z_context:get_q_validated("file", Context),
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
     case import_file(TmpFile, Id, Context) of
         ok ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
