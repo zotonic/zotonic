@@ -154,7 +154,7 @@
                 vars=[], attachment=[], queue=false}).
 
 %% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, raw}).
+-record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).
 
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).

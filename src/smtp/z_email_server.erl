@@ -401,14 +401,26 @@ encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Context);
-encode_email(Id, Email, VERP, From, Context) ->
+encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_tuple(Body) ->
+    Headers = [{<<"From">>, From},
+               {<<"To">>, Email#email.to},
+               {<<"Message-ID">>, VERP},
+               {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+                | Email#email.headers ],
+    Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
+    {BodyType, BodySubtype, BodyHeaders, BodyParams, BodyParts} = Body,
+    MailHeaders = [
+        {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
+    ],
+    mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts});
+encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
                {"To", z_convert:to_list(Email#email.to)},
                {"Message-ID", VERP},
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Email#email.body ]).
+    iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
 
     date(Context) ->
         z_convert:to_list(erlydtl_dateformat:format("r", z_context:set_language(en, Context))).
@@ -428,40 +440,46 @@ encode_email(Id, Email, VERP, From, Context) ->
     add_reply_to(Id, #email{reply_to=message_id}, Headers, Context) ->
         [{"Reply-To", reply_email(Id, Context)} | Headers];
     add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
-        [{"Reply-To", "<"++ensure_domain(ReplyTo,Context)++">"} | Headers].
+        {Name, Email} = z_email:split_name_email(ReplyTo),
+        ReplyTo1 = string:strip(Name ++ " <" ++ ensure_domain(Email, Context) ++ ">"),
+        [{"Reply-To", ReplyTo1} | Headers].
 
 
 build_and_encode_mail(Headers, Text, Html, Context) ->
-    ToEncode = esmtp_mime:create_multipart(),
-    ToEncode1 = lists:foldl(fun(Header, Acc) -> esmtp_mime:add_header(Acc, Header) end, ToEncode, Headers),
-    ToEncode2 = esmtp_mime:set_multipart_type(ToEncode1, alternative),
-
-    ToEncode3 = case Text of
-        [] ->
-            case Html of
-                [] ->
-                    ToEncode2;
-                _ ->
-                    Markdown = z_markdown:to_markdown(Html, [no_html]),
-                    esmtp_mime:add_part(ToEncode2, esmtp_mime:create_text_part(z_convert:to_list(Markdown)))
+    Headers1 = [
+        {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
+    ],
+    Parts = case z_utils:is_empty(Text) of
+        true ->
+            case z_utils:is_empty(Html) of
+                true -> 
+                    [];
+                false -> 
+                    [{<<"text">>, <<"plain">>, [], [], 
+                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(Html, [no_html])))}]
             end;
-        _ -> 
-            esmtp_mime:add_part(ToEncode2, esmtp_mime:create_text_part(z_convert:to_list(Text)))
-        end,
-
-    ToEncode4 = case Html of
-        [] -> 
-            ToEncode3;
-        _ -> 
-            {Parts, Html1} = z_email_embed:embed_images(z_convert:to_list(Html), Context),
-            MimeHtml = esmtp_mime:set_multipart_type(esmtp_mime:create_multipart(), related),
-            MimeHtml2 = esmtp_mime:add_part(MimeHtml, esmtp_mime:create_html_part(Html1)),
-            MimeHtml3 = lists:foldr(fun(P, Msg) -> esmtp_mime:add_part(Msg, P) end, MimeHtml2, Parts),
-            esmtp_mime:add_part(ToEncode3, MimeHtml3)
+        false -> 
+            [{<<"text">>, <<"plain">>, [], [], 
+             expand_cr(z_convert:to_binary(Text))}]
     end,
-    %EncodedMail = mimemail:encode(ToEncode4),
-    EncodedMail = esmtp_mime:encode(ToEncode4),
-    EncodedMail.
+    Parts1 = case z_utils:is_empty(Html) of
+        true -> 
+            Parts;
+        false -> 
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], [], z_convert:to_binary(Html)}], Context)
+    end,
+    mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1}).
+
+
+% Make sure that loose \n characters are expanded to \r\n
+expand_cr(B) -> expand_cr(B, <<>>).
+
+    expand_cr(<<>>, Acc) -> Acc;
+    expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+    expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+    expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+    expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
+
 
 spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
     Email = binary_to_list(EncodedMail),

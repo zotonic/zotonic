@@ -46,6 +46,7 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 										reference=Reference,
 										email=ParsedEmail2,
 										headers=Headers,
+										decoded={Type, Subtype, Headers, Params, Body},
 										raw=Data
 									}, 
 									z_context:new(Host));
@@ -102,6 +103,15 @@ parse_email({<<"multipart">>, <<"related">>}, Headers, _Params, Body) ->
 				Parts);
 
 parse_email({<<"multipart">>, <<"mixed">>}, Headers, _Params, Body) ->
+	Parts = [
+		parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
+		|| {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
+	],
+	lists:foldr(fun(A,B) -> append_email(A,B) end, 
+				#email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
+				Parts);
+
+parse_email({<<"multipart">>, <<"digest">>}, Headers, _Params, Body) ->
 	Parts = [
 		parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
 		|| {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body

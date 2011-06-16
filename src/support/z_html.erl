@@ -267,6 +267,10 @@ sanitize1(Html) ->
 	flatten_attr({<<"style">>,Value}) ->
 		Value1 = escape(filter_css(Value), <<>>),
 		<<"style=\"", Value1/binary, $">>;
+	flatten_attr({<<"class">>,Value}) ->
+	    % Remove all do_xxxx widget manager classes
+		Value1 = escape(filter_widget_class(Value)),
+		<<"class=\"", Value1/binary, $">>;
 	flatten_attr({Attr,Value}) ->
 		Value1 = case is_url_attr(Attr) of
 					true -> noscript(Value);
@@ -412,6 +416,7 @@ is_selfclosing(_) -> false.
 %% @doc Disallowed elements whose contents should be skipped
 skip_contents(<<"style">>) -> true;
 skip_contents(<<"script">>) -> true;
+skip_contents(<<"deleteme">>) -> true;
 skip_contents(_) -> false.
 
 %% @doc Simple filter for css. Removes parts between () and quoted strings. 
@@ -453,6 +458,10 @@ filter_css(<<H,T/binary>>, in_text, Acc) ->
     filter_css(T, in_text, <<Acc/binary, H>>);
 filter_css(<<_,T/binary>>, State, Acc) ->
     filter_css(T, State, Acc).
+
+%% @doc Remove all do_xxxx classes to prevent widget manager invocations
+filter_widget_class(Class) ->
+    z_convert:to_binary(re:replace(Class, <<"do_[0-9a-zA-Z_]+">>, <<>>, [global])).
 
 %% @doc Filter a url, remove any javascript.
 noscript(Url) -> 

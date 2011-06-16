@@ -77,7 +77,7 @@ init(Hostname, SessionCount, _Address, Options) ->
 %     {error, "554 invalid hostname", State};
 % handle_HELO(<<"trusted_host">>, State) ->
 %     {ok, State};
-handle_HELO(Hostname, State) ->
+handle_HELO(_Hostname, State) ->
     % error_logger:info_msg("SMTP: HELO from ~s~n", [Hostname]),
     {ok, 655360, State}. % 640kb of HELO should be enough for anyone.
 %If {ok, State} was returned here, we'd use the default 10mb limit

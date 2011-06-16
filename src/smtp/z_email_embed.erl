@@ -23,10 +23,35 @@
 -export([embed_images/2]).
 
 -include_lib("zotonic.hrl").
--include_lib("esmtp_mime.hrl").
+
+%% @doc Embed images mentioned in the HTML parts.
+embed_images(Parts, Context) ->
+    [ embed_images_part(P, Context) || P <- Parts ].
+
+
+embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
+    case embed_images_html(Html, Context) of
+        {[], _Html} ->
+            HtmlPart;
+        {ImageParts, Html1} ->
+            {   <<"multipart">>, <<"related">>,
+                [], 
+                [], 
+                [ 
+                    {<<"text">>, <<"html">>, Hs, Ps, z_convert:to_binary(Html1)} | ImageParts
+                ]
+            }
+    end;
+embed_images_part({<<"multipart">>, SubType, Hs, Ps, Parts}, Context) ->
+    Parts1 = [ embed_images_part(P, Context) || P <- Parts ],
+    {<<"multipart">>, SubType, Hs, Ps, Parts1};
+embed_images_part(Part, _Context) ->
+    Part.
+
+
 
 %% Given a HTML message, extract images (starting with /lib/ or /image/) and
-embed_images(Html, Context) ->
+embed_images_html(Html, Context) ->
     {P1, Html1} = embed_lib_images(Html, Context),
     {P2, Html2} = embed_generated_images(Html1, Context),
     {P1 ++ P2, Html2}.
@@ -49,10 +74,9 @@ embed_lib_image_match([Match], {Parts, Html, Context}) ->
             case filelib:is_file(File) of
                 true ->
                     ContentType = z_media_identify:guess_mime(File),
-                    {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined),
-                    Part1 = esmtp_mime:add_header(Part, {"X-Attachment-Id", [Cid]}),
+                    {Part, Cid} = create_attachment(File, ContentType, undefined),
                     Html1 = re:replace(Html, "/lib/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
-                    {[Part1|Parts], Html1, Context};
+                    {[Part|Parts], Html1, Context};
                 _ ->
                     {Parts, Html, Context}
             end;
@@ -79,10 +103,9 @@ embed_generated_image_match([Match], {Parts, Html, Context}) ->
             File = z_context:get(fullpath, Context1),
             ContentType = z_context:get(mime, Context1),
             BaseName = filename:rootname(filename:basename(BaseFile)) ++ z_media_identify:extension(ContentType),
-            {Part, Cid} = esmtp_mime:create_attachment(File, ContentType, undefined, BaseName),
-            Part1 = esmtp_mime:add_header(Part, {"X-Attachment-Id", [Cid]}),
+            {Part, Cid} = create_attachment(File, ContentType, BaseName),
             Html1 = re:replace(Html, "/image/" ++ Match, "cid:" ++ Cid, [global, {return, list}]),
-            {[Part1|Parts], Html1, Context};
+            {[Part|Parts], Html1, Context};
         {false, _} ->
             {Parts, Html, Context};
         {error, _} ->
@@ -130,7 +153,7 @@ rsc_media_check(File, Context) ->
             Props = [
                 {id, proplists:get_value(id, Media)},
                 {mime_original, MimeOriginal},
-				{is_media_preview, IsResized}
+                {is_media_preview, IsResized}
             ],
             Props1 = case IsResized of 
                         true -> [ {mime, z_media_identify:guess_mime(File)} | Props ];
@@ -207,6 +230,29 @@ ensure_preview(Path, Context) ->
                     {false, Context}
             end
     end.
+
+
+
+create_attachment(Filename, ContentType, Name) ->
+    ContentId = z_ids:id(30),
+    Headers = [ 
+        {<<"Content-ID">>, iolist_to_binary(["<" ++ ContentId ++ ">"])},
+        {<<"X-Attachment-Id">>, z_convert:to_binary(ContentId)} 
+    ],
+    {create_attachment_part(Filename, ContentType, Name, Headers), ContentId}.
+
+create_attachment_part(Filename, ContentType, Name, Headers) ->
+    [Type, Subtype] = string:tokens(ContentType, "/"),
+    {ok, Data} = file:read_file(Filename),
+    { z_convert:to_binary(Type), z_convert:to_binary(Subtype),
+      Headers,
+      [
+        {<<"transfer-encoding">>, <<"base64">>},
+        {<<"disposition">>, <<"inline">>}, 
+        {<<"disposition-params">>, [{<<"filename">>, z_convert:to_binary(Name)}]}
+      ],
+      Data
+    }.
 
 
 
