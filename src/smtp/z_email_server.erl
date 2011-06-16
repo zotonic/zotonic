@@ -317,7 +317,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
             VERP = "<"++bounce_email(Id, Context)++">",
 
             From = get_email_from(Email#email.from, VERP, State, Context),
-            Recipient1 = check_override(Recipient, State),
+            Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
             Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
             {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
             [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
@@ -553,12 +553,20 @@ recv_spamd(Socket, Res) ->
             Res
     end.
    
-check_override(EmailAddr, _) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
+check_override(EmailAddr, _SiteOverride, _State) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
     undefined;
-check_override(EmailAddr, #state{override=Override}) when Override == undefined; Override == []; Override == <<>> ->
-    z_convert:to_list(EmailAddr);
-check_override(EmailAddr, State) ->
-    escape_email(z_convert:to_list(EmailAddr)) ++ " (override) <" ++ State#state.override ++ ">".
+check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
+    UseOverride = case z_utils:is_empty(ZotonicOverride) of 
+        true -> SiteOverride;
+        false -> ZotonicOverride
+    end,
+    case z_utils:is_empty(UseOverride) of
+        true ->
+            z_convert:to_list(EmailAddr);
+        false ->
+            escape_email(z_convert:to_list(EmailAddr)) ++ " (override) <" ++ z_convert:to_list(UseOverride) ++ ">"
+    end.
+
 
 escape_email(Email) ->
    escape_email(Email, []).
