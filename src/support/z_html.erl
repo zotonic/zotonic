@@ -336,6 +336,7 @@ allow_once(_) -> false.
 
 %% @doc Allowed elements (see also allow_once/1 above)
 allow_elt(<<"audio">>) -> true;
+allow_elt(<<"address">>) -> true;
 allow_elt(<<"blockquote">>) -> true;
 allow_elt(<<"caption">>) -> true;
 allow_elt(<<"col">>) -> true;
