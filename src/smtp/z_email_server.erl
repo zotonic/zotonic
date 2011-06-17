@@ -380,7 +380,6 @@ encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is
     ]);
 encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
     %% Optionally render the text and html body
-    ?DEBUG(Email),
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
     Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
     Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
