@@ -380,27 +380,30 @@ encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is
     ]);
 encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
     %% Optionally render the text and html body
+    ?DEBUG(Email),
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
     Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
     Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
 
     %% Fetch the subject from the title of the HTML part or from the Email record
     Subject = case {Html, Email#email.subject} of
-                      {[], undefined} -> [];
-                      {[], Sub} -> Sub;
+                      {[], undefined} ->
+                          <<>>;
                       {_Html, undefined} ->
-                          {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*)</title>", [dotall, caseless]),
-                          string:strip(z_string:line(lists:sublist(Html, Start+1, Len)))
+                          {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
+                          string:strip(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
+                      {_Html, Sub} -> 
+                          Sub
                   end,
     Headers = [{"From", From},
                {"To", z_convert:to_list(Email#email.to)},
                {"Subject", z_convert:to_flatlist(Subject)},
-    {"Date", date(Context)},
+               {"Date", date(Context)},
                {"MIME-Version", "1.0"},
                {"Message-ID", VERP},
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    build_and_encode_mail(Headers2, Text, Html, Context);
+    build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, Email#email.to},
@@ -445,7 +448,7 @@ encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_list(Bo
         [{"Reply-To", ReplyTo1} | Headers].
 
 
-build_and_encode_mail(Headers, Text, Html, Context) ->
+build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Headers1 = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
     ],
@@ -468,7 +471,47 @@ build_and_encode_mail(Headers, Text, Html, Context) ->
         false -> 
             z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], [], z_convert:to_binary(Html)}], Context)
     end,
-    mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1}).
+    case Attachment of
+        [] ->
+            mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1});
+        _ ->
+            mimemail:encode({<<"multipart">>, <<"mixed">>,
+             Headers1,
+             [],
+             [
+                {<<"multipart">>, <<"alternative">>, [], [], Parts1} |
+                [ encode_attachment(Att, Context) || Att <- Attachment ]
+             ]
+            })
+    end.
+
+    encode_attachment(Att, _Context) ->
+        Data = case Att#upload.data of
+                    undefined ->
+                        {ok, FileData} = file:read_file(Att#upload.tmpfile),
+                        FileData;
+                    AttData ->
+                       AttData
+               end,
+        [Type, Subtype] = binstr:split(z_convert:to_binary(Att#upload.mime), <<"/">>, 2),
+        {
+            Type, Subtype,
+            [],
+            [
+                {<<"transfer-encoding">>, <<"base64">>},
+                {<<"disposition">>, <<"attachment">>},
+                {<<"disposition-params">>, [{<<"filename">>, filename(Att)}]}
+            ],
+            Data
+        }.
+        
+        filename(#upload{filename=undefined, tmpfile=undefined}) ->
+            <<"untitled">>;
+        filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
+            z_convert:to_binary(filename:basename(z_convert:to_list(Tmpfile)));
+        filename(#upload{filename=Filename}) ->
+            z_convert:to_binary(Filename).
+
 
 
 % Make sure that loose \n characters are expanded to \r\n

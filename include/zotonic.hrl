@@ -151,7 +151,7 @@
 -record(email, {to=[], cc=[], bcc=[], from=[], reply_to, 
                 headers=[], body, raw,
                 subject, text, html, text_tpl, html_tpl, 
-                vars=[], attachment=[], queue=false}).
+                vars=[], attachments=[], queue=false}).
 
 %% @doc Notification sent to a site when e-mail for that site is received
 -record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).

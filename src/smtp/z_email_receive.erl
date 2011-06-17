@@ -161,7 +161,7 @@ merge_email(A, B) ->
 		subject=take_defined(A#email.subject, B#email.subject),
 		text=take_defined(A#email.text, B#email.text), 
 		html=take_defined(A#email.html, B#email.html), 
-		attachment=A#email.attachment++B#email.attachment
+		attachments=A#email.attachments++B#email.attachments
 	}.
 
 % Append two e-mails (used in multipart/mixed messages)
@@ -172,7 +172,7 @@ append_email(A, B) ->
 		subject=take_defined(A1#email.subject, B1#email.subject),
 		html=append(A1#email.html, B1#email.html),
 		text=append(A1#email.text, B1#email.text),
-		attachment=A1#email.attachment++B1#email.attachment
+		attachments=A1#email.attachments++B1#email.attachments
 	}.
 
 
@@ -182,7 +182,6 @@ take_defined(A, _) -> A.
 append(undefined, B) -> B;
 append(A, undefined) -> A;
 append(A, B) -> <<A/binary, B/binary>>.
-
 
 generate_text(#email{text=undefined, html=undefined} = E) ->
 	E;
@@ -210,11 +209,16 @@ opt_attachment(Mime, Params, Body) ->
 attachment({Type, SubType}, Params, Body) ->
 	DispParams = proplists:get_value(<<"disposition-params">>, Params, []),
 	#email{
-		attachment=[
+		attachments=[
 			#upload{
-				mime=append(Type, SubType),
+				mime=append_mime(Type, SubType),
 				data=Body,
 				filename=proplists:get_value(<<"filename">>, DispParams)
 			}
 		]
 	}.
+	
+    append_mime(undefined, B) -> B;
+    append_mime(A, undefined) -> A;
+    append_mime(A, B) -> <<A/binary, $/, B/binary>>.
+    

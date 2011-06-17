@@ -34,6 +34,7 @@ embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
         {[], _Html} ->
             HtmlPart;
         {ImageParts, Html1} ->
+            Html1,
             {   <<"multipart">>, <<"related">>,
                 [], 
                 [], 
