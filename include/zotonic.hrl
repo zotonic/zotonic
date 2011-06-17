@@ -145,7 +145,9 @@
 -record(dragdrop, {tag, delegate, id}).
 
 %% @doc e-mail notification used by z_email and the mod_emailer.
--record(email, {to=[], cc=[], from=[], reply_to=[], subject, headers, body, text, html, text_tpl, html_tpl, vars=[], queue=false}).
+-record(email, {to=[], cc=[], from=[], reply_to=[], subject, headers, body, 
+                text, html, text_tpl, html_tpl, vars=[], attachments=[], 
+                queue=false}).
 
 %% @doc For 0.7 and later
 -record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, raw}).
