@@ -204,6 +204,11 @@ replace(Id, Props, Context) ->
 insert_file(File, Context) ->
     insert_file(File, [], Context).
 
+insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, Props, Context) when Data /= undefined ->
+    TmpFile = z_tempfile:new(),
+    ok = file:write_file(TmpFile, Data),
+    insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=TmpFile}, Props, Context);
+
 insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, Context) ->
     PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
     insert_file(TmpFile, [{original_filename, OriginalFilename}|Props], PropsMedia, Context);
