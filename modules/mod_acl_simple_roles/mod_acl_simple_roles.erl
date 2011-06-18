@@ -110,7 +110,12 @@ observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
     constrain_visible_for(Id, Props, Context) ->
         case proplists:get_value(visible_for, Props) of
     		undefined ->
-    		    z_utils:prop_replace(visible_for, min_visible(Context), Props);
+                case min_visible(Context) of
+                    N when is_integer(N) ->
+                        z_utils:prop_replace(visible_for, N, Props);
+                    undefined ->
+                        Props
+                end;
     		Vis -> 
     		    CurrVis = case Id of 
     		                insert_rsc -> ?ACL_VIS_USER;
