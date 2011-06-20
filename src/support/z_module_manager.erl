@@ -33,6 +33,7 @@
     upgrade/1,
     deactivate/2,
     activate/2,
+    restart/2,
     active/1,
     active/2,
     active_dir/1,
@@ -95,6 +96,12 @@ activate(Module, Context) ->
     end,
     z_db:transaction(F, Context),
     upgrade(Context).
+
+
+%% @doc Shortcut, restart a module by deactivating and reactivating the module.
+restart(Module, Context) ->
+    deactivate(Module, Context),
+    activate(Module, Context).
 
 
 %% @doc Return the list of active modules.
