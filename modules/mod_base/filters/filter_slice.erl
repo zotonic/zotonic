@@ -49,7 +49,9 @@ slice(undefined, _, _Context) ->
     undefined;
 
 slice(List, Slice, _Context) when is_list(List) ->
-	slice1(List, Slice).
+    slice1(List, Slice);
+slice(MaybeList, Slice, Context) ->
+    slice1(erlydtl_runtime:to_list(MaybeList, Context), Slice).
 
 slice1(List, [undefined, undefined]) ->
     slice2(List, 1, length(List));
