@@ -352,9 +352,14 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
                 end,
         case Info of
             L when is_list(L) ->
-                manage_datamodel(Module, Context),
-                ok = z_supervisor:add_child(ModuleSup, Spec),
-                z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
+                case catch manage_datamodel(Module, Context) of
+                    ok ->
+                        ok = z_supervisor:add_child(ModuleSup, Spec),
+                        z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
+                    Error ->
+                        ?ERROR("Error starting module ~p, datamodel initialization error: ~p", Error),
+                        error
+                end;
             error ->
                 error
         end.
@@ -413,7 +418,7 @@ valid(M, Context) ->
 %% @doc Initialize the datamodel of the module.
 manage_datamodel(Module, Context) ->
     case proplists:get_value(datamodel, erlang:get_module_info(Module, exports)) of
-        undefined -> nop;
+        undefined -> ok;
         0 -> z_datamodel:manage(Module, Module:datamodel(), Context);
         1 -> z_datamodel:manage(Module, Module:datamodel(Context), Context)
     end.
