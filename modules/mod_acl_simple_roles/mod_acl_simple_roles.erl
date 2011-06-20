@@ -25,8 +25,6 @@
 -mod_description("Simple role based access control.  Use this for a site with different editor roles.").
 -mod_prio(500).
 
--export([init/1]).
-
 %% interface functions
 -export([
     observe_acl_is_allowed/2,
@@ -188,11 +186,6 @@ observe_rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
         false ->
             {Changed, Props}
     end.
-
-
-%% @doc Initialize the datamodel for this module.
-init(Context) ->
-    z_datamodel:manage(?MODULE, datamodel(), Context).
 
 
 %% @doc On logon, cache ACL information in the context record

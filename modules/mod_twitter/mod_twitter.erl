@@ -40,6 +40,7 @@
 
 %% interface functions
 -export([
+         datamodel/0,
          fetch/4, 
          observe_rsc_update_done/2,
          receive_chunk/2
@@ -100,14 +101,10 @@ start_link(Args) when is_list(Args) ->
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
-%% @doc Initiates the server.
+%% @doc Initiates the server.  The datamodel is installed before the server is started.
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-
-    %% Manage our data model
-    z_datamodel:manage(?MODULE, datamodel(), Context),
-
     handle_author_edges_upgrade(Context),
 
     z_notifier:observe(restart_twitter, self(), Context),
@@ -346,7 +343,7 @@ receive_chunk(RequestId, Context) ->
 
 
 %%
-%% The datamodel that is used in this module.
+%% @doc The datamodel that is used in this module, installed before the module is started.
 %%
 datamodel() ->
     [{categories,

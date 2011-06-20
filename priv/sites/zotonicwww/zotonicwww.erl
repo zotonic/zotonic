@@ -24,18 +24,11 @@
 -mod_description("The Zotonic web site.").
 -mod_prio(10).
 
--export([init/1]).
+-export([datamodel/0]).
 
 -include_lib("zotonic.hrl").
 
-%% @doc Initialize the datamodel
-init(Context) ->
-    z_datamodel:manage(?MODULE, datamodel(), Context).
-
-%%====================================================================
-%% support functions
-%%====================================================================
-
+%% @doc Datamodel, installed before this module is started.
 datamodel() ->
     [
 

@@ -28,14 +28,9 @@
 
 %% interface functions
 -export([
-    init/1,
+    datamodel/0,
     event/2
 ]).
-
-
-%% @doc Initialize the contact module.  Make sure that the page_contact is present.
-init(Context) ->
-    z_datamodel:manage(?MODULE, datamodel(), Context).
 
 
 %% @doc Handle the contact form submit.
@@ -59,10 +54,7 @@ event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
                     {slide_down, [{target,"contact-form-sent"}]}], 
                   Context).
 
-%%====================================================================
-%% support functions
-%%====================================================================
-
+%% @doc Datamodel for mod_contact, installed when the module is started.
 datamodel() ->
     [
         {resources,

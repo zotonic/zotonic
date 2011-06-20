@@ -49,8 +49,8 @@
 	delete_scheduled/3,
 	get_scheduled/2,
 	check_scheduled/1,
-	
-	install/1
+
+	init_tables/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -358,13 +358,8 @@ check_scheduled(Context) ->
 		limit 1", Context).
 
 
-%% @doc Install the tables needed for the mailinglist
-%% @spec install(Context) -> void()
-install(Context) ->
-	% Install the mailinglist category.
-	z_datamodel:manage(mod_mailinglist, datamodel(), Context),
-
-	% Install the SQL tables to track recipients and scheduled mailings.
+% Install the SQL tables to track recipients and scheduled mailings.
+init_tables(Context) ->
 	case z_db:table_exists(mailinglist_recipient, Context) of
 		true ->
 		    case z_db:column_names(mailinglist_recipient, Context) of
@@ -415,32 +410,3 @@ install(Context) ->
 				)", Context)
 	end.
 
-datamodel() ->
-	[
-		{categories, [
-			{mailinglist, undefined, [
-							{title, "Mailing list"},
-							{summary, "Mailing lists are used to send pages to groups of people."}
-						]}
-		]},
-
-        % Any resource with an e-mail address can be a subscriber of a mailinglist
-        {predicates, [
-            {subscriberof,
-                 [{title, <<"Subscriber of">>}],
-                 [{person, mailinglist}, {location, mailinglist}]},
-             {exsubscriberof,
-                  [{title, <<"Ex-subscriber of">>}],
-                  [{person, mailinglist}, {location, mailinglist}]}
-        ]},
-		
-		{resources, [
-			{mailinglist_test, mailinglist, [
-							{visible_for, 1},
-							{title, "Test mailing list"},
-							{summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It should not be visible for the world."}
-						]}
-		]}
-	].
-	
-	

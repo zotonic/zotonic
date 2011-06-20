@@ -333,7 +333,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
               ok
           end, ok, Kill),
 
-    [ start_child(ModuleSup, module_spec(C, Context)) || C <- Create ],
+    [ start_child(C, ModuleSup, module_spec(C, Context), Context) || C <- Create ],
     case {Kill, Create} of
         {[], []} -> nop;
         _ -> z_notifier:notify(module_ready, Context)
@@ -342,7 +342,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
 
 
     %% @doc Try to add and start the child, do not crash on missing modules.
-    start_child(ModuleSup, Spec) ->
+    start_child(Module, ModuleSup, Spec, Context) ->
         Info =  try
                     erlang:get_module_info(Spec#child_spec.name, attributes)
                 catch
@@ -352,6 +352,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
                 end,
         case Info of
             L when is_list(L) ->
+                manage_datamodel(Module, Context),
                 ok = z_supervisor:add_child(ModuleSup, Spec),
                 z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
             error ->
@@ -409,6 +410,15 @@ valid(M, Context) ->
     lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
 
+%% @doc Initialize the datamodel of the module.
+manage_datamodel(Module, Context) ->
+    case proplists:get_value(datamodel, erlang:get_module_info(Module, exports)) of
+        undefined -> nop;
+        0 -> z_datamodel:manage(Module, Module:datamodel(), Context);
+        1 -> z_datamodel:manage(Module, Module:datamodel(Context), Context)
+    end.
+
+
 %% @doc Add the observers for a module, called after module has been activated
 add_observers(Module, Pid, Context) ->
     [ z_notifier:observe(Message, Handler, Context) || {Message, Handler} <- observes(Module, Pid) ].
@@ -439,3 +449,4 @@ observes(Module, Pid) ->
         end;
     observes(Module, Pid, [_|Rest], Acc) -> 
         observes(Module, Pid, Rest, Acc).
+

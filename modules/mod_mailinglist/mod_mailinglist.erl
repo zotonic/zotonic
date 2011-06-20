@@ -34,12 +34,44 @@
 	observe_search_query/2,
 	observe_mailinglist_message/2,
 	event/2,
-	update_scheduled_list/2
+	update_scheduled_list/2,
+	datamodel/1
 ]).
 
 -include_lib("zotonic.hrl").
 
 -record(state, {context}).
+
+
+%% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
+datamodel(Context) ->
+    m_mailinglist:init_tables(Context),
+    [
+        {categories, [
+            {mailinglist, undefined, [
+                            {title, "Mailing list"},
+                            {summary, "Mailing lists are used to send pages to groups of people."}
+                        ]}
+        ]},
+
+        % Any resource with an e-mail address can be a subscriber of a mailinglist
+        {predicates, [
+            {subscriberof,
+                 [{title, <<"Subscriber of">>}],
+                 [{person, mailinglist}, {location, mailinglist}]},
+             {exsubscriberof,
+                  [{title, <<"Ex-subscriber of">>}],
+                  [{person, mailinglist}, {location, mailinglist}]}
+        ]},
+
+        {resources, [
+            {mailinglist_test, mailinglist, [
+                            {visible_for, 1},
+                            {title, "Test mailing list"},
+                            {summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It should not be visible for the world."}
+                        ]}
+        ]}
+    ].
 
 
 observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
@@ -134,7 +166,6 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    m_mailinglist:install(Context),
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(180000, poll),

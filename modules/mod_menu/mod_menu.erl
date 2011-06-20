@@ -28,6 +28,7 @@
 %% interface functions
 -export([
     init/1,
+    datamodel/1,
     get_menu/1,
     get_menu/2,
     set_menu/3,
@@ -37,21 +38,7 @@
     convert_symbolic_names/1
 ]).
 
-
-init(Context) ->
-    z_datamodel:manage(?MODULE, datamodel(Context), Context),
-    z_pivot_rsc:insert_task(?MODULE, convert_symbolic_names, Context),
-    case m_config:get(menu, menu_default, Context) of
-        undefined -> ok;
-        Props -> 
-            %% upgrade from previous menu
-            OldMenu = proplists:get_value(menu, Props, []),
-            ?zInfo("Upgrading old menu structure", Context),
-            set_menu(OldMenu, Context),
-            m_config:delete(menu, menu_default, Context)
-    end.
-
-
+%% @doc The datamodel for the menu routines.
 datamodel(Context) ->
     [
      {categories,
@@ -71,6 +58,20 @@ datamodel(Context) ->
        }
       ]}
     ].
+
+%% @doc Initializes the module (after the datamodel is installed).
+init(Context) ->
+    z_pivot_rsc:insert_task(?MODULE, convert_symbolic_names, Context),
+    case m_config:get(menu, menu_default, Context) of
+        undefined -> ok;
+        Props -> 
+            %% upgrade from previous menu
+            OldMenu = proplists:get_value(menu, Props, []),
+            ?zInfo("Upgrading old menu structure", Context),
+            set_menu(OldMenu, Context),
+            m_config:delete(menu, menu_default, Context)
+    end.
+
 
 
 %% @doc Notifier handler to get all menu ids for the default menu.

@@ -26,8 +26,9 @@
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
 
--export([init/1]).
 -export([
+    datamodel/0,
+
     observe_signup_url/2,
     observe_identity_verification/2,
     observe_logon_ready_page/2
@@ -36,9 +37,6 @@
 
 -include("zotonic.hrl").
 
-%% @doc Add terms and privacy statement articles
-init(Context) ->
-    z_datamodel:manage(?MODULE, datamodel(), Context).
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
 observe_signup_url({signup_url, Props, SignupProps}, Context) ->
