@@ -89,7 +89,7 @@ filter_args([], true, Acc, _Context) ->
     Acc;
 filter_args([], false, Acc, Context) ->
     [_S,M,_L] = get_sizes(Context),
-    [{size,M}|Acc];
+    [{size,M},{sizename,"medium"}|Acc];
 filter_args([{size,Size}|Args], _, Acc, Context) ->
     [S,M,L] = get_sizes(Context),
     P = case Size of
@@ -97,7 +97,7 @@ filter_args([{size,Size}|Args], _, Acc, Context) ->
             "small" -> S;
             _ -> M
         end,
-    filter_args(Args, true, [{size,P}|Acc], Context);
+    filter_args(Args, true, [{size,P},{sizename,Size}|Acc], Context);
 filter_args([{crop,"crop"}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{crop,true}|Acc], Context);
 filter_args([{crop,_}|Args], HasSize, Acc, Context) ->
