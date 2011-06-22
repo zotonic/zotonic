@@ -34,8 +34,7 @@
     set_menu/3,
     observe_menu_get_rsc_ids/2,
     test/0,
-    menu_flat/1,
-    convert_symbolic_names/1
+    menu_flat/2
 ]).
 
 %% @doc The datamodel for the menu routines.
@@ -67,7 +66,6 @@ datamodel(Context) ->
 
 %% @doc Initializes the module (after the datamodel is installed).
 init(Context) ->
-    z_pivot_rsc:insert_task(?MODULE, convert_symbolic_names, Context),
     case m_config:get(menu, menu_default, Context) of
         undefined -> ok;
         Props -> 
@@ -143,51 +141,28 @@ set_menu(Id, Menu, Context) ->
 
 
 
-menu_flat(undefined) ->
+menu_flat(undefined, _Context) ->
     [];
-menu_flat(<<>>) ->
+menu_flat(<<>>, _Context) ->
     [];
-menu_flat(X) ->
-    menu_flat(X, [1], []).
+menu_flat(X, Context) ->
+    menu_flat(X, [1], [], Context).
 
-menu_flat([], _Path, Acc) ->
+menu_flat([], _Path, Acc, _Context) ->
     lists:reverse(Acc);
-menu_flat([ {MenuId, []} | Rest], [Idx|PR], Acc ) ->
+menu_flat([ {MenuId, []} | Rest], [Idx|PR], Acc, Context ) ->
 
-    [ {MenuId, [Idx|PR], undefined} ] 
-        ++ menu_flat(Rest, [Idx+1|PR], [])
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
+        ++ menu_flat(Rest, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc ) ->
+menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc, Context ) ->
 
-    [ {MenuId, [Idx|PR], down} ] 
-        ++ menu_flat(Children, [1,Idx|PR], []) 
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], down} ] 
+        ++ menu_flat(Children, [1,Idx|PR], [], Context) 
         ++ [{undefined, undefined, up}]
-        ++ menu_flat(Rest, [Idx+1|PR], [])
+        ++ menu_flat(Rest, [Idx+1|PR], [], Context)
         ++  Acc.
 
-
-%% @doc Convert the menu structure as installed (which can contain
-%%      resource names) to a menu which only contains numeric
-%%      ids. This is needed for the menu trail to correctly function.
-convert_symbolic_names(Ctx) ->
-    Context = z_acl:sudo(Ctx),
-    Menu = get_menu(Context),
-    Menu2 = menu_names_to_ids(Menu, Context),
-    set_menu(Menu2, Context),
-    ok.
-
-menu_names_to_ids(Menu, Ctx) ->
-    menu_names_to_ids(Menu, Ctx, []).
-
-menu_names_to_ids([], _Ctx, Acc) ->
-    lists:reverse(Acc);
-menu_names_to_ids([{Item, Childs}|Rest], Context, Acc) ->
-    Id = case Item of
-             X when is_integer(X) -> X;
-             N -> m_rsc:rid(N, Context)
-         end,
-    [{Id, menu_names_to_ids(Childs, Context, [])} | menu_names_to_ids(Rest, Context, Acc)].
-    
 
 %% @doc test function
 %%  111  [1]
@@ -209,4 +184,4 @@ test() ->
      {333, [1,2], undefined},
      {undefined, undefined, up}
     ]
-        = menu_flat([{111, [{444, [{555, []}, {666, []} ]}]}, {222, [{333, []}]}]).
+        = menu_flat([{111, [{444, [{555, []}, {666, []} ]}]}, {222, [{333, []}]}], x).
