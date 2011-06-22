@@ -152,7 +152,7 @@ default_menu(blog) ->
 
 default_menu(_) ->
     %% no/unknown skeleton = no default menu
-    [].
+    undefined.
 
 
 %% @doc Helper function for getting an absolute path to a data file

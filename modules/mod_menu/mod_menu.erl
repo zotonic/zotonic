@@ -49,14 +49,20 @@ datamodel(Context) ->
       ]
      },
      {resources,
-      [
-       {main_menu,
-        menu,
-        [{title, <<"Main menu">>},
-         {menu, z_install_defaultdata:default_menu(m_site:get(skeleton, Context))}
-        ]
-       }
-      ]}
+      case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
+          undefined ->
+              [];
+          Menu ->
+              [
+               {main_menu,
+                menu,
+                [{title, <<"Main menu">>},
+                 {menu, Menu}
+                ]
+               }
+              ]
+      end
+     }
     ].
 
 %% @doc Initializes the module (after the datamodel is installed).
