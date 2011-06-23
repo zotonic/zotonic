@@ -25,28 +25,33 @@ menu_trail(Id, Context) ->
     menu_trail(Id, main_menu, Context).
 
 menu_trail(Id, MenuId, Context) ->
-    Current = z_convert:to_integer(Id),
     Menu = mod_menu:get_menu(MenuId, Context),
-    trail(Current, Menu).
+    trail(m_rsc:rid(Id, Context), Menu, Context).
 
 
-trail(_Id, []) ->
+trail(_Id, [], _Context) ->
     []; %% not found
-trail(Id, [{Id, _}|_]) ->
+trail(Id, [{Id, _}|_], _Context) ->
     [Id]; %% found
-trail(Id, [{MenuId, Children}|Rest]) ->
-    case trail(Id, Children) of
-        [] ->
-            %% not found
-            trail(Id, Rest);
-        Path ->
-            %% Found
-            [MenuId|Path]
+trail(Id, [{MenuMaybeSymbolic, Children}|Rest], Context) ->
+    MenuId = m_rsc:rid(MenuMaybeSymbolic, Context),
+    case MenuId of
+        Id ->
+            [Id];
+        _ ->
+            case trail(Id, Children, Context) of
+                [] ->
+                    %% not found
+                    trail(Id, Rest, Context);
+                Path ->
+                    %% Found
+                    [MenuId|Path]
+            end
     end.
 
 
 
 test() ->
-    [1] = trail(1, [{1, []}]),
-    [] = trail(1, [{33, []}]),
-    [33,66] = trail(66, [{4, []}, {33, [{3, []}, {66, []}]}]).
+    [1] = trail(1, [{1, []}], x),
+    [] = trail(1, [{33, []}], x),
+    [33,66] = trail(66, [{4, []}, {33, [{3, []}, {66, []}]}], x).

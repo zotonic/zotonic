@@ -134,52 +134,32 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                     end;
                 {error, {unknown_rsc, _}} ->
                     %% new resource, or old resource
-
-                    %% Check if name was previously inserted.
-                    ManagedNames = case m_config:get(Module, datamodel, Context) of
-                                       undefined ->
-                                           [];
-                                       Cfg ->
-                                           case proplists:get_value(managed_resources, Cfg) of
-                                               undefined ->
-                                                   [];
-                                               N -> N
-                                           end
-                                   end,
-
-                    {Result, NewNames} = case lists:member(Name, ManagedNames) of
-                                             false ->
-                                                 Props1 = [{name, Name}, {category_id, CatId},
-                                                           {installed_by, Module}, {managed_props, z_html:escape_props(Props)}] ++ Props,
-                                                 Props2 = case proplists:get_value(is_published, Props1) of
-                                                              undefined -> [{is_published, true} | Props1];
-                                                              _ -> Props1
-                                                          end,
-                                                 Props3 = case proplists:get_value(visible_for, Props2) of
-                                                              undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
-                                                              _ -> Props2
-                                                          end,
-                                                 ?zInfo(io_lib:format("Creating new resource '~p'", [Name]), Context),
-                                                 {ok, Id} = m_rsc:insert(Props3, Context),
-                                                 case proplists:get_value(media_url, Props3) of
-                                                     undefined ->
-                                                         nop;
-                                                     Url ->
-                                                         m_media:replace_url(Url, Id, [], Context)
-                                                 end,
-                                                 case proplists:get_value(media_file, Props3) of
-                                                     undefined ->
-                                                         nop;
-                                                     File ->
-                                                         m_media:replace_file(File, Id, Context)
-                                                 end,
-                                                 {{ok, Id}, [Name | ManagedNames ]};
-                                             true ->
-                                                 ?zInfo(io_lib:format("Resource '~p' was deleted", [Name]), Context),
-                                                 {{ok}, ManagedNames}
-                                         end,
-                    m_config:set_prop(Module, datamodel, managed_resources, NewNames, Context),
-                    Result
+                    Props1 = [{name, Name}, {category_id, CatId},
+                              {is_protected, true},
+                              {installed_by, Module}, {managed_props, z_html:escape_props(Props)}] ++ Props,
+                    Props2 = case proplists:get_value(is_published, Props1) of
+                                 undefined -> [{is_published, true} | Props1];
+                                 _ -> Props1
+                             end,
+                    Props3 = case proplists:get_value(visible_for, Props2) of
+                                 undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
+                                 _ -> Props2
+                             end,
+                    ?zInfo(io_lib:format("Creating new resource '~p'", [Name]), Context),
+                    {ok, Id} = m_rsc:insert(Props3, Context),
+                    case proplists:get_value(media_url, Props3) of
+                        undefined ->
+                            nop;
+                        Url ->
+                            m_media:replace_url(Url, Id, [], Context)
+                    end,
+                    case proplists:get_value(media_file, Props3) of
+                        undefined ->
+                            nop;
+                        File ->
+                            m_media:replace_file(File, Id, Context)
+                    end,
+                    {ok, Id}
             end;
         {error, _} ->
             Msg = io_lib:format("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),

@@ -172,12 +172,15 @@ find_template(File, true, Context) ->
 find_template_cat([$/|_] = File, _Id, _Context) ->
     {ok, File};
 find_template_cat(File, Id, Context) ->
-	IsA = m_rsc:is_a(Id, Context),
+	Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
+                {L, undefined} -> L;
+                {L, Name} -> L ++ [z_convert:to_atom(Name)]
+            end,
 	Root = filename:rootname(File),
 	Ext = filename:extension(File),
 	case lists:foldr(fun(Cat, {error, enoent}) -> find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
 					    (_Cat, Found) -> Found	
-					 end, {error, enoent}, IsA) of
+					 end, {error, enoent}, Stack) of
 		{error, enoent} -> find_template(File, Context);
 		{ok, Template} -> {ok, Template}
 	end.

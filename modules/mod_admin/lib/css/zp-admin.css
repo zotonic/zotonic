@@ -103,7 +103,8 @@ hr {
 	border-bottom: 1px solid #e0e0e0;
 }
 
-	.short-list li button {
+	.short-list li button,
+	.short-list li a.button {
 		margin: 3px 3px 0 0;
 	}
 
@@ -120,7 +121,7 @@ hr {
         color: #888;
     }
 
-		.short-list li a:hover {
+		.short-list li a.row:hover {
 			background: #eee;
 			color: #000;
 		}

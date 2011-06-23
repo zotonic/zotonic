@@ -25,28 +25,28 @@
 			
 			<div class="zp-50">
 				{# Latest modified texts #}
-				{% include "_admin_latest_texts.tpl" %}
+                {% include "admin_widget_dashboard_latest.tpl" cat="text" headline=_"Latest modified texts" %}
 
 				{# Latest modified persons #}
-				{% include "_admin_latest_persons.tpl" %}
+                {% include "admin_widget_dashboard_latest.tpl" cat="person" headline=_"Latest modified persons" %}
 			</div>
 
 			<div class="zp-50">
 
 				{# Latest modified locations #}
 				{% if m.rsc['location'].id and m.acl.view['location'] %}
-					{% include "_admin_latest_locations.tpl" %}
+                    {% include "admin_widget_dashboard_latest.tpl" cat="location" headline=_"Latest modified locations" last=1 %}
 				{% endif %}
 
 
 				{# Latest modified events #}
 				{% if m.rsc['event'].id and m.acl.view['event'] %}
-					{% include "_admin_latest_events.tpl" %}
+                    {% include "admin_widget_dashboard_latest.tpl" cat="event" headline=_"Latest modified events" last=1 %}
 				{% endif %}
 
 
 				{# Latest modified media items #}
-				{% include "_admin_latest_media_items.tpl" %}
+                {% include "admin_widget_dashboard_latest.tpl" cat="media" headline=_"Latest modified media items" media=1 last=1 %}
 			</div>
 
 		</div>

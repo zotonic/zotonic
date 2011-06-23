@@ -20,5 +20,5 @@
 -export([menu_flat/2]).
 
 
-menu_flat(Menu, _Context) ->
-    mod_menu:menu_flat(Menu).
+menu_flat(Menu, Context) ->
+    mod_menu:menu_flat(Menu, Context).

@@ -194,10 +194,19 @@ prio(Module) ->
 %% @doc Sort the results of a scan on module priority first, module name next. 
 %% The list is made up of {module, Values} tuples
 %% @spec prio_sort(proplist()) -> proplist()
-prio_sort(ModuleProps) ->
+prio_sort([{_,_}|_]=ModuleProps) ->
     WithPrio = [ {z_module_manager:prio(M), {M, X}} || {M, X} <- ModuleProps ],
     Sorted = lists:sort(WithPrio),
-    [ X || {_Prio, X} <- Sorted ].
+    [ X || {_Prio, X} <- Sorted ];
+
+%% @doc Sort the results of a scan on module priority first, module name next. 
+%% The list is made up of module atoms.
+%% @spec prio_sort(proplist()) -> proplist()
+prio_sort(Modules) ->
+    WithPrio = [ {z_module_manager:prio(M), M} || M <- Modules ],
+    Sorted = lists:sort(WithPrio),
+    [ M || {_Prio, M} <- Sorted ].
+
 
 
 %% @doc Check if the code of a module exists. The database can hold module references to non-existing modules.
@@ -333,7 +342,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Old  = sets:from_list([Name || {Name, _} <- ChildrenPids]),
     New  = sets:from_list(ValidModules),
     Kill = sets:subtract(Old, New),
-    Create = sets:to_list(sets:subtract(New, Old)),
+    Create = lists:reverse(prio_sort(sets:to_list(sets:subtract(New, Old)))),
 
     sets:fold(fun (Module, ok) ->
               z_supervisor:delete_child(ModuleSup, Module),

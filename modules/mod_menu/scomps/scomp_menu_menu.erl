@@ -44,7 +44,7 @@ render(Params, _Vars, Context) ->
     MenuId = m_rsc:rid(proplists:get_value(menu_id, Params, main_menu), Context),
     Menu = mod_menu:get_menu(MenuId, Context),
     Vars = [
-        {menu, mod_menu:menu_flat(Menu)},
+        {menu, mod_menu:menu_flat(Menu, Context)},
         {menu_id, MenuId}
         | Params
     ],

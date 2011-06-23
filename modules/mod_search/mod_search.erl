@@ -216,6 +216,21 @@ search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
         order="kw.pivot_title"
        };
 
+search({archive_year, [{cat,Cat}]}, OffsetLimit, Context) ->
+    Q = #search_sql{
+      select="date_part('year', r.publication_start)::int as year, count(*) as count",
+      from="rsc r",
+      tables=[{rsc, "r"}],
+      assoc=true,
+      cats=[{"r", Cat}],
+      group_by="date_part('year', r.publication_start)",
+      order="year desc"
+     },
+    R = z_search:search_result(Q, OffsetLimit, Context),
+    Result = [ [{as_date, {{z_convert:to_integer(Y),1,1},{0,0,0}}}|Rest]
+               || Rest = [{year, Y}, {count, _}] <- R#search_result.result],
+    #search_result{result=Result};
+
 search({archive_year_month, [{cat,Cat}]}, OffsetLimit, Context) ->
     Q = #search_sql{
       select="date_part('year', r.publication_start)::int as year, date_part('month', r.publication_start)::int as month, count(*) as count",

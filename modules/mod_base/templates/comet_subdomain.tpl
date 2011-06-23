@@ -1,5 +1,6 @@
 <html>
   <head>	
+	<meta name="robots" content="noindex, nofollow" />
 	<title>Comet subdomain handler of: {{ m.site.title }} </title>
   </head>
 

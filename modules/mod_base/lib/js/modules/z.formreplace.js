@@ -33,7 +33,7 @@ $.widget("ui.fieldreplace",
 		var fieldWrapper, replacedField, self = this, obj = this.element;
 
 		fieldWrapper 	= $('<span></span>').addClass('zp-field-wrapper zp-' + obj.get(0).type);
-		replacedField 	= $('<span></span>').addClass(obj.is(':checked') ? 'zp-'+ obj.get(0).type +'-checked' : 'zp-'+ obj.get(0).type +'-unchecked').addClass('zp-'+ obj.get(0).type +'-replacement').bind('click', function(e) { obj.click(); $(this).toggleClass('zp-'+ obj.get(0).type +'-unchecked'); $(this).toggleClass('zp-'+ obj.get(0).type +'-checked'); });
+		replacedField 	= $('<span></span>').addClass(obj.is(':checked') ? 'zp-'+ obj.get(0).type +'-checked' : 'zp-'+ obj.get(0).type +'-unchecked').addClass('zp-'+ obj.get(0).type +'-replacement').bind('click', function(e) { obj.click(); });
 
 		obj.wrap(fieldWrapper).after(replacedField).addClass('zp-'+ obj.get(0).type +'-replaced').bind('change', function(e) { replacedField.toggleClass('zp-'+ obj.get(0).type +'-unchecked'); replacedField.toggleClass('zp-'+ obj.get(0).type +'-checked'); });
 	}
