@@ -37,7 +37,9 @@
 %% interface functions
 -export([
    recv_parse/1,
-   recv_parse/2
+   recv_parse/2,
+   
+   find_boundary/2
 ]).
 
 -include("zotonic.hrl").
@@ -208,6 +210,12 @@ feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
              <<Data:Start/binary, _:Skip/binary, Rest/binary>> = Buffer,
              C1 = Callback({body, Data}),
              feed_mp(headers, State#mp{callback=C1(body_end), buffer=Rest});
+        {maybe, 0} ->
+            % Found a boundary, without an ending newline
+            case read_more(State) of
+                State -> throw({error, incomplete_end_boundary});
+                S1 -> feed_mp(body, S1)
+            end;
         {maybe, Start} ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
             feed_mp(body, read_more(State#mp{callback=Callback({body, Data}), buffer=Rest}));
@@ -285,6 +293,9 @@ find_boundary(Prefix, Data) ->
                     {next_boundary, Skip, size(Prefix) + 2};
                 <<_:PrefixSkip/binary, "--\r\n", _/binary>> ->
                     {end_boundary, Skip, size(Prefix) + 4};
+                % POSTs by Adobe Flash don't have the ending newline
+                <<_:PrefixSkip/binary, "--", _/binary>> ->
+                    {end_boundary, Skip, size(Prefix) + 2};
                 _ when size(Data) < PrefixSkip + 4 ->
                     %% Underflow
                     {maybe, Skip};
