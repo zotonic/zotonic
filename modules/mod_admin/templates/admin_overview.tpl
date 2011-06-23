@@ -4,8 +4,6 @@
 
 {% block content %}
 
-{% with q.qcat == "event" as is_event %}
-
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
@@ -50,15 +48,6 @@
 				{% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
 
 				<li class="headers clearfix">
-					{% if is_event %}
-						<span class="zp-20">{_ Title _}</span>
-						<span class="zp-15">{_ Performer _}</span>
-						<span class="zp-15">{_ Start date _}</span>
-						<span class="zp-10">{_ Category _}</span>
-						<span class="zp-15">{_ Modified on _}</span>
-						<span class="zp-15">{_ Modified by _}</span>
-						<span class="zp-10">{_ Options _}</span>
-					{% else %}
 						<span class="zp-25">
 							{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
 						</span>
@@ -75,36 +64,22 @@
 							{% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}
 						</span>
 						<span class="zp-15">{_ Options _}</span>
-					{% endif %}
 				</li>
 
 			{% for id in result %}
 				{% if m.rsc[id].is_visible %}
-				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
-					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
-						{% if is_event %}
-							<span class="zp-20">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
-							<span class="zp-15">{{ m.rsc[id].o.performer.title|default:"-" }}</span>
-							<span class="zp-15">{{ m.rsc[id].date_start|date:"d M Y, H:i"|default:"-" }}</span>
-							<span class="zp-10">{{ m.rsc[m.rsc[id].category_id].title }}</span>
-							<span class="zp-15">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
-							<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
-							<span class="zp-10">
-								{% button text=_"view" action={redirect id=id} %}
-								{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
-							</span>
-						{% else %}
+				<li id="{{ #li.id }}" class="clearfix {% if not m.rsc[id].is_published %} unpublished{% endif %}">
+					<a href="{% url admin_edit_rsc id=id %}" class="row">
 							<span class="zp-25">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
 							<span class="zp-15">{{ m.rsc[m.rsc[id].category_id].title }}</span>
 							<span class="zp-15">{{ m.rsc[id].created|date:"d M Y, H:i" }}</span>
 							<span class="zp-15">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
 							<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
+                    </a>
 							<span class="zp-15">
-								{% button text=_"view" action={redirect id=id} %}
-								{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                                <a href="{{ m.rsc[id].page_url }}" class="button">{_ view _}</a>
+                                <a href="{% url admin_edit_rsc id=id %}" class="button">{_ edit _}</a>
 							</span>
-						{% endif %}
-					</a>
 				</li>
 				{% endif %}
 			{% empty %}
@@ -121,6 +96,5 @@
 		</div>
 	</div>
 
-{% endwith %}
 
 {% endblock %}
