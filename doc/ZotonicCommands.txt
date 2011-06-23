@@ -102,3 +102,20 @@ zotonic update
 --------------
 Update the server.  Compiles and loads any new code, flushes caches and
 rescans all modules.
+
+
+zotonic compilefile [files...]
+------------------------------
+
+Compiles a single file within the zotonic folder. This runs very fast
+and works very well on a save-hook of your text editor. In Emacs, it
+would be called like this:
+
+(add-hook 'erlang-mode-hook
+          '(lambda ()
+             (add-hook 'after-save-hook '
+                       (lambda ()
+                         (call-process "/path/to/your/bin/zotonic" nil "*scratch*" nil "compilefile" buffer-file-name)
+                         )
+                       )
+             ))
