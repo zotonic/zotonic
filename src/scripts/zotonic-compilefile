@@ -29,9 +29,10 @@ if [ "$*" = "" ]; then
 fi
 
 for FILE in $*; do
-    if [ "${FILE::0}" != "/" ]; then
+    if [ "${FILE::1}" != "/" ]; then
         FILE="`pwd`/$FILE"
     fi
+
     F=$(echo $FILE|sed -e "s!^$ZOTONIC/!!")
     if [ ! -e "$ZOTONIC/$F" ]; then
         echo "$FILE is not under the Zotonic basedir." 1>&2
