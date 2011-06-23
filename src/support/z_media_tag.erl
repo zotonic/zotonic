@@ -90,16 +90,19 @@ viewer(Filename, Options, Context) ->
 %%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
-tag(undefined, _Options, _Context) ->
+tag(What, Options, Context) ->
+    tag(What, Options, Context, []).
+
+tag(undefined, _Options, _Context, _Visited) ->
     {ok, []};
-tag([], _Options, _Context) ->
+tag([], _Options, _Context, _Visited) ->
     {ok, []};
-tag(Name, Options, Context) when is_atom(Name) ->
+tag(Name, Options, Context, Visited) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
-        {ok, Id} -> tag(Id, Options, Context);
+        {ok, Id} -> tag(Id, Options, Context, Visited);
         _ -> {ok, []}
     end;
-tag(Id, Options, Context) when is_integer(Id) ->
+tag(Id, Options, Context, Visited) when is_integer(Id) ->
     case m_media:get(Id, Context) of
         Props when is_list(Props) ->
             case mediaprops_filename(Id, Props, Context) of
@@ -107,22 +110,31 @@ tag(Id, Options, Context) when is_integer(Id) ->
                 Filename -> tag1(Props, Filename, Options, Context)
             end;
         undefined ->
-            case z_notifier:first({media_stillimage, Id, []}, Context) of
-                {ok, Filename} -> tag(Filename, Options, Context);
-                _ -> {ok, []}
+            NewId = case z_notifier:first({media_stillimage, Id, []}, Context) of
+                        {ok, N} -> N;
+                        _ ->
+                            %% Use the first depiction edge
+                            m_edge:object(Id, depiction, 1, Context)
+                    end,
+            case NewId of
+                undefined -> {ok, []};
+                _ -> case lists:member(NewId, Visited) of
+                         true -> {ok, []}; %% cycle detected
+                         false -> tag(NewId, Options, Context, [NewId|Visited]) %% recurse
+                     end
             end
     end;
-tag([{_Prop, _Value}|_] = Props, Options, Context) ->
+tag([{_Prop, _Value}|_] = Props, Options, Context, _Visited) ->
     case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
         [] -> {ok, []};
         Filename -> tag1(Props, Filename, Options, Context)
     end;
-tag(Filename, Options, Context) when is_binary(Filename) ->
+tag(Filename, Options, Context, _Visited) when is_binary(Filename) ->
     tag(binary_to_list(Filename), Options, Context);
-tag(Filename, Options, Context) when is_list(Filename) ->
+tag(Filename, Options, Context, _Visited) when is_list(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
     tag1(FilePath, Filename, Options, Context);
-tag({filepath, Filename, FilePath}, Options, Context) ->
+tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
     tag1(FilePath, Filename, Options, Context).
     
 
