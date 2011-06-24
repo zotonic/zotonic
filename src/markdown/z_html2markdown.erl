@@ -139,6 +139,8 @@ to_md({<<"head">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
 to_md({<<"script">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
+to_md({<<"style">>, _Args, _Enclosed}, M, _S) ->
+    {[], M};
 
 to_md({_, _, Enclosed}, M, S) ->
     to_md(Enclosed, M, S);
