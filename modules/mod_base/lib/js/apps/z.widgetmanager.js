@@ -35,7 +35,7 @@ limitations under the License.
 				var objectOptions, defaults, element = stack.pop();
 				if (element.className) 
 				{
-					var objectClass = element.className.match(/do_[a-z0-9_]+/g);
+					var objectClass = element.className.match(/do_[a-zA-Z0-9_]+/g);
 					if (objectClass) 
 					{
 						var n = objectClass.length;
