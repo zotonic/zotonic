@@ -316,12 +316,7 @@ subject(Id, Pred, N, Context) ->
 %% @spec objects(Id, Pred, Context) -> List
 objects(_Id, undefined, _Context) ->
     [];
-objects(Id, Pred, Context) when is_atom(Pred) ->
-    case m_predicate:name_to_id(Pred, Context) of
-        {error, _} -> [];
-        {ok, PredId} -> objects(Id, PredId, Context)
-    end;
-objects(Id, Pred, Context) ->
+objects(Id, Pred, Context) when is_integer(Pred) ->
     case z_depcache:get({objects, Pred, Id}, Context) of
         {ok, Objects} ->
             Objects;
@@ -330,6 +325,11 @@ objects(Id, Pred, Context) ->
             Objects = [ ObjId || {ObjId} <- Ids ],
             z_depcache:set({objects, Pred, Id}, Objects, ?DAY, [Id], Context),
             Objects
+    end;
+objects(Id, Pred, Context) ->
+    case m_predicate:name_to_id(Pred, Context) of
+        {error, _} -> [];
+        {ok, PredId} -> objects(Id, PredId, Context)
     end.
 
 
@@ -337,12 +337,7 @@ objects(Id, Pred, Context) ->
 %% @spec subjects(Id, Pred, Context) -> List
 subjects(_Id, undefined, _Context) ->
     [];
-subjects(Id, Pred, Context) when is_atom(Pred) ->
-    case m_predicate:name_to_id(Pred, Context) of
-        {error, _} -> [];
-        {ok, PredId} -> subjects(Id, PredId, Context)
-    end;
-subjects(Id, Pred, Context) ->
+subjects(Id, Pred, Context) when is_integer(Pred) ->
     case z_depcache:get({subjects, Pred, Id}, Context) of
         {ok, Objects} ->
             Objects;
@@ -351,6 +346,11 @@ subjects(Id, Pred, Context) ->
             Subjects = [ SubjId || {SubjId} <- Ids ],
             z_depcache:set({subjects, Pred, Id}, Subjects, ?HOUR, [Id], Context),
             Subjects
+    end;
+subjects(Id, Pred, Context) ->
+    case m_predicate:name_to_id(Pred, Context) of
+        {error, _} -> [];
+        {ok, PredId} -> subjects(Id, PredId, Context)
     end.
 
 
