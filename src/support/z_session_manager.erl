@@ -253,9 +253,9 @@ ensure_session1(S, P, Context, State) when S == undefined orelse P == error ->
 			Context4 = z_notifier:foldl(session_init_fold, Context3, Context3),
 		    {Pid, Context4, State1}
 	end;
-ensure_session1(_SessionId, Pid, Context, State) ->
+ensure_session1(SessionId, Pid, Context, State) ->
     z_session:keepalive(Context#context.page_pid, Pid),
-    Context1  = Context#context{session_pid = Pid},
+    Context1  = Context#context{session_pid = Pid, props=[{session_id, SessionId}|Context#context.props]},
     {Pid, Context1, State}.
 
 
@@ -351,7 +351,21 @@ spawn_session(PersistId, Context) ->
 %% @doc fetch the session id from the request, return 'undefined' when not found
 get_session_id(Context) ->
     ReqData = z_context:get_reqdata(Context),
-    wrq:get_cookie_value(?SESSION_COOKIE, ReqData).
+    case wrq:get_cookie_value(?SESSION_COOKIE, ReqData) of
+        undefined ->
+            % Check the z_sid query args
+            case wrq:get_qs_value("z_sid", ReqData) of
+                undefined ->
+                    case dict:find(z_sid, wrq:path_info(ReqData)) of
+                        {ok, SessionId} -> SessionId;
+                        error -> undefined
+                    end;
+                SessionId ->
+                    SessionId
+            end;
+        SessionId ->
+            SessionId
+    end.
 
 %% @spec set_session_id(SessionId::string(), Context::#context{}) -> #context{}
 %% @doc Save the session id in a cookie on the user agent
@@ -364,7 +378,7 @@ set_session_id(SessionId, Context) ->
                 {domain, z_context:cookie_domain(Context)}
                 ]),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set(set_session_id, true, z_context:set_reqdata(RD1, Context)).
+    z_context:set([{set_session_id, true}, {session_id, SessionId}], z_context:set_reqdata(RD1, Context)).
 
 
 %% @spec clear_session_id(Context::#context{}) -> #context{}
