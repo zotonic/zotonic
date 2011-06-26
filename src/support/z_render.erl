@@ -384,18 +384,20 @@ appear_after_selector_js(CssSelector, Html) ->
 
 %% @doc Helper functions for the insert/appear/set_value functions
 update_js(CssSelector, Html, <<"html">>, AfterEffects) ->
-    [ $$, $(, quote_css_selector(CssSelector), 
-      <<").html(\"">>, z_utils:js_escape(Html), $", $), 
-      AfterEffects, 
-      $;];
+    update_js_selector_first(CssSelector, Html, <<"html">>, AfterEffects);
 update_js(CssSelector, Html, <<"val">>, AfterEffects) ->
-    [ $$, $(, quote_css_selector(CssSelector), 
-      <<").val(\"">>, z_utils:js_escape(Html), $", $), 
-      AfterEffects, 
-      $;];
+    update_js_selector_first(CssSelector, Html, <<"val">>, AfterEffects);
+update_js(CssSelector, Html, <<"replaceWith">>, AfterEffects) ->
+    update_js_selector_first(CssSelector, Html, <<"replaceWith">>, AfterEffects);
 update_js(CssSelector, Html, Function, AfterEffects) ->
     [ $$, $(, $", z_utils:js_escape(Html), $", $), 
       $., Function, $(, quote_css_selector(CssSelector), $), 
+      AfterEffects, 
+      $;].
+
+update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
+    [ $$, $(, quote_css_selector(CssSelector), 
+      <<").">>, Function, <<"(\"">>, z_utils:js_escape(Html), $", $), 
       AfterEffects, 
       $;].
 
