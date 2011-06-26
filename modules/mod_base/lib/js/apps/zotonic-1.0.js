@@ -474,6 +474,19 @@ function z_is_enter_key(event)
 }
 
 
+function z_has_flash()
+{
+	if (navigator.plugins && navigator.plugins.length>0) {
+		var type = 'application/x-shockwave-flash';
+		var mimeTypes = navigator.mimeTypes;
+		return (mimeTypes && mimeTypes[type] && mimeTypes[type].enabledPlugin);
+	} else if(navigator.appVersion.indexOf("Mac")==-1 && window.execScript) {
+		var obj = getActiveXObject("ShockwaveFlash.ShockwaveFlash");
+		return !obj.activeXError;
+	}
+	return false;
+}
+
 /* Spinner, show when waiting for a postback
 ---------------------------------------------------------- */
 
