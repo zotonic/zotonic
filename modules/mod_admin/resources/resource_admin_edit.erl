@@ -22,7 +22,8 @@
 -export([
     resource_exists/2,
     is_authorized/2,
-    event/2
+    event/2,
+    filter_props/1
 ]).
 
 -include_lib("resource_html.hrl").
