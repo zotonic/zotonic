@@ -90,7 +90,7 @@ write_pretty(Str, Fd) ->
 
 write_string(Str, Fd) ->
     file:write(Fd, "\""),
-    file:write(Fd, Str),
+    file:write(Fd, escape_chars(Str)),
     file:write(Fd, "\"\n").
 
 
