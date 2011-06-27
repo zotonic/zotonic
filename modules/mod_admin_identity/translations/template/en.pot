@@ -61,10 +61,8 @@ msgstr ""
 
 #: ./modules/mod_admin_identity/templates/admin_users.tpl:21 
 msgid ""
-"Every page/person can be made into a user on the edit page.
-				The "
-"difference between a user and a normal page is only
-				that the former "
+"Every page/person can be made into a user on the edit page.\n				The "
+"difference between a user and a normal page is only\n				that the former "
 "has logon credentials attached to its page record."
 msgstr ""
 

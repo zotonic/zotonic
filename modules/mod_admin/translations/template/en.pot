@@ -225,7 +225,7 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\'s life."
+"description of someone\\'s life."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:16 
@@ -315,9 +315,8 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:14 
 msgid ""
 "Here you can edit the arguments of the  search query. Every argument goes "
-"on its own line. For more information, see the
-		<a "
-"href="http://zotonic.com/documentation/761/the-query-search-model">docu"
+"on its own line. For more information, see the\n		<a "
+"href=\"http://zotonic.com/documentation/761/the-query-search-model\">docu"
 "mentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 

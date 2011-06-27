@@ -46,7 +46,7 @@ msgstr ""
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:20 
 msgid ""
-"Keywords to include on every page. Separate keywords with a ",""
+"Keywords to include on every page. Separate keywords with a \",\""
 msgstr ""
 
 #: ./modules/mod_seo/templates/admin_seo.tpl:43 

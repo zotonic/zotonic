@@ -190,8 +190,7 @@ msgstr ""
 #: ./modules/mod_signup/templates/signup.tpl:149 
 msgid ""
 "We will be very careful with all the information given to us and will never "
-"give your name or address away without your permission.
-			We do have some "
+"give your name or address away without your permission.\n			We do have some "
 "rules that we need you to agree with."
 msgstr ""
 
