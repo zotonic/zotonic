@@ -45,7 +45,7 @@ generate1([{_Module, ModDir, Labels}|ModLabs]) ->
 
 %% Delete all existing po files in a directory
 delete_po_files(Dir) ->
-    Files = filelib:wildcard(filename:join(Dir, "*.po")) ++ filelib:wildcard(filename:join(Dir, "*.pot")),
+    Files = filelib:wildcard(filename:join(Dir, "[a-z][a-z].{po,pot}")),
     [ file:delete(F) || F <- Files ].
 
 %% Generate po files for all languages found in the labels.
