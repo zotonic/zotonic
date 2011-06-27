@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_signup/templates/signup.tpl:155 
+#: ./modules/mod_signup/templates/signup.tpl:161 
 msgid ""
 "And sign up"
 msgstr ""
@@ -28,12 +28,12 @@ msgid ""
 "Bring me to my profile page"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:140 
+#: ./modules/mod_signup/templates/signup.tpl:146 
 msgid ""
 "Check our Terms of Service and Privacy policies"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:109 
+#: ./modules/mod_signup/templates/signup.tpl:115 
 msgid ""
 "Choose a username and password"
 msgstr ""
@@ -63,7 +63,7 @@ msgid ""
 "Dear"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:97 
+#: ./modules/mod_signup/templates/signup.tpl:103 
 msgid ""
 "E-mail"
 msgstr ""
@@ -78,7 +78,7 @@ msgid ""
 "Hope to see you soon."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:148 
+#: ./modules/mod_signup/templates/signup.tpl:154 
 msgid ""
 "I agree to the"
 msgstr ""
@@ -104,12 +104,12 @@ msgid ""
 "field below."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:87 
+#: ./modules/mod_signup/templates/signup.tpl:93 
 msgid ""
 "Last name"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:120 
+#: ./modules/mod_signup/templates/signup.tpl:126 
 msgid ""
 "Password"
 msgstr ""
@@ -124,12 +124,17 @@ msgid ""
 "Please follow the link below."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:149 
+#: ./modules/mod_signup/templates/signup.tpl:87 
+msgid ""
+"Prefix"
+msgstr ""
+
+#: ./modules/mod_signup/templates/signup.tpl:155 
 msgid ""
 "Privacy policies"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:3 ./modules/mod_signup/templates/signup.tpl:158 
+#: ./modules/mod_signup/templates/signup.tpl:3 ./modules/mod_signup/templates/signup.tpl:164 
 msgid ""
 "Sign Up"
 msgstr ""
@@ -150,7 +155,7 @@ msgid ""
 "provider. Maybe your account here was suspended."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:111 
+#: ./modules/mod_signup/templates/signup.tpl:117 
 msgid ""
 "Sorry, this username is already in use. Please try another one."
 msgstr ""
@@ -161,28 +166,28 @@ msgid ""
 "account before you can use it."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:145 
+#: ./modules/mod_signup/templates/signup.tpl:151 
 msgid ""
 "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:114 
+#: ./modules/mod_signup/templates/signup.tpl:120 
 msgid ""
 "Username"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:128 
+#: ./modules/mod_signup/templates/signup.tpl:134 
 msgid ""
 "Verify password"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:167 
+#: ./modules/mod_signup/templates/signup.tpl:173 
 msgid ""
 "We have sent you an e-mail. In the e-mail you will find instructions on "
 "how to confirm your account."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:143 
+#: ./modules/mod_signup/templates/signup.tpl:149 
 msgid ""
 "We will be very careful with all the information given to us and will never "
 "give your name or address away without your permission.
@@ -195,13 +200,13 @@ msgid ""
 "Welcome"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:169 
+#: ./modules/mod_signup/templates/signup.tpl:175 
 msgid ""
 "When you don’t receive the e-mail within a few minutes then be sure to "
 "check your spam filter and spam folders."
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:165 
+#: ./modules/mod_signup/templates/signup.tpl:171 
 msgid ""
 "You are almost there!"
 msgstr ""
@@ -221,7 +226,7 @@ msgid ""
 "and enter the key"
 msgstr ""
 
-#: ./modules/mod_signup/templates/signup.tpl:149 
+#: ./modules/mod_signup/templates/signup.tpl:155 
 msgid ""
 "and the"
 msgstr ""
