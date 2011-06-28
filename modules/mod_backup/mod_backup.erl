@@ -283,9 +283,14 @@ pg_dump(Name, Context) ->
                     " -f '", DumpFile, "' ", 
                     " -U '", User, "' ", 
                     Database]),
-    [] = os:cmd(binary_to_list(Command)),
-    ok = file:delete(PgPass),
-    ok.
+    case os:cmd(binary_to_list(Command)) of
+        [] ->
+            nop;
+        _Output ->
+            ?zWarning(_Output, Context)
+    end,
+    ok = file:delete(PgPass).
+
 
 %% @doc Make a tar archive of all the files in the archive directory.
 archive(Name, Context) ->
