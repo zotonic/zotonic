@@ -17,7 +17,7 @@
 #
 # usage zotonic [command] [arguments...]
 #
-export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
+export ZOTONIC=${ZOTONIC:=`python -c "import os,sys;print os.path.realpath(\"$0/../..\")"`}
 export ZOTONIC_SCRIPTS="$ZOTONIC/src/scripts"
 if [ ! $1 ]
 then
