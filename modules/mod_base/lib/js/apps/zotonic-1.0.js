@@ -81,7 +81,7 @@ function z_growl_close()
 
 function z_event_register(name, func)
 {
-    z_registered_events[name] = func;
+	z_registered_events[name] = func;
 }
 
 function z_event(name, extraParams)
@@ -156,25 +156,25 @@ function z_opt_cancel(obj)
 
 function z_httpdata( xhr, type, s ) 
 { 
-    // lifted from jq1.4.4
-    var ct = xhr.getResponseHeader("content-type") || "",
-      xml = type === "xml" || !type && ct.indexOf("xml") >= 0,
-      data = xml ? xhr.responseXML : xhr.responseText;
+	// lifted from jq1.4.4
+	var ct = xhr.getResponseHeader("content-type") || "",
+	  xml = type === "xml" || !type && ct.indexOf("xml") >= 0,
+	  data = xml ? xhr.responseXML : xhr.responseText;
 
-    if ( xml && data.documentElement.nodeName === "parsererror" ) {
-      $.error( "parsererror" );
-    }
-    if ( s && s.dataFilter ) {
-      data = s.dataFilter( data, type );
-    }
-    if ( typeof data === "string" ) {
-      if ( type === "json" || !type && ct.indexOf("json") >= 0 ) {
-        data = $.parseJSON( data );
-      } else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
-        $.globalEval( data );
-      }
-    }
-    return data;
+	if ( xml && data.documentElement.nodeName === "parsererror" ) {
+	  $.error( "parsererror" );
+	}
+	if ( s && s.dataFilter ) {
+	  data = s.dataFilter( data, type );
+	}
+	if ( typeof data === "string" ) {
+	  if ( type === "json" || !type && ct.indexOf("json") >= 0 ) {
+		data = $.parseJSON( data );
+	  } else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
+		$.globalEval( data );
+	  }
+	}
+	return data;
 }
 
 function z_queue_postback(triggerID, postback, extraParams, noTriggerValue) 
@@ -481,8 +481,12 @@ function z_has_flash()
 		var mimeTypes = navigator.mimeTypes;
 		return (mimeTypes && mimeTypes[type] && mimeTypes[type].enabledPlugin);
 	} else if(navigator.appVersion.indexOf("Mac")==-1 && window.execScript) {
-		var obj = getActiveXObject("ShockwaveFlash.ShockwaveFlash");
-		return !obj.activeXError;
+		try {
+			obj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+			return true;
+		} catch(err) {
+			return false;
+		}
 	}
 	return false;
 }
@@ -637,7 +641,7 @@ function isScrolledIntoView(elem)
 	var elemBottom = elemTop + $(elem).height();
 
 	return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
-	// && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop);
+	// && (elemBottom <= docViewBottom) &&	(elemTop >= docViewTop);
 }
 
 /* Form element validations
