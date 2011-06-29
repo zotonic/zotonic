@@ -17,8 +17,15 @@
 #
 # usage zotonic [command] [arguments...]
 #
-export ZOTONIC=${ZOTONIC:=`python -c "import os,sys;print os.path.realpath(\"$0/../..\")"`}
+if type python &> /dev/null
+then
+    export ZOTONIC=${ZOTONIC:=`python -c "import os,sys;print os.path.realpath(\"$0/../..\")"`}
+else
+    export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
+fi 
+
 export ZOTONIC_SCRIPTS="$ZOTONIC/src/scripts"
+
 if [ ! $1 ]
 then
     echo Usage: `basename $0` [command] 1>&2
