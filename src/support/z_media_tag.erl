@@ -256,7 +256,8 @@ url(Filename, Options, Context) ->
 
 %% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
 %% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
-url1(Filename, Options, Context) ->
+url1(File, Options, Context) ->
+    Filename = z_convert:to_list(File),
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
     % Map all ImageOpts to an opt string
     UrlProps = props2url(ImageOpts),
