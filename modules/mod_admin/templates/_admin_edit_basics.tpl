@@ -5,5 +5,5 @@
 {% block widget_show_minimized %}false{% endblock %}
 
 {% block widget_content %}
-{% catinclude "_admin_edit_basics_form.tpl" id %}
+{% catinclude "_admin_edit_basics_form.tpl" id lang_code_with_brackets=lang_code_with_brackets lang_code_with_dollar=lang_code_with_dollar r_language=r_language is_i18n=is_i18n lang_code=lang_code lang=lang %}
 {% endblock %}
