@@ -346,21 +346,41 @@ function z_translate(text)
 
 function z_tinymce_add(element) 
 {
-	if (typeof(tinyMCE) != 'undefined') {
-		$("textarea.tinymce", element).each( function() { 
+	$("textarea.tinymce", element).each(function() {
+		if (typeof $(this).tinymce == 'function') {
+			var self = $(this);
+			setTimeout(function() { 
+				if (typeof tinyInit == 'object') self.tinymce(tinyInit);
+				else self.tinymce({}); 
+			}, 200);
+		} else if (typeof tinyMCE == 'object') {
 			var mce_id = $(this).attr('id');
 			setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
-		} );
+		}
+	});
+}
+
+function z_tinymce_save(element)
+{
+	var tiny = $("textarea.tinymce", element);
+	if (tiny.length > 0) {
+		if (typeof tiny.tinymce == "function") {
+			tiny.each(function() { $(this).tinymce().save(); });
+		} else if (typeof tinyMCE == 'object') {
+			tinyMCE.triggerSave(true,true);
+		}
 	}
 }
 
 function z_tinymce_remove(element) 
 {
-	if (typeof(tinyMCE) != 'undefined') {
-		$("textarea.tinymce", element).each( function() {
+	$("textarea.tinymce", element).each( function() {
+		if (typeof $(this).tinymce == 'function') {
+			$(this).tinymce().remove();
+		} else if (typeof(tinyMCE) != 'undefined') {
 			tinyMCE.execCommand('mceRemoveControl',false, $(this).attr('id')); 
-		} );
-	}
+		}
+	});
 }
 
 
@@ -686,11 +706,7 @@ function z_init_postback_forms()
 	.submit(function(event)
 	{
 		theForm = this;
-		
-		if ($('.tinymce', theForm).length > 0 && tinyMCE)
-		{
-			tinyMCE.triggerSave(true,true);
-		}
+		z_tinymce_save(theForm);
 		
 		submitFunction = function(ev) {
 			var arguments = $(theForm).formToArray();
