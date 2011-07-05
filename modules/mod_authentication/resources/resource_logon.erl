@@ -212,9 +212,9 @@ event({submit, [], "logon_verification_form", _Target}, Context) ->
 		_Other -> verification_error(Context)
 	end;
 event({submit, {logon_confirm, Args}, "logon_confirm_form", _Target}, Context) ->
-    LogonArgs  [ {"username", binary_to_list(m_identity:get_username(Context))}
+    LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
-    case z_notifier:first({logon_submit, Args2}, Context) of
+    case z_notifier:first({logon_submit, LogonArgs}, Context) of
         {error, _Reason} ->
             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
         {ok, UserId} when is_integer(UserId) ->
