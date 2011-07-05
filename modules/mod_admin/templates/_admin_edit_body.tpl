@@ -29,19 +29,18 @@
 
 {# some tinymce js #}
 {% block widget_after %}
-<script type="text/javascript" src="/lib/js/modules/tinymce3.3.2a/tiny_mce.js"></script>
+<script type="text/javascript" src="/lib/js/modules/tinymce3.4.3.2/tiny_mce.js"></script>
+<script type="text/javascript" src="/lib/js/modules/tinymce3.4.3.2/jquery.tinymce.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	tinyMCE.init(tinyInit);
-
 	/* Initialize translation tabs, select correct language */
 	if ($(".translations").length) {
 		$(".translations").tabs();
 
 		$(".translations").bind('tabsshow', function(event, ui) {
 			$(".tinymce-init", ui.panel).each(function() { 
-				var mce_id = $(this).attr('id');
-				setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+			    var self = $(this);
+			    setTimeout(function() { self.tinymce(tinyInit); }, 200);
 			}).removeClass('tinymce-init').addClass('tinymce');
 			$(".translations").tabs("select", ui.index);
 		});
@@ -57,8 +56,8 @@ $(document).ready(function(){
 
 	/* Initialize all non-initialized tinymce controls */
 	$(".tinymce-init:visible").each(function() { 
-		var mce_id = $(this).attr('id');
-		setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
+	    var self = $(this);
+	    setTimeout(function() { self.tinymce(tinyInit); }, 200);
 	}).removeClass('tinymce-init').addClass('tinymce');
 });
 </script>

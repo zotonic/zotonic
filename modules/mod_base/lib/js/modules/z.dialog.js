@@ -2,7 +2,7 @@
 ----------------------------------------------------------
 
 @package:	Zotonic 2009	
-@Author: 	Tim Benniks <tim@timbenniks.nl>
+@Author:	Tim Benniks <tim@timbenniks.nl>
 
 Copyright 2009 Tim Benniks
 
@@ -53,7 +53,9 @@ limitations under the License.
 				dialogBLC			= $('<span></span>').addClass('dialog-bottom-left');
 				dialogBRC			= $('<span></span>').addClass('dialog-bottom-right');
 				leftPos				= Math.floor((parseInt($(window).width()) / 2) - (parseInt(width) / 2));
-				topPos				= $(window).scrollTop() + 100;
+				
+				var scrollTop = $(window).scrollTop();
+				topPos				= scrollTop + 100;
 			
 				dialogTop			= $('<div></div>').addClass('dialog-top').append(dialogTitle, dialogTLC, dialogTRC, dialogClose);
 				dialogContent		= $('<div></div>').addClass('dialog-content clearfix').append(dialogInnerContent, dialogRightContent);
@@ -68,8 +70,8 @@ limitations under the License.
 
 				$(document).keypress(function(e)
 				{
-					if($.browser.msie) 	{ var key = e.which }
-					else 				{ key = e.keyCode } 
+					if($.browser.msie)	{ var key = e.which }
+					else				{ key = e.keyCode } 
 					
 					if(key == $.ui.keyCode.ESCAPE)
 					{
@@ -79,11 +81,20 @@ limitations under the License.
 				
 				$('body').append(dialogWrapper);
 
+				/* Make sure that the dialog is within the viewport */
+				var dialogHeight = dialogWrapper.height();
+				var windowHeight = $(window).height();
+				if (scrollTop + 100 + dialogHeight > windowHeight) {
+					var newTop = scrollTop + windowHeight - dialogHeight - 20;
+					
+					$(dialogWrapper).css({top: newTop > scrollTop ? newTop : scrollTop});
+				}
+
+				$('input[type=text]', dialogWrapper).focus();
 				if (typeof($.widgetManager) != 'undefined') {
 					dialogWrapper.widgetManager();
 				}
 				z_tinymce_add(dialogWrapper);
-				$('input', dialogWrapper).eq(0).focus();
 			}
 		},
 

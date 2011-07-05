@@ -1,9 +1,9 @@
 /* Admin widgetManager class
 ----------------------------------------------------------
 
-@package:	Zotonic	
-@Author: 	Tim Benniks <tim@timbenniks.nl>
-@Author: 	Marc Worrell <marc@worrell.nl>
+@package:	Zotonic 
+@Author:	Tim Benniks <tim@timbenniks.nl>
+@Author:	Marc Worrell <marc@worrell.nl>
 
 Copyright 2009-2011 Tim Benniks
 
@@ -27,8 +27,8 @@ limitations under the License.
 	{
 		widgetManager: function(context)
 		{
-			context 	= context || document.body;
-			var stack 	= [context];
+			context		= context || document.body;
+			var stack	= [context];
 
 			while (stack.length > 0)
 			{
@@ -42,7 +42,8 @@ limitations under the License.
 						for (var i=0; i<n; i++)
 						{
 							var functionName = objectClass[i].substring(3);
-
+							var defaultsName = functionName;
+							
 							if ('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
 
 							if (typeof $(element)[functionName] == "function")
@@ -55,7 +56,7 @@ limitations under the License.
 								{
 									defaults = {}
 								}
-								$(element)[functionName]( $.extend({}, defaults, $(element).metadata(functionName)) );
+								$(element)[functionName]( $.extend({}, defaults, $(element).metadata(defaultsName)) );
 							}
 						}
 					}
@@ -63,7 +64,7 @@ limitations under the License.
 
 				if (element.childNodes) 
 				{
-				    for (var i = 0; i< element.childNodes.length; i++)
+					for (var i = 0; i< element.childNodes.length; i++)
 					{
 						if (element.childNodes[i].nodeType != 3)
 						{
@@ -174,7 +175,7 @@ limitations under the License.
 		$(elem).data(data_name, data);
 		return data;
 	};
-    
+	
 	$.fn.widgetManager = function()
 	{
 		this.each(function() { $.widgetManager(this); });
