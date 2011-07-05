@@ -27,6 +27,7 @@
     is_auth_recent/1,
     
     logon/2,
+    confirm/2,
     logon_pw/3,
     logoff/1,
     logon_from_session/1,
@@ -36,6 +37,8 @@
 
     is_enabled/2
 ]).
+
+-define(AUTH_RECENT_TIMEOUT, 600).
 
 -include_lib("zotonic.hrl").
 
@@ -49,9 +52,15 @@ is_auth(_) ->
 
 is_auth_recent(#context{user_id=undefined}) ->
     false;
-is_auth_recent(_) ->
-    true.
-
+is_auth_recent(#context{}=Context) ->
+    case z_context:get_session(auth_confirm_timestamp, Context) of
+        undefined ->
+            false;
+        AuthConfirmTimestamp ->
+            ?DEBUG(AuthConfirmTimestamp),
+            CurrentTimestamp = z_utils:now(),
+            AuthConfirmTimestamp + ?AUTH_RECENT_TIMEOUT > CurrentTimestamp
+    end.
 
 %% @doc Logon a username/password combination, checks passwords with m_identity.
 %% @spec logon_pw(Username, Password, Context) -> {bool(), NewContext}
@@ -59,12 +68,25 @@ logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, Id} ->
 			case logon(Id, Context) of
-				{ok, Context1} -> Context1;
+				{ok, Context1} ->
+                                    Context1;
 				{error, _Reason} -> {false, Context}
 			end;
         {error, _Reason} -> {false, Context}
     end.
 
+confirm(UserId, Context) ->
+    % check if auth_user_id == userId??
+    case is_enabled(UserId, Context) of
+        true ->        
+            Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
+            Context2 = z_notifier:foldl(auth_confirm, Context1, Context1),
+            z_notifier:notify(auth_confirm_done, Context2),
+            {ok, Context2};
+        false ->
+            {error, user_not_enabled}
+    end.
+    
 
 %% @doc Logon an user whose id we know
 logon(UserId, Context) ->
