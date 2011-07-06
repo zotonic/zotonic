@@ -244,6 +244,30 @@ header {
 			border: none;
 		}
 
+		.home #banner section {
+            position: relative;
+        }
+
+		.home #banner section a span {
+            position: absolute;
+            top: 0; left: 0;
+            color: white;
+            left: 92px;
+        }
+
+		.home #banner section a span.header {
+            top: 28px;
+            font-size: 20px;
+            font-weight: bold;
+        }            
+
+		.home #banner section a span.subheader {
+            top: 52px;
+            font-size: 14px;
+        }            
+
+
+
 #logo {
 	margin: 18px 0 0 0;
 }

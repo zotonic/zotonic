@@ -8,10 +8,17 @@
 
 	<section id="banner">
 		<section id="download-zotonic">
-			<a href="/download" title=""><img src="/lib/images/download_zotonic.png" alt="" /></a>
+			<a href="/download" title="">
+                <img src="/lib/images/download_zotonic.png" alt="" />
+                <span class="header">Download Zotonic</span>
+                <span class="subheader">Release {{ m.config.site.current_release.value }}</span>
+            </a>
 		</section>
 		<section id="docs-zotonic">
-			<a href="/documentation" title=""><img src="/lib/images/docs.png" alt="" /></a>
+			<a href="/documentation" title=""><img src="/lib/images/docs.png" alt="" />
+                <span class="header">Zotonic documentation</span>
+                <span class="subheader">{_ Read about getting up to speed fast _}</span>
+            </a>
 		</section>
 	</section>
 
