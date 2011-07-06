@@ -1,10 +1,8 @@
 New feature release:
 
-* Update the RELEASE file. Add relevant new modules and
+* Update the NEWS file. Add relevant new modules and
   features, plus overview of all fixed bugs. Also take commit log for
   the tip into consideration, extracting relevant commits.
-
-* Copy the RELEASE file into the NEWS file.
 
 * Check/change download graphic in priv/sites/zotonicwww/lib/images/download_zotonic.xcf,
   and export to .png in the same dir.
@@ -41,4 +39,30 @@ New feature release:
 * Change zotonic.com website
 
 
+
+
+
+
+New bugfix release:
+
+* Update working branch to the release branch: hg update release-0.6.x
+
+* Generate change log and put it in docs/changelogs/0.6.1.txt and hg add it
+
+* Update the NEWS file. If any, add relevant new features. For the
+  bugfixes, refer to the change log.
+
+* Update the include/zotonic_release.hrl and src/zotonic.app to include the new version nr., say 0.6.1
+
+* Commit & push
+
+* Tag the release: hg tag release-0.4.1
+
+* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.1.zip 
+
+* Upload zipfile to google code, making it keywords: featured, type-source and os-all; un-feature the previuos release
+
+* Update the zotonic.com website, changing the site.current_release config value and change the download links
+
+* Announce on zotonic-users, zotonic-developers, erlang-questions
 
