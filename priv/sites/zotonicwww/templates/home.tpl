@@ -32,10 +32,6 @@
 			<h1>{{ m.rsc[id].title }}</h1>
 			{{ m.rsc[id].body|show_media }}
 
-            {% with m.rsc['page_features'].id as id %}
-            <h2><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].short_title }} &raquo;</a></h2>
-            <p>{{ m.rsc[id].summary|escape }}</p>
-            {% endwith %}
 		</div>
 	</article>
 
