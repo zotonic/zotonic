@@ -22,7 +22,6 @@
 	<![endif]-->
 	
 	{% lib
-		"js/modules/cufon.js"
 		"js/apps/modernizr.js"
 	%}
 	{% block html_head_extra %}{% endblock %}
@@ -34,7 +33,7 @@
 	<section class="zp-wrapper">
 		<header class="clearfix">
 			<figure id="logo" class="left">
-				<a href="/" title="Home"><img src="/lib/images/logo.jpg" alt="Zotonic &mdash; Simple stuff that works" /></a>
+				<a href="/" title="Home"><img src="/lib/images/logo.png" alt="Zotonic &mdash; Simple stuff that works" /></a>
 			</figure>
 			
 			<nav class="right">

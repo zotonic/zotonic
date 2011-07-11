@@ -8,7 +8,8 @@
 
 {% block content %}
 
-	<article id="content" class="zp-33">
+    <div class="zp-100 clearfix">
+	<article id="content" class="zp-67">
 		<div class="padding">
 			{% with m.category[id].path as path %}
 				{% ifnotequal path|length 1 %}
@@ -30,22 +31,27 @@
 			{% if m.rsc[id].summary %}<p class="summary">{{ m.rsc[id].summary }}</p>{% endif %}
 			{{ m.rsc[id].body }}
 
-            <hr />
-            {% include "_block_search.tpl" %}
 		</div>
 	</article>
-	
+    <section class="zp-33 clearfix">
+            {% include "_block_search.tpl" %}
+    </section>
+    </div>	
+
+    <section class="feature-wrapper clearfix zp-100">
 	{% with m.category[id].tree1 as sub_cats %}
 		{% with m.search[{all_bytitle_featured cat_is=id}] as c_ids %}
 
 		{% if sub_cats %}
-			<section class="collection-members zp-33">
+
+			{% for cs in sub_cats|vsplit_in:3 %}
+			<section class="feature-members zp-33">
 				<div class="padding">
-					<ul class="item-list">
-						{% for cat in sub_cats %}
+					<ul class="feature-list">
+						{% for cat in cs %}
 							{% with cat.id as c_id %}
-							<li class="list-item">
-								<h3><a href="{{ m.rsc[c_id].page_url }}">{{ m.rsc[c_id].title }}</a></h3>
+							<li class="feature-item">
+								<h2><a href="{{ m.rsc[c_id].page_url }}">{{ m.rsc[c_id].title }}</a></h2>
 								<p class="summary">{{ m.rsc[c_id].summary }}</p>
 							</li>
 							{% endwith %}
@@ -53,7 +59,8 @@
 					</ul>
 				</div>
 			</section>
-
+            {% endfor %}
+{#
 			{% if c_ids %}
 				<section class="collection-members zp-33">
 					<div class="padding">
@@ -68,19 +75,20 @@
 					</div>
 				</section>
 			{% endif %}
+#}
 
 		{% else %}
 
-			{% for ids in c_ids|vsplit_in:2 %}
+			{% for ids in c_ids|vsplit_in:3 %}
 				{% if ids %}
-					<section class="collection-members zp-33">
+					<section class="feature-members zp-33">
 						<div class="padding">
-							<ul class="item-list">
+							<ul class="feature-list">
 								{% for title,c_id in ids %}
-								<li class="list-item">
-									<h3><a href="{{ m.rsc[c_id].page_url }}">{{ title }}</a></h3>
+								<li class="feature-item">
+									<h2><a href="{{ m.rsc[c_id].page_url }}">{{ title }}</a></h2>
 									{% if m.rsc[c_id].summary %}
-										<p class="summary">{{ m.rsc[c_id].summary | truncate:50 }}</p>
+										<p class="summary">{{ m.rsc[c_id].summary | truncate:80 }}</p>
 									{% endif %}
 								</li>
 								{% endfor %}
@@ -93,5 +101,5 @@
 		{% endif %}
 		{% endwith %}
 	{% endwith %}
-
+    </section>
 {% endblock %}

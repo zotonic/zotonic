@@ -4,6 +4,9 @@
     {home,      [],                         resource_page,  [ {template, "home.tpl"}, {id, page_home} ]},
     {features,  ["features"],               resource_page,  [ {template, "features.tpl"}, {id, page_features} ]},
     {team,      ["zotonic-team"],           resource_page,  [ { template, "zotonic_team.tpl"}, {id, zotonic_team} ]},
+
+    {article,   ["blog", id, slug],         resource_page,  [ {template, {cat, "page.tpl"}} ]},
+
     {collection,["collection", id],         resource_page,  [ {template, "collection.tpl"} ]},
     {collection,["collection", id, slug],   resource_page,  [ {template, "collection.tpl"} ]},
     {manual,    ["manual", id],             resource_page,  [ {template, "manual.tpl"} ]},

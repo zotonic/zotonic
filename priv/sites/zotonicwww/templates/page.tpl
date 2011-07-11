@@ -6,27 +6,30 @@
 
 {% block content %}
 
-	<article id="content" class="zp-67">
+	<article id="content" class="{% block content_class %}zp-67{% endblock %}">
 		<div class="padding">
 			{% block breadcrumb %}{% endblock %}
-			<h1>{{ m.rsc[id].title }}</h1>
+			{% block pagetitle %}<h1>{{ m.rsc[id].title }}</h1>{% endblock %}
 
 			{% if m.rsc[id].website %}
 			<p class="website"><a href="{{ m.rsc[id].website }}">{{ m.rsc[id].website }}</a></p>
 			{% endif %}
 
 			<p class="summary">{{ m.rsc[id].summary }}</p>
-			
-			{% with m.rsc[id].media as media %}
+
+			{% with m.rsc[id].media|without_embedded_media:id as media %}
 				{% if media[1] %}
 					{% media media[1] width=540 %}
 				{% else %}
 					{% media id width=540 %}
 				{% endif %}
-
-				{{ m.rsc[id].body|show_media }}
 			{% endwith %}
+
+            {{ m.rsc[id].body|show_media }}
 		</div>
+
+        {% block below_content %}
+        {% endblock %}
 
         <section id="comments">
             {% include "_comments.tpl" id=id %}
@@ -37,7 +40,7 @@
 {% endblock %}
 
 {% block sidebar %}
-	
+
 	<aside id="sidebar" class="zp-33">
         {% include "_keywords.tpl" %}
 
@@ -45,7 +48,7 @@
 			{% if collections %}
 				{% for c_id in collections %}
 					<h2><a href="{{ m.rsc[c_id].page_url }}">{{ m.rsc[c_id].title }}</a></h2>
-					
+
 					<ul class="item-list">
 					{% for p_id in m.rsc[c_id].o.haspart %}
 						<li class="list-item">
