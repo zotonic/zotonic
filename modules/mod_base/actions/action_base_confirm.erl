@@ -33,9 +33,17 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event({postback, {confirm, Args}, _TriggerId, _TargetId}, Context) ->
     Title = proplists:get_value(title, Args, ?__(<<"Confirm">>, Context)),
+    {IsTemplate, Text,Context1} = case proplists:get_value(text_template, Args) of
+              undefined ->
+                  {false, proplists:get_value(text, Args), Context};
+              Template ->
+                  {Txt, Ctx} = z_template:render_to_iolist(Template, Args, Context),
+                  {true, Txt, Ctx}
+           end,
     Vars = [
         {title, Title},
-        {text, proplists:get_value(text, Args, "")},
+        {text, Text},
+        {is_template, IsTemplate},
         {ok, proplists:get_value(ok, Args)},
         {cancel, proplists:get_value(cancel, Args)},
         {action, proplists:get_all_values(action, Args)},
@@ -43,4 +51,4 @@ event({postback, {confirm, Args}, _TriggerId, _TargetId}, Context) ->
         {postback, proplists:get_value(postback, Args)},
         {delegate, proplists:get_value(delegate, Args)}
     ],
-    z_render:dialog(Title, "_action_dialog_confirm.tpl", Vars, Context).
+    z_render:dialog(Title, "_action_dialog_confirm.tpl", Vars, Context1).

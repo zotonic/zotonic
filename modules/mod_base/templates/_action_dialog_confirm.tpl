@@ -1,5 +1,5 @@
 <div class="confirm">
-	<p>{{ text }}</p>
+    {% if is_template %}{{ text }}{% else %}<p>{{ text }}</p>{% endif %}
 
 	<div class="buttons">
 		<button id="{{ #ok }}">{{ ok|default:_"OK" }}</button>
