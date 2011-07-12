@@ -81,7 +81,7 @@ a:hover {
 }
 
 p {
-	margin: 0 0 18px 0;
+	margin: 0 0 9px 0;
 }
 
 	p.summary {
@@ -128,9 +128,8 @@ p.breadcrumb {
 }
 
 .bullet-list, #content ul {
-	list-style: circle;
-	list-style-position: inside;
-	margin: 0 0 18px 0;
+	list-style: disc;
+	margin: 0 0 18px 18px;
 }
 
 	.bullet-list li {
@@ -584,4 +583,13 @@ ul.archive ul li {
 
 figure.image-wrapper {
     margin-left: 0;
+}
+
+article.blogentry {
+    margin-bottom: 18px;
+}
+
+p.meta {
+    font-style: italic;
+    color: #666;
 }

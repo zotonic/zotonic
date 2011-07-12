@@ -19,7 +19,7 @@
 					</div>
 					
 					<div class="zp-67">
-						<h2>{{ m.rsc[c_id].title }}</h2>
+						<h2><a href="{{ m.rsc[c_id].page_url }}">{{ m.rsc[c_id].title }}</a></h2>
 						{% if m.rsc[c_id].summary %}
 							<p class="summary">{{ m.rsc[c_id].summary }}</p>
 						{% endif %}

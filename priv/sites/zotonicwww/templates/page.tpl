@@ -11,6 +11,10 @@
 			{% block breadcrumb %}{% endblock %}
 			{% block pagetitle %}<h1>{{ m.rsc[id].title }}</h1>{% endblock %}
 
+            {% if id|is_a:"article" %}
+            {% include "_blog_meta.tpl" %}
+            {% endif %}
+
 			{% if m.rsc[id].website %}
 			<p class="website"><a href="{{ m.rsc[id].website }}">{{ m.rsc[id].website }}</a></p>
 			{% endif %}
@@ -19,9 +23,9 @@
 
 			{% with m.rsc[id].media|without_embedded_media:id as media %}
 				{% if media[1] %}
-					{% media media[1] width=540 %}
+					{% media media[1] width=540 height=340 %}
 				{% else %}
-					{% media id width=540 %}
+					{% media id width=540 height=340 %}
 				{% endif %}
 			{% endwith %}
 
