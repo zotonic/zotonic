@@ -53,6 +53,7 @@
 	is_process_alive/1,
 	is_true/1,
 	js_escape/1,
+	js_array/1,
 	js_object/1,
 	js_object/2,
 	lib_dir/0,
@@ -441,6 +442,8 @@ js_escape([H|T], Acc) ->
 %% js_escape(<<"<script", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "<scr\" + \"ipt">>);
 %% js_escape(<<"script>", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "scr\" + \"ipt>">>);
 
+js_array(L) ->
+    [ $[, combine($,,[ js_prop_value(undefined, V) || V <- L ]), $] ].
 
 %% @doc Create a javascript object from a proplist
 js_object([]) -> <<"{}">>;
@@ -451,7 +454,7 @@ js_object(L, [Key|T]) -> js_object(proplists:delete(Key,L), T).
 
 %% recursively add all properties as object properties
 js_object1([], Acc) ->
-    [${, combine($,,Acc), $}];
+    [${, combine($,,lists:reverse(Acc)), $}];
 js_object1([{Key,Value}|T], Acc) ->
     Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value)],
     js_object1(T, [Prop|Acc]).
