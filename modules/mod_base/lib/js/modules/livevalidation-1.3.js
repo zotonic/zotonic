@@ -248,6 +248,8 @@ LiveValidation.prototype =
             return LiveValidation.TEXT;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'URL')
             return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'HIDDEN')
+            return LiveValidation.TEXT;
         if (nodeName == 'SELECT')
             return LiveValidation.SELECT;
         if (nodeName == 'INPUT')
@@ -588,11 +590,6 @@ var LiveValidationForm = function(element){
 }
 
 /**
- * namespace to hold instances
- */
-LiveValidationForm.instances = {};
-
-/**
    *  gets the instance of the LiveValidationForm if it has already been made or creates it if it doesnt exist
    *  
    *  @var element {HTMLFormElement} - a dom element reference to a form
@@ -601,9 +598,12 @@ LiveValidationForm.getInstance = function(element){
   var rand = Math.random() * Math.random();
   if(!$(element).attr("id"))
     $(element).attr("id", 'formId_' + rand.toString().replace(/\./, '') + new Date().valueOf());
-  if(!LiveValidationForm.instances[$(element).attr("id")])
-    LiveValidationForm.instances[$(element).attr("id")] = new LiveValidationForm(element);
-  return LiveValidationForm.instances[$(element).attr("id")];
+  var instance = $(element).data("z_live_validation_instance");
+  if (!instance) {
+      instance = new LiveValidationForm(element);
+      $(element).data("z_live_validation_instance", instance);
+  }
+  return instance;
 }
 
 LiveValidationForm.prototype = {
@@ -700,7 +700,7 @@ LiveValidationForm.prototype = {
 	    // remove events - set back to previous events
 	    this.element.onsubmit = this.oldOnSubmit;
 	    // remove from the instances namespace
-	    LiveValidationForm.instances[this.name] = null;
+	    $(this.element).removeData("z_live_validation_instance");
 	    return true;
 	} else {
 		return false;
@@ -1077,7 +1077,12 @@ var Validate = {
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
         var message = paramsObj.failureMessage || "Not valid.";
-        if(!against(value, args, isSubmit, submitTrigger)) Validate.fail(message);
+        if (typeof against == "string") {
+            var result = z_call_function_by_name(against, window, value, args, isSubmit, submitTrigger);
+        } else {
+            var result = against(value, args, isSubmit, submitTrigger);
+        }
+        if(!result) Validate.fail(message);
         return true;
     },
 

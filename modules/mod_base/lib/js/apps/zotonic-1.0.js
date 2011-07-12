@@ -1084,6 +1084,7 @@ function z_add_validator(id, type, args)
 				case 'length':			v.add(Validate.Length, args);		break;
 				case 'format':			v.add(Validate.Format, args);		break;
 				case 'numericality':	v.add(Validate.Numericality, args); break;
+				case 'custom':			v.add(Validate.Custom, args);		break;
 				case 'postback':		
 					args['z_id'] = id;
 					v.add(Validate.Postback, args);
@@ -1145,6 +1146,19 @@ function z_validation_error(id, error)
 		}
 		v.showErrorMessage(error);
 	}
+}
+
+
+// Execute a function by name
+function z_call_function_by_name(name, context)
+{
+	var args = Array.prototype.slice.call(arguments).splice(2);
+	var namespaces = name.split(".");
+	var func = namespaces.pop();
+	for(var i = 0; i < namespaces.length; i++) {
+		context = context[namespaces[i]];
+	}
+	return context[func].apply(this, args);
 }
 
 // URL encode function that is more RFC compatible.	 Also encodes +, *, / and @.
