@@ -94,8 +94,14 @@ callback(Next, Form, UploadCheckFun) ->
             ContentDisposition = proplists:get_value("content-disposition", Headers),
             case ContentDisposition of
                 {"form-data", [{"name", Name}, {"filename",Filename}]} ->
-                    ContentLength = z_convert:to_integer(proplists:get_value("content-length", Headers)),
-                    ContentType = proplists:get_value("content-type", Headers),
+                    ContentLength = case proplists:get_value("content-length", Headers) of
+                                        undefined -> undefined;
+                                        {CL,_} -> z_convert:to_integer(CL)
+                                    end,
+                    ContentType = case proplists:get_value("content-type", Headers) of
+                                        undefined -> undefined;
+                                        {Mime,_} -> Mime
+                                  end,
                     case UploadCheckFun(Filename, ContentType, ContentLength) of
                         ok ->
                             NF = Form#multipart_form{name=Name,
