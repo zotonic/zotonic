@@ -253,6 +253,8 @@ do_poll(Context) ->
                 ?zInfo(io_lib:format("Executing task: ~p:~p( ~p )", [Module, Function, Args]), Context),
                 erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context])
             catch
+                error:undef -> 
+                    ?zWarning(io_lib:format("Undefined task, aborting: ~p:~p(~p)~n", [Module, Function, Args]), Context);
                 Error:Reason -> 
                     ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]), Context),
                     insert_task(Module, Function, Key, Args, Context)
