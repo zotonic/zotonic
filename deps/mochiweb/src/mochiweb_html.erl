@@ -623,6 +623,7 @@ tokenize_charref(Bin, S=#decoder{offset=O}, Start) ->
                                          orelse C =:= ?SQUOTE
                                          orelse C =:= ?QUOTE
                                          orelse C =:= $/
+                                         orelse C =:= $< 
                                          orelse C =:= $> 
                                          orelse C =:= $& ->
             Len = O - Start,
@@ -1307,5 +1308,45 @@ parse_funny_singletons_test() ->
 		] },
 		mochiweb_html:parse(D0)),
 	ok.
+
+parse_charref_test() ->
+    %% Normal charref
+    D0 = <<"<div>&amp;</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"&">>]},
+       mochiweb_html:parse(D0)),
+
+    %% Missing semicolon in the middle. 
+    D1 = <<"<div>&amp &amp;</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"& &">>]},
+       mochiweb_html:parse(D1)),
+
+    %% Missing semicolon on the last enitity
+    D2 = <<"<div>&amp &amp</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"& &">>]},
+       mochiweb_html:parse(D2)),
+
+    D3 = <<"<div>&amp&amp</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"&&">>]},
+       mochiweb_html:parse(D3)),
+
+    D4 = <<"<div>&amp</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"&">>]},
+       mochiweb_html:parse(D4)),
+
+    ok.
+
+parse_charref_garbage_in_garbage_out_test() ->
+    %% faulty charref is left alone
+    D1 = <<"<div>&amp. test</div>">>,
+    ?assertEqual(
+       {<<"div">>, [], [<<"&amp. test">>]},
+       mochiweb_html:parse(D1)),
+    
+    ok.
     
 -endif.
