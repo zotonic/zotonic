@@ -72,6 +72,8 @@
  					       <option value="sent" {% if q.status == 'sent' %}selected="selected"{% endif %}>{_ Sent _}</option>
  					       <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
  					       <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
+ 					       <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
+ 					       <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
  					   </select>
 					   {% wire id="log_status" type="change" action={submit target="log_filter"} %}
 					</span>

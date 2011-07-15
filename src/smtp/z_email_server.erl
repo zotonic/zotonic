@@ -156,7 +156,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
         {atomic, {Recipient, PickledContext}} ->
             Context = z_context:depickle(PickledContext),
             z_notifier:notify({log, #log_email{
-                                        severity = ?LOG_INFO,
+                                        severity = ?LOG_ERROR,
                                         message_nr = MsgId,
                                         mailer_status = bounce,
                                         mailer_host = z_convert:ip_to_list(Peer), 
@@ -174,7 +174,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                 {ok, Host} ->
                     Context = z_context:new(Host),
                     z_notifier:notify({log, #log_email{
-                                                severity = ?LOG_INFO,
+                                                severity = ?LOG_WARNING,
                                                 message_nr = MsgId,
                                                 mailer_status = bounce,
                                                 mailer_host = z_convert:ip_to_list(Peer), 
@@ -384,26 +384,28 @@ spawn_send(Id, Recipient, Email, Context, State) ->
             
             %% use the unique id as 'envelope sender' (VERP)
             case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-                {error, retries_exceeded, {FailureType, Host, Message}} ->
+                {error, retries_exceeded, {_FailureType, Host, Message}} ->
                     %% do nothing, it will retry later
                     z_notifier:notify({log, LogEmail#log_email{
                                                 severity=?LOG_WARNING, 
-                                                mailer_status=FailureType,
+                                                mailer_status=retry,
                                                 mailer_message=Message,
                                                 mailer_host=Host
                                             }}, Context),
                     ok;
                 {error, no_more_hosts, {permanant_failure, Host, Message}} ->
+                    % classify this as a bounce, something is wrong with the receiving server or the recipient
                     z_notifier:notify({log, LogEmail#log_email{
-                                                severity=?LOG_ERROR, 
-                                                mailer_status=no_more_hosts,
-                                                mailer_message=Message,
-                                                mailer_host=Host
+                                                severity = ?LOG_ERROR,
+                                                mailer_status = bounce,
+                                                mailer_message = Message,
+                                                mailer_host = z_convert:ip_to_list(Host)
                                             }}, Context),
-                    %% delete email from the queue and notify the system
+                    % delete email from the queue and notify the system
                     delete_emailq(Id),
-                    z_notifier:first({email_failed, Id, Recipient}, Context);
+                    z_notifier:first({email_bounced, Id, Recipient}, Context);
                 {error, Reason} ->
+                    % Returned when the options are not ok
                     z_notifier:notify({log, LogEmail#log_email{
                                                 severity=?LOG_ERROR, 
                                                 mailer_status=error,
@@ -413,11 +415,11 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                     delete_emailq(Id),
                     z_notifier:first({email_failed, Id, Recipient}, Context),
                     io:format("Invalid SMTP options: ~p\n", [Reason]);
-                Recepit when is_binary(Recepit) ->
+                Receipt when is_binary(Receipt) ->
                     z_notifier:notify({log, LogEmail#log_email{
                                                 severity=?LOG_INFO, 
                                                 mailer_status=sent,
-                                                mailer_message=Recepit
+                                                mailer_message=Receipt
                                             }}, Context),
                     %% email accepted by relay
                     mark_sent(Id),
