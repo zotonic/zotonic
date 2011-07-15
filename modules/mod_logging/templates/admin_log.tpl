@@ -1,21 +1,14 @@
-{% extends "admin_base.tpl" %}
+{% extends "admin_log_base.tpl" %}
 
-{% block title %}{_ Log _}{% endblock %}
+{% block title %}{_ Log messages _}{% endblock %}
 
-{% block content %}
+{% block title_log %}{_ Log messages _}{% endblock %}
 
-	<div id="content" class="zp-85">
-		<div class="block clearfix">
+{% block content_log %}
 
-		<h2>{_ Log messages _}</h2>
-
-		<form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}">
-			<input type="hidden" name="qsort" value="{{ q.qsort }}" />
-			<input type="hidden" name="qs" value="{{ q.qs }}" />
-			<h3 class="above-list ">
-				{_ Most recent messages _}
-			</h3>
-		</form>
+		<h3 class="above-list ">
+			{_ Most recent messages _}
+		</h3>
 
 		{% with m.search[{log page=q.page pagelen=20}] as result %}
 			<ul class="short-list">
@@ -43,7 +36,4 @@
 		{% endwith %}
 
 		{% logwatch %}
-		</div>
-	</div>
-
 {% endblock %}

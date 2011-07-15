@@ -152,7 +152,9 @@ search({log, []}, _OffsetLimit, _Context) ->
         order="created DESC",
         args=[],
         assoc=false
-       };
+    };
+search({log_email, Filter}, _OffsetLimit, Context) ->
+    m_log_email:search(Filter, Context);
 search(_, _, _) ->
     undefined.
 
@@ -195,7 +197,7 @@ handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Pro
 
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
-% it is also sent to the  
+% it is also sent to the main log.  
 handle_other_log(Record, State) ->
     LogType = element(1, Record),
     Fields = record_to_proplist(Record),

@@ -1,4 +1,5 @@
 %% Dispatch rule for a predicate list page
 [
-	{admin_log,  	["admin", "log"],					resource_admin,					[{template, "admin_log.tpl"}, {selected, "log"}]}
+    {admin_log,         ["admin", "log"],           resource_admin, [{template, "admin_log.tpl"}, {selected, "log"}]},
+    {admin_log_email,   ["admin", "log", "email"],  resource_admin, [{template, "admin_log_email.tpl"}, {selected, "log"}]}
 ].
