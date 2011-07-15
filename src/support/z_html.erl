@@ -222,6 +222,10 @@ sanitize1(Html) ->
 		escape(B);
 	sanitize({comment, Text}, _Stack) ->
 		{comment, Text};
+	sanitize({pi, _Raw}, _Stack) ->
+		<<>>;
+	sanitize({pi, _Tag, _Attrs}, _Stack) ->
+		<<>>;
 	sanitize({Elt,Attrs,Enclosed}, Stack) ->
 		Lower = list_to_binary(z_string:to_lower(Elt)),
 		case allow_elt(Lower) orelse (not lists:member(Lower, Stack) andalso allow_once(Lower))	of
@@ -418,6 +422,7 @@ is_selfclosing(_) -> false.
 skip_contents(<<"style">>) -> true;
 skip_contents(<<"script">>) -> true;
 skip_contents(<<"deleteme">>) -> true;
+skip_contents(<<"head">>) -> true;
 skip_contents(_) -> false.
 
 %% @doc Simple filter for css. Removes parts between () and quoted strings. 
