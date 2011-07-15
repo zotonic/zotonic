@@ -28,7 +28,8 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    get/2
+    get/2,
+    install/1
 ]).
 
 
@@ -65,4 +66,37 @@ list(Context) ->
 merge_props(R) ->
     proplists:delete(props, R) ++ proplists:get_value(props, R, []).
 
+
+install(Context) ->
+    case z_db:table_exists(log, Context) of
+        true -> ok;
+        false ->
+            z_db:q("
+                create table log (
+                    id bigserial not null,
+                    rsc_id int,
+                    user_id int,
+                    type character varying(80) not null default ''::character varying,
+                    module character varying(160) not null default ''::character varying,
+                    props bytea,
+                    created timestamp with time zone not null default now(),
+
+                    constraint log_pkey primary key (id),
+                    constraint fk_log_rsc_id foreign key (rsc_id)
+                        references rsc(id)
+                        on delete set null on update cascade,
+                    constraint fk_log_user_id foreign key (user_id)
+                        references rsc(id)
+                        on delete set null on update cascade
+                )
+            ", Context),
+            Indices = [
+                       {"fki_log_rsc_id", "rsc_id"},
+                       {"fki_log_user_id", "user_id"},
+                       {"log_module_created_key", "module, created"},
+                       {"log_type_created_key", "type, created"},
+                       {"log_created_key", "created"}
+                      ],
+            [ z_db:q("create index "++Name++" on log ("++Cols++")", Context) || {Name, Cols} <- Indices ]
+    end.
 

@@ -41,7 +41,9 @@
     to_date/1,
     to_time/1,
     to_isotime/1,
-    to_json/1
+    to_json/1,
+    
+    ip_to_list/1
 ]).
 
 
@@ -287,4 +289,16 @@ to_json_struct_key(X) when is_list(X) ->
 to_json_struct_key(_) ->
     invalid_key.
     
-    
+
+
+ip_to_list({IP,Port}) when is_tuple(IP), is_integer(Port) ->
+    ip_to_list(IP);
+ip_to_list({N1,N2,N3,N4} ) ->
+    lists:flatten([integer_to_list(N1), $., integer_to_list(N2), $., integer_to_list(N3), $., integer_to_list(N4)]);
+ip_to_list({_K1,_K2,_K3,_K4,_K5,_K6,_K7,_K8} = IPv6) ->
+    L = lists:map(fun(0) -> "";
+                     (N) -> io_lib:format("~.16b", [N])
+                  end,
+                  tuple_to_list(IPv6)),
+    lists:flatten(string:join(L, ":")).
+

@@ -43,6 +43,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_log.hrl").
 
 % @doc Return a new context
 c(Site) ->
@@ -100,4 +101,4 @@ log(Type, Msg, Props, Context) ->
     Line = proplists:get_value(line, Props, 0),
     Module = proplists:get_value(module, Props, unknown),
     error_logger:info_msg("[~p] ~p @ ~p:~p  ~s~n", [Context#context.host, Type, Module, Line, binary_to_list(Msg1)]),
-    z_notifier:notify({log, Type, Msg1, Props}, Context).
+    z_notifier:notify({log, #log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}}, Context).

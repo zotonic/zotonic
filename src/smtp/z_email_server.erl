@@ -29,13 +29,14 @@
 -export([
     start_link/0,
     is_bounce_email/1,
-    bounced/1,
+    bounced/2,
     generate_message_id/0,
     send/2,
     send/3
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_log.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
 % Maximum times we retry to send a message before we mark it as failed.
@@ -70,8 +71,8 @@ is_bounce_email("noreply+"++_) -> true;
 is_bounce_email(_) -> false.
 
 %% @doc Handle a bounce
-bounced(NoReplyEmail) ->
-    gen_server:cast(?MODULE, {bounced, NoReplyEmail}).
+bounced(Peer, NoReplyEmail) ->
+    gen_server:cast(?MODULE, {bounced, Peer, NoReplyEmail}).
     
 
 %% @doc Generate a new message id
@@ -140,9 +141,9 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
     {noreply, State1};
 
 %%@ doc Handle a bounced email
-handle_cast({bounced, BounceEmail}, State) ->
+handle_cast({bounced, Peer, BounceEmail}, State) ->
     % Fetch the MsgId from the bounce address
-    [BounceLocalName|_] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
+    [BounceLocalName,Domain] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
     <<"noreply+", MsgId/binary>> = BounceLocalName,
 
     % Find the original message in our database of recent sent e-mail
@@ -154,11 +155,37 @@ handle_cast({bounced, BounceEmail}, State) ->
     case mnesia:transaction(TrFun) of
         {atomic, {Recipient, PickledContext}} ->
             Context = z_context:depickle(PickledContext),
+            z_notifier:notify({log, #log_email{
+                                        severity = ?LOG_INFO,
+                                        message_nr = MsgId,
+                                        mailer_status = bounce,
+                                        mailer_host = z_convert:ip_to_list(Peer), 
+                                        envelop_to = BounceEmail,
+                                        envelop_from = "<>",
+                                        to_id = z_acl:user(Context),
+                                        props = []
+                                    }}, Context),
             z_notifier:first({email_bounced, MsgId, Recipient}, Context);
         _ ->
             % We got a bounce, but we don't have the message anymore.
-            % Custom bounce domains make this difficult to process
-            ok
+            % Custom bounce domains make this difficult to process.
+            % Try to map the hostname of the ip address to a host.
+            case z_sites_dispatcher:get_host_for_domain(Domain) of
+                {ok, Host} ->
+                    Context = z_context:new(Host),
+                    z_notifier:notify({log, #log_email{
+                                                severity = ?LOG_INFO,
+                                                message_nr = MsgId,
+                                                mailer_status = bounce,
+                                                mailer_host = z_convert:ip_to_list(Peer), 
+                                                envelop_to = BounceEmail,
+                                                envelop_from = "<>",
+                                                props = []
+                                            }}, Context),
+                    z_notifier:first({email_bounced, MsgId, undefined}, Context);
+                undefined ->
+                    ignore
+            end
     end,
     {noreply, State};
 %% @doc Trap unknown casts
@@ -344,22 +371,54 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                          {relay, RecipientDomain}]
                 end,
 
+            LogEmail = #log_email{
+                message_nr=Id,
+                envelop_to=RecipientEmail,
+                envelop_from=VERP,
+                to_id=proplists:get_value(recipient_id, Email#email.vars),
+                from_id=z_acl:user(Context),
+                content_id=proplists:get_value(id, Email#email.vars),
+                message_template=Email#email.html_tpl
+            },
+            z_notifier:notify({log, LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}}, Context),
+            
             %% use the unique id as 'envelope sender' (VERP)
             case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-                {error, retries_exceeded, {temporary_failure, _LastRelay, _Bin}} ->
+                {error, retries_exceeded, {FailureType, Host, Message}} ->
                     %% do nothing, it will retry later
+                    z_notifier:notify({log, LogEmail#log_email{
+                                                severity=?LOG_WARNING, 
+                                                mailer_status=FailureType,
+                                                mailer_message=Message,
+                                                mailer_host=Host
+                                            }}, Context),
                     ok;
-                {error, no_more_hosts, _ErrorDetails} ->
+                {error, no_more_hosts, {permanant_failure, Host, Message}} ->
+                    z_notifier:notify({log, LogEmail#log_email{
+                                                severity=?LOG_ERROR, 
+                                                mailer_status=no_more_hosts,
+                                                mailer_message=Message,
+                                                mailer_host=Host
+                                            }}, Context),
                     %% delete email from the queue and notify the system
                     delete_emailq(Id),
-                    ?DEBUG(_ErrorDetails),
                     z_notifier:first({email_failed, Id, Recipient}, Context);
                 {error, Reason} ->
+                    z_notifier:notify({log, LogEmail#log_email{
+                                                severity=?LOG_ERROR, 
+                                                mailer_status=error,
+                                                props=[{reason, Reason}]
+                                            }}, Context),
                     %% delete email from the queue and notify the system
                     delete_emailq(Id),
                     z_notifier:first({email_failed, Id, Recipient}, Context),
                     io:format("Invalid SMTP options: ~p\n", [Reason]);
                 Recepit when is_binary(Recepit) ->
+                    z_notifier:notify({log, LogEmail#log_email{
+                                                severity=?LOG_INFO, 
+                                                mailer_status=sent,
+                                                mailer_message=Recepit
+                                            }}, Context),
                     %% email accepted by relay
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary

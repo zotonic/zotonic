@@ -29,25 +29,37 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
+    add_admin_log_page/1,
     observe_search_query/2, 
-    add_admin_log_page/1
+    pid_observe_add_admin_log_page/3,
+    pid_observe_log/3
 ]).
 
-%% interface functions
-
 -include("zotonic.hrl").
+-include("zotonic_log.hrl").
 
 -record(state, {context, admin_log_pages=[]}).
 
+%% interface functions
 
+add_admin_log_page(C=#context{page_pid=Pid}) ->
+    z_notifier:first({add_admin_log_page, Pid}, C).
 
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
 
+pid_observe_add_admin_log_page(Pid, {add_admin_log_page, _Pid} = Msg, _Context) ->
+    gen_server:call(Pid, Msg).
 
-add_admin_log_page(C=#context{page_pid=Pid}) ->
-    z_notifier:first({add_admin_log_page, Pid}, C).
+pid_observe_log(Pid, {log, #log_message{}=Msg}, Context) ->
+    case Msg#log_message.user_id of
+        undefined -> gen_server:cast(Pid, {log, Msg#log_message{user_id=z_acl:user(Context)}});
+        _UserId -> gen_server:cast(Pid, {log, Msg})
+    end;
+pid_observe_log(Pid, {log, _} = LogMsg, _Context) ->
+    gen_server:cast(Pid, LogMsg).
+
 
 
 %%====================================================================
@@ -68,15 +80,9 @@ start_link(Args) when is_list(Args) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-    process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
-    z_notifier:observe(add_admin_log_page, self(), Context),
-
     install_check(Context1),
-
-    %% Watch for log events
-    z_notifier:observe(log, self(), Context),
     {ok, #state{context=Context1}}.
 
 
@@ -87,43 +93,17 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
-%% @doc Trap unknown calls
-handle_call({{add_admin_log_page, Pid}, _Ctx}, _From, State) ->
-    ?DEBUG("Adding admin log.."),
+handle_call({add_admin_log_page, Pid}, _From, State) ->
     Pids = lists:filter(fun erlang:is_process_alive/1, [Pid|State#state.admin_log_pages]),
     {reply, ok, State#state{admin_log_pages=Pids}};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-handle_cast({{log, Type, Msg, Props}, Ctx}, State=#state{context=Context}) ->
-    {ok, Id} = z_db:insert(log, [
-                                 {user_id, z_acl:user(Ctx)},
-                                 {type, Type},
-                                 {message, Msg}] ++ Props, Context),
-
-    % Notify admins of any updates
-    case State#state.admin_log_pages of
-        [] -> nop;
-        AdminPages ->
-            case catch z_template:render_to_iolist("_admin_log_row.tpl", [{id, Id}], Context) of
-                {error, {template_not_found,"_admin_log_row.tpl",enoent}} ->
-                    % We can get a template_not_found error when the system is still starting.
-                    nop;
-                {error, Reason} ->
-                    ?DEBUG(Reason),
-                    nop;
-                {Tpl, _Ctx} ->
-                    Tpl2 = lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl))),
-                    F = fun(Pid) ->
-                                z_session_page:add_script([
-                                    "$('", z_utils:js_escape(Tpl2), 
-                                    "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
-                                   log_color(Type), "'}).animate({backgroundColor:'", 
-                                   log_color(bg), "'}, 8000, 'linear');"], Pid)
-                        end,
-                    [F(P) || P <- AdminPages]
-            end
-    end,
+handle_cast({log, #log_message{} = Log}, State) ->
+    handle_simple_log(Log, State),
+    {noreply, State};
+handle_cast({log, OtherLog}, State) ->
+    handle_other_log(OtherLog, State),
     {noreply, State};
 
 %% @doc Trap unknown casts
@@ -143,10 +123,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    Context = State#state.context,
-    z_notifier:detach(add_admin_log_page, self(), Context),
-    z_notifier:detach(log, self(), Context),
+terminate(_Reason, _State) ->
     ok.
 
 
@@ -162,38 +139,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 install_check(Context) ->
-    case z_db:table_exists(log, Context) of
-        true -> ok;
-        false ->
-            ?DEBUG("Creating log table."),
-            z_db:q("
-                create table log (
-                    id serial not null,
-                    rsc_id int,
-                    user_id int,
-                    type character varying(80) not null default ''::character varying,
-                    module character varying(160) not null default ''::character varying,
-                    props bytea,
-                    created timestamp with time zone not null default now(),
-
-                    constraint log_pkey primary key (id),
-                    constraint fk_log_rsc_id foreign key (rsc_id)
-                        references rsc(id)
-                        on delete set null on update cascade,
-                    constraint fk_log_user_id foreign key (user_id)
-                        references rsc(id)
-                        on delete set null on update cascade
-                )
-            ", Context),
-            Indices = [
-                       {"fki_log_rsc_id", "rsc_id"},
-                       {"fki_log_user_id", "user_id"},
-                       {"log_module_created_key", "module, created"},
-                       {"log_type_created_key", "type, created"},
-                       {"log_created_key", "created"}
-                      ],
-            [ z_db:q("create index "++Name++" on log ("++Cols++")", Context) || {Name, Cols} <- Indices ]
-    end.
+    m_log:install(Context),
+    m_log_email:install(Context).
 
 
 
@@ -208,6 +155,76 @@ search({log, []}, _OffsetLimit, _Context) ->
        };
 search(_, _, _) ->
     undefined.
+
+
+
+%% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
+handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
+    {ok, Id} = z_db:insert(log, [
+                    {user_id, UserId},
+                    {type, Type},
+                    {message, Msg}
+                ] ++ Props, State#state.context),
+
+    % Notify admins of any updates
+    case State#state.admin_log_pages of
+        [] -> 
+            nop;
+        AdminPages ->
+            case catch z_template:render_to_iolist("_admin_log_row.tpl", [{id, Id}], State#state.context) of
+                {error, {template_not_found,"_admin_log_row.tpl",enoent}} ->
+                    % We can get a template_not_found error when the system is still starting.
+                    error;
+                {error, Reason} ->
+                    error_logger:info_msg("[~p] Render error of _admin_log_row.tpl: ~p~n", 
+                                          [(State#state.context)#context.host, Reason]),
+                    error;
+                {Tpl, _Ctx} ->
+                    Tpl2 = lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl))),
+                    F = fun(Pid) ->
+                                z_session_page:add_script([
+                                    "$('", z_utils:js_escape(Tpl2), 
+                                    "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
+                                   log_color(Type), "'}).animate({backgroundColor:'", 
+                                   log_color(bg), "'}, 8000, 'linear');"], Pid)
+                        end,
+                    [F(P) || P <- AdminPages],
+                    ok
+            end
+    end.
+
+
+% All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
+% it is also sent to the  
+handle_other_log(Record, State) ->
+    LogType = element(1, Record),
+    Fields = record_to_proplist(Record),
+    case z_db:table_exists(LogType, State#state.context) of
+        true ->
+            {ok, Id} = z_db:insert(LogType, Fields, State#state.context),
+            Log = #log_message{
+                message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
+                props=[ {log_type, LogType}, {log_id, Id} | Fields ]
+            },
+            case proplists:get_value(severity, Fields) of
+                ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
+                ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
+                _Other -> nop
+            end;
+        false ->
+            Log = #log_message{
+                message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
+                props=[ {log_type, LogType} | Fields ]
+            },
+            handle_simple_log(Log, State)
+    end.
+
+
+record_to_proplist(#log_email{} = Rec) ->
+    lists:zip(record_info(fields, log_email), tl(tuple_to_list(Rec))).
+
+
+
 
 
 log_color(debug) -> "#ffffff";

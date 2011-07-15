@@ -20,13 +20,15 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-	received/8
+	received/9,
+	get_host/1
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_log.hrl").
 
 %% @doc Handle a received e-mail
-received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
+received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
 	ParsedEmail = parse_email({Type, Subtype}, Headers, Params, Body),
 	ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
 	ParsedEmail2 = ParsedEmail1#email{
@@ -37,6 +39,19 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 	[
 		case get_host(Recipient) of
 			{ok, LocalPart, LocalTags, Domain, Host} ->
+			    Context = z_context:new(Host),
+			    z_notifier:notify({log, #log_email{
+			                            severity = ?LOG_INFO,
+                                        mailer_status = received,
+                                        mailer_host = z_convert:ip_to_list(Peer),
+			                            message_nr = Reference,
+                                        envelop_to = Recipient,
+                                        envelop_from = From,
+                                        props = [
+                                            {headers, Headers}
+                                        ]
+			                        }},
+			                        Context),
 				z_notifier:notify(#email_received{
 										localpart=LocalPart,
 										localtags=LocalTags,
@@ -49,7 +64,7 @@ received(Recipients, From, Reference, {Type, Subtype}, Headers, Params, Body, Da
 										decoded={Type, Subtype, Headers, Params, Body},
 										raw=Data
 									}, 
-									z_context:new(Host));
+									Context);
 			undefined ->
 				error_logger:info_msg("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
 				skip

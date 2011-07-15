@@ -31,10 +31,10 @@
          handle_RCPT/2, handle_RCPT_extension/2, handle_DATA/4, handle_RSET/1, handle_VRFY/2,
          handle_other/3, code_change/3, terminate/2]).
 
--record(state,
-	{
-            options = [] :: list()
-	}).
+-record(state, {
+    options = [] :: list(),
+    peer :: tuple()
+}).
         
 
 start_link() ->
@@ -42,14 +42,14 @@ start_link() ->
     Args1 = case z_config:get(smtp_listen_domain) of
         undefined -> [];
         ListenDomain -> [{domain, ListenDomain}]
-    end,	
+    end,    
     Args2 = case z_config:get(smtp_listen_ip) of
         undefined -> [];
         any -> [{address, {0,0,0,0}} | Args1];
         ListenIp -> 
             {ok, Address} = inet:getaddr(ListenIp, inet),
             [{address, Address} | Args1]
-    end,	
+    end,    
     Args3 = case z_config:get(smtp_listen_port) of
         undefined -> Args2;
         ListenPort -> [{port, ListenPort} | Args2]
@@ -59,12 +59,12 @@ start_link() ->
 start_link(Args) when is_list(Args) ->
     gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).
 
--spec init(Hostname :: binary(), SessionCount :: non_neg_integer(), Address :: tuple(), Options :: list()) -> {'ok', string(), #state{}} | {'stop', any(), string()}.
-init(Hostname, SessionCount, _Address, Options) ->
+-spec init(Hostname :: binary(), SessionCount :: non_neg_integer(), PeerName :: tuple(), Options :: list()) -> {'ok', string(), #state{}} | {'stop', any(), string()}.
+init(Hostname, SessionCount, PeerName, Options) ->
     case SessionCount > 20 of
         false ->
             Banner = io_lib:format("~s ESMTP Zotonic ~s", [Hostname, ?ZOTONIC_VERSION]),
-            State = #state{options = Options},
+            State = #state{options = Options, peer=PeerName},
             {ok, Banner, State};
         true ->
             error_logger:warning_msg("SMTP Connection limit exceeded~n"),
@@ -106,11 +106,11 @@ handle_MAIL_extension(_Extension, State) ->
 
 -spec handle_RCPT(To :: binary(), State :: #state{}) -> {'ok', #state{}} | {'error', string(), #state{}}.
 handle_RCPT(_To, State) ->
-	% Check if the "To" address exists
-	% Check domain, check addressee in domain.
-	% For bounces:
-	% - To = <noreply+MSGID@example.org> 
-	% - Return-Path header should be present and contains <>
+    % Check if the "To" address exists
+    % Check domain, check addressee in domain.
+    % For bounces:
+    % - To = <noreply+MSGID@example.org> 
+    % - Return-Path header should be present and contains <>
     {ok, State}.
 
 -spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}} | 'error'.
@@ -122,15 +122,18 @@ handle_DATA(From, To, Data, State) ->
     Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary({node(), erlang:now()}))]),
     try mimemail:decode(Data) of
         {Type, Subtype, Headers, Params, Body} ->
-			case find_bounce_id(To, Headers) of
-				{ok, MessageId} ->
-					z_email_server:bounced(MessageId);
-				ok ->
-					% Bounced, but without a message id
-					nop;
-				no_bounce ->
-					z_email_receive:received(To, From, Reference, {Type, Subtype}, Headers, Params, Body, Data)
-			end
+            case find_bounce_id(To, Headers) of
+                {ok, MessageId} ->
+                    % The e-mail server knows about the messages sent from our system.
+                    z_email_server:bounced(State#state.peer, MessageId);
+                ok ->
+                    % Bounced, but without a message id
+                    nop;
+                no_bounce ->
+                    % The z_email_receive will do the logging, as it will map the recipients to hosts
+                    z_email_receive:received(To, From, State#state.peer, Reference, 
+                                             {Type, Subtype}, Headers, Params, Body, Data)
+            end
     catch
         What:Why ->
             error_logger:error_msg("SMTP receive: Message decode FAILED with ~p:~p", [What, Why])
@@ -167,24 +170,24 @@ terminate(Reason, State) ->
 %% @doc A message is classified as a bounce when the recipient is <noreply+MSGID@example.org>
 %% OR when the Return-Path is set to <>
 find_bounce_id(Recipients, Headers) ->
-	case find_bounce_email(Recipients) of
-		{ok, _MessageId} = M -> 
-			M;
-		undefined ->
-			case proplists:get_value(<<"Return-Path">>, Headers) of
-				<<"<>">> -> ok;
-				_ -> no_bounce
-			end
-	end.
+    case find_bounce_email(Recipients) of
+        {ok, _MessageId} = M -> 
+            M;
+        undefined ->
+            case proplists:get_value(<<"Return-Path">>, Headers) of
+                <<"<>">> -> ok;
+                _ -> no_bounce
+            end
+    end.
 
 % Check if one of the recipients is a bounce address
 find_bounce_email([]) ->
-	undefined;
+    undefined;
 find_bounce_email([To|Other]) ->
-	case z_email_server:is_bounce_email(To) of
-		true -> {ok, To};
-		false -> find_bounce_email(Other)
-	end.
+    case z_email_server:is_bounce_email(To) of
+        true -> {ok, To};
+        false -> find_bounce_email(Other)
+    end.
 
 
-	
+    
