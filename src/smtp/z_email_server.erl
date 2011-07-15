@@ -320,15 +320,6 @@ get_email_from(Context) ->
     end.
 
 
-% Fetch the hostname used for the EHLO
-get_hostname(Context) ->
-    [_,Hostname] = string:tokens(get_email_from(Context), "@"),
-    case lists:reverse(Hostname) of
-        [$,|_] -> Hostname;
-        _ -> Hostname ++ "."
-    end.
-    
-
 %% =========================
 %% SENDING related functions
 %% =========================
@@ -363,11 +354,11 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                 case State#state.smtp_relay of
                     true ->
                         [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, get_hostname(Context)}
+                         {hostname, email_domain(Context)}
                          | State#state.smtp_relay_opts];
                     false ->
                         [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, get_hostname(Context)},
+                         {hostname, email_domain(Context)},
                          {relay, RecipientDomain}]
                 end,
 
