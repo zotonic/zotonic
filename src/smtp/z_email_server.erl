@@ -399,7 +399,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                                                 severity = ?LOG_ERROR,
                                                 mailer_status = bounce,
                                                 mailer_message = Message,
-                                                mailer_host = z_convert:ip_to_list(Host)
+                                                mailer_host = Host
                                             }}, Context),
                     % delete email from the queue and notify the system
                     delete_emailq(Id),
