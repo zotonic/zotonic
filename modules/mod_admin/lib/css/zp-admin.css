@@ -137,6 +137,13 @@ hr {
 		float: left;
 		display: block;
 	}
+	
+	.short-list li.log-warning, .short-list li.log-warning a {
+        color: #930;
+    }
+	.short-list li.log-error, .short-list li.log-error a {
+        color: #c00;
+	}
 
 ul.pager {
 	padding: 6px;

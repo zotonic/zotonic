@@ -1,7 +1,4 @@
-<li class="clearfix" 
-    {% if result_row.severity <= 1 %}style="color: #c00"{% endif %}
-    {% if result_row.severity == 2 %}style="color: #930"{% endif %}
->
+<li class="clearfix {% if result_row.severity <= 1 %}log-error{% endif %}{% if result_row.severity == 2 %}log-warning{% endif %}">
 	<span class="zp-10">
 	    <a href="{% url admin_log_email severity=result_row.severity %}">
 	   {% if result_row.severity == 0 %}Fatal{% endif %}
