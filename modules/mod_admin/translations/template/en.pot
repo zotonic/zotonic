@@ -97,7 +97,7 @@ msgid ""
 "Basic"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_admin_edit_content_category.tpl:41 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_admin_edit_content_category.tpl:41 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:16 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 
 msgid ""
 "Cancel"
 msgstr ""
@@ -653,7 +653,7 @@ msgid ""
 "SEO Content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:9 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14 
 msgid ""
 "Save"
 msgstr ""
@@ -905,7 +905,7 @@ msgid ""
 "Visible till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:15 
 msgid ""
 "Visit full editpage"
 msgstr ""
