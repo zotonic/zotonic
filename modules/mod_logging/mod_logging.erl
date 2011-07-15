@@ -226,9 +226,9 @@ record_to_proplist(#log_email{} = Rec) ->
 record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
     #log_message{
         message=iolist_to_binary(["SMTP: ",
-                    R#log_email.mailer_status, ": ", R#log_email.mailer_message, $\n,
-                    "To: ", R#log_email.envelop_to, opt_user(R#log_email.to_id), $\n,
-                    "From: ", R#log_email.envelop_from, opt_user(R#log_email.from_id)
+                    z_convert:to_list(R#log_email.mailer_status), ": ", z_convert:to_list(R#log_email.mailer_message), $\n,
+                    "To: ", z_convert:to_list(R#log_email.envelop_to), opt_user(R#log_email.to_id), $\n,
+                    "From: ", z_convert:to_list(R#log_email.envelop_from), opt_user(R#log_email.from_id)
                 ]),
         props=[{log_type, LogType}, {log_id, Id}]
     };
