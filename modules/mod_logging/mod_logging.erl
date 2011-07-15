@@ -204,10 +204,7 @@ handle_other_log(Record, State) ->
     case z_db:table_exists(LogType, State#state.context) of
         true ->
             {ok, Id} = z_db:insert(LogType, Fields, State#state.context),
-            Log = #log_message{
-                message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
-                props=[ {log_type, LogType}, {log_id, Id} | Fields ]
-            },
+            Log = record_to_log_message(Record, Fields, LogType, Id),
             case proplists:get_value(severity, Fields) of
                 ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
                 ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
@@ -226,7 +223,24 @@ record_to_proplist(#log_email{} = Rec) ->
     lists:zip(record_info(fields, log_email), tl(tuple_to_list(Rec))).
 
 
+record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
+    #log_message{
+        message=z_convert:to_binary(["SMTP: ",
+                    R#log_email.mailer_status, ": ", R#log_email.mailer_message, $\n,
+                    "To: ", R#log_email.envelop_to, opt_user(R#log_email.to_id), $\n,
+                    "From: ", R#log_email.envelop_from, opt_user(R#log_email.from_id)
+                ]),
+        props=[{log_type, LogType}, {log_id, Id}]
+    };
+record_to_log_message(_, Fields, LogType, Id) ->
+    #log_message{
+        message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
+        props=[ {log_type, LogType}, {log_id, Id} | Fields ]
+    }.
 
+
+opt_user(undefined) -> [];
+opt_user(Id) -> [" (", integer_to_list(Id), ")"].
 
 
 log_color(debug) -> "#ffffff";
