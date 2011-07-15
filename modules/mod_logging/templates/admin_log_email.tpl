@@ -79,7 +79,7 @@
 					   <input name="message_nr" type="text" style="width: 85%" value="{{ q.message_nr|escape }}" />
 					</span>
 					<span class="zp-15">
-					   <input name="to" type="text" style="width: 85%" value="{{ q.message_nr|escape }}" />
+					   <input name="to" type="text" style="width: 85%" value="{{ q.to|escape }}" />
 					</span>
 					<span class="zp-15">
  					   <input name="from" type="text" style="width: 85%" value="{{ q.from|escape }}" />
