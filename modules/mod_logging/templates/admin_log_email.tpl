@@ -44,18 +44,18 @@
 		<form id="log_filter" method="GET" action="{% url log_email %}">
 			<ul class="short-list">
 				<li class="headers clearfix" id="log-headers">
-					<span class="zp-5">{_ Svty _}</span>
-					<span class="zp-5">{_ Status _}</span>
+					<span class="zp-10">{_ Severity _}</span>
+					<span class="zp-10">{_ Status _}</span>
 					<span class="zp-10">{_ Message nr _}</span>
 					<span class="zp-15">{_ To _}</span>
 					<span class="zp-15">{_ From _}</span>
-					<span class="zp-10">{_ Content _}</span>
-					<span class="zp-10">{_ Other _}</span>
+					<span class="zp-5">{_ Content _}</span>
+					<span class="zp-5">{_ Other _}</span>
 					<span class="zp-15">{_ Template _}</span>
 					<span class="zp-15">{_ Date _}</span>
 				</li>
 				<li class="headers clearfix" id="log-headers">
-					<span class="zp-5">
+					<span class="zp-10">
 					   <select id="log_severity" name="severity" style="width: 95%">
 					       <option value="0" {% if q.severity == '0' %}selected="selected"{% endif %}>{_ Fatal _}</option>
 					       <option value="1" {% if q.severity == '' or q.severity|is_undefined or q.severity == '1' %}selected="selected"{% endif %}>{_ Error _}</option>
@@ -65,7 +65,7 @@
 					   </select>
 					   {% wire id="log_severity" type="change" action={submit target="log_filter"} %}
 					</span>
-					<span class="zp-5">
+					<span class="zp-10">
  					   <select id="log_status" name="status" style="width: 95%">
  					       <option value="">{_ All _}</option>
  					       <option value="sending" {% if q.status == 'sending' %}selected="selected"{% endif %}>{_ Sending _}</option>
@@ -84,11 +84,11 @@
 					<span class="zp-15">
  					   <input name="from" type="text" style="width: 85%" value="{{ q.from|escape }}" />
 					</span>
-					<span class="zp-10">
-					   <input name="content" type="text" style="width: 85%" value="{{ q.content|escape }}" />
+					<span class="zp-5">
+					   <input name="content" type="text" style="width: 70%" value="{{ q.content|escape }}" />
 					</span>
-					<span class="zp-10">
- 					   <input name="other" type="text" style="width: 85%" value="{{ q.other|escape }}" />
+					<span class="zp-5">
+ 					   <input name="other" type="text" style="width: 70%" value="{{ q.other|escape }}" />
 					</span>
 					<span class="zp-15">
 					   <input name="template" type="text" style="width: 85%" value="{{ q.template|escape }}" />

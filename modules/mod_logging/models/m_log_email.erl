@@ -104,7 +104,7 @@ install(Context) ->
                     id bigserial not null,
                     severity int not null default 1,
                     message_nr character varying(32),
-                    mailer_status character varying(8),
+                    mailer_status character varying(32),
                     mailer_message bytea,
                     mailer_host character varying(128),
                     envelop_to character varying(128) not null,

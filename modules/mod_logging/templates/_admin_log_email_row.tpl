@@ -2,7 +2,7 @@
     {% if result_row.severity <= 1 %}style="color: #c00"{% endif %}
     {% if result_row.severity == 2 %}style="color: #930"{% endif %}
 >
-	<span class="zp-5">
+	<span class="zp-10">
 	    <a href="{% url admin_log_email severity=result_row.severity %}">
 	   {% if result_row.severity == 0 %}Fatal{% endif %}
 	   {% if result_row.severity == 1 %}Error{% endif %}
@@ -11,7 +11,7 @@
 	   {% if result_row.severity == 4 %}Debug{% endif %}
 	   </a>
 	</span>
-	<span class="zp-5">
+	<span class="zp-10">
 	    <a href="{% url admin_log_email severity=q.severity status=result_row.mailer_status %}">
 	    {{ result_row.mailer_status|escape }}
 	    </a>
@@ -45,12 +45,12 @@
 	        </a>
 	    {% endif %}
 	</span>
-	<span class="zp-10">
+	<span class="zp-5">
 	    <a href="{% url admin_log_email severity=4 content=result_row.content_id %}">
 	        {{ result_row.content_id|default:"-" }}
 	    </a>
     </span>
-	<span class="zp-10">
+	<span class="zp-5">
 	    <a href="{% url admin_log_email severity=4 other=result_row.other_id %}">
 	        {{ result_row.other_id|default:"-" }}
 	    </a>
