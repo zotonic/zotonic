@@ -67,7 +67,6 @@
 
 	{% include "_js_include.tpl" %}
 
-	<script type="text/javascript">Cufon.now();</script>
 	{% all include "_html_body.tpl" %}
 </body>
 </html>
