@@ -52,7 +52,9 @@ event({postback, {dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}, _Tr
 
 event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
-	Context;
+	z_script:add_script(
+		["$(\"#", _TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "], 
+		Context);
 
 event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
