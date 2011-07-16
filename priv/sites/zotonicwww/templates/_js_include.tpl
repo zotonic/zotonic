@@ -4,7 +4,6 @@
 	"js/apps/z.widgetmanager.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/z.inputoverlay.js"
-	"js/cufon.anja.js"
 %}
 
 {% script %}
@@ -13,18 +12,5 @@
 	$(function()
 	{
 	    $.widgetManager();
-	});
-	
-	Cufon.registerFont(cufon_anja);
-	Cufon.replace('h1',{
-		color: '-linear-gradient(#19B7E8, #5bbde5)',
-		hover: true,
-		textShadow: '#222 1px 1px'
-	});
-	
-	Cufon.replace('h2', {
-		color: '-linear-gradient(#19B7E8, #5bbde5)',
-		hover: true,
-		textShadow: '#222 1px 1px'
 	});
 </script>
