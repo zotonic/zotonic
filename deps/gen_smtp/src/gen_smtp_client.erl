@@ -346,15 +346,9 @@ do_AUTH_each(Socket, Username, Password, [_Type | Tail]) ->
 try_EHLO(Socket, Options) ->
 	ok = socket:send(Socket, ["EHLO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
 	case read_possible_multiline_reply(Socket) of
-		{ok, <<"500", Rest/binary>> = Msg} ->
+		{ok, <<"500", _Rest/binary>>} ->
 			% 500 5.3.3 Unrecognized command
-			case binstr:strip(Rest, left) of
-				<<"5.3.3", _/binary>> -> 
-					try_HELO(Socket, Options);
-				_Else ->
-					quit(Socket),
-					erlang:throw({permanant_failure, Msg})
-			end;
+			try_HELO(Socket, Options);
 		{ok, <<"4", _Rest/binary>> = Msg} ->
 			quit(Socket),
 			throw({temporary_failure, Msg});
