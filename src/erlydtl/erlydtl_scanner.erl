@@ -259,22 +259,19 @@ scan([H | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
 
 % Closing code blocks
 scan("%}-->" ++ T, [{identifier,_,"war"},{open_tag,_,"%{--!<"}|Scanned], {Row, Column}, {_, "%}-->"}) ->
-    scan(T, Scanned, {Row, Column + 2}, {in_raw, "<!--{% endraw %}-->"});
+    scan(T, Scanned, {Row, Column + 5}, {in_raw, "<!--{% endraw %}-->"});
 
 scan("%}-->" ++ T, Scanned, {Row, Column}, {_, "%}-->"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], {Row, Column + 5}, in_text);
 
 scan("%}" ++ T, [{identifier,_,"war"},{open_tag,_,"%{"}|Scanned], {Row, Column}, {_, "%}"}) ->
     scan(T, Scanned, {Row, Column + 2}, {in_raw, "{% endraw %}"});
 
 scan("%}" ++ T, Scanned, {Row, Column}, {_, "%}"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], {Row, Column + 2}, in_text);
 
 scan("}}-->" ++ T, Scanned, {Row, Column}, {_, "}}-->"}) ->
-    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], {Row, Column + 5}, in_text);
 
 scan("}}" ++ T, Scanned, {Row, Column}, {_, "}}"}) ->
     scan(T, [{close_var, {Row, Column}, "}}"} | Scanned], {Row, Column + 2}, in_text);
