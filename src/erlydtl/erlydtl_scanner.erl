@@ -105,6 +105,9 @@ scan([], _Scanned, _, {in_comment, _}) ->
 scan([], _Scanned, _, {in_trans, _}) ->
     {error, "Reached end of file inside a trans block."};
 
+scan([], _Scanned, _, {in_raw, _}) ->
+    {error, "Reached end of file inside a raw block."};
+
 scan([], _Scanned, _, _) ->
     {error, "Reached end of file inside a code block."};
 
@@ -119,7 +122,7 @@ scan("{%" ++ T, Scanned, {Row, Column}, {in_raw, "{% endraw %}"}) ->
             scan(T, Scanned2, {Row, Column + 2}, {in_raw, "{% endraw %}"})
     end;
 scan("<!--{%" ++ T, Scanned, {Row, Column}, {in_raw, "<!--{% endraw %}-->"}) ->
-    case find_endraw(T, "%}-->", Row, Column+2) of
+    case find_endraw(T, "%}-->", Row, Column+6) of
         {ok, T1, Row1, Column1} ->
             scan(T1, Scanned, {Row1, Column1}, in_text);
         notfound ->
