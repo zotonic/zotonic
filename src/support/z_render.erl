@@ -140,6 +140,8 @@ render({trans, _} = Tr, Context) ->
     render(z_trans:lookup_fallback(Tr, Context), Context);
 render({{_,_,_},{_,_,_}} = D, Context) ->
     render(filter_date:date(D, "Y-m-d H:i:s", Context), Context);
+render(T, Context) when is_tuple(T) ->
+    render(iolist_to_binary(io_lib:format("~p", [T])), Context);
 render([H|T], Context) ->
     Context1 = render(H, Context),
     render(T, Context1).
