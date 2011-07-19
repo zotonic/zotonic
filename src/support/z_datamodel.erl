@@ -168,35 +168,39 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
     end.
 
 update_new_props(Module, Id, NewProps, Context) ->
-    PreviousProps = m_rsc:p(Id, managed_props, Context),
-    lists:foldl(fun({K, V}, Props) ->
-                        case m_rsc:p(Id, K, Context) of
-                            V ->
-                                %% New value == current value
-                                Props;
-                            DbVal ->
-                                case proplists:get_value(K, PreviousProps) of 
+    case m_rsc:p(Id, managed_props, Context) of
+        undefined ->
+            NewProps;
+        PreviousProps ->
+            lists:foldl(fun({K, V}, Props) ->
+                                case m_rsc:p(Id, K, Context) of
+                                    V ->
+                                        %% New value == current value
+                                        Props;
                                     DbVal ->
-                                        %% New value in NewProps, unchanged in DB
-                                        [{K,V} | Props];
-                                    _PrevVal when is_binary(DbVal) ->
-                                        %% Compare with converted to list value
-                                        case z_convert:to_list(DbVal) of
-                                            V ->
-                                                Props;
-                                            _ ->
+                                        case proplists:get_value(K, PreviousProps) of 
+                                            DbVal ->
+                                                %% New value in NewProps, unchanged in DB
+                                                [{K,V} | Props];
+                                            _PrevVal when is_binary(DbVal) ->
+                                                %% Compare with converted to list value
+                                                case z_convert:to_list(DbVal) of
+                                                    V ->
+                                                        Props;
+                                                    _ ->
+                                                        %% Changed by someone else
+                                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
+                                                        Props
+                                                end;
+                                            _PrevVal2 ->
+
                                                 %% Changed by someone else
                                                 ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
                                                 Props
-                                        end;
-                                    _PrevVal2 ->
-
-                                        %% Changed by someone else
-                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
-                                        Props
+                                        end
                                 end
-                        end
-                end, [], NewProps).
+                        end, [], NewProps)
+    end.
 
 
 manage_predicate_validfor(_Id, [], _Context) ->
