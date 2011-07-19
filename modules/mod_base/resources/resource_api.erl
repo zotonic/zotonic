@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ allowed_methods(ReqData, Context) ->
             %% Not exists
             {['GET', 'HEAD', 'POST'], ReqData, Context1}
     end.
-    
+
 
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
@@ -126,7 +126,7 @@ api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
 
 
 api_result(ReqData, Context, Result) ->
-    case Result of 
+    case Result of
         {error, Err=missing_arg, Arg} ->
             api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
 
@@ -155,7 +155,7 @@ api_result(ReqData, Context, Result) ->
                     {{halt, 500}, ReqData1, Context}
             end
     end.
-    
+
 
 to_json(ReqData, Context) ->
     Module = z_context:get("module", Context),
@@ -163,12 +163,10 @@ to_json(ReqData, Context) ->
 
 
 process_post(ReqData, Context) ->
-    Method       = list_to_atom(z_context:get_q("method", Context)),
-    {ok, Module} = z_module_indexer:find(service, Method, Context),
+    Module = z_context:get("module", Context),
     case Module:process_post(ReqData, Context) of
         ok ->
             {true, ReqData, Context};
         Result ->
             api_result(ReqData, Context, Result)
     end.
-            
