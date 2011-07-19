@@ -871,7 +871,9 @@ parse_encoded_address_test_() ->
 					?assertEqual({<<"God@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<\\God@heaven.af.mil>">>)),
 					?assertEqual({<<"God@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<\"God\"@heaven.af.mil>">>)),
 					?assertEqual({<<"God@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<@gateway.af.mil,@uucp.local:\"\\G\\o\\d\"@heaven.af.mil>">>)),
-					?assertEqual({<<"God2@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<God2@heaven.af.mil>">>))
+					?assertEqual({<<"God2@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<God2@heaven.af.mil>">>)),
+					?assertEqual({<<"God+extension@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<God+extension@heaven.af.mil>">>)),
+					?assertEqual({<<"God~*$@heaven.af.mil">>, <<>>}, parse_encoded_address(<<"<God~*$@heaven.af.mil>">>))
 			end
 		},
 		{"Addresses that are sorta valid should parse",
