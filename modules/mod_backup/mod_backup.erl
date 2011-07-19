@@ -265,6 +265,7 @@ pg_dump(Name, Context) ->
     User = m_site:get(dbuser, Context),
     Password = m_site:get(dbpassword, Context),
     Database = m_site:get(dbdatabase, Context),
+    Schema = m_site:get(dbschema, Context),
     PgDump = m_config:get_value(mod_backup, pg_dump, "pg_dump", Context),
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),
@@ -282,6 +283,7 @@ pg_dump(Name, Context) ->
                     " -w ", 
                     " -f '", DumpFile, "' ", 
                     " -U '", User, "' ", 
+                    " -n '", Schema, "' ",
                     Database]),
     case os:cmd(binary_to_list(Command)) of
         [] ->
