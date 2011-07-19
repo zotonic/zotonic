@@ -105,8 +105,46 @@ scan([], _Scanned, _, {in_comment, _}) ->
 scan([], _Scanned, _, {in_trans, _}) ->
     {error, "Reached end of file inside a trans block."};
 
+scan([], _Scanned, _, {in_raw, _}) ->
+    {error, "Reached end of file inside a raw block."};
+
 scan([], _Scanned, _, _) ->
     {error, "Reached end of file inside a code block."};
+
+%%we just capture the {% raw %} {% endraw %} tags and pass on string between the tags as is
+scan("{%" ++ T, Scanned, {Row, Column}, {in_raw, "{% endraw %}"}) ->
+    case find_endraw(T, "%}", Row, Column+2) of
+        {ok, T1, Row1, Column1} ->
+            scan(T1, Scanned, {Row1, Column1}, in_text);
+        notfound ->
+            Scanned1 = append_text_char(Scanned, {Row, Column}, ${),
+            Scanned2 = append_text_char(Scanned1, {Row, Column}, $%),
+            scan(T, Scanned2, {Row, Column + 2}, {in_raw, "{% endraw %}"})
+    end;
+scan("<!--{%" ++ T, Scanned, {Row, Column}, {in_raw, "<!--{% endraw %}-->"}) ->
+    case find_endraw(T, "%}-->", Row, Column+6) of
+        {ok, T1, Row1, Column1} ->
+            scan(T1, Scanned, {Row1, Column1}, in_text);
+        notfound ->
+            Scanned1 = append_text_char(Scanned, {Row, Column}, $<),
+            Scanned2 = append_text_char(Scanned1, {Row, Column}, $!),
+            Scanned3 = append_text_char(Scanned2, {Row, Column}, $-),
+            Scanned4 = append_text_char(Scanned3, {Row, Column}, $-),
+            Scanned5 = append_text_char(Scanned4, {Row, Column}, ${),
+            Scanned6 = append_text_char(Scanned5, {Row, Column}, $%),
+            scan(T, Scanned6, {Row, Column + 6}, {in_raw, "<!--{% endraw %}-->"})
+    end;
+
+scan("\r\n" ++ T, Scanned, {Row, Column}, {in_raw, Closer}) ->
+    Scanned1 = append_text_char(Scanned, {Row, Column}, $\r),
+    Scanned2 = append_text_char(Scanned1, {Row, Column}, $\n),
+    scan(T, Scanned2, {Row+1, 1}, {in_raw, Closer});
+
+scan("\n" ++ T, Scanned, {Row, Column}, {in_raw, Closer}) ->
+    scan(T, append_text_char(Scanned, {Row, Column}, $\n), {Row+1, 1}, {in_raw, Closer});
+
+scan([H | T], Scanned, {Row, Column}, {in_raw, Closer}) ->
+    scan(T, append_text_char(Scanned, {Row, Column}, H), {Row, Column + 1}, {in_raw, Closer});
 
 scan("<!--{{" ++ T, Scanned, {Row, Column}, in_text) ->
     scan(T, [{open_var, {Row, Column}, "<!--{{"} | Scanned], {Row, Column + length("<!--{{")}, {in_code, "}}-->"});
@@ -158,8 +196,16 @@ scan("{%" ++ T, Scanned, {Row, Column}, in_text) ->
 scan([H | T], Scanned, {Row, Column}, {in_trans, Closer}) ->
     scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_trans, Closer});
 
+scan("\r\n" ++ T, Scanned, {Row, Column}, in_text) ->
+    Scanned1 = append_text_char(Scanned, {Row, Column}, $\r),
+    Scanned2 = append_text_char(Scanned1, {Row, Column}, $\n),
+    scan(T, Scanned2, {Row + 1, 1}, in_text);
+
 scan("\n" ++ T, Scanned, {Row, Column}, in_text) ->
     scan(T, append_text_char(Scanned, {Row, Column}, $\n), {Row + 1, 1}, in_text);
+
+scan("\r\n" ++ T, Scanned, {Row, _Column}, {in_code, Closer}) ->
+    scan(T, Scanned, {Row + 1, 1}, {in_code, Closer});
 
 scan("\n" ++ T, Scanned, {Row, _Column}, {in_code, Closer}) ->
     scan(T, Scanned, {Row + 1, 1}, {in_code, Closer});
@@ -212,17 +258,20 @@ scan([H | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
     scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_single_quote, Closer});
 
 % Closing code blocks
+scan("%}-->" ++ T, [{identifier,_,"war"},{open_tag,_,"%{--!<"}|Scanned], {Row, Column}, {_, "%}-->"}) ->
+    scan(T, Scanned, {Row, Column + 5}, {in_raw, "<!--{% endraw %}-->"});
+
 scan("%}-->" ++ T, Scanned, {Row, Column}, {_, "%}-->"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], {Row, Column + 5}, in_text);
+
+scan("%}" ++ T, [{identifier,_,"war"},{open_tag,_,"%{"}|Scanned], {Row, Column}, {_, "%}"}) ->
+    scan(T, Scanned, {Row, Column + 2}, {in_raw, "{% endraw %}"});
 
 scan("%}" ++ T, Scanned, {Row, Column}, {_, "%}"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], {Row, Column + 2}, in_text);
 
 scan("}}-->" ++ T, Scanned, {Row, Column}, {_, "}}-->"}) ->
-    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], 
-        {Row, Column + 2}, in_text);
+    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], {Row, Column + 5}, in_text);
 
 scan("}}" ++ T, Scanned, {Row, Column}, {_, "}}"}) ->
     scan(T, [{close_var, {Row, Column}, "}}"} | Scanned], {Row, Column + 2}, in_text);
@@ -377,3 +426,30 @@ char_type(Char) ->
         _ ->
             undefined
     end.
+
+
+% Find the 'endraw %}' tag
+find_endraw([C|Rest], Closer, Row, Column) when C == 9; C == 32 ->
+    find_endraw(Rest, Closer, Row, Column+1);
+find_endraw("\r\n" ++ Rest, Closer, Row, _Column) ->
+    find_endraw(Rest, Closer, Row+1, 1);
+find_endraw("\n" ++ Rest, Closer, Row, _Column) ->
+    find_endraw(Rest, Closer, Row+1, 1);
+find_endraw("endraw" ++ Rest, Closer, Row, Column) ->
+    find_endraw_close(Rest, Closer, Row, Column+6);
+find_endraw(_Rest, _Closer, _Row, _Column) ->
+    notfound.
+
+find_endraw_close([C|Rest], Closer, Row, Column) when C == 9; C == 32 ->
+    find_endraw_close(Rest, Closer, Row, Column+1);
+find_endraw_close("\r\n" ++ Rest, Closer, Row, _Column) ->
+    find_endraw_close(Rest, Closer, Row+1, 1);
+find_endraw_close("\n" ++ Rest, Closer, Row, _Column) ->
+    find_endraw_close(Rest, Closer, Row+1, 1);
+find_endraw_close("%}-->" ++ Rest, "%}-->", Row, Column) ->
+    {ok, Rest, Row, Column+5};
+find_endraw_close("%}" ++ Rest, "%}", Row, Column) ->
+    {ok, Rest, Row, Column+2};
+find_endraw_close(_T, _Closer, _Row, _Colum) ->
+    notfound.
+

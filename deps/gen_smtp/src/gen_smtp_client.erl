@@ -345,8 +345,30 @@ do_AUTH_each(Socket, Username, Password, [_Type | Tail]) ->
 
 try_EHLO(Socket, Options) ->
 	ok = socket:send(Socket, ["EHLO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
-	{ok, Reply} = read_possible_multiline_reply(Socket),
-	{ok, parse_extensions(Reply)}.
+	case read_possible_multiline_reply(Socket) of
+		{ok, <<"500", _Rest/binary>>} ->
+			% 500 5.3.3 Unrecognized command
+			try_HELO(Socket, Options);
+		{ok, <<"4", _Rest/binary>> = Msg} ->
+			quit(Socket),
+			throw({temporary_failure, Msg});
+		{ok, Reply} ->
+			{ok, parse_extensions(Reply)}
+	end.
+
+try_HELO(Socket, Options) ->
+	ok = socket:send(Socket, ["HELO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
+	case read_possible_multiline_reply(Socket) of
+		{ok, <<"250", _Rest/binary>>} ->
+			{ok, []};
+		{ok, <<"4", _Rest/binary>> = Msg} ->
+			quit(Socket),
+			throw({temporary_failure, Msg});
+		{ok, Msg} ->
+			quit(Socket),
+			throw({permanant_failure, Msg})
+	end.
+
 
 % check if we should try to do TLS
 try_STARTTLS(Socket, Options, Extensions) ->
@@ -625,6 +647,38 @@ session_start_test_() ->
 								socket:send(Y, "250-server.example.com EHLO\r\n250-AUTH LOGIN PLAIN\r\n421 too busy\r\n"),
 								?assertMatch({ok, "QUIT\r\n"}, socket:recv(Y, 0, 1000)),
 								receive {'DOWN', Monitor, _, _, Error} -> ?assertMatch({error, retries_exceeded, _}, Error) end,
+								ok
+						end
+					}
+			end,
+			fun({ListenSock}) ->
+					{"retry with HELO when EHLO not accepted",
+						fun() ->
+								% Connected to mail.maaswaalcollege.nl.
+								% Escape character is '^]'.
+								% 220 
+								% EHLO maxclass.com
+								% 500 5.3.3 Unrecognized command
+								% HELO maxclass.com
+								% 250 webmail.maaswaalcollege.nl Hello [193.172.125.195]
+								Options = [{relay, "localhost"}, {port, 9876}, {hostname, "testing"}],
+								{ok, _Pid} = send({"test@foo.com", ["foo@bar.com"], "hello world"}, Options),
+								{ok, X} = socket:accept(ListenSock, 1000),
+								socket:send(X, "220 \r\n"),
+								?assertMatch({ok, "EHLO testing\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "500 5.3.3 Unrecognized command\r\n"),
+								?assertMatch({ok, "HELO testing\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250 Some banner\r\n"),
+								?assertMatch({ok, "MAIL FROM: <test@foo.com>\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250 ok\r\n"),
+								?assertMatch({ok, "RCPT TO: <foo@bar.com>\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250 ok\r\n"),
+								?assertMatch({ok, "DATA\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "354 ok\r\n"),
+								?assertMatch({ok, "hello world\r\n"}, socket:recv(X, 0, 1000)),
+								?assertMatch({ok, ".\r\n"}, socket:recv(X, 0, 1000)),
+								socket:send(X, "250 ok\r\n"),
+								?assertMatch({ok, "QUIT\r\n"}, socket:recv(X, 0, 1000)),
 								ok
 						end
 					}

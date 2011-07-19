@@ -367,11 +367,13 @@ output1([List|Rest], Context, Acc) when is_list(List) ->
 output1([undefined|Rest], Context, Acc) ->
     output1(Rest, Context, Acc);
 output1([C|Rest], Context, Acc) when is_atom(C) ->
-    output1(Rest, Context, [atom_to_list(C)|Acc]);
+    output1(Rest, Context, [list_to_binary(atom_to_list(C))|Acc]);
 output1([{trans, _} = Trans|Rest], Context, Acc) ->
     output1(Rest, Context, [z_trans:lookup_fallback(Trans, Context)|Acc]);
 output1([{{_,_,_},{_,_,_}} = D|Rest], Context, Acc) ->
     output1([filter_date:date(D, "Y-m-d H:i:s", Context)|Rest], Context, Acc);
+output1([T|Rest], Context, Acc) when is_tuple(T) ->
+    output1([iolist_to_binary(io_lib:format("~p", [T]))|Rest], Context, Acc);
 output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
     

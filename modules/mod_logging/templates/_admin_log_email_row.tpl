@@ -8,12 +8,12 @@
 	   {% if result_row.severity == 4 %}Debug{% endif %}
 	   </a>
 	</span>
-	<span class="zp-10">
+	<span class="zp-10" title="{{ result_row.mailer_message }} [{{ result_row.mailer_host }}]">
 	    <a href="{% url admin_log_email severity=q.severity status=result_row.mailer_status %}">
 	    {{ result_row.mailer_status|escape }}
 	    </a>
 	</span>
-	<span class="zp-10">
+	<span class="zp-10" title="{{ result_row.message_nr }}">
 	    <a href="{% url admin_log_email severity=4 message_nr=result_row.message_nr %}">
 	        {{ result_row.message_nr|truncate:12|escape }}
 	    </a>

@@ -80,7 +80,7 @@ rfc5322_timestamp() ->
 	NDay = calendar:day_of_the_week(Year, Month, Day),
 	DoW = lists:nth(NDay, ?DAYS),
 	MoY = lists:nth(Month, ?MONTHS),
-	io_lib:format("~s, ~b ~s ~b ~b:~b:~b ~s", [DoW, Day, MoY, Year, Hour, Minute, Second, zone()]).
+	io_lib:format("~s, ~b ~s ~b ~2..0w:~2..0w:~2..0w ~s", [DoW, Day, MoY, Year, Hour, Minute, Second, zone()]).
 
 % borrowed from YAWS
 zone() ->
