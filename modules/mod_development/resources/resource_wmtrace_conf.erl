@@ -119,7 +119,7 @@ get_trace_conf(Tbl, Key, Acc) ->
     get_trace_conf(Tbl, ets:next(Tbl, Key), [Res | Acc]).
 
 get_resources(Context) ->
-    {_, _, _, _, _, SiteDispatch} = z_dispatcher:dispatchinfo(Context),
+    {_Host, _Hostname, _Streamhost, _Smtphost, _Hostaliases, _Redirect, SiteDispatch} = z_dispatcher:dispatchinfo(Context),
     Resources = lists:foldl(fun({_, _, Resource, _}, ResList) -> 
                                     case lists:member(Resource, ResList) of
                                         false -> [Resource | ResList];

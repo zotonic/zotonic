@@ -90,7 +90,7 @@ hostname_port(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'hostname_port').
 
 
-%% @spec dispatchinfo(Context) -> {host, hostname, hostalias, dispatchlist}
+%% @spec dispatchinfo(Context) -> {host, hostname, streamhost, smtphost, hostaliases, redirect, dispatchlist}
 %% @doc Fetch the dispatchlist for the site.
 dispatchinfo(#context{dispatcher=Dispatcher}) -> 
     gen_server:call(Dispatcher, 'dispatchinfo');
@@ -173,7 +173,7 @@ handle_call('hostname', _From, State) ->
 handle_call('hostname_port', _From, State) ->
     {reply, State#state.hostname_port, State};
 
-%% @doc Return the dispatchinfo for the site  {host, hostname, streamhost, hostaliases, dispatchlist}
+%% @doc Return the dispatchinfo for the site  {host, hostname, streamhost, smtphost, hostaliases, redirect, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
     {reply,
      {State#state.host, State#state.hostname, State#state.streamhost, State#state.smtphost,
