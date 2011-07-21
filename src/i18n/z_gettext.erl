@@ -37,7 +37,7 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
--export([parse_po/1, parse_po_bin/1]).
+-export([parse_po/1, parse_po_bin/1, test/0]).
 
 
 -define(GETTEXT_HEADER_INFO, header).
@@ -52,7 +52,7 @@ parse_po(Fname) ->
     parse_po_bin(Bin).
 
 parse_po_bin(Bin) ->
-    parse_po_file(to_list(Bin)).
+    lists:map(fun header_info/1, parse_po_file(to_list(Bin))).
 
 parse_po_file("msgid" ++ T) ->
     {Key, R0} = get_po_string(T),
@@ -67,6 +67,9 @@ get_msgstr("msgstr" ++ T) ->
     get_po_string(T);
 get_msgstr([_ | T]) ->
     get_msgstr(T).
+
+header_info({"",R}) -> {?GETTEXT_HEADER_INFO, R};  
+header_info(X)      -> X.
 
 %%%
 %%% A PO-string has the same syntax as a C character string.
@@ -83,11 +86,7 @@ get_po_string([$\s|T]) -> get_po_string(T);
 get_po_string([$\r|T]) -> get_po_string(T);
 get_po_string([$\n|T]) -> get_po_string(T);
 get_po_string([$\t|T]) -> get_po_string(T);
-get_po_string([$"|T])  -> header_info(eat_string(T)).
-
-%%% only header-info has empty po-string !
-header_info({"",R}) -> {?GETTEXT_HEADER_INFO, R};  
-header_info(X)      -> X.
+get_po_string([$"|T])  -> eat_string(T).
 
 eat_string(S) ->
     eat_string(S,[]).
@@ -110,4 +109,34 @@ to_list(A) when is_atom(A)    -> atom_to_list(A);
 to_list(I) when is_integer(I) -> integer_to_list(I);
 to_list(B) when is_binary(B)  -> binary_to_list(B);
 to_list(L) when is_list(L)    -> L.
+
+test() ->
+
+    X = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"">>),
+
+[{header, "header value"}] = X,
+
+    X2 = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"
+
+msgid \"en\"
+msgstr \"nl\"
+">>),
+
+[{header, "header value"}, {"en", "nl"}] = X2,
+
+    X3 = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"
+
+msgid \"en\"
+msgstr \"nl\"
+
+msgid \"en2\"
+msgstr \"\"
+">>),
+
+[{header, "header value"}, {"en", "nl"}, {"en2", ""}] = X3.
+
+
 
