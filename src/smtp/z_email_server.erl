@@ -362,6 +362,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                          {relay, RecipientDomain}]
                 end,
 
+
             LogEmail = #log_email{
                 message_nr=Id,
                 envelop_to=RecipientEmail,
@@ -369,6 +370,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                 to_id=proplists:get_value(recipient_id, Email#email.vars),
                 from_id=z_acl:user(Context),
                 content_id=proplists:get_value(id, Email#email.vars),
+                other_id=proplists:get_value(list_id, Email#email.vars), %% Supposed to contain the mailinglist id
                 message_template=Email#email.html_tpl
             },
             z_notifier:notify({log, LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}}, Context),

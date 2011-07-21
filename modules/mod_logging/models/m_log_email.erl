@@ -81,10 +81,10 @@ search(Filter, Context) ->
         end;
     map_search({other, RscId}, {Ws,As}, Context) ->
         case m_rsc:rid(RscId, Context) of
-            undefined -> {["content_id = -1"|Ws], As};
+            undefined -> {["other_id = -1"|Ws], As};
             Id -> 
                 {As1,N} = arg(integer_to_list(Id), As),
-                {[["content_id = $",N]|Ws], As1}
+                {[["other_id = $",N]|Ws], As1}
         end.
     
     
