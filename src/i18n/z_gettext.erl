@@ -52,24 +52,33 @@ parse_po(Fname) ->
     parse_po_bin(Bin).
 
 parse_po_bin(Bin) ->
-    lists:map(fun header_info/1, parse_po_file(to_list(Bin))).
+    parse_po_file(to_list(Bin)).
 
-parse_po_file("msgid" ++ T) ->
+parse_po_file(List) ->
+    lists:reverse(
+      lists:foldl(fun ({"", R}, AccIn) ->
+                          [{?GETTEXT_HEADER_INFO, R}|AccIn];
+                      ({_, ""}, AccIn) ->
+                          AccIn;
+                      (R, AccIn) ->
+                          [R|AccIn]
+                  end,
+                  [],
+                  parse_po_list(List))).
+
+parse_po_list("msgid" ++ T) ->
     {Key, R0} = get_po_string(T),
     {Val, Rest} = get_msgstr(R0),
-    [{Key,Val} | parse_po_file(Rest)];
-parse_po_file([_ | T]) ->
-    parse_po_file(T);
-parse_po_file([]) ->
+    [{Key,Val} | parse_po_list(Rest)];
+parse_po_list([_ | T]) ->
+    parse_po_list(T);
+parse_po_list([]) ->
     [].
 
 get_msgstr("msgstr" ++ T) ->
     get_po_string(T);
 get_msgstr([_ | T]) ->
     get_msgstr(T).
-
-header_info({"",R}) -> {?GETTEXT_HEADER_INFO, R};  
-header_info(X)      -> X.
 
 %%%
 %%% A PO-string has the same syntax as a C character string.
@@ -132,11 +141,11 @@ msgstr \"header value\"
 msgid \"en\"
 msgstr \"nl\"
 
-msgid \"en2\"
+msgid \"empty trans\"
 msgstr \"\"
 ">>),
 
-[{header, "header value"}, {"en", "nl"}, {"en2", ""}] = X3.
+[{header, "header value"}, {"en", "nl"}] = X3.
 
 
 
