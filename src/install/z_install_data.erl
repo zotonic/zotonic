@@ -44,12 +44,12 @@ install(Host, C) ->
 
 %% @doc Install all configuration parameters with default values
 %% @spec install_config(Connection) -> ok
-install_config(C) ->
+install_config(_C) ->
     ?DEBUG("Inserting config keys"),
-    {ok, 1} = pgsql:equery(C, 
-        "insert into config (module, key, value, props, modified) values ($1, $2, $3, $4, now())", 
-        ["i18n", "language", "en", []]),
-    pgsql:reset_id(C, "config"),
+    %% {ok, 1} = pgsql:equery(C, 
+    %%     "insert into config (module, key, value, props, modified) values ($1, $2, $3, $4, now())", 
+    %%     ["mod_foo", "bar", "baz", []]),
+    %% pgsql:reset_id(C, "config"),
     ok.
 
 
