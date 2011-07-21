@@ -58,8 +58,8 @@ parse_po_file(List) ->
     lists:reverse(
       lists:foldl(fun ({"", R}, AccIn) ->
                           [{?GETTEXT_HEADER_INFO, R}|AccIn];
-                      ({_, ""}, AccIn) ->
-                          AccIn;
+                      ({T, ""}, AccIn) ->
+                          [{T,T}|AccIn];
                       (R, AccIn) ->
                           [R|AccIn]
                   end,
@@ -145,7 +145,7 @@ msgid \"empty trans\"
 msgstr \"\"
 ">>),
 
-[{header, "header value"}, {"en", "nl"}] = X3.
+[{header, "header value"}, {"en", "nl"}, {"empty trans", "empty trans"}] = X3.
 
 
 
