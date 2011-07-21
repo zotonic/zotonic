@@ -226,7 +226,7 @@ record_to_proplist(#log_email{} = Rec) ->
 record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
     #log_message{
         message=iolist_to_binary(["SMTP: ",
-                    z_convert:to_list(R#log_email.mailer_status), ": ", z_convert:to_list(R#log_email.mailer_message), $\n,
+                    z_convert:to_list(R#log_email.mailer_status), ": ", to_list(R#log_email.mailer_message), $\n,
                     "To: ", z_convert:to_list(R#log_email.envelop_to), opt_user(R#log_email.to_id), $\n,
                     "From: ", z_convert:to_list(R#log_email.envelop_from), opt_user(R#log_email.from_id)
                 ]),
@@ -238,6 +238,13 @@ record_to_log_message(_, Fields, LogType, Id) ->
         props=[ {log_type, LogType}, {log_id, Id} | Fields ]
     }.
 
+
+    to_list({error, timeout}) ->
+        "timeout";
+    to_list(R) when is_tuple(R) ->
+        io_lib:format("~p", R);
+    to_list(V) ->
+        z_convert:to_list(V).
 
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
