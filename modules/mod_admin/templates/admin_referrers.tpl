@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Referrers of {{ m.rsc[q.id].title }} _}{% endblock %}
+{% block title %}{_ Referrers of _} {{ m.rsc[q.id].title }}{% endblock %}
 
 {% block content %}
 	<div id="content" class="zp-85">
