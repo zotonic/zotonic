@@ -35,7 +35,8 @@
 	observe_mailinglist_message/2,
 	event/2,
 	update_scheduled_list/2,
-	datamodel/1
+	datamodel/1,
+	page_attachments/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -331,10 +332,12 @@ send_mailing_process(ListId, PageId, Context) ->
             [] -> skip;
             Email1 ->
                 Options1 = [{email,Email1}|Options],
-                case IsDirect of
-                    true -> z_email:send_render(Email, {cat, "mailing_page.tpl"}, Options1, Context);
-                    false -> z_email:sendq_render(Email, {cat, "mailing_page.tpl"}, Options1, Context)
-                end
+
+                Id = proplists:get_value(id, Options),
+                Attachments = mod_mailinglist:page_attachments(Id, Context),
+
+                z_email_server:send(#email{queue=not(IsDirect), to=Email1,
+	                        html_tpl={cat, "mailing_page.tpl"}, vars=Options1, attachments=Attachments}, Context)
         end.
 
 
@@ -348,3 +351,17 @@ send_mailing_process(ListId, PageId, Context) ->
 		split_list(N, [H|T], Acc) ->
 			split_list(N-1, T, [H|Acc]).
 
+
+%% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'document' edges.
+page_attachments(Id, Context) ->
+    AttIds = m_edge:objects(Id, document, Context),
+    [as_upload(AId, Context) || AId <- AttIds].
+
+
+as_upload(Id, Context) ->
+    M = m_media:get(Id, Context),
+    #upload{
+             tmpfile=z_media_archive:abspath(proplists:get_value(filename, M), Context),
+             mime=proplists:get_value(mime, M),
+             filename=proplists:get_value(original_filename, M)
+           }.
