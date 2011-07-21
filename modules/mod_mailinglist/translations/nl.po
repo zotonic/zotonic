@@ -578,7 +578,7 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14
-#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:63
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62
 msgid "cancel"
 msgstr "annuleer"
 
@@ -598,7 +598,7 @@ msgid "e-Mail"
 msgstr "email"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
-#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:56
 msgid "edit"
 msgstr "bewerk"
 
@@ -618,7 +618,7 @@ msgstr "lees het hele artikel online."
 msgid "recipients"
 msgstr "ontvangers"
 
-#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:59
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:58
 msgid "subscribe"
 msgstr "aanmelden"
 

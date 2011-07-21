@@ -25,22 +25,21 @@
 					<span class="zp-15">{_ Predicate _}</span>
 					<span class="zp-15">{_ Category _}</span>
 					<span class="zp-15">{_ Modified on _}</span>
-					<span class="zp-15">{_ Modified by _}</span>
-					<span class="zp-10">{_ Options _}</span>
+					<span class="zp-25">{_ Modified by _}</span>
 				</li>
 			{% for id, pred_id in result %}
-				<li id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
-					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
+				<li id="{{ #li.id }}" class="clearfix {% if not m.rsc[id].is_published %}unpublished{% endif %}">
+					<a href="{% url admin_edit_rsc id=id %}">
 						<span class="zp-30">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
 						<span class="zp-15">{{ m.rsc[pred_id].title }}</span>
 						<span class="zp-15">{{ m.rsc[m.rsc[id].category_id].title }}</span>
 						<span class="zp-15">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
-						<span class="zp-15">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
-						<span class="zp-10">
-							{% button text=_"delete" disabled=m.rsc[id].is_protected action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
-							{% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
-						</span>
+						<span class="zp-25">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
 					</a>
+                    <span class="button-area">
+                        {% button text=_"delete" disabled=m.rsc[id].is_protected action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
+                        {% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                    </span>
 				</li>
 			{% empty %}
 				<li>

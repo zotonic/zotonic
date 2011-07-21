@@ -13,7 +13,7 @@
 {% if not r.is_a.meta %}
 <div class="notification notice">
 	{_ The category defines what the page represents. _} 
-	<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about category. _}', text: '{_ Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}', width: '450px'">{_ Need more help? _}</a>
+	<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about category."|escapejs }}', text: '{{ _"Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
 </div>
 
 <p>

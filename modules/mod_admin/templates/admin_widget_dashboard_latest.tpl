@@ -24,8 +24,7 @@
 <ul class="short-list">
 	<li class="headers clearfix">
 		<span class="zp-55">{_ Title _}</span>
-		<span class="zp-25">{_ Category _}</span>
-		<span class="zp-20">{_ Options _}</span>
+		<span class="zp-45">{_ Category _}</span>
 	</li>
 
 	{% for id in m.search[{latest cat=cat pagelen=pagelen|default:5}] %}
@@ -38,9 +37,9 @@
                 {% else %}
                 <span class="zp-55">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
                 {% endif %}
-                <span class="zp-25">{{ m.rsc[m.rsc[id].category_id].title }}</span>
+                <span class="zp-45">{{ m.rsc[m.rsc[id].category_id].title }}</span>
 		    </a>
-			<span class="zp-20">
+			<span class="button-area">
                 <a href="{{ m.rsc[id].page_url }}" class="button">{_ view _}</a>
                 <a href="{% url admin_edit_rsc id=id %}" class="button">{_ edit _}</a>
 			</span>

@@ -3,7 +3,7 @@
 {# Show the edit fields to edit the name of a person #}
 
 
-{% block widget_title %}{_ Person name _}{% endblock %}
+{% block widget_title %}{{ _"Person name"|escapejs }}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
 
 
@@ -12,7 +12,7 @@
 <fieldset class="admin-form">
 	<div class="notification notice">
 		{_ Here you can edit the person's name.  Use the title of the base content for the display name of this person. _}
-		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about person name. _}', text: '{_ <strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name. _}', width: '450px'">{_ Need more help? _}</a>
+		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about person name."|escapejs }}', text: '{{ _"<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
 	</div>
 
 	<div class="zp-20">

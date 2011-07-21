@@ -96,6 +96,7 @@ hr {
 	}
 
 .short-list li {
+    position: relative;
 	display: block;
 	margin: 0;
 	padding: 0 6px;
@@ -144,6 +145,12 @@ hr {
 	.short-list li.log-error, .short-list li.log-error a {
         color: #c00;
 	}
+
+    .short-list li span.button-area {
+        position: absolute;
+        right: 0;
+    }
+
 
 ul.pager {
 	padding: 6px;

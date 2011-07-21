@@ -457,7 +457,7 @@ msgid ""
 "Next in category: "
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:41 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40 
 msgid ""
 "No items."
 msgstr ""
@@ -467,19 +467,14 @@ msgid ""
 "No media found."
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:87 
+#: ./modules/mod_admin/templates/admin_overview.tpl:86 
 msgid ""
 "No pages found."
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:47 
+#: ./modules/mod_admin/templates/admin_referrers.tpl:46 
 msgid ""
 "No referrers found."
-msgstr ""
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:17 ./modules/mod_admin/templates/admin_overview.tpl:66 ./modules/mod_admin/templates/admin_referrers.tpl:29 
-msgid ""
-"Options"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:5 
@@ -620,7 +615,7 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/admin_referrers.tpl:3 
 msgid ""
-"Referrers of {{ m.rsc[q.id].title }}"
+"Referrers of"
 msgstr ""
 
 #: ./modules/mod_admin/templates/admin_referrers.tpl:9 
@@ -929,7 +924,7 @@ msgstr ""
 msgid ""
 "When a page has a publication date range then it will only be visible "
 "between the two dates. Note that when you are allowed to edit the page then "
-"you can always see it."
+"you can always see it"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2 
@@ -993,7 +988,7 @@ msgid ""
 "download"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:34 ./modules/mod_admin/templates/admin_overview.tpl:81 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/admin_overview.tpl:80 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 
 msgid ""
 "edit"
 msgstr ""
@@ -1093,7 +1088,7 @@ msgid ""
 "uploaded on"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/admin_overview.tpl:80 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/admin_overview.tpl:79 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
 msgid ""
 "view"
 msgstr ""

@@ -11,7 +11,7 @@
 <div class="admin-form form-item">
 	<div class="notification notice">
 		{_ Used for events and other periods. _}
-		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{_ Help about date ranges. _}', text: '{_ Every page can have a date range. For example if the page is an event or description of someone\'s life. _}', width: '450px'">{_ Need more help? _}</a>
+		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone\'s life."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
 	</div>
 	<fieldset>
 		<div class="form-item">
