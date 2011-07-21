@@ -204,6 +204,7 @@ q(Sql, Parameters, Context) ->
         C ->
             try
                 case pgsql:equery(C, Sql, Parameters) of
+                    {ok, _Affected, _Cols, Rows} -> Rows;
                     {ok, _Cols, Rows} -> Rows;
                     {ok, Rows} -> Rows
                 end
