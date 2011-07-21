@@ -37,7 +37,7 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
--export([parse_po/1, parse_po_bin/1]).
+-export([parse_po/1, parse_po_bin/1, test/0]).
 
 
 -define(GETTEXT_HEADER_INFO, header).
@@ -54,13 +54,25 @@ parse_po(Fname) ->
 parse_po_bin(Bin) ->
     parse_po_file(to_list(Bin)).
 
-parse_po_file("msgid" ++ T) ->
+parse_po_file(List) ->
+    lists:reverse(
+      lists:foldl(fun ({"", R}, AccIn) ->
+                          [{?GETTEXT_HEADER_INFO, R}|AccIn];
+                      ({_, ""}, AccIn) ->
+                          AccIn;
+                      (R, AccIn) ->
+                          [R|AccIn]
+                  end,
+                  [],
+                  parse_po_list(List))).
+
+parse_po_list("msgid" ++ T) ->
     {Key, R0} = get_po_string(T),
     {Val, Rest} = get_msgstr(R0),
-    [{Key,Val} | parse_po_file(Rest)];
-parse_po_file([_ | T]) ->
-    parse_po_file(T);
-parse_po_file([]) ->
+    [{Key,Val} | parse_po_list(Rest)];
+parse_po_list([_ | T]) ->
+    parse_po_list(T);
+parse_po_list([]) ->
     [].
 
 get_msgstr("msgstr" ++ T) ->
@@ -83,11 +95,7 @@ get_po_string([$\s|T]) -> get_po_string(T);
 get_po_string([$\r|T]) -> get_po_string(T);
 get_po_string([$\n|T]) -> get_po_string(T);
 get_po_string([$\t|T]) -> get_po_string(T);
-get_po_string([$"|T])  -> header_info(eat_string(T)).
-
-%%% only header-info has empty po-string !
-header_info({"",R}) -> {?GETTEXT_HEADER_INFO, R};  
-header_info(X)      -> X.
+get_po_string([$"|T])  -> eat_string(T).
 
 eat_string(S) ->
     eat_string(S,[]).
@@ -110,4 +118,34 @@ to_list(A) when is_atom(A)    -> atom_to_list(A);
 to_list(I) when is_integer(I) -> integer_to_list(I);
 to_list(B) when is_binary(B)  -> binary_to_list(B);
 to_list(L) when is_list(L)    -> L.
+
+test() ->
+
+    X = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"">>),
+
+[{header, "header value"}] = X,
+
+    X2 = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"
+
+msgid \"en\"
+msgstr \"nl\"
+">>),
+
+[{header, "header value"}, {"en", "nl"}] = X2,
+
+    X3 = parse_po_bin(<<"msgid \"\"
+msgstr \"header value\"
+
+msgid \"en\"
+msgstr \"nl\"
+
+msgid \"empty trans\"
+msgstr \"\"
+">>),
+
+[{header, "header value"}, {"en", "nl"}] = X3.
+
+
 
