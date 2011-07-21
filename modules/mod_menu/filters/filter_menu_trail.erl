@@ -47,7 +47,11 @@ trail(Id, [{MenuMaybeSymbolic, Children}|Rest], Context) ->
                     %% Found
                     [MenuId|Path]
             end
-    end.
+    end;
+trail(Id, [MenuId|Rest], Context) when is_integer(MenuId)->
+    %% legacy menu notation
+    trail(Id, [{MenuId, []}|Rest], Context).
+
 
 
 

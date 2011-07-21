@@ -1,3 +1,0 @@
-[
-    {admin_menu, ["admin", "menu"], resource_menu_admin_menu, []}
-].

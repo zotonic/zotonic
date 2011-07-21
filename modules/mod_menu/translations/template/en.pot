@@ -18,7 +18,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
+#: ./modules/mod_menu/templates/_admin_menu_menu_view.tpl:1 
+msgid ""
+"Current menu"
+msgstr ""
+
+#: ./modules/mod_menu/templates/_admin_menu_menu_view.tpl:12 
+msgid ""
+"Drag me"
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
 msgid ""
 "Help about editing menus."
 msgstr ""
@@ -29,12 +39,31 @@ msgid ""
 "side and drag them to the menu on the left."
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
+#: ./modules/mod_menu/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Menu"
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
 msgid ""
 "Need more help?"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:21 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:15 
 msgid ""
-"xxx."
+"Search for a page"
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
+msgid ""
+"Type the name of the page you want in your menu in the box left of this "
+"note. When you get a result, you can drag that item onto the menu pane on "
+"the left side of the page. You can also move the menu items around to "
+"manage the way your navigations looks."
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:23 
+msgid ""
+"Type your search terms to find pages. Then drag them on to the panel on "
+"your left."
 msgstr ""

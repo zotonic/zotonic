@@ -146,6 +146,7 @@ menu_flat(undefined, _Context) ->
 menu_flat(<<>>, _Context) ->
     [];
 menu_flat(X, Context) ->
+    ?DEBUG(X),
     menu_flat(X, [1], [], Context).
 
 menu_flat([], _Path, Acc, _Context) ->
@@ -161,7 +162,11 @@ menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc, Context ) ->
         ++ menu_flat(Children, [1,Idx|PR], [], Context) 
         ++ [{undefined, undefined, up}]
         ++ menu_flat(Rest, [Idx+1|PR], [], Context)
-        ++  Acc.
+        ++  Acc;
+menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
+    %% oldschool notation fallback
+    menu_flat([{MenuId, []} | Rest], P, A, C).
+
 
 
 %% @doc test function
