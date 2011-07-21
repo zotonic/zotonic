@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-01-20 15:52+0100\n"
+"PO-Revision-Date: 2011-07-21 10:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "<em>withheld</em>"
 msgstr "<em>achtergehouden</em>"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
 "click on the “show all recipients” link.</p><h3>Sender name and e-mail "
@@ -34,7 +34,18 @@ msgid ""
 "p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
 "allowed to send a page to the mailing list. Everybody who can view the "
 "mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Ontvangers</h3><p>Om ontvangers toe te voegen, te verwijderen of te bekijken, klik op de “bekijk alle ontvangers“ link.</p><h3>Afzender naam en email</h3> <p>De naam en email van de afzender kan per mailinglijst worden ingesteld. De default is de configuratieoptie <tt>mod_emailer.email_from</tt>.  <h3>Automatische upload van ontvanger-lijsten</h3> <p>De “dropbox-bestandsnaam“ wordt gebruikt om automatisch de lijst van ontvangers te importeren. De huidige lijst van ontvangers wordt vervangen door de namen in het dropbox bestand.</p> <h3>Toegang</h3><p>Iedereen die de mailinglijst pagina mag bewerken, kan een pagina versturen naar de ontvangers van die lijst. Iedereen die de lijst kan zien kan een email adres toevoegen aan de lijst.</p>"
+msgstr ""
+"<h3>Ontvangers</h3><p>Om ontvangers toe te voegen, te verwijderen of te "
+"bekijken, klik op de “bekijk alle ontvangers“ link.</p><h3>Afzender naam en "
+"email</h3> <p>De naam en email van de afzender kan per mailinglijst worden "
+"ingesteld. De default is de configuratieoptie <tt>mod_emailer.email_from</"
+"tt>.  <h3>Automatische upload van ontvanger-lijsten</h3> <p>De “dropbox-"
+"bestandsnaam“ wordt gebruikt om automatisch de lijst van ontvangers te "
+"importeren. De huidige lijst van ontvangers wordt vervangen door de namen in "
+"het dropbox bestand.</p> <h3>Toegang</h3><p>Iedereen die de mailinglijst "
+"pagina mag bewerken, kan een pagina versturen naar de ontvangers van die "
+"lijst. Iedereen die de lijst kan zien kan een email adres toevoegen aan de "
+"lijst.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:18
 msgid "<p>Sorry, something went wrong. Please try again later.</p>"
@@ -52,12 +63,12 @@ msgstr "<p>Bedankt. Je hebt je nu aangemeld bij de mailing.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Bedankt. Je bent nu afgemeld van de mailing.</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:36
 msgid "Act"
 msgstr "Actief"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:32
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:25
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
 msgid "Actions"
 msgstr "Acties"
 
@@ -79,7 +90,7 @@ msgstr ""
 msgid "All mailing lists"
 msgstr "Alle mailinglijsten"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:23
 msgid ""
 "All recipients of the mailing list. You can upload or download this list, "
 "which must be a file with one e-mail address per line."
@@ -87,10 +98,10 @@ msgstr ""
 "Alle ontvangers van de mailinglijst. Je kan deze lijst downloaden of "
 "uploaden. Elke regel van het bestand moet 1 email adres bevatten."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:15
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:14
 msgid ""
-"Any page can be send as a mailing. You can send a mailing from any edit "
-"page, here you can add or remove mailing lists and recipients."
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
 msgstr ""
 "Elke pagina kan als een mailing worden verstuurd. Je kan een mailing "
 "versturen vanaf elke bewerk-pagina. Op deze pagina kan je ontvangers "
@@ -111,8 +122,8 @@ msgid ""
 msgstr "Voordat je email ontvangt, moet je aanmelding eerst worden bevestigd."
 
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
-#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:26
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13
 #: modules/mod_mailinglist/templates/_dialog_email_page.tpl:13
 msgid "Cancel"
 msgstr "Annuleren"
@@ -124,6 +135,10 @@ msgstr "Mailing annuleren"
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
 msgid "Cancel this mailing."
 msgstr "Annuleer deze mailing."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "Clear"
+msgstr "Wissen"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:13
 msgid ""
@@ -139,7 +154,11 @@ msgid ""
 "Click the button below to confirm your subscription to this mailing list."
 msgstr "Klik op de onderstaande knop om je aanmelding te bevestingen."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "Delete all recipients from this list?"
+msgstr "Alle geaddresseerden van deze lijst verwijderen?"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:21
 msgid "Description"
 msgstr "Omschrijving"
 
@@ -155,19 +174,19 @@ msgstr "Download de lijst van actieve ontvangers"
 msgid "Downloading active recipients list. Check your download window."
 msgstr "Aan het downloaden. Let op je downloadvenster."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:27
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:28
 msgid "Dropbox filename (optional)"
 msgstr "Dropbox bestandsnaam (optioneel)"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:24
 msgid "Edit the mailing list &raquo;"
 msgstr "Bewerk de mailinglijst &raquo;"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37
 msgid "Email"
 msgstr "Email"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:16
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:17
 msgid "Email page"
 msgstr "Email deze pagina"
 
@@ -195,13 +214,13 @@ msgstr "Geef je email adres waarmee je je wilt aanmelden."
 msgid "Goodbye,"
 msgstr "Tot ziens,"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:6
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6
 msgid "Hello,"
 msgstr "Hallo,"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
 msgid "Help about mailing lists."
 msgstr "Hulp over mailinglijsten"
 
@@ -213,9 +232,9 @@ msgstr "Hopelijk tot ziens"
 msgid "Keep mailing"
 msgstr "Niet afmelden"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:12
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:11
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:12
 msgid "Kind Regards,"
 msgstr "Met vriendelijke groet,"
 
@@ -223,11 +242,11 @@ msgstr "Met vriendelijke groet,"
 msgid "Mailing Lists"
 msgstr "Mailinglijsten"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:18
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:17
 msgid "Mailing list overview"
 msgstr "Mailinglijsten overzicht"
 
@@ -240,8 +259,8 @@ msgstr "Mailinglijst instellingen"
 msgid "Mailing lists"
 msgstr "Mailinglijsten"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:9
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
@@ -249,11 +268,11 @@ msgstr "Meer hulp nodig?"
 msgid "New mailing list"
 msgstr "Nieuwe mailinglijst"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:50
 msgid "No items found"
 msgstr "Geen ontvangers gevonden"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:62
 msgid "No recipients"
 msgstr "Geen ontvangers"
 
@@ -273,7 +292,7 @@ msgstr "Bevestig a.u.b. uw aanmelding voor"
 msgid "Please follow"
 msgstr "Klik a.u.b. op"
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:24
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:8
 msgid "Please unsubscribe"
 msgstr "Klik hier"
 
@@ -281,34 +300,46 @@ msgstr "Klik hier"
 msgid "Prefix"
 msgstr "Voorvoegsel"
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:19
+#: modules/mod_mailinglist/templates/mailing_page.tpl:21
 msgid "Read this page on the web."
 msgstr "Lees deze pagina online"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:23
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
 msgid "Recipients"
 msgstr "Ontvangers"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:15
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+"De geaddresseerden van een mailinglijst zijn óf slechts een mailadres,\n"
+"óf een volledige persoon in het systeem."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:9
 msgid "Recipients for"
 msgstr "Ontvangers voor"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:40
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Remove this recipient. No undo possible."
 msgstr "Verwijder deze ontvanger."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:2
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "Ingepland"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "See the"
+msgstr "Bekijk de"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:2
 msgid "Select a mailing list to send the page"
 msgstr "Kies een mailinglijst om deze pagina naartoe te sturen"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:13
 msgid "Select a mailing list to send this page to."
 msgstr "Kies een mailinglijst om deze pagina naartoe te sturen<"
 
@@ -325,11 +356,11 @@ msgid "Send e-mail"
 msgstr "Via email"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:25
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:13
 msgid "Send mailing"
 msgstr "Verstuur mailing"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:14
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:15
 msgid "Send test mailing"
 msgstr "Verstuur testmailing"
 
@@ -341,15 +372,15 @@ msgstr "Verstuur pagina"
 msgid "Send this page to a mailing list."
 msgstr "Verstuur deze pagina naar een mailinglijst."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:16
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:17
 msgid "Send this page to an e-mail address."
 msgstr "Verstuur deze pagina naar een email adres."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:14
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:15
 msgid "Send this page to the test mailing list."
 msgstr "Verstuur deze pagina naar de testmailinglijst."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:4
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3
 msgid "Send to mailing list"
 msgstr "Verstuur naar mailinglijst"
 
@@ -357,11 +388,11 @@ msgstr "Verstuur naar mailinglijst"
 msgid "Send welcome"
 msgstr "Verstuur welkomstbericht"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:19
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:20
 msgid "Sender address for e-mails (optional)"
 msgstr "Afzender adres voor mailings (optioneel)"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:14
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:15
 msgid "Sender name for e-mails (optional)"
 msgstr "Afzendernaam voor mailings (optioneel)"
 
@@ -369,7 +400,7 @@ msgstr "Afzendernaam voor mailings (optioneel)"
 msgid "Sent the e-mail."
 msgstr "Email verstuurd."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:11
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:12
 msgid "Show all recipients &raquo;"
 msgstr "Toon alle ontvangers &raquo;"
 
@@ -435,7 +466,7 @@ msgstr "Deze actie kan niet ongedaan worden gemaakt."
 msgid "This mail was sent to you because someone visiting"
 msgstr "Je krijgt deze mail omdat iemand die"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:21
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:20
 msgid "Title"
 msgstr "Titel"
 
@@ -463,8 +494,8 @@ msgstr ""
 msgid "Upload a list of recipients."
 msgstr "Upload de lijst met ontvangers."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:12
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
 msgid "Upload file"
 msgstr "Bestand uploaden"
 
@@ -506,7 +537,7 @@ msgstr "Je bent nu afgemeld van deze mailinglijst"
 msgid "You can"
 msgstr "Je kunt"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
 msgid ""
 "You can send this page as an e-mail to everyone in a mailing list. If the "
 "page has a future publication start date, is not yet published or is not "
@@ -523,7 +554,7 @@ msgid ""
 "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "opgegven a"
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:24
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:3
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Je ontvangt deze mail omdat je lid bent van de mailinglijst"
 
@@ -545,9 +576,9 @@ msgstr ""
 "verstuurd naar het opgegeven adres. Als de mail niet aankomt, controleer dan "
 "de \"spam\" folder."
 
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:63
-#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "cancel"
 msgstr "annuleer"
 
@@ -555,18 +586,18 @@ msgstr "annuleer"
 msgid "click here to unsubscribe."
 msgstr "hier klikken om je af te melden."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:40
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:44
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "delete"
 msgstr "verwijder"
 
-#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:13
 #: modules/mod_mailinglist/templates/_dialog_email_page.tpl:7
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:13
 msgid "e-Mail"
 msgstr "email"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:40
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
 msgid "edit"
 msgstr "bewerk"
@@ -574,11 +605,6 @@ msgstr "bewerk"
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12
 msgid "mailing list"
 msgstr "mailinglijst"
-
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:5
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:5
-msgid "make smaller"
-msgstr "kleiner"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "or copy and paste the address below in your browser."
@@ -588,13 +614,17 @@ msgstr "of copy-paste het onderstaande adres in je browser."
 msgid "read the full article online."
 msgstr "lees het hele artikel online."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
 msgid "recipients"
 msgstr "ontvangers"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:59
 msgid "subscribe"
 msgstr "aanmelden"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "subscribing persons &raquo;"
+msgstr "aangemelde personen &raquo;"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
@@ -609,14 +639,17 @@ msgstr "bezocht dacht dat je dit leuk zou vinden."
 msgid "to:"
 msgstr "naar:"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:41
 msgid "view"
 msgstr "bekijk"
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:24
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:8
 msgid "when you don't want to receive any further mail from this list."
 msgstr "wanneer je geen mail meer wilt ontvangen van deze lijst."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8
 msgid "with your e-mail address"
 msgstr "met je email adres"
+
+#~ msgid "make smaller"
+#~ msgstr "kleiner"

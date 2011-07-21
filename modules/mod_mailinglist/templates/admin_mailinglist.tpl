@@ -11,8 +11,8 @@
 		{% button text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 
 		<hr class="clear" />
-		<p>{_ Any page can be send as a mailing. You can send a mailing from any edit page, here you can add or remove mailing lists and recipients. _}<br/>
-		{_ Recipients can be e-mail only via a simple signup form, or subscribed person pages in the system. _}</p>
+		<p>{_ Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients. _}<br/>
+		{_ Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system. _}</p>
 
 		<h3 class="above-list ">{_ Mailing list overview _}</h3>
 		<ul class="short-list">

@@ -44,7 +44,8 @@
 	recipient_delete_quiet/2,
 	recipient_confirm/2,
 	recipient_is_enabled_toggle/2,
-	
+	recipients_clear/2,
+
 	insert_scheduled/3,
 	delete_scheduled/3,
 	get_scheduled/2,
@@ -174,7 +175,13 @@ recipient_confirm(ConfirmKey, Context) ->
 		undefined ->
 			{error, enoent}
 	end.
-	
+
+%% @doc Clear all recipients of the list
+%% @spec recipients_clear(ListId, Context) -> ok
+recipients_clear(ListId, Context) ->
+    %% TODO clear person edges to list
+    z_db:q("delete from mailinglist_recipient where mailinglist_id = $1", [ListId], Context),
+    ok.
 
 %% @doc Fetch the information for a confirmation key
 %% @spec get_confirm_key(ConfirmKey, Context) -> Proplist | undefined

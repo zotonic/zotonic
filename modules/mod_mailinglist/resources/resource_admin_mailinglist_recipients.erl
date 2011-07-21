@@ -62,5 +62,9 @@ event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _Targ
 					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
 				], Context);
 
+event({postback, {recipients_clear, [{id, Id}]}, _TriggerId, _TargetId}, Context) ->
+	m_mailinglist:recipients_clear(Id, Context),
+	z_render:wire([{reload, []}], Context);
+
 event({postback, {dialog_recipient_upload, [{id,_Id}]}, _TriggerId, _TargetId}, Context) ->
 	Context.

@@ -47,8 +47,7 @@
 
 {% if in_admin and not recipient_id %}
 	<div class="form-item clearfix">
-		<label for="{{ #welcome }}">{_ Send welcome _}</label>
-		<input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" checked="checked" />
+		<label><input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" checked="checked" />{_ Send welcome _}</label>
 	</div>
 {% endif %}
 
