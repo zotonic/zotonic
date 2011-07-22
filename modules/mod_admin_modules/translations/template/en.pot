@@ -18,48 +18,58 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:23 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 ./modules/mod_admin_modules/templates/admin_modules.tpl:33 
 msgid ""
 "Activate"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:22 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:17 
 msgid ""
 "Author"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:20 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:29 
+msgid ""
+"Deactivate"
+msgstr ""
+
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:15 
 msgid ""
 "Description"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 
+#: ./modules/mod_admin_modules/templates/_admin_menu_module.tpl:2 ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 
 msgid ""
 "Modules"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:16 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:11 
 msgid ""
 "Modules overview"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:46 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:41 
 msgid ""
 "No modules found"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:21 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:16 
 msgid ""
 "Prio"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:14 
+#: ./modules/mod_admin_modules/templates/_admin_status.tpl:2 
+msgid ""
+"Rescan modules"
+msgstr ""
+
+#: ./modules/mod_admin_modules/templates/_admin_status.tpl:3 
 msgid ""
 "Rescanning will rebuild the index of all modules, actions, templates etc. "
 " It will also reload all dispatch rules."
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:19 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:14 
 msgid ""
 "Title"
 msgstr ""

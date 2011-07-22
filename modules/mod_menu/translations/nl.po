@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mod_menu\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-07-21 22:22+0200\n"
+"Last-Translator: Arjan Scherpenisse <arjan@scherpenisse.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:1
+msgid "Current menu"
+msgstr "Huidig menu"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+msgid "Drag me"
+msgstr "Verslepen"
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:20
+msgid "Help about editing menus."
+msgstr "Hulp bij de menu-editor"
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:19
+msgid ""
+"Here you can change the menu of your site.  Select pages on the right hand "
+"side and drag them to the menu on the left."
+msgstr ""
+"Op deze plek kan je het menu van de site aanpassen. Selecteer pagina's aan "
+"de rechterkant en sleep ze in het menu links."
+
+#: modules/mod_menu/templates/_admin_menu_module.tpl:2
+msgid "Menu"
+msgstr "Menu"
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:20
+msgid "Need more help?"
+msgstr "Meer hulp nodig?"
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:15
+msgid "Search for a page"
+msgstr "Pagina opzoeken"
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:20
+msgid ""
+"Type the name of the page you want in your menu in the box left of this "
+"note. When you get a result, you can drag that item onto the menu pane on "
+"the left side of the page. You can also move the menu items around to manage "
+"the way your navigations looks."
+msgstr ""
+"Type de naam van de pagina die je in het menu wilt in het zoekveld rechts. "
+"Zodra je een resultaat krijgt, kan je dat in het menu aan de linkerkan "
+"slepen. Je kan ook het menu aanpassen en van volgorde veranderen door de "
+"items binnen het menu te slepen."
+
+#: modules/mod_menu/templates/admin_edit.menu.tpl:23
+msgid ""
+"Type your search terms to find pages. Then drag them on to the panel on your "
+"left."
+msgstr ""
+"Type een zoekterm om pagina's te vinden. Sleep ze daarna in het menu links."

@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mod_acl_simple_roles\n"
+"POT-Creation-Date: 2011-07-21 22:29+0200\n"
+"PO-Revision-Date: 2011-07-21 22:43+0200\n"
+"Last-Translator: Arjan Scherpenisse <arjan@scherpenisse.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79 
+msgid ""
+"<strong>Security notice</strong>: When you allow */* files then all members "
+"of this role will be able to obtain full access to your whole site and all "
+"underlying data."
+msgstr ""
+"<strong>Waarschuwing</strong>: Wanneer je */* toelaat als filter voor\n"
+"bestanden dan kunnen alle leden van deze rol volledige toegang tot\n"
+"jesite en alle onderliggende data verkrijgen."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16 
+msgid ""
+"All members are allowed to view all content.  (Check this for supervisors.)"
+msgstr "Alle leden van deze rol mogen alle content zien. (Aanbevolen voor supervisors.)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40 
+msgid ""
+"Allow editing of category"
+msgstr "Sta editen toe van de volgende categorieën"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid ""
+"Check below what people that are member of this role are allowed to do."
+msgstr "Kies hieronder wat de leden van deze rol mogen doen."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32 
+msgid ""
+"Community members"
+msgstr "Leden"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77 
+msgid ""
+"File types allowed to be uploaded"
+msgstr "Bestandstypes dat geupload mogen worden"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70 
+msgid ""
+"File uploads"
+msgstr "Uploads"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33 
+msgid ""
+"Group members"
+msgstr "Groepleden"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid ""
+"Help about ACL roles."
+msgstr "Hulp bij de ACL rollen"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55 
+msgid ""
+"Manage modules"
+msgstr "Modulebeheer"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72 
+msgid ""
+"Maximum allowed file size for uploads (in KB)"
+msgstr "Maximum bestandsgroote voor uploads (in KB)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25 
+msgid ""
+"Maximum visibility (user can’t change visibility to higher level than "
+"this)"
+msgstr "Maximum zichtbaarheid (gebruikers kunnen zichtbaarheid van pagina' niet hoger zetten dan deze waarde)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid ""
+"Need more help?"
+msgstr "Meer hulp nodig?"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21 
+msgid ""
+"Only allow to update content created by the user himself. (Check for user "
+"generated content sites.)"
+msgstr "Sta gebruikers enkel toe content te bewerken die ze zelf hebben aangemaakt. (Kies dit voor user-generated content sites)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5 
+msgid ""
+"Permissions"
+msgstr "Permissies"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29 
+msgid ""
+"The whole world"
+msgstr "De hele wereld"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid ""
+"Users can be member of multiple roles. Depending on the roles an user is "
+"allowed to create and edit certain categories or is able to manage certain "
+"modules."
+msgstr "Gebruikers kunnen lid zijn van meerdere rollen. Afhankelijk van deze rollen wordt een gebruiker toegestaan content uit bepaalde categorieen te bewerken en bepaalde modules te gebruiken."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6 
+msgid ""
+"make smaller"
+msgstr "kleiner"
