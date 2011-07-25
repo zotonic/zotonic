@@ -515,28 +515,36 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Headers1 = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
     ],
+    Params = [
+        {<<"content-type-params">>, [ {<<"charset">>, <<"utf-8">>} ]},
+        {<<"disposition">>, <<"inline">>},
+        {<<"disposition-params">>, []}
+    ],
     Parts = case z_utils:is_empty(Text) of
         true ->
             case z_utils:is_empty(Html) of
                 true -> 
                     [];
                 false -> 
-                    [{<<"text">>, <<"plain">>, [], [], 
+                    [{<<"text">>, <<"plain">>, [], Params, 
                      expand_cr(z_convert:to_binary(z_markdown:to_markdown(Html, [no_html])))}]
             end;
         false -> 
-            [{<<"text">>, <<"plain">>, [], [], 
+            [{<<"text">>, <<"plain">>, [], Params, 
              expand_cr(z_convert:to_binary(Text))}]
     end,
     Parts1 = case z_utils:is_empty(Html) of
         true -> 
             Parts;
         false -> 
-            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], [], z_convert:to_binary(Html)}], Context)
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, z_convert:to_binary(Html)}], Context)
     end,
     case Attachment of
         [] ->
-            mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1});
+            case Parts1 of
+                [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts});
+                _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1})
+            end;
         _ ->
             mimemail:encode({<<"multipart">>, <<"mixed">>,
              Headers1,
