@@ -637,7 +637,16 @@ guess_best_encoding(Body) ->
 encode_parameters([[]]) ->
 	[];
 encode_parameters(Parameters) ->
-	[case binstr:strchr(Y, $\s) of 0 -> [X, "=", Y]; _ -> [X, "=\"", Y, "\""] end || {X, Y} <- Parameters].
+	lists:map(fun encode_parameter/1, Parameters).
+
+	encode_parameter({<<"boundary">>, Boundary}) ->
+		[<<"boundary=\"">>, Boundary, $"];
+	encode_parameter({X, Y}) ->
+		case binstr:strchr(Y, $\s) of 
+			0 -> [X, "=", Y]; 
+			_ -> [X, "=\"", Y, "\""] 
+		end.
+
 
 encode_headers(Headers) ->
 	encode_headers(Headers, []).
