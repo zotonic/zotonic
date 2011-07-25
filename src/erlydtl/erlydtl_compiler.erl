@@ -566,6 +566,8 @@ value_ast(ValueToken, AsString, Context, TreeWalker) ->
                 true  -> string_ast(Number, TreeWalker);
                 false -> {{erl_syntax:integer(list_to_integer(Number)), #ast_info{}}, TreeWalker}
             end;
+        {'atom_literal', _Pos, String} ->
+            {{erl_syntax:atom(to_atom(unescape_string_literal(String))), #ast_info{}}, TreeWalker};
         undefined ->
             {{erl_syntax:atom(undefined), #ast_info{}}, TreeWalker};
         {'auto_id', Name} ->
@@ -1097,6 +1099,8 @@ cycle_ast(Names, Context, TreeWalker) ->
                             {[ erl_syntax:string(unescape_string_literal(Str)) | Acc], TW};
 						({trans_literal, _, Str}, {Acc,TW}) ->
 						  	{[ trans_literal_ast(Str, Context) | Acc ], TW};
+                        ({atom_literal, _, Str}, {Acc,TW}) ->
+                            {[ erl_syntax:atom(to_atom(unescape_string_literal(Str))) | Acc], TW};
                         ({number_literal, _, Num}, {Acc,TW}) ->
                             V = format(erl_syntax:integer(Num), Context),
                             {[ V | Acc ], TW};
@@ -1115,6 +1119,7 @@ cycle_ast(Names, Context, TreeWalker) ->
     {{erl_syntax:application(
         erl_syntax:atom('erlydtl_runtime'), erl_syntax:atom('cycle'),
         [erl_syntax:tuple(NamesTuple), erl_syntax:variable("Counters"), z_context_ast(Context)]), #ast_info{}}, TreeWalker1}.
+
 
 %% Older Django templates treat cycle with comma-delimited elements as strings
 cycle_compat_ast(Names, Context, TreeWalker) ->
@@ -1190,6 +1195,14 @@ unescape_string_literal("t" ++ Rest, Acc, slash) ->
     unescape_string_literal(Rest, [$\t | Acc], noslash);
 unescape_string_literal([C | Rest], Acc, slash) ->
     unescape_string_literal(Rest, [C | Acc], noslash).
+
+
+to_atom(B) when is_binary(B) ->
+    list_to_atom(binary_to_list(B));
+to_atom(L) when is_list(L) ->
+    list_to_atom(L);
+to_atom(A) when is_atom(A) ->
+    A.
 
 
 full_path(File, Context) ->
@@ -1580,6 +1593,8 @@ interpreted_argval({number_literal, _, Value}, _Context, TreeWalker) ->
     {erl_syntax:integer(list_to_integer(Value)), TreeWalker};
 interpreted_argval({string_literal, _, Value}, _Context, TreeWalker) -> 
     {erl_syntax:string(unescape_string_literal(Value)), TreeWalker};
+interpreted_argval({atom_literal, _, Value}, _Context, TreeWalker) -> 
+    {erl_syntax:atom(to_atom(unescape_string_literal(Value))), TreeWalker};
 interpreted_argval({trans_literal, _, Value}, Context, TreeWalker) ->
     {trans_literal_ast(Value, Context), TreeWalker};
 interpreted_argval({auto_id, Name}, Context, TreeWalker) ->

@@ -139,6 +139,7 @@ Nonterminals
 Terminals
 	all_keyword
 	as_keyword
+	atom_literal
     autoescape_keyword
     block_keyword
 	cache_keyword
@@ -346,6 +347,7 @@ FilterArgs -> FilterArgs colon TermValue : '$1' ++ ['$3'].
 Literal -> string_literal : '$1'.
 Literal -> trans_literal  : '$1'.
 Literal -> number_literal : '$1'.
+Literal -> atom_literal : '$1'.
 
 CustomTag -> open_tag OptionalAll identifier Args close_tag : {tag, '$3', '$4', '$2'}.
 
