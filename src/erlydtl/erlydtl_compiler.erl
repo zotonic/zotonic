@@ -113,11 +113,11 @@ compile(File, BaseFile, Module, Options, ZContext) ->
                 Err ->
                     Err
             end;
-        {error, {ErrLineCol, ErrModule, ["syntax error before: " = ErrMsg, [$[,Text,$]]]}} when is_list(Text) ->
+        {error, {ErrLoc, ErrModule, ["syntax error before: " = ErrMsg, [$[,Text,$]]]}} when is_list(Text) ->
             Text1 = [ list_to_integer(C) || C <- Text, is_list(C) ],
-            {error, {ErrLineCol, ErrModule, ErrMsg ++ Text1}};
-        {error, {ErrLineCol, ErrModule, ErrMsg}} ->
-            {error, {ErrLineCol, ErrModule, lists:flatten(ErrMsg)}};
+            {error, {ErrLoc, ErrModule, ErrMsg ++ Text1}};
+        {error, {ErrLoc, ErrModule, ErrMsg}} ->
+            {error, {ErrLoc, ErrModule, lists:flatten(ErrMsg)}};
         Err ->
             Err
     end.
@@ -169,7 +169,7 @@ parse(File, Context) ->
     {M,F} = Context#dtl_context.reader,
     case catch M:F(File) of
         {ok, Data} ->
-            case parse(Data) of
+            case scan_parse(File, Data) of
                 {ok, Val} ->
                     {ok, Val};
                 Err ->
@@ -178,9 +178,13 @@ parse(File, Context) ->
         Error ->
             {error, io_lib:format("reading ~p failed (~p)", [File, Error])}  
     end.
-        
-parse(Data) ->
-    case erlydtl_scanner:scan(binary_to_list(Data)) of
+
+% Used for parsing tests
+parse(Data) when is_binary(Data) ->
+    scan_parse("string", Data).
+
+scan_parse(SourceRef, Data) ->
+    case erlydtl_scanner:scan(SourceRef, binary_to_list(Data)) of
         {ok, Tokens} ->
             erlydtl_parser:parse(Tokens);
         Err ->

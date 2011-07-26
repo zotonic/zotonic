@@ -40,7 +40,7 @@
 -author('rsaccon@gmail.com').
 -author('emmiller@gmail.com').
 
--export([scan/1]). 
+-export([scan/2]). 
 
 
 %%====================================================================
@@ -54,8 +54,8 @@
 %% an error.
 %% @end
 %%--------------------------------------------------------------------
-scan(Template) ->
-    scan(Template, [], {1, 1}, in_text).
+scan(SourceRef, Template) ->
+    scan(Template, [], {SourceRef, 1, 1}, in_text).
 
 
 identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToken == open_tag; PrevToken == all_keyword ->
@@ -99,321 +99,321 @@ scan([], Scanned, _, in_text) ->
     {_Token, ScannedKeyword} = lists:foldr(fun identifier_to_keyword/2, {'$eof', []}, Scanned),
     {ok, lists:reverse(ScannedKeyword)};
 
-scan([], _Scanned, _, {in_comment, _}) ->
-    {error, "Reached end of file inside a comment."};
+scan([], _Scanned, {SourceRef, _, _}, {in_comment, _}) ->
+    {error, io_lib:format("Reached end of ~p inside a comment.", [SourceRef])};
 
-scan([], _Scanned, _, {in_trans, _}) ->
-    {error, "Reached end of file inside a trans block."};
+scan([], _Scanned, {SourceRef, _, _}, {in_trans, _}) ->
+    {error, io_lib:format("Reached end of ~p inside a trans block.", [SourceRef])};
 
-scan([], _Scanned, _, {in_raw, _}) ->
-    {error, "Reached end of file inside a raw block."};
+scan([], _Scanned, {SourceRef, _, _}, {in_raw, _}) ->
+    {error, io_lib:format("Reached end of ~p inside a raw block.", [SourceRef])};
 
-scan([], _Scanned, _, _) ->
-    {error, "Reached end of file inside a code block."};
+scan([], _Scanned, {SourceRef, _, _}, _) ->
+    {error, io_lib:format("Reached end of ~p inside a code block.", [SourceRef])};
 
 %%we just capture the {% raw %} {% endraw %} tags and pass on string between the tags as is
-scan("{%" ++ T, Scanned, {Row, Column}, {in_raw, "{% endraw %}"}) ->
+scan("{%" ++ T, Scanned, {SourceRef, Row, Column}, {in_raw, "{% endraw %}"}) ->
     case find_endraw(T, "%}", Row, Column+2) of
         {ok, T1, Row1, Column1} ->
-            scan(T1, Scanned, {Row1, Column1}, in_text);
+            scan(T1, Scanned, {SourceRef, Row1, Column1}, in_text);
         notfound ->
-            Scanned1 = append_text_char(Scanned, {Row, Column}, ${),
-            Scanned2 = append_text_char(Scanned1, {Row, Column}, $%),
-            scan(T, Scanned2, {Row, Column + 2}, {in_raw, "{% endraw %}"})
+            Scanned1 = append_text_char(Scanned, {SourceRef, Row, Column}, ${),
+            Scanned2 = append_text_char(Scanned1, {SourceRef, Row, Column}, $%),
+            scan(T, Scanned2, {SourceRef, Row, Column + 2}, {in_raw, "{% endraw %}"})
     end;
-scan("<!--{%" ++ T, Scanned, {Row, Column}, {in_raw, "<!--{% endraw %}-->"}) ->
+scan("<!--{%" ++ T, Scanned, {SourceRef, Row, Column}, {in_raw, "<!--{% endraw %}-->"}) ->
     case find_endraw(T, "%}-->", Row, Column+6) of
         {ok, T1, Row1, Column1} ->
-            scan(T1, Scanned, {Row1, Column1}, in_text);
+            scan(T1, Scanned, {SourceRef, Row1, Column1}, in_text);
         notfound ->
-            Scanned1 = append_text_char(Scanned, {Row, Column}, $<),
-            Scanned2 = append_text_char(Scanned1, {Row, Column}, $!),
-            Scanned3 = append_text_char(Scanned2, {Row, Column}, $-),
-            Scanned4 = append_text_char(Scanned3, {Row, Column}, $-),
-            Scanned5 = append_text_char(Scanned4, {Row, Column}, ${),
-            Scanned6 = append_text_char(Scanned5, {Row, Column}, $%),
-            scan(T, Scanned6, {Row, Column + 6}, {in_raw, "<!--{% endraw %}-->"})
+            Scanned1 = append_text_char(Scanned, {SourceRef, Row, Column}, $<),
+            Scanned2 = append_text_char(Scanned1, {SourceRef, Row, Column}, $!),
+            Scanned3 = append_text_char(Scanned2, {SourceRef, Row, Column}, $-),
+            Scanned4 = append_text_char(Scanned3, {SourceRef, Row, Column}, $-),
+            Scanned5 = append_text_char(Scanned4, {SourceRef, Row, Column}, ${),
+            Scanned6 = append_text_char(Scanned5, {SourceRef, Row, Column}, $%),
+            scan(T, Scanned6, {SourceRef, Row, Column + 6}, {in_raw, "<!--{% endraw %}-->"})
     end;
 
-scan("\r\n" ++ T, Scanned, {Row, Column}, {in_raw, Closer}) ->
-    Scanned1 = append_text_char(Scanned, {Row, Column}, $\r),
-    Scanned2 = append_text_char(Scanned1, {Row, Column}, $\n),
-    scan(T, Scanned2, {Row+1, 1}, {in_raw, Closer});
+scan("\r\n" ++ T, Scanned, {SourceRef, Row, Column}, {in_raw, Closer}) ->
+    Scanned1 = append_text_char(Scanned, {SourceRef, Row, Column}, $\r),
+    Scanned2 = append_text_char(Scanned1, {SourceRef, Row, Column}, $\n),
+    scan(T, Scanned2, {SourceRef, Row+1, 1}, {in_raw, Closer});
 
-scan("\n" ++ T, Scanned, {Row, Column}, {in_raw, Closer}) ->
-    scan(T, append_text_char(Scanned, {Row, Column}, $\n), {Row+1, 1}, {in_raw, Closer});
+scan("\n" ++ T, Scanned, {SourceRef, Row, Column}, {in_raw, Closer}) ->
+    scan(T, append_text_char(Scanned, {SourceRef, Row, Column}, $\n), {SourceRef, Row+1, 1}, {in_raw, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_raw, Closer}) ->
-    scan(T, append_text_char(Scanned, {Row, Column}, H), {Row, Column + 1}, {in_raw, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_raw, Closer}) ->
+    scan(T, append_text_char(Scanned, {SourceRef, Row, Column}, H), {SourceRef, Row, Column + 1}, {in_raw, Closer});
 
-scan("<!--{{" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, [{open_var, {Row, Column}, "<!--{{"} | Scanned], {Row, Column + length("<!--{{")}, {in_code, "}}-->"});
+scan("<!--{{" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, [{open_var, {SourceRef, Row, Column}, "<!--{{"} | Scanned], {SourceRef, Row, Column + length("<!--{{")}, {in_code, "}}-->"});
 
-scan("{{" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, [{open_var, {Row, Column}, "{{"} | Scanned], {Row, Column + 2}, {in_code, "}}"});
+scan("{{" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, [{open_var, {SourceRef, Row, Column}, "{{"} | Scanned], {SourceRef, Row, Column + 2}, {in_code, "}}"});
 
-scan("<!--{_" ++ T, Scanned, {Row, Column}, in_text) ->
+scan("<!--{_" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
     scan(T, [
-			{trans_text, {Row, Column + length("<!--{_")}, ""},
-			{open_trans, {Row, Column}, "<!--{_"} | Scanned], 
-    {Row, Column + length("<!--{_")}, {in_trans, "_}-->"});
+			{trans_text, {SourceRef, Row, Column + length("<!--{_")}, ""},
+			{open_trans, {SourceRef, Row, Column}, "<!--{_"} | Scanned], 
+    {SourceRef, Row, Column + length("<!--{_")}, {in_trans, "_}-->"});
 
-scan("{_" ++ T, Scanned, {Row, Column}, in_text) ->
+scan("{_" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
     scan(T, [
-			{trans_text, {Row, Column + 2}, ""},
-			{open_trans, {Row, Column}, "{_"} | Scanned], 
-		{Row, Column + 2}, {in_trans, "_}"});
+			{trans_text, {SourceRef, Row, Column + 2}, ""},
+			{open_trans, {SourceRef, Row, Column}, "{_"} | Scanned], 
+		{SourceRef, Row, Column + 2}, {in_trans, "_}"});
 
-scan("_}-->" ++ T, Scanned, {Row, Column}, {in_trans, "_}-->"}) ->
-    scan(T, [{close_trans, {Row, Column}, "_}-->"} | Scanned], {Row, Column + length("_}-->")}, in_text);
+scan("_}-->" ++ T, Scanned, {SourceRef, Row, Column}, {in_trans, "_}-->"}) ->
+    scan(T, [{close_trans, {SourceRef, Row, Column}, "_}-->"} | Scanned], {SourceRef, Row, Column + length("_}-->")}, in_text);
 
-scan("_}" ++ T, Scanned, {Row, Column}, {in_trans, "_}"}) ->
-    scan(T, [{close_trans, {Row, Column}, "_}"} | Scanned], {Row, Column + 2}, in_text);
+scan("_}" ++ T, Scanned, {SourceRef, Row, Column}, {in_trans, "_}"}) ->
+    scan(T, [{close_trans, {SourceRef, Row, Column}, "_}"} | Scanned], {SourceRef, Row, Column + 2}, in_text);
 
-scan("<!--{#" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, Scanned, {Row, Column + length("<!--{#")}, {in_comment, "#}-->"});
+scan("<!--{#" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, Scanned, {SourceRef, Row, Column + length("<!--{#")}, {in_comment, "#}-->"});
 
-scan("{#" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, Scanned, {Row, Column + 2}, {in_comment, "#}"});
+scan("{#" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 2}, {in_comment, "#}"});
 
-scan("#}-->" ++ T, Scanned, {Row, Column}, {in_comment, "#}-->"}) ->
-    scan(T, Scanned, {Row, Column + length("#}-->")}, in_text);
+scan("#}-->" ++ T, Scanned, {SourceRef, Row, Column}, {in_comment, "#}-->"}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + length("#}-->")}, in_text);
 
-scan("#}" ++ T, Scanned, {Row, Column}, {in_comment, "#}"}) ->
-    scan(T, Scanned, {Row, Column + 2}, in_text);
+scan("#}" ++ T, Scanned, {SourceRef, Row, Column}, {in_comment, "#}"}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 2}, in_text);
 
-scan([_ | T], Scanned, {Row, Column}, {in_comment, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_comment, Closer});
+scan([_ | T], Scanned, {SourceRef, Row, Column}, {in_comment, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_comment, Closer});
 
-scan("<!--{%" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, [{open_tag, {Row, Column}, lists:reverse("<!--{%")} | Scanned], 
-        {Row, Column + length("<!--{%")}, {in_code, "%}-->"});
+scan("<!--{%" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("<!--{%")} | Scanned], 
+        {SourceRef, Row, Column + length("<!--{%")}, {in_code, "%}-->"});
 
-scan("{%" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, [{open_tag, {Row, Column}, lists:reverse("{%")} | Scanned], 
-        {Row, Column + 2}, {in_code, "%}"});
+scan("{%" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("{%")} | Scanned], 
+        {SourceRef, Row, Column + 2}, {in_code, "%}"});
 
-scan([H | T], Scanned, {Row, Column}, {in_trans, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_trans, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_trans, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_trans, Closer});
 
-scan("\r\n" ++ T, Scanned, {Row, Column}, in_text) ->
-    Scanned1 = append_text_char(Scanned, {Row, Column}, $\r),
-    Scanned2 = append_text_char(Scanned1, {Row, Column}, $\n),
-    scan(T, Scanned2, {Row + 1, 1}, in_text);
+scan("\r\n" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    Scanned1 = append_text_char(Scanned, {SourceRef, Row, Column}, $\r),
+    Scanned2 = append_text_char(Scanned1, {SourceRef, Row, Column}, $\n),
+    scan(T, Scanned2, {SourceRef, Row + 1, 1}, in_text);
 
-scan("\n" ++ T, Scanned, {Row, Column}, in_text) ->
-    scan(T, append_text_char(Scanned, {Row, Column}, $\n), {Row + 1, 1}, in_text);
+scan("\n" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, append_text_char(Scanned, {SourceRef, Row, Column}, $\n), {SourceRef, Row + 1, 1}, in_text);
 
-scan("\r\n" ++ T, Scanned, {Row, _Column}, {in_code, Closer}) ->
-    scan(T, Scanned, {Row + 1, 1}, {in_code, Closer});
+scan("\r\n" ++ T, Scanned, {SourceRef, Row, _Column}, {in_code, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row + 1, 1}, {in_code, Closer});
 
-scan("\n" ++ T, Scanned, {Row, _Column}, {in_code, Closer}) ->
-    scan(T, Scanned, {Row + 1, 1}, {in_code, Closer});
+scan("\n" ++ T, Scanned, {SourceRef, Row, _Column}, {in_code, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row + 1, 1}, {in_code, Closer});
 
-scan([H | T], Scanned, {Row, Column}, in_text) ->
-    scan(T, append_text_char(Scanned, {Row, Column}, H), {Row, Column + 1}, in_text);
+scan([H | T], Scanned, {SourceRef, Row, Column}, in_text) ->
+    scan(T, append_text_char(Scanned, {SourceRef, Row, Column}, H), {SourceRef, Row, Column + 1}, in_text);
 
-scan("\"" ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{string_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_double_quote, Closer});
+scan("\"" ++ T, Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
+    scan(T, [{string_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan("_\"" ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{trans_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_double_quote, Closer});
+scan("_\"" ++ T, Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
+    scan(T, [{trans_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan("\"" ++ T, Scanned, {Row, Column}, {in_identifier, Closer}) ->
-    scan(T, [{string_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_double_quote, Closer});
+scan("\"" ++ T, Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
+    scan(T, [{string_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan("\'" ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{string_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_single_quote, Closer});
+scan("\'" ++ T, Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
+    scan(T, [{string_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_single_quote, Closer});
 
-scan("_\'" ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{trans_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_single_quote, Closer});
+scan("_\'" ++ T, Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
+    scan(T, [{trans_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_single_quote, Closer});
 
-scan("\'" ++ T, Scanned, {Row, Column}, {in_identifier, Closer}) ->
-    scan(T, [{string_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_single_quote, Closer});
+scan("\'" ++ T, Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
+    scan(T, [{string_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_single_quote, Closer});
 
-scan("`" ++ T, Scanned, {Row, Column}, {in_code, Closer}) ->
-    scan(T, [{atom_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_back_quote, Closer});
+scan("`" ++ T, Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
+    scan(T, [{atom_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_back_quote, Closer});
 
-scan("`" ++ T, Scanned, {Row, Column}, {in_identifier, Closer}) ->
-    scan(T, [{atom_literal, {Row, Column}, ""} | Scanned], {Row, Column + 1}, {in_back_quote, Closer});
+scan("`" ++ T, Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
+    scan(T, [{atom_literal, {SourceRef, Row, Column}, ""} | Scanned], {SourceRef, Row, Column + 1}, {in_back_quote, Closer});
 
-scan([$\\ | T], Scanned, {Row, Column}, {in_double_quote, Closer}) ->
-    scan(T, append_char(Scanned, $\\), {Row, Column + 1}, {in_double_quote_slash, Closer});
+scan([$\\ | T], Scanned, {SourceRef, Row, Column}, {in_double_quote, Closer}) ->
+    scan(T, append_char(Scanned, $\\), {SourceRef, Row, Column + 1}, {in_double_quote_slash, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_double_quote_slash, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_double_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_double_quote_slash, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan([$\\ | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
-    scan(T, append_char(Scanned, $\\), {Row, Column + 1}, {in_single_quote_slash, Closer});
+scan([$\\ | T], Scanned, {SourceRef, Row, Column}, {in_single_quote, Closer}) ->
+    scan(T, append_char(Scanned, $\\), {SourceRef, Row, Column + 1}, {in_single_quote_slash, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_single_quote_slash, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_single_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_single_quote_slash, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_single_quote, Closer});
 
-scan([$\\ | T], Scanned, {Row, Column}, {in_back_quote, Closer}) ->
-    scan(T, append_char(Scanned, $\\), {Row, Column + 1}, {in_back_quote_slash, Closer});
+scan([$\\ | T], Scanned, {SourceRef, Row, Column}, {in_back_quote, Closer}) ->
+    scan(T, append_char(Scanned, $\\), {SourceRef, Row, Column + 1}, {in_back_quote_slash, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_back_quote_slash, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_back_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_back_quote_slash, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_back_quote, Closer});
 
 
 
 % end quote
-scan("\"" ++ T, Scanned, {Row, Column}, {in_double_quote, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan("\"" ++ T, Scanned, {SourceRef, Row, Column}, {in_double_quote, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
 % treat single quotes the same as double quotes
-scan("\'" ++ T, Scanned, {Row, Column}, {in_single_quote, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan("\'" ++ T, Scanned, {SourceRef, Row, Column}, {in_single_quote, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("`" ++ T, Scanned, {Row, Column}, {in_back_quote, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan("`" ++ T, Scanned, {SourceRef, Row, Column}, {in_back_quote, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_double_quote, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_double_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_double_quote, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_single_quote, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_single_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_single_quote, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_single_quote, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_back_quote, Closer}) ->
-    scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_back_quote, Closer});
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_back_quote, Closer}) ->
+    scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_back_quote, Closer});
 
 % Closing code blocks
-scan("%}-->" ++ T, [{identifier,_,"war"},{open_tag,_,"%{--!<"}|Scanned], {Row, Column}, {_, "%}-->"}) ->
-    scan(T, Scanned, {Row, Column + 5}, {in_raw, "<!--{% endraw %}-->"});
+scan("%}-->" ++ T, [{identifier,_,"war"},{open_tag,_,"%{--!<"}|Scanned], {SourceRef, Row, Column}, {_, "%}-->"}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 5}, {in_raw, "<!--{% endraw %}-->"});
 
-scan("%}-->" ++ T, Scanned, {Row, Column}, {_, "%}-->"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}-->")} | Scanned], {Row, Column + 5}, in_text);
+scan("%}-->" ++ T, Scanned, {SourceRef, Row, Column}, {_, "%}-->"}) ->
+    scan(T, [{close_tag, {SourceRef, Row, Column}, lists:reverse("%}-->")} | Scanned], {SourceRef, Row, Column + 5}, in_text);
 
-scan("%}" ++ T, [{identifier,_,"war"},{open_tag,_,"%{"}|Scanned], {Row, Column}, {_, "%}"}) ->
-    scan(T, Scanned, {Row, Column + 2}, {in_raw, "{% endraw %}"});
+scan("%}" ++ T, [{identifier,_,"war"},{open_tag,_,"%{"}|Scanned], {SourceRef, Row, Column}, {_, "%}"}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 2}, {in_raw, "{% endraw %}"});
 
-scan("%}" ++ T, Scanned, {Row, Column}, {_, "%}"}) ->
-    scan(T, [{close_tag, {Row, Column}, lists:reverse("%}")} | Scanned], {Row, Column + 2}, in_text);
+scan("%}" ++ T, Scanned, {SourceRef, Row, Column}, {_, "%}"}) ->
+    scan(T, [{close_tag, {SourceRef, Row, Column}, lists:reverse("%}")} | Scanned], {SourceRef, Row, Column + 2}, in_text);
 
-scan("}}-->" ++ T, Scanned, {Row, Column}, {_, "}}-->"}) ->
-    scan(T, [{close_var, {Row, Column}, lists:reverse("}}-->")} | Scanned], {Row, Column + 5}, in_text);
+scan("}}-->" ++ T, Scanned, {SourceRef, Row, Column}, {_, "}}-->"}) ->
+    scan(T, [{close_var, {SourceRef, Row, Column}, lists:reverse("}}-->")} | Scanned], {SourceRef, Row, Column + 5}, in_text);
 
-scan("}}" ++ T, Scanned, {Row, Column}, {_, "}}"}) ->
-    scan(T, [{close_var, {Row, Column}, "}}"} | Scanned], {Row, Column + 2}, in_text);
+scan("}}" ++ T, Scanned, {SourceRef, Row, Column}, {_, "}}"}) ->
+    scan(T, [{close_var, {SourceRef, Row, Column}, "}}"} | Scanned], {SourceRef, Row, Column + 2}, in_text);
 
 % Expression operators
-scan("==" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'==', {Row, Column}, "=="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan("==" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'==', {SourceRef, Row, Column}, "=="} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan("/=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'/=', {Row, Column}, "/="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan("/=" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'/=', {SourceRef, Row, Column}, "/="} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan("!=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'/=', {Row, Column}, "!="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan("!=" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'/=', {SourceRef, Row, Column}, "!="} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan(">=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'>=', {Row, Column}, ">="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan(">=" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'>=', {SourceRef, Row, Column}, ">="} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan("=<" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'=<', {Row, Column}, "=<"} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan("=<" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'=<', {SourceRef, Row, Column}, "=<"} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan("<=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'=<', {Row, Column}, "<="} | Scanned], {Row, Column + 2}, {in_code, Closer});
+scan("<=" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'=<', {SourceRef, Row, Column}, "<="} | Scanned], {SourceRef, Row, Column + 2}, {in_code, Closer});
 
-scan("<" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'<', {Row, Column}, "<"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("<" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'<', {SourceRef, Row, Column}, "<"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan(">" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'>', {Row, Column}, ">"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan(">" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'>', {SourceRef, Row, Column}, ">"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("-" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'-', {Row, Column}, "-"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("-" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'-', {SourceRef, Row, Column}, "-"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("+" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'+', {Row, Column}, "+"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("+" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'+', {SourceRef, Row, Column}, "+"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("*" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'*', {Row, Column}, "*"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("*" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'*', {SourceRef, Row, Column}, "*"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("/" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'/', {Row, Column}, "/"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("/" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'/', {SourceRef, Row, Column}, "/"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("%" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'%', {Row, Column}, "%"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("%" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'%', {SourceRef, Row, Column}, "%"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("("++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{'(', {Row, Column}, "("} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("("++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{'(', {SourceRef, Row, Column}, "("} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan(")" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{')', {Row, Column}, ")"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan(")" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{')', {SourceRef, Row, Column}, ")"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
 % Other
-scan("," ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{comma, {Row, Column}, ","} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("," ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{comma, {SourceRef, Row, Column}, ","} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("|" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{pipe, {Row, Column}, "|"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("|" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{pipe, {SourceRef, Row, Column}, "|"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("=" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{equal, {Row, Column}, "="} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("=" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{equal, {SourceRef, Row, Column}, "="} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan(":" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{colon, {Row, Column}, ":"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan(":" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{colon, {SourceRef, Row, Column}, ":"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("." ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{dot, {Row, Column}, "."} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("." ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{dot, {SourceRef, Row, Column}, "."} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan(" " ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan(" " ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("\t" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan("\t" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("\r\n" ++ T, Scanned, {Row, _Column}, {_, Closer}) ->
-    scan(T, Scanned, {Row+1, 1}, {in_code, Closer});
+scan("\r\n" ++ T, Scanned, {SourceRef, Row, _Column}, {_, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row+1, 1}, {in_code, Closer});
 
-scan("\n" ++ T, Scanned, {Row, _Column}, {_, Closer}) ->
-    scan(T, Scanned, {Row+1, 1}, {in_code, Closer});
+scan("\n" ++ T, Scanned, {SourceRef, Row, _Column}, {_, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row+1, 1}, {in_code, Closer});
 
-scan("\r" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, Scanned, {Row, Column + 1}, {in_code, Closer});
+scan("\r" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("#" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{hash, {Row, Column}, "#"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("#" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{hash, {SourceRef, Row, Column}, "#"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("[" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{open_bracket, {Row, Column}, "["} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("[" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{open_bracket, {SourceRef, Row, Column}, "["} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("]" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{close_bracket, {Row, Column}, "]"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("]" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{close_bracket, {SourceRef, Row, Column}, "]"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("{" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{open_curly, {Row, Column}, "{"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("{" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{open_curly, {SourceRef, Row, Column}, "{"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan("}" ++ T, Scanned, {Row, Column}, {_, Closer}) ->
-    scan(T, [{close_curly, {Row, Column}, "}"} | Scanned], {Row, Column + 1}, {in_code, Closer});
+scan("}" ++ T, Scanned, {SourceRef, Row, Column}, {_, Closer}) ->
+    scan(T, [{close_curly, {SourceRef, Row, Column}, "}"} | Scanned], {SourceRef, Row, Column + 1}, {in_code, Closer});
 
-scan([H | T], Scanned, {Row, Column}, {in_code, Closer}) ->
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
     case char_type(H) of
         letter_underscore ->
-            scan(T, [{identifier, {Row, Column}, [H]} | Scanned], {Row, Column + 1}, {in_identifier, Closer});
+            scan(T, [{identifier, {SourceRef, Row, Column}, [H]} | Scanned], {SourceRef, Row, Column + 1}, {in_identifier, Closer});
         digit ->
-            scan(T, [{number_literal, {Row, Column}, [H]} | Scanned], {Row, Column + 1}, {in_number, Closer});
+            scan(T, [{number_literal, {SourceRef, Row, Column}, [H]} | Scanned], {SourceRef, Row, Column + 1}, {in_number, Closer});
         _ ->
-            {error, io_lib:format("Illegal character line ~p column ~p", [Row, Column])}
+            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
     end;
 
-scan([H | T], Scanned, {Row, Column}, {in_number, Closer}) ->
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_number, Closer}) ->
     case char_type(H) of
         digit ->
-            scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_number, Closer});
+            scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_number, Closer});
         _ ->
-            {error, io_lib:format("Illegal character line ~p column ~p", [Row, Column])}
+            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
     end;
 
-scan([H | T], Scanned, {Row, Column}, {in_identifier, Closer}) ->
+scan([H | T], Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
     case char_type(H) of
         letter_underscore ->
-            scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_identifier, Closer});
+            scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_identifier, Closer});
         digit ->
-            scan(T, append_char(Scanned, H), {Row, Column + 1}, {in_identifier, Closer});
+            scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_identifier, Closer});
         _ ->
-            {error, io_lib:format("Illegal character line ~p column ~p", [Row, Column])}
+            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
     end.
 
 
@@ -423,10 +423,10 @@ append_char(Scanned, Char) ->
     [String | Scanned1] = Scanned,
     [setelement(3, String, [Char | element(3, String)]) | Scanned1].
 
-append_text_char(Scanned, {Row, Column}, Char) ->
+append_text_char(Scanned, {SourceRef, Row, Column}, Char) ->
     case length(Scanned) of
         0 ->
-            [{text, {Row, Column}, [Char]}];
+            [{text, {SourceRef, Row, Column}, [Char]}];
         _ ->
             [Token | Scanned1] = Scanned,
             case element(1, Token) of

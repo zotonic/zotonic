@@ -107,16 +107,16 @@ render(File, Variables, Context) ->
                         Output;
                     {error, Reason} ->
                         z_depcache:in_process(OldCaching),
-                        ?ERROR("Error rendering template: ~p (~p)", [File, Reason]),
+                        ?ERROR("Error rendering template: ~p (~p)~n", [File, Reason]),
                         throw({error, {template_rendering_error, File, Reason}})
                  end;
-            {error, {{Line,Col}, _CompilerModule, Error}} ->
+            {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
                 Error1 = try lists:flatten(Error) catch _:_ -> Error end,
-                ?ERROR("Error compiling template: ~s (~p: ~p)", [File, {Line,Col}, Error1]),
-                throw({error, {template_compile_error, File, {Line,Col}, Error1}});
+                ?ERROR("Error compiling template: ~s:~p (~p) ~s~n", [ErrFile, Line, Col, Error1]),
+                throw({error, {template_compile_error, ErrFile, {Line,Col}, Error1}});
             {error, Reason} ->
                 Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
-                ?ERROR("Error compiling template: ~s (~p)", [File, Reason1]),
+                ?ERROR("Error compiling template: ~s (~p)~n", [File, Reason1]),
                 throw({error, {template_compile_error, File, Reason1}})
         end.
     
