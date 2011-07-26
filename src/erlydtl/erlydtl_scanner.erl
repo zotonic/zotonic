@@ -40,7 +40,7 @@
 -author('rsaccon@gmail.com').
 -author('emmiller@gmail.com').
 
--export([scan/2]). 
+-export([scan/1, scan/2]). 
 
 
 %%====================================================================
@@ -54,6 +54,9 @@
 %% an error.
 %% @end
 %%--------------------------------------------------------------------
+scan(Template) ->
+    scan(undefined, Template).
+
 scan(SourceRef, Template) ->
     scan(Template, [], {SourceRef, 1, 1}, in_text).
 

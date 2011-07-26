@@ -93,11 +93,11 @@ parse(Data) when is_binary(Data) ->
 %% @doc Extract all translation tags from the parse tree.
 extract(ParseTree, Acc, F) when is_list(ParseTree) ->
     lists:foldl(fun(Tree,A) -> extract(Tree, A, F) end, Acc, ParseTree);
-extract({trans, {trans_text, {Line,_Col}, Text}}, Acc, F) ->
+extract({trans, {trans_text, {_File, Line,_Col}, Text}}, Acc, F) ->
     [{z_string:trim(Text), [], {F,Line}}|Acc];
-extract({trans_literal, {Line,_Col}, Text}, Acc, F) ->
+extract({trans_literal, {_File, Line,_Col}, Text}, Acc, F) ->
     [{Text, [], {F,Line}}|Acc];
-extract({trans_ext, {string_literal, {Line,_Col}, Text}, Args}, Acc, F) ->
+extract({trans_ext, {string_literal, {_File, Line,_Col}, Text}, Args}, Acc, F) ->
     [{Text, trans_ext_args(Args,[]), {F,Line}}|Acc];
 extract({text, _, _}, Acc, _F) -> Acc;
 extract({string_literal, _, _}, Acc, _F) -> Acc;
