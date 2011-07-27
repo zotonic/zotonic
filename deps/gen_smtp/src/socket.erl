@@ -128,7 +128,7 @@ accept(Socket, Timeout) ->
 		Error -> Error
 	end.
 
--spec send(Socket :: socket(), Data :: binary() | string()) -> 'ok' | {'error', any()}.
+-spec send(Socket :: socket(), Data :: binary() | string() | iolist()) -> 'ok' | {'error', any()}.
 send(Socket, Data) when is_port(Socket) ->
 	gen_tcp:send(Socket, Data);
 send(Socket, Data) ->
@@ -234,21 +234,21 @@ to_ssl_server(Socket, Options) ->
 to_ssl_server(Socket, Options, Timeout) when is_port(Socket) ->
 	ssl:ssl_accept(Socket, ssl_listen_options(Options), Timeout);
 to_ssl_server(_Socket, _Options, _Timeout) ->
-	erlang:error(ssl_connected, "Socket is already using SSL").
+	{error, already_ssl}.
 
--spec to_ssl_client(Socket :: socket()) -> {'ok', ssl:sslsocket()} | {'error', any()}.
+-spec to_ssl_client(Socket :: socket()) -> {'ok', ssl:sslsocket()} | {'error', 'already_ssl'}.
 to_ssl_client(Socket) ->
 	to_ssl_client(Socket, []).
 
--spec to_ssl_client(Socket :: socket(), Options :: list()) -> {'ok', ssl:sslsocket()} | {'error', any()}.
+-spec to_ssl_client(Socket :: socket(), Options :: list()) -> {'ok', ssl:sslsocket()} | {'error', 'already_ssl'}.
 to_ssl_client(Socket, Options) ->
 	to_ssl_client(Socket, Options, infinity).
 
--spec to_ssl_client(Socket :: socket(), Options :: list(), Timeout :: non_neg_integer() | 'infinity') -> {'ok', ssl:sslsocket()} | {'error', any()}.
+-spec to_ssl_client(Socket :: socket(), Options :: list(), Timeout :: non_neg_integer() | 'infinity') -> {'ok', ssl:sslsocket()} | {'error', 'already_ssl'}.
 to_ssl_client(Socket, Options, Timeout) when is_port(Socket) ->
 	ssl:connect(Socket, ssl_connect_options(Options), Timeout);
 to_ssl_client(_Socket, _Options, _Timeout) ->
-	erlang:error(ssl_connected, "Socket is already using SSL").
+	{error, already_ssl}.
 
 -spec type(Socket :: socket()) -> protocol().
 type(Socket) when is_port(Socket) ->
@@ -657,7 +657,7 @@ ssl_upgrade_test_() ->
 			spawn(fun() ->
 						{ok, ListenSocket} = listen(ssl, ?TEST_PORT, [{keyfile, "../testdata/server.key"}, {certfile, "../testdata/server.crt"}]),
 						{ok, ServerSocket} = accept(ListenSocket),
-						?assertException(error, ssl_connected, to_ssl_server(ServerSocket)),
+						?assertMatch({error, already_ssl}, to_ssl_server(ServerSocket)),
 						close(ServerSocket)
 				end),
 			{ok, ClientSocket} = connect(tcp, "localhost", ?TEST_PORT),
@@ -677,7 +677,7 @@ ssl_upgrade_test_() ->
 				end),
 			{ok, ClientSocket} = connect(ssl, "localhost", ?TEST_PORT),
 			receive ServerSocket -> ok end,
-			?assertException(error, ssl_connected, to_ssl_client(ClientSocket)),
+			?assertMatch({error, already_ssl}, to_ssl_client(ClientSocket)),
 			close(ClientSocket),
 			close(ServerSocket)
 		end

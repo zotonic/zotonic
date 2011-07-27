@@ -45,17 +45,45 @@
 -include_lib("eunit/include/eunit.hrl").
 -compile(export_all).
 -else.
--export([send/2, send_blocking/2, send_it/2]).
+-export([send/2, send/3, send_blocking/2]).
 -endif.
 
--spec send(Email :: {string(), [string(), ...], string()}, Options :: list()) -> {'ok', pid()} | {'error', any()}.
+-type email() :: {string() | binary(), [string() | binary(), ...], string() | binary() | function()}. 
+
+-spec send(Email :: {string() | binary(), [string() | binary(), ...], string() | binary() | function()}, Options :: list()) -> {'ok', pid()} | {'error', any()}.
+%% @doc Send an email in a non-blocking fashion via a spawned_linked process.
+%% The process will exit abnormally on a send failure.
 send(Email, Options) ->
+	send(Email, Options, undefined).
+
+%% @doc Send an email nonblocking and invoke a callback with the result of the send.
+%% The callback will receive either `{ok, Receipt}' where Receipt is the SMTP server's receipt
+%% identifier,  `{error, Type, Message}' or `{exit, ExitReason}', as the single argument.
+-spec send(Email :: {string() | binary(), [string() | binary(), ...], string() | binary() | function()}, Options :: list(), Callback :: function() | 'undefined') -> {'ok', pid()} | {'error', any()}.
+send(Email, Options, Callback) ->
 	NewOptions = lists:ukeymerge(1, lists:sort(Options),
 		lists:sort(?DEFAULT_OPTIONS)),
 	case check_options(NewOptions) of
+		ok when is_function(Callback) ->
+			spawn(fun() ->
+						process_flag(trap_exit, true),
+						Pid = spawn_link(fun() ->
+									send_it_nonblock(Email, NewOptions, Callback)
+							end
+						),
+						receive
+							{'EXIT', Pid, Reason} ->
+								case Reason of
+									X when X == normal; X == shutdown ->
+										ok;
+									Error ->
+										Callback({exit, Error})
+								end
+						end
+				end);
 		ok ->
 			Pid = spawn_link(fun () ->
-						send_it_nonblock(Email, NewOptions)
+						send_it_nonblock(Email, NewOptions, Callback)
 				end
 			),
 			{ok, Pid};
@@ -63,6 +91,9 @@ send(Email, Options) ->
 			{error, Reason}
 	end.
 
+-spec send_blocking(Email :: {string() | binary(), [string() | binary(), ...], string() | binary() | function()}, Options :: list()) -> binary() | {'error', atom(), any()} | {'error', any()}.
+%% @doc Send an email and block waiting for the reply. Returns either a binary that contains
+%% the SMTP server's receipt or `{error, Type, Message}' or `{error, Reason}'.
 send_blocking(Email, Options) ->
 	NewOptions = lists:ukeymerge(1, lists:sort(Options),
 		lists:sort(?DEFAULT_OPTIONS)),
@@ -73,15 +104,22 @@ send_blocking(Email, Options) ->
 			{error, Reason}
 	end.
 
-send_it_nonblock(Email, Options) ->
-	case (?MODULE):send_it(Email, Options) of
+-spec send_it_nonblock(Email :: email(), Options :: list(), Callback :: function() | 'undefined') ->{'ok', binary()} | {'error', any(), any()}.
+send_it_nonblock(Email, Options, Callback) ->
+	case send_it(Email, Options) of
+		{error, Type, Message} when is_function(Callback) ->
+			Callback({error, Type, Message}),
+			{error, Type, Message};
 		{error, Type, Message} ->
 			erlang:exit({error, Type, Message});
-		_ ->
-			ok
+		Receipt when is_function(Callback) ->
+			Callback({ok, Receipt}),
+			{ok, Receipt};
+		Receipt ->
+			{ok, Receipt}
 	end.
 
--spec send_it(Email :: {string(), [string(), ...], string()}, Options :: list()) -> 'ok'.
+-spec send_it(Email :: {string() | binary(), [string() | binary(), ...], string() | binary() | function()}, Options :: list()) -> binary() | {'error', any(), any()}.
 send_it(Email, Options) ->
 	RelayDomain = proplists:get_value(relay, Options),
 	MXRecords = case proplists:get_value(no_mx_lookups, Options) of
@@ -99,13 +137,15 @@ send_it(Email, Options) ->
 	end,
 	try_smtp_sessions(Hosts, Email, Options, []).
 
+-spec try_smtp_sessions(Hosts :: [{non_neg_integer(), string()}, ...], Email :: email(), Options :: list(), RetryList :: list()) -> binary() | {'error', any(), any()}.
 try_smtp_sessions([{Distance, Host} | Tail], Email, Options, RetryList) ->
 	Retries = proplists:get_value(retries, Options),
-	try do_smtp_session(Host, Email, Options)
+	try do_smtp_session(Host, Email, Options) of
+		Res -> Res
 	catch
-		throw:{permanant_failure, Message} ->
-			% permanant failure means no retries, and don't even continue with other hosts
-			{error, no_more_hosts, {permanant_failure, Host, Message}};
+		throw:{permanent_failure, Message} ->
+			% permanent failure means no retries, and don't even continue with other hosts
+			{error, no_more_hosts, {permanent_failure, Host, Message}};
 		throw:{FailureType, Message} ->
 			case proplists:get_value(Host, RetryList) of
 				RetryCount when is_integer(RetryCount), RetryCount >= Retries ->
@@ -135,13 +175,13 @@ try_smtp_sessions([{Distance, Host} | Tail], Email, Options, RetryList) ->
 			end
 	end.
 
+-spec do_smtp_session(Host :: string(), Email :: email(), Options :: list()) -> binary().
 do_smtp_session(Host, Email, Options) ->
 	{ok, Socket, _Host, _Banner} = connect(Host, Options),
 	%io:format("connected to ~s; banner was ~s~n", [Host, Banner]),
 	{ok, Extensions} = try_EHLO(Socket, Options),
 	%io:format("Extensions are ~p~n", [Extensions]),
-	{Socket2, Extensions2} = try_STARTTLS(Socket, Options,
-		Extensions),
+	{Socket2, Extensions2} = try_STARTTLS(Socket, Options, Extensions),
 	%io:format("Extensions are ~p~n", [Extensions2]),
 	_Authed = try_AUTH(Socket2, Options, proplists:get_value(<<"AUTH">>, Extensions2)),
 	%io:format("Authentication status is ~p~n", [Authed]),
@@ -150,11 +190,13 @@ do_smtp_session(Host, Email, Options) ->
 	quit(Socket2),
 	Receipt.
 
+-spec try_sending_it(Email :: email(), Socket :: socket:socket(), Extensions :: list()) -> binary().
 try_sending_it({From, To, Body}, Socket, Extensions) ->
 	try_MAIL_FROM(From, Socket, Extensions),
 	try_RCPT_TO(To, Socket, Extensions),
 	try_DATA(Body, Socket, Extensions).
 
+-spec try_MAIL_FROM(From :: string() | binary(), Socket :: socket:socket(), Extensions :: list()) -> true.
 try_MAIL_FROM(From, Socket, Extensions) when is_binary(From) ->
 	try_MAIL_FROM(binary_to_list(From), Socket, Extensions);
 try_MAIL_FROM("<" ++ _ = From, Socket, _Extensions) ->
@@ -169,12 +211,13 @@ try_MAIL_FROM("<" ++ _ = From, Socket, _Extensions) ->
 		{ok, Msg} ->
 			%io:format("Mail FROM rejected: ~p~n", [Msg]),
 			quit(Socket),
-			throw({permanant_failure, Msg})
+			throw({permanent_failure, Msg})
 	end;
 try_MAIL_FROM(From, Socket, Extensions) ->
 	% someone was bad and didn't put in the angle brackets
 	try_MAIL_FROM("<"++From++">", Socket, Extensions).
 
+-spec try_RCPT_TO(Tos :: [binary() | string()], Socket :: socket:socket(), Extensions :: list()) -> true.
 try_RCPT_TO([], _Socket, _Extensions) ->
 	true;
 try_RCPT_TO([To | Tail], Socket, Extensions) when is_binary(To) ->
@@ -191,35 +234,39 @@ try_RCPT_TO(["<" ++ _ = To | Tail], Socket, Extensions) ->
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
 			quit(Socket),
-			throw({permanant_failure, Msg})
+			throw({permanent_failure, Msg})
 	end;
 try_RCPT_TO([To | Tail], Socket, Extensions) ->
 	% someone was bad and didn't put in the angle brackets
 	try_RCPT_TO(["<"++To++">" | Tail], Socket, Extensions).
 
+-spec try_DATA(Body :: binary() | function(), Socket :: socket:socket(), Extensions :: list()) -> binary().
+try_DATA(Body, Socket, Extensions) when is_function(Body) ->
+    try_DATA(Body(), Socket, Extensions);
 try_DATA(Body, Socket, _Extensions) ->
 	socket:send(Socket, "DATA\r\n"),
 	case read_possible_multiline_reply(Socket) of
 		{ok, <<"354", _Rest/binary>>} ->
 			socket:send(Socket, [Body, "\r\n.\r\n"]),
 			case read_possible_multiline_reply(Socket) of
-				{ok, <<"250", Receipt/binary>>} ->
+				{ok, <<"250 ", Receipt/binary>>} ->
 					Receipt;
 				{ok, <<"4", _Rest2/binary>> = Msg} ->
 					quit(Socket),
 					throw({temporary_failure, Msg});
 				{ok, Msg} ->
 					quit(Socket),
-					throw({permanant_failure, Msg})
+					throw({permanent_failure, Msg})
 			end;
 		{ok, <<"4", _Rest/binary>> = Msg} ->
 			quit(Socket),
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
 			quit(Socket),
-			throw({permanant_failure, Msg})
+			throw({permanent_failure, Msg})
 	end.
 
+-spec try_AUTH(Socket :: socket:socket(), Options :: list(), AuthTypes :: [string()]) -> boolean().
 try_AUTH(Socket, Options, []) ->
 	case proplists:get_value(auth, Options) of
 		always ->
@@ -258,7 +305,7 @@ try_AUTH(Socket, Options, AuthTypes) ->
 					case proplists:get_value(auth, Options) of
 						always ->
 							quit(Socket),
-							erlang:throw({permanant_failure, auth_failed});
+							erlang:throw({permanent_failure, auth_failed});
 						_ ->
 							false
 					end;
@@ -267,6 +314,7 @@ try_AUTH(Socket, Options, AuthTypes) ->
 			end
 	end.
 
+-spec do_AUTH(Socket :: socket:socket(), Username :: string(), Password :: string(), Types :: [string()]) -> boolean().
 do_AUTH(Socket, Username, Password, Types) ->
 	FixedTypes = [string:to_upper(X) || X <- Types],
 	%io:format("Fixed types: ~p~n", [FixedTypes]),
@@ -275,6 +323,7 @@ do_AUTH(Socket, Username, Password, Types) ->
 	%	[AllowedTypes]),
 	do_AUTH_each(Socket, Username, Password, AllowedTypes).
 
+-spec do_AUTH_each(Socket :: socket:socket(), Username :: string() | binary(), Password :: string() | binary(), AuthTypes :: [string()]) -> boolean().
 do_AUTH_each(_Socket, _Username, _Password, []) ->
 	false;
 do_AUTH_each(Socket, Username, Password, ["CRAM-MD5" | Tail]) ->
@@ -343,11 +392,12 @@ do_AUTH_each(Socket, Username, Password, [_Type | Tail]) ->
 	%io:format("unsupported AUTH type ~s~n", [Type]),
 	do_AUTH_each(Socket, Username, Password, Tail).
 
+-spec try_EHLO(Socket :: socket:socket(), Options :: list()) -> {ok, list()}.
 try_EHLO(Socket, Options) ->
 	ok = socket:send(Socket, ["EHLO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
 	case read_possible_multiline_reply(Socket) of
 		{ok, <<"500", _Rest/binary>>} ->
-			% 500 5.3.3 Unrecognized command
+			% Unrecognized command, fall back to HELO
 			try_HELO(Socket, Options);
 		{ok, <<"4", _Rest/binary>> = Msg} ->
 			quit(Socket),
@@ -356,6 +406,7 @@ try_EHLO(Socket, Options) ->
 			{ok, parse_extensions(Reply)}
 	end.
 
+-spec try_HELO(Socket :: socket:socket(), Options :: list()) -> {ok, list()}.
 try_HELO(Socket, Options) ->
 	ok = socket:send(Socket, ["HELO ", proplists:get_value(hostname, Options, smtp_util:guess_FQDN()), "\r\n"]),
 	case read_possible_multiline_reply(Socket) of
@@ -366,11 +417,11 @@ try_HELO(Socket, Options) ->
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
 			quit(Socket),
-			throw({permanant_failure, Msg})
+			throw({permanent_failure, Msg})
 	end.
 
-
 % check if we should try to do TLS
+-spec try_STARTTLS(Socket :: socket:socket(), Options :: list(), Extensions :: list()) -> {socket:socket(), list()}.
 try_STARTTLS(Socket, Options, Extensions) ->
 		case {proplists:get_value(tls, Options),
 				proplists:get_value(<<"STARTTLS">>, Extensions)} of
@@ -396,6 +447,7 @@ try_STARTTLS(Socket, Options, Extensions) ->
 	end.
 
 %% attempt to upgrade socket to TLS
+-spec do_STARTTLS(Socket :: socket:socket(), Options :: list()) -> {socket:socket(), list()} | false.
 do_STARTTLS(Socket, Options) ->
 	socket:send(Socket, "STARTTLS\r\n"),
 	case read_possible_multiline_reply(Socket) of
@@ -417,7 +469,7 @@ do_STARTTLS(Socket, Options) ->
 			throw({temporary_failure, Msg});
 		{ok, Msg} ->
 			quit(Socket),
-			throw({permanant_failure, Msg})
+			throw({permanent_failure, Msg})
 	end.
 
 %% try connecting to a host
@@ -452,13 +504,14 @@ connect(Host, Options) ->
 					throw({temporary_failure, Msg});
 				{ok, Msg} ->
 					quit(Socket),
-					throw({permanant_failure, Msg})
+					throw({permanent_failure, Msg})
 			end;
 		{error, Reason} ->
 			throw({network_failure, {error, Reason}})
 	end.
 
 %% read a multiline reply (eg. EHLO reply)
+-spec read_possible_multiline_reply(Socket :: socket:socket()) -> {ok, binary()}.
 read_possible_multiline_reply(Socket) ->
 	case socket:recv(Socket, 0, ?TIMEOUT) of
 		{ok, Packet} ->
@@ -473,6 +526,7 @@ read_possible_multiline_reply(Socket) ->
 			throw({network_failure, Error})
 	end.
 
+-spec read_multiline_reply(Socket :: socket:socket(), Code :: binary(), Acc :: [binary()]) -> {ok, binary()}.
 read_multiline_reply(Socket, Code, Acc) ->
 	case socket:recv(Socket, 0, ?TIMEOUT) of
 		{ok, Packet} ->
@@ -514,6 +568,7 @@ check_options(Options) ->
 			end
 	end.
 
+-spec parse_extensions(Reply :: binary()) -> [{binary(), binary()}].
 parse_extensions(Reply) ->
 	[_ | Reply2] = re:split(Reply, "\r\n", [{return, binary}, trim]),
 	[
@@ -654,13 +709,6 @@ session_start_test_() ->
 			fun({ListenSock}) ->
 					{"retry with HELO when EHLO not accepted",
 						fun() ->
-								% Connected to mail.maaswaalcollege.nl.
-								% Escape character is '^]'.
-								% 220 
-								% EHLO maxclass.com
-								% 500 5.3.3 Unrecognized command
-								% HELO maxclass.com
-								% 250 webmail.maaswaalcollege.nl Hello [193.172.125.195]
 								Options = [{relay, "localhost"}, {port, 9876}, {hostname, "testing"}],
 								{ok, _Pid} = send({"test@foo.com", ["foo@bar.com"], "hello world"}, Options),
 								{ok, X} = socket:accept(ListenSock, 1000),
@@ -909,7 +957,7 @@ session_start_test_() ->
 								?assertMatch({ok, "EHLO testing\r\n"}, socket:recv(X, 0, 1000)),
 								socket:send(X, "250-hostname\r\n250-AUTH GSSAPI\r\n250 8BITMIME\r\n"),
 								?assertEqual({ok, "QUIT\r\n"}, socket:recv(X, 0, 1000)),
-								receive {'DOWN', Monitor, _, _, Error} -> ?assertMatch({error, no_more_hosts, {permanant_failure, _, auth_failed}}, Error) end,
+								receive {'DOWN', Monitor, _, _, Error} -> ?assertMatch({error, no_more_hosts, {permanent_failure, _, auth_failed}}, Error) end,
 								ok
 						end
 					}

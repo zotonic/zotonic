@@ -20,7 +20,7 @@
 %%% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 %%% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-%% @doc A non-blocking tcp listener.  based on the tcp_listener module by Serge
+%% @doc A non-blocking tcp listener for SMTP connections. Based on the tcp_listener module by Serge
 %% Aleynikov [http://www.trapexit.org/Building_a_Non-blocking_TCP_server_using_OTP_principles]
 
 -module(gen_smtp_server).
@@ -86,12 +86,12 @@ start(Module, Options) when is_list(Options) ->
 start(Module) ->
 	start(Module, [[]]).
 
-
 %% @doc Stop the listener pid() `Pid' with reason `normal'.
 -spec(stop/1 :: (Pid :: pid()) -> 'ok').
 stop(Pid) ->
 	gen_server:call(Pid, stop).
 
+%% @doc Return the list of active SMTP session pids.
 -spec sessions(Pid :: pid()) -> [pid()].
 sessions(Pid) ->
 	gen_server:call(Pid, sessions).
@@ -100,16 +100,28 @@ sessions(Pid) ->
 %% The gen_smtp_server is given a list of tcp listener configurations.
 %% You'll typically only want to listen on one port so your options
 %% will be a single-item list containing a proplist. e.g.:
-%%   [ [{port,25},{protocol,tcp},{domain,"myserver.com"},{address,,{0,0,0,0}}]
-%%   ]
-%% by providing additional configurations the server will listen on multiple
+%%
+%% <pre>  [[{port,25},{protocol,tcp},{domain,"myserver.com"},{address,,{0,0,0,0}}]]</pre>
+%%
+%% By providing additional configurations the server will listen on multiple
 %% ports over either tcp or ssl on any given port. e.g.:
-%%   [ [{port,25},{protocol,tcp},{domain,"myserver.com"},{address,{0,0,0,0}}],
-%%     [{port,465},{protocol,ssl},{domain,"secure.myserver.com"},{address,{0.0.0.0}}]
-%%   ]
+%% <pre>
+%%  [
+%%    [{port,25},{protocol,tcp},{domain,"myserver.com"},{address,{0,0,0,0}}],
+%%    [{port,465},{protocol,ssl},{domain,"secure.myserver.com"},{address,{0.0.0.0}}],
+%%    [{port, 25},{family, inet6},{domain,"ipv6.myserver.com"},{address,"::"}]
+%%  ]
+%% </pre>
+%% Note that the default port to listen on is `2525' because the regular SMTP
+%% ports are privileged and only bindable by root. The default protocol is
+%% `tcp', the default listen address is `0.0.0.0' and the default address family
+%% is `inet'. Anything passed in the `sessionoptions' option, is passed through
+%% to `gen_server_smtp_session'.
+%% @see gen_smtp_server_session
 -spec(init/1 :: (Args :: list()) -> {'ok', #state{}} | {'stop', any()}).
 init([Module, Configurations]) ->
-	DefaultConfig = [{domain, smtp_util:guess_FQDN()}, {address, {0,0,0,0}}, {port, ?PORT}, {protocol, tcp}, {family, inet}],
+	DefaultConfig = [{domain, smtp_util:guess_FQDN()}, {address, {0,0,0,0}},
+		{port, ?PORT}, {protocol, tcp}, {family, inet}],
 	try
 		case Configurations of
 			[FirstConfig|_] when is_list(FirstConfig) -> ok;

@@ -111,10 +111,10 @@ strpos(Bin, C, I, S) ->
 	end.
 
 
+-spec strrpos(Bin :: binary(), C :: binary() | list()) -> non_neg_integer().
 strrpos(Bin, C) ->
 	strrpos(Bin, C, byte_size(Bin), byte_size(C)).
 
--spec strrpos(Bin :: binary(), C :: binary() | list()) -> non_neg_integer().
 strrpos(Bin, C, I, S) ->
 	case Bin of
 		<<_X:I/binary, C:S/binary, _Rest/binary>> ->
@@ -207,20 +207,31 @@ split_(Bin, Separator, Acc) ->
 -spec chomp(Bin :: binary()) -> binary().
 chomp(Bin) ->
 	L = byte_size(Bin),
-	L2 = L - 1,
-	case strrpos(Bin, <<"\r\n">>) of
-		L2 ->
-			substr(Bin, 1,  L2 - 1);
+	try [binary:at(Bin, L-2), binary:at(Bin, L-1)] of
+		"\r\n" ->
+			binary:part(Bin, 0, L-2);
+		[_, X] when X == $\r; X == $\n ->
+			binary:part(Bin, 0, L-1);
 		_ ->
-			case strrchr(Bin, $\n) of
-				L ->
-					substr(Bin, 1, L - 1);
+			Bin
+	catch
+		_:_ ->
+			io:format("fallback, yay~n"),
+			L2 = L - 1,
+			case strrpos(Bin, <<"\r\n">>) of
+				L2 ->
+					substr(Bin, 1,  L2 - 1);
 				_ ->
-					case strrchr(Bin, $\r) of
+					case strrchr(Bin, $\n) of
 						L ->
 							substr(Bin, 1, L - 1);
 						_ ->
-							Bin
+							case strrchr(Bin, $\r) of
+								L ->
+									substr(Bin, 1, L - 1);
+								_ ->
+									Bin
+							end
 					end
 			end
 	end.
@@ -245,11 +256,19 @@ strip(Bin, left, _C) ->
 	Bin;
 strip(Bin, right, C) ->
 	L = byte_size(Bin),
-	case strrchr(Bin, C) of
-		L ->
-			strip(substr(Bin, 1, L - 1), right, C);
+	try binary:at(Bin, L-1) of
+		C ->
+			strip(binary:part(Bin, 0, L-1), right, C);
 		_ ->
 			Bin
+	catch
+		_:_ ->
+			case strrchr(Bin, C) of
+				L ->
+					strip(substr(Bin, 1, L - 1), right, C);
+				_ ->
+					Bin
+			end
 	end.
 
 -spec to_lower(Bin :: binary()) -> binary().

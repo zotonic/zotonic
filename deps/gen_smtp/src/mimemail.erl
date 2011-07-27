@@ -637,31 +637,30 @@ guess_best_encoding(Body) ->
 encode_parameters([[]]) ->
 	[];
 encode_parameters(Parameters) ->
-	lists:map(fun encode_parameter/1, Parameters).
+	[encode_parameter(Parameter) || Parameter <- Parameters].
 
-	encode_parameter({X, Y}) ->
-		case escape_tspecial(Y, false, <<>>) of 
-			{true, Special} -> [X, $=, $", Special, $"];
-			false -> [X, $=, Y]
-		end.
+encode_parameter({X, Y}) ->
+	case escape_tspecial(Y, false, <<>>) of
+		{true, Special} -> [X, $=, $", Special, $"];
+		false -> [X, $=, Y]
+	end.
 
-    % See also: http://www.ietf.org/rfc/rfc2045.txt section 5.1
-	escape_tspecial(<<>>, false, _Acc) ->
-		false;
-	escape_tspecial(<<>>, IsSpecial, Acc) ->
-		{IsSpecial, Acc};
-	escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc) when C =:= $" ->
-		escape_tspecial(Rest, true, <<Acc/binary, $\\, $">>);
-	escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc) when C =:= $\\ ->
-		escape_tspecial(Rest, true, <<Acc/binary, $\\, $\\>>);
-	escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc) 
-		when C =:= $(; C =:= $); C =:= $<; C =:= $>; C =:= $@;
-			 C =:= $,; C =:= $;; C =:= $:; 
-			 C =:= $/; C =:= $[; C =:= $]; C =:= $?; C =:= $=;
-			 C =:= $\s ->
-		escape_tspecial(Rest, true, <<Acc/binary, C>>);
-	escape_tspecial(<<C, Rest/binary>>, IsSpecial, Acc) ->
-		escape_tspecial(Rest, IsSpecial, <<Acc/binary, C>>).
+% See also: http://www.ietf.org/rfc/rfc2045.txt section 5.1
+escape_tspecial(<<>>, false, _Acc) ->
+	false;
+escape_tspecial(<<>>, IsSpecial, Acc) ->
+	{IsSpecial, Acc};
+escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc) when C =:= $" ->
+	escape_tspecial(Rest, true, <<Acc/binary, $\\, $">>);
+escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc) when C =:= $\\ ->
+	escape_tspecial(Rest, true, <<Acc/binary, $\\, $\\>>);
+escape_tspecial(<<C, Rest/binary>>, _IsSpecial, Acc)
+	when C =:= $(; C =:= $); C =:= $<; C =:= $>; C =:= $@;
+		C =:= $,; C =:= $;; C =:= $:; C =:= $/; C =:= $[;
+		C =:= $]; C =:= $?; C =:= $=; C =:= $\s ->
+	escape_tspecial(Rest, true, <<Acc/binary, C>>);
+escape_tspecial(<<C, Rest/binary>>, IsSpecial, Acc) ->
+	escape_tspecial(Rest, IsSpecial, <<Acc/binary, C>>).
 
 encode_headers(Headers) ->
 	encode_headers(Headers, []).

@@ -386,7 +386,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                                                 mailer_host=Host
                                             }}, Context),
                     ok;
-                {error, no_more_hosts, {permanant_failure, Host, Message}} ->
+                {error, no_more_hosts, {permanent_failure, Host, Message}} ->
                     % classify this as a bounce, something is wrong with the receiving server or the recipient
                     z_notifier:notify({log, LogEmail#log_email{
                                                 severity = ?LOG_ERROR,
