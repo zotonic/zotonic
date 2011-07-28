@@ -17,9 +17,7 @@ New feature release:
 
 * Change to default branch: hg update default
 
-* Reset the RELEASE file (date = UNRELEASED, clear bugfixes and features list)
-
-* edit include/zotonic_release.hrl to include the higher version, say 0.5-dev
+* edit include/zotonic_release.hrl and src/zotonic.app to include the higher version, say 0.5-dev
 
 * Commit
 
