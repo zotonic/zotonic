@@ -230,14 +230,16 @@ header {
 
 	.home #banner #download-zotonic {
 		position: absolute;
-		right: 63px;
+		left: 625px;
 		top: 40px;
+		width: 350px;
 	}
 
 	.home #banner #docs-zotonic {
 		position: absolute;
-		right: 9px;
+		left: 625px;
 		top: 170px;
+		width: 350px;
 	}
 		
 		.home #banner #download-zotonic a,

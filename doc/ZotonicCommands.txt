@@ -60,8 +60,8 @@ granted CREATEDB in postgres as follows:
 zotonic debug
 -------------
 Launch the Zotonic server interactively and get an EShell on the
-running instance.  This command used to be called "./start.sh" in
-Zotonic 0.6 and earlier.
+running instance.  There is a "start.sh" command in the root folder
+which is a shortcut for this command.
 
 
 zotonic restart
