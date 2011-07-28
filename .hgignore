@@ -6,6 +6,7 @@ erl_crash.dump
 ebin/*
 deps/mochiweb/doc/*
 deps/mochiweb/.eunit/*
+deps/gen_smtp/.eunit/*
 src/erlydtl/erlydtl_parser.erl
 src/tests/erlydtl/rendered_output/*
 priv/log/*

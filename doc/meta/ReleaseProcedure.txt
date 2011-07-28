@@ -4,9 +4,6 @@ New feature release:
   features, plus overview of all fixed bugs. Also take commit log for
   the tip into consideration, extracting relevant commits.
 
-* Check/change download graphic in priv/sites/zotonicwww/lib/images/download_zotonic.xcf,
-  and export to .png in the same dir.
-
 * Make a release branch:
   hg branch release-0.4.x
 
