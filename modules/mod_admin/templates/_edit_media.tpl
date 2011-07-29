@@ -5,6 +5,6 @@
 	{% sorter id=#media tag={object_sorter predicate="depiction" id=id} placeholder="ui-sortable-placeholder" %}
 	<ul id="{{ #media }}" class="media-sorter">
 		{% for object_id, edge_id in m.edge.o[id].depiction %}
-        {% include "_rsc_edge_media.tpl" subject_id=id %}
+            {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
 		{% endfor %}
 	</ul>
