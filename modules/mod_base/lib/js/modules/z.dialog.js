@@ -84,7 +84,7 @@ limitations under the License.
 				/* Make sure that the dialog is within the viewport */
 				var dialogHeight = dialogWrapper.height();
 				var windowHeight = $(window).height();
-				if (scrollTop + 100 + dialogHeight > windowHeight) {
+				if (100 + dialogHeight > windowHeight) {
 					var newTop = scrollTop + windowHeight - dialogHeight - 20;
 					
 					$(dialogWrapper).css({top: newTop > scrollTop ? newTop : scrollTop});
