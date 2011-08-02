@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% @doc Handles all ajax postback calls
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@
     malformed_request/2,
     allowed_methods/2,
     content_types_provided/2,
-    process_post/2
-    ]).
+    process_post/2,
+    
+    process_postback/1
+]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
@@ -58,13 +60,58 @@ content_types_provided(ReqData, Context) ->
 
 process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
+    {Script, EventContext} = process_postback(Context1),
+    CometScript = z_session_page:get_scripts(EventContext#context.page_pid),
+    
+    % Send back all the javascript.
+    RD  = z_context:get_reqdata(EventContext),
+    RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
+        "multipart/form-data" ++ _ ->
+            RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
+            case z_context:document_domain(EventContext) of
+                undefined ->
+                    wrq:append_to_resp_body([
+                            "<textarea>", Script, CometScript, "</textarea>"
+                            ], RDct);
+                DocumentDomain ->
+                    wrq:append_to_resp_body([
+                            <<"<script>document.domain=\"">>, DocumentDomain,<<"\";</script><textarea>">>,
+                            Script, CometScript, "</textarea>"
+                            ], RDct)
+            end;
+        _ ->
+            wrq:append_to_resp_body([Script, CometScript], RD)
+    end,
+
+    ReplyContext = z_context:set_reqdata(RD1, EventContext),
+    ?WM_REPLY(true, ReplyContext).
+
+
+
+%% @doc Process the postback, shared with the resource_websocket.
+process_postback(Context1) ->
     EventContext = case z_context:get_q("postback", Context1) of
         "notify" ->
             Message = z_context:get_q("z_msg", Context1),
-            TriggerId1 = undefined,
-            case z_notifier:first({postback_notify, Message}, Context1) of
-                undefined -> Context1;
-                #context{} = ContextNotify -> ContextNotify
+            TriggerId1 = case z_context:get_q("z_trigger_id", Context1) of
+                             undefined -> undefined;
+                             [] -> undefined;
+                             TrId -> TrId
+                         end,
+            TargetId = case z_context:get_q("z_target_id", Context1) of
+                             undefined -> undefined;
+                             [] -> undefined;
+                             TtId -> TtId
+                         end,
+            case z_context:get_q("z_delegate", Context1) of
+                None when None =:= []; None =:= undefined ->
+                    case z_notifier:first({postback_notify, Message}, Context1) of
+                        undefined -> Context1;
+                        #context{} = ContextNotify -> ContextNotify
+                    end;
+                Delegate ->
+                    {ok, Module} = z_utils:ensure_existing_module(Delegate),
+                    Module:event({postback_notify, Message, TriggerId1, TargetId}, Context1)
             end;
         Postback ->
             {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
@@ -89,34 +136,11 @@ process_post(ReqData, Context) ->
             end
     end,
 
-    Script      = z_script:get_script(EventContext),
-    CometScript = z_session_page:get_scripts(EventContext#context.page_pid),
-    
+    Script      = iolist_to_binary(z_script:get_script(EventContext)),
     % Remove the busy mask from the element that triggered this event.
     Script1 = case TriggerId1 of 
         undefined -> Script;
-        FormId -> [Script, " z_unmask('",z_utils:js_escape(FormId),"');" ]
+        "" -> Script;
+        _HtmlElementId -> [Script, " z_unmask('",z_utils:js_escape(TriggerId1),"');" ]
     end,
-    
-    % Send back all the javascript.
-    RD  = z_context:get_reqdata(EventContext),
-    RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
-        "multipart/form-data" ++ _ ->
-            RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
-            case z_context:document_domain(EventContext) of
-                undefined ->
-                    wrq:append_to_resp_body([
-                            "<textarea>", Script1, CometScript, "</textarea>"
-                            ], RDct);
-                DocumentDomain ->
-                    wrq:append_to_resp_body([
-                            <<"<script>document.domain=\"">>, DocumentDomain,<<"\";</script><textarea>">>,
-                            Script1, CometScript, "</textarea>"
-                            ], RDct)
-            end;
-        _ ->
-            wrq:append_to_resp_body([Script1, CometScript], RD)
-    end,
-
-    ReplyContext = z_context:set_reqdata(RD1, EventContext),
-    ?WM_REPLY(true, ReplyContext).
+    {Script1, EventContext}.

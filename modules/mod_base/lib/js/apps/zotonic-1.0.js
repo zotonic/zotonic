@@ -35,6 +35,7 @@ var z_drag_tag				= [];
 var z_registered_events		= new Object();
 var z_on_visible_checks		= [];
 var z_on_visible_timer		= undefined;
+var z_unique_id_counter		= 0;
 
 /* Non modal dialogs
 ---------------------------------------------------------- */
@@ -101,13 +102,19 @@ function z_event(name, extraParams)
 
 function z_notify(message, extraParams)
 {
+	var trigger_id = '';
+	if (extraParams != undefined && extraParams.z_trigger_id != undefined) {
+	    trigger_id = extraParams.z_trigger_id;
+	    extraParams.z_trigger_id = undefined;
+	}
+
 	var extra = ensure_name_value(extraParams);
 	if (typeof extra != 'object')
 	{
 		extra = [];
 	}
 	extra.push({name: 'z_msg', value: message});
-	z_queue_postback('', 'notify', extra, true);
+	z_queue_postback(trigger_id, 'notify', extra, true);
 }
 
 /* Postback loop
@@ -510,6 +517,26 @@ function z_has_flash()
 	}
 	return false;
 }
+
+
+function z_ensure_id(elt)
+{
+	var id = $(elt).attr('id');
+	if (id == undefined) {
+		id = z_unique_id();
+		$(elt).attr('id', id);
+	}
+	return id;
+}
+
+function z_unique_id()
+{
+	do {
+		var id = '-z-' + z_unique_id_counter++;
+	} while ($('#'+id).length > 0);
+	return id;
+}
+
 
 /* Spinner, show when waiting for a postback
 ---------------------------------------------------------- */
@@ -1187,7 +1214,8 @@ function ensure_name_value(a)
 		var n = []
 		for (var prop in a)
 		{
-			n.push({name: prop, value: a[prop]});
+		    if (a[prop] != undefined)
+			    n.push({name: prop, value: a[prop]});
 		}
 		return n;
 	}

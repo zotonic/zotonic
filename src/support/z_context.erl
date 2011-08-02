@@ -584,6 +584,8 @@ get_q_all_noz(Context) ->
     is_zotonic_arg("postback") -> true;
     is_zotonic_arg("triggervalue") -> true;
     is_zotonic_arg("z_trigger_id") -> true;
+    is_zotonic_arg("z_target_id") -> true;
+    is_zotonic_arg("z_delegate") -> true;
     is_zotonic_arg("z_sid") -> true;
     is_zotonic_arg("z_pageid") -> true;
     is_zotonic_arg("z_v") -> true;
