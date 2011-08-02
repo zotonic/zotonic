@@ -57,9 +57,10 @@ receive_loop(SignalPrototype, Actions, ConnectorContext) ->
 % @doc Render the actions and send the scripts to the page connected to the signal.
 %
 render_page_actions(Signal, Actions, Context) ->
-    Actions1 = [ {Name,  [ {signal, Signal} | Props ] } || {Name, Props} <- Actions],
+    {_, SignalProps} = Signal,
+    Actions1 = [ {Name,  [ {signal, Signal}, {signal_props, SignalProps} | Props ] } || {Name, Props} <- Actions],
     Options  = [{action, X} || X <- Actions1],
-    
+
     %% What parameters should be used here?
     Script = z_script:get_script(z_render:wire(undefined, undefined, {event, Options}, Context)),
     

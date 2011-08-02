@@ -29,9 +29,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
-    add_admin_log_page/1,
     observe_search_query/2, 
-    pid_observe_add_admin_log_page/3,
     pid_observe_log/3
 ]).
 
@@ -42,15 +40,8 @@
 
 %% interface functions
 
-add_admin_log_page(C=#context{page_pid=Pid}) ->
-    z_notifier:first({add_admin_log_page, Pid}, C).
-
-
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
-
-pid_observe_add_admin_log_page(Pid, {add_admin_log_page, _Pid} = Msg, _Context) ->
-    gen_server:call(Pid, Msg).
 
 pid_observe_log(Pid, {log, #log_message{}=Msg}, Context) ->
     case Msg#log_message.user_id of
@@ -93,9 +84,6 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
-handle_call({add_admin_log_page, Pid}, _From, State) ->
-    Pids = lists:filter(fun erlang:is_process_alive/1, [Pid|State#state.admin_log_pages]),
-    {reply, ok, State#state{admin_log_pages=Pids}};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -159,7 +147,6 @@ search(_, _, _) ->
     undefined.
 
 
-
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
 handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
     {ok, Id} = z_db:insert(log, [
@@ -167,33 +154,7 @@ handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Pro
                     {type, Type},
                     {message, Msg}
                 ] ++ Props, State#state.context),
-
-    % Notify admins of any updates
-    case State#state.admin_log_pages of
-        [] -> 
-            nop;
-        AdminPages ->
-            case catch z_template:render_to_iolist("_admin_log_row.tpl", [{id, Id}], State#state.context) of
-                {error, {template_not_found,"_admin_log_row.tpl",enoent}} ->
-                    % We can get a template_not_found error when the system is still starting.
-                    error;
-                {error, Reason} ->
-                    error_logger:info_msg("[~p] Render error of _admin_log_row.tpl: ~p~n", 
-                                          [(State#state.context)#context.host, Reason]),
-                    error;
-                {Tpl, _Ctx} ->
-                    Tpl2 = lists:flatten(z_string:line(erlang:iolist_to_binary(Tpl))),
-                    F = fun(Pid) ->
-                                z_session_page:add_script([
-                                    "$('", z_utils:js_escape(Tpl2), 
-                                    "').hide().insertBefore('#log-area li:first').slideDown().css({backgroundColor:'", 
-                                   log_color(Type), "'}).animate({backgroundColor:'", 
-                                   log_color(bg), "'}, 8000, 'linear');"], Pid)
-                        end,
-                    [F(P) || P <- AdminPages],
-                    ok
-            end
-    end.
+    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, State#state.context).
 
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
@@ -209,7 +170,8 @@ handle_other_log(Record, State) ->
                 ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
                 ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
                 _Other -> nop
-            end;
+            end,
+            mod_signal:emit({LogType, [{log_id, Id}|Fields]}, State#state.context);
         false ->
             Log = #log_message{
                 message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
@@ -248,10 +210,3 @@ record_to_log_message(_, Fields, LogType, Id) ->
 
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
-
-
-log_color(debug) -> "#ffffff";
-log_color(info) -> "#ffff99";
-log_color(warning) -> "#ffcc99";
-log_color(bg) -> "#f1f1f1";
-log_color(_) -> "#f1f1f1".

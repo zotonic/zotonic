@@ -35,5 +35,6 @@
 		   </div>
 		{% endwith %}
 
-		{% logwatch %}
+        {% wire action={connect signal={log_message} action={addlog target="log-area"}} %}
+
 {% endblock %}
