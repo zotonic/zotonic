@@ -85,7 +85,8 @@
     url_reserved_char/1,
     url_unreserved_char/1,
     url_valid_char/1,
-    flush_message/1
+    flush_message/1,
+    ensure_existing_module/1
 ]).
 
 %%% FORMAT %%%
@@ -844,6 +845,40 @@ are_equal(_Arg1, _Arg2) ->
 %% @spec name_for_host(atom(), atom()) -> atom()
 name_for_host(Name, Host) ->
     z_convert:to_atom(z_convert:to_list(Name) ++ [$$, z_convert:to_list(Host)]).
+
+
+%% @doc Ensure that the given string matches an existing module. Used to prevent
+%%      a denial of service attack where we exhaust the atom space.
+ensure_existing_module(ModuleName) when is_list(ModuleName) ->
+    case catch list_to_existing_atom(ModuleName) of
+        {'EXIT', {badarg, _Traceback}} ->
+            case code:where_is_file(ensure_valid_modulename(ModuleName) ++ ".beam") of
+                non_existing -> {error, not_found};
+                Absname ->
+                    {module, Module} = code:load_file(Absname),
+                    {ok, Module}
+            end;
+        M ->
+            ensure_existing_module(M)
+     end;
+ensure_existing_module(ModuleName) when is_atom(ModuleName) ->
+    case module_loaded(ModuleName) of
+        true -> 
+            {ok, ModuleName};
+        false ->
+            {module, Module} = code:ensure_loaded(ModuleName),
+            {ok, Module}
+    end;
+ensure_existing_module(ModuleName) when is_binary(ModuleName) ->
+    ensure_existing_module(binary_to_list(ModuleName)).
+
+    % Crash on a modulename that is not valid.
+    ensure_valid_modulename(Name) ->
+        lists:filter(fun ensure_valid_modulechar/1, Name).
+            
+        ensure_valid_modulechar(C) when C >= $0, C =< $9 -> true;
+        ensure_valid_modulechar(C) when C >= $a, C =< $z -> true;
+        ensure_valid_modulechar(C) when C >= $_ -> true.
 
 
 %% @doc return a unique temporary filename.
