@@ -1,3 +1,4 @@
+{% with signal_props.log_id|default:id as id %}
 {% with m.log[id] as l %}
 <li id="{{ #li.id }}" class="clearfix">
         <span class="zp-5">{{ l.type|default:"-" }}</span>
@@ -20,4 +21,5 @@
         </span>
         <span class="zp-10">{{ l.created|date:"d M Y, H:i" }}</span>
 </li>
+{% endwith %}
 {% endwith %}
