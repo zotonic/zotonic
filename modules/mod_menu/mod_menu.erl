@@ -146,7 +146,6 @@ menu_flat(undefined, _Context) ->
 menu_flat(<<>>, _Context) ->
     [];
 menu_flat(X, Context) ->
-    ?DEBUG(X),
     menu_flat(X, [1], [], Context).
 
 menu_flat([], _Path, Acc, _Context) ->
