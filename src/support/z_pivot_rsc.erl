@@ -407,7 +407,7 @@ pivot_resource(Id, Context) ->
     
         {z_utils:combine(" || ", Sql1), Args1}.
             
-    
+
     %      new.tsv := 
     %        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.title_nl,'')), 'A') || 
     %        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.desc_nl,'')),  'D') ||
@@ -416,7 +416,7 @@ pivot_resource(Id, Context) ->
 
 
 truncate(undefined, _Len) -> undefined;
-truncate(S, Len) -> truncate(S, Len, Len).
+truncate(S, Len) -> z_string:to_lower(truncate(S, Len, Len)).
     
     truncate(_S, 0, _Bytes) ->
         "";
