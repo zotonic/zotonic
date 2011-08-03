@@ -45,9 +45,9 @@
 
 </div>
 
-{% if in_admin and not recipient_id %}
+{% if in_admin and not recipient_id and not m.rsc[id].mailinglist_private %}
 	<div class="form-item clearfix">
-		<label><input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" checked="checked" />{_ Send welcome _}</label>
+		<label><input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" />{_ Send welcome _}</label>
 	</div>
 {% endif %}
 

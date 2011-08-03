@@ -30,7 +30,7 @@
 					<span class="zp-20">{{ title|default:"untitled" }}</span>
 					<span class="zp-40">{{ m.rsc[id].summary|default:"-" }}</span>
 					{% with m.mailinglist.stats[id] as stats %}
-						<span class="zp-10">{{ (stats[1] + id.s.subscriberof|length)|format_number }}</span>
+						<span class="zp-10">{{ stats[1]|format_number }}</span>
 						<span class="zp-10">{{ stats[2]|length|format_number }}</span>
 					{% endwith %}
 					<span class="zp-20">

@@ -40,8 +40,11 @@ event({postback, {mailing_page_test, PageId, OnSuccess}, _TriggerId, _TargetId},
 		{ok, ListId} ->
 			case z_acl:rsc_visible(ListId, Context) of
 				true ->
+                    %% Reset the recepient stats for the test list
+                    m_mailinglist:reset_log_email(ListId, PageId, Context),
+                    %% And send.
 					z_notifier:notify({mailinglist_mailing, ListId, PageId}, Context),
-					Context1 = z_render:growl("Sending the page to the test mailing list.", Context),
+					Context1 = z_render:growl("Sending the page to the test mailing list...", Context),
 					z_render:wire(OnSuccess, Context1);
 				false ->
 					z_render:growl_error("You are not allowed to send mail to the test mailing list.", Context)

@@ -51,6 +51,10 @@
 	get_scheduled/2,
 	check_scheduled/1,
 
+	get_email_from/2,
+    already_sent/4,
+    reset_log_email/3,
+
 	init_tables/1
 ]).
 
@@ -63,6 +67,10 @@ m_find_value(stats, #m{value=undefined} = M, _Context) ->
    M#m{value=stats};
 m_find_value(Id, #m{value=stats}, Context) ->
    get_stats(Id, Context);
+m_find_value(rsc_stats, #m{value=undefined} = M, _Context) ->
+   M#m{value=rsc_stats};
+m_find_value(Id, #m{value=rsc_stats}, Context) ->
+   get_rsc_stats(Id, Context);
 m_find_value(recipient, #m{value=undefined} = M, _Context) ->
    M#m{value=recipient};
 m_find_value(Id, #m{value=recipient}, Context) ->
@@ -107,7 +115,26 @@ get_stats(Id, Context) ->
 							join rsc on id = page_id
 					where mailinglist_id = $1
 					order by publication_start", [Id], Context),
-	{Count, Scheduled}.
+	{Count + length(m_edge:subjects(Id, subscriber_of, Context)), Scheduled}.
+
+
+%% @doc Get the stats for all mailing lists which have been sent to a rsc (content_id)
+%% @spec get_rsc_stats(int(), Context) -> [ {mailinglist_id::int(), statlist} ]
+get_rsc_stats(Id, Context) ->
+    F = fun() ->
+                Stats = [ {ListId, [{created, Created}, {total, Total}]} || 
+                            {ListId, Created, Total} <- z_db:q("select other_id, min(created) as sent_on, count(distinct(envelop_to)) from log_email where content_id = $1 group by other_id", [Id], Context)],
+                %% merge in all mailer statuses
+                lists:foldl(fun({ListId, Status, Count}, St) ->
+                                    z_utils:prop_replace(ListId,
+                                                         [{z_convert:to_atom(Status), Count}|proplists:get_value(ListId, St, [])],
+                                                         St)
+                            end,
+                            Stats,
+                            z_db:q("select other_id, mailer_status, count(envelop_to) from log_email where content_id = $1 group by other_id, mailer_status", [Id], Context))
+        end,
+    z_depcache:memo(F, {mailinglist_stats, Id}, 1, [Id], Context). %% Cache a little while to prevent database DOS while mail is sending
+
 
 
 %% @doc Fetch all enabled recipients from a list.
@@ -347,9 +374,9 @@ delete_scheduled(ListId, PageId, Context) ->
 
 %% @doc Get the list of scheduled mailings for a page.
 get_scheduled(Id, Context) ->
-	z_db:q("select mailinglist_id
-			from mailinglist_scheduled
-			where page_id = $1", [Id], Context).
+	[ListId || {ListId} <- z_db:q("select mailinglist_id
+                			from mailinglist_scheduled
+                			where page_id = $1", [Id], Context)].
 
 
 %% @doc Fetch the next scheduled mailing that is publicly visible, published and in the publication date range.
@@ -363,6 +390,34 @@ check_scheduled(Context) ->
 		  and r.publication_start <= now()
 		  and r.publication_end >= now()
 		limit 1", Context).
+
+
+%% @doc Given an email address for a list/page combination, check if this page already has been delivered to this address.
+already_sent(Email, ListId, Id, Context) ->
+    z_convert:to_bool(z_db:q1("select true from log_email where other_id = $1 and content_id = $2 and envelop_to = $3 and mailer_status = 'sent'", [ListId, Id, Email], Context)).
+
+
+%% @doc Reset the email log for given list/page combination, allowing one to send the same page again to the given list.
+reset_log_email(ListId, PageId, Context) ->
+    z_db:q("delete from log_email where other_id = $1 and content_id = $2", [ListId, PageId], Context),
+    z_depcache:flush({mailinglist_stats, PageId}, Context),
+    ok.
+
+
+%% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to mod_emailer.email_from config variable.
+get_email_from(ListId, Context) ->
+    FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
+                    Empty when Empty =:= undefined; Empty =:= <<>> ->
+                        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
+                    RT ->
+                        z_convert:to_list(RT)
+                end,
+    FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
+                  undefined -> [];
+                  <<>> -> []; 
+                  SenderName -> z_convert:to_list(SenderName)
+               end,
+    z_email:combine_name_email(FromName, FromEmail).
 
 
 % Install the SQL tables to track recipients and scheduled mailings.

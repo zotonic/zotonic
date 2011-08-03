@@ -299,7 +299,9 @@ msgstr ""
 msgid ""
 "Here you can edit the person's name.  Use the title of the base content for "
 "the display name of this person."
-msgstr "Hier kan je de namen van de persoon bewerken. Gebruik de titel van de basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
+msgstr ""
+"Hier kan je de namen van de persoon bewerken. Gebruik de titel van de "
+"basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
 
 #: modules/mod_admin/templates/admin.tpl:44
 msgid "Latest modified events"
@@ -370,7 +372,9 @@ msgstr "Media URL"
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
-msgstr "Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. Ze kunnen worden gekoppeld aan pagina's."
+msgstr ""
+"Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. "
+"Ze kunnen worden gekoppeld aan pagina's."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:29
 msgid "Media file"
@@ -497,7 +501,8 @@ msgstr "Predicaat"
 #: modules/mod_admin/templates/_admin_edit_content_category.tpl:47
 msgid ""
 "Predicates, groups and categories can't be changed into another category."
-msgstr "Predicaten, groepen en categorieën kunnen niet van categorie veranderen."
+msgstr ""
+"Predicaten, groepen en categorieën kunnen niet van categorie veranderen."
 
 #: modules/mod_admin/templates/admin_media.tpl:41
 msgid "Preview"
@@ -537,7 +542,9 @@ msgstr "Zoekvraag voorbeeld"
 msgid ""
 "Rebuild all search-indices by putting all pages and data from the database "
 "in the indexer queue. This can take a long time!"
-msgstr "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan even duren!"
+msgstr ""
+"Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan even "
+"duren!"
 
 #: modules/mod_admin/templates/admin_status.tpl:22
 msgid "Rebuild search indices"
@@ -553,9 +560,6 @@ msgid "Referrers"
 msgstr "Verwijzingen"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:3
-msgid "Referrers of"
-msgstr "Verwijzingen van"
-
 #: modules/mod_admin/templates/admin_referrers.tpl:9
 msgid "Referrers to"
 msgstr "Verwijzingen naar"
@@ -979,6 +983,9 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/_admin_header_title.tpl:5
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Referrers of"
+#~ msgstr "Verwijzingen van"
 
 #~ msgid "Hello"
 #~ msgstr "Hallo"
