@@ -36,9 +36,6 @@
 -define(MAX_WIDTH,  5000).
 -define(MAX_HEIGHT, 5000).
 
--define(PIX100, 1000).
--define(PIX50,  250000).
-
 -include_lib("zotonic.hrl").
 
 
@@ -147,14 +144,10 @@ cmd_args(FileProps, Filters, OutMime) ->
                     {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)}, 
                     {crop, CropArgs},
                     {colorspace, "RGB"} | Filters1],
-    Filters2b = case {CropArgs,is_enabled(extent, Filters)} of
+    Filters3 = case {CropArgs,is_enabled(extent, Filters)} of
                     {none,true} -> Filters2 ++ [{extent, ReqWidth, ReqHeight}];
                     _ -> Filters2
                 end,
-    Filters3 = case OutMime of
-              "image/jpg" -> Filters2b ++ [quality];
-              _ -> Filters2b
-    end,
     Filters4 = case is_blurred(Filters3) of
                     true ->  Filters3;
                     false -> case Mime of
@@ -293,13 +286,7 @@ filter2arg(sharpen_small, Width, Height) ->
     {Width, Height, []};
 filter2arg(lossless, Width, Height) ->
     {Width, Height, []};
-filter2arg(quality, Width, Height) ->
-    Pix = Width * Height,
-    Q   = if 
-            Pix < ?PIX100 -> 100;
-            Pix > ?PIX50 -> 50;
-            true -> 100 - round(50 * (Pix - ?PIX100) / (?PIX50 - ?PIX100))
-          end,
+filter2arg({quality, Q}, Width, Height) ->
     {Width,Height, ["-quality ",integer_to_list(Q)]};
 filter2arg({removebg, Fuzz}, Width, Height) ->
     {Width, Height, ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
