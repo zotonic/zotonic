@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 ./modules/mod_admin_modules/templates/admin_modules.tpl:33 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 ./modules/mod_admin_modules/templates/admin_modules.tpl:34 
 msgid ""
 "Activate"
 msgstr ""
@@ -28,7 +28,7 @@ msgid ""
 "Author"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:29 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:30 
 msgid ""
 "Deactivate"
 msgstr ""

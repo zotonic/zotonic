@@ -34,7 +34,6 @@
 	observe_search_query/2,
 	observe_mailinglist_message/2,
 	event/2,
-	update_scheduled_list/2,
 	datamodel/1,
 	page_attachments/2
 ]).
@@ -106,7 +105,7 @@ observe_mailinglist_message({mailinglist_message, Message, ListId, RecipientId},
 
 %% @doc Request confirmation of canceling this mailing.
 event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, Context) ->
-	MailingId = proplists:get_value(mailinglist_id, Args),
+	MailingId = proplists:get_value(list_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
 		true ->
 			z_render:dialog("Confirm mailing cancelation.", "_dialog_mailing_cancel_confirm.tpl", Args, Context);
@@ -114,15 +113,26 @@ event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, 
 			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
 	end;
 event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
-	MailingId = proplists:get_value(mailinglist_id, Args),
+	MailingId = proplists:get_value(list_id, Args),
 	PageId = proplists:get_value(page_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
 		true ->
 			m_mailinglist:delete_scheduled(MailingId, PageId, Context),
-			Context1 = update_scheduled_list(PageId, Context),
-			z_render:growl("The mailing has been canceled.", Context1);
+            mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
+			z_render:growl("The mailing has been canceled.", Context);
 		false ->
 			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
+	end;
+event({postback, {mailinglist_reset, Args}, _TriggerId, _TargetId}, Context) ->
+	MailingId = proplists:get_value(list_id, Args),
+	PageId = proplists:get_value(page_id, Args),
+	case z_acl:rsc_editable(MailingId, Context) of
+		true ->
+			m_mailinglist:reset_log_email(MailingId, PageId, Context),
+            mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
+			z_render:growl("The statistics have been cleared.", Context);
+		false ->
+			z_render:growl_error("You are not allowed to reset this mailing.", Context)
 	end;
 
 %% @doc Handle upload of a new recipients list
@@ -135,17 +145,7 @@ event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) 
             z_render:growl(Msg, "error", true, Context)
     end.
 
-%% @doc Update the list with the mailings scheduled for this page.
-update_scheduled_list(Id, Context) ->
-	Vars = [
-		{id, Id},
-		{scheduled, m_mailinglist:get_scheduled(Id, Context)}
-	],
-	Html = z_template:render("_mailinglist_scheduled.tpl", Vars, Context),
-	z_render:update("mailinglist-scheduled", Html, Context).
 
-
-	
 
 %%====================================================================
 %% API
@@ -284,38 +284,17 @@ poll_scheduled(Context) ->
 	
 
 %% @doc Send the page to the mailinglist. The first 20 e-mails are send directly, which is useful for
-%% short lists like test e-mail lists. All other e-mails are queued and send later.  When the page is
-%% not yet visible then the mailing is queued.  The test mailinglist is always send directly.
+%% short lists like test e-mail lists. All other e-mails are queued and sent later.
 send_mailing(ListId, PageId, Context) ->
-	case m_rsc:p(ListId, name, Context) of
-		<<"mailinglist_test">> ->
-			spawn(fun() -> send_mailing_process(ListId, PageId, Context) end);
-		_ ->
-			AnonymousContext = z_acl:anondo(Context),
-			case z_acl:rsc_visible(PageId, AnonymousContext) of
-				true -> spawn(fun() -> send_mailing_process(ListId, PageId, AnonymousContext) end);
-				false -> m_mailinglist:insert_scheduled(ListId, PageId, Context)
-			end
-	end.
+    spawn(fun() -> send_mailing_process(ListId, PageId, z_acl:sudo(Context)) end).
+
 
 send_mailing_process(ListId, PageId, Context) ->
     Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
     SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
     {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
-    FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
-                    Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
-                    RT ->
-                        z_convert:to_list(RT)
-                end,
-    FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
-                  undefined -> [];
-                  <<>> -> []; 
-                  SenderName -> z_convert:to_list(SenderName)
-               end,
-    From = z_email:combine_name_email(FromName, FromEmail),
     Options = [
-        {id,PageId}, {list_id, ListId}, {email_from, From}
+        {id,PageId}, {list_id, ListId}, {email_from, m_mailinglist:get_email_from(ListId, Context)}
     ],
     
     [ send(true, Email, Options, Context) || Email <- Direct ],
@@ -331,13 +310,18 @@ send_mailing_process(ListId, PageId, Context) ->
         case z_convert:to_list(z_string:trim(Email)) of
             [] -> skip;
             Email1 ->
-                Options1 = [{email,Email1}|Options],
-
                 Id = proplists:get_value(id, Options),
-                Attachments = mod_mailinglist:page_attachments(Id, Context),
-
-                z_email_server:send(#email{queue=not(IsDirect), to=Email1,
-	                        html_tpl={cat, "mailing_page.tpl"}, vars=Options1, attachments=Attachments}, Context)
+                ListId = proplists:get_value(list_id, Options),
+                %% check if not already sent
+                case m_mailinglist:already_sent(Email1, ListId, Id, Context) of
+                    true ->
+                        %% already sent.
+                        ok;
+                    false ->
+                        Attachments = mod_mailinglist:page_attachments(Id, Context),
+                        z_email_server:send(#email{queue=not(IsDirect), to=Email1,
+                                                   html_tpl={cat, "mailing_page.tpl"}, vars=[{email,Email1}|Options], attachments=Attachments}, Context)
+                end
         end.
 
 

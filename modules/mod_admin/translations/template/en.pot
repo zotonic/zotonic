@@ -613,12 +613,7 @@ msgid ""
 "Referrers"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:3 
-msgid ""
-"Referrers of"
-msgstr ""
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:9 
+#: ./modules/mod_admin/templates/admin_referrers.tpl:3 ./modules/mod_admin/templates/admin_referrers.tpl:9 
 msgid ""
 "Referrers to"
 msgstr ""
