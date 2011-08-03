@@ -57,31 +57,27 @@ install_modules(Host, C) ->
     ?DEBUG("Inserting modules"),
     Modules = [
         "mod_base",
-        "mod_emailer",
         "mod_menu",
         "mod_oauth",
         "mod_search",
         "mod_video_embed",
         "mod_atom_feed",
-		"mod_broadcast",
         "mod_translation",
-        "mod_log",
+        "mod_signal",
+        "mod_logging",
 
         "mod_seo",
         "mod_seo_google",
         "mod_seo_sitemap",
 
         "mod_authentication",
-		"mod_acl_adminonly",
+        "mod_acl_adminonly",
 
         "mod_admin",
-        "mod_admin_address",
         "mod_admin_category",
         "mod_admin_config",
-        "mod_admin_event",
         "mod_admin_identity",
         "mod_admin_modules",
-        "mod_admin_person",
         "mod_admin_predicate",
 
         %% Enable comments
