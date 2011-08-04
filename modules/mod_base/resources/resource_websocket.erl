@@ -27,11 +27,8 @@
     content_types_provided/2,
     provide_content/2,
     websocket_start/2,
-    loop/4,
-    send_loop/2,
     
-    pack_length/1,
-    unpack_length/1
+    handle_message/2
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -70,126 +67,23 @@ provide_content(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
-    Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}],Context1),
-    Socket = webmachine_request:socket(ReqData),
-    Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
-    
-    case z_context:get_req_header("sec-websocket-key1", Context1) of
+    case z_context:get_req_header("sec-websocket-version", Context1) of
         undefined ->
-            % First draft protocol version, this code should be removed in due time.
-            %% Send the handshake
-            Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
-                    "Upgrade: WebSocket", 13, 10,
-                    "Connection: Upgrade", 13, 10,
-                    "WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
-                    "WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
-                    13, 10
-                    ],
-            ok = send(Socket, Data),
-            spawn_link(fun() -> start_send_loop(Socket, Context1) end),
-            loop(none, nolength, Socket, Context1);
-            
-        WsKey1 ->
-            % Protocol draft 76
-
-            %% Sec-Websocket stuff
-            Key1 = process_key(WsKey1),
-            Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
-            {ok, Body} = mochiweb_socket:recv(Socket, 8, infinity),
-            SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
-
-            %% Send the handshake
-            Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
-                    "Upgrade: WebSocket", 13, 10,
-                    "Connection: Upgrade", 13, 10,
-                    "Sec-WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
-                    "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
-                    "Sec-WebSocket-Protocol: zotonic", 13, 10,
-                    13, 10,
-                    <<SignKey/binary>>
-                    ],
-            ok = send(Socket, Data),
-            spawn_link(fun() -> start_send_loop(Socket, Context1) end),
-            loop(none, nolength, Socket, Context1)
+            case z_context:get_req_header("sec-websocket-key1", Context1) of
+                undefined ->
+                    z_websocket_hixie75:start(ReqData, Context1);
+                WsKey1 ->
+                    z_websocket_hybi00:start(WsKey1, ReqData, Context1)
+            end;
+        % https://github.com/ostinelli/misultin/commit/23b21e0c8d1d9aa4bc0ce60d527a8716d76e025c
+        "7" ->
+            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07
+            todo; % hybi07(WsKey1, Context1);
+        "8" ->
+            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
+            todo % hybi10(WsKey1, Context1)
     end.
 
-%% @doc Start receiving messages from the websocket
-loop(Buff, Length, Socket, Context) ->
-    case mochiweb_socket:recv(Socket, 0, infinity) of
-        {ok, Received} ->
-            handle_data(Buff, Length, Received, Socket, Context);
-        {error, Reason} ->
-            {error, Reason}
-    end.
-
-%% @doc Upack any data frames, send them to the handling functions.
-handle_data(none, nolength, <<0,T/binary>>, Socket, Context) ->
-    <<Type, _/binary>> = T,
-    case Type =< 127 of
-        true -> 
-            handle_data(<<>>, nolength, T, Socket, Context);
-        false ->
-            {Length, LenBytes} = unpack_length(T),
-            <<_:LenBytes/bytes, Rest:Length/bytes>> = T,
-            handle_data(<<>>, Length, Rest, Socket, Context)
-    end;
-
-%% Extract frame ending with 255
-handle_data(none, nolength, <<>>, Socket, Context) ->
-    resource_websocket:loop(none, nolength, Socket, Context);
-handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
-    % A packet of <<0,255>> signifies that the ua wants to close the connection
-    ua_close_request;
-handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    handle_message(Msg, Context),
-    handle_data(none, nolength, T, Socket, Context);
-handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
-    handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
-
-%% Extract frame with length bytes
-handle_data(Msg, 0, T, Socket, Context) ->
-    handle_message(Msg, Context),
-    handle_data(none, nolength, T, Socket, Context);
-handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
-    handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
-
-%% Data ended before the end of the frame, loop to fetch more
-handle_data(Msg, Length, <<>>, Socket, Context) ->
-    resource_websocket:loop(Msg, Length, Socket, Context).
-
-
-%% @doc Unpack the length bytes
-%% @author Davide Marquês (From yaws_websockets.erl)
-unpack_length(Binary) ->
-    unpack_length(Binary, 0, 0).
-unpack_length(Binary, LenBytes, Length) ->
-    <<_:LenBytes/bytes, B, _/bitstring>> = Binary,
-    B_v = B band 16#7F,
-    NewLength = (Length * 128) + B_v,
-    case B band 16#80 of
-    16#80 ->
-        unpack_length(Binary, LenBytes + 1, NewLength);
-    0 ->
-        {NewLength, LenBytes + 1}
-    end.
-
-%% @doc Pack the length in 7 bits bytes
-pack_length(N) ->
-    pack_length(N, []).
-
-pack_length(N, Acc) ->
-    N1 = N div 128,
-    B = N rem 128,
-    case Acc of
-        [] ->
-            pack_length(N1, [B|Acc]);
-        _ ->
-            case N1 of
-                0 -> [B+128|Acc];
-                _ -> pack_length(N1, [B+128|Acc])
-            end
-    end.
 
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
@@ -215,54 +109,3 @@ handle_message(Msg, Context) ->
     z_session_page:add_script(ResultScript, ResultContext),
     erlang:erase().
     
-
-%% @doc Start the loop passing data (scripts) from the page to the browser
-start_send_loop(Socket, Context) ->
-    % We want to receive any exit signal (including 'normal') from the socket's process.
-    process_flag(trap_exit, true),
-    z_session_page:websocket_attach(self(), Context),
-    send_loop(Socket, Context).
-
-send_loop(Socket, Context) ->
-    receive
-        {send_data, Data} ->
-            case send(Socket, [0, Data, 255]) of
-                ok -> resource_websocket:send_loop(Socket, Context);
-                closed -> closed
-            end;
-        {'EXIT', _FromPid, _Reason} ->
-            % Exit of the socket's process, stop sending data.
-            exit;
-        _ ->
-            resource_websocket:send_loop(Socket, Context)
-    end.
-
-
-%% @doc Send data to the user agent
-send(undefined, _Data) ->
-    ok;
-send(Socket, Data) ->
-    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
-        ok -> ok;
-        {error, closed} -> closed;
-        _ -> exit(normal)
-    end.
-
-
-%% Process a key from the websockey handshake, return an integere
-%% @spec process_key(string()) -> integer
-process_key(L) ->
-    {Number,Spaces} = split_key(L, [], 0),
-    Number div Spaces.
-
-    split_key([], DAcc, Spaces) ->
-        {list_to_integer(lists:reverse(DAcc)), Spaces};
-    split_key([C|Rest], DAcc, Spaces) when C >= $0, C =< $9 ->
-        split_key(Rest, [C|DAcc], Spaces);
-    split_key([32|Rest], DAcc, Spaces) ->
-        split_key(Rest, DAcc, Spaces+1);
-    split_key([_|Rest], DAcc, Spaces) ->
-        split_key(Rest, DAcc, Spaces).
-
-
-
