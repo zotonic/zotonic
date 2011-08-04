@@ -60,7 +60,6 @@
 
 %% @doc Spawns a new logger process
 start(Args) ->
-    io:format("z_logger:start~n"),
     Args1 = [{wm_pid, self()} | Args],
     gen_server:start(?MODULE, Args1, []).
 
