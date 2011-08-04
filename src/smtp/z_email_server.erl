@@ -47,7 +47,7 @@
 -define(SPAMD_TIMEOUT, 10000).
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
-                smtp_verp_as_from, smtp_bcc, override, smtp_spamd_ip, smtp_spamd_port}).
+                smtp_verp_as_from, smtp_bcc, override, smtp_spamd_ip, smtp_spamd_port, sending=[]}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10), retry=0, 
                       recipient, email, created=now(), sent, 
                       pickled_context}).
@@ -106,6 +106,7 @@ init(_Args) ->
                         [{attributes, record_info(fields, email_queue)}]),
     timer:send_interval(5000, poll),
     State = #state{},
+    process_flag(trap_exit, true),
     {ok, State}.
     
 
@@ -126,19 +127,19 @@ handle_call(Message, _From, State) ->
 %% @doc Send an e-mail.
 handle_cast({send, Id, #email{} = Email, Context}, State) ->
     State1 = update_config(State),
-    case z_utils:is_empty(Email#email.to) of
-        true -> nop;
+    State2 = case z_utils:is_empty(Email#email.to) of
+        true -> State1;
         false -> send_email(Id, Email#email.to, Email, Context, State1)
     end,
-    case z_utils:is_empty(Email#email.cc) of
-        true -> nop;
-        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State1)
+    State3 = case z_utils:is_empty(Email#email.cc) of
+        true -> State2;
+        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
     end,
-    case z_utils:is_empty(Email#email.bcc) of
-        true -> nop;
-        false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State1)
+    State4 = case z_utils:is_empty(Email#email.bcc) of
+        true -> State3;
+        false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
     end,
-    {noreply, State1};
+    {noreply, State4};
 
 %%@ doc Handle a bounced email
 handle_cast({bounced, Peer, BounceEmail}, State) ->
@@ -188,6 +189,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
             end
     end,
     {noreply, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -200,6 +202,10 @@ handle_info(poll, State) ->
     State1 = poll_queued(State),
     z_utils:flush_message(poll),
     {noreply, State1};
+
+%% @doc Spawned process has crashed. Clear it from the sending list.
+handle_info({'EXIT', Pid, _Reason}, State) ->
+    {noreply, remove_worker(Pid, State)};
 
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
@@ -319,6 +325,10 @@ get_email_from(Context) ->
         EmailFrom -> z_convert:to_list(EmailFrom)
     end.
 
+%% @doc Remove a worker Pid from the server state.
+remove_worker(Pid, State) ->
+    Filtered = lists:filter(fun({_,P}) -> P =/= Pid end, State#state.sending),
+    State#state{sending=Filtered}.
 
 %% =========================
 %% SENDING related functions
@@ -334,7 +344,7 @@ send_email(Id, Recipient, Email, Context, State) ->
     {atomic, ok} = mnesia:transaction(QEmailTransFun),        
     case Email#email.queue of
         false -> spawn_send(Id, Recipient, Email, Context, State);
-        true -> ok
+        true -> State
     end.
 
 
@@ -431,10 +441,10 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                             SpamStatus = spamcheck(EncodedMail, Addr, Port),
                             z_notifier:first({email_spamstatus, Id, SpamStatus}, Context)
                     end
-                            
             end
         end,
-    spawn(F).
+    SenderPid = spawn_link(F),
+    State#state{sending=[{Id,SenderPid}|State#state.sending]}.
 
 
 encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is_binary(Raw) ->
@@ -726,6 +736,7 @@ delete_emailq(Id) ->
 
 %% @doc Fetch a new batch of queued e-mails. Deletes failed messages.
 poll_queued(State) ->
+
     %% delete sent messages
     DelTransFun = fun() -> 
                           DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
@@ -764,12 +775,16 @@ poll_queued(State) ->
     %% notify the system that these emails were failed to be sent
     [ z_notifier:first({email_failed, Id, Recipient}, z_context:depickle(PickledContext)) 
      || {Id, Recipient, PickledContext} <- NotifyList2 ],
- 
+
     %% fetch a batch of messages for sending
     FetchTransFun =
         fun() ->
                 Q = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
+                           %% Should not already have been sent
                            QEmail#email_queue.sent == undefined,
+                           %% Should not be currently sending
+                           proplists:get_value(QEmail#email_queue.id, State#state.sending) == undefined,
+                           %% Eligible for retry
                            timer:now_diff(QEmail#email_queue.retry_on, now()) < 0]),
                 qlc:e(Q)
         end,
@@ -779,16 +794,17 @@ poll_queued(State) ->
         [] ->
             State;
         _  ->
-            State1 = update_config(State),
-            [ begin
+            State2 = update_config(State),
+            lists:foldl(
+              fun(QEmail, St) ->
                   update_retry(QEmail),
                   spawn_send(QEmail#email_queue.id, 
                              QEmail#email_queue.recipient,
                              QEmail#email_queue.email,
                              z_context:depickle(QEmail#email_queue.pickled_context), 
-                             State1)
-              end || QEmail <- Ms ],
-            State1
+                             St)
+              end,
+              State2, Ms)
     end.
 
 
