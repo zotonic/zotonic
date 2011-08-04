@@ -32,7 +32,7 @@
 -export([start/1, stop/2, flush_and_stop/1, drop_and_stop/1, log/3, log/4, set_loglevel/2]).
 -export([init/1, terminate/2, handle_call/3, handle_cast/2, handle_info/2, code_change/3]).
 
--record(state, {output, loglevel, log_timestamp, format, eagerness, buffer = []}).
+-record(state, {output, loglevel, log_timestamp, format, eagerness, buffer = [], wm_mref}).
 
 %% Configuration defaults
 -define(DEFAULT_LOGLEVEL, 0).
@@ -60,8 +60,9 @@
 
 %% @doc Spawns a new logger process
 start(Args) ->
-    Options = [],
-    gen_server:start(?MODULE, Args, Options).
+    io:format("z_logger:start~n"),
+    Args1 = [{wm_pid, self()} | Args],
+    gen_server:start(?MODULE, Args1, []).
 
 %% @doc Stops a logger process.
 stop(LoggerProc, PolicyFunParam) ->
@@ -105,33 +106,29 @@ init(Args) ->
     timer:send_interval(?MEM_SOFTL_CHKINTERVAL, check_softlimit),
     timer:send_interval(?MEM_HARDL_CHKINTERVAL, check_hardlimit),
 
+    {wm_pid, WMPid} = proplists:lookup(wm_pid, Args),
+    WMRef = erlang:monitor(process, WMPid),
+
     {ok, #state{loglevel=LogLevel, log_timestamp=LogTimestamp,
-                format=Format, eagerness=Eagerness, output=Output2}}.
+                format=Format, eagerness=Eagerness, output=Output2,
+                wm_mref=WMRef}}.
 
 terminate(_Reason, _State) ->
     ok.
 
-handle_call({stop, PolicyFunParam}, _From, State=#state{output=Output, 
-                                                        eagerness=Eagerness, 
-                                                        buffer=Buffer}) ->
+handle_call({stop, PolicyFunParam}, _From, State=#state{eagerness=Eagerness}) ->
     WhatToDo = case Eagerness of
                    {at_once, PolicyFun} ->
                        PolicyFun(PolicyFunParam);
                    _ -> flush
                end,
     case  WhatToDo of
-        flush ->
-            Output2 = open(Output),                      
-            flush(Output2, Buffer),
-            close(Output2);
-        drop ->
-            drop
+        flush -> do_handle_flush(State);
+        drop -> drop
     end,    
     {stop, normal, ok, State};
-handle_call(flush_and_stop, _From, State=#state{output=Output, buffer=Buffer}) ->
-    Output2 = open(Output),
-    flush(Output2, Buffer),
-    close(Output2),
+handle_call(flush_and_stop, _From, State=#state{}) ->
+    do_handle_flush(State),
     {stop, normal, ok, State};
 handle_call(drop_and_stop, _From, State=#state{output=Output}) ->
     close(Output),
@@ -140,15 +137,9 @@ handle_call(drop_and_stop, _From, State=#state{output=Output}) ->
 handle_cast({log, MsgLogLevel, _Text, _Data}, 
             State=#state{loglevel=LogLevel}) when MsgLogLevel > LogLevel ->
     {noreply, State};
-handle_cast({log, _MsgLogLevel, Text, Data}, 
-            State=#state{output=Output,
-                         log_timestamp=LogTimestamp,
-                         format=Format, 
-                         eagerness=Eagerness, 
-                         buffer=Buffer}) ->    
-    ToLog = fmt_log(Format, LogTimestamp, {Text, Data}),
-    Buffer2 = do_log(Output, Eagerness, ToLog, Buffer),
-    {noreply, State#state{buffer=Buffer2}};
+handle_cast({log, _MsgLogLevel, Text, Data}, State) ->
+    State2 = do_handle_log(Text, Data, State),
+    {noreply, State2};
 handle_cast({set_loglevel, LogLevel}, State) ->
     {noreply, State#state{loglevel=LogLevel}}.
     
@@ -181,14 +172,37 @@ handle_info(check_hardlimit, State=#state{output=Output}) ->
         Mem >= ?MEM_HARDLIMIT -> %% very unlikely...
             close(Output),
             {stop, mem_hardlimit_exceeded, State}
-    end.
+    end;
 %% TODO: check CPU/IO/etc usage
-    
+
+% Webmachine left without saying goodbye.
+handle_info({'DOWN', Ref, process, _Pid, Reason}, State = #state{wm_mref=Ref}) ->
+    State2 = do_handle_log("Unexpected Webmachine DOWN: ~p~n", [Reason], State),
+    do_handle_flush(State2),
+    {stop, normal, State2}.
+
 code_change(_OldVsn, State, _Extra) -> {ok, State}.
 
 %% 
 %% Internal functions
 %%
+
+do_handle_log(Text, Data, 
+            State=#state{output=Output,
+                         log_timestamp=LogTimestamp,
+                         format=Format, 
+                         eagerness=Eagerness, 
+                         buffer=Buffer}) ->   
+    ToLog = fmt_log(Format, LogTimestamp, {Text, Data}),
+    Buffer2 = do_log(Output, Eagerness, ToLog, Buffer),
+    State#state{buffer=Buffer2}.
+
+do_handle_flush(#state{output=Output, buffer=Buffer}) ->
+    Output2 = open(Output),
+    flush(Output2, Buffer),
+    close(Output2).
+
+
 
 fmt_timestamp(text) ->
     {{Y, M, D}, {H, Mm, S}} = calendar:local_time(),
@@ -223,6 +237,7 @@ fmt_log(text, LogTimestamp, {Text, Data}) ->
             io_lib:format(Text, Data)
     end.
 
+
 do_log(_Output, {at_once, _Fun}, ToLog, Buffer) ->
     [ToLog | Buffer];
 do_log(_Output, delayed, ToLog, Buffer) when length(Buffer) < ?BUFFER_SIZE_N ->
@@ -236,6 +251,8 @@ do_log({file, {io_device, File}}, immediate, ToLog, Buffer) ->
 do_log({udp, {Socket, Address, Port}}, immediate, ToLog, Buffer) ->
     gen_udp:send(Socket, Address, Port, ToLog),
     Buffer.
+
+
 
 open(Output) ->
     case Output of
