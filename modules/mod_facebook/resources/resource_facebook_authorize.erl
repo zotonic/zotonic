@@ -50,7 +50,7 @@ previously_existed(ReqData, Context) ->
 moved_temporarily(ReqData, Context) ->
     %% @todo add the redirect page parameter of the logon page to the redirect url
     Context1 = ?WM_REQ(ReqData, Context),
-    {AppId, _AppSecret} = mod_facebook:get_appid_secret(Context1),
+    {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context1),
     Page = get_page(Context1),
     RedirectUrl = lists:flatten(
                         z_context:abs_url(
@@ -59,7 +59,7 @@ moved_temporarily(ReqData, Context) ->
     Location = "https://graph.facebook.com/oauth/authorize?client_id="
                 ++ z_utils:url_encode(AppId)
                 ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
-                ++ "&scope=email",
+                ++ "&scope=" ++ Scope,
     ?WM_REPLY({true, Location}, Context1).
 
 

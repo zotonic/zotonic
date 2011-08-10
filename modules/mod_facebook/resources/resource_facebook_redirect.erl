@@ -79,7 +79,7 @@ moved_temporarily(ReqData, Context) ->
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
-    {AppId, AppSecret} = mod_facebook:get_appid_secret(Context),
+    {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     Page = z_context:get_q("p", Context, "/"),
     RedirectUrl = lists:flatten(
                         z_context:abs_url(

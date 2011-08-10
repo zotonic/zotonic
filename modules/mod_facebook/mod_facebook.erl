@@ -27,13 +27,15 @@
 -export([
     observe_auth_logoff/3
 ]).
--export([get_appid_secret/1]).
+-export([get_config/1]).
 
 -include("zotonic.hrl").
 
 % Default facebook appid and secret from the Zotonic Dev application.
 -define(FACEBOOK_APPID, "106094309435783").
 -define(FACEBOOK_APPSECRET, "50fb8d9d1ea8013c4c1640632c3ab706").
+-define(FACEBOOK_SCOPE, "email"). %% by default, only request access to e-mail address.
+
 
 %% @doc Reset the received facebook access token (as set in the session)
 observe_auth_logoff(auth_logoff, AccContext, _Context) ->
@@ -49,7 +51,10 @@ observe_auth_logoff(auth_logoff, AccContext, _Context) ->
     z_context:set_session(facebook_access_token, undefined, AccContext1).
 
 
-%% @doc Return the facebook appid and secret
-get_appid_secret(Context) ->
+%% @doc Return the facebook appid, secret and scope
+%% @spec get_config(Context) -> {AppId, Secret, Scope}
+get_config(Context) ->
     { z_convert:to_list(m_config:get_value(mod_facebook, appid, ?FACEBOOK_APPID, Context)),
-      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context)) }.
+      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context)),
+      z_convert:to_list(m_config:get_value(mod_facebook, scope, ?FACEBOOK_SCOPE, Context))
+    }.
