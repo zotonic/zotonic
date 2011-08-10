@@ -89,8 +89,8 @@ identify_file_direct(File, OriginalFilename) ->
 
 %% @spec identify_file_os(OsFamily::atom(), File::string(), OriginalFilename::string()) -> {ok, PropList} | {error, Reason}
 %% @doc Identify the mime type of a file using the unix "file" command.
-identify_file_os(win32, File, _OriginalFilename) ->
-    {ok, [{mime, guess_mime(File)}]};
+identify_file_os(win32, _File, OriginalFilename) ->
+    {ok, [{mime, guess_mime(OriginalFilename)}]};
 
 identify_file_os(unix, File, OriginalFilename) ->
     SafeFile = z_utils:os_filename(File),
