@@ -18,5 +18,8 @@
     {gallery,   ["gallery", id],            resource_page,  [ {template, "gallery.tpl"} ]},
     {gallery,   ["gallery", id, slug],      resource_page,  [ {template, "gallery.tpl"} ]},
     %% Search results
-    {search,   ["search"],      resource_template,  [ {template, "search.tpl"} ]}
+    {search,   ["search"],      resource_template,  [ {template, "search.tpl"} ]},
+
+    %% Generated edocs
+	{edoc,			["edoc", '*'],          resource_static_pages, [ {root, "edoc"} ]}
 ].
