@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.7.1\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-08-12 04:51+0200\n"
+"Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: ARGENTINA\n"
+
+#: modules/mod_signup/templates/signup.tpl:161
+msgid "And sign up"
+msgstr "Y regístrese"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:12
+msgid "Bring me to my profile page"
+msgstr "Ir a la página de mi perfil"
+
+#: modules/mod_signup/templates/signup.tpl:146
+msgid "Check our Terms of Service and Privacy policies"
+msgstr "Verifique nuestros Términos de Servicio y nuestras Políticas de Privacidad"
+
+#: modules/mod_signup/templates/signup.tpl:115
+msgid "Choose a username and password"
+msgstr "Elija un nombre de usuario y contraseña"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:26
+msgid "Confirm key"
+msgstr "Confirmar clave"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:3
+#: modules/mod_signup/templates/signup_confirm.tpl:15
+#: modules/mod_signup/templates/signup_confirm.tpl:30
+msgid "Confirm my account"
+msgstr "Confirmar mi cuenta"
+
+#: modules/mod_signup/templates/email_verify.tpl:12
+msgid "Confirm my account."
+msgstr "Confirmar mi cuenta."
+
+#: modules/mod_signup/templates/signup.tpl:70
+msgid "Create your account"
+msgstr "Crear su cuenta"
+
+#: modules/mod_signup/templates/email_verify.tpl:6
+msgid "Dear"
+msgstr "Estimado"
+
+#: modules/mod_signup/templates/signup.tpl:103
+msgid "E-mail"
+msgstr "Correo"
+
+#: modules/mod_signup/templates/signup.tpl:75
+msgid "First name"
+msgstr "Nombre"
+
+#: modules/mod_signup/templates/email_verify.tpl:16
+msgid "Hope to see you soon."
+msgstr "Esperamos volver a verlo pronto."
+
+#: modules/mod_signup/templates/signup.tpl:154
+msgid "I agree to the"
+msgstr "Acepto el"
+
+#: modules/mod_signup/templates/_logon_link.tpl:2
+msgid "I don’t have an account, please sign me up."
+msgstr "No tengo una cuenta, por favor regístreme."
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "If the link does not work then you can go to"
+msgstr "Si el vínculo no funciona entonces puede ir a"
+
+#: modules/mod_signup/templates/signup.tpl:57
+msgid "If you have already an account,"
+msgstr "Si ya tiene una cuenta,"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:17
+msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
+msgstr "En su correo electrónico recibió una clave de confirmación. Por favor cópiela al campo de entrada de abajo."
+
+#: modules/mod_signup/templates/signup.tpl:93
+msgid "Last name"
+msgstr "Apellido"
+
+#: modules/mod_signup/templates/signup.tpl:126
+msgid "Password"
+msgstr "Contraseña"
+
+#: modules/mod_signup/templates/email_verify.tpl:3
+msgid "Please confirm your account."
+msgstr "Por favor confirme su cuenta."
+
+#: modules/mod_signup/templates/email_verify.tpl:10
+msgid "Please follow the link below."
+msgstr "Por favor haga clic sobre el vínculo abajo."
+
+#: modules/mod_signup/templates/signup.tpl:87
+msgid "Prefix"
+msgstr "Prefijo"
+
+#: modules/mod_signup/templates/signup.tpl:155
+msgid "Privacy policies"
+msgstr "Políticas de privacidad"
+
+#: modules/mod_signup/templates/signup.tpl:3
+#: modules/mod_signup/templates/signup.tpl:164
+msgid "Sign Up"
+msgstr "Registrar"
+
+#: modules/mod_signup/templates/signup.tpl:55
+msgid "Sign up and become a member"
+msgstr "Regístrese y conviértase en miembro"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:20
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr "Disculpe, no hay registro de ese código de confirmación. Lo copió correctamente?"
+
+#: modules/mod_signup/templates/signup.tpl:72
+msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
+msgstr "Disculpe, ya existe una cuenta asociada a la cuenta de su proveedor de servicio. Puede que su cuenta aquí haya sido suspendida."
+
+#: modules/mod_signup/templates/signup.tpl:117
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr "Disculpe, este nombre de usuario ya está siendo usado. Por favor use uno distinto."
+
+#: modules/mod_signup/templates/email_verify.tpl:8
+msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
+msgstr "Gracias por registrarse en nuestro sitio. Le pedimos que confirme su cuenta antes de usarla."
+
+#: modules/mod_signup/templates/signup.tpl:151
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "Para registrarse debe aceptar los Términos de Servicio y las Políticas de Privacidad."
+
+#: modules/mod_signup/templates/signup.tpl:120
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: modules/mod_signup/templates/signup.tpl:134
+msgid "Verify password"
+msgstr "Verificar clave"
+
+#: modules/mod_signup/templates/signup.tpl:173
+msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
+msgstr "Le hemos enviado un correo electrónico. In el mismo encontrará instrucciones de cómo confirmar su cuenta."
+
+#: modules/mod_signup/templates/signup.tpl:149
+msgid ""
+"We will be very careful with all the information given to us and will never give your name or address away without your permission.\n"
+"\t\t\tWe do have some rules that we need you to agree with."
+msgstr ""
+"Seremos muy cuidadosos con la información que nos ha provisto y nunca entregaremos ni su nombre ni su dirección sin su permiso.\n"
+"\t\t\tTenemos algunas reglas que tiene que aceptar."
+
+#: modules/mod_signup/templates/signup_confirm.tpl:8
+msgid "Welcome"
+msgstr "Bienvenido"
+
+#: modules/mod_signup/templates/signup.tpl:175
+msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
+msgstr "Si no recibe el correo electrónico en unos minutos por favor revise su filtro antispam y su carpeta de correo basura."
+
+#: modules/mod_signup/templates/signup.tpl:171
+msgid "You are almost there!"
+msgstr "¡Ya casi ha terminado!"
+
+#: modules/mod_signup/templates/signup.tpl:60
+msgid "You can also"
+msgstr "También puede"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:10
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr "Su cuenta ha sido confirmada. Puede continuar operando en nuestro sitio."
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "and enter the key"
+msgstr "e ingrese la clave"
+
+#: modules/mod_signup/templates/signup.tpl:155
+msgid "and the"
+msgstr "y el"
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "in the input field."
+msgstr "en el campo de entrada."
+
+#: modules/mod_signup/templates/signup.tpl:57
+msgid "log on now"
+msgstr "conectarse ahora"
+
+#: modules/mod_signup/templates/signup.tpl:60
+msgid "sign up for a username and password"
+msgstr "regístrese para obtener usuario y clave"
+
