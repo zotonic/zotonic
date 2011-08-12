@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-04
+%% Date: 2009-08-04
 %% @doc Serve an atom feed for a category.  Shows the newest created items of a certain category, always as the anonymous user.
 %% The category being served must be a name.
 

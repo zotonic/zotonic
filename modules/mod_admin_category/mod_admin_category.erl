@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-08
+%% Date: 2009-07-08
 %% @doc Module for editing and managing categories.
 
 %% Copyright 2009 Marc Worrell

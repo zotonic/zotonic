@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-16
+%% Date: 2009-08-16
 %% @doc Search engine optimization.  Provides admin interface for the SEO modules.
 
 %% Copyright 2009 Marc Worrell

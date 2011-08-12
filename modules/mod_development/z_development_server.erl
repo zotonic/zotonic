@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-01
+%% Date: 2009-11-01
 %%
 %% @doc Development server.  Periodically loads modules whose beam file have been updated.
 %% This server is started by the mod_development.
@@ -45,7 +45,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link() ->
 	start_link([]).
@@ -82,7 +82,6 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -161,7 +160,7 @@ reload_module(M) ->
 	{ok, M}.
 
 %% @doc Reload all modules from the zotonic directory or subdirectories.  Return a list of modules reloaded. Empty list when nothing changed.
-%% @spec reload_all() -> [Result]
+%% @spec reload_loaded_modules() -> [Result]
 reload_loaded_modules() ->
 	Dir = z_utils:lib_dir(),
 	Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],

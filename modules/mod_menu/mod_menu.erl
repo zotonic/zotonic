@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-12
+%% Date: 2009-07-12
 %% @doc Menu module.  Supports menus in Zotonic. Adds admin interface to define the menu.
 
 %% Copyright 2009 Marc Worrell

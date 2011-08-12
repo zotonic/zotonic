@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-11
+%% Date: 2010-05-11
 %% @doc Redirect to the authorize uri of Facebook
-%% @see http://developers.facebook.com/docs/authentication/
+%% See: http://developers.facebook.com/docs/authentication/
 
 %% Copyright 2010 Marc Worrell
 %%

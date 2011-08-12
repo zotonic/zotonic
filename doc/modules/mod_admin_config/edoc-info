@@ -1,0 +1,6 @@
+{packages,[]}.
+{modules,[action_admin_config_config_delete,action_admin_config_config_toggle,
+          action_admin_config_dialog_config_delete,
+          action_admin_config_dialog_config_edit,
+          action_admin_config_dialog_config_new,mod_admin_config,
+          resource_admin_config]}.

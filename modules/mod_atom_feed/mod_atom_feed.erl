@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-04
+%% Date: 2009-08-04
 %% @doc Adds support for atom feed generation.
 
 %% Copyright 2009 Marc Worrell

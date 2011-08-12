@@ -1,6 +1,6 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2010 Maas-Maarten Zeeman
-%% @date 2010-12-03
+%% Date: 2010-12-03
 %% @doc Signal and slot mechanism for use in templates.
 
 %% Copyright 2010 Maas-Maarten Zeeman

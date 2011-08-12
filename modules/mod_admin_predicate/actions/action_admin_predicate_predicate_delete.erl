@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-28
+%% Date: 2009-04-28
 %% @doc Delete a predicate, no confirmation.
 
 %% Copyright 2009 Marc Worrell

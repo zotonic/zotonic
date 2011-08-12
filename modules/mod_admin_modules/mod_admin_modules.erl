@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-03
+%% Date: 2009-06-03
 %% @doc Add a module management screen to the admin.
 
 %% Copyright 2009 Marc Worrell

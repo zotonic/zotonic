@@ -26,6 +26,6 @@ render_validator(custom, TriggerId, _TargetId, Args, Context)  ->
     {[], Script, Context}.
 
 %% @spec validate(Type, Name, Values, Args, Context) -> {ok, AcceptedValue} | {error,Id,Error}
-%%          Error -> invalid | novalue
+%%          Error = invalid | novalue
 validate(custom, _Id, Value, _Args, Context) ->
     {{ok, Value}, Context}.

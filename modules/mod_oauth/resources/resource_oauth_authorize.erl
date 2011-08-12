@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @date 2009-10-01
+%% Date: 2009-10-01
 %% @doc Authorizing an OAuth request key
 
 %% Copyright 2009 Arjan Scherpenisse

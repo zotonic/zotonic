@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-10-04
+%% Date: 2009-10-04
 %% @doc OAuth; API permission entry store.
 
 %% Copyright 2009 Arjan Scherpenisse
@@ -53,7 +53,7 @@ m_find_value(Id, #m{value=humanreadable}, Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> list()
 m_to_list(#m{value=undefined}, Context) ->
     [ [{value, Val}, {title, Title}] || {Val, Title} <- z_service:all(authvalues, Context)].
 

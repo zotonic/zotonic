@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-27
+%% Date: 2009-11-27
 %% @doc Open a dialog for sending an e-mail to a mailing list.
 
 %% Copyright 2009,2011 Marc Worrell, Arjan Scherpenisse

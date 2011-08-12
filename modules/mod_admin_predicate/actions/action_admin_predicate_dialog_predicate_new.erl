@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-05-12
+%% Date: 2009-05-12
 %% @doc Open a dialog with some fields to make a new predicate.
 
 %% Copyright 2009 Marc Worrell

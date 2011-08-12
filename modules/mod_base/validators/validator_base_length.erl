@@ -29,7 +29,7 @@ render_validator(length, TriggerId, _TargetId, Args, Context)  ->
 
 
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
-%%          Error -> invalid | novalue | {script, Script}
+%%          Error = invalid | novalue | {script, Script}
 validate(length, Id, Value, [Min,Max], Context) ->
     Len   = length(Value),
     MinOK = (Min == -1 orelse Len >= Min),

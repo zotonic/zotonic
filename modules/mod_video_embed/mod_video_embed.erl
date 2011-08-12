@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-15
+%% Date: 2009-07-15
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
 %% The embed information is stored in the medium table associated with the page. You can not have embed
 %% information and a medium file. Either one or the other.
@@ -37,11 +37,11 @@
 -include_lib("zotonic.hrl").
 
 
-%% @doc Fantasy mime type to distinguish embeddable html fragments.
+%% Fantasy mime type to distinguish embeddable html fragments.
 -define(EMBED_MIME, <<"text/html-video-embed">>).
 
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
-%% @spec rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
+%% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
 observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     case proplists:is_defined(video_embed_code, Props) of
         true -> 
@@ -100,7 +100,7 @@ observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
-%% @spec media_viewer(Notification, Context) -> undefined | {ok, Html}
+%% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
 observe_media_viewer({media_viewer, _Id, Props, _Filename, _Options}, _Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
@@ -114,7 +114,7 @@ observe_media_viewer({media_viewer, _Id, Props, _Filename, _Options}, _Context) 
 
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+%% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
 observe_media_stillimage({media_stillimage, Id, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->

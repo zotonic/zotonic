@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-05-08
+%% Date: 2009-05-08
 %% @doc List all referrers to a rsc, should also offer to filter on predicate
 
 %% Copyright 2009 Marc Worrell

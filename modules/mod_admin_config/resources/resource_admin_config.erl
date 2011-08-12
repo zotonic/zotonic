@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-07
+%% Date: 2009-08-07
 %% @doc Overview of all config settings with string values.
 
 %% Copyright 2009 Marc Worrell
@@ -42,7 +42,7 @@ html(Context) ->
 
 
 %% @doc Check if the config does not have a non-string setting.  We only edit string values.
-%% @spec is_value_config({module, [{key,}]}) -> bool()
+%% @spec only_value_config({module, [{key,Value}]}) -> bool()
 only_value_config({Module, Keys}) ->
     {Module, lists:filter(fun is_value_config_key/1, Keys)}.
 

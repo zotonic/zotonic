@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @date 2009-09-27
+%% Date: 2009-09-27
 %% @doc Entrypoint for API requests.
 
 %% Copyright 2009 Arjan Scherpenisse

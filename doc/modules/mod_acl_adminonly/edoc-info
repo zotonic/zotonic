@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[mod_acl_adminonly]}.

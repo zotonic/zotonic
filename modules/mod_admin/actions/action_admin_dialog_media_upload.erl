@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-27
+%% Date: 2009-04-27
 %% @doc Open a dialog with some fields to upload a new media.
 
 %% Copyright 2009 Marc Worrell

@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-10-02
+%% Date: 2009-10-02
 %% @doc OAuth.
 
 %% Copyright 2009 Arjan Scherpenisse
@@ -31,7 +31,7 @@
 -define(ATOM_NS, 'http://www.w3.org/2005/Atom').
 
 %% @doc Export a resource to Atom XML.
-%% @spec resource(rsc_export()) -> string().
+%% @spec resource_to_atom(rsc_export()) -> string()
 resource_to_atom(RscExport) ->
     Rsc = proplists:get_value(rsc, RscExport),
     Content0 = [
@@ -65,7 +65,7 @@ resource_to_atom(RscExport) ->
 
 
 %% @doc Construct the Atom author element.
-%% @spec author_element(rsc_export()) -> [#xmlElement]
+%% @spec author_element(rsc_export()) -> [#xmlElement{}]
 author_element(Export) ->
     case proplists:get_value(edges, Export) of
         X when X =:= undefined orelse X =:= [] ->
@@ -79,14 +79,14 @@ author_element(Export) ->
 
 
 %% @doc Given a list of edges, filter out the ones which have the given predicate name.
-%% @spec filter_edges([edge()], atom()) -> [edge()].
+%% @spec filter_edges([edge()], atom()) -> [edge()]
 filter_edges(Edges, PredicateName) ->
     lists:filter(fun(X) -> proplists:get_value(predicate_name, X) == PredicateName end, Edges).
 
 
 
 %% @doc Export a resource to Atom XML.
-%% @spec resource(string()) -> rsc_export().
+%% @spec atom_to_resource(string()) -> rsc_export()
 atom_to_resource(Xml) when is_binary(Xml) ->
     atom_to_resource(binary_to_list(Xml));
 
@@ -156,7 +156,7 @@ atom_to_resource(Xml) ->
 
 
 %% @doc Given an Atom entry, get a list of all the authors formatted as author edges.
-%% @spec find_author(#xmlElement) -> [edge()]
+%% @spec find_author(#xmlElement{}) -> [edge()]
 find_author(Elem) ->
     case xmerl_xpath:string("/entry/author", Elem) of
         [] -> []; % no author found
@@ -180,7 +180,7 @@ find_author(Elem) ->
 
 
 %% @doc Find the enclosure and store as depiction edge.
-%% @doc find_depiction(#xmlElement) -> [edge()]
+%% @spec find_depiction(#xmlElement{}) -> [edge()]
 find_depiction(Elem) ->
     case xmerl_xpath:string("/entry/link[@rel=\"enclosure\"]", Elem) of
         [] -> []; % no depiction found
@@ -192,7 +192,7 @@ find_depiction(Elem) ->
     end.
 
 %% @doc Given an XML element, get the value of an attribute.
-%% @spec xml_attrib(atom(), #xmlElement) -> binary() | undefined
+%% @spec xml_attrib(atom(), #xmlElement{}) -> binary() | undefined
 xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
     case lists:filter(fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end, Attrs) of
         [] -> undefined;
@@ -201,7 +201,7 @@ xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
     end.
 
 %% @doc Given a list of XML test, implode it into one list.
-%% @spec collapse_xmltext([#xmlText]) -> string()
+%% @spec collapse_xmltext([#xmlText{}]) -> string()
 collapse_xmltext(Content) ->
     lists:flatten([X#xmlText.value || X <- Content]).
 

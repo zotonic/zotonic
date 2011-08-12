@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-18
+%% Date: 2009-04-18
 %% @doc Show the pager for the search result
 
 %% Copyright 2009 Marc Worrell

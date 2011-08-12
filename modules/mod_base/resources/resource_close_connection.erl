@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-05-13
+%% Date: 2009-05-13
 %% @doc Simple resource that closes the connection, used when uploading forms with Ajax in Safari browsers.
 
 %% Copyright 2009 Marc Worrell

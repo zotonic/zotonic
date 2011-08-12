@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
-%% @date 2010-06-01
+%% Date: 2010-06-01
 %% @doc Simple database logging.
 
 %% Copyright 2010 Arjan Scherpenisse
@@ -56,7 +56,7 @@ pid_observe_log(Pid, {log, _} = LogMsg, _Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -83,7 +83,7 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
+%% @doc Handling call messages
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 

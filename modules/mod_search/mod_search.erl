@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-09
+%% Date: 2009-06-09
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
 %% This module needs to be split in specific PostgreSQL queries and standard SQL queries when you want to 
 %% support other databases (like MySQL).
@@ -55,7 +55,7 @@ observe_module_activate(_, _Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -84,7 +84,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -501,7 +500,7 @@ search(_, _, _) ->
 
 
 
-%% @doc Expand a search string like "hello wor" to "'hello' & 'wor:*'"
+%% @doc Expand a search string like "hello wor" to a posgres search query.
 to_tsquery(undefined, _Context) ->
     [];
 to_tsquery(Text, Context) when is_binary(Text) ->

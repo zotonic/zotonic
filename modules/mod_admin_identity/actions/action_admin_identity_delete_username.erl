@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-07
+%% Date: 2009-07-07
 %% @doc Delete username from an user, no confirmation.
 
 %% Copyright 2009 Marc Worrell

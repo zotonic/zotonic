@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Bryan Fink <bryan@basho.com>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-01
+%% Date: 2009-11-01
 %% @doc Development server.  Periodically performs a "make" and loads new files.
 %% When new files are loaded the caches are emptied.
 
@@ -108,7 +108,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.

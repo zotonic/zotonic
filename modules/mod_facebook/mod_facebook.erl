@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-09
+%% Date: 2010-05-09
 %% @doc Facebook integration. Adds Facebook login and other functionalities.
 
 %% Copyright 2010 Marc Worrell

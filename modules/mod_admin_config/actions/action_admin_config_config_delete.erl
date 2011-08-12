@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-07
+%% Date: 2009-08-07
 %% @doc Delete a configuration, no confirmation.
 
 %% Copyright 2009 Marc Worrell

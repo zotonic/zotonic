@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-10-06
+%% Date: 2009-10-06
 %% @doc Remotely recompile and flush.
 
 %% Copyright 2009 Arjan Scherpenisse

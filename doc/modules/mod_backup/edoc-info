@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[action_backup_backup_start,mod_backup,resource_admin_backup]}.

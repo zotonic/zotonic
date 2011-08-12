@@ -107,7 +107,7 @@ render(Params, _Vars, Context) ->
 
 
 %% @doc  renders an image indicating the edit possibility.
-%% @spec render_image(undefined | Image_id::integer() | Image_path::string())
+%% @spec render_image(Input) -> string()
 render_image(undefined) ->
     "";
 render_image(Image_url) when is_list(Image_url) ->

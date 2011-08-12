@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-09-07
+%% Date: 2010-09-07
 %% @doc Toggle the value of a config setting, set it to the value of the checkbox.
 
 %% Copyright 2010 Marc Worrell

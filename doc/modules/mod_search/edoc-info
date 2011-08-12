@@ -1,0 +1,3 @@
+{packages,[]}.
+{modules,[mod_search,mod_search_tests,search_all_bytitle,search_query,
+          search_query_notify,service_search_search]}.

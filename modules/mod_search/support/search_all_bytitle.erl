@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-04
+%% Date: 2009-07-04
 %% @doc Return a list of ids of a category, sorted by title.  This needs to fetch and sort all 
 %% resources of that category, so use this with care for situations where you know that the number
 %% of returned resources is relatively low.

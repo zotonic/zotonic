@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse
-%% @date 2011-06-25
+%% Date: 2011-06-25
 %% @doc Edit the basic properties of a rsc in a dialog.
 
 %% Copyright 2011 Arjan Scherpenisse

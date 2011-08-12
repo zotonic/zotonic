@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-01-15
+%% Date: 2010-01-15
 %% @doc Simple comment module. Adds comments to any rsc.
 
 %% Copyright 2010 Marc Worrell

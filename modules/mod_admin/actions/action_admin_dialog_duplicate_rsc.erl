@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-21
+%% Date: 2009-07-21
 %% @doc Duplicate a resource, replace the title with the one entered in a dialog.
 
 %% Copyright 2009 Marc Worrell

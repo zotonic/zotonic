@@ -1,6 +1,6 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2011 Maas-Maarten Zeeman
-%% @date 2011-08-09
+%% Date: 2011-08-09
 %% @doc Page with all facebook settings.
 
 %% Copyright 2011 Maas-Maarten Zeeman

@@ -31,7 +31,7 @@ render_validator(postback, TriggerId, TargetId, Args, Context)  ->
 	{Args, Script, Context}.
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {{ok,AcceptedValue}, NewContext} | {{error,Id,Error}, NewContext}
-%%          Error -> invalid | novalue | {script, Script} | novalidator | string()
+%%          Error = invalid | novalue | {script, Script} | novalidator | string()
 validate(postback, Id, Value, Args, Context) ->
     case proplists:get_value(delegate, Args) of
         undefined ->

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-10-07
+%% Date: 2010-10-07
 %%
 %% @doc Simple store for key/value pairs
 
@@ -46,7 +46,7 @@ m_find_value(Key, #m{value=Type}, Context) ->
     get(Type, Key, Context).
 
 %% @doc Transform a value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> list()
 m_to_list(_, _Context) ->
     [].
     

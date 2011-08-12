@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-26
+%% Date: 2009-04-26
 %% @doc Open a dialog where the user can select an object
 
 %% Copyright 2009 Marc Worrell

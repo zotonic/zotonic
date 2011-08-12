@@ -65,7 +65,7 @@ m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> list()
 m_to_list(#m{value=undefined}, _Context) ->
 	[].
 

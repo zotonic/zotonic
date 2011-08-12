@@ -30,7 +30,7 @@ urlize(Input, _Context) ->
 %% Maybe the do_urlize should go to z_html. It could be handy in other places too
 
 %% @doc Given a text, convert any URL into clickable links
-%% @spec urlize(string()) -> string()
+%% @spec do_urlize(string()) -> string()
 do_urlize(Text) ->
     [urlize_word(Word) || Word <- re:split(Text, "(\s+)")].
 

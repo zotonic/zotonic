@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-12
+%% Date: 2010-05-12
 %% @doc Let new members register themselves.
 %% @todo Check person props before sign up
 %% @todo Add verification and verification e-mails (check for _Verified, add to m_identity)
@@ -64,7 +64,7 @@ observe_logon_ready_page({logon_ready_page, Url}, _Context) ->
 
 
 %% @doc Sign up a new user.
-%% @spec signup(proplist(), proplist(), Context) -> {ok, UserId} | {error, Reason}
+%% @spec signup(proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
 signup(Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
