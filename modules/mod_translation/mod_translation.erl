@@ -49,6 +49,7 @@ init(Context) ->
                 undefined ->
                     m_config:set_prop(i18n, language_list, list, [
                             {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                            {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
                             {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
