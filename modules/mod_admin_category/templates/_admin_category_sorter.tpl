@@ -1,7 +1,7 @@
 {% with m.acl.is_admin as editable %}
-		
+
 	<div class="padding">
-		<h3 class="above-list">Category overview</h3>
+		<h3 class="above-list">{_ Category overview _}</h3>
 		<ul class="short-list categories">
 			{% for id, depth, nbsp, name in m.category.all_flat_meta %}
 
