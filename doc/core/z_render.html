@@ -18,9 +18,18 @@
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#appear-3">appear/3</a></td><td>Set the contents of an element to the the html fragment.</td></tr>
+<tr><td valign="top"><a href="#appear_after-3">appear_after/3</a></td><td>Add a html after the target element.</td></tr>
+<tr><td valign="top"><a href="#appear_after_selector-3">appear_after_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_after_selector_js-2">appear_after_selector_js/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_before-3">appear_before/3</a></td><td>Append a html fragment at the bottom of the contents of an element.</td></tr>
+<tr><td valign="top"><a href="#appear_before_selector-3">appear_before_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_before_selector_js-2">appear_before_selector_js/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#appear_bottom-3">appear_bottom/3</a></td><td>Append a html fragment at the bottom of the contents of an element.</td></tr>
 <tr><td valign="top"><a href="#appear_bottom_selector-3">appear_bottom_selector/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#appear_bottom_selector_js-2">appear_bottom_selector_js/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_replace-3">appear_replace/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_replace_selector-3">appear_replace_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#appear_replace_selector_js-2">appear_replace_selector_js/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#appear_selector-3">appear_selector/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#appear_selector_js-2">appear_selector_js/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#appear_top-3">appear_top/3</a></td><td>Insert a html fragment at the top of the contents of an element.</td></tr>
@@ -33,6 +42,12 @@
 <tr><td valign="top"><a href="#growl-2">growl/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#growl-4">growl/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#growl_error-2">growl_error/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#insert_after-3">insert_after/3</a></td><td>Add a html after the target element.</td></tr>
+<tr><td valign="top"><a href="#insert_after_selector-3">insert_after_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#insert_after_selector_js-2">insert_after_selector_js/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#insert_before-3">insert_before/3</a></td><td>Add a html before the target element.</td></tr>
+<tr><td valign="top"><a href="#insert_before_selector-3">insert_before_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#insert_before_selector_js-2">insert_before_selector_js/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#insert_bottom-3">insert_bottom/3</a></td><td>Append a html fragment at the bottom of the contents of an element.</td></tr>
 <tr><td valign="top"><a href="#insert_bottom_selector-3">insert_bottom_selector/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#insert_bottom_selector_js-2">insert_bottom_selector_js/2</a></td><td></td></tr>
@@ -49,6 +64,9 @@
 <tr><td valign="top"><a href="#render_css_selector-1">render_css_selector/1</a></td><td>Render a css selector, allow direct expressions like.</td></tr>
 <tr><td valign="top"><a href="#render_to_iolist-2">render_to_iolist/2</a></td><td>Render adds output to the render field of the context state.</td></tr>
 <tr><td valign="top"><a href="#render_validator-4">render_validator/4</a></td><td>Render a validator to the correct javascript.</td></tr>
+<tr><td valign="top"><a href="#replace-3">replace/3</a></td><td>Replace an element to the the html fragment.</td></tr>
+<tr><td valign="top"><a href="#replace_selector-3">replace_selector/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#replace_selector_js-2">replace_selector_js/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#set_value-3">set_value/3</a></td><td>Set the value of an input element.</td></tr>
 <tr><td valign="top"><a href="#set_value_selector-3">set_value_selector/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#update-3">update/3</a></td><td>Set the contents of an element to the the html fragment.</td></tr>
@@ -67,6 +85,36 @@
 <p><tt>appear(TargetId, Html, Context) -&gt; any()</tt></p>
 </div><p>Set the contents of an element to the the html fragment</p>
 
+<h3 class="function"><a name="appear_after-3">appear_after/3</a></h3>
+<div class="spec">
+<p><tt>appear_after(TargetId, Html, Context) -&gt; any()</tt></p>
+</div><p>Add a html after the target element</p>
+
+<h3 class="function"><a name="appear_after_selector-3">appear_after_selector/3</a></h3>
+<div class="spec">
+<p><tt>appear_after_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_after_selector_js-2">appear_after_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>appear_after_selector_js(CssSelector, Html) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_before-3">appear_before/3</a></h3>
+<div class="spec">
+<p><tt>appear_before(TargetId, Html, Context) -&gt; any()</tt></p>
+</div><p>Append a html fragment at the bottom of the contents of an element</p>
+
+<h3 class="function"><a name="appear_before_selector-3">appear_before_selector/3</a></h3>
+<div class="spec">
+<p><tt>appear_before_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_before_selector_js-2">appear_before_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>appear_before_selector_js(CssSelector, Html) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="appear_bottom-3">appear_bottom/3</a></h3>
 <div class="spec">
 <p><tt>appear_bottom(TargetId, Html, Context) -&gt; any()</tt></p>
@@ -80,6 +128,21 @@
 <h3 class="function"><a name="appear_bottom_selector_js-2">appear_bottom_selector_js/2</a></h3>
 <div class="spec">
 <p><tt>appear_bottom_selector_js(CssSelector, Html) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_replace-3">appear_replace/3</a></h3>
+<div class="spec">
+<p><tt>appear_replace(TargetId, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_replace_selector-3">appear_replace_selector/3</a></h3>
+<div class="spec">
+<p><tt>appear_replace_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="appear_replace_selector_js-2">appear_replace_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>appear_replace_selector_js(CssSelector, Html) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="appear_selector-3">appear_selector/3</a></h3>
@@ -140,6 +203,36 @@
 <h3 class="function"><a name="growl_error-2">growl_error/2</a></h3>
 <div class="spec">
 <p><tt>growl_error(Text, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="insert_after-3">insert_after/3</a></h3>
+<div class="spec">
+<p><tt>insert_after(TargetId, Html, Context) -&gt; any()</tt></p>
+</div><p>Add a html after the target element</p>
+
+<h3 class="function"><a name="insert_after_selector-3">insert_after_selector/3</a></h3>
+<div class="spec">
+<p><tt>insert_after_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="insert_after_selector_js-2">insert_after_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>insert_after_selector_js(CssSelector, Html) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="insert_before-3">insert_before/3</a></h3>
+<div class="spec">
+<p><tt>insert_before(TargetId, Html, Context) -&gt; any()</tt></p>
+</div><p>Add a html before the target element</p>
+
+<h3 class="function"><a name="insert_before_selector-3">insert_before_selector/3</a></h3>
+<div class="spec">
+<p><tt>insert_before_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="insert_before_selector_js-2">insert_before_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>insert_before_selector_js(CssSelector, Html) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="insert_bottom-3">insert_bottom/3</a></h3>
@@ -226,6 +319,21 @@
        This renders an allocation of the initial validator and then appends all validations.
        'type' holds multiple validations.  Validations are of the form:  {validator, [Args]}</p>
 
+<h3 class="function"><a name="replace-3">replace/3</a></h3>
+<div class="spec">
+<p><tt>replace(TargetId, Html, Context) -&gt; any()</tt></p>
+</div><p>Replace an element to the the html fragment</p>
+
+<h3 class="function"><a name="replace_selector-3">replace_selector/3</a></h3>
+<div class="spec">
+<p><tt>replace_selector(CssSelector, Html, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="replace_selector_js-2">replace_selector_js/2</a></h3>
+<div class="spec">
+<p><tt>replace_selector_js(CssSelector, Html) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="set_value-3">set_value/3</a></h3>
 <div class="spec">
 <p><tt>set_value(TargetId, Value, Context) -&gt; any()</tt></p>
@@ -273,6 +381,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 25 2011, 21:14:41.</i></p>
+<p><i>Generated by EDoc, Aug 12 2011, 16:36:03.</i></p>
 </body>
 </html>

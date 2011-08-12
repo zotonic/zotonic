@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_import_wordpress/templates/_admin_status.tpl:4 
+msgid ""
+"Import WXR file"
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_admin_status.tpl:5 
+msgid ""
+"Import a Wordpress WXR export file into Zotonic."
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:18 
+msgid ""
+"Import previously deleted items again"
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:22 
+msgid ""
+"Start import"
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2 
+msgid ""
+"Upload a wordpress WXR file from your computer."
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:11 
+msgid ""
+"WXR file"
+msgstr ""
+
+#: ./modules/mod_import_wordpress/templates/_admin_status.tpl:2 ./modules/mod_import_wordpress/templates/_admin_status.tpl:4 
+msgid ""
+"Wordpress import"
+msgstr ""
