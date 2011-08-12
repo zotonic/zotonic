@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-19
+%% Date: 2010-05-19
 %% @doc Translation support for i18n.  Generates .po files by scanning templates.
 
 %% Copyright 2010 Marc Worrell
@@ -49,6 +49,7 @@ init(Context) ->
                 undefined ->
                     m_config:set_prop(i18n, language_list, list, [
                             {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                            {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
                             {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
@@ -253,10 +254,7 @@ generate(Host) when is_atom(Host) ->
 
 
 %% do_choose/2 is adapted from webmachine_util:do_choose/3
-%% 
-%% @author Justin Sheehy <justin@basho.com>
-%% @author Andy Gross <andy@basho.com>
-%% @copyright 2007-2008 Basho Technologies
+%% Original code copyright 2007-2008 Basho Technologies
 do_choose(Choices, Header) ->
     Accepted = build_conneg_list(string:tokens(Header, ",")),
     StarPrio = [P || {P,C} <- Accepted, C =:= "*"],

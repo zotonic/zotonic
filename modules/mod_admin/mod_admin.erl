@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-09
+%% Date: 2009-06-09
 %% @doc Administrative interface.  Aka backend.
 
 %% Copyright 2009 Marc Worrell

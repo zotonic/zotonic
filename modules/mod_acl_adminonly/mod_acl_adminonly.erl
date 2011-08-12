@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-03
+%% Date: 2010-05-03
 %% @doc Simple ACL module. Any user gets full admin privileges.  Useful for a simple site or blog.
 
 %% Copyright 2010 Marc Worrell

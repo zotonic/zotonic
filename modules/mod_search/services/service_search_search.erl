@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-12-04
+%% Date: 2009-12-04
 %% @doc Search zotonic using the search-model
 
 %% Copyright 2009 Arjan Scherpenisse

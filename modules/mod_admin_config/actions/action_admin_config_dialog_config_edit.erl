@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-07
+%% Date: 2009-08-07
 %% @doc Open a dialog to change the value of a config key.
 
 %% Copyright 2009 Marc Worrell

@@ -1,6 +1,6 @@
 %% @author Atilla Erdodi <atilla@maximonster.com>
 %% @copyright 2010 Maximonster Interactive Things
-%% @date 2010-10-20
+%% Date: 2010-10-20
 %% @doc Resource to configure tracing of webmachine requests.
 
 %% Copyright 2010 Maximonster Interactive Things

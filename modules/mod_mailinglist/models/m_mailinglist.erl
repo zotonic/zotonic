@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-23
+%% Date: 2009-11-23
 %%
 %% @doc Mailing list access for templates.
 
@@ -93,7 +93,7 @@ m_find_value(_Key, #m{value=undefined}, _Context) ->
    undefined.
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> list()
 m_to_list(_, _Context) ->
     [].
 
@@ -104,7 +104,7 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.
-%% @spec get_stats(int(), Context) -> {count::int(), [rsc_id::int()]}
+%% @spec get_stats(int(), Context) -> {Count::int(), [RscId::int()]}
 get_stats(Id, Context) ->
 	Count = z_db:q1("
 			select count(*) from mailinglist_recipient
@@ -119,7 +119,7 @@ get_stats(Id, Context) ->
 
 
 %% @doc Get the stats for all mailing lists which have been sent to a rsc (content_id)
-%% @spec get_rsc_stats(int(), Context) -> [ {mailinglist_id::int(), statlist} ]
+%% @spec get_rsc_stats(int(), Context) -> [ {ListId::int(), Statuslist} ]
 get_rsc_stats(Id, Context) ->
     F = fun() ->
                 Stats = [ {ListId, [{created, Created}, {total, Total}]} || 

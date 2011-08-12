@@ -26,7 +26,7 @@ render_validator(acceptance, TriggerId, _TargetId, Args, Context)  ->
 	{[], Script, Context}.
 
 %% @spec validate(Type, Name, Values, Args, Context) -> {ok, AcceptedValue} | {error,Id,Error}
-%%          Error -> invalid | novalue
+%%          Error = invalid | novalue
 validate(acceptance, Id, Value, _Args, Context) ->
     case z_utils:is_true(Value) of
         true  -> {{ok, "1"}, Context};

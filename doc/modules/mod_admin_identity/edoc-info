@@ -1,0 +1,7 @@
+{packages,[]}.
+{modules,[action_admin_identity_delete_username,
+          action_admin_identity_dialog_delete_username,
+          action_admin_identity_dialog_set_username_password,
+          action_admin_identity_dialog_user_add,mod_admin_identity,
+          validator_admin_identity_email_unique,
+          validator_admin_identity_username_unique]}.

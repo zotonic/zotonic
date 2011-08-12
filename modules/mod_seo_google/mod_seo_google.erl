@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-08-16
+%% Date: 2009-08-16
 %% @doc Search engine optimization for Google. Support for Google Analytics and Webmaster tools.
 
 %% Copyright 2009 Marc Worrell

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-13
+%% Date: 2009-07-13
 %% @doc Open a dialog to let the user add a new category. Allows to select the parent category, refreshes the category overview.
 
 %% Copyright 2009 Marc Worrell

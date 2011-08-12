@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-04
+%% Date: 2009-07-04
 %% @doc Force a rescan of all modules, actions, templates etc. This is needed after a template, action or 
 %% validation has been added.  It will also tell the dispatcher to reload all dispatch rules.
 

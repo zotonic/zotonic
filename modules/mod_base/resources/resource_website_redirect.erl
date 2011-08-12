@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @date 2009-11-15
+%% Date: 2009-11-15
 %% @doc Redirect to the URL of a resource of type 'website'.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");

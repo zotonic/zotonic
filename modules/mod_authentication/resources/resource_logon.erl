@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-07
+%% Date: 2010-05-07
 %% @doc Log on an user. Set optional "rememberme" cookie.
 
 %% Copyright 2010 Marc Worrell

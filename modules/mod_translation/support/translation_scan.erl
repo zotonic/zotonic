@@ -1,6 +1,6 @@
 % @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-19
+%% Date: 2010-05-19
 %% @doc Parse a template, extract all translations.
 
 %% Copyright 2010 Marc Worrell

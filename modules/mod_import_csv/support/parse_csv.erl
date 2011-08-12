@@ -1,6 +1,6 @@
 %% @doc Import a csv file according to the derived file/record definitions.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @date 2010-06-26
+%% Date: 2010-06-26
 
 %% Copyright 2010-2011 Arjan Scherpenisse
 %%

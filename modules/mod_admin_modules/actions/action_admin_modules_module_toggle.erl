@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-11
+%% Date: 2009-06-11
 %% @doc Activate/dactivate a module
 
 %% Copyright 2009 Marc Worrell

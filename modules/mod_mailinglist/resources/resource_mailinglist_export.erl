@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @data 2009-12-01
+%% Date: 2009-12-01
 %% @doc Export the list of active recipients of a mailinglist.
 
 %% Copyright 2009 Marc Worrell

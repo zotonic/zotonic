@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-02
+%% Date: 2009-07-02
 %% @doc Support for editing predicates in the admin module.  Also hooks into the rsc update function to
 %% save the specific fields for predicates
 
@@ -35,7 +35,7 @@
 
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
-%% @spec rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
+%% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
 observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     case       proplists:is_defined(predicate_subject, Props) 
         orelse proplists:is_defined(predicate_object, Props) of

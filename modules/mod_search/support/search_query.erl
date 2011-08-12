@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009-2010 Arjan Scherpenisse
-%% @date 2009-04-12
+%% Date: 2009-04-12
 %% @doc Handler for m.search[{query, Args..}]
 
 %%

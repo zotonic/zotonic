@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% @doc Serve static library files (css and js).  Library files can be combined in one path, using z_lib_include:tag/2
 %%
-%% Serves files like: /lib/<filepath>
+%% Serves files like: /lib/some/path
 
 %% Copyright 2009-2011 Marc Worrell, Konstantin Nikiforov
 %%

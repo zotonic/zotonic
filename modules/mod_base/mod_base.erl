@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-08
+%% Date: 2009-06-08
 %% @doc The base module, implementing basic Zotonic scomps, actions, models and validators.
 
 %% Copyright 2009 Marc Worrell
@@ -33,7 +33,7 @@
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
+%% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
 observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
     case proplists:get_value(mime, Props) of
         undefined -> undefined;

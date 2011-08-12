@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-03-19
+%% Date: 2010-03-19
 %% @doc Resource to display traces of webmachine requests.
 
 %% Copyright 2009 Marc Worrell

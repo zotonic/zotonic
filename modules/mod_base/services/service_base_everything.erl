@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-10-03
+%% Date: 2009-10-03
 %% @doc Retrieve the list of all objects in the system.
 
 %% Copyright 2009 Arjan Scherpenisse

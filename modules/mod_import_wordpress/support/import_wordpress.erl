@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
-%% @date 2010-09-20
+%% Date: 2010-09-20
 %% @doc Wordpress WXR import.
 
 %% Copyright 2010,2011 Arjan Scherpenisse
@@ -232,12 +232,12 @@ get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
 
 
 %% @doc Given a list of XML test, implode it into one list.
-%% @spec collapse_xmltext([#xmlText]) -> string()
+%% @spec collapse_xmltext([#xmlText{}]) -> string()
 collapse_xmltext(Content) ->
     lists:flatten([X#xmlText.value || X <- Content]).
 
 %% @doc Given an XML element, get the value of an attribute.
-%% @spec xml_attrib(atom(), #xmlElement) -> binary() | undefined
+%% @spec xml_attrib(atom(), #xmlElement{}) -> binary() | undefined
 xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
     case lists:filter(fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end, Attrs) of
         [] -> undefined;

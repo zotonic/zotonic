@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-29
+%% Date: 2009-11-29
 %% @doc Confirm a mailing list subscription.
 
 %% Copyright 2009 Marc Worrell

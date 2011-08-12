@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-11-22
+%% Date: 2010-11-22
 %% @doc Add tinyMCE controls to all textarea.tinymce in the target
 
 %% Copyright 2010 Marc Worrell

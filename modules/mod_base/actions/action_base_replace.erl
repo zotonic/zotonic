@@ -1,6 +1,6 @@
 %% @author Konstantin Nikiforov <helllamer@gmail.com>
 %% @copyright 2011 Konstantin Nikiforov
-%% @date 2011-04-11
+%% Date: 2011-04-11
 %% @doc Replace the target HTML element by new one.
 
 %% Copyright 2011 Konstantin Nikiforov

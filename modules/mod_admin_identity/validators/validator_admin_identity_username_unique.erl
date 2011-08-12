@@ -31,7 +31,7 @@ render_validator(username_unique, TriggerId, TargetId, Args, Context)  ->
     {Args, Script, Context}.
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {{ok,AcceptedValue}, NewContext} | {{error,Id,Error}, NewContext}
-%%          Error -> invalid | novalue | {script, Script} | novalidator | string()
+%%          Error = invalid | novalue | {script, Script} | novalidator | string()
 validate(username_unique, Id, Value, Args, Context) ->
     UserId = z_convert:to_integer(proplists:get_value(id, Args)),
     Username = z_string:trim(Value),

@@ -1,0 +1,282 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.7.1\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-08-05 13:30-0300\n"
+"Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: ARGENTINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "Below are your account details and a link to set a new password."
+msgstr "Abajo están los datos de su cuenta y un vínculo para crear una nueva clave."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:6
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:5
+msgid "Below you can enter a new password for your account"
+msgstr "Abajo puede ingresar una nueva clave para su cuenta"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:32
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:31
+msgid "Change password and Log on"
+msgstr "Cambiar clave y conectarse"
+
+#: modules/mod_authentication/templates/_logon_verification.tpl:13
+msgid "Check your e-mail!"
+msgstr "Revise su correo electrónico!"
+
+#: modules/mod_authentication/templates/_logon_verification.tpl:4
+msgid "Click on the button below to e-mail you a verification message."
+msgstr "Cliquee el botón de abajo para enviarle por correo electrónico un mensaje de verificación."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:12
+msgid "Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser."
+msgstr "Cliquee el vínculo de abajo para ingresar una nueva clave, si cliqueando no funciona puede copiar y pegar la dirección completa en su navegador."
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:25
+msgid "Confirm"
+msgstr "Confirmar"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:20
+msgid "Confirmation failure"
+msgstr "Falla de confirmación"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:9
+msgid "E-mail address or username"
+msgstr "Dirección de correo electrónico o nombre de usuario"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:5
+msgid "Enter your e-mail address or username below and we will send you an e-mail with password reset instructions."
+msgstr "Ingrese su dirección de correo electrónico o su nombre de usuario y le enviaremos un correo con instrucciones para restablecer su clave."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:45
+msgid "For security reasons password reset codes are only kept for a limited amount of time and can only be used once."
+msgstr "Por razones de seguridad los códigos para restablecer claves se mantienen por un tiempo limitado y sólo pueden ser usados una vez."
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:3
+msgid "Forgot your password?"
+msgstr "Olvidó su clave?"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:6
+msgid "Hello"
+msgstr "Hola"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:3
+msgid "How to reset your password"
+msgstr "Cómo cambiar su clave"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:8
+#: modules/mod_authentication/templates/logon.tpl:35
+msgid "I forgot my username or password"
+msgstr "Olvidé mi usuario o clave"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:24
+msgid "In the e-mail you will find instructions on how to reset the password of your account."
+msgstr "En el correo electrónico encontrará instrucciones de cómo restablecer la clave de su cuenta."
+
+#: modules/mod_authentication/templates/logoff.tpl:3
+#: modules/mod_authentication/templates/_logon_off.tpl:2
+msgid "Log Off"
+msgstr "Desconectarse"
+
+#: modules/mod_authentication/templates/_logon_form_box.tpl:30
+#: modules/mod_authentication/templates/_logon_off.tpl:4
+msgid "Log On"
+msgstr "Conectarse"
+
+#: modules/mod_authentication/templates/_logon_form_box.tpl:3
+msgid "Log on using your"
+msgstr "Conectarse usando su"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:12
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:11
+msgid "New password"
+msgstr "Nueva clave"
+
+#: modules/mod_authentication/templates/logoff.tpl:10
+msgid "One moment please, logging off…"
+msgstr "Un momento por favor, desconectándose..."
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_authentication/templates/_logon_form_box.tpl:17
+msgid "Password"
+msgstr "Clave"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:25
+#: modules/mod_authentication/templates/_logon_error.tpl:32
+msgid "Passwords should have at least six characters."
+msgstr "Las claves deben tener por lo menos 6 caracteres."
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:8
+msgid "Please confirm your"
+msgstr "Por favor confirme su"
+
+#: modules/mod_authentication/templates/logon.tpl:39
+msgid "Please show me the log on form"
+msgstr "Por favor muéstreme el formulario de conexión"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:20
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:18
+msgid "Repeat password"
+msgstr "Repita la clave"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:34
+msgid "Reset Password and Log On"
+msgstr "Restablecer Clave y Conectarse"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:4
+msgid "Reset your password"
+msgstr "Restablecer su clave"
+
+#: modules/mod_authentication/templates/_logon_verification.tpl:8
+msgid "Send Verification Message"
+msgstr "Enviar Mensaje de Verificación"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:17
+msgid "Send me instructions"
+msgstr "Enviame instrucciones"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:37
+msgid "Sorry, could not send the verification message."
+msgstr "Disculpe, no hemos podido enviar el mensaje de verificación."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:43
+msgid "Sorry, your password reset code is unknown or expired"
+msgstr "Disculpe, el código para restablecer su clave es incorrecto o ya ha expirado."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:28
+#: modules/mod_authentication/templates/_logon_form_box.tpl:24
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:25
+msgid "Stay logged on unless I log off."
+msgstr "Mantenerse conectado a menos que me desconecte."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:18
+msgid "Thank you,"
+msgstr "Gracias,"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
+msgid "The crew at"
+msgstr "El equipo de"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "The e-mail address associated with your account is"
+msgstr "La dirección de correo electrónico asociada con su cuenta es"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "The e-mail will contain instructions how to reset your password."
+msgstr "El correo electrónico la dará instrucciones de cómo restablecer su clave."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:30
+msgid "The two passwords should be equal. Please retype them."
+msgstr "Las dos claves deberían ser iguales. Por favor ingréselas nuevamente."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:19
+msgid "To find your account\tyou need to enter either your username or the e-mail address you gave us."
+msgstr "Para encontrar su cuenta\tdebe ingresar su nombre de usuario o la dirección de correo electrónico que nos había dado."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:26
+#: modules/mod_authentication/templates/_logon_error.tpl:33
+msgid "Use some non alphabetical characters or digits to make it harder to guess."
+msgstr "Use algunos caracteres no alfabéticos o dígitos para que sea más difícil adivinarla."
+
+#: modules/mod_authentication/templates/_logon_form_box.tpl:10
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:18
+msgid "We can only send you an e-mail when we have the e-mail address of your account."
+msgstr "Sólo podemos enviarle un correo cuando tenemos la dirección de correo electrónico de su cuenta."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:39
+msgid "We don’t seem to have any valid e-mail address or other electronic communication address of you."
+msgstr "Aparentemente no tenemos ninguna dirección de correo electrónico válida ni ninguna otra dirección electrónica suya."
+
+#: modules/mod_authentication/templates/_logon_verification.tpl:15
+msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
+msgstr "Le hemos enviado un correo electrónico. En el mismo encontrará instrucciones de cómo confirmar su cuenta."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:16
+msgid "When you didn't request a passsword reset then you can ignore this e-mail.  Maybe someone made an error typing his or her e-mail address."
+msgstr "Si no pidió que se restablezca su clave entonces puede ignorar este correo electrónico. Puede que alguien haya cometido un error ingresando su dirección de correo electrónico."
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:25
+#: modules/mod_authentication/templates/_logon_verification.tpl:17
+msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
+msgstr "Si no recibe un correo electrónico dentro de los próximos minutos verifique sus carpetas o filtros antispam."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "When you forgot your username or pasword then you can ask us to"
+msgstr "Si olvidó su nombre de usuario o clave entonces puede pedirnos que"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
+msgid "You can"
+msgstr "Puede"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:16
+msgid "You entered an unknown username or e-mail address.  Please try again."
+msgstr "Ingresó un nombre de usuario o dirección de correo electrónico desconocidos. Por favor intente nuevamente."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:2
+msgid "You entered an unknown username or password.  Please try again."
+msgstr "Ingresó un nombre de usuario o clave desconocidos. Por favor intente nuevamente."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:5
+msgid "You might have made a typo in your username or password.  Please note that both are case sensitive and check that your caps lock key is off."
+msgstr "Puede que haya cometido un error con su nombre de usuario o clave. Por favor tenga en cuenta que en ambos tiene que respetar mayúsculas y minúsculas y verifique que la tecla Bloq Mayús no esté activada."
+
+#: modules/mod_authentication/templates/_logon_password_expired.tpl:3
+msgid "You need to change your password"
+msgstr "Debe cambiar su clave"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:22
+msgid "You receive this e-mail because you or someone else requested a password reset for your account. You or the someone else either entered your username or e-mail address.  You will not receive any additional e-mails because of this request."
+msgstr "Ha recibido este correo electrónico porque usted o alguien más pidieron que se restablezca la clave de su cuenta. Usted o alguien más ingresaron su nombre de usuario o dirección de correo electrónico. No recibirá más mensajes relacionados con este requerimiento."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "You requested a new password for"
+msgstr "Usted pidió una nueva clave para"
+
+#: modules/mod_authentication/templates/logoff.tpl:12
+msgid "You will be redirected to the home page."
+msgstr "Será redireccionado a la página principal."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "Your account name is"
+msgstr "Su cuenta es"
+
+#: modules/mod_authentication/templates/_logon_verification.tpl:2
+msgid "Your account needs verification"
+msgstr "Su cuenta debe verificarse"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:23
+msgid "Your new password is too short."
+msgstr "Su nueva clave es demasiado corta."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:38
+msgid "Your password will be reset and you will be logged on as"
+msgstr "Su clave se restablecerá y se conectará como"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "e-mail a temporary password"
+msgstr "enviar por correo electrónico una clave temporaria"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
+msgid "request a new password reset code"
+msgstr "pedir un nuevo código para restablecer la clave"
+

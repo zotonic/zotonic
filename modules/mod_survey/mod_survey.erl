@@ -320,7 +320,7 @@ do_submit(SurveyId, QuestionIds, Questions, Answers, Context) ->
 
 
 %% @doc Collect all answers, report any missing answers.
-%% @type collect_answers(proplist(), Context) -> {AnswerList, MissingIdsList}
+%% @spec collect_answers(list(), proplist(), Context) -> {AnswerList, MissingIdsList}
 collect_answers(QIds, Qs, Answers) ->
     collect_answers(QIds, Qs, Answers, [], []).
 

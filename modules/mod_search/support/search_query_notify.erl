@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009-2010 Arjan Scherpenisse
-%% @date 2009-04-12
+%% Date: 2009-04-12
 %% @doc Notifications for 'query' resources when items are added to them.
 
 %%
@@ -53,8 +53,8 @@ watches_update(Id, Watches, Context) ->
 watches_remove(Id, Watches, _Context) ->
     proplists:delete(Id, Watches).
 
-%% @doc Check whether the given resource matches to the queries.
-%% @spec check_rsc(Id, Watches, Context) -> [Id] list of matching query resources.
+%% @doc Check whether the given resource matches to the queries. Returns list of matching query resource ids.
+%% @spec check_rsc(Id, Watches, Context) -> list()
 check_rsc(Id, Watches, Context) ->
     IsA = m_rsc:p(Id, is_a, Context),
     Cats   = [ {cat, atom_to_list(A)} || {A,_} <- IsA ],

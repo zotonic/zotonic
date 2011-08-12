@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-04-11
+%% Date: 2010-04-11
 %% @doc Flush system cache
 
 

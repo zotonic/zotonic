@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-10-02
+%% Date: 2009-10-02
 %% @doc OAuth.
 
 %% Copyright 2009 Arjan Scherpenisse
@@ -75,7 +75,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.

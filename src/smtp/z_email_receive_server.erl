@@ -167,8 +167,8 @@ terminate(Reason, State) ->
 
 %% Internal functions
 
-%% @doc A message is classified as a bounce when the recipient is <noreply+MSGID@example.org>
-%% OR when the Return-Path is set to <>
+%% @doc A message is classified as a bounce when the recipient is noreply+MSGID@@example.org
+%% OR when the Return-Path is set to an empty address.
 find_bounce_id(Recipients, Headers) ->
     case find_bounce_email(Recipients) of
         {ok, _MessageId} = M -> 

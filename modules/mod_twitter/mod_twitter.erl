@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-12-10
+%% Date: 2009-12-10
 %% @doc Follow users on Twitter using the streaming HTTP API.
 %%
 %% Setup instructions:
@@ -88,7 +88,7 @@ observe_rsc_update_done({rsc_update_done, _Type, Id, _, _}, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -127,11 +127,7 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
-
-
-
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -407,7 +403,7 @@ check_import_pictures(Urls, Context) ->
 
 
 %% @doc Import oEmbed-compatible proplist as a rsc.
-%% @spec import_oembed(Props, Context) -> undefined | Id::integer.
+%% @spec import_oembed(Url, Props, Context) -> undefined | int()
 import_oembed(OriginalUrl, Props, Context) ->
     case oembed_category(proplists:get_value("type", Props)) of
         undefined ->

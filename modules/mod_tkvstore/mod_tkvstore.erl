@@ -92,8 +92,7 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
-%% Fetch persistent data, first check the data dict that is still being written
+%% @doc Fetch persistent data, first check the data dict that is still being written
 handle_call({tkvstore_get, Type, Key}, _From, State) ->
     case dict:find({Type, Key}, State#state.data) of
         {ok, Data} ->

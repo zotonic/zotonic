@@ -97,7 +97,7 @@ handle_data(Msg, Length, <<>>, Socket, Context) ->
 
 
 %% @doc Unpack the length bytes
-%% @author Davide Marquês (From yaws_websockets.erl)
+%% author: Davide Marquês (From yaws_websockets.erl)
 unpack_length(Binary) ->
     unpack_length(Binary, 0, 0).
 unpack_length(Binary, LenBytes, Length) ->
@@ -111,7 +111,7 @@ unpack_length(Binary, LenBytes, Length) ->
         {NewLength, LenBytes + 1}
     end.
 
-%% @doc Pack the length in 7 bits bytes
+% %% @doc Pack the length in 7 bits bytes
 % pack_length(N) ->
 %     pack_length(N, []).
 % 

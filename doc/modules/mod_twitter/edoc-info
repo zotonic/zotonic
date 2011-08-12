@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[filter_twitter,mod_twitter]}.

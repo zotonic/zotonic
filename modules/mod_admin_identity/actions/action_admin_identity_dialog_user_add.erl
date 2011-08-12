@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-13
+%% Date: 2009-07-13
 %% @doc Add a complete new person and make it into an user.
 
 %% Copyright 2009 Marc Worrell

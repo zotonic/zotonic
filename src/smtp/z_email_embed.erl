@@ -190,7 +190,7 @@ file_exists(Name, Context) ->
 
 
 
-%% @spec ensure_preview(ReqData, Path, Context) -> {Boolean, NewContext}
+%% @spec ensure_preview(Path, Context) -> {Boolean, NewContext}
 %% @doc Generate the file on the path from an archived media file.
 %% The path is like: 2007/03/31/wedding.jpg(300x300)(crop-center)(709a-a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% The original media should be in State#media_path (or z_path:media_archive)

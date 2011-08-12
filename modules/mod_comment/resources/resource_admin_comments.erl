@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-01-19
+%% Date: 2010-01-19
 %% @doc Creates an editable overview of all categories.
 
 %% Copyright 2010 Marc Worrell

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-07-20
+%% Date: 2010-07-20
 %% @doc Simple contact form.
 
 %% Copyright 2010 Marc Worrell

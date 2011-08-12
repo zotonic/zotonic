@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-12
+%% Date: 2010-05-12
 %% @doc Display a form to sign up.
 
 %% Copyright 2010 Marc Worrell

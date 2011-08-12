@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-07-10
+%% Date: 2009-07-10
 %% @doc Open a dialog that asks confirmation to delete a category. Optionaly move pages to another category.
 
 %% Copyright 2009 Marc Worrell

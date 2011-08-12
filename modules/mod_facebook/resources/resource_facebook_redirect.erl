@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-11
+%% Date: 2010-05-11
 %% @doc Handle the OAuth redirect of the Facebook logon handshake.
-%% @see http://developers.facebook.com/docs/authentication/
+%% See http://developers.facebook.com/docs/authentication/
 %% @todo Update a user record when we receive a new e-mail address.
 
 %% Copyright 2010 Marc Worrell
@@ -79,7 +79,7 @@ moved_temporarily(ReqData, Context) ->
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
-    {AppId, AppSecret} = mod_facebook:get_appid_secret(Context),
+    {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     Page = z_context:get_q("p", Context, "/"),
     RedirectUrl = lists:flatten(
                         z_context:abs_url(

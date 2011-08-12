@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-23
+%% Date: 2009-11-23
 %% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
 
 %% Copyright 2009-2011 Marc Worrell
@@ -179,7 +179,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Handle a dropbox file with recipients.
 handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
 	GetFiles = fun() ->

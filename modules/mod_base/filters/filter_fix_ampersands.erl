@@ -1,7 +1,7 @@
 %% @author    Roberto Saccon <rsaccon@gmail.com> [http://rsaccon.com]
 %% @author    Evan Miller <emmiller@gmail.com>
 %% @copyright 2008 Roberto Saccon, Evan Miller
-%% @doc 'fix_ampersands' filter, escape '&' characters
+%% @doc 'fix_ampersands' filter, escape '&amp;' characters
 
 %%% The MIT License
 %%%

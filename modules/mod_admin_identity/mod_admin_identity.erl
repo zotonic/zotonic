@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-06-13
+%% Date: 2009-06-13
 %% @doc Identity administration.  Adds overview of users to the admin and enables to add passwords on the edit page.
 
 %% Copyright 2009 Marc Worrell

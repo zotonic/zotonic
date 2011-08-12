@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @date 2010-06-01
+%% Date: 2010-06-01
 %%
 %% @doc Model for log messages.
 
@@ -41,7 +41,7 @@ m_find_value(Index, #m{value=undefined} = M, _Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context)
+%% @spec m_to_list(Source, Context) -> Value
 m_to_list(#m{value=undefined}, Context) ->
     list(Context);
 m_to_list(#m{value={log, Id}}, Context) ->

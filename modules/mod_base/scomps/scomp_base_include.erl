@@ -1,13 +1,13 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% @doc Include a template, with possible caching
 %%
 %%      Example: include "some_file.tpl" and cache it for 3600 seconds
-%%      {% @include depend="something" maxage=3600 file="some_file.tpl" %}
+%%      {% include vary="something" maxage=3600 file="some_file.tpl" %}
 %%
 %%      Give a maxage of 0 for slam dunk protection but no caching.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

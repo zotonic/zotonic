@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-02-11
+%% Date: 2010-02-11
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 
@@ -119,7 +119,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Start a backup
 handle_call(start_backup, _From, State) ->
     case State#state.backup_pid of

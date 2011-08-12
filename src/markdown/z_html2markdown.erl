@@ -196,7 +196,7 @@ len([]) ->
 
 
 
-%% @doc Escape <, >, ' and " in texts (& is already removed or escaped).
+%% @doc Escape pointy brackets, single and double quotes in texts (ampersand is already removed or escaped).
 escape_html_text(<<>>, Acc) -> 
     Acc;
 escape_html_text(<<${, T/binary>>, Acc) ->
@@ -230,7 +230,7 @@ escape_html_text(<<$\n, T/binary>>, Acc) ->
 escape_html_text(<<C, T/binary>>, Acc) ->
     escape_html_text(T, <<Acc/binary, C>>).
 
-%% @doc Escape <, > (for in comments)
+%% @doc Escape pointy brackets (for in comments)
 escape_html_comment(<<>>, Acc) -> 
     Acc;
 escape_html_comment(<<$<, T/binary>>, Acc) ->

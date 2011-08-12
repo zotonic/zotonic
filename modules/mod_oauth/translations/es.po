@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.7.1\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-08-12 04:48+0200\n"
+"Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: ARGENTINA\n"
+
+#: modules/mod_oauth/templates/_admin_menu_module.tpl:2
+msgid "API access"
+msgstr "Acceder a API"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
+msgid "Access to"
+msgstr "Acceder a"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:71
+msgid "Add application"
+msgstr "Agregar aplicación"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+msgid "Allow"
+msgstr "Permitir"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:29
+msgid "Allow!"
+msgstr "¡Permitir!"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:14
+msgid "Application title"
+msgstr "Título de la aplicación"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:8
+msgid "Authorization"
+msgstr "Autorización"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:3
+msgid "Authorization finished"
+msgstr "Autorización finalizada"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:3
+msgid "Authorize this request"
+msgstr "Autorizar este requerimiento"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:7
+msgid "Authorized!"
+msgstr "Autorizado!"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:32
+msgid "Callback URL"
+msgstr "URL de retorno"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:26
+msgid "Change the title, description and access permissions of this application."
+msgstr "Cambiar el título, descripción y permisos de acceso de esta aplicación."
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:7
+msgid "Consumer key"
+msgstr "Clave de consumidor"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:8
+msgid "Consumer secret"
+msgstr "Secreto de consumidor"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid "Delete"
+msgstr "Brrar"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:26
+msgid "Description"
+msgstr "Descripción"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:7
+msgid "Details"
+msgstr "Detalles"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:30
+msgid "Disallow"
+msgstr "No permitir"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
+msgid "Do you really want to delete this application?"
+msgstr "¿Está seguro de que desea borrar esta aplicación?"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:26
+msgid "Edit"
+msgstr "Editar"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:20
+msgid "Homepage"
+msgstr "Página principal"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20
+msgid "In use since"
+msgstr "En uso desde"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:16
+msgid "More information about this program"
+msgstr "Más información acerca de este programa"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:3
+msgid "OAuth applications"
+msgstr "Aplicaciones OAuth"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:30
+msgid "Registered OAuth applications"
+msgstr "Aplicaciones OAuth registradas"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:1
+msgid "Registered applications"
+msgstr "Aplicaciones registradas"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:27
+msgid "Show applications/users that are using this key"
+msgstr "Mostrar aplicaciones/usuarios que están utilizando esta clave"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "The application"
+msgstr "La aplicación"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:8
+msgid "The following users are still using this application. If you delete this application, you will revoke access and most likely their applications will break."
+msgstr "Los siguientes usuarios todavía están utilizando esta aplicación. Si borra esta aplicación, les revocará el acceso y muy probablemente sus aplicaciones fallen."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
+msgid "The following users are using this application:"
+msgstr "Los siguientes usuarios están utilizando esta aplicación:"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:19
+msgid "This application wants access to the following services:"
+msgstr "Esta aplicación quiere acceder a los siguientes servicios:"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:32
+msgid "This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database."
+msgstr "Esta página le permite registrar claves de API con las que terceras partes pueden obtener acceso a partes específicas de la API y la base de datos."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:32
+msgid "This token is not yet used by anybody."
+msgstr "Nadie está usando esta ficha (token) todavía."
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
+msgid "Title"
+msgstr "Título"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21
+msgid "Type"
+msgstr "Tipo"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "Untitled"
+msgstr "Sin título"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:69
+msgid "Update"
+msgstr "Actualizar"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:19
+msgid "User"
+msgstr "Usuario"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:27
+msgid "Users"
+msgstr "Usuarios"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:42
+msgid "When done, go to the authorization tab to set permissions."
+msgstr "Cuando termine, vaya a la lengüeta de autorización para asignar los permisos."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:11
+msgid "You can now safely close this window."
+msgstr "Ya puede cerrar esta ventana."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "You have granted the application"
+msgstr "Le ha permitido a la aplicación"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "access your account."
+msgstr "acceder a su cuenta"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "wants to access your account."
+msgstr "quiere acceder a su cuenta."
+

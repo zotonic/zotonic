@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
-%% @date 2009-12-06
+%% Date: 2009-12-06
 %% @doc Serve an atom feed for a search query. Query arguments are like /api/search.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[m_email_receive_recipient,mod_email_receive]}.

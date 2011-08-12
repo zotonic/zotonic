@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-16
+%% Date: 2009-04-16
 %% @doc Simple interface to the pie3d type of Google chart.  Allows for simpler data entry.
 %% Parameters:  data=[{label,value}, ...] colors=some_color
 %% and then all parameters

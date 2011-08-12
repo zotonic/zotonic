@@ -1,6 +1,6 @@
 %% @doc Import tab separated files.  There must be an import definition for the file to be accepted.
 %% @author Marc Worrell <marc@worrell.nl>
-%% @date 2010-06-26
+%% Date: 2010-06-26
 
 %% Copyright 2010-2011 Marc Worrell
 %%

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-09-07
+%% Date: 2010-09-07
 %% @doc Stream template updates to the user agent
 
 

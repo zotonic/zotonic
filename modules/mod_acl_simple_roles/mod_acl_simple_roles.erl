@@ -1,7 +1,7 @@
 
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-05-05
+%% Date: 2010-05-05
 %% @doc Simple ACL module based on roles.
 
 %% Copyright 2010 Marc Worrell
@@ -147,7 +147,7 @@ observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
 
 %% @doc Check if the update contains information for a acl role.  If so then modify the acl role
 %% information so that it is easier to handle.
-%% @spec rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
+%% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
 observe_rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
     case       proplists:is_defined(acl_cat, Props) 
         orelse proplists:is_defined(acl_mod, Props) 

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-04-26
+%% Date: 2009-04-26
 %% @doc Adds typeahead with a searchresult to an input box
 
 %% Copyright 2009 Marc Worrell

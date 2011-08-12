@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @date 2009-11-06
+%% Date: 2009-11-06
 %% @doc Insert the result of a render action at the bottom of an HTML element.
 
 %% Copyright 2009 Marc Worrell
