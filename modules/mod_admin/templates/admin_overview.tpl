@@ -7,20 +7,20 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>Page Overview</h2>
+		<h2>{_ Page Overview _}</h2>
 		<div class="clearfix">
 			{% all include "_admin_make_page_buttons.tpl" %}
 			{% button class="" text=_"Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
 			{% button class="" text=_"Make a new media item" action={dialog_media_upload title=""} %}
 		</div>
-		
+
 		<hr />
-		
+
 			<form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}">
 				<input type="hidden" name="qsort" value="{{ q.qsort }}" />
 				<input type="hidden" name="qs" value="{{ q.qs }}" />
 				<h3 class="above-list ">
-					{_ Pages overview _}{% if q.qs %}, 
+					{_ Pages overview _}{% if q.qs %},
 						{_ matching _} “{{ q.qs|escape }}”
 						{% button text="show all" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
 						<input type="hidden" name="qs" value="{{ q.qs|escape }}" />
