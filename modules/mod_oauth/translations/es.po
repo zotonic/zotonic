@@ -10,9 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-12 04:48+0200\n"
+"PO-Revision-Date: 2011-08-12 22:23-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,6 +31,10 @@ msgstr "Acceder a"
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:71
 msgid "Add application"
 msgstr "Agregar aplicación"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:40
+msgid "Add new application"
+msgstr "Agregar nueva aplicación"
 
 #: modules/mod_oauth/templates/oauth_authorize.tpl:7
 msgid "Allow"
@@ -63,6 +68,7 @@ msgstr "Autorizado!"
 msgid "Callback URL"
 msgstr "URL de retorno"
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:40
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73
 msgid "Cancel"
 msgstr "Cancelar"
@@ -168,6 +174,7 @@ msgstr "Tipo"
 msgid "Untitled"
 msgstr "Sin título"
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:39
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:69
 msgid "Update"
 msgstr "Actualizar"

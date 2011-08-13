@@ -1,16 +1,15 @@
 
 {% if page_count %}
 	<p>
-		There are {{ page_count }} pages with the category “{{ m.rsc[id].title }}”, which you want to delete.<br/>
-		Please specify to which category you want to transfer those pages.
+		{_ There are _} {{ page_count }} {_ pages with the category _} “{{ m.rsc[id].title }}”, {_ which you want to delete. _}<br/>{_ Please specify to which category you want to transfer those pages. _}
 	</p>
 {% else %}
 	<p>
-		Are you sure you want to delete the category “{{ m.rsc[id].title }}”?
+		{_ Are you sure you want to delete the category _} “{{ m.rsc[id].title }}”?
 	</p>
 {% endif %}
 
-<p>This action can't be undone, the category will be lost forever.</p>
+<p>{_ This action can't be undone, the category will be lost forever. _}</p>
 
 {% wire id=#form type="submit" postback={delete_category on_success=on_success} delegate=delegate %}
 <form id="{{ #form }}" method="POST" action="postback">
@@ -19,7 +18,7 @@
 
 	{% if page_count %}
 		<div class="form-item clearfix">
-			<label for="{{ #transfer_id }}">Transfer to</label>
+			<label for="{{ #transfer_id }}">{_ Transfer to _}</label>
 			<select id="{{ #transfer_id }}" name="transfer_id">
 				<option value=""></option>
 				{% for cat_id, level, indent, name in m.category.all_flat %}
@@ -31,10 +30,10 @@
 			{% validate id=#transfer_id  type={presence} %}
 		</div>
 	{% endif %}
-	
+
 	<div class="form-item clearfix">
-		{% button text="Delete" %}
-		{% button text="Cancel" action={dialog_close} %}
+		{% button text=_"Delete" %}
+		{% button text=_"Cancel" action={dialog_close} %}
 	</div>
 
 </form>

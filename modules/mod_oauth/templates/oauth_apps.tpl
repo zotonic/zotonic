@@ -26,7 +26,7 @@
 
 <div id="content" class="zp-85">
     <div class="block clearfix">
-        
+
 		<h2>{_ Registered OAuth applications _}</h2>
         <p>
             {_ This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database. _}
@@ -35,11 +35,11 @@
         <ul id="oauth-apps">
             {% include "_oauth_apps_list.tpl" %}
         </ul>
-        
+
         <p class="clearfix">
-            {% button text="Add new application" postback="start_add_app" %}
+            {% button text=_"Add new application" postback="start_add_app" %}
         </p>
-        
+
     </div>
 </div>
 

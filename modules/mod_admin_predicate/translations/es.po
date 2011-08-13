@@ -10,14 +10,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-05 15:43-0300\n"
+"PO-Revision-Date: 2011-08-12 21:53-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:20
+msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages. The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
+msgstr "Un predicado indica características o aspectos de una página y expresa una relación entre dos páginas. La relación es siempre dirigida, desde el sujeto hacia el objeto.<br/>Los predicados se definen en ontologías como <a href=\"http://sioc-project.org/\">SIOC</a>.  En esta página puede definir los predicados que conocidos por Zotonic."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:29
+msgid "Actions"
+msgstr "Acciones"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:2
+msgid "Are you sure you want to delete the predicate"
+msgstr "¿Está seguro de que desea borrar el predicado"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:7
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:6
+msgid "Delete"
+msgstr "Borrar"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:19
 msgid "From category"
@@ -27,21 +49,64 @@ msgstr "De categoría"
 msgid "Help about predicates."
 msgstr "Ayuda acerca de predicados."
 
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:16
+msgid "Make predicate"
+msgstr "Crear predicado"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:26
+msgid "Name"
+msgstr "Nombre"
+
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10
 msgid "Need more help?"
 msgstr "¿Necesita más ayuda?"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:47
+msgid "No predicates found."
+msgstr "No se encontraron predicados."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:2
+msgid "Please fill in the title of the new predicate."
+msgstr "Por favor ingrese el título del nuevo predicado."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:22
+msgid "Predicate overview"
+msgstr "Resumen de predicados"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:3
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:10
+#: modules/mod_admin_predicate/templates/_admin_menu_module.tpl:2
+msgid "Predicates"
+msgstr "Predicados"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:28
+msgid "Reversed?"
+msgstr "¿Invertido?"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "La dirección (desde/hacia) de este predicado es la inversa a la de la definición normal."
 
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:4
+msgid "This can't be undone. The predicate will be lost forever."
+msgstr "Esto no se puede deshacer. El predicado se perderá para siempre."
+
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10
 msgid "This predicate can be used between two pages of the following categories."
-msgstr "Este predicado puede usarse entre dos páginasde las siguientes categorías."
+msgstr "Este predicado puede usarse entre dos páginas de las siguientes categorías."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:11
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:25
+msgid "Title"
+msgstr "Título"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
 msgstr "A categoría"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:27
+msgid "Uri"
+msgstr "URI"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3
 msgid "Valid between"
@@ -50,4 +115,16 @@ msgstr "Válido entre"
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to.  When you don\\'t check anything then all categories are valid."
 msgstr "Puede definir para qué categorías se mostrará el predicado en la página de edición.. También puede definir qué categorías de objetos se encontrarán cuando se busque una página a la cual conectarse. Si no se marca nada entonces todas las categorías serán válidas."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:40
+msgid "delete"
+msgstr "borrar"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:41
+msgid "edit"
+msgstr "editar"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:14
+msgid "make a new predicate"
+msgstr "crear un nuevo predicado"
 

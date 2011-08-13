@@ -10,14 +10,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-12 04:46+0200\n"
+"PO-Revision-Date: 2011-08-12 20:55-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:49
+msgid "(that's you)"
+msgstr "(este es usted)"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Add or remove credentials."
@@ -31,22 +36,22 @@ msgstr "Agregar usuario"
 msgid "Are you sure you want to delete the username from"
 msgstr "Está seguro de que quiere borrar el nombre de usuario de"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37
-#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
-msgid "Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore."
-msgstr "Presione \"borrar\" para eliminar todos los nombres de usuario / clave de la persona, la persona no será más un usuario."
+msgid "Click “delete” to remove any existing username/password from the person, the person won't be a user anymore."
+msgstr "Haga clic sobre \"borrar\" para eliminar todos los nombres de usuario/contraseña de la persona, la persona no será más un usuario."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:42
 msgid "Created on"
 msgstr "Creado el"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40
 msgid "Delete"
 msgstr "Borrar"
 
@@ -55,23 +60,17 @@ msgid "E-mail"
 msgstr "Dirección de Correo"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
-msgid ""
-"Every page/person can be made into a user on the edit page.\n"
-"\t\t\t\tThe difference between a user and a normal page is only\n"
-"\t\t\t\tthat the former has logon credentials attached to its page record."
-msgstr ""
-"Toda página/persona puede convertirse en usuario en la página de edición.\n"
-"\t\t\t\tLa diferencia entre un usuario y una página normal es solamente\n"
-"\t\t\t\tque el primero tiene credenciales para conectarse adjuntas a su registro de página."
+msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
+msgstr "Toda página/persona puede convertirse en usuario en la página de edición. La diferencia entre un usuario y una página normal es solamente que el primero tiene credenciales para conectarse adjuntas a su registro de página."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12
 msgid "First"
 msgstr "Nombre"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 msgid "Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Ingrese un nombre de usuario único y una clave. Los nombres de usuario y claves deben respetar minúsculas y mayúsculas, así que tenga cuidado cuando las ingrese."
+msgstr "Ingrese un nombre de usuario único y una contraseña. Los nombres de usuario y contraseñas deben respetar minúsculas y mayúsculas, así que tenga cuidado cuando las ingrese."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
@@ -109,10 +108,10 @@ msgstr "No se encontraron usuarios."
 msgid "Options"
 msgstr "Opciones"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:50
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
 msgid "Password"
-msgstr "Clave"
+msgstr "Contraseña"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:35
 msgid "Save"
@@ -120,11 +119,11 @@ msgstr "Guardar"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
 msgid "Set username / password"
-msgstr "Asignar usuario / clave"
+msgstr "Asignar usuario / contraseña"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:18
 msgid "Sur. prefix"
-msgstr "Prefijo de Apellido"
+msgstr "Prefijo Apellido"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:24
 msgid "Surname"
@@ -132,11 +131,11 @@ msgstr "Apellido"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
-msgstr "La clave del usuario administrador no puede cambiarse en la base de datos. Por favor edite el archivo de configuración de su sitio en"
+msgstr "La contraseña del usuario administrador no puede cambiarse en la base de datos. Por favor edite el archivo de configuración de su sitio en"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
-msgstr "Esto no se puede deshacer. El nombre de usuario y clave se perderán para siempre."
+msgstr "Esto no se puede deshacer. El nombre de usuario y ccontraseña se perderán para siempre."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:16
 msgid "This person is also a user."
@@ -146,19 +145,23 @@ msgstr "Esta persona ya es un usuario."
 msgid "This person is not yet a user."
 msgstr "Esta persona todavía no es un usuario."
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20
+#: modules/mod_admin_identity/templates/admin_users.tpl:9
+msgid "User Overview"
+msgstr "Resumen de Usuarios"
+
 #: modules/mod_admin_identity/templates/admin_users.tpl:40
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20
 msgid "Username"
 msgstr "Nombre de usuario"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:5
 msgid "Username / password"
-msgstr "Usuario / clave"
+msgstr "Usuario / contraseña"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37
 msgid "Username and password"
-msgstr "Usuario y clave"
+msgstr "Usuario y contraseña"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:32
@@ -184,7 +187,7 @@ msgstr "editar"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid "if you want to change the admin password."
-msgstr "si quiere cambiar la clave del administrador."
+msgstr "si quiere cambiar la contraseña del administrador."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:33
 msgid "matching"
@@ -196,7 +199,7 @@ msgstr "resumen"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:53
 msgid "set username/ password"
-msgstr "asignar usuario / clave"
+msgstr "asignar usuario / contraseña"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:34
 msgid "show all"

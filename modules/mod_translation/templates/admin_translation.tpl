@@ -10,13 +10,13 @@
 		<h2>{_ Translation configuration and tools _}</h2>
 
 		<div class="clearfix">
-		    {% button text=_"Generate .pot files" 
+		    {% button text=_"Generate .pot files"
 					  action={postback postback="translation_generate" delegate="mod_translation"} %}
 		    <span class="expl">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
 		</div>
 
 		<div class="clearfix">
-		    {% button text=_"Reload Translations" 
+		    {% button text=_"Reload Translations"
 					  action={postback postback="translation_reload" delegate="mod_translation"} %}
 		    <span class="expl">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
 		</div>
@@ -34,7 +34,7 @@
 		<br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
 
 		<div class="clearfix">
-			{% button class="" text="add language" 
+			{% button class="" text=_"add language"
 				action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
 			%}
 		</div>
@@ -66,22 +66,22 @@
 					<span class="zp-15">{{ code|default:"-" }}</span>
 					<span class="zp-40">{{ lang.language|default:"-" }}</span>
 					<span class="zp-25">
-						{% button text="delete" 
+						{% button text="delete"
 							action={dialog_open
 										title=_"Delete language"
 										template="_dialog_language_delete.tpl"
 										code=code lang=lang
 									}
 						%}
-						{% button text="edit" 
-							action={dialog_open 
+						{% button text="edit"
+							action={dialog_open
 								 		title=_"Edit language" template="_dialog_language_edit.tpl"
 										code=code lang=lang}
 						%}
 					</span>
 				</a>
-				{% wire id=#a.code 
-					action={dialog_open 
+				{% wire id=#a.code
+					action={dialog_open
 						 		title=_"Edit language" template="_dialog_language_edit.tpl"
 								code=code lang=lang}
 				%}
@@ -93,7 +93,7 @@
 		{% endfor %}
 	{% endwith %}
 		</ul>
-	
+
 	</div>
 </div>
 

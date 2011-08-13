@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,13 @@
 
 -include("zotonic.hrl").
 
+-define(TRANS_ADD_CONFIGURATION_KEY, {trans, [{en, "Add configuration key."}, {es, "Agregar clave de configuración."}]}).
+-define(TRANS_CONFIGURATION_KEY_EXISTS, {trans, [{en, "The config key already exists, please choose another key name."},
+                                                 {es, "La clave de configuración ya existe, por favor elija otro nombre de clave."}]}).
+-define(TRANS_ONLY_ADMIN_CAN_ADD_KEYS, {trans, [{en, "Only an administrator can add configuration keys."},
+                                                {es, "Sólo un administrador puede agregar claves de configuración."}]}).
+
+
 render_action(TriggerId, TargetId, Args, Context) ->
     OnSuccess = proplists:get_all_values(on_success, Args),
     Postback = {config_new_dialog, OnSuccess},
@@ -42,7 +49,7 @@ event({postback, {config_new_dialog, OnSuccess}, _TriggerId, _TargetId}, Context
         {delegate, atom_to_list(?MODULE)},
         {on_success, OnSuccess}
     ],
-    z_render:dialog("Add configuration key.", "_action_dialog_config_new.tpl", Vars, Context);
+    z_render:dialog(z_trans:trans(?TRANS_ADD_CONFIGURATION_KEY, Context), "_action_dialog_config_new.tpl", Vars, Context);
 
 
 event({submit, {config_new, Args}, _TriggerId, _TargetId}, Context) ->
@@ -58,9 +65,9 @@ event({submit, {config_new, Args}, _TriggerId, _TargetId}, Context) ->
                     m_config:set_value(Module, Key, Value, Context),
                     z_render:wire([{dialog_close, []} | OnSuccess], Context);
                 _ ->
-                    z_render:growl_error("The config key already exists, please choose another key name.", Context)
+                    z_render:growl_error(z_trans:trans(?TRANS_CONFIGURATION_KEY_EXISTS, Context), Context)
             end;
         false ->
-            z_render:growl_error("Only an administrator can add configuration keys.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_ONLY_ADMIN_CAN_ADD_KEYS, Context), Context)
     end.
 

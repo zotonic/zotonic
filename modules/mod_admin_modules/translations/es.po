@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 13:42-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +21,7 @@ msgstr ""
 "X-Poedit-Country: ARGENTINA\n"
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:18
-#: modules/mod_admin_modules/templates/admin_modules.tpl:33
+#: modules/mod_admin_modules/templates/admin_modules.tpl:34
 msgid "Activate"
 msgstr "Activar"
 
@@ -28,7 +29,7 @@ msgstr "Activar"
 msgid "Author"
 msgstr "Autor"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:29
+#: modules/mod_admin_modules/templates/admin_modules.tpl:30
 msgid "Deactivate"
 msgstr "Desactivar"
 
@@ -36,9 +37,9 @@ msgstr "Desactivar"
 msgid "Description"
 msgstr "Descripción"
 
-#: modules/mod_admin_modules/templates/_admin_menu_module.tpl:2
 #: modules/mod_admin_modules/templates/admin_modules.tpl:3
 #: modules/mod_admin_modules/templates/admin_modules.tpl:9
+#: modules/mod_admin_modules/templates/_admin_menu_module.tpl:2
 msgid "Modules"
 msgstr "Módulos"
 
@@ -59,10 +60,13 @@ msgid "Rescan modules"
 msgstr "Reexaminar módulos"
 
 #: modules/mod_admin_modules/templates/_admin_status.tpl:3
-msgid "Rescanning will rebuild the index of all modules, actions, templates etc.  It will also reload all dispatch rules."
-msgstr "Al reexaminar se reconstruirán los índices de todos los módulos, acciones, modelos, etc. También se recargarán todas las reglas de despacho."
+msgid ""
+"Rescanning will rebuild the index of all modules, actions, templates etc.  "
+"It will also reload all dispatch rules."
+msgstr ""
+"Al reexaminar se reconstruirán los índices de todos los módulos, acciones, "
+"modelos, etc. También se recargarán todas las reglas de despacho."
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:14
 msgid "Title"
 msgstr "Título"
-

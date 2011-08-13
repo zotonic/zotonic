@@ -36,12 +36,12 @@
 
             <div class="form-item clearfix">
                 {% if consumer.id %}
-                {% button type="submit" text="Update" %}
-                {% button action={dialog_close} text="Cancel" %}
+                {% button type="submit" text=_"Update" %}
+                {% button action={dialog_close} text=_"Cancel" %}
                 {% else %}
                 {_ When done, go to the authorization tab to set permissions. _}
                 {% endif %}
-                
+
             </div>
         </div>
         <div id="{{ #tab }}-auth">
@@ -51,7 +51,7 @@
                 {% for perm in m.oauth_perms %}
                 <tr>
                     <td>
-                        
+
                         <input type="checkbox" name="zp-perm" value="{{ perm.value }}" id="perm-{{ perm.value }}"
                                {% for p in perms %}{% ifequal perm.value p.perm %}checked="checked"{% endifequal %}{% endfor %}
                                />
@@ -61,7 +61,7 @@
                 </tr>
                 {% endfor %}
             </table>
-            
+
             {% endwith %}
 
             <div class="form-item clearfix">

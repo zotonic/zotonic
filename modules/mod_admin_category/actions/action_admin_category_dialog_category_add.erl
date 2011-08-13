@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,15 @@
 
 -include("zotonic.hrl").
 
+-define(TRANS_ADD_CATEGORY, {trans, [{en, "Add category"}, {es, "Agregar categoría"}]}).
+-define(TRANS_NO_ADD_CATEGORY_PERM, {trans, [{en, "You are not allowed to add categories."},
+                                             {es, "No tiene permitido agregar categorías."}]}).
+-define(TRANS_CATEGORY_EXISTS, {trans, [{en, "This category exists already. Please use another name."},
+                                        {es, "Esta categoría ya existe. Por favor use otro nombre."}]}).
+-define(TRANS_COULD_NOT_INSERT_CATEGORY, {trans, [{en, "Could not insert the category (~p)"},
+                                                  {es, "No se pudo insertar la categoría (~p)"}]}).
+
+
 render_action(TriggerId, TargetId, Args, Context) ->
     OnSuccess = proplists:get_all_values(on_success, Args),
     Postback = {dialog_category_add, OnSuccess},
@@ -41,9 +50,9 @@ event({postback, {dialog_category_add, OnSuccess}, _TriggerId, _TargetId}, Conte
     case z_acl:is_allowed(insert, #acl_rsc{category=category}, Context) of
         true ->
             Vars = [ {on_success, OnSuccess} ],
-            z_render:dialog("Add category", "_action_dialog_category_add.tpl", Vars, Context);
+            z_render:dialog(z_trans:trans(?TRANS_ADD_CATEGORY, Context), "_action_dialog_category_add.tpl", Vars, Context);
         false ->
-            z_render:growl_error("You are not allowed to add categories.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_ADD_CATEGORY_PERM, Context), Context)
     end;
 
 %% @doc Handle the form postback. Optionally renaming existing categories.
@@ -53,14 +62,14 @@ event({submit, {category_add, Options}, _TriggerId, _TargetId}, Context) ->
             Title    = z_context:get_q_validated("title", Context),
             Name     = z_context:get_q_validated("name", Context),
             ParentId = z_convert:to_integer(z_context:get_q("category_id", Context, undefined)),
-            
+
             Props = [
                 {is_published, true},
                 {category, category},
                 {name, Name},
                 {title, Title}
             ],
-            
+
             case m_rsc:insert(Props, Context) of
                 {ok, Id} ->
                     case ParentId of
@@ -69,11 +78,11 @@ event({submit, {category_add, Options}, _TriggerId, _TargetId}, Context) ->
                     end,
                     z_render:wire(proplists:get_all_values(on_success, Options), Context);
                 {error, duplicate_name} ->
-                    z_render:growl_error("This category exists already. Please use another name.", Context);
+                    z_render:growl_error(z_trans:trans(?TRANS_CATEGORY_EXISTS, Context), Context);
                 {error, Reason} ->
-                    Error = io_lib:format("Could not insert the categorie (~p)", [Reason]),
+                    Error = io_lib:format(z_trans:trans(?TRANS_COULD_NOT_INSERT_CATEGORY, Context), [Reason]),
                     z_render:growl_error(Error, Context)
             end;
         false ->
-            z_render:growl_error("You are not allowed to add categories.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_ADD_CATEGORY_PERM, Context), Context)
     end.

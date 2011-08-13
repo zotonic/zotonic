@@ -6,7 +6,7 @@
 <p>
 	{_ Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
 	{% if username %}
-		<br/>{_ Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore. _}
+		<br/>{_ Click “delete” to remove any existing username/password from the person, the person won't be a user anymore. _}
 	{% endif %}
 </p>
 
