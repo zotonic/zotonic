@@ -33,6 +33,11 @@ msgid ""
 "Add application"
 msgstr ""
 
+#: ./modules/mod_oauth/templates/oauth_apps.tpl:40 
+msgid ""
+"Add new application"
+msgstr ""
+
 #: ./modules/mod_oauth/templates/oauth_authorize.tpl:7 
 msgid ""
 "Allow"
@@ -73,7 +78,7 @@ msgid ""
 "Callback URL"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:40 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 
 msgid ""
 "Cancel"
 msgstr ""
@@ -206,7 +211,7 @@ msgid ""
 "Untitled"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:69 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:39 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:69 
 msgid ""
 "Update"
 msgstr ""

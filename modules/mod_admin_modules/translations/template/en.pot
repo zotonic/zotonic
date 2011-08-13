@@ -38,7 +38,7 @@ msgid ""
 "Description"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/_admin_menu_module.tpl:2 ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 ./modules/mod_admin_modules/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Modules"
 msgstr ""

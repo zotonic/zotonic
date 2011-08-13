@@ -88,7 +88,7 @@ msgid ""
 "Log incoming/outgoing e-mail"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_base.tpl:10 ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 
+#: ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 ./modules/mod_logging/templates/admin_log_base.tpl:10 
 msgid ""
 "Log messages"
 msgstr ""

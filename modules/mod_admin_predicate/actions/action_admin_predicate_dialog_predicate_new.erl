@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,9 @@
 
 -include("zotonic.hrl").
 
+-define(TRANS_MAKE_NEW_PREDICATE, {trans, [{en, "Make a new predicate"}, {es, "Crear un nuevo predicado"}]}).
+
+
 render_action(TriggerId, TargetId, Args, Context) ->
     Title = proplists:get_value(title, Args),
     Redirect = proplists:get_value(redirect, Args, true),
@@ -44,7 +47,7 @@ event({postback, {predicate_new_dialog, Title, Redirect}, _TriggerId, _TargetId}
         {redirect, Redirect },
         {title, Title}
     ],
-    z_render:dialog("Make a new predicate", "_action_dialog_predicate_new.tpl", Vars, Context);
+    z_render:dialog(z_trans:trans(?TRANS_MAKE_NEW_PREDICATE, Context), "_action_dialog_predicate_new.tpl", Vars, Context);
 
 
 event({submit, predicate_new, _TriggerId, _TargetId}, Context) ->

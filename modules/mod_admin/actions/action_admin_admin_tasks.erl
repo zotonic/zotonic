@@ -14,6 +14,15 @@
     event/2
 ]).
 
+-define(TRANS_CACHES_FLUSHED, {trans, [{en, "Caches have been flushed."}, {es, "Los cachés se han refrescado."}]}).
+-define(TRANS_TEMPLATES_RECOMPILED, {trans, [{en, "Templates will be recompiled."}, {es, "Los modelos se recmpilarán."}]}).
+-define(TRANS_INDEX_REBUILDING, {trans, [{en, "The search index is rebuilding. Depending on the database size, this can take a long time."},
+                                         {es, "El índice de búsqueda se está reconstruyendo. Dependiendo del tamaño de la base de datos, ésto puede demorar un largo rato."}]}).
+-define(TRANS_CATEGORY_TREE_REBUILDING, {trans, [{en, "The category tree is rebuilding. This can take a long time."},
+                                                 {es, "El árbol de categorías se está reconstruyendo. Esto puede demorar un largo rato."}]}).
+-define(TRANS_NO_PERMISSION, {trans, [{en, "You don't have permission to perform this action."},
+                                      {es, "No tiene permisos para realizar esta acción."}]}).
+
 render_action(TriggerId, TargetId, Args, Context) ->
     Postback = {admin_tasks, [{task, proplists:get_value(task, Args)}]},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
@@ -21,22 +30,22 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Flush the caches of all sites.
 event({postback, {admin_tasks, [{task, "flush"}]}, _TriggerId, _TargetId}, Context) ->
-    do(fun z:flush/0, "Caches have been flushed.", Context);
+    do(fun z:flush/0, z_trans:trans(?TRANS_CACHES_FLUSHED, Context), Context);
 
 %% @doc Reset templates.
 event({postback, {admin_tasks, [{task, "templates_reset"}]}, _TriggerId, _TargetId}, Context) ->
-    do(fun() -> z_template:reset(Context) end, "Templates will be recompiled.", Context);
+    do(fun() -> z_template:reset(Context) end, z_trans:trans(?TRANS_TEMPLATES_RECOMPILED, Context), Context);
 
 
 %% @doc Pivot everything
 event({postback, {admin_tasks, [{task, "pivot_all"}]}, _TriggerId, _TargetId}, Context) ->
-    do(fun() -> z_pivot_rsc:queue_all(Context) end, 
-       "The search index is rebuilding. Depending on the database size, this can take a long time.", Context);
+    do(fun() -> z_pivot_rsc:queue_all(Context) end,
+       z_trans:trans(?TRANS_INDEX_REBUILDING, Context), Context);
 
 %% @doc Renumber the category tree
 event({postback, {admin_tasks, [{task, "renumber_categories"}]}, _TriggerId, _TargetId}, Context) ->
-    do(fun() -> m_category:renumber(Context) end, 
-       "The category tree is rebuilding. This can take a long time.", Context).
+    do(fun() -> m_category:renumber(Context) end,
+       z_trans:trans(?TRANS_CATEGORY_TREE_REBUILDING, Context), Context).
 
 
 do(Fun, OkMsg, Context) ->
@@ -45,5 +54,5 @@ do(Fun, OkMsg, Context) ->
             Fun(),
             z_render:growl(OkMsg, Context);
         false ->
-            z_render:growl_error("You don't have permission to perform this action.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_PERMISSION, Context), Context)
     end.

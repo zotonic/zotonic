@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,8 +29,8 @@
 -define(DELTA, 2).
 -define(SLIDE, ?DELTA + ?DELTA + 1).
 
--define(TRANS_PAGER_NEXT, {trans, [{en, "next"}, {nl, "volgende"}]}).
--define(TRANS_PAGER_PREV, {trans, [{en, "previous"}, {nl, "vorige"}]}).
+-define(TRANS_PAGER_NEXT, {trans, [{en, "next"}, {nl, "volgende"}, {es, "siguiente"}]}).
+-define(TRANS_PAGER_PREV, {trans, [{en, "previous"}, {nl, "vorige"}, {es, "anterior"}]}).
 
 
 vary(_Params, _Context) -> nocache.
@@ -43,7 +43,7 @@ render(Params, _Vars, Context) ->
                    end,
     HideSinglePage  = proplists:get_value(hide_single_page, Params),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
-    
+
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
         true -> CleanedArgs;
         false -> [{qargs,true}|CleanedArgs]
@@ -144,7 +144,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
     {Part1,Next} = case Middle of
         [] ->
             {UrlStart, max(Start) + 1};
-        [N|_] when N == 2 -> 
+        [N|_] when N == 2 ->
             % Now Start is always of the format [1]
             {UrlStart ++ UrlMiddle, lists:max(Middle) + 1};
         _ ->
@@ -153,7 +153,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
     case End of
         [] ->
             Part1;
-        [M|_] -> 
+        [M|_] ->
             if
                 M == Next -> Part1 ++ UrlEnd;
                 true -> Part1 ++ [{none, sep}|UrlEnd]
@@ -173,4 +173,4 @@ test() ->
     R = #search_result{result=[a], pages=100, page=10},
     {ok, H} = render([{result,R}], [], C),
     list_to_binary(H).
-    
+

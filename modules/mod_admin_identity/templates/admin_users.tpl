@@ -6,32 +6,30 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-		<h2>User Overview</h2>
-	
+		<h2>{_ User Overview _}</h2>
+
 		{% if m.acl.is_admin %}
 			{% button text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
 		{% else %}
 			<p>{_ You need to be an administrator to add users. _}</p>
 		{% endif %}
-		
+
 		<hr class="clear" />
 
 		<div class="clearfix">
 			<p>
-			 {_ Every page/person can be made into a user on the edit page.
-				The difference between a user and a normal page is only
-				that the former has logon credentials attached to its page record. _}
+			 {_ Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record. _}
 			</p>
 
 		</div>
 
-	
+
 	{% with m.acl.user as me %}
 
 		{% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
 			<h3 class="above-list ">
-				{_ Users _}{% if q.qs %}, 
+				{_ Users _}{% if q.qs %},
 					{_ matching _} “{{ q.qs|escape }}”
 					{% button text=_"show all" action={redirect dispatch="admin_user"} %}
 				{% else %} {_ overview _}{% endif %}
@@ -48,7 +46,7 @@
 				<li id="{{ #li.id }}">
 					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
 						<span class="zp-20">{{ m.rsc[id].title|striptags }}</span>
-						<span class="zp-15">{{ m.identity[id].username|escape }}{% if id == me %}  <strong>(that's you)</strong>{% endif %}</span>
+						<span class="zp-15">{{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</span>
 						<span class="zp-10">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
 						<span class="zp-10">{{ m.rsc[id].created|date:"d M, H:i" }}</span>
 						<span class="zp-30">

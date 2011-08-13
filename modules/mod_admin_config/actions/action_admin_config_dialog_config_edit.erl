@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,11 @@
 ]).
 
 -include("zotonic.hrl").
+
+-define(TRANS_EDIT_CONFIG_VALUE, {trans, [{en, "Edit config value."},
+                                          {es, "Editar valor de configuración."}]}).
+-define(TRANS_ONLY_ADMIN_CAN_CHANGE_CONFIG, {trans, [{en, "Only administrators can change the configuration."},
+                                                     {es, "Sólo un administrador puede cambiar la configuración."}]}).
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Module = proplists:get_value(module, Args),
@@ -45,7 +50,7 @@ event({postback, {config_edit_dialog, Module, Key, OnSuccess}, _TriggerId, _Targ
         {key, Key},
         {on_success, OnSuccess}
     ],
-    z_render:dialog("Edit config value.", "_action_dialog_config_edit.tpl", Vars, Context);
+    z_render:dialog(z_trans:trans(?TRANS_EDIT_CONFIG_VALUE, Context), "_action_dialog_config_edit.tpl", Vars, Context);
 
 
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
@@ -60,5 +65,5 @@ event({submit, {config_edit, Args}, _TriggerId, _TargetId}, Context) ->
             m_config:set_value(Module, Key, Value, Context),
             z_render:wire([{dialog_close, []} | OnSuccess], Context);
         false ->
-            z_render:growl_error("Only administrators can change the configuration.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_ONLY_ADMIN_CAN_CHANGE_CONFIG, Context), Context)
     end.

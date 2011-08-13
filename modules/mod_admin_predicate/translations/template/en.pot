@@ -18,6 +18,35 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:20 
+msgid ""
+"A predicate denotes traits or aspects of a page and expresses a "
+"relationship between two pages. The relation is always directed, from the "
+"subject to the object.<br/>Predicates are defined in ontologies like <a "
+"href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the "
+"predicates known to Zotonic."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:29 
+msgid ""
+"Actions"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:2 
+msgid ""
+"Are you sure you want to delete the predicate"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18 ./modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:7 
+msgid ""
+"Cancel"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:6 
+msgid ""
+"Delete"
+msgstr ""
+
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:19 
 msgid ""
 "From category"
@@ -28,9 +57,44 @@ msgid ""
 "Help about predicates."
 msgstr ""
 
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:16 
+msgid ""
+"Make predicate"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:26 
+msgid ""
+"Name"
+msgstr ""
+
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
 msgid ""
 "Need more help?"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:47 
+msgid ""
+"No predicates found."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:2 
+msgid ""
+"Please fill in the title of the new predicate."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:22 
+msgid ""
+"Predicate overview"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:3 ./modules/mod_admin_predicate/templates/admin_predicate.tpl:10 ./modules/mod_admin_predicate/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Predicates"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:28 
+msgid ""
+"Reversed?"
 msgstr ""
 
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15 
@@ -39,14 +103,29 @@ msgid ""
 "definition."
 msgstr ""
 
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:4 
+msgid ""
+"This can't be undone. The predicate will be lost forever."
+msgstr ""
+
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
 msgid ""
 "This predicate can be used between two pages of the following categories."
 msgstr ""
 
+#: ./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:11 ./modules/mod_admin_predicate/templates/admin_predicate.tpl:25 
+msgid ""
+"Title"
+msgstr ""
+
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35 
 msgid ""
 "To category"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:27 
+msgid ""
+"Uri"
 msgstr ""
 
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3 
@@ -60,4 +139,19 @@ msgid ""
 "page.  You can also define which categories of objects will be found when "
 "searching for a page to connect to.  When you don\\'t check anything then "
 "all categories are valid."
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:40 
+msgid ""
+"delete"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:41 
+msgid ""
+"edit"
+msgstr ""
+
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:14 
+msgid ""
+"make a new predicate"
 msgstr ""

@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.7.1\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-08-12 21:30-0300\n"
+"Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: ARGENTINA\n"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:8
+msgid "Are you sure you want to delete the category"
+msgstr "¿Está seguro de que desea borrar la categoría"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:22
+msgid "Below category"
+msgstr "Categoría de abajo"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:36
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:35
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: modules/mod_admin_category/templates/_admin_menu_module.tpl:2
+msgid "Categories"
+msgstr "Categorías"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:18
+msgid "Categories are used to categorize all pages. Every page belongs to exactly one category. The categories are defined in a hierarchy. Here you can change that hierarchy."
+msgstr "Las categorías se usan para categorizar a todas las páginas. Toda página pertenece a exactamente una categoría. Las categorías se definen en una jerarquía. Aquí puede cambiar esa jerarquía."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
+msgid "Category Hierarchy"
+msgstr "Jerarquía de Categoría"
+
+#: modules/mod_admin_category/templates/_admin_category_sorter.tpl:4
+msgid "Category overview"
+msgstr "Resumen de categoría"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:35
+msgid "Delete"
+msgstr "Borrar"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:26
+msgid "How does this work?"
+msgstr "¿Cómo funciona ésto?"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:13
+msgid "Make a new category"
+msgstr "Crear una nueva categoría"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:34
+msgid "Make category"
+msgstr "Crear categoría"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:16
+msgid "Name"
+msgstr "Nombre"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
+msgid "Page Categories"
+msgstr "Categorías de Páginas"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:2
+msgid "Please specify the title, unique name and optional parent of the new category."
+msgstr "Por favor especifique el título, nombre único y padre opcional de la nueva categoría."
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:4
+msgid "Please specify to which category you want to transfer those pages."
+msgstr "Por favor especifique a qué categoría quiere transferir esas páginas."
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:4
+msgid "There are"
+msgstr "Hay"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:12
+msgid "This action can't be undone, the category will be lost forever."
+msgstr "Esta acción no se puede deshacer, la categoría se perderá para siempre"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_add.tpl:10
+msgid "Title"
+msgstr "Título"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:21
+msgid "Transfer to"
+msgstr "Transferir a"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:4
+msgid "pages with the category"
+msgstr "páginas con la categoría"
+
+#: modules/mod_admin_category/templates/_action_dialog_category_delete.tpl:4
+msgid "which you want to delete."
+msgstr "que quiere borrar."
+

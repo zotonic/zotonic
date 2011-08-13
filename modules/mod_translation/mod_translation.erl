@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,21 +28,34 @@
     observe_session_init_fold/3,
     observe_session_context/3,
     observe_auth_logon/3,
-    
-    init/1, 
+
+    init/1,
     event/2,
     generate/1,
-    
+
     do_choose/2
 ]).
 
 -include("zotonic.hrl").
 
+-define(TRANS_NO_SET_DEFAULT_LANGUAGE_PERM, {trans, [{en, "Sorry, you don't have permission to set the default language."},
+                                                     {es, "Disculpe, no tiene permiso para definir el idioma por defecto."}]}).
+-define(TRANS_BUILDING_PO_TEMPLATES, {trans, [{en, "Started building the .po templates. This may take a while."},
+                                              {es, "Construyendo los modelos .po. Esto puede demorar un rato."}]}).
+-define(TRANS_NO_SCAN_TRANSLATIONS_PERM, {trans, [{en, "Sorry, you don't have permission to scan for translations."},
+                                                  {es, "Disculpe, no tiene permiso para examinar las traducciones."}]}).
+-define(TRANS_RELOADING_PO_TEMPLATES, {trans, [{en, "Reloading all .po templates in the background."},
+                                               {es, "Recargando todos los modelos .po en segundo plano."}]}).
+-define(TRANS_NO_RELOAD_TRANSLATIONS_PERM, {trans, [{en, "Sorry, you don't have permission to reload translations."},
+                                                    {es, "Disculpe, no tiene permiso para recargar las traducciones."}]}).
+-define(TRANS_NO_CHANGE_LANGUAGE_LIST_PERM, {trans, [{en, "Sorry, you don't have permission to change the language list."},
+                                                     {es, "Disculpe, no tiene permiso para cambiar la lista de idiomas."}]}).
+
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
     case Context#context.host of
-        zotonic_status -> 
+        zotonic_status ->
             ok;
         _Other ->
             case m_config:get(i18n, language_list, Context) of
@@ -70,8 +83,8 @@ observe_session_init_fold(session_init_fold, Context, _Context) ->
                     Context;
                 AcceptLanguage ->
                     LanguagesAvailable = [ atom_to_list(Lang)
-                                            || {Lang, Props} <- get_language_config(Context), 
-                                               proplists:get_value(is_enabled, Props) =:= true 
+                                            || {Lang, Props} <- get_language_config(Context),
+                                               proplists:get_value(is_enabled, Props) =:= true
                                          ],
                     case catch do_choose(LanguagesAvailable, AcceptLanguage) of
                         Lang when is_list(Lang) ->
@@ -101,7 +114,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
             % Ensure that the user has a default language
             catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
             Context;
-        Code -> 
+        Code ->
             % Switch the session to the default language of the user
             List = get_language_config(Context),
             Context1 = set_language(z_convert:to_list(Code), List, Context),
@@ -119,7 +132,7 @@ event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
     Context1 = set_language(z_convert:to_list(Code), List, Context),
     z_context:set_persistent(language, z_context:language(Context1), Context1),
     case z_acl:user(Context1) of
-        undefined -> 
+        undefined ->
             nop;
         UserId ->
             case m_rsc:p_no_acl(UserId, pref_language, Context1) of
@@ -137,7 +150,7 @@ event({postback, {language_default, Args}, _TriggerId, _TargetId}, Context) ->
             m_config:set_value(i18n, language, z_convert:to_binary(Code), Context),
             Context;
         false ->
-            z_render:growl_error("Sorry, you don't have permission to set the default language.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_SET_DEFAULT_LANGUAGE_PERM, Context), Context)
     end;
 
 %% @doc Start rescanning all templates for translation tags.
@@ -145,29 +158,29 @@ event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> generate(Context) end),
-            z_render:growl("Started building the .po templates. This may take a while.", Context);
+            z_render:growl(z_trans:trans(?TRANS_BUILDING_PO_TEMPLATES, Context), Context);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to scan for translations.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_SCAN_TRANSLATIONS_PERM, Context), Context)
     end;
 event({postback, translation_reload, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> z_trans_server:load_translations(Context) end),
-            z_render:growl("Reloading all .po template in the background.", Context);
+            z_render:growl(z_trans:trans(?TRANS_RELOADING_PO_TEMPLATES, Context), Context);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to reload translations.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_RELOAD_TRANSLATIONS_PERM, Context), Context)
     end;
 
 event({submit, {language_edit, Args}, _TriggerId, _TargetId}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
-            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), 
+            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context),
                         z_context:get_q("is_enabled", Context), Context),
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_CHANGE_LANGUAGE_LIST_PERM, Context), Context)
     end;
 
 event({postback, {language_delete, Args}, _TriggerId, _TargetId}, Context) ->
@@ -178,7 +191,7 @@ event({postback, {language_delete, Args}, _TriggerId, _TargetId}, Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_CHANGE_LANGUAGE_LIST_PERM, Context), Context)
     end;
 
 event({postback, {language_enable, Args}, _TriggerId, _TargetId}, Context) ->
@@ -188,7 +201,7 @@ event({postback, {language_enable, Args}, _TriggerId, _TargetId}, Context) ->
             language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context),
             Context;
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(z_trans:trans(?TRANS_NO_CHANGE_LANGUAGE_LIST_PERM, Context), Context)
     end.
 
 
@@ -211,7 +224,7 @@ language_add(OldIsoCode, NewIsoCode, Language, IsEnabled, Context) ->
     IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
-    Languages2 = lists:usort([{IsoCodeNewAtom, 
+    Languages2 = lists:usort([{IsoCodeNewAtom,
                                 [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
                                  {is_enabled, z_convert:to_bool(IsEnabled)}
                                 ]} | Languages1]),
@@ -283,7 +296,7 @@ do_choose(AnyOkay, Choices, [AccPair|AccRest]) ->
             % doing this a little more work than needed in
             % order to be easily insensitive but preserving
             case lists:member(LAcc, LChoices) of
-                true -> 
+                true ->
                     hd([X || X <- Choices,
                              string:to_lower(X) =:= LAcc]);
                 false -> do_choose(AnyOkay, Choices, AccRest)
@@ -298,7 +311,7 @@ build_conneg_list([Acc|AccRest], Result) ->
     Pair = case XPair of
         {Choice, "q=" ++ PrioStr} ->
             % Simplify "en-us" to "en"
-            [Choice1|_] = string:tokens(Choice, "-"), 
+            [Choice1|_] = string:tokens(Choice, "-"),
             case PrioStr of
                 "0" -> {0.0, Choice1};
                 "1" -> {1.0, Choice1};

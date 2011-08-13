@@ -10,9 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-05 14:15-0300\n"
+"PO-Revision-Date: 2011-08-12 22:14-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,16 +26,16 @@ msgstr "Agregar clave"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Está seguro de que quiere eliminar la clave de configuración"
+msgstr "¿Está seguro de que quiere eliminar la clave de configuración"
 
-#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: modules/mod_admin_config/templates/_admin_menu_module.tpl:2
 msgid "Config"
-msgstr "Config"
+msgstr "Configuración"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
