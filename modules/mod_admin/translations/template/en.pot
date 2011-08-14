@@ -102,7 +102,7 @@ msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:5 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16 ./modules/mod_admin/templates/admin_overview.tpl:55 ./modules/mod_admin/templates/admin_referrers.tpl:26 
+#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:5 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.tpl:7 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:13 ./modules/mod_admin/templates/admin_referrers.tpl:26 
 msgid ""
 "Category"
 msgstr ""
@@ -137,7 +137,7 @@ msgid ""
 "Created by"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:58 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:10 
 msgid ""
 "Created on"
 msgstr ""
@@ -437,12 +437,12 @@ msgid ""
 "Modified"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:64 ./modules/mod_admin/templates/admin_referrers.tpl:28 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:19 ./modules/mod_admin/templates/admin_referrers.tpl:28 
 msgid ""
 "Modified by"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:61 ./modules/mod_admin/templates/admin_referrers.tpl:27 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:13 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:16 ./modules/mod_admin/templates/admin_referrers.tpl:27 
 msgid ""
 "Modified on"
 msgstr ""
@@ -467,7 +467,7 @@ msgid ""
 "No media found."
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:86 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:38 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:42 
 msgid ""
 "No pages found."
 msgstr ""
@@ -515,6 +515,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/admin_overview.tpl:23 
 msgid ""
 "Pages overview"
+msgstr ""
+
+#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:7 
+msgid ""
+"Performer"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:6 
@@ -688,6 +693,11 @@ msgid ""
 "Show this article only between the two dates."
 msgstr ""
 
+#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:10 
+msgid ""
+"Start date"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:78 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:119 
 msgid ""
 "State"
@@ -794,7 +804,7 @@ msgid ""
 "Till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15 ./modules/mod_admin/templates/admin_overview.tpl:52 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5 ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:42 
+#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15 ./modules/mod_admin/templates/_admin_overview_list.tpl:4 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:4 ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:42 
 msgid ""
 "Title"
 msgstr ""
@@ -983,7 +993,7 @@ msgid ""
 "download"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/admin_overview.tpl:80 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/_admin_overview_list.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:36 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 
 msgid ""
 "edit"
 msgstr ""
@@ -1083,7 +1093,7 @@ msgid ""
 "uploaded on"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/admin_overview.tpl:79 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.tpl:31 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:35 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
 msgid ""
 "view"
 msgstr ""

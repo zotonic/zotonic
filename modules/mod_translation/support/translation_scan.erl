@@ -1,9 +1,9 @@
 % @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010,2011 Marc Worrell
 %% Date: 2010-05-19
-%% @doc Parse a template, extract all translations.
+%% @doc Parse templates / erlang files in modules, extract all translations.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010,2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,16 +20,22 @@
 -module(translation_scan).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([scan/1]).
+-export([scan/1, scan_file/2]).
 
 -include("zotonic.hrl").
 
 scan(Context) ->
-    ModTemplates = z_module_indexer:all(template, Context),
-    [ scan_module(Mod) || Mod <- ModTemplates ].
-    
-scan_module({Module, {Path, Templates}}) ->
-    {Module, Path, dedupl(lists:flatten([ scan_file(File) || {_BaseName,File} <- Templates ]))}.
+    ModTemplates = [{Path, Files} || {_M, {Path, Files}} <- z_module_indexer:all(template, Context)],
+    ModErlang = [{Path, Files} || {_M, {Path, Files}} <- z_module_indexer:all(erlang, Context)],
+    Combined = lists:foldl(
+                 fun({Path, Files}, Acc) ->
+                         [{Path, Files ++ proplists:get_value(Path, ModTemplates, [])}
+                          |proplists:delete(Path, Acc)]
+                 end, [], ModErlang),
+    [ scan_module(Mod) || Mod <- Combined ].
+
+scan_module({Path, Templates}) ->
+    {Path, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || {_BaseName,File} <- Templates ]))}.
 
 
 dedupl(Trans) ->
@@ -58,8 +64,19 @@ dedupl(Trans) ->
         end.
 
 
+%% @doc Parse the Erlang module. Extract all translation tags.
+scan_file(".erl", File) ->
+    {ok, Path} = zotonic_app:get_path(),
+    case epp:open(File, [filename:join(Path, "include")]) of
+        {ok, Epp} ->
+            parse_erl(File, Epp);
+        {error, Reason} ->
+            ?ERROR("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
+            []
+    end;
+
 %% @doc Parse the template in the file. Extract all translation tags.
-scan_file(File) ->
+scan_file(".tpl", File) ->
     case parse(File) of
         {ok, ParseTree} ->
             extract(ParseTree, [], File);
@@ -114,3 +131,44 @@ extract(N, Acc, _F) when is_integer(N); is_atom(N) ->
         Acc;
     trans_ext_args([{{identifier,_,Lang}, {string_literal, _, Text}}|Args], Acc) ->
         trans_ext_args(Args, [{list_to_atom(Lang), Text}|Acc]).
+
+
+%% Scan binary for erlang ?__(..., Context) syntax with either a binary or a string as first arg.
+parse_erl(File, Epp) ->
+    parse_erl_form(epp:parse_erl_form(Epp), File, Epp, []).
+
+parse_erl_form({eof, _}, _File, Epp, Acc) ->
+    epp:close(Epp),
+    Acc;
+parse_erl_form({ok, Other}, File, Epp, Acc) ->
+    parse_erl_form(epp:parse_erl_form(Epp), File, Epp, 
+                   parse_erl_form_part(Other, File, Acc));
+parse_erl_form({error, _}, File, Epp, Acc) ->
+    parse_erl_form(epp:parse_erl_form(Epp), File, Epp, Acc).
+
+
+parse_erl_form_part({function, _, _, _, Expressions}, File, Acc) ->
+    lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
+parse_erl_form_part({tuple, _, Expressions}, File, Acc) ->
+    lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
+parse_erl_form_part({clause, _, _, _, Expressions}, File, Acc) ->
+    lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
+parse_erl_form_part({match, _, X, Y}, File, Acc) ->
+    parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
+parse_erl_form_part({cons, _, X, Y}, File, Acc) ->
+    parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
+parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
+    parse_erl_form_part(Expr, File, []) ++ 
+        lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Exprs);
+
+parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
+                     [{string, Line, S}, _]}, File, Acc) ->
+    [{S, [], {File,Line}}|Acc];
+parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
+                     [{bin, _, [{bin_element, _, {string, Line, S}, _, _}|_]}|_]}, File, Acc) ->
+    [{S, [], {File,Line}}|Acc];
+
+parse_erl_form_part({call, _, _, Expressions}, File, Acc) ->
+    lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
+parse_erl_form_part(_Part, _File, Acc) ->
+    Acc. %% ignore

@@ -249,7 +249,8 @@ subdir(scomp)      -> { "scomps",      "scomp_",     ".erl" };
 subdir(action)     -> { "actions",     "action_",    ".erl" };
 subdir(validator)  -> { "validators",  "validator_", ".erl" };
 subdir(model)      -> { "models",      "m_",         ".erl" };
-subdir(service)    -> { "services",    "service_",   ".erl" }.
+subdir(service)    -> { "services",    "service_",   ".erl" };
+subdir(erlang)     -> { "",            "",           ".erl" }.
 
 file2index(_, {NoPrefixExt, File}) ->
     ModuleName = list_to_atom(filename:basename(File, ".erl")),

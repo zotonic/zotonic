@@ -18,9 +18,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_base/actions/action_base_alert.erl:36 
+msgid ""
+"Alert"
+msgstr ""
+
 #: ./modules/mod_base/templates/_action_dialog_confirm.tpl:6 
 msgid ""
 "Cancel"
+msgstr ""
+
+#: ./modules/mod_base/actions/action_base_confirm.erl:35 
+msgid ""
+"Confirm"
 msgstr ""
 
 #: ./modules/mod_base/templates/_action_dialog_alert.tpl:5 ./modules/mod_base/templates/_action_dialog_confirm.tpl:5 

@@ -144,8 +144,8 @@ tag_to_value($i, _, {_,M,_}, _Context) ->
 % if they're zero and the strings 'midnight' and 'noon' if appropriate.
 % Examples: '1 a.m.', '1:30 p.m.', 'midnight', 'noon', '12:30 p.m.'
 % Proprietary extension.
-tag_to_value($P, _, {0,  0, _}, Context) -> ?__("midnight", Context);
-tag_to_value($P, _, {12, 0, _}, Context) -> ?__("noon", Context);
+tag_to_value($P, _, {0,  0, _}, Context) -> l10n_date:label(midnight, Context);
+tag_to_value($P, _, {12, 0, _}, Context) -> l10n_date:label(noon, Context);
 tag_to_value($P, Date, Time, Context) ->
    tag_to_value($f, Date, Time, Context)
       ++ " " ++ tag_to_value($a, Date, Time, Context);
@@ -160,7 +160,7 @@ tag_to_value($s, _, {_,_,S}, _Context) ->
 
 % Month, textual, 3 letters, lowercase; e.g. 'jan'
 tag_to_value($b, {_,M,_}, _, Context) ->
-   z_string:truncate(monthname(M, Context), 3, []);
+   z_string:truncate(l10n_date:monthname(M, Context), 3, []);
 
 % ISO 8601 date format - 2004-02-12T15:19:21+00:00
 tag_to_value($c, Date, Time, Context) ->
@@ -186,11 +186,11 @@ tag_to_value($d, {_, _, D}, _, _Context) ->
 % Day of the week, textual, 3 letters; e.g. 'Fri'
 tag_to_value($D, Date, _, Context) ->
    Dow = calendar:day_of_the_week(Date),
-   z_string:truncate(dayname(Dow, Context), 3, []);
+   z_string:truncate(l10n_date:dayname(Dow, Context), 3, []);
 
 % Month, textual, long; e.g. 'January'
 tag_to_value($F, {_,M,_}, _, Context) ->
-   monthname(M, Context);
+   l10n_date:monthname(M, Context);
 
 % '1' if Daylight Savings Time, '0' otherwise.
 tag_to_value($I, _, _, _Context) ->
@@ -202,7 +202,7 @@ tag_to_value($j, {_, _, D}, _, _Context) ->
 
 % Day of the week, textual, long; e.g. 'Friday'
 tag_to_value($l, Date, _, Context) ->
-   dayname(calendar:day_of_the_week(Date), Context);
+   l10n_date:dayname(calendar:day_of_the_week(Date), Context);
 
 % Boolean for whether it is a leap year; i.e. True or False
 tag_to_value($L, {Y,_,_}, _, _Context) ->
@@ -217,7 +217,7 @@ tag_to_value($m, {_, M, _}, _, _Context) ->
 
 % Month, textual, 3 letters; e.g. 'Jan'
 tag_to_value($M, {_,M,_}, _, Context) ->
-   z_string:truncate(monthname(M, Context), 3, []);
+   z_string:truncate(l10n_date:monthname(M, Context), 3, []);
 
 % Month without leading zeros; i.e. '1' to '12'
 tag_to_value($n, {_, M, _}, _, _Context) ->
@@ -226,14 +226,14 @@ tag_to_value($n, {_, M, _}, _, _Context) ->
 % Month abbreviation in Associated Press style. Proprietary extension.
 tag_to_value($N, {_,M,_}, _, Context) when M =:= 9 ->
    % Special case - "Sept."
-   z_string:truncate(monthname(M, Context), 4, ".");
+   z_string:truncate(l10n_date:monthname(M, Context), 4, ".");
 tag_to_value($N, {_,M,_}, _, Context) when M < 3 orelse M > 7 ->
    % Jan, Feb, Aug, Oct, Nov, Dec are all
    % abbreviated with a full-stop appended.
-   z_string:truncate(monthname(M, Context), 3, ".");
+   z_string:truncate(l10n_date:monthname(M, Context), 3, ".");
 tag_to_value($N, {_,M,_}, _, Context) ->
    % The rest are the fullname.
-   monthname(M, Context);
+   l10n_date:monthname(M, Context);
 
 % Difference to Greenwich time in hours; e.g. '+0200'
 tag_to_value($O, Date, Time, _Context) ->
@@ -349,28 +349,6 @@ utc_diff(Date, Time) ->
        calendar:datetime_to_gregorian_seconds(UTime),
    trunc((DiffSecs / 3600) * 100).
 
-dayname(1, Context) -> ?__({trans, [{en,"Monday"},{nl,"maandag"}]}, Context);
-dayname(2, Context) -> ?__({trans, [{en,"Tuesday"},{nl,"dinsdag"}]}, Context);
-dayname(3, Context) -> ?__({trans, [{en,"Wednesday"},{nl,"woensdag"}]}, Context);
-dayname(4, Context) -> ?__({trans, [{en,"Thursday"},{nl,"donderdag"}]}, Context);
-dayname(5, Context) -> ?__({trans, [{en,"Friday"},{nl,"vrijdag"}]}, Context);
-dayname(6, Context) -> ?__({trans, [{en,"Saturday"},{nl,"zaterdag"}]}, Context);
-dayname(7, Context) -> ?__({trans, [{en,"Sunday"},{nl,"zondag"}]}, Context);
-dayname(_, _Context) -> "???".
-
-monthname(1, Context) ->  ?__({trans, [{en,"January"},{nl,"januari"}]}, Context);
-monthname(2, Context) ->  ?__({trans, [{en,"February"},{nl,"februari"}]}, Context);
-monthname(3, Context) ->  ?__({trans, [{en,"March"},{nl,"maart"}]}, Context);
-monthname(4, Context) ->  ?__({trans, [{en,"April"},{nl,"april"}]}, Context);
-monthname(5, Context) ->  ?__({trans, [{en,"May"},{nl,"mei"}]}, Context);
-monthname(6, Context) ->  ?__({trans, [{en,"June"},{nl,"juni"}]}, Context);
-monthname(7, Context) ->  ?__({trans, [{en,"July"},{nl,"juli"}]}, Context);
-monthname(8, Context) ->  ?__({trans, [{en,"August"},{nl,"augustus"}]}, Context);
-monthname(9, Context) ->  ?__({trans, [{en,"September"},{nl,"september"}]}, Context);
-monthname(10, Context) -> ?__({trans, [{en,"October"},{nl,"oktober"}]}, Context);
-monthname(11, Context) -> ?__({trans, [{en,"November"},{nl,"november"}]}, Context);
-monthname(12, Context) -> ?__({trans, [{en,"December"},{nl,"december"}]}, Context);
-monthname(_, _Context) -> "???".
 
 % Utility functions
 integer_to_list_zerofill(N) when is_float(N) ->

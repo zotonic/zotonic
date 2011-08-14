@@ -1,9 +1,9 @@
 % @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010,2011 Marc Worrell
 %% Date: 2010-05-19
 %% @doc Generate .po files for all found labels. The .po files are generated per module and language
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010,2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ generate(ModLabs) ->
 
 generate1([]) ->
     ok;
-generate1([{_Module, ModDir, Labels}|ModLabs]) ->
+generate1([{ModDir, Labels}|ModLabs]) ->
     Dir = filename:join([ModDir, "translations", "template"]),
     case filelib:ensure_dir(filename:join([Dir, "empty"])) of
         ok ->
