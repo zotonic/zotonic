@@ -31,7 +31,7 @@ generate(ModLabs) ->
 
 generate1([]) ->
     ok;
-generate1([{_Module, ModDir, Labels}|ModLabs]) ->
+generate1([{ModDir, Labels}|ModLabs]) ->
     Dir = filename:join([ModDir, "translations", "template"]),
     case filelib:ensure_dir(filename:join([Dir, "empty"])) of
         ok ->
