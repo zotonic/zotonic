@@ -25,7 +25,8 @@
 -mod_prio(400).
 
 -export([
-    observe_auth_logoff/3
+    observe_auth_logoff/3,
+    observe_search_query/2
 ]).
 -export([get_config/1]).
 
@@ -58,3 +59,10 @@ get_config(Context) ->
       z_convert:to_list(m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context)),
       z_convert:to_list(m_config:get_value(mod_facebook, scope, ?FACEBOOK_SCOPE, Context))
     }.
+
+
+%% @doc 
+observe_search_query({search_query, {fql, []}, OffsetLimit}, Context) ->
+    m_facebook:search({fql, []}, OffsetLimit, Context);
+observe_search_query(_, _Context) ->
+    undefined.
