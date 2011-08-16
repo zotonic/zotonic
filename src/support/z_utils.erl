@@ -855,7 +855,7 @@ ensure_existing_module(ModuleName) when is_list(ModuleName) ->
             case code:where_is_file(ensure_valid_modulename(ModuleName) ++ ".beam") of
                 non_existing -> {error, not_found};
                 Absname ->
-                    {module, Module} = code:load_file(Absname),
+                    {module, Module} = code:load_abs(Absname),
                     {ok, Module}
             end;
         M ->
