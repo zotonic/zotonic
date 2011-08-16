@@ -36,9 +36,35 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(_Key, #m{value=undefined}, _Context) ->
-   %% Do a graph query. 
-   undefined.
+m_find_value(CT, M=#m{value=undefined}, _Context)  
+  when CT == friends; 
+       CT == home;
+       CT == feed;
+       CT == likes;
+       CT == music;
+       CT == books;
+       CT == notes;
+       CT == permissions;
+       CT == photos;
+       CT == albums;
+       CT == videos;
+       CT == events;
+       CT == groups; 
+       CT == checkins ->
+    M#m{value=atom_to_list(CT)};
+m_find_value(Key, #m{value=ConnectionType}, Context) ->
+    %% Do a graph query. 
+    GraphUrl = graph_url(Key, ConnectionType, Context), 
+
+    Payload = case http:request(GraphUrl) of
+        {ok, {{_, 200, _}, _Headers, Body}} ->
+            mochijson2:decode(Body);
+        Other ->
+            ?DEBUG({error, {http_error, GraphUrl, Other}}),
+            []
+    end,
+
+    convert_json(Payload).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> []
@@ -51,16 +77,12 @@ m_value(#m{value=undefined}, _Context) ->
     undefined.
 
 %% @doc Return the search as used by z_search and the search model.
-search({fql, []}, _OfffsetLimit, _Context) ->
-    %% TODO ...  
-    #search_sql{select="first_name", from="user", where="uid=me()", run_func=fun facebook_q/4 }.
+search({fql, Args}, _OfffsetLimit, _Context) ->
+    #search_sql{select="dummy", from="dummy", args=Args, run_func=fun facebook_q/4 }.
 
 %% Experimental feature to do facebook fql queries.
-facebook_q(Q, Sql, Args, Context) ->
-    ?DEBUG({facebook_q, Q, Sql, Args}),
-
-    %% TODO Construct a valid FQL Query from the arguments
-    Query = "select uid, first_name, last_name, online_presence from user where uid in (select uid2 from friend where uid1 = me())",
+facebook_q(_Q, _Sql, Args, Context) ->
+    Query = proplists:get_value('query', Args),
     FqlUrl = fql_url(Query, Context),
 
     %% 
@@ -74,15 +96,26 @@ facebook_q(Q, Sql, Args, Context) ->
 
     %%
     Rows = case Payload of
-       {struct, [{<<"error_code">>, _ErrorCode} | _T]} ->
-           ?DEBUG(Payload),
-           [];
-       _ ->
-        [ [{z_convert:to_atom(K), V} || {K, V} <- PropList] || {struct, PropList} <- Payload]
+	       {struct, [{<<"error_code">>, _ErrorCode} | _T]} ->
+		   ?DEBUG(Payload),
+		   [];
+	       _ ->
+		   ?DEBUG(Payload),
+		   convert_json(Payload)
     end,
   
     #search_result{result=Rows}.
 
+%% Convert json from facebook favour to an easy to use format for zotonic templates.
+%%
+convert_json({K, V}) when is_binary(K) ->
+    {z_convert:to_atom(K), convert_json(V)};
+convert_json({struct, PropList}) when is_list(PropList) ->
+    [convert_json(V) || V <- PropList];
+convert_json(L) when is_list(L) ->
+    [convert_json(V) || V <- L];
+convert_json(V) ->
+    V.
 
 fql_url(Query, Context) ->
     Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_utils:url_encode(Query),
@@ -90,3 +123,16 @@ fql_url(Query, Context) ->
         undefined -> Fql;
         AccessToken -> Fql ++ "&access_token=" ++ z_utils:url_encode(AccessToken)
     end.
+
+graph_url(Id, ConnectionType, Context) ->
+    GraphUrl = "https://graph.facebook.com/" ++ z_utils:url_encode(Id),
+    GraphUrlType = case ConnectionType of
+		       undefined -> GraphUrl;
+		       _ -> GraphUrl ++ "/" ++ ConnectionType
+		   end,
+    case z_context:get_session(facebook_access_token, Context) of
+        undefined -> GraphUrlType;
+        AccessToken -> GraphUrlType ++ "?access_token=" ++ z_utils:url_encode(AccessToken)
+    end.
+    
+

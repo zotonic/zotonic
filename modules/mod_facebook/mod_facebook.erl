@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% Date: 2010-05-09
+%% @date 2010-05-09
 %% @doc Facebook integration. Adds Facebook login and other functionalities.
 
 %% Copyright 2010 Marc Worrell
@@ -62,7 +62,7 @@ get_config(Context) ->
 
 
 %% @doc 
-observe_search_query({search_query, {fql, []}, OffsetLimit}, Context) ->
-    m_facebook:search({fql, []}, OffsetLimit, Context);
+observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
+    m_facebook:search({fql, Args}, OffsetLimit, Context);
 observe_search_query(_, _Context) ->
     undefined.
