@@ -1,8 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2011 Maas-Maarten Zeeman 
-%% Date: 2011-08-15
 %%
-%% @doc Model for managing the comments on a page.
+%% @doc Model for accessing facebook data via the graph api.
 
 %% Copyright 2011 Maas-Maarten Zeeman
 %%
@@ -41,30 +40,26 @@ m_find_value(CT, M=#m{value=undefined}, _Context)
        CT == home;
        CT == feed;
        CT == likes;
+       CT == movies;
        CT == music;
        CT == books;
        CT == notes;
        CT == permissions;
+       CT == picture;
        CT == photos;
        CT == albums;
        CT == videos;
        CT == events;
        CT == groups; 
        CT == checkins ->
-    M#m{value=atom_to_list(CT)};
+    M#m{value=CT};
+m_find_value(Key, #m{value=picture}, Context) ->
+    %% Getting the picture is different from all other fields.
+    PictureUrl = graph_url(Key, undefined, Context) ++ "&fields=picture",
+    P = do_graph_get(PictureUrl),
+    proplists:get_value(picture, P);
 m_find_value(Key, #m{value=ConnectionType}, Context) ->
-    %% Do a graph query. 
-    GraphUrl = graph_url(Key, ConnectionType, Context), 
-
-    Payload = case http:request(GraphUrl) of
-        {ok, {{_, 200, _}, _Headers, Body}} ->
-            mochijson2:decode(Body);
-        Other ->
-            ?DEBUG({error, {http_error, GraphUrl, Other}}),
-            []
-    end,
-
-    convert_json(Payload).
+    do_graph_get(graph_url(Key, ConnectionType, Context)). 
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> []
@@ -128,11 +123,20 @@ graph_url(Id, ConnectionType, Context) ->
     GraphUrl = "https://graph.facebook.com/" ++ z_utils:url_encode(Id),
     GraphUrlType = case ConnectionType of
 		       undefined -> GraphUrl;
-		       _ -> GraphUrl ++ "/" ++ ConnectionType
+		       _ -> GraphUrl ++ "/" ++ atom_to_list(ConnectionType)
 		   end,
     case z_context:get_session(facebook_access_token, Context) of
         undefined -> GraphUrlType;
         AccessToken -> GraphUrlType ++ "?access_token=" ++ z_utils:url_encode(AccessToken)
     end.
     
+do_graph_get(Url) ->
+    Payload = case http:request(Url) of
+        {ok, {{_, 200, _}, _Headers, Body}} ->
+            mochijson2:decode(Body);
+        Other ->
+            ?DEBUG({error, {http_error, Url, Other}}),
+            []
+    end,
 
+    convert_json(Payload).
