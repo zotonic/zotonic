@@ -24,6 +24,7 @@
 	is_allowed/3,
 
 	rsc_visible/2,
+        rsc_prop_visible/3,
 	rsc_editable/2,
 	rsc_deletable/2,
 
@@ -62,6 +63,16 @@ is_allowed(Action, Object, Context) ->
         Other -> Other
     end.
 
+%% @doc Check if an action on a property of a resource is allowed for the current actor.
+is_allowed_prop(_Action, _Object, _Property, #context{acl=admin}) ->
+    true;
+is_allowed_prop(_Action, _Object, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+    true;
+is_allowed_prop(Action, Object, Property, Context) ->
+    case z_notifier:first({acl_is_allowed_prop, Action, Object, Property}, Context) of
+        undefined -> true; % Note, the default behaviour is different for props!
+        Other -> Other
+    end.
 
 %% @doc Check if the resource is visible for the current user
 rsc_visible(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
@@ -85,6 +96,28 @@ rsc_visible(Id, Context) ->
 		false ->
 			is_allowed(view, Id, Context)
 	end.
+
+%% @doc Check if a property of the resource is visible for the current user
+rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
+    true;
+rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+    true;
+rsc_prop_visible(_Id, _Property, #context{acl=admin}) ->
+    true;
+rsc_prop_visible(Id, Property, Context) ->
+    case z_memo:is_enabled(Context) of
+        true ->
+                case z_memo:get({rsc_prop_visible, Id, Property}) of
+                        undefined ->
+                                Visible = is_allowed_prop(view, Id, Property, Context),
+                                z_memo:set({rsc_prop_visible, Id, Property}, Visible),
+                                Visible;
+                        Visible ->
+                                Visible
+                end;
+        false ->
+                is_allowed_prop(view, Id, Property, Context)
+    end.
 
 %% @doc Check if the resource is editable by the current user
 rsc_editable(_Id, #context{user_id=undefined}) ->

@@ -73,11 +73,11 @@
 m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
         undefined -> undefined;
-        RId -> 
+        RId ->
             case z_acl:rsc_visible(RId, Context) of
                 true ->
                     M#m{value=RId};
-                false -> 
+                false ->
                     fun(is_a, C) -> is_a(RId, C);
                        (_, _C) -> undefined
                     end
@@ -88,7 +88,12 @@ m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) ->
 m_find_value(Key, #m{value={is_cat, Id}}, Context) -> 
     is_cat(Id, Key, Context);
 m_find_value(Key, #m{value=Id}, Context) when is_integer(Id) ->
-    p_no_acl(Id, Key, Context).
+    case z_acl:rsc_prop_visible(Id, Key, Context) of
+        true ->
+            p_no_acl(Id, Key, Context);
+        false ->
+            undefined
+    end.
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
