@@ -53,13 +53,9 @@ question_props(Q) ->
         
         {question_label, ""},
         {text_label, "Matching"},
-        {text_explanation, "<p>Enter the matching pairs below, one per line.</p>"},
-        
-        {type, Q#survey_question.type},
-        {name, Q#survey_question.name},
-        {question, Q#survey_question.question},
-        {text, Q#survey_question.text}
-    ].
+        {text_explanation, "<p>Enter the matching pairs below, one per line.</p>"}
+     ] ++
+     ?QUESTION_AS_PROPLIST(Q).
 
 render(Q) ->
     Name = z_html:escape(Q#survey_question.name),
