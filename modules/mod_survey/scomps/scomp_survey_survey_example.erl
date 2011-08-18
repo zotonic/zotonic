@@ -27,7 +27,5 @@
 vary(_,_) -> nocache.
 
 render(Args, _Vars, Context) ->
-    Type = proplists:get_value(type, Args),
-    Module = list_to_atom("survey_q_"++z_convert:to_list(Type)),
-    Q = Module:new(),
+    Q = mod_survey:new_question(proplists:get_value(type, Args)),
     {ok, filter_replace:replace(Q#survey_question.html, ["class=\"", "class=\"nosubmit "], Context)}.

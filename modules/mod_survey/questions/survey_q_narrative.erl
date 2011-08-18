@@ -51,13 +51,9 @@ Use [name=first|second|third] for a drop down menu named \"name\" with the given
         {has_question, false},
         
         {question_label, ""},
-        {text_label, "Sentence"},
-        
-        {type, Q#survey_question.type},
-        {name, Q#survey_question.name},
-        {question, Q#survey_question.question},
-        {text, Q#survey_question.text}
-    ].
+        {text_label, "Sentence"}
+    ] ++
+    ?QUESTION_AS_PROPLIST(Q).
 
 render(Q) ->
     {Parts, _Inputs} = parse(z_convert:to_list(Q#survey_question.text)),

@@ -28,6 +28,7 @@
 -export([
     event/2,
     redraw_questions/2,
+    new_question/1,
     delete_question/3,
     
     render_next_page/6,
@@ -165,7 +166,7 @@ redraw_questions(Id, Context) ->
 
 %% @doc Return the default state for each item type.
 new_question(Type) ->
-    Mod = list_to_atom("survey_q_"++z_convert:to_list(Type)),
+    Mod = module_name(Type),
     Mod:new().
 
 
@@ -313,6 +314,7 @@ do_submit(SurveyId, QuestionIds, Questions, Answers, Context) ->
     case Missing of
         [] ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
+            z_notifier:notify({survey_submit, SurveyId, FoundAnswers}, Context),
             ok;
         _ -> 
             {error, notfound}
@@ -336,6 +338,10 @@ collect_answers([QId|QIds], Qs, Answers, FoundAnswers, Missing) ->
         {error, missing} -> collect_answers(QIds, Qs, Answers, FoundAnswers, [QId|Missing])
     end.
 
+module_name(L) when is_list(L) ->
+    module_name(list_to_atom(L));
+module_name(Type) when is_atom(Type) ->
+    module_name(#survey_question{type=Type});
 module_name(#survey_question{type=Type}) ->
     list_to_atom("survey_q_"++atom_to_list(Type)).
 

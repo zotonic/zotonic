@@ -10,5 +10,5 @@
 	<li class="first">{_ Strongly Agree _}</li>
 </ul>
 {% endwith %}
-{% validate id=#q1 name=name type={presence} %}
+{% if question.is_required %}{% validate id=#q1 name=name type={presence} %}{% endif %}
 

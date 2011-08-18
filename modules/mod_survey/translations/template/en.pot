@@ -89,12 +89,17 @@ msgid ""
 "Question Templates"
 msgstr ""
 
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:25 
+msgid ""
+"Required?"
+msgstr ""
+
 #: ./modules/mod_survey/templates/_survey_start.tpl:19 ./modules/mod_survey/templates/_survey_results.tpl:2 
 msgid ""
 "Results"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:24 
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:30 
 msgid ""
 "Save"
 msgstr ""
@@ -154,6 +159,11 @@ msgstr ""
 #: ./modules/mod_survey/templates/_survey_question_truefalse.tpl:3 
 msgid ""
 "True"
+msgstr ""
+
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:27 
+msgid ""
+"Whether the question needs answering or not."
 msgstr ""
 
 #: ./modules/mod_survey/templates/_survey_question_yesno.tpl:3 

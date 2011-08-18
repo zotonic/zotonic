@@ -120,13 +120,14 @@ did_survey(SurveyId, Context) ->
 insert_survey_submission(SurveyId, Answers, Context) ->
     UserId = z_acl:user(Context),
     %% Delete previous answers of this user, if any
-    case UserId of
+    PersistentId = case UserId of
         undefined ->
-            PersistentId = z_context:persistent_id(Context),
-            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PersistentId], Context);
+            PId = z_context:persistent_id(Context),
+            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PId], Context),
+            PId;
         _Other ->
             z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context),
-            PersistentId = undefined
+            undefined
     end,
     insert_questions(SurveyId, UserId, PersistentId, Answers, Context).
 

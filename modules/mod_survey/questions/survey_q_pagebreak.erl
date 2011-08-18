@@ -48,13 +48,9 @@ question_props(Q) ->
         {has_name, true},
         
         {question_label, "To question"},
-        {text_label, "Condition"},
-        
-        {type, Q#survey_question.type},
-        {name, Q#survey_question.name},
-        {question, Q#survey_question.question},
-        {text, Q#survey_question.text}
-    ].
+        {text_label, "Condition"}
+    ] ++
+    ?QUESTION_AS_PROPLIST(Q).
 
 render(Q) ->
     Q#survey_question{

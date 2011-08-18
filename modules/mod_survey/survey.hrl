@@ -19,3 +19,5 @@
 
 %% @doc A question for in a survey
 -record(survey_question, {type, name, question, text, html, parts=[], is_required=true}).
+
+-define(QUESTION_AS_PROPLIST(Q), lists:zip(record_info(fields, survey_question), tl(tuple_to_list(Q)))).
