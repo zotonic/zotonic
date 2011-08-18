@@ -18,7 +18,7 @@
 						<option {% if ans == opt %}selected="selected" {% endif %}>{{ opt }}</option>
 					{% endfor %}
 				</select>
-				{% validate id=#match.index name=nm type={presence} %}
+				{% if question.is_required %}{% validate id=#match.index name=nm type={presence} %}{% endif %}
 				{% endwith %}
 				{% endwith %}
 			</li>
