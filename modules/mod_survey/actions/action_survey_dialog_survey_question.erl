@@ -53,8 +53,9 @@ event({submit, {survey_question_save, ActionProps}, _TriggerId, _TargetId}, Cont
     Name = z_string:to_slug(z_string:trim(z_context:get_q("name", Context, ""))),
     Question = z_string:trim(z_context:get_q("question", Context, "")),
     Text = z_string:trim(z_context:get_q("text", Context, "")),
+    IsRequired = z_convert:to_bool(z_context:get_q("is_required", Context, "")),
     Q = get_question(Id, QuestionId, Context),
-    Q1 = question_render(Q#survey_question{name=Name, question=Question, text=Text}),
+    Q1 = question_render(Q#survey_question{name=Name, question=Question, text=Text, is_required=IsRequired}),
     save_question(Id, QuestionId, Q1, Context),
     Context1 = mod_survey:redraw_questions(Id, Context),
     z_render:dialog_close(Context1).
@@ -70,7 +71,7 @@ save_question(Id, QuestionId, Question, Context) ->
 
 
 question_props(Q) ->
-    Mod = list_to_atom("survey_q_"++z_convert:to_list(Q#survey_question.type)),
+    Mod = mod_survey:module_name(Q),
     Mod:question_props(Q).
 
 question_render(Q) ->

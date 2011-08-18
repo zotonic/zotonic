@@ -21,6 +21,12 @@
 		<textarea rows="10" type="text" id="{{ #text }}" name="text">{{ text|escape }}</textarea>
 	{% endif %}
 
+    <div class="clearfix">
+        <label for="{{ #text }}">{_ Required? _}</label>
+        <input type="checkbox" id="{{ #required }}" name="is_required" {% if is_required %}checked="checked"{% endif %} value="true" />
+        {_ Whether the question needs answering or not. _}
+    </div>
+
 	{% button text=_"Save" %}
 	{% button text=_"Cancel" action={dialog_close} %}
 
