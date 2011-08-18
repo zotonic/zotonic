@@ -28,7 +28,9 @@
     m_to_list/2,
     m_value/2,
 
-    search/3
+    search/3,
+	 
+    do_graph_call/5
 ]).
 
 -include_lib("zotonic.hrl").
@@ -54,12 +56,11 @@ m_find_value(CT, M=#m{value=undefined}, _Context)
        CT == checkins ->
     M#m{value=CT};
 m_find_value(Key, #m{value=picture}, Context) ->
-    %% Getting the picture is different from all other fields.
-    PictureUrl = graph_url(Key, undefined, Context) ++ "&fields=picture",
-    P = do_graph_get(PictureUrl),
+    %% Getting the picture is strangely enough different from all other fields.
+    P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
     proplists:get_value(picture, P);
 m_find_value(Key, #m{value=ConnectionType}, Context) ->
-    do_graph_get(graph_url(Key, ConnectionType, Context)). 
+    do_graph_call(get, Key, ConnectionType, [], Context). 
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> []
@@ -101,42 +102,65 @@ facebook_q(_Q, _Sql, Args, Context) ->
   
     #search_result{result=Rows}.
 
+%% @doc Do a facebook graph call. See http://developers.facebook.com/docs/reference/api/ for more info
+%%
+do_graph_call(Method, Id, Connection, Args, Context) 
+  when Method == get; Method == post; Method == delete ->
+    ReqArgs = case z_context:get_session(facebook_access_token, Context) of
+		  undefined -> Args;
+		  AccessToken -> [{access_token, AccessToken} | Args]
+	      end,
+    Query = mochiweb_util:urlencode(ReqArgs),
+
+    Path = [$/, string:join([z_utils:url_encode(C) || C <- [Id, Connection], C =/= undefined], "/")],
+
+    Request = make_httpc_request(Method, "https", "graph.facebook.com", Path, Query),
+
+    Payload = case http:request(Method, Request, [], []) of
+		  {ok, {{_, 200, _}, _Headers, Body}} ->
+		      mochijson2:decode(Body);
+		  Other ->
+		      ?DEBUG({error, {http_error, element(1, Request), Other}}),
+		      []
+	      end,
+
+    convert_json(Payload).
+
+%% Create a http request for the inets httpc api.
+%%
+make_httpc_request(post, Scheme, Server, Path, Query) ->
+    Url = mochiweb_util:urlunsplit({Scheme, Server, Path, [], []}),
+    {Url, [], "application/x-www-form-urlencoded", Query};
+make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get; 
+								   Method == delete ->
+    Url = mochiweb_util:urlunsplit({Scheme, Server, Path, Query, []}),
+    {Url, []}.
+
 %% Convert json from facebook favour to an easy to use format for zotonic templates.
 %%
 convert_json({K, V}) when is_binary(K) ->
     {z_convert:to_atom(K), convert_json(V)};
 convert_json({struct, PropList}) when is_list(PropList) ->
-    [convert_json(V) || V <- PropList];
+    convert_json(PropList);
 convert_json(L) when is_list(L) ->
     [convert_json(V) || V <- L];
 convert_json(V) ->
     V.
 
+%%
+%%
 fql_url(Query, Context) ->
     Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_utils:url_encode(Query),
     case z_context:get_session(facebook_access_token, Context) of
         undefined -> Fql;
         AccessToken -> Fql ++ "&access_token=" ++ z_utils:url_encode(AccessToken)
     end.
-
-graph_url(Id, ConnectionType, Context) ->
-    GraphUrl = "https://graph.facebook.com/" ++ z_utils:url_encode(Id),
-    GraphUrlType = case ConnectionType of
-		       undefined -> GraphUrl;
-		       _ -> GraphUrl ++ "/" ++ atom_to_list(ConnectionType)
-		   end,
-    case z_context:get_session(facebook_access_token, Context) of
-        undefined -> GraphUrlType;
-        AccessToken -> GraphUrlType ++ "?access_token=" ++ z_utils:url_encode(AccessToken)
-    end.
     
-do_graph_get(Url) ->
-    Payload = case http:request(Url) of
-        {ok, {{_, 200, _}, _Headers, Body}} ->
-            mochijson2:decode(Body);
-        Other ->
-            ?DEBUG({error, {http_error, Url, Other}}),
-            []
-    end,
+    
 
-    convert_json(Payload).
+
+
+		  
+					   
+    
+    
