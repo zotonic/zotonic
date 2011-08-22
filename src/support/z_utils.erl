@@ -852,7 +852,7 @@ name_for_host(Name, Host) ->
 ensure_existing_module(ModuleName) when is_list(ModuleName) ->
     case catch list_to_existing_atom(ModuleName) of
         {'EXIT', {badarg, _Traceback}} ->
-            case code:where_is_file(ensure_valid_modulename(ModuleName) ++ ".beam") of
+            case code:where_is_file(ensure_valid_modulename(ModuleName)) of
                 non_existing -> {error, not_found};
                 Absname ->
                     {module, Module} = code:load_abs(Absname),
