@@ -103,9 +103,9 @@ handle_cast(init_query_watches, State) ->
     Watches = search_query_notify:init(State#state.context),
     {noreply, State#state{query_watches=Watches}};
 
-handle_cast({{rsc_update_done, delete, _Id, _, _}, _Ctx}, State) ->
+handle_cast({#rsc_update_done{action=delete}, _Ctx}, State) ->
     {noreply, State};
-handle_cast({{rsc_update_done, _, Id, Cats, Cats}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
+handle_cast({#rsc_update_done{id=Id, pre_is_a=Cats, post_is_a=Cats}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
     %% Update; categories have not changed.
     Watches1 = case lists:member('query', Cats) of
                    false -> Watches;
@@ -115,7 +115,7 @@ handle_cast({{rsc_update_done, _, Id, Cats, Cats}, _Ctx}, State=#state{query_wat
     search_query_notify:send_notifications(Id, search_query_notify:check_rsc(Id, Watches1, Context), Context),
     {noreply, State#state{query_watches=Watches1}};
 
-handle_cast({{rsc_update_done, _, Id, CatsOld, CatsNew}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
+handle_cast({#rsc_update_done{id=Id, pre_is_a=CatsOld, post_is_a=CatsNew}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
     %% Update; categories *have* changed.
     Watches1 = case lists:member('query', CatsOld) of
                    true ->

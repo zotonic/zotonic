@@ -71,7 +71,8 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 delete_nocheck(Id, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
-
+    Props = m_rsc:get(Id, Context),
+    
     F = fun(Ctx) ->
         z_notifier:notify({rsc_delete, Id}, Ctx),
         z_db:delete(rsc, Id, Ctx)
@@ -89,7 +90,14 @@ delete_nocheck(Id, Context) ->
     [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
     [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
     %% Notify all modules that the rsc has been deleted
-    z_notifier:notify({rsc_update_done, delete, Id, CatList, []}, Context),
+    z_notifier:notify(#rsc_update_done{
+                        action=delete,
+                        id=Id,
+                        pre_is_a=CatList,
+                        post_is_a=[],
+                        pre_props=Props,
+                        post_props=[]
+                    }, Context),
     ok.
 
 
@@ -244,7 +252,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     true ->
                         UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(UpdatePropsN1),
                         {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
-                        {ok, RscId, UpdatePropsN, BeforeCatList, RenumberCats};
+                        {ok, RscId, BeforeProps, UpdatePropsN, BeforeCatList, RenumberCats};
                     false ->
                         {ok, RscId, notchanged}
                 end
@@ -254,7 +262,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             case z_db:transaction(TransactionF, Context) of
                 {ok, NewId, notchanged} ->
                     {ok, NewId};
-                {ok, NewId, NewProps, OldCatList, RenumberCats} ->
+                {ok, NewId, OldProps, NewProps, OldCatList, RenumberCats} ->
                     z_depcache:flush(NewId, Context),
                     case proplists:get_value(name, NewProps) of
                         undefined -> nop;
@@ -276,10 +284,15 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     % Flush all cached content that is depending on one of the updated categories
                     [ z_depcache:flush(Cat, Context) || Cat <- AllCatList ],
                      % Notify that a new resource has been inserted, or that an existing one is updated
-                    case Id of
-                        insert_rsc -> z_notifier:notify({rsc_update_done, insert, NewId, OldCatList, NewCatList}, Context);
-                        _ ->          z_notifier:notify({rsc_update_done, update, NewId, OldCatList, NewCatList}, Context)
-                    end,
+                    Note = #rsc_update_done{
+                        action= case Id of insert_rsc -> insert; _ -> update end,
+                        id=NewId,
+                        pre_is_a=OldCatList,
+                        post_is_a=NewCatList,
+                        pre_props=OldProps,
+                        post_props=NewProps
+                    },
+                    z_notifier:notify(Note, Context),
 
                     % Return the updated or inserted id
                     {ok, NewId};

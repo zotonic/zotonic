@@ -51,7 +51,7 @@
 -record(state, {context, twitter_pid=undefined}).
 
 
-observe_rsc_update_done({rsc_update_done, _Type, Id, _, _}, Context) ->
+observe_rsc_update_done(#rsc_update_done{id=Id}, Context) ->
     case m_rsc:p(Id, twitter_id, Context) of
         undefined ->
             ok;

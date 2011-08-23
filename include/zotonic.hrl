@@ -156,6 +156,9 @@
 %% @doc Notification sent to a site when e-mail for that site is received
 -record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).
 
+%% @doc Resource update done notification
+-record(rsc_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
+
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 

@@ -53,7 +53,7 @@ observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
     end.
 
 %% @doc Whenever a predicate has been updated we have to flush the predicate cache.
-observe_rsc_update_done({rsc_update_done, _UpdateAction, _Id, BeforeCatList, CatList}, Context) ->
+observe_rsc_update_done(#rsc_update_done{pre_is_a=BeforeCatList, post_is_a=CatList}, Context) ->
     case lists:member(predicate, CatList) orelse lists:member(predicate, BeforeCatList) of
         true -> m_predicate:flush(Context);
         false -> ok
