@@ -400,33 +400,24 @@ restart_session(Session) ->
 
 %% @doc Load the persistent data from the database, used on session start.
 load_persist(Session) ->
-	case z_db:q1("select props from persistent where id = $1", 
-	                [Session#session.persist_id], 
-	                Session#session.context) of
-		L when is_list(L) ->
-			Session#session{ props_persist = L, persist_is_dirty = false, persist_is_saved = true };
-		_ ->
-			Session#session{ props_persist = [], persist_is_dirty = false, persist_is_saved = false }
-	end.
+    {PropsPersist, PersistIsSaved} = case m_persistent:get(Session#session.persist_id, Session#session.context) of
+	L when is_list(L) -> {L,  true};
+	_		  -> {[], false}
+    end,
+    Session#session{ 
+	props_persist	 = PropsPersist, 
+	persist_is_dirty = false, 
+	persist_is_saved = PersistIsSaved 
+    }.
+
 
 %% @doc Save the persistent data to the database, when it is changed. Reset the dirty flag.
+save_persist(#session{persist_is_dirty=true, persist_id=Id, props_persist=Props, context=Context} = Session) ->
+    ok = m_persistent:put(Id, Props, Context),
+    Session#session{persist_is_dirty = false, persist_is_saved = true};
 save_persist(Session) ->
-	case Session#session.persist_is_dirty of
-		true ->
-			case z_db:q("update persistent set props = $2, modified = now() where id = $1", 
-						[Session#session.persist_id, Session#session.props_persist], 
-						Session#session.context) of
-				0 ->
-					z_db:q("insert into persistent (id,props,created,modified) values ($1,$2,now(),now())", 
-							[Session#session.persist_id, Session#session.props_persist], 
-							Session#session.context);
-				1 ->
-					ok
-			end,
-			Session#session{persist_is_dirty = false, persist_is_saved = true};
-		false ->
-			Session
-	end.
+    Session.
+
 
 %% @doc Return a new page record, monitor the started page process because we want to know about normal exits
 page_start(PageId) ->
