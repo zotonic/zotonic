@@ -386,43 +386,47 @@ is_text(_Mime) -> false.
 %% The original media should be in State#media_path (or z_path:media_archive)
 %% The generated image should be created in State#root (or z_path:media_preview)
 ensure_preview(Path, Context) ->
-    {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} = 
-                    case z_context:get(media_tag_url2props,Context) of
-                        undefined -> z_media_tag:url2props(Path, Context);
-                        MediaInfo -> MediaInfo
-                    end,
-    case mochiweb_util:safe_relative_path(Filepath) of
-        undefined ->
+    UrlProps = case z_context:get(media_tag_url2props,Context) of
+                    undefined -> z_media_tag:url2props(Path, Context);
+                    MediaInfo -> MediaInfo
+                end,
+    case UrlProps of
+        error -> 
             {false, Context};
-        Safepath  ->
-            MediaPath = case z_context:get(media_path, Context) of
-                            undefined -> z_path:media_archive(Context);
-                            ConfMediaPath -> ConfMediaPath
-                        end,
+        {Filepath, PreviewPropList, _Checksum, _ChecksumBaseString} ->
+            case mochiweb_util:safe_relative_path(Filepath) of
+                undefined ->
+                    {false, Context};
+                Safepath  ->
+                    MediaPath = case z_context:get(media_path, Context) of
+                                    undefined -> z_path:media_archive(Context);
+                                    ConfMediaPath -> ConfMediaPath
+                                end,
             
-            MediaFile = case Safepath of 
-                            "lib/" ++ LibPath ->  
-                                case z_module_indexer:find(lib, LibPath, Context) of 
-                                    {ok, ModuleFilename} -> ModuleFilename; 
-                                    {error, _} -> filename:join(MediaPath, Safepath) 
-                                end; 
-                            _ -> 
-                                filename:join(MediaPath, Safepath) 
-                        end,
-            case filelib:is_regular(MediaFile) of
-                true ->
-                    % Media file exists, perform the resize
-                    Root = case z_context:get(root, Context) of
-                               [ConfRoot|_] -> ConfRoot;
-                               _ -> z_path:media_preview(Context)
-                           end,
-                    PreviewFile = filename:join(Root, Path),
-                    case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
-                        ok -> {true, z_context:set(fullpath, PreviewFile, Context)};
-                        {error, Reason} -> throw(Reason)
-                    end;
-                false ->
-                    {false, Context}
+                    MediaFile = case Safepath of 
+                                    "lib/" ++ LibPath ->  
+                                        case z_module_indexer:find(lib, LibPath, Context) of 
+                                            {ok, ModuleFilename} -> ModuleFilename; 
+                                            {error, _} -> filename:join(MediaPath, Safepath) 
+                                        end; 
+                                    _ -> 
+                                        filename:join(MediaPath, Safepath) 
+                                end,
+                    case filelib:is_regular(MediaFile) of
+                        true ->
+                            % Media file exists, perform the resize
+                            Root = case z_context:get(root, Context) of
+                                       [ConfRoot|_] -> ConfRoot;
+                                       _ -> z_path:media_preview(Context)
+                                   end,
+                            PreviewFile = filename:join(Root, Path),
+                            case z_media_preview:convert(MediaFile, PreviewFile, PreviewPropList, Context) of
+                                ok -> {true, z_context:set(fullpath, PreviewFile, Context)};
+                                {error, Reason} -> throw(Reason)
+                            end;
+                        false ->
+                            {false, Context}
+                    end
             end
     end.
 

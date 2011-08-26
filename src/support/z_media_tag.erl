@@ -324,38 +324,42 @@ props2url([{Prop,Value}|Rest], Width, Height, Acc) ->
     props2url(Rest, Width, Height, [[atom_to_list(Prop),$-,z_convert:to_list(Value)]|Acc]).
 
 
-%% @spec url2props(Url, Context) -> {Filepath,PreviewPropList,Checksum,ChecksumBaseString}
+%% @spec url2props(Url, Context) -> {Filepath,PreviewPropList,Checksum,ChecksumBaseString} | error
 %% @doc Translate an url of the format "image.jpg(300x300)(crop-center)(checksum).jpg" to parts
 %% @todo Map the extension to the format of the preview (.jpg or .png)
 url2props(Url, Context) ->
     {Filepath,Rest} = lists:splitwith(fun(C) -> C =/= $( end, Url),
     PropsRoot = filename:rootname(Rest),
     % Take the checksum from the string
-    LastParen = string:rchr(PropsRoot, $(),
-    {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
-    Check1 = string:strip(Check, right, $)),
-    PropList = case Props of
-                   "()" ++ _ -> [""|string:tokens(Props, ")(")];
-                   _ -> string:tokens(Props, ")(")
-               end,
-    FileMime = z_media_identify:guess_mime(Rest),
-    {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
-    z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
-    PropList1       = case PropList of
-                        [] -> [];
-                        [Size|RestProps]->
-                            {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
-                            SizeProps = case {W,XH} of
-                                            {"", "x"}            -> [];
-                                            {"", ""}             -> [];
-                                            {Width, ""}          -> [{width,list_to_integer(Width)}]; 
-                                            {Width, "x"}         -> [{width,list_to_integer(Width)}]; 
-                                            {"", [$x|Height]}    -> [{height,list_to_integer(Height)}]; 
-                                            {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
-                                        end,
-                            SizeProps ++ url2props1(RestProps, [])
-                      end,
-    {Filepath,PropList1,Check1,Props}.
+    case string:rchr(PropsRoot, $() of
+        0 ->
+            error;
+        LastParen ->
+            {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
+            Check1 = string:strip(Check, right, $)),
+            PropList = case Props of
+                           "()" ++ _ -> [""|string:tokens(Props, ")(")];
+                           _ -> string:tokens(Props, ")(")
+                       end,
+            FileMime = z_media_identify:guess_mime(Rest),
+            {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
+            z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
+            PropList1       = case PropList of
+                                [] -> [];
+                                [Size|RestProps]->
+                                    {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
+                                    SizeProps = case {W,XH} of
+                                                    {"", "x"}            -> [];
+                                                    {"", ""}             -> [];
+                                                    {Width, ""}          -> [{width,list_to_integer(Width)}]; 
+                                                    {Width, "x"}         -> [{width,list_to_integer(Width)}]; 
+                                                    {"", [$x|Height]}    -> [{height,list_to_integer(Height)}]; 
+                                                    {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
+                                                end,
+                                    SizeProps ++ url2props1(RestProps, [])
+                              end,
+            {Filepath,PropList1,Check1,Props}
+    end.
 
 url2props1([], Acc) ->
     lists:reverse(Acc);
