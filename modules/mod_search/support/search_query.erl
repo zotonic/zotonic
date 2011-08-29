@@ -75,6 +75,7 @@ request_arg("authoritative")       -> authoritative;
 request_arg("cat")                 -> cat;
 request_arg("cat_exclude")         -> cat_exclude;
 request_arg("custompivot")         -> custompivot;
+request_arg("id_exclude")          -> id_exclude;
 request_arg("hasobject")           -> hasobject;
 request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
@@ -134,6 +135,16 @@ parse_query([{cat_exclude, Cats}|Rest], Context, Result) ->
     Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats_exclude),
     Tables1 = Result#search_sql.tables,
     parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats2, tables=Tables1});
+
+%% id_exclude=resource-id
+%% Exclude an id from the result
+parse_query([{id_exclude, Id}|Rest], Context, Result)  when is_integer(Id) ->
+    Result1 = add_where("rsc.id <> " ++ integer_to_list(Id), Result),
+    parse_query(Rest, Context, Result1);
+
+parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
+    parse_query(Rest, Context, Result);
+
 
 %% hassubject=[id]
 %% Give all things which have an incoming edge to Id
