@@ -71,5 +71,6 @@ get_props(Id, Context) ->
 -spec put(Id :: id(), Props :: list(), #context{}) -> ok.
 put(Id, Props, Context) ->
     z_db:q("UPDATE " ++ ?T_PERSISTENT ++ " SET props = $2, modified = now() WHERE id = $1", [Id, Props], Context) == 1
-    orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, Props], Context).
+    orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, Props], Context),
+    ok.
 
