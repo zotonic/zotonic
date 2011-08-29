@@ -33,7 +33,7 @@ msgid ""
 "Confirm"
 msgstr ""
 
-#: ./modules/mod_base/templates/_action_dialog_alert.tpl:5 ./modules/mod_base/templates/_action_dialog_confirm.tpl:5 
+#: ./modules/mod_base/templates/_action_dialog_confirm.tpl:5 ./modules/mod_base/templates/_action_dialog_alert.tpl:5 
 msgid ""
 "OK"
 msgstr ""

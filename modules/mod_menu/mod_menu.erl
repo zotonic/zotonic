@@ -33,6 +33,7 @@
     get_menu/2,
     set_menu/3,
     observe_menu_get_rsc_ids/2,
+    observe_menu_save/2,
     test/0,
     menu_flat/2
 ]).
@@ -90,6 +91,11 @@ observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
         menu_ids(T, Acc1);
     menu_ids([H|T], Acc) ->
         menu_ids(T, [H|Acc]).
+
+
+%% @doc Observer the 'menu_save' notification
+observe_menu_save({menu_save, MenuId, Menu}, Context) ->
+    set_menu(MenuId, Menu, Context).
 
 
 %% @doc Fetch the default menu. Performs validation/visibility checking on the menu items.
