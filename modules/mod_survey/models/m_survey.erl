@@ -228,7 +228,7 @@ survey_results(SurveyId, Context) ->
                 lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
                                 | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]
                               ])
-                | [ user_answer_row(User, Created, Answers, QIds, QsB) || {User, Created, Answers} <- Grouped ]
+                | [ user_answer_row(User, Created, Answers, QIds, QsB, Context) || {User, Created, Answers} <- Grouped ]
             ];
         undefined ->
             []
@@ -258,13 +258,13 @@ survey_results(SurveyId, Context) ->
         }.
 
 
-    user_answer_row({user, User, Persistent}, Created, Answers, QuestionIds, Questions) ->
+    user_answer_row({user, User, Persistent}, Created, Answers, QuestionIds, Questions, Context) ->
         [
             User,
             Persistent,
             case Created of 
                 undefined -> <<>>;
-                _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", z_context:new(mediafonds))
+                _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
             end
             | answer_row(Answers, QuestionIds, Questions)
         ].
