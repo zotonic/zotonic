@@ -63,6 +63,10 @@
 			{% endif %}
 			{_ Show results to user after completion of survey. _}
 		</label>
+		<label>
+			<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple %}checked="checked"{% endif %} />
+			{_ Allow multiple entries per user/browser. _}
+		</label>
 	</div>
 
 	<p><a href="{% url survey_results id=id %}">{_ Show survey results _}</a></p>

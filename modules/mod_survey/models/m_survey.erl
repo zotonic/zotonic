@@ -120,14 +120,19 @@ did_survey(SurveyId, Context) ->
 insert_survey_submission(SurveyId, Answers, Context) ->
     UserId = z_acl:user(Context),
     %% Delete previous answers of this user, if any
-    PersistentId = case UserId of
-        undefined ->
-            PId = z_context:persistent_id(Context),
-            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PId], Context),
-            PId;
-        _Other ->
-            z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context),
-            undefined
+    PersistentId = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
+        true ->
+            z_ids:id(30);
+        false ->
+            case UserId of
+                undefined ->
+                    PId = z_context:persistent_id(Context),
+                    z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PId], Context),
+                    PId;
+                _Other ->
+                    z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context),
+                    undefined
+            end
     end,
     insert_questions(SurveyId, UserId, PersistentId, Answers, Context).
 
@@ -144,8 +149,8 @@ insert_survey_submission(SurveyId, Answers, Context) ->
             {text, Text} -> [SurveyId, UserId, PersistentId, QuestionId, Name, undefined, Text];
             Value -> [SurveyId, UserId, PersistentId, QuestionId, Name, z_convert:to_list(Value), undefined]
         end,
-        z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text) 
-                values ($1, $2, $3, $4, $5, $6, $7)", 
+        z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text, created) 
+                values ($1, $2, $3, $4, $5, $6, $7, now())", 
                Args,
                Context),
         insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Context).
@@ -213,15 +218,17 @@ survey_stats(SurveyId, Context) ->
 survey_results(SurveyId, Context) ->
     case m_rsc:p(SurveyId, survey, Context) of
         {survey, QuestionIds, Questions} ->
-             Rows = z_db:q("select user_id, persistent, question, name, value, text 
+             Rows = z_db:q("select user_id, persistent, question, name, value, text, created
                             from survey_answer 
                             where survey_id = $1", [SurveyId], Context),
             Grouped = group_users(Rows),
             QIds = [ z_convert:to_binary(QId) || QId <- QuestionIds ],
             QsB = [ {z_convert:to_binary(QId), Q} || {QId, Q} <- Questions ],
             [
-                lists:flatten([ <<"user_id">>, <<"anonymous">> | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]])
-                | [ user_answer_row(User, Answers, QIds, QsB) || {User, Answers} <- Grouped ]
+                lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
+                                | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]
+                              ])
+                | [ user_answer_row(User, Created, Answers, QIds, QsB) || {User, Created, Answers} <- Grouped ]
             ];
         undefined ->
             []
@@ -230,30 +237,32 @@ survey_results(SurveyId, Context) ->
     group_users([]) ->
         [];
     group_users([R|Rs]) ->
-        {User, Q} = unpack_user_row(R),
-        group_users(User, Rs, [Q], []).
+        {User, Q, Created} = unpack_user_row(R),
+        group_users(User, Created, Rs, [Q], []).
         
-    group_users(User, [], UserAcc, Acc) ->
-        [{User,UserAcc} | Acc];
-    group_users(User, [R|Rs], UserAcc, Acc) ->
-        {U, Q} = unpack_user_row(R),
+    group_users(User, Created, [], UserAcc, Acc) ->
+        [{User, Created, UserAcc} | Acc];
+    group_users(User, Created, [R|Rs], UserAcc, Acc) ->
+        {U, Q, Crtd} = unpack_user_row(R),
         case User of
-            U -> group_users(User, Rs, [Q|UserAcc], Acc);
-            _ -> group_users(U, Rs, [Q], [{User,UserAcc}|Acc])
+            U -> group_users(User, Created, Rs, [Q|UserAcc], Acc);
+            _ -> group_users(U, Crtd, Rs, [Q], [{User,Created,UserAcc}|Acc])
         end.
 
 
-    unpack_user_row({UserId, Persistent, Question, Name, Value, Text}) ->
+    unpack_user_row({UserId, Persistent, Question, Name, Value, Text, Created}) ->
         {
             {user, UserId, Persistent},
-            {Question, {Name, {Value, Text}}}
+            {Question, {Name, {Value, Text}}},
+            Created
         }.
 
 
-    user_answer_row({user, User, Persistent}, Answers, QuestionIds, Questions) ->
+    user_answer_row({user, User, Persistent}, Created, Answers, QuestionIds, Questions) ->
         [
             User,
-            Persistent
+            Persistent,
+            erlydtl_dateformat:format(Created, "Y-m-d H:i", z_context:new(mediafonds))
             | answer_row(Answers, QuestionIds, Questions)
         ].
         
@@ -287,7 +296,8 @@ install(Context) ->
                 #column_def{name=question, type="character varying", length=32, is_nullable=false},
                 #column_def{name=name, type="character varying", length=32, is_nullable=false},
                 #column_def{name=value, type="character varying", length=80, is_nullable=true},
-                #column_def{name=text, type="bytea", is_nullable=true}
+                #column_def{name=text, type="bytea", is_nullable=true},
+                #column_def{name=created, type="timestamp", is_nullable=false}
             ], Context),
             
     % Add some indices and foreign keys, ignore errors
