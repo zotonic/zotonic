@@ -262,7 +262,10 @@ survey_results(SurveyId, Context) ->
         [
             User,
             Persistent,
-            erlydtl_dateformat:format(Created, "Y-m-d H:i", z_context:new(mediafonds))
+            case Created of 
+                undefined -> <<>>;
+                _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", z_context:new(mediafonds))
+            end
             | answer_row(Answers, QuestionIds, Questions)
         ].
         
@@ -297,7 +300,7 @@ install(Context) ->
                 #column_def{name=name, type="character varying", length=32, is_nullable=false},
                 #column_def{name=value, type="character varying", length=80, is_nullable=true},
                 #column_def{name=text, type="bytea", is_nullable=true},
-                #column_def{name=created, type="timestamp", is_nullable=false}
+                #column_def{name=created, type="timestamp", is_nullable=true}
             ], Context),
             
     % Add some indices and foreign keys, ignore errors

@@ -333,9 +333,17 @@ collect_answers([QId|QIds], Qs, Answers, FoundAnswers, Missing) ->
     Q = proplists:get_value(QId, Qs),
     Module = module_name(Q),
     case Module:answer(Q, Answers) of
-        {ok, none} -> collect_answers(QIds, Qs, Answers, FoundAnswers, Missing);
-        {ok, AnswerList} -> collect_answers(QIds, Qs, Answers, [{QId, AnswerList}|FoundAnswers], Missing);
-        {error, missing} -> collect_answers(QIds, Qs, Answers, FoundAnswers, [QId|Missing])
+        {ok, none} ->
+            collect_answers(QIds, Qs, Answers, FoundAnswers, Missing);
+        {ok, AnswerList} -> 
+            collect_answers(QIds, Qs, Answers, [{QId, AnswerList}|FoundAnswers], Missing);
+        {error, missing} -> 
+            case Q#survey_question.is_required of
+                true ->
+                    collect_answers(QIds, Qs, Answers, FoundAnswers, [QId|Missing]);
+                false ->
+                    collect_answers(QIds, Qs, Answers, FoundAnswers, Missing)
+            end
     end.
 
 module_name(L) when is_list(L) ->
