@@ -852,10 +852,10 @@ name_for_host(Name, Host) ->
 ensure_existing_module(ModuleName) when is_list(ModuleName) ->
     case catch list_to_existing_atom(ModuleName) of
         {'EXIT', {badarg, _Traceback}} ->
-            case code:where_is_file(ensure_valid_modulename(ModuleName)) of
+            case code:where_is_file(ensure_valid_modulename(ModuleName) ++ ".beam") of
                 non_existing -> {error, not_found};
                 Absname ->
-                    {module, Module} = code:load_abs(Absname),
+                    {module, Module} = code:load_abs(filename:rootname(Absname)),
                     {ok, Module}
             end;
         M ->
@@ -878,7 +878,8 @@ ensure_existing_module(ModuleName) when is_binary(ModuleName) ->
             
         ensure_valid_modulechar(C) when C >= $0, C =< $9 -> true;
         ensure_valid_modulechar(C) when C >= $a, C =< $z -> true;
-        ensure_valid_modulechar(C) when C >= $_ -> true.
+        ensure_valid_modulechar(C) when C >= $A, C =< $Z -> true;
+        ensure_valid_modulechar(C) when C == $_ -> true.
 
 
 %% @doc return a unique temporary filename.
