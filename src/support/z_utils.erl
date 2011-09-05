@@ -229,12 +229,6 @@ url_encode(S) ->
 % hexdigit is from Mochiweb.
 
 -define(PERCENT, 37).  % $\%
--define(FULLSTOP, 46). % $\.
--define(QS_SAFE(C), ((C >= $a andalso C =< $z) orelse
-                     (C >= $A andalso C =< $Z) orelse
-                     (C >= $0 andalso C =< $9) orelse
-                     (C =:= ?FULLSTOP orelse C =:= $- orelse C =:= $~ orelse
-                      C =:= $_))).
 
 hexdigit(C) when C < 10 -> $0 + C;
 hexdigit(C) when C < 16 -> $A + (C - 10).
