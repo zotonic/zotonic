@@ -130,6 +130,11 @@ function check_options {
         usage
     fi
 
+    if [ "$SITE" != "`echo $SITE|sed -e 's/[^a-z_0-9]//g'`" ]; then
+        echo `basename $0`: Site name can only consist of lowercase alphanumeric and underscore characters. 1>&2
+        exit 1
+    fi
+
     # allow %%SITE%% syntax in db name and schema
     DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"`
     DBSCHEMA=`echo $DBSCHEMA|sed "s/%%SITE%%/$SITE/g"`
