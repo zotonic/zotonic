@@ -222,9 +222,11 @@ depickle(Data, Context) ->
 
 %%% URL ENCODE %%%
 
-url_encode(S) -> quote_plus(S).
+url_encode(S) -> 
+    %% @todo possible speedups for binaries
+    mochiweb_util:quote_plus(S).
 
-% quote_plus and hexdigit are from Mochiweb.
+% hexdigit is from Mochiweb.
 
 -define(PERCENT, 37).  % $\%
 -define(FULLSTOP, 46). % $\.
@@ -236,24 +238,6 @@ url_encode(S) -> quote_plus(S).
 
 hexdigit(C) when C < 10 -> $0 + C;
 hexdigit(C) when C < 16 -> $A + (C - 10).
-
-quote_plus(Atom) when is_atom(Atom) ->
-    quote_plus(atom_to_list(Atom));
-quote_plus(Int) when is_integer(Int) ->
-    quote_plus(integer_to_list(Int));
-quote_plus(String) ->
-    quote_plus(String, []).
-
-quote_plus([], Acc) ->
-    lists:reverse(Acc);
-quote_plus([C | Rest], Acc) when ?QS_SAFE(C) ->
-    quote_plus(Rest, [C | Acc]);
-quote_plus([$\s | Rest], Acc) ->
-    quote_plus(Rest, [$+ | Acc]);
-quote_plus([C | Rest], Acc) ->
-    <<Hi:4, Lo:4>> = <<C>>,
-    quote_plus(Rest, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc]).
-
 
 %%% URL PATH ENCODE %%%
 
