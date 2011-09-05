@@ -135,15 +135,7 @@ search_result(#search_sql{} = Q, Limit, Context) ->
 
 
 concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=GroupBy, order=Order, limit=SearchLimit, args=Args}, Limit1) ->
-    From1  = case From of
-	#search_sql{} ->
-	    case concat_sql_query(From, undefined) of
-		{SQL, []} -> "(" ++ SQL ++ ") AS ___aaaaaa"; %% postgres wants to see "AS ..." after inner select in from
-		{SQL, [{as, Alias}]} when is_list(Alias) -> "(" ++ SQL ++ ") AS " ++ Alias;
-		{_SQL, A} -> throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
-	    end;
-	_ -> From
-    end,
+    From1  = concat_sql_from(From),
     Where1 = case Where of
         [] -> [];
         _ -> "where " ++ Where
@@ -210,7 +202,36 @@ concat_where([W|Rest], []) ->
     concat_where(Rest, [W]);
 concat_where([W|Rest], Acc) ->
     concat_where(Rest, [W, " and "|Acc]).
-    
+
+
+%% @doc Process SQL from clause. We analyzing the input (it may be a string, list of #search_sql or/and other strings)
+%% @spec concat_sql_from(From) -> From1::string()
+concat_sql_from(From) -> 
+    Froms = concat_sql_from1(From),
+    string:join(Froms, ",").
+
+concat_sql_from1([H|_]=From) when is_integer(H) -> [From]; %% from is string?
+concat_sql_from1([#search_sql{} = From | T]) ->
+    Subquery = case concat_sql_query(From, undefined) of
+	{SQL, []} -> "(" ++ SQL ++ ") AS z_"++z_ids:id(); %% postgresql: alias for inner SELECT in FROM must be defined
+	{SQL, [{as, Alias}]} when is_list(Alias) -> "(" ++ SQL ++ ") AS " ++ Alias;
+	{_SQL, A} -> throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
+    end,
+    [Subquery | concat_sql_from1(T)];
+concat_sql_from1([{Source,Alias} | T]) ->
+    Alias2 = case z_utils:is_empty(Alias) of
+	false -> " AS " ++ z_convert:to_list(Alias);
+	_     -> []
+    end,
+    [concat_sql_from1(Source) ++ Alias2 | concat_sql_from1(T) ];
+concat_sql_from1([H|T]) ->
+    [concat_sql_from1(H) | concat_sql_from1(T)];
+concat_sql_from1([]) ->
+    [];
+concat_sql_from1(Something) ->	%% make list for records or other stuff
+    concat_sql_from1([Something]).
+
+
 
 %% @doc Create extra 'where' conditions for checking the access control
 %% @spec add_acl_check({Table, Alias}, Args, Q, Context) -> {Where, NewArgs}

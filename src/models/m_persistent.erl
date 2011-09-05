@@ -27,23 +27,50 @@
 -export([
     m_find_value/3,
     m_to_list/2,
-    m_value/2
+    m_value/2,
+
+    get/2,
+    get_props/2,
+    put/3
 ]).
 
 -include_lib("zotonic.hrl").
 
+-type id() :: binary() | string().
+-define(T_PERSISTENT, "persistent").
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
+-spec m_find_value(Key :: id(), Source :: #m{}, #context{}) -> term().
 m_find_value(Key, #m{value=undefined}, Context) ->
     z_context:get_persistent(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
+-spec m_to_list(Source :: #m{}, #context{}) -> list().
 m_to_list(#m{value=undefined}, _Context) ->
-	[].
+    [].
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
+-spec m_value(Source :: #m{}, #context{}) -> term().
 m_value(#m{value=undefined}, _Context) ->
-	undefined.
+    undefined.
+
+
+%% @doc Select full row by persistent id.
+-spec get(Id :: id(), #context{}) -> {ok, Props :: list()}.
+get(Id, Context) ->
+    z_db:select(?T_PERSISTENT, Id, Context).
+
+
+%% @doc Get only stored (persistent) props for session by id.
+-spec get_props(Id :: id(), Context :: #context{}) -> Props :: list() | 'undefined'.
+get_props(Id, Context) ->
+    z_db:q1("SELECT props FROM " ++ ?T_PERSISTENT ++ " WHERE id = $1", [Id], Context).
+
+
+%% @doc Save new persistent session data.
+-spec put(Id :: id(), Props :: list(), #context{}) -> ok.
+put(Id, Props, Context) ->
+    z_db:q("UPDATE " ++ ?T_PERSISTENT ++ " SET props = $2, modified = now() WHERE id = $1", [Id, Props], Context) == 1
+    orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, Props], Context),
+    ok.
 
