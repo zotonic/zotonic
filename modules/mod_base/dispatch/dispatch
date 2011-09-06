@@ -67,7 +67,7 @@
 
     %% API access
     {api,    ["api",module,method], resource_api, []},
-    {api,    ["api",module], 		resource_api, [{method_is_module, true}]},
+    {api,    ["api",module], 		resource_api, []},
     
     %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
     {favicon, ["favicon.ico"], resource_file_readonly, [ 

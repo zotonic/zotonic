@@ -45,13 +45,21 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
-    Context1 = z_context:ensure_qs(Context0),
+    Context1 = z_context:ensure_all(Context0),
     %% 'ping' the service to ensure we loaded all the existing services.
     z_service:all(Context1),
-    TheMod   = z_context:get_q("module", Context1),
-    Method = case z_context:get(method_is_module, Context1) of
-                 true -> TheMod;
-                 _ -> z_context:get_q("method", Context1)
+    TheMod = case z_context:get_q("module", Context1) of
+                 undefined -> z_convert:to_list(z_context:get(module, Context1));
+                 M -> M
+             end,
+    Method = case z_context:get_q("method", Context1) of
+                 undefined ->
+                     case z_convert:to_list(z_context:get(method, Context1)) of
+                         [] -> 
+                             TheMod; %% method == module name
+                         M2 -> M2
+                     end;
+                 M3 -> M3
              end,
     try
         Module  = list_to_existing_atom("service_" ++ TheMod ++ "_" ++ Method),
