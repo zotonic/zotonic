@@ -455,8 +455,9 @@ encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is
 encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
     %% Optionally render the text and html body
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
-    Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, Context),
-    Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, Context),
+    ContextRender = set_render_language(Vars, Context),
+    Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, ContextRender),
+    Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, ContextRender),
 
     %% Fetch the subject from the title of the HTML part or from the Email record
     Subject = case {Html, Email#email.subject} of
@@ -708,6 +709,19 @@ optional_render(Text, undefined, _Vars, _Context) ->
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     binary_to_list(iolist_to_binary(Output)).
+
+set_render_language(Vars, Context) ->
+    case proplists:get_value(recipient_id, Vars) of
+        UserId when is_integer(UserId) ->
+            case m_rsc:p_no_acl(UserId, pref_language, Context) of
+                Code when is_atom(Code), Code /= undefined -> 
+                    z_context:set_language(Code, Context);
+                _ ->
+                    Context
+            end;
+        _Other ->
+            Context
+   end.
     
 
 %% @doc Mark email as sent by adding the 'sent' timestamp. 
