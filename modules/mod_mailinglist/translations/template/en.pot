@@ -28,8 +28,8 @@ msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
 "click on the “show all recipients” link.</p><h3>Sender name and e-mail "
 "address</h3><p>The sender name and e-mail address can be set per mailing "
-"list. This defaults to the config key <tt>mod_emailer.email_from</tt>.  "
-"The <i>From</i> of the sent e-mails will be set to the sender name and "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and "
 "address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox "
 "filename is used for the automatic upload of complete recipients list. The "
 "filename must match the filename of the uploaded recipient list. The "
@@ -65,7 +65,7 @@ msgid ""
 "Act"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:24 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17 
+#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:24 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38 
 msgid ""
 "Actions"
 msgstr ""
@@ -131,7 +131,7 @@ msgid ""
 "subscription."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13 ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28 
+#: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12 ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13 
 msgid ""
 "Cancel"
 msgstr ""
@@ -248,7 +248,7 @@ msgid ""
 "Goodbye,"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:6 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:6 ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:6 
 msgid ""
 "Hello,"
 msgstr ""
@@ -281,7 +281,7 @@ msgid ""
 "Keep mailing"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:12 ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:11 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17 
+#: ./modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:11 ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17 ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:12 
 msgid ""
 "Kind Regards,"
 msgstr ""
@@ -291,7 +291,7 @@ msgid ""
 "Mailing Lists"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3 
 msgid ""
 "Mailing list"
 msgstr ""
@@ -306,7 +306,7 @@ msgid ""
 "Mailing list settings."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:9 ./modules/mod_mailinglist/templates/_admin_menu_module.tpl:2 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10 
+#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:9 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10 ./modules/mod_mailinglist/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Mailing lists"
 msgstr ""
@@ -316,7 +316,7 @@ msgid ""
 "Mailing status"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:14 ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10 
+#: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10 ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:14 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -386,7 +386,7 @@ msgid ""
 "Read this page on the web."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:22 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:14 
+#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:22 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:14 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33 
 msgid ""
 "Recipients"
 msgstr ""
@@ -407,7 +407,7 @@ msgid ""
 "Remove this recipient. No undo possible."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23 ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:2 
+#: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:2 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23 
 msgid ""
 "Scheduled"
 msgstr ""
@@ -606,7 +606,7 @@ msgid ""
 "Upload a list of recipients."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:12 
+#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:12 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19 
 msgid ""
 "Upload file"
 msgstr ""
@@ -679,7 +679,7 @@ msgid ""
 "bounced"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62 ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56 
+#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62 
 msgid ""
 "cancel"
 msgstr ""
@@ -694,7 +694,7 @@ msgid ""
 "click here to unsubscribe."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:43 ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8 
+#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:43 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46 
 msgid ""
 "delete"
 msgstr ""

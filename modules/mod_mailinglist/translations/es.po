@@ -10,9 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-11 17:20-0300\n"
+"PO-Revision-Date: 2011-09-07 11:31+0200\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,8 +25,20 @@ msgid "<em>withheld</em>"
 msgstr "<em>retenido</em>"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
-msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>mod_emailer.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Destinatarios</h3><p>Para agregar, eliminar o ver los destinatarios de las listas de correo, haga clic sobre el vínculo “mostrar todos los destinatarios”.</p><h3>Nombre del remitente y dirección de correo electrónico</h3><p>El nombre del remitente y la dirección de correo electrónico pueden configurarse para cada lista de correo. El valor por defecto usado es el de la clave de configuración <tt>mod_emailer.email_from</tt>.  El <i>Desde</i> de los correos enviados tendrá asignado el nombre del remitente y su dirección de correo.</p><h3>Subida automática de listas de destinatarios</h3><p>El nombre de archivo de destino se usa para subir automáticamente una lista de destinatarios completa. El nombre del archivo debe ser el mismo que el usado para la lista de destinatarios subida. La lista completa de destinatarios se reemplazará con aquellos presentes en el archivo de destino.</p><h3>Control de acceso</h3><p>Todo aquel que puede editar una lista de correo puede también enviar una página a la lista. Todo aquel que puede ver la lista de correo puede agregar una dirección de correo electrónico a la lista.</p>"
+msgid ""
+"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
+"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
+"address</h3><p>The sender name and e-mail address can be set per mailing "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
+"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
+"used for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</"
+"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
+"allowed to send a page to the mailing list. Everybody who can view the "
+"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr "<h3>Destinatarios</h3><p>Para agregar, eliminar o ver los destinatarios de las listas de correo, haga clic sobre el vínculo “mostrar todos los destinatarios”.</p><h3>Nombre del remitente y dirección de correo electrónico</h3><p>El nombre del remitente y la dirección de correo electrónico pueden configurarse para cada lista de correo. El valor por defecto usado es el de la clave de configuración <tt>site.email_from</tt>.  El <i>Desde</i> de los correos enviados tendrá asignado el nombre del remitente y su dirección de correo.</p><h3>Subida automática de listas de destinatarios</h3><p>El nombre de archivo de destino se usa para subir automáticamente una lista de destinatarios completa. El nombre del archivo debe ser el mismo que el usado para la lista de destinatarios subida. La lista completa de destinatarios se reemplazará con aquellos presentes en el archivo de destino.</p><h3>Control de acceso</h3><p>Todo aquel que puede editar una lista de correo puede también enviar una página a la lista. Todo aquel que puede ver la lista de correo puede agregar una dirección de correo electrónico a la lista.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:18
 msgid "<p>Sorry, something went wrong. Please try again later.</p>"
@@ -33,7 +46,8 @@ msgstr "<p>Disculpe, se produjo un error. Por favor reintente en un rato.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
 msgid "<p>Sorry, something went wrong. Please try to re-subscribe.</p>"
-msgstr "<p>Disculpe, se produjo un error. Por favor trate de resuscribirse.</p>"
+msgstr ""
+"<p>Disculpe, se produjo un error. Por favor trate de resuscribirse.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:23
 msgid "<p>Thank you. You are now subscribed.</p>"
@@ -48,6 +62,7 @@ msgid "Act"
 msgstr "Activar"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
 msgid "Actions"
 msgstr "Acciones"
@@ -61,20 +76,37 @@ msgid "Add recipient"
 msgstr "Agregar destinatario"
 
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:4
-msgid "After publication this page will be send to the following mailing lists:"
-msgstr "Después de la publicación esta página se enviará a las siguientes listas de correo:"
+msgid ""
+"After publication this page will be send to the following mailing lists:"
+msgstr ""
+"Después de la publicación esta página se enviará a las siguientes listas de "
+"correo:"
 
 #: modules/mod_mailinglist/templates/mailinglist.tpl:18
 msgid "All mailing lists"
 msgstr "Todas las listas de correo"
 
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38
+msgid "All processed"
+msgstr ""
+
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:23
-msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "Todos los receptores de la lista de correo. Puede subir o bajar esta lista, que debe ser un archivo de texto con una dirección de correo electrónico por línea."
+msgid ""
+"All recipients of the mailing list. You can upload or download this list, "
+"which must be a file with one e-mail address per line."
+msgstr ""
+"Todos los receptores de la lista de correo. Puede subir o bajar esta lista, "
+"que debe ser un archivo de texto con una dirección de correo electrónico por "
+"línea."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:14
-msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "Cualquier página puede enviarse como correo. Puede enviar un correo desde cualquier página de edición. En esta página puede agregar o eliminar listas de correo y sus destinatarios."
+msgid ""
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
+msgstr ""
+"Cualquier página puede enviarse como correo. Puede enviar un correo desde "
+"cualquier página de edición. En esta página puede agregar o eliminar listas "
+"de correo y sus destinatarios."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
@@ -84,14 +116,23 @@ msgstr "Está seguro de que desea cancelar el correo a"
 msgid "Are you sure you want to delete the mailing list"
 msgstr "Está seguro de que desea eliminar la lista de correo"
 
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61
+msgid ""
+"Are you sure you want to reset the statistics for this mailing? This means "
+"that if you send the mailing again afterwards, recipients might have gotten "
+"the mailing twice."
+msgstr ""
+
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
-msgid "Before you will receive any further mail you need to confirm your subscription."
-msgstr "Para poder empezar a recibir correos antes debe confirmar su suscripción."
+msgid ""
+"Before you will receive any further mail you need to confirm your "
+"subscription."
+msgstr ""
+"Para poder empezar a recibir correos antes debe confirmar su suscripción."
 
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:26
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:13
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -108,16 +149,31 @@ msgid "Clear"
 msgstr "Limpiar"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:13
-msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
-msgstr "Presione <strong>desuscribir</strong> para eliminarse a usted mismo de la lista de correo."
+msgid ""
+"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgstr ""
+"Presione <strong>desuscribir</strong> para eliminarse a usted mismo de la "
+"lista de correo."
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:6
+#: modules/mod_mailinglist/templates/mailing_page.tpl:8
 msgid "Click here when you can’t read the message below."
 msgstr "Presione acá cuando no pueda leer el mensaje de abajo."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:18
-msgid "Click the button below to confirm your subscription to this mailing list."
-msgstr "Presione el botón de abajo para confirmar su suscripción a esta lista de correo."
+msgid ""
+"Click the button below to confirm your subscription to this mailing list."
+msgstr ""
+"Presione el botón de abajo para confirmar su suscripción a esta lista de "
+"correo."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:31
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:36
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:40
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:42
+msgid "Click to view log entries"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
 msgid "Delete all recipients from this list?"
@@ -137,9 +193,11 @@ msgstr "Bajar lista de todos los destinatarios activos."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:18
 msgid "Downloading active recipients list. Check your download window."
-msgstr "Bajando lista de destinatarios activos. Verifique la ventana donde se esté bajando el archivo."
+msgstr ""
+"Bajando lista de destinatarios activos. Verifique la ventana donde se esté "
+"bajando el archivo."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:28
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
 msgid "Dropbox filename (optional)"
 msgstr "Nombre de archivo en Dropbox (opcional)"
 
@@ -151,9 +209,16 @@ msgstr "Editar la lista de correo &raquo;"
 msgid "Email"
 msgstr "Dirección de correo"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:17
-msgid "Email page"
-msgstr "Página de correo"
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
+#, fuzzy
+msgid ""
+"Enter the e-mail address of the recipient. The name of the recipient is "
+"optional."
+msgstr " "
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:27
+msgid "Externally managed list &mdash; no (un)subscribe links"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:22
 msgid "First name"
@@ -163,13 +228,13 @@ msgstr "Nombre"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "De ahora en más recibirá correos de nuesta lista."
 
-#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
-msgid "Give the e-mail address of the recipient, and check if the recipient will receive a welcome e-mail message. The name of the recipient is optional."
-msgstr " "
-
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3
 msgid "Give your e-mail address to subscribe to"
 msgstr "Ingrese su dirección de correo electrónico para suscribirse a"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9
+msgid "Go to mailinglist page"
+msgstr "Enviar a lista de correo"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:6
 msgid "Goodbye,"
@@ -181,13 +246,25 @@ msgid "Hello,"
 msgstr "Hola,"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
 msgid "Help about mailing lists."
+msgstr "Ayuda acerca de listas de correo."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:14
+msgid "Help about the mailing page."
 msgstr "Ayuda acerca de listas de correo."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:9
 msgid "Hope to see you again."
 msgstr "Esperamos verlo nuevamente,"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid ""
+"It appears you have sent\n"
+"    this page once already to this list. If you send it again, only\n"
+"    the recipients that did not yet receive the mail will get it. As a\n"
+"    safety-caution, it is impossible to send the same page twice to\n"
+"    the same e-mail address."
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
@@ -204,6 +281,7 @@ msgid "Mailing Lists"
 msgstr "Listas de Correo"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3
 msgid "Mailing list"
 msgstr "Lista de correo"
 
@@ -216,12 +294,17 @@ msgid "Mailing list settings."
 msgstr "Configuración de lista de correo."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
 #: modules/mod_mailinglist/templates/_admin_menu_module.tpl:2
 msgid "Mailing lists"
 msgstr "Listas de correo"
 
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
+msgid "Mailing status"
+msgstr "Listas de Correo"
+
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:10
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:14
 msgid "Need more help?"
 msgstr "¿Necesita más ayuda?"
 
@@ -230,6 +313,7 @@ msgid "New mailing list"
 msgstr "Nueva lista de correo"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:50
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "No items found"
 msgstr "No se encontraron ítems."
 
@@ -237,9 +321,17 @@ msgstr "No se encontraron ítems."
 msgid "No recipients"
 msgstr "No hay destinatarios."
 
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:40
+msgid "OK"
+msgstr ""
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:24
 msgid "Our excuses for the inconvenience."
 msgstr "Discúlpenos por los inconvenientes causados."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "Please confirm that you want to send the page"
+msgstr "Seleccione una lista de correo adonde enviar la página"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:16
 msgid "Please confirm your subscription"
@@ -253,6 +345,10 @@ msgstr "Por favor confirme su suscripción en"
 msgid "Please follow"
 msgstr "Por favor siga"
 
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid "Please note:"
+msgstr "Por favor siga:"
+
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:8
 msgid "Please unsubscribe"
 msgstr "Por favor desuscríbase"
@@ -261,18 +357,23 @@ msgstr "Por favor desuscríbase"
 msgid "Prefix"
 msgstr "Prefijo"
 
-#: modules/mod_mailinglist/templates/mailing_page.tpl:21
+#: modules/mod_mailinglist/templates/mailing_page.tpl:24
 msgid "Read this page on the web."
 msgstr "Lea esta página en la web."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:14
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
 msgid "Recipients"
 msgstr "Destinatarios"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:15
-msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
-msgstr "Los destinatarios pueden suscribirse a través de correo electrónico (en un formulario de registración simple) o como personas suscriptas en el sistema."
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+"Los destinatarios pueden suscribirse a través de correo electrónico (en un "
+"formulario de registración simple) o como personas suscriptas en el sistema."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:9
@@ -292,54 +393,42 @@ msgstr "Agendado"
 msgid "See the"
 msgstr "Ver el"
 
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:2
-msgid "Select a mailing list to send the page"
-msgstr "Seleccione una lista de correo adonde enviar la página"
-
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:13
-msgid "Select a mailing list to send this page to."
-msgstr "Seleccione una lista de correo adonde enviar esta página."
-
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
 msgstr "Seleccione un archivo"
 
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:7
-msgid "Select mailing list"
-msgstr "Seleccione una lista de correo"
-
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:12
-msgid "Send e-mail"
-msgstr "Enviar correo electrónico"
-
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:25
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:27
 msgid "Send mailing"
 msgstr "Enviar correo"
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:15
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send test mailing"
 msgstr "Enviar correo de prueba"
 
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:1
-msgid "Send the page"
-msgstr "Enviar la página"
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "Send the mailing automatically after the publication start date of"
+msgstr ""
+"Los correos se enviarán después de la fecha de comienzo de publicación de"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
+msgid ""
+"Send the mailing immediately after the \"published\" checkbox has been "
+"checked in the edit page."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
+msgid ""
+"Send the mailing right now, but do not include a link back to the website."
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9
-msgid "Send this page to a mailing list."
+#, fuzzy
+msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr "Enviar esta página a una lista de correo."
 
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:17
-msgid "Send this page to an e-mail address."
-msgstr "Enviar esta página a una dirección de correo electrónico."
-
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:15
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send this page to the test mailing list."
 msgstr "Enviar esta página a la lista de correo de prueba."
-
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3
-msgid "Send to mailing list"
-msgstr "Enviar a lista de correo"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:50
 msgid "Send welcome"
@@ -353,17 +442,21 @@ msgstr "Dirección del remitente de correo electrónico (opcional)"
 msgid "Sender name for e-mails (optional)"
 msgstr "Nombre del remitente de correo electrónico (opcional)"
 
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:3
-msgid "Sent the e-mail."
-msgstr "Enviar el correo electrónico."
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:15
+msgid "Sent on"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:12
 msgid "Show all recipients &raquo;"
 msgstr "Mostrar todos los destinatarios &raquo;"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:25
-msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
-msgstr "Disculpe, no se ha podido suscribirlo a la lista de correo. Por favor reintente un un rato con otra dirección de correo electrónico."
+msgid ""
+"Sorry, I could not subscribe you to the mailing list. Please try again later "
+"or with another e-mail address."
+msgstr ""
+"Disculpe, no se ha podido suscribirlo a la lista de correo. Por favor "
+"reintente un un rato con otra dirección de correo electrónico."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:28
 msgid "Sorry, can’t confirm your subscription"
@@ -372,6 +465,10 @@ msgstr "Disculpe, no se puede confirmar su suscripción"
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:22
 msgid "Sorry, can’t find your subscription"
 msgstr "Disculpe, no se puede encontrar su suscripción"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:16
+msgid "Statistics"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:21
 msgid "Subscribe"
@@ -386,20 +483,26 @@ msgid "Thank you"
 msgstr "Gracias"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:30
-msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
-msgstr "La clave de confirmación es desconocida. Ya confirmó o alguna otra cosa falló."
+msgid ""
+"The confirmation key is unknown. Either you already confirmed or something "
+"else went wrong."
+msgstr ""
+"La clave de confirmación es desconocida. Ya confirmó o alguna otra cosa "
+"falló."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:23
-msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "La clave en su vínculo no se corresponde con ninguna suscripción. O ya se había desuscripto o la lista de correo ha sido borrada."
+msgid ""
+"The key in your link does not match any subscription. Either you already "
+"unsubscribed, or the mailing list has been deleted."
+msgstr ""
+"La clave en su vínculo no se corresponde con ninguna suscripción. O ya se "
+"había desuscripto o la lista de correo ha sido borrada."
 
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:21
-msgid "The mailing will be send after the publication start date of"
-msgstr "Los correos se enviarán después de la fecha de comienzo de publicación de"
-
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:18
-msgid "The mailing will be send after this page has been published."
-msgstr "Los correos se enviarán después que esta página haya sido publicada."
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
+msgid ""
+"The page you are trying to e-mail is not yet published. What do you want to "
+"do?"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -409,11 +512,35 @@ msgstr "La lista de destinatarios de la lista de correo también será borrada."
 msgid "This can not be undone"
 msgstr "Esto no se puede deshacer"
 
-#: modules/mod_mailinglist/templates/email_page.tpl:6
-msgid "This mail was sent to you because someone visiting"
-msgstr "Este correo se le envió porque alguien visitó"
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
+msgid ""
+"This is a \"private\", externally managed list. Recipients will not receive "
+"any subscribe/unsubscribe messages."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:14
+msgid ""
+"This overview allows you to send the current page to a group of recipients, "
+"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
+"which shows how the mailing will look like when it is sent; choose 'send "
+"test mailing' to send it to the predefined list of test e-mail addresses. "
+"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
+"the table below, together with statistics on when it was sent and to how "
+"many recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:13
+msgid "This page can be sent to different mailing lists."
+msgstr "Enviar esta página a la lista de correo de prueba."
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
+msgid ""
+"Tick the checkbox if you want the recipient to receive a welcome e-mail "
+"message."
+msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:20
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:13
 msgid "Title"
 msgstr "Título"
 
@@ -430,8 +557,13 @@ msgid "Unsubscribe from mailing list"
 msgstr "Desuscribirse de la lista de correo"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:1
-msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
-msgstr "Subir un archivo con destinatarios. El archivo debe contener una sola dirección de correo electrónico por línea. El juego de caracteres del archivo debe ser utf-8."
+msgid ""
+"Upload a file with recipients. The file must contain a single e-mail address "
+"per line. The file’s character set must be utf-8."
+msgstr ""
+"Subir un archivo con destinatarios. El archivo debe contener una sola "
+"dirección de correo electrónico por línea. El juego de caracteres del "
+"archivo debe ser utf-8."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
 msgid "Upload a list of recipients."
@@ -447,7 +579,8 @@ msgid "Welcome to"
 msgstr "Bienvenido a"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
-msgid "When you don’t want to receive any mail then please ignore this message."
+msgid ""
+"When you don’t want to receive any mail then please ignore this message."
 msgstr "Si no desea recibir más correo entonces por favor ignore este mensaje."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10
@@ -455,8 +588,13 @@ msgid "When you don’t want to receive any more mail then"
 msgstr "Si no desea recibir más correo entonces"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:12
-msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
-msgstr "No tiene permisos para ver o editar la lista de destinatarios. Debe tener permisos de edición sobre la lista de correo para cambiar o ver los destinatarios."
+msgid ""
+"You are not allowed to view or edit the recipients list. You need to have "
+"edit permission on the mailing list to change and view the recipients."
+msgstr ""
+"No tiene permisos para ver o editar la lista de destinatarios. Debe tener "
+"permisos de edición sobre la lista de correo para cambiar o ver los "
+"destinatarios."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:8
 msgid "You are now subscribed to our mailing list"
@@ -470,17 +608,12 @@ msgstr "Ya se ha desuscripto de"
 msgid "You are now unsubscribed from the mailing list"
 msgstr "Ya se ha desuscripto de la lista de correo"
 
-#: modules/mod_mailinglist/templates/email_page.tpl:7
-msgid "You can"
-msgstr "Puede"
-
-#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
-msgid "You can send this page as an e-mail to everyone in a mailing list. If the page has a future publication start date, is not yet published or is not visible for the world then the mail will be send after publication of the page."
-msgstr "Puede enviar esta página como un correo electrónico a todos en  una lista de correo. Si la página tiene una fecha de publicación en el futuro, aún no ha sido publicada o no es visible para todo el mundo entonces el correo será enviado después de la publicación de la página."
-
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:31
-msgid "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "Puede tratar de resuscribirse a una de nuestras listas de correo en la columna del costado."
+msgid ""
+"You can try to re-subscribe to one of our mailing lists in the side column."
+msgstr ""
+"Puede tratar de resuscribirse a una de nuestras listas de correo en la "
+"columna del costado."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:3
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -492,17 +625,34 @@ msgstr "Recibirá una confirmación en su correo electrónico."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Usted o alguien más agregaron su dirección de correo electrónico a nuestra lista de correo"
+msgstr ""
+"Usted o alguien más agregaron su dirección de correo electrónico a nuestra "
+"lista de correo"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:20
-msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "Su dirección de correo electrónico fue agregada a nuestra lista de correo. Un correo de confirmación le llegará pronto a su casilla de correo electrónico. Si no lo recibe por favor revise su carpeta de correo basura."
+msgid ""
+"Your e-mail address is added to the mailing list. A confirmation mail is "
+"sent to your e-mail address and will arrive shortly. When you don’t receive "
+"it, then please check your spam folder."
+msgstr ""
+"Su dirección de correo electrónico fue agregada a nuestra lista de correo. "
+"Un correo de confirmación le llegará pronto a su casilla de correo "
+"electrónico. Si no lo recibe por favor revise su carpeta de correo basura."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "bounced"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62
 msgid "cancel"
 msgstr "cancelar"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61
+msgid "clear"
+msgstr "Limpiar"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10
 msgid "click here to unsubscribe."
@@ -514,31 +664,69 @@ msgstr "haga clic aquí para desuscribirse."
 msgid "delete"
 msgstr "borrar"
 
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:7
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:13
 msgid "e-Mail"
 msgstr "correo electrónico"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:18
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:56
 msgid "edit"
 msgstr "editar"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:42
+msgid "error"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
+#, fuzzy
+msgid "has been sent to the following lists:"
+msgstr ""
+"Después de la publicación esta página se enviará a las siguientes listas de "
+"correo:"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
+msgid "has never been sent yet."
+msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12
 msgid "mailing list"
 msgstr "lista de correo"
 
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:9
+#, fuzzy
+msgid "mailinglist status page"
+msgstr "Configuración de lista de correo."
+
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "or copy and paste the address below in your browser."
 msgstr "o copie y pegue la dirección de abajo en su navegador."
 
-#: modules/mod_mailinglist/templates/email_page.tpl:7
-msgid "read the full article online."
-msgstr "leer el artículo completo en línea"
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+#, fuzzy
+msgid "preview mailing"
+msgstr "Continuar enviando"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:36
+msgid "processed"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
 msgid "recipients"
 msgstr "destinatarios"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:32
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:47
+msgid "scheduled"
+msgstr "Agendado"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59
+msgid "send mailing"
+msgstr "Enviar correo"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59
+msgid "send to "
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:58
 msgid "subscribe"
@@ -552,14 +740,9 @@ msgstr "personas suscriptas &raquo;"
 msgid "this link to confirm"
 msgstr "este vínculo para confirmar"
 
-#: modules/mod_mailinglist/templates/email_page.tpl:6
-msgid "thought you would be interested."
-msgstr "pensé que podría estar interesado."
-
-#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:2
-#: modules/mod_mailinglist/templates/_dialog_email_page.tpl:1
-msgid "to:"
-msgstr "a:"
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "to the list"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:41
 msgid "view"
@@ -573,3 +756,53 @@ msgstr "si no quiere recibir más correo de esta lista."
 msgid "with your e-mail address"
 msgstr "con su dirección de correo"
 
+#~ msgid "Email page"
+#~ msgstr "Página de correo"
+
+#~ msgid "Select a mailing list to send this page to."
+#~ msgstr "Seleccione una lista de correo adonde enviar esta página."
+
+#~ msgid "Select mailing list"
+#~ msgstr "Seleccione una lista de correo"
+
+#~ msgid "Send e-mail"
+#~ msgstr "Enviar correo electrónico"
+
+#~ msgid "Send the page"
+#~ msgstr "Enviar la página"
+
+#~ msgid "Send this page to an e-mail address."
+#~ msgstr "Enviar esta página a una dirección de correo electrónico."
+
+#~ msgid "Sent the e-mail."
+#~ msgstr "Enviar el correo electrónico."
+
+#~ msgid "The mailing will be send after this page has been published."
+#~ msgstr ""
+#~ "Los correos se enviarán después que esta página haya sido publicada."
+
+#~ msgid "This mail was sent to you because someone visiting"
+#~ msgstr "Este correo se le envió porque alguien visitó"
+
+#~ msgid "You can"
+#~ msgstr "Puede"
+
+#~ msgid ""
+#~ "You can send this page as an e-mail to everyone in a mailing list. If the "
+#~ "page has a future publication start date, is not yet published or is not "
+#~ "visible for the world then the mail will be send after publication of the "
+#~ "page."
+#~ msgstr ""
+#~ "Puede enviar esta página como un correo electrónico a todos en  una lista "
+#~ "de correo. Si la página tiene una fecha de publicación en el futuro, aún "
+#~ "no ha sido publicada o no es visible para todo el mundo entonces el "
+#~ "correo será enviado después de la publicación de la página."
+
+#~ msgid "read the full article online."
+#~ msgstr "leer el artículo completo en línea"
+
+#~ msgid "thought you would be interested."
+#~ msgstr "pensé que podría estar interesado."
+
+#~ msgid "to:"
+#~ msgstr "a:"
