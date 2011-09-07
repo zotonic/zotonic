@@ -292,20 +292,21 @@ send_mailing_process(ListId, PageId, Context) ->
     Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
     SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
     {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
+    From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
-        {id,PageId}, {list_id, ListId}, {email_from, m_mailinglist:get_email_from(ListId, Context)}
+        {id,PageId}, {list_id, ListId}, {email_from, From}
     ],
     
-    [ send(true, Email, Options, Context) || Email <- Direct ],
-    [ send(false, Email, Options, Context) || Email <- Queued ],
+    [ send(true, Email, From, Options, Context) || Email <- Direct ],
+    [ send(false, Email, From, Options, Context) || Email <- Queued ],
     ok.
 
 
-    send(_IsDirect, undefined, _Options, _Context) ->
+    send(_IsDirect, undefined, _From, _Options, _Context) ->
         skip;
-    send(IsDirect, Id, Options, Context) when is_integer(Id) ->
-        send(IsDirect, m_rsc:p_no_acl(Id, email, Context), [{recipient_id,Id}|Options], Context);
-    send(IsDirect, Email, Options, Context) ->
+    send(IsDirect, Id, From, Options, Context) when is_integer(Id) ->
+        send(IsDirect, m_rsc:p_no_acl(Id, email, Context), From, [{recipient_id,Id}|Options], Context);
+    send(IsDirect, Email, From, Options, Context) ->
         case z_convert:to_list(z_string:trim(Email)) of
             [] -> skip;
             Email1 ->
@@ -318,7 +319,7 @@ send_mailing_process(ListId, PageId, Context) ->
                         ok;
                     false ->
                         Attachments = mod_mailinglist:page_attachments(Id, Context),
-                        z_email_server:send(#email{queue=not(IsDirect), to=Email1,
+                        z_email_server:send(#email{queue=not(IsDirect), to=Email1, from=From,
                                                    html_tpl={cat, "mailing_page.tpl"}, vars=[{email,Email1}|Options], attachments=Attachments}, Context)
                 end
         end.
