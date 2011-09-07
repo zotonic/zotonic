@@ -19,7 +19,7 @@
 
 			<p>Access control controls what an user is allowed to do and see.  The roles define different groups of rights.  Users can be made member of multiple roles.</p>
 			
-			<h3 class="above-list">Predicate overview</h3>
+			<h3 class="above-list">ACL role overview</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">
 					<span class="zp-20">Title</span>
@@ -46,7 +46,7 @@
 						</span>
 						<span class="zp-10">
 							{% button disabled=p.is_protected text="delete" action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
-							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=p.id} %}
+							{% button text="edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
 						</span>
 					</a>
 					{% endwith %}
