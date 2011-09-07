@@ -2795,6 +2795,10 @@ tinymce.html.Styles = function(settings, schema) {
 						}
 					}
 
+					// Keep nodes which contain comments
+					if (node.type == 8)
+						return false;
+
 					// Keep non whitespace text nodes
 					if ((node.type === 3 && !whiteSpaceRegExp.test(node.value)))
 						return false;
