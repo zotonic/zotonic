@@ -404,11 +404,11 @@ reset_log_email(ListId, PageId, Context) ->
     ok.
 
 
-%% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to mod_emailer.email_from config variable.
+%% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
 get_email_from(ListId, Context) ->
     FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
                     Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_list(m_config:get_value(mod_emailer, email_from, Context));
+                        z_convert:to_list(m_config:get_value(site, email_from, Context));
                     RT ->
                         z_convert:to_list(RT)
                 end,
