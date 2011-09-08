@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:68 
+msgid ""
+"Allow multiple entries per user/browser."
+msgstr ""
+
 #: ./modules/mod_survey/templates/_action_dialog_survey_question_delete.tpl:1 
 msgid ""
 "Are you sure you want to delete this question?"
@@ -33,7 +38,7 @@ msgid ""
 "Below you can define your survey. Drag items from the left to the right."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:59 ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:31 
+#: ./modules/mod_survey/templates/_survey_question_page.tpl:59 ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:34 
 msgid ""
 "Cancel"
 msgstr ""
@@ -68,9 +73,19 @@ msgid ""
 "False"
 msgstr ""
 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:53 
+msgid ""
+"Help about surveys"
+msgstr ""
+
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:9 
 msgid ""
 "Name"
+msgstr ""
+
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:53 
+msgid ""
+"Need more help?"
 msgstr ""
 
 #: ./modules/mod_survey/templates/_survey_question_page.tpl:63 
@@ -94,12 +109,12 @@ msgid ""
 "Question"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:73 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:77 
 msgid ""
 "Question Templates"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:25 
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:26 
 msgid ""
 "Required?"
 msgstr ""
@@ -109,7 +124,7 @@ msgid ""
 "Results"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:30 
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:31 
 msgid ""
 "Save"
 msgstr ""
@@ -119,7 +134,7 @@ msgid ""
 "Show results to user after completion of survey."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:68 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:72 
 msgid ""
 "Show survey results"
 msgstr ""
@@ -171,7 +186,7 @@ msgid ""
 "True"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:27 
+#: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:28 
 msgid ""
 "Whether the question needs answering or not."
 msgstr ""
@@ -192,7 +207,7 @@ msgid ""
 "on the right."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:80 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:84 
 msgid ""
 "Your survey"
 msgstr ""
