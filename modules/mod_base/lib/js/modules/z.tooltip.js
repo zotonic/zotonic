@@ -50,7 +50,7 @@ $.widget("ui.tooltip",
 			var left = $(this).position().left;
 			var top  = $(this).position().top;
 							
-			tip.css({top: top - 30});
+			tip.css({top: top - tip.height()-10});
 			
 			if(left + tip.width() > $(window).width())
 			{
