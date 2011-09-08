@@ -50,7 +50,7 @@
 {% block widget_content %}
 <fieldset class="admin-form survey-editor">
 	<div class="notification notice">
-		{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: 'Help about predicates.', text: '{_ You can create your survey by dragging the Question templates to the survey on the right. _}', width: '450px'">Need more help?</a>
+		{_ Below you can define your survey. Drag items from the left to the right. _} <a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about surveys"|escapejs }}', text: '{{ _"You can create your survey by dragging the Question templates to the survey on the right."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
 	</div>
 
 	<div class="admin-form form-item">
