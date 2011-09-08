@@ -1,0 +1,123 @@
+# Dutch date names
+# Copyright (C) 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+# This file is distributed under the same license as the Zotonic package.
+# Arjan Scherpenisse <arjan@scherpenisse.net>, 2011
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-09-08 09:38+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:37 
+msgid ""
+"April"
+msgstr "april"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:41 
+msgid ""
+"August"
+msgstr "augustus"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:45 
+msgid ""
+"December"
+msgstr "december"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:35 
+msgid ""
+"February"
+msgstr "februari"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:28 
+msgid ""
+"Friday"
+msgstr "vrijdag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:34 
+msgid ""
+"January"
+msgstr "januari"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:40 
+msgid ""
+"July"
+msgstr "juli"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:39 
+msgid ""
+"June"
+msgstr "juni"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:36 
+msgid ""
+"March"
+msgstr "maart"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:38 
+msgid ""
+"May"
+msgstr "mei"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:24 
+msgid ""
+"Monday"
+msgstr "maandag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:44 
+msgid ""
+"November"
+msgstr "november"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:43 
+msgid ""
+"October"
+msgstr "oktober"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:29 
+msgid ""
+"Saturday"
+msgstr "zaterdag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:42 
+msgid ""
+"September"
+msgstr "september"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:30 
+msgid ""
+"Sunday"
+msgstr "zondag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:27 
+msgid ""
+"Thursday"
+msgstr "donderdag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:25 
+msgid ""
+"Tuesday"
+msgstr "dinsdag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:26 
+msgid ""
+"Wednesday"
+msgstr "woensdag"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:19 
+msgid ""
+"midnight"
+msgstr "middernacht"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:21 
+msgid ""
+"noon"
+msgstr "middag"
