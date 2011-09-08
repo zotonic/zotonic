@@ -75,13 +75,13 @@ identify_file_direct(File, OriginalFilename) ->
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
 			%% Last resort, give ImageMagick a try
-			identify_file_imagemagick(File);
+			identify_file_imagemagick(OsFamily, File);
 		{ok, Props} ->
 			%% Images, pdf and ps are further investigated by ImageMagick
 			case proplists:get_value(mime, Props) of
-				"image/" ++ _ -> identify_file_imagemagick(File);
-				"application/pdf" -> identify_file_imagemagick(File);
-				"application/postscript" -> identify_file_imagemagick(File);
+				"image/" ++ _ -> identify_file_imagemagick(OsFamily, File);
+				"application/pdf" -> identify_file_imagemagick(OsFamily, File);
+				"application/postscript" -> identify_file_imagemagick(OsFamily, File);
 				_Mime -> {ok, Props}
 			end
 	end.
@@ -159,9 +159,9 @@ identify_file_os(unix, File, OriginalFilename) ->
 
 %% @spec identify_file_imagemagick(ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
-identify_file_imagemagick(ImageFile) ->
+identify_file_imagemagick(OsFamily, ImageFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
-    Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2>/dev/null"),
+    Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2> " ++ devnull(OsFamily)),
     % ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
     % sometimes:
     % test.jpg[0]=>test.jpg JPEG 2126x1484 2126x1484+0+0 DirectClass 8-bit 836.701kb 0.130u 0:02
@@ -193,6 +193,9 @@ identify_file_imagemagick(ImageFile) ->
             ?LOG("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
             {error, "unknown result from 'identify': '"++Line1++"'"}
     end.
+
+devnull(win32) -> "nul";
+devnull(unix)  -> "/dev/null".
 
 
 %% @spec mime(String) -> MimeType
