@@ -348,9 +348,16 @@ send_email(Id, Recipient, Email, Context, State) ->
     end.
 
 
+% if user overrides VERP, return user defined VERP otherwise the default 
+get_verp(Id, Context) ->
+    case m_config:get_value(site, smtp_verp_override, Context) of
+        undefined -> "<"++bounce_email(Id, Context)++">";
+        VERP      -> z_convert:to_list(VERP)
+    end.
+
 spawn_send(Id, Recipient, Email, Context, State) ->
     F = fun() ->
-            VERP = "<"++bounce_email(Id, Context)++">",
+            VERP = get_verp(Id, Context),
 
             From = get_email_from(Email#email.from, VERP, State, Context),
             Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
