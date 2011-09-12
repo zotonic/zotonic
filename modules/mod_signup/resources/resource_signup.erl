@@ -109,13 +109,13 @@ event({submit, {signup, [{xs_props,Xs}]}, "signup_form", _Target}, Context) ->
             undefined ->
                 V = case Validated of
                     true -> z_context:get_q_validated(Prop, Context);
-                    false -> z_context:get_q(Prop, Context, "")
+                    false -> z_context:get_q(Prop, Context)
                 end,
                 V1 = case {V,Prop} of
-                    {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context, "");
+                    {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context);
                     _ -> V
                 end,
-                z_string:trim(V1);
+                z_string:trim(z_convert:to_list(V1));
             V -> V
         end.
     

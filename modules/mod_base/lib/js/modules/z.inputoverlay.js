@@ -2,7 +2,7 @@
 ----------------------------------------------------------
 
 @package:	Zotonic 2010	
-@Author: 	Marc Worrell <marc@worrell.nl>
+@Author:	Marc Worrell <marc@worrell.nl>
 
 Copyright 2010 Marc Worrell
 
@@ -21,8 +21,8 @@ limitations under the License.
 ---------------------------------------------------------- */
 
 /*
-This widget overlays a label field with an input field.  When the input
-is empty the label is visible.  When there is content then the label is hidden.
+This widget overlays a label field with an input field.	 When the input
+is empty the label is visible.	When there is content then the label is hidden.
 
 HTML:
 
@@ -70,40 +70,43 @@ $.widget("ui.inputoverlay",
 	_init: function() 
 	{
 		var self = this;
-		var obj  = this.element;
+		var obj	 = this.element;
 		var input = $('input', obj);
 		var span = $('span', obj);
 		
 		if (!input.length) {
 			input = $('textarea', obj);
 		}
+		if ($(input).val() != "") {
+			$(span).addClass('hidden');
+		}
 
-	    var func = function(focus) {
-		    if ($(input).val() == "") {
-		        if (focus) {
-    		        $(span).removeClass('hidden').addClass('focus');
-		        } else {
-    		        $(span).removeClass('hidden').removeClass('focus');
-		        }
-		    } else {
-		        $(span).removeClass('focus').addClass('hidden');
-		    }
+		var func = function(focus) {
+			if ($(input).val() == "") {
+				if (focus) {
+					$(span).removeClass('hidden').addClass('focus');
+				} else {
+					$(span).removeClass('hidden').removeClass('focus');
+				}
+			} else {
+				$(span).removeClass('focus').addClass('hidden');
+			}
 		};
 		
 		input.change(function() {
-		    func(true);
+			func(true);
 		}).focus(function() {
-		    func(true);
+			func(true);
 		}).blur(function() {
-		    func(false);
+			func(false);
 		}).keydown(function() {
-		    setTimeout(function(){func(true);},10);
+			setTimeout(function(){func(true);},10);
 		}).keyup(function() {
-		    func(true);
+			func(true);
 		});
 		
 		input.closest("form").bind("reset", function() {
-		    setTimeout(function(){func(true);},10);
+			setTimeout(function(){func(true);},10);
 		});
 		
 		span.click(function() {
@@ -111,13 +114,13 @@ $.widget("ui.inputoverlay",
 		});
 		
 		if (input.attr('autocomplete') == 'on') {
-    	    setInterval(function() {
-    		    if ($(input).val() == "") {
-    		        $(span).removeClass('hidden');
-    		    } else {
-    		        $(span).addClass('hidden');
-    		    }
-    		}, 100);
+			setInterval(function() {
+				if ($(input).val() == "") {
+					$(span).removeClass('hidden');
+				} else {
+					$(span).addClass('hidden');
+				}
+			}, 100);
 		}
-    }    
+	}	 
 });

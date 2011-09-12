@@ -184,12 +184,17 @@ props_to_rsc(Props, IsVerified, Context) ->
         | Props
     ],
     case proplists:is_defined(title, Props1) of
-        true -> Props1;
+        true -> 
+            Props1;
         false ->
-            [ {title, z_convert:to_list(proplists:get_value(name_first, Props1))
-                        ++ " "
-                        ++ z_convert:to_list(proplists:get_value(name_surname, Props1))}
-                | Props1 ]
+            Name = [
+                z_convert:to_list(proplists:get_value(name_first, Props1)),
+                z_convert:to_list(proplists:get_value(name_surname_prefix, Props1)),
+                z_convert:to_list(proplists:get_value(name_surname, Props1))
+            ],
+            Name1 = lists:filter(fun(S) -> not z_utils:is_empty(S) end, Name),
+            Name2 = string:join(Name1, " "),
+            [ {title, Name2} | Props1 ]
     end.
 
 

@@ -392,7 +392,7 @@ update_js(CssSelector, Html, <<"val">>, AfterEffects) ->
 update_js(CssSelector, Html, <<"replaceWith">>, AfterEffects) ->
     update_js_selector_first(CssSelector, Html, <<"replaceWith">>, AfterEffects);
 update_js(CssSelector, Html, Function, AfterEffects) ->
-    [ $$, $(, $", z_utils:js_escape(Html), $", $), 
+    [ <<"z_text_to_nodes(\"">>, z_utils:js_escape(Html), $", $), 
       $., Function, $(, quote_css_selector(CssSelector), $), 
       AfterEffects, 
       $;].
