@@ -206,12 +206,7 @@ update_new_props(Module, Id, NewProps, Context) ->
 manage_predicate_validfor(_Id, [], _Context) ->
     ok;
 manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
-    SubjectId = m_rsc:name_to_id_check(SubjectCat, Context),
-    ObjectId  = m_rsc:name_to_id_check(ObjectCat, Context),
-
-    F = fun(_S, _I, undefined) ->
-                ok;
-           (S, I, C) ->
+    F = fun(S, I, C) ->
                 case z_db:q("SELECT 1 FROM predicate_category WHERE predicate_id = $1 AND is_subject = $2 AND category_id = $3", [S, I, C], Context) of
                     [{1}] ->
                         ok;
@@ -220,9 +215,16 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
                         ok
                 end
         end,
-    F(Id, true, SubjectId),
-    F(Id, false, ObjectId),
-
+    case SubjectCat of
+        undefined -> nop;
+        _ -> 
+            F(Id, true, m_rsc:name_to_id_check(SubjectCat, Context))
+    end,
+    case ObjectCat of
+        undefined -> nop;
+        _ ->
+            F(Id, false, m_rsc:name_to_id_check(ObjectCat, Context))
+    end,
     manage_predicate_validfor(Id, Rest, Context).
 
 
