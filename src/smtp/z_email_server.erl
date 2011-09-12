@@ -269,7 +269,10 @@ update_config(State) ->
 % E-mail domain, depends on the smtp domain of the sending site
 
 bounce_email(MessageId, Context) ->
-    "noreply+"++z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
+    case m_config:get_value(site, bounce_email_override, Context) of
+        undefined -> "noreply+"++z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)];
+        VERP      -> z_convert:to_list(VERP)
+    end.
 
 reply_email(MessageId, Context) ->
     "reply+"++z_convert:to_list(MessageId)++[$@ | email_domain(Context)].
