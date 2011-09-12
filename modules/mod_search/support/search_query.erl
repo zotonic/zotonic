@@ -241,18 +241,18 @@ parse_query([{is_published, Boolean}|Rest], Context, Result) ->
         "all" ->
             parse_query(Rest, Context, Result1);
         _ ->
-            case z_convert:to_bool(Boolean) of
-                true ->
-                    Result2 = add_where("rsc.is_published and "
-                                    "rsc.publication_start <= now() and "
-                                    "rsc.publication_end >= now()",
-                                    Result1);
-                false ->
-                    Result2 = add_where("(not rsc.is_published or "
-                                    "rsc.publication_start > now() or "
-                                    "rsc.publication_end < now())",
-                                    Result1)
-            end,
+            Result2 = case z_convert:to_bool(Boolean) of
+                          true ->
+                              add_where("rsc.is_published and "
+                                        "rsc.publication_start <= now() and "
+                                        "rsc.publication_end >= now()",
+                                        Result1);
+                          false ->
+                              add_where("(not rsc.is_published or "
+                                        "rsc.publication_start > now() or "
+                                        "rsc.publication_end < now())",
+                                        Result1)
+                      end,
             parse_query(Rest, Context, Result2)
     end;
 
@@ -264,12 +264,12 @@ parse_query([{is_public, Boolean}|Rest], Context, Result) ->
         "all" ->
             parse_query(Rest, Context, Result);
         _ ->
-            case z_convert:to_bool(Boolean) of
-                true ->
-                    Result2 = add_where("rsc.visible_for = 0", Result);
-                false ->
-                    Result2 = add_where("rsc.visible_for > 0", Result)
-            end,
+            Result2 = case z_convert:to_bool(Boolean) of
+                          true ->
+                              add_where("rsc.visible_for = 0", Result);
+                          false ->
+                              add_where("rsc.visible_for > 0", Result)
+                      end,
             parse_query(Rest, Context, Result2)
     end;
 
