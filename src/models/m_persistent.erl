@@ -56,9 +56,9 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 %% @doc Select full row by persistent id.
--spec get(Id :: id(), #context{}) -> {ok, Props :: list()}.
+-spec get(Id :: id(), #context{}) -> Props :: list().
 get(Id, Context) ->
-    z_db:select(?T_PERSISTENT, Id, Context).
+    z_db:q1("SELECT props FROM " ++ ?T_PERSISTENT ++ " WHERE id = $1", [Id], Context).
 
 
 %% @doc Get only stored (persistent) props for session by id.
