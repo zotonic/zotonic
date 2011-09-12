@@ -817,11 +817,10 @@ function z_form_submit_validated_do(event)
 	
 	if (event.zAfterValidation)
 	{
-		for (var f in event.zAfterValidation) 
-		{
-			ret = event.zAfterValidation[f].func.call(f.context, event) && ret;
-		}
-		event.zAfterValidation = new Array();
+		$.each(event.zAfterValidation, function(){
+			ret = typeof this.func == 'function' && this.func.call(this.context, event) && ret;
+		});
+		event.zAfterValidation.length = 0;
 	}
 	return ret;
 }
