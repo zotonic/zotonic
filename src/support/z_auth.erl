@@ -57,7 +57,6 @@ is_auth_recent(#context{}=Context) ->
         undefined ->
             false;
         AuthConfirmTimestamp ->
-            ?DEBUG(AuthConfirmTimestamp),
             CurrentTimestamp = z_utils:now(),
             AuthConfirmTimestamp + ?AUTH_RECENT_TIMEOUT > CurrentTimestamp
     end.
