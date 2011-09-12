@@ -83,6 +83,10 @@ request_arg("hassubjectpredicate") -> hassubjectpredicate;
 request_arg("is_featured")         -> is_featured;
 request_arg("is_published")        -> is_published;
 request_arg("is_public")           -> is_public;
+request_arg("date_start_after")    -> date_start_after;
+request_arg("date_start_before")   -> date_start_before;
+request_arg("date_start_year")     -> date_start_year;
+request_arg("date_end_year")       -> date_end_year;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
 request_arg("query_id")            -> query_id;
@@ -358,16 +362,28 @@ parse_query([{date_start_before, Date}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
     parse_query(Rest, Context, add_where("rsc.pivot_date_start <= " ++ Arg, Result1));
 
+%% date_start_year=year
+%% Filter on year of start date
+parse_query([{date_start_year, Year}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_integer(Year), Result),
+    parse_query(Rest, Context, add_where("date_part('year', rsc.pivot_date_start) = " ++ Arg, Result1));
+
+%% date_end_year=year
+%% Filter on year of end date
+parse_query([{date_end_year, Year}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_integer(Year), Result),
+    parse_query(Rest, Context, add_where("date_part('year', rsc.pivot_date_end) = " ++ Arg, Result1));
+
 %% publication_year=year
 %% Filter on year of publication
 parse_query([{publication_year, Year}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(list_to_integer(Year), Result),
+    {Arg, Result1} = add_arg(z_convert:to_integer(Year), Result),
     parse_query(Rest, Context, add_where("date_part('year', rsc.publication_start) = " ++ Arg, Result1));
 
 %% publication_month=month
 %% Filter on month of publication
 parse_query([{publication_month, Month}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(list_to_integer(Month), Result),
+    {Arg, Result1} = add_arg(z_convert:to_integer(Month), Result),
     parse_query(Rest, Context, add_where("date_part('month', rsc.publication_start) = " ++ Arg, Result1));
 
 
