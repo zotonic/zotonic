@@ -26,7 +26,8 @@
 %% interface functions
 -export([
 	observe_dropbox_file/2,
-	can_handle/2
+	can_handle/2,
+	event/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -45,6 +46,29 @@ observe_dropbox_file({dropbox_file, F}, Context) ->
         _ ->
             undefined
     end.
+
+
+%% @doc Uploading a CSV file through the web interface.
+event({submit, {csv_upload, []}, _TriggerId, _TargetId}, Context) ->
+    #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
+
+    %% Move temporary file to processing directory
+    Dir = z_path:files_subdir_ensure("processing", Context),
+    Target = filename:join([Dir, OriginalFilename]),
+    file:delete(Target),
+    {ok, _} = file:copy(TmpFile, Target),
+    file:delete(TmpFile),
+
+    %% Process the file
+    Context2 = case can_handle(Target, Context) of
+                   {ok, Definition} ->
+                       handle_spawn(Definition, Context),
+                       z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                   false ->
+                       file:delete(Target),
+                       z_render:growl_error(?__("This file cannot be imported.", Context), Context)
+               end,
+    z_render:wire([{dialog_close, []}], Context2).
 
 
 %%====================================================================
@@ -173,8 +197,9 @@ cols2importdef(Cols) ->
         {
         % Field mapping
         [
-            {name, {concat, [name_prefix, name]}}
-            | [ {Col, Col} || Col <- unique(Cols1,[]), Col /= name, Col /= name_prefix, Col /= '' ]
+         {name, {concat, [name_prefix, name]}}
+         | 
+         lists:filter(fun(X) -> X =/= undefined end, [cols2importdef_map(Col) || Col <- unique(Cols1,[])])
         ]
         ,
         % Edges
@@ -195,4 +220,10 @@ unique([C|Cs], Acc) ->
         false -> unique(Cs, [C|Acc])
     end.
 
-
+%% @doc Maps well-known column names to an import definition.
+cols2importdef_map('') -> undefined;
+cols2importdef_map(name) -> undefined;
+cols2importdef_map(name_prefix) -> undefined;
+cols2importdef_map(date_start) ->  {date_start, {datetime, date_start, <<"00:00:00">>}};
+cols2importdef_map(date_end) ->  {date_end, {datetime, date_end, <<"23:59:59">>}};
+cols2importdef_map(X) -> {X, X}.
