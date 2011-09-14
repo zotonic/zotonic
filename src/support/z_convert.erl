@@ -171,6 +171,8 @@ to_localtime(D) ->
 %% @doc Convert an input to a datetime, using to_date/1 and to_time/1.
 to_datetime({{_,_,_},{_,_,_}} = DT) -> DT;
 to_datetime({_,_,_} = D) -> {D, {0,0,0}};
+to_datetime(B) when is_binary(B) ->
+    to_datetime(binary_to_list(B));
 to_datetime(L) when is_list(L) ->
 	try
 		case string:tokens(L, " T") of
@@ -212,6 +214,9 @@ to_datetime(undefined) ->
 
 %% @doc Convert an input to a date.
 to_date({_,_,_} = D) -> D;
+to_date(B) when is_binary(B) ->
+    to_date(binary_to_list(B));
+to_date([]) -> undefined;
 to_date(L) when is_list(L) ->
     case string:tokens(L, "-/") of
         [D,M,Y] when length(Y) =:= 4 ->
@@ -222,6 +227,9 @@ to_date(L) when is_list(L) ->
 
 %% @doc Convert an input to a time.
 to_time({_,_,_} = D) -> D;
+to_time(B) when is_binary(B) ->
+    to_time(binary_to_list(B));
+to_time([]) -> undefined;
 to_time(L) when is_list(L) ->
     [H,I,S|_] = lists:flatten([[to_integer(X) ||X <-  string:tokens(L, ":.")], 0, 0]),
     {H,I,S}.

@@ -407,45 +407,10 @@ map_one({name_prefix, Prefix, Rest}, Row, State) ->
     {name_prefix, Prefix, map_one(Rest, Row, State)};
 
 map_one({date, F}, Row, State) ->
-    case map_one(F, Row, State) of
-        <<"00-00-00">> -> {1900,1,1};
-        <<"00-00-0000">> -> {1900,1,1};
-        Val ->
-            [Db, Mb, Yb] = re:split(Val, "-"),
-            Year = case z_convert:to_integer(Yb) of
-                       Y when Y > 1900 -> Y;
-                       Y when Y >= 50 andalso Y < 100 -> Y + 1900;
-                       Y when Y >= 0 andalso Y < 50 -> Y + 2000;
-                       _ -> throw({error, {invalid_year, Val}})
-                   end,
-            Month = case z_convert:to_integer(Mb) of
-                        M when M > 0 andalso M < 13 -> M;
-                        _ -> throw({error, {invalid_month, Val}})
-                    end,
-            Day = case z_convert:to_integer(Db) of
-                      D when D > 0 andalso D < 32 -> D;
-                      _ -> throw({error, {invalid_day, Val}})
-                  end,
-            {Year, Month, Day}
-    end;
+    z_convert:to_date(map_one(F, Row, State));
 
 map_one({time, F}, Row, State) ->
-    Val = map_one(F, Row, State),
-    [Hb, Mb, Sb] = re:split(Val, ":"),
-    Hour = case z_convert:to_integer(Hb) of
-               H when H >= 0 andalso H < 24 -> H;
-               H when H >= 24 andalso H < 48 -> H - 24;
-               _ -> 0
-           end,
-    Minute = case z_convert:to_integer(Mb) of
-               M when M >= 0 andalso M < 60 -> M;
-               _ -> 0
-           end,
-    Second = case z_convert:to_integer(Sb) of
-               S when S >= 0 andalso S < 60 -> S;
-               _ -> 0
-           end,
-    {Hour, Minute, Second};
+    z_convert:to_time(map_one(F, Row, State));
 
 map_one({datetime, D, T}, Row, State) ->
     {map_one({date, D}, Row, State),
