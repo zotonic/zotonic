@@ -114,7 +114,9 @@ get_persistent(Key, Context) ->
 
 
 %% @doc Reset the session contents, keep the persistent data. Used in the case where an user restarts his browser.
-restart(Pid) ->
+restart(Context=#context{}) ->
+    restart(Context#context.session_pid);
+restart(Pid) when is_pid(Pid) ->
 	gen_server:cast(Pid, restart).
 
 
