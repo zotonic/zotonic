@@ -27,4 +27,5 @@ sub_month(Date, Context) ->
 sub_month(undefined, _N, _Context) ->
 	undefined;
 sub_month(Date, N, Context) ->
-	sub_month(Date, 0-N, Context).
+	filter_add_month:add_month(Date, -N, Context).
+
