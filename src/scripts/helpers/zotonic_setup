@@ -36,9 +36,6 @@ if [ "$HOSTNAME" != "localhost" ]; then
 fi
 export HOSTNAME=$HOSTNAME
 
-# The command used to restart zotonic when crashed, only used after a "zotonic.sh start"
-export HEART_COMMAND="$ZOTONIC_BIN/zotonic start"
-
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
