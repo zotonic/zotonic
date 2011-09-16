@@ -23,6 +23,8 @@
 # For more information see: http://steve.vinoski.net/blog/2009/02/22/controlling-erlangs-heart/
 #
 
+cd $ZOTONIC
+
 now=`date -u +%s`
 
 if [ "$HEART" = true ]; then
@@ -59,5 +61,4 @@ ENV=`which env`
 HEART_COMMAND="${ENV} HEART=true ZOTONIC_HEART_RESTARTS=$restarts ZOTONIC_HEART_START=$starttime $ZOTONIC_BIN/zotonic start"
 export HEART_COMMAND
 
-cd $ZOTONIC
 $ERL -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -config $ZOTONIC/priv/erlang.config -heart -detached -s zotonic
