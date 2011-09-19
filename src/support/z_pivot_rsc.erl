@@ -29,7 +29,7 @@
 -export([
     poll/1,
     pivot/2,
-    pivot_resource_update/1,
+    pivot_resource_update/2,
     queue_all/1,
 
     get_pivot_title/1,
@@ -75,7 +75,16 @@ pivot(Id, Context) ->
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
-pivot_resource_update(Props) ->
+pivot_resource_update(UpdateProps, RawProps) ->
+    Props = lists:foldl(fun(Key, All) ->
+                                case proplists:is_defined(Key, UpdateProps) of
+                                    false ->
+                                        [{Key, proplists:get_value(Key, RawProps)}|All];
+                                    true ->
+                                        All
+                                end
+                        end, UpdateProps, [date_start, date_end]),
+
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
     [
@@ -86,7 +95,7 @@ pivot_resource_update(Props) ->
         {pivot_title, PivotTitle}
         | Props
     ].
-    
+
     month_day(undefined) -> undefined;
     month_day(?EPOCH_START) -> undefined;
     month_day(?ST_JUTTEMIS) -> undefined;
@@ -356,6 +365,8 @@ pivot_resource(Id, Context) ->
     TsvCat = [ [" zpc",integer_to_list(CId)] || CId <- CatIds ],
     TsvIds = list_to_binary([TsvObj,TsvCat]),
 
+    PropsPrePivoted = z_pivot_rsc:pivot_resource_update([], m_rsc:get_raw(Id, Context)),
+
     N = length(ArgsD),
     Sql = list_to_binary([
             "update rsc set pivot_tsv = ",TsvSql,
@@ -368,7 +379,11 @@ pivot_resource(Id, Context) ->
             ", pivot_first_name=$",integer_to_list(N+7),
             ", pivot_surname  = $",integer_to_list(N+8),
             ", pivot_gender   = $",integer_to_list(N+9),
-            " where id = $",integer_to_list(N+10)
+            ", pivot_date_start = $",integer_to_list(N+10),
+            ", pivot_date_end   = $",integer_to_list(N+11),
+            ", pivot_date_start_month_day   = $",integer_to_list(N+12),
+            ", pivot_date_end_month_day   = $",integer_to_list(N+13),
+            " where id = $",integer_to_list(N+14)
         ]),
 
     SqlArgs = ArgsD ++ [
@@ -381,6 +396,10 @@ pivot_resource(Id, Context) ->
         truncate(proplists:get_value(name_first, R), 100),
         truncate(proplists:get_value(name_surname, R), 100),
         truncate(proplists:get_value(gender, R), 1),
+        proplists:get_value(pivot_date_start, PropsPrePivoted),
+        proplists:get_value(pivot_date_end, PropsPrePivoted),
+        proplists:get_value(pivot_date_start_month_day, PropsPrePivoted),
+        proplists:get_value(pivot_date_end_month_day, PropsPrePivoted),
         Id
     ],
     z_db:q(Sql, SqlArgs, Context),
