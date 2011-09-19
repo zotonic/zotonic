@@ -25,6 +25,7 @@
 -export([
     has_connection/1,
     transaction/2,
+    transaction/3,
     transaction_clear/1,
     set/3,
     get/2,
@@ -69,16 +70,61 @@
 
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
-transaction(Function, #context{dbc=undefined} = Context) ->
+transaction(Function, Context) ->
+    transaction(Function, [], Context).
+
+% @doc Perform a transaction with extra options. Default retry on deadlock
+transaction(Function, Options, #context{dbc=undefined} = Context) ->
+    Result = case transaction1(Function, Context) of
+                {rollback, {{error, {error, error, <<"40P01">>, _, _}}, Trace1}} ->
+                    {rollback, {deadlock, Trace1}};
+                {rollback, {{case_clause, {error, {error, error,<<"40P01">>, _, _}}}, Trace2}} ->
+                    {rollback, {deadlock, Trace2}};
+                {rollback, {{badmatch, {error, {error, error,<<"40P01">>, _, _}}}, Trace2}} ->
+                    {rollback, {deadlock, Trace2}};
+                Other -> 
+                    Other
+            end,
+    case Result of
+        {rollback, {deadlock, Trace}} = DeadlockError ->
+            case proplists:get_value(noretry_on_deadlock, Options) of
+                true ->
+                    ?zWarning(
+                        io_lib:format("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
+                        Context
+                    ),
+                    DeadlockError;
+                _False ->
+                    ?zWarning(
+                        io_lib:format("DEADLOCK on database transaction, will retry '~p'", [Trace]),
+                        Context
+                    ),
+                    % Sleep random time, then retry transaction
+                    timer:sleep(z_ids:number(100)),
+                    transaction(Function, Options, Context)
+            end;
+        R ->
+            R
+    end.
+
+
+% @doc Perform the transaction, return error when the transaction function crashed
+transaction1(Function, #context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             Host     = Context#context.host,
             {ok, C}  = pgsql_pool:get_connection(Host),
             Context1 = Context#context{dbc=C},
             Result = try
-                        {ok, [], []} = pgsql:squery(C, "BEGIN"),
+                        case pgsql:squery(C, "BEGIN") of
+                            {ok, [], []} -> ok;
+                            {error, _} = ErrorBegin -> throw(ErrorBegin)
+                        end,
                         R = Function(Context1),
-                        {ok, [], []} = pgsql:squery(C, "COMMIT"),
+                        case pgsql:squery(C, "COMMIT") of
+                            {ok, [], []} -> ok;
+                            {error, _} = ErrorCommit -> throw(ErrorCommit)
+                        end,
                         R
                      catch
                         _:Why ->
@@ -90,9 +136,11 @@ transaction(Function, #context{dbc=undefined} = Context) ->
         false ->
             {rollback, {no_database_connection, erlang:get_stacktrace()}}
     end;
-transaction(Function, Context) ->
+transaction1(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
     Function(Context).
+    
+    
 
 %% @doc Clear any transaction in the context, useful when starting a thread with this context.
 transaction_clear(#context{dbc=undefined} = Context) ->
