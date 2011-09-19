@@ -74,7 +74,7 @@ transaction(Function, Context) ->
     transaction(Function, [], Context).
 
 % @doc Perform a transaction with extra options. Default retry on deadlock
-transaction(Function, Options, #context{dbc=undefined} = Context) ->
+transaction(Function, Options, Context) ->
     Result = case transaction1(Function, Context) of
                 {rollback, {{error, {error, error, <<"40P01">>, _, _}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
