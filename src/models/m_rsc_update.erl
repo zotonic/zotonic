@@ -251,8 +251,11 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                         [ {pivot_category_nr, CatNr} | UpdatePropsN]
                 end,
 
-                RawProps = m_rsc:get_raw(Id, Context),
-                case Id == insert_rsc orelse Changed orelse is_changed(RawProps, UpdatePropsN1) of
+                RawProps = case Id of 
+                              insert_rsc -> [];
+                              _ -> m_rsc:get_raw(Id, Context)
+                           end,
+                case Id =:= insert_rsc orelse Changed orelse is_changed(RawProps, UpdatePropsN1) of
                     true ->
                         UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(UpdatePropsN1, RawProps),
                         {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
