@@ -317,6 +317,7 @@ extension_mime() ->
 		{".tpl", "text/html"},
 		{".txt", "text/plain"},
 		{".wav", "audio/x-wav"},
+		{".woff", "application/x-font-woff"},
 		{".wmf", "application/x-msmetafile"},
 		{".xhtml", "application/xhtml+xml"},
 		{".xls", "application/vnd.ms-excel"},
@@ -378,6 +379,7 @@ is_mime_compressed("application/zip")                        -> true;
 is_mime_compressed("application/x-gz"++_)                    -> true;
 is_mime_compressed("application/x-rar")                      -> true;
 is_mime_compressed("application/x-bzip2")                    -> true;
+is_mime_compressed("application/x-font-woff")                -> true;
 is_mime_compressed("application/vnd.oasis.opendocument."++_) -> true;
 is_mime_compressed("application/vnd.openxml"++_)             -> true;
 is_mime_compressed("application/x-shockwave-flash")          -> true;
