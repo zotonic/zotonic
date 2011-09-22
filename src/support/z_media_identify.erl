@@ -157,7 +157,7 @@ identify_file_os(unix, File, OriginalFilename) ->
     end.
 
 
-%% @spec identify_file_imagemagick(ImageFile) -> {ok, PropList} | {error, Reason}
+%% @spec identify_file_imagemagick(OsFamily, ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
 identify_file_imagemagick(OsFamily, ImageFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),

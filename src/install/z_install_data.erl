@@ -60,7 +60,7 @@ install_modules(Host, C) ->
         "mod_menu",
         "mod_oauth",
         "mod_search",
-        "mod_video_embed",
+        "mod_oembed",
         "mod_atom_feed",
         "mod_translation",
         "mod_signal",

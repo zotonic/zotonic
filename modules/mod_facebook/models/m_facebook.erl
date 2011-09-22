@@ -97,7 +97,7 @@ facebook_q(_Q, _Sql, Args, Context) ->
 		   [];
 	       _ ->
 		   ?DEBUG(Payload),
-		   convert_json(Payload)
+		   z_convert:convert_json(Payload)
     end,
   
     #search_result{result=Rows}.
@@ -124,7 +124,7 @@ do_graph_call(Method, Id, Connection, Args, Context)
 		      []
 	      end,
 
-    convert_json(Payload).
+    z_convert:convert_json(Payload).
 
 %% Create a http request for the inets httpc api.
 %%
@@ -136,16 +136,6 @@ make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get;
     Url = mochiweb_util:urlunsplit({Scheme, Server, Path, Query, []}),
     {Url, []}.
 
-%% Convert json from facebook favour to an easy to use format for zotonic templates.
-%%
-convert_json({K, V}) when is_binary(K) ->
-    {z_convert:to_atom(K), convert_json(V)};
-convert_json({struct, PropList}) when is_list(PropList) ->
-    convert_json(PropList);
-convert_json(L) when is_list(L) ->
-    [convert_json(V) || V <- L];
-convert_json(V) ->
-    V.
 
 %%
 %%

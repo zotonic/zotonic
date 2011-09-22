@@ -14,7 +14,7 @@
 ]).
 
 %% @doc Provide some localized date strings
-%% @spec label(midnight|noon) -> string()
+%% @spec label(midnight|noon, #context{}) -> string()
 label(midnight, Context) ->
     ?__("midnight", Context);
 label(noon, Context) ->

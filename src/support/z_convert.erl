@@ -42,7 +42,8 @@
     to_time/1,
     to_isotime/1,
     to_json/1,
-    
+
+	convert_json/1,
     ip_to_list/1
 ]).
 
@@ -310,3 +311,13 @@ ip_to_list({_K1,_K2,_K3,_K4,_K5,_K6,_K7,_K8} = IPv6) ->
                   tuple_to_list(IPv6)),
     lists:flatten(string:join(L, ":")).
 
+
+%% @doc Convert json from facebook favour to an easy to use format for zotonic templates.
+convert_json({K, V}) when is_binary(K) ->
+    {z_convert:to_atom(K), convert_json(V)};
+convert_json({struct, PropList}) when is_list(PropList) ->
+    convert_json(PropList);
+convert_json(L) when is_list(L) ->
+    [convert_json(V) || V <- L];
+convert_json(V) ->
+    V.
