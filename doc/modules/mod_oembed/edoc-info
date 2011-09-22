@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[mod_oembed,oembed_client,oembed_providers]}.
