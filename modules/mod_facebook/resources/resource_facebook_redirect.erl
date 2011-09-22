@@ -68,13 +68,18 @@ moved_temporarily(ReqData, Context) ->
     end.
 
 
-    redirect_error(Reason, Context) ->
-        ?DEBUG({?MODULE, Reason}),
-        z_context:set_session(facebook_logon, false, Context),
-        z_context:set_session(facebook_access_token, undefined, Context),
-        z_context:set_session(facebook_access_token_expires, undefined, Context),
-        Location = z_context:abs_url(z_dispatcher:url_for(logon, Context), Context),
-        ?WM_REPLY({true, Location}, Context).
+%% @doc Redirect user to a signup failure URL, or to the logon page.
+redirect_error(Reason, Context) ->
+    ?DEBUG({?MODULE, Reason}),
+    z_context:set_session(facebook_logon, false, Context),
+    z_context:set_session(facebook_access_token, undefined, Context),
+    z_context:set_session(facebook_access_token_expires, undefined, Context),
+    Location = case z_notifier:first({signup_failed_url, Reason}, Context) of
+                   {ok, L} -> L;
+                   undefined ->
+                       z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)
+               end,
+    ?WM_REPLY({true, Location}, Context).
 
 
 % Exchange the code for an access token
