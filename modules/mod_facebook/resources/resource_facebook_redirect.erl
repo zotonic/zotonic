@@ -130,7 +130,7 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
         undefined ->
             % Register the Facebook identities as verified
             SignupProps = [
-                {identity, {username_pw, {generate_username(Props, Context), z_ids:id(6)}, true, true}},
+                {identity, {username_pw, {z_utils:generate_username(Props, Context), z_ids:id(6)}, true, true}},
                 {identity, {facebook, UID, true, true}},
                 {identity, {email, proplists:get_value(email, FacebookProps), true, true}},
                 {ready_page, LocationAfterSignup}
@@ -172,30 +172,6 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
     use_see_other(Location, Context) ->
         ContextLoc = z_context:set_resp_header("Location", Location, Context),
         ?WM_REPLY({halt, 303}, ContextLoc).
-        
-
-generate_username(Props, Context) ->
-    case proplists:get_value(title, Props) of
-        [] ->
-            First = proplists:get_value(name_first, Props),
-            Last = proplists:get_value(name_surname, Props),
-            generate_username1(z_string:nospaces(z_string:to_lower(First) ++ "." ++ z_string:to_lower(Last)), Context);
-        Title ->
-            generate_username1(z_string:nospaces(z_string:to_lower(Title)), Context)
-    end.
-    
-    generate_username1(Name, Context) ->
-        case m_identity:lookup_by_username(Name, Context) of
-            undefined -> Name;
-            _ -> generate_username2(Name, Context)
-        end.
-        
-    generate_username2(Name, Context) ->
-        N = integer_to_list(z_ids:number() rem 1000),
-        case m_identity:lookup_by_username(Name++N, Context) of
-            undefined -> Name;
-            _ -> generate_username2(Name, Context)
-        end.
         
 
 % [{"id","100001090298809"},

@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
 %% Date: 2009-12-10
-%% @doc Follow users on Twitter using the streaming HTTP API.
+%% @doc Use Twitter for logon and/or follow users on Twitter using the streaming HTTP API.
 %%
 %% Setup instructions:
 %% * Enable the mod_twitter module
@@ -31,7 +31,7 @@
 -behaviour(gen_server).
 
 -mod_title("Twitter").
--mod_description("Follow persons from Zotonic on Twitter using the streaming API.").
+-mod_description("Use Twitter for logon, and/or follow users on Twitter using the streaming HTTP API.").
 -mod_prio(200).
 
 %% gen_server exports
@@ -117,7 +117,7 @@ init(Args) ->
             {ok, #state{context=z_context:new(Context)}};
         not_configured ->
             z_session_manager:broadcast(#broadcast{type="error", message="No configuration (mod_twitter.api_login / mod_twitter.api_password) found, not starting.", title="Twitter", stay=true}, z_acl:sudo(Context)),
-            ignore
+            {ok, #state{context=z_context:new(Context)}}
     end.
 
 

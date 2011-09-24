@@ -86,7 +86,8 @@
     url_unreserved_char/1,
     url_valid_char/1,
     flush_message/1,
-    ensure_existing_module/1
+    ensure_existing_module/1,
+	generate_username/2
 ]).
 
 %%% FORMAT %%%
@@ -872,5 +873,30 @@ flush_message(Msg) ->
         Msg -> flush_message(Msg)
     after 0 ->
         ok
+    end.
+
+
+%% @doc Generate a unique user name from a proplist.
+generate_username(Props, Context) ->
+    case proplists:get_value(title, Props) of
+        [] ->
+            First = proplists:get_value(name_first, Props),
+            Last = proplists:get_value(name_surname, Props),
+            generate_username1(z_string:nospaces(z_string:to_lower(First) ++ "." ++ z_string:to_lower(Last)), Context);
+        Title ->
+            generate_username1(z_string:nospaces(z_string:to_lower(Title)), Context)
+    end.
+
+generate_username1(Name, Context) ->
+    case m_identity:lookup_by_username(Name, Context) of
+        undefined -> Name;
+        _ -> generate_username2(Name, Context)
+    end.
+
+generate_username2(Name, Context) ->
+    N = integer_to_list(z_ids:number() rem 1000),
+    case m_identity:lookup_by_username(Name++N, Context) of
+        undefined -> Name;
+        _ -> generate_username2(Name, Context)
     end.
 
