@@ -79,14 +79,18 @@ String.prototype.score = function(abbreviation,offset) {
 
 jQuery.fn.listfilter = function(options)
 {
-	list = jQuery(options.list);
+	var list = jQuery(options.list);
 
 	if(list.length) 
 	{
 		var rows = list.children()
 		var cache = rows.map(function()
 		{
-			return $(this).text().toLowerCase();
+		    if (typeof options.text == 'string') {
+			    return $(options.text, this).text().toLowerCase();
+		    } else {
+			    return $(this).text().toLowerCase();
+			}
 		});
 			
 		this.keyup(filter).keyup().parents('form').submit(function()
