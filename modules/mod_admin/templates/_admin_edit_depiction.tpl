@@ -7,7 +7,7 @@
 {% block widget_content %}
 {% if is_editable or m.rsc[id].depiction %}
 <div id="{{ #media }}">
-	{% include "_edit_media.tpl" media=media div_id=#media %}
+	{% catinclude "_edit_media.tpl" id media=media div_id=#media %}
 </div>
 <div class="clear">
 	{% if is_editable %}
