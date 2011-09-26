@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2011 Marc Worrell
 %% Date: 2010-05-19
 %% @doc Translation support for i18n.  Generates .po files by scanning templates.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,13 +21,14 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Translation").
--mod_description("Generate .po files containing translatable texts by scanning templates.").
+-mod_description("Handle user’s language and generate .pot files with translatable texts.").
 -mod_prio(500).
 
 -export([
     observe_session_init_fold/3,
     observe_session_context/3,
     observe_auth_logon/3,
+    observe_set_user_language/3,
     
     init/1, 
     event/2,
@@ -108,6 +109,17 @@ observe_auth_logon(auth_logon, Context, _Context) ->
             z_context:set_persistent(language, z_context:language(Context1), Context1),
             Context1
     end.
+
+observe_set_user_language({set_user_language, UserId}, Context, _Context) when is_integer(UserId) ->
+    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+        Code when is_atom(Code), Code /= undefined -> 
+            z_context:set_language(Code, Context);
+        _ ->
+            Context
+    end;
+observe_set_user_language({set_user_language, _UserId}, Context, _Context) ->
+    Context.
+
 
 %% @doc Set the current session (and user) language, reload the user agent's page.
 event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
