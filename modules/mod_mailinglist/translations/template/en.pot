@@ -131,7 +131,7 @@ msgid ""
 "subscription."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12 ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13 
+#: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12 ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:14 
 msgid ""
 "Cancel"
 msgstr ""
@@ -207,7 +207,7 @@ msgid ""
 "Edit the mailing list &raquo;"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37 
+#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7 
 msgid ""
 "Email"
 msgstr ""
@@ -361,6 +361,11 @@ msgid ""
 "Please confirm your subscription on"
 msgstr ""
 
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:1 
+msgid ""
+"Please enter the e-mail address you want to send a test mail to."
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11 
 msgid ""
 "Please follow"
@@ -422,7 +427,7 @@ msgid ""
 "Select file"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:27 
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:27 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:13 
 msgid ""
 "Send mailing"
 msgstr ""
@@ -430,6 +435,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:20 
 msgid ""
 "Send test mailing"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:21 ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:21 
+msgid ""
+"Send test to address"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22 
@@ -451,6 +461,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:9 
 msgid ""
 "Send this page to a mailinglist and view mailinglist statistics."
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:21 
+msgid ""
+"Send this page to a single address"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:20 
