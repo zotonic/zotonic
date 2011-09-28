@@ -38,7 +38,23 @@ msgid ""
 "p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
 "allowed to send a page to the mailing list. Everybody who can view the "
 "mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Destinatarios</h3><p>Para agregar, eliminar o ver los destinatarios de las listas de correo, haga clic sobre el vínculo “mostrar todos los destinatarios”.</p><h3>Nombre del remitente y dirección de correo electrónico</h3><p>El nombre del remitente y la dirección de correo electrónico pueden configurarse para cada lista de correo. El valor por defecto usado es el de la clave de configuración <tt>site.email_from</tt>.  El <i>Desde</i> de los correos enviados tendrá asignado el nombre del remitente y su dirección de correo.</p><h3>Subida automática de listas de destinatarios</h3><p>El nombre de archivo de destino se usa para subir automáticamente una lista de destinatarios completa. El nombre del archivo debe ser el mismo que el usado para la lista de destinatarios subida. La lista completa de destinatarios se reemplazará con aquellos presentes en el archivo de destino.</p><h3>Control de acceso</h3><p>Todo aquel que puede editar una lista de correo puede también enviar una página a la lista. Todo aquel que puede ver la lista de correo puede agregar una dirección de correo electrónico a la lista.</p>"
+msgstr ""
+"<h3>Destinatarios</h3><p>Para agregar, eliminar o ver los destinatarios de "
+"las listas de correo, haga clic sobre el vínculo “mostrar todos los "
+"destinatarios”.</p><h3>Nombre del remitente y dirección de correo "
+"electrónico</h3><p>El nombre del remitente y la dirección de correo "
+"electrónico pueden configurarse para cada lista de correo. El valor por "
+"defecto usado es el de la clave de configuración <tt>site.email_from</tt>.  "
+"El <i>Desde</i> de los correos enviados tendrá asignado el nombre del "
+"remitente y su dirección de correo.</p><h3>Subida automática de listas de "
+"destinatarios</h3><p>El nombre de archivo de destino se usa para subir "
+"automáticamente una lista de destinatarios completa. El nombre del archivo "
+"debe ser el mismo que el usado para la lista de destinatarios subida. La "
+"lista completa de destinatarios se reemplazará con aquellos presentes en el "
+"archivo de destino.</p><h3>Control de acceso</h3><p>Todo aquel que puede "
+"editar una lista de correo puede también enviar una página a la lista. Todo "
+"aquel que puede ver la lista de correo puede agregar una dirección de correo "
+"electrónico a la lista.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:18
 msgid "<p>Sorry, something went wrong. Please try again later.</p>"
@@ -133,6 +149,7 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:14
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -206,6 +223,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Editar la lista de correo &raquo;"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7
 msgid "Email"
 msgstr "Dirección de correo"
 
@@ -341,6 +359,11 @@ msgstr "Por favor confirme su suscripción"
 msgid "Please confirm your subscription on"
 msgstr "Por favor confirme su suscripción en"
 
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:1
+#, fuzzy
+msgid "Please enter the e-mail address you want to send a test mail to."
+msgstr "Seleccione una lista de correo adonde enviar la página"
+
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
 msgstr "Por favor siga"
@@ -398,12 +421,18 @@ msgid "Select file"
 msgstr "Seleccione un archivo"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:27
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:13
 msgid "Send mailing"
 msgstr "Enviar correo"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send test mailing"
 msgstr "Enviar correo de prueba"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:21
+#, fuzzy
+msgid "Send test to address"
+msgstr "Enviar esta página a una dirección de correo electrónico."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
 msgid "Send the mailing automatically after the publication start date of"
@@ -425,6 +454,11 @@ msgstr ""
 #, fuzzy
 msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr "Enviar esta página a una lista de correo."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:21
+#, fuzzy
+msgid "Send this page to a single address"
+msgstr "Enviar esta página a una dirección de correo electrónico."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send this page to the test mailing list."
@@ -756,6 +790,10 @@ msgstr "si no quiere recibir más correo de esta lista."
 msgid "with your e-mail address"
 msgstr "con su dirección de correo"
 
+#, fuzzy
+#~ msgid "E-mail"
+#~ msgstr "Dirección de correo"
+
 #~ msgid "Email page"
 #~ msgstr "Página de correo"
 
@@ -770,9 +808,6 @@ msgstr "con su dirección de correo"
 
 #~ msgid "Send the page"
 #~ msgstr "Enviar la página"
-
-#~ msgid "Send this page to an e-mail address."
-#~ msgstr "Enviar esta página a una dirección de correo electrónico."
 
 #~ msgid "Sent the e-mail."
 #~ msgstr "Enviar el correo electrónico."

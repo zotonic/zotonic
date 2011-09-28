@@ -18,6 +18,7 @@
                 <a href="{% url admin_edit_rsc id=id %}" class="button">{_ edit _}</a>
                 <a href="{% url admin_mailing_preview id=id %}" class="button" onclick="window.open(this.getAttribute('href'), 'mailingpreview', 'width=800,height=800');return false;">{_ preview mailing _}</a>
                 {% button text=_"Send test mailing" class="do_tooltip" title=_"Send this page to the test mailing list." action={mailing_page_test id=id} %}
+                {% button text=_"Send test to address" class="do_tooltip" title=_"Send this page to a single address" action={dialog_open template="_dialog_mailing_testaddress.tpl" title=_"Send test to address" id=id} %}
             </div>
 
             <hr />

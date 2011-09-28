@@ -143,7 +143,14 @@ event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) 
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
         {error, Msg} ->
             z_render:growl(Msg, "error", true, Context)
-    end.
+    end;
+
+%% @doc Handle the test-sending of a page to a single address.
+event({submit, {mailing_testaddress, [{id, PageId}]}, _, _}, Context) ->
+    Email = z_context:get_q_validated("email", Context),
+    z_notifier:notify({mailinglist_mailing, {single_test_address, Email}, PageId}, Context),
+    Context1 = z_render:growl("Sending the page to " ++ Email ++ "...", Context),
+    z_render:wire([{dialog_close, []}], Context1).
 
 
 
@@ -288,8 +295,14 @@ send_mailing(ListId, PageId, Context) ->
     spawn(fun() -> send_mailing_process(ListId, PageId, z_acl:sudo(Context)) end).
 
 
+send_mailing_process({single_test_address, Email}, PageId, Context) ->
+    {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
+    send_mailing_process(ListId, [Email], PageId, Context);
+
 send_mailing_process(ListId, PageId, Context) ->
-    Recipients = m_mailinglist:get_enabled_recipients(ListId, Context),
+    send_mailing_process(ListId, m_mailinglist:get_enabled_recipients(ListId, Context), PageId, Context).
+
+send_mailing_process(ListId, Recipients, PageId, Context) ->
     SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
     {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
     From = m_mailinglist:get_email_from(ListId, Context),

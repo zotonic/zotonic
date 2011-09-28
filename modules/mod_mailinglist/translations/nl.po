@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-09-07 11:29+0200\n"
+"PO-Revision-Date: 2011-09-28 11:05+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -34,7 +34,18 @@ msgid ""
 "p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
 "allowed to send a page to the mailing list. Everybody who can view the "
 "mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Ontvangers</h3><p>Om ontvangers toe te voegen, te verwijderen of te bekijken, klik op de “bekijk alle ontvangers“ link.</p><h3>Afzender naam en email</h3> <p>De naam en email van de afzender kan per mailinglijst worden ingesteld. De default is de configuratieoptie <tt>site.email_from</tt>.  <h3>Automatische upload van ontvanger-lijsten</h3> <p>De “dropbox-bestandsnaam“ wordt gebruikt om automatisch de lijst van ontvangers te importeren. De huidige lijst van ontvangers wordt vervangen door de namen in het dropbox bestand.</p> <h3>Toegang</h3><p>Iedereen die de mailinglijst pagina mag bewerken, kan een pagina versturen naar de ontvangers van die lijst. Iedereen die de lijst kan zien kan een email adres toevoegen aan de lijst.</p>"
+msgstr ""
+"<h3>Ontvangers</h3><p>Om ontvangers toe te voegen, te verwijderen of te "
+"bekijken, klik op de “bekijk alle ontvangers“ link.</p><h3>Afzender naam en "
+"email</h3> <p>De naam en email van de afzender kan per mailinglijst worden "
+"ingesteld. De default is de configuratieoptie <tt>site.email_from</tt>.  "
+"<h3>Automatische upload van ontvanger-lijsten</h3> <p>De “dropbox-"
+"bestandsnaam“ wordt gebruikt om automatisch de lijst van ontvangers te "
+"importeren. De huidige lijst van ontvangers wordt vervangen door de namen in "
+"het dropbox bestand.</p> <h3>Toegang</h3><p>Iedereen die de mailinglijst "
+"pagina mag bewerken, kan een pagina versturen naar de ontvangers van die "
+"lijst. Iedereen die de lijst kan zien kan een email adres toevoegen aan de "
+"lijst.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:18
 msgid "<p>Sorry, something went wrong. Please try again later.</p>"
@@ -128,6 +139,7 @@ msgstr "Voordat je email ontvangt, moet je aanmelding eerst worden bevestigd."
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:14
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -195,6 +207,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Bewerk de mailinglijst &raquo;"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7
 msgid "Email"
 msgstr "Email"
 
@@ -334,6 +347,10 @@ msgstr "Bevestig a.u.b. uw aanmelding"
 msgid "Please confirm your subscription on"
 msgstr "Bevestig a.u.b. uw aanmelding voor"
 
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:1
+msgid "Please enter the e-mail address you want to send a test mail to."
+msgstr "Voer het email adres in waar je een test-mail naartoe wilt sturen."
+
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
 msgstr "Klik a.u.b. op"
@@ -391,12 +408,17 @@ msgid "Select file"
 msgstr "Kies bestand"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:27
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:13
 msgid "Send mailing"
 msgstr "Verstuur mailing"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send test mailing"
 msgstr "Verstuur testmailing"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:21
+msgid "Send test to address"
+msgstr "Verstuur test naar adres"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
 msgid "Send the mailing automatically after the publication start date of"
@@ -421,6 +443,10 @@ msgstr ""
 msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr ""
 "Verstuur deze pagina naar een mailinglijst en bekijk de mailingstatistieken."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:21
+msgid "Send this page to a single address"
+msgstr "Verstuur deze pagina naar een enkel email adres."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:20
 msgid "Send this page to the test mailing list."
@@ -754,6 +780,10 @@ msgstr "wanneer je geen mail meer wilt ontvangen van deze lijst."
 msgid "with your e-mail address"
 msgstr "met je email adres"
 
+#, fuzzy
+#~ msgid "E-mail"
+#~ msgstr "Email"
+
 #~ msgid "This mail was sent to you because someone visiting"
 #~ msgstr "Je krijgt deze mail omdat iemand die"
 
@@ -804,9 +834,6 @@ msgstr "met je email adres"
 
 #~ msgid "Select mailing list"
 #~ msgstr "Kies mailinglijst"
-
-#~ msgid "Send this page to an e-mail address."
-#~ msgstr "Verstuur deze pagina naar een email adres."
 
 #~ msgid ""
 #~ "You can send this page as an e-mail to everyone in a mailing list. If the "
