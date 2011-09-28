@@ -176,7 +176,9 @@ to_datetime(B) when is_binary(B) ->
     to_datetime(binary_to_list(B));
 to_datetime(L) when is_list(L) ->
 	try
-		case string:tokens(L, " T") of
+		case string:tokens(L, " T+") of
+			[Date,Time,_TZ] ->
+                z_convert:to_datetime(Date++"T"++Time); % Timezone ignored.
 			[Date,Time] ->
                 WithTZ = fun(Tm, Tz, Mul) ->
                                  TZTime = to_time(Tz),
