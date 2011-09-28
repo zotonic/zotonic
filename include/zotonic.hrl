@@ -110,7 +110,7 @@
 					 shutdown=5000}).
 
 %% For the z_db definitions
--record(column_def, {name, type, length, is_nullable=true, default}).
+-record(column_def, {name, type, length, is_nullable=true, default, primary_key}).
 
 %% For the datamodel: default resources to create.
 -record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[]}).

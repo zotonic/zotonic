@@ -625,6 +625,7 @@ ensure_table(Table, Cols, Context) ->
 
     table_create_primary_key([]) -> [];
     table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
+    table_create_primary_key([#column_def{name=N, primary_key=true}|_]) -> ", primary key(" ++ z_convert:to_list(N) ++ ")";
     table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
 
     ensure_table_create_cols([], Acc) ->
