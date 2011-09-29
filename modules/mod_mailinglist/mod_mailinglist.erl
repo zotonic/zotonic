@@ -324,17 +324,9 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
             [] -> skip;
             Email1 ->
                 Id = proplists:get_value(id, Options),
-                ListId = proplists:get_value(list_id, Options),
-                %% check if not already sent
-                case m_mailinglist:already_sent(Email1, ListId, Id, Context) of
-                    true ->
-                        %% already sent.
-                        ok;
-                    false ->
-                        Attachments = mod_mailinglist:page_attachments(Id, Context),
-                        z_email_server:send(#email{queue=not(IsDirect), to=Email1, from=From,
-                                                   html_tpl={cat, "mailing_page.tpl"}, vars=[{email,Email1}|Options], attachments=Attachments}, Context)
-                end
+                Attachments = mod_mailinglist:page_attachments(Id, Context),
+                z_email_server:send(#email{queue=not(IsDirect), to=Email1, from=From,
+                                           html_tpl={cat, "mailing_page.tpl"}, vars=[{email,Email1}|Options], attachments=Attachments}, Context)
         end.
 
 
