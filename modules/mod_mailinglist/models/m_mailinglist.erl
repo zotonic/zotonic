@@ -52,7 +52,6 @@
 	check_scheduled/1,
 
 	get_email_from/2,
-    already_sent/4,
     reset_log_email/3,
 
 	init_tables/1
@@ -390,11 +389,6 @@ check_scheduled(Context) ->
 		  and r.publication_start <= now()
 		  and r.publication_end >= now()
 		limit 1", Context).
-
-
-%% @doc Given an email address for a list/page combination, check if this page already has been delivered to this address.
-already_sent(Email, ListId, Id, Context) ->
-    z_convert:to_bool(z_db:q1("select true from log_email where other_id = $1 and content_id = $2 and envelop_to = $3 and mailer_status = 'sent'", [ListId, Id, Email], Context)).
 
 
 %% @doc Reset the email log for given list/page combination, allowing one to send the same page again to the given list.
