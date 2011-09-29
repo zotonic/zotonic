@@ -27,4 +27,4 @@ action={unlink
     undo_message_id=unlink_message 
     undo_action={postback postback={reload_media rsc_id=id div_id=div_id} delegate="resource_admin_edit"}} 
 %}
-{% wire id=#edit target=#unlink_wrapper action={dialog_edit_basics edge_id=edge_id edge_template="_rsc_edge_media.tpl"} %}
+{% wire id=#edit target=#unlink_wrapper action={dialog_edit_basics edge_id=edge_id template="_rsc_edge_media.tpl"} %}

@@ -552,6 +552,7 @@ flush(Context) ->
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @spec update_sequence(Table, IdList, Context) -> void()
+%% @todo Make the steps of the sequence bigger, and try to keep the old sequence numbers in tact (needs a diff routine)
 update_sequence(Table, Ids, Context) when is_atom(Table) ->
     update_sequence(atom_to_list(Table), Ids, Context);
 update_sequence(Table, Ids, Context) ->

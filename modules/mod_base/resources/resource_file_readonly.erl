@@ -120,7 +120,7 @@ encodings_provided(ReqData, Context) ->
                             "video/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
                             "audio/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
                             "application/x-gzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
-                            "applicationzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
+                            "application/zip" ++ _ -> [{"identity", fun(Data) -> Data end}];
                             _ -> 
                                 [{"identity", fun(Data) -> decode_data(identity, Data) end},
                                  {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]

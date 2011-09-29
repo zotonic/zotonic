@@ -15,6 +15,7 @@
 		"css/zp-growl.css"
 		"css/zp-datepicker.css"
 		"css/zp-icon-status.css"
+		"css/zp-menuedit.css"
 		"css/jquery.loadmask.css"
 	%}
 

@@ -115,12 +115,10 @@ process_postback(Context1) ->
             end;
         Postback ->
             {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
-
             TriggerId1 = case TriggerId of
                 undefined -> z_context:get_q("z_trigger_id", Context1);
                 _         -> TriggerId
             end,
-
             ContextRsc = z_context:set_resource_module(Module, Context1),
             case EventType of
                 "submit" -> 

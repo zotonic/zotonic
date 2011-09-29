@@ -1,8 +1,8 @@
 {% with m.modules.info.mod_translation.enabled, m.rsc[id].language|default:[z_language]  as  is_i18n, r_language %}
 
 {% if is_i18n %}
-    {% block widget_before %}{% endblock %}
-    <div class="item-wrapper">
+	{% block widget_before %}{% endblock %}
+	<div class="item-wrapper">
 	<div class="translations ui-tabs" id="{% block widget_id %}{% endblock %}">
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
 
@@ -15,10 +15,11 @@
 		    {% endwith %}
 		{% endfor %}
 	</div>
-    </div>
-    {% block widget_after %}{% endblock %}
+	</div>
+	{% block widget_after %}{% endblock %}
 
-{% else %}				    {# non-multilanguage content and translation module disabled #}
+{% else %}
+	{# non-multilanguage content and translation module disabled #}
 	{% include "admin_edit_widget_std.tpl" %}
 {% endif %}
 

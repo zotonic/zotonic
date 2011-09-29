@@ -37,7 +37,6 @@
 					<div class="padding">
 
 						{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
-
 						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
 
 						{% if r.is_a.media or r.medium %}

@@ -217,7 +217,6 @@ function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
 	o.triggerID		= triggerID;
 	o.postback		= postback;
 	o.extraParams	= extraParams;
-	
 	z_postbacks.push(o);
 	z_postback_check();
 }

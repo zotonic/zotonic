@@ -623,6 +623,7 @@ ul.media-sorter li {
 	position: relative;
 }
 
+
 .suggestions-list {
 	background: #888;
 	width: 310px;
@@ -806,39 +807,54 @@ span.add-connection {
 /* modules - navigation builder
 ---------------------------------------------------------- */
 
-ul.navigation-manager {
+ul.ui-sortable {
 	padding: 8px 6px;
 }
 
-ul.navigation-manager li {
+ul.ui-sortable li {
 	padding: 0;
 }
 
-ul.navigation-manager li a {
+ul.ui-sortable li.placeholder {
+	padding: 1px 0 0;
+    background: #efe;
+    border: 1px solid #ccc;
+}
+
+ul.ui-sortable li div {
 	padding: 1px 0 0;
 	border: 1px solid #e0e0e0;
 	background: #fff;
 	display: block;
+	cursor: move;
 }
 
-	ul.navigation-manager li .grippy img {
+	ul.ui-sortable li .grippy img {
 		position: absolute;
 		top: 4px;
 		left: 6px;
 	}
 
-	ul.navigation-manager li#top {
-		padding: 1px 0 0 7px;
-		border: 1px dotted #ccc;
-		margin: 0 0 3px 0;
-	}
-
-		ul.navigation-manager li ul li {
+		ul.ui-sortable li ul li {
 			border: none;
 		}
 
 .search-nav-items input.autocompleter {
 	width: 279px;
+}
+
+.search-nav-items .autocomplete-wrapper .short-list {
+    border: none;
+    padding: 4px 0px;
+}
+
+#sortable-new {
+    border: none;
+    padding-top: 8px;
+}
+
+#drag-explanation {
+    height: 60px;
 }
 
 ul ul {
@@ -859,32 +875,6 @@ li.hover, li.hover a {
 	border: 1px dotted #ccc !important;
 	background: none;
 	margin: 6px 0;
-}
-
-ul.categories {
-	padding: 8px 6px 0;
-}
-
-ul.categories li {
-	margin: 0;
-	padding: 0;
-	border: none;
-}
-
-ul.categories li.active {
-	background: #f1f1f1;	
-}
-
-	ul.categories li.ui-draggable {
-		width: auto;
-		display: block;
-	}
-
-ul.categories li a {
-	padding: 1px 0 0 15px;
-	border: 1px solid #e0e0e0;
-	background: #fff;
-	cursor: pointer;
 }
 
 #category-sorter .ui-draggable-dragging,
