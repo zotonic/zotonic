@@ -33,10 +33,10 @@
 <script type="text/javascript" src="/lib/js/modules/tinymce3.4.3.2/jquery.tinymce.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	{% all catinclude "_admin_tinymce_overrides_js.tpl" id %}
 	/* Initialize translation tabs, select correct language */
 	if ($(".translations").length) {
 		$(".translations").tabs();
-
 		$(".translations").bind('tabsshow', function(event, ui) {
 			$(".tinymce-init", ui.panel).each(function() { 
 			    var self = $(this);
