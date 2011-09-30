@@ -26,23 +26,13 @@
 				</div>
 			{% else %}
 				<div class="form-item">
-					{% with id.category_id as r_cat %}
 					<label>{_ Category _}</label>
-					<select id="category_id" name="category_id">
-						{% for cat_id, level, indent, name in m.category.all_flat %}
-						{% if m.acl.insert[name|as_atom] %}
-							<option value="{{cat_id}}" {% ifequal r_cat cat_id %}selected="selected"{% endifequal %}>
-							{{ indent }}{{ m.rsc[cat_id].title|default:name }}
-							</option>
-						{% endif %}
-						{% endfor %}
-					</select>
-					{% endwith %}
+                    {% include "_admin_category_dropdown.tpl" id=id %}
 				</div>
 			{% endif %}
 
 			<div class="form-item clearfix">
-				<label>&nbsp;</label>
+				<label>{_ Published? _}</label>
 				<input type="checkbox" class="do_fieldreplace" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
 				<label for="is_published" class="left">{_ Published _}</label>
 			</div>

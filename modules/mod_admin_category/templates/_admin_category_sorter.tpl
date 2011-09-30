@@ -2,7 +2,7 @@
 		
 	<div class="padding">
 		<h3 class="above-list">Category overview</h3>
-		<ul id="category" class="category-list categories {% if editable %}do_menuedit{% endif %}" data-menuedit="connectWith: '#trash'">
+		<ul id="category" class="tree-list categories {% if editable %}do_menuedit{% endif %}" data-menuedit="connectWith: '#trash'">
 			{% for mid, path, action in m.category.menu|menu_flat %}
 				{% with forloop.counter as c %}
 				{% if mid %}
