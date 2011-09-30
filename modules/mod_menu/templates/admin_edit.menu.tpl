@@ -17,10 +17,10 @@
 		<div class="zp-20">
 			{% include "_menu_trash.tpl" %}
 			
-			<ul id="sortable-new" class="short-list ui-sortable" title="{_ Drag to add a new page _}">
+			<ul id="sortable-new" class="tree-list ui-sortable" title="{_ Drag to add a new page _}">
 				<li class="header" id="page-new-text" data-nestedsortable-receive="new">
 					<div class="clearfix">
-						<span class="grippy"><img src="/lib/images/grippy.png" alt="{_ Drag me _}" /></span>
+						<img class="grippy" src="/lib/images/grippy.png" alt="{_ Drag me _}" />
 						<span>{_ New page _}</span>
 					</div>
 				</li>
@@ -37,7 +37,7 @@
 		
 			<div class="form-item autocomplete-wrapper clear">
 				<input id="{{#input}}" class="autocompleter" type="text" value="" />
-				<ul id="{{#suggestions}}" class="short-list ui-sortable"></ul>
+				<ul id="{{#suggestions}}" class="tree-list ui-sortable"></ul>
 			</div>
 		
 			{% wire id=#input

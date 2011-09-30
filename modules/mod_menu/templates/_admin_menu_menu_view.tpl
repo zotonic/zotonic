@@ -1,6 +1,6 @@
 <h3 class="above-list">{_ Current menu _}</h3>
 
-<ul class="short-list do_menuedit" id="menu-{{ id }}" data-menuedit="connectWith: '#trash'">
+<ul class="tree-list do_menuedit" id="menu-{{ id }}" data-menuedit="connectWith: '#trash'">
 	{% for mid, path, action in id.menu|menu_flat %}
 		{% with forloop.counter as c %}
 		{% if mid %}

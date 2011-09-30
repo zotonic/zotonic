@@ -811,10 +811,6 @@ ul.ui-sortable {
 	padding: 8px 6px;
 }
 
-ul.ui-sortable li {
-	padding: 0;
-}
-
 ul.ui-sortable li.placeholder {
 	padding: 1px 0 0;
     background: #efe;
@@ -870,30 +866,47 @@ li.hover, li.hover a {
 	border-color: #fff;
 }
 
-.short-list .line {
-	height: 15px;
-	border: 1px dotted #ccc !important;
-	background: none;
-	margin: 6px 0;
+ul.tree-list {
+	padding: 0;
 }
+
+ul.tree-list li {
+    position: relative;
+	display: block;
+	margin: 0;
+	padding: 0;
+	line-height: 27px;
+}
+
+ul.tree-list li div {
+	border: 1px solid #e0e0e0;
+    margin-bottom: -1px;
+    padding-left: 20px;
+    position: relative;
+}
+
+ul.tree-list li button,
+ul.tree-list li a.button {
+	margin: 3px 3px 0 0;
+}
+
+ul.tree-list li:last-child {
+	border: none;
+}
+
 
 #category-sorter .ui-draggable-dragging,
 .navigation-manager .ui-draggable-dragging {
 	width: 339px !important;
 }
 
-.grippy {
-	width: 18px;
-	height: 29px;
-	position: relative;
+img.grippy {
 	cursor: move;
+	position: absolute;
+	top: 4px;
+	left: 6px;
 }
 
-	.grippy img {
-		position: absolute;
-		top: 4px;
-		left: 6px;
-	}
 
 .short-list li.depth-1 { margin-left: 0; }
 .short-list li.depth-2 { margin-left: 30px; }

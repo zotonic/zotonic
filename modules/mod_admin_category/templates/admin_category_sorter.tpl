@@ -9,27 +9,20 @@
 
 			<h2>{_ Page Categories _}</h2>
 
-{#
-			{% if editable %}
-				{% button text="Make a new category" action={dialog_category_add on_success={reload}} %}
-			{% endif %}
-			
-			<hr class="clear" />
-#}
 			<div id="category-sorter" class="clear zp-50">
 				{% include "_admin_category_sorter.tpl" %}
 			</div>
-			
+
 			<div id="sidebar" class="zp-50">
 				<h3 class="above-list">{_ How does this work? _}</h3>
 				<div class="item">
 					<div class="zp-30">
 						{% include "_menu_trash.tpl" %}
 
-						<ul id="sortable-new" class="short-list ui-sortable" title="{_ Drag to add a new page _}">
+						<ul id="sortable-new" class="tree-list ui-sortable" title="{_ Drag to add a new page _}">
 							<li class="header" id="page-new-category">
 								<div class="clearfix">
-									<span class="grippy"><img src="/lib/images/grippy.png" alt="{_ Drag me _}" /></span>
+									<img class="grippy" src="/lib/images/grippy.png" alt="{_ Drag me _}" />
 									<span>{_ New category _}</span>
 								</div>
 							</li>
