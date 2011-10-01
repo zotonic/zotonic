@@ -33,6 +33,7 @@ html(Context) ->
     Vars = [
         {page_admin_backup, true},
         {backups, mod_backup:list_backups(Context)},
+        {backup_config, mod_backup:check_configuration(Context)},
         {backup_in_progress, mod_backup:backup_in_progress(Context)}
     ],
 	Html = z_template:render("admin_backup.tpl", Vars, Context),
