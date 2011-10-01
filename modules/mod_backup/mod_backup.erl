@@ -306,20 +306,27 @@ pg_dump(Name, Context) ->
 %% @doc Make a tar archive of all the files in the archive directory.
 archive(Name, Context) ->
     ArchiveDir = z_path:media_archive(Context),
-    DumpFile = filename:join(dir(Context), z_convert:to_list(Name) ++ ".tar.gz"),
-    Command = lists:flatten([
-                    archive_cmd(Context),
-                    " -c -z ",
-                    "-f '", DumpFile, "' ",
-                    "-C '", ArchiveDir, "' ",
-                    " ."]),
-    [] = os:cmd(Command),
-    ok.
+    case filelib:is_dir(ArchiveDir) of
+        true ->
+            DumpFile = filename:join(dir(Context), z_convert:to_list(Name) ++ ".tar.gz"),
+            Command = lists:flatten([
+                                     archive_cmd(Context),
+                                     " -c -z ",
+                                     "-f '", DumpFile, "' ",
+                                     "-C '", ArchiveDir, "' ",
+                                     " ."]),
+            [] = os:cmd(Command),
+            ok;
+        false ->
+            %% No files uploaded
+            ok
+    end.
+
 
 %% @doc List all backups in the backup directory.
 list_backup_files(Context) ->
-    Files = filelib:wildcard(filename:join(dir(Context), "*.tar.gz")),
-    lists:reverse(lists:sort([ {filename:rootname(filename:basename(F), ".tar.gz"), filename_to_date(F)} || F <- Files ])).
+    Files = filelib:wildcard(filename:join(dir(Context), "*.sql")),
+    lists:reverse(lists:sort([ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F)} || F <- Files ])).
 
 filename_to_date(File) ->
     [Y1,Y2,Y3,Y4,M1,M2,D1,D2,$-,H1,H2,I1,I2,S1,S2,$.|_] = filename:basename(File),
