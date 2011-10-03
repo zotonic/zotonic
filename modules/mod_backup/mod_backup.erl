@@ -36,7 +36,8 @@
     list_backups/1,
     backup_in_progress/1,
     file_exists/2,
-    file_forbidden/2
+    file_forbidden/2,
+	check_configuration/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -44,7 +45,7 @@
 -record(state, {context, backup_start, backup_pid, timer_ref}).
 
 % Interval for checking for new and/or changed files.
--define(BCK_POLL_INTERVAL, 3600).
+-define(BCK_POLL_INTERVAL, 3600 * 1000).
 
 
 %% @doc Callback for resource_file_readonly.  Check if the file exists.
@@ -160,7 +161,7 @@ handle_info(periodic_backup, State) ->
     cleanup(State#state.context),
     z_utils:flush_message(periodic_backup), 
     {Date, Time} = calendar:local_time(),
-    case Time >= {3,0,0} andalso Time =< {6,0,0} of
+    case Time >= {3,0,0} andalso Time =< {7,0,0} of
         true ->
             DoStart = case list_backup_files(State#state.context) of
                 [{_, LastBackupDate}|_] -> LastBackupDate < {Date, {0,0,0}};
@@ -247,10 +248,15 @@ do_backup(Name, State) ->
 
 %% @todo Add a tar of all files in the files/archive directory (excluding preview)
 do_backup_process(Name, Context) ->
-    ok = pg_dump(Name, Context),
-    ok = archive(Name, Context),
-    ok.
-    
+    Cfg = check_configuration(Context),
+    case proplists:get_value(ok, Cfg) of
+        true ->
+            ok = pg_dump(Name, Context),
+            ok = archive(Name, Context);
+        false ->
+            {error, not_configured}
+    end.
+
 
 %% @doc Return and ensure the backup directory
 dir(Context) ->
@@ -265,7 +271,6 @@ pg_dump(Name, Context) ->
     Password = m_site:get(dbpassword, Context),
     Database = m_site:get(dbdatabase, Context),
     Schema = m_site:get(dbschema, Context),
-    PgDump = m_config:get_value(mod_backup, pg_dump, "pg_dump", Context),
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),
     ok = file:write_file(PgPass, z_convert:to_list(Host)
@@ -274,41 +279,54 @@ pg_dump(Name, Context) ->
                                 ++":"++z_convert:to_list(User)
                                 ++":"++z_convert:to_list(Password)),
     ok = file:change_mode(PgPass, 8#00600),
-    Command = iolist_to_binary([
-                    "PGPASSFILE='",PgPass,"' '",
-                    PgDump,
-                    "' -h ", Host, 
-                    " -p ", z_convert:to_list(Port), 
-                    " -w ", 
-                    " -f '", DumpFile, "' ", 
-                    " -U '", User, "' ", 
-                    " -n '", Schema, "' ",
-                    Database]),
-    case os:cmd(binary_to_list(Command)) of
-        [] ->
-            nop;
-        _Output ->
-            ?zWarning(_Output, Context)
-    end,
-    ok = file:delete(PgPass).
+    Command = [
+               "PGPASSFILE='",PgPass,"' '",
+               db_dump_cmd(Context),
+               "' -h ", Host,
+               " -p ", z_convert:to_list(Port),
+               " -w ", 
+               " -f '", DumpFile, "' ",
+               " -U '", User, "' ",
+               case z_utils:is_empty(Schema) of
+                   true -> [];
+                   false -> [" -n '", Schema, "' "]
+               end,
+               Database],
+    Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
+                 [] ->
+                     ok;
+                 _Output ->
+                     ?zWarning(_Output, Context),
+                     {error, _Output}
+             end,
+    ok = file:delete(PgPass),
+    Result.
 
 
 %% @doc Make a tar archive of all the files in the archive directory.
 archive(Name, Context) ->
     ArchiveDir = z_path:media_archive(Context),
-    DumpFile = filename:join(dir(Context), z_convert:to_list(Name) ++ ".tar.gz"),
-    Command = lists:flatten([
-                    "tar -c -z ",
-                    "-f '", DumpFile, "' ",
-                    "-C '", ArchiveDir, "' ",
-                    " ."]),
-    [] = os:cmd(Command),
-    ok.
+    case filelib:is_dir(ArchiveDir) of
+        true ->
+            DumpFile = filename:join(dir(Context), z_convert:to_list(Name) ++ ".tar.gz"),
+            Command = lists:flatten([
+                                     archive_cmd(Context),
+                                     " -c -z ",
+                                     "-f '", DumpFile, "' ",
+                                     "-C '", ArchiveDir, "' ",
+                                     " ."]),
+            [] = os:cmd(Command),
+            ok;
+        false ->
+            %% No files uploaded
+            ok
+    end.
+
 
 %% @doc List all backups in the backup directory.
 list_backup_files(Context) ->
     Files = filelib:wildcard(filename:join(dir(Context), "*.sql")),
-    lists:reverse(lists:sort([ {filename:rootname(filename:basename(F)), filename_to_date(F)} || F <- Files ])).
+    lists:reverse(lists:sort([ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F)} || F <- Files ])).
 
 filename_to_date(File) ->
     [Y1,Y2,Y3,Y4,M1,M2,D1,D2,$-,H1,H2,I1,I2,S1,S2,$.|_] = filename:basename(File),
@@ -320,3 +338,19 @@ filename_to_date(File) ->
     S = list_to_integer([S1,S2]),
     {{Y,M,D},{H,I,S}}.
 
+
+archive_cmd(Context) ->
+    z_convert:to_list(m_config:get_value(?MODULE, tar, "tar", Context)).
+
+db_dump_cmd(Context) ->
+    z_convert:to_list(m_config:get_value(?MODULE, pg_dump, "pg_dump", Context)).
+
+
+%% @doc Check if we can make backups, the configuration is ok
+check_configuration(Context) ->
+    Which = fun(Cmd) -> filelib:is_regular(z_string:trim_right(os:cmd("which " ++ z_utils:os_escape(Cmd)))) end,
+    Db = Which(db_dump_cmd(Context)),
+    Tar = Which(archive_cmd(Context)),
+    [{ok, Db and Tar},
+     {db_dump, Db},
+     {archive, Tar}].

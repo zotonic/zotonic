@@ -45,6 +45,10 @@ viewer(undefined, _Options, _Context) ->
     {ok, []};
 viewer([], _Options, _Context) ->
     {ok, []};
+viewer(#rsc_list{list=[]}, _Options, _Context) ->
+    {ok, []};
+viewer(#rsc_list{list=[Id|_]}, Options, Context) ->
+    viewer(Id, Options, Context);
 viewer(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> viewer(Id, Options, Context);
@@ -97,6 +101,10 @@ tag(undefined, _Options, _Context, _Visited) ->
     {ok, []};
 tag([], _Options, _Context, _Visited) ->
     {ok, []};
+tag(#rsc_list{list=[]}, _Options, _Context, _Visited) ->
+    {ok, []};
+tag(#rsc_list{list=[Id|_]}, Options, Context, Visited) ->
+    tag(Id, Options, Context, Visited);
 tag(Name, Options, Context, Visited) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> tag(Id, Options, Context, Visited);
@@ -136,6 +144,7 @@ tag(Filename, Options, Context, _Visited) when is_list(Filename) ->
     tag1(FilePath, Filename, Options, Context);
 tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
     tag1(FilePath, Filename, Options, Context).
+
     
 
     tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->

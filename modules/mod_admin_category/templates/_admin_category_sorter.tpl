@@ -2,30 +2,23 @@
 		
 	<div class="padding">
 		<h3 class="above-list">Category overview</h3>
-		<ul class="short-list categories">
-			{% for id, depth, nbsp, name in m.category.all_flat_meta %}
-
-				{% if editable %}
-					{% droppable id=#before.id tag="b-"|append:id %}
-					{% droppable id=#cat.id tag="t-"|append:id %}
-					{% draggable id=#cat.id tag="t-"|append:id  clone %}
+		<ul id="category" class="tree-list categories {% if editable %}do_menuedit{% endif %}" data-menuedit="connectWith: '#trash'">
+			{% for mid, path, action in m.category.menu|menu_flat %}
+				{% with forloop.counter as c %}
+				{% if mid %}
+					<li class="header" id="{{ #cat.mid }}">
+						{% include "_menu_edit_item.tpl" id=mid %}
+					{% if action == `down` %}
+						<ul>
+					{% else %}
+						</li>
+					{% endif %}
+				{% else %}
+				</ul></li>
 				{% endif %}
-
-				<li id="{{ #before.id }}" class="line depth-{{ depth }}"></li>
-
-				<li id="{{ #cat.id }}" class="depth-{{ depth }}">
-					<span class="grippy"><img src="/lib/images/grippy.png" alt="Drag me" /></span>
-					<a href="{% url admin_edit_rsc id=id %}" class="clearfix">
-						<span class="cat-title">{{ m.rsc[id].title|default:name }}</span>
-					</a>
-				</li>
+				{% endwith %}
 			{% endfor %}
-
-			{% if editable %}
-				{% droppable id=#last tag="end" %}
-			{% endif %}
-
-			<li id="{{ #last }}" class="line"></li>
 		</ul>
 	</div>
 {% endwith %}
+

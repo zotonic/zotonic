@@ -45,6 +45,7 @@
     name_to_id/2,
     name_to_id_check/2,
     id_to_name/2,
+    move/2,
     move_below/3,
     move_end/2,
     move_before/3,
@@ -53,12 +54,13 @@
     all_flat/2,
     all_flat_meta/1,
     ranges/2,
+    menu/1,
     tree/1,
     tree/2,
     tree_depth/2,
     tree_depth/3,
     renumber/1,
-    renumber_pivot_task/2,
+    renumber_pivot_task/1,
     enumerate/1,
     boundaries/2      
 ]).
@@ -75,6 +77,8 @@ m_find_value(tree1, #m{value=undefined}, Context) ->
     get_root(Context);
 m_find_value(tree2, #m{value=undefined}, Context) ->
     tree_depth(2, Context);
+m_find_value(menu, #m{value=undefined}, Context) ->
+    menu(Context);
 m_find_value(all_flat, #m{value=undefined}, Context) ->
     all_flat(Context);
 m_find_value(all_flat_meta, #m{value=undefined}, Context) ->
@@ -249,6 +253,30 @@ last_modified(Cat, Context) ->
     end.
 
 
+%% @doc Move categories to the given positions, no checks (except ACL done)
+move(Cats, Context) ->
+    [
+        true = z_acl:is_allowed(update, Id, Context)
+        || {Id, _ParentId, _Seq} <- Cats
+    ],
+    F = fun(Ctx) ->
+            [
+                z_db:q("update category 
+                        set parent_id = $2, 
+                            seq = $3
+                        where id = $1",
+                       [Id,ParentId,Seq],
+                       Ctx)
+                || {Id, ParentId, Seq} <- Cats
+            ],
+            renumber(Ctx),
+            ok
+        end,
+    ok = z_db:transaction(F, Context),
+    z_depcache:flush(category, Context),
+    ok.
+
+
 %% @doc Move the category below another category, placing it at the end of the children of that category.
 %% @spec move_below(CatId::int(), NewParentId::int(), Context) -> ok | {error, Reason}
 move_below(Id, ParentId, Context) ->
@@ -338,9 +366,13 @@ update_sequence(Ids, Context) ->
 %% @doc Delete the category, move referring pages to another category. Fails when the transfer id is not a category.
 %% @spec delete(Id::int(), TransferId::int(), Context) -> ok | {error, Reason}
 delete(Id, TransferId, Context) ->
-    % fail when deleting 'other' or 'category'
+    % fail when deleting 'other', 'meta', 'category' or 'predicate'
     case z_db:q("select name from rsc where id = $1", [Id], Context) of
-        N when N == <<"other">>; N == <<"category">> -> {error, is_system_category};
+        N when  N == <<"other">>; 
+                N == <<"meta">>; 
+                N == <<"category">>; 
+                N == <<"predicate">> ->
+            {error, is_system_category};
         _ ->
             case z_acl:is_allowed(delete, Id, Context) of
                 true ->
@@ -511,6 +543,19 @@ all_flat(CatId, Context) ->
     [ {Id, Lvl, string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Lvl-1), flat_title(Name, Props)} || {Id, Lvl, Name, Props} <- All ].
 
 
+%% @doc Return the category tree as a menu resource
+menu(Context) ->
+    tree_to_menu(tree(Context), []).
+
+    tree_to_menu([], Acc) ->
+        lists:reverse(Acc);
+    tree_to_menu([Cat|Rest], Acc) ->
+        {id, Id} = proplists:lookup(id, Cat),
+        {children, {ok, Cs}} = proplists:lookup(children, Cat),
+        Cs1 = tree_to_menu(Cs, []),
+        tree_to_menu(Rest, [{Id,Cs1}|Acc]).
+
+
 %% @doc Return the tree of all categories
 %% @spec tree(Context) -> Tree
 tree(Context) ->
@@ -618,34 +663,32 @@ renumber_transaction(Context) ->
                 , Context)
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],
-    z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [1], Context),
+    z_pivot_rsc:insert_task_after(10, ?MODULE, renumber_pivot_task, "m_category:renumber", [], Context),
     ok.
 
 %% @doc Resync all ids that have their category nr changed.
-renumber_pivot_task(LowId, Context) ->
+renumber_pivot_task(Context) ->
     Nrs = z_db:q("select r.id, c.nr
                  from rsc r, category c
-                 where r.id >= $1
-                   and c.id = r.category_id
+                 where c.id = r.category_id
                    and (r.pivot_category_nr is null or r.pivot_category_nr <> c.nr)
                  order by r.id
-                 limit 500", [LowId], Context),
+                 limit 500", Context),
     case Nrs of
         [] ->
-            case LowId of
-                1 -> ok;
-                _ -> m_category:renumber_pivot_task(1, Context)
-            end;
+            ok;
         Ids ->
             ok = z_db:transaction(fun(Ctx) ->
                     [
-                        z_db:q("update rsc set pivot_category_nr = $2 where id = $1", [Id, CatNr], Ctx)
+                        z_db:q("update rsc
+                                set pivot_category_nr = $2 
+                                where id = $1 
+                                  and (pivot_category_nr is null or pivot_category_nr <> $2)", [Id, CatNr], Ctx)
                         || {Id,CatNr} <- Ids
                     ],
                     ok
                 end, Context),
-            {HighestId,_} = lists:last(Ids),
-            z_pivot_rsc:insert_task(?MODULE, renumber_pivot_task, "m_category:renumber", [HighestId+1], Context)
+            {delay, 1}
     end.
 
 

@@ -22,8 +22,11 @@
 						{_ Created by _} {{ m.rsc[r.creator_id].title }}.<br/>
 					</span>
 				</p>
-				<h2>{{ r.title|striptags|default:"<em>untitled</em>" }}
-					<span>{{ m.rsc[r.category_id].title|lower }} <a href="#category">{_ change _}</a></span>
+				<h2>{{ r.title|striptags|default:_"<em>untitled</em>" }}
+                    {% if m.acl.insert[r.category.name|as_atom] and not r.is_a.meta %}
+					<span>{{ m.rsc[r.category_id].title|lower }} <a href="javascript:;" id="changecategory">{_ change _}</a></span>
+                    {% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}
+                    {% endif %}
 				</h2>
 			{% endif %}
 
@@ -37,12 +40,11 @@
 					<div class="padding">
 
 						{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
-
 						{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
 
 						{% if r.is_a.media or r.medium %}
 							{% include "_admin_edit_content_media.tpl" %}
-						
+
 							{% if is_editable %}
 								{% include "_admin_edit_content_website.tpl" %}
 							{% endif %}
@@ -79,10 +81,6 @@
 
 						{# Page connections #}
 						{% include "_admin_edit_content_page_connections.tpl" %}
-
-						{% if m.acl.insert[r.category.name|as_atom] %}
-							{% include "_admin_edit_content_category.tpl" %}
-						{% endif %}
 					</div>
 				</div>
 			</form>

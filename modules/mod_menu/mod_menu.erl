@@ -28,42 +28,18 @@
 %% interface functions
 -export([
     init/1,
-    datamodel/1,
+    event/2,
+    observe_menu_get_rsc_ids/2,
+    observe_menu_save/2,
     get_menu/1,
     get_menu/2,
     set_menu/3,
-    observe_menu_get_rsc_ids/2,
-    observe_menu_save/2,
-    test/0,
-    menu_flat/2
+    datamodel/1,
+    menu_flat/2,
+    test/0
 ]).
 
-%% @doc The datamodel for the menu routines.
-datamodel(Context) ->
-    [
-     {categories,
-      [
-       {menu, categorization,
-        [{title, <<"Page menu">>}]
-       }
-      ]
-     },
-     {resources,
-      case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
-          undefined ->
-              [];
-          Menu ->
-              [
-               {main_menu,
-                menu,
-                [{title, <<"Main menu">>},
-                 {menu, Menu}
-                ]
-               }
-              ]
-      end
-     }
-    ].
+
 
 %% @doc Initializes the module (after the datamodel is installed).
 init(Context) ->
@@ -76,6 +52,142 @@ init(Context) ->
             set_menu(OldMenu, Context),
             m_config:delete(menu, menu_default, Context)
     end.
+
+
+event({postback_notify, "menuedit", TriggerId, _TargetId}, Context) ->
+    {Kind, RootId, Predicate} = get_kind_root(TriggerId),
+    Tree = unpack(z_context:get_q("tree", Context)),
+    {Tree1, Context1} = create_new(Tree, Context),
+    case z_context:get_q("kind", Context1, Kind) of
+        category ->
+            % This is the category hierarchy.
+            z_notifier:notify({category_hierarchy_save, Tree1}, Context1),
+            Context1;
+        menu ->
+            % A menu hierarchy, give it to the menu routines
+            z_notifier:notify({menu_save, m_rsc:rid(RootId, Context1), Tree1}, Context1),
+            Context1;
+        edge ->
+            % Hierarchy using edges between resources
+            hierarchy_edge(m_rsc:rid(RootId, Context1), Predicate, Tree1, Context1)
+    end.
+
+% @doc Sync a hierarchy based on edges (silently ignore ACL errors)
+hierarchy_edge(RootId, Predicate, Tree, Context) ->
+    Predicate = z_context:get_q("z_predicate", Context, Predicate),
+    {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
+    {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+    move_edges(RootId, Tree, PredName, Context),
+    z_notifier:notify({hierarchy_updated, RootId, PredName}, Context),
+    Context.
+
+move_edges(RootId, Tree, Pred, Context) ->
+    Wanted = [ Id || {Id,_SubTree} <- Tree ],
+    case z_acl:rsc_editable(RootId, Context) of
+        true -> ok = m_edge:replace(RootId, Pred, Wanted, Context);
+        false -> ignore
+    end,
+    [ move_edges(Id, SubTree, Pred, Context) || {Id, SubTree} <- Tree ].
+
+
+
+%% @doc The id of the root ul should be one of:
+%%      category
+%%      menu-ID
+%%      edge-ROOTID
+%%      edge-ROOTID-PREDICATE
+%%      collection-ROOTID
+get_kind_root("category") ->
+    {category, undefined, undefined};
+get_kind_root("menu-"++MenuId) ->
+    {menu, MenuId, undefined};
+get_kind_root(TriggerId) ->
+    case string:tokens(TriggerId, "-") of
+        ["edge", RootId, Predicate] ->
+            {edge, RootId, Predicate};
+        ["collection", RootId] ->
+            {edge, RootId, haspart};
+        _ ->
+            {edge, TriggerId, haspart}
+    end.
+
+unpack(S) ->
+    {[], Tree} = unpack(S, []),
+    Tree.
+
+unpack([$[|S], Acc) ->
+    unpack(S, Acc);
+unpack([$]|S], Acc) ->
+    {S, lists:reverse(Acc)};
+unpack([$,|S], Acc) ->
+    unpack(S, Acc);
+unpack(S, Acc) ->
+    {Id,S1} = lists:splitwith(fun(C) when C==$[; C==$]; C==$, -> false; (_) -> true end, S),
+    {Rest,Sub} = case S1 of
+                    [$[|Xs] -> unpack(Xs, []);
+                    _ -> {S1,[]}
+                 end,
+    Acc1 = [{map_id(Id),Sub}|Acc],
+    unpack(Rest,Acc1).
+
+map_id(Id) ->
+    Id1 = lists:last(string:tokens(Id, "-")),
+    case z_utils:only_digits(Id1) of
+        true -> list_to_integer(Id1);
+        false -> Id
+    end.
+
+
+create_new([], Context) ->
+    {[], Context};
+create_new(List, Context) ->
+    create_new(List, [], Context).
+
+
+    create_new([], Acc, Context) ->
+        {lists:reverse(Acc), Context};
+    create_new([{Id,Sub}|Rest], Acc, Context) ->
+        {Id1, Context1} = create_new_if_needed(Id, Context),
+        {Sub1, Context2} = create_new(Sub, Context1),
+        create_new(Rest, [{Id1,Sub1}|Acc], Context2).
+    
+    
+    create_new_if_needed(Id, Context) when is_integer(Id) ->
+        {Id, Context};
+    create_new_if_needed(Id, Context) ->
+        Category = case lists:last(string:tokens(Id, "-")) of
+                        [] ->
+                            text;
+                        C ->
+                            case m_category:name_to_id(C, Context) of
+                                {error, _} -> text;
+                                {ok, C1} -> C1
+                            end
+                   end,
+        Props = [
+            {is_published, false},
+            {category, Category},
+            {title, ?__("New page", Context)}
+        ],
+        {ok, RscId} = m_rsc:insert(Props, Context),
+        OuterId = iolist_to_binary(["outernew-",integer_to_list(RscId)]),
+        InnerId = iolist_to_binary(["innernew-",integer_to_list(RscId)]),
+        Context1 = z_render:wire(
+            [
+                {script, [{script, ["$('#",Id,"').attr('id','",OuterId,"');"]}]},
+                {dialog_edit_basics, [
+                            {id, RscId}, 
+                            {target, InnerId},
+                            {template, "_menu_edit_item.tpl"}
+                    ]},
+                {update, [
+                            {target, OuterId}, 
+                            {menu_id, InnerId}, 
+                            {id, RscId}, 
+                            {template, "_menu_edit_item.tpl"}
+                    ]}
+            ], Context),
+        {RscId, Context1}.
 
 
 
@@ -171,6 +283,35 @@ menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc, Context ) ->
 menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
     %% oldschool notation fallback
     menu_flat([{MenuId, []} | Rest], P, A, C).
+
+
+%% @doc The datamodel for the menu routines.
+datamodel(Context) ->
+    [
+     {categories,
+      [
+       {menu, categorization,
+        [{title, <<"Page menu">>}]
+       }
+      ]
+     },
+     {resources,
+      case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
+          undefined ->
+              [];
+          Menu ->
+              [
+               {main_menu,
+                menu,
+                [{title, <<"Main menu">>},
+                 {menu, Menu}
+                ]
+               }
+              ]
+      end
+     }
+    ].
+
 
 
 

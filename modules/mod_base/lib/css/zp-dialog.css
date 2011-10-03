@@ -214,6 +214,10 @@ h5.dialog-title {
 	color: #eee;
 }
 
+.dialog a, .dialog a:focus {
+    color: #fff;
+}
+
 .dialog input.form-field-error,
 .dialog textarea.form-field-error {
 	background: #603d3d; 
