@@ -266,10 +266,12 @@ update_config(State) ->
                 smtp_spamd_port=SmtpSpamdPort}.
 
 
-% E-mail domain, depends on the smtp domain of the sending site
-
+%% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
 bounce_email(MessageId, Context) ->
-    "noreply+"++z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
+    case m_config:get_value(site, bounce_email_override, Context) of
+        undefined -> "noreply+"++MessageId;
+        VERP      -> z_convert:to_list(VERP)
+    end.
 
 reply_email(MessageId, Context) ->
     "reply+"++z_convert:to_list(MessageId)++[$@ | email_domain(Context)].
@@ -325,6 +327,10 @@ get_email_from(Context) ->
         EmailFrom -> z_convert:to_list(EmailFrom)
     end.
 
+% Unique message-id, depends on bounce domain
+message_id(MessageId, Context) ->
+    z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
+
 %% @doc Remove a worker Pid from the server state.
 remove_worker(Pid, State) ->
     Filtered = lists:filter(fun({_,P}) -> P =/= Pid end, State#state.sending),
@@ -350,7 +356,8 @@ send_email(Id, Recipient, Email, Context, State) ->
 
 spawn_send(Id, Recipient, Email, Context, State) ->
     F = fun() ->
-            VERP = "<"++bounce_email(Id, Context)++">",
+            MessageId = message_id(Id, Context),
+            VERP = "<"++bounce_email(MessageId, Context)++">",
 
             From = get_email_from(Email#email.from, VERP, State, Context),
             Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
@@ -358,7 +365,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
             {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
             [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
 
-            EncodedMail = encode_email(Id, Email, VERP, From, Context),
+            EncodedMail = encode_email(Id, Email, "<"++MessageId++">", From, Context),
             
             SmtpOpts = 
                 case State#state.smtp_relay of
@@ -447,12 +454,12 @@ spawn_send(Id, Recipient, Email, Context, State) ->
     State#state{sending=[{Id,SenderPid}|State#state.sending]}.
 
 
-encode_email(_Id, #email{raw=Raw}, _VERP, _From, _Context) when is_list(Raw); is_binary(Raw) ->
+encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
         "X-Mailer: Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)\r\n", 
         Raw
     ]);
-encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
+encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     %% Optionally render the text and html body
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
     ContextRender = set_render_language(Vars, Context),
@@ -474,14 +481,14 @@ encode_email(Id, #email{body=undefined} = Email, VERP, From, Context) ->
                {"Subject", z_convert:to_flatlist(Subject)},
                {"Date", date(Context)},
                {"MIME-Version", "1.0"},
-               {"Message-ID", VERP},
+               {"Message-ID", MessageId},
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
-encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_tuple(Body) ->
+encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, Email#email.to},
-               {<<"Message-ID">>, VERP},
+               {<<"Message-ID">>, MessageId},
                {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
@@ -490,10 +497,10 @@ encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_tuple(B
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
     ],
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts});
-encode_email(Id, #email{body=Body} = Email, VERP, From, Context) when is_list(Body); is_binary(Body) ->
+encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
                {"To", z_convert:to_list(Email#email.to)},
-               {"Message-ID", VERP},
+               {"Message-ID", MessageId},
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
