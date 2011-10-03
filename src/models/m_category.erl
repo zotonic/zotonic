@@ -683,7 +683,7 @@ renumber_pivot_task(Context) ->
                         z_db:q("update rsc
                                 set pivot_category_nr = $2 
                                 where id = $1 
-                                  and pivot_category_nr <> $2", [Id, CatNr], Ctx)
+                                  and (pivot_category_nr is null or pivot_category_nr <> $2)", [Id, CatNr], Ctx)
                         || {Id,CatNr} <- Ids
                     ],
                     ok
