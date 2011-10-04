@@ -20,3 +20,24 @@
 				cat=m.predicate.object_category[predicate]
 			}
 %}
+
+{% with m.rsc[("admin_action_link_defaults_"|append:predicate)].id as defaults_id %}
+{% if defaults_id %}
+<div class="form-item">
+    {_ Alternatively, choose an item from this predefined list: _}
+</div>
+<div class="form-item">
+
+        {% for did in m.search[{query query_id=defaults_id}] %}
+        {% if not did|member:m.rsc[subject_id].o[predicate] %}
+        {% button text=did.title
+           action={link subject_id=subject_id predicate=predicate element_id=element_id edge_template=edge_template object_id=did} 
+           action={dialog_close}
+           action=action
+        %}
+        {% endif %}
+        {% endfor %}
+</div>
+
+{% endif %}
+{% endwith %}
