@@ -670,7 +670,7 @@ ensure_table(Table, Cols, Context) ->
     column_spec_nullable(false) -> " not null".
     
     column_spec_default(undefined) -> "";
-    column_spec_default(Default) -> [32, Default].
+    column_spec_default(Default) -> [" DEFAULT ", Default].
 
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
