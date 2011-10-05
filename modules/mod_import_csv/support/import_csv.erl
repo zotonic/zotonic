@@ -406,6 +406,9 @@ map_one({surroundspace, Field}, Row, State) ->
 map_one({name_prefix, Prefix, Rest}, Row, State) ->
     {name_prefix, Prefix, map_one(Rest, Row, State)};
 
+map_one({datetime, F}, Row, State) ->
+    z_convert:to_datetime(map_one(F, Row, State));
+
 map_one({date, F}, Row, State) ->
     z_convert:to_date(map_one(F, Row, State));
 

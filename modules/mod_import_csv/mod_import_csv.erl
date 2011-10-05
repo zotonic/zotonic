@@ -224,6 +224,8 @@ unique([C|Cs], Acc) ->
 cols2importdef_map('') -> undefined;
 cols2importdef_map(name) -> undefined;
 cols2importdef_map(name_prefix) -> undefined;
-cols2importdef_map(date_start) ->  {date_start, {datetime, date_start, <<"00:00:00">>}};
-cols2importdef_map(date_end) ->  {date_end, {datetime, date_end, <<"23:59:59">>}};
+cols2importdef_map(date_start) ->  {date_start, {datetime, date_start}};
+cols2importdef_map(date_end) ->  {date_end, {datetime, date_end}};
+cols2importdef_map(publication_start) ->  {publication_start, {datetime, publication_start}};
+cols2importdef_map(publication_end) ->  {publication_end, {datetime, publication_end}};
 cols2importdef_map(X) -> {X, X}.
