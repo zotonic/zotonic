@@ -59,7 +59,7 @@ ensure_id(Context) ->
             {Context2, N};
         undefined ->
             try
-                IdN = list_to_integer(z_context:get_q("id", Context2)),
+                {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context2), Context2),
                 {z_context:set(id, IdN, Context2), IdN}
             catch
                 _:_ -> {Context2, undefined}
