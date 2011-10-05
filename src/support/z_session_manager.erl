@@ -49,6 +49,7 @@
 	add_script/2,
     count/1, 
     dump/1, 
+	get_session_id/1,
     tick/1,
     foreach/2,
     broadcast/2
