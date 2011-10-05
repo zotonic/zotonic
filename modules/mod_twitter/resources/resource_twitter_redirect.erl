@@ -54,13 +54,12 @@ moved_temporarily(ReqData, Context) ->
     case oauth_twitter_client:get_access_token(Token, Context) of
         {ok, AccessToken} ->
             z_context:set_session(twitter_logon, true, Context1),
-            ?DEBUG("after login"),
-            ?DEBUG(AccessToken),
             z_context:set_session(twitter_access_token, AccessToken, Context1),
 
             case fetch_user_data(AccessToken, Context1) of
                 {ok, UserProps} ->
-                    logon_twitter_user(UserProps, z_context:get_q("p", Context1), Context1);
+                    Page = z_context:get_session(twitter_ready_page, Context1),
+                    logon_twitter_user(UserProps, Page, Context1);
                 {error, Reason} ->
                     redirect_error(Reason, Context1)
             end;

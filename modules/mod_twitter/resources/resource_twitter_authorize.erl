@@ -52,11 +52,11 @@ moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     {ok, {Token, Secret}} = oauth_twitter_client:get_request_token(Context1),
     z_context:set_session(twitter_request_token, {Token, Secret}, Context),
+    z_context:set_session(twitter_ready_page, get_page(Context1), Context1),
 
-    Page = get_page(Context1),
     RedirectUrl = lists:flatten(
                         z_context:abs_url(
-                            lists:flatten(z_dispatcher:url_for(twitter_redirect, [{p,Page}], Context1)), 
+                            lists:flatten(z_dispatcher:url_for(twitter_redirect, [], Context1)), 
                             Context1)),
     Location = oauth_twitter_client:authorize_url(Token)
         ++ "&oauth_callback=" ++ z_utils:url_encode(RedirectUrl),
