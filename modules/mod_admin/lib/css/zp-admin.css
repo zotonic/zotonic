@@ -588,6 +588,10 @@ input[type="radio"],
 	margin: 0 0 9px 0;
 }
 
+ul.media-sorter {
+    padding: 6px 0 !important;
+}
+
 ul.media-sorter li {
 	width: 187px;
 	float: left;
@@ -698,6 +702,9 @@ span.add-connection {
 .unlink-item {
 	float: left;
 	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 140px;
 }
 
 .unlink-cross {
@@ -817,23 +824,15 @@ ul.ui-sortable li.placeholder {
     border: 1px solid #ccc;
 }
 
-ul.ui-sortable li div {
-	padding: 1px 0 0;
-	border: 1px solid #e0e0e0;
-	background: #fff;
-	display: block;
-	cursor: move;
+ul.ui-sortable li .grippy img {
+	position: absolute;
+	top: 4px;
+	left: 6px;
 }
 
-	ul.ui-sortable li .grippy img {
-		position: absolute;
-		top: 4px;
-		left: 6px;
-	}
-
-		ul.ui-sortable li ul li {
-			border: none;
-		}
+ul.ui-sortable li ul li {
+	border: none;
+}
 
 .search-nav-items input.autocompleter {
 	width: 279px;
