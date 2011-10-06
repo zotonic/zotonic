@@ -47,12 +47,14 @@ escape_props(Props) ->
         Acc;
     escape_props([{_K,V} = Prop|T], Acc) when is_float(V); is_integer(V); is_atom(V) -> 
         escape_props(T, [Prop|Acc]);
-    escape_props([{body, V}|T], Acc) ->
-        escape_props(T, [{body, sanitize(V)} | Acc]);
-    escape_props([{body_extra, V}|T], Acc) ->
-        escape_props(T, [{body_extra, sanitize(V)} | Acc]);
+    escape_props([{K, V}|T], Acc) when K =:= body orelse K =:= body_extra->
+        escape_props(T, [{K, sanitize(V)} | Acc]);
     escape_props([{K, V}|T], Acc) ->
-        escape_props(T, [{K, escape_value(V)} | Acc]).
+        EscapeFun = case lists:reverse(atom_to_list(K)) of
+                        "lmth_" ++ _ -> fun sanitize/1; %% prop ends in '_html'
+                        _ -> fun escape_value/1
+                    end,
+        escape_props(T, [{K, EscapeFun(V)} | Acc]).
 
     escape_value({trans, Texts}) ->
         {trans, escape_props(Texts)};
