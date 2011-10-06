@@ -150,8 +150,10 @@ first(Msg, Context) ->
         undefined;
     first1([Obs|Rest], Msg, Context) ->
         case notify_observer(Msg, Obs, true, Context) of
-            undefined -> 
+            Continue when Continue =:= undefined; Continue =:= continue -> 
                 first1(Rest, Msg, Context);
+            {continue, Msg1} ->
+                first1(Rest, Msg1, Context);
             Result ->
                 Result
         end.
