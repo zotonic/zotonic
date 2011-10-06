@@ -176,9 +176,7 @@ to_datetime(B) when is_binary(B) ->
     to_datetime(binary_to_list(B));
 to_datetime(L) when is_list(L) ->
 	try
-		case string:tokens(L, " T+") of
-			[Date,Time,_TZ] ->
-                z_convert:to_datetime(Date++"T"++Time); % Timezone ignored.
+		case string:tokens(L, " T") of
 			[Date,Time] ->
                 WithTZ = fun(Tm, Tz, Mul) ->
                                  TZTime = to_time(Tz),
@@ -233,6 +231,8 @@ to_time({_,_,_} = D) -> D;
 to_time(B) when is_binary(B) ->
     to_time(binary_to_list(B));
 to_time([]) -> undefined;
+to_time([H1,H2,M1,M2]) ->
+    to_time([H1,H2,$:,M1,M2]);
 to_time(L) when is_list(L) ->
     [H,I,S|_] = lists:flatten([[to_integer(X) ||X <-  string:tokens(L, ":.")], 0, 0]),
     {H,I,S}.

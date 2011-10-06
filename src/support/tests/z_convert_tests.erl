@@ -35,6 +35,7 @@ convert_datetime_test() ->
     ?assertDatetime(calendar:universal_time_to_local_time({{2010,1,1},{17,29,39}}), "2010-01-01T18:29:39+01:00"),
     ?assertDatetime(calendar:universal_time_to_local_time({{2010,1,1},{20,29,39}}), "2010-01-01T18:29:39-02:00"),
 
+    ?assertDatetime(calendar:universal_time_to_local_time({{2011,10,6},{14,44,0}}), "2011-10-06T16:44:00+0200"),
     ok.
 
 datetime_to_iso_test() ->
