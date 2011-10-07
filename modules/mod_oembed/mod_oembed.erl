@@ -49,7 +49,7 @@ init(Context) ->
 %% then try to get the oembed information from the provider and update
 %% the attached medium item.
 %% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
+observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
     case proplists:is_defined(oembed_url, Props) of
         true -> 
             EmbedChanged = case proplists:get_value(oembed_url, Props) of
@@ -106,7 +106,7 @@ observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 %% the HTML code that the oembed provider gave us; if none found,
 %% falls back to the generic template <tt>_oembed_embeddable.tpl</tt>.
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer({media_viewer, Id, Props, Filename, Options}, Context) ->
+observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, options=Options}, Context) ->
     case proplists:get_value(mime, Props) of
         ?OEMBED_MIME ->
             TplOpts = [{id, Id}, {medium, Props}, {options, Options}, {filename, Filename}],
@@ -138,7 +138,7 @@ media_viewer_fallback(OEmbed, TplOpts, Context) ->
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage({media_stillimage, Id, Props}, Context) ->
+observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?OEMBED_MIME ->
             case m_rsc:p(Id, depiction, Context) of

@@ -58,7 +58,7 @@ is_allowed(_Action, _Object, #context{acl=admin}) ->
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed(Action, Object, Context) ->
-    case z_notifier:first({acl_is_allowed, Action, Object}, Context) of
+    case z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context) of
         undefined -> false;
         Other -> Other
     end.
@@ -69,7 +69,7 @@ is_allowed_prop(_Action, _Object, _Property, #context{acl=admin}) ->
 is_allowed_prop(_Action, _Object, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed_prop(Action, Object, Property, Context) ->
-    case z_notifier:first({acl_is_allowed_prop, Action, Object, Property}, Context) of
+    case z_notifier:first(#acl_is_allowed_prop{action=Action, object=Object, prop=Property}, Context) of
         undefined -> true; % Note, the default behaviour is different for props!
         Other -> Other
     end.
@@ -144,7 +144,7 @@ rsc_deletable(Id, Context) ->
 
 %% @doc Filter the properties of an update.  This is before any escaping.
 rsc_update_check(Id, Props, Context) ->
-	z_notifier:foldl({acl_rsc_update_check, Id}, Props, Context).
+	z_notifier:foldl(#acl_rsc_update_check{id=Id}, Props, Context).
 		
 
 %% @doc Set the acl fields of the context for the 'visible_for' setting.  Used when rendering scomps.
@@ -172,7 +172,7 @@ can_see(#context{acl=admin}) ->
 can_see(#context{user_id=?ACL_ANONYMOUS_USER_ID}) ->
     ?ACL_VIS_COMMUNITY;
 can_see(Context) ->
-	case z_notifier:first({acl_can_see}, Context) of
+	case z_notifier:first(#acl_can_see{}, Context) of
 		undefined -> [];
 		CanSee -> CanSee
 	end.
@@ -250,7 +250,7 @@ anondo(Context) ->
 %% @doc Log the user with the id on, fill the acl field of the context
 %% @spec logon(integer(), #context{}) -> #context{}
 logon(Id, Context) ->
-	case z_notifier:first({acl_logon, Id}, Context) of
+	case z_notifier:first(#acl_logon{id=Id}, Context) of
 		undefined -> Context#context{acl=undefined, user_id=Id};
 		#context{} = NewContext -> NewContext
 	end.
@@ -259,7 +259,7 @@ logon(Id, Context) ->
 %% @doc Log off, reset the acl field of the context
 %% @spec logoff(#context{}) -> #context{}
 logoff(Context) ->
-	case z_notifier:first({acl_logoff}, Context) of
+	case z_notifier:first(#acl_logoff{}, Context) of
 		undefined -> Context#context{user_id=undefined, acl=undefined};
 		#context{} = NewContext -> NewContext
 	end.

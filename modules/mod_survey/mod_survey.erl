@@ -314,7 +314,7 @@ do_submit(SurveyId, QuestionIds, Questions, Answers, Context) ->
     case Missing of
         [] ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
-            z_notifier:notify({survey_submit, SurveyId, FoundAnswers}, Context),
+            z_notifier:notify(#survey_submit{id=SurveyId, answers=FoundAnswers}, Context),
             ok;
         _ -> 
             {error, notfound}

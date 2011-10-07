@@ -36,7 +36,7 @@
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
 %% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
+observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
     case       proplists:is_defined(predicate_subject, Props) 
         orelse proplists:is_defined(predicate_object, Props) of
 

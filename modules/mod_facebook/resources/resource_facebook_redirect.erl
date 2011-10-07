@@ -74,7 +74,7 @@ redirect_error(Reason, Context) ->
     z_context:set_session(facebook_logon, false, Context),
     z_context:set_session(facebook_access_token, undefined, Context),
     z_context:set_session(facebook_access_token_expires, undefined, Context),
-    Location = case z_notifier:first({signup_failed_url, Reason}, Context) of
+    Location = case z_notifier:first(#signup_failed_url{reason=Reason}, Context) of
                    {ok, L} -> L;
                    undefined ->
                        z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)
@@ -135,7 +135,7 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
                 {identity, {email, proplists:get_value(email, FacebookProps), true, true}},
                 {ready_page, LocationAfterSignup}
             ],
-            case z_notifier:first({signup_url, Props, SignupProps}, Context) of
+            case z_notifier:first(#signup_url{props=Props, signup_props=SignupProps}, Context) of
                 {ok, Location} ->
                     use_see_other(Location, Context);
                     %?WM_REPLY({true, Location}, Context);

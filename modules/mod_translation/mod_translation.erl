@@ -110,14 +110,14 @@ observe_auth_logon(auth_logon, Context, _Context) ->
             Context1
     end.
 
-observe_set_user_language({set_user_language, UserId}, Context, _Context) when is_integer(UserId) ->
+observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when is_atom(Code), Code /= undefined -> 
             z_context:set_language(Code, Context);
         _ ->
             Context
     end;
-observe_set_user_language({set_user_language, _UserId}, Context, _Context) ->
+observe_set_user_language(#set_user_language{}, Context, _Context) ->
     Context.
 
 
@@ -214,7 +214,7 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
 do_set_language(Code, Context) when is_atom(Code) ->
     Context1 = z_context:set_language(Code, Context),
     z_context:set_session(language, Code, Context1),
-    z_notifier:notify({language, Code}, Context1),
+    z_notifier:notify(#language{language=Code}, Context1),
     Context1.
 
 

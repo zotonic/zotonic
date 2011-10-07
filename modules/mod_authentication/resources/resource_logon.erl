@@ -145,7 +145,7 @@ get_page(Context) ->
 %% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
     Page = z_context:get_q("page", Context, []),
-    case z_notifier:first({logon_ready_page, Page}, Context) of
+    case z_notifier:first(#logon_ready_page{request_page=Page}, Context) of
         undefined -> Page;
         Url -> Url
     end.
@@ -207,14 +207,14 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 	end;
 event({submit, [], "logon_verification_form", _Target}, Context) ->
 	UserId = list_to_integer(z_context:get_q("user_id", Context)),
-	case z_notifier:first({identity_verification, UserId}, Context) of
+	case z_notifier:first(#identity_verification{user_id=UserId}, Context) of
 		ok -> verification_sent(Context);
 		_Other -> verification_error(Context)
 	end;
 event({submit, {logon_confirm, Args}, "logon_confirm_form", _Target}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
-    case z_notifier:first({logon_submit, LogonArgs}, Context) of
+    case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
         {error, _Reason} ->
             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
         {ok, UserId} when is_integer(UserId) ->
@@ -224,7 +224,7 @@ event({submit, {logon_confirm, Args}, "logon_confirm_form", _Target}, Context) -
     end;
 event({submit, [], _Trigger, _Target}, Context) ->
     Args = z_context:get_q_all(Context),
-    case z_notifier:first({logon_submit, Args}, Context) of
+    case z_notifier:first(#logon_submit{query_args=Args}, Context) of
         undefined -> logon_error(Context); % No handler for posted args
         {error, _Reason} -> logon_error(Context);
         {expired, UserId} when is_integer(UserId) -> password_expired(UserId, Context);

@@ -19,6 +19,8 @@
 %% The release information
 -include("zotonic_release.hrl").
 
+-include("zotonic_notifications.hrl").
+
 -include_lib("deps/webmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
@@ -76,7 +78,6 @@
         props=[]
     }).
     
--record(activity, {version=1, posted_time, actor, verb=post, object, target}).
     
 -define(WM_REQ(ReqData, Context), z_context:set_reqdata(ReqData, Context)).
 -define(WM_REPLY(Reply, Context), {Reply, Context#context.wm_reqdata, Context#context{wm_reqdata=undefined}}).
@@ -106,8 +107,8 @@
 
 %% For z_supervisor, process definitions.
 -record(child_spec, {name, mfa, status, pid, crashes=5, period=60, 
-					 period_retry=600, period_retries=10, eternal_retry=7200,
-					 shutdown=5000}).
+                     period_retry=600, period_retries=10, eternal_retry=7200,
+                     shutdown=5000}).
 
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default, primary_key}).
@@ -146,21 +147,6 @@
 
 %% @doc drag and drop event message
 -record(dragdrop, {tag, delegate, id}).
-
-%% @doc e-mail notification used by z_email and z_email_server.
--record(email, {to=[], cc=[], bcc=[], from=[], reply_to, 
-                headers=[], body, raw,
-                subject, text, html, text_tpl, html_tpl, 
-                vars=[], attachments=[], queue=false}).
-
-%% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).
-
-%% @doc Resource update done notification
--record(rsc_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
-
-%% @doc Broadcast notification.
--record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {template, vars=[]}).

@@ -335,7 +335,7 @@ replace_file(File, RscId, Props, PropsMedia, Context) ->
                 z_depcache:flush(Id, Context),
                 m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
                 %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-                z_notifier:notify({media_replace_file, Id, m_media:get(Id, Context)}, Context),
+                z_notifier:notify(#media_replace_file{id=Id, medium=m_media:get(Id, Context)}, Context),
                 {ok, Id};
             false ->
                 {error, eacces}

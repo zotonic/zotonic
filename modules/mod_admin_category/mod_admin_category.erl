@@ -30,7 +30,7 @@
 -include_lib("zotonic.hrl").
 
 
-observe_category_hierarchy_save({category_hierarchy_save, New}, Context) ->
+observe_category_hierarchy_save(#category_hierarchy_save{tree=New}, Context) ->
     % Rebuild all parent/child relationship.
     % 1. Check if any missing. If so delete
     % 2. See if any parent/child is changed, if so update

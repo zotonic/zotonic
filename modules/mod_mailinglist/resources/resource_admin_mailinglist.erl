@@ -55,13 +55,4 @@ event({postback, {mailinglist_delete, [{id,Id}]}, _TriggerId, _TargetId}, Contex
 		{error, _Reason} ->
 			z_render:wire([	{growl, [{text, "Could not delete the mailing list."}, {type, "error"}]}, 
 							{dialog_close, []}], Context)
-	end;
-
-event({submit, mailinglist_editform, _TriggerId, _TargetId}, Context) ->
-	Props = [
-		{title, z_html:escape(z_context:get_q_validated("title", Context)) },
-		{description, z_html:escape(z_context:get_q_validated("description", Context)) },
-		{is_public, z_convert:to_bool(z_context:get_q("is_public", Context, true)) },
-		{dropbox_file, z_context:get_q("dropbox_file", Context, "") }
-	],
-	z_render:wire([{dialog_close, []}, {reload, []}], Context).
+	end.

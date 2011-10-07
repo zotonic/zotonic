@@ -601,7 +601,7 @@ page_url(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
             CatPath = lists:reverse(is_a(Id, Context)),
-            case z_notifier:first({page_url, RscId, CatPath}, Context) of
+            case z_notifier:first(#page_url{id=RscId, is_a=CatPath}, Context) of
                 {ok, Url} -> 
                     Url;
                 undefined ->

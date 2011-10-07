@@ -77,7 +77,7 @@ m_value(#m{value=undefined}, _Context) ->
 
 is_allowed_results_download(Id, Context) ->
     z_acl:rsc_editable(Id, Context)
-    orelse z_notifier:first({survey_is_allowed_results_download, Id}, Context) == true.
+    orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) == true.
 
 
 %% @doc Transform a list of survey questions to admin template friendly proplists

@@ -7,7 +7,7 @@ wire_update_test() ->
     Context = z_context:new(testsandbox),
     z_ids:fix_seed(),
     {Html, ContextHtml} = z_template:render_to_iolist("tests/wire_update_test.tpl", [], Context),
-    Script = z_script:get_script(ContextHtml),
+    _Script = z_script:get_script(ContextHtml),
     %% ?assertEqual(<<"\n\n$(\"#summary\").html(\"\\x3cbutton id\\x3d\\x27mtbuaa\\x27\\x3eClick Me!\\x3c/button\\x3e\\n\").widgetManager();\n$(\"#mtbuaa\").bind('click', function(event) { alert(\"Thank you\"); return z_opt_cancel(this); } );\n">>,
     %%              iolist_to_binary(Script)),
 

@@ -148,7 +148,7 @@ set_value(Module, Key, Value, Context) ->
         1 -> ok
     end,
     z_depcache:flush(config, Context),
-    z_notifier:notify({m_config_update, Module, Key, Value}, Context),
+    z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
     ok.
 
 
@@ -160,7 +160,7 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
         Id -> z_db:update(config, Id, [{Prop,PropValue}], Context)
     end,
     z_depcache:flush(config, Context),
-    z_notifier:notify({m_config_update_prop, Module, Key, Prop, PropValue}, Context),
+    z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context),
     ok.
 
 
@@ -169,7 +169,7 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
 delete(Module, Key, Context) ->
     z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
     z_depcache:flush(config, Context),
-    z_notifier:notify({m_config_update, Module, Key, undefined}, Context),
+    z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context),
     ok.
 
 

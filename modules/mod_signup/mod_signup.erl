@@ -39,27 +39,28 @@
 
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
-observe_signup_url({signup_url, Props, SignupProps}, Context) ->
+observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
     CheckId = z_ids:id(),
     z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
     {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))}.
 
-observe_identity_verification({identity_verification, UserId, Ident}, Context) ->
+
+observe_identity_verification(#identity_verification{user_id=UserId, identity=undefined}, Context) ->
+    request_verification(UserId, Context);
+observe_identity_verification(#identity_verification{user_id=UserId, identity=Ident}, Context) ->
     case proplists:get_value(type, Ident) of
         <<"email">> -> send_verify_email(UserId, Ident, Context);
         _ -> false
-    end;
-observe_identity_verification({identity_verification, UserId}, Context) ->
-    request_verification(UserId, Context).
+    end.
 
 
 %% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
-observe_logon_ready_page({logon_ready_page, []}, Context) ->
+observe_logon_ready_page(#logon_ready_page{request_page=[]}, Context) ->
     case z_auth:is_auth(Context) of
         true -> m_rsc:p(z_acl:user(Context), page_url, Context);
         false -> []
     end;
-observe_logon_ready_page({logon_ready_page, Url}, _Context) ->
+observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
     Url.
 
 
@@ -85,7 +86,7 @@ request_verification(UserId, Context) ->
     request_verification(_, [], true, _Context) ->
         ok;
     request_verification(UserId, [Ident|Rest], Requested, Context) ->
-        case z_notifier:first({identity_verification, UserId, Ident}, Context) of
+        case z_notifier:first(#identity_verification{user_id=UserId, identity=Ident}, Context) of
             ok -> request_verification(UserId, Rest, true, Context);
             _ -> request_verification(UserId, Rest, Requested, Context)
         end.
@@ -144,9 +145,9 @@ do_signup(Props, SignupProps, RequestConfirm, Context) ->
     case m_rsc:insert(props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, Id} ->
             [ insert_identity(Id, Ident, Context) || {K,Ident} <- SignupProps, K == identity ],
-            z_notifier:map({signup_done, Id, IsVerified, Props, SignupProps}, Context),
+            z_notifier:map(#signup_done{id=Id, is_verified=IsVerified, props=Props, signup_props=SignupProps}, Context),
             case IsVerified of
-                true -> z_notifier:map({signup_confirm, Id}, Context);
+                true -> z_notifier:map(#signup_confirm{id=Id}, Context);
                 false -> nop
             end,    
             {ok, Id};

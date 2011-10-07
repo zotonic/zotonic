@@ -46,7 +46,7 @@
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
 
-observe_module_activate({module_activate, ?MODULE, Pid}, _Context) ->
+observe_module_activate(#module_activate{module=?MODULE, pid=Pid}, _Context) ->
     gen_server:cast(Pid, init_query_watches);
 observe_module_activate(_, _Context) ->
     ok.

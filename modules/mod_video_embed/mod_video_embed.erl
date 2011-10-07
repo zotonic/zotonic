@@ -42,7 +42,7 @@
 
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
 %% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
+observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
     case proplists:is_defined(video_embed_code, Props) of
         true -> 
             EmbedChanged = case proplists:get_value(video_embed_code, Props) of
@@ -101,7 +101,7 @@ observe_rsc_update({rsc_update, Id, _OldProps}, {Changed, Props}, Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer({media_viewer, _Id, Props, _Filename, _Options}, _Context) ->
+observe_media_viewer(#media_viewer{props=Props}, _Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case proplists:get_value(video_embed_code, Props) of
@@ -115,7 +115,7 @@ observe_media_viewer({media_viewer, _Id, Props, _Filename, _Options}, _Context) 
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage({media_stillimage, Id, Props}, Context) ->
+observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case m_rsc:p(Id, depiction, Context) of

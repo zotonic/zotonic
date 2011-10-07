@@ -177,7 +177,7 @@ recipient_delete(RecipientId, Context) ->
 		Email = proplists:get_value(email, RecipientProps),
 		case Quiet of
 			false ->
-				z_notifier:notify1({mailinglist_message, send_goodbye, ListId, Email}, Context);
+				z_notifier:notify1(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Email}, Context);
 			_ -> nop
 		end,
 		ok.
@@ -196,7 +196,7 @@ recipient_confirm(ConfirmKey, Context) ->
 		{RecipientId, _IsEnabled, ListId} ->
 			NewConfirmKey = z_ids:id(20),
 			z_db:q("update mailinglist_recipient set confirm_key = $2, is_enabled = true where confirm_key = $1", [ConfirmKey, NewConfirmKey], Context),
-			z_notifier:notify({mailinglist_message, send_welcome, ListId, RecipientId}, Context),
+			z_notifier:notify(#mailinglist_message{what=send_welcome, list_id=ListId, recipient=RecipientId}, Context),
 			{ok, RecipientId};
 		undefined ->
 			{error, enoent}
@@ -268,7 +268,7 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 	end,
 	case WelcomeMessageType1 of
 		none -> nop;
-		_ -> z_notifier:notify({mailinglist_message, WelcomeMessageType1, ListId, RecipientId}, Context)
+		_ -> z_notifier:notify(#mailinglist_message{what=WelcomeMessageType1, list_id=ListId, recipient=RecipientId}, Context)
 	end,
 	ok.
 

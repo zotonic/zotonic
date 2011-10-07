@@ -423,11 +423,11 @@ pivot_resource(Id, Context) ->
         Id
     ],
     z_db:q(Sql, SqlArgs, Context),
-    Results = z_notifier:map({custom_pivot, Id}, Context),
+    Results = z_notifier:map(#custom_pivot{id=Id}, Context),
     [ok = update_custom_pivot(Id, Res, Context) || Res <- Results],
 
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify({rsc_pivot_done, Id, IsA}, Context),
+    z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
     ok.
 
 
@@ -507,7 +507,7 @@ get_pivot_data(Id, Context) ->
     get_pivot_data(Id, get_pivot_rsc(Id, Context), Context).
     
 get_pivot_data(Id, Rsc, Context) ->
-    R = z_notifier:foldr({pivot_get, Id}, Rsc, Context),
+    R = z_notifier:foldr(#pivot_get{id=Id}, Rsc, Context),
     {A,B} = lists:foldl(fun(Res,Acc) -> fetch_texts(Res, Acc, Context) end, {[],[]}, R),
     {ObjIds, ObjTexts} = related(Id, Context),
     {CatIds, CatTexts} = category(proplists:get_value(category_id, R), Context),
@@ -538,8 +538,8 @@ split_lang([Text|Rest], Dict, Context) ->
 %% @doc Fetch the title of all things related to the resource
 related(Id, Context) ->
     Ids = lists:usort(m_edge:objects(Id, Context)),
-    Ids1 = z_notifier:foldr({pivot_related, Id}, Ids, Context),
-    IdsTexts = z_notifier:foldr({pivot_related_text_ids, Id}, Ids, Context),
+    Ids1 = z_notifier:foldr(#pivot_related{id=Id}, Ids, Context),
+    IdsTexts = z_notifier:foldr(#pivot_related_text_ids{id=Id}, Ids, Context),
     Texts = [ m_rsc:p(R, title, Context) || R <- IdsTexts ],
     {Ids1, Texts}.
     

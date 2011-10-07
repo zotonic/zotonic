@@ -26,6 +26,7 @@
 -mod_title("Typed K/V Store").
 -mod_description("Simple typed key/value store used to store structured data.").
 
+-include_lib("zotonic.hrl").
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -35,6 +36,7 @@
 -export([
     pid_observe_tkvstore_get/3,
     pid_observe_tkvstore_put/3,
+    pid_observe_tkvstore_delete/3,
     
     writer_loop/2
 ]).
@@ -54,15 +56,15 @@ start_link(Args) when is_list(Args) ->
 
 
 %% @doc Do a put in the persistent store, replace existing key/value
-pid_observe_tkvstore_put(Pid, {tkvstore_put, _Type, _Key, _Data} = Message, _Context) ->
+pid_observe_tkvstore_put(Pid, #tkvstore_put{} = Message, _Context) ->
     gen_server:cast(Pid, Message).
 
 %% @doc Fetch the persistent data of a type/key
-pid_observe_tkvstore_get(Pid, {tkvstore_get, _Type, _Key} = Message, _Context) ->
+pid_observe_tkvstore_get(Pid, #tkvstore_get{} = Message, _Context) ->
     gen_server:call(Pid, Message).
 
 %% @doc Delete the persistent data of a type/key
-pid_observe_tkvstore_delete(Pid, {tkvstore_delete, _Type, _Key} = Message, _Context) ->
+pid_observe_tkvstore_delete(Pid, #tkvstore_delete{} = Message, _Context) ->
     gen_server:cast(Pid, Message).
 
 
@@ -93,7 +95,7 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Fetch persistent data, first check the data dict that is still being written
-handle_call({tkvstore_get, Type, Key}, _From, State) ->
+handle_call(#tkvstore_get{type=Type, key=Key}, _From, State) ->
     case dict:find({Type, Key}, State#state.data) of
         {ok, Data} ->
             % Data is being written, return the data that is not yet in the store
@@ -112,14 +114,14 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Put request, copy to the writer, keep a local copy of the data
-handle_cast({tkvstore_put, Type, Key, Data}, State) ->
+handle_cast(#tkvstore_put{type=Type, key=Key, value=Data}, State) ->
     State#state.writer_pid ! {data, Type, Key, Data},
     {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
 
-%% @doc Delete a value from the tkvstoe    
-handle_cast({tkvstore_delete, Type, Key, Data}, State) ->
+%% @doc Delete a value from the tkvstore    
+handle_cast(#tkvstore_delete{type=Type, key=Key}, State) ->
     State#state.writer_pid ! {delete, Type, Key},
-    {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
+    {noreply, State#state{ data=dict:store({Type, Key}, undefined, State#state.data) }};
 
 %% @doc Writer loop wrote the data, remove our local copy
 handle_cast({written, Type, Key}, State) ->

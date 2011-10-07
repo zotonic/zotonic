@@ -34,7 +34,7 @@
 -include_lib("include/import_csv.hrl").
 
 %% @doc Handle a dropbox file when it is a tsv file we know.
-observe_dropbox_file({dropbox_file, F}, Context) ->
+observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
     case filename:extension(F) of
         ".csv" ->
             %% Correct file type, see if we can handle the file.
@@ -99,7 +99,7 @@ to_importing_dir(Def, Context) ->
 can_handle(Filename, Context) ->
     %% @todo Add here a notify to the modules to see if they have an import definition for basename(Filename)
     FSize = filelib:file_size(Filename),
-    case z_notifier:first({import_csv_definition, filename:basename(Filename), Filename}, Context) of
+    case z_notifier:first(#import_csv_definition{basename=filename:basename(Filename), filename=Filename}, Context) of
         {ok, #import_data_def{colsep=ColSep, skip_first_row=SkipFirstRow, record=Record, importdef=ImportDef}} ->
             {ok, #filedef{
                         filename=Filename, 

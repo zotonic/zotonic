@@ -35,7 +35,7 @@
 -include("zotonic.hrl").
 
 %% @doc Check the logon event for the Zotonic native username/password registration.
-observe_logon_submit({logon_submit, Args}, Context) ->
+observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
     Username = proplists:get_value("username", Args),
     Password = proplists:get_value("password", Args),
     case Username /= undefined andalso Password /= undefined of

@@ -301,7 +301,7 @@ body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
         true ->
             throw({error, "Circular file inclusion: " ++ File});
         _ ->
-            notify({debug, template, {extends, Extends, File}}, Context#dtl_context.z_context),
+            notify(#debug{what=template, arg={extends, Extends, File}}, Context#dtl_context.z_context),
             case parse(File, Context) of
                 {ok, ParentParseTree} ->
                     ThisFile = hd(Context#dtl_context.parse_trail),
@@ -332,7 +332,7 @@ body_ast([overrules | ThisParseTree], Context, TreeWalker) ->
     % Find the first file after the current file
     case find_next(Files, CurrentFile) of
         {ok, File} ->
-            notify({debug, template, {overrules, CurrentExtend, File}}, Context#dtl_context.z_context),
+            notify(#debug{what=template, arg={overrules, CurrentExtend, File}}, Context#dtl_context.z_context),
             body_extends(CurrentExtend, File, ThisParseTree, Context, TreeWalker);
         error ->
             ?ERROR("body_ast: could not find overruled template for \"~p\" (~p)", [CurrentExtend,CurrentFile]),
@@ -660,7 +660,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
 
             % {AstList, Info, TreeWalker}
             IncludeFun = fun(FilePath, {AstList, InclInfo, TreeW}) ->
-                    notify({debug, template, {include, File, FilePath}}, ContextInclude#dtl_context.z_context),
+                    notify(#debug{what=template, arg={include, File, FilePath}}, ContextInclude#dtl_context.z_context),
                     case parse(FilePath, ContextInclude) of
                         {ok, InclusionParseTree} ->
                             AutoIdVar = "AutoId_"++z_ids:identifier(),

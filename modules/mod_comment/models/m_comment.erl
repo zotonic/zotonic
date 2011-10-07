@@ -128,7 +128,7 @@ insert(RscId, Name, Email, Message, Context) ->
             case z_db:insert(comment, Props, Context) of
                 {ok, CommentId} = Result ->
                     z_depcache:flush({comment_rsc, RscId}, Context),
-                    z_notifier:notify({comment_insert, CommentId, RscId}, Context),
+                    z_notifier:notify(#comment_insert{comment_id=CommentId, id=RscId}, Context),
                     Result;
                 {error, _} = Error ->
                     Error

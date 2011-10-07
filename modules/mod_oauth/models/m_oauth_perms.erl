@@ -30,6 +30,7 @@
          m_to_list/2,
          m_value/2,
          get/2,
+         get_all/2,
          set/3,
          
          all_services_for/2,
@@ -114,7 +115,7 @@ all_services_for(Id, Context) ->
 %% collapsed with respect to "*" syntax notation.
 %%
 humanreadable(Id, Context) ->
-    X = [[{desc, D}] || D <- human([string:tokens(binary_to_list(proplists:get_value(perm, R)), "/") || R <- get(Id, Context)])].
+    [[{desc, D}] || D <- human([string:tokens(binary_to_list(proplists:get_value(perm, R)), "/") || R <- get(Id, Context)])].
 
 
 human([]) ->

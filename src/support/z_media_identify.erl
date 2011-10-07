@@ -60,7 +60,7 @@ identify(File, OriginalFilename, Context) ->
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
 identify_file(File, OriginalFilename, Context) ->
-    case z_notifier:first({media_identify_file, File}, Context) of
+    case z_notifier:first(#media_identify_file{filename=File}, Context) of
         {ok, Props} ->
 			{ok, Props};
         undefined -> 

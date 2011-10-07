@@ -14,13 +14,13 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Check if an user is enabled.
-observe_user_is_enabled({user_is_enabled, UserId}, _Context) ->
+observe_user_is_enabled(#user_is_enabled{id=UserId}, _Context) ->
     UserId == 1.
 
 %% @doc Let the user log on, this is the moment to start caching information.
-observe_acl_logon({acl_logon, UserId}, Context) ->
+observe_acl_logon(#acl_logon{id=UserId}, Context) ->
     Context#context{user_id=UserId}.
 
 %% @doc Let the user log off, clean up any cached information.
-observe_acl_logoff({acl_logoff}, Context) ->
+observe_acl_logoff(#acl_logoff{}, Context) ->
     Context#context{acl=undefined, user_id=undefined}.

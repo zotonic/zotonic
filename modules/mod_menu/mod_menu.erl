@@ -61,11 +61,11 @@ event({postback_notify, "menuedit", TriggerId, _TargetId}, Context) ->
     case z_context:get_q("kind", Context1, Kind) of
         category ->
             % This is the category hierarchy.
-            z_notifier:notify({category_hierarchy_save, Tree1}, Context1),
+            z_notifier:notify(#category_hierarchy_save{tree=Tree1}, Context1),
             Context1;
         menu ->
             % A menu hierarchy, give it to the menu routines
-            z_notifier:notify({menu_save, m_rsc:rid(RootId, Context1), Tree1}, Context1),
+            z_notifier:notify(#menu_save{id=m_rsc:rid(RootId, Context1), tree=Tree1}, Context1),
             Context1;
         edge ->
             % Hierarchy using edges between resources
@@ -78,7 +78,7 @@ hierarchy_edge(RootId, Predicate, Tree, Context) ->
     {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     move_edges(RootId, Tree, PredName, Context),
-    z_notifier:notify({hierarchy_updated, RootId, PredName}, Context),
+    z_notifier:notify(#hierarchy_updated{root_id=RootId, predicate=PredName}, Context),
     Context.
 
 move_edges(RootId, Tree, Pred, Context) ->
@@ -206,7 +206,7 @@ observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
 
 
 %% @doc Observer the 'menu_save' notification
-observe_menu_save({menu_save, MenuId, Menu}, Context) ->
+observe_menu_save(#menu_save{id=MenuId, tree=Menu}, Context) ->
     set_menu(MenuId, Menu, Context).
 
 

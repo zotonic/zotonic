@@ -45,52 +45,52 @@
 
 %% @doc Check if the user is allowed to perform Action on Object
 %% @todo #acl_edge
-observe_acl_is_allowed({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
     is_view_public(Id, Context);
-observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
 	undefined;
 % Logged on users
-observe_acl_is_allowed({acl_is_allowed, view, Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) ->
     can_view(Id, Context);
-observe_acl_is_allowed({acl_is_allowed, insert, #acl_media{mime=Mime, size=Size}}, Context) -> 
+observe_acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) -> 
     can_media(Mime, Size, Context);
-observe_acl_is_allowed({acl_is_allowed, insert, #acl_rsc{category=Cat}}, Context) -> 
+observe_acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat}}, Context) -> 
     can_insert(Cat, Context);
-observe_acl_is_allowed({acl_is_allowed, insert, Cat}, Context) when is_atom(Cat) -> 
+observe_acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) -> 
     can_insert(Cat, Context);
-observe_acl_is_allowed({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) when is_integer(Id) ->
 	case m_rsc:p_no_acl(Id, is_authoritative, Context) of
 		true -> can_edit(Id, Context);
 		_ -> undefined
 	end;
-observe_acl_is_allowed({acl_is_allowed, delete, Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=delete, object=Id}, Context) when is_integer(Id) ->
 	can_edit(Id, Context);
-observe_acl_is_allowed({acl_is_allowed, Action, ModuleName}, Context) when Action == use; Action == admin ->
+observe_acl_is_allowed(#acl_is_allowed{action=Action, object=ModuleName}, Context) when Action == use; Action == admin ->
 	can_module(Action, ModuleName, Context);
-observe_acl_is_allowed({acl_is_allowed, _Action, #acl_edge{} = Edge}, Context) ->
+observe_acl_is_allowed(#acl_is_allowed{object=#acl_edge{} = Edge}, Context) ->
     can_edge(Edge, Context);
-observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, _Context) ->
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
 %% @doc Return the max visible_for an user can see, used for pruning during searches
-observe_acl_can_see({acl_can_see, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_can_see(#acl_can_see{}, #context{user_id=undefined}) ->
 	?ACL_VIS_PUBLIC;
-observe_acl_can_see({acl_can_see}, _Context) ->
+observe_acl_can_see(#acl_can_see{}, _Context) ->
 	?ACL_VIS_USER.
 	
 %% @doc Let the user log on, this is the moment to start caching information.
-observe_acl_logon({acl_logon, UserId}, Context) ->
+observe_acl_logon(#acl_logon{id=UserId}, Context) ->
     logon(UserId, Context).
 	
 %% @doc Let the user log off, clean up any cached information.
-observe_acl_logoff({acl_logoff}, Context) ->
+observe_acl_logoff(#acl_logoff{}, Context) ->
 	Context#context{acl=undefined, user_id=undefined}.
 
 %% @doc Filter the properties before an update. Return filtered/updated resource proplist or
 %% the tuple {error, Reason}
-observe_acl_rsc_update_check({acl_rsc_update_check, _Id}, {error, Reason}, _Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
 	{error, Reason};
-observe_acl_rsc_update_check({acl_rsc_update_check, insert_rsc}, Props, Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{id=insert_rsc}, Props, Context) ->
 	PropsPubl = case proplists:get_value(is_published, Props) of
 		undefined -> z_utils:prop_replace(is_published, false, Props);
 		_ -> Props
@@ -100,7 +100,7 @@ observe_acl_rsc_update_check({acl_rsc_update_check, insert_rsc}, Props, Context)
 		undefined -> z_utils:prop_replace(is_authoritative, true, PropsVis);
 		_ -> PropsVis
 	end;
-observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) ->
 	constrain_visible_for(Id, Props, Context).
 
     % Make sure that the user doesn't try to change the visibility beyond what that user is allowed to do.
@@ -148,7 +148,7 @@ observe_acl_rsc_update_check({acl_rsc_update_check, Id}, Props, Context) ->
 %% @doc Check if the update contains information for a acl role.  If so then modify the acl role
 %% information so that it is easier to handle.
 %% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update({rsc_update, _Id, _OldProps}, {Changed, Props}, _Context) ->
+observe_rsc_update(#rsc_update{}, {Changed, Props}, _Context) ->
     case       proplists:is_defined(acl_cat, Props) 
         orelse proplists:is_defined(acl_mod, Props) 
         orelse proplists:is_defined(acl_mime, Props) 

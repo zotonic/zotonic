@@ -84,7 +84,7 @@ viewer(Filename, Options, Context) ->
     %% @doc Try to generate Html for the media reference.  First check if a module can do this, then 
     %% check the normal image tag.
     viewer1(Id, Props, FilePath, Options, Context) ->
-        case z_notifier:first({media_viewer, Id, Props, FilePath, Options}, Context) of
+        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
             {ok, Html} -> {ok, Html};
             undefined -> tag(Props, Options, Context)
         end.
@@ -118,7 +118,7 @@ tag(Id, Options, Context, Visited) when is_integer(Id) ->
                 Filename -> tag1(Props, Filename, Options, Context)
             end;
         undefined ->
-            NewId = case z_notifier:first({media_stillimage, Id, []}, Context) of
+            NewId = case z_notifier:first(#media_stillimage{id=Id, props=[]}, Context) of
                         {ok, N} -> N;
                         _ ->
                             %% Use the first depiction edge

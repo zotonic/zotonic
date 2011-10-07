@@ -62,15 +62,15 @@ event(_Event, Context) ->
 	Context.
 
 % @doc Ensure that en email handler exists
-observe_email_ensure_handler({email_ensure_handler, Notification, UserId, ResourceId}, Context) ->
+observe_email_ensure_handler(#email_ensure_handler{notification=Notification, user_id=UserId, resource_id=ResourceId}, Context) ->
 	m_email_receive_recipient:ensure(Notification, UserId, ResourceId, Context).
 
 % @doc Add an email handler, returns the email address for the handler
-observe_email_add_handler({email_add_handler, Notification, UserId, ResourceId}, Context) ->
+observe_email_add_handler(#email_add_handler{notification=Notification, user_id=UserId, resource_id=ResourceId}, Context) ->
 	m_email_receive_recipient:insert(Notification, UserId, ResourceId, Context).
 
 % @doc Drop all handlers matching the parameters
-observe_email_drop_handler({email_drop_handler, Notification, UserId, ResourceId}, Context) ->
+observe_email_drop_handler(#email_drop_handler{notification=Notification, user_id=UserId, resource_id=ResourceId}, Context) ->
 	m_email_receive_recipient:delete(Notification, UserId, ResourceId, Context).
 
 

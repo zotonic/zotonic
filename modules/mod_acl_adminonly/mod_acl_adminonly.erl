@@ -36,7 +36,7 @@
 -include("zotonic.hrl").
 
 %% @doc Check if the user is allowed to perform Action on Object
-observe_acl_is_allowed({acl_is_allowed, view, Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
 	Acl = m_rsc:get_acl_props(Id, Context),
     case Acl#acl_props.is_published of
         false -> 
@@ -50,35 +50,35 @@ observe_acl_is_allowed({acl_is_allowed, view, Id}, #context{user_id=undefined} =
                     Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
             end
     end;	
-observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
 	false;
-observe_acl_is_allowed({acl_is_allowed, update, Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) when is_integer(Id) ->
 	case m_rsc:p(Id, is_authoritative, Context) of
 		true -> true;
 		_ -> undefined
 	end;
-observe_acl_is_allowed({acl_is_allowed, _Action, _Object}, _Context) ->
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
 	true.
 
 %% @doc Return the max visible_for an user can see, used for pruning during searches
-observe_acl_can_see({acl_can_see, _Action, _Object}, #context{user_id=undefined}) ->
+observe_acl_can_see(#acl_can_see{}, #context{user_id=undefined}) ->
 	?ACL_VIS_PUBLIC;
-observe_acl_can_see({acl_can_see}, _Context) ->
+observe_acl_can_see(#acl_can_see{}, _Context) ->
 	?ACL_VIS_USER.
 	
 %% @doc Let the user log on, this is the moment to start caching information.
-observe_acl_logon({acl_logon, UserId}, Context) ->
+observe_acl_logon(#acl_logon{id=UserId}, Context) ->
 	Context#context{acl=?MODULE, user_id=UserId}.
 
 %% @doc Let the user log off, clean up any cached information.
-observe_acl_logoff({acl_logoff}, Context) ->
+observe_acl_logoff(#acl_logoff{}, Context) ->
 	Context#context{acl=undefined, user_id=undefined}.
 
 %% @doc Filter the properties before an update. Return filtered/updated resource proplist or
 %% the tuple {error, Reason}
-observe_acl_rsc_update_check({acl_rsc_update_check, _Id}, {error, Reason}, _Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
 	{error, Reason};
-observe_acl_rsc_update_check({acl_rsc_update_check, insert_rsc}, Props, _Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{id=insert_rsc}, Props, _Context) ->
 	PropsPubl = case proplists:get_value(is_published, Props) of
 		undefined -> z_utils:prop_replace(is_published, false, Props);
 		_ -> Props
@@ -91,7 +91,7 @@ observe_acl_rsc_update_check({acl_rsc_update_check, insert_rsc}, Props, _Context
 		undefined -> z_utils:prop_replace(is_authoritative, true, PropsVis);
 		_ -> PropsVis
 	end;
-observe_acl_rsc_update_check({acl_rsc_update_check, _id}, Props, _Context) ->
+observe_acl_rsc_update_check(#acl_rsc_update_check{}, Props, _Context) ->
 	Props.
 
 

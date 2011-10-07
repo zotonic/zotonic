@@ -140,7 +140,7 @@ compile(File, Context) ->
     end.
 
 compile(File, FoundFile, Context) ->
-    z_notifier:notify({debug, template, {compile, File, FoundFile}}, Context),
+    z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile}}, Context),
     gen_server:call(Context#context.template_server, {compile, File, FoundFile, Context}, ?TIMEOUT).
 
 

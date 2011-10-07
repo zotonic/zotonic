@@ -36,7 +36,7 @@
 -include_lib("zotonic.hrl").
 
 
-m_find_value(Index, #m{value=undefined} = M, _Context) ->
+m_find_value(Index, #m{value=undefined}, _Context) ->
     get(Index, _Context).
 
 

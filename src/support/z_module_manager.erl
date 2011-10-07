@@ -284,14 +284,14 @@ handle_cast(upgrade, State) ->
 handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     add_observers(Module, Pid, State#state.context),
-    z_notifier:notify({module_activate, Module, Pid}, State#state.context), 
+    z_notifier:notify(#module_activate{module=Module, pid=Pid}, State#state.context), 
     {noreply, State};
 
 %% @doc Existing child process stopped, remove the event listeners
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State#state.context),
-    z_notifier:notify({module_deactivate, Module}, State#state.context), 
+    z_notifier:notify(#module_deactivate{module=Module}, State#state.context), 
     {noreply, State};
 
 

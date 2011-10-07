@@ -42,7 +42,7 @@ event({postback, {dialog_mailing_page, Id, ListId, OnSuccess}, _TriggerId, _Targ
             {list_id, ListId},
             {on_success, OnSuccess}
 	],
-	z_render:dialog("Confirm sending to mailinglist.", "_dialog_mailing_page.tpl", Vars, Context);
+	z_render:dialog(?__("Confirm sending to mailinglist", Context), "_dialog_mailing_page.tpl", Vars, Context);
 
 %% When the page is not yet visible and the user did not choose the
 %% "now" button, the mailing is queued.
@@ -53,11 +53,11 @@ event({submit, {mailing_page, Args}, _TriggerId, _TargetId}, Context) ->
     When = z_context:get_q("mail_when", Context),
 	Context1 = case z_acl:rsc_visible(PageId, z_acl:anondo(Context)) orelse When =:= "now" of
 		true -> 
-			z_notifier:notify({mailinglist_mailing, ListId, PageId}, Context),
-			z_render:growl("The e-mails are being sent...", Context);
+			z_notifier:notify(#mailinglist_mailing{list_id=ListId, page_id=PageId}, Context),
+			z_render:growl(?__("The e-mails are being sent...", Context), Context);
 		false -> 
 			m_mailinglist:insert_scheduled(ListId, PageId, Context),
             mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
-			z_render:growl("The mailing will be send when the page becomes visible.", Context)
+			z_render:growl(?__("The mailing will be send when the page becomes visible.", Context), Context)
 	end,
 	z_render:wire(OnSuccess, Context1).

@@ -21,5 +21,5 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 
 %% @doc Flush the caches of all sites.
 event({postback, {development_templates_stream, [{target, Target}]}, _TriggerId, _TargetId}, Context) ->
-    z_notifier:notify1({debug_stream, Target, template}, Context),
+    z_notifier:notify1(#debug_stream{target=Target, what=template}, Context),
     Context.

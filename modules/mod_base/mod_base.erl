@@ -34,7 +34,7 @@
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
-observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
+observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
     case proplists:get_value(mime, Props) of
         undefined -> undefined;
         [] -> undefined;
@@ -68,10 +68,10 @@ observe_media_stillimage({media_stillimage, _Id, Props}, Context) ->
 
 
 %% @doc Part of the {% script %} rendering in templates
-observe_scomp_script_render({scomp_script_render, false, _Args}, Context) ->
+observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) ->
     DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
     [<<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
-observe_scomp_script_render({scomp_script_render, true, _Args}, _Context) ->
+observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
     [].
 
 

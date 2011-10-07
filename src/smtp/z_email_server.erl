@@ -166,7 +166,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                         to_id = z_acl:user(Context),
                                         props = []
                                     }}, Context),
-            z_notifier:first({email_bounced, MsgId, Recipient}, Context);
+            z_notifier:first(#email_bounced{message_nr=MsgId, recipient=Recipient}, Context);
         _ ->
             % We got a bounce, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
@@ -183,7 +183,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                                 envelop_from = "<>",
                                                 props = []
                                             }}, Context),
-                    z_notifier:first({email_bounced, MsgId, undefined}, Context);
+                    z_notifier:first(#email_bounced{message_nr=MsgId, recipient=undefined}, Context);
                 undefined ->
                     ignore
             end
@@ -776,7 +776,7 @@ poll_queued(State) ->
                   end,
     {atomic, NotifyList1} = mnesia:transaction(DelTransFun),
     %% notify the system that these emails were sucessfuly sent and (probably) received
-    [ z_notifier:first({email_sent, Id, Recipient}, z_context:depickle(PickledContext)) 
+    [ z_notifier:first(#email_sent{message_nr=Id, recipient=Recipient}, z_context:depickle(PickledContext)) 
      || {Id, Recipient, PickledContext} <- NotifyList1 ],
 
     %% delete all messages with too high retry count
@@ -794,7 +794,7 @@ poll_queued(State) ->
                       end,
     {atomic, NotifyList2} = mnesia:transaction(SetFailTransFun),
     %% notify the system that these emails were failed to be sent
-    [ z_notifier:first({email_failed, Id, Recipient}, z_context:depickle(PickledContext)) 
+    [ z_notifier:first(#email_failed{message_nr=Id, recipient=Recipient}, z_context:depickle(PickledContext)) 
      || {Id, Recipient, PickledContext} <- NotifyList2 ],
 
     %% fetch a batch of messages for sending

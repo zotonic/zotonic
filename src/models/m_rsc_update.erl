@@ -74,7 +74,7 @@ delete_nocheck(Id, Context) ->
     Props = m_rsc:get(Id, Context),
     
     F = fun(Ctx) ->
-        z_notifier:notify({rsc_delete, Id}, Ctx),
+        z_notifier:notify(#rsc_delete{id=Id}, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
 
@@ -176,7 +176,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                         CategoryName = m_category:id_to_name(CategoryId, Ctx),
                         InsProps = [{category_id, CategoryId}, {version, 0}],
                          % Allow the insertion props to be modified.
-                        InsPropsN = z_notifier:foldr({rsc_insert}, InsProps, Ctx),
+                        InsPropsN = z_notifier:foldr(#rsc_insert{}, InsProps, Ctx),
 
                         % Check if the user is allowed to create the resource
                         case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Ctx) orelse not(AclCheck) of
@@ -242,7 +242,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                 ],
 
                 % Allow the update props to be modified.
-                {Changed, UpdatePropsN} = z_notifier:foldr({rsc_update, RscId, BeforeProps}, {false, UpdateProps1}, Ctx),
+                {Changed, UpdatePropsN} = z_notifier:foldr(#rsc_update{id=RscId, props=BeforeProps}, {false, UpdateProps1}, Ctx),
                 UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
                     undefined ->
                         UpdatePropsN;

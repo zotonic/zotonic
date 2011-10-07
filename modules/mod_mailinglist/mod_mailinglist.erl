@@ -88,12 +88,12 @@ observe_search_query(_, _) ->
 
 
 %% @doc Send status messages to a recipient.
-observe_mailinglist_message({mailinglist_message, silent, _ListId, _Email}, _Context) ->
+observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
 	ok;
-observe_mailinglist_message({mailinglist_message, send_goodbye, ListId, Email}, Context) ->
+observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Email}, Context) ->
 	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}], Context),
 	ok;
-observe_mailinglist_message({mailinglist_message, Message, ListId, RecipientId}, Context) ->
+observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, recipient=RecipientId}, Context) ->
 	Template = case Message of
 		send_welcome -> "email_mailinglist_welcome.tpl";
 		send_confirm -> "email_mailinglist_confirm.tpl"
@@ -148,7 +148,7 @@ event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) 
 %% @doc Handle the test-sending of a page to a single address.
 event({submit, {mailing_testaddress, [{id, PageId}]}, _, _}, Context) ->
     Email = z_context:get_q_validated("email", Context),
-    z_notifier:notify({mailinglist_mailing, {single_test_address, Email}, PageId}, Context),
+    z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
     Context1 = z_render:growl("Sending the page to " ++ Email ++ "...", Context),
     z_render:wire([{dialog_close, []}], Context1).
 
@@ -221,7 +221,7 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Send a mailing.
-handle_cast({{mailinglist_mailing, ListId, PageId}, SenderContext}, State) ->
+handle_cast({#mailinglist_mailing{list_id=ListId, page_id=PageId}, SenderContext}, State) ->
 	send_mailing(ListId, PageId, SenderContext),
 	{noreply, State};
 	

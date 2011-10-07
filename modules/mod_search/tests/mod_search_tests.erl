@@ -7,7 +7,7 @@
 wait_for(QueryId, ItemId) ->
     receive 
         {'$gen_cast',
-         {{rsc_query_item, QueryId, ItemId}, _}} ->
+         {#rsc_query_item{query_id=QueryId, match_id=ItemId}, _}} ->
             ok;
         _X ->
             ?DEBUG("Got wrong message, waiting for rsc_query_item:"),

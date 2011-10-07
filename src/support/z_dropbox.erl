@@ -160,7 +160,7 @@ do_scan(State) ->
                                 end,
                                 ToProcess,
                                 Moved),
-    lists:foreach(fun(F) -> z_notifier:first({dropbox_file, F}, State#state.context) end, ToProcess1).
+    lists:foreach(fun(F) -> z_notifier:first(#dropbox_file{filename=F}, State#state.context) end, ToProcess1).
 
 
 %% @doc Scan a directory, return list of files not changed in the last 10 seconds.

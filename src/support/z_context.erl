@@ -379,7 +379,7 @@ output1([C|Rest], Context, Acc) ->
     
     render_script(Args, Context) ->
         NoStartup = z_convert:to_bool(proplists:get_value(nostartup, Args, false)),
-        Extra = [ S || S <- z_notifier:map({scomp_script_render, NoStartup, Args}, Context), S /= undefined ],
+        Extra = [ S || S <- z_notifier:map(#scomp_script_render{is_nostartup=NoStartup, args=Args}, Context), S /= undefined ],
         Script = case NoStartup of
             false ->
                 [ z_script:get_page_startup_script(Context),

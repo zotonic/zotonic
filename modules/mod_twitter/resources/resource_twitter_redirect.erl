@@ -73,7 +73,7 @@ redirect_error(Reason, Context) ->
     ?DEBUG({?MODULE, Reason}),
     z_context:set_session(twitter_logon, false, Context),
     z_context:set_session(twitter_access_token, undefined, Context),
-    Location = case z_notifier:first({signup_failed_url, Reason}, Context) of
+    Location = case z_notifier:first(#signup_failed_url{reason=Reason}, Context) of
                    {ok, L} -> L;
                    undefined ->
                        z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)
@@ -102,7 +102,7 @@ logon_twitter_user(TwitterProps, LocationAfterSignup, Context) ->
                 {identity, {twitter_screenname, proplists:get_value(screen_name, TwitterProps), true, true}},
                 {ready_page, LocationAfterSignup}
             ],
-            case z_notifier:first({signup_url, Props, SignupProps}, Context) of
+            case z_notifier:first(#signup_url{props=Props, signup_props=SignupProps}, Context) of
                 {ok, Location} ->
                     use_see_other(Location, Context);
                     %?WM_REPLY({true, Location}, Context);

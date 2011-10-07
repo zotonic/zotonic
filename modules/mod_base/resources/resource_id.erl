@@ -22,7 +22,7 @@
 
 -export([
     init/1,
-	service_available/2,
+    service_available/2,
     resource_exists/2,
     content_types_provided/2,
     see_other/2
@@ -40,43 +40,59 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
-    Id = z_context:get_q("id", ContextQs),
+    {Id, ContextQs} = get_id(z_context:ensure_qs(Context1)),
     ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs).
 
 content_types_provided(ReqData, Context) ->
-	{CT,Context1} = get_content_types(Context),
-	CT1 = [{Mime, see_other} || {Mime, _Dispatch} <- CT],
-	{CT1, ReqData, Context1}.
+    {CT,Context1} = get_content_types(Context),
+    CT1 = [{Mime, see_other} || {Mime, _Dispatch} <- CT],
+    {CT1, ReqData, Context1}.
 
 see_other(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-	Mime = z_context:get_resp_header("Content-Type", Context1),
-	{CT,Context2} = get_content_types(Context1),
-    Id = z_context:get_q("id", Context2),
-	{Location,Context3} = case proplists:get_value(Mime, CT) of
-							page_url ->
-								ContextSession = z_context:continue_session(Context2),
-								{m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
-							Dispatch -> 
-								{z_dispatcher:url_for(Dispatch, [{id,Id}], Context2), Context2}
-						  end,
-	AbsUrl = z_context:abs_url(Location, Context3),
-    Context4 = z_context:set_resp_header("Location", AbsUrl, Context3),
-	?WM_REPLY({halt, 303}, Context4).
+    Mime = z_context:get_resp_header("Content-Type", Context1),
+    {CT,Context2} = get_content_types(Context1),
+    {Id, Context3} = get_id(Context2),
+    {Location,Context4} = case proplists:get_value(Mime, CT) of
+                            page_url ->
+                                ContextSession = z_context:continue_session(Context3),
+                                {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
+                            Dispatch -> 
+                                {z_dispatcher:url_for(Dispatch, [{id,Id}], Context3), Context3}
+                          end,
+    AbsUrl = z_context:abs_url(Location, Context4),
+    Context5 = z_context:set_resp_header("Location", AbsUrl, Context4),
+    ?WM_REPLY({halt, 303}, Context5).
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
 get_content_types(Context) ->
-	case z_context:get(content_types_dispatch, Context) of
-		undefined ->
-			CT = z_notifier:foldr(content_types_dispatch, [], Context),
-			CT1 = case proplists:get_value("text/html", CT) of
-					undefined -> [{"text/html", page_url}|CT];
-					Prov -> [Prov|CT]
-				  end,
-			Context1 = z_context:set(content_types_dispatch, CT1, Context),
-			{CT1, Context1};
-		CT -> 
-			{CT, Context}
-	end.
+    case z_context:get(content_types_dispatch, Context) of
+        undefined ->
+            {Id, Context1} = get_id(Context),
+            CT = z_notifier:foldr(#content_types_dispatch{id=Id}, [], Context1),
+            CT1 = case proplists:get_value("text/html", CT) of
+                    undefined -> [{"text/html", page_url}|CT];
+                    Prov -> [Prov|CT]
+                  end,
+            Context2 = z_context:set(content_types_dispatch, CT1, Context1),
+            {CT1, Context2};
+        CT -> 
+            {CT, Context}
+    end.
+    
+get_id(Context) ->
+    case z_context:get(id, Context) of
+        undefined ->
+            case z_context:get_q("id", Context) of
+                undefined ->
+                    {undefined, Context};
+                [] ->
+                    {undefined, Context};
+                Id ->
+                    RscId = m_rsc:rid(Id, Context),
+                    {{ok, RscId}, z_context:set(id, RscId, Context)}
+            end;
+        {ok, Id} ->
+            {Id, Context}
+    end.

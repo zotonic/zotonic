@@ -139,7 +139,7 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
                     {ok, ContextUser} = z_auth:logon(UserId, Context),
                     Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
                         [] -> 
-                            case z_notifier:first({signup_confirm_redirect, UserId}, ContextUser) of
+                            case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
                                 undefined -> m_rsc:p(UserId, page_url, ContextUser);
                                 Loc -> Loc
                             end;

@@ -71,10 +71,10 @@ make(Context) ->
 
 %% @doc Stream specific debug information to an area on the current page.
 debug_stream(TargetId, What, Context) ->
-    z_notifier:notify1({debug_stream, TargetId, What}, Context).
+    z_notifier:notify1(#debug_stream{target=TargetId, what=What}, Context).
 
 %% @doc Stream all debug information of a certain kind to the target id on the user agent.
-observe_debug_stream({debug_stream, TargetId, What}, Context) ->
+observe_debug_stream(#debug_stream{target=TargetId, what=What}, Context) ->
     start_debug_stream(TargetId, What, Context).
 
 pid_observe_development_reload(Pid, development_reload, _Context) ->
@@ -188,12 +188,12 @@ page_debug_stream(TargetId, What, Context) ->
             {'EXIT', _} ->
                 z_notifier:detach(debug, self(), Context),
                 done;
-            {'$gen_cast', {{debug, What, Args}, _Context}} ->
+            {'$gen_cast', {#debug{what=What, arg=Arg}, _Context}} ->
                 %% Update the target id with a dump of this debug message
-                S = io_lib:format("~p: ~p~n", [What, Args]),
+                S = io_lib:format("~p: ~p~n", [What, Arg]),
                 z_session_page:add_script(z_render:insert_top(TargetId, S, Context)),
                 ?MODULE:page_debug_stream_loop(TargetId, What, Context);
-            {'$gen_cast', {{debug, _Other, _Args}, _Context}} ->
+            {'$gen_cast', {#debug{what=_Other}, _Context}} ->
                 ?MODULE:page_debug_stream_loop(TargetId, What, Context)
         end.
         

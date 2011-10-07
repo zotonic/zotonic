@@ -32,5 +32,5 @@
 -include_lib("zotonic.hrl").
 
 %% Dispatch to the atom representation.
-observe_content_types_dispatch(content_types_dispatch, Acc, _Context) ->
+observe_content_types_dispatch(#content_types_dispatch{}, Acc, _Context) ->
     [{"application/atom+xml", atom_entry} | Acc].

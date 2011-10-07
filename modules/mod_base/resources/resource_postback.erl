@@ -105,7 +105,7 @@ process_postback(Context1) ->
                          end,
             case z_context:get_q("z_delegate", Context1) of
                 None when None =:= []; None =:= undefined ->
-                    case z_notifier:first({postback_notify, Message}, Context1) of
+                    case z_notifier:first(#postback_notify{message=Message}, Context1) of
                         undefined -> Context1;
                         #context{} = ContextNotify -> ContextNotify
                     end;

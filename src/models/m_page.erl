@@ -42,6 +42,6 @@ m_to_list(#m{value=undefined}, _Context) ->
     [].
 
 -spec m_value(#m{}, #context{}) -> [].
-m_value(#m{value=undefined}, Context) ->
+m_value(#m{value=undefined}, _Context) ->
     [].
 

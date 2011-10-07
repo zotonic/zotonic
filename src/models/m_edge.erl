@@ -144,7 +144,7 @@ insert(SubjectId, Pred, ObjectId, Context) ->
                         {ok, EdgeId} = z_db:transaction(F, Context),
                         z_depcache:flush(SubjectId, Context),
                         z_depcache:flush(ObjectId, Context),
-                        z_notifier:notify({edge_insert, SubjectId, PredName, ObjectId}, Context),
+                        z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
                         {ok, EdgeId};
                     AclError ->
                         {error, {acl, AclError}}
@@ -168,7 +168,7 @@ delete(Id, Context) ->
             z_db:transaction(F, Context),
             z_depcache:flush(SubjectId, Context),
             z_depcache:flush(ObjectId, Context),
-            z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context),
+            z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
             ok;
         AclError -> 
             {error, {acl, AclError}}
@@ -188,7 +188,7 @@ delete(SubjectId, Pred, ObjectId, Context) ->
             z_db:transaction(F, Context),
             z_depcache:flush(SubjectId, Context),
             z_depcache:flush(ObjectId, Context),
-            z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context),
+            z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
             ok;
         AclError ->
             {error, {acl, AclError}}
@@ -218,7 +218,7 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
                     z_depcache:flush(SubjectId, Context),
                     z_depcache:flush(ObjectId, Context),
                     [
-                        z_notifier:notify({edge_delete, SubjectId, PredName, ObjectId}, Context)
+                        z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context)
                         || PredName <- PredNames
                     ],
                     ok;
