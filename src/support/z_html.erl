@@ -50,7 +50,7 @@ escape_props(Props) ->
     escape_props([{K, V}|T], Acc) when K =:= body orelse K =:= body_extra->
         escape_props(T, [{K, sanitize(V)} | Acc]);
     escape_props([{K, V}|T], Acc) ->
-        EscapeFun = case lists:reverse(atom_to_list(K)) of
+        EscapeFun = case lists:reverse(z_convert:to_list(K)) of
                         "lmth_" ++ _ -> fun sanitize/1; %% prop ends in '_html'
                         _ -> fun escape_value/1
                     end,
