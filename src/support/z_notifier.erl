@@ -68,13 +68,42 @@
 start_link(SiteProps) when is_list(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
+    %% If the notifier crashes the supervisor gets ownership
+    %% of the observer table. When it restarts the notifier
+    %% it will give ownership back to the notifier.
+    ObserverTable = ensure_observer_table(Host),
+
+    case gen_server:start_link({local, Name}, ?MODULE, SiteProps, []) of
+        {ok, P} ->
+            ets:give_away(ObserverTable, P, observer_table),
+            {ok, P};
+        {already_started, P} ->
+            ets:give_away(ObserverTable, P, observer_table),
+            {already_started, P};
+        R -> R
+    end.
+
+% Make sure the observer table exists.
+%
+ensure_observer_table(Name) ->
+    Table = observer_table_name(Name),
+    case ets:info(Table) of
+        undefined -> ets:new(Table, [named_table, set, {keypos, 1}, protected, {heir, self(), []}]);
+        _ -> Table
+    end.
+
+% Return the name of the observer table
+%
+observer_table_name(Context) when is_record(Context, context) ->
+    observer_table_name(Context#context.host);
+observer_table_name(Name) when is_atom(Name) ->
+    z_utils:name_for_host(observers, Name).
 
 %% @doc Start a notifier server for unit testing
 start_tests() ->
     io:format("Starting notifier server.~n"),
-    gen_server:start_link({local, 'z_notifier$test'}, ?MODULE, [], []).
+    start_link([{host, test}]).
 
 
 %%====================================================================
@@ -107,10 +136,14 @@ detach(Event, Observer, Host) when is_atom(Host) ->
     gen_server:cast(Notifier, {'detach', Event, Observer}).
 
 %% @doc Return all observers for a particular event
-get_observers(Msg, #context{notifier=Notifier}) when is_tuple(Msg) ->
-    gen_server:call(Notifier, {'get_observers', element(1, Msg)});
-get_observers(Event, #context{notifier=Notifier}) ->
-    gen_server:call(Notifier, {'get_observers', Event}).
+get_observers(Msg, Context) when is_tuple(Msg) ->
+    get_observers(element(1, Msg), Context);
+get_observers(Event, #context{host=Host}) ->
+    Table = observer_table_name(Host),
+    case ets:lookup(Table, Event) of
+        [] -> [];
+        [{Event, Observers}] -> Observers
+    end.
 
 
 %%====================================================================
@@ -199,7 +232,7 @@ foldr(Msg, Acc0, Context) ->
 init(Args) ->
     {host, Host} = proplists:lookup(host, Args),
     Timers = [ timer:send_interval(Time * 1000, {tick, Msg}) || {Time, Msg} <- ?TIMER_INTERVAL ],
-    State = #state{observers=dict:new(), timers=Timers, context=z_context:new(Host)},
+    State = #state{observers=undefined, timers=Timers, context=z_context:new(Host)},
     {ok, State}.
 
 
@@ -209,15 +242,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Return the list of observers for an event. The event must be an atom.
-handle_call({'get_observers', Event}, _From, State) ->
-    case dict:find(Event, State#state.observers) of
-        {ok, Observers} ->
-            {reply, Observers, State};
-        error ->
-            {reply, [], State}
-    end;
-
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -228,33 +252,36 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Add an observer to an event
 handle_cast({'observe', Event, Observer, Priority}, State) ->
-	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-    Observers1 = case dict:find(Event1, State#state.observers) of
-                  {ok, EventObservers} -> 
-                        Os1 = lists:sort([{Priority, Observer}|EventObservers]),
-                        dict:store(Event1, Os1, State#state.observers);
-                  error -> 
-                        dict:store(Event1, [{Priority, Observer}], State#state.observers)
-                  end,
-    {noreply, State#state{observers=Observers1}};
+    Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
+        
+    PObs = {Priority, Observer},
+    UpdatedObservers = case ets:lookup(State#state.observers, Event1) of 
+        [] -> [PObs];
+        [{Event1, Observers}] -> lists:sort([PObs | Observers])
+    end,
+    ets:insert(State#state.observers, {Event1, UpdatedObservers}),
+
+    {noreply, State};
 
 %% @doc Detach an observer from an event
 handle_cast({'detach', Event, Observer}, State) ->
 	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-    Observers1 = case dict:find(Event1, State#state.observers) of
-                  {ok, Olist} ->
-                      Olist1 = lists:filter(fun({_Prio,Obs}) -> Obs /= Observer end, Olist),
-                      dict:store(Event1, Olist1, State#state.observers);
-                  error ->
-                      State#state.observers
-                  end,
-    {noreply, State#state{observers=Observers1}};
+
+    case ets:lookup(State#state.observers, Event1) of 
+        [] -> ok;
+        [{Event1, Observers}] -> 
+            UpdatedObservers = lists:filter(fun({_Prio,Obs}) -> Obs /= Observer end, Observers),
+            ets:insert(State#state.observers, {Event1, UpdatedObservers})
+    end,
+
+    {noreply, State};
 
 
 %% @doc Detach all observer from an event
 handle_cast({'detach_all', Event}, State) ->
 	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-    {noreply, State#state{observers = dict:erase(Event1, State#state.observers)}};
+    ets:delete(State#state.observers, Event1),  
+    {noreply, State};
 
 
 %% @doc Trap unknown casts
@@ -270,7 +297,11 @@ handle_info({tick, Msg}, State) ->
     spawn(fun() -> ?MODULE:notify(Msg, State#state.context) end),
     z_utils:flush_message({tick, Msg}),
     {noreply, State};
-    
+
+%% @doc Handle ets table transfers
+handle_info({'ETS-TRANSFER', Table, _FromPid, observer_table}, State) ->
+    {noreply, State#state{observers=Table}};
+
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -281,9 +312,14 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
+terminate(normal, State) ->
+    cancel_timers(State#state.timers),
+    ets:delete(State#state.observers),
+    ok;
 terminate(_Reason, State) ->
-    [ timer:cancel(TRef)  || {ok, TRef} <- State#state.timers ],
+    cancel_timers(State#state.timers),
     ok.
+
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
@@ -295,6 +331,10 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+cancel_timers(Timers) ->
+    [ timer:cancel(TRef)  || {ok, TRef} <- Timers ].
+
 
 %% @doc Notify an observer of an event
 notify_observer(Msg, {_Prio, Fun}, _IsCall, Context) when is_function(Fun) ->
