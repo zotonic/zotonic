@@ -352,15 +352,16 @@ extension_mime() ->
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 exif_orientation(InFile) ->
     %% FIXME - don't depend on external command
-    case os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)) of
-        "top - left\n" -> 1;
-        "top - right\n" -> 2;
-        "bottom - right\n" -> 3;
-        "bottom - left\n" -> 4;
-        "left - top\n" -> 5;
-        "right - top\n" -> 6;
-        "right - bottom\n" -> 7;
-        "left - bottom\n" -> 8;
+    FirstLine = z_string:to_lower(hd(string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)), "\n"))),
+    case [z_string:trim(X) || X <- string:tokens(FirstLine, "-")] of
+        ["top", "left"] -> 1;
+        ["top", "right"] -> 2;
+        ["bottom", "right"] -> 3;
+        ["bottom", "left"] -> 4;
+        ["left", "top"] -> 5;
+        ["right", "top"] -> 6;
+        ["right", "bottom"] -> 7;
+        ["left", "bottom"] -> 8;
         _ -> 1
     end.
 
