@@ -157,11 +157,23 @@ escape_link(Text) ->
         lists:reverse([escape(Text) | Acc]);
     make_links1(Offset, [{Offset, Len}|Rest], Text, Acc) ->
         {Link, Text1} = lists:split(Len, Text),
-        Link1 = escape(noscript(Link)),
-        make_links1(Offset+Len, Rest, Text1, [["<a href=\"",Link1,"\" rel=\"nofollow\">",Link1,"</a>"] | Acc]);
+        NoScript = noscript(Link),
+        Link1 = escape(NoScript),
+        Link2 = escape(ensure_protocol(NoScript)),
+        make_links1(Offset+Len, Rest, Text1, [["<a href=\"",Link2,"\" rel=\"nofollow\">",Link1,"</a>"] | Acc]);
     make_links1(Offset, [{MatchOffs,_}|_] = Matches, Text, Acc) ->
         {Text1,Text2} = lists:split(MatchOffs-Offset, Text),
         make_links1(MatchOffs, Matches, Text2, [escape(Text1)|Acc]).
+
+    ensure_protocol([]) ->
+        [];
+    ensure_protocol("#" ++ _ = Link) ->
+        Link;
+    ensure_protocol("www" ++ Rest) ->
+        ["http://www", Rest];
+    ensure_protocol(Link) ->
+        Link.
+
 
 
 %% @doc Strip all html elements from the text. Simple parsing is applied to find the elements. Does not escape the end result.
