@@ -84,16 +84,10 @@ sub vcl_pass {
 
 
 sub vcl_fetch {
-  if (req.url ~ "^/$") {
-    unset obj.http.Set-Cookie;
-	set obj.grace = 10s;
-	set obj.ttl = 1s;
-	return (deliver);
-  }
   if (req.url ~ "^/(lib|image|media|favicon.ico)/") {
-    unset obj.http.Set-Cookie;
-    set obj.grace = 30m;
-    set obj.ttl = 10m;
+    unset beresp.http.Set-Cookie;
+    set beresp.grace = 30m;
+    set beresp.ttl = 10m;
     return (deliver);
   }
   return (pass);
