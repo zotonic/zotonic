@@ -204,7 +204,7 @@ record_to_log_message(_, Fields, LogType, Id) ->
     to_list({error, timeout}) ->
         "timeout";
     to_list(R) when is_tuple(R) ->
-        io_lib:format("~p", R);
+        io_lib:format("~p", [R]);
     to_list(V) ->
         z_convert:to_list(V).
 
