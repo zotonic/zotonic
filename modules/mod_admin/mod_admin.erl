@@ -23,3 +23,51 @@
 -mod_title("Admin module").
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 
+-export([
+    observe_sanitize_element/3
+]).
+
+-include_lib("zotonic.hrl").
+
+
+%% @doc Fix tinymce images that are the result of copying
+%% <img class="z-tinymce-media z-tinymce-media-align-block z-tinymce-media-size-small z-tinymce-media-crop- z-tinymce-media-link- " 
+%%      src="/admin/media/preview/41113" 
+%%      alt="" />
+observe_sanitize_element(sanitize_element, {<<"img">>, Attrs, _Enclosed} = Element, Context) ->
+    case proplists:get_value(<<"src">>, Attrs) of
+        <<"/admin/media/preview/", Number/binary>> ->
+            NumberList = binary_to_list(Number),
+            case m_rsc:rid(NumberList, Context) of
+                undefined ->
+                    {nop, []};
+                ImgId ->
+                    CommentText = [
+                        <<" z-media ">>,
+                        integer_to_list(ImgId),
+                        32,
+                        class_to_opts(proplists:get_value(<<"class">>, Attrs))
+                    ],
+                    ?DEBUG({comment, iolist_to_binary(CommentText)})
+            end;
+        _OtherSrc ->
+            Element
+    end;
+observe_sanitize_element(sanitize_element, Element, _Context) ->
+    Element.
+
+
+class_to_opts(undefined) ->
+    [];
+class_to_opts(Class) ->
+    case re:run(Class, "z-tinymce-media-([a-z]+)-([a-z]*)", [{capture, all_but_first, binary}, global]) of
+        nomatch ->
+            [];
+        {match, Ms} ->
+            [
+                mochijson:encode({struct, [{A,V} || [A,V] <- Ms]}),
+                32
+            ]
+    end.
+
+    
