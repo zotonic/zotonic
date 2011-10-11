@@ -33,6 +33,7 @@
 -export([
 	observe_search_query/2,
 	observe_mailinglist_message/2,
+	observe_email_bounced/2,
 	event/2,
 	datamodel/1,
 	page_attachments/2
@@ -83,6 +84,15 @@ observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _Offset
         order="email",
         tables=[]
     };
+observe_search_query({search_query, {mailinglist_recipients, [{id,Id}, {is_bounced, Bounced}]}, _OffsetLimit}, _Context) ->
+    #search_sql{
+        select="id, email, is_enabled",
+        from="mailinglist_recipient",
+		where="mailinglist_id = $1 AND is_bounced = $2",
+		args=[Id, Bounced],
+        order="email",
+        tables=[]
+    };
 observe_search_query(_, _) ->
 	undefined.
 
@@ -101,7 +111,14 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
 	Props = m_mailinglist:recipient_get(RecipientId, Context),
 	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
 	ok.
-	
+
+
+%% @doc When an e-mail bounces, disable the corresponding recipients and mark them as bounced.
+observe_email_bounced(B=#email_bounced{}, Context) ->
+    Recipients = m_mailinglist:get_recipients_by_email(B#email_bounced.recipient, Context),
+    lists:foreach(fun(Id) -> m_mailinglist:update_recipient(Id, [{is_enabled, false}, {is_bounced, true}, {bounce_time, calendar:local_time()}], Context) end, Recipients),
+    undefined. %% Let other bounce handlers do their thing
+
 
 %% @doc Request confirmation of canceling this mailing.
 event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, Context) ->
@@ -149,8 +166,20 @@ event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) 
 event({submit, {mailing_testaddress, [{id, PageId}]}, _, _}, Context) ->
     Email = z_context:get_q_validated("email", Context),
     z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
-    Context1 = z_render:growl("Sending the page to " ++ Email ++ "...", Context),
-    z_render:wire([{dialog_close, []}], Context1).
+    Context1 = z_render:growl(?__("Sending the page to ", Context) ++ Email ++ "...", Context),
+    z_render:wire([{dialog_close, []}], Context1);
+
+
+%% @doc Handle the test-sending of a page to a single address.
+event({postback, {resend_bounced, [{list_id, ListId}, {id, PageId}]}, _, _}, Context) ->
+    z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
+    case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
+        0 ->
+            z_render:growl_error(?__("No addresses selected", Context), Context);
+        _ ->
+            Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
+            z_render:wire([{dialog_close, []}], Context1)
+    end.
 
 
 
@@ -299,10 +328,14 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
     {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
     send_mailing_process(ListId, [Email], PageId, Context);
 
+send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
+    send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
+
 send_mailing_process(ListId, PageId, Context) ->
     send_mailing_process(ListId, m_mailinglist:get_enabled_recipients(ListId, Context), PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) ->
+    m_mailinglist:reset_bounced(ListId, Context),
     SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
     {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
     From = m_mailinglist:get_email_from(ListId, Context),

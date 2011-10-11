@@ -46,13 +46,13 @@ event({postback, {mailinglist_delete_confirm, [{id,Id}]}, _TriggerId, _TargetId}
 event({postback, {mailinglist_delete, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
 	case m_rsc:delete(Id, Context) of
 		ok ->
-			z_render:wire([	{growl, [{text, "Deleted the mailing list."}]}, 
+			z_render:wire([	{growl, [{text, ?__("Deleted the mailing list.", Context)}]}, 
 							{slide_fade_out, [{target,"mailinglist-"++z_convert:to_list(Id)}]},
 							{dialog_close, []}], Context);
 		{error, eacces} ->
-			z_render:wire([	{growl, [{text, "You are not allowed to delete the mailing list."}, {type, "error"}]}, 
+			z_render:wire([	{growl, [{text, ?__("You are not allowed to delete the mailing list.", Context)}, {type, "error"}]}, 
 							{dialog_close, []}], Context);
 		{error, _Reason} ->
-			z_render:wire([	{growl, [{text, "Could not delete the mailing list."}, {type, "error"}]}, 
+			z_render:wire([	{growl, [{text, ?__("Could not delete the mailing list.", Context)}, {type, "error"}]}, 
 							{dialog_close, []}], Context)
 	end.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-09-28 11:05+0200\n"
+"PO-Revision-Date: 2011-10-11 16:54+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -120,7 +120,7 @@ msgstr "Weet je zeker dat je de volgende mailing wilt cancellen:"
 msgid "Are you sure you want to delete the mailing list"
 msgstr "Weet je zeker dat je de volgende mailinglijst wilt verwijderen:"
 
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
 msgid ""
 "Are you sure you want to reset the statistics for this mailing? This means "
 "that if you send the mailing again afterwards, recipients might have gotten "
@@ -135,6 +135,11 @@ msgid ""
 "Before you will receive any further mail you need to confirm your "
 "subscription."
 msgstr "Voordat je email ontvangt, moet je aanmelding eerst worden bevestigd."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:57
+msgid "Bounces"
+msgstr "Bounces"
 
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
@@ -178,6 +183,10 @@ msgstr "Klik op de onderstaande knop om je aanmelding te bevestingen."
 msgid "Click to view log entries"
 msgstr "Klik om e-mail log te bekijken"
 
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
+msgid "Confirm sending to mailinglist"
+msgstr "Bevestig versturen van mailinglijst"
+
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
 msgid "Delete all recipients from this list?"
 msgstr "Alle geaddresseerden van deze lijst verwijderen?"
@@ -206,10 +215,15 @@ msgstr "Dropbox bestandsnaam (optioneel)"
 msgid "Edit the mailing list &raquo;"
 msgstr "Bewerk de mailinglijst &raquo;"
 
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7
 msgid "Email"
 msgstr "Email"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6
+msgid "Enabled"
+msgstr "Actief"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
 msgid ""
@@ -318,8 +332,12 @@ msgstr "Meer hulp nodig?"
 msgid "New mailing list"
 msgstr "Nieuwe mailinglijst"
 
+#: modules/mod_mailinglist/mod_mailinglist.erl:178
+msgid "No addresses selected"
+msgstr "Geen adres geselecteerd"
+
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:50
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:73
 msgid "No items found"
 msgstr "Geen ontvangers gevonden"
 
@@ -330,6 +348,18 @@ msgstr "Geen ontvangers"
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:40
 msgid "OK"
 msgstr "OK"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
+msgid ""
+"On this page you see the addresses that have bounced. They have\n"
+"    been disabled by default. Please correct each address and check the\n"
+"    checkbox in front of the address to re-enable it. If an address is "
+"invalid, you can delete it."
+msgstr ""
+"Op deze pagina zie je de adressen die zijn gebounced. Ze zijn\n"
+"voorlopig op non-actief gesteld. Corrigeer a.u.b. de adressen en\n"
+"activeer ze weer door ze aan te vinken. Wanneer een adres ongeldig is,\n"
+"kan je het ook verwijderen."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:24
 msgid "Our excuses for the inconvenience."
@@ -393,6 +423,10 @@ msgstr "Ontvangers voor"
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Remove this recipient. No undo possible."
 msgstr "Verwijder deze ontvanger."
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:180
+msgid "Resending bounced addresses..."
+msgstr "Deze adressen opnieuw aan het versturen..."
 
 #: modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:2
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:23
@@ -464,6 +498,10 @@ msgstr "Afzender adres voor mailings (optioneel)"
 msgid "Sender name for e-mails (optional)"
 msgstr "Afzendernaam voor mailings (optioneel)"
 
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
+msgid "Sending the page to the test mailing list..."
+msgstr "De pagina naar de testmailinglijst aan het versturen..."
+
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:15
 msgid "Sent on"
 msgstr "Verstuurd op"
@@ -511,11 +549,20 @@ msgid ""
 msgstr ""
 "De bevestigingssleutel is onbekend. Waarschijnlijk heeft u al bevestigd."
 
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
+msgid "The e-mails are being sent..."
+msgstr "De e-mails worden verzonden..."
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:23
 msgid ""
 "The key in your link does not match any subscription. Either you already "
 "unsubscribed, or the mailing list has been deleted."
 msgstr "De afmeldlink is ongeldig. Misschien ben je al afgemeld."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
+msgid "The mailing will be send when the page becomes visible."
+msgstr ""
+"De mailing zal worden verstuurd wanneer deze pagina gepubliceerd wordt."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
 msgid ""
@@ -528,6 +575,18 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "De lijst met ontvangers wordt ook verwijderd."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:32
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr ""
+"Er zijn geen e-mailadressen gevonden die opnieuw kunnen worden\n"
+"verstuurd. De bounces zijn blijkbaar al eerder afgehandeld."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
+msgid "There is no mailing list with the name ‘mailinglist_test’."
+msgstr "Er is geen mailinglijst met de naam 'mailinglist_test'."
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
@@ -607,6 +666,10 @@ msgstr "Upload de lijst met ontvangers."
 msgid "Upload file"
 msgstr "Bestand uploaden"
 
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+msgid "View and edit the bounced addresses and re-send the mailing."
+msgstr "Bekijk en bewerk de gebouncede adressen en verstuur de mailing opnieuw."
+
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
 msgstr "Welkom bij"
@@ -620,6 +683,10 @@ msgstr ""
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10
 msgid "When you don’t want to receive any more mail then"
 msgstr "Wanneer je geen mail meer wilt ontvangen kun je"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
+msgid "You are not allowed to send mail to the test mailing list."
+msgstr "Je hebt geen toestemming om mail te sturen naar de testmailinglijst."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:12
 msgid ""
@@ -673,13 +740,13 @@ msgid "bounced"
 msgstr "bounce"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:60
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62
 msgid "cancel"
 msgstr "annuleer"
 
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
 msgid "clear"
 msgstr "wissen"
 
@@ -688,6 +755,7 @@ msgid "click here to unsubscribe."
 msgstr "hier klikken om je af te melden."
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:43
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "delete"
@@ -697,6 +765,7 @@ msgstr "verwijder"
 msgid "e-Mail"
 msgstr "email"
 
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:18
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:56
@@ -744,11 +813,15 @@ msgstr "ontvangers"
 msgid "scheduled"
 msgstr "ingepland"
 
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
 msgid "send mailing"
 msgstr "Verstuur mailing"
 
-#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:28
+msgid "send mailing again to corrected addresses"
+msgstr "verstuur mailing naar gecorrigeerde adressen"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
 msgid "send to "
 msgstr "verstuur naar"
 
@@ -807,15 +880,8 @@ msgstr "met je email adres"
 #~ msgid "Send the page"
 #~ msgstr "Verstuur pagina"
 
-#~ msgid "Send to mailing list"
-#~ msgstr "Verstuur naar mailinglijst"
-
 #~ msgid "Sent the e-mail."
 #~ msgstr "Email verstuurd."
-
-#~ msgid "The mailing will be send after this page has been published."
-#~ msgstr ""
-#~ "De mailing zal worden verstuurd wanneer deze pagina gepubliceerd wordt."
 
 #~ msgid "to"
 #~ msgstr "naar:"

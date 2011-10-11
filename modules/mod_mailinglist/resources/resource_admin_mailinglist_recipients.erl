@@ -56,9 +56,14 @@ event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _Trigg
 		["$(\"#", _TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "], 
 		Context);
 
+event({postback, {recipient_change_email, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+    Email = z_context:get_q("triggervalue", Context),
+    m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
+    z_render:growl(?__("E-mail address updated", Context), Context);
+
 event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
-	z_render:wire([ {growl, [{text, "Recipient deleted."}]},
+	z_render:wire([ {growl, [{text, ?__("Recipient deleted.", Context)}]},
 					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
 				], Context);
 

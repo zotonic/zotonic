@@ -52,7 +52,11 @@
 	check_scheduled/1,
 
 	get_email_from/2,
+	get_recipients_by_email/2,
     reset_log_email/3,
+
+	reset_bounced/2,
+	get_bounced_recipients/2,
 
 	init_tables/1
 ]).
@@ -430,6 +434,11 @@ init_tables(Context) ->
 		            z_db:flush(Context),
 			    ok;
                 [confirm_key,email,id,is_enabled,mailinglist_id,props,timestamp] ->
+		            z_db:q("alter table mailinglist_recipient
+                                add column is_bounced boolean not null default false", Context),
+		            z_db:flush(Context),
+                    ok;
+                [confirm_key,email,id,is_bounced,is_enabled,mailinglist_id,props,timestamp] ->
 		            ok
 		    end;
 		false ->
@@ -439,6 +448,7 @@ init_tables(Context) ->
 					mailinglist_id INT NOT NULL,
 					email character varying (200) NOT NULL,
 					is_enabled boolean NOT NULL default true,
+                    is_bounced boolean NOT NULL default false,
 					props bytea,
 					confirm_key character varying (32) NOT NULL,
 					timestamp timestamp with time zone NOT NULL DEFAULT now(),
@@ -466,3 +476,18 @@ init_tables(Context) ->
 				)", Context)
 	end.
 
+
+%% @doc Given an address, get all recipients with this email.
+get_recipients_by_email(Email, Context) ->
+    [Id || {Id} <- z_db:q("SELECT id FROM mailinglist_recipient WHERE email = $1", [Email], Context)].
+
+
+%% @doc Reset the bounced state for the given mailing list.
+reset_bounced(ListId, Context) ->
+    z_db:q("UPDATE mailinglist_recipient SET is_bounced = false WHERE mailinglist_id = $1 AND is_enabled = true", [ListId], Context).
+
+
+%% @doc Get all email addresses for the given list which have the is_bounced flag set.
+get_bounced_recipients(ListId, Context) ->
+	Emails = z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1 AND is_bounced = true AND is_enabled = true", [ListId], Context),
+	[ E || {E} <- Emails ].
