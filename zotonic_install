@@ -4,12 +4,10 @@ SHELL=/bin/bash && \
 apt-get install -y \
         erlang \
         build-essential \
-        rake \
-        libxml2-dev \
-        libexpat1-dev \
         postgresql-8.4 \
         imagemagick \
-        mercurial && \
+        exif \
+        git && \
 
 echo "CREATE USER zotonic WITH PASSWORD 'zotonic';
 ALTER ROLE zotonic WITH CREATEDB;
@@ -26,7 +24,7 @@ mkdir /home/zotonic &&\
 useradd -d $ZOTONIC -s /bin/bash zotonic && \
 chown -R zotonic:zotonic $ZOTONIC && \
 
-echo "hg clone https://zotonic.googlecode.com/hg/ zotonic && \
+echo "git clone git://github.com/zotonic/zotonic.git zotonic && \
 cd zotonic/ && \
 make && \
 echo export PATH=\$PATH:\$HOME/zotonic/bin > \$HOME/.profile && \
