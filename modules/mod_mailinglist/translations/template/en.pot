@@ -118,7 +118,7 @@ msgid ""
 "Are you sure you want to delete the mailing list"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61 
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65 
 msgid ""
 "Are you sure you want to reset the statistics for this mailing? This means "
 "that if you send the mailing again afterwards, recipients might have gotten "
@@ -129,6 +129,11 @@ msgstr ""
 msgid ""
 "Before you will receive any further mail you need to confirm your "
 "subscription."
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:57 
+msgid ""
+"Bounces"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:12 ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28 ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:13 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:14 
@@ -172,6 +177,11 @@ msgid ""
 "Click to view log entries"
 msgstr ""
 
+#: ./modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45 
+msgid ""
+"Confirm sending to mailinglist"
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20 
 msgid ""
 "Delete all recipients from this list?"
@@ -207,9 +217,14 @@ msgid ""
 "Edit the mailing list &raquo;"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7 
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:37 ./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:7 
 msgid ""
 "Email"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6 
+msgid ""
+"Enabled"
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2 
@@ -326,7 +341,12 @@ msgid ""
 "New mailing list"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:50 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69 
+#: ./modules/mod_mailinglist/mod_mailinglist.erl:178 
+msgid ""
+"No addresses selected"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:50 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:73 
 msgid ""
 "No items found"
 msgstr ""
@@ -339,6 +359,14 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:40 
 msgid ""
 "OK"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3 
+msgid ""
+"On this page you see the addresses that have bounced. They have\n    been "
+"disabled by default. Please correct each address and check the\n    checkbox "
+"in front of the address to re-enable it. If an address is invalid, you can "
+"delete it."
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:24 
@@ -410,6 +438,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46 
 msgid ""
 "Remove this recipient. No undo possible."
+msgstr ""
+
+#: ./modules/mod_mailinglist/mod_mailinglist.erl:180 
+msgid ""
+"Resending bounced addresses..."
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_mailinglist_scheduled.tpl:2 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23 
@@ -488,6 +521,11 @@ msgid ""
 "Sender name for e-mails (optional)"
 msgstr ""
 
+#: ./modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47 
+msgid ""
+"Sending the page to the test mailing list..."
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:15 
 msgid ""
 "Sent on"
@@ -540,10 +578,20 @@ msgid ""
 "else went wrong."
 msgstr ""
 
+#: ./modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57 
+msgid ""
+"The e-mails are being sent..."
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:23 
 msgid ""
 "The key in your link does not match any subscription. Either you already "
 "unsubscribed, or the mailing list has been deleted."
+msgstr ""
+
+#: ./modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61 
+msgid ""
+"The mailing will be send when the page becomes visible."
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15 
@@ -555,6 +603,17 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3 
 msgid ""
 "The recipients list of the mailing list will be deleted as well."
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:32 
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr ""
+
+#: ./modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53 
+msgid ""
+"There is no mailing list with the name ‘mailinglist_test’."
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6 
@@ -626,6 +685,11 @@ msgid ""
 "Upload file"
 msgstr ""
 
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56 
+msgid ""
+"View and edit the bounced addresses and re-send the mailing."
+msgstr ""
+
 #: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3 
 msgid ""
 "Welcome to"
@@ -639,6 +703,11 @@ msgstr ""
 #: ./modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:10 
 msgid ""
 "When you don’t want to receive any more mail then"
+msgstr ""
+
+#: ./modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50 
+msgid ""
+"You are not allowed to send mail to the test mailing list."
 msgstr ""
 
 #: ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:12 
@@ -694,12 +763,12 @@ msgid ""
 "bounced"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62 
+#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:60 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:14 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:62 
 msgid ""
 "cancel"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:61 
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65 
 msgid ""
 "clear"
 msgstr ""
@@ -709,7 +778,7 @@ msgid ""
 "click here to unsubscribe."
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:43 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46 
+#: ./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:8 ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:43 ./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46 
 msgid ""
 "delete"
 msgstr ""
@@ -719,7 +788,7 @@ msgid ""
 "e-Mail"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:39 ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:18 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:56 
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:22 ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:39 ./modules/mod_mailinglist/templates/admin_mailing_status.tpl:18 ./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:56 
 msgid ""
 "edit"
 msgstr ""
@@ -774,12 +843,17 @@ msgid ""
 "scheduled"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59 
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63 
 msgid ""
 "send mailing"
 msgstr ""
 
-#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:59 
+#: ./modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:28 
+msgid ""
+"send mailing again to corrected addresses"
+msgstr ""
+
+#: ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63 
 msgid ""
 "send to "
 msgstr ""

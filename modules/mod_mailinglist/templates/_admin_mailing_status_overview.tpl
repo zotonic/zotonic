@@ -52,6 +52,10 @@
                 {% endif %}
 
 					<span class="button-area">
+                        {% if rsc_stats[mid].bounce %}
+                                {% button text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing." 
+                                        action={dialog_open template="_dialog_mailing_bounces.tpl" title=_"Bounces" id=id mid=mid} %}
+                        {% endif %}
                         {% if mid|member:scheduled %}
                                 {% button text=_"cancel" postback={dialog_mailing_cancel_confirm list_id=mid page_id=id} delegate="mod_mailinglist"  %}
                         {% else %}

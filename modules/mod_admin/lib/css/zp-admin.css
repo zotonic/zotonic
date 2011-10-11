@@ -73,6 +73,21 @@ hr {
 	-webkit-border-bottom-right-radius: 5px;
 }
 
+.dialog-content .short-list,
+.dialog-content .item  {
+	margin: 0 0 18px 0;
+	padding: 0;
+    color: #f1f1f1;
+    background: none;
+	border: solid #333;
+	border-top-color: #333;
+	border-width: 1px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+}
+
 .item {
 	margin: 0;
 }
@@ -102,6 +117,11 @@ hr {
 	padding: 0 6px;
 	line-height: 27px;
 	border-bottom: 1px solid #e0e0e0;
+}
+
+.dialog-content .short-list li {
+    margin-bottom: 2px;
+    border-bottom: 1px dotted #666;
 }
 
 	.short-list li button,

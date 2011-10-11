@@ -8,4 +8,4 @@
 
 </p>
 
-{% mailinglist_subscribe id=id recipient_id=recipient_id in_admin %}
+{% mailinglist_subscribe id=id recipient_id=recipient_id in_admin action=action %}
