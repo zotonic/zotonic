@@ -23,20 +23,34 @@ msgid ""
 "Current menu"
 msgstr ""
 
-#: ./modules/mod_menu/templates/_admin_menu_menu_view.tpl:12 
+#: ./modules/mod_menu/templates/_menu_trash.tpl:1 
+msgid ""
+"Drag elements here to remove them"
+msgstr ""
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:34 
+msgid ""
+"Drag items from the menu to the trash to remove them."
+msgstr ""
+
+#: ./modules/mod_menu/templates/_menu_edit_item.tpl:3 ./modules/mod_menu/templates/admin_edit.menu.tpl:23 
 msgid ""
 "Drag me"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:35 
 msgid ""
-"Help about editing menus."
+"Drag the <strong>New page</strong> to add a new page."
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:19 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
 msgid ""
-"Here you can change the menu of your site.  Select pages on the right hand "
-"side and drag them to the menu on the left."
+"Drag to add a new page"
+msgstr ""
+
+#: ./modules/mod_menu/templates/_menu_edit_item.tpl:6 
+msgid ""
+"Edit"
 msgstr ""
 
 #: ./modules/mod_menu/templates/_admin_menu_module.tpl:2 
@@ -44,25 +58,17 @@ msgid ""
 "Menu"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:170 
 msgid ""
-"Need more help?"
+"New page"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:15 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:14 
 msgid ""
 "Search for a page"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
-msgid ""
-"Type the name of the page you want in your menu in the box left of this "
-"note. When you get a result, you can drag that item onto the menu pane on "
-"the left side of the page. You can also move the menu items around to "
-"manage the way your navigations looks."
-msgstr ""
-
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:23 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:33 
 msgid ""
 "Type your search terms to find pages. Then drag them on to the panel on "
 "your left."

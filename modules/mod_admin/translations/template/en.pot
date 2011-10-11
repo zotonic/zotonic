@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_admin/templates/admin_edit.tpl:25 
+msgid ""
+"<em>untitled</em>"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 
 msgid ""
 "<strong>First</strong> also known as given name, forename or Christen "
@@ -27,7 +32,7 @@ msgid ""
 "as family name or last name."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:5 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11 ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:5 
 msgid ""
 "Access control"
 msgstr ""
@@ -72,6 +77,11 @@ msgid ""
 "Alternative telephone"
 msgstr ""
 
+#: ./modules/mod_admin/templates/_action_dialog_link.tpl:27 
+msgid ""
+"Alternatively, choose an item from this predefined list:"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:3 
 msgid ""
 "Are you sure you want to delete the"
@@ -97,19 +107,29 @@ msgid ""
 "Basic"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_admin_edit_content_category.tpl:41 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:16 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:13 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 
 msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16 ./modules/mod_admin/templates/admin_referrers.tpl:26 ./modules/mod_admin/templates/_admin_overview_list.tpl:7 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:13 ./modules/mod_admin/templates/_admin_edit_content_category.tpl:5 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:29 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.tpl:7 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:13 ./modules/mod_admin/templates/admin_referrers.tpl:26 
 msgid ""
 "Category"
+msgstr ""
+
+#: ./modules/mod_admin/templates/admin_edit.tpl:28 
+msgid ""
+"Change category"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:9 
 msgid ""
 "Choose a media item from this page to insert in the body text."
+msgstr ""
+
+#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:2 
+msgid ""
+"Choose the new category for this page."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:68 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:109 
@@ -147,7 +167,7 @@ msgid ""
 "Customize page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_base.tpl:64 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
+#: ./modules/mod_admin/templates/admin_base.tpl:65 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
 msgid ""
 "Dashboard"
 msgstr ""
@@ -162,7 +182,7 @@ msgid ""
 "Define who can see or edit this page."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:8 
+#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:8 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 
 msgid ""
 "Delete"
 msgstr ""
@@ -228,7 +248,7 @@ msgid ""
 "description of someone\\'s life."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:16 
+#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:18 
 msgid ""
 "Every page is categorized in exactly one category.  The category defines "
 "what the page represents. For example an event, a product or a person.  "
@@ -285,11 +305,6 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:7 
 msgid ""
 "Group members"
-msgstr ""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:16 
-msgid ""
-"Help about category."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
@@ -366,6 +381,11 @@ msgid ""
 "Mailing address"
 msgstr ""
 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10 
+msgid ""
+"Main"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:46 
 msgid ""
 "Make"
@@ -376,7 +396,7 @@ msgid ""
 "Make a new connection"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:14 ./modules/mod_admin/templates/admin_media.tpl:25 ./modules/mod_admin/templates/admin.tpl:19 
+#: ./modules/mod_admin/templates/admin_overview.tpl:14 ./modules/mod_admin/templates/admin.tpl:19 ./modules/mod_admin/templates/admin_media.tpl:25 
 msgid ""
 "Make a new media item"
 msgstr ""
@@ -391,7 +411,7 @@ msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:21 ./modules/mod_admin/templates/admin_base.tpl:66 
+#: ./modules/mod_admin/templates/admin_base.tpl:67 ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:21 
 msgid ""
 "Media"
 msgstr ""
@@ -437,17 +457,17 @@ msgid ""
 "Modified"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:28 ./modules/mod_admin/templates/_admin_overview_list.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:19 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:19 ./modules/mod_admin/templates/admin_referrers.tpl:28 
 msgid ""
 "Modified by"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:27 ./modules/mod_admin/templates/_admin_overview_list.tpl:13 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:16 
+#: ./modules/mod_admin/templates/_admin_overview_list.tpl:13 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:16 ./modules/mod_admin/templates/admin_referrers.tpl:27 
 msgid ""
 "Modified on"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_category.tpl:16 
+#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -502,12 +522,12 @@ msgid ""
 "Page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:18 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:17 
+#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:17 ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:18 
 msgid ""
 "Page title"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/templates/admin_base.tpl:65 
+#: ./modules/mod_admin/templates/admin_base.tpl:66 ./modules/mod_admin/templates/admin_overview.tpl:3 
 msgid ""
 "Pages"
 msgstr ""
@@ -552,11 +572,6 @@ msgid ""
 "Predicate"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:47 
-msgid ""
-"Predicates, groups and categories can't be changed into another category."
-msgstr ""
-
 #: ./modules/mod_admin/templates/admin_media.tpl:41 
 msgid ""
 "Preview"
@@ -582,9 +597,14 @@ msgid ""
 "Publish this page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:25 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:37 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:25 
 msgid ""
 "Published"
+msgstr ""
+
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:35 
+msgid ""
+"Published?"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:18 
@@ -648,7 +668,7 @@ msgid ""
 "SEO Content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:49 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:12 
 msgid ""
 "Save"
 msgstr ""
@@ -656,16 +676,6 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 
 msgid ""
 "Save and view the page."
-msgstr ""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:37 
-msgid ""
-"Save this page"
-msgstr ""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:38 
-msgid ""
-"Save this page and change category."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:13 
@@ -683,7 +693,7 @@ msgid ""
 "Search query"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:12 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:20 
+#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:20 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:12 
 msgid ""
 "Short title"
 msgstr ""
@@ -691,6 +701,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13 
 msgid ""
 "Show this article only between the two dates."
+msgstr ""
+
+#: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:92 
+msgid ""
+"Something went wrong. Sorry."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:10 
@@ -728,7 +743,7 @@ msgid ""
 "Surname"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_base.tpl:71 
+#: ./modules/mod_admin/templates/admin_base.tpl:72 
 msgid ""
 "System"
 msgstr ""
@@ -746,11 +761,6 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:17 
 msgid ""
 "Telephone"
-msgstr ""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:15 
-msgid ""
-"The category defines what the page represents."
 msgstr ""
 
 #: ./modules/mod_admin/templates/admin_referrers.tpl:16 
@@ -783,11 +793,6 @@ msgid ""
 "This can't be undone. Your page will be lost forever."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_category.tpl:46 
-msgid ""
-"This page is a"
-msgstr ""
-
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
 msgid ""
 "This page is able to connect to others. For example you can connect it to "
@@ -804,7 +809,7 @@ msgid ""
 "Till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15 ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:42 ./modules/mod_admin/templates/_admin_overview_list.tpl:4 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:4 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 
+#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15 ./modules/mod_admin/templates/_admin_overview_list.tpl:4 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:4 ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:42 
 msgid ""
 "Title"
 msgstr ""
@@ -835,7 +840,7 @@ msgid ""
 "URL"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:23 ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25 
 msgid ""
 "Unique name"
 msgstr ""
@@ -905,7 +910,7 @@ msgid ""
 "Visible till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:15 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50 
 msgid ""
 "Visit full editpage"
 msgstr ""
@@ -915,7 +920,7 @@ msgid ""
 "Visiting address"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:5 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:46 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:19 
+#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:46 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:19 ./modules/mod_admin/templates/_admin_edit_content_website.tpl:5 
 msgid ""
 "Website"
 msgstr ""
@@ -978,7 +983,7 @@ msgid ""
 "cancel"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:26 
+#: ./modules/mod_admin/templates/admin_edit.tpl:27 
 msgid ""
 "change"
 msgstr ""
@@ -993,7 +998,7 @@ msgid ""
 "download"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 ./modules/mod_admin/templates/_admin_overview_list.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:36 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/_admin_overview_list.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:36 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:64 
 msgid ""
 "edit"
 msgstr ""

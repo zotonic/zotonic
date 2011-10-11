@@ -96,7 +96,7 @@ msgid ""
 "How to reset your password"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/logon.tpl:35 ./modules/mod_authentication/templates/_logon_error.tpl:8 
+#: ./modules/mod_authentication/templates/_logon_error.tpl:8 ./modules/mod_authentication/templates/logon.tpl:35 
 msgid ""
 "I forgot my username or password"
 msgstr ""
@@ -112,7 +112,7 @@ msgid ""
 "Log Off"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_off.tpl:4 ./modules/mod_authentication/templates/_logon_form_box.tpl:30 
+#: ./modules/mod_authentication/templates/_logon_form_box.tpl:30 ./modules/mod_authentication/templates/_logon_off.tpl:4 
 msgid ""
 "Log On"
 msgstr ""
@@ -187,7 +187,7 @@ msgid ""
 "Sorry, your password reset code is unknown or expired"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 ./modules/mod_authentication/templates/_logon_form_box.tpl:24 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_form_box.tpl:24 ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 
 msgid ""
 "Stay logged on unless I log off."
 msgstr ""
@@ -257,7 +257,7 @@ msgid ""
 " Maybe someone made an error typing his or her e-mail address."
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:17 ./modules/mod_authentication/templates/_logon_password_reminder.tpl:25 
+#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:25 ./modules/mod_authentication/templates/_logon_verification.tpl:17 
 msgid ""
 "When you don’t receive the e-mail within a few minutes then be sure to "
 "check your spam filter and spam folders."

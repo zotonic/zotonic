@@ -18,11 +18,48 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:7 
+msgid ""
+"(implicit)"
+msgstr ""
+
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79 
 msgid ""
 "<strong>Security notice</strong>: When you allow */* files then all members "
 "of this role will be able to obtain full access to your whole site and all "
 "underlying data."
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:22 
+msgid ""
+"ACL role overview"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Access Control"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:10 
+msgid ""
+"Access Control - Roles Overview"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:20 
+msgid ""
+"Access control controls what an user is allowed to do and see.  The roles "
+"define different groups of rights.  Users can be made member of multiple "
+"roles."
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:28 
+msgid ""
+"Actions"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:3 
+msgid ""
+"Admin Access Control"
 msgstr ""
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16 
@@ -33,6 +70,11 @@ msgstr ""
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40 
 msgid ""
 "Allow editing of category"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:38 
+msgid ""
+"Categories"
 msgstr ""
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
@@ -81,9 +123,24 @@ msgid ""
 "this)"
 msgstr ""
 
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:1 
+msgid ""
+"Member of roles"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:42 
+msgid ""
+"Modules"
+msgstr ""
+
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
 msgid ""
 "Need more help?"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:56 
+msgid ""
+"No ACL roles found."
 msgstr ""
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21 
@@ -97,9 +154,19 @@ msgid ""
 "Permissions"
 msgstr ""
 
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:27 
+msgid ""
+"Rights"
+msgstr ""
+
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29 
 msgid ""
 "The whole world"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:25 
+msgid ""
+"Title"
 msgstr ""
 
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
@@ -109,7 +176,32 @@ msgid ""
 "modules."
 msgstr ""
 
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:26 
+msgid ""
+"View all"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:48 
+msgid ""
+"delete"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:49 
+msgid ""
+"edit"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:14 
+msgid ""
+"make a new acl role"
+msgstr ""
+
 #: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6 
 msgid ""
 "make smaller"
+msgstr ""
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:36 
+msgid ""
+"view all,&mdash;"
 msgstr ""

@@ -28,7 +28,7 @@ msgid ""
 "Are you sure you want to delete the configuration key"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13 ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13 
 msgid ""
 "Cancel"
 msgstr ""
@@ -53,7 +53,7 @@ msgid ""
 "Delete"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:21 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13 ./modules/mod_admin_config/templates/admin_config.tpl:21 
 msgid ""
 "Key"
 msgstr ""
@@ -63,7 +63,7 @@ msgid ""
 "Modified"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:20 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7 ./modules/mod_admin_config/templates/admin_config.tpl:20 
 msgid ""
 "Module"
 msgstr ""
@@ -98,7 +98,7 @@ msgid ""
 "This can't be undone. The configuration key will be lost forever."
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:22 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8 ./modules/mod_admin_config/templates/admin_config.tpl:22 
 msgid ""
 "Value"
 msgstr ""

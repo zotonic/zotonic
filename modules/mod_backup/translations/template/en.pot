@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:27 
+#: ./modules/mod_backup/templates/admin_backup.tpl:38 
 msgid ""
 "Actions"
 msgstr ""
@@ -28,58 +28,82 @@ msgid ""
 "Admin Backups"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:12 
+#: ./modules/mod_backup/templates/admin_backup.tpl:14 
 msgid ""
 "At any moment you can make a backup of your system."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:10 ./modules/mod_backup/templates/admin_backup.tpl:23 ./modules/mod_backup/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_backup/templates/admin_backup.tpl:12 ./modules/mod_backup/templates/admin_backup.tpl:34 ./modules/mod_backup/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Backups"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+#: ./modules/mod_backup/templates/admin_backup.tpl:37 
 msgid ""
 "Date"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:48 
+#: ./modules/mod_backup/templates/admin_backup.tpl:59 
 msgid ""
 "No backups present."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:18 
+#: ./modules/mod_backup/templates/admin_backup.tpl:21 
 msgid ""
 "Start backup now"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:12 
+#: ./modules/mod_backup/templates/admin_backup.tpl:27 
+msgid ""
+"The \"pg_dump\" command was not found in the path. Set the "
+"\"mod_backup.pg_dump\" config key to the path to pg_dump and return to this "
+"page."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:28 
+msgid ""
+"The \"tar\" command was not found in the path. Set the \"mod_backup.tar\" "
+"config key to the path to pg_dump and return to this page."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:14 
 msgid ""
 "The backup comprises two parts, the database and the uploaded files."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:13 
+#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+msgid ""
+"Warning:"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:15 
 msgid ""
 "You can have 10 backups, older ones will be deleted automatically."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:17 
+#: ./modules/mod_backup/templates/admin_backup.tpl:20 
 msgid ""
 "You can start a backup immediately, whilst the backup is running you can "
 "continue working."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:40 
+#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+msgid ""
+"Your backup is not correctly configured. The backup module will not work "
+"the problem(s) below have been resolved:"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:52 
 msgid ""
 "download database"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:41 
+#: ./modules/mod_backup/templates/admin_backup.tpl:53 
 msgid ""
 "download files"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:38 
+#: ./modules/mod_backup/templates/admin_backup.tpl:50 
 msgid ""
 "this backup is in progress"
 msgstr ""
