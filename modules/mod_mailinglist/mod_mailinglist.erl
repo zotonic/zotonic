@@ -332,17 +332,16 @@ send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
     send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
 
 send_mailing_process(ListId, PageId, Context) ->
-    send_mailing_process(ListId, m_mailinglist:get_enabled_recipients(ListId, Context), PageId, Context).
+    Recipients = m_mailinglist:get_enabled_recipients(ListId, Context) ++ m_edge:subjects(ListId, subscriberof, Context),
+    send_mailing_process(ListId, Recipients, PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) ->
     m_mailinglist:reset_bounced(ListId, Context),
-    SubscribersOf = m_edge:subjects(ListId, subscriberof, Context),
-    {Direct,Queued} = split_list(20, Recipients ++ SubscribersOf),
+    {Direct,Queued} = split_list(20, Recipients),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
         {id,PageId}, {list_id, ListId}, {email_from, From}
     ],
-    
     [ send(true, Email, From, Options, Context) || Email <- Direct ],
     [ send(false, Email, From, Options, Context) || Email <- Queued ],
     ok.
