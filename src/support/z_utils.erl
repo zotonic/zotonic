@@ -82,6 +82,7 @@
     now/0,
     now_msec/0,
     tempfile/0,
+    temppath/0,
     url_reserved_char/1,
     url_unreserved_char/1,
     url_valid_char/1,
@@ -865,8 +866,18 @@ ensure_existing_module(ModuleName) when is_binary(ModuleName) ->
 %% @spec tempfile() -> string()
 tempfile() ->
     {A,B,C}=erlang:now(),
-    lists:flatten(io_lib:format("/tmp/ztmp-~p-~p.~p.~p",[node(),A,B,C])).
-    
+    filename:join(temppath(), lists:flatten(io_lib:format("ztmp-~s-~p.~p.~p",[node(),A,B,C]))).
+
+
+%% @doc Returns the path where to store temporary files.
+%%@spec temppath() -> string()
+temppath() ->
+    lists:foldl(fun(false, Fallback) -> Fallback;
+                   (Good, _) -> Good end,
+                "/tmp",
+                [os:getenv("TMP"), os:getenv("TEMP")]).
+
+
 %% @doc Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.
 flush_message(Msg) ->
     receive

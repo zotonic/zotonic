@@ -27,8 +27,7 @@
 
 % @doc Return a new unique filename, start a monitoring process to clean it up after use.
 new() ->
-	{A,B,C}=now(),
-	Filename = "/tmp/zp-" ++ lists:flatten(io_lib:format("~p-~p.~p.~p",[node(),A,B,C])),
+	Filename = z_utils:tempfile(),
 	OwnerPid = self(),
 	Pid = erlang:spawn_link(fun() -> cleanup(Filename, OwnerPid) end),
 	receive
