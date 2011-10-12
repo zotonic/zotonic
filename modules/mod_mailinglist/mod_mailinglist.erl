@@ -373,9 +373,9 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
 			split_list(N-1, T, [H|Acc]).
 
 
-%% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'document' edges.
+%% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'hasdocument' edges.
 page_attachments(Id, Context) ->
-    AttIds = m_edge:objects(Id, document, Context),
+    AttIds = m_edge:objects(Id, hasdocument, Context),
     [as_upload(AId, Context) || AId <- AttIds].
 
 
