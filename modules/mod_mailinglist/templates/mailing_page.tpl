@@ -25,7 +25,7 @@
 {% endif %}
 
 {% if not m.rsc[list_id].mailinglist_private %}
-{% include "_mailing_unsubscribe.tpl" %}
+{% include "_mailing_footer.tpl" %}
 {% endif %}
 
 {% endblock %}
