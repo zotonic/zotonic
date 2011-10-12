@@ -30,8 +30,11 @@
     
     is_allowed_results_download/2,
     insert_survey_submission/3,
+    insert_survey_submission/5,
     survey_stats/2,
     survey_results/2,
+	single_result/4,
+	delete_result/4,
     install/1
 ]).
 
@@ -44,6 +47,8 @@ m_find_value(questions, #m{value=undefined} = M, _Context) ->
     M#m{value=questions};
 m_find_value(results, #m{value=undefined} = M, _Context) ->
     M#m{value=results};
+m_find_value(all_results, #m{value=undefined} = M, _Context) ->
+    M#m{value=all_results};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
 m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
@@ -58,6 +63,8 @@ m_find_value(Id, #m{value=questions}, Context) ->
     end;
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(Id, Context);
+m_find_value(Id, #m{value=all_results}, Context) ->
+    survey_results(Id, Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
     did_survey(Id, Context);
 m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
@@ -118,21 +125,27 @@ did_survey(SurveyId, Context) ->
 
 %% @doc Save a survey, connect to the current user (if any)
 insert_survey_submission(SurveyId, Answers, Context) ->
-    UserId = z_acl:user(Context),
-    %% Delete previous answers of this user, if any
-    PersistentId = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
-        true ->
-            z_ids:id(30);
-        false ->
-            case UserId of
-                undefined ->
-                    PId = z_context:persistent_id(Context),
-                    z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PId], Context),
-                    PId;
-                _Other ->
-                    z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context),
-                    undefined
-            end
+    {UserId, PersistentId} = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
+                                 true ->
+                                     {undefined, z_ids:id(30)};
+                                 false ->
+                                     case z_acl:user(Context) of
+                                         undefined ->
+                                             {undefined, z_context:persistent_id(Context)};
+                                         U ->
+                                             {U, undefined}
+                                     end
+                             end,
+    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context).
+
+%% @doc Save or replace a survey for the given userid/persistent_id combination
+insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
+    case UserId of
+        undefined ->
+            PId = z_context:persistent_id(Context),
+            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [SurveyId, PId], Context);
+        _Other ->
+            z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context)
     end,
     insert_questions(SurveyId, UserId, PersistentId, Answers, Context).
 
@@ -224,12 +237,13 @@ survey_results(SurveyId, Context) ->
             Grouped = group_users(Rows),
             QIds = [ z_convert:to_binary(QId) || QId <- QuestionIds ],
             QsB = [ {z_convert:to_binary(QId), Q} || {QId, Q} <- Questions ],
+            UnSorted = [ user_answer_row(User, Created, Answers, QIds, QsB, Context) || {User, Created, Answers} <- Grouped ],
+            Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
             [
-                lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
-                                | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]
-                              ])
-                | [ user_answer_row(User, Created, Answers, QIds, QsB, Context) || {User, Created, Answers} <- Grouped ]
-            ];
+             lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
+                             | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]
+                           ])
+             | Sorted];
         undefined ->
             []
     end.
@@ -322,3 +336,28 @@ install(Context) ->
 
     ok.
 
+
+single_result(SurveyId, UserId, PersistentId, Context) ->
+    {Clause, Args} = case z_utils:is_empty(UserId) of
+                         true -> {"persistent = $1", [PersistentId]};
+                         false -> {"user_id = $1", [UserId]}
+                     end,
+    Rows = z_db:q("SELECT question, name, value, text FROM survey_answer WHERE " ++ Clause ++ "AND survey_id = $2", Args ++ [SurveyId], Context),
+    lists:foldr(fun({Q, N, Numeric, Text}, R) ->
+                        QId = z_convert:to_list(Q),
+                        Name = z_convert:to_list(N),
+                        Value = case z_utils:is_empty(Text) of
+                                    true -> Numeric; false -> {text, z_convert:to_list(Text)}
+                                end,
+                        z_utils:prop_replace(QId, z_utils:prop_replace(Name, Value, proplists:get_value(QId, R, [])), R)
+                end,
+                [],
+                Rows).
+
+
+delete_result(SurveyId, UserId, PersistentId, Context) ->
+    {Clause, Args} = case z_utils:is_empty(UserId) of
+                         true -> {"persistent = $1", [PersistentId]};
+                         false -> {"user_id = $1", [UserId]}
+                     end,
+    z_db:q("DELETE FROM survey_answer WHERE " ++ Clause ++ " and survey_id = $2", Args ++ [SurveyId], Context).

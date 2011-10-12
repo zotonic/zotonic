@@ -8,42 +8,7 @@
 
 
 {% block widget_before %}
-<style type="text/css">
-	.survey-editor ul {
-	min-height: 1300px;
-}
-	.survey-editor ul li {
-		border: 1px solid #ddd;
-		border-left: 5px solid #ddd;
-		padding: 4px;
-		margin-bottom: 4px;
-		margin-right: 4px;
-		cursor: hand;
-		background-color: #f8f8f8;
-	}
-
-	.survey-editor ul li textarea {
-		width: 90%;
-	}
-
-	.survey-info {
-		color: #777;
-		font-style: italic;
-	}
-
-	#survey .shortanswer input, #survey-qs .shortanswer input {
-		width: 90%;
-	}
-
-	#survey-qs li {
-		font-size: 80%;
-	}
-
-	#survey li {
-		background-color: #f8f8f8;
-		border-left-width: 1px;
-	}
-</style>
+{% lib "css/admin_survey.css" %}
 {% endblock %}
 
 
@@ -69,7 +34,10 @@
 		</label>
 	</div>
 
-	<p><a href="{% url survey_results id=id %}">{_ Show survey results _}</a></p>
+	<p>
+        <a href="{% url survey_results id=id %}">{_ Show survey results _}</a> |
+        <a href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
+    </p>
 
 	<hr/>
 

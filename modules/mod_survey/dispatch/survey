@@ -5,5 +5,8 @@
     {survey_results, ["survey", "results", id, slug], resource_page, [ {template, "survey_results.tpl"} ]},
 
     {survey, ["survey", id],       resource_page, [ {template, "survey.tpl"} ]},
-    {survey, ["survey", id, slug], resource_page, [ {template, "survey.tpl"} ]}
+    {survey, ["survey", id, slug], resource_page, [ {template, "survey.tpl"} ]},
+
+    {admin_survey_editor, ["admin", "survey", id],  resource_admin, [{acl, {module, mod_survey}}, {template, "admin_survey_editor.tpl"}]}
+
 ].

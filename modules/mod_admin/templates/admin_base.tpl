@@ -25,6 +25,8 @@
 			"css/zp-ie.css"
 		%}
 	<![endif]-->
+    {% block head_extra %}
+    {% endblock %}
 </head>
 <body class="zp-wide">
 	<div class="skip">

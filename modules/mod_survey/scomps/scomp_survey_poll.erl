@@ -28,5 +28,13 @@ vary(_,_) -> nocache.
 render(Args, _Vars, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     ElementId = proplists:get_value(element_id, Args, "survey-question"),
-    Render = mod_survey:render_next_page(SurveyId, 1, exact, [], [], Context),
+    PersistentId = proplists:get_value(persistent_id, Args),
+    UserId = proplists:get_value(user_id, Args),
+    Answers = m_survey:single_result(SurveyId, UserId, PersistentId, Context),
+    case z_convert:to_bool(proplists:get_value(editing, Args)) andalso z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            z_session:set(mod_survey_editing, {UserId, PersistentId}, Context);
+        false -> nop
+    end,
+    Render = mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Context),
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.

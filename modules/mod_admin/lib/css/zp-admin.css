@@ -1049,3 +1049,27 @@ div.translations table.mceLayout {
 	-webkit-border-top-left-radius: 0px;
 	-webkit-border-top-right-radius: 0px;
 }
+
+
+/* tables */
+td button, td a.button {
+    display: inline;
+    float: none;
+    margin: 0;
+}
+
+td, th {
+    padding: 4px 0;
+}
+
+td {
+    border-bottom: 1px dotted #bbb;
+}
+th {
+    text-align: left;
+    border-bottom: 1px solid #bbb;
+}
+
+table {
+    margin-bottom: 18px;
+}
