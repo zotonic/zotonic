@@ -22,11 +22,13 @@
 
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds amdin interface to define the menu.").
+-mod_schema(1).
 
 -include("zotonic.hrl").
 
 %% interface functions
 -export([
+	manage_schema/2,
     init/1,
     event/2,
     observe_menu_get_rsc_ids/2,
@@ -34,7 +36,6 @@
     get_menu/1,
     get_menu/2,
     set_menu/3,
-    datamodel/1,
     menu_flat/2,
     test/0
 ]).
@@ -286,33 +287,28 @@ menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
 
 
 %% @doc The datamodel for the menu routines.
-datamodel(Context) ->
-    [
-     {categories,
-      [
-       {menu, categorization,
-        [{title, <<"Page menu">>}]
-       }
-      ]
-     },
-     {resources,
-      case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
-          undefined ->
-              [];
-          Menu ->
-              [
-               {main_menu,
-                menu,
-                [{title, <<"Main menu">>},
-                 {menu, Menu}
-                ]
-               }
-              ]
-      end
-     }
-    ].
-
-
+manage_schema(install, Context) ->
+    z_datamodel:manage(
+      mod_menu,
+      #datamodel{categories=
+                 [
+                  {menu, categorization,
+                   [{title, <<"Page menu">>}]
+                  }
+                 ],
+                 resources=
+                 case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
+                     undefined ->
+                         [];
+                     Menu ->
+                         [
+                          {main_menu,
+                           menu,
+                           [{title, <<"Main menu">>},
+                            {menu, Menu}
+                           ]
+                          }]
+                 end}, Context).
 
 
 %% @doc test function

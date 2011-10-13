@@ -21,16 +21,16 @@
 
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
-
--export([init/1]).
+-mod_schema(1).
 
 %% interface functions
 -export([
+	manage_schema/2,
     event/2,
     redraw_questions/2,
     new_question/1,
     delete_question/3,
-    
+
     render_next_page/6,
     question_to_props/1,
     module_name/1
@@ -39,10 +39,11 @@
 -include_lib("zotonic.hrl").
 -include("survey.hrl").
 
-%% @doc Initilize the data model.
-init(Context) ->
-    m_survey:install(Context),
-    z_datamodel:manage(?MODULE, datamodel(), Context).
+
+%% @doc Schema for mod_survey lives in separate module
+manage_schema(What, Context) ->
+    mod_survey_schema:manage_schema(What, Context).
+
 
 %% @doc Handle drag/drop events from the survey admin
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
@@ -374,13 +375,3 @@ module_name(Type) when is_atom(Type) ->
     module_name(#survey_question{type=Type});
 module_name(#survey_question{type=Type}) ->
     list_to_atom("survey_q_"++atom_to_list(Type)).
-
-
-
-datamodel() ->
-    [
-        {categories, [
-                {survey, undefined, [{title, "Survey"}]},
-                {poll, survey, [{title, "Poll"}]}
-            ]}
-    ].

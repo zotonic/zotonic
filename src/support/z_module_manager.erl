@@ -391,7 +391,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
                         ok = z_supervisor:add_child(ModuleSup, Spec),
                         z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
                     Error ->
-                        ?ERROR("Error starting module ~p, Schema initialization error:~n~p~n", [Module, Error]),
+                        ?ERROR("[~p] Error starting module ~p, Schema initialization error:~n~p~n", [z_context:site(Context), Module, Error]),
                         error
                 end;
             error ->
@@ -474,8 +474,9 @@ manage_schema(_Module, _Current, undefined, _Context) ->
 %% @doc Installing a schema
 manage_schema(Module, undefined, Target, Context) ->
     F = fun(C) ->
-                Module:manage_schema(install, C),
-                set_db_schema_version(Module, Target, C)
+                ok = Module:manage_schema(install, C),
+                ok = set_db_schema_version(Module, Target, C),
+                ok = z_db:flush(C)
         end,
     ok = z_db:transaction(F, Context);
 
@@ -489,8 +490,9 @@ manage_schema(Module, Current, Target, _Context) when
 manage_schema(Module, Current, Target, Context) when
       is_integer(Current) andalso is_integer(Target) ->
     F = fun(C) ->
-                Module:manage_schema({upgrade, Current+1}, C),
-                set_db_schema_version(Module, Current+1, C)
+                ok = Module:manage_schema({upgrade, Current+1}, C),
+                ok = set_db_schema_version(Module, Current+1, C),
+                ok = z_db:flush(C)
         end,
     ok = z_db:transaction(F, Context),
     manage_schema(Module, Current+1, Target, Context);

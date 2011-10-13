@@ -24,6 +24,7 @@
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
+-mod_schema(1).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -31,11 +32,11 @@
 
 %% interface functions
 -export([
+	manage_schema/2,
 	observe_search_query/2,
 	observe_mailinglist_message/2,
 	observe_email_bounced/2,
 	event/2,
-	datamodel/1,
 	page_attachments/2
 ]).
 
@@ -43,36 +44,9 @@
 
 -record(state, {context}).
 
-
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
-datamodel(Context) ->
-    m_mailinglist:init_tables(Context),
-    [
-        {categories, [
-            {mailinglist, undefined, [
-                            {title, "Mailing list"},
-                            {summary, "Mailing lists are used to send pages to groups of people."}
-                        ]}
-        ]},
-
-        % Any resource with an e-mail address can be a subscriber of a mailinglist
-        {predicates, [
-            {subscriberof,
-                 [{title, <<"Subscriber of">>}],
-                 [{person, mailinglist}, {location, mailinglist}]},
-             {exsubscriberof,
-                  [{title, <<"Ex-subscriber of">>}],
-                  [{person, mailinglist}, {location, mailinglist}]}
-        ]},
-
-        {resources, [
-            {mailinglist_test, mailinglist, [
-                            {visible_for, 1},
-                            {title, "Test mailing list"},
-                            {summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It should not be visible for the world."}
-                        ]}
-        ]}
-    ].
+manage_schema(What, Context) ->
+    mod_mailinglist_schema:manage_schema(What, Context).
 
 
 observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
