@@ -19,11 +19,12 @@
 
 <h2><a name="description">Description</a></h2>Mailing list access for templates.
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#already_sent-4">already_sent/4</a></td><td>Given an email address for a list/page combination, check if this page already has been delivered to this address.</td></tr>
-<tr><td valign="top"><a href="#check_scheduled-1">check_scheduled/1</a></td><td>Fetch the next scheduled mailing that is publicly visible, published and in the publication date range.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#check_scheduled-1">check_scheduled/1</a></td><td>Fetch the next scheduled mailing that is publicly visible, published and in the publication date range.</td></tr>
 <tr><td valign="top"><a href="#delete_scheduled-3">delete_scheduled/3</a></td><td>Delete a scheduled mailing.</td></tr>
+<tr><td valign="top"><a href="#get_bounced_recipients-2">get_bounced_recipients/2</a></td><td>Get all email addresses for the given list which have the is_bounced flag set.</td></tr>
 <tr><td valign="top"><a href="#get_email_from-2">get_email_from/2</a></td><td>Get the "from" address used for this mailing list.</td></tr>
 <tr><td valign="top"><a href="#get_enabled_recipients-2">get_enabled_recipients/2</a></td><td>Fetch all enabled recipients from a list.</td></tr>
+<tr><td valign="top"><a href="#get_recipients_by_email-2">get_recipients_by_email/2</a></td><td>Given an address, get all recipients with this email.</td></tr>
 <tr><td valign="top"><a href="#get_scheduled-2">get_scheduled/2</a></td><td>Get the list of scheduled mailings for a page.</td></tr>
 <tr><td valign="top"><a href="#get_stats-2">get_stats/2</a></td><td>Get the stats for the mailing.</td></tr>
 <tr><td valign="top"><a href="#init_tables-1">init_tables/1</a></td><td></td></tr>
@@ -42,16 +43,12 @@
 <tr><td valign="top"><a href="#recipient_is_enabled_toggle-2">recipient_is_enabled_toggle/2</a></td><td>Toggle the enabled flag of a recipient.</td></tr>
 <tr><td valign="top"><a href="#recipients_clear-2">recipients_clear/2</a></td><td>Clear all recipients of the list.</td></tr>
 <tr><td valign="top"><a href="#replace_recipients-3">replace_recipients/3</a></td><td>Replace all recipients found in the binary file.</td></tr>
+<tr><td valign="top"><a href="#reset_bounced-2">reset_bounced/2</a></td><td>Reset the bounced state for the given mailing list.</td></tr>
 <tr><td valign="top"><a href="#reset_log_email-3">reset_log_email/3</a></td><td>Reset the email log for given list/page combination, allowing one to send the same page again to the given list.</td></tr>
 <tr><td valign="top"><a href="#update_recipient-3">update_recipient/3</a></td><td>Update a single recipient; changing e-mail address or name details.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
-
-<h3 class="function"><a name="already_sent-4">already_sent/4</a></h3>
-<div class="spec">
-<p><tt>already_sent(Email, ListId, Id, Context) -&gt; any()</tt></p>
-</div><p>Given an email address for a list/page combination, check if this page already has been delivered to this address.</p>
 
 <h3 class="function"><a name="check_scheduled-1">check_scheduled/1</a></h3>
 <div class="spec">
@@ -63,6 +60,11 @@
 <p><tt>delete_scheduled(ListId, PageId, Context) -&gt; any()</tt></p>
 </div><p>Delete a scheduled mailing</p>
 
+<h3 class="function"><a name="get_bounced_recipients-2">get_bounced_recipients/2</a></h3>
+<div class="spec">
+<p><tt>get_bounced_recipients(ListId, Context) -&gt; any()</tt></p>
+</div><p>Get all email addresses for the given list which have the is_bounced flag set.</p>
+
 <h3 class="function"><a name="get_email_from-2">get_email_from/2</a></h3>
 <div class="spec">
 <p><tt>get_email_from(ListId, Context) -&gt; any()</tt></p>
@@ -72,6 +74,11 @@
 <div class="spec">
 <p><tt>get_enabled_recipients(ListId, Context) -&gt; any()</tt></p>
 </div><p>Fetch all enabled recipients from a list.</p>
+
+<h3 class="function"><a name="get_recipients_by_email-2">get_recipients_by_email/2</a></h3>
+<div class="spec">
+<p><tt>get_recipients_by_email(Email, Context) -&gt; any()</tt></p>
+</div><p>Given an address, get all recipients with this email.</p>
 
 <h3 class="function"><a name="get_scheduled-2">get_scheduled/2</a></h3>
 <div class="spec">
@@ -163,6 +170,11 @@
 <p><tt>replace_recipients(ListId, Bin, Context) -&gt; any()</tt></p>
 </div><p>Replace all recipients found in the binary file. One recipient per line.</p>
 
+<h3 class="function"><a name="reset_bounced-2">reset_bounced/2</a></h3>
+<div class="spec">
+<p><tt>reset_bounced(ListId, Context) -&gt; any()</tt></p>
+</div><p>Reset the bounced state for the given mailing list.</p>
+
 <h3 class="function"><a name="reset_log_email-3">reset_log_email/3</a></h3>
 <div class="spec">
 <p><tt>reset_log_email(ListId, PageId, Context) -&gt; any()</tt></p>
@@ -175,6 +187,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Sep 22 2011, 08:54:57.</i></p>
+<p><i>Generated by EDoc, Oct 13 2011, 14:45:58.</i></p>
 </body>
 </html>

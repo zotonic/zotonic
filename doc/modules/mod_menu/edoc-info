@@ -1,3 +1,2 @@
 {packages,[]}.
-{modules,[filter_menu_flat,filter_menu_trail,mod_menu,
-          resource_menu_admin_menu,scomp_menu_menu]}.
+{modules,[filter_menu_flat,filter_menu_trail,mod_menu,scomp_menu_menu]}.
