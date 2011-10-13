@@ -100,6 +100,7 @@ upgrade(Name, Database, Schema) ->
 	ok = drop_visitor(Name, Database, Schema),
 	ok = extent_mime(Name, Database, Schema),
     ok = install_task_due(Name, Database, Schema),
+    ok = install_module_schema_version(Name, Database, Schema),
     ok.
 
 
@@ -219,6 +220,21 @@ install_task_due(Name, Database, Schema) ->
             {ok, [], []} = pgsql:squery(C, "BEGIN"),
             pgsql:squery(C, "alter table pivot_task_queue "
                             "add column due timestamp "),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok
+    end.
+
+
+install_module_schema_version(Name, Database, Schema) ->
+    case has_column("module", "schema_version", Name, Database, Schema) of
+        true -> 
+            ok;
+        false ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            pgsql:squery(C, "alter table module "
+                            "add column schema_version int "),
             {ok, [], []} = pgsql:squery(C, "COMMIT"),
             pgsql_pool:return_connection(Name, C),
             ok

@@ -226,6 +226,24 @@ title(M) ->
     end.
 
 
+%% @doc Get the schema version of a module.
+mod_schema(M) ->
+    try
+        {mod_schema, [S]} = proplists:lookup(mod_schema, M:module_info(attributes)),
+        S
+    catch
+        _M:_E -> undefined
+    end.
+
+db_schema_version(M, Context) ->
+    z_db:q1("SELECT schema_version FROM module WHERE name = $1", [M], Context).
+
+set_db_schema_version(M, V, Context) ->
+    1 = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
+    ok.
+
+
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -368,12 +386,12 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
                 end,
         case Info of
             L when is_list(L) ->
-                case catch manage_datamodel(Module, Context) of
+                case catch manage_schema(Module, Context) of
                     ok ->
                         ok = z_supervisor:add_child(ModuleSup, Spec),
                         z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
                     Error ->
-                        ?ERROR("Error starting module ~p, datamodel initialization error: ~p", Error),
+                        ?ERROR("Error starting module ~p, Schema initialization error:~n~p~n", [Module, Error]),
                         error
                 end;
             error ->
@@ -431,13 +449,55 @@ valid(M, Context) ->
     lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
 
-%% @doc Initialize the datamodel of the module.
-manage_datamodel(Module, Context) ->
-    case proplists:get_value(datamodel, erlang:get_module_info(Module, exports)) of
-        undefined -> ok;
-        0 -> z_datamodel:manage(Module, Module:datamodel(), Context);
-        1 -> z_datamodel:manage(Module, Module:datamodel(Context), Context)
+%% @doc Manage the upgrade/install of this module.
+manage_schema(Module, Context) ->
+    Target = mod_schema(Module),
+    Current = db_schema_version(Module, Context),
+    case {proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)), Target =/= undefined} of
+        {undefined, false} ->
+            ok; %% No manage_schema function, and no target schema
+        {undefined, true} ->
+            throw({error, {"Schema version defined in module but no manage_schema/2 function.", Module}});
+        {2, _} ->
+            %% Module has manage_schema function
+            manage_schema(Module, Current, Target, Context)
     end.
+
+%% @doc Database version equals target version; ignore
+manage_schema(_Module, Version, Version, _Context) ->
+    ok;
+
+%% @doc Upgrading to undefined schema version..?
+manage_schema(_Module, _Current, undefined, _Context) ->
+    ok; %% or?: throw({error, {upgrading_to_empty_schema_version, Module}});
+
+%% @doc Installing a schema
+manage_schema(Module, undefined, Target, Context) ->
+    F = fun(C) ->
+                Module:manage_schema(install, C),
+                set_db_schema_version(Module, Target, C)
+        end,
+    ok = z_db:transaction(F, Context);
+
+%% @doc Attempting a schema downgrade.
+manage_schema(Module, Current, Target, _Context) when
+      is_integer(Current) andalso is_integer(Target)
+      andalso Current > Target ->
+    throw({error, {"Module downgrades currently not supported.", Module}});
+
+%% @doc Do a single upgrade step.
+manage_schema(Module, Current, Target, Context) when
+      is_integer(Current) andalso is_integer(Target) ->
+    F = fun(C) ->
+                Module:manage_schema({upgrade, Current+1}, C),
+                set_db_schema_version(Module, Current+1, C)
+        end,
+    ok = z_db:transaction(F, Context),
+    manage_schema(Module, Current+1, Target, Context);
+
+%% @doc Invalid version numbering
+manage_schema(_, Current, Target, _) ->
+    throw({error, {"Invalid schema version numbering", Current, Target}}).
 
 
 %% @doc Add the observers for a module, called after module has been activated

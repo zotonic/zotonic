@@ -117,7 +117,8 @@ model_pgsql() ->
         is_active boolean NOT NULL DEFAULT false,
         created timestamp with time zone NOT NULL DEFAULT now(),
         modified timestamp with time zone NOT NULL DEFAULT now(),
-        
+        schema_version int NULL,
+
         CONSTRAINT module_pkey PRIMARY KEY (id),
         CONSTRAINT module_name_key UNIQUE (name)
     )",
