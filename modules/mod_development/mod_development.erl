@@ -97,6 +97,9 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
+
+    z_sass_converter:start_link(Context),
+
     {ok, #state{
         context  = z_context:new(Context)
     }}.
