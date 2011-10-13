@@ -474,7 +474,11 @@ manage_schema(_Module, _Current, undefined, _Context) ->
 %% @doc Installing a schema
 manage_schema(Module, undefined, Target, Context) ->
     F = fun(C) ->
-                ok = Module:manage_schema(install, C),
+                case Module:manage_schema(install, C) of
+                    D=#datamodel{} ->
+                        ok = z_datamodel:manage(Module, D, Context);
+                    ok -> ok
+                end,
                 ok = set_db_schema_version(Module, Target, C),
                 ok = z_db:flush(C)
         end,

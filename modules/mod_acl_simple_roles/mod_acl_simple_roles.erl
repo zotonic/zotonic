@@ -399,34 +399,32 @@ can_media(Mime, Size, #context{acl=ACL}) ->
 
 
 %% @doc The datamodel for the role based ACL
-manage_schema(install, Context) ->
-    z_datamodel:manage(
-      mod_acl_simple_roles,
-      #datamodel{categories=
-                 [
-                  {acl_role,
-                   meta,
-                   [{title, <<"ACL Role">>}]}
-                 ],
-                 predicates=
-                 [{acl_role_member,
-                   [{title, <<"ACL Role Member">>}],
-                   [{acl_role, person}, {acl_role, institution}]
-                  }],
-                 resources=
-                 [
-                  {?ROLE_MEMBER, acl_role,
-                   [{visible_for, 1},
-                    {title, "ACL role for members"},
-                    {summary, "The rights of this role are assigned to members (logged on) when they are not "
-                     "member of any other ACL role.  Make the user member of another role to overrule this role."},
-                    {acl, [   {view_all, false},
-                              {only_update_own, false},
-                              {file_upload_size, 1024},
-                              {file_mime,["image/jpeg", "image/png", "image/gif"]},
-                              {categories,[article,image]},
-                              {modules,[]}]}
-                   ]
-                  }
+manage_schema(install, _Context) ->
+    #datamodel{categories=
+               [
+                {acl_role,
+                 meta,
+                 [{title, <<"ACL Role">>}]}
+               ],
+               predicates=
+               [{acl_role_member,
+                 [{title, <<"ACL Role Member">>}],
+                 [{acl_role, person}, {acl_role, institution}]
+                }],
+               resources=
+               [
+                {?ROLE_MEMBER, acl_role,
+                 [{visible_for, 1},
+                  {title, "ACL role for members"},
+                  {summary, "The rights of this role are assigned to members (logged on) when they are not "
+                   "member of any other ACL role.  Make the user member of another role to overrule this role."},
+                  {acl, [   {view_all, false},
+                            {only_update_own, false},
+                            {file_upload_size, 1024},
+                            {file_mime,["image/jpeg", "image/png", "image/gif"]},
+                            {categories,[article,image]},
+                            {modules,[]}]}
                  ]
-                }, Context).
+                }
+               ]
+              }.

@@ -341,23 +341,20 @@ receive_chunk(RequestId, Context) ->
 %%
 %% @doc The datamodel that is used in this module, installed the first time the module is started.
 %%
-manage_schema(install, Context) ->
-    z_datamodel:manage(
-      mod_twitter,
-      #datamodel{categories=
-                 [
-                  {tweet,
-                   text,
-                   [{title, <<"Tweet">>}]}
-                 ],
-                 resources=
-                 [
-                  {from_twitter,
-                   keyword,
-                   [{title, <<"From Twitter">>}]}
-                 ]
-                },
-      Context).
+manage_schema(install, _Context) ->
+    #datamodel{categories=
+               [
+                {tweet,
+                 text,
+                 [{title, <<"Tweet">>}]}
+               ],
+               resources=
+               [
+                {from_twitter,
+                 keyword,
+                 [{title, <<"From Twitter">>}]}
+               ]
+              }.
 
 
 %% handle_author_edges_upgrade(Context)

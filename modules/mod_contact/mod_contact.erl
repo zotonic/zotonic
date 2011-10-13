@@ -57,17 +57,15 @@ event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
 
 
 %% @doc Datamodel for mod_contact, installed when the module is started.
-manage_schema(install, Context) ->
-    z_datamodel:manage(
-      mod_contact,
-      #datamodel{resources=
-                 [
-                  {page_contact,
-                   text,
-                   [{title, <<"Contact">>},
-                    {summary, <<"Get in contact with us! Use the form give some feedback.">>},
-                    {page_path, <<"/contact">>}
-                   ]
-                  }
+manage_schema(install, _Context) ->
+    #datamodel{resources=
+               [
+                {page_contact,
+                 text,
+                 [{title, <<"Contact">>},
+                  {summary, <<"Get in contact with us! Use the form give some feedback.">>},
+                  {page_path, <<"/contact">>}
                  ]
-                }, Context).
+                }
+               ]
+              }.
