@@ -4,6 +4,8 @@ EBIN_DIRS := $(wildcard deps/*/ebin)
 APP       := zotonic
 PARSER     =src/erlydtl/erlydtl_parser
 
+MAKEFILES := $(shell find -L modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
+
 all: gen_smtp iconv z_logger mochiweb webmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
@@ -29,9 +31,8 @@ webmachine:
 	cd deps/webmachine && $(MAKE)
 
 module-deps:
-	@if [ "`find modules/ -name Makefile`" != "" ]; then for f in modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
-	@if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in priv/modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
-	@if [ "`find priv/sites/*/modules/ -name Makefile`" != "" ]; then for f in priv/sites/*/modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
@@ -43,9 +44,7 @@ clean:
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
 	(cd deps/iconv; ./rebar clean)
-	@if [ "`find modules/ -name Makefile`" != "" ]; then for f in modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
-	@if [ "`find priv/modules/ -name Makefile`" != "" ]; then for f in priv/modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
-	@if [ "`find priv/sites/*/modules/ -name Makefile`" != "" ]; then for f in priv/sites/*/modules/*/Makefile; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
+	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
 	rm -f priv/log/*
