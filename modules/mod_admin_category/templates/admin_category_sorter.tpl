@@ -7,7 +7,7 @@
 	<div id="content" class="zp-85">
 		<div class="block clearfix">
 
-			<h2>{_ Page Categories _}</h2>
+			<h2>{_ Categories _}</h2>
 
 			<div id="category-sorter" class="clear zp-50">
 				{% include "_admin_category_sorter.tpl" %}

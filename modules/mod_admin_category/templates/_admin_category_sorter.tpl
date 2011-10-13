@@ -1,7 +1,7 @@
 {% with m.acl.is_admin as editable %}
 		
 	<div class="padding">
-		<h3 class="above-list">Category overview</h3>
+		<h3 class="above-list">{_ Category overview _}</h3>
 		<ul id="category" class="tree-list categories {% if editable %}do_menuedit{% endif %}" data-menuedit="connectWith: '#trash'">
 			{% for mid, path, action in m.category.menu|menu_flat %}
 				{% with forloop.counter as c %}

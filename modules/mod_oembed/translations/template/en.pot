@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:38 
+msgid ""
+"Cancel"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:13 
+msgid ""
+"Embed URL"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:5 
+msgid ""
+"Embed a video or other media URL. Here you can paste any URL from YouTube, "
+"Vimeo or other services."
+msgstr ""
+
+#: ./modules/mod_oembed/mod_oembed.erl:233 
+msgid ""
+"Invalid media URL"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+msgid ""
+"Make media item"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:26 
+msgid ""
+"Media title"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+msgid ""
+"Replace media item"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:31 
+msgid ""
+"Summary"
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:23 
+msgid ""
+"The media title will be automatically detected from its URL."
+msgstr ""

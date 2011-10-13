@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-10-13 14:56+0200\n"
+"Last-Translator: Arjan Scherpenisse <arjan@scherpenisse.net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_admin_category/templates/_admin_menu_module.tpl:2
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
+msgid "Categories"
+msgstr "Categorieën"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:36
+msgid ""
+"Categories are used to categorize all pages. Every page belongs to exactly "
+"one category.<br/>The categories are defined in a hierarchy. Here you can "
+"change that hierarchy."
+msgstr ""
+"Categoriëen worden gebruikt om pagina's op een logische manier van\n"
+"elkaar te onderscheiden. Elke pagina in het systeem zit in precies één\n"
+"categorie. De categoriëen zijn hierarchiesch onderverdeeld. Op deze\n"
+"pagina kan je deze hierarchie bewerken."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
+msgid "Category Hierarchy"
+msgstr "Categorie hierarchie"
+
+#: modules/mod_admin_category/templates/_admin_category_sorter.tpl:4
+msgid "Category overview"
+msgstr "Categorie overzicht"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:38
+msgid "Drag categories to the place where you want them in the hierarchy."
+msgstr ""
+"Versleep categorieën naar de plaats waar je deze in de hierarchie wilt "
+"hebben."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:41
+msgid "Drag categories to the trash to remove them."
+msgstr "Versleep categorieën naar de prullenbak om ze te verwijderen."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+msgid "Drag me"
+msgstr "Versleep"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:42
+msgid "Drag the <strong>New category</strong> to add a new category."
+msgstr ""
+"Versleep <strong>Nieuwe categorie</strong> om een nieuwe categorie toe te "
+"voegen."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
+msgid "Drag to add a new page"
+msgstr "Versleep om een nieuwe pagina toe te voegen"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:17
+msgid "How does this work?"
+msgstr "Hoe werkt dit?"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:26
+msgid "New category"
+msgstr "Nieuwe categorie"

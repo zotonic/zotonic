@@ -20,10 +20,25 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
-msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Nombre</strong>, su primer nombre o nombre de pila.<br/><strong>Segundo nombre</strong> muchas veces reducido a una inicial como en <em>Juan B. Justo</em>.<br/><strong>Prefijo de apellido</strong> como <em>de, del, della</em>.<br/><strong>Apellido</strong> o nombre de familia."
+#: modules/mod_admin/templates/admin_edit.tpl:25
+#, fuzzy
+msgid "<em>untitled</em>"
+msgstr "sin título"
 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
+msgid ""
+"<strong>First</strong> also known as given name, forename or Christen name."
+"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
+"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
+"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
+"name or last name."
+msgstr ""
+"<strong>Nombre</strong>, su primer nombre o nombre de pila.<br/"
+"><strong>Segundo nombre</strong> muchas veces reducido a una inicial como en "
+"<em>Juan B. Justo</em>.<br/><strong>Prefijo de apellido</strong> como "
+"<em>de, del, della</em>.<br/><strong>Apellido</strong> o nombre de familia."
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
 msgid "Access control"
 msgstr "Control de acceso"
@@ -60,6 +75,10 @@ msgstr "Todas las Categorías"
 msgid "Alternative telephone"
 msgstr "Teléfono alternativo"
 
+#: modules/mod_admin/templates/_action_dialog_link.tpl:27
+msgid "Alternatively, choose an item from this predefined list:"
+msgstr ""
+
 #: modules/mod_admin/templates/_action_dialog_delete_media.tpl:3
 msgid "Are you sure you want to delete the"
 msgstr "¿Está seguro de que quiere borrar el/la"
@@ -80,28 +99,40 @@ msgstr "Medios adjuntos"
 msgid "Basic"
 msgstr "Básico"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:41
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:16
-#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
-#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23
-#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:69
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
-#: modules/mod_admin/templates/_action_dialog_delete_media.tpl:9
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47
+#: modules/mod_admin/templates/_action_dialog_delete_media.tpl:9
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:69
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:5
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16
-#: modules/mod_admin/templates/admin_overview.tpl:55
-#: modules/mod_admin/templates/admin_referrers.tpl:26
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:29
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16
+#: modules/mod_admin/templates/_admin_overview_list.tpl:7
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:13
+#: modules/mod_admin/templates/admin_referrers.tpl:26
 msgid "Category"
+msgstr "Categoría"
+
+#: modules/mod_admin/templates/admin_edit.tpl:28
+#, fuzzy
+msgid "Change category"
 msgstr "Categoría"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:9
 msgid "Choose a media item from this page to insert in the body text."
-msgstr "Elija un ítem de medios de esta página para insertar en el texto del cuerpo."
+msgstr ""
+"Elija un ítem de medios de esta página para insertar en el texto del cuerpo."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:2
+#, fuzzy
+msgid "Choose the new category for this page."
+msgstr "y la categoría de la nueva página."
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:68
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:109
@@ -125,7 +156,7 @@ msgstr "País"
 msgid "Created by"
 msgstr "Creado por"
 
-#: modules/mod_admin/templates/admin_overview.tpl:58
+#: modules/mod_admin/templates/_admin_overview_list.tpl:10
 msgid "Created on"
 msgstr "Creado el"
 
@@ -133,9 +164,9 @@ msgstr "Creado el"
 msgid "Customize page slug"
 msgstr "Personalizar el slug"
 
+#: modules/mod_admin/templates/admin_base.tpl:67
 #: modules/mod_admin/templates/admin.tpl:3
 #: modules/mod_admin/templates/admin.tpl:9
-#: modules/mod_admin/templates/admin_base.tpl:64
 msgid "Dashboard"
 msgstr "Tablero de control"
 
@@ -147,9 +178,9 @@ msgstr "Rango de fechas"
 msgid "Define who can see or edit this page."
 msgstr "Definir quién puede ver o editar esta página."
 
-#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
 #: modules/mod_admin/templates/_action_dialog_delete_media.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 msgid "Delete"
 msgstr "Borrar"
 
@@ -200,12 +231,25 @@ msgid "Emergency telephone"
 msgstr "Teléfono de emergencias"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
-msgid "Every page can have a date range. For example if the page is an event or description of someone\\'s life."
-msgstr "Toda página puede tener un rango de fechas. Por ejemplo, si la página corresponde a un event o descripción de la vida de alguien."
+msgid ""
+"Every page can have a date range. For example if the page is an event or "
+"description of someone\\'s life."
+msgstr ""
+"Toda página puede tener un rango de fechas. Por ejemplo, si la página "
+"corresponde a un event o descripción de la vida de alguien."
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
-msgid "Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "Toda página está categorizada en una única categoría. La categoría define aquello que la página representa. Por ejemplo, un evento, un producto o una persona. Las categorías tienen definida una jerarquía. De esa manera, puede existir una categoría de tipo vehículo con las subcategorías automóvil y bicicleta."
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:18
+msgid ""
+"Every page is categorized in exactly one category.  The category defines "
+"what the page represents. For example an event, a product or a person.  The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Toda página está categorizada en una única categoría. La categoría define "
+"aquello que la página representa. Por ejemplo, un evento, un producto o una "
+"persona. Las categorías tienen definida una jerarquía. De esa manera, puede "
+"existir una categoría de tipo vehículo con las subcategorías automóvil y "
+"bicicleta."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:28
 msgid "Featured"
@@ -224,8 +268,12 @@ msgid "First"
 msgstr "Primer nombre"
 
 #: modules/mod_admin/templates/admin_status.tpl:18
-msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Refrescar todas las reglas de despacho de URLs, cachés de modelos y librerías y todos los otros datos cacheados en memoria."
+msgid ""
+"Flush all URL dispatch rules, template- and library caches and other in-"
+"memory cached data."
+msgstr ""
+"Refrescar todas las reglas de despacho de URLs, cachés de modelos y "
+"librerías y todos los otros datos cacheados en memoria."
 
 #: modules/mod_admin/templates/admin_status.tpl:17
 msgid "Flush system caches"
@@ -247,10 +295,6 @@ msgstr "Volver hacia atrás."
 msgid "Group members"
 msgstr "Miembros del grupo"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
-msgid "Help about category."
-msgstr "Ayuda acerca de categoría."
-
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
 msgid "Help about date ranges."
 msgstr "Ayuda acerca de rangos de fechas."
@@ -269,15 +313,24 @@ msgstr "Ayuda acerca de rangos de fechas de publicación."
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
-"Here you can edit the arguments of the  search query. Every argument goes on its own line. For more information, see the\n"
-"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model\">documentation on the query arguments</a> on the Zotonic website."
+"Here you can edit the arguments of the  search query. Every argument goes on "
+"its own line. For more information, see the\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
-"Aquí puede editar los argumentos de una consulta de búsqueda. Cada argumento va en su propia línea. Para más información ver la\n"
-"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model\">documentación de los argumentos de consulta</a> en el sitio web de Zotonic."
+"Aquí puede editar los argumentos de una consulta de búsqueda. Cada argumento "
+"va en su propia línea. Para más información ver la\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">documentación de los argumentos de consulta</a> en el sitio web de "
+"Zotonic."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:14
-msgid "Here you can edit the person's name.  Use the title of the base content for the display name of this person."
-msgstr "Aquí puede editar el nombre de una persona. Use el título del contenido base para el nombre que se mostrará  en pantalla."
+msgid ""
+"Here you can edit the person's name.  Use the title of the base content for "
+"the display name of this person."
+msgstr ""
+"Aquí puede editar el nombre de una persona. Use el título del contenido base "
+"para el nombre que se mostrará  en pantalla."
 
 #: modules/mod_admin/templates/admin.tpl:44
 msgid "Latest modified events"
@@ -311,6 +364,10 @@ msgstr "Longitud"
 msgid "Mailing address"
 msgstr "Dirección de correo"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10
+msgid "Main"
+msgstr ""
+
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:46
 msgid "Make"
 msgstr "Crear"
@@ -319,14 +376,14 @@ msgstr "Crear"
 msgid "Make a new connection"
 msgstr "Crear una nueva conexión"
 
-#: modules/mod_admin/templates/admin.tpl:19
 #: modules/mod_admin/templates/admin_overview.tpl:14
+#: modules/mod_admin/templates/admin.tpl:19
 #: modules/mod_admin/templates/admin_media.tpl:25
 msgid "Make a new media item"
 msgstr "Crear un nuevo ítem de medios"
 
-#: modules/mod_admin/templates/admin.tpl:15
 #: modules/mod_admin/templates/admin_overview.tpl:13
+#: modules/mod_admin/templates/admin.tpl:15
 msgid "Make a new page"
 msgstr "Crear nueva página"
 
@@ -334,7 +391,7 @@ msgstr "Crear nueva página"
 msgid "Make media item"
 msgstr "Crear ítem de medios"
 
-#: modules/mod_admin/templates/admin_base.tpl:66
+#: modules/mod_admin/templates/admin_base.tpl:69
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:21
 msgid "Media"
@@ -345,8 +402,12 @@ msgid "Media URL"
 msgstr "URL de Medios"
 
 #: modules/mod_admin/templates/admin_media.tpl:32
-msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Los medios comprenden todas las imágenes subidas, las películas y los documentos. Los medios se pueden adjuntar a las páginas."
+msgid ""
+"Media encompasses all uploaded images, movies and documents. Media can be "
+"attached to pages."
+msgstr ""
+"Los medios comprenden todas las imágenes subidas, las películas y los "
+"documentos. Los medios se pueden adjuntar a las páginas."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:29
 msgid "Media file"
@@ -373,21 +434,22 @@ msgstr "Segundo nombre"
 msgid "Modified"
 msgstr "Modificado"
 
-#: modules/mod_admin/templates/admin_overview.tpl:64
+#: modules/mod_admin/templates/_admin_overview_list.tpl:16
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:19
 #: modules/mod_admin/templates/admin_referrers.tpl:28
 msgid "Modified by"
 msgstr "Modificado por"
 
-#: modules/mod_admin/templates/admin_overview.tpl:61
+#: modules/mod_admin/templates/_admin_overview_list.tpl:13
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:16
 #: modules/mod_admin/templates/admin_referrers.tpl:27
 msgid "Modified on"
 msgstr "Modificado el"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
 msgid "Need more help?"
 msgstr "¿Necesita más ayuda?"
 
@@ -403,7 +465,8 @@ msgstr "No hay ítems."
 msgid "No media found."
 msgstr "No se encontraron medios."
 
-#: modules/mod_admin/templates/admin_overview.tpl:86
+#: modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:42
 msgid "No pages found."
 msgstr "No se encontraron páginas."
 
@@ -436,14 +499,18 @@ msgstr "Slug de página"
 msgid "Page title"
 msgstr "Título de página"
 
+#: modules/mod_admin/templates/admin_base.tpl:68
 #: modules/mod_admin/templates/admin_overview.tpl:3
-#: modules/mod_admin/templates/admin_base.tpl:65
 msgid "Pages"
 msgstr "Páginas"
 
 #: modules/mod_admin/templates/admin_overview.tpl:23
 msgid "Pages overview"
 msgstr "Resumen de páginas"
+
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:7
+msgid "Performer"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
 msgid "Person name"
@@ -470,10 +537,6 @@ msgstr "Código postal"
 msgid "Predicate"
 msgstr "Predicado"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:47
-msgid "Predicates, groups and categories can't be changed into another category."
-msgstr "Los predicados, grupos y categorías no pueden cambiarse a otra categoría."
-
 #: modules/mod_admin/templates/admin_media.tpl:41
 msgid "Preview"
 msgstr "Vista preliminar"
@@ -494,10 +557,16 @@ msgstr "Período de publicación"
 msgid "Publish this page"
 msgstr "Publicar esta página"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:37
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
-#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42
 msgid "Published"
+msgstr "Publicado"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:35
+#, fuzzy
+msgid "Published?"
 msgstr "Publicado"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
@@ -509,16 +578,23 @@ msgid "Query preview"
 msgstr "Vista preliminar de consulta"
 
 #: modules/mod_admin/templates/admin_status.tpl:23
-msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Reconstruir todos los índices de búsqueda insertando las páginas y datos de la base de datos en la cola de indexación. Esto puede demorar mucho tiempo!"
+msgid ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
+msgstr ""
+"Reconstruir todos los índices de búsqueda insertando las páginas y datos de "
+"la base de datos en la cola de indexación. Esto puede demorar mucho tiempo!"
 
 #: modules/mod_admin/templates/admin_status.tpl:22
 msgid "Rebuild search indices"
 msgstr "Reconstruir índices de búsqueda"
 
 #: modules/mod_admin/templates/admin_status.tpl:28
-msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "Recalcular la numeración del árbol de categorías. Este proceso puede demorar mucho tiempo."
+msgid ""
+"Recalculate the numbering of the category tree. This can take a long time."
+msgstr ""
+"Recalcular la numeración del árbol de categorías. Este proceso puede demorar "
+"mucho tiempo."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 msgid "Referrers"
@@ -549,21 +625,14 @@ msgstr "Reemplazar este ítem de medios"
 msgid "SEO Content"
 msgstr "Contenido SEO"
 
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:49
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
 msgid "Save"
 msgstr "Guardar"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
 msgid "Save and view the page."
 msgstr "Guardar y ver página."
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:37
-msgid "Save this page"
-msgstr "Guardar esta página"
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:38
-msgid "Save this page and change category."
-msgstr "Guardar esta página y cambiar categoría."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:13
 msgid "Save this page."
@@ -585,6 +654,14 @@ msgstr "Título corto"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13
 msgid "Show this article only between the two dates."
 msgstr "Mostrar este artículo únicamente entre las dos fechas."
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:92
+msgid "Something went wrong. Sorry."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:10
+msgid "Start date"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:78
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:119
@@ -613,7 +690,7 @@ msgstr "Prefijo de apellido"
 msgid "Surname"
 msgstr "Apellido"
 
-#: modules/mod_admin/templates/admin_base.tpl:71
+#: modules/mod_admin/templates/admin_base.tpl:74
 msgid "System"
 msgstr "Sistema"
 
@@ -628,10 +705,6 @@ msgstr "Administración de sistema"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:17
 msgid "Telephone"
 msgstr "Teléfono"
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:15
-msgid "The category defines what the page represents."
-msgstr "La categoría define aquello que la página representa."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:16
 msgid "The following"
@@ -657,14 +730,14 @@ msgstr "Esto no se puede deshacer. Su medio se perderá para siempre."
 msgid "This can't be undone. Your page will be lost forever."
 msgstr "Esto no se puede deshacer. Su página se perderá para siempre."
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:46
-msgid "This page is a"
-msgstr "Esta página es un"
-
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
-msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "Esta página se puede conectar a otras. Por ejemplo, puede conectarla a un actor o a una marca."
+msgid ""
+"This page is able to connect to others. For example you can connect it to an "
+"actor or a brand."
+msgstr ""
+"Esta página se puede conectar a otras. Por ejemplo, puede conectarla a un "
+"actor o a una marca."
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:40
 msgid "This resource was created by the module"
@@ -676,8 +749,9 @@ msgstr "Hasta"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15
-#: modules/mod_admin/templates/admin_overview.tpl:52
+#: modules/mod_admin/templates/_admin_overview_list.tpl:4
 #: modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:4
 #: modules/mod_admin/templates/admin_referrers.tpl:24
 #: modules/mod_admin/templates/admin_media.tpl:42
 msgid "Title"
@@ -685,7 +759,9 @@ msgstr "Título"
 
 #: modules/mod_admin/templates/_admin_edit_content_location.tpl:14
 msgid "Try to fill the fields automatically from the title of the location"
-msgstr "Intentar llenar los campos automáticamenet a partir del título de la ubicación"
+msgstr ""
+"Intentar llenar los campos automáticamenet a partir del título de la "
+"ubicación"
 
 #: modules/mod_admin/templates/admin_media.tpl:43
 msgid "Type"
@@ -696,13 +772,18 @@ msgid "Type the title of the page you want to connect to."
 msgstr "Ingrese el título de la página a la que quiere conectarse."
 
 #: modules/mod_admin/templates/_action_dialog_link.tpl:2
-msgid "Type the title of the page you want to connect to.  Click “Make a new connection” when the page does not yet exist."
-msgstr "Ingrese el título de la página a la que quiere conectarse. Seleccione \"Crear una nueva conexión\" si la página todavía no existe."
+msgid ""
+"Type the title of the page you want to connect to.  Click “Make a new "
+"connection” when the page does not yet exist."
+msgstr ""
+"Ingrese el título de la página a la que quiere conectarse. Seleccione "
+"\"Crear una nueva conexión\" si la página todavía no existe."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:5
 msgid "URL"
 msgstr "URL"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:23
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25
 msgid "Unique name"
 msgstr "Nombre único"
@@ -733,7 +814,8 @@ msgstr "Subido"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:35
 msgid "Use the autocompleter to search the media in this site."
-msgstr "Usar el servicio de autocompletar para buscar los medios en este sitio."
+msgstr ""
+"Usar el servicio de autocompletar para buscar los medios en este sitio."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:13
 msgid "Used for events and other periods."
@@ -759,7 +841,7 @@ msgstr "Visible desde"
 msgid "Visible till"
 msgstr "Visible hasta"
 
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:15
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50
 msgid "Visit full editpage"
 msgstr "Visitar página de edición completa"
 
@@ -768,8 +850,8 @@ msgid "Visiting address"
 msgstr "Dirección visitada"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:46
-#: modules/mod_admin/templates/_admin_edit_content_website.tpl:5
 #: modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:5
 msgid "Website"
 msgstr "Sitio web"
 
@@ -778,8 +860,14 @@ msgid "Website for clicks on image"
 msgstr "Sitio web para clics en imagen"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
-msgid "When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it"
-msgstr "Cuando una página tiene un rango de fechas de publicación será visible únicamente dentro de esas dos fechas. Tenga en cuenta que si tiene permitida la edición de la página siempre podrá verla."
+msgid ""
+"When a page has a publication date range then it will only be visible "
+"between the two dates. Note that when you are allowed to edit the page then "
+"you can always see it"
+msgstr ""
+"Cuando una página tiene un rango de fechas de publicación será visible "
+"únicamente dentro de esas dos fechas. Tenga en cuenta que si tiene permitida "
+"la edición de la página siempre podrá verla."
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -791,8 +879,12 @@ msgstr "No tiene permitida la edición de"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:13
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:46
-msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "Tiene que ingresar una descripción del archivo para poder buscarlo y compartirlo fácilmente."
+msgid ""
+"You have to specify a description of the file to make it easier to find and "
+"share."
+msgstr ""
+"Tiene que ingresar una descripción del archivo para poder buscarlo y "
+"compartirlo fácilmente."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:16
 msgid "a connection to the page"
@@ -818,7 +910,7 @@ msgstr "por"
 msgid "cancel"
 msgstr "cancelar"
 
-#: modules/mod_admin/templates/admin_edit.tpl:26
+#: modules/mod_admin/templates/admin_edit.tpl:27
 msgid "change"
 msgstr "cambiar"
 
@@ -832,7 +924,8 @@ msgid "download"
 msgstr "bajar"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33
-#: modules/mod_admin/templates/admin_overview.tpl:80
+#: modules/mod_admin/templates/_admin_overview_list.tpl:32
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:36
 #: modules/mod_admin/templates/admin_referrers.tpl:41
 #: modules/mod_admin/templates/admin_media.tpl:64
 msgid "edit"
@@ -907,8 +1000,8 @@ msgstr "mostrar todos"
 msgid "undo"
 msgstr "deshacer"
 
-#: modules/mod_admin/templates/_choose_media.tpl:8
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:7
+#: modules/mod_admin/templates/_choose_media.tpl:8
 msgid "untitled"
 msgstr "sin título"
 
@@ -917,7 +1010,8 @@ msgid "uploaded on"
 msgstr "subido el"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32
-#: modules/mod_admin/templates/admin_overview.tpl:79
+#: modules/mod_admin/templates/_admin_overview_list.tpl:31
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:35
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
 msgid "view"
 msgstr "ver"
@@ -926,3 +1020,22 @@ msgstr "ver"
 msgid "visit site"
 msgstr "visitar sitio"
 
+#~ msgid "Help about category."
+#~ msgstr "Ayuda acerca de categoría."
+
+#~ msgid ""
+#~ "Predicates, groups and categories can't be changed into another category."
+#~ msgstr ""
+#~ "Los predicados, grupos y categorías no pueden cambiarse a otra categoría."
+
+#~ msgid "Save this page"
+#~ msgstr "Guardar esta página"
+
+#~ msgid "Save this page and change category."
+#~ msgstr "Guardar esta página y cambiar categoría."
+
+#~ msgid "The category defines what the page represents."
+#~ msgstr "La categoría define aquello que la página representa."
+
+#~ msgid "This page is a"
+#~ msgstr "Esta página es un"
