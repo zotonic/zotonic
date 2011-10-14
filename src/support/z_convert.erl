@@ -251,6 +251,8 @@ to_json(X) when is_atom(X) ->
     X;
 to_json(X) when is_integer(X) ->
     X;
+to_json(X) when is_float(X) ->
+    X;
 to_json(X) when is_binary(X) ->
     X;
 
