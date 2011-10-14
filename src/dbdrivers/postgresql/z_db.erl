@@ -55,7 +55,7 @@
     column_names/2,
     update_sequence/3,
     table_exists/2,
-    ensure_table/3,
+    create_table/3,
     drop_table/2,
     flush/1,
     
@@ -599,78 +599,40 @@ drop_table(Name, Context) ->
 %% @doc Ensure that a table with the given columns exists, alter any existing table
 %% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
 %% when creating the table.
-ensure_table(Table, Cols, Context) when is_atom(Table) ->
-    ensure_table(atom_to_list(Table), Cols, Context);
-ensure_table(Table, Cols, Context) ->
-    case table_exists(Table, Context) of
-        false ->
-            ensure_table_create(Table, Cols, Context);
-        true ->
-            ExistingCols = lists:sort(columns(Table, Context)),
-            WantedCols = lists:sort(Cols),
-            case ensure_table_alter_cols(WantedCols, ExistingCols, []) of
-                [] -> ok;
-                Diff ->
-                    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-                    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
-                    z_db:q("ALTER TABLE \""++Table++"\" " ++ string:join(Diff, ","), Context),
-                    z_depcache:flush({columns, Db, Schema, Table}, Context),
-                    ok
-            end
-    end.
-
-    ensure_table_create(Name, Cols, Context) ->
-        ColsSQL = ensure_table_create_cols(Cols, []),
-        z_db:q("CREATE TABLE \""++Name++"\" ("++string:join(ColsSQL, ",") ++ table_create_primary_key(Cols) ++ ")", Context),
-        ok.
-
-    table_create_primary_key([]) -> [];
-    table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
-    table_create_primary_key([#column_def{name=N, primary_key=true}|_]) -> ", primary key(" ++ z_convert:to_list(N) ++ ")";
-    table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
-
-    ensure_table_create_cols([], Acc) ->
-        lists:reverse(Acc);
-    ensure_table_create_cols([C|Cols], Acc) ->
-        M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
-        ensure_table_create_cols(Cols, [M|Acc]).
+create_table(Table, Cols, Context) when is_atom(Table)->
+    create_table(atom_to_list(Table), Cols, Context);
+create_table(Table, Cols, Context) ->
+    assert_table_name(Table),
+    ColsSQL = ensure_table_create_cols(Cols, []),
+    z_db:q("CREATE TABLE \""++Table++"\" ("++string:join(ColsSQL, ",") ++ table_create_primary_key(Cols) ++ ")", Context),
+    ok.
 
 
-    ensure_table_alter_cols([], [], Acc) ->
-        lists:reverse(Acc);
-    ensure_table_alter_cols([N|Ns], [N|Es], Acc) ->
-        ensure_table_alter_cols(Ns, Es, Acc);
-    ensure_table_alter_cols([N|Ns], [E|Es], Acc) when N#column_def.name == E#column_def.name ->
-        M = lists:flatten(["ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" TYPE ", column_spec(N)]),
-        M1 = case N#column_def.is_nullable of 
-                true  -> M ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" DROP NOT NULL"]);
-                false -> M ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" SET NOT NULL"])
-             end,
-        M2 = case N#column_def.default of
-                undefined -> M1 ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" DROP DEFAULT"]);
-                Default -> M1 ++ lists:flatten([", ALTER COLUMN \"", atom_to_list(N#column_def.name), "\" SET DEFAULT ", Default])
-             end,
-        ensure_table_alter_cols(Ns, Es, [M2|Acc]);
-    ensure_table_alter_cols([N|Ns], Es, Acc) when Es == [] orelse N < hd(Es) ->
-        M = lists:flatten(["ADD COLUMN \"", atom_to_list(N#column_def.name), "\" ", 
-                            column_spec(N), 
-                            column_spec_nullable(N#column_def.is_nullable), 
-                            column_spec_default(N#column_def.default)]),
-        ensure_table_alter_cols(Ns, Es, [M|Acc]);
-    ensure_table_alter_cols(Ns, [E|Es], Acc) when Ns == [] orelse E < hd(Ns) ->
-        M = lists:flatten(["DROP COLUMN \"", atom_to_list(E#column_def.name), "\""]),
-        ensure_table_alter_cols(Ns, Es, [M|Acc]).
+table_create_primary_key([]) -> [];
+table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
+table_create_primary_key([#column_def{name=N, primary_key=true}|_]) -> ", primary key(" ++ z_convert:to_list(N) ++ ")";
+table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
 
-    column_spec(#column_def{type=Type, length=undefined}) ->
-        Type;
-    column_spec(#column_def{type=Type, length=Length}) ->
-        lists:flatten([Type, $(, integer_to_list(Length), $)]).
-    
-    column_spec_nullable(true) -> "";
-    column_spec_nullable(false) -> " not null".
-    
-    column_spec_default(undefined) -> "";
-    column_spec_default(Default) -> [" DEFAULT ", Default].
+ensure_table_create_cols([], Acc) ->
+    lists:reverse(Acc);
+ensure_table_create_cols([C|Cols], Acc) ->
+    M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
+    ensure_table_create_cols(Cols, [M|Acc]).
+
+column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, default=Default}) ->
+    L = case Length of
+            undefined -> [];
+            _ -> [$(, integer_to_list(Length), $)]
+        end,
+    N = column_spec_nullable(Nullable),
+    D = column_spec_default(Default),
+    lists:flatten([Type, L, N, D]).
+
+column_spec_nullable(true) -> "";
+column_spec_nullable(false) -> " not null".
+
+column_spec_default(undefined) -> "";
+column_spec_default(Default) -> [" DEFAULT ", Default].
 
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid

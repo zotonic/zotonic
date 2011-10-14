@@ -23,12 +23,13 @@
 -mod_title("Contact Form").
 -mod_description("Simple contact form. Mails a contact form to the administrator user.").
 -mod_prio(500).
+-mod_schema(1).
 
 -include_lib("zotonic.hrl").
 
 %% interface functions
 -export([
-    datamodel/0,
+    manage_schema/2,
     event/2
 ]).
 
@@ -54,18 +55,17 @@ event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
                     {slide_down, [{target,"contact-form-sent"}]}], 
                   Context).
 
+
 %% @doc Datamodel for mod_contact, installed when the module is started.
-datamodel() ->
-    [
-        {resources,
-            [
+manage_schema(install, _Context) ->
+    #datamodel{resources=
+               [
                 {page_contact,
-                    text,
-                    [{title, <<"Contact">>},
-                     {summary, <<"Get in contact with us! Use the form give some feedback.">>},
-                     {page_path, <<"/contact">>}
-                    ]
+                 text,
+                 [{title, <<"Contact">>},
+                  {summary, <<"Get in contact with us! Use the form give some feedback.">>},
+                  {page_path, <<"/contact">>}
+                 ]
                 }
-            ]
-        }
-    ].
+               ]
+              }.

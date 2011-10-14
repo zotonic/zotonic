@@ -34,8 +34,7 @@
     survey_stats/2,
     survey_results/2,
 	single_result/4,
-	delete_result/4,
-    install/1
+	delete_result/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -301,40 +300,6 @@ survey_results(SurveyId, Context) ->
     answer_header(Q) ->
         M = mod_survey:module_name(Q),
         M:prep_answer_header(Q).
-
-
-%% @doc Install tables used for storing survey results
-install(Context) ->
-    z_db:ensure_table(survey_answer, [
-                #column_def{name=id, type="serial", is_nullable=false},
-                #column_def{name=survey_id, type="integer", is_nullable=false},
-                #column_def{name=user_id, type="integer", is_nullable=true},
-                #column_def{name=persistent, type="character varying", length=32, is_nullable=true},
-                #column_def{name=question, type="character varying", length=32, is_nullable=false},
-                #column_def{name=name, type="character varying", length=32, is_nullable=false},
-                #column_def{name=value, type="character varying", length=80, is_nullable=true},
-                #column_def{name=text, type="bytea", is_nullable=true},
-                #column_def{name=created, type="timestamp", is_nullable=true}
-            ], Context),
-            
-    % Add some indices and foreign keys, ignore errors
-    z_db:equery("create index fki_survey_answer_survey_id on survey_answer(survey_id)", Context),
-    z_db:equery("alter table survey_answer add 
-                constraint fk_survey_answer_survey_id foreign key (survey_id) references rsc(id) 
-                on update cascade on delete cascade", Context),
-
-    z_db:equery("create index fki_survey_answer_user_id on survey_answer(user_id)", Context),
-    z_db:equery("alter table survey_answer add 
-                constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id) 
-                on update cascade on delete cascade", Context),
-
-    %% For aggregating answers to survey questions (group by name)
-    z_db:equery("create index survey_answer_survey_name_key on survey_answer(survey_id, name)", Context),
-    z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
-    z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
-    z_db:equery("create index survey_answer_survey_persistent_key on survey_answer(survey_id, persistent)", Context),
-
-    ok.
 
 
 single_result(SurveyId, UserId, PersistentId, Context) ->

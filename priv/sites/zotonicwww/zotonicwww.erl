@@ -23,13 +23,14 @@
 -mod_title("Zotonic Web Site").
 -mod_description("The Zotonic web site.").
 -mod_prio(10).
+-mod_schema(1).
 
--export([datamodel/0]).
+-export([manage_schema/2]).
 
 -include_lib("zotonic.hrl").
 
 %% @doc Datamodel, installed before this module is started.
-datamodel() ->
+manage_schema(install, _) ->
     #datamodel{
            resources =
            [

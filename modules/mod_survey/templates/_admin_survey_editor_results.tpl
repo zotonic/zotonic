@@ -5,6 +5,7 @@
 
 <table width="100%">
     <tr>
+        <th>&nbsp;</th>
         {% for name in columns|tail|tail %}
         <th>{{ name|capfirst }}</th>
         {% endfor %}
@@ -13,6 +14,7 @@
 
     {% for r in results %}
     <tr id="survey-result-{{ r[1] }}-{{ r[2] }}">
+        <td align="right">{{ forloop.counter }}.&nbsp;&nbsp;</td>
         {% for value in r|tail|tail %}
         <td>{{ value }}</td>
         {% endfor %}

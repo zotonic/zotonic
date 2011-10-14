@@ -33,6 +33,7 @@
 -mod_title("Twitter").
 -mod_description("Use Twitter for logon, and/or follow users on Twitter using the streaming HTTP API.").
 -mod_prio(200).
+-mod_schema(1).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -40,7 +41,7 @@
 
 %% interface functions
 -export([
-         datamodel/0,
+         manage_schema/2,
          fetch/4, 
          observe_rsc_update_done/2,
          receive_chunk/2
@@ -337,26 +338,23 @@ receive_chunk(RequestId, Context) ->
     end.
 
 
-
 %%
-%% @doc The datamodel that is used in this module, installed before the module is started.
+%% @doc The datamodel that is used in this module, installed the first time the module is started.
 %%
-datamodel() ->
-    [{categories,
-      [
-       {tweet,
-        text,
-        [{title, <<"Tweet">>}]}
-      ]
-     },
-    {resources,
-      [
-       {from_twitter,
-        keyword,
-        [{title, <<"From Twitter">>}]}
-      ]
-     }].
-
+manage_schema(install, _Context) ->
+    #datamodel{categories=
+               [
+                {tweet,
+                 text,
+                 [{title, <<"Tweet">>}]}
+               ],
+               resources=
+               [
+                {from_twitter,
+                 keyword,
+                 [{title, <<"From Twitter">>}]}
+               ]
+              }.
 
 
 %% handle_author_edges_upgrade(Context)

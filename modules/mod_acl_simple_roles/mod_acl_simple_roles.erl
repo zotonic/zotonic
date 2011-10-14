@@ -24,16 +24,17 @@
 -mod_title("ACL Simple Roles").
 -mod_description("Simple role based access control.  Use this for a site with different editor roles.").
 -mod_prio(500).
+-mod_schema(1).
 
 %% interface functions
 -export([
+	manage_schema/2,
     observe_acl_is_allowed/2,
     observe_acl_can_see/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_rsc_update_check/3,
-    observe_rsc_update/3,
-    datamodel/0
+    observe_rsc_update/3
 ]).
 
 -include("zotonic.hrl").
@@ -398,37 +399,32 @@ can_media(Mime, Size, #context{acl=ACL}) ->
 
 
 %% @doc The datamodel for the role based ACL
-datamodel() ->
-    [{categories,
-      [
-       {acl_role,
-        meta,
-        [{title, <<"ACL Role">>}]}
-      ]
-     },
-
-     {predicates,
-      [{acl_role_member,
-        [{title, <<"ACL Role Member">>}],
-        [{acl_role, person}, {acl_role, institution}]
-       }]
-     },
-     
-     {resources,
-         [
-            {?ROLE_MEMBER, acl_role,
-             [{visible_for, 1},
-              {title, "ACL role for members"},
-              {summary, "The rights of this role are assigned to members (logged on) when they are not member of any other ACL role.  Make the user member of another role to overrule this role."},
-              {acl, [   {view_all, false},
-                        {only_update_own, false},
-                        {file_upload_size, 1024},
-                        {file_mime,["image/jpeg", "image/png", "image/gif"]},
-                        {categories,[article,image]},
-                        {modules,[]}]}
-             ]
-            }
-         ]
-     }
-    ].
-
+manage_schema(install, _Context) ->
+    #datamodel{categories=
+               [
+                {acl_role,
+                 meta,
+                 [{title, <<"ACL Role">>}]}
+               ],
+               predicates=
+               [{acl_role_member,
+                 [{title, <<"ACL Role Member">>}],
+                 [{acl_role, person}, {acl_role, institution}]
+                }],
+               resources=
+               [
+                {?ROLE_MEMBER, acl_role,
+                 [{visible_for, 1},
+                  {title, "ACL role for members"},
+                  {summary, "The rights of this role are assigned to members (logged on) when they are not "
+                   "member of any other ACL role.  Make the user member of another role to overrule this role."},
+                  {acl, [   {view_all, false},
+                            {only_update_own, false},
+                            {file_upload_size, 1024},
+                            {file_mime,["image/jpeg", "image/png", "image/gif"]},
+                            {categories,[article,image]},
+                            {modules,[]}]}
+                 ]
+                }
+               ]
+              }.

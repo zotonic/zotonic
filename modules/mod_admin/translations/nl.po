@@ -10,13 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-07-21 16:48+0200\n"
+"PO-Revision-Date: 2011-10-13 14:59+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_admin/templates/admin_edit.tpl:25
+msgid "<em>untitled</em>"
+msgstr "<em>zonder titel</em>"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
 msgid ""
@@ -27,6 +31,7 @@ msgid ""
 "name or last name."
 msgstr ""
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
 msgid "Access control"
 msgstr "Toegangsrechten"
@@ -63,6 +68,10 @@ msgstr "Alle categorieën"
 msgid "Alternative telephone"
 msgstr "Alternatief telefoonnummer"
 
+#: modules/mod_admin/templates/_action_dialog_link.tpl:27
+msgid "Alternatively, choose an item from this predefined list:"
+msgstr ""
+
 #: modules/mod_admin/templates/_action_dialog_delete_media.tpl:3
 msgid "Are you sure you want to delete the"
 msgstr "Weet je zeker dat je de"
@@ -83,28 +92,37 @@ msgstr "Gekoppelde media"
 msgid "Basic"
 msgstr "Basisgegevens"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:41
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:16
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47
 #: modules/mod_admin/templates/_action_dialog_delete_media.tpl:9
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:69
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:5
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:29
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16
-#: modules/mod_admin/templates/admin_overview.tpl:55
+#: modules/mod_admin/templates/_admin_overview_list.tpl:7
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:13
 #: modules/mod_admin/templates/admin_referrers.tpl:26
 msgid "Category"
 msgstr "Categorie"
 
+#: modules/mod_admin/templates/admin_edit.tpl:28
+msgid "Change category"
+msgstr "Verander categorie"
+
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:9
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Kies een mediabestand van deze pagina om in de tekst in te voegen."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:2
+msgid "Choose the new category for this page."
+msgstr "Kies de nieuwe categorie van deze pagina."
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:68
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:109
@@ -128,7 +146,7 @@ msgstr "Land"
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: modules/mod_admin/templates/admin_overview.tpl:58
+#: modules/mod_admin/templates/_admin_overview_list.tpl:10
 msgid "Created on"
 msgstr "Gemaakt op"
 
@@ -136,7 +154,7 @@ msgstr "Gemaakt op"
 msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
-#: modules/mod_admin/templates/admin_base.tpl:64
+#: modules/mod_admin/templates/admin_base.tpl:67
 #: modules/mod_admin/templates/admin.tpl:3
 #: modules/mod_admin/templates/admin.tpl:9
 msgid "Dashboard"
@@ -210,7 +228,7 @@ msgstr ""
 "Elke pagina kan een datum-bereik hebben. Bijvoorbeeld als de pagina een "
 "evenement voorstelt."
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:18
 msgid ""
 "Every page is categorized in exactly one category.  The category defines "
 "what the page represents. For example an event, a product or a person.  The "
@@ -266,10 +284,6 @@ msgstr "Ga terug."
 #: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
 msgid "Group members"
 msgstr "Groepsleden"
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
-msgid "Help about category."
-msgstr "Hulp voor categorieën"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
 msgid "Help about date ranges."
@@ -335,6 +349,10 @@ msgstr "Breedtegraad"
 msgid "Mailing address"
 msgstr "Postadres"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10
+msgid "Main"
+msgstr ""
+
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:46
 msgid "Make"
 msgstr "Aanmaken"
@@ -358,7 +376,7 @@ msgstr "Maak een nieuwe pagina"
 msgid "Make media item"
 msgstr "Maak mediabestand"
 
-#: modules/mod_admin/templates/admin_base.tpl:66
+#: modules/mod_admin/templates/admin_base.tpl:69
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:21
 msgid "Media"
@@ -401,17 +419,18 @@ msgstr "Middennaam"
 msgid "Modified"
 msgstr "Bewerkt"
 
-#: modules/mod_admin/templates/admin_overview.tpl:64
+#: modules/mod_admin/templates/_admin_overview_list.tpl:16
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:19
 #: modules/mod_admin/templates/admin_referrers.tpl:28
 msgid "Modified by"
 msgstr "Bewerkt door"
 
-#: modules/mod_admin/templates/admin_overview.tpl:61
+#: modules/mod_admin/templates/_admin_overview_list.tpl:13
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:16
 #: modules/mod_admin/templates/admin_referrers.tpl:27
 msgid "Modified on"
 msgstr "Bewerkt op"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:16
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:15
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
@@ -431,7 +450,8 @@ msgstr "Geen items."
 msgid "No media found."
 msgstr "Geen media gevonden."
 
-#: modules/mod_admin/templates/admin_overview.tpl:86
+#: modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:42
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
@@ -464,7 +484,7 @@ msgstr "Paginaslug"
 msgid "Page title"
 msgstr "Paginatitel"
 
-#: modules/mod_admin/templates/admin_base.tpl:65
+#: modules/mod_admin/templates/admin_base.tpl:68
 #: modules/mod_admin/templates/admin_overview.tpl:3
 msgid "Pages"
 msgstr "Pagina's"
@@ -472,6 +492,10 @@ msgstr "Pagina's"
 #: modules/mod_admin/templates/admin_overview.tpl:23
 msgid "Pages overview"
 msgstr "Paginaoverzicht"
+
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:7
+msgid "Performer"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
 msgid "Person name"
@@ -498,12 +522,6 @@ msgstr "Postcode"
 msgid "Predicate"
 msgstr "Predicaat"
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:47
-msgid ""
-"Predicates, groups and categories can't be changed into another category."
-msgstr ""
-"Predicaten, groepen en categorieën kunnen niet van categorie veranderen."
-
 #: modules/mod_admin/templates/admin_media.tpl:41
 msgid "Preview"
 msgstr "Voorbeeld"
@@ -524,11 +542,16 @@ msgstr "Publicatieperiode"
 msgid "Publish this page"
 msgstr "Publiceer deze pagina"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:37
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
 msgid "Published"
 msgstr "Gepubliceerd"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:35
+msgid "Published?"
+msgstr "Gepubliceerd?"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid "Query"
@@ -584,21 +607,14 @@ msgstr "Vervang dit mediabestand"
 msgid "SEO Content"
 msgstr "SEO inhoud"
 
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:49
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
 msgid "Save"
 msgstr "Opslaan"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
 msgid "Save and view the page."
 msgstr "Slaat de pagina op en bekijk aan de voorkant."
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:37
-msgid "Save this page"
-msgstr "Sla deze pagina op"
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:38
-msgid "Save this page and change category."
-msgstr "Sla deze pagina op en verander de categorie."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:13
 msgid "Save this page."
@@ -620,6 +636,14 @@ msgstr "Korte titel"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13
 msgid "Show this article only between the two dates."
 msgstr "Toon dit artikel alleen tussen deze twee datums."
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:92
+msgid "Something went wrong. Sorry."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:10
+msgid "Start date"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:78
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:119
@@ -648,7 +672,7 @@ msgstr "Voorvoegsel"
 msgid "Surname"
 msgstr "Achternaam"
 
-#: modules/mod_admin/templates/admin_base.tpl:71
+#: modules/mod_admin/templates/admin_base.tpl:74
 msgid "System"
 msgstr "Systeem"
 
@@ -663,10 +687,6 @@ msgstr "Systeembeheer"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:17
 msgid "Telephone"
 msgstr "Telefoon"
-
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:15
-msgid "The category defines what the page represents."
-msgstr "De categorie van een pagina bepaalt wat de pagina representeert."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:16
 msgid "The following"
@@ -695,10 +715,6 @@ msgid "This can't be undone. Your page will be lost forever."
 msgstr ""
 "Dit kan niet ongedaan worden gemaakt. Je pagina is voor altijd verloren."
 
-#: modules/mod_admin/templates/_admin_edit_content_category.tpl:46
-msgid "This page is a"
-msgstr "Deze pagina is een"
-
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
 msgid ""
@@ -718,8 +734,9 @@ msgstr "Tot"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15
-#: modules/mod_admin/templates/admin_overview.tpl:52
+#: modules/mod_admin/templates/_admin_overview_list.tpl:4
 #: modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:4
 #: modules/mod_admin/templates/admin_referrers.tpl:24
 #: modules/mod_admin/templates/admin_media.tpl:42
 msgid "Title"
@@ -749,6 +766,7 @@ msgstr ""
 msgid "URL"
 msgstr "URL\n"
 
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:23
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25
 msgid "Unique name"
 msgstr "Unieke naam"
@@ -806,7 +824,7 @@ msgstr "Zichtbaar vanaf"
 msgid "Visible till"
 msgstr "Zichtbaar tot"
 
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:15
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50
 msgid "Visit full editpage"
 msgstr "Ga naar volledige pagina"
 
@@ -825,15 +843,14 @@ msgid "Website for clicks on image"
 msgstr "Website voor kliks op de afbeelding"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
-#, fuzzy
 msgid ""
 "When a page has a publication date range then it will only be visible "
 "between the two dates. Note that when you are allowed to edit the page then "
 "you can always see it"
 msgstr ""
-"Wanneer een pagina een publicatie start- en eindatum heeft, is het alleen "
-"zichtbaar tussen die periode. Echter, wanneer je de pagina mag bewerken, is "
-"deze voor jou altijd zichtbaar."
+"Wanneer een pagina een publicatie start- en eindatum heeft, is deze\n"
+"alleen zichtbaar tussen die periode. Echter, wanneer je de pagina mag\n"
+"bewerken, is deze voor jou altijd zichtbaar."
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -876,7 +893,7 @@ msgstr "door"
 msgid "cancel"
 msgstr "annuleren"
 
-#: modules/mod_admin/templates/admin_edit.tpl:26
+#: modules/mod_admin/templates/admin_edit.tpl:27
 msgid "change"
 msgstr "verander"
 
@@ -890,7 +907,8 @@ msgid "download"
 msgstr "download"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33
-#: modules/mod_admin/templates/admin_overview.tpl:80
+#: modules/mod_admin/templates/_admin_overview_list.tpl:32
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:36
 #: modules/mod_admin/templates/admin_referrers.tpl:41
 #: modules/mod_admin/templates/admin_media.tpl:64
 msgid "edit"
@@ -930,7 +948,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_link.tpl:6
 msgid "or use the autocompleter to search the site."
-msgstr ""
+msgstr "of gebruik het zoekvak om de site te doorzoeken."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:16
 msgid "page has"
@@ -942,7 +960,7 @@ msgstr "pagina's hebben"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:5
 msgid "pixels"
-msgstr ""
+msgstr "pixels"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:13
 msgid "save"
@@ -975,7 +993,8 @@ msgid "uploaded on"
 msgstr "geupload op"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32
-#: modules/mod_admin/templates/admin_overview.tpl:79
+#: modules/mod_admin/templates/_admin_overview_list.tpl:31
+#: modules/mod_admin/templates/_admin_overview_list.event.tpl:35
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
 msgid "view"
 msgstr "bekijk"
@@ -983,6 +1002,26 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/_admin_header_title.tpl:5
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Help about category."
+#~ msgstr "Hulp voor categorieën"
+
+#~ msgid ""
+#~ "Predicates, groups and categories can't be changed into another category."
+#~ msgstr ""
+#~ "Predicaten, groepen en categorieën kunnen niet van categorie veranderen."
+
+#~ msgid "Save this page"
+#~ msgstr "Sla deze pagina op"
+
+#~ msgid "Save this page and change category."
+#~ msgstr "Sla deze pagina op en verander de categorie."
+
+#~ msgid "The category defines what the page represents."
+#~ msgstr "De categorie van een pagina bepaalt wat de pagina representeert."
+
+#~ msgid "This page is a"
+#~ msgstr "Deze pagina is een"
 
 #~ msgid "Referrers of"
 #~ msgstr "Verwijzingen van"
