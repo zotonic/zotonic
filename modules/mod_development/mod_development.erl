@@ -94,14 +94,7 @@ file_changed(F) ->
     case file_blacklisted(F) of
         true -> nop;
         false -> 
-            case filename:extension(F) of
-                ".erl" ->
-                    Module = list_to_atom(filename:rootname(filename:basename(F))),
-                    ?DEBUG(Module);
-                _ ->
-                    nop
-                    %% unknown filename
-            end
+            handle_file(filename:extension(F), F)
     end,
     ok.
 
@@ -115,6 +108,23 @@ file_blacklisted(F) ->
     end.
 
 
+handle_file(".erl", F) ->
+    spawn(fun() -> 
+                  make:files([F], [load, 
+                                   {i, "include"}, 
+                                   {i, "src/dbdrivers/postgresql/include"}, 
+                                   {i, "deps/webmachine/include"}, {outdir, "ebin"}]) 
+          end);
+
+handle_file(".sass", F) ->
+    handle_file(".scss", F);
+handle_file(".scss", F) ->
+    ?DEBUG("wanna do scss"),
+    ?DEBUG(filename:dirname(F));
+handle_file(_, _) -> %% unknown filename
+    nop.
+
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -125,10 +135,12 @@ file_blacklisted(F) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-    process_flag(trap_exit, true),
-    {context, Context} = proplists:lookup(context, Args),
-    timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
+%%    process_flag(trap_exit, true),
+    ?DEBUG("hello"),
 
+    {context, Context} = proplists:lookup(context, Args),
+
+    timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
     NeedPeriodic = case os:type() of
                        {unix, linux} ->
                            case z_filewatcher_inotify:start_link(Context) of

@@ -66,14 +66,7 @@ start_link(Context=#context{}) ->
 %% @doc Initiates the server.
 init(Context) ->
     process_flag(trap_exit, true),
-    Args = ["-e", "modify,create", "-m", "-r",
-            filename:join(os:getenv("ZOTONIC"), "src"),
-            filename:join(os:getenv("ZOTONIC"), "modules")
-            |
-            string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
-    ?DEBUG(Args),
-    Port = erlang:open_port({spawn_executable, "/usr/bin/inotifywait"}, [{args, Args}, {line, 1024}]),
-    {ok, #state{context=Context, port=Port}}.
+    {ok, #state{context=Context, port=start_inotify()}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -102,7 +95,7 @@ handle_cast(Message, State) ->
 %% prevent duplicate file changed message for the same filename
 %% (e.g. if a editor saves a file twice for some reason).
 handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers}) ->
-    case re:run(Line, "^(.*) (MODIFY|CREATE) (.*)", [{capture, all_but_first, list}]) of
+    case re:run(Line, "^(.+) (MODIFY|CREATE) (.+)", [{capture, all_but_first, list}]) of
         nomatch -> 
             {noreply, State};
         {match, [Path, _Verb, File]} ->
@@ -124,6 +117,9 @@ handle_info({filechange, Filename}, State=#state{timers=Timers}) ->
     mod_development:file_changed(Filename),
     {noreply, State#state{timers=proplists:delete(Filename, Timers)}};
 
+handle_info({'EXIT', Port, _}, State=#state{port=Port}) ->
+    ?DEBUG("restart inotify"),
+    {noreply, State#state{port=start_inotify()}};
 
 handle_info(_Info, State) ->
     ?DEBUG(_Info),
@@ -151,3 +147,10 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 
+start_inotify() ->
+    Args = ["-e", "modify,create", "-m", "-r",
+            filename:join(os:getenv("ZOTONIC"), "src"),
+            filename:join(os:getenv("ZOTONIC"), "modules")
+            |
+            string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
+    erlang:open_port({spawn_executable, "/usr/bin/inotifywait"}, [{args, Args}, {line, 1024}]).

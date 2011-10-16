@@ -30,7 +30,8 @@
 %% interface functions
 -export([
 	reload/0,
-	make/0
+	make/0,
+	reload_module/1
 ]).
 
 -include_lib("zotonic.hrl").
