@@ -98,7 +98,8 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
 
-    z_sass_converter:start_link(Context),
+    %%z_sass_converter:start_link(Context),
+    z_filewatcher:start_link(Context),
 
     {ok, #state{
         context  = z_context:new(Context)
