@@ -98,8 +98,8 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
 
-    %%z_sass_converter:start_link(Context),
-    z_filewatcher:start_link(Context),
+    z_filewatcher_inotify:start_link(Context),
+    z_code_reloader:start_link(true),
 
     {ok, #state{
         context  = z_context:new(Context)
@@ -121,13 +121,11 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 handle_cast(development_reload, State) ->
-    ensure_dev_server(),
-    z_development_server:reload(),
+    z_code_reloader:reload(),
     {noreply, State};
 
 handle_cast(development_make, State) ->
-    ensure_dev_server(),
-    z_development_server:make(),
+    z_code_reloader:make(),
     {noreply, State};
 
 %% @doc Trap unknown casts
@@ -140,7 +138,6 @@ handle_cast(Message, State) ->
 %%                                       {stop, Reason, State}
 %% @doc Periodic check if the dev server is still running.
 handle_info(ensure_server, State) ->
-    ensure_dev_server(),
     z_utils:flush_message(ensure_server), 
     {noreply, State};
 
@@ -165,15 +162,6 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
-
-
-%% @doc Ensure that a dev server is running.  If it is not running then the server is started and
-%% this module process is linked to the server.
-ensure_dev_server() ->
-	case erlang:whereis(z_development_server) of
-		undefined -> z_development_server:start_link();
-		_Pid -> ok
-	end.
 
 
 %% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.

@@ -18,7 +18,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_filewatcher).
+-module(z_filewatcher_inotify).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("include/zotonic.hrl").
