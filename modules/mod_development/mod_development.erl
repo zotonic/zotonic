@@ -39,7 +39,8 @@
     observe_debug_stream/2,
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
-    
+    file_changed/1,
+
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -51,6 +52,10 @@
 
 % Interval for checking for new and/or changed files.
 -define(DEV_POLL_INTERVAL, 10000).
+
+
+%% Which files do we not consider at all in the file_changed handler
+-define(FILENAME_BLACKLIST_RE, "_flymake|\.#").
 
 
 %%====================================================================
@@ -83,6 +88,32 @@ pid_observe_development_reload(Pid, development_reload, _Context) ->
 pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
 
+%% @doc Called when a file is changed on disk. Decides what to do.
+%% @spec file_changed(string()) -> ok
+file_changed(F) ->
+    case file_blacklisted(F) of
+        true -> nop;
+        false -> 
+            case filename:extension(F) of
+                ".erl" ->
+                    Module = list_to_atom(filename:rootname(filename:basename(F))),
+                    ?DEBUG(Module);
+                _ ->
+                    nop
+                    %% unknown filename
+            end
+    end,
+    ok.
+
+
+file_blacklisted(F) ->
+    case re:run(F, ?FILENAME_BLACKLIST_RE) of
+        {match, _} ->
+             true;
+        nomatch -> 
+            false
+    end.
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -98,8 +129,16 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
 
-    z_filewatcher_inotify:start_link(Context),
-    z_code_reloader:start_link(true),
+    NeedPeriodic = case os:type() of
+                       {unix, linux} ->
+                           case z_filewatcher_inotify:start_link(Context) of
+                               {ok, _} -> false;
+                               {error, _} -> true
+                           end;
+                       _ ->
+                           true
+                   end,
+    z_code_reloader:start_link(NeedPeriodic),
 
     {ok, #state{
         context  = z_context:new(Context)

@@ -98,13 +98,33 @@ handle_cast(Message, State) ->
 
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
+%% @doc Reading a line from the inotifywait program. Sets a timer to
+%% prevent duplicate file changed message for the same filename
+%% (e.g. if a editor saves a file twice for some reason).
 handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers}) ->
-    ?DEBUG(Line),
-    {noreply, State};
+    case re:run(Line, "^(.*) (MODIFY|CREATE) (.*)", [{capture, all_but_first, list}]) of
+        nomatch -> 
+            {noreply, State};
+        {match, [Path, _Verb, File]} ->
+            Filename = filename:join(Path, File),
+            Timers1 = case proplists:lookup(Filename, Timers) of
+                          {Filename, TRef} ->
+                              {ok, cancel} = timer:cancel(TRef),
+                              proplists:delete(Filename, Timers);
+                          none ->
+                              Timers
+                      end,
+            {ok, TRef2} = timer:send_after(300, {filechange, Filename}),
+            Timers2 = [{Filename, TRef2} | Timers1],
+            {noreply, State#state{timers=Timers2}}
+    end;
+
+%% @doc Launch the actual filechanged notification
+handle_info({filechange, Filename}, State=#state{timers=Timers}) ->
+    mod_development:file_changed(Filename),
+    {noreply, State#state{timers=proplists:delete(Filename, Timers)}};
+
+
 handle_info(_Info, State) ->
     ?DEBUG(_Info),
     {noreply, State}.
@@ -115,9 +135,8 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, {_, Port}) ->
-    ?DEBUG(Port),
     true = erlang:port_close(Port),
-    ?DEBUG("closed"),
+    os:cmd("killall inotifywait"),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
