@@ -108,6 +108,7 @@ file_blacklisted(F) ->
     end.
 
 
+%% @doc Recompile Erlang files on the fly
 handle_file(".erl", F) ->
     spawn(fun() -> 
                   make:files([F], [load, 
@@ -116,13 +117,34 @@ handle_file(".erl", F) ->
                                    {i, "deps/webmachine/include"}, {outdir, "ebin"}]) 
           end);
 
+%% @doc SCSS / SASS files
 handle_file(".sass", F) ->
     handle_file(".scss", F);
 handle_file(".scss", F) ->
-    ?DEBUG("wanna do scss"),
-    ?DEBUG(filename:dirname(F));
+    InPath = filename:dirname(F),
+    OutPath = filename:join(filename:dirname(InPath), "css"),
+    case filelib:is_dir(OutPath) of
+        true ->
+            os:cmd("sass --update " ++ z_utils:os_escape(InPath) ++ " " ++ z_utils:os_escape(OutPath));
+        false ->
+            nop
+    end;
+
+%% @doc Coffeescript
+handle_file(".coffee", F) ->
+    InPath = filename:dirname(F),
+    OutPath = filename:join(filename:dirname(InPath), "js"),
+    case filelib:is_dir(OutPath) of
+        true ->
+            os:cmd("coffee -o " ++ z_utils:os_escape(OutPath) ++ " -c " ++ z_utils:os_escape(InPath));
+        false ->
+            nop
+    end;
+
+%% @doc Unknown files
 handle_file(_, _) -> %% unknown filename
     nop.
+
 
 
 %%====================================================================
