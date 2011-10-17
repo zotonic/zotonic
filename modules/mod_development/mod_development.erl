@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -93,8 +93,11 @@ pid_observe_development_make(Pid, development_make, _Context) ->
 file_changed(F) ->
     case file_blacklisted(F) of
         true -> nop;
-        false -> 
-            handle_file(filename:extension(F), F)
+        false ->
+            case handle_file(filename:extension(F), F) of
+                undefined -> ok;
+                Message -> send_message(os:type(), z_string:trim(Message))
+            end
     end,
     ok.
 
@@ -103,21 +106,22 @@ file_blacklisted(F) ->
     case re:run(F, ?FILENAME_BLACKLIST_RE) of
         {match, _} ->
              true;
-        nomatch -> 
+        nomatch ->
             false
     end.
 
 
 %% @doc Recompile Erlang files on the fly
 handle_file(".erl", F) ->
-    spawn(fun() -> 
-                  make:files([F], [load, 
-                                   {i, "include"}, 
-                                   {i, "src/dbdrivers/postgresql/include"}, 
-                                   {i, "deps/webmachine/include"}, {outdir, "ebin"}]) 
-          end);
+    spawn(fun() ->
+                  make:files([F], [load,
+                                   {i, "include"},
+                                   {i, "src/dbdrivers/postgresql/include"},
+                                   {i, "deps/webmachine/include"}, {outdir, "ebin"}])
+          end),
+    "Recompile " ++ F;
 
-%% @doc SCSS / SASS files
+%% @doc SCSS / SASS files from lib/scss -> lib/css
 handle_file(".sass", F) ->
     handle_file(".scss", F);
 handle_file(".scss", F) ->
@@ -127,24 +131,33 @@ handle_file(".scss", F) ->
         true ->
             os:cmd("sass --update " ++ z_utils:os_escape(InPath) ++ " " ++ z_utils:os_escape(OutPath));
         false ->
-            nop
+            undefined
     end;
 
-%% @doc Coffeescript
+%% @doc Coffeescript from lib/coffee -> lib/js
 handle_file(".coffee", F) ->
     InPath = filename:dirname(F),
     OutPath = filename:join(filename:dirname(InPath), "js"),
     case filelib:is_dir(OutPath) of
         true ->
-            os:cmd("coffee -o " ++ z_utils:os_escape(OutPath) ++ " -c " ++ z_utils:os_escape(InPath));
+            os:cmd("coffee -o " ++ z_utils:os_escape(OutPath) ++ " -c " ++ z_utils:os_escape(InPath)),
+            "Compiled " ++ OutPath;
         false ->
-            nop
+            undefined
     end;
 
 %% @doc Unknown files
 handle_file(_, _) -> %% unknown filename
-    nop.
+    undefined.
 
+
+%% @doc send message to the user
+send_message(_, []) ->
+    undefined;
+send_message({unix, linux}, Msg) ->
+    os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
+send_message(_, _) ->
+    undefined.
 
 
 %%====================================================================
@@ -211,7 +224,7 @@ handle_cast(Message, State) ->
 %%                                       {stop, Reason, State}
 %% @doc Periodic check if the dev server is still running.
 handle_info(ensure_server, State) ->
-    z_utils:flush_message(ensure_server), 
+    z_utils:flush_message(ensure_server),
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
@@ -247,7 +260,7 @@ page_debug_stream(TargetId, What, Context) ->
     process_flag(trap_exit, true),
     z_notifier:observe(debug, self(), Context),
     ?MODULE:page_debug_stream_loop(TargetId, What, Context).
-    
+
     page_debug_stream_loop(TargetId, What, Context) ->
         receive
             {'EXIT', _} ->
@@ -261,4 +274,4 @@ page_debug_stream(TargetId, What, Context) ->
             {'$gen_cast', {#debug{what=_Other}, _Context}} ->
                 ?MODULE:page_debug_stream_loop(TargetId, What, Context)
         end.
-        
+
