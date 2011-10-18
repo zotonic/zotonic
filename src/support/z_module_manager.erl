@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% Date: 2009-06-03
 
 %% @doc Module supervisor. Uses a z_supervisor.  Starts/restarts module processes.
 %% @todo Take module dependencies into account when starting/restarting modules.
 
-%% Copyright 2009-2010 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@
     scan/1,
     prio/1,
     prio_sort/1,
+    dependency_sort/1,
+    dependencies/1,
     module_exists/1,
     title/1
 ]).
@@ -208,6 +210,29 @@ prio_sort(Modules) ->
     [ M || {_Prio, M} <- Sorted ].
 
 
+%% @doc Sort all modules on their dependencies
+dependency_sort(#context{} = Context) ->
+    dependency_sort(active(Context));
+dependency_sort(Modules) when is_list(Modules) ->
+    Ms = [ dependencies(M) || M <- Modules ],
+    z_toposort:sort(Ms).
+
+
+%% @doc Return a module's dependencies as a tuple usable for z_toposort:sort/1.
+dependencies({M, X}) ->
+    {_, Ds, Ps} = dependencies(M),
+    {{M,X}, Ds, Ps};
+dependencies(M) when is_atom(M) ->
+    try
+        Info = erlang:get_module_info(M, attributes),
+        Depends = proplists:get_value(mod_depends, Info, []),
+        Provides = proplists:get_value(mod_provides, Info, []),
+        {M, Depends, Provides}
+    catch
+        _M:_E -> {M, [], []}
+    end.
+
+
 
 %% @doc Check if the code of a module exists. The database can hold module references to non-existing modules.
 module_exists(M) ->
@@ -360,7 +385,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Old  = sets:from_list([Name || {Name, _} <- ChildrenPids]),
     New  = sets:from_list(ValidModules),
     Kill = sets:subtract(Old, New),
-    Create = lists:reverse(prio_sort(sets:to_list(sets:subtract(New, Old)))),
+    {ok, Create} = dependency_sort(sets:to_list(sets:subtract(New, Old))),
 
     sets:fold(fun (Module, ok) ->
               z_supervisor:delete_child(ModuleSup, Module),
