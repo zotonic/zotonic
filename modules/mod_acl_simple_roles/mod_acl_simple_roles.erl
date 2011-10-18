@@ -25,6 +25,8 @@
 -mod_description("Simple role based access control.  Use this for a site with different editor roles.").
 -mod_prio(500).
 -mod_schema(1).
+-mod_depends([]).
+-mod_provides([acl]).
 
 %% interface functions
 -export([

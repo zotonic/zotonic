@@ -24,6 +24,8 @@
 -mod_title("Admin predicate support").
 -mod_description("Adds support for editing predicates to the admin.").
 -mod_prio(600).
+-mod_depends([admin]).
+-mod_provides([]).
 
 %% interface functions
 -export([

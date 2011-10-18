@@ -22,6 +22,8 @@
 
 -mod_title("Admin module").
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
+-mod_depends([base, authentication]).
+-mod_provides([admin]).
 
 -export([
     observe_sanitize_element/3

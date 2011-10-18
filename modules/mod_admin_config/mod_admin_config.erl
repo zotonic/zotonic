@@ -23,4 +23,6 @@
 -mod_title("Admin config support").
 -mod_description("Allow admins to edit the system configuration.").
 -mod_prio(800).
+-mod_depends([admin]).
+-mod_provides([]).
 

@@ -23,3 +23,5 @@
 -mod_title("SEO Google").
 -mod_description("Support for Google Analytics and Webmaster tools.").
 -mod_prio(600).
+-mod_depends([seo]).
+-mod_provides([seo_google]).

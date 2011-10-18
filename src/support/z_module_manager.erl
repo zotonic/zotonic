@@ -215,7 +215,7 @@ dependency_sort(#context{} = Context) ->
     dependency_sort(active(Context));
 dependency_sort(Modules) when is_list(Modules) ->
     Ms = [ dependencies(M) || M <- Modules ],
-    z_toposort:sort(Ms).
+    z_toposort:sort(?DEBUG(Ms)).
 
 
 %% @doc Return a module's dependencies as a tuple usable for z_toposort:sort/1.
@@ -225,8 +225,8 @@ dependencies({M, X}) ->
 dependencies(M) when is_atom(M) ->
     try
         Info = erlang:get_module_info(M, attributes),
-        Depends = proplists:get_value(mod_depends, Info, []),
-        Provides = proplists:get_value(mod_provides, Info, []),
+        Depends = proplists:get_value(mod_depends, Info, [base]),
+        Provides = [ M | proplists:get_value(mod_provides, Info, []) ],
         {M, Depends, Provides}
     catch
         _M:_E -> {M, [], []}

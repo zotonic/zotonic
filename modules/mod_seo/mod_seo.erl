@@ -23,3 +23,5 @@
 -mod_title("SEO Search Engine Optimization").
 -mod_description("Provides admin interface for the SEO modules.").
 -mod_prio(600).
+-mod_depends([base, admin]).
+-mod_provides([seo]).
