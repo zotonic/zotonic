@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-11-01
 %%
-%% @doc Development server.  Periodically loads modules whose beam file have been updated.
+%% @doc Periodically loads modules whose beam file have been updated.
 %% This server is started by the mod_development.
 
 %% Copyright 2009 Marc Worrell
@@ -19,24 +19,25 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_development_server).
+-module(z_code_reloader).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/0, start_link/1]).
+-export([start_link/1]).
 
 %% interface functions
 -export([
 	reload/0,
-	make/0
+	make/0,
+	reload_module/1
 ]).
 
 -include_lib("zotonic.hrl").
 
 % The state record for this server
--record(state, {}).
+-record(state, {periodic=true}).
 
 % Interval for checking for new and/or changed files.
 -define(DEV_POLL_INTERVAL, 10000).
@@ -47,10 +48,13 @@
 %%====================================================================
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link() ->
-	start_link([]).
-start_link(Args) when is_list(Args) ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
+start_link(Periodic) ->
+	case erlang:whereis(?MODULE) of
+        undefined ->
+            gen_server:start_link({local, ?MODULE}, ?MODULE, [Periodic], []);
+        Pid ->
+            {ok, Pid}
+    end.
 
 
 %% @doc Check if beam files are changed, load the changed ones.
@@ -71,9 +75,14 @@ make() ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(_Args) ->
-    timer:send_interval(?DEV_POLL_INTERVAL, reload_beams),
-    {ok, #state{}}.
+init([Periodic]) ->
+    case Periodic of
+        true ->
+            timer:send_interval(?DEV_POLL_INTERVAL, reload_beams);
+        _ ->
+            nop
+    end,
+    {ok, #state{periodic=Periodic}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
