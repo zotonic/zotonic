@@ -284,7 +284,7 @@ replace(SubjectId, Pred, NewObjects, Context) ->
             
                         % Sync all caches, notify edge delete/insert listeners
                         z_db:transaction(F, Context),
-                        z_db:flush(SubjectId),
+                        z_db:flush(SubjectId, Context),
                         [
                             case lists:member(ObjId, NewObjects) of
                                 true -> nop;
