@@ -129,7 +129,7 @@ handle_file(".scss", F) ->
     OutPath = filename:join(filename:dirname(InPath), "css"),
     case filelib:is_dir(OutPath) of
         true ->
-            os:cmd("sass --update " ++ z_utils:os_escape(InPath) ++ " " ++ z_utils:os_escape(OutPath));
+            os:cmd("sass --update " ++ z_utils:os_escape(InPath) ++ ":" ++ z_utils:os_escape(OutPath));
         false ->
             undefined
     end;
@@ -171,8 +171,6 @@ send_message(_, _) ->
 %% @doc Initiates the server.
 init(Args) ->
 %%    process_flag(trap_exit, true),
-    ?DEBUG("hello"),
-
     {context, Context} = proplists:lookup(context, Args),
 
     timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
