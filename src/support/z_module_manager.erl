@@ -215,7 +215,7 @@ dependency_sort(#context{} = Context) ->
     dependency_sort(active(Context));
 dependency_sort(Modules) when is_list(Modules) ->
     Ms = [ dependencies(M) || M <- Modules ],
-    z_toposort:sort(?DEBUG(Ms)).
+    z_toposort:sort(Ms).
 
 
 %% @doc Return a module's dependencies as a tuple usable for z_toposort:sort/1.
