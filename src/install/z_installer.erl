@@ -258,7 +258,7 @@ ensure_module_active(C, Module) ->
         {ok, _, [{true}]} ->
             ok;
         {ok, _, [{false}]} ->
-            {ok, 1} = pgsql:equery(C, "update module set is_active = 1 where name = $1", [Module]);
+            {ok, 1} = pgsql:equery(C, "update module set is_active = true where name = $1", [Module]);
         _ ->
     		{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [Module])
     end.
