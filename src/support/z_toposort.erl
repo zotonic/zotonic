@@ -24,9 +24,8 @@
 
 
 %% @doc Return the topological sort of a list.
--spec sort(topoitems()) -> {ok, list()} | {error, {cyclic, list()}}.
 -type topoitems() :: {Name::term(), Depends::list(), Provides::list()}.  
-
+-spec sort(topoitems()) -> {ok, list()} | {error, {cyclic, list()}}.
 sort([]) ->
     {ok, []};
 sort(L) ->
