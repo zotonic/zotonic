@@ -170,10 +170,7 @@ send_message(_, _) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-%%    process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-
-    timer:send_interval(?DEV_POLL_INTERVAL, ensure_server),
     NeedPeriodic = case os:type() of
                        {unix, linux} ->
                            case z_filewatcher_inotify:start_link(Context) of
@@ -220,11 +217,6 @@ handle_cast(Message, State) ->
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
-%% @doc Periodic check if the dev server is still running.
-handle_info(ensure_server, State) ->
-    z_utils:flush_message(ensure_server),
-    {noreply, State};
-
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
