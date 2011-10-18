@@ -23,9 +23,13 @@
 
 			{% with m.rsc[id].media|without_embedded_media:id as media %}
 				{% if media[1] %}
-					{% media media[1] width=540 height=340 %}
+					<a href="{% url media_inline id=media[1] %}" title="{_ Click to download _}">{% media media[1] width=540 height=340 %}</a>
 				{% else %}
-					{% media id width=540 height=340 %}
+				    {% if id.is_a.image or id.is_a.document %}
+					    <a href="{% url media_inline id=id %}" title="{_ Click to download _}">{% image id width=540 height=340 %}</a>
+					{% else %}
+				        {% media id width=540 height=340 %}
+					{% endif %}
 				{% endif %}
 			{% endwith %}
 
