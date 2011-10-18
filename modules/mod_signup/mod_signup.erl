@@ -25,6 +25,9 @@
 -mod_title("Sign up users").
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
+-mod_depends([base, authentication]).
+-mod_provides([signup]).
+
 
 -export([
     datamodel/0,

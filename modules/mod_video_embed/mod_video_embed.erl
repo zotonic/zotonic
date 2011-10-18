@@ -25,6 +25,8 @@
 -mod_title("Video embed").
 -mod_description("Embed youtube, vimeo and other movies as media pages.").
 -mod_prio(600).
+-mod_depends([admin]).
+-mod_provides([video_embed]).
 
 %% interface functions
 -export([

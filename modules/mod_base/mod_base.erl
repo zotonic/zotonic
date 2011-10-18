@@ -23,6 +23,8 @@
 -mod_title("Zotonic Base").
 -mod_description("Base supplies all basic scomps, actions and validators.").
 -mod_prio(9999).
+-mod_depends([]).
+-mod_provides([base]).
 
 -include_lib("zotonic.hrl").
 

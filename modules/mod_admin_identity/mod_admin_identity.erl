@@ -22,6 +22,8 @@
 
 -mod_title("Admin identity/user supports").
 -mod_description("Adds an user overview and possibility to edit passwords.").
+-mod_depends([admin]).
+-mod_provides([]).
 
 
 %% interface functions

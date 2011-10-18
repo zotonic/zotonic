@@ -22,6 +22,8 @@
 -mod_title("Admin category support").
 -mod_description("Support editing and changing the category hierarchy.").
 -mod_prio(600).
+-mod_depends([admin]).
+-mod_provides([]).
 
 -export([
     observe_category_hierarchy_save/2

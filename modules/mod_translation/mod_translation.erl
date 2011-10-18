@@ -23,6 +23,8 @@
 -mod_title("Translation").
 -mod_description("Handle user’s language and generate .pot files with translatable texts.").
 -mod_prio(500).
+-mod_depends([admin]).
+-mod_provides([translation]).
 
 -export([
     observe_session_init_fold/3,

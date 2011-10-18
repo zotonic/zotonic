@@ -23,6 +23,8 @@
 -mod_title("Admin module support").
 -mod_description("Manages modules. Adds an admin interface to activate and deactivate modules.").
 -mod_prio(700).
+-mod_depends([admin]).
+-mod_provides([]).
 
 %% interface functions
 -export([

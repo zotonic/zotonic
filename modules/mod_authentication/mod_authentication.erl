@@ -23,6 +23,8 @@
 -mod_title("Authentication").
 -mod_description("Handles authentication and identification of users.").
 -mod_prio(500).
+-mod_depends([base, acl]).
+-mod_provides([authentication]).
 
 %% gen_server exports
 -export([

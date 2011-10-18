@@ -23,6 +23,8 @@
 -mod_title("ACL Admins Only").
 -mod_description("Simple access control module, all users are site administrators. Use this for a simple site.").
 -mod_prio(500).
+-mod_depends([]).
+-mod_provides([acl]).
 
 %% interface functions
 -export([

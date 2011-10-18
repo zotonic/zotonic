@@ -22,6 +22,8 @@
 
 -mod_title("Comments").
 -mod_description("Comments for pages. Implements a simple comment system with comments stored locally.").
+-mod_depends([admin, base]).
+-mod_provides([comment]).
 
 %% gen_server exports
 -export([init/1]).

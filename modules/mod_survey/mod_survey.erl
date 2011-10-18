@@ -22,6 +22,8 @@
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_schema(1).
+-mod_depends([admin]).
+-mod_provides([survey, poll]).
 
 %% interface functions
 -export([
