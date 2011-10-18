@@ -7,7 +7,8 @@
 	delegate="mod_survey" 
 %}
 <form id="{{ #q }}" method="post" action="postback">
-	{% for question in questions %}
+	{% for qid in question_ids %}
+    {% with questions[qid] as question %}
 	{% with question.type|make_list as t %}
 		<fieldset class="{{ t }}">
 			{% if t == "subhead" %}
@@ -44,6 +45,7 @@
 				{% include "_survey_question_narrative.tpl" question=question name=question.name %}
 			{% endif %}
 		</fieldset>
+	{% endwith %}
 	{% endwith %}
 	{% endfor %}
 

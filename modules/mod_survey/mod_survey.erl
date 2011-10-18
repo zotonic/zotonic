@@ -201,7 +201,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                     % A new list of questions, PageNr might be another than expected
                     Vars = [ {id, Id},
                              {page_nr, NewPageNr},
-                             {questions, [ [{id, QId} | question_to_props(Q)] || {QId, Q} <- L ]},
+                             {question_ids, QuestionIds},
+                             {questions, [ {QId, [{id, QId} | question_to_props(Q)]} || {QId, Q} <- L ]},
                              {pages, count_pages(Qs1)},
                              {answers, Answers2},
                              {history, [NewPageNr|History]}],
