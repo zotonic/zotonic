@@ -849,7 +849,7 @@ period(_) -> 7 * 24 * 60.       % Retry every week for extreme cases
 
 %% @doc Increases a timestamp (as returned by now/0) with a value provided in minutes
 inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) ->
-    Sec2 = Sec + MinToAdd, %%!!! * 60,
+    Sec2 = Sec + (MinToAdd * 60),
     Sec3 = Sec2 rem 1000000,
     MegaSec2 = MegaSec + Sec2 div 1000000,
     {MegaSec2, Sec3, MicroSec}.
