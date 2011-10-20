@@ -41,9 +41,6 @@ init(Host) ->
     % On (re)start we use the newest site config.
     SiteProps = z_sites_manager:get_site_config(Host),
 
-    % Default site name
-    {host, Host} = proplists:lookup(host, SiteProps),
-
     Depcache = {z_depcache,
                 {z_depcache, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
