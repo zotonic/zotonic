@@ -1,5 +1,18 @@
 Welcome to Zotonic!
 
+Release 0.8.0, in development
+-----------------------------
+
+* The "host" option in a host's config file is now optional. 
+  When not present it will be derived from the site's directory name.
+  (Thanks to Andreas Stenius)
+
+* Modules can now have dependencies. The dependencies regulate the
+  start order of modules. Define then with "-mod_depends([...])."
+  and "-mod_provides([...])." 
+  A module always provides its own module name. When "-mod_depends([...])." 
+  is not given then it defaults to "[base]".
+
 
 Release 0.7.0, released on 2011-07-28
 -------------------------------------
