@@ -34,7 +34,7 @@
 			ed.addButton('zlink', {
 				title: 'Add internal link',
 				cmd: 'Z_Link',
-				'class': 'mce_link'
+				'class': 'mce_zlink'
 			});
 		},
 
