@@ -39,7 +39,7 @@
     observe_debug_stream/2,
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
-    file_changed/1,
+    file_changed/2,
 
     % internal (for spawn)
     page_debug_stream/3,
@@ -90,11 +90,11 @@ pid_observe_development_make(Pid, development_make, _Context) ->
 
 %% @doc Called when a file is changed on disk. Decides what to do.
 %% @spec file_changed(string()) -> ok
-file_changed(F) ->
+file_changed(Verb, F) ->
     case file_blacklisted(F) of
         true -> nop;
         false ->
-            case handle_file(filename:extension(F), F) of
+            case handle_file(Verb, filename:extension(F), F) of
                 undefined -> ok;
                 Message -> send_message(os:type(), z_string:trim(Message))
             end
@@ -112,7 +112,7 @@ file_blacklisted(F) ->
 
 
 %% @doc Recompile Erlang files on the fly
-handle_file(".erl", F) ->
+handle_file(_Verb, ".erl", F) ->
     spawn(fun() ->
                   make:files([F], [load,
                                    {i, "include"},
@@ -122,9 +122,9 @@ handle_file(".erl", F) ->
     "Recompile " ++ F;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
-handle_file(".sass", F) ->
-    handle_file(".scss", F);
-handle_file(".scss", F) ->
+handle_file(_Verb, ".sass", F) ->
+    handle_file(_Verb, ".scss", F);
+handle_file(_Verb, ".scss", F) ->
     InPath = filename:dirname(F),
     OutPath = filename:join(filename:dirname(InPath), "css"),
     case filelib:is_dir(OutPath) of
@@ -135,7 +135,7 @@ handle_file(".scss", F) ->
     end;
 
 %% @doc Coffeescript from lib/coffee -> lib/js
-handle_file(".coffee", F) ->
+handle_file(_Verb, ".coffee", F) ->
     InPath = filename:dirname(F),
     OutPath = filename:join(filename:dirname(InPath), "js"),
     case filelib:is_dir(OutPath) of
@@ -146,8 +146,23 @@ handle_file(".coffee", F) ->
             undefined
     end;
 
+%% @doc Flush the cache when a new .tpl file is used
+handle_file(_Verb, ".tpl", F) ->
+    case re:run(F, "^.*/(.*?)/templates/(.*)", [{capture, all_but_first, list}]) of
+        nomatch -> 
+            undefined;
+        {match, [Site, TemplateFile]} ->
+            C = z_context:new(list_to_atom(Site)),
+            case z_template:find_template(TemplateFile, C) of
+                {ok, _} -> undefined;
+                {error, _} ->
+                    z_depcache:flush(C),
+                    "Flushed cache of " ++ Site ++ " due to new template."
+            end
+    end;
+
 %% @doc Unknown files
-handle_file(_, _) -> %% unknown filename
+handle_file(_, _, _) -> %% unknown filename
     undefined.
 
 

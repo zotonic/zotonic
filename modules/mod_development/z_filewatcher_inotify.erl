@@ -98,7 +98,7 @@ handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers})
     case re:run(Line, "^(.+) (MODIFY|CREATE) (.+)", [{capture, all_but_first, list}]) of
         nomatch -> 
             {noreply, State};
-        {match, [Path, _Verb, File]} ->
+        {match, [Path, Verb, File]} ->
             Filename = filename:join(Path, File),
             Timers1 = case proplists:lookup(Filename, Timers) of
                           {Filename, TRef} ->
@@ -107,14 +107,14 @@ handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers})
                           none ->
                               Timers
                       end,
-            {ok, TRef2} = timer:send_after(300, {filechange, Filename}),
+            {ok, TRef2} = timer:send_after(300, {filechange, verb(Verb), Filename}),
             Timers2 = [{Filename, TRef2} | Timers1],
             {noreply, State#state{timers=Timers2}}
     end;
 
 %% @doc Launch the actual filechanged notification
-handle_info({filechange, Filename}, State=#state{timers=Timers}) ->
-    mod_development:file_changed(Filename),
+handle_info({filechange, Verb, Filename}, State=#state{timers=Timers}) ->
+    mod_development:file_changed(Verb, Filename),
     {noreply, State#state{timers=proplists:delete(Filename, Timers)}};
 
 handle_info({'EXIT', Port, _}, State=#state{port=Port}) ->
@@ -148,9 +148,14 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 start_inotify() ->
+    os:cmd("killall inotifywait"),
     Args = ["-e", "modify,create", "-m", "-r",
             filename:join(os:getenv("ZOTONIC"), "src"),
             filename:join(os:getenv("ZOTONIC"), "modules")
             |
             string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
     erlang:open_port({spawn_executable, "/usr/bin/inotifywait"}, [{args, Args}, {line, 1024}]).
+
+
+verb("MODIFY") -> modify;
+verb("CREATE") -> create.
