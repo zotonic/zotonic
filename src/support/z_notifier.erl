@@ -256,8 +256,12 @@ handle_cast({'observe', Event, Observer, Priority}, State) ->
         
     PObs = {Priority, Observer},
     UpdatedObservers = case ets:lookup(State#state.observers, Event1) of 
-        [] -> [PObs];
-        [{Event1, Observers}] -> lists:sort([PObs | Observers])
+        [] -> 
+            [PObs];
+        [{Event1, Observers}] ->
+            % Prevent double observers, remove old observe first
+            OtherObservers = lists:filter(fun({_Prio,Obs}) -> Obs /= Observer end, Observers),
+            lists:sort([PObs | OtherObservers])
     end,
     ets:insert(State#state.observers, {Event1, UpdatedObservers}),
 
