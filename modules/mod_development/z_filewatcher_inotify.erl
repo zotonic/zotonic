@@ -102,12 +102,12 @@ handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers})
             Filename = filename:join(Path, File),
             Timers1 = case proplists:lookup(Filename, Timers) of
                           {Filename, TRef} ->
-                              {ok, cancel} = timer:cancel(TRef),
+                              erlang:cancel_timer(TRef),
                               proplists:delete(Filename, Timers);
                           none ->
                               Timers
                       end,
-            {ok, TRef2} = timer:send_after(300, {filechange, verb(Verb), Filename}),
+            TRef2 = erlang:send_after(300, self(), {filechange, verb(Verb), Filename}),
             Timers2 = [{Filename, TRef2} | Timers1],
             {noreply, State#state{timers=Timers2}}
     end;
