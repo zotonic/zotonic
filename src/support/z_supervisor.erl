@@ -147,13 +147,21 @@ handle_call({add_child, ChildSpec}, _From, State) ->
 
 %% @doc Start the child when it is not running already
 handle_call({start_child, Name}, _From, State) ->
-    case is_running(Name, State) of
-        true ->
-            {reply, ok, State};
-        false ->
+    case find_running(Name, State) of
+        {ok, Pid} ->
+            {reply, {ok, Pid}, State};
+        error ->
             case do_remove_child(Name, State) of
-                {CS, State1} -> {reply, ok, do_start_child(CS, State1)};
-                error -> {reply, {error, unknown_child}, State}
+                {CS, State1} -> 
+                    State2 = do_start_child(CS, State1),
+                    case find_running(Name, State2) of
+                        {ok, Pid} ->
+                            {reply, {ok, Pid}, State2};
+                        error ->
+                            {reply, {error, not_started}, State2}
+                    end;
+                error -> 
+                    {reply, {error, unknown_child}, State}
             end
     end;
 
@@ -485,9 +493,13 @@ remove_by_pid(Pid, [CS|Rest], Acc) ->
     remove_by_pid(Pid, Rest, [CS|Acc]).
 
 
-%% @doc Check if a named child is running
-is_running(Name, State) ->
-    is_member(Name, State#state.running).
+%% @doc Find the pid() of a running child
+find_running(Name, State) ->
+    find_running1(Name, State#state.running).
+    
+    find_running1(_Name, []) -> error;
+    find_running1(Name, [#child_state{name=Name, pid=Pid}|_]) -> {ok, Pid};
+    find_running1(Name, [_|Running]) -> find_running1(Name, Running).
 
 %% @doc Check if a named child exists
 exists(Name, State) ->
