@@ -1,6 +1,8 @@
 Welcome to Zotonic
 ==================
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zotonic&url=https://github.com/zotonic/zotonic&title=zotonic&language=en_GB&tags=github&category=software) 
+
 Here are some starting points for your journey with Zotonic.
 
 INSTALLING
