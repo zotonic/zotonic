@@ -57,6 +57,9 @@
 %% The default module priority
 -define(MOD_PRIO, 500).
 
+%% Give a module a minute to start
+-define(MODULE_START_TIMEOUT, 60000).
+
 %% Module manager state
 -record(state, {context, sup, start_wait=none, start_queue=[], start_error=[]}).
 
@@ -442,6 +445,11 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
               ok
           end, ok, Kill),
 
+    sets:fold(fun (Module, ok) ->
+            z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
+            ok
+        end, ok, New),
+
     % 1. Put all to be started modules into a start list (add to State)
     % 2. Let the module manager start them one by one (if startable)
     % 3. Log any start errors, suppress modules that have errors.
@@ -520,20 +528,14 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
             fun() ->
                 Result = case catch manage_schema(Module, Context) of
                             ok ->
-                                % ?DEBUG({module_start, z_context:hostname(Context), Module}),
-                                % Ensure that the child process is known (ignore duplicate error)
-                                z_supervisor:add_child(ModuleSup, Spec),
                                 % Try to start it
-                                z_supervisor:start_child(ModuleSup, Spec#child_spec.name);
+                                z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
                             Error ->
                                 ?ERROR("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
                                         [z_context:site(Context), Module, Error]),
                                 {error, {schema_init, Error}}
                          end,
-                case Result of
-                    {ok, _} -> nop;
-                    _Other -> gen_server:cast(ManagerPid, {start_child_result, Module, Result})
-                end
+                gen_server:cast(ManagerPid, {start_child_result, Module, Result})
             end
         ),
         {ok, StartPid}.

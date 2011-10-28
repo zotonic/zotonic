@@ -351,8 +351,14 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
                 gen_server:cast(Pid, {Msg, Context})
         end
     catch M:E ->
-        ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
-        detach(msg_event(Msg), Pid, Context),
+        case z_utils:is_process_alive(Pid) of
+            false ->
+                ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
+                detach(msg_event(Msg), Pid, Context);
+            true ->
+                % Assume transient error
+                nop
+        end,
         {error, {notify_observer, Pid, Msg, M, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F}}, _IsCall, Context) ->
@@ -361,8 +367,14 @@ notify_observer(Msg, {_Prio, {M,F,[Pid]}}, _IsCall, Context) when is_pid(Pid) ->
     try
         M:F(Pid, Msg, Context)
     catch EM:E ->
-        ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
-        detach(msg_event(Msg), {M,F,[Pid]}, Context),
+        case z_utils:is_process_alive(Pid) of
+            false ->
+                ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
+                detach(msg_event(Msg), Pid, Context);
+            true ->
+                % Assume transient error
+                nop
+        end,
         {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F,Args}}, _IsCall, Context) ->

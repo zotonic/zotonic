@@ -37,8 +37,10 @@
     start_link/1,
     start_link/2,
     add_child/2,
+    add_child_async/2,
     delete_child/2,
     start_child/2,
+    start_child/3,
     stop_child/2,
     restart_child/2,
     which_children/1,
@@ -77,6 +79,9 @@ start_link(SupName, Args) ->
 add_child(Pid, ChildSpec) ->
     gen_server:call(Pid, {add_child, ChildSpec}).
 
+add_child_async(Pid, ChildSpec) ->
+    gen_server:cast(Pid, {add_child, ChildSpec}).
+
 %% @doc Delete a child, the child will be terminated and removed.
 delete_child(Pid, Name) ->
     gen_server:cast(Pid, {delete_child, Name}).
@@ -84,6 +89,10 @@ delete_child(Pid, Name) ->
 %% @doc Start a child when it is not running (either failed or stopped)
 start_child(Pid, Name) ->
     gen_server:call(Pid, {start_child, Name}).
+
+%% @doc Start a child when it is not running (either failed or stopped)
+start_child(Pid, Name, Timeout) ->
+    gen_server:call(Pid, {start_child, Name}, Timeout).
 
 %% @doc Stop a child, the child will be terminated and put in "stopped" state
 stop_child(Pid, Name) ->
@@ -198,6 +207,16 @@ handle_call(Message, _From, State) ->
     ?DEBUG({unknown_call, Message}),
     {stop, {unknown_call, Message}, State}.
 
+
+% @doc Async version of the handle_calls({add_child, ...}, ...) above
+handle_cast({add_child, ChildSpec}, State) ->
+    case exists(ChildSpec#child_spec.name, State) of
+        false ->
+            CS = #child_state{name=ChildSpec#child_spec.name, child=ChildSpec, state=starting, time=erlang:localtime()},
+            {noreply, State#state{stopped=[CS|State#state.stopped]}};
+        true ->
+            {noreply, State}
+    end;
 
 %% @doc Stop a child process and add it to the stopped list.
 handle_cast({stop_child, Name}, State) ->
