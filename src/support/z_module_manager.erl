@@ -438,8 +438,12 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Old  = sets:from_list([Name || {Name, _} <- ChildrenPids]),
     New  = sets:from_list(ValidModules),
     Kill = sets:subtract(Old, New),
-    {ok, Create} = dependency_sort(sets:to_list(sets:subtract(New, Old))),
-
+    Create = sets:subtract(New, Old),
+    
+    Running = z_supervisor:running_children(State#state.sup),
+    Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
+    {ok, StartList} = dependency_sort(Start),
+    
     sets:fold(fun (Module, ok) ->
               z_supervisor:delete_child(ModuleSup, Module),
               ok
@@ -448,14 +452,20 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     sets:fold(fun (Module, ok) ->
             z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
             ok
-        end, ok, New),
+        end, ok, Create),
 
     % 1. Put all to be started modules into a start list (add to State)
     % 2. Let the module manager start them one by one (if startable)
     % 3. Log any start errors, suppress modules that have errors.
     % 4. Log non startable modules (remaining after all startable modules have started)
-    gen_server:cast(self(), start_next),
-    State#state{start_queue=Create}.
+    
+    case {StartList, sets:size(Kill)} of
+        {[], 0} -> 
+            State#state{start_queue=[]};
+        _ ->
+            gen_server:cast(self(), start_next),
+            State#state{start_queue=StartList}
+    end.
 
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
@@ -570,7 +580,7 @@ handle_start_child_result(Module, Result, State) ->
 
 %% @doc Return the list of all provided services.
 handle_get_provided(State) ->
-    get_provided_for_modules(handle_get_modules(State)).
+    get_provided_for_modules(handle_get_running(State)).
 
 get_provided_for_modules(Modules) ->
     lists:flatten(
@@ -592,6 +602,9 @@ stop_children_with_missing_depends(State) ->
 handle_get_modules(State) ->
     [ Name || {Name,_Pid} <- handle_get_modules_pid(State) ].
 
+%% @doc Return the list of module names currently managed and running by the z_supervisor.
+handle_get_running(State) ->
+    z_supervisor:running_children(State#state.sup).
 
 %% @doc Return the list of module names and their pid currently managed by the z_supervisor.
 handle_get_modules_pid(State) ->
@@ -600,7 +613,6 @@ handle_get_modules_pid(State) ->
                           [ {Name,Pid} || {Name,_Spec,Pid,_Time} <- Children ]
                         end,
                         z_supervisor:which_children(State#state.sup))).
-
 
 %% @doc Get a list of all valid modules
 valid_modules(Context) ->
