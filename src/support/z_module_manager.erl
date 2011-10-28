@@ -449,7 +449,10 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     gen_server:cast(self(), start_next),
     State#state{start_queue=Create}.
 
-handle_start_next(#state{start_queue=[]} = State) ->
+handle_start_next(#state{context=Context, start_queue=[]} = State) ->
+    % Signal modules are loaded, and load all translations.
+    z_notifier:notify(module_ready, Context),
+    spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     State;
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
     % Filter all children on the capabilities of the loaded modules.
@@ -464,19 +467,20 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                         ])
                 || M <- Starting
             ],
-            z_notifier:notify(module_ready, Context),
+            
+            % Add non-started modules to the list with errors.
             CleanedUpErrors = lists:foldl(fun(M,Acc) -> 
                                             proplists:delete(M,Acc) 
                                           end,
                                           State#state.start_error,
                                           Starting),
             
-            State#state{
+            handle_start_next(State#state{
                 start_error=[ {M, case is_module(M) of false -> not_found; true -> dependencies_error end} 
                               || M <- Starting 
                             ] ++ CleanedUpErrors,
                 start_queue=[]
-            };
+            });
         [C|_] ->
             case start_child(self(), C, ModuleSup, module_spec(C, Context), Context) of
                 {ok, StartHelperPid} -> 
@@ -486,11 +490,11 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                         start_queue=lists:delete(C, Starting)
                     };
                 {error, Reason} -> 
-                    gen_server:cast(start_next, self()),
-                    State#state{
-                        start_error=[ {C, Reason} | proplists:delete(C, State#state.start_error) ],
-                        start_queue=lists:delete(C, Starting)
-                    }
+                    handle_start_next(
+                        State#state{
+                            start_error=[ {C, Reason} | proplists:delete(C, State#state.start_error) ],
+                            start_queue=lists:delete(C, Starting)
+                        })
             end
     end.
 
@@ -516,6 +520,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
             fun() ->
                 Result = case catch manage_schema(Module, Context) of
                             ok ->
+                                % ?DEBUG({module_start, z_context:hostname(Context), Module}),
                                 % Ensure that the child process is known (ignore duplicate error)
                                 z_supervisor:add_child(ModuleSup, Spec),
                                 % Try to start it
@@ -536,6 +541,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
 
 
 handle_start_child_result(Module, Result, State) ->
+    % ?DEBUG({module_start_result, Module, Result}),
     % Where we waiting for this child? If so, start the next.
     State1 = case State#state.start_wait of
                 {Module, _Pid, _NowStarted} ->

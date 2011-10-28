@@ -34,9 +34,6 @@ start_link(SiteProps) ->
     % Make sure all modules are started
     z_module_manager:upgrade(Context),
 
-    % Load all translations
-    spawn(fun() -> z_trans_server:load_translations(Context) end),
-
     % Put software version in database
     % @todo Check if current version != database version and run upgrader (and downgrader?)
     case m_site:get(dbdatabase, Context) of
@@ -44,6 +41,4 @@ start_link(SiteProps) ->
         _ -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context)
     end,
     
-    % Let the module handle their startup code, the whole site is now up and running.
-    z_notifier:notify(site_startup, Context),
     ignore.

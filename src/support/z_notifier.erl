@@ -253,7 +253,7 @@ handle_call(Message, _From, State) ->
 %% @doc Add an observer to an event
 handle_cast({'observe', Event, Observer, Priority}, State) ->
     Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-        
+
     PObs = {Priority, Observer},
     UpdatedObservers = case ets:lookup(State#state.observers, Event1) of 
         [] -> 
@@ -264,7 +264,6 @@ handle_cast({'observe', Event, Observer, Priority}, State) ->
             lists:sort([PObs | OtherObservers])
     end,
     ets:insert(State#state.observers, {Event1, UpdatedObservers}),
-
     {noreply, State};
 
 %% @doc Detach an observer from an event

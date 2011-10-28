@@ -16,8 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-% 'module_ready' - Notify z_module_indexer to reindex all modules' templates, actions etc.
-% 'site_startup' - Notification sent when the site's code has been initialized and all modules are started.
+% 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started. (notify)
 -record(module_activate, {module, pid}).
@@ -26,6 +25,8 @@
 -record(module_deactivate, {module}).
 
 
+%% @doc Possibility to overrule a property of a resource (currently only the title)
+-record(rsc_property, {id, property, value}).
 
 %% @doc Foldr by resource_id to find all pairs {ContentType, DispatchRule} available.
 %% Example: {"text/html", page}
