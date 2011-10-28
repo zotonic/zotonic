@@ -252,10 +252,9 @@ q(Sql, Parameters, Context) ->
         C ->
             try
                 case pgsql:equery(C, Sql, Parameters) of
-                    {ok, _Affected, _Cols, Rows}  -> Rows;
-                    {ok, _Cols, Rows}		  -> Rows;
-		    {ok, 0}			  -> [];
-                    {ok, Rows}			  -> Rows
+                    {ok, _Affected, _Cols, Rows} -> Rows;
+                    {ok, _Cols, Rows} -> Rows;
+                    {ok, Rows} -> Rows
                 end
             after
                 return_connection(C, Context)
