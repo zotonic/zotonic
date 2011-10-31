@@ -137,7 +137,7 @@ module(Service) ->
 %%
 http_methods(Service) ->
     F = Service:module_info(functions),
-    lists:filter(fun (M) -> lists:member(handler(M), F) end, ['GET', 'POST', 'HEAD']).
+    lists:filter(fun (M) -> lists:member(handler(M), F) end, ['GET', 'POST', 'HEAD', 'PUT', 'DELETE']).
 
 %% define the handler mapping for the module.
 handler('POST') ->
@@ -145,8 +145,12 @@ handler('POST') ->
 handler('GET') -> 
     {process_get, 2};
 handler('HEAD') ->
-    {process_get, 2}.
-    
+    {process_get, 2};
+handler('PUT') ->
+    {process_post, 2};
+handler('DELETE') ->
+    {process_post, 2}.
+
 
 module_attr(Service, Attr, Default, T) ->
     code:ensure_loaded(Service),
