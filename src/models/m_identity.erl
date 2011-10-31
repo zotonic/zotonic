@@ -45,8 +45,6 @@
     lookup_by_type_and_key/3,
     lookup_by_type_and_key_multi/3,
 
-	set_props/5,
-	get_props/4,
 	set_by_type/4,
 	delete_by_type/3,
 	
@@ -274,23 +272,6 @@ is_verified(RscId, Context) ->
         undefined -> false;
         _ -> true
     end.
-
-%% @doc Replace any existing identity property with a new value
-set_props(RscId, Type, Key, Props, Context) ->
-	F = fun(Ctx) -> 
-		case z_db:q("update identity set props = $4 where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key, Props], Ctx) of
-			1 -> ok;
-			0 -> z_db:q("insert into identity (rsc_id, type, key, props) values ($1,$2,$3,$4)", [RscId, Type, Key, Props], Ctx)
-		end
-	end,
-	z_db:transaction(F, Context).
-	
-get_props(RscId, Type, Key, Context) ->
-	case z_db:q1("select props from identity where rsc_id = $1 and key = $2 and type = $3", [RscId, Key, Type], Context) of
-		undefined -> [];
-		Props -> Props
-	end.
-
 
 set_by_type(RscId, Type, Key, Context) ->
 	F = fun(Ctx) -> 
