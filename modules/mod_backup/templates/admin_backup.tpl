@@ -23,7 +23,7 @@
 			{% endif %}
             {% else %}
             <p class="error">
-                <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work the problem(s) below have been resolved: _}
+                <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
                 {% if not backup_config.db_dump %}<br/><strong>{_ The "pg_dump" command was not found in the path. Set the "mod_backup.pg_dump" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
                 {% if not backup_config.archive %}<br/><strong>{_ The "tar" command was not found in the path. Set the "mod_backup.tar" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
             </p>

@@ -262,6 +262,7 @@ default(smtp_ssl) -> {ok, false};
 default(smtp_bounce_ip) -> {ok, "127.0.0.1"};
 default(smtp_bounce_port) -> {ok, 2525};
 default(smtp_spamd_port) -> {ok, 783};
+default(smtp_delete_sent_after) -> {ok, 240};
 default(log_dir) -> {ok, filename:join([z_utils:lib_dir(priv), "log"])};
 default(inet_backlog) -> {ok, 500};
 default(webmachine_error_handler) -> {ok, z_webmachine_error_handler};

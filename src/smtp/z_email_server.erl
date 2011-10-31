@@ -41,13 +41,13 @@
 
 % Maximum times we retry to send a message before we mark it as failed.
 -define(MAX_RETRY, 7).
-% The time in minutes how long sent email should be kept in the queue.
--define(DELETE_AFTER, 240).
 % Timeout value for the connection of the spamassassin daemon
 -define(SPAMD_TIMEOUT, 10000).
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
-                smtp_verp_as_from, smtp_bcc, override, smtp_spamd_ip, smtp_spamd_port, sending=[]}).
+                smtp_verp_as_from, smtp_bcc, override, 
+                smtp_spamd_ip, smtp_spamd_port, sending=[],
+                delete_sent_after}).
 -record(email_queue, {id, retry_on=inc_timestamp(now(), 10), retry=0, 
                       recipient, email, created=now(), sent, 
                       pickled_context}).
@@ -256,6 +256,7 @@ update_config(State) ->
     Override = z_config:get(email_override),
     SmtpSpamdIp = z_config:get(smtp_spamd_ip),
     SmtpSpamdPort = z_config:get(smtp_spamd_port),
+    DeleteSentAfter = z_config:get(smtp_delete_sent_after),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
                 smtp_no_mx_lookups=SmtpNoMxLookups,
@@ -263,7 +264,8 @@ update_config(State) ->
                 smtp_bcc=SmtpBcc,
                 override=Override,
                 smtp_spamd_ip=SmtpSpamdIp,
-                smtp_spamd_port=SmtpSpamdPort}.
+                smtp_spamd_port=SmtpSpamdPort,
+                delete_sent_after=DeleteSentAfter}.
 
 
 %% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
@@ -763,7 +765,7 @@ poll_queued(State) ->
                           DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
                                                       QEmail#email_queue.sent /= undefined andalso
                                                         timer:now_diff(
-                                                            inc_timestamp(QEmail#email_queue.sent, ?DELETE_AFTER),
+                                                            inc_timestamp(QEmail#email_queue.sent, State#state.delete_sent_after),
                                                             now()) < 0
                                             ]),
                           DelQueryRes = qlc:e(DelQuery),

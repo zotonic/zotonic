@@ -61,6 +61,11 @@
  % {smtp_no_mx_lookups, false},
  % {smtp_verp_as_from, false},
 
+ %% SMTP mail queue
+ %% How long to keep sent messages in the mail queue (in minutes)
+ %% Leave it long enough to receive any bounce message
+ % {smtp_delete_sent_after, 240},
+
  %% SMTP debug options
  %% Send a copy of outgoing mail to this address
  % {smtp_bcc, "bcc@localhost"},
