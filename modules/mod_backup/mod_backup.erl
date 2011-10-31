@@ -265,12 +265,12 @@ dir(Context) ->
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, Context) ->
-    Host = m_site:get(dbhost, Context),
-    Port = m_site:get(dbport, Context),
-    User = m_site:get(dbuser, Context),
-    Password = m_site:get(dbpassword, Context),
-    Database = m_site:get(dbdatabase, Context),
-    Schema = m_site:get(dbschema, Context),
+    {ok, Host} = pgsql_pool:get_database_opt(host, ?HOST(Context)),
+    {ok, Port} = pgsql_pool:get_database_opt(port, ?HOST(Context)),
+    {ok, User} = pgsql_pool:get_database_opt(username, ?HOST(Context)),
+    {ok, Password} = pgsql_pool:get_database_opt(password, ?HOST(Context)),
+    {ok, Database} = pgsql_pool:get_database_opt(database, ?HOST(Context)),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),
     ok = file:write_file(PgPass, z_convert:to_list(Host)
