@@ -162,8 +162,14 @@ handle_file(_Verb, ".tpl", F) ->
     end;
 
 %% @doc Unknown files
-handle_file(_, _, _) -> %% unknown filename
-    undefined.
+handle_file(_, _, F) -> %% unknown filename
+    case re:run(F, "^.*/dispatch/(.*)") of
+        nomatch ->
+            undefined;
+        {match, _} ->
+            z:flush(),
+            "Flushed cache due to dispatch rule change."
+    end.
 
 
 %% @doc send message to the user
