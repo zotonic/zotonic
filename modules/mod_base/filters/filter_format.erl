@@ -46,6 +46,8 @@ format(Input, Args, _Context) when is_list(Input) andalso is_list(Args) ->
         Arg ->
             do_format(Input, [Arg], [])
     end;
+format(Input, Args, Context) when is_binary(Input) ->
+    format(z_convert:to_list(Input), Args, Context);
 format(Input, _Args, _Context) ->
     Input.
 
