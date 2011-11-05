@@ -134,6 +134,19 @@ handle_file(_Verb, ".scss", F) ->
             undefined
     end;
 
+%% @doc LESS from lib/less -> lib/css
+handle_file(_Verb, ".less", F) ->
+    InPath = filename:dirname(F),
+    OutPath = filename:join(filename:dirname(InPath), "css"),
+    case filelib:is_dir(OutPath) of
+        true ->
+            OutFile = filename:join(OutPath, filename:basename(F, ".less")++".css"),
+            os:cmd("lessc " ++ z_utils:os_escape(F) ++ " > " ++ z_utils:os_escape(OutFile)),
+            "Compiled " ++ OutFile;
+        false ->
+            undefined
+    end;
+
 %% @doc Coffeescript from lib/coffee -> lib/js
 handle_file(_Verb, ".coffee", F) ->
     InPath = filename:dirname(F),

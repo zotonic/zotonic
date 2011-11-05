@@ -151,6 +151,7 @@ start_inotify() ->
     os:cmd("killall inotifywait"),
     Args = ["-e", "modify,create", "-m", "-r",
             filename:join(os:getenv("ZOTONIC"), "src"),
+            filename:join(os:getenv("ZOTONIC"), "priv/sites"),
             filename:join(os:getenv("ZOTONIC"), "modules")
             |
             string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
