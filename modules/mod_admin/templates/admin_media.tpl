@@ -3,8 +3,9 @@
 {% block title %}{_ Media _}{% endblock %}
 
 {% block search %}
-<div class="right search">
-    <form action="{% url admin_media %}" method="get">
+<div class="right">
+    {% all include "_admin_headeritem.tpl" %}
+    <form class="headeritem" action="{% url admin_media %}" method="get">
         <input type="hidden" name="qsort" value="{{ q.qsort }}" />
         <input type="hidden" name="qcat" value="{{ q.qcat }}" />
         <div class="search-wrapper">
