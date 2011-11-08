@@ -47,6 +47,7 @@
     object_edge_ids/3,
     subject_edge_ids/3,
     update_sequence/4,
+    set_sequence/4,
     update_sequence_edge_ids/4,
     object_predicates/2,
     subject_predicates/2,
@@ -511,6 +512,43 @@ update_sequence(Id, Pred, ObjectIds, Context) ->
             {error, eacces}
     end.
 
+
+%% @doc Set edges order so that the specified object ids are in given order.
+%% Any extra edges not speicified will be deleted, and any missing edges will be inserted.
+%% @spec set_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
+set_sequence(Id, Pred, ObjectIds, Context) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            PredId = m_predicate:name_to_id_check(Pred, Context),
+            F = fun(Ctx) ->
+                        All = z_db:q("
+                            select object_id, id
+                            from edge
+                            where predicate_id = $1
+                              and subject_id = $2", [PredId, Id], Ctx),
+
+                        [ delete(EdgeId, Context) || {ObjectId, EdgeId} <- All, not lists:member(ObjectId, ObjectIds) ],
+                        NewEdges = [ begin
+                                         {ok, EdgeId} = insert(Id, Pred, ObjectId, Context),
+                                         {ObjectId, EdgeId}
+                                     end
+                                     || ObjectId <- ObjectIds,
+                                        not lists:member(ObjectId, All)
+                                   ],
+
+                        AllEdges = All ++ NewEdges,
+                        SortedEdgeIds = [ proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds ],
+                        z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                        m_rsc:touch(Id, Ctx),
+                        ok
+                end,
+
+            Result = z_db:transaction(F, Context),
+            z_depcache:flush(Id, Context),
+            Result;
+        false ->
+            {error, eacces}
+    end.
 
 
 %% @doc Update the sequence for the given edge ids.  Optionally rename the predicate on the edge.
