@@ -264,8 +264,8 @@ InheritTag -> open_tag inherit_keyword close_tag : inherit.
 
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag __keyword string_literal TransArgs close_tag : {trans_ext, '$3', '$4'}.
-IncludeTag -> open_tag OptionalAll include_keyword string_literal Args close_tag : {include, '$4', '$5', '$2'}.
-CatIncludeTag -> open_tag OptionalAll catinclude_keyword string_literal E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
+IncludeTag -> open_tag OptionalAll include_keyword E Args close_tag : {include, '$4', '$5', '$2'}.
+CatIncludeTag -> open_tag OptionalAll catinclude_keyword E E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
 NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
 
 OptionalAll -> all_keyword : true.

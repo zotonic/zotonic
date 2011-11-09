@@ -395,10 +395,10 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                     TreeWalkerAcc);
             ({'text', _Pos, String}, TreeWalkerAcc) -> 
                 string_ast(String, TreeWalkerAcc);
-            ({'include', {string_literal, _, File}, Args, All}, TreeWalkerAcc) ->
-                include_ast(unescape_string_literal(File), Args, All, Context, TreeWalkerAcc);
-            ({'catinclude', {string_literal, _, File}, RscId, Args, All}, TreeWalkerAcc) ->
-                catinclude_ast(unescape_string_literal(File), RscId, Args, All, Context, TreeWalkerAcc);
+            ({'include', Template, Args, All}, TreeWalkerAcc) ->
+                include_ast(Template, Args, All, Context, TreeWalkerAcc);
+            ({'catinclude', Template, RscId, Args, All}, TreeWalkerAcc) ->
+                catinclude_ast(Template, RscId, Args, All, Context, TreeWalkerAcc);
             ({'if', {'expr', "b_not", E}, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = empty_ast(TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(Contents, Context, TreeWalker1),
@@ -607,7 +607,7 @@ string_ast(String, TreeWalker) ->
     {{erl_syntax:binary([erl_syntax:binary_field(erl_syntax:integer(X)) || X <- String]), #ast_info{}}, TreeWalker}.       
 
 catinclude_ast(File, Id, Args, All, Context, TreeWalker) ->
-    Args1 = [ {{identifier, none, "$file"},{string_literal, none, File}},
+    Args1 = [ {{identifier, none, "$file"}, File},
 			  {{identifier, none, "id"}, Id} | Args],
     scomp_ast("catinclude", Args1, All, Context, TreeWalker).
 
@@ -629,8 +629,9 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                             end,
                             {false, false},
                             Args),
-    case UseScomp of
-        false ->
+    case {UseScomp, File} of
+        {false, {string_literal, _, Template}} ->
+            Template1 = unescape_string_literal(Template),
             {InterpretedArgs, TreeWalker1} = interpreted_args(Args, Context, TreeWalker),
             {ScopedArgs, ArgAsts} = lists:foldr(
                 fun({AKey, AAst}, {ScopeAcc, AstAcc}) ->
@@ -693,10 +694,10 @@ include_ast(File, Args, All, Context, TreeWalker) ->
             end,
 
             % Compile all included files, put them in a block expr with a single assignment of the argument vars at the start.
-            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(File, All, Context)) of
+            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(Template1, All, Context)) of
                 {[], _, TreeWalkerN} ->
                     case All of
-                        false -> ?LOG("include_ast: could not find template ~p", [File]);
+                        false -> ?LOG("include_ast: could not find template ~p", [Template1]);
                         true -> ok
                     end,
                     {{erl_syntax:string(""), #ast_info{}}, TreeWalkerN};
@@ -704,8 +705,8 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                     AstN = erl_syntax:block_expr(ArgAsts1 ++ [erl_syntax:list(lists:reverse(AstList))]),
                     {{AstN, AstInfo}, TreeWalkerN}
             end;
-        true ->
-            Args1 = [{{identifier, none, "$file"},{string_literal, none, File}} | Args],
+        _ ->
+            Args1 = [{{identifier, none, "$file"},File} | Args],
             scomp_ast("include", Args1, All, Context, TreeWalker)
     end.
 
