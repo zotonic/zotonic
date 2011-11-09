@@ -101,7 +101,7 @@ activate(Module, Context) ->
             1 -> 1
         end
     end,
-    z_db:transaction(F, Context),
+    1 = z_db:transaction(F, Context),
     upgrade(Context).
 
 
