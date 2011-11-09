@@ -91,7 +91,7 @@ get_id(Context) ->
                     {undefined, Context};
                 Id ->
                     RscId = m_rsc:rid(Id, Context),
-                    {{ok, RscId}, z_context:set(id, RscId, Context)}
+                    {RscId, z_context:set(id, {ok, RscId}, Context)}
             end;
         {ok, Id} ->
             {Id, Context}

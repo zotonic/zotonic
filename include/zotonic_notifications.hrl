@@ -85,6 +85,11 @@
 %% @doc Set the language of the context to a user's prefered language (first)
 -record(set_user_language, {id}).
 
+%% @doc Rewrite an url after it has been generated using the z_dispatcher (foldl)
+-record(url_rewrite, {dispatch, args=[]}).
+
+%% @doc Rewrite an url before it will be dispatched using the z_dispatcher (foldl)
+-record(dispatch_rewrite, {}).
 
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list

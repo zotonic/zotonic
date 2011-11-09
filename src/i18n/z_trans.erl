@@ -200,10 +200,11 @@ language_list(_Context) ->
 %% @doc check if the two letter code is a valid language
 %% @spec is_language(LanguageString) -> bool()
 %%   LanguageString = string()
-is_language(LanguageString) ->
+is_language([_,_] = LanguageString) ->
 	Language = iso639:lc2lang(LanguageString),
-	Language /= "".
-	
+	Language /= "";
+is_language(_) ->
+    false.
 
 %% @doc Translate a language to an atom, fail when unknown language
 %% @spec lc2(LanguageString) -> Language

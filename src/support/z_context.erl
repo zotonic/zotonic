@@ -563,15 +563,19 @@ get_q(Key, Context, Default) ->
 %% @spec get_q_all(Context) -> [{Key::string(), [Values]}]
 %% @doc Get all parameters.
 get_q_all(Context) ->
-    {'q', Qs} = proplists:lookup('q', Context#context.props),
-    Qs.
+    case proplists:lookup('q', Context#context.props) of
+        {'q', Qs} -> Qs;
+        none -> []
+    end.
 
 
 %% @spec get_q_all(Key::string(), Context) -> [Values]
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
 get_q_all(Key, Context) ->
-    {'q', Qs} = proplists:lookup('q', Context#context.props),
-    proplists:get_all_values(z_convert:to_list(Key), Qs).
+    case proplists:lookup('q', Context#context.props) of
+        none -> [];
+        {'q', Qs} -> proplists:get_all_values(z_convert:to_list(Key), Qs)
+    end.
 
 
 %% @spec get_q_all_noz(Context) -> [{Key::string(), [Values]}]

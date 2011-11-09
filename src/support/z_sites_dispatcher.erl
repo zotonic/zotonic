@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 %% Date: 2009-12-15
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -63,13 +63,20 @@ start_link(Args) when is_list(Args) ->
 %%                   | handled
 dispatch(Host, Path, ReqData) ->
     case gen_server:call(?MODULE, {dispatch, Host, Path, ReqData}) of
-        {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqData1} when MatchedHost =/= undefined ->
+        {{no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}, ReqData1} when MatchedHost =/= undefined ->
             %% Check if there is a matching resource page_path for the host
-            Context = z_context:new(MatchedHost),
-            case m_rsc:page_path_to_id(Path, Context) of
+            Context = case lists:keyfind(z_language, 1, Bindings) of
+                          {z_language, Language} -> z_context:set_language(list_to_atom(Language), z_context:new(MatchedHost));
+                          false -> z_context:new(MatchedHost)
+                      end,
+            RewrittenPath = case NonMatchedPathTokens of 
+                                undefined -> Path;
+                                _ -> string:join(NonMatchedPathTokens, "/")
+                            end,
+            case m_rsc:page_path_to_id(RewrittenPath, Context) of
                 {ok, Id} ->
                     %% We found the id, lookup the page uri
-                    DefaultPagePath = lists:flatten(m_rsc:p_no_acl(Id, default_page_url, Context)),
+                    DefaultPagePath = binary_to_list(m_rsc:p_no_acl(Id, default_page_url, Context)),
                     gen_server:call(?MODULE, {dispatch, Host, DefaultPagePath, ReqData});
                 {error, _} ->
                     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqData1}
@@ -121,8 +128,8 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                     case wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) of
                         {redirect, ProtocolAsString, Hostname} ->
                             {handled, redirect(false, ProtocolAsString, Hostname, ReqData)};
-                        {no_dispatch_match, UnmatchedPathTokens} ->
-                            {{no_dispatch_match, Host, UnmatchedPathTokens}, RDHost};
+                        {no_dispatch_match, UnmatchedPathTokens, Bindings} ->
+                            {{no_dispatch_match, Host, UnmatchedPathTokens, Bindings}, RDHost};
                         {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
                             {{Mod, ModOpts, 
                               [], none, % Host info
@@ -139,7 +146,7 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                                        end,
                     {handled, redirect(true, ProtocolAsString, Hostname, ReqData)};
                 no_host_match ->
-                    {{no_dispatch_match, undefined, undefined}, ReqData}
+                    {{no_dispatch_match, undefined, undefined, []}, ReqData}
             end,
     {reply, Reply, State};
 
@@ -455,7 +462,10 @@ filter_ssl(_, Rules) ->
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
 wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
+    Context = z_context:new(Host),
     Path = string:tokens(PathAsString, [?SEPARATOR]),
+    {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{}, {Path, []}, Context),
+        
     % URIs that end with a trailing slash are implicitly one token
     % "deeper" than we otherwise might think as we are "inside"
     % a directory named by the last token.
@@ -463,12 +473,12 @@ wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
 		     true -> 1;
 		     _ -> 0
 		 end,
-    try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path, [], ExtraDepth).
+    try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, ExtraDepth, Context).
 
-try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, _, _) ->
-    {no_dispatch_match, PathTokens};
-try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth) ->
-    case bind(Host, PathSchema, PathTokens, Bindings, 0) of
+try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->
+    {no_dispatch_match, PathTokens, Bindings};
+try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth, Context) ->
+    case bind(Host, PathSchema, PathTokens, Bindings, 0, Context) of
         {ok, Remainder, NewBindings, Depth} ->
             case {proplists:get_value(ssl, Props), IsSSL} of
                 {undefined, true} ->
@@ -490,7 +500,7 @@ try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Pro
                     {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)}
             end;
         fail -> 
-            try_path_binding(IsSSL, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth)
+            try_path_binding(IsSSL, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth, Context)
          
     end.
     
@@ -498,38 +508,43 @@ try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Pro
 %     {Host_, _OldPort} = split_host(Host),
 %     Host_ ++ [$: | integer_to_list(Port)].
 
-bind(_Host, [], [], Bindings, Depth) ->
+bind(_Host, [], [], Bindings, Depth, _Context) ->
     {ok, [], Bindings, Depth};
-bind(_Host, [?MATCH_ALL], Rest, Bindings, Depth) when is_list(Rest) ->
+bind(_Host, [?MATCH_ALL], Rest, Bindings, Depth, _Context) when is_list(Rest) ->
     {ok, Rest, Bindings, Depth + length(Rest)};
-bind(_Host, _, [], _, _) ->
+bind(_Host, _, [], _, _, _Context) ->
     fail;
-bind(Host, [Token|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
-    bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
-bind(Host, [{Token, {Module,Function}}|RestToken],[Match|RestMatch],Bindings,Depth) 
+bind(Host, [z_language|RestToken],[Match|RestMatch],Bindings,Depth, Context) ->
+    case z_trans:is_language(Match) of
+        true -> bind(Host, RestToken, RestMatch, [{z_language, Match}|Bindings], Depth + 1, Context);
+        false -> fail
+    end;
+bind(Host, [Token|RestToken],[Match|RestMatch],Bindings,Depth, Context) when is_atom(Token) ->
+    bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1, Context);
+bind(Host, [{Token, {Module,Function}}|RestToken],[Match|RestMatch],Bindings,Depth, Context) 
 when is_atom(Token), is_atom(Module), is_atom(Function) ->
-    case Module:Function(Match, z_context:new(Host)) of
-        true -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1);
+    case Module:Function(Match, Context) of
+        true -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth + 1, Context);
         false -> fail;
-        {ok, Value} -> bind(Host, RestToken, RestMatch, [{Token, Value}|Bindings], Depth+1)
+        {ok, Value} -> bind(Host, RestToken, RestMatch, [{Token, Value}|Bindings], Depth+1, Context)
     end;
-bind(Host, [{Token, RegExp}|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+bind(Host, [{Token, RegExp}|RestToken],[Match|RestMatch],Bindings,Depth, Context) when is_atom(Token) ->
     case re:run(Match, RegExp) of
-        {match, _} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        {match, _} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1, Context);
         nomatch -> fail
     end;
-bind(Host, [{Token, RegExp, Options}|RestToken],[Match|RestMatch],Bindings,Depth) when is_atom(Token) ->
+bind(Host, [{Token, RegExp, Options}|RestToken],[Match|RestMatch],Bindings,Depth, Context) when is_atom(Token) ->
     case re:run(Match, RegExp, Options) of
-        {match, []} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
-        {match, [T|_]} when is_tuple(T) -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
-        {match, [Captured]} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1);
-        {match, Captured} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1);
-        match -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1);
+        {match, []} -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1, Context);
+        {match, [T|_]} when is_tuple(T) -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1, Context);
+        {match, [Captured]} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1, Context);
+        {match, Captured} -> bind(Host, RestToken, RestMatch, [{Token, Captured}|Bindings], Depth+1, Context);
+        match -> bind(Host, RestToken, RestMatch, [{Token, Match}|Bindings], Depth+1, Context);
         nomatch -> fail
     end;
-bind(Host, [Token|RestToken], [Token|RestMatch], Bindings, Depth) ->
-    bind(Host, RestToken, RestMatch, Bindings, Depth + 1);
-bind(_Host, _, _, _, _) ->
+bind(Host, [Token|RestToken], [Token|RestMatch], Bindings, Depth, Context) ->
+    bind(Host, RestToken, RestMatch, Bindings, Depth + 1, Context);
+bind(_Host, _, _, _, _, _Context) ->
     fail.
 
 reconstitute([]) -> "";

@@ -1,3 +1,4 @@
+
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Refresh the current page.
@@ -20,5 +21,8 @@
 -include("zotonic.hrl").
 -export([render_action/4]).
 
-render_action(_TriggerId, _TargetId, _Args, Context) ->
-	{"z_reload();", Context}.
+render_action(_TriggerId, _TargetId, Args, Context) ->
+    case Args of
+        [] -> {"z_reload();", Context};
+        _ -> {["z_reload(",z_utils:js_object(Args),$),$;], Context}
+    end.

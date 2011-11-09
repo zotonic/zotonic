@@ -354,7 +354,7 @@ p_no_acl(Id, exists, Context) -> exists(Id, Context);
 p_no_acl(Id, page_url, Context) -> 
     case p_no_acl(Id, page_path, Context) of
         undefined -> page_url(Id, Context);
-        PagePath -> PagePath
+        PagePath -> z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context)
     end;
 p_no_acl(Id, translation, Context) ->
     fun(Code) ->
@@ -396,6 +396,13 @@ p_no_acl(Id, day_end, Context) ->
         {{_,_,_} = Date, _} -> Date;
         _Other -> undefined
     end;
+% p_no_acl(Id, title, Context) ->
+%     Title = p_cached(Id, title, Context),
+%     Title1 = case z_utils:is_empty(Title) of true -> undefined; false -> Title end,
+%     case z_notifier:first(#rsc_property{id=Id, property=title, value=Title1}, Context) of
+%         undefined -> Title;
+%         OtherTitle -> OtherTitle
+%     end;
 
 % Check if the requested predicate is a readily available property or an edge
 p_no_acl(Id, Predicate, Context) when is_integer(Id) -> 

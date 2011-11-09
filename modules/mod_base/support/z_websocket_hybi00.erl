@@ -26,7 +26,7 @@
 
 start(WsKey1, ReqData, Context1) ->
     Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = z_dispatcher:url_for(websocket, [{z_pageid, z_context:get_q("z_pageid", Context1)}],Context1),
+    WebSocketPath = iolist_to_binary(["/websocket?z_pageid=", mochiweb_util:quote_plus(z_context:get_q("z_pageid", Context1))]),
     Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
     Socket = webmachine_request:socket(ReqData),
 
