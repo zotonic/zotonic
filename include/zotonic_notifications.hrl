@@ -89,7 +89,7 @@
 -record(url_rewrite, {dispatch, args=[]}).
 
 %% @doc Rewrite an url before it will be dispatched using the z_dispatcher (foldl)
--record(dispatch_rewrite, {}).
+-record(dispatch_rewrite, {is_dir=false, path=""}).
 
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list

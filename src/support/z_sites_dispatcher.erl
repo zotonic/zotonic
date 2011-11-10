@@ -464,15 +464,20 @@ filter_ssl(_, Rules) ->
 wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
     Context = z_context:new(Host),
     Path = string:tokens(PathAsString, [?SEPARATOR]),
-    {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{}, {Path, []}, Context),
+    IsDir = lists:last(PathAsString) == ?SEPARATOR,
+    {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString}, {Path, []}, Context),
         
     % URIs that end with a trailing slash are implicitly one token
     % "deeper" than we otherwise might think as we are "inside"
     % a directory named by the last token.
-    ExtraDepth = case lists:last(PathAsString) == ?SEPARATOR of
-		     true -> 1;
-		     _ -> 0
-		 end,
+    ExtraDepth = case Path1 of 
+                    [] -> 1;
+                    _ -> 
+                        case IsDir of
+                		     true -> 1;
+                		     _ -> 0
+                		end
+		         end,
     try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, ExtraDepth, Context).
 
 try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->

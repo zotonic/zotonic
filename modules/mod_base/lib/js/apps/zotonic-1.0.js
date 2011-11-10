@@ -338,13 +338,18 @@ function z_reload(args)
 		else {
     	    var qs = ensure_name_value(args);
 
-    		if (   qs.length == 1 
-    		    &&  typeof args.z_language == "string"
-    		    &&  (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/"
-    		        || window.location.pathname == "/")) {
-    		    var href = window.location.protocol+"//"+window.location.host
-    		            +"/"+args.z_language+"/"
-    		            +window.location.pathname.substring(2+args.z_language.length);
+    		if (qs.length == 1 &&  typeof args.z_language == "string") {
+    		    var href;
+    		    
+    		    if (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/") {
+        		    href = window.location.protocol+"//"+window.location.host
+        		            +"/"+args.z_language+"/"
+        		            +window.location.pathname.substring(2+args.z_language.length);
+        		} else {
+        		    href = window.location.protocol+"//"+window.location.host
+        		            +"/"+args.z_language
+        		            +window.location.pathname;
+        		}
     		    if (window.location.search == "")
     		        window.location.href = href;
     		    else

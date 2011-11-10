@@ -135,24 +135,30 @@ observe_set_user_language(#set_user_language{}, Context, _Context) ->
 observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case lists:keyfind(z_language, 1, Args) of
         false ->
-            % Insert the current language in front of the url
-            iolist_to_binary([$/, atom_to_list(z_context:language(Context)), Url]);
+            case is_multiple_languages_config(Context) of
+                true ->
+                    % Insert the current language in front of the url
+                    iolist_to_binary([$/, atom_to_list(z_context:language(Context)), Url]);
+                false ->
+                    Url
+            end;
         _ ->
             Url
     end.
     
-observe_dispatch_rewrite(#dispatch_rewrite{}, {Parts, Args} = Dispatch, _Context) ->
+observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispatch, _Context) ->
     case Parts of
-        [] -> 
-            Dispatch;
-        [First|Rest] ->
+        [First|Rest] when IsDir orelse Rest /= [] ->
             case z_trans:is_language(First) of
                 true ->
                     {Rest, [{z_language, First}|Args]};
                 false ->
                     Dispatch
-            end
+            end;
+        _ ->
+            Dispatch
     end.
+
 
 observe_scomp_script_render(#scomp_script_render{}, Context) ->
     [<<"z_language=\"">>, atom_to_list(z_context:language(Context)), $", $; ].
@@ -309,6 +315,16 @@ language_enable(Code, IsEnabled, Context) ->
     Languages1 = lists:usort([{Code, Lang1} | proplists:delete(Code, Languages)]),
     set_language_config(Languages1, Context).
 
+
+is_multiple_languages_config(Context) ->
+    case z_memo:get(is_multiple_languages_config) of
+        V when is_boolean(V) ->
+            V;
+        _ ->
+            Languages = lists:filter(fun({_,Props}) -> proplists:get_value(is_enabled, Props) =:= true end,
+                                     get_language_config(Context)),
+            z_memo:set(is_multiple_languages_config, length(Languages) > 1)
+    end.
 
 %% @doc Get the list of languages
 get_language_config(Context) ->
