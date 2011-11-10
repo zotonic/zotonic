@@ -146,12 +146,15 @@ observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
             Url
     end.
     
-observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispatch, _Context) ->
+observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispatch, Context) ->
     case Parts of
         [First|Rest] when IsDir orelse Rest /= [] ->
             case z_trans:is_language(First) of
                 true ->
-                    {Rest, [{z_language, First}|Args]};
+                    case lists:keyfind(list_to_atom(First), 1, get_enabled_languages(Context)) of
+                        false -> Dispatch;
+                        _ -> {Rest, [{z_language, First}|Args]}
+                    end;
                 false ->
                     Dispatch
             end;
@@ -317,13 +320,16 @@ language_enable(Code, IsEnabled, Context) ->
 
 
 is_multiple_languages_config(Context) ->
-    case z_memo:get(is_multiple_languages_config) of
+    length(get_enabled_languages(Context)) > 1.
+
+get_enabled_languages(Context) ->
+    case z_memo:get('mod_translation$enabled_languages') of
         V when is_boolean(V) ->
             V;
         _ ->
             Languages = lists:filter(fun({_,Props}) -> proplists:get_value(is_enabled, Props) =:= true end,
                                      get_language_config(Context)),
-            z_memo:set(is_multiple_languages_config, length(Languages) > 1)
+            z_memo:set('mod_translation$enabled_languages', Languages)
     end.
 
 %% @doc Get the list of languages
