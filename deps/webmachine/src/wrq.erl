@@ -172,15 +172,22 @@ set_response_code(Code, RD) when is_integer(Code) ->
 
 get_resp_header(HdrName, _RD=#wm_reqdata{resp_headers=RespH}) ->
     mochiweb_headers:get_value(HdrName, RespH).
+
 set_resp_header(K, V, RD=#wm_reqdata{resp_headers=RespH})
   when is_list(K),is_list(V) ->
-    RD#wm_reqdata{resp_headers=mochiweb_headers:enter(K, V, RespH)}.
+    RD#wm_reqdata{resp_headers=mochiweb_headers:enter(K, V, RespH)};
+set_resp_header(K, V, RD=#wm_reqdata{resp_headers=RespH})
+  when is_list(K),is_binary(V) ->
+    RD#wm_reqdata{resp_headers=mochiweb_headers:enter(K, binary_to_list(V), RespH)}.
+
 set_resp_headers(Hdrs, RD=#wm_reqdata{resp_headers=RespH}) ->
     F = fun({K, V}, Acc) -> mochiweb_headers:enter(K, V, Acc) end,
     RD#wm_reqdata{resp_headers=lists:foldl(F, RespH, Hdrs)}.
+
 fresh_resp_headers(Hdrs, RD) ->
     F = fun({K, V}, Acc) -> mochiweb_headers:enter(K, V, Acc) end,
     RD#wm_reqdata{resp_headers=lists:foldl(F, mochiweb_headers:empty(), Hdrs)}.
+
 remove_resp_header(K, RD=#wm_reqdata{resp_headers=RespH}) when is_list(K) ->
     RD#wm_reqdata{resp_headers=mochiweb_headers:from_list(
                                  proplists:delete(K,
