@@ -56,6 +56,7 @@ init(Context) ->
             case m_config:get(i18n, language_list, Context) of
                 undefined ->
                     m_config:set_prop(i18n, language_list, list, [
+                            {ar, [ {language, <<"العربية">>}, {is_enabled, false}]},
                             {en, [ {language, <<"English">>}, {is_enabled, true}]},
                             {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},

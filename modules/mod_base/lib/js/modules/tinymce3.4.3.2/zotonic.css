@@ -35,6 +35,10 @@ body.mceContentBody {
 	margin: 0;
 }
 
+body[dir=rtl].mceContentBody {
+    font: 18px/24px "Lucida Grande", "Lucida Sans", Helvetica, sans-serif;
+}
+
 body.mceForceColors {
 	background: #fff;
 	color: #666;

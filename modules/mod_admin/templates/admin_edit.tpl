@@ -12,7 +12,7 @@
 
 			{% if not is_editable %}
 				<h2>
-					{_ You are not allowed to edit the _} {{ m.rsc[r.category_id].title|lower }} “{{ r.title|striptags }}”
+					{_ You are not allowed to edit the _} {{ m.rsc[r.category_id].title|lower }} “<span {% include "_language_attrs.tpl" %}>{{ r.title|striptags }}</span>”
 				</h2>
 			{% else %}
 				<p class="admin-chapeau">{_ editing _}:
@@ -22,7 +22,7 @@
 						{_ Created by _} {{ m.rsc[r.creator_id].title }}.<br/>
 					</span>
 				</p>
-				<h2>{{ r.title|striptags|default:_"<em>untitled</em>" }}
+				<h2 {% include "_language_attrs.tpl" %}>{{ r.title|striptags|default:_"<em>untitled</em>" }}
                     {% if m.acl.insert[r.category.name|as_atom] and not r.is_a.meta %}
 					<span>{{ m.rsc[r.category_id].title|lower }} <a href="javascript:;" id="changecategory">{_ change _}</a></span>
                     {% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}

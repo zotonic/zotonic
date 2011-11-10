@@ -158,6 +158,11 @@ hr {
 		float: left;
 		display: block;
 	}
+
+	.short-list li span[dir=rtl] {
+	    float: right;
+	    margin-right: 10px;
+	}
 	
 	.short-list li.log-warning, .short-list li.log-warning a {
         color: #930;
@@ -375,7 +380,7 @@ a:focus {
 	#navigation li a {
 		height: 27px;
 		line-height: 27px;
-		padding: 0 0 0 9px;
+		padding: 0 4px 0 9px;
 		border-bottom: 1px solid #ddd;
 		float: none;
 		display: block;
@@ -1023,6 +1028,10 @@ body.wait button {
 		text-decoration: none;
 	}
 
+    body[dir=rtl] .ui-tabs-nav li {
+        float: right;
+    }
+
 	.ui-tabs-nav .ui-state-hover {
 		border-color: #999;
 		background-color: #e4e4e4;
@@ -1072,4 +1081,15 @@ th {
 
 table {
     margin-bottom: 18px;
+}
+
+/* Some extra rtl definitions */
+
+input[type="text"].rtl, textarea.rtl {
+    font-size: 150%;
+}
+
+body[dir=rtl] label {
+    float: right;
+    text-align: right;
 }

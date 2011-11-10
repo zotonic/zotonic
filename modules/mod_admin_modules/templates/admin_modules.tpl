@@ -3,7 +3,7 @@
 {% block title %}{_ Modules _}{% endblock %}
 
 {% block content %}
-	<div id="content" class="zp-85">
+	<div id="content" class="zp-85"  {% include "_language_attrs.tpl" language=`en` %}>
 		<div class="block clearfix">
 
 		<h2>{_ Modules _}</h2>

@@ -15,7 +15,7 @@
 	    <div class="zp-50">
 		<div class="form-item clearfix">
 		    <label for="field-page-path">{_ Page path, default is _} <em>{{ r.default_page_url|escape }}</em></label>
-		    <input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %} />
+		    <input type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %}/>
 		</div>
 	    </div>
 
@@ -23,7 +23,7 @@
 		<div class="zp-50">
 		    <div class="form-item clearfix">
 			<label for="field-name">{_ Unique name _}</label>
-			<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} />
+			<input type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
 		    </div>
 		</div>
 	    {% else %}

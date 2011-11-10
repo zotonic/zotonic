@@ -5,14 +5,16 @@
 		<label for="field-title{{ lang_code_with_dollar }}">{_ Title _} {{ lang_code_with_brackets }}</label>
 		<input type="text" class="field-title" id="field-title{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
 			value="{{ is_i18n|if : r.translation[lang_code].title : r.title }}"
-			{% if not is_editable %}disabled="disabled"{% endif %}/>
+			{% if not is_editable %}disabled="disabled"{% endif %}
+			{% include "_language_attrs.tpl" language=lang_code %}/>
 	</div>
 
 	<div class="form-item clearfix">
 		<label for="field-short-title{{ lang_code_with_dollar }}">{_ Short title _} {{ lang_code_with_brackets }}</label>
 		<input type="text" id="field-short-title{{ lang_code_with_dollar }}" name="short_title{{ lang_code_with_dollar }}" 
 			value="{{ is_i18n|if : r.translation[lang_code].short_title : r.short_title }}"
-			{% if not is_editable %}disabled="disabled"{% endif %} />
+			{% if not is_editable %}disabled="disabled"{% endif %} 
+			{% include "_language_attrs.tpl" language=lang_code %} />
 	</div>
 
 	<div class="form-item clearfix">

@@ -28,6 +28,8 @@
     lookup/3,
     lookup_fallback/2,
     lookup_fallback/3,
+    lookup_fallback_language/2,
+    lookup_fallback_language/3,
     default_language/1, 
     is_language/1, 
     language_list/1,
@@ -151,6 +153,47 @@ lookup_fallback(Text, _Lang, _Context) ->
             EnglishText -> 
                 EnglishText
         end.
+
+
+lookup_fallback_language(Langs, Context) ->
+    lookup_fallback_language(Langs, z_context:language(Context), Context).
+
+lookup_fallback_language([], Lang, _Context) ->
+    Lang;
+lookup_fallback_language(Langs, Lang, Context) ->
+    case lists:member(Lang, Langs) of
+        false ->
+            case default_language(Context) of
+                undefined -> 
+                    case lists:member(en, Langs) of
+                        true ->
+                            en;
+                        false ->
+                            case Langs of
+                                [] -> Lang;
+                                [L|_] -> L
+                            end
+                    end;
+                CfgLang ->
+                    CfgLangAtom = z_convert:to_atom(CfgLang),
+                    case lists:member(CfgLangAtom, Langs) of
+                        false ->
+                            case lists:member(en, Langs) of
+                                true ->
+                                    en;
+                                false ->
+                                    case Langs of
+                                        [] -> Lang;
+                                        [L|_] -> L
+                                    end
+                            end;
+                        true ->
+                            CfgLangAtom
+                    end
+            end;
+        true -> 
+            Lang
+    end.
 
 
 %% @doc translate a string or trans record into another language

@@ -23,7 +23,7 @@ limitations under the License.
 tinyInit = {
 	mode: "none",
 	theme: "advanced",
-    theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,cleanup,code,|,formatselect,|,zlink,zmedia",
+    theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,ltr,rtl,|,link,unlink,|,cleanup,code,|,formatselect,|,zlink,zmedia",
 	theme_advanced_buttons2: "tablecontrols,outdent,indent",
 	theme_advanced_buttons3: "",
 	theme_advanced_buttons4: "",
@@ -59,7 +59,7 @@ tinyInit = {
 	tab_focus: ":prev,:next", 
 	content_css: "/lib/js/modules/tinymce3.4.3.2/zotonic.css", 
 	wpeditimage_disable_captions: "", 
-	plugins: "paste,table,zlink,zmedia,autosave",
+	plugins: "paste,table,zlink,zmedia,autosave,directionality",
 	table_row_limit: 100,
 	table_col_limit: 10	
 }
