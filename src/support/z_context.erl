@@ -792,8 +792,14 @@ language(Context) ->
 
 %% @doc Set the language of the context.
 %% @spec set_language(atom(), context()) -> context()
+set_language(Lang, Context) when is_atom(Lang) ->
+    Context#context{language=Lang};
 set_language(Lang, Context) ->
-    Context#context{language=Lang}.
+    Lang1 = z_convert:to_list(Lang),
+    case z_trans:is_language(Lang1) of
+        true -> set_language(list_to_atom(Lang1), Context);
+        false -> Context
+    end.
 
 %% @doc Set a response header for the request in the context.
 %% @spec set_resp_header(Header, Value, Context) -> NewContext
