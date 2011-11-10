@@ -463,6 +463,9 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 lib_ast(LibList, Args, Context, TreeWalkerAcc);
             ({'cache', [MaxAge, Args], CacheContents}, TreeWalkerAcc) ->
                 cache_ast(MaxAge, Args, CacheContents, Context, TreeWalkerAcc);
+            ({'value', ValueToken, WithArgs}, TreeWalkerAcc) ->
+                {{ValueAst,ValueInfo},ValueTreeWalker} = value_ast(ValueToken, WithArgs, true, Context, TreeWalkerAcc),
+                {{format(ValueAst, Context),ValueInfo},ValueTreeWalker};
             (ValueToken, TreeWalkerAcc) -> 
                 {{ValueAst,ValueInfo},ValueTreeWalker} = value_ast(ValueToken, true, Context, TreeWalkerAcc),
                 {{format(ValueAst, Context),ValueInfo},ValueTreeWalker}
@@ -543,6 +546,48 @@ inherit_ast(Context, TreeWalker) ->
 empty_ast(TreeWalker) ->
     {{erl_syntax:list([]), #ast_info{}}, TreeWalker}.
 
+
+value_ast(ValueToken, [], AsString, Context, TreeWalker) ->
+    value_ast(ValueToken, AsString, Context, TreeWalker);
+value_ast(ValueToken, [{{identifier,_,"sudo"}, true}|Args], AsString, Context, TreeWalker) ->
+    NewContextAst = erl_syntax:application(erl_syntax:atom(z_acl),
+                                           erl_syntax:atom(sudo),
+                                           [z_context_ast(Context)]),
+    ContextVarAst = erl_syntax:variable("WithContext_" ++ [$_|z_ids:identifier()]),
+    LocalScope = [ {'ZpContext', ContextVarAst} ],
+    WithContext = Context#dtl_context{local_scopes=[LocalScope | Context#dtl_context.local_scopes]},
+    {{InnerAst,InfoValue}, TreeWalker1} = value_ast(ValueToken, Args, AsString, WithContext, TreeWalker),
+    WithAst = erl_syntax:block_expr([erl_syntax:match_expr(ContextVarAst, NewContextAst), InnerAst]),
+    {{WithAst, InfoValue}, TreeWalker1};
+value_ast(ValueToken, [{{identifier,_,"anondo"}, true}|Args], AsString, Context, TreeWalker) ->
+    NewContextAst = erl_syntax:application(erl_syntax:atom(z_acl),
+                                           erl_syntax:atom(anondo),
+                                           [z_context_ast(Context)]),
+    ContextVarAst = erl_syntax:variable("WithContext_" ++ [$_|z_ids:identifier()]),
+    LocalScope = [ {'ZpContext', ContextVarAst} ],
+    WithContext = Context#dtl_context{local_scopes=[LocalScope | Context#dtl_context.local_scopes]},
+    {{InnerAst,InfoValue}, TreeWalker1} = value_ast(ValueToken, Args, AsString, WithContext, TreeWalker),
+    WithAst = erl_syntax:block_expr([erl_syntax:match_expr(ContextVarAst, NewContextAst), InnerAst]),
+    {{WithAst, InfoValue}, TreeWalker1};
+value_ast(ValueToken, [{{identifier,_,"z_language"}, Lang}|Args], AsString, Context, TreeWalker) ->
+    {{LangAst,InfoValue1}, TreeWalker1} = value_ast(Lang, false, Context, TreeWalker),
+    NewContextAst = erl_syntax:application(erl_syntax:atom(z_context), 
+                                           erl_syntax:atom(set_language),
+                                           [LangAst, z_context_ast(Context)]),
+    ContextVarAst = erl_syntax:variable("WithContext_" ++ [$_|z_ids:identifier()]),
+    LocalScope = [ {'ZpContext', ContextVarAst} ],
+    WithContext = Context#dtl_context{local_scopes=[LocalScope | Context#dtl_context.local_scopes]},
+    {{InnerAst,InfoValue2}, TreeWalker2} = value_ast(ValueToken, Args, AsString, WithContext, TreeWalker1),
+    WithAst = erl_syntax:block_expr([erl_syntax:match_expr(ContextVarAst, NewContextAst), InnerAst]),
+    {{WithAst, merge_info(InfoValue1,InfoValue2)}, TreeWalker2};
+value_ast(ValueToken, [{{identifier,_,Var}, Value}|Args], AsString, Context, TreeWalker) ->
+    {{ValueAst,InfoValue1}, TreeWalker1} = value_ast(Value, false, Context, TreeWalker),
+    VarAst = erl_syntax:variable("WithContext_" ++ [$_|z_ids:identifier()]),
+    WithContext = Context#dtl_context{local_scopes=[ [{list_to_atom(Var), VarAst}] | Context#dtl_context.local_scopes]},
+    {{InnerAst,InfoValue2}, TreeWalker2} = value_ast(ValueToken, Args, AsString, WithContext, TreeWalker1),
+    WithAst = erl_syntax:block_expr([erl_syntax:match_expr(VarAst, ValueAst), InnerAst]),
+    {{WithAst, merge_info(InfoValue1,InfoValue2)}, TreeWalker2}.
+    
 
 value_ast(ValueToken, AsString, Context, TreeWalker) ->
     case ValueToken of
@@ -903,18 +948,21 @@ resolve_variable_ast(ValueToken, Context, TreeWalker, _FinderFunction) ->
     {{Ast, "$value", Info}, TreeWalker1}.
 
 
-resolve_scoped_variable_ast(VarName, Context) ->
+resolve_scoped_variable_ast(VarName, Context) when is_atom(VarName) ->
     lists:foldl(fun(Scope, Value) ->
                 case Value of
-                    undefined -> proplists:get_value(list_to_atom(VarName), Scope);
+                    undefined -> proplists:get_value(VarName, Scope);
                     _ -> Value
                 end
-        end, undefined, Context#dtl_context.local_scopes).
+        end, undefined, Context#dtl_context.local_scopes);
+resolve_scoped_variable_ast(VarName, Context) when is_list(VarName) ->
+    resolve_scoped_variable_ast(list_to_atom(VarName), Context).
+
 
 
 %% @doc Return the AST for the z_context var
 z_context_ast(Context) ->
-    case resolve_scoped_variable_ast("ZpContext", Context) of
+    case resolve_scoped_variable_ast('ZpContext', Context) of
         undefined -> erl_syntax:variable("ZpContext"); 
         Ast -> Ast
     end.

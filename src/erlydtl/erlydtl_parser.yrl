@@ -3,6 +3,7 @@
 %%% @author    Roberto Saccon <rsaccon@gmail.com> [http://rsaccon.com]
 %%% @author    Evan Miller <emmiller@gmail.com>
 %%% @copyright 2008 Roberto Saccon, Evan Miller
+%%% @copyright 2009-2011 Marc Worrell
 %%% @doc Template language grammar
 %%% @reference  See <a href="http://erlydtl.googlecode.com" target="_top">http://erlydtl.googlecode.com</a> for more information
 %%% @changes Marc Worrell - added print/image/scomp, more args options etc.
@@ -11,6 +12,7 @@
 %%% The MIT License
 %%%
 %%% Copyright (c) 2007 Roberto Saccon, Evan Miller
+%%% Copyright (c) 2009-2011 Marc Worrell
 %%%
 %%% Permission is hereby granted, free of charge, to any person obtaining a copy
 %%% of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +44,7 @@ Nonterminals
     Literal
 
     ValueBraced
+    OptWith
 
     ExtendsTag
     OverrulesTag
@@ -256,7 +259,10 @@ Elements -> Elements WithBlock : '$1' ++ ['$2'].
 Elements -> Elements CacheBlock : '$1' ++ ['$2'].
 
 
-ValueBraced -> open_var E close_var : '$2'.
+ValueBraced -> open_var E OptWith close_var : {value, '$2', '$3'}.
+
+OptWith -> '$empty' : [].
+OptWith -> with_keyword Args : '$2'.
 
 ExtendsTag -> open_tag extends_keyword string_literal close_tag : {extends, '$3'}.
 OverrulesTag -> open_tag overrules_keyword close_tag : overrules.
