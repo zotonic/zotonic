@@ -1,0 +1,50 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_import_wordpress\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-13 16:21+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Import WXR file"
+msgstr "Importuj plik WXR"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:5
+msgid "Import a Wordpress WXR export file into Zotonic."
+msgstr "Importuje plik WXR utworzony przez system WordPress."
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:18
+msgid "Import previously deleted items again"
+msgstr "Zaimportuj ponownie wcześniej usunięte elementy"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:22
+msgid "Start import"
+msgstr "Importuj dane"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2
+msgid "Upload a wordpress WXR file from your computer."
+msgstr "Wczytaj plik WXR z twojego komputera."
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:11
+msgid "WXR file"
+msgstr "Plik WXR"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:2
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Wordpress import"
+msgstr "Import danych z systemu WordPress"
+

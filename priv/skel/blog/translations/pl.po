@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./priv/sites/zc/templates/archives.tpl:3 ./priv/sites/zc/templates/_sidebar.tpl:25 
+msgid "Archive"
+msgstr "Archiwum"
+
+#: ./priv/sites/zc/templates/archives.tpl:6 
+msgid "Archive for"
+msgstr "Archiwum z"
+
+#: ./priv/sites/zc/templates/by_keyword.tpl:6 
+msgid "Articles about"
+msgstr "Artykuły dotyczące"
+
+#: ./priv/sites/zc/templates/by_keyword.tpl:3 
+msgid "Articles for"
+msgstr ""
+
+#: ./priv/sites/zc/templates/_article_keywords.tpl:4 ./priv/sites/zc/templates/_sidebar.tpl:38 
+msgid "Keywords"
+msgstr "Słowa kluczowe"
+
+#: ./priv/sites/zc/templates/_article_prevnext.tpl:7 
+msgid "Next post"
+msgstr "Następny wpis"
+
+#: ./priv/sites/zc/templates/_article_meta.tpl:1 
+msgid "Posted on"
+msgstr "Opublikowany"
+
+#: ./priv/sites/zc/templates/_article_prevnext.tpl:13 
+msgid "Previous post"
+msgstr "Poprzedni wpis"
+
+#: ./priv/sites/zc/templates/_article_summary.tpl:21 ./priv/sites/zc/templates/_article_summary.tpl:36 
+msgid "Read more"
+msgstr "Czytaj dalszą część wpisu"
+
+#: ./priv/sites/zc/templates/base.tpl:64 
+msgid "Website powered by"
+msgstr "Serwis oparty na"
+
+#: ./priv/sites/zc/templates/_article_meta.tpl:2 
+msgid "by"
+msgstr "przez"
+
+#: ./priv/sites/zc/templates/_article_sidebar.tpl:16 ./priv/sites/zc/templates/_sidebar.tpl:48 
+msgid "edit this page"
+msgstr "edytuj stronę"
