@@ -58,7 +58,7 @@ clean_lower(L) -> string:strip(z_string:to_lower(to_list(L))).
 to_list(undefined) -> [];
 to_list(<<>>) -> [];
 to_list({rsc_list, L}) -> L;
-to_list(L) when is_list(L) -> lists:flatten(L);
+to_list(L) when is_list(L) -> L;
 to_list(A) when is_atom(A) -> atom_to_list(A);
 to_list(B) when is_binary(B) -> binary_to_list(B);
 to_list(I) when is_integer(I) -> integer_to_list(I);
@@ -67,10 +67,10 @@ to_list(F) when is_float(F) -> float_to_list(F).
 to_flatlist(L) when is_list(L) ->
 	case z_string:is_string(L) of
 		true -> L;
-		false -> to_list(iolist_to_binary(L))
+		false -> lists:flatten(to_list(iolist_to_binary(L)))
 	end;
 to_flatlist(L) ->
-	to_list(L).
+	lists:flatten(to_list(L)).
 
 
 to_atom(<<>>) -> undefined;
