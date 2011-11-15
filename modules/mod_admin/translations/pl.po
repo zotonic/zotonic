@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-11-13 23:43+0100\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr "Kokpit"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5
 msgid "Date range"
-msgstr "Okres czasu"
+msgstr "Wpis dotyczy okresu"
 
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:12
 msgid "Define who can see or edit this page."
@@ -243,7 +243,7 @@ msgstr "Imię"
 
 #: modules/mod_admin/templates/admin_status.tpl:18
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Usuń wszystkie reguły dyspozytora URL, cache szablonów i bibliotek oraz inne, przechowywane w pamięci dane."
+msgstr "Usunie wszystkie reguły dyspozytora URL, cache szablonów i bibliotek oraz inne, przechowywane w pamięci dane."
 
 #: modules/mod_admin/templates/admin_status.tpl:17
 msgid "Flush system caches"
@@ -533,7 +533,7 @@ msgstr "Podgląd zapytania"
 
 #: modules/mod_admin/templates/admin_status.tpl:23
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Przebuduj indeksy wyszukiwania umieszczając wszystkie strony i dane znajdujące się w bazie danych w kolejce wyszukiwania. To może potrwać długo!"
+msgstr "Przebuduje indeksy wyszukiwania umieszczając wszystkie strony i dane znajdujące się w bazie danych w kolejce wyszukiwania. To może potrwać długo!"
 
 #: modules/mod_admin/templates/admin_status.tpl:22
 msgid "Rebuild search indices"
