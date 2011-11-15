@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_admin_identity\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-14 22:34+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
+msgid "Add or remove credentials."
+msgstr "Dodaj lub usuń dane uwierzytelniające"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:57
+msgid "Add user"
+msgstr "Dodaj użytkownika"
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2
+msgid "Are you sure you want to delete the username from"
+msgstr "Czy na pewno chcesz usunąć login użytkownikowi"
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
+msgid "Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore."
+msgstr "Naciśnij \"skasuj\" aby usunąć dane uwierzytelniające tej osoby. Po wykonaniu tej operacji osoba przestanie być użytkownikiem."
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:42
+msgid "Created on"
+msgstr "Stworzony"
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40
+msgid "Delete"
+msgstr "Skasuj"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:30
+msgid "E-mail"
+msgstr "E-mail"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:21
+msgid ""
+"Every page/person can be made into a user on the edit page.\n				The "
+"difference between a user and a normal page is only\n				that the former "
+"has logon credentials attached to its page record."
+msgstr ""
+"Każdą stronę lub osobę można przekształcić w użytkownika za pomoca strony edycji.<br/>Różnica między użytkownikiem a stroną/osobą polega na tym, że ten pierwszy ma przypisane dane uwierzytelniające (loginu i hasło)."
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12
+msgid "First"
+msgstr "Pierwszy"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
+msgid "Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
+msgstr "Podaj unikalne: llogin i hasło użytkownika. Uwaga: rozpoznawana jest wielkość liter (\"a\" to nie to samo, co \"A\"), dlatego dane wprowadzaj uważnie!"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8
+msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
+msgstr "Podaj personalia i adres e-mail nowego użytkownika. Strona typu <em>osoba</em> zostanie utworzona automatycznie."
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+msgid "Help about user credentials."
+msgstr "Dane uwierzytelniające - pomoc."
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:12
+msgid "Make a new user"
+msgstr "Stwórz nowego użytkownika"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:41
+msgid "Modified on"
+msgstr "Zmodyfikowany"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:39
+msgid "Name"
+msgstr "Użytkownik"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:6
+msgid "Name and e-mail address"
+msgstr "Użytkownik i adres e-mail"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+msgid "Need more help?"
+msgstr "Potrzebujesz podpowiedzi?"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:63
+msgid "No users found."
+msgstr "Nie znaleziono żadnego użytkownika."
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:43
+msgid "Options"
+msgstr "Opcje"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:50
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
+msgid "Password"
+msgstr "Hasło"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:35
+msgid "Save"
+msgstr "Zapisz"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
+msgid "Set username / password"
+msgstr "Zmień login lub hasło"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:18
+msgid "Sur. prefix"
+msgstr "Przedrostek nazwiska"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:24
+msgid "Surname"
+msgstr "Nazwisko"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
+msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
+msgstr "Hasła administratora nie można ustawić w bazie danych. Musisz wyedytować plik konfiguracyjny serwisu:"
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
+msgid "This can't be undone. The username and password will be lost forever."
+msgstr "Tej operacji nie można cofnąć. Login i hasło zostaną skasowane bezpowrotnie."
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:16
+msgid "This person is also a user."
+msgstr "Ta osoba jest też użytkownikiem."
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
+msgid "This person is not yet a user."
+msgstr "Ta osoba nie ma uprawnień użytkownika."
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:40
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20
+msgid "Username"
+msgstr "Login"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:5
+msgid "Username / password"
+msgstr "Login / hasło"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37
+msgid "Username and password"
+msgstr "Login i hasło"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:3
+#: modules/mod_admin_identity/templates/admin_users.tpl:32
+#: modules/mod_admin_identity/templates/_admin_menu_module.tpl:2
+msgid "Users"
+msgstr "Użytkownicy"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
+msgstr "Osoba może zostać przekształcona w użytkownika poprzez dodanie jej danych uwierzytelniających. Osoba lub komputer mogą wykorzystać te dane by wykonywać operacje w tym systemie.<br/><br/>Zakres uprawnień użytkownika określają grupy, do których został przypisany."
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:14
+msgid "You need to be an administrator to add users."
+msgstr "Musisz mieć uprawnienia administratora by tworzyć użytkowników"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:55
+msgid "delete username"
+msgstr "skasuj login"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:57
+msgid "edit"
+msgstr "edytuj"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
+msgid "if you want to change the admin password."
+msgstr "jeśli chesz zmienić hasło administratora"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:33
+msgid "matching"
+msgstr "pasujące"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:35
+msgid "overview"
+msgstr "- zestawienie"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
+msgid "set username/ password"
+msgstr "zmień login / hasło"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:34
+msgid "show all"
+msgstr "pokaż wszystko"
+
