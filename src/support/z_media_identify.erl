@@ -363,7 +363,7 @@ extension_mime() ->
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 exif_orientation(InFile) ->
     %% FIXME - don't depend on external command
-    case string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)) of
+    case string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile))) of
         [] -> 
             1;
         [Line|_] -> 
