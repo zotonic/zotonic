@@ -1,6 +1,6 @@
 %% @author Andreas Stenius <andreas.stenius@astekk.se>
 %% @copyright 2011 Andreas Stenius
-%% @doc 'format' filter, replace $N in string from a list of replacement values.
+%% @doc 'replace_args' filter, replace $N in string from a list of replacement values.
 
 %% Copyright 2011 Andreas Stenius
 %%
@@ -18,7 +18,7 @@
 
 %% Replace any $N in Input with the N'th value from Args.
 %%
-%% Example usage: {{ value|format:["first", "second", "third"] }}
+%% Example usage: {{ value|replace_args:["first", "second", "third"] }}
 %%   For a value of "My $1 trough $3 is not $2 to best" 
 %%   produces "My first trough third is not second to best"
 %%
@@ -26,42 +26,41 @@
 %% N may be in the range [1..9]. If N is out of range of the provided
 %% args, the $N is left as-is.
 %%
-%% For single arg, {{ value|format:"first" }} is also allowed.
+%% For single arg, {{ value|replace_args:"first" }} is also allowed.
 
--module(filter_format).
+-module(filter_replace_args).
 -export([
-         format/2,
-         format/3
+         replace_args/2,
+         replace_args/3
         ]).
 
 -include("zotonic.hrl").
 
-format(Input, _Context) ->
+replace_args(Input, _Context) ->
     Input.
 
-format(Input, Args, _Context) when is_list(Input) andalso is_list(Args) ->
+replace_args(Input, Args, _Context) when is_list(Input) andalso is_list(Args) ->
     case Args of
         [H|_] when is_list(H) ->
-            do_format(Input, Args, []);
+            do_replace_args(Input, Args, []);
         Arg ->
-            do_format(Input, [Arg], [])
+            do_replace_args(Input, [Arg], [])
     end;
-format(Input, Args, Context) when is_binary(Input) ->
-    format(z_convert:to_list(Input), Args, Context);
-format(Input, _Args, _Context) ->
+replace_args(Input, Args, Context) when is_binary(Input) ->
+    replace_args(z_convert:to_list(Input), Args, Context);
+replace_args(Input, _Args, _Context) ->
     Input.
 
-do_format([$\\, $$|Input], Args, Acc) ->
-    do_format(Input, Args, [$$|Acc]);
-do_format([$$, N|Input], Args, Acc) ->
+do_replace_args([$\\, $$|Input], Args, Acc) ->
+    do_replace_args(Input, Args, [$$|Acc]);
+do_replace_args([$$, N|Input], Args, Acc) ->
     case N - $0 of
         Nth when Nth >= 1 andalso Nth =< length(Args) ->
-            do_format(Input, Args, [lists:nth(Nth, Args)|Acc]);
+            do_replace_args(Input, Args, [lists:nth(Nth, Args)|Acc]);
         _ ->
-            do_format(Input, Args, [N, $$|Acc])
+            do_replace_args(Input, Args, [N, $$|Acc])
     end;
-do_format([H|Input], Args, Acc) ->
-    do_format(Input, Args, [H|Acc]);
-do_format([], _Args, Acc) ->
+do_replace_args([H|Input], Args, Acc) ->
+    do_replace_args(Input, Args, [H|Acc]);
+do_replace_args([], _Args, Acc) ->
     lists:reverse(Acc).
-
