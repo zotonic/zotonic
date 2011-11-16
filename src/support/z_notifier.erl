@@ -253,7 +253,6 @@ handle_call(Message, _From, State) ->
 %% @doc Add an observer to an event
 handle_cast({'observe', Event, Observer, Priority}, State) ->
     Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-
     PObs = {Priority, Observer},
     UpdatedObservers = case ets:lookup(State#state.observers, Event1) of 
         [] -> 
@@ -268,8 +267,7 @@ handle_cast({'observe', Event, Observer, Priority}, State) ->
 
 %% @doc Detach an observer from an event
 handle_cast({'detach', Event, Observer}, State) ->
-	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-
+    Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
     case ets:lookup(State#state.observers, Event1) of 
         [] -> ok;
         [{Event1, Observers}] -> 
@@ -282,7 +280,7 @@ handle_cast({'detach', Event, Observer}, State) ->
 
 %% @doc Detach all observer from an event
 handle_cast({'detach_all', Event}, State) ->
-	Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
+    Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
     ets:delete(State#state.observers, Event1),  
     {noreply, State};
 
@@ -353,7 +351,7 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
     catch M:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
+                ?ERROR("Error notifying ~p with event ~p. Detaching pid.", [Pid, Msg]),
                 detach(msg_event(Msg), Pid, Context);
             true ->
                 % Assume transient error
@@ -369,8 +367,8 @@ notify_observer(Msg, {_Prio, {M,F,[Pid]}}, _IsCall, Context) when is_pid(Pid) ->
     catch EM:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
-                detach(msg_event(Msg), Pid, Context);
+                ?ERROR("Error notifying ~p with event ~p. Detaching pid.", [{M,F,Pid}, Msg]),
+                detach(msg_event(Msg), {M,F,[Pid]}, Context);
             true ->
                 % Assume transient error
                 nop
@@ -389,7 +387,7 @@ notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
     try
         gen_server:call(Pid, {Msg, Acc, Context}, ?TIMEOUT)
     catch M:E ->
-        ?ERROR("Error notifying %p with event %p. Detaching pid.", [Pid, Msg]),
+        ?ERROR("Error folding ~p with event ~p. Detaching pid.", [Pid, Msg]),
         detach(msg_event(Msg), Pid, Context),
         {error, {notify_observer_fold, Pid, Msg, M, E}}
     end;
@@ -399,7 +397,7 @@ notify_observer_fold(Msg, {_Prio, {M,F,[Pid]}}, Acc, Context) when is_pid(Pid) -
     try
         M:F(Pid, Msg, Acc, Context)
     catch EM:E ->
-        ?ERROR("Error notifying %p with event %p. Detaching pid.", [{M,F,Pid}, Msg]),
+        ?ERROR("Error folding ~p with event ~p. Detaching pid.", [{M,F,Pid}, Msg]),
         detach(msg_event(Msg), {M,F,[Pid]}, Context),
         {error, {notify_observer, Pid, Msg, EM, E}}
     end;
