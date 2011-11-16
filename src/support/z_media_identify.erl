@@ -171,6 +171,9 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
             %% sometimes:
             %% test.jpg[0]=>test.jpg JPEG 2126x1484 2126x1484+0+0 DirectClass 8-bit 836.701kb 0.130u 0:02
+
+            %% "/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252[0]=>/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252 JPEG 1824x1824 1824x1824+0+0 8-bit DirectClass 1.245MB 0.000u 0:00.000"
+
             Line1 = hd(string:tokens(Result, "\r\n")),
             try
                 Words = string:tokens(Line1, " "),
@@ -360,17 +363,22 @@ extension_mime() ->
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 exif_orientation(InFile) ->
     %% FIXME - don't depend on external command
-    FirstLine = z_string:to_lower(hd(string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)), "\n"))),
-    case [z_string:trim(X) || X <- string:tokens(FirstLine, "-")] of
-        ["top", "left"] -> 1;
-        ["top", "right"] -> 2;
-        ["bottom", "right"] -> 3;
-        ["bottom", "left"] -> 4;
-        ["left", "top"] -> 5;
-        ["right", "top"] -> 6;
-        ["right", "bottom"] -> 7;
-        ["left", "bottom"] -> 8;
-        _ -> 1
+    case string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)) of
+        [] -> 
+            1;
+        [Line|_] -> 
+            FirstLine = z_string:to_lower(Line),
+            case [z_string:trim(X) || X <- string:tokens(FirstLine, "-")] of
+                ["top", "left"] -> 1;
+                ["top", "right"] -> 2;
+                ["bottom", "right"] -> 3;
+                ["bottom", "left"] -> 4;
+                ["left", "top"] -> 5;
+                ["right", "top"] -> 6;
+                ["right", "bottom"] -> 7;
+                ["left", "bottom"] -> 8;
+                _ -> 1
+            end
     end.
 
 
