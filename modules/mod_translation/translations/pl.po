@@ -172,7 +172,7 @@ msgstr "Stan tłumaczeń"
 
 #: ./modules/mod_translation/templates/admin_translation_status.tpl:20 
 msgid "Translation status per module"
-msgstr "Kompletność tłumaczeń poszczególnych modułów"
+msgstr "Stan tłumaczeń poszczególnych modułów"
 
 #: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:5 
 msgid "Translations"

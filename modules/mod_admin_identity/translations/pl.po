@@ -53,7 +53,7 @@ msgstr "Skasuj"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:30
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "e-mail"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
 msgid ""
