@@ -129,7 +129,7 @@ handle_file(_Verb, ".scss", F) ->
     OutPath = filename:join(filename:dirname(InPath), "css"),
     case filelib:is_dir(OutPath) of
         true ->
-            os:cmd("sass --update " ++ z_utils:os_escape(InPath) ++ ":" ++ z_utils:os_escape(OutPath));
+            os:cmd("sass -C --update " ++ z_utils:os_escape(InPath) ++ ":" ++ z_utils:os_escape(OutPath));
         false ->
             undefined
     end;
