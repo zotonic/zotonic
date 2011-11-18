@@ -169,8 +169,8 @@ handle_file(_Verb, ".tpl", F) ->
             case z_template:find_template(TemplateFile, C) of
                 {ok, _} -> undefined;
                 {error, _} ->
-                    z_depcache:flush(C),
-                    "Flushed cache of " ++ Site ++ " due to new template."
+                    z:flush(),
+                    "Flushed cache due to new template."
             end
     end;
 
