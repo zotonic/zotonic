@@ -695,7 +695,11 @@ manage_schema(Module, Current, Target, _Context) when
 manage_schema(Module, Current, Target, Context) when
       is_integer(Current) andalso is_integer(Target) ->
     F = fun(C) ->
-                ok = Module:manage_schema({upgrade, Current+1}, C),
+                case Module:manage_schema({upgrade, Current+1}, C) of
+                    D=#datamodel{} ->
+                        ok = z_datamodel:manage(Module, D, Context);
+                    ok -> ok
+                end,
                 ok = set_db_schema_version(Module, Current+1, C),
                 ok = z_db:flush(C)
         end,
