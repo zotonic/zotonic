@@ -23,7 +23,7 @@ limitations under the License.
 tinyInit = {
 	mode: "none",
 	theme: "advanced",
-    theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,ltr,rtl,zbdoltr,zbdortl,|,link,unlink,|,cleanup,code,|,formatselect,|,zlink,zmedia",
+    theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,cleanup,code,|,formatselect,|,zlink,zmedia",
 	theme_advanced_buttons2: "tablecontrols,outdent,indent",
 	theme_advanced_buttons3: "",
 	theme_advanced_buttons4: "",
