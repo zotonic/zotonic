@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: zotonic - mod_admin\n"
+"Project-Id-Version: zotonic - mod_mailinglist\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
@@ -43,11 +43,10 @@ msgstr "<h3>Odbiorcy</h3><p>By zarządzać adresami odbiorców kliknij na odnoś
 "“Pokaż wszystkich odbiorców“.</p><h3>Osoba, rozsyłająca wiadomości i adres 
 nadawcy</h3><p>To dane, które mogą być ustawiane indywidualnie dla każdej wysyłki. "
 "Domyślną wartością jest zawartość parametru konfiguracji <tt>site.email_from</tt>.</p>"
-"<h3>Automatic upload of recipient lists</h3><p>The dropbox "
-"filename is used for the automatic upload of complete recipients list. The "
-"filename must match the filename of the uploaded recipient list. The "
-"complete list of recipients will be replaced with the recipients in the "
-"dropbox file.</p> "
+"<h3>Automatyczne pobieranie listy odbiorców</h3><p>Plik umieszczony w usłudze "
+"Dropbox może zostać użyty jako źródło listy odbiorców. Nazwa pliku w usłudze Dropbox "
+"musi odpowiadać nazwie pliku zapisanej listy odbiorców. Ta druga zostanie wtedy "
+"zastąpiona zawartością tej pierwszej."
 "<h3>Kontrola dostępu</h3>Każdy, kto posiada uprawnienia do modyfikacji listy "
 "wysyłkowej posiada także prawa do wysyłania wiadomości na listę. Każdy, to ma "
 "uprawnienia do oglądania listy może dodać do niej adres e-mail.</p>"
@@ -557,7 +556,7 @@ msgid "This overview allows you to send the current page to a group of recipient
 msgstr "To zestawienie pozwala na wysłanie aktualnej strony do odbiorców, zgrupowanych "
 "na listach adresowych. Wybierz \"podgląd wysyłki\" aby otworzyć okno, w którym będziesz "
 "mógł zobaczyć, jak będzie wyglądać wysłana wiadomość. Wybierz \"Rozpocznij testową wysyłkę\" "
-"aby rozpocząc wysyłkę na, zdefiniowaną wcześniej, grupę testowych adresów. "
+"aby rozpocząć wysyłkę na, zdefiniowaną wcześniej, grupę testowych adresów. "
 "Wybierz \"Edytuj\" aby powrócić do strony edycji. Poniżej znajduje się tabela wszystkich "
 "list wysyłkowych, wraz z informacjami o czasie i odbiorcach ostatniej wysyłki."
 
@@ -568,7 +567,7 @@ msgstr "Z tej strony można wysłać wiadomości na różne listy wysyłkowe."
 #: ./modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6 
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail "
 "message."
-msgstr "Zaznacz tutaj, jesli odbiorca ma otrzymać wiadomośc powitalną."
+msgstr "Zaznacz tutaj, jeśli odbiorca ma otrzymać wiadomość powitalną."
 
 #: ./modules/mod_mailinglist/templates/admin_mailinglist.tpl:20 ./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:13 
 msgid "Title"

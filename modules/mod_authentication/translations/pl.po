@@ -89,7 +89,7 @@ msgstr "Jak uzyskać nowe hasło?"
 
 #: ./modules/mod_authentication/templates/_logon_error.tpl:8 ./modules/mod_authentication/templates/logon.tpl:35 
 msgid "I forgot my username or password"
-msgstr "Nie pamiętam hasła!"
+msgstr "Nie pamiętam hasła"
 
 #: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:24 
 msgid "In the e-mail you will find instructions on how to reset the password of "

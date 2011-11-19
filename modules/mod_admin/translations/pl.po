@@ -255,7 +255,7 @@ msgstr "Od"
 
 #: modules/mod_admin/templates/_admin_edit_content_location.tpl:6
 msgid "Geodata"
-msgstr "Geodata"
+msgstr "Dane lokalizacyjne"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 msgid "Go back."
@@ -558,7 +558,7 @@ msgstr "Uwagi"
 
 #: modules/mod_admin/templates/admin_status.tpl:27
 msgid "Renumber category tree"
-msgstr "Przenumeruj drzewo kategorii"
+msgstr "Przebuduj drzewo kategorii"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:68
 msgid "Replace media item"
@@ -623,11 +623,11 @@ msgstr "Ulica"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:63
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:104
 msgid "Street Line 2"
-msgstr "Ulica (c.d.)"
+msgstr "Ulica (cd.)"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:13
 msgid "Summary"
-msgstr "Podsumowanie"
+msgstr "Opis"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:34
 msgid "Sur. prefix"
@@ -752,7 +752,7 @@ msgstr "Umieszczono"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:35
 msgid "Use the autocompleter to search the media in this site."
-msgstr "Użyj autouzupełniania by wyszukać obiekty mediów na tej stronie."
+msgstr "Użyj auto-uzupełniania by wyszukać obiekty mediów na tej stronie."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:13
 msgid "Used for events and other periods."
@@ -892,7 +892,7 @@ msgstr "nowych"
 
 #: modules/mod_admin/templates/_action_dialog_link.tpl:6
 msgid "or use the autocompleter to search the site."
-msgstr "lub użyj autouzupełniania by przeszukać witrynę."
+msgstr "lub użyj auto-uzupełniania by przeszukać witrynę."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:16
 msgid "page has"

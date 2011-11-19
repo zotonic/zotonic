@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
 #
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
@@ -61,7 +61,7 @@ msgid ""
 "difference between a user and a normal page is only\n				that the former "
 "has logon credentials attached to its page record."
 msgstr ""
-"Każdą stronę lub osobę można przekształcić w użytkownika za pomoca strony edycji.<br/>Różnica między użytkownikiem a stroną/osobą polega na tym, że ten pierwszy ma przypisane dane uwierzytelniające (loginu i hasło)."
+"Każdą stronę lub osobę można przekształcić w użytkownika za pomocą strony edycji.<br/>Różnica między użytkownikiem a stroną/osobą polega na tym, że ten pierwszy ma przypisane dane uwierzytelniające (loginu i hasło)."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12
 msgid "First"
@@ -70,7 +70,7 @@ msgstr "Pierwszy"
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 msgid "Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Podaj unikalne: llogin i hasło użytkownika. Uwaga: rozpoznawana jest wielkość liter (\"a\" to nie to samo, co \"A\"), dlatego dane wprowadzaj uważnie!"
+msgstr "Podaj unikalne: login i hasło użytkownika. Uwaga: rozpoznawana jest wielkość liter (\"a\" to nie to samo, co \"A\"), dlatego dane wprowadzaj uważnie!"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
@@ -131,7 +131,7 @@ msgstr "Nazwisko"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
-msgstr "Hasła administratora nie można ustawić w bazie danych. Musisz wyedytować plik konfiguracyjny serwisu:"
+msgstr "Hasła administratora nie można ustawić w bazie danych. Musisz zmodyfikować plik konfiguracyjny serwisu:"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
@@ -183,7 +183,7 @@ msgstr "edytuj"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid "if you want to change the admin password."
-msgstr "jeśli chesz zmienić hasło administratora"
+msgstr "jeśli chcesz zmienić hasło administratora"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:33
 msgid "matching"

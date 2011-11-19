@@ -59,7 +59,7 @@ msgstr "Autoryzuj to żądanie"
 
 #: ./modules/mod_oauth/templates/oauth_authorize_finished.tpl:7 
 msgid "Authorized!"
-msgstr "Zautoryzowano!"
+msgstr "Udzielono autoryzacji!"
 
 #: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:32 
 msgid "Callback URL"

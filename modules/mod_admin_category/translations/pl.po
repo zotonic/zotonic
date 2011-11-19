@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
 #
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
@@ -18,6 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
 #: modules/mod_admin_category/templates/_admin_menu_module.tpl:2
@@ -26,7 +28,7 @@ msgstr "Kategorie"
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:36
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Kategorie służą do grupowania stron. Każda strona przynależy do jednej - i tylko jednej - kategorii.<br/>Kategorie ułożne są hierarchicznie - tutaj możesz je modyfikować."
+msgstr "Kategorie służą do grupowania stron. Każda strona przynależy do jednej - i tylko jednej - kategorii.<br/>Kategorie ułożone są hierarchicznie - tutaj możesz je modyfikować."
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"

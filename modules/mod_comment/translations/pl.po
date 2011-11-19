@@ -64,7 +64,7 @@ msgstr "Umieszczony"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:4 
 msgid "Recent Comments"
-msgstr "Najnowsze Lomentarze"
+msgstr "Najnowsze komentarze"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:13 
 msgid "Recent comments"
