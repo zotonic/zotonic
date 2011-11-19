@@ -24,6 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([base, authentication]).
 -mod_provides([admin]).
+-mod_prio(1000).
 
 -export([
     observe_sanitize_element/3
