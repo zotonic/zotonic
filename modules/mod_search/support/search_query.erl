@@ -74,6 +74,8 @@ parse_query_text(Text) ->
 request_arg("authoritative")       -> authoritative;
 request_arg("cat")                 -> cat;
 request_arg("cat_exclude")         -> cat_exclude;
+request_arg("creator_id")          -> creator_id;
+request_arg("modifier_id")         -> modifier_id;
 request_arg("custompivot")         -> custompivot;
 request_arg("id_exclude")          -> id_exclude;
 request_arg("hasobject")           -> hasobject;
@@ -297,6 +299,20 @@ parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
 parse_query([{authoritative, Boolean}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
      Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
+     parse_query(Rest, Context, Result2);
+
+%% creator_id=<rsc id>
+%% Filter on items which are created by <rsc id>
+parse_query([{creator_id, Integer}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
+     Result2 = add_where("rsc.creator_id = " ++ Arg, Result1),
+     parse_query(Rest, Context, Result2);
+
+%% modifier_id=<rsc id>
+%% Filter on items which are last modified by <rsc id>
+parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
+     Result2 = add_where("rsc.modifier_id = " ++ Arg, Result1),
      parse_query(Rest, Context, Result2);
 
 %% query_id=<rsc id>
