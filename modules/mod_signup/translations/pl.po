@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_signup\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+
+
+#: ./modules/mod_signup/templates/signup.tpl:161 
+msgid "And sign up"
+msgstr "...i stwórz konto."
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:12 
+msgid "Bring me to my profile page"
+msgstr "Przejdź do mojego profilu"
+
+#: ./modules/mod_signup/templates/signup.tpl:146 
+msgid "Check our Terms of Service and Privacy policies"
+msgstr "Zapoznaj się z zasadami korzystania z usługi i z polityką prywatności"
+
+#: ./modules/mod_signup/templates/signup.tpl:115 
+msgid "Choose a username and password"
+msgstr "Wybierz login i hasło"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:26 
+msgid "Confirm key"
+msgstr "Klucz weryfikacyjny"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:3 ./modules/mod_signup/templates/signup_confirm.tpl:15 ./modules/mod_signup/templates/signup_confirm.tpl:30 
+msgid "Confirm my account"
+msgstr "Weryfikacja konta"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:12 
+msgid "Confirm my account."
+msgstr "Potwierdź konto."
+
+#: ./modules/mod_signup/templates/signup.tpl:70 
+msgid "Create your account"
+msgstr "Stwórz nowe konto"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:6 
+msgid "Dear"
+msgstr "Szanowny"
+
+#: ./modules/mod_signup/templates/signup.tpl:103 
+msgid "E-mail"
+msgstr "e-mail"
+
+#: ./modules/mod_signup/templates/signup.tpl:75 
+msgid "First name"
+msgstr "Imię"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:16 
+msgid "Hope to see you soon."
+msgstr "Do zobaczenia wkrótce."
+
+#: ./modules/mod_signup/templates/signup.tpl:154 
+msgid "I agree to the"
+msgstr "Akceptuję"
+
+#: ./modules/mod_signup/templates/_logon_link.tpl:2 
+msgid "I don’t have an account, please sign me up."
+msgstr "Nie mam jeszcze konta - chcę je założyć."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid "If the link does not work then you can go to"
+msgstr "Jeśli kliknięcie w odnośnik nie przyniosło efektu możesz skopiować "
+"do przeglądarki adres "
+
+#: ./modules/mod_signup/templates/signup.tpl:57 
+msgid "If you have already an account,"
+msgstr "Jeśli już posiadasz konto,"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:17 
+msgid "In your e-mail you received a confirmation key. Please copy it in the input "
+"field below."
+msgstr "W przesłanej do Ciebie wiadomości znajduje się klucz aktywacyjny. Wklej go "
+"do poniższego formularza."
+
+#: ./modules/mod_signup/templates/signup.tpl:93 
+msgid "Last name"
+msgstr "Nazwisko"
+
+#: ./modules/mod_signup/templates/signup.tpl:126 
+msgid "Password"
+msgstr "Hasło"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:3 
+msgid "Please confirm your account."
+msgstr "Potwierdź chęć założenia konta."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:10 
+msgid "Please follow the link below."
+msgstr "Korzystając z odnośnika poniżej."
+
+#: ./modules/mod_signup/templates/signup.tpl:87 
+msgid "Prefix"
+msgstr "Przedrostek"
+
+#: ./modules/mod_signup/templates/signup.tpl:155 
+msgid "Privacy policies"
+msgstr "politykę prywatności"
+
+#: ./modules/mod_signup/templates/signup.tpl:3 ./modules/mod_signup/templates/signup.tpl:164 
+msgid "Sign Up"
+msgstr "Załóż konto"
+
+#: ./modules/mod_signup/templates/signup.tpl:55 
+msgid "Sign up and become a member"
+msgstr "Załóż konto i dołącz do naszej społeczności"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:20 
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr "Niestety, nie rozpoznaję kodu aktywacyjnego. Czy na pewno wpisałeś go poprawnie?"
+
+#: ./modules/mod_signup/templates/signup.tpl:72 
+msgid "Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+msgstr "Niestety, wygląda na to, że takie konto już istnieje w naszym systemie. "
+"Być może brak możliwości skorzystania z niego wynika z zablokowania go przez administratora?"
+
+#: ./modules/mod_signup/templates/signup.tpl:117 
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr "Niestety, ten login jest już zajęty. Wybierz inny."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:8 
+msgid "Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+msgstr "Dziękujemy za założenie konta w naszym systemie. Przed uzyskaniem pełnego "
+"musisz zakończyć procedurę weryfikacyjną."
+
+#: ./modules/mod_signup/templates/signup.tpl:151 
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "Aby założyć konto musisz wyrazić zgodzić się z zasadami korzystania z usługi 
+i polityką prywatności"
+
+#: ./modules/mod_signup/templates/signup.tpl:120 
+msgid "Username"
+msgstr "Login"
+
+#: ./modules/mod_signup/templates/signup.tpl:134 
+msgid "Verify password"
+msgstr "Powtórz hasło"
+
+#: ./modules/mod_signup/templates/signup.tpl:173 
+msgid "We have sent you an e-mail. In the e-mail you will find instructions on "
+"how to confirm your account."
+msgstr "Wysłaliśmy do Ciebie wiadomość weryfikacyjną. Znajdują się w niej "
+"informacje, niezbędne do pełnej aktywacji konta."
+
+#: ./modules/mod_signup/templates/signup.tpl:149 
+msgid "We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission.\n			We do have some "
+"rules that we need you to agree with."
+msgstr "Informacje, które umieścisz w naszym serwisie, będą chronione i bez Twojej "
+"zgody, nie będą przekazywane podmiotom zewnętrznym.<br/>Zanim założysz konto musisz "
+"zadeklarować, że akceptujesz zasady korzystania z usługi."
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:8 
+msgid "Welcome"
+msgstr "Witaj"
+
+#: ./modules/mod_signup/templates/signup.tpl:175 
+msgid "When you don’t receive the e-mail within a few minutes then be sure to "
+"check your spam filter and spam folders."
+msgstr "Jeśli wiadomość nie dotrze do Ciebie w ciągu kilku najbliższych minut, "
+"sprawdź zawartość katalogu ze spamem, a potem przyjrzyj się filtrom antyspamowym."
+
+#: ./modules/mod_signup/templates/signup.tpl:171 
+msgid "You are almost there!"
+msgstr "To już prawie koniec!"
+
+#: ./modules/mod_signup/templates/signup.tpl:60 
+msgid "You can also"
+msgstr "Możesz także"
+
+#: ./modules/mod_signup/templates/signup_confirm.tpl:10 
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr "Twoje konto zostało w pełni aktywowane. Możesz zacząć z niego korzystać."
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid "and enter the key"
+msgstr "i wprowadzić klucz weryfikacyjny"
+
+#: ./modules/mod_signup/templates/signup.tpl:155 
+msgid "and the"
+msgstr "oraz"
+
+#: ./modules/mod_signup/templates/email_verify.tpl:14 
+msgid "in the input field."
+msgstr "do znajdującego się tam formularza."
+
+#: ./modules/mod_signup/templates/signup.tpl:57 
+msgid "log on now"
+msgstr "zaloguj się"
+
+#: ./modules/mod_signup/templates/signup.tpl:60 
+msgid "sign up for a username and password"
+msgstr "Zarejestruj się by uzyskać login i hasło"
