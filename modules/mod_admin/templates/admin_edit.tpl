@@ -34,6 +34,7 @@
 
 			{% wire id="rscform" type="submit" postback="rscform" %}
 			<form id="rscform" method="post" action="postback">
+                <button style="display:none"></button><!-- for saving on press enter -->
 				<input type="hidden" name="id" value="{{ id }}" />
 
 				<div class="zp-67" id="poststuff">
