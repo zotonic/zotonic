@@ -231,8 +231,7 @@ fetch(URL, Body, Sleep, Context) ->
                       {URL, [], "application/x-www-form-urlencoded", Body},
                       [],
                       [{sync, false},
-                       {stream, self},
-                       {verbose, trace}]) of
+                       {stream, self}]) of
         {ok, RequestId} ->
             case receive_chunk(RequestId, Context) of
                 {ok, _} ->
