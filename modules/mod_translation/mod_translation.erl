@@ -61,7 +61,8 @@ init(Context) ->
                             {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
-                            {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]}
+                            {pl, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
+                            {tr, [ {language, <<"Polski">>}, {is_enabled, true}]}
                         ], Context);
                 _Exists ->
                     ok
