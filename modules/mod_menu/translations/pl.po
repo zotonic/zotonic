@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_menu\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+
+#: ./modules/mod_menu/templates/_admin_menu_menu_view.tpl:1 
+msgid "Current menu"
+msgstr "Aktualne menu"
+
+#: ./modules/mod_menu/templates/_menu_trash.tpl:1 
+msgid "Drag elements here to remove them"
+msgstr "Przeciągnij tu elementy by je usunąć"
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:34 
+msgid "Drag items from the menu to the trash to remove them."
+msgstr "Aby usunąć elementy z menu przeciągnij je do kosza."
+
+#: ./modules/mod_menu/templates/_menu_edit_item.tpl:3 ./modules/mod_menu/templates/admin_edit.menu.tpl:23 
+msgid "Drag me"
+msgstr "Przeciągnij mnie"
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:35 
+msgid "Drag the <strong>New page</strong> to add a new page."
+msgstr "Przeciągnij element <strong>Nowa strona</strong> żeby dodać nową stronę."
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20 
+msgid "Drag to add a new page"
+msgstr "Przeciągnij by dodać nową stronę"
+
+#: ./modules/mod_menu/templates/_menu_edit_item.tpl:6 
+msgid "Edit"
+msgstr "Edytuj"
+
+#: ./modules/mod_menu/templates/_admin_menu_module.tpl:2 
+msgid "Menu"
+msgstr "Menu"
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:173 
+msgid "New page"
+msgstr "Nowa strona"
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:14 
+msgid "Search for a page"
+msgstr "Znajdź stronę"
+
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:33 
+msgid "Type your search terms to find pages. Then drag them on to the panel on "
+"your left."
+msgstr "Wpisz zapytanie aby znaleźć stronę. Potem przeciągnij ją na panel "
+"po lewej stronie."

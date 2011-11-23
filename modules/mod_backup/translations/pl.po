@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_backup\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:38 
+msgid "Actions"
+msgstr "Akcje"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:3 
+msgid "Admin Backups"
+msgstr "Zarządzanie kopiami zapasowymi"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:14 
+msgid "At any moment you can make a backup of your system."
+msgstr "Kopię zapasową możesz wykonać w dowolnym momencie."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:12 ./modules/mod_backup/templates/admin_backup.tpl:34 ./modules/mod_backup/templates/_admin_menu_module.tpl:2 
+msgid "Backups"
+msgstr "Kopie zapasowe"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:37 
+msgid "Date"
+msgstr "Data"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:59 
+msgid "No backups present."
+msgstr "Nie utworzono żadnej kopii zapasowej."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:21 
+msgid "Start backup now"
+msgstr "Wykonaj kopię zapasową"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:27 
+msgid "The \"pg_dump\" command was not found in the path. Set the "
+"\"mod_backup.pg_dump\" config key to the path to pg_dump and return to this "
+"page."
+msgstr "Polecenie \"pg)dump\" nie zostało odnalezione. Ustal parametr konfiguracyjny "
+"\"mod_backup.pg_dump\" tak, by wskazywał na polecenie pg_dump i spróbuj wykonać "
+"kopię ponownie."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:28 
+msgid "The \"tar\" command was not found in the path. Set the \"mod_backup.tar\" "
+"config key to the path to pg_dump and return to this page."
+msgstr "Polecenie \"tar\" nie zostało odnalezione. Ustal parametr konfiguracyjny "
+"\"mod_backup.tar\" tak, by wskazywał na polecenie tar i spróbuj wykonać "
+"kopię ponownie."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:14 
+msgid "The backup comprises two parts, the database and the uploaded files."
+msgstr "Kopia zapasowa składa się z dwóch części - kopii bazy danych "
+"i umieszczonych na serwerze plików."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+msgid "Warning:"
+msgstr "Ostrzeżenie:"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:15 
+msgid "You can have 10 backups, older ones will be deleted automatically."
+msgstr "Jednocześnie możesz mieć 10 kopii danych, utworzenie kolejnej spowoduje "
+"usunięcie najstarszej."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:20 
+msgid "You can start a backup immediately, whilst the backup is running you can "
+"continue working."
+msgstr "Możesz rozpocząć w dowolnym momencie i wrócić do pracy - proces wykona się w tle."
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+msgid "Your backup is not correctly configured. The backup module will not work "
+"the problem(s) below have been resolved:"
+msgstr "System kopii zapasowych nie został prawidłowo skonfigurowany. Aby "
+"rozpocząć wykonywanie kopii, musisz rozwiązać następujące problemy: "
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:52 
+msgid "download database"
+msgstr "pobierz kopię bazy"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:53 
+msgid "download files"
+msgstr "pobierz kopie plików"
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:50 
+msgid "this backup is in progress"
+msgstr "wykonywanie kopii zapasowej"

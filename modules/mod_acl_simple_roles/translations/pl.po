@@ -1,0 +1,180 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Piotr Meyer <aniou@smutek.pl>, 2011.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_admin\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:7 
+msgid "(implicit)"
+msgstr "(niejawne)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79 
+msgid "<strong>Security notice</strong>: When you allow */* files then all members "
+"of this role will be able to obtain full access to your whole site and all "
+"underlying data."
+msgstr "<strong>Ostrzeżenie</strong>: jeśli wybierzesz opcję \"*/*\" wtedy wszyscy "
+"użytkownicy, którym przypisano tę rolę uzyskają pełny dostęp do całego serwisu"
+"i wszystkich istotnych danych"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:22 
+msgid "ACL role overview"
+msgstr "Listy kontroli dostępu dla ról"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_menu_module.tpl:2 
+msgid "Access Control"
+msgstr "Kontrola dostępu"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:10 
+msgid "Access Control - Roles Overview"
+msgstr "Kontrola dostępu - przegląd ról"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:20 
+msgid "Access control controls what an user is allowed to do and see.  The roles "
+"define different groups of rights.  Users can be made member of multiple "
+"roles."
+msgstr "Reguły dostępu określają co dany użytkownik może zobaczyć i zrobić. Role "
+"definiują różne grupy uprawnień. Użytkownik może mieć przydzielonych wiele ról."
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:28 
+msgid "Actions"
+msgstr "Akcje"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:3 
+msgid "Admin Access Control"
+msgstr "Zarządzanie kontrolą dostępu"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16 
+msgid "All members are allowed to view all content.  (Check this for supervisors.)"
+msgstr "Wszyscy członkowie będą mieli dostęp do wszystkich treści (zaznacz dla osób nadzorujących)."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40 
+msgid "Allow editing of category"
+msgstr "Zezwalaj na edycję kategorii"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:38 
+msgid "Categories"
+msgstr "Kategorie"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid "Check below what people that are member of this role are allowed to do."
+msgstr "Sprawdź poniżej, jakie uprawnienia mają użytkownicy, którym przypisano tę rolę."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32 
+msgid "Community members"
+msgstr "Członkowie społeczności"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77 
+msgid "File types allowed to be uploaded"
+msgstr "Rodzaje plików, które można umieszczać na serwerze"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70 
+msgid "File uploads"
+msgstr "Wysyłanie plików"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33 
+msgid "Group members"
+msgstr "Członkowie grupy"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid "Help about ACL roles."
+msgstr "Kontrola dostępu - pomoc."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55 
+msgid "Manage modules"
+msgstr "Zarządzanie modułami"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72 
+msgid "Maximum allowed file size for uploads (in KB)"
+msgstr "Maksymalny rozmiar plików, które można wysyłać na serwer (w KB)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25 
+msgid "Maximum visibility (user can’t change visibility to higher level than "
+"this)"
+msgstr "Maksymalna widoczność (użytkownik nie może określać widoczności na "
+"poziomie wyższym, niż ten)"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:1 
+msgid "Member of roles"
+msgstr "Użytkownicy przydzieleni do ról"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:42 
+msgid "Modules"
+msgstr "Moduły"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid "Need more help?"
+msgstr "Potrzebujesz podpowiedzi?"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:56 
+msgid "No ACL roles found."
+msgstr "Nie znaleziono reguł kontroli dostępu."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21 
+msgid "Only allow to update content created by the user himself. (Check for user "
+"generated content sites.)"
+msgstr "Użytkownik może zmieniać tylko dane stworzone przez siebie (zaznacz dla "
+"serwisów, w których treści tworzą użytkownicy)."
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5 
+msgid "Permissions"
+msgstr "Uprawnienia"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:27 
+msgid "Rights"
+msgstr "Uprawnienia"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29 
+msgid "The whole world"
+msgstr "Wszyscy"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:25 
+msgid "Title"
+msgstr "Tytuł"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11 
+msgid "Users can be member of multiple roles. Depending on the roles an user is "
+"allowed to create and edit certain categories or is able to manage certain "
+"modules."
+msgstr "Użytkownicy mogą mieć przypisane wiele ról. W zależności od ról mogą "
+"posiadać prawa do tworzenia i edycji określonych danych albo zarządzania 
+określonymi modułami."
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:26 
+msgid "View all"
+msgstr "Widzi wszystko"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:48 
+msgid "delete"
+msgstr "skasuj"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:49 
+msgid "edit"
+msgstr "edytuj"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:14 
+msgid "make a new acl role"
+msgstr "stwórz nową rolę"
+
+#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6 
+msgid "make smaller"
+msgstr "zmniejsz"
+
+#: ./modules/mod_acl_simple_roles/templates/admin_acl.tpl:36 
+msgid "view all,&mdash;"
+msgstr "widzi wszystko,&mdash;"
