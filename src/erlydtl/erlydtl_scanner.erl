@@ -442,7 +442,7 @@ append_text_char(Scanned, {SourceRef, Row, Column}, Char) ->
 
 char_type(Char) ->
     case Char of 
-        C when ((C >= $a) and (C =< $z)) or ((C >= $A) and (C =< $Z)) or (C == $_) ->
+        C when ((C >= $a) and (C =< $z)) or ((C >= $A) and (C =< $Z)) or (C == $_) or (C == $$) ->
             letter_underscore;
         C when ((C >= $0) and (C =< $9)) ->
             digit;
