@@ -24,7 +24,8 @@ lower(undefined, _Context) ->
     undefined;
 lower(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_lower(Input);
-lower(Input, _Context) ->
-    Input.
+lower(Input, Context) ->
+    lower(z_convert:to_list(Input), Context).
+
 
 

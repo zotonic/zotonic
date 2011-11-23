@@ -24,6 +24,6 @@ upper(undefined, _Context) ->
     undefined;
 upper(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_upper(Input);
-upper(Input, _Context) ->
-    Input.
+upper(Input, Context) ->
+    upper(z_convert:to_list(Input), Context).
 
