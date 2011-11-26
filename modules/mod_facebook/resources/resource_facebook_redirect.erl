@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -86,10 +86,7 @@ redirect_error(Reason, Context) ->
 fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     Page = z_context:get_q("p", Context, "/"),
-    RedirectUrl = lists:flatten(
-                        z_context:abs_url(
-                            lists:flatten(z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context)), 
-                            Context)),
+    RedirectUrl = lists:flatten(z_context:abs_url(z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context), Context)),
 
     FacebookUrl = "https://graph.facebook.com/oauth/access_token?client_id="
                 ++ z_utils:url_encode(AppId)
@@ -97,7 +94,7 @@ fetch_access_token(Code, Context) ->
                 ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
                 ++ "&code=" ++ z_utils:url_encode(Code),
     case http:request(FacebookUrl) of
-        {ok, {{_, 200, _}, _Headers, Payload}} -> 
+        {ok, {{_, 200, _}, _Headers, Payload}} ->
             Qs = mochiweb_util:parse_qs(Payload),
             {ok, proplists:get_value("access_token", Qs), z_convert:to_integer(proplists:get_value("expires", Qs))};
         Other ->
@@ -156,15 +153,14 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
 			end,
             LocationAbs = lists:flatten(z_context:abs_url(Location, Context1)),
             use_see_other(LocationAbs, Context1)
-            %?WM_REPLY({true, LocationAbs}, Context1)
     end.
-    
+
     has_location(undefined) -> false;
     has_location([]) -> false;
     has_location(<<>>) -> false;
     has_location("/") -> false;
     has_location(_) -> true.
-    
+
     %% HACK ALERT!
     %% We use a 303 See Other here as there is a serious bug in Safari 4.0.5
     %% When we use a 307 then the orginal login post at Facebook will be posted
@@ -172,7 +168,7 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
     use_see_other(Location, Context) ->
         ContextLoc = z_context:set_resp_header("Location", Location, Context),
         ?WM_REPLY({halt, 303}, ContextLoc).
-        
+
 
 % [{"id","100001090298809"},
 % {"name","Marc Worrell"},

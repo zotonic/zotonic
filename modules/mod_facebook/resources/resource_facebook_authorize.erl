@@ -54,7 +54,7 @@ moved_temporarily(ReqData, Context) ->
     Page = get_page(Context1),
     RedirectUrl = lists:flatten(
                         z_context:abs_url(
-                            lists:flatten(z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context1)), 
+                            z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context1),
                             Context1)),
     Location = "https://www.facebook.com/dialog/oauth?client_id="
                 ++ z_utils:url_encode(AppId)

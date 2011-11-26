@@ -56,7 +56,7 @@ moved_temporarily(ReqData, Context) ->
 
     RedirectUrl = lists:flatten(
                         z_context:abs_url(
-                            lists:flatten(z_dispatcher:url_for(twitter_redirect, [], Context1)), 
+                            z_dispatcher:url_for(twitter_redirect, [], Context1),
                             Context1)),
     Location = oauth_twitter_client:authorize_url(Token)
         ++ "&oauth_callback=" ++ z_utils:url_encode(RedirectUrl),
