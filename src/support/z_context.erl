@@ -76,6 +76,7 @@
 
     set_session/3,
     get_session/2,
+    get_session/3,
     incr_session/3,
 
     set_page/3,
@@ -710,6 +711,13 @@ get_session(_Key, #context{session_pid=undefined}) ->
     undefined;
 get_session(Key, Context) ->
     z_session:get(Key, Context#context.session_pid).
+
+%% @spec get_session(Key, Context, DefaultValue) -> Value
+%% @doc Fetch the value of the session variable Key, falling back to default.
+get_session(_Key, #context{session_pid=undefined}, DefaultValue) ->
+    DefaultValue;
+get_session(Key, Context, DefaultValue) ->
+    z_session:get(Key, Context#context.session_pid, DefaultValue).
 
 %% @spec incr_session(Key, Increment, Context) -> {NewValue, NewContext}
 %% @doc Increment the session variable Key
