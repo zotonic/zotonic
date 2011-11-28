@@ -375,6 +375,9 @@ range_parts(_RD=#wm_reqdata{resp_body={stream, Size, StreamFun}}, Ranges) ->
      Size};
 
 range_parts(_RD=#wm_reqdata{resp_body=Body0}, Ranges) ->
+    range_parts(Body0, Ranges);
+
+range_parts(Body0, Ranges) when is_binary(Body0); is_list(Body0) ->
     Body = iolist_to_binary(Body0),
     Size = size(Body),
     F = fun(Spec, Acc) ->
