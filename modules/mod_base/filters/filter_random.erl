@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc 'random' filter, return a random element of a list
+%% @doc 'random' filter, return a random element/elements of a list
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2011 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 %% limitations under the License.
 
 -module(filter_random).
--export([random/2]).
+-export([random/2, random/3]).
 
 
+%% @doc Get random element from list.
 random([], _Context) ->
     undefined;
 random(undefined, _Context) ->
@@ -29,3 +30,17 @@ random(In, Context) when is_list(In) ->
     hd(lists:nthtail(M-1, In));
 random(In, Context) ->
     random(erlydtl_runtime:to_list(In, Context), Context).
+
+
+%% @doc create a sublist of using n random elements from source list
+random(N, _Count, _Context) when N == [] orelse N == undefined ->
+    [];
+random(In, Count, _Context) when is_list(In) ->
+    L = length(In),
+    RandomizedIn = z_utils:randomize(In),
+    if
+	Count >= L -> RandomizedIn;
+	true	   -> lists:nthtail(L - Count, RandomizedIn)
+    end;
+random(In, Count, Context) ->
+    random(erlydtl_runtime:to_list(In, Context), Count, Context).
