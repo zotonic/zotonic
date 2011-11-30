@@ -250,6 +250,12 @@ preview_create(MediaId, MediaProps, Context) ->
         [] -> ok;
         Url -> 
             Json = oembed_request(Url, Context),
+            %% if no title yet
+            case z_utils:is_empty(?__(m_rsc:p(MediaId, title, Context), Context)) of
+                true ->
+                    m_rsc:update(MediaId, [{title, proplists:get_value(title, Json)}], Context);
+                false -> nop
+            end,
             %% store found properties in the media part of the rsc
             ok = m_media:replace(MediaId, [{oembed, Json} | MediaProps], Context),
             Type = proplists:get_value(type, Json),
