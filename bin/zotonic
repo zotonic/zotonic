@@ -19,7 +19,7 @@
 #
 if type python &> /dev/null
 then
-    export ZOTONIC=${ZOTONIC:=`python -c "import os,sys;print os.path.realpath(\"$0/../..\")"`}
+    export ZOTONIC=${ZOTONIC:=`python2 -c "import os,sys;print os.path.realpath(\"$0/../..\")"`}
 else
     export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
 fi 
