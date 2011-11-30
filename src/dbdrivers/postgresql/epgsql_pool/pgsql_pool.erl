@@ -45,6 +45,8 @@ get_connection(P, Timeout) ->
     try
         gen_server:call(P, get_connection, Timeout)
     catch 
+        exit:{noproc, _} ->
+            {error, noproc};
         _:_ ->
             gen_server:cast(P, {cancel_wait, self()}),
             {error, timeout}
@@ -78,27 +80,27 @@ init({Name, Size, Opts}) ->
             undefined -> self();
             _Name -> Name
          end,
-    Connections =
-        case connect(Opts) of
-            {ok, Connection} ->
-                [{Connection, now_secs()}];
-            {error, econnrefused} ->
-                error_logger:error_msg("Connection to PostgreSQL server refused."),
-                []
-        end,
+    % Connections =
+    %     case connect(Opts) of
+    %         {ok, Connection} ->
+    %             [{Connection, now_secs()}];
+    %         {error, econnrefused} ->
+    %             error_logger:error_msg("Connection to PostgreSQL server refused."),
+    %             []
+    %     end,
     {ok, TRef} = timer:send_interval(60000, close_unused),
     State = #state{
       id          = Id,
       size        = Size,
       opts        = Opts,
-      connections = Connections,
+      connections = [],
       monitors    = [],
       waiting     = queue:new(),
       timer       = TRef},
     {ok, State}.
 
 %% Requestor wants a connection. When available then immediately return, otherwise add to the waiting queue.
-handle_call(get_connection, From, #state{connections = Connections, waiting = Waiting} = State) ->
+handle_call(get_connection, From, #state{connections = Connections, waiting = Waiting, opts=Opts} = State) ->
     case Connections of
         [{C,_} | T] -> 
             % Return existing unused connection
@@ -107,8 +109,15 @@ handle_call(get_connection, From, #state{connections = Connections, waiting = Wa
             case length(State#state.monitors) < State#state.size of
                 true ->
                     % Allocate a new connection and return it.
-                    {ok, C} = connect(State#state.opts),
-                    {noreply, deliver(From, C, State)};
+                    case connect(State#state.opts) of
+                        {ok, C} -> 
+                            {noreply, deliver(From, C, State)};
+                        {error, Reason} ->
+                            % Could not connect, wait for other established connections
+                            error_logger:info_msg("~p: could not connect to database ~p. Error: ~p~n", 
+                                                  [?MODULE, proplists:get_value(database, Opts), Reason]),
+                            {noreply, State#state{waiting = queue:in(From, Waiting)}}
+                    end;
                 false ->
                     % Reached max connections, let the requestor wait
                     {noreply, State#state{waiting = queue:in(From, Waiting)}}
@@ -170,8 +179,10 @@ handle_info({'DOWN', M, process, _Pid, _Info}, #state{monitors = Monitors} = Sta
     end;
 
 %% One of our database connections crashed. Clean up our administration.
-handle_info({'EXIT', ConnectionPid, _Reason}, State) ->
+handle_info({'EXIT', ConnectionPid, Reason}, #state{opts=Opts} = State) ->
     % Demonitor the process holding the connection
+    error_logger:info_msg("~p: connection ~p to ~p EXIT. Error: ~p~n", 
+                          [?MODULE, ConnectionPid, proplists:get_value(database, Opts), Reason]),
     #state{connections = Connections, monitors = Monitors} = State,
     Connections2 = proplists:delete(ConnectionPid, Connections),
     F = fun({C, M}) when C == ConnectionPid -> 
@@ -200,9 +211,7 @@ connect(Opts) ->
     Host     = proplists:get_value(host, Opts),
     Username = proplists:get_value(username, Opts),
     Password = proplists:get_value(password, Opts),
-    {ok, Conn} = pgsql:connect(Host, Username, Password, Opts),
-    {ok, [], []} = pgsql:squery(Conn, "SET search_path TO " ++ proplists:get_value(schema, Opts)),
-    {ok, Conn}.
+    pgsql:connect(Host, Username, Password, Opts).
 
 deliver({Pid,_Tag} = From, C, #state{monitors=Monitors} = State) ->
     % Monitor the requesting process, demonitor is done on {return_connection, C}

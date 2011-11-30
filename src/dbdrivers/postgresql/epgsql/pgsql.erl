@@ -1,4 +1,5 @@
 %%% Copyright (C) 2008 - Will Glozer.  All rights reserved.
+%%% Copyright (C) 2009-2011 - MARC WORRELL.  All rights reserved.
 
 %% Modified by Marc Worrell, 2009.
 %% Added last_id/2, reset_id/2, squery1/2, equery1/2, equery1/3, assoc/2, assoc/3, columns/2
@@ -17,7 +18,7 @@
 -include("pgsql.hrl").
 -include("zotonic.hrl").
 
--define(timeout, 5000).
+-define(TIMEOUT, 50000).
 
 %% -- client interface --
 
@@ -29,7 +30,23 @@ connect(Host, Username, Opts) ->
 
 connect(Host, Username, Password, Opts) ->
     {ok, C} = pgsql_connection:start_link(),
-    pgsql_connection:connect(C, Host, Username, Password, Opts).
+    case pgsql_connection:connect(C, Host, Username, Password, Opts) of
+        {ok, Conn} ->
+            case proplists:get_value(schema, Opts) of
+                undefined -> 
+                    {ok, Conn};
+                Schema when is_list(Schema) ->
+                    case squery(Conn, "SET search_path TO " ++ Schema) of
+                        {ok, [], []} ->
+                            {ok, Conn};
+                        Error -> 
+                            close(Conn),
+                            Error
+                    end
+            end;
+        Error -> 
+            Error
+    end.
 
 close(C) when is_pid(C) ->
     catch pgsql_connection:stop(C),
@@ -202,7 +219,7 @@ receive_result(C, Cols, Rows) ->
         {pgsql, C, done} ->
             done
     after
-        ?timeout -> {error, timeout}
+        ?TIMEOUT -> {error, timeout}
     end.
 
 receive_extended_result(C)->
@@ -226,5 +243,5 @@ receive_extended_result(C, Rows) ->
         {pgsql, C, {notice, _N}} ->
             receive_extended_result(C, Rows)
     after
-        ?timeout -> {error, timeout}
+        ?TIMEOUT -> {error, timeout}
     end.

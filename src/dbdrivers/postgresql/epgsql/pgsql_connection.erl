@@ -1,4 +1,5 @@
 %%% Copyright (C) 2008 - Will Glozer.  All rights reserved.
+%%% Copyright (C) 2009-2011 - Marc Worrell.  All rights reserved.
 
 -module(pgsql_connection).
 
@@ -22,7 +23,7 @@
 -include("zotonic.hrl").
 
 -record(state, {
-	     async,
+          async,
           reader,
           sock,
           parameters = [],
@@ -43,13 +44,13 @@ start_link() ->
     gen_fsm:start_link(?MODULE, [], []).
 
 stop(C) ->
-    gen_fsm:send_all_state_event(C, stop).
+    gen_fsm:send_all_state_event(C, stop, ?PGSQL_TIMEOUT).
 
 connect(C, Host, Username, Password, Opts) ->
-    gen_fsm:sync_send_event(C, {connect, Host, Username, Password, Opts}).
+    gen_fsm:sync_send_event(C, {connect, Host, Username, Password, Opts}, ?PGSQL_TIMEOUT).
 
 get_parameter(C, Name) ->
-    gen_fsm:sync_send_event(C, {get_parameter, to_binary(Name)}).
+    gen_fsm:sync_send_event(C, {get_parameter, to_binary(Name)}, ?PGSQL_TIMEOUT).
 
 squery(C, Sql) ->
     gen_fsm:sync_send_event(C, {squery, Sql}, ?PGSQL_TIMEOUT).
@@ -58,25 +59,25 @@ equery(C, Statement, Parameters) ->
     gen_fsm:sync_send_event(C, {equery, Statement, Parameters}, ?PGSQL_TIMEOUT).
 
 parse(C, Name, Sql, Types) ->
-    gen_fsm:sync_send_event(C, {parse, Name, Sql, Types}).
+    gen_fsm:sync_send_event(C, {parse, Name, Sql, Types}, ?PGSQL_TIMEOUT).
 
 bind(C, Statement, PortalName, Parameters) ->
-    gen_fsm:sync_send_event(C, {bind, Statement, PortalName, Parameters}).
+    gen_fsm:sync_send_event(C, {bind, Statement, PortalName, Parameters}, ?PGSQL_TIMEOUT).
 
 execute(C, Statement, PortalName, MaxRows) ->
     gen_fsm:sync_send_event(C, {execute, Statement, PortalName, MaxRows}, ?PGSQL_TIMEOUT).
 
 describe(C, Type, Name) ->
-    gen_fsm:sync_send_event(C, {describe, Type, Name}).
+    gen_fsm:sync_send_event(C, {describe, Type, Name}, ?PGSQL_TIMEOUT).
 
 close(C, Type, Name) ->
-    gen_fsm:sync_send_event(C, {close, Type, Name}).
+    gen_fsm:sync_send_event(C, {close, Type, Name}, ?PGSQL_TIMEOUT).
 
 sync(C) ->
-    gen_fsm:sync_send_event(C, sync).
+    gen_fsm:sync_send_event(C, sync, ?PGSQL_TIMEOUT).
     
 database(C) ->
-    gen_fsm:sync_send_event(C, {database}).
+    gen_fsm:sync_send_event(C, database, ?PGSQL_TIMEOUT).
 
 %% -- gen_fsm implementation --
 
@@ -148,7 +149,7 @@ startup({connect, Host, Username, Password, Opts}, From, State) ->
             State2 = State#state{reader   = Reader,
                                  sock     = Sock,
                                  reply_to = From,
-				                 async = Async,
+                                 async    = Async,
                                  database = proplists:get_value(database, Opts, undefined)},
             send(State2, [<<196608:32>>, Opts3, 0]),
 
@@ -246,7 +247,7 @@ ready({get_parameter, Name}, _From, State) ->
     end,
     {reply, {ok, Value}, ready, State};
 
-ready({database}, _From, State) ->
+ready(database, _From, State) ->
     {reply, {ok, State#state.database}, ready, State};
 
 ready({parse, Name, Sql, Types}, From, State) ->
