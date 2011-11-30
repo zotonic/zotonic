@@ -46,43 +46,43 @@ $.widget("ui.feedback",
 			var args = [];
 			var trigger = $('#'+self.options.trigger);
 			if (trigger.length == 0) {
-			    clearInterval(self.input_updater);
-			    self.input_updater = undefined;
+				clearInterval(self.input_updater);
+				self.input_updater = undefined;
 			} else {
-			    if (trigger.prop('tagName').toLowerCase() == 'form') {
-    				args = trigger.formToArray();
-    			} else {
-    				var v = $.fieldValue(trigger, true);
-    				if (v && v.constructor == Array) {
-    					for(var j=0, jmax=v.length; j < jmax; j++)
-    						args.push({name: "triggervalue", value: v[j]});
-    				}
-    				else if (v !== null && typeof v != 'undefined')
-    					args.push({name: "triggervalue", value: v});
-    			}
+				if (trigger.prop('tagName').toLowerCase() == 'form') {
+					args = trigger.formToArray();
+				} else {
+					var v = $.fieldValue(trigger.get(0), true);
+					if (v && v.constructor == Array) {
+						for(var j=0, jmax=v.length; j < jmax; j++)
+							args.push({name: "triggervalue", value: v[j]});
+					}
+					else if (v !== null && typeof v != 'undefined')
+						args.push({name: "triggervalue", value: v});
+				}
 
-    			// Stop when there is an 'in-flight' update with the same args
-    			if (self.element.hasClass('loading')) {
-    				if (self.last_args == $.param(args)) {
-    					clearInterval(self.input_updater);
-    					self.input_updater = undefined;
-    				}
-    			} else {
-    				self.element.addClass('loading');
-    				self.last_args = $.param(args);
-    				clearInterval(self.input_updater);
+				// Stop when there is an 'in-flight' update with the same args
+				if (self.element.hasClass('loading')) {
+					if (self.last_args == $.param(args)) {
+						clearInterval(self.input_updater);
+						self.input_updater = undefined;
+					}
+				} else {
+					self.element.addClass('loading');
+					self.last_args = $.param(args);
+					clearInterval(self.input_updater);
 
-                    // Form changed, post it to the server
-    				var notify_args = {};
-    				for (var i=0; i<args.length; i++) {
-    				    notify_args[args[i].name] = args[i].value;
-    				}
-    				notify_args.z_trigger_id = self.options.trigger;
-    				notify_args.z_target_id  = $(self.element).attr('id');
-    				notify_args.z_delegate   = self.options.delegate;
-    				z_notify("feedback", notify_args);
-    			}
-    		}
+					// Form changed, post it to the server
+					var notify_args = {};
+					for (var i=0; i<args.length; i++) {
+						notify_args[args[i].name] = args[i].value;
+					}
+					notify_args.z_trigger_id = self.options.trigger;
+					notify_args.z_target_id	 = $(self.element).attr('id');
+					notify_args.z_delegate	 = self.options.delegate;
+					z_notify("feedback", notify_args);
+				}
+			}
 		}, self.options.timeout);
 	}
 });
