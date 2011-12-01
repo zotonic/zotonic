@@ -27,3 +27,5 @@ zotonic.tmproj
 *.so
 *.Plo
 *.wmtrace
+*.mo
+*.swp
