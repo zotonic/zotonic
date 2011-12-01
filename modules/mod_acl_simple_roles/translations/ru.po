@@ -150,7 +150,7 @@ msgstr "удалить"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:49
 msgid "edit"
-msgstr "редактировать"
+msgstr "изменить"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:14
 msgid "make a new acl role"
