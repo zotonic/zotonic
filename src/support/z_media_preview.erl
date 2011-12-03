@@ -162,7 +162,7 @@ cmd_args(FileProps, Filters, OutMime) ->
                end,
 
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) -> 
-                                                {NewW,NewH,Arg} = filter2arg(Filter, W, H),
+                                                {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters5),
                                                 {NewW,NewH,[Arg|Acc]} 
                                             end,
                                             {ImageWidth,ImageHeight,[]},
@@ -201,14 +201,14 @@ out_mime(_Mime, Options) ->
 
 %% @spec filter2arg(Filter, Width, Height) -> {NewWidth, NewHeight, Filter::string}
 %% @doc Map filters to an ImageMagick argument
-filter2arg({make_image, "application/pdf"}, Width, Height) ->
+filter2arg({make_image, "application/pdf"}, Width, Height, _AllFilters) ->
     RArg = ["-resize ", integer_to_list(Width),$x,integer_to_list(Height)],
     {Width, Height, RArg};
-filter2arg(coalesce, Width, Height) ->
+filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
-filter2arg({make_image, _Mime}, Width, Height) ->
+filter2arg({make_image, _Mime}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({correct_orientation, Orientation}, Width, Height) ->
+filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
     case Orientation of
     	2 -> {Width, Height, "-flip"};
     	3 -> {Width, Height, "-rotate 180"};
@@ -219,19 +219,19 @@ filter2arg({correct_orientation, Orientation}, Width, Height) ->
     	8 -> {Width, Height, "-rotate 270"};
         _ -> {Width, Height, []}
     end;
-filter2arg({background, Color}, Width, Height) ->
+filter2arg({background, Color}, Width, Height, _AllFilters) ->
     {Width, Height, ["-background ", $", z_utils:os_escape(Color), $"]};
-filter2arg({layers, Method}, Width, Height) ->
+filter2arg({layers, Method}, Width, Height, _AllFilters) ->
     {Width, Height, ["-layers ", $", z_utils:os_escape(Method), $"]};
-filter2arg({colorspace, Colorspace}, Width, Height) ->
+filter2arg({colorspace, Colorspace}, Width, Height, _AllFilters) ->
     {Width, Height, ["-colorspace ", $", z_utils:os_escape(Colorspace), $"]};
-filter2arg({width, _}, Width, Height) ->
+filter2arg({width, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({height, _}, Width, Height) ->
+filter2arg({height, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({resize, Width, Height, _}, Width, Height) ->
+filter2arg({resize, Width, Height, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({resize, EndWidth, EndHeight, false}, Width, Height) 
+filter2arg({resize, EndWidth, EndHeight, false}, Width, Height, _AllFilters) 
   when Width =< EndWidth andalso Height =< EndHeight ->
     % Prevent scaling up, perform an extent instead
     GArg = "-gravity West",
@@ -239,70 +239,83 @@ filter2arg({resize, EndWidth, EndHeight, false}, Width, Height)
     % Still thumbnail to remove extra info from the image
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, EArg, 32, RArg]};
-filter2arg({resize, EndWidth, EndHeight, true}, Width, Height) 
+filter2arg({resize, EndWidth, EndHeight, true}, Width, Height, _AllFilters) 
   when Width < EndWidth andalso Height < EndHeight ->
     % Scale up
     EArg = ["-resize ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [EArg, 32, RArg]};
-filter2arg({extent, EndWidth, EndHeight}, Width, Height) when EndWidth == undefined orelse EndHeight == undefined ->
+filter2arg({extent, EndWidth, EndHeight}, Width, Height, _AllFilters) when EndWidth == undefined orelse EndHeight == undefined ->
     {Width, Height, []};
-filter2arg({extent, EndWidth, EndHeight}, Width, Height) when Width /= EndWidth orelse Height /= EndHeight ->
+filter2arg({extent, EndWidth, EndHeight}, Width, Height, _AllFilters) when Width /= EndWidth orelse Height /= EndHeight ->
     GArg = "-gravity Center",
     EArg = ["-extent ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
     {EndWidth, EndHeight, [GArg, 32, EArg]};
-filter2arg({resize, EndWidth, EndHeight, _}, _Width, _Height) ->
+filter2arg({resize, EndWidth, EndHeight, _}, _Width, _Height, _AllFilters) ->
     GArg = "-gravity NorthWest",
     RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, RArg]};
-filter2arg({crop, none}, Width, Height) ->
+filter2arg({crop, none}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({crop, {CropL, CropT, CropWidth, CropHeight}}, _Width, _Height) ->
+filter2arg({crop, {CropL, CropT, CropWidth, CropHeight}}, _Width, _Height, _AllFilters) ->
     GArg = "-gravity NorthWest",
     CArg = ["-crop ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight), 
                         $+,integer_to_list(CropL),$+,integer_to_list(CropT)],
     RArg = "+repage",
     {CropWidth, CropHeight, [GArg,32,CArg,32,RArg]};
-filter2arg(grey, Width, Height) ->
+filter2arg(grey, Width, Height, _AllFilters) ->
     {Width, Height, "-colorspace Gray"};
-filter2arg(mono, Width, Height) ->
+filter2arg(mono, Width, Height, _AllFilters) ->
     {Width, Height, "-monochrome"};
-filter2arg(flip, Width, Height) ->
+filter2arg(flip, Width, Height, _AllFilters) ->
     {Width, Height, "-flip"};
-filter2arg(flop, Width, Height) ->
+filter2arg(flop, Width, Height, _AllFilters) ->
     {Width, Height, "-flop"};
-filter2arg(blur, Width, Height) ->
-    filter2arg({blur, 10}, Width, Height);
-filter2arg({blur, Blur}, Width, Height) when is_integer(Blur) ->
+filter2arg(blur, Width, Height, _AllFilters) ->
+    filter2arg({blur, 10}, Width, Height, _AllFilters);
+filter2arg({blur, Blur}, Width, Height, _AllFilters) when is_integer(Blur) ->
     {Width, Height, ["-blur ", integer_to_list(Blur)]};
-filter2arg({blur, Blur}, Width, Height) when is_list(Blur) ->
+filter2arg({blur, Blur}, Width, Height, _AllFilters) when is_list(Blur) ->
     case string:tokens(Blur, "x") of
         [A,B] -> {Width, Height, ["-blur ", ensure_integer(A), $x, ensure_integer(B)]};
         [A] ->   {Width, Height, ["-blur ", ensure_integer(A)]}
     end;
-filter2arg(sharpen_small, Width, Height) when Width < 400 andalso Height < 400 ->
+filter2arg(sharpen_small, Width, Height, _AllFilters) when Width < 400 andalso Height < 400 ->
     {Width, Height, "-unsharp 0.3x0.7 "}; % 6x3+1+0
-filter2arg(sharpen_small, Width, Height) ->
+filter2arg(sharpen_small, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg(lossless, Width, Height) ->
+filter2arg(lossless, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({quality, Q}, Width, Height) ->
+filter2arg({quality, Q}, Width, Height, _AllFilters) ->
     {Width,Height, ["-quality ",integer_to_list(Q)]};
-filter2arg({removebg, Fuzz}, Width, Height) ->
-    {Width, Height, ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
-                     "-draw 'matte 0,0 floodfill' ",
-                     "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
-                     "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
-                     "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                    ]};
+filter2arg({removebg, Fuzz}, Width, Height, AllFilters) ->
+    Filter = case lists:member(lossless, AllFilters) of 
+                 true ->
+                     %% PNG images get the alpha channel flood-filled to remove the background.
+                     ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
+                      "-draw 'matte 0,0 floodfill' ",
+                      "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
+                      "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
+                      "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
+                     ];
+                 false ->
+                     %% JPEG images get flood-filled with white to remove the background.
+                     ["-matte -fill white -fuzz ", integer_to_list(Fuzz), "% ",
+                      "-draw 'color 0,0 floodfill' ",
+                      "-draw 'color 0,", integer_to_list(Height-1), " floodfill' ",
+                      "-draw 'color ", integer_to_list(Width-1), ",0 floodfill' ",
+                      "-draw 'color ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
+                     ]
+             end,
+    {Width, Height, Filter};
 % Ignore these (are already handled as other filter args)
-filter2arg(extent, Width, Height) ->
+filter2arg(extent, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({extent, _}, Width, Height) ->
+filter2arg({extent, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({extent, _, _}, Width, Height) ->
+filter2arg({extent, _, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg(upscale, Width, Height) ->
+filter2arg(upscale, Width, Height, _AllFilters) ->
     {Width, Height, []}.
 
 
