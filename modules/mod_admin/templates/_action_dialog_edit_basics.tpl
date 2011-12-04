@@ -1,5 +1,5 @@
 {% wire id=#form type="submit" 
-	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element template=template}
+	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element template=template actions=actions}
 	delegate=delegate 
 %}
 <form id="{{ #form }}" method="POST" action="postback">
