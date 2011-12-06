@@ -105,7 +105,7 @@ handle_message(Msg, Context) ->
              Context1}
     end,
     % Cleanup process dict, so our process heap is smaller between calls
-    % z_depcache:flush_process_dict(),
     z_session_page:add_script(ResultScript, ResultContext),
-    erlang:erase().
-    
+    z_utils:erase_process_dict(),
+    ok.
+

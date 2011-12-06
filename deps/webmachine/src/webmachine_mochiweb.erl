@@ -138,13 +138,12 @@ reset_process_dictionary() ->
         mochiweb_request_body_length,
         mochiweb_request_post,
         mochiweb_request_cookie,
-        mochiweb_request_force_close
-           ],
-    ProcessDict = erlang:erase(),
-    lists:map(fun({K,V}) ->
-                      case lists:member(K, Keys) of
-                          true -> erlang:put(K, V);
-                          false -> nop
-                      end
-              end,
-              ProcessDict).
+        mochiweb_request_force_close,
+        '$ancestors',
+        '$initial_call',
+        '$erl_eval_max_line'
+    ],
+    Values = [ {K, erlang:get(K)} || K <- Keys ],
+    erlang:erase(),
+    [ erlang:put(K, V) || {K, V} <- Values, V =/= undefined ],
+    ok.
