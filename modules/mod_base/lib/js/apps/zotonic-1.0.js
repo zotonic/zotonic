@@ -1549,8 +1549,8 @@ function is_equal(x, y) {
         for ( p in y ) {
             if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
         }
-        return true;
     }
+    return true;
 }
 
 
