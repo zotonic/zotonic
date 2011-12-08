@@ -1546,9 +1546,9 @@ function is_equal(x, y) {
         if ( x[ p ] === y[ p ] ) continue;
         if ( typeof( x[ p ] ) !== "object" ) return false;
         if ( ! is_equal( x[ p ],  y[ p ] ) ) return false;
-        for ( p in y ) {
-            if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
-        }
+    }
+    for ( p in y ) {
+        if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
     }
     return true;
 }
