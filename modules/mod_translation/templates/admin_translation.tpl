@@ -23,7 +23,7 @@
 
 		<div class="clearfix">
 		    <a href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
-		    <span class="expl">{_ Show per module how much of the templates a translated. _}</span>
+		    <span class="expl">{_ Show per module how much of the templates are translated. _}</span>
 		</div>
 
 		<hr />
