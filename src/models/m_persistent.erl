@@ -41,6 +41,8 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_find_value(Key :: id(), Source :: #m{}, #context{}) -> term().
+m_find_value(persistent_id, #m{value=undefined}, Context) ->
+    z_context:persistent_id( Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
     z_context:get_persistent(Key, Context).
 
