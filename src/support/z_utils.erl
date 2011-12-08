@@ -51,6 +51,7 @@
 	set_nth/3,
 	is_empty/1,
 	is_process_alive/1,
+	erase_process_dict/0,
 	is_true/1,
 	js_escape/1,
 	js_array/1,
@@ -133,6 +134,15 @@ is_process_alive(Pid) ->
 		_ -> false
 	end.
 	
+
+
+%% @doc Safe erase of process dict, keeps some 'magical' proc_lib vars
+erase_process_dict() ->
+    Values = [ {K, erlang:get(K)} || K <- ['$initial_call', '$ancestors', '$erl_eval_max_line'] ],
+    erlang:erase(),
+    [ erlang:put(K,V) || {K,V} <- Values, V =/= undefined ],
+    ok.
+
 
 %%% HEX ENCODE and HEX DECODE
 

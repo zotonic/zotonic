@@ -391,19 +391,18 @@ handle_call({get_waiting_pids, Key}, _From, State) ->
 
 %% @doc Fetch a key from the cache, returns undefined when not found.
 handle_call({get, Key}, _From, State) ->
-    {reply, get_in_depcache(Key, State), State};
+    {reply, get_in_depcache_ets(Key, State), State};
 
 %% @doc Fetch a subkey from a key from the cache, returns undefined when not found.
 %% This is useful when the cached data is very large and the fetched data is small in comparison.
 handle_call({get, Key, SubKey}, _From, State) ->
-    case get_in_depcache(Key, State) of
+    case get_in_depcache_ets(Key, State) of
         undefined -> {reply, undefined, State};
         {ok, Value} -> {reply, {ok, find_value(SubKey, Value)}, State}
     end;
 
 %% Add an entry to the cache table
 handle_call({set, Key, Data, MaxAge, Depend}, _From, State) ->
-    erlang:erase(),
     State1 = State#state{serial=State#state.serial+1},
     case MaxAge of
         0 ->
@@ -444,7 +443,6 @@ handle_call(flush, _From, State) ->
     ets:delete_all_objects(State#state.data_table),
     ets:delete_all_objects(State#state.meta_table),
     ets:delete_all_objects(State#state.deps_table),
-    erlang:erase(),
     {reply, ok, State}.
 
 
@@ -464,11 +462,9 @@ handle_cast(flush, State) ->
     ets:delete_all_objects(State#state.data_table),
     ets:delete_all_objects(State#state.meta_table),
     ets:delete_all_objects(State#state.deps_table),
-    erlang:erase(),
     {noreply, State};
 
 handle_cast(tick, State) ->
-    erlang:erase(),
     z_utils:flush_message({'$gen_cast', tick}),
     {noreply, State#state{now=z_utils:now()}};
 
@@ -482,23 +478,6 @@ terminate(_Reason, _State) -> ok.
 code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
 
-%% @doc Fetch a value, from within the depcache process.  Cache the value in the process dictionary of the depcache.
-get_in_depcache(Key, State) ->
-    case erlang:get({depcache, Key}) of
-        {memo, Value} ->
-            Value;
-        undefined ->
-            % Prevent the process dict memo from blowing up the process size
-            case erlang:get(depcache_count) > ?PROCESS_DICT_THRESHOLD of
-                true -> erlang:erase();
-                false -> nop
-            end,
-            Value = get_in_depcache_ets(Key, State),
-            erlang:put({depcache, Key}, {memo, Value}),
-            erlang:put(depcache_count, incr(erlang:get(depcache_count))),
-            Value
-    end.
-    
 incr(undefined) -> 1;
 incr(N) -> N+1.
 
@@ -550,12 +529,11 @@ is_simple_key(_Key) ->
     true.
 
 
-%% @doc Flush a key from the cache, reset the in-process cache as well (we don't know if any cached value had a dependency)
+%% @doc Flush a key from the cache.
 flush_key(Key, State) ->
     ets:delete(State#state.data_table, Key),
     ets:delete(State#state.deps_table, Key),
-    ets:delete(State#state.meta_table, Key),
-    erlang:erase().
+    ets:delete(State#state.meta_table, Key).
 
 
 %% @doc Check if all dependencies are still valid, that is they have a serial before or equal to the serial of the entry
