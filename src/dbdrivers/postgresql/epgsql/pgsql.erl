@@ -49,7 +49,7 @@ connect(Host, Username, Password, Opts) ->
     end.
 
 close(C) when is_pid(C) ->
-    catch pgsql_connection:stop(C),
+    pgsql_connection:stop(C),
     ok.
 
 get_parameter(C, Name) ->

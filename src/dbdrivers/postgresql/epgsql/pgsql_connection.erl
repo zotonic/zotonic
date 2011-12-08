@@ -44,7 +44,7 @@ start_link() ->
     gen_fsm:start_link(?MODULE, [], []).
 
 stop(C) ->
-    gen_fsm:send_all_state_event(C, stop, ?PGSQL_TIMEOUT).
+    gen_fsm:send_all_state_event(C, stop).
 
 connect(C, Host, Username, Password, Opts) ->
     gen_fsm:sync_send_event(C, {connect, Host, Username, Password, Opts}, ?PGSQL_TIMEOUT).
