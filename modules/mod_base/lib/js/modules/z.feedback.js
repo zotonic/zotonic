@@ -68,7 +68,6 @@ $.widget("ui.feedback",
 						self.input_updater = undefined;
 					}
 				} else {
-					self.element.addClass('loading');
 					self.last_args = $.param(args);
 					clearInterval(self.input_updater);
 
@@ -78,9 +77,19 @@ $.widget("ui.feedback",
 						notify_args[args[i].name] = args[i].value;
 					}
 					notify_args.z_trigger_id = self.options.trigger;
-					notify_args.z_target_id	 = $(self.element).attr('id');
-					notify_args.z_delegate	 = self.options.delegate;
-					z_notify("feedback", notify_args);
+					notify_args.z_target_id = $(self.element).attr('id');
+					notify_args.z_delegate = self.options.delegate;
+					for (var k in self.options) {
+						if (k != "delegate" && k != "timeout" && k != "delegate") {
+							notify_args[k] = self.options[k];
+						}
+					}
+					
+					if (typeof self.previous_feedback == 'undefined' || !is_equal(self.previous_feedback, notify_args)) {
+						self.element.addClass('loading');
+						self.previous_feedback = notify_args;
+						z_notify("feedback", notify_args);
+					}
 				}
 			}
 		}, self.options.timeout);
@@ -90,6 +99,5 @@ $.widget("ui.feedback",
 $.ui.feedback.defaults = {
 	delegate: undefined,
 	trigger: undefined,
-	template: undefined,
 	timeout: 400
 }
