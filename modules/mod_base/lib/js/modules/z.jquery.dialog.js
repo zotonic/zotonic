@@ -40,15 +40,18 @@ limitations under the License.
 
 		dialogClose: function() 
 		{
+                        if(!$d) return;
 			$d.dialog('close');
 		},
 		
 		dialogRemove: function(obj)
 		{
-			if(!$d) return;
-			z_tinymce_remove($d);
- 			$d.hide().dialog('destroy').remove();
-			$d = null;
+                        if(!$d) return;
+                        z_tinymce_remove($d);
+                        $d.hide();
+                        if($d.dialog) $d.dialog('destroy');
+                        $d.remove();
+                        $d = null;
 		}
 	});
 
