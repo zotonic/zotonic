@@ -33,7 +33,7 @@ render(Params, _Vars, Context) ->
     BasePath = proplists:get_value(z_convert:to_atom(Module), AllDirs),
 
     %% First check if module has a translations template file. If not, return "n/a"
-    PotFile = filename:join([BasePath, "translations", "template", "en.pot"]),
+    PotFile = filename:join([BasePath, "translations", "template", z_convert:to_list(Module) ++ ".pot"]),
     case filelib:is_regular(PotFile) of
         true ->
             TotalLines = length(z_gettext:parse_po(PotFile)),

@@ -32,11 +32,12 @@ generate(ModLabs) ->
 generate1([]) ->
     ok;
 generate1([{ModDir, Labels}|ModLabs]) ->
+    ModuleName = filename:basename(ModDir),
     Dir = filename:join([ModDir, "translations", "template"]),
     case filelib:ensure_dir(filename:join([Dir, "empty"])) of
         ok ->
             delete_po_files(Dir),
-            generate_po_files(Dir, Labels),
+            generate_po_files(ModuleName, Dir, Labels),
             generate1(ModLabs);
         {error, Reason} ->
             ?LOG("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
@@ -49,11 +50,11 @@ delete_po_files(Dir) ->
     [ file:delete(F) || F <- Files ].
 
 %% Generate po files for all languages found in the labels.
-generate_po_files(_Dir, []) ->
+generate_po_files(_ModuleName, _Dir, []) ->
     ok;
-generate_po_files(Dir, Labels) ->
+generate_po_files(ModuleName, Dir, Labels) ->
     Languages = extract_languages(Labels, [en]),
-    [ generate_po_file(Lang, Dir, Labels) || Lang <- Languages ].
+    [ generate_po_file(ModuleName, Lang, Dir, Labels) || Lang <- Languages ].
 
 
 extract_languages([], Acc) ->
@@ -69,8 +70,8 @@ extract_languages([{_Text, Args, _Pos}|Labels], Acc) ->
         end.
 
 
-generate_po_file(Lang, Dir, Labels) ->
-    Filename = filename:join([Dir, atom_to_list(Lang) ++ case Lang of en -> ".pot"; _ -> ".po" end]),
+generate_po_file(ModuleName, Lang, Dir, Labels) ->
+    Filename = filename:join([Dir, ModuleName ++ case Lang of en -> ".pot"; _ -> ".po" end]),
     PoLabels = extract_labels(Lang, Labels, []),
     z_gettext_compile:generate(Filename, lists:sort(PoLabels)).
 
