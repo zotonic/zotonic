@@ -33,7 +33,7 @@ msgid ""
 "At any moment you can make a backup of your system."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:12 ./modules/mod_backup/templates/admin_backup.tpl:34 ./modules/mod_backup/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_backup/templates/_admin_menu_module.tpl:2 ./modules/mod_backup/templates/admin_backup.tpl:12 ./modules/mod_backup/templates/admin_backup.tpl:34 
 msgid ""
 "Backups"
 msgstr ""
@@ -90,7 +90,7 @@ msgstr ""
 #: ./modules/mod_backup/templates/admin_backup.tpl:26 
 msgid ""
 "Your backup is not correctly configured. The backup module will not work "
-"the problem(s) below have been resolved:"
+"until the problem(s) below have been resolved:"
 msgstr ""
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:52 

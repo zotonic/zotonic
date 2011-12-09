@@ -96,12 +96,12 @@ msgid ""
 "Help about translations."
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:48 ./modules/mod_translation/templates/_dialog_language_edit.tpl:13 
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:13 ./modules/mod_translation/templates/admin_translation.tpl:48 
 msgid ""
 "ISO Code"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:49 ./modules/mod_translation/templates/_dialog_language_edit.tpl:19 
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:19 ./modules/mod_translation/templates/admin_translation.tpl:49 
 msgid ""
 "Language"
 msgstr ""
@@ -155,7 +155,7 @@ msgstr ""
 
 #: ./modules/mod_translation/templates/admin_translation.tpl:26 
 msgid ""
-"Show per module how much of the templates a translated."
+"Show per module how much of the templates are translated."
 msgstr ""
 
 #: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13 

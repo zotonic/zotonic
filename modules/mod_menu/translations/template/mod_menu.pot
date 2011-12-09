@@ -33,7 +33,7 @@ msgid ""
 "Drag items from the menu to the trash to remove them."
 msgstr ""
 
-#: ./modules/mod_menu/templates/_menu_edit_item.tpl:3 ./modules/mod_menu/templates/admin_edit.menu.tpl:23 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:23 ./modules/mod_menu/templates/_menu_edit_item.tpl:3 
 msgid ""
 "Drag me"
 msgstr ""
@@ -58,7 +58,7 @@ msgid ""
 "Menu"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:170 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:173 
 msgid ""
 "New page"
 msgstr ""

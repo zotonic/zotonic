@@ -22,52 +22,43 @@ msgstr ""
 msgid ""
 "E-mail"
 msgstr ""
-"E-mail"
 
 #: ./modules/mod_contact/templates/email_contact.tpl:6 
 msgid ""
 "Hello, the contact form of"
 msgstr ""
-"Hello, the contact form of"
 
 #: ./modules/mod_contact/templates/email_contact.tpl:16 ./modules/mod_contact/templates/contact.tpl:22 
 msgid ""
 "Message"
 msgstr ""
-"Message"
 
 #: ./modules/mod_contact/templates/email_contact.tpl:10 ./modules/mod_contact/templates/contact.tpl:11 
 msgid ""
 "Name"
 msgstr ""
-"Name"
 
 #: ./modules/mod_contact/templates/contact.tpl:27 
 msgid ""
 "Send"
 msgstr ""
-"Send"
 
 #: ./modules/mod_contact/templates/contact.tpl:32 
 msgid ""
 "Thank you!"
 msgstr ""
-"Thank you!"
 
 #: ./modules/mod_contact/templates/contact.tpl:33 
 msgid ""
 "Your message has been submitted! We’ll get in touch soon."
 msgstr ""
-"Your message has been submitted! We’ll get in touch soon."
 
 #: ./modules/mod_contact/templates/email_contact.tpl:3 
 msgid ""
 "contact form on"
 msgstr ""
-"contact form on"
 
 #: ./modules/mod_contact/templates/email_contact.tpl:6 
 msgid ""
 "has been submitted."
 msgstr ""
-"has been submitted."
