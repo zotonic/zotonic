@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:16 
+msgid ""
+"Added on"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments.tpl:4 ./modules/mod_comment/templates/_admin_menu_module.tpl:2 ./modules/mod_comment/templates/admin_comments.tpl:11 
+msgid ""
+"Comments"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_form.tpl:15 
+msgid ""
+"E-mail"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:20 
+msgid ""
+"Email"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_form.tpl:35 
+msgid ""
+"Log on or sign up to comment"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_form.tpl:24 ./modules/mod_comment/templates/admin_comments.tpl:18 
+msgid ""
+"Message"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_form.tpl:10 ./modules/mod_comment/templates/admin_comments.tpl:19 
+msgid ""
+"Name"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:21 
+msgid ""
+"Options"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:17 
+msgid ""
+"Page"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_comment.tpl:4 
+msgid ""
+"Posted"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:4 
+msgid ""
+"Recent Comments"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:13 
+msgid ""
+"Recent comments"
+msgstr ""
+
+#: ./modules/mod_comment/templates/_comments_form.tpl:29 
+msgid ""
+"Send"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:45 
+msgid ""
+"There are no comments."
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:39 
+msgid ""
+"delete"
+msgstr ""
+
+#: ./modules/mod_comment/templates/admin_comments.tpl:38 
+msgid ""
+"view"
+msgstr ""
