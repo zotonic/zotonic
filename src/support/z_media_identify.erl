@@ -328,6 +328,7 @@ extension_mime() ->
 		{".tpl", "text/html"},
 		{".txt", "text/plain"},
 		{".wav", "audio/x-wav"},
+		{".webm", "video/webm"},
 		{".woff", "application/x-font-woff"},
 		{".wmf", "application/x-msmetafile"},
 		{".xhtml", "application/xhtml+xml"},
