@@ -1,0 +1,6 @@
+Zotonic 0.7.3
+=============
+
+Released on 2011-12-11 20:07 by arjan.
+
+
