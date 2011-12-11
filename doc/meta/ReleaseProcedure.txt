@@ -1,21 +1,24 @@
-New feature release:
+New feature release
+-------------------
 
-* Update the NEWS file. Add relevant new modules and
-  features, plus overview of all fixed bugs. Also take commit log for
-  the tip into consideration, extracting relevant commits.
+* Update the NEWS file. 
 
+    Add relevant new modules and features, plus overview of all fixed
+    bugs. Also take commit log for the tip into consideration,
+    extracting relevant commits.
+  
 * Make a release branch:
-  hg branch release-0.4.x
+  git co -b release-0.4.x master
 
 * Update the include/zotonic_release.hrl and src/zotonic.app to include the new version nr., say 0.4.0
 
 * Commit to this branch
 
-* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.0.zip 
+* Make zipfile: git archive --format=zip --prefix=zotonic > ../zotonic-0.4.0.zip 
 
-* Tag the release: hg tag release-0.4.0
+* Tag the release: git tag release-0.4.0
 
-* Change to default branch: hg update default
+* Change to default branch: git co master
 
 * edit include/zotonic_release.hrl and src/zotonic.app to include the higher version, say 0.5-dev
 
@@ -27,37 +30,31 @@ New feature release:
 
 * Update the zotonic.com website:
   * Convert release notes to HTML put on zotonic.com site
-  * hg up on miffy for zotonic.com (download graphic)
+  * change zotonic.version config setting in admin
 
 * Announce on zotonic-users, zotonic-developers, erlang-questions
 
-* Change zotonic.com website
 
 
 
 
+New bugfix release
+------------------
 
+* install zutils
 
-New bugfix release:
-
-* Update working branch to the release branch: hg update release-0.6.x
-
-* Generate change log and put it in docs/changelogs/0.6.1.txt and hg add it
-
-* Update the NEWS file. If any, add relevant new features. For the
-  bugfixes, refer to the change log.
-
-* Update the include/zotonic_release.hrl and src/zotonic.app to include the new version nr., say 0.6.1
-
-* Commit & push
-
-* Tag the release: hg tag release-0.4.1
-
-* Make zipfile: hg archive -t zip -p zotonic zotonic-0.4.1.zip 
+* run: z-mkrelease
+  edit the changelog file so it looks good. Create a HTML version of
+  it for use on zotonic.com
 
 * Upload zipfile to google code, making it keywords: featured, type-source and os-all; un-feature the previuos release
 
-* Update the zotonic.com website, changing the site.current_release config value and change the download links
+* git push
+
+* Update the zotonic.com website, changing:
+  - site.current_release config value
+  - change the download page (version nr. and release notes link)
+  - create a new release note on the site.
 
 * Announce on zotonic-users, zotonic-developers, erlang-questions
 
