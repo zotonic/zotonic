@@ -168,7 +168,7 @@
 %% The props are the resource's props _before_ the update.
 %% The folded value is {IsChanged, UpdateProps} for the update itself.
 %% Set IsChanged to true if you modify the UpdateProps.
--record(rsc_update, {id, props}).
+-record(rsc_update, {action, id, props}).
 
 %% @doc Resource update done notification.
 %% action is 'insert', 'update' or 'delete'

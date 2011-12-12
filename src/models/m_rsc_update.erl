@@ -242,7 +242,13 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                 ],
 
                 % Allow the update props to be modified.
-                {Changed, UpdatePropsN} = z_notifier:foldr(#rsc_update{id=RscId, props=BeforeProps}, {false, UpdateProps1}, Ctx),
+                {Changed, UpdatePropsN} = z_notifier:foldr(#rsc_update{
+                                                        action=case Id of insert_rsc -> insert; _ -> update end,
+                                                        id=RscId, 
+                                                        props=BeforeProps
+                                                    }, 
+                                                    {false, UpdateProps1},
+                                                    Ctx),
                 UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
                     undefined ->
                         UpdatePropsN;
@@ -303,8 +309,8 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 
                     % Return the updated or inserted id
                     {ok, NewId};
-                {rollback, {Why, _}} ->
-                    throw(Why)
+                {rollback, {Why, _} = Er} ->
+                    throw(Er)
             end;
         false ->
             E = case m_rsc:p(Id, is_authoritative, Context) of
