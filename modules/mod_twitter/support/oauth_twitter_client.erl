@@ -104,10 +104,10 @@ oauth_get(URL, Params, Consumer, Token, TokenSecret) ->
   Signed = oauth:signed_params("GET", URL, Params, Consumer, Token, TokenSecret),
   {AuthorizationParams, QueryParams} = lists:partition(fun({K, _}) -> lists:prefix("oauth_", K) end, Signed),
   Request = {oauth:uri(URL, QueryParams), [oauth:header(AuthorizationParams)]},
-  http:request(get, Request, [{autoredirect, false}], []).
+  httpc:request(get, Request, [{autoredirect, false}], []).
 
 oauth_post(URL, Params, Consumer, Token, TokenSecret) ->
     Signed = oauth:signed_params("POST", URL, Params, Consumer, Token, TokenSecret),
     Body = oauth_uri:params_to_string(Signed),
     Request = {URL, [], "application/x-www-form-urlencoded", Body},
-    http:request(post, Request, [{autoredirect, false}], []).
+    httpc:request(post, Request, [{autoredirect, false}], []).

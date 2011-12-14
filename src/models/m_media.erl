@@ -379,7 +379,7 @@ mime_to_category(Mime) ->
 %% @doc Download a file from a http url.
 download_file(Url) ->
     File = z_utils:tempfile(),
-    case http:request(get, 
+    case httpc:request(get, 
                       {z_convert:to_list(Url), []},
                       [],
                       [{stream, File}]) of

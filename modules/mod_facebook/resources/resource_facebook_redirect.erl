@@ -93,7 +93,7 @@ fetch_access_token(Code, Context) ->
                 ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
                 ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
                 ++ "&code=" ++ z_utils:url_encode(Code),
-    case http:request(FacebookUrl) of
+    case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             Qs = mochiweb_util:parse_qs(Payload),
             {ok, proplists:get_value("access_token", Qs), z_convert:to_integer(proplists:get_value("expires", Qs))};
@@ -104,7 +104,7 @@ fetch_access_token(Code, Context) ->
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
     FacebookUrl = "https://graph.facebook.com/me?access_token=" ++ z_utils:url_encode(AccessToken),
-    case http:request(FacebookUrl) of
+    case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:decode(Payload),
             {ok, [ {list_to_atom(K), V} || {K,V} <- Props ]};

@@ -237,7 +237,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
             case re:run(Embed, "youtube(\-nocookie)?\\.com/v/([^\?\"'&]+)", [{capture,[2],list}]) of
                 {match, [Code]} ->
                     Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
-                    case http:request(Url) of
+                    case httpc:request(Url) of
                         {ok, {_StatusLine, _Header, Data}} ->
                             %% Received the preview image, move it to a file.
                             m_media:save_preview(MediaId, Data, "image/jpeg", Context);
@@ -260,14 +260,14 @@ preview_vimeo(MediaId, InsertProps, Context) ->
             case re:run(Embed, "clip_id=([0-9]+)", [{capture,[1],list}]) of
                 {match, [Code]} ->
                     JsonUrl = "http://vimeo.com/api/v2/video/" ++ Code ++ ".json",
-                    case http:request(JsonUrl) of
+                    case httpc:request(JsonUrl) of
                         {ok, {_StatusLine, _Header, Data}} ->
                             {array, [{struct, Props}]} = mochijson:decode(Data),
                             case proplists:get_value("thumbnail_large", Props) of
                                 undefined ->
                                     nop;
                                 ImgUrl ->
-                                    case http:request(ImgUrl) of
+                                    case httpc:request(ImgUrl) of
                                         {ok, {_StatusLine1, _Header1, ImgData}} ->
                                             %% Received the preview image, move it to a file.
                                             m_media:save_preview(MediaId, ImgData, "image/jpeg", Context);
@@ -296,7 +296,7 @@ preview_yandex(MediaId, InsertProps, Context) ->
             case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/]+)", [{capture, [1, 2], list}]) of
                 {match, [User, Code]} ->
                     Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
-                    case http:request(Url) of
+                    case httpc:request(Url) of
                         {ok, {_StatusLine, _Header, Data}} ->
                             %% Received the preview image, move it to a file.
                             m_media:save_preview(MediaId, Data, "image/jpeg", Context);

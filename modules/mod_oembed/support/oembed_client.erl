@@ -131,5 +131,5 @@ discover_per_provider(Url, []) ->
 
 
 oembed_request(RequestUrl) ->
-    {ok, {{_, 200, _}, _Headers, Body}} = http:request(get, {RequestUrl, []}, [], []),
+    {ok, {{_, 200, _}, _Headers, Body}} = httpc:request(get, {RequestUrl, []}, [], []),
     z_convert:convert_json(mochijson2:decode(Body)).

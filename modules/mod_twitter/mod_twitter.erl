@@ -227,7 +227,7 @@ start_following(Context) ->
 %% Main fetch process
 %%
 fetch(URL, Body, Sleep, Context) ->
-    case http:request(post,
+    case httpc:request(post,
                       {URL, [], "application/x-www-form-urlencoded", Body},
                       [],
                       [{sync, false},
@@ -387,7 +387,7 @@ check_import_pictures(Urls, Context) ->
     %% Get oEmbed info on all Urls
     EmbedlyUrl = "http://api.embed.ly/1/oembed?urls=" ++ string:join([z_utils:url_encode(Url) || Url <- Urls], ","),
     {ok, {{_Version, 200, _ReasonPhrase}, _Headers, Body}} =
-        http:request(EmbedlyUrl),
+        httpc:request(EmbedlyUrl),
     {array, Pictures} = mochijson:decode(Body),
 
     Props = [P || {struct, P} <- Pictures],

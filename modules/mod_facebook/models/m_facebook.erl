@@ -82,7 +82,7 @@ facebook_q(_Q, _Sql, Args, Context) ->
     FqlUrl = fql_url(Query, Context),
 
     %% 
-    Payload = case http:request(FqlUrl) of
+    Payload = case httpc:request(FqlUrl) of
         {ok, {{_, 200, _}, _Headers, Body}} ->
             mochijson2:decode(Body);
         Other ->
@@ -116,7 +116,7 @@ do_graph_call(Method, Id, Connection, Args, Context)
 
     Request = make_httpc_request(Method, "https", "graph.facebook.com", Path, Query),
 
-    Payload = case http:request(Method, Request, [], []) of
+    Payload = case httpc:request(Method, Request, [], []) of
 		  {ok, {{_, 200, _}, _Headers, Body}} ->
 		      mochijson2:decode(Body);
 		  Other ->

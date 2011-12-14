@@ -286,7 +286,7 @@ oembed_request(Url, Context) ->
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
 thumbnail_request(ThumbUrl, Context) ->
     F = fun() ->
-                {ok, {{_, 200, _}, Headers, ImageData}} = http:request(get, {z_convert:to_list(ThumbUrl), []}, [], []),
+                {ok, {{_, 200, _}, Headers, ImageData}} = httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []),
                 CT = case proplists:lookup("content-type", Headers) of
                          {"content-type", C} -> C;
                          _ -> "image/jpeg"
