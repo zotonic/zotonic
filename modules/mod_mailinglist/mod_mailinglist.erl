@@ -114,8 +114,8 @@ observe_mailinglist_message({mailinglist_message, Message, ListId, RecipientId},
 
 
 %% @doc When an e-mail bounces, disable the corresponding recipients and mark them as bounced.
-observe_email_bounced(B=#email_bounced{}, Context) ->
-    Recipients = m_mailinglist:get_recipients_by_email(B#email_bounced.recipient, Context),
+observe_email_bounced({email_bounced, _MsgId, Email}, Context) ->
+    Recipients = m_mailinglist:get_recipients_by_email(Email, Context),
     lists:foreach(fun(Id) -> m_mailinglist:update_recipient(Id, [{is_enabled, false}, {is_bounced, true}, {bounce_time, calendar:local_time()}], Context) end, Recipients),
     undefined. %% Let other bounce handlers do their thing
 
