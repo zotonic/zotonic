@@ -20,6 +20,12 @@ export SITES=${SITES:=$ZOTONIC/priv/sites}
 # Path to the Erlang VM
 export ERL=${ERL:=erl}
 
+# Increase this if you expect a lot of concurrent connections. For example
+# if you use comet on popular pages.
+# Please check the documentation of your system on how to increase 
+# the maximum number of open files your operating system. 
+export MAX_PORTS=${MAX_PORTS:=1024}
+
 # The include path for the erlang vm, add when needed for your application.
 export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
