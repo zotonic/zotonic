@@ -1,0 +1,103 @@
+Gossiped data with Zynamo
+=========================
+
+- Nodes (current nodes)
+    Node name
+    State (up, down)
+    Membership (ok, joining, leaving, joined, left)
+    VersionNr (incr by node)
+    Services = [
+        {service, up|down}, ...
+    ]
+
+- Byes (nodes that left)
+    Node name
+    Version
+
+
+Zynamo stores its ring information in a file in its priv directory.
+The file is named 'ring-<nodename>.data' and contains a textual erlang dump of the ring state.
+
+The ring has 1024 partitions.
+
+System and site config are stored in files.
+These files are time-stamped with a Vclock.
+
+On every ring change a node requests most recent version of the configs.
+
+
+When we receive different data for some service record that we also have:
+- Call all services with the other OpaqueData, returning {ok, NewOpaqueData}
+- When we have services with different new OpaqueData then reply the other node
+
+
+Services:
+- Attach themselves to the zynamo otp application: {attach, service}
+- Detach with: {detach, service}
+- zynamo monitors the service for up/down state
+- Only system wide services, no site specific services (for now)
+
+
+Example services:
+    smtp_client (sending e-mail)
+    smtp_server (receiving e-mail)
+    image_resizer
+    ...
+
+Services assumed to be available (for now):
+    sqlstore (structured data)
+    kvstore (simple k/v)
+    filestore (stored by sha1 hash of content)
+
+
+We have two rings:
+- A 'past' ring (all 'ok', 'leaving' and 'left' nodes)
+- A 'future' ring (all 'ok', 'joining' and 'joined' nodes)
+Reads go to the union of nodes from both rings
+Writes go to the 'future' ring
+
+
+(NOTES ON RING CHANGES BELOW -- SEE ALSO DYNAMO PAPER)
+
+Moving content because of ring changes is handled by:
+- Node calculates which content it will have (partition of 'future' ring)
+- Compares the partition with content it is holding ('past' ring)
+- Requests a stream of {key,bucketnr,Vclock} triples from all nodes (starting with 'leaving' nodes)
+  for all keys in the 'future' partition range.
+  Stream start is based on the result of a Merkle tree comparison per ring partition.
+- Partition range includes 2nd/3rd copies ('N') range
+- Nodes deliver these keys async, oldest first
+- Periodically a slow cleanup, pruning data we shouldn't have
+  (check for every pruned key if the other N nodes have it before deletion)
+
+
+How to remove a node Y:
+- Y sets membership to 'leaving'
+- Y recalculates the ring as it will be without leaving nodes
+(other nodes will start requesting data for rebalancing)
+- When all data is rebalanced then Y sets the membership to 'left'
+- The node can be removed when all nodes have membership 'ok', 'joined' or 'left'
+- Y adds itself to the 'bye' list when there are no more 'leaving' or 'joining' nodes
+- Y can be switched off.
+
+How to add a node X:
+- X sets membership status to 'joining'
+- X pings another node, adding itself to the ring (new ring will be gossiped)
+('moving content on ring changes' is triggered because of ring change)
+- When it received all data (receives [] from all up nodes) status goes to 'ok'
+- Status change to 'yes' triggers a ring-membership recalculation and rebalance of all member nodes
+- After a while change node 
+
+How to force-remove a crashed node Z:
+- On any live node: add node Z to the 'bye' list
+- Nodes will see new ring status and start rebalancing
+
+
+
+--------------------------
+Amount of data for a full sync:
+- Key: ~16 bytes  (128 bit uuid)
+- Newest Vclock entry: ~16 bytes
+- BucketNr: 2 bytes
+Total ~34 bytes = 3GB for 100M keys
+Say 1000 keys/sec checked = 1M secs = ~1 day

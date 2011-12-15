@@ -6,7 +6,7 @@ PARSER     =src/erlydtl/erlydtl_parser
 
 MAKEFILES := $(shell find -L modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
 
-all: gen_smtp iconv z_logger mochiweb webmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
+all: gen_smtp iconv z_logger mochiweb webmachine zynamo module-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -29,6 +29,9 @@ mochiweb:
 
 webmachine:
 	cd deps/webmachine && $(MAKE)
+
+zynamo:
+	cd deps/zynamo && $(MAKE)
 
 module-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi

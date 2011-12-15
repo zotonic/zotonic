@@ -1,0 +1,96 @@
+Zotonic startup sequence
+========================
+
+
+Base system:
+
+    zotonic_sup
+        z_ids
+        z_config
+        z_media_preview_server
+        z_sites_dispatcher
+        z_email_server
+        z_email_receive_server
+        z_sites_manager
+
+
+Per site:
+
+    z_site_sup
+        psgql_pool
+        z_depcache
+        z_trans_server
+        z_installer
+        z_notifier
+        z_session_manager
+        z_dispatcher
+        z_template
+        z_dropbox
+        z_pivot_rsc
+        z_module_indexer
+        z_module_manager
+            mod_abc
+            mod_def
+            mod_xyz
+        z_site_startup
+
+
+NEW
+===
+
+How to boot with a database module...
+
+1. [DONE] Add dependencies and capabilities to the modules
+        -mod_provides([ ... ]).
+        -mod_depends([ ... ]).
+
+2. Store the module list in a config file (instead of the database).
+
+    priv/sites/<sitename>/config.running
+    
+    (add vector clock - distribute via gossip)
+
+3. Boot following the dependencies.
+
+
+Add database modules.
+- PostgreSQL
+- sqlite3
+
+And then:
+- More powerful full text indexing
+
+
+
+DATABASE / DIST STATE
+=====================
+
+z_db
+    --> z_notifier:notify(#db{}, ...)
+
+zynamo
+    - observes #db{} from all sites
+    - observes #file{} from all sites
+            Translates #db and #file to internal services (db and file)
+    - handles distribution
+    - knows which nodes provide a database
+    - interfaces to z_ring / gossip
+    - gossips 
+        1. ring state
+        2. zotonic configuration (z_config)
+        3. enabled sites
+        4. site configuration (m_config)
+        5. modules per site
+    - all configs in files
+
+
+
+z_postgresql (provides localdb)
+z_sqlite3 (provides localdb)
+    - database connection pool
+    - only local database
+    - observes #localdb{}
+    - triggers local update notifications
+
+
+    

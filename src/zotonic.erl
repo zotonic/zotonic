@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2011 Marc Worrell
 
 %% @doc Start/stop functions for Zotonic
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2011 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,16 +39,18 @@ start() -> start([]).
 start(_Args) ->
     zotonic_deps:ensure(),    
     ensure_started(crypto),
-    ensure_started(webmachine),
     ensure_started(mnesia),
+    ensure_started(webmachine),
+    ensure_started(zynamo),
     ok = application:start(zotonic).
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
     Res = application:stop(zotonic),
-    application:stop(mnesia),
+    application:stop(zynamo),
     application:stop(webmachine),
+    application:stop(mnesia),
     application:stop(crypto),
     Res.
 
