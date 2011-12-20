@@ -65,6 +65,7 @@ iso2country() -> [
 	{<<"cr">>, <<"Costa Rica">>},
 	{<<"hr">>, <<"Croatia">>},
 	{<<"cu">>, <<"Cuba">>},
+	{<<"cw">>, <<"Curaçao">>},
 	{<<"cy">>, <<"Cyprus">>},
 	{<<"cz">>, <<"Czech Republic">>},
 	{<<"dk">>, <<"Denmark">>},
