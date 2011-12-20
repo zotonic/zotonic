@@ -179,6 +179,20 @@ return_connection(C, #context{dbc=undefined, host=Host}) ->
 return_connection(_C, _Context) -> 
     ok.
 
+%% @doc Apply function F with a connection as parameter. Make sure the
+%% connection is returned after usage.
+with_connection(F, Context) ->
+    with_connection(F, get_connection(Context), Context).
+
+    with_connection(F, none, _Context) -> 
+        F(none);
+    with_connection(F, Connection, Context) when is_pid(Connection) -> 
+        try
+            F(Connection)
+        after
+            return_connection(Connection, Context)
+	end.
+
 
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
@@ -200,13 +214,11 @@ assoc_props_row(Sql, Parameters, Context) ->
     
 
 get_parameter(Parameter, Context) ->
-    C = get_connection(Context),
-    try
-        {ok, Result} = pgsql:get_parameter(C, z_convert:to_binary(Parameter)),
-        Result
-    after
-        return_connection(C, Context)
-    end.
+    F = fun(C) ->
+		{ok, Result} = pgsql:get_parameter(C, z_convert:to_binary(Parameter)),
+		Result
+	end,
+    with_connection(F, Context).
     
 
 %% @doc Return property lists of the results of a query on the database in the Context
@@ -215,68 +227,53 @@ assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
 assoc(Sql, Parameters, Context) ->
-    case get_connection(Context) of
-        none -> [];
-        C ->
-            try
+    F = fun(C) when C =:= none -> [];
+	   (C) ->
                 {ok, Result} = pgsql:assoc(C, Sql, Parameters),
                 Result
-            after
-                return_connection(C, Context)
-            end
-    end.
+	end,
+    with_connection(F, Context).
 
 
 assoc_props(Sql, Context) ->
     assoc_props(Sql, [], Context).
 
 assoc_props(Sql, Parameters, Context) ->
-    case get_connection(Context) of
-        none -> [];
-        C ->
-            try
+    F = fun(C) when C =:= none -> [];
+	   (C) ->
                 {ok, Result} = pgsql:assoc(C, Sql, Parameters),
                 merge_props(Result)
-            after
-                return_connection(C, Context)
-            end
-    end.
+	end,
+    with_connection(F, Context).
 
 
 q(Sql, Context) ->
     q(Sql, [], Context).
 
 q(Sql, Parameters, Context) ->
-    case get_connection(Context) of
-        none -> [];
-        C ->
-            try
+    F = fun(C) when C =:= none -> [];
+	   (C) ->
                 case pgsql:equery(C, Sql, Parameters) of
                     {ok, _Affected, _Cols, Rows} -> Rows;
                     {ok, _Cols, Rows} -> Rows;
                     {ok, Rows} -> Rows
                 end
-            after
-                return_connection(C, Context)
-            end
-    end.
+	end,
+    with_connection(F, Context).
 
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
 q1(Sql, Parameters, Context) ->
-    case get_connection(Context) of
-        none -> undefined;
-        C ->
-            try
+    F = fun(C) when C =:= none -> undefined;
+	   (C) ->
                 case pgsql:equery1(C, Sql, Parameters) of
                     {ok, Value} -> Value;
                     {error, noresult} -> undefined
                 end
-            after
-                return_connection(C, Context)
-            end
-    end.
+	end,
+    with_connection(F, Context).
+	
 
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
@@ -292,16 +289,12 @@ equery(Sql, Context) ->
     equery(Sql, [], Context).
     
 equery(Sql, Parameters, Context) ->
-    case get_connection(Context) of
-        none -> 
-            {error, noresult};
-        C ->
-            try
+    F = fun(C) when C =:= none -> {error, noresult};
+	   (C) ->
                 pgsql:equery(C, Sql, Parameters)
-            after
-                return_connection(C, Context)
-            end
-    end.
+	end,
+    with_connection(F, Context).
+
 
 %% @doc Insert a new row in a table, use only default values.
 %% @spec insert(Table, Context) -> {ok, Id}
@@ -309,12 +302,10 @@ insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
     assert_table_name(Table),
-    C = get_connection(Context),
-    try
-        pgsql:equery1(C, "insert into \""++Table++"\" default values returning id")
-    after
-        return_connection(C, Context)
-    end.
+    F = fun(C) ->
+		pgsql:equery1(C, "insert into \""++Table++"\" default values returning id")
+	end,
+    with_connection(F, Context).
 
 
 %% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
@@ -349,16 +340,15 @@ insert(Table, Props, Context) ->
         false -> Sql
     end,
 
-    C = get_connection(Context),
-    try
-        Id = case pgsql:equery1(C, FinalSql, Parameters) of
-                {ok, IdVal} -> IdVal;
-                {error, noresult} -> undefined
-             end,
-         {ok, Id}
-    after
-        return_connection(C, Context)
-    end.
+    F = fun(C) ->
+		Id = case pgsql:equery1(C, FinalSql, Parameters) of
+			 {ok, IdVal} -> IdVal;
+			 {error, noresult} -> undefined
+		     end,
+		{ok, Id}
+	end,
+    with_connection(F, Context).
+
 
 %% @doc Update a row in a table, merging the props list with any new props values
 %% @spec update(Table, Id, Parameters, Context) -> {ok, RowsUpdated}
@@ -368,8 +358,7 @@ update(Table, Id, Parameters, Context) ->
     assert_table_name(Table),
     Cols         = column_names(Table, Context),
     UpdateProps  = prepare_cols(Cols, Parameters),
-    C            = get_connection(Context),
-    try
+    F = fun(C) ->
         UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
             true ->
                 % Merge the new props with the props in the database
@@ -394,9 +383,8 @@ update(Table, Id, Parameters, Context) ->
                  ++ " where id = $1",
         {ok, RowsUpdated} = pgsql:equery1(C, Sql, [Id | Params]),
         {ok, RowsUpdated}
-    after
-        return_connection(C, Context)
-    end.
+    end,
+    with_connection(F, Context).
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
@@ -405,14 +393,12 @@ delete(Table, Id, Context) when is_atom(Table) ->
     delete(atom_to_list(Table), Id, Context);
 delete(Table, Id, Context) ->
     assert_table_name(Table),
-    C = get_connection(Context),
-    try
+    F = fun(C) ->
         Sql = "delete from \""++Table++"\" where id = $1", 
         {ok, RowsDeleted} = pgsql:equery1(C, Sql, [Id]),
         {ok, RowsDeleted}
-    after
-        return_connection(C, Context)
-    end.
+	end,
+    with_connection(F, Context).
 
 
 
@@ -423,13 +409,11 @@ select(Table, Id, Context) when is_atom(Table) ->
     select(atom_to_list(Table), Id, Context);
 select(Table, Id, Context) ->
     assert_table_name(Table),
-    C = get_connection(Context),
-    {ok, Row} = try
-        Sql = "select * from \""++Table++"\" where id = $1 limit 1", 
-        pgsql:assoc(C, Sql, [Id])
-    after
-        return_connection(C, Context)
-    end,
+    F = fun(C) ->
+		Sql = "select * from \""++Table++"\" where id = $1 limit 1", 
+		pgsql:assoc(C, Sql, [Id])
+	end,
+    {ok, Row} = with_connection(F, Context),
     
     Props = case Row of
         [R] ->
@@ -548,7 +532,7 @@ column_names(Table, Context) ->
 flush(Context) ->
     {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
     z_depcache:flush({database, Db}, Context).
-    
+
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @spec update_sequence(Table, IdList, Context) -> void()
@@ -558,15 +542,12 @@ update_sequence(Table, Ids, Context) when is_atom(Table) ->
 update_sequence(Table, Ids, Context) ->
     assert_table_name(Table),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
-    case get_connection(Context) of
-        none -> [];
-        C ->
-	    try
+    F = fun(C) when C =:= none -> 
+		[];
+	   (C) -> 
 		[ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
-	    after
-		return_connection(C, Context)
-	    end
-    end.
+	   end,
+    with_connection(F, Context).
 
 
 
