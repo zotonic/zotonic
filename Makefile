@@ -6,7 +6,7 @@ PARSER     =src/erlydtl/erlydtl_parser
 
 MAKEFILES := $(shell find -L modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
 
-all: gen_smtp iconv z_logger mochiweb webmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
+all: gen_smtp iconv z_logger mochiweb webzmachine module-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -27,8 +27,8 @@ z_logger:
 mochiweb:
 	cd deps/mochiweb && $(MAKE)
 
-webmachine:
-	cd deps/webmachine && $(MAKE)
+webzmachine:
+	cd deps/webzmachine && $(MAKE)
 
 module-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
@@ -42,7 +42,7 @@ clean:
 	(cd deps/gen_smtp; $(MAKE) clean)
 	(cd deps/z_logger; $(MAKE) clean)
 	(cd deps/mochiweb; $(MAKE) clean)
-	(cd deps/webmachine; $(MAKE) clean)
+	(cd deps/webzmachine; $(MAKE) clean)
 	(cd deps/iconv; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app

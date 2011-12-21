@@ -1,0 +1,3 @@
+[submodule "deps/webzmachine"]
+	path = deps/webzmachine
+	url = git://github.com/zotonic/webzmachine.git

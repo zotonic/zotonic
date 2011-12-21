@@ -21,7 +21,7 @@
 
 -include("zotonic_notifications.hrl").
 
--include_lib("deps/webmachine/include/wm_reqdata.hrl").
+-include_lib("deps/webzmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
 -record(context, {

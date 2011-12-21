@@ -39,7 +39,7 @@ start() -> start([]).
 start(_Args) ->
     zotonic_deps:ensure(),    
     ensure_started(crypto),
-    ensure_started(webmachine),
+    ensure_started(webzmachine),
     ensure_started(mnesia),
     ok = application:start(zotonic).
 
@@ -48,7 +48,7 @@ start(_Args) ->
 stop() ->
     Res = application:stop(zotonic),
     application:stop(mnesia),
-    application:stop(webmachine),
+    application:stop(webzmachine),
     application:stop(crypto),
     Res.
 

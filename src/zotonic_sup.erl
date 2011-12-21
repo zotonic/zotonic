@@ -202,16 +202,16 @@ init_webmachine() ->
                 webmachine_error_handler;
             EH -> EH
         end,
-    application:set_env(webmachine, error_handler, ErrorHandler),        
+    application:set_env(webzmachine, error_handler, ErrorHandler),        
         
     LogDir = z_config:get_dirty(log_dir),
     
-    application:set_env(webmachine, webmachine_logger_module, webmachine_logger),
+    application:set_env(webzmachine, webmachine_logger_module, webmachine_logger),
     webmachine_sup:start_logger(LogDir),
     
     case z_config:get_dirty(enable_perf_logger) of
         true ->
-            application:set_env(webmachine, enable_perf_logger, true),
+            application:set_env(webzmachine, enable_perf_logger, true),
             webmachine_sup:start_perf_logger(LogDir);
         _ ->
             ignore
