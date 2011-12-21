@@ -1,0 +1,3 @@
+[submodule "deps/basho_stats"]
+	path = deps/basho_stats
+	url = git://github.com/basho/basho_stats.git
