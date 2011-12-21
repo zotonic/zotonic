@@ -1,3 +1,6 @@
 [submodule "deps/webzmachine"]
 	path = deps/webzmachine
 	url = git://github.com/zotonic/webzmachine.git
+[submodule "deps/gen_smtp"]
+	path = deps/gen_smtp
+	url = git://github.com/zotonic/gen_smtp.git
