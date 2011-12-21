@@ -39,14 +39,24 @@ start_link() ->
 
 init([]) ->
     Processes = [
+        {zynamo_random, {zynamo_random, start_link, []},
+            permanent, 2000, worker, [zynamo_random]},
+
         {zynamo_event, {zynamo_event, start_link, []},
-            permanent, 2000, worker, dynamic},
+            permanent, 2000, worker, [zynamo_event]},
+
+        {zynamo_request_fsm_sup, {zynamo_request_fsm_sup, start_link, []},
+            permanent, 2000, supervisor, [zynamo_request_fsm_sup]},
 
         {zynamo_manager, {zynamo_manager, start_link, []},
-            permanent, 2000, worker, dynamic},
+            permanent, 2000, worker, [zynamo_manager]},
 
         {zynamo_gossip, {zynamo_gossip, start_link, []},
-            permanent, 2000, worker, dynamic}
+            permanent, 2000, worker, [zynamo_gossip]},
+    
+        % Standard zynamo services
+        {zynamo_kv, {zynamo_kv, start_link, []},
+            permanent, 2000, worker, [zynamo_kv]}
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 

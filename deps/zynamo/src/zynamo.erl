@@ -35,6 +35,7 @@
 ]).
 
 start() ->
+    check(),
     ensure_started(crypto),
     application:start(zynamo).
 
@@ -48,6 +49,7 @@ stop(_State) ->
     ok.
 
 
+%% @doc Ensure that the give application is started. Crash when it can't be started.
 ensure_started(App) ->
     case application:start(App) of
     ok ->
@@ -55,3 +57,12 @@ ensure_started(App) ->
     {error, {already_started, App}} ->
         ok
     end.
+
+
+-spec check() -> ok.
+check() ->
+    % Check if the node name is correct for Zynamo
+    zynamo_hash:node_id(),
+    ok.
+
+

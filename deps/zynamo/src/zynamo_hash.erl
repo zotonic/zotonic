@@ -28,7 +28,13 @@
 
 -export([
     nodelist_hash/2,
-    nodelist_bucket/2
+    nodelist_bucket/2,
+    
+    hash/1,
+
+    unique_id/0,
+    unique_id_split/1,
+    node_id/0
 ]).
 
 
@@ -55,7 +61,51 @@ nodelist_bucket(BucketNr, Ranges) ->
 
 %% @doc Simple but functional hash function.
 %% @todo Make this configurable
+-spec hash(term()) -> non_neg_integer().
 hash(Key) ->
     <<Sha:160/integer>> = crypto:sha(term_to_binary(Key)),
     Sha rem zynamo_ring:ring_buckets().
+
+
+%% @doc Generate an unique id, based on a number in the node name or hostname.
+-spec unique_id() -> pos_integer().
+unique_id() ->
+    case node_id() of
+        Nr when Nr < 1000 -> 
+            {A,B,C} = now(),
+            (((A * 1000000)+B)*1000000+C)*1000+Nr;
+        _ ->
+            error(node_number_too_large)
+    end.
+
+%% @doc Return the node id of this node. Should be unique in the cluster
+-spec node_id() -> non_neg_integer().
+node_id() ->
+    [Name,Host] = string:tokens(atom_to_list(node()), "@"),
+    case node2nr(Name) of
+        undefined ->
+            case node2nr(hd(string:tokens(Host, "."))) of
+                Nr when is_integer(Nr) -> Nr;
+                _ -> error(node_number_missing)
+            end;
+        Nr -> 
+            Nr
+    end.
+
+    node2nr(L) ->
+        case [ D || D <- L, D >= $0, D =< $9 ] of
+            [] -> undefined;
+            N -> list_to_integer(N)
+        end.
+
+
+%% @doc Return the node and timestamp of an unique id.
+-spec unique_id_split(pos_integer()) -> {non_neg_integer, {pos_integer(), pos_integer(), pos_integer()}}.
+unique_id_split(Id) ->
+    Nr = Id rem 1000,
+    Now = Id div 1000,
+    C = Now rem 1000000,
+    B = (Now div 1000000) rem 1000000,
+    A = (Now div 1000000) div 1000000,
+    {Nr, calendar:now_to_universal_time({A,B,C})}.
 

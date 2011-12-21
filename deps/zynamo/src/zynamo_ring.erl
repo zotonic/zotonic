@@ -408,35 +408,25 @@ list_services(Site, Ring) ->
     lists:usort(lists:flatten(Services)).
 
 
-%% @doc Return the list of processes running a service. Local node first, randomized afterwards.
--spec locate_service(atom(), atom(), ring()) -> [ pid() ].
+%% @doc Return the list of processes running a service, keep in ring order. Only list active nodes.
+-spec locate_service(atom(), atom(), ring()) -> [ {pid(), term()} ].
 locate_service(Site, Service, Ring) ->
-    {Local,Other} = lists:foldl(
-        fun(Node, {LocalPid,Acc}) ->
+    lists:foldl(
+        fun(Node, Acc) ->
             case is_node_active(Node) of
                 true ->
                     case lists:keyfind({Site, Service}, 1, Node#ring_node.services) of
                         false -> 
-                            {LocalPid, Acc};
-                        {{Site, Service}, Pid, _GossipState} ->
-                            case Node#ring_node.node == node() of
-                                true -> {Pid, Acc};
-                                false -> {LocalPid, [Pid|Acc]}
-                            end
+                            Acc;
+                        {{Site, Service}, Pid, GossipState} ->
+                            [{Pid,GossipState}|Acc]
                     end;
                 false ->
-                    {LocalPid, Acc}
+                    Acc
             end
         end,
-        {undefined,[]},
-        Ring#ring.nodes),
-    % Put the local node in front, randomize the other nodes
-    Other1 = randomize(Other),
-    case Local of
-        undefined -> Other1;
-        _ -> [Local|Other1]
-    end.
-
+        [],
+        Ring#ring.nodes).
 
 
 %% @doc Sync two views of the ring memberships. This does not merge the up-state of the nodes.
@@ -480,19 +470,6 @@ random_other_node(#ring{nodes=Nodes} = Ring) ->
 -spec random_other_ring_nodes(ring()) -> [ #ring_node{} ].
 random_other_ring_nodes(#ring{nodes=Nodes}) ->
     Nodes1 = lists:filter(fun(#ring_node{node=N}) -> N /= node() end, Nodes),
-    randomize(Nodes1).
+    zynamo_random:randomize(Nodes1).
 
 
-%% @doc Simple randomize of a list. Not good quality, but good enough for us
-randomize([]) -> 
-    [];
-randomize([_] = L) -> 
-    L;
-randomize(List) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
-    D = lists:map(fun(A) ->
-                    {random:uniform(), A}
-             end, List),
-    {_, D1} = lists:unzip(lists:keysort(1, D)),
-    D1.

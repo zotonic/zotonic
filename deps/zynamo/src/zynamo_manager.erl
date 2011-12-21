@@ -28,6 +28,7 @@
 %% interface functions
 -export([
     get_ring/0,
+    get_ring_range/1,
     sync_ring/2,
     save/0,
     leave/0,
@@ -41,6 +42,7 @@
 ]).
 
 -type ring() :: zynamo_ring:ring().
+
 
 %% @doc The ring state. The complete ring and the buckets per node.
 %%      The 'past' bucket list is the state without joining nodes
@@ -77,6 +79,12 @@ get_ring() ->
 -spec sync_ring(node(), ring()) -> {ok, ring()} | no_change | {error, term()}.
 sync_ring(FromNode, Ring) ->
     gen_server:call(?MODULE, {do_sync_ring, FromNode, Ring}, infinity).
+
+
+%% @doc Fetch a ring and its ranges
+-spec get_ring_range(past | future) -> {ok, ring()} | {error, term()}.
+get_ring_range(Which) ->
+    gen_server:call(?MODULE, {get_ring_range, Which}, infinity).
 
 
 %% @doc Save the ring to disk, which will be used for a later reboot.
@@ -121,9 +129,10 @@ list_services(Site) ->
 
 
 %% @doc Return a list of (random) available service Pids, local Pid first.
--spec locate_service(atom(), atom()) -> {ok, [ node() ]} | {error, term()}.
+-spec locate_service(atom(), atom()) -> {ok, [ {pid(), term()} ]} | {error, term()}.
 locate_service(Site, Service) ->
     gen_server:call(?MODULE, {locate_service, Site, Service}, infinity).
+
 
 
 %%====================================================================
@@ -170,6 +179,12 @@ handle_call({do_sync_ring, FromNode, OtherRing}, _From, #state{ring=MyRing} = St
 
 handle_call(get_ring, _From, #state{ring=Ring} = State) ->
     {reply, {ok, Ring}, State};
+
+handle_call({get_ring_range, past}, _From, #state{past=Past} = State) ->
+    {reply, {ok, Past}, State};
+
+handle_call({get_ring_range, future}, _From, #state{past=Future} = State) ->
+    {reply, {ok, Future}, State};
 
 handle_call(list_services, _From, #state{ring=Ring} = State) ->
     {reply, {ok, zynamo_ring:list_services(Ring)}, State};
