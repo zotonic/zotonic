@@ -4,3 +4,6 @@
 [submodule "deps/gen_smtp"]
 	path = deps/gen_smtp
 	url = git://github.com/zotonic/gen_smtp.git
+[submodule "deps/erlang-iconv"]
+	path = deps/erlang-iconv
+	url = git://github.com/Vagabond/erlang-iconv.git

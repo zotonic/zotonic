@@ -19,7 +19,7 @@ gen_smtp:
 	cd deps/gen_smtp && $(MAKE)
 
 iconv:
-	cd deps/iconv && ./rebar compile
+	cd deps/erlang-iconv && ./rebar compile
 
 z_logger:
 	cd deps/z_logger && $(MAKE)
@@ -49,6 +49,7 @@ clean:
 	(cd deps/z_logger; $(MAKE) clean)
 	(cd deps/mochiweb; $(MAKE) clean)
 	(cd deps/webmachine; $(MAKE) clean)
+	(cd deps/basho_stats; $(MAKE) clean)
 	(cd deps/iconv; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
