@@ -7,3 +7,6 @@
 [submodule "deps/erlang-iconv"]
 	path = deps/erlang-iconv
 	url = git://github.com/Vagabond/erlang-iconv.git
+[submodule "deps/webzmachine"]
+	path = deps/webzmachine
+	url = git://github.com/zotonic/webzmachine.git

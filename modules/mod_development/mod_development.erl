@@ -117,7 +117,7 @@ handle_file(_Verb, ".erl", F) ->
                   make:files([F], [load,
                                    {i, "include"},
                                    {i, "src/dbdrivers/postgresql/include"},
-                                   {i, "deps/webmachine/include"}, {outdir, "ebin"}])
+                                   {i, "deps/webzmachine/include"}, {outdir, "ebin"}])
           end),
     "Recompile " ++ F;
 

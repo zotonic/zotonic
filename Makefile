@@ -4,9 +4,10 @@ EBIN_DIRS := $(wildcard deps/*/ebin)
 APP       := zotonic
 PARSER     =src/erlydtl/erlydtl_parser
 
-MAKEFILES := $(shell find -L modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
+GIT_CHECK := $(shell test -d .git && git submodule update --init)
+MAKEFILES := $(shell find -L deps/ modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
 
-all: gen_smtp iconv z_logger mochiweb webmachine zynamo basho_stats module-deps $(PARSER).erl erl ebin/$(APP).app 
+all: iconv makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
@@ -15,42 +16,18 @@ erl:
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl $(PARSER).yrl
 
-gen_smtp:
-	cd deps/gen_smtp && $(MAKE)
-
 iconv:
 	cd deps/erlang-iconv && ./rebar compile
 
-z_logger:
-	cd deps/z_logger && $(MAKE)
-
-mochiweb:
-	cd deps/mochiweb && $(MAKE)
-
-webmachine:
-	cd deps/webmachine && $(MAKE)
-
-zynamo:
-	cd deps/zynamo && $(MAKE)
-
-basho_stats:
-	cd deps/basho_stats && $(MAKE)
-
-module-deps:
+makefile-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
-
 
 docs:
 	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
 
-clean: 
+clean:
 	@echo "removing:"
-	(cd deps/gen_smtp; $(MAKE) clean)
-	(cd deps/z_logger; $(MAKE) clean)
-	(cd deps/mochiweb; $(MAKE) clean)
-	(cd deps/webmachine; $(MAKE) clean)
-	(cd deps/basho_stats; $(MAKE) clean)
-	(cd deps/iconv; ./rebar clean)
+	(cd deps/erlang-iconv; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
@@ -58,4 +35,3 @@ clean:
 
 ebin/$(APP).app:
 	cp src/$(APP).app $@
-
