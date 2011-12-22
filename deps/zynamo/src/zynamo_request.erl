@@ -30,7 +30,9 @@
     put/6,
 
     list/3,
-    list/4
+    list/4,
+
+    reply/2
 ]).
 
 -include("zynamo.hrl").
@@ -78,6 +80,14 @@ list(Site, Service, Receiver, Options) ->
     % TODO
     {error, not_implemented}.
 
+
+%% @doc Helper function for sending reply back from a service.
+reply(Reply, #zynamo_service_command{ref=Ref, from=From}) ->
+    case is_pid(From) of
+        true -> From ! {ok, node(), Ref, Reply};
+        false -> nop
+    end.
+    
 
 
 

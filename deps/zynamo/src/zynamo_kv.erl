@@ -65,12 +65,8 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 handle_cast(#zynamo_service_command{
-                ref=Ref,
-                is_primary=_IsPrimary,
-                from=From,
-                handoff=Handoff,
                 command=Command
-            }, State) ->
+            }=SC, State) ->
     #zynamo_command{command=Cmd, key=Key, value=Value, version=Version} = Command,
     Reply = case Cmd of
                 put ->
@@ -84,10 +80,7 @@ handle_cast(#zynamo_service_command{
                         [{_Key,{Vers,Val}}] -> {ok, Vers, Val}
                     end
             end,
-    case is_pid(From) of
-        true -> From ! {ok, node(), Ref, Reply};
-        false -> nop
-    end,
+    zynamo_request:reply(Reply, SC),
     {noreply, State};
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
