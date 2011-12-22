@@ -202,6 +202,7 @@ init_webmachine() ->
                 webmachine_error_handler;
             EH -> EH
         end,
+    application:set_env(webzmachine, server_header, webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION),
     application:set_env(webzmachine, error_handler, ErrorHandler),        
         
     LogDir = z_config:get_dirty(log_dir),
