@@ -76,7 +76,7 @@ list(Site, Service, Receiver) ->
     list(Site, Service, Receiver, []).
 
 -spec list(atom(), atom(), {pid, pid(), reference()}, list()) -> ok | {error, Reason :: term()}.
-list(Site, Service, Receiver, Options) ->
+list(_Site, _Service, _Receiver, _Options) ->
     % TODO
     {error, not_implemented}.
 
@@ -170,7 +170,7 @@ collect_preference_nodes(Buckets, Ranges, ServiceNodes) ->
         collect_preference_nodes1(Bucket, Ranges, ServiceNodes)
         || Bucket <- Buckets
     ],
-    merge_preference_nodes(Nodes, []).
+    unique_list(merge_preference_nodes(Nodes, [])).
 
     collect_preference_nodes1(local_random, _Ranges, ServiceNodes) ->
         Random = zynamo_random:randomize([ Node || {Node,_} <- ServiceNodes ]),
@@ -199,3 +199,17 @@ collect_preference_nodes(Buckets, Ranges, ServiceNodes) ->
             Nodes),
         merge_preference_nodes(Rest, Acc ++ lists:reverse(Extra1)).
 
+
+unique_list(L) ->
+    unique_list(L, []).
+
+unique_list([], Acc) ->
+    lists:reverse(Acc);
+unique_list([Member|Rest], Acc) ->
+    case lists:member(Member, Acc) of
+        true ->
+            unique_list(Rest, Acc);
+        false ->
+            unique_list(Rest, [Member|Acc])
+    end.
+    
