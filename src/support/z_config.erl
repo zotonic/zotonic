@@ -223,7 +223,7 @@ write_config(Config) ->
     
 
 config_file() ->
-    filename:join([z_utils:lib_dir(priv), "config"]).
+    filename:join([z_utils:lib_dir(priv), "config." ++ atom_to_list(node())]).
 
 
 handle_get(Prop, State) ->

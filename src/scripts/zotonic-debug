@@ -19,4 +19,16 @@
 #
 
 cd $ZOTONIC
+
+# Allow for custom SNAME as extra argument. If so, we move the ports
+if [ "$1" != "" ]; then
+    export SNAME=$1;
+    NR=`echo $SNAME|sed -e 's/[^0-9]//g'`;
+    echo $NR;
+    export ZOTONIC_PORT=`echo ${ZOTONIC_PORT:=8000}+$NR|bc`
+    export ZOTONIC_PORT_SSL=`echo ${ZOTONIC_PORT_SSL:=443}+$NR|bc`
+    export ZOTONIC_SMTP_LISTEN_PORT=`echo ${ZOTONIC_SMTP_LISTEN_PORT:=2525}+$NR|bc`
+    echo "Starting Zotonic using custom port configuration."
+fi
+
 $ERL -env ERL_MAX_PORTS $MAX_PORTS +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic 
