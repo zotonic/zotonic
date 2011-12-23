@@ -18,6 +18,7 @@
  [	{i, "include"},
 	{i, "src/dbdrivers/postgresql/include"},
 	{i, "deps/webzmachine/include"},
+	{i, "deps/zynamo/include"},
   	{outdir, "ebin"},
   	debug_info
  ]
