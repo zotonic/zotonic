@@ -12,8 +12,6 @@
 </article>
 {% endblock %}
 
-
-
 {% block sidebar %}
 <aside id="sidebar" class="zp-33">
     <div style="clear:left" id="notices"></div>
