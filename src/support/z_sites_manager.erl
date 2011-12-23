@@ -169,7 +169,15 @@ handle_call(get_sites_all, _From, State) ->
 
 %% @doc Return all sites
 handle_call(get_sites_status, _From, State) ->
-    {reply, z_supervisor:which_children(State#state.sup), State};
+    Grouped = z_supervisor:which_children(State#state.sup),
+    Ungrouped = lists:foldr(fun({Status, Sites}, Acc) ->
+                                    [begin
+                                         [Name|Rest] = tuple_to_list(Site),
+                                         [Name,Status|Rest]
+                                     end || Site <- Sites] ++ Acc end,
+                            [],
+                            Grouped),
+    {reply, lists:sort(Ungrouped), State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->

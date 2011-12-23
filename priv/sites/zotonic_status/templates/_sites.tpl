@@ -9,8 +9,9 @@
 			</thead>
 			
 			<tbody>
-{% for status, ss in sites %}
-	{% for name,childspec,pid,time in ss %}
+
+	{% for name,status,childspec,pid,time in sites %}
+
 		{% if name /= 'zotonic_status' and (has_user or not configs[name].hidden) %}
 			<tr id="site-{{ name }}" class="{{ status }}">
 				<td>
@@ -55,5 +56,4 @@
 			</tr>
 		{% endif %}
 	{% endfor %}
-{% endfor %}
 			</tbody>

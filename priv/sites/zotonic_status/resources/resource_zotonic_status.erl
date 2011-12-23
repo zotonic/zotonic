@@ -51,7 +51,11 @@ content_types_provided(ReqData, Context) ->
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    Template = z_context:get(template, Context2),
+
+    Template = case z_acl:user(Context2) of
+                   undefined -> "logon.tpl";
+                   _ -> z_context:get(template, Context2)
+               end,
     SitesStatus = z_sites_manager:get_sites_status(),
     Vars = [
         {has_user, z_acl:user(Context2)},
