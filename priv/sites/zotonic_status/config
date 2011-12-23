@@ -23,7 +23,7 @@
 	{modules, [
 			zotonic_status,
 			mod_base,
-			mod_zotonic_status_mercurial,
+			mod_zotonic_status_vcs,
                         mod_zotonic_tracer
 		]},
 	

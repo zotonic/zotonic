@@ -31,7 +31,7 @@
 	                </div>
 	                <p>
 		            <label>{_ Password _}</label>
-		            <input type="password" id="password" name="password" value="" />
+		            <input type="password" id="password" name="password" value="" autofocus />
 	                </p>
 	            </div>
 

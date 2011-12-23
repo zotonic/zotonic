@@ -363,9 +363,7 @@ textarea {
 input[type="text"]:focus,
 input[type="password"]:focus,
 textarea:focus {
-	background: #F74273;
-	color: #fff;
-	border: none;
+	background: #eee;
 }
 
 
