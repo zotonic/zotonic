@@ -130,7 +130,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, {_, Port}) ->
+terminate(_Reason, #state{port=Port}) ->
     true = erlang:port_close(Port),
     os:cmd("killall inotifywait"),
     ok.
