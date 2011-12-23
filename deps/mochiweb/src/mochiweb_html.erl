@@ -305,6 +305,8 @@ tokenize(B, S=#decoder{offset=O}) ->
             tokenize_comment(B, ?ADV_COL(S, 4));
         <<_:O/binary, "<!DOCTYPE", _/binary>> ->
             tokenize_doctype(B, ?ADV_COL(S, 10));
+        <<_:O/binary, "<!doctype", _/binary>> ->
+            tokenize_doctype(B, ?ADV_COL(S, 10));
         <<_:O/binary, "<![CDATA[", _/binary>> ->
             tokenize_cdata(B, ?ADV_COL(S, 9));
         <<_:O/binary, "<?php", _/binary>> ->
