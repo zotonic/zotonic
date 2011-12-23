@@ -17,18 +17,16 @@
 	%}
 
 	<!--[if IE]>
-	{% lib	"css/zp-ie.css" %}
+	{% lib "css/zp-ie.css" %}
 	<![endif]-->
 	
 	<!-- Make ie understand html5 -->
-	{% lib	"js/modules/cufon.js"
-	 		"js/apps/modernizr.js" 
-	 %}
+	{% lib "js/apps/modernizr.js" %}
 
 	{% block html_head_extra %}{% endblock %}
 </head>
 
-<body class="{% block page_class %}{% endblock %}">
+<body class="page">
 
 	<section class="skip">
 		<a href="#content-area" title="Go directly to page content">Go to page content</a>
@@ -37,7 +35,7 @@
 	<section class="zp-wrapper">
 		<header class="clearfix">
 			<figure id="logo" class="left">
-				<a href="/" title="Home"><img src="/lib/images/logo.jpg" alt="Zotonic &mdash; Simple stuff that works" /></a>
+				<a href="/" title="Home"><img src="/lib/images/logo.png" alt="Zotonic &mdash; Simple stuff that works" /></a>
 			</figure>
 			
 			<nav class="right">

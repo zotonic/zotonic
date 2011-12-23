@@ -23,13 +23,13 @@ limitations under the License.
 ---------------------------------------------------------- */
 
 body {
-	background: #27343c url(../images/page_bg.jpg) repeat-x left top;
-	color: #fff;
-	font: 12px/18px "Lucida Grande", Arial, Helvetica, sans-serif;
+	background: #fff url(../images/page_bg.jpg) repeat-x left top;
+	color: #333;
+	font: 14px/22px "Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 	body.home {
-		background: #27343c url(../images/home_bg.jpg) repeat-x left top;
+		background: #fff url(../images/home_bg.jpg) repeat-x left top;
 	}
 
 
@@ -42,130 +42,56 @@ figure {
 ---------------------------------------------------------- */
 
 h1 {
-	font-size: 21px;
-	line-height: 24px;
-	letter-spacing: 0.02em;
-	text-transform: uppercase;
+	font-size: 32px;
+	line-height: 40px;
 	margin: 0 0 6px 0;
 	font-style: normal;
-	color: #63c9f2;
+	color: #0778B0;
 	font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
-	text-shadow: 1px 2px #000;
+	text-shadow: 1px 1px #fff;
 }
 
 h2 {
 	font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
 	font-weight: normal;
-	color: #53b1d7;
+	color: #0778B0;
 	font-style: normal;
-	text-transform: uppercase;
-	font-size: 15px;
-	line-height: 24px;
+	font-size: 20px;
+	line-height: 30px;
+    margin-bottom: 9px;
+	text-shadow: 1px 1px #fff;
 }
 
 h3 {
-	color: #63c9f2;
-	font-weight: bold;
-	font-size: 13px;
+	color: #0778B0;
+	font-weight: normal;
+	font-size: 14px;
+    margin-bottom: 9px;
 }
 
 a, a:focus {
-	color: #63c9f2;
+	color: #0778B0;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #5dbae0;
+	color: #0778B0;
 	text-decoration: none;
-	border-bottom: 1px dotted #5dbae0;
+	border-bottom: 1px dotted #0778B0;
 }
 
 p {
-	margin: 0 0 18px 0;
-	letter-spacing: .03em;
+	margin: 0 0 9px 0;
 }
 
 	p.summary {
-		font-weight: bold;
-		color: #fff;
+        color: black;
 	}
 
 	#sidebar p {
-		font-size: 11px;
+		font-size: 14px;
 	}
 
-p.important:first-letter,
-p.intro:first-letter {
-	font-size: inherit;
-	font-weight: inherit;
-	line-height: inherit;
-	letter-spacing: inherit;
-	float: none;
-	padding: 0;
-	width: auto;
-	font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
-}
-
-p.important:first-line,
-p.intro:first-line {
-	font-variant: normal;
-}
-
-p.breadcrumb {
-	font-size: 11px;
-	margin: 0 0 6px 0;
-	color: #ddd;
-	text-transform: lowercase;
-}
-
-	p.breadcrumb a:hover {
-		color: #5DBAE0;
-		border: none;
-	}
-
-
-/* Lists
----------------------------------------------------------- */
-
-.bullet-list, #content ul {
-	list-style: circle;
-	list-style-position: inside;
-	margin: 0 0 18px 0;
-}
-
-	.bullet-list li {
-		letter-spacing: .03em;
-	}
-
-li.list-item {
-	margin: 0 0 18px 0;
-}
-
-	.list-item p.summary {
-		margin: 0;
-	}
-
-.list-item p.summary {
-	font-size: 11px;
-	font-weight: normal;
-}
-
-.list-filters {
-	margin: 0 0 18px 0;
-}
-
-.list-filters li a {
-	color: #fff;
-	text-decoration: none;
-	font-size: 11px;
-}
-
-	.list-filters li a.current,
-	.list-filters li a:hover {
-		color: #5dbae0;
-		text-decoration: none;
-		border-bottom: 1px dotted #5dbae0;
-	}
 
 
 /* Tables
@@ -173,28 +99,27 @@ li.list-item {
 
 #content table {
 	margin: 0 0 18px;
-	font-size: 11px;
+	font-size: 14px;
 }
 
+#content table th,
 #content table td {
-	padding: 6px 18px 6px 6px;
-	border-bottom: 1px solid #323f47;
+	padding: 6px;
+	border-bottom: 1px dotted #333;
+}
+#content table th {
+    padding-bottom: 0;
 }
 
-	#content table thead th {
-		padding: 6px 18px 6px 6px;
-		font-weight: bold;
-		border-bottom: 1px dotted #666;
-		text-align: left;
-	}
-	
-	#content table tr:nth-child(even) td {
-		background: #2a373f;
-	}
+#content table tr th {
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 1px dotted #333;
+}
 
-	#content table tr:hover td {
-		background-color: #3a474f;
-	}
+#content table tr:nth-child(even) td {
+    background: #eee;
+}
 
 
 /* Grid
@@ -209,7 +134,7 @@ header {
 }
 
 .page header {
-	margin: 0 0 36px 0;
+	margin: 0 0 48px 0;
 }
 
 #content-area {
@@ -233,33 +158,51 @@ header {
 	position: relative;
 }
 
-	.home #banner {
-		color: white;
-	}
-
-	.home #banner #sites-zotonic {
+	.home #banner #download-zotonic {
 		position: absolute;
-		right: 63px;
-		top: 110px;
-	}
-	
-	#logon_rememberme,
-	#logon_button {
-		margin-top: 16px;
-		padding-left: 60px;
+		left: 625px;
+		top: 40px;
+		width: 350px;
 	}
 
-#sites li {
-	margin-top: 8px;
-	font-size: 14px;
-}
-
-	#sites li a {
-		color: white;
+	.home #banner #docs-zotonic {
+		position: absolute;
+		left: 625px;
+		top: 170px;
+		width: 350px;
 	}
+		
+		.home #banner #download-zotonic a,
+		.home #banner #docs-zotonic a {
+			border: none;
+		}
+
+		.home #banner section {
+            position: relative;
+        }
+
+		.home #banner section a span {
+            position: absolute;
+            top: 0; left: 0;
+            color: white;
+            left: 92px;
+        }
+
+		.home #banner section a span.header {
+            top: 28px;
+            font-size: 20px;
+            font-weight: bold;
+        }            
+
+		.home #banner section a span.subheader {
+            top: 52px;
+            font-size: 14px;
+        }            
+
+
 
 #logo {
-	margin: 18px 0 0 0;
+	margin: 21px 0 0 0;
 }
 
 #logo img {
@@ -275,7 +218,7 @@ header {
 .collection #content .padding,
 .collection-members .padding,
 .feature-members .padding {
-	padding: 0 40px 0 0;
+	padding: 0 40px 32px 0;
 }
 
 
@@ -302,7 +245,7 @@ html, body {
 ---------------------------------------------------------- */
 
 footer {
-	background: #1f2b33 url(../images/page_footer.jpg);
+	background: #eee;
 }
 
 #footer-content {
@@ -313,8 +256,8 @@ footer {
 }
 
 	footer p {
-		font-size: 11px;
-		color: #bbb;
+		font-size: 14px;
+		color: #666;
 	}
 	
 	.footer-list li {
@@ -324,13 +267,13 @@ footer {
 	}
 	
 	.footer-list li a {
-		font-size: 11px;
-		color: #bbb;
+		font-size: 14px;
+		color: #666;
 		line-height: 18px;
 	}	
 
 		.footer-list li a:hover {
-			color: #5dbae0;
+			color: #0778B0;
 		}
 
 /* navigation
@@ -347,10 +290,12 @@ nav {
 		#navigation li a {
 			text-decoration: none;
 			display: block;
-			color: #f1f1f1;
+			color: #333;
 			padding: 0;
-			margin: 0 0 0 9px;
+			margin: 0 0 0 15px;
 			border: none;
+            font-weight: bold;
+			color: #0778B0;
 		}
 		
 		#navigation li a:hover,
@@ -361,7 +306,7 @@ nav {
 		#navigation li a.current,
 		#navigation li a:focus,
 		#navigation li a:active {
-			color: #19b7e8;
+			color: black;
 		}
 
 
@@ -390,7 +335,6 @@ nav {
 	
 .zotonic-license-notice {
 	color: #bbb; 
-	border-top: 1px dotted #666; 
 	padding: 17px 0 0 0;
 }
 
@@ -407,18 +351,11 @@ fieldset {
 	border: none;
 }
 
-label {
-	color: #fff;
-}
-
-label.wide {
-	width: auto;
-}
 
 input[type="text"],
 input[type="password"],
 textarea {
-	border: none;
+	border: 1px solid #333;;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
@@ -426,6 +363,9 @@ textarea {
 input[type="text"]:focus,
 input[type="password"]:focus,
 textarea:focus {
+	background: #F74273;
+	color: #fff;
+	border: none;
 }
 
 
@@ -474,15 +414,17 @@ textarea:focus {
 ---------------------------------------------------------- */
 
 pre {
-	white-space: pre-wrap;       /* css-3 */
-	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-	white-space: -pre-wrap;      /* Opera 4-6 */
-	white-space: -o-pre-wrap;    /* Opera 7 */
-	word-wrap: break-word;       /* Internet Explorer 5.5+ */
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	background: #1e2b33;
-	border: 1px solid #323f47;
+    color: black;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background: #eee;
 }
 
 
@@ -490,15 +432,14 @@ pre {
 ---------------------------------------------------------- */
 
 div#logon_box {
-	background-color: #323f47;
-	border: 1px solid #323f47 !important;
+	background-color: #fff;
+	border: 1px solid #eee !important;
 }
 
 div#logon_box input[type=text], div#logon_box input[type=password] {
 	border: 1px solid #333;
-	color: white;
+	color: black;
 }
-
 
 p.error {
     display: none;
@@ -508,16 +449,15 @@ form.error-pw .error {
     display: block;
 }
 
-/* Pages - sites status
----------------------------------------------------------- */
 
 /* status flags */
 
 span.status {
 	display: none;
-	padding: 2px 4px 3px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	padding: 4px 4px 3px;
+        font-size: 12px;
+	-moz-border-radius: 2px;
+	border-radius: 3px;
 }
 
 .waiting span.waiting {
@@ -596,32 +536,20 @@ span.stopped {
 	display: none;
 }
 
-/* Pages - features
----------------------------------------------------------- */
 
-.feature-wrapper {
-	background: #1e2b33;
-	border: 1px solid #323f47;
-	padding: 9px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
+
+.pager li {
+	display: inline;
+	margin: 0 6px 0 0;
 }
 
-	.feature-item img {
-		margin: 6px 6px 0 0;
-	}
+.pager li.current {
+    font-weight: bold;
+}
 
-	.feature-item p.summary {
-		font-weight: normal;
-		color: #fff;
-		font-size: 11px;
-		margin: 0;
-	}
-	
-	.feature-item {
-		margin: 0 0 18px 0;
-	}
-	
-		.last-feature {
-			margin: 0;
-		}
+fieldset { padding-left: 0; }
+
+
+p.meta {
+    color: #666;
+}
