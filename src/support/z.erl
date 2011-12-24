@@ -64,8 +64,8 @@ m() ->
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
-	[ flush(C) || C <- z_sites_manager:get_site_contexts() ],
-	z_sites_manager:update_dispatchinfo().
+    [ flush(C) || C <- z_sites_manager:get_site_contexts() ],
+    z_sites_dispatcher:update_dispatchinfo().
 	
 flush(Context) ->
    	z_depcache:flush(Context),

@@ -148,7 +148,7 @@ code_change(_OldVsn, State, _Extra) ->
 reload_all() ->
 	case reload_loaded_modules() of
 		[] -> 
-		    z_sites_manager:update_dispatchinfo(),
+		    z_sites_dispatcher:update_dispatchinfo(),
 		    [ z_module_indexer:reindex(C) || C <- z_sites_manager:get_site_contexts() ],
 		    ok;
 		_ -> 
