@@ -28,7 +28,6 @@
 %% API exports
 -export([
     upgrade/0,
-    update_dispatchinfo/0,
     get_sites/0,
     get_sites_all/0,
     get_sites_status/0,
@@ -43,7 +42,6 @@
 
 
 -include_lib("zotonic.hrl").
--include_lib("wm_host_dispatch_list.hrl").
 
 -record(state, {sup}).
 
@@ -63,23 +61,6 @@ start_link() ->
 %% Removes and stops deleted sites, adds (but does not start) new sites.
 upgrade() ->
     gen_server:cast(?MODULE, upgrade).
-
-
-%% @doc Update the webmachine dispatch information. Collects dispatch information from all sites and sends it
-%% to webmachine for updating its dispatch lists and host information.
-update_dispatchinfo() ->
-    DispatchList = [ fetch_dispatchinfo(Site) || Site <- get_sites() ],
-    z_sites_dispatcher:set_dispatch_rules(DispatchList),
-    ok.
-
-    fetch_dispatchinfo(Site) ->
-        Name = z_utils:name_for_host(z_dispatcher, Site),
-        {Host, Hostname, Streamhost, SmtpHost, Hostalias, Redirect, DispatchList} = 
-			z_dispatcher:dispatchinfo(Name),
-        #wm_host_dispatch_list{
-            host=Host, hostname=Hostname, streamhost=Streamhost, smtphost=SmtpHost, hostalias=Hostalias,
-            redirect=Redirect, dispatch_list=DispatchList
-        }.
 
 
 %% @doc Return a list of active site names.
