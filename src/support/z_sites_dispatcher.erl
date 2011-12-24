@@ -33,11 +33,11 @@
 
 %% interface functions
 -export([
-    dispatch/3,
-    set_dispatch_rules/1,
-    get_fallback_site/0,
-	get_host_for_domain/1
-]).
+         dispatch/3,
+         get_fallback_site/0,
+         get_host_for_domain/1,
+         update_dispatchinfo/0
+        ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
@@ -54,6 +54,12 @@ start_link() ->
 start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
+
+
+%% @doc Update the webmachine dispatch information. Collects dispatch information from all sites and sends it
+%% to webmachine for updating its dispatch lists and host information.
+update_dispatchinfo() ->
+    gen_server:cast(?MODULE, update_dispatchinfo).
 
 
 %% @doc Match the host and path to a dispatch rule.
@@ -86,10 +92,6 @@ dispatch(Host, Path, ReqData) ->
     end.
 
 
-%% @doc Store a new set of dispatch rules, called when a site refreshes its modules or when a site is restarted.
-set_dispatch_rules(DispatchRules) ->
-    gen_server:cast(?MODULE, {set_dispatch_rules, DispatchRules}).
-
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->
     gen_server:call(?MODULE, {get_fallback_site}).
@@ -111,6 +113,7 @@ get_host_for_domain(Domain) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
+    timer:send_after(2000, update_dispatchinfo),
     {ok, #state{rules=[], fallback_site=z_sites_manager:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -166,12 +169,11 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% @doc Load a new set of dispatch rules.
+%% @doc Reloads the dispatch rules.
 %% @todo Do SSL filtering per host (instead of on a system wide basis).
-handle_cast({set_dispatch_rules, Rules}, State) ->
-    Rules1 = filter_ssl(z_config:get(ssl), Rules),
-    Rules2 = normalize_streamhosts(Rules1),
-    {noreply, State#state{rules=compile_regexps_hosts(Rules2)}};
+handle_cast(update_dispatchinfo, State) ->
+    {noreply, State#state{rules=collect_dispatchrules()}};
+
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -179,9 +181,10 @@ handle_cast(Message, State) ->
 
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
+%% @doc Collect the dispatch rules again (called from a timer in init/1).
+handle_info(update_dispatchinfo, State) ->
+    {noreply, State#state{rules=collect_dispatchrules()}};
+
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -204,6 +207,25 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc Collect all dispatch rules for all sites, normalize and filter them.
+collect_dispatchrules() ->
+    Rules = [ fetch_dispatchinfo(Site) || Site <- z_sites_manager:get_sites() ],
+    Rules1 = filter_ssl(z_config:get(ssl), Rules),
+    Rules2 = normalize_streamhosts(Rules1),
+    compile_regexps_hosts(Rules2).
+
+
+%% @doc Fetch dispatch rules for a specific site.
+fetch_dispatchinfo(Site) ->
+    Name = z_utils:name_for_host(z_dispatcher, Site),
+    {Host, Hostname, Streamhost, SmtpHost, Hostalias, Redirect, DispatchList} = 
+        z_dispatcher:dispatchinfo(Name),
+    #wm_host_dispatch_list{
+                            host=Host, hostname=Hostname, streamhost=Streamhost, smtphost=SmtpHost, hostalias=Hostalias,
+                            redirect=Redirect, dispatch_list=DispatchList
+                          }.
 
 
 %% @doc Redirect to another host name.
