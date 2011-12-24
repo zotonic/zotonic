@@ -113,8 +113,7 @@ get_host_for_domain(Domain) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    timer:send_after(2000, update_dispatchinfo),
-    {ok, #state{rules=[], fallback_site=z_sites_manager:get_fallback_site()}}.
+    {ok, #state{rules=collect_dispatchrules(), fallback_site=z_sites_manager:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -179,11 +178,6 @@ handle_cast(update_dispatchinfo, State) ->
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-
-
-%% @doc Collect the dispatch rules again (called from a timer in init/1).
-handle_info(update_dispatchinfo, State) ->
-    {noreply, State#state{rules=collect_dispatchrules()}};
 
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
