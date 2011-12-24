@@ -7,6 +7,8 @@
 	<div class="padding">
 		<h1>{_ Sites on this Zotonic server _}</h1>
 	
+            {% sites_status %}
+
 		<table id="sites">
 			{% include "_sites.tpl" %}
 		</table>

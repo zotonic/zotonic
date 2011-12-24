@@ -70,7 +70,6 @@
 	</footer>
 
 	{% include "_js_include.tpl" %}
-	<script type="text/javascript">Cufon.now();</script>
 
 </body>
 </html>

@@ -63,6 +63,8 @@
     delete_local_service/3,
     list_services/1,
     list_services/2,
+    list_known_services/1,
+    list_node_services/2,
     locate_service/3,
     sync/2,
     ranges/2,
@@ -383,13 +385,20 @@ delete_local_service(Site, Service, Ring) ->
     end.
 
 
+%% @doc Get a list of all known services on all nodes, up or down.
+-spec list_known_services(ring()) -> [ {atom(), atom()} ].
+list_known_services(Ring) ->
+    AllServices = lists:flatten([[Service || {Service, _, _} <- Node#ring_node.services] || Node <- Ring#ring.nodes]),
+    lists:sort(sets:to_list(sets:from_list(AllServices))).
+                                   
+
 %% @doc Get a list of all services for all sites available on active nodes.
 -spec list_services(ring()) -> [ {atom(), atom()} ].
 list_services(Ring) ->
     Services = [
         case is_node_active(Node) of
             true -> [ Service || {Service, _, _} <- Node#ring_node.services ];
-            false -> Node
+            false -> []
         end
         || Node <- Ring#ring.nodes
     ],
@@ -401,9 +410,18 @@ list_services(Site, Ring) ->
     Services = [
         case is_node_active(Node) of
             true -> [ Service || {{ServiceSite, Service}, _, _} <- Node#ring_node.services, ServiceSite =:= Site ];
-            false -> Node
+            false -> []
         end
         || Node <- Ring#ring.nodes
+    ],
+    lists:usort(lists:flatten(Services)).
+
+%% @doc Get a list of all services for all sites available on active nodes.
+-spec list_node_services(atom(), ring()) -> [ {atom(), atom()} ].
+list_node_services(Node, Ring) ->
+    Services = [
+                [ Service || {Service, _, _} <- N#ring_node.services, N#ring_node.node =:= Node ]
+        || N <- Ring#ring.nodes
     ],
     lists:usort(lists:flatten(Services)).
 

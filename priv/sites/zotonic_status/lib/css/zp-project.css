@@ -551,3 +551,7 @@ fieldset { padding-left: 0; }
 p.meta {
     color: #666;
 }
+
+th.node-down {
+    color: #ccc;
+}
