@@ -2,6 +2,9 @@
 	<li><a {% if zotonic_dispatch == "home" %}class="current"{% endif %} 
             href="{% url home %}">{_ Sites _}</a></li>
 
+	<li><a {% if zotonic_dispatch == "nodes" %}class="current"{% endif %} 
+                href="{% url nodes %}">{_ Nodes _}</a></li>
+
 	<li><a {% if zotonic_dispatch == "stats" %}class="current"{% endif %} 
                 href="{% url stats %}">{_ Statistics _}</a></li>
 

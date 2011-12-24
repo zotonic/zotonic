@@ -1,4 +1,5 @@
 [
 	{home, [],         resource_zotonic_status, [{template, "home.tpl"}]},
+	{nodes, ["nodes"], resource_zotonic_status, [{template, "nodes.tpl"}]},
 	{stats, ["stats"], resource_zotonic_status, [{template, "stats.tpl"}]}
 ].
