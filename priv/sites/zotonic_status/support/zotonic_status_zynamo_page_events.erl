@@ -35,14 +35,25 @@
 
 -include("zotonic.hrl").
 
+-record(state, {context, timer}).
+
 %%% gen_event callbacks
-init(Context) -> {ok, Context}.
+init(Context) -> {ok, #state{context=Context}}.
 
 %% @doc Update the node status table
-handle_event(_Event, Context) ->
-    {ok, render_update(Context)}.
+handle_event(_Event, State) ->
+    case State#state.timer of
+        undefined -> nop;
+        _ -> timer:cancel(State#state.timer)
+    end,
+    {ok, Timer} = timer:send_after(200, render),
+    {ok, State#state{timer=Timer}}.
 
 handle_call(_, State) -> {stop, not_supported, State}.
+
+handle_info(render, State) -> 
+    render_update(State#state.context),
+    {ok, State#state{timer=undefined}};
 handle_info(_, State) -> {ok, State}.
 
 terminate(_Reason, State) ->
@@ -53,6 +64,6 @@ code_change(_OldVsn, State, _Extra) ->
 
 render_update(Context) ->
     Context1 = z_render:update("nodes", scomp_zotonic_status_nodes_status:ring_status_html(Context), Context),
-    z_session_page:add_script(Context1),
-    Context1.
+    z_session_page:add_script(Context1).
+
     

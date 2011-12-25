@@ -24,12 +24,13 @@
 -include_lib("include/zotonic.hrl").
 -include_lib("zynamo.hrl").
 
--export([vary/2, render/3, ring_status_html/1]).
+-export([vary/2, render/3, ring_status_html/1, event_process/1]).
 
 vary(_Params, _Context) -> nocache.
 
 render(_Params, _Vars, Context) ->
-    spawn_link(fun() -> event_process(Context) end),
+    z_session_page:spawn_link(?MODULE, event_process, [Context], Context),
+    %%spawn_link(fun() -> event_process(Context) end),
     {ok, ["<table id=\"nodes\">", ring_status_html(Context), "</table>"]}.
 
 
@@ -48,8 +49,9 @@ service_as_string({Site,Service}) ->
 ring_status_html(Context) ->
     {ok, Ring} = zynamo_manager:get_ring(),
     Nodes = zynamo_ring:nodes(Ring),
+    NodeUp = [{Node, zynamo_ring:is_node_up(Node, Ring)} || Node <- Nodes],
     Vars = [{nodes, Nodes},
-            {node_up, [{Node, zynamo_ring:is_node_up(Node, Ring)} || Node <- Nodes]},
+            {node_up, NodeUp},
             {services, lists:map(fun service_as_string/1, zynamo_ring:list_known_services(Ring))},
             {node_services, [{N, lists:map(fun service_as_string/1, zynamo_ring:list_node_services(N, Ring))} || N <- Nodes]},
             {ring, []}],

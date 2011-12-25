@@ -1,5 +1,5 @@
 <tr>
-    <td></td>
+    <td>&nbsp;</td>
     {% for node in nodes %}
     <th class="node-{% if node_up[node] %}up{% else %}down{% endif %}">{{ node }}</th>
     {% endfor %}
