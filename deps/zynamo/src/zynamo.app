@@ -27,7 +27,7 @@
             zynamo_random,
             zynamo_request_fsm_sup,
             zynamo_kv,
-            zynamo_stats,
+            zynamo_stats
         ]},
         {applications, [kernel, stdlib, crypto]},
         {mod, {zynamo, []}}
