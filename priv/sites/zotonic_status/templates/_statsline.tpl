@@ -1,1 +1,1 @@
-99% below <strong>{{ stats.perc99|statsvalue:k }}</strong>, 95% below <strong>{{ stats.perc95|statsvalue:k }}</strong><br /> average: <strong>{{ stats.avg|statsvalue:k }}</strong>, min: <strong>{{ stats.min|statsvalue:k }}</strong>, max: <strong>{{ stats.max|statsvalue:k }}</strong>."
+99% below <strong>{{ stats.perc99|statsvalue:k }}</strong>, 95% below <strong>{{ stats.perc95|statsvalue:k }}</strong><br />average: <strong>{{ stats.avg|statsvalue:k }}</strong>, min: <strong>{{ stats.min|statsvalue:k }}</strong>, max: <strong>{{ stats.max|statsvalue:k }}</strong>
