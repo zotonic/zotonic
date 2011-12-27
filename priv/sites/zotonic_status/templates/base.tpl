@@ -21,6 +21,7 @@
 	<![endif]-->
 	
 	<!-- Make ie understand html5 -->
+        {% include "_js_include_jquery.tpl" %}
 	{% lib "js/apps/modernizr.js" %}
 
 	{% block html_head_extra %}{% endblock %}

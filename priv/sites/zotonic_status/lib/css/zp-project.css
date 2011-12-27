@@ -555,3 +555,9 @@ p.meta {
 th.node-down {
     color: #ccc;
 }
+
+div.graph {
+    width: 380px;
+    height: 200px;
+    border: 2px solid #eee;
+}
