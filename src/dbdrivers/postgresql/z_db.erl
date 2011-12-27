@@ -187,13 +187,13 @@ with_connection(F, Context) ->
     with_connection(F, none, _Context) -> 
         F(none);
     with_connection(F, Connection, Context) when is_pid(Connection) -> 
-        statz:incr({db, Context#context.host, requests}),
-        statz:incr({db, requests}),
+        statz:incr({Context#context.host, db, requests}),
+        statz:incr({zotonic, db, requests}),
         try
             Start = now(),
             Result = F(Connection),
-            statz:msec(Start, {db, Context#context.host, duration}),
-            statz:msec(Start, {db, duration}),
+            statz:msec(Start, {Context#context.host, db, duration}),
+            statz:msec(Start, {zotonic, db, duration}),
             Result
         after
             return_connection(Connection, Context)

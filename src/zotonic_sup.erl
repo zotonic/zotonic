@@ -59,13 +59,13 @@ init([]) ->
     random:seed(A1, A2, A3),
 
     % Make sure that some stats counters are present
-    statz:new({db, requests}),
-    statz:new({db, duration}),
+    statz:new({zotonic, db, requests}),
+    statz:new({zotonic, db, duration}),
 
-    statz:new({webmachine, requests}),
-    statz:new({webmachine, duration}),
-    statz:new({webmachine, out}),
-    statz:new({webmachine, in}),
+    statz:new({zotonic, webzmachine, requests}),
+    statz:new({zotonic, webzmachine, duration}),
+    statz:new({zotonic, webzmachine, out}),
+    statz:new({zotonic, webzmachine, in}),
 
     % Random id generation
     Ids     = {z_ids,
