@@ -120,9 +120,9 @@ init([]) ->
                 permanent, 5000, worker, dynamic},
                 
     Processes = [
-        Ids, Config, PreviewServer, Dispatcher,
+        Ids, Config, PreviewServer,
         SmtpServer, SmtpBounceServer, 
-        SitesSup
+        SitesSup, Dispatcher
                 ],
 
     % Listen to IP address and Port

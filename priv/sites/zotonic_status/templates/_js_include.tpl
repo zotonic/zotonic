@@ -15,17 +15,4 @@
 	{
 	    $.widgetManager();
 	});
-	
-	Cufon.registerFont(cufon_anja);
-	Cufon.replace('h1',{
-		color: '-linear-gradient(#19B7E8, #5bbde5)',
-		hover: true,
-		textShadow: '#222 1px 1px'
-	});
-	
-	Cufon.replace('h2', {
-		color: '-linear-gradient(#19B7E8, #5bbde5)',
-		hover: true,
-		textShadow: '#222 1px 1px'
-	});
 </script>

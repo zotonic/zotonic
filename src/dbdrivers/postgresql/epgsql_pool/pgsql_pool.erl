@@ -181,8 +181,12 @@ handle_info({'DOWN', M, process, _Pid, _Info}, #state{monitors = Monitors} = Sta
 %% One of our database connections crashed. Clean up our administration.
 handle_info({'EXIT', ConnectionPid, Reason}, #state{opts=Opts} = State) ->
     % Demonitor the process holding the connection
-    error_logger:info_msg("~p: connection ~p to ~p EXIT. Error: ~p~n", 
-                          [?MODULE, ConnectionPid, proplists:get_value(database, Opts), Reason]),
+    case Reason of
+        normal -> nop;
+        _ ->
+            error_logger:info_msg("~p: connection ~p to ~p EXIT. Error: ~p~n", 
+                                  [?MODULE, ConnectionPid, proplists:get_value(database, Opts), Reason])
+    end,
     #state{connections = Connections, monitors = Monitors} = State,
     Connections2 = proplists:delete(ConnectionPid, Connections),
     F = fun({C, M}) when C == ConnectionPid -> 

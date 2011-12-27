@@ -1,17 +1,13 @@
 {% extends "base.tpl" %}
 
-{% block title %}{_ Sites _}{% endblock %}
+{% block title %}{_ Nodes _}{% endblock %}
 
 {% block content %}
 <article id="content" class="zp-67">
 	<div class="padding">
-		<h1>{_ Sites on this Zotonic server _}</h1>
-	
-            {% sites_status %}
-
-		<table id="sites">
-			{% include "_sites.tpl" %}
-		</table>
+		<h1>{_ Zotonic nodes &amp; services _}</h1>
+	        
+                {% nodes_status %}
 	</div>
 </article>
 {% endblock %}
