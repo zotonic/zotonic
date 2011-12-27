@@ -10,3 +10,6 @@
 [submodule "deps/webzmachine"]
 	path = deps/webzmachine
 	url = git://github.com/zotonic/webzmachine.git
+[submodule "deps/statz"]
+	path = deps/statz
+	url = git://github.com/zotonic/statz.git

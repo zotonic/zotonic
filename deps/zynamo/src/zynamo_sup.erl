@@ -56,7 +56,9 @@ init([]) ->
     
         % Standard zynamo services
         {zynamo_kv, {zynamo_kv, start_link, []},
-            permanent, 2000, worker, [zynamo_kv]}
+            permanent, 2000, worker, [zynamo_kv]},
+        {zynamo_stats, {zynamo_stats, start_link, []},
+            permanent, 2000, worker, [zynamo_stats]}
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 

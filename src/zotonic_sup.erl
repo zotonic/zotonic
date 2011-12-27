@@ -58,6 +58,15 @@ init([]) ->
     {A1,A2,A3} = erlang:now(),
     random:seed(A1, A2, A3),
 
+    % Make sure that some stats counters are present
+    statz:new({db, requests}),
+    statz:new({db, duration}),
+
+    statz:new({webmachine, requests}),
+    statz:new({webmachine, duration}),
+    statz:new({webmachine, out}),
+    statz:new({webmachine, in}),
+
     % Random id generation
     Ids     = {z_ids,
                {z_ids, start_link, []}, 

@@ -38,6 +38,12 @@ start_link(Host) ->
 %% @spec init(Host) -> SupervisorTree
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 init(Host) ->
+    % Ensure we have stats for this site running
+    statz:new({webmachine, Host, requests}),
+    statz:new({webmachine, Host, in}),
+    statz:new({webmachine, Host, out}),
+    statz:new({webmachine, Host, duration}),
+    
     % On (re)start we use the newest site config.
     SiteProps = z_sites_manager:get_site_config(Host),
 
@@ -120,6 +126,9 @@ add_db_pool(Host, Processes, SiteProps) ->
             DbOpts     = [ {host, DbHost}, {port, DbPort}, 
                            {username, DbUser}, {password, DbPassword}, 
                            {database, DbDatabase}, {schema, DbSchema} ],
+
+            statz:new({db, Host, requests}),
+            statz:new({db, Host, duration}),
 
             [ {Host, 
                 {pgsql_pool, start_link, [Host, 10, DbOpts]},

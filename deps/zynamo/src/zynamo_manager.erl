@@ -49,7 +49,7 @@
 %%      The 'future' bucket list is the state without leaving nodes
 -record(state, {
             ring :: ring(),
-            service_monitors = [] :: [{{atom(), atom()}, reference(), pid()}],
+            service_monitors = [] :: [{{atom(), atom()}, reference(), pid(), term()}],
             past = [] :: [{integer(), integer(), node()}],
             future = [] :: [{integer(), integer(), node()}]
     }).
@@ -218,11 +218,23 @@ handle_cast(leave, #state{ring=Ring} = State) ->
     end;
 
 %% @doc Take part in the ring again, overruling any earlier 'bye'
-handle_cast(join, #state{ring=Ring} = State) ->
+handle_cast(join, #state{ring=Ring, service_monitors=Monitors} = State) ->
     case zynamo_ring:is_member(node(), Ring) of
         false ->
-            {_Changed, NewRing} = zynamo_ring:hello(Ring),
-            {noreply, ring_changed(Ring, NewRing, State)};
+            {Changed, NewRing} = zynamo_ring:hello(Ring),
+            % Re-publish all local services
+            NewRing1 = case Changed of
+                        true ->
+                            lists:foldl(fun({{Site, Service}, _MRef, Pid, GossipState}, R) ->
+                                            zynamo_ring:set_local_service(Site, Service, Pid, GossipState, R)
+                                        end,
+                                        NewRing,
+                                        Monitors);
+                        false ->
+                            NewRing
+                       end,
+            % Signal our ring change
+            {noreply, ring_changed(Ring, NewRing1, State)};
         true ->
             {noreply, State}
     end;
@@ -262,10 +274,10 @@ handle_info({nodedown, Node}, State) ->
 %% @todo Log the service down event
 handle_info({'DOWN', MRef, process, Pid, _Reason}, #state{service_monitors=Monitors} = State) ->
     case lists:keyfind(MRef, 2, Monitors) of
-        {{Site, Service}, MRef, Pid} ->
+        {{Site, Service, _GossipState}, MRef, Pid, _GossipState} ->
             % Delete the service, gossip the deletion
             {noreply, do_set_service(Site, Service, undefined, undefined, State)};
-        {{_Site, _Service}, MRef, _OtherPid} ->
+        {{_Site, _Service}, MRef, _OtherPid, _GossipState} ->
             % Monitor on a service that has been deleted, dispose the monitor and ignore
             Monitors1 = lists:keydelete(MRef, 2, Monitors),
             {noreply, State#state{service_monitors=Monitors1}};

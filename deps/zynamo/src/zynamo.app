@@ -14,9 +14,9 @@
             zynamo_request_fsm,
             zynamo_request_fsm_sup,
             zynamo_kv,
-            
+            zynamo_stats,
+ 
             merkerl,
-            spiraltime,
             vclock
         ]},
         {registered, [
@@ -26,7 +26,8 @@
             zynamo_event,
             zynamo_random,
             zynamo_request_fsm_sup,
-            zynamo_kv
+            zynamo_kv,
+            zynamo_stats,
         ]},
         {applications, [kernel, stdlib, crypto]},
         {mod, {zynamo, []}}

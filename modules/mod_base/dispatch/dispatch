@@ -4,7 +4,7 @@
     {home,     [],            resource_template, [ {template, "home.tpl"} ]},
 
     %% Comet connection, used with long polls from the browser.
-    {comet,    ["comet"],     resource_comet, [{ssl, any}]},
+    {comet,    ["comet"],     resource_comet, [{ssl, any}, {statz, [no_duration]}]},
 
     %% Comet sub-domain connection, used with long polls from the browser.
     {comet,    ["comet", "subdomain"], resource_template, [{template, "comet_subdomain.tpl"}]},

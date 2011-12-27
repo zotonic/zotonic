@@ -187,8 +187,14 @@ with_connection(F, Context) ->
     with_connection(F, none, _Context) -> 
         F(none);
     with_connection(F, Connection, Context) when is_pid(Connection) -> 
+        statz:incr({db, Context#context.host, requests}),
+        statz:incr({db, requests}),
         try
-            F(Connection)
+            Start = now(),
+            Result = F(Connection),
+            statz:msec(Start, {db, Context#context.host, duration}),
+            statz:msec(Start, {db, duration}),
+            Result
         after
             return_connection(Connection, Context)
 	end.

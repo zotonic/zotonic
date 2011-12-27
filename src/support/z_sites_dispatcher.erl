@@ -132,7 +132,7 @@ handle_call({dispatch, HostAsString, PathAsString, ReqData}, _From, State) ->
                             {{no_dispatch_match, Host, UnmatchedPathTokens, Bindings}, RDHost};
                         {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
                             {{Mod, ModOpts, 
-                              [], none, % Host info
+                              Host, [], none, % Host info
                               PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
                               AppRoot, StringPath}, 
                              RDHost}
