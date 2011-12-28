@@ -39,10 +39,11 @@ statsarray(Stats, Type, Which, _Context) ->
 resultarray(Type, Values) ->
     [ "[", 
      lists:flatten(
-      [ ["[", integer_to_list(K), ",", io_lib:format("~.2f", [map(Type, V)]), "],"]
-       || {K, {V,_N}} <- lists:zip(lists:seq(1, length(Values)), Values)]), 
+      [ ["[", integer_to_list(K), ",", io_lib:format("~.2f", [map(Type, V, N)]), "],"]
+       || {K, {V,N}} <- lists:zip(lists:seq(1, length(Values)), Values)]), 
       "],"
     ].
         
-map({_, _, duration}, V) -> V/10.0; %% show duration in ms.
-map(_, V) -> V/1.0.
+map(_, _, 0) -> 0.0;
+map({_, _, duration}, V,N) -> V/(N*10.0); %% show duration in ms.
+map(_, V, N) -> V/N.
