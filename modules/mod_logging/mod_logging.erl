@@ -154,7 +154,7 @@ handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Pro
                     {type, Type},
                     {message, Msg}
                 ] ++ Props, State#state.context),
-    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, State#state.context).
+    catch mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, State#state.context).
 
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
@@ -171,7 +171,7 @@ handle_other_log(Record, State) ->
                 ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
                 _Other -> nop
             end,
-            mod_signal:emit({LogType, [{log_id, Id}|Fields]}, State#state.context);
+            catch mod_signal:emit({LogType, [{log_id, Id}|Fields]}, State#state.context);
         false ->
             Log = #log_message{
                 message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),

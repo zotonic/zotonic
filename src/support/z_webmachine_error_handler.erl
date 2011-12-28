@@ -70,7 +70,11 @@ show_template(ReqData, Code, ErrorDump) ->
             {error_code, Code}, 
             {error_dump, ErrorDump}
         ],
-        Html = z_template:render("error.tpl", Vars, Context),
+        Template = case z_template:find_template("error." ++ integer_to_list(Code) ++ ".tpl", z_context:new(ReqData, ?MODULE)) of
+                       {ok, F} -> F;
+                       {error, _} -> "error.tpl"
+                   end,
+        Html = z_template:render(Template, Vars, Context),
         {Output, _} = z_context:output(Html, Context),
         {Output, RD2}
     catch
