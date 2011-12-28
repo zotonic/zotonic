@@ -28,14 +28,10 @@
 statsvalue(undefined, _, _Context) ->
     "n/a";
 
-statsvalue(V, {_, db, requests}, _Context) ->
-    io_lib:format("~w requests", [V]);
-statsvalue(V, {_, db, duration}, _Context) ->
-    io_lib:format("~.2f msec.", [V/10.0]);
-statsvalue(V, {_, webzmachine, duration}, _Context) ->
-    io_lib:format("~.2f msec.", [V/10.0]);
-statsvalue(V, {_, webzmachine, requests}, _Context) ->
-    io_lib:format("~w requests", [V]);
+statsvalue(V, {_, _, requests}, _Context) ->
+    io_lib:format("~w rq", [V]);
+statsvalue(V, {_, _, duration}, _Context) ->
+    io_lib:format("~.1f ms", [V/10.0]);
 statsvalue(V, {_, webzmachine, in}, _Context) ->
     io_lib:format("~.2f Kb", [V/1000.0]);
 statsvalue(V, {_, webzmachine, out}, _Context) ->

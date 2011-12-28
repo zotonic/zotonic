@@ -1,1 +1,3 @@
-99% below <strong>{{ stats.perc99|statsvalue:k }}</strong>, 95% below <strong>{{ stats.perc95|statsvalue:k }}</strong><br />average: <strong>{{ stats.avg|statsvalue:k }}</strong>, min: <strong>{{ stats.min|statsvalue:k }}</strong>, max: <strong>{{ stats.max|statsvalue:k }}</strong>
+{% for n in nodes %}
+<span title="min: {{ stats[n][type].min|statsvalue:type }}, max: {{ stats[n][type].max|statsvalue:type }}"><strong>{{ n }}</strong>: 99% &lt; <strong>{{ stats[n][type].perc99|statsvalue:type }}</strong>, 95% &lt; <strong>{{ stats[n][type].perc95|statsvalue:type }}</strong>, avg: <strong>{{ stats[n][type].avg|statsvalue:type }}</strong></span><br/>
+{% endfor %}

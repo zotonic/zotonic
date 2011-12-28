@@ -36,10 +36,7 @@ render(_Params, _Vars, Context) ->
 
 event_process(Context) ->
     timer:sleep(1000),
-
-    Vars=[{stats, zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{n,all}])}],
-    Script = z_template:render("_statistics_script.tpl", Vars, Context),
-
+    Script = z_template:render("_statistics_script.tpl", tplvars(), Context),
     Context1 = z_script:add_script(Script, Context),
     z_session_page:add_script(Context1),
 
@@ -47,5 +44,16 @@ event_process(Context) ->
 
 
 statistics_html(Context) ->
-    Vars=[{stats, zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{n,all}])}],
-    z_template:render("_statistics.tpl", Vars, Context).
+    z_template:render("_statistics.tpl", tplvars(), Context).
+
+
+tplvars() ->
+    Source = lists:sort(zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{n,all}])),
+    Nodes = [N || {N, _, _} <- Source],
+    {_,_,S0} = hd(Source),
+    Stats = [{Node, S} || {Node, _, S} <- Source],
+    Types = [K || {K, _} <- S0],
+    [{stats, Stats},
+     {nodes, Nodes},
+     {types, Types}].
+    

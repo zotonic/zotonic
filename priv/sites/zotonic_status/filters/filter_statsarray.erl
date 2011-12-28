@@ -23,13 +23,23 @@
 
 -include_lib("include/zotonic.hrl").
 
--export([statsarray/2]).
+-export([statsarray/4]).
 
-statsarray(Values, _Context) ->
+statsarray(Stats, Type, Which, _Context) ->
+    [
+     "[",
+     [ resultarray(Type, proplists:get_value(list_to_existing_atom(Which), 
+                                             proplists:get_value(Type, S), [])) || {_, S} <- Stats],
+     "]"].
+
+
+resultarray(Type, Values) ->
     [ "[", 
      lists:flatten(
-      [ ["[", integer_to_list(K), ",", integer_to_list(V), "],"]
+      [ ["[", integer_to_list(K), ",", io_lib:format("~.2f", [map(Type, V)]), "],"]
        || {K, {V,_N}} <- lists:zip(lists:seq(1, length(Values)), Values)]), 
-      "]"
+      "],"
     ].
         
+map({_, _, duration}, V) -> V/10.0; %% show duration in ms.
+map(_, V) -> V/1.0.

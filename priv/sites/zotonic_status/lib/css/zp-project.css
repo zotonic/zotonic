@@ -550,6 +550,7 @@ fieldset { padding-left: 0; }
 
 p.meta {
     color: #666;
+    font-size: 13px;
 }
 
 th.node-down {
