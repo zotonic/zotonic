@@ -29,13 +29,16 @@
 %% Distributed Systems". Workshop on Parallel and Distributed Algorithms:
 %% pp. 215-226
 
--module(vclock).
+%% Slightly adapted by Marc Worrell for the Zynamo system.
+
+-module(zynamo_vclock).
 
 -author('Justin Sheehy <justin@basho.com>').
 -author('Andy Gross <andy@basho.com>').
 
--export([fresh/0,descends/2,merge/1,get_counter/2,get_timestamp/2,
-	increment/2,increment/3,all_nodes/1,equal/2,prune/3,timestamp/0]).
+-export([fresh/0,descends/2,merge/1,get_counter/2,
+    get_timestamp/1,get_timestamp/2,
+    increment/2,increment/3,all_nodes/1,equal/2,prune/3,timestamp/0]).
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
@@ -101,16 +104,24 @@ merge(V=[{Node1,{Ctr1,TS1}}|VClock],
 -spec get_counter(Node :: vclock_node(), VClock :: vclock()) -> counter() | undefined.
 get_counter(Node, VClock) ->
     case lists:keyfind(Node, 1, VClock) of
-	{_, {Ctr, _TS}} -> Ctr;
-	false           -> undefined
+    {_, {Ctr, _TS}} -> Ctr;
+    false           -> undefined
+    end.
+
+% @doc Get the newest timestamp value in a VClock.
+-spec get_timestamp(VClock :: vclock()) -> timestamp() | undefined.
+get_timestamp(VClock) ->
+    case VClock of
+        [] -> undefined;
+        _ -> lists:max([ TS || {_,{_Ctr,TS}} <- VClock ])
     end.
 
 % @doc Get the timestamp value in a VClock set from Node.
 -spec get_timestamp(Node :: vclock_node(), VClock :: vclock()) -> timestamp() | undefined.
 get_timestamp(Node, VClock) ->
     case lists:keyfind(Node, 1, VClock) of
-	{_, {_Ctr, TS}} -> TS;
-	false           -> undefined
+    {_, {_Ctr, TS}} -> TS;
+    false           -> undefined
     end.
 
 % @doc Increment VClock at Node.
@@ -138,8 +149,8 @@ all_nodes(VClock) ->
 
 -define(DAYS_FROM_GREGORIAN_BASE_TO_EPOCH, (1970*365+478)).
 -define(SECONDS_FROM_GREGORIAN_BASE_TO_EPOCH,
-	(?DAYS_FROM_GREGORIAN_BASE_TO_EPOCH * 24*60*60)
-	%% == calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}})
+    (?DAYS_FROM_GREGORIAN_BASE_TO_EPOCH * 24*60*60)
+    %% == calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}})
        ).
 
 % @doc Return a timestamp for a vector clock

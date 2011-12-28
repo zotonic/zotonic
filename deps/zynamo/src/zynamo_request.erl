@@ -29,6 +29,13 @@
     put/5,
     put/6,
 
+    delete/4,
+    delete/5,
+    
+    command/3,
+    command/4,
+    command/5,
+
     list/3,
     list/4,
 
@@ -65,6 +72,35 @@ put(Site, Service, Key, Version, Value) ->
                                         | {error, Reason :: term()}.
 put(Site, Service, Key, Version, Value, Options) ->
     do_command(Site, Service, Key, #zynamo_command{command=put, key=Key, version=Version, value=Value}, Options).
+
+
+%% @doc Delete a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
+-spec delete(atom(), atom(), term(), zynamo_data_version()) -> 
+                                          {ok, zynamo_request_stats()} 
+                                        | {maybe, zynamo_request_stats()} 
+                                        | {error, Reason :: term()}.
+delete(Site, Service, Key, Version) ->
+    delete(Site, Service, Key, Version, []).
+
+-spec delete(atom(), atom(), term(), zynamo_data_version(), zynamo_request_options()) -> 
+                                          {ok, zynamo_request_stats()} 
+                                        | {maybe, zynamo_request_stats()} 
+                                        | {error, Reason :: term()}.
+delete(Site, Service, Key, Version, Options) ->
+    do_command(Site, Service, Key, #zynamo_command{command=delete, key=Key, version=Version}, Options).
+
+
+%% @doc Send a command to a site/service
+command(Site, Service, #zynamo_command{} = Command) ->
+    do_command(Site, Service, undefined, Command, []).
+
+command(Site, Service, #zynamo_command{} = Command, Options) when is_list(Options) ->
+    do_command(Site, Service, undefined, Command, Options);
+command(Site, Service, Key, #zynamo_command{} = Command) ->
+    do_command(Site, Service, Key, Command, []).
+
+command(Site, Service, Key, #zynamo_command{} = Command, Options) ->
+    do_command(Site, Service, Key, Command, Options).
 
 
 %% @doc List all key/values on the servers, tryes to deduplicate. 
@@ -104,8 +140,8 @@ do_command(Site, Service, Key, Command, Options) ->
         PreferenceNodes ->
             Ref = erlang:make_ref(),
             Command1 = Command#zynamo_command{ref=Ref, bucket_nr=bucket_nr(Key, Buckets)},
-            {ok, _Pid} = zynamo_request_fsm_sup:start_fsm([self(), Command1, PreferenceNodes, ServiceNodes, Options]),
-            wait_for_result(Ref, Options)
+            {ok, Pid} = zynamo_request_fsm_sup:start_fsm([self(), Command1, PreferenceNodes, ServiceNodes, Options]),
+            wait_for_result(Pid, Ref)
     end.
     
     bucket_nr(Key, []) -> zynamo_hash:hash(Key) rem zynamo_ring:ring_buckets();
@@ -113,13 +149,22 @@ do_command(Site, Service, Key, Command, Options) ->
     bucket_nr(Key, [_|Rest]) -> bucket_nr(Key, Rest).
 
 
-%% @doc Wait for a result from the FSM, timeout after a configured time.
-wait_for_result(Ref, Options) ->
-    Timeout = proplists:get_value(timeout, Options, ?ZYNAMO_REQUEST_TIMEOUT),
+%% @doc Wait for a result from the FSM. Monitor the FSM so that we can stop if it crashes.
+%%      Trust the FSM for handling the timeout values.
+wait_for_result(Pid, CommandRef) ->
+    MRef = erlang:monitor(process, Pid),
     receive 
-        {result, Ref, Result, _Stats} -> Result
-    after Timeout ->
-        {error, timeout}
+        {result, CommandRef, Result, _Stats} -> 
+            erlang:demonitor(MRef, [flush]),
+            Result;
+        {'DOWN', MRef, process, _Pid, Reason} ->
+            % Result might be a bit slower than the down message from a successful FSM
+            receive
+                {result, CommandRef, Result, _Stats} -> 
+                    Result
+            after 0 ->  
+                {error, Reason}
+            end
     end.
 
 

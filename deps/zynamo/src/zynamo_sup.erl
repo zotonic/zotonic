@@ -45,15 +45,18 @@ init([]) ->
         {zynamo_event, {zynamo_event, start_link, []},
             permanent, 2000, worker, [zynamo_event]},
 
-        {zynamo_request_fsm_sup, {zynamo_request_fsm_sup, start_link, []},
-            permanent, 2000, supervisor, [zynamo_request_fsm_sup]},
-
         {zynamo_manager, {zynamo_manager, start_link, []},
             permanent, 2000, worker, [zynamo_manager]},
 
         {zynamo_gossip, {zynamo_gossip, start_link, []},
             permanent, 2000, worker, [zynamo_gossip]},
-    
+
+        {zynamo_request_fsm_sup, {zynamo_request_fsm_sup, start_link, []},
+            permanent, 2000, supervisor, [zynamo_request_fsm_sup]},
+
+        {zynamo_handoff_fsm_sup, {zynamo_handoff_fsm_sup, start_link, []},
+            permanent, 2000, supervisor, [zynamo_handoff_fsm_sup]},
+
         % Standard zynamo services
         {zynamo_kv, {zynamo_kv, start_link, []},
             permanent, 2000, worker, [zynamo_kv]},

@@ -58,6 +58,9 @@ init(_Args) ->
     {ok, #state{}}.
 
 
+handle_call({handoff_check, _Node}, _From, State) ->
+    {reply, {ok, done}, State};
+
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -71,6 +74,10 @@ handle_cast(#zynamo_service_command{
             end,
     zynamo_request:reply(Reply, SC),
     {noreply, State};
+
+handle_cast({handoff_done, _Node, _Command}, State) ->
+    {norepy, State};
+    
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 

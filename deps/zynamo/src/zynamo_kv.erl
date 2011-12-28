@@ -31,7 +31,9 @@
 
 -include_lib("zynamo.hrl").
 
--record(state, {data, handoff}).
+-record(state, {data, handoff, local}).
+-record(data, {key, version, is_gone, bucket_nr, value}).
+
 
 %%====================================================================
 %% API
@@ -57,31 +59,76 @@ init(_Args) ->
     zynamo_manager:set_service(zynamo, kv, self(), undefined),
     {ok, #state{
             data=ets:new(zynamo_kv, [set,protected]),
+            local=ets:new(zynamo_local, [set, protected]),
             handoff=ets:new(zynamo_handoff, [set,protected])
     }}.
 
+
+handle_call({handoff_check, Node}, _From, State) ->
+    do_handoff_check(Node, State);
 
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 handle_cast(#zynamo_service_command{
-                command=Command
+                command=Command,
+                handoff=Handoff
             }=SC, State) ->
-    #zynamo_command{command=Cmd, key=Key, value=Value, version=Version} = Command,
+    #zynamo_command{command=Cmd, key=Key, value=Value, version=Version, bucket_nr=BucketNr} = Command,
+    IsHandoffOnly = not lists:member(node(), Handoff),
     Reply = case Cmd of
-                put ->
-                    % TODO: handle handoffs
-                    % TODO: check iff the version is a follow-up from the one we have.
-                    ets:insert(State#state.data, [{Key, {Version,Value}}]),
-                    ok;
                 get ->
                     case ets:lookup(State#state.data, Key) of
                         [] -> {ok, not_found, undefined};
-                        [{_Key,{Vers,Val}}] -> {ok, Vers, Val}
+                        [{_Key, #data{is_gone=false, version=Vers, value=Val}}] -> {ok, Vers, Val};
+                        [{_Key, #data{is_gone=true, version=Vers}}] -> {ok, gone, Vers}
+                    end;
+                    
+                Upd when Upd =:= put; Upd =:= delete ->
+                    case is_newer(Key, Version, State#state.data) of
+                        true ->
+                            Data = #data{
+                                key=Key,
+                                version=Version,
+                                bucket_nr=BucketNr,
+                                is_gone=(Cmd =:= delete),
+                                value=Value
+                            },
+                            ets:insert(State#state.data, [{Key, Data}]),
+                            ets:insert(State#state.handoff, [{{N, Key}, Version, Cmd} || N <- Handoff -- [node()] ]),
+                            case IsHandoffOnly of
+                                true -> ets:delete(State#state.local, Key);
+                                false -> ets:insert(State#state.local, {Key})
+                            end,
+                            {ok, Version};
+                        {false, OldVersion} ->
+                            % We can receive a handoff for data we already have.
+                            case zynamo_version:is_equal(Version, OldVersion) of
+                                true ->
+                                    % Set the local flag when this update is for the current node
+                                    case IsHandoffOnly of
+                                        false ->
+                                            case ets:lookup(State#state.local, Key) of
+                                                [{_K}] -> nop;
+                                                [] -> ets:insert(State#state.local, [{Key}])
+                                            end;
+                                        true ->
+                                            nop
+                                    end,
+                                    ets:insert(State#state.handoff, [{{N, Key}, Version, Cmd} || N <- Handoff -- [node()] ]),
+                                    {ok, Version};
+                                false ->
+                                    {error, {conflict, OldVersion}}
+                            end
                     end
             end,
     zynamo_request:reply(Reply, SC),
     {noreply, State};
+
+handle_cast({handoff_done, Node, Command}, State) ->
+    do_handoff_done(Node, Command, State),
+    {noreply, State};
+
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
@@ -93,3 +140,66 @@ terminate(_Reason, State) ->
 
 code_change(_OldVersion, _NewVersion, State) ->
     {ok, State}.
+
+
+%% ====================================================================
+%% internal support routines
+%% ====================================================================
+
+do_handoff_check(Node, State) ->
+    case ets:match(State#state.handoff, {{Node,'$1'}, '$2', '$3'}, 1) of
+        '$end_of_table' -> 
+            {reply, {ok, done}, State};
+        {[[Key,Version,Command]], _Continuation} ->
+            case ets:lookup(State#state.data, Key) of
+                [{_Key, #data{version=Version} = Data}] ->
+                    % Re-create the handoff command
+                    Cmd = #zynamo_command{
+                        command=Command,
+                        key=Key,
+                        version=Version,
+                        bucket_nr=Data#data.bucket_nr,
+                        value=Data#data.value
+                    },
+                    {reply, {ok, Cmd}, State};
+                _Other ->
+                    % Old handoff data, drop it
+                    ets:delete(State#state.handoff, {Node,Key}),
+                    do_handoff_check(Node, State)
+            end
+    end.
+
+
+do_handoff_done(Node, ZynamoCommand, State) ->
+    #zynamo_command{key=Key, version=Version, command=Command} = ZynamoCommand,
+    case ets:lookup(State#state.handoff, {Node, Key}) of
+        [{{_N,_K}, Version, Command}] ->
+            ets:delete(State#state.handoff, {Node, Key}),
+            case ets:lookup(State#state.local, Key) of
+                [{Key}] ->
+                    nop;
+                [] ->
+                    % Check if this was the last handoff, if so delete the entry
+                    case ets:match(State#state.handoff, [{{'_', Key}, '_', '_'}], 1) of
+                        '$end_of_table' -> 
+                            ets:delete(State#state.data, Key);
+                        _Match ->
+                            nop
+                    end
+            end;
+        _ ->
+            % Not there, or a newer handoff request
+            nop
+    end.
+
+%% @doc Check if the received version is newer than the one we have already.
+is_newer(Key, Version, DataTable) ->
+    case ets:lookup(DataTable, Key) of
+        [] -> 
+            true;
+        [{_K, #data{version=PrevVers}}] -> 
+            case zynamo_version:is_newer(Version, PrevVers) of
+                true -> true;
+                false -> {false, PrevVers}
+            end
+    end.

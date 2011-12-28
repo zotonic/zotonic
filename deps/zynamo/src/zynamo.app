@@ -13,11 +13,14 @@
             zynamo_request,
             zynamo_request_fsm,
             zynamo_request_fsm_sup,
+            zynamo_handoff_fsm,
+            zynamo_handoff_fsmsup,
             zynamo_kv,
             zynamo_stats,
  
             merkerl,
-            vclock
+            zynamo_version,
+            zynamo_vclock
         ]},
         {registered, [
             zynamo_sup,
@@ -26,6 +29,7 @@
             zynamo_event,
             zynamo_random,
             zynamo_request_fsm_sup,
+            zynamo_handoff_fsm_sup,
             zynamo_kv,
             zynamo_stats
         ]},
