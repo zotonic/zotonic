@@ -28,8 +28,11 @@
 statsarray(Stats, Type, Which, _Context) ->
     [
      "[",
-     [ resultarray(Type, proplists:get_value(list_to_existing_atom(Which), 
-                                             proplists:get_value(Type, S), [])) || {_, S} <- Stats],
+     [ ["{label: \"", atom_to_list(N), "\", data: ", resultarray(Type, proplists:get_value(list_to_existing_atom(Which), 
+                                             proplists:get_value(Type, S), [])),
+        "},"
+       ]
+       || {N, S} <- Stats],
      "]"].
 
 

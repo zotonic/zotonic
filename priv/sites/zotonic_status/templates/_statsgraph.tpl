@@ -5,24 +5,21 @@
     window.graphs["{{ type | statskey }}"] = $.plot(
     $("#graph-{{ type | statskey }}"), 
     {{ stats|statsarray : type : 'second' }}
-{#
+
 ,    {
-    yaxis: {
-    min: 0,
-    max: {{ stats|statsmax }}
-    },
     grid: {
     markings: [
-    {% if stats.avg %}
-    { color: '#33c', lineWidth: 2, yaxis: { from: {{stats.avg}}, to: {{stats.avg}} } },
+    {% for n in nodes %}
+    {% if stats[n][type].avg %}
+    { color: '#33c', lineWidth: 1, yaxis: { from: {{stats[n][type].avg}}, to: {{stats[n][type].avg}} } },
     {% endif %}
-    {% if stats.perc95 %}
-    { color: '#c33', lineWidth: 2, yaxis: { from: {{stats.perc95}}, to: {{stats.perc95}} } }
+    {% if stats[n][type].perc95 %}
+    { color: '#c33', lineWidth: 1, yaxis: { from: {{stats[n][type].perc95}}, to: {{stats[n][type].perc95}} } },
     {% endif %}
+    {% endfor %}
     ]
     }
     }
-#}
 );
 </script>
 

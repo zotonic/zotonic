@@ -562,3 +562,8 @@ div.graph {
     height: 200px;
     border: 2px solid #eee;
 }
+
+
+div.legend td {
+    border: 0!important; padding: 0!important;
+}
