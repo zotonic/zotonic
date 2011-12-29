@@ -34,7 +34,15 @@ start_fsm(Node) ->
                 {zynamo_handoff_fsm, start_link, [Node]},
                 permanent, 2000, worker, [zynamo_handoff_fsm]
             },
-            supervisor:start_child(?MODULE, Spec)
+            case supervisor:start_child(?MODULE, Spec) of
+                {error, {already_started, Pid}} = Result ->
+                    gen_fsm:send_all_state_event(Pid, nodeup),
+                    Result;
+                {ok, Pid} = Result ->
+                    gen_fsm:send_all_state_event(Pid, nodeup),
+                    Result;
+                Other -> Other
+            end
     end.
 
 

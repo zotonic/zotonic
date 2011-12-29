@@ -40,7 +40,8 @@
 
 % Check every 10-20 seconds if there is anything to handoff
 -define(HANDOFF_RANDOM_TIMEOUT, 10000).
--define(HANDOFF_MINIMUM_TIMEOUT, 10000).
+-define(HANDOFF_SHORT_TIMEOUT,  10000).
+-define(HANDOFF_LONG_TIMEOUT,   60000).
 
 % Max timeout for the handoff command, the service might tarpit us, so we need a long timeout.
 -define(HANDOFF_COMMAND_TIMEOUT, 300000).
@@ -65,13 +66,13 @@ init([Node]) ->
     {ok, check_node_active, #state{
         node=Node,
         services=[]
-    }, handoff_timeout()}.
+    }, handoff_timeout(short)}.
 
 
 check_node_active(timeout, #state{node=Node} = State) ->
     case zynamo_manager:is_node_active(Node) of
         {ok, true} -> {next_state, collect_services, State, 0};
-        _IsNotUp -> {next_state, check_node_active, State, handoff_timeout()}
+        _IsNotUp -> {next_state, check_node_active, State, handoff_timeout(long)}
     end.
 
 collect_services(timeout, #state{node=Node} = State) ->
@@ -82,7 +83,7 @@ collect_services(timeout, #state{node=Node} = State) ->
 
 
 handoff_service(timeout, #state{services=[]} = State) ->
-    {next_state, check_node_active, State, handoff_timeout()};
+    {next_state, check_node_active, State, handoff_timeout(long)};
 handoff_service(timeout, #state{services=[{Site,Service}|Rest], node=Node} = State) ->
     case do_handoff_check(Site, Service, Node) of
         {ok, done} ->
@@ -101,7 +102,9 @@ handoff_service(timeout, #state{services=[{Site,Service}|Rest], node=Node} = Sta
             {next_state, handoff_service, State#state{services=Rest}, 0}
     end.
 
-
+%% @doc When the node comes up, then cut the polling interval short 
+handle_event(nodeup, _StateName, State) ->
+    {next_state, check_node_active, State, handoff_timeout(short)};
 handle_event(Event, _StateName, State) ->
     {stop, {unknown_event, Event}, State}.
 
@@ -159,5 +162,8 @@ do_handoff_command(Site, Service, Node, HandoffCommand) ->
     end.
 
 
-handoff_timeout() ->
-    ?HANDOFF_MINIMUM_TIMEOUT + zynamo_random:uniform(?HANDOFF_RANDOM_TIMEOUT).
+handoff_timeout(short) ->
+    ?HANDOFF_SHORT_TIMEOUT + zynamo_random:uniform(?HANDOFF_RANDOM_TIMEOUT);
+handoff_timeout(long) ->
+    ?HANDOFF_LONG_TIMEOUT + zynamo_random:uniform(?HANDOFF_RANDOM_TIMEOUT).
+
