@@ -31,43 +31,45 @@
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/0, start_link/1]).
+-export([start_link/1]).
 
 %% interface functions
 -export([
-         observe_dispatch_rewrite/3
+         pid_observe_dispatch_rewrite/4
 ]).
 
--record(state, {context, requesttime, threshold, lastn}).
+-record(state, {context, requesttime=0, threshold, lastn, min_samples}).
 
 -define(LAST_N, 30). %% in seconds. Can be overridden in mod_failwhale.last_n config setting.
+-define(MIN_SAMPLES, 10). %% if there are less than X seconds with requests, skip.
 -define(THRESHOLD, 100). %% in milliseconds. Can be overridden in mod_failwhale.threshold config setting.
 
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
-start_link() -> 
-    start_link([]).
 start_link(Args) when is_list(Args) ->
-    Host = proplists:get_value(host, Args),
-    Name = name(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, Args, []).
+    gen_server:start_link(?MODULE, Args, []).
 
 
 %% @doc Rewrite the dispatch rules
-observe_dispatch_rewrite(#dispatch_rewrite{}, Dispatch, Context) ->
-    case check_request(Context) of
+pid_observe_dispatch_rewrite(Pid, #dispatch_rewrite{}, Dispatch, _Context) ->
+    case gen_server:call(Pid, check_request) of
         true ->
            Dispatch;
         false ->
-            {["failwhale"], []}
+            case whitelisted(Dispatch) of 
+                true -> Dispatch;
+                false ->
+                    {["failwhale"], []}
+            end
     end.
 
-%% Get the request time from my gen_server
-check_request(Context) ->
-    gen_server:call(name(Context), check_request).
+
+%% @doc Whitelist certain paths, e.g. /lib/ for serving css/images of the fail whale.
+whitelisted({["lib"|_], _}) -> true;
+whitelisted(_) -> false.
 
 
 
@@ -81,7 +83,8 @@ init(Args) ->
     timer:send_interval(1000, probe),
     Threshold = z_convert:to_integer(m_config:get_value(?MODULE, threshold, ?THRESHOLD, Context)),
     LastN = z_convert:to_integer(m_config:get_value(?MODULE, lastn, ?LAST_N, Context)),
-    {ok, #state{context=Context, threshold=Threshold, lastn=LastN}}.
+    Min = z_convert:to_integer(m_config:get_value(?MODULE, min_samples, ?MIN_SAMPLES, Context)),
+    {ok, #state{context=Context, threshold=Threshold, lastn=LastN, min_samples=Min}}.
 
 %% @doc Check the request for the request time threshold. If above threshold, serve 503.
 handle_call(check_request, _From, State=#state{requesttime=undefined}) ->
@@ -104,30 +107,34 @@ handle_cast(Message, State) ->
 %% Take the average request durations of the last 30 seconds as an
 %% indication of average request time.
 handle_info(probe, State=#state{requesttime=OldT, threshold=Threshold, context=Context}) ->
+
     {ok, Summary} = statz:summary({zotonic, webzmachine, duration}),
     LastN = State#state.lastn,
     Avgs = lists:sublist(lists:map(fun({_, 0}) -> 0;
                                       ({C, N}) -> C/N end, 
                                    proplists:get_value(second, Summary, [])),
                          LastN),
-    T = case length(Avgs) of
-            0 -> 'NaN';
-            N -> lists:sum(Avgs)/N
+
+    T = case length([S || S <- Avgs, S =/= 0]) of
+            N when N < State#state.min_samples ->
+                0;
+            N ->
+                lists:sum(Avgs)/N
         end,
 
     case OldT < Threshold andalso T >= Threshold of
         true ->
-            ?zInfo("Exceeded request time. Serving 503 page.~n", Context);
+            ?zInfo("Exceeded request time. Serving 503 page.", Context);
         _ -> nop
     end,
 
     case OldT >= Threshold andalso T < Threshold of
         true ->
-            ?zInfo("Request time back to normal.~n", Context);
+            ?zInfo("Request time back to normal.", Context);
         _ -> nop
     end,
-
     {noreply, State#state{requesttime=T}};
+
 
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
@@ -143,9 +150,3 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
-
-
-name(Context) ->
-    name(?MODULE, Context#context.host).
-name(Module, Host) ->
-    z_utils:name_for_host(Module, Host).
