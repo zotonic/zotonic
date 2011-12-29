@@ -42,7 +42,7 @@
 
 -define(LAST_N, 30). %% in seconds. Can be overridden in mod_failwhale.last_n config setting.
 -define(MIN_SAMPLES, 10). %% if there are less than X seconds with requests, skip.
--define(THRESHOLD, 100). %% in milliseconds. Can be overridden in mod_failwhale.threshold config setting.
+-define(THRESHOLD, 1000). %% in milliseconds. Can be overridden in mod_failwhale.threshold config setting.
 
 %%====================================================================
 %% API
