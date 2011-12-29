@@ -55,28 +55,43 @@
     command     :: #zynamo_command{}
 }).
 
-
 -type zynamo_callback() :: {atom(),atom()} | read_repair | pid() | function().
 
 -type zynamo_request_option() :: 
-                        {node, {atom(),atom()} 
-                            | function() 
-                            | random 
+                       {node, random 
                             | local_random 
                             | local
-                            | sha
                             | [ node() ] 
-                            | pos_integer()
-                            }
+                            | sha
+                            | function()
+                            | non_neg_integer()
+                            | {atom(),atom()} 
+                            | {key, term()}
+                            | {key, term(), sha|function()|{atom(),atom()}}
+                       }
                      | {request_timeout, non_neg_integer()}
                      | {node_timeout, non_neg_integer()}
                      | {n, non_neg_integer() | all}
                      | {quorum, non_neg_integer() | n}
-                     | {no_handoff}
+                     | no_handoff
                      | {final_action, zynamo_callback()}.
 -type zynamo_request_options() :: list( zynamo_request_option() ).
 
 
 %% @doc Default timeout for operations is 10 seconds.
 -define(ZYNAMO_REQUEST_TIMEOUT, 10000).
+
+
+% ===========================================================
+% Specific values for some #zynamo_command{} records.
+% ===========================================================
+
+%% @doc 'value' of a 'list' command.
+-record(zynamo_list_args, {
+    value   = false :: boolean(),
+    version = false :: boolean(),
+    offset  = 0 :: non_neg_integer(),
+    limit   = all :: pos_integer() | all
+}).
+
 
