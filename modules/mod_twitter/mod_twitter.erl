@@ -214,7 +214,7 @@ start_following(Context) ->
                     error_logger:info_msg("No follow configuration for mod_twitter. ~n"),
                     undefined;
                 _ ->
-                    URL = "http://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
+                    URL = "https://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
                     Follow = z_utils:combine(",", Follow1),
                     Body = lists:flatten("follow=" ++ Follow),
                     z_session_manager:broadcast(#broadcast{type="notice", message="Now waiting for tweets to arrive...", title="Twitter", stay=false}, Context),
