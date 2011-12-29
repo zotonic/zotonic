@@ -52,7 +52,8 @@
     request_timeout :: pos_integer(),
     node_timeout    :: pos_integer(),
     n               :: pos_integer(),
-    quorum          :: pos_integer()
+    quorum          :: pos_integer(),
+    no_handoff      :: boolean()
 }).
 
 -define(NODE_TIMEOUT, 5000).
@@ -79,6 +80,10 @@ start_link(From, Command, PreferenceNodes, ServiceNodes, Options) ->
 %% ====================================================================
 
 init([From, Command, PreferenceNodes, ServiceNodes, Options]) ->
+    N = case proplists:get_value(n, Options, ?DEFAULT_N) of
+           all -> length(PreferenceNodes);
+           NVal -> NVal
+        end,
     {ok, prepare, #state{
         from=From,
         command=Command,
@@ -93,12 +98,16 @@ init([From, Command, PreferenceNodes, ServiceNodes, Options]) ->
         start_time=now(),
         request_timeout=proplists:get_value(request_timeout, Options, ?ZYNAMO_REQUEST_TIMEOUT),
         node_timeout=proplists:get_value(node_timeout, Options, ?NODE_TIMEOUT),
-        n=proplists:get_value(n, Options, ?DEFAULT_N),
-        quorum=proplists:get_value(quorum, Options, ?DEFAULT_QUORUM)
+        n=N,
+        quorum=case proplists:get_value(quorum, Options, ?DEFAULT_QUORUM) of
+                    n -> N;
+                    Q -> erlang:min(Q,N)
+               end,
+        no_handoff=proplists:get_value(no_handoff, Options, false)
     }, 0}.
 
 
-prepare(timeout, #state{pref_nodes=PrefNodes, batch_nr=BatchNr, service_nodes=ServiceNodes, n=N} = State) ->
+prepare(timeout, #state{pref_nodes=PrefNodes, batch_nr=BatchNr, service_nodes=ServiceNodes, n=N, no_handoff=NoHandoff} = State) ->
     {PrefN,Unused} = case N of
                        all -> {PrefNodes, []};
                        N when is_integer(N) -> take(N, PrefNodes)
@@ -115,7 +124,7 @@ prepare(timeout, #state{pref_nodes=PrefNodes, batch_nr=BatchNr, service_nodes=Se
                                             PrefN),
     PrefOkHF = [{Node, erlang:make_ref(), BatchNr, [Node]} || Node <- PrefOk ],
     % Assign handoff nodes for the preferred nodes that are not up
-    case handoff(PrefHandoff, PrefOkHF, UnusedService, BatchNr) of
+    case handoff(PrefHandoff, PrefOkHF, UnusedService, BatchNr, NoHandoff) of
         no_nodes ->
             {next_state, validate, State#state{
                         participating_nodes = [],
@@ -162,7 +171,10 @@ waiting_reply({error, FromNode, Ref, Reason}, State) ->
             State2 = case State#state.batch_nr of
                         BatchNr ->
                             % Current request batch, allocate handoff nodes
-                            error_handoff(Handoffs, State1);
+                            case State#state.no_handoff of
+                                true -> error_handoff_unused(Handoffs, State1);
+                                false -> error_handoff(Handoffs, State1)
+                            end;
                         _OlderBatch -> 
                             % Old request batch, already handoffs in progress
                             State1
@@ -405,16 +417,17 @@ send_command(Nodes, State) ->
     ].
 
 
-%% @doc Received an error return from a node, try some other node
+%% @doc Received an error return from a node, try any other node (including participarting nodes)
 error_handoff(Handoff, State) ->
     Participating = [ Node || {Node,_,_,_} <- State#state.participating_nodes ],
     error_handoff(Handoff, State#state.unused_nodes++Participating, State).
 
+%% @doc Received an error return from a node, try some other unused node
 error_handoff_unused(Handoff, State) ->
     error_handoff(Handoff, State#state.unused_nodes, State).
 
 error_handoff(Handoff, Candidates, State) ->
-    case handoff(Handoff, [], Candidates, State#state.batch_nr) of
+    case handoff(Handoff, [], Candidates, State#state.batch_nr, State#state.no_handoff) of
         {ok, NewParticipating, NewUnused} ->
             send_command(NewParticipating, State),
             State#state{
@@ -426,17 +439,21 @@ error_handoff(Handoff, Candidates, State) ->
     end.
 
 %% @doc Assign the to-be-handed off nodes to unused nodes or participating nodes
-handoff([], SelectedHF, Unused, _BatchNr) ->
+handoff([], SelectedHF, Unused, _BatchNr, _NoHandoff) ->
     {ok, SelectedHF, Unused};
-handoff([_|_], [], [], _BatchNr) ->
+handoff([_|_], [], [], _BatchNr, _NoHandoff) ->
     no_nodes;
-handoff([Node|Other], SelectedHF, [], BatchNr) ->
+handoff(_ToBeHandedoff, SelectedHF, [], _BatchNr, true) ->
+    % Ran out of alternative nodes, and no handoff allowed
+    {ok, SelectedHF, []};
+handoff([Node|Other], SelectedHF, [], BatchNr, false) ->
     % Add to random other node in the already participating nodes
     N = zynamo_random:uniform(length(SelectedHF)),
     SelectedHF1 = add_node(N, Node, SelectedHF, []),
-    handoff(Other, SelectedHF1, [], BatchNr);
-handoff([Node|RN], SelectedHF, [Unused|RU], BatchNr) ->
-    handoff(RN, [{Unused, erlang:make_ref(), BatchNr, [Node]}|SelectedHF], RU, BatchNr).
+    handoff(Other, SelectedHF1, [], BatchNr, false);
+handoff([Node|RN], SelectedHF, [Unused|RU], BatchNr, NoHandoff) ->
+    % Still some unused nodes, start with those
+    handoff(RN, [{Unused, erlang:make_ref(), BatchNr, [Node]}|SelectedHF], RU, BatchNr, NoHandoff).
 
     add_node(1, Node, [{N,Ref,BatchNr,HF}|Rest], Acc) ->
         lists:reverse([{N,Ref,BatchNr,[Node|HF]}|Rest], Acc);

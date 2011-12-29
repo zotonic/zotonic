@@ -27,6 +27,7 @@
 
 %% interface functions
 -export([
+    nodes/0,
     get_ring/0,
     get_ring_range/1,
     sync_ring/2,
@@ -35,10 +36,13 @@
     join/0,
     nodeup/1,
     nodedown/1,
+    is_node_active/1,
     set_service/4,
     list_services/0,
     list_services/1,
-    locate_service/2
+    list_node_services/1,
+    locate_service/2,
+    get_service_pid/3
 ]).
 
 -type ring() :: zynamo_ring:ring().
@@ -68,6 +72,11 @@ start_link() ->
 start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
+
+%% @doc List all nodes in the current ring
+-spec nodes() -> {ok, [node()]} | {error, term()}.
+nodes() ->
+    gen_server:call(?MODULE, nodes, infinity).
 
 %% @doc Fetch the current ring
 -spec get_ring() -> {ok, ring()} | {error, term()}.
@@ -112,6 +121,11 @@ nodeup(Node) ->
 nodedown(Node) ->
     gen_server:cast(?MODULE, {nodedown, Node}).
 
+%% @doc Check if the node is marked as 'up' and available
+-spec is_node_active(node()) -> {ok, boolean()} | {error, term()}.
+is_node_active(Node) ->
+    gen_server:call(?MODULE, {is_node_active, Node}, infinity).
+
 %% @doc Add a service, track its availability
 -spec set_service(atom(), atom(), pid(), term()) -> ok.
 set_service(Site, Service, Pid, GossipState) ->
@@ -127,11 +141,24 @@ list_services() ->
 list_services(Site) ->
     gen_server:call(?MODULE, {list_services, Site}, infinity).
 
+%% @doc Return the list of available services on a node
+-spec list_node_services(node()) -> {ok, [{atom(),atom()}]} | {error, term()}.
+list_node_services(Node) ->
+    gen_server:call(?MODULE, {list_node_services, Node}, infinity).
 
 %% @doc Return a list of (random) available service Pids, local Pid first.
 -spec locate_service(atom(), atom()) -> {ok, [ {pid(), term()} ]} | {error, term()}.
 locate_service(Site, Service) ->
     gen_server:call(?MODULE, {locate_service, Site, Service}, infinity).
+
+%% @doc Return the pid of a service on a specific node
+-spec get_service_pid(atom(), atom(), node()) -> {ok, pid()} | {error, term()}.
+get_service_pid(Site, Service, Node) ->
+    {ok, Pids} = zynamo_manager:locate_service(Site, Service),
+    case [ Pid || {Pid,_} <- Pids, node(Pid) =:= Node ] of
+        [Pid] -> {ok, Pid};
+        [] -> {error, service_not_running}
+    end.
 
 
 
@@ -150,6 +177,7 @@ init(_Args) ->
                {error, _Reason} -> zynamo_ring:new()
            end,
     zynamo_event:up(),
+    service_events(zynamo_ring:new(), Ring),
     {ok, new_ring(#state{}, Ring)}.
 
 
@@ -167,6 +195,7 @@ handle_call({do_sync_ring, FromNode, OtherRing}, _From, #state{ring=MyRing} = St
         changed ->
             save(),
             zynamo_event:changed(),
+            node_events(MyRing, NewRing),
             service_events(MyRing, NewRing);
         nochange ->
             nop
@@ -177,6 +206,9 @@ handle_call({do_sync_ring, FromNode, OtherRing}, _From, #state{ring=MyRing} = St
         true -> {reply, ok, State1}
     end;
 
+handle_call(nodes, _From, #state{ring=Ring} = State) ->
+    {reply, {ok, zynamo_ring:nodes(Ring)}, State};
+
 handle_call(get_ring, _From, #state{ring=Ring} = State) ->
     {reply, {ok, Ring}, State};
 
@@ -186,11 +218,17 @@ handle_call({get_ring_range, past}, _From, #state{past=Past} = State) ->
 handle_call({get_ring_range, future}, _From, #state{past=Future} = State) ->
     {reply, {ok, Future}, State};
 
+handle_call({is_node_active, Node}, _From, #state{ring=Ring} = State) ->
+    {reply, {ok, zynamo_ring:is_node_active(Node, Ring)}, State};
+
 handle_call(list_services, _From, #state{ring=Ring} = State) ->
     {reply, {ok, zynamo_ring:list_services(Ring)}, State};
 
 handle_call({list_services, Site}, _From, #state{ring=Ring} = State) ->
     {reply, {ok, zynamo_ring:list_services(Site, Ring)}, State};
+
+handle_call({list_node_services, Node}, _From, #state{ring=Ring} = State) ->
+    {reply, {ok, zynamo_ring:list_node_services(Node, Ring)}, State};
 
 handle_call({locate_service, Site, Service}, _From, #state{ring=Ring} = State) ->
     {reply, {ok, zynamo_ring:locate_service(Site, Service, Ring)}, State};
@@ -440,10 +478,22 @@ ring_changed(OldRing, NewRing, State) ->
     do_save(NewRing),
     zynamo_event:changed(),
     zynamo_gossip:push_ring(),
+    node_events(OldRing, NewRing),
     service_events(OldRing, NewRing),
     new_ring(State, NewRing).
 
-
+%% @doc Generate nodeup/nodedown events for the change in nodes.
+node_events(OldRing, NewRing) ->
+    AllNodes = lists:usort(zynamo_ring:nodes(OldRing) ++ zynamo_ring:nodes(NewRing)),
+    [
+        case {zynamo_ring:is_node_up(N, OldRing), zynamo_ring:is_node_up(N, NewRing)} of
+            {false, true} -> zynamo_event:nodeup(N);
+            {true, false} -> zynamo_event:nodedown(N);
+            _ -> no_change
+        end
+        || N <- AllNodes
+    ].
+        
 %% @doc Generate service up/down events for the services on the ring
 service_events(OldRing, NewRing) ->
     NewServices = zynamo_ring:list_services(NewRing),

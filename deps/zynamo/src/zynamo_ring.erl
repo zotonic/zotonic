@@ -420,8 +420,8 @@ list_services(Site, Ring) ->
 -spec list_node_services(atom(), ring()) -> [ {atom(), atom()} ].
 list_node_services(Node, Ring) ->
     Services = [
-                [ Service || {Service, _, _} <- N#ring_node.services, N#ring_node.node =:= Node ]
-        || N <- Ring#ring.nodes
+                [ Service || {Service, _, _} <- N#ring_node.services ]
+        || N <- Ring#ring.nodes, N#ring_node.node =:= Node
     ],
     lists:usort(lists:flatten(Services)).
 

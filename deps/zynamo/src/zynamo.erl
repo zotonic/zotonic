@@ -41,8 +41,10 @@ start() ->
 
 start(_StartType, _StartArgs) ->
     case zynamo_sup:start_link() of
-        {ok, Pid} -> {ok, Pid};
-        Other -> {error, Other}
+        {ok, Pid} -> 
+            {ok, Pid};
+        Other ->
+            {error, Other}
     end.
 
 stop(_State) ->
