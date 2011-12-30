@@ -100,7 +100,7 @@ node_id() ->
 
 
 %% @doc Return the node and timestamp of an unique id.
--spec unique_id_split(pos_integer()) -> {non_neg_integer, {pos_integer(), pos_integer(), pos_integer()}}.
+-spec unique_id_split(pos_integer()) -> {non_neg_integer(), {{integer(), integer(), integer()}, {integer(), integer(), integer()}}}.
 unique_id_split(Id) ->
     Nr = Id rem 1000,
     Now = Id div 1000,
