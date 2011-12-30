@@ -21,7 +21,12 @@ source $ZOTONIC/src/scripts/helpers/zotonic_enabledisable
 
 
 function enablesite {
-    $ZOTONIC/bin/zotonic status>/dev/null && $ERL -noshell -pa $PA -name ${SNAME}_enable@$HOSTNAME -s z_sites_manager restart $1 -s init stop
+    $ZOTONIC/bin/zotonic status>/dev/null
+    if [ "$?" -eq 0 ]; then
+        # update & start site
+        NODE=$SNAME@$HOSTNAME
+        $ERL -noshell -pa $PA -name ${SNAME}_enable@$HOSTNAME-s zotonic update $NODE -s z_sites_manager start $NODE $1  -s init stop
+    fi
 }
 
 SITE=$1

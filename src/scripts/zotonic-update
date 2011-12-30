@@ -19,4 +19,4 @@
 #
 
 echo "Updating zotonic $SNAME"
-$ERL -noshell -pa $PA -name ${SNAME}_update@$HOSTNAME -s zotonic update $SNAME@$HOSTNAME
+$ERL -noshell -pa $PA -name ${SNAME}_update@$HOSTNAME -s make all load -s zotonic update $SNAME@$HOSTNAME

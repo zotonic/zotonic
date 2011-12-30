@@ -114,20 +114,20 @@ get_fallback_site() ->
     end.
     
 %% @doc Stop a site or multiple sites.
-stop(Sites) when is_list(Sites) ->
-    [stop(Site) || Site <- Sites];
+stop([Node, Site]) ->
+    rpc:call(Node, ?MODULE, stop, [Site]);
 stop(Site) ->
     gen_server:cast(?MODULE, {stop, Site}).
     
 %% @doc Start a site or multiple sites.
-start(Sites) when is_list(Sites) ->
-    [start(Site) || Site <- Sites];
+start([Node, Site]) ->
+    rpc:call(Node, ?MODULE, start, [Site]);
 start(Site) ->
     gen_server:cast(?MODULE, {start, Site}).
 
 %% @doc Restart a site or multiple sites.
-restart(Sites) when is_list(Sites) ->
-    [restart(Site) || Site <- Sites];
+restart([Node, Site]) ->
+    rpc:call(Node, ?MODULE, restart, [Site]);
 restart(Site) ->
     gen_server:cast(?MODULE, {restart, Site}).
 
