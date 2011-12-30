@@ -46,6 +46,8 @@
 
 -include("zynamo.hrl").
 
+-type list_receiver() :: list() | {pid(), reference()} | function() | {atom(), atom()}.
+
 %% @doc Read a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
 get(Site, Service, Key) ->
     get(Site, Service, Key, []).
@@ -61,16 +63,19 @@ get(Site, Service, Key, Options) ->
 
 
 
-%% @doc List all key/values on the servers, tryes to deduplicate. 
+%% @doc List all key/values on the servers, tryes to deduplicate.
+-spec list(atom(), atom()) -> {ok, list()} | {error, term()}.
 list(Site, Service) ->
     list(Site, Service, [], []).
 
+-spec list(atom(), atom(), list_receiver(), list( zynamo_request_option() | return_value | no_return_version) ) -> 
+    {ok, list()} | {ok, term()} | {ok, {pid(), reference()}}| {error, term()}.
 list(Site, Service, Receiver, Options) ->
     case proplists:get_all_values(node, Options) of
         [] ->
             % Calculate our own coverage
             N = proplists:get_value(n, Options, 1),
-            {Nodes, ServiceNodes} = coverage(Site, Service, N);
+            Nodes = coverage(Site, Service, N);
         _Ns ->
             % Use the mentioned node(s)
             Buckets = get_buckets(Site, Service, undefined, Options),
@@ -79,7 +84,7 @@ list(Site, Service, Receiver, Options) ->
             ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
             Nodes = collect_preference_nodes(Buckets, Ranges, ServiceNodes)
     end,
-    do_list(Site, Service, Nodes, ServiceNodes, Receiver, Options).
+    do_list(Site, Service, Nodes, Receiver, Options).
     
 
 %% @doc Read a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
@@ -274,33 +279,45 @@ unique_list([Member|Rest], Acc) ->
     
 
 
-%% @doc Calculate the coverage for a given N and the nodes running the service.
+%% @doc Calculate the best coverage for a given N and the nodes running the service.
 coverage(Site, Service, _N) ->
     % Lazy for now - take all nodes that run the service
+    % Method:
+    % - Make lists of nodes, with step N through the ring, starting at 1..N
+    % - Check which list is covered by ServiceNodes
+    % - Take most online, add nodes before/after for offline nodes (when alt node is not yet covered)
+    % - Random select equal best fits to lower load when running queries
     {ok, ServicePidData} = zynamo_manager:locate_service(Site, Service),
     ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
-    { [ Node || {Node,_Pid} <- ServiceNodes ], ServiceNodes }.
+    [ Node || {Node,_Pid} <- ServiceNodes ].
 
 
-do_list(Site, Service, Nodes, ServiceNodes, Receiver, _Options) ->
-    States = [
-        {Node, Site, Service, [], 0, ServiceNodes}
-        || Node <- Nodes
-    ],
-    States1 = lists:map(fun(S) -> list_next(S) end, States),
-    step_lists(States1, Receiver).
-    
-    step_lists(States, Receiver) ->
+do_list(Site, Service, Nodes, Receiver, Options) ->
+    ListArgs = #zynamo_list_args{
+        value=proplists:get_value(return_value, Options, false), 
+        version=not proplists:get_value(no_return_version, Options, false),
+        offset=0,
+        limit=1000
+    },
+    ServiceArgs = {Site, Service, ListArgs},
+    States = [ list_next({Node, [], 0}, ServiceArgs) || Node <- Nodes ],
+    step_lists(States, Receiver, ServiceArgs).
+
+
+    step_lists(States, Receiver, ServiceArgs) ->
         Min = find_lowest(States, undefined),
         Value = resolve_version([ {K,Vers,Val} || {{K,Vers,Val},_} <- States, K =:= Min ]),
-        States1 = [ step_lowest(State, Min) || State <- States ],
+
+        %% @TODO combine the do_command calls into a single parallel do_command call.
+        States1 = [ step_lowest(State, Min, ServiceArgs) || State <- States ],
+
         case lists:any(fun({'$end_of_table',_}) -> false;
                           ({{error, _}, _}) -> false;
                           (_) -> true
                        end,
                        States1)
         of
-            true -> step_lists(States1, list_receiver(Value, Receiver));
+            true -> step_lists(States1, list_receiver(Value, Receiver), ServiceArgs);
             false -> list_finalize(list_receiver(Value, Receiver))
         end.
 
@@ -317,18 +334,18 @@ do_list(Site, Service, Nodes, ServiceNodes, Receiver, _Options) ->
     find_lowest([_|T], Min) ->
         find_lowest(T, Min).
 
-    step_lowest({{K,_,_},S}, K) -> list_next(S);
-    step_lowest(S, _K) -> S.
+    step_lowest({{K,_,_},S}, K, ServiceArgs) -> list_next(S, ServiceArgs);
+    step_lowest(S, _K, _ServiceArgs) -> S.
 
     %% @doc A function that requests data from the given node. Sending them one by one to the caller.
-    list_next({_Node, _Site, _Service, {error, Reason}, _Offset, _ServiceNodes} = State) ->
+    list_next({_Node, {error, Reason}, _Offset} = State, _ServiceArgs) ->
         {{error, Reason}, State};
-    list_next({_Node, _Site, _Service, '$end_of_table', _Offset, _ServiceNodes} = State) ->
+    list_next({_Node, '$end_of_table', _Offset} = State, _ServiceArgs) ->
         {'$end_of_table', State};
-    list_next({Node, Site, Service, [], Offset, ServiceNodes}) ->
+    list_next({Node, [], Offset}, {Site, Service, ListArgs} = ServiceArgs) ->
         Command = #zynamo_command{
             command=list,
-            value=#zynamo_list_args{value=true, version=true, offset=Offset, limit=1000}
+            value=ListArgs#zynamo_list_args{offset=Offset}
         },
         Options = [
             {node, [Node]},
@@ -338,36 +355,36 @@ do_list(Site, Service, Nodes, ServiceNodes, Receiver, _Options) ->
         ],
         case do_command(Site, Service, undefined, Command, Options) of
             {error, Reason} -> 
-                {{error, Reason}, {Node, Site, Service, {error, Reason}, Offset, ServiceNodes}};
+                {{error, Reason}, {Node, {error, Reason}, Offset}};
             [{_Node, _Handoff, {ok, []}}] ->
-                list_next({Node, Site, Service, '$end_of_table', Offset, ServiceNodes});
+                list_next({Node, '$end_of_table', Offset}, ServiceArgs);
             [{_Node, _Handoff, {ok, List}}] ->
-                list_next({Node, Site, Service, List, Offset, ServiceNodes})
+                list_next({Node, List, Offset}, ServiceArgs)
         end;
-    list_next({Node, Site, Service, [KV|Rest], Offset, ServiceNodes}) ->
-        {KV, {Node, Site, Service, Rest, Offset+1, ServiceNodes}}.
+    list_next({Node, [KV|Rest], Offset}, _ServiceArgs) ->
+        {KV, {Node, Rest, Offset+1}}.
 
-    % TODO: add zynamo_version to determine which value is the most recent (or multiple if conflict)
+    % TODO: use zynamo_version to determine which value is the most recent (or multiple if conflict)
     resolve_version(Vs) ->
         hd(Vs).
 
+    list_receiver(V, Acc) when is_list(Acc) ->
+        [V|Acc];
+    list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
+        Pid ! {Ref, V};
+    list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
+        Pid ! {Ref, V};
+    list_receiver(V, F) when is_function(F) ->
+        F(V);
+    list_receiver(V, {M,F}) when is_atom(M), is_atom(F) ->
+        M:F(V).
 
-list_receiver(V, Acc) when is_list(Acc) ->
-    [V|Acc];
-list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
-    Pid ! {Ref, V};
-list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
-    Pid ! {Ref, V};
-list_receiver(V, F) when is_function(F) ->
-    F(V);
-list_receiver(V, {M,F}) when is_atom(M), is_atom(F) ->
-    M:F(V).
-
-list_finalize(Acc) when is_list(Acc) ->
-    lists:reverse(Acc);
-list_finalize({Pid, Ref}) when is_pid(Pid) ->
-    Pid ! {Ref, '$end_of_table'};
-list_finalize(F) when is_function(F) ->
-    F('$end_of_table');
-list_finalize({M, F}) when is_atom(M), is_atom(F) ->
-    M:F('$end_of_table').
+    list_finalize(Acc) when is_list(Acc) ->
+        {ok, lists:reverse(Acc)};
+    list_finalize({Pid, Ref}) when is_pid(Pid) ->
+        Pid ! {Ref, '$end_of_table'},
+        {ok, {Pid, Ref}};
+    list_finalize(F) when is_function(F) ->
+        {ok, F('$end_of_table')};
+    list_finalize({M, F}) when is_atom(M), is_atom(F) ->
+        {ok, M:F('$end_of_table')}.
