@@ -72,7 +72,7 @@ status() ->
 %% @spec status([node()]) -> ok
 %% @doc Get server status.  Prints the state of sites running.
 status([Node]) ->
-	io:format("~p~n", [rpc:call(Node, z_sites_manager, get_sites_status, [])]),
+	[io:format("~-20s- ~s~n", [Site, Status]) || [Site,Status|_] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
 	ok.
 
 %% @spec update() -> ok
