@@ -113,15 +113,21 @@ get_fallback_site() ->
         false -> get_fallback_site(Sites)
     end.
     
-%% @doc Stop a site.
+%% @doc Stop a site or multiple sites.
+stop(Sites) when is_list(Sites) ->
+    [stop(Site) || Site <- Sites];
 stop(Site) ->
     gen_server:cast(?MODULE, {stop, Site}).
     
-%% @doc Start a site.
+%% @doc Start a site or multiple sites.
+start(Sites) when is_list(Sites) ->
+    [start(Site) || Site <- Sites];
 start(Site) ->
     gen_server:cast(?MODULE, {start, Site}).
 
-%% @doc Restart a site.
+%% @doc Restart a site or multiple sites.
+restart(Sites) when is_list(Sites) ->
+    [restart(Site) || Site <- Sites];
 restart(Site) ->
     gen_server:cast(?MODULE, {restart, Site}).
 

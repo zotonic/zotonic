@@ -6,6 +6,9 @@
 
 _complete_zotonic() 
 {
+    ENABLED=$(ls `zotonic sitedir .`/../sites)
+    DISABLED=$(ls `zotonic sitedir .`/../sites-disabled)
+        
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -18,6 +21,16 @@ _complete_zotonic()
     if [ "$prev" == "zotonic" ]; then
         CMDS=`zotonic 2>&1|head -n 4|tail -n 1`
         COMPREPLY=( $(compgen -W "$CMDS" -- ${cur}) )
+        return 0
+    fi
+    if [ "$prev" == "enablesite" ]; then
+        CMDS=`zotonic 2>&1|head -n 4|tail -n 1`
+        COMPREPLY=( $(compgen -W "$DISABLED" -- ${cur}) )
+        return 0
+    fi
+    if [ "$prev" == "disablesite" ]; then
+        CMDS=`zotonic 2>&1|head -n 4|tail -n 1`
+        COMPREPLY=( $(compgen -W "$ENABLED" -- ${cur}) )
         return 0
     fi
 
