@@ -39,9 +39,7 @@
     command/4,
     command/5,
 
-    reply/2,
-    
-    coverage/3
+    reply/2
 ]).
 
 -include("zynamo.hrl").
@@ -74,8 +72,12 @@ list(Site, Service, Receiver, Options) ->
     case proplists:get_all_values(node, Options) of
         [] ->
             % Calculate our own coverage
-            N = proplists:get_value(n, Options, 1),
-            Nodes = coverage(Site, Service, N);
+            N = proplists:get_value(n, Options, ?ZYNAMO_DEFAULT_N),
+            case zynamo_coverage:coverage(Site, Service, N) of
+                {ok, Nodes} -> Nodes;
+                {partial, Nodes} -> Nodes;
+                {error, _} -> Nodes = []
+            end;
         _Ns ->
             % Use the mentioned node(s)
             Buckets = get_buckets(Site, Service, undefined, Options),
@@ -278,20 +280,6 @@ unique_list([Member|Rest], Acc) ->
     end.
     
 
-
-%% @doc Calculate the best coverage for a given N and the nodes running the service.
-coverage(Site, Service, _N) ->
-    % Lazy for now - take all nodes that run the service
-    % Method:
-    % - Make lists of nodes, with step N through the ring, starting at 1..N
-    % - Check which list is covered by ServiceNodes
-    % - Take most online, add nodes before/after for offline nodes (when alt node is not yet covered)
-    % - Random select equal best fits to lower load when running queries
-    {ok, ServicePidData} = zynamo_manager:locate_service(Site, Service),
-    ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
-    [ Node || {Node,_Pid} <- ServiceNodes ].
-
-
 do_list(Site, Service, Nodes, Receiver, Options) ->
     ListArgs = #zynamo_list_args{
         value=proplists:get_value(return_value, Options, false), 
@@ -305,20 +293,24 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
 
 
     step_lists(States, Receiver, ServiceArgs) ->
-        Min = find_lowest(States, undefined),
-        Value = resolve_version([ {K,Vers,Val} || {{K,Vers,Val},_} <- States, K =:= Min ]),
+        case find_lowest(States, undefined) of
+            undefined ->
+                list_finalize(Receiver);
+            Min ->
+                Value = resolve_version([ {K,Vers,Val} || {{K,Vers,Val},_} <- States, K =:= Min ]),
 
-        %% @TODO combine the do_command calls into a single parallel do_command call.
-        States1 = [ step_lowest(State, Min, ServiceArgs) || State <- States ],
+                %% @TODO combine the do_command calls into a single parallel do_command call.
+                States1 = [ step_lowest(State, Min, ServiceArgs) || State <- States ],
 
-        case lists:any(fun({'$end_of_table',_}) -> false;
-                          ({{error, _}, _}) -> false;
-                          (_) -> true
-                       end,
-                       States1)
-        of
-            true -> step_lists(States1, list_receiver(Value, Receiver), ServiceArgs);
-            false -> list_finalize(list_receiver(Value, Receiver))
+                case lists:any(fun({'$end_of_table',_}) -> false;
+                                  ({{error, _}, _}) -> false;
+                                  (_) -> true
+                               end,
+                               States1)
+                of
+                    true -> step_lists(States1, list_receiver(Value, Receiver), ServiceArgs);
+                    false -> list_finalize(list_receiver(Value, Receiver))
+                end
         end.
 
     find_lowest([], Min) -> 

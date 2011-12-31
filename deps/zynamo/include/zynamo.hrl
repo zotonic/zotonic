@@ -81,6 +81,9 @@
 %% @doc Default timeout for operations is 10 seconds.
 -define(ZYNAMO_REQUEST_TIMEOUT, 10000).
 
+-define(ZYNAMO_DEFAULT_N, 3).
+-define(ZYNAMO_DEFAULT_QUORUM, 2).
+
 
 % ===========================================================
 % Specific values for some #zynamo_command{} records.

@@ -59,9 +59,6 @@
 -define(NODE_TIMEOUT, 5000).
 -define(FINAL_TIMEOUT, 20000).
 
--define(DEFAULT_N, 3).
--define(DEFAULT_QUORUM, 2).
-
 
 %% ===================================================================
 %% Public API
@@ -80,7 +77,7 @@ start_link(From, Command, PreferenceNodes, ServiceNodes, Options) ->
 %% ====================================================================
 
 init([From, Command, PreferenceNodes, ServiceNodes, Options]) ->
-    N = case proplists:get_value(n, Options, ?DEFAULT_N) of
+    N = case proplists:get_value(n, Options, ?ZYNAMO_DEFAULT_N) of
            all -> length(PreferenceNodes);
            NVal -> NVal
         end,
@@ -99,7 +96,7 @@ init([From, Command, PreferenceNodes, ServiceNodes, Options]) ->
         request_timeout=proplists:get_value(request_timeout, Options, ?ZYNAMO_REQUEST_TIMEOUT),
         node_timeout=proplists:get_value(node_timeout, Options, ?NODE_TIMEOUT),
         n=N,
-        quorum=case proplists:get_value(quorum, Options, ?DEFAULT_QUORUM) of
+        quorum=case proplists:get_value(quorum, Options, ?ZYNAMO_DEFAULT_QUORUM) of
                     n -> N;
                     Q -> erlang:min(Q,N)
                end,
