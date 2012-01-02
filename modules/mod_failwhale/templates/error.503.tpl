@@ -8,7 +8,7 @@
 </p>
 
 <p>
-    <img src="/lib/images/failwhale.jpg" title="{_ 503 Service Unavailable _}" width="720" height="479" />
+    <img src="/lib/images/failwhale.jpg" title="{_ 503 Service Unavailable _}" width="640" height="426" />
 </p>
 
 
