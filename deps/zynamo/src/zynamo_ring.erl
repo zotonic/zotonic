@@ -69,7 +69,8 @@
     sync/2,
     ranges/2,
     random_other_node/1,
-    random_other_ring_nodes/1
+    random_other_ring_nodes/1,
+    empty_ring_services/1
 ]).
 
 %% @doc The version of the ring data structure.
@@ -491,3 +492,8 @@ random_other_ring_nodes(#ring{nodes=Nodes}) ->
     zynamo_random:randomize(Nodes1).
 
 
+%% @doc Return a ring with all services removed
+empty_ring_services(Ring) ->
+    Ring#ring{byes=[], nodes=[Node#ring_node{services=[]} || Node <- Ring#ring.nodes]}.
+
+    

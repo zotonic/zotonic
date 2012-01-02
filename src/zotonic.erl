@@ -37,12 +37,17 @@ start() -> start([]).
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
+   
     zotonic_deps:ensure(),    
     ensure_started(crypto),
     ensure_started(mnesia),
     ensure_started(statz),
     ensure_started(webzmachine),
+
+    RingFile = filename:join([code:lib_dir(zotonic, priv), "ring", atom_to_list(node())]),
+    application:set_env(zynamo, ring_state_file, RingFile),
     ensure_started(zynamo),
+    
     ok = application:start(zotonic).
 
 %% @spec stop() -> ok

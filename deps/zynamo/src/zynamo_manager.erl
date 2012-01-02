@@ -353,7 +353,7 @@ do_save(Ring) ->
             "% This file contains the latest ring state.",10,
             "% Delete this file to reset the ring to its defaults (when not running).",10,
             10>>),
-    Data = io_lib:format("~p.~n", [Ring]),
+    Data = io_lib:format("~p.~n", [zynamo_ring:empty_ring_services(Ring)]),
     ok = file:write(Dev, iolist_to_binary(Data)),
     ok = file:close(Dev).
 
@@ -364,6 +364,7 @@ do_read() ->
         {ok, Rings} ->
             {ok, hd(Rings)};
         {error, _Reason} = Error ->
+            error_logger:info_msg("Error reading ring state:~n~n~p~n", [Error]),
             Error
     end.
 
@@ -517,7 +518,7 @@ new_ring(State, NewRing) ->
 
 
 ring_file() ->
-    case application:get_env(zynamo, ring_state_dir) of
+    case application:get_env(zynamo, ring_state_file) of
         {ok, Dir} -> Dir;
         undefined -> filename:join([code:lib_dir(zynamo, priv), "ring-"++atom_to_list(node())])
     end.
