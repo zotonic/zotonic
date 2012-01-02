@@ -15,8 +15,8 @@
             zynamo_request_fsm_sup,
             zynamo_handoff_fsm,
             zynamo_handoff_fsmsup,
-            zynamo_kv,
-            zynamo_stats,
+            zynamo_service_kv,
+            zynamo_service_stats,
  
             merkerl,
             zynamo_version,
@@ -30,8 +30,8 @@
             zynamo_random,
             zynamo_request_fsm_sup,
             zynamo_handoff_fsm_sup,
-            zynamo_kv,
-            zynamo_stats
+            zynamo_service_kv,
+            zynamo_service_stats
         ]},
         {applications, [kernel, stdlib, crypto]},
         {mod, {zynamo, []}}

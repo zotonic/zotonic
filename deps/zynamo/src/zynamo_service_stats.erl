@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(zynamo_stats).
+-module(zynamo_service_stats).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 

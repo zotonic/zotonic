@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(zynamo_kv).
+-module(zynamo_service_kv).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 
@@ -121,7 +121,7 @@ do_list(#zynamo_command{value=Args}, State) ->
     #zynamo_list_args{value=WithValue, version=WithVersion, offset=Offset, limit=Limit} = Args,
     % Walk to the Key at Offset
     case offset(State#state.data, ets:first(State#state.data), Offset) of
-        '$end_of_table' -> {ok, []};
+        '$end_of_table' -> {ok, '$end_of_table'};
         FirstKey ->
             Keys = limit(State#state.data, FirstKey, Limit, [FirstKey]),
             case WithValue or WithVersion of

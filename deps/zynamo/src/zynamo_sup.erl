@@ -58,10 +58,10 @@ init([]) ->
             permanent, 2000, supervisor, [zynamo_handoff_fsm_sup]},
 
         % Standard zynamo services
-        {zynamo_kv, {zynamo_kv, start_link, []},
-            permanent, 2000, worker, [zynamo_kv]},
-        {zynamo_stats, {zynamo_stats, start_link, []},
-            permanent, 2000, worker, [zynamo_stats]}
+        {zynamo_service_kv, {zynamo_service_kv, start_link, []},
+            permanent, 2000, worker, [zynamo_service_kv]},
+        {zynamo_service_stats, {zynamo_service_stats, start_link, []},
+            permanent, 2000, worker, [zynamo_service_stats]}
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 

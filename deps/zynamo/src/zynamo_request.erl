@@ -348,7 +348,7 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
         case do_command(Site, Service, undefined, Command, Options) of
             {error, Reason} -> 
                 {{error, Reason}, {Node, {error, Reason}, Offset}};
-            [{_Node, _Handoff, {ok, []}}] ->
+            [{_Node, _Handoff, {ok, '$end_of_table'}}] ->
                 list_next({Node, '$end_of_table', Offset}, ServiceArgs);
             [{_Node, _Handoff, {ok, List}}] ->
                 list_next({Node, List, Offset}, ServiceArgs)
@@ -362,8 +362,6 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
 
     list_receiver(V, Acc) when is_list(Acc) ->
         [V|Acc];
-    list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
-        Pid ! {Ref, V};
     list_receiver(V, {Pid, Ref}) when is_pid(Pid) ->
         Pid ! {Ref, V};
     list_receiver(V, F) when is_function(F) ->
