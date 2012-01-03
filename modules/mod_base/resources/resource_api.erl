@@ -63,9 +63,7 @@ allowed_methods(ReqData, Context) ->
              end,
 
     try
-	%% Ping all services
-	z_service:all(info, Context),
-        Module  = list_to_existing_atom("service_" ++ TheMod ++ "_" ++ Method),
+        {ok, Module}  = z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method),
         Context2 = z_context:set("module", Module, Context1),
         try
             {z_service:http_methods(Module), ReqData, Context2}
@@ -83,7 +81,9 @@ allowed_methods(ReqData, Context) ->
 %% TODO: refactor via z_notifier.
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
-    Context2 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
+    Context0 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
+    
     case z_auth:is_auth(Context2) of
         true ->
             %% Yep; use these credentials.
