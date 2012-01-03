@@ -45,7 +45,8 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
-    Context1 = z_context:ensure_all(Context0),
+    Context1 = z_context:ensure_qs(z_context:continue_session(Context0)),
+
     %% 'ping' the service to ensure we loaded all the existing services.
     z_service:all(Context1),
     TheMod = case z_context:get_q("module", Context1) of

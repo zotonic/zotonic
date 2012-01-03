@@ -21,6 +21,7 @@
 
 -export([
     init/1, 
+    service_available/2,
     forbidden/2,
     malformed_request/2,
     allowed_methods/2,
@@ -33,10 +34,16 @@
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(_Args) -> {ok, []}.
+init(DispatchArgs) -> {ok, DispatchArgs}.
 
-malformed_request(ReqData, _Context) ->
-    Context1 = z_context:new(ReqData, ?MODULE),
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
+    Context  = z_context:new(ReqData, ?MODULE),
+    Context1 = z_context:set(DispatchArgs, Context),
+    ?WM_REPLY(true, Context1).
+
+
+malformed_request(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_qs(Context1),
     case z_context:get_q("postback", Context2) of
         undefined ->
@@ -61,7 +68,10 @@ content_types_provided(ReqData, Context) ->
 process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     {Script, EventContext} = process_postback(Context1),
-    CometScript = z_session_page:get_scripts(EventContext#context.page_pid),
+    CometScript = case z_context:has_session_page(EventContext) of
+                      true -> z_session_page:get_scripts(EventContext#context.page_pid);
+                      false -> []
+                  end,
     
     % Send back all the javascript.
     RD  = z_context:get_reqdata(EventContext),
