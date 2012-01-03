@@ -4,19 +4,19 @@
     {home,     [],            resource_template, [ {template, "home.tpl"} ]},
 
     %% Comet connection, used with long polls from the browser.
-    {comet,    ["comet"],     resource_comet, [{ssl, any}]},
+    {comet,    ["comet"],     resource_comet, [{ssl, any}, {no_session, true}]},
 
     %% Comet sub-domain connection, used with long polls from the browser.
     {comet,    ["comet", "subdomain"], resource_template, [{template, "comet_subdomain.tpl"}]},
     
     %% WebSocket connection.
-    {websocket,    ["websocket"],     resource_websocket, [{ssl, any}]},
+    {websocket,    ["websocket"],     resource_websocket, [{ssl, any}, {no_session, true}]},
     
     %% Postback of events from the browser to the server, dispatched from the postback resource.
-    {postback, ["postback"],  resource_postback, [{ssl, any}]},
+    {postback, ["postback"],  resource_postback, [{ssl, any}, {no_session, true}]},
     
     %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
-    {close_connection, ["close-connection"],  resource_close_connection, [{ssl, any}]},
+    {close_connection, ["close-connection"],  resource_close_connection, [{ssl, any}, {no_session, true}]},
 
     %% Normal page to show a resource.
     {page,    ["page", id],       resource_page, [ {template, {cat, "page.tpl"}} ]},

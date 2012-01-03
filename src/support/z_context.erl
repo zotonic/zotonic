@@ -46,10 +46,10 @@
 
     continue_session/1,
     has_session/1,
+    has_session_page/1,
     
     ensure_all/1,
     ensure_session/1,
-    ensure_page_session/1,
     ensure_qs/1,
 
     get_reqdata/1,
@@ -460,6 +460,12 @@ continue_session(Context) ->
     end.
     
 
+%% @doc Check if the current context has a session page attached
+has_session_page(#context{page_pid=PagePid}) when is_pid(PagePid) ->
+    true;
+has_session_page(_) ->
+    false.
+
 %% @doc Check if the current context has a session attached
 has_session(#context{session_pid=SessionPid}) when is_pid(SessionPid) ->
     true;
@@ -469,9 +475,13 @@ has_session(_) ->
 
 %% @doc Ensure session and page session and fetch and parse the query string
 ensure_all(Context) ->
-    ensure_page_session(
-        ensure_session(
-            ensure_qs(Context))).
+    case get(no_session, Context, false) of
+        false ->
+            ensure_page_session(ensure_session(ensure_qs(Context)));
+        true ->
+            continue_page_session(continue_session(ensure_qs(Context)))
+    end.
+
 
 
 %% @doc Ensure that we have a session, start a new session process when needed
@@ -486,15 +496,23 @@ ensure_session(Context) ->
             Context
     end.
 
-%% @doc Ensure that we have a page session, used for comet and postback requests
+%% @doc Ensure that we have a page session, used for comet and postback requests.
 ensure_page_session(Context) ->
     case Context#context.page_pid of
         undefined ->
-            Context1 = ensure_session(Context),
-            z_session:ensure_page_session(Context1);
+            z_session:ensure_page_session(Context);
         _ ->
             Context
     end.
+
+continue_page_session(Context) ->
+    case Context#context.session_pid of
+        undefined ->
+            Context;
+        _ ->
+            z_session:ensure_page_session(Context)
+    end.
+
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary
 ensure_qs(Context) ->

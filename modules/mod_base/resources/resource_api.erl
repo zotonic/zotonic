@@ -45,7 +45,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
-    Context1 = z_context:ensure_all(Context0),
+    Context1 = z_context:ensure_qs(z_context:continue_session(Context0)),
 
     TheMod = case z_context:get_q("module", Context1) of
                  undefined -> z_convert:to_list(z_context:get(module, Context1));
