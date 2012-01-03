@@ -53,6 +53,7 @@
     node_timeout    :: pos_integer(),
     n               :: pos_integer(),
     quorum          :: pos_integer(),
+    not_found_is_error :: boolean(),
     no_handoff      :: boolean()
 }).
 
@@ -100,6 +101,7 @@ init([From, Command, PreferenceNodes, ServiceNodes, Options]) ->
                     n -> N;
                     Q -> erlang:min(Q,N)
                end,
+        not_found_is_error=proplists:get_value(not_found_is_error, Options, false),
         no_handoff=proplists:get_value(no_handoff, Options, false)
     }, 0}.
 
@@ -188,10 +190,22 @@ waiting_reply({ok, FromNode, Ref, Reply}, State) ->
     % Received a result from a node, collect all results
     case lists:keytake(Ref, 2, State#state.participating_nodes) of
         {value, {FromNode, Ref, _BatchNr, Handoff}, RestParticipating} ->
-            Oks = [ {FromNode, Handoff, Reply} | State#state.received_ok ],
+            IsOk = case Reply of
+                       {ok, not_found, _} -> not State#state.not_found_is_error;
+                       _ -> true
+                   end,
+            {Oks,Fails} = case IsOk of
+                            true ->
+                                {[ {FromNode, Handoff, Reply} | State#state.received_ok ],
+                                 State#state.received_fail};
+                            false ->
+                                {State#state.received_ok,
+                                 [ {FromNode, Handoff, Reply} | State#state.received_fail]}
+                          end,
             State1 = State#state{
                 participating_nodes = RestParticipating,
-                received_ok = Oks
+                received_ok = Oks,
+                received_fail = Fails
             },
             case wait_for_quorum(State1) of
                 false -> {next_state, return_replies, State1, 0};

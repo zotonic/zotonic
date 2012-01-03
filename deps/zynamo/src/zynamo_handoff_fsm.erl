@@ -146,21 +146,22 @@ do_handoff_command(Site, Service, Node, HandoffCommand) ->
     of
         [{Node, _Handoff, {ok, _Version}}] ->
             % Report back to our local service that the handoff has been done
-            case zynamo_manager:get_service_pid(Site, Service, node()) of
-                {ok, Pid} -> gen_server:cast(Pid, {handoff_done, Node, HandoffCommand});
-                {error, _Reason} = Error -> Error
-            end;
+            handoff_done(Site, Service, Node, HandoffCommand);
         [{Node, _Handoff, {error, {conflict, _OtherVersion}}}] ->
-            case zynamo_manager:get_service_pid(Site, Service, node()) of
-                {ok, Pid} -> gen_server:cast(Pid, {handoff_done, Node, HandoffCommand});
-                {error, _Reason} = Error -> Error
-            end;
+            handoff_done(Site, Service, Node, HandoffCommand);
+        [{Node, _Handoff, {error, operation_not_supported}}] ->
+            handoff_done(Site, Service, Node, HandoffCommand);
         [{Node, _Handoff, {error, _Reason} = Error}] ->
             Error;
         {error, _Reason} = Error ->
             Error
     end.
 
+    handoff_done(Site, Service, Node, HandoffCommand) ->
+        case zynamo_manager:get_service_pid(Site, Service, node()) of
+            {ok, Pid} -> gen_server:cast(Pid, {handoff_done, Node, HandoffCommand});
+            {error, _Reason} = Error -> Error
+        end.
 
 handoff_timeout(short) ->
     ?HANDOFF_SHORT_TIMEOUT + zynamo_random:uniform(?HANDOFF_RANDOM_TIMEOUT);

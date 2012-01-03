@@ -150,7 +150,17 @@ do_command(Site, Service, Key, Command, Options) ->
     Buckets = get_buckets(Site, Service, Key, Options),
     {ok, Ranges} = get_ring_range(Command, Options),
     {ok, ServicePidData} = zynamo_manager:locate_service(Site, Service),
-    ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
+    ExcludeNodes = lists:flatten(proplists:get_all_values(node_exclude, Options)),
+    ServiceNodes = lists:foldl(
+            fun({Pid, _Data}, Acc) ->
+                N = node(Pid),
+                case proplists:member(N, ExcludeNodes) of
+                    false -> [{N, Pid} | Acc];
+                    true -> Acc
+                end
+            end,
+            [],
+            ServicePidData),
     case collect_preference_nodes(Buckets, Ranges, ServiceNodes) of
         [] ->
             {error, no_nodes};

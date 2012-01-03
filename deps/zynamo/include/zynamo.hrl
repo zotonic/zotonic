@@ -69,10 +69,12 @@
                             | {key, term()}
                             | {key, term(), sha|function()|{atom(),atom()}}
                        }
+                     | {node_exclude, [ node() ]}
                      | {request_timeout, non_neg_integer()}
                      | {node_timeout, non_neg_integer()}
                      | {n, non_neg_integer() | all}
                      | {quorum, non_neg_integer() | n}
+                     | not_found_is_error
                      | no_handoff
                      | {final_action, zynamo_callback()}.
 -type zynamo_request_options() :: list( zynamo_request_option() ).

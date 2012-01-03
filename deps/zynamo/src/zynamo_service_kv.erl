@@ -195,7 +195,7 @@ do_update(Command, Handoff, State) ->
                         true ->
                             nop
                     end,
-                    ets:insert(State#state.handoff, [{{N, Key}, Version, Cmd} || N <- Handoff -- [node()] ]),
+                    insert_handoff(State#state.handoff, Key, Version, Cmd, lists:delete(node(),Handoff)),
                     {ok, Version};
                 false ->
                     {error, {conflict, OldVersion}}
@@ -247,6 +247,25 @@ do_handoff_done(Node, ZynamoCommand, State) ->
             % Not there, or a newer handoff request
             nop
     end.
+
+
+%% @doc Insert a handoff command, check if we don't have a newer handoff registered.
+insert_handoff(_Handoff, _Key, _Version, _Cmd, []) ->
+    ok;
+insert_handoff(Handoff, Key, Version, Cmd, [N|Nodes]) ->
+    case ets:lookup(Handoff, {N,Key}) of
+        [] ->
+            ets:insert(Handoff, {{N, Key}, Version, Cmd});
+        [{_,HandoffVersion,_}] ->
+            case zynamo_version:is_newer(Version, HandoffVersion) of
+                true ->
+                    ets:insert(Handoff, {{N, Key}, Version, Cmd});
+                false ->
+                    nop
+            end
+    end,
+    insert_handoff(Handoff, Key, Version, Cmd, Nodes).
+
 
 %% @doc Check if the received version is newer than the one we have already.
 is_newer(Key, Version, DataTable) ->
