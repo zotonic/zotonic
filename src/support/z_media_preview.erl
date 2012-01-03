@@ -49,20 +49,27 @@ convert(InFile, OutFile, Filters, Context) ->
             {mime, Mime} = proplists:lookup(mime, FileProps),
             case can_generate_preview(Mime) of
                 true ->
+                    SiteDir = z_path:site_dir(Context),
+                    RelInFile = case lists:prefix(SiteDir, InFile) of
+                                    true -> lists:nthtail(length(SiteDir), InFile);
+                                    false -> InFile
+                                end,
                     OutMime = z_media_identify:guess_mime(OutFile),
                     {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
                     z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
                     z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
                     Args1   = lists:flatten(z_utils:combine(32, CmdArgs)),
-                    Cmd     = ["convert ", z_utils:os_filename(InFile++infile_suffix(Mime)), " ", Args1, " ", z_utils:os_filename(OutFile)],
+                    Cmd     = lists:flatten(["convert ", z_utils:os_filename(InFile++infile_suffix(Mime)), " ", Args1, " ", z_utils:os_filename(OutFile)]),
+                    ?zInfo(io_lib:format("Converting image ~p: ~s", [RelInFile, Cmd]), Context),
                     file:delete(OutFile),
                     ok = filelib:ensure_dir(OutFile),
                     Result  = z_media_preview_server:exec(lists:flatten(Cmd), OutFile),
                     case filelib:is_regular(OutFile) of
                         true ->
+                            ?zInfo(io_lib:format("Converting image ~p done.", [RelInFile]), Context),
                             ok;
                         false -> 
-                            ?LOG("convert cmd ~p failed, result ~p", [Cmd, Result]),
+                            ?zWarning(io_lib:format("Converting image ~p error: ~p", [RelInFile, Result]), Context),
                             {error, "Error during convert."}
                     end;
                 false ->
