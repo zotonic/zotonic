@@ -26,25 +26,27 @@
 
 
 -export ([
-	clean_lower/1,
-	to_list/1,
-	to_flatlist/1,
-	to_atom/1, 
-	to_binary/1, 
-	to_integer/1,
-	to_float/1,
-	to_bool_strict/1,
-	to_bool/1,
-	to_utc/1,
-	to_localtime/1,
-	to_datetime/1,
-    to_date/1,
-    to_time/1,
-    to_isotime/1,
-    to_json/1,
+          clean_lower/1,
+          to_list/1,
+          to_flatlist/1,
+          to_atom/1, 
+          to_binary/1, 
+          to_integer/1,
+          to_float/1,
+          to_bool_strict/1,
+          to_bool/1,
+          to_utc/1,
+          to_localtime/1,
+          to_datetime/1,
+          to_date/1,
+          to_time/1,
+          to_isotime/1,
+          to_json/1,
 
-	convert_json/1,
-    ip_to_list/1
+          convert_json/1,
+          ip_to_list/1,
+          ip_to_long/1,
+          long_to_ip/1
 ]).
 
 
@@ -314,6 +316,27 @@ ip_to_list({_K1,_K2,_K3,_K4,_K5,_K6,_K7,_K8} = IPv6) ->
                   end,
                   tuple_to_list(IPv6)),
     lists:flatten(string:join(L, ":")).
+
+
+%% Taken from egeoip (http://code.google.com/p/egeoip/source/browse/trunk/egeoip/src/egeoip.erl?r=19)
+%% @spec ip2long(Address) -> {ok, integer()}
+%% @doc Convert an IP address from a string, IPv4 tuple or IPv6 tuple to the
+%%      big endian integer representation.
+ip_to_long({B3, B2, B1, B0}) ->
+    {ok, (B3 bsl 24) bor (B2 bsl 16) bor (B1 bsl 8) bor B0};
+ip_to_long({W7, W6, W5, W4, W3, W2, W1, W0}) ->
+    {ok, (W7 bsl 112) bor (W6 bsl 96) bor (W5 bsl 80) bor (W4 bsl 64) bor
+	(W3 bsl 48) bor (W2 bsl 32) bor (W1 bsl 16) bor W0};
+ip_to_long(_) ->
+    {error, badmatch}.
+
+
+%% @doc Convert long int to IP address tuple. FIXME: ipv6
+long_to_ip(L) ->
+    {ok, {(L band (255 bsl 24)) bsr 24,
+          (L band (255 bsl 16)) bsr 16,
+          (L band (255 bsl 8)) bsr 8,
+          L band 255}}.
 
 
 %% @doc Convert json from facebook favour to an easy to use format for zotonic templates.
