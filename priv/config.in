@@ -60,6 +60,7 @@
  %% some picky/buggy/misconfigured relays might need one of these to be enabled
  % {smtp_no_mx_lookups, false},
  % {smtp_verp_as_from, false},
+ % {smtp_bounce_email_override, "me@example.com"},
 
  %% SMTP mail queue
  %% How long to keep sent messages in the mail queue (in minutes)
