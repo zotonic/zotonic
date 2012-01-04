@@ -235,9 +235,9 @@ update_config(State) ->
     SmtpRelayOpts = 
         case SmtpRelay of 
             true ->
-                [{relay, z_config:get(smtp_host)},
-                 {port, z_config:get(smtp_port)},
-                 {ssl, z_config:get(smtp_ssl)}]
+                [{relay, z_config:get(smtp_host, "localhost")},
+                 {port, z_config:get(smtp_port, 25)},
+                 {ssl, z_config:get(smtp_ssl, false)}]
                 ++ case {z_config:get(smtp_username),
                          z_config:get(smtp_password)} of
                         {undefined, undefined} ->
@@ -271,8 +271,13 @@ update_config(State) ->
 %% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
 bounce_email(MessageId, Context) ->
     case m_config:get_value(site, bounce_email_override, Context) of
-        undefined -> "noreply+"++MessageId;
-        VERP      -> z_convert:to_list(VERP)
+        undefined -> 
+            case z_config:get(smtp_bounce_email_override) of
+                undefined -> "noreply+"++MessageId;
+                VERP -> z_convert:to_list(VERP)
+            end;
+        VERP ->
+            z_convert:to_list(VERP)
     end.
 
 reply_email(MessageId, Context) ->
