@@ -48,7 +48,7 @@ statistics_html(Context) ->
 
 
 tplvars() ->
-    Source = lists:sort(zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{n,all}])),
+    Source = lists:sort(zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{quorum, n}, {n,all}])),
     Nodes = [N || {N, _, _} <- Source],
     {_,_,S0} = hd(Source),
     Stats = [{Node, S} || {Node, _, S} <- Source],

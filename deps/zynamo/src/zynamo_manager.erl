@@ -272,13 +272,16 @@ handle_cast(join, #state{ring=Ring, service_monitors=Monitors} = State) ->
             {Changed, NewRing} = zynamo_ring:hello(Ring),
             % Re-publish all local services
             NewRing1 = case Changed of
-                        true ->
+                        changed ->
                             lists:foldl(fun({{Site, Service}, _MRef, Pid, GossipState}, R) ->
-                                            zynamo_ring:set_local_service(Site, Service, Pid, GossipState, R)
+                                                case zynamo_ring:set_local_service(Site, Service, Pid, GossipState, R) of
+                                                    {ok, NewRing2} -> NewRing2;
+                                                    {error, _} -> R
+                                                end
                                         end,
                                         NewRing,
                                         Monitors);
-                        false ->
+                        nochange ->
                             NewRing
                        end,
             % Signal our ring change
@@ -450,11 +453,14 @@ do_set_service(Site, Service, Pid, GossipState, #state{ring=Ring, service_monito
         {{Site,Service}, Pid, GossipState} ->
             State;
         {{Site,Service}, Pid, _OldGossipState} ->
-            {ok, NewRing} = zynamo_ring:set_local_service(Site, Service, Pid, GossipState, Ring),
+            NewRing = case zynamo_ring:set_local_service(Site, Service, Pid, GossipState, Ring) of
+                          {ok, R} -> R;
+                          {error, _} -> Ring
+                      end,
             State#state{ring=NewRing};
         {{Site,Service}, OtherPid, _OldGossipState} ->
             Monitors1 = case lists:keyfind(OtherPid, 3, Monitors) of
-                            {{Site, Service}, OtherMRef, OtherPid} ->
+                            {{Site, Service}, OtherMRef, OtherPid, _GossipState} ->
                                 erlang:demonitor(OtherMRef),
                                 lists:keydelete(OtherPid, 3, Monitors);
                             _NotMonitored ->
@@ -466,7 +472,7 @@ do_set_service(Site, Service, Pid, GossipState, #state{ring=Ring, service_monito
     % Service is changed, force gossip to prevent referrals to old service
     update_service(Site, Service, undefined, _GossipState, #state{ring=Ring, service_monitors=Monitors} = State) ->
         Monitors1 = case lists:keyfind({Site, Service}, 1, Monitors) of
-                        {{Site, Service}, OtherMRef, _OtherPid} ->
+                        {{Site, Service}, OtherMRef, _OtherPid, _GossipState} ->
                             erlang:demonitor(OtherMRef),
                             lists:keydelete({Site, Service}, 1, Monitors);
                         false ->
@@ -478,10 +484,15 @@ do_set_service(Site, Service, Pid, GossipState, #state{ring=Ring, service_monito
         State#state{ring=NewRing, service_monitors=Monitors1};
     update_service(Site, Service, Pid, GossipState, #state{ring=Ring, service_monitors=Monitors} = State) ->
         MRef = erlang:monitor(process, Pid),
-        {ok, NewRing} = zynamo_ring:set_local_service(Site, Service, Pid, GossipState, Ring),
-        zynamo_gossip:push_ring(),
-        service_events(Ring, NewRing),
-        State#state{ring=NewRing, service_monitors=[ {{Site,Service}, MRef, Pid} | Monitors ]}.
+    NewRing = case zynamo_ring:set_local_service(Site, Service, Pid, GossipState, Ring) of
+                  {ok, Ring1} ->
+                      zynamo_gossip:push_ring(),
+                      service_events(Ring, Ring1),
+                      Ring1;
+                  {error, node_down} ->
+                      Ring
+              end,
+    State#state{ring=NewRing, service_monitors=[ {{Site,Service}, MRef, Pid, GossipState} | Monitors ]}.
 
 
 %% @doc Ring is changed, save the ring state, notify event listeners, gossip the new ring.

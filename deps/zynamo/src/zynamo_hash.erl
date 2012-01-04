@@ -82,21 +82,20 @@ unique_id() ->
 -spec node_id() -> non_neg_integer().
 node_id() ->
     [Name,Host] = string:tokens(atom_to_list(node()), "@"),
-    case node2nr(Name) of
+    case node2nr(hd(string:tokens(Host, "."))) of
         undefined ->
-            case node2nr(hd(string:tokens(Host, "."))) of
-                Nr when is_integer(Nr) -> Nr;
-                _ -> error(node_number_missing)
+            case node2nr(Name) of
+                undefined -> error(node_number_missing);
+                Nr -> Nr
             end;
-        Nr -> 
-            Nr
+        Nr -> Nr
     end.
 
-    node2nr(L) ->
-        case [ D || D <- L, D >= $0, D =< $9 ] of
-            [] -> undefined;
-            N -> list_to_integer(N)
-        end.
+node2nr(L) ->
+    case [ D || D <- L, D >= $0, D =< $9 ] of
+        [] -> undefined;
+        N -> list_to_integer(N)
+    end.
 
 
 %% @doc Return the node and timestamp of an unique id.
