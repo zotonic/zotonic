@@ -45,6 +45,7 @@
     resume/1,
     hello/1,
     bye/1,
+    resync/1,
     ring_buckets/0,
     is_equal/2,
     get_node/1,
@@ -132,6 +133,22 @@ resume(#ring{} = Ring) ->
             Me -> Node#ring_node{services=[], version=now()};
             _ -> Node
         end
+        || Node <- Ring#ring.nodes
+    ],
+    Ring#ring{nodes=Nodes}.
+
+
+%% @doc Touch the ring, forcing a gossip
+-spec resync(ring()) -> ring().
+resync(#ring{} = Ring) ->
+    Me = node(),
+    Nodes = [
+        Node#ring_node{
+            version=case Node#ring_node.node of
+                        Me -> now();
+                        _  -> {0,0,0}
+                    end
+        }
         || Node <- Ring#ring.nodes
     ],
     Ring#ring{nodes=Nodes}.

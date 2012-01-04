@@ -34,6 +34,7 @@
     save/0,
     leave/0,
     join/0,
+    resync/0,
     nodeup/1,
     nodedown/1,
     is_node_active/1,
@@ -110,6 +111,11 @@ leave() ->
 -spec join() -> ok.
 join() ->
     gen_server:cast(?MODULE, join).
+
+%% @doc Resync our ring state by forcing a gossip
+-spec resync() -> ok.
+resync() ->
+    gen_server:cast(?MODULE, resync).
 
 %% @doc Set the node's state to 'up'
 -spec nodeup(node()) -> ok.
@@ -244,6 +250,10 @@ handle_call(Message, _From, State) ->
 handle_cast(save, #state{ring=Ring} = State) ->
     do_save(Ring),
     {noreply, State};
+
+handle_cast(resync, #state{ring=Ring} = State) ->
+    zynamo_gossip:push_ring(),
+    {noreply, zynamo_ring:resync(Ring), State};
 
 %% @doc Leave the ring.
 handle_cast(leave, #state{ring=Ring} = State) ->
