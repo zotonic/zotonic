@@ -119,9 +119,12 @@ new() ->
 -spec new(node()) -> ring().
 new(Node) ->
     #ring{
-        nodes=[ #ring_node{node=Node, state=up, membership=ok, version=now(), services=[]} ],
+        nodes=[ new_ring_node(Node) ],
         byes=[]
     }.
+
+new_ring_node(Node) ->
+    #ring_node{node=Node, state=up, membership=ok, version=now(), services=[]}.
 
 %% @doc Resume a previously saved ring state, remove the local services.
 -spec resume(ring()) -> ring().
@@ -253,7 +256,7 @@ nodes(Ring) ->
 
 %% @doc A hello for the current node, rejoining the ring
 hello(Ring) ->
-    hello(#ring_node{node=node(), version=now(), services=[]}, Ring).
+    hello(new_ring_node(node()), Ring).
     
 %% @doc Process a received {hello, node(), Version} message from another node.
 -spec hello(#ring_node{}, ring()) -> {'nochange'|'changed', #ring{}}.
