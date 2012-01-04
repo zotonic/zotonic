@@ -262,13 +262,13 @@ handle_cast(join, #state{ring=Ring, service_monitors=Monitors} = State) ->
             {Changed, NewRing} = zynamo_ring:hello(Ring),
             % Re-publish all local services
             NewRing1 = case Changed of
-                        true ->
+                        changed ->
                             lists:foldl(fun({{Site, Service}, _MRef, Pid, GossipState}, R) ->
                                             zynamo_ring:set_local_service(Site, Service, Pid, GossipState, R)
                                         end,
                                         NewRing,
                                         Monitors);
-                        false ->
+                        nochange ->
                             NewRing
                        end,
             % Signal our ring change
