@@ -35,6 +35,7 @@
 % API export
 -export([
     get/1,
+    get/2,
     set/2,
     get_dirty/1,
     set_dirty/2
@@ -55,6 +56,13 @@ start_link() ->
 %% @doc Get value from config file (cached)
 get(Key) ->
     gen_server:call(?MODULE, {get, Key}).
+
+%% @doc Get value from config file, returning default value when not set (cached)
+get(Key, Default) ->
+    case gen_server:call(?MODULE, {get, Key}) of
+        undefined -> Default;
+        Value -> Value
+    end.
 
 %% @doc Set value in config file, update cache.
 set(Key, Value) ->
@@ -145,7 +153,7 @@ handle_cast({set, Key, Value}, State) ->
             {noreply, State};
         _ -> 
             Config = write_config(Key, Value),
-            {no_reply, State#state{config=Config}}
+            {noreply, State#state{config=Config}}
     end;
 
 %% @doc Trap unknown casts
