@@ -494,6 +494,6 @@ random_other_ring_nodes(#ring{nodes=Nodes}) ->
 
 %% @doc Return a ring with all services removed
 empty_ring_services(Ring) ->
-    Ring#ring{byes=[], nodes=[Node#ring_node{services=[]} || Node <- Ring#ring.nodes]}.
+    Ring#ring{byes=[], nodes=[Node#ring_node{services=[], version={0,0,0}} || Node <- Ring#ring.nodes]}.
 
     
