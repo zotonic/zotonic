@@ -5,7 +5,7 @@ APP       := zotonic
 PARSER     =src/erlydtl/erlydtl_parser
 
 GIT_CHECK := $(shell test -d .git && git submodule update --init)
-MAKEFILES := $(shell find -L deps/ modules/ priv/sites/ priv/modules/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
+MAKEFILES := $(shell find -L deps/ modules/ priv/sites/ priv/modules/ priv/extensions/ priv/sites/*/modules/ -maxdepth 2 -name Makefile)
 
 all: iconv makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 

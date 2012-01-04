@@ -113,7 +113,7 @@ init([]) ->
     Processes = [
         Ids, Config, PreviewServer,
         SmtpServer, SmtpBounceServer, 
-        SitesSup, Dispatcher
+        SitesSup, Dispatcher | get_extensions()
                 ],
 
     % Listen to IP address and Port
@@ -224,3 +224,16 @@ ipv6_supported() ->
         {ok, _Addr} -> true;
         {error, _} -> false
     end.
+
+
+%% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
+get_extensions() ->
+    Files = filelib:wildcard(filename:join([z_utils:lib_dir(priv), "extensions", "ext_*"])),
+    [
+     begin
+         Module = list_to_atom(filename:basename(F)),
+         {Module,
+          {Module, start_link, []},
+          permanent, 5000, worker, dynamic}
+     end
+     || F <- Files].
