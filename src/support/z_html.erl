@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-17
 %%
 %% @doc Utility functions for html processing.  Also used for property filtering (by m_rsc_update).
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -232,33 +232,48 @@ sanitize(Html) ->
 sanitize({trans, Tr}, OptContext) ->
     {trans, [{Lang, sanitize(V, OptContext)} || {Lang,V} <- Tr]};
 sanitize(Html, OptContext) when is_binary(Html) ->
-    sanitize1(<<"<sanitize>",Html/binary,"</sanitize>">>, OptContext);
+    sanitize_opts(<<"<sanitize>",Html/binary,"</sanitize>">>, OptContext);
 sanitize(Html, OptContext) when is_list(Html) ->
-    sanitize1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"]), OptContext).
+    sanitize_opts(iolist_to_binary(["<sanitize>", Html, "</sanitize>"]), OptContext).
 
-sanitize1(Html, OptContext) ->
+    sanitize_opts(Html, OptContext) ->
+        ExtraAttrs = case OptContext of
+                        #context{} -> 
+                            binstr:split(m_config:get_value(site, html_attr_extra, <<>>, OptContext), <<",">>);
+                        undefined ->
+                            []
+                     end,
+        ExtraElts =  case OptContext of
+                        #context{} -> 
+                             binstr:split(m_config:get_value(site, html_attr_extra, <<>>, OptContext), <<",">>);
+                        undefined ->
+                             []
+                     end,
+        sanitize1(Html, ExtraElts, ExtraAttrs, OptContext).
+
+sanitize1(Html, ExtraElts, ExtraAttrs, OptContext) ->
     Parsed = mochiweb_html:parse(ensure_escaped_amp(Html)),
-    Sanitized = sanitize(Parsed, [], OptContext),
+    Sanitized = sanitize(Parsed, [], ExtraElts, ExtraAttrs, OptContext),
     flatten(Sanitized).
 
-    sanitize(B, _Stack, _OptContext) when is_binary(B) ->
+    sanitize(B, _Stack, _ExtraElts, _ExtraAttrs, _OptContext) when is_binary(B) ->
         escape(B);
-    sanitize({comment, Text}, _Stack, _OptContext) ->
+    sanitize({comment, Text}, _Stack, _ExtraElts, _ExtraAttrs, _OptContext) ->
         {comment, Text};
-    sanitize({pi, _Raw}, _Stack, _OptContext) ->
+    sanitize({pi, _Raw}, _Stack, _ExtraElts, _ExtraAttrs, _OptContext) ->
         <<>>;
-    sanitize({pi, _Tag, _Attrs}, _Stack, _OptContext) ->
+    sanitize({pi, _Tag, _Attrs}, _Stack, _ExtraElts, _ExtraAttrs, _OptContext) ->
         <<>>;
-    sanitize({Elt,Attrs,Enclosed}, Stack, OptContext) ->
+    sanitize({Elt,Attrs,Enclosed}, Stack, ExtraElts, ExtraAttrs, OptContext) ->
         Lower = list_to_binary(z_string:to_lower(Elt)),
-        case allow_elt(Lower) orelse (not lists:member(Lower, Stack) andalso allow_once(Lower)) of
+        case allow_elt(Lower, ExtraElts) orelse (not lists:member(Lower, Stack) andalso allow_once(Lower)) of
             true ->
-                Attrs1 = lists:filter(fun({A,_}) -> allow_attr(A) end, Attrs),
+                Attrs1 = lists:filter(fun({A,_}) -> allow_attr(A, ExtraAttrs) end, Attrs),
                 Attrs2 = [ {list_to_binary(z_string:to_lower(A)), V} || {A,V} <- Attrs1 ],
                 Stack1 = [Lower|Stack],
                 Tag = { Lower, 
                         Attrs2,
-                        [ sanitize(Encl, Stack1, OptContext) || Encl <- Enclosed ]},
+                        [ sanitize(Encl, Stack1, ExtraElts, ExtraAttrs, OptContext) || Encl <- Enclosed ]},
                 case OptContext of
                     #context{} -> z_notifier:foldl(sanitize_element, Tag, OptContext);
                     undefined -> Tag
@@ -266,7 +281,7 @@ sanitize1(Html, OptContext) ->
             false ->
                 case skip_contents(Lower) of
                     false ->
-                        {nop, [ sanitize(Encl, Stack, OptContext) || Encl <- Enclosed ]};
+                        {nop, [ sanitize(Encl, Stack, ExtraElts, ExtraAttrs, OptContext) || Encl <- Enclosed ]};
                     true ->
                         {nop, []}
                 end
@@ -368,6 +383,9 @@ allow_once(<<"var">>) -> true;
 allow_once(_) -> false.
 
 %% @doc Allowed elements (see also allow_once/1 above)
+allow_elt(Elt, Extra) ->
+    allow_elt(Elt) orelse lists:member(Elt, Extra).
+
 allow_elt(<<"audio">>) -> true;
 allow_elt(<<"address">>) -> true;
 allow_elt(<<"bdo">>) -> true;
@@ -407,6 +425,9 @@ allow_elt(<<"video">>) -> true;
 allow_elt(_) -> false.
 
 %% @doc Allowed attributes
+allow_attr(Attr, Extra) ->
+    allow_attr(Attr) orelse lists:member(Attr, Extra).
+
 allow_attr(<<"align">>) -> true;
 allow_attr(<<"alt">>) -> true;
 allow_attr(<<"autoplay">>) -> true;
