@@ -226,6 +226,7 @@ set_nodes_down(#ring{nodes=Nodes} = Ring) ->
     Nodes1 = [
         N#ring_node{
             state=case N#ring_node.node of Me -> up; _ -> down end,
+            version=case N#ring_node.node of Me -> now(); _ -> {0,0,0} end,
             services=[]
         } 
         || N <- Nodes
