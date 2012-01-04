@@ -154,7 +154,7 @@ do_command(Site, Service, Key, Command, Options) ->
     ServiceNodes = lists:foldl(
             fun({Pid, _Data}, Acc) ->
                 N = node(Pid),
-                case proplists:member(N, ExcludeNodes) of
+                case lists:member(N, ExcludeNodes) of
                     false -> [{N, Pid} | Acc];
                     true -> Acc
                 end
