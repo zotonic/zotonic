@@ -70,7 +70,7 @@ tinyInit = {
 
 	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
 	/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
-	valid_elements : "@[style|title|dir<ltr?rtl|lang|xml::lang],"
+	valid_elements : "@[class|style|title|dir<ltr?rtl|lang|xml::lang],"
 	+ "a[rel|rev|charset|hreflang|tabindex|accesskey|type|name|href|target|title],"
 	+ "strong/b,em/i,strike,u,"
 	+ "#p,-ol[type|compact],-ul[type|compact],-li,br,img[longdesc|usemap|"
