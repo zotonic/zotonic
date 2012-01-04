@@ -245,7 +245,7 @@ sanitize(Html, OptContext) when is_list(Html) ->
                      end,
         ExtraElts =  case OptContext of
                         #context{} -> 
-                             binstr:split(m_config:get_value(site, html_attr_extra, <<>>, OptContext), <<",">>);
+                             binstr:split(m_config:get_value(site, html_elt_extra, <<>>, OptContext), <<",">>);
                         undefined ->
                              []
                      end,
