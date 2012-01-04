@@ -48,7 +48,6 @@ allowed_methods(ReqData, Context) ->
     Context1 = z_context:ensure_qs(z_context:continue_session(Context0)),
 
     %% 'ping' the service to ensure we loaded all the existing services.
-    z_service:all(Context1),
     TheMod = case z_context:get_q("module", Context1) of
                  undefined -> z_convert:to_list(z_context:get(module, Context1));
                  M -> M
@@ -63,7 +62,7 @@ allowed_methods(ReqData, Context) ->
                  M3 -> M3
              end,
     try
-        Module  = list_to_existing_atom("service_" ++ TheMod ++ "_" ++ Method),
+        {ok, Module}  = z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method),
         Context2 = z_context:set("module", Module, Context1),
         Context3 = z_context:set("partial_method", Method, Context2),
         try
@@ -81,7 +80,9 @@ allowed_methods(ReqData, Context) ->
 
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
-    Context2 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
+    Context0 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
+    
     case z_auth:is_auth(Context2) of
         true ->
             %% Yep; use these credentials.
