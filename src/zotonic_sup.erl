@@ -211,7 +211,7 @@ init_webmachine() ->
                 webmachine_error_handler;
             EH -> EH
         end,
-    application:set_env(webzmachine, server_header, webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION ++ "; " ++ atom_to_list(node())),
+    application:set_env(webzmachine, server_header, webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION ++ "; " ++ short_node()),
     application:set_env(webzmachine, error_handler, ErrorHandler),        
         
     LogDir = z_config:get_dirty(log_dir),
@@ -246,3 +246,10 @@ get_extensions() ->
           permanent, 5000, worker, dynamic}
      end
      || F <- Files].
+
+%% @doc Returns the short node name as list. This will be put in the
+%% server header. We use a short node name as not to give away our
+%% hostname.
+short_node() ->
+    [Name, Host] = string:tokens(atom_to_list(node()), "@"),
+    Name ++ "@" ++ hd(string:tokens(Host, ".")).
