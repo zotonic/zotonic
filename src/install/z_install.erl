@@ -91,18 +91,17 @@ model_pgsql() ->
     
     % Table config
     % Holds all configuration keys
-    "CREATE TABLE config
-    (
-        id serial NOT NULL,
+    "CREATE TABLE config (
         module character varying(80) NOT NULL DEFAULT 'zotonic'::character varying,
         key character varying(80) NOT NULL DEFAULT ''::character varying,
         value character varying(1000) NOT NULL DEFAULT ''::character varying,
         props bytea,
+        is_gone boolean not null default false,
+        version bigint not null,
         created timestamp with time zone NOT NULL DEFAULT now(),
         modified timestamp with time zone NOT NULL DEFAULT now(),
         
-        CONSTRAINT config_pkey PRIMARY KEY (id),
-        CONSTRAINT config_module_key_key UNIQUE (module, key)
+        CONSTRAINT config_pkey PRIMARY KEY (module, key)
     )",
 
     

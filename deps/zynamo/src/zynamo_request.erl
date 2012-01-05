@@ -358,17 +358,22 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
         case do_command(Site, Service, undefined, Command, Options) of
             {error, Reason} -> 
                 {{error, Reason}, {Node, {error, Reason}, Offset}};
-            [{_Node, _Handoff, {ok, '$end_of_table'}}] ->
+            {ok, _, [{ok, '$end_of_table'}]} ->
                 list_next({Node, '$end_of_table', Offset}, ServiceArgs);
-            [{_Node, _Handoff, {ok, List}}] ->
-                list_next({Node, List, Offset}, ServiceArgs)
+            {ok, _, [{ok, List}]} ->
+                list_next({Node, List, Offset}, ServiceArgs);
+            {ok, false, []} ->
+                % Could not reach the node, assume end of table
+                Reason = no_answer,
+                {{error, Reason}, {Node, {error, Reason}, Offset}}
         end;
     list_next({Node, [KV|Rest], Offset}, _ServiceArgs) ->
         {KV, {Node, Rest, Offset+1}}.
 
-    % TODO: use zynamo_version to determine which value is the most recent (or multiple if conflict)
+    % Use zynamo_version to determine which value is the most recent.
+    % Doesn't return multiple versions, uses a heuristic when multiple versions are found.
     resolve_version(Vs) ->
-        hd(Vs).
+        zynamo_version:newest_tuple(2, Vs).
 
     list_receiver(V, Acc) when is_list(Acc) ->
         [V|Acc];

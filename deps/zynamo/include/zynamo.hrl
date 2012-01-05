@@ -44,7 +44,8 @@
     command     :: atom(),
     key         :: term(),
     version     :: zynamo_data_version(),
-    value       :: term()
+    value       :: term(),
+    handoff_ref :: term()
 }).
 
 -record(zynamo_service_command, {
@@ -55,7 +56,7 @@
     command     :: #zynamo_command{}
 }).
 
--type zynamo_callback() :: {atom(),atom()} | read_repair | pid() | function().
+-type zynamo_callback() :: {atom(),atom()} | pid() | function().
 
 -type zynamo_request_option() :: 
                        {node, random 
@@ -75,8 +76,10 @@
                      | {n, non_neg_integer() | all}
                      | {quorum, non_neg_integer() | n}
                      | not_found_is_error
+                     | stats
                      | no_handoff
-                     | {final_action, zynamo_callback()}.
+                     | {result, raw|merge}
+                     | {final_action, zynamo_callback() | read_repair}.
 -type zynamo_request_options() :: list( zynamo_request_option() ).
 
 

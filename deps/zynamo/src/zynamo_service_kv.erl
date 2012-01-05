@@ -176,9 +176,10 @@ do_update(Command, Handoff, State) ->
             },
             ets:insert(State#state.data, [{Key, Data}]),
             ets:insert(State#state.handoff, [{{N, Key}, Version, Cmd} || N <- Handoff -- [node()] ]),
+            % Set the local flag when this update is for the current node
             case IsHandoffOnly of
-                true -> ets:delete(State#state.local, Key);
-                false -> ets:insert(State#state.local, {Key})
+                false -> ets:insert(State#state.local, {Key});
+                true -> nop
             end,
             {ok, Version};
         {false, OldVersion} ->
@@ -187,13 +188,8 @@ do_update(Command, Handoff, State) ->
                 true ->
                     % Set the local flag when this update is for the current node
                     case IsHandoffOnly of
-                        false ->
-                            case ets:lookup(State#state.local, Key) of
-                                [{_K}] -> nop;
-                                [] -> ets:insert(State#state.local, [{Key}])
-                            end;
-                        true ->
-                            nop
+                        false -> ets:insert(State#state.local, [{Key}]);
+                        true -> nop
                     end,
                     insert_handoff(State#state.handoff, Key, Version, Cmd, lists:delete(node(),Handoff)),
                     {ok, Version};

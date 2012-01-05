@@ -48,12 +48,19 @@ statistics_html(Context) ->
 
 
 tplvars() ->
-    Source = lists:sort(zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{quorum, n}, {n,all}])),
-    Nodes = [N || {N, _, _} <- Source],
-    {_,_,S0} = hd(Source),
-    Stats = [{Node, S} || {Node, _, S} <- Source],
-    Types = [K || {K, _} <- S0],
-    [{stats, Stats},
-     {nodes, Nodes},
-     {types, Types}].
+    case zynamo_request:get(zynamo, stats, {'zotonic', '_', '_'}, [{quorum, n}, {n,all}, raw]) of
+        {ok, _IsQuorum, [_|_] = Results} ->
+            Source = lists:sort(Results),
+            Nodes = [N || {N, _, _} <- Source],
+            {_,_,S0} = hd(Source),
+            Stats = [{Node, S} || {Node, _, S} <- Source],
+            Types = [K || {K, _} <- S0],
+            [{stats, Stats},
+             {nodes, Nodes},
+             {types, Types}];
+        _ ->
+            [{stats, []},
+             {nodes, []},
+             {types, []}]
+    end.
     

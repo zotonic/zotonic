@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-09
 %%
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when 
 %% a key is not defined in the configuration table.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +37,10 @@
     set_value/4,
     set_prop/5,
     delete/3,
-    get_id/3
+    
+    zynamo_delete/3,
+    zynamo_get/2,
+    zynamo_put/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -70,10 +73,10 @@ all(Context) ->
         {ok, Cs} ->
             Cs;
         undefined ->
-			Cs = case z_db:has_connection(Context) of
-					true -> z_db:assoc_props("select * from config order by module, key", Context);
-					false -> []
-				 end,
+            Cs = case z_db:has_connection(Context) of
+                    true -> z_db:assoc_props("select * from config order by module, key", Context);
+                    false -> []
+                 end,
             Indexed = [ {M, z_utils:index_proplist(key, CMs)} || {M,CMs} <- z_utils:group_proplists(module, Cs) ],
             z_depcache:set(config, Indexed, ?DAY, Context),
             Indexed
@@ -91,11 +94,11 @@ get(Module, Context) when is_atom(Module) ->
             All = all(Context),
             proplists:get_value(Module, All, [])
     end,
-	case m_site:get(Module, Context) of
-		L when is_list(L) -> z_convert:to_list(ConfigProps) ++ L;
-		_ -> ConfigProps
-	end.
-	
+    case m_site:get(Module, Context) of
+        L when is_list(L) -> z_convert:to_list(ConfigProps) ++ L;
+        _ -> ConfigProps
+    end.
+    
 %% @doc Get a configuration value for the given module/key combination.
 %% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
 get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
@@ -111,15 +114,15 @@ get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
                 Cs -> proplists:get_value(Key, Cs)
             end
     end,
-	case Value of 
-		undefined ->
-			case m_site:get(Module, Key, Context) of
-				undefined -> Value;
-				V -> [{value,V}]
-			end;
-		_ ->
-			Value
-	end.
+    case Value of 
+        undefined ->
+            case m_site:get(Module, Key, Context) of
+                undefined -> Value;
+                V -> [{value,V}]
+            end;
+        _ ->
+            Value
+    end.
 
 
 get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
@@ -127,10 +130,10 @@ get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
         undefined -> undefined;
         Cfg -> proplists:get_value(value, Cfg)
     end,
-	case Value of
-		undefined -> m_site:get(Module, Key, Context);
-		_ -> Value
-	end.
+    case Value of
+        undefined -> m_site:get(Module, Key, Context);
+        _ -> Value
+    end.
 
 
 get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Key) ->
@@ -141,40 +144,170 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
 
 
 %% @doc Set a "simple" config value.
-%% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
+-spec set_value(Module::atom(), Key::atom(), Value::iolist(), #context{}) -> ok | {error, term()}.
 set_value(Module, Key, Value, Context) ->
-    case z_db:q("update config set value = $1, modified = now() where module = $2 and key = $3", [Value, Module, Key], Context) of
-        0 -> z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context);
-        1 -> ok
-    end,
-    z_depcache:flush(config, Context),
-    z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-    ok.
+    set_prop(Module, Key, value, z_convert:to_binary(Value), Context).
 
 
 %% @doc Set a "complex" config value.
-%% @spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok
+-spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok | {error, term()}.
 set_prop(Module, Key, Prop, PropValue, Context) ->
-    case get_id(Module, Key, Context) of
-        undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
-        Id -> z_db:update(config, Id, [{Prop,PropValue}], Context)
-    end,
-    z_depcache:flush(config, Context),
-    z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context),
-    ok.
+    case zynamo_request:get(Context#context.host, config, {Module, Key}, [{result, merge}]) of
+        {ok, _IsQuorum, Missing, _Version} when Missing =:= not_found; Missing =:= gone ->
+            set_prop1(Module, Key, Prop, PropValue, [{Prop, PropValue}], Context);
+        {ok, _IsQuorum, _Version, CurrProps} ->
+            NewProps = z_utils:prop_replace(Prop, PropValue, CurrProps),
+            set_prop1(Module, Key, Prop, PropValue, NewProps, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+set_prop1(Module, Key, Prop, PropValue, Props, Context) ->
+    case zynamo_request:put(Context#context.host, config, 
+                            {Module, Key},
+                            zynamo_version:timestamp(),
+                            Props,
+                            [{n,all},{result,merge}])
+    of
+        {ok, _IsQuorum, _Version} ->
+            case Prop of
+                value -> z_notifier:notify(#m_config_update_prop{module=Module, key=Key, value=PropValue}, Context);
+                _ -> z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context)
+            end,
+            ok;
+        {error, _} = Error ->
+            ?DEBUG({set_prop1, Key, Prop, PropValue, Error}),
+            Error
+    end.
+
 
 
 %% @doc Delete the specified module/key combination
-%% @spec delete(Module::atom(), Key::atom(), #context{}) -> ok
+-spec delete(Module::atom(), Key::atom(), #context{}) -> ok | {error, any()}.
 delete(Module, Key, Context) ->
-    z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
-    z_depcache:flush(config, Context),
-    z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context),
-    ok.
+    case zynamo_request:delete(Context#context.host, config,
+                               {Module,Key}, zynamo_version:timestamp(),
+                               [{n,all},{result,merge}]) 
+    of
+        {ok, _IsQuorum, _Version} -> ok;
+        {error, _Reason} = Error -> Error
+    end.
 
 
-%% @doc Lookup the unique id in the config table from the module/key combination.
-get_id(Module, Key, Context) ->
-    z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).    
+%% @doc Return the current version of a config key. undefined if the key doesn't exist.
+version(Module, Key, Context) ->
+    z_db:q1("select version from config where module = $1 and key = $2", [Module, Key], Context).
+
+
+%%====================================================================
+%% Zynamo callback routines, performing the actual updates on the db
+%%====================================================================
+
+
+zynamo_delete(Host, {Module, Key}, Version) ->
+    Context = z_context:new(Host),
+    Result = z_db:transaction(
+            fun(Ctx) ->
+                CurrVersion = version(Module, Key, Ctx),
+                case zynamo_version:is_newer(Version, CurrVersion) of
+                    true ->
+                        % Keep in database, in case another node has an old value
+                        case z_db:q("update config set
+                                        is_gone = true,
+                                        version = $3,
+                                        props = $4,
+                                        value = $5,
+                                        modified = now()
+                                     where module = $1
+                                       and key = $2", 
+                                    [Module, Key, Version, [], <<>>], 
+                                    Ctx)
+                        of
+                            1 ->
+                                {ok, Version};
+                            0 ->
+                                % Always register as gone, in case another node has an old value
+                                1 = z_db:q("insert into config (module, key, version, props, value, is_gone, modified)
+                                            values ($1, $2, $3, $4, $5, true, now())",
+                                           [Module, Key, Version, [], <<>>], 
+                                           Ctx),
+                                {ok, Version}
+                        end;
+                    false ->
+                        case zynamo_version:is_equal(Version, CurrVersion) of
+                            true -> {ok, CurrVersion};
+                            false -> {error, {conflict, CurrVersion}}
+                        end
+                end
+            end,
+            Context),
+    case Result of
+        {ok, _, _} ->
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context);
+        _ ->
+            nop
+    end,
+    Result.
+
+
+zynamo_get(Host, {Module, Key}) ->
+    Context = z_context:new(Host),
+    case z_db:assoc_props_row("select * from config where module = $1 and key = $2", [Module, Key], Context) of
+        undefined -> 
+            {ok, not_found, undefined};
+        Props ->
+            Version = proplists:get_value(version, Props),
+            case proplists:get_value(is_gone, Props) of
+                true -> {ok, gone, Version};
+                false -> {ok, Version, Props}
+            end
+    end.
+
+zynamo_put(Host, {Module, Key}, Version, Props) ->
+    Context = z_context:new(Host),
+    Cols = z_db:column_names(config, Context),
+    OtherProps = z_utils:prop_delete(Cols, Props),
+    PropValue = proplists:get_value(value, Props),
+    Result = z_db:transaction(
+            fun(Ctx) ->
+                CurrVersion = version(Module, Key, Ctx),
+                case zynamo_version:is_newer(Version, CurrVersion) of
+                    true ->
+                        case CurrVersion of 
+                            undefined ->
+                                1 = z_db:q("insert into config (module, key, props, value, version, modified)
+                                            values ($1, $2, $3, $4, $5, now())",
+                                           [Module, Key, OtherProps, PropValue, Version],
+                                           Ctx);
+                            _Exists ->
+                                1 = z_db:q("update config set
+                                                is_gone = false,
+                                                props = $3,
+                                                value = $4,
+                                                version = $5,
+                                                modified = now()
+                                            where module = $1
+                                              and key = $2",
+                                           [Module, Key, OtherProps, PropValue, Version],
+                                           Ctx)
+                        end,
+                        {ok, Version};
+                    false ->
+                        case zynamo_version:is_equal(Version, CurrVersion) of
+                            true -> {ok, CurrVersion};
+                            false -> {error, {conflict, CurrVersion}}
+                        end
+                end
+            end,
+            Context),
+    case Result of
+        {ok, _} ->
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=OtherProps, value=PropValue}, Context);
+        _ ->
+            nop
+    end,
+    Result.
 
 
