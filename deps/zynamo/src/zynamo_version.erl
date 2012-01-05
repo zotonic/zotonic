@@ -27,12 +27,39 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    newest/1,
+    newest_tuple/2,
+    
     is_newer/2,
     is_equal/2,
     
     timestamp/0
 ]).
 
+
+%% @doc Determine the newest value in a list of values. The list may not be empty.
+newest([H|T]) ->
+    lists:foldl(fun(Vers, Acc) ->
+                    case is_newer(Vers, Acc) of
+                        true -> Vers;
+                        false -> Acc
+                    end
+                end,
+                H,
+                T).
+
+%% @doc Determine the newest pair in a list of {version, term()} pairs. The list may not be empty.
+newest_tuple(N, [H|T]) ->
+    lists:foldl(fun(VV, Acc) ->
+                    Vers = element(N, VV),
+                    Best = element(N, Acc),
+                    case is_newer(Vers, Best) of
+                        true -> VV;
+                        false -> Acc
+                    end
+                end,
+                H,
+                T).
 
 %% @doc Check if the first arg A is newer than the second arg B.
 %%      This functions handles mixes of timestamps well.

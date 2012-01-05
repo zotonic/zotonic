@@ -42,26 +42,26 @@ install_check(SiteProps) ->
     Database = proplists:get_value(dbdatabase, SiteProps),
     Schema   = proplists:get_value(dbschema, SiteProps, "public"),
 
-	case Database of
-		none ->
-			ignore;
-		_ ->
-		    z_install:pre_install(Name, SiteProps),
-	
-		    case has_table("config", Name, Database, Schema) of
-		        false ->
-		            ?LOG("Installing database ~p@~p:~p ~p", [
-		                        proplists:get_value(dbuser, SiteProps),
-		                        proplists:get_value(dbhost, SiteProps),
-		                        proplists:get_value(dbport, SiteProps),
-		                        Database
-		                        ]),
-		            z_install:install(Name);
-		        true -> 
-					ok = upgrade(Name, Database, Schema),
-					sanity_check(Name, Database, Schema)
-		    end
-	end.
+    case Database of
+        none ->
+            ignore;
+        _ ->
+            z_install:pre_install(Name, SiteProps),
+    
+            case has_table("config", Name, Database, Schema) of
+                false ->
+                    ?LOG("Installing database ~p@~p:~p ~p", [
+                                proplists:get_value(dbuser, SiteProps),
+                                proplists:get_value(dbhost, SiteProps),
+                                proplists:get_value(dbport, SiteProps),
+                                Database
+                                ]),
+                    z_install:install(Name);
+                true -> 
+                    ok = upgrade(Name, Database, Schema),
+                    sanity_check(Name, Database, Schema)
+            end
+    end.
 
 
 %% Check if a table exists by querying the information schema.
@@ -74,8 +74,8 @@ has_table(Table, Name, Database, Schema) ->
               and table_name = $3 
               and table_schema = $2
               and table_type = 'BASE TABLE'", [Database, Schema, Table]),
-	pgsql_pool:return_connection(Name, C),
-	HasTable == 1.
+    pgsql_pool:return_connection(Name, C),
+    HasTable == 1.
 
 %% Check if a column in a table exists by querying the information schema.
 has_column(Table, Column, Name, Database, Schema) ->
@@ -87,78 +87,81 @@ has_column(Table, Column, Name, Database, Schema) ->
               and table_schema = $2
               and table_name = $3 
               and column_name = $4", [Database, Schema, Table, Column]),
-	pgsql_pool:return_connection(Name, C),
-	HasColumn == 1.
+    pgsql_pool:return_connection(Name, C),
+    HasColumn == 1.
 
 
 %% Upgrade older Zotonic versions.
 upgrade(Name, Database, Schema) ->
+    % Update the SQL model from any older version
     ok = install_acl(Name, Database, Schema),
     ok = install_identity_is_verified(Name, Database, Schema),
     ok = install_identity_verify_key(Name, Database, Schema),
-	ok = install_persist(Name, Database, Schema),
-	ok = drop_visitor(Name, Database, Schema),
-	ok = extent_mime(Name, Database, Schema),
+    ok = install_persist(Name, Database, Schema),
+    ok = drop_visitor(Name, Database, Schema),
+    ok = extent_mime(Name, Database, Schema),
     ok = install_task_due(Name, Database, Schema),
     ok = install_module_schema_version(Name, Database, Schema),
-    ok.
+    ok = install_config_version(Name, Database, Schema),
+    % Let some models install/update themselves
+    ok = m_handoff:install(z_context:new(Name)).
 
 
 install_acl(Name, Database, Schema) ->
-	%% Remove group, rsc_group, group_id
-	HasRscGroup = has_table("rsc_group", Name, Database, Schema),
-	HasGroup = has_table("group", Name, Database, Schema),
-	case HasRscGroup andalso HasGroup of
-		true ->
-		    {ok, C}  = pgsql_pool:get_connection(Name),
-			{ok, [], []} = pgsql:squery(C, "BEGIN"),
-			pgsql:squery(C, "alter table rsc drop column group_id cascade"),
-			pgsql:squery(C, "drop table rsc_group cascade"),
-			pgsql:squery(C, "drop table \"group\" cascade"),
-			pgsql:squery(C, "delete from module where name='mod_admin_group'"),
-			{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", ["mod_acl_adminonly"]),
-			{ok, [], []} = pgsql:squery(C, "COMMIT"),
-        	pgsql_pool:return_connection(Name, C),
-			ok;
-		false ->
-			ok
-	end.
+    %% Remove group, rsc_group, group_id
+    HasRscGroup = has_table("rsc_group", Name, Database, Schema),
+    HasGroup = has_table("group", Name, Database, Schema),
+    case HasRscGroup andalso HasGroup of
+        true ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            pgsql:squery(C, "alter table rsc drop column group_id cascade"),
+            pgsql:squery(C, "drop table rsc_group cascade"),
+            pgsql:squery(C, "drop table \"group\" cascade"),
+            pgsql:squery(C, "delete from module where name='mod_admin_group'"),
+            {ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", ["mod_acl_adminonly"]),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok;
+        false ->
+            ok
+    end.
 
 
 install_persist(Name, Database, Schema) ->
-	case has_table("persistent", Name, Database, Schema) of
-		false ->
-		    {ok, C}  = pgsql_pool:get_connection(Name),
-			{ok,[],[]} = pgsql:squery(C, "create table persistent ( "
-							"  id character varying(32) not null,"
-							"  props bytea,"
-					      	"  created timestamp with time zone NOT NULL DEFAULT now(),"
-							"  modified timestamp with time zone NOT NULL DEFAULT now(),"
-					      	"  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
-							")"),
-        	pgsql_pool:return_connection(Name, C),
-			ok;
-		true ->
-			ok
-	end.
+    case has_table("persistent", Name, Database, Schema) of
+        false ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok,[],[]} = pgsql:squery(C, "create table persistent ( "
+                            "  id character varying(32) not null,"
+                            "  props bytea,"
+                            "  created timestamp with time zone NOT NULL DEFAULT now(),"
+                            "  modified timestamp with time zone NOT NULL DEFAULT now(),"
+                            "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
+                            ")"),
+            pgsql_pool:return_connection(Name, C),
+            ok;
+        true ->
+            ok
+    end.
 
 
 drop_visitor(Name, Database, Schema) ->
-	case has_table("visitor_cookie", Name, Database, Schema) of
-		true ->
-		    {ok, C}  = pgsql_pool:get_connection(Name),
-			{ok, [], []} = pgsql:squery(C, "BEGIN"),
-			{ok, _N} = pgsql:squery(C, 
-					"insert into persistent (id,props) "
-					"select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
-			pgsql:squery(C, "drop table visitor_cookie cascade"),
-			pgsql:squery(C, "drop table visitor cascade"),
-			{ok, [], []} = pgsql:squery(C, "COMMIT"),
-        	pgsql_pool:return_connection(Name, C),
-			ok;
-		false ->
-			ok
-	end.
+    case has_table("visitor_cookie", Name, Database, Schema) of
+        true ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            {ok, _N} = pgsql:squery(C, 
+                    "insert into persistent (id,props) "
+                    "select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
+            pgsql:squery(C, "drop table visitor_cookie cascade"),
+            pgsql:squery(C, "drop table visitor cascade"),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok;
+        false ->
+            ok
+    end.
 
 
 extent_mime(Name, Database, Schema) ->
@@ -242,15 +245,34 @@ install_module_schema_version(Name, Database, Schema) ->
     end.
 
 
+install_config_version(Name, Database, Schema) ->
+    case has_column("config", "version", Name, Database, Schema) of
+        true -> 
+            ok;
+        false ->
+            {ok, C}  = pgsql_pool:get_connection(Name),
+            {ok, [], []} = pgsql:squery(C, "BEGIN"),
+            pgsql:squery(C, "alter table config "
+                            "add column is_gone boolean not null default false,"
+                            "add column version bigint not null default 1,"
+                            "drop column id,"
+                            "add CONSTRAINT config_pkey PRIMARY KEY (module, key)"),
+            {ok, [], []} = pgsql:squery(C, "COMMIT"),
+            pgsql_pool:return_connection(Name, C),
+            ok
+    end.
+
+
+
 % Perform some simple sanity checks
 sanity_check(Name, _Database, _Schema) ->
     {ok, C}  = pgsql_pool:get_connection(Name),
-	{ok, [], []} = pgsql:squery(C, "BEGIN"),
+    {ok, [], []} = pgsql:squery(C, "BEGIN"),
     ensure_module_active(C, "mod_authentication"),
-	{ok, [], []} = pgsql:squery(C, "COMMIT"),
-	pgsql_pool:return_connection(Name, C),
+    {ok, [], []} = pgsql:squery(C, "COMMIT"),
+    pgsql_pool:return_connection(Name, C),
     ok.
-	
+    
 
 
 ensure_module_active(C, Module) ->
@@ -260,5 +282,5 @@ ensure_module_active(C, Module) ->
         {ok, _, [{false}]} ->
             {ok, 1} = pgsql:equery(C, "update module set is_active = true where name = $1", [Module]);
         _ ->
-    		{ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [Module])
+            {ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [Module])
     end.

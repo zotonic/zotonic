@@ -332,6 +332,24 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 %% ====================================================================
 
 
+client_reply(Result, #state{options=Options, from=From, command=Command} = State) when is_list(Result) ->
+    Result1 = case proplists:get_value(result, Options, list) of
+                merge -> 
+                    case merge_results(Command#zynamo_command.command, Result) of
+                        {error, _} = E -> 
+                            E;
+                        {ok, Version} -> 
+                            {ok, is_quorum_reached(State), Version};
+                        {ok, Version, Value} -> 
+                            {ok, is_quorum_reached(State), Version, Value}
+                    end;
+                raw ->
+                    {ok, is_quorum_reached(State), Result};
+                list ->
+                    Rets = [ Ret || {_N, _HF, Ret} <- Result ],
+                    {ok, is_quorum_reached(State), Rets}
+              end,
+    From ! {result, Command#zynamo_command.ref, Result1, get_stats(State)};
 client_reply(Reply, #state{from=From, command=Command} = State) ->
     From ! {result, Command#zynamo_command.ref, Reply, get_stats(State)}.
 
@@ -374,6 +392,38 @@ final_action(undefined, _State) ->
     ok.
 
 
+%% @doc Merge the results of a data operation.
+merge_results(Cmd, Results) when Cmd =:= put; Cmd =:= delete ->
+    Conflicts = [ Version || {_N, _HF, {error, {conflict, Version}}} <- Results ],
+    case Conflicts of
+        [] ->
+            Updates = [ Version || {_N, _HF, {ok, Version}} <- Results ],
+            case Updates of
+                [] -> {error, no_result};
+                _ -> {ok, zynamo_version:newest(Updates)}
+            end;
+        _ -> 
+            {error, {conflict, Conflicts}}
+    end;
+merge_results(_Get, Results) ->
+    % NotFounds = [ Version || {_N, _HF, {ok, gone, Version}} <- Results ],
+    Founds = [ OK || {_N, _HF, {ok, Version, _Value} = OK} <- Results, 
+                               Version /= gone, Version /= not_found ],
+    case Founds of
+        [] ->
+            Gones = [ Version || {_N, _HF, {ok, gone, Version}} <- Results ],
+            case Gones of 
+                [] -> {ok, not_found, undefined};
+                _ -> {ok, gone, zynamo_version:newest(Gones)}
+            end;
+        _ ->
+            zynamo_version:newest_tuple(2, Founds)
+    end.
+
+
+    
+
+
 %% @doc Check if the required quorum has been reached or is impossible to reach
 wait_for_quorum(#state{received_ok=Oks, received_fail=Fails, service_nodes=ServiceNodes, quorum=Quorum}) ->
     case count_nodes(Oks) >= Quorum of
@@ -384,6 +434,11 @@ wait_for_quorum(#state{received_ok=Oks, received_fail=Fails, service_nodes=Servi
             % Only return 'true' when we are able to get enough results
             count_nodes(Fails) + Quorum =< length(ServiceNodes)
     end.
+
+
+%% @doc Check if we received enough non-error replies to match the quorum
+is_quorum_reached(#state{received_ok=Oks, quorum=Quorum}) ->
+    count_nodes(Oks) >= Quorum.
 
 
 %% @doc Count the nodes in a received list.

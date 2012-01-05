@@ -70,6 +70,7 @@
 	pickle/2,
 	prefix/2,
 	prop_delete/2,
+	prop_replace/2,
 	prop_replace/3,
 	randomize/1,
 	randomize/2,
@@ -568,9 +569,22 @@ assert(_, _) -> ok.
 
 
 %% @doc Replace a property in a proplist
+prop_replace(Props, List) ->
+    lists:foldl(fun({P,V}, Acc) ->
+                    prop_replace(P,V,Acc)
+                end,
+                List,
+                Props).
+
 prop_replace(Prop, Value, List) ->
     [{Prop,Value} | lists:keydelete(Prop,1,List)].
 
+prop_delete(Props, List) when is_list(Props) ->
+    lists:foldl(fun(P, Acc) ->
+                    lists:keydelete(P, 1, Acc)
+                end,
+                List,
+                Props);
 prop_delete(Prop, List) ->
     lists:keydelete(Prop, 1, List).
 

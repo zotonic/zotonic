@@ -55,16 +55,22 @@ init(Host) ->
                 {z_trans_server, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
+    % Notifier might be needed by the zynamo services and db
+    Notifier = {z_notifier,
+                {z_notifier, start_link, [SiteProps]}, 
+                permanent, 5000, worker, dynamic},
+
     % The installer needs the database pool, depcache and translation.
     Installer = {z_installer,
                 {z_installer, start_link, [SiteProps]},
                 permanent, 1, worker, dynamic},
 
-    % Continue with the normal per-site servers
-    Notifier = {z_notifier,
-                {z_notifier, start_link, [SiteProps]}, 
-                permanent, 5000, worker, dynamic},
+    % Database is up, start the zynamo services
+    ZynamoServices = {z_site_services_sup, 
+                {z_site_services_sup, start_link, [SiteProps]},
+                permanent, 5000, supervisor, dynamic},
 
+    % Continue with the normal per-site servers
     Session = {z_session_manager,
                 {z_session_manager, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
@@ -98,8 +104,9 @@ init(Host) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Depcache, Translation, Installer, Notifier, Session, 
-            Dispatcher, Template, DropBox, Pivot,
+            Depcache, Translation, Notifier, Installer, 
+            ZynamoServices,
+            Session, Dispatcher, Template, DropBox, Pivot,
             ModuleIndexer, Modules,
             PostStartup
     ],
