@@ -255,7 +255,8 @@ install_config_version(Name, Database, Schema) ->
             pgsql:squery(C, "alter table config "
                             "add column is_gone boolean not null default false,"
                             "add column version bigint not null default 1,"
-                            "drop column id"),
+                            "drop column id,"
+                            "add CONSTRAINT config_pkey PRIMARY KEY (module, key)"),
             {ok, [], []} = pgsql:squery(C, "COMMIT"),
             pgsql_pool:return_connection(Name, C),
             ok

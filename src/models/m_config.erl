@@ -176,7 +176,6 @@ set_prop1(Module, Key, Prop, PropValue, Props, Context) ->
             end,
             ok;
         {error, _} = Error ->
-            ?DEBUG({set_prop1, Key, Prop, PropValue, Error}),
             Error
     end.
 
