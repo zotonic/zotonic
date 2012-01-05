@@ -634,8 +634,9 @@ get_q_validated(Key, Context) ->
         {'q_validated', Qs} ->
             case proplists:lookup(z_convert:to_list(Key), Qs) of
                 {_Key, Value} -> Value;
-                none -> throw({not_validated, Key})
-            end
+                none -> throw({bad_request, {not_validated, Key}})
+            end;
+        none -> throw({bad_request, {not_validated, Key}})
     end.
 
 
