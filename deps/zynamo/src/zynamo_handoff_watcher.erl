@@ -49,8 +49,8 @@ handle_event(_Event, State) ->
 handle_call(_Msg, State) ->
     {ok, ok, State}.
 
-handle_info(Info, State) ->
-    {stop, {unknown_info, Info}, State}.
+handle_info(_Info, State) ->
+    {ok, State}.
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
