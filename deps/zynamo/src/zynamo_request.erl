@@ -69,25 +69,25 @@ list(Site, Service) ->
 -spec list(atom(), atom(), list_receiver(), list( zynamo_request_option() | return_value | no_return_version) ) -> 
     {ok, list()} | {ok, term()} | {ok, {pid(), reference()}}| {error, term()}.
 list(Site, Service, Receiver, Options) ->
-    case proplists:get_all_values(node, Options) of
-        [] ->
-            % Calculate our own coverage
-            N = proplists:get_value(n, Options, ?ZYNAMO_DEFAULT_N),
-            case zynamo_coverage:coverage(Site, Service, N) of
-                {ok, Nodes} -> Nodes;
-                {partial, Nodes} -> Nodes;
-                {error, _} -> Nodes = []
-            end;
-        _Ns ->
-            % Use the mentioned node(s)
-            Buckets = get_buckets(Site, Service, undefined, Options),
-            {ok, Ranges} = get_ring_range(get, Options),
-            {ok, ServicePidData} = zynamo_manager:locate_service(Site, Service),
-            ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
-            Nodes = collect_preference_nodes(Buckets, Ranges, ServiceNodes)
-    end,
+    Nodes = case proplists:get_all_values(node, Options) of
+                [] ->
+                                                % Calculate our own coverage
+                    N = proplists:get_value(n, Options, ?ZYNAMO_DEFAULT_N),
+                    case zynamo_coverage:coverage(Site, Service, N) of
+                        {ok, Ns} -> Ns;
+                        {partial, Ns} -> Ns;
+                        {error, _} -> []
+                    end;
+                _Ns ->
+                                                % Use the mentioned node(s)
+                    Buckets = get_buckets(Site, Service, undefined, Options),
+                    {ok, Ranges} = get_ring_range(get, Options),
+                    {ok, ServicePidData} = zynamo_manager:locate_service(Site, Service),
+                    ServiceNodes = [ {node(Pid), Pid} || {Pid,_Data} <- ServicePidData ],
+                    collect_preference_nodes(Buckets, Ranges, ServiceNodes)
+            end,
     do_list(Site, Service, Nodes, Receiver, Options).
-    
+
 
 %% @doc Read a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
 -spec put(atom(), atom(), term(), zynamo_data_version(), term()) -> 
