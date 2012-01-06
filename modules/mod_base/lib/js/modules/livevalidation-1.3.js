@@ -485,19 +485,17 @@ LiveValidation.prototype =
      */
     insertMessage: function(elementToInsert){
         this.removeMessage();
-		if (this.elementType != LiveValidation.RADIO) {
-	        if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-	            || this.element.value != '' ){
-            
-	            var className = this.validationFailed ? this.invalidClass : this.validClass;
-	            elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-	            if(this.insertAfterWhatNode.nextSibling){
-	              this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-	            }else{
-	                  this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-	            }
-			 }
-	      }
+	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
+	    || this.element.value != '' ) {
+                
+	        var className = this.validationFailed ? this.invalidClass : this.validClass;
+	        elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+	        if(this.insertAfterWhatNode.nextSibling){
+	            this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+	        }else{
+	            this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+	        }
+	    }
     },
     
     
