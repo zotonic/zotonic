@@ -563,7 +563,11 @@ div.graph {
     border: 2px solid #eee;
 }
 
-
-div.legend td {
-    border: 0!important; padding: 0!important;
+div.node-legend {
+    padding: 10px 0;
+}
+div.node-legend span {
+    padding: 3px 5px;
+    border-radius: 4px;
+    margin-right: 10px;
 }

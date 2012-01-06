@@ -1,5 +1,11 @@
 <script>window.graphs={};</script>
 
+<div class="node-legend">
+    {% for n in nodes %}
+    <span style="background-color: {{ forloop.counter|nodecolor }}">{{ n }}</span>
+    {% endfor %}
+</div>
+
 <table width="100%">
     {% for typea, typeb in types|chunk:2 %}
     <tr>

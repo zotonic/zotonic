@@ -28,11 +28,11 @@
 statsarray(Stats, Type, Which, _Context) ->
     [
      "[",
-     [ ["{label: \"", atom_to_list(N), "\", data: ", resultarray(Type, proplists:get_value(list_to_existing_atom(Which), 
+     [ ["{color: \"", filter_nodecolor:nodecolor(Count, x), "\", data: ", resultarray(Type, proplists:get_value(list_to_existing_atom(Which), 
                                              proplists:get_value(Type, S), [])),
         "},"
        ]
-       || {N, S} <- Stats],
+       || {Count, {_Node, S}} <- lists:zip(lists:seq(1, length(Stats)), Stats)],
      "]"].
 
 
