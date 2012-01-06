@@ -28,6 +28,6 @@
 nodecolor(1, _) -> "#edc240";
 nodecolor(2, _) -> "#afd8f8";
 nodecolor(3, _) -> "#cb4b4b";
-nodecolor(4, _) -> "4da74d";
+nodecolor(4, _) -> "#4da74d";
 nodecolor(5, _) -> "#9440ed";
 nodecolor(_, _) -> "red".
