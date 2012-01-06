@@ -1,6 +1,6 @@
 {% for type in types %}
 p = window.graphs["{{ type | statskey }}"];
-p.setData({{ stats|statsarray : type : 'second' }});
+p.setData({{ stats|statsarray : type : (q.which|default:'second') }});
 p.setupGrid();
 p.draw();
 {% endfor %}

@@ -4,7 +4,7 @@
 <script>
     window.graphs["{{ type | statskey }}"] = $.plot(
     $("#graph-{{ type | statskey }}"), 
-    {{ stats|statsarray : type : 'second' }}
+    {{ stats|statsarray : type : (q.which|default:'second') }}
 
 ,    {
     grid: {
