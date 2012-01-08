@@ -25,9 +25,7 @@
          title/1, 
          all/1, 
          all/2, 
-         serviceinfo/1,
-         method/1,
-         module/1,
+	 serviceinfo/2,
          http_methods/1,
          handler/1,
          grouped/1,
@@ -41,57 +39,81 @@
 %%
 all(Context) ->
     F = fun() ->
-                  {_Ms, Services} = lists:unzip(z_module_indexer:find_all(service, true, Context)),
-                  lists:filter(fun(S) -> z_module_manager:active(module(S), Context) end, Services)
-          end,
+		[ServiceModule || {_Method, ServiceModule} <- z_module_indexer:find_all(service, true, Context)]
+	end,
     z_depcache:memo(F, {z_services}, ?WEEK, [z_modules], Context).
-
-
 
 %%
 %% All services grouped by module
 %%
 grouped(Context) ->
-    grouped(all(Context), Context).
+    grouped(all(info, Context), Context).
 
-grouped(Services, Context) ->
-    Mods = sets:to_list(sets:from_list([ module(S) || S <- all(Context) ])),
-    Grouped = [ {Mod, lists:filter( fun(S) -> module(S) == Mod end, Services)} || Mod <-Mods ],
-    lists:filter(fun({_,L}) -> not(L==[]) end, Grouped).
+grouped(Services, _Context) ->
+    P = [{proplists:get_value(module, Service), Service} || Service <- Services],
+    [{Mod, proplists:get_all_values(Mod, P)} || Mod <- proplists:get_keys(P) ].
 
 %%
 %% All services augmented as serviceinfo/1 record.
 %%
 all(info, Context) ->
-    Services = all(Context),
-    [ serviceinfo(S) || S <- Services ];
+    F = fun() ->
+		Info = z_module_indexer:find_all(service, true, Context),
+		[serviceinfo(M, zotonic_module(M, S), S) || {M, S} <- Info]
+          end,
+    z_depcache:memo(F, {z_services_info}, ?WEEK, [z_modules], Context);
 
 
 %%
 %% All services as authentication values
 %%
 all(authvalues, Context) ->
-    All = all(Context),
-    All2 = lists:filter( fun(S) -> needauth(S) end, All),
+    All = all(info, Context),
+    All2 = lists:filter( fun(S) -> proplists:get_value(needauth, S) end, All),
     Grouped = grouped(All2, Context),
-    S = lists:flatten([ {"*", "Everything"} | 
-                        [ [ {string:substr(atom_to_list(Module), 5) ++ "/*",proplists:get_value(mod_title, Module:module_info(attributes))} | 
-                            [{method(S), title(S)} || S <- Services]]   || {Module, Services} <- Grouped]]),
-    S.
 
+    lists:flatten([ {"*", "Everything"} | 
+		    [ [authvalue_module(Module) | [authvalue_service(S) || S <- Services]]   || {Module, Services} <- Grouped]]).
+
+authvalue_module(Module) ->
+    ModuleTitle = proplists:get_value(mod_title, Module:module_info(attributes)),
+    {string:substr(atom_to_list(Module), 5) ++ "/*", ModuleTitle}.
+
+authvalue_service(ServiceInfo) ->
+    ServiceTitle = title(proplists:get_value(service, ServiceInfo)),
+    {proplists:get_value(method, ServiceInfo), ServiceTitle}.
+    
 
 %%
-%% All information about a service.
-%%%
-serviceinfo(M) ->    
-    [ {method, method(M)},
-      {module, module(M)},
-      {title,  title(M)},
-      {needauth, needauth(M)},
-      {http, string:join([atom_to_list(MM) || MM <- http_methods(M)],",")} 
-     ].
+%% Returns the zotonic module of the service
+%%
+zotonic_module(Method, ServiceModule) ->
+    L = length(atom_to_list(ServiceModule)) - 9 - length(atom_to_list(Method)),
+    Name = [$m, $o, $d, $_ | string:substr(atom_to_list(ServiceModule), 9, L)],
+    list_to_atom(Name).
 
+%%
+%% All information about a service
+%%
+serviceinfo(ServiceModule, Context) ->
+    All = all(info, Context),
+    case lists:filter(fun(I) -> proplists:get_value(service, I) =:= ServiceModule end, All) of
+	[Info] -> Info;
+	_ ->
+	    undefined
+    end.
+
+serviceinfo(Method, ZotonicModule, ServiceModule) ->
+    ZotonicModuleName = string:substr(atom_to_list(ZotonicModule), 5),
+    [ {method, string:join([ZotonicModuleName, atom_to_list(Method)], "/")},
+      {module, ZotonicModule}, 
+      {service, ServiceModule},
+      {title,  title(ServiceModule)},
+      {needauth, needauth(ServiceModule)},
+      {http, string:join([atom_to_list(MM) || MM <- http_methods(ServiceModule)],",")} 
+    ].
     
+
 %%
 %% Whether a service needs an authenticated user. Defaults to false.
 %%
@@ -104,32 +126,6 @@ needauth(Service) ->
 %%    
 title(Service) ->
     module_attr(Service, svc_title, "(untitled)", list).
-
-
-%%
-%% The public method name of the service. 
-%% 
-method(Service) ->
-    S = atom_to_list(Service),
-    S2 = string:substr(S, 9),
-    string:join(string:tokens(S2, "_"), "/").
-
-%%
-%% In which Zotonic module this API call resides. First checks to see
-%% if a module exists which starts with 'mod_'; if this is not the
-%% case the module is just the part of the service until the first
-%% underscore.
-%% 
-module(Service) ->
-    S = atom_to_list(Service),
-    [M|_Rest] = string:tokens(string:substr(S, 9), "_"),
-    Mod = list_to_atom("mod_" ++ M),
-    case z_module_manager:module_exists(Mod) of
-        true ->
-            Mod;
-        false ->
-            list_to_atom(M)
-    end.
 
 
 %%
@@ -177,10 +173,10 @@ module_attr(Service, Attr, Default, T) ->
 %%
 %% Whether a services applies to a pattern.  applies(Pattern, Service).
 %%
-applies([Pattern|Rest], Service) when is_list(Pattern) ->
-    applies(Pattern, Service) orelse applies(Rest, Service);
-applies(Pattern, Service) ->
-    applies1(string:tokens(Pattern, "/"), string:tokens(method(Service), "/")).
+applies([Pattern|Rest], ServiceMethod) when is_list(Pattern) ->
+    applies(Pattern, ServiceMethod) orelse applies(Rest, ServiceMethod);
+applies(Pattern, ServiceMethod) ->
+    applies1(string:tokens(Pattern, "/"), string:tokens(ServiceMethod, "/")).
 
 applies1(["*"], _) ->
     true;

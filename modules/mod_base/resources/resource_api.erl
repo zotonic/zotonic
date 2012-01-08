@@ -46,12 +46,12 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(Context0),
-    %% 'ping' the service to ensure we loaded all the existing services.
-    z_service:all(Context1),
+
     TheMod = case z_context:get_q("module", Context1) of
                  undefined -> z_convert:to_list(z_context:get(module, Context1));
                  M -> M
              end,
+
     Method = case z_context:get_q("method", Context1) of
                  undefined ->
                      case z_convert:to_list(z_context:get(method, Context1)) of
@@ -61,23 +61,26 @@ allowed_methods(ReqData, Context) ->
                      end;
                  M3 -> M3
              end,
+
     try
+	%% Ping all services
+	z_service:all(info, Context),
         Module  = list_to_existing_atom("service_" ++ TheMod ++ "_" ++ Method),
         Context2 = z_context:set("module", Module, Context1),
-        Context3 = z_context:set("partial_method", Method, Context2),
         try
-            {z_service:http_methods(Module), ReqData, Context3}
+            {z_service:http_methods(Module), ReqData, Context2}
         catch
             _X:_Y ->
-                {['GET', 'HEAD', 'POST'], ReqData, Context3}
+                {['GET', 'HEAD', 'POST'], ReqData, Context2}
         end
     catch
         error: badarg ->
-            %% Not exists
+            %% The atom (service module) does not exist, return default methods.
             {['GET', 'HEAD', 'POST'], ReqData, Context1}
     end.
 
 
+%% TODO: refactor via z_notifier.
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
     Context2 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
@@ -85,19 +88,19 @@ is_authorized(ReqData, Context) ->
         true ->
             %% Yep; use these credentials.
             ?WM_REPLY(true, Context2);
-
         false ->
             %% No; see if we can use OAuth.
-            Module = z_context:get("module", Context),
-            case mod_oauth:check_request_logon(ReqData, Context) of
-                {none, Context} ->
+            Module = z_context:get("module", Context2),
+            case mod_oauth:check_request_logon(ReqData, Context2) of
+                {none, Context2} ->
                     case z_service:needauth(Module) of
                         false ->
                             %% No auth needed; so we're authorized.
                             {true, ReqData, Context2};
                         true ->
+			    ServiceInfo = z_service:serviceinfo(Module, Context2),			    
                             %% Authentication is required for this module...
-                            mod_oauth:authenticate(z_service:method(Module) ++ ": " ++ z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context2)
+                            mod_oauth:authenticate(proplists:get_value(method, ServiceInfo) ++ ": " ++ z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context2)
                     end;
 
                 {true, AuthorizedContext} ->
@@ -118,8 +121,15 @@ is_authorized(ReqData, Context) ->
 
 
 resource_exists(ReqData, Context) ->
-    Module = z_context:get("module", Context),
-    {lists:member(Module, z_service:all(Context)), ReqData, Context}.
+    Exists = case z_context:get("module", Context) of
+		 undefined -> false;
+		 ServiceModule ->
+		     case z_service:serviceinfo(ServiceModule, Context) of
+			 undefined -> false;
+			 _ -> true
+		     end
+	     end,
+    {Exists, ReqData, Context}.
 
 
 content_types_provided(ReqData, Context) ->
