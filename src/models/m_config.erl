@@ -246,7 +246,7 @@ zynamo_delete(Host, {Module, Key}, Version) ->
             end,
             Context),
     case Result of
-        {ok, _, _} ->
+        {ok, _} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context);
         _ ->
