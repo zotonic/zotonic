@@ -51,7 +51,11 @@ only_value_config({Module, Keys}) ->
 
     is_value_config_props([]) ->
         true;
-    is_value_config_props([{Prop,_}|Rest]) when Prop == created; Prop == modified; Prop == value; Prop == id; Prop == module; Prop == key ->
+    is_value_config_props([{is_gone,true}|_Rest]) ->
+        false;
+    is_value_config_props([{Prop,_}|Rest]) when
+            Prop == created; Prop == modified; Prop == value; 
+            Prop == id; Prop == module; Prop == key; Prop == version; Prop == is_gone ->
         is_value_config_props(Rest);
     is_value_config_props([{props,<<>>}|Rest]) ->
         is_value_config_props(Rest);
