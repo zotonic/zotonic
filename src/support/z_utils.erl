@@ -478,8 +478,8 @@ js_prop_value(_, Value) -> [$",js_escape(Value),$"].
 
 %%% ESCAPE JSON %%%
 
-%% @doc Json escape (http://www.json.org/)
-
+%% @doc JSON escape for safe quoting of JSON strings. Subtly different
+%% from JS escape, see http://www.json.org/
 json_escape(undefined) -> [];
 json_escape([]) -> [];
 json_escape(<<>>) -> [];
