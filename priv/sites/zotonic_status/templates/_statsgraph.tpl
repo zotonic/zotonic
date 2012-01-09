@@ -20,7 +20,12 @@
     ]
     }
     {% with type as _x,_y,t %}
-        {% if t == `in` or t == `out` or t == `requests` %}, series: { stack: 0 }{% endif %}
+        {% if t == `in` or t == `out` or t == `requests` %}
+            , series: { 
+                stack: 0,
+                lines: { show: true, fill: true, steps: false }
+            }
+        {% endif %}
     {% endwith %}
     }
 );
