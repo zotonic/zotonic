@@ -35,9 +35,9 @@ statsname({_, webzmachine, duration}, _Context) ->
 statsname({_, webzmachine, requests}, _Context) ->
     "Web server - nr. of requests";
 statsname({_, webzmachine, in}, _Context) ->
-    "Web server - bytes in";
+    "Web server - Kb in";
 statsname({_, webzmachine, out}, _Context) ->
-    "Web server - bytes out";
+    "Web server - Kb out";
 statsname(_K, _) ->
     ?DEBUG(_K),
     "?".
