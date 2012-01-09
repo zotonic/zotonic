@@ -173,7 +173,7 @@ api_result(ReqData, Context, Result) ->
                        end,
                 {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
-                _E:plop ->
+                _E:_R ->
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
                     {{halt, 500}, ReqData1, Context}
             end
