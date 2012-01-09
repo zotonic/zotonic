@@ -549,12 +549,19 @@ fieldset { padding-left: 0; }
 
 
 p.meta {
+    margin-top: 4px;
     color: #666;
-    font-size: 13px;
+    font-size: 70%;
+    line-height: 1.5em;
 }
 
 th.node-down {
     color: #ccc;
+}
+
+th.node-header span {
+    display: block;
+    font-weight: normal;
 }
 
 div.graph {

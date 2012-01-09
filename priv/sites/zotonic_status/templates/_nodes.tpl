@@ -1,7 +1,7 @@
 <tr>
     <td>&nbsp;</td>
     {% for node in nodes %}
-    <th class="node-{% if node_up[node] %}up{% else %}down{% endif %}">{{ node }}</th>
+    <th class="node-header node-{% if node_up[node] %}up{% else %}down{% endif %}">{{ node|make_list|replace:["@","<span>"] }}</span></th>
     {% endfor %}
 </tr>
 
