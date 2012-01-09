@@ -351,10 +351,10 @@ spawn_session(PersistId, Context) ->
 %% @spec get_session_id(Context) -> undefined | string()
 %% @doc fetch the session id from the request, return 'undefined' when not found
 get_session_id(Context) ->
-    ReqData = z_context:get_reqdata(Context),
-    case wrq:get_cookie_value(?SESSION_COOKIE, ReqData) of
+    case z_context:get_cookie(?SESSION_COOKIE, Context) of
         undefined ->
             % Check the z_sid query args
+            ReqData = z_context:get_reqdata(Context),
             case wrq:get_qs_value("z_sid", ReqData) of
                 undefined ->
                     case dict:find(z_sid, wrq:path_info(ReqData)) of
@@ -371,51 +371,33 @@ get_session_id(Context) ->
 %% @spec set_session_id(SessionId::string(), Context::#context{}) -> #context{}
 %% @doc Save the session id in a cookie on the user agent
 set_session_id(SessionId, Context) ->
-    RD = z_context:get_reqdata(Context),
-    %% TODO: set the {domain,"example.com"} of the session cookie
-    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, SessionId, [
-                {path, "/"},
-                {http_only, true},
-                {domain, z_context:cookie_domain(Context)}
-                ]),
-    RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set([{set_session_id, true}, {session_id, SessionId}], z_context:set_reqdata(RD1, Context)).
+    Options = [{path, "/"},
+               {http_only, true}],
+    z_context:set([{set_session_id, true}, {session_id, SessionId}], z_context:set_cookie(?SESSION_COOKIE, SessionId, Options, Context)).
 
 
 %% @spec clear_session_id(Context::#context{}) -> #context{}
 %% @doc Remove the session id from the user agent and clear the session pid in the context
 clear_session_id(Context) ->
-    RD = z_context:get_reqdata(Context),
-    %% TODO: set the {domain,"example.com"} of the session cookie
-    Hdr = mochiweb_cookies:cookie(?SESSION_COOKIE, "", [
-                {max_age, 0}, 
-                {path, "/"}, 
-                {http_only, true},
-                {domain, z_context:cookie_domain(Context)}
-                ]),
-    RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set_reqdata(RD1, Context#context{session_pid=undefined}).
+    Options = [{max_age, 0}, 
+               {path, "/"}, 
+               {http_only, true}],
+    Context1 = z_context:set_cookie(?SESSION_COOKIE, "", Options, Context),
+    Context1#context{session_pid=undefined}.
 
 
 
 %% @doc Ensure that there is a persistent cookie set at the browser, return the updated context and the id.
 %% We need to do this on first visit as the user might communicate further via websockets.
 ensure_persist_cookie(Context) ->
-    RD = z_context:get_reqdata(Context),
-    case wrq:get_cookie_value(?PERSIST_COOKIE, RD) of
+    case z_context:get_cookie(?PERSIST_COOKIE, Context) of
         undefined ->
             NewPersistCookieId = z_ids:id(),
             Options = [
                 {max_age, ?PERSIST_COOKIE_MAX_AGE}, 
                 {path, "/"},
-                {http_only, true},
-                {domain, z_context:cookie_domain(Context)}
-                ],
-            Hdr = mochiweb_cookies:cookie(?PERSIST_COOKIE, NewPersistCookieId, Options),
-            RD1 = wrq:merge_resp_headers([Hdr], RD),
-            {NewPersistCookieId, z_context:set_reqdata(RD1, Context)};
+                {http_only, true}],
+            {NewPersistCookieId, z_context:set_cookie(?PERSIST_COOKIE, NewPersistCookieId, Options, Context)};
         PersistCookie ->
             {PersistCookie, Context}
     end.
-
-
