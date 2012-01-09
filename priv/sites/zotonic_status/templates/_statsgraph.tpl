@@ -20,7 +20,7 @@
     ]
     }
     {% with type as _x,_y,t %}
-        {% if t == `in` or t == `out` or t == `requests` %}, stack = true{% endif %}
+        {% if t == `in` or t == `out` or t == `requests` %}, stack: true{% endif %}
     {% endwith %}
     }
 );
