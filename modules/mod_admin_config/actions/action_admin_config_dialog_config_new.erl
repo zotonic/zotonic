@@ -53,11 +53,11 @@ event({submit, {config_new, Args}, _TriggerId, _TargetId}, Context) ->
             Value = z_context:get_q("val", Context, ""),
             OnSuccess = proplists:get_all_values(on_success, Args),
 
-            case m_config:get_id(Module, Key, Context) of
-                undefined ->
+            case m_config:exists(Module, Key, Context) of
+                false ->
                     m_config:set_value(Module, Key, Value, Context),
                     z_render:wire([{dialog_close, []} | OnSuccess], Context);
-                _ ->
+                true ->
                     z_render:growl_error("The config key already exists, please choose another key name.", Context)
             end;
         false ->

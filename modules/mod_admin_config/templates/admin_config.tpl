@@ -25,7 +25,7 @@
 				</li>
 			{% for module, keys in config %}
 				{% for key, c in keys %}
-					{% with c.id as id %}
+					{% with [c.module,"---",c.key]|join as id %}
 						<li id="{{ #li.id }}" class="clearfix">
 							<a id="{{ #a.id }}" href="#edit-config">
 								<span class="zp-15">{{ module|escape|default:"-" }}</span>
@@ -33,11 +33,11 @@
 								<span class="zp-35">{{ c.value|escape|default:"-" }}</span>
 								<span class="zp-30">{{ c.modified|date:"d M Y, H:i" }}</span>
 							</a>
-                            <span class="button-area">
-                                {% button text=_"delete" disabled=(module=="zotonic") action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#li.id}} %}
-                                
-                                {% button text=_"edit" disabled=(module=="zotonic") action={dialog_config_edit module=module key=key on_success={reload}} %}
-                            </span>
+							<span class="button-area">
+								{% button text=_"delete" disabled=(module=="zotonic") action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#li.id}} %}
+								
+								{% button text=_"edit" disabled=(module=="zotonic") action={dialog_config_edit module=module key=key on_success={reload}} %}
+							</span>
 							{% wire id=#a.id action={dialog_config_edit module=module key=key on_success={reload}} %}
 						</li>
 					{% endwith %}

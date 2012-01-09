@@ -36,6 +36,8 @@
     get_value/4,
     set_value/4,
     set_prop/5,
+    exists/3,
+    version/3,
     delete/3,
     
     zynamo_delete/3,
@@ -196,6 +198,9 @@ delete(Module, Key, Context) ->
 %% @doc Return the current version of a config key. undefined if the key doesn't exist.
 version(Module, Key, Context) ->
     z_db:q1("select version from config where module = $1 and key = $2", [Module, Key], Context).
+
+exists(Module, Key, Context) ->
+    version(Module, Key, Context) /= undefined.
 
 
 %%====================================================================

@@ -33,8 +33,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Key = proplists:get_value(key, Args),
     OnSuccess = proplists:get_all_values(on_success, Args),
     Postback = {config_delete, Module, Key, OnSuccess},
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-	{PostbackMsgJS, Context}.
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
 
 
 %% @doc Delete a config key.
