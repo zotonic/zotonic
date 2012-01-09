@@ -46,4 +46,6 @@ resultarray(Type, Values) ->
         
 map(_, _, 0) -> 0.0;
 map({_, _, duration}, V,N) -> V/(N*10.0); %% show duration in ms.
+map({_, _, out}, V, _) -> z_convert:to_float(V);
+map({_, _, requests}, V, _) -> z_convert:to_float(V);
 map(_, V, N) -> V/N.

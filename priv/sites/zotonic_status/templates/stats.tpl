@@ -16,7 +16,7 @@
         
 	<h1>{_ Statistics _}</h1>
 
-        {% lib "js/jquery.flot.js" %}
+        {% lib "js/jquery.flot.js" "js/jquery.flot.stack.js" %}
 	{% statistics %}
 
     </div>
