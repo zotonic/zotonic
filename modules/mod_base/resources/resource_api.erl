@@ -134,6 +134,7 @@ resource_exists(ReqData, Context) ->
 
 content_types_provided(ReqData, Context) ->
     {[{"application/json", to_json},
+      {"application/javascript", to_json},
       {"text/javascript", to_json}
      ], ReqData, Context}.
 
@@ -165,10 +166,14 @@ api_result(ReqData, Context, Result) ->
 
         Result2 ->
             try
-                {{halt, 200}, wrq:set_resp_body(mochijson:encode(Result2), ReqData), Context}
+                JSON = iolist_to_binary(mochijson:encode(Result2)),
+                Body = case get_callback(Context) of
+                           undefined -> JSON;
+                           Callback -> [ Callback, $(, JSON, $), $; ]
+                       end,
+                {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
-                _E: R ->
-                    ?DEBUG(R),
+                _E:plop ->
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
                     {{halt, 500}, ReqData1, Context}
             end
@@ -188,3 +193,21 @@ process_post(ReqData, Context) ->
         Result ->
             api_result(ReqData, Context, Result)
     end.
+
+
+get_callback(Context) ->
+    case z_context:get_q("callback", Context) of
+        undefined -> 
+            filter(z_context:get_q("jsonp", Context));
+        Callback ->
+            filter(Callback)
+    end.
+
+filter(undefined) ->
+    undefined;
+filter(F) ->
+    [ C || C <- F,      (C >= $0 andalso C =< $9) 
+                 orelse (C >= $a andalso C =< $z)
+                 orelse (C >= $A andalso C =< $Z)
+    ].
+
