@@ -885,8 +885,10 @@ ensure_existing_module(ModuleName) when is_atom(ModuleName) ->
         true -> 
             {ok, ModuleName};
         false ->
-            {module, Module} = code:ensure_loaded(ModuleName),
-            {ok, Module}
+            case code:ensure_loaded(ModuleName) of
+                {module, Module} -> {ok, Module};
+                {error, E} -> {error, E}
+            end
     end;
 ensure_existing_module(ModuleName) when is_binary(ModuleName) ->
     ensure_existing_module(binary_to_list(ModuleName)).

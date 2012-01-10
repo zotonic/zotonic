@@ -29,7 +29,9 @@
          http_methods/1,
          handler/1,
          grouped/1,
-         applies/2
+         applies/2,
+         module_to_api_prefix/1,
+         api_prefix_to_module/1
         ]).
 
 -include_lib("zotonic.hrl").
@@ -60,8 +62,9 @@ all(info, Context) ->
     F = fun() ->
 		Info = z_module_indexer:find_all(service, true, Context),
 		[serviceinfo(M, zotonic_module(M, S), S) || {M, S} <- Info]
-          end,
-    z_depcache:memo(F, {z_services_info}, ?WEEK, [z_modules], Context);
+        end,
+    F();
+%    z_depcache:memo(F, {z_services_info}, ?WEEK, [z_modules], Context);
 
 
 %%
@@ -71,26 +74,40 @@ all(authvalues, Context) ->
     All = all(info, Context),
     All2 = lists:filter( fun(S) -> proplists:get_value(needauth, S) end, All),
     Grouped = grouped(All2, Context),
-
     lists:flatten([ {"*", "Everything"} | 
 		    [ [authvalue_module(Module) | [authvalue_service(S) || S <- Services]]   || {Module, Services} <- Grouped]]).
 
 authvalue_module(Module) ->
     ModuleTitle = proplists:get_value(mod_title, Module:module_info(attributes)),
-    {string:substr(atom_to_list(Module), 5) ++ "/*", ModuleTitle}.
+    {module_to_api_prefix(Module) ++ "/*", ModuleTitle}.
 
 authvalue_service(ServiceInfo) ->
     ServiceTitle = title(proplists:get_value(service, ServiceInfo)),
     {proplists:get_value(method, ServiceInfo), ServiceTitle}.
     
 
+module_to_api_prefix(ZotonicModule) when is_atom(ZotonicModule) ->
+    case atom_to_list(ZotonicModule) of
+        [$m, $o, $d, $_ | Mod] -> Mod;
+        Site -> Site
+    end.
+    
+api_prefix_to_module(Base) when is_list(Base) ->
+    case z_utils:ensure_existing_module([$m, $o, $d, $_ | Base]) of
+        {ok, M} -> M;
+        {error, _} ->
+            {ok, M2} = z_utils:ensure_existing_module(Base),
+            M2
+    end.
+
+
 %%
 %% Returns the zotonic module of the service
 %%
 zotonic_module(Method, ServiceModule) ->
     L = length(atom_to_list(ServiceModule)) - 9 - length(atom_to_list(Method)),
-    Name = [$m, $o, $d, $_ | string:substr(atom_to_list(ServiceModule), 9, L)],
-    list_to_atom(Name).
+    ModuleName = string:substr(atom_to_list(ServiceModule), 9, L),
+    api_prefix_to_module(ModuleName).
 
 %%
 %% All information about a service
@@ -104,7 +121,7 @@ serviceinfo(ServiceModule, Context) ->
     end.
 
 serviceinfo(Method, ZotonicModule, ServiceModule) ->
-    ZotonicModuleName = string:substr(atom_to_list(ZotonicModule), 5),
+    ZotonicModuleName = module_to_api_prefix(ZotonicModule),
     [ {method, string:join([ZotonicModuleName, atom_to_list(Method)], "/")},
       {module, ZotonicModule}, 
       {service, ServiceModule},

@@ -125,6 +125,6 @@ human([["*"]|_Rest]) ->
     ["Access to every aspect of your account"];
 human([[Module, "*"]|Rest]) ->
     Rest2 = lists:filter(fun([M,_]) -> not(M == Module) end, Rest),
-    [ "Access to the " ++ z_module_manager:title(list_to_atom("mod_" ++ Module)) ++ " module" | human(Rest2)];
+    [ "Access to the " ++ z_module_manager:title(z_service:api_prefix_to_module(Module)) ++ " module" | human(Rest2)];
 human([[Module, Part]|Rest]) ->
     [z_service:title(list_to_atom("service_" ++ Module ++ "_" ++ Part)) | human(Rest)].
