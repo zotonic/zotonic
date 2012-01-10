@@ -75,13 +75,15 @@ websocket_start(ReqData, Context) ->
                 WsKey1 ->
                     z_websocket_hybi00:start(WsKey1, ReqData, Context1)
             end;
-        % https://github.com/ostinelli/misultin/commit/23b21e0c8d1d9aa4bc0ce60d527a8716d76e025c
         "7" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07
-            todo; % hybi07(WsKey1, Context1);
+            z_websocket_hybi17:start(ReqData, Context1);
         "8" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
-            todo % hybi10(WsKey1, Context1)
+            z_websocket_hybi17:start(ReqData, Context1);
+        "13" ->
+            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
+            z_websocket_hybi17:start(ReqData, Context1)
     end.
 
 
