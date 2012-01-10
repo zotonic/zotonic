@@ -41,7 +41,7 @@
 
 %% @doc Start the oembed client.
 init(Context) ->
-    oembed_client:start_link(oembed_providers:list(Context)),
+    oembed_client:start_link(Context),
     ok.
 
 
@@ -277,7 +277,7 @@ preview_create(MediaId, MediaProps, Context) ->
 %% @spec oembed_request(string(), #context{}) -> [{Key, Value}]
 oembed_request(Url, Context) ->
     F = fun() ->
-                oembed_client:discover(Url)
+                oembed_client:discover(Url, Context)
         end,
     z_depcache:memo(F, {oembed, Url}, 3600, Context).
 
