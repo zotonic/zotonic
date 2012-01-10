@@ -294,6 +294,7 @@ test() ->
 %% Whether consumer with this Id is allowed to execute Service.
 %%
 is_allowed(Id, Service, Context) ->
-    lists:member(Service, [proplists:get_value(service, S)
-                           || S <- m_oauth_perms:all_services_for(Id, Context)]).
+    not(z_service:needauth(Service)) orelse
+        lists:member(Service, [proplists:get_value(service, S)
+                               || S <- m_oauth_perms:all_services_for(Id, Context)]).
 
