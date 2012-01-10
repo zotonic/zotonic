@@ -229,13 +229,18 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
 event({postback, {do_oembed, []}, _TriggerId, _TargetId}, Context) ->
     Url = z_context:get_q(triggervalue, Context),
     case oembed_request(Url, Context) of
-        error ->
-            z_render:growl_error(?__("Invalid media URL", Context), Context);
-        Json ->
+        {error, _} ->
+            z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
+        {ok, Json} ->
             %% Fill title
             z_context:add_script_page(["$('#oembed-title').val('", z_utils:js_escape(proplists:get_value(title, Json, [])), "');"], Context),
             %% And summary
             z_context:add_script_page(["$('#oembed-summary').val('", z_utils:js_escape(proplists:get_value(description, Json, [])), "');"], Context),
+            case preview_url_from_json(proplists:get_value(type, Json), Json) of
+                undefined -> nop;
+                PreviewUrl -> 
+                    z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').parents().show();"], Context)
+            end,
             z_render:growl("Detected media item", Context)
     end.
 
@@ -249,26 +254,30 @@ preview_create(MediaId, MediaProps, Context) ->
     case z_convert:to_list(proplists:get_value(oembed_url, MediaProps)) of
         [] -> ok;
         Url -> 
-            Json = oembed_request(Url, Context),
-            %% if no title yet
-            case z_utils:is_empty(?__(m_rsc:p(MediaId, title, Context), Context)) of
-                true ->
-                    m_rsc:update(MediaId, [{title, proplists:get_value(title, Json)}], Context);
-                false -> nop
-            end,
-            %% store found properties in the media part of the rsc
-            ok = m_media:replace(MediaId, [{oembed, Json} | MediaProps], Context),
-            Type = proplists:get_value(type, Json),
-            case preview_url_from_json(Type, Json) of
-                undefined -> nop;
-                ThumbUrl ->
-                    {CT, ImageData} = thumbnail_request(ThumbUrl, Context),
-                    {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
-                    %% move to correct category if rsc is a 'media'
-                    case m_rsc:is_a(MediaId, media, Context) of
-                        true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
-                        false -> m_rsc:touch(MediaId, Context)
-                    end
+            case oembed_request(Url, Context) of
+                {ok, Json} ->
+                    %% if no title yet
+                    case z_utils:is_empty(?__(m_rsc:p(MediaId, title, Context), Context)) of
+                        true ->
+                            m_rsc:update(MediaId, [{title, proplists:get_value(title, Json)}], Context);
+                        false -> nop
+                    end,
+                    %% store found properties in the media part of the rsc
+                    ok = m_media:replace(MediaId, [{oembed, Json} | MediaProps], Context),
+                    Type = proplists:get_value(type, Json),
+                    case preview_url_from_json(Type, Json) of
+                        undefined -> nop;
+                        ThumbUrl ->
+                            {CT, ImageData} = thumbnail_request(ThumbUrl, Context),
+                            {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
+                            %% move to correct category if rsc is a 'media'
+                            case m_rsc:is_a(MediaId, media, Context) of
+                                true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
+                                false -> m_rsc:touch(MediaId, Context)
+                            end
+                    end;
+                {error, _} ->
+                    nop
             end
     end.
 

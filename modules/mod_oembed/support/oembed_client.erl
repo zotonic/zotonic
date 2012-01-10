@@ -133,11 +133,10 @@ discover_per_provider(Url, []) ->
 
 
 oembed_request(RequestUrl) ->
-    io:format(RequestUrl),
     {ok, {{_, Code, _}, _Headers, Body}} = httpc:request(get, {RequestUrl, []}, [], []),
     case Code of
         200 -> 
-            z_convert:convert_json(mochijson2:decode(Body));
+            {ok, z_convert:convert_json(mochijson2:decode(Body))};
         _ ->
-            undefined
+            {error, {http, Code, Body}}  %% empty proplist
     end.
