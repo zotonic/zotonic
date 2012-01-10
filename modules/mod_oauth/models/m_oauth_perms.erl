@@ -76,7 +76,7 @@ get(Id, Context) ->
 %% *All* applicable permissions
 %%
 get_all(Id, Context) ->
-    [ z_service:serviceinfo(S, Context) || S <- all_services_for(Id, Context)].
+    all_services_for(Id, Context).
 
 
 insert_all([], _Id, _Context) ->
