@@ -352,6 +352,7 @@ msgstr ""
 msgid ""
 "You need to change your password"
 msgstr ""
+"Sa pead oma parooli vahetama"
 
 #: ./modules/mod_authentication/templates/email_password_reset.tpl:22 
 msgid ""
@@ -360,43 +361,54 @@ msgid ""
 "username or e-mail address.  You will not receive any additional e-mails "
 "because of this request."
 msgstr ""
+"Sa said selle e-maili, kuna keegi tellis sinu kontol paroolivahetuse. "
+"Sina või keegi teine sisestas sinu kautajanime või e-maili aadressi. "
+"Sa ei saa ühtegi täiendavat e-maili selle päringu pärast."
 
 #: ./modules/mod_authentication/templates/email_password_reset.tpl:8 
 msgid ""
 "You requested a new password for"
 msgstr ""
+"Sa tellisid uue paroooli"
 
 #: ./modules/mod_authentication/templates/logoff.tpl:12 
 msgid ""
 "You will be redirected to the home page."
 msgstr ""
+"Sind suunatakse ümber kodulehele."
 
 #: ./modules/mod_authentication/templates/email_password_reset.tpl:10 
 msgid ""
 "Your account name is"
 msgstr ""
+"Sinu konto kasutajanimi on"
 
 #: ./modules/mod_authentication/templates/_logon_verification.tpl:2 
 msgid ""
 "Your account needs verification"
 msgstr ""
+"Sinu kasutjakonto nõuabülekontrollimist"
 
 #: ./modules/mod_authentication/templates/_logon_error.tpl:23 
 msgid ""
 "Your new password is too short."
 msgstr ""
+"Sinu uus parool on liiga lühike."
 
 #: ./modules/mod_authentication/templates/_logon_password_reset.tpl:38 
 msgid ""
 "Your password will be reset and you will be logged on as"
 msgstr ""
+"Sinu parool muudetakse ning sind logitakse sisse kui"
 
 #: ./modules/mod_authentication/templates/_logon_error.tpl:10 
 msgid ""
 "e-mail a temporary password"
 msgstr ""
+"saada e-mailiga ajutine parool"
 
 #: ./modules/mod_authentication/templates/_logon_password_reset.tpl:46 
 msgid ""
 "request a new password reset code"
 msgstr ""
+"tellis uue paroolivahetuskoodi"
