@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23 
+msgid ""
+"Add key"
+msgstr ""
+"Lisa võti"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2 
+msgid ""
+"Are you sure you want to delete the configuration key"
+msgstr ""
+"Oled kindel, et tahad kustutada konfiguratsioonivõtit"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13 ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 
+msgid ""
+"Cancel"
+msgstr ""
+"Katkesta"
+
+#: ./modules/mod_admin_config/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Config"
+msgstr ""
+"Konfig."
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:3 
+msgid ""
+"Configuration"
+msgstr ""
+"Konfiguratsioon"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:17 
+msgid ""
+"Configuration overview"
+msgstr ""
+"Konfiguratsiooni ülevaade"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:6 
+msgid ""
+"Delete"
+msgstr ""
+"Kustuta"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:21 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13 
+msgid ""
+"Key"
+msgstr ""
+"Võti"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:23 
+msgid ""
+"Modified"
+msgstr ""
+"Muudetud"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:20 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7 
+msgid ""
+"Module"
+msgstr ""
+"Moodul"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:47 
+msgid ""
+"No configurations found."
+msgstr ""
+"Ei leia konfiguratsioone."
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:24 
+msgid ""
+"Options"
+msgstr ""
+"Parameetrid"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1 
+msgid ""
+"Please fill in the module, key and value for the new configuration key."
+msgstr ""
+"Palun sisesta moodul, võti ja väärtus uuele konfiguratsioonivõtmele."
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12 
+msgid ""
+"Save"
+msgstr ""
+"Salvesta"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:10 
+msgid ""
+"System Configuration"
+msgstr ""
+"Süsteemikonfiguratsioon"
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4 
+msgid ""
+"This can't be undone. The configuration key will be lost forever."
+msgstr ""
+"Seda ei saa tagasi võtta. Konfiguratsiooni võti kaob iveseks."
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:22 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19 
+msgid ""
+"Value"
+msgstr ""
+"Väärtus"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:37 
+msgid ""
+"delete"
+msgstr ""
+"kustuta"
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:39 
+msgid ""
+"edit"
+msgstr ""
+"redig."
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:12 
+msgid ""
+"make a new config setting"
+msgstr ""
+"tee uus konfiguratsiooni võti"
