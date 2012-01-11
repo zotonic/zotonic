@@ -40,7 +40,7 @@ msgstr ""
 msgid ""
 "Config"
 msgstr ""
-"Konfig."
+"Konfiguratsioon"
 
 #: ./modules/mod_admin_config/templates/admin_config.tpl:3 
 msgid ""

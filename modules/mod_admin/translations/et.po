@@ -336,8 +336,8 @@ msgid ""
 "Flush all URL dispatch rules, template- and library caches and other "
 "in-memory cached data."
 msgstr ""
-"Kustuta vahem채lust k천ik URL suundamisreeglidlehtede mallid ja biblioteekide vahem쳉쨖ud "
-"ning muu vahem채lus hoitav ifo."
+"Kustuta vahem채lust k천ik URL suunamisreeglid, lehtede mallid ja bilioteekide vahem채lud "
+"ning kogu muu vahem채lus hoitav info."
 
 #: ./modules/mod_admin/templates/admin_status.tpl:17 
 msgid ""
