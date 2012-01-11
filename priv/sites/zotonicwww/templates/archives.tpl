@@ -6,6 +6,7 @@
 
 
 {% block content %}
+{% cache 3600 cat='article' vary=q %}
 <article id="content" class="{% block content_class %}zp-67{% endblock %}">
     <div class="padding">
         <h1>{_ Archive for _} {% if q.month %}{{ q.month }}, {% endif %}{{ q.year }}</h1>
@@ -21,6 +22,7 @@
 	{% endwith %}
     </div>
 </article>
+{% endcache %}
 {% endblock %}
 
 {% block sidebar %}
