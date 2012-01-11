@@ -1,0 +1,175 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-01-11 18:20+0200\n"
+"Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:24
+msgid "Active modules"
+msgstr "Aktiivsed moodulid"
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:3
+msgid "Add a new language"
+msgstr "Lisa uus keel"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:38
+msgid "Add language"
+msgstr "Lisa keel"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:33
+msgid "All languages known to the system. You can add or remove languages."
+msgstr "Kõik süsteemile tuntud keeled. Sa võid lisada või kustutada keeli."
+
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:1
+msgid "Are you sure you want to delete the language"
+msgstr "Oled sa kindel, et tahad keelt kustutada"
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:31
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6
+msgid "Cancel"
+msgstr "Katkesta"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:47
+msgid "Default"
+msgstr "Vaikeväärtus"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:71
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:5
+msgid "Delete language"
+msgstr "Kustuta keel"
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:5
+msgid "Edit"
+msgstr "Redigeeri"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:78
+#: ./modules/mod_translation/templates/admin_translation.tpl:85
+msgid "Edit language"
+msgstr "Redigeeri keelt"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:46
+msgid "Enabled"
+msgstr "Aktiveeritud"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:34
+msgid "Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language."
+msgstr "Aktiveeritud keeled on näha keelte valiku menüüs. Vaikimisi keelt kasutatakse külastajate jaoks, kes keelt valinud pole."
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:8
+msgid "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of the language. Use the native form of the language, for example <em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+msgstr "Sisesta keele iso kood (näiteks <em>en</em> or <em>nl</em>) ja keele nimetus. Kasuta keele enda vormi näiteks <em>English</em>, <em>Türkçe</em> või <em>Français</em>."
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:13
+msgid "Generate .pot files"
+msgstr "Genereeri .pot failid"
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
+msgid "Help about translations."
+msgstr "Tõlkimise abi."
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:48
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:13
+msgid "ISO Code"
+msgstr "ISO kood"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:49
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:19
+msgid "Language"
+msgstr "Keel"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:31
+#: ./modules/mod_translation/templates/admin_translation.tpl:42
+msgid "Languages overview"
+msgstr "Keelte ülevaade"
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
+msgid "Need more help?"
+msgstr "Tahad veel abi"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:91
+msgid "No languages configured."
+msgstr "Keeli ei ole konfigureeritud"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:50
+msgid "Options"
+msgstr "Sätted"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:19
+msgid "Reload Translations"
+msgstr "Uuenda tõlked"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:21
+msgid "Reload all translations from the modules and site. All templates will be recompiled."
+msgstr "Loe uusti kõik tõlked moodulites ja saidilt. Kõik mallid kompileeritakse uuesti."
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:30
+msgid "Save"
+msgstr "Salvesta"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:15
+msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates."
+msgstr "Skaneeri kõik mallid tõlke tagide otismiseks ning genereeri .pot failid, mida saab kasutada tõlgete mallidena."
+
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:25
+msgid "Show in menu"
+msgstr "Näite menüüs"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:26
+msgid "Show per module how much of the templates are translated."
+msgstr "Näita moodulikohaselt kui palju mallidest on tõlgitud."
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
+msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
+msgstr "Pealkirja, sisu ning muud tekstid saab tõlkida erinevatesse keeltesse. Siin saad valida, milliseid keeli hakatakse kasutama."
+
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:3
+msgid "This will not affect any translations in the database or .po files. This only removes the reference to the language, making it impossible to select or edit content written in the delete language."
+msgstr "See ei oma efekti tõlgetele andmebaasis või .po failides. See ainult peidab viite keelele, mis teeb võimatuks keele valimise või selles keeles sisu sisestamise."
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:27
+msgid "Title"
+msgstr "Pealkiri"
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:22
+msgid "To view the up-to-date version of this module, please run \"generate .pot files\" first from the translation overview."
+msgstr "Selleks, et vaadata ajakohast vaadet lejest, palud käivita  kõigepealt \"generate .pot files\" tõägete ülevaate lehelt."
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+msgid "Translate this page in other languages."
+msgstr "Tõlgi see leht teise keelde."
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:3
+#: ./modules/mod_translation/templates/_admin_menu_module.tpl:2
+msgid "Translation"
+msgstr "Tõlge"
+
+#: ./modules/mod_translation/templates/admin_translation.tpl:10
+msgid "Translation configuration and tools"
+msgstr "Tõlgete konfigureerimine ja töövahendid"
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:3
+#: ./modules/mod_translation/templates/admin_translation.tpl:25
+msgid "Translation status"
+msgstr "Tõlgete staatus"
+
+#: ./modules/mod_translation/templates/admin_translation_status.tpl:20
+msgid "Translation status per module"
+msgstr "Tõlgete staatus moodulites kaupa"
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
+msgid "Translations"
+msgstr "Tõlked"
+
