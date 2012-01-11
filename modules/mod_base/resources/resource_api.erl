@@ -209,5 +209,7 @@ filter(F) ->
     [ C || C <- F,      (C >= $0 andalso C =< $9) 
                  orelse (C >= $a andalso C =< $z)
                  orelse (C >= $A andalso C =< $Z)
+                 orelse C =:= $_
+                 orelse C =:= $$
     ].
 
