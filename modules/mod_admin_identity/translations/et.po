@@ -1,0 +1,289 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-01-11 15:07+0200\n"
+"Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
+msgid ""
+"Add or remove credentials."
+msgstr ""
+"Lisa või kustuta kasutajatunnuseid."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:57 
+msgid ""
+"Add user"
+msgstr ""
+"Lisa kasutaja"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2 
+msgid ""
+"Are you sure you want to delete the username from"
+msgstr ""
+"Oled sa kindel et tahad kasutajanime kustutada"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58 
+msgid ""
+"Cancel"
+msgstr ""
+"Katkesta"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9 
+msgid ""
+"Click “delete” to remove any existing username/ password from the "
+"person, the person won't be an user anymore."
+msgstr ""
+"Kliki “kustuta” ,et kustutada olemasolev kasutajanimi/parool "
+"isikult, isik lakkab olemas kasutaja."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:42 
+msgid ""
+"Created on"
+msgstr ""
+"Loodud"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6 
+msgid ""
+"Delete"
+msgstr ""
+"Kustuta"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:30 
+msgid ""
+"E-mail"
+msgstr ""
+"E-mail"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:21 
+msgid ""
+"Every page/person can be made into a user on the edit page.\n				The "
+"difference between a user and a normal page is only\n				that the former "
+"has logon credentials attached to its page record."
+msgstr ""
+"Iga lehe/isiku võib teha kasutajaks redigeerimise lehel\n"
+"Kasutaja ja tavalise leha vahe on ainult selles, et kasutajal\n on sisselogimise "
+"tunnused lisatud lehe kirjele."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12 
+msgid ""
+"First"
+msgstr ""
+"Esimene"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39 
+msgid ""
+"Give an unique username and a password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr ""
+"Sisesta unikaalne kasutajanimi ja parool. Kasutajanimed ja paroolid "
+"on tõstutundlikud, ole tähelepanelik nende sisestamisel."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8 
+msgid ""
+"Give the name and the e-mail address of the new user. A <em>person</em> "
+"page will be created for this user."
+msgstr ""
+"Sisesta nimi ja e-maili aadress uuele kasutajale. Kasutajale tehakse uus <em>isiku</em> "
+"leht."
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+msgid ""
+"Help about user credentials."
+msgstr ""
+"Abi kasutajatunnuste kohta."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:12 
+msgid ""
+"Make a new user"
+msgstr ""
+"Tee uus kasutaja"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:41 
+msgid ""
+"Modified on"
+msgstr ""
+"Muudetud"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:39 
+msgid ""
+"Name"
+msgstr ""
+"Nimi"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:6 
+msgid ""
+"Name and e-mail address"
+msgstr ""
+"Nimi ja e-maili aadress"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+msgid ""
+"Need more help?"
+msgstr ""
+"Veel abi?"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:63 
+msgid ""
+"No users found."
+msgstr ""
+"Kasutajaid ei leitud."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:43 
+msgid ""
+"Options"
+msgstr ""
+"Parameetrid"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:50 
+msgid ""
+"Password"
+msgstr ""
+"Parool"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:35 
+msgid ""
+"Save"
+msgstr ""
+"Salvesta"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24 
+msgid ""
+"Set username / password"
+msgstr ""
+"Sisesta kasutajanimi / parool"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:18 
+msgid ""
+"Sur. prefix"
+msgstr ""
+"Nime prefiks"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:24 
+msgid ""
+"Surname"
+msgstr ""
+"Perenimi"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3 
+msgid ""
+"The password of the admin user cannot be changed in the database. Please "
+"edit your site's configuration file at"
+msgstr ""
+"Administraatori parooli ei saa andmebaasi kaudu muuta. Palun "
+"redigeeri selleks oma saidi konfiguratsioonifaili"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4 
+msgid ""
+"This can't be undone. The username and password will be lost forever."
+msgstr ""
+"Seda ei saa tagasi võtta. Kasutajanimija parool kaovad igaveseks."
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:16 
+msgid ""
+"This person is also a user."
+msgstr ""
+"See isik on ka kasutaja."
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18 
+msgid ""
+"This person is not yet a user."
+msgstr ""
+"See isik ei ole veel kasutaja."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20 ./modules/mod_admin_identity/templates/admin_users.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
+msgid ""
+"Username"
+msgstr ""
+"Kasutajanimi"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:5 
+msgid ""
+"Username / password"
+msgstr ""
+"Kasutajanimi / parool"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37 
+msgid ""
+"Username and password"
+msgstr ""
+"Kasutjanimi ja parool"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:3 ./modules/mod_admin_identity/templates/admin_users.tpl:32 ./modules/mod_admin_identity/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Users"
+msgstr ""
+"Kasutajad"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+msgid ""
+"When you add credentials to a person then the person becomes an user. A "
+"person or machine can log on with those credentials and perform actions "
+"on your Zotonic system.<br/><br/>What an user can do depends on the groups "
+"the user is member of."
+msgstr ""
+"Kui sa lisad kasutajatunnused isikule, saab see isik kasutajaks."
+"Kasutaja või arvuti või nende tunnustega süsteemi sisse logida ning teha "
+"tegevusi sinu Zotonic'u süsteemis. <br/><br/>Mida kasutaja teha saab, sõltub "
+"gruppidest, mille liige ta on."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:14 
+msgid ""
+"You need to be an administrator to add users."
+msgstr ""
+"Sa pead olema administraator kasutjate lisamiseks."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:55 
+msgid ""
+"delete username"
+msgstr ""
+"kustuta kasutajanimi"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:57 
+msgid ""
+"edit"
+msgstr ""
+"redig."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3 
+msgid ""
+"if you want to change the admin password."
+msgstr ""
+"kui tahad administraatori parooli muuta."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:33 
+msgid ""
+"matching"
+msgstr ""
+"klappiv"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:35 
+msgid ""
+"overview"
+msgstr ""
+"ülevaade"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:53 
+msgid ""
+"set username/ password"
+msgstr ""
+"pane kasutajanimi / parool"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:34 
+msgid ""
+"show all"
+msgstr ""
+"näita kõ"
