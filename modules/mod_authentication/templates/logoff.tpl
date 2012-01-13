@@ -3,7 +3,7 @@
 {% block title %}{_ Log Off _} ...{% endblock %}
 
 {% block html_head_extra %}
-	<meta http-equiv="refresh" content="6;url=/" />
+	<meta http-equiv="refresh" content="4;url={{ q.p|escape|default:"/"}}" />
 {% endblock %}
 
 {% block content_area %}
@@ -13,3 +13,4 @@
 	
 	{% all include "_logoff_extra.tpl" %}
 {% endblock %}
+

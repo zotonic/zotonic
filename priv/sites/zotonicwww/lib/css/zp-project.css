@@ -595,3 +595,12 @@ p.meta {
     font-style: italic;
     color: #666;
 }
+
+ul.simple-list {
+    margin-bottom: 18px;
+}
+
+ul.simple-list ul {
+    margin-left: 18px;
+    font-size: 13px;
+}

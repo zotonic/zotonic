@@ -17,6 +17,8 @@
 
 normalize(URI) ->
   case http_uri:parse(URI) of
+    {ok, {Scheme, UserInfo, Host, Port, Path, _Query}} -> % R15B
+        normalize(Scheme, UserInfo, string:to_lower(Host), Port, [Path]);
     {Scheme, UserInfo, Host, Port, Path, _Query} ->
       normalize(Scheme, UserInfo, string:to_lower(Host), Port, [Path]);
     Else ->

@@ -88,7 +88,11 @@ fetch_user_data(AccessToken, Context) ->
 
 
 %% @doc Check if the user exists, if not then hand over control to the auth_signup resource.
-logon_twitter_user(TwitterProps, LocationAfterSignup, Context) ->
+logon_twitter_user(TwitterProps, LocationAfterSignup0, Context) ->
+    LocationAfterSignup = case z_utils:is_empty(LocationAfterSignup0) of
+                              true -> undefined;
+                              false -> LocationAfterSignup0
+                          end,
     Props = [
         {title, unicode:characters_to_binary(proplists:get_value(name, TwitterProps))}
     ],
@@ -112,26 +116,24 @@ logon_twitter_user(TwitterProps, LocationAfterSignup, Context) ->
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
 			{Location,Context1} = case z_auth:logon(UserId, Context) of
-				{ok, ContextUser} ->
-		            case has_location(LocationAfterSignup) of
-		            	false -> {m_rsc:p(UserId, page_url, ContextUser), ContextUser};
-		                true -> {LocationAfterSignup, ContextUser}
-		        	end;
-				{error, _Reason} ->
-					{z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
+                                                  {ok, ContextUser} ->
+                                                      case z_notifier:first(#logon_ready_page{request_page=LocationAfterSignup}, ContextUser) of
+                                                          undefined ->
+                                                              case LocationAfterSignup of
+                                                                  undefined -> 
+                                                                      {m_rsc:p(UserId, page_url, ContextUser), ContextUser};
+                                                                  _ ->
+                                                                      {LocationAfterSignup, ContextUser}
+                                                              end;
+                                                          Url -> {Url, ContextUser}
+                                                      end;
+                                                  {error, _Reason} ->
+                                                      {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
 			end,
             LocationAbs = lists:flatten(z_context:abs_url(Location, Context1)),
             use_see_other(LocationAbs, Context1)
-            %?WM_REPLY({true, LocationAbs}, Context1)
     end.
     
-    has_location(undefined) -> false;
-    has_location([]) -> false;
-    has_location(<<>>) -> false;
-    has_location("/") -> false;
-    has_location(_) -> true.
-    
-    use_see_other(Location, Context) ->
-        ContextLoc = z_context:set_resp_header("Location", Location, Context),
-        ?WM_REPLY({halt, 303}, ContextLoc).
-
+use_see_other(Location, Context) ->
+    ContextLoc = z_context:set_resp_header("Location", Location, Context),
+    ?WM_REPLY({halt, 303}, ContextLoc).

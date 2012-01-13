@@ -107,6 +107,10 @@
 
     get_req_path/1,
 
+    set_cookie/3,
+    set_cookie/4,
+    get_cookie/2,
+
     cookie_domain/1,
     document_domain/1,
     streamhost/1
@@ -927,3 +931,24 @@ add_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     % This let IE6 accept our cookies, basically we tell IE6 that our cookies do not contain any private data.
     RD3 = wrq:set_resp_header("P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", RD2),
     Context#context{wm_reqdata=RD3}.
+
+
+%% @doc Set a cookie value with default options.
+set_cookie(Key, Value, Context) ->
+    set_cookie(Key, Value, [], Context).
+
+%% @doc Set a cookie value with cookie options.
+set_cookie(Key, Value, Options, Context) ->
+    % Add domain to cookie if not set
+    Options1 = case proplists:lookup(domain, Options) of
+                   {domain, _} -> Options;
+                   none -> [{domain, z_context:cookie_domain(Context)}|Options]
+               end,
+    RD = Context#context.wm_reqdata,
+    Hdr = mochiweb_cookies:cookie(Key, Value, Options1),
+    RD1 = wrq:merge_resp_headers([Hdr], RD),
+    z_context:set_reqdata(RD1, Context).
+
+%% @doc Read a cookie value from the current request.
+get_cookie(Key, #context{wm_reqdata=RD}) ->
+    wrq:get_cookie_value(Key, RD).

@@ -20,6 +20,9 @@
     %% Search results
     {search,   ["search"],      resource_template,  [ {template, "search.tpl"} ]},
 
+    {archives_y,["archives", year],	        resource_template,	[ {template, "archives.tpl"}, {cat, article} ]},
+    {archives_m,["archives", year, month],	resource_template,	[ {template, "archives.tpl"}, {cat, article} ]},
+    
     %% Generated edocs
-	{edoc,			["edoc", '*'],          resource_static_pages, [ {root, "edoc"} ]}
+    {edoc,			["edoc", '*'],          resource_static_pages, [ {root, "edoc"} ]}
 ].

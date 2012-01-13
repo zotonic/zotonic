@@ -22,6 +22,10 @@
 				<div class="form-item clearfix">
                     {_ The media title will be automatically detected from its URL. _}
                 </div>
+				<div class="form-item clearfix" style="display:none">
+				    <label for="oembed-title" style="color:white">&nbsp;</label>
+                                    <img id="oembed-image" src="" width="180" />
+				</div>
 				<div class="form-item clearfix">
 					<label for="oembed-title" style="color:white">{_ Media title _}</label>
 					<input type="text" id="oembed-title" name="title" value="{{ title|escape }}" />

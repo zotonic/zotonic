@@ -1,6 +1,6 @@
 {% extends "base.tpl" %}
 
-{% block title %}{_ Archive _}{% endblock %}
+{% block title %}{_ Archive for _} {% if q.month %}{{ q.month }}, {% endif %}{{ q.year }}{% endblock %}
 
 {% block chapeau %}
 	<h5 class="chapeau">{_ Archive for _} {% if q.month %}{{ q.month }}, {% endif %}{{ q.year }}</h5>

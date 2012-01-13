@@ -1,0 +1,223 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-01-11 14:57+0200\n"
+"Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:54 ./modules/mod_logging/templates/admin_log_email.tpl:84 
+msgid ""
+"All"
+msgstr ""
+"Kõik"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:57 
+msgid ""
+"Bounce"
+msgstr ""
+"Põrgata"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:36 
+msgid ""
+"Content"
+msgstr ""
+"Sisu"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:39 ./modules/mod_logging/templates/admin_log.tpl:20 
+msgid ""
+"Date"
+msgstr ""
+"Kuupäev"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:48 
+msgid ""
+"Debug"
+msgstr ""
+"Debug"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:45 
+msgid ""
+"Error"
+msgstr ""
+"Viga"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:59 
+msgid ""
+"Failed"
+msgstr ""
+"Ebaõnnestunud"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:44 
+msgid ""
+"Fatal"
+msgstr ""
+"Fatal"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:83 
+msgid ""
+"Filter"
+msgstr ""
+"Filter"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:35 
+msgid ""
+"From"
+msgstr ""
+"Kellelt"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:47 
+msgid ""
+"Info"
+msgstr ""
+"Info"
+
+#: ./modules/mod_logging/templates/admin_log_base.tpl:3 ./modules/mod_logging/templates/_admin_menu_module.tpl:2 
+msgid ""
+"Log"
+msgstr ""
+"Logi"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:3 
+msgid ""
+"Log email"
+msgstr ""
+"Logi email"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:5 
+msgid ""
+"Log incoming/outgoing e-mail"
+msgstr ""
+"Logi sissetulev/väljaminev e-mail"
+
+#: ./modules/mod_logging/templates/admin_log_base.tpl:10 ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 
+msgid ""
+"Log messages"
+msgstr ""
+"Logi sõnumid"
+
+#: ./modules/mod_logging/templates/admin_log.tpl:18 
+msgid ""
+"Message"
+msgstr ""
+"Sõnum"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:33 
+msgid ""
+"Message nr"
+msgstr ""
+"Sõnum n"
+
+#: ./modules/mod_logging/templates/admin_log.tpl:17 
+msgid ""
+"Module"
+msgstr ""
+"Moodul"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:12 ./modules/mod_logging/templates/admin_log.tpl:10 
+msgid ""
+"Most recent messages"
+msgstr ""
+"Viimatised sõnumid"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:101 ./modules/mod_logging/templates/admin_log.tpl:30 
+msgid ""
+"No log messages."
+msgstr ""
+"Ei ole logi sõnumeid."
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:37 
+msgid ""
+"Other"
+msgstr ""
+"Muud"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:58 
+msgid ""
+"Received"
+msgstr ""
+"Vastu võetud"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:60 
+msgid ""
+"Retry"
+msgstr ""
+"Proovi uuesti"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:55 
+msgid ""
+"Sending"
+msgstr ""
+"Saadan"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:56 
+msgid ""
+"Sent"
+msgstr ""
+"Saadetud"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:31 
+msgid ""
+"Severity"
+msgstr ""
+"Kategooria"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:32 
+msgid ""
+"Status"
+msgstr ""
+"Staatus"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:38 
+msgid ""
+"Template"
+msgstr ""
+"Mall"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:34 
+msgid ""
+"To"
+msgstr ""
+"Kellele"
+
+#: ./modules/mod_logging/templates/admin_log.tpl:16 
+msgid ""
+"Type"
+msgstr ""
+"Tüüp"
+
+#: ./modules/mod_logging/templates/admin_log.tpl:19 
+msgid ""
+"User"
+msgstr ""
+"Kasutaja"
+
+#: ./modules/mod_logging/templates/admin_log_email.tpl:46 
+msgid ""
+"Warning"
+msgstr ""
+"Hoiatus"
+
+#: ./modules/mod_logging/templates/admin_log_base.tpl:13 
+msgid ""
+"email log"
+msgstr ""
+"emaili logi"
+
+#: ./modules/mod_logging/templates/admin_log_base.tpl:12 
+msgid ""
+"message log"
+msgstr ""
+"sõnumite logi"

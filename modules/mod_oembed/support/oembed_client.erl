@@ -26,23 +26,24 @@
 -export([start_link/1]).
 
 %% interface functions
--export([discover/1]).
+-export([discover/2]).
 
 -include_lib("../include/oembed.hrl").
 
 
--record(state, {providers=[]}).
+-record(state, {context, providers=[]}).
 
 %%====================================================================
 %% API
 %%====================================================================
 %% @spec start_link([#oembed_provider{}]) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link(Providers) when is_list(Providers) ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, Providers, []).
+start_link(Context) ->
+    Name = z_utils:name_for_host(?MODULE, z_context:site(Context)),
+    gen_server:start_link({local, Name}, ?MODULE, Context, []).
 
-discover(Url) ->
-    gen_server:call(?MODULE, {discover, Url}).
+discover(Url, Context) ->
+    gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), {discover, Url}).
 
 %%====================================================================
 %% gen_server callbacks
@@ -53,8 +54,9 @@ discover(Url) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Providers) ->
-    {ok, #state{providers=Providers}}.
+init(Context) ->
+    Providers = oembed_providers:list(Context),
+    {ok, #state{context=Context, providers=Providers}}.
 
 %% @doc Discover
 handle_call({discover, Url}, _From, State) ->
@@ -125,11 +127,16 @@ discover_per_provider(Url, [Provider=#oembed_provider{}|Rest]) ->
     end;
 
 discover_per_provider(Url, []) ->
-    io:format("Fallback embed.ly discovery for url: ~p~n", [Url]),
+    error_logger:info_report("Fallback embed.ly discovery for url: ~p~n", [Url]),
     %% Use embed.ly service...
     oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url)).
 
 
 oembed_request(RequestUrl) ->
-    {ok, {{_, 200, _}, _Headers, Body}} = httpc:request(get, {RequestUrl, []}, [], []),
-    z_convert:convert_json(mochijson2:decode(Body)).
+    {ok, {{_, Code, _}, _Headers, Body}} = httpc:request(get, {RequestUrl, []}, [], []),
+    case Code of
+        200 -> 
+            {ok, z_convert:convert_json(mochijson2:decode(Body))};
+        _ ->
+            {error, {http, Code, Body}}  %% empty proplist
+    end.
