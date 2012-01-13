@@ -21,10 +21,10 @@ popd
 
 
 pushd .
-cd .\deps\webmachine
+cd .\deps\webzmachine
 @echo on
 @echo '------------------------------'
-@echo 'make webmachine'
+@echo 'make webzmachine'
 @echo '------------------------------'
 @echo off
 %erl% -noinput +B -eval "case make:all() of up_to_date -> halt(0); error -> halt(1) end."
