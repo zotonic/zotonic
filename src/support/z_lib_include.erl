@@ -98,6 +98,8 @@ collapsed_paths(Files) ->
 uncollapse(Path) ->
     Parts = string:tokens(Path, [?SEP]),
     case uncollapse_dirs(Parts) of
+        [] -> 
+            [];
         [File] ->
             [File];
         [TimestampExt | Files] ->

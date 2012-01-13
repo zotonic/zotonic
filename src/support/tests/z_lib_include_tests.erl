@@ -9,6 +9,9 @@
 
 
 uncollapse_test() ->
+    ?assertEqual([],
+                 z_lib_include:uncollapse("")),
+
     ?assertEqual(["/a/b1.js","/a/b2.js","/a/b/c.js","/a/b3.js"],
                  z_lib_include:uncollapse("/a/b1~b2~b/c~/a/b3~63415422477.js")),
     ?assertEqual(["/a/b1.js"],
