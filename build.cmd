@@ -32,7 +32,7 @@ copy src\*.app ebin
 popd
 
 pushd .
-cd .\deps\erlang-oauth
+cd .\modules\mod_oauth\deps\erlang-oauth
 @echo on
 @echo '------------------------------'
 @echo 'make erlang-oauth'
@@ -43,7 +43,6 @@ IF NOT EXIST ebin (
 )
 copy src\oauth.app ebin
 %erl% -make
-
 popd
 
 pushd .
@@ -67,7 +66,7 @@ popd
 @echo '------------------------------'
 %erlc% -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
 
-%erl% -pa ebin ./erlang-oauth/ebin ./mochiweb/ebin ./webmachine/ebin -noinput +B -eval "case make:all() of up_to_date -> halt(0);error -> halt(1) end."
+%erl% -pa ebin ./deps/mochiweb/ebin ./deps/webzmachine/ebin ./modules/mod_oauth/deps/erlang-oauth/ebin -noinput +B -eval "case make:all() of up_to_date -> halt(0);error -> halt(1) end."
 
 copy src\zotonic.app ebin
 
