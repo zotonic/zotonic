@@ -119,7 +119,7 @@ handle_info(probe, State=#state{requesttime=OldT, threshold=Threshold, context=C
             N when N < State#state.min_samples ->
                 0;
             N ->
-                lists:sum(Avgs)/N
+                (lists:sum(Avgs)/N)/10
         end,
 
     case OldT < Threshold andalso T >= Threshold of
