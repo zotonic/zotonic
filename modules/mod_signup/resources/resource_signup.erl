@@ -61,7 +61,7 @@ provide_content(ReqData, Context) ->
 
 
 %% @doc Handle the submit of the signup form.
-event(#submit{message={signup, [{xs_props,Xs}]}, trigger="signup_form"}, Context) ->
+event(#submit{message={signup, [{xs_props,Xs}]}, form="signup_form"}, Context) ->
     {XsProps0,XsSignupProps} = case Xs of
         {A,B} -> {A,B};
         undefined -> {undefined, undefined}

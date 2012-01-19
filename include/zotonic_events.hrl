@@ -25,9 +25,6 @@
 %%
 -record(submit, {message, form, target}).
 
-%%
-%% Still todo: postback_notify
-%%
 
 %% Drag and drop events. They are received in a normal postback event by scomp_base_droppable. 
 %% The are emitted as separate event.
