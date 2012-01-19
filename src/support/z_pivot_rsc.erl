@@ -31,7 +31,8 @@
     pivot/2,
     pivot_resource_update/2,
     queue_all/1,
-
+    insert_queue/2,
+         
     get_pivot_title/1,
     get_pivot_title/2,
 
