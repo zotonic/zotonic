@@ -71,9 +71,10 @@
 
 
 %% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of
-%% the request. (first)
+%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the 
+%% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
 %% Return either 'undefined' or a #context with the result of the postback
--record(postback_notify, {message}).
+-record(postback_notify, {message, trigger, target}).
 
 %% @doc Notification to signal an inserted comment. (notify)
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.

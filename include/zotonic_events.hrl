@@ -25,6 +25,7 @@
 %%
 -record(submit, {message, form, target}).
 
+%% The record of the postback_notify event is defined in zotonic_notifications.hrl
 
 %% Drag and drop events. They are received in a normal postback event by scomp_base_droppable. 
 %% The are emitted as separate event.

@@ -103,15 +103,16 @@ process_postback(Context1) ->
                              [] -> undefined;
                              TtId -> TtId
                          end,
+            PostbackNotify = #postback_notify{message=Message, trigger=TriggerId1, target=TargetId},
             case z_context:get_q("z_delegate", Context1) of
                 None when None =:= []; None =:= undefined ->
-                    case z_notifier:first(#postback_notify{message=Message}, Context1) of
+                    case z_notifier:first(PostbackNotify, Context1) of
                         undefined -> Context1;
                         #context{} = ContextNotify -> ContextNotify
                     end;
                 Delegate ->
                     {ok, Module} = z_utils:ensure_existing_module(Delegate),
-                    Module:event({postback_notify, Message, TriggerId1, TargetId}, Context1)
+                    Module:event(PostbackNotify, Context1)
             end;
         Postback ->
             {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
