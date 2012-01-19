@@ -29,6 +29,6 @@ render_action(TriggerId, TargetId, Args, Context) ->
     {Script, _Context} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {Script, Context}.
 
-event({postback, {emit, [{signal, Signal}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={emit, [{signal, Signal}]}}, Context) ->
     mod_signal:emit(Signal, Context),
     Context.

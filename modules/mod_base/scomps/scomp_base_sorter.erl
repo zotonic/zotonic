@@ -102,7 +102,7 @@ render(Params, _Vars, Context) ->
 
 
 %% @doc Handle the drop of a sortable in a sorter
-event({postback, {SortTag,SortDelegate}, TriggerId, _TargetId}, Context) ->
+event(#postback{message={SortTag,SortDelegate}, trigger=TriggerId}, Context) ->
 	SortItems = z_context:get_q("sort_items", Context),
 
     UnpickleF = fun(X) ->

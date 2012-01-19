@@ -161,7 +161,7 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
 %% @spec event(Event, Context1) -> Context2
-event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
@@ -226,7 +226,7 @@ event({submit, {add_video_embed, EventProps}, _TriggerId, _TargetId}, Context) -
     end;
 
 %% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
-event({postback, {do_oembed, []}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={do_oembed, []}}, Context) ->
     Url = z_context:get_q(triggervalue, Context),
     case oembed_request(Url, Context) of
         {error, _} ->

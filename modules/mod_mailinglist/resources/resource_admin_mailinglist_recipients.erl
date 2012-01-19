@@ -37,39 +37,39 @@ html(Context) ->
 	Html = z_template:render("admin_mailinglist_recipients.tpl", Vars, Context),
 	z_context:output(Html, Context).
 
-event({postback, {dialog_recipient_add, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_recipient_add, [{id,Id}]}}, Context) ->
 	Vars = [
 		{id, Id}
 	],
 	z_render:dialog("Add recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
 
-event({postback, {dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}}, Context) ->
 	Vars = [
             {id, Id},
             {recipient_id, RcptId}
 	],
 	z_render:dialog("Edit recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
 
-event({postback, {recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
 	z_script:add_script(
-		["$(\"#", _TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "], 
+		["$(\"#", TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "], 
 		Context);
 
-event({postback, {recipient_change_email, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={recipient_change_email, [{recipient_id, RcptId}]}}, Context) ->
     Email = z_context:get_q("triggervalue", Context),
     m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
     z_render:growl(?__("E-mail address updated", Context), Context);
 
-event({postback, {recipient_delete, [{recipient_id, RcptId}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={recipient_delete, [{recipient_id, RcptId}]}}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
 	z_render:wire([ {growl, [{text, ?__("Recipient deleted.", Context)}]},
 					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
 				], Context);
 
-event({postback, {recipients_clear, [{id, Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={recipients_clear, [{id, Id}]}}, Context) ->
 	m_mailinglist:recipients_clear(Id, Context),
 	z_render:wire([{reload, []}], Context);
 
-event({postback, {dialog_recipient_upload, [{id,_Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_recipient_upload, [{id,_Id}]}}, Context) ->
 	Context.

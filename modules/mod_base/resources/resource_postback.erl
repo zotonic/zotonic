@@ -124,13 +124,13 @@ process_postback(Context1) ->
                 "submit" -> 
                     case z_validation:validate_query_args(ContextRsc) of
                         {ok, ContextEval} ->   
-                            Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
+                            Module:event(#submit{message=Tag, form=TriggerId1, target=TargetId}, ContextEval);
                         {error, ContextEval} ->
                             %% Posted form did not validate, return any errors.
                             ContextEval
                     end;
                 _ -> 
-                    Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+                    Module:event(#postback{message=Tag, trigger=TriggerId1, target=TargetId}, ContextRsc)
             end
     end,
 

@@ -15,22 +15,22 @@ html(Context) ->
     z_context:output(Html, Context2).
 
 
-event({postback, show_confirm, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=show_confirm}, Context) ->
     z_render:wire({confirm, [{text,"This is a Javascript Confirm"},{postback,confirm_ok}, {delegate, ?MODULE}]}, Context);
-event({postback, show_alert, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=show_alert}, Context) ->
     z_render:wire({alert, [{text,"This is a Javascript Alert"}]}, Context);
-event({postback, confirm_ok, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=confirm_ok}, Context) ->
     z_render:wire({alert, [{text,"You confirmed"}]}, Context);
-event({postback, show_growl, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=show_growl}, Context) ->
     z_render:wire({growl, [{text,"This is a Growl Alert that disappears automatically after some time."}]}, Context);
-event({postback, show_growl_stay, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=show_growl_stay}, Context) ->
     z_render:wire({growl, [{text,"This is a Growl Alert that stays until you close it."},{stay,1}]}, Context);
 
-event({postback, fill_content, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=fill_content}, Context) ->
     z_render:update("content", "Hello World<br/>", Context);
-event({postback, insert_top, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=insert_top}, Context) ->
     z_render:insert_top("content", "At the top<br/>", Context);
-event({postback, insert_bottom, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=insert_bottom}, Context) ->
     z_render:insert_bottom("content", "At the bottom<br/>", Context);
 
 event({drop, Drag, Drop}, Context) ->
@@ -43,7 +43,7 @@ event({sort, Drags, Drop}, Context) ->
     Msg = io_lib:format("Result ~p on ~p",[DragIds,Drop#dragdrop.id]),
     z_render:wire({growl, [{text,Msg}]}, Context);
 
-event({submit, _Tag, _FormId, _TargetId}, Context) ->
+event(#submit{}, Context) ->
     Email = z_context:get_q_validated("email", Context),
     z_render:wire({growl, [{text,["You posted a valid email address \"",Email,"\""]}]}, Context);
     

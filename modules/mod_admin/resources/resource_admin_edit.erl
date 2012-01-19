@@ -68,7 +68,7 @@ ensure_id(Context) ->
 
 
 %% @doc Handle the submit of the resource edit form
-event({submit, rscform, _FormId, _TargetId}, Context) ->
+event(#submit{message=rscform}, Context) ->
     Post = z_context:get_q_all_noz(Context),
     Props = filter_props(Post),
     Id = z_convert:to_integer(proplists:get_value("id", Props)),
@@ -116,7 +116,7 @@ event({submit, rscform, _FormId, _TargetId}, Context) ->
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;
 
-event({postback, {reload_media, Opts}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={reload_media, Opts}}, Context) ->
     RscId = proplists:get_value(rsc_id, Opts),
     DivId = proplists:get_value(div_id, Opts),
     {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, [{id,RscId},{div_id,DivId}], Context),
@@ -130,7 +130,7 @@ event({sort, Sorted, {dragdrop, {object_sorter, Props}, _, _}}, Context) ->
     Context;
 
 %% Previewing the results of a query in the admin edit
-event({postback, {query_preview, Opts}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     try
         Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),

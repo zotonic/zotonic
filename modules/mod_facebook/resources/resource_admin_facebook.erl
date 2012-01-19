@@ -37,7 +37,7 @@ html(Context) ->
     Html = z_template:render("admin_facebook.tpl", Vars, Context),
     z_context:output(Html, Context).
 
-event({submit, admin_facebook, _TriggerId, _TargetId}, Context) ->
+event(#submit{message=admin_facebook}, Context) ->
     case z_acl:is_allowed(use, mod_facebook, Context) of
         true ->
             save_settings(z_context:get_q_all(Context), Context),

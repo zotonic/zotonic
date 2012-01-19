@@ -44,7 +44,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate, Actions}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate, Actions}}, Context) ->
     CatName = case Cat of
         undefined -> "page";
         _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
@@ -69,7 +69,7 @@ event({postback, {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, 
     z_render:dialog("Make a new "++CatName++".", "_action_dialog_new_rsc.tpl", Vars, Context);
 
 
-event({submit, {new_page, Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={new_page, Args}}, Context) ->
     Title   = z_context:get_q("new_rsc_title", Context),
     CatId   = list_to_integer(z_context:get_q("category_id", Context)),
     IsPublished = z_context:get_q("is_published", Context),

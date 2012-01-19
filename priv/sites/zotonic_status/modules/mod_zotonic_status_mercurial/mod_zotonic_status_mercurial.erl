@@ -32,7 +32,7 @@
 -include("zotonic.hrl").
 
 
-event({postback, {hgup, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={hgup, Args}}, Context) ->
     true = z_auth:is_auth(Context),
     case proplists:get_value(zotonic, Args) of
         true ->
@@ -58,7 +58,7 @@ event({postback, {hgup, Args}, _TriggerId, _TargetId}, Context) ->
                     notice(Site, "Unknown site or nor mercurial folder present.", Context)
             end
     end;
-event({postback, make, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=make}, Context) ->
     true = z_auth:is_auth(Context),
     spawn(fun() -> 
             z:m(),

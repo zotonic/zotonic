@@ -65,7 +65,7 @@ provide_content(ReqData, Context) ->
 
 
 %% @doc Handle the submit of the signup form.
-event({submit, _, _Trigger, _Target}, Context) ->
+event(#submit{}, Context) ->
     Key = z_context:get_q(key, Context, []),
     case confirm(Key, Context) of
         {ok, UserId} ->

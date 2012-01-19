@@ -7,7 +7,7 @@
 
 -include_lib("zotonic.hrl").
 
-event({submit, {contact, []}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={contact, []}}, Context) ->
     Vars = [{mail, z_context:get_q("mail", Context)},
             {name, z_context:get_q("name", Context)},
             {message, z_context:get_q("message", Context)}],

@@ -43,7 +43,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
 %% @spec event(Event, Context1) -> Context2
-event({postback, {link, SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={link, SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action}}, Context) ->
     do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Action, Context).
 
 

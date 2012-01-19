@@ -30,7 +30,7 @@
 -include("zotonic.hrl").
 
 
-event({postback, {trace, _Args}, _TriggerId, _TargetId}, Context) ->    
+event(#postback{message={trace, _Args}}, Context) ->    
     case z_tracer:get_tracer() of 
         {ok, _TracerPid} ->             
             z_tracer:stop(),

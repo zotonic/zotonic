@@ -37,7 +37,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Connect a signal to a collection of actions.  
 %
-event({postback, {connect, [{signal, Signal}, {name, Name}, {actions, Actions}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={connect, [{signal, Signal}, {name, Name}, {actions, Actions}]}}, Context) ->
     Slot = z_connect:page(Signal, Actions, Context),
     store_slot(Name, Slot, Context),
     Context.

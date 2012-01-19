@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-event({postback, {mailinglist_confirm, ConfirmKey, OnSuccess, OnError}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailinglist_confirm, ConfirmKey, OnSuccess, OnError}}, Context) ->
 	case m_mailinglist:recipient_confirm(ConfirmKey, Context) of
 		{ok, _RecipientId} ->
 			z_render:wire(OnSuccess, Context);

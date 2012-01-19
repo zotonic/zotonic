@@ -28,16 +28,13 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Signal = proplists:get_value(signal, Args),
     Name = proplists:get_value(name, Args),
   
-    ?DEBUG(Name),
-    
     Postback = {disconnect, [{signal, Signal}, {name, Name}]},
     
     {Script, _Context} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {Script, Context}.
 
 %
-event({postback, {disconnect, [{signal, Signal}, {name, Name}]}, _TriggerId, _TargetId}, Context) ->
-    ?DEBUG(Name),
+event(#postback{message={disconnect, [{signal, Signal}, {name, Name}]}}, Context) ->
     case action_signal_connect:get_slot(Name, Context) of
 	undefined -> ok;
 	Slot ->

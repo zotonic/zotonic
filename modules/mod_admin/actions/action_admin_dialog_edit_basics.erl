@@ -40,7 +40,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the edit basics form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {edit_basics, RscId, EdgeId, Template, Actions}, _TriggerId, TargetId}, Context) ->
+event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions}, target=TargetId}, Context) ->
     ObjectId = case RscId of
                     undefined ->
                         {_, _, OId} = m_edge:get_triple(EdgeId, Context),
@@ -60,7 +60,7 @@ event({postback, {edit_basics, RscId, EdgeId, Template, Actions}, _TriggerId, Ta
     z_render:dialog("Edit " ++ Title, "_action_dialog_edit_basics.tpl", Vars, Context);
 
 %% @doc Save the thing and close the dialog.
-event({submit, {rsc_edit_basics, Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     {edge_id, EdgeId} = proplists:lookup(edge_id, Args),
     Actions = proplists:get_value(actions, Args, []),

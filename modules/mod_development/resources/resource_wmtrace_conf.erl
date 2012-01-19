@@ -42,7 +42,7 @@
 is_authorized(ReqData, Context) ->
     z_acl:wm_is_authorized(use, mod_development, ReqData, Context).
 
-event({submit, {add, _Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={add, _Args}}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
             Res  = z_context:get_q("resource", Context),
@@ -58,7 +58,7 @@ event({submit, {add, _Args}, _TriggerId, _TargetId}, Context) ->
         false ->
             z_render:growl("You don't have permission to change tracing settings.", Context)
     end;
-event({postback, {set_global, _Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={set_global, _Args}}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
             Policy = list_to_atom(z_context:get_q("triggervalue", Context)),
@@ -73,7 +73,7 @@ event({postback, {set_global, _Args}, _TriggerId, _TargetId}, Context) ->
         false ->
             z_render:growl("You don't have permission to change tracing settings.", Context)
     end;
-event({postback, {edit, _Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={edit, _Args}}, Context) ->
     %% not used yet, since it is only meaningful if we need 
     %% more trace options for per-resource tracing
     % Res  = proplists:get_value(resource, Args),
@@ -81,7 +81,7 @@ event({postback, {edit, _Args}, _TriggerId, _TargetId}, Context) ->
     % ets:delete(?WMTRACE_CONF_TBL, Res),
     % ets:insert(?WMTRACE_CONF_TBL, {Res, NewOpts}),    
     Context;
-event({postback, {delete, Args}, _TriggerId, _TargetId}, Context) ->    
+event(#postback{message={delete, Args}}, Context) ->    
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
     

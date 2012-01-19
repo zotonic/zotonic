@@ -51,18 +51,18 @@ manage_schema(What, Context) ->
 event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
     event_sort(Id, Items, Context);
 
-event({postback, {survey_start, Args}, _, _}, Context) ->
+event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     render_update(render_next_page(SurveyId, 1, exact, [], [], Context), Args, Context);
 
-event({submit, {survey_next, Args}, _, _}, Context) ->
+event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
     render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Context), Args, Context);
 
-event({postback, {survey_back, Args}, _, _}, Context) ->
+event(#postback{message={survey_back, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     % {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
@@ -74,7 +74,7 @@ event({postback, {survey_back, Args}, _, _}, Context) ->
             render_update(render_next_page(SurveyId, 0, exact, Answers, [], Context), Args, Context)
     end;
 
-event({postback, {survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}, _, _}, Context) ->
+event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}}, Context) ->
     m_survey:delete_result(SurveyId, UserId, PersistentId, Context),
     Target = "survey-result-"++z_convert:to_list(UserId)++"-"++z_convert:to_list(PersistentId),
 	z_render:wire([ {growl, [{text, ?__("Survey result deleted.", Context)}]},

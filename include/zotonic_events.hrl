@@ -1,8 +1,8 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% @doc Logoff the current user
+%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
+%% @copyright 2012 Maas-Maarten Zeeman
+%% @doc Events used in Zotonic core
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2012 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(action_base_logoff).
--include("zotonic.hrl").
--export([render_action/4, event/2]).
 
-render_action(TriggerId, TargetId, _Args, Context) ->
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(logoff, undefined, TriggerId, TargetId, ?MODULE, Context),
-	{[PostbackMsgJS], Context}.
+%% @doc Postback event received from browser. 
+%% 
+-record(postback, {message, trigger, target}).
 
-event(#postback{message=logoff}, Context) ->
-    Context1 = z_auth:logoff(Context),
-    z_render:wire({reload, []}, Context1).
+%% @doc Submit event received from browser. 
+%%
+-record(submit, {message, form, target}).
+
+%%
+%% Still todo: drag, drop, sort, postback_notify
+%%

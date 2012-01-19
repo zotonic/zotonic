@@ -35,7 +35,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-event({postback, {mailing_page_test, PageId, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailing_page_test, PageId, OnSuccess}}, Context) ->
 	case m_rsc:name_to_id(mailinglist_test, Context) of
 		{ok, ListId} ->
 			case z_acl:rsc_visible(ListId, Context) of

@@ -37,7 +37,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the new group form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {config_new_dialog, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={config_new_dialog, OnSuccess}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {on_success, OnSuccess}
@@ -45,7 +45,7 @@ event({postback, {config_new_dialog, OnSuccess}, _TriggerId, _TargetId}, Context
     z_render:dialog("Add configuration key.", "_action_dialog_config_new.tpl", Vars, Context);
 
 
-event({submit, {config_new, Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={config_new, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             Module = z_string:to_name(z_context:get_q_validated("module", Context)),

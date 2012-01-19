@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the confirmation template.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {confirm, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={confirm, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ?__(<<"Confirm">>, Context)),
     {IsTemplate, Text,Context1} = case proplists:get_value(text_template, Args) of
               undefined ->

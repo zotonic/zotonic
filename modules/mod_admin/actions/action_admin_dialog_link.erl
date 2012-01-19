@@ -40,7 +40,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
 %% @spec event(Event, Context1) -> Context2
-event({postback, {dialog_link, SubjectId, Predicate, ElementId, EdgeTemplate, Actions}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_link, SubjectId, Predicate, ElementId, EdgeTemplate, Actions}}, Context) ->
     Pred = m_predicate:get(Predicate, Context),
     Title = ["Add a connection: ", ?__(proplists:get_value(title, Pred), Context)],
     PredCat = case m_predicate:object_category(Predicate, Context) of

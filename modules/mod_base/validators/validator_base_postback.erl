@@ -52,7 +52,7 @@ validate(postback, Id, Value, Args, Context) ->
 
 %% @spec event(Event, Context) -> Context
 %% @doc Handle the validation during form entry.
-event({postback, {validate, Args}, TriggerId, _TargetId}, Context) ->
+event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     IsValid = case validate(postback, TriggerId, Value, Args, Context) of
         {{ok, _},ContextValidated} -> 

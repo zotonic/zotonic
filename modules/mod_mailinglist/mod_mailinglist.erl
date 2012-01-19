@@ -97,7 +97,7 @@ observe_email_bounced(B=#email_bounced{}, Context) ->
 
 
 %% @doc Request confirmation of canceling this mailing.
-event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
 	MailingId = proplists:get_value(list_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
 		true ->
@@ -105,7 +105,7 @@ event({postback, {dialog_mailing_cancel_confirm, Args}, _TriggerId, _TargetId}, 
 		false ->
 			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
 	end;
-event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailing_cancel, Args}}, Context) ->
 	MailingId = proplists:get_value(list_id, Args),
 	PageId = proplists:get_value(page_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
@@ -116,7 +116,7 @@ event({postback, {mailing_cancel, Args}, _TriggerId, _TargetId}, Context) ->
 		false ->
 			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
 	end;
-event({postback, {mailinglist_reset, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailinglist_reset, Args}}, Context) ->
 	MailingId = proplists:get_value(list_id, Args),
 	PageId = proplists:get_value(page_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
@@ -129,7 +129,7 @@ event({postback, {mailinglist_reset, Args}, _TriggerId, _TargetId}, Context) ->
 	end;
 
 %% @doc Handle upload of a new recipients list
-event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
     #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
     case import_file(TmpFile, Id, Context) of
         ok ->
@@ -139,7 +139,7 @@ event({submit, {mailinglist_upload,[{id,Id}]}, _TriggerId, _TargetId}, Context) 
     end;
 
 %% @doc Handle the test-sending of a page to a single address.
-event({submit, {mailing_testaddress, [{id, PageId}]}, _, _}, Context) ->
+event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
     Email = z_context:get_q_validated("email", Context),
     z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
     Context1 = z_render:growl(?__("Sending the page to ", Context) ++ Email ++ "...", Context),
@@ -147,7 +147,7 @@ event({submit, {mailing_testaddress, [{id, PageId}]}, _, _}, Context) ->
 
 
 %% @doc Handle the test-sending of a page to a single address.
-event({postback, {resend_bounced, [{list_id, ListId}, {id, PageId}]}, _, _}, Context) ->
+event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Context) ->
     z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
     case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
         0 ->

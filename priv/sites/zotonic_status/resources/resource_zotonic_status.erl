@@ -70,31 +70,31 @@ provide_content(ReqData, Context) ->
 %% Handle all events
 %% -----------------------------------------------------------------------------------------------
 
-event({submit, [], TriggerId, _TargetId}, Context) ->
+event(#submit{message=[], form=FormId}, Context) ->
     case z_context:get_q(password, Context) == z_config:get(password) of
         true ->
             {ok, ContextAuth} = z_auth:logon(1, Context),
             z_render:wire({reload, []}, ContextAuth);
         false ->
             z_render:wire([
-                        {set_class, [{target,TriggerId},{class,"error-pw"}]}, 
+                        {set_class, [{target,FormId},{class,"error-pw"}]}, 
                         {set_value, [{target,"password"},{value, ""}]}], Context)
     end;
-event({postback, {logoff, []}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={logoff, []}}, Context) ->
     z_render:wire({reload, []}, z_auth:logoff(Context));
-event({postback, {site_start, [{site, Site}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={site_start, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:start(Site),
     Context;
-event({postback, {site_restart, [{site, Site}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={site_restart, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:restart(Site),
     Context;
-event({postback, {site_stop, [{site, Site}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={site_stop, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:stop(Site),
     Context;
-event({postback, {site_flush, [{site, Site}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z:flush(z_context:new(Site)),
     Context.

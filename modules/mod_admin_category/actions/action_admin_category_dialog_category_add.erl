@@ -37,7 +37,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the category.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {dialog_category_add, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_category_add, OnSuccess}}, Context) ->
     case z_acl:is_allowed(insert, #acl_rsc{category=category}, Context) of
         true ->
             Vars = [ {on_success, OnSuccess} ],
@@ -47,7 +47,7 @@ event({postback, {dialog_category_add, OnSuccess}, _TriggerId, _TargetId}, Conte
     end;
 
 %% @doc Handle the form postback. Optionally renaming existing categories.
-event({submit, {category_add, Options}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={category_add, Options}}, Context) ->
     case z_acl:is_allowed(insert, #acl_rsc{category=category}, Context) of
         true ->
             Title    = z_context:get_q_validated("title", Context),
