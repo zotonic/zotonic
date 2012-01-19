@@ -48,7 +48,7 @@ manage_schema(What, Context) ->
 
 
 %% @doc Handle drag/drop events from the survey admin
-event({sort, Items, {dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
+event(#sort{items=Items, drop={dragdrop, {survey, [{id,Id}]}, _Delegate, "survey"}}, Context) ->
     event_sort(Id, Items, Context);
 
 event(#postback{message={survey_start, Args}}, Context) ->

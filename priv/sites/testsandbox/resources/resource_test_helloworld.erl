@@ -38,7 +38,7 @@ event(#drop{drag=Drag, drop=Drop}, Context) ->
 event(#drag{drag=Drag, drop=Drop}, Context) ->
     z_render:wire({growl, [{text,["You dragged ",Drag#dragdrop.tag," to ",Drop#dragdrop.tag]}]}, Context);
 
-event({sort, Drags, Drop}, Context) ->
+event(#sort{items=Drags, drop=Drop}, Context) ->
     DragIds = [ Id || #dragdrop{id=Id} <- Drags],
     Msg = io_lib:format("Result ~p on ~p",[DragIds,Drop#dragdrop.id]),
     z_render:wire({growl, [{text,Msg}]}, Context);

@@ -122,7 +122,7 @@ event(#postback{message={reload_media, Opts}}, Context) ->
     {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, [{id,RscId},{div_id,DivId}], Context),
     z_render:update(DivId, Html, Context1);
 
-event({sort, Sorted, {dragdrop, {object_sorter, Props}, _, _}}, Context) ->
+event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Context) ->
     RscId     = proplists:get_value(id, Props),
     Predicate = proplists:get_value(predicate, Props),
     EdgeIds   = [ EdgeId || {dragdrop, EdgeId, _, _ElementId} <- Sorted ],
