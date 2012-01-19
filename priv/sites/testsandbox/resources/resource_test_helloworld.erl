@@ -33,9 +33,9 @@ event(#postback{message=insert_top}, Context) ->
 event(#postback{message=insert_bottom}, Context) ->
     z_render:insert_bottom("content", "At the bottom<br/>", Context);
 
-event({drop, Drag, Drop}, Context) ->
+event(#drop{drag=Drag, drop=Drop}, Context) ->
     z_render:wire({growl, [{text,["You dropped ",Drag#dragdrop.tag," on ",Drop#dragdrop.tag]}]}, Context);
-event({drag, Drag, Drop}, Context) ->
+event(#drag{drag=Drag, drop=Drop}, Context) ->
     z_render:wire({growl, [{text,["You dragged ",Drag#dragdrop.tag," to ",Drop#dragdrop.tag]}]}, Context);
 
 event({sort, Drags, Drop}, Context) ->

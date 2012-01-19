@@ -26,5 +26,17 @@
 -record(submit, {message, form, target}).
 
 %%
-%% Still todo: drag, drop, sort, postback_notify
+%% Still todo: sort, postback_notify
 %%
+
+%% Drag and drop events. They are received in a normal postback event by scomp_base_droppable. 
+%% The are emitted as separate events by scomp_base_droppable.
+%%
+
+%% @doc Drag event.
+-record(drag, {drag, drop}).
+
+%% @doc Drop event.
+-record(drop, {drag, drop}).
+
+
