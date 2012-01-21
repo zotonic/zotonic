@@ -276,16 +276,22 @@ replace(SubjectId, Pred, NewObjects, Context) ->
                             ]) || Id <- NewObjects
                         ], ","),
                         F = fun(Ctx) ->
-                            z_db:q("delete from edge where subject_id = $1 and predicate_id = $2", 
-                                    [SubjectId, PredId], Ctx),
-                            z_db:q("insert into edge (subject_id, predicate_id, object_id, creator_id, created)
-                                    values "++Values, Ctx),
-                            m_rsc:touch(SubjectId, Ctx)
+                                    z_db:q("delete from edge where subject_id = $1 and predicate_id = $2", 
+                                           [SubjectId, PredId], Ctx),
+                                    case NewObjects of
+                                        [] -> nop;
+                                        _ ->
+                                            z_db:q("insert into edge (subject_id, predicate_id, object_id, creator_id, created)
+                                                        values "++Values, Ctx)
+                                    end,
+                                    m_rsc:touch(SubjectId, Ctx)
                         end,
             
                         % Sync all caches, notify edge delete/insert listeners
                         z_db:transaction(F, Context),
-                        z_db:flush(Context),
+                        z_depcache:flush(SubjectId, Context),
+                        [z_depcache:flush(ObjectId, Context) || ObjectId <- NewObjects],
+                        [z_depcache:flush(ObjectId, Context) || ObjectId <- CurrObjects],
                         [
                             case lists:member(ObjId, NewObjects) of
                                 true -> nop;
