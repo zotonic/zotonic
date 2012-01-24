@@ -35,11 +35,16 @@ connect(Host, Username, Password, Opts) ->
             case proplists:get_value(schema, Opts) of
                 undefined -> 
                     {ok, Conn};
-                Schema when is_list(Schema) ->
-                    case squery(Conn, "SET search_path TO " ++ Schema) of
+                SchemaName ->
+                    Schema = z_convert:to_list(SchemaName),
+                    case squery(Conn, "SET search_path TO \"" ++ Schema ++ "\"") of
                         {ok, [], []} ->
                             {ok, Conn};
-                        Error -> 
+                        {error,{error,error,<<"3F000">>, _, _}} -> 
+                            {ok, [], []} = squery(Conn, "CREATE SCHEMA \"" ++ Schema ++ "\""),
+                            {ok, [], []} = squery(Conn, "SET search_path TO \"" ++ Schema ++ "\""),
+                            {ok, Conn};
+                        {error, _} = Error -> 
                             close(Conn),
                             Error
                     end

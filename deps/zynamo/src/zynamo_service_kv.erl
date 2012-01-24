@@ -67,8 +67,14 @@ init(_Args) ->
 handle_call({handoff_check, Node}, _From, State) ->
     do_handoff_check(Node, State);
 
+handle_call({is_sync_wanted, _SecondsSinceLastSync}, _From, State) ->
+    {reply, {ok, true}, State};
+
+handle_call(sync_n, _From, State) ->
+    {reply, {ok, 3}, State};
+
 handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
+    {reply, {error, {unknown_call, Message}}, State}.
 
 handle_cast(#zynamo_service_command{
                 command=Command,
@@ -79,10 +85,20 @@ handle_cast(#zynamo_service_command{
                     do_get(Command, State);
                 list ->
                     do_list(Command, State);
+                list_hash ->
+                    % Used when syncing, return a list of hashes of list ranges
+                    case do_list(Command, State) of
+                        #zynamo_service_result{value='$end_of_table'} ->
+                            #zynamo_service_result{value=[]};
+                        #zynamo_service_result{value=L} ->
+                            #zynamo_service_result{value=zynamo_hash:hash_sync_list(L)};
+                        Other ->
+                            Other
+                    end;
                 Upd when Upd =:= put; Upd =:= delete ->
                     do_update(Command, Handoff, State);
                 _Other ->
-                    {error, operation_not_supported}
+                    #zynamo_service_result{status=operation_not_supported}
             end,
     zynamo_request:reply(Reply, SC),
     {noreply, State};
@@ -111,38 +127,48 @@ code_change(_OldVersion, _NewVersion, State) ->
 
 do_get(#zynamo_command{key=Key}, State) ->
     case ets:lookup(State#state.data, Key) of
-        [] -> {ok, not_found, undefined};
-        [{_Key, #data{is_gone=false, version=Vers, value=Val}}] -> {ok, Vers, Val};
-        [{_Key, #data{is_gone=true, version=Vers}}] -> {ok, gone, Vers}
+        [] -> 
+            #zynamo_service_result{
+                is_found=false,
+                is_gone=false
+            };
+        [{_Key, #data{is_gone=false, version=Vers, value=Val}}] -> 
+            #zynamo_service_result{
+                is_gone=false,
+                is_found=true,
+                version=Vers,
+                value=Val
+            };
+        [{_Key, #data{is_gone=true, version=Vers}}] -> 
+            #zynamo_service_result{
+                is_gone=true,
+                is_found=true,
+                version=Vers
+            }
     end.
 
 
 do_list(#zynamo_command{value=Args}, State) ->
-    #zynamo_list_args{value=WithValue, version=WithVersion, offset=Offset, limit=Limit} = Args,
-    % Walk to the Key at Offset
+    case Args#zynamo_list_args.offset of
+        undefined -> do_list_offset_int(0, Args, State);
+        N when is_integer(N) -> do_list_offset_int(N, Args, State);
+        {key, Key} -> do_list_offset_key(Key, Args, State);
+        _Other -> #zynamo_service_result{status=unsupported_offset}
+    end.
+    
+% Walk to the Key at Offset
+do_list_offset_int(Offset, Args, State) ->
+    #zynamo_list_args{return_value=WithValue, return_version=WithVersion, return_gone=IsListGone, limit=Limit} = Args,
     case offset(State#state.data, ets:first(State#state.data), Offset) of
-        '$end_of_table' -> {ok, '$end_of_table'};
+        '$end_of_table' ->
+            #zynamo_service_result{
+                value='$end_of_table'
+            };
         FirstKey ->
             Keys = limit(State#state.data, FirstKey, Limit, [FirstKey]),
-            case WithValue or WithVersion of
-                true ->
-                    {ok, [
-                        begin
-                            [{_K,Data}] = ets:lookup(State#state.data, Key),
-                            case {WithVersion, WithValue} of
-                                {true, true} ->
-                                    {Key, Data#data.version, Data#data.value};
-                                {true, false} ->
-                                    {Key, Data#data.version, undefined};
-                                {false, true} ->
-                                    {Key, undefined, Data#data.value}
-                            end
-                        end
-                        || Key <- Keys
-                    ]};
-                false ->
-                    {ok, [ {Key, undefined, undefined} || Key <- Keys ]}
-            end
+            #zynamo_service_result{
+                value=add_value_version(WithValue, WithVersion, IsListGone, Keys, State)
+            }
     end.
 
     offset(_Tab, Key, 0) ->
@@ -160,6 +186,69 @@ do_list(#zynamo_command{value=Args}, State) ->
             '$end_of_table' -> lists:reverse(Acc);
             Next -> limit(Tab, Next, case Limit of all -> all; _ -> Limit-1 end, [Next|Acc])
         end.
+
+% Take Limit keys, starting with the given key
+do_list_offset_key(Key, Args, State) ->
+    #zynamo_list_args{return_value=WithValue, return_version=WithVersion, return_gone=IsListGone, limit=Limit} = Args,
+    Keys = case Key of
+                undefined -> limit_key(State#state.data, ets:first(State#state.data), Limit, []);
+                _ -> limit_key(State#state.data, ets:next(State#state.data, Key), Limit, [])
+           end,
+    #zynamo_service_result{
+        value=add_value_version(WithValue, WithVersion, IsListGone, Keys, State)
+    }.
+
+    limit_key(_Data, _Key, N, Acc) when N =< 0 ->
+        lists:reverse(Acc);
+    limit_key(_Data, '$end_of_table', _N, Acc) ->
+        lists:reverse(Acc);
+    limit_key(Data, Key, N, Acc) ->
+        limit_key(Data, ets:next(Data, Key), N-1, [Key|Acc]).
+    
+
+add_value_version(WithValue, WithVersion, IsListGone, Keys, State) ->
+    case WithValue or WithVersion or not IsListGone of
+        true ->
+            lists:foldr(
+                    fun(Key, Acc) ->
+                        [{_K,Data}] = ets:lookup(State#state.data, Key),
+                        case IsListGone or not Data#data.is_gone of
+                            true ->
+                                case {WithVersion, WithValue} of
+                                    {true, true} ->
+                                        [
+                                            #zynamo_service_result{
+                                                key=Key,
+                                                version=Data#data.version,
+                                                value=Data#data.value
+                                            } | Acc
+                                        ];
+                                    {true, false} ->
+                                        [
+                                            #zynamo_service_result{
+                                                key=Key,
+                                                version=Data#data.version
+                                            } | Acc
+                                        ];
+                                    {false, true} ->
+                                        [
+                                            #zynamo_service_result{
+                                                key=Key,
+                                                value=Data#data.value
+                                            } | Acc
+                                        ];
+                                    {false, false} ->
+                                        [ #zynamo_service_result{key=Key}|Acc ]
+                                end;
+                            false ->
+                                Acc
+                        end
+                    end,
+                    [],
+                    Keys);
+        false ->
+            [ #zynamo_service_result{key=Key} || Key <- Keys ]
+    end.
 
 
 do_update(Command, Handoff, State) ->
@@ -181,7 +270,7 @@ do_update(Command, Handoff, State) ->
                 false -> ets:insert(State#state.local, {Key});
                 true -> nop
             end,
-            {ok, Version};
+            #zynamo_service_result{key=Key, version=Version, is_gone=(Cmd =:= delete)};
         {false, OldVersion} ->
             % We can receive a handoff for data we already have.
             case zynamo_version:is_equal(Version, OldVersion) of
@@ -192,9 +281,9 @@ do_update(Command, Handoff, State) ->
                         true -> nop
                     end,
                     insert_handoff(State#state.handoff, Key, Version, Cmd, lists:delete(node(),Handoff)),
-                    {ok, Version};
+                    #zynamo_service_result{key=Key, version=Version};
                 false ->
-                    {error, {conflict, OldVersion}}
+                    #zynamo_service_result{status=conflict, key=Key, version=OldVersion}
             end
     end.
     

@@ -62,15 +62,15 @@ handle_call({handoff_check, _Node}, _From, State) ->
     {reply, {ok, done}, State};
 
 handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
+    {reply, {error, {unknown_call, Message}}, State}.
 
 handle_cast(#zynamo_service_command{
                 command=Command
             }=SC, State) ->
     #zynamo_command{command=Cmd, key=Key} = Command,
     Reply = case Cmd of
-                get -> collect_stats(Key);
-                _ -> {error, operation_not_supported}
+                get -> #zynamo_service_result{value=collect_stats(Key)};
+                _ -> #zynamo_service_result{status=operation_not_supported}
             end,
     zynamo_request:reply(Reply, SC),
     {noreply, State};

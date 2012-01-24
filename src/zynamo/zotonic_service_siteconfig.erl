@@ -34,6 +34,10 @@
 
 -record(state, {host}).
 
+% Minimum seconds between full config syncs. 
+% At least 10 minutes between full syncs.
+-define(SYNC_PERIOD, 600).
+
 
 %%====================================================================
 %% API
@@ -59,8 +63,16 @@ init(Args) ->
 handle_call({handoff_check, Node}, _From, State) ->
     do_handoff_check(Node, State);
 
+handle_call({is_sync_wanted, startup}, _From, State) ->
+    {reply, {ok, true}, State};
+handle_call({is_sync_wanted, SecsAgo}, _From, State) ->
+    {reply, {ok, SecsAgo >= ?SYNC_PERIOD}, State};
+
+handle_call(sync_n, _From, State) ->
+    {reply, {ok, all}, State};
+
 handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
+    {reply, {error, {unknown_call, Message}}, State}.
 
 handle_cast(#zynamo_service_command{
                 command=Command,
@@ -70,11 +82,18 @@ handle_cast(#zynamo_service_command{
                 get ->
                     do_get(Command, State);
                 list ->
-                    do_list(Command, State);
+                    #zynamo_service_result{
+                        value=m_config:zynamo_list(State#state.host, Command#zynamo_command.value)
+                    };
+                list_hash ->
+                    List = m_config:zynamo_list(State#state.host, Command#zynamo_command.value),
+                    #zynamo_service_result{
+                        value=zynamo_hash:hash_sync_list(List)
+                    };
                 Upd when Upd =:= put; Upd =:= delete ->
                     do_update(Command, Handoff, State);
                 _Other ->
-                    {error, operation_not_supported}
+                    #zynamo_service_result{status=operation_not_supported}
             end,
     zynamo_request:reply(Reply, SC),
     {noreply, State};
@@ -103,11 +122,12 @@ code_change(_OldVersion, _NewVersion, State) ->
 
 do_get(Command, State) ->
     case Command#zynamo_command.key of
-        {_, _} = Key -> m_config:zynamo_get(State#state.host, Key);
-        _ -> {error, unknown_key_format}
+        {_, _} = Key -> 
+            m_config:zynamo_get(State#state.host, Key);
+        _ -> #zynamo_service_result{status=unknown_key_format}
     end.
     
-do_update(Command, Handoff, #state{host=Host} = State) ->
+do_update(Command, Handoff, #state{host=Host}) ->
     #zynamo_command{command=Cmd, key=Key, version=Version, value=Value} = Command,
     case Key of
         {_, _} -> 
@@ -123,55 +143,11 @@ do_update(Command, Handoff, #state{host=Host} = State) ->
             {error, unknown_key_format}
     end.
 
-do_list(Comand, State) ->
-    {ok, '$end_of_table'}.
-
-
-
 do_handoff_check(Node, State) ->
-    Host = State#state.host,
-    case m_handoff:next_handoff(Node, Host, config, m_config) of
-        {ok, done} ->
-            {reply, {ok, done}, State};
-        {ok, Id, Key, Version, delete} ->
-            Command = #zynamo_command{
-                command=delete,
-                key=Key,
-                version=Version,
-                handoff_ref=Id
-            },
-            {reply, {ok, Command}, State};
-        {ok, Id, Key, Version, put} ->
-            case m_config:zynamo_get(Host, Key) of
-                {ok, gone, _} ->
-                    m_handoff:delete_handoff(Host, Id),
-                    do_handoff_check(Node, State);
-                    
-                {ok, StoredVersion, Data} ->
-                    case zynamo_version:is_equal(StoredVersion, Version) of
-                        true ->
-                            Command = #zynamo_command{
-                                command=put,
-                                key=Key,
-                                version=Version,
-                                value=Data,
-                                handoff_ref=Id
-                            },
-                            {ok, Command};
-                        false ->
-                            m_handoff:delete_handoff(Host, Id),
-                            do_handoff_check(Node, State)
-                    end;
-                
-                {error, _} ->
-                    m_handoff:delete_handoff(Host, Id),
-                    do_handoff_check(Node, State)
-            end
-        
-    end.
+    Result = m_handoff:handoff_check(Node, State#state.host, config, m_config, fun m_config:zynamo_get/2),
+    {reply, Result, State}.
 
-
-do_handoff_done(Node, Command, State) ->
+do_handoff_done(_Node, Command, State) ->
     #zynamo_command{
         handoff_ref=Id
     } = Command,

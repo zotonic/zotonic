@@ -30,6 +30,7 @@
     nodes/0,
     get_ring/0,
     get_ring_range/1,
+    get_ring_range/2,
     sync_ring/2,
     save/0,
     leave/0,
@@ -92,10 +93,22 @@ sync_ring(FromNode, Ring) ->
 
 
 %% @doc Fetch a ring and its ranges
--spec get_ring_range(past | future) -> {ok, ring()} | {error, term()}.
+-spec get_ring_range(past | future) -> {ok, list( {non_neg_integer(), non_neg_integer(), node()} )} | {error, term()}.
 get_ring_range(Which) ->
     gen_server:call(?MODULE, {get_ring_range, Which}, infinity).
 
+
+-spec get_ring_range(past | future, node()) -> {ok, {non_neg_integer(), non_neg_integer()}} | {error, term()}.
+get_ring_range(Which, Node) ->
+    case get_ring_range(Which) of
+        {ok, Ranges} ->
+            case lists:keyfind(Node, 3, Ranges) of
+                {L,H,_Node} -> {ok, {L, H}};
+                false -> {error, not_found}
+            end;
+        Error ->
+            Error
+    end.
 
 %% @doc Save the ring to disk, which will be used for a later reboot.
 -spec save() -> ok.

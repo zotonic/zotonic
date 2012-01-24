@@ -28,6 +28,7 @@
     m_value/2,
 
     handle_handoff/7,
+    handoff_check/5,
     
     next_handoff/4,
     delete_handoff/2,
@@ -51,7 +52,7 @@ m_to_list(_, _Context) ->
 m_value(_, _Context) ->
     undefined.
 
-
+-spec handle_handoff(list( node() ), atom(), atom(), atom(), any(), zynamo_data_version(), #zynamo_command{}) -> ok.
 handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
     Context = z_context:new(Site),
     OtherNodes = Nodes -- [node()],
@@ -136,6 +137,54 @@ handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
                      case is_integer(Key) of true -> undefined; false -> to_binary(Key) end,
                      Version, Cmd
                    ], Context).
+
+
+-spec handoff_check(node(), atom(), atom(), atom(), function()) -> {ok, done | #zynamo_command{}}.
+handoff_check(Node, Host, Service, Model, GetFun) ->
+   case m_handoff:next_handoff(Node, Host, config, m_config) of
+       {ok, done} ->
+            {ok, done};
+       {ok, HandoffId, Key, Version, delete} ->
+           Command = #zynamo_command{
+               command=delete,
+               key=Key,
+               version=Version,
+               handoff_ref=HandoffId
+           },
+           {ok, Command};
+       {ok, HandoffId, Key, Version, put} ->
+           case GetFun(Host, Key) of
+               {ok, {gone, _Version}, _} ->
+                   m_handoff:delete_handoff(Host, HandoffId),
+                   handoff_check(Node, Host, Service, Model, GetFun);
+
+               {ok, not_found, _} ->
+                   m_handoff:delete_handoff(Host, HandoffId),
+                   handoff_check(Node, Host, Service, Model, GetFun);
+
+               {ok, StoredVersion, Data} ->
+                   case zynamo_version:is_equal(StoredVersion, Version) of
+                       true ->
+                           Command = #zynamo_command{
+                               command=put,
+                               key=Key,
+                               version=Version,
+                               value=Data,
+                               handoff_ref=HandoffId
+                           },
+                           {ok, Command};
+                       false ->
+                           m_handoff:delete_handoff(Host, HandoffId),
+                           handoff_check(Node, Host, Service, Model, GetFun)
+                   end;
+
+               {error, _} ->
+                   m_handoff:delete_handoff(Host, HandoffId),
+                   handoff_check(Node, Host, Service, Model, GetFun)
+           end
+   end.
+
+
 
 next_handoff(Node, Site, Service, Model) ->
     Context = z_context:new(Site),

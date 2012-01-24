@@ -42,8 +42,9 @@
     pref_nodes      :: [ node() ],
     service_nodes   :: [ {node(),pid()} ],
     participating_nodes :: [ {node(), reference(), pos_integer(), [node()]} ],
+    primary_nodes   :: [ node() ],
     batch_nr        :: pos_integer(),
-    primary_node    :: node(),
+    first_node      :: node(),
     unused_nodes    :: [ node() ],
     received_ok     :: [ {node(), [node()], term()} ],
     received_fail   :: [ {node(), [node()], term()} ],
@@ -126,11 +127,13 @@ prepare(timeout, #state{pref_nodes=PrefNodes, batch_nr=BatchNr, service_nodes=Se
     case handoff(PrefHandoff, PrefOkHF, UnusedService, BatchNr, NoHandoff) of
         no_nodes ->
             {next_state, validate, State#state{
+                        primary_nodes=PrefN,
                         participating_nodes = [],
                         unused_nodes = []
             }, 0};
         {ok, InitialNodes, UnusedNodes} ->
             {next_state, validate, State#state{
+                        primary_nodes=PrefN,
                         participating_nodes = InitialNodes,
                         unused_nodes = UnusedNodes
             }, 0}
@@ -141,9 +144,9 @@ validate(timeout, #state{participating_nodes=[]} = State) ->
     client_reply({error, no_nodes}, State),
     {stop, normal, State};
 validate(timeout, #state{} = State) ->
-    {PrimaryNode, _Ref, _BatchNr, _Handoff} = hd(State#state.participating_nodes),
+    {FirstNode, _Ref, _BatchNr, _Handoff} = hd(State#state.participating_nodes),
     {next_state, execute, State#state{
-                primary_node=PrimaryNode
+                first_node=FirstNode
     }, 0}.
 
 
@@ -191,7 +194,7 @@ waiting_reply({ok, FromNode, Ref, Reply}, State) ->
     case lists:keytake(Ref, 2, State#state.participating_nodes) of
         {value, {FromNode, Ref, _BatchNr, Handoff}, RestParticipating} ->
             IsOk = case Reply of
-                       {ok, not_found, _} -> not State#state.not_found_is_error;
+                       #zynamo_service_result{is_found=false} -> not State#state.not_found_is_error;
                        _ -> true
                    end,
             {Oks,Fails} = case IsOk of
@@ -335,23 +338,32 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 client_reply(Result, #state{options=Options, from=From, command=Command} = State) when is_list(Result) ->
     Result1 = case proplists:get_value(result, Options, list) of
                 merge -> 
-                    case merge_results(Command#zynamo_command.command, Result) of
-                        {error, _} = E -> 
-                            E;
-                        {ok, Version} -> 
-                            {ok, is_quorum_reached(State), Version};
-                        {ok, Version, Value} -> 
-                            {ok, is_quorum_reached(State), Version, Value}
-                    end;
+                    R = merge_results(Command#zynamo_command.command, Result, State),
+                    R#zynamo_result{
+                        is_quorum=is_quorum_reached(State), 
+                        stats=get_stats(State)
+                    };
                 raw ->
-                    {ok, is_quorum_reached(State), Result};
+                    #zynamo_result{
+                        is_quorum=is_quorum_reached(State),
+                        value=Result,
+                        stats=get_stats(State)
+                    };
                 list ->
-                    Rets = [ Ret || {_N, _HF, Ret} <- Result ],
-                    {ok, is_quorum_reached(State), Rets}
+                    #zynamo_result{
+                        is_quorum=is_quorum_reached(State),
+                        value=[ Ret || {_N, _HF, Ret} <- Result ],
+                        stats=get_stats(State)
+                    }
               end,
-    From ! {result, Command#zynamo_command.ref, Result1, get_stats(State)};
-client_reply(Reply, #state{from=From, command=Command} = State) ->
-    From ! {result, Command#zynamo_command.ref, Reply, get_stats(State)}.
+    From ! {result, Command#zynamo_command.ref, Result1};
+client_reply({error, _} = Error, #state{from=From, command=Command} = State) -> 
+    R = #zynamo_result{
+        status=Error,
+        is_quorum=is_quorum_reached(State),
+        stats=get_stats(State)
+    },
+    From ! {result, Command#zynamo_command.ref, R}.
 
 
 %% Handle late incoming results, no handoffs needed.
@@ -393,35 +405,49 @@ final_action(undefined, _State) ->
 
 
 %% @doc Merge the results of a data operation.
-merge_results(Cmd, Results) when Cmd =:= put; Cmd =:= delete ->
-    Conflicts = [ Version || {_N, _HF, {error, {conflict, Version}}} <- Results ],
+merge_results(Cmd, Results, State) when Cmd =:= put; Cmd =:= delete ->
+    Conflicts = [ Version || {_N, _HF, #zynamo_service_result{status=conflict, version=Version}} <- Results ],
     case Conflicts of
         [] ->
-            Updates = [ Version || {_N, _HF, {ok, Version}} <- Results ],
+            Updates = [ Upd || {_N, _HF, #zynamo_service_result{status=ok} = Upd} <- Results ],
             case Updates of
-                [] -> {error, no_result};
-                _ -> {ok, zynamo_version:newest(Updates)}
+                [] -> #zynamo_result{status=no_result};
+                _ -> 
+                    {R,IsPrimary} = zynamo_version:newest_primary(Updates, State#state.primary_nodes),
+                    #zynamo_result{
+                        is_found=true,
+                        is_primary=IsPrimary,
+                        is_gone=R#zynamo_service_result.is_gone,
+                        is_multiple=false,
+                        node=R#zynamo_service_result.node,
+                        version=R#zynamo_service_result.version,
+                        value=R#zynamo_service_result.value
+                    }
             end;
         _ -> 
-            {error, {conflict, Conflicts}}
+            #zynamo_result{status=conflict, value=Results}
     end;
-merge_results(_Get, Results) ->
-    % NotFounds = [ Version || {_N, _HF, {ok, gone, Version}} <- Results ],
-    Founds = [ OK || {_N, _HF, {ok, Version, _Value} = OK} <- Results, 
-                               Version /= gone, Version /= not_found ],
-    case Founds of
-        [] ->
-            Gones = [ Version || {_N, _HF, {ok, gone, Version}} <- Results ],
-            case Gones of 
-                [] -> {ok, not_found, undefined};
-                _ -> {ok, gone, zynamo_version:newest(Gones)}
-            end;
-        _ ->
-            zynamo_version:newest_tuple(2, Founds)
+merge_results(_Get, Results, State) ->
+    Found = [ OK || {_N, _HF, #zynamo_service_result{status=ok, is_found=true} = OK} <- Results ],
+    case Found of
+        [] -> 
+            #zynamo_result{
+                is_found=false
+            };
+        _ -> 
+            {R,IsPrimary} = zynamo_version:newest_primary(Found, State#state.primary_nodes),
+            #zynamo_result{
+                is_found=true,
+                is_primary=IsPrimary,
+                is_gone=R#zynamo_service_result.is_gone,
+                is_multiple=false,
+                node=R#zynamo_service_result.node,
+                version=R#zynamo_service_result.version,
+                value=R#zynamo_service_result.value
+            }
     end.
 
 
-    
 
 
 %% @doc Check if the required quorum has been reached or is impossible to reach
@@ -465,14 +491,14 @@ get_stats(_State) ->
 %% @doc Send the command to the list of nodes
 send_command(Nodes, State) ->
     ServiceNodes = State#state.service_nodes,
-    PrimaryNode = State#state.primary_node,
+    FirstNode = State#state.first_node,
     Command = State#state.command,
     [
         begin
             {Node, Pid} = lists:keyfind(Node, 1, ServiceNodes),
             Cmd = #zynamo_service_command{
                 ref=Ref,
-                is_primary= (Node =:= PrimaryNode),
+                is_first= (Node =:= FirstNode),
                 from=self(),
                 handoff=Handoff,
                 command=Command

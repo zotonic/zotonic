@@ -47,17 +47,13 @@
 -type list_receiver() :: list() | {pid(), reference()} | function() | {atom(), atom()}.
 
 %% @doc Read a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
+-spec get(atom(), atom(), Key::term()) -> #zynamo_result{}.
 get(Site, Service, Key) ->
-    get(Site, Service, Key, []).
+    get(Site, Service, Key, [{result, merge}]).
 
--spec get(atom(), atom(), Key::term(), zynamo_request_options()) -> 
-                                          {ok, Value :: term(), zynamo_request_stats()} 
-                                        | {maybe, Value :: term(), zynamo_request_stats()} 
-                                        | {multiple, [Value :: term()], zynamo_request_stats()} 
-                                        | {error, Reason :: term()}.
+-spec get(atom(), atom(), Key::term(), zynamo_request_options()) -> #zynamo_result{}.
 get(Site, Service, Key, Options) ->
     do_command(Site, Service, Key, #zynamo_command{command=get, key=Key}, Options).
-
 
 
 
@@ -67,7 +63,7 @@ list(Site, Service) ->
     list(Site, Service, [], []).
 
 -spec list(atom(), atom(), list_receiver(), list( zynamo_request_option() | return_value | no_return_version) ) -> 
-    {ok, list()} | {ok, term()} | {ok, {pid(), reference()}}| {error, term()}.
+                                          #zynamo_result{}.
 list(Site, Service, Receiver, Options) ->
     Nodes = case proplists:get_all_values(node, Options) of
                 [] ->
@@ -90,33 +86,21 @@ list(Site, Service, Receiver, Options) ->
 
 
 %% @doc Read a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
--spec put(atom(), atom(), term(), zynamo_data_version(), term()) -> 
-                                          {ok, zynamo_request_stats()} 
-                                        | {maybe, zynamo_request_stats()} 
-                                        | {error, Reason :: term()}.
+-spec put(atom(), atom(), term(), zynamo_version(), term()) -> #zynamo_result{}.
 put(Site, Service, Key, Version, Value) ->
-    put(Site, Service, Key, Version, Value, []).
+    put(Site, Service, Key, Version, Value, [{result,merge}]).
 
--spec put(atom(), atom(), term(), zynamo_data_version(), term(), zynamo_request_options()) -> 
-                                          {ok, zynamo_request_stats()} 
-                                        | {maybe, zynamo_request_stats()} 
-                                        | {error, Reason :: term()}.
+-spec put(atom(), atom(), term(), zynamo_version(), term(), zynamo_request_options()) -> #zynamo_result{}.
 put(Site, Service, Key, Version, Value, Options) ->
     do_command(Site, Service, Key, #zynamo_command{command=put, key=Key, version=Version, value=Value}, Options).
 
 
 %% @doc Delete a value from the zynamo ring. Returns 'maybe' when the quorum has not been reached.
--spec delete(atom(), atom(), term(), zynamo_data_version()) -> 
-                                          {ok, zynamo_request_stats()} 
-                                        | {maybe, zynamo_request_stats()} 
-                                        | {error, Reason :: term()}.
+-spec delete(atom(), atom(), term(), zynamo_version()) -> #zynamo_result{}.
 delete(Site, Service, Key, Version) ->
     delete(Site, Service, Key, Version, []).
 
--spec delete(atom(), atom(), term(), zynamo_data_version(), zynamo_request_options()) -> 
-                                          {ok, zynamo_request_stats()} 
-                                        | {maybe, zynamo_request_stats()} 
-                                        | {error, Reason :: term()}.
+-spec delete(atom(), atom(), term(), zynamo_version(), zynamo_request_options()) -> #zynamo_result{}.
 delete(Site, Service, Key, Version, Options) ->
     do_command(Site, Service, Key, #zynamo_command{command=delete, key=Key, version=Version}, Options).
 
@@ -135,13 +119,12 @@ command(Site, Service, Key, #zynamo_command{} = Command, Options) ->
 
 
 %% @doc Helper function for sending reply back from a service.
+%%      Reply should be a #zynamo_service_result{} record
 reply(Reply, #zynamo_service_command{ref=Ref, from=From}) ->
     case is_pid(From) of
         true -> From ! {ok, node(), Ref, Reply};
         false -> nop
     end.
-    
-
 
 
 %% @doc Send a command to a quorum of servers.  Servers are selected based on the
@@ -163,7 +146,7 @@ do_command(Site, Service, Key, Command, Options) ->
             ServicePidData),
     case collect_preference_nodes(Buckets, Ranges, ServiceNodes) of
         [] ->
-            {error, no_nodes};
+            #zynamo_result{status=no_nodes};
         PreferenceNodes ->
             Ref = erlang:make_ref(),
             Command1 = Command#zynamo_command{ref=Ref, bucket_nr=bucket_nr(Key, Buckets)},
@@ -181,16 +164,16 @@ do_command(Site, Service, Key, Command, Options) ->
 wait_for_result(Pid, CommandRef) ->
     MRef = erlang:monitor(process, Pid),
     receive 
-        {result, CommandRef, Result, _Stats} -> 
+        {result, CommandRef, Result} -> 
             erlang:demonitor(MRef, [flush]),
             Result;
         {'DOWN', MRef, process, _Pid, Reason} ->
             % Result might be a bit slower than the down message from a successful FSM
             receive
-                {result, CommandRef, Result, _Stats} -> 
+                {result, CommandRef, Result} -> 
                     Result
-            after 0 ->  
-                {error, Reason}
+            after 0 ->
+                #zynamo_result{status={error, Reason}}
             end
     end.
 
@@ -292,8 +275,8 @@ unique_list([Member|Rest], Acc) ->
 
 do_list(Site, Service, Nodes, Receiver, Options) ->
     ListArgs = #zynamo_list_args{
-        value=proplists:get_value(return_value, Options, false), 
-        version=not proplists:get_value(no_return_version, Options, false),
+        return_value=proplists:get_value(return_value, Options, false), 
+        return_version=not proplists:get_value(no_return_version, Options, false),
         offset=0,
         limit=1000
     },
@@ -307,11 +290,10 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
             undefined ->
                 list_finalize(Receiver);
             Min ->
-                Value = resolve_version([ {K,Vers,Val} || {{K,Vers,Val},_} <- States, K =:= Min ]),
+                Value = resolve_version([ ZyResult || {#zynamo_service_result{key=K} = ZyResult,_} <- States, K =:= Min ]),
 
                 %% @TODO combine the do_command calls into a single parallel do_command call.
                 States1 = [ step_lowest(State, Min, ServiceArgs) || State <- States ],
-
                 case lists:any(fun({'$end_of_table',_}) -> false;
                                   ({{error, _}, _}) -> false;
                                   (_) -> true
@@ -329,14 +311,14 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
         find_lowest(T, Min);
     find_lowest([{{error, _}, _}|T], Min) ->
         find_lowest(T, Min);
-    find_lowest([{{K,_Vers,_Val}, _}|T], undefined) ->
+    find_lowest([{#zynamo_service_result{status=ok, key=K}, _}|T], undefined) ->
         find_lowest(T, K);
-    find_lowest([{{K,_Vers,_Val}, _}|T], Min) when K < Min ->
+    find_lowest([{#zynamo_service_result{status=ok, key=K}, _}|T], Min) when K < Min ->
         find_lowest(T, K);
     find_lowest([_|T], Min) ->
         find_lowest(T, Min).
 
-    step_lowest({{K,_,_},S}, K, ServiceArgs) -> list_next(S, ServiceArgs);
+    step_lowest({#zynamo_service_result{key=K},S}, K, ServiceArgs) -> list_next(S, ServiceArgs);
     step_lowest(S, _K, _ServiceArgs) -> S.
 
     %% @doc A function that requests data from the given node. Sending them one by one to the caller.
@@ -356,24 +338,23 @@ do_list(Site, Service, Nodes, Receiver, Options) ->
             no_handoff
         ],
         case do_command(Site, Service, undefined, Command, Options) of
-            {error, Reason} -> 
-                {{error, Reason}, {Node, {error, Reason}, Offset}};
-            {ok, _, [{ok, '$end_of_table'}]} ->
-                list_next({Node, '$end_of_table', Offset}, ServiceArgs);
-            {ok, _, [{ok, List}]} ->
-                list_next({Node, List, Offset}, ServiceArgs);
-            {ok, false, []} ->
+            #zynamo_result{is_quorum=false} ->
                 % Could not reach the node, assume end of table
-                Reason = no_answer,
-                {{error, Reason}, {Node, {error, Reason}, Offset}}
+                {{error, no_answer}, {Node, {error, no_answer}, Offset}};
+            #zynamo_result{status=NotOk} when NotOk =/= ok ->
+                {{error, NotOk}, {Node, {error, NotOk}, Offset}};
+            #zynamo_result{value=[#zynamo_service_result{value='$end_of_table'}]} ->
+                list_next({Node, '$end_of_table', Offset}, ServiceArgs);
+            #zynamo_result{value=[#zynamo_service_result{value=List}]} ->
+                list_next({Node, List, Offset}, ServiceArgs)
         end;
-    list_next({Node, [KV|Rest], Offset}, _ServiceArgs) ->
-        {KV, {Node, Rest, Offset+1}}.
+    list_next({Node, [ServiceResult|Rest], Offset}, _ServiceArgs) ->
+        {ServiceResult, {Node, Rest, Offset+1}}.
 
     % Use zynamo_version to determine which value is the most recent.
     % Doesn't return multiple versions, uses a heuristic when multiple versions are found.
     resolve_version(Vs) ->
-        zynamo_version:newest_tuple(2, Vs).
+        zynamo_version:newest(Vs).
 
     list_receiver(V, Acc) when is_list(Acc) ->
         [V|Acc];

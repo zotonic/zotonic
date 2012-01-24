@@ -199,8 +199,18 @@ ensure_config() ->
                     {error, io_lib:format("failed to parse: ~s: ~s", [File, file:format_error(Reason)])}
             end;
         false -> 
+            BaseConfig = config_file_base(),
             {ok, Password} = default(password),
-            write_config([{password, Password}]),
+            Default = [{password, Password}],
+            case filelib:is_regular(BaseConfig) of
+                true ->
+                    case file:consult(BaseConfig) of
+                        {ok, Consult} -> write_config(hd(Consult));
+                        {error, _Reason} -> write_config(Default)
+                    end;
+                false ->
+                    write_config(Default)
+            end,
             ensure_config()
     end.
 
@@ -232,6 +242,10 @@ write_config(Config) ->
 
 config_file() ->
     filename:join([z_utils:lib_dir(priv), "config." ++ atom_to_list(node())]).
+
+config_file_base() ->
+    filename:join([z_utils:lib_dir(priv), "config"]).
+    
 
 
 handle_get(Prop, State) ->

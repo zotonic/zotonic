@@ -42,10 +42,12 @@
     
     zynamo_delete/3,
     zynamo_get/2,
-    zynamo_put/4
+    zynamo_put/4,
+    zynamo_list/2
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("deps/zynamo/include/zynamo.hrl").
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -155,11 +157,13 @@ set_value(Module, Key, Value, Context) ->
 -spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok | {error, term()}.
 set_prop(Module, Key, Prop, PropValue, Context) ->
     case zynamo_request:get(Context#context.host, config, {Module, Key}, [{result, merge}]) of
-        {ok, _IsQuorum, Missing, _Version} when Missing =:= not_found; Missing =:= gone ->
+        #zynamo_result{status=ok, is_found=IsFound, is_gone=IsGone} when not IsFound; IsGone ->
             set_prop1(Module, Key, Prop, PropValue, [{Prop, PropValue}], Context);
-        {ok, _IsQuorum, _Version, CurrProps} ->
+        #zynamo_result{status=ok, value=CurrProps} ->
             NewProps = z_utils:prop_replace(Prop, PropValue, CurrProps),
             set_prop1(Module, Key, Prop, PropValue, NewProps, Context);
+        #zynamo_result{status=Reason} ->
+            {error, Reason};
         {error, _} = Error ->
             Error
     end.
@@ -171,12 +175,14 @@ set_prop1(Module, Key, Prop, PropValue, Props, Context) ->
                             Props,
                             [{n,all},{result,merge}])
     of
-        {ok, _IsQuorum, _Version} ->
+        #zynamo_result{status=ok} ->
             case Prop of
                 value -> z_notifier:notify(#m_config_update_prop{module=Module, key=Key, value=PropValue}, Context);
                 _ -> z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context)
             end,
             ok;
+        #zynamo_result{status=Reason} ->
+            {error, Reason};
         {error, _} = Error ->
             Error
     end.
@@ -190,7 +196,8 @@ delete(Module, Key, Context) ->
                                {Module,Key}, zynamo_version:timestamp(),
                                [{n,all},{result,merge}]) 
     of
-        {ok, _IsQuorum, _Version} -> ok;
+        #zynamo_result{status=ok} -> ok;
+        #zynamo_result{status=Reason} -> {error, Reason};
         {error, _Reason} = Error -> Error
     end.
 
@@ -208,7 +215,7 @@ exists(Module, Key, Context) ->
 %%====================================================================
 
 
-zynamo_delete(Host, {Module, Key}, Version) ->
+zynamo_delete(Host, {Module, Key} = MK, Version) ->
     Context = z_context:new(Host),
     Result = z_db:transaction(
             fun(Ctx) ->
@@ -228,19 +235,37 @@ zynamo_delete(Host, {Module, Key}, Version) ->
                                     Ctx)
                         of
                             1 ->
-                                {ok, Version};
+                                #zynamo_service_result{
+                                    key=MK,
+                                    is_gone=true,
+                                    version=Version
+                                };
                             0 ->
                                 % Always register as gone, in case another node has an old value
                                 1 = z_db:q("insert into config (module, key, version, props, value, is_gone, modified)
                                             values ($1, $2, $3, $4, $5, true, now())",
                                            [Module, Key, Version, [], <<>>], 
                                            Ctx),
-                                {ok, Version}
+                                #zynamo_service_result{
+                                    key=MK,
+                                    is_gone=true,
+                                    version=Version
+                                }
                         end;
                     false ->
                         case zynamo_version:is_equal(Version, CurrVersion) of
-                            true -> {ok, CurrVersion};
-                            false -> {error, {conflict, CurrVersion}}
+                            true ->
+                                #zynamo_service_result{
+                                    key=MK,
+                                    is_gone=true,
+                                    version=CurrVersion
+                                };
+                            false ->
+                                #zynamo_service_result{
+                                    status=conflict,
+                                    key=MK,
+                                    version=CurrVersion
+                                }
                         end
                 end
             end,
@@ -255,20 +280,101 @@ zynamo_delete(Host, {Module, Key}, Version) ->
     Result.
 
 
-zynamo_get(Host, {Module, Key}) ->
+zynamo_get(Host, {Module, Key}=MK) ->
     Context = z_context:new(Host),
     case z_db:assoc_props_row("select * from config where module = $1 and key = $2", [Module, Key], Context) of
         undefined -> 
-            {ok, not_found, undefined};
+            #zynamo_service_result{
+                is_found=false, 
+                key=MK
+            };
         Props ->
-            Version = proplists:get_value(version, Props),
-            case proplists:get_value(is_gone, Props) of
-                true -> {ok, gone, Version};
-                false -> {ok, Version, Props}
-            end
+            #zynamo_service_result{
+                is_found=true,
+                is_gone=proplists:get_value(is_gone, Props),
+                key=MK,
+                version=proplists:get_value(version, Props),
+                value=Props
+            }
     end.
 
-zynamo_put(Host, {Module, Key}, Version, Props) ->
+
+% Optimized versions for data sync
+zynamo_list(Host, #zynamo_list_args{offset={key, undefined}, return_version=true, return_value=false, return_gone=true, limit=Limit}) ->
+    sync_list_rows(z_db:q("select module, key, version, is_gone
+                           from config 
+                           order by module, key 
+                           limit $1", [Limit], z_context:new(Host)));
+zynamo_list(Host, #zynamo_list_args{offset={key, {Module,Key}}, return_version=true, return_value=false, return_gone=true, limit=Limit}) ->
+    sync_list_rows(z_db:q("select module, key, version, is_gone
+                           from config 
+                           where (module = $2 and key > $3)
+                              or module > $2
+                           order by module, key
+                           limit $1", [Limit, Module, Key], z_context:new(Host)));
+% Generic list commands
+zynamo_list(Host, #zynamo_list_args{offset={key, undefined}, return_gone=true, limit=Limit} = ListArgs) ->
+    Sql = "select * from config order by module, key limit $1",
+    SqlArgs = [Limit],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs);
+zynamo_list(Host, #zynamo_list_args{offset={key, undefined}, return_gone=false, limit=Limit} = ListArgs) ->
+    Sql = "select * from config where not is_gone order by module, key limit $1",
+    SqlArgs = [Limit],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs);
+zynamo_list(Host, #zynamo_list_args{offset={key, {Module,Key}}, return_gone=true, limit=Limit} = ListArgs) ->
+    Sql = "select * from config where (module = $2 and key >= $3) or module > $2 order by module, key limit $1",
+    SqlArgs = [Limit, Module, Key],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs);
+zynamo_list(Host, #zynamo_list_args{offset={key, {Module,Key}}, return_gone=false, limit=Limit} = ListArgs) ->
+    Sql = "select * from config where not is_gone and ((module = $2 and key >= $3) or module > $2) order by module, key limit $1",
+    SqlArgs = [Limit, Module, Key],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs);
+zynamo_list(Host, #zynamo_list_args{offset=Offset, return_gone=true, limit=Limit} = ListArgs) ->
+    Sql = "select * from config order by module, key limit $1 offset $2",
+    SqlArgs = [Limit, Offset],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs);
+zynamo_list(Host, #zynamo_list_args{offset=Offset, return_gone=false, limit=Limit} = ListArgs) ->
+    Sql = "select * from config where not is_gone order by module, key limit $1 offset $2",
+    SqlArgs = [Limit, Offset],
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs).
+
+    sync_list_rows([]) ->
+        #zynamo_service_result{value='$end_of_table'};
+    sync_list_rows(Rs) ->
+        #zynamo_service_result{
+            value=[
+                    #zynamo_service_result{
+                        is_gone=IsGone,
+                        key={z_convert:to_atom(M), z_convert:to_atom(K)},
+                        version=Version
+                    }
+                    || {M, K, Version, IsGone} <- Rs
+            ]}.
+
+    zynamo_list_sql(Host, ListArgs, Sql, SqlArgs) ->
+        #zynamo_list_args{return_value=WithValue, return_version=WithVersion} = ListArgs,
+        Context = z_context:new(Host),
+        case z_db:assoc_props(Sql, SqlArgs, Context) of
+            [] ->
+                #zynamo_service_result{value='$end_of_table'};
+            Rs ->
+                #zynamo_service_result{
+                    value=[
+                        #zynamo_service_result{
+                            is_gone=proplists:get_value(is_gone, R),
+                            key={z_convert:to_atom(proplists:get_value(module, R)), 
+                                 z_convert:to_atom(proplists:get_value(key, R))},
+                            version=case WithVersion of
+                                        true -> proplists:get_value(version, R);
+                                        false -> undefined
+                                    end,
+                            value=case WithValue of true -> R; false -> undefined end
+                        }
+                        || R <- Rs
+                    ]}
+        end.
+
+zynamo_put(Host, {Module, Key} = MK, Version, Props) ->
     Context = z_context:new(Host),
     Cols = z_db:column_names(config, Context),
     OtherProps = z_utils:prop_delete(Cols, Props),
@@ -296,11 +402,23 @@ zynamo_put(Host, {Module, Key}, Version, Props) ->
                                            [Module, Key, OtherProps, PropValue, Version],
                                            Ctx)
                         end,
-                        {ok, Version};
+                        #zynamo_service_result{
+                            key=MK,
+                            version=Version
+                        };
                     false ->
                         case zynamo_version:is_equal(Version, CurrVersion) of
-                            true -> {ok, CurrVersion};
-                            false -> {error, {conflict, CurrVersion}}
+                            true -> 
+                                #zynamo_service_result{
+                                    key=MK,
+                                    version=CurrVersion
+                                };
+                            false ->
+                                #zynamo_service_result{
+                                    status=conflict,
+                                    key=MK,
+                                    version=CurrVersion
+                                }
                         end
                 end
             end,

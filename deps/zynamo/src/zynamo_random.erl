@@ -57,8 +57,6 @@ randomize([]) ->
 randomize([_] = L) -> 
     L;
 randomize(List) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
     D = lists:map(fun(A) ->
                     {random:uniform(), A}
              end, List),

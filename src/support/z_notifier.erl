@@ -232,7 +232,7 @@ foldr(Msg, Acc0, Context) ->
 init(Args) ->
     {host, Host} = proplists:lookup(host, Args),
     Timers = [ timer:send_interval(Time * 1000, {tick, Msg}) || {Time, Msg} <- ?TIMER_INTERVAL ],
-    State = #state{observers=undefined, timers=Timers, context=z_context:new(Host)},
+    State = #state{observers=undefined, timers=Timers, context=z_context:new(Host, en)},
     {ok, State}.
 
 

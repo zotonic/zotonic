@@ -23,6 +23,7 @@
 
 %% interface functions
 -export([
+    pool_name/1,
     has_connection/1,
     transaction/2,
     transaction/3,
@@ -68,6 +69,9 @@
 -include_lib("zotonic.hrl").
 
 
+pool_name(#context{host=Host}) -> pool_name(Host);
+pool_name(Host) -> z_utils:name_for_host("zdb", Host).
+
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
 transaction(Function, Context) ->
@@ -112,8 +116,8 @@ transaction(Function, Options, Context) ->
 transaction1(Function, #context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
-            Host     = Context#context.host,
-            {ok, C}  = pgsql_pool:get_connection(Host),
+            Pool = pool_name(Context),
+            {ok, C}  = pgsql_pool:get_connection(Pool),
             Context1 = Context#context{dbc=C},
             Result = try
                         case pgsql:squery(C, "BEGIN") of
@@ -131,7 +135,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             pgsql:squery(C, "ROLLBACK"),
                             {rollback, {Why, erlang:get_stacktrace()}}
                      end,
-            pgsql_pool:return_connection(Host, C),
+            pgsql_pool:return_connection(Pool, C),
             Result;
         false ->
             {rollback, {no_database_connection, erlang:get_stacktrace()}}
@@ -157,15 +161,15 @@ get(Key, Props) ->
 
 
 %% @doc Check if we have database connection
-has_connection(#context{host=Host}) ->
-    is_pid(erlang:whereis(Host)).
+has_connection(Context) ->
+    is_pid(erlang:whereis(pool_name(Context))).
 
 
 %% @doc Transaction handler safe function for fetching a db connection
 get_connection(#context{dbc=undefined, host=Host} = Context) ->
     case has_connection(Context) of
         true ->
-            {ok, C} = pgsql_pool:get_connection(Host),
+            {ok, C} = pgsql_pool:get_connection(pool_name(Host)),
             C;
         false ->
             none
@@ -175,7 +179,7 @@ get_connection(Context) ->
 
 %% @doc Transaction handler safe function for releasing a db connection
 return_connection(C, #context{dbc=undefined, host=Host}) ->
-    pgsql_pool:return_connection(Host, C);
+    pgsql_pool:return_connection(pool_name(Host), C);
 return_connection(_C, _Context) -> 
     ok.
 
@@ -487,8 +491,9 @@ split_props(Props, Cols) ->
 columns(Table, Context) when is_atom(Table) ->
     columns(atom_to_list(Table), Context);
 columns(Table, Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    Pool = pool_name(Context),
+    {ok, Db} = pgsql_pool:get_database(Pool),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, Pool),
     case z_depcache:get({columns, Db, Schema, Table}, Context) of
         {ok, Cols} -> 
             Cols;
@@ -536,7 +541,8 @@ column_names(Table, Context) ->
 
 %% @doc Flush all cached information about the database.
 flush(Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
+    Pool = pool_name(Context),
+    {ok, Db} = pgsql_pool:get_database(Pool),
     z_depcache:flush({database, Db}, Context).
 
 
@@ -548,11 +554,9 @@ update_sequence(Table, Ids, Context) when is_atom(Table) ->
 update_sequence(Table, Ids, Context) ->
     assert_table_name(Table),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
-    F = fun(C) when C =:= none -> 
-		[];
-	   (C) -> 
-		[ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
-	   end,
+    F = fun(none) -> [];
+           (C) -> [ {ok, _} = pgsql:equery1(C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
+        end,
     with_connection(F, Context).
 
 
@@ -560,8 +564,9 @@ update_sequence(Table, Ids, Context) ->
 %% @doc Check the information schema if a certain table exists in the context database.
 %% @spec table_exists(TableName, Context) -> bool()
 table_exists(Table, Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    Pool = pool_name(Context),
+    {ok, Db} = pgsql_pool:get_database(Pool),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, Pool),
     case q1("   select count(*) 
                 from information_schema.tables 
                 where table_catalog = $1 

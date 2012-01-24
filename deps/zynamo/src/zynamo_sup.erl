@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
+%% @copyright 2010-2012 Marc Worrell
 %% @doc zynamo supervisor
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -56,6 +56,9 @@ init([]) ->
 
         {zynamo_handoff_fsm_sup, {zynamo_handoff_fsm_sup, start_link, []},
             permanent, 2000, supervisor, [zynamo_handoff_fsm_sup]},
+
+        {zynamo_sync_fsm, {zynamo_sync_fsm, start_link, []},
+            permanent, 2000, worker, [zynamo_sync_fsm]},
 
         % Standard zynamo services
         {zynamo_service_kv, {zynamo_service_kv, start_link, []},

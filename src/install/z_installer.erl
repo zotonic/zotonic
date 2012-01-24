@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-17
 %%
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
@@ -37,36 +37,41 @@ start_link(SiteProps) when is_list(SiteProps) ->
     ignore.
 
 install_check(SiteProps) ->
-    % Check if the config table exists, if so then assume that all is ok
-    Name     = proplists:get_value(host, SiteProps),
-    Database = proplists:get_value(dbdatabase, SiteProps),
-    Schema   = proplists:get_value(dbschema, SiteProps, "public"),
-
-    case Database of
-        none ->
+    Host = proplists:get_value(host, SiteProps),
+    files_check(Host),
+    Pool = z_db:pool_name(Host),
+    case whereis(Pool) of
+        undefined ->
             ignore;
-        _ ->
-            z_install:pre_install(Name, SiteProps),
-    
-            case has_table("config", Name, Database, Schema) of
+        _Pid ->
+            z_install:pre_install(Host, SiteProps),
+
+            {ok, Database} = pgsql_pool:get_database_opt(database, Pool),
+            {ok, Schema}   = pgsql_pool:get_database_opt(schema, Pool),
+            case has_table("config", Pool, Database, Schema) of
                 false ->
-                    ?LOG("Installing database ~p@~p:~p ~p", [
-                                proplists:get_value(dbuser, SiteProps),
-                                proplists:get_value(dbhost, SiteProps),
-                                proplists:get_value(dbport, SiteProps),
-                                Database
-                                ]),
-                    z_install:install(Name);
+                    {ok, DbUser} = pgsql_pool:get_database_opt(username, Pool),
+                    {ok, DbHost} = pgsql_pool:get_database_opt(host, Pool),
+                    {ok, DbPort} = pgsql_pool:get_database_opt(port, Pool),
+                    ?LOG("Installing database ~p@~p:~p ~p", [ DbUser, DbHost, DbPort, Database ]),
+                    ok = z_install:install(Host, Pool);
                 true -> 
-                    ok = upgrade(Name, Database, Schema),
-                    sanity_check(Name, Database, Schema)
+                    ok = upgrade(Host, Pool, Database, Schema),
+                    ok = sanity_check(Pool, Database, Schema)
             end
-    end.
+    end,
+    ok.
+
+
+files_check(Host) ->
+    Context = z_context:new(Host, en),
+    filelib:ensure_dir(z_path:media_archive(Context)),
+    filelib:ensure_dir(z_path:media_preview(Context)).
 
 
 %% Check if a table exists by querying the information schema.
-has_table(Table, Name, Database, Schema) ->
-    {ok, C}  = pgsql_pool:get_connection(Name),
+has_table(Table, Pool, Database, Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Pool),
     {ok, HasTable} = pgsql:equery1(C, "
             select count(*) 
             from information_schema.tables 
@@ -74,12 +79,12 @@ has_table(Table, Name, Database, Schema) ->
               and table_name = $3 
               and table_schema = $2
               and table_type = 'BASE TABLE'", [Database, Schema, Table]),
-    pgsql_pool:return_connection(Name, C),
+    pgsql_pool:return_connection(Pool, C),
     HasTable == 1.
 
 %% Check if a column in a table exists by querying the information schema.
-has_column(Table, Column, Name, Database, Schema) ->
-    {ok, C}  = pgsql_pool:get_connection(Name),
+has_column(Table, Column, Pool, Database, Schema) ->
+    {ok, C}  = pgsql_pool:get_connection(Pool),
     {ok, HasColumn} = pgsql:equery1(C, "
             select count(*) 
             from information_schema.columns 
@@ -87,12 +92,12 @@ has_column(Table, Column, Name, Database, Schema) ->
               and table_schema = $2
               and table_name = $3 
               and column_name = $4", [Database, Schema, Table, Column]),
-    pgsql_pool:return_connection(Name, C),
+    pgsql_pool:return_connection(Pool, C),
     HasColumn == 1.
 
 
 %% Upgrade older Zotonic versions.
-upgrade(Name, Database, Schema) ->
+upgrade(Host, Name, Database, Schema) ->
     % Update the SQL model from any older version
     ok = install_acl(Name, Database, Schema),
     ok = install_identity_is_verified(Name, Database, Schema),
@@ -104,7 +109,7 @@ upgrade(Name, Database, Schema) ->
     ok = install_module_schema_version(Name, Database, Schema),
     ok = install_config_version(Name, Database, Schema),
     % Let some models install/update themselves
-    ok = m_handoff:install(z_context:new(Name)).
+    ok = m_handoff:install(z_context:new(Host)).
 
 
 install_acl(Name, Database, Schema) ->

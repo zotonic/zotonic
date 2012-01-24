@@ -32,10 +32,14 @@
     
     hash/1,
 
+    hash_sync_list/1,
+
     unique_id/0,
     unique_id_split/1,
     node_id/0
 ]).
+
+-include_lib("zynamo.hrl").
 
 
 %% @doc Find the primary node responsible for storing a key, using the default hash function.
@@ -65,6 +69,27 @@ nodelist_bucket(BucketNr, Ranges) ->
 hash(Key) ->
     <<Sha:160/integer>> = crypto:sha(term_to_binary(Key)),
     Sha rem zynamo_ring:ring_buckets().
+
+
+%% @doc Hash a list of keys, used for syncing the data of two services
+hash_sync_list('$end_of_table') ->
+    [];
+hash_sync_list([]) ->
+    [];
+hash_sync_list([KV|Rest]) ->
+    hash_sync_list(Rest, 1, [kv(KV)], []).
+    
+    hash_sync_list([], _N, T, Acc) ->
+        {K,_} = hd(T),
+        lists:reverse([{K,crypto:sha(term_to_binary(T))}|Acc]);
+    hash_sync_list([KV|Rest], ?ZYNAMO_SYNC_HASH_STEP, T, Acc) ->
+        {K,_} = hd(T),
+        Acc1 = [{K,crypto:sha(term_to_binary(T))}|Acc],
+        hash_sync_list(Rest, 1, [kv(KV)], Acc1);
+    hash_sync_list([KV|Rest], N, T, Acc) ->
+        hash_sync_list(Rest, N+1, [kv(KV)|T], Acc).
+
+    kv(#zynamo_service_result{key=K, version=V}) -> {K,V}.
 
 
 %% @doc Generate an unique id, based on a number in the node name or hostname.

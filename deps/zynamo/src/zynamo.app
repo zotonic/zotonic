@@ -14,7 +14,9 @@
             zynamo_request_fsm,
             zynamo_request_fsm_sup,
             zynamo_handoff_fsm,
-            zynamo_handoff_fsmsup,
+            zynamo_handoff_fsm_sup,
+            zynamo_handoff_watcher,
+            zynamo_sync_fsm,
             zynamo_service_kv,
             zynamo_service_stats,
  
@@ -30,6 +32,7 @@
             zynamo_random,
             zynamo_request_fsm_sup,
             zynamo_handoff_fsm_sup,
+            zynamo_sync_fsm,
             zynamo_service_kv,
             zynamo_service_stats
         ]},

@@ -28,21 +28,22 @@
 %% interface functions
 -export([
     pre_install/2,
-    install/1
+    install/2
 ]).
 
 -include_lib("zotonic.hrl").
 
 %% @doc Perform pre-installation commands.
 %% @spec pre_install(Host, SiteProps) -> ok
-pre_install(testsandbox, SiteProps) ->
+pre_install(testsandbox, _SiteProps) ->
     %% The test sandbox needs cleanup first:
-    {ok, C} = pgsql_pool:get_connection(testsandbox),
-    Schema = proplists:get_value(dbschema, SiteProps, "public"),
+    Pool = z_db:pool_name(testsandbox),
+    {ok, Schema} = pgsql_pool:get_database_opt(schema, Pool),
+    {ok, C} = pgsql_pool:get_connection(Pool),
 
     %% Drop all tables
-    pgsql:equery(C, "DROP SCHEMA " ++ Schema ++ " CASCADE"),
-    pgsql:equery(C, "CREATE SCHEMA " ++ Schema),
+    pgsql:equery(C, "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"),
+    pgsql:equery(C, "CREATE SCHEMA \"" ++ Schema ++ "\""),
 
     %% Remove all files
     FilesDir = z_utils:os_filename(filename:join([z_utils:lib_dir(priv), "sites", testsandbox, "files", "preview"])),
@@ -56,24 +57,26 @@ pre_install(_, _) ->
 
 %% @doc Install the database for the given host.
 %% @spec install(Host) -> ok
-install(Host) ->
-    {ok, C} = pgsql_pool:get_connection(Host),
+install(Host, Pool) ->
+    {ok, C} = pgsql_pool:get_connection(Pool),
     ok = pgsql:with_transaction(C, fun (C2) ->
                                            install_sql_list(C, model_pgsql()),
                                            z_install_data:install(Host, C2),
                                            ok 
                                    end
                                ),
-    pgsql_pool:return_connection(Host, C),
+    pgsql_pool:return_connection(Pool, C),
+
+    % Install some base models
+    Context = z_context:new(Host),
+    ok = m_handoff:install(Context),
     
+    % Install demo data (if needed)
     InstallData = fun() ->
                           timer:sleep(200), %% give other processes some time to start
-                          
                           Context = z_context:new(Host),
-                          
                           %% install the default data for the skeleton the site is based on
                           z_install_defaultdata:install(m_site:get(skeleton, Context), Context),
-                          
                           %% renumber the category tree.
                           m_category:renumber(Context)
                   end,
