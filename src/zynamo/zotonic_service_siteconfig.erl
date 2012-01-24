@@ -82,14 +82,16 @@ handle_cast(#zynamo_service_command{
                 get ->
                     do_get(Command, State);
                 list ->
-                    #zynamo_service_result{
-                        value=m_config:zynamo_list(State#state.host, Command#zynamo_command.value)
-                    };
+                    m_config:zynamo_list(State#state.host, Command#zynamo_command.value);
                 list_hash ->
-                    List = m_config:zynamo_list(State#state.host, Command#zynamo_command.value),
-                    #zynamo_service_result{
-                        value=zynamo_hash:hash_sync_list(List)
-                    };
+                    case m_config:zynamo_list(State#state.host, Command#zynamo_command.value) of
+                        #zynamo_service_result{status=ok, value=List} ->
+                            #zynamo_service_result{
+                                value=zynamo_hash:hash_sync_list(List)
+                            };
+                        Other ->
+                            Other
+                    end;
                 Upd when Upd =:= put; Upd =:= delete ->
                     do_update(Command, Handoff, State);
                 _Other ->

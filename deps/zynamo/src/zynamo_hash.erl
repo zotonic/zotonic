@@ -74,6 +74,8 @@ hash(Key) ->
 %% @doc Hash a list of keys, used for syncing the data of two services
 hash_sync_list('$end_of_table') ->
     [];
+hash_sync_list([#zynamo_service_result{value='$end_of_table'}]) ->
+    [];
 hash_sync_list([]) ->
     [];
 hash_sync_list([KV|Rest]) ->

@@ -52,7 +52,7 @@ m_to_list(_, _Context) ->
 m_value(_, _Context) ->
     undefined.
 
--spec handle_handoff(list( node() ), atom(), atom(), atom(), any(), zynamo_data_version(), #zynamo_command{}) -> ok.
+-spec handle_handoff(list( node() ), atom(), atom(), atom(), any(), zynamo_version(), #zynamo_command{}) -> ok.
 handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
     Context = z_context:new(Site),
     OtherNodes = Nodes -- [node()],
@@ -63,7 +63,7 @@ handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
                 ),
     case ShouldUpdate of
         true ->
-            z_db:transaction(
+            ok = z_db:transaction(
                 fun(Ctx) ->
                     % Register all handoffs to other nodes, iff this handoff is newer than an existing one.
                     [
@@ -77,12 +77,12 @@ handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
                                         _Other ->
                                             z_db:q("delete from handoff_command where id = $1", [Id], Ctx)
                                     end,
-                                    handoff_insert(Nodes, Site, Service, Model, Key, Version, Cmd, Ctx);
+                                    handoff_insert(Node, Site, Service, Model, Key, Version, Cmd, Ctx);
                                 false ->
                                     skip
                             end
                         end
-                        || Node <- Nodes, Node /= node()
+                        || Node <- OtherNodes
                     ],
                     % Check if the local node was a destination, if so insert local
                     case lists:member(node(), Nodes) of
@@ -111,7 +111,7 @@ handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
                          Context)
         of
             undefined -> {undefined, undefined};
-            R -> R
+            {Id,Version} -> {Id, to_version(Version)}
         end;
      handoff_version(Node, Site, Service, Model, Key, Context) ->
          case z_db:q_row("select id, version 
@@ -121,11 +121,11 @@ handle_handoff(Nodes, Site, Service, Model, Key, Version, Cmd) ->
                             and service = $3
                             and model = $4
                             and key_bin = $5",
-                          [Node, Site, Service, Model, z_convert:to_binary(Key)],
+                          [Node, Site, Service, Model, to_binary(Key)],
                           Context)
         of
             undefined -> {undefined, undefined};
-            R -> R
+            {Id, Version} -> {Id, to_version(Version)}
         end.
 
     handoff_insert(Node, Site, Service, Model, Key, Version, Cmd, Context) ->
@@ -154,15 +154,15 @@ handoff_check(Node, Host, Service, Model, GetFun) ->
            {ok, Command};
        {ok, HandoffId, Key, Version, put} ->
            case GetFun(Host, Key) of
-               {ok, {gone, _Version}, _} ->
+               #zynamo_service_result{status=ok, is_gone=true} ->
                    m_handoff:delete_handoff(Host, HandoffId),
                    handoff_check(Node, Host, Service, Model, GetFun);
 
-               {ok, not_found, _} ->
+               #zynamo_service_result{status=ok, is_found=false} ->
                    m_handoff:delete_handoff(Host, HandoffId),
                    handoff_check(Node, Host, Service, Model, GetFun);
 
-               {ok, StoredVersion, Data} ->
+               #zynamo_service_result{status=ok, version=StoredVersion, value=Data} ->
                    case zynamo_version:is_equal(StoredVersion, Version) of
                        true ->
                            Command = #zynamo_command{
@@ -178,7 +178,7 @@ handoff_check(Node, Host, Service, Model, GetFun) ->
                            handoff_check(Node, Host, Service, Model, GetFun)
                    end;
 
-               {error, _} ->
+               #zynamo_service_result{status=_ErrorReason} ->
                    m_handoff:delete_handoff(Host, HandoffId),
                    handoff_check(Node, Host, Service, Model, GetFun)
            end
@@ -201,10 +201,14 @@ next_handoff(Node, Site, Service, Model) ->
         undefined ->
             {ok, done};
         {Id, Key, undefined, Version, Command} ->
-            {ok, Id, Key, Version, Command};
+            {ok, Id, Key, to_version(Version), z_convert:to_atom(Command)};
         {Id, undefined, Key, Version, Command} ->
-            {ok, Id, from_binary(Key), Version, Command}
+            {ok, Id, from_binary(Key), to_version(Version), z_convert:to_atom(Command)}
     end.
+    
+    % Big ints become a binary when inserting into a bytea, convert it back.
+    to_version(B) when is_binary(B) -> z_convert:to_integer(B);
+    to_version(T) -> T.
 
 
 delete_handoff(Site, HandoffRef) ->
