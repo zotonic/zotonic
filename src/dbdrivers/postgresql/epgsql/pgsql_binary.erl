@@ -36,7 +36,7 @@ encode(varchar, B, _UseIntDT) when is_binary(B) -> <<(byte_size(B)):?int32, B/bi
 encode(bytea, T, UseIntDT) when is_tuple(T)   -> 
     B = term_to_binary(T),
     encode(bytea, <<?TERM_MAGIC_NUMBER, B/binary>>, UseIntDT);
-encode(bytea, [T|_Rest]=L, UseIntDT) when is_tuple(T)   -> 
+encode(bytea, [T|_Rest]=L, UseIntDT) when is_tuple(T); is_atom(T)   -> 
     B = term_to_binary(L),
     encode(bytea, <<?TERM_MAGIC_NUMBER, B/binary>>, UseIntDT);
 encode(Type, A, UseIntDT) when is_atom(A)      -> encode(Type, atom_to_list(A), UseIntDT);
