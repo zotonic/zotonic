@@ -42,7 +42,7 @@ render(Params, _Vars, Context) ->
     {ok, z_template:render(Template, Props, Context)}.
 
 
-event({submit, {recipient_add, Props}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={recipient_add, Props}}, Context) ->
     Id = proplists:get_value(id, Props),
     InAdmin = z_convert:to_bool(proplists:get_value(in_admin, Props)),
 	case z_acl:rsc_visible(Id, Context) of
@@ -87,7 +87,7 @@ event({submit, {recipient_add, Props}, _TriggerId, _TargetId}, Context) ->
 			end
 	end;
 
-event({submit, {recipient_edit, Props}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={recipient_edit, Props}}, Context) ->
     Id = proplists:get_value(id, Props),
     RcptId = proplists:get_value(recipient_id, Props),
     InAdmin = z_convert:to_bool(proplists:get_value(in_admin, Props)),

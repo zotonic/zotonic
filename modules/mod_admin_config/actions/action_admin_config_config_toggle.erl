@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Change a config key.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {config_toggle, Module, Key}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={config_toggle, Module, Key}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             m_config:set_value(Module, Key, z_context:get_q("triggervalue", Context), Context),

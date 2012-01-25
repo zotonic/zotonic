@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#
+# Copyright 2011 Arjan Scherpenisse
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# usage zotonic-disablesite [site_name or directory]
+#
+source $ZOTONIC/src/scripts/helpers/zotonic_enabledisable
+
+SITE=$1
+
+function disablesite {
+    $ZOTONIC/bin/zotonic status>/dev/null
+    if [ "$?" -eq 0 ]; then
+        # update & start site
+        NODE=$SNAME@$HOSTNAME
+        $ERL -noshell -pa $PA -name ${SNAME}_enable@$HOSTNAME -s z_sites_manager stop $NODE $1 -s init stop
+    fi
+}
+
+
+if [ ! $SITE ]; then
+    echo USAGE: $0 [site_name or directory] [source_server] 1>&2
+    exit 1;
+fi
+
+cd $ZOTONIC
+if [ "${SITE:0:1}" = "/" -o -d $SITE ]; then
+
+    disablesitedir $SITE
+    disablesite `dirname $SITE`
+    echo "ok."
+    
+else
+    if [ -e "priv/sites-disabled/$SITE" ]; then
+        SITEDIR=$(cd priv/sites-disabled/$SITE; pwd -P);
+        disablesitedir $SITEDIR
+    else
+        # check if in sites folder
+        if [ -e "priv/sites/$SITE" ]; then
+            mv "priv/sites/$SITE" "priv/sites-disabled/"
+            disablesite $SITE
+            echo "ok"
+        fi
+    fi
+fi

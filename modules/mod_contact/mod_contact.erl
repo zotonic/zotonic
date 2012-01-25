@@ -35,7 +35,7 @@
 
 
 %% @doc Handle the contact form submit.
-event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
+event(#submit{message={contact, Args}, form=FormId}, Context) ->
     Template = proplists:get_value(email_template, Args, "email_contact.tpl"),
     Email = proplists:get_value(to, Args, m_config:get_value(?MODULE, email, Context)),
     To = case z_utils:is_empty(Email) of
@@ -51,7 +51,7 @@ event({submit, {contact, Args}, TriggerId, _TargetId}, Context) ->
             {message, z_context:get_q("message", Context)},
             {fields, z_context:get_q_all_noz(Context)}],
     z_email:send_render(To, Template, Vars, Context),
-    z_render:wire([ {slide_up, [{target, TriggerId}]},
+    z_render:wire([ {slide_up, [{target, FormId}]},
                     {slide_down, [{target,"contact-form-sent"}]}], 
                   Context).
 

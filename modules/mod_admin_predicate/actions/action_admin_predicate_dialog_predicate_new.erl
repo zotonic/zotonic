@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {predicate_new_dialog, Title, Redirect}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={predicate_new_dialog, Title, Redirect}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {redirect, Redirect },
@@ -47,7 +47,7 @@ event({postback, {predicate_new_dialog, Title, Redirect}, _TriggerId, _TargetId}
     z_render:dialog("Make a new predicate", "_action_dialog_predicate_new.tpl", Vars, Context);
 
 
-event({submit, predicate_new, _TriggerId, _TargetId}, Context) ->
+event(#submit{message=predicate_new}, Context) ->
     Title    = z_context:get_q("new_predicate_title", Context),
     Redirect = z_context:get_q("redirect", Context),
     {ok, Id} = m_predicate:insert(Title, Context),

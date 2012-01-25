@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the predicate.
 %% @todo Check if the predicate is in use, if so show text that the predicate is in use and can't be deleted
 %% @spec event(Event, Context1) -> Context2
-event({postback, {delete_predicate_dialog, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={delete_predicate_dialog, Id, OnSuccess}}, Context) ->
     case z_acl:is_allowed(insert, predicate, Context) of
         true ->
             Vars = [

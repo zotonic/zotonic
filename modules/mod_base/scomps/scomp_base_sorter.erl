@@ -102,7 +102,7 @@ render(Params, _Vars, Context) ->
 
 
 %% @doc Handle the drop of a sortable in a sorter
-event({postback, {SortTag,SortDelegate}, TriggerId, _TargetId}, Context) ->
+event(#postback{message={SortTag,SortDelegate}, trigger=TriggerId}, Context) ->
 	SortItems = z_context:get_q("sort_items", Context),
 
     UnpickleF = fun(X) ->
@@ -114,7 +114,7 @@ event({postback, {SortTag,SortDelegate}, TriggerId, _TargetId}, Context) ->
     Drop   = #dragdrop{tag=SortTag, delegate=SortDelegate, id=TriggerId},
 
 	try
-	    SortDelegate:event({sort, Sorted, Drop}, Context)
+	    SortDelegate:event(#sort{items=Sorted, drop=Drop}, Context)
     catch
         _M:E ->
             Error = io_lib:format("Error in routing sort to \"~s:event/2\"; error: \"~p\"", [SortDelegate,E]),

@@ -56,13 +56,15 @@ previously_existed(ReqData, Context) ->
 
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Location = z_context:get_q("p", Context1, "/"),
-    ?WM_REPLY({true, Location}, Context1).
+    Context2 = z_context:ensure_qs(Context1),
+    Location = z_context:get_q("p", Context2, "/"),
+    ?WM_REPLY({true, Location}, Context2).
 
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context1),
-    Rendered = z_template:render("logoff.tpl", z_context:get_all(Context2), Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
+    Context2 = z_context:ensure_qs(Context1),
+    Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
+    Rendered = z_template:render("logoff.tpl", z_context:get_all(Context3), Context3),
+    {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
     

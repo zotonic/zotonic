@@ -24,6 +24,6 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(logoff, undefined, TriggerId, TargetId, ?MODULE, Context),
 	{[PostbackMsgJS], Context}.
 
-event({postback, logoff, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=logoff}, Context) ->
     Context1 = z_auth:logoff(Context),
     z_render:wire({reload, []}, Context1).

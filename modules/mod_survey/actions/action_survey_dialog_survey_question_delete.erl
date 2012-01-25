@@ -37,7 +37,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the resource
 %% @spec event(Event, Context1) -> Context2
-event({postback, {survey_delete_question_dialog, Id, QuestionId}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={survey_delete_question_dialog, Id, QuestionId}}, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             Vars = [
@@ -50,7 +50,7 @@ event({postback, {survey_delete_question_dialog, Id, QuestionId}, _TriggerId, _T
             z_render:growl_error("You are not allowed to edit this page.", Context)
     end;
 
-event({postback, {survey_delete_question, Props}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={survey_delete_question, Props}}, Context) ->
     Id = proplists:get_value(id, Props),
     QuestionId = proplists:get_value(question_id, Props),
     mod_survey:delete_question(Id, QuestionId, Context).

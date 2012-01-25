@@ -247,6 +247,7 @@ get_extensions() ->
      end
      || F <- Files].
 
+
 %% @doc Returns the short node name as list. This will be put in the
 %% server header. We use a short node name as not to give away our
 %% hostname.

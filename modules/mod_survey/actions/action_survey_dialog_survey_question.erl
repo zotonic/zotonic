@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Fill the dialog with the duplicate page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {dialog_survey_question, Id, QuestionId}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_survey_question, Id, QuestionId}}, Context) ->
     Q = get_question(Id, QuestionId, Context),
     Vars = [
         {id, Id},
@@ -47,7 +47,7 @@ event({postback, {dialog_survey_question, Id, QuestionId}, _TriggerId, _TargetId
     ] ++ question_props(Q),
     z_render:dialog("Edit survey question.", "_action_dialog_survey_question.tpl", Vars, Context);
 
-event({submit, {survey_question_save, ActionProps}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={survey_question_save, ActionProps}}, Context) ->
     Id = proplists:get_value(id, ActionProps),
     QuestionId = proplists:get_value(question_id, ActionProps),
     Name = z_string:to_slug(z_string:trim(z_context:get_q("name", Context, ""))),

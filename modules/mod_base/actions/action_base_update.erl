@@ -89,6 +89,6 @@ render_postback(Method, TriggerId, TargetId, Html, Args, Context) ->
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback({render, Method, Html, Args}, undefined, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
-event({postback, {render, Method, Html, Args}, _TriggerId, TargetId}, Context) ->
+event(#postback{message={render, Method, Html, Args}, target=TargetId}, Context) ->
     {[], Context1} = render_inline(Method, TargetId, Html, Args, Context),
     Context1.

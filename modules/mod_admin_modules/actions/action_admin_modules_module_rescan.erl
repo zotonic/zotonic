@@ -37,7 +37,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Signal the module indexer to rescan all modules for actions, templates etc.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {module_rescan, Actions}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={module_rescan, Actions}}, Context) ->
     z_notifier:notify(module_ready, Context),
     Context1 = z_render:growl("Module rescan is in progress.", Context),
     z_render:wire(Actions, Context1).

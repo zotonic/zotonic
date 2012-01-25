@@ -58,6 +58,7 @@ init(Context) ->
                     m_config:set_prop(i18n, language_list, list, [
                             {ar, [ {language, <<"العربية">>}, {is_enabled, false}]},
                             {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                            {ee, [ {language, <<"Eesti">>}, {is_enabled, true}]},
                             {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
@@ -170,7 +171,7 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
         
 
 %% @doc Set the current session (and user) language, reload the user agent's page.
-event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={set_language, Args}}, Context) ->
     Code = case proplists:get_value(code, Args) of
                 undefined -> z_context:get_q("triggervalue", Context);
                 ArgCode -> ArgCode
@@ -190,7 +191,7 @@ event({postback, {set_language, Args}, _TriggerId, _TargetId}, Context) ->
     z_render:wire({reload, [{z_language,z_context:language(Context1)}]}, Context1);
 
 %% @doc Set the default language.
-event({postback, {language_default, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={language_default, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),
@@ -201,7 +202,7 @@ event({postback, {language_default, Args}, _TriggerId, _TargetId}, Context) ->
     end;
 
 %% @doc Start rescanning all templates for translation tags.
-event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=translation_generate}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> generate(Context) end),
@@ -209,7 +210,7 @@ event({postback, translation_generate, _TriggerId, _TargetId}, Context) ->
         false ->
             z_render:growl_error("Sorry, you don't have permission to scan for translations.", Context)
     end;
-event({postback, translation_reload, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=translation_reload}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> z_trans_server:load_translations(Context) end),
@@ -218,7 +219,7 @@ event({postback, translation_reload, _TriggerId, _TargetId}, Context) ->
             z_render:growl_error("Sorry, you don't have permission to reload translations.", Context)
     end;
 
-event({submit, {language_edit, Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={language_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
@@ -230,7 +231,7 @@ event({submit, {language_edit, Args}, _TriggerId, _TargetId}, Context) ->
             z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
     end;
 
-event({postback, {language_delete, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={language_delete, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),
@@ -241,7 +242,7 @@ event({postback, {language_delete, Args}, _TriggerId, _TargetId}, Context) ->
             z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
     end;
 
-event({postback, {language_enable, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={language_enable, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),

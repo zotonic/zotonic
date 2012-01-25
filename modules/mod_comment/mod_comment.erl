@@ -38,7 +38,7 @@
 
 
 %% @doc Handle the submit event of a new comment
-event({submit, {newcomment, Args}, TriggerId, _TargetId}, Context) ->
+event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_auth:is_auth(Context) of
         false ->
@@ -63,8 +63,8 @@ event({submit, {newcomment, Args}, TriggerId, _TargetId}, Context) ->
             Html = z_template:render(CommentTemplate, Props, Context),
             Context1 = z_render:insert_bottom(CommentsListElt, Html, Context),
             Context2 = z_render:wire([
-                            {set_value, [{selector, "#"++TriggerId++" textarea[name=\"message\"]"}, {value, ""}]},
-                            {set_value, [{selector, "#"++TriggerId++" input[name=\"message\"]"}, {value, ""}]},
+                            {set_value, [{selector, "#"++FormId++" textarea[name=\"message\"]"}, {value, ""}]},
+                            {set_value, [{selector, "#"++FormId++" input[name=\"message\"]"}, {value, ""}]},
                             {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
                         ], Context1),
             case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of

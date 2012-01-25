@@ -54,7 +54,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Show more results.
 %% @spec event(Event, Context1) -> Context2
 %% @todo Handle the "MorePageLen" argument correctly.
-event({postback, {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, TriggerId, TargetId}, Context) ->
+event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
     SearchProps1 = [{page, Page}|SearchProps],
     R = m_search:search({SearchName, SearchProps1}, Context),
     Result = R#m_search_result.result,

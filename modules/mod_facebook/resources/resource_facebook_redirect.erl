@@ -114,7 +114,11 @@ fetch_user_data(AccessToken) ->
 
 
 %% @doc Check if the user exists, if not then hand over control to the auth_signup resource.
-logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
+logon_fb_user(FacebookProps, LocationAfterSignup0, Context) ->
+    LocationAfterSignup = case z_utils:is_empty(LocationAfterSignup0) of
+                              true -> undefined;
+                              false -> LocationAfterSignup0
+                          end,
     Props = [
         {title, unicode:characters_to_binary(proplists:get_value(name, FacebookProps))},
         {name_first, unicode:characters_to_binary(proplists:get_value(first_name, FacebookProps))},
@@ -142,24 +146,24 @@ logon_fb_user(FacebookProps, LocationAfterSignup, Context) ->
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
 			{Location,Context1} = case z_auth:logon(UserId, Context) of
-				{ok, ContextUser} ->
-		            update_user(UserId, Props, ContextUser),
-		            case has_location(LocationAfterSignup) of
-		            	false -> {m_rsc:p(UserId, page_url, ContextUser), ContextUser};
-		                true -> {LocationAfterSignup, ContextUser}
-		        	end;
-				{error, _Reason} ->
-					{z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
+                                                  {ok, ContextUser} ->
+                                                      update_user(UserId, Props, ContextUser),
+                                                      case z_notifier:first(#logon_ready_page{request_page=LocationAfterSignup}, ContextUser) of
+                                                          undefined ->
+                                                              case LocationAfterSignup of
+                                                                  undefined -> 
+                                                                      {m_rsc:p(UserId, page_url, ContextUser), ContextUser};
+                                                                  _ ->
+                                                                      {LocationAfterSignup, ContextUser}
+                                                              end;
+                                                          Url -> {Url, ContextUser}
+                                                      end;
+                                                  {error, _Reason} ->
+                                                      {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
 			end,
             LocationAbs = lists:flatten(z_context:abs_url(Location, Context1)),
             use_see_other(LocationAbs, Context1)
     end.
-
-    has_location(undefined) -> false;
-    has_location([]) -> false;
-    has_location(<<>>) -> false;
-    has_location("/") -> false;
-    has_location(_) -> true.
 
     %% HACK ALERT!
     %% We use a 303 See Other here as there is a serious bug in Safari 4.0.5

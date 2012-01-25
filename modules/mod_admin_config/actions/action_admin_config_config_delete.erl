@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Delete a config key.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {config_delete, Module, Key, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={config_delete, Module, Key, OnSuccess}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             ok = m_config:delete(Module, Key, Context),

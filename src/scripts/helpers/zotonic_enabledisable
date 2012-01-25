@@ -1,0 +1,67 @@
+
+function assertsitedir {
+    SITE=$1
+    if [ ! -d "$SITE" ]; then
+        echo $SITE does not exist as a directory. 1>&2
+        exit 1
+    fi
+    if [ ! -f "$SITE/config" ]; then
+        if [ -f "$SITE/config.in" ]; then
+            echo Cannot enable $SITE: you need to copy config.in to config. 1>&2
+        else
+            echo "$SITE does not seem to be a valid site." 1>&2
+        fi
+        exit 1
+    fi
+
+    if [ ! -d "$SITE/files" ]; then
+        if [ -w "$SITE" ]; then
+            echo "Creating files/ directory."
+            mkdir "$SITE/files"
+        else
+            echo "$SITE/files does not exist and no permission to create it."
+            echo "Please create this directory and make it writable for $USER."
+            exit 1
+        fi
+    fi 
+    if [ ! -w "$SITE/files" ]; then
+        echo "$SITE/files is not writable by $USER. Please fix this before enabling the site."
+        exit 1
+    fi
+}  
+
+function enablesitedir {
+    SITE=$1
+
+    assertsitedir $SITE
+
+    # check if not yet enabled
+    BASE=`basename $SITE`
+    SITEDIR="priv/sites/$BASE"
+
+    if [ -L $SITEDIR ]; then
+        echo $BASE already enabled. 1>&2
+        exit 1
+    fi
+
+    cd priv/sites
+    ln -s $SITE
+}
+
+function disablesitedir {
+    SITE=$1
+
+    assertsitedir $SITE
+
+    # check if not yet enabled
+    BASE=`basename $SITE`
+    SITEDIR="priv/sites-disabled/$BASE"
+
+    if [ -L $SITEDIR ]; then
+        echo $BASE already disabled. 1>&2
+        exit 1
+    fi
+
+    cd priv/sites-disabled
+    ln -s $SITE
+}

@@ -35,7 +35,7 @@ html(Context) ->
 	Html = z_template:render("admin_comments.tpl", [{page_admin_comments, true}], Context),
 	z_context:output(Html, Context).
 
-event({postback, {comment_delete, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={comment_delete, Args}}, Context) ->
     CommentId = proplists:get_value(id, Args),
     case m_comment:delete(CommentId, Context) of
         ok -> 
@@ -47,7 +47,7 @@ event({postback, {comment_delete, Args}, _TriggerId, _TargetId}, Context) ->
             z_render:growl_error(?__("You are not allowed to delete the comment.", Context), Context)
     end;
 
-event({postback, {comment_toggle, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={comment_toggle, Args}}, Context) ->
     CommentId = proplists:get_value(id, Args),
     case m_comment:toggle(CommentId, Context) of
         {ok, IsVisible} ->

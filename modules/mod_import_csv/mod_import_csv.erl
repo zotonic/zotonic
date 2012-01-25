@@ -49,7 +49,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
 
 
 %% @doc Uploading a CSV file through the web interface.
-event({submit, {csv_upload, []}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={csv_upload, []}}, Context) ->
     #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
 
     %% Move temporary file to processing directory

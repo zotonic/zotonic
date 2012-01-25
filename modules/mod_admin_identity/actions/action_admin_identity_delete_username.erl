@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Delete an username from an user.
 %% @spec event(Event, Context1) -> Context2
-event({postback, {delete_username, Id, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={delete_username, Id, OnSuccess}}, Context) ->
     case z_acl:is_allowed(delete, Id, Context) of
         true ->
             m_identity:delete_username(Id, Context),

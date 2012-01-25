@@ -4,7 +4,6 @@
 	"js/apps/z.widgetmanager.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/z.inputoverlay.js"
-	"js/cufon.anja.js"
 %}
 
 {% stream %}

@@ -22,5 +22,3 @@
     </div>
 </article>
 {% endblock %}
-
-

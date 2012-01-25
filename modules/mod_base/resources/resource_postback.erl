@@ -113,15 +113,16 @@ process_postback(Context1) ->
                              [] -> undefined;
                              TtId -> TtId
                          end,
+            PostbackNotify = #postback_notify{message=Message, trigger=TriggerId1, target=TargetId},
             case z_context:get_q("z_delegate", Context1) of
                 None when None =:= []; None =:= undefined ->
-                    case z_notifier:first(#postback_notify{message=Message}, Context1) of
+                    case z_notifier:first(PostbackNotify, Context1) of
                         undefined -> Context1;
                         #context{} = ContextNotify -> ContextNotify
                     end;
                 Delegate ->
                     {ok, Module} = z_utils:ensure_existing_module(Delegate),
-                    Module:event({postback_notify, Message, TriggerId1, TargetId}, Context1)
+                    Module:event(PostbackNotify, Context1)
             end;
         Postback ->
             {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
@@ -134,13 +135,13 @@ process_postback(Context1) ->
                 "submit" -> 
                     case z_validation:validate_query_args(ContextRsc) of
                         {ok, ContextEval} ->   
-                            Module:event({submit, Tag, TriggerId1, TargetId}, ContextEval);
+                            Module:event(#submit{message=Tag, form=TriggerId1, target=TargetId}, ContextEval);
                         {error, ContextEval} ->
                             %% Posted form did not validate, return any errors.
                             ContextEval
                     end;
                 _ -> 
-                    Module:event({postback, Tag, TriggerId1, TargetId}, ContextRsc)
+                    Module:event(#postback{message=Tag, trigger=TriggerId1, target=TargetId}, ContextRsc)
             end
     end,
 

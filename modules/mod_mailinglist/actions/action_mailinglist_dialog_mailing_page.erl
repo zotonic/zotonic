@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-event({postback, {dialog_mailing_page, Id, ListId, OnSuccess}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={dialog_mailing_page, Id, ListId, OnSuccess}}, Context) ->
 	Vars = [
             {id, Id},
             {list_id, ListId},
@@ -46,7 +46,7 @@ event({postback, {dialog_mailing_page, Id, ListId, OnSuccess}, _TriggerId, _Targ
 
 %% When the page is not yet visible and the user did not choose the
 %% "now" button, the mailing is queued.
-event({submit, {mailing_page, Args}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={mailing_page, Args}}, Context) ->
 	PageId = proplists:get_value(id, Args),
 	OnSuccess = proplists:get_all_values(on_success, Args),
 	ListId = z_convert:to_integer(z_context:get_q("list_id", Context)),

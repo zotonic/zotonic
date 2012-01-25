@@ -159,10 +159,10 @@ cleanup_url(Url) -> z_html:noscript(Url).
 %% @doc Handle the submit of the logon form, this will be handed over to the
 %% different authentication handlers.
 
-event({submit, [], "logon_password_expired_form", _Target}, Context) ->
-    event({submit, [], "logon_password_reset_form", _Target}, Context);
+event(#submit{message=[], form="logon_password_expired_form"}=S, Context) ->
+    event(S#submit{form="logon_password_reset_form"}, Context);
 
-event({submit, [], "logon_password_reset_form", _Target}, Context) ->
+event(#submit{message=[], form="logon_password_reset_form"}, Context) ->
 	Secret = z_context:get_q("secret", Context),
 	Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
 	Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
@@ -191,7 +191,7 @@ event({submit, [], "logon_password_reset_form", _Target}, Context) ->
 					{add_class, [{target, "logon_outer"}, {class, "logon_error_password_unequal"}]}
 					], Context)
 	end;
-event({submit, [], "logon_reminder_form", _Target}, Context) ->
+event(#submit{message=[], form="logon_reminder_form"}, Context) ->
 	case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
 		[] ->
 			logon_error(Context);
@@ -205,13 +205,13 @@ event({submit, [], "logon_reminder_form", _Target}, Context) ->
 					reminder_success(Context)
 			end
 	end;
-event({submit, [], "logon_verification_form", _Target}, Context) ->
+event(#submit{message=[], form="logon_verification_form"}, Context) ->
 	UserId = list_to_integer(z_context:get_q("user_id", Context)),
 	case z_notifier:first(#identity_verification{user_id=UserId}, Context) of
 		ok -> verification_sent(Context);
 		_Other -> verification_error(Context)
 	end;
-event({submit, {logon_confirm, Args}, "logon_confirm_form", _Target}, Context) ->
+event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
     case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
@@ -222,7 +222,7 @@ event({submit, {logon_confirm, Args}, "logon_confirm_form", _Target}, Context) -
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
         Other -> ?DEBUG(Other)
     end;
-event({submit, [], _Trigger, _Target}, Context) ->
+event(#submit{message=[]}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first(#logon_submit{query_args=Args}, Context) of
         undefined -> logon_error(Context); % No handler for posted args

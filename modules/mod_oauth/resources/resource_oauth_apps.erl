@@ -49,13 +49,13 @@ del_consumer(Id, Context) ->
 %%
 %% Start add oauth application (consumer)
 %%
-event({postback, start_add_app, _TriggerId, _TargetId}, Context) ->
+event(#postback{message=start_add_app}, Context) ->
     z_render:dialog("Add application", "_oauth_consumer_edit.tpl", [], Context);
 
 %%
 %% Start edit oauth application (consumer)
 %%
-event({postback, {start_edit_app, Arg}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={start_edit_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Consumer = m_oauth_app:get_consumer(Id, Context),
     Vars = [{consumer, Consumer}],
@@ -64,7 +64,7 @@ event({postback, {start_edit_app, Arg}, _TriggerId, _TargetId}, Context) ->
 %%
 %% Consumer save handler
 %%
-event({submit, {consumer_save, Arg}, _TriggerId, _TargetId}, Context) ->
+event(#submit{message={consumer_save, Arg}}, Context) ->
     Title = z_context:get_q("zp-title", Context),
     Descr = z_context:get_q("zp-text", Context),
     URL = z_context:get_q("zp-url", Context),
@@ -93,19 +93,19 @@ event({submit, {consumer_save, Arg}, _TriggerId, _TargetId}, Context) ->
 %%
 %% Delete oauth application (consumer)
 %%
-event({postback, {start_del_app, Arg}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={start_del_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}, {delete, true}],
     z_render:dialog("Delete application", "_oauth_consumer_tokens.tpl", Vars, Context);
 
 
-event({postback, {start_tokens, Arg}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={start_tokens, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}],
     z_render:dialog("Tokens", "_oauth_consumer_tokens.tpl", Vars, Context);
     
 
-event({postback, {confirm_del_app, Arg}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={confirm_del_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Context1 = z_render:wire({dialog_close, []}, Context),
     del_consumer(Id, Context1).

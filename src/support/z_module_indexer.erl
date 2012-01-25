@@ -260,6 +260,7 @@ file2index(_, {NoPrefixExt, File}) ->
 scan_all(What, Context) ->
     {Subdir, Prefix, Extension} = subdir(What),
     Scan = scan_subdir(Subdir, Prefix, Extension, Context), 
+
     z_module_manager:prio_sort(Scan).
 
 

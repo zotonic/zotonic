@@ -39,7 +39,7 @@ html(Context) ->
 	z_context:output(Html, Context).
 
 
-event({submit, admin_seo, _TriggerId, _TargetId}, Context) ->
+event(#submit{message=admin_seo}, Context) ->
     case z_acl:is_allowed(use, mod_seo, Context) of
         true ->
             save_settings(z_context:get_q_all(Context), Context),

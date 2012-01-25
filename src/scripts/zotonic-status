@@ -19,21 +19,23 @@
 #
 
 cd $ZOTONIC
-if [ -f $ZOTONIC_PIDFILE ]
+if [ ! -f $ZOTONIC_PIDFILE ]; then
+    echo Not Running
+    exit 1
+fi
+
+PID=`cat $ZOTONIC_PIDFILE`
+if ps -p $PID >&-
 then
-	PID=`cat $ZOTONIC_PIDFILE`
-	if ps -p $PID >&-
-	then
-		echo "\
+    echo "\
 Running: $SNAME@$HOSTNAME
 
 Sites Status:
 ============="
-	$ERL -noshell -pa $PA -name ${SNAME}_stop@$HOSTNAME -s zotonic status $SNAME@$HOSTNAME -s init stop
-	echo
-	else
-		echo "Not Running (process '$PID' may have crashed or been killed)"
-	fi 
+    $ERL -noshell -pa $PA -name ${SNAME}_stop@$HOSTNAME -s zotonic status $SNAME@$HOSTNAME -s init stop
+    echo
+    exit 0
 else
-	echo Not Running
-fi
+    echo "Not Running (process '$PID' may have crashed or been killed)"
+    exit 1
+fi 

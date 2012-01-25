@@ -33,13 +33,13 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @spec event(Event, Context1) -> Context2
-event({postback, {zmedia_choose, []}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={zmedia_choose, []}}, Context) ->
     ?DEBUG(z_context:get("media_id", Context)),
     Args = [{id, z_context:get("media_id", Context)}],
     z_render:wire({zmedia_has_chosen, Args}, Context);
 
 %% @spec event(Event, Context1) -> Context2
-event({postback, {zmedia_choose, Args}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={zmedia_choose, Args}}, Context) ->
     z_render:wire({zmedia_has_chosen, Args}, Context).
 
 

@@ -37,13 +37,13 @@ html(Context) ->
 	Html = z_template:render("admin_mailinglist.tpl", Vars, Context),
 	z_context:output(Html, Context).
 
-event({postback, {mailinglist_delete_confirm, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailinglist_delete_confirm, [{id,Id}]}}, Context) ->
 	Vars = [
 		{id, Id}
 	],
 	z_render:dialog("Delete mailing list.", "_dialog_mailinglist_delete_confirm.tpl", Vars, Context);
 
-event({postback, {mailinglist_delete, [{id,Id}]}, _TriggerId, _TargetId}, Context) ->
+event(#postback{message={mailinglist_delete, [{id,Id}]}}, Context) ->
 	case m_rsc:delete(Id, Context) of
 		ok ->
 			z_render:wire([	{growl, [{text, ?__("Deleted the mailing list.", Context)}]}, 

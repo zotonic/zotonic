@@ -20,8 +20,9 @@
 	{% lib "css/zp-ie.css" %}
 	<![endif]-->
 	
-	<!-- Make ie understand html5 -->
         {% include "_js_include_jquery.tpl" %}
+
+	<!-- Make ie understand html5 -->
 	{% lib "js/apps/modernizr.js" %}
 
 	{% block html_head_extra %}{% endblock %}
