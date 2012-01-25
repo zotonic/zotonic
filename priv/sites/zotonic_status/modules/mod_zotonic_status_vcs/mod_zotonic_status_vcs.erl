@@ -32,7 +32,7 @@
 -include("zotonic.hrl").
 
 
-event(#postback{message={vsc_up, Args}}, Context) ->
+event(#postback{message={vcs_up, Args}}, Context) ->
     true = z_auth:is_auth(Context),
     case proplists:get_value(zotonic, Args) of
         true ->
