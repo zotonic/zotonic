@@ -271,7 +271,7 @@ zynamo_delete(Host, {Module, Key} = MK, Version) ->
             end,
             Context),
     case Result of
-        {ok, _} ->
+        #zynamo_service_result{status=ok} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context);
         _ ->
@@ -424,7 +424,7 @@ zynamo_put(Host, {Module, Key} = MK, Version, Props) ->
             end,
             Context),
     case Result of
-        {ok, _} ->
+        #zynamo_service_result{status=ok} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=OtherProps, value=PropValue}, Context);
         _ ->

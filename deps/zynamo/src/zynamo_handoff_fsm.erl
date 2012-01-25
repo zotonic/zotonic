@@ -40,7 +40,7 @@
 
 % Check every 10-20 seconds if there is anything to handoff
 -define(HANDOFF_RANDOM_TIMEOUT, 10000).
--define(HANDOFF_SHORT_TIMEOUT,  10000).
+-define(HANDOFF_SHORT_TIMEOUT,   3000).
 -define(HANDOFF_LONG_TIMEOUT,   60000).
 
 % Max timeout for the handoff command, the service might tarpit us, so we need a long timeout.
@@ -144,15 +144,15 @@ do_handoff_command(Site, Service, Node, HandoffCommand) ->
                                    {timeout, ?HANDOFF_COMMAND_TIMEOUT}
                                 ])
     of
-        [{Node, _Handoff, {ok, _Version}}] ->
+        #zynamo_result{status=ok} ->
             % Report back to our local service that the handoff has been done
             handoff_done(Site, Service, Node, HandoffCommand);
-        [{Node, _Handoff, {error, {conflict, _OtherVersion}}}] ->
+        #zynamo_result{status=conflict} ->
             handoff_done(Site, Service, Node, HandoffCommand);
-        [{Node, _Handoff, {error, operation_not_supported}}] ->
+        #zynamo_result{status=operation_not_supported} ->
             handoff_done(Site, Service, Node, HandoffCommand);
-        [{Node, _Handoff, {error, _Reason} = Error}] ->
-            Error;
+        #zynamo_result{status=ErrorReason} ->
+            {error, ErrorReason};
         {error, _Reason} = Error ->
             Error
     end.
