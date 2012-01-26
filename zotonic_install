@@ -15,9 +15,9 @@ CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 \c zotonic
 CREATE LANGUAGE \"plpgsql\";" | su -l postgres -c psql && \
 echo "# Zotonic settings
-local   all         zotonic                           trust
-host    all         zotonic     127.0.0.1/32          trust
-host    all         zotonic     ::1/128               trust" >> /etc/postgresql/8.4/main/pg_hba.conf && \
+local   all         zotonic                           ident
+host    all         zotonic     127.0.0.1/32          md5
+host    all         zotonic     ::1/128               md5" >> /etc/postgresql/8.4/main/pg_hba.conf && \
 /etc/init.d/postgresql reload && \
 
 mkdir /home/zotonic &&\
