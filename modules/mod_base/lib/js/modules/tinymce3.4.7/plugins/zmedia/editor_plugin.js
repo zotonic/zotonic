@@ -42,7 +42,7 @@
                             window.z_choose_zmedia = function(id) {
                                 if (!id) return;
                                 var html = window.tinyMCEzMedia.toHTML(id, {align: "block", size: "middle", crop: '', link: ''});
-                                ed.execCommand('mceInsertContent', false, res, {});
+                                ed.execCommand('mceInsertContent', false, html, {});
                             };
                         }
                     });

@@ -4,3 +4,6 @@
 [submodule "deps/gen_smtp"]
 	path = deps/gen_smtp
 	url = git://github.com/zotonic/gen_smtp.git
+[submodule "deps/lager"]
+	path = deps/lager
+	url = https://github.com/basho/lager.git
