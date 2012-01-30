@@ -218,6 +218,7 @@ init_webmachine() ->
             ignore
     end.
 
+
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 ipv6_supported() ->
     case (catch inet:getaddr("localhost", inet6)) of

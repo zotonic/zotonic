@@ -10,4 +10,4 @@
   {registered, []},
   {mod, {zotonic_app, []}},
   {env, []},
-  {applications, [kernel, stdlib, crypto, mnesia]}]}.
+  {applications, [kernel, stdlib, crypto, lager, mnesia]}]}.
