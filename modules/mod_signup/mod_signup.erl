@@ -46,7 +46,7 @@
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
     CheckId = z_ids:id(),
     z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
-    {ok, lists:flatten(z_dispatcher:url_for(signup, [{xs, CheckId}], Context))}.
+    {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 
 observe_identity_verification(#identity_verification{user_id=UserId, identity=undefined}, Context) ->
