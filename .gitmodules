@@ -13,3 +13,6 @@
 [submodule "deps/statz"]
 	path = deps/statz
 	url = git://github.com/zotonic/statz.git
+[submodule "deps/lager"]
+	path = deps/lager
+	url = https://github.com/basho/lager.git

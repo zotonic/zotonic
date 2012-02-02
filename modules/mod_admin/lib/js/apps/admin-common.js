@@ -62,7 +62,7 @@ tinyInit = {
 
 	accessibility_focus: "1", 
 	tab_focus: ":prev,:next", 
-	content_css: "/lib/js/modules/tinymce3.4.3.2/zotonic.css", 
+	content_css: "/lib/js/modules/tinymce3.4.7/zotonic.css", 
 	wpeditimage_disable_captions: "", 
 	plugins: "paste,table,zlink,zmedia,autosave,directionality,zbdo",
 	table_row_limit: 100,

@@ -1,9 +1,12 @@
-[{kernel, [{error_logger, {file, "priv/sasl/zotonic.log"}}]},
- {sasl,   [{error_logger_mf_dir, "priv/sasl/log_mf_h"},
-           {error_logger_mf_maxbytes, 16000000},
-           {error_logger_mf_maxfiles, 8},
-           {errlog_type, all},
-           {sasl_error_logger, {file, "priv/sasl/sasl.log"}}
-          ]}
+[
+ {lager, [
+    {handlers, [
+      {lager_console_backend, info},
+      {lager_file_backend, [
+        {"priv/sasl/error.log", error, 10485760, "$D0", 5},
+        {"priv/sasl/console.log", info, 10485760, "$D0", 5}
+      ]}
+    ]},
+    {crash_log, "priv/sasl/crash.log"}
+  ]}
 ].
-

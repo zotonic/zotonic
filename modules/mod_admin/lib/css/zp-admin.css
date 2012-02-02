@@ -1093,3 +1093,9 @@ body[dir=rtl] label {
     float: right;
     text-align: right;
 }
+
+
+/* tinyMCE buttons */
+.defaultSkin span.mce_zlink {background-position:-40px -40px}
+.defaultSkin span.mce_zbdoltr {background-position:-60px -40px}
+.defaultSkin span.mce_zbdortl {background-position:-80px -40px}
