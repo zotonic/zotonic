@@ -4859,6 +4859,8 @@ tinymce.html.Writer = function(settings) {
 								return false;
 						}
 					}
+                                    
+                                        if (type == 8) return false; // keep comment nodes
 
 					// Keep non whitespace text nodes
 					if ((type === 3 && !whiteSpaceRegExp.test(node.nodeValue)))
