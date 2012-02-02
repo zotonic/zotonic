@@ -885,7 +885,9 @@ var Validate = {
       var paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "Incorrect E-mail";
       value = $.trim(value);
-      Validate.Format(value, { failureMessage: message, pattern: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i } );
+      // see validator_base_email.erl:43
+      var re = /^$|^(("[^"\f\n\r\t\v\b]+")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,})$/;
+      Validate.Format(value, { failureMessage: message, pattern: re } );
       return true;
     },
     
