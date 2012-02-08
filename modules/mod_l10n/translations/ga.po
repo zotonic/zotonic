@@ -1,0 +1,103 @@
+# French date names
+# Copyright (C) 2012 Michael Connors <michael@bring42.net>
+# This file is distributed under the same license as the Zotonic package.
+# Michael Connors <michael@bring42.net>, 2012
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-02-03 13:55+0100\n"
+"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_l10n/support/l10n_date.erl:37
+msgid "April"
+msgstr "Mí Aibreán"
+
+#: modules/mod_l10n/support/l10n_date.erl:41
+msgid "August"
+msgstr "Mí Lúnasa"
+
+#: modules/mod_l10n/support/l10n_date.erl:45
+msgid "December"
+msgstr "Mí na Nollag"
+
+#: modules/mod_l10n/support/l10n_date.erl:35
+msgid "February"
+msgstr "Mí Feabhra"
+
+#: modules/mod_l10n/support/l10n_date.erl:28
+msgid "Friday"
+msgstr "Dé hAoine"
+
+#: modules/mod_l10n/support/l10n_date.erl:34
+msgid "January"
+msgstr "Mí Eanair"
+
+#: modules/mod_l10n/support/l10n_date.erl:40
+msgid "July"
+msgstr "Mí Iúil"
+
+#: modules/mod_l10n/support/l10n_date.erl:39
+msgid "June"
+msgstr "Mí Meitheamh"
+
+#: modules/mod_l10n/support/l10n_date.erl:36
+msgid "March"
+msgstr "Mí Márta"
+
+#: modules/mod_l10n/support/l10n_date.erl:38
+msgid "May"
+msgstr "Mí Bealtaine"
+
+#: modules/mod_l10n/support/l10n_date.erl:24
+msgid "Monday"
+msgstr "Dé Luain"
+
+#: modules/mod_l10n/support/l10n_date.erl:44
+msgid "November"
+msgstr "Mí na Samhna"
+
+#: modules/mod_l10n/support/l10n_date.erl:43
+msgid "October"
+msgstr "Mí Deireadh Fomhair"
+
+#: modules/mod_l10n/support/l10n_date.erl:29
+msgid "Saturday"
+msgstr "Dé Sathairn"
+
+#: modules/mod_l10n/support/l10n_date.erl:42
+msgid "September"
+msgstr "Mí Meán Fomhair"
+
+#: modules/mod_l10n/support/l10n_date.erl:30
+msgid "Sunday"
+msgstr "Dé Domhnaigh"
+
+#: modules/mod_l10n/support/l10n_date.erl:27
+msgid "Thursday"
+msgstr "Déardaoin"
+
+#: modules/mod_l10n/support/l10n_date.erl:25
+msgid "Tuesday"
+msgstr "Dé Máirt"
+
+#: modules/mod_l10n/support/l10n_date.erl:26
+msgid "Wednesday"
+msgstr "Dé Chéadaoin"
+
+#: modules/mod_l10n/support/l10n_date.erl:19
+msgid "midnight"
+msgstr "meán oíche"
+
+#: modules/mod_l10n/support/l10n_date.erl:21
+msgid "noon"
+msgstr "meán lae"
+
