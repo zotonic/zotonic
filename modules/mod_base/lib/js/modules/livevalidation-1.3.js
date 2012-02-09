@@ -890,6 +890,34 @@ var Validate = {
       Validate.Format(value, { failureMessage: message, pattern: re } );
       return true;
     },
+
+    /**
+     *  validates that the field contains a valid date
+     *
+     *  @var value {mixed} - value to be checked
+     *  @var paramsObj {Object} - parameters for this particular validation, see below for details
+     *
+     *  paramsObj properties:
+     *              failureMessage {String} - the message to show when the field fails validation
+     *                            (DEFAULT: "Incorrect Date")
+     *              format {String} - 'l', 'm','b' endian 
+     *                             (DEFAULT: "l")
+     *              separator {String} - a character which is not a number
+     *                             (DEFAULT: "-")
+     *
+     **/
+
+    Date: function(value, paramsObj){
+      var paramsObj = paramsObj || {};
+      var message = paramsObj.failureMessage || "Incorrect Date";
+      var format = paramsObj.format || "l";
+      var separator = paramsObj.separator || "-";
+      value = $.trim(value);
+      if (!valid_date(value, format, separator)) {
+          Validate.fail(message);
+      }
+      return true;
+    },
     
     /**
      *  validates the length of the value
