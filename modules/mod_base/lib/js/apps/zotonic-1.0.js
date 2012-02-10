@@ -1156,6 +1156,7 @@ function z_add_validator(id, type, args)
 			switch (type)
 			{
 				case 'email':			v.add(Validate.Email, args);		break;
+                                case 'date':                    v.add(Validate.Date, args);             break;
 				case 'presence':		v.add(Validate.Presence, args);		break;
 				case 'confirmation':	v.add(Validate.Confirmation, args); break;
 				case 'acceptance':		v.add(Validate.Acceptance, args);	break;
