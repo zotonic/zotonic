@@ -951,11 +951,6 @@ var Validate = {
               Validate.fail(message);
           }
       }
-
-
-      if (!valid_date(value, format, separator)) {
-          Validate.fail(message);
-      }
       return true;
     },
     
