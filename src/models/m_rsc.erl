@@ -180,7 +180,11 @@ get_raw(Id, Context) when is_integer(Id) ->
             Memo ->
                 Memo
           end,
-    z_db:assoc_props_row(SQL, [Id], Context).
+    case z_db:assoc_props_row(SQL, [Id], Context) of
+        undefined -> [];
+        Raw -> Raw
+    end.
+             
 
 
 %% @doc Get the ACL fields for the resource with the id. The id must be an integer
