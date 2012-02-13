@@ -75,7 +75,6 @@ show_media_html(Id, Context) ->
     show_media_html(Id, {struct, []}, Context).
 
 show_media_html(Id, {struct, Args}, Context) ->
-    Template = "_body_media.tpl",
     Args2 = [ {list_to_atom(A), B} || {A,B} <- Args],
     Args3 = filter_args(Args2, false, [], Context),
     Id1 = try 
@@ -83,7 +82,7 @@ show_media_html(Id, {struct, Args}, Context) ->
           catch
               _:_ -> Id
           end,
-    z_template:render(Template, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+    z_template:render({cat, "_body_media.tpl"}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
 
 filter_args([], true, Acc, _Context) ->
     Acc;
