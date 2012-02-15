@@ -23,8 +23,9 @@
 
 -export([
          init/1,
-         content_types_provided/2,
          resource_exists/2,
+         allowed_methods/2,
+         content_types_provided/2,
          response/2
         ]).
 
@@ -41,6 +42,10 @@ resource_exists(ReqData, _Context) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:ensure_qs(Context),
     {true, ReqData, Context1}.
+
+
+allowed_methods(ReqData, Context) ->
+    {['POST', 'GET', 'HEAD'], ReqData, Context}.
 
 
 content_types_provided(ReqData, Context) ->
