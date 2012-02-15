@@ -142,7 +142,8 @@ check_request_logon(ReqData, Context) ->
                                                 {false, authenticate(Reason, ReqData, Context)};
                                             true ->
                                                 SigMethod = oauth_param("oauth_signature_method", ReqData),
-                                                case oauth:verify(Signature, "GET", URL, Params, to_oauth_consumer(Consumer, SigMethod), str_value(token_secret, Token)) of
+                                                case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
+                                                                  Params, to_oauth_consumer(Consumer, SigMethod), str_value(token_secret, Token)) of
                                                     true ->
                                                         UID = int_value(user_id, Token),
                                                         Context1 = z_acl:logon(UID, Context),
