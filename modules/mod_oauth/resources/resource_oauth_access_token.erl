@@ -26,6 +26,7 @@
          resource_exists/2,
          allowed_methods/2,
          content_types_provided/2,
+         process_post/2,
          response/2
         ]).
 
@@ -52,6 +53,9 @@ content_types_provided(ReqData, Context) ->
     {[{"text/html", response}], ReqData, Context}.
 
 
+process_post(ReqData, Context) ->
+    response(ReqData, Context).
+
 response(ReqData, Context) ->
     case mod_oauth:request_is_signed(ReqData) of
         false ->
@@ -69,7 +73,8 @@ response(ReqData, Context) ->
                                         mod_oauth:authenticate("Request token not found.", ReqData, Context);
                                     Token ->
                                         SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),
-                                        case oauth:verify(Signature, "GET", URL, Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), mod_oauth:str_value(token_secret, Token)) of
+                                        case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
+                                                          Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), mod_oauth:str_value(token_secret, Token)) of
                                             true ->
                                                 case m_oauth_app:exchange_request_for_access(Token, Context) of
                                                     {ok, NewToken} ->
