@@ -475,12 +475,13 @@ has_session(_) ->
 
 %% @doc Ensure session and page session and fetch and parse the query string
 ensure_all(Context) ->
-    case get(no_session, Context, false) of
+    Context1 = case get(no_session, Context, false) of
         false ->
             ensure_page_session(ensure_session(ensure_qs(Context)));
         true ->
             continue_page_session(continue_session(ensure_qs(Context)))
-    end.
+    end,
+    z_notifier:foldl(ensure_context_fold, Context1, Context1).
 
 
 
