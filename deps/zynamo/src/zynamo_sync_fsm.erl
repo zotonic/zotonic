@@ -112,16 +112,21 @@ select_node(timeout, #state{services=[{Site,Service}|RestServices]} = State) ->
             case zynamo_manager:get_service_pid(Site, Service, node()) of
                 {ok, LocalPid} ->
                     {Candidates, BucketRange} = nodes_within_n(LocalPid, Pids),
-                    OtherNode = lists:nth(random:uniform(length(Candidates)), Candidates),
-                    {next_state, compare_hashes, State#state{
-                            service={Site, Service},
-                            local_pid=LocalPid,
-                            other_node=OtherNode,
-                            bucket_range=BucketRange,
-                            from_key=undefined,
-                            is_retry=false,
-                            history=[ {{Site,Service}, OtherNode, now_secs()} | State#state.history ],
-                            services=RestServices}, 0};
+                    case Candidates of
+                        [] -> 
+                            {next_state, select_node, State#state{services=RestServices}, 0};
+                        _ ->
+                            OtherNode = lists:nth(random:uniform(length(Candidates)), Candidates),
+                            {next_state, compare_hashes, State#state{
+                                    service={Site, Service},
+                                    local_pid=LocalPid,
+                                    other_node=OtherNode,
+                                    bucket_range=BucketRange,
+                                    from_key=undefined,
+                                    is_retry=false,
+                                    history=[ {{Site,Service}, OtherNode, now_secs()} | State#state.history ],
+                                    services=RestServices}, 0}
+                    end;
                 {error, _} ->
                     {next_state, select_node, State#state{services=RestServices}, 0}
             end
