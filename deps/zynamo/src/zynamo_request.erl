@@ -63,7 +63,7 @@ list(Site, Service) ->
     list(Site, Service, [], []).
 
 -spec list(atom(), atom(), list_receiver(), list( zynamo_request_option() | return_value | no_return_version) ) -> 
-                                          #zynamo_result{}.
+                                          {ok, list()} | {ok, list_receiver()} | {error, term()}.
 list(Site, Service, Receiver, Options) ->
     Nodes = case proplists:get_all_values(node, Options) of
                 [] ->
