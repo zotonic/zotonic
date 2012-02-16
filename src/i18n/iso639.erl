@@ -941,6 +941,11 @@ lc2lang("pi") -> "Pali";
 lc2lang("pl") -> "Polish";
 lc2lang("ps") -> "Pashto, Pushto";
 lc2lang("pt") -> "Portuguese";
+
+% Two made up language codes.
+lc2lang("po") -> "Papiamento";
+lc2lang("pu") -> "Papiamentu";
+
 lc2lang("qu") -> "Quechua";
 lc2lang("rm") -> "Rhaeto-Romance";
 lc2lang("rn") -> "Rundi; Kirundi";
@@ -1112,6 +1117,11 @@ all2lang() ->
      {"pl", "Polish"},
      {"ps", "Pashto, Pushto"},
      {"pt", "Portuguese"},
+
+     % Two made up language codes.
+     {"po", "Papiamento"},
+     {"pu", "Papiamentu"},
+
      {"qu", "Quechua"},
      {"rm", "Rhaeto-Romance"},
      {"rn", "Rundi; Kirundi"},
