@@ -891,7 +891,7 @@ var Validate = {
       return true;
     },
 
-    /**
+    /*
      *  validates that the field contains a valid date
      *
      *  @var value {mixed} - value to be checked
@@ -900,12 +900,12 @@ var Validate = {
      *  paramsObj properties:
      *              failureMessage {String} - the message to show when the field fails validation
      *                            (DEFAULT: "Incorrect Date")
-     *              format {String} - 'l', 'm','b' endian 
+     *              format {String} - l, m,b endian 
      *                             (DEFAULT: "l")
      *              separator {String} - a character which is not a number
      *                             (DEFAULT: "-")
      *
-     **/
+     */
 
     Date: function(value, paramsObj){
       function to_integer(value) {
@@ -922,10 +922,10 @@ var Validate = {
       var separator = paramsObj.separator || "-";
       value = $.trim(value);
 
-      var date_components = my_date.split(separator);
+      var date_components = value.split(separator);
       
       if (date_components.length != 3) {
-          return false;
+          Validate.fail(message);
       } else {
           not_a_number = to_integer(separator);
           if (!isNaN(not_a_number)) {
