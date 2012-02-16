@@ -21,6 +21,9 @@
     {dbdatabase, "%%DBDATABASE%%"},
     {dbschema, "%%DBSCHEMA%%"},
 
+    % Depcache settings, maximum size in mbs
+    {depcache_memory_max, 100},
+
     % Password for the 'admin' user.
     {admin_password, "%%ADMINPASSWORD%%"},
 

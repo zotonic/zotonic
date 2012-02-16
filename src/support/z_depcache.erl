@@ -31,7 +31,7 @@
 -export([in_process/0, in_process/1, flush_process_dict/0]).
 
 %% internal export
--export([cleanup/4, cleanup/8]).
+-export([cleanup/5, cleanup/9]).
 
 -include_lib("zotonic.hrl").
 
@@ -333,9 +333,13 @@ init(SiteProps) ->
             DepsTable = ets:new(?DEPS_TABLE, [set, {keypos, 2}, protected]),
             DataTable = ets:new(?DATA_TABLE, [set, {keypos, 1}, protected])
     end,
+    MemoryMax = case proplists:get_value(depcache_memory_max, SiteProps) of
+	undefined -> ?MEMORY_MAX;
+        Mbs -> Mbs * 1024 * 1024
+    end,
     State = #state{now=z_utils:now(), serial=0, meta_table=MetaTable, deps_table=DepsTable, data_table=DataTable, wait_pids=dict:new()},
     timer:apply_interval(1000, ?MODULE, tick, [#context{host=Host, depcache=Depcache}]),
-    spawn_link(?MODULE, cleanup, [self(), MetaTable, DepsTable, DataTable]),
+    spawn_link(?MODULE, cleanup, [self(), MetaTable, DepsTable, DataTable, MemoryMax]),
     {ok, State}.
 
 
@@ -649,58 +653,58 @@ find_value(_Key, _Data) ->
 %%      This cleanup process starts to delete random entries.  By using a random delete we don't need to keep
 %%      a LRU list, which is a bit expensive.
 
-cleanup(Pid, MetaTable, DepsTable, DataTable) ->
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax) ->
     {A1,A2,A3} = now(),
     random:seed(A1, A2, A3),
-    ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, 0, z_utils:now(), normal, 0).
+    ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, 0, z_utils:now(), normal, 0).
 
 %% Wrap around the end of table
-cleanup(Pid, MetaTable, DepsTable, DataTable, '$end_of_table', Now, _Mode, Ct) ->
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, '$end_of_table', Now, _Mode, Ct) ->
     case ets:info(MetaTable, size) of
-        0 -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, 0, Now, cleanup_mode(DataTable), 0);
-        _ -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, 0, Now, cleanup_mode(DataTable), Ct)
+        0 -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, 0, Now, cleanup_mode(DataTable, MemoryMax), 0);
+        _ -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, 0, Now, cleanup_mode(DataTable, MemoryMax), Ct)
     end;
 
 %% In normal cleanup, sleep a second between each batch before continuing our cleanup sweep
-cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, normal, 0) -> 
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, Now, normal, 0) -> 
     timer:sleep(1000),
     case ets:info(MetaTable, size) of
-        0 -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, 0, Now, normal, 0);
-        _ -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, z_utils:now(), cleanup_mode(DataTable), ?CLEANUP_BATCH)
+        0 -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, 0, Now, normal, 0);
+        _ -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, z_utils:now(), cleanup_mode(DataTable, MemoryMax), ?CLEANUP_BATCH)
     end;
 
 %% After finishing a batch in cache_full mode, check if the cache is still full, if so keep deleting entries
-cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, cache_full, 0) -> 
-    case cleanup_mode(DataTable) of
-        normal     -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, normal, 0);
-        cache_full -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, z_utils:now(), cache_full, ?CLEANUP_BATCH)
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, Now, cache_full, 0) -> 
+    case cleanup_mode(DataTable, MemoryMax) of
+        normal     -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, Now, normal, 0);
+        cache_full -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, z_utils:now(), cache_full, ?CLEANUP_BATCH)
     end;
 
 %% Normal cleanup behaviour - check expire stamp and dependencies
-cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, normal, Ct) ->
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, Now, normal, Ct) ->
     Slot =  try 
                 ets:slot(MetaTable, SlotNr)
             catch
                 _M:_E -> '$end_of_table'
             end,
     case Slot of
-        '$end_of_table' -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, '$end_of_table', Now, normal, 0);
-        [] -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr+1, Now, normal, Ct-1);
+        '$end_of_table' -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, '$end_of_table', Now, normal, 0);
+        [] -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr+1, Now, normal, Ct-1);
         Entries ->
             lists:foreach(fun(Meta) -> flush_expired(Meta, Now, DepsTable, Pid) end, Entries),
-            ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr+1, Now, normal, Ct-1)
+            ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr+1, Now, normal, Ct-1)
     end;
 
 %% Full cache cleanup mode - randomly delete every 10th entry
-cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, cache_full, Ct) ->
+cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr, Now, cache_full, Ct) ->
     Slot =  try 
                 ets:slot(MetaTable, SlotNr)
             catch
                 _M:_E -> '$end_of_table'
             end,
     case Slot of
-        '$end_of_table' -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, '$end_of_table', Now, cache_full, 0);
-        [] -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr+1, Now, cache_full, Ct-1);
+        '$end_of_table' -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, '$end_of_table', Now, cache_full, 0);
+        [] -> ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr+1, Now, cache_full, Ct-1);
         Entries ->
             FlushExpire = fun (Meta) ->
                                 case flush_expired(Meta, Now, DepsTable, Pid) of
@@ -719,7 +723,7 @@ cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr, Now, cache_full, Ct) ->
 
             Entries1 = lists:map(FlushExpire, Entries),
             lists:foreach(RandomDelete, Entries1),
-            ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, SlotNr+1, Now, cache_full, Ct-1)
+            ?MODULE:cleanup(Pid, MetaTable, DepsTable, DataTable, MemoryMax, SlotNr+1, Now, cache_full, Ct-1)
     end.
 
 
@@ -737,9 +741,9 @@ flush_expired(#meta{key=Key, serial=Serial, expire=Expire, depend=Depend}, Now, 
 %% We use erts_debug:size() on the stored terms to calculate the total size of all terms stored.  This
 %% is better than counting the number of entries.  Using the process_info(Pid,memory) is not very useful as the
 %% garbage collection still needs to be done and then we delete too many entries.
-cleanup_mode(DataTable) ->
+cleanup_mode(DataTable, MemoryMax) ->
     Memory = ets:info(DataTable, memory),
     if 
-        Memory >= ?MEMORY_MAX -> cache_full;
+        Memory >= MemoryMax -> cache_full;
         true -> normal
     end.
