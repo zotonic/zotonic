@@ -182,20 +182,20 @@ search_prevnext(Type, Args, Context) ->
                   ("date_end") -> "pivot_date_end";
                   ("title") -> "pivot_title";
                   (X) -> X end,
-    Field = proplists:get_value(sort, Args, publication_start),
+    Field = z_convert:to_list(proplists:get_value(sort, Args, publication_start)),
     Limit = z_convert:to_integer(proplists:get_value(limit, Args, 1)),
     {id, Id} = proplists:lookup(id, Args),
     {cat, Cat} = proplists:lookup(cat, Args),
-    FieldValue = m_rsc:p(Id, list_to_existing_atom(Field), Context),
+    FieldValue = m_rsc:p(Id, z_convert:to_atom(Field), Context),
     #search_sql{
                  select="r.id",
                  from="rsc r",
-                 where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1)",
+                 where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1) and r.id <> $2",
                  tables=[{rsc, "r"}],
                  cats=[{"r", Cat}],
-                 args=[FieldValue, Limit],
+                 args=[FieldValue, Id, Limit],
                  order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
-                 limit="limit $2"
+                 limit="limit $3"
                }.
 
 
