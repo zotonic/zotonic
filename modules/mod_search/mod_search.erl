@@ -175,32 +175,35 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% Retrieve the previous id (on publication date) 
-search({previous, [{cat, Cat}, {id, Id}]}, _OffsetLimit, Context) ->
-    PubStart = m_rsc:p(Id, publication_start, Context),
-    Modified = m_rsc:p(Id, modified, Context),
+search_prevnext(Type, Args, Context) ->
+    Order = fun(next) -> "ASC"; (previous) -> "DESC" end,
+    Operator = fun(next) -> " > "; (previous) -> " < " end,
+    MapField = fun("date_start") -> "pivot_date_start";
+                  ("date_end") -> "pivot_date_end";
+                  ("title") -> "pivot_title";
+                  (X) -> X end,
+    Field = proplists:get_value(sort, Args, publication_start),
+    Limit = z_convert:to_integer(proplists:get_value(limit, Args, 1)),
+    {id, Id} = proplists:lookup(id, Args),
+    {cat, Cat} = proplists:lookup(cat, Args),
+    FieldValue = m_rsc:p(Id, list_to_existing_atom(Field), Context),
     #search_sql{
-        select="r.id",
-        from="rsc r",
-        where="((publication_start < $1 OR (publication_start = $1 AND modified < $2)) AND id <> $3)",
-        tables=[{rsc, "r"}],
-        cats=[{"r", Cat}],
-        args=[PubStart, Modified, Id],
-        order="publication_start DESC, modified DESC, id DESC"
-       };
-search({next, [{cat, Cat}, {id, Id}]}, _OffsetLimit, Context) ->
-    PubStart = m_rsc:p(Id, publication_start, Context),
-    Modified = m_rsc:p(Id, modified, Context),
-    #search_sql{
-        select="r.id",
-        from="rsc r",
-        where="((publication_start > $1 OR (publication_start = $1 AND modified > $2)) AND id <> $3)",
-        tables=[{rsc, "r"}],
-        cats=[{"r", Cat}],
-        args=[PubStart, Modified, Id],
-        order="publication_start, modified, id"
-       };
+                 select="r.id",
+                 from="rsc r",
+                 where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1)",
+                 tables=[{rsc, "r"}],
+                 cats=[{"r", Cat}],
+                 args=[FieldValue, Limit],
+                 order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
+                 limit="limit $2"
+               }.
 
+
+%% Retrieve the previous/next id(s) (on sort field, defaults to publication date) 
+search({previous, Args}, _OffsetLimit, Context) ->
+    search_prevnext(previous, Args, Context);
+search({next, Args}, _OffsetLimit, Context) ->
+    search_prevnext(next, Args, Context);
 
 search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
     Subject = m_predicate:name_to_id_check(subject, Context),
@@ -298,8 +301,8 @@ search({match_objects_cats, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
 
 %% @doc Return a list of resource ids, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> #search_sql{}
-search({featured, []}, OffsetLimit, Context) ->
-    search({'query', [{sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
+search({featured, []}, OffsetLimit, Context) -> 
+   search({'query', [{sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
 
 %% @doc Return a list of resource ids inside a category, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
