@@ -18,107 +18,162 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_l10n/support/l10n_date.erl:37 
+#: ./modules/mod_l10n/support/l10n_date.erl:53 
 msgid ""
-"April"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:41 
-msgid ""
-"August"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:45 
-msgid ""
-"December"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:35 
-msgid ""
-"February"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:28 
-msgid ""
-"Friday"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:34 
-msgid ""
-"January"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:40 
-msgid ""
-"July"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:39 
-msgid ""
-"June"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:36 
-msgid ""
-"March"
+"Apr"
 msgstr ""
 
 #: ./modules/mod_l10n/support/l10n_date.erl:38 
 msgid ""
-"May"
+"April"
 msgstr ""
 
-#: ./modules/mod_l10n/support/l10n_date.erl:24 
+#: ./modules/mod_l10n/support/l10n_date.erl:57 
 msgid ""
-"Monday"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:44 
-msgid ""
-"November"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:43 
-msgid ""
-"October"
-msgstr ""
-
-#: ./modules/mod_l10n/support/l10n_date.erl:29 
-msgid ""
-"Saturday"
+"Aug"
 msgstr ""
 
 #: ./modules/mod_l10n/support/l10n_date.erl:42 
 msgid ""
-"September"
+"August"
 msgstr ""
 
-#: ./modules/mod_l10n/support/l10n_date.erl:30 
+#: ./modules/mod_l10n/support/l10n_date.erl:61 
 msgid ""
-"Sunday"
+"Dec"
 msgstr ""
 
-#: ./modules/mod_l10n/support/l10n_date.erl:27 
+#: ./modules/mod_l10n/support/l10n_date.erl:46 
 msgid ""
-"Thursday"
+"December"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:51 
+msgid ""
+"Feb"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:36 
+msgid ""
+"February"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:29 
+msgid ""
+"Friday"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:50 
+msgid ""
+"Jan"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:35 
+msgid ""
+"January"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:56 
+msgid ""
+"Jul"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:41 
+msgid ""
+"July"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:55 
+msgid ""
+"Jun"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:40 
+msgid ""
+"June"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:52 
+msgid ""
+"Mar"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:37 
+msgid ""
+"March"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:39 ./modules/mod_l10n/support/l10n_date.erl:54 
+msgid ""
+"May"
 msgstr ""
 
 #: ./modules/mod_l10n/support/l10n_date.erl:25 
 msgid ""
-"Tuesday"
+"Monday"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:60 
+msgid ""
+"Nov"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:45 
+msgid ""
+"November"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:59 
+msgid ""
+"Oct"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:44 
+msgid ""
+"October"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:30 
+msgid ""
+"Saturday"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:58 
+msgid ""
+"Sep"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:43 
+msgid ""
+"September"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:31 
+msgid ""
+"Sunday"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:28 
+msgid ""
+"Thursday"
 msgstr ""
 
 #: ./modules/mod_l10n/support/l10n_date.erl:26 
 msgid ""
+"Tuesday"
+msgstr ""
+
+#: ./modules/mod_l10n/support/l10n_date.erl:27 
+msgid ""
 "Wednesday"
 msgstr ""
 
-#: ./modules/mod_l10n/support/l10n_date.erl:19 
+#: ./modules/mod_l10n/support/l10n_date.erl:20 
 msgid ""
 "midnight"
 msgstr ""
 
-#: ./modules/mod_l10n/support/l10n_date.erl:21 
+#: ./modules/mod_l10n/support/l10n_date.erl:22 
 msgid ""
 "noon"
 msgstr ""

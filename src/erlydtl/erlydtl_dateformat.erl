@@ -217,7 +217,10 @@ tag_to_value($m, {_, M, _}, _, _Context) ->
 
 % Month, textual, 3 letters; e.g. 'Jan'
 tag_to_value($M, {_,M,_}, _, Context) ->
-   z_string:truncate(l10n_date:monthname(M, Context), 3, []);
+    case l10n_date:monthname_short(M, Context) of
+        [] -> z_string:truncate(l10n_date:monthname(M, Context), 3, []);
+        S -> S
+    end;
 
 % Month without leading zeros; i.e. '1' to '12'
 tag_to_value($n, {_, M, _}, _, _Context) ->

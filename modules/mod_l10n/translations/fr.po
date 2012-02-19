@@ -13,91 +13,143 @@ msgstr ""
 "PO-Revision-Date: 2012-02-03 13:45+0100\n"
 "Last-Translator: Michael Connors <michael@bring42.net>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_l10n/support/l10n_date.erl:37
+#: modules/mod_l10n/support/l10n_date.erl:53
+#, fuzzy
+msgid "Apr"
+msgstr "avril"
+
+#: modules/mod_l10n/support/l10n_date.erl:38
 msgid "April"
 msgstr "avril"
 
-#: modules/mod_l10n/support/l10n_date.erl:41
+#: modules/mod_l10n/support/l10n_date.erl:57
+#, fuzzy
+msgid "Aug"
+msgstr "août"
+
+#: modules/mod_l10n/support/l10n_date.erl:42
 msgid "August"
 msgstr "août"
 
-#: modules/mod_l10n/support/l10n_date.erl:45
+#: modules/mod_l10n/support/l10n_date.erl:61
+msgid "Dec"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:46
 msgid "December"
 msgstr "décembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:35
+#: modules/mod_l10n/support/l10n_date.erl:51
+msgid "Feb"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:36
 msgid "February"
 msgstr "février"
 
-#: modules/mod_l10n/support/l10n_date.erl:28
+#: modules/mod_l10n/support/l10n_date.erl:29
 msgid "Friday"
 msgstr "vendredi"
 
-#: modules/mod_l10n/support/l10n_date.erl:34
+#: modules/mod_l10n/support/l10n_date.erl:50
+#, fuzzy
+msgid "Jan"
+msgstr "janvier"
+
+#: modules/mod_l10n/support/l10n_date.erl:35
 msgid "January"
 msgstr "janvier"
 
-#: modules/mod_l10n/support/l10n_date.erl:40
+#: modules/mod_l10n/support/l10n_date.erl:56
+#, fuzzy
+msgid "Jul"
+msgstr "juillet"
+
+#: modules/mod_l10n/support/l10n_date.erl:41
 msgid "July"
 msgstr "juillet"
 
-#: modules/mod_l10n/support/l10n_date.erl:39
+#: modules/mod_l10n/support/l10n_date.erl:55
+#, fuzzy
+msgid "Jun"
+msgstr "juin"
+
+#: modules/mod_l10n/support/l10n_date.erl:40
 msgid "June"
 msgstr "juin"
 
-#: modules/mod_l10n/support/l10n_date.erl:36
+#: modules/mod_l10n/support/l10n_date.erl:52
+#, fuzzy
+msgid "Mar"
+msgstr "mars"
+
+#: modules/mod_l10n/support/l10n_date.erl:37
 msgid "March"
 msgstr "mars"
 
-#: modules/mod_l10n/support/l10n_date.erl:38
+#: modules/mod_l10n/support/l10n_date.erl:39
+#: modules/mod_l10n/support/l10n_date.erl:54
 msgid "May"
 msgstr "mai"
 
-#: modules/mod_l10n/support/l10n_date.erl:24
+#: modules/mod_l10n/support/l10n_date.erl:25
 msgid "Monday"
 msgstr "lundi"
 
-#: modules/mod_l10n/support/l10n_date.erl:44
+#: modules/mod_l10n/support/l10n_date.erl:60
+msgid "Nov"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:45
 msgid "November"
 msgstr "novembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:43
+#: modules/mod_l10n/support/l10n_date.erl:59
+#, fuzzy
+msgid "Oct"
+msgstr "octobre"
+
+#: modules/mod_l10n/support/l10n_date.erl:44
 msgid "October"
 msgstr "octobre"
 
-#: modules/mod_l10n/support/l10n_date.erl:29
+#: modules/mod_l10n/support/l10n_date.erl:30
 msgid "Saturday"
 msgstr "samedi"
 
-#: modules/mod_l10n/support/l10n_date.erl:42
+#: modules/mod_l10n/support/l10n_date.erl:58
+msgid "Sep"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:43
 msgid "September"
 msgstr "septembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:30
+#: modules/mod_l10n/support/l10n_date.erl:31
 msgid "Sunday"
 msgstr "dimanche"
 
-#: modules/mod_l10n/support/l10n_date.erl:27
+#: modules/mod_l10n/support/l10n_date.erl:28
 msgid "Thursday"
 msgstr "jeudi"
 
-#: modules/mod_l10n/support/l10n_date.erl:25
+#: modules/mod_l10n/support/l10n_date.erl:26
 msgid "Tuesday"
 msgstr "mardi"
 
-#: modules/mod_l10n/support/l10n_date.erl:26
+#: modules/mod_l10n/support/l10n_date.erl:27
 msgid "Wednesday"
 msgstr "mercredi"
 
-#: modules/mod_l10n/support/l10n_date.erl:19
+#: modules/mod_l10n/support/l10n_date.erl:20
 msgid "midnight"
 msgstr "minuit"
 
-#: modules/mod_l10n/support/l10n_date.erl:21
+#: modules/mod_l10n/support/l10n_date.erl:22
 msgid "noon"
 msgstr "midi"
-
