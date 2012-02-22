@@ -38,7 +38,7 @@ msgstr "août"
 
 #: modules/mod_l10n/support/l10n_date.erl:61
 msgid "Dec"
-msgstr ""
+msgstr "déc"
 
 #: modules/mod_l10n/support/l10n_date.erl:46
 msgid "December"
@@ -46,7 +46,7 @@ msgstr "décembre"
 
 #: modules/mod_l10n/support/l10n_date.erl:51
 msgid "Feb"
-msgstr ""
+msgstr "févr"
 
 #: modules/mod_l10n/support/l10n_date.erl:36
 msgid "February"
@@ -59,7 +59,7 @@ msgstr "vendredi"
 #: modules/mod_l10n/support/l10n_date.erl:50
 #, fuzzy
 msgid "Jan"
-msgstr "janvier"
+msgstr "janv"
 
 #: modules/mod_l10n/support/l10n_date.erl:35
 msgid "January"
@@ -68,7 +68,7 @@ msgstr "janvier"
 #: modules/mod_l10n/support/l10n_date.erl:56
 #, fuzzy
 msgid "Jul"
-msgstr "juillet"
+msgstr "juil"
 
 #: modules/mod_l10n/support/l10n_date.erl:41
 msgid "July"
@@ -103,7 +103,7 @@ msgstr "lundi"
 
 #: modules/mod_l10n/support/l10n_date.erl:60
 msgid "Nov"
-msgstr ""
+msgstr "nov"
 
 #: modules/mod_l10n/support/l10n_date.erl:45
 msgid "November"
@@ -112,7 +112,7 @@ msgstr "novembre"
 #: modules/mod_l10n/support/l10n_date.erl:59
 #, fuzzy
 msgid "Oct"
-msgstr "octobre"
+msgstr "oct"
 
 #: modules/mod_l10n/support/l10n_date.erl:44
 msgid "October"
@@ -124,7 +124,7 @@ msgstr "samedi"
 
 #: modules/mod_l10n/support/l10n_date.erl:58
 msgid "Sep"
-msgstr ""
+msgstr "sept"
 
 #: modules/mod_l10n/support/l10n_date.erl:43
 msgid "September"
