@@ -21,7 +21,6 @@
 					<div class="form-item clearfix">
 						<label for="new_media_title" style="color:white">{_ Media title _}</label>
 						<input type="text" id="new_media_title" name="new_media_title" value="{{ title|escape }}" />
-						{% validate id="new_media_title" type={presence} %}
 					</div>
 				{% endif %}
 				
