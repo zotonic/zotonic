@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:38 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:42 
 msgid ""
 "Cancel"
 msgstr ""
@@ -36,25 +36,26 @@ msgstr ""
 
 #: ./modules/mod_oembed/mod_oembed.erl:233 
 msgid ""
-"Invalid media URL"
+"Invalid or unsupported media URL. The item might have been deleted or is "
+"not public."
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:41 
 msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:26 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:30 
 msgid ""
 "Media title"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:41 
 msgid ""
 "Replace media item"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:31 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:35 
 msgid ""
 "Summary"
 msgstr ""

@@ -23,7 +23,7 @@ msgid ""
 "Added on"
 msgstr ""
 
-#: ./modules/mod_comment/templates/_comments.tpl:4 ./modules/mod_comment/templates/_admin_menu_module.tpl:2 ./modules/mod_comment/templates/admin_comments.tpl:11 
+#: ./modules/mod_comment/templates/_comments.tpl:4 ./modules/mod_comment/templates/admin_comments.tpl:11 ./modules/mod_comment/templates/_admin_menu_module.tpl:2 
 msgid ""
 "Comments"
 msgstr ""

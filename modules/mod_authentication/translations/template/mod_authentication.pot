@@ -23,7 +23,7 @@ msgid ""
 "Below are your account details and a link to set a new password."
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:5 ./modules/mod_authentication/templates/_logon_password_reset.tpl:6 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:6 ./modules/mod_authentication/templates/_logon_password_expired.tpl:5 
 msgid ""
 "Below you can enter a new password for your account"
 msgstr ""
@@ -107,12 +107,12 @@ msgid ""
 "your account."
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_off.tpl:2 ./modules/mod_authentication/templates/logoff.tpl:3 
+#: ./modules/mod_authentication/templates/logoff.tpl:3 ./modules/mod_authentication/templates/_logon_off.tpl:2 
 msgid ""
 "Log Off"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_off.tpl:4 ./modules/mod_authentication/templates/_logon_form_box.tpl:30 
+#: ./modules/mod_authentication/templates/_logon_form_box.tpl:30 ./modules/mod_authentication/templates/_logon_off.tpl:4 
 msgid ""
 "Log On"
 msgstr ""
@@ -122,7 +122,7 @@ msgid ""
 "Log on using your"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:11 ./modules/mod_authentication/templates/_logon_password_reset.tpl:12 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:12 ./modules/mod_authentication/templates/_logon_password_expired.tpl:11 
 msgid ""
 "New password"
 msgstr ""
@@ -132,7 +132,7 @@ msgid ""
 "One moment please, logging off…"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:15 ./modules/mod_authentication/templates/_logon_form_box.tpl:17 
+#: ./modules/mod_authentication/templates/_logon_form_box.tpl:17 ./modules/mod_authentication/templates/logon_confirm_form.tpl:15 
 msgid ""
 "Password"
 msgstr ""
@@ -152,7 +152,7 @@ msgid ""
 "Please show me the log on form"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:18 ./modules/mod_authentication/templates/_logon_password_reset.tpl:20 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:20 ./modules/mod_authentication/templates/_logon_password_expired.tpl:18 
 msgid ""
 "Repeat password"
 msgstr ""
@@ -187,7 +187,7 @@ msgid ""
 "Sorry, your password reset code is unknown or expired"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_form_box.tpl:24 
+#: ./modules/mod_authentication/templates/_logon_form_box.tpl:24 ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 
 msgid ""
 "Stay logged on unless I log off."
 msgstr ""

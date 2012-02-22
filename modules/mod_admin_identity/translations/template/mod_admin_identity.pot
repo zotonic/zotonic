@@ -33,7 +33,7 @@ msgid ""
 "Are you sure you want to delete the username from"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58 
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58 
 msgid ""
 "Cancel"
 msgstr ""
@@ -49,7 +49,7 @@ msgid ""
 "Created on"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6 
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40 
 msgid ""
 "Delete"
 msgstr ""
@@ -169,7 +169,7 @@ msgid ""
 "This person is not yet a user."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20 ./modules/mod_admin_identity/templates/admin_users.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
 msgid ""
 "Username"
 msgstr ""
