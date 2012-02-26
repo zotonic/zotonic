@@ -185,6 +185,12 @@ scan("#}-->" ++ T, Scanned, {SourceRef, Row, Column}, {in_comment, "#}-->"}) ->
 scan("#}" ++ T, Scanned, {SourceRef, Row, Column}, {in_comment, "#}"}) ->
     scan(T, Scanned, {SourceRef, Row, Column + 2}, in_text);
 
+scan("\r\n" ++ T, Scanned, {SourceRef, Row, _Column}, {in_comment, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row+1, 1}, {in_comment, Closer});
+
+scan("\n" ++ T, Scanned, {SourceRef, Row, _Column}, {in_comment, Closer}) ->
+    scan(T, Scanned, {SourceRef, Row+1, 1}, {in_comment, Closer});
+
 scan([_ | T], Scanned, {SourceRef, Row, Column}, {in_comment, Closer}) ->
     scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_comment, Closer});
 
