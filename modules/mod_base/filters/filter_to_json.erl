@@ -19,6 +19,8 @@
 %% Modified by François Cardinaux in order to convert UTF8 strings correctly.
 %% Usage: 
 %%    * If the input value contains strings of UTF-8-encoded characters: 
+%%          {{ value|to_json }}
+%%      or
 %%          {{ value|to_json:"utf-8" }}
 %%    * If the input value contains strings of ISO 8859-1 (= Latin-1) characters: 
 %%          {{ value|to_json:"latin-1" }}
@@ -26,7 +28,17 @@
 %% The output will always contain utf-8-encoded strings.  
 
 -module(filter_to_json).
--export([to_json/3]).
+-export([to_json/2, to_json/3]).
+
+%% @doc Convert an Erlang list or tuple to JSON
+%% This function assumes that all strings of the input term are made of utf-8-encoded characters. 
+%% @spec to_json(ErlangTerm, Context) -> Json
+%% Where: 
+%%    * ErlangTerm = list() | tuple()
+%%    * Context = Zotonic context record
+%%    * Json = the JSON content
+to_json(Value, Context) ->
+    to_json(Value, "utf-8", Context).
 
 %% @doc Convert an Erlang list or tuple to JSON
 %% This function assumes that the all strings of the input term have the same 
