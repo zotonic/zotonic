@@ -195,11 +195,6 @@ figure {
 
 .clearfix, 
 .zp-wrapper {
-    display: inline-block;
-}
-
-html[xmlns] .clearfix,
-html[xmlns] .zp-wrapper {
     display: block;
 }
 
