@@ -42,7 +42,8 @@
           to_time/1,
           to_isotime/1,
           to_json/1,
-
+          unicode_to_utf8/1,
+          
           convert_json/1,
           ip_to_list/1,
           ip_to_long/1,
@@ -348,3 +349,46 @@ convert_json(L) when is_list(L) ->
     [convert_json(V) || V <- L];
 convert_json(V) ->
     V.
+
+unicode_to_utf8(List) when is_list(List) -> lists:flatmap(fun unicode_to_utf8/1, List);
+unicode_to_utf8(Ch) -> char_to_utf8(Ch).
+
+char_to_utf8(Ch) when is_integer(Ch), Ch >= 0 ->
+    if Ch < 128 ->
+	    %% 0yyyyyyy
+	    [Ch];
+       Ch < 16#800 ->
+	    %% 110xxxxy 10yyyyyy
+	    [16#C0 + (Ch bsr 6),
+	     128+(Ch band 16#3F)];
+       Ch < 16#10000 ->
+	    %% 1110xxxx 10xyyyyy 10yyyyyy
+	    if Ch < 16#D800; Ch > 16#DFFF, Ch < 16#FFFE ->
+		    [16#E0 + (Ch bsr 12),
+		     128+((Ch bsr 6) band 16#3F),
+		     128+(Ch band 16#3F)];
+               true -> [$?]
+	    end;
+       Ch < 16#200000 ->
+	    %% 11110xxx 10xxyyyy 10yyyyyy 10yyyyyy
+	    [16#F0+(Ch bsr 18),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       Ch < 16#4000000 ->
+	    %% 111110xx 10xxxyyy 10yyyyyy 10yyyyyy 10yyyyyy
+	    [16#F8+(Ch bsr 24),
+	     128+((Ch bsr 18) band 16#3F),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       Ch < 16#80000000 ->
+	    %% 1111110x 10xxxxyy 10yyyyyy 10yyyyyy 10yyyyyy 10yyyyyy
+	    [16#FC+(Ch bsr 30),
+	     128+((Ch bsr 24) band 16#3F),
+	     128+((Ch bsr 18) band 16#3F),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       true -> [$?]
+    end.

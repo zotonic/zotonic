@@ -191,6 +191,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 start_following(Context) ->
+
     Login = case m_config:get_value(?MODULE, api_login, false, Context) of
                 LB when is_binary(LB) ->
                     binary_to_list(LB);
@@ -201,6 +202,8 @@ start_following(Context) ->
                     binary_to_list(LP);
                 P -> P
             end,
+    error_logger:info_msg("~p: Username = ~p. ~n", [z_context:site(Context), Login]),
+
     case Login of
         false ->
             error_logger:info_msg("No username/password configuration for mod_twitter. ~n"),
@@ -272,8 +275,9 @@ process_data(Data, Context) ->
                             Row ->
                                 UserId = proplists:get_value(rsc_id, Row),
                                 CategoryId = m_category:name_to_id_check(tweet, AsyncContext),
+                                Body = z_convert:unicode_to_utf8(proplists:get_value("text", Tweet)),
                                 Props = [{title, proplists:get_value("screen_name", User) ++ " tweeted on " ++ proplists:get_value("created_at", Tweet)},
-                                         {body, proplists:get_value("text", Tweet)},
+                                         {body, Body},
                                          {source, proplists:get_value("source", Tweet)},
                                          {category_id, CategoryId},
                                          {tweet, Tweet},
@@ -292,7 +296,7 @@ process_data(Data, Context) ->
                                 %% Create edges
                                 [{ok, _} = m_edge:insert(TweetId, depiction, PictureId, Context) || PictureId <- Ids],
 
-                                Message = proplists:get_value("screen_name", User) ++ ": " ++ proplists:get_value("text", Tweet),
+                                Message = proplists:get_value("screen_name", User) ++ ": " ++ Body,
                                 z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
                                 TweetId
                         end
