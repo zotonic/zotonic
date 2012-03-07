@@ -26,24 +26,28 @@
 
 
 -export ([
-	clean_lower/1,
-	to_list/1,
-	to_flatlist/1,
-	to_atom/1, 
-	to_binary/1, 
-	to_integer/1,
-	to_float/1,
-	to_bool_strict/1,
-	to_bool/1,
-	to_utc/1,
-	to_localtime/1,
-	to_datetime/1,
-    to_date/1,
-    to_time/1,
-    to_isotime/1,
-    to_json/1,
-    
-    ip_to_list/1
+          clean_lower/1,
+          to_list/1,
+          to_flatlist/1,
+          to_atom/1, 
+          to_binary/1, 
+          to_integer/1,
+          to_float/1,
+          to_bool_strict/1,
+          to_bool/1,
+          to_utc/1,
+          to_localtime/1,
+          to_datetime/1,
+          to_date/1,
+          to_time/1,
+          to_isotime/1,
+          to_json/1,
+          unicode_to_utf8/1,
+          
+          convert_json/1,
+          ip_to_list/1,
+          ip_to_long/1,
+          long_to_ip/1
 ]).
 
 
@@ -312,3 +316,77 @@ ip_to_list({_K1,_K2,_K3,_K4,_K5,_K6,_K7,_K8} = IPv6) ->
                   tuple_to_list(IPv6)),
     lists:flatten(string:join(L, ":")).
 
+
+%% Taken from egeoip (http://code.google.com/p/egeoip/source/browse/trunk/egeoip/src/egeoip.erl?r=19)
+%% @spec ip2long(Address) -> {ok, integer()}
+%% @doc Convert an IP address from a string, IPv4 tuple or IPv6 tuple to the
+%%      big endian integer representation.
+ip_to_long({B3, B2, B1, B0}) ->
+    {ok, (B3 bsl 24) bor (B2 bsl 16) bor (B1 bsl 8) bor B0};
+ip_to_long({W7, W6, W5, W4, W3, W2, W1, W0}) ->
+    {ok, (W7 bsl 112) bor (W6 bsl 96) bor (W5 bsl 80) bor (W4 bsl 64) bor
+	(W3 bsl 48) bor (W2 bsl 32) bor (W1 bsl 16) bor W0};
+ip_to_long(_) ->
+    {error, badmatch}.
+
+
+%% @doc Convert long int to IP address tuple. FIXME: ipv6
+long_to_ip(L) ->
+    {ok, {(L band (255 bsl 24)) bsr 24,
+          (L band (255 bsl 16)) bsr 16,
+          (L band (255 bsl 8)) bsr 8,
+          L band 255}}.
+
+
+%% @doc Convert json from facebook favour to an easy to use format for zotonic templates.
+convert_json({K, V}) when is_binary(K) ->
+    {z_convert:to_atom(K), convert_json(V)};
+convert_json({struct, PropList}) when is_list(PropList) ->
+    convert_json(PropList);
+convert_json(L) when is_list(L) ->
+    [convert_json(V) || V <- L];
+convert_json(V) ->
+    V.
+
+unicode_to_utf8(List) when is_list(List) -> lists:flatmap(fun unicode_to_utf8/1, List);
+unicode_to_utf8(Ch) -> char_to_utf8(Ch).
+
+char_to_utf8(Ch) when is_integer(Ch), Ch >= 0 ->
+    if Ch < 128 ->
+	    %% 0yyyyyyy
+	    [Ch];
+       Ch < 16#800 ->
+	    %% 110xxxxy 10yyyyyy
+	    [16#C0 + (Ch bsr 6),
+	     128+(Ch band 16#3F)];
+       Ch < 16#10000 ->
+	    %% 1110xxxx 10xyyyyy 10yyyyyy
+	    if Ch < 16#D800; Ch > 16#DFFF, Ch < 16#FFFE ->
+		    [16#E0 + (Ch bsr 12),
+		     128+((Ch bsr 6) band 16#3F),
+		     128+(Ch band 16#3F)];
+               true -> [$?]
+	    end;
+       Ch < 16#200000 ->
+	    %% 11110xxx 10xxyyyy 10yyyyyy 10yyyyyy
+	    [16#F0+(Ch bsr 18),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       Ch < 16#4000000 ->
+	    %% 111110xx 10xxxyyy 10yyyyyy 10yyyyyy 10yyyyyy
+	    [16#F8+(Ch bsr 24),
+	     128+((Ch bsr 18) band 16#3F),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       Ch < 16#80000000 ->
+	    %% 1111110x 10xxxxyy 10yyyyyy 10yyyyyy 10yyyyyy 10yyyyyy
+	    [16#FC+(Ch bsr 30),
+	     128+((Ch bsr 24) band 16#3F),
+	     128+((Ch bsr 18) band 16#3F),
+	     128+((Ch bsr 12) band 16#3F),
+	     128+((Ch bsr 6) band 16#3F),
+	     128+(Ch band 16#3F)];
+       true -> [$?]
+    end.
