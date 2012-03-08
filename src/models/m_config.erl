@@ -78,7 +78,7 @@ all(Context) ->
             Cs;
         undefined ->
             Cs = case z_db:has_connection(Context) of
-                    true -> z_db:assoc_props("select * from config order by module, key", Context);
+                    true -> z_db:assoc_props("select * from config where not is_gone order by module, key", Context);
                     false -> []
                  end,
             Indexed = [ {M, z_utils:index_proplist(key, CMs)} || {M,CMs} <- z_utils:group_proplists(module, Cs) ],
@@ -378,7 +378,10 @@ zynamo_put(Host, {Module, Key} = MK, Version, Props) ->
     Context = z_context:new(Host),
     Cols = z_db:column_names(config, Context),
     OtherProps = z_utils:prop_delete(Cols, Props),
-    PropValue = proplists:get_value(value, Props),
+    PropValue = case proplists:get_value(value, Props) of
+                    undefined -> <<>>;
+                    PV -> PV
+                end,
     Result = z_db:transaction(
             fun(Ctx) ->
                 CurrVersion = version(Module, Key, Ctx),
