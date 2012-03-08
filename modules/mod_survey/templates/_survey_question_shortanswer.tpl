@@ -1,4 +1,4 @@
-{% with answers[question.id][question.name][2]  as value %}
+{% with answers[question.id][question.name][2]|default:value  as value %}
 <p>{{ question.question|escape }}</p>
 <input id="{{ #short }}" name="{{ question.name }}" type="text" value="{{ value|escape }}" />
 {% if question.name == "email" %}
