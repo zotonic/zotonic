@@ -202,6 +202,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     Vars = [ {id, Id},
+                             {q, As},
                              {page_nr, NewPageNr},
                              {question_ids, QuestionIds},
                              {questions, [ {QId, [{id, QId} | question_to_props(Q)]} || {QId, Q} <- L ]},
@@ -219,18 +220,18 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                                 ok ->
                                     case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
                                         true ->
-                                            #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}]};
+                                            #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}, {q, As}]};
                                         false ->
-                                            #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}]}
+                                            #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                                     end;
                                 {error, _Reason} ->
-                                    #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}]}
+                                    #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                             end
                     end
             end;
         _NoSurvey ->
             % No survey defined, show an error page.
-            #render{template="_survey_empty.tpl", vars=[{id,Id}]}
+            #render{template="_survey_empty.tpl", vars=[{id,Id}, {q, As}]}
     end.
 
 
