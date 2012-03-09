@@ -215,18 +215,18 @@ checksum_assert(Data, Checksum, Context) ->
 
 pickle(Data, Context) ->
     BData = erlang:term_to_binary(Data),
-	Nonce = z_ids:number(1 bsl 31),
-	Sign  = z_ids:sign_key(Context),
-	SData = <<BData/binary, Nonce:32, Sign/binary>>,
-	<<C1:64,C2:64>> = erlang:md5(SData),
-	base64:encode(<<C1:64, C2:64, Nonce:32, BData/binary>>).
+    Nonce = crypto:rand_bytes(4), 
+    Sign  = z_ids:sign_key(Context),
+    SData = <<BData/binary, Nonce:4/binary>>,
+    <<Mac:16/binary>> = crypto:md5_mac(Sign, SData),	
+    base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
 depickle(Data, Context) ->
     try
-        <<C1:64, C2:64, Nonce:32, BData/binary>> = base64:decode(Data),
+        <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
     	Sign  = z_ids:sign_key(Context),
-    	SData = <<BData/binary, Nonce:32, Sign/binary>>,
-    	<<C1:64, C2:64>> = erlang:md5(SData),
+    	SData = <<BData/binary, Nonce:4/binary>>,
+    	<<Mac:16/binary>> = crypto:md5_mac(Sign, SData),
     	erlang:binary_to_term(BData)
     catch
         _M:_E -> erlang:throw("Postback data invalid, could not depickle: "++Data)
