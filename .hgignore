@@ -11,7 +11,7 @@ src/erlydtl/erlydtl_parser.erl
 src/tests/erlydtl/rendered_output/*
 priv/log/*
 priv/sasl/*
-priv/sites/default/files/*
+priv/sites/*/files/
 priv/sites/*/config
 priv/config
 priv/erlang.config
@@ -27,3 +27,8 @@ zotonic.tmproj
 *.so
 *.Plo
 *.wmtrace
+*.mo
+*.swp
+deps/webzmachine/
+deps/lager
+log/

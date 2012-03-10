@@ -58,3 +58,6 @@ zotonic.tmproj
 
 *.wmtrace
 
+*.swp
+
+*.mo

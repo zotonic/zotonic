@@ -1,0 +1,166 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic.mod_acl_simple_roles.ru\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-12-01 19:03+0300\n"
+"Last-Translator: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:7
+msgid "(implicit)"
+msgstr "(неявный)"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79
+msgid "<strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data."
+msgstr "<strong>Уведомление безопасности</strong>: Если разрешить доступ к файлам */*, все пользователи указанной роли будут в способны получить полный доступ ко всему сайту и его данным."
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:22
+msgid "ACL role overview"
+msgstr "Обзор ролей ACL"
+
+#: modules/mod_acl_simple_roles/templates/_admin_menu_module.tpl:2
+msgid "Access Control"
+msgstr "Контроль доступа"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:10
+msgid "Access Control - Roles Overview"
+msgstr "Контроль доступа - Обзор ролей"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:20
+msgid "Access control controls what an user is allowed to do and see.  The roles define different groups of rights.  Users can be made member of multiple roles."
+msgstr "Контроль доступа отвечает системе на вопрос: \"Может ли какой-то пользователь делать такое-то действие или просматривать такой-то ресурс?\". Каждая роль определяет различный набор прав. На каждого пользователя может быть назначено одновременно несколько ролей."
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:28
+msgid "Actions"
+msgstr "Действия"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:3
+msgid "Admin Access Control"
+msgstr "Управление доступом"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16
+msgid "All members are allowed to view all content.  (Check this for supervisors.)"
+msgstr "Все пользователи с этой ролью могут просматривать весь контент. (Отметка для модераторов/супервайзоров)."
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40
+msgid "Allow editing of category"
+msgstr "Разрешить редактировать категорию"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:38
+msgid "Categories"
+msgstr "Категории"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
+msgid "Check below what people that are member of this role are allowed to do."
+msgstr "Выберите, что могут делать пользователи, обладающие этой ролью, из списка ниже."
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32
+msgid "Community members"
+msgstr "Участники сообщества"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
+msgid "File types allowed to be uploaded"
+msgstr "Типы файлов, разрешенные для загрузки"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70
+msgid "File uploads"
+msgstr "Загрузка файлов"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33
+msgid "Group members"
+msgstr "Участники групп"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
+msgid "Help about ACL roles."
+msgstr "О ролях ACL."
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55
+msgid "Manage modules"
+msgstr "Управлять модулями"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72
+msgid "Maximum allowed file size for uploads (in KB)"
+msgstr "Максимально разрешенный размер файла для закрузок (в КB)"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25
+msgid "Maximum visibility (user can’t change visibility to higher level than this)"
+msgstr "Максимальная видимость (пользователь не сможет выставить уровень видимости выше указанного)"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:1
+msgid "Member of roles"
+msgstr "Участник ролей"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:42
+msgid "Modules"
+msgstr "Модули"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
+msgid "Need more help?"
+msgstr "Помочь?"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:56
+msgid "No ACL roles found."
+msgstr "Ролей ACL не найдено."
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21
+msgid "Only allow to update content created by the user himself. (Check for user generated content sites.)"
+msgstr "Разрешить пользователям изменять только контент, который они сами произвели. (Отметить для сайтов с контентом, который генерят юзеры-редакторы)."
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:27
+msgid "Rights"
+msgstr "Права"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29
+msgid "The whole world"
+msgstr "Весь мир"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:25
+msgid "Title"
+msgstr "Заголовок"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
+msgid "Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules."
+msgstr "Пользователи могут быть участниками нескольких ролей. Пользователь, обладающий теми или иными ролями, может создавать и редактировать определенные категории или управлять определенными модулями."
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:26
+msgid "View all"
+msgstr "Просмотреть всё"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:48
+msgid "delete"
+msgstr "удалить"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:49
+msgid "edit"
+msgstr "изменить"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:14
+msgid "make a new acl role"
+msgstr "Создать новую роль ACL"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6
+msgid "make smaller"
+msgstr "уменьшить"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:36
+msgid "view all,&mdash;"
+msgstr "просмотреть всё,&mdash;"
+
