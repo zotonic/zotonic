@@ -54,7 +54,7 @@ msgstr "Управление доступом"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16
 msgid "All members are allowed to view all content.  (Check this for supervisors.)"
-msgstr "Все пользователи с этой ролью могут просматривать весь контент. (Включать для модераторов/супервайзоров)."
+msgstr "Все пользователи с этой ролью могут просматривать весь контент. (Отметка для модераторов/супервайзоров)."
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40
 msgid "Allow editing of category"
@@ -66,7 +66,7 @@ msgstr "Категории"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
 msgid "Check below what people that are member of this role are allowed to do."
-msgstr "Укажи, что пользователи, обладающие этой ролью, могут делать."
+msgstr "Выберите, что могут делать пользователи, обладающие этой ролью, из списка ниже."
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32
 msgid "Community members"
@@ -78,7 +78,7 @@ msgstr "Типы файлов, разрешенные для загрузки"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70
 msgid "File uploads"
-msgstr "Загрузки файлов"
+msgstr "Загрузка файлов"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33
 msgid "Group members"
@@ -102,7 +102,7 @@ msgstr "Максимальная видимость (пользователь н
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar_identity.tpl:1
 msgid "Member of roles"
-msgstr "Участик ролей"
+msgstr "Участник ролей"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:42
 msgid "Modules"
@@ -118,7 +118,7 @@ msgstr "Ролей ACL не найдено."
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21
 msgid "Only allow to update content created by the user himself. (Check for user generated content sites.)"
-msgstr "Только разрешить пользователям изменять контент, который они сами произвели. (Включать для сайтов с контентом, который генерят юзеры-редакторы)."
+msgstr "Разрешить пользователям изменять только контент, который они сами произвели. (Отметить для сайтов с контентом, который генерят юзеры-редакторы)."
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5
 msgid "Permissions"
@@ -138,7 +138,7 @@ msgstr "Заголовок"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
 msgid "Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules."
-msgstr "Пользователи могут быть участниками нескольких ролей. Пользователь, обладающий теми или иными ролями, может создавать и редактировать какие-то категории или управлять какими-то модулями."
+msgstr "Пользователи могут быть участниками нескольких ролей. Пользователь, обладающий теми или иными ролями, может создавать и редактировать определенные категории или управлять определенными модулями."
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:26
 msgid "View all"

@@ -47,7 +47,7 @@ msgstr "Чтобы удалить категорию, необходимо пе�
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
 msgid "Drag me"
-msgstr "Тяни"
+msgstr "Перетяни меня"
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:42
 msgid "Drag the <strong>New category</strong> to add a new category."

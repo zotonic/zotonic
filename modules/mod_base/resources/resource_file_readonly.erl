@@ -116,7 +116,7 @@ encodings_provided(ReqData, Context) ->
                         [{"identity", fun(Data) -> Data end}];
                     _ ->
 			Mime = z_context:get(mime, Context),
-			case z_media_identity:is_mime_compressed(Mime) of
+			case z_media_identify:is_mime_compressed(Mime) of
 			    true -> [{"identity", fun(Data) -> Data end}];
 
                             _    -> [{"identity", fun(Data) -> decode_data(identity, Data) end},

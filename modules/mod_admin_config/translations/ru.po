@@ -65,7 +65,7 @@ msgstr "Модуль"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:47
 msgid "No configurations found."
-msgstr "Не найдено ключей."
+msgstr "Конфигурация не найдена."
 
 #: modules/mod_admin_config/templates/admin_config.tpl:24
 msgid "Options"
