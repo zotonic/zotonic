@@ -1,6 +1,6 @@
 {application, zotonic,
  [{description, "zotonic"},
-  {vsn, "0.7.4"},
+  {vsn, "0.7.5"},
   {modules, [
     zotonic,
     zotonic_app,
