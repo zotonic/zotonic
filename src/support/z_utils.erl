@@ -23,75 +23,84 @@
 -include("zotonic.hrl").
 
 -export ([
-	are_equal/2,
-	assert/2,
-    encode_value/2,
-    decode_value/2,
-    encode_value_expire/3,
-    decode_value_expire/2,
-	checksum/2,
-	checksum_assert/3,
-	coalesce/1,
-	combine/2,
-	combine_defined/2,
-	decode/2,
-	depickle/2,
-	encode/2,
-	f/1,
-	f/2,
-	get_seconds/0,
-	group_by/3,
-	group_proplists/2,
-	hex_decode/1,
-	hex_encode/1,
-	index_proplist/2,
-	nested_proplist/1,
-	nested_proplist/2,
-	get_nth/2,
-	set_nth/3,
-	is_empty/1,
-	is_process_alive/1,
-	erase_process_dict/0,
-	is_true/1,
-	js_escape/1,
-	js_array/1,
-	js_object/1,
-	js_object/2,
-	json_escape/1,
-	lib_dir/0,
-	lib_dir/1,
-	list_dir_recursive/1,
-	name_for_host/2,
-	only_digits/1,
-	only_letters/1,
-	is_iolist/1,
-	is_proplist/1,
-	os_escape/1,
-	os_filename/1,
-	pickle/2,
-	prefix/2,
-	prop_delete/2,
-	prop_replace/3,
-	randomize/1,
-	randomize/2,
-	replace1/3,
-	split/2,
-	split_in/2,
-	url_path_encode/1,
-	url_encode/1,
-	url_decode/1,
-	vsplit_in/2,
-    now/0,
-    now_msec/0,
-    tempfile/0,
-    temppath/0,
-    url_reserved_char/1,
-    url_unreserved_char/1,
-    url_valid_char/1,
-    flush_message/1,
-    ensure_existing_module/1,
-	generate_username/2
-]).
+          are_equal/2,
+          assert/2,
+          encode_value/2,
+          decode_value/2,
+          encode_value_expire/3,
+          decode_value_expire/2,
+          checksum/2,
+          checksum_assert/3,
+          coalesce/1,
+          combine/2,
+          combine_defined/2,
+          decode/2,
+          depickle/2,
+          encode/2,
+          f/1,
+          f/2,
+          get_seconds/0,
+          group_by/3,
+          group_proplists/2,
+          hex_decode/1,
+          hex_encode/1,
+          index_proplist/2,
+          nested_proplist/1,
+          nested_proplist/2,
+          get_nth/2,
+          set_nth/3,
+          is_empty/1,
+          is_process_alive/1,
+          erase_process_dict/0,
+          is_true/1,
+          js_escape/1,
+          js_array/1,
+          js_object/1,
+          js_object/2,
+          json_escape/1,
+          lib_dir/0,
+          lib_dir/1,
+          list_dir_recursive/1,
+          name_for_host/2,
+          only_digits/1,
+          only_letters/1,
+          is_iolist/1,
+          is_proplist/1,
+          os_escape/1,
+          os_filename/1,
+          pickle/2,
+          prefix/2,
+          prop_delete/2,
+          prop_replace/3,
+          randomize/1,
+          randomize/2,
+          replace1/3,
+          split/2,
+          split_in/2,
+          url_path_encode/1,
+          url_encode/1,
+          url_decode/1,
+          percent_encode/1,
+          vsplit_in/2,
+          now/0,
+          now_msec/0,
+          tempfile/0,
+          temppath/0,
+          url_reserved_char/1,
+          url_unreserved_char/1,
+          url_valid_char/1,
+          flush_message/1,
+          ensure_existing_module/1,
+          generate_username/2
+         ]).
+
+-define(is_uppercase_alpha(C), C >= $A, C =< $Z).
+-define(is_lowercase_alpha(C), C >= $a, C =< $z).
+-define(is_alpha(C), ?is_uppercase_alpha(C); ?is_lowercase_alpha(C)).
+-define(is_digit(C), C >= $0, C =< $9).
+-define(is_alphanumeric(C), ?is_alpha(C); ?is_digit(C)).
+-define(is_unreserved(C), ?is_alphanumeric(C); C =:= $-; C =:= $_; C =:= $.; C =:= $~).
+
 
 %%% FORMAT %%%
 
@@ -270,6 +279,24 @@ url_path_encode([C|R], Acc)->
     end.
 
 
+%%% PERCENT encode ENCODE %%%
+
+%% @doc Percent encoding/decoding as defined by RFC 3986 (http://tools.ietf.org/html/rfc3986).
+percent_encode(Chars) when is_list(Chars) ->
+    percent_encode(Chars, []);
+percent_encode(Chars) ->
+    percent_encode(z_convert:to_list(Chars)).
+
+percent_encode([], Encoded) ->
+  lists:flatten(lists:reverse(Encoded));
+percent_encode([C|Etc], Encoded) when ?is_unreserved(C) ->
+  percent_encode(Etc, [C|Encoded]);
+percent_encode([C|Etc], Encoded) ->
+  Value = [io_lib:format("%~s", [z_utils:encode([Char], 16)]) 
+            || Char <- binary_to_list(unicode:characters_to_binary([C]))],
+  percent_encode(Etc, [lists:flatten(Value)|Encoded]).
+
+
 %% @spec os_filename(String) -> String
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)
@@ -385,14 +412,11 @@ url_reserved_char($[) -> true;
 url_reserved_char($]) -> true;
 url_reserved_char(_) -> false.
 
-url_unreserved_char(Ch) when Ch >= $A andalso Ch < $Z + 1 -> true;
-url_unreserved_char(Ch) when Ch >= $a andalso Ch < $z + 1 -> true;
-url_unreserved_char(Ch) when Ch >= $0 andalso Ch < $9 + 1 -> true;
-url_unreserved_char($-) -> true;
-url_unreserved_char($_) -> true;
-url_unreserved_char($.) -> true;
-url_unreserved_char($~) -> true;
-url_unreserved_char(_)  -> false.
+url_unreserved_char(Ch) when ?is_unreserved(Ch) ->
+    true;
+url_unreserved_char(_) -> 
+    false.
+
 
 
 
