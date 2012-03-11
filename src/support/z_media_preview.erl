@@ -378,31 +378,35 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
                 false -> {Width, ceil(Width / ImageAspect), none}
             end;
         _ ->
-			% When we are doing a crop then we have to calculate the
-			% maximum inner bounding box, and not the maximum outer 
-			% bounding box for the image
-		    {W,H} = case Aspect > ImageAspect of
-        		        true ->
-        				    % width is the larger one
-        				    {Width, Width / ImageAspect};
-        				false ->
-        				    % height is the larger one
-        				    {ImageAspect * Height, Height}
-        			end,
-        	CropL = case CropPar of
-        	            X when X == north_west; X == west; X == south_west -> 0;
-        	            X when X == north_east; X == east; X == south_east -> ceil(W - Width);
-        	            _ -> ceil((W - Width) / 2)
-    	            end,
-    	    CropT = case CropPar of
-    	                Y when Y == north_west; Y == north; Y == north_east -> 0;
-    	                Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
-    	                _ -> ceil((H - Height) / 2)
-	                end,
+	    %% When we are doing a crop then we have to calculate the
+	    %% maximum inner bounding box, and not the maximum outer 
+	    %% bounding box for the image
+	    {W,H} = case Aspect > ImageAspect of
+		% width is the larger one
+		true  -> {Width, Width / ImageAspect};
+		
+		% height is the larger one
+		false -> {ImageAspect * Height, Height}
+	    end,
 
-	        % @todo Prevent scaleup of the image, but preserve the result size
-	        % The crop is relative to the original image
-	        {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
+        	
+	    CropL = case CropPar of
+		X when X == north_west; X == west; X == south_west -> 0;
+		X when X == north_east; X == east; X == south_east -> ceil(W - Width);
+		[X,_] when is_integer(X) -> X;
+		_ -> ceil((W - Width) / 2)
+	    end,
+
+    	    CropT = case CropPar of
+		Y when Y == north_west; Y == north; Y == north_east -> 0;
+		Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
+		[_,Y] when is_integer(Y) -> Y;
+		_ -> ceil((H - Height) / 2)
+	    end,
+
+	    %% @todo Prevent scaleup of the image, but preserve the result size
+	    %% The crop is relative to the original image
+	    {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
     end.
 
 
@@ -420,7 +424,10 @@ string2filter("crop", Where) ->
             "south_west" -> south_west;
             "west"       -> west;
             "north_west" -> north_west;
-            "center"     -> center
+            "center"     -> center;
+	    [C|_] = CropLT when C == $+ orelse C == $- ->
+		{match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
+		[list_to_integer(CropL), list_to_integer(CropT)]
           end,
     {crop,Dir};
 string2filter("grey",[]) ->

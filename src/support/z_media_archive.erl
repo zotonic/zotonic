@@ -74,7 +74,13 @@ archive_file(Filename, NewBasename, Context) ->
             NewFile = archive_filename(NewBasename, Context),
             AbsPath = abspath(NewFile, Context),
             ok = filelib:ensure_dir(AbsPath),
-            ok = file:rename(Fileabs, AbsPath),
+            case file:rename(Fileabs, AbsPath) of
+                %% cross-fs rename is not supported by erlang, so copy and delete the file
+                {error, exdev} ->
+                    {ok, _BytesCopied} = file:copy(Fileabs, AbsPath),
+                    ok = file:delete(Fileabs);
+                ok -> ok
+            end,
             NewFile
     end.
 

@@ -27,7 +27,7 @@ msgstr "Апрель"
 
 #: modules/mod_l10n/support/l10n_date.erl:38
 msgid "April"
-msgstr "Апрель"
+msgstr "Апреля"
 
 #: modules/mod_l10n/support/l10n_date.erl:57
 #, fuzzy
@@ -36,7 +36,7 @@ msgstr "Август"
 
 #: modules/mod_l10n/support/l10n_date.erl:42
 msgid "August"
-msgstr "Август"
+msgstr "Августа"
 
 #: modules/mod_l10n/support/l10n_date.erl:61
 msgid "Dec"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:46
 msgid "December"
-msgstr "Декабрь"
+msgstr "Декабря"
 
 #: modules/mod_l10n/support/l10n_date.erl:51
 msgid "Feb"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:36
 msgid "February"
-msgstr "Февраль"
+msgstr "Февраля"
 
 #: modules/mod_l10n/support/l10n_date.erl:29
 msgid "Friday"
@@ -65,7 +65,7 @@ msgstr "Январь"
 
 #: modules/mod_l10n/support/l10n_date.erl:35
 msgid "January"
-msgstr "Январь"
+msgstr "Января"
 
 #: modules/mod_l10n/support/l10n_date.erl:56
 #, fuzzy
@@ -74,7 +74,7 @@ msgstr "Июль"
 
 #: modules/mod_l10n/support/l10n_date.erl:41
 msgid "July"
-msgstr "Июль"
+msgstr "Июля"
 
 #: modules/mod_l10n/support/l10n_date.erl:55
 #, fuzzy
@@ -83,7 +83,7 @@ msgstr "Июнь"
 
 #: modules/mod_l10n/support/l10n_date.erl:40
 msgid "June"
-msgstr "Июнь"
+msgstr "Июня"
 
 #: modules/mod_l10n/support/l10n_date.erl:52
 #, fuzzy
@@ -92,12 +92,12 @@ msgstr "Март"
 
 #: modules/mod_l10n/support/l10n_date.erl:37
 msgid "March"
-msgstr "Март"
+msgstr "Марта"
 
 #: modules/mod_l10n/support/l10n_date.erl:39
 #: modules/mod_l10n/support/l10n_date.erl:54
 msgid "May"
-msgstr "Май"
+msgstr "Мая"
 
 #: modules/mod_l10n/support/l10n_date.erl:25
 msgid "Monday"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:45
 msgid "November"
-msgstr "Ноябрь"
+msgstr "Ноября"
 
 #: modules/mod_l10n/support/l10n_date.erl:59
 #, fuzzy
@@ -118,7 +118,7 @@ msgstr "Октябрь"
 
 #: modules/mod_l10n/support/l10n_date.erl:44
 msgid "October"
-msgstr "Октябрь"
+msgstr "Октября"
 
 #: modules/mod_l10n/support/l10n_date.erl:30
 msgid "Saturday"
@@ -130,7 +130,7 @@ msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:43
 msgid "September"
-msgstr "Сентябрь"
+msgstr "Сентября"
 
 #: modules/mod_l10n/support/l10n_date.erl:31
 msgid "Sunday"

@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic.mod_admin_category.ru\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2011-12-01 23:49+0300\n"
+"Last-Translator: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
+msgid "Add key"
+msgstr "Добавить ключ"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
+msgid "Are you sure you want to delete the configuration key"
+msgstr "Удалить ключ"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_admin_config/templates/_admin_menu_module.tpl:2
+msgid "Config"
+msgstr "Конфиг"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:3
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:17
+msgid "Configuration overview"
+msgstr "Обзор конфигурации"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:6
+msgid "Delete"
+msgstr "Удалить"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13
+#: modules/mod_admin_config/templates/admin_config.tpl:21
+msgid "Key"
+msgstr "Ключ"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:23
+msgid "Modified"
+msgstr "Изменен"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7
+#: modules/mod_admin_config/templates/admin_config.tpl:20
+msgid "Module"
+msgstr "Модуль"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:47
+msgid "No configurations found."
+msgstr "Конфигурация не найдена."
+
+#: modules/mod_admin_config/templates/admin_config.tpl:24
+msgid "Options"
+msgstr "Опции"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
+msgid "Please fill in the module, key and value for the new configuration key."
+msgstr "Необходимо указать модуль, ключ и значения для нового ключа конфигурации."
+
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
+msgid "Save"
+msgstr "Сохранить"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:10
+msgid "System Configuration"
+msgstr "Системная конфигурация"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
+msgid "This can't be undone. The configuration key will be lost forever."
+msgstr "Ключ конфигурации будет удален. Это действие нельзя отменить."
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8
+#: modules/mod_admin_config/templates/admin_config.tpl:22
+msgid "Value"
+msgstr "Значение"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:37
+msgid "delete"
+msgstr "удалить"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:39
+msgid "edit"
+msgstr "изменить"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:12
+msgid "make a new config setting"
+msgstr "создать новый ключ конфигурации"
+

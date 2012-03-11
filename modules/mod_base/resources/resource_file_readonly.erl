@@ -115,15 +115,12 @@ encodings_provided(ReqData, Context) ->
                     true ->
                         [{"identity", fun(Data) -> Data end}];
                     _ ->
-                        case z_context:get(mime, Context) of
-                            "image/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                            "video/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                            "audio/" ++ _ ->  [{"identity", fun(Data) -> Data end}];
-                            "application/x-gzip" ++ _ -> [{"identity", fun(Data) -> Data end}];
-                            "application/zip" ++ _ -> [{"identity", fun(Data) -> Data end}];
-                            _ -> 
-                                [{"identity", fun(Data) -> decode_data(identity, Data) end},
-                                 {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+                        Mime = z_context:get(mime, Context),
+                        case z_media_identify:is_mime_compressed(Mime) of
+                            true -> [{"identity", fun(Data) -> Data end}];
+
+                            _    -> [{"identity", fun(Data) -> decode_data(identity, Data) end},
+                                     {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
                         end
                 end,
     {Encodings, ReqData, z_context:set(encode_data, length(Encodings) > 1, Context)}.
