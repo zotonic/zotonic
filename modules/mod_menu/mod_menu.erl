@@ -296,25 +296,25 @@ menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
 manage_schema(install, Context) ->
     z_datamodel:manage(
       mod_menu,
-      #datamodel{categories=
-                 [
-                  {menu, categorization,
-                   [{title, <<"Page menu">>}]
-                  }
-                 ],
-                 resources=
-                 case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
-                     undefined ->
-                         [];
-                     Menu ->
-                         [
-                          {main_menu,
-                           menu,
-                           [{title, <<"Main menu">>},
-                            {menu, Menu}
-                           ]
-                          }]
-                 end}, Context).
+      #datamodel{
+        categories = [
+              {menu, categorization,
+               [{title, <<"Page menu">>}]
+              }
+        ],
+        resources = [
+              {main_menu,
+                   menu,
+                   [{title, <<"Main menu">>},
+                    {menu, case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
+                                undefined -> [];
+                                Menu -> Menu
+                           end}
+                   ]
+              }
+        ]
+      },
+      Context).
 
 
 %% @doc test function
