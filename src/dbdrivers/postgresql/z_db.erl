@@ -36,12 +36,16 @@
     assoc_props_row/3,
     assoc/2,
     assoc/3,
+    assoc/4,
     assoc_props/2,
     assoc_props/3,
+    assoc_props/4,
     q/2,
     q/3,
+    q/4,
     q1/2,
     q1/3,
+    q1/4,
     q_row/2,
     q_row/3,
     equery/2,
@@ -226,10 +230,15 @@ get_parameter(Parameter, Context) ->
 assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
-assoc(Sql, Parameters, Context) ->
+assoc(Sql, Parameters, #context{} = Context) ->
+    assoc(Sql, Parameters, Context, ?PGSQL_TIMEOUT);
+assoc(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    assoc(Sql, [], Context, Timeout).
+
+assoc(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> [];
 	   (C) ->
-                {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+                {ok, Result} = pgsql:assoc(C, Sql, Parameters, Timeout),
                 Result
 	end,
     with_connection(F, Context).
@@ -238,22 +247,32 @@ assoc(Sql, Parameters, Context) ->
 assoc_props(Sql, Context) ->
     assoc_props(Sql, [], Context).
 
-assoc_props(Sql, Parameters, Context) ->
+assoc_props(Sql, Parameters, #context{} = Context) ->
+    assoc_props(Sql, Parameters, Context, ?PGSQL_TIMEOUT);
+assoc_props(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    assoc_props(Sql, [], Context, Timeout).
+
+assoc_props(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> [];
 	   (C) ->
-                {ok, Result} = pgsql:assoc(C, Sql, Parameters),
+                {ok, Result} = pgsql:assoc(C, Sql, Parameters, Timeout),
                 merge_props(Result)
 	end,
     with_connection(F, Context).
 
 
 q(Sql, Context) ->
-    q(Sql, [], Context).
+    q(Sql, [], Context, ?PGSQL_TIMEOUT).
 
-q(Sql, Parameters, Context) ->
+q(Sql, Parameters, #context{} = Context) ->
+    q(Sql, Parameters, Context, ?PGSQL_TIMEOUT);
+q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    q(Sql, [], Context, Timeout).
+
+q(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> [];
 	   (C) ->
-                case pgsql:equery(C, Sql, Parameters) of
+                case pgsql:equery(C, Sql, Parameters, Timeout) of
                     {ok, _Affected, _Cols, Rows} -> Rows;
                     {ok, _Cols, Rows} -> Rows;
                     {ok, Rows} -> Rows
@@ -264,16 +283,21 @@ q(Sql, Parameters, Context) ->
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
-q1(Sql, Parameters, Context) ->
+q1(Sql, Parameters, #context{} = Context) ->
+    q1(Sql, Parameters, Context, ?PGSQL_TIMEOUT);
+q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    q1(Sql, [], Context, Timeout).
+
+q1(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> undefined;
-	   (C) ->
-                case pgsql:equery1(C, Sql, Parameters) of
+           (C) ->
+                case pgsql:equery1(C, Sql, Parameters, Timeout) of
                     {ok, Value} -> Value;
                     {error, noresult} -> undefined
                 end
-	end,
+    end,
     with_connection(F, Context).
-	
+
 
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
@@ -288,11 +312,15 @@ q_row(Sql, Args, Context) ->
 equery(Sql, Context) ->
     equery(Sql, [], Context).
     
-equery(Sql, Parameters, Context) ->
+equery(Sql, Parameters, #context{} = Context) ->
+    equery(Sql, Parameters, Context, ?PGSQL_TIMEOUT);
+equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    equery(Sql, [], Context, Timeout).
+
+equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
-	   (C) ->
-                pgsql:equery(C, Sql, Parameters)
-	end,
+           (C) -> pgsql:equery(C, Sql, Parameters, Timeout)
+        end,
     with_connection(F, Context).
 
 

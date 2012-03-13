@@ -5,11 +5,23 @@
 
 -behavior(gen_fsm).
 
--export([start_link/0, stop/1, connect/5, get_parameter/2]).
--export([squery/2, equery/3]).
--export([parse/4, bind/4, execute/4, describe/3]).
--export([close/3, sync/1]).
--export([database/1]).
+-export([start_link/0, stop/1]).
+-export([
+    connect/5, get_parameter/2,
+    connect/6, get_parameter/3,
+
+    squery/2, equery/3,
+    squery/3, equery/4,
+
+    parse/4, bind/4, execute/4, describe/3,
+    parse/5, bind/5, execute/5, describe/4,
+
+    close/3, sync/1,
+    close/4, sync/2,
+
+    database/1,
+    database/2
+]).
 
 -export([init/1, handle_event/3, handle_sync_event/4]).
 -export([handle_info/3, terminate/3, code_change/4]).
@@ -47,37 +59,68 @@ stop(C) ->
     gen_fsm:send_all_state_event(C, stop).
 
 connect(C, Host, Username, Password, Opts) ->
-    gen_fsm:sync_send_event(C, {connect, Host, Username, Password, Opts}, ?PGSQL_TIMEOUT).
+    connect(C, Host, Username, Password, Opts, ?PGSQL_TIMEOUT).
+
+connect(C, Host, Username, Password, Opts, Timeout) ->
+    gen_fsm:sync_send_event(C, {connect, Host, Username, Password, Opts}, Timeout).
 
 get_parameter(C, Name) ->
-    gen_fsm:sync_send_event(C, {get_parameter, to_binary(Name)}, ?PGSQL_TIMEOUT).
+    get_parameter(C, Name, ?PGSQL_TIMEOUT).
+
+get_parameter(C, Name, Timeout) ->
+    gen_fsm:sync_send_event(C, {get_parameter, to_binary(Name)}, Timeout).
 
 squery(C, Sql) ->
-    gen_fsm:sync_send_event(C, {squery, Sql}, ?PGSQL_TIMEOUT).
+    squery(C, Sql, ?PGSQL_TIMEOUT).
+
+squery(C, Sql, Timeout) ->
+    gen_fsm:sync_send_event(C, {squery, Sql}, Timeout).
 
 equery(C, Statement, Parameters) ->
-    gen_fsm:sync_send_event(C, {equery, Statement, Parameters}, ?PGSQL_TIMEOUT).
+    equery(C, Statement, Parameters, ?PGSQL_TIMEOUT).
+
+equery(C, Statement, Parameters, Timeout) ->
+    gen_fsm:sync_send_event(C, {equery, Statement, Parameters}, Timeout).
 
 parse(C, Name, Sql, Types) ->
-    gen_fsm:sync_send_event(C, {parse, Name, Sql, Types}, ?PGSQL_TIMEOUT).
+    parse(C, Name, Sql, Types, ?PGSQL_TIMEOUT).
+        
+parse(C, Name, Sql, Types, Timeout) ->
+    gen_fsm:sync_send_event(C, {parse, Name, Sql, Types}, Timeout).
 
 bind(C, Statement, PortalName, Parameters) ->
-    gen_fsm:sync_send_event(C, {bind, Statement, PortalName, Parameters}, ?PGSQL_TIMEOUT).
+    bind(C, Statement, PortalName, Parameters, ?PGSQL_TIMEOUT).
+
+bind(C, Statement, PortalName, Parameters, Timeout) ->
+    gen_fsm:sync_send_event(C, {bind, Statement, PortalName, Parameters}, Timeout).
 
 execute(C, Statement, PortalName, MaxRows) ->
-    gen_fsm:sync_send_event(C, {execute, Statement, PortalName, MaxRows}, ?PGSQL_TIMEOUT).
+    execute(C, Statement, PortalName, MaxRows, ?PGSQL_TIMEOUT).
+
+execute(C, Statement, PortalName, MaxRows, Timeout) ->
+    gen_fsm:sync_send_event(C, {execute, Statement, PortalName, MaxRows}, Timeout).
 
 describe(C, Type, Name) ->
-    gen_fsm:sync_send_event(C, {describe, Type, Name}, ?PGSQL_TIMEOUT).
+    describe(C, Type, Name, ?PGSQL_TIMEOUT).
+
+describe(C, Type, Name, Timeout) ->
+    gen_fsm:sync_send_event(C, {describe, Type, Name}, Timeout).
 
 close(C, Type, Name) ->
-    gen_fsm:sync_send_event(C, {close, Type, Name}, ?PGSQL_TIMEOUT).
+    close(C, Type, Name, ?PGSQL_TIMEOUT).
+close(C, Type, Name, Timeout) ->
+    gen_fsm:sync_send_event(C, {close, Type, Name}, Timeout).
 
 sync(C) ->
-    gen_fsm:sync_send_event(C, sync, ?PGSQL_TIMEOUT).
+    sync(C, ?PGSQL_TIMEOUT).
+sync(C, Timeout) ->
+    gen_fsm:sync_send_event(C, sync, Timeout).
     
 database(C) ->
-    gen_fsm:sync_send_event(C, database, ?PGSQL_TIMEOUT).
+    database(C, ?PGSQL_TIMEOUT).
+
+database(C, Timeout) ->
+    gen_fsm:sync_send_event(C, database, Timeout).
 
 %% -- gen_fsm implementation --
 

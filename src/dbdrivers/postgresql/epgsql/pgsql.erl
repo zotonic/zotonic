@@ -7,9 +7,22 @@
 
 -module(pgsql).
 
--export([connect/2, connect/3, connect/4, close/1]).
--export([last_id/2, reset_id/2, squery1/2, equery1/2, equery1/3, assoc/2, assoc/3]).
--export([get_parameter/2, squery/2, equery/2, equery/3]).
+-export([
+    connect/2, connect/3, connect/4, connect/5,
+    close/1
+]).
+-export([
+        last_id/2, last_id/3, 
+        reset_id/2, reset_id/3, 
+        squery1/2, squery1/3, 
+        equery1/2, equery1/3, equery1/4,
+        assoc/2, assoc/3, assoc/4
+]).
+-export([
+    get_parameter/2, 
+    squery/2, squery/3, 
+    equery/2, equery/3, equery/4
+]).
 -export([parse/2, parse/3, parse/4, describe/2, describe/3]).
 -export([bind/3, bind/4, execute/2, execute/3, execute/4]).
 -export([close/2, close/3, sync/1]).
@@ -27,16 +40,18 @@ connect(Host, Opts) ->
 
 connect(Host, Username, Opts) ->
     connect(Host, Username, "", Opts).
-
 connect(Host, Username, Password, Opts) ->
+    connect(Host, Username, Password, Opts, ?TIMEOUT).
+
+connect(Host, Username, Password, Opts, Timeout) ->
     {ok, C} = pgsql_connection:start_link(),
-    case pgsql_connection:connect(C, Host, Username, Password, Opts) of
+    case pgsql_connection:connect(C, Host, Username, Password, Opts, Timeout) of
         {ok, Conn} ->
             case proplists:get_value(schema, Opts) of
                 undefined -> 
                     {ok, Conn};
                 Schema when is_list(Schema) ->
-                    case squery(Conn, "SET search_path TO " ++ Schema) of
+                    case squery(Conn, "SET search_path TO " ++ Schema, Timeout) of
                         {ok, [], []} ->
                             {ok, Conn};
                         Error -> 
@@ -55,21 +70,33 @@ close(C) when is_pid(C) ->
 get_parameter(C, Name) ->
     pgsql_connection:get_parameter(C, Name).
 
-last_id(C, Table) when is_atom(Table) ->
-    last_id(C, atom_to_list(Table));
 last_id(C, Table) ->
-    equery1(C, "select currval(pg_get_serial_sequence($1, 'id'))", [Table]).
+    last_id(C, Table, ?TIMEOUT).
+    
+last_id(C, Table, Timeout) when is_atom(Table) ->
+    last_id(C, atom_to_list(Table), Timeout);
+last_id(C, Table, Timeout) ->
+    equery1(C, "select currval(pg_get_serial_sequence($1, 'id'))", [Table], Timeout).
 
-reset_id(C, Table) when is_atom(Table) ->
-    reset_id(C, atom_to_list(Table));
 reset_id(C, Table) ->
-    {ok, Max} = equery1(C, "select max(id) from \""++Table++"\""),
-    equery1(C, "select setval(pg_get_serial_sequence($1, 'id'), $2)", [Table, Max+1]).
+    reset_id(C, Table, ?TIMEOUT).
+    
+reset_id(C, Table, Timeout) when is_atom(Table) ->
+    reset_id(C, atom_to_list(Table), Timeout);
+reset_id(C, Table, Timeout) ->
+    {ok, Max} = equery1(C, "select max(id) from \""++Table++"\"", Timeout),
+    equery1(C, "select setval(pg_get_serial_sequence($1, 'id'), $2)", [Table, Max+1], Timeout).
 
 assoc(C, Sql) ->
-    assoc(C, Sql, []).
-assoc(C, Sql, Parameters) ->
-    case equery(C, Sql, Parameters) of
+    assoc(C, Sql, [], ?TIMEOUT).
+
+assoc(C, Sql, Timeout) when is_integer(Timeout) ->
+    assoc(C, Sql, [], Timeout);
+assoc(C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
+    assoc(C, Sql, Parameters, ?TIMEOUT).
+    
+assoc(C, Sql, Parameters, Timeout) ->
+    case equery(C, Sql, Parameters, Timeout) of
         {ok, Columns, Rows} ->
             Names = [ list_to_atom(binary_to_list(Name)) || #column{name=Name} <- Columns ],
             Rows1 = [ lists:zip(Names, tuple_to_list(Row)) || Row <- Rows ],
@@ -77,8 +104,12 @@ assoc(C, Sql, Parameters) ->
         Other -> Other
     end.
 
+
 squery1(C, Sql) ->
-    case squery(C,Sql) of
+    squery1(C, Sql, ?TIMEOUT).
+
+squery1(C, Sql, Timeout) ->
+    case squery(C,Sql, Timeout) of
         {ok, _Columns, []} -> {error, noresult};
         {ok, _RowCount, _Columns, []} -> {error, noresult};
         {ok, _Columns, [Row|_]} -> {ok, element(1, Row)};
@@ -87,9 +118,15 @@ squery1(C, Sql) ->
     end.
 
 equery1(C, Sql) ->
-    equery1(C, Sql, []).
-equery1(C, Sql, Parameters) ->
-    case equery(C, Sql, Parameters) of
+    equery1(C, Sql, [], ?TIMEOUT).
+
+equery1(C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
+    equery1(C, Sql, Parameters, ?TIMEOUT);
+equery1(C, Sql, Timeout) when is_integer(Timeout) ->
+    equery1(C, Sql, [], Timeout).
+
+equery1(C, Sql, Parameters, Timeout) ->
+    case equery(C, Sql, Parameters, Timeout) of
         {ok, _Columns, []} -> {error, noresult};
         {ok, _RowCount, _Columns, []} -> {error, noresult};
         {ok, _Columns, [Row|_]} -> {ok, element(1, Row)};
@@ -100,24 +137,33 @@ equery1(C, Sql, Parameters) ->
 
     
 squery(C, Sql) ->
-    ok = pgsql_connection:squery(C, Sql),
-    case receive_results(C, []) of
+    squery(C, Sql, ?TIMEOUT).
+
+squery(C, Sql, Timeout) ->
+    ok = pgsql_connection:squery(C, Sql, Timeout),
+    case receive_results(C, [], Timeout) of
         [Result] -> Result;
         Results  -> Results
     end.
 
 equery(C, Sql) ->
-    equery(C, Sql, []).
+    equery(C, Sql, [], ?TIMEOUT).
 
-
+equery(C, Sql, Timeout) when is_integer(Timeout) ->
+    equery(C, Sql, [], Timeout);
 equery(C, Sql, Parameters) when is_tuple(Parameters) ->
-    equery(C, Sql, tuple_to_list(Parameters));
-equery(C, Sql, Parameters) ->
-    case pgsql_connection:parse(C, "", Sql, []) of
+    equery(C, Sql, tuple_to_list(Parameters), ?TIMEOUT);
+equery(C, Sql, Parameters) when is_list(Parameters) ->
+    equery(C, Sql, Parameters, ?TIMEOUT).
+
+equery(C, Sql, Parameters, Timeout) when is_tuple(Parameters) ->
+    equery(C, Sql, tuple_to_list(Parameters), Timeout);
+equery(C, Sql, Parameters, Timeout) when is_list(Parameters) ->
+    case pgsql_connection:parse(C, "", Sql, [], Timeout) of
         {ok, #statement{types = Types} = S} ->
             Typed_Parameters = lists:zip(Types, Parameters),
-            ok = pgsql_connection:equery(C, S, Typed_Parameters),
-            receive_result(C);
+            ok = pgsql_connection:equery(C, S, Typed_Parameters, Timeout),
+            receive_result(C, Timeout);
         Error ->
             ?LOG("SQL error ~p : ~p", [Error, Sql]),
             Error
@@ -187,24 +233,24 @@ with_transaction(C, F) ->
 
 %% -- internal functions --
 
-receive_result(C) ->
-    R = receive_result(C, [], []),
+receive_result(C, Timeout) ->
+    R = receive_result(C, [], [], Timeout),
     receive
         {pgsql, C, done} -> R
     end.
 
-receive_results(C, Results) ->
-    case receive_result(C, [], []) of
+receive_results(C, Results, Timeout) ->
+    case receive_result(C, [], [], Timeout) of
         done -> lists:reverse(Results);
-        R    -> receive_results(C, [R | Results])
+        R    -> receive_results(C, [R | Results], Timeout)
     end.
 
-receive_result(C, Cols, Rows) ->
+receive_result(C, Cols, Rows, Timeout) ->
     receive
         {pgsql, C, {columns, Cols2}} ->
-            receive_result(C, Cols2, Rows);
+            receive_result(C, Cols2, Rows, Timeout);
         {pgsql, C, {data, Row}} ->
-            receive_result(C, Cols, [Row | Rows]);
+            receive_result(C, Cols, [Row | Rows], Timeout);
         {pgsql, C, {error, _E} = Error} ->
             Error;
         {pgsql, C, {complete, {_Type, Count}}} ->
@@ -215,17 +261,20 @@ receive_result(C, Cols, Rows) ->
         {pgsql, C, {complete, _Type}} ->
             {ok, Cols, lists:reverse(Rows)};
         {pgsql, C, {notice, _N}} ->
-            receive_result(C, Cols, Rows);
+            receive_result(C, Cols, Rows, Timeout);
         {pgsql, C, done} ->
             done
     after
-        ?TIMEOUT -> {error, timeout}
+        Timeout -> {error, timeout}
     end.
 
 receive_extended_result(C)->
     receive_extended_result(C, []).
 
 receive_extended_result(C, Rows) ->
+    receive_extended_result(C, Rows, ?TIMEOUT).
+
+receive_extended_result(C, Rows, Timeout) ->
     receive
         {pgsql, C, {data, Row}} ->
             receive_extended_result(C, [Row | Rows]);
@@ -243,5 +292,5 @@ receive_extended_result(C, Rows) ->
         {pgsql, C, {notice, _N}} ->
             receive_extended_result(C, Rows)
     after
-        ?TIMEOUT -> {error, timeout}
+        Timeout -> {error, timeout}
     end.
