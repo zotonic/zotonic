@@ -239,12 +239,12 @@ get_menu(Id, Context) ->
 remove_invisible([], Acc, _Context) ->
     lists:reverse(Acc);
 remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
-    case m_rsc:is_visible(Id, Context) of
+    case m_rsc:is_visible(Id, Context) andalso m_rsc:exists(Id, Context) of
         true ->  remove_invisible(Rest, [{Id,remove_invisible(Sub, [], Context)} | Acc], Context);
         false -> remove_invisible(Rest, Acc, Context)
     end;
 remove_invisible([Id|Rest], Acc, Context) ->
-    case m_rsc:is_visible(Id, Context) of
+    case m_rsc:is_visible(Id, Context) andalso m_rsc:exists(Id, Context) of
         true ->  remove_invisible(Rest, [Id | Acc], Context);
         false -> remove_invisible(Rest, Acc, Context)
     end.
