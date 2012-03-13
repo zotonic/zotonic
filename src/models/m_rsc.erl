@@ -261,16 +261,9 @@ exists(Name, Context) when is_binary(Name) ->
 exists(Id, Context) -> 
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
-            case z_depcache:get({exists, Rid}, Context) of
-                {ok, Exists} ->
-                    Exists;
-                undefined -> 
-                    Exists = case z_db:q1("select id from rsc where id = $1", [Rid], Context) of
-                        undefined -> false;
-                        _ -> true
-                    end,
-                    z_depcache:set({exists, Rid}, Exists, ?DAY, [Rid], Context),
-                    Exists
+            case m_rsc:p_no_acl(Rid, id, Context) of
+                Rid -> true;
+                undefined -> false
             end;
         undefined -> false
     end.
