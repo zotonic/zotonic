@@ -399,22 +399,22 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 include_ast(Template, Args, All, Context, TreeWalkerAcc);
             ({'catinclude', Template, RscId, Args, All}, TreeWalkerAcc) ->
                 catinclude_ast(Template, RscId, Args, All, Context, TreeWalkerAcc);
-            ({'if', {'expr', "b_not", E}, Contents}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = empty_ast(TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = body_ast(Contents, Context, TreeWalker1),
-                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'if', E, Contents}, TreeWalkerAcc) ->
+            ({'if', E, Contents, []}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
-                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
-            ({'ifelse', {'expr', "b_not", E}, IfContents, ElseContents}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = body_ast(ElseContents, Context, TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = body_ast(IfContents, Context, TreeWalker1),
-                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                  
-            ({'ifelse', E, IfContents, ElseContents}, TreeWalkerAcc) ->
+                ifexpr_ast(E, IfAstInfo, [{'else', ElseAstInfo}], Context, TreeWalker2);
+            ({'if', E, IfContents, ElseChoices}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(IfContents, Context, TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = body_ast(ElseContents, Context, TreeWalker1),
-                ifexpr_ast(E, IfAstInfo, ElseAstInfo, Context, TreeWalker2);
+                {ElseAsts,TW2} = lists:foldr(fun({'else', ElseContents}, {EAS, IfTW}) ->
+                                                        {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
+                                                        {[{'else', ElseAstInfo}|EAS], IfTW1};
+                                                  ({'elseif', ElseIfExpr, ElseContents}, {EAS, IfTW}) ->
+                                                        {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
+                                                        {[{'elseif', ElseIfExpr, ElseAstInfo}|EAS], IfTW1}
+                                             end,
+                                             {[], TreeWalker1},
+                                             ElseChoices),
+                ifexpr_ast(E, IfAstInfo, ElseAsts, Context, TW2);
             ({'ifequal', Args, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
@@ -984,16 +984,24 @@ auto_escape(Value, Context) ->
             Value
     end.
 
-ifexpr_ast(Expression, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
-    Info = merge_info(IfContentsInfo, ElseContentsInfo),
-    {{Ast, ExpressionInfo}, TreeWalker1} = value_ast(Expression, false, Context, TreeWalker),
-    {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(is_false), [Ast]),
-        [erl_syntax:clause([erl_syntax:atom(true)], none, 
-                [ElseContentsAst]),
-        erl_syntax:clause([erl_syntax:underscore()], none,
-                [IfContentsAst])
-        ]), merge_info(ExpressionInfo, Info)}, TreeWalker1}.
-    
+ifexpr_ast(Expression, IfContents, ElseChoices, Context, TreeWalker) ->
+    lists:foldr(fun({'else', {ElseAst, ElseInfo}}, {{_InnerAst, Inf}, TW}) ->
+                            {{ElseAst, merge_info(Inf, ElseInfo)}, TW};
+                   ({'elseif', E, {ElseAst, ElseInfo}}, {{InnerAst, Inf}, TW}) ->
+                             {{ElseExprAst, ElseExprInfo}, TW1} = value_ast(E, false, Context, TW),
+                             {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
+                                                                          erl_syntax:atom(is_false), 
+                                                                          [ElseExprAst]),
+                                                    [
+                                                    erl_syntax:clause([erl_syntax:atom(true)], none, [InnerAst]),
+                                                    erl_syntax:clause([erl_syntax:underscore()], none, [ElseAst])
+                                                    ]),
+                               merge_info(merge_info(Inf, ElseInfo), ElseExprInfo)
+                              }, TW1}
+                end,
+                empty_ast(TreeWalker),
+                [{'elseif', Expression, IfContents} | ElseChoices]).
+
 
 ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
     Info = merge_info(IfContentsInfo, ElseContentsInfo),

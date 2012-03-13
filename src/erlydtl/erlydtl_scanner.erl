@@ -65,7 +65,7 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToke
     %% At the start of a {% .... %} tag we accept all keywords
     RevString = lists:reverse(String),
     Keywords = ["for", "empty", "endfor", "in", "include", "catinclude", "block", "endblock",
-        "extends", "overrules", "inherit", "autoescape", "endautoescape", "if", "else", "endif",
+        "extends", "overrules", "inherit", "autoescape", "endautoescape", "if", "else", "elseif", "endif",
         "not", "or", "and", "xor", "comment", "endcomment", "cycle", "firstof",
         "ifchanged", "ifequal", "endifequal", "ifnotequal", "endifnotequal",
         "now", "regroup", "rsc", "spaceless", "endspaceless", "ssi", "templatetag",

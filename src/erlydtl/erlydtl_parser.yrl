@@ -68,13 +68,16 @@ Nonterminals
 
     ForBlock
     ForBraced
-	EmptyBraced
+    EmptyBraced
     EndForBraced
     ForExpression
     ForGroup
 
     IfBlock
     IfBraced
+    ElsePart
+    ElseIfList
+    ElseIfBraced
     ElseBraced
     EndIfBraced
 
@@ -156,7 +159,8 @@ Terminals
     cycle_keyword
     dot
     else_keyword
-	empty_keyword
+    elseif_keyword
+    empty_keyword
     endautoescape_keyword
     endblock_keyword
 	endcache_keyword
@@ -312,10 +316,16 @@ ForExpression -> ForGroup in_keyword E : {'in', '$1', '$3'}.
 ForGroup -> identifier : ['$1'].
 ForGroup -> ForGroup comma identifier : '$1' ++ ['$3'].
 
-IfBlock -> IfBraced Elements ElseBraced Elements EndIfBraced : {ifelse, '$1', '$2', '$4'}.
-IfBlock -> IfBraced Elements EndIfBraced : {'if', '$1', '$2'}.
-IfBraced -> open_tag if_keyword E close_tag : '$3'.
+IfBlock -> IfBraced Elements ElsePart : {'if', '$1', '$2', '$3'}.
 
+ElsePart -> EndIfBraced : [].
+ElsePart -> ElseBraced Elements EndIfBraced : [{'else', '$2'}].
+ElsePart -> ElseIfList : '$1'.
+
+ElseIfList -> ElseIfBraced Elements ElsePart : [{'elseif', '$1', '$2'}] ++ '$3'.
+
+IfBraced -> open_tag if_keyword E close_tag : '$3'.
+ElseIfBraced -> open_tag elseif_keyword E close_tag : '$3'.
 ElseBraced -> open_tag else_keyword close_tag.
 EndIfBraced -> open_tag endif_keyword close_tag.
 
