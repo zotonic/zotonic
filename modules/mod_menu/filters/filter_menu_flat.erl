@@ -21,4 +21,4 @@
 
 
 menu_flat(Menu, Context) ->
-    mod_menu:menu_flat(Menu, Context).
+    mod_menu:menu_flat(mod_menu:remove_invisible(Menu, Context), Context).

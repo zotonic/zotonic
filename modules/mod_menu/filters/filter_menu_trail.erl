@@ -26,7 +26,7 @@ menu_trail(Id, Context) ->
 
 menu_trail(Id, MenuId, Context) ->
     Menu = mod_menu:get_menu(MenuId, Context),
-    trail(m_rsc:rid(Id, Context), Menu, Context).
+    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context).
 
 
 trail(_Id, [], _Context) ->

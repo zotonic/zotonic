@@ -39,6 +39,7 @@
     get_menu/2,
     set_menu/3,
     menu_flat/2,
+    remove_invisible/2,
     test/0
 ]).
 
@@ -234,6 +235,9 @@ get_menu(Id, Context) ->
 	validate([M|Ms], Acc) ->
 		validate(Ms, [{M,[]}|Acc]).
 
+
+remove_invisible(Menu, Context) ->
+    remove_invisible(Menu, [], Context).
 
 %% Remove invisible menu items
 remove_invisible([], Acc, _Context) ->
