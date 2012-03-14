@@ -76,9 +76,12 @@ answer(#survey_question{name=Name}, Answers) ->
 
 prep_chart(_Q, []) ->
     undefined;
-prep_chart(Q, [{_, Vals}]) ->
-    Yes = proplists:get_value(<<"yes">>, Vals, 0),
-    No  = proplists:get_value(<<"no">>, Vals, 0),
+prep_chart(Q, Answers) ->
+    {Yes, No} = lists:foldr(fun({_Id, Vals}, {Y, N}) ->
+                                    {proplists:get_value(<<"yes">>, Vals, 0) + Y,
+                                     proplists:get_value(<<"no">>, Vals, 0) + N} end,
+                            {0, 0},
+                            Answers),
     Total = Yes + No,
     YesP = round(Yes * 100 / Total),
     NoP = 100 - YesP,
