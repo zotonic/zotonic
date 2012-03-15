@@ -312,6 +312,7 @@ extension_mime() ->
 		{".pdf", "application/pdf"},
 		{".php", "text/x-php"},
 		{".png", "image/png"},
+		{".ppsx", "application/vnd.openxmlformats-officedocument.presentationml.slideshow"},
 		{".ppt", "application/vnd.ms-powerpoint"},
 		{".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
 		{".ps", "application/postscript"},
