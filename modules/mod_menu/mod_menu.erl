@@ -240,6 +240,8 @@ remove_invisible(Menu, Context) ->
     remove_invisible(Menu, [], Context).
 
 %% Remove invisible menu items
+remove_invisible(<<>>, Acc, _Context) ->
+    lists:reverse(Acc);
 remove_invisible([], Acc, _Context) ->
     lists:reverse(Acc);
 remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
