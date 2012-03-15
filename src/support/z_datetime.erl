@@ -186,6 +186,8 @@ prev_second({YMD,{H,I,S}}) ->
 	{YMD, {H,I,S-1}}.
 
 %% @doc Return the date one year later.
+next_year({{Y,2,29},T})  ->
+	{{Y+1,3,1}, T};
 next_year({{Y,M,D},T}) ->
 	{{Y+1,M,D}, T}.
 
