@@ -7,7 +7,7 @@
 
 	{% if has_name %}
 		<label for="{{ #name }}">{_ Name _}</label>
-		<input type="text" id="{{ #name }}" name="name" value="{{ name|escape }}" />
+		<input type="text" id="{{ #name }}" name="name" value="{{ name|escape }}" maxlength="32" />
 	{% endif %}
 	
 	{% if has_question %}
