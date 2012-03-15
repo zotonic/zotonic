@@ -293,14 +293,20 @@ replace_file(File, RscId, Props, PropsMedia, Context) ->
                 ],
 
                 F = fun(Ctx) ->
+                            Props1 = case      proplists:is_defined(category, Props)
+                                        orelse proplists:is_defined(category_id, Props)
+                                     of 
+                                        true -> Props;
+                                        false -> [{category, mime_to_category(Mime)} | Props]
+                                    end,
                             {ok, Id} = case RscId of
                                            insert_rsc ->
-                                               m_rsc:insert([{category, mime_to_category(Mime)} | Props], Ctx);
+                                               m_rsc:insert(Props1, Ctx);
                                            _ ->
                                                %% When the resource is in the media category, then move it to the correct sub-category depending
                                                %% on the mime type of the uploaded file.
                                                case rsc_is_media_cat(RscId, Context) of
-                                                   true -> m_rsc:update(RscId, [{category, mime_to_category(Mime)}], Context);
+                                                   true -> m_rsc:update(RscId, Props1, Context);
                                                    false -> m_rsc:touch(RscId, Context)
                                                end,
                                                z_db:delete(medium, RscId, Context),
