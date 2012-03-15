@@ -283,10 +283,12 @@ dispatch_for_uri_lookup(DispatchList) ->
 dispatch_for_uri_lookup1([], Dict) ->
     Dict;
 dispatch_for_uri_lookup1([{Name, Pattern, _Resource, _Args}|T], Dict) ->
-    Vars  = lists:filter(fun({A,_RegExp}) -> is_atom(A);
-                            (A) -> is_atom(A)
-                         end,
-                         Pattern),
+    Vars  = lists:foldl(fun(A, Acc) when is_atom(A) -> [A|Acc];
+                           ({A,_RegExp}, Acc) when is_atom(A) -> [A|Acc];
+                           (_, Acc) -> Acc
+                        end,
+                        [],
+                        Pattern),
     Dict1 = case dict:is_key(Name, Dict) of
                 true  -> dict:append(Name, {length(Vars), Vars, Pattern}, Dict);
                 false -> dict:store(Name, [{length(Vars), Vars, Pattern}], Dict)
