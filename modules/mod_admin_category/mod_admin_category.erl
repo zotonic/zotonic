@@ -26,7 +26,8 @@
 -mod_provides([]).
 
 -export([
-    observe_category_hierarchy_save/2
+         observe_category_hierarchy_save/2,
+         observe_admin_menu/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -76,3 +77,9 @@ pair(P, N, [{Id, Sub}|Rest], Acc) ->
     Acc1 = pair(Id, 1, Sub, Acc),
     pair(P, N+1, Rest, [{Id,P,N}|Acc1]).
 
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     {admin_categories,     {admin_structure,   ?__("Categories", Context), {url, admin_category_sorter}}}
+     
+     |Acc].

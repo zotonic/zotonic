@@ -9,8 +9,6 @@
     {admin_referrers,       ["admin", "referrer", id],              resource_admin_referrers,		[]},
     {admin_media,           ["admin", "media", "preview", id],      resource_admin_media_preview,   []},
 
-	{admin_status,			["admin", "status"],					resource_admin,					[{template, "admin_status.tpl"}, {selected, "status"}]},
-
-    {admin_categories_manager, ["admin", "categories"],             resource_admin_categories_manager,[]}
+	{admin_status,			["admin", "status"],					resource_admin,					[{template, "admin_status.tpl"}, {selected, "status"}]}
 
 ].

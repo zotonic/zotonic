@@ -77,16 +77,24 @@ class_to_opts(Class) ->
     
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
-     {dashboard, {undefined, ?__("Dashboard", Context), "/admin"}},
-     
-     {content,   {undefined, ?__("Content", Context), undefined}},
-     
-     {structure, {undefined, ?__("Structure", Context), undefined}},
+     {admin_dashboard, {undefined, ?__("Dashboard", Context), {url, admin} }},
 
-     {modules,   {undefined, ?__("Modules", Context), undefined}},
-     
-     {auth,      {undefined, ?__("Auth", Context), undefined}},
+     %% CONTENT %%
+     {admin_content,   {undefined, ?__("Content", Context), undefined}},
 
-     {system,    {undefined, ?__("System", Context), undefined}}
+     {overview,        {admin_content,   ?__("Pages", Context), {url, admin_overview_rsc}}},
+     {admin_media,     {admin_content,   ?__("Media", Context), {url, admin_media}}},
+     
+     {admin_structure,  {undefined, ?__("Structure", Context), undefined}},
+     {admin_categories, {admin_content,   ?__("Categories", Context),
+                         {url, admin_categories_manager}}},
+
+     
+     {admin_modules,   {undefined, ?__("Modules", Context), undefined}},
+     
+     {admin_auth,      {undefined, ?__("Auth", Context), undefined}},
+
+     {admin_system,    {undefined, ?__("System", Context), undefined}},
+     {admin_status,     {admin_system,   ?__("Status", Context), {url, admin_status}}}
 
      |Acc].
