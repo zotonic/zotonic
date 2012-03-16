@@ -27,7 +27,8 @@
 -mod_prio(1000).
 
 -export([
-    observe_sanitize_element/3
+         observe_sanitize_element/3,
+         observe_admin_menu/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -74,3 +75,18 @@ class_to_opts(Class) ->
     end.
 
     
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     {dashboard, {undefined, ?__("Dashboard", Context), "/admin"}},
+     
+     {content,   {undefined, ?__("Content", Context), undefined}},
+     
+     {structure, {undefined, ?__("Structure", Context), undefined}},
+
+     {modules,   {undefined, ?__("Modules", Context), undefined}},
+     
+     {auth,      {undefined, ?__("Auth", Context), undefined}},
+
+     {system,    {undefined, ?__("System", Context), undefined}}
+
+     |Acc].
