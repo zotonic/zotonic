@@ -1,17 +1,13 @@
-<script type="text/javascript">
-	$(function()
-	{
-		$('.do_fieldreplace').fieldreplace();
-	});
-</script>
-<p>{_ Please fill in the title _} {% if not nocatselect %}{_ and the category of the new page._}{% else %}{_ of the new _} {{ catname }}.{% endif %} </p>
-
 {% wire id=#form type="submit" 
 	postback={new_page subject_id=subject_id predicate=predicate redirect=redirect edge_template=edge_template actions=actions }
 	delegate=delegate 
 %}
 <form id="{{ #form }}" method="POST" action="postback">
 
+    <div class="modal-body">
+        
+    <p>{_ Please fill in the title _} {% if not nocatselect %}{_ and the category of the new page._}{% else %}{_ of the new _} {{ catname }}.{% endif %} </p>
+    
 	<div class="new-rsc-wrapper">
 		<div class="form-item clearfix">
 			<label for="new_rsc_title">{_ Page title _}</label>
@@ -42,10 +38,11 @@
 			<label for="{{ #published }}" class="left">{_ Published _}</label>
 		</div>
 		
-		<div class="form-item clearfix">
-			<button type="submit">{_ Make _} {{ catname }}</button>
-			{% button action={dialog_close} text=_"Cancel" %}
-		</div>
 	</div>
+    </div>
+    <div class="modal-footer">
+	{% button class="btn" action={dialog_close} text=_"Cancel" %}
+	<button class="btn btn-primary" type="submit">{_ Make _} {{ catname }}</button>
+    </div>
 </form>
 
