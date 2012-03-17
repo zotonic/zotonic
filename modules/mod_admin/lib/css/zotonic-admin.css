@@ -28,6 +28,9 @@ div.widget {
     margin-bottom: 40px;
 }
 
+div.modal-backdrop {
+    opacity: 0.5;
+}
 
 /* tinyMce stuff
 --------------------------------------------------------- */
