@@ -24,6 +24,9 @@ body > div.container {
     margin-top: 60px;
 }
 
+div.widget {
+    margin-bottom: 40px;
+}
 
 
 /* tinyMce stuff
