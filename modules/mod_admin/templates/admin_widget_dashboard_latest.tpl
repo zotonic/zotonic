@@ -21,7 +21,7 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-<table class="table">
+<table class="table do_adminLinkedTable">
     <thead>
         <tr>
             <th width="55%">{_ Title _}</th>
@@ -41,7 +41,7 @@
                 {{ m.rsc[m.rsc[id].category_id].title }}
                 <span class="pull-right">
                     <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
-                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini row-link">{_ edit _}</a>
                 </span>
             </td>
         </tr>

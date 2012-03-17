@@ -1,41 +1,48 @@
-<ul class="short-list">
-    <li class="headers clearfix">
-        <span class="zp-30">
-            {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
-        </span>
-        <span class="zp-15">
-            {% include "_admin_sort_header.tpl" field="category_id" caption=_"Category" %}
-        </span>
-        <span class="zp-15">
-            {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" %}
-        </span>
-        <span class="zp-15">
-            {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" %}
-        </span>
-        <span class="zp-25">
-            {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}
-        </span>
-    </li>
+<table class="table table-striped do_adminLinkedTable">
+    <thead>
+        <tr>
+            <th width="30%">
+                {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
+            </th>
+            <th width="15%">
+                {% include "_admin_sort_header.tpl" field="category_id" caption=_"Category" %}
+            </th>
+            <th width="15%">
+                {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" %}
+            </th>
+            <th width="15%">
+                {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" %}
+            </th>
+            <th width="25%">
+                {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" %}
+            </th>
+        </tr>
+    </thead>
 
-    {% for id in result %}
-    {% if m.rsc[id].is_visible %}
-    <li id="{{ #li.id }}" class="clearfix {% if not m.rsc[id].is_published %} unpublished{% endif %}">
-        <a href="{% url admin_edit_rsc id=id %}" class="row">
-            <span class="zp-30"><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></span>
-            <span class="zp-15">{{ m.rsc[m.rsc[id].category_id].title }}</span>
-            <span class="zp-15">{{ m.rsc[id].created|date:"d M Y, H:i" }}</span>
-            <span class="zp-15">{{ m.rsc[id].modified|date:"d M Y, H:i" }}</span>
-            <span class="zp-25">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
-        </a>
-        <span class="button-area">
-            <a href="{{ m.rsc[id].page_url }}" class="button">{_ view _}</a>
-            <a href="{% url admin_edit_rsc id=id %}" class="button">{_ edit _}</a>
-        </span>
-    </li>
-    {% endif %}
-    {% empty %}
-    <li>
-        {_ No pages found. _}
-    </li>
-    {% endfor %}
-</ul>
+    <tbody>
+        {% for id in result %}
+        {% if m.rsc[id].is_visible %}
+        <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}">
+            <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
+            <td>{{ m.rsc[m.rsc[id].category_id].title }}</td>
+            <td>{{ m.rsc[id].created|date:"d M Y, H:i" }}</td>
+            <td>{{ m.rsc[id].modified|date:"d M Y, H:i" }}</td>
+            <td>
+                {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
+                <span class="pull-right">
+                    <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini row-link">{_ edit _}</a>
+                </span>
+            </td>
+        </tr>
+        {% endif %}
+        {% empty %}
+        <tr>
+            <td colspan="5">
+                {_ No pages found. _}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

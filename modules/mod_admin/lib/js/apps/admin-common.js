@@ -1,10 +1,11 @@
 /* Admin Common js
 ----------------------------------------------------------
 
-@package:	Zotonic 2009	
+@package:	Zotonic 2009
 @Author:	Tim Benniks <tim@timbenniks.nl>
 
 Copyright 2009 Tim Benniks
+Copyright 2012 Arjan Scherpenisse
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ---------------------------------------------------------- */
+
+(function($)
+{
+    $.widget("ui.adminLinkedTable",
+    {
+        _init: function() {
+            var self = this;
+            (self.element.find("tr a.row-link").each(function() {
+                                                         var href = $(this).attr("href");
+                                                         $(this).parents("tr:first").find("td").each(function() {
+                                                                                                         $(this)
+                                                                                                             .addClass("view-link")
+                                                                                                             .contents()
+                                                                                                             .wrapAll($("<a>").addClass("view-link").attr("href", href));
+                                                                                                     });
+                                                     }));
+
+            
+        }
+    });
+})(jQuery);
 
 tinyInit = {
 	mode: "none",

@@ -43,7 +43,14 @@ div.modal-body div.modal-footer {
     margin-top: 0;
 }
 
-/* widget */
+hr {
+    width: 100%;
+}
+
+
+/* widget
+--------------------------------------------------------- */
+
 div.widget {
     margin-bottom: 36px;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -70,6 +77,24 @@ div.widget h3 {
 div.widget :last-child {
     margin-bottom: 0;
 }
+
+
+/* admin table
+--------------------------------------------------------- */
+
+table.do_adminLinkedTable td.view-link {
+    padding: 0;
+}
+
+table.do_adminLinkedTable td a.view-link:hover {
+    text-decoration: none;
+}
+table.do_adminLinkedTable td a.view-link {
+    display: block;
+    padding: 8px;
+    color: inherit;
+}
+
 
 /* tinyMce stuff
 --------------------------------------------------------- */
