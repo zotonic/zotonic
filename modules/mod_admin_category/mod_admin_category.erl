@@ -80,6 +80,7 @@ pair(P, N, [{Id, Sub}|Rest], Acc) ->
 
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
-     {admin_categories,     {admin_structure,   ?__("Categories", Context), {url, admin_category_sorter}}}
+     {admin_categories,     {admin_structure,   ?__("Categories", Context),
+                             {url, admin_category_sorter}, {acl, insert, category}}}
      
      |Acc].

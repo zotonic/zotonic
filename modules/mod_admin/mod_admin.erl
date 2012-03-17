@@ -98,3 +98,4 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      {admin_status,     {admin_system,   ?__("Status", Context), {url, admin_status}}}
 
      |Acc].
+

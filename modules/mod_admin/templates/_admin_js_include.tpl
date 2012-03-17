@@ -1,5 +1,7 @@
 {% lib 
-	"js/apps/zotonic-1.0.js"
+        "bootstrap/js/bootstrap.min.js"
+
+        "js/apps/zotonic-1.0.js"
 	"js/apps/z.widgetmanager.js"
 	"js/apps/admin-common.js"
 	
