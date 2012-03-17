@@ -34,15 +34,17 @@
 
 %% interface functions
 -export([
-	manage_schema/2,
-	observe_search_query/2,
-	observe_mailinglist_message/2,
-	observe_email_bounced/2,
-	event/2,
-	page_attachments/2
-]).
+         manage_schema/2,
+         observe_search_query/2,
+         observe_mailinglist_message/2,
+         observe_email_bounced/2,
+         event/2,
+         page_attachments/2,
+         observe_admin_menu/3
+        ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -record(state, {context}).
 
@@ -362,3 +364,13 @@ as_upload(Id, Context) ->
              mime=proplists:get_value(mime, M),
              filename=proplists:get_value(original_filename, M)
            }.
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_mailinglist,
+                parent=admin_content,
+                label=?__("Mailing lists", Context),
+                url={admin_mailinglist},
+                visiblecheck={acl, use, ?MODULE}}
+     
+     |Acc].

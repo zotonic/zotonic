@@ -26,9 +26,6 @@
 -mod_prio(900).
 
 
--include_lib("zotonic.hrl").
-
-
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
@@ -43,8 +40,13 @@
          str_value/2,
          authenticate/3,
          test/0,
-         is_allowed/3
+         is_allowed/3,
+         observe_admin_menu/3
 ]).
+
+-include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
 
 %%====================================================================
 %% API
@@ -299,3 +301,13 @@ is_allowed(Id, Service, Context) ->
         lists:member(Service, [proplists:get_value(service, S)
                                || S <- m_oauth_perms:all_services_for(Id, Context)]).
 
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_oauth,
+                parent=admin_auth,
+                label=?__("API access", Context),
+                url={admin_oauth},
+                visiblecheck={acl, use, ?MODULE}}
+     |Acc].

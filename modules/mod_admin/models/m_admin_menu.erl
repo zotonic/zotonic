@@ -22,6 +22,7 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("include/zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -export([test/0]).
 
@@ -63,11 +64,12 @@ m_value(#m{value=undefined}, _Context) ->
 
 menu(Context) ->
     F = fun() ->
-                Menu = z_notifier:foldr(admin_menu, [], Context),
+                Menu = z_notifier:foldl(admin_menu, [], Context),
                 hierarchize(Menu, Context)
         end,
-    z_depcache:memo(F, {admin_menu, z_acl:user(Context), z_context:language(Context)},
-                    Context).
+    F().
+    %% z_depcache:memo(F, {admin_menu, z_acl:user(Context), z_context:language(Context)},
+    %%                 Context).
 
 
 
@@ -81,44 +83,39 @@ hierarchize(Id, All, Context) ->
     
 
 partition(Key, Items) ->
-    lists:partition(fun({_, {K, _, _}}) when K =:= Key ->
+    lists:partition(fun(#menu_item{parent=K}) when K =:= Key ->
+                            true;
+                       (#menu_separator{parent=K}) when K =:= Key ->
                             true;
                        (_) ->
                             false end, Items).
 
-mixin({Id, {_Parent, Label, UrlDef}}, All, Context) ->
+mixin(Item=#menu_item{id=Id, url=UrlDef}, All, Context) ->
     Url = item_url(UrlDef, Context),
-    {Id, [{url, Url},
-          {label, Label},
-          {items, hierarchize(Id, All, Context)}]};
-mixin({Id, {_Parent, Label, UrlDef, VisibleCheck}}, All, Context) ->
-    Url = item_url(UrlDef, Context),
-    {Id, [{url, Url},
-          {label, Label},
-          {visiblecheck, VisibleCheck},
-          {items, hierarchize(Id, All, Context)}]}.
+    Props = [{url, Url},
+             {items, hierarchize(Id, All, Context)}
+             | proplists:delete(url, lists:zip(record_info(fields, menu_item), tl(tuple_to_list(Item))))],
+    {Id, Props};
 
-item_url({url, Rule}, Context) ->
+mixin(#menu_separator{visiblecheck=C}, _All, _Context) ->
+    {undefined, [{separator, true}, {visiblecheck, C}]}.
+
+item_url({Rule}, Context) ->
     z_dispatcher:url_for(Rule, Context);
-item_url({url, Rule, Args}, Context) ->
+item_url({Rule, Args}, Context) ->
     z_dispatcher:url_for(Rule, Args, Context);
 item_url(X, _) ->
     X.
 
 item_visible({_Key, ItemProps}, Context) ->
-    case proplists:get_value(url, ItemProps) =/= undefined orelse
-        proplists:get_value(items, ItemProps) =/= [] of
-        false ->
-            false;
-        true ->
-            case proplists:get_value(visiblecheck, ItemProps) of
-                undefined ->
-                    true;
-                F when is_function(F) ->
-                    F();
+    case proplists:get_value(visiblecheck, ItemProps) of
+        undefined ->
+            proplists:get_value(url, ItemProps) =/= undefined orelse
+                proplists:get_value(items, ItemProps) =/= [];
+        F when is_function(F) ->
+            F();
                 {acl, Action, Object} ->
-                    z_acl:is_allowed(Action, Object, Context)
-            end
+            z_acl:is_allowed(Action, Object, Context)
     end.
                      
 
@@ -128,10 +125,16 @@ test() ->
     
     %% simple test
     Items1 = [
-              {top1, {undefined, "Label", "/"}}],
+              #menu_item{id=top1, label="Label", url="/"}
+             ],
+
     [{top1, [{url, "/"},
+             {items, []},
+             {id, top1},
+             {parent, undefined},
              {label, "Label"},
-             {items, []}]}] = hierarchize(Items1, C),
+             {icon, undefined},
+             {visiblecheck, undefined}]}] = hierarchize(Items1, C),
 
     %% simple test with empty children
     Items1a = [

@@ -31,6 +31,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
 observe_category_hierarchy_save(#category_hierarchy_save{tree=New}, Context) ->
@@ -80,7 +81,10 @@ pair(P, N, [{Id, Sub}|Rest], Acc) ->
 
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
-     {admin_categories,     {admin_structure,   ?__("Categories", Context),
-                             {url, admin_category_sorter}, {acl, insert, category}}}
+     #menu_item{id=admin_categories,
+                parent=admin_structure,
+                label=?__("Categories", Context),
+                url={admin_category_sorter},
+                visiblecheck={acl, insert, category}}
      
      |Acc].

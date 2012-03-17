@@ -26,11 +26,14 @@
 
 -export([
     observe_auth_logoff/3,
-    observe_search_query/2
+    observe_search_query/2,
+    observe_admin_menu/3
 ]).
 -export([get_config/1]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
 
 % Default facebook appid and secret from the Zotonic Dev application.
 -define(FACEBOOK_APPID, "106094309435783").
@@ -66,3 +69,13 @@ observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
     m_facebook:search({fql, Args}, OffsetLimit, Context);
 observe_search_query(_, _Context) ->
     undefined.
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_facebook,
+                parent=admin_modules,
+                label=?__("Facebook", Context),
+                url={admin_facebook},
+                visiblecheck={acl, use, ?MODULE}}
+     
+     |Acc].

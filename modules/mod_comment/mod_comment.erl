@@ -31,10 +31,12 @@
 %% interface functions
 -export([
     event/2,
-    observe_search_query/2
+    observe_search_query/2,
+    observe_admin_menu/3
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
 %% @doc Handle the submit event of a new comment
@@ -185,3 +187,14 @@ remove_old_comment_rsc_fields(Context) ->
             z_db:q("alter table rsc " ++ string:join(L, ", "), Context),
             ok
     end.
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_comments,
+                parent=admin_content,
+                label=?__("Comments", Context),
+                url={admin_comments},
+                visiblecheck={acl, use, ?MODULE}}
+     
+     |Acc].

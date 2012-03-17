@@ -28,10 +28,12 @@
 
 %% interface functions
 -export([
-    observe_search_query/2
+    observe_search_query/2,
+    observe_admin_menu/3
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
@@ -63,3 +65,15 @@ search({users, [{text,QueryText}]}, _OffsetLimit, Context) ->
     end;
 search(_, _, _) ->
     undefined.
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_user,
+                parent=admin_auth,
+                label=?__("Users", Context),
+                url={admin_user},
+                visiblecheck={acl, use, mod_admin_identity}}
+     
+     |Acc].
+

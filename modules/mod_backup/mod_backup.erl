@@ -37,10 +37,13 @@
     backup_in_progress/1,
     file_exists/2,
     file_forbidden/2,
-	check_configuration/1
+    check_configuration/1,
+    observe_admin_menu/3
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
 
 -record(state, {context, backup_start, backup_pid, timer_ref}).
 
@@ -354,3 +357,15 @@ check_configuration(Context) ->
     [{ok, Db and Tar},
      {db_dump, Db},
      {archive, Tar}].
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_backup,
+                parent=admin_content,
+                label=?__("Backup", Context),
+                url={admin_backup},
+                visiblecheck={acl, use, mod_admin_backup}}
+     
+     |Acc].
+

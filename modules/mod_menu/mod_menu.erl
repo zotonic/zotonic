@@ -26,15 +26,14 @@
 -mod_depends([admin]).
 -mod_provides([menu]).
 
--include("zotonic.hrl").
-
 %% interface functions
 -export([
-	manage_schema/2,
+    manage_schema/2,
     init/1,
     event/2,
     observe_menu_get_rsc_ids/2,
     observe_menu_save/2,
+    observe_admin_menu/3,
     get_menu/1,
     get_menu/2,
     set_menu/3,
@@ -43,6 +42,8 @@
     test/0
 ]).
 
+-include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
 %% @doc Initializes the module (after the datamodel is installed).
@@ -240,6 +241,8 @@ remove_invisible(Menu, Context) ->
     remove_invisible(Menu, [], Context).
 
 %% Remove invisible menu items
+remove_invisible(undefined, Acc, _Context) ->
+    lists:reverse(Acc);
 remove_invisible(<<>>, Acc, _Context) ->
     lists:reverse(Acc);
 remove_invisible([], Acc, _Context) ->
@@ -317,6 +320,25 @@ manage_schema(install, Context) ->
         ]
       },
       Context).
+
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    case m_rsc:name_to_id(main_menu, Context) of
+        {ok, Id} ->
+            ?DEBUG(Id),
+
+            [
+             #menu_item{id=admin_menu,
+                        parent=admin_content,
+                        label=?__("Menu", Context),
+                        url={admin_admin_edit_rsc, [{id, Id}]},
+                        visiblecheck={acl, use, mod_menu}}
+             |Acc];
+        _ ->
+            Acc
+    end.
+
 
 
 %% @doc test function

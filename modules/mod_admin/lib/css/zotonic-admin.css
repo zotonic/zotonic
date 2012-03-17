@@ -74,6 +74,10 @@ div.widget h3 {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
 }
 
+div.widget h3 button.btn-mini {
+    margin-top: 3px;
+}
+
 div.widget :last-child {
     margin-bottom: 0;
 }

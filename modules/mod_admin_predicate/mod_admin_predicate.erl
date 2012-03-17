@@ -30,10 +30,13 @@
 %% interface functions
 -export([
     observe_rsc_update/3,
-    observe_rsc_update_done/2
+    observe_rsc_update_done/2,
+    observe_admin_menu/3
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
 
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
@@ -60,3 +63,14 @@ observe_rsc_update_done(#rsc_update_done{pre_is_a=BeforeCatList, post_is_a=CatLi
         true -> m_predicate:flush(Context);
         false -> ok
     end.
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_predicate,
+                parent=admin_structure,
+                label=?__("Predicates", Context),
+                url={admin_predicate},
+                visiblecheck={acl, insert, predicate}}
+     
+     |Acc].
+

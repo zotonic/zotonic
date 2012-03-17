@@ -32,6 +32,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("include/admin_menu.hrl").
 
 
 %% @doc Fix tinymce images that are the result of copying
@@ -77,25 +78,45 @@ class_to_opts(Class) ->
     
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
-     {admin_dashboard, {undefined, ?__("Dashboard", Context), {url, admin} }},
+     #menu_item{id=admin_dashboard,
+                label=?__("Dashboard", Context),
+                url={admin} },
 
      %% CONTENT %%
-     {admin_content,   {undefined, ?__("Content", Context), undefined}},
+     #menu_item{id=admin_content,
+                label=?__("Content", Context)},
 
-     {overview,        {admin_content,   ?__("Pages", Context), {url, admin_overview_rsc}}},
-     {admin_media,     {admin_content,   ?__("Media", Context), {url, admin_media}}},
-     
-     {admin_structure,  {undefined, ?__("Structure", Context), undefined}},
-     {admin_categories, {admin_content,   ?__("Categories", Context),
-                         {url, admin_categories_manager}}},
+     #menu_item{id=admin_overview,
+                parent=admin_content,
+                label=?__("Pages", Context),
+                url={admin_overview_rsc}},
+     #menu_item{id=admin_media,
+                parent=admin_content,
+                label=?__("Media", Context),
+                url={admin_media}},
+
+     %% STRUCTURE %%
+     #menu_item{id=admin_structure,
+                label=?__("Structure", Context)},
 
      
-     {admin_modules,   {undefined, ?__("Modules", Context), undefined}},
-     
-     {admin_auth,      {undefined, ?__("Auth", Context), undefined}},
+     %% MODULES %%
+     #menu_item{id=admin_modules,
+                label=?__("Modules", Context)},
 
-     {admin_system,    {undefined, ?__("System", Context), undefined}},
-     {admin_status,     {admin_system,   ?__("Status", Context), {url, admin_status}}}
+
+     %% AUTH %%
+     #menu_item{id=admin_auth,
+                label=?__("Auth", Context)},
+
+     %% SYSTEM %%
+     #menu_item{id=admin_system,
+                label=?__("System", Context)},
+
+     #menu_item{id=admin_status,
+                parent=admin_system,
+                label=?__("Status", Context),
+                url={admin_status}}
 
      |Acc].
 
