@@ -53,7 +53,7 @@ $.widget("ui.adminwidget",
             self.item.hide();
         else
             self.item.slideUp(200);
-        self.icon.attr("class", "pull-right icon-chevron-down");
+        self.icon.attr("class", "pull-right icon-plus");
         self.showing = false;
     },
 
@@ -63,7 +63,7 @@ $.widget("ui.adminwidget",
             self.item.show();
         else
             self.item.slideDown(200);
-        self.icon.attr("class", "pull-right icon-chevron-up");
+        self.icon.attr("class", "pull-right icon-minus");
         self.showing = true;
     }
 });
