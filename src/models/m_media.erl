@@ -360,6 +360,7 @@ rsc_is_media_cat(Id, Context) ->
         <<"image">> -> true;
         <<"audio">> -> true;
         <<"video">> -> true;
+        <<"document">> -> true;
         _ -> false
     end.
 
@@ -368,6 +369,7 @@ mime_to_category(Mime) ->
         "image/" ++ _ -> image;
         "video/" ++ _ -> video;
         "audio/" ++ _ -> audio;
+        "application/" ++ _ -> document;
         _ -> media
     end.
 
