@@ -9,9 +9,8 @@
 {% block widget_content %}
 {% with m.rsc[id] as r %}
 
-<div class="notification notice">
-	{_ This page is able to connect to others. For example you can connect it to an actor or a brand. _}
-	<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about page connections."|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
+<div class="pull-right">
+    <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about page connections."|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}', width: '450px'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
 </div>
 
 <div id="unlink-undo-message"></div>
