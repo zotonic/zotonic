@@ -57,13 +57,14 @@ div.widget {
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-div.widget h3 {
+div.widget h3.widget-header {
     padding: 4px 8px;
-    background: #f5f5f5;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     text-shadow: 1px 1px 1px white;
     font-size: 14px;
-    
+}    
+div.widget > ul.nav,
+div.widget h3.widget-header {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     background: #eeeeee; /* Old browsers */
     background: -moz-linear-gradient(top, #eeeeee 0%, #f5f5f5 50%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
@@ -77,7 +78,7 @@ div.widget h3 {
 div.widget.dark {
     box-shadow: none;
 }    
-div.widget.dark h3 {
+div.widget.dark h3.widget-header {
     background: #ccc;
     border-bottom: 2px solid #f5f5f5;
 }
@@ -85,7 +86,7 @@ div.widget.dark div.widget-content {
     background: #ccc;
 }
 
-div.widget h3 button.btn-mini {
+div.widget h3.widget-header button.btn-mini {
     margin-top: 3px;
 }
 
@@ -103,6 +104,13 @@ div.widget-active h3 i {
 div.widget-content {
     padding: 8px;
 }
+
+
+/* widget forms */
+div.widget input.span8, div.widget textarea.span8, div.widget  .uneditable-input.span8 {
+    width: 592px;
+}
+
 
 /* admin table
 --------------------------------------------------------- */
