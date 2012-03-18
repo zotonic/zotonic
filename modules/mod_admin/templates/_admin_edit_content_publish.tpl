@@ -4,7 +4,7 @@
 
 {% block widget_title %}{_ Publish this page _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-{% block widget_id %}sort-publish{% endblock %}
+{% block widget_id %}sidebar-publish{% endblock %}
 
 
 {% block widget_content %}
