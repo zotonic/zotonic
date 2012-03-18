@@ -58,7 +58,7 @@ div.widget {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 div.widget h3 {
-    padding: 4px;
+    padding: 4px 8px;
     background: #f5f5f5;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     text-shadow: 1px 1px 1px white;
@@ -72,6 +72,17 @@ div.widget h3 {
     background: -ms-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* IE10+ */
     background: linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+}
+
+div.widget.dark {
+    box-shadow: none;
+}    
+div.widget.dark h3 {
+    background: #ccc;
+    border-bottom: 2px solid #f5f5f5;
+}
+div.widget.dark div.widget-content {
+    background: #ccc;
 }
 
 div.widget h3 button.btn-mini {
@@ -90,7 +101,7 @@ div.widget-active h3 i {
 }
 
 div.widget-content {
-    padding: 4px;
+    padding: 8px;
 }
 
 /* admin table
@@ -117,9 +128,6 @@ p.admin-chapeau {
     margin: 0;
 }
 
-#sidebar-publish div.widget-content {
-    background: #f5f5f5;
-}
 
 /* tinyMce stuff
 --------------------------------------------------------- */

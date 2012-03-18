@@ -25,6 +25,7 @@
         {% endblock %}
     </head>
     <body>
+	{% wire name="adminwidget_toggle" action={adminwidget_toggle} %}
 
         {% block navigation %}
         {% include "_admin_menu.tpl" %}
@@ -42,7 +43,7 @@
 	{% script %}
 
 	{% block tinymce %}{% endblock %}
-	
+        
 	{% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
 </body>
 </html>

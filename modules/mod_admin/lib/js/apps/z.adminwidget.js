@@ -35,7 +35,11 @@ $.widget("ui.adminwidget",
         
 	self.options.minifiedOnInit ? self.hide(true) : self.show(true);
 
-        self.header.click(function() { self.toggle(); });
+        self.header.click(function() 
+                          { 
+                              self.toggle(); 
+                              z_event("adminwidget_toggle", {showing: self.showing});
+                          });
     },
 
     toggle: function() {
