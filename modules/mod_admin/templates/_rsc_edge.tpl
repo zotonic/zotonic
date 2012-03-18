@@ -1,7 +1,7 @@
 {# Show an object with an unlink option. Used in the admin_edit #}
 {% with m.rsc[object_id].title as title %}
 	{% sortable id=#unlink_wrapper tag=edge_id %}
-	<li id="{{ #unlink_wrapper }}" class="rsc-edge do_unlink">
+	<li id="{{ #unlink_wrapper }}" class="rsc-edge">
 		<span class="clearfix">
 			<span class="unlink-mover"></span>
 			<span id="{{ #unlink }}" class="unlink-cross"></span>
