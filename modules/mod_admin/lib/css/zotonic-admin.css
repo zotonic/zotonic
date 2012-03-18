@@ -118,8 +118,11 @@ div.widget-content {
 
 
 /* widget forms */
-div.widget input.span8, div.widget textarea.span8, div.widget  .uneditable-input.span8 {
+div.widget input.span8, div.widget textarea.span8 {
     width: 592px;
+}
+#zmodal input.span8, #zmodal textarea.span8  {
+    width: 300px;
 }
 
 div.widget div.span4 {
@@ -130,6 +133,7 @@ div.widget div.span4 {
     width: 592px;
 }
 
+div.widget-footer,
 div.save-buttons {
     min-height: 36px;
     margin-top: 18px;
@@ -158,6 +162,20 @@ table.do_adminLinkedTable td a.view-link {
 p.admin-chapeau {
     color: #999999;
     margin: 0;
+}
+
+ul.media.thumbnails {
+    margin: 0;
+}
+ul.media.thumbnails > li {
+    margin: 0 0 18px 3px;
+}
+ul.media.thumbnails > li.ui-sortable-placeholder {
+    width: 197px;
+    height: 200px;
+}
+ul.media.thumbnails li img {
+    cursor: move;
 }
 
 

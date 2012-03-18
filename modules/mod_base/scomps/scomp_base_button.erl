@@ -31,6 +31,7 @@ render(Params, _Vars, Context) ->
     Text      = proplists:get_value(text, Params, <<"Submit">>),
     Id        = z_ids:optid(proplists:get_value(id, Params)),
     Class     = proplists:get_all_values(class, Params),
+    Icon      = proplists:get_all_values(icon, Params),
     Style     = proplists:get_value(style, Params),
     Type      = proplists:get_value(type, Params),
     Title     = proplists:get_value(title, Params),
@@ -69,11 +70,15 @@ render(Params, _Vars, Context) ->
         undefined -> Attrs1;
         _ -> [ {<<"type">>, Type} | Attrs1 ]
     end,
-    
+
+    Text1 = case z_utils:is_empty(Icon) of
+                true -> Text;
+                false -> [<<"<i class=">>, Icon, "></i> ", Text]
+            end,
     Context2 = z_tags:render_tag(
                         <<"button">>,
                         [{<<"class">>,Class1}|Attrs2],
-                    	Text,
+                    	Text1,
                     	Context1),
     {ok, Context2}.
 

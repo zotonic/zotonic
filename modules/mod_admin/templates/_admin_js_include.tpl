@@ -10,7 +10,6 @@
 	"js/jquery.ui.nestedSortable.js"
 	
 	"js/modules/z.notice.js"
-	"js/modules/z.unlink.js"
 	"js/modules/z.tooltip.js"
 	"js/modules/z.dialog.js"
 	"js/modules/z.formreplace.js"
