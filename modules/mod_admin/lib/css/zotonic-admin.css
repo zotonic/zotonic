@@ -101,7 +101,7 @@ div.widget h3.widget-header button.btn-mini {
     margin-top: 3px;
 }
 
-div.widget :last-child {
+div.widget > :last-child {
     margin-bottom: 0;
 }
 
