@@ -66,6 +66,11 @@ Nonterminals
     CycleNames
     CycleNamesCompat
 
+    FilterBlock
+    FilterBraced
+    EndFilterBraced
+    Filters
+
     ForBlock
     ForBraced
     EmptyBraced
@@ -165,6 +170,7 @@ Terminals
     endblock_keyword
 	endcache_keyword
     endcomment_keyword
+    endfilter_keyword
     endfor_keyword
     endif_keyword
     endifequal_keyword
@@ -172,6 +178,7 @@ Terminals
 	endwith_keyword
     equal
     extends_keyword
+    filter_keyword
     for_keyword
     identifier
     if_keyword
@@ -245,6 +252,7 @@ Elements -> Elements LibTag : '$1' ++ ['$2'].
 Elements -> Elements LoadTag : '$1' ++ ['$2'].
 Elements -> Elements CycleTag : '$1' ++ ['$2'].
 Elements -> Elements BlockBlock : '$1' ++ ['$2'].
+Elements -> Elements FilterBlock : '$1' ++ ['$2'].
 Elements -> Elements ForBlock : '$1' ++ ['$2'].
 Elements -> Elements IfBlock : '$1' ++ ['$2'].
 Elements -> Elements IfEqualBlock : '$1' ++ ['$2'].
@@ -306,6 +314,13 @@ CycleNames -> CycleNames Value : '$1' ++ ['$2'].
 CycleNamesCompat -> identifier comma : ['$1'].
 CycleNamesCompat -> CycleNamesCompat identifier comma : '$1' ++ ['$2'].
 CycleNamesCompat -> CycleNamesCompat identifier : '$1' ++ ['$2'].
+
+FilterBlock -> FilterBraced Elements EndFilterBraced : {filter, '$1', '$2'}.
+FilterBraced -> open_tag filter_keyword Filters close_tag : '$3'.
+EndFilterBraced -> open_tag endfilter_keyword close_tag.
+
+Filters -> Filter : ['$1'].
+Filters -> Filters pipe Filter : '$1' ++ ['$3'].
 
 ForBlock -> ForBraced Elements EndForBraced : {for, '$1', '$2'}.
 ForBlock -> ForBraced Elements EmptyBraced Elements EndForBraced : {for, '$1', '$2', '$4'}.

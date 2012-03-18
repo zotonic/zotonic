@@ -70,7 +70,7 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToke
         "ifchanged", "ifequal", "endifequal", "ifnotequal", "endifnotequal",
         "now", "regroup", "rsc", "spaceless", "endspaceless", "ssi", "templatetag",
         "load", "call", "with", "url", "print", "image", "image_url", "media", "_", "with", "endwith", 
-        "all", "lib", "cache", "endcache" ], 
+        "all", "lib", "cache", "endcache", "filter", "endfilter" ], 
     Type = case lists:member(RevString, Keywords) of
         true -> list_to_atom(RevString ++ "_keyword");
         _ ->    identifier
