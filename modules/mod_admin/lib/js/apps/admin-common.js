@@ -40,7 +40,18 @@ limitations under the License.
             
         }
     });
+
+
+    $.widget("ui.autofocus",
+    {
+        _init: function() {
+            var self = this;
+            self.element.focus();
+        }
+    });
 })(jQuery);
+
+
 
 tinyInit = {
 	mode: "none",

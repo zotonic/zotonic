@@ -8,12 +8,13 @@
 {% with r.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 
-<div>
-    <div class="pull-right">
+<div class="edit-header">
+    <div class="pull-right span6">
         <div class="alert alert-info">
 	    {_ Modified _} {{ r.modified|timesince }}
-	    {_ by _} {{ m.rsc[r.modifier_id].title }}.<br/>
-	    {_ Created by _} {{ m.rsc[r.creator_id].title }}.
+	    {_ by _} <nobr><a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>.</nobr><br />
+	    {_ Created by _}
+            <nobr><a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>.</nobr>
         </div>
     </div>
 

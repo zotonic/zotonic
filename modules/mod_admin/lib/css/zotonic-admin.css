@@ -178,6 +178,9 @@ ul.media.thumbnails li img {
     cursor: move;
 }
 
+div.edit-header {
+    margin-bottom: 18px;
+}
 
 /* tinyMce stuff
 --------------------------------------------------------- */

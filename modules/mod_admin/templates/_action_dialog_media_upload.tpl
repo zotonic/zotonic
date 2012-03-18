@@ -25,7 +25,7 @@
 	        <div class="control-group">
 		    <label class="control-label" for="new_media_title">{_ Media title _}</label>
                     <div class="controls">
-		        <input type="text" class="span4" id="new_media_title" name="new_media_title" value="{{ title|escape }}" />
+		        <input type="text" class="span4 do_autofocus" id="new_media_title" name="new_media_title" value="{{ title|escape }}" />
                     </div>
 		</div>
 		{% endif %}

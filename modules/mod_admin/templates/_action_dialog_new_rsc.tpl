@@ -10,7 +10,7 @@
 	<div class="control-group">
 	    <label class="control-label" for="new_rsc_title">{_ Page title _}</label>
             <div class="controls">
-	        <input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ title|escape }}" class="span4" />
+	        <input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ title|escape }}" class="span4 do_autofocus" />
 		{% validate id="new_rsc_title" type={presence} %}
 	    </div>
         </div>
