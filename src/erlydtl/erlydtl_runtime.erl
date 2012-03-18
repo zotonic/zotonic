@@ -193,6 +193,12 @@ cycle(NamesTuple, Counters, Context) when is_tuple(NamesTuple) ->
     element(fetch_value(counter0, Counters, Context) rem size(NamesTuple) + 1, NamesTuple).
 
 
+spaceless(Contents) ->
+    Contents1 = re:replace(Contents, "^[ \t\n\f\r]+<", "<"),
+    Contents2 = re:replace(Contents1, ">[ \t\n\f\r]+$", ">"),
+    Contents3 = re:replace(Contents2, ">[ \t\n\f\r]+<", "><", [global]),
+    Contents3.
+
 cache(MaxAge, Name, Args, Func, Context) ->
     VisibleFor = z_acl:args_to_visible_for(Args),
     case do_cache(VisibleFor, Args, Context) of

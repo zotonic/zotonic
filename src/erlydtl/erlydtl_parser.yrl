@@ -119,6 +119,7 @@ Nonterminals
     
     CustomTag
     Args
+    SpacelessBlock
 	TransArgs
 
     CallTag
@@ -175,6 +176,7 @@ Terminals
     endif_keyword
     endifequal_keyword
     endifnotequal_keyword
+    endspaceless_keyword
 	endwith_keyword
     equal
     extends_keyword
@@ -200,6 +202,7 @@ Terminals
     overrules_keyword
     pipe
     print_keyword
+    spaceless_keyword
     string_literal
     text
 	url_keyword
@@ -248,6 +251,7 @@ Elements -> Elements InheritTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
 Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
 Elements -> Elements NowTag : '$1' ++ ['$2'].
+Elements -> Elements SpacelessBlock : '$1' ++ ['$2'].
 Elements -> Elements LibTag : '$1' ++ ['$2'].
 Elements -> Elements LoadTag : '$1' ++ ['$2'].
 Elements -> Elements CycleTag : '$1' ++ ['$2'].
@@ -355,6 +359,8 @@ IfNotEqualBlock -> IfNotEqualBraced Elements EndIfNotEqualBraced : {ifnotequal, 
 IfNotEqualBraced -> open_tag ifnotequal_keyword IfNotEqualExpression E close_tag : ['$3', '$4'].
 IfNotEqualExpression -> E : '$1'.
 EndIfNotEqualBraced -> open_tag endifnotequal_keyword close_tag.
+
+SpacelessBlock -> open_tag spaceless_keyword close_tag Elements open_tag endspaceless_keyword close_tag : {spaceless, '$4'}.
 
 AutoEscapeBlock -> AutoEscapeBraced Elements EndAutoEscapeBraced : {autoescape, '$1', '$2'}.
 AutoEscapeBraced -> open_tag autoescape_keyword identifier close_tag : '$3'.

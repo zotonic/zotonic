@@ -433,6 +433,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 {IfAstInfo, TreeWalker1} = body_ast(ElseContents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(IfContents, Context, TreeWalker1),
                 ifequalelse_ast(Args, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                    
+            ({'spaceless', Contents}, TreeWalkerAcc) ->
+                spaceless_ast(Contents, Context, TreeWalkerAcc);
             ({'with', [ExprList, Identifiers], WithContents}, TreeWalkerAcc) ->
                 with_ast(ExprList, Identifiers, WithContents, Context, TreeWalkerAcc);
             ({'for', {'in', IteratorList, Value}, Contents}, TreeWalkerAcc) ->
@@ -1269,6 +1271,13 @@ now_ast(FormatString, Context, TreeWalker) ->
         erl_syntax:atom(format),
         [erl_syntax:string(FormatString), z_context_ast(Context)]),
         #ast_info{}}, TreeWalker}.
+
+spaceless_ast(Contents, Context, TreeWalker) ->
+    {{Ast, Info}, TreeWalker1} = body_ast(Contents, Context, TreeWalker),
+    {{erl_syntax:application(erl_syntax:atom(erlydtl_runtime),
+                             erl_syntax:atom(spaceless),
+                             [Ast]), Info}, TreeWalker1}.
+    
 
 unescape_string_literal(String) ->
     unescape_string_literal(String, [], noslash).
