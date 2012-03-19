@@ -4,7 +4,7 @@
 
 {% block widget_title %}{_ SEO Content _}{% endblock %}
 {% block widget_show_minimized %}true{% endblock %}
-
+{% block widget_id %}edit-seo{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}

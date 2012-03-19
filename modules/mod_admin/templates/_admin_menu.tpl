@@ -40,6 +40,9 @@
                         </li>
                         {% endif %}
                     {% endfor %}
+                    <li>
+                        <a href="{% url logoff %}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
+                    </li>
                 </ul>
             </div>
 

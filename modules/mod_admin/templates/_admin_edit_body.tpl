@@ -2,7 +2,7 @@
 
 {% block widget_title %}{_ Content _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_id %}edit-body{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}

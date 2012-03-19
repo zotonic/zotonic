@@ -4,7 +4,7 @@
 
 {% block widget_title %}{_ File / media content _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_id %}edit-content-media{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id].medium  as  medium %}

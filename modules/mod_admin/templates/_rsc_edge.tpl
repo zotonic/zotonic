@@ -3,8 +3,8 @@
 {% sortable id=#unlink_wrapper tag=edge_id %}
 <li id="{{ #unlink_wrapper }}">
     <span class="btn btn-small" id="{{ #edit }}">
-        <i class="icon-move"></i>
-        <id id="{{ #unlink }}" class="icon-remove"></id>
+        <i title="{_ Drag to change connection position _}" class="unlink-mover icon-move"></i>
+        <id id="{{ #unlink }}" title="{_ Disconnect _}" class="icon-remove"></id>
         <a href="{% url admin_edit_rsc id=object_id %}">{{ title }}</a>
     </span>
 </li>

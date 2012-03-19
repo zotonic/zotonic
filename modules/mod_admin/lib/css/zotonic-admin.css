@@ -47,6 +47,12 @@ hr {
     width: 100%;
 }
 
+/* nav 
+--------------------------------------------------------- */
+div.navbar ul.nav i.icon-white {
+    opacity: 0.5;
+}
+
 
 /* widget
 --------------------------------------------------------- */
@@ -120,10 +126,14 @@ div.widget-active h3 i {
 
 
 
-/* widget forms */
+/* widget forms, overrides */
 div.widget input.span8, div.widget textarea.span8 {
     width: 592px;
 }
+div.widget input.span4, div.widget textarea.span4 {
+    width: 283px;
+}
+
 #zmodal input.span8, #zmodal textarea.span8  {
     width: 300px;
 }
@@ -200,6 +210,10 @@ div.edit-media {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
 }
 
+.ui-datepicker .ui-datepicker-header {
+    height: 29px;
+}
+
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {
@@ -209,10 +223,26 @@ ul.connections-list li {
     float: left;
     margin-right: 8px; margin-bottom: 8px;
 }
+ul.connections-list li .unlink-mover {
+    cursor: move;
+}
 
 #unlink-undo-message div.alert {
     padding-right: 14px; /* right-aligned undo button in page connections */
 }
+
+
+/* .media-sorter .ui-sortable-placeholder, */
+.connections-list .ui-sortable-placeholder {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+    visibility: visible !important;
+}
+
+.connections-list .ui-sortable-placeholder {
+}
+
 
 /* tinyMce stuff
 --------------------------------------------------------- */

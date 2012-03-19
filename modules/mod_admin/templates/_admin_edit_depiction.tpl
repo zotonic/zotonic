@@ -2,7 +2,7 @@
 
 {% block widget_title %}{_ Attached media _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_id %}edit-depiction{% endblock %}
 
 {% block widget_content %}
 {% if is_editable or m.rsc[id].depiction %}
