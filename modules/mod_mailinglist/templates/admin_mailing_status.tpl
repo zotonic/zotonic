@@ -11,8 +11,8 @@
     <p>{_ This page can be sent to different mailing lists. _}</p>
     
     <div class="well">
-        <a class="btn btn-primary" href="{% url admin_edit_rsc id=id %}" class="button">{_ edit _}</a>
-        <a class="btn"  href="{% url admin_mailing_preview id=id %}" class="button" onclick="window.open(this.getAttribute('href'), 'mailingpreview', 'width=800,height=800');return false;">{_ preview mailing _}</a>
+        <a class="btn btn-primary" href="{% url admin_edit_rsc id=id %}" class="button">{_ Edit _}</a>
+        <a class="btn"  href="{% url admin_mailing_preview id=id %}" class="button" onclick="window.open(this.getAttribute('href'), 'mailingpreview', 'width=800,height=800');return false;">{_ Preview mailing _}</a>
         {% button text=_"Send test mailing" class="btn" title=_"Send this page to the test mailing list." action={mailing_page_test id=id} %}
         {% button text=_"Send test to address" class="btn" title=_"Send this page to a single address" action={dialog_open template="_dialog_mailing_testaddress.tpl" title=_"Send test to address" id=id} %}
 

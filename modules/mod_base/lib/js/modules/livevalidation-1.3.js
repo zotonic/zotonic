@@ -446,6 +446,7 @@ LiveValidation.prototype =
      * @return {HTMLSpanObject} - a span element with the message in it
      */
     createMessageSpan: function(){
+        if (!this.message) return null;
         var span = document.createElement('span');
         var textNode = document.createTextNode(this.message);
         span.appendChild(textNode);
@@ -485,6 +486,7 @@ LiveValidation.prototype =
      */
     insertMessage: function(elementToInsert){
         this.removeMessage();
+        if (!elementToInsert) return;
 	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
 	    || this.element.value != '' ) {
                 

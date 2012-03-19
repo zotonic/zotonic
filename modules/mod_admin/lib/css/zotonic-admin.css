@@ -84,9 +84,11 @@ div.widget h3.widget-header {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c1c1c1',GradientType=0 ); /* IE6-9 */
 }
 
-div.widget-content-full,
-div.widget-content {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+div.widget > ul.nav {
+    margin-bottom: 0;
+}
+
+div.widget {
     background: #eeeeee; /* Old browsers */
     background: -moz-linear-gradient(top, #eeeeee 0%, #f5f5f5 50%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
@@ -99,6 +101,24 @@ div.widget-content {
 div.widget-content {
     padding: 8px;
 }
+
+div.widget ul.nav-tabs li > a {
+    padding-bottom: 3px;
+    padding-top: 5px;
+}
+
+div.widget ul.nav-tabs li.active > a {
+     border-bottom-color: #eeeeee;
+     background: #ffffff; /* Old browsers */
+     background: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
+     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+     background: -webkit-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+     background: -o-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
+     background: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* IE10+ */
+     background: linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* W3C */
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+}
+
 
 div.widget.dark {
 
@@ -243,6 +263,20 @@ ul.connections-list li .unlink-mover {
 .connections-list .ui-sortable-placeholder {
 }
 
+.form-field-error {
+    color: #B94A48;
+}    
+.z_validation_message {
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    color: #B94A48;
+    margin-left: 9px;
+    margin-bottom: 9px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 9px;
+    border-radius: 4px;
+}
 
 /* growl message */
 .notice-wrap {
