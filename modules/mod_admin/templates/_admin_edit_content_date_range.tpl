@@ -7,26 +7,33 @@
 
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
-<div class="admin-form form-item">
-	<div class="notification notice">
-		{_ Used for events and other periods. _}
-		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone\'s life."|escapejs }}', width: '450px'">{_ Need more help? _}</a>
-	</div>
-	<fieldset>
-		<div class="form-item">
-			<label>{_ From _}</label>
-			{% include "_edit_date.tpl" date=r.date_start name="date_start" is_end=0 %}
-		</div>
-		<div class="form-item">
-			<label>{_ Till _}</label>
-			{% include "_edit_date.tpl" date=r.date_end name="date_end" is_end=1 %}
-		</div>
-		<div class="form-item clear">
-			<label>{_ Remarks _}</label>
-			<input type="text" name="date_remarks" value="{{ r.date_remarks }}" />
-		</div>
-	</fieldset>
+
+<div class="pull-right">
+    <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone\'s life."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
 </div>
+
+
+{% with m.rsc[id] as r %}
+<div class="control-group">
+    <label class="control-label">{_ From _}</label>
+    <div class="controls">
+	{% include "_edit_date.tpl" date=r.date_start name="date_start" is_end=0 %}
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label">{_ Till _}</label>
+    <div class="controls">
+        {% include "_edit_date.tpl" date=r.date_end name="date_end" is_end=1 %}
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label">{_ Remarks _}</label>
+    <div class="controls">
+	<input type="text" name="date_remarks" value="{{ r.date_remarks }}" />
+    </div>
+</div>
+
 {% endwith %}
 {% endblock %}

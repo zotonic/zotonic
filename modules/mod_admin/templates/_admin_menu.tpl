@@ -48,7 +48,7 @@
                 <ul class="nav">
                     {% all include "_admin_headeritem.tpl" %}
                     <li>
-		        <form class="navbar-form form-search" action="{% url admin_overview_rsc %}" method="get">
+		        <form class="navbar-form form-search" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
                             <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
                             <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
 		            <input class="input-medium search-query" type="text" name="qs" value="{{q.qs|escape}}" placeholder="Search..." />

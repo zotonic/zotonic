@@ -10,6 +10,7 @@
 
         {% lib
                 "bootstrap/css/bootstrap.min.css"
+                "css/zp-datepicker.css"
                 "css/zotonic-admin.css"
         %}
 

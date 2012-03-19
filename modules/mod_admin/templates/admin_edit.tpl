@@ -24,20 +24,17 @@
     </h2>
     {% else %}
     <p class="admin-chapeau">
-        {_ editing _}:
+        {_ editing _}
+        {% if m.acl.insert[r.category.name|as_atom] and not r.is_a.meta %}
+        <a  href="javascript:;" id="changecategory" title="{_ Change category _}">{{ m.rsc[r.category_id].title|lower }}</a>:
+        {% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}
+        {% else %}
+        {{ m.rsc[r.category_id].title|lower }}:
+        {% endif %}
     </p>
     
-    <h2 {% include "_language_attrs.tpl" %}>{{ r.title|striptags|default:_"<em>untitled</em>" }}
-
-    {% if m.acl.insert[r.category.name|as_atom] and not r.is_a.meta %}
-    <small>
-        {{ m.rsc[r.category_id].title|lower }}
-        <a class="btn btn-mini" href="javascript:;" id="changecategory" title="{_ Change category _}">
-        {_ change _}</a>
-        {% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}
-    </small>
-    {% endif %}
-
+    <h2 {% include "_language_attrs.tpl" %}>
+        {{ r.title|striptags|default:_"<em>untitled</em>" }}
     </h2>
     {% endif %}{# editable #}
 </div>

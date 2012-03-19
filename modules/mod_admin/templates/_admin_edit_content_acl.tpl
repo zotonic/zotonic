@@ -7,11 +7,10 @@
 
 
 {% block widget_content %}
-<div class="admin-form clearfix">
-	<div class="notification notice">
-		{_ Define who can see or edit this page. _}
-	</div>
-
-	{% include "_admin_edit_visible_for.tpl" id=id %}
+<div class="pull-right">
+    <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
 </div>
+
+{% include "_admin_edit_visible_for.tpl" id=id %}
+
 {% endblock %}

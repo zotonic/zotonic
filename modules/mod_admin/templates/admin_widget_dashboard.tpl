@@ -1,6 +1,8 @@
 <div class="widget {% block widget_class %}{% endblock %}">
-    <h3 class="above-list">
+    <h3 class="widget-header">
 	{% block widget_headline %}{% endblock %}
     </h3>
-    {% block widget_content %}{% endblock %}
+    <div class="widget-content-full">
+        {% block widget_content %}{% endblock %}
+    </div>
 </div>

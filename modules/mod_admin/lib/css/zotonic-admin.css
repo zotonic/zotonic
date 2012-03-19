@@ -77,6 +77,7 @@ div.widget h3.widget-header {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c1c1c1',GradientType=0 ); /* IE6-9 */
 }
 
+div.widget-content-full,
 div.widget-content {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     background: #eeeeee; /* Old browsers */
@@ -87,6 +88,9 @@ div.widget-content {
     background: -ms-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* IE10+ */
     background: linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+}
+div.widget-content {
+    padding: 8px;
 }
 
 div.widget.dark {
@@ -101,7 +105,8 @@ div.widget h3.widget-header button.btn-mini {
     margin-top: 3px;
 }
 
-div.widget > :last-child {
+div.widget-content-full > :last-child,
+div.widget-content > :last-child {
     margin-bottom: 0;
 }
 
@@ -112,9 +117,6 @@ div.widget-active h3 i {
     margin: 5px;
 }
 
-div.widget-content {
-    padding: 8px;
-}
 
 
 /* widget forms */
@@ -156,12 +158,20 @@ table.do_adminLinkedTable td a.view-link {
     color: inherit;
 }
 
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background: white;
+}
+
 /* admin edit page
    -------------------------------------------------------------- */
 
 p.admin-chapeau {
     color: #999999;
     margin: 0;
+}
+p.admin-chapeau a {
+    color: #999999;
+    text-decoration: underline;
 }
 
 ul.media.thumbnails {

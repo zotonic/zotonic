@@ -7,22 +7,23 @@
 
 
 {% block widget_content %}
+
+<div class="pull-right">
+    <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about publication date range."|escapejs }}', text: '{{ _"When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+</div>
+
 {% with m.rsc[id] as r %}
-<div class="admin-form form-item">
-	<div class="notification notice">
-		{_ Show this article only between the two dates. _}
-		<a href="javascript:void(0)" class="do_dialog" data-dialog="title: '{{ _"Help about publication date range."|escapejs }}', text: '{{ _"When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it"|escapejs }}', width: '450px'">{_ Need more help? _}</a>
-	</div>
-	<fieldset>
-		<div class="form-item">
-			<label>{_ Visible from _}</label>
-			{% include "_edit_date.tpl" date=r.publication_start name="publication_start" is_end=0 %}
-		</div>
-		<div class="form-item">
-			<label>{_ Visible till _}</label>
-			{% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
-		</div>
-	</fieldset>
+<div class="control-group">
+    <label class="control-label">{_ Visible from _}</label>
+    <div class="controls">
+        {% include "_edit_date.tpl" date=r.publication_start name="publication_start" is_end=0 %}
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">{_ Visible till _}</label>
+    <div class="controls">
+	{% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
+    </div>
 </div>
 {% endwith %}
 {% endblock %}
