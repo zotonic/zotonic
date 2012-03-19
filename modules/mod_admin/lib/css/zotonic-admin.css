@@ -244,6 +244,16 @@ ul.connections-list li .unlink-mover {
 }
 
 
+/* growl message */
+.notice-wrap {
+	position: fixed;
+	top: 60px;
+	right: 20px;
+	width: 300px;
+	z-index: 9999;
+}
+
+
 /* tinyMce stuff
 --------------------------------------------------------- */
 

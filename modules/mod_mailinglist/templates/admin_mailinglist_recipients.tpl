@@ -24,7 +24,7 @@
 	<div class="well">
 	    {% button class="btn btn-primary" text=_"Add recipient" title=_"Add a new recipient." postback={dialog_recipient_add id=id} %}
 	    {% button class="btn" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
-	    {% button class="btn" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
+	    {% button class="btn" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
             {% button class="btn" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='resource_admin_mailinglist_recipients'} %}
 
         </div>
@@ -46,9 +46,9 @@
 
             <tbody>
 	        {% for rcpt_id, email, is_enabled in list %}
-                <tr id="{{ #item.rcpt_id }}" class="{% if not is_enabled %}unpublished{% endif %}">
+                <tr class="{% if not is_enabled %}unpublished{% endif %}">
                     <td width="10%"><input id="{{ #enabled.rcpt_id }}" title="{_ Check to activate the e-mail address. _}" type="checkbox" value="{{ rcpt_id }}" {% if is_enabled %}checked="checked"{% endif %} /></td>
-		    <td width="90%">
+		    <td width="90%" id="{{ #item.rcpt_id }}" style="cursor: pointer" title="{_ Edit recipient _}">
 		        <div class="pull-right">
                             {% button class="btn btn-mini" text=_"delete" title=_"Remove this recipient. No undo possible." postback={recipient_delete recipient_id=rcpt_id} %}
                         </div>

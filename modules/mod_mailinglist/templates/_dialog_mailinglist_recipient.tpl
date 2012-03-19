@@ -1,5 +1,5 @@
 <p>
-	{_ Enter the e-mail address of the recipient. The name of the recipient is optional. _}
+    {_ Enter the e-mail address of the recipient. The name of the recipient is optional. _}
     {% if m.rsc[id].mailinglist_private %}
     {_ This is a "private", externally managed list. Recipients will not receive any subscribe/unsubscribe messages. _}
     {% else %}
