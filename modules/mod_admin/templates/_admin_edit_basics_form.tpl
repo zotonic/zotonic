@@ -7,7 +7,7 @@
 	    <input type="text" id="field-title{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
 		   value="{{ is_i18n|if : r.translation[lang_code].title : r.title }}"
 		   {% if not is_editable %}disabled="disabled"{% endif %}
-		{% include "_language_attrs.tpl" language=lang_code class="span8 field-title" %}
+		{% include "_language_attrs.tpl" language=lang_code class="do_autofocus span8 field-title" %}
                 />
         </div>
     </div>
