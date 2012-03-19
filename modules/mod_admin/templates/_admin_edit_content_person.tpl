@@ -2,10 +2,9 @@
 
 {# Show the edit fields to edit the name of a person #}
 
-
 {% block widget_title %}{{ _"Person name"|escapejs }}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_id %}content-person{% endblock %}
 
 {% block widget_content %}
 

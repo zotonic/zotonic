@@ -4,52 +4,57 @@
 
 {% block widget_title %}{_ Address _}{% endblock %}
 {% block widget_show_minimized %}true{% endblock %}
-
+{% block widget_id %}content-address{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="admin-form">
+<fieldset>
 
-	<h4>{_ Electronic address _}</h4>
-
-	<div class="zp-33">
-		<div class="form-item clearfix">
-			<label for="phone">{_ Telephone _}</label>
-			<input id="phone" type="text" name="phone" value="{{ r.phone }}" style="width: 185px" />
+    <div class="row">
+        <div class="span8">
+	    <h5>{_ Electronic address _}</h5>
+        </div>
+    </div>
+        <div class="row">
+	    <div class="span3 control-group">
+		<label class="control-label" for="phone">{_ Telephone _}</label>
+                <div class="controls">
+		    <input id="phone" type="text" name="phone" value="{{ r.phone }}" style="width: 185px" />
 		</div>
+	    </div>
+
+	    <div class="span3 control-group">
+		<label class="control-label" for="phone_alt">{_ Alternative telephone _}</label>
+                <div class="controls">
+		    <input id="phone_alt" type="text" name="phone_alt" value="{{ r.phone_alt }}" style="width: 185px" />
+		</div>
+            </div>
+
+	    <div class="span3 control-group">
+		<label class="control-label" for="phone_emergency">{_ Emergency telephone _}</label>
+                <div class="controls">
+		    <input id="phone_emergency" type="text" name="phone_emergency" value="{{ r.phone_emergency }}" style="width: 195px" />
+		</div>
+            </div>
 	</div>
 
-	<div class="zp-33">
-		<div class="form-item clearfix">
-			<label for="phone_alt">{_ Alternative telephone _}</label>
-			<input id="phone_alt" type="text" name="phone_alt" value="{{ r.phone_alt }}" style="width: 185px" />
+        <div class="row">
+	    <div class="span4 control-group">
+		<label class="control-label" for="email">{_ E-mail address _}</label>
+                <div class="controls">
+		    <input id="email" type="text" name="email" value="{{ r.email }}" style="width: 285px" />
+		    {% validate id="email" type={email} %}
 		</div>
+            </div>
+	    <div class="span4 control-group">
+		<label class="control-label" for="website">{_ Website _}</label>
+                <div class="controls">
+		    <input id="website" type="text" name="website" value="{{ r.website }}" style="width: 295px" />
+                </div>
+            </div>
 	</div>
 
-	<div class="zp-33">
-		<div class="form-item clearfix">
-			<label for="phone_emergency">{_ Emergency telephone _}</label>
-			<input id="phone_emergency" type="text" name="phone_emergency" value="{{ r.phone_emergency }}" style="width: 195px" />
-		</div>
-	</div>
-
-	<div class="zp-50">
-		<div class="clear form-item clearfix">
-			<label for="email">{_ E-mail address _}</label>
-			<input id="email" type="text" name="email" value="{{ r.email }}" style="width: 285px" />
-			{% validate id="email" type={email} %}
-		</div>
-	</div>
-
-	<div class="zp-50">
-		<div class="form-item clearfix">
-			<label for="website">{_ Website _}</label>
-			<input id="website" type="text" name="website" value="{{ r.website }}" style="width: 295px" />
-		</div>
-	</div>
-
-	<hr class="clear" />
-
+	<hr />
 
 	<div class="zp-50">
 		<h4>{_ Visiting address _}</h4>

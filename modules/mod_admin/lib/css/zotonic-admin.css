@@ -164,6 +164,9 @@ div.widget div.span4 {
 div.widget div.span2 {
     width: 100px;
 }
+div.widget div.span3 {
+    width: 180px;
+}
 
 .admin-form textarea {
     width: 592px;
