@@ -53,9 +53,10 @@ hr {
 
 div.widget {
     margin-bottom: 18px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    border-bottom: none;
     border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
 div.widget h3.widget-header {
@@ -94,7 +95,7 @@ div.widget-content {
 }
 
 div.widget.dark {
-    box-shadow: none;
+
 }    
 
 div.widget.dark div.widget-content {
@@ -197,6 +198,20 @@ div.edit-media {
     padding: 4px;
     border-radius: 4px;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+}
+
+/* Connections
+---------------------------------------------------------- */
+ul.connections-list {
+    list-style-type: none; margin: 0; padding: 0;
+}
+ul.connections-list li {
+    float: left;
+    margin-right: 8px; margin-bottom: 8px;
+}
+
+#unlink-undo-message div.alert {
+    padding-right: 14px; /* right-aligned undo button in page connections */
 }
 
 /* tinyMce stuff

@@ -21,11 +21,12 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-$.widget("ui.adminwidget", 
+$.widget("z.adminwidget", 
 {
     _init: function() 
     {
 	var self = this;
+        var id = self.element.attr("id");
         self.element.addClass("widget-active");
         self.item = self.element.find("div.widget-content");
 
@@ -38,15 +39,20 @@ $.widget("ui.adminwidget",
         self.header.click(function() 
                           { 
                               self.toggle(); 
-                              z_event("adminwidget_toggle", {showing: self.showing});
+                              if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
                           });
     },
 
     toggle: function() {
         var self = this;
-        self.showing ? self.hide() : self.show();
+        self.setVisible(!self.showing);
     },
 
+    setVisible: function(v, skipAnim) {
+        var self = this;
+        v ? self.show(skipAnim) : self.hide(skipAnim);
+    },
+    
     hide: function(skipAnim) {
         var self = this;
         if (skipAnim) 
@@ -68,6 +74,6 @@ $.widget("ui.adminwidget",
     }
 });
 
-$.ui.adminwidget.defaults = {
+$.z.adminwidget.defaults = {
     minifiedOnInit: false
 };

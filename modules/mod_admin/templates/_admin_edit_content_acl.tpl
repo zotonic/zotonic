@@ -4,7 +4,7 @@
 
 {% block widget_title %}{_ Access control _}{% endblock %}
 {% block widget_show_minimized %}true{% endblock %}
-
+{% block widget_id %}sidebar-acl{% endblock %}
 
 {% block widget_content %}
 <div class="pull-right">

@@ -21,5 +21,12 @@ render_action(TriggerId, TargetId, _Args, Context) ->
 
 %% @doc Flush the caches of all sites.
 event(#postback{message={toggle}}, Context) ->
-    ?DEBUG(z_context:get_q("showing", Context)),
+    State = z_context:get_q("showing", Context),
+    Id = z_context:get_q("id", Context),
+    New = z_utils:prop_replace(Id, State, z_session:get("admin_widgets", Context, [])),
+    z_session:set("admin_widgets",
+                  New,
+                  Context),
+    ?DEBUG(New),
+
     Context.
