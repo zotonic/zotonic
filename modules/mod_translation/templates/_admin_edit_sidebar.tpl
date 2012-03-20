@@ -4,7 +4,7 @@
 
 {% block widget_title %}{_ Translations _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_id %}sidebar-translations{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id].language as r_lang %}

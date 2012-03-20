@@ -61,10 +61,10 @@ event(#postback{message={recipient_change_email, [{recipient_id, RcptId}]}}, Con
     m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
     z_render:growl(?__("E-mail address updated", Context), Context);
 
-event(#postback{message={recipient_delete, [{recipient_id, RcptId}]}}, Context) ->
+event(#postback{message={recipient_delete, [{recipient_id, RcptId}, {target, Target}]}}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
 	z_render:wire([ {growl, [{text, ?__("Recipient deleted.", Context)}]},
-					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
+					{slide_fade_out, [{target, Target}]}
 				], Context);
 
 event(#postback{message={recipients_clear, [{id, Id}]}}, Context) ->

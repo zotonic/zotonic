@@ -119,7 +119,6 @@ div.widget ul.nav-tabs li.active > a {
      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
 }
 
-
 div.widget.dark {
 
 }    
@@ -144,14 +143,21 @@ div.widget-active h3 i {
     margin: 5px;
 }
 
+div.widget-content.tab-content {
+    width: auto;
+}
+
 
 
 /* widget forms, overrides */
 div.widget input.span8, div.widget textarea.span8 {
     width: 592px;
 }
-div.widget input.span4, div.widget textarea.span4 {
+div.widget input.span4, div.widget textarea.span4, div.widget select.span4 {
     width: 283px;
+}
+div.widget input.span3, div.widget textarea.span3 {
+    width: 181px;
 }
 
 #zmodal input.span8, #zmodal textarea.span8  {
@@ -159,7 +165,7 @@ div.widget input.span4, div.widget textarea.span4 {
 }
 
 div.widget div.span4 {
-    width: 291px;
+    width: 280px;
 }
 div.widget div.span2 {
     width: 100px;
@@ -282,6 +288,10 @@ ul.connections-list li .unlink-mover {
     vertical-align: middle;
     padding: 5px 9px;
     border-radius: 4px;
+}
+
+form.form-horizontal .z_validation_message {
+    margin-bottom: 0;
 }
 
 /* growl message */

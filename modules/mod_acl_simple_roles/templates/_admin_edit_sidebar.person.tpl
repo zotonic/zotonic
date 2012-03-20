@@ -1,8 +1,8 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{% block widget_title %}
-{_ Member of roles _}
-{% endblock %}
+{% block widget_title %}{_ Member of roles _}{% endblock %}
+{% block widget_show_minimized %}false{% endblock %}
+{% block widget_id %}sidebar-acl-roles{% endblock %}
 
 {% block widget_content %}
 <ul>
