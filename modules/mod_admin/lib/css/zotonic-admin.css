@@ -136,6 +136,7 @@ div.widget-content > :last-child {
     margin-bottom: 0;
 }
 
+td.clickable,
 div.widget-active h3 {
     cursor: pointer;
 }
@@ -165,7 +166,7 @@ div.widget input.span3, div.widget textarea.span3 {
 }
 
 div.widget div.span4 {
-    width: 280px;
+    width: 278px;
 }
 div.widget div.span2 {
     width: 100px;
