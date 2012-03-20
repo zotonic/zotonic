@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-09
 %%
 %% @doc Model for medium database
@@ -261,6 +261,16 @@ insert_file_mime_ok(File, Props1, PropsMedia, Context) ->
 %% @spec replace_file(File, RscId, Context) -> {ok, Id} | {error, Reason}
 replace_file(File, RscId, Context) ->
     replace_file(File, RscId, [], Context).
+
+
+replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, RscId, Props, Context) when Data /= undefined ->
+    TmpFile = z_tempfile:new(),
+    ok = file:write_file(TmpFile, Data),
+    replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=TmpFile}, RscId, Props, Context);
+
+replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, Context) ->
+    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    replace_file(TmpFile, RscId, [{original_filename, OriginalFilename}|Props], PropsMedia, Context);
 
 replace_file(File, RscId, Props, Context) ->
     OriginalFilename = proplists:get_value(original_filename, Props, File),
