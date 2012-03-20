@@ -5,36 +5,7 @@
 {% block content %}
 
 <div class="edit-header">
-    <h2>{_ Translation configuration and tools _}</h2>
-
-    <div class="well">
-
-        <div class="control-group">
-            <div class="controls">
-                {% button class="btn" text=_"Generate .pot files" 
-                    action={postback postback="translation_generate" delegate="mod_translation"} %}
-                <span class="help-inline">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                {% button class="btn" text=_"Reload Translations" 
-                    action={postback postback="translation_reload" delegate="mod_translation"} %}
-                <span class="help-inline">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                <a class="btn" href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
-                <span class="help-inline">{_ Show per module how much of the templates are translated. _}</span>
-            </div>
-        </div>
-    </div>
-    
-</div>
-
-<div>
-    <h3>{_ Languages overview _}</h3>
+    <h2>{_ Languages overview _}</h2>
 
     <p>{_ All languages known to the system. You can add or remove languages. _}
     <br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
@@ -101,6 +72,35 @@
         {% endwith %}
         </tbody>
     </table>
+    
+</div>
+
+<div>
+    <h3>{_ Translation configuration and tools _}</h3>
+
+    <div class="well">
+
+        <div class="control-group">
+            <div class="controls">
+                {% button class="btn" text=_"Generate .pot files" 
+                    action={postback postback="translation_generate" delegate="mod_translation"} %}
+                <span class="help-inline">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                {% button class="btn" text=_"Reload Translations" 
+                    action={postback postback="translation_reload" delegate="mod_translation"} %}
+                <span class="help-inline">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <a class="btn" href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
+                <span class="help-inline">{_ Show per module how much of the templates are translated. _}</span>
+            </div>
+        </div>
+    </div>
     
 </div>
 
