@@ -1,5 +1,4 @@
-
-
+<form>
 <div class="control-group">
     <label class="control-label" for="new-link">{_ Type the title of the page you want to connect to.  Click “Make a new connection” when the page does not yet exist. _}</label>
     <div class="controls">
@@ -11,11 +10,8 @@
 <div class="control-group">
     <label class="control-label" for="{{#input}}">{_ or use the autocompleter to search the site. _}</label>
     <div class="controls">
-
-        <div class="form-item autocomplete-wrapper clear">
-	    <input id="{{#input}}" type="text" value="" class="autocompleter span8 do_autofocus" />
-	    <ul id="{{#suggestions}}" class="suggestions-list"></ul>
-        </div>
+	<input id="{{#input}}" type="text" value="" class="autocompleter span8 do_autofocus" />
+	<ul id="{{#suggestions}}" class="suggestions-list"></ul>
     </div>
 </div>
 
@@ -52,3 +48,8 @@
 
 {% endif %}
 {% endwith %}
+</form>
+
+<div class="modal-footer">
+    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+</div>

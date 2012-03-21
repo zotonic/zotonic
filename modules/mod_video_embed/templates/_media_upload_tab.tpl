@@ -1,2 +1,2 @@
 {# Tab title for the media embed tab #}
-<li><a href="#{{ tab }}-embed">Embed code</a></li>
+<li><a data-toggle="tab" href="#{{ tab }}-embed">{_ Embed code _}</a></li>
