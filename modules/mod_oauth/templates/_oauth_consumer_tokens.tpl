@@ -14,29 +14,38 @@
 {% endif %}
 
 {% if tokens %}
-<table width="100%">
-    <tr>
-        <th>{_ User _}</th>
-        <th>{_ In use since _}</th>
-        <th>{_ Type _}</th>
-    </tr>
-    
-    {% for token in tokens %}
-    <tr>
-        <td><a href="{{ m.rsc[token.user_id].page_url }}">{{ m.rsc[token.user_id].title }}</a></td>
-        <td>{{ token.timestamp|date:"Y-d-m H:i" }}</td>
-        <td>{{ token.token_type }}</td>
-    </tr>
-    {% endfor %}
+<table class="table" width="100%">
+    <thead>
+        <tr>
+            <th>{_ User _}</th>
+            <th>{_ In use since _}</th>
+            <th>{_ Type _}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for token in tokens %}
+        <tr>
+            <td><a href="{{ m.rsc[token.user_id].page_url }}">{{ m.rsc[token.user_id].title }}</a></td>
+            <td>{{ token.timestamp|date:"Y-d-m H:i" }}</td>
+            <td>{{ token.token_type }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endfor %}
 {% else %}
 <p>{_ This token is not yet used by anybody. _}</p>
 {% endif %}
 
 {% if delete %}
-    <p>{_ Do you really want to delete this application? _}</p>
-    <p>
-        {% button text="Delete this application!" postback={confirm_del_app id=id} %}
-    </p>
+<p>{_ Do you really want to delete this application? _}</p>
+<div class="modal-footer">
+    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+    {% button class="btn btn-primary" text=_"Delete this application!" postback={confirm_del_app id=id} %}
+</div>
+{% else %}
+<div class="modal-footer">
+    {% button class="btn" action={dialog_close} text=_"Close" %}
+</div>
 {% endif %}
 
 {% endwith %}
