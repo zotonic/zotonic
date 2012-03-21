@@ -19,6 +19,44 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
+ul.tree-list {
+    padding: 0; margin: 0;
+}
+ul.tree-list li.placeholder {
+    background: #999;
+    border-radius: 4px;
+}
+
+ul.tree-list li {
+    list-style-type: none;
+    display: block;
+    line-height: 34px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+ul.tree-list li img.grippy {
+    cursor: move;
+    padding-right: 2px;
+}
+
+ul.tree-list li div {
+    border: 1px solid #E0E0E0;
+    margin-bottom: -1px;
+    position: relative;
+    padding: 0 8px;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 50%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* IE10+ */
+    background: linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+    border-radius: 4px;
+}
+
 /* Hierarchy editor */
 ul.ui-trash {
     background: url("/lib/images/ui-trash-64.png") no-repeat;

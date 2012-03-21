@@ -18,7 +18,7 @@
 			{% include "_menu_trash.tpl" %}
 			
 			<ul id="sortable-new" class="tree-list ui-sortable" title="{_ Drag to add a new page _}">
-				<li class="header" id="page-new-text" data-nestedsortable-receive="new">
+				<li id="page-new-text" data-nestedsortable-receive="new">
 					<div class="clearfix">
 						<img class="grippy" src="/lib/images/grippy.png" alt="{_ Drag me _}" />
 						<span>{_ New page _}</span>

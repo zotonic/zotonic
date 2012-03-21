@@ -4,7 +4,7 @@
 	{% for mid, path, action in id.menu|menu_flat %}
 		{% with forloop.counter as c %}
 		{% if mid %}
-			<li class="header" id="{{ #menu.c }}-{{ mid }}">
+			<li id="{{ #menu.c }}-{{ mid }}">
 			    {% include "_menu_edit_item.tpl" id=mid %}
 			{% if action == `down` %}
 				<ul>
