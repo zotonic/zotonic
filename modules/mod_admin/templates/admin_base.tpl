@@ -12,6 +12,7 @@
                 "bootstrap/css/bootstrap.min.css"
                 "css/zp-datepicker.css"
                 "css/zp-menuedit.css"
+                "css/zp-icon-status.css"
                 "css/zotonic-admin.css"
         %}
 

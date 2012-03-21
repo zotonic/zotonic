@@ -206,6 +206,12 @@ table.do_adminLinkedTable td a.view-link {
     background: white;
 }
 
+table.table tr.unpublished td,
+table.table tr.unpublished td a {
+    color: #999;
+}
+
+
 /* admin edit page
    -------------------------------------------------------------- */
 
