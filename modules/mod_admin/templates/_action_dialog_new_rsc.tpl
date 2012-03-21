@@ -19,7 +19,7 @@
 	    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
             <div class="controls">
 	        {% if cat and nocatselect %}
-	        <strong>{{ m.rsc[cat].title }}</strong>
+	        <input type="text" readonly value="{{ m.rsc[cat].title }}" />
 		<input type="hidden" name="category_id" value="{{ cat }}"/>
 		{% else %}
 		<select id="{{ #category }}" name="category_id" class="span4">
