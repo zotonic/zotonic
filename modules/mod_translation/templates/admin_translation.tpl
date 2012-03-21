@@ -11,7 +11,7 @@
     <br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
 
     <div class="well">
-        {% button class="btn btn-primary" text="add language" 
+        {% button class="btn btn-primary" text="Add language" 
             action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
             %}
     </div>
