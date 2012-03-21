@@ -43,15 +43,15 @@ event(#postback{message={dialog_delete_username, Id, OnSuccess}}, Context) ->
         true ->
             case m_identity:get_username(Id, Context) of
                 undefined ->
-                    z_render:growl("There is no username coupled to this person.", Context);
+                    z_render:growl(?__("There is no username coupled to this person.", Context), Context);
                 Username ->
                     Vars = [
                         {on_success, OnSuccess},
                         {id, Id},
                         {username, Username}
                     ],
-                    z_render:dialog("Confirm user deletion.", "_action_dialog_delete_username.tpl", Vars, Context)
+                    z_render:dialog(?__("Confirm user deletion", Context), "_action_dialog_delete_username.tpl", Vars, Context)
             end;
         false ->
-            z_render:growl_error("Only an administrator can delete usernames.", Context)
+            z_render:growl_error(?__("Only an administrator can delete usernames.", Context), Context)
     end.
