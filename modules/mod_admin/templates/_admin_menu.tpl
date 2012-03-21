@@ -41,7 +41,9 @@
                         {% endif %}
                     {% endfor %}
                     <li>
-                        <a href="{% url logoff %}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
+                        <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
+                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
+                                                   action={redirect dispatch=`logoff`}} %}
                     </li>
                 </ul>
             </div>
