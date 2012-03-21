@@ -1,36 +1,39 @@
 .survey-editor ul {
-	min-height: 1300px;
+    min-height: 1300px;
+    list-style-type: none;
+    margin: 0; padding: 0;
 }
+
 .survey-editor ul li {
-	border: 1px solid #ddd;
-	border-left: 5px solid #ddd;
-	padding: 4px;
-	margin-bottom: 4px;
-	margin-right: 4px;
-	cursor: hand;
-	background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-left: 5px solid #ddd;
+    padding: 4px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+    cursor: hand;
+    background-color: #f8f8f8;
 }
 
 .survey-editor ul li textarea {
-	width: 90%;
+    width: 90%;
 }
 
 .survey-info {
-	color: #777;
-	font-style: italic;
+    color: #777;
+    font-style: italic;
 }
 
 #survey .shortanswer input, #survey-qs .shortanswer input {
-	width: 90%;
+    width: 90%;
 }
 
 #survey-qs li {
-	font-size: 80%;
+    font-size: 80%;
 }
 
 #survey li {
-	background-color: #f8f8f8;
-	border-left-width: 1px;
+    background-color: #f8f8f8;
+    border-left-width: 1px;
 }
 
 
