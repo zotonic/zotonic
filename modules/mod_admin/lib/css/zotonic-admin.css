@@ -137,6 +137,7 @@ div.widget-content > :last-child {
 }
 
 td.clickable,
+tr.clickable td,
 div.widget-active h3 {
     cursor: pointer;
 }

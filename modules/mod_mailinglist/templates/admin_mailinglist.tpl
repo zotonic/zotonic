@@ -30,7 +30,7 @@
 
         <tbody>
 	    {% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
-	    <tr id="mailinglist-{{id}}">
+	    <tr id="mailinglist-{{id}}" data-href="{% url admin_mailinglist_recipients id=id %}">
 		{% with m.rsc[id].is_editable as editable %}
 		    <td width="20%">{{ title|default:"untitled" }}</td>
 		    <td width="40%">{{ m.rsc[id].summary|default:"-" }}</td>
@@ -38,7 +38,7 @@
 		    <td width="10%">{{ stats[1]|format_number }}</td>
 		    <td width="30%">
 		        <div class="pull-right">
-		            <a class="btn btn-mini row-link" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
+		            <a class="btn btn-mini" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
 			    {% if editable %}
                             <a class="btn btn-mini" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
 			    {% else %}

@@ -32,7 +32,7 @@
     <tbody>
         {% for id in m.search[{latest cat=cat pagelen=pagelen|default:5}] %}
         {% if m.rsc[id].is_visible %}
-        <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}">
+        <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td>
                 {% if media %}{% image id width=40 height=18 crop %}&nbsp;{% endif %}
                 {{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}
@@ -41,7 +41,7 @@
                 {{ m.rsc[m.rsc[id].category_id].title }}
                 <span class="pull-right">
                     <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
-                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini row-link">{_ edit _}</a>
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
                 </span>
             </td>
         </tr>

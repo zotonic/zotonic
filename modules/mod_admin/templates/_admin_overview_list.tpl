@@ -22,7 +22,7 @@
     <tbody>
         {% for id in result %}
         {% if m.rsc[id].is_visible %}
-        <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}">
+        <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
             <td>{{ m.rsc[m.rsc[id].category_id].title }}</td>
             <td>{{ m.rsc[id].created|date:"d M Y, H:i" }}</td>
@@ -31,7 +31,7 @@
                 {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
                 <span class="pull-right">
                     <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
-                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini row-link">{_ edit _}</a>
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
                 </span>
             </td>
         </tr>

@@ -42,7 +42,7 @@ event(#postback{message={config_new_dialog, OnSuccess}}, Context) ->
         {delegate, atom_to_list(?MODULE)},
         {on_success, OnSuccess}
     ],
-    z_render:dialog("Add configuration key.", "_action_dialog_config_new.tpl", Vars, Context);
+    z_render:dialog(?__("Add configuration key", Context), "_action_dialog_config_new.tpl", Vars, Context);
 
 
 event(#submit{message={config_new, Args}}, Context) ->
@@ -58,9 +58,9 @@ event(#submit{message={config_new, Args}}, Context) ->
                     m_config:set_value(Module, Key, Value, Context),
                     z_render:wire([{dialog_close, []} | OnSuccess], Context);
                 _ ->
-                    z_render:growl_error("The config key already exists, please choose another key name.", Context)
+                    z_render:growl_error(?__("The config key already exists, please choose another key name.", Context), Context)
             end;
         false ->
-            z_render:growl_error("Only an administrator can add configuration keys.", Context)
+            z_render:growl_error(?__("Only an administrator can add configuration keys.", Context), Context)
     end.
 

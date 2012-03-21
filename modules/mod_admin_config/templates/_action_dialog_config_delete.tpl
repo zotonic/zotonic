@@ -3,5 +3,7 @@
 
 <p>{_ This can't be undone. The configuration key will be lost forever. _}</p>
 
-{% button text=_"Delete" action={config_delete module=module key=key on_success=on_success} action={dialog_close} %}
-{% button text=_"Cancel" action={dialog_close} %}
+<div class="modal-footer">
+    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+    {% button class="btn btn-primary" text=_"Delete" action={config_delete module=module key=key on_success=on_success} action={dialog_close} %}
+</div>

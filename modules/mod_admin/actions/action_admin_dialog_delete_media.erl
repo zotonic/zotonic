@@ -45,7 +45,7 @@ event(#postback{message={delete_media_dialog, Id, OnSuccess}}, Context) ->
                 {on_success, OnSuccess},
                 {id, Id}
             ],
-            z_render:dialog("Confirm delete", "_action_dialog_delete_media.tpl", Vars, Context);
+            z_render:dialog(?__("Confirm delete", Context), "_action_dialog_delete_media.tpl", Vars, Context);
         false ->
-            z_render:growl_error("You are not allowed to delete this media.", Context)
+            z_render:growl_error(?__("You are not allowed to delete this media.", Context), Context)
     end.

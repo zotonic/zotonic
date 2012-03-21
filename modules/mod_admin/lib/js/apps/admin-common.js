@@ -27,17 +27,15 @@ limitations under the License.
     {
         _init: function() {
             var self = this;
-            (self.element.find("tr a.row-link").each(function() {
-                                                         var href = $(this).attr("href");
-                                                         $(this).parents("tr:first").find("td").each(function() {
-                                                                                                         $(this)
-                                                                                                             .addClass("view-link")
-                                                                                                             .contents()
-                                                                                                             .wrapAll($("<a>").addClass("view-link").attr("href", href));
-                                                                                                     });
-                                                     }));
-
-            
+            (self.element.find("tr").each(function() {
+                                              var href = $(this).attr("data-href");
+                                              $(this).find("td").each(function() {
+                                                                          $(this)
+                                                                              .addClass("view-link")
+                                                                              .contents()
+                                                                              .wrapAll($("<a>").addClass("view-link").attr("href", href));
+                                                                      });
+                                          }));
         }
     });
 

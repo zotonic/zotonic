@@ -45,7 +45,7 @@ event(#postback{message={delete_rsc_dialog, Id, OnSuccess}}, Context) ->
                 {on_success, OnSuccess},
                 {id, Id}
             ],
-            z_render:dialog("Confirm delete", "_action_dialog_delete_rsc.tpl", Vars, Context);
+            z_render:dialog(?__("Confirm delete", Context), "_action_dialog_delete_rsc.tpl", Vars, Context);
         false ->
-            z_render:growl_error("You are not allowed to delete this page.", Context)
+            z_render:growl_error(?__("You are not allowed to delete this page.", Context), Context)
     end.

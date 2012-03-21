@@ -27,11 +27,9 @@
         <thead>
             <tr>
 		<th width="10%">{_ Preview _}</th>
- 		<th width="20%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</th>
-		<th width="15%">{_ Type _}</th>
-		<th width="25%">{_ Filename _}</th>
-		<th width="10%">{_ Dimensions _}</th>
-		<th width="20%">{% include "_admin_sort_header.tpl" field="created" caption=_"Uploaded" %}</th>
+ 		<th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</th>
+		<th width="25%">{_ Info _}</th>
+		<th width="30%">{% include "_admin_sort_header.tpl" field="created" caption=_"Uploaded" %}</th>
             </tr>
         </thead>
 
@@ -40,18 +38,24 @@
 	    {% if m.rsc[id].is_visible %}
 	    {% with m.rsc[id] as r %}
 	    {% with r.medium as medium %}
-	    <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
-		<td width="10%">{% image medium width=80 height=60 crop %}</td>
-		<td width="20%">{{ r.title|striptags|default:"<em>untitled</em>" }}</td>
-		<td width="15%">{{ medium.mime|default:"&nbsp;" }}</td>
-		<td width="25%">{{ medium.filename|default:"-" }}</td>
-		<td width="10%">{{ medium.width }}&times;{{ medium.height }}</td>
-		<td width="10%">
+	    <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
+		<td>{% image medium width=80 height=60 crop %}</td>
+		<td>
+                    <h5>{{ r.title|striptags|default:"<em>untitled</em>" }}</h5>
+                    <p class="help-block">{{ medium.filename|default:"-" }}</p>
+                </td>
+		<td>
+                    <p class="help-block">
+                        {{ medium.mime|default:"&nbsp;" }}<br />
+		        {{ medium.width }}&times;{{ medium.height }}
+                    </p>
+                </td>
+		<td>
                     {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
                     <div class="pull-right">
 			{% button class="btn btn-mini" text=_"delete" disabled=r.is_protected action={dialog_delete_rsc
                         id=id on_success={slide_fade_out target=#li.id}} %}
-                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini row-link">{_ edit _}</a>
+                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
                     </div>
                 </td>
             </tr>

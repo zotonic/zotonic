@@ -32,14 +32,14 @@
 
         <tbody>
             {% for name,p in m.predicate %}
-            <tr id="{{ #li.name }}">
+            <tr id="{{ #li.name }}" data-href="{% url admin_edit_rsc id=p.id %}">
                 <td>{{ p.title|default:"&nbsp;" }}</td>
                 <td>{{ p.name|default:"&nbsp;" }}</td>
                 <td>{{ p.uri|default:"&nbsp;" }}</td>
                 <td>
                     <div class="pull-right">
                         {% button class="btn btn-mini" disabled=p.is_protected text="delete" action={dialog_predicate_delete id=p.id on_success={slide_fade_out target=#li.name}} %}
-                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-mini row-link">{_ edit _}</a>
+                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-mini">{_ edit _}</a>
                     </div>                        
                     {{ p.reversed|yesno:"reversed,&nbsp;" }}
                 </td>

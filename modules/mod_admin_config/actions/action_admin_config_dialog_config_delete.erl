@@ -43,7 +43,7 @@ event(#postback{message={delete_config_dialog, Module, Key, OnSuccess}}, Context
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             Vars = [ {on_success, OnSuccess}, {module, Module}, {key, Key} ],
-            z_render:dialog("Confirm delete.", "_action_dialog_config_delete.tpl", Vars, Context);
+            z_render:dialog(?__("Confirm delete", Context), "_action_dialog_config_delete.tpl", Vars, Context);
         false ->
-            z_render:growl_error("Only administrators can delete configurations.", Context)
+            z_render:growl_error(?__("Only administrators can delete configurations.", Context), Context)
     end.
