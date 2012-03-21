@@ -4,6 +4,8 @@
 
 {% block title_log %}{_ Log incoming/outgoing e-mail _}{% endblock %}
 
+{% block active2 %}active{% endblock %}
+
 {% block content_log %}
 
 {#
