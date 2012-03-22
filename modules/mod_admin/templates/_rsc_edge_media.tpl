@@ -9,7 +9,7 @@
 					<div class="rsc-edge do_unlink">
 						<span class="clearfix">
 							<span class="unlink-mover"></span>
-							<span id="{{ #unlink.object_id }}" class="unlink-cross do_tooltip" title="{_ Disconnect _} {{title}}."></span>
+							<span id="{{ #unlink.object_id }}" class="unlink-cross"></span>
 							<span class="unlink-item"><a href="{% url admin_edit_rsc id=object_id %}" id="{{ #edit }}" title="{{ title }}">{{ title }}</a></span>
 						</span>
 					</div>
