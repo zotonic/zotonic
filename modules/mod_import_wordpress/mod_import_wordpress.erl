@@ -20,7 +20,7 @@
 -module(mod_import_wordpress).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--mod_title("Wordpress import").
+-mod_title("Import WordPress WXR").
 -mod_description("Import your Wordpress blog into Zotonic using a .wxr file.").
 
 -include_lib("zotonic.hrl").
