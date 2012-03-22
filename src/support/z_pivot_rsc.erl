@@ -86,7 +86,7 @@ pivot_resource_update(UpdateProps, RawProps) ->
                                     true ->
                                         All
                                 end
-                        end, UpdateProps, [date_start, date_end]),
+                        end, UpdateProps, [date_start, date_end, title]),
 
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
@@ -404,7 +404,8 @@ pivot_resource(Id, Context) ->
             ", pivot_date_end   = $",integer_to_list(N+11),
             ", pivot_date_start_month_day   = $",integer_to_list(N+12),
             ", pivot_date_end_month_day   = $",integer_to_list(N+13),
-            " where id = $",integer_to_list(N+14)
+            ", pivot_title   = $",integer_to_list(N+14),
+            " where id = $",integer_to_list(N+15)
         ]),
 
     SqlArgs = ArgsD ++ [
@@ -421,6 +422,7 @@ pivot_resource(Id, Context) ->
         proplists:get_value(pivot_date_end, PropsPrePivoted),
         proplists:get_value(pivot_date_start_month_day, PropsPrePivoted),
         proplists:get_value(pivot_date_end_month_day, PropsPrePivoted),
+        proplists:get_value(pivot_title, PropsPrePivoted),
         Id
     ],
     z_db:q(Sql, SqlArgs, Context),
