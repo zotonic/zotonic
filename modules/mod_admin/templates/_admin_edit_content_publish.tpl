@@ -12,13 +12,13 @@
 <div class="admin-form ">
     <div class="control-group">
         <div class="pull-right">
-	    {% button class="btn do_tooltip" text=_"Cancel" action={redirect back} title=_"Go back." %}
+	    {% button class="btn" text=_"Cancel" action={redirect back} title=_"Go back." %}
         </div>        
-	{% button type="submit" id="save_stay" class="btn btn-primary do_tooltip" text=_"Save" title=_"Save this page." disabled=not is_editable %}
+	{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
 	{% if is_editable %}
-	    {% button type="submit" id="save_view" class="btn do_tooltip" text=_"Save &amp; view" title=_"Save and view the page." %}
+	    {% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
 	{% else %}
-	    {% button id="save_view" class="btn-primary do_tooltip" text=_"view" title=_"View this page." action={redirect id=id} %}
+	    {% button id="save_view" class="btn-primary" text=_"view" title=_"View this page." action={redirect id=id} %}
 	{% endif %}
 
     </div>
@@ -43,22 +43,22 @@
     <div class="control-group">
         <div class="pull-right">
 	    {% for id in m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}] %}
-	    {% button class="btn btn-small right do_tooltip" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
+	    {% button class="btn btn-small right" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
 	    {% endfor %}
 
 	    {% for id in m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}] %}
-	    {% button class="btn btn-small do_tooltip" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
+	    {% button class="btn btn-small" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
 	    {% endfor %}
         </div>
 
 	{% ifnotequal id 1 %}
-	    {% button class="btn btn-small do_tooltip" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title=_"Delete this page." %}
+	    {% button class="btn btn-small" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title=_"Delete this page." %}
 	{% endifnotequal %}
 	
 	{% if is_editable %}
-	    {% button type="submit" id="save_duplicate" class="btn btn-small do_tooltip" text=_"Duplicate" title=_"Duplicate this page." %}
+	    {% button type="submit" id="save_duplicate" class="btn btn-small" text=_"Duplicate" title=_"Duplicate this page." %}
 	{% else %}
-	    {% button	class="btn btn-small do_tooltip" 
+	    {% button	class="btn btn-small" 
 			text=_"Duplicate" 
 			action={dialog_duplicate_rsc id=id} 
 			title=_"Duplicate this page."
