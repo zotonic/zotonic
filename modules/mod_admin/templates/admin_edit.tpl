@@ -105,6 +105,13 @@
                 $("#"+k).adminwidget("setVisible", this[k] == "true", true);
             }});
         }, 1);
+        
+        $('.language-tabs > li > a[data-toggle="tab"]').live('shown', function (e) {
+            if (e.target != e.relatedTarget) {
+                var lang = $(e.target).parent().attr('lang');
+                $("li[lang='"+lang+"'] > a").tab('show');
+            }
+        });
     });
 </script>
 
