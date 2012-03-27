@@ -44,7 +44,7 @@ $.widget("ui.menuedit", {
         self.options.receive = function(event, ui) {
             var elt = ui.item[0];
             var elt_id = $(elt).attr('id');
-            var target_elt = $('#'+elt_id, $(this));
+            var target_elt = $('.drag_group_dragdrop', $(this));
             var new_id = z_unique_id()+"-"+elt_id;
 
             $(target_elt)
