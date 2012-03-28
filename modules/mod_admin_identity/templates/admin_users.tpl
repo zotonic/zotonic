@@ -5,7 +5,12 @@
 {% block content %}
 <div class="edit-header">
 
-    <h2>{_ Users _}</h2>
+    <h2>
+        {_ Users _}{% if q.qs %}, 
+        {_ matching _} “{{ q.qs|escape }}”
+        {% button text=_"show all" action={redirect dispatch="admin_user"} %}
+        {% else %} {_ overview _}{% endif %}
+    </h2>
     
     <p>
         {_ Every page/person can be made into a user on the edit page.
@@ -20,22 +25,12 @@
     {% else %}
     <div class="alert alert-info">{_ You need to be an administrator to add users. _}</div>
     {% endif %}
-    
 </div>
 
 <div>    
     {% with m.acl.user as me %}
-
     {% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
-    <h3 class="above-list ">
-        {_ Users _}{% if q.qs %}, 
-        {_ matching _} “{{ q.qs|escape }}”
-        {% button text=_"show all" action={redirect dispatch="admin_user"} %}
-        {% else %} {_ overview _}{% endif %}
-    </h3>
-    <hr />
-    
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
