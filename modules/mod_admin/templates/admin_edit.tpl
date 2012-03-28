@@ -9,13 +9,13 @@
 {% with m.config.i18n.language_list.list as languages %}
 
 <div class="edit-header">
-    <div class="pull-right span6">
-        <div class="alert alert-info">
+    <div class="pull-right span4">
+        <p class="admin-chapeau">
 	    {_ Modified _} {{ r.modified|timesince }}
-	    {_ by _} <nobr><a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>.</nobr><br />
+	    {_ by _} <nobr><a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>.</nobr>
 	    {_ Created by _}
             <nobr><a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>.</nobr>
-        </div>
+        </p>
     </div>
 
     {% if not is_editable %}

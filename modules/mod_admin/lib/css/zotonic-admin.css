@@ -221,6 +221,10 @@ img.thumb {
 /* admin edit page
    -------------------------------------------------------------- */
 
+.pull-right p.admin-chapeau {
+    text-align: right;
+}
+
 p.admin-chapeau {
     color: #999999;
     margin: 0;
