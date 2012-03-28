@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
             </a>
 	    
-            <a class="brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><img src="/lib/images/admin_zotonic.png"></a>
+            <a class="brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/admin_zotonic.png" width="106" height="20"></a>
 
             <div class="nav-collapse">
                 <ul class="nav">
