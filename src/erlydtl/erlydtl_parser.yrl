@@ -66,6 +66,11 @@ Nonterminals
     CycleNames
     CycleNamesCompat
 
+    FilterBlock
+    FilterBraced
+    EndFilterBraced
+    Filters
+
     ForBlock
     ForBraced
     EmptyBraced
@@ -114,6 +119,7 @@ Nonterminals
     
     CustomTag
     Args
+    SpacelessBlock
 	TransArgs
 
     CallTag
@@ -165,13 +171,16 @@ Terminals
     endblock_keyword
 	endcache_keyword
     endcomment_keyword
+    endfilter_keyword
     endfor_keyword
     endif_keyword
     endifequal_keyword
     endifnotequal_keyword
+    endspaceless_keyword
 	endwith_keyword
     equal
     extends_keyword
+    filter_keyword
     for_keyword
     identifier
     if_keyword
@@ -193,6 +202,7 @@ Terminals
     overrules_keyword
     pipe
     print_keyword
+    spaceless_keyword
     string_literal
     text
 	url_keyword
@@ -241,10 +251,12 @@ Elements -> Elements InheritTag : '$1' ++ ['$2'].
 Elements -> Elements IncludeTag : '$1' ++ ['$2'].
 Elements -> Elements CatIncludeTag : '$1' ++ ['$2'].
 Elements -> Elements NowTag : '$1' ++ ['$2'].
+Elements -> Elements SpacelessBlock : '$1' ++ ['$2'].
 Elements -> Elements LibTag : '$1' ++ ['$2'].
 Elements -> Elements LoadTag : '$1' ++ ['$2'].
 Elements -> Elements CycleTag : '$1' ++ ['$2'].
 Elements -> Elements BlockBlock : '$1' ++ ['$2'].
+Elements -> Elements FilterBlock : '$1' ++ ['$2'].
 Elements -> Elements ForBlock : '$1' ++ ['$2'].
 Elements -> Elements IfBlock : '$1' ++ ['$2'].
 Elements -> Elements IfEqualBlock : '$1' ++ ['$2'].
@@ -307,6 +319,13 @@ CycleNamesCompat -> identifier comma : ['$1'].
 CycleNamesCompat -> CycleNamesCompat identifier comma : '$1' ++ ['$2'].
 CycleNamesCompat -> CycleNamesCompat identifier : '$1' ++ ['$2'].
 
+FilterBlock -> FilterBraced Elements EndFilterBraced : {filter, '$1', '$2'}.
+FilterBraced -> open_tag filter_keyword Filters close_tag : '$3'.
+EndFilterBraced -> open_tag endfilter_keyword close_tag.
+
+Filters -> Filter : ['$1'].
+Filters -> Filters pipe Filter : '$1' ++ ['$3'].
+
 ForBlock -> ForBraced Elements EndForBraced : {for, '$1', '$2'}.
 ForBlock -> ForBraced Elements EmptyBraced Elements EndForBraced : {for, '$1', '$2', '$4'}.
 EmptyBraced -> open_tag empty_keyword close_tag.
@@ -340,6 +359,8 @@ IfNotEqualBlock -> IfNotEqualBraced Elements EndIfNotEqualBraced : {ifnotequal, 
 IfNotEqualBraced -> open_tag ifnotequal_keyword IfNotEqualExpression E close_tag : ['$3', '$4'].
 IfNotEqualExpression -> E : '$1'.
 EndIfNotEqualBraced -> open_tag endifnotequal_keyword close_tag.
+
+SpacelessBlock -> open_tag spaceless_keyword close_tag Elements open_tag endspaceless_keyword close_tag : {spaceless, '$4'}.
 
 AutoEscapeBlock -> AutoEscapeBraced Elements EndAutoEscapeBraced : {autoescape, '$1', '$2'}.
 AutoEscapeBraced -> open_tag autoescape_keyword identifier close_tag : '$3'.

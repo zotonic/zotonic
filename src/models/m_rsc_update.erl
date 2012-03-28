@@ -148,6 +148,7 @@ update(Id, Props, true, Context) ->
 update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc ->
     EscapeTexts = proplists:get_value(escape_texts, Options, true),
     AclCheck = proplists:get_value(acl_check, Options, true),
+    IsImport = proplists:is_defined(is_import, Options),
     IsEditable = Id == insert_rsc orelse z_acl:rsc_editable(Id, Context) orelse not(AclCheck),
 
     case IsEditable of
@@ -236,10 +237,25 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 
                 UpdateProps1 = [
                     {version, z_db:q1("select version+1 from rsc where id = $1", [RscId], Ctx)},
-                    {modifier_id, z_acl:user(Ctx)},
-                    {modified, calendar:local_time()}
+                    {modifier_id, z_acl:user(Ctx)}
                     | UpdateProps
                 ],
+                
+                % Optionally fetch the created date if this is an import of a resource
+                UpdateProps2 = case imported_prop(IsImport, created, AtomProps, undefined) of
+                                   undefined -> UpdateProps1;
+                                   CreatedDT -> [{created, CreatedDT}|UpdateProps1]
+                               end,
+                
+                UpdateProps3 = case IsImport of
+                                  false ->
+                                      [{modified, calendar:local_time()} | UpdateProps2 ];
+                                  true ->
+                                      case imported_prop(IsImport, created, AtomProps, undefined) of
+                                          undefined -> UpdateProps2;
+                                          ModifiedDT -> [{modified, ModifiedDT}|UpdateProps2]
+                                      end
+                              end,
 
                 % Allow the update props to be modified.
                 {Changed, UpdatePropsN} = z_notifier:foldr(#rsc_update{
@@ -247,7 +263,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                                                         id=RscId, 
                                                         props=BeforeProps
                                                     }, 
-                                                    {false, UpdateProps1},
+                                                    {false, UpdateProps3},
                                                     Ctx),
                 UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
                     undefined ->
@@ -309,7 +325,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 
                     % Return the updated or inserted id
                     {ok, NewId};
-                {rollback, {Why, _} = Er} ->
+                {rollback, {_Why, _} = Er} ->
                     throw(Er)
             end;
         false ->
@@ -320,6 +336,12 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             throw(E)
     end.
 
+
+    imported_prop(false, _, _, Default) ->
+        Default;
+    imported_prop(true, Prop, Props, Default) ->
+        proplists:get_value(Prop, Props, Default).
+        
 
 %% @doc Check if the update will change the data in the database
 %% @spec is_changed(Current, Props) -> bool()

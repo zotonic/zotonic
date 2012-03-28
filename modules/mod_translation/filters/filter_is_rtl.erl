@@ -27,17 +27,13 @@ is_rtl(Id, Context) when is_integer(Id) ->
     is_rtl(filter_language:language(Id, Context), Context);
 is_rtl([Lang|_] = Langs, Context) when is_atom(Lang) ->
     is_rtl(filter_language:language(Langs, Context), Context);
-is_rtl(ar, _Context) ->
-    true;
-is_rtl(he, _Context) ->
-    true;
-is_rtl("ar", _Context) ->
-    true;
-is_rtl("he", _Context) ->
-    true;
-is_rtl(<<"ar">>, _Context) ->
-    true;
-is_rtl(<<"he">>, _Context) ->
-    true;
-is_rtl(_, _Context) ->
-    false.
+is_rtl(ar, _Context) -> true;
+is_rtl(fa, _Context) -> true;
+is_rtl(he, _Context) -> true;
+is_rtl("ar", _Context) -> true;
+is_rtl("fa", _Context) -> true;
+is_rtl("he", _Context) -> true;
+is_rtl(<<"ar">>, _Context) -> true;
+is_rtl(<<"fa">>, _Context) -> true;
+is_rtl(<<"he">>, _Context) -> true;
+is_rtl(_, _Context) -> false.

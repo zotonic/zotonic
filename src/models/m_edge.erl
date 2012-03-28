@@ -32,6 +32,7 @@
     get_id/4,
     get_edges/2,
     insert/4,
+    insert/5,
     delete/2,
     delete/4,
     delete_multiple/4,
@@ -122,22 +123,28 @@ get_edges(SubjectId, Context) ->
     end.
 
 %% Insert a new edge
-insert(SubjectId, PredId, ObjectId, Context) when is_integer(PredId) ->
+insert(SubjectId, Pred, ObjectId, Context) ->
+    insert(SubjectId, Pred, ObjectId, [], Context).
+
+insert(SubjectId, PredId, ObjectId, Opts, Context) when is_integer(PredId) ->
     case m_predicate:is_predicate(PredId, Context) of
-        true -> insert1(SubjectId, PredId, ObjectId, Context);
+        true -> insert1(SubjectId, PredId, ObjectId,  Opts, Context);
         false -> throw({error, {unknown_predicate, PredId}})
     end;
-insert(SubjectId, Pred, ObjectId, Context) ->
+insert(SubjectId, Pred, ObjectId, Opts, Context) ->
     PredId = m_predicate:name_to_id_check(Pred, Context),
-    insert1(SubjectId, PredId, ObjectId, Context).
-    
-    insert1(SubjectId, PredId, ObjectId, Context) ->
+    insert1(SubjectId, PredId, ObjectId, Opts, Context).
+
+    insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
         case z_db:q1("select id from edge where subject_id = $1 and object_id = $2 and predicate_id = $3", [SubjectId, ObjectId, PredId], Context) of
             undefined ->
                 F = fun(Ctx) ->
-                    m_rsc:touch(SubjectId, Ctx),
-                    z_db:insert(edge, [{subject_id, SubjectId}, {object_id, ObjectId}, {predicate_id, PredId}], Ctx)
-                end,
+                        case proplists:is_defined(no_touch, Opts) of 
+                            true -> skip;
+                            false -> m_rsc:touch(SubjectId, Ctx)
+                        end,
+                        z_db:insert(edge, [{subject_id, SubjectId}, {object_id, ObjectId}, {predicate_id, PredId}], Ctx)
+                    end,
                 
                 {ok, PredName} = m_predicate:id_to_name(PredId, Context),
                 case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of

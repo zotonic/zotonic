@@ -384,6 +384,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 inherit_ast(Context, TreeWalkerAcc);
             ({'comment', _Contents}, TreeWalkerAcc) ->
                 empty_ast(TreeWalkerAcc);
+            ({'filter', Filters, Contents}, TreeWalkerAcc) ->
+                filter_tag_ast(Filters, Contents, Context, TreeWalkerAcc);
 			({'trans', {trans_text, _Pos, TransLiteral}}, TreeWalkerAcc) ->
 				trans_ast(TransLiteral, Context, TreeWalkerAcc);
 			({'trans_ext', {string_literal, _Pos, String}, Args}, TreeWalkerAcc) ->
@@ -431,6 +433,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 {IfAstInfo, TreeWalker1} = body_ast(ElseContents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = body_ast(IfContents, Context, TreeWalker1),
                 ifequalelse_ast(Args, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                    
+            ({'spaceless', Contents}, TreeWalkerAcc) ->
+                spaceless_ast(Contents, Context, TreeWalkerAcc);
             ({'with', [ExprList, Identifiers], WithContents}, TreeWalkerAcc) ->
                 with_ast(ExprList, Identifiers, WithContents, Context, TreeWalkerAcc);
             ({'for', {'in', IteratorList, Value}, Contents}, TreeWalkerAcc) ->
@@ -755,6 +759,29 @@ include_ast(File, Args, All, Context, TreeWalker) ->
             scomp_ast("include", Args1, All, Context, TreeWalker)
     end.
 
+filter_tag_ast(FilterList, Contents, Context, TreeWalker) ->
+    {{InnerAst, Info}, TreeWalker1} = body_ast(Contents, Context#dtl_context{auto_escape = did}, TreeWalker),
+
+    {{FilteredAst, FilteredInfo}, TreeWalker2} = lists:foldl(fun
+                ({filter, {identifier, _, "escape"}, _}, {{AstAcc, InfoAcc}, TreeWalkerAcc}) ->
+                    {{AstAcc, InfoAcc}, TreeWalkerAcc};
+                (Filter, {{AstAcc, InfoAcc}, TreeWalkerAcc}) ->
+                    {{Ast, AstInfo}, TreeWalkerAcc1} = filter_ast1(Filter, AstAcc, Context, TreeWalkerAcc),
+                    {{Ast, merge_info(InfoAcc, AstInfo)}, TreeWalkerAcc1}
+            end, {{erl_syntax:application(
+                        erl_syntax:atom(lists),
+                        erl_syntax:atom(flatten),
+                        [InnerAst]), Info}, TreeWalker1}, FilterList),
+
+    case search_for_escape_filter(lists:reverse(FilterList), Context) of
+        on -> 
+            {{erl_syntax:application(
+                erl_syntax:atom(filter_force_escape),
+                erl_syntax:atom(force_escape),
+                [FilteredAst, z_context_ast(Context)]), FilteredInfo}, TreeWalker2};
+        _ -> 
+            {{FilteredAst, FilteredInfo}, TreeWalker2}
+    end.
 
 filter_ast(Variable, Filter, Context, TreeWalker) ->
     % the escape filter is special; it is always applied last, so we have to go digging for it
@@ -763,13 +790,12 @@ filter_ast(Variable, Filter, Context, TreeWalker) ->
     % so don't do any more escaping
     {{UnescapedAst, Info}, TreeWalker2} = filter_ast_noescape(Variable, Filter, Context#dtl_context{auto_escape = did}, TreeWalker),
     case search_for_escape_filter(Variable, Filter, Context) of
-        on ->
+        on -> 
             {{erl_syntax:application(
-                    erl_syntax:atom(filter_force_escape), 
-                    erl_syntax:atom(force_escape), 
-                    [UnescapedAst, z_context_ast(Context)]), 
-                Info}, TreeWalker2};
-        _ ->
+                        erl_syntax:atom(filter_force_escape), 
+                        erl_syntax:atom(force_escape), 
+                        [UnescapedAst, z_context_ast(Context)]), Info}, TreeWalker};
+        _ -> 
             {{UnescapedAst, Info}, TreeWalker2}
     end.
 
@@ -820,22 +846,29 @@ filter_ast1({filter, {identifier, _, Name}, Args}, VariableAst, Context, TreeWal
                 ),
     {{FilterAst, Info}, TreeWalker2}.
     
+
+search_for_escape_filter(_FilterList, #dtl_context{auto_escape = on}) ->
+    on;
+search_for_escape_filter(_FilterList, #dtl_context{auto_escape = did}) ->
+    off;
+search_for_escape_filter([{filter, {identifier, _, "escape"}, []}|_Rest], _Context) ->
+    on;
+search_for_escape_filter([_|Rest], Context) ->
+    search_for_escape_filter(Rest, Context);
+search_for_escape_filter([], _Context) ->
+    off.
+
  
 search_for_escape_filter(_, _, #dtl_context{auto_escape = on}) ->
     on;
 search_for_escape_filter(_, _, #dtl_context{auto_escape = did}) ->
     off;
-search_for_escape_filter(Variable, Filter, _) ->
-    search_for_escape_filter(Variable, Filter).
-
-search_for_escape_filter(_, {filter, {identifier, _, "escape"}, []}) ->
+search_for_escape_filter(_, {filter, {identifier, _, "escape"}, []}, _Context) ->
     on;
-search_for_escape_filter({apply_filter, Variable, Filter}, _) ->
-    search_for_escape_filter(Variable, Filter);
-search_for_escape_filter(_Variable, _Filter) ->
+search_for_escape_filter({apply_filter, Variable, Filter}, _, Context) ->
+    search_for_escape_filter(Variable, Filter, Context);
+search_for_escape_filter(_Variable, _Filter, _Context) ->
     off.
-
-
 
 resolve_variable_ast(VarTuple, Context, TreeWalker) ->
     opttrans_variable_ast(resolve_variable_ast(VarTuple, Context, TreeWalker, 'fetch_value'), Context).
@@ -1238,6 +1271,13 @@ now_ast(FormatString, Context, TreeWalker) ->
         erl_syntax:atom(format),
         [erl_syntax:string(FormatString), z_context_ast(Context)]),
         #ast_info{}}, TreeWalker}.
+
+spaceless_ast(Contents, Context, TreeWalker) ->
+    {{Ast, Info}, TreeWalker1} = body_ast(Contents, Context, TreeWalker),
+    {{erl_syntax:application(erl_syntax:atom(erlydtl_runtime),
+                             erl_syntax:atom(spaceless),
+                             [Ast]), Info}, TreeWalker1}.
+    
 
 unescape_string_literal(String) ->
     unescape_string_literal(String, [], noslash).

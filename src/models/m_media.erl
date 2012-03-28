@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-09
 %%
 %% @doc Model for medium database
@@ -31,6 +31,7 @@
     m_value/2,
     identify/2,
     get/2,
+    get_file_data/2,
     get_by_filename/2,
     exists/2,
     depiction/2,
@@ -42,6 +43,7 @@
     replace_file/3,
     replace_file/4,
     replace_file/5,
+    replace_file/6,
     insert_url/2,
     insert_url/3,
     replace_url/4,
@@ -116,6 +118,26 @@ exists(Id, Context) ->
 get(Id, Context) ->
     F = fun() -> z_db:assoc_props_row("select * from medium where id = $1", [Id], Context) end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
+
+%% @doc Return the contents of the file belonging to the media resource
+get_file_data(Id, Context) ->
+    case get(Id, Context) of
+        undefined ->
+            {error, enoent};
+        Media ->
+            Filename = proplists:get_value(filename, Media),
+            ArchivedFilename = z_media_archive:abspath(Filename, Context),
+            case file:read_file(ArchivedFilename) of
+                {ok, Data} ->
+                    #upload{
+                        filename=Filename,
+                        data=Data,
+                        mime=proplists:get_value(mime, Media)
+                    };
+                Error ->
+                    Error
+            end
+    end.
 
 %% @doc Fetch a medium by filename
 get_by_filename(Filename, Context) ->
@@ -253,31 +275,44 @@ insert_file_mime_ok(File, Props1, PropsMedia, Context) ->
         undefined -> [{title, proplists:get_value(original_filename, Props2)}|Props2];
         _ -> Props2
     end,
-    replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, Context).
+    replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, [], Context).
 
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is made in the archive.
 %% When the resource is in the media category, then the category is adapted depending on the mime type of the uploaded file.
 %% @spec replace_file(File, RscId, Context) -> {ok, Id} | {error, Reason}
 replace_file(File, RscId, Context) ->
-    replace_file(File, RscId, [], Context).
+    replace_file(File, RscId, [], [], Context).
 
 replace_file(File, RscId, Props, Context) ->
+    replace_file(File, RscId, Props, [], Context).
+
+
+replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, RscId, Props, Opts, Context) when Data /= undefined ->
+    TmpFile = z_tempfile:new(),
+    ok = file:write_file(TmpFile, Data),
+    replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=TmpFile}, RscId, Props, Opts, Context);
+
+replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, Opts, Context) ->
+    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    replace_file(TmpFile, RscId, [{original_filename, OriginalFilename}|Props], PropsMedia, Opts, Context);
+
+replace_file(File, RscId, Props, Opts, Context) ->
     OriginalFilename = proplists:get_value(original_filename, Props, File),
     PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    replace_file(File, RscId, Props, PropsMedia, Context).
+    replace_file(File, RscId, Props, PropsMedia, Opts, Context).
 
-replace_file(File, RscId, Props, PropsMedia, Context) ->
+replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
     case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
         true ->
-            replace_file_mime_ok(File, RscId, Props, PropsMedia, Context);
+            replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context);
         false ->
             {error, file_not_allowed}
     end.
 
     %% @doc Replace the file, no mime check needed.
-    replace_file_mime_ok(File, RscId, Props, PropsMedia, Context) ->
+    replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context) ->
         case RscId == insert_rsc orelse z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
             true ->
                 Mime = proplists:get_value(mime, PropsMedia),
@@ -292,6 +327,9 @@ replace_file(File, RscId, Props, PropsMedia, Context) ->
                     | PropsMedia
                 ],
 
+                IsImport = proplists:is_defined(is_import, Opts),
+                NoTouch = proplists:is_defined(no_touch, Opts),
+                
                 F = fun(Ctx) ->
                             Props1 = case      proplists:is_defined(category, Props)
                                         orelse proplists:is_defined(category_id, Props)
@@ -301,15 +339,20 @@ replace_file(File, RscId, Props, PropsMedia, Context) ->
                                     end,
                             {ok, Id} = case RscId of
                                            insert_rsc ->
-                                               m_rsc:insert(Props1, Ctx);
+                                               m_rsc_update:insert(Props1, Opts, Ctx);
                                            _ ->
                                                %% When the resource is in the media category, then move it to the correct sub-category depending
                                                %% on the mime type of the uploaded file.
                                                case rsc_is_media_cat(RscId, Context) of
-                                                   true -> m_rsc:update(RscId, Props1, Context);
-                                                   false -> m_rsc:touch(RscId, Context)
+                                                   true -> 
+                                                        {ok, RscId} = m_rsc_update:update(RscId, Props1, Opts, Ctx);
+                                                   false -> 
+                                                        case IsImport orelse NoTouch of
+                                                            true -> nop;
+                                                            false -> {ok, RscId} = m_rsc:touch(RscId, Ctx)
+                                                        end
                                                end,
-                                               z_db:delete(medium, RscId, Context),
+                                               z_db:delete(medium, RscId, Ctx),
                                                {ok, RscId}
                                        end,
                             case z_db:insert(medium, [{id, Id} | MediumRowProps], Ctx) of
