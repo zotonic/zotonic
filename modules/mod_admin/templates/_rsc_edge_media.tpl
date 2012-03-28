@@ -3,14 +3,14 @@
 {% sortable id=#unlink_wrapper tag=edge_id %}
 <li id="{{ #unlink_wrapper }}">
     <div class="thumbnail">
-        {% image object_id width=187 height=200 extent %}
+        {% image object_id width=178 height=200 extent %}
 
-        <div class="caption">
-            {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
             <div class="pull-right">
                 <button id="{{ #unlink.object_id }}" class="btn btn-mini" title="{_ Disconnect _} {{title}}."><i class="icon-remove"></i></button>
             </div>
-            <h5><a href="#" id="{{ #edit }}">{{ title }}</a></h5>
+        <div class="caption">
+            {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
+            <a href="#" id="{{ #edit }}">{{ title }}</a>
             {% endwith %}
 	</div>
     </div>

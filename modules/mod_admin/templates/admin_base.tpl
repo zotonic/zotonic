@@ -9,7 +9,7 @@
         <meta name="author" content="Arjan Scherpenisse" />
 
         {% lib
-                "css/bootstrap-admin.min.css"
+                "css/bootstrap-admin.css"
                 "css/zp-datepicker.css"
                 "css/zp-menuedit.css"
                 "css/zp-icon-status.css"
