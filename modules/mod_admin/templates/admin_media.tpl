@@ -11,6 +11,7 @@
     <p>{_ Media encompasses all uploaded images, movies and documents. Media can be attached to pages. _}</p>
 
     <div class="well">
+        <a name="content-pager"></a>
 	{% button
                 class="btn btn-primary"
 	        text=_"Make a new media item" 
@@ -19,9 +20,6 @@
     </div>
 
     {% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=q.qsort|default:"-created"}] as result %}
-
-    <h3 class="above-list">{_ Media overview _}</h3>
-    <hr />
 
     <table class="table table-striped do_adminLinkedTable">
         <thead>
@@ -39,7 +37,7 @@
 	    {% with m.rsc[id] as r %}
 	    {% with r.medium as medium %}
 	    <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
-		<td>{% image medium width=80 height=60 crop %}</td>
+		<td>{% image medium width=80 height=60 crop class="thumb" %}</td>
 		<td>
                     <h5>{{ r.title|striptags|default:"<em>untitled</em>" }}</h5>
                     <p class="help-block">{{ medium.filename|default:"-" }}</p>

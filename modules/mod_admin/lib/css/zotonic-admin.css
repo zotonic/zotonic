@@ -212,6 +212,11 @@ table.table tr.unpublished td a {
     color: #999;
 }
 
+img.thumb {
+    padding: 2px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+}
 
 /* admin edit page
    -------------------------------------------------------------- */
@@ -244,6 +249,7 @@ div.edit-header {
 }
 
 div.edit-media {
+    display: inline-block;
     background: white;
     padding: 4px;
     border-radius: 4px;

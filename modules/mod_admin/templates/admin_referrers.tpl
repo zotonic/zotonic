@@ -4,7 +4,7 @@
 
 {% block content %}
 <div>
-    <h2>{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
+    <h2 id="content-pager">{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
 
 {% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
 	{% ifequal result.total 0 %}
@@ -14,14 +14,12 @@
 		{_ a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”.</p>
 	{% endifequal %}
 	
-	<hr/>
-	
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
                 <th width="30%">{_ Title _}</th>
-                <th width="15%">{_ Predicate _}</th>
                 <th width="15%">{_ Category _}</th>
+                <th width="15%">{_ Predicate _}</th>
                 <th width="15%">{_ Modified on _}</th>
                 <th width="25%">{_ Modified by _}</th>
             </tr>

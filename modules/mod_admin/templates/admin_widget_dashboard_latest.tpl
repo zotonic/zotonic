@@ -15,7 +15,11 @@
 
 {% block widget_headline %}
     {{ headline }}
-    {% button class="btn btn-mini pull-right" action={redirect dispatch="admin_overview_rsc" qcat=cat} text=_"show all"%}
+    {% if media %}
+        {% button class="btn btn-mini pull-right" action={redirect dispatch="admin_media"} text=_"show all"%}
+    {% else %}
+        {% button class="btn btn-mini pull-right" action={redirect dispatch="admin_overview_rsc" qcat=cat} text=_"show all"%}
+    {% endif %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
@@ -34,7 +38,7 @@
         {% if m.rsc[id].is_visible %}
         <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td>
-                {% if media %}{% image id width=40 height=18 crop %}&nbsp;{% endif %}
+                {% if media %}{% image id width=40 height=18 crop class="thumb" %}&nbsp;{% endif %}
                 {{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}
             </td>
             <td>

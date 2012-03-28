@@ -39,11 +39,13 @@
 </form>
 
 <div class="well">
+    <a name="content-pager"></a>
     {% all include "_admin_make_page_buttons.tpl" %}
     {% button class="btn btn-primary" text=_"Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
     {% button class="btn" text=_"Make a new media item" action={dialog_media_upload title=""} %}
 </div>
-		
+
+
 {% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
         {% catinclude "_admin_overview_list.tpl" q.qcat result=result %}
 	{% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page=1 %}
