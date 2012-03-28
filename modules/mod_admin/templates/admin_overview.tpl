@@ -4,15 +4,6 @@
 
 {% block content %}
 
-<div>
-    <h2>Page Overview</h2>
-    <div class="well">
-	{% all include "_admin_make_page_buttons.tpl" %}
-	{% button class="btn btn-primary" text=_"Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
-	{% button class="btn" text=_"Make a new media item" action={dialog_media_upload title=""} %}
-    </div>
-</div>
-
 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}" class="form-horizontal">
     <div class="pull-right">
 	{% with q.qcat as qcat %}
@@ -38,16 +29,20 @@
 
     <input type="hidden" name="qsort" value="{{ q.qsort }}" />
     <input type="hidden" name="qs" value="{{ q.qs }}" />
-    <h3>
+    <h2>
 	{_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
 	{_ matching _} “{{ q.qs|escape }}”
 	{% button text="show all" class="btn btn-mini" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
 	<input type="hidden" name="qs" value="{{ q.qs|escape }}" />
 	{% endif %}
-    </h3>
+    </h2>
 </form>
 
-<hr />
+<div class="well">
+    {% all include "_admin_make_page_buttons.tpl" %}
+    {% button class="btn btn-primary" text=_"Make a new page" action={dialog_new_rsc title="" cat=q.qcat} %}
+    {% button class="btn" text=_"Make a new media item" action={dialog_media_upload title=""} %}
+</div>
 		
 {% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
         {% catinclude "_admin_overview_list.tpl" q.qcat result=result %}
