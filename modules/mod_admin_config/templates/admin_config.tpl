@@ -13,9 +13,6 @@
         
 </div>
 <div>
-    <h3>{_ Configuration overview _}</h3>
-    <hr />
-
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
