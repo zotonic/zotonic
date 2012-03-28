@@ -20,8 +20,6 @@
             </div>
         </div>
 
-        <hr />
-                        
         <div class="row">
             <div class="span6">
                 {# Latest modified texts #}

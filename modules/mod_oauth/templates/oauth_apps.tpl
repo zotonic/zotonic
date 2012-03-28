@@ -16,9 +16,6 @@
 </div>
 
 <div>
-    <h3>{_ Registered applications _}</h3>
-    <hr />
-    
     <div id="oauth-apps">
         {% include "_oauth_apps_list.tpl" %}
     </div>

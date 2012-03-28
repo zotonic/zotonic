@@ -249,6 +249,18 @@ ul.media.thumbnails li .caption {
     overflow: hidden;
 }
 
+ul.media.thumbnails li .caption {
+    position: relative;
+    overflow: hidden;
+    width: 170px;
+    height: 1.5em;
+}
+ul.media.thumbnails li .pull-right {
+    position: absolute;
+    right: 2px;
+    top: 8px;
+}
+
 div.edit-header {
     margin-bottom: 18px;
 }
@@ -263,6 +275,10 @@ div.edit-media {
 
 .ui-datepicker .ui-datepicker-header {
     height: 29px;
+}
+
+.do_menuedit {
+    min-height:100px;
 }
 
 /* Connections

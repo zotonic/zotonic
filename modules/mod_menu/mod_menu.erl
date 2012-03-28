@@ -330,7 +330,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
              #menu_item{id=admin_menu,
                         parent=admin_content,
                         label=?__("Menu", Context),
-                        url={admin_admin_edit_rsc, [{id, Id}]},
+                        url={admin_edit_rsc, [{id, Id}]},
                         visiblecheck={acl, use, mod_menu}}
              |Acc];
         _ ->

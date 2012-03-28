@@ -13,10 +13,6 @@
         {% button class="btn btn-primary" text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
     </div>
 
-
-    <h3>{_ Mailing list overview _}</h3>
-    <hr class="clear" />
-    
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
