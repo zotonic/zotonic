@@ -85,13 +85,28 @@ render(Params, _Vars, Context) ->
 build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
-    [
-        "\n<ul class=\"pager block\">",
-            prev(Page, Pages, Dispatch, DispatchArgs, Context),
-            [ url_to_li(Url, N, N == Page) || {N, Url} <- Urls ],
-            next(Page, Pages, Dispatch, DispatchArgs, Context),
-        "\n</ul>"
-    ].
+    Props = [
+        {prev_url, case Page =< 1 of 
+                        true -> undefined; 
+                        false ->  z_dispatcher:url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context)
+                   end},
+        {next_url, case Page >= Pages of 
+                        true -> undefined; 
+                        false ->  z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
+                   end},
+        {pages, Urls},
+        {page, Page}
+    ],
+    {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
+    Html.
+
+    % [
+    %     "\n<ul class=\"pager block\">",
+    %         prev(Page, Pages, Dispatch, DispatchArgs, Context),
+    %         [ url_to_li(Url, N, N == Page) || {N, Url} <- Urls ],
+    %         next(Page, Pages, Dispatch, DispatchArgs, Context),
+    %     "\n</ul>"
+    % ].
 
 prev(Page, _Pages, _Dispatch, _DispatchArgs, Context) when Page =< 1 ->
     ["\n<li class=\"disabled pager-prev\">&laquo; ", z_trans:trans(?TRANS_PAGER_PREV, Context), "</li>"];
@@ -148,7 +163,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
             % Now Start is always of the format [1]
             {UrlStart ++ UrlMiddle, lists:max(Middle) + 1};
         _ ->
-            {UrlStart ++ [{none, sep}|UrlMiddle], lists:max(Middle) + 1}
+            {UrlStart ++ [{undefined, sep}|UrlMiddle], lists:max(Middle) + 1}
     end,
     case End of
         [] ->
@@ -156,7 +171,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
         [M|_] -> 
             if
                 M == Next -> Part1 ++ UrlEnd;
-                true -> Part1 ++ [{none, sep}|UrlEnd]
+                true -> Part1 ++ [{undefined, sep}|UrlEnd]
             end
     end.
 
