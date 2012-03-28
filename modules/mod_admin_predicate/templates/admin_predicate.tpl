@@ -17,9 +17,6 @@
     </div>
     {% endif %}
 
-    <h3>{_ Predicate overview _}</h3>
-    <hr />
-
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>

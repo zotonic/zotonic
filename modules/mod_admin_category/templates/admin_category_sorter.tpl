@@ -11,7 +11,6 @@
     <p>{_ Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy. _}</p>
     
 </div>
-<hr />
 <div class="row">
 
     <div id="category-sorter" class="span6">

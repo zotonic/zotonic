@@ -10,9 +10,6 @@
 </div>
 
 <div {% include "_language_attrs.tpl" language=`en` %}>
-
-    <h3>{_ Modules overview _}</h3>
-    <hr />
     <table class="table table-striped">
         <thead>
             <tr>

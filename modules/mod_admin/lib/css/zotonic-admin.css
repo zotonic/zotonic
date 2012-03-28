@@ -276,6 +276,9 @@ div.edit-media {
     min-height:100px;
 }
 
+.tree-list.categories {
+    padding-bottom: 40px;
+}
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {
