@@ -7,10 +7,8 @@
 {% block content %}
 <div class="edit-header">
 
-    <h2>{_ Comments _}</h2>
-    <hr />
-    
-    <h3>{_ Recent comments _}</h3>
+    <h2>{_ Recent comments _}</h2>
+
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
@@ -45,7 +43,7 @@
             {% endwith %}
             {% empty %}
             <tr>
-                <td colspan="5">
+                <td colspan="4">
                     {_ There are no comments. _}
                 </td>
             </tr>

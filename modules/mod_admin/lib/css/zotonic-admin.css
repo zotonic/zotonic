@@ -272,6 +272,10 @@ div.edit-media {
     height: 29px;
 }
 
+.do_menuedit {
+    min-height:100px;
+}
+
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {
