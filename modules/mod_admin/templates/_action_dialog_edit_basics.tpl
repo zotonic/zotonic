@@ -1,3 +1,6 @@
+{% with m.config.i18n.language_list.list as languages %}
+{% with m.rsc[id].language as r_lang %}
+
 {% wire id=#form type="submit" 
 	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element template=template actions=actions}
 	delegate=delegate 
@@ -12,11 +15,22 @@
 
         <div class="tab-content">
 	<div class="tab-pane active" id="{{ #main }}">
+	    {% for code, lang in languages %}
+            {% if lang.is_enabled %}
+                {% if code|member:r_lang or (not r_lang and z_language == code) %}
+            	    <input type="hidden" id="{{ #language.code }}" name="language" value="{{ code }}" /> 
+        	    {% endif %}
+            {% endif %}
+        {% endfor %}
+        
+	    {#
 	    {% if m.modules.info.mod_translation.enabled %}
 	    {% catinclude "_admin_edit_basics_form.tpl" id in_dialog lang_code=z_language lang_code_with_dollar=["$", z_language]|join lang_code_with_brackets=["(", z_language, ")"]|join %}
 	    {% else %}
 	    {% catinclude "_admin_edit_basics_form.tpl" id in_dialog %}
 	    {% endif %}
+	    #}
+	    {% all catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages %}
 			
 	    {% if id.is_a.meta %}
 	    <div class="control-group">
@@ -58,3 +72,6 @@
 	{% button class="btn btn-primary" text=_"Save" %}
     </div>
 </form>
+
+{% endwith %}
+{% endwith %}

@@ -109,7 +109,7 @@
         $('.language-tabs > li > a[data-toggle="tab"]').live('shown', function (e) {
             if (e.target != e.relatedTarget) {
                 var lang = $(e.target).parent().attr('lang');
-                $("li[lang='"+lang+"'] > a").tab('show');
+                $("li[lang='"+lang+"']:visible > a").tab('show');
             }
         });
     });

@@ -18,11 +18,11 @@
 
 {% wire id=#unlink.object_id
         action={unlink 
-        subject_id=subject_id 
-        predicate="depiction" 
-        object_id=object_id 
-        hide=#unlink_wrapper
-        undo_message_id=unlink_message 
-        undo_action={postback postback={reload_media rsc_id=id div_id=div_id} delegate="resource_admin_edit"}} 
+            subject_id=subject_id 
+            predicate="depiction" 
+            object_id=object_id 
+            hide=#unlink_wrapper
+            undo_message_id=unlink_message 
+            undo_action={postback postback={reload_media rsc_id=id div_id=div_id} delegate="resource_admin_edit"}} 
 %}
-{% wire id=#edit action={dialog_edit_basics edge_id=edge_id template="_rsc_edge_media.tpl"} %}
+{% wire id=#edit target=#unlink_wrapper action={dialog_edit_basics edge_id=edge_id template="_rsc_edge_media.tpl"} %}
