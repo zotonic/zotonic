@@ -5,9 +5,9 @@
     <div class="thumbnail">
         {% image object_id width=178 height=200 extent %}
 
-            <div class="pull-right">
-                <button id="{{ #unlink.object_id }}" class="btn btn-mini" title="{_ Disconnect _} {{title}}."><i class="icon-remove"></i></button>
-            </div>
+        <div class="pull-right">
+            <button id="{{ #unlink.object_id }}" class="btn btn-mini" title="{_ Disconnect _} {{title}}."><i class="icon-remove"></i></button>
+        </div>
         <div class="caption">
             {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
             <a href="#" id="{{ #edit }}">{{ title }}</a>

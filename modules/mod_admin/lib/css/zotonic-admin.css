@@ -235,10 +235,13 @@ ul.media.thumbnails {
 }
 ul.media.thumbnails > li {
     margin: 0 0 18px 3px;
+    background: #f5f5f5;
 }
 ul.media.thumbnails > li.ui-sortable-placeholder {
-    width: 197px;
-    height: 200px;
+    width: 188px;
+    height: 246px;
+    background: #aaa;
+    border-radius: 4px;
 }
 ul.media.thumbnails li img {
     cursor: move;
@@ -249,17 +252,6 @@ ul.media.thumbnails li .caption {
     overflow: hidden;
 }
 
-ul.media.thumbnails li .caption {
-    position: relative;
-    overflow: hidden;
-    width: 170px;
-    height: 1.5em;
-}
-ul.media.thumbnails li .pull-right {
-    position: absolute;
-    right: 2px;
-    top: 8px;
-}
 
 div.edit-header {
     margin-bottom: 18px;
@@ -301,13 +293,9 @@ ul.connections-list li .unlink-mover {
 
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
-    background: white;
+    background: #aaa;
     border-radius: 4px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
     visibility: visible !important;
-}
-
-.connections-list .ui-sortable-placeholder {
 }
 
 .form-field-error {
