@@ -29,6 +29,7 @@ limitations under the License.
             var self = this;
             (self.element.find("tr").each(function() {
                                               var href = $(this).attr("data-href");
+                                              if (!href) return;
                                               $(this).find("td").each(function() {
                                                                           $(this)
                                                                               .addClass("view-link")
