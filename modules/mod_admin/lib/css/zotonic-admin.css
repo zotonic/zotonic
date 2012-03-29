@@ -98,7 +98,7 @@ div.widget {
     background: linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
 }
-div.widget-content {
+div.widget div.widget-content {
     padding: 8px;
 }
 

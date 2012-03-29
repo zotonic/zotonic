@@ -23,13 +23,6 @@
             {% endif %}
         {% endfor %}
         
-	    {#
-	    {% if m.modules.info.mod_translation.enabled %}
-	    {% catinclude "_admin_edit_basics_form.tpl" id in_dialog lang_code=z_language lang_code_with_dollar=["$", z_language]|join lang_code_with_brackets=["(", z_language, ")"]|join %}
-	    {% else %}
-	    {% catinclude "_admin_edit_basics_form.tpl" id in_dialog %}
-	    {% endif %}
-	    #}
 	    {% all catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages %}
 			
 	    {% if id.is_a.meta %}

@@ -2,10 +2,11 @@
 
 {% if is_i18n %}
 	{% block widget_before %}{% endblock %}
-	<div class="widget translations tabbable" id="{% block widget_id %}{% endblock %}">
+	<div class="{% if in_dialog %}dialog-{% endif %}widget translations tabbable" id="{% block widget_id %}{% endblock %}">
 	    {% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
             
             <div class="tab-content widget-content">
+
 		{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 		{# to define some helper vars that will be usefull in widget_content: #}
 		{% with ["$", lang_code]|join, ["(", lang_code, ")"]|join  as  lang_code_with_dollar, lang_code_with_brackets %}
