@@ -3,7 +3,7 @@
 {% sortable id=#unlink_wrapper tag=edge_id %}
 <li id="{{ #unlink_wrapper }}">
     <div class="thumbnail">
-        {% image object_id width=178 height=200 extent %}
+        {% image object_id width=166 height=200 extent %}
 
         <div class="pull-right">
             <button id="{{ #unlink.object_id }}" class="btn btn-mini" title="{_ Disconnect _} {{title}}."><i class="icon-remove"></i></button>

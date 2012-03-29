@@ -153,31 +153,31 @@ div.widget-content.tab-content {
 
 /* widget forms, overrides */
 div.widget input.span8, div.widget textarea.span8 {
-    width: 752px;
+    width: 712px;
 }
 div.widget input.span4, div.widget textarea.span4, div.widget select.span4 {
-    width: 363px;
+    width: 343px;
 }
 div.widget input.span3, div.widget textarea.span3 {
-    width: 241px;
+    width: 216px;
 }
 
 #zmodal input.span8, #zmodal textarea.span8  {
-    width: 460px;
+    width: 420px;
 }
 
 div.widget div.span4 {
-    width: 372px;
+    width: 352px;
 }
 div.widget div.span2 {
-    width: 140px;
+    width: 130px;
 }
 div.widget div.span3 {
-    width: 240px;
+    width: 215px;
 }
 
 .admin-form textarea {
-    width: 752px;
+    width: 712px;
 }
 
 div.widget-footer,
@@ -242,7 +242,7 @@ ul.media.thumbnails > li {
     background: #f5f5f5;
 }
 ul.media.thumbnails > li.ui-sortable-placeholder {
-    width: 188px;
+    width: 176px;
     height: 246px;
     background: #aaa;
     border-radius: 4px;
@@ -251,9 +251,12 @@ ul.media.thumbnails li img {
     cursor: move;
 }
 ul.media.thumbnails li .caption {
-    width: 130px;
+    width: 120px;
     height: 18px;
     overflow: hidden;
+}
+ul.media.thumbnails li div.pull-right button {
+    margin-top: 10px;
 }
 
 
