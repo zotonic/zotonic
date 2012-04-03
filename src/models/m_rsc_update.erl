@@ -155,7 +155,8 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
         true ->
             DateProps = recombine_dates(Props),
             TextProps = recombine_languages(DateProps, Context),
-            AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- TextProps ],
+            BlockProps = recombine_blocks(TextProps),
+            AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- BlockProps ],
             FilteredProps = props_filter(props_trim(AtomProps), [], Context),
             EditableProps = props_filter_protected(FilteredProps),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
@@ -806,6 +807,26 @@ recombine_languages(Props, Context) ->
             undefined ->
                 [{P, {trans, [{Lang1,z_convert:to_binary(V)}]}}|Acc]
         end.
+
+
+recombine_blocks(Props) ->
+    {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
+    {Dict,Keys} = lists:foldr(fun({Name, Val}, {D,Ks}) ->
+                            Ts = string:tokens(Name, "-"),
+                            BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
+                            BlockField = list_to_existing_atom(lists:last(Ts)),
+                            Ks1 = case lists:member(BlockId, Ks) of
+                                    true -> Ks;
+                                    false -> [BlockId|Ks]
+                                  end,
+                            {
+                                dict:append(BlockId, {BlockField, Val}, D),
+                                Ks1
+                            }
+                       end,
+                       {dict:new(), []},
+                       BPs),
+    [{blocks, [ dict:fetch(K, Dict) || K <- Keys ]} | Ps ].
 
 
 %% @doc Accept only configured languages

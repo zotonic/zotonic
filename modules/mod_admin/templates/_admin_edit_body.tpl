@@ -34,18 +34,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	{% all catinclude "_admin_tinymce_overrides_js.tpl" id %}
-
-	/* Initialize all non-initialized tinymce controls */
-	$(".tinymce-init:visible").each(function() { 
-		var self = $(this);
-		setTimeout(function() { 
-			var ti = jQuery.extend({}, tinyInit);
-			if (self.attr('dir')) {
-				ti.directionality = self.attr('dir');
-			}
-			self.tinymce(ti); 
-		}, 200);
-	}).removeClass('tinymce-init').addClass('tinymce');
+    z_tinymce_init();
 });
 </script>
 {% endblock %}

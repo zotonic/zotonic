@@ -59,13 +59,18 @@ div.navbar ul.nav i.icon-white {
 
 div.widget {
     margin-bottom: 18px;
-
     border-bottom: none;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
-div.widget h3.widget-header {
+li > div.widget {
+    border-radius: 0 0 4px 4px;
+}
+
+
+div.widget h3.widget-header, 
+li h3.widget-header {
     padding: 0 6px;
     text-shadow: 1px 0px 1px white;
     font-size: 14px;
@@ -73,7 +78,8 @@ div.widget h3.widget-header {
 }    
 
 div.widget > ul.nav,
-div.widget h3.widget-header {
+div.widget h3.widget-header, 
+li h3.widget-header {
     background: #e8e8e8; /* Old browsers */
     background: -moz-linear-gradient(top, #e8e8e8 0%, #c1c1c1 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e8e8e8), color-stop(100%,#c1c1c1)); /* Chrome,Safari4+ */
@@ -82,6 +88,15 @@ div.widget h3.widget-header {
     background: -ms-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* IE10+ */
     background: linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c1c1c1',GradientType=0 ); /* IE6-9 */
+}
+
+li h3.widget-header {
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+li div.widget > ul.nav {
+    background: none;
 }
 
 div.widget > ul.nav {
@@ -283,6 +298,47 @@ div.edit-media {
 .tree-list.categories {
     padding-bottom: 40px;
 }
+
+ul.blocks {
+    margin-left: -8px;
+    margin-right: -8px;
+    border: 1px solid #e8e8e8;
+    padding: 30px 8px 0 8px;
+    background-color: #fcfcfc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+ul.blocks > li {
+    list-style-type: none;
+    margin-left: 0;
+    margin-bottom: 32px;
+}
+ul.blocks > li > h3 {
+    cursor: move;
+}
+ul.blocks > li > h3 > .icon-remove,
+ul.blocks > li > h3 > .pull-right {
+    cursor: pointer;
+}
+ul.blocks > li > h3 > .pull-right {
+    margin-top: 6px;
+}
+ul.blocks > li > h3 > input {
+    margin: 2px 0 3px 0;
+    height: 1em;
+    width: 100px;
+}
+ul.blocks li.block .widget {
+    padding-top: 4px;
+    border-radius: 0 0 4px 4px;
+}
+.block-add-block {
+    margin-top: 6px;
+}
+fieldset.block-name {
+    margin-top: 8px;
+}
+
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {
@@ -292,7 +348,7 @@ ul.connections-list li {
     float: left;
     margin-right: 8px; margin-bottom: 8px;
 }
-ul.connections-list li .unlink-mover {
+ul.connections-list li .unlink-mover, .icon-move {
     cursor: move;
 }
 

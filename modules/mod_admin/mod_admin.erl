@@ -28,7 +28,8 @@
 
 -export([
          observe_sanitize_element/3,
-         observe_admin_menu/3
+         observe_admin_menu/3,
+         event/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -119,4 +120,44 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_status}}
 
      |Acc].
+
+
+event(#postback_notify{message="admin-insert-block"}, Context) ->
+    Language = case z_context:get_q("language", Context) of
+                    undefined -> 
+                        [];
+                    Ls -> 
+                        Ls1 = string:tokens(Ls, ","),
+                        [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
+               end,
+    EditLanguage = case z_context:get_q("edit_language", Context) of
+                    undefined -> 
+                        z_context:language(Context);
+                    EL ->
+                        case z_trans:is_language(EL) of
+                            true -> list_to_atom(EL);
+                            false -> z_context:language(Context)
+                        end
+                   end,
+    Type = z_string:to_name(z_context:get_q("type", Context)),
+    RscId = list_to_integer(z_context:get_q("rsc_id", Context)),
+    Render = #render{
+                template="_admin_edit_block_li.tpl",
+                vars=[
+                    {id, RscId},
+                    {r_language, Language},
+                    {edit_language, EditLanguage},
+                    is_new,
+                    {is_editable, z_acl:rsc_editable(RscId, Context)},
+                    {blk, [{type, Type}]}
+                ]
+            },
+    case z_html:escape(z_context:get_q("after", Context)) of
+        undefined -> z_render:insert_top("edit-blocks", Render, Context);
+        AfterId -> z_render:insert_after(AfterId, Render, Context)
+    end;
+event(_, Context) ->
+    Context.
+
+    
 

@@ -46,6 +46,7 @@
 
                  var dialog = $("<div>")
                      .attr("id", "zmodal")
+                     .attr("style", "width: "+width)
                      .addClass(dialogClass)
                      .append(title)
                      .append(body)
@@ -99,6 +100,6 @@
      $.ui.dialog.defaults = {
 	 title: 'Title',
 	 text: 'tekst',
-	 width: '450px'
+	 width: '700px'
      };
  })(jQuery);

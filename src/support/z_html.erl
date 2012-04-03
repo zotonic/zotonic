@@ -55,6 +55,9 @@ escape_props(Props, Context) ->
         escape_props1(T, [Prop|Acc], OptContext);
     escape_props1([{K, V}|T], Acc, OptContext) when K =:= body orelse K =:= body_extra->
         escape_props1(T, [{K, sanitize(V, OptContext)} | Acc], OptContext);
+    escape_props1([{blocks, V}|T], Acc, OptContext) when is_list(V) ->
+        V1 = [ escape_props1(L, [], OptContext) || L <- V ],
+        escape_props1(T, [{blocks, V1}|Acc], OptContext);
     escape_props1([{K, V}|T], Acc, OptContext) ->
         EscapeFun = case lists:reverse(z_convert:to_list(K)) of
                         "lmth_" ++ _ -> fun(A) -> sanitize(A, OptContext) end; %% prop ends in '_html'

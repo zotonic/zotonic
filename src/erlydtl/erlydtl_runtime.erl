@@ -32,8 +32,20 @@ find_value(Key, [N|_], Context) when is_atom(Key), is_integer(N) ->
     m_rsc:p(N, Key, Context);
 
 %% Property of a resource, just assume an integer is a rsc id
-find_value(Key, Id, Context) when is_integer(Id) ->
+find_value(Key, Id, Context) when is_atom(Key), is_integer(Id) ->
     m_rsc:p(Id, Key, Context);
+
+%% Property of a resource, just assume an integer is a rsc id
+find_value(Key, RscName, Context) when is_atom(Key), is_atom(RscName) ->
+    m_rsc:p(RscName, Key, Context);
+
+%% List of proplists - blocks in the rsc
+find_value(Name, [[{A,_}|_]|_] = Blocks, _Context ) when is_atom(A), not is_integer(Name) ->
+    NameB = z_convert:to_binary(Name),
+    case lists:dropwhile(fun(Ps) -> proplists:get_value(name, Ps) =/= NameB end, Blocks) of
+        [] -> undefined;
+        [Block|_] -> Block
+    end;
 
 %% Regular proplist lookup
 find_value(Key, L, _Context) when is_list(L) ->
@@ -50,6 +62,17 @@ find_value(Key, #rsc_list{list=[H|_T]}, Context) ->
     find_value(Key, H, Context);
 find_value(_Key, #rsc_list{list=[]}, _Context) ->
     undefined;
+
+%% Translations lookup
+find_value(IsoAtom, {trans, Tr}, _Context) ->
+    proplists:get_value(IsoAtom, Tr, <<>>);
+find_value(IsoAtom, Text, _Context) when is_atom(IsoAtom), is_binary(Text) ->
+    case z_trans:is_language(atom_to_list(IsoAtom)) of
+        true ->
+            Text;
+        false ->
+            undefined
+    end;
 
 %% JSON-decoded proplist structure
 find_value(Key, {obj, Props}, _Context) ->
