@@ -11,24 +11,25 @@
 
 {% block content %}
 
-    <h1>{{ m.rsc[id].title }}</h1>
+	<h1>{{ m.rsc[id].title }}</h1>
 
-    {% if m.rsc[id].summary %}
-    <p class="summary">
-        {{ m.rsc[id].summary }}
-    </p>
-    {% endif %}
+	{% if m.rsc[id].summary %}
+	<p class="summary">
+		{{ m.rsc[id].summary }}
+	</p>
+	{% endif %}
 
-    {% if m.rsc[id].medium %}
-    	<figure class="image-wrapper block-level-image">
+	{% if m.rsc[id].medium %}
+		<figure class="image-wrapper block-level-image">
 			{% media m.rsc[id].medium width=445 crop class=align alt=m.rsc[id].title %}
 		</figure>
-    {% endif %}
+	{% endif %}
 
-    {{ m.rsc[id].body|show_media }}
+	{{ m.rsc[id].body|show_media }}
+
+	{% include "_blocks.tpl" %}
 
 	{% block below_body %}{% endblock %}
-
 
 {% with m.search.paged[{query hassubject=[id, 'haspart']  sort='seq' pagelen=1 page=q.page}] as result %}
 {% for id in result %}
