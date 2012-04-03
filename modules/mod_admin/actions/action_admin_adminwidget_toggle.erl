@@ -24,9 +24,5 @@ event(#postback{message={toggle}}, Context) ->
     State = z_context:get_q("showing", Context),
     Id = z_context:get_q("id", Context),
     New = z_utils:prop_replace(Id, State, z_session:get("admin_widgets", Context, [])),
-    z_session:set("admin_widgets",
-                  New,
-                  Context),
-    ?DEBUG(New),
-
+    z_session:set("admin_widgets", New, Context),
     Context.
