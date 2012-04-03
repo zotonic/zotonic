@@ -909,8 +909,8 @@ var Validate = {
 
     Date: function(value, paramsObj){
       function to_integer(value) {
-          if (parseInt(value) == value) {
-              return parseInt(value);
+          if (parseInt(value, 10) == value) {
+              return parseInt(value, 10);
           } else {
               return parseInt("NaN");
           }
