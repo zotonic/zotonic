@@ -153,7 +153,7 @@ div.widget-content > :last-child {
 
 td.clickable,
 tr.clickable td,
-div.widget-active h3 {
+div.widget-active h3 i {
     cursor: pointer;
 }
 div.widget-active h3 i {
@@ -337,6 +337,19 @@ ul.blocks li.block .widget {
 }
 fieldset.block-name {
     margin-top: 8px;
+}
+
+h3.widget-header input.block-name {
+    background: #ddd;
+}
+h3.widget-header input.block-name:focus {
+    background: white;
+}
+
+ul.blocks .ui-sortable-placeholder {
+    background: #aaa;
+    border-radius: 4px;
+    visibility: visible !important;
 }
 
 /* Connections

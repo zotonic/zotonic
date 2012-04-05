@@ -65,7 +65,7 @@ function z_dialog_confirm(options)
 	$.dialogAdd({ 
 		title: (options.title||z_translate('Confirm')),
 		text: html,
-		width: (options.width||'350px')
+		width: (options.width)
 	});
 	$(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
 	$(".z-dialog-ok-button").click(function() { 

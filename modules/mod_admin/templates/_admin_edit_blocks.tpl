@@ -13,8 +13,7 @@
             handle: '.widget-header',
             revert: 'invalid',
             axis: 'y',
-            containment: 'parent',
-            start: function(event, ui) { 
+            start: function(event, ui) {
                 z_tinymce_save($(this));
                 z_tinymce_remove($(this));
             },
@@ -29,7 +28,6 @@
                 text: '<p>",_"Do you want to remove this block?","</p>',
                 cancel: '",_"Cancel","',
                 ok: '",_"Delete","',
-                width: '350px',
                 on_confirm: function() { 
                                 $(block).fadeTo('fast', 0.0)
                                         .slideUp('normal', 0.0, 
