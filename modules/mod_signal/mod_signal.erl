@@ -107,20 +107,23 @@ slots(Signal, Context) ->
     Table = slot_table_name(Context),
     SignalType = signal_type(Signal),
 
-    % collect the tags
-    Tags = ets:lookup(Table, SignalType),
-    
-    % Get the list of keys we have to 
-    Keys = [key(Signal, Tag) || {tags, _S, Tag} <- Tags],
+    case ets:info(Table, size) of
+        undefined -> []; %% No table, no slots.
+        _ ->
+            Tags = ets:lookup(Table, SignalType),
 
-    slots1([], Table, Keys).
+            % Get the list of keys we have to 
+            Keys = [key(Signal, Tag) || {tags, _S, Tag} <- Tags],
 
-    slots1(Slots, _Table, []) ->
-        [Slot || {slot, _K, Slot} <- lists:flatten(Slots)];
-    slots1(Slots, Table, [undefined|T]) ->
-        slots1(Slots, Table, T);
-    slots1(Slots, Table, [H|T]) ->
-        slots1([ets:lookup(Table, H) | Slots], Table, T).
+            slots1([], Table, Keys)
+    end.
+
+slots1(Slots, _Table, []) ->
+    [Slot || {slot, _K, Slot} <- lists:flatten(Slots)];
+slots1(Slots, Table, [undefined|T]) ->
+    slots1(Slots, Table, T);
+slots1(Slots, Table, [H|T]) ->
+    slots1([ets:lookup(Table, H) | Slots], Table, T).
 
 % @doc Return how many items there 
 %
