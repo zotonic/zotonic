@@ -33,11 +33,14 @@
     reindex/1,
     translations/1,
     find/3,
+    find_ua_class/4,
     find_all/3,
+    find_ua_class_all/4,
     all/2
 ]).
 
 -record(state, {context, scomps=[], actions=[], validators=[], models=[], templates=[], lib=[], services=[]}).
+-record(mfile, {name, filepath, module, erlang_module, prio, ua_class=generic}).
 
 -include("zotonic.hrl").
 
@@ -66,13 +69,18 @@ translations(Context) ->
 %% @doc Find a scomp, validator etc.
 %% @spec find(What, Name, Context) -> {ok, term()} | {error, Reason}
 find(What, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find, What, Name}).
+    gen_server:call(Context#context.module_indexer, {find, What, Name, z_user_agent:get_class(Context)}).
 
+find_ua_class(What, Class, Name, Context) ->
+    gen_server:call(Context#context.module_indexer, {find, What, Name, Class}).
 
 %% @doc Find a scomp, validator etc.
 %% @spec find_all(What, Name, Context) -> list()
 find_all(What, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find_all, What, Name}).
+    gen_server:call(Context#context.module_indexer, {find_all, What, Name, z_user_agent:get_class(Context)}).
+
+find_ua_class_all(What, Class, Name, Context) ->
+    gen_server:call(Context#context.module_indexer, {find_all, What, Name, Class}).
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, Context) ->
@@ -102,35 +110,37 @@ init(SiteProps) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Find a template definition
-handle_call({find, scomp, Name}, _From, State) ->
+handle_call({find, scomp, Name, _Class}, _From, State) ->
     {reply, lookup(Name, State#state.scomps), State};
-handle_call({find, action, Name}, _From, State) ->
+handle_call({find, action, Name, _Class}, _From, State) ->
     {reply, lookup(Name, State#state.actions), State};
-handle_call({find, validator, Name}, _From, State) ->
+handle_call({find, validator, Name, _Class}, _From, State) ->
     {reply, lookup(Name, State#state.validators), State};
-handle_call({find, model, Name}, _From, State) ->
+handle_call({find, model, Name, _Class}, _From, State) ->
     {reply, lookup(Name, State#state.models), State};
-handle_call({find, template, Name}, _From, State) ->
-    {reply, lookup(Name, State#state.templates), State};
-handle_call({find, lib, Name}, _From, State) ->
-    {reply, lookup(Name, State#state.lib), State};
-handle_call({find, service, Name}, _From, State) ->
+handle_call({find, service, Name, _Class}, _From, State) ->
     {reply, lookup(Name, State#state.services), State};
 
-handle_call({find_all, scomp, Name}, _From, State) ->
+handle_call({find, lib, File, _Class}, _From, State) ->
+    {reply, lookup_class(generic, File, State#state.lib), State};
+handle_call({find, template, File, Class}, _From, State) ->
+    {reply, lookup_class(Class, File, State#state.templates), State};
+
+handle_call({find_all, scomp, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.scomps), State};
-handle_call({find_all, action, Name}, _From, State) ->
+handle_call({find_all, action, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.actions), State};
-handle_call({find_all, validator, Name}, _From, State) ->
+handle_call({find_all, validator, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.validators), State};
-handle_call({find_all, model, Name}, _From, State) ->
+handle_call({find_all, model, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.models), State};
-handle_call({find_all, template, Name}, _From, State) ->
-    {reply, lookup_all(Name, State#state.templates), State};
-handle_call({find_all, lib, Name}, _From, State) ->
-    {reply, lookup_all(Name, State#state.lib), State};
-handle_call({find_all, service, Name}, _From, State) ->
+handle_call({find_all, service, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.services), State};
+
+handle_call({find_all, lib, File, _Class}, _From, State) ->
+    {reply, lookup_class_all(generic, File, State#state.lib), State};
+handle_call({find_all, template, File, Class}, _From, State) ->
+    {reply, lookup_class_all(Class, File, State#state.templates), State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -205,111 +215,160 @@ translations1(Context) ->
         [Lang|_] = string:tokens(Basename, "."),
         Lang.
 
-
 %% @doc Find a scomp etc in a lookup list
 lookup(Name, List) ->
-    case proplists:get_value(Name, List) of
-        undefined ->
-            {error, enoent};
-        Result ->
-            {ok, Result}
+    case lists:keyfind(Name, #mfile.name, List) of
+        false -> {error, enoent};
+        #mfile{erlang_module=ErlMod} -> {ok, ErlMod}
     end.
 
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->
-    List;
+    [ ErlMod || #mfile{erlang_module=ErlMod} <- List ];
 lookup_all(Name, List) ->
-    proplists:get_all_values(Name, List).
+    lookup_all1(Name, List, []).
+    
+    lookup_all1(_Name, [], Acc) ->
+        lists:reverse(Acc);
+    lookup_all1(Name, [#mfile{name=Name, erlang_module=ErlMod}|T], Acc) ->
+        lookup_all1(Name, T, [ErlMod|Acc]);
+    lookup_all1(Name, [_|T], Acc) ->
+        lookup_all1(Name, T, Acc).
+
+
+%% @doc Find a template, filter on user-agent class
+lookup_class(_Class, _Name, []) ->
+    {error, enoent};
+lookup_class(_Class, Name, [#mfile{name=Name, ua_class=generic, filepath=P}|_]) ->
+    {ok, P};
+lookup_class(Class, Name, [#mfile{name=Name, ua_class=UA, filepath=P}|T]) ->
+    case z_user_agent:order_class(Class, UA) of
+        true -> {ok, P};
+        false -> lookup_class(Class, Name, T)
+    end;
+lookup_class(Class, Name, [_|T]) ->
+    lookup_class(Class, Name, T).
+
+
+%% @doc Find all templates, filter on user-agent class
+lookup_class_all(Class, true, List) ->
+    L1 = lists:filter(fun(#mfile{ua_class=UA}) ->
+                        UA =:= generic orelse z_user_agent:order_class(Class,UA)
+                      end,
+                      List),
+    [ P || #mfile{filepath=P} <- L1 ];
+lookup_class_all(Class, Name, List) ->
+    lookup_class_all1(Class, Name, List, []).
+
+    lookup_class_all1(_Class, _Name, [], Acc) ->
+        lists:reverse(Acc);
+    lookup_class_all1(Class, Name, [#mfile{name=Name, filepath=Path, ua_class=generic}|T], Acc) ->
+        lookup_class_all1(Class, Name, T, [Path|Acc]);
+    lookup_class_all1(Class, Name, [#mfile{name=Name, filepath=Path, ua_class=UA}|T], Acc) ->
+        case z_user_agent:order_class(Class,UA) of
+            true -> lookup_class_all1(Class, Name, T, [Path|Acc]);
+            false -> lookup_class_all1(Class, Name, T, Acc)
+        end;
+    lookup_class_all1(Class, Name, [_|T], Acc) ->
+        lookup_class_all1(Class, Name, T, Acc).
 
 
 %% @doc Scan the module directories for scomps, actions etc.
 scan(Context) ->
-    [ {What, scan1(What, Context)} || What <- [ scomp, action, validator, model, template, lib, service ] ].
+    [
+        {template, scan_subdir_class_files("templates", Context)},
+        {lib, scan_subdir_class_files("lib", Context)}
+        | [ 
+            {What, scan_subdir(What, Context)} 
+            || What <- [ scomp, action, validator, model, service ]
+        ]
+    ].
 
 
 %% @doc Scan module directories for specific kinds of parts. Returns a lookup list [ {lookup-name, fullpath} ]
-scan1(template, Context) ->
-    scan_subdir_files("templates", Context);
-scan1(lib, Context) ->
-    scan_subdir_files("lib", Context);
-scan1(What, Context) ->
+scan_subdir(What, Context) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    Scan = scan_subdir(Subdir, Prefix, Extension, Context), 
-    Sorted = z_module_manager:prio_sort(Scan),
-    FlattenFun = fun({_Module, {_ModuleDir, Files}}, Acc) ->
-        Files1 = [ file2index(What, F) || F <- Files ],
-        Files1 ++ Acc
-    end,
-    lists:foldr(FlattenFun, [], Sorted).
+    scan_subdir(Subdir, Prefix, Extension, Context). 
 
-subdir(translation)-> { "translations","",           ".po" };
-subdir(template)   -> { "templates",   "",           ".tpl" };
-subdir(lib)        -> { "lib",         "",           "" };
-subdir(scomp)      -> { "scomps",      "scomp_",     ".erl" };
-subdir(action)     -> { "actions",     "action_",    ".erl" };
-subdir(validator)  -> { "validators",  "validator_", ".erl" };
-subdir(model)      -> { "models",      "m_",         ".erl" };
-subdir(service)    -> { "services",    "service_",   ".erl" };
-subdir(erlang)     -> { "",            "",           ".erl" }.
-
-file2index(_, {NoPrefixExt, File}) ->
-    ModuleName = list_to_atom(filename:basename(File, ".erl")),
-    {list_to_atom(NoPrefixExt), ModuleName}.
+    subdir(translation)-> { "translations","",           ".po" };
+    subdir(scomp)      -> { "scomps",      "scomp_",     ".erl" };
+    subdir(action)     -> { "actions",     "action_",    ".erl" };
+    subdir(validator)  -> { "validators",  "validator_", ".erl" };
+    subdir(model)      -> { "models",      "m_",         ".erl" };
+    subdir(service)    -> { "services",    "service_",   ".erl" }.
 
 %% @doc Find all files, for the all/2 function.
+scan_all(lib, Context) ->
+    scan_subdir_class_files("lib", Context);
+scan_all(template, Context) ->
+    scan_subdir_class_files("templates", Context);
 scan_all(What, Context) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    Scan = scan_subdir(Subdir, Prefix, Extension, Context), 
-
-    z_module_manager:prio_sort(Scan).
+    scan_subdir(Subdir, Prefix, Extension, Context).
 
 
 %% @doc Scan the whole subdir hierarchy for files, used for templates and lib folders.
-scan_subdir_files(Subdir, Context) ->
-    Modules = z_module_manager:active_dir(Context),
+scan_subdir_class_files(Subdir, Context) ->
     Scan1 = fun({Module, Dir}, Acc) ->
-        case z_utils:list_dir_recursive(filename:join(Dir, Subdir)) of
-            [] -> 
-                Acc;
-            Files -> 
-                AbsFiles = [ {F, filename:join([Dir, Subdir, F])} || F <- Files ],
-                [{z_module_manager:prio(Module), Module, AbsFiles} | Acc]
-        end
-    end,
-    Files = lists:foldl(Scan1, [], Modules),
-    Sorted = lists:sort(Files),
-    lists:flatten([ Fs || {_Module, _Prio, Fs} <- Sorted ]).
-    
+                case z_utils:list_dir_recursive(filename:join(Dir, Subdir)) of
+                    [] -> 
+                        Acc;
+                    Files ->
+                        Prio = z_module_manager:prio(Module),
+                        [
+                            [ 
+                                begin
+                                    {UAClass, RelPath} = z_user_agent:filename_split_class(F),
+                                    #mfile{
+                                        filepath=filename:join([Dir, Subdir, F]),
+                                        name=RelPath,
+                                        module=Module,
+                                        prio=Prio,
+                                        ua_class=UAClass
+                                    }
+                                end
+                                || F <- Files
+                            ]
+                            | Acc
+                        ]
+                end
+            end,
+    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], z_module_manager:active_dir(Context)))).
+
 
 %% @doc Scan all module directories for templates/scomps/etc.  Example: scan("scomps", "scomp_", ".erl", Context)
 %% @spec scan_subdir(Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
 scan_subdir(Subdir, Prefix, Extension, Context) ->
-    Modules = z_module_manager:active_dir(Context),
     ExtensionRe = case Extension of [] -> []; "."++_ -> "\\" ++ Extension ++ "$" end,
     Scan1 = fun({Module, Dir}, Acc) ->
-        {Dir1, Pattern, PrefixLen} = case Prefix of
-            [] -> 
-		{filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
-            _ ->
-                Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
-		{filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
-        end,
-	Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
-        case Files of
-            [] -> Acc;
-            _  -> 
-                Files1 = [ {scan_remove_prefix_ext(F, PrefixLen, Extension), F} || F <- Files ],
-                Files2 = lists:filter(
-                            fun
-                                ( {[$.|_], _} ) -> false;
-                                ( _ ) -> true
-                            end,
-                            Files1), 
-                [{Module, {Dir, Files2}} | Acc]
-        end
-    end,
-    lists:foldl(Scan1, [], Modules).
-    
+                {Dir1, Pattern, PrefixLen} = 
+                        case Prefix of
+                                [] -> 
+                                    {filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
+                                _ ->
+                                    Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
+                                    {filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
+                        end,
+                Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
+                case Files of
+                    [] -> 
+                        Acc;
+                    _  -> 
+                        [[
+                            #mfile{
+                                filepath=F, 
+                                name=z_convert:to_atom(scan_remove_prefix_ext(F, PrefixLen, Extension)),
+                                erlang_module=opt_erlang_module(F, Extension),
+                                module=Module,
+                                prio=z_module_manager:prio(Module)
+                            }
+                            || F <- Files 
+                        ] | Acc ]
+                end
+            end,
+    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], z_module_manager:active_dir(Context)))).
+
+
     module2prefix(Module) ->
         case atom_to_list(Module) of
             "mod_" ++ Rest -> Rest;
@@ -320,6 +379,20 @@ scan_subdir(Subdir, Prefix, Extension, Context) ->
         Basename = filename:basename(Filename, Ext),
         lists:nthtail(PrefixLen, Basename).
 
+    opt_erlang_module(Filename, ".erl") ->
+        list_to_atom(filename:basename(Filename, ".erl"));
+    opt_erlang_module(_Filename, _Ext) ->
+        undefined.
+
+
+%% @doc Order function for #mfile records.
+%% Order is:
+%%  1. module priority
+%%  2. ua_class
+mfile_compare(#mfile{prio=P, ua_class=A}, #mfile{prio=P, ua_class=A}) -> true;
+mfile_compare(#mfile{prio=A}, #mfile{prio=B}) when A < B -> true;
+mfile_compare(#mfile{prio=A}, #mfile{prio=B}) when A > B -> false;
+mfile_compare(#mfile{ua_class=A}, #mfile{ua_class=B}) -> z_user_agent:order_class(A, B).
 
 
 %% @doc Flush all 'module_ready' messages in the message queue.  This is needed when waking up after sleep.

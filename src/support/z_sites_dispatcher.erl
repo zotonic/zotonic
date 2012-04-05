@@ -68,7 +68,10 @@ update_dispatchinfo() ->
 %%                   | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                   | handled
 dispatch(Host, Path, ReqData) ->
-    case gen_server:call(?MODULE, {dispatch, Host, Path, ReqData}) of
+    % Classify the user agent
+    {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
+    % Find a matching dispatch rule 
+    case gen_server:call(?MODULE, {dispatch, Host, Path, ReqDataUA}) of
         {{no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}, ReqData1} when MatchedHost =/= undefined ->
             %% Check if there is a matching resource page_path for the host
             Context = case lists:keyfind(z_language, 1, Bindings) of

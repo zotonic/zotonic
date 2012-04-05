@@ -7,3 +7,6 @@
 [submodule "deps/lager"]
 	path = deps/lager
 	url = git://github.com/basho/lager.git
+[submodule "deps/ua_classifier"]
+	path = deps/ua_classifier
+	url = git://github.com/zotonic/ua_classifier.git

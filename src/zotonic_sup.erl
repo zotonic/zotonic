@@ -105,6 +105,11 @@ init([]) ->
                         {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, dynamic},
 
+    % User Agent classifier
+    UAClassifier = {ua_classifier, 
+                    {ua_classifier, start_link, []},
+                    permanent, 5000, worker, dynamic},
+    
     % Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_manager,
                 {z_sites_manager, start_link, []},
@@ -112,9 +117,10 @@ init([]) ->
                 
     Processes = [
         Ids, Config, PreviewServer,
-        SmtpServer, SmtpBounceServer, 
+        SmtpServer, SmtpBounceServer,
+        UAClassifier,
         SitesSup, Dispatcher | get_extensions()
-                ],
+    ],
 
     % Listen to IP address and Port
     WebIp = case os:getenv("ZOTONIC_IP") of
