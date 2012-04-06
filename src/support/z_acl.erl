@@ -158,7 +158,7 @@ set_visible_for(?ACL_VIS_COMMUNITY, Context) ->
     Context#context{user_id=?ACL_ANONYMOUS_USER_ID, acl=undefined};
 set_visible_for(?ACL_VIS_GROUP, Context) ->
     Context#context{acl=undefined};
-set_visible_for(_VIS_USER, Context) ->
+set_visible_for(?ACL_VIS_USER, Context) ->
     Context.
 
 
