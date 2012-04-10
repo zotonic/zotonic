@@ -30,10 +30,18 @@
 
 %% @doc Classify the user agent in the wm_reqdata.
 set_class(#wm_reqdata{} = ReqData) ->
-    webmachine_request:set_metadata(
-        ua_class,
-        ua_classifier:classify(wrq:get_req_header_lc("user-agent", ReqData)),
-        ReqData).
+    case ua_classifier:classify(wrq:get_req_header_lc("user-agent", ReqData)) of
+        {ok, Props} ->
+            webmachine_request:set_metadata(
+                ua_class,
+                ua_classifier:device_type(Props),
+                ReqData);
+        {error, _Reason} ->
+            webmachine_request:set_metadata(
+                ua_class,
+                desktop,
+                ReqData)
+    end.
 
 %% @doc Get the user agent class
 get_class(undefined) ->
