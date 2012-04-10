@@ -285,7 +285,7 @@ check_resource(ReqData, State) ->
                         filename:join(RelName1, "index.html") 
                      ],
                 find_file1(T1);
-            Found -> 
+            {ok, File} = Found -> 
                 Found
         end.
 
@@ -302,7 +302,7 @@ check_resource(ReqData, State) ->
     find_template([F|R], Context) ->
         case z_module_indexer:find(template, F, Context) of
             {error, enoent} -> find_template(R, Context);
-            {ok, _AbsPath} = Found -> Found
+            {ok, #module_index{filepath=File}} -> {ok, File}
         end.
 
 

@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-06-06
 %%
 %% @doc Implements the module extension mechanisms for scomps, templates, actions etc.  Scans all active modules
 %% for scomps (etc) and maintains lookup lists for when the system tries to find a scomp (etc).
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -67,17 +67,54 @@ translations(Context) ->
     translations1(Context).
 
 %% @doc Find a scomp, validator etc.
-%% @spec find(What, Name, Context) -> {ok, term()} | {error, Reason}
+%% @spec find(What, Name, Context) -> {ok, #module_index{}} | {error, Reason}
+find(template, Name, Context) ->
+    find_ua_class(template, z_user_agent:get_class(Context), Name, Context);
 find(What, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find, What, Name, z_user_agent:get_class(Context)}).
+    find_ua_class(What, generic, Name, Context).
 
-find_ua_class(What, Class, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find, What, Name, Class}).
+find_ua_class(template, Class, Name, Context) ->
+    case ets:lookup(?MODULE_INDEX, 
+                    #module_index_key{
+                        site=z_context:site(Context), 
+                        type=template, 
+                        name=Name, 
+                        ua_class=Class
+                    })
+    of
+        [] -> {error, enoent};
+        [#module_index{} = M|_] -> {ok, M}
+    end;
+find_ua_class(lib, _Class, Name, Context) ->
+    case ets:lookup(?MODULE_INDEX, 
+                    #module_index_key{
+                        site=z_context:site(Context), 
+                        type=lib, 
+                        name=Name 
+                    })
+    of
+        [] -> {error, enoent};
+        [#module_index{} = M|_] -> {ok, M}
+    end;
+find_ua_class(What, _Class, Name, Context) ->
+    case ets:lookup(?MODULE_INDEX, 
+                    #module_index_key{
+                        site=z_context:site(Context), 
+                        type=What, 
+                        name=Name
+                    })
+    of
+        [] -> {error, enoent};
+        [#module_index{} = M|_] -> {ok, M}
+    end.
+
 
 %% @doc Find a scomp, validator etc.
 %% @spec find_all(What, Name, Context) -> list()
+find_all(template, Name, Context) ->
+    find_ua_class_all(template, z_user_agent:get_class(Context), Name, Context);
 find_all(What, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find_all, What, Name, z_user_agent:get_class(Context)}).
+    find_ua_class_all(What, generic, Name, Context).
 
 find_ua_class_all(What, Class, Name, Context) ->
     gen_server:call(Context#context.module_indexer, {find_all, What, Name, Class}).
@@ -109,23 +146,6 @@ init(SiteProps) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Find a template definition
-handle_call({find, scomp, Name, _Class}, _From, State) ->
-    {reply, lookup(Name, State#state.scomps), State};
-handle_call({find, action, Name, _Class}, _From, State) ->
-    {reply, lookup(Name, State#state.actions), State};
-handle_call({find, validator, Name, _Class}, _From, State) ->
-    {reply, lookup(Name, State#state.validators), State};
-handle_call({find, model, Name, _Class}, _From, State) ->
-    {reply, lookup(Name, State#state.models), State};
-handle_call({find, service, Name, _Class}, _From, State) ->
-    {reply, lookup(Name, State#state.services), State};
-
-handle_call({find, lib, File, _Class}, _From, State) ->
-    {reply, lookup_class(generic, File, State#state.lib), State};
-handle_call({find, template, File, Class}, _From, State) ->
-    {reply, lookup_class(Class, File, State#state.templates), State};
-
 handle_call({find_all, scomp, Name, _Class}, _From, State) ->
     {reply, lookup_all(Name, State#state.scomps), State};
 handle_call({find_all, action, Name, _Class}, _From, State) ->
@@ -165,10 +185,13 @@ handle_cast({module_ready, _NotifyContext}, State) ->
     },
     case State =/= State1 of
         true ->
+            % Reindex the ets table for this host
+            reindex_ets_lookup(State1),
             % Reset the template server when the templates are changed
             z_template:reset(State1#state.context),
             {noreply, State1};
         false ->
+            reindex_ets_lookup(State1),
             {noreply, State}
     end;
 
@@ -215,35 +238,42 @@ translations1(Context) ->
         [Lang|_] = string:tokens(Basename, "."),
         Lang.
 
-%% @doc Find a scomp etc in a lookup list
-lookup(Name, List) ->
-    case lists:keyfind(Name, #mfile.name, List) of
-        false -> {error, enoent};
-        #mfile{erlang_module=ErlMod} -> {ok, ErlMod}
-    end.
-
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->
-    [ ErlMod || #mfile{erlang_module=ErlMod} <- List ];
+    [
+        #module_index{
+            key=#module_index_key{name=F#mfile.name},
+            module=F#mfile.module,
+            filepath=F#mfile.filepath,
+            erlang_module=F#mfile.erlang_module
+        }
+        || F <- List
+    ];
 lookup_all(Name, List) ->
     lookup_all1(Name, List, []).
     
     lookup_all1(_Name, [], Acc) ->
         lists:reverse(Acc);
-    lookup_all1(Name, [#mfile{name=Name, erlang_module=ErlMod}|T], Acc) ->
-        lookup_all1(Name, T, [ErlMod|Acc]);
+    lookup_all1(Name, [#mfile{name=Name} = F|T], Acc) ->
+        M = #module_index{
+            key=#module_index_key{name=Name},
+            module=F#mfile.module,
+            filepath=F#mfile.filepath,
+            erlang_module=F#mfile.erlang_module
+        },
+        lookup_all1(Name, T, [M|Acc]);
     lookup_all1(Name, [_|T], Acc) ->
         lookup_all1(Name, T, Acc).
 
 
-%% @doc Find a template, filter on user-agent class
+%% @doc Find a template on user-agent class
 lookup_class(_Class, _Name, []) ->
     {error, enoent};
-lookup_class(_Class, Name, [#mfile{name=Name, ua_class=generic, filepath=P}|_]) ->
-    {ok, P};
-lookup_class(Class, Name, [#mfile{name=Name, ua_class=UA, filepath=P}|T]) ->
+lookup_class(_Class, Name, [#mfile{name=Name, ua_class=generic} = M|_]) ->
+    {ok, M};
+lookup_class(Class, Name, [#mfile{name=Name, ua_class=UA} = M|T]) ->
     case z_user_agent:order_class(Class, UA) of
-        true -> {ok, P};
+        true -> {ok, M};
         false -> lookup_class(Class, Name, T)
     end;
 lookup_class(Class, Name, [_|T]) ->
@@ -256,18 +286,37 @@ lookup_class_all(Class, true, List) ->
                         UA =:= generic orelse z_user_agent:order_class(Class,UA)
                       end,
                       List),
-    [ P || #mfile{filepath=P} <- L1 ];
+    [
+       #module_index{
+              key=#module_index_key{name=F#mfile.name},
+              module=F#mfile.module,
+              filepath=F#mfile.filepath,
+              erlang_module=F#mfile.erlang_module
+       }
+       || F <- L1 
+    ];
 lookup_class_all(Class, Name, List) ->
     lookup_class_all1(Class, Name, List, []).
 
     lookup_class_all1(_Class, _Name, [], Acc) ->
-        lists:reverse(Acc);
-    lookup_class_all1(Class, Name, [#mfile{name=Name, filepath=Path, ua_class=generic}|T], Acc) ->
-        lookup_class_all1(Class, Name, T, [Path|Acc]);
-    lookup_class_all1(Class, Name, [#mfile{name=Name, filepath=Path, ua_class=UA}|T], Acc) ->
-        case z_user_agent:order_class(Class,UA) of
-            true -> lookup_class_all1(Class, Name, T, [Path|Acc]);
-            false -> lookup_class_all1(Class, Name, T, Acc)
+        lists:reverse([ ModIndex || {_Module, ModIndex} <- Acc ]);
+    lookup_class_all1(Class, Name, [#mfile{name=Name, filepath=Path, module=Module, erlang_module=EM, ua_class=UA}|T], Acc) ->
+        case UA =:= generic orelse z_user_agent:order_class(Class,UA) of
+            true -> 
+                case proplists:is_defined(Module, Acc) of
+                    false ->
+                        M = #module_index{
+                               key=#module_index_key{name=Name},
+                               module=Module,
+                               filepath=Path,
+                               erlang_module=EM
+                            },
+                        lookup_class_all1(Class, Name, T, [{Module, M}|Acc]);
+                    true -> 
+                        lookup_class_all1(Class, Name, T, Acc)
+                end;
+            false ->
+                lookup_class_all1(Class, Name, T, Acc)
         end;
     lookup_class_all1(Class, Name, [_|T], Acc) ->
         lookup_class_all1(Class, Name, T, Acc).
@@ -402,3 +451,94 @@ flush() ->
     after 
         0 -> ok
     end.
+
+
+%% @doc Re-index the ets table holding all module indices
+reindex_ets_lookup(State) ->
+    Site = z_context:site(State#state.context),
+    Now = erlang:now(),
+    templates_to_ets(State#state.templates, Now, Site),
+    to_ets(State#state.lib, lib, Now, Site),
+    to_ets(State#state.scomps, scomp, Now, Site),
+    to_ets(State#state.actions, action, Now, Site),
+    to_ets(State#state.validators, validator, Now, Site),
+    to_ets(State#state.services, service, Now, Site),
+    cleanup_ets(Now, Site).
+
+
+%% @doc Re-index all non-templates
+to_ets(List, Type, Tag, Site) ->
+    to_ets(List, Type, Tag, Site, []).
+
+    to_ets([], _Type, _Tag, _Site, _Acc) ->
+        ok;
+    to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Acc) ->
+        case lists:member(Name, Acc) of
+            true -> 
+                skip;
+            false -> 
+                K = #module_index{
+                    key=#module_index_key{
+                        site=Site,
+                        type=Type,
+                        name=Name,
+                        ua_class=generic
+                    },
+                    module=Mod,
+                    erlang_module=ErlMod,
+                    filepath=FP,
+                    tag=Tag
+                },
+                ets:insert(?MODULE_INDEX, K)
+        end,
+        to_ets(T, Type, Tag, Site, Acc).
+
+
+% Place all templates in the ets table, indexed per device type
+templates_to_ets(List, Tag, Site) ->
+    Templates = lists:usort([ Name || #mfile{name=Name} <- List ]),
+    [
+        templates_to_ets(Templates, List, Tag, Site, UAClass)
+        || UAClass <- z_user_agent:classes()
+    ].
+    
+    templates_to_ets([], _List, _Tag, _Site, _UAClass) ->
+        ok;
+    templates_to_ets([Name|T], List, Tag, Site, UAClass) ->
+        case lookup_class(UAClass, Name, List) of
+            {error, enoent} ->
+                skip;
+            {ok, #mfile{filepath=FP, module=Mod}} ->
+                K = #module_index{
+                    key=#module_index_key{
+                        site=Site,
+                        type=template,
+                        name=Name,
+                        ua_class=UAClass
+                    },
+                    module=Mod,
+                    erlang_module=z_template:filename_to_modulename(FP, Site),
+                    filepath=FP,
+                    tag=Tag
+                },
+                ets:insert(?MODULE_INDEX, K)
+        end,
+        templates_to_ets(T, List, Tag, Site, UAClass).
+
+
+%% @doc Remove all ets entries for this host with an old tag
+cleanup_ets(Tag, Site) ->
+    cleanup_ets_1(ets:first(?MODULE_INDEX), Tag, Site, []).
+    
+    cleanup_ets_1('$end_of_table', _Tag, _Site, Acc) ->
+        [ ets:delete(?MODULE_INDEX, K) || K <- Acc ];
+    cleanup_ets_1(#module_index_key{site=Site} = K, Tag, Site, Acc) ->
+        case ets:lookup(?MODULE_INDEX, K) of
+            [#module_index{tag=Tag}] ->
+                cleanup_ets_1(ets:next(?MODULE_INDEX, K), Tag, Site, Acc);
+            _ ->
+                cleanup_ets_1(ets:next(?MODULE_INDEX, K), Tag, Site, [K|Acc])
+        end;
+    cleanup_ets_1(K, Tag, Site, Acc) ->
+        cleanup_ets_1(ets:next(?MODULE_INDEX, K), Tag, Site, Acc).
+

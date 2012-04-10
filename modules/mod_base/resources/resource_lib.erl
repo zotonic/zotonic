@@ -219,7 +219,7 @@ file_exists1([], _RelName, _Context) ->
     false;
 file_exists1([ModuleIndex|T], RelName, Context) when is_atom(ModuleIndex) ->
     case z_module_indexer:find(ModuleIndex, RelName, Context) of
-        {ok, File} -> {true, File};
+        {ok, #module_index{filepath=File}} -> {true, File};
         {error, _} -> file_exists1(T, RelName, Context)
     end;
 file_exists1([DirName|T], RelName, Context) ->

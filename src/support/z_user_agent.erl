@@ -23,24 +23,33 @@
     set_class/1,
     get_class/1,
     filename_split_class/1,
-    order_class/2
+    order_class/2,
+    classes/0
 ]).
 
 -include_lib("zotonic.hrl").
 
 %% @doc Classify the user agent in the wm_reqdata.
 set_class(#wm_reqdata{} = ReqData) ->
-    case ua_classifier:classify(wrq:get_req_header_lc("user-agent", ReqData)) of
-        {ok, Props} ->
-            webmachine_request:set_metadata(
-                ua_class,
-                ua_classifier:device_type(Props),
-                ReqData);
-        {error, _Reason} ->
+    case wrq:get_req_header_lc("user-agent", ReqData) of
+        undefined ->
             webmachine_request:set_metadata(
                 ua_class,
                 desktop,
-                ReqData)
+                ReqData);
+        UserAgent ->
+            case ua_classifier:classify(UserAgent) of
+                {ok, Props} ->
+                    webmachine_request:set_metadata(
+                        ua_class,
+                        ua_classifier:device_type(Props),
+                        ReqData);
+                {error, _Reason} ->
+                    webmachine_request:set_metadata(
+                        ua_class,
+                        desktop,
+                        ReqData)
+            end
     end.
 
 %% @doc Get the user agent class
@@ -74,3 +83,7 @@ order_class(tablet, text) -> true;
 order_class(tablet, phone) -> true;
 order_class(_, _) -> false.
 
+
+%% @doc Return all possible UA classes
+classes() ->
+    [ text, phone, tablet, desktop ].

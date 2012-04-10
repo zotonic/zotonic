@@ -172,7 +172,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
             Trigger = proplists:get_value(trigger, Args, TriggerId),
             Target = proplists:get_value(target,  Args, TargetId),
             case z_module_indexer:find(action, Action, Context) of
-                {ok, ActionModule} ->
+                {ok, #module_index{erlang_module=ActionModule}} ->
                     ActionModule:render_action(Trigger, Target, Args, Context);
                 {error, enoent} ->
                     ?LOG("No action enabled for \"~p\"", [Action]),
@@ -213,7 +213,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                     VMod = case proplists:get_value(delegate, VArgs) of
                                 undefined -> 
                                     case z_module_indexer:find(validator, VType, Context) of
-                                        {ok, Mod} -> {ok, Mod};
+                                        {ok, #module_index{erlang_module=Mod}} -> {ok, Mod};
                                         {error, enoent} -> ?LOG("No validator found for \"~p\"", [VType])
                                     end;
                                 Delegate  -> 

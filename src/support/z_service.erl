@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
+%% @copyright 2009-2012 Arjan Scherpenisse
 %% Date: 2009-10-03
 %% @doc Support functions for API calls.
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2009-2012 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
          title/1, 
          all/1, 
          all/2, 
-	 serviceinfo/2,
+         serviceinfo/2,
          http_methods/1,
          handler/1,
          grouped/1,
@@ -41,8 +41,8 @@
 %%
 all(Context) ->
     F = fun() ->
-		[ServiceModule || {_Method, ServiceModule} <- z_module_indexer:find_all(service, true, Context)]
-	end,
+            [ ServiceModule || #module_index{erlang_module=ServiceModule} <- z_module_indexer:find_all(service, true, Context) ]
+        end,
     z_depcache:memo(F, {z_services}, ?WEEK, [z_modules], Context).
 
 %%
@@ -60,8 +60,8 @@ grouped(Services, _Context) ->
 %%
 all(info, Context) ->
     F = fun() ->
-		Info = z_module_indexer:find_all(service, true, Context),
-		[serviceinfo(M, zotonic_module(M, S), S) || {M, S} <- Info]
+            Info = z_module_indexer:find_all(service, true, Context),
+            [ serviceinfo(Name, Module, ErlangModule) || #module_index{key=#module_index_key{name=Name}, module=Module, erlang_module=ErlangModule} <- Info ]
         end,
     F();
 %    z_depcache:memo(F, {z_services_info}, ?WEEK, [z_modules], Context);
@@ -75,7 +75,7 @@ all(authvalues, Context) ->
     All2 = lists:filter( fun(S) -> proplists:get_value(needauth, S) end, All),
     Grouped = grouped(All2, Context),
     lists:flatten([ {"*", "Everything"} | 
-		    [ [authvalue_module(Module) | [authvalue_service(S) || S <- Services]]   || {Module, Services} <- Grouped]]).
+                    [ [authvalue_module(Module) | [authvalue_service(S) || S <- Services]]   || {Module, Services} <- Grouped]]).
 
 authvalue_module(Module) ->
     ModuleTitle = proplists:get_value(mod_title, Module:module_info(attributes)),
@@ -102,22 +102,13 @@ api_prefix_to_module(Base) when is_list(Base) ->
 
 
 %%
-%% Returns the zotonic module of the service
-%%
-zotonic_module(Method, ServiceModule) ->
-    L = length(atom_to_list(ServiceModule)) - 9 - length(atom_to_list(Method)),
-    ModuleName = string:substr(atom_to_list(ServiceModule), 9, L),
-    api_prefix_to_module(ModuleName).
-
-%%
 %% All information about a service
 %%
 serviceinfo(ServiceModule, Context) ->
     All = all(info, Context),
     case lists:filter(fun(I) -> proplists:get_value(service, I) =:= ServiceModule end, All) of
-	[Info] -> Info;
-	_ ->
-	    undefined
+        [Info] -> Info;
+        _ -> undefined
     end.
 
 serviceinfo(Method, ZotonicModule, ServiceModule) ->
