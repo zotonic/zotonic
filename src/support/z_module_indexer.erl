@@ -368,10 +368,17 @@ scan_subdir_class_files(Subdir, Context) ->
                             [ 
                                 begin
                                     {UAClass, RelPath} = z_user_agent:filename_split_class(F),
+                                    Filepath = filename:join([Dir, Subdir, F]),
                                     #mfile{
-                                        filepath=filename:join([Dir, Subdir, F]),
+                                        filepath=Filepath,
                                         name=RelPath,
                                         module=Module,
+                                        erlang_module=case Subdir of
+                                                        "templates" -> 
+                                                            z_template:filename_to_modulename(Filepath, z_context:site(Context));
+                                                        _ ->
+                                                            undefined
+                                                      end,
                                         prio=Prio,
                                         ua_class=UAClass
                                     }
@@ -407,8 +414,8 @@ scan_subdir(Subdir, Prefix, Extension, Context) ->
                             #mfile{
                                 filepath=F, 
                                 name=z_convert:to_atom(scan_remove_prefix_ext(F, PrefixLen, Extension)),
-                                erlang_module=opt_erlang_module(F, Extension),
                                 module=Module,
+                                erlang_module=opt_erlang_module(F, Extension),
                                 prio=z_module_manager:prio(Module)
                             }
                             || F <- Files 
@@ -428,9 +435,9 @@ scan_subdir(Subdir, Prefix, Extension, Context) ->
         Basename = filename:basename(Filename, Ext),
         lists:nthtail(PrefixLen, Basename).
 
-    opt_erlang_module(Filename, ".erl") ->
-        list_to_atom(filename:basename(Filename, ".erl"));
-    opt_erlang_module(_Filename, _Ext) ->
+    opt_erlang_module(Filepath, ".erl") ->
+        list_to_atom(filename:basename(Filepath, ".erl"));
+    opt_erlang_module(_Filepath, _Ext) ->
         undefined.
 
 
@@ -508,7 +515,7 @@ templates_to_ets(List, Tag, Site) ->
         case lookup_class(UAClass, Name, List) of
             {error, enoent} ->
                 skip;
-            {ok, #mfile{filepath=FP, module=Mod}} ->
+            {ok, #mfile{filepath=FP, module=Mod, erlang_module=ErlMod}} ->
                 K = #module_index{
                     key=#module_index_key{
                         site=Site,
@@ -517,7 +524,7 @@ templates_to_ets(List, Tag, Site) ->
                         ua_class=UAClass
                     },
                     module=Mod,
-                    erlang_module=z_template:filename_to_modulename(FP, Site),
+                    erlang_module=ErlMod,
                     filepath=FP,
                     tag=Tag
                 },
