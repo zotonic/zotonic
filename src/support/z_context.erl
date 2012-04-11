@@ -446,16 +446,11 @@ copy_scripts(From, Context) ->
 
 %% @doc Continue an existing session, if the session id is in the request.
 continue_session(Context) ->
-    case Context#context.session_pid of
-        undefined ->
-            case z_session_manager:continue_session(Context) of
-                {ok, Context1} ->
-                    Context2 = z_auth:logon_from_session(Context1),
-                    z_notifier:foldl(session_context, Context2, Context2);
-                {error, _} ->
-                    Context
-            end;
-        _ ->
+    case z_session_manager:continue_session(Context) of
+        {ok, Context1} ->
+            Context2 = z_auth:logon_from_session(Context1),
+            z_notifier:foldl(session_context, Context2, Context2);
+        {error, _} ->
             Context
     end.
     
@@ -473,7 +468,7 @@ has_session(_) ->
     false.
 
 
-%% @doc Ensure session and page session and fetch and parse the query string
+%% @doc Ensure session and page session. Fetches and parses the query string.
 ensure_all(Context) ->
     case get(no_session, Context, false) of
         false ->
@@ -488,7 +483,7 @@ ensure_all(Context) ->
 ensure_session(Context) ->
     case Context#context.session_pid of
         undefined ->
-            Context1 = z_session_manager:ensure_session(Context),
+            {ok, Context1} = z_session_manager:ensure_session(Context),
             Context2 = z_auth:logon_from_session(Context1),
             Context3 = z_notifier:foldl(session_context, Context2, Context2),
             add_nocache_headers(Context3);
