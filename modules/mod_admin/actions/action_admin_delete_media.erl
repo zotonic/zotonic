@@ -49,5 +49,5 @@ event(#postback{message={delete_media, Id, OnSuccess}}, Context) ->
                 Context,
                 lists:flatten(OnSuccess));
         false ->
-            z_render:growl_error("You are not allowed to delete this media.", Context)
+            z_render:growl_error(?__("You are not allowed to delete this media.", Context), Context)
     end.

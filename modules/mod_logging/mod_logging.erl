@@ -30,11 +30,13 @@
 -export([start_link/1]).
 -export([
     observe_search_query/2, 
-    pid_observe_log/3
+    pid_observe_log/3,
+    observe_admin_menu/3
 ]).
 
 -include("zotonic.hrl").
 -include("zotonic_log.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -record(state, {context, admin_log_pages=[]}).
 
@@ -210,3 +212,15 @@ record_to_log_message(_, Fields, LogType, Id) ->
 
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_log,
+                parent=admin_system,
+                label=?__("Log", Context),
+                url={admin_log},
+                visiblecheck={acl, use, mod_logging}}
+     
+     |Acc].
+

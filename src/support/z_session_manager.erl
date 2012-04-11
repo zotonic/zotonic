@@ -395,7 +395,9 @@ start_session(Action, CurrentSessionId, Context) ->
                            new ->
                                Props = [
                                    {auth_user_id, z_acl:user(Context3)},
-                                   {remote_ip, m_req:get(peer, Context3)}
+                                   {remote_ip, m_req:get(peer, Context3)},
+                                   {ua_class, z_user_agent:get_class(Context3)},
+                                   {ua_props, z_user_agent:get_props(Context3)}
                                ],
                                z_session:set(Props, Context3),
                                z_notifier:notify(session_init, Context3),
@@ -403,7 +405,9 @@ start_session(Action, CurrentSessionId, Context) ->
                            restart -> 
                                Props = [
                                    {auth_user_id, z_acl:user(Context3)},
-                                   {remote_ip, m_req:get(peer, Context3)}
+                                   {remote_ip, m_req:get(peer, Context3)},
+                                   {ua_class, z_user_agent:get_class(Context3)},
+                                   {ua_props, z_user_agent:get_props(Context3)}
                                ],
                                z_session:set(Props, Context3),
                                Context3;

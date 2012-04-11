@@ -173,7 +173,7 @@ newest([], Mod, _Context) ->
     calendar:datetime_to_gregorian_seconds(ModUTC);
 newest([File|Files], Mod, Context) ->
     case z_module_indexer:find(lib, File, Context) of
-        {ok, FilePath} ->
+        {ok, #module_index{filepath=FilePath}} ->
             FileMod = filelib:last_modified(FilePath),
             case FileMod > Mod of
                 true -> newest(Files, FileMod, Context);

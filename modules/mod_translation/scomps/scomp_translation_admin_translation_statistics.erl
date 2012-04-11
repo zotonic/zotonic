@@ -42,12 +42,12 @@ render(Params, _Vars, Context) ->
                 true ->
                     C = count_translated(PoFile),
                     Cls = erlang:min(100, trunc(((C/TotalLines) * 100)/20)*20),
-                    {ok, ["<span class=\"zp-10 perc perc-", z_convert:to_list(Cls), "\"><span>", z_convert:to_list(C), " / ", z_convert:to_list(TotalLines), "</span></span>"]};
+                    {ok, ["<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>", z_convert:to_list(C), " / ", z_convert:to_list(TotalLines), "</span></td>"]};
                 false ->
-                    {ok, ["<span class=\"zp-10 perc perc-0\"><span>0 / ", z_convert:to_list(TotalLines), "</span></span>"]}
+                    {ok, ["<td class=\"perc perc-0\"><span>0 / ", z_convert:to_list(TotalLines), "</span></td>"]}
             end;
         false ->
-            {ok, <<"<span class=\"zp-10 perc\"><span>N/A</span></span>">>}
+            {ok, <<"<td class=\"zp-10 perc\"><span>N/A</span></td>">>}
     end.
 
 

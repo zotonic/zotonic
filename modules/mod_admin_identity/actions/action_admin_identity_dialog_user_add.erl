@@ -41,9 +41,9 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
             Vars = [
                 {on_success, OnSuccess}
             ],
-            z_render:dialog("Add a new user.", "_action_dialog_user_add.tpl", Vars, Context);
+            z_render:dialog(?__("Add a new user", Context),"_action_dialog_user_add.tpl", Vars, Context);
         false ->
-            z_render:growl_error("Only administrators can add users.", Context)
+            z_render:growl_error(?__("Only administrators can add users.", Context), Context)
     end;
 
 %% @doc Delete an username from an user.
@@ -91,14 +91,14 @@ event(#submit{message={user_add, Props}}, Context) ->
                 {rollback, {Error, _CallStack}} ->
                     case Error of
                         {error, eexist} ->
-                            z_render:growl_error("Duplicate username, please choose another username.", Context);
+                            z_render:growl_error(?__("Duplicate username, please choose another username.", Context), Context);
                         {error, eacces} ->
-                            z_render:growl_error("You are not allowed to create the person page.", Context);
+                            z_render:growl_error(?__("You are not allowed to create the person page.", Context), Context);
                         _OtherError ->
                             ?DEBUG(Error),
-                            z_render:growl_error("Could not create the user. Sorry.", Context)
+                            z_render:growl_error(?__("Could not create the user. Sorry.", Context), Context)
                     end
             end;
         false ->
-            z_render:growl_error("Only administrators can add users.", Context)
+            z_render:growl_error(?__("Only administrators can add users.", Context), Context)
     end.

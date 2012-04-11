@@ -18,7 +18,7 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_set_username_password).
--author("Marc Worrell <marc@worrell.nl").
+-author("Marc Worrell <marc@worrell.nl>").
 
 %% interface functions
 -export([
@@ -52,7 +52,7 @@ event(#postback{message={set_username_password, Id, OnDelete}}, Context) ->
         {password, Password},
         {on_delete, OnDelete}
     ],
-    z_render:dialog("Set username/ password.", "_action_dialog_set_username_password.tpl", Vars, Context);
+    z_render:dialog(?__("Set username/ password", Context), "_action_dialog_set_username_password.tpl", Vars, Context);
 
 event(#submit{message=set_username_password}, Context) ->
     Id = z_convert:to_integer(z_context:get_q("id", Context)),
@@ -68,23 +68,23 @@ event(#submit{message=set_username_password}, Context) ->
                         ok ->
                             z_render:wire([
                                 {dialog_close, []},
-                                {growl, [{text, "Changed the username."}]}
+                                {growl, [{text, ?__("Changed the username.", Context)}]}
                                 ], Context);
                         {error, eexist} ->
-                            z_render:wire({growl, [{text, "The username is already in use, please try another."},{type, "error"}]}, Context)
+                            z_render:wire({growl, [{text, ?__("The username is already in use, please try another.", Context)},{type, "error"}]}, Context)
                     end;
                 _Password ->
                     case m_identity:set_username_pw(Id, Username, Password, Context) of
                         {error, _} ->
                             %% Assume duplicate key violation, user needs to pick another username.
-                            z_render:growl_error("The username is in use, please supply an unique username.", Context);
+                            z_render:growl_error(?__("The username is already in use, please try another.", Context), Context);
                         ok ->
                             z_render:wire([
                                 {dialog_close, []},
-                                {growl, [{text, "The new username/ password has been set."}]}
+                                {growl, [{text, ?__("The new username/ password has been set.", Context)}]}
                                 ], Context)
                     end
             end;
         false ->
-            z_render:growl_error("Only an administrator or the user him/herself can set a password.", Context)
+            z_render:growl_error(?__("Only an administrator or the user him/herself can set a password.", Context), Context)
     end.

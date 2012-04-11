@@ -28,10 +28,12 @@
 
 %% interface functions
 -export([
-    all/1
+    all/1,
+    observe_admin_menu/3
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
 %% @spec all(context()) -> ModuleDescriptions
@@ -77,3 +79,15 @@ descr(Module) ->
         _Title ->
             Descr
     end.
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_modules_,
+                parent=admin_system,
+                label=?__("Modules", Context),
+                url={admin_modules},
+                visiblecheck={acl, use, mod_admin_modules}}
+     
+     |Acc].
+

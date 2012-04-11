@@ -41,14 +41,14 @@ event(#postback{message={dialog_recipient_add, [{id,Id}]}}, Context) ->
 	Vars = [
 		{id, Id}
 	],
-	z_render:dialog("Add recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
+	z_render:dialog(?__("Add recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
 
 event(#postback{message={dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}}, Context) ->
 	Vars = [
             {id, Id},
             {recipient_id, RcptId}
 	],
-	z_render:dialog("Edit recipient.", "_dialog_mailinglist_recipient.tpl", Vars, Context);
+	z_render:dialog(?__("Edit recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
 
 event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
@@ -61,10 +61,10 @@ event(#postback{message={recipient_change_email, [{recipient_id, RcptId}]}}, Con
     m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
     z_render:growl(?__("E-mail address updated", Context), Context);
 
-event(#postback{message={recipient_delete, [{recipient_id, RcptId}]}}, Context) ->
+event(#postback{message={recipient_delete, [{recipient_id, RcptId}, {target, Target}]}}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
 	z_render:wire([ {growl, [{text, ?__("Recipient deleted.", Context)}]},
-					{slide_fade_out, [{target, "recipient-"++integer_to_list(RcptId)}]}
+					{slide_fade_out, [{target, Target}]}
 				], Context);
 
 event(#postback{message={recipients_clear, [{id, Id}]}}, Context) ->

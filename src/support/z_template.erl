@@ -42,7 +42,8 @@
     find_template/3,
     find_template_cat/3,
     reset/1,
-	is_template_module/1
+    is_template_module/1,
+    filename_to_modulename/2
 ]).
 
 -record(state, {reset_counter, host}).
@@ -74,29 +75,36 @@ render(#render{} = Render, Context) ->
 %% The resulting list contains the rendered template and scomp contexts.  Use render_to_iolist/3 to get a iolist().
 render({cat, File}, Variables, Context) ->
     case find_template_cat(File, proplists:get_value(id, Variables), Context) of
-        {ok, FoundFile} -> 
-            render1(File, FoundFile, Variables, Context);
+        {ok, FoundFileOrModuleIndex} -> 
+            render1(File, FoundFileOrModuleIndex, Variables, Context);
         {error, Reason} ->
             ?LOG("Could not find template: ~s (~p)", [File, Reason]),
             throw({error, {template_not_found, File, Reason}})
     end;
+render(#module_index{} = M, Variables, Context) ->
+    render1(M#module_index.filepath, M, Variables, Context);
 render(File, Variables, Context) ->
     File1 = z_convert:to_list(File),
     case find_template(File1, Context) of
-        {ok, FoundFile} ->
-            render1(File1, FoundFile, Variables, Context);
+        {ok, ModuleIndexOrList} ->
+            render1(File1, ModuleIndexOrList, Variables, Context);
         {error, Reason} ->
             ?LOG("Could not find template: ~s (~p)", [File1, Reason]),
             throw({error, {template_not_found, File1, Reason}})
     end.
 
     %% Render the found template
+    render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
+        render1(File, FoundFile, Module, Variables, Context);
     render1(File, FoundFile, Variables, Context) ->
-        Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile}, ?TIMEOUT) of
-            modified -> compile(File, FoundFile, Context);
-            Other -> Other
-        end,
-
+        Module = filename_to_modulename(FoundFile, z_context:site(Context)),
+        render1(File, FoundFile, Module, Variables, Context).
+        
+    render1(File, FoundFile, Module, Variables, Context) ->
+        Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile, Module}, ?TIMEOUT) of
+                    modified -> compile(File, FoundFile, Module, Context);
+                    Other -> Other
+                 end,
         case Result of
             {ok, Module} ->
                 %% @todo Move the in_process caching to the template compiler?
@@ -107,8 +115,8 @@ render(File, Variables, Context) ->
                         Output;
                     {error, Reason} ->
                         z_depcache:in_process(OldCaching),
-                        ?ERROR("Error rendering template: ~p (~p)~n", [File, Reason]),
-                        throw({error, {template_rendering_error, File, Reason}})
+                        ?ERROR("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
+                        throw({error, {template_rendering_error, FoundFile, Reason}})
                  end;
             {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
                 Error1 = try lists:flatten(Error) catch _:_ -> Error end,
@@ -116,8 +124,8 @@ render(File, Variables, Context) ->
                 throw({error, {template_compile_error, ErrFile, {Line,Col}, Error1}});
             {error, Reason} ->
                 Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
-                ?ERROR("Error compiling template: ~s (~p)~n", [File, Reason1]),
-                throw({error, {template_compile_error, File, Reason1}})
+                ?ERROR("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
+                throw({error, {template_compile_error, FoundFile, Reason1}})
         end.
     
             
@@ -130,7 +138,7 @@ render_to_iolist(File, Vars, Context) ->
 
 
 %% @spec compile(File, Context) -> {ok, atom()} | {error, Reason}
-%% @doc Compile a template, retun the module name.
+%% @doc Compile a template, return the module name.
 compile(File, Context) ->
     case find_template(File, Context) of
         {ok, FoundFile} ->
@@ -139,14 +147,21 @@ compile(File, Context) ->
             {error, Reason}
     end.
 
+compile(File, #module_index{filepath=FoundFile, erlang_module=Module}, Context) ->
+    compile(File, FoundFile, Module, Context);
 compile(File, FoundFile, Context) ->
-    z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile}}, Context),
-    gen_server:call(Context#context.template_server, {compile, File, FoundFile, Context}, ?TIMEOUT).
+    Module = filename_to_modulename(FoundFile, z_context:site(Context)),
+    compile(File, FoundFile, Module, Context).
+
+compile(File, FoundFile, Module, Context) ->
+    z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile, Module}}, Context),
+    gen_server:call(Context#context.template_server, {compile, File, FoundFile, Module, Context}, ?TIMEOUT).
 
 
-%% @spec find_template(File, Context) -> {ok, filename()} | {error, code} 
+%% @spec find_template(File, Context) -> {ok, filename()} | {ok, #module_index{}} | {error, code} 
 %% @doc Finds the template designated by the file, check modules.
 %% When the file is an absolute path, then do nothing and assume the file exists.
+%% @todo Only compile abs path templates iff the template is contained in a templates directory. 
 find_template([$/|_] = File, _Context) ->
     {ok, File};
 find_template([_,$:,$/|_] = File, _Context) ->
@@ -155,11 +170,11 @@ find_template(File, Context) ->
     z_module_indexer:find(template, File, Context).
 
 
-%% @spec find_template(File, All, Context) -> FilenameList
+%% @spec find_template(File, All, Context) -> [ #module_index{} ]
 %% @doc Finds the first or all templates designated by the file, check modules.
 find_template(File, false, Context) ->
     case z_module_indexer:find(template, File, Context) of
-        {ok, TemplateFile} -> [TemplateFile];
+        {ok, #module_index{}=M} -> [M];
         {error, _Reason} -> []
     end;
 find_template(File, true, Context) ->
@@ -174,28 +189,33 @@ find_template_cat([$/|_] = File, _Id, _Context) ->
 find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
     find_template(File, Context);
 find_template_cat(File, Id, Context) ->
-	Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
+    Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
                 {[meta,category|_], _} -> m_category:is_a(Id, Context); %% When the Id is a category, use the category chain itself.
                 {L, undefined} -> L;
                 {L, Name} -> L ++ [z_convert:to_atom(Name)]
             end,
-	Root = filename:rootname(File),
-	Ext = filename:extension(File),
-	case lists:foldr(fun(Cat, {error, enoent}) -> find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
-					    (_Cat, Found) -> Found	
-					 end, {error, enoent}, Stack) of
-		{error, enoent} -> find_template(File, Context);
-		{ok, Template} -> {ok, Template}
-	end.
+    Root = filename:rootname(File),
+    Ext = filename:extension(File),
+    case lists:foldr(fun(Cat, {error, enoent}) ->
+                            find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
+                        (_Cat, Found) ->
+                            Found  
+                     end, 
+                     {error, enoent},
+                     Stack)
+    of
+        {error, enoent} -> find_template(File, Context);
+        {ok, ModuleIndex} -> {ok, ModuleIndex}
+    end.
 
 
 %% @doc Check if the module is a template module.
 %% @spec is_template_module(atom()) -> bool()
 is_template_module(Module) ->
-	case z_convert:to_list(Module) of
-		?TEMPLATE_PREFIX ++ _ -> true;
-		_ -> false
-	end.
+    case z_convert:to_list(Module) of
+        ?TEMPLATE_PREFIX ++ _ -> true;
+        _ -> false
+    end.
 
 %%====================================================================
 %% gen_server callbacks
@@ -212,9 +232,10 @@ init(SiteProps) ->
 
 %% @spec handle_call({check_modified, File}, From, State) -> {ok, Module} | {error, Reason}
 %% @doc Compile the template if it has been modified, return the template module for rendering.
-handle_call({check_modified, File}, _From, State) ->
-    ModuleName = filename_to_modulename(File, State#state.host),
-    Module = list_to_atom(ModuleName),
+handle_call({check_modified, File, undefined}, From, State) ->
+    Module = filename_to_modulename(File, State#state.host),
+    handle_call({check_modified, File, Module}, From, State);
+handle_call({check_modified, _File, Module}, _From, State) ->
     Result = case template_is_modified(Module, State#state.reset_counter, State#state.host) of
                 true  -> modified;
                 false -> {ok, Module}
@@ -224,12 +245,16 @@ handle_call({check_modified, File}, _From, State) ->
 
 %% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
 %% one template at a time to prevent overloading the server on restarts.
-handle_call({compile, File, FoundFile, Context}, _From, State) ->
+handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
     FinderFun  = fun(FinderFile, All) ->
-        ?MODULE:find_template(FinderFile, All, Context)
-    end,
-    ModuleName = filename_to_modulename(FoundFile, State#state.host),
-    Module     = list_to_atom(ModuleName),
+                    [
+                        case F of
+                            #module_index{filepath=FP} -> FP;
+                            FP -> FP
+                        end
+                        || F <- ?MODULE:find_template(FinderFile, All, Context)
+                    ]
+                 end,
     ErlyResult = case erlydtl:compile(  FoundFile,
                                         File,
                                         Module, 
@@ -257,7 +282,7 @@ code_change(_OldVersion, State, _Extra) ->
 
 %% @doc Translate a filename to a module name
 filename_to_modulename(File, Host) ->
-    filename_to_modulename(File, Host, []).
+    list_to_atom(filename_to_modulename(File, Host, [])).
 
 filename_to_modulename([], Host, Acc) ->
     ?TEMPLATE_PREFIX ++ atom_to_list(Host) ++ [$_ | lists:reverse(Acc)];

@@ -37,7 +37,7 @@
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(Key, #m{value=undefined}, Context) ->
-    get(Key, z_context:get_reqdata(Context)).
+    get(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
@@ -51,6 +51,11 @@ m_value(#m{value=undefined}, Context) ->
 
 
 %% @doc Fetch the field from the wrq interface.
+get(ua_class, #context{} = Context) ->
+    z_user_agent:get_class(Context);
+get(ua_props, #context{} = Context) ->
+    z_user_agent:get_props(Context);
+
 get(What, #context{} = Context) -> get(What, z_context:get_reqdata(Context));
 get(_What, undefined) -> undefined;
 get(method, RD) -> wrq:method(RD);

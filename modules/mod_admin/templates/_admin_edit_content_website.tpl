@@ -10,7 +10,7 @@
 <fieldset class="admin-form">
 	<div class="form-item clearfix">
 		<label for="media-website">{_ Website for clicks on image _}</label>
-		<input type="text" id="media-website" name="website" class="zp-100" value="{{ r.website }}"/>
+		<input type="text" id="media-website" name="website" class="span8" value="{{ r.website }}"/>
 	</div>
 </fieldset>
 {% endblock %}

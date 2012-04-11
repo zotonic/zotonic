@@ -112,9 +112,9 @@ init([]) ->
                 
     Processes = [
         Ids, Config, PreviewServer,
-        SmtpServer, SmtpBounceServer, 
+        SmtpServer, SmtpBounceServer,
         SitesSup, Dispatcher | get_extensions()
-                ],
+    ],
 
     % Listen to IP address and Port
     WebIp = case os:getenv("ZOTONIC_IP") of

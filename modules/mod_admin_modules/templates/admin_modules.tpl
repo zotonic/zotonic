@@ -3,45 +3,56 @@
 {% block title %}{_ Modules _}{% endblock %}
 
 {% block content %}
-	<div id="content" class="zp-85"  {% include "_language_attrs.tpl" language=`en` %}>
-		<div class="block clearfix">
+<div class="edit-header">
+    <h2>{_ Modules _}</h2>
+    <p>{_ Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,
+    while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
+</div>
 
-		<h2>{_ Modules _}</h2>
+<div {% include "_language_attrs.tpl" language=`en` %}>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th width="20%">{_ Title _}</th>
+                <th width="45%">{_ Description _}</th>
+                <th width="5%">{_ Prio _}</th>
+                <th width="30%">{_ Author _}</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for sort, prio, module, props in modules %}
+            <tr id="{{ #li.module }}" class="{% if not props.is_active %}unpublished{% endif %}">
+                <td>{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</td>
+                <td>{{ props.mod_description|default:"-" }}</td>
+                <td>{{ prio }}</td>
+                <td>
+                    <div class="pull-right">
+                        {% if props.is_active %}
+                        {% button text=_"Deactivate"
+                           class="btn btn-mini"
+                           action={module_toggle module=module status_id=#status.module}
+                           action={toggle_class id=#li.module class="enabled"} %}
+                        {% else %}
+                        {% button text=_"Activate"
+                           class="btn btn-mini btn-success"
+                           action={module_toggle module=module status_id=#status.module} 
+                           action={toggle_class id=#li.module class="enabled"} %}
+                        {% endif %}
+                    </div>
 
-		<h3 class="above-list ">{_ Modules overview _}</h3>
-		<ul class="short-list">
-			<li class="headers clearfix">
-				<span class="zp-20">{_ Title _}</span>
-				<span class="zp-45">{_ Description _}</span>
-				<span class="zp-5">{_ Prio _}</span>
-				<span class="zp-25">{_ Author _}</span>
-				<span class="zp-5">{_ Activate _}</span>
-			</li>
-		{% for sort, prio, module, props in modules %}
-			<li id="{{ #li.module }}" class="clearfix {% if not props.is_active %}unpublished{% endif %}">
-				<a href="#">
-					<span class="zp-20">{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</span>
-					<span class="zp-45">{{ props.mod_description|default:"-" }}</span>
-					<span class="zp-5">{{ prio }}</span>
-					<span class="zp-30">{{ props.author|escape|default:"-" }}</span>
-                </a>
-                <span class="button-area">
-						{% if props.is_active %}
-							{% button text=_"Deactivate" 
-									action={module_toggle module=module status_id=#status.module}
-									action={toggle_class id=#li.module class="enabled"} %}
-						{% else %}
-							{% button text=_"Activate"
-									action={module_toggle module=module status_id=#status.module} 
-									action={toggle_class id=#li.module class="enabled"} %}
-						{% endif %}
-                </span>
-			</li>
-		{% empty %}
-			<li>{_ No modules found _}</li>
-		{% endfor %}
-		</ul>
+                    {{ props.author|escape|default:"-" }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    {_ No modules found _}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-		</div>
-	</div>
+</div>
 {% endblock %}

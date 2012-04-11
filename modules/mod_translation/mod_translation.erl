@@ -34,7 +34,8 @@
     observe_url_rewrite/3,
     observe_dispatch_rewrite/3,
     observe_scomp_script_render/2,
-    
+    observe_admin_menu/3,
+
     try_set_language/2,
     
     init/1, 
@@ -45,6 +46,7 @@
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
@@ -412,3 +414,13 @@ build_conneg_list([Acc|AccRest], Result) ->
     end,
     build_conneg_list(AccRest,[Pair|Result]).
 
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_translation,
+                parent=admin_structure,
+                label=?__("Translation", Context),
+                url={admin_translation},
+                visiblecheck={acl, use, ?MODULE}}
+     
+     |Acc].

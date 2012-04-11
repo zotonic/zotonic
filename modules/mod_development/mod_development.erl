@@ -40,6 +40,7 @@
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
     file_changed/2,
+    observe_admin_menu/3,
 
     % internal (for spawn)
     page_debug_stream/3,
@@ -47,6 +48,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -record(state, {context}).
 
@@ -298,4 +300,15 @@ page_debug_stream(TargetId, What, Context) ->
             {'$gen_cast', {#debug{what=_Other}, _Context}} ->
                 ?MODULE:page_debug_stream_loop(TargetId, What, Context)
         end.
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_development,
+                parent=admin_system,
+                label=?__("Development", Context),
+                url={admin_development},
+                visiblecheck={acl, use, mod_admin_development}}
+     
+     |Acc].
 

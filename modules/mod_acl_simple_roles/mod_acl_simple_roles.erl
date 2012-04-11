@@ -30,16 +30,18 @@
 
 %% interface functions
 -export([
-	manage_schema/2,
+    manage_schema/2,
     observe_acl_is_allowed/2,
     observe_acl_can_see/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_rsc_update_check/3,
-    observe_rsc_update/3
+    observe_rsc_update/3,
+    observe_admin_menu/3
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -record(acl_user, {modules, categories, roles, view_all, only_update_own, file_mimes, file_size, visible_for}).
 
@@ -398,6 +400,16 @@ can_media(Mime, Size, #context{acl=ACL}) ->
         [Type|_] = string:tokens(z_convert:to_list(Mime), "/"),
         list_to_binary(Type ++ "/*").
 
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_acl,
+                parent=admin_auth,
+                label=?__("Access Control", Context),
+                url={admin_acl},
+                visiblecheck={acl, use, ?MODULE}}
+     |Acc].
 
 
 %% @doc The datamodel for the role based ACL

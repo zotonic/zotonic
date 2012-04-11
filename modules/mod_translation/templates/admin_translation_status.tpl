@@ -4,48 +4,49 @@
 
 {% block content %}
 <style type="text/css">
-.perc span {
-    padding-left: 5px;
-}
-.perc-0 { background-color: #ff0000; color: white; }
-.perc-20 { background-color: #cc3300; color: white; }
-.perc-40 { background-color: #996600; color: white; }
-.perc-60 { background-color: #669900; color: white; }
-.perc-80 { background-color: #33cc00; color: white; }
-.perc-100 { background-color: #00ff00; color: white;}
+.perc-0 { background-color: #ff0000 !important; color: white; }
+.perc-20 { background-color: #cc3300 !important; color: white; }
+.perc-40 { background-color: #996600 !important; color: white; }
+.perc-60 { background-color: #669900 !important; color: white; }
+.perc-80 { background-color: #33cc00 !important; color: white; }
+.perc-100 { background-color: #00ff00 !important; color: white;}
 </style>
-<div id="content" class="zp-85">
-	<div class="block clearfix">
+<div class="edit-header">
 
-		<h2>{_ Translation status per module _}</h2>
+    <h2>{_ Translation status per module _}</h2>
 
-        <p>{_ To view the up-to-date version of this module, please run "generate .pot files" first from the translation overview. _}</p>
+    <p>{_ To view the up-to-date version of this module, please run "generate .pot files" first from the translation overview. _}</p>
 	
-		<h3 class="above-list ">{_ Active modules _}</h3>
-		<ul class="short-list">
-			<li class="headers clearfix">
-				<span class="zp-30">{_ Title _}</span>
+    <hr />
+
+    <h3>{_ Active modules _}</h3>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="30%">{_ Title _}</th>
                 {% for code, lang in m.config.i18n.language_list.list %}
                 {% if code != "en" %}
-                <span class="zp-10">{{ lang.language }}</span>
+                <th width="10%">{{ lang.language }}</th>
                 {% endif %}
                 {% endfor %}
-            </li>
+            </tr>
+        </thead>
 
-		{% for sort, prio, module, props in modules %}
-			<li id="{{ #li.module }}">
-				<a href="#" class="clearfix">
-					<span class="zp-30">{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</span>
-                    {% for code, lang in m.config.i18n.language_list.list %}
-                    {% if code != "en" %}
-                        {% admin_translation_statistics module=module lang=code %}
-                    {% endif %}
-                    {% endfor %}
-                </a>
-            </li>
+        <tbody>
+
+	    {% for sort, prio, module, props in modules %}
+	    <tr id="{{ #li.module }}">
+		<td>{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</td>
+                {% for code, lang in m.config.i18n.language_list.list %}
+                {% if code != "en" %}
+                {% admin_translation_statistics module=module lang=code %}
+                {% endif %}
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </ul>
-	</div>
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}

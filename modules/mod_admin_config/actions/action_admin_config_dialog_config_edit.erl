@@ -45,7 +45,7 @@ event(#postback{message={config_edit_dialog, Module, Key, OnSuccess}}, Context) 
         {key, Key},
         {on_success, OnSuccess}
     ],
-    z_render:dialog("Edit config value.", "_action_dialog_config_edit.tpl", Vars, Context);
+    z_render:dialog([?__("Edit", Context), " ", Module, "." , Key], "_action_dialog_config_edit.tpl", Vars, Context);
 
 
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
@@ -60,5 +60,5 @@ event(#submit{message={config_edit, Args}}, Context) ->
             m_config:set_value(Module, Key, Value, Context),
             z_render:wire([{dialog_close, []} | OnSuccess], Context);
         false ->
-            z_render:growl_error("Only administrators can change the configuration.", Context)
+            z_render:growl_error(?__("Only administrators can change the configuration.", Context), Context)
     end.

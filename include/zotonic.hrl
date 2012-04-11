@@ -112,6 +112,15 @@
                      period_retry=600, period_retries=10, eternal_retry=7200,
                      shutdown=5000}).
 
+
+%% Used for storing templates/scomps etc. in the lookup ets table
+-record(module_index_key, {site, type, name, ua_class=generic}).
+-record(module_index, {key, filepath, module, erlang_module, tag}).
+
+%% Name of the global module index table
+-define(MODULE_INDEX, 'zotonic$module_index').
+
+
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default, primary_key}).
 

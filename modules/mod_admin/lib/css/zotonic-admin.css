@@ -1,0 +1,510 @@
+/* Specific styles for Zotonic admin
+----------------------------------------------------------
+
+@package:	Zotonic admin CSS
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---------------------------------------------------------- */
+
+
+/* bootstrap structure
+--------------------------------------------------------- */
+body > div.container {
+    margin-top: 60px;
+}
+
+div.modal-backdrop {
+    opacity: 0.5;
+}
+
+div#zmodal form {
+    margin-bottom: 0;
+}
+
+/* do not use scrolling inside modal body */
+div.modal-body {
+    max-height: none;
+}
+
+/* make it possible to use the nice modal footer inside the body, e.g. for tabs */
+div.modal-body div.modal-footer {
+    margin: -15px;
+    margin-top: 0;
+}
+
+hr {
+    width: 100%;
+}
+
+/* nav 
+--------------------------------------------------------- */
+div.navbar ul.nav i.icon-white {
+    opacity: 0.5;
+}
+
+
+/* widget
+--------------------------------------------------------- */
+
+div.widget {
+    margin-bottom: 18px;
+    border-bottom: none;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+li > div.widget {
+    border-radius: 0 0 4px 4px;
+}
+
+
+div.widget h3.widget-header, 
+li h3.widget-header {
+    padding: 0 6px;
+    text-shadow: 1px 0px 1px white;
+    font-size: 14px;
+    font-weight: normal;
+}    
+
+div.widget > ul.nav,
+div.widget h3.widget-header, 
+li h3.widget-header {
+    background: #e8e8e8; /* Old browsers */
+    background: -moz-linear-gradient(top, #e8e8e8 0%, #c1c1c1 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e8e8e8), color-stop(100%,#c1c1c1)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* IE10+ */
+    background: linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c1c1c1',GradientType=0 ); /* IE6-9 */
+}
+
+li h3.widget-header {
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+li div.widget > ul.nav {
+    background: none;
+}
+
+div.widget > ul.nav {
+    margin-bottom: 0;
+}
+
+div.widget {
+    background: #eeeeee; /* Old browsers */
+    background: -moz-linear-gradient(top, #eeeeee 0%, #f5f5f5 50%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* IE10+ */
+    background: linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+}
+div.widget div.widget-content {
+    padding: 8px;
+}
+
+div.widget ul.nav-tabs li > a {
+    padding-bottom: 3px;
+    padding-top: 5px;
+}
+
+div.widget ul.nav-tabs li.active > a {
+     border-bottom-color: #eeeeee;
+     background: #ffffff; /* Old browsers */
+     background: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
+     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+     background: -webkit-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+     background: -o-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
+     background: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* IE10+ */
+     background: linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* W3C */
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+}
+
+div.widget.dark {
+
+}    
+
+div.widget.dark div.widget-content {
+    background: #ddd;
+}
+
+div.widget h3.widget-header button.btn-mini {
+    margin-top: 3px;
+}
+
+div.widget-content-full > :last-child,
+div.widget-content > :last-child {
+    margin-bottom: 0;
+}
+
+td.clickable,
+tr.clickable td,
+div.widget-active h3 i {
+    cursor: pointer;
+}
+div.widget-active h3 i {
+    margin: 5px;
+}
+
+div.widget-content.tab-content {
+    width: auto;
+}
+
+
+
+/* widget forms, overrides */
+div.widget input.span8, div.widget textarea.span8 {
+    width: 712px;
+}
+div.widget input.span4, div.widget textarea.span4, div.widget select.span4 {
+    width: 343px;
+}
+div.widget input.span3, div.widget textarea.span3 {
+    width: 216px;
+}
+
+#zmodal input.span8, #zmodal textarea.span8  {
+    width: 420px;
+}
+
+div.widget div.span4 {
+    width: 352px;
+}
+div.widget div.span2 {
+    width: 130px;
+}
+div.widget div.span3 {
+    width: 215px;
+}
+
+.admin-form textarea {
+    width: 712px;
+}
+
+div.widget-footer,
+div.save-buttons {
+    min-height: 36px;
+    margin-top: 18px;
+}
+
+
+/* admin table
+--------------------------------------------------------- */
+
+table.do_adminLinkedTable td.view-link {
+    padding: 0;
+}
+
+table.do_adminLinkedTable td a.view-link:hover {
+    text-decoration: none;
+}
+table.do_adminLinkedTable td a.view-link {
+    display: block;
+    padding: 8px;
+    color: inherit;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background: white;
+}
+
+table.table tr.unpublished td,
+table.table tr.unpublished td a {
+    color: #999;
+}
+
+img.thumb {
+    padding: 2px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+}
+
+/* admin edit page
+   -------------------------------------------------------------- */
+
+.pull-right p.admin-chapeau {
+    text-align: right;
+}
+
+p.admin-chapeau {
+    color: #999999;
+    margin: 0;
+}
+p.admin-chapeau a {
+    color: #999999;
+    text-decoration: underline;
+}
+
+ul.media.thumbnails {
+    margin: 0;
+}
+ul.media.thumbnails > li {
+    margin: 0 0 18px 3px;
+    background: #f5f5f5;
+}
+ul.media.thumbnails > li.ui-sortable-placeholder {
+    width: 176px;
+    height: 246px;
+    background: #aaa;
+    border-radius: 4px;
+}
+ul.media.thumbnails li img {
+    cursor: move;
+}
+ul.media.thumbnails li .caption {
+    width: 120px;
+    height: 18px;
+    overflow: hidden;
+}
+ul.media.thumbnails li div.pull-right button {
+    margin-top: 10px;
+}
+
+
+div.edit-header {
+    margin-bottom: 18px;
+}
+
+div.edit-media {
+    display: inline-block;
+    background: white;
+    padding: 4px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    height: 29px;
+}
+
+.do_menuedit {
+    min-height:100px;
+}
+
+.tree-list.categories {
+    padding-bottom: 40px;
+}
+
+ul.blocks {
+    margin-left: -8px;
+    margin-right: -8px;
+    border: 1px solid #e8e8e8;
+    padding: 30px 8px 0 8px;
+    background-color: #fcfcfc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+ul.blocks > li {
+    list-style-type: none;
+    margin-left: 0;
+    margin-bottom: 32px;
+}
+ul.blocks > li > h3 {
+    cursor: move;
+}
+ul.blocks > li > h3 > .icon-remove,
+ul.blocks > li > h3 > .pull-right {
+    cursor: pointer;
+}
+ul.blocks > li > h3 > .pull-right {
+    margin-top: 6px;
+}
+ul.blocks > li > h3 > input {
+    margin: 2px 0 3px 0;
+    height: 1em;
+    width: 100px;
+}
+ul.blocks li.block .widget {
+    padding-top: 4px;
+    border-radius: 0 0 4px 4px;
+}
+.block-add-block {
+    margin-top: 6px;
+}
+fieldset.block-name {
+    margin-top: 8px;
+}
+
+h3.widget-header input.block-name {
+    background: #ddd;
+}
+h3.widget-header input.block-name:focus {
+    background: white;
+}
+
+ul.blocks .ui-sortable-placeholder {
+    background: #aaa;
+    border-radius: 4px;
+    visibility: visible !important;
+}
+
+/* Connections
+---------------------------------------------------------- */
+ul.connections-list {
+    list-style-type: none; margin: 0; padding: 0;
+}
+ul.connections-list li {
+    float: left;
+    margin-right: 8px; margin-bottom: 8px;
+}
+ul.connections-list li .unlink-mover, .icon-move {
+    cursor: move;
+}
+
+#unlink-undo-message div.alert {
+    padding-right: 14px; /* right-aligned undo button in page connections */
+}
+
+
+/* .media-sorter .ui-sortable-placeholder, */
+.connections-list .ui-sortable-placeholder {
+    background: #aaa;
+    border-radius: 4px;
+    visibility: visible !important;
+}
+
+.form-field-error {
+    color: #B94A48;
+}    
+.z_validation_message {
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    color: #B94A48;
+    margin-left: 9px;
+    margin-bottom: 9px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 9px;
+    border-radius: 4px;
+}
+
+form.form-horizontal .z_validation_message {
+    margin-bottom: 0;
+}
+
+ul.suggestions-list {
+    margin: 0; padding: 0;
+    list-style-type: none;
+}
+ul.suggestions-list li a {
+    display: block;
+
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 50%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* IE10+ */
+    background: linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    margin-bottom: -1px;
+    padding: 2px 4px;
+}
+
+ul.suggestions-list li a .pull-right {
+    color: #999;
+}
+
+ul.suggestions-list li a:hover span.pull-right,
+ul.suggestions-list li a:hover {
+    color: #f5f5f5;
+    background: #999;
+    text-decoration: none;
+}
+
+
+/* growl message */
+.notice-wrap {
+	position: fixed;
+	top: 60px;
+	right: 20px;
+	width: 300px;
+	z-index: 9999;
+}
+
+
+/* tinyMce stuff
+--------------------------------------------------------- */
+
+.mceToolbar td a span.mce_zmore {
+	background: url(/lib/images/toolbars.gif) !important;
+}
+
+.z-tinymce-media-left {
+	float: left;
+	margin: 4px 6px 0 0;
+	-moz-border-radius-bottomleft:3px;
+	-moz-border-radius-bottomright:3px;
+	-moz-border-radius-topleft:3px;
+	-moz-border-radius-topright:3px;
+	border: 4px solid #CCCCCC;
+}
+
+.dialog .z-tinymce-media-options label {
+	float: none;
+	width: auto;
+}
+
+	.z-tinymce-media-options p {
+		margin: 0;
+	}
+
+.wp_themeSkin .mceStatusbar div {
+    width: 600px;
+    overflow: hidden;
+}
+
+
+/* ajax interaction 
+-------------------------------------------------------------- */
+body.wait {
+    cursor: wait;
+}
+body.wait button {
+    cursor: wait;
+}
+
+
+/* maps
+-------------------------------------------------------------- */
+
+.map-wrapper {
+	height: 300px;
+	width: 610px;
+	border: 3px solid #ddd;
+	margin: 0 0 9px 0;
+	border-radius: 6px;
+}
+
+/* Some extra rtl definitions */
+
+input[type="text"].rtl, textarea.rtl {
+    font-size: 150%;
+}
+
+body[dir=rtl] label {
+    float: right;
+    text-align: right;
+}
+
+
+/* tinyMCE buttons */
+.defaultSkin span.mce_zlink {background-position:-40px -40px}
+.defaultSkin span.mce_zbdoltr {background-position:-60px -40px}
+.defaultSkin span.mce_zbdortl {background-position:-80px -40px}

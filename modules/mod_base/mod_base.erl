@@ -57,7 +57,7 @@ observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
                     lists:foldl(
                         fun(F, undefined) ->
                                 case z_module_indexer:find(lib, F, Context) of
-                                    {ok, File} -> {ok, {filepath, "lib/"++F, File}};
+                                    {ok, #module_index{filepath=File}} -> {ok, {filepath, "lib/"++F, File}};
                                     {error, enoent} -> undefined
                                 end;
                            (_F, Result) ->

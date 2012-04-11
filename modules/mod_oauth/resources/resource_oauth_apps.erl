@@ -75,7 +75,7 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
                    undefined ->
                        Consumer = m_oauth_app:create_consumer(Title, URL, Descr, Callback, Context),
                        m_oauth_perms:set(z_db:get(id, Consumer), Perms, Context),
-                       z_render:wire({growl, [{text, "Created new application."}]}, Context);
+                       z_render:wire({growl, [{text, ?__("Created new application.", Context)}]}, Context);
                    
                    Id ->
                        m_oauth_app:update_consumer(Id, [{application_title, Title},
@@ -83,7 +83,7 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
                                                         {application_uri, URL},
                                                         {callback_uri, Callback}], Context),
                        m_oauth_perms:set(Id, Perms, Context),
-                       z_render:wire({growl, [{text, "Application details saved."}]}, Context)
+                       z_render:wire({growl, [{text, ?__("Application details saved.", Context)}]}, Context)
     end,
     Html = z_template:render("_oauth_apps_list.tpl", [], Context1),
     Context2 = z_render:update("oauth-apps", Html, Context1),
@@ -96,13 +96,13 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
 event(#postback{message={start_del_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}, {delete, true}],
-    z_render:dialog("Delete application", "_oauth_consumer_tokens.tpl", Vars, Context);
+    z_render:dialog(?__("Delete application", Context), "_oauth_consumer_tokens.tpl", Vars, Context);
 
 
 event(#postback{message={start_tokens, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}],
-    z_render:dialog("Tokens", "_oauth_consumer_tokens.tpl", Vars, Context);
+    z_render:dialog(?__("Tokens", Context), "_oauth_consumer_tokens.tpl", Vars, Context);
     
 
 event(#postback{message={confirm_del_app, Arg}}, Context) ->

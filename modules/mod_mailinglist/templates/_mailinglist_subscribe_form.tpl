@@ -8,59 +8,62 @@
 
 <form id="{{ #form }}" method="post" action="postback">
 
-<div class="form-item clearfix">
-	<div class="zp-60">
-		<label for="{{ #email }}">{_ e-Mail _}</label>
-		<input type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|escape }}" />
-		{% validate id=#email name="email" type={presence} type={email} %}
-	</div>
+<div class="control-group">
+    <label class="control-label" for="{{ #email }}">{_ E-mail _}</label>
+    <div class="controls">
+        <input type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|escape }}" />
+	{% validate id=#email name="email" type={presence} type={email} %}
+    </div>
 </div>
 
-<div class="form-item clearfix">
-	<div class="zp-30">
-		<div class="form-item clearfix">
-			<label for="{{ #name_first }}">{_ First name _}</label>
-			<input id="{{ #name_first }}" type="text" name="name_first" value="{{ rcpt.props.name_first|default:r.name_first }}" style="width: 90%;" />
-		</div>
+<div class="row">
+	<div class="control-group span2">
+	    <label class="control-label" for="{{ #name_first }}">{_ First name _}</label>
+            <div class="controls">
+	        <input id="{{ #name_first }}" type="text" name="name_first" value="{{ rcpt.props.name_first|default:r.name_first }}" style="width: 90%;" />
+	    </div>
 	</div>
 
-	<div class="zp-15">
-		<div class="form-item clearfix">
-			<label for="{{ #name_surname_prefix }}">{_ Prefix _}</label>
-			<input id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:r.name_surname_prefix }}" style="width: 50%" />
+	<div class="control-group span1">
+	    <label class="control-label" for="{{ #name_surname_prefix }}">{_ Prefix _}</label>
+                <div class="controls">
+		    <input id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:r.name_surname_prefix }}" style="width: 50%" />
 		</div>
-	</div>
+        </div>
 
-	<div class="zp-55">
-		<div class="form-item clearfix">
-			<label for="{{ #name_surname }}">{_ Surname _}</label>
-			<input id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:r.name_surname }}" style="width: 90%" />
-		</div>
-	</div>
+	<div class="control-group span3">
+	    <label class="control-label" for="{{ #name_surname }}">{_ Surname _}</label>
+            <div class="controls">
+		<input id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:r.name_surname }}" style="width: 90%" />
+	    </div>
+        </div>
 	
 	{% if not in_admin %}
 		{% validate id=#name_first name="name_first" type={presence} %}
 		{% validate id=#name_surname name="name_surname" type={presence} %}
 	{% endif %}
-
 </div>
 
 {% if in_admin and not recipient_id and not m.rsc[id].mailinglist_private %}
-	<div class="form-item clearfix">
-		<label><input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" />{_ Send welcome _}</label>
-	</div>
+<div class="control-group">
+    <label class="checkbox inline"><input type="checkbox" id="{{ #welcome }}" name="send_welcome" value="1" />{_ Send welcome _}</label>
+</div>
 {% endif %}
 
-<div style="clear: both">
-    {% if recipient_id %}
-	{% button text=_"edit" %}
-    {% else %}
-	{% button text=_"subscribe" %}
-	{% endif %}
+{% if in_admin %}
+<div class="modal-footer">
+{% else %}
+<div>
+{% endif %}
+    {% if in_admin %}
+        {% button class="btn" text=_"Cancel" action={dialog_close} %}
+    {% endif %}
 
-	{% if in_admin %}
-		{% button text=_"cancel" action={dialog_close} %}
-	{% endif %}
+    {% if recipient_id %}
+        {% button class="btn btn-primary" text=_"Edit" %}
+    {% else %}
+        {% button class="btn btn-primary" text=_"Subscribe" %}
+    {% endif %}
 </div>
 
 </form>

@@ -3,55 +3,56 @@
 {% block title %}{_ Referrers to _} {{ m.rsc[q.id].title }}{% endblock %}
 
 {% block content %}
-	<div id="content" class="zp-85">
-		<div class="block clearfix">
+<div>
+    <h2 id="content-pager">{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
 
-			<h2>{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
-			
-		{% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
+{% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
+	{% ifequal result.total 0 %}
+		<p>{_ There are no pages with a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”</p>
+	{% else %}
+		<p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %} 
+		{_ a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”.</p>
+	{% endifequal %}
+	
+    <table class="table table-striped do_adminLinkedTable">
+        <thead>
+            <tr>
+                <th width="30%">{_ Title _}</th>
+                <th width="15%">{_ Category _}</th>
+                <th width="15%">{_ Predicate _}</th>
+                <th width="15%">{_ Modified on _}</th>
+                <th width="25%">{_ Modified by _}</th>
+            </tr>
+        </thead>
 
-			{% ifequal result.total 0 %}
-				<p>{_ There are no pages with a connection to the page _} “{{ m.rsc[q.id].title }}”</p>
-			{% else %}
-				<p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %} {_ a connection to the page _} “{{ m.rsc[q.id].title }}”.</p>
-			{% endifequal %}
-
-			{% pager result=result dispatch="admin_referrers" id=q.id qargs %}
-			
-			<h3 class="above-list">{_ Referrers _}</h3>
-			<ul class="short-list">
-				<li class="headers clearfix">
-					<span class="zp-30">{_ Title _}</span>
-					<span class="zp-15">{_ Predicate _}</span>
-					<span class="zp-15">{_ Category _}</span>
-					<span class="zp-15">{_ Modified on _}</span>
-					<span class="zp-25">{_ Modified by _}</span>
-				</li>
-			{% for id, pred_id in result %}
-				<li id="{{ #li.id }}" class="clearfix {% if not m.rsc[id].is_published %}unpublished{% endif %}">
-					<a href="{% url admin_edit_rsc id=id %}">
-						<span class="zp-30">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
-						<span class="zp-15">{{ m.rsc[pred_id].title }}</span>
-						<span class="zp-15">{{ m.rsc[m.rsc[id].category_id].title }}</span>
-						<span class="zp-15">{{ m.rsc[id].modified|date:"d M, H:i" }}</span>
-						<span class="zp-25">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
-					</a>
-                    <span class="button-area">
-                        {% button text=_"delete" disabled=m.rsc[id].is_protected action={dialog_delete_rsc id=id on_success={slide_fade_out target=#li.id}} %}
-                        {% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+        <tbody>
+            {% for id, pred_id in result %}
+            {% if id.is_visible %}
+            <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+                <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
+                <td>{{ m.rsc[m.rsc[id].category_id].title }}</td>
+                <td>{{ m.rsc[pred_id].title }}</td>
+                <td>{{ m.rsc[id].modified|date:"d M Y, H:i" }}</td>
+                <td>
+                    {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
+                    <span class="pull-right">
+                        <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
+                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
                     </span>
-				</li>
-			{% empty %}
-				<li>
-					{_ No referrers found. _}
-				</li>
-			{% endfor %}
-			</ul>
+                </td>
+            </tr>
+            {% endif %}
+            {% empty %}
+            <tr>
+                <td colspan="5">
+                    {_ No pages found. _}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% pager result=result dispatch="admin_referrers" id=q.id qargs %}
+{% endwith %}
 
-			{% pager result=result dispatch="admin_referrers" id=q.id qargs %}
-
-		{% endwith %}
-
-		</div>
-	</div>
+</div>
 {% endblock %}

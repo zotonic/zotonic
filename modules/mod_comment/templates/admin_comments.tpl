@@ -5,51 +5,53 @@
 {% endblock %}
 
 {% block content %}
-	<div id="content" class="zp-85">
-		<div class="block clearfix">
+<div class="edit-header">
 
-			<h2>{_ Comments _}</h2>
+    <h2>{_ Recent comments _}</h2>
 
-			<h3 class="above-list">{_ Recent comments _}</h3>
-			<ul class="short-list">
-				<li class="headers clearfix">
-					<span class="zp-15">{_ Added on _}</span>
-					<span class="zp-15">{_ Page _}</span>
-					<span class="zp-25">{_ Message _}</span>
-					<span class="zp-15">{_ Name _}</span>
-					<span class="zp-15">{_ Email _}</span>
-					<span class="zp-15">{_ Options _}</span>
-				</li>
-			{% with m.search.paged[{recent_comments page=q.page}] as result %}
-				{% for comment in result %}
-					{% with comment.id as id %}
-					<li {% if not comment.is_visible %}class="unpublished" {% endif %}>
-						<a id="{{ #comment.id }}" href="{{ m.rsc[comment.rsc_id].page_url }}#comment-{{ id }}" class="clearfix">
-							<span class="zp-15">{{ comment.created|date:"d M Y, H:i" }}</span>
-							<span class="zp-15">{{ m.rsc[comment.rsc_id].title|truncate:20 }}</span>
-							<span class="zp-25">{{ comment.message|striptags|truncate:40 }}</span>
-							{% if comment.user_id %}
-								<span class="zp-30">{{ m.rsc[comment.user_id].title }} [#{{ comment.user_id }}]</span>
-							{% else %}
-								<span class="zp-15">{{ comment.name|truncate:20 }}</span>
-								<span class="zp-15" title="{{ comment.email|truncate }}">{{ comment.email|truncate:20|escape }}</span>
-							{% endif %}
-							<span class="zp-15">
-	                            {% button text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
-								{% button text=_"delete" postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}} %}
-							</span>
-						</a>
-					</li>
-					{% endwith %}
-				{% empty %}
-					<li>{_ There are no comments. _}</li>
-				{% endfor %}
-				</ul>
-			
-				{% pager result=result dispatch="admin_comments" qargs %}
+    <table class="table table-striped do_adminLinkedTable">
+        <thead>
+            <tr>
+                <th width="15%">{_ Added on _}</th>
+                <th width="15%">{_ Page _}</th>
+                <th width="35%">{_ Message _}</th>
+                <th width="35%">{_ Name _} / {_ Email _}</th>
+            </tr>
+        </thead>
 
-			{% endwith %}
-			
-		</div>
-	</div>
+        <tbody>
+            {% with m.search.paged[{recent_comments page=q.page}] as result %}
+            {% for comment in result %}
+            {% with comment.id as id %}
+            <tr id="{{ #comment.id }}" {% if not comment.is_visible %}class="unpublished" {% endif %} data-href="{{ m.rsc[comment.rsc_id].page_url }}#comment-{{ id }}">
+                <td>{{ comment.created|date:"d M Y, H:i" }}</td>
+                <td>{{ m.rsc[comment.rsc_id].title|truncate:20 }}</td>
+                <td>{{ comment.message|striptags|truncate:40 }}</td>
+                <td title="{{ comment.email }}">
+                    <div class="pull-right">
+                        {% button class="btn btn-mini" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
+                        {% button class="btn btn-mini" text=_"delete" postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}} %}
+                    </div>
+                    {% if comment.user_id %}
+                    {{ m.rsc[comment.user_id].title }} (#{{ comment.user_id }})
+                    {% else %}
+                    {{ comment.name|truncate:20 }} &ndash;
+                    {{ comment.email|truncate:20|escape }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endwith %}
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    {_ There are no comments. _}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% pager result=result dispatch="admin_comments" qargs %}
+    {% endwith %}
+        
+</div>
 {% endblock %}

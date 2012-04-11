@@ -1,16 +1,19 @@
-<p>{_ Please enter the e-mail address you want to send a test mail to. _}</p>
 
 {% wire type="submit" id=#form postback={mailing_testaddress id=id} action={dialog_close} delegate="mod_mailinglist" %}
 <form id="{{ #form }}" method="post" action="postback">
 
-		<div class="form-item clearfix">
-            <label for="email">{_ Email _}</label>
-            <input id="email" type="text" value="" name="email" />
+    <p>{_ Please enter the e-mail address you want to send a test mail to. _}</p>
+    
+    <div class="control-label">
+        <label class="control-label" for="email">{_ Email _}</label>
+        <div class="controls">
+            <input id="email" type="text" value="" class="input-xlarge do_autofocus" name="email" />
             {% validate id="email" type={presence} type={email} %}
         </div>
+    </div>
 
-		<div class="form-item clearfix">
-            {% button text=_"Send mailing" %}
-            {% button text=_"Cancel" action={dialog_close} %}
-        </div>
+    <div class="modal-footer">
+            {% button class="btn" text=_"Cancel" action={dialog_close} %}
+            {% button class="btn btn-primary" text=_"Send mailing" %}
+    </div>
 </form>

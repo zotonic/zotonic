@@ -42,7 +42,7 @@ event(#postback{message={delete_username, Id, OnSuccess}}, Context) ->
     case z_acl:is_allowed(delete, Id, Context) of
         true ->
             m_identity:delete_username(Id, Context),
-            z_render:wire([{growl, [{text, "Username has been deleted."}]} | OnSuccess], Context);
+            z_render:wire([{growl, [{text, ?__("Username has been deleted.", Context)}]} | OnSuccess], Context);
         false ->
-            z_render:growl_error("Only administrators can delete usernames.", Context)
+            z_render:growl_error(?__("Only administrators can delete usernames.", Context), Context)
     end.

@@ -27,10 +27,13 @@
 -mod_prio(1000).
 
 -export([
-    observe_sanitize_element/3
+         observe_sanitize_element/3,
+         observe_admin_menu/3,
+         event/2
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("include/admin_menu.hrl").
 
 
 %% @doc Fix tinymce images that are the result of copying
@@ -74,3 +77,87 @@ class_to_opts(Class) ->
     end.
 
     
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_dashboard,
+                label=?__("Dashboard", Context),
+                url={admin} },
+
+     %% CONTENT %%
+     #menu_item{id=admin_content,
+                label=?__("Content", Context)},
+
+     #menu_item{id=admin_overview,
+                parent=admin_content,
+                label=?__("Pages", Context),
+                url={admin_overview_rsc}},
+     #menu_item{id=admin_media,
+                parent=admin_content,
+                label=?__("Media", Context),
+                url={admin_media}},
+
+     %% STRUCTURE %%
+     #menu_item{id=admin_structure,
+                label=?__("Structure", Context)},
+
+     
+     %% MODULES %%
+     #menu_item{id=admin_modules,
+                label=?__("Modules", Context)},
+
+
+     %% AUTH %%
+     #menu_item{id=admin_auth,
+                label=?__("Auth", Context)},
+
+     %% SYSTEM %%
+     #menu_item{id=admin_system,
+                label=?__("System", Context)},
+
+     #menu_item{id=admin_status,
+                parent=admin_system,
+                label=?__("Status", Context),
+                url={admin_status}}
+
+     |Acc].
+
+
+event(#postback_notify{message="admin-insert-block"}, Context) ->
+    Language = case z_context:get_q("language", Context) of
+                    undefined -> 
+                        [];
+                    Ls -> 
+                        Ls1 = string:tokens(Ls, ","),
+                        [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
+               end,
+    EditLanguage = case z_context:get_q("edit_language", Context) of
+                    undefined -> 
+                        z_context:language(Context);
+                    EL ->
+                        case z_trans:is_language(EL) of
+                            true -> list_to_atom(EL);
+                            false -> z_context:language(Context)
+                        end
+                   end,
+    Type = z_string:to_name(z_context:get_q("type", Context)),
+    RscId = list_to_integer(z_context:get_q("rsc_id", Context)),
+    Render = #render{
+                template="_admin_edit_block_li.tpl",
+                vars=[
+                    {id, RscId},
+                    {r_language, Language},
+                    {edit_language, EditLanguage},
+                    is_new,
+                    {is_editable, z_acl:rsc_editable(RscId, Context)},
+                    {blk, [{type, Type}]}
+                ]
+            },
+    case z_html:escape(z_context:get_q("after", Context)) of
+        undefined -> z_render:insert_top("edit-blocks", Render, Context);
+        AfterId -> z_render:insert_after(AfterId, Render, Context)
+    end;
+event(_, Context) ->
+    Context.
+
+    
+

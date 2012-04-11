@@ -26,3 +26,23 @@
 -mod_depends([admin]).
 -mod_provides([]).
 
+
+%% interface functions
+-export([
+    observe_admin_menu/3
+]).
+
+-include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_config,
+                parent=admin_system,
+                label=?__("Config", Context),
+                url={admin_config},
+                visiblecheck={acl, use, mod_admin_config}}
+     
+     |Acc].
+

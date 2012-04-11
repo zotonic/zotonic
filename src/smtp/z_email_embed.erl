@@ -71,7 +71,7 @@ embed_lib_images(Html, Context) ->
 
 embed_lib_image_match([Match], {Parts, Html, Context}) ->
     case z_module_indexer:find(lib, Match, Context) of
-        {ok, File} ->
+        {ok, #module_index{filepath=File}} ->
             case filelib:is_file(File) of
                 true ->
                     ContentType = z_media_identify:guess_mime(File),
@@ -213,7 +213,7 @@ ensure_preview(Path, Context) ->
             MediaFile = case Safepath of 
                             "lib/" ++ LibPath ->  
                                 case z_module_indexer:find(lib, LibPath, Context) of 
-                                    {ok, ModuleFilename} -> ModuleFilename; 
+                                    {ok, #module_index{filepath=ModuleFilename}} -> ModuleFilename; 
                                     {error, _} -> filename:join(MediaPath, Safepath) 
                                 end; 
                             _ -> 
