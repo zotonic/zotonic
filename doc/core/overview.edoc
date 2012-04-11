@@ -1,7 +1,7 @@
 @author Marc Worrell <marc@worrell.nl>
 @author Arjan Scherpenisse <arjan@scherpenisse.net>
-@copyright 2011 Arjan Scherpenisse
-@version 0.7-dev
+@copyright 2011, 2012 Arjan Scherpenisse
+@version 0.9-dev
 @title Zotonic core documentation
 @doc Zotonic is a content management system and web framework written in Erlang.
 
