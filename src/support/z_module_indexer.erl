@@ -85,17 +85,6 @@ find_ua_class(template, Class, Name, Context) ->
         [] -> {error, enoent};
         [#module_index{} = M|_] -> {ok, M}
     end;
-find_ua_class(lib, _Class, Name, Context) ->
-    case ets:lookup(?MODULE_INDEX, 
-                    #module_index_key{
-                        site=z_context:site(Context), 
-                        type=lib, 
-                        name=Name 
-                    })
-    of
-        [] -> {error, enoent};
-        [#module_index{} = M|_] -> {ok, M}
-    end;
 find_ua_class(What, _Class, Name, Context) ->
     case ets:lookup(?MODULE_INDEX, 
                     #module_index_key{
