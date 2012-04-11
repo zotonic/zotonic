@@ -14,7 +14,9 @@ New feature release
 
 * Commit to this branch
 
-* Make zipfile: git archive --format=zip --prefix=zotonic > ../zotonic-0.4.0.zip 
+* Make zipfile: z-archive 0.4.0
+
+* Test the zipfile on the supported target platforms
 
 * Tag the release: git tag release-0.4.0
 
