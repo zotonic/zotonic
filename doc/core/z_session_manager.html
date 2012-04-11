@@ -10,8 +10,8 @@
 <hr>
 
 <h1>Module z_session_manager</h1>
-<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>User agent session management for zotonic.
-<p>Copyright © 2009 Marc Worrell</p>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>User agent session management for zotonic.
+<p>Copyright © 2009-2012 Marc Worrell</p>
 
 <p><b>Behaviours:</b> <a href="gen_server.html"><tt>gen_server</tt></a>.</p>
 <p><b>Authors:</b> Marc Worrell (<a href="mailto:marc@worrell.nl"><tt>marc@worrell.nl</tt></a>).</p>
@@ -19,7 +19,12 @@
 <h2><a name="description">Description</a></h2>User agent session management for zotonic.  A ua session is a process started for every
        user agent visiting the site.  The session is alive for a fixed period after the
        last request has been done.  The session manager manages all the ua session processes.
- 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-session_id">session_id()</a></h3>
+<p><tt>session_id() = list()</tt></p>
+
+
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#add_script-1">add_script/1</a></td><td>Send the scripts in the context to all pages of all sessions.</td></tr>
 <tr><td valign="top"><a href="#add_script-2">add_script/2</a></td><td>Send a script to all pages of all sessions.</td></tr>
@@ -30,7 +35,7 @@
 <tr><td valign="top"><a href="#dump-1">dump/1</a></td><td>Dump all session to stdout.</td></tr>
 <tr><td valign="top"><a href="#ensure_session-1">ensure_session/1</a></td><td>Start a new session or continue an existing session.</td></tr>
 <tr><td valign="top"><a href="#foreach-2">foreach/2</a></td><td>Apply the given function to all sessions.</td></tr>
-<tr><td valign="top"><a href="#get_session_id-1">get_session_id/1</a></td><td>fetch the session id from the request, return 'undefined' when not found.</td></tr>
+<tr><td valign="top"><a href="#get_session_id-1">get_session_id/1</a></td><td>Fetch the session id.</td></tr>
 <tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td></td></tr>
@@ -66,8 +71,8 @@
 
 <h3 class="function"><a name="continue_session-1">continue_session/1</a></h3>
 <div class="spec">
-<p><tt>continue_session(Context) -&gt; Context</tt><br></p>
-</div><p>Continue an existing session</p>
+<p><tt>continue_session(Context::#context{}) -&gt; {ok, #context{}} | {error, term()}</tt><br></p>
+</div><p>Continue an existing session. No new session will be created.</p>
 
 <h3 class="function"><a name="count-1">count/1</a></h3>
 <div class="spec">
@@ -81,7 +86,7 @@
 
 <h3 class="function"><a name="ensure_session-1">ensure_session/1</a></h3>
 <div class="spec">
-<p><tt>ensure_session(Context) -&gt; Context</tt><br></p>
+<p><tt>ensure_session(Context::#context{}) -&gt; {ok, #context{}} | {error, term()}</tt><br></p>
 </div><p>Start a new session or continue an existing session</p>
 
 <h3 class="function"><a name="foreach-2">foreach/2</a></h3>
@@ -91,8 +96,8 @@
 
 <h3 class="function"><a name="get_session_id-1">get_session_id/1</a></h3>
 <div class="spec">
-<p><tt>get_session_id(Context) -&gt; undefined | string()</tt><br></p>
-</div><p>fetch the session id from the request, return 'undefined' when not found</p>
+<p><tt>get_session_id(Context::#context{}) -&gt; undefined | <a href="#type-session_id">session_id()</a></tt><br></p>
+</div><p>Fetch the session id</p>
 
 <h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
 <div class="spec">
@@ -117,17 +122,17 @@
 
 <h3 class="function"><a name="rename_session-1">rename_session/1</a></h3>
 <div class="spec">
-<p><tt>rename_session(Context) -&gt; Context</tt><br></p>
+<p><tt>rename_session(Context::#context{}) -&gt; {ok, #context{}} | {error, term()}</tt><br></p>
 </div><p>Rename the session id, only call this after ensure_session</p>
 
 <h3 class="function"><a name="start_link-1">start_link/1</a></h3>
 <div class="spec">
-<p><tt>start_link(SiteProps) -&gt; {ok, Pid} | ignore | {error, Error}</tt><br></p>
+<p><tt>start_link(SiteProps::list()) -&gt; {ok, pid()} | ignore | {error, term()}</tt><br></p>
 </div><p>Starts the session manager server</p>
 
 <h3 class="function"><a name="stop_session-1">stop_session/1</a></h3>
 <div class="spec">
-<p><tt>stop_session(Context) -&gt; Context</tt><br></p>
+<p><tt>stop_session(Context::#context{}) -&gt; {ok, #context{}} | {error, term()}</tt><br></p>
 </div><p>Explicitly stop an existing session</p>
 
 <h3 class="function"><a name="terminate-2">terminate/2</a></h3>
@@ -142,6 +147,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Apr 11 2012, 16:16:58.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 20:41:27.</i></p>
 </body>
 </html>
