@@ -1,17 +1,61 @@
 Welcome to Zotonic!
 
-Release 0.8.0, in development
------------------------------
+Release 0.8.0, released on 2012-04-11
+-------------------------------------
 
-* The "host" option in a host's config file is now optional. 
-  When not present it will be derived from the site's directory name.
-  (Thanks to Andreas Stenius)
+* New core features:
 
-* Modules can now have dependencies. The dependencies regulate the
-  start order of modules. Define them with "-mod_depends([...])."
-  and "-mod_provides([...])." 
-  A module always provides its own module name. When "-mod_depends([...])." 
-  is not given then it defaults to "[base]".
+Module manager: module manager startup stability fixes, module
+dependencies and starting/stopping modules in the correct order.
+
+Status site - the site status got a redesign to be more in line with
+the current zotonic.com site. It now shows a friendly welcome
+message and requires a login to view / manage the running zotonic
+sites.
+
+PostgreSQL - we stabilized the pgsql connection pool in the presence
+of database connection failures and improvoved query timeout
+handling.
+
+The "host" option in a site's config file is now optional. When not
+present it will be derived from the site's directory name.
+
+
+* New / updated modules:
+
+** mod_oembed - Provides an easier way to embed external content into
+   your site, using the OEmbed standard.
+
+** mod_translation - added support for RTL languages like Hebrew and
+   Arabic in the admin interface. Content pages that are translated in
+   multiple languages now have a separate URL for each language
+   version.  Translations of the admin interface were added for Irish,
+   Spanish, Estonian and Polish.
+
+** mod_mailinglist - Improved the mailinglist interface. It is now much
+   easier to track to which list a page has been sent to, to preview
+   the mailing and to view and manage bounced emails.
+
+** mod_development - On Linux, development has been made easier by
+   integrating inotify. Supports on-the-fly compilation of Erlang
+   files, flushing caches, and compiling/minifying
+   LESS/SCSS/Coffeescript.
+
+* Other minor features
+
+** New filter: index_of, which gives the index of an item in a list.
+** filter_random:random/3 - create random sublist with length l.
+** range filter: easily generate lists with integers
+
+
+* Development process
+
+The git master branch switched to using git submodules for the most
+important external dependencies.
+
+Documentation got updated, most source files now have @doc tags which
+are generated and available online at from
+http://zotonic.com/documentation
 
 
 Release 0.7.0, released on 2011-07-28
