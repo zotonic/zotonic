@@ -46,7 +46,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(Periodic::boolean()) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Periodic) ->
 	case erlang:whereis(?MODULE) of

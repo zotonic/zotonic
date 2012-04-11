@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module mod_development</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -21,9 +22,10 @@
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Convert process state when code is changed.</td></tr>
 <tr><td valign="top"><a href="#debug_stream-3">debug_stream/3</a></td><td>Stream specific debug information to an area on the current page.</td></tr>
+<tr><td valign="top"><a href="#file_changed-2">file_changed/2</a></td><td>Called when a file is changed on disk.</td></tr>
 <tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Trap unknown calls.</td></tr>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Periodic check if the dev server is still running.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handling all non call/cast messages.</td></tr>
 <tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initiates the server.</td></tr>
 <tr><td valign="top"><a href="#make-1">make/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#observe_debug_stream-2">observe_debug_stream/2</a></td><td>Stream all debug information of a certain kind to the target id on the user agent.</td></tr>
@@ -41,7 +43,7 @@
 
 <h3 class="function"><a name="code_change-3">code_change/3</a></h3>
 <div class="spec">
-<p><tt>code_change(OldVsn, State, Extra) -&gt; {ok, NewState}</tt></p>
+<p><tt>code_change(OldVsn, State, Extra) -&gt; {ok, NewState}</tt><br></p>
 </div><p>Convert process state when code is changed</p>
 
 <h3 class="function"><a name="debug_stream-3">debug_stream/3</a></h3>
@@ -49,24 +51,29 @@
 <p><tt>debug_stream(TargetId, What, Context) -&gt; any()</tt></p>
 </div><p>Stream specific debug information to an area on the current page.</p>
 
+<h3 class="function"><a name="file_changed-2">file_changed/2</a></h3>
+<div class="spec">
+<p><tt>file_changed(Verb::modify | create, F::string()) -&gt; ok</tt><br></p>
+</div><p>Called when a file is changed on disk. Decides what to do.</p>
+
 <h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
 <div class="spec">
-<p><tt>handle_call(Message::Request, From, State) -&gt; {reply, Reply, State} | {reply, Reply, State, Timeout} | {noreply, State} | {noreply, State, Timeout} | {stop, Reason, Reply, State} | {stop, Reason, State}</tt></p>
+<p><tt>handle_call(Message::Request, From, State) -&gt; {reply, Reply, State} | {reply, Reply, State, Timeout} | {noreply, State} | {noreply, State, Timeout} | {stop, Reason, Reply, State} | {stop, Reason, State}</tt><br></p>
 </div><p>Trap unknown calls</p>
 
 <h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
 <div class="spec">
-<p><tt>handle_cast(Message::Msg, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt></p>
+<p><tt>handle_cast(Message::Msg, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt><br></p>
 </div>
 
 <h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
 <div class="spec">
-<p><tt>handle_info(Info, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt></p>
-</div><p>Periodic check if the dev server is still running.</p>
+<p><tt>handle_info(Info, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt><br></p>
+</div><p>Handling all non call/cast messages</p>
 
 <h3 class="function"><a name="init-1">init/1</a></h3>
 <div class="spec">
-<p><tt>init(Args) -&gt; {ok, State} | {ok, State, Timeout} | ignore | {stop, Reason}</tt></p>
+<p><tt>init(Args) -&gt; {ok, State} | {ok, State, Timeout} | ignore | {stop, Reason}</tt><br></p>
 </div><p>Initiates the server.</p>
 
 <h3 class="function"><a name="make-1">make/1</a></h3>
@@ -106,12 +113,12 @@
 
 <h3 class="function"><a name="start_link-1">start_link/1</a></h3>
 <div class="spec">
-<p><tt>start_link(Args) -&gt; {ok, Pid} | ignore | {error, Error}</tt></p>
+<p><tt>start_link(Args) -&gt; {ok, Pid} | ignore | {error, Error}</tt><br></p>
 </div><p>Starts the server</p>
 
 <h3 class="function"><a name="terminate-2">terminate/2</a></h3>
 <div class="spec">
-<p><tt>terminate(Reason, State) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>terminate(Reason, State) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>This function is called by a gen_server when it is about to
   terminate. It should be the opposite of Module:init/1 and do any necessary
   cleaning up. When it returns, the gen_server terminates with Reason.
@@ -119,6 +126,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:57.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:17:01.</i></p>
 </body>
 </html>

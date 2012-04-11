@@ -320,7 +320,7 @@ ip_to_list({_K1,_K2,_K3,_K4,_K5,_K6,_K7,_K8} = IPv6) ->
 
 
 %% Taken from egeoip (http://code.google.com/p/egeoip/source/browse/trunk/egeoip/src/egeoip.erl?r=19)
-%% @spec ip2long(Address) -> {ok, integer()}
+%% @spec ip_to_long(Address) -> {ok, integer()} | {error, badmatch}
 %% @doc Convert an IP address from a string, IPv4 tuple or IPv6 tuple to the
 %%      big endian integer representation.
 ip_to_long({B3, B2, B1, B0}) ->

@@ -1,7 +1,7 @@
 {packages,[]}.
 {modules,[action_survey_dialog_survey_question,
           action_survey_dialog_survey_question_delete,m_survey,mod_survey,
-          resource_survey_results,scomp_survey_poll,
+          mod_survey_schema,resource_survey_results,scomp_survey_poll,
           scomp_survey_survey_example,survey_q_likert,survey_q_longanswer,
           survey_q_matching,survey_q_narrative,survey_q_pagebreak,
           survey_q_prompt,survey_q_shortanswer,survey_q_subhead,

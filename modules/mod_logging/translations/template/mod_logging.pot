@@ -18,57 +18,57 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:54 ./modules/mod_logging/templates/admin_log_email.tpl:84 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:70 ./modules/mod_logging/templates/admin_log_email.tpl:100 
 msgid ""
 "All"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:57 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:73 
 msgid ""
 "Bounce"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:36 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:52 
 msgid ""
 "Content"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log.tpl:20 ./modules/mod_logging/templates/admin_log_email.tpl:39 
+#: ./modules/mod_logging/templates/admin_log.tpl:20 ./modules/mod_logging/templates/admin_log_email.tpl:55 
 msgid ""
 "Date"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:48 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:64 
 msgid ""
 "Debug"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:45 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:61 
 msgid ""
 "Error"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:59 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:75 
 msgid ""
 "Failed"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:44 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:60 
 msgid ""
 "Fatal"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:83 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:99 
 msgid ""
 "Filter"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:35 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:51 
 msgid ""
 "From"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:47 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:63 
 msgid ""
 "Info"
 msgstr ""
@@ -98,7 +98,7 @@ msgid ""
 "Message"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:33 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:49 
 msgid ""
 "Message nr"
 msgstr ""
@@ -108,57 +108,57 @@ msgid ""
 "Module"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log.tpl:10 ./modules/mod_logging/templates/admin_log_email.tpl:12 
+#: ./modules/mod_logging/templates/admin_log.tpl:10 ./modules/mod_logging/templates/admin_log_email.tpl:28 
 msgid ""
 "Most recent messages"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log.tpl:30 ./modules/mod_logging/templates/admin_log_email.tpl:101 
+#: ./modules/mod_logging/templates/admin_log.tpl:30 ./modules/mod_logging/templates/admin_log_email.tpl:117 
 msgid ""
 "No log messages."
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:37 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:53 
 msgid ""
 "Other"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:58 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:74 
 msgid ""
 "Received"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:60 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:76 
 msgid ""
 "Retry"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:55 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:71 
 msgid ""
 "Sending"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:56 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:72 
 msgid ""
 "Sent"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:31 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:47 
 msgid ""
 "Severity"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:32 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:48 
 msgid ""
 "Status"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:38 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:54 
 msgid ""
 "Template"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:34 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:50 
 msgid ""
 "To"
 msgstr ""
@@ -173,7 +173,7 @@ msgid ""
 "User"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:46 
+#: ./modules/mod_logging/templates/admin_log_email.tpl:62 
 msgid ""
 "Warning"
 msgstr ""

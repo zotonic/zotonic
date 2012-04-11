@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module z_utils</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -34,6 +35,7 @@
 <tr><td valign="top"><a href="#encode_value-2">encode_value/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#encode_value_expire-3">encode_value_expire/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ensure_existing_module-1">ensure_existing_module/1</a></td><td>Ensure that the given string matches an existing module.</td></tr>
+<tr><td valign="top"><a href="#erase_process_dict-0">erase_process_dict/0</a></td><td>Safe erase of process dict, keeps some 'magical' proc_lib vars.</td></tr>
 <tr><td valign="top"><a href="#f-1">f/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#f-2">f/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flush_message-1">flush_message/1</a></td><td>Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.</td></tr>
@@ -56,6 +58,7 @@
 <tr><td valign="top"><a href="#js_escape-1">js_escape/1</a></td><td>Javascript escape, see also: http://code.google.com/p/doctype/wiki/ArticleXSSInJavaScript.</td></tr>
 <tr><td valign="top"><a href="#js_object-1">js_object/1</a></td><td>Create a javascript object from a proplist.</td></tr>
 <tr><td valign="top"><a href="#js_object-2">js_object/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#json_escape-1">json_escape/1</a></td><td>JSON escape for safe quoting of JSON strings.</td></tr>
 <tr><td valign="top"><a href="#lib_dir-0">lib_dir/0</a></td><td>Return an abspath to a directory relative to the application root.</td></tr>
 <tr><td valign="top"><a href="#lib_dir-1">lib_dir/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_dir_recursive-1">list_dir_recursive/1</a></td><td>Return a list of all files in a directory, recursive depth first search for files not starting with a '.'.</td></tr>
@@ -68,6 +71,7 @@
 <tr><td valign="top"><a href="#only_letters-1">only_letters/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#os_escape-1">os_escape/1</a></td><td>Simple escape function for command line arguments.</td></tr>
 <tr><td valign="top"><a href="#os_filename-1">os_filename/1</a></td><td>Simple escape function for filenames as commandline arguments.</td></tr>
+<tr><td valign="top"><a href="#percent_encode-1">percent_encode/1</a></td><td>Percent encoding/decoding as defined by RFC 3986 (http://tools.ietf.org/html/rfc3986).</td></tr>
 <tr><td valign="top"><a href="#pickle-2">pickle/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#prefix-2">prefix/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#prop_delete-2">prop_delete/2</a></td><td></td></tr>
@@ -98,7 +102,7 @@
 
 <h3 class="function"><a name="assert-2">assert/2</a></h3>
 <div class="spec">
-<p><tt>assert(X1::bool(), Error::error) -&gt; none()</tt></p>
+<p><tt>assert(X1::bool(), Error::error) -&gt; none()</tt><br></p>
 </div><p>Check if an assertion is ok or failed</p>
 
 <h3 class="function"><a name="checksum-2">checksum/2</a></h3>
@@ -167,6 +171,11 @@
 </div><p>Ensure that the given string matches an existing module. Used to prevent
        a denial of service attack where we exhaust the atom space.</p>
 
+<h3 class="function"><a name="erase_process_dict-0">erase_process_dict/0</a></h3>
+<div class="spec">
+<p><tt>erase_process_dict() -&gt; any()</tt></p>
+</div><p>Safe erase of process dict, keeps some 'magical' proc_lib vars</p>
+
 <h3 class="function"><a name="f-1">f/1</a></h3>
 <div class="spec">
 <p><tt>f(S) -&gt; any()</tt></p>
@@ -204,7 +213,7 @@
 
 <h3 class="function"><a name="group_proplists-2">group_proplists/2</a></h3>
 <div class="spec">
-<p><tt>group_proplists(Prop::Property, Rest::[PropList]) -&gt; PropList</tt></p>
+<p><tt>group_proplists(Prop::Property, Rest::[PropList]) -&gt; PropList</tt><br></p>
 </div><p>Given a list of proplists, make it a nested list with respect to a property, combining elements
   with the same property.  Assumes the list is sorted on the property you are splitting on
   For example:  [[{a,b}{x}], [{a,b}{z}], [{a,c}{y}]] gives:
@@ -222,7 +231,7 @@
 
 <h3 class="function"><a name="index_proplist-2">index_proplist/2</a></h3>
 <div class="spec">
-<p><tt>index_proplist(Prop::Property, List::[PropList]) -&gt; PropList</tt></p>
+<p><tt>index_proplist(Prop::Property, List::[PropList]) -&gt; PropList</tt><br></p>
 </div><p>Make a property list based on the value of a property
   For example:  [  [{a,b}], [{a,c}] ]  gives  [{a, [{a,b}]}, {c, [[{a,c}]]}]</p>
 
@@ -271,6 +280,12 @@
 <p><tt>js_object(L, T) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="json_escape-1">json_escape/1</a></h3>
+<div class="spec">
+<p><tt>json_escape(Value) -&gt; any()</tt></p>
+</div><p>JSON escape for safe quoting of JSON strings. Subtly different
+  from JS escape, see http://www.json.org/</p>
+
 <h3 class="function"><a name="lib_dir-0">lib_dir/0</a></h3>
 <div class="spec">
 <p><tt>lib_dir() -&gt; any()</tt></p>
@@ -289,7 +304,7 @@
 
 <h3 class="function"><a name="name_for_host-2">name_for_host/2</a></h3>
 <div class="spec">
-<p><tt>name_for_host(Name::atom(), Host::atom()) -&gt; atom()</tt></p>
+<p><tt>name_for_host(Name::atom(), Host::atom()) -&gt; atom()</tt><br></p>
 </div><p>Return the name used in the context of a hostname</p>
 
 <h3 class="function"><a name="nested_proplist-1">nested_proplist/1</a></h3>
@@ -324,14 +339,19 @@
 
 <h3 class="function"><a name="os_escape-1">os_escape/1</a></h3>
 <div class="spec">
-<p><tt>os_escape(A::String) -&gt; String</tt></p>
+<p><tt>os_escape(A::String) -&gt; String</tt><br></p>
 </div><p>Simple escape function for command line arguments</p>
 
 <h3 class="function"><a name="os_filename-1">os_filename/1</a></h3>
 <div class="spec">
-<p><tt>os_filename(A::String) -&gt; String</tt></p>
+<p><tt>os_filename(A::String) -&gt; String</tt><br></p>
 </div><p>Simple escape function for filenames as commandline arguments.
   foo/"bar.jpg -&gt; "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)</p>
+
+<h3 class="function"><a name="percent_encode-1">percent_encode/1</a></h3>
+<div class="spec">
+<p><tt>percent_encode(Chars) -&gt; any()</tt></p>
+</div><p>Percent encoding/decoding as defined by RFC 3986 (http://tools.ietf.org/html/rfc3986).</p>
 
 <h3 class="function"><a name="pickle-2">pickle/2</a></h3>
 <div class="spec">
@@ -385,12 +405,12 @@
 
 <h3 class="function"><a name="tempfile-0">tempfile/0</a></h3>
 <div class="spec">
-<p><tt>tempfile() -&gt; string()</tt></p>
+<p><tt>tempfile() -&gt; string()</tt><br></p>
 </div><p>return a unique temporary filename.</p>
 
 <h3 class="function"><a name="temppath-0">temppath/0</a></h3>
 <div class="spec">
-<p><tt>temppath() -&gt; string()</tt></p>
+<p><tt>temppath() -&gt; string()</tt><br></p>
 </div><p>Returns the path where to store temporary files.</p>
 
 <h3 class="function"><a name="url_decode-1">url_decode/1</a></h3>
@@ -430,6 +450,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:55.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:58.</i></p>
 </body>
 </html>

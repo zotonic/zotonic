@@ -39,7 +39,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+%% @spec start_link(#context{}) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Context=#context{}) ->
     case os:cmd("which inotifywait") of
@@ -69,13 +69,6 @@ init(Context) ->
     {ok, #state{context=Context, port=start_inotify()}}.
 
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% Description: Handling call messages
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.

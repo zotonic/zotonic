@@ -89,7 +89,7 @@ pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
 
 %% @doc Called when a file is changed on disk. Decides what to do.
-%% @spec file_changed(string()) -> ok
+%% @spec file_changed(modify | create, string()) -> ok
 file_changed(Verb, F) ->
     case file_blacklisted(F) of
         true -> nop;

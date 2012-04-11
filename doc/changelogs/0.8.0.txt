@@ -1,0 +1,422 @@
+Welcome Zotonic 0.8.0, released on April 11, 2012
+
+These are the changes for Zotonic release 0.8.0. The most important
+changes are summarized first, below that is a full "git shortlog" of all
+changes since release 0.7.
+
+
+* New core features:
+
+Module manager: module manager startup stability fixes, module
+dependencies and starting/stopping modules in the correct order.
+
+Status site - the site status got a redesign to be more in line with
+the current zotonic.com site. It now shows a friendly welcome
+message and requires a login to view / manage the running zotonic
+sites.
+
+PostgreSQL - we stabilized the pgsql connection pool in the presence
+of database connection failures and improvoved query timeout
+handling.
+
+The "host" option in a site's config file is now optional. When not
+present it will be derived from the site's directory name.
+
+
+* New / updated modules:
+
+** mod_oembed - Provides an easier way to embed external content into
+   your site, using the OEmbed standard.
+
+** mod_translation - added support for RTL languages like Hebrew and
+   Arabic in the admin interface. Content pages that are translated in
+   multiple languages now have a separate URL for each language
+   version.  Translations of the admin interface were added for Irish,
+   Spanish, Estonian and Polish.
+
+** mod_mailinglist - Improved the mailinglist interface. It is now much
+   easier to track to which list a page has been sent to, to preview
+   the mailing and to view and manage bounced emails.
+
+** mod_development - On Linux, development has been made easier by
+   integrating inotify. Supports on-the-fly compilation of Erlang
+   files, flushing caches, and compiling/minifying
+   LESS/SCSS/Coffeescript.
+
+* Other minor features
+
+** New filter: index_of, which gives the index of an item in a list.
+** filter_random:random/3 - create random sublist with length l.
+** range filter: easily generate lists with integers
+
+
+* Development process
+
+The git master branch switched to using git submodules for the most
+important external dependencies.
+
+Documentation got updated, most source files now have @doc tags which
+are generated and available online at from
+http://zotonic.com/documentation
+
+
+
+* Git shortlog
+
+
+Alain O'Dea (2):
+      Ignore compile output and runtime generated files
+      Enhance PostgreSQL security
+
+Andreas Stenius (27):
+      z_pivot_rsc: Should also update pivot_category_nr when it is null.
+      z_media_identify: Log identify errors.
+      z_email_server: inc_timestamp/2 should increment by minutes.
+      z_config: report config file parse errors, and terminate.
+      site config: improved error reporting and host checks. (for issue #5)
+      z_email_server: refactored the ?DELETE_AFTER define to be a customizable option.
+      mod_backup: lookup db settings from pgsql_pool.
+      m_edge: add set_sequence/4 to control edges.
+      admin action "dialog_new_rsc": trigger custom actions for newly created resources.
+      mod_base/filters/replace_args: new filter (#193).
+      format filter: support filtering binaries. (#251)
+      Windows: Update build.cmd for renamed webmachine -> webzmachine.
+      mod_signup: url's are returned as binaries.
+      Added Michael Connors for his Irish translations.
+      Avoid // in path of found Makefiles.
+      Pull in lager using git:// rather than https.
+      Keep track of row number inside {# ... #}-comments.
+      Fix dialog display issue when not using <html xmlns=...>
+      fix for prev_year from feb 29.
+
+Arjan Scherpenisse (245):
+      Add 'no session' dispatch rule option to prevent starting a session on a page.
+      Add check in zotonic-addsite to see if the given site name is valid.
+      Add distinctive icon for internal link in TinyMCE. Fixes #189
+      Add some cache blocks in case we get HN'd/slashdotted :-)
+      Add z_context:{get,set}_cookie
+      Added +x permission to zotonic-status script.
+      Added .cw (Curaçao) to mod_l10n.
+      Added .empty file for extensions dir
+      Added 2 new translation template files.
+      Added François Cardinaux to contributors, fix docstring.
+      Added PUT and DELETE as accepted methods for API calls.
+      Added a file with the translators per language.
+      Added administration of worker processes to email server.
+      Added application/x-font-woff for webfonts.
+      Added blog section to www.zotonic.com
+      Added commands to enable, disable sites
+      Added date_start_year= and date_end_year= search filters to filter on year of date start/end.
+      Added dutch month/day names to mod_l10n.
+      Added dutch translation for mod_survey; small template tweaks. Fixes #205
+      Added empty _language_attrs.tpl to admin module for when mod_translation is disabled.
+      Added gen_smtp as a submodule.
+      Added l10n_date:monthname_short/2 for short month names.
+      Added lager as logging framework
+      Added missing file
+      Added mod_signal to the default list of installed modules.
+      Added option email_bounce_override to override bounce email address.
+      Added resource_menu_admin_menu again which was removed by accident.
+      Added sass support to mod_development
+      Added spanish translation and install the spanish language by default and enable it.
+      Added support for scanning module .erl files for ?__ syntax.
+      Added support for updating Zotonic and sites over Git in zotonic_status site.
+      Added support for validation error message on radio elements.
+      Added support for varying overview lists in the admin on category.
+      Added the ability to use the resource_api handler for any URL.
+      Added z_utils:percent_encode/1 function.
+      Addressed the issues in the backup module. Fixes #220
+      Admin link dialog: possibility to add a preconfigured list of defaults.
+      Admin: remove tooltip from media attachment to fix dragging images to the right.
+      Again fix the embedding of images in TinyMCE. Fixes #286
+      Allow id to be either number or unique name for resource_admin_edit.
+      Allow modules to override admin TinyMCE options which were originally set in admin-common.js
+      Automatic make of changed .erl files works
+      Bugfixes in m_edge:replace/4.
+      Completely remove cufon from zotonic_status site, remove stats page
+      Deal with spaces in provider name for embed template lookup.
+      Disregard stderr output from identify command. Fixes issue #206
+      Do not use sass caching
+      Enable/disable now starts/stop the site on the node.
+      Export z_pivot_rsc:insert_queue/2, for the delayed pivoting of a single rsc.
+      Export z_session_manager:get_session_id/1.
+      Facebook: Add possibility to redirect to a custom signup failure page.
+      First work on module upgrader.
+      Fix calls to z_sites_dispatcher:update_dispatchinfo/0
+      Fix compilation error in z_toposort
+      Fix custom server header for Zotonic with the new webzmachine.
+      Fix infinite recursion in sub_month/3 filter.
+      Fix stylesheet issues in new hierarchical editor.
+      Fix warnings in m_rsc_update
+      Fixed crash in inotify server of mod_development.
+      Fixed picture rotation detection by tweaking the parser of the output of "exif -m -t Rotation".
+      Fixed quality=xx parameter to {% image %}.
+      Fixed some more admin translations
+      Fixed typo in TinyMCE. See #286
+      Fixed z_utils:tempfile() to respect OS environment variables.
+      Fixes in twitter/facebook for changed z_dispatcher:url_for return value :-/
+      Forgot to use catinclude after media item add in admin.
+      Gave a fresh new look to zotonic_status, similar to Zotonic.com.
+      Generalized group_title_firstchar filter into group_firstchar.
+      Get the persistent id in template using {{ m.persistent.persistent_id }}
+      Greatly improved the mailinglist feedback.
+      Implemented new schema mechanism in all Zotonic modules.
+      Let m_rsc:get_raw/2 return empty list instead of undefined when result is not found
+      Let z_lib_include handle an empty request. Fixes #283
+      Let zotonicwww site also use manage_schema/2.
+      LiveValidation: use the same e-mail regexp as in the backend.
+      Logoff controller now respects 'p' argument.
+      Make bin/zotonic compatible with python 3.x
+      Make the "change category" option better accessible
+      Make windows users happy when redirecting stderr.
+      Make z_form_submit_validated_do more stable using $.each()
+      Makefile - use "find" to locate every Makefile we need, including those behind symlinks.
+      Makefile now inits/updates git submodules if any.
+      Media: classify "application/*" media files as "document".
+      Move webmachine -> webzmachine in its own repository.
+      Moved translation-tabs initialization into mod_translation.
+      New filter: index_of, which gives the index of an item in a list.
+      OAuth: fix request/acces token with POST
+      OEmbed: even better error reporting, and show preview image when creating item.
+      OEmbed: make the gen_server site-dependent; do not crash when getting invalid http request.
+      OEmbed: when adding an oembed video, set the title if it's not set yet.
+      On win32, mime type returned as application/octet for all files.
+      Only show text direction controls in TinyMCE when mod_translation is enabled.
+      Pass all filters into filter2arg function. Fix background removal for JPG images.
+      Prettified the zotonic status commandline script
+      Re-added the option of test-sending a mailinglist page to a single address.
+      Refactored m_media:replace_file_mime_ok to not use a nested transaction in the insert case.
+      Refactored the collecting of dispatch rules.
+      Removed already_sent check from mod_mailinglist, which is not needed since the new interface.
+      Removed gen_smtp in preparation of it being a submodule
+      Removed m_identity:{get,set}_props which were unused and not working.
+      Replaced TinyMCE with latest version. Fixed zmedia plugin.
+      Reworked the way mod_logging notifies the log pages; it now uses mod_signal for inter-page communication.
+      Rsc pivot: fix case where sometimes pivot title would say 'undefined' and refused to update.
+      Show error message when user tries to add the same edge twice.
+      Show language selector on admin media page. Fixes #253
+      Simplify manage_schema/2 module call allowing to return a #datamodel{}.
+      Start sites dispatcher *after* sites manager so we can directly collect dispatch rules in dispatcher's init/1.
+      Support ISO timestamps with time zone (currently ignored)
+      Support for "extensions"; system-wide extra user-defined gen_servers.
+      Support for default value in session get / get_persistent
+      Tooltip Y position is now dependent on its height. Fixes issue #207
+      Twitter and Facebook modules now also use #logon_ready_page observe pattern after successful logon.
+      Updated the zotonic_install script
+      Updated varnish config example to a more recent Varnish version
+      Use catinclude in show_media filter for more versatility
+      Use newer rebar script for iconv.
+      When postgres exists normally, dont print info report.
+      action_admin_dialog_edit_basics: custom action= argument(s)
+      admin: use catinclude for _edit_media template, so it can be overridden.
+      filter_index_of: Removed debug statements
+      lower/upper filters now try to convert their argument to a list if it's not.
+      m_rsc_update emptied the pivot_date_* fields when date_ fields where not part of the update.
+      mod_admin: Made the title of uploaded file optional.
+      mod_admin: Press "enter" now saves the edit page.
+      mod_backup: make sure we have an archive dir before archiving.
+      mod_development - Removed unneeded ensure_server message and commented out trap_exit
+      mod_development - flush cache on dispatch rule change.
+      mod_development - remove debug statement, fix sass syntax
+      mod_development.erl: When detecting new template, flush all cache to make sure it is found.
+      mod_development: Added LESS css on-the-fly compilation.
+      mod_development: when discovering new .tpl in site, flush its cache.
+      mod_facebook: make 'scope' parameter configurable.
+      mod_import_csv: Added import button to admin status page.
+      mod_import_csv: Added more flexible date import and support for publication start/end.
+      mod_import_wordpress tweaks
+      mod_l10n: added ru.po, ru.country.po
+      mod_logging - Fix log message formatting error.
+      mod_mailinglist - added bounce handling dialog.
+      mod_mailinglist - attach documents to the mailing for each 'hasdocument' edge instead of 'document'.
+      mod_mailinglist - fix include reference to mailing footer template.
+      mod_mailinglist: When sending to single address or to bounces, do not send to subscriber_of edges.
+      mod_oauth: do not assume GET
+      mod_oauth: fix API authorization check when using OAuth.
+      mod_oauth: fix for R15B, changed http_uri:parse/1 return format.
+      mod_oauth: fix for accessing public services when authorized
+      mod_oauth: more refactoring; API services defined in site modules now also work.
+      mod_search: Add creator_id and modifier_id to search query options.
+      mod_search: improve the previous/next search function by allowing other dates to be paged on.
+      mod_survey - show a counter column in front of every survey result in the editor.
+      mod_survey - show questions in the right order
+      mod_survey: Added a survey results edit page to the admin.
+      mod_survey: Limit entry of "name" field to 32 chars.
+      mod_survey: Propagate qargs into the survey templates, make possible to add default values to survey
+      mod_survey: made questions configurably required or not.
+      mod_survey: normalize survey question names with z_string:to_name/1 instead of with to_slug/1
+      mod_survey: quick hack to put email validation on a field if you name it 'email'.
+      mod_twitter - use https for streaming API.
+      mod_twitter -- support for login using Twitter, similar to mod_facebook.
+      mod_twitter: Fixed converting unicode -> utf-8 in body text of received tweets.
+      mod_twitter: fix redirecting to ready_page by storing it in the session.
+      mod_twitter: remove invalid {verbose, trace} option.
+      mos_survey: fix chart export when answer name changed for yesno questions.
+      oauth: Added allowed methods for access/request token uris.
+      resource_api: do not start session when not needed.
+      search_query: fix Erlang warning about exported variable.
+      tiny_mce: Fixed the disappearing of inline images. Fixes issue #203.
+      z_convert added ip_to_long/1 and long_to_ip/1.
+      z_convert: fix timezone parsing for formats like 2011-10-06T14:44:00+0200
+      z_convert:to_json/1 now also accepts floating point numbers.
+      z_datamodel: do not try to resolve 'undefined' in valid_for check
+      z_db:ensure_table -- added primary_key attribute for custom primary keys
+      z_filewatcher_inotify - Change timer:send_after to erlang:send_after
+      z_html: do not escape/strip HTML when a property name ends in _html.
+      z_html:escape_props/1 -  Make selecting escape function more safe.
+      z_module_manager: schema upgrades are allowed to return a #datamodel{} now as well.
+      z_session:restart/1 can now take #context{} as argument.
+      zotonic-start: cd to $ZOTONIC before doing make. Fixes #218
+
+Atilla Erdodi (4):
+      support for per property acl settings (note: you need to implement your own acl module. no example provided yet.)
+      page model
+      removed unnecessary info messages
+
+François Cardinaux (1):
+      New filter to escape JSON strings added to mod_base.
+
+Konstantin Nikiforov (7):
+      z_session, m_persistent: move SQL into model, cleanup ugly code
+      added .gitignore
+      z_search: added recursive concat for complex #search_sql{}
+      m_persistent: fixed push()
+      fixed SQL RETURNING behaviour on empty result.
+      filter_random:random/3 - create random sublist with length l.
+      mod_l10n: added ru.po, ru.country.po
+
+Maas (2):
+      Sometimes somebody (e.g. google) uses a smallcaps dtd
+      Added a range filter to easily generate lists with integers. Syntax: 18|range:70 -> [18, 19, .., 70] or 2012|range:1900:'-1' -> [2012, 2011, .., 1900]
+
+Maas-Maarten Zeeman (39):
+      Accidentally removed, generated new template
+      Add facebook graph queries
+      Added admin page for facebook module
+      Added configuration option to increase the maximum number of concurrent connections
+      Added facebook model for fql and graph queries
+      Added if argument for optional caching. Issue #296
+      Added spaceless block to strip whitespace between tags. {% spaceless %}...{% endspaceless %}
+      Also refacted the sort event, again backward compatible
+      Also refactored postback_notify. The refactor is backward compatible for postbacks, but not for notifications. The notification now also contains the trigger and target ids of the elements. This can lead to crashes in code which did not use records for notifications.
+      Apply filter to a block. {% filter upper %}This will {% endfilter %}
+      Backward compatible refactor for drag and drop events
+      Backward compatible refactor. Moved submit and postback to records in order to make things more clear and remove the _TriggerId, _TargetId (or was it vice versa?) code. Todo are drag, drop, postback_notify and sort events.
+      Change to get an object picture via the facebook graph api
+      Changed filenames of translation templates
+      Changed md5 hash for hmac and use base64url encoding so pickles are url friendly
+      Configurable max memory for depcache
+      Copied macro's not needed anymore
+      Couple of wrong renames
+      Fix for a nasty loop caused by heart when things fail. Issue #212
+      Fixed parsing of quoted attributes. They can contain newlines
+      Fixes a race condition in which slots is called before the module is started
+      Fixes an error when closing the dialog
+      Fixes the edit button of acl_simple_roles. Fixes issue #208
+      Format validator converts javascripts re's to pcre re's. Allows unicode re's #242
+      Generated fresh pot files
+      Made the acl_simple_role admin templates translatable
+      Refactor, Introduced with_connection to handle direct pgsql queries easier
+      Refactored facebook code. Now it can do graph posts too
+      Refactored z_service so it works with modules and methods with underscores
+      Removed experimental module
+      Renamed translation template files from en.pot to modulename.pot
+      Store z_notifier observers in ets instead of a dict
+      Support for webm video
+      iolist support for to_lower and to_upper
+      quote_plus is now exported by mochiweb_util, removed copied code
+
+Marc Worrell (136):
+      Add 'action' to the #rsc_update fold nofitication, so we can distinguish an insert from an update.
+      Add alternative urls to the head for translations of the current page.
+      Add http:// before links starting with www.
+      Added 'with' support to value expressions.  Example: {{ a with a=3 }}
+      Added dependencies to modules.     Fixes issue 230.
+      Added download link to media on page.tpl
+      Added ensure_existing_module/1 which checks if a module name can be found (and loaded) as a module.  This without creating a new atom when the module does not exist.
+      Added flattr button
+      Added fold set_user_language, sets the context language to the pref_language of an user.
+      Added freebsd to iconv rebar config. Thanks to Thomas Legg.
+      Added id_exclude search term. With thanks to Michael Connors.
+      Added is_even filter. Thanks to Michael Connors
+      Added new menu/hierarchy sorter. In use for menu and category editors.
+      Added remark about optional host configuration and module dependencies.
+      Added sha1 as filter and javascript.
+      Added some module dependencies. Changes default module dependencies to include module name with the provides and default [base] with the depends.  Refers to issue #230
+      Added support for posting z_notify javascript notifications directly to a delegate module. This calls the event/2 handler in the module (instead of the z_notifier observer).
+      Added tinyMCE plugin for inline text direction editing: zbdo
+      Added url rewrite on dispatch and generation.     Now in use for automatically adding z_language argument to all paths.
+      Added {continue, NewMessage} return format to z_notifier:first/2.
+      Allow binaries for the header values.     Fixes issue #257
+      Allow included template to be a variable, forcing a runtime include.     Fixes issue #256
+      Allow non-atoms as language when setting the context language, ignore lists that aren't languages.
+      Changed http into httpc for R15 compatibility.
+      Changed the rsc_update_done notification to a #rsc_update_done notification record.
+      Changing startup sequence.
+      Check on return value of module activation transaction.     Fixes issue #255.
+      Fix for URLs with only a language code.     Suppress language codes in URL when no languages enabled.     Refers to issue #258.
+      Fix for a problem where the admin overview crashed when no category was given.
+      Fix for detaching m:f with pid when pid is not alive anymore.
+      Fix for do_feedback on a single input element.
+      Fix for loading beam files.
+      Fix for loading modules on the fly.
+      Fix for range requests
+      Fix for saving surname prefix when signing up.
+      Fix for the case where the exif orientation is an empty string.
+      Fix for url encoding values >= 16.  With thanks to Charles Won.
+      Fix for when the to-be-submitted form disappeared during a feedback wait.
+      Fixes #215. Hide the label when there is a value in the overlayed input.
+      Fixes #225.     Filters image tags with references for /admin/media/preview.
+      Fixes for is_required handling of survey.  Make created nullable for a smoother upgrade.
+      Graceful Not Found in missing lib images.
+      Make module startup handle nested upgrades.
+      Make sure that text can be prepended/appended into an existing html element. Fixes #214
+      Making modules more robust. More to follow.
+      Missing argument for string:tokens/2
+      Module manager: Only start modules when their dependencies are running.
+      Monitor webmachine, in case webmachine goes down without telling z_logger.
+      Moved old datamodel/0 to the manage_schema/2.
+      No acl check for is_published and visible_for.
+      Only allow existing and enabled languages as a language prefix.     This fixes issue #258.
+      REST API: Added support for jsonp callbacks
+      Set min height of tree editor, so a drop on an empty menu is possible.
+      Set the language of rendered e-mails to the preferred language of the recipient_id (if any)
+      Stabilizing the database connection pool and sites in the presence of database connection failures.     Refers to issue #269
+      Support for rtl languages. (Arabic and Hebrew)
+      Use bind instead of live - as we run into event bubble problems.
+      admin: Fix for positioning dialogs that are higher than the window height.
+      admin: Fix for unlinking images, result of action was not shown.
+      dispatcher: Fix for creating URLs when a parameter has a regexp pattern.
+      email: Added default values for relay options. Added option smtp_bounce_email_override to override the VERP for all sites.
+      erlydtl: Added {% ifelse ... %} support. fixes #303
+      i18n: Added Farsi (Persian) as right-to-left language.
+      m_media: Fixed problem where uploading a file with a pre-defined category resulted in a duplicate category_id SQL error.
+      m_rsc: Added 'is_import' and 'no_touch' options, this makes it possible to import data from other sites and keep the original created/modified dates.
+      m_rsc: More efficient 'exists' check for rsc records.
+      mod_import_wordpress: Renamed title of module to be more inline with other import modules.
+      mod_menu: Remove invisible menu items when requesting menu_flat or menu_trail. Issue #291
+      tinymce: Updated to 3.4.7
+      to_list/1 shouldn't flatten a list, to_flatlist/1 should.
+      websockets: Added support for hybi17 websocket protocol "13". Thanks to code from Cowboy by Loïc Hoguin
+      z_datetime: Fix for next year on feb 29.
+      z_db: Added automatic retry for deadlocked transactions.
+      z_db: Added optional timeout argument for (most) database functions. Defaults to ?PGSQL_TIMEOUT.  Fixes #301
+      z_depcache: Make the process dict flush safe for proc_lib process dict vars.
+      z_notifier: Allow programmes to send scripts to connected pages.  Allow signals to be a simple atom, for programming simplicity.
+      z_notifier: Documented z_notifier notifications. Translated tuple into records.
+
+Michael Connors (5):
+      Add Month, Day and Country translations in French and Irish
+      Added Irish translation
+      Added date validator to Zotonic.
+
+Paul Guyot (1):
+      z_db: Fix bug where ensure_table generated bad SQL when adding a column with a default value.
+
+Piotr Meyer (10):
+      Added Polish translation
+
+Taavi Talvik (4):
+      Added Estonian translation
+
+

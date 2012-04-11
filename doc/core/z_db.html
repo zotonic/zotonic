@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module z_db</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -21,18 +22,20 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#assert_table_name-1">assert_table_name/1</a></td><td>Check if a name is a valid SQL table name.</td></tr>
 <tr><td valign="top"><a href="#assoc-2">assoc/2</a></td><td>Return property lists of the results of a query on the database in the Context.</td></tr>
 <tr><td valign="top"><a href="#assoc-3">assoc/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#assoc-4">assoc/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_props-2">assoc_props/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_props-3">assoc_props/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#assoc_props-4">assoc_props/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_props_row-2">assoc_props_row/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_props_row-3">assoc_props_row/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_row-2">assoc_row/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#assoc_row-3">assoc_row/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#column_names-2">column_names/2</a></td><td>Return a list with the column names of a table.</td></tr>
 <tr><td valign="top"><a href="#columns-2">columns/2</a></td><td>Return a property list with all columns of the table.</td></tr>
+<tr><td valign="top"><a href="#create_table-3">create_table/3</a></td><td>Ensure that a table with the given columns exists, alter any existing table
+  to add, modify or drop columns.</td></tr>
 <tr><td valign="top"><a href="#delete-3">delete/3</a></td><td>Delete a row from a table, the row must have a column with the name 'id'.</td></tr>
 <tr><td valign="top"><a href="#drop_table-2">drop_table/2</a></td><td>Make sure that a table is dropped, only when the table exists.</td></tr>
-<tr><td valign="top"><a href="#ensure_table-3">ensure_table/3</a></td><td>Ensure that a table with the given columns exists, alter any existing table
-  to add, modify or drop columns.</td></tr>
 <tr><td valign="top"><a href="#equery-2">equery/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#equery-3">equery/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flush-1">flush/1</a></td><td>Flush all cached information about the database.</td></tr>
@@ -44,8 +47,10 @@
 <tr><td valign="top"><a href="#prepare_cols-2">prepare_cols/2</a></td><td>Check if all cols are valid columns in the target table, move unknown properties to the props column (if exists).</td></tr>
 <tr><td valign="top"><a href="#q-2">q/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#q-3">q/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#q-4">q/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#q1-2">q1/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#q1-3">q1/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#q1-4">q1/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#q_row-2">q_row/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#q_row-3">q_row/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#select-3">select/3</a></td><td>Read a row from a table, the row must have a column with the name 'id'.</td></tr>
@@ -62,17 +67,22 @@
 
 <h3 class="function"><a name="assert_table_name-1">assert_table_name/1</a></h3>
 <div class="spec">
-<p><tt>assert_table_name(T::String) -&gt; true</tt></p>
+<p><tt>assert_table_name(T::String) -&gt; true</tt><br></p>
 </div><p>Check if a name is a valid SQL table name. Crashes when invalid</p>
 
 <h3 class="function"><a name="assoc-2">assoc/2</a></h3>
 <div class="spec">
-<p><tt>assoc(Sql::SqlQuery, Context) -&gt; Rows</tt></p>
+<p><tt>assoc(Sql::SqlQuery, Context) -&gt; Rows</tt><br></p>
 </div><p>Return property lists of the results of a query on the database in the Context</p>
 
 <h3 class="function"><a name="assoc-3">assoc/3</a></h3>
 <div class="spec">
 <p><tt>assoc(Sql, Parameters, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="assoc-4">assoc/4</a></h3>
+<div class="spec">
+<p><tt>assoc(Sql, Parameters, Context, Timeout) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="assoc_props-2">assoc_props/2</a></h3>
@@ -83,6 +93,11 @@
 <h3 class="function"><a name="assoc_props-3">assoc_props/3</a></h3>
 <div class="spec">
 <p><tt>assoc_props(Sql, Parameters, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="assoc_props-4">assoc_props/4</a></h3>
+<div class="spec">
+<p><tt>assoc_props(Sql, Parameters, Context, Timeout) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="assoc_props_row-2">assoc_props_row/2</a></h3>
@@ -107,30 +122,30 @@
 
 <h3 class="function"><a name="column_names-2">column_names/2</a></h3>
 <div class="spec">
-<p><tt>column_names(Table, Context) -&gt; [atom()]</tt></p>
+<p><tt>column_names(Table, Context) -&gt; [atom()]</tt><br></p>
 </div><p>Return a list with the column names of a table.  The names are sorted.</p>
 
 <h3 class="function"><a name="columns-2">columns/2</a></h3>
 <div class="spec">
-<p><tt>columns(Table, Context) -&gt; [#column_def{}]</tt></p>
+<p><tt>columns(Table, Context) -&gt; [#column_def{}]</tt><br></p>
 </div><p>Return a property list with all columns of the table. (example: [{id,int4,modifier},...])</p>
+
+<h3 class="function"><a name="create_table-3">create_table/3</a></h3>
+<div class="spec">
+<p><tt>create_table(Table, Cols, Context) -&gt; any()</tt></p>
+</div><p>Ensure that a table with the given columns exists, alter any existing table
+  to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
+  when creating the table.</p>
 
 <h3 class="function"><a name="delete-3">delete/3</a></h3>
 <div class="spec">
-<p><tt>delete(Table, Id, Context) -&gt; {ok, RowsDeleted}</tt></p>
+<p><tt>delete(Table, Id, Context) -&gt; {ok, RowsDeleted}</tt><br></p>
 </div><p>Delete a row from a table, the row must have a column with the name 'id'</p>
 
 <h3 class="function"><a name="drop_table-2">drop_table/2</a></h3>
 <div class="spec">
 <p><tt>drop_table(Name, Context) -&gt; any()</tt></p>
 </div><p>Make sure that a table is dropped, only when the table exists</p>
-
-<h3 class="function"><a name="ensure_table-3">ensure_table/3</a></h3>
-<div class="spec">
-<p><tt>ensure_table(Table, Cols, Context) -&gt; any()</tt></p>
-</div><p>Ensure that a table with the given columns exists, alter any existing table
-  to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
-  when creating the table.</p>
 
 <h3 class="function"><a name="equery-2">equery/2</a></h3>
 <div class="spec">
@@ -164,12 +179,12 @@
 
 <h3 class="function"><a name="insert-2">insert/2</a></h3>
 <div class="spec">
-<p><tt>insert(Table, Context) -&gt; {ok, Id}</tt></p>
+<p><tt>insert(Table, Context) -&gt; {ok, Id}</tt><br></p>
 </div><p>Insert a new row in a table, use only default values.</p>
 
 <h3 class="function"><a name="insert-3">insert/3</a></h3>
 <div class="spec">
-<p><tt>insert(Table::atom(), Props::<a href="#type-proplist">proplist()</a>, Context) -&gt; {ok, Id} | Error</tt></p>
+<p><tt>insert(Table::atom(), Props::<a href="#type-proplist">proplist()</a>, Context) -&gt; {ok, Id} | Error</tt><br></p>
 </div><p>Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
   When the table has an 'id' column then the new id is returned.</p>
 
@@ -188,6 +203,11 @@
 <p><tt>q(Sql, Parameters, Context) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="q-4">q/4</a></h3>
+<div class="spec">
+<p><tt>q(Sql, Parameters, Context, Timeout) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="q1-2">q1/2</a></h3>
 <div class="spec">
 <p><tt>q1(Sql, Context) -&gt; any()</tt></p>
@@ -196,6 +216,11 @@
 <h3 class="function"><a name="q1-3">q1/3</a></h3>
 <div class="spec">
 <p><tt>q1(Sql, Parameters, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="q1-4">q1/4</a></h3>
+<div class="spec">
+<p><tt>q1(Sql, Parameters, Context, Timeout) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="q_row-2">q_row/2</a></h3>
@@ -210,7 +235,7 @@
 
 <h3 class="function"><a name="select-3">select/3</a></h3>
 <div class="spec">
-<p><tt>select(Table, Id, Context) -&gt; {ok, Row}</tt></p>
+<p><tt>select(Table, Id, Context) -&gt; {ok, Row}</tt><br></p>
 </div><p>Read a row from a table, the row must have a column with the name 'id'.
   The props column contents is merged with the other properties returned.</p>
 
@@ -221,12 +246,12 @@
 
 <h3 class="function"><a name="table_exists-2">table_exists/2</a></h3>
 <div class="spec">
-<p><tt>table_exists(Table::TableName, Context) -&gt; bool()</tt></p>
+<p><tt>table_exists(Table::TableName, Context) -&gt; bool()</tt><br></p>
 </div><p>Check the information schema if a certain table exists in the context database.</p>
 
 <h3 class="function"><a name="transaction-2">transaction/2</a></h3>
 <div class="spec">
-<p><tt>transaction(Function, Context) -&gt; FunctionResult | {error, Reason}</tt></p>
+<p><tt>transaction(Function, Context) -&gt; FunctionResult | {error, Reason}</tt><br></p>
 </div><p>Perform a function inside a transaction, do a rollback on exceptions</p>
 
 <h3 class="function"><a name="transaction-3">transaction/3</a></h3>
@@ -241,16 +266,16 @@
 
 <h3 class="function"><a name="update-4">update/4</a></h3>
 <div class="spec">
-<p><tt>update(Table, Id, Parameters, Context) -&gt; {ok, RowsUpdated}</tt></p>
+<p><tt>update(Table, Id, Parameters, Context) -&gt; {ok, RowsUpdated}</tt><br></p>
 </div><p>Update a row in a table, merging the props list with any new props values</p>
 
 <h3 class="function"><a name="update_sequence-3">update_sequence/3</a></h3>
 <div class="spec">
-<p><tt>update_sequence(Table, Ids::IdList, Context) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>update_sequence(Table, Ids::IdList, Context) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:55.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:58.</i></p>
 </body>
 </html>

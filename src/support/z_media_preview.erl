@@ -199,7 +199,7 @@ out_mime(_Mime, Options) ->
 	end.
 
 
-%% @spec filter2arg(Filter, Width, Height) -> {NewWidth, NewHeight, Filter::string}
+%% @spec filter2arg(Filter, Width, Height, AllFilters) -> {NewWidth, NewHeight, Filter::string}
 %% @doc Map filters to an ImageMagick argument
 filter2arg({make_image, "application/pdf"}, Width, Height, _AllFilters) ->
     RArg = ["-resize ", integer_to_list(Width),$x,integer_to_list(Height)],

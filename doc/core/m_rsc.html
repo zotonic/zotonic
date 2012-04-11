@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module m_rsc</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -65,12 +66,12 @@
 
 <h3 class="function"><a name="delete-2">delete/2</a></h3>
 <div class="spec">
-<p><tt>delete(Id::Props, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>delete(Id::Props, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Delete a resource</p>
 
 <h3 class="function"><a name="duplicate-3">duplicate/3</a></h3>
 <div class="spec">
-<p><tt>duplicate(Id, Props, Context) -&gt; {ok, NewId} | {error, Reason}</tt></p>
+<p><tt>duplicate(Id, Props, Context) -&gt; {ok, NewId} | {error, Reason}</tt><br></p>
 </div><p>Duplicate a resource.</p>
 
 <h3 class="function"><a name="exists-2">exists/2</a></h3>
@@ -80,12 +81,12 @@
 
 <h3 class="function"><a name="get-2">get/2</a></h3>
 <div class="spec">
-<p><tt>get(Id, Context) -&gt; PropList | undefined</tt></p>
+<p><tt>get(Id, Context) -&gt; PropList | undefined</tt><br></p>
 </div><p>Read a whole resource</p>
 
 <h3 class="function"><a name="get_acl_props-2">get_acl_props/2</a></h3>
 <div class="spec">
-<p><tt>get_acl_props(Id, Context::#context{}) -&gt; #acl_props{}</tt></p>
+<p><tt>get_acl_props(Id, Context::#context{}) -&gt; #acl_props{}</tt><br></p>
 </div><p>Get the ACL fields for the resource with the id. The id must be an integer</p>
 
 <h3 class="function"><a name="get_raw-2">get_raw/2</a></h3>
@@ -95,22 +96,22 @@
 
 <h3 class="function"><a name="insert-2">insert/2</a></h3>
 <div class="spec">
-<p><tt>insert(Props, Context) -&gt; {ok, Id} | {error, Reason}</tt></p>
+<p><tt>insert(Props, Context) -&gt; {ok, Id} | {error, Reason}</tt><br></p>
 </div><p>Insert a new resource</p>
 
 <h3 class="function"><a name="is_a-2">is_a/2</a></h3>
 <div class="spec">
-<p><tt>is_a(Id::<a href="#type-int">int()</a>, Context) -&gt; list()</tt></p>
+<p><tt>is_a(Id::<a href="#type-int">int()</a>, Context) -&gt; list()</tt><br></p>
 </div><p>Return the categories and the inherited categories of the resource. Returns a list with category atoms</p>
 
 <h3 class="function"><a name="is_a-3">is_a/3</a></h3>
 <div class="spec">
-<p><tt>is_a(Id::<a href="#type-int">int()</a>, Cat::atom(), Context) -&gt; bool()</tt></p>
+<p><tt>is_a(Id::<a href="#type-int">int()</a>, Cat::atom(), Context) -&gt; bool()</tt><br></p>
 </div><p>Check if the resource is in a categorie.</p>
 
 <h3 class="function"><a name="is_a_id-2">is_a_id/2</a></h3>
 <div class="spec">
-<p><tt>is_a_id(Id::<a href="#type-int">int()</a>, Context) -&gt; list()</tt></p>
+<p><tt>is_a_id(Id::<a href="#type-int">int()</a>, Context) -&gt; list()</tt><br></p>
 </div><p>Return the categories and the inherited categories of the resource. Returns a list with category ids</p>
 
 <h3 class="function"><a name="is_cat-3">is_cat/3</a></h3>
@@ -140,17 +141,17 @@
 
 <h3 class="function"><a name="m_find_value-3">m_find_value/3</a></h3>
 <div class="spec">
-<p><tt>m_find_value(Id::Key, M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_find_value(Id::Key, M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Fetch the value for the key from a model source</p>
 
 <h3 class="function"><a name="m_to_list-2">m_to_list/2</a></h3>
 <div class="spec">
-<p><tt>m_to_list(M::Source, Context) -&gt; List</tt></p>
+<p><tt>m_to_list(M::Source, Context) -&gt; List</tt><br></p>
 </div><p>Transform a m_config value to a list, used for template loops</p>
 
 <h3 class="function"><a name="m_value-2">m_value/2</a></h3>
 <div class="spec">
-<p><tt>m_value(M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_value(M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Transform a model value so that it can be formatted or piped through filters</p>
 
 <h3 class="function"><a name="media-2">media/2</a></h3>
@@ -166,7 +167,7 @@
 
 <h3 class="function"><a name="name_to_id-2">name_to_id/2</a></h3>
 <div class="spec">
-<p><tt>name_to_id(Name::NameString, Context) -&gt; {ok, <a href="#type-int">int()</a>} | {error, Reason}</tt></p>
+<p><tt>name_to_id(Name::NameString, Context) -&gt; {ok, <a href="#type-int">int()</a>} | {error, Reason}</tt><br></p>
 </div><p>Return the id of the resource with the name</p>
 
 <h3 class="function"><a name="name_to_id_cat-3">name_to_id_cat/3</a></h3>
@@ -258,14 +259,14 @@
 
 <h3 class="function"><a name="touch-2">touch/2</a></h3>
 <div class="spec">
-<p><tt>touch(Id, Context) -&gt; {ok, Id} | {error, Reason}</tt></p>
+<p><tt>touch(Id, Context) -&gt; {ok, Id} | {error, Reason}</tt><br></p>
 </div><p>"Touch" the rsc, incrementing the version nr and the modification date/ modifier_id.
   This should be called as part of another update or transaction and does not resync the caches,
   and does not check the ACL.  After "touching" the resource will be re-pivoted.</p>
 
 <h3 class="function"><a name="update-3">update/3</a></h3>
 <div class="spec">
-<p><tt>update(Id, Props, Context) -&gt; {ok, Id} | {error, Reason}</tt></p>
+<p><tt>update(Id, Props, Context) -&gt; {ok, Id} | {error, Reason}</tt><br></p>
 </div><p>Update a resource</p>
 
 <h3 class="function"><a name="uri_lookup-2">uri_lookup/2</a></h3>
@@ -276,6 +277,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:56.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:59.</i></p>
 </body>
 </html>

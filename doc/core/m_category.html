@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module m_category</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -80,20 +81,18 @@
 
 <h3 class="function"><a name="boundaries-2">boundaries/2</a></h3>
 <div class="spec">
-<p><tt>boundaries(CatId::Id, Context::C) -&gt; {Left, Right}</tt></p>
+<p><tt>boundaries(CatId::Id, Context::C) -&gt; {Left, Right}</tt><br></p>
 </div>
 
 <h3 class="function"><a name="delete-3">delete/3</a></h3>
 <div class="spec">
-<p><tt>delete(Id::<a href="#type-int">int()</a>, TransferId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>delete(Id::<a href="#type-int">int()</a>, TransferId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Delete the category, move referring pages to another category. Fails when the transfer id is not a category.</p>
 
 <h3 class="function"><a name="enumerate-1">enumerate/1</a></h3>
 <div class="spec">
 <p><tt>enumerate(Cats::[Cat]) -&gt; [Sort]</tt>
-<ul class="definitions"><li><tt>Cat = {CatId, Parent, NodeSeq}</tt></li>
-<li><tt>Sort = {CatId, Nr, Level, Left, Right, Path}</tt></li>
-</ul></p>
+<ul class="definitions"><li><tt>Cat = {CatId, Parent, NodeSeq}</tt></li><li><tt>Sort = {CatId, Nr, Level, Left, Right, Path}</tt></li></ul></p>
 </div><p>Take a category list and make it into a tree, recalculating the left/right and lvl nrs</p>
 
 <h3 class="function"><a name="get-2">get/2</a></h3>
@@ -118,7 +117,7 @@
 
 <h3 class="function"><a name="get_path-2">get_path/2</a></h3>
 <div class="spec">
-<p><tt>get_path(Id, Context) -&gt; [CatId]</tt></p>
+<p><tt>get_path(Id, Context) -&gt; [CatId]</tt><br></p>
 </div><p>Return the path from a root to the category (excluding the category itself)</p>
 
 <h3 class="function"><a name="get_range-2">get_range/2</a></h3>
@@ -153,32 +152,32 @@
 
 <h3 class="function"><a name="is_a-2">is_a/2</a></h3>
 <div class="spec">
-<p><tt>is_a(Id::<a href="#type-int">int()</a>, Context) -&gt; <a href="#type-atomlist">atomlist()</a></tt></p>
+<p><tt>is_a(Id::<a href="#type-int">int()</a>, Context) -&gt; <a href="#type-atomlist">atomlist()</a></tt><br></p>
 </div><p>Return the list of categories (as atoms) that the category is part of</p>
 
 <h3 class="function"><a name="is_a-3">is_a/3</a></h3>
 <div class="spec">
-<p><tt>is_a(Id::<a href="#type-int">int()</a>, Cat, Context) -&gt; <a href="#type-atomlist">atomlist()</a></tt></p>
+<p><tt>is_a(Id::<a href="#type-int">int()</a>, Cat, Context) -&gt; <a href="#type-atomlist">atomlist()</a></tt><br></p>
 </div><p>Check if the id is within another category.</p>
 
 <h3 class="function"><a name="last_modified-2">last_modified/2</a></h3>
 <div class="spec">
-<p><tt>last_modified(Cat::term(), Context) -&gt; {ok, {{Y, M, D}, {Hour, Min, Sec}}} | {error, Reason}</tt></p>
+<p><tt>last_modified(Cat::term(), Context) -&gt; {ok, {{Y, M, D}, {Hour, Min, Sec}}} | {error, Reason}</tt><br></p>
 </div><p>Return the last modification date of the category. Returns false</p>
 
 <h3 class="function"><a name="m_find_value-3">m_find_value/3</a></h3>
 <div class="spec">
-<p><tt>m_find_value(Index::Key, M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_find_value(Index::Key, M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Fetch the value for the key from a model source</p>
 
 <h3 class="function"><a name="m_to_list-2">m_to_list/2</a></h3>
 <div class="spec">
-<p><tt>m_to_list(M::Source, Context) -&gt; List</tt></p>
+<p><tt>m_to_list(M::Source, Context) -&gt; List</tt><br></p>
 </div><p>Transform a m_config value to a list, used for template loops</p>
 
 <h3 class="function"><a name="m_value-2">m_value/2</a></h3>
 <div class="spec">
-<p><tt>m_value(M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_value(M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Transform a model value so that it can be formatted or piped through filters</p>
 
 <h3 class="function"><a name="menu-1">menu/1</a></h3>
@@ -193,18 +192,18 @@
 
 <h3 class="function"><a name="move_before-3">move_before/3</a></h3>
 <div class="spec">
-<p><tt>move_before(CatId::<a href="#type-int">int()</a>, BeforeCatId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>move_before(CatId::<a href="#type-int">int()</a>, BeforeCatId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Move a category in front of another category, resetting the parent of the moved category to
   the parent of the other category.</p>
 
 <h3 class="function"><a name="move_below-3">move_below/3</a></h3>
 <div class="spec">
-<p><tt>move_below(CatId::<a href="#type-int">int()</a>, NewParentId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>move_below(CatId::<a href="#type-int">int()</a>, NewParentId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Move the category below another category, placing it at the end of the children of that category.</p>
 
 <h3 class="function"><a name="move_end-2">move_end/2</a></h3>
 <div class="spec">
-<p><tt>move_end(CatId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>move_end(CatId::<a href="#type-int">int()</a>, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Move the category to the end of all categories, making it a top category in the process</p>
 
 <h3 class="function"><a name="name_to_id-2">name_to_id/2</a></h3>
@@ -219,12 +218,12 @@
 
 <h3 class="function"><a name="ranges-2">ranges/2</a></h3>
 <div class="spec">
-<p><tt>ranges(Cat::CatList, Context) -&gt; RangeList</tt></p>
+<p><tt>ranges(Cat::CatList, Context) -&gt; RangeList</tt><br></p>
 </div><p>Given a list of category ids, return the list of numeric ranges they cover.</p>
 
 <h3 class="function"><a name="renumber-1">renumber/1</a></h3>
 <div class="spec">
-<p><tt>renumber(Context) -&gt; ok</tt></p>
+<p><tt>renumber(Context) -&gt; ok</tt><br></p>
 </div><p>Renumber all categories so that the left/right and level indices are correct.</p>
 
 <h3 class="function"><a name="renumber_pivot_task-1">renumber_pivot_task/1</a></h3>
@@ -234,22 +233,22 @@
 
 <h3 class="function"><a name="tree-1">tree/1</a></h3>
 <div class="spec">
-<p><tt>tree(Context) -&gt; Tree</tt></p>
+<p><tt>tree(Context) -&gt; Tree</tt><br></p>
 </div><p>Return the tree of all categories</p>
 
 <h3 class="function"><a name="tree-2">tree/2</a></h3>
 <div class="spec">
-<p><tt>tree(CatId, Context) -&gt; TreeNode</tt></p>
+<p><tt>tree(CatId, Context) -&gt; TreeNode</tt><br></p>
 </div><p>Return the tree of all categories below a category id</p>
 
 <h3 class="function"><a name="tree_depth-2">tree_depth/2</a></h3>
 <div class="spec">
-<p><tt>tree_depth(Depth, Context) -&gt; Tree</tt></p>
+<p><tt>tree_depth(Depth, Context) -&gt; Tree</tt><br></p>
 </div><p>Return the tree of all categories till a certain depth</p>
 
 <h3 class="function"><a name="tree_depth-3">tree_depth/3</a></h3>
 <div class="spec">
-<p><tt>tree_depth(CatId, Depth, Context) -&gt; TreeNode</tt></p>
+<p><tt>tree_depth(CatId, Depth, Context) -&gt; TreeNode</tt><br></p>
 </div><p>Return the tree of all categories below a category id till a certain depth</p>
 
 <h3 class="function"><a name="update_sequence-2">update_sequence/2</a></h3>
@@ -259,6 +258,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:56.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:59.</i></p>
 </body>
 </html>

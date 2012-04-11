@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module z_module_manager</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -10,7 +11,7 @@
 
 <h1>Module z_module_manager</h1>
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Module supervisor.
-<p>Copyright © 2009-2010 Marc Worrell
+<p>Copyright © 2009-2011 Marc Worrell
   Date: 2009-06-03</p>
 
 <p><b>Behaviours:</b> <a href="gen_server.html"><tt>gen_server</tt></a>.</p>
@@ -25,8 +26,11 @@
 <tr><td valign="top"><a href="#all-1">all/1</a></td><td>Return the list of all modules in the database.</td></tr>
 <tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Convert process state when code is changed.</td></tr>
 <tr><td valign="top"><a href="#deactivate-2">deactivate/2</a></td><td>Deactivate a module.</td></tr>
+<tr><td valign="top"><a href="#dependencies-1">dependencies/1</a></td><td>Return a module's dependencies as a tuple usable for z_toposort:sort/1.</td></tr>
+<tr><td valign="top"><a href="#dependency_sort-1">dependency_sort/1</a></td><td>Sort all modules on their dependencies (with sub sort the module's priority).</td></tr>
 <tr><td valign="top"><a href="#get_modules-1">get_modules/1</a></td><td>Return the list of all modules running.</td></tr>
 <tr><td valign="top"><a href="#get_modules_status-1">get_modules_status/1</a></td><td>Return the status of all running modules.</td></tr>
+<tr><td valign="top"><a href="#get_provided-1">get_provided/1</a></td><td>Return the list of all provided functionalities in running modules.</td></tr>
 <tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Return a list of all enabled modules managed by the z_supervisor.</td></tr>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Sync enabled modules with loaded modules.</td></tr>
 <tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handling all non call/cast messages.</td></tr>
@@ -37,6 +41,7 @@
 <tr><td valign="top"><a href="#restart-2">restart/2</a></td><td>Shortcut, restart a module by deactivating and reactivating the module.</td></tr>
 <tr><td valign="top"><a href="#scan-1">scan/1</a></td><td>Scan for a list of modules present in the site's module directories.</td></tr>
 <tr><td valign="top"><a href="#start_link-1">start_link/1</a></td><td>Starts the module manager.</td></tr>
+<tr><td valign="top"><a href="#startable-2">startable/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>This function is called by a gen_server when it is about to
   terminate.</td></tr>
 <tr><td valign="top"><a href="#title-1">title/1</a></td><td>Get the title of a module.</td></tr>
@@ -48,39 +53,49 @@
 
 <h3 class="function"><a name="activate-2">activate/2</a></h3>
 <div class="spec">
-<p><tt>activate(Module, Context::#context{}) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>activate(Module, Context::#context{}) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>Activate a module. The module is marked as active and started as a child of the module z_supervisor.
   The module manager can be checked later to see if the module started or not.</p>
 
 <h3 class="function"><a name="active-1">active/1</a></h3>
 <div class="spec">
-<p><tt>active(Context::#context{}) -&gt; [atom()]</tt></p>
+<p><tt>active(Context::#context{}) -&gt; [atom()]</tt><br></p>
 </div><p>Return the list of active modules.</p>
 
 <h3 class="function"><a name="active-2">active/2</a></h3>
 <div class="spec">
-<p><tt>active(Module::atom(), Context::#context{}) -&gt; [atom()]</tt></p>
+<p><tt>active(Module::atom(), Context::#context{}) -&gt; [atom()]</tt><br></p>
 </div><p>Return whether a specific module is active.</p>
 
 <h3 class="function"><a name="active_dir-1">active_dir/1</a></h3>
 <div class="spec">
-<p><tt>active_dir(Context::#context{}) -&gt; [{atom, Dir}]</tt></p>
+<p><tt>active_dir(Context::#context{}) -&gt; [{atom, Dir}]</tt><br></p>
 </div><p>Return the list of all active modules and their directories</p>
 
 <h3 class="function"><a name="all-1">all/1</a></h3>
 <div class="spec">
-<p><tt>all(Context::#context{}) -&gt; [atom()]</tt></p>
+<p><tt>all(Context::#context{}) -&gt; [atom()]</tt><br></p>
 </div><p>Return the list of all modules in the database.</p>
 
 <h3 class="function"><a name="code_change-3">code_change/3</a></h3>
 <div class="spec">
-<p><tt>code_change(OldVsn, State, Extra) -&gt; {ok, NewState}</tt></p>
+<p><tt>code_change(OldVsn, State, Extra) -&gt; {ok, NewState}</tt><br></p>
 </div><p>Convert process state when code is changed</p>
 
 <h3 class="function"><a name="deactivate-2">deactivate/2</a></h3>
 <div class="spec">
-<p><tt>deactivate(Module, Context::#context{}) -&gt; ok</tt></p>
+<p><tt>deactivate(Module, Context::#context{}) -&gt; ok</tt><br></p>
 </div><p>Deactivate a module. The module is marked as deactivated and stopped when it was running.</p>
+
+<h3 class="function"><a name="dependencies-1">dependencies/1</a></h3>
+<div class="spec">
+<p><tt>dependencies(M) -&gt; any()</tt></p>
+</div><p>Return a module's dependencies as a tuple usable for z_toposort:sort/1.</p>
+
+<h3 class="function"><a name="dependency_sort-1">dependency_sort/1</a></h3>
+<div class="spec">
+<p><tt>dependency_sort(Context) -&gt; any()</tt></p>
+</div><p>Sort all modules on their dependencies (with sub sort the module's priority)</p>
 
 <h3 class="function"><a name="get_modules-1">get_modules/1</a></h3>
 <div class="spec">
@@ -92,24 +107,29 @@
 <p><tt>get_modules_status(Context) -&gt; any()</tt></p>
 </div><p>Return the status of all running modules.</p>
 
+<h3 class="function"><a name="get_provided-1">get_provided/1</a></h3>
+<div class="spec">
+<p><tt>get_provided(Context) -&gt; any()</tt></p>
+</div><p>Return the list of all provided functionalities in running modules.</p>
+
 <h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
 <div class="spec">
-<p><tt>handle_call(Message::Request, From, State) -&gt; {reply, Reply, State} | {reply, Reply, State, Timeout} | {noreply, State} | {noreply, State, Timeout} | {stop, Reason, Reply, State} | {stop, Reason, State}</tt></p>
+<p><tt>handle_call(Message::Request, From, State) -&gt; {reply, Reply, State} | {reply, Reply, State, Timeout} | {noreply, State} | {noreply, State, Timeout} | {stop, Reason, Reply, State} | {stop, Reason, State}</tt><br></p>
 </div><p>Return a list of all enabled modules managed by the z_supervisor</p>
 
 <h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
 <div class="spec">
-<p><tt>handle_cast(Message::Msg, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt></p>
+<p><tt>handle_cast(Message::Msg, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt><br></p>
 </div><p>Sync enabled modules with loaded modules</p>
 
 <h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
 <div class="spec">
-<p><tt>handle_info(Info, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt></p>
+<p><tt>handle_info(Info, State) -&gt; {noreply, State} | {noreply, State, Timeout} | {stop, Reason, State}</tt><br></p>
 </div><p>Handling all non call/cast messages</p>
 
 <h3 class="function"><a name="init-1">init/1</a></h3>
 <div class="spec">
-<p><tt>init(Args) -&gt; {ok, State} | {ok, State, Timeout} | ignore | {stop, Reason}</tt></p>
+<p><tt>init(Args) -&gt; {ok, State} | {ok, State, Timeout} | ignore | {stop, Reason}</tt><br></p>
 </div><p>Initiates the server.</p>
 
 <h3 class="function"><a name="module_exists-1">module_exists/1</a></h3>
@@ -119,13 +139,13 @@
 
 <h3 class="function"><a name="prio-1">prio/1</a></h3>
 <div class="spec">
-<p><tt>prio(Module) -&gt; integer()</tt></p>
+<p><tt>prio(Module) -&gt; integer()</tt><br></p>
 </div><p>Return the priority of a module. Default priority is 500, lower is higher priority.
   Never crash on a missing module.</p>
 
 <h3 class="function"><a name="prio_sort-1">prio_sort/1</a></h3>
 <div class="spec">
-<p><tt>prio_sort(ModuleProps::<a href="#type-proplist">proplist()</a>) -&gt; <a href="#type-proplist">proplist()</a></tt></p>
+<p><tt>prio_sort(ModuleProps::<a href="#type-proplist">proplist()</a>) -&gt; <a href="#type-proplist">proplist()</a></tt><br></p>
 </div><p>Sort the results of a scan on module priority first, module name next.
   The list is made up of {module, Values} tuples</p>
 
@@ -136,18 +156,23 @@
 
 <h3 class="function"><a name="scan-1">scan/1</a></h3>
 <div class="spec">
-<p><tt>scan(Context::#context{}) -&gt; [{atom(), <a href="#type-dirname">dirname()</a>}]</tt></p>
+<p><tt>scan(Context::#context{}) -&gt; [{atom(), <a href="#type-dirname">dirname()</a>}]</tt><br></p>
 </div><p>Scan for a list of modules present in the site's module directories. A module is always a directory,
   the name of the directory is the same as the name of the module.</p>
 
 <h3 class="function"><a name="start_link-1">start_link/1</a></h3>
 <div class="spec">
-<p><tt>start_link(SiteProps::<a href="#type-proplist">proplist()</a>) -&gt; {ok, Pid} | ignore | {error, Error}</tt></p>
+<p><tt>start_link(SiteProps::<a href="#type-proplist">proplist()</a>) -&gt; {ok, Pid} | ignore | {error, Error}</tt><br></p>
 </div><p>Starts the module manager</p>
+
+<h3 class="function"><a name="startable-2">startable/2</a></h3>
+<div class="spec">
+<p><tt>startable(M, Context) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="terminate-2">terminate/2</a></h3>
 <div class="spec">
-<p><tt>terminate(Reason, State) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>terminate(Reason, State) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>This function is called by a gen_server when it is about to
   terminate. It should be the opposite of Module:init/1 and do any necessary
   cleaning up. When it returns, the gen_server terminates with Reason.
@@ -160,7 +185,7 @@
 
 <h3 class="function"><a name="upgrade-1">upgrade/1</a></h3>
 <div class="spec">
-<p><tt>upgrade(Context::#context{}) -&gt; ok</tt></p>
+<p><tt>upgrade(Context::#context{}) -&gt; ok</tt><br></p>
 </div><p>Reload the list of all modules, add processes if necessary.</p>
 
 <h3 class="function"><a name="whereis-2">whereis/2</a></h3>
@@ -170,6 +195,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:56.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:58.</i></p>
 </body>
 </html>

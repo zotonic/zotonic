@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module m_edge</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -40,6 +41,7 @@
 <tr><td valign="top"><a href="#get_id-4">get_id/4</a></td><td>Get the edge id of a subject/pred/object combination.</td></tr>
 <tr><td valign="top"><a href="#get_triple-2">get_triple/2</a></td><td>Get the edge as a triple {subject_id, predicate, object_id}.</td></tr>
 <tr><td valign="top"><a href="#insert-4">insert/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#insert-5">insert/5</a></td><td></td></tr>
 <tr><td valign="top"><a href="#m_find_value-3">m_find_value/3</a></td><td>Fetch all object/edge ids for a subject/predicate.</td></tr>
 <tr><td valign="top"><a href="#m_to_list-2">m_to_list/2</a></td><td>Transform a m_config value to a list, used for template loops.</td></tr>
 <tr><td valign="top"><a href="#m_value-2">m_value/2</a></td><td>Transform a model value so that it can be formatted or piped through filters.</td></tr>
@@ -50,6 +52,7 @@
 <tr><td valign="top"><a href="#objects-2">objects/2</a></td><td>Return all object ids of the resource.</td></tr>
 <tr><td valign="top"><a href="#objects-3">objects/3</a></td><td>Return all object ids of an id with a certain predicate.</td></tr>
 <tr><td valign="top"><a href="#replace-4">replace/4</a></td><td>Replace the objects with the new list.</td></tr>
+<tr><td valign="top"><a href="#set_sequence-4">set_sequence/4</a></td><td>Set edges order so that the specified object ids are in given order.</td></tr>
 <tr><td valign="top"><a href="#subject-4">subject/4</a></td><td>Return the Nth subject with a certaing predicate of an object.</td></tr>
 <tr><td valign="top"><a href="#subject_edge_ids-3">subject_edge_ids/3</a></td><td>Return all subject ids with the edge id for a predicate/object_id.</td></tr>
 <tr><td valign="top"><a href="#subject_predicate_ids-2">subject_predicate_ids/2</a></td><td>Return the list of predicates is use by edges from subjects to the id.</td></tr>
@@ -105,22 +108,27 @@
 
 <h3 class="function"><a name="insert-4">insert/4</a></h3>
 <div class="spec">
-<p><tt>insert(SubjectId, PredId, ObjectId, Context) -&gt; any()</tt></p>
+<p><tt>insert(SubjectId, Pred, ObjectId, Context) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="insert-5">insert/5</a></h3>
+<div class="spec">
+<p><tt>insert(SubjectId, PredId, ObjectId, Opts, Context) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="m_find_value-3">m_find_value/3</a></h3>
 <div class="spec">
-<p><tt>m_find_value(Key, M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_find_value(Key, M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Fetch all object/edge ids for a subject/predicate</p>
 
 <h3 class="function"><a name="m_to_list-2">m_to_list/2</a></h3>
 <div class="spec">
-<p><tt>m_to_list(M::Source, Context) -&gt; List</tt></p>
+<p><tt>m_to_list(M::Source, Context) -&gt; List</tt><br></p>
 </div><p>Transform a m_config value to a list, used for template loops</p>
 
 <h3 class="function"><a name="m_value-2">m_value/2</a></h3>
 <div class="spec">
-<p><tt>m_value(M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_value(M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Transform a model value so that it can be formatted or piped through filters</p>
 
 <h3 class="function"><a name="object-4">object/4</a></h3>
@@ -130,33 +138,39 @@
 
 <h3 class="function"><a name="object_edge_ids-3">object_edge_ids/3</a></h3>
 <div class="spec">
-<p><tt>object_edge_ids(Id, Predicate, Context) -&gt; list()</tt></p>
+<p><tt>object_edge_ids(Id, Predicate, Context) -&gt; list()</tt><br></p>
 </div><p>Return all object ids with the edge id for a predicate/subject_id</p>
 
 <h3 class="function"><a name="object_predicate_ids-2">object_predicate_ids/2</a></h3>
 <div class="spec">
-<p><tt>object_predicate_ids(Id, Context) -&gt; List</tt></p>
+<p><tt>object_predicate_ids(Id, Context) -&gt; List</tt><br></p>
 </div><p>Return the list of predicate ids in use by edges to objects from the id</p>
 
 <h3 class="function"><a name="object_predicates-2">object_predicates/2</a></h3>
 <div class="spec">
-<p><tt>object_predicates(Id, Context) -&gt; List</tt></p>
+<p><tt>object_predicates(Id, Context) -&gt; List</tt><br></p>
 </div><p>Return the list of predicates in use by edges to objects from the id</p>
 
 <h3 class="function"><a name="objects-2">objects/2</a></h3>
 <div class="spec">
-<p><tt>objects(Id, Context) -&gt; list()</tt></p>
+<p><tt>objects(Id, Context) -&gt; list()</tt><br></p>
 </div><p>Return all object ids of the resource</p>
 
 <h3 class="function"><a name="objects-3">objects/3</a></h3>
 <div class="spec">
-<p><tt>objects(Id, Pred, Context) -&gt; List</tt></p>
+<p><tt>objects(Id, Pred, Context) -&gt; List</tt><br></p>
 </div><p>Return all object ids of an id with a certain predicate.  The order of the ids is deterministic.</p>
 
 <h3 class="function"><a name="replace-4">replace/4</a></h3>
 <div class="spec">
 <p><tt>replace(SubjectId, PredId, NewObjects, Context) -&gt; any()</tt></p>
 </div><p>Replace the objects with the new list</p>
+
+<h3 class="function"><a name="set_sequence-4">set_sequence/4</a></h3>
+<div class="spec">
+<p><tt>set_sequence(Id, Pred::Predicate, ObjectIds, Context) -&gt; ok | {error, Reason}</tt><br></p>
+</div><p>Set edges order so that the specified object ids are in given order.
+  Any extra edges not speicified will be deleted, and any missing edges will be inserted.</p>
 
 <h3 class="function"><a name="subject-4">subject/4</a></h3>
 <div class="spec">
@@ -165,47 +179,47 @@
 
 <h3 class="function"><a name="subject_edge_ids-3">subject_edge_ids/3</a></h3>
 <div class="spec">
-<p><tt>subject_edge_ids(Id, Predicate, Context) -&gt; list()</tt></p>
+<p><tt>subject_edge_ids(Id, Predicate, Context) -&gt; list()</tt><br></p>
 </div><p>Return all subject ids with the edge id for a predicate/object_id</p>
 
 <h3 class="function"><a name="subject_predicate_ids-2">subject_predicate_ids/2</a></h3>
 <div class="spec">
-<p><tt>subject_predicate_ids(Id, Context) -&gt; List</tt></p>
+<p><tt>subject_predicate_ids(Id, Context) -&gt; List</tt><br></p>
 </div><p>Return the list of predicates is use by edges from subjects to the id</p>
 
 <h3 class="function"><a name="subject_predicates-2">subject_predicates/2</a></h3>
 <div class="spec">
-<p><tt>subject_predicates(Id, Context) -&gt; List</tt></p>
+<p><tt>subject_predicates(Id, Context) -&gt; List</tt><br></p>
 </div><p>Return the list of predicates is use by edges from subjects to the id</p>
 
 <h3 class="function"><a name="subjects-2">subjects/2</a></h3>
 <div class="spec">
-<p><tt>subjects(Id, Context) -&gt; list()</tt></p>
+<p><tt>subjects(Id, Context) -&gt; list()</tt><br></p>
 </div><p>Return all subject ids of the resource</p>
 
 <h3 class="function"><a name="subjects-3">subjects/3</a></h3>
 <div class="spec">
-<p><tt>subjects(Id, Pred, Context) -&gt; List</tt></p>
+<p><tt>subjects(Id, Pred, Context) -&gt; List</tt><br></p>
 </div><p>Return all subject ids of an object id with a certain predicate.   The order of the ids is deterministic.</p>
 
 <h3 class="function"><a name="update_nth-5">update_nth/5</a></h3>
 <div class="spec">
-<p><tt>update_nth(SubjectId::<a href="#type-int">int()</a>, Predicate, Nth::<a href="#type-int">int()</a>, ObjectId, Context) -&gt; {ok, EdgeId} | {error, Reason}</tt></p>
+<p><tt>update_nth(SubjectId::<a href="#type-int">int()</a>, Predicate, Nth::<a href="#type-int">int()</a>, ObjectId, Context) -&gt; {ok, EdgeId} | {error, Reason}</tt><br></p>
 </div><p>Update the nth edge of a subject.  Set a new object, keep the predicate.
   When there are not enough edges then an error is returned. The first edge is nr 1.</p>
 
 <h3 class="function"><a name="update_sequence-4">update_sequence/4</a></h3>
 <div class="spec">
-<p><tt>update_sequence(Id, Pred::Predicate, ObjectIds, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>update_sequence(Id, Pred::Predicate, ObjectIds, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Reorder the edges so that the mentioned ids are in front, in the listed order.</p>
 
 <h3 class="function"><a name="update_sequence_edge_ids-4">update_sequence_edge_ids/4</a></h3>
 <div class="spec">
-<p><tt>update_sequence_edge_ids(Id, Pred::Predicate, EdgeIds, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>update_sequence_edge_ids(Id, Pred::Predicate, EdgeIds, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Update the sequence for the given edge ids.  Optionally rename the predicate on the edge.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:56.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:59.</i></p>
 </body>
 </html>

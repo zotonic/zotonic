@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module m_identity</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -23,7 +24,6 @@
 <tr><td valign="top"><a href="#delete-2">delete/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#delete_by_type-3">delete_by_type/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#delete_username-2">delete_username/2</a></td><td>Delete an username from a resource.</td></tr>
-<tr><td valign="top"><a href="#get_props-4">get_props/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#get_rsc-2">get_rsc/2</a></td><td>Fetch all credentials belonging to the user "id".</td></tr>
 <tr><td valign="top"><a href="#get_rsc-3">get_rsc/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#get_username-1">get_username/1</a></td><td>Return the username of the current user.</td></tr>
@@ -44,7 +44,6 @@
 <tr><td valign="top"><a href="#m_to_list-2">m_to_list/2</a></td><td>Transform a m_config value to a list, used for template loops.</td></tr>
 <tr><td valign="top"><a href="#m_value-2">m_value/2</a></td><td>Transform a model value so that it can be formatted or piped through filters.</td></tr>
 <tr><td valign="top"><a href="#set_by_type-4">set_by_type/4</a></td><td></td></tr>
-<tr><td valign="top"><a href="#set_props-5">set_props/5</a></td><td>Replace any existing identity property with a new value.</td></tr>
 <tr><td valign="top"><a href="#set_username-3">set_username/3</a></td><td>Change the username of the resource id, only possible if there is already an username/password set.</td></tr>
 <tr><td valign="top"><a href="#set_username_pw-4">set_username_pw/4</a></td><td>Set the username/password of a resource.</td></tr>
 <tr><td valign="top"><a href="#set_verified-2">set_verified/2</a></td><td>Set the verified flag on a record.</td></tr>
@@ -56,7 +55,7 @@
 
 <h3 class="function"><a name="check_username_pw-3">check_username_pw/3</a></h3>
 <div class="spec">
-<p><tt>check_username_pw(Username, Password, Context) -&gt; {ok, Id} | {error, Reason}</tt></p>
+<p><tt>check_username_pw(Username, Password, Context) -&gt; {ok, Id} | {error, Reason}</tt><br></p>
 </div><p>Return the rsc_id with the given username/password.  When succesful then updates the 'visited' timestamp of the entry.</p>
 
 <h3 class="function"><a name="delete-2">delete/2</a></h3>
@@ -71,17 +70,12 @@
 
 <h3 class="function"><a name="delete_username-2">delete_username/2</a></h3>
 <div class="spec">
-<p><tt>delete_username(Id::ResourceId, Context) -&gt; void</tt></p>
+<p><tt>delete_username(Id::ResourceId, Context) -&gt; void</tt><br></p>
 </div><p>Delete an username from a resource.</p>
-
-<h3 class="function"><a name="get_props-4">get_props/4</a></h3>
-<div class="spec">
-<p><tt>get_props(RscId, Type, Key, Context) -&gt; any()</tt></p>
-</div>
 
 <h3 class="function"><a name="get_rsc-2">get_rsc/2</a></h3>
 <div class="spec">
-<p><tt>get_rsc(Id::integer(), Context::<a href="#type-context">context()</a>) -&gt; list()</tt></p>
+<p><tt>get_rsc(Id::integer(), Context::<a href="#type-context">context()</a>) -&gt; list()</tt><br></p>
 </div><p>Fetch all credentials belonging to the user "id"</p>
 
 <h3 class="function"><a name="get_rsc-3">get_rsc/3</a></h3>
@@ -91,22 +85,22 @@
 
 <h3 class="function"><a name="get_username-1">get_username/1</a></h3>
 <div class="spec">
-<p><tt>get_username(Context) -&gt; Username | undefined</tt></p>
+<p><tt>get_username(Context) -&gt; Username | undefined</tt><br></p>
 </div><p>Return the username of the current user</p>
 
 <h3 class="function"><a name="get_username-2">get_username/2</a></h3>
 <div class="spec">
-<p><tt>get_username(Id::ResourceId, Context) -&gt; Username | undefined</tt></p>
+<p><tt>get_username(Id::ResourceId, Context) -&gt; Username | undefined</tt><br></p>
 </div><p>Return the username of the resource id, undefined if no username</p>
 
 <h3 class="function"><a name="hash-1">hash/1</a></h3>
 <div class="spec">
-<p><tt>hash(Pw::Password) -&gt; tuple()</tt></p>
+<p><tt>hash(Pw::Password) -&gt; tuple()</tt><br></p>
 </div><p>Hash a password, using sha1 and a salt</p>
 
 <h3 class="function"><a name="hash_is_equal-2">hash_is_equal/2</a></h3>
 <div class="spec">
-<p><tt>hash_is_equal(Pw::Password, X2::Hash) -&gt; bool()</tt></p>
+<p><tt>hash_is_equal(Pw::Password, X2::Hash) -&gt; bool()</tt><br></p>
 </div><p>Compare if a password is the same as a hash.</p>
 
 <h3 class="function"><a name="insert-4">insert/4</a></h3>
@@ -161,17 +155,17 @@
 
 <h3 class="function"><a name="m_find_value-3">m_find_value/3</a></h3>
 <div class="spec">
-<p><tt>m_find_value(Id::Key, M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_find_value(Id::Key, M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Fetch the value for the key from a model source</p>
 
 <h3 class="function"><a name="m_to_list-2">m_to_list/2</a></h3>
 <div class="spec">
-<p><tt>m_to_list(M::Source, Context) -&gt; List</tt></p>
+<p><tt>m_to_list(M::Source, Context) -&gt; List</tt><br></p>
 </div><p>Transform a m_config value to a list, used for template loops</p>
 
 <h3 class="function"><a name="m_value-2">m_value/2</a></h3>
 <div class="spec">
-<p><tt>m_value(M::Source, Context) -&gt; term()</tt></p>
+<p><tt>m_value(M::Source, Context) -&gt; term()</tt><br></p>
 </div><p>Transform a model value so that it can be formatted or piped through filters</p>
 
 <h3 class="function"><a name="set_by_type-4">set_by_type/4</a></h3>
@@ -179,19 +173,14 @@
 <p><tt>set_by_type(RscId, Type, Key, Context) -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="set_props-5">set_props/5</a></h3>
-<div class="spec">
-<p><tt>set_props(RscId, Type, Key, Props, Context) -&gt; any()</tt></p>
-</div><p>Replace any existing identity property with a new value</p>
-
 <h3 class="function"><a name="set_username-3">set_username/3</a></h3>
 <div class="spec">
-<p><tt>set_username(Id::ResourceId, Username, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>set_username(Id::ResourceId, Username, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Change the username of the resource id, only possible if there is already an username/password set</p>
 
 <h3 class="function"><a name="set_username_pw-4">set_username_pw/4</a></h3>
 <div class="spec">
-<p><tt>set_username_pw(Id::RscId, Username, Password, Context) -&gt; ok | {error, Reason}</tt></p>
+<p><tt>set_username_pw(Id::RscId, Username, Password, Context) -&gt; ok | {error, Reason}</tt><br></p>
 </div><p>Set the username/password of a resource.  Replaces any existing username/password.</p>
 
 <h3 class="function"><a name="set_verified-2">set_verified/2</a></h3>
@@ -211,6 +200,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:56.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:59.</i></p>
 </body>
 </html>

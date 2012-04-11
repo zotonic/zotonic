@@ -58,7 +58,7 @@ msgid ""
 "Menu"
 msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:173 
+#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24 ./modules/mod_menu/mod_menu.erl:174 
 msgid ""
 "New page"
 msgstr ""

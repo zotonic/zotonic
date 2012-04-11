@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module z_session_manager</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -45,17 +46,17 @@
 
 <h3 class="function"><a name="add_script-1">add_script/1</a></h3>
 <div class="spec">
-<p><tt>add_script(Context) -&gt; none()</tt></p>
+<p><tt>add_script(Context) -&gt; none()</tt><br></p>
 </div><p>Send the scripts in the context to all pages of all sessions</p>
 
 <h3 class="function"><a name="add_script-2">add_script/2</a></h3>
 <div class="spec">
-<p><tt>add_script(Script::<a href="#type-io_list">io_list()</a>, Context) -&gt; none()</tt></p>
+<p><tt>add_script(Script::<a href="#type-io_list">io_list()</a>, Context) -&gt; none()</tt><br></p>
 </div><p>Send a script to all pages of all sessions</p>
 
 <h3 class="function"><a name="broadcast-2">broadcast/2</a></h3>
 <div class="spec">
-<p><tt>broadcast(Broadcast::#broadcast{}, Context) -&gt; ok</tt></p>
+<p><tt>broadcast(Broadcast::#broadcast{}, Context) -&gt; ok</tt><br></p>
 </div><p>Broadcast a notification message to all open sessions.</p>
 
 <h3 class="function"><a name="code_change-3">code_change/3</a></h3>
@@ -65,32 +66,32 @@
 
 <h3 class="function"><a name="continue_session-1">continue_session/1</a></h3>
 <div class="spec">
-<p><tt>continue_session(Context) -&gt; Context</tt></p>
+<p><tt>continue_session(Context) -&gt; Context</tt><br></p>
 </div><p>Continue an existing session</p>
 
 <h3 class="function"><a name="count-1">count/1</a></h3>
 <div class="spec">
-<p><tt>count(Context) -&gt; Int</tt></p>
+<p><tt>count(Context) -&gt; Int</tt><br></p>
 </div><p>Return the number of open sessions</p>
 
 <h3 class="function"><a name="dump-1">dump/1</a></h3>
 <div class="spec">
-<p><tt>dump(Context) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>dump(Context) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>Dump all session to stdout</p>
 
 <h3 class="function"><a name="ensure_session-1">ensure_session/1</a></h3>
 <div class="spec">
-<p><tt>ensure_session(Context) -&gt; Context</tt></p>
+<p><tt>ensure_session(Context) -&gt; Context</tt><br></p>
 </div><p>Start a new session or continue an existing session</p>
 
 <h3 class="function"><a name="foreach-2">foreach/2</a></h3>
 <div class="spec">
-<p><tt>foreach(Function::function(), Context::#context{}) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>foreach(Function::function(), Context::#context{}) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>Apply the given function to all sessions</p>
 
 <h3 class="function"><a name="get_session_id-1">get_session_id/1</a></h3>
 <div class="spec">
-<p><tt>get_session_id(Context) -&gt; undefined | string()</tt></p>
+<p><tt>get_session_id(Context) -&gt; undefined | string()</tt><br></p>
 </div><p>fetch the session id from the request, return 'undefined' when not found</p>
 
 <h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
@@ -110,23 +111,23 @@
 
 <h3 class="function"><a name="init-1">init/1</a></h3>
 <div class="spec">
-<p><tt>init(SiteProps) -&gt; {ok, State}</tt></p>
+<p><tt>init(SiteProps) -&gt; {ok, State}</tt><br></p>
 </div><p>Initialize the session server with an empty session table.  We make the session manager a system process
        so that crashes in sessions are isolated from each other.</p>
 
 <h3 class="function"><a name="rename_session-1">rename_session/1</a></h3>
 <div class="spec">
-<p><tt>rename_session(Context) -&gt; Context</tt></p>
+<p><tt>rename_session(Context) -&gt; Context</tt><br></p>
 </div><p>Rename the session id, only call this after ensure_session</p>
 
 <h3 class="function"><a name="start_link-1">start_link/1</a></h3>
 <div class="spec">
-<p><tt>start_link(SiteProps) -&gt; {ok, Pid} | ignore | {error, Error}</tt></p>
+<p><tt>start_link(SiteProps) -&gt; {ok, Pid} | ignore | {error, Error}</tt><br></p>
 </div><p>Starts the session manager server</p>
 
 <h3 class="function"><a name="stop_session-1">stop_session/1</a></h3>
 <div class="spec">
-<p><tt>stop_session(Context) -&gt; Context</tt></p>
+<p><tt>stop_session(Context) -&gt; Context</tt><br></p>
 </div><p>Explicitly stop an existing session</p>
 
 <h3 class="function"><a name="terminate-2">terminate/2</a></h3>
@@ -136,11 +137,11 @@
 
 <h3 class="function"><a name="tick-1">tick/1</a></h3>
 <div class="spec">
-<p><tt>tick(SessionManager::pid()) -&gt; <a href="#type-void">void()</a></tt></p>
+<p><tt>tick(SessionManager::pid()) -&gt; <a href="#type-void">void()</a></tt><br></p>
 </div><p>Periodic tick used for cleaning up sessions</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 13 2011, 14:45:55.</i></p>
+<p><i>Generated by EDoc, Apr 11 2012, 16:16:58.</i></p>
 </body>
 </html>

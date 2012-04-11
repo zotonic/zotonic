@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
-%% @copyright 2011, Loïc Hoguin <essen@dev-extend.eu>
+%% @copyright 2012 Marc Worrell, 2011, Loïc Hoguin <essen@dev-extend.eu>
 %% @doc WebSocket draft-ietf-hybi-thewebsocketprotocol-17 (Chrome 16)
 
 %% Major parts of the protocol handling are copied from Cowboy.
