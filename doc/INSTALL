@@ -3,7 +3,7 @@ Zotonic installation
 
 You will need to:
 
-1. Install Erlang 13B or newer. Build it from source, or
+1. Install Erlang R14B03 or newer. Build it from source, or
    use packages (see platform-specific notes below)
 
 2. Install ImageMagick (version 6.5 or higher) for the 'convert' and
@@ -16,7 +16,6 @@ You will need to:
 4. Enable trust-authentication (username+password) in postgres.
 
 5. Obtain a copy of the Zotonic source code.
-
 
 
 
@@ -74,13 +73,15 @@ Steps to install Zotonic
 Operating system specific notes:
 -------------------------------
 
-FreeBSD:
--------
-If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
-(check with 'make --version', which should give you GNU, and version
-info) If you're not running GNU-make as a default, edit the Makefile
-to run with 'gmake' (make sure gmake is available first))
 
+Ubuntu ( >= 10.04)
+------------------
+
+Erlang can be installed from a custom PPA by running:
+
+sudo add-apt-repository ppa:scattino/ppa
+sudo apt-get update
+sudo apt-get install erlang-base postgresql imagemagick
 
 
 Ubuntu 9.04 (jaunty)
@@ -96,15 +97,6 @@ PostgreSQL and Imagemagick are available on Ubuntu as packages:
 sudo apt-get install postgresql-8.4 imagemagick
 
 
-Ubuntu 9.10 (karmic)
---------------------
-Follow the instructions for Ubuntu 9.04, but instead of compiling
-erlang, you can just install Erlang but you need the ssl and xml dev
-libraries as well for XMPP:
-
-sudo apt-get install erlang build-essential libxml2-dev libexpat1-dev
-
-
 Debian (lenny)
 --------------------
 You'll need to build erlang from source. Before building, make sure
@@ -114,6 +106,19 @@ sudo apt-get install build-essential libncurses5-dev m4
 sudo apt-get install openssl libssl-dev
 sudo apt-get install unixodbc-dev
 
+Alternatively, you can install a precompiled recent Erlang from the
+following PPA: https://launchpad.net/~scattino/+archive/ppa
+
+Afterwards, for a quick setup of zotonic and postgres you can use the
+following script:
+https://raw.github.com/zotonic/zotonic/master/zotonic_install
+
+FreeBSD
+-------
+If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
+(check with 'make --version', which should give you GNU, and version
+info) If you're not running GNU-make as a default, edit the Makefile
+to run with 'gmake' (make sure gmake is available first).
 
 Windows
 -------
