@@ -435,6 +435,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 ifequalelse_ast(Args, IfAstInfo, ElseAstInfo, Context, TreeWalker2);                    
             ({'spaceless', Contents}, TreeWalkerAcc) ->
                 spaceless_ast(Contents, Context, TreeWalkerAcc);
+            ({'javascript', Contents}, TreeWalkerAcc) ->
+                javascript_ast(Contents, Context, TreeWalkerAcc);
             ({'with', [ExprList, Identifiers], WithContents}, TreeWalkerAcc) ->
                 with_ast(ExprList, Identifiers, WithContents, Context, TreeWalkerAcc);
             ({'for', {'in', IteratorList, Value}, Contents}, TreeWalkerAcc) ->
@@ -1277,7 +1279,12 @@ spaceless_ast(Contents, Context, TreeWalker) ->
     {{erl_syntax:application(erl_syntax:atom(erlydtl_runtime),
                              erl_syntax:atom(spaceless),
                              [Ast]), Info}, TreeWalker1}.
-    
+
+javascript_ast(Contents, Context, TreeWalker) ->
+    {{Ast, Info}, TreeWalker1} = body_ast(Contents, Context, TreeWalker),
+    {{erl_syntax:application(erl_syntax:atom(z_script),
+                             erl_syntax:atom(javascript_ast),
+                             [Ast, z_context_ast(Context)]), Info}, TreeWalker1}.
 
 unescape_string_literal(String) ->
     unescape_string_literal(String, [], noslash).

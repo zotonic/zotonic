@@ -70,6 +70,10 @@ Nonterminals
     FilterBraced
     EndFilterBraced
     Filters
+    
+    ScriptBlock
+    ScriptBraced
+    EndScriptBraced
 
     ForBlock
     ForBraced
@@ -176,6 +180,7 @@ Terminals
     endif_keyword
     endifequal_keyword
     endifnotequal_keyword
+    endjavascript_keyword
     endspaceless_keyword
 	endwith_keyword
     equal
@@ -202,6 +207,7 @@ Terminals
     overrules_keyword
     pipe
     print_keyword
+    javascript_keyword
     spaceless_keyword
     string_literal
     text
@@ -268,6 +274,7 @@ Elements -> Elements CallTag : '$1' ++ ['$2'].
 Elements -> Elements CallWithTag : '$1' ++ ['$2'].
 Elements -> Elements UrlTag : '$1' ++ ['$2'].
 Elements -> Elements PrintTag : '$1' ++ ['$2'].
+Elements -> Elements ScriptBlock : '$1' ++ ['$2'].
 Elements -> Elements ImageTag : '$1' ++ ['$2'].
 Elements -> Elements ImageUrlTag : '$1' ++ ['$2'].
 Elements -> Elements MediaTag : '$1' ++ ['$2'].
@@ -322,6 +329,10 @@ CycleNamesCompat -> CycleNamesCompat identifier : '$1' ++ ['$2'].
 FilterBlock -> FilterBraced Elements EndFilterBraced : {filter, '$1', '$2'}.
 FilterBraced -> open_tag filter_keyword Filters close_tag : '$3'.
 EndFilterBraced -> open_tag endfilter_keyword close_tag.
+
+ScriptBlock -> ScriptBraced Elements EndScriptBraced : {javascript, '$2'}.
+ScriptBraced -> open_tag javascript_keyword close_tag.
+EndScriptBraced -> open_tag endjavascript_keyword close_tag.
 
 Filters -> Filter : ['$1'].
 Filters -> Filters pipe Filter : '$1' ++ ['$3'].

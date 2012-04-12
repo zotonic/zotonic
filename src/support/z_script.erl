@@ -1,7 +1,7 @@
 %% This is the MIT license.
 %% 
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2010 Marc Worrell
+%% Copyright (c) 2009-2012 Marc Worrell
 %% 
 %% Permission is hereby granted, free of charge, to any person obtaining a copy 
 %% of this software and associated documentation files (the "Software"), to deal 
@@ -26,6 +26,7 @@
     split/1,
     add_script/2,
     get_script/1,
+    javascript_ast/2,
     get_page_startup_script/1,
     add_content_script/2,
     clean/1
@@ -36,13 +37,25 @@
 split(Context) ->
     {iolist_to_binary(get_script(Context)), clean(Context)}.
 
+%% @doc Render a javascript ast, injects a #context{} with a script into the output stream.
+-spec javascript_ast(list() | binary(), #context{}) -> #context{}.
+javascript_ast(Block, Context) when is_binary(Block) ->
+    add_content_script(Block, z_context:new(Context));
+javascript_ast(Block, Context) ->
+    RenderContext = z_context:new(Context),
+    {Script, RenderContext} = z_render:render_to_iolist(Block, z_context:new(Context)),
+    add_content_script(Script, RenderContext).
 
 add_content_script([], Context) -> 
+    Context;
+add_content_script(<<>>, Context) -> 
     Context;
 add_content_script(Script, Context) ->
     Context#context{content_scripts=[Script, "\n" | Context#context.content_scripts]}.
 
 add_script([], Context) -> 
+    Context;
+add_script(<<>>, Context) -> 
     Context;
 add_script(Script, Context) ->
     Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
