@@ -23,7 +23,7 @@ makefile-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
 
 docs:
-	@erl -noshell -run edoc_run application '$(APP)' '"."' '[]'
+	bin/zotonic generate-edoc
 
 clean:
 	@echo "removing:"
