@@ -4,5 +4,5 @@
 		id		id of the page
 #}
 {% if m.rsc[id].is_editable %}
-	{% button text=_"edit this page" action={redirect dispatch="admin_edit_rsc" id=id} %}
+        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-primary btn-mini">{_ edit this page _}</a>
 {% endif %}

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>{% block title %}{{ m.rsc[id].seo_title | default: m.rsc[id].title }}{% endblock %} &mdash; Zotonic</title>
 
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
