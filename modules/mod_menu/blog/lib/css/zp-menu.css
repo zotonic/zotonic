@@ -60,7 +60,7 @@ nav {
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
 	left:			0;
-	top:			35px; /* match top ul list item height */
+	top:			1.9em; /* match top ul list item height */
 	z-index:		99;
 }
 ul.sf-menu li:hover li ul,
@@ -84,42 +84,40 @@ ul.sf-menu li li li.sfHover ul {
 
 /*** SKIN ***/
 .sf-menu {
-    float:			left;
-    margin-top: 5px;
+	float:			left;
 
 }
 .sf-menu a {
     border: 0;
-    padding: 		5px 10px;
-    text-decoration:none;
+	border-left:	1px solid #fff;
+	padding: 		.45em 1em;
+	text-decoration:none;
+}
+.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+	color:			#333;
+}
+.sf-menu li {
+
+}
+.sf-menu li li {
+	background:		#eee;
+}
+.sf-menu li li li {
+	background:		#eee;
+}
+.sf-menu li:hover, .sf-menu li.sfHover,
+.sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+	background:		#bbb;
+	outline:		0;
 }
 
-/* primary level */
-.sf-menu li a {
-    color: #999999;
-}
-
-.sf-menu li a.current {
-    color: white;
-}
-
-/* secondary levels */
-.sf-menu li li a {
-    color: #333;
-    background: #eee;
+.sf-menu li ul li a {
     border-top: 1px dotted #aaa;
 }
 
-.sf-menu li li a:hover,
-.sf-menu li li a:focus {
-    background: #bbb;
-}
-
-.sf-menu li li a.current {
-    color: black;
+.sf-menu a.current {
     background: #ddd;
 }
-
 
 /*** arrows **/
 .sf-menu a.sf-with-ul {
@@ -135,16 +133,12 @@ ul.sf-menu li li li.sfHover ul {
 	height:			10px;
 	text-indent: 	-999em;
 	overflow:		hidden;
-	background:		url('/lib/images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:		url('/lib/images/arrows-333333.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
 	top:			.6em;
 	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
 }
-.sf-menu li li .sf-sub-indicator {
-	background:		url('/lib/images/arrows-333333.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
-}
-
 /* apply hovers to modern browsers */
 a:focus > .sf-sub-indicator,
 a:hover > .sf-sub-indicator,

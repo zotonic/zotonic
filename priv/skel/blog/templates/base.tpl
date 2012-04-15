@@ -20,6 +20,7 @@
         "bootstrap/css/bootstrap.min.css"
         "bootstrap/css/bootstrap.responsive.min.css"
         "css/jquery.loadmask.css"
+        "css/zp-menu.css"
         "css/project.css"
         %}
 
