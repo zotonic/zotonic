@@ -1,5 +1,18 @@
 Welcome to Zotonic!
 
+Release 0.9.0, not yet released
+-------------------------------
+
+* New core features:
+
+Ability to make mobile sites using automatic user agent classification
+and template selection based on the detected user agent.
+
+All base HTML has moved to use the Twitter Bootstrap CSS framework
+instead of Atatonic. This includes the admin (which got a new design)
+and the base templates for the skeleton sites.
+
+
 Release 0.8.0, released on 2012-04-11
 -------------------------------------
 
