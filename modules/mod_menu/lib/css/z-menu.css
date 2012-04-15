@@ -60,7 +60,7 @@ nav {
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
 	left:			0;
-	top:			35px; /* match top ul list item height */
+	top:			38px; /* match top ul list item height */
 	z-index:		99;
 }
 ul.sf-menu li:hover li ul,
@@ -85,18 +85,17 @@ ul.sf-menu li li li.sfHover ul {
 /*** SKIN ***/
 .sf-menu {
     float:			left;
-    margin-top: 5px;
 
 }
 .sf-menu a {
     border: 0;
-    padding: 		5px 10px;
     text-decoration:none;
 }
 
 /* primary level */
 .sf-menu li a {
     color: #999999;
+    padding: 10px;
 }
 
 .sf-menu li a.current {
@@ -108,6 +107,7 @@ ul.sf-menu li li li.sfHover ul {
     color: #333;
     background: #eee;
     border-top: 1px dotted #aaa;
+    padding: 5px 10px;
 }
 
 .sf-menu li li a:hover,

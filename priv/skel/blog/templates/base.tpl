@@ -12,7 +12,7 @@
 	-->
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="YOUR NAME HERE &copy; 2009" />
+	<meta name="author" content="YOUR NAME HERE &copy; 2012" />
 
 	{% all include "_html_head.tpl" %}
 
@@ -20,7 +20,7 @@
         "bootstrap/css/bootstrap.min.css"
         "bootstrap/css/bootstrap.responsive.min.css"
         "css/jquery.loadmask.css"
-        "css/zp-menu.css"
+        "css/z-menu.css"
         "css/project.css"
         %}
 

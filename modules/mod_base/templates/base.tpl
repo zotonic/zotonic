@@ -1,72 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title>{% block title %}{{ m.rsc[id].seo_title | default: m.rsc[id].title }}{% endblock %} &mdash; Zotonic</title>
+<html lang="{{ z_language|default:"en"|escape }}">
+    <head>
+        <meta charset="utf-8" />
+	<title>{% block title %}{% endblock %} &mdash; {{ m.config.site.title.value }}</title>
 
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	
-	<meta name="author" content="Tim Benniks" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="author" content="Arjan Scherpenisse" />
 
 	{% all include "_html_head.tpl" %}
 
 	{% lib
-		"css/zp-compressed.css"
-		"css/zp-project.css"
-		"css/zp-menu.css"
-		"css/jquery.loadmask.css" 
+	"bootstrap/css/bootstrap.min.css"
+	"css/z-menu.css"
+	"css/jquery.loadmask.css" 
+	"css/project.css"
 	%}
 
-	<!--[if IE]>
-	{% lib	"css/zp-ie.css" %}
-	<![endif]-->
-	
-	<!-- Make ie understand html5 -->
-	{% lib "js/apps/modernizr.js" %}
-
 	{% block html_head_extra %}{% endblock %}
-</head>
+    </head>
 
-<body class="{% block page_class %}{% endblock %}">
+    <body class="{% block page_class %}{% endblock %}">
 
-	<section class="skip">
-		<a href="#content-area" title="Go directly to page content">Go to page content</a>
-	</section>
+        <div class="container">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+        	        <a class="brand" href="/">{{ m.config.site.title.value }} {% if m.config.site.subtitle.value %}{% endif %}</a>
+                        
+                        <div class="pull-right">
+                            {% menu id=id %}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end navbar -->
 
-	<section class="zp-wrapper">
-		<header class="clearfix">
-			{#
-			<figure id="logo" class="left">
-				<a href="/" title="Home"><img src="/lib/images/logo.jpg" alt="Zotonic &mdash; Simple stuff that works" /></a>
-			</figure>
-			#}
-			
-			<nav class="right">
-				{% menu id=id class="list" %}
-			</nav>
-		</header>
+            <div class="row">
+                <div class="span12" id="content-area">
+		    {% block content_area %}
+		    {% block content %}{% endblock %}
+		    {% block sidebar %}{% endblock %}
+		    {% endblock %}
+                </div>
+            </div>
+	    
+            <div class="row">
+                <div class="span12" id="footer">
+		    {% include "_footer.tpl" %}
+                </div>
+            </div>
 
-		{% block banner %}{% endblock %}
-		
-		<section id="content-area" class="clear clearfix">
-		{% block content_area %}
-			{% block content %}{% endblock %}
-			{% block sidebar %}{% endblock %}
-		{% endblock %}
-		</section>
-
-		<div class="push"><!-- push down --></div>
-	</section>
-	
-	<footer>
-		{% include "_footer.tpl" %}
-	</footer>
-
+        </div><!-- end container -->
+        
 	{% include "_js_include.tpl" %}
 
 	{% script %}
-
 </body>
 </html>
