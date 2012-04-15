@@ -32,6 +32,17 @@ aside, header, footer, figure, article {
     display: block !important;
 }
 
+div.navbar-inner {
+    background: #154868; /* Old browsers */
+    background: -moz-linear-gradient(top, #154868 26%, #333333 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(26%,#154868), color-stop(100%,#333333)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #154868 26%,#333333 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #154868 26%,#333333 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #154868 26%,#333333 100%); /* IE10+ */
+    background: linear-gradient(top, #154868 26%,#333333 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#154868', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
+}
+
 
 /* Typography
    ---------------------------------------------------------- */
@@ -186,13 +197,13 @@ header {
 /* Footer - see footer navigation styles in the zp-menu.css
    ------------------------------------------------------ */
 
-footer {
-    margin: 47px 0;
+#footer {
+    margin-top: 20px;
     border-top: 1px dotted #333;
     padding: 9px 0 0 0;
 }
 
-footer p.footer-blog-title {
+#footer p.footer-blog-title {
     margin: 0;
     font-size: 12px;
     font-variant: small-caps;

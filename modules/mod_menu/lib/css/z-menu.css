@@ -132,17 +132,16 @@ ul.sf-menu li li li.sfHover ul {
 	right:			.75em;
 	top:			1.05em; /* IE6 only */
 	width:			10px;
-	height:			10px;
+	height:			20px;
 	text-indent: 	-999em;
 	overflow:		hidden;
-	background:		url('/lib/images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:		url('/lib/images/arrows-ffffff.png') no-repeat -10px -95px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
 	top:			.6em;
-	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
 }
 .sf-menu li li .sf-sub-indicator {
-	background:		url('/lib/images/arrows-333333.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:		url('/lib/images/arrows-333333.png') no-repeat -10px -95px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 
 /* apply hovers to modern browsers */
@@ -151,7 +150,7 @@ a:hover > .sf-sub-indicator,
 a:active > .sf-sub-indicator,
 li:hover > a > .sf-sub-indicator,
 li.sfHover > a > .sf-sub-indicator {
-	background-position: -10px -100px; /* arrow hovers for modern browsers*/
+	background-position: -10px -95px; /* arrow hovers for modern browsers*/
 }
 
 /* point right for anchors in subs */
