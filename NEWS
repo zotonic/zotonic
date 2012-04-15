@@ -46,7 +46,8 @@ present it will be derived from the site's directory name.
 ** New filter: index_of, which gives the index of an item in a list.
 ** filter_random:random/3 - create random sublist with length l.
 ** range filter: easily generate lists with integers
-
+** replace_args filter: replace $N in string from a list of replacement values.
+** date validator: validate input date against a given date format.
 
 * Development process
 
