@@ -27,19 +27,22 @@
 
 %% @doc The request context, session information and other
 -record(context, {
-        %% Webmachine request data
-        wm_reqdata,
+        %% The host
+        host=default,
+
+        %% Webmachine request data (only set when this context is used because of a request)
+        wm_reqdata=undefined :: #wm_reqdata{} | undefined,
         
         %% The resource responsible for handling this request
-        resource_module,
+        resource_module=undefined :: atom(),
         
-        %% The page (comet) and session processes associated with the current request
-        session_pid=undefined,  % one session per browser (also manages the persistent data)
-        page_pid=undefined,     % multiple pages per session
-        page_id=undefined,
+        %% The page and session processes associated with the current request
+        session_pid=undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
+        page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
+        page_id=undefined :: string() | undefined,
 
-        %% The host (also the id of the database used) 
-        host=default,
+        %% About the user-agent this context is used with.
+        ua_class=undefined :: ua_classifier:device_type() | undefined,
         
         %% Servers and supervisors for the site/host
         depcache,
@@ -54,14 +57,14 @@
         translation_table,
         
         %% The database connection used for (nested) transactions, see z_db
-        dbc=undefined,
+        dbc=undefined :: pid() | undefined,
 
         %% The language selected, used by z_trans and others
-        language=en,
+        language=en :: atom(),
         
         %% The current logged on person, derived from the session and visitor
         acl=undefined,      %% opaque placeholder managed by the z_acl module
-        user_id=undefined,
+        user_id=undefined :: integer() | undefined,
 
         %% The state below is the render state, can be cached and/or merged
         

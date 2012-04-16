@@ -107,6 +107,8 @@
 
     get_req_path/1,
 
+    set_nocache_headers/1,
+
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
@@ -122,9 +124,11 @@
 %% @doc Return a new empty context, no request is initialized.
 %% @spec new(HostDescr) -> Context2
 %%      HostDescr = Context | atom() | ReqData
+-spec new( #context{} | #wm_reqdata{} | atom() ) -> #context{}.
 new(#context{} = C) ->
     #context{
         host=C#context.host,
+        ua_class=C#context.ua_class,
         language=C#context.language,
         depcache=C#context.depcache,
         notifier=C#context.notifier,
@@ -149,7 +153,12 @@ new(ReqData) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{wm_reqdata=ReqData, host=site(ReqData)}),
+    Context = set_server_names(
+                    #context{
+                        host=site(ReqData),
+                        wm_reqdata=ReqData,
+                        ua_class=z_user_agent:get_class(ReqData)
+                    }),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
 
@@ -194,7 +203,6 @@ set_server_names(#context{host=Host} = Context) ->
         module_indexer=list_to_atom("z_module_indexer"++HostAsList),
         translation_table=z_trans_server:table(Host)
     }.
-
 
 
 %% @doc Maps the host in the request to a site in the sites folder.
@@ -486,7 +494,7 @@ ensure_session(Context) ->
             {ok, Context1} = z_session_manager:ensure_session(Context),
             Context2 = z_auth:logon_from_session(Context1),
             Context3 = z_notifier:foldl(session_context, Context2, Context2),
-            add_nocache_headers(Context3);
+            set_nocache_headers(Context3);
         _ ->
             Context
     end.
@@ -937,8 +945,8 @@ parse_form_urlencoded(Context) ->
 %% the content generated has a session. You can prevent addition of
 %% these headers by not calling z_context:ensure_session/1, or
 %% z_context:ensure_all/1.
-%% @spec add_nocache_headers(#context{}) -> #context{}
-add_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
+%% @spec set_nocache_headers(#context{}) -> #context{}
+set_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     RD1 = wrq:set_resp_header("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0", ReqData),
     RD2 = wrq:set_resp_header("Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}}), RD1),
     % This let IE6 accept our cookies, basically we tell IE6 that our cookies do not contain any private data.
