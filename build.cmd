@@ -4,69 +4,28 @@ set erlc=erlc
 rem set erl="C:\Program Files\erl5.7.4\bin\erl.exe"
 rem set erlc="C:\Program Files\erl5.7.4\bin\erlc.exe"
 
-pushd .
-cd .\deps\mochiweb\src
-@echo on
-@echo '------------------------------'
-@echo 'make mochiweb'
-@echo '------------------------------'
-@echo off
-set EBIN_DIR = "..\ebin"
-if not exist "..\ebin" (
-  mkdir ..\ebin
-)
-for %%g in (*.erl) do cmd /c "%erlc%" -o ../ebin/ %%g
-copy *.app ..\ebin
-popd
+@echo ==============================
+@echo  make deps
+@echo ==============================
+
+for /D %%i in (.\deps\*) do cmd /c .\deps\build-dep.cmd %%~ni %%i
+
+cmd /c .\deps\build-dep.cmd erlang-oauth .\modules\mod_oauth\deps\erlang-oauth
 
 
-pushd .
-cd .\deps\webzmachine
-@echo on
-@echo '------------------------------'
-@echo 'make webzmachine'
-@echo '------------------------------'
-@echo off
-%erl% -noinput +B -eval "case make:all() of up_to_date -> halt(0); error -> halt(1) end."
-copy src\*.app ebin
-popd
+@echo ==============================
+@echo  make zotonic
+@echo ------------------------------
 
-pushd .
-cd .\modules\mod_oauth\deps\erlang-oauth
-@echo on
-@echo '------------------------------'
-@echo 'make erlang-oauth'
-@echo '------------------------------'
-@echo off
-IF NOT EXIST ebin (
-	mkdir ebin
-)
-copy src\oauth.app ebin
-%erl% -make
-popd
+setlocal enabledelayedexpansion
+set DEPS=.\ebin .\modules\mod_oauth\deps\erlang-oauth\ebin
+for /D %%i in (.\deps\*) do if exist %%i\ebin set DEPS=!DEPS! %%i
 
-pushd .
-cd .\deps\gen_smtp\src
-@echo on
-@echo '------------------------------'
-@echo 'make gen_smtp'
-@echo '------------------------------'
-@echo off
-set EBIN_DIR = "..\ebin"
-if not exist "..\ebin" (
-  mkdir ..\ebin
-)
-for %%g in (*.erl) do cmd /c "%erlc%" -o ../ebin/ %%g
-copy *.app ..\ebin
-popd
-
-@echo on
-@echo '------------------------------'
-@echo 'make zotonic'
-@echo '------------------------------'
 %erlc% -o src/erlydtl src/erlydtl/erlydtl_parser.yrl
-
-%erl% -pa ebin ./deps/mochiweb/ebin ./deps/webzmachine/ebin ./modules/mod_oauth/deps/erlang-oauth/ebin -noinput +B -eval "case make:all() of up_to_date -> halt(0);error -> halt(1) end."
+%erl% -pa %DEPS% -noinput +B -eval "case make:all() of up_to_date -> halt(0);error -> halt(1) end."
 
 copy src\zotonic.app ebin
 
+@echo ------------------------------
+@echo  build done
+@echo ==============================
