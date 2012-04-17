@@ -123,6 +123,12 @@
 %% Name of the global module index table
 -define(MODULE_INDEX, 'zotonic$module_index').
 
+%% Index record for the mediaclass ets table.
+-record(mediaclass_index_key, {site, mediaclass, ua_class=generic}).
+-record(mediaclass_index, {key, props=[], checksum, tag}).
+
+%% Name of the global mediaclass index table
+-define(MEDIACLASS_INDEX, 'zotonic$mediaclass_index').
 
 %% For the z_db definitions
 -record(column_def, {name, type, length, is_nullable=true, default, primary_key}).

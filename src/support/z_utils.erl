@@ -885,7 +885,9 @@ are_equal(_Arg1, _Arg2) ->
 
 
 %% @doc Return the name used in the context of a hostname
-%% @spec name_for_host(atom(), atom()) -> atom()
+-spec name_for_host(Name :: atom(), atom() | #context{}) -> atom().
+name_for_host(Name, #context{} = Host) ->
+    name_for_host(Name, z_context:site(Host));
 name_for_host(Name, Host) ->
     z_convert:to_atom(z_convert:to_list(Name) ++ [$$, z_convert:to_list(Host)]).
 

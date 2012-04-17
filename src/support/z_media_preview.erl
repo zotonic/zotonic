@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-03-02
+%% @copyright 2009-2012 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, gray, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +26,7 @@
     convert/4,
     size/3,
     can_generate_preview/1,
-	out_mime/2,
+    out_mime/2,
     string2filter/2,
     cmd_args/3,
     calc_size/7
@@ -41,36 +40,53 @@
 
 %% @spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason}
 %% @doc Convert the Infile to an outfile with a still image using the filters.
-%% @todo Check if the conversion has been done
-%% @todo Check if the target /= source
+convert(InFile, InFile, _, _Context) ->
+    lager:error("convert will overwrite input file ~p", [InFile]),
+    {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     case z_media_identify:identify(InFile, Context) of
         {ok, FileProps} ->
             {mime, Mime} = proplists:lookup(mime, FileProps),
             case can_generate_preview(Mime) of
                 true ->
-                    OutMime = z_media_identify:guess_mime(OutFile),
-                    {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
-                    z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
-                    z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
-                    Args1   = lists:flatten(z_utils:combine(32, CmdArgs)),
-                    Cmd     = ["convert ", z_utils:os_filename(InFile++infile_suffix(Mime)), " ", Args1, " ", z_utils:os_filename(OutFile)],
-                    file:delete(OutFile),
-                    ok = filelib:ensure_dir(OutFile),
-                    Result  = z_media_preview_server:exec(lists:flatten(Cmd), OutFile),
-                    case filelib:is_regular(OutFile) of
-                        true ->
-                            ok;
-                        false -> 
-                            ?LOG("convert cmd ~p failed, result ~p", [Cmd, Result]),
-                            {error, "Error during convert."}
+                    case z_media_class:expand_mediaclass_checksum(Filters, Context) of
+                        {ok, FiltersExpanded} ->
+                            convert_1(InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                        {error, _} = Error ->
+                            lager:warning("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
+                            Error
                     end;
                 false ->
-                    {error, "Can not convert "++Mime}
+                    lager:error("cannot convert a ~p (~p)", [Mime, InFile]),
+                    {error, mime_type}
             end;
         {error, Reason} ->
             {error, Reason}
     end.
+
+    convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
+        OutMime = z_media_identify:guess_mime(OutFile),
+        {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
+        z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
+        z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
+        file:delete(OutFile),
+        ok = filelib:ensure_dir(OutFile),
+        Cmd = lists:flatten([
+            "convert ",
+            z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
+            lists:flatten(z_utils:combine(32, CmdArgs)), " ",
+            z_utils:os_filename(OutFile)
+        ]),
+        lager:debug("~p", [Cmd]),
+        Result = z_media_preview_server:exec(Cmd, OutFile),
+        case filelib:is_regular(OutFile) of
+            true ->
+                ok;
+            false -> 
+                lager:error("convert cmd ~p failed, result ~p", [Cmd, Result]),
+                {error, convert_error}
+        end.
+
 
 %% Return the ImageMagick input-file suffix.
 %% @spec infile_suffix(Mime) -> Suffix::string()
@@ -193,10 +209,10 @@ out_mime("image/gif", _) ->
     %% gif is gif, daar kan je gif op innemen
     {"image/gif", ".gif"};
 out_mime(_Mime, Options) ->
-	case lists:member("lossless", Options) orelse proplists:is_defined(lossless, Options) of
-		false -> {"image/jpeg", ".jpg"};
-		true  -> {"image/png", ".png"}
-	end.
+    case lists:member("lossless", Options) orelse proplists:is_defined(lossless, Options) of
+        false -> {"image/jpeg", ".jpg"};
+        true  -> {"image/png", ".png"}
+    end.
 
 
 %% @spec filter2arg(Filter, Width, Height, AllFilters) -> {NewWidth, NewHeight, Filter::string}
@@ -210,13 +226,13 @@ filter2arg({make_image, _Mime}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
     case Orientation of
-    	2 -> {Width, Height, "-flip"};
-    	3 -> {Width, Height, "-rotate 180"};
-    	4 -> {Width, Height, "-flop"};
-    	5 -> {Width, Height, "-transpose"};
-    	6 -> {Width, Height, "-rotate 90"};
-    	7 -> {Width, Height, "-transverse"};
-    	8 -> {Width, Height, "-rotate 270"};
+        2 -> {Width, Height, "-flip"};
+        3 -> {Width, Height, "-rotate 180"};
+        4 -> {Width, Height, "-flop"};
+        5 -> {Width, Height, "-transpose"};
+        6 -> {Width, Height, "-rotate 90"};
+        7 -> {Width, Height, "-transverse"};
+        8 -> {Width, Height, "-rotate 270"};
         _ -> {Width, Height, []}
     end;
 filter2arg({background, Color}, Width, Height, _AllFilters) ->
@@ -378,35 +394,35 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
                 false -> {Width, ceil(Width / ImageAspect), none}
             end;
         _ ->
-	    %% When we are doing a crop then we have to calculate the
-	    %% maximum inner bounding box, and not the maximum outer 
-	    %% bounding box for the image
-	    {W,H} = case Aspect > ImageAspect of
-		% width is the larger one
-		true  -> {Width, Width / ImageAspect};
-		
-		% height is the larger one
-		false -> {ImageAspect * Height, Height}
-	    end,
+        %% When we are doing a crop then we have to calculate the
+        %% maximum inner bounding box, and not the maximum outer 
+        %% bounding box for the image
+        {W,H} = case Aspect > ImageAspect of
+        % width is the larger one
+        true  -> {Width, Width / ImageAspect};
+        
+        % height is the larger one
+        false -> {ImageAspect * Height, Height}
+        end,
 
-        	
-	    CropL = case CropPar of
-		X when X == north_west; X == west; X == south_west -> 0;
-		X when X == north_east; X == east; X == south_east -> ceil(W - Width);
-		[X,_] when is_integer(X) -> X;
-		_ -> ceil((W - Width) / 2)
-	    end,
+            
+        CropL = case CropPar of
+        X when X == north_west; X == west; X == south_west -> 0;
+        X when X == north_east; X == east; X == south_east -> ceil(W - Width);
+        [X,_] when is_integer(X) -> X;
+        _ -> ceil((W - Width) / 2)
+        end,
 
-    	    CropT = case CropPar of
-		Y when Y == north_west; Y == north; Y == north_east -> 0;
-		Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
-		[_,Y] when is_integer(Y) -> Y;
-		_ -> ceil((H - Height) / 2)
-	    end,
+            CropT = case CropPar of
+        Y when Y == north_west; Y == north; Y == north_east -> 0;
+        Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
+        [_,Y] when is_integer(Y) -> Y;
+        _ -> ceil((H - Height) / 2)
+        end,
 
-	    %% @todo Prevent scaleup of the image, but preserve the result size
-	    %% The crop is relative to the original image
-	    {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
+        %% @todo Prevent scaleup of the image, but preserve the result size
+        %% The crop is relative to the original image
+        {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
     end.
 
 
@@ -425,9 +441,9 @@ string2filter("crop", Where) ->
             "west"       -> west;
             "north_west" -> north_west;
             "center"     -> center;
-	    [C|_] = CropLT when C == $+ orelse C == $- ->
-		{match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
-		[list_to_integer(CropL), list_to_integer(CropT)]
+        [C|_] = CropLT when C == $+ orelse C == $- ->
+        {match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
+        [list_to_integer(CropL), list_to_integer(CropT)]
           end,
     {crop,Dir};
 string2filter("grey",[]) ->
@@ -447,7 +463,7 @@ string2filter("blur",[]) ->
 string2filter("blur",Arg) ->
     {blur,Arg};
 string2filter("quality", Arg) ->
-    {quality,list_to_integer(Arg)};
+    {quality, list_to_integer(Arg)};
 string2filter("background", Arg) ->
     {background,Arg};
 string2filter("lossless", []) ->
@@ -455,7 +471,10 @@ string2filter("lossless", []) ->
 string2filter("removebg", []) ->
     {removebg, 5};
 string2filter("removebg", Arg) ->
-    {removebg, list_to_integer(Arg)}.
+    {removebg, list_to_integer(Arg)};
+string2filter("mediaclass", Arg) ->
+    [MediaClass|Checksum] = string:tokens(Arg, "."),
+    {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}.
 
 
 % simple ceil for positive numbers
