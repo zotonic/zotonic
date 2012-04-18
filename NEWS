@@ -25,6 +25,14 @@ directory. Which image class definition is chosen depends on the
 user agent classification.
 
 
+* New filters
+
+menu_subtree:
+    Finds the menu below a particular resource id.
+    Usage:  m.rsc.main_menu.menu|menu_subtree:id
+
+
+
 Release 0.8.0, released on 2012-04-11
 -------------------------------------
 
