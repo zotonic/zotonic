@@ -362,12 +362,7 @@ scan_subdir_class_files(Subdir, Context) ->
                                         filepath=Filepath,
                                         name=RelPath,
                                         module=Module,
-                                        erlang_module=case Subdir of
-                                                        "templates" -> 
-                                                            z_template:filename_to_modulename(Filepath, z_context:site(Context));
-                                                        _ ->
-                                                            undefined
-                                                      end,
+                                        erlang_module=defined_in_templates_to_ets,
                                         prio=Prio,
                                         ua_class=UAClass
                                     }
@@ -504,7 +499,7 @@ templates_to_ets(List, Tag, Site) ->
         case lookup_class(UAClass, Name, List) of
             {error, enoent} ->
                 skip;
-            {ok, #mfile{filepath=FP, module=Mod, erlang_module=ErlMod}} ->
+            {ok, #mfile{filepath=FP, module=Mod}} ->
                 K = #module_index{
                     key=#module_index_key{
                         site=Site,
@@ -513,7 +508,7 @@ templates_to_ets(List, Tag, Site) ->
                         ua_class=UAClass
                     },
                     module=Mod,
-                    erlang_module=ErlMod,
+                    erlang_module=z_template:filename_to_modulename(FP, UAClass, Site),
                     filepath=FP,
                     tag=Tag
                 },

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% @doc Template handling, compiles and renders django compatible templates using an extended version of erlydtl
 %% @todo Make the template handling dependent on the host of the context (hosts have different modules enabled).
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,7 +44,8 @@
     reset/1,
     module_reindexed/2,
     is_template_module/1,
-    filename_to_modulename/2
+    filename_to_modulename/2,
+    filename_to_modulename/3
 ]).
 
 -record(state, {reset_counter, host}).
@@ -100,15 +101,16 @@ render(File, Variables, Context) ->
 
     %% Render the found template
     render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
+        ?DEBUG(Module),
         render1(File, FoundFile, Module, Variables, Context);
     render1(File, FoundFile, Variables, Context) ->
-        Module = filename_to_modulename(FoundFile, z_context:site(Context)),
+        Module = filename_to_modulename(FoundFile, Context),
         render1(File, FoundFile, Module, Variables, Context).
         
     render1(File, FoundFile, Module, Variables, Context) ->
-        Result = case gen_server:call(Context#context.template_server, {check_modified, FoundFile, Module}, ?TIMEOUT) of
+        Result = case gen_server:call(Context#context.template_server, {check_modified, Module}, ?TIMEOUT) of
                     modified -> compile(File, FoundFile, Module, Context);
-                    Other -> Other
+                    ok -> {ok, Module}
                  end,
         case Result of
             {ok, Module} ->
@@ -155,7 +157,7 @@ compile(File, Context) ->
 compile(File, #module_index{filepath=FoundFile, erlang_module=Module}, Context) ->
     compile(File, FoundFile, Module, Context);
 compile(File, FoundFile, Context) ->
-    Module = filename_to_modulename(FoundFile, z_context:site(Context)),
+    Module = filename_to_modulename(FoundFile, Context),
     compile(File, FoundFile, Module, Context).
 
 compile(File, FoundFile, Module, Context) ->
@@ -238,15 +240,12 @@ init(SiteProps) ->
     {ok, #state{reset_counter=z_utils:now_msec(), host=Host}}.
 
 
-%% @spec handle_call({check_modified, File}, From, State) -> {ok, Module} | {error, Reason}
+%% @spec handle_call({check_modified, Module}, From, State) -> ok | modified
 %% @doc Compile the template if it has been modified, return the template module for rendering.
-handle_call({check_modified, File, undefined}, From, State) ->
-    Module = filename_to_modulename(File, State#state.host),
-    handle_call({check_modified, File, Module}, From, State);
-handle_call({check_modified, _File, Module}, _From, State) ->
+handle_call({check_modified, Module}, _From, State) when Module =/= undefined ->
     Result = case template_is_modified(Module, State#state.reset_counter, State#state.host) of
                 true  -> modified;
-                false -> {ok, Module}
+                false -> ok
              end,
     {reply, Result, State};
 
@@ -295,22 +294,27 @@ code_change(_OldVersion, State, _Extra) ->
 
 
 %% @doc Translate a filename to a module name
-filename_to_modulename(File, Host) ->
-    list_to_atom(filename_to_modulename(File, Host, [])).
+-spec filename_to_modulename(file:filename(), #context{}) -> string().
+filename_to_modulename(File, #context{} = Context) ->
+    filename_to_modulename(File, z_user_agent:get_class(Context), z_context:site(Context)).
 
-filename_to_modulename([], Host, Acc) ->
-    ?TEMPLATE_PREFIX ++ atom_to_list(Host) ++ [$_ | lists:reverse(Acc)];
-filename_to_modulename([C|T], Host, Acc) ->
-    filename_to_modulename(T, Host, [savechar(C)|Acc]).
+-spec filename_to_modulename(file:filename(), ua_classifier:device_type(), atom()) -> string().
+filename_to_modulename(File, UAClass, Host) ->
+    list_to_atom(filename_to_modulename_1(File, Host, lists:reverse([$_|z_convert:to_list(UAClass)]))).
 
-savechar(C) when C >= $0 andalso C =< $9 ->
-    C;
-savechar(C) when C >= $a andalso C =< $z ->
-    C;
-savechar(C) when C >= $A andalso C =< $Z ->
-    C+32;
-savechar(_C) ->
-    $_.
+    filename_to_modulename_1([], Host, Acc) ->
+        ?TEMPLATE_PREFIX ++ atom_to_list(Host) ++ [$_ | lists:reverse(Acc)];
+    filename_to_modulename_1([C|T], Host, Acc) ->
+        filename_to_modulename_1(T, Host, [savechar(C)|Acc]).
+
+    savechar(C) when C >= $0 andalso C =< $9 ->
+        C;
+    savechar(C) when C >= $a andalso C =< $z ->
+        C;
+    savechar(C) when C >= $A andalso C =< $Z ->
+        C+32;
+    savechar(_C) ->
+        $_.
 
 
 %% Check if the template or one of the by the template included files is modified since compilation

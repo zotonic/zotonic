@@ -1,12 +1,4 @@
 {% with m.req.ua_class as uac %}
-{% if uac == `text` %}
-<div id="ua_select">
-    <a href="{% url ua_select ua_class='desktop' %}">{_ Desktop _}</a> |
-    <a href="{% url ua_select ua_class='tablet' %}">{_ Tablet _}</a> |
-    <a href="{% url ua_select ua_class='phone' %}">{_ Phone _}</a> |
-    <a href="{% url ua_select ua_class='automatic' %}">{_ Automatic _}</a>
-</div>
-{% else %}
 <div class="btn-group {% if dropup %}dropup{% endif %}" id="ua-select">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
         {_ Mobile or desktop _}
@@ -20,5 +12,4 @@
         <li><a href="{% url ua_select ua_class='automatic' %}">{_ Automatic _}</a></li>
     </ul>
 </div>
-{% endif %}
 {% endwith %}
