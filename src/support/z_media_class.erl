@@ -203,9 +203,12 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Find all mediaclass files for all device types.
 reindex(#state{context=Context, last=Last} = State) ->
     Files = [
-        case z_module_indexer:find_ua_class(template, UAClass, ?MEDIACLASS_FILENAME, Context) of
-            {error, enoent} -> {UAClass, undefined, undefined};
-            {ok, #module_index{filepath=Path}} -> {UAClass, Path, filelib:last_modified(Path)}
+        case z_module_indexer:find_ua_class_all(template, UAClass, ?MEDIACLASS_FILENAME, Context) of
+            [] -> 
+                {UAClass, undefined, undefined};
+            Ms ->
+                Paths = [ Path || #module_index{filepath=Path} <- Ms ],
+                {UAClass, Paths, lists:max([ filelib:last_modified(Path) || Path <- Paths ])}
         end
         || UAClass <- [ generic | z_user_agent:classes() ]
     ],
@@ -225,53 +228,57 @@ reindex_files(Files, State) ->
     State.
 
 reindex_file({_UAClass, undefined, undefined}, _Tag, _Site) ->
-    % No imageclass file for the ua class
+    % No mediaclass file for the ua class
     ok;
 reindex_file({_UAClass, _Path, 0}, _Tag, _Site) ->
-    % Could not stat the imageclass file, file might have disappeared.
+    % Could not stat the mediaclass file, file might have disappeared.
     ok;
-reindex_file({UAClass, Path, _Modified}, Tag, Site) ->
-    case file:consult(Path) of
-        {error, Reason} ->
-            % log an error and continue
-            lager:error("Error consulting media class file ~p: ~p", [Path, Reason]),
-            {error, Reason};
-        {ok, Forms} ->
-            % Process the mediaclass definitions
-            Defs = [
-                begin
-                    Props1 = lists:sort(Props),
-                    {z_convert:to_binary(MediaClass),
-                     Props1,
-                     z_convert:to_binary(
-                        z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:sha(term_to_binary(Props1)))))
-                     )}
-                end
-                || {MediaClass, Props} <- lists:flatten(Forms)
-            ],
-            % Insert all into the mediaclass ets table
-            % Also insert by checksum for the generation of media by url.
-            [
-                begin
-                    ets:insert(?MEDIACLASS_INDEX,
-                                #mediaclass_index{
-                                    key=#mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
-                                    props=Ps,
-                                    checksum=Checksum,
-                                    tag=Tag
-                                }),
-                    ets:insert(?MEDIACLASS_INDEX,
-                                #mediaclass_index{
-                                    key=Checksum,
-                                    props=Ps,
-                                    checksum=Checksum,
-                                    tag=Tag
-                                })
-                end
-                || {MC, Ps, Checksum} <- Defs
-            ],
-            ok
-    end.
+reindex_file({UAClass, Paths, _Modified}, Tag, Site) ->
+    Forms = [ 
+        case file:consult(Path) of
+            {error, Reason} ->
+                % log an error and continue
+                lager:error("Error consulting media class file ~p: ~p", [Path, Reason]),
+                [];
+            {ok, Fs} -> 
+                Fs
+        end
+        || Path <- Paths
+    ],
+    % Process the mediaclass definitions
+    Defs = [
+        begin
+            Props1 = lists:sort(Props),
+            {z_convert:to_binary(MediaClass),
+             Props1,
+             z_convert:to_binary(
+                z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:sha(term_to_binary(Props1)))))
+             )}
+        end
+        || {MediaClass, Props} <- lists:flatten(Forms)
+    ],
+    % Insert all into the mediaclass ets table
+    % Also insert by checksum for the generation of media by url.
+    [
+        begin
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=#mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
+                            props=Ps,
+                            checksum=Checksum,
+                            tag=Tag
+                        }),
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=Checksum,
+                            props=Ps,
+                            checksum=Checksum,
+                            tag=Tag
+                        })
+        end
+        || {MC, Ps, Checksum} <- Defs
+    ],
+    ok.
 
 
 %% @doc Remove all ets entries for this host with an old tag
