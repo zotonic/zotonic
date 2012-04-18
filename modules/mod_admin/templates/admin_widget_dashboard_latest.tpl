@@ -38,7 +38,7 @@
         {% if m.rsc[id].is_visible %}
         <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td>
-                {% if media %}{% image id width=40 height=18 crop class="thumb" %}&nbsp;{% endif %}
+                {% if media %}{% image id mediaclass="admin-list-dashboard" class="thumb" %}&nbsp;{% endif %}
                 {{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}
             </td>
             <td>

@@ -37,7 +37,7 @@
 	    {% with m.rsc[id] as r %}
 	    {% with r.medium as medium %}
 	    <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
-		<td>{% image medium width=80 height=60 crop class="thumb" %}</td>
+		<td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
 		<td>
                     <h5>{{ r.title|striptags|default:"<em>untitled</em>" }}</h5>
                     <p class="help-block">{{ medium.filename|default:"-" }}</p>
