@@ -4,6 +4,9 @@
 
 {% block content %}
 
+{% wire id="admin-seo" type="submit" postback="admin_seo" %}
+<form name="admin-seo" id="admin-seo" method="POST" action="postback">
+
 <div class="admin-header">
 
     <h2>{_ Search Engine Optimization _}</h2>
@@ -15,8 +18,6 @@
     </div>
 </div>
 
-{% wire id="admin-seo" type="submit" postback="admin_seo" %}
-<form name="admin-seo" id="admin-seo" method="POST" action="postback">
 
     <div class="widget">
 
