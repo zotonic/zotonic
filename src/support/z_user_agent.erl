@@ -274,9 +274,11 @@ ua_probe(SetManual, ProbePs, Context) ->
 
 
     % Get the class from the user agent screen size and touch input.
-    class_from_size(_, W, H, false) when W >= 800, H >= 480 -> desktop;
-    class_from_size(_, W, H, true) when W >= 800, H >= 480 -> tablet;
-    class_from_size(_, W, H, _IsTouch) when W =< 800; H =< 480 -> phone;
+    % The px sizes are from http://twitter.github.com/bootstrap/scaffolding.html#responsive
+    class_from_size(_, W, _H, false) when W >= 768 -> desktop;
+    class_from_size(_, W, H, true) when W > 480, H > 480 -> tablet; % larger display, touch
+    class_from_size(_, W, H, false) when W =< 480; H =< 480 -> text; % small display, no touch
+    class_from_size(_, W, H, true) when W =< 480; H =< 480 -> phone; % portrait or landscape phone
     class_from_size(C, _, _, _) -> C.
 
 
