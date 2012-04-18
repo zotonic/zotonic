@@ -232,6 +232,18 @@ img.thumb {
     border-radius: 4px;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
 }
+img.admin-list-dashboard {
+    width: 40px;
+    height: 18px;
+}
+img.admin-list-overview {
+    width: 80px;
+    height: 60px;
+}
+img.admin-rsc-edge-media {
+    width: 166px;
+    height: 200px;
+}
 
 /* admin edit page
    -------------------------------------------------------------- */
