@@ -15,7 +15,9 @@
         {% endif %}
     </div>
     {% if is_new %}
-        {% wire action={script script="z_tinymce_init();" } %}
+        {% javascript %}
+            z_tinymce_init();
+        {% endjavascript %}
     {% endif %}
     
     {% include "_admin_edit_block_addblock.tpl" %}
