@@ -38,6 +38,7 @@
     get_menu/2,
     set_menu/3,
     menu_flat/2,
+    menu_subtree/3,
     remove_invisible/2,
     test/0
 ]).
@@ -270,10 +271,11 @@ set_menu(Id, Menu, Context) ->
     m_rsc:update(Id, [{menu, Menu}], Context).
 
 
-
-menu_flat(undefined, _Context) ->
+%% @doc Flatten the menu structure in a list, used for display purposes in templates
+-spec menu_flat(list() | undefined | <<>>, #context{}) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
+menu_flat(Menu, _Context) when not is_list(Menu) ->
     [];
-menu_flat(<<>>, _Context) ->
+menu_flat([], _Context) ->
     [];
 menu_flat(X, Context) ->
     menu_flat(X, [1], [], Context).
@@ -281,7 +283,6 @@ menu_flat(X, Context) ->
 menu_flat([], _Path, Acc, _Context) ->
     lists:reverse(Acc);
 menu_flat([ {MenuId, []} | Rest], [Idx|PR], Acc, Context ) ->
-
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
         ++ menu_flat(Rest, [Idx+1|PR], [], Context)
         ++  Acc;
@@ -295,6 +296,37 @@ menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc, Context ) ->
 menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
     %% oldschool notation fallback
     menu_flat([{MenuId, []} | Rest], P, A, C).
+
+
+%% @doc Find the subtree below a resource id. 'undefined' when not found.
+-spec menu_subtree(Menu::list(), PageId :: term(), #context{}) -> list() | undefined.
+menu_subtree([], _BelowId, _Context) ->
+    undefined;
+menu_subtree(Menu, _BelowId, _Context) when not is_list(Menu) ->
+    undefined;
+menu_subtree(_Menu, undefined, _Context) ->
+    undefined;
+menu_subtree(Menu, BelowId, Context) when not is_integer(BelowId) ->
+    menu_subtree(Menu, m_rsc:rid(BelowId, Context), Context);
+menu_subtree(Menu, BelowId, _Context) ->
+    menu_subtree_1(Menu, BelowId).
+    
+    menu_subtree_1([], _BelowId) ->
+        undefined;
+    menu_subtree_1([{BelowId, Menu}|_Rest], BelowId) ->
+        Menu;
+    menu_subtree_1([{_Id, Menu}|Rest], BelowId) ->
+        case menu_subtree_1(Menu, BelowId) of
+            undefined -> menu_subtree_1(Rest, BelowId);
+            M -> M
+        end;
+    % Old notation
+    menu_subtree_1([BelowId|_Rest], BelowId) ->
+        [];
+    menu_subtree_1([_|Rest], BelowId) ->
+        menu_subtree_1(Rest, BelowId).
+
+
 
 
 %% @doc The datamodel for the menu routines.
