@@ -84,7 +84,7 @@ render({cat, File}, Variables, Context) ->
         {ok, FoundFileOrModuleIndex} -> 
             render1(File, FoundFileOrModuleIndex, Variables, Context);
         {error, Reason} ->
-            ?LOG("Could not find template: ~s (~p)", [File, Reason]),
+            lager:info("Could not find template: ~s (~p)", [File, Reason]),
             throw({error, {template_not_found, File, Reason}})
     end;
 render(#module_index{} = M, Variables, Context) ->
@@ -95,13 +95,14 @@ render(File, Variables, Context) ->
         {ok, ModuleIndexOrList} ->
             render1(File1, ModuleIndexOrList, Variables, Context);
         {error, Reason} ->
-            ?LOG("Could not find template: ~s (~p)", [File1, Reason]),
+            lager:info("Could not find template: ~s (~p)", [File1, Reason]),
             throw({error, {template_not_found, File1, Reason}})
     end.
 
     %% Render the found template
+    render1(File, #module_index{filepath=FoundFile, erlang_module=undefined}, Variables, Context) ->
+        render1(File, FoundFile, Variables, Context);
     render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
-        ?DEBUG(Module),
         render1(File, FoundFile, Module, Variables, Context);
     render1(File, FoundFile, Variables, Context) ->
         Module = filename_to_modulename(FoundFile, Context),
@@ -122,16 +123,16 @@ render(File, Variables, Context) ->
                         Output;
                     {error, Reason} ->
                         z_depcache:in_process(OldCaching),
-                        ?ERROR("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
+                        lager:error("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
                         throw({error, {template_rendering_error, FoundFile, Reason}})
                  end;
             {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
                 Error1 = try lists:flatten(Error) catch _:_ -> Error end,
-                ?ERROR("Error compiling template: ~s:~p (~p) ~s~n", [ErrFile, Line, Col, Error1]),
+                lager:error("Error compiling template: ~s:~p (~p) ~s~n", [ErrFile, Line, Col, Error1]),
                 throw({error, {template_compile_error, ErrFile, {Line,Col}, Error1}});
             {error, Reason} ->
                 Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
-                ?ERROR("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
+                lager:error("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
                 throw({error, {template_compile_error, FoundFile, Reason1}})
         end.
     

@@ -362,7 +362,7 @@ scan_subdir_class_files(Subdir, Context) ->
                                         filepath=Filepath,
                                         name=RelPath,
                                         module=Module,
-                                        erlang_module=defined_in_templates_to_ets,
+                                        erlang_module=undefined,
                                         prio=Prio,
                                         ua_class=UAClass
                                     }
