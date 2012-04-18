@@ -90,7 +90,6 @@ h2 {
 }
 
 h3 {
-    font-family: georgia, times, serif;
     font-size: 12px;
     line-height: 24px;
     font-style: normal;
@@ -150,7 +149,6 @@ p.important:first-letter {
     padding: 6px 0 0 0;
     width: auto;
     color: #154868;
-    font-family: Georgia, Times, serif;
 }
 
 p.keywords {

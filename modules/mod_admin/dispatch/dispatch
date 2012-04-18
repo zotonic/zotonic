@@ -1,14 +1,14 @@
 %% Admin dispatch rules
 
 [
-	{admin,   				["admin"],								resource_admin,					[]},
-	{admin_overview_rsc,  	["admin", "overview"],					resource_admin,					[{template, "admin_overview.tpl"}, {selected, "overview"}]},
-    {admin_media,           ["admin", "media"],                     resource_admin,					[{template, "admin_media.tpl"}, {selected, "media"}]},
+    {admin,   		["admin"],				resource_admin,			[]},
+    {admin_logon,  	["admin", "logon"],			resource_logon,			[{template, "admin_logon.tpl"}]},
+    {admin_overview_rsc,["admin", "overview"],			resource_admin,			[{template, "admin_overview.tpl"}, {selected, "overview"}]},
+    {admin_media,       ["admin", "media"],                     resource_admin,			[{template, "admin_media.tpl"}, {selected, "media"}]},
 
-	{admin_edit_rsc, 		["admin", "edit", id],					resource_admin_edit,			[]},
-    {admin_referrers,       ["admin", "referrer", id],              resource_admin_referrers,		[]},
-    {admin_media,           ["admin", "media", "preview", id],      resource_admin_media_preview,   []},
+    {admin_edit_rsc, 	["admin", "edit", id],			resource_admin_edit,		[]},
+    {admin_referrers,   ["admin", "referrer", id],              resource_admin_referrers,	[]},
+    {admin_media,       ["admin", "media", "preview", id],      resource_admin_media_preview,   []},
 
-	{admin_status,			["admin", "status"],					resource_admin,					[{template, "admin_status.tpl"}, {selected, "status"}]}
-
+    {admin_status,	["admin", "status"],			resource_admin,			[{template, "admin_status.tpl"}, {selected, "status"}]}
 ].

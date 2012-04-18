@@ -1,8 +1,9 @@
 /* Design for logon, password reminder etc. */
 
-div#logon_outer {
+div.logon_bottom {
 	text-align: center;
-	margin: 100px auto 20px;
+	margin-top: 20px;
+        margin-bottom: 100px;
 }
 
 p#logon_reason {
@@ -14,35 +15,78 @@ ul#logon_methods {
 }
 
 div#logon_box {
-	text-align: left;
-	width: 300px;
-	margin: 0 auto;
-	padding: 10px 30px 10px;
-	border: 1px solid #aaa;
+    text-align: left;
+    width: 300px;
+    margin: 0 auto;
+    padding: 30px;
+    padding-bottom: 10px;
+    margin-top: 100px;
 
-	border-radius: 8px;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
 
-	box-shadow: 0 0 6px #999;
-	-webkit-box-shadow: 0 0 6px #999;
-	-moz-box-shadow: 0 0 6px #999;
+    box-shadow: 0 0 6px #999;
+    -webkit-box-shadow: 0 0 6px #999;
+    -moz-box-shadow: 0 0 6px #999;
 
-	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999')";
-	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999')";
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
 }
 
-.logon_error div#logon_box {
-	width: 600px;
+#logon_box form input[type="text"],
+#logon_box form input[type="password"] {
+    font-size: 18px;
+    height: 22px;
+}
+
+#logon_box form div.buttons {
+    margin-top: 30px;
+}
+
+#logon_box form div.buttons p {
+    margin-top: 9px;
+}
+
+#logon_box form .checkbox {
+    padding-left: 4px;
+}
+
+#logon_box form .z_validation_message {
+    position: absolute;
+    padding-left: 4px;
+    color: red;
+}
+
+#logon_box form .form-field-error,
+#logon_box form .form-field-error:focus {
+    border-color: red;
+}
+
+
+div#logon_box.logon_error  {
+    width: 600px;
 }
 
 div#logon_error {
-	margin: 18px 18px 18px 0px;
-	padding-right: 18px;
-	border-right: 1px solid #ccc;
-	width: 260px; 
-	float: left; 
-	text-align: left;	
+    margin: 0 18px 18px 0px;
+    padding-right: 18px;
+    border-right: 1px solid #ccc;
+    width: 260px; 
+    float: left; 
+    text-align: left;
+    display: none;
+}
+
+h1.logon_header.error {
+    color: red;
+}
+
+div#logon_box.logon_error div#logon_error  {
+    display: block;
+}
+div#logon_box.logon_error div#logon_form  {
+    margin-left: 300px;
 }
 
 
@@ -50,78 +94,19 @@ div#logon_error h2 {
 	color: #d80000;
 }
 
-div#logon_form_box,
-div#logon_password_reset,
-div#logon_reminder,
-div#logon_password_expired,
-div#logon_verification_pending,
-div#logon_verification_sent {
-	width: 300px;
-}
-
 div#logon_button {
 	text-align: center;
 }
 
-div#logon_button button {
-	float: none;
-	display: inline;
-	font-weight: bold;
-	padding: 4px 10px;
-}
-
-h1.logon_header {
-	margin: 18px 0px;
-}
-
-div.rememberme {
-	margin-top: 9px;
-}
-
-div.rememberme label {
-	float: none;
-	display: inline;
-}
 
 p.logon_link {
 	margin: 0;
 }
 
+#logon_methods {
+    list-style-type: none;
+}
+
 #logon_methods img {
 	float: none;
 }
-
-
-/* Overlay label and input element */
-/* Some of this should be part of the z.inputoverlay.js module. */
-
-p.do_inputoverlay {
-	margin: 0px;
-	padding: 0px;
-	position: relative;
-	height: 40px;
-	font-size: 18px;
-}
-
-p.do_inputoverlay input {
-	position: absolute;
-	left: 0px;
-	background: none !important;
-	font-size: 18px;
-}
-
-p.do_inputoverlay span {
-	position: absolute;
-	left: 8px;
-	top: 5px;
-	color: #aaa;
-}
-
-p.do_inputoverlay span.focus {
-	color: #d8d8d8;
-}
-
-p.do_inputoverlay span.hidden {
-	display: none;
-}
-

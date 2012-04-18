@@ -51,33 +51,24 @@ content_types_provided(ReqData, Context) ->
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
-    case is_password_reset(Context2) of
+    case z_auth:is_auth(Context2) of
         true ->
-            ?WM_REPLY(true, Context2);
+            case z_context:get_q("p", Context2, []) of
+                [] -> ?WM_REPLY(false, Context2);
+                _P -> ?WM_REPLY(true, Context2)
+            end;
         false ->
-            case z_auth:is_auth(Context2) of
-                true ->
-                    case z_context:get_q("p", Context2, []) of
-                        [] -> ?WM_REPLY(false, Context2);
-                        _P -> ?WM_REPLY(true, Context2)
+            case get_rememberme_cookie(Context2) of
+                {ok, UserId} ->
+                    Context3 = z_context:set(user_id, UserId, Context2),
+                    case z_auth:logon(UserId, Context3) of
+                        {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
+                        {error, _Reason} -> ?WM_REPLY(true, Context3)
                     end;
-                false ->
-                    case get_rememberme_cookie(Context2) of
-                        {ok, UserId} ->
-                            Context3 = z_context:set(user_id, UserId, Context2),
-                            case z_auth:logon(UserId, Context3) of
-                                {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
-                                {error, _Reason} -> ?WM_REPLY(true, Context3)
-                            end;
-                        undefined ->
-                            ?WM_REPLY(true, Context2)
-                    end
+                undefined ->
+                    ?WM_REPLY(true, Context2)
             end
     end.
-    
-    is_password_reset(Context) ->
-               z_context:get(is_password_reset, Context, false)
-        orelse z_context:get(is_password_reminder, Context, false).
 
 
 previously_existed(ReqData, Context) ->
@@ -96,35 +87,25 @@ provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
     Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
-	IsPasswordReset = z_context:get(is_password_reset, Context3),
-	IsPasswordReminder = z_context:get(is_password_reminder, Context3),
-    Vars = [
-        {page, get_page(Context3)},
-		{is_password_reset, IsPasswordReset},
-		{is_password_reminder, IsPasswordReminder}
-    ],
-	Vars1 = case IsPasswordReset of
-		true -> 
-			Secret = z_context:get_q("secret", Context3),
-			case get_by_reminder_secret(Secret, Context3) of
-				{ok, UserId} -> 
-					[ {user_id, UserId}, 
-					  {secret, Secret},
-					  {username, m_identity:get_username(UserId, Context3)} | Vars ];
-				undefined -> 
-					Vars
-			end;
-		_ ->
-			Vars
-	end,
-	ErrorUId = z_context:get_q("error_uid", Context3),
-	ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
-		false -> Context3;
-		true -> check_verified(list_to_integer(ErrorUId), Context3)
-	end,
-	Rendered = z_template:render("logon.tpl", Vars1, ContextVerify),
+    Secret = z_context:get_q("secret", Context3),
+    Vars = [{page, get_page(Context3)}],
+    Vars1 = case get_by_reminder_secret(Secret, Context3) of
+                {ok, UserId} -> 
+                    [ {user_id, UserId}, 
+                      {secret, Secret},
+                      {username, m_identity:get_username(UserId, Context3)} | Vars ];
+                undefined -> 
+                    Vars
+            end,
+    ErrorUId = z_context:get_q("error_uid", Context3),
+    ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
+                        false -> Context3;
+                        true -> check_verified(list_to_integer(ErrorUId), Context3)
+                    end,
+    Template = z_context:get(template, ContextVerify, "logon.tpl"),
+    Rendered = z_template:render(Template, Vars1, ContextVerify),
     {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
-	?WM_REPLY(Output, OutputContext).
+    ?WM_REPLY(Output, OutputContext).
 
 
 %% @doc Get the page we should redirect to after a successful log on.
@@ -159,58 +140,52 @@ cleanup_url(Url) -> z_html:noscript(Url).
 %% @doc Handle the submit of the logon form, this will be handed over to the
 %% different authentication handlers.
 
-event(#submit{message=[], form="logon_password_expired_form"}=S, Context) ->
-    event(S#submit{form="logon_password_reset_form"}, Context);
+event(#postback{message={send_verification, [{user_id, UserId}]}}, Context) ->
+    case z_notifier:first(#identity_verification{user_id=UserId}, Context) of
+        ok -> logon_stage("verification_sent", Context);
+        _Other -> logon_stage("verification_error", Context)
+    end;
 
-event(#submit{message=[], form="logon_password_reset_form"}, Context) ->
-	Secret = z_context:get_q("secret", Context),
-	Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
-	Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
-	case {Password1,Password2} of
-		{A,_} when length(A) < 6 ->
-			z_render:wire([
-					{remove_class, [{target, "logon_outer"}, {class, "logon_error_password_unequal"}]},
-					{add_class, [{target, "logon_outer"}, {class, "logon_error"}]},
-					{add_class, [{target, "logon_outer"}, {class, "logon_error_password_tooshort"}]}
-					], Context);
-		{P,P} ->
-			{ok, UserId} = get_by_reminder_secret(Secret, Context),
-			case m_identity:get_username(UserId, Context) of
-				undefined ->
-					throw({error, "User does not have an username defined."});
-				Username ->
+event(#submit{message=[], form="password_expired"}=S, Context) ->
+    event(S#submit{form="password_reset"}, Context);
+
+event(#submit{message=[], form="password_reset"}, Context) ->
+    Secret = z_context:get_q("secret", Context),
+    Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
+    Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
+    case {Password1,Password2} of
+        {A,_} when length(A) < 6 ->
+            logon_error("tooshort", Context);
+        {P,P} ->
+            {ok, UserId} = get_by_reminder_secret(Secret, Context),
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    throw({error, "User does not have an username defined."});
+                Username ->
                     ContextLoggedon = logon_user(UserId, Context),
-					delete_reminder_secret(UserId, ContextLoggedon),
-					m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
                     ContextLoggedon
-			end;
-		{_,_} ->
-			z_render:wire([
-					{remove_class, [{target, "logon_outer"}, {class, "logon_error_password_tooshort"}]},
-					{add_class, [{target, "logon_outer"}, {class, "logon_error"}]},
-					{add_class, [{target, "logon_outer"}, {class, "logon_error_password_unequal"}]}
-					], Context)
-	end;
-event(#submit{message=[], form="logon_reminder_form"}, Context) ->
+            end;
+        {_,_} ->
+            logon_error("unequal", Context)
+    end;
+
+event(#submit{message=[], form="password_reminder"}, Context) ->
 	case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
 		[] ->
-			logon_error(Context);
+			logon_error("reminder", Context);
 		Reminder ->
 			case lookup_identities(Reminder, Context) of
 				[] -> 
-					logon_error(Context);
+					logon_error("reminder", Context);
 				Identities ->
 					% @todo TODO check if reminder could be sent (maybe there is no e-mail address)
 					send_reminder(Identities, Context),
-					reminder_success(Context)
+					logon_stage("reminder_sent", Context)
 			end
 	end;
-event(#submit{message=[], form="logon_verification_form"}, Context) ->
-	UserId = list_to_integer(z_context:get_q("user_id", Context)),
-	case z_notifier:first(#identity_verification{user_id=UserId}, Context) of
-		ok -> verification_sent(Context);
-		_Other -> verification_error(Context)
-	end;
+
 event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
@@ -222,41 +197,34 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
         Other -> ?DEBUG(Other)
     end;
+
 event(#submit{message=[]}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first(#logon_submit{query_args=Args}, Context) of
-        undefined -> logon_error(Context); % No handler for posted args
-        {error, _Reason} -> logon_error(Context);
-        {expired, UserId} when is_integer(UserId) -> password_expired(UserId, Context);
+        undefined -> logon_error("pwd", Context); % No handler for posted args
+        {error, _Reason} -> logon_error("pw", Context);
+        {expired, UserId} when is_integer(UserId) ->
+            logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
         {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
     end.
 
-	logon_error(Context) ->
-		Context1 = z_render:set_value("password", "", Context),
-		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_error"}]}, Context1).
-
-	remove_logon_error(Context) ->
-		z_render:wire({remove_class, [{target, "logon_outer"}, {class, "logon_error"}]}, Context).
-	
-	reminder_success(Context) ->
-		Context1 = remove_logon_error(Context),
-		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_reminder_sent"}]}, Context1).
-
-	password_expired(UserId, Context) ->
-		z_render:wire([{set_value, [{target, "logon_password_expired_secret"}, {value, set_reminder_secret(UserId, Context)}]},
-					   {set_class, [{target, "logon_outer"}, {class, "logon_password_expired"}]}], Context).
-
-	verification_pending(UserId, Context) ->
-		z_render:wire([{set_value, [{target, "logon_verification_user_id"}, {value, integer_to_list(UserId)}]},
-					   {set_class, [{target, "logon_outer"}, {class, "logon_verification_pending"}]}], Context).
-
-	verification_sent(Context) ->
-		z_render:wire({set_class, [{target, "logon_outer"}, {class, "logon_verification_sent"}]}, Context).
-
-	verification_error(Context) ->
-		z_render:wire({add_class, [{target, "logon_outer"}, {class, "logon_error_verification"}]}, logon_error(Context)).
+logon_error(Reason, Context) ->
+    Context1 = z_render:set_value("password", "", Context),
+    Context2 = z_render:wire({add_class, [{target, "logon_box"}, {class, "logon_error"}]}, Context1),
+    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
 
 
+remove_logon_error(Context) ->
+    z_render:wire({remove_class, [{target, "logon_box"}, {class, "logon_error"}]}, Context).
+
+
+logon_stage(Stage, Context) ->
+    logon_stage(Stage, [], Context).
+
+logon_stage(Stage, Args, Context) ->
+    Context1 = remove_logon_error(Context),
+    z_render:update("logon_form", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
+    
 
 logon_user(UserId, Context) ->
     case z_auth:logon(UserId, Context) of
@@ -270,7 +238,7 @@ logon_user(UserId, Context) ->
 			check_verified(UserId, Context);
 		{error, _Reason} ->
 			% Could not log on, some error occured
-			logon_error(Context)
+			logon_error("unknown", Context)
 	end.
 
 
@@ -278,11 +246,11 @@ check_verified(UserId, Context) ->
 	case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
 		false ->
 			% The account is awaiting verification
-			verification_pending(UserId, Context);
+			logon_stage("verification_pending", [{user_id, UserId}], Context);
 		V when V == true orelse V == undefined ->
 			% The account has been disabled after verification, or
 			% verification flag not set, account didn't need verification
-			logon_error(Context)
+			logon_error("unknown", Context)
 	end.
 
 

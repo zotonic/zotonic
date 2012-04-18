@@ -171,7 +171,7 @@ div.widget input.span8, div.widget textarea.span8 {
     width: 712px;
 }
 div.widget input.span4, div.widget textarea.span4, div.widget select.span4 {
-    width: 343px;
+    width: 332px;
 }
 div.widget input.span3, div.widget textarea.span3 {
     width: 216px;
@@ -508,3 +508,23 @@ body[dir=rtl] label {
 .defaultSkin span.mce_zlink {background-position:-40px -40px}
 .defaultSkin span.mce_zbdoltr {background-position:-60px -40px}
 .defaultSkin span.mce_zbdortl {background-position:-80px -40px}
+
+
+/* admin logon */
+.admin-logon {
+    margin: auto;
+    margin-top: 100px;
+    width: 400px;
+}
+
+.admin-logon input.span4 {
+    width: 340px !important;
+}
+
+.admin-logon div.buttons p {
+    margin-top: 9px;
+}
+
+.admin-logon div.buttons {
+    margin-top: 30px;
+}

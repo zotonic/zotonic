@@ -63,13 +63,15 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 menu(Context) ->
-    F = fun() ->
-                Menu = z_notifier:foldl(admin_menu, [], Context),
-                hierarchize(Menu, Context)
-        end,
-    F().
-    %% z_depcache:memo(F, {admin_menu, z_acl:user(Context), z_context:language(Context)},
-    %%                 Context).
+    case z_acl:is_allowed(use, mod_admin, Context) of
+        false -> [];
+        true ->
+            F = fun() ->
+                        Menu = z_notifier:foldl(admin_menu, [], Context),
+                        hierarchize(Menu, Context)
+                end,
+            z_depcache:memo(F, {admin_menu, z_acl:user(Context), z_context:language(Context)}, Context)
+    end.
 
 
 
