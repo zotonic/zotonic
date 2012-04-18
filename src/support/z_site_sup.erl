@@ -71,6 +71,10 @@ init(Host) ->
                 {z_template, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
+    MediaClass = {z_media_class, 
+                {z_media_class, start_link, [SiteProps]},
+                permanent, 5000, worker, dynamic},
+
     DropBox = {z_dropbox,
                 {z_dropbox, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
@@ -93,7 +97,7 @@ init(Host) ->
 
     Processes = [
             Depcache, Translation, Installer, Notifier, Session, 
-            Dispatcher, Template, DropBox, Pivot,
+            Dispatcher, Template, MediaClass, DropBox, Pivot,
             ModuleIndexer, Modules,
             PostStartup
     ],

@@ -125,6 +125,7 @@ restart(Site) ->
 init([]) ->
     {ok, Sup} = z_supervisor:start_link([]),
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
+    ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
     add_sites_to_sup(Sup, scan_sites()),
     {ok, #state{sup=Sup}}.
 

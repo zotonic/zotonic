@@ -12,6 +12,18 @@ All base HTML has moved to use the Twitter Bootstrap CSS framework
 instead of Atatonic. This includes the admin (which got a new design)
 and the base templates for the skeleton sites.
 
+* New tags/changed tags
+
+{% javascript %}...{% endjavascript %}
+Adds javascript that will be run after jQuery has been initialized.
+In dynamic content it will run after the DOM has been updated with the
+template where the javascript was defined.
+
+{% image %} new attribute: imageclass
+Image classes are defined using property files in the template 
+directory. Which image class definition is chosen depends on the 
+user agent classification.
+
 
 Release 0.8.0, released on 2012-04-11
 -------------------------------------

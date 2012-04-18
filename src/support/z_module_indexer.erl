@@ -176,11 +176,11 @@ handle_cast({module_ready, _NotifyContext}, State) ->
         true ->
             % Reindex the ets table for this host
             reindex_ets_lookup(State1),
-            % Reset the template server when the templates are changed
-            z_template:reset(State1#state.context),
+
+            % Reset the template server (and others) when there the index is changed.
+            z_notifier:notify(module_reindexed, State1#state.context),
             {noreply, State1};
         false ->
-            reindex_ets_lookup(State1),
             {noreply, State}
     end;
 

@@ -42,6 +42,7 @@
     find_template/3,
     find_template_cat/3,
     reset/1,
+    module_reindexed/2,
     is_template_module/1,
     filename_to_modulename/2
 ]).
@@ -61,9 +62,13 @@ start_link(SiteProps) ->
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
 reset(Host) when is_atom(Host) ->
     Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:cast(Name, reset);
+    gen_server:cast(Name, module_reindexed);
 reset(Context) ->
-    gen_server:cast(Context#context.template_server, reset).
+    gen_server:cast(Context#context.template_server, module_reindexed).
+
+%% @doc Observer, triggered when there are new module files indexed
+module_reindexed(module_reindexed, Context) ->
+    reset(Context).
 
 
 render(#render{} = Render, Context) ->
@@ -227,7 +232,10 @@ is_template_module(Module) ->
 %%                     {stop, Reason}
 %% @doc Initialize the template server, handles template compiles and rendering.
 init(SiteProps) ->
-    {ok, #state{reset_counter=z_utils:now_msec(), host=proplists:get_value(host, SiteProps)}}.
+    process_flag(trap_exit, true),
+    Host = proplists:get_value(host, SiteProps),
+    z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
+    {ok, #state{reset_counter=z_utils:now_msec(), host=Host}}.
 
 
 %% @spec handle_call({check_modified, File}, From, State) -> {ok, Module} | {error, Reason}
@@ -266,18 +274,24 @@ handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
     {reply, ErlyResult, State}.
 
 %% @doc Reset all compiled templates, done by the module_indexer after the module list changed.
-handle_cast(reset, State) -> 
+handle_cast(module_reindexed, State) -> 
     {noreply, State#state{reset_counter=State#state.reset_counter+1}};
 handle_cast(_Msg, State) -> 
     {noreply, State}.
 
-handle_info(_Msg, State) -> {noreply, State}.
+handle_info(_Msg, State) -> 
+    {noreply, State}.
 
-terminate(_Reason, _State) ->
+terminate(_Reason, State) ->
+    z_notifier:detach(module_reindexed, {?MODULE, module_reindexed}, z_context:new(State#state.host)),
     ok.
 
 code_change(_OldVersion, State, _Extra) ->
     {ok, State}.
+
+%%====================================================================
+%% support functions
+%%====================================================================
 
 
 %% @doc Translate a filename to a module name

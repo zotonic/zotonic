@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-03-03
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
@@ -9,7 +9,7 @@
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,8 +31,10 @@
     viewer/3,
     tag/3,
     url/3,
-    props2url/1,
-    url2props/2
+    url2props/2,
+    
+    % Export for tests
+    props2url/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -151,13 +153,23 @@ tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
         tag1(FilePath, Filename, Options, Context);
     tag1(MediaRef, Filename, Options, Context) ->
         {url, Url, TagOpts, ImageOpts} = url1(Filename, Options, Context),
-        % Calculate the real size of the image using the options
-        TagOpts1 = case z_media_preview:size(MediaRef, ImageOpts, Context) of
+        TagOpts1 =
+            case proplists:get_value(mediaclass, Options) of
+                undefined ->
+                    % Calculate the real size of the image using the options
+                    case z_media_preview:size(MediaRef, ImageOpts, Context) of
                         {size, Width, Height, _Mime} ->
                             [{width,Width},{height,Height}|TagOpts];
                         _ ->
                             TagOpts
-                    end,
+                    end;
+                MC ->
+                    % Add the mediaclass to the tag's class attribute
+                    case proplists:get_value(class, TagOpts) of
+                        undefined -> [{class, MC} | TagOpts];
+                        Class -> [{class, iolist_to_binary([MC, 32, Class])} | proplists:delete(class, TagOpts)]
+                    end
+            end,
         % Make sure the required alt tag is present
         TagOpts2 =  case proplists:get_value(alt, TagOpts1) of
                         undefined -> [{alt,""}|TagOpts1];
@@ -166,11 +178,11 @@ tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
         % Filter some opts
         case proplists:get_value(link, TagOpts) of
             Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-                {ok, z_tags:render_tag("img", [{src,Url}|TagOpts2])};
+                {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts2]))};
             Link ->
                 HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
                 Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
-                {ok, z_tags:render_tag("a", [{href,HRef}], Tag)}
+                {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
         end.
 
 
@@ -269,14 +281,21 @@ url1(File, Options, Context) ->
     Filename = z_convert:to_list(File),
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
     % Map all ImageOpts to an opt string
-    UrlProps = props2url(ImageOpts),
-	MimeFile = z_media_identify:guess_mime(Filename),
-	{_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts),
-    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
-    PropCheck = mochiweb_util:quote_plus(lists:flatten([UrlProps,$(,Checksum,$)])),
-    {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]))), 
-          TagOpts,
-          ImageOpts}.
+    MimeFile = z_media_identify:guess_mime(Filename),
+    {_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts),
+    case props2url(ImageOpts, Context) of
+        {no_checksum, UrlProps} ->
+            PropsQuoted = mochiweb_util:quote_plus(UrlProps),
+            {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]))), 
+                  TagOpts,
+                  ImageOpts};
+        {checksum, UrlProps} ->
+            Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
+            PropCheck = mochiweb_util:quote_plus(iolist_to_binary([UrlProps,$(,Checksum,$)])),
+            {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]))), 
+                  TagOpts,
+                  ImageOpts}
+    end.
 
 
 is_tagopt({link,  _}) -> true;
@@ -297,6 +316,7 @@ is_tagopt({quality, _}) -> false;
 is_tagopt({background, _}) -> false;
 is_tagopt({lossless, _}) -> false;
 is_tagopt({removebg, _}) -> false;
+is_tagopt({mediaclass, _}) -> false;
 % And be sure to keep the data-xxxx args in the tag
 is_tagopt({Prop, _}) ->
     case z_convert:to_list(Prop) of
@@ -305,32 +325,52 @@ is_tagopt({Prop, _}) ->
     end.
 
 
-props2url(Props) -> 
-    props2url(Props, undefined, undefined, []).
-
-props2url([], Width, Height, Acc) ->
+props2url([{mediaclass, _}] = Props, Context) -> 
+    {_Width, _Height, Acc} = props2url(Props, undefined, undefined, [], Context),
+    {no_checksum, iolist_to_binary([$(,Acc,$)])};
+props2url(Props, Context) -> 
+    {Width, Height, Acc} = props2url(Props, undefined, undefined, [], Context),
     Size =  case {Width,Height} of
                 {undefined,undefined} -> [];
                 {_W,undefined} -> [integer_to_list(Width)] ++ "x";
                 {undefined,_H} -> [$x|integer_to_list(Height)];
                 {_W,_H} -> integer_to_list(Width) ++ [$x|integer_to_list(Height)]
             end,
-    lists:flatten([$(, z_utils:combine(")(", [Size|lists:reverse(Acc)]), $)]);
+    {checksum, iolist_to_binary([$(, z_utils:combine(")(", [Size|lists:reverse(Acc)]), $)])}.
 
-props2url([{crop,None}|Rest], Width, Height, Acc) when None == false; None == undefined; None == <<>>; None == [] ->
-    props2url(Rest, Width, Height, Acc);
-props2url([{width,Width}|Rest], _Width, Height, Acc) ->
-    props2url(Rest, z_convert:to_integer(Width), Height, Acc);
-props2url([{height,Height}|Rest], Width, _Height, Acc) ->
-    props2url(Rest, Width, z_convert:to_integer(Height), Acc);
-props2url([{Prop}|Rest], Width, Height, Acc) ->
-    props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc]);
-props2url([{_Prop,undefined}|Rest], Width, Height, Acc) ->
-    props2url(Rest, Width, Height, Acc);
-props2url([{Prop,true}|Rest], Width, Height, Acc) ->
-    props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc]);
-props2url([{Prop,Value}|Rest], Width, Height, Acc) ->
-    props2url(Rest, Width, Height, [[atom_to_list(Prop),$-,z_convert:to_list(Value)]|Acc]).
+props2url([], Width, Height, Acc, _Context) ->
+    {Width, Height, Acc};
+props2url([{crop,None}|Rest], Width, Height, Acc, Context) when None == false; None == undefined; None == <<>>; None == [] ->
+    props2url(Rest, Width, Height, Acc, Context);
+props2url([{width,Width}|Rest], _Width, Height, Acc, Context) ->
+    props2url(Rest, z_convert:to_integer(Width), Height, Acc, Context);
+props2url([{height,Height}|Rest], Width, _Height, Acc, Context) ->
+    props2url(Rest, Width, z_convert:to_integer(Height), Acc, Context);
+props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
+    case z_media_class:get(Class, Context) of
+        {ok, [], <<>>} ->
+            lager:warning("~p: unknown mediaclass ~p", [z_context:site(Context), Class]),
+            props2url(Rest, Width, Height, Acc, Context);
+        {ok, _Props, Checksum} ->
+            MC = [
+                <<"mediaclass-">>,
+                Class,
+                $.,
+                Checksum
+            ],
+            props2url(Rest, Width, Height, [MC|Acc], Context);
+        {error, _Reason} = Error ->
+            lager:info("~p: error looking up mediaclass ~p: ~p", [z_context:site(Context), Class, Error]),
+            props2url(Rest, Width, Height, Acc, Context)
+    end;
+props2url([{Prop}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);
+props2url([{_Prop,undefined}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, Acc, Context);
+props2url([{Prop,true}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);
+props2url([{Prop,Value}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, [[atom_to_list(Prop),$-,z_convert:to_list(Value)]|Acc], Context).
 
 
 %% @spec url2props(Url, Context) -> {Filepath,PreviewPropList,Checksum,ChecksumBaseString} | error
@@ -352,22 +392,30 @@ url2props(Url, Context) ->
                        end,
             FileMime = z_media_identify:guess_mime(Rest),
             {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
-            z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
-            PropList1       = case PropList of
-                                [] -> [];
-                                [Size|RestProps]->
-                                    {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
-                                    SizeProps = case {W,XH} of
-                                                    {"", "x"}            -> [];
-                                                    {"", ""}             -> [];
-                                                    {Width, ""}          -> [{width,list_to_integer(Width)}]; 
-                                                    {Width, "x"}         -> [{width,list_to_integer(Width)}]; 
-                                                    {"", [$x|Height]}    -> [{height,list_to_integer(Height)}]; 
-                                                    {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
-                                                end,
-                                    SizeProps ++ url2props1(RestProps, [])
-                              end,
-            {Filepath,PropList1,Check1,Props}
+            case {Check1,PropList} of
+                {"mediaclass-"++_, []} ->
+                    % shorthand with only the mediaclass
+                    {Filepath,url2props1([Check1], []),none,none};
+                _ ->
+                    % multiple args, also needs a checksum
+                    z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
+                    PropList1 = case PropList of
+                                    [] -> 
+                                        [];
+                                    [Size|RestProps]->
+                                        {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
+                                        SizeProps = case {W,XH} of
+                                                        {"", "x"}            -> [];
+                                                        {"", ""}             -> [];
+                                                        {Width, ""}          -> [{width,list_to_integer(Width)}]; 
+                                                        {Width, "x"}         -> [{width,list_to_integer(Width)}]; 
+                                                        {"", [$x|Height]}    -> [{height,list_to_integer(Height)}]; 
+                                                        {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
+                                                    end,
+                                        SizeProps ++ url2props1(RestProps, [])
+                                end,
+                    {Filepath,PropList1,Check1,Props}
+            end
     end.
 
 url2props1([], Acc) ->

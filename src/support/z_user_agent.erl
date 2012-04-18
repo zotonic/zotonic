@@ -21,6 +21,7 @@
 
 -export([
     set_class/1,
+    set_class/2,
     get_class/1,
     get_props/1,
     ua_probe/2,
@@ -37,6 +38,14 @@
 -define(UA_COOKIE_MAX_AGE, 3600*24*3650).
 
 -type ua_template_class() :: ua_classifier:device_type() | generic.
+
+
+%% @doc Set the class in a context, useful for testing.
+%%      Doesn't change the reqdata or the session settings.
+-spec set_class(ua_classifier:device_type(), #context{}) -> #context{}.
+set_class(UAClass, Context) ->
+    Context#context{ua_class = UAClass}.
+
 
 %% @doc Classify the user agent in the wm_reqdata.
 -spec set_class(#wm_reqdata{}) -> {ok, #wm_reqdata{}}.
