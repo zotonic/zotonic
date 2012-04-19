@@ -59,7 +59,7 @@ set_class(#wm_reqdata{} = ReqData) ->
             ua_props,
             [
                 {is_user_select, IsUserSelect},
-                {is_touch, is_touch(UAProps)}
+                {has_pointer, has_pointer_device(UAClass, UAProps)}
                 | UAProps
             ],
             RD1).
@@ -96,6 +96,7 @@ set_class(#wm_reqdata{} = ReqData) ->
                             IsUserDefined = z_convert:to_bool(proplists:get_value("u", Qs)),
                             Props = lists:foldl(fun({"h",V}, Acc) -> [{displayHeight, list_to_integer(V)} | Acc];
                                                    ({"w",V}, Acc) -> [{displayWidth, list_to_integer(V)} | Acc];
+                                                   ({"t",V}, Acc) -> [{has_pointer, z_convert:to_bool(V)} | Acc];
                                                    (_,Acc) -> Acc
                                                  end,
                                                  [],
@@ -159,10 +160,10 @@ ua_select(automatic, Context) ->
     {UAClass, UAProps} = get_ua_header(z_context:get_reqdata(Context)),
     CurrWidth = proplists:get_value(displayWidth, UAProps, 800),
     CurrHeight = proplists:get_value(displayHeight, UAProps, 600),
-    CurrIsTouch = is_touch(UAProps),
+    CurrHasPointer = has_pointer_device(UAClass, UAProps),
     set_cookie(UAClass,
                false,
-               CurrIsTouch,
+               CurrHasPointer,
                CurrWidth,
                CurrHeight,
                Context);
@@ -174,10 +175,10 @@ ua_select(UAClass, Context) ->
             CurrPs = get_props(Context),
             CurrWidth = proplists:get_value(displayWidth, CurrPs, 800),
             CurrHeight = proplists:get_value(displayHeight, CurrPs, 600),
-            CurrIsTouch = is_touch(CurrPs),
+            CurrHasPointer = has_pointer_device(UAClass, CurrPs),
             set_cookie(UAClass,
                        true,
-                       CurrIsTouch,
+                       CurrHasPointer,
                        CurrWidth,
                        CurrHeight,
                        Context)
@@ -196,28 +197,29 @@ ua_probe(SetManual, ProbePs, Context) ->
     CurrIsUser = not SetManual orelse proplists:get_value(is_user_select, CurrPs, false),
     CurrWidth = proplists:get_value(displayWidth, CurrPs, 800),
     CurrHeight = proplists:get_value(displayHeight, CurrPs, 600),
-    CurrIsTouch = is_touch(CurrPs),
+    CurrHasPointer = has_pointer_device(CurrClass, CurrPs),
 
     ProbeWidth = proplists:get_value(width, ProbePs),
     ProbeHeight = proplists:get_value(height, ProbePs),
-    ProbeIsTouch = proplists:get_value(is_touch, ProbePs, false),
+    % Only set ProbeIsTouch when it positively identifies an unexpected touch screen.
+    ProbeHasPointer = proplists:get_value(is_touch, ProbePs, false) orelse CurrHasPointer,
 
     IsChanged = CurrWidth =/= ProbeWidth
             orelse CurrHeight =/= ProbeHeight
-            orelse CurrIsTouch =/= ProbeIsTouch,
+            orelse CurrHasPointer =/= ProbeHasPointer,
             
     case CurrIsUser of
         false ->
             % As we got a probe back we know JS is working.
             % Upgrade the 'text' classification to 'phone'
-            NewClass = class_from_size(CurrClass, ProbeWidth, ProbeHeight, ProbeIsTouch),
+            NewClass = class_from_size(CurrClass, ProbeWidth, ProbeHeight, ProbeHasPointer),
             case NewClass =/= CurrClass of
                 false ->
                     case IsChanged of
                         true ->
                             {ok, set_cookie(CurrClass,
                                             false,
-                                            ProbeIsTouch,
+                                            ProbeHasPointer,
                                             ProbeWidth,
                                             ProbeHeight,
                                             Context)};
@@ -227,7 +229,7 @@ ua_probe(SetManual, ProbePs, Context) ->
                 true ->
                     {reload, set_cookie(NewClass,
                                         false,
-                                        ProbeIsTouch,
+                                        ProbeHasPointer,
                                         ProbeWidth,
                                         ProbeHeight,
                                         Context)}
@@ -238,7 +240,7 @@ ua_probe(SetManual, ProbePs, Context) ->
                 true ->
                     {ok, set_cookie(CurrClass,
                                     true,
-                                    ProbeIsTouch,
+                                    ProbeHasPointer,
                                     ProbeWidth,
                                     ProbeHeight,
                                     Context)};
@@ -248,12 +250,12 @@ ua_probe(SetManual, ProbePs, Context) ->
     end.
 
     % Set the cookie, update the session with the new ua props
-    set_cookie(Class, IsUser, IsTouch, W, H, Context) ->
+    set_cookie(Class, IsUser, HasPointer, W, H, Context) ->
         % Keep this sorted on key
         Props = [
             {displayHeight, H},
             {displayWidth, W},
-            {is_touch, IsTouch},
+            {has_pointer, HasPointer},
             {is_user_select, IsUser}
         ],
         z_session:set(ua_class, Class, Context),
@@ -261,7 +263,7 @@ ua_probe(SetManual, ProbePs, Context) ->
         V = mochiweb_util:urlencode([
                             {"c", Class},
                             {"u", case IsUser of true -> 1; false -> 0 end},
-                            {"t", case IsTouch of true -> 1; false -> 0 end},
+                            {"t", case HasPointer of true -> 1; false -> 0 end},
                             {"w", W},
                             {"h", H}
                         ]),
@@ -273,24 +275,19 @@ ua_probe(SetManual, ProbePs, Context) ->
         z_context:set_cookie(?UA_COOKIE, mochiweb_util:quote_plus(V), Options, Context).
 
 
-    % Get the class from the user agent screen size and touch input.
+    % Get the class from the user agent screen size and pointer device.
     % The px sizes are from http://twitter.github.com/bootstrap/scaffolding.html#responsive
     class_from_size(_, W, _H, false) when W >= 768 -> desktop;
-    class_from_size(_, W, H, true) when W > 480, H > 480 -> tablet; % larger display, touch
-    class_from_size(_, W, H, false) when W =< 480; H =< 480 -> text; % small display, no touch
+    class_from_size(_, W, H, true) when W > 480, H > 480 -> tablet; % larger display, pointer
+    class_from_size(_, W, H, false) when W =< 480; H =< 480 -> text; % small display, no pointer
     class_from_size(_, W, H, true) when W =< 480; H =< 480 -> phone; % portrait or landscape phone
     class_from_size(C, _, _, _) -> C.
 
 
-%% @doc A device is a touch device when it has a touchscreen or stylus.
-is_touch(UAProps) ->
-    case proplists:get_value(inputDevices, UAProps) of
-       Ds when is_list(Ds) -> 
-            lists:member(<<"touchscreen">>, Ds) orelse lists:member(<<"stylus">>, Ds);
-       <<"touchscreen">> -> true;
-       <<"stylus">> -> true;
-       _ -> false
-   end.
+%% @doc A device is easily navigatable when it has a pointer device.
+has_pointer_device(desktop, _Ps) -> true;
+has_pointer_device(text, _Ps) -> false;
+has_pointer_device(_, Ps) -> ua_classifier:has_pointer_device(Ps).
 
 
 %% @doc Split a filename (with subdir) to a device class and a relative path.
