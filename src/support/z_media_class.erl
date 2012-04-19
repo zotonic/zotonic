@@ -31,6 +31,7 @@
     get/2,
     get/3,
     
+    expand_mediaclass_checksum/1,
     expand_mediaclass_checksum/2,
     expand_mediaclass/2,
     
@@ -77,23 +78,35 @@ get(UAClass, MediaClass, Context) ->
     end.
 
 %% @doc Expand the mediaclass, use the checksum when available
--spec expand_mediaclass_checksum(list(), #context{}) -> {ok, list()} | {error, term()}.
-expand_mediaclass_checksum(Props, _Context) ->
+-spec expand_mediaclass_checksum(list() | binary()) -> {ok, list()} | {error, term()}.
+expand_mediaclass_checksum(Checksum) when is_binary(Checksum) ->
+    expand_mediaclass_checksum(Checksum, []);
+expand_mediaclass_checksum(Props) ->
     case proplists:get_value(mediaclass, Props) of
         undefined ->
             {ok, Props};
         {MC, Checksum} when Checksum =/= undefined ->
-            % Expand for preview generation, we got the checksum from the URL.
-            case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
-                [#mediaclass_index{props=Ps}|_] ->
-                    {ok, expand_mediaclass_1(Props, Ps)};
-                [] ->
-                    lager:warning("mediaclass expand for unknown mediaclass checksum ~p:~p", [MC, Checksum]),
-                    {ok, Props};
-                {error, _} = Error ->
-                    Error
-            end
+            expand_mediaclass_checksum_1(MC, Checksum, Props);
+        Checksum ->
+            expand_mediaclass_checksum_1(undefined, z_convert:to_binary(Checksum), Props)
     end.
+
+-spec expand_mediaclass_checksum(Checksum :: binary(), Props :: list()) -> list().
+expand_mediaclass_checksum(Checksum, Props) ->
+    expand_mediaclass_checksum_1(undefined, Checksum, Props).
+
+    expand_mediaclass_checksum_1(Class, Checksum, Props) ->
+        % Expand for preview generation, we got the checksum from the URL.
+        case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
+            [#mediaclass_index{props=Ps}|_] ->
+                {ok, expand_mediaclass_1(Props, Ps)};
+            [] ->
+                lager:warning("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
+                {ok, Props};
+            {error, _} = Error ->
+                Error
+        end.
+
 
 %% @doc Expand the mediaclass for tag generation
 -spec expand_mediaclass(list(), #context{}) -> {ok, list()} | {error, term()}.
@@ -258,23 +271,34 @@ reindex_file({UAClass, Paths, _Modified}, Tag, Site) ->
         || {MediaClass, Props} <- lists:flatten(Forms)
     ],
     % Insert all into the mediaclass ets table
-    % Also insert by checksum for the generation of media by url.
+    % Also insert by checksum for the lookup of a mediaclass definition by url.
     [
         begin
-            ets:insert(?MEDIACLASS_INDEX,
-                        #mediaclass_index{
-                            key=#mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
-                            props=Ps,
-                            checksum=Checksum,
-                            tag=Tag
-                        }),
-            ets:insert(?MEDIACLASS_INDEX,
-                        #mediaclass_index{
-                            key=Checksum,
-                            props=Ps,
-                            checksum=Checksum,
-                            tag=Tag
-                        })
+            K = #mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
+            case ets:lookup(?MEDIACLASS_INDEX, K) of
+                [#mediaclass_index{tag=Tag}|_] ->
+                    ok;
+                _Other ->
+                    ets:insert(?MEDIACLASS_INDEX,
+                                #mediaclass_index{
+                                    key=K,
+                                    props=Ps,
+                                    checksum=Checksum,
+                                    tag=Tag
+                                })
+            end,
+            case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
+                [#mediaclass_index{tag=Tag}|_] ->
+                    ok;
+                _ ->
+                    ets:insert(?MEDIACLASS_INDEX,
+                                #mediaclass_index{
+                                    key=Checksum,
+                                    props=Ps,
+                                    checksum=Checksum,
+                                    tag=Tag
+                                })
+            end
         end
         || {MC, Ps, Checksum} <- Defs
     ],
