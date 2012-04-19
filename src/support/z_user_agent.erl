@@ -59,7 +59,7 @@ set_class(#wm_reqdata{} = ReqData) ->
             ua_props,
             [
                 {is_user_select, IsUserSelect},
-                {is_touch, has_touchscreen(UAProps)}
+                {is_touch, is_touch(UAProps)}
                 | UAProps
             ],
             RD1).
@@ -159,7 +159,7 @@ ua_select(automatic, Context) ->
     {UAClass, UAProps} = get_ua_header(z_context:get_reqdata(Context)),
     CurrWidth = proplists:get_value(displayWidth, UAProps, 800),
     CurrHeight = proplists:get_value(displayHeight, UAProps, 600),
-    CurrIsTouch = has_touchscreen(UAProps),
+    CurrIsTouch = is_touch(UAProps),
     set_cookie(UAClass,
                false,
                CurrIsTouch,
@@ -174,7 +174,7 @@ ua_select(UAClass, Context) ->
             CurrPs = get_props(Context),
             CurrWidth = proplists:get_value(displayWidth, CurrPs, 800),
             CurrHeight = proplists:get_value(displayHeight, CurrPs, 600),
-            CurrIsTouch = has_touchscreen(CurrPs),
+            CurrIsTouch = is_touch(CurrPs),
             set_cookie(UAClass,
                        true,
                        CurrIsTouch,
@@ -196,7 +196,7 @@ ua_probe(SetManual, ProbePs, Context) ->
     CurrIsUser = not SetManual orelse proplists:get_value(is_user_select, CurrPs, false),
     CurrWidth = proplists:get_value(displayWidth, CurrPs, 800),
     CurrHeight = proplists:get_value(displayHeight, CurrPs, 600),
-    CurrIsTouch = has_touchscreen(CurrPs),
+    CurrIsTouch = is_touch(CurrPs),
 
     ProbeWidth = proplists:get_value(width, ProbePs),
     ProbeHeight = proplists:get_value(height, ProbePs),
@@ -282,9 +282,13 @@ ua_probe(SetManual, ProbePs, Context) ->
     class_from_size(C, _, _, _) -> C.
 
 
-has_touchscreen(UAProps) ->
+%% @doc A device is a touch device when it has a touchscreen or stylus.
+is_touch(UAProps) ->
     case proplists:get_value(inputDevices, UAProps) of
-       Ds when is_list(Ds) -> lists:member(<<"touchscreen">>, Ds);
+       Ds when is_list(Ds) -> 
+            lists:member(<<"touchscreen">>, Ds) orelse lists:member(<<"stylus">>, Ds);
+       <<"touchscreen">> -> true;
+       <<"stylus">> -> true;
        _ -> false
    end.
 
