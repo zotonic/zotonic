@@ -71,8 +71,8 @@ init(Host) ->
                 {z_template, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
-    MediaClass = {z_media_class, 
-                {z_media_class, start_link, [SiteProps]},
+    MediaClass = {z_mediaclass, 
+                {z_mediaclass, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
     DropBox = {z_dropbox,

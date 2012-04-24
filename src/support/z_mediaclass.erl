@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_media_class).
+-module(z_mediaclass).
 
 -author("Marc Worrell <marc@worrell.nl>").
 
