@@ -40,11 +40,10 @@ split(Context) ->
 %% @doc Render a javascript ast, injects a #context{} with a script into the output stream.
 -spec javascript_ast(list() | binary(), #context{}) -> #context{}.
 javascript_ast(Block, Context) when is_binary(Block) ->
-    add_content_script(Block, z_context:new(Context));
+    z_render:wire({script, [{script, Block}]}, z_context:new(Context));
 javascript_ast(Block, Context) ->
-    RenderContext = z_context:new(Context),
-    {Script, RenderContext} = z_render:render_to_iolist(Block, z_context:new(Context)),
-    add_content_script(Script, RenderContext).
+    {Script, C} = z_render:render_to_iolist(Block, z_context:new(Context)),
+    z_render:wire({script, [{script, iolist_to_binary(Script)}]}, C).
 
 add_content_script([], Context) -> 
     Context;
@@ -87,7 +86,7 @@ clean(Context) ->
 
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
 %% @spec get_script(Context) -> iolist()    
-get_script(Context) -> 
+get_script(Context) ->
     get_script1(Context).
     
     get_script1(Context) ->
@@ -128,7 +127,8 @@ get_script(Context) ->
             _NonEmpty ->
                 [   
                     lists:reverse(Context#context.content_scripts),
-                    lists:reverse(Context#context.scripts) | get_script1(Context4)
+                    lists:reverse(Context#context.scripts),
+                    get_script1(Context4)
                 ]
         end.
     
