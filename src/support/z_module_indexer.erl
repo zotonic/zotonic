@@ -472,7 +472,7 @@ to_ets(List, Type, Tag, Site) ->
     to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Acc) ->
         case lists:member(Name, Acc) of
             true -> 
-                skip;
+                to_ets(T, Type, Tag, Site, Acc);
             false -> 
                 K = #module_index{
                     key=#module_index_key{
@@ -486,9 +486,9 @@ to_ets(List, Type, Tag, Site) ->
                     filepath=FP,
                     tag=Tag
                 },
-                ets:insert(?MODULE_INDEX, K)
-        end,
-        to_ets(T, Type, Tag, Site, Acc).
+                ets:insert(?MODULE_INDEX, K),
+                to_ets(T, Type, Tag, Site, [Name|Acc])
+        end.
 
 
 % Place all templates in the ets table, indexed per device type
