@@ -21,7 +21,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Menus").
--mod_description("Menus in Zotonic, adds amdin interface to define the menu.").
+-mod_description("Menus in Zotonic, adds admin interface to define the menu.").
 -mod_schema(1).
 -mod_depends([admin]).
 -mod_provides([menu]).
