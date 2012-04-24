@@ -21,6 +21,8 @@
 
 -author('mmzeeman@xs4all.nl').
 
+match(undefined, _Re, _Context) ->
+    false;
 match(S, Re, _Context) -> 
     case re:run(S, Re) of
 	match ->
