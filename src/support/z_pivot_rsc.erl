@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-04-17
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
 -export([
     poll/1,
     pivot/2,
-    pivot_resource_update/2,
+    pivot_resource_update/4,
     queue_all/1,
     insert_queue/2,
          
@@ -78,7 +78,7 @@ pivot(Id, Context) ->
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
-pivot_resource_update(UpdateProps, RawProps) ->
+pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     Props = lists:foldl(fun(Key, All) ->
                                 case proplists:is_defined(Key, UpdateProps) of
                                     false ->
@@ -90,14 +90,15 @@ pivot_resource_update(UpdateProps, RawProps) ->
 
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
-    [
+    Props1 = [
         {pivot_date_start, DateStart},
         {pivot_date_end, DateEnd},
         {pivot_date_start_month_day, month_day(DateStart)},
         {pivot_date_end_month_day, month_day(DateEnd)},
         {pivot_title, PivotTitle}
         | Props
-    ].
+    ],
+    z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
     month_day(undefined) -> undefined;
     month_day(?EPOCH_START) -> undefined;
@@ -380,57 +381,74 @@ pivot_resource(Id, Context) ->
     {SqlC, ArgsC} = to_tsv(TC, $C, ArgsB),
     {SqlD, ArgsD} = to_tsv(TD, $D, ArgsC),
 
-    TsvSql = [SqlA, " || ", SqlB, " || ", SqlC, " || ", SqlD],
-
     TsvObj = [ [" zpo",integer_to_list(OId)] || OId <- ObjIds ],
     TsvCat = [ [" zpc",integer_to_list(CId)] || CId <- CatIds ],
     TsvIds = list_to_binary([TsvObj,TsvCat]),
 
-    PropsPrePivoted = z_pivot_rsc:pivot_resource_update([], m_rsc:get_raw(Id, Context)),
+    PropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, [], m_rsc:get_raw(Id, Context), Context),
 
-    N = length(ArgsD),
-    Sql = list_to_binary([
-            "update rsc set pivot_tsv = ",TsvSql,
-            ", pivot_rtsv     = to_tsvector($",integer_to_list(N+1),")",
-            ", pivot_street   = $",integer_to_list(N+2),
-            ", pivot_city     = $",integer_to_list(N+3),
-            ", pivot_postcode = $",integer_to_list(N+4),
-            ", pivot_state    = $",integer_to_list(N+5),
-            ", pivot_country  = $",integer_to_list(N+6),
-            ", pivot_first_name=$",integer_to_list(N+7),
-            ", pivot_surname  = $",integer_to_list(N+8),
-            ", pivot_gender   = $",integer_to_list(N+9),
-            ", pivot_date_start = $",integer_to_list(N+10),
-            ", pivot_date_end   = $",integer_to_list(N+11),
-            ", pivot_date_start_month_day   = $",integer_to_list(N+12),
-            ", pivot_date_end_month_day   = $",integer_to_list(N+13),
-            ", pivot_title   = $",integer_to_list(N+14),
-            " where id = $",integer_to_list(N+15)
-        ]),
+    Rtsv = z_db:q1("select to_tsvector($1)", [TsvIds], Context),
+    TsvSql = [SqlA, " || ", SqlB, " || ", SqlC, " || ", SqlD],
+    Tsv  = z_db:q1(iolist_to_binary(["select ", TsvSql]), ArgsD, Context),
 
-    SqlArgs = ArgsD ++ [
-        TsvIds,
-        truncate(proplists:get_value(address_street_1, R), 120),
-        truncate(proplists:get_value(address_city, R), 100),
-        truncate(proplists:get_value(address_postcode, R), 30),
-        truncate(proplists:get_value(address_state, R), 50),
-        truncate(proplists:get_value(address_country, R), 80),
-        truncate(proplists:get_value(name_first, R), 100),
-        truncate(proplists:get_value(name_surname, R), 100),
-        truncate(proplists:get_value(gender, R), 1),
-        proplists:get_value(pivot_date_start, PropsPrePivoted),
-        proplists:get_value(pivot_date_end, PropsPrePivoted),
-        proplists:get_value(pivot_date_start_month_day, PropsPrePivoted),
-        proplists:get_value(pivot_date_end_month_day, PropsPrePivoted),
-        proplists:get_value(pivot_title, PropsPrePivoted),
-        Id
+    KVs = [
+        {pivot_tsv, Tsv},
+        {pivot_rtsv, Rtsv},
+        {pivot_street, truncate(proplists:get_value(address_street_1, R), 120)},
+        {pivot_city, truncate(proplists:get_value(address_city, R), 100)},
+        {pivot_postcode, truncate(proplists:get_value(address_postcode, R), 30)},
+        {pivot_state, truncate(proplists:get_value(address_state, R), 50)},
+        {pivot_country, truncate(proplists:get_value(address_country, R), 80)},
+        {pivot_first_name, truncate(proplists:get_value(name_first, R), 100)},
+        {pivot_surname, truncate(proplists:get_value(name_surname, R), 100)},
+        {pivot_gender, truncate(proplists:get_value(gender, R), 1)},
+        {pivot_date_start, proplists:get_value(pivot_date_start, PropsPrePivoted)},
+        {pivot_date_end, proplists:get_value(pivot_date_end, PropsPrePivoted)},
+        {pivot_date_start_month_day, proplists:get_value(pivot_date_start_month_day, PropsPrePivoted)},
+        {pivot_date_end_month_day, proplists:get_value(pivot_date_end_month_day, PropsPrePivoted)},
+        {pivot_title, proplists:get_value(pivot_title, PropsPrePivoted)}
     ],
-    z_db:q(Sql, SqlArgs, Context),
-    Results = z_notifier:map(#custom_pivot{id=Id}, Context),
-    [ok = update_custom_pivot(Id, Res, Context) || Res <- Results],
+    
+    KVsFolded = z_notifier:foldr(#pivot_fields{id=Id, rsc=R}, KVs, Context),
+    
+    % Check which fields are changed, update only those
+    case lists:filter(fun({K,V}) when is_list(V) -> proplists:get_value(K, R) =/= iolist_to_binary(V);
+                         ({K,undefined}) -> proplists:get_value(K, R) =/= undefined;
+                         ({K,V}) when is_atom(V) -> proplists:get_value(K, R) =/= z_convert:to_binary(V);
+                         ({K,V}) -> proplists:get_value(K, R) =/= V
+                      end, 
+                      KVsFolded)
+    of
+        [] ->
+            % No fields changed, nothing to do
+            nop;
+        KVsChanged ->
+            % Make Sql update statement for the changed fields
+            {Sql, Args} = lists:foldl(fun({K,V}, {Sq,As}) ->
+                                         {[Sq,
+                                            case As of [] -> []; _ -> $, end,
+                                            z_convert:to_list(K),
+                                            " = $", integer_to_list(length(As)+1)
+                                          ],
+                                          [V|As]}
+                                      end,
+                                      {"update rsc set ",[]},
+                                      KVsChanged),
+
+            1 = z_db:q1(iolist_to_binary([Sql, " where id = $", integer_to_list(length(Args)+1)]),
+                        lists:reverse([Id|Args]),
+                        Context)
+    end,
+    
+    CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
+    [ ok = update_custom_pivot(Id, Res, Context) || Res <- CustomPivots ],
 
     IsA = m_rsc:is_a(Id, Context),
     z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
+
+    % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
+    % @todo Make this a callback, which should check on the KVsChanged
+    m_rsc_update:flush(Id, Context),
     ok.
 
 
@@ -458,7 +476,7 @@ pivot_resource(Id, Context) ->
 
 
 truncate(undefined, _Len) -> undefined;
-truncate(S, Len) -> z_string:to_lower(truncate(S, Len, Len)).
+truncate(S, Len) -> iolist_to_binary(z_string:to_lower(truncate(S, Len, Len))).
     
     truncate(_S, 0, _Bytes) ->
         "";
@@ -502,7 +520,8 @@ get_pivot_title(Props) ->
 
 %% @doc Return the data for the pivoter
 get_pivot_rsc(Id, Context) ->
-    z_notifier:foldl(pivot_rsc_data, m_rsc:get(Id, Context), Context).
+    FullRecord = z_db:assoc_props_row("select * from rsc where id = $1", [Id], Context),
+    z_notifier:foldl(pivot_rsc_data, FullRecord, Context).
 
 
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
@@ -555,47 +574,50 @@ category(CatId, Context) ->
     {Ids, Names}.
 
 
-fetch_texts({title, Value}, {A,B}, _Context) ->
-    {[Value|A], B};
-fetch_texts({subtitle, Value}, {A,B}, _Context) ->
-    {[Value|A], B};
-fetch_texts({name_surname, Value}, {A,B}, _Context) ->
-    {[Value|A], B};
-fetch_texts({name_first, Value}, {A,B}, _Context) ->
-    {[Value|A], B};
-fetch_texts({F, Value}, {A,B}, _Context) when is_binary(Value) ->
-    case is_lang_neutral(F, Value) of
-        true ->
-            {A, [{trans, [{none, Value}]}|B]};
-        false ->
-            case do_pivot_field(F) of
-                false -> {A,B};
-                true -> {A, [Value|B]}
-            end
-    end;
-fetch_texts({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc, Context)
-    when is_integer(Y) andalso is_integer(M) andalso is_integer(D) 
-        andalso is_integer(H) andalso is_integer(Min) andalso is_integer(S) ->
-    case do_pivot_field(F) of
-        false ->
-            Acc;
-        true -> 
-            case catch erlydtl_dateformat:format(Date, "Y m d H i F l h", Context) of
-                {'EXIT', _} -> Acc;
-                Formatted -> {A, [Formatted|B]}
-            end
-    end;
-fetch_texts({_, {trans, _} = V}, {A,B}, _Context) ->
-    {A, [V|B]};
-fetch_texts({F, V}, {A,B} = Acc, _Context) ->
+fetch_texts({F, _} = FV, Acc, Context) ->
     case do_pivot_field(F) of
         false -> Acc;
-        true ->
-            case z_string:is_string(V) of
-                true -> {A, [V|B]};
-                false -> Acc
-            end
+        true -> fetch_texts_1(FV, Acc, Context)
     end.
+
+    fetch_texts_1({title, Value}, {A,B}, _Context) ->
+        {[Value|A], B};
+    fetch_texts_1({subtitle, Value}, {A,B}, _Context) ->
+        {[Value|A], B};
+    fetch_texts_1({name_surname, Value}, {A,B}, _Context) ->
+        {[Value|A], B};
+    fetch_texts_1({name_first, Value}, {A,B}, _Context) ->
+        {[Value|A], B};
+    fetch_texts_1({F, Value}, {A,B}, _Context) when is_binary(Value) ->
+        case is_lang_neutral(F, Value) of
+            true ->
+                {A, [{trans, [{none, Value}]}|B]};
+            false ->
+                case do_pivot_field(F) of
+                    false -> {A,B};
+                    true -> {A, [Value|B]}
+                end
+        end;
+    fetch_texts_1({F, {{Y,M,D},{H,Min,S}} = Date}, {A,B} = Acc, Context)
+        when is_integer(Y) andalso is_integer(M) andalso is_integer(D) 
+            andalso is_integer(H) andalso is_integer(Min) andalso is_integer(S) ->
+        case do_pivot_field(F) of
+            false ->
+                Acc;
+            true -> 
+                case catch erlydtl_dateformat:format(Date, "Y m d H i F l h", Context) of
+                    {'EXIT', _} -> Acc;
+                    Formatted -> {A, [Formatted|B]}
+                end
+        end;
+    fetch_texts_1({_, {trans, _} = V}, {A,B}, _Context) ->
+        {A, [V|B]};
+    fetch_texts_1({_, V}, {A,B} = Acc, _Context) ->
+        case z_string:is_string(V) of
+            true -> {A, [V|B]};
+            false -> Acc
+        end.
+
 
 % Suppress some fields that are only for supporting the pivoting
 do_pivot_field(pivot_category_nr) -> false; 
@@ -613,12 +635,17 @@ do_pivot_field(pivot_city) -> false;
 do_pivot_field(pivot_state) -> false; 
 do_pivot_field(pivot_postcode) -> false; 
 do_pivot_field(pivot_country) -> false; 
-do_pivot_field(pivot_geocode) -> false; 
+do_pivot_field(pivot_geocode) -> false;
+do_pivot_field(pivot_geocode_qhash) -> false;
 do_pivot_field(uri) -> false; 
 do_pivot_field(publication_start) -> false; 
 do_pivot_field(publication_end) -> false; 
 do_pivot_field(created) -> false; 
 do_pivot_field(modified) -> false; 
+do_pivot_field(location_lat) -> false; 
+do_pivot_field(location_lng) -> false; 
+do_pivot_field(computed_location_lat) -> false; 
+do_pivot_field(computed_location_lng) -> false; 
 do_pivot_field(_) -> true.
 
 

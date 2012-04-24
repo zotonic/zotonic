@@ -156,6 +156,9 @@
 %% @doc Signal that the hierarchy underneath a resource has been changed by mod_menu (notify)
 -record(hierarchy_updated, {root_id, predicate}).
 
+%% @doc Resource is read, opportunity to add computed fields
+%%      Used in a foldr with the read properties as accumulator.
+-record(rsc_get, {id}).
 
 %% @doc Resource will be deleted. (notify)
 %% This notification is part of the delete transaction, it's purpose is to clean up
@@ -184,6 +187,10 @@
 
 % 'pivot_rsc_data' - foldl over the resource props to extend/remove data to be pivoted
 
+%% @doc Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
+%%      Foldr over all observers.
+-record(pivot_update, {id, raw_props}).
+
 %% @doc Foldr over a resource's pivot data, after 'pivot_rsc_data' fold.
 %% Further filtering/extending of pivot data.
 -record(pivot_get, {id}).
@@ -195,6 +202,10 @@
 %% @doc Determine which ids will have their title indexed with the resource.
 %% Foldr over the related ids of a resource.
 -record(pivot_related_text_ids, {id}).
+
+%% @doc Foldr to change or add pivot fields for the main pivot table.
+%%      The rsc contains all rsc properties for this resource, including pivot properties.
+-record(pivot_fields, {id, rsc}).
 
 %% @doc Signal that a resource pivot has been done. (notify)
 -record(rsc_pivot_done, {id, is_a=[]}).
