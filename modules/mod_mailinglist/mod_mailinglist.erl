@@ -25,7 +25,7 @@
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
 -mod_schema(1).
--mod_depends([admin]).
+-mod_depends([admin, mod_logging]).
 -mod_provides([mailinglist]).
 
 %% gen_server exports
