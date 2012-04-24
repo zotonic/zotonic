@@ -347,7 +347,7 @@ props2url([{width,Width}|Rest], _Width, Height, Acc, Context) ->
 props2url([{height,Height}|Rest], Width, _Height, Acc, Context) ->
     props2url(Rest, Width, z_convert:to_integer(Height), Acc, Context);
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
-    case z_media_class:get(Class, Context) of
+    case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
             lager:warning("~p: unknown mediaclass ~p", [z_context:site(Context), Class]),
             props2url(Rest, Width, Height, Acc, Context);

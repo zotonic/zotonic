@@ -10,9 +10,8 @@
 
         {% lib
                 "css/bootstrap-admin.css"
-                "css/zp-datepicker.css"
+                "css/jquery-ui.datepicker.css"
                 "css/zp-menuedit.css"
-                "css/zp-icon-status.css"
                 "css/zotonic-admin.css"
         %}
 

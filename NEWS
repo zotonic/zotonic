@@ -10,7 +10,8 @@ and template selection based on the detected user agent.
 
 All base HTML has moved to use the Twitter Bootstrap CSS framework
 instead of Atatonic. This includes the admin (which got a new design)
-and the base templates for the skeleton sites.
+and the base templates for the skeleton sites. All Atatonic CSS files
+have been removed from Zotonic. Cufon is also no longer included.
 
 * New tags/changed tags
 
