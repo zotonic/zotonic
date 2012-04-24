@@ -63,6 +63,7 @@ reindex(Context) ->
 %% @doc Find all .po files in all modules and the active site.
 %% This is an active scan, not designed to be fast.
 %% @spec translations(#context{}) -> [ {module, {ModuleDirectory, [{Language,File}]}} ]
+-spec translations(#context{}) -> [ {Module :: atom(), [{Language :: atom(), filelib:filename()}]}].
 translations(Context) ->
     translations1(Context).
 
@@ -218,14 +219,19 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 translations1(Context) ->
-    [{M,lang_to_atom(X)} || {M,X} <- z_module_manager:prio_sort(scan_subdir("translations", "", ".po", Context))].
+    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir("translations", "", ".po", Context) ],
+    ByModule = lists:foldl(fun({M,F}, Acc) ->
+                                dict:append(M, F, Acc)
+                           end,
+                           dict:new(),
+                           POs),
+    [{M,tag_with_lang(POFiles)} || {M,POFiles} <- z_module_manager:prio_sort(dict:to_list(ByModule))].
 
-    lang_to_atom({ModDir,LangFiles}) -> 
-        {ModDir, [{list_to_atom(extract_lang(Lang)), File} || {Lang,File} <- LangFiles]}.
+    tag_with_lang(POFiles) -> 
+        [{pofile_to_lang(POFile), POFile} || POFile <- POFiles].
 
-    extract_lang(Basename) ->
-        [Lang|_] = string:tokens(Basename, "."),
-        Lang.
+    pofile_to_lang(POFile) ->
+        list_to_atom(hd(string:tokens(filename:basename(POFile), "."))).
 
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->

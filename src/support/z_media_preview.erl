@@ -49,7 +49,7 @@ convert(InFile, OutFile, Filters, Context) ->
             {mime, Mime} = proplists:lookup(mime, FileProps),
             case can_generate_preview(Mime) of
                 true ->
-                    case z_media_class:expand_mediaclass_checksum(Filters, Context) of
+                    case z_media_class:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
                             convert_1(InFile, OutFile, Mime, FileProps, FiltersExpanded);
                         {error, _} = Error ->

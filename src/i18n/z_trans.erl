@@ -74,8 +74,8 @@ parse_translations(Context) ->
     %% @doc Parse all .po files. Results in a dict {label, [iso_code,trans]}
     parse_mod_trans([], Acc) ->
         lists:reverse(Acc);
-    parse_mod_trans([{_Module, {_Dir, Trans}}|Rest], Acc) ->
-        Acc1 = parse_trans(Trans, Acc),
+    parse_mod_trans([{_Module, POList}|Rest], Acc) ->
+        Acc1 = parse_trans(POList, Acc),
         parse_mod_trans(Rest, Acc1).
     
     parse_trans([], Acc) ->
