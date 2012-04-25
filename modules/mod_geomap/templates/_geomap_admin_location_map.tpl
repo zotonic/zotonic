@@ -35,6 +35,12 @@
 <p class="help-inline">{_ Please click on the map to select the location. _}</p>
 
 {% javascript %}
+{# disable the 'entered address' button when there is no address on the edit page #}
+if ($('#address_country').length == 0) {
+    $('#location_address').addClass('disabled');
+}
+
+{# Initialize the map, with a timeout function so that the interface works before the map is loaded #}
 OpenLayers.ImgPath = '/lib/images/'
 
 var map;
@@ -126,7 +132,7 @@ setTimeout(function() {
     var click = new OpenLayers.Control.Click();
     map.addControl(click);
     click.activate();
-}, 500);
+}, 100);
 
 $('#location_me').click(function(ev) {
     map_geolocate.activate();
@@ -134,17 +140,19 @@ $('#location_me').click(function(ev) {
     ev.preventDefault();
 });
 
-$('#location_address').click(function(ev) { 
-    var args = {
-        street: $('#address_street_1').val(),
-        city: $('#address_city').val(),
-        postcode: $('#address_postcode').val(),
-        state: $('#address_state').val(),
-        country: $('#address_country').val(),
-        z_delegate: 'mod_geomap'
-    };
-    z_notify("address_lookup", args);
-    $(this).addClass('disabled');
+$('#location_address').click(function(ev) {
+    if ($('#address_country').length > 0) {
+        var args = {
+            street: $('#address_street_1').val(),
+            city: $('#address_city').val(),
+            postcode: $('#address_postcode').val(),
+            state: $('#address_state').val(),
+            country: $('#address_country').val(),
+            z_delegate: 'mod_geomap'
+        };
+        z_notify("address_lookup", args);
+        $(this).addClass('disabled');
+    }
     ev.preventDefault(); 
 });
 $('#location_clear').click(function(ev) { 
