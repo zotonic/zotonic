@@ -24,9 +24,7 @@
     vary/2, render/3
 ]).
 
--define(TILE_WIDTH, 256).
--define(TILE_HEIGHT, 256).
-
+-define(TILE_SIZE, 256).
 
 -include("zotonic.hrl").
 
@@ -39,17 +37,19 @@ render(Params, _Vars, Context) ->
             N = z_convert:to_integer(proplists:get_value(n, Params, 2)),
             Cols = z_convert:to_integer(proplists:get_value(cols, Params, N)),
             Rows = z_convert:to_integer(proplists:get_value(rows, Params, N)),
+            Size = z_convert:to_integer(proplists:get_value(size, Params, ?TILE_SIZE)),
             case geomap_tiles:map_tiles(Latitude, Longitude, Cols, Rows, Zoom) of
                 {ok, Tiles, {MarkerX,MarkerY}} ->
                     Vars = [
                         {n, N},
                         {rows, Rows},
                         {cols, Cols},
+                        {size, Size},
                         {location_lat, Latitude},
                         {location_lng, Longitude},
                         {tiles, Tiles},
                         {marker, {MarkerX,MarkerY}},
-                        {marker_px, {round(MarkerX*?TILE_WIDTH), round(MarkerY*?TILE_HEIGHT)}}
+                        {marker_px, {round(MarkerX*Size), round(MarkerY*Size)}}
                         | Params
                     ],
                     {Html, _Context} = z_template:render_to_iolist("_geomap_static.tpl", Vars, Context),
