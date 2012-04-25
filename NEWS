@@ -26,12 +26,27 @@ directory. Which image class definition is chosen depends on the
 user agent classification.
 
 
+* New modules
+
+mod_geomap
+    Provides mapping and geocoding.
+    
+
 * New filters
 
 menu_subtree:
     Finds the menu below a particular resource id.
     Usage:  m.rsc.main_menu.menu|menu_subtree:id
 
+
+* New scomps
+
+geomap_static:
+    Makes the HTML for a static map of a location.
+    Uses the OpenStreetMaps tiles.
+    Example usage:
+        {% geomap_static id=id n=3 %}
+    (Show the location of the resource 'id' in a grid of 3x3 tiles).
 
 
 Release 0.8.0, released on 2012-04-11
