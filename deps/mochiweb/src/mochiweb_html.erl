@@ -323,7 +323,8 @@ tokenize(B, S=#decoder{offset=O}) ->
             {Tag, S1} = tokenize_literal(B, ?ADV_COL(S, 2)),
             {S2, _} = find_gt(B, S1),
             {{end_tag, Tag}, S2};
-        <<_:O/binary, "<", C, _/binary>> when ?IS_WHITESPACE(C) ->
+        <<_:O/binary, "<", C, _/binary>> 
+                when ?IS_WHITESPACE(C); not ?IS_LITERAL_SAFE(C) ->
             %% This isn't really strict HTML
             {{data, Data, _Whitespace}, S1} = tokenize_data(B, ?INC_COL(S)),
             {{data, <<$<, Data/binary>>, false}, S1};
@@ -1356,5 +1357,23 @@ parse_charref_garbage_in_garbage_out_test() ->
        mochiweb_html:parse(D1)),
     
     ok.
+
+parse_unescaped_lt_test() ->
+    D1 = <<"<div> < < <a href=\"/\">Back</a></div>">>,
+    ?assertEqual(
+        {<<"div">>, [], [<<" < < ">>, {<<"a">>, [{<<"href">>, <<"/">>}], 
+                                       [<<"Back">>]}]},
+        mochiweb_html:parse(D1)),
+
+    D2 = <<"<div> << <a href=\"/\">Back</a></div>">>,
+    ?assertEqual(
+        {<<"div">>, [], [<<" << ">>, {<<"a">>, [{<<"href">>, <<"/">>}], 
+                                      [<<"Back">>]}]},
+    mochiweb_html:parse(D2)).
+
+
+
+
+
     
 -endif.
