@@ -50,7 +50,7 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
                 z_delegate: 'mod_admin', 
                 type: block_type, 
                 after: after_block, 
-                rsc_id: ",id|make_list,", 
+                rsc_id: {{ id }}, 
                 language: langs,
                 edit_language: $('.language-tabs .active').attr('lang')
             });
