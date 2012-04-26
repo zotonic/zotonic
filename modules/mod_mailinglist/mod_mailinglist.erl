@@ -78,8 +78,9 @@ observe_search_query(_, _) ->
 %% @doc Send status messages to a recipient.
 observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
 	ok;
-observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Email}, Context) ->
-	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}], Context),
+observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) ->
+	Email = proplists:get_value(email, Props),
+	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}, {recipient, Props}], Context),
 	ok;
 observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, recipient=RecipientId}, Context) ->
 	Template = case Message of
