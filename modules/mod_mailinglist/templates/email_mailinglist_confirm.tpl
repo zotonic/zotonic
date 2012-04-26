@@ -3,7 +3,7 @@
 {% block title %}{_ Please confirm your subscription on _} {{ m.rsc[list_id].title }}{% endblock %}
 
 {% block body %}
-	<p>{_ Hello, _}</p>
+	{% include "_email_mailinglist_hello.tpl" %}
 
 	<p>{_ You, or someone else, added your e-mail address to our mailing list _} <a href="{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a>.
 	{_ Before you will receive any further mail you need to confirm your subscription. _}</p>
