@@ -11,7 +11,7 @@
 <div class="control-group">
     <label class="control-label" for="{{ #email }}">{_ E-mail _}</label>
     <div class="controls">
-        <input type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|escape }}" />
+        <input type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|default:q.email|escape }}" />
 	{% validate id=#email name="email" type={presence} type={email} %}
     </div>
 </div>
@@ -20,21 +20,21 @@
 	<div class="control-group span2">
 	    <label class="control-label" for="{{ #name_first }}">{_ First name _}</label>
             <div class="controls">
-	        <input id="{{ #name_first }}" type="text" name="name_first" value="{{ rcpt.props.name_first|default:r.name_first }}" style="width: 90%;" />
+	        <input id="{{ #name_first }}" type="text" name="name_first" value="{{ rcpt.props.name_first|default:r.name_first|default:q.name_first|escape }}" style="width: 90%;" />
 	    </div>
 	</div>
 
 	<div class="control-group span1">
 	    <label class="control-label" for="{{ #name_surname_prefix }}">{_ Prefix _}</label>
                 <div class="controls">
-		    <input id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:r.name_surname_prefix }}" style="width: 50%" />
+		    <input id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:r.name_surname_prefix|default:q.name_surname_prefix }}" style="width: 50%" />
 		</div>
         </div>
 
 	<div class="control-group span3">
 	    <label class="control-label" for="{{ #name_surname }}">{_ Surname _}</label>
             <div class="controls">
-		<input id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:r.name_surname }}" style="width: 90%" />
+		<input id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:r.name_surname|default:q.name_surname|escape }}" style="width: 90%" />
 	    </div>
         </div>
 	
