@@ -108,6 +108,8 @@
     get_req_path/1,
 
     set_nocache_headers/1,
+    set_noindex_header/1,
+    set_noindex_header/2,
 
     set_cookie/3,
     set_cookie/4,
@@ -953,6 +955,21 @@ set_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     RD3 = wrq:set_resp_header("P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", RD2),
     Context#context{wm_reqdata=RD3}.
 
+%% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
+-spec set_noindex_header(#context{}) -> #context{}.
+set_noindex_header(Context) ->
+    set_noindex_header(false, Context).
+
+%% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
+-spec set_noindex_header(Force::term(), #context{}) -> #context{}.
+set_noindex_header(Force, Context) ->
+    case z_convert:to_bool(m_config:get_value(seo, noindex, Context))
+         orelse get(seo_noindex, Context, false)
+         orelse z_convert:to_bool(Force)
+    of
+       true -> set_resp_header("X-Robots-Tag", "noindex", Context);
+       _ -> Context
+    end.
 
 %% @doc Set a cookie value with default options.
 set_cookie(Key, Value, Context) ->

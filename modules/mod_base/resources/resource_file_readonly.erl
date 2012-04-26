@@ -55,7 +55,7 @@ init(ConfigProps) ->
 
 %% @doc Initialize the context for the request. Continue session when available.
 service_available(ReqData, ConfigProps) ->
-    Context = z_context:set(ConfigProps, z_context:new(ReqData)),
+    Context = z_context:set_noindex_header(z_context:set(ConfigProps, z_context:new(ReqData))),
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     
     try ensure_file_info(ReqData, Context1) of
