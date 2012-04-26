@@ -41,7 +41,7 @@
             <div class="control-group">
                 <div class="controls">
                     <label class="inline checkbox" for="seo-noindex" title="{_ Add a noindex, nofollow element to all pages. _}">
-                        <input type="checkbox" id="seo-noindex" name="seo-noindex" value="1" {% if m.config.seo.noindex.value %}check="checked"{% endif %} />
+                        <input type="checkbox" id="seo-noindex" name="seo-noindex" value="1" {% if m.config.seo.noindex.value %}checked="checked"{% endif %} />
                         {_ Exclude this site from search engines _}
                     </label>
                 </div>
