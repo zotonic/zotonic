@@ -30,6 +30,8 @@
     update/4,
     duplicate/3,
 
+    flush/2,
+    
     delete_nocheck/2,
     props_filter/3,
 
@@ -84,11 +86,9 @@ delete_nocheck(Id, Context) ->
         true ->  m_category:renumber(Context);
         false -> nop
     end,
-
-    %% Flush all cached entries depending on this entry, one of its subjects or its categories.
-    z_depcache:flush(Id, Context),
+    % Sync the caches
     [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
-    [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
+    flush(Id, CatList, Context),
     %% Notify all modules that the rsc has been deleted
     z_notifier:notify(#rsc_update_done{
                         action=delete,
@@ -98,6 +98,17 @@ delete_nocheck(Id, Context) ->
                         pre_props=Props,
                         post_props=[]
                     }, Context),
+    ok.
+
+
+%% Flush all cached entries depending on this entry, one of its subjects or its categories.
+flush(Id, Context) ->
+    CatList = m_rsc:is_a(Id, Context),
+    flush(Id, CatList, Context).
+    
+flush(Id, CatList, Context) ->
+    z_depcache:flush(Id, Context),
+    [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
     ok.
 
 
@@ -280,7 +291,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                            end,
                 case Id =:= insert_rsc orelse Changed orelse is_changed(RawProps, UpdatePropsN1) of
                     true ->
-                        UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(UpdatePropsN1, RawProps),
+                        UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(RscId, UpdatePropsN1, RawProps, Context),
                         {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
                         {ok, RscId, BeforeProps, UpdatePropsN, BeforeCatList, RenumberCats};
                     false ->
@@ -293,7 +304,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                 {ok, NewId, notchanged} ->
                     {ok, NewId};
                 {ok, NewId, OldProps, NewProps, OldCatList, RenumberCats} ->
-                    z_depcache:flush(NewId, Context),
+                    % Flush some low level caches
                     case proplists:get_value(name, NewProps) of
                         undefined -> nop;
                         Name -> z_depcache:flush({rsc_name, z_convert:to_list(Name)}, Context)
@@ -302,8 +313,6 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                         undefined -> nop;
                         Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
                     end,
-                     NewCatList = m_rsc:is_a(NewId, Context),
-                    AllCatList = lists:usort(NewCatList ++ OldCatList),
 
                     % After inserting a category we need to renumber the categories
                     case RenumberCats of
@@ -312,7 +321,10 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     end,
 
                     % Flush all cached content that is depending on one of the updated categories
-                    [ z_depcache:flush(Cat, Context) || Cat <- AllCatList ],
+                    z_depcache:flush(NewId, Context),
+                    NewCatList = m_rsc:is_a(NewId, Context),
+                    [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
+
                      % Notify that a new resource has been inserted, or that an existing one is updated
                     Note = #rsc_update_done{
                         action= case Id of insert_rsc -> insert; _ -> update end,
@@ -500,6 +512,14 @@ props_filter([{visible_for, Vis}|T], Acc, Context) ->
 
 props_filter([{category, CatName}|T], Acc, Context) ->
     props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);
+
+props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Location =:= location_lng ->
+    case catch z_convert:to_float(P) of
+        X when is_float(X) -> 
+            props_filter(T, [{Location, X} | Acc], Context);
+        _ ->
+            props_filter(T, [{Location, undefined} | Acc], Context)
+    end;
 
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).

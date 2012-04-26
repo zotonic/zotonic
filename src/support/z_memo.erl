@@ -30,7 +30,8 @@
 	set/2,
 	set/3,
 	get/1,
-	get/2
+	get/2,
+	delete/1
 ]).
 
 -include_lib("include/zotonic.hrl").
@@ -82,4 +83,8 @@ set(Key, Value, Context) ->
 		false -> nop
 	end,
 	Value.
+
+delete(Key) ->
+    erlang:erase(Key).
+
 

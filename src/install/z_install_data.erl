@@ -79,6 +79,8 @@ install_modules(Host, C) ->
         "mod_admin_identity",
         "mod_admin_modules",
         "mod_admin_predicate",
+        
+        "mod_geomap",
 
         %% Enable comments
         "mod_comment",

@@ -27,6 +27,7 @@
         {% endblock %}
     </head>
     <body>
+
 	{% wire name="adminwidget_toggle" action={adminwidget_toggle} %}
 
         {% block navigation %}

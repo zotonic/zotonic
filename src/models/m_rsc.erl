@@ -162,10 +162,17 @@ page_path_to_id(Path, Context) ->
 get(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
-            F = fun() ->
-                get_raw(Rid, Context)
-            end,
-            z_depcache:memo(F, Rid, ?WEEK, Context)
+            z_depcache:memo(fun() -> 
+                                case get_raw(Rid, Context) of
+                                    undefined -> undefined;
+                                    Props -> z_notifier:foldr(#rsc_get{id=Rid}, Props, Context) 
+                                end
+                            end,
+                            Rid,
+                            ?WEEK,
+                            Context);
+        undefined ->
+            undefined
     end.
 
 %% @doc Get the resource from the database, do not fetch the pivot fields.
@@ -173,7 +180,12 @@ get_raw(Id, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
             undefined ->
                 AllCols = [ z_convert:to_list(C) || C <- z_db:column_names(rsc, Context) ],
-                DataCols = lists:filter(fun("pivot_" ++ _) -> false; (_) -> true end, AllCols),
+                DataCols = lists:filter(
+                                    fun("pivot_geocode") -> true;
+                                       ("pivot_" ++ _) -> false; 
+                                       (_) -> true 
+                                    end, 
+                                    AllCols),
                 Query = "select "++string:join(DataCols, ",") ++ " from rsc where id = $1",
                 z_memo:set(rsc_raw_sql, Query),
                 Query;
@@ -421,7 +433,7 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
                 % Unknown properties will be checked against the predicates, returns o(Predicate).
                 case m_predicate:is_predicate(Predicate, Context) of
                     true -> o(Id, Predicate, Context);
-                    false -> undefined
+                    false -> undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
                 end;
             _ ->
                 Value
