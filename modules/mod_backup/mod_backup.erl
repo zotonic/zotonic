@@ -129,9 +129,8 @@ handle_call(start_backup, _From, State) ->
         undefined ->
             %% @doc Return the base name of the dump files. The base name is composed of the date and time.
             %% @todo keep the backup page updated with the state of the current backup.
-            Now = calendar:local_time(),
-            Pid = do_backup(erlydtl_dateformat:format(Now, "Ymd-His", State#state.context), State),
-            {reply, ok, State#state{backup_pid=Pid, backup_start=Now}};
+            Pid = do_backup(name(State#state.context), State),
+            {reply, ok, State#state{backup_pid=Pid, backup_start=calendar:local_time()}};
         _Pid ->
             {reply, {error, in_progress}, State}
     end;
@@ -265,6 +264,13 @@ do_backup_process(Name, Context) ->
 dir(Context) ->
     z_path:files_subdir_ensure(backup, Context).
 
+%% @doc Return the base name of the backup files.
+name(Context) ->
+    Now = calendar:local_time(),
+    iolist_to_binary(
+      [atom_to_list(z_context:site(Context)), "-",
+       erlydtl_dateformat:format(Now, "Ymd-His", Context)]).
+
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, Context) ->
@@ -332,13 +338,14 @@ list_backup_files(Context) ->
     lists:reverse(lists:sort([ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F)} || F <- Files ])).
 
 filename_to_date(File) ->
-    [Y1,Y2,Y3,Y4,M1,M2,D1,D2,$-,H1,H2,I1,I2,S1,S2,$.|_] = filename:basename(File),
-    Y = list_to_integer([Y1,Y2,Y3,Y4]),
-    M = list_to_integer([M1,M2]),
-    D = list_to_integer([D1,D2]),
-    H = list_to_integer([H1,H2]),
-    I = list_to_integer([I1,I2]),
-    S = list_to_integer([S1,S2]),
+    R = re:run(filename:basename(File), "([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})", [{capture, all, list}]),
+    {match, [_, YY, MM, DD, HH, II, SS]} = R,
+    Y = list_to_integer(YY),
+    M = list_to_integer(MM),
+    D = list_to_integer(DD),
+    H = list_to_integer(HH),
+    I = list_to_integer(II),
+    S = list_to_integer(SS),
     {{Y,M,D},{H,I,S}}.
 
 
