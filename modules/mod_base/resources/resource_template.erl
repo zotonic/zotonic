@@ -80,10 +80,7 @@ provide_content(ReqData, Context) ->
         true -> z_context:ensure_qs(Context1);
         _ -> z_context:ensure_all(Context1)
     end,
-    Context3 = case z_context:get(seo_noindex, Context2) of
-        true ->  z_context:set_resp_header("X-Robots-Tag", "noindex", Context2);
-        _ -> Context2
-    end,
+    Context3 = z_context:set_noindex_header(Context2),
     Template = z_context:get(template, Context3),
     Rendered = z_template:render(Template, z_context:get_all(Context), Context3),
     {Output, OutputContext} = z_context:output(Rendered, Context3),

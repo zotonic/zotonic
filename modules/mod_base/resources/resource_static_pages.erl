@@ -107,7 +107,7 @@ encodings_provided(ReqData, State) ->
             [{"identity", fun(Data) -> decode_data(identity, Data) end}];
         _ ->
             case State#state.mime of
-                "image/jpeg" ->
+                "image/"++_ ->
                     [{"identity", fun(Data) -> decode_data(identity, Data) end}];
                 _ -> 
                     [{"identity", fun(Data) -> decode_data(identity, Data) end},
@@ -216,7 +216,7 @@ cache_key(Path) ->
     {resource_static_pages, Path}.
 
 check_resource(ReqData, #state{fullpath=undefined} = State) ->
-    Context = z_context:new(ReqData, ?MODULE),
+    Context = z_context:set_noindex_header(z_context:new(ReqData, ?MODULE)),
     case mochiweb_util:safe_relative_path(mochiweb_util:unquote(wrq:disp_path(ReqData))) of
         undefined ->
             {error, enoent};

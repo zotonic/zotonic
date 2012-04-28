@@ -82,11 +82,8 @@ is_authorized(ReqData, Context) ->
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 html(Context) ->
-	Id = get_id(Context),
-    Context1 = case z_convert:to_bool(m_rsc:p(Id, seo_noindex, Context)) of
-        true ->  z_context:set_resp_header("X-Robots-Tag", "noindex", Context);
-        false -> Context
-    end,
+    Id = get_id(Context),
+    Context1 = z_context:set_noindex_header(m_rsc:p(Id, seo_noindex, Context), Context),
 
 	%% EXPERIMENTAL:
 	%%
