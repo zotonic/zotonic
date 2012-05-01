@@ -1,5 +1,5 @@
 script:
-  - make
+  - (cd /home/vagrant/builds/zotonic/zotonic; make)
 before_install:
   - git submodule update --init --recursive
 otp_release:
