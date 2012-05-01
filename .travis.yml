@@ -1,0 +1,20 @@
+script:
+  - make
+before_install:
+  - git submodule update --init --recursive
+otp_release:
+  - R15B01
+  - R14B04
+  - R14B03
+env:
+  - DB=postgres
+branches:
+  only:
+    - master
+notifications:
+  email:
+    recipients:
+      - marc@worrell.nl
+      - arjan@miraclethings.nl
+    on_success: change #[always|never|change] # default: change
+    on_failure: always #[always|never|change] # default: always
