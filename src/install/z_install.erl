@@ -169,7 +169,7 @@ model_pgsql() ->
         pivot_state character varying(50),
         pivot_postcode character varying(30),
         pivot_country character varying(80),
-        pivot_geocode unsigned bigint,
+        pivot_geocode bigint,
         pivot_title character varying(100),
 
         CONSTRAINT rsc_pkey PRIMARY KEY (id),
