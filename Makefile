@@ -1,6 +1,5 @@
 ERL       ?= erl
 ERLC      ?= $(ERL)c
-EBIN_DIRS := $(wildcard deps/*/ebin)
 APP       := zotonic
 PARSER     =src/erlydtl/erlydtl_parser
 
@@ -10,7 +9,7 @@ MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extension
 all: iconv makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
-	@$(ERL) -pa $(EBIN_DIRS) -pa ebin -noinput +B \
+	@$(ERL) -pa $(wildcard deps/*/ebin) -pa ebin -noinput +B \
 	  -eval 'case make:all() of up_to_date -> halt(0); error -> halt(1) end.'
 
 $(PARSER).erl: $(PARSER).yrl
