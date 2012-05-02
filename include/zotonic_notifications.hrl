@@ -16,6 +16,17 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+%% @doc Final try for dispatch, try to match the request. Called with z_notifier:first/2
+%%      Result:   {ok, RscId::integer()} 
+%%              | {ok, #dispatch_match{}} 
+%%              | {ok, #dispatch_redirect{}}
+%%              | undefined.
+-record(dispatch, {host, path=[], method='GET', is_ssl=false}).
+    
+    -record(dispatch_redirect, {location, is_permanent=false}).
+    -record(dispatch_match, {dispatch_name, mod, mod_opts=[], path_tokens=[], bindings=[], app_root="", string_path=""}).
+
+
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started. (notify)

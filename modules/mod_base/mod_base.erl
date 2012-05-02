@@ -31,7 +31,8 @@
 %% interface functions
 -export([
     observe_media_stillimage/2,
-    observe_scomp_script_render/2
+    observe_scomp_script_render/2,
+    observe_dispatch/2
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
@@ -76,6 +77,24 @@ observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) -
 observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
     [].
 
+%% @doc Check if there is a resource or template matching the path.
+observe_dispatch(#dispatch{path=Path}, Context) ->
+    case m_rsc:page_path_to_id(Path, Context) of
+        {ok, Id} ->
+            {ok, Id};
+        {error, _} ->
+            Template = "static/"++Path++".tpl",
+            case z_module_indexer:find(template, Template, Context) of
+                {ok, _} ->
+                    {ok, #dispatch_match{
+                        mod=resource_template,
+                        mod_opts=[{template, Template}, {ssl, any}],
+                        bindings=[{path, Path}, {is_static, true}]
+                    }};
+                {error, _} ->
+                    undefined
+            end
+    end.
 
 %%====================================================================
 %% support functions
