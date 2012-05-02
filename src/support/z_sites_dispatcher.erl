@@ -110,7 +110,7 @@ dispatch(Host, Path, ReqData) ->
                         string_path=SStringPath}} ->
                     {{SMod, SModOpts, 
                       [], none, % Host info
-                      SPathTokens, [{zotonic_dispatch, SDispatchName},{zotonic_host, MatchedHost}|SBindings], 
+                      SPathTokens, [{zotonic_dispatch, SDispatchName},{zotonic_host, MatchedHost}|SBindings] ++ Bindings, 
                       SAppRoot, SStringPath}, 
                      ReqDataHost};
                 {ok, #dispatch_redirect{location=Location, is_permanent=IsPermanent}} ->
