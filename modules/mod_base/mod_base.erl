@@ -83,7 +83,11 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
         {ok, Id} ->
             {ok, Id};
         {error, _} ->
-            Template = "static/"++Path++".tpl",
+            Last = last(Path),
+            Template= case Last of
+                         $/ -> "static/"++Path++"index.tpl";
+                         _ -> "static/"++Path++".tpl"
+                      end,
             case z_module_indexer:find(template, Template, Context) of
                 {ok, _} ->
                     {ok, #dispatch_match{
@@ -92,9 +96,30 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                         bindings=[{path, Path}, {is_static, true}]
                     }};
                 {error, _} ->
-                    undefined
+                    % Check again, assuming the path is a directory (without trailing $/) 
+                    case Last of
+                        $/ -> 
+                            undefined;
+                        $. ->
+                            undefined;
+                        _ ->
+                            Template1 = "static/"++Path++"/index.tpl",
+                            case z_module_indexer:find(template, Template1, Context) of
+                                {ok, _} ->
+                                    {ok, #dispatch_match{
+                                        mod=resource_template,
+                                        mod_opts=[{template, Template1}, {ssl, any}],
+                                        bindings=[{path, Path}, {is_static, true}]
+                                    }};
+                                {error, _} ->
+                                    undefined
+                            end
+                    end
             end
     end.
+
+    last([]) -> $/;
+    last(Path) -> lists:last(Path).
 
 %%====================================================================
 %% support functions
