@@ -1,7 +1,21 @@
 {% with m.acl.user as user_id %}
 {% if user_id or m.config.mod_comment.anonymous.value|default_if_undefined:1 %}
+
+{% if m.config.comments.moderate.value %}
+    <div id='comments-moderation-notice' style='display: none'>
+    	 <h2>Your comment</h2>
+    	 <p>{_ Your comment has been saved and will be subject to review before it is displayed to other visitors of the website. Thank you for your comment! _}</p>
+    </div>
+    {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" action={fade_out target="comments-area"} action={slide_fade_in target="comments-moderation-notice"} %}
+{% else %}
+    {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" %}
+{% endif %}
+
+<div id="comments-area">
 <h2>{_ Leave a comment _}</h2>
-{% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" %}
+{% if m.config.comments.moderate.value %}
+    <p>({_ Note: Comments are moderated _})</p>
+{% endif %}
 <form id="comments-form" method="post" action="postback" class="form-horizontal">
     <fieldset>
 
@@ -36,9 +50,15 @@
 		<button class="btn btn-primary" type="submit">{_ Send _}</button>
 	    </div>
 	</div>
+
+	<div>
+	  <input type="hidden" name="user_agent" value="{{ m.req.user_agent }}" />
+        </div>
         
     </fieldset>
 </form>
+</div>
+
 {% else %}
 <p id="comments-logon"><a href="{% url logon back %}">{_ Log on or sign up to comment _}</a>.</p>
 {% endif %}

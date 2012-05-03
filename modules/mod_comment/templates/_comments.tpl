@@ -5,7 +5,9 @@
 {% with m.rsc[id].creator_id as creator_id %}
 <ul id="comments-list" class="comments-list">
 {% for comment in comments %}
-	{% include "_comments_comment.tpl" %}
+   {% if comment.is_visible %}
+      {% include "_comments_comment.tpl" %}
+   {% endif %}
 {% endfor %}
 </ul>
 {% endwith %}
