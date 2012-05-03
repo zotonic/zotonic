@@ -30,7 +30,12 @@
                 <td title="{{ comment.email }}">
                     <div class="pull-right">
                         {% button class="btn btn-mini" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
-                        {% button class="btn btn-mini" text=_"delete" postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}} %}
+			{% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}
+                        {% button class="btn btn-mini"
+                           text=_"delete"
+                           action={confirm text=_"Are you sure you wish to delete that comment?"
+                           action={postback delegate="resource_admin_comments"
+                                            postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}}}} %}
                     </div>
                     {% if comment.user_id %}
                     {{ m.rsc[comment.user_id].title }} (#{{ comment.user_id }})
