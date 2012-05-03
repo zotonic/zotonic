@@ -21,7 +21,7 @@
 	<![endif]-->
 	
 	<!-- Make ie understand html5 -->
-	{% lib "js/apps/modernizr.js" %}
+	{% lib "js/modernizr.js" %}
 
 	{% block html_head_extra %}{% endblock %}
 </head>
