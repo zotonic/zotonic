@@ -13,7 +13,6 @@ branches:
 notifications:
   email:
     recipients:
-      - marc@worrell.nl
-      - arjan@miraclethings.nl
+      - zotonic-commits@googlegroups.com
     on_success: change #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always

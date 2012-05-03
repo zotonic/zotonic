@@ -31,7 +31,8 @@
 %% interface functions
 -export([
     observe_media_stillimage/2,
-    observe_scomp_script_render/2
+    observe_scomp_script_render/2,
+    observe_dispatch/2
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
@@ -76,6 +77,49 @@ observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) -
 observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
     [].
 
+%% @doc Check if there is a resource or template matching the path.
+observe_dispatch(#dispatch{path=Path}, Context) ->
+    case m_rsc:page_path_to_id(Path, Context) of
+        {ok, Id} ->
+            {ok, Id};
+        {error, _} ->
+            Last = last(Path),
+            Template= case Last of
+                         $/ -> "static/"++Path++"index.tpl";
+                         _ -> "static/"++Path++".tpl"
+                      end,
+            case z_module_indexer:find(template, Template, Context) of
+                {ok, _} ->
+                    {ok, #dispatch_match{
+                        mod=resource_template,
+                        mod_opts=[{template, Template}, {ssl, any}],
+                        bindings=[{path, Path}, {is_static, true}]
+                    }};
+                {error, _} ->
+                    % Check again, assuming the path is a directory (without trailing $/) 
+                    case Last of
+                        $/ -> 
+                            undefined;
+                        $. ->
+                            undefined;
+                        _ ->
+                            Template1 = "static/"++Path++"/index.tpl",
+                            case z_module_indexer:find(template, Template1, Context) of
+                                {ok, _} ->
+                                    {ok, #dispatch_match{
+                                        mod=resource_template,
+                                        mod_opts=[{template, Template1}, {ssl, any}],
+                                        bindings=[{path, Path}, {is_static, true}]
+                                    }};
+                                {error, _} ->
+                                    undefined
+                            end
+                    end
+            end
+    end.
+
+    last([]) -> $/;
+    last(Path) -> lists:last(Path).
 
 %%====================================================================
 %% support functions
