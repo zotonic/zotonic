@@ -67,6 +67,11 @@ event(#postback{message={comment_toggle, Args}}, Context) ->
         {error, _Reason} ->
             %% Assume permission problem.
             z_render:growl_error(?__("You are not allowed to toggle the comment.", Context), Context)
-    end.
+    end;
+
+event(Else, _Context) ->
+    error_logger:info_msg("Other Event: ~p", [Else]).
+
+
 
 

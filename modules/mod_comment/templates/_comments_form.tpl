@@ -1,6 +1,7 @@
 {% with m.acl.user as user_id %}
 {% if user_id or m.config.mod_comment.anonymous.value|default_if_undefined:1 %}
 <h2>{_ Leave a comment _}</h2>
+{% if m.config.comments.moderate.value %}<p>({_ Note: Comments are moderated _})</p>{% endif %}
 {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" %}
 <form id="comments-form" method="post" action="postback" class="form-horizontal">
     <fieldset>

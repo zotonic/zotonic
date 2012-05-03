@@ -51,7 +51,8 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Email = ""
     end,
     Message = z_context:get_q_validated("message", Context),
-    case m_comment:insert(Id, Name, Email, Message, Context) of
+    Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
+    case m_comment:insert(Id, Name, Email, Message, Is_visible, Context) of
         {ok, CommentId} ->
             CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),
             CommentTemplate = proplists:get_value(comment_template, Args, "_comments_comment.tpl"),
@@ -195,6 +196,11 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_content,
                 label=?__("Comments", Context),
                 url={admin_comments},
-                visiblecheck={acl, use, ?MODULE}}
-     
+                visiblecheck={acl, use, ?MODULE}},
+     #menu_item{id=admin_comments_settings,
+		parent=admin_modules,
+		label=?__("Comments", Context),
+		url={admin_comments_settings},
+		visiblecheck={acl, use, ?MODULE}}     
      |Acc].
+
