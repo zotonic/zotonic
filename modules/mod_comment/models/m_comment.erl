@@ -112,7 +112,9 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             Name1 = z_html:escape(z_string:trim(Name)),
             Message1 = z_html:escape_link(z_string:trim(Message)),
             KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
-            Props = [
+	    UserAgent = z_context:get_q("user_agent", Context, <<"">>),
+	    IPAddress = wrq:peer(z_context:get_reqdata(Context)),
+	    Props = [
                 {rsc_id, z_convert:to_integer(RscId)},
                 {is_visible, Is_visible},
                 {user_id, z_acl:user(Context)},
@@ -122,8 +124,8 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 {email, Email},
                 {gravatar_code, gravatar_code(Email)},
                 {keep_informed, KeepInformed},
-                {ip_address, ""},
-                {user_agent, ""}
+                {ip_address, IPAddress},
+                {user_agent, UserAgent}
             ],
             case z_db:insert(comment, Props, Context) of
                 {ok, CommentId} = Result ->
