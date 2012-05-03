@@ -1,0 +1,170 @@
+/* zotonic_status styles 2012
+----------------------------------------------------------
+
+@Author: 	Arjan Scherpenisse
+@Created: 	2009-02-01
+@Changed:	2012-05-03
+
+Copyright 2009 Tim Benniks
+Copyright 2012 Arjan Scherpenisse
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---------------------------------------------------------- */
+
+/* Tables
+---------------------------------------------------------- */
+
+#content table {
+	margin: 0 0 18px;
+	font-size: 14px;
+}
+
+#content table th,
+#content table td {
+	padding: 6px;
+	border-bottom: 1px dotted #333;
+}
+#content table th {
+    padding-bottom: 0;
+}
+
+#content table tr th {
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 1px dotted #333;
+}
+
+#content table tr:nth-child(even) td {
+    background: #eee;
+}
+
+body {
+    margin-top: 80px;
+}
+
+/* Logon
+---------------------------------------------------------- */
+
+#error-pw {
+    display: none;
+}
+
+form.error-pw #error-pw {
+    display: block;
+}
+
+
+/* status flags */
+
+span.status {
+	display: none;
+	padding: 4px 4px 3px;
+        font-size: 12px;
+	-moz-border-radius: 2px;
+	border-radius: 3px;
+}
+
+.waiting span.waiting {
+	display: inline;
+}
+
+.running span.running {
+	display: inline;
+}
+
+.retrying span.retrying {
+	display: inline;
+}
+
+.failed span.failed {
+	display: inline;
+}
+
+.stopped span.stopped {
+	display: inline;
+}
+
+span.running {
+	color: white;
+	background: green;
+}
+
+span.retrying {
+	color: white;
+	background: #f90;
+}
+
+span.failed {
+	color: white;
+	background: #c00;
+}
+
+span.stopped {
+	color: white;
+	background: #999;
+}
+
+/* status buttons */
+
+.running button.start {
+	display: none;
+}
+
+.retrying button.restart,
+.retrying button.flush,
+.stopped button.stop,
+.stopped button.restart,
+.stopped button.flush,
+.failed button.restart, 
+.failed button.flush,
+.stopped button.stop, 
+.stopped button.restart, 
+.stopped button.flush {
+	display: none;
+}
+
+.stopped a {
+	color: #ccc;
+}
+
+/* Some extra spacing for the buttons */
+
+#content table button, 
+#content table a.button {
+	padding: 1px 4px;
+	margin: 0px 8px -6px 0px;
+}
+
+
+.hidden {
+	display: none;
+}
+
+
+
+.pager li {
+	display: inline;
+	margin: 0 6px 0 0;
+}
+
+.pager li.current {
+    font-weight: bold;
+}
+
+fieldset { padding-left: 0; }
+
+
+p.meta {
+    color: #666;
+}

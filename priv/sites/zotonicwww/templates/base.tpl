@@ -22,7 +22,7 @@
 	<![endif]-->
 	
 	{% lib
-		"js/apps/modernizr.js"
+		"js/modernizr.js"
 	%}
 	{% block html_head_extra %}{% endblock %}
 	
