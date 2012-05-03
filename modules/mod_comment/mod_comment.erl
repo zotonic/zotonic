@@ -51,7 +51,8 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Email = ""
     end,
     Message = z_context:get_q_validated("message", Context),
-    case m_comment:insert(Id, Name, Email, Message, Context) of
+    Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
+    case m_comment:insert(Id, Name, Email, Message, Is_visible, Context) of
         {ok, CommentId} ->
             CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),
             CommentTemplate = proplists:get_value(comment_template, Args, "_comments_comment.tpl"),
@@ -64,11 +65,16 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             ],
             Html = z_template:render(CommentTemplate, Props, Context),
             Context1 = z_render:insert_bottom(CommentsListElt, Html, Context),
-            Context2 = z_render:wire([
-                            {set_value, [{selector, "#"++FormId++" textarea[name=\"message\"]"}, {value, ""}]},
-                            {set_value, [{selector, "#"++FormId++" input[name=\"message\"]"}, {value, ""}]},
-                            {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
-                        ], Context1),
+            Context2 = case Is_visible of
+			   true ->
+			       z_render:wire([
+					      {set_value, [{selector, "#"++FormId++" textarea[name=\"message\"]"}, {value, ""}]},
+					      {set_value, [{selector, "#"++FormId++" input[name=\"message\"]"}, {value, ""}]},
+					      {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
+					     ], Context1);
+			   false ->
+			       Context1
+		       end,
             case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of
                 true -> z_render:wire({redirect, [{location, "#comment-"++integer_to_list(CommentId)}]}, Context2);
                 false -> Context2
@@ -195,6 +201,11 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_content,
                 label=?__("Comments", Context),
                 url={admin_comments},
-                visiblecheck={acl, use, ?MODULE}}
-     
+                visiblecheck={acl, use, ?MODULE}},
+     #menu_item{id=admin_comments_settings,
+		parent=admin_modules,
+		label=?__("Comments", Context),
+		url={admin_comments_settings},
+		visiblecheck={acl, use, ?MODULE}}     
      |Acc].
+

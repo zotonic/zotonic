@@ -31,7 +31,7 @@
     
     list_rsc/2,
     get/2,
-    insert/5,
+    insert/6,
     delete/2,
     toggle/2,
     gravatar_code/1,
@@ -101,9 +101,9 @@ get(CommentId, Context) ->
 
 
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
-%% @spec insert(Id::int(), Name::string(), Email::string(), Message::string(), Context) -> {ok, CommentId} | {error, Reason}
+%% @spec insert(Id::int(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
-insert(RscId, Name, Email, Message, Context) ->
+insert(RscId, Name, Email, Message, Is_visible, Context) ->
     case z_acl:rsc_visible(RscId, Context) 
         and (z_auth:is_auth(Context) 
             orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
@@ -114,7 +114,7 @@ insert(RscId, Name, Email, Message, Context) ->
             KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
             Props = [
                 {rsc_id, z_convert:to_integer(RscId)},
-                {is_visible, true},
+                {is_visible, Is_visible},
                 {user_id, z_acl:user(Context)},
                 {persistent_id, z_context:persistent_id(Context)},
                 {name, Name1},

@@ -49,6 +49,8 @@ event(#postback{message={comment_delete, Args}}, Context) ->
 
 event(#postback{message={comment_toggle, Args}}, Context) ->
     CommentId = proplists:get_value(id, Args),
+    BtnPublish = proplists:get_value(btnpublish, Args),
+    BtnUnpublish = proplists:get_value(btnunpublish, Args),
     case m_comment:toggle(CommentId, Context) of
         {ok, IsVisible} ->
             OnSuccess = proplists:get_all_values(on_success, Args),
@@ -59,14 +61,27 @@ event(#postback{message={comment_toggle, Args}}, Context) ->
                 ElementId -> 
                     case IsVisible of
                         true ->
-                            z_render:wire({remove_class, [{target, ElementId},{class,"unpublished"}]}, Context1);
+                            z_render:wire([
+					   {remove_class, [{target, ElementId},{class,"unpublished"}]},
+					   {add_class, [{target, BtnPublish},{class,"disabled"}]},
+					   {remove_class, [{target, BtnUnpublish},{class,"disabled"}]}
+					  ], Context1);
                         false ->
-                            z_render:wire({add_class, [{target, ElementId},{class,"unpublished"}]}, Context1)
+                            z_render:wire([
+					   {add_class, [{target, ElementId},{class,"unpublished"}]},
+					   {add_class, [{target, BtnUnpublish},{class,"disabled"}]},
+					   {remove_class, [{target, BtnPublish},{class,"disabled"}]}
+					  ], Context1)
                     end
             end;
         {error, _Reason} ->
             %% Assume permission problem.
             z_render:growl_error(?__("You are not allowed to toggle the comment.", Context), Context)
-    end.
+    end;
+
+event(Else, _Context) ->
+    error_logger:info_msg("Other Event: ~p", [Else]).
+
+
 
 
