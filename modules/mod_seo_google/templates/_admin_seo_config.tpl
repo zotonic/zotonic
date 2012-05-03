@@ -12,7 +12,7 @@
 
 			<div class="form-item clearfix">
 				<label for="seo_google-webmaster">{_ Google Webmaster Tools<br/>
-					Enter here the verification code for <a href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. Copy the content of the meta tag provided by Google. _}
+					Enter here the verification code for <a href="https://www.google.com/webmasters/tools">Google Webmaster Tools</a>. Copy the value of the content attribute in the meta tag provided by Google. _}
 				</label>
 				<input type="text" id="seo_google-webmaster_verify" name="seo_google-webmaster_verify" value="{{ m.config.seo_google.webmaster_verify.value|escape }}" />
 			</div>
