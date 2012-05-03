@@ -13,6 +13,10 @@ instead of Atatonic. This includes the admin (which got a new design)
 and the base templates for the skeleton sites. All Atatonic CSS files
 have been removed from Zotonic. Cufon is also no longer included.
 
+Modules can now implement their own URL dispatch mechanisms through
+#dispatch{} notifications. They are triggered when the regular
+dispatch rules do not match.
+
 * New tags/changed tags
 
 {% javascript %}...{% endjavascript %}
