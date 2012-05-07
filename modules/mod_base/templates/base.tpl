@@ -49,6 +49,8 @@
 	{% include "_js_include.tpl" %}
 
 	{% script %}
+
+	{% include "_include_audioplayerjs.tpl" %}
 	
 	{% block ua_probe %}
 		{% include "_ua_probe.tpl"%}
