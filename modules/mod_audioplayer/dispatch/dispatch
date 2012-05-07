@@ -1,0 +1,7 @@
+[
+    {audio_attachment, ["media","audio",id,"audio.mp3"], resource_file_readonly, [
+                                            {path, id},
+                                            {use_cache, false},
+                                            {content_disposition, attachment}
+                                        ]}
+].

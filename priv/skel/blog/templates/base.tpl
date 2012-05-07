@@ -92,6 +92,8 @@
 	{% stream %}
         {% script %}
 
+        {% include "_include_audioplayerjs.tpl" %}
+
         {% all include "_html_body.tpl" %}
     </body>
 </html>
