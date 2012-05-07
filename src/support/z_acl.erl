@@ -24,7 +24,7 @@
 	is_allowed/3,
 
 	rsc_visible/2,
-        rsc_prop_visible/3,
+    rsc_prop_visible/3,
 	rsc_editable/2,
 	rsc_deletable/2,
 
@@ -134,12 +134,12 @@ rsc_editable(Id, Context) ->
 
 %% @doc Check if the resource is deletable by the current user
 rsc_deletable(_Id, #context{user_id=undefined}) ->
-    % Anonymous visitors can't delete anything
     false;
-rsc_deletable(_Id, #context{acl=admin}) ->
-	true;
+rsc_deletable(Id, #context{acl=admin} = Context) ->
+    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context));
 rsc_deletable(Id, Context) ->
-	is_allowed(delete, Id, Context).
+    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context))
+    andalso is_allowed(delete, Id, Context).
 
 
 %% @doc Filter the properties of an update.  This is before any escaping.
