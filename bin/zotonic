@@ -31,7 +31,7 @@ then
     echo Usage: `basename $0` [command] 1>&2
     echo 1>&2
     echo Where [command] is one of: 1>&2
-    CMDS="`ls $ZOTONIC_SCRIPTS | grep zotonic- | grep -v _ | sed 's/zotonic-//g'`"
+    CMDS="`find $ZOTONIC_SCRIPTS/zotonic-* -perm /a+x | sed 's/.*zotonic-//g'`"
     echo $CMDS 1>&2
     echo 1>&2
     echo see doc/ZotonicCommands.txt for more info 1>&2
