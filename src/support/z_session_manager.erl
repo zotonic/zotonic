@@ -49,7 +49,8 @@
     get_session_id/1,
     tick/1,
     foreach/2,
-    broadcast/2
+    broadcast/2,
+    fold/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -165,6 +166,13 @@ foreach(Function, #context{session_manager=SessionManager}) when is_function(Fun
 foreach(Function, SessionManager) when is_function(Function) ->
     gen_server:cast(SessionManager, {foreach, Function}).
 
+%% @spec fold(function(), Acc0 :: term(), #context{}) -> Acc :: term()
+%% @doc Calls Fun on successive sessions together with an extra argument Acc (short for accumulator). Fun must return a new accumulator which is passed to the next call. Acc0 is returned if the list is empty. The evaluation order is undefined.
+fold(Function, Acc0, #context{session_manager=SessionManager}) when is_function(Function) ->
+    fold(Function, Acc0, SessionManager);
+fold(Function, Acc0, SessionManager) ->
+    gen_server:call(SessionManager, {fold, Function, Acc0}).
+
 %% @spec broadcast(#broadcast{}, Context) -> ok
 %% @doc Broadcast a notification message to all open sessions.
 broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, stay=Stay}, Context) ->
@@ -236,6 +244,26 @@ handle_call(dump, _From, State) ->
     SesPids = dict:to_list(State#session_srv.pid2key),
     lists:foreach(fun({Pid,Key}) -> io:format("sid:~p~n", [Key]), z_session:dump(Pid) end, SesPids),
     {reply, ok, State};
+
+%% Call Function on successive sessions together with an extra argument Acc (short for accumulator).
+%% Fun must return a new accumulator which is passed to the next call.
+%% Acc0 is returned if no sessions exist.
+handle_call({fold, Function, Acc0}, From,
+	    #session_srv{context=Context, pid2key=Pid2Key} = State) ->
+    SesPids = dict:fetch_keys(Pid2Key),
+    if
+	is_function(Function, 2) ->
+	    spawn(fun() ->
+			  Res = lists:foldl(Function, Acc0, SesPids),
+			  gen_server:reply(From, Res)
+		  end);
+	is_function(Function, 3) ->
+	    spawn(fun() ->
+			  Res = lists:foldl(fun(Pid, Acc) -> Function(Pid, Context#context{session_pid=Pid}, Acc) end, Acc0, SesPids),
+			  gen_server:reply(From, Res)
+		  end)
+    end,
+    {noreply, State};    
     
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
