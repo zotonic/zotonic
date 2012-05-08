@@ -17,16 +17,19 @@
 %% limitations under the License.
 
 -module(filter_show_media).
--export([show_media/2]).
+-export([show_media/2, show_media/3]).
 
 -include_lib("zotonic.hrl").
 
+show_media(Input, Context) ->
+    show_media(Input, "_body_media.tpl", Context).
 
-show_media(undefined, _Context) ->
+show_media(undefined, _Template, _Context) ->
     undefined;
-show_media(Input, Context) when is_binary(Input) ->
-    show_media1(Input, 0, Context);
-show_media(Input, _Context) ->
+show_media(Input, Template, Context) when is_binary(Input) ->
+    Context1 = z_context:set(show_media_template, Template, Context),
+    show_media1(Input, 0, Context1);
+show_media(Input, _Template, _Context) ->
     Input.
 
 
@@ -82,7 +85,8 @@ show_media_html(Id, {struct, Args}, Context) ->
           catch
               _:_ -> Id
           end,
-    z_template:render({cat, "_body_media.tpl"}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+    Tpl = z_context:get(show_media_template, Context),
+    z_template:render({cat, Tpl}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
 
 filter_args([], true, Acc, _Context) ->
     Acc;
