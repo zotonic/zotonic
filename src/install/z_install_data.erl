@@ -80,6 +80,7 @@ install_modules(Host, C) ->
         "mod_admin_modules",
         "mod_admin_predicate",
         
+        "mod_l10n",
         "mod_geomap",
 
         %% Enable comments
