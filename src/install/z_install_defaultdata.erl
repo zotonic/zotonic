@@ -64,7 +64,7 @@ install(blog, Context) ->
         article,
         [{title, <<"Welcome to Zotonic!">>},
          {publication_start, Now},
-         {summary, <<"Zotonic is the content management system for people that want a fast, extensible, flexible and complete system for dynamic web sites. It is built from the ground up with rich internet applications ánd web publishing in mind.">>},
+         {summary, <<"Zotonic is the content management system for people that want a fast, extensible, flexible and complete system for dynamic web sites. It is built from the ground up with rich internet applications and web publishing in mind.">>},
          {body, {file, datafile(blog, "welcome.html")}}
         ]
        },
