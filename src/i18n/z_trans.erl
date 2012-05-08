@@ -32,8 +32,7 @@
     lookup_fallback_language/3,
     default_language/1, 
     is_language/1, 
-    language_list/1,
-    lc2/1, 
+    to_language_atom/1, 
     lc2descr/1
 ]).
 
@@ -231,31 +230,30 @@ trans(Text, Language, Context) ->
 
 
 %% @doc Return the configured default language for this server
+-spec default_language(#context{}) -> atom().
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
 
-%% @doc Return the list of languages selected for this site
-%% @todo Make this configurable
-language_list(_Context) ->
-    [ en, nl ].
-
 %% @doc check if the two letter code is a valid language
-%% @spec is_language(LanguageString) -> bool()
-%%   LanguageString = string()
-is_language([_,_] = LanguageString) ->
-	Language = iso639:lc2lang(LanguageString),
-	Language /= "";
-is_language(_) ->
-    false.
+-spec is_language(Language :: term()) -> boolean().
+is_language(<<A,B>>) -> iso639:lc2lang([A,B]) /= "";
+is_language([_,_] = IsoCode) -> iso639:lc2lang(IsoCode) /= "";
+is_language(_) -> false.
 
-%% @doc Translate a language to an atom, fail when unknown language
-%% @spec lc2(LanguageString) -> Language
-%%  LanguageString = string()
-%%  Language = atom()
-lc2(LanguageString) ->
-	true = is_language(iso639:lc2lang(LanguageString)),
-	list_to_atom(LanguageString).
+%% @doc Translate a language-code to an atom.
+-spec to_language_atom(IsoCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
+to_language_atom([_,_] = IsoCode) ->
+    case is_language(IsoCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(IsoCode)}
+    end;
+to_language_atom(IsoCode) when is_atom(IsoCode) ->
+    to_language_atom(atom_to_list(IsoCode));
+to_language_atom(IsoCode) when is_binary(IsoCode) ->
+    to_language_atom(binary_to_list(IsoCode));
+to_language_atom(_) ->
+    {error, not_a_language}.
 
 
 %% @doc Return a descriptive (english) string for the language
@@ -263,4 +261,4 @@ lc2(LanguageString) ->
 %%  Language = atom()
 %%  Descr = list()
 lc2descr(Language) ->
-	iso639:lc2lang(atom_to_list(Language)).
+    iso639:lc2lang(atom_to_list(Language)).
