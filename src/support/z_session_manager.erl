@@ -171,12 +171,7 @@ foreach(Function, SessionManager) when is_function(Function) ->
 fold(Function, Acc0, #context{session_manager=SessionManager}) when is_function(Function) ->
     fold(Function, Acc0, SessionManager);
 fold(Function, Acc0, SessionManager) ->
-    Ref = make_ref(),
-    gen_server:cast(SessionManager, {fold, Function, Acc0, {self(), Ref}}),
-    receive
-	{Ref, Acc} ->
-	    Acc
-    end.
+    gen_server:call(SessionManager, {fold, Function, Acc0}).
 
 %% @spec broadcast(#broadcast{}, Context) -> ok
 %% @doc Broadcast a notification message to all open sessions.
@@ -249,6 +244,26 @@ handle_call(dump, _From, State) ->
     SesPids = dict:to_list(State#session_srv.pid2key),
     lists:foreach(fun({Pid,Key}) -> io:format("sid:~p~n", [Key]), z_session:dump(Pid) end, SesPids),
     {reply, ok, State};
+
+%% Call Function on successive sessions together with an extra argument Acc (short for accumulator).
+%% Fun must return a new accumulator which is passed to the next call.
+%% Acc0 is returned if no sessions exist.
+handle_call({fold, Function, Acc0}, From,
+	    #session_srv{context=Context, pid2key=Pid2Key} = State) ->
+    SesPids = dict:fetch_keys(Pid2Key),
+    if
+	is_function(Function, 2) ->
+	    spawn(fun() ->
+			  Res = lists:foldl(Function, Acc0, SesPids),
+			  gen_server:reply(From, Res)
+		  end);
+	is_function(Function, 3) ->
+	    spawn(fun() ->
+			  Res = lists:foldl(fun(Pid, Acc) -> Function(Pid, Context#context{session_pid=Pid}, Acc) end, Acc0, SesPids),
+			  gen_server:reply(From, Res)
+		  end)
+    end,
+    {noreply, State};    
     
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
@@ -266,25 +281,6 @@ handle_cast({foreach, Function}, #session_srv{context=Context, pid2key=Pid2Key} 
     end,
     {noreply, State};
 
-%% Call Function on successive sessions together with an extra argument Acc (short for accumulator).
-%% Fun must return a new accumulator which is passed to the next call.
-%% Acc0 is returned if no sessions exist.
-handle_cast({fold, Function, Acc0, {CallerPid, Ref}}, #session_srv{context=Context, pid2key=Pid2Key} = State) ->
-    SesPids = dict:fetch_keys(Pid2Key),
-    if
-	is_function(Function, 2) ->
-	    spawn(fun() ->
-			  Res = lists:foldl(Function, Acc0, SesPids),
-			  CallerPid ! {Ref, Res}
-		  end);
-	is_function(Function, 3) ->
-	    spawn(fun() ->
-			  Res = lists:foldl(fun(Pid, Acc) -> Function(Pid, Context#context{session_pid=Pid}, Acc) end, Acc0, SesPids),
-			  CallerPid ! {Ref, Res}
-		  end)
-    end,
-    {noreply, State};
-    
 handle_cast(_Msg, State) -> 
     {noreply, State}.
 
