@@ -37,20 +37,20 @@ start_link(SiteProps) when is_list(SiteProps) ->
     ignore.
 
 install_check(SiteProps) ->
-    % Check if the config table exists, if so then assume that all is ok
+    %% Check if the config table exists, if so then assume that all is ok
     Name     = proplists:get_value(host, SiteProps),
     Database = case proplists:get_value(dbdatabase, SiteProps, inherit) of
-		   inherit ->
-		       pgsql_pool:get_database_opt(database, Name);
-		   Db ->
-		       Db
-	       end,
-    
+                   inherit ->
+                       pgsql_pool:get_database_opt(database, Name);
+                   Db ->
+                       Db
+               end,
+
     case Database of
         none ->
             ignore;
         _ ->
-	    {ok, Schema} = pgsql_pool:get_database_opt(schema, Name),
+            {ok, Schema} = pgsql_pool:get_database_opt(schema, Name),
             {ok, C} = pgsql_pool:get_connection(Name),
             {ok, [], []} = pgsql:squery(C, "BEGIN"),
 
@@ -61,18 +61,18 @@ install_check(SiteProps) ->
                     {ok, [], []} = pgsql:squery(C, "COMMIT"),
                     pgsql_pool:return_connection(Name, C),
 
-		    {ok, User} = pgsql_pool:get_database_opt(username, Name),
-		    {ok, Host} = pgsql_pool:get_database_opt(host, Name),
-		    {ok, Port} = pgsql_pool:get_database_opt(port, Name),
+                    {ok, User} = pgsql_pool:get_database_opt(username, Name),
+                    {ok, Host} = pgsql_pool:get_database_opt(host, Name),
+                    {ok, Port} = pgsql_pool:get_database_opt(port, Name),
                     lager:warning("~p: Installing database ~s.~s at ~s@~s:~s", 
-				  [
-				   Name,
-				   z_convert:to_list(Database),
-				   z_convert:to_list(Schema),
-				   z_convert:to_list(User),
-				   z_convert:to_list(Host),
-				   z_convert:to_list(Port)
-				  ]),
+                                  [
+                                   Name,
+                                   z_convert:to_list(Database),
+                                   z_convert:to_list(Schema),
+                                   z_convert:to_list(User),
+                                   z_convert:to_list(Host),
+                                   z_convert:to_list(Port)
+                                  ]),
                     z_install:install(Name);
                 true -> 
                     ok = upgrade(C, Database, Schema),
