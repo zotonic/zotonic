@@ -46,6 +46,7 @@
         <a class="btn btn-mini" href="{% url survey_results id=id %}">{_ Show survey results _}</a>
         <a class="btn btn-mini" href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a>
         {% wire id=#email_addresses postback={admin_show_emails id=id} delegate="mod_survey" %}
+        <a class="btn btn-mini" href="{% url survey_results_printable id=id %}">{_ Printable list _}</a>
         <a class="btn btn-mini" href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
     </p>
 
