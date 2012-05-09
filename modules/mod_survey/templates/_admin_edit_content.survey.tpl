@@ -37,8 +37,16 @@
     </div>
 
     <p>
-        <a href="{% url survey_results id=id %}">{_ Show survey results _}</a> |
-        <a href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
+        {% if m.survey.is_allowed_results_download[id] %}
+	<a id="{{ #download }}" class="btn btn-mini" href="{% url survey_results_download id=id %}">{_ Download CSV results _}</a>
+	{% wire id=#download propagate 
+	action={alert text=_"Download will start in the background. Please check your download window."}
+	%}
+        {% endif %}
+        <a class="btn btn-mini" href="{% url survey_results id=id %}">{_ Show survey results _}</a>
+        <a class="btn btn-mini" href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a>
+        {% wire id=#email_addresses postback={admin_show_emails id=id} delegate="mod_survey" %}
+        <a class="btn btn-mini" href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
     </p>
 
     <hr/>
