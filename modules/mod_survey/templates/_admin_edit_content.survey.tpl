@@ -42,8 +42,9 @@
 	%}
         {% endif %}
         <a href="{% url survey_results id=id %}">{_ Show survey results _}</a> |
-        <a href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a> |
+        <a href="#" id="{{ #email_addresses }}">{_ Email addresses _}</a> |
         {% wire id=#email_addresses postback={admin_show_emails id=id} delegate="mod_survey" %}
+        <a href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _}</a> |
         
         <a href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
         </p>

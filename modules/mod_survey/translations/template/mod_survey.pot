@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_survey/templates/survey_results_printable.tpl:9 
+msgid ""
+"All survey entries up until"
+msgstr ""
+
 #: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:33 
 msgid ""
 "Allow multiple entries per user/browser."
@@ -53,7 +58,22 @@ msgid ""
 "Click here to download the results as a CSV file."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_results.tpl:8 
+#: ./modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:4 
+msgid ""
+"Close"
+msgstr ""
+
+#: ./modules/mod_survey/models/m_survey.erl:337 
+msgid ""
+"Created"
+msgstr ""
+
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:39 
+msgid ""
+"Download CSV results"
+msgstr ""
+
+#: ./modules/mod_survey/templates/_survey_results.tpl:8 ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:41 
 msgid ""
 "Download will start in the background. Please check your download window."
 msgstr ""
@@ -63,17 +83,27 @@ msgid ""
 "Drag questions here."
 msgstr ""
 
+#: ./modules/mod_survey/mod_survey.erl:94 
+msgid ""
+"E-mail addresses"
+msgstr ""
+
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:4 
 msgid ""
 "Edit"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:22 
+#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:23 
 msgid ""
 "Edit survey result"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_question_truefalse.tpl:4 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:45 
+msgid ""
+"Email addresses"
+msgstr ""
+
+#: ./modules/mod_survey/templates/_survey_question_truefalse.tpl:5 
 msgid ""
 "False"
 msgstr ""
@@ -98,7 +128,7 @@ msgid ""
 "Next"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_question_yesno.tpl:4 
+#: ./modules/mod_survey/templates/_survey_question_yesno.tpl:5 
 msgid ""
 "No"
 msgstr ""
@@ -109,12 +139,17 @@ msgid ""
 "will be shown to the people surveyed."
 msgstr ""
 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:47 
+msgid ""
+"Printable list"
+msgstr ""
+
 #: ./modules/mod_survey/templates/_action_dialog_survey_question.tpl:14 ./modules/mod_survey/templates/_survey_question_page.tpl:2 
 msgid ""
 "Question"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:45 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:57 
 msgid ""
 "Question Templates"
 msgstr ""
@@ -139,7 +174,7 @@ msgid ""
 "Show results to user after completion of survey."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:38 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:44 
 msgid ""
 "Show survey results"
 msgstr ""
@@ -179,7 +214,7 @@ msgid ""
 "Survey result deleted."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:39 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:49 
 msgid ""
 "Survey results editor"
 msgstr ""
@@ -201,7 +236,7 @@ msgid ""
 "this."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_question_truefalse.tpl:3 
+#: ./modules/mod_survey/templates/_survey_question_truefalse.tpl:4 
 msgid ""
 "True"
 msgstr ""
@@ -211,7 +246,7 @@ msgid ""
 "Whether the question needs answering or not."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_survey_question_yesno.tpl:3 
+#: ./modules/mod_survey/templates/_survey_question_yesno.tpl:4 
 msgid ""
 "Yes"
 msgstr ""
@@ -227,17 +262,17 @@ msgid ""
 "on the right."
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:52 
+#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:64 
 msgid ""
 "Your survey"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:23 
+#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:24 
 msgid ""
 "delete"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4 ./modules/mod_survey/templates/admin_survey_editor.tpl:15 ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:22 
+#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:23 ./modules/mod_survey/templates/admin_survey_editor.tpl:15 ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4 
 msgid ""
 "edit"
 msgstr ""

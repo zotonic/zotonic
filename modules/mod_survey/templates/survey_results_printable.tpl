@@ -2,15 +2,18 @@
 {% with m.survey.all_results[id] as r %}
 {% with r|first as columns %}
 {% with r|tail as results %}
+
 {% with m.survey.captions[id] as captions %}
+
+<h1>{{ m.rsc[id].title }}</h1>
+<p><strong>{_ All survey entries up until _} {{ now|date:"Y-m-d H:i" }}</strong></p>
 
 <table width="100%">
     <tr>
         <th>&nbsp;</th>
         {% for name in columns|tail|tail %}
-        <th>{{ captions[name] }}</th>
+        <th align="left">{{ captions[name] }}</th>
         {% endfor %}
-        <th>&nbsp;</th>
     </tr>
 
     {% for r in results %}
@@ -19,10 +22,6 @@
         {% for value in r|tail|tail %}
         <td>{{ value }}</td>
         {% endfor %}
-        <td align="right">
-            {% button text=_"edit" action={dialog_open template="_dialog_survey_editor.tpl" id=id persistent_id=r[2] user_id=r[1] title=_"Edit survey result"} %}
-            {% button text=_"delete" postback={survey_remove_result id=id persistent_id=r[2] user_id=r[1]} delegate="mod_survey" %}
-        </td>
     </tr>
     {% endfor %}
 </table>
