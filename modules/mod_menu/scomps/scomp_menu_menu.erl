@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% @doc Render the menu.  Add classes to highlight the current item.  The menu is always build as seen by the anonymous user.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,10 +42,14 @@ vary(_Params, _Context) -> default.
 
 render(Params, _Vars, Context) ->
     MenuId = m_rsc:rid(proplists:get_value(menu_id, Params, main_menu), Context),
+    Template = case proplists:get_value(is_superfish, Params, false) of
+                    true -> proplists:get_value(template, Params, "_menu_superfish.tpl");
+                    false -> proplists:get_value(template, Params, "_menu.tpl")
+               end,
     Menu = mod_menu:get_menu(MenuId, Context),
     Vars = [
         {menu, mod_menu:menu_flat(Menu, Context)},
         {menu_id, MenuId}
         | Params
     ],
-    {ok, z_template:render("_menu.tpl", Vars, Context)}.
+    {ok, z_template:render(Template, Vars, Context)}.

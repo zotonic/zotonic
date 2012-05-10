@@ -1,6 +1,6 @@
 {% extends "base.tpl" %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}{_ Welcome _}{% endblock %}
 
 {% block content %}
 <div class="hero-unit">

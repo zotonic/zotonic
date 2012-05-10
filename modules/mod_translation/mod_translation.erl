@@ -36,6 +36,8 @@
     observe_scomp_script_render/2,
     observe_admin_menu/3,
 
+    url_strip_language/1,
+    set_user_language/2,
     try_set_language/2,
     
     init/1, 
@@ -178,18 +180,7 @@ event(#postback{message={set_language, Args}}, Context) ->
                 undefined -> z_context:get_q("triggervalue", Context);
                 ArgCode -> ArgCode
             end,
-    List = get_language_config(Context),
-    Context1 = set_language(z_convert:to_list(Code), List, Context),
-    z_context:set_persistent(language, z_context:language(Context1), Context1),
-    case z_acl:user(Context1) of
-        undefined -> 
-            nop;
-        UserId ->
-            case m_rsc:p_no_acl(UserId, pref_language, Context1) of
-                Code -> nop;
-                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context1)}], Context1)
-            end
-    end,
+    Context1 = set_user_language(Code, Context),
     z_render:wire({reload, [{z_language,z_context:language(Context1)}]}, Context1);
 
 %% @doc Set the default language.
@@ -254,6 +245,37 @@ event(#postback{message={language_enable, Args}}, Context) ->
             z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
     end.
 
+
+%% @doc Strip any language from the URL (iff the first part of the url is a known language)
+url_strip_language([$/,A,B,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
+url_strip_language(Url) ->
+    Url.
+
+
+%% @doc Set the language, as selected by the user. Persist this choice.
+set_user_language(Code, Context) ->
+    List = get_language_config(Context),
+    Context1 = set_language(z_convert:to_list(Code), List, Context),
+    z_context:set_persistent(language, z_context:language(Context1), Context1),
+    case z_acl:user(Context1) of
+        undefined -> 
+            nop;
+        UserId ->
+            case m_rsc:p_no_acl(UserId, pref_language, Context1) of
+                Code -> nop;
+                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context1)}], Context1)
+            end
+    end,
+    Context1.
 
 
 %% @doc Set the language of the user. Only done when the found language is a known language.

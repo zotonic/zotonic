@@ -1,8 +1,5 @@
 %% Base dispatch rules for zotonic
 [
-    %% The home page, just shows the "home.tpl" template.
-    {home,     [],            resource_template, [ {template, "home.tpl"} ]},
-
     %% Comet connection, used with long polls from the browser.
     {comet,    ["comet"],     resource_comet, [{ssl, any}, {no_session, true}]},
 
@@ -18,18 +15,11 @@
     %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
     {close_connection, ["close-connection"],  resource_close_connection, [{ssl, any}, {no_session, true}]},
 
-    %% Normal page to show a resource.
-    {page,    ["page", id],       resource_page, [ {template, {cat, "page.tpl"}} ]},
-    {page,    ["page", id, slug], resource_page, [ {template, {cat, "page.tpl"}} ]},
-
     %% The id controller redirects depending on the accept header sent by the user agent.
     {id,       ["id", id],    resource_id, []},
 
     % CSS and Javascript files from the "lib" module folder. Possibly more than one file combined in one request.
     {lib,      ["lib",'*'],   resource_lib, [ {use_cache, false}, {ssl, any} ]},
-
-    % Redirect controller for resource of type 'website'
-    {website,  ["redirect", id, slug],   resource_website_redirect, []},
 
     %% Resized images, expects resize parameters and a checksum. Places resized images in the root folder.
     %% The original images must be present in the media_path.
@@ -90,9 +80,4 @@
                                             {use_cache, false},
                                             {content_disposition, inline}
                                         ]}
-    
-    %% "Last resort" we check the request path against the page_path of resources and redirect to
-    %% the page configured for the page path.
-    %% {page_path, ['*'], resource_page_path, []}
-
 ].
