@@ -1,3 +1,4 @@
+{# Superfish menu #}
 {% if menu %}
 {% with id|menu_trail:menu_id as parents %}
     <ul id="{{ id_prefix }}navigation" class="clearfix sf-menu do_superfish">
