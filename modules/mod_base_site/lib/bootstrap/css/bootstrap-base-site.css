@@ -1,0 +1,41 @@
+/* For phone+, for text see bootstrap-text.css */
+
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
+
+    /* Site specific definitions */
+    .navbar .dropdown-menu {
+        display: none;
+    }
+    .navbar .dropdown-toggle .caret {
+        display: none;
+    }
+    
+    .navbar .pull-right {
+        float: none;
+    }
+}
+
+.meta {
+    padding: 10px 0;
+    margin: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    font-size: 11px;
+}
+.meta a {
+    font-weight: 200;
+}
+
+
+.geomap-static {
+    position: relative;
+    width: 512px;
+}

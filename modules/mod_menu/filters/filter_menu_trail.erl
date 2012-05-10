@@ -24,6 +24,16 @@ menu_trail(undefined, _Context) ->
 menu_trail(Id, Context) ->
     menu_trail(Id, main_menu, Context).
 
+menu_trail(_Id, undefined, _Context) ->
+    undefined;
+menu_trail(_Id, [], _Context) ->
+    undefined;
+menu_trail(_Id, <<>>, _Context) ->
+    undefined;
+menu_trail(undefined, _Menu, _Context) ->
+    undefined;
+menu_trail(Id, [{MenuId,Sub}|_] = Menu, Context) when is_integer(MenuId), is_list(Sub) ->
+    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
 menu_trail(Id, MenuId, Context) ->
     Menu = mod_menu:get_menu(MenuId, Context),
     trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context).
