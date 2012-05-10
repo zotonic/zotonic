@@ -1,6 +1,6 @@
 {% extends "base.tpl" %}
 
-{% block title %} | {{ error_code }}{% endblock %}
+{% block title %} {{ error_code }} Error {% endblock %}
 
 {% block content %}
 {% if error_code == 403 %}
