@@ -63,3 +63,23 @@ body {
     position: relative;
     width: 512px;
 }
+
+
+.nav-stacked li .item-0 {
+}
+.nav-stacked li .item-1 {
+    padding-left: 20px;
+}
+.nav-stacked li .item-2 {
+    padding-left: 30px;
+}
+.nav-stacked li .item-3 {
+    padding-left: 40px;
+}
+.nav-stacked li .item-4 {
+    padding-left: 50px;
+}
+.nav-stacked li .item-5 {
+    padding-left: 60px;
+}
+

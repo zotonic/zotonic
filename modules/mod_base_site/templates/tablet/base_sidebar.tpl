@@ -3,7 +3,7 @@
 {% block content %}
 {% block above %}{# {% include "_breadcrumb.tpl" %} #}{% endblock %}
 <div class="row-fluid">
-    <div class="span3">
+    <div id="subnavbar" class="span3">
         {% block subnavbar %}&nbsp;{% endblock %}
     </div>
 
@@ -11,7 +11,7 @@
         {% block main %}{% endblock %}
     </div>
     
-    <div class="span3">
+    <div id="sidebar" class="span3">
         {% block sidebar %}&nbsp;{% endblock %}
     </div>
 </div>
