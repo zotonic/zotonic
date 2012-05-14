@@ -16,7 +16,7 @@
         {% with id.depiction as dep %}
         {% if dep %}
         <div class="thumbnail depiction">
-            <img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" />
+            <a href="{{ dep.id.page_url }}"><img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" /></a>
             {% if dep.id.summary %}<p class="caption">{{ dep.id.summary }}</p>{% endif %}
         </div>
         {% endif %}

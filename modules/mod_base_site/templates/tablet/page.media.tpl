@@ -36,5 +36,6 @@
 {% block sidebar %}
     {% include "_content_list.tpl" list=id.s.haspart %}
     {% include "_content_list.tpl" list=id.s.depiction %}
+    {% include "_content_list.tpl" list=id.s.hasdocument %}
     {% include "_content_list.tpl" list=id.o.haspart %}
 {% endblock %}
