@@ -10,7 +10,7 @@
 		<p class="summary">{{ id|summary }}</p>
 
 		{% for id in m.rsc[id].media %}
-		   {% include "_body_media.tpl" width=445 crop=1 align="block" %}
+			{% include "_body_media.tpl" width=445 crop=1 align="block" %}
 		{% endfor %}
 
 	{% endif %}
