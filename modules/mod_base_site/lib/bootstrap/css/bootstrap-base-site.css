@@ -1,4 +1,6 @@
-/* For phone+, for text see bootstrap-text.css */
+/* For phone+.
+ * For text see bootstrap-text.css 
+ */
 
 body {
     padding-top: 60px;
@@ -34,6 +36,22 @@ body {
     font-weight: 200;
 }
 
+.thumbnail a img {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.depiction p.caption {
+    margin-bottom: 0px;
+    font-size: 90%;
+    padding-bottom: 4px;
+}
+
+.depiction {
+    margin-bottom: 10px;
+}
 
 .geomap-static {
     position: relative;

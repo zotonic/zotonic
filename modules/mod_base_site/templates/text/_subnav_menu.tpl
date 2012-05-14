@@ -1,10 +1,10 @@
-{% with m.rsc[menu_id] as r_menu %}
+{% with m.rsc[menu_id|default:`main_menu`] as r_menu %}
 {% with r_menu.menu as in_menu %}
 {% if in_menu %}
     {% with id|menu_trail:in_menu as breadcrumb %}
     {% if breadcrumb %}
      <ul class="nav nav-tabs nav-stacked breadcrumb">
-     {% if not main_menu %}
+     {% if r_menu.name != 'main_menu' %}
         <li {% include "_language_attrs.tpl" id=r_menu.id %}>
             <a class="item-1" href="{% url page id=r_menu.id %}">{{ r_menu.id.short_title|default:(r_menu.id.title) }} <span class="divider">/</span></a>
         </li>

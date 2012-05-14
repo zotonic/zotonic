@@ -1,3 +1,4 @@
+{# navbar for phone+ #}
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
@@ -8,14 +9,14 @@
           <span class="icon-bar"></span>
         </a>
 
-        <a class="brand" href="/">{{ m.config.site.title.value }}</a>
+        <a class="brand" href="/"><img src="/lib/images/logo.png" class="logo" alt=""> {{ m.config.site.title.value }}</a>
         
         <div class="nav-collapse">
             <form class="navbar-search pull-right" method="get" action="{% url search %}">
               <input type="text" class="search-query" placeholder="Search" name="qs"/>
             </form>
 
-            {% menu id=id %}
+            {% menu id=id maxdepth=2 %}
 
             <div class="pull-right">
                 {% include "_navbar_right.tpl"%}
