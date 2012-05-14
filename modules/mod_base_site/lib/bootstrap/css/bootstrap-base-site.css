@@ -11,7 +11,14 @@ body {
     body {
         padding-top: 0px;
     }
-
+    .navbar .brand {
+       padding-left: 50px;
+       padding-right: 10px;
+       margin: 0 0 0 -5px;
+     }
+     .navbar .brand .logo {
+         left: 0px;
+     }
     /* Site specific definitions */
     .navbar .dropdown-menu {
         display: none;
@@ -19,7 +26,6 @@ body {
     .navbar .dropdown-toggle .caret {
         display: none;
     }
-    
     .navbar .pull-right {
         float: none;
     }
