@@ -44,22 +44,12 @@
 {% endblock %}
 
 {% block subnavbar %}
-{% block subnav %}
-    {% include "_subnav.tpl" %}
-{% endblock %}
-&nbsp;
+    {% block subnav %}{% include "_subnav.tpl" %}{% endblock %}
+    &nbsp;
 {% endblock %}
 
 {% block sidebar %}
-    {% block related %}
-    	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
-
-    	{% with id.o.haspart, id.s.haspart as sub,super %}
-    	{% if sub or super %}
-        	<h3>{_ Related _}</h3>
-            {% include "_content_list.tpl" list=sub %}
-            {% include "_content_list.tpl" list=super %}
-        {% endif %}
-        {% endwith %}
-    {% endblock %}
+	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
+    {% include "_content_list.tpl" list=id.s.haspart title=_"More" %}
+	{% include "_content_list.tpl" list=m.search[{latest cat=id.category_id pagelen=10}] title=_"Latest" exclude=[id] %}
 {% endblock %}

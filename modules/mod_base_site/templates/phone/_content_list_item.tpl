@@ -1,3 +1,4 @@
+{% if id.is_visible and id.is_published and not id|member:exclude %}
 <tr {% if counter % 2 %}class="odd"{% else %}class="even"{% endif %}>
     <td {% include "_language_attrs.tpl" id=id %}>
         {% with id.depiction as dep %}
@@ -11,3 +12,4 @@
         {% endif %}
     </td>
 </tr>
+{% endif %}
