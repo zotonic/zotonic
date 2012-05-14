@@ -38,6 +38,7 @@
     get_menu/2,
     set_menu/3,
     menu_flat/2,
+    menu_flat/3,
     menu_subtree/3,
     remove_invisible/2,
     test/0
@@ -273,29 +274,36 @@ set_menu(Id, Menu, Context) ->
 
 %% @doc Flatten the menu structure in a list, used for display purposes in templates
 -spec menu_flat(list() | undefined | <<>>, #context{}) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
-menu_flat(Menu, _Context) when not is_list(Menu) ->
-    [];
-menu_flat([], _Context) ->
-    [];
-menu_flat(X, Context) ->
-    menu_flat(X, [1], [], Context).
+menu_flat(Menu, Context) ->
+    menu_flat(Menu, 999, Context).
 
-menu_flat([], _Path, Acc, _Context) ->
+-spec menu_flat(list() | undefined | <<>>, integer(), #context{}) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
+menu_flat(Menu, _MaxDepth, _Context) when not is_list(Menu) ->
+    [];
+menu_flat([], _MaxDepth, _Context) ->
+    [];
+menu_flat(X, MaxDepth, Context) ->
+    menu_flat(X, MaxDepth, [1], [], Context).
+
+menu_flat([], _MaxDepth, _Path, Acc, _Context) ->
     lists:reverse(Acc);
-menu_flat([ {MenuId, []} | Rest], [Idx|PR], Acc, Context ) ->
+menu_flat([ {MenuId, []} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
-        ++ menu_flat(Rest, [Idx+1|PR], [], Context)
+        ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ {MenuId, Children} | Rest], [Idx|PR], Acc, Context ) ->
-
+menu_flat([ {MenuId, _Children} | Rest], 1, [Idx|PR], Acc, Context ) ->
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
+        ++ menu_flat(Rest, 1, [Idx+1|PR], [], Context)
+        ++  Acc;
+menu_flat([ {MenuId, Children} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], down} ] 
-        ++ menu_flat(Children, [1,Idx|PR], [], Context) 
+        ++ menu_flat(Children, MaxDepth-1, [1,Idx|PR], [], Context) 
         ++ [{undefined, undefined, up}]
-        ++ menu_flat(Rest, [Idx+1|PR], [], Context)
+        ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ MenuId | Rest ], P, A, C) when is_integer(MenuId) ->
+menu_flat([ MenuId | Rest ], MaxDepth, P, A, C) when is_integer(MenuId) ->
     %% oldschool notation fallback
-    menu_flat([{MenuId, []} | Rest], P, A, C).
+    menu_flat([{MenuId, []} | Rest], MaxDepth, P, A, C).
 
 
 %% @doc Find the subtree below a resource id. 'undefined' when not found.

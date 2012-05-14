@@ -46,9 +46,10 @@ render(Params, _Vars, Context) ->
                     true -> proplists:get_value(template, Params, "_menu_superfish.tpl");
                     false -> proplists:get_value(template, Params, "_menu.tpl")
                end,
+    MaxDepth = proplists:get_value(maxdepth, Params, 999),
     Menu = mod_menu:get_menu(MenuId, Context),
     Vars = [
-        {menu, mod_menu:menu_flat(Menu, Context)},
+        {menu, mod_menu:menu_flat(Menu, MaxDepth, Context)},
         {menu_id, MenuId}
         | Params
     ],
