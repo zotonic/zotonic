@@ -1,6 +1,6 @@
 [
     {survey_results_download,  ["survey", "results", "download", id],  resource_survey_results, []},
-    {survey_results_printable, ["survey", "results", "printable", id],  resource_page, [ {template, "survey_results_printable.tpl"}, {acl, {module, mod_survey}} ]},
+    {survey_results_printable, ["survey", "results", "printable", id],  resource_admin, [ {acl, {module, mod_survey}}, {template, "survey_results_printable.tpl"} ]},
 
     {survey_results, ["survey", "results", id],       resource_page, [ {template, "survey_results.tpl"} ]},
     {survey_results, ["survey", "results", id, slug], resource_page, [ {template, "survey_results.tpl"} ]},
