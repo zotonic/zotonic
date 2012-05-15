@@ -50,6 +50,6 @@
 
 {% block sidebar %}
 	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
-    {% include "_content_list.tpl" list=id.s.haspart title=_"More" %}
+    {% include "_content_list_partof.tpl" list=id.s.haspart title=_"More" %}
 	{% include "_content_list.tpl" list=m.search[{latest cat=id.category_id pagelen=10}] title=_"Latest" exclude=[id] %}
 {% endblock %}
