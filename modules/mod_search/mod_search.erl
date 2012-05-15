@@ -35,7 +35,8 @@
 -export([
     observe_search_query/2,
     observe_module_activate/2,
-    to_tsquery/2
+    to_tsquery/2,
+    find_by_id/2
 ]).
 
 -include("zotonic.hrl").
@@ -363,27 +364,32 @@ search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
 search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
     search({autocomplete, [{cat,[]}, {text,QueryText}]}, OffsetLimit, Context);
 search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
-    TsQuery = to_tsquery(QueryText, Context),
-    case TsQuery of
-        A when A == undefined orelse A == [] ->
-            #search_result{};
+    case z_string:trim(QueryText) of
+        "id:" ++ S ->
+            find_by_id(S, Context);
         _ ->
-            #search_sql{
-                select="r.id, ts_rank_cd(pivot_tsv, query, 32) AS rank",
-                from="rsc r, to_tsquery($2, $1) query",
-                where=" query @@ pivot_tsv",
-                order="rank desc",
-                args=[TsQuery, z_pivot_rsc:pg_lang(Context#context.language)],
-                cats=[{"r", Cat}],
-                tables=[{rsc,"r"}]
-            }
+            TsQuery = to_tsquery(QueryText, Context),
+            case TsQuery of
+                A when A == undefined orelse A == [] ->
+                    #search_result{};
+                _ ->
+                    #search_sql{
+                        select="r.id, ts_rank_cd(pivot_tsv, query, 32) AS rank",
+                        from="rsc r, to_tsquery($2, $1) query",
+                        where=" query @@ pivot_tsv",
+                        order="rank desc",
+                        args=[TsQuery, z_pivot_rsc:pg_lang(Context#context.language)],
+                        cats=[{"r", Cat}],
+                        tables=[{rsc,"r"}]
+                    }
+            end
     end;
 
 search({fulltext, [{cat,Cat},{text,QueryText}]}, OffsetLimit, Context) when Cat == undefined orelse Cat == [] orelse Cat == <<>> ->
     search({fulltext, [{text,QueryText}]}, OffsetLimit, Context);
 
 search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
-    case QueryText of
+    case z_string:trim(QueryText) of
         A when A == undefined orelse A == "" orelse A == <<>> ->
             #search_sql{
                 select="r.id, 1 AS rank",
@@ -392,6 +398,8 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 args=[],
                 tables=[{rsc,"r"}]
             };
+        "id:" ++ S ->
+            find_by_id(S, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
@@ -405,7 +413,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
     end;
 
 search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
-    case QueryText of
+    case z_string:trim(QueryText) of
         A when A == undefined orelse A == "" orelse A == <<>> ->
             #search_sql{
                 select="r.id, 1 AS rank",
@@ -414,6 +422,8 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             };
+        "id:" ++ S ->
+            find_by_id(S, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
@@ -527,3 +537,16 @@ to_tsquery(Text, Context) ->
             re:replace(TsQ2, "'", "", [global])
     end.
 
+
+%% @doc Find a resource by id or name
+find_by_id(S, Context) ->
+    case m_rsc:rid(S, Context) of
+        undefined ->
+            #search_result{};
+        RscId ->
+            #search_result{
+                result=[RscId],
+                page=1,
+                total=1
+            }
+    end.
