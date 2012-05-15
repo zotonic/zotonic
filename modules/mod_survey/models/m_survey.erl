@@ -240,7 +240,7 @@ survey_results_sorted(SurveyId, SortColumn, Context) ->
             [Headers|Data];
         N ->
             %% Sort on nth row
-            Data1 = [{lists:nth(N, Row), Row} || Row <- Data],
+            Data1 = [{z_string:to_lower(z_convert:to_list(lists:nth(N, Row))), Row} || Row <- Data],
             Data2 = [Row1 || {_, Row1} <- lists:sort(Data1)],
             [Headers|Data2]
     end.
