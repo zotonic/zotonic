@@ -312,7 +312,8 @@ ensure_session1(SessionId, SessionPid, PersistId, State) when SessionId =:= unde
         error ->
             NewSessionPid = spawn_session(PersistId, State#session_srv.context),
             NewSessionId = z_ids:id(),
-            State1 = store_persist_pid(PersistId, NewSessionPid, store_session_pid(SessionId, NewSessionPid, State)),
+            State1 = store_persist_pid(PersistId, NewSessionPid, 
+                                       store_session_pid(NewSessionId, NewSessionPid, State)),
             {ok, new, NewSessionPid, NewSessionId, State1}
     end;
 ensure_session1(SessionId, SessionPid, _PersistId, State) ->
@@ -352,7 +353,7 @@ erase_session_pid(Pid, State) ->
 
 %% @doc Add the pid to the session state
 -spec store_session_pid(session_id(), pid(), #session_srv{}) -> #session_srv{}.
-store_session_pid(SessionId, Pid, State) ->
+store_session_pid(SessionId, Pid, State) when is_list(SessionId) and is_pid(Pid) ->
     State#session_srv{
             pid2key = dict:store(Pid, SessionId, State#session_srv.pid2key),
             key2pid = dict:store(SessionId, Pid, State#session_srv.key2pid)
@@ -361,7 +362,7 @@ store_session_pid(SessionId, Pid, State) ->
 
 %% @doc Add the pid to the persist state
 -spec store_persist_pid(persistent_id(), pid(), #session_srv{}) -> #session_srv{}.
-store_persist_pid(PersistId, Pid, State) ->
+store_persist_pid(PersistId, Pid, State) when is_list(PersistId) and is_pid(Pid) ->
     State#session_srv{
             pid2persist = dict:store(Pid, PersistId, State#session_srv.pid2persist),
             persist2pid = dict:store(PersistId, Pid, State#session_srv.persist2pid)
