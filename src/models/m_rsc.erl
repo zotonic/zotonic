@@ -621,7 +621,7 @@ page_url(Id, Context) ->
                 {ok, Url} -> 
                     Url;
                 undefined ->
-                    Args = [{id,RscId}, {slug, p(RscId, slug, Context)}],
+                    Args = [{id,RscId}, {slug, p(RscId, slug, Context)} | z_context:get(extra_args, Context, [])],
                     page_url_path(CatPath, Args, Context)
             end;
         _ ->
