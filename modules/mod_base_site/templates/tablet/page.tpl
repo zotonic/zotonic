@@ -4,8 +4,7 @@
 
 {% block main %}
 <div {% include "_language_attrs.tpl" id=id %}>
-    <h1>{{ m.rsc[id].title }}</h1>
-
+    {% include "_title.tpl" %}
     {% include "_meta.tpl" %}
 
 	{% if m.rsc[id].summary %}
@@ -50,6 +49,6 @@
 
 {% block sidebar %}
 	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
-    {% include "_content_list_partof.tpl" list=id.s.haspart title=_"More" %}
+    {% include "_content_list.tpl" list=id.s.haspart title=_"More" %}
 	{% include "_content_list.tpl" list=m.search[{latest cat=id.category_id pagelen=10}] title=_"Latest" exclude=[id] %}
 {% endblock %}
