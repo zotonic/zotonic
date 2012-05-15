@@ -82,4 +82,8 @@ body {
 .nav-stacked li .item-5 {
     padding-left: 60px;
 }
+#content-pager {
+    padding-top: 50px;
+}
+
 
