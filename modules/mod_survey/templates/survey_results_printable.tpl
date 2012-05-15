@@ -1,5 +1,5 @@
 {% with q.id|default:id as id %}
-{% with m.survey.all_results[id] as r %}
+{% with m.survey.all_results[[id, q.sort|default:"name_surname"]] as r %}
 {% with r|first as columns %}
 {% with r|tail as results %}
 
@@ -11,7 +11,7 @@
 <table width="100%">
     <tr>
         <th>&nbsp;</th>
-        {% for name in columns|tail|tail %}
+        {% for name in columns|tail|tail|tail %}
         <th align="left">{{ captions[name] }}</th>
         {% endfor %}
     </tr>
@@ -19,7 +19,7 @@
     {% for r in results %}
     <tr id="survey-result-{{ r[1] }}-{{ r[2] }}">
         <td align="right">{{ forloop.counter }}.&nbsp;&nbsp;</td>
-        {% for value in r|tail|tail %}
+        {% for value in r|tail|tail|tail %}
         <td>{{ value }}</td>
         {% endfor %}
     </tr>

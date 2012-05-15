@@ -64,6 +64,8 @@ m_find_value(Id, #m{value=questions}, Context) ->
     end;
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(Id, Context);
+m_find_value([Id, SortColumn], #m{value=all_results}, Context) ->
+    survey_results_sorted(Id, SortColumn, Context);
 m_find_value(Id, #m{value=all_results}, Context) ->
     survey_results(Id, Context);
 m_find_value(Id, #m{value=captions}, Context) ->
@@ -229,6 +231,19 @@ survey_stats(SurveyId, Context) ->
     group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
         group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
 
+
+survey_results_sorted(SurveyId, SortColumn, Context) ->
+    [Headers|Data] = survey_results(SurveyId, Context),
+    case string:str(Headers, [list_to_binary(SortColumn)]) of
+        0 ->
+            %% column not found, do not sort
+            [Headers|Data];
+        N ->
+            %% Sort on nth row
+            Data1 = [{lists:nth(N, Row), Row} || Row <- Data],
+            Data2 = [Row1 || {_, Row1} <- lists:sort(Data1)],
+            [Headers|Data2]
+    end.
 
 %% @doc Return all results of a survey
 survey_results(SurveyId, Context) ->
