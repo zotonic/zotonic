@@ -1,3 +1,4 @@
+{# navbar for text #}
 <table class="navbar navbar-top" width="100%">
 	<tr>
 		<td>

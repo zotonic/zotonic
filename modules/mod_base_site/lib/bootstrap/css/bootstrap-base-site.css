@@ -1,4 +1,6 @@
-/* For phone+, for text see bootstrap-text.css */
+/* For phone+.
+ * For text see bootstrap-text.css 
+ */
 
 body {
     padding-top: 60px;
@@ -9,7 +11,14 @@ body {
     body {
         padding-top: 0px;
     }
-
+    .navbar .brand {
+       padding-left: 50px;
+       padding-right: 10px;
+       margin: 0 0 0 -5px;
+     }
+     .navbar .brand .logo {
+         left: 0px;
+     }
     /* Site specific definitions */
     .navbar .dropdown-menu {
         display: none;
@@ -17,7 +26,6 @@ body {
     .navbar .dropdown-toggle .caret {
         display: none;
     }
-    
     .navbar .pull-right {
         float: none;
     }
@@ -34,8 +42,48 @@ body {
     font-weight: 200;
 }
 
+.thumbnail a img {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.depiction p.caption {
+    margin-bottom: 0px;
+    font-size: 90%;
+    padding-bottom: 4px;
+}
+
+.depiction {
+    margin-bottom: 10px;
+}
 
 .geomap-static {
     position: relative;
     width: 512px;
 }
+
+
+.nav-stacked li .item-0 {
+}
+.nav-stacked li .item-1 {
+    padding-left: 20px;
+}
+.nav-stacked li .item-2 {
+    padding-left: 30px;
+}
+.nav-stacked li .item-3 {
+    padding-left: 40px;
+}
+.nav-stacked li .item-4 {
+    padding-left: 50px;
+}
+.nav-stacked li .item-5 {
+    padding-left: 60px;
+}
+#content-pager {
+    padding-top: 50px;
+}
+
+
