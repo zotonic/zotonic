@@ -142,7 +142,8 @@ observe_set_user_language(#set_user_language{}, Context, _Context) ->
 observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case lists:keyfind(z_language, 1, Args) of
         false ->
-            case is_multiple_languages_config(Context) of
+            RewriteUrl = z_convert:to_bool(m_config:get_value(?MODULE, rewrite_url, true, Context)),
+            case RewriteUrl and is_multiple_languages_config(Context) of
                 true ->
                     % Insert the current language in front of the url
                     iolist_to_binary([$/, atom_to_list(z_context:language(Context)), Url]);
