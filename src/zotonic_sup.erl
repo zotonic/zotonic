@@ -142,7 +142,8 @@ init([]) ->
     
     NonSSLOpts = [{port, WebPort}],
     SSLCertOpts = [{certfile, z_config:get_dirty(ssl_certfile)}, 
-                   {keyfile, z_config:get_dirty(ssl_keyfile)}],
+                   {keyfile, z_config:get_dirty(ssl_keyfile)},
+			       {password, z_config:get_dirty(ssl_password)}],
     SSLCertOpts2 = case z_config:get_dirty(ssl_cacertfile) of
                        undefined -> SSLCertOpts;
                        CACertFile -> [{cacertfile, CACertFile} | SSLCertOpts]
