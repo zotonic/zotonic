@@ -11,11 +11,13 @@
 <div align="center">
 	<table width="{% block body_width %}635{% endblock %}" id="email-table" border="0" cellspacing="0" cellpadding="0">
 		{% block header %}{% endblock %}
-		{% block body %}
+		{% block content %}
 		<tr>
 			<td id="content">
+			    {% block body %}
 				<h1>Lectori Salutem,</h1>
 				<p>{_ This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block. _}</p>
+				{% endblock %}
 			</td>
 		</tr>
 		{% endblock %}

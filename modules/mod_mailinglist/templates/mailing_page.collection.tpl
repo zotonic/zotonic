@@ -1,7 +1,7 @@
 {% extends "mailing_page.tpl" %}
 
 {# Main body of the message sent. #}
-{% block body %}
+{% block content %}
 {% with m.mailinglist.subscription[list_id][email] as sub %}
 <tr>
 	<td id="content">
