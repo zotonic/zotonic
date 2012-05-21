@@ -5,7 +5,7 @@
 {% with m.mailinglist.subscription[list_id][email] as sub %}
 <tr>
 	<td id="content">
-		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 10px 10px 0; padding: 0; border: 1px solid gray;" %}
+		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 10px 10px 0; padding: 0; border: 0;" %}
 		<h1>{{ id.title }}</h1>
 		{% if id.summary %}
 			<p><b>{{ id.summary }}</b></p>
