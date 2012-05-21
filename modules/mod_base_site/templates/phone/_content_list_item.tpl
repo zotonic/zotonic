@@ -6,8 +6,15 @@
     {% endif %}
     {% endwith %}
     <h2>{{ id.title|default:"&mdash;" }}</h2>
-    {% if id.summary %}<p>{{id.summary|truncate:120}} <a href="{{ id.page_url with in_collection=in_collection }}">{_ Read more _} &raquo;</a></p>
-    {% elseif id.body %}<p>{{ id.body|striptags|truncate:120 }} <a href="{{ id.page_url with in_collection=in_collection }}">{_ Read more _} &raquo;</a></p>
-    {% endif %}
+	<p>    
+		{% if id.summary %}
+		{{id.summary|truncate:120}}
+    	{% elseif id.body %}
+		{{ id.body|striptags|truncate:120 }}
+		{% endif %}
+		<a href="{{ id.page_url with in_collection=in_collection }}">{_ Read more _} &raquo;</a>
+	</p>
+
+    
 </li>
 {% endif %}
