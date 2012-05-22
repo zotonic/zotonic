@@ -11,9 +11,9 @@
         {% block main %}{% endblock %}
     </div>
     
-    <div id="sidebar" class="span3">
+    <aside id="sidebar" class="span3">
         {% block sidebar %}&nbsp;{% endblock %}
-    </div>
+    </aside>
 </div>
 {% block below %}{% endblock %}
 {% endblock %}

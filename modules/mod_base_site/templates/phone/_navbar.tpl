@@ -1,5 +1,5 @@
 {# navbar for phone+ #}
-<div class="navbar navbar-fixed-top">
+<nav class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
@@ -15,13 +15,11 @@
             <form class="navbar-search pull-right" method="get" action="{% url search %}">
               <input type="text" class="search-query" placeholder="Search" name="qs"/>
             </form>
-
-            {% menu id=id maxdepth=2 %}
-
-            <div class="pull-right">
+			<div class="pull-right">
                 {% include "_navbar_right.tpl"%}
-            </div>
+            </div>        
+			{% menu id=id maxdepth=2 %}
         </div>
     </div>
   </div>
-</div>
+</nav>
