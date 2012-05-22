@@ -394,6 +394,26 @@ function z_reload(args)
 	}
 }
 
+/* Send a post request to a server
+---------------------------------------------------------- */
+
+function z_post(path, args) 
+{
+	var form = $(document.createElement('form'))
+		.attr({action: path, method: "POST", style: "display: none"});
+	for(var key in args) {
+		if(args.hasOwnProperty(key)) {
+			var field = $(document.createElement("input"))
+				.attr({type: "hidden", name: key, value: args[key]});
+			form.append(field);
+		}
+	}
+	form.appendTo(document.body);
+	form.submit();
+	form.remove();
+}
+
+
 /* translations
 ---------------------------------------------------------- */
 
