@@ -60,7 +60,8 @@
         });
         
         this._map.addLayers([this._base]);
-        this._map.setCenter(new OpenLayers.LonLat(0, 0), 1);
+        var center = new OpenLayers.LonLat(0, 30).transform(new OpenLayers.Projection("EPSG:4326"), GeoMap.map().getProjectionObject());
+        this._map.setCenter(center, 3);
     };
     GeoMap.map = function() {
         return this._map;
