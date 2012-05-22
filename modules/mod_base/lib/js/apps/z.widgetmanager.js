@@ -33,7 +33,7 @@ limitations under the License.
 			while (stack.length > 0)
 			{
 				var objectOptions, defaults, element = stack.pop();
-				if (element.className) 
+				if (typeof element.className == "string") 
 				{
 					var objectClass = element.className.match(/do_[a-zA-Z0-9_]+/g);
 					if (objectClass) 

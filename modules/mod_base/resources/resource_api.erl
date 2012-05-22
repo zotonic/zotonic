@@ -29,7 +29,8 @@
     process_post/2,
     is_authorized/2,
     content_types_provided/2,
-    to_json/2
+    to_json/2,
+    get_q_all/1
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -198,10 +199,21 @@ process_post(ReqData, Context) ->
 get_callback(Context) ->
     case z_context:get_q("callback", Context) of
         undefined -> 
-            filter(z_context:get_q("jsonp", Context));
+            case z_context:get_q("jsonp", Context) of
+                undefined -> filter(z_context:get_q("jsoncallback", Context));
+                Callback -> filter(Callback)
+            end;
         Callback ->
             filter(Callback)
     end.
+
+get_q_all(Context) ->
+    proplists:delete("module", 
+    proplists:delete("method", 
+    proplists:delete("jsoncallback", 
+    proplists:delete("callback", 
+    proplists:delete("jsonp", 
+        z_context:get_q_all_noz(Context)))))).
 
 filter(undefined) ->
     undefined;
@@ -210,6 +222,9 @@ filter(F) ->
                  orelse (C >= $a andalso C =< $z)
                  orelse (C >= $A andalso C =< $Z)
                  orelse C =:= $_
+                 orelse C =:= $.
+                 orelse C =:= $[
+                 orelse C =:= $]
                  orelse C =:= $$
     ].
 
