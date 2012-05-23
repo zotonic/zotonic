@@ -13,6 +13,10 @@
 <div class="control-group">
     <div class="controls">
         <input type="text" id="twitter-id" name="twitter_id" class="zp-100" value="{{ m.rsc[id].twitter_id }}" />
+        <p class="help-block">
+            {_ Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account name to this number go to: _} 
+            <a target="_blank" href="http://idfromuser.com/">idfromuser.com</a>.
+        </p>
     </div>
 </div>
 
