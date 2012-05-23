@@ -20,12 +20,10 @@
 -export([twitter/2]).
 
 
-twitter(undefined, _Context) ->
-    undefined;
-twitter(Input, Context) when is_binary(Input) ->
-    twitter1(Input, 0, Context);
-twitter(Input, _Context) ->
-    Input.
+twitter(undefined, _Context) -> undefined;
+twitter(<<"<p>", _/binary>> = Input, _Context) -> Input;
+twitter(Input, Context) when is_binary(Input) -> twitter1(Input, 0, Context);
+twitter(Input, _Context) -> Input.
 
 twitter1(Input, Index, Context) when is_binary(Input) ->
     case Input of
@@ -64,11 +62,11 @@ twitter1_url(Pre, Input, Index, Context) ->
 
 twitter1_at(Input, Index, Context) ->
     case Input of
-        <<Name:Index/binary, Char, Post/binary>> when not(Char >= $a andalso Char < $z+1
+        <<Name:Index/binary, Char, Post/binary>> when not(Char >= $a andalso Char =< $z
                                                           orelse
-                                                          Char >= $A andalso Char < $Z+1
+                                                          Char >= $A andalso Char =< $Z
                                                           orelse
-                                                          Char >= $0 andalso Char < $9+1
+                                                          Char >= $0 andalso Char =< $9
                                                           orelse Char =:= $_ orelse Char =:= $.
                                                          ) ->
             Html = twitter_at_url(Name),
@@ -80,15 +78,15 @@ twitter1_at(Input, Index, Context) ->
     end.
 
 twitter_at_url(Name) ->
-    ["@<a href=\"http://twitter.com/", Name, "\">", Name, "</a>"].
+    ["<a href=\"http://twitter.com/", Name, "\">@", Name, "</a>"].
 
 twitter1_hash(Input, Index, Context) ->
     case Input of
-        <<Name:Index/binary, Char, Post/binary>> when not(Char >= $a andalso Char < $z+1
+        <<Name:Index/binary, Char, Post/binary>> when not(Char >= $a andalso Char =< $z
                                                           orelse
-                                                          Char >= $A andalso Char < $Z+1
+                                                          Char >= $A andalso Char =< $Z
                                                           orelse
-                                                          Char >= $0 andalso Char < $9+1
+                                                          Char >= $0 andalso Char =< $9
                                                           orelse Char =:= $_ orelse Char =:= $.
                                                          ) ->
             Html = twitter_hash_url(Name),
@@ -100,7 +98,7 @@ twitter1_hash(Input, Index, Context) ->
     end.
 
 twitter_hash_url(Hash) ->
-    ["#<a href=\"http://twitter.com/#search?q=%23", Hash, "\">", Hash, "</a>"].
+    ["<a href=\"http://twitter.com/#search?q=%23", Hash, "\">#", Hash, "</a>"].
 
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->
