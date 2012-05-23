@@ -340,7 +340,7 @@ tokenize(B, S=#decoder{offset=O}) ->
             Singleton = HasSlash orelse is_singleton(Tag),
             {{start_tag, Tag, Attrs, Singleton}, S3};
         _ ->
-            tokenize_data(B, S)
+            tokenize_data(B, S, false)
     end.
 
 tree_data([{data, Data, Whitespace} | Rest], AllWhitespace, Acc) ->
@@ -456,6 +456,9 @@ is_singleton(_) -> false.
 
 tokenize_data(B, S=#decoder{offset=O}) ->
     tokenize_data(B, S, O, true).
+
+tokenize_data(B, S=#decoder{offset=O}, WhiteSpace) ->
+    tokenize_data(B, S, O, WhiteSpace).
 
 tokenize_data(B, S=#decoder{offset=O}, Start, Whitespace) ->
     case B of
