@@ -1,5 +1,5 @@
 <p class="meta">
-    <span class="label">{{ id.category_id.title }}</span>
+    <a href="{{ id.category_id.page_url }}"><span class="label">{{ id.category_id.title }}</span></a>
 {% for id in id.o.author|is_visible %}
     {% if forloop.first %}{_ By _}{% endif %}
     <a href="{{ id.page_url }}">{{ id.title }}</a>{% if not forloop.last %}, {% else %} &ndash; {% endif %}

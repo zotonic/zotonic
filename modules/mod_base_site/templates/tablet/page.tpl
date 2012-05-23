@@ -39,6 +39,9 @@
     </ul>
     {% endif %}
 	{% endwith %}
+	
+	{% block related %}
+	{% endblock %}
 </div>
 {% endblock %}
 
