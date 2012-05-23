@@ -270,34 +270,39 @@ process_data(Data, Context) ->
                         TweeterId = proplists:get_value("id", User),
                         case m_identity:lookup_by_type_and_key("twitter_id", TweeterId, AsyncContext) of
                             undefined ->
-                                ?DEBUG("Unknown user..."),
+                                lager:warning("Twitter: Received a tweet for an unknown user (~p)", [TweeterId]),
                                 z_session_manager:broadcast(#broadcast{type="error", message="Received a tweet for an unknown user.", title="Unknown user", stay=false}, Context);
                             Row ->
                                 UserId = proplists:get_value(rsc_id, Row),
-                                CategoryId = m_category:name_to_id_check(tweet, AsyncContext),
-                                Body = z_convert:unicode_to_utf8(proplists:get_value("text", Tweet)),
-                                Props = [{title, proplists:get_value("screen_name", User) ++ " tweeted on " ++ proplists:get_value("created_at", Tweet)},
-                                         {body, Body},
-                                         {source, proplists:get_value("source", Tweet)},
-                                         {category_id, CategoryId},
-                                         {tweet, Tweet},
-                                         {is_published, true}],
+                                TweetText = z_convert:unicode_to_utf8(proplists:get_value("text", Tweet)),
+                                Body = iolist_to_binary([
+                                            <<"<p>">>,
+                                            filter_twitter:twitter(TweetText, Context),
+                                            <<"</p>">>
+                                        ]),
+                                Props = [
+                                    {category, tweet},
+                                    {is_published, true},
+                                    {title, iolist_to_binary([
+                                                proplists:get_value("screen_name", User),
+                                                " tweeted on ",
+                                                proplists:get_value("created_at", Tweet)])},
+                                     {body, Body},
+                                     {source, proplists:get_value("source", Tweet)},
+                                     {tweet, Tweet}
+                                ],
 
                                 AdminContext = z_acl:sudo(AsyncContext),
-                                %% Create rsc
                                 {ok, TweetId} = m_rsc:insert(Props, AdminContext),
-
-                                %% Create edge
                                 {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
 
                                 %% Get images from the tweet and download them.
                                 Urls = extract_urls(Tweet),
                                 Ids = check_import_pictures(Urls, Context),
-                                %% Create edges
                                 [{ok, _} = m_edge:insert(TweetId, depiction, PictureId, Context) || PictureId <- Ids],
 
-                                Message = proplists:get_value("screen_name", User) ++ ": " ++ Body,
-                                z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
+                                % Message = proplists:get_value("screen_name", User) ++ ": " ++ Body,
+                                % z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
                                 TweetId
                         end
                 end,
