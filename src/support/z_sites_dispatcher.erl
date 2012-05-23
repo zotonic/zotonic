@@ -86,7 +86,6 @@ dispatch(Host, Path, ReqData) ->
                                 undefined -> Path;
                                 _ -> string:join(NonMatchedPathTokens, "/")
                             end,
-
             case z_notifier:first(DispReq#dispatch{path=RewrittenPath}, Context#context{wm_reqdata=ReqDataHost}) of
                 {ok, Id} when is_integer(Id) ->
                     %% Retry with the resource's default page uri
@@ -522,10 +521,13 @@ wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
     IsDir = lists:last(PathAsString) == ?SEPARATOR,
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString}, {Path, []}, Context),
     case try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context) of
-        {no_dispatch_match, _, _} ->
+        {no_dispatch_match, _, _} = NoMatch ->
             % Try without rewrite
             % This is needed for URIs like "id/123" where 'id' is matched to a language (Indonesian)
-            try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path, [], extra_depth(Path, IsDir), Context);
+            case try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path, [], extra_depth(Path, IsDir), Context) of
+                {no_dispatch_match, _, _} -> NoMatch;
+                Match -> Match
+            end;
         Match ->
             Match
     end.
