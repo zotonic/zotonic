@@ -2,7 +2,7 @@
 {% with r_menu.menu as in_menu %}
 {% if in_menu %}
     {% with id|menu_trail:in_menu as breadcrumb %}
-    {% if breadcrumb|length > 1 %}
+    {% if breadcrumb|length %}
      <ul class="nav nav-tabs nav-stacked">
      {% if r_menu.name != 'main_menu' %}
         <li {% include "_language_attrs.tpl" id=r_menu.id %}>
