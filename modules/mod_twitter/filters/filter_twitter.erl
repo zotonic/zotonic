@@ -22,40 +22,36 @@
 
 twitter(undefined, _Context) -> undefined;
 twitter(<<"<p>", _/binary>> = Input, _Context) -> Input;
-twitter(Input, Context) when is_binary(Input) -> twitter1(Input, 0, Context);
+twitter(Input, Context) when is_binary(Input) -> iolist_to_binary(twitter1(Input, 0, Context));
 twitter(Input, _Context) -> Input.
 
 twitter1(Input, Index, Context) when is_binary(Input) ->
     case Input of
-        <<Pre:Index/binary, "http://", Post/binary>> ->
-            process_binary_match(Pre, <<>>, size(Post), twitter1_url("http://", Post, 0, Context));
-        <<Pre:Index/binary, "https://", Post/binary>> ->
-            process_binary_match(Pre, <<>>, size(Post), twitter1_url("https://", Post, 0, Context));
-        <<Pre:Index/binary, $@, Post/binary>> ->
-            process_binary_match(Pre, <<>>, size(Post), twitter1_at(Post, 0, Context));
-        <<_:Index/binary, $&, $#, _/binary>> ->
-            twitter1(Input, Index + 2, Context);
-        <<Pre:Index/binary, $#, Post/binary>> ->
-            process_binary_match(Pre, <<>>, size(Post), twitter1_hash(Post, 0, Context));
-        <<_:Index/binary, _/binary>> ->
-            twitter1(Input, Index + 1, Context);
-        _ ->
-            Input
+        <<Pre:Index/binary, "http://", Post/binary>> ->  [Pre, twitter1_url("http://", Post, 0, Context)];
+        <<Pre:Index/binary, "https://", Post/binary>> -> [Pre, twitter1_url("https://", Post, 0, Context)];
+        <<Pre:Index/binary, $&, $#, Post/binary>> ->     [Pre, $&, $#, twitter1(Post, 0, Context)];
+        <<Pre:Index/binary, $@, Post/binary>> ->         [Pre, twitter1_at(Post, 0, Context)];
+        <<Pre:Index/binary, $#, Post/binary>> ->         [Pre, twitter1_hash(Post, 0, Context)];
+        <<_:Index/binary, _/binary>> -> twitter1(Input, Index + 1, Context);
+        _ -> Input
     end.
 
 twitter1_url(Pre, Input, Index, Context) ->
     case Input of
+        <<_:Index/binary, "&#38;", _/binary>> ->
+            twitter1_url(Pre, Input, Index + 5, Context);
+        <<_:Index/binary, "&amp;", _/binary>> ->
+            twitter1_url(Pre, Input, Index + 5, Context);
         <<Url:Index/binary, Char, Post/binary>> ->
-            case z_utils:url_valid_char(Char) of
+            case Char /= $& andalso z_utils:url_valid_char(Char) of
                 true ->
                     twitter1_url(Pre, Input, Index + 1, Context);
                 false ->
-                    Html = ["<a href=\"", Pre, Url, "\">", Pre, Url, "</a>"],
-                    process_binary_match(<<>>, [Html, Char], size(Post), twitter1(Post, 0, Context))
+                    Html = ["<a href=\"", Pre, Url, "\">", Url, "</a> "],
+                    [Html, twitter1(<<Char, Post/binary>>, 0, Context)]
             end;
         <<Url:Index/binary>> ->
-            Html = ["<a href=\"", Pre, Url, "\">", Pre, Url, "</a>"],
-            process_binary_match(<<>>, Html, 0, <<>>);
+            ["<a href=\"", Pre, Url, "\">", Url, "</a>"];
         _ ->
             Input
     end.
@@ -70,8 +66,10 @@ twitter1_at(Input, Index, Context) ->
                                                           orelse Char =:= $_ orelse Char =:= $.
                                                          ) ->
             Html = twitter_at_url(Name),
-            process_binary_match(<<>>, [Html, Char], size(Post), twitter1(Post, 0, Context));
-        <<_:Index/binary, _/binary>>  ->
+            [Html, twitter1(<<Char, Post/binary>>, 0, Context)];
+        <<Name:Index/binary>> ->
+            twitter_at_url(Name);
+        <<_:Index/binary, _/binary>> ->
             twitter1_at(Input, Index + 1, Context);
         _ ->
             Input
@@ -90,7 +88,9 @@ twitter1_hash(Input, Index, Context) ->
                                                           orelse Char =:= $_ orelse Char =:= $.
                                                          ) ->
             Html = twitter_hash_url(Name),
-            process_binary_match(<<>>, [Html, Char], size(Post), twitter1(Post, 0, Context));
+            [[Html, Char], twitter1(Post, 0, Context)];
+        <<Name:Index/binary>> ->
+            twitter_hash_url(Name);
         <<_:Index/binary, _/binary>>  ->
             twitter1_hash(Input, Index + 1, Context);
         _ ->
@@ -100,11 +100,3 @@ twitter1_hash(Input, Index, Context) ->
 twitter_hash_url(Hash) ->
     ["<a href=\"http://twitter.com/#search?q=%23", Hash, "\">#", Hash, "</a>"].
 
-
-process_binary_match(Pre, Insertion, SizePost, Post) ->
-    case {size(Pre), SizePost} of
-        {0, 0} -> Insertion;
-        {0, _} -> [Insertion, Post];
-        {_, 0} -> [Pre, Insertion];
-        _ -> [Pre, Insertion, Post]
-    end.

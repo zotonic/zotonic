@@ -202,11 +202,10 @@ start_following(Context) ->
                     binary_to_list(LP);
                 P -> P
             end,
-    error_logger:info_msg("~p: Username = ~p. ~n", [z_context:site(Context), Login]),
-
+    lager:info("Twitter: (~p) Username = ~p", [z_context:site(Context), Login]),
     case Login of
         false ->
-            error_logger:info_msg("No username/password configuration for mod_twitter. ~n"),
+            lager:warning("Twitter: (~p) No username/password configuration.", [z_context:site(Context)]),
             not_configured;
         _ ->
             %% Get list of twitter ids to follow
@@ -214,7 +213,7 @@ start_following(Context) ->
 
             case Follow1 of
                 [] ->
-                    error_logger:info_msg("No follow configuration for mod_twitter. ~n"),
+                    lager:info("Twitter: (~p) No follow configuration for mod_twitter.", [z_context:site(Context)]),
                     undefined;
                 _ ->
                     URL = "https://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
@@ -262,55 +261,65 @@ fetch(URL, Body, Sleep, Context) ->
 process_data(Data, Context) ->
     case Data of
         <<${, _/binary>> ->
-            {struct, Tweet} = mochijson:decode(Data),
+            {struct, Tweet} = mochijson:binary_decode(Data),
+            case proplists:get_value(<<"delete">>, Tweet) of
+                undefined ->
+                    AsyncContext = z_context:prune_for_async(Context),
+                    spawn(fun() -> import_tweet(Tweet, AsyncContext) end);
+                {struct, _} ->
+                    lager:info("Twitter: ignored delete request."),
+                    % {"delete":{"status":{"user_id":42,"user_id_str":"42","id_str":"1234","id":1234}}}
+                    ok
+            end;
 
-            AsyncContext = z_context:prune_for_async(Context),
-            F = fun() ->
-                        {struct, User} = proplists:get_value("user", Tweet),
-                        TweeterId = proplists:get_value("id", User),
-                        case m_identity:lookup_by_type_and_key("twitter_id", TweeterId, AsyncContext) of
-                            undefined ->
-                                lager:warning("Twitter: Received a tweet for an unknown user (~p)", [TweeterId]),
-                                z_session_manager:broadcast(#broadcast{type="error", message="Received a tweet for an unknown user.", title="Unknown user", stay=false}, Context);
-                            Row ->
-                                UserId = proplists:get_value(rsc_id, Row),
-                                TweetText = z_convert:unicode_to_utf8(proplists:get_value("text", Tweet)),
-                                Body = iolist_to_binary([
-                                            <<"<p>">>,
-                                            filter_twitter:twitter(TweetText, Context),
-                                            <<"</p>">>
-                                        ]),
-                                Props = [
-                                    {category, tweet},
-                                    {is_published, true},
-                                    {title, iolist_to_binary([
-                                                proplists:get_value("screen_name", User),
-                                                " tweeted on ",
-                                                proplists:get_value("created_at", Tweet)])},
-                                     {body, Body},
-                                     {source, proplists:get_value("source", Tweet)},
-                                     {tweet, Tweet}
-                                ],
-
-                                AdminContext = z_acl:sudo(AsyncContext),
-                                {ok, TweetId} = m_rsc:insert(Props, AdminContext),
-                                {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
-
-                                %% Get images from the tweet and download them.
-                                Urls = extract_urls(Tweet),
-                                Ids = check_import_pictures(Urls, Context),
-                                [{ok, _} = m_edge:insert(TweetId, depiction, PictureId, Context) || PictureId <- Ids],
-
-                                % Message = proplists:get_value("screen_name", User) ++ ": " ++ Body,
-                                % z_session_manager:broadcast(#broadcast{type="notice", message=Message, title="New tweet!", stay=false}, AdminContext),
-                                TweetId
-                        end
-                end,
-            spawn(F);
+        <<"\r\n">> ->
+            % Keep alive
+            ok;
         _ ->
+            lager:warning("Twitter: received unknown data: ~p", [Data]),
             ok
     end.
 
+
+    import_tweet(Tweet, Context) ->
+        {struct, User} = proplists:get_value(<<"user">>, Tweet),
+        TweeterId = proplists:get_value(<<"id">>, User),
+        case m_identity:lookup_by_type_and_key("twitter_id", TweeterId, Context) of
+            undefined ->
+                lager:warning("Twitter: Received a tweet for an unknown user (~p)", [TweeterId]),
+                skip;
+            Row ->
+                UserId = proplists:get_value(rsc_id, Row),
+                %TweetText = z_convert:to_binary(z_convert:unicode_to_utf8(proplists:get_value(<<"text">>, Tweet))),
+                TweetText = proplists:get_value(<<"text">>, Tweet),
+                Body = iolist_to_binary([
+                            <<"<p>">>,
+                            filter_twitter:twitter(TweetText, Context),
+                            <<"</p>">>
+                        ]),
+                Props = [
+                    {category, tweet},
+                    {is_published, true},
+                    {title, iolist_to_binary([
+                                proplists:get_value(<<"screen_name">>, User),
+                                " tweeted on ",
+                                proplists:get_value(<<"created_at">>, Tweet)])},
+                     {body, Body},
+                     {source, proplists:get_value(<<"source">>, Tweet)},
+                     {tweet, Tweet}
+                ],
+
+                AdminContext = z_acl:sudo(Context),
+                {ok, TweetId} = m_rsc:insert(Props, AdminContext),
+                lager:info("Twitter: imported tweet ~p for user_id ~p", [TweetId, UserId]),
+
+                {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
+
+                %% Get images from the tweet and download them.
+                Urls = extract_urls(Tweet),
+                Ids = check_import_pictures(Urls, Context),
+                [{ok, _} = m_edge:insert(TweetId, depiction, PictureId, Context) || PictureId <- Ids]
+        end.
 
 %%
 %% Process a chunk of http data
@@ -318,11 +327,13 @@ process_data(Data, Context) ->
 receive_chunk(RequestId, Context) ->
     receive
         {http, {RequestId, {error, Reason}}} when(Reason =:= etimedout) orelse(Reason =:= timeout) ->
+            lager:error("Twitter: closed stream due to http timeout."),
             exit({error, timeout});
         {http, {RequestId, {{_, 401, _} = Status, Headers, _}}} ->
-            z_session_manager:broadcast(#broadcast{type="error", message="Twitter says the username/password is unauthorized.", title="Twitter module", stay=false}, z_acl:sudo(Context)),
+            lager:error("Twitter: username/password not accepted."),
             exit({error, {unauthorized, {Status, Headers}}});
         {http, {RequestId, Result}} ->
+            lager:error("Twitter: unknown stream result (~p)", Result),
             exit({error, Result});
 
         %% start of streaming data
@@ -344,6 +355,7 @@ receive_chunk(RequestId, Context) ->
 
     after 120 * 1000 ->
             %% Timeout; respawn.
+            lager:error("Twitter: closed stream due to our own timeout."),
             exit({error, timeout})
     end.
 
@@ -373,7 +385,7 @@ handle_author_edges_upgrade(C) ->
     Context = z_acl:sudo(C),
     case m_rsc:name_to_id_cat(tweeted, predicate, Context) of
         {ok, Tweeted} ->
-            ?DEBUG("Found old 'tweeted' predicate, upgrading..."),
+            lager:info("Twitter: Found old 'tweeted' predicate, upgrading..."),
             Author = m_rsc:name_to_id_cat_check(author, predicate, Context),
             z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2", [Author, Tweeted], Context),
             m_rsc:delete(Tweeted, Context),
@@ -384,9 +396,9 @@ handle_author_edges_upgrade(C) ->
 
 
 extract_urls(Tweet) ->
-    {struct, Entitites} = proplists:get_value("entities", Tweet),
-    {array, Urls} = proplists:get_value("urls", Entitites),
-    [proplists:get_value("url", UO) || {struct, UO} <- Urls].
+    {struct, Entitites} = proplists:get_value(<<"entities">>, Tweet),
+    Urls = proplists:get_value(<<"urls">>, Entitites),
+    [proplists:get_value(<<"url">>, UO) || {struct, UO} <- Urls].
     
 
 
@@ -395,14 +407,17 @@ check_import_pictures([], _Context) ->
 check_import_pictures(Urls, Context) ->
     %% Get oEmbed info on all Urls
     EmbedlyUrl = "http://api.embed.ly/1/oembed?urls=" ++ string:join([z_utils:url_encode(Url) || Url <- Urls], ","),
-    {ok, {{_Version, 200, _ReasonPhrase}, _Headers, Body}} =
-        httpc:request(EmbedlyUrl),
-    {array, Pictures} = mochijson:decode(Body),
+    {ok, {{_Version, 200, _ReasonPhrase}, _Headers, Body}} = httpc:request(EmbedlyUrl),
 
+    Pictures = mochijson:binary_decode(Body),
     Props = [P || {struct, P} <- Pictures],
     UrlProps = lists:zip(Urls, Props),
+
     %% Import pictures
-    Ids = lists:filter(fun (X) -> not(z_utils:is_empty(X)) end, [import_oembed(Url, Props1, Context) || {Url, Props1} <- UrlProps]),
+    Ids = lists:filter(fun (X) -> 
+                            not(z_utils:is_empty(X)) 
+                       end,
+                       [ import_oembed(Url, Props1, Context) || {Url, Props1} <- UrlProps ]),
 
     %% Give 'em edges to the 'from twitter' keyword
     [{ok, _} = m_edge:insert(Id, subject, m_rsc:rid(from_twitter, Context), Context) || Id <- Ids],
@@ -413,24 +428,25 @@ check_import_pictures(Urls, Context) ->
 %% @doc Import oEmbed-compatible proplist as a rsc.
 %% @spec import_oembed(Url, Props, Context) -> undefined | int()
 import_oembed(OriginalUrl, Props, Context) ->
-    case oembed_category(proplists:get_value("type", Props)) of
+    case oembed_category(proplists:get_value(<<"type">>, Props)) of
         undefined ->
             undefined;
         Category ->
+            lager:info("Twitter: "),
             RscProps = [{category, Category},
-                        {title, proplists:get_value("title", Props)},
-                        {summary, proplists:get_value("description", Props)},
+                        {title, proplists:get_value(<<"title">>, Props)},
+                        {summary, proplists:get_value(<<"description">>, Props)},
                         {website, OriginalUrl},
                         {oembed, Props}],
-            Url = proplists:get_value("url", Props),
+            Url = proplists:get_value(<<"url">>, Props),
             {ok, Id} = m_media:insert_url(Url, RscProps, Context),
             Id
     end.
 
 
 %% @doc Mapping from oEmbed category to Zotonic category. undefined means: do not import.
-oembed_category("photo") -> image;
-oembed_category("image") -> image; %% not standard oEmbed, but returned by yfrog
+oembed_category(<<"photo">>) -> image;
+oembed_category(<<"image">>) -> image; %% not standard oEmbed, but returned by yfrog
 oembed_category(_) -> undefined.
 
 
