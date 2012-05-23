@@ -87,3 +87,31 @@ body {
 }
 
 
+.pager-collection {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+.pager-collection a {
+    color: #999;
+    padding: 5px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid white;
+}
+.pager-collection a:hover {
+    text-decoration: none;
+    border: 1px solid #eee;
+    color: #005580;
+}
+.pager-collection li.previous {
+    float: left;
+}
+.pager-collection li.next {
+    float: right;
+}
+.pager-collection li.up {
+    text-align: center;
+}
+
+
