@@ -40,6 +40,7 @@
     menu_flat/2,
     menu_flat/3,
     menu_subtree/3,
+    menu_subtree/4,
     remove_invisible/2,
     test/0
 ]).
@@ -308,31 +309,51 @@ menu_flat([ MenuId | Rest ], MaxDepth, P, A, C) when is_integer(MenuId) ->
 
 %% @doc Find the subtree below a resource id. 'undefined' when not found.
 -spec menu_subtree(Menu::list(), PageId :: term(), #context{}) -> list() | undefined.
-menu_subtree([], _BelowId, _Context) ->
-    undefined;
-menu_subtree(Menu, _BelowId, _Context) when not is_list(Menu) ->
-    undefined;
-menu_subtree(_Menu, undefined, _Context) ->
-    undefined;
-menu_subtree(Menu, BelowId, Context) when not is_integer(BelowId) ->
-    menu_subtree(Menu, m_rsc:rid(BelowId, Context), Context);
-menu_subtree(Menu, BelowId, _Context) ->
-    menu_subtree_1(Menu, BelowId).
+menu_subtree(Menu, PageId, Context) ->
+    menu_subtree(Menu, PageId, false, Context).
     
-    menu_subtree_1([], _BelowId) ->
+-spec menu_subtree(Menu::list(), PageId :: term(), AddSiblings :: boolean(), #context{}) -> list() | undefined.
+menu_subtree([], _BelowId, _AddSiblings, _Context) ->
+    undefined;
+menu_subtree(Menu, _BelowId, _AddSiblings, _Context) when not is_list(Menu) ->
+    undefined;
+menu_subtree(_Menu, undefined, _AddSiblings, _Context) ->
+    undefined;
+menu_subtree(Menu, BelowId, AddSiblings, Context) when not is_integer(BelowId) ->
+    menu_subtree(Menu, m_rsc:rid(BelowId, Context), AddSiblings, Context);
+menu_subtree(Menu, BelowId, AddSiblings, _Context) ->
+    menu_subtree_1(Menu, BelowId, AddSiblings, Menu).
+    
+    menu_subtree_1([], _BelowId, _AddSiblings, _CurrMenu) ->
         undefined;
-    menu_subtree_1([{BelowId, Menu}|_Rest], BelowId) ->
+    menu_subtree_1([{BelowId, Menu}|_Rest], BelowId, false, _CurrMenu) ->
         Menu;
-    menu_subtree_1([{_Id, Menu}|Rest], BelowId) ->
-        case menu_subtree_1(Menu, BelowId) of
-            undefined -> menu_subtree_1(Rest, BelowId);
+    menu_subtree_1([{BelowId, _}|_Rest], BelowId, true, CurrMenu) ->
+        [
+            case MenuId of
+                BelowId -> {BelowId, Menu};
+                _ -> {MenuId, []}
+            end
+            || {MenuId,Menu} <- CurrMenu
+        ];
+    menu_subtree_1([{_Id, Menu}|Rest], BelowId, AddSiblings, CurrMenu) ->
+        case menu_subtree_1(Menu, BelowId, AddSiblings, Menu) of
+            undefined -> menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu);
             M -> M
         end;
     % Old notation
-    menu_subtree_1([BelowId|_Rest], BelowId) ->
+    menu_subtree_1([BelowId|_Rest], BelowId, false, _CurrMenu) ->
         [];
-    menu_subtree_1([_|Rest], BelowId) ->
-        menu_subtree_1(Rest, BelowId).
+    menu_subtree_1([BelowId|_Rest], BelowId, true, CurrMenu) ->
+        [
+          case Id of
+            {MenuId,_} -> {MenuId, []};
+            _ -> {Id,[]}
+          end 
+          || Id <- CurrMenu 
+        ];
+    menu_subtree_1([_|Rest], BelowId, AddSiblings, CurrMenu) ->
+        menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu).
 
 
 
