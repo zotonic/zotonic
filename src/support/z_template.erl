@@ -198,7 +198,6 @@ find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; N
     find_template(File, Context);
 find_template_cat(File, Id, Context) ->
     Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
-                {[meta,category|_], _} -> m_category:is_a(Id, Context); %% When the Id is a category, use the category chain itself.
                 {L, undefined} -> L;
                 {L, Name} -> L ++ [z_convert:to_atom(Name)]
             end,

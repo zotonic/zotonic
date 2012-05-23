@@ -47,7 +47,7 @@
 
 
 {% with m.search.paged[{query authoritative=1 cat=q.qcat cat_exclude="meta" text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
-        {% catinclude "_admin_overview_list.tpl" q.qcat result=result %}
+	{% include "_admin_overview_list.tpl" result=result %}
 	{% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page=1 %}
 {% endwith %}
 
