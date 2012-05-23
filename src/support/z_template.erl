@@ -199,6 +199,7 @@ find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; N
 find_template_cat(File, Id, Context) ->
     Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
                 {L, undefined} -> L;
+                {[meta, category|_] = L, _Name} -> L;
                 {L, Name} -> L ++ [z_convert:to_atom(Name)]
             end,
     Root = filename:rootname(File),
