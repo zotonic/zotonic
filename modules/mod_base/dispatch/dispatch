@@ -69,7 +69,7 @@
                                         ]},
     
     %% User Agent handling
-    {ua_probe, ["useragent","probe"], resource_user_agent_probe, []},
+    {ua_probe, ["useragent","probe.js"], resource_user_agent_probe, []},
     {ua_select, ["useragent","select", ua_class], resource_user_agent_select, []},
     {ua_select, ["useragent","select"], resource_user_agent_select, []},
     

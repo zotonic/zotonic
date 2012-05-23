@@ -17,16 +17,15 @@
 %% limitations under the License.
 
 -module(resource_user_agent_probe).
--author("Marc Worrell <marc@worrell>").
--author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
+-author("Marc Worrell <marc@worrell.nl>").
 
 -export([
     init/1,
     service_available/2,
     allowed_methods/2,
     malformed_request/2,
-    post_is_create/2,
-    process_post/2
+    content_types_provided/2,
+    to_js/2
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -42,13 +41,11 @@ service_available(ReqData, DispatchArgs) ->
     ?WM_REPLY(true, ContextQs).
 
 allowed_methods(ReqData, Context) ->
-    {['POST'], ReqData, Context}.
+    {['GET'], ReqData, Context}.
 
-%% Check all parameters
-%%
 malformed_request(ReqData, Context) ->
-    C1 = ?WM_REQ(ReqData, Context),
     try
+        C1 = ?WM_REQ(ReqData, Context),
         C2 = z_context:set(ua_args, [
                             {width, list_to_integer(z_context:get_q("w", C1))},
                             {height, list_to_integer(z_context:get_q("h", C1))},
@@ -57,40 +54,22 @@ malformed_request(ReqData, Context) ->
                            C1),
         ?WM_REPLY(false, C2)
     catch
-        _:_ -> {true, ReqData, C1}
+        _:_ -> {true, ReqData, Context}
     end.
 
-%% The probe does not create a new resource.
-%%
-post_is_create(ReqData, Context) ->
-    {false, ReqData, Context}.
+content_types_provided(ReqData, Context) -> 
+    {[
+        {"application/x-javascript", to_js}
+     ], ReqData, Context }.
 
-%% Process the probe. Send back a 204 when the user agent class does not 
-%% change. Force a reload of the page with a 303 See Other when a reload 
-%% is requested.
-%%
-process_post(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    UaArgs = z_context:get(ua_args, Context1),
-    ReplyContext = case z_user_agent:ua_probe(UaArgs, Context1) of
-        {reload, ReloadContext} -> 
-            to_referer(ReloadContext);
-        {ok, CookieContext} -> 
-            no_reply(CookieContext);
-        ok -> 
-            no_reply(Context1)
-    end,
-    ?WM_REPLY(true, ReplyContext).
-
-to_referer(Context) ->
-    RD = z_context:get_reqdata(Context),
-    Referer = wrq:get_req_header_lc("referer", RD),
-    RD1 = wrq:do_redirect(true, 
-        wrq:set_resp_header("location", Referer, RD)),
-    z_context:set_reqdata(RD1, Context).
-
-no_reply(Context) ->
-    RD = z_context:get_reqdata(Context),
-    RD1 = wrq:set_resp_body(<<>>, RD),
-    z_context:set_reqdata(RD1, Context).
+to_js(ReqData, Context) ->
+    CRD = z_context:set_nocache_headers(?WM_REQ(ReqData, Context)),
+    case z_user_agent:ua_probe(z_context:get(ua_args, CRD), CRD) of
+        {reload, CR} ->
+            ?WM_REPLY(<<"window.location.href = window.location.protocol+'//'+window.location.host+page.val();">>, CR);
+        {ok, CR} ->
+            ?WM_REPLY(<<>>, CR);
+        ok ->
+            ?WM_REPLY(<<>>, CRD)
+    end.
 
