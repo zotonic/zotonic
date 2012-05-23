@@ -24,7 +24,7 @@
 {% with id.o.haspart, id.s.haspart as sub,super %}
 {% if sub or super %}
 	<h3>{_ Related _}</h3>
-    {% include "_content_list.tpl" list=sub %}
+    {% include "_content_list.tpl" list=sub in_collection=id %}
     {% include "_content_list.tpl" list=super %}
 {% endif %}
 {% endwith %}

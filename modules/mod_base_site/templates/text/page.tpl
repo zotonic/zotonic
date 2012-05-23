@@ -21,6 +21,8 @@
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
 
+    {% block below_body %}{% endblock %}
+
     {% block related %}
     	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
     	{% include "_content_list.tpl" list=id.o.depiction title=_"Media"%}

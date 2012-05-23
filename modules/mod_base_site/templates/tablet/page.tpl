@@ -40,7 +40,7 @@
     {% endif %}
 	{% endwith %}
 	
-	{% block related %}
+	{% block below_body %}
 	{% endblock %}
 </div>
 {% endblock %}
