@@ -308,7 +308,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_system,
                 label=?__("Development", Context),
                 url={admin_development},
-                visiblecheck={acl, use, mod_admin_development}}
+                visiblecheck={acl, use, mod_development}}
      
      |Acc].
 
