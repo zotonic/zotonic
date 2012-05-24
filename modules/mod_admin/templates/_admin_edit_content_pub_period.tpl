@@ -25,5 +25,11 @@
 	{% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
     </div>
 </div>
+<div class="control-group">
+    <label class="control-label">{_ Publication date of original article _}</label>
+    <div class="controls">
+	{% include "_edit_date.tpl" date=r.org_pubdate name="org_pubdate" is_end=0 %}
+    </div>
+</div>
 {% endwith %}
 {% endblock %}
