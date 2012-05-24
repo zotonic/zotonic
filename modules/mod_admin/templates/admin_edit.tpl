@@ -53,10 +53,7 @@
 
 		{% if r.is_a.media or r.medium %}
 			{% include "_admin_edit_content_media.tpl" %}
-			{% if is_editable %}
-				{% include "_admin_edit_content_website.tpl" %}
-			{% endif %}
-		{% endif %}{# medium #}
+		{% endif %}
 
 		{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
 		{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
