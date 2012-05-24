@@ -48,6 +48,7 @@
 
 	<div class="span8" id="poststuff">
 		{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
+        {% include "_admin_edit_content_address.tpl" %}
 		{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
 
 		{% if r.is_a.media or r.medium %}
