@@ -294,7 +294,7 @@ process_data(Data, Context) ->
                 TweetText = proplists:get_value(<<"text">>, Tweet),
                 Body = iolist_to_binary([
                             <<"<p>">>,
-                            filter_twitter:twitter(TweetText, Context),
+                            filter_twitter:twitter(TweetText, [url_location], Context),
                             <<"</p>">>
                         ]),
                 Props = [

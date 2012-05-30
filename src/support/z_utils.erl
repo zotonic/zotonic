@@ -77,29 +77,24 @@
           replace1/3,
           split/2,
           split_in/2,
-          url_path_encode/1,
-          url_encode/1,
-          url_decode/1,
-          percent_encode/1,
           vsplit_in/2,
           now/0,
           now_msec/0,
           tempfile/0,
           temppath/0,
-          url_reserved_char/1,
-          url_unreserved_char/1,
-          url_valid_char/1,
           flush_message/1,
           ensure_existing_module/1,
-          generate_username/2
-         ]).
+          generate_username/2,
 
--define(is_uppercase_alpha(C), C >= $A, C =< $Z).
--define(is_lowercase_alpha(C), C >= $a, C =< $z).
--define(is_alpha(C), ?is_uppercase_alpha(C); ?is_lowercase_alpha(C)).
--define(is_digit(C), C >= $0, C =< $9).
--define(is_alphanumeric(C), ?is_alpha(C); ?is_digit(C)).
--define(is_unreserved(C), ?is_alphanumeric(C); C =:= $-; C =:= $_; C =:= $.; C =:= $~).
+          % Deprecated, see z_url.erl
+          url_path_encode/1,
+          url_encode/1,
+          url_decode/1,
+          percent_encode/1,
+          url_reserved_char/1,
+          url_unreserved_char/1,
+          url_valid_char/1
+         ]).
 
 
 %%% FORMAT %%%
@@ -244,57 +239,15 @@ depickle(Data, Context) ->
 
 %%% URL ENCODE %%%
 
-url_encode(S) -> 
-    %% @todo possible speedups for binaries
-    mochiweb_util:quote_plus(S).
+url_encode(S) -> z_url:url_encode(S).
+url_decode(S) -> z_url:url_decode(S).
+url_path_encode(L) -> z_url:url_path_encode(L).
+percent_encode(S) -> z_url:percent_encode(S).
 
-% hexdigit is from Mochiweb.
+url_valid_char(C) -> z_url:url_valid_char(C).
+url_reserved_char(C) -> z_url:url_reserved_char(C).
+url_unreserved_char(C) -> z_url:url_unreserved_char(C).
 
--define(PERCENT, 37).  % $\%
-
-hexdigit(C) when C < 10 -> $0 + C;
-hexdigit(C) when C < 16 -> $A + (C - 10).
-
-%%% URL PATH ENCODE %%%
-
-%% url spec for path part
-url_path_encode(L) when is_list(L) ->
-    url_path_encode(L, []);
-url_path_encode(L) ->
-    url_path_encode(z_convert:to_list(L)).
-
-url_path_encode([], Acc) ->
-    lists:reverse(Acc);
-url_path_encode([$/|R], Acc) ->
-    url_path_encode(R, [$/|Acc]);
-url_path_encode([C|R], Acc) when (C==$: orelse C==$@ orelse C==$& orelse C==$= orelse C==$+ orelse C==$$ orelse C==$ orelse C==$;) ->
-    url_path_encode(R, [C|Acc]);
-url_path_encode([C|R], Acc)->
-    case url_unreserved_char(C) of
-        true ->
-            url_path_encode(R, [C|Acc]);
-        false ->
-            <<Hi:4, Lo:4>> = <<C>>,
-            url_path_encode(R, [hexdigit(Lo), hexdigit(Hi), ?PERCENT | Acc])
-    end.
-
-
-%%% PERCENT encode ENCODE %%%
-
-%% @doc Percent encoding/decoding as defined by RFC 3986 (http://tools.ietf.org/html/rfc3986).
-percent_encode(Chars) when is_list(Chars) ->
-    percent_encode(Chars, []);
-percent_encode(Chars) ->
-    percent_encode(z_convert:to_list(Chars)).
-
-percent_encode([], Encoded) ->
-  lists:flatten(lists:reverse(Encoded));
-percent_encode([C|Etc], Encoded) when ?is_unreserved(C) ->
-  percent_encode(Etc, [C|Encoded]);
-percent_encode([C|Etc], Encoded) ->
-  Value = [io_lib:format("%~s", [z_utils:encode([Char], 16)]) 
-            || Char <- binary_to_list(unicode:characters_to_binary([C]))],
-  percent_encode(Etc, [lists:flatten(Value)|Encoded]).
 
 
 %% @spec os_filename(String) -> String
@@ -370,52 +323,6 @@ os_escape(win32, [C|Rest], Acc) when C == $&
     os_escape(win32, Rest, [C,$^|Acc]);
 os_escape(win32, [C|Rest], Acc) ->
     os_escape(win32, Rest, [C|Acc]).
-
-
-url_decode(S) ->
-    lists:reverse(url_decode(S, [])).
-
-url_decode([], Acc) -> 
-    Acc;
-url_decode([$%, A, B|Rest], Acc) ->
-    Ch = erlang:list_to_integer([A, B], 16),
-    url_decode(Rest, [Ch|Acc]);
-url_decode([$+|Rest], Acc) ->
-    url_decode(Rest, [32|Acc]);
-url_decode([Ch|Rest], Acc) ->
-    url_decode(Rest, [Ch|Acc]).
-
-%% VALID URL CHARACTERS
-%% RFC 3986
-url_valid_char(Char) ->
-    url_reserved_char(Char) orelse url_unreserved_char(Char).
-
-url_reserved_char($!) -> true;
-url_reserved_char($*) -> true;
-url_reserved_char($") -> true;
-url_reserved_char($') -> true;
-url_reserved_char($() -> true;
-url_reserved_char($)) -> true;
-url_reserved_char($;) -> true;
-url_reserved_char($:) -> true;
-url_reserved_char($@) -> true;
-url_reserved_char($&) -> true;
-url_reserved_char($=) -> true;
-url_reserved_char($+) -> true;
-url_reserved_char($$) -> true;
-url_reserved_char($,) -> true;
-url_reserved_char($/) -> true;
-url_reserved_char($?) -> true;
-url_reserved_char($%) -> true;
-url_reserved_char($#) -> true;
-url_reserved_char($[) -> true;
-url_reserved_char($]) -> true;
-url_reserved_char(_) -> false.
-
-url_unreserved_char(Ch) when ?is_unreserved(Ch) ->
-    true;
-url_unreserved_char(_) -> 
-    false.
 
 
 
