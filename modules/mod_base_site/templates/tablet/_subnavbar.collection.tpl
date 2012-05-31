@@ -1,8 +1,8 @@
-{# featured stuff #}
-{% include "_content_list.tpl" list=id.o.hasfeatured %}
-
 {# prev/next in collection and optional sub menu #}
 {% include "_subnav.tpl" %}
+
+{# featured stuff #}
+{% include "_content_list.tpl" list=id.o.hasfeatured %}
 
 {% if id.body %}
     {# The current id's collection, only when it is not shown in the main content #}
