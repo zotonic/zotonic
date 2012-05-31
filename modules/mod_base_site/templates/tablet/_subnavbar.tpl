@@ -1,8 +1,9 @@
 {# featured stuff #}
-{% include "_content_list.tpl" list=id.o.hasfeatured %}
-
 {# prev/next in collection and optional sub menu #}
 {% include "_subnav.tpl" %}
+
+{% include "_content_list.tpl" list=id.o.hasfeatured %}
+
 {% with id.o.haspart as o_haspart %}
 {% with id.s.haspart as s_haspart %}
 
