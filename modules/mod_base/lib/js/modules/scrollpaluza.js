@@ -40,7 +40,12 @@
                       }
                   }
                   if (best) {
-                      document.location.hash = '#'+best.id;
+                      if (window.history.replaceState) {
+                          var ps = window.location.href.split('#');
+                          window.history.replaceState(null, this.title, ps[0]+"#"+ best.id);
+                      } else {
+                        document.location.hash = '#'+best.id;
+                      }
                   }
                   waiting=false;
                 }, 150);
