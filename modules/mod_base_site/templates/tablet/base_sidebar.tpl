@@ -1,18 +1,18 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-{% block above %}{# {% include "_breadcrumb.tpl" %} #}{% endblock %}
+{% block above %}{% include "_breadcrumb.tpl" %}{% endblock %}
 <div class="row-fluid">
-    <div id="subnavbar" class="span3">
-        {% block subnavbar %}&nbsp;{% endblock %}
-    </div>
-
     <div class="span6">
         {% block main %}{% endblock %}
     </div>
+
+    <div id="subnavbar" class="span3">
+        {% block subnavbar %}&nbsp;{% endblock %}
+    </div>
     
     <aside id="sidebar" class="span3">
-        {% block sidebar %}&nbsp;{% endblock %}
+        {% block sidebar %}{% include "_sidebar.tpl" %}{% endblock %}
     </aside>
 </div>
 {% block below %}{% endblock %}
