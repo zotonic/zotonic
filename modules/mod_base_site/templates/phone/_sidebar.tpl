@@ -1,3 +1,5 @@
+{% include "_sidebar_top.tpl" %}
+
 <div class="intro highlight">
     {{ m.rsc.page_home.summary|default:m.rsc.page_home.body|default:"<span class='label label-important'>Important</span> <i>Set the summary of page with name 'page_home'</i>" }}
     {% if m.rsc.page_home.is_editable %}<a class="btn btn-mini pull-right" href="{% url admin_edit_rsc id=m.rsc.page_home.id %}">Edit</a>{% endif %}
