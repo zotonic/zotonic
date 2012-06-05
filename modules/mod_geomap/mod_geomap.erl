@@ -134,7 +134,9 @@ optional_geocode(Id, R, Context) ->
                         _ ->
                             % Changed, and we are doing automatic lookups
                             Version = proplists:get_value(version, R),
-                            spawn_link(fun() -> do_geocode(Id, Version, Q, Context) end),
+                            % Remove the dbc from the context
+                            ContextNoTrans = z_context:new(Context),
+                            spawn_link(fun() -> do_geocode(Id, Version, Q, ContextNoTrans) end),
                             ok
                     end
             end

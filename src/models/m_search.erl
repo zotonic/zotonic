@@ -117,6 +117,16 @@ get_result(props, Result, _Context) ->
     Result#m_search_result.search_props;
 get_result(total, Result, _Context) ->
     Result#m_search_result.total;
+get_result(pages, Result, _Context) ->
+    case Result#m_search_result.result of
+        #search_result{pages=Pages} -> Pages;
+        undefined -> Result#m_search_result.pages
+    end;
+get_result(page, Result, _Context) ->
+    case Result#m_search_result.result of
+        #search_result{page=Page} -> Page;
+        undefined -> Result#m_search_result.page
+    end;
 get_result(_Key, _Result, _Context) ->
     undefined.
     

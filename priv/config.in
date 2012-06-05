@@ -49,6 +49,7 @@
  % {ssl, true},
  % {ssl_certfile, "priv/ssl/server.crt"},
  % {ssl_keyfile, "priv/ssl/server.key"},
+ % {ssl_password, ""},
 
  %% SMTP outbound relay configuration
  % {smtp_relay, true},

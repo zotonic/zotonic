@@ -40,7 +40,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    {Id, ContextQs} = get_id(z_context:ensure_qs(Context1)),
+    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
     ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs).
 
 content_types_provided(ReqData, Context) ->

@@ -48,6 +48,8 @@ m_find_value(results, #m{value=undefined} = M, _Context) ->
     M#m{value=results};
 m_find_value(all_results, #m{value=undefined} = M, _Context) ->
     M#m{value=all_results};
+m_find_value(captions, #m{value=undefined} = M, _Context) ->
+    M#m{value=captions};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
 m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
@@ -62,8 +64,12 @@ m_find_value(Id, #m{value=questions}, Context) ->
     end;
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(Id, Context);
+m_find_value([Id, SortColumn], #m{value=all_results}, Context) ->
+    survey_results_sorted(Id, SortColumn, Context);
 m_find_value(Id, #m{value=all_results}, Context) ->
     survey_results(Id, Context);
+m_find_value(Id, #m{value=captions}, Context) ->
+    survey_captions(Id, Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
     did_survey(Id, Context);
 m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
@@ -226,6 +232,19 @@ survey_stats(SurveyId, Context) ->
         group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
 
 
+survey_results_sorted(SurveyId, SortColumn, Context) ->
+    [Headers|Data] = survey_results(SurveyId, Context),
+    case string:str(Headers, [list_to_binary(SortColumn)]) of
+        0 ->
+            %% column not found, do not sort
+            [Headers|Data];
+        N ->
+            %% Sort on nth row
+            Data1 = [{z_string:to_lower(z_convert:to_list(lists:nth(N, Row))), Row} || Row <- Data],
+            Data2 = [Row1 || {_, Row1} <- lists:sort(Data1)],
+            [Headers|Data2]
+    end.
+
 %% @doc Return all results of a survey
 survey_results(SurveyId, Context) ->
     case m_rsc:p(SurveyId, survey, Context) of
@@ -326,3 +345,13 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
                          false -> {"user_id = $1", [UserId]}
                      end,
     z_db:q("DELETE FROM survey_answer WHERE " ++ Clause ++ " and survey_id = $2", Args ++ [SurveyId], Context).
+
+
+survey_captions(Id, Context) ->
+    {survey, _, Questions} = m_rsc:p(Id, survey, Context),
+    [{<<"created">>, ?__("Created", Context)} |
+     [
+      {list_to_binary(S#survey_question.name),
+       S#survey_question.question}
+      || {_, S} <- Questions]
+    ].

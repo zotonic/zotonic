@@ -35,11 +35,15 @@ search(Query, Context) ->
                         from="rsc rsc",
                         tables=[{rsc, "rsc"}]},
     Query1 = filter_empty(Query),
-    R = parse_query(Query1, Context, Start),
-    %% add any sort terms
-    R1 = parse_sort(Query1, R),
-    %% add default sorting
-    add_order("-rsc.id", R1).
+    case parse_query(Query1, Context, Start) of
+        [] -> #search_result{};
+        #search_result{} = Result -> Result;
+        R ->
+            %% add any sort terms
+            R1 = parse_sort(Query1, R),
+            %% add default sorting
+            add_order("-rsc.id", R1)
+    end.
 
 
 
@@ -323,7 +327,8 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
             Q = z_convert:to_list(m_rsc:p(Id, 'query', Context)),
             parse_query(parse_query_text(Q) ++ Rest, Context, Result);
         false ->
-            throw({error, {invalid_query_id, Id}})
+            % Fetch the id's haspart objects (assume a collection)
+            parse_query([{hassubject, Id, haspart} | Rest], Context, Result)
     end;
 
 %% rsc_id=<rsc id>
@@ -350,10 +355,9 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 %% text=...
 %% Perform a fulltext search
 parse_query([{text, Text}|Rest], Context, Result) ->
-    Text1 = z_string:trim(Text),
-    case Text1 of 
-        [] ->
-            parse_query(Rest, Context, Result);
+    case z_string:trim(Text) of 
+        "id:"++ S -> mod_search:find_by_id(S, Context);
+        [] -> parse_query(Rest, Context, Result);
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
@@ -517,26 +521,36 @@ assure_categories(Name, Context) ->
                true -> [Name];
                false -> Name
            end,
-    Cats1 = lists:filter(fun(C) -> not(C == undefined) andalso not(C == []) end, Cats),
-    [ assure_category(C, Context) || C <- Cats1 ].
+    lists:foldl(fun(C, Acc) ->
+                    case assure_category(C, Context) of
+                        error -> Acc;
+                        {ok, N} -> [N|Acc]
+                    end
+                end,
+                [],
+                Cats).
 
 %% Make sure the given name is a category.
+assure_category([], _) -> error;
+assure_category(<<>>, _) -> error;
+assure_category(undefined, _) -> error;
 assure_category(Name, Context) ->
     case m_category:name_to_id(Name, Context) of
         {ok, _Id} ->
-            Name;
+            {ok, Name};
         _ -> 
-            CatId = try 
-                        z_convert:to_integer(Name)
-                    catch
-                        _:_ ->
-                            throw({error, {unknown_category, Name}})
-                    end,
-            case m_category:id_to_name(CatId, Context) of
+            case m_rsc:rid(Name, Context) of
                 undefined ->
-                    throw({error, {unknown_category, Name}});
-                Name1 ->
-                    Name1
+                    lager:warning("Query: unknown category ~p", [Name]),
+                    error;
+                CatId ->
+                    case m_category:id_to_name(CatId, Context) of
+                        undefined ->
+                            lager:warning("Query: ~p is not a category", [CatId]),
+                            error;
+                        Name1 ->
+                            {ok, Name1}
+                    end
             end
     end.
 

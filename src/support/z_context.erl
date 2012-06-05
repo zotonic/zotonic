@@ -848,11 +848,10 @@ get_resp_header(Header, #context{wm_reqdata=ReqData}) ->
     wrq:get_resp_header(Header, ReqData).
 
 
-%% @doc Get a request header
+%% @doc Get a request header. The header MUST be in lower case.
 %% @spec get_req_header(Header, Context) -> Value
-get_req_header(Header, Context) ->
-    ReqData = get_reqdata(Context),
-    wrq:get_req_header(Header, ReqData).
+get_req_header(Header, #context{wm_reqdata=ReqData}) ->
+    wrq:get_req_header_lc(Header, ReqData).
 
 
 %% @doc Return the request path

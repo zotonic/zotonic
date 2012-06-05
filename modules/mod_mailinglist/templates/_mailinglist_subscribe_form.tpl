@@ -16,6 +16,7 @@
     </div>
 </div>
 
+{% if not is_email_only %}
 <div class="row">
 	<div class="control-group span2">
 	    <label class="control-label" for="{{ #name_first }}">{_ First name _}</label>
@@ -43,6 +44,7 @@
 		{% validate id=#name_surname name="name_surname" type={presence} %}
 	{% endif %}
 </div>
+{% endif %}
 
 {% if in_admin and not recipient_id and not m.rsc[id].mailinglist_private %}
 <div class="control-group">

@@ -23,7 +23,7 @@
 
 	<h3>{_ Query preview _}</h3>
 	<div class="query-results" id="{{ #querypreview }}">
-		{% include "_admin_query_preview.tpl" result=m.search[{query query_id=id}] %}
+		{% include "_admin_query_preview.tpl" result=m.search[{query query_id=id pagelen=20}] %}
 	</div>
 </fieldset>
 {% endwith %}

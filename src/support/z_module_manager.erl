@@ -623,24 +623,26 @@ valid_modules(Context) ->
 %% @doc Return the z_supervisor child spec for a module
 module_spec(ModuleName, Context) ->
     Args = [ {context, Context}, {module, ModuleName} | z_sites_manager:get_site_config(z_context:site(Context))],
-    GenServerModule = gen_server_module(ModuleName),
+    ChildModule = gen_server_module(ModuleName),
     #child_spec{
         name=ModuleName,
-        mfa={GenServerModule, start_link, [Args]}
+        mfa={ChildModule, start_link, [Args]}
     }.
-
 
 
 %% When a module does not implement a gen_server then we use a dummy gen_server.
 gen_server_module(M) ->
+    case has_behaviour(M, gen_server) orelse has_behaviour(M, supervisor) of
+        true -> M;
+        false -> z_module_dummy
+    end.
+
+has_behaviour(M, Behaviour) ->
     case proplists:get_value(behaviour, erlang:get_module_info(M, attributes)) of
         L when is_list(L) ->
-            case lists:member(gen_server, L) of
-                true -> M;
-                false -> z_module_dummy
-            end;
+            lists:member(Behaviour, L);
         undefined ->
-            z_module_dummy
+            false
     end.
 
 

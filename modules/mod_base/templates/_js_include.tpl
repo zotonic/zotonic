@@ -2,7 +2,6 @@
 {% include "_js_include_jquery.tpl" %}
 
 {% lib
-	"bootstrap/js/bootstrap.min.js"
 	"js/apps/zotonic-1.0.js"
 	"js/apps/z.widgetmanager.js"
 	"js/modules/z.notice.js"

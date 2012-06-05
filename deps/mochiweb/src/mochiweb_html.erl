@@ -95,7 +95,12 @@ to_tokens({Tag0, Acc}) ->
     to_tokens({Tag0, [], Acc});
 to_tokens({Tag0, Attrs, Acc}) ->
     Tag = to_tag(Tag0),
-    to_tokens([{Tag, Acc}], [{start_tag, Tag, Attrs, is_singleton(Tag)}]).
+    case is_singleton(Tag) of
+        true ->
+            to_tokens([], [{start_tag, Tag, Attrs, true}]);
+        false ->
+            to_tokens([{Tag, Acc}], [{start_tag, Tag, Attrs, false}])
+    end.
 
 %% @spec to_html([html_token()] | html_node()) -> iolist()
 %% @doc Convert a list of html_token() to a HTML document.
@@ -335,7 +340,7 @@ tokenize(B, S=#decoder{offset=O}) ->
             Singleton = HasSlash orelse is_singleton(Tag),
             {{start_tag, Tag, Attrs, Singleton}, S3};
         _ ->
-            tokenize_data(B, S)
+            tokenize_data(B, S, false)
     end.
 
 tree_data([{data, Data, Whitespace} | Rest], AllWhitespace, Acc) ->
@@ -451,6 +456,9 @@ is_singleton(_) -> false.
 
 tokenize_data(B, S=#decoder{offset=O}) ->
     tokenize_data(B, S, O, true).
+
+tokenize_data(B, S=#decoder{offset=O}, WhiteSpace) ->
+    tokenize_data(B, S, O, WhiteSpace).
 
 tokenize_data(B, S=#decoder{offset=O}, Start, Whitespace) ->
     case B of
@@ -928,39 +936,50 @@ parse_test() ->
 </html>">>,
     ?assertEqual(
        {<<"html">>, [],
-        [{<<"head">>, [],
-          [{<<"meta">>,
+        [<<"\n ">>,
+         {<<"head">>, [],
+          [<<"\n   ">>,
+           {<<"meta">>,
             [{<<"http-equiv">>,<<"Content-Type">>},
              {<<"content">>,<<"text/html; charset=UTF-8">>}],
             []},
+           <<"\n   ">>,
            {<<"title">>,[],[<<"Foo">>]},
+           <<"\n   ">>,
            {<<"link">>,
             [{<<"rel">>,<<"stylesheet">>},
              {<<"type">>,<<"text/css">>},
              {<<"href">>,<<"/static/rel/dojo/resources/dojo.css">>},
              {<<"media">>,<<"screen">>}],
             []},
+           <<"\n   ">>,
            {<<"link">>,
             [{<<"rel">>,<<"stylesheet">>},
              {<<"type">>,<<"text/css">>},
              {<<"href">>,<<"/static/foo.css">>},
              {<<"media">>,<<"screen">>}],
             []},
+           <<"\n   ">>,
            {comment,<<"[if lt IE 7]>\n   <style type=\"text/css\">\n     .no_ie { display: none; }\n   </style>\n   <![endif]">>},
+           <<"\n   ">>,
            {<<"link">>,
             [{<<"rel">>,<<"icon">>},
              {<<"href">>,<<"/static/images/favicon.ico">>},
              {<<"type">>,<<"image/x-icon">>}],
             []},
+           <<"\n   ">>,
            {<<"link">>,
             [{<<"rel">>,<<"shortcut icon">>},
              {<<"href">>,<<"/static/images/favicon.ico">>},
              {<<"type">>,<<"image/x-icon">>}],
-            []}]},
+            []},
+           <<"\n ">>]},
+         <<"\n ">>,
          {<<"body">>,
           [{<<"id">>,<<"home">>},
            {<<"class">>,<<"tundra">>}],
-          [<<"&lt;<this<!-- is -->CDATA>&gt;">>]}]},
+          [<<"&lt;<this<!-- is -->CDATA>&gt;">>]},
+         <<"\n">>]},
        parse(D0)),
     ?assertEqual(
        {<<"html">>,[],
@@ -1317,6 +1336,30 @@ parse_funny_singletons_test() ->
 		] },
 		mochiweb_html:parse(D0)),
 	ok.
+
+to_html_singleton_test() ->
+    D0 = <<"<link />">>,
+    T0 = {<<"link">>,[],[]},
+    ?assertEqual(D0, iolist_to_binary(to_html(T0))),
+
+    D1 = <<"<head><link /></head>">>,
+    T1 = {<<"head">>,[],[{<<"link">>,[],[]}]},
+    ?assertEqual(D1, iolist_to_binary(to_html(T1))),
+
+    D2 = <<"<head><link /><link /></head>">>,
+    T2 = {<<"head">>,[],[{<<"link">>,[],[]}, {<<"link">>,[],[]}]},
+    ?assertEqual(D2, iolist_to_binary(to_html(T2))),
+
+    %% Make sure singletons are converted to singletons.
+    D3 = <<"<head><link /></head>">>,
+    T3 = {<<"head">>,[],[{<<"link">>,[],[<<"funny">>]}]},
+    ?assertEqual(D3, iolist_to_binary(to_html(T3))),
+
+    D4 = <<"<link />">>,
+    T4 = {<<"link">>,[],[<<"funny">>]},
+    ?assertEqual(D4, iolist_to_binary(to_html(T4))),
+
+    ok.
 
 parse_charref_test() ->
     %% Normal charref

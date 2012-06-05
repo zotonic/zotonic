@@ -17,7 +17,7 @@
     
     <div class="row">
 
-        <div class="span4">
+        <div class="span3">
 	    <h4>{_ From category _}</h4>
 
 	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}
@@ -28,7 +28,7 @@
 	    {% endfor %}
 	</div>
 
-	<div class="span4">
+	<div class="span3">
 	    <h4>{_ To category _}</h4>
 
 	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}

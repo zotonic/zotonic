@@ -27,17 +27,12 @@
 
 vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
-    Id = m_rsc:rid(proplists:get_value(id, Params), Context),
-    RcptId = proplists:get_value(recipient_id, Params),
-    InAdmin = proplists:get_value(in_admin, Params, false),
     Template = proplists:get_value(template, Params, "_scomp_mailinglist_subscribe.tpl"),
-    UserId = z_acl:user(Context),
     Props = [
-        {id, Id},
-        {recipient_id, RcptId},
-        {user_id, UserId},
-        {in_admin, InAdmin},
+        {id, m_rsc:rid(proplists:get_value(id, Params), Context)},
+        {user_id, z_acl:user(Context)},
         {delegate, ?MODULE}
+        | Params
     ],
     {ok, z_template:render(Template, Props, Context)}.
 

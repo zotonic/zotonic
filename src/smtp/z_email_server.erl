@@ -543,6 +543,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Params = [
         {<<"content-type-params">>, [ {<<"charset">>, <<"utf-8">>} ]},
         {<<"disposition">>, <<"inline">>},
+        {<<"transfer-encoding">>, <<"quoted-printable">>},
         {<<"disposition-params">>, []}
     ],
     Parts = case z_utils:is_empty(Text) of

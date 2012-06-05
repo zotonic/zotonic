@@ -78,8 +78,23 @@ event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, 
     m_survey:delete_result(SurveyId, UserId, PersistentId, Context),
     Target = "survey-result-"++z_convert:to_list(UserId)++"-"++z_convert:to_list(PersistentId),
 	z_render:wire([ {growl, [{text, ?__("Survey result deleted.", Context)}]},
-					{slide_fade_out, [{target, Target}]}
-				], Context).
+                        {slide_fade_out, [{target, Target}]}
+				], Context);
+
+event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
+    ?DEBUG(SurveyId),
+    [Headers0|Data] = m_survey:survey_results(SurveyId, Context),
+    ?DEBUG(Headers0),
+
+    Headers = lists:map(fun(X) -> list_to_atom(binary_to_list(X)) end, Headers0),
+    ?DEBUG(Headers),
+
+    All = [lists:zip(Headers, Row) || Row <- Data],
+    ?DEBUG(All),
+    z_render:dialog(?__("E-mail addresses", Context),
+                    "_dialog_survey_email_addresses.tpl",
+                    [{id, SurveyId}, {all, All}],
+                    Context).
 
 
 
