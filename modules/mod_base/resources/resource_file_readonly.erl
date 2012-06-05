@@ -173,16 +173,29 @@ provide_content(ReqData, Context) ->
                 true ->
                     {ok, Device} = file:open(z_context:get(fullpath, Context), [read,raw,binary]),
                     FileSize = z_context:get(file_size, Context),
-                    {   {stream, read_chunk(0, FileSize, Device)}, 
+		    Body = case lists:member({sendfile, 5}, file:module_info(functions)) of
+			       true ->
+				   {sendfile, Device};
+			       false ->
+				   {stream, read_chunk(0, FileSize, Device)}
+			   end,
+                    { Body,
                      wrq:set_resp_header("Content-Length", integer_to_list(FileSize), RD1),
                      z_context:set(use_cache, false, Context) };
                 _ ->
-                    {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
-                    Body = case z_context:get(encode_data, Context, false) of 
-                               true -> encode_data(Data);
-                               false -> Data
-                           end,
-                    {Body, RD1, z_context:set(body, Body, Context)}
+		    case lists:member({sendfile, 5}, file:module_info(functions)) of
+			true ->
+			    {ok, Device} = file:open(z_context:get(fullpath, Context), [read,raw,binary]),
+			    Body = {sendfile, Device},
+			    {Body, RD1, z_context:set(body, Body, Context)};
+			false ->
+			    {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
+			    Body = case z_context:get(encode_data, Context, false) of 
+				       true -> encode_data(Data);
+				       false -> Data
+				   end,
+			    {Body, RD1, z_context:set(use_cache, false, Context)}
+		    end
             end;
         Body -> 
             {Body, RD1, Context}
