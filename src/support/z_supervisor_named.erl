@@ -132,7 +132,7 @@ ensure_child(SupRef, ChildRef, MFA) ->
                 {ok, Pid, _Extra} -> {ok, Pid};
                 {error, {already_present, Pid}} -> {ok, Pid};
                 {error, already_present} ->
-                    case z_supervisor_simple:restart_child(SupRef, ChildRef) of
+                    case restart_child(SupRef, ChildRef) of
                         {ok, Pid} -> {ok, Pid};
                         {error, {running, Pid}} -> {ok, Pid};
                         Other -> Other

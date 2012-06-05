@@ -135,6 +135,10 @@ unescape(B) when is_binary(B) ->
         unescape(T, <<Acc/binary, "\"">>);
     unescape(<<"&#39;", T/binary>>, Acc) ->
         unescape(T, <<Acc/binary, "'">>);
+    unescape(<<"&#x27;", T/binary>>, Acc) ->
+        unescape(T, <<Acc/binary, "'">>);
+    unescape(<<"&#x2F;", T/binary>>, Acc) ->
+        unescape(T, <<Acc/binary, "/">>);
     unescape(<<"&lt;", T/binary>>, Acc) ->
         unescape(T, <<Acc/binary, "<">>);
     unescape(<<"&gt;", T/binary>>, Acc) ->

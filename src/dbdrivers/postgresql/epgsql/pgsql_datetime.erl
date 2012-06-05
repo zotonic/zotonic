@@ -124,7 +124,9 @@ timestamp2f({_D,_M,_Y} = Date) ->
     timestamp2f({Date, {0,0,0}});
 timestamp2f({Date, Time}) ->
     D = date2j(Date) - ?postgres_epoc_jdate,
-    D * ?secs_per_day + time2f(Time).
+    D * ?secs_per_day + time2f(Time);
+timestamp2f(Date) when is_binary(Date); is_list(Date) ->
+    timestamp2f(dh_date:parse(Date)).
 
 
 i2timestamp(N) ->
@@ -152,7 +154,9 @@ i2time(N) ->
 timestamp2i({_D,_M,_Y} = Date) ->
     timestamp2i({Date, {0,0,0}});
 timestamp2i({Date, Time}) ->
-    time2i(Time) + (date2j(Date) - ?postgres_epoc_jdate) * ?iusecs_per_day.
+    time2i(Time) + (date2j(Date) - ?postgres_epoc_jdate) * ?iusecs_per_day;
+timestamp2i(Date) when is_list(Date); is_binary(Date) ->
+    timestamp2i(dh_date:parse(Date)).
 
 time2i({H, M, S}) ->
     H * ?iusecs_per_hour + M * ?iusecs_per_minute + S * ?iusecs_per_sec.

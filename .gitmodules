@@ -10,3 +10,6 @@
 [submodule "deps/ua_classifier"]
 	path = deps/ua_classifier
 	url = git://github.com/zotonic/ua_classifier.git
+[submodule "deps/dh_date"]
+	path = deps/dh_date
+	url = git://github.com/zotonic/dh_date.git

@@ -1,11 +1,11 @@
 %% @author Marc Worrell
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %%
 %% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
 %%
 %% @doc Misc utility functions for zotonic
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -500,32 +500,9 @@ js_prop_value(_, Int) when is_integer(Int) -> integer_to_list(Int);
 js_prop_value(_, Value) -> [$",js_escape(Value),$"].
 
 
-%%% ESCAPE JSON %%%
-
-%% @doc JSON escape for safe quoting of JSON strings. Subtly different
-%% from JS escape, see http://www.json.org/
-json_escape(undefined) -> [];
-json_escape([]) -> [];
-json_escape(<<>>) -> [];
-json_escape(Value) when is_integer(Value) -> integer_to_list(Value);
-json_escape(Value) when is_atom(Value) -> json_escape(atom_to_list(Value), []);
-json_escape(Value) when is_binary(Value) -> json_escape(binary_to_list(Value), []);
-json_escape(Value) -> json_escape(Value, []).
-
-json_escape([], Acc) -> lists:reverse(Acc);
-json_escape([$" |T], Acc) -> json_escape(T, [$" ,$\\|Acc]);
-json_escape([$\\|T], Acc) -> json_escape(T, [$\\,$\\|Acc]);
-json_escape([$/ |T], Acc) -> json_escape(T, [$/ ,$\\|Acc]);
-json_escape([$\b|T], Acc) -> json_escape(T, [$b ,$\\|Acc]);
-json_escape([$\f|T], Acc) -> json_escape(T, [$f ,$\\|Acc]);
-json_escape([$\n|T], Acc) -> json_escape(T, [$n ,$\\|Acc]);
-json_escape([$\r|T], Acc) -> json_escape(T, [$r ,$\\|Acc]);
-json_escape([$\t|T], Acc) -> json_escape(T, [$t ,$\\|Acc]);
-json_escape([H|T], Acc) when is_integer(H) ->
-    json_escape(T, [H|Acc]);
-json_escape([H|T], Acc) ->
-    H1 = json_escape(H),
-    json_escape(T, [H1|Acc]).
+% @doc Deprecated: moved to z_json.
+json_escape(A) ->
+    z_json:escape(A).
 
 
 only_letters([]) ->

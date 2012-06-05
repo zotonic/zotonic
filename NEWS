@@ -30,11 +30,13 @@ directory. Which image class definition is chosen depends on the
 user agent classification.
 
 
-* New modules
+* Modules
 
 mod_geomap
-    Provides mapping and geocoding.
-    
+    New module: Provides mapping and geocoding.
+
+mod_comment
+    Added the possibility to have comments be moderated before submitting.
 
 * New filters
 
