@@ -3,6 +3,7 @@ ZOTONIC=/home/zotonic && \
 SHELL=/bin/bash && \
 apt-get install -y \
         erlang \
+        erlang-src \
         build-essential \
         postgresql-8.4 \
         imagemagick \
