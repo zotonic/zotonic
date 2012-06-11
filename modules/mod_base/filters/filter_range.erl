@@ -21,10 +21,8 @@
 
 range(Start, End, _Context) when Start =:= undefined; End =:= undefined->
     [];
-range(Start, End, _Context) ->
-    range(Start, End, 1).
+range(Start, End, Context) ->
+    range(Start, End, 1, Context).
 
 range(Start, End, Step, _Context) ->
     lists:seq(z_convert:to_integer(Start), z_convert:to_integer(End), z_convert:to_integer(Step)).   
-   
-	  
