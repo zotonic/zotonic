@@ -508,6 +508,7 @@ LiveValidation.prototype =
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
+            	$('input[name='+this.element.name+']').closest('.control-group').addClass("success");
 				switch (this.elementType) {
 				case LiveValidation.RADIO:
 	            	$('input[name='+this.element.name+']').closest('label').addClass(this.validFieldClass);
@@ -518,6 +519,7 @@ LiveValidation.prototype =
 				}
             }
         }else{
+        	$('input[name='+this.element.name+']').closest('.control-group').removeClass("success").addClass("error");
 			switch (this.elementType) {
 			case LiveValidation.RADIO:
             	$('input[name='+this.element.name+']').closest('label').addClass(this.invalidFieldClass);
@@ -549,6 +551,7 @@ LiveValidation.prototype =
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
+    	$('input[name='+this.element.name+']').closest('.control-group').removeClass("success").removeClass("error");
 		switch (this.elementType) {
 		case LiveValidation.RADIO:
         	$('input[name='+this.element.name+']').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
