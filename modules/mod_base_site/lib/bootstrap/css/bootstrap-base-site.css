@@ -124,4 +124,12 @@ ul.simple-list {
     text-align: center;
 }
 
-
+#mailinglist_subscribe {
+    margin-top: 13px;
+}
+#mailinglist_subscribe_form .z_invalid {
+    display:none;
+}
+.home #mailinglist_subscribe_form input {
+    width: 50%;
+}

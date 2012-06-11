@@ -6,7 +6,7 @@
 </div>
 
 {% with m.rsc.main_mailinglist.id as mailinglist_id %}
-{% if mailinglist_id.is_published %}
+{% if mailinglist_id.is_published and mailinglist_id.is_visible %}
     {% mailinglist_subscribe id=mailinglist_id is_email_only %}
 {% endif %}
 {% endwith %}
