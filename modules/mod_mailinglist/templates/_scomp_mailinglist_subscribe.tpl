@@ -1,8 +1,12 @@
 <div id="mailinglist_subscribe">
-	<p>
-		{_ Give your e-mail address to subscribe to _} {{ m.rsc[id].title }}.  
-		{_ You will receive a confirmation in your e-mail._}
-	</p>
+	{% if is_email_only %}
+		<p>{_ Subscribe to _} {{ m.rsc[id].title }}.</p>
+	{% else %}
+		<p>
+			{_ Give your e-mail address to subscribe to _} {{ m.rsc[id].title }}.  
+			{_ You will receive a confirmation in your e-mail._}
+		</p>
+	{% endif %}
 
 	<div id="mailinglist_subscribe_form" class="clearfix">
         {% if in_admin %}
