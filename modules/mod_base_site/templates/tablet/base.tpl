@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{# Base PHONE template #}
+{# Base TABLET/DESKTOP template (two columns) #}
 <html lang="{{ z_language|default:"en"|escape }}">
 <head>
 	<meta charset="utf-8" />
@@ -27,7 +27,33 @@
 <div class="container-fluid">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
-		{% block content %}{% endblock %}
+		{% block content %}
+			{% block above %}
+				{% include "_breadcrumb.tpl" %}
+				{% include "_title.tpl" %}
+			{% endblock %}
+			<div class="row-fluid">
+				<div class="span8">
+					{% block main %}{% endblock %}
+				</div>
+
+				<div id="subnavbar" class="span4">
+					{# {% block sidebar %}{% include "_sidebar.tpl" %}{% endblock %} #}
+					{% block subnavbar %}
+						{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
+
+						{% with id.o.haspart, id.s.haspart as sub,super %}
+						{% if sub or super %}
+							<h3>{_ Related _}</h3>
+							{% include "_content_list.tpl" list=sub in_collection=id %}
+							{% include "_content_list.tpl" list=super %}
+						{% endif %}
+						{% endwith %}
+					{% endblock %}
+				</div>
+			</div>
+			{% block below %}{% endblock %}
+		{% endblock %}
 		</div>
 	{% endblock %}
 	{% include "_footer.tpl" %}

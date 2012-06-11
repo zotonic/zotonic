@@ -1,10 +1,9 @@
-{% extends "base_sidebar.tpl" %}
+{% extends "base.tpl" %}
 
 {# Page for TABLET+ #}
 
 {% block main %}
 <div {% include "_language_attrs.tpl" id=id %}>
-    {% include "_title.tpl" %}
     {% include "_meta.tpl" %}
 
 	{% if m.rsc[id].summary %}

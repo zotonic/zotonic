@@ -1,4 +1,4 @@
-{% extends "base_sidebar.tpl" %}
+{% extends "base.tpl" %}
 
 {% block title %}{_ Map of _} {{ id.title }}{% endblock %}
 
