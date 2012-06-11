@@ -37,6 +37,17 @@ body {
 .content h1 {
     margin-bottom: 10px;
 }
+h1 small {
+    display: block;
+}
+.chapeau {
+    color: #999;
+    margin: 10px 0 0 0;
+}
+ul.content-list {
+    margin: 0;
+    list-style: none;
+}
 .meta {
     padding: 5px 0;
     margin: 0 0 10px 0;
@@ -47,6 +58,9 @@ body {
 .meta a {
     font-weight: 200;
 }
+.content .thumbnails {
+    margin-top: 20px;
+}
 .thumbnail a img {
   display: block;
   max-width: 100%;
@@ -55,7 +69,7 @@ body {
 }
 .depiction p.caption {
     margin-bottom: 0px;
-    font-size: 90%;
+    font-size: 80%;
     padding-bottom: 4px;
 }
 .depiction {
@@ -81,9 +95,6 @@ body {
 }
 .nav-stacked li .item-5 {
     padding-left: 50px;
-}
-#content-pager {
-    padding-top: 50px;
 }
 .pager-collection {
     margin-bottom: 10px;
