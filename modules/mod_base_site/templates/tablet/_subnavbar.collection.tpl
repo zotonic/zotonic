@@ -22,11 +22,10 @@
         {% endwith %}
         
         {% if not s_haspart %}
-            {% include "_content_list.tpl" list=m.search[{query pagelen=10 cat=id.category.name cat_exclude=`tweet` sort="-rsc.publication_start"}] %}
+            {% include "_content_list.tpl" list=m.search[{query pagelen=10 cat=`tweet` cat=`news` sort="-rsc.publication_start"}] %}
         {% endif %}
     {% endwith %}
 
-    
 {% endif %}
 
 
