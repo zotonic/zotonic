@@ -5,10 +5,9 @@
 {% block main %}
 {% if q.qs %}
 {% with m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` pagelen=10 page=q.page}] as result %}
+	<h1 id="content-pager">{_ Searching for _} <b>{{ q.qs|escape }}</b></h1>
     {% if result.total > 0 %}
-        <p id="content-pager">
-            <span class="pull-left">{_ Searching for _} <b>{{ q.qs|escape }}</b></span>
-            &nbsp;
+        <p>
             <span class="pull-right">
                 {_ Page _} {{ result.page }}/{{ result.pages }}
             </span>

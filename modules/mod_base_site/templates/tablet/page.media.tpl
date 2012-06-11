@@ -1,8 +1,6 @@
 {% extends "page.tpl" %}
 
 {% block main %}
-    <h1>{{ m.rsc[id].title }}</h1>
-
     {% include "_meta.tpl" %}
 
     {% if m.rsc[id].summary %}
@@ -11,8 +9,8 @@
 
     {% include "_address.tpl" %}
 
-    {{ m.rsc[id].body }}
-    {% include "_blocks.tpl" %}
+	{{ m.rsc[id].body }}
+	{% include "_blocks.tpl" %}
 
     {% with id.o.depiction as ds %}
     {% if ds %}
