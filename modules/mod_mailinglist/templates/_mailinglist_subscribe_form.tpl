@@ -10,6 +10,7 @@
 <form id="{{ #form }}" method="post" action="postback" class="form-inline">
 	<div class="control-group">
 		<input type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|default:q.email|escape }}" placeholder="you@example.com" />
+		{% validate id=#email name="email" type={presence} type={email} %}
 		{% button class="btn btn-primary" text=_"Subscribe" %}
 	</div>
 </form>
