@@ -133,3 +133,6 @@ ul.simple-list {
 .home #mailinglist_subscribe_form input {
     width: 50%;
 }
+form div.row {
+    margin-left: -20px;
+}

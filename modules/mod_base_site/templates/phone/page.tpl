@@ -18,8 +18,10 @@
         {% include "_subnav.tpl" %}
     {% endblock %}
 
+    {% block body %}
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
+    {% endblock %}
 
     {% block below_body %}{% endblock %}
 

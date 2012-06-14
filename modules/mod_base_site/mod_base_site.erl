@@ -21,6 +21,6 @@
 
 -mod_title("Base Site").
 -mod_description("Simple site building blocks.").
--mod_prio(1000).
+-mod_prio(550).
 -mod_depends([base]).
 -mod_provides([base_site]).

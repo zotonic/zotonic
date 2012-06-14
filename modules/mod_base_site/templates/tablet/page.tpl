@@ -24,8 +24,10 @@
 	{% endblock %}
 	{% include "_address.tpl" %}
 
+    {% block body %}
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
+	{% endblock %}
 	
 	{% with id.o.hasdocument as xs %}
 	{% with id.o.depiction as ds %}
