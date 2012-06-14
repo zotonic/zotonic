@@ -10,15 +10,9 @@
         {% endif %}
         {{ id.body }}
     {% endif %}
-
-    {% with id.o.haspart as haspart %}
-    {% if haspart %}
-        {% include "_content_list.tpl" list=haspart %}
-        {% include "_content_list.tpl" list=m.search[{featured cat='text' pagelen=10}] %}
-    {% else %}
-        {% include "_content_list.tpl" list=m.search[{featured cat='text' pagelen=20}] %}
-    {% endif %}
-    {% endwith %}
+    
+    {% include "_content_list.tpl" list=id.o.hasfeatured %}
+    {% include "_content_list.tpl" list=id.o.haspart in_collection=id %}
 {% endwith %}
 
 {% endblock %}

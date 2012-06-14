@@ -24,16 +24,13 @@
     {% block below_body %}{% endblock %}
 
     {% block related %}
+        {% include "_content_list.tpl" list=id.o.hasfeatured %}
     	{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
     	{% include "_content_list.tpl" list=id.o.depiction title=_"Media"%}
 
-    	{% with id.o.haspart, id.s.haspart as sub,super %}
-    	{% if sub or super %}
-        	<h3>{_ More _}</h3>
-            {% include "_content_list.tpl" list=sub %}
-            {% include "_content_list.tpl" list=super %}
-        {% endif %}
-        {% endwith %}
+        {% include "_content_list.tpl" list=id.o.haspart title=_"More" %}
+
+        {% include "_content_list.tpl" list=m.rsc.sidebar_collection.o.haspart %}
     {% endblock %}
 </div>
 {% endblock %}
