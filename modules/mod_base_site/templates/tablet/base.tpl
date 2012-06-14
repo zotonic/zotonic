@@ -38,17 +38,8 @@
 				</div>
 
 				<div id="subnavbar" class="span4">
-					{# {% block sidebar %}{% include "_sidebar.tpl" %}{% endblock %} #}
 					{% block subnavbar %}
-						{% include "_content_list.tpl" list=id.o.hasdocument title=_"Documents"%}
-
-						{% with id.o.haspart, id.s.haspart as sub,super %}
-						{% if sub or super %}
-							<h3>{_ Related _}</h3>
-							{% include "_content_list.tpl" list=sub in_collection=id %}
-							{% include "_content_list.tpl" list=super %}
-						{% endif %}
-						{% endwith %}
+                        {% include "_subnav.tpl" %}
 					{% endblock %}
 				</div>
 			</div>

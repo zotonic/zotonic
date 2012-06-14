@@ -1,35 +1,53 @@
 {% extends "base.tpl" %}
 
-{% block title %}{_ Search _}{% endblock %}
+{% block title %}{_ Search _}{% if q.qs %}: {{ q.qs|escape }}{% endif %}{% endblock %}
 
-{% block main %}
+{% block page_class %}search{% endblock %}
+
+{% block content %}
 {% if q.qs %}
 {% with m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` cat=`location` cat=`mailinglist` pagelen=10 page=q.page}] as result %}
-	<h1 id="content-pager">{_ Searching for _} <b>{{ q.qs|escape }}</b></h1>
-    {% if result.total > 0 %}
-        <p>
-            <span class="pull-right">
-                {_ Page _} {{ result.page }}/{{ result.pages }}
-            </span>
-        </p>
-        {% include "_content_list.tpl" list=result %}
-        {% pager result=result %}
-    {% else %}
-    <p id="content-pager">
-        {_ Did not find any pages matching _} <b>{{ q.qs|escape }}</b>.
-    </p>
-    {% endif %}
+
+    <h1 id="content-pager">{_ Searching for _} <b>{{ q.qs|escape }}</b></h1>
+
+	<div class="row-fluid">
+		<div class="span8 main">
+            {% if result.total > 0 %}
+                <p>
+                    <span class="pull-right">
+                        {_ Page _} {{ result.page }}/{{ result.pages }}
+                    </span>
+                </p>
+            {% endif %}
+            {% if result.total > 0 %}
+                {% include "_content_list.tpl" list=result %}
+                {% pager result=result %}
+            {% else %}
+            <p id="content-pager">
+                {_ Did not find any pages matching _} <b>{{ q.qs|escape }}</b>.
+            </p>
+            {% endif %}
+            {% include "_search_form.tpl" %}
+		</div>
+
+		<div id="subnavbar" class="span4">
+            {% if result.total > 0 %}
+		    <p><span class="pull-right">&nbsp;</span></p>
+		    {% endif %}
+            {% include "_subnav.tpl" %}
+		</div>
+	</div>
 {% endwith %}
-
 <hr/>
+{% else %}
+<div class="row-fluid">
+	<div class="span8 main">
+	    {% include "_search_form.tpl" %}
+	</div>
+	<div id="subnavbar" class="span4">
+        {% include "_subnav.tpl" %}
+	</div>
+</divv>
 {% endif %}
-
-<form class="well" method="GET" action="{% url search %}#content-pager">
-    <fieldset>
-        <label>{_ Type the text to search _}</label>
-        <input type="text" name="qs" value="{{ q.qs|escape }}" />
-    </fieldset>
-    <input class="btn btn-primary" type="submit" value="{_ Search _}" />
-</form>
 
 {% endblock %}
