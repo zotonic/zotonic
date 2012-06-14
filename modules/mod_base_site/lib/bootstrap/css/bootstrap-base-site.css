@@ -77,7 +77,7 @@ ul.simple-list {
     margin-bottom: 10px;
 }
     .depiction.portrait {
-        width: 50%;
+        max-width: 50%;
         float: right;
         margin-left: 10px;
     }
