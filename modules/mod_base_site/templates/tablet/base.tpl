@@ -33,7 +33,7 @@
 				{% include "_title.tpl" %}
 			{% endblock %}
 			<div class="row-fluid">
-				<div class="span8">
+				<div class="span8 main">
 					{% block main %}{% endblock %}
 				</div>
 
