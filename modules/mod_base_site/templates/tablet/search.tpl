@@ -4,7 +4,7 @@
 
 {% block main %}
 {% if q.qs %}
-{% with m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` pagelen=10 page=q.page}] as result %}
+{% with m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` cat=`location` pagelen=10 page=q.page}] as result %}
 	<h1 id="content-pager">{_ Searching for _} <b>{{ q.qs|escape }}</b></h1>
     {% if result.total > 0 %}
         <p>
