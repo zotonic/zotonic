@@ -36,16 +36,14 @@ search(Query, Context) ->
                         tables=[{rsc, "rsc"}]},
     Query1 = filter_empty(Query),
     case parse_query(Query1, Context, Start) of
+        #search_sql{} = S ->
+            case z_utils:is_empty(S#search_sql.order) of
+                true -> add_order("-rsc.id", S);
+                false -> S
+            end;
         [] -> #search_result{};
-        #search_result{} = Result -> Result;
-        Start -> #search_result{};
-        R ->
-            %% add any sort terms
-            R1 = parse_sort(Query1, R),
-            %% add default sorting
-            add_order("-rsc.id", R1)
+        Other -> Other
     end.
-
 
 
 parse_request_args(Args) ->
@@ -114,19 +112,6 @@ empty_term([X, _]) ->
     empty_term(X);
 empty_term(_) ->
     false.
-
-
-parse_sort([], Result) ->
-    Result;
-parse_sort([{sort, Sort}|Rest], Result) ->
-    Sort1 = case is_atom(Sort) of
-                true -> atom_to_list(Sort);
-                false -> Sort
-            end,
-    parse_sort(Rest, add_order(Sort1, Result));
-parse_sort([_|Rest], Result) ->
-    parse_sort(Rest, Result).
-
 
 parse_query([], _Context, Result) ->
     Result;
@@ -341,8 +326,8 @@ parse_query([{rsc_id, Id}|Rest], Context, Result) ->
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
-parse_query([{sort, _Sort}|Rest], Context, Result) ->
-    parse_query(Rest, Context, Result);
+parse_query([{sort, Sort}|Rest], Context, Result) ->
+    parse_query(Rest, Context, add_order(Sort,Result));
 
 %% custompivot=tablename
 %% Add a join on the given custom pivot table.
@@ -472,6 +457,10 @@ add_where(Clause, Search) ->
 
 
 %% Add an ORDER clause.
+add_order(Order, Search) when is_atom(Order) ->
+    add_order(atom_to_list(Order), Search);
+add_order(Order, Search) when is_binary(Order) ->
+    add_order(binary_to_list(Order), Search);
 add_order("seq", Search) ->
     case proplists:get_value(edge, Search#search_sql.tables) of
         L when is_list(L) -> add_order(L++".seq", Search);
