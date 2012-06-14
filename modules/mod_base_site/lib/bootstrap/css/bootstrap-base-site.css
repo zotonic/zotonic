@@ -70,12 +70,18 @@ ul.simple-list {
 }
 .depiction p.caption {
     margin-bottom: 0px;
-    font-size: 80%;
+    font-size: 85%;
     padding-bottom: 4px;
 }
 .depiction {
     margin-bottom: 10px;
 }
+    .depiction.portrait {
+        width: 50%;
+        float: right;
+        margin-left: 10px;
+    }
+
 .geomap-static {
     position: relative;
     width: 512px;
