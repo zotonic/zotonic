@@ -160,6 +160,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
     EscapeTexts = proplists:get_value(escape_texts, Options, true),
     AclCheck = proplists:get_value(acl_check, Options, true),
     IsImport = proplists:is_defined(is_import, Options),
+    % IsTransMerge = proplists:is_defined(is_trans_merge, Options, false),
     IsEditable = Id == insert_rsc orelse z_acl:rsc_editable(Id, Context) orelse not(AclCheck),
 
     case IsEditable of
@@ -167,7 +168,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             DateProps = recombine_dates(Props),
             TextProps = recombine_languages(DateProps, Context),
             BlockProps = recombine_blocks(TextProps),
-            AtomProps = [ {z_convert:to_atom(P), V} || {P, V} <- BlockProps ],
+            AtomProps = [ {map_property_name(P), V} || {P, V} <- BlockProps ],
             FilteredProps = props_filter(props_trim(AtomProps), [], Context),
             EditableProps = props_filter_protected(FilteredProps),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
@@ -421,15 +422,14 @@ preflight_check(Id, [_H|T], Context) ->
 
 %% @doc Remove whitespace around some predefined fields
 props_trim(Props) ->
-    props_trim(Props, []).
+    [
+        case is_trimmable(P,V) of
+            true -> {P, z_string:trim(V)};
+            false -> {P,V}
+        end
+        || {P,V} <- Props
+    ].
 
-props_trim([], Acc) ->
-    lists:reverse(Acc);
-props_trim([{P,V}=Prop|T], Acc) ->
-    case is_trimmable(P,V) of
-        true -> props_trim(T, [{P, z_string:trim(V)}|Acc]);
-        false -> props_trim(T, [Prop|Acc])
-    end.
 
 %% @doc Remove properties the user is not allowed to change and convert some other to the correct data type
 %% @spec props_filter(Props1, Acc, Context) -> Props2
@@ -477,7 +477,6 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
         false ->
             props_filter(T, Acc, Context)
     end;
-
 props_filter([{slug, undefined}|T], Acc, Context) ->
     props_filter(T, [{slug, []} | Acc], Context);
 props_filter([{slug, <<>>}|T], Acc, Context) ->
@@ -490,7 +489,6 @@ props_filter([{custom_slug, P}|T], Acc, Context) ->
     props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
 props_filter([{is_published, P}|T], Acc, Context) ->
     props_filter(T, [{is_published, z_convert:to_bool(P)} | Acc], Context);
-
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
@@ -500,7 +498,8 @@ props_filter([{is_authoritative, P}|T], Acc, Context) ->
     end;
 props_filter([{is_featured, P}|T], Acc, Context) ->
     props_filter(T, [{is_featured, z_convert:to_bool(P)} | Acc], Context);
-
+props_filter([{is_query_live, P}|T], Acc, Context) ->
+    props_filter(T, [{is_query_live, z_convert:to_bool(P)} | Acc], Context);
 props_filter([{visible_for, Vis}|T], Acc, Context) ->
     VisibleFor = z_convert:to_integer(Vis),
     case VisibleFor of
@@ -568,42 +567,43 @@ props_defaults(Props, _Context) ->
 props_filter_protected(Props) ->
     lists:filter(fun({K,_V}) -> not is_protected(K) end, Props).
 
+
+%% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
+map_property_name(P) when not is_list(P) -> map_property_name(z_convert:to_list(P));
+map_property_name("computed_"++_) -> computed_xxx;
+map_property_name("pivot_"++_) -> pivot_xxx;
+map_property_name(P) when is_list(P) -> erlang:list_to_existing_atom(P).
+
+
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-is_protected(created)                    -> true;
-is_protected(creator_id)                 -> true;
-is_protected(id)                         -> true;
-is_protected(modified)                   -> true;
-is_protected(modifier_id)                -> true;
-is_protected(pivot_category_nr)          -> true;
-is_protected(pivot_city)                 -> true;
-is_protected(pivot_country)              -> true;
-is_protected(pivot_date_end)             -> true;
-is_protected(pivot_date_end_month_day)   -> true;
-is_protected(pivot_date_start)           -> true;
-is_protected(pivot_date_start_month_day) -> true;
-is_protected(pivot_first_name)           -> true;
-is_protected(pivot_gender)               -> true;
-is_protected(pivot_geocode)              -> true;
-is_protected(pivot_postcode)             -> true;
-is_protected(pivot_rtsv)                 -> true;
-is_protected(pivot_state)                -> true;
-is_protected(pivot_street)               -> true;
-is_protected(pivot_surname)              -> true;
-is_protected(pivot_title)                -> true;
-is_protected(pivot_tsv)                  -> true;
-is_protected(props)                      -> true;
-is_protected(version)                    -> true;
-is_protected(_)                          -> false.
+is_protected(id)            -> true;
+is_protected(created)       -> true;
+is_protected(creator_id)    -> true;
+is_protected(modified)      -> true;
+is_protected(modifier_id)   -> true;
+is_protected(props)         -> true;
+is_protected(version)       -> true;
+is_protected(page_url)      -> true;
+is_protected(medium)        -> true;
+is_protected(pivot_xxx)     -> true;
+is_protected(computed_xxx)  -> true;
+is_protected(_)             -> false.
 
 
 is_trimmable(_, V) when not is_binary(V) and not is_list(V) -> false;
+is_trimmable(title, _)       -> true;
+is_trimmable(title_short, _) -> true;
+is_trimmable(summary, _)     -> true;
+is_trimmable(chapeau, _)     -> true;
+is_trimmable(subtitle, _)    -> true;
 is_trimmable(email, _)       -> true;
+is_trimmable(uri, _)         -> true;
+is_trimmable(website, _)     -> true;
 is_trimmable(page_path, _)   -> true;
+is_trimmable(name, _)        -> true;
 is_trimmable(slug, _)        -> true;
 is_trimmable(custom_slug, _) -> true;
 is_trimmable(category, _)    -> true;
-is_trimmable(title, _)       -> true;
-is_trimmable(title_short, _) -> true;
 is_trimmable(_, _)           -> false.
 
 

@@ -46,8 +46,13 @@ watches_update(Id, Watches, Context) ->
         undefined ->
             proplists:delete(Id, Watches);
         Q ->
-            Props = search_query:parse_query_text(Q),
-            [{Id, Props} | proplists:delete(Id, Watches)]
+            case z_convert:to_bool(m_rsc:p(Id, is_query_live, Context)) of
+                true ->
+                    Props = search_query:parse_query_text(Q),
+                    [{Id, Props} | proplists:delete(Id, Watches)];
+                false ->
+                    proplists:delete(Id, Watches)
+            end
     end.
 
 watches_remove(Id, Watches, _Context) ->
