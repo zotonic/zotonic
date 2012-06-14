@@ -15,11 +15,20 @@
 		<a href="http://zotonic.com/documentation/761/the-query-search-model">documentation on the query arguments</a> on the Zotonic website. _}
 	</div>
 
-	<div class="form-item clearfix">
-		<label for="query">{_ Query _}</label>
-		<textarea id="{{ #query }}" name="query" rows="15">{{ r.query }}</textarea>
-		{% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview} delegate="resource_admin_edit" %}
-	</div>
+    <div class="control-group">
+    	<label class="control-label" for="query">{_ Query _}</label>
+    	<div class="controls">
+    	    <textarea id="{{ #query }}" name="query" rows="15">{{ r.query }}</textarea>
+    		{% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview} delegate="resource_admin_edit" %}
+    	</div>
+    </div>
+    
+    <div class="control-group">
+    	<label class="checkbox">
+    	    <input type="checkbox" id="is_query_live" name="is_query_live" {% if r.is_query_live %}checked{% endif %}/>
+    	    {_ Live query, send notifications when matching items are updated or inserted. _}
+    	</label>
+    </div>
 
 	<h3>{_ Query preview _}</h3>
 	<div class="query-results" id="{{ #querypreview }}">

@@ -38,6 +38,7 @@ search(Query, Context) ->
     case parse_query(Query1, Context, Start) of
         [] -> #search_result{};
         #search_result{} = Result -> Result;
+        Start -> #search_result{};
         R ->
             %% add any sort terms
             R1 = parse_sort(Query1, R),
