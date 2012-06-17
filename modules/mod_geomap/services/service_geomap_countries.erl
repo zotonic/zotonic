@@ -43,6 +43,7 @@ get_data(Context) ->
                             case z_acl:rsc_visible(Id, Context) of
                                 true ->
                                     [{m_rsc:p(Id, address_country, Context), {
+                                            Id,
                                             z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context),
                                             m_rsc:p(Id, map_color, Context), 
                                             m_rsc:p(Id, map_value, Context)
@@ -97,9 +98,10 @@ set_value({struct, Fs}, Data) ->
             };
         Iso ->
             case proplists:get_value(Iso, Data) of
-                {Title, Colour, Value} ->
+                {RscId, Title, Colour, Value} ->
                     P1 = {<<"properties">>,
-                       {struct,[{<<"name">>,Title},
+                       {struct,[{<<"rsc_id">>, RscId},
+                                {<<"name">>,Title},
                                 {<<"value">>,value(Value)},
                                 {<<"colour">>, color(Colour)}
                         ]}
