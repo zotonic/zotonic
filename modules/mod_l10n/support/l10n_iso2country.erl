@@ -7,8 +7,18 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    iso2country/0
+    iso2country/0,
+    iso2country/1
 ]).
+
+
+
+iso2country(Iso) ->
+    case lists:keyfind(Iso, 1, iso2country()) of
+        {_, Name} -> Name;
+        false -> undefined
+    end.
+
 
 iso2country() -> [
 	{<<"af">>, <<"Afghanistan">>},
