@@ -31,7 +31,7 @@
 
 	get_stats/2,
 	get_enabled_recipients/2,
-	replace_recipients/3,
+	insert_recipients/4,
 	insert_recipient/4,
 	insert_recipient/5,
 
@@ -280,31 +280,38 @@ update_recipient(RcptId, Props, Context) ->
     ok.
 
 
-%% @doc Replace all recipients found in the binary file. One recipient per line.
-replace_recipients(ListId, Bin, Context) when is_binary(Bin) ->
-	Lines = z_string:split_lines(Bin),
-    Rcpts = lines_to_recipients(Lines),
-	replace_recipients(ListId, Rcpts, Context);
-
 %% @doc Replace all recipients of the mailinglist. Do not send welcome messages to the recipients.
-%% @spec replace_recipients(ListId::int(), Recipients::list(), Context) -> ok | {error, Error}
-replace_recipients(ListId, Recipients, Context) ->
-	case z_acl:rsc_editable(ListId, Context) of
-		true ->
-			ok = z_db:transaction(fun(Ctx) -> replace_recipients1(ListId, Recipients, Ctx) end, Context);
-		false ->
-			{error, eacces}
-	end.
-	
-	replace_recipients1(ListId, Recipients, Context) ->
-		Now = erlang:localtime(),
-		[ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
-		z_db:q("
-			delete from mailinglist_recipient 
-			where mailinglist_id = $1 
-			  and timestamp < $2", [ListId, Now], Context),
-		ok.
-	
+-spec insert_recipients(ListId::integer(), Recipients::list() | binary(), IsTruncate::boolean(), #context{}) -> ok | {error, term()}.
+insert_recipients(ListId, Bin, IsTruncate, Context) when is_binary(Bin) ->
+    Lines = z_string:split_lines(Bin),
+    Rcpts = lines_to_recipients(Lines),
+    insert_recipients(ListId, Rcpts, IsTruncate, Context);
+insert_recipients(ListId, Recipients, IsTruncate, Context) ->
+    case z_acl:rsc_editable(ListId, Context) of
+        true ->
+            ok = z_db:transaction(
+                            fun(Ctx) -> 
+                                {ok, Now} = insert_recipients1(ListId, Recipients, Ctx),
+                                optional_truncate(ListId, IsTruncate, Now, Ctx)
+                            end, Context);
+        false ->
+            {error, eacces}
+    end.
+    
+    insert_recipients1(ListId, Recipients, Context) ->
+        Now = erlang:localtime(),
+        [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
+        {ok, Now}.
+        
+    optional_truncate(_, false, _, _) ->
+        ok;
+    optional_truncate(ListId, true, Now, Context) ->
+        z_db:q("
+            delete from mailinglist_recipient 
+            where mailinglist_id = $1 
+              and timestamp < $2", [ListId, Now], Context),
+        ok.
+    
 replace_recipient(ListId, Recipient, Now, Context) when is_binary(Recipient) ->
     replace_recipient(ListId, Recipient, [], Now, Context);
 replace_recipient(ListId, Recipient, Now, Context) ->

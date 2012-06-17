@@ -134,7 +134,8 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 %% @doc Handle upload of a new recipients list
 event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
     #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
-    case import_file(TmpFile, Id, Context) of
+    IsTruncate = z_convert:to_bool(z_context:get_q("truncate", Context)),
+    case import_file(TmpFile, IsTruncate, Id, Context) of
         ok ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
         {error, Msg} ->
@@ -208,7 +209,7 @@ handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
 		ListId ->
 			HandleF = fun() ->
 				C = z_acl:sudo(State#state.context),
-                case import_file(File, ListId, C) of
+                case import_file(File, true, ListId, C) of
                     ok ->
         				z_email:send_admin(
                           "mod_mailinglist: Import from dropbox",
@@ -272,11 +273,11 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %% @doc Import a file, replacing the recipients of the list.
-import_file(TmpFile, Id, Context) ->
+import_file(TmpFile, IsTruncate, Id, Context) ->
 	{ok, Data} = file:read_file(TmpFile),
 	file:delete(TmpFile),
     try
-        ok = m_mailinglist:replace_recipients(Id, Data, Context)
+        ok = m_mailinglist:insert_recipients(Id, Data, IsTruncate, Context)
     catch
         _: {badmatch, {rollback, {{case_clause, {error, {error, error, <<"22021">>, _, _}}},_}}}->
             {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
