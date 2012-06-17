@@ -100,8 +100,8 @@ set_value({struct, Fs}, Data) ->
                 {Title, Colour, Value} ->
                     P1 = {<<"properties">>,
                        {struct,[{<<"name">>,Title},
-                                {<<"value">>,Value},
-                                {<<"colour">>,Colour}
+                                {<<"value">>,value(Value)},
+                                {<<"colour">>, color(Colour)}
                         ]}
                     };
                 undefined ->
@@ -115,4 +115,11 @@ set_value({struct, Fs}, Data) ->
     end,
     {ok, {struct, [ P1 | proplists:delete(<<"properties">>, Fs) ]}}.
 
+
+    color(undefined) -> <<"#ccc">>;
+    color(<<>>) -> <<"#ccc">>;
+    color(C) -> C.
+    
+    value(undefined) -> <<"">>;
+    value(V) -> V.
 
