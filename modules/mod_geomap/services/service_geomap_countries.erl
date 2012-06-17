@@ -39,31 +39,22 @@ process_get(_ReqData, Context) ->
 get_data(Context) ->
     Coords = get_country_coords(Context),
     Ids = get_countries(Context),
-    Data = [
-        begin
-            Title = m_rsc:p(Id, title, Context),
-            {fetch_en(Title), {
-                    m_rsc:p(Id, address_country, Context), 
-                    z_trans:lookup_fallback(Title, Context),
-                    m_rsc:p(Id, map_color, Context), 
-                    m_rsc:p(Id, map_value, Context)
-                }
-            }
-        end
-        || Id <- Ids
-    ],
+    Data = lists:foldl(fun(Id, Acc) ->
+                            case z_acl:rsc_visible(Id, Context) of
+                                true ->
+                                    [{m_rsc:p(Id, address_country, Context), {
+                                            z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context),
+                                            m_rsc:p(Id, map_color, Context), 
+                                            m_rsc:p(Id, map_value, Context)
+                                        }
+                                    } | Acc];
+                                false ->
+                                    Acc
+                            end
+                        end,
+                        [],
+                        Ids),
     set_values(Coords, Data).
-
-
-    fetch_en({trans, []}) ->
-        <<>>;
-    fetch_en({trans, Tr}) ->
-        case proplists:get_value(en, Tr) of
-            undefined -> element(2, hd(Tr));
-            V -> V
-        end;
-    fetch_en(V) ->
-        V.
 
 
 get_countries(Context) ->
@@ -106,7 +97,7 @@ set_value({struct, Fs}, Data) ->
             };
         Iso ->
             case proplists:get_value(Iso, Data) of
-                {Title, Value, Colour} ->
+                {Title, Colour, Value} ->
                     P1 = {<<"properties">>,
                        {struct,[{<<"name">>,Title},
                                 {<<"value">>,Value},
