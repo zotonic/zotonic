@@ -33,6 +33,9 @@
 	.navbar-fixed-top {
 		position: absolute !important;
 	}
+	.navbar .container-fluid {
+		padding: 0 20px;
+	}
 	</style>
 </head>
 
