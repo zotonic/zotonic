@@ -3,8 +3,6 @@
 {% block title %}{_ Map of _} {{ id.title }}{% endblock %}
 
 {% block main %}
-    <h1>{_ Where is _} {{id.title }}?</h1>
-    
     <p><a href="{{ id.page_url }}">{_ Back to _} {{ id.title }}</a></p>
 
     {% include "_address.tpl" no_link_map %}
