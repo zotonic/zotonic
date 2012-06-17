@@ -3,10 +3,8 @@
 {% block title %}{% if q.id %}{_ Map of _} {{ m.rsc[q.id].title }}{% else %}{_ Map _}{% endif %}{% endblock %}
 
 {% block html_head_extra %}
-    {% lib
-            "css/openlayers/theme/default/style.tidy.css" 
-            "css/geomap.css" 
-    %}
+    {% lib "css/openlayers/theme/default/style.tidy.css" %}
+    {% lib "css/geomap.css" %}
     <style type="text/css">
     div#map {
         height: 100%;
