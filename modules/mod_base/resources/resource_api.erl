@@ -167,19 +167,24 @@ api_result(ReqData, Context, Result) ->
 
         Result2 ->
             try
-                JSON = iolist_to_binary(mochijson:encode(Result2)),
+                JSON = result_to_json(Result2),
                 Body = case get_callback(Context) of
                            undefined -> JSON;
                            Callback -> [ Callback, $(, JSON, $), $; ]
                        end,
                 {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
-                _E:_R ->
+                E:R ->
+                    lager:warning("API error: ~p:~p", [E,R]),
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
                     {{halt, 500}, ReqData1, Context}
             end
     end.
 
+    result_to_json(B) when is_binary(B) -> B;
+    result_to_json({binary_json, R}) -> iolist_to_binary(mochijson:binary_encode(R));
+    result_to_json(R) -> iolist_to_binary(mochijson:encode(R)).
+    
 
 to_json(ReqData, Context) ->
     Module = z_context:get("module", Context),
