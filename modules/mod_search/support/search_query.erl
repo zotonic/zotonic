@@ -94,6 +94,8 @@ request_arg("date_start_year")     -> date_start_year;
 request_arg("date_end_year")       -> date_end_year;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
+request_arg("publication_after")   -> publication_after;
+request_arg("publication_before")  -> publication_before;
 request_arg("query_id")            -> query_id;
 request_arg("rsc_id")              -> rsc_id;
 request_arg("sort")                -> sort;
@@ -392,6 +394,13 @@ parse_query([{publication_month, Month}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_integer(Month), Result),
     parse_query(Rest, Context, add_where("date_part('month', rsc.publication_start) = " ++ Arg, Result1));
 
+parse_query([{publication_after, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    parse_query(Rest, Context, add_where("rsc.publication_start >= " ++ Arg, Result1));
+
+parse_query([{publication_before, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    parse_query(Rest, Context, add_where("rsc.publication_start <= " ++ Arg, Result1));
 
 %% No match found
 parse_query([Term|_], _Context, _Result) ->
