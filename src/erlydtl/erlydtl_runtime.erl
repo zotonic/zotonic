@@ -164,8 +164,19 @@ fetch_value(Key, Data, Context) ->
 are_equal(Arg1, Arg2) ->
     z_utils:are_equal(Arg1, Arg2).
     
+is_false({trans, _} = T, Context) ->
+    z_utils:is_empty(z_trans:lookup_fallback(T, Context));
+is_false(A, _Context) ->
+    is_false(A).
+
 is_false(A) ->
     not z_convert:to_bool(A).
+
+
+is_true({trans, _} = T, Context) ->
+    not z_utils:is_empty(z_trans:lookup_fallback(T, Context));
+is_true(A, _Context) ->
+    is_true(A).
 
 is_true(A) ->
     z_convert:to_bool(A).

@@ -42,17 +42,17 @@
 ]).
 
 
-'and'(A, B, _Context) ->
-    erlydtl_runtime:is_true(A) and erlydtl_runtime:is_true(B).
+'and'(A, B, Context) ->
+    erlydtl_runtime:is_true(A, Context) and erlydtl_runtime:is_true(B, Context).
 
-'not'(A, _Context) ->
-    not erlydtl_runtime:is_true(A).
+'not'(A, Context) ->
+    erlydtl_runtime:is_false(A, Context).
 
-'or'(A, B, _Context) ->
-    erlydtl_runtime:is_true(A) or erlydtl_runtime:is_true(B).
+'or'(A, B, Context) ->
+    erlydtl_runtime:is_true(A, Context) or erlydtl_runtime:is_true(B, Context).
 
-'xor'(A, B, _Context) ->
-    erlydtl_runtime:is_true(A) xor erlydtl_runtime:is_true(B).
+'xor'(A, B, Context) ->
+    erlydtl_runtime:is_true(A, Context) xor erlydtl_runtime:is_true(B, Context).
 
 
 add(A, B, _Context) ->

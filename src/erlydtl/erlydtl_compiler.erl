@@ -828,7 +828,7 @@ filter_ast1({filter, {identifier, _, Name}, []}, VariableAst, Context, TreeWalke
 filter_ast1({filter, {identifier, _, "default"}, [Arg]}, VariableAst, Context, TreeWalker) ->
     {{ArgAst, Info},TreeWalker1} = value_ast(Arg, false, Context, TreeWalker),
     VarAst  = erl_syntax:variable("Default_" ++ z_ids:identifier()),
-    CaseAst = erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(is_false), [VarAst]),
+    CaseAst = erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), erl_syntax:atom(is_false), [VarAst, z_context_ast(Context)]),
         [erl_syntax:clause([erl_syntax:atom(true)], none, 
                 [ArgAst]),
          erl_syntax:clause([erl_syntax:underscore()], none,
@@ -1040,7 +1040,7 @@ ifexpr_ast(Expression, IfContents, ElseChoices, Context, TreeWalker) ->
                              {{ElseExprAst, ElseExprInfo}, TW1} = value_ast(E, false, Context, TW),
                              {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
                                                                           erl_syntax:atom(is_false), 
-                                                                          [ElseExprAst]),
+                                                                          [ElseExprAst, z_context_ast(Context)]),
                                                     [
                                                     erl_syntax:clause([erl_syntax:atom(true)], none, [InnerAst]),
                                                     erl_syntax:clause([erl_syntax:underscore()], none, [ElseAst])

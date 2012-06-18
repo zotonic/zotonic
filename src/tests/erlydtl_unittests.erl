@@ -131,7 +131,13 @@ tests() ->
                 {"If non-empty string",
                     <<"{% if var1 %}yay{% endif %}">>, [{var1, "hello"}], <<"yay">>},
                 {"If proplist",
-                    <<"{% if var1 %}yay{% endif %}">>, [{var1, [{foo, "bar"}]}], <<"yay">>}
+                    <<"{% if var1 %}yay{% endif %}">>, [{var1, [{foo, "bar"}]}], <<"yay">>},
+                {"If non-empty trans",
+                    <<"{% if var1 %}yay{% endif %}">>, [{var1, {trans, [{en,<<"x">>}]}}], <<"yay">>},
+                {"If empty trans",
+                    <<"{% if var1 %}yay{% endif %}">>, [{var1, {trans, [{en,<<"">>}]}}], <<"">>},
+                {"If not empty trans",
+                    <<"{% if not var1 %}yay{% endif %}">>, [{var1, {trans, [{en,<<"">>}]}}], <<"yay">>}
             ]},
         {"for", [
                 {"Simple loop",
@@ -403,6 +409,7 @@ tests() ->
 
 run_tests() ->
     io:format("Running unit tests...~n"),
+    z_trans_server:start_tests(),
     Failures = lists:foldl(
         fun({Group, Assertions}, GroupAcc) ->
                 io:format(" Test group ~p...~n", [Group]),
