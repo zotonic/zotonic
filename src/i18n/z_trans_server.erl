@@ -44,7 +44,7 @@
 
 start_tests() ->
     io:format("Starting trans server.~n"),
-    gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, [], []).
+    gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, test, []).
     
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
