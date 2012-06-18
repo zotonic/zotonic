@@ -32,8 +32,7 @@
 {% endblock %}
 
 {% block subnavbar %}
+    {% inherit %}
     {% include "_content_list.tpl" list=id.s.depiction %}
     {% include "_content_list.tpl" list=id.s.hasdocument %}
-
-    {% inherit %}
 {% endblock %}
