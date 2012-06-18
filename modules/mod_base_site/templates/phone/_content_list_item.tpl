@@ -11,14 +11,8 @@
     {% endwith %}
     <h3>{{ id.title|default:"&mdash;" }}</h3>
 	<p>
-    {% if is_large %}
-    	{% if id.summary %}{{ id.summary }}
-    	{% elseif id.body %}{{ id.body|striptags|truncate:240 }}
-    	{% endif %}
-    {% else %}
-		{% if id.summary %}{{ id.summary|truncate:120 }}
-    	{% elseif id.body %}{{ id.body|striptags|truncate:120 }}
-		{% endif %}
+    {% if is_large %}{{ id|summary }}
+    {% else %}{{ id|summary:120 }}
 	{% endif %}
 	<a href="{{ id.page_url with in_collection=in_collection }}">{_ Read more _} &raquo;</a>
 	</p>
