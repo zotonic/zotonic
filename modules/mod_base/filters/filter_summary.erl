@@ -29,12 +29,23 @@ summary(RId, Context) ->
 summary(undefined, _N, _Context) ->
     undefined;
 summary(RId, N, Context) ->
-    Id = m_rsc:rid(RId, Context),
-    S = case m_rsc:p(Id, summary, Context) of
-            X when X =/= [] andalso X =/= <<>> andalso X =/= undefined ->
-                X;
-            _Empty ->
-                Body = m_rsc:p(Id, body, Context),
-                z_html:strip(Body)
-    end,
-    z_string:truncate(z_trans:lookup_fallback(S, Context), z_convert:to_integer(N)).
+    case m_rsc:rid(RId, Context) of
+        undefined ->
+            undefined;
+        Id ->
+            S = get_summary_text(Id, Context),
+            S1 = case z_utils:is_empty(S) of
+                    true ->
+                        Body = m_rsc:p(Id, body, Context),
+                        z_string:trim_left(z_html:strip(z_trans:lookup_fallback(Body, Context)));
+                    false ->
+                        S
+                end,
+            z_string:trim(z_string:truncate(S1, z_convert:to_integer(N)))
+    end.
+
+    get_summary_text(Id, Context) ->
+        case m_rsc:p(Id, summary, Context) of
+            {trans, _} = T -> z_trans:lookup_fallback(T, Context);
+            Other -> Other
+        end.
