@@ -135,7 +135,7 @@ limitations under the License.
         } else {
             setTimeout(function() {
                 if (typeof data.rsc_id != "undefined") {
-                    z_notify("update-element", {
+                    z_notify("render-update", {
                                 template: "_geomap_popup.tpl",
                                 id: data.rsc_id, 
                                 name: data.name, 
