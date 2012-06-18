@@ -61,6 +61,7 @@ ul.simple-list {
 }
 .content .thumbnails {
     margin-top: 20px;
+    clear: both;
 }
 .thumbnail a img {
   display: block;
