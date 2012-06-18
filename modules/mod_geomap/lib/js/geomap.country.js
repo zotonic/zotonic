@@ -126,9 +126,25 @@ limitations under the License.
                                  });
         this._selectedFeature.popup = this._popup;
         this._popup.feature = this._selectedFeature;
+        this._popup.maxSize = new OpenLayers.Size(
+                                        Math.min(jQuery(window).width(), 500),
+                                        Math.min(jQuery(window).height()-100, 500));
         GeoMapCountry.map().addPopup(this._popup, true);
         if (self._popup_callback) {
             setTimeout(function() { self._popup_callback.apply(self, ['geo-popup-info', data]); }, 10);
+        } else {
+            setTimeout(function() {
+                if (typeof data.rsc_id != "undefined") {
+                    z_notify("update-element", {
+                                template: "_geomap_popup.tpl",
+                                id: data.rsc_id, 
+                                name: data.name, 
+                                color: data.colour, 
+                                value: data.value, 
+                                z_target_id: 'geo-popup-info'
+                            });
+                }
+            }, 10);
         }
     }
     GeoMapCountry.featureUnselect = function(evt) {
