@@ -3,16 +3,20 @@
 {% if id.body or id.blocks %}
 	<div class="thumbnail depiction {% if dep.width < 400 or 10*dep.width / dep.height < 20 %}portrait{% else %}landscape{% endif %}">
 		{% if dep.width < 400 %}
-			<img src="{% image_url dep mediaclass="base-page-main-small" %}" alt="{{ dep.id.title }}" />
+			<a href="{{ dep.id.page_url }}"><img src="{% image_url dep mediaclass="base-page-main-small" %}" alt="{{ dep.id.title }}" /></a>
 		{% else %}
-			<img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" />
+			<a href="{{ dep.id.page_url }}"><img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" /></a>
 		{% endif %}
-		<p class="caption"><span class="icon icon-camera"></span> <a href="{{ dep.id.page_url }}">{{ dep.id.summary|default:dep.id.title }}</a></p>
+		{% if dep.id.summary %}
+		<p class="caption"><span class="icon icon-camera"></span> <a href="{{ dep.id.page_url }}">{{ dep.id.summary }}</a></p>
+		{% endif %}
 	</div>
 {% else %}
 <div class="thumbnail depiction landscape">
-	<img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" />
-	<p class="caption"><span class="icon icon-camera"></span> <a href="{{ dep.id.page_url }}">{{ dep.id.summary|default:dep.id.title }}</a></p>
+	<a href="{{ dep.id.page_url }}"><img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" /></a>
+	{% if dep.id.summary %}
+	<p class="caption"><span class="icon icon-camera"></span> <a href="{{ dep.id.page_url }}">{{ dep.id.summary }}</a></p>
+	{% endif %}
 </div>
 {% endif %}
 {% endif %}
