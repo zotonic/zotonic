@@ -10,9 +10,9 @@
     {% if id.website %}<a href="{{ id.website }}"><i class="icon-bookmark"></i> {{ id.website }}</a><br/>{% endif %}
 
     {% if not no_link_map and id.computed_location_lat %}
-        <br/><a href="{% url map id=id %}">{_ Show on a map _} &raquo;</a>
+        <br/><a href="{% url map id=id %}">{_ Show map _} &raquo;</a>
     {% endif %}
 </p>
 {% elseif id.computed_location_lat %}
-    <p class="btn"><a href="{% url map id=id %}">{_ Show on a map _}</a></p>
+    <p class="btn"><a href="{% url map id=id %}">{_ Show map _}</a></p>
 {% endif %}
