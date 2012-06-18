@@ -59,14 +59,22 @@ ul.simple-list {
 .meta a {
     font-weight: 200;
 }
+.content .address {
+    border-left: 10px solid #eee;
+    padding-left: 10px;
+}
+.address i {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}
 .content .thumbnails {
     margin-top: 20px;
     clear: both;
 }
-    .thumbnails li.thumbnail .caption {
-        overflow: hidden;
-        height: 2em;
-    }
+.thumbnails li.thumbnail .caption {
+    overflow: hidden;
+    height: 2em;
+}
 .thumbnail a img {
   display: block;
   max-width: 100%;
@@ -86,7 +94,6 @@ ul.simple-list {
         float: right;
         margin-left: 10px;
     }
-
 .geomap-static {
     position: relative;
     width: 512px;
