@@ -832,10 +832,13 @@ recombine_languages(Props, Context) ->
 recombine_blocks(Props) ->
     {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
     case BPs of
-        [] -> 
+        [] ->
             Props;
         _ ->
-            {Dict,Keys} = lists:foldr(fun({Name, Val}, {D,Ks}) ->
+            {Dict,Keys} = lists:foldr(
+                            fun ({"block-", _}, Acc) -> 
+                                    Acc;
+                                ({Name, Val}, {D,Ks}) ->
                                     Ts = string:tokens(Name, "-"),
                                     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
                                     BlockField = list_to_existing_atom(lists:last(Ts)),
@@ -847,9 +850,9 @@ recombine_blocks(Props) ->
                                         dict:append(BlockId, {BlockField, Val}, D),
                                         Ks1
                                     }
-                               end,
-                               {dict:new(), []},
-                               BPs),
+                            end,
+                            {dict:new(), []},
+                            BPs),
             [{blocks, [ dict:fetch(K, Dict) || K <- Keys ]} | Ps ]
     end.
 

@@ -1,4 +1,5 @@
 <div id="edit-blocks-wrapper">
+    <input type="hidden" id="block-" name="block-" value="" /> 
     {% include "_admin_edit_block_addblock.tpl" %}
     <ul class="blocks ui-sortable" id="edit-blocks">
     {% for blk in id.blocks %}
