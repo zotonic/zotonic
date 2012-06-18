@@ -63,6 +63,10 @@ ul.simple-list {
     margin-top: 20px;
     clear: both;
 }
+    .thumbnails li.thumbnail .caption {
+        overflow: hidden;
+        height: 2em;
+    }
 .thumbnail a img {
   display: block;
   max-width: 100%;
