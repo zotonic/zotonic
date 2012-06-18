@@ -17,7 +17,7 @@
 	<div class="row-fluid">
 		<div class="span8 main">
 			{% if result.total > 0 %}
-				{% include "_content_list.tpl" list=result %}
+				{% include "_content_list.tpl" list=result is_large %}
 				{% pager result=result %}
 			{% else %}
 			<p id="content-pager">

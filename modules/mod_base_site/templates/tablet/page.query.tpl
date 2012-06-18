@@ -4,7 +4,7 @@
 {% include "_meta.tpl" %}
 
 {% with m.search.paged[{query query_id=id pagelen=20 page=q.page}] as result%}
-    {% include "_content_list.tpl" list=result %}
+    {% include "_content_list.tpl" list=result is_large %}
     {% pager id=id result=result in_collection=q.in_collection %}
 {% endwith %}
 {% endblock %}
