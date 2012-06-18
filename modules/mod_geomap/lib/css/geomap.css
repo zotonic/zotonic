@@ -36,4 +36,12 @@ div.olControlZoom a.olControlZoomOut {
     border-radius: 0 0 4px 4px;
     margin-top: 4px;
 }
+div.olControlAttribution {
+    font-size: 1em;
+    bottom: 0.1em;
+    padding: 2px 4px;
+    background-color: white;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+}
 

@@ -54,7 +54,8 @@ limitations under the License.
         _popup : null
     };
     
-    GeoMap.init = function() {
+    GeoMap.init = function(options) {
+        options = options || {};
         this._map = new OpenLayers.Map({
             div: 'map',
             theme: null,
@@ -68,13 +69,18 @@ limitations under the License.
                 }),
                 new OpenLayers.Control.Navigation(),
                 new OpenLayers.Control.KeyboardDefaults(),
-                new OpenLayers.Control.Zoom()
+                new OpenLayers.Control.Zoom(),
+                new OpenLayers.Control.Attribution()
             ]
         });
 
-        this._base = new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+        var mapopts = {
             transitionEffect: 'resize'
-        });
+        };
+        if (typeof options.attribution == "string" && options.attribution.length > 0) {
+            mapopts.attribution = options.attribution;
+        }
+        this._base = new OpenLayers.Layer.OSM("OpenStreetMap", null, mapopts);
         
         this._map.addLayers([this._base]);
         var center = new OpenLayers.LonLat(0, 30).transform(new OpenLayers.Projection("EPSG:4326"), GeoMap.map().getProjectionObject());

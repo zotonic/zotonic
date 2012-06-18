@@ -7,6 +7,6 @@
         "js/openlayers/OpenLayers.js"
         "js/geomap.country.js"
     %}
-    {% javascript %}window.GeoMapCountry.init();{% endjavascript %}
+    {% javascript %}window.GeoMapCountry.init({ attribution: "{{ m.rsc[id].summary }}" });{% endjavascript %}
 {% endblock %}
 

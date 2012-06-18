@@ -27,6 +27,7 @@ limitations under the License.
     OpenLayers.ImgPath = '/lib/images/'
     
     var GeoMapCountry = {
+        _options: {},
         _map: null,
         _base: null,
         _selectControl: null,
@@ -35,7 +36,8 @@ limitations under the License.
         _popup_callback: null
     };
     
-    GeoMapCountry.init = function() {
+    GeoMapCountry.init = function(options) {
+        this._options = options || {};
         this._map = new OpenLayers.Map({
             div: 'map',
             theme: null,
@@ -49,7 +51,8 @@ limitations under the License.
                 }),
                 new OpenLayers.Control.Navigation(),
                 new OpenLayers.Control.KeyboardDefaults(),
-                new OpenLayers.Control.Zoom()
+                new OpenLayers.Control.Zoom(),
+                new OpenLayers.Control.Attribution()
             ]
         });
     };
@@ -73,19 +76,23 @@ limitations under the License.
 
         // Create polygon layer as vector features
         // http://dev.openlayers.org/docs/files/OpenLayers/Layer/Vector-js.html
-        this._base = new OpenLayers.Layer.Vector("GML", {
-                                            protocol: dataSource,
-                                            transitionEffect: 'resize',
-                                            strategies: [
-                                                new OpenLayers.Strategy.Fixed()
-                                            ],
-                                            styleMap: new OpenLayers.StyleMap({'default': style}),
-                                            isBaseLayer: true,
-                                            eventListeners: {
-                                                "featureselected": function(evt) { self.featureSelect(evt); },
-                                                "featureunselected": function(evt) { self.featureUnselect(evt); }
-                                            }
-                                        });
+        var mapopts = {
+            protocol: dataSource,
+            transitionEffect: 'resize',
+            strategies: [
+                new OpenLayers.Strategy.Fixed()
+            ],
+            styleMap: new OpenLayers.StyleMap({'default': style}),
+            isBaseLayer: true,
+            eventListeners: {
+                "featureselected": function(evt) { self.featureSelect(evt); },
+                "featureunselected": function(evt) { self.featureUnselect(evt); }
+            }
+        };
+        if (typeof this._options.attribution == "string" && this._options.attribution.length > 0) {
+            mapopts.attribution = this._options.attribution;
+        }
+        this._base = new OpenLayers.Layer.Vector("GML", mapopts);
 
         var selectFeatures = new OpenLayers.Control.SelectFeature([this._base], { click: true });
         this._map.addLayers([this._base]);

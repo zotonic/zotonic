@@ -24,7 +24,7 @@
         "js/openlayers/OpenLayers.js"
         "js/geomap.js"
     %}
-    {% javascript %}window.GeoMap.init();{% endjavascript %}
+    {% javascript %}window.GeoMap.init({ attribution: "{{ m.rsc[id].summary }}" });{% endjavascript %}
 {% endblock %}
 
 
