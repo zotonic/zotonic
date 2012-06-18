@@ -133,7 +133,9 @@ observe_postback_notify(#postback_notify{message="render-update", target=TargetI
                 undefined -> z_render:update(TargetId, #render{template=Template, vars=[]}, Context);
                 _ -> z_render:update(TargetId, #render{template={cat, Template}, vars=[{id, Id}]}, Context)
             end
-    end.
+    end;
+observe_postback_notify(#postback_notify{}, _Context) ->
+    undefined.
 
 
 %%====================================================================
