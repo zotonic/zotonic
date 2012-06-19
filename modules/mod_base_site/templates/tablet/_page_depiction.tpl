@@ -1,5 +1,5 @@
 {% with id.depiction as dep %}
-{% if dep and not dep.id.is_a.document %}
+{% if dep and dep.id.is_a.image %}
 {% if id.body or id.blocks %}
 	<div class="thumbnail depiction {% if dep.width < 400 or 10*dep.width / dep.height < 18 %}portrait{% else %}landscape{% endif %}">
 		{% if dep.width < 400 %}
