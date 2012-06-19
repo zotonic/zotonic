@@ -316,7 +316,7 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
             parse_query(parse_query_text(Q) ++ Rest, Context, Result);
         false ->
             % Fetch the id's haspart objects (assume a collection)
-            parse_query([{hassubject, Id, haspart} | Rest], Context, Result)
+            parse_query([{hassubject, [Id, haspart]} | Rest], Context, Result)
     end;
 
 %% rsc_id=<rsc id>
