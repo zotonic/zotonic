@@ -1,5 +1,5 @@
 {% if id.is_visible and id.is_published and not id|member:exclude %}
-<li {% include "_language_attrs.tpl" id=id %}>
+<li {% include "_language_attrs.tpl" id=id class="tweet" %}>
     {% with id.depiction as dep %}
     {% if dep %}
     <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" /> 
