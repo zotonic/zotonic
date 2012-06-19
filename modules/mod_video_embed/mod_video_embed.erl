@@ -234,11 +234,11 @@ preview_youtube(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
         [] -> nop;
         Embed ->
-            case re:run(Embed, "youtube(\-nocookie)?\\.com/v/([^\?\"'&]+)", [{capture,[2],list}]) of
+            case re:run(Embed, "youtube(\-nocookie)?\\.com/(v|embed)/([^\?\"'&]+)", [{capture,[3],list}]) of
                 {match, [Code]} ->
                     Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
                     case httpc:request(Url) of
-                        {ok, {_StatusLine, _Header, Data}} ->
+                        {ok, {{_,200,_}, _Header, Data}} ->
                             %% Received the preview image, move it to a file.
                             m_media:save_preview(MediaId, Data, "image/jpeg", Context);
                         {error, _Reason} ->
