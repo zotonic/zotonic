@@ -69,7 +69,11 @@ ul.simple-list {
 }
 .content .thumbnails {
     margin-top: 20px;
+    margin-left: 0;
     clear: both;
+}
+.content .thumbnails li {
+    margin-left: 0;
 }
 .thumbnails li.thumbnail .caption {
     overflow: hidden;
@@ -83,8 +87,11 @@ ul.simple-list {
 .thumbnail a img {
   display: block;
   max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: 0;
+}
+.thumbnails .thumbnail a img {
+    max-width: 90%;
 }
 .depiction p.caption {
     margin-bottom: 0px;
