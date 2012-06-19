@@ -75,6 +75,11 @@ ul.simple-list {
     overflow: hidden;
     height: 2em;
 }
+.thumbnails li.thumbnail.video {
+    clear: both;
+    height: auto;
+    display: block;
+}
 .thumbnail a img {
   display: block;
   max-width: 100%;
