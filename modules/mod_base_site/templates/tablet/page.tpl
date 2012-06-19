@@ -15,10 +15,12 @@
 	{% endblock %}
 	{% include "_address.tpl" %}
 
+    <div class="body">
     {% block body %}
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
 	{% endblock %}
+	</div>
 	
 	{% block thumbnails %}
 	    {% include "_page_thumbnails.tpl" %}

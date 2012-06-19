@@ -4,8 +4,8 @@
 
 {% block content %}
 <div {% include "_language_attrs.tpl" id=id %}>
-    {% include "_title.tpl" %}
-    {% include "_meta.tpl" %}
+	{% include "_title.tpl" %}
+	{% include "_meta.tpl" %}
 
 	{% if m.rsc[id].summary %}
 		<p class="summary"><b>{{ m.rsc[id].summary }}</b></p>
@@ -13,18 +13,20 @@
 
 	{% include "_address.tpl" %}
 
-    {% block subnav %}
-        {% include "_subnav.tpl" %}
-    {% endblock %}
+	{% block subnav %}
+		{% include "_subnav.tpl" %}
+	{% endblock %}
 
-    {% block body %}
-	{{ m.rsc[id].body }}
-	{% include "_blocks.tpl" %}
-    {% endblock %}
+	{% block body %}
+	<div class="body">
+		{{ m.rsc[id].body }}
+		{% include "_blocks.tpl" %}
+	</div>
+	{% endblock %}
 
-    {% block below_body %}{% endblock %}
+	{% block below_body %}{% endblock %}
 
-    {% block related %}
+	{% block related %}
 		{% with id.o.hasdocument as xs %}
 		{% with id.o.depiction as ds %}
 		{% if xs or ds|length > 1 %}
@@ -42,13 +44,13 @@
 		{% endwith %}
 		{% endwith %}
 
-    	{% with id.o.haspart, id.s.haspart as sub,super %}
-    	{% if sub or super %}
-        	<h3>{_ More _}</h3>
-            {% include "_content_list.tpl" list=sub %}
-            {% include "_content_list.tpl" list=super %}
-        {% endif %}
-        {% endwith %}
-    {% endblock %}
+		{% with id.o.haspart, id.s.haspart as sub,super %}
+		{% if sub or super %}
+			<h3>{_ More _}</h3>
+			{% include "_content_list.tpl" list=sub %}
+			{% include "_content_list.tpl" list=super %}
+		{% endif %}
+		{% endwith %}
+	{% endblock %}
 </div>
 {% endblock %}
