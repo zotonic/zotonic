@@ -2,10 +2,11 @@
 
 {% block main %}
 	{% inherit %}
-	{% if not (id.body or id.blocks) %}
+	{% if not id.body %}
 		{% include "_content_list.tpl" list=id.o.haspart in_collection=id is_large %}
-
-		{% include "_page_depiction.tpl" is_landscape %}
+		{% if not id.blocks %}
+		    {% include "_page_depiction.tpl" is_landscape %}
+		{% endif %}
 		{% include "_page_thumbnails.tpl" %}
 	{% endif %}
 {% endblock %}
@@ -17,7 +18,7 @@
 {% endblock %}
 
 {% block thumbnails %}
-{% if id.body or id.blocks %}
+{% if id.body %}
 	{% inherit %}
 {% endif %}
 {% endblock %}
