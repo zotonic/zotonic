@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
-%% @doc 'linebreaksbr' filter, translate linebreaks into <br/> elements
+%% @doc 'brlinebreaks' filter, translate <br/> elements into linebreaks
 
 %% Copyright 2012 Marc Worrell
 %%
@@ -16,8 +16,8 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_linebreaksbr).
--export([linebreaksbr/2]).
+-module(filter_brlinebreaks).
+-export([brlinebreaks/2]).
 
-linebreaksbr(S, _Context) -> z_html:nl2br(S).
+brlinebreaks(S, _Context) -> z_html:br2nl(S).
 

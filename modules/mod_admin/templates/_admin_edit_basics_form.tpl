@@ -19,7 +19,7 @@
 		      name="summary{{ lang_code_with_dollar }}"
 		      {% if not is_editable %}disabled="disabled"{% endif %}
 		      {% include "_language_attrs.tpl" language=lang_code class="span8 intro" %}
-		      >{{ is_i18n|if : r.translation[lang_code].summary : r.summary }}</textarea>
+		      >{{ is_i18n|if : r.translation[lang_code].summary : r.summary | brlinebreaks }}</textarea>
 	</div>
     </div>
     

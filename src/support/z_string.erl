@@ -668,6 +668,17 @@ truncate(L, N, Append) ->
 		lists:reverse(insert_acc(Append, Acc));
 	truncate(_, 0, Append, _LastState, Last, _AccState, _Acc) ->
 		lists:reverse(insert_acc(Append, Last));
+
+	%% HTML element (we only allow self closing elements like <br/> and <hr/>)
+	truncate([$>|Rest], N, Append, _LastState, Last, in_element, Acc) ->
+		truncate(Rest, N, Append, sentence, Last, in_word, [$>|Acc]);
+
+	truncate([C|Rest], N, Append, LastState, Last, in_element, Acc) ->
+		truncate(Rest, N, Append, LastState, Last, in_element, [C|Acc]);
+
+	truncate([$<|Rest], N, Append, LastState, _Last, _AccState, Acc) ->
+		truncate(Rest, N, Append, LastState, Acc, in_element, [$<|Acc]);
+
 	truncate([C|Rest], N, Append, LastState, Last, AccState, Acc) 
 		when C == $.; C == $!; C == $? ->
 			case AccState of
@@ -715,7 +726,7 @@ truncate(L, N, Append) ->
 	%% Restricted by RFC 3629: start of 6-byte sequence
 	truncate([X,A,B,C,D,E|Rest], N, Append, LastState, Last, _AccState, Acc) when X >= 252, X =< 253 ->
 		truncate(Rest, N-1, Append, LastState, Last, in_word, [E,D,C,B,A,X|Acc]);
-	
+
 	%% Any other character
 	truncate([C|Rest], N, Append, LastState, Last, _AccState, Acc) ->
 		truncate(Rest, N-1, Append, LastState, Last, in_word, [C|Acc]).

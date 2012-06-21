@@ -33,6 +33,7 @@
     noscript/1,
     escape_link/1,
     nl2br/1,
+    br2nl/1,
     scrape_link_elements/1,
     ensure_escaped_amp/1
 ]).
@@ -55,6 +56,8 @@ escape_props(Props, Context) ->
         escape_props1(T, [Prop|Acc], OptContext);
     escape_props1([{K, V}|T], Acc, OptContext) when K =:= body orelse K =:= body_extra->
         escape_props1(T, [{K, sanitize(V, OptContext)} | Acc], OptContext);
+    escape_props1([{summary, Summary}|T], Acc, OptContext) ->
+        escape_props1(T, [{summary, nl2br(escape_value(Summary))} | Acc], OptContext);
     escape_props1([{blocks, V}|T], Acc, OptContext) when is_list(V) ->
         V1 = [ escape_props1(L, [], OptContext) || L <- V ],
         escape_props1(T, [{blocks, V1}|Acc], OptContext);
@@ -77,7 +80,6 @@ escape_props(Props, Context) ->
         escape(B);
     escape_value(V) -> 
         V.
-
 
 %% @doc Escape a string so that it is valid within HTML/ XML.
 %% @spec escape(iolist()) -> binary()
@@ -545,7 +547,40 @@ noscript(Url) ->
     nows([C|T], Acc) -> nows(T, [C|Acc]).
 
 
+%% @doc Translate any html br entities to newlines.
+br2nl(undefined) ->
+    undefined;
+br2nl({trans, Ts}) ->
+    {trans, [ {Iso,br2nl(T)} || {Iso,T} <- Ts ]};
+br2nl(B) when is_binary(B) ->
+    br2nl_bin(B, <<>>);
+br2nl(L) ->
+    br2nl(L, []).
+
+    br2nl([], Acc) ->
+        lists:reverse(Acc);
+    br2nl("<br/>" ++ Rest, Acc) ->
+        br2nl(Rest, [$\n|Acc]);
+    br2nl("<br />" ++ Rest, Acc) ->
+        br2nl(Rest, [$\n|Acc]);
+    br2nl([C | Rest], Acc) ->
+        br2nl(Rest, [C | Acc]).
+
+    br2nl_bin(<<>>, Acc) ->
+        Acc;
+    br2nl_bin(<<"<br/>", Post/binary>>, Acc) ->
+        br2nl_bin(Post, <<Acc/binary, $\n>>);
+    br2nl_bin(<<"<br />", Post/binary>>, Acc) ->
+        br2nl_bin(Post, <<Acc/binary, $\n>>);
+    br2nl_bin(<<C, Post/binary>>, Acc) ->
+        br2nl_bin(Post, <<Acc/binary, C>>).
+
+
 %% @doc Translate any newlines to html br entities.
+nl2br(undefined) ->
+    undefined;
+nl2br({trans, Ts}) ->
+    {trans, [ {Iso,nl2br(T)} || {Iso,T} <- Ts ]};
 nl2br(B) when is_binary(B) ->
     nl2br_bin(B, <<>>);
 nl2br(L) ->
