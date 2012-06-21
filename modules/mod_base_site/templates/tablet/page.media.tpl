@@ -31,6 +31,9 @@
     </p>
 
     {% include "_media_info.tpl" %}
+
+    {% include "_content_list.tpl" list=id.o.haspart in_collection=id is_large %}
+    {% include "_content_list.tpl" list=id.o.relation is_large %}
 {% endblock %}
 
 {% block subnavbar %}

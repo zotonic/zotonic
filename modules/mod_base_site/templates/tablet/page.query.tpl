@@ -24,6 +24,8 @@
 {% endif %}
 {% endblock %}
 
-{% block thumbnails %}
+{% block seealso %}
 {% endblock %}
 
+{% block thumbnails %}
+{% endblock %}
