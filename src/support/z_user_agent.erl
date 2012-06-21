@@ -306,6 +306,7 @@ filename_split_class(F) ->
 -spec order_class( ua_classifier:device_type(), ua_classifier:device_type() ) -> boolean().
 order_class(A,A) -> true;
 order_class(_, generic) -> false;
+order_class(generic, _) -> true;
 order_class(desktop, _) -> true;
 order_class(phone, text) -> true;
 order_class(tablet, text) -> true;
