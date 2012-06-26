@@ -611,7 +611,7 @@ ul.simple-list ul {
 #survey-question .shortanswer input {
     width: 400px;
 }
-#survey-question .longanswer input {
+#survey-question .longanswer textarea {
     width: 400px;
     height: 100px;
 }
