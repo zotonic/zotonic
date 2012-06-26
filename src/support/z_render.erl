@@ -203,7 +203,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
     Name        = proplists:get_value(name,  Args, Target),
 
     % The validator object, can have parameters for failureMessage.
-    VldOptions  = z_utils:js_object(Args, [type,trigger,id,target]),
+    VldOptions  = z_utils:js_object(Args, [type,trigger,id,target], Context),
     VldScript   = [<<"z_init_validator(\"">>,Trigger,<<"\", ">>,VldOptions,<<");\n">>],
     
     % Now render and append all individual validations
@@ -419,7 +419,7 @@ update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
 
 dialog(Title, Template, Vars, Context) ->
     {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
-    Args = [{title, Title}, {text, Html}],
+    Args = [{title, z_trans:lookup_fallback(Title, Context)}, {text, Html}],
     Args1 = case proplists:get_value(width, Vars) of
                 undefined -> Args;
                 Width -> [{width, Width} | Args]

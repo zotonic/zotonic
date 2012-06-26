@@ -53,10 +53,12 @@
           is_process_alive/1,
           erase_process_dict/0,
           is_true/1,
+          js_escape/2,
           js_escape/1,
           js_array/1,
           js_object/1,
           js_object/2,
+          js_object/3,
           json_escape/1,
           lib_dir/0,
           lib_dir/1,
@@ -330,81 +332,87 @@ os_escape(win32, [C|Rest], Acc) ->
 %%% ESCAPE JAVASCRIPT %%%
 
 %% @doc Javascript escape, see also: http://code.google.com/p/doctype/wiki/ArticleXSSInJavaScript
+js_escape({trans, []}, undefined) -> [];
+js_escape({trans, Ts}, undefined) -> js_escape(hd(Ts));
+js_escape({trans, _} = Tr, Context) -> js_escape(z_trans:lookup_fallback(Tr, Context));
+js_escape(V, _OptContext) -> js_escape(V).
 
 js_escape(undefined) -> [];
 js_escape([]) -> [];
 js_escape(<<>>) -> [];
 js_escape(Value) when is_integer(Value) -> integer_to_list(Value);
-js_escape(Value) when is_atom(Value) ->  js_escape(atom_to_list(Value), []);
-js_escape(Value) when is_binary(Value) -> js_escape(binary_to_list(Value), []);
-js_escape(Value) -> js_escape(Value, []).
+js_escape(Value) when is_atom(Value) ->  js_escape1(atom_to_list(Value), []);
+js_escape(Value) when is_binary(Value) -> js_escape1(binary_to_list(Value), []);
+js_escape(Value) -> js_escape1(Value, []).
 
-js_escape([], Acc) -> lists:reverse(Acc);
-js_escape([$\\|T], Acc) -> js_escape(T, [$\\,$\\|Acc]);
-js_escape([$\n|T], Acc) -> js_escape(T, [$n,$\\|Acc]);
-js_escape([$\r|T], Acc) -> js_escape(T, [$r,$\\|Acc]);
-js_escape([$\t|T], Acc) -> js_escape(T, [$t,$\\|Acc]);
-js_escape([$'|T], Acc) -> js_escape(T, [$7,$2,$x,$\\|Acc]);
-js_escape([$"|T], Acc) -> js_escape(T, [$2,$2,$x,$\\|Acc]);
-js_escape([$<|T], Acc) -> js_escape(T, [$c,$3,$x,$\\|Acc]);
-js_escape([$>|T], Acc) -> js_escape(T, [$e,$3,$x,$\\|Acc]);
-js_escape([$=|T], Acc) -> js_escape(T, [$d,$3,$x,$\\|Acc]);
-js_escape([$&|T], Acc) -> js_escape(T, [$6,$2,$x,$\\|Acc]);
-%% js_escape([16#85,C|T], Acc) when C >= 16#80 -> js_escape(T, [C,16#85|Acc]);
-%% js_escape([16#85|T], Acc) -> js_escape(T, [$5,$8,$0,$0,$u,$\\|Acc]);
-js_escape([16#2028|T],Acc)-> js_escape(T, [$8,$2,$0,$2,$u,$\\|Acc]);
-js_escape([16#2029|T],Acc)-> js_escape(T, [$9,$2,$0,$2,$u,$\\|Acc]);
-js_escape([16#e2,16#80,16#a8|T],Acc)-> js_escape(T, [$8,$2,$0,$2,$u,$\\|Acc]);
-js_escape([16#e2,16#80,16#a9|T],Acc)-> js_escape(T, [$9,$2,$0,$2,$u,$\\|Acc]);
-js_escape([H|T], Acc) when is_integer(H) ->
-    js_escape(T, [H|Acc]);
-js_escape([H|T], Acc) ->
+js_escape1([], Acc) -> lists:reverse(Acc);
+js_escape1([$\\|T], Acc) -> js_escape1(T, [$\\,$\\|Acc]);
+js_escape1([$\n|T], Acc) -> js_escape1(T, [$n,$\\|Acc]);
+js_escape1([$\r|T], Acc) -> js_escape1(T, [$r,$\\|Acc]);
+js_escape1([$\t|T], Acc) -> js_escape1(T, [$t,$\\|Acc]);
+js_escape1([$'|T], Acc) -> js_escape1(T, [$7,$2,$x,$\\|Acc]);
+js_escape1([$"|T], Acc) -> js_escape1(T, [$2,$2,$x,$\\|Acc]);
+js_escape1([$<|T], Acc) -> js_escape1(T, [$c,$3,$x,$\\|Acc]);
+js_escape1([$>|T], Acc) -> js_escape1(T, [$e,$3,$x,$\\|Acc]);
+js_escape1([$=|T], Acc) -> js_escape1(T, [$d,$3,$x,$\\|Acc]);
+js_escape1([$&|T], Acc) -> js_escape1(T, [$6,$2,$x,$\\|Acc]);
+%% js_escape1([16#85,C|T], Acc) when C >= 16#80 -> js_escape1(T, [C,16#85|Acc]);
+%% js_escape1([16#85|T], Acc) -> js_escape1(T, [$5,$8,$0,$0,$u,$\\|Acc]);
+js_escape1([16#2028|T],Acc)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc]);
+js_escape1([16#2029|T],Acc)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc]);
+js_escape1([16#e2,16#80,16#a8|T],Acc)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc]);
+js_escape1([16#e2,16#80,16#a9|T],Acc)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc]);
+js_escape1([H|T], Acc) when is_integer(H) ->
+    js_escape1(T, [H|Acc]);
+js_escape1([H|T], Acc) ->
     H1 = js_escape(H),
-    js_escape(T, [H1|Acc]).
+    js_escape1(T, [H1|Acc]).
 
 %% js_escape(<<"<script", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "<scr\" + \"ipt">>);
 %% js_escape(<<"script>", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "scr\" + \"ipt>">>);
 
 js_array(L) ->
-    [ $[, combine($,,[ js_prop_value(undefined, V) || V <- L ]), $] ].
+    [ $[, combine($,,[ js_prop_value(undefined, V, undefined) || V <- L ]), $] ].
 
 %% @doc Create a javascript object from a proplist
-js_object([]) -> <<"{}">>;
-js_object(L) -> js_object(L,[]).
+js_object(L) -> js_object(L, undefined).
 
-js_object(L, []) -> js_object1(L, []);
-js_object(L, [Key|T]) -> js_object(proplists:delete(Key,L), T).
+js_object([], _OptContext) -> <<"{}">>;
+js_object(L, OptContext) -> js_object(L,[], OptContext).
+
+js_object(L, [], Context) -> js_object1(L, [], Context);
+js_object(L, [Key|T], Context) -> js_object(proplists:delete(Key,L), T, Context).
 
 %% recursively add all properties as object properties
-js_object1([], Acc) ->
+js_object1([], Acc, _OptContext) ->
     [${, combine($,,lists:reverse(Acc)), $}];
-js_object1([{Key,Value}|T], Acc) ->
-    Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value)],
-    js_object1(T, [Prop|Acc]).
+js_object1([{Key,Value}|T], Acc, OptContext) ->
+    Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value, OptContext)],
+    js_object1(T, [Prop|Acc], OptContext).
 
-js_prop_value(_, undefined) -> <<"null">>;
-js_prop_value(_, true) -> <<"true">>;
-js_prop_value(_, false) -> <<"true">>;
-js_prop_value(_, Atom) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(Atom)), $"];
-js_prop_value(pattern, [$/|T]=List) ->
+js_prop_value(_, undefined, _OptContext) -> <<"null">>;
+js_prop_value(_, true, _OptContext) -> <<"true">>;
+js_prop_value(_, false, _OptContext) -> <<"true">>;
+js_prop_value(_, Atom, _OptContext) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(Atom)), $"];
+js_prop_value(pattern, [$/|T]=List, OptContext) ->
     %% Check for regexp
     case length(T) of
         Len when Len =< 2 ->
-            [$",js_escape(List),$"];
+            [$",js_escape(List, OptContext),$"];
         _Len ->
             case string:rchr(T, $/) of
                 0 ->
-                    [$",js_escape(List),$"];
+                    [$",js_escape(List, OptContext),$"];
                 N ->
                     {_Re, [$/|Options]} = lists:split(N-1,T),
                     case only_letters(Options) of
                         true -> List;
-                        false -> [$",js_escape(List),$"]
+                        false -> [$",js_escape(List, OptContext),$"]
                     end
             end
     end;
-js_prop_value(_, Int) when is_integer(Int) -> integer_to_list(Int);
-js_prop_value(_, Value) -> [$",js_escape(Value),$"].
+js_prop_value(_, Int, _OptContext) when is_integer(Int) -> integer_to_list(Int);
+js_prop_value(_, Value, OptContext) -> [$",js_escape(Value, OptContext),$"].
 
 
 % @doc Deprecated: moved to z_json.
