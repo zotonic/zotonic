@@ -630,5 +630,9 @@ ul.simple-list ul {
     float: none;
     width: auto;
 }
+#survey-question .matching label {
+    width: 180px;
+    text-align: right;
+}
 
 
