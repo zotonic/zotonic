@@ -618,6 +618,10 @@ ul.simple-list ul {
 #survey-question .longanswer label {
     width: 150px;
 }
+#survey-question .likert li.first {
+    margin-right: 12px;
+    float: left;
+}
 #survey-question .likert label {
     width: auto;
     padding: 0 10px 0 0;
