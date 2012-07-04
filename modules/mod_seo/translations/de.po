@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-07-04 13:47+0100\n"
+"Last-Translator: Hans-Christian Espérer <hc-translate@hcesperer.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:30
+msgid "Add a noindex, nofollow element to all pages."
+msgstr "Ein noindex, nofollow-Element in alle Seiten einfügen."
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:25
+msgid "Description to include on every page"
+msgstr "Beschreibung, die jeder Seite hinzugefügt wird"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:32
+msgid "Exclude this site from search engines"
+msgstr "Diese Seite nicht von Suchmaschinen indizieren lassen"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:16
+msgid "General SEO Optimization"
+msgstr "Allgemeine SEO-Optimierung"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:13
+msgid "Here you find settings to optimize the indexing of your site by search engines."
+msgstr "Hier finden Sie Einstellungen, vermittels derer Sie die Indizierung Ihrer Seite durch Suchmaschinen optimieren können."
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:20
+msgid "Keywords to include on every page. Separate keywords with a \",\""
+msgstr "Keywords, die für jede Seite angegeben werden sollen. Mit \",\" voneinander trennen."
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:43
+msgid "Save SEO settings"
+msgstr "SEO-Einstellungen speichern"
+
+#: ./modules/mod_seo/templates/admin_seo.tpl:3
+#: ./modules/mod_seo/templates/admin_seo.tpl:12
+msgid "Search Engine Optimization"
+msgstr "Suchmaschinenoptimierung"
+
