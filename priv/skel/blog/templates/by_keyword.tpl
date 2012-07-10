@@ -9,13 +9,13 @@
 {% block content %}
 
 	{% with m.search.paged[{referrers id=q.id page=q.page pagelen=m.config.site.pagelen.value}] as result %}
-	
+
 		{% for id, predicate in result %}
 			{% include "_article_summary.tpl" id=id %}
 		{% endfor %}
-		
+
 		{% pager result=result dispatch='keyword' id=id slug=m.rsc[id].slug %}
-	
+
 	{% endwith %}
 
 {% endblock %}

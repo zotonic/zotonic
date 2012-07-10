@@ -26,10 +26,14 @@
 		<a href="#content-area" title="Go directly to page content">Go to page content</a>
 	</section>
 
-    <section class="zp-wrapper">
+	<section class="zp-wrapper">
 
         <header class="clearfix">
-        	<h1 class="left"><a href="/">{{ m.config.site.title.value }} {% if m.config.site.subtitle.value %}<span>{{ m.config.site.subtitle.value }}</span>{% endif %}</a></h1>
+		<h1 class="left">
+			<a href="/">
+				{{ m.config.site.title.value }} {% if m.config.site.subtitle.value %}<span>{{ m.config.site.subtitle.value }}</span>{% endif %}
+			</a>
+		</h1>
         </header>
         <nav class="clearfix">
             {% menu id=id %}
@@ -88,4 +92,4 @@
 
     {% all include "_html_body.tpl" %}
 </body>
-</html>
+=</html>
