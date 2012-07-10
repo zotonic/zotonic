@@ -65,6 +65,7 @@ init(Context) ->
                             {ee, [ {language, <<"Eesti">>}, {is_enabled, true}]},
                             {es, [ {language, <<"Español">>}, {is_enabled, true}]},
                             {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
+                            {de, [ {language, <<"Deutsch">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
                             {pl, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
                             {tr, [ {language, <<"Polski">>}, {is_enabled, true}]}

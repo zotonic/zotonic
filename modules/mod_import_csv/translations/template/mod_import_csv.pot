@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_import_csv/templates/_dialog_import_csv.tpl:10 
+msgid ""
+"CSV file"
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_admin_status.tpl:2 
+msgid ""
+"CSV import"
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_admin_status.tpl:2 
+msgid ""
+"Import CSV file"
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_admin_status.tpl:3 
+msgid ""
+"Import a CSV file into Zotonic."
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_dialog_import_csv.tpl:17 
+msgid ""
+"Import previously deleted items again"
+msgstr ""
+
+#: ./modules/mod_import_csv/mod_import_csv.erl:66 
+msgid ""
+"Please hold on while the file is importing. You will get a notification "
+"when it is ready."
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_dialog_import_csv.tpl:21 
+msgid ""
+"Start import"
+msgstr ""
+
+#: ./modules/mod_import_csv/mod_import_csv.erl:69 
+msgid ""
+"This file cannot be imported."
+msgstr ""
+
+#: ./modules/mod_import_csv/templates/_dialog_import_csv.tpl:2 
+msgid ""
+"Upload a CSV file from your computer."
+msgstr ""
