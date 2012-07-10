@@ -604,3 +604,35 @@ ul.simple-list ul {
     margin-left: 18px;
     font-size: 13px;
 }
+
+
+/* Survey */
+
+#survey-question .shortanswer input {
+    width: 400px;
+}
+#survey-question .longanswer textarea {
+    width: 400px;
+    height: 100px;
+}
+#survey-question .longanswer label {
+    width: 150px;
+}
+#survey-question .likert li.first {
+    margin-right: 12px;
+    float: left;
+}
+#survey-question .likert label {
+    width: auto;
+    padding: 0 10px 0 0;
+}
+#survey-question .thurstone li label {
+    float: none;
+    width: auto;
+}
+#survey-question .matching label {
+    width: 180px;
+    text-align: right;
+}
+
+
