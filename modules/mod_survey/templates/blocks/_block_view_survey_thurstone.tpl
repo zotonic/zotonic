@@ -1,5 +1,5 @@
 {% with blk|survey_prepare_thurstone as props %}
-{% with answers[blk.name] as ans %}
+{% with answers[blk.name]|survey_answer_split:blk as ans %}
 <div class="control-group survey-thurstone">
     <label>{{ blk.prompt }}</label>
     <div class="controls">

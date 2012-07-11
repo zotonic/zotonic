@@ -38,3 +38,4 @@ render(Args, _Vars, Context) ->
     end,
     Render = mod_survey:render_next_page(SurveyId, 1, exact, Answers1, [], Context),
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.
+

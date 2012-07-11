@@ -29,7 +29,7 @@
 <fieldset class="form-vertical">
     <div class="control-group">
         <label class="checkbox">
-            <input type="checkbox" id="block-{{name}}-is_multiple" name="block-{{name}}-is_multiple" value="1" {% if blk.is_multiple %}check="checked"{% endif %} />
+            <input type="checkbox" id="block-{{name}}-is_multiple" name="block-{{name}}-is_multiple" value="1" {% if blk.is_multiple %}checked="checked"{% endif %} />
             {_ Multiple answers possible (use checkboxes instead of radio buttons) _}
         </label>
 

@@ -4,7 +4,7 @@
     <div class="controls">
     {% for val,item in props.items %}
         {% with forloop.counter as index %}
-        {% with [name, "_", index|make_list]|join as nm %}
+        {% with [blk.name, "_", val]|join|to_binary as nm %}
         {% with answers[nm] as ans %}
             <label for="{{ #match.index }}">{{ item|escape }}</label>
             <select id="{{ #match.index }}" name="{{ nm }}">

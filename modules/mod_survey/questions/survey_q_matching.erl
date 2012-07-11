@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2012 Marc Worrell
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,10 +41,10 @@ to_block(Q) ->
 answer(Block, Answers, Context) ->
     Name = proplists:get_value(name, Block),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Count = length(proplists:get_value(items, Props)),
     Options = [ Val || {Val,_Text} <- proplists:get_value(options, Props) ],
-    Names = [ iolist_to_binary([Name, $_, integer_to_list(N)]) || N <- lists:seq(1,Count) ],
-    ensure_option(Names, Options, Answers, []).
+    Items = proplists:get_value(items, Props),
+    ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
+    ensure_option(ItemNames, Options, Answers, []).
 
 
 ensure_option([], _Options, _Answers, Acc) ->
@@ -69,10 +69,9 @@ prep_chart(Block, Answers, Context) ->
     Name = proplists:get_value(name, Block),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
     Items = proplists:get_value(items, Props),
-    Parts = proplists:get_value(parts, Props),
-    ItemNames = [ iolist_to_binary([Name, $_, integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
-    Labels = proplists:get_value(options, Parts),
-    LabelsB = [ z_convert:to_binary(Lab) || Lab <- Labels ],
+    ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
+    Labels = proplists:get_value(options, Props),
+    LabelsB = [ Lab || {Lab, _} <- Labels ],
     [
         {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
         {charts, [ prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB) 
@@ -82,7 +81,7 @@ prep_chart(Block, Answers, Context) ->
 
     prep_chart1(_ItemText, undefined, _LabelsB) ->
         undefined;
-    prep_chart1(ItemText, Vals, LabelsB) ->
+    prep_chart1({_,ItemText}, Vals, LabelsB) ->
         Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
         Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
         Perc = [ round(V*100/Sum) || V <- Values ],
@@ -97,13 +96,13 @@ prep_chart(Block, Answers, Context) ->
 prep_answer_header(Block, _Context) ->
     Name = proplists:get_value(name, Block),
     Items = proplists:get_value(items, Block),
-    [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ].
+    [ iolist_to_binary([Name, $:, KI]) || {KI,_} <- Items ].
 
 
 prep_answer(Block, Answers, _Context) ->
     Name = proplists:get_value(name, Block),
     Items = proplists:get_value(items, Block),
-    ItemNames = [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
+    ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
     [ prep_answer1(Item, Answers) || Item <- ItemNames ].
 
     prep_answer1(Item, Answers) ->

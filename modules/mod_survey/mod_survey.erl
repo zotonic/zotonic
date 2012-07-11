@@ -125,7 +125,7 @@ render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     As = [ {z_convert:to_binary(K), z_convert:to_binary(V)} || {K,V} <- z_context:get_q_all_noz(Context) ],
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
-    Answers2 = Answers1 ++ As,
+    Answers2 = Answers1 ++ group_multiselect(As),
     case m_rsc:p(Id, blocks, Context) of
         Questions when is_list(Questions) ->
             case go_page(PageNr, Questions, Answers2, Direction, Context) of
@@ -164,6 +164,17 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             #render{template="_survey_empty.tpl", vars=[{id,Id}, {q, As}]}
     end.
 
+    group_multiselect([]) ->
+        [];
+    group_multiselect(As) ->
+        group_multiselect(lists:sort(As), undefined, [], []).
+    
+        group_multiselect([], K, [V], Acc) -> [{K,V}|Acc];
+        group_multiselect([], K, Vs, Acc) -> [{K,Vs}|Acc];
+        group_multiselect([{K,V}|KVs], undefined, [], Acc) -> group_multiselect(KVs, K, [V], Acc);
+        group_multiselect([{K,V}|KVs], K, Vs, Acc) -> group_multiselect(KVs, K, [V|Vs], Acc);
+        group_multiselect([{K,V}|KVs], K1, [V1], Acc) -> group_multiselect(KVs, K, [V], [{K1,V1}|Acc]);
+        group_multiselect([{K,V}|KVs], K1, V1s, Acc) -> group_multiselect(KVs, K, [V], [{K1,V1s}|Acc]).
 
     %% @doc Count the number of pages in the survey
     count_pages([]) ->
