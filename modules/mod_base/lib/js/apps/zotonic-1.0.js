@@ -690,10 +690,6 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 		for (var i = 0; i < this.childNodes.length; i++) 
 		{
 			var sortTag = $(this.childNodes[i]).data("z_sort_tag") 
-			if (!sortTag && this.childNodes[i].id)
-			{
-				sortTag = z_drag_tag[this.childNodes[i].id];
-			}
 			if (sortTag)
 			{
 				if (sortItems != "") 
@@ -709,7 +705,11 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 		
 		z_queue_postback(this.id, sortPostbackInfo, sortItem, true);
 	};
-
+	sortOptions.receive = function (ev, ui) {
+		var $target = $(this).data().sortable.currentItem;
+		var $source = $(ui.sender);
+		$target.data('z_sort_tag', $source.data('z_drag_tag')); 
+	};
 	$(sortBlock).sortable(sortOptions);
 }
 
