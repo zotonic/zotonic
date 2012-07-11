@@ -96,6 +96,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_narrative, ?__("Narrative", Context)},
                     {survey_short_answer, ?__("Short answer", Context)},
                     {survey_long_answer, ?__("Long answer", Context)},
+                    {survey_country, ?__("Country select", Context)},
                     {survey_page_break, ?__("Page break", Context)}
                 ]}
                 | Menu
