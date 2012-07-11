@@ -22,6 +22,7 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     to_block/1
 ]).
 
@@ -47,7 +48,7 @@ answer(Block, Answers, Context) ->
 answer_inputs([], _Answers, Acc) ->
     {ok, Acc};
 answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
-    case proplists:get_value(Name, Answers) of
+    case proplists:get_value(z_convert:to_binary(Name), Answers) of
         undefined -> {error, missing};
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};
@@ -88,20 +89,12 @@ prep_chart(Block, Answers, Context) ->
         end.
 
 
-prep_answer_header(Block, Context) ->
-    Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>), 
-                    Context),
-    {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
-    Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
+prep_answer_header(Block, _Context) ->
+    Parts = proplists:get_value(parts, Block),
     [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ].
     
-prep_answer(Block, Answers, Context) ->
-    Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>), 
-                    Context),
-    {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
-    Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
+prep_answer(Block, Answers, _Context) ->
+    Parts = proplists:get_value(parts, Block),
     Names = [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ],
     [ z_convert:to_binary(value(proplists:get_value(Name, Answers))) || Name <- Names ].
 
@@ -111,7 +104,16 @@ prep_answer(Block, Answers, Context) ->
     value(undefined) -> <<>>;
     value({undefined, X}) -> X;
     value({X, _}) -> X.
-    
+
+prep_block(Block, Context) ->
+    Narrative = z_trans:lookup_fallback(
+                    proplists:get_value(narrative, Block, <<>>), 
+                    Context),
+    {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
+    Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
+    [{parts, Parts} | Block].
+
+
 
 find_select([], _Name) ->
     undefined;

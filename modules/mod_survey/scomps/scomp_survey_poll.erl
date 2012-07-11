@@ -31,10 +31,10 @@ render(Args, _Vars, Context) ->
     PersistentId = proplists:get_value(persistent_id, Args),
     UserId = proplists:get_value(user_id, Args),
     Answers = m_survey:single_result(SurveyId, UserId, PersistentId, Context),
+    Answers1 = lists:flatten([ Vs || {_,Vs} <- Answers ]),
     case z_convert:to_bool(proplists:get_value(editing, Args)) andalso z_acl:rsc_editable(SurveyId, Context) of
-        true ->
-            z_session:set(mod_survey_editing, {UserId, PersistentId}, Context);
+        true -> z_session:set(mod_survey_editing, {UserId, PersistentId}, Context);
         false -> nop
     end,
-    Render = mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Context),
+    Render = mod_survey:render_next_page(SurveyId, 1, exact, Answers1, [], Context),
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.

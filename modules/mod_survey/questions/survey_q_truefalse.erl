@@ -22,16 +22,18 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     to_block/1
 ]).
 
+-include_lib("zotonic.hrl").
 -include("../survey.hrl").
 
 answer(Block, Answers, _Context) ->
     Name = proplists:get_value(name, Block),
-    case proplists:get_value(z_convert:to_list(Name), Answers) of
+    case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
-        V -> {ok, [{Name, z_convert:to_bool(V)}]}
+        V -> {ok, [{Name, z_convert:to_binary(z_convert:to_bool(V))}]}
     end.
 
 
@@ -56,8 +58,11 @@ prep_answer_header(Q, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {Value, _Text}}], _Context) ->
+prep_answer(_Q, [{_Name, {Value, _Text}}|_], _Context) ->
     Value.
+
+prep_block(B, _Context) ->
+    B.
 
 
 to_block(Q) ->

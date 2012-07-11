@@ -4,7 +4,6 @@
 {% with r|tail as results %}
 {% with m.survey.captions[id] as captions %}
 
-<<<<<<< HEAD
 <table class="table table-striped">
     <thead>
         <tr>
@@ -29,13 +28,6 @@
                 </div>
             </td>
         </tr>
-=======
-<table width="100%">
-    <tr>
-        <th>&nbsp;</th>
-        {% for name in columns|tail|tail %}
-        <th>{{ captions[name] }}</th>
->>>>>>> 868fadf... mod_survey: Added easily-printable output.
         {% endfor %}
     </tbody>
 </table>

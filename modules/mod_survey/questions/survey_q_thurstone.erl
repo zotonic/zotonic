@@ -22,6 +22,7 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     to_block/1
 ]).
 
@@ -31,14 +32,14 @@
 
 answer(Block, Answers, Context) ->
     Name = proplists:get_value(name, Block),
-    case proplists:get_value(z_convert:to_list(Name), Answers) of
+    case proplists:get_value(Name, Answers) of
         undefined -> 
             {error, missing};
         N -> 
             Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
             Options = proplists:get_value(answers, Props),
             {Val, _} = lists:nth(list_to_integer(N), Options),
-            {ok, [{Name, z_convert:to_binary(Val)}]}
+            {ok, [{Name, Val}]}
     end.
 
 
@@ -65,6 +66,9 @@ prep_answer(_Q, [], _Context) ->
     <<>>;
 prep_answer(_Q, [{_Name, {Value, _Text}}], _Context) ->
     Value.
+
+prep_block(B, _Context) ->
+    B.
 
 
 to_block(Q) ->

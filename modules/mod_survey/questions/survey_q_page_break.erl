@@ -21,6 +21,7 @@
     answer/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     test/3,
     to_block/1
 ]).
@@ -44,6 +45,10 @@ prep_answer_header(_Q, _Context) ->
 
 prep_answer(_Q, _Answer, _Context) ->
     [].
+
+prep_block(B, _Context) ->
+    B.
+
 
 %% @doc Evaluate the (optional) jump expression of a page break
 test(Q, Answers, Context) ->

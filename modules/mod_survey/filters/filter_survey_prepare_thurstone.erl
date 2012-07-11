@@ -39,6 +39,6 @@ split_markers(Qs) ->
 
 split_marker(X) ->
     case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {Opt, Opt};
-        {Opt, [$#|Rest]} -> {Opt, Rest}
+        {Opt, []} -> {z_convert:to_binary(Opt), z_convert:to_binary(Opt)};
+        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
     end.

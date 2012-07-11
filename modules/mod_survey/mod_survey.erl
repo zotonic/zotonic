@@ -40,24 +40,8 @@
 
 
 %% @doc Schema for mod_survey lives in separate module
-%% @todo Incr schema, apply convertor for survey resource prop
-% {survey, QuestionIds, [{NewQuestionId, NewQuestion}|SurveyQuestions]} 
-% question_to_props(Q) ->
-%     [
-%         {name, Q#survey_question.name},
-%         {type, Q#survey_question.type},
-%         {question, Q#survey_question.question},
-%         {text, Q#survey_question.text},
-%         {parts, Q#survey_question.parts},
-%         {html, Q#survey_question.html},
-%         {is_required, Q#survey_question.is_required}
-%     ].
-% 
 manage_schema(What, Context) ->
     mod_survey_schema:manage_schema(What, Context).
-
-
-%% @doc Handle drag/drop events from the survey admin
 
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -139,7 +123,7 @@ render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
                     },
                     Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
-    As = z_context:get_q_all_noz(Context),
+    As = [ {z_convert:to_binary(K), z_convert:to_binary(V)} || {K,V} <- z_context:get_q_all_noz(Context) ],
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ As,
     case m_rsc:p(Id, blocks, Context) of
@@ -299,7 +283,6 @@ do_submit(SurveyId, Questions, Answers, Context) ->
 %% @doc Collect all answers, report any missing answers.
 %% @spec collect_answers(list(), proplist(), Context) -> {AnswerList, MissingNames}
 collect_answers(Qs, Answers, Context) ->
-    ?DEBUG(Answers),
     collect_answers(Qs, Answers, [], [], Context).
 
 

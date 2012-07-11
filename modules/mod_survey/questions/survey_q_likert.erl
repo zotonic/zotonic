@@ -22,6 +22,7 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     to_block/1
 ]).
 
@@ -38,8 +39,7 @@ to_block(Q) ->
 
 answer(Block, Answers, _Context) ->
     Name = proplists:get_value(name, Block),
-    case proplists:get_value(z_convert:to_list(Name), Answers) of
-        [C] when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
+    case proplists:get_value(Name, Answers) of
         <<C>> when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
         undefined -> {error, missing}
     end.
@@ -68,4 +68,8 @@ prep_answer(_Q, [], _Context) ->
     <<>>;
 prep_answer(_Q, [{_Name, {Value, _Text}}], _Context) ->
     Value.
+
+prep_block(B, _Context) ->
+    B.
+
 

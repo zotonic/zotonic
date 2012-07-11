@@ -43,11 +43,11 @@ parse([$[|T], Acc, InputAcc) ->
     Elt = case IsSelect of
         true -> 
             {Name, Options} = split_select(Input1),
-            {select, Name, split_markers(Options)};
+            {select, z_convert:to_binary(Name), split_markers(Options)};
         false ->
             Name = z_string:trim(Input1),
             Length = length(Input1),
-            {input, Name, Length}
+            {input, z_convert:to_binary(Name), Length}
     end,
     Acc1 = [Elt|Acc],
     InputAcc1 = [{IsSelect, Name}|InputAcc],
@@ -88,6 +88,6 @@ split_markers(Qs) ->
 
 split_marker(X) ->
     case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {Opt, Opt};
-        {Opt, [$#|Rest]} -> {Opt, Rest}
+        {Opt, []} -> {z_convert:to_binary(Opt), z_convert:to_binary(Opt)};
+        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
     end.

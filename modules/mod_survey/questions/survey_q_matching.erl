@@ -22,6 +22,7 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_block/2,
     to_block/1
 ]).
 
@@ -42,22 +43,21 @@ answer(Block, Answers, Context) ->
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
     Count = length(proplists:get_value(items, Props)),
     Options = [ Val || {Val,_Text} <- proplists:get_value(options, Props) ],
-    Names = [ lists:flatten([z_convert:to_list(Name), $_, integer_to_list(N)]) || N <- lists:seq(1,Count) ],
+    Names = [ iolist_to_binary([Name, $_, integer_to_list(N)]) || N <- lists:seq(1,Count) ],
     ensure_option(Names, Options, Answers, []).
 
 
 ensure_option([], _Options, _Answers, Acc) ->
     {ok, Acc};
 ensure_option([Name|Ns], Options, Answers, Acc) ->
-    case proplists:get_value(z_convert:to_list(Name), Answers) of
+    case proplists:get_value(Name, Answers) of
         [] -> 
             {error, missing};
         undefined ->
             {error, missing};
         Value -> 
-            OptVal = z_convert:to_binary(Value),
-            case lists:member(OptVal, Options) of
-                true -> ensure_option(Ns, Options, Answers, [{Name,OptVal}|Acc]);
+            case lists:member(Value, Options) of
+                true -> ensure_option(Ns, Options, Answers, [{Name,Value}|Acc]);
                 false -> {error, missing}
             end
     end.
@@ -94,17 +94,15 @@ prep_chart(Block, Answers, Context) ->
         ].
 
 
-prep_answer_header(Block, Context) ->
+prep_answer_header(Block, _Context) ->
     Name = proplists:get_value(name, Block),
-    Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Items = proplists:get_value(items, Props),
+    Items = proplists:get_value(items, Block),
     [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ].
 
 
-prep_answer(Block, Answers, Context) ->
+prep_answer(Block, Answers, _Context) ->
     Name = proplists:get_value(name, Block),
-    Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Items = proplists:get_value(items, Props),
+    Items = proplists:get_value(items, Block),
     ItemNames = [ iolist_to_binary([Name, $., integer_to_list(N)]) || N <- lists:seq(1,length(Items)) ],
     [ prep_answer1(Item, Answers) || Item <- ItemNames ].
 
@@ -113,5 +111,9 @@ prep_answer(Block, Answers, Context) ->
             {V, _Text} -> V;
             undefined -> <<>>
         end.
+
+prep_block(Block, Context) ->
+    Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
+    Props ++ Block.
 
 
