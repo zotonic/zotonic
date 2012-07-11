@@ -21,7 +21,6 @@
 			{{ id|summary:300 }} <a href="{{ m.rsc[id].page_url }}">{_ Read more _}&nbsp;&raquo;</a>
 		</p>
 
-
 	</section>
 
 {% else %}
