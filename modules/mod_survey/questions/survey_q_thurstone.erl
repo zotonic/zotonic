@@ -18,105 +18,61 @@
 -module(survey_q_thurstone).
 
 -export([
-    new/0,
-    question_props/1,
-    render/1,
-    answer/2,
-    prep_chart/2,
-    prep_answer_header/1,
-    prep_answer/2
+    answer/3,
+    prep_chart/3,
+    prep_answer_header/2,
+    prep_answer/3,
+    to_block/1
 ]).
 
 -include("zotonic.hrl").
 -include("../survey.hrl").
 
-new() ->
-    Q = #survey_question{
-        type = thurstone, 
-        name = z_ids:identifier(5),
-        question = "",
-        text = "This editor is very intuitive.
-This editor is fairly easy to use.
-This editor gets the job done.
-This editor is not that easy to use.
-This editor is very confusing."
-    },
-    render(Q).
 
-question_props(Q) ->
-    [
-        {explanation, ""},
-        
-        {has_question, true},
-        {has_text, true},
-        {has_name, true},
-        
-        {question_label, ""},
-        {text_label, "Options"},
-        {text_explanation, "<p>Enter the options below, one per line.</p>"}
-    ] ++
-    ?QUESTION_AS_PROPLIST(Q).
-
-render(Q) ->
-    Name = z_html:escape(Q#survey_question.name),
-    Options = split_options(Q#survey_question.text),
-    Rs = radio(Options, 1, Name, []),
-    Q#survey_question{
-        question = iolist_to_binary(Q#survey_question.question),
-        parts = [ z_html:escape(Opt) || Opt <- Options ],
-        html = iolist_to_binary([
-            "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
-            "<p class=\"thurstone\">",
-            Rs,
-            "</p"
-            ])
-    }.
-
-
-
-split_options(Text) ->
-    Options = string:tokens(z_string:trim(z_convert:to_list(Text)), "\n"),
-    [ z_string:trim(Option) || Option <- Options ].
-
-radio([], _N, _Name, Acc) ->
-    lists:reverse(Acc);
-radio([""|T], N, Name, Acc) ->
-    radio(T, N, Name, Acc);
-radio([H|T], N, Name, Acc) ->
-    R = ["<input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"", integer_to_list(N),"\"> ", z_html:escape(H), "<br />"],
-    radio(T, N+1, Name, [R|Acc]).
-
-
-answer(Q, Answers) ->
-    Name = Q#survey_question.name,
-    Options = split_options(Q#survey_question.text),
-    case proplists:get_value(Name, Answers) of
-        undefined -> {error, missing};
-        N -> {ok, [{Name, lists:nth(list_to_integer(N), Options)}]}
+answer(Block, Answers, Context) ->
+    Name = proplists:get_value(name, Block),
+    case proplists:get_value(z_convert:to_list(Name), Answers) of
+        undefined -> 
+            {error, missing};
+        N -> 
+            Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+            Options = proplists:get_value(answers, Props),
+            {Val, _} = lists:nth(list_to_integer(N), Options),
+            {ok, [{Name, z_convert:to_binary(Val)}]}
     end.
 
 
-prep_chart(_Q, []) ->
+prep_chart(_Q, [], _Context) ->
     undefined;
-prep_chart(Q, [{_, Vals}]) ->
-    Labels = [ z_convert:to_binary(Lab) || Lab <- split_options(Q#survey_question.text) ],
+prep_chart(Block, [{_, Vals}], Context) ->
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Labels = [ Lab || {Lab,_} <- proplists:get_value(answers, Props) ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
-        {question, z_html:escape(Q#survey_question.question)},
+        {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
         {values, lists:zip(Labels, Values)},
         {type, "pie"},
         {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]}
     ].
 
 
-prep_answer_header(Q) ->
-    z_convert:to_binary(Q#survey_question.name).
+prep_answer_header(Q, _Context) ->
+    proplists:get_value(name, Q).
 
-prep_answer(_Q, []) ->
+prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {Value, _Text}}]) ->
+prep_answer(_Q, [{_Name, {Value, _Text}}], _Context) ->
     Value.
 
-    
+
+to_block(Q) ->
+    [
+        {type, survey_thurstone},
+        {is_required, Q#survey_question.is_required},
+        {name, z_convert:to_binary(Q#survey_question.name)},
+        {prompt, z_convert:to_binary(Q#survey_question.question)},
+        {answers, z_convert:to_binary(Q#survey_question.text)}
+    ].
+

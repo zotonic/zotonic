@@ -22,7 +22,13 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("include/zotonic.hrl").
--export([manage_schema/2]).
+-include("../survey.hrl").
+
+-export([
+    manage_schema/2,
+    
+    survey_to_blocks/2
+]).
 
 
 %% @doc Install tables used for storing survey results
@@ -64,4 +70,67 @@ manage_schema(install, Context) ->
                   {poll, survey, [{title, "Poll"}]}
                  ]}, Context),
 
+    ok;
+manage_schema({upgrade, 1}, Context) ->
+    % Replace all survey properties with blocks
+    {Low, High} = m_category:range(survey, Context),
+    Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [Low, High], Context),
+    [
+        survey_to_blocks(Id, Context) || {Id} <- Ids
+    ],
     ok.
+
+
+survey_to_blocks(Id, Context) ->
+    case m_rsc:p_no_acl(Id, survey, Context) of
+        undefined -> 
+            ok;
+        {survey, QIds, Qs} ->
+            QBlocks = [
+                question_to_block(proplists:get_value(QId, Qs))
+                || QId <- QIds
+            ],
+            CurrBlocks = to_list(m_rsc:p_no_acl(Id, blocks, Context)),
+            m_rsc_update:update(Id,
+                                [
+                                    {survey, undefined},
+                                    {blocks, CurrBlocks++QBlocks}
+                                ], 
+                                z_acl:sudo(Context)),
+            ok
+    end.
+    
+    to_list(undefined) -> [];
+    to_list(<<>>) -> [];
+    to_list(L) when is_list(L) -> L.
+
+    question_to_block(#survey_question{type=likert} = Q) -> survey_q_likert:to_block(Q);
+    question_to_block(#survey_question{type=longanswer} = Q) -> survey_q_long_answer:to_block(Q);
+    question_to_block(#survey_question{type=matching} = Q) -> survey_q_matching:to_block(Q);
+    question_to_block(#survey_question{type=narrative} = Q) -> survey_q_narrative:to_block(Q);
+    question_to_block(#survey_question{type=pagebreak} = Q) -> survey_q_page_break:to_block(Q);
+    question_to_block(#survey_question{type=shortanswer} = Q) -> survey_q_short_answer:to_block(Q);
+    question_to_block(#survey_question{type=thurstone} = Q) -> survey_q_thurstone:to_block(Q);
+    question_to_block(#survey_question{type=truefalse} = Q) -> survey_q_truefalse:to_block(Q);
+    question_to_block(#survey_question{type=yesno} = Q) -> survey_q_yesno:to_block(Q);
+    question_to_block(#survey_question{type=subhead, name=Name, question=Q}) ->
+        [
+            {type, header},
+            {name, z_convert:to_binary(Name)},
+            {header, z_convert:to_binary(Q)}
+        ];
+    question_to_block(#survey_question{type=prompt, name=Name, question=Q}) ->
+        [
+            {type, text},
+            {name, z_convert:to_binary(Name)},
+            {body, z_convert:to_binary(["<p>",Q,"</p>"])}
+        ];
+    question_to_block(#survey_question{type=textblock, name=Name, question=Q}) ->
+        [
+            {type, text},
+            {name, z_convert:to_binary(Name)},
+            {body, z_convert:to_binary(["<p>",Q,"</p>"])}
+        ].
+
+
+    

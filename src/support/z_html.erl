@@ -25,6 +25,7 @@
 -export([
     escape_props/1,
     escape_props/2,
+    escape/2,
     escape/1,
     unescape/1,
     strip/1,
@@ -82,7 +83,13 @@ escape_props(Props, Context) ->
         V.
 
 %% @doc Escape a string so that it is valid within HTML/ XML.
+-spec escape(list()|binary()|{trans, list()}, #context{}) -> binary() | undefined.
+escape(V, Context) ->
+    escape(z_trans:lookup_fallback(V, Context)).
+
+%% @doc Escape a string so that it is valid within HTML/ XML.
 %% @spec escape(iolist()) -> binary()
+-spec escape(list()|binary()|{trans, list()}) -> binary() | undefined.
 escape({trans, Tr}) ->
     {trans, [{Lang, escape(V)} || {Lang,V} <- Tr]};
 escape(undefined) -> 
@@ -94,24 +101,24 @@ escape([]) ->
 escape(L) when is_list(L) ->
     escape(list_to_binary(L));
 escape(B) when is_binary(B) ->
-    escape(B, <<>>).
+    escape1(B, <<>>).
 
-    escape(<<>>, Acc) -> 
+    escape1(<<>>, Acc) -> 
         Acc;
-    escape(<<"&euro;", T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "€">>);
-    escape(<<$&, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&amp;">>);
-    escape(<<$<, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&lt;">>);
-    escape(<<$>, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&gt;">>);
-    escape(<<$", T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&quot;">>);
-    escape(<<$', T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#39;">>);
-    escape(<<C, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, C>>).
+    escape1(<<"&euro;", T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "€">>);
+    escape1(<<$&, T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "&amp;">>);
+    escape1(<<$<, T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "&lt;">>);
+    escape1(<<$>, T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "&gt;">>);
+    escape1(<<$", T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "&quot;">>);
+    escape1(<<$', T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, "&#39;">>);
+    escape1(<<C, T/binary>>, Acc) ->
+        escape1(T, <<Acc/binary, C>>).
 
 
 %% @doc Unescape - reverses the effect of escape.

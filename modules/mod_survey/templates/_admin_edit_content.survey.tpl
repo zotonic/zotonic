@@ -12,10 +12,9 @@
 
 
 {% block widget_content %}
-<div class="pull-right">
-    <a href="javascript:void(0)" class="btn btn-mini btn-primary do_dialog" data-dialog="title: '{{ _"Help about surveys"|escapejs }}', text: '{{ _"You can create your survey by dragging the Question templates to the survey on the right."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
-</div>
-
+    <div class="pull-right">
+        <a href="javascript:void(0)" class="btn btn-mini btn-primary do_dialog" data-dialog="title: '{{ _"Help about surveys"|escapejs }}', text: '{{ _"You can create your survey by adding blocks with questions below the body."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+    </div>
 
     <div class="control-group">
         <label class="inline checkbox">
@@ -50,24 +49,4 @@
         <a class="btn btn-mini" href="{% url admin_survey_editor id=id %}">{_ Survey results editor _}</a>
     </p>
 
-    <hr/>
-
-    <div class="row survey-editor">
-        <div class="span4">
-	    <h4>{_ Question Templates _}</h4>
-	    <ul id="survey-qs" style="cursor: move;">
-		{% include "_admin_survey_questions.tpl" %}
-	    </ul>
-	</div>
-
-	<div class="span4">
-	    <h4>{_ Your survey _}</h4>
-	    {% sorter id="survey" tag={survey id=id} group="survey" delegate="mod_survey" %}
-	    <ul id="survey" style="cursor: move;" style="min-height:400px">
-		{% include "_admin_survey_questions_edit.tpl" id=id %}
-	    </ul>
-	</div>
-    </div>
-
-{% include "_admin_save_buttons.tpl" %}
 {% endblock %}

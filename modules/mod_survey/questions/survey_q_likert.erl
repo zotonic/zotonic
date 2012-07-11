@@ -18,69 +18,36 @@
 -module(survey_q_likert).
 
 -export([
-    new/0,
-    question_props/1,
-    render/1,
-    answer/2,
-    prep_chart/2,
-    prep_answer_header/1,
-    prep_answer/2
+    answer/3,
+    prep_chart/3,
+    prep_answer_header/2,
+    prep_answer/3,
+    to_block/1
 ]).
 
 -include("zotonic.hrl").
 -include("../survey.hrl").
 
-new() ->
-    Q = #survey_question{
-        type = likert, 
-        name = z_ids:identifier(5),
-        text = "", 
-        question = <<"Weasels make great pets.">>
-    },
-    render(Q).
-
-question_props(Q) ->
+to_block(Q) ->
     [
-        {explanation, ""},
-        
-        {has_question, true},
-        {has_text, false},
-        {has_name, true},
-        
-        {question_label, ""},
-        {text_label, ""}
-    ] ++
-    ?QUESTION_AS_PROPLIST(Q).
+        {type, survey_matching},
+        {is_required, Q#survey_question.is_required},
+        {name, z_convert:to_binary(Q#survey_question.name)},
+        {prompt, z_convert:to_binary(Q#survey_question.question)}
+    ].
 
-render(Q) ->
-    Name = z_html:escape(Q#survey_question.name),
-    Q#survey_question{
-        text = "",
-        question = iolist_to_binary(Q#survey_question.question),
-        html = iolist_to_binary([
-            "<p class=\"question\">", z_html:escape(Q#survey_question.question), "</p>",
-            "<p class=\"likert\">
-                Strongly Disagree
-                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"1\"/> 1 
-                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"2\"/> 2
-                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"3\"/> 3 
-                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"4\"/> 4 
-                <input class=\"survey-q\" type=\"radio\" name=\"",Name,"\" value=\"5\"/> 5
-                Strongly Agree
-            <p>"
-            ])
-    }.
-
-answer(#survey_question{name=Name}, Answers) ->
-    case proplists:get_value(Name, Answers) of
+answer(Block, Answers, _Context) ->
+    Name = proplists:get_value(name, Block),
+    case proplists:get_value(z_convert:to_list(Name), Answers) of
         [C] when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
+        <<C>> when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
         undefined -> {error, missing}
     end.
 
 
-prep_chart(_Q, []) ->
+prep_chart(_Block, [], _Context) ->
     undefined;
-prep_chart(Q, [{_, Vals}]) ->
+prep_chart(Block, [{_, Vals}], Context) ->
     Labels = [<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>],
     LabelsDisplay = [<<"Strongly agree">>,<<"Agree">>,<<"Neutral">>,<<"Disagree">>,<<"Strongly disagree">>],
 
@@ -88,17 +55,17 @@ prep_chart(Q, [{_, Vals}]) ->
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
-        {question, z_html:escape(Q#survey_question.question)},
+        {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
         {values, lists:zip(LabelsDisplay, Values)},
         {type, "pie"},
         {data, [{L,P} || {L,P} <- lists:zip(LabelsDisplay, Perc), P /= 0]}
     ].
 
-prep_answer_header(Q) ->
-    z_convert:to_binary(Q#survey_question.name).
+prep_answer_header(Block, _Context) ->
+    proplists:get_value(name, Block).
 
-prep_answer(_Q, []) ->
+prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {Value, _Text}}]) ->
+prep_answer(_Q, [{_Name, {Value, _Text}}], _Context) ->
     Value.
 

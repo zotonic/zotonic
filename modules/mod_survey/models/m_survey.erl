@@ -175,31 +175,39 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
 
 
 prepare_results(SurveyId, Context) ->
-    case m_rsc:p(SurveyId, survey, Context) of
-        {survey, QuestionIds, Questions} ->
+    case m_rsc:p(SurveyId, blocks, Context) of
+        [] ->
+            undefined;
+        <<>> ->
+            undefined;
+        undefined -> 
+            undefined;
+        Blocks ->
             Stats = survey_stats(SurveyId, Context),
             [
-                prepare_result(proplists:get_value(QId, Questions), 
-                               proplists:get_value(z_convert:to_binary(QId), Stats)) 
-                || QId <- QuestionIds
-            ];
-        undefined -> 
-            undefined
+                begin
+                    Name = proplists:get_value(name, Block),
+                    prepare_result(Block, proplists:get_value(Name, Stats), Context)
+                end
+                || Block <- Blocks
+            ]
     end.
-    
-    prepare_result(Question, Stats) ->
-        [
+
+    prepare_result(_Block, undefined, _Context) ->
+        {undefined, undefined, undefined};
+    prepare_result(Block, Stats, Context) ->
+        Type = proplists:get_value(type, Block),
+        {
          Stats,
-         prep_chart(Question, Stats),
-         mod_survey:question_to_props(Question)
-        ].
+         prep_chart(Type, Block, Stats, Context),
+         [] % mod_survey:question_to_props(Question)
+        }.
 
-
-prep_chart(_Q, undefined) ->
+prep_chart(_Type, _Block, undefined, _Context) ->
     undefined;
-prep_chart(Q, Stats) ->
-    M = mod_survey:module_name(Q),
-    M:prep_chart(Q, Stats).
+prep_chart(Type, Block, Stats, Context) ->
+    M = mod_survey:module_name(Type),
+    M:prep_chart(Block, Stats, Context).
 
 
 
@@ -247,21 +255,21 @@ survey_results_sorted(SurveyId, SortColumn, Context) ->
 
 %% @doc Return all results of a survey
 survey_results(SurveyId, Context) ->
-    case m_rsc:p(SurveyId, survey, Context) of
-        {survey, QuestionIds, Questions} ->
-             Rows = z_db:q("select user_id, persistent, question, name, value, text, created
-                            from survey_answer 
-                            where survey_id = $1", [SurveyId], Context),
+    case m_rsc:p(SurveyId, blocks, Context) of
+        Blocks when is_list(Blocks) ->
+            Rows = z_db:q("select user_id, persistent, question, name, value, text, created
+                           from survey_answer 
+                           where survey_id = $1", [SurveyId], Context),
             Grouped = group_users(Rows),
-            QIds = [ z_convert:to_binary(QId) || QId <- QuestionIds ],
-            QsB = [ {z_convert:to_binary(QId), Q} || {QId, Q} <- Questions ],
-            UnSorted = [ user_answer_row(User, Created, Answers, QIds, QsB, Context) || {User, Created, Answers} <- Grouped ],
+            NQs = [ {proplists:get_value(name, B), B} || B <- Blocks ],
+            UnSorted = [ user_answer_row(User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
             Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
             [
-             lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
-                             | [ answer_header(proplists:get_value(QId, Questions)) || QId <- QuestionIds ]
-                           ])
-             | Sorted];
+                 lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
+                                 | [ answer_header(proplists:get_value(type, B), B, Context) || B <- Blocks ]
+                               ])
+                 | Sorted
+            ];
         undefined ->
             []
     end.
@@ -290,7 +298,7 @@ survey_results(SurveyId, Context) ->
         }.
 
 
-    user_answer_row({user, User, Persistent}, Created, Answers, QuestionIds, Questions, Context) ->
+    user_answer_row({user, User, Persistent}, Created, Answers, Questions, Context) ->
         [
             User,
             Persistent,
@@ -298,28 +306,32 @@ survey_results(SurveyId, Context) ->
                 undefined -> <<>>;
                 _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
             end
-            | answer_row(Answers, QuestionIds, Questions)
+            | answer_row(Answers, Questions, Context)
         ].
         
-    answer_row(Answers, QuestionIds, Questions) ->
+    answer_row(Answers, Questions, Context) ->
         lists:flatten([
             answer_row_question(proplists:get_all_values(QId, Answers), 
-                                proplists:get_value(QId, Questions)) || QId <- QuestionIds
+                                Question,
+                                Context)
+            || {QId, Question} <- Questions
         ]).
     
-    answer_row_question(_Answer, undefined) ->
+    answer_row_question(_Answer, undefined, _Context) ->
         [];
-    answer_row_question(Answer, Q) ->
-        M = mod_survey:module_name(Q),
-        M:prep_answer(Q, Answer).
+    answer_row_question(Answer, Q, Context) ->
+        Type = proplists:get_value(type, Q),
+        case mod_survey:module_name(Type) of
+            undefined -> [];
+            M -> M:prep_answer(Q, Answer, Context)
+        end.
 
 
-    answer_header(undefined) ->
-        [];
-    answer_header(Q) ->
-        M = mod_survey:module_name(Q),
-        M:prep_answer_header(Q).
-
+    answer_header(Type, Block, Context) ->
+        case mod_survey:module_name(Type) of
+            undefined -> [];
+            M -> M:prep_answer_header(Block, Context)
+        end.
 
 single_result(SurveyId, UserId, PersistentId, Context) ->
     {Clause, Args} = case z_utils:is_empty(UserId) of
@@ -348,10 +360,13 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
 
 
 survey_captions(Id, Context) ->
-    {survey, _, Questions} = m_rsc:p(Id, survey, Context),
-    [{<<"created">>, ?__("Created", Context)} |
-     [
-      {list_to_binary(S#survey_question.name),
-       S#survey_question.question}
-      || {_, S} <- Questions]
-    ].
+    case m_rsc:p(Id, blocks, Context) of
+        Blocks when is_list(Blocks) ->
+            [
+                {<<"created">>, ?__("Created", Context)} |
+                [ {proplists:get_value(name, Block), proplists:get_value(prompt, Block)} || Block <- Blocks ]
+            ];
+        _ ->
+            []
+    end.
+

@@ -29,6 +29,7 @@
 -export([
          observe_sanitize_element/3,
          observe_admin_menu/3,
+         observe_admin_edit_blocks/3,
          event/2
 ]).
 
@@ -122,6 +123,16 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 
+observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
+    [
+        {1, ?__("Texts", Context), [
+            {header, ?__("Header", Context)},
+            {text, ?__("Text", Context)}
+        ]}
+        | Menu
+    ].
+
+
 event(#postback_notify{message="admin-insert-block"}, Context) ->
     Language = case z_context:get_q("language", Context) of
                     undefined -> 
@@ -149,7 +160,8 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
                     {edit_language, EditLanguage},
                     is_new,
                     {is_editable, z_acl:rsc_editable(RscId, Context)},
-                    {blk, [{type, Type}]}
+                    {blk, [{type, Type}]},
+                    {blocks, lists:sort(z_notifier:foldl(#admin_edit_blocks{id=RscId}, [], Context))}
                 ]
             },
     case z_html:escape(z_context:get_q("after", Context)) of

@@ -364,6 +364,14 @@ ul.blocks .ui-sortable-placeholder {
     visibility: visible !important;
 }
 
+.input.inline {
+    display:inline-block;
+    padding-top:5px;
+    margin-bottom:0;
+    vertical-align:sub;
+}
+
+
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {

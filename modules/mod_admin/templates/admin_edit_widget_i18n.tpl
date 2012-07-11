@@ -19,6 +19,9 @@
 			{% endwith %}
 			{% endfor %}
 		</div>
+		<div class="tab-content widget-content">
+		    {% block widget_content_nolang %}{% endblock %}
+		</div>
 	</div>
 	{% block widget_after %}{% endblock %}
 

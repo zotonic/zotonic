@@ -1,23 +1,21 @@
 {% extends "page.tpl" %}
 
-{% block content %}
-
+{% block main %}
 
 <style type="text/css">
-	.survey-question {
-		border: 1px solid white;
-		background-color: #f8f8f8;
-		padding: 4px;
-		margin-bottom: 4px;
-	}
-
-	.survey-missing {
-		background-color: #fee;
-		border: 1px solid #fcc;
-	}
+    .survey-narrative input,
+    .survey-narrative select {
+        vertical-align: baseline;
+        width: auto;
+    }
 </style>
 
 <div id="survey-question">
+    {% media m.rsc[id].media[1] width=400 height=400 class="main-image" %}
+
+    <p class="summary">{{ m.rsc[id].summary }}</p>
+    {{ m.rsc[id].body|show_media }}
+
 	{% include "_survey_start.tpl" %}
 </div>
 

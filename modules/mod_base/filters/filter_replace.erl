@@ -17,12 +17,21 @@
 %% limitations under the License.
 
 -module(filter_replace).
--export([replace/3]).
+-export([
+    replace/3, 
+    replace/4
+]).
 
 
 replace(undefined, _, _Context) ->
     undefined;
-replace(In, [A,B], _Context) when is_binary(A) orelse is_list(A) ->
-    iolist_to_binary(re:replace(In, A, B, [global]));
-replace(In, A, _Context) ->
-    iolist_to_binary(re:replace(In, A, [], [global])).
+replace(In, [A,B], Context) when is_binary(A) orelse is_list(A) ->
+    replace(In, A, B, Context);
+replace(In, A, Context) ->
+    replace(In, A, <<>>, Context).
+
+replace(In, A, B, Context) ->
+    In1 = z_trans:lookup_fallback(In, Context),
+    A1 = z_trans:lookup_fallback(A, Context),
+    B1 = z_trans:lookup_fallback(B, Context),
+    iolist_to_binary(re:replace(In1, A1, B1, [global])).

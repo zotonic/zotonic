@@ -103,6 +103,11 @@
 %% @doc Rewrite an url before it will be dispatched using the z_dispatcher (foldl)
 -record(dispatch_rewrite, {is_dir=false, path=""}).
 
+%% @doc Used in the admin to fetch the possible blocks for display (foldl)
+-record(admin_edit_blocks, {id}).
+
+%% Used for fetching the menu in the admin (foldl)
+% admin_menu
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
 %% of patterns matching this activity.  These patterns are then used to find interested
@@ -224,6 +229,7 @@
 
 %% @doc Check if an action is allowed (first).
 %% Should return undefined, true or false.
+%% action :: view|update|delete
 -record(acl_is_allowed, {action, object}).
 
 %% @doc Check if an action on a property is allowed (first).

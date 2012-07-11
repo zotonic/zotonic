@@ -44,8 +44,11 @@ resource_exists(ReqData, Context) ->
         
 
 html(Context) ->
+    Id = z_context:get(id, Context),
+    Blocks = z_notifier:foldl(#admin_edit_blocks{id=Id}, [], Context),
     Vars = [
-        {id, z_context:get(id, Context)}
+        {id, Id},
+        {blocks, lists:sort(Blocks)}
     ],
     Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
 	z_context:output(Html, Context).

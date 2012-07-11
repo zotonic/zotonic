@@ -4,10 +4,15 @@
         {_ + add block _}
         <span class="caret"></span>
     </a>
-    <ul class="dropdown-menu">
-        <li><a href="#" data-block-type="header">{_ Header _}</li></a>
-        <li><a href="#" data-block-type="text">{_ Text _}</li></a>
-        {# <li><a href="#" data-block-type="media">{_ Media _}</li></a> #}
+    <ul class="dropdown-menu nav-list nav">
+        {% for _order, title, items in blocks %}
+            {% if title %}
+            <li class="nav-header">{{ title }}</li>
+            {% endif %}
+            {% for type, title in items %}
+                <li><a href="#" data-block-type="{{ type }}">{{ title }}</li></a>
+            {% endfor %}
+        {% endfor %}
     </ul>
 </div>
 {% endif %}
