@@ -21,8 +21,6 @@
 		{% endwith %}
 	</div>
 </fieldset>
-
-{% include "_admin_save_buttons.tpl" %}
 {% endwith %}
 {% endblock %}
 

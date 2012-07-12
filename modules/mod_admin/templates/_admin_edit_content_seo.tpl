@@ -57,7 +57,5 @@
     <label class="control-label" for="seo_desc">{_ Page description _}</label>
     <textarea rows="5" cols="10" id="seo_desc" name="seo_desc" class="seo-desc span8">{{ r.seo_desc }}</textarea>
 </div>
-
-{% include "_admin_save_buttons.tpl" %}
 {% endwith %}
 {% endblock %}
