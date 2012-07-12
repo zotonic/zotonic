@@ -40,12 +40,19 @@ limitations under the License.
         }
     });
 
-
     $.widget("ui.autofocus",
     {
         _init: function() {
             var self = this;
             self.element.focus();
+        }
+    });
+    
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 83) {
+            $('body').addClass('scrolled');
+        } else {
+            $('body').removeClass('scrolled');
         }
     });
 })(jQuery);

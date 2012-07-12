@@ -577,3 +577,18 @@ span.icon_status_warning {
 span.icon_status_starting {
     background-position: -77px 0;
 }
+
+
+/* scroll - keep the save buttons into view
+--------------------------------------------------------- */
+
+
+body.scrolled #sidebar-publish {
+    position: fixed;
+    top: 49px;
+    width: 360px;
+}
+
+body.scrolled #sort {
+    padding-top: 166px;
+}
