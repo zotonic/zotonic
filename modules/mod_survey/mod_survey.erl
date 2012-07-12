@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
+%% @copyright 2010-2012 Marc Worrell
 %% @doc Survey module.  Define surveys and let people fill them in.
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -125,12 +125,20 @@ render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
                     },
                     Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
-    As = get_args(Context),
+    {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
     case m_rsc:p(Id, blocks, Context) of
         Questions when is_list(Questions) ->
-            case go_page(PageNr, Questions, Answers2, Direction, Context) of
+
+            Next = case Submitter of
+                       undefined -> 
+                            go_page(PageNr, Questions, Answers2, Direction, Context);
+                       _ButtonName ->  
+                            go_button_target(Submitter, Questions, Answers2, Context)
+                   end,
+
+            case Next of
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     Vars = [ {id, Id},
@@ -178,7 +186,11 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                                   end,
                                   Args,
                                   Buttons),
-        proplists:delete(<<"z_submitter">>, proplists:delete(<<"survey$button">>, WithButtons)).
+        {proplists:delete(<<"z_submitter">>, proplists:delete(<<"survey$button">>, WithButtons)),
+         case lists:member(Submitter,Buttons) of
+             true -> Submitter;
+             false -> undefined
+         end}.
 
 
     group_multiselect([]) ->
@@ -211,6 +223,11 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
         end.
 
 
+    go_button_target(Submitter, Questions, Answers, Context) ->
+        [Button|_] = lists:dropwhile(fun(B) -> proplists:get_value(name, B) =/= Submitter end, Questions),
+        TargetName = proplists:get_value(target, Button),
+        eval_page_jumps(fetch_question_name(Questions, TargetName, 1, in_q), Answers, Context).
+
     go_page(Nr, Qs, _Answers, exact, _Context) ->
         case fetch_page(Nr, Qs) of
             last ->
@@ -227,7 +244,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         last;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
-        case is_page_break(Q) orelse is_button(Q) of
+        case is_page_break(Q) of
             true ->
                 case test(Q, Answers, Context) of
                     ok -> 
@@ -235,11 +252,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                     {jump, Name} ->
                         % Go to question 'name', count pagebreaks in between for the new page nr
                         % Only allow jumping forward to prevent endless loops.
-                        State = case is_page_break(Q) of
-                                    true -> in_pagebreak;
-                                    false -> in_q
-                                end,
-                        eval_page_jumps(fetch_question_name(L, z_convert:to_binary(Name), Nr, State), Answers, Context);
+                        eval_page_jumps(fetch_question_name(L, z_convert:to_binary(Name), Nr, in_pagebreak), Answers, Context);
                     {error, Reason} ->
                         {error, Reason}
                 end;
@@ -286,8 +299,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 
     %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
-    %%      Returns the questions before the page so that all button and page-jump conditions
-    %%      can be tested.
+    %%      Returns the position at the page breaks before the page, so that eventual jump
+    %%      expressions can be evaluated.
     fetch_page(Nr, []) ->
         {[], Nr};
     fetch_page(Nr, L) ->
@@ -298,7 +311,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     fetch_page(N, Nr, L) when N >= Nr ->
         {L, N};
     fetch_page(N, Nr, L) when N == Nr - 1 ->
-        {L, Nr};
+        L1 = lists:dropwhile(fun(B) -> not is_page_break(B) end, L),
+        {L1, Nr};
     fetch_page(N, Nr, [B|Bs]) when N < Nr ->
         case is_page_break(B) of
             true ->
@@ -313,9 +327,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 is_page_break(Block) ->
     proplists:get_value(type, Block) =:= <<"survey_page_break">>.
-
-is_button(Block) ->
-    proplists:get_value(type, Block) =:= <<"survey_button">>.
 
 
 %% @doc Collect all answers per question, save to the database.
