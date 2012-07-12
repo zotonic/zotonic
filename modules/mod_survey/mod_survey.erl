@@ -97,6 +97,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_short_answer, ?__("Short answer", Context)},
                     {survey_long_answer, ?__("Long answer", Context)},
                     {survey_country, ?__("Country select", Context)},
+                    {survey_button, ?__("Button", Context)},
                     {survey_page_break, ?__("Page break", Context)}
                 ]}
                 | Menu
@@ -124,7 +125,7 @@ render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
                     },
                     Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
-    As = [ {z_convert:to_binary(K), z_convert:to_binary(V)} || {K,V} <- z_context:get_q_all_noz(Context) ],
+    As = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
     case m_rsc:p(Id, blocks, Context) of
@@ -164,6 +165,21 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             % No survey defined, show an error page.
             #render{template="_survey_empty.tpl", vars=[{id,Id}, {q, As}]}
     end.
+
+    get_args(Context) ->
+        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)} || {K,V} <- z_context:get_q_all_noz(Context) ],
+        Submitter = proplists:get_value(<<"z_submitter">>, Args),
+        Buttons = proplists:get_all_values(<<"survey$button">>, Args),
+        WithButtons = lists:foldl(fun(B, Acc) -> 
+                                      case B of
+                                          Submitter -> [{B,<<"yes">>} | proplists:delete(B, Acc) ];
+                                          _ -> [{B, <<"no">>} | Acc]
+                                      end
+                                  end,
+                                  Args,
+                                  Buttons),
+        proplists:delete(<<"z_submitter">>, proplists:delete(<<"survey$button">>, WithButtons)).
+
 
     group_multiselect([]) ->
         [];
@@ -211,15 +227,19 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         last;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
-        case is_page_break(Q) of
+        case is_page_break(Q) orelse is_button(Q) of
             true ->
-                case survey_q_page_break:test(Q, Answers, Context) of
+                case test(Q, Answers, Context) of
                     ok -> 
                         eval_page_jumps({L,Nr}, Answers, Context);
                     {jump, Name} ->
                         % Go to question 'name', count pagebreaks in between for the new page nr
                         % Only allow jumping forward to prevent endless loops.
-                        eval_page_jumps(fetch_question_name(L, z_convert:to_binary(Name), Nr, in_pagebreak), Answers, Context);
+                        State = case is_page_break(Q) of
+                                    true -> in_pagebreak;
+                                    false -> in_q
+                                end,
+                        eval_page_jumps(fetch_question_name(L, z_convert:to_binary(Name), Nr, State), Answers, Context);
                     {error, Reason} ->
                         {error, Reason}
                 end;
@@ -227,6 +247,24 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                 QsNr
         end.
 
+    test(Q, Answers, Context) ->
+        case is_page_break(Q) of
+            true ->
+                survey_q_page_break:test(Q, Answers, Context);
+            false ->
+                % Assume button
+                Name = proplists:get_value(name, Q), 
+                case proplists:get_value(Name, Answers) of
+                    <<"yes">> ->
+                        Target = proplists:get_value(target, Q), 
+                        case z_utils:is_empty(Target) of
+                            true -> ok;
+                            false -> {jump, Target}
+                        end;
+                    _ ->
+                        ok
+                end
+        end.
 
     fetch_question_name([], _Name, Nr, _State) ->
         {[], Nr};
@@ -248,8 +286,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 
     %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
-    %%      Returns the question list at the point of the pagebreak, so a pagebreak jump
-    %%      can be made.
+    %%      Returns the questions before the page so that all button and page-jump conditions
+    %%      can be tested.
     fetch_page(Nr, []) ->
         {[], Nr};
     fetch_page(Nr, L) ->
@@ -259,11 +297,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
         {[], Nr};
     fetch_page(N, Nr, L) when N >= Nr ->
         {L, N};
-    fetch_page(N, Nr, [B|Bs] = L) when N == Nr - 1 ->
-        case is_page_break(B) of
-            true -> {L, Nr};
-            false -> fetch_page(N, Nr, Bs)
-        end;
+    fetch_page(N, Nr, L) when N == Nr - 1 ->
+        {L, Nr};
     fetch_page(N, Nr, [B|Bs]) when N < Nr ->
         case is_page_break(B) of
             true ->
@@ -277,10 +312,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 
 is_page_break(Block) ->
-    case proplists:get_value(type, Block) of
-        <<"survey_page_break">> -> true;
-        _ -> false
-    end.
+    proplists:get_value(type, Block) =:= <<"survey_page_break">>.
+
+is_button(Block) ->
+    proplists:get_value(type, Block) =:= <<"survey_button">>.
 
 
 %% @doc Collect all answers per question, save to the database.

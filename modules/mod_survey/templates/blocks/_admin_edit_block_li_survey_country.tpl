@@ -1,4 +1,4 @@
-{% extends "admin_edit_widget_std.tpl" %}
+{% extends "admin_edit_widget_i18n.tpl" %}
 
 {% block widget_title %}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
@@ -12,7 +12,7 @@
     {% if is_editable %}
         <input type="text" id="block-{{name}}-prompt{{ lang_code_with_dollar }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
                class="span8" value="{{ blk.prompt[lang_code] }}"
-               placeholder="{_ Select your country. _} ({{ lang_code }})" />
+               placeholder="{_ Select your country _} ({{ lang_code }})" />
 
     {% else %}
         <p>{{ blk.prompt[lang_code] }}</p>

@@ -2,7 +2,7 @@
 	postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 	delegate="mod_survey" 
 %}
-<form id="{{ #q }}" method="post" action="postback">
+<form class="form-survey" id="{{ #q }}" method="post" action="postback">
 	<fieldset>
 		{% if not id.is_a.poll and pages > 1 %}
 			<legend>{_ Question _} <span class="progress">{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
@@ -17,20 +17,24 @@
 		{% endfor %}
 	</fieldset>
 
-	<div class="form-actions">
-		{% if page_nr > 1 %}
-			<a id="{{ #back }}" href="#" class="btn">{_ Back _}</a>
-			{% wire id=#back 
-					postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
-					delegate="mod_survey"
-			%}
-		{% else %}
-			{% if not id.is_a.poll %}
-				<a id="{{ #back }}" href="#" class="btn">{_ Cancel _}</a>
-				{% wire id=#back action={redirect id} %}
-			{% endif %}
-		{% endif %}
-		<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next Question _}{% endif %}</button>
-	</div>
+    {% with questions|last as last %}
+    {% if last.type != 'survey_button' %}
+    	<div class="form-actions">
+    		{% if page_nr > 1 %}
+    			<a id="{{ #back }}" href="#" class="btn">{_ Back _}</a>
+    			{% wire id=#back 
+    					postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
+    					delegate="mod_survey"
+    			%}
+    		{% else %}
+    			{% if not id.is_a.poll %}
+    				<a id="{{ #back }}" href="#" class="btn">{_ Cancel _}</a>
+    				{% wire id=#back action={redirect id} %}
+    			{% endif %}
+    		{% endif %}
+    		<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next Question _}{% endif %}</button>
+    	</div>
+    {% endif %}
+    {% endwith %}
 </form>
 
