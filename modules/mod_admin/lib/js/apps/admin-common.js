@@ -49,7 +49,7 @@ limitations under the License.
     });
     
     $(window).scroll(function() {
-        if ($(window).scrollTop() > 83) {
+        if ($(window).scrollTop() > 118) {
             $('body').addClass('scrolled');
         } else {
             $('body').removeClass('scrolled');

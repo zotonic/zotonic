@@ -583,12 +583,19 @@ span.icon_status_starting {
 --------------------------------------------------------- */
 
 
-body.scrolled #sidebar-publish {
+body.scrolled #sidebar-publish-page {
     position: fixed;
-    top: 49px;
+    top: 12px;
     width: 360px;
 }
 
 body.scrolled #sort {
     padding-top: 166px;
+}
+
+#sidebar-publish-page .widget-content {
+    display: block;
+}
+#sidebar-publish-page h3.widget-header i {
+    display: none;
 }
