@@ -45,21 +45,20 @@
             </thead>
 
             <tbody>
-	        {% for rcpt_id, email, is_enabled in list %}
+            {% for rcpt_id, email, is_enabled in list %}
                 <tr class="{% if not is_enabled %}unpublished{% endif %}" id="{{ #target.rcpt_id }}">
                     <td width="10%"><input id="{{ #enabled.rcpt_id }}" title="{_ Check to activate the e-mail address. _}" type="checkbox" value="{{ rcpt_id }}" {% if is_enabled %}checked="checked"{% endif %} /></td>
-		    <td width="90%" id="{{ #item.rcpt_id }}" style="cursor: pointer" title="{_ Edit recipient _}">
-		        <div class="pull-right">
+                    <td width="90%" id="{{ #item.rcpt_id }}" style="cursor: pointer" title="{_ Edit recipient _}">
+                        <div class="pull-right">
                             {% button class="btn btn-mini" text=_"delete" title=_"Remove this recipient. No undo possible." postback={recipient_delete recipient_id=rcpt_id target=#target.rcpt_id} %}
                         </div>
-                        {{ email|escape|default:"-" }}
+                        {{ email|truncate:35|escape|default:"-" }}
                     </td>
                 </tr>
+                {% wire id=#enabled.rcpt_id postback={recipient_is_enabled_toggle recipient_id=rcpt_id} %}
+                {% wire id=#item.rcpt_id postback={dialog_recipient_edit id=id recipient_id=rcpt_id} %}
+            {% endfor %}
             </tbody>
-	    
-	    {% wire id=#enabled.rcpt_id postback={recipient_is_enabled_toggle recipient_id=rcpt_id} %}
-	    {% wire id=#item.rcpt_id postback={dialog_recipient_edit id=id recipient_id=rcpt_id} %}
-	    {% endfor %}
         </table>
     </div>
     {% empty %}
