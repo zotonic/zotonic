@@ -338,7 +338,7 @@ sanitize1(Html, ExtraElts, ExtraAttrs, OptContext) ->
                     true -> noscript(Value);
                     false -> Value
                 end,
-        Value2 = escape(Value1, <<>>),
+        Value2 = escape(Value1),
         <<Attr/binary, $=, $", Value2/binary, $">>.
 
     %% @doc Escape smaller-than, greater-than, single and double quotes in texts (&amp; is already removed or escaped).
