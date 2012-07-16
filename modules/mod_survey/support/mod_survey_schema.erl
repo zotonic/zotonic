@@ -71,9 +71,9 @@ manage_schema(install, Context) ->
                  ]}, Context),
 
     ok;
-manage_schema({upgrade, 1}, Context) ->
+manage_schema({upgrade, 2}, Context) ->
     % Replace all survey properties with blocks
-    {Low, High} = m_category:range(survey, Context),
+    {Low, High} = m_category:get_range_by_name(survey, Context),
     Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [Low, High], Context),
     [
         survey_to_blocks(Id, Context) || {Id} <- Ids
