@@ -413,9 +413,9 @@ function z_text_to_nodes(text)
 	if (text == "") {
 		return $(text);
 	} else {
-		var len = text.length;
-		
-		if (text.charAt(0) == "<" && text.charAt(len-1) == ">") {
+		var text1 = $.trim(text);
+		var len = text1.length;
+		if (text1.charAt(0) == "<" && text1.charAt(len-1) == ">") {
 			return $(text);
 		} else {
 			return $("<span></span>"+text+"<span></span>").slice(1,-1);
