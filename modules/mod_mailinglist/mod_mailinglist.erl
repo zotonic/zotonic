@@ -298,8 +298,7 @@ poll_scheduled(Context) ->
 	end.
 	
 
-%% @doc Send the page to the mailinglist. The first 20 e-mails are send directly, which is useful for
-%% short lists like test e-mail lists. All other e-mails are queued and sent later.
+%% @doc Send the page to the mailinglist.
 send_mailing(ListId, PageId, Context) ->
     spawn(fun() -> send_mailing_process(ListId, PageId, z_acl:sudo(Context)) end).
 
@@ -317,41 +316,33 @@ send_mailing_process(ListId, PageId, Context) ->
 
 send_mailing_process(ListId, Recipients, PageId, Context) ->
     m_mailinglist:reset_bounced(ListId, Context),
-    {Direct,Queued} = split_list(20, Recipients),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
         {id,PageId}, {list_id, ListId}, {email_from, From}
     ],
-    [ send(true, Email, From, Options, Context) || Email <- Direct ],
-    [ send(false, Email, From, Options, Context) || Email <- Queued ],
+    [ send(Email, From, Options, Context) || Email <- Recipients ],
     ok.
 
 
-    send(_IsDirect, undefined, _From, _Options, _Context) ->
+    send(undefined, _From, _Options, _Context) ->
         skip;
-    send(IsDirect, Id, From, Options, Context) when is_integer(Id) ->
-        send(IsDirect, m_rsc:p_no_acl(Id, email, Context), From, [{recipient_id,Id}|Options], Context);
-    send(IsDirect, Email, From, Options, Context) ->
+    send(Id, From, Options, Context) when is_integer(Id) ->
+        send(m_rsc:p_no_acl(Id, email, Context), From, [{recipient_id,Id}|Options], Context);
+    send(Email, From, Options, Context) ->
         case z_convert:to_list(z_string:trim(Email)) of
-            [] -> skip;
+            [] -> 
+                skip;
             Email1 ->
                 Id = proplists:get_value(id, Options),
                 Attachments = mod_mailinglist:page_attachments(Id, Context),
-                z_email_server:send(#email{queue=not(IsDirect), to=Email1, from=From,
-                                           html_tpl={cat, "mailing_page.tpl"}, vars=[{email,Email1}|Options], attachments=Attachments}, Context)
+                z_email_server:send(#email{to=Email1, 
+                                           from=From,
+                                           html_tpl={cat, "mailing_page.tpl"}, 
+                                           vars=[{email,Email1}|Options], 
+                                           attachments=Attachments
+                                    }, 
+                                    Context)
         end.
-
-
-	split_list(N, List) ->
-		split_list(N, List, []).
-
-		split_list(0, List, Acc) ->
-			{Acc, List};
-		split_list(_N, [], Acc) ->
-			{Acc, []};
-		split_list(N, [H|T], Acc) ->
-			split_list(N-1, T, [H|Acc]).
-
 
 %% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'hasdocument' edges.
 page_attachments(Id, Context) ->
