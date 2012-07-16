@@ -379,7 +379,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                 mailer_status=error,
                 props=[{reason, illegal_address}],
                 message_nr=Id,
-                envelop_to=Email,
+                envelop_to=Recipient,
                 to_id=proplists:get_value(recipient_id, Email#email.vars),
                 from_id=z_acl:user(Context),
                 content_id=proplists:get_value(id, Email#email.vars),
