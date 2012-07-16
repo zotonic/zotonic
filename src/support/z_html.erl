@@ -327,7 +327,7 @@ sanitize1(Html, ExtraElts, ExtraAttrs, OptContext) ->
     %% @todo Strip scripting and text css attributes
     %% css: anything within () should be removed
     flatten_attr({<<"style">>,Value}) ->
-        Value1 = escape(filter_css(Value), <<>>),
+        Value1 = escape(filter_css(Value)),
         <<"style=\"", Value1/binary, $">>;
     flatten_attr({<<"class">>,Value}) ->
         % Remove all do_xxxx widget manager classes
