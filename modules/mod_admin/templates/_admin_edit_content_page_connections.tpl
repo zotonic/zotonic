@@ -20,23 +20,25 @@
     {% for name, p in m.predicate %}
 	{% if p.id|member:pred_shown %}
 	    {% ifnotequal name "depiction" %}
-	    <h4>
-                {{ p.title }}
-            </h4>
+	    <h4>{{ p.title }}</h4>
 		
 	    <div class="unlink-wrapper clearfix">
 		{% sorter id=["links",id|format_integer,name]|join:"-" tag={object_sorter predicate=name id=id} group="edges" handle=".unlink-mover" %}
-		<ul id="links-{{ id }}-{{ name }}" class="connections-list">
-		    {% for o_id, edge_id in m.edge.o[id][name] %}
-		    {% include "_rsc_edge.tpl" subject_id=id predicate=name object_id=o_id edge_id=edge_id %}
-		    {% endfor %}
+		<ul id="links-{{ id }}-{{ name }}" class="connections-list" data-reload-template="_rsc_edge_list.tpl">
+			{% include "_rsc_edge_list.tpl" id=id predicate=name %}
 		</ul>
 	    </div>
+
 	    {% if is_editable %}
-	    <p>{% dialog_link_add subject_id=id predicate=name %}</p>
+	    <p>
+		    <a id="{{ #connect.name }}" href="#connect">+ {_ add a connection _}</a>
+		   	{% wire id=#connect.name 
+		   			action={dialog_open template="_action_dialog_connect.tpl" 
+		   						title=[_"Add a connection: ", p.title] subject_id=id predicate=name}
+		   	%}
+	   	</p>
 	    {% endif %}
 
-	    
 	    <hr />
 	    {% endifnotequal %}
 	{% endif %}

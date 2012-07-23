@@ -23,6 +23,7 @@
             object_id=object_id 
             hide=#unlink_wrapper
             undo_message_id=unlink_message 
-            undo_action={postback postback={reload_media rsc_id=id div_id=div_id} delegate="resource_admin_edit"}} 
+            undo_action={postback postback={reload_media rsc_id=id div_id=["links-",id|make_list,"-depiction"]} 
+                                  delegate="resource_admin_edit"}} 
 %}
 {% wire id=#edit target=#unlink_wrapper action={dialog_edit_basics edge_id=edge_id template="_rsc_edge_media.tpl"} %}

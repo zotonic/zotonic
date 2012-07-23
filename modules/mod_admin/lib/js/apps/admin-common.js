@@ -34,7 +34,9 @@ limitations under the License.
                                                                           $(this)
                                                                               .addClass("view-link")
                                                                               .contents()
-                                                                              .wrapAll($("<a>").addClass("view-link").attr("href", href));
+                                                                              .wrapAll($("<a>")
+                                                                              	.addClass("view-link")
+                                                                              	.attr("href", href));
                                                                       });
                                           }));
         }
@@ -57,6 +59,21 @@ limitations under the License.
     });
 })(jQuery);
 
+
+window.zAdminConnectDone = function(v) {
+	console.log(v);
+	var target_id = "links-"+v.subject_id+"-"+v.predicate;
+	var $elt = $("#"+target_id);
+	$elt.mask("", 10);
+	z_notify("update", {
+		z_delegate: "mod_admin",
+		z_target_id: target_id,
+		z_trigger_id: target_id,
+		id: v.subject_id,
+		predicate: v.predicate,
+		template: $elt.data("reload-template")
+	});
+};
 
 
 tinyInit = {

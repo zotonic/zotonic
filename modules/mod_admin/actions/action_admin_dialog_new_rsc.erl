@@ -35,16 +35,16 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Redirect = proplists:get_value(redirect, Args, true),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
-    EdgeTemplate = proplists:get_value(edge_template, Args),
+    Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_all_values(action, Args),
-    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate, Actions},
+    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, Callback, Actions},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, EdgeTemplate, Actions}}, Context) ->
+event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, Callback, Actions}}, Context) ->
     CatName = case Cat of
         undefined -> "page";
         _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
@@ -63,7 +63,8 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, Subj
         {cat, CatId},
         {nocatselect, NoCatSelect},
         {catname, CatName},
-        {edge_template, EdgeTemplate},
+        {callback, Callback},
+        {catname, CatName},
         {actions, Actions}
     ],
     z_render:dialog("Make a new "++CatName++".", "_action_dialog_new_rsc.tpl", Vars, Context);
@@ -76,7 +77,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     Redirect = proplists:get_value(redirect, Args),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
-    EdgeTemplate = proplists:get_value(edge_template, Args),
+    Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
 
     Props = [
@@ -90,8 +91,11 @@ event(#submit{message={new_page, Args}}, Context) ->
     Context1 = case SubjectId of
         [] -> 
             Context;
-        L when is_list(L); is_integer(L) ->
-            action_admin_link:do_link(z_convert:to_integer(SubjectId), Predicate, Id, EdgeTemplate, Context);
+        L when is_list(L); is_integer(L); is_binary(L) ->
+            case mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context) of
+                {ok, Ct} -> Ct;
+                {error, Ct} -> Ct
+            end;
         _ ->
             Context
     end,
@@ -105,7 +109,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     % optionally redirect to the edit page of the new resource
     case z_convert:to_bool(Redirect) of
         false ->
-            Context2;
+             Context2;
         true ->
             Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)

@@ -35,20 +35,22 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Predicate = proplists:get_value(predicate, Args, depiction),
     Actions = proplists:get_all_values(action, Args),
     Stay = proplists:get_value(stay, Args, false),
-    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Actions},
+    Callback = proplists:get_value(callback, Args),
+    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Callback, Actions},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Actions}}, Context) ->
+event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Callback, Actions}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
-        {id, Id },
-        {subject_id, SubjectId },
+        {id, Id},
+        {subject_id, SubjectId},
         {title, Title},
         {actions, Actions},
+        {callback, Callback},
         {predicate, Predicate},
         {stay, Stay}
     ],
@@ -109,43 +111,44 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
+    Callback = proplists:get_value(callback, EventProps),
     case Id of
         %% Create a new media page
         undefined ->
             SubjectId = proplists:get_value(subject_id, EventProps),
             Predicate = proplists:get_value(predicate, EventProps, depiction),
-            F = fun(Ctx) ->
-                        case InsertFun(Ctx) of
-                            {ok, MediaRscId} ->
-                                case SubjectId of
-                                    undefined -> 
-                                        ok;
-                                    _ ->
-                                        m_edge:insert(SubjectId, Predicate, MediaRscId, Ctx)
-                                end,
-                                {ok, MediaRscId};
-                            Error -> 
-                                Error
-                        end
-                end,
-            Result = z_db:transaction(F, Context),
+            Result = z_db:transaction(fun(Ctx) -> InsertFun(Ctx) end, Context),
             
             case Result of
                 {ok, MediaId} ->
-                    ContextRedirect = case SubjectId of
-                                          undefined -> 
-                                              case Stay of
-                                                  true -> Context;
-                                                  false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context)
-                                              end;
-                                          _ -> Context
+                    ContextCb = case SubjectId of
+                        undefined ->
+                            Context;
+                        _ ->
+                            case mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context) of
+                                {ok, Ct} -> Ct;
+                                {error, Ct} -> Ct
+                            end
+                    end,
+                    ContextRedirect = 
+                            case SubjectId of
+                              undefined -> 
+                                  case Stay of
+                                      true -> ContextCb;
+                                      false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, ContextCb)
+                                  end;
+                              _ -> 
+                                  ContextCb
                             end,
                     Actions2 = [add_arg_to_action({id, MediaId}, A) || A <- Actions],
-                    z_render:wire([{growl, [{text, "Uploaded the file."}]} | Actions2], ContextRedirect);
+                    z_render:wire([
+                            {growl, [{text, "Uploaded the file."}]},
+                            {dialog_close, []} 
+                            | Actions2], ContextRedirect);
                 {error, _Error} ->
                     z_render:growl_error("Error uploading the file.", Context)
             end;
-        
+      
         %% Replace attached medium with the uploaded file (skip any edge requests)
         N when is_integer(N) -> 
             case ReplaceFun(Id, Context) of

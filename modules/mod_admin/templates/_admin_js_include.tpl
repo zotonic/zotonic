@@ -12,6 +12,7 @@
     "js/modules/z.notice.js"
     "js/modules/z.tooltip.js"
     "js/modules/z.dialog.js"
+    "js/modules/z.feedback.js"
     "js/modules/z.formreplace.js"
     "js/modules/z.datepicker.js"
     "js/modules/z.menuedit.js"

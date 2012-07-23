@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-06-09
 %% @doc Administrative interface.  Aka backend.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,7 +30,9 @@
          observe_sanitize_element/3,
          observe_admin_menu/3,
          observe_admin_edit_blocks/3,
-         event/2
+         event/2,
+
+         do_link/5
 ]).
 
 -include_lib("zotonic.hrl").
@@ -168,8 +170,85 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
         undefined -> z_render:insert_top("edit-blocks", Render, Context);
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
-event(_, Context) ->
+
+event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
+    % Find pages matching the search criteria.
+    SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
+    Category = z_context:get_q(find_category, Context),
+    Text=z_context:get_q(find_text, Context),
+    Cats = case Category of
+                "p:"++Predicate -> m_predicate:object_category(Predicate, Context);
+                "" -> [];
+                CatId -> [{z_convert:to_integer(CatId)}]
+           end,
+    Vars = [
+        {subject_id, SubjectId},
+        {cat, Cats},
+        {text, Text}
+    ],
+    z_render:wire([
+        {remove_class, [{target, TargetId}, {class, "loading"}]},
+        {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
+    ], Context);
+
+event(#postback_notify{message="admin-connect-select"}, Context) ->
+    SubjectId = z_convert:to_integer(z_context:get_q("subject_id", Context)),
+    Predicate = z_context:get_q("predicate", Context),
+    ObjectId = z_convert:to_integer(z_context:get_q("select_id", Context)),
+    Callback = z_context:get_q("callback", Context),
+    case do_link(SubjectId, Predicate, ObjectId, Callback, Context) of
+        {ok, Context1} ->
+            z_render:dialog_close(Context1);
+        {error, Context1} ->
+            Context1
+    end;
+
+event(#postback_notify{message="update", target=TargetId}, Context) ->
+    Template = filename:basename(z_context:get_q("template", Context)),
+    Id = z_convert:to_integer(z_context:get_q("id", Context)),
+    Predicate = list_to_existing_atom(z_context:get_q("predicate", Context)),
+    Vars = [
+        {id, Id},
+        {predicate, Predicate}
+    ],
+    Context1 = z_render:wire({unmask, []}, Context),
+    z_render:update(TargetId, #render{template=Template, vars=Vars}, Context1);
+
+event(_E, Context) ->
     Context.
+
+
+
+do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
+    case z_acl:rsc_editable(SubjectId, Context) of
+        true ->
+            case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
+                undefined ->
+                    {ok, EdgeId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
+                    Vars = [
+                            {subject_id, SubjectId},
+                            {predicate, Predicate},
+                            {object_id, ObjectId},
+                            {edge_id, EdgeId}
+                           ],
+                    Context1 = case Callback of
+                            undefined -> 
+                                Context;
+                            _ ->
+                                z_render:wire({script, [{script, [
+                                        Callback, $(,
+                                            z_utils:js_object(Vars,Context),
+                                        $),$;
+                                    ]}]}, Context)
+                        end,
+                    Title = m_rsc:p(ObjectId, title, Context1),
+                    {ok, z_render:wire({growl, [{text, [?__("Added the connection to", Context1),"“",Title,"”."]}]}, Context1)};
+                _ ->
+                    {error, z_render:growl_error(?__("This connection does already exist.", Context), Context)}
+            end;
+        false ->
+            {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.",Context), Context)}
+    end.
 
     
 

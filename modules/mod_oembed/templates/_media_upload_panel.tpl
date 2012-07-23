@@ -4,8 +4,11 @@
 <div class="tab-pane" id="{{ tab }}-oembed">
     <p>{_ Embed a video or other media URL. Here you can paste any URL from YouTube, Vimeo or other services. _}</p>
 
-    {% wire id=#form type="submit" postback={add_video_embed predicate=predicate actions=actions id=id subject_id=subject_id stay=stay} delegate="mod_oembed" %}
-
+    {% wire id=#form type="submit" 
+    	postback={add_video_embed predicate=predicate actions=actions id=id 
+    				subject_id=subject_id stay=stay callback=callback}
+    	delegate="mod_oembed" 
+    %}
     <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
 
 	<div class="control-group">

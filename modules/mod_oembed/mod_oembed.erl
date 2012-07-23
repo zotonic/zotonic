@@ -164,6 +164,7 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
+    Callback = proplists:get_value(callback, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
     EmbedUrl = z_context:get_q_validated("oembed_url", Context),
 
@@ -183,13 +184,9 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {oembed_url, EmbedUrl}
             ],
             F = fun(Ctx) ->
-                case m_rsc:insert(Props, Context) of
-                    {ok, MediaRscId} ->
-                        case SubjectId of
-                            undefined -> nop;
-                            _ -> m_edge:insert(SubjectId, Predicate, MediaRscId, Ctx)
-                        end,
-                        {ok, MediaRscId};
+                case m_rsc:insert(Props, Ctx) of
+                    {ok, _MediaRscId} = Ok ->
+                        Ok;
                     {error, Error} ->
                         throw({error, Error})
                 end
@@ -198,15 +195,22 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
             case z_db:transaction(F, Context) of
                 {ok, MediaId} ->
                     spawn(fun() -> preview_create(MediaId, Props, Context) end),
+                    
+                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, 
+                                                         MediaId, Callback, Context),
+
                     ContextRedirect = case SubjectId of
                         undefined ->
                             case Stay of
-                                false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, Context);
-                                true -> Context
+                                false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, ContextLink);
+                                true -> ContextLink
                             end;
-                        _ -> Context
+                        _ -> ContextLink
                     end,
-                    z_render:wire([{dialog_close, []}, {growl, [{text, "Made the media page."}]} | Actions], ContextRedirect);
+                    z_render:wire([
+                                {dialog_close, []}, 
+                                {growl, [{text, ?__("Made the media page.", ContextRedirect)}]} 
+                                | Actions], ContextRedirect);
                 {rollback, {_Error, _Trace}} ->
                     ?ERROR("~p~n~p", [_Error, _Trace]),
                     z_render:growl_error("Could not create the media page.", Context)

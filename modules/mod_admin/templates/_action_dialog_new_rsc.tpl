@@ -1,5 +1,6 @@
 {% wire id=#form type="submit" 
-	postback={new_page subject_id=subject_id predicate=predicate redirect=redirect edge_template=edge_template actions=actions }
+	postback={new_page subject_id=subject_id predicate=predicate redirect=redirect 
+			  actions=actions callback=callback}
 	delegate=delegate 
 %}
 <p>{_ Please fill in the title _} {% if not nocatselect %}{_ and the category of the new page._}{% else %}{_ of the new _} {{ catname }}.{% endif %} </p>
@@ -39,7 +40,8 @@
 	    <label class="control-label" for="{{ #published }}">{_ Published _}</label>
             <div class="controls">
 		<label class="checkbox">
-                    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" {% if subject_id %}checked="checked"{% endif %} />
+                    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" 
+                    		{% if subject_id %}checked="checked"{% endif %} />
                 </label>
 	    </div>
 	</div>

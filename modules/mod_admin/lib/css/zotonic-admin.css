@@ -450,6 +450,27 @@ ul.suggestions-list li a:hover {
 }
 
 
+#dialog-connect-results {
+    max-height: 400px;
+    overflow-y: scroll;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+}
+
+    #dialog-connect-results .thumbnail:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+
+    #dialog-connect-results .thumbnails .thumbnail {
+        overflow: hidden;
+        height: 64px;
+    }
+
+    #dialog-connect-results .thumbnails .thumbnail img {
+        margin-right: 4px;
+    }
+
 /* growl message */
 .notice-wrap {
 	position: fixed;
