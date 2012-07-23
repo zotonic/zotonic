@@ -32,6 +32,7 @@
 		{% include "_content_list.tpl" list=id.o.depiction title=_"Media"%}
 
 		{% include "_content_list.tpl" list=id.o.haspart title=_"More" %}
+		{% include "_content_list.tpl" list=id.o.relation %}
 
 		{% include "_content_list.tpl" list=m.rsc.sidebar_collection.o.haspart %}
 	{% endblock %}
