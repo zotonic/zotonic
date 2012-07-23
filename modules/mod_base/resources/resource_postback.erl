@@ -115,7 +115,7 @@ process_postback(Context1) ->
                          end,
             PostbackNotify = #postback_notify{message=Message, trigger=TriggerId1, target=TargetId},
             case z_context:get_q("z_delegate", Context1) of
-                None when None =:= []; None =:= undefined ->
+                None when None =:= []; None =:= <<>>; None =:= undefined ->
                     case z_notifier:first(PostbackNotify, Context1) of
                         undefined -> Context1;
                         #context{} = ContextNotify -> ContextNotify
