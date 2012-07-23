@@ -4,8 +4,7 @@
 
 {% block content %}
 <div {% include "_language_attrs.tpl" id=id %}>
-	<h1>{{ m.rsc[id].title }}</h1>
-
+	{% include "_title.tpl" %}
 	{% include "_meta.tpl" %}
 
 	{% if m.rsc[id].summary %}

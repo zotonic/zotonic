@@ -26,30 +26,19 @@
 
 	{% block below_body %}{% endblock %}
 
-	{% block related %}
-		{% with id.o.hasdocument as xs %}
-		{% with id.o.depiction as ds %}
-		{% if xs or ds|length > 1 %}
-		<ul class="thumbnails">
-			{% for d in ds %}
-			{% if not forloop.first or d.is_a.document %}
-				{% catinclude "_thumbnail_list_item.tpl" d %}
-			{% endif %}
-			{% endfor %}
-			{% for d in xs %}
-				{% catinclude "_thumbnail_list_item.tpl" d %}
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% endwith %}
-		{% endwith %}
+	{% block seealso %}
+		{% include "_content_list.tpl" list=id.o.hasfeatured %}
+        {% include "_content_list.tpl" list=id.o.haspart in_collection=id %}
+        {% include "_content_list.tpl" list=id.o.relation %}
+	{% endblock %}
+	
+	{% block thumbnails %}
+	    {% include "_page_thumbnails.tpl" %}
+	{% endblock %}
 
-		{% with id.o.haspart, id.s.haspart as sub,super %}
-		{% if sub or super %}
-			<h3>{_ More _}</h3>
-			{% include "_content_list.tpl" list=sub %}
-			{% include "_content_list.tpl" list=super %}
-		{% endif %}
+	{% block sidebar_collection %}
+		{% with m.rsc.sidebar_collection.id as id %}
+		{% include "_content_list.tpl" list=id.o.haspart %}
 		{% endwith %}
 	{% endblock %}
 </div>

@@ -21,6 +21,9 @@
 	{% include "_blocks.tpl" %}
 	{% endblock %}
 	</div>
+
+	{% block below_body %}
+	{% endblock %}
 	
 	{% block seealso %}
         {% include "_content_list.tpl" list=id.o.haspart in_collection=id is_large %}
@@ -29,9 +32,6 @@
 	
 	{% block thumbnails %}
 	    {% include "_page_thumbnails.tpl" %}
-	{% endblock %}
-	
-	{% block below_body %}
 	{% endblock %}
 </div>
 {% endblock %}
