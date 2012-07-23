@@ -24,11 +24,11 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
     Stay   = proplists:get_value(stay, Args, 0),
     Type   = proplists:get_value(type, Args, "notice"),
 
-    TextJS = z_utils:js_escape(Text),
+    TextJS = z_utils:js_escape(Text, Context),
     StayJS = case z_convert:to_bool(Stay) of 
                 true  -> $1;
                 false -> $0
              end,
-	TypeJS = z_utils:js_escape(Type),
+	TypeJS = z_utils:js_escape(Type, Context),
 	Script = [<<"z_growl_add(\"">>,TextJS,<<"\", ">>, StayJS,<<",\"">>, TypeJS, $", $), $;],
 	{Script, Context}.
