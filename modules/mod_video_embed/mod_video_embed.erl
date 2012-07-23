@@ -168,7 +168,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
             ],
 
             F = fun(Ctx) ->
-                case m_rsc:insert(Props, Context) of
+                case m_rsc:insert(Props, Ctx) of
                     {ok, _MediaRscId} = Ok ->
                         Ok;
                     {error, Error} ->
