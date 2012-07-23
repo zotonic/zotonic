@@ -334,39 +334,41 @@ os_escape(win32, [C|Rest], Acc) ->
 %% @doc Javascript escape, see also: http://code.google.com/p/doctype/wiki/ArticleXSSInJavaScript
 js_escape({trans, []}, undefined) -> [];
 js_escape({trans, Ts}, undefined) -> js_escape(hd(Ts));
-js_escape({trans, _} = Tr, Context) -> js_escape(z_trans:lookup_fallback(Tr, Context));
-js_escape(V, _OptContext) -> js_escape(V).
+js_escape({trans, _} = Tr, Context) -> js_escape(z_trans:lookup_fallback(Tr, Context), Context);
+js_escape(undefined, _OptContext) -> [];
+js_escape([], _OptContext) -> [];
+js_escape(<<>>, _OptContext) -> [];
+js_escape(Value, _OptContext) when is_integer(Value) -> integer_to_list(Value);
+js_escape(Value, OptContext) when is_atom(Value) ->  js_escape1(atom_to_list(Value), [], OptContext);
+js_escape(Value, OptContext) when is_binary(Value) -> js_escape1(binary_to_list(Value), [], OptContext);
+js_escape(Value, OptContext) -> js_escape1(Value, [], OptContext).
 
-js_escape(undefined) -> [];
-js_escape([]) -> [];
-js_escape(<<>>) -> [];
-js_escape(Value) when is_integer(Value) -> integer_to_list(Value);
-js_escape(Value) when is_atom(Value) ->  js_escape1(atom_to_list(Value), []);
-js_escape(Value) when is_binary(Value) -> js_escape1(binary_to_list(Value), []);
-js_escape(Value) -> js_escape1(Value, []).
+js_escape(V) ->
+  js_escape(V, undefined).
 
-js_escape1([], Acc) -> lists:reverse(Acc);
-js_escape1([$\\|T], Acc) -> js_escape1(T, [$\\,$\\|Acc]);
-js_escape1([$\n|T], Acc) -> js_escape1(T, [$n,$\\|Acc]);
-js_escape1([$\r|T], Acc) -> js_escape1(T, [$r,$\\|Acc]);
-js_escape1([$\t|T], Acc) -> js_escape1(T, [$t,$\\|Acc]);
-js_escape1([$'|T], Acc) -> js_escape1(T, [$7,$2,$x,$\\|Acc]);
-js_escape1([$"|T], Acc) -> js_escape1(T, [$2,$2,$x,$\\|Acc]);
-js_escape1([$<|T], Acc) -> js_escape1(T, [$c,$3,$x,$\\|Acc]);
-js_escape1([$>|T], Acc) -> js_escape1(T, [$e,$3,$x,$\\|Acc]);
-js_escape1([$=|T], Acc) -> js_escape1(T, [$d,$3,$x,$\\|Acc]);
-js_escape1([$&|T], Acc) -> js_escape1(T, [$6,$2,$x,$\\|Acc]);
+
+js_escape1([], Acc, _OptContext) -> lists:reverse(Acc);
+js_escape1([$\\|T], Acc, OptContext) -> js_escape1(T, [$\\,$\\|Acc], OptContext);
+js_escape1([$\n|T], Acc, OptContext) -> js_escape1(T, [$n,$\\|Acc], OptContext);
+js_escape1([$\r|T], Acc, OptContext) -> js_escape1(T, [$r,$\\|Acc], OptContext);
+js_escape1([$\t|T], Acc, OptContext) -> js_escape1(T, [$t,$\\|Acc], OptContext);
+js_escape1([$'|T], Acc, OptContext) -> js_escape1(T, [$7,$2,$x,$\\|Acc], OptContext);
+js_escape1([$"|T], Acc, OptContext) -> js_escape1(T, [$2,$2,$x,$\\|Acc], OptContext);
+js_escape1([$<|T], Acc, OptContext) -> js_escape1(T, [$c,$3,$x,$\\|Acc], OptContext);
+js_escape1([$>|T], Acc, OptContext) -> js_escape1(T, [$e,$3,$x,$\\|Acc], OptContext);
+js_escape1([$=|T], Acc, OptContext) -> js_escape1(T, [$d,$3,$x,$\\|Acc], OptContext);
+js_escape1([$&|T], Acc, OptContext) -> js_escape1(T, [$6,$2,$x,$\\|Acc], OptContext);
 %% js_escape1([16#85,C|T], Acc) when C >= 16#80 -> js_escape1(T, [C,16#85|Acc]);
 %% js_escape1([16#85|T], Acc) -> js_escape1(T, [$5,$8,$0,$0,$u,$\\|Acc]);
-js_escape1([16#2028|T],Acc)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc]);
-js_escape1([16#2029|T],Acc)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc]);
-js_escape1([16#e2,16#80,16#a8|T],Acc)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc]);
-js_escape1([16#e2,16#80,16#a9|T],Acc)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc]);
-js_escape1([H|T], Acc) when is_integer(H) ->
-    js_escape1(T, [H|Acc]);
-js_escape1([H|T], Acc) ->
-    H1 = js_escape(H),
-    js_escape1(T, [H1|Acc]).
+js_escape1([16#2028|T],Acc, OptContext)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc], OptContext);
+js_escape1([16#2029|T],Acc, OptContext)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc], OptContext);
+js_escape1([16#e2,16#80,16#a8|T],Acc, OptContext)-> js_escape1(T, [$8,$2,$0,$2,$u,$\\|Acc], OptContext);
+js_escape1([16#e2,16#80,16#a9|T],Acc, OptContext)-> js_escape1(T, [$9,$2,$0,$2,$u,$\\|Acc], OptContext);
+js_escape1([H|T], Acc, OptContext) when is_integer(H) ->
+    js_escape1(T, [H|Acc], OptContext);
+js_escape1([H|T], Acc, OptContext) ->
+    H1 = js_escape(H, OptContext),
+    js_escape1(T, [H1|Acc], OptContext).
 
 %% js_escape(<<"<script", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "<scr\" + \"ipt">>);
 %% js_escape(<<"script>", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "scr\" + \"ipt>">>);
