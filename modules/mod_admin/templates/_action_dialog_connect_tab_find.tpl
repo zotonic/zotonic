@@ -32,9 +32,10 @@ $("#dialog-connect-found").on('click', '.thumbnail', function() {
 	z_notify("admin-connect-select", { 
 				z_delegate: "mod_admin", 
 				select_id: $(this).data('id'),
-				predicate: '{{ predicate.name }}',
+				predicate: '{{ predicate }}',
 				subject_id: '{{ subject_id }}',
-				callback: 'window.zAdminConnectDone'
+				callback: '{{ callback }}',
+				language: '{{ language }}'
 		});
 });
 {% endjavascript %}

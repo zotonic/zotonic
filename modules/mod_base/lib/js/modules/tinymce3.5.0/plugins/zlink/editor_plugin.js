@@ -16,21 +16,21 @@
 		{
 			ed.addCommand('Z_Link', function() 
 			{
-                z_event('zlink');
+	            window.z_zlink = function(url, title) {
+	                //var html = id + "<b>{$selection}</b>";
+	                if (ed.selection.getContent())
+	                {
+	                    ed.execCommand('mceInsertLink', false, {href: url, title: title});
+	                }
+	                else
+	                {
+	                    var html = "<a href=\"" + url + "\">" + title + "</a>";
+	                    ed.execCommand('mceInsertContent', false, html);
+	                }
+				};
+                z_event('zlink', {language: window.zEditLanguage()});
 			});
 
-            window.z_zlink = function(url, title) {
-                //var html = id + "<b>{$selection}</b>";
-                if (ed.selection.getContent())
-                {
-                    ed.execCommand('mceInsertLink', false, {href: url, title: title});
-                }
-                else
-                {
-                    var html = "<a href=\"" + url + "\">" + title + "</a>";
-                    ed.execCommand('mceInsertContent', false, html);
-                }
-			};
 			ed.addButton('zlink', {
 				title: 'Add internal link',
 				cmd: 'Z_Link',

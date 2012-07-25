@@ -64,7 +64,7 @@ content_types_provided(ReqData, Context) ->
 
 
 to_image(ReqData, Context) ->
-    Opts = [{width, 100}, {height, 100}],
+    Opts = [{mediaclass, "admin-editor"}],
     Id = m_rsc:rid(z_context:get("id", Context), Context),
     {ok, Url} = z_media_tag:url(Id, Opts, Context),
     ReqData1 = wrq:set_resp_header("Location", binary_to_list(Url), ReqData),

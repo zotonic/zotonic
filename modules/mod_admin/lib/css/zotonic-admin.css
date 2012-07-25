@@ -457,17 +457,17 @@ ul.suggestions-list li a:hover {
     border-top: 1px solid #eee;
 }
 
-    #dialog-connect-results .thumbnail:hover {
+    #dialog-connect-panels .thumbnail:hover {
         background-color: #eee;
         cursor: pointer;
     }
 
-    #dialog-connect-results .thumbnails .thumbnail {
+    #dialog-connect-panels .thumbnails .thumbnail {
         overflow: hidden;
         height: 64px;
     }
 
-    #dialog-connect-results .thumbnails .thumbnail img {
+    #dialog-connect-panels .thumbnails .thumbnail img {
         margin-right: 4px;
     }
 

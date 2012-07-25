@@ -24,25 +24,6 @@
                                               delegate="resource_admin_edit"}
                                 ]}
             %}
-
-{#
-        {% button   text=_"add a new media item"
-            class="btn"
-            icon="icon-camera"
-            action={dialog_media_upload subject_id=id stay
-            action={postback postback={reload_media rsc_id=id div_id=#media} delegate="resource_admin_edit"}}
-        %}
-
-        {% button   text=_"add media item"
-            class="btn"
-            icon="icon-folder-open"
-            action={dialog_link subject_id=id predicate="depiction"
-            action={postback
-            postback={reload_media rsc_id=id div_id=#media}
-            delegate="resource_admin_edit"}
-            } 
-        %}
-#}
     </div>
 </div>
 {% endif %}

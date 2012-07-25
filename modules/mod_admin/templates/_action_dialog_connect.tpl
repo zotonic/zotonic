@@ -1,7 +1,13 @@
-{% with callback|default:"window.zAdminConnectDone" as callback %}
+{% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
+{% with language|default:q.language|default:z_language as language %}
 {% with actions|default:[] as actions %}
 <ul class="nav nav-pills">
+	{% if q.is_zmedia %}
 	<li class="active">
+		<a data-toggle="tab" href="#{{ #tab }}-depiction">{_ Attached media _}</a>
+	</li>
+	{% endif %}
+	<li {% if not is_zmedia %}class="active"{% endif %}>
 		<a data-toggle="tab" href="#{{ #tab }}-find">{_ Find Page _}</a>
 	</li>
 	{% if predicate.name /= "depiction" %}
@@ -18,8 +24,12 @@
     {% all include "_media_upload_tab.tpl" tab=#tab %}
 </ul>
 
-<div class="tab-content">
-	{% include "_action_dialog_connect_tab_find.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active title="" %}
+<div class="tab-content" id="dialog-connect-panels">
+	{% if q.is_zmedia %}
+		{% include "_action_dialog_connect_tab_depictions.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active title="" %}
+	{% endif %}
+
+	{% include "_action_dialog_connect_tab_find.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active=(not is_zmedia) title="" %}
 
 	{% if predicate.name /= "depiction" %}
 		{% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
@@ -34,5 +44,6 @@
 	    %}
 	{% endwith %}
 </div>
+{% endwith %}
 {% endwith %}
 {% endwith %}

@@ -8,8 +8,24 @@
 {% with m.rsc[id] as r %}
 <fieldset class="admin-form">
 	{% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
+
+	{% wire name="zmedia" 
+		action={dialog_open template="_action_dialog_connect.tpl" title=_"Insert image" 
+							subject_id=id predicate=`depiction`
+							is_zmedia
+							callback="window.zAdminMediaDone"}
+	%}
+
+	{% wire name="zlink" 
+		action={dialog_open template="_action_dialog_connect.tpl" title=_"Add link"
+							subject_id=id predicate=`relation`
+							is_zlink
+							callback="window.zAdminLinkDone"}
+	%}
+{#
 	{% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
 	{% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
+#}
 
 	<div class="form-item clearfix">
 		{% with is_i18n|if:r.translation[lang_code].body:r.body	 as	 body %}

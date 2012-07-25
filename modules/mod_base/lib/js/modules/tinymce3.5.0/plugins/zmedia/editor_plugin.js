@@ -1,8 +1,10 @@
 /**
- * $Id: editor_plugin_src.js 677 2008-03-07 13:52:41Z spocke $
+ * Set the image options or select an image to insert.
  *
+ * @author Arjan Scherpenisse <arjan@scherpenisse.net>
  * @author Moxiecode
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright 2010-2012 Arjan Scherpenisse <arjan@scherpenisse.net>
+ * @copyright Copyright 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
 
@@ -38,12 +40,12 @@
                         } 
                         else {
                             // Open "insert" dialog
-                            z_event('zmedia');
                             window.z_choose_zmedia = function(id) {
                                 if (!id) return;
                                 var html = window.tinyMCEzMedia.toHTML(id, {align: "block", size: "middle", crop: '', link: ''});
                                 ed.execCommand('mceInsertContent', false, html, {});
                             };
+                            z_event('zmedia', {language: window.zEditLanguage(), is_zmedia: 1});
                         }
                     });
 
@@ -73,47 +75,57 @@
                 var id = this._zMediaIdFromDOM(node);
                 var opts = this._zMediaOptsFromDOM(node);
 
-                $.dialogAdd({title: 'Media properties',
-                            text: '<div class="z-tinymce-media-options"><img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" />' + 
-                            '<p>Choose the properties of the image:</p>' + 
+                z_dialog_open({
+                            title: 'Media properties',
+                            text: 
+                             '<form id="zmedia-props-form">'
+                            +'<fieldset>'
+                            +'<div class="row">'
+                            +'<div class="span2"><img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" /></div>' 
+                            +'<div class="span2">'
+                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='block'?'checked="checked"':'') + ' value="block" id="a-block"> Between text</label>'
+                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='left'?'checked="checked"':'') + 'value="left" id="a-left"> Aligned left</label>'
+                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='right'?'checked="checked"':'') + 'value="right" id="a-right"> Aligned right</label>'
+                            +'</div>'
+                            +'<div class="span1">'
+                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='small'?'checked="checked"':'') + ' value="small" id="a-small"> Small</label>'
+                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='middle' || opts.size == undefined?'checked="checked"':'') + 'value="middle" id="a-middle"> Middle</label>'
+                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='large'?'checked="checked"':'') + 'value="large" id="a-large"> Large</label>'
+                            +'</div>'
+                            +'<div class="span2">'
+                            +'<label class="checkbox"><input type="checkbox" name="crop" ' + (opts.crop=='crop'?'checked="checked"':'') + ' value="crop" id="a-crop"> Crop image</label>'
+                            +'<label class="checkbox"><input type="checkbox" name="link" ' + (opts.link=='link'?'checked="checked"':'') + ' value="crop" id="a-link"> Make link</label>'
+                            +'</div>'
+                            +'</div>'
 
-                            '<div class="form-item clearfix left">' +
-                            '<label for="a-block"><input type="radio" name="align" ' + (opts.align=='block'?'checked="checked"':'') + ' value="block" id="a-block"> Between text</label>' +
-                            '<label for="a-left"><input type="radio" name="align" ' + (opts.align=='left'?'checked="checked"':'') + 'value="left" id="a-left"> Aligned left</label>' +
-                            '<label for="a-right"><input type="radio" name="align" ' + (opts.align=='right'?'checked="checked"':'') + 'value="right" id="a-right"> Aligned right</label>' +
-                            '</div>' +
-
-                            '<div class="form-item clearfix left" style="padding-left: 8px">' +
-                            '<label for="a-small"><input type="radio" name="size" ' + (opts.size=='small'?'checked="checked"':'') + ' value="small" id="a-small"> Small</label>' +
-                            '<label for="a-middle"><input type="radio" name="size" ' + (opts.size=='middle' || opts.size == undefined?'checked="checked"':'') + 'value="middle" id="a-middle"> Middle</label>' +
-                            '<label for="a-large"><input type="radio" name="size" ' + (opts.size=='large'?'checked="checked"':'') + 'value="large" id="a-large"> Large</label>' +
-                            '</div>' +
-
-                            '<div class="form-item clearfix left" style="padding-left: 8px">' +
-                            '<label for="a-crop"><input type="checkbox" name="crop" ' + (opts.crop=='crop'?'checked="checked"':'') + ' value="crop" id="a-crop"> Crop image</label>' +
-                            '<label for="a-link"><input type="checkbox" name="link" ' + (opts.link=='link'?'checked="checked"':'') + ' value="crop" id="a-link"> Make link</label>' +
-                            '<br/><br/>' +
-                            '<button onclick="window.z_media_props();">Submit</button>' +
-                            '<button onclick="$.dialogRemove($(\'.dialog\'));">Cancel</button>' +
-                            '</div>' +
-
-                            '</div>'});
-
-                window.z_media_props = function() {
-                    opts = {
-                        'align': $('input[name="align"]:checked', $('.dialog')).val(),
-                        'size': $('input[name="size"]:checked', $('.dialog')).val(),
-                        'crop': $('input[name="crop"]:checked', $('.dialog')).val() ? "crop" : "",
-                        'link': $('input[name="link"]:checked', $('.dialog')).val() ? "link" : ""
+                            +'<div class="modal-footer">'
+                            +'<button class="btn" id="zmedia-props-cancel">Cancel</button>'
+                            +'<button class="btn btn-primary" type="submit">Save Properties</button>'
+                            +'</div>'
+                            +'</fieldset>'
+                            +'</form>'
+                        });
+                
+                $('#zmedia-props-form').submit(function() {
+                    var new_opts = {
+                        'align': $('#zmedia-props-form input[name="align"]:checked').val(),
+                        'size': $('#zmedia-props-form input[name="size"]:checked').val(),
+                        'crop': $('#zmedia-props-form input[name="crop"]:checked').val() ? "crop" : "",
+                        'link': $('#zmedia-props-form input[name="link"]:checked').val() ? "link" : ""
                     };
-                    var el = $(window.tinyMCEzMedia.toHTML(id, opts));
+                    var el = $(window.tinyMCEzMedia.toHTML(id, new_opts));
                     node.className = el.attr("class");
                     $(node)
                         .attr("data-zmedia-opts", el.attr("data-zmedia-opts"))
                         .attr("data-zmedia-id", el.attr("data-zmedia-id"));
 
-                    $.dialogRemove($('.dialog'));
-                }
+                    z_dialog_close();
+                    return false;
+                });
+                $('#zmedia-props-cancel').click(function() { 
+                    z_dialog_close(); 
+                    return false;
+                });
             },
                 
             getInfo : function() {

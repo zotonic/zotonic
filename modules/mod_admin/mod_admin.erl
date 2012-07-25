@@ -222,33 +222,53 @@ event(_E, Context) ->
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
     case z_acl:rsc_editable(SubjectId, Context) of
         true ->
-            case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
+            {EdgeId,IsNew} = case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
                 undefined ->
-                    {ok, EdgeId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
-                    Vars = [
-                            {subject_id, SubjectId},
-                            {predicate, Predicate},
-                            {object_id, ObjectId},
-                            {edge_id, EdgeId}
-                           ],
-                    Context1 = case Callback of
-                            undefined -> 
-                                Context;
-                            _ ->
-                                z_render:wire({script, [{script, [
-                                        Callback, $(,
-                                            z_utils:js_object(Vars,Context),
-                                        $),$;
-                                    ]}]}, Context)
-                        end,
-                    Title = m_rsc:p(ObjectId, title, Context1),
-                    {ok, z_render:wire({growl, [{text, [?__("Added the connection to", Context1),"“",Title,"”."]}]}, Context1)};
-                _ ->
-                    {error, z_render:growl_error(?__("This connection does already exist.", Context), Context)}
+                    {ok, EdgId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
+                    {EdgId, true};
+                EdgId ->
+                    {EdgId, false}
+            end,
+
+            ContextP = context_language(Context),
+            Title = m_rsc:p(ObjectId, title, Context),
+            Vars = [
+                    {is_new, IsNew},
+                    {subject_id, SubjectId},
+                    {predicate, Predicate},
+                    {object_id, ObjectId},
+                    {edge_id, EdgeId},
+                    {url_language, m_rsc:page_url(ObjectId, ContextP)},
+                    {title_language, z_trans:lookup_fallback(Title, ContextP)},
+                    {title, z_trans:lookup_fallback(Title, Context)}
+                   ],
+            Context1 = case Callback of
+                    undefined -> 
+                        Context;
+                    _ ->
+                        z_render:wire({script, [{script, [
+                                Callback, $(,
+                                    z_utils:js_object(Vars,Context),
+                                $),$;
+                            ]}]}, Context)
+                end,
+
+            case IsNew of
+                true -> {ok, z_render:growl([?__("Added the connection to", Context1),"“",Title,"”."], Context1)};
+                false -> {ok, Context1}
             end;
         false ->
             {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.",Context), Context)}
     end.
 
-    
+context_language(Context) ->
+    case z_context:get_q("language", Context) of
+        undefined -> Context;
+        [] -> Context;
+        Lang -> 
+            case z_trans:to_language_atom(Lang) of
+                {ok, IsoCode} -> z_context:set_language(IsoCode, Context);
+                _ -> Context
+            end
+    end.
 
