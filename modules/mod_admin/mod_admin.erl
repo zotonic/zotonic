@@ -206,7 +206,7 @@ event(#postback_notify{message="admin-connect-select"}, Context) ->
 event(#postback_notify{message="update", target=TargetId}, Context) ->
     Template = filename:basename(z_context:get_q("template", Context)),
     Id = z_convert:to_integer(z_context:get_q("id", Context)),
-    Predicate = list_to_existing_atom(z_context:get_q("predicate", Context)),
+    Predicate = get_predicate(z_context:get_q("predicate", Context), Context),
     Vars = [
         {id, Id},
         {predicate, Predicate}
@@ -217,6 +217,15 @@ event(#postback_notify{message="update", target=TargetId}, Context) ->
 event(_E, Context) ->
     Context.
 
+
+get_predicate(P, Context) when is_list(P) ->
+    case z_utils:only_digits(P) of
+        true ->
+            RscId = m_rsc:rid(P, Context),
+            z_convert:to_atom(m_rsc:p(RscId, name, Context));
+        false ->
+            list_to_existing_atom(P) 
+    end. 
 
 
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->

@@ -231,21 +231,30 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
 %% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
 event(#postback{message={do_oembed, []}}, Context) ->
-    Url = z_context:get_q(triggervalue, Context),
-    case oembed_request(Url, Context) of
-        {error, _} ->
-            z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
-        {ok, Json} ->
-            %% Fill title
-            z_context:add_script_page(["$('#oembed-title').val('", z_utils:js_escape(proplists:get_value(title, Json, [])), "');"], Context),
-            %% And summary
-            z_context:add_script_page(["$('#oembed-summary').val('", z_utils:js_escape(proplists:get_value(description, Json, [])), "');"], Context),
-            case preview_url_from_json(proplists:get_value(type, Json), Json) of
-                undefined -> nop;
-                PreviewUrl -> 
-                    z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').parents().show();"], Context)
-            end,
-            z_render:growl("Detected media item", Context)
+    case z_string:trim(z_context:get_q(triggervalue, Context)) of
+        "" -> 
+            z_context:add_script_page(["$('#oembed-title').val('""');"], Context),
+            z_context:add_script_page(["$('#oembed-summary').val('""');"], Context),
+            z_context:add_script_page(["$('#oembed-image').closest('.control-group').hide();"], Context),
+            Context;
+        Url ->
+            case oembed_request(Url, Context) of
+                {error, _} ->
+                    z_context:add_script_page(["$('#oembed-title').val('""');"], Context),
+                    z_context:add_script_page(["$('#oembed-summary').val('""');"], Context),
+                    z_context:add_script_page(["$('#oembed-image').closest('.control-group').hide();"], Context),
+                    z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
+                {ok, Json} ->
+                    z_context:add_script_page(["$('#oembed-title').val('", z_utils:js_escape(proplists:get_value(title, Json, [])), "');"], Context),
+                    z_context:add_script_page(["$('#oembed-summary').val('", z_utils:js_escape(proplists:get_value(description, Json, [])), "');"], Context),
+                    case preview_url_from_json(proplists:get_value(type, Json), Json) of
+                        undefined -> 
+                            z_context:add_script_page(["$('#oembed-image').closest('.control-group').hide();"], Context);
+                        PreviewUrl -> 
+                            z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"], Context)
+                    end,
+                    z_render:growl("Detected media item", Context)
+            end
     end.
 
 
@@ -312,9 +321,20 @@ thumbnail_request(ThumbUrl, Context) ->
 %% @doc Get the preview URL from JSON structure. Either the thumbnail
 %% URL for non-photo elements, or the full URL for photo elements.
 preview_url_from_json(<<"photo">>, Json) ->
-    proplists:get_value(url, Json);
+    case proplists:get_value(url, Json) of
+        None when None =:= undefined; None =:= null ->
+            case proplists:get_value(thumbnail_url, Json) of
+                null -> undefined;
+                Url -> Url
+            end;
+        Url ->
+            Url
+    end;
 preview_url_from_json(_Type, Json) ->
-    proplists:get_value(thumbnail_url, Json).
+    case proplists:get_value(thumbnail_url, Json) of
+        null -> undefined;
+        Url -> Url
+    end.
 
 
 type_to_category(<<"photo">>) -> image;
