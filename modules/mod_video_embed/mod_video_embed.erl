@@ -167,16 +167,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {video_embed_code, EmbedCode}
             ],
 
-            F = fun(Ctx) ->
-                case m_rsc:insert(Props, Ctx) of
-                    {ok, _MediaRscId} = Ok ->
-                        Ok;
-                    {error, Error} ->
-                        throw({error, Error})
-                end 
-            end,
-    
-            case z_db:transaction(F, Context) of
+            case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn(fun() -> preview_create(MediaId, Props, Context) end),
 
@@ -195,8 +186,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                         {dialog_close, []},
                         {growl, [{text, "Made the media page."}]}
                         | Actions], ContextRedirect);
-                {rollback, {_Error, _Trace}} ->
-                    ?ERROR("~p~n~p", [_Error, _Trace]),
+                {error, _} = Error ->
+                    ?ERROR("~p", [Error]),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
         

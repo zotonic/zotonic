@@ -13,19 +13,29 @@
 
 	<div class="control-group">
 	    <label class="control-label" for="{{ #embed_code }}">{_ Embed URL _}</label>
-            <div class="controls">
-		<input id="{{ #embed_code }}" class="span4" name="oembed_url" value="{{ medium.oembed_url }}" />
-		{% validate id=#embed_code name="oembed_url" type={presence} %}
-                {% if not id %}
-                {% wire id=#embed_code type="change" postback={do_oembed} delegate="mod_oembed" %}
-                {% endif %}
-            </div>
+        <div class="controls">
+			<input id="{{ #embed_code }}" class="span4" name="oembed_url" value="{{ medium.oembed_url }}" />
+			{% validate id=#embed_code name="oembed_url" type={presence} %}
+			<button class="btn" id="oembed-url-check">{_ Try URL _}</button>
+			{% javascript %}
+				$('#oembed-url-check').click(function() {
+					var url = $('#{{ #embed_code }}').val();
+					if (url != "") {
+						z_notify("do_oembed", {
+							z_delegate: "mod_oembed",
+							url: url
+						});
+					}
+					return false;
+				});
+			{% endjavascript %}
+        </div>
 	</div>
 
 	{% if not id %}
-        <p>
-            {_ The media title will be automatically detected from its URL. _}
-        </p>
+    <p>{_ The media title will be automatically detected from its URL. _}</p>
+    {% endif %}
+
 	<div class="control-group" style="display:none">
 	    <label class="control-label">&nbsp;</label>
             <div class="controls">
@@ -33,6 +43,7 @@
             </div>
 	</div>
         
+	{% if not id %}
 	<div class="control-group">
 	    <label class="control-label" for="oembed-title">{_ Media title _}</label>
             <div class="controls">

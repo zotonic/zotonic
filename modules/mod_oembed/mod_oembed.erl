@@ -183,16 +183,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {mime, ?OEMBED_MIME},
                 {oembed_url, EmbedUrl}
             ],
-            F = fun(Ctx) ->
-                case m_rsc:insert(Props, Ctx) of
-                    {ok, _MediaRscId} = Ok ->
-                        Ok;
-                    {error, Error} ->
-                        throw({error, Error})
-                end
-            end,
 
-            case z_db:transaction(F, Context) of
+            case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn(fun() -> preview_create(MediaId, Props, Context) end),
                     
@@ -211,8 +203,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                                 {dialog_close, []}, 
                                 {growl, [{text, ?__("Made the media page.", ContextRedirect)}]} 
                                 | Actions], ContextRedirect);
-                {rollback, {_Error, _Trace}} ->
-                    ?ERROR("~p~n~p", [_Error, _Trace]),
+                {error, _} = Error ->
+                    ?ERROR("~p", [Error]),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
 
@@ -230,8 +222,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
     end;
 
 %% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
-event(#postback{message={do_oembed, []}}, Context) ->
-    case z_string:trim(z_context:get_q(triggervalue, Context)) of
+event(#postback_notify{message="do_oembed"}, Context) ->
+    case z_string:trim(z_context:get_q("url", Context)) of
         "" -> 
             z_context:add_script_page(["$('#oembed-title').val('""');"], Context),
             z_context:add_script_page(["$('#oembed-summary').val('""');"], Context),

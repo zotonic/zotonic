@@ -117,9 +117,8 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
         undefined ->
             SubjectId = proplists:get_value(subject_id, EventProps),
             Predicate = proplists:get_value(predicate, EventProps, depiction),
-            Result = z_db:transaction(fun(Ctx) -> InsertFun(Ctx) end, Context),
-            
-            case Result of
+
+            case InsertFun(Context) of
                 {ok, MediaId} ->
                     ContextCb = case SubjectId of
                         undefined ->
