@@ -1,6 +1,9 @@
 <div class="widget" id="{{ #menu }}">
 	<h3 class="widget-header">
 		{_ Current menu _}
+	</h3>
+	<div class="widget-content">
+
         <span class="btn-group pull-right">
             <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">{_ Add menu item _} <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -9,8 +12,13 @@
                 <li><a href="#" data-where="bottom">&darr; {_ Add bottom _}</a></li>
             </ul>
         </span>
-	</h3>
-	<div class="widget-content">
+
+        <p>
+            {_ Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages. _}
+            <br/>{_ Drag menu items in the menu up, down, left or right to structure the menu. _}
+        </p>
+
+
 		<ul class="tree-list do_menuedit" id="menu-{{ id }}">
 			{% for mid, path, action in id.menu|menu_flat %}
 			{% with forloop.counter as c %}

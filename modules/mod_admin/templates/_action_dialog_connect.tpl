@@ -1,7 +1,7 @@
 {% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
 {% with language|default:q.language|default:z_language as language %}
 {% with actions|default:[] as actions %}
-{% with stay|default:(not not callback) as stay %}
+{% with stay or callback or subject_id as stay %}
 <ul class="nav nav-pills">
 	{% if q.is_zmedia %}
 	<li class="active">
