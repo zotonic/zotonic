@@ -8,7 +8,7 @@
 
     {admin_edit_rsc, 	["admin", "edit", id],			resource_admin_edit,		[]},
     {admin_referrers,   ["admin", "referrer", id],              resource_admin_referrers,	[]},
-    {admin_media,       ["admin", "media", "preview", id],      resource_admin_media_preview,   []},
+    {admin_media_preview, ["admin", "media", "preview", id],      resource_admin_media_preview,   []},
 
     {admin_status,	["admin", "status"],			resource_admin,			[{template, "admin_status.tpl"}, {selected, "status"}]}
 ].

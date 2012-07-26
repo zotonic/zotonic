@@ -8,7 +8,10 @@
 <div class="edit-header">
     <h2>{_ Media _}</h2>
 
-    <p>{_ Media encompasses all uploaded images, movies and documents. Media can be attached to pages. _}</p>
+    <p>
+        {_ Media encompasses all uploaded images, movies and documents. Media can be attached to pages. _}
+        {_ And media can also be viewed on their own page. _}
+    </p>
 
     <div class="well">
         <a name="content-pager"></a>
@@ -17,6 +20,8 @@
 	        text=_"Make a new media item" 
 	        action={dialog_media_upload}
 	        %}
+        <a class="btn" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+        <a class="btn disabled" href="{% url admin_media %}">{_ All media _}</a>
     </div>
 
     {% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=q.qsort|default:"-created"}] as result %}

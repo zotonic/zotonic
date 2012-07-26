@@ -7,16 +7,14 @@
             <h2>{_ Dashboard _}</h2>
 
             <div class="well">
-                {% all include "_admin_make_page_buttons.tpl" %}
-
                 {% button   class="btn btn-primary" 
-                        text=_"Make a new page" 
+                        text=_"Make a new page or media" 
                         action={dialog_new_rsc title=""} %}
 
-                {% button   class="btn"
-                        text=_"Make a new media item"
-                        action={dialog_media_upload title=""}
-                        disabled=(not m.acl.insert.media and not m.acl.insert.image) %}
+                {% all include "_admin_make_page_buttons.tpl" %}
+
+                <a class="btn" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn" href="{% url admin_media %}">{_ All media _}</a>
             </div>
         </div>
 
