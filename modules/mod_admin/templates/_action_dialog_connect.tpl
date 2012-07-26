@@ -1,6 +1,7 @@
 {% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
 {% with language|default:q.language|default:z_language as language %}
 {% with actions|default:[] as actions %}
+{% with stay|default:(not not callback) as stay %}
 <ul class="nav nav-pills">
 	{% if q.is_zmedia %}
 	<li class="active">
@@ -31,9 +32,7 @@
 
 	{% include "_action_dialog_connect_tab_find.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active=(not is_zmedia) title="" %}
 
-	{% if predicate.name /= "depiction" %}
-		{% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
-	{% endif %}
+	{% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
 
 	{% with "action_admin_dialog_media_upload" as delegate %}
 		{% include "_action_dialog_media_upload_tab_upload.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
@@ -44,6 +43,7 @@
 	    %}
 	{% endwith %}
 </div>
+{% endwith %}
 {% endwith %}
 {% endwith %}
 {% endwith %}

@@ -78,7 +78,16 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
         edge ->
             % Hierarchy using edges between resources
             hierarchy_edge(m_rsc:rid(RootId, Context1), Predicate, Tree1, Context1)
-    end.
+    end;
+
+event(#postback_notify{message="menu-item-render"}, Context) ->
+    Id = z_convert:to_integer(z_context:get_q("id", Context)),
+    Callback = z_context:get_q("callback", Context),
+    {Html, Context2} = z_template:render_to_iolist("_menu_edit_item.tpl", [{id,Id}], Context),
+    z_render:wire({script, [{script, [
+                    Callback, $(, $",z_utils:js_escape(Html,Context2),$",$),$;
+                ]}]}, Context2).
+
 
 % @doc Sync a hierarchy based on edges (silently ignore ACL errors)
 hierarchy_edge(RootId, Predicate, Tree, Context) ->

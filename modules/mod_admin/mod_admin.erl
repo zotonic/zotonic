@@ -218,6 +218,11 @@ event(_E, Context) ->
     Context.
 
 
+
+get_predicate(undefined, _Context) ->
+    undefined;
+get_predicate([], _Context) ->
+    undefined;
 get_predicate(P, Context) when is_list(P) ->
     case z_utils:only_digits(P) of
         true ->
@@ -228,6 +233,27 @@ get_predicate(P, Context) when is_list(P) ->
     end. 
 
 
+do_link(undefined, _Predicate, ObjectId, Callback, Context) ->
+    ContextP = context_language(Context),
+    Title = m_rsc:p(ObjectId, title, Context),
+    Vars = [
+            {subject_id, undefined},
+            {predicate, undefined},
+            {object_id, ObjectId},
+            {url_language, m_rsc:page_url(ObjectId, ContextP)},
+            {title_language, z_trans:lookup_fallback(Title, ContextP)},
+            {title, z_trans:lookup_fallback(Title, Context)}
+           ],
+    case Callback of
+        undefined -> 
+            {ok, Context};
+        _ ->
+            {ok, z_render:wire({script, [{script, [
+                    Callback, $(,
+                        z_utils:js_object(Vars,Context),
+                    $),$;
+                ]}]}, Context)}
+    end;
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
     case z_acl:rsc_editable(SubjectId, Context) of
         true ->

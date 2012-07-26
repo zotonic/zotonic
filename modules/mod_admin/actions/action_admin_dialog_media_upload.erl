@@ -120,15 +120,8 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
 
             case InsertFun(Context) of
                 {ok, MediaId} ->
-                    ContextCb = case SubjectId of
-                        undefined ->
-                            Context;
-                        _ ->
-                            case mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context) of
-                                {ok, Ct} -> Ct;
-                                {error, Ct} -> Ct
-                            end
-                    end,
+                    {_, ContextCb} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context),
+
                     ContextRedirect = 
                             case SubjectId of
                               undefined -> 

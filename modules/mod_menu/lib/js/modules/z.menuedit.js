@@ -67,6 +67,7 @@ $.widget("ui.menuedit", {
                 suppress_update = true;
             }
         };
+        $(self.element).bind('sortupdate', self.options.update);
         $(self.element).nestedSortable(self.options);
     },
     
@@ -89,7 +90,7 @@ $.ui.menuedit.defaults = {
 	forcePlaceholderSize: true,
 	handle: "div",
 	helper: "clone",
-	items: "li",
+	items: "li.menu-item",
 	maxLevels: 0,
 	opacity: .6,
 	placeholder: "placeholder",

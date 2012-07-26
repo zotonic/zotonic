@@ -88,18 +88,8 @@ event(#submit{message={new_page, Args}}, Context) ->
     {ok, Id} = m_rsc_update:insert(Props, Context),
 
     % Optionally add an edge from the subject to this new resource
-    Context1 = case SubjectId of
-        [] -> 
-            Context;
-        L when is_list(L); is_integer(L); is_binary(L) ->
-            case mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context) of
-                {ok, Ct} -> Ct;
-                {error, Ct} -> Ct
-            end;
-        _ ->
-            Context
-    end,
-    
+    {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context), 
+       
     % Close the dialog
     Context2a = z_render:wire({dialog_close, []}, Context1),
 

@@ -2,7 +2,8 @@
 {% with m.rsc[id].language as r_lang %}
 
 {% wire id=#form type="submit" 
-	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element template=template actions=actions}
+	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element
+					template=template actions=actions callback=callback}
 	delegate=delegate 
 %}
 <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">

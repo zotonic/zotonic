@@ -57,29 +57,18 @@ ul.tree-list li div {
     border-radius: 4px;
 }
 
-/* Hierarchy editor */
-ul.ui-trash {
-    background: url("/lib/images/ui-trash-64.png") no-repeat;
-    height: 64px;
-    width: 64px;
-    padding: 0px;
-    margin: 4px;
-    overflow: hidden;
-}
-
-    ul.ui-trash-over {
-        background-color: #fcc;
-    }
-
-ul.ui-trash li.placeholder {
-    height: 62px;
-    width: 62px;
-    overflow: hidden;
-    background: none;
-    border: none;
-}
-
-
 .menu-edit a {
     float: right;
 }
+
+ul.tree-list .btn-group {
+    margin-left: 6px;
+    margin-top: 3px;
+}
+
+#menu-editor .widget-header {
+    overflow: hidden;
+}
+    #menu-editor .widget-header .btn-group {
+        margin-right: 12px;
+    }
