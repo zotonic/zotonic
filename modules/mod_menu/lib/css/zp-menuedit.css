@@ -67,7 +67,7 @@ ul.tree-list .btn-group {
 }
 
 #menu-editor .widget-header {
-    overflow: hidden;
+    height: 28px;
 }
     #menu-editor .widget-header .btn-group {
         margin-right: 12px;
