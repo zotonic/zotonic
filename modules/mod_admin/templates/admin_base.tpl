@@ -14,6 +14,7 @@
                 "css/zp-menuedit.css"
                 "css/zotonic-admin.css"
                 "css/geomap.css"
+                "css/jquery.loadmask.css"
         %}
 
 

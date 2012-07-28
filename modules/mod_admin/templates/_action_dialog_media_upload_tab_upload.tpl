@@ -8,7 +8,7 @@
 
 	{% wire id=#form type="submit" 
 		postback={media_upload predicate=predicate actions=actions id=id subject_id=subject_id stay=stay callback=callback} 
-		delegate=delegate
+		delegate=`action_admin_dialog_media_upload`
 	%}
 	<form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
 	    <fieldset>
