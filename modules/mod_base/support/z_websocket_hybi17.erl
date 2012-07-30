@@ -48,7 +48,6 @@ start(ReqData, Context) ->
             "Upgrade: websocket", 13, 10,
             "Connection: Upgrade", 13, 10,
             "Sec-WebSocket-Accept: ", Accept, 13, 10,
-            "Sec-WebSocket-Protocol: zotonic", 13, 10,
             13, 10
             ],
     ok = send(Socket, Data),
