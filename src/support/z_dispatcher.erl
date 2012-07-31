@@ -323,7 +323,6 @@ make_url_for(Name, Args, Escape, UriLookup) ->
                 Url -> Url
             end;
         error -> 
-            ?LOG("make_url_for: no dispatch rule named `~p'.~n", [Name1]), 
             undefined
     end.
 
