@@ -1,0 +1,168 @@
+/* For phone+.
+ * For text see bootstrap-text.css 
+ */
+
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
+    .navbar .brand {
+       padding-left: 50px;
+       padding-right: 10px;
+       margin: 0 0 0 -5px;
+     }
+     .navbar .brand .logo {
+         left: 0px;
+     }
+    /* Site specific definitions */
+    .navbar .dropdown-menu {
+        display: none;
+    }
+    .navbar .dropdown-toggle .caret {
+        display: none;
+    }
+    .navbar .pull-right {
+        float: none;
+    }
+}
+
+.content {
+    max-width: 1200px;
+}
+.content h1 {
+    margin-bottom: 10px;
+}
+h1 small {
+    display: block;
+}
+.chapeau {
+    color: #999;
+    margin: 10px 0 0 0;
+}
+ul.content-list,
+ul.simple-list {
+    margin: 0;
+    list-style: none;
+}
+.meta {
+    padding: 5px 0;
+    margin: 0 0 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    font-size: 11px;
+}
+.meta a {
+    font-weight: 200;
+}
+.content .address {
+    border-left: 10px solid #eee;
+    padding-left: 10px;
+}
+.address i {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}
+.content .thumbnails {
+    margin-top: 20px;
+    margin-left: 0;
+    clear: both;
+}
+.content .thumbnails li {
+    margin-left: 0;
+}
+.thumbnails li.thumbnail .caption {
+    overflow: hidden;
+    height: 2em;
+}
+.thumbnails li.thumbnail.video {
+    clear: both;
+    height: auto;
+    display: block;
+}
+.thumbnail a img {
+  display: block;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+.thumbnails .thumbnail a img {
+    max-width: 90%;
+}
+.depiction p.caption {
+    margin-bottom: 0px;
+    font-size: 85%;
+    padding-bottom: 4px;
+}
+.depiction {
+    margin-bottom: 10px;
+}
+    .depiction.portrait {
+        width: 50%;
+        float: right;
+        margin-left: 10px;
+    }
+.geomap-static {
+    position: relative;
+    width: 512px;
+}
+.nav-stacked li .item-0 {
+}
+.nav-stacked li .item-1 {
+    padding-left: 10px;
+}
+.nav-stacked li .item-2 {
+    padding-left: 20px;
+}
+.nav-stacked li .item-3 {
+    padding-left: 30px;
+}
+.nav-stacked li .item-4 {
+    padding-left: 40px;
+}
+.nav-stacked li .item-5 {
+    padding-left: 50px;
+}
+.pager-collection {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+.pager-collection a {
+    color: #999;
+    padding: 5px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid white;
+}
+.pager-collection a:hover {
+    text-decoration: none;
+    border: 1px solid #eee;
+    color: #005580;
+}
+.pager-collection li.previous {
+    float: left;
+}
+.pager-collection li.next {
+    float: right;
+}
+.pager-collection li.up {
+    text-align: center;
+}
+
+#mailinglist_subscribe {
+    margin-top: 13px;
+}
+#mailinglist_subscribe_form .z_invalid {
+    display:none;
+}
+.home #mailinglist_subscribe_form input {
+    width: 50%;
+}
+form div.row {
+    margin-left: -20px;
+}
