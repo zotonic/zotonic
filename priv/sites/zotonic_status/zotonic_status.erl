@@ -24,6 +24,7 @@
 -mod_title("Zotonic Status").
 -mod_descr("Default Zotonic site, used when no other site can handle the supplied Host.").
 -mod_prio(10).
+-mod_depends([base, bootstrap]).
 
 -export([
     observe_user_is_enabled/2,
