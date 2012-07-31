@@ -307,8 +307,24 @@ make_url_for(Name, Args, Escape, UriLookup) ->
             (_) -> true
         end, Args),
     case dict:find(Name1, UriLookup) of
-        {ok, Patterns} -> make_url_for1(Args1, Patterns, Escape, undefined);
-        error -> undefined
+        {ok, Patterns} -> 
+            case make_url_for1(Args1, Patterns, Escape, undefined) of
+                undefined ->
+                    ?LOG("make_url_for: dispatch rule `~p' failed when processing ~p.~n", 
+                         [
+                          Name1,
+                          [
+                           {'Args', Args1},
+                           {'Patterns', Patterns},
+                           {'Escape', Escape}
+                          ]
+                         ]),
+                    undefined;
+                Url -> Url
+            end;
+        error -> 
+            ?LOG("make_url_for: no dispatch rule named `~p'.~n", [Name1]), 
+            undefined
     end.
 
 
