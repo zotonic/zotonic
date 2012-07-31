@@ -1,6 +1,6 @@
 {% extends "base.tpl" %}
 
-{% block title %}{_ Sites _}{% endblock %}
+{% block title %}Zotonic {_ Sites _}{% endblock %}
 
 {% block content %}
 <div class="row">
