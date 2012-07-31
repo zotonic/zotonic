@@ -1,8 +1,9 @@
+% -*- coding: utf-8; Mode: erlang; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil -*-
+% ex: set softtabstop=4 tabstop=4 shiftwidth=4 expandtab fileencoding=utf-8:
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
 %% Date: 2009-04-26
 %% @doc String related functions
-%% @todo Make this UTF-8 safe
 
 %% @todo Check valid chars for filenames, allow chinese, japanese, etc?
 %% CJK Unified Ideographs Extension A: Range: 3400-4DBF
