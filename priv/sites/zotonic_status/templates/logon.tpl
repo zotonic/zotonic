@@ -3,7 +3,7 @@
 {% block navbar %}
 {% endblock %}
 
-{% block content_area %}
+{% block content %}
 <div class="hero-unit">
     <h1>{_ Powered by Zotonic _}</h1>
     <p>
