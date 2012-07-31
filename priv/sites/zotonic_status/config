@@ -1,32 +1,34 @@
-% Configuration of the Zotonic system site.
-% This site is used as the fallback for unrecognized hosts and shows the server status
+%% -*- erlang -*-
+%% Configuration of the Zotonic system site.
+%% This site is used as the fallback for unrecognized hosts and shows the server status
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DO NOT CHANGE ANY SETTINGS IN THIS FILE %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DO NOT CHANGE ANY SETTINGS IN THIS FILE %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [
-    % This site is always enabled.
-    {enabled, true},
-    {host, zotonic_status},
+ %% This site is always enabled.
+ {enabled, true},
+ {host, zotonic_status},
 
-	% This is the fallback site for all non-matching hostnames (or disabled sites).
-    {hostname, none},
+ %% This is the fallback site for all non-matching hostnames (or disabled sites).
+ {hostname, none},
 
-	% This site doesn't use a database connection
-	{dbdatabase, none},
+ %% This site doesn't use a database connection
+ {dbdatabase, none},
 
-    {sign_key_simple, <<>>},
-    {sign_key, <<>>},
+ {sign_key_simple, <<>>},
+ {sign_key, <<>>},
 
-	% Installed modules, defined here as there is no database connection
-	{modules, [
-			zotonic_status,
-			mod_base,
-			mod_zotonic_status_vcs,
-                        mod_zotonic_tracer
-		]},
-	
-	% Default config keys
-	{site, [{language, "en"}]}
+ %% Installed modules, defined here as there is no database connection
+ {modules, [
+            zotonic_status,
+            mod_base,
+            mod_bootstrap,
+            mod_zotonic_status_vcs,
+            mod_zotonic_tracer
+           ]},
+
+ %% Default config keys
+ {site, [{language, "en"}]}
 ].
