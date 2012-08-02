@@ -54,12 +54,6 @@ else
 
     # Only build zotonic the first time, not for restarts
     echo  "Starting zotonic $SNAME@$HOSTNAME" 
-    if make --version 2>&1 | grep "^GNU Make" >& /dev/null
-    then
-      MAKE=make
-    else
-      MAKE=gmake
-    fi
     ${MAKE} >/dev/null
 fi
 

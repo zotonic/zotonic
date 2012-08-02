@@ -81,12 +81,6 @@ function do_addsite {
     fi
 
     # Make the new site
-    if make --version 2>&1 | grep "^GNU Make" >& /dev/null
-    then
-      MAKE=make
-    else
-      MAKE=gmake
-    fi
     ${MAKE} -C $ZOTONIC
 
     echo
