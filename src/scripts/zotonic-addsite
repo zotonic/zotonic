@@ -81,7 +81,13 @@ function do_addsite {
     fi
 
     # Make the new site
-    make -C $ZOTONIC
+    if make --version 2>&1 | grep "^GNU Make" >& /dev/null
+    then
+      MAKE=make
+    else
+      MAKE=gmake
+    fi
+    ${MAKE} -C $ZOTONIC
 
     echo
     echo "Added site $SITE. Now start zotonic and go to http://$SITE:${ZOTONIC_PORT:=8000}/ to view it."
