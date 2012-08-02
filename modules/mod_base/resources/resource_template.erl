@@ -63,7 +63,7 @@ is_authorized(ReqData, Context) ->
             Context2 = z_context:ensure_all(Context1),
             case z_auth:is_auth(Context2) of
                 true ->
-                    Context3 = z_auth:logoff(Context2),
+                    Context3 = resource_logoff:reset_rememberme_cookie_and_logoff(Context2),
                     ?WM_REPLY(true, Context3);
                 false ->
                     ?WM_REPLY(true, Context2)

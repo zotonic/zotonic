@@ -22,6 +22,7 @@
 
 -export([init/1, service_available/2, charsets_provided/2, content_types_provided/2, provide_content/2]).
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
+-export([reset_rememberme_cookie_and_logoff/1]).
 
 -include_lib("webmachine_resource.hrl").
 -include_lib("include/zotonic.hrl").
@@ -32,10 +33,8 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:continue_session(Context1),
-    ContextNoCookie = resource_logon:reset_rememberme_cookie(Context2),
-    ContextLogOff = z_auth:logoff(ContextNoCookie),
-    {ok, ContextNoSession} = z_session_manager:stop_session(ContextLogOff),
-    ?WM_REPLY(true, ContextNoSession).
+    Context3 = reset_rememberme_cookie_and_logoff(Context2),
+    ?WM_REPLY(true, Context3).
 
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
@@ -68,3 +67,9 @@ provide_content(ReqData, Context) ->
     {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
     
+% @doc Logoff and reset the rememberme cookie.
+reset_rememberme_cookie_and_logoff(Context) ->
+    ContextNoCookie = resource_logon:reset_rememberme_cookie(Context),
+    ContextLogOff = z_auth:logoff(ContextNoCookie),
+    {ok, ContextNoSession} = z_session_manager:stop_session(ContextLogOff),
+    ContextNoSession.
