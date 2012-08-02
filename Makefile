@@ -1,1 +1,1 @@
-A0;136;0call: ; @echo Use GNUMake, e.g. gmake
+all: ; @echo Use a GNU-compatible make, e.g. gmake
