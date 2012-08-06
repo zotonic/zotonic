@@ -12,4 +12,4 @@
 	url = git://github.com/zotonic/ua_classifier.git
 [submodule "deps/dh_date"]
 	path = deps/dh_date
-	url = git://github.com/zotonic/dh_date.git
+	url = git://github.com/amiramix/dh_date.git
