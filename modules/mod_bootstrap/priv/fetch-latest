@@ -1,0 +1,7 @@
+#!/bin/env bash
+
+cd `dirname $0`/../lib
+rm -rf bootstrap
+wget http://twitter.github.com/bootstrap/assets/bootstrap.zip
+unzip bootstrap.zip
+rm bootstrap.zip

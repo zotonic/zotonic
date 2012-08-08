@@ -629,7 +629,12 @@ page_url(Id, Context) ->
     end.
 
 page_url_path([], Args, Context) ->
-    z_dispatcher:url_for(page, Args, Context);
+    case z_dispatcher:url_for(page, Args, Context) of
+        undefined ->
+            ?zWarning("Failed to get page url path. Is the `page' dispatch rule missing?", Context), 
+            undefined;
+        Url -> Url
+    end;
 page_url_path([CatName|Rest], Args, Context) ->
     case z_dispatcher:url_for(CatName, Args, Context) of
         undefined -> page_url_path(Rest, Args, Context);

@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
-{% block navbar %}
-{% endblock %}
+{% block title %}Zotonic{% endblock %}
+{% block navbar %}{% endblock %}
 
 {% block content %}
 <div class="hero-unit">
