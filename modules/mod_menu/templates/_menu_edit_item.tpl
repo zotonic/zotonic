@@ -4,9 +4,8 @@
 	    <span class="title-{{id}}">{{ id.title }}</span>
 
 	    <span class="pull-right btn-group">
-	        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">{_ Menu item _} <span class="caret"></span></a>
+	        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></a>
 			<ul class="dropdown-menu">
-			    <!-- dropdown menu links -->
 			    <li><a href="#" data-where="before">&uarr; {_ Add before _}</a></li>
 			    <li><a href="#" data-where="below">&rarr; {_ Add below _}</a></li>
 			    <li><a href="#" data-where="after">&darr; {_ Add after _}</a></li>

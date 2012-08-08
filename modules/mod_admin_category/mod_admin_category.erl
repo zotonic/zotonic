@@ -48,8 +48,9 @@ observe_category_hierarchy_save(#category_hierarchy_save{tree=New}, Context) ->
             OldIds = lists:sort(flatten(Old, [])),
             Deleted = OldIds -- NewIds,
             % Inserted = NewIds -- OldIds,
+
             lists:map(fun(Id) ->
-                        m_category:delete(Id, undefined, Context)
+                        ok = m_category:delete(Id, undefined, Context)
                       end,
                       Deleted),
             
