@@ -67,7 +67,7 @@ init(Hostname, SessionCount, PeerName, Options) ->
             State = #state{options = Options, peer=PeerName},
             {ok, Banner, State};
         true ->
-            error_logger:warning_msg("SMTP Connection limit exceeded~n"),
+            lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
             {stop, normal, io_lib:format("421 ~s is too busy to accept mail right now", [Hostname])}
     end.
 
@@ -78,7 +78,7 @@ init(Hostname, SessionCount, PeerName, Options) ->
 % handle_HELO(<<"trusted_host">>, State) ->
 %     {ok, State};
 handle_HELO(_Hostname, State) ->
-    % error_logger:info_msg("SMTP: HELO from ~s~n", [Hostname]),
+    % lager:info("SMTP: HELO from ~s~n", [Hostname]),
     {ok, 655360, State}. % 640kb of HELO should be enough for anyone.
 %If {ok, State} was returned here, we'd use the default 10mb limit
 
@@ -136,7 +136,7 @@ handle_DATA(From, To, Data, State) ->
             end
     catch
         What:Why ->
-            error_logger:error_msg("SMTP receive: Message decode FAILED with ~p:~p", [What, Why])
+            lager:error("SMTP receive: Message decode FAILED with ~p:~p", [What, Why])
     end,
     % At this point, if we return ok, we've accepted responsibility for the email
     {ok, Reference, State}.

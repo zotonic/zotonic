@@ -28,7 +28,7 @@
 
 
 render_error(Code = 500, ReqData, Reason) ->
-    error_logger:error_msg("webmachine error: path=~p~n~p~n", [wrq:path(ReqData), Reason]),
+    lager:error("webmachine error: path=~p: ~p", [wrq:path(ReqData), Reason]),
     ErrorDump = mochiweb_html:escape(lists:flatten(io_lib:format("~p", [Reason]))),
     Type = webmachine_request:get_metadata('content-type', ReqData),
     error_handler(Type, ReqData, Code, ErrorDump, Reason);

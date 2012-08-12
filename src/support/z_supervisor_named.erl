@@ -304,7 +304,7 @@ count_child(#child{pid = Pid, child_type = supervisor}, {Specs, Active, Supers, 
 %%% Hopefully cause a function-clause as there is no API function
 %%% that utilizes cast.
 handle_cast(null, State) ->
-    error_logger:error_msg("ERROR: Supervisor received cast-message 'null'~n", []),
+    lager:error("ERROR: Supervisor received cast-message 'null'", []),
     {noreply, State}.
 
 %%
@@ -329,7 +329,7 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Reason}, State) ->
     end;
 
 handle_info(Msg, State) ->
-    error_logger:error_msg("Supervisor received unexpected message: ~p~n", [Msg]),
+    lager:error("Supervisor received unexpected message: ~p", [Msg]),
     {noreply, State}.
 
 %%
