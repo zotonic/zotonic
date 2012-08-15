@@ -5,5 +5,7 @@
 
 <p>{_ This can not be undone _}</p>
 
-{% button text=_"delete" postback={mailinglist_delete id=id} %}
-{% button text=_"cancel" action={dialog_close} %}
+<div class="modal-footer">
+    {% button class="btn" text=_"delete" postback={mailinglist_delete id=id} tag="a" %}
+    {% button class="btn btn-primary" text=_"cancel" action={dialog_close} %}
+</div>

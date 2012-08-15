@@ -37,6 +37,7 @@ render(Params, _Vars, Context) ->
     Title     = proplists:get_value(title, Params),
     Disabled  = proplists:get_value(disabled, Params, false),
     Actions   = proplists:get_all_values(action, Params),
+    Tag       = proplists:get_value(tag, Params, <<"a">>),
 
     Options   = [{action,X} || X <- Actions],
     Options1  = case Postback of
@@ -76,7 +77,7 @@ render(Params, _Vars, Context) ->
                 false -> [<<"<i class=">>, Icon, "></i> ", Text]
             end,
     Context2 = z_tags:render_tag(
-                        <<"button">>,
+                        Tag,
                         [{<<"class">>,Class1}|Attrs2],
                     	Text1,
                     	Context1),

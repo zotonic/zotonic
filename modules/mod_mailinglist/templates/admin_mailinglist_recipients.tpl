@@ -11,7 +11,7 @@
 	<p>{_ You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients. _}</p>
 	<div class="well">
 	    {% button class="btn" text=_"cancel" action={redirect back} %}
-        </div>
+    </div>
 	{% else %}
 
 	<p>{_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}<br/>

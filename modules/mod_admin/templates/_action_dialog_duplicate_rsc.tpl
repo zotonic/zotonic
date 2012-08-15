@@ -22,7 +22,7 @@
     </div>
 
     <div class="modal-footer">
-	{% button class="btn" action={dialog_close} text=_"Cancel" %}
+	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
 	<button class="btn btn-primary" type="submit">{_ Duplicate page _}</button>
     </div>
 

@@ -19,7 +19,7 @@
 
 		<div class="form-item clearfix">
 			<button type="submit">Add trace rule</button>
-			{% button text="Cancel" action={dialog_close} %}
+			{% button text="Cancel" action={dialog_close} tag="a" %}
 		</div>
 
 	</div>

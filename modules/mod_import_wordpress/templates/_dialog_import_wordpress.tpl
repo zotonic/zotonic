@@ -2,7 +2,6 @@
     {_ Upload a wordpress WXR file from your computer. _}
 </p>
 
-
 {% wire id=#form type="submit" delegate="mod_import_wordpress" postback={wxr_upload} %}
 <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
 
@@ -24,7 +23,7 @@
     </div>
 
     <div class="modal-footer">
-        {% button class="btn" action={dialog_close} text="Cancel" %}
+        {% button class="btn" action={dialog_close} text="Cancel" tag="a" %}
         <button class="btn btn-primary" type="submit">{_ Start import _}</button>
     </div>
 </form>

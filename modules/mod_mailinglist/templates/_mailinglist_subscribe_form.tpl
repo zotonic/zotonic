@@ -64,7 +64,7 @@
 	<div>
 	{% endif %}
 		{% if in_admin %}
-			{% button class="btn" text=_"Cancel" action={dialog_close} %}
+			{% button class="btn" text=_"Cancel" action={dialog_close} tag="a" %}
 		{% endif %}
 
 		{% if recipient_id %}

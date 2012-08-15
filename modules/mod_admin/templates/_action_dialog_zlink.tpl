@@ -16,5 +16,5 @@ action={dialog_close}
 %}
 
 <div class="modal-footer">
-    {% button class="btn" text=_"Cancel" action={dialog_close} %}
+    {% button class="btn" text=_"Cancel" action={dialog_close} tag="a" %}
 </div>
