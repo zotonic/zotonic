@@ -21,7 +21,7 @@
 	</div>
 
 	<div class="modal-footer">
-	{% button class="btn" text=_"Cancel" action={dialog_close} %}
+	{% button class="btn" text=_"Cancel" action={dialog_close} tag="a" %}
 	{% button class="btn btn-primary" text=_"Upload file" %}
 	</div>
 </form>

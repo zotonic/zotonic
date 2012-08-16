@@ -17,31 +17,16 @@
         {% include "_admin_category_sorter.tpl" %}
     </div>
 
-        <div class="span2">
-            {% include "_menu_trash.tpl" %}
-
-            <ul id="sortable-new" class="tree-list ui-sortable" title="{_ Drag to add a new page _}">
-                <li class="header" id="page-new-category">
-                    <div class="clearfix">
-                        <img class="grippy" src="/lib/images/grippy.png" alt="{_ Drag me _}" />
-                        <span>{_ New category _}</span>
-                    </div>
-                </li>
-                {% draggable id="page-new-category" to_sorter="category" helper='clone' %}
-            </ul>
-        </div>
-    
     <div id="sidebar" class="span4">
         <div class="widget">
             <h3 class="widget-header">{_ How does this work? _}</h3>
             <div class="widget-content">
-        <p>
-            {_ Drag categories to the place where you want them in the hierarchy. _}
-        </p>
-        <p>
-            {_ Drag categories to the trash to remove them. _} 
-            {_ Drag the <strong>New category</strong> to add a new category. _}
-        </p>
+                <p>
+                    {_ Use the <i class="icon-cog"></i> button to add or remove categories. _}
+                </p>
+                <p>
+                    {_ Drag categories to the place where you want them in the hierarchy. _}
+                </p>
             </div>
         </div>
 

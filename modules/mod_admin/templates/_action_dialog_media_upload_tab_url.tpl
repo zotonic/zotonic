@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="modal-footer">
-		    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+		    {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
 		    <button class="btn btn-primary" type="submit">{% if not id %}{_ Make media item _}{% else %}{_ Replace media item _}{% endif %}</button>
 		</div>
     </fieldset>

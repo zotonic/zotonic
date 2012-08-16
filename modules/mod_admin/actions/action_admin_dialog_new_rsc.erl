@@ -74,6 +74,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     Title   = z_context:get_q("new_rsc_title", Context),
     CatId   = list_to_integer(z_context:get_q("category_id", Context)),
     IsPublished = z_context:get_q("is_published", Context),
+    Name = z_context:get_q("name", Context),
     Redirect = proplists:get_value(redirect, Args),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
@@ -83,7 +84,8 @@ event(#submit{message={new_page, Args}}, Context) ->
     Props = [
         {category_id, CatId},
         {title, Title},
-        {is_published, IsPublished}
+        {is_published, IsPublished},
+        {name, Name}
     ],
     {ok, Id} = m_rsc_update:insert(Props, Context),
 
@@ -104,4 +106,5 @@ event(#submit{message={new_page, Args}}, Context) ->
             Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
+
 

@@ -35,7 +35,7 @@
     </div>
 
     <div class="modal-footer">
-	{% button class="btn" action={dialog_close} text=_"Cancel" %}
+	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
 
 	{% if username %}
 	    {% button class="btn" action={dialog_delete_username id=id on_success=on_delete} text=_"Delete" %}
