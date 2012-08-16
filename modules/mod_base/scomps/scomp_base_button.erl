@@ -37,7 +37,7 @@ render(Params, _Vars, Context) ->
     Title     = proplists:get_value(title, Params),
     Disabled  = proplists:get_value(disabled, Params, false),
     Actions   = proplists:get_all_values(action, Params),
-    Tag       = proplists:get_value(tag, Params, <<"a">>),
+    Tag       = proplists:get_value(tag, Params, <<"button">>),
 
     Options   = [{action,X} || X <- Actions],
     Options1  = case Postback of
