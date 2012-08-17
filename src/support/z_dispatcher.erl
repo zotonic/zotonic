@@ -310,15 +310,20 @@ make_url_for(Name, Args, Escape, UriLookup) ->
         {ok, Patterns} -> 
             case make_url_for1(Args1, Patterns, Escape, undefined) of
                 undefined ->
-                    ?LOG("make_url_for: dispatch rule `~p' failed when processing ~p.~n", 
-                         [
-                          Name1,
-                          [
-                           {'Args', Args1},
-                           {'Patterns', Patterns},
-                           {'Escape', Escape}
-                          ]
-                         ]),
+                    case Name of
+                        image -> 
+                            skip;
+                        _ ->
+                            ?LOG("make_url_for: dispatch rule `~p' failed when processing ~p.~n", 
+                                 [
+                                  Name1,
+                                  [
+                                   {'Args', Args1},
+                                   {'Patterns', Patterns},
+                                   {'Escape', Escape}
+                                  ]
+                                 ])
+                    end,
                     undefined;
                 Url -> Url
             end;
