@@ -1,26 +1,37 @@
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
-<div class="control-group survey-thurstone">
+<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }}">
     <label>{{ blk.prompt }}</label>
     <div class="controls">
-{% if blk.is_multiple %}
+{% if blk.explanation %}
+        <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
+{% if blk.input_type == 'multi' %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}
             <label class="checkbox">
-                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="checkbox" value="{{ val|escape }}" {% if val|member:ans %}checked="checked" {% endif %}/>
-                {{ item|escape }}
+                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="checkbox" value="{{ val }}" {% if val|member:ans %}checked="checked" {% endif %}/>
+                {{ item }}
             </label>
             {% if forloop.first %}
                 {% if question.is_required %}{% validate id=#thur.index name=name type={presence} %}{% endif %}
             {% endif %}
         {% endwith %}
     {% endfor %}
+{% elseif blk.input_type == 'submit' %}
+    {% for val,item in props.answers %}
+        {% with forloop.counter as index %}
+            <button id="{{ #thur.index }}" name="{{ blk.name }}" value="{{ val }}" class="btn" type="submit">
+                <span></span>{{ item }}
+            </button>
+        {% endwith %}
+    {% endfor %}
 {% else %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}
             <label class="radio">
-                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="radio" value="{{ val|escape }}" {% if val|member:ans %}checked="checked" {% endif %}/>
-                {{ item|escape }}
+                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="radio" value="{{ val }}" {% if val|member:ans %}checked="checked" {% endif %}/>
+                {{ item }}
             </label>
             {% if forloop.first %}
                 {% if question.is_required %}{% validate id=#thur.index name=name type={presence} %}{% endif %}

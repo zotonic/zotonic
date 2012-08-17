@@ -1,5 +1,8 @@
 <div class="control-group survey-yesno">
     <label class="control-label">{{ blk.prompt }}</label>
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
     <div class="controls">
         <label class="radio inline">
             <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "yes" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"Yes" }}

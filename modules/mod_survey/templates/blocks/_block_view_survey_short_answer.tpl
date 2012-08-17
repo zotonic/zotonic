@@ -1,5 +1,8 @@
 <div class="control-group survey-short-answer">
     <label for="{{ #id }}">{{ blk.prompt }}</label>
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
     <div class="controls">
         <input type="text" class="span6" name="{{ blk.name }}" id="{{ #id }}" value="{{ answers[blk.name]|escape }}" />
     </div>

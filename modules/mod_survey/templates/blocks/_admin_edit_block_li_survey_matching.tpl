@@ -22,6 +22,10 @@ Milk = White<br/>
 Vienna = Austria<br/>
 Flying dutchman = Wagner._}</p>
 
+        <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+               class="span8" rows="2"
+               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code] }}</textarea>
+
     {% else %}
         <p>{{ blk.narrative[lang_code] }}</p>
     {% endif %}

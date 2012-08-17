@@ -1,6 +1,9 @@
 {% with blk|survey_prepare_matching as props %}
 <div class="control-group survey-matching">
     <label>{{ blk.prompt }}</label>
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
     <div class="controls">
     {% for val,item in props.items %}
         {% with forloop.counter as index %}

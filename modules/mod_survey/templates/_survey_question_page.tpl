@@ -2,10 +2,10 @@
 	postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 	delegate="mod_survey" 
 %}
-<form class="form-survey" id="{{ #q }}" method="post" action="postback">
+<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
 	<fieldset>
 		{% if not id.is_a.poll and pages > 1 %}
-			<legend>{_ Question _} <span class="progress">{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
+			<legend>{_ Question _} <span>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
 		{% endif %}
 
 		{% for blk in questions %}
@@ -31,10 +31,14 @@
 					{% wire id=#back action={redirect id} %}
 				{% endif %}
 			{% endif %}
-			{% if last.type != 'survey_button' %}
+			{% if last.type != 'survey_button' and last.input_type != 'submit' %}
 				<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next Question _}{% endif %}</button>
 			{% endif %}
 		</div>
 	{% endwith %}
 </form>
+
+{% javascript %}
+    $('body').removeClass('survey-start').addClass('survey-question');
+{% endjavascript %}
 

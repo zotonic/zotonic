@@ -1,3 +1,6 @@
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
 <p class="survey-narrative">
 {% with blk|survey_prepare_narrative as props %}
 {% for type,name,value in props.parts %}

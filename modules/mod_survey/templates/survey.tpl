@@ -1,15 +1,11 @@
 {% extends "page.tpl" %}
 
+{% block html_head_extra %}
+	{% inherit %}
+	{% lib "css/survey.css" %}
+{% endblock %}
+
 {% block main %}
-
-<style type="text/css">
-    .survey-narrative input,
-    .survey-narrative select {
-        vertical-align: baseline;
-        width: auto;
-    }
-</style>
-
 <div id="survey-question">
     {% media m.rsc[id].media[1] width=400 height=400 class="main-image" %}
 
@@ -18,5 +14,4 @@
 
 	{% include "_survey_start.tpl" %}
 </div>
-
 {% endblock %}

@@ -15,10 +15,9 @@
                placeholder="{_ Please enter your name. _} ({{ lang_code }})" />
 
        <label>{_ Explanation text (optional) _}</label>
-       <textarea class="body tinymce-init" 
-                 id="block-{{name}}-body{{ lang_code_with_dollar }}" name="block-{{name}}-body{{ lang_code_with_dollar }}"
-                 placeholder="{_ This and that will happen when you click this button. _} ({{ lang_code }})"
-                 {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code]|escape }}</textarea>
+       <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+              class="span8" rows="2"
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code] }}</textarea>
 
     {% else %}
         <p>{{ blk.prompt[lang_code] }}</p>

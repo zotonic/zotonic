@@ -1,0 +1,17 @@
+/* CSS for surveys, overrules the bootstrap css */
+
+.survey-thurstone .btn {
+	display: block;
+	margin-bottom: 12px;	
+	width: auto;
+}
+
+.survey-thurstone .btn:before {
+	content: "\0025BA";
+}
+
+.survey-narrative input,
+.survey-narrative select {
+    vertical-align: baseline;
+    width: auto;
+}

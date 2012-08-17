@@ -1,5 +1,8 @@
 <div class="control-group survey-short-answer">
     <label for="{{ #id }}">{{ blk.prompt }}</label>
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
     <div class="controls">
         <select name="{{ blk.name }}" id="{{ #id }}">
             <option value="">{_ Select country _}</option>
