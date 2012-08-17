@@ -47,7 +47,10 @@ parse(Expr) ->
     simplify({value_list, List}) ->
         {value_list, [ simplify(Elt) || Elt <- List ]};
     simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
-        {apply_filter, list_to_atom("filter_"++Filter), list_to_atom(Filter), simplify(Expr), [ simplify(Arg) || Arg <- Args ]}.
+        {apply_filter, list_to_atom("filter_"++Filter), list_to_atom(Filter), simplify(Expr), [ simplify(Arg) || Arg <- Args ]};
+    simplify({value, {expr, _, _, _} = Expr, []}) ->
+        simplify(Expr).
+
 
 
 %% @doc Evaluate a parsed expression tree.
