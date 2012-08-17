@@ -670,12 +670,15 @@ is_lang_neutral(phone_emergency, _) -> true;
 is_lang_neutral(_, _) -> false.
 
 
-%% @doc Translate a language to a language string as used by postgresql
-%% @todo Add more languages
-% pg_lang(en) -> "english";
-% pg_lang(nl) -> "dutch";
-% pg_lang(de) -> "german";
-% pg_lang(fr) -> "french";
+%% @doc Translate a language to a language string as used by
+%% postgresql. This language list is the intersection of the default
+%% catalogs of postgres with the languages supported by
+%% mod_translation.
+pg_lang(nl) -> "dutch";
+pg_lang(de) -> "german";
+pg_lang(fr) -> "french";
+pg_lang(es) -> "spanish";
+pg_lang(tr) -> "turkish";
 pg_lang(_) -> "english".
 
 
