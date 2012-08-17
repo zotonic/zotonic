@@ -12,6 +12,9 @@
         <input type="text" id="block-{{name}}-prompt{{ lang_code_with_dollar }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
                class="span8" value="{{ blk.prompt[lang_code] }}"
                placeholder="{_ Please write an essay. _} ({{ lang_code }})" />
+        <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+               class="span8" rows="2"
+               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code] }}</textarea>
     {% else %}
         <p>{{ blk.prompt[lang_code] }}</p>
     {% endif %}

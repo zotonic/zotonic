@@ -27,6 +27,7 @@
 ]).
 
 -include("../survey.hrl").
+-include_lib("zotonic.hrl").
 
 to_block(Q) ->
     [
@@ -69,12 +70,12 @@ eval1(<<>>, _, _, _Context) ->
 eval1(_, <<>>, _, _Context) ->
     ok;
 eval1(Expr, Target, Answers, Context) ->
-    case z_expression:parse(Expr) of
+    case z_expression:parse(z_html:unescape(Expr)) of
         {ok, Tree} ->
             case z_convert:to_bool(
                     z_expression:eval(Tree, 
                                       fun(Var) ->
-                                          proplists:get_value(Var, Answers)
+                                          proplists:get_value(z_convert:to_binary(Var), Answers)
                                       end,
                                       Context))
             of

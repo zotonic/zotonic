@@ -13,11 +13,6 @@
                class="span8" value="{{ blk.prompt[lang_code] }}"
                placeholder="{_ Weasels make great pets. _} ({{ lang_code }})" />
 
-{#
-       <textarea id="block-{{name}}-question{{ lang_code_with_dollar }}" name="block-{{name}}-question{{ lang_code_with_dollar }}" 
-              class="span8" rows="6"
-              placeholder="{_ Question _} ({{ lang_code }})" >{{ blk.question[lang_code] }}</textarea>
-#}
         <div class="controls">
             <label class="input inline">
                 <input type="text" id="block-{{name}}-disagree{{ lang_code_with_dollar }}" name="block-{{name}}-disagree{{ lang_code_with_dollar }}" 
@@ -35,6 +30,11 @@
                       placeholder="{_ Strongly Agree _}" />
             </label>
         </div>
+
+       <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+              class="span8" rows="2"
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code] }}</textarea>
+
     {% else %}
         <p>{{ blk.prompt[lang_code] }}</p>
     {% endif %}

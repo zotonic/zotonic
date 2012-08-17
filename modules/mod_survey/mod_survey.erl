@@ -214,7 +214,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     count_pages([], N) ->
         N;
     count_pages([Q|L], N) ->
-        case is_page_break(Q) of
+        case is_countable_page_break(Q) of
             true ->
                 L1 = lists:dropwhile(fun is_page_break/1, L),
                 count_pages(L1, N+1);
@@ -230,15 +230,22 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
     go_page(Nr, Qs, _Answers, exact, _Context) ->
         case fetch_page(Nr, Qs) of
-            last ->
-                last;
+            last -> last;
+            {[], _Nr} -> last;
             {L,Nr1} ->
                 L1 = lists:dropwhile(fun is_page_break/1, L),
                 L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
                 {L2,Nr1}
         end;
     go_page(Nr, Qs, Answers, forward, Context) ->
-        eval_page_jumps(fetch_page(Nr, Qs), Answers, Context).
+        case eval_page_jumps(fetch_page(Nr, Qs), Answers, Context) of
+            {error, _} = Error -> Error;
+            last -> last;
+            {L1, Nr1} ->
+                L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
+                {L2,Nr1}
+        end.
+
 
 
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
@@ -327,6 +334,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 is_page_break(Block) ->
     proplists:get_value(type, Block) =:= <<"survey_page_break">>.
+
+is_countable_page_break(Block) ->
+    is_page_break(Block) andalso not z_convert:to_bool(proplists:get_value(is_nocount, Block)).
 
 
 %% @doc Collect all answers per question, save to the database.

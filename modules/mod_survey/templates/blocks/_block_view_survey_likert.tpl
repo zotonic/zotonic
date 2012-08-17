@@ -2,6 +2,10 @@
 <div class="control-group survey-likert">
     <label class="control-label">{{ blk.prompt }}</label>
 
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}
+
     <div class="controls">
         <label class="radio inline">
             {{ blk.disagree|default:_"Strongly Disagree" }}

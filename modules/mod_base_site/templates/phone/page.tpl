@@ -5,41 +5,43 @@
 {% block content %}
 <div {% include "_language_attrs.tpl" id=id %}>
 	{% include "_title.tpl" %}
-	{% include "_meta.tpl" %}
+	{% block main %}
+		{% include "_meta.tpl" %}
 
-	{% if m.rsc[id].summary %}
-		<p class="summary"><b>{{ m.rsc[id].summary }}</b></p>
-	{% endif %}
+		{% if m.rsc[id].summary %}
+			<p class="summary"><b>{{ m.rsc[id].summary }}</b></p>
+		{% endif %}
 
-	{% include "_address.tpl" %}
+		{% include "_address.tpl" %}
 
-	{% block subnav %}
-		{% include "_subnav.tpl" %}
-	{% endblock %}
+		{% block subnav %}
+			{% include "_subnav.tpl" %}
+		{% endblock %}
 
-	{% block body %}
-	<div class="body">
-		{{ m.rsc[id].body }}
-		{% include "_blocks.tpl" %}
-	</div>
-	{% endblock %}
+		{% block body %}
+		<div class="body">
+			{{ m.rsc[id].body }}
+			{% include "_blocks.tpl" %}
+		</div>
+		{% endblock %}
 
-	{% block below_body %}{% endblock %}
+		{% block below_body %}{% endblock %}
 
-	{% block seealso %}
-		{% include "_content_list.tpl" list=id.o.hasfeatured %}
-        {% include "_content_list.tpl" list=id.o.haspart in_collection=id %}
-        {% include "_content_list.tpl" list=id.o.relation %}
-	{% endblock %}
-	
-	{% block thumbnails %}
-	    {% include "_page_thumbnails.tpl" %}
-	{% endblock %}
+		{% block seealso %}
+			{% include "_content_list.tpl" list=id.o.hasfeatured %}
+	        {% include "_content_list.tpl" list=id.o.haspart in_collection=id %}
+	        {% include "_content_list.tpl" list=id.o.relation %}
+		{% endblock %}
+		
+		{% block thumbnails %}
+		    {% include "_page_thumbnails.tpl" %}
+		{% endblock %}
 
-	{% block sidebar_collection %}
-		{% with m.rsc.sidebar_collection.id as id %}
-		{% include "_content_list.tpl" list=id.o.haspart %}
-		{% endwith %}
+		{% block sidebar_collection %}
+			{% with m.rsc.sidebar_collection.id as id %}
+			{% include "_content_list.tpl" list=id.o.haspart %}
+			{% endwith %}
+		{% endblock %}
 	{% endblock %}
 </div>
 {% endblock %}

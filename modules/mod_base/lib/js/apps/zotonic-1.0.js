@@ -1368,7 +1368,7 @@ $.fn.formToArray = function(semantic) {
 	if (sub) {
 		var n = sub.name;
 		if (n && !sub.disabled) {
-			a.push({name: n, value: ''});
+			a.push({name: n, value: $(sub).val()});
 			a.push({name: 'z_submitter', value: n});
 		}
 	}
