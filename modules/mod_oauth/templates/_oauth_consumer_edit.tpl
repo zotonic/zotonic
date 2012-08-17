@@ -41,7 +41,7 @@
 
                 <div class="modal-footer">
                     {% if consumer.id %}
-                    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+                    {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
                     {% button class="btn btn-primary" type="submit" text=_"Update" %}
                     {% else %}
                     {_ When done, go to the authorization tab to set permissions. _}

@@ -3,9 +3,5 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn-primary" id="{{ #cancel }}">{{ button|default:_"OK" }}</button>
-    {% wire id=#cancel 
-        action={dialog_close}
-	action=action
-    %}
+	{% button class="btn-primary" text=button|default:_"OK" action={dialog_close} action=action %}
 </div>

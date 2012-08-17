@@ -33,12 +33,7 @@ render(Params, _Vars, Context) ->
     Postback  = proplists:get_value(postback,Params),
     Delegate  = proplists:get_value(delegate,Params),
 
-    Args = proplists:delete(id, 
-                proplists:delete(type, 
-                    proplists:delete(target,
-                        proplists:delete(action, 
-                            proplists:delete(postback,
-                                proplists:delete(delegate, Params)))))), 
+    Args = lists:foldl(fun proplists:delete/2, Params, [id, type, target, action, postback, delegate]),
 
     Actions1  = lists:flatten(Actions),
     Options   = [{action, append_args(X, Args)} || X <- Actions1, X =/= undefined ],

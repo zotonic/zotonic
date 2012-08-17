@@ -12,7 +12,7 @@
 <div class="admin-form ">
     <div class="control-group">
         <div class="pull-right">
-	    {% button class="btn" text=_"Cancel" action={redirect back} title=_"Go back." %}
+	    {% button class="btn" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
         </div>        
 	{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
 	{% if is_editable %}

@@ -24,12 +24,8 @@
 	<div id="confirm_button">
 		<button type="submit">{_ Confirm _}</button>
 	</div>
-{%
-	wire id=#cancel
-	action={dialog_close}
-%}
 	<div id="cancel_button">
-		<button id="{{#cancel}}" type="cancel">{_ Cancel _}</button>
+	    {% button class="btn" text=_"Cancel" action={dialog_close} tag="a" %}
 	</div>
 </form>
 

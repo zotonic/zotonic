@@ -39,7 +39,7 @@
 {% if delete %}
 <p>{_ Do you really want to delete this application? _}</p>
 <div class="modal-footer">
-    {% button class="btn" action={dialog_close} text=_"Cancel" %}
+    {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
     {% button class="btn btn-primary" text=_"Delete this application!" postback={confirm_del_app id=id} %}
 </div>
 {% else %}

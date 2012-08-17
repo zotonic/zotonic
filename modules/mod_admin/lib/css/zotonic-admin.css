@@ -227,6 +227,10 @@ table.table tr.unpublished td a {
     color: #999;
 }
 
+table.table tr.unpublished td a.btn-success {
+    color: white;
+}
+
 img.thumb {
     padding: 2px;
     border-radius: 4px;

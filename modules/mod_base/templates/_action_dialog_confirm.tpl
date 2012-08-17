@@ -3,16 +3,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn" id="{{ #cancel }}">{{ cancel|default:_"Cancel" }}</button>
-    <button class="btn btn-primary" id="{{ #ok }}">{{ ok|default:_"OK" }}</button>
-    {% wire id=#ok 
-        action={dialog_close}
-	action=action
-	postback=postback
-	delegate=delegate
-    %}
-    {% wire id=#cancel 
-        action={dialog_close}
-	action=on_cancel
-    %}
+	{% button class="btn" text=cancel|default:_"Cancel" action={dialog_close} action=on_cancel delegate=delegate tag="a" %}
+	{% button class="btn btn-primary" text=ok|default:_"OK" action={dialog_close} delegate=delegate action=action %}
 </div>

@@ -47,6 +47,8 @@ export HOSTNAME=$HOSTNAME
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
+export ZOTONIC_CALL="erl_call -name $SNAME@$HOSTNAME"
+
 # Make sure the erlang.config file exists
 if [ ! -e "$ZOTONIC/priv/erlang.config" -a -e "$ZOTONIC/priv/erlang.config.in" ]; then
     echo "Installing default erlang.config file"

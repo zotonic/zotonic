@@ -37,7 +37,7 @@
 	</div>
 	
 	<div class="modal-footer">
-	    {% button class="btn" action={dialog_close} text="Cancel" %}
+	    {% button class="btn" action={dialog_close} text="Cancel" tag="a" %}
 	    <button class="btn btn-primary" type="submit">{% if id %}Replace{% else %}Make{% endif %} media item</button>
 	</div>
     </form>
