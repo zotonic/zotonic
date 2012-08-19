@@ -334,8 +334,8 @@
 -record(media_stillimage, {id, props=[]}).
 
 
-%% @doc A survey has been filled in and submitted. (notify)
--record(survey_submit, {id, answers}).
+%% @doc A survey has been filled in and submitted. (first)
+-record(survey_submit, {id, answers, missing}).
 
 %% @doc Check if the current user is allowed to download a survey. (first)
 -record(survey_is_allowed_results_download, {id}).

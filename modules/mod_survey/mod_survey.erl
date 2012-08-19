@@ -21,6 +21,7 @@
 
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
+-mod_prio(800).
 -mod_schema(2).
 -mod_depends([admin]).
 -mod_provides([survey, poll]).
@@ -158,12 +159,16 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                             %% That was the last page. Show a thank you and save the result.
                             case do_submit(Id, Questions, Answers2, Context) of
                                 ok ->
+                                    mail_result(Id, Answers2, Context),
                                     case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
                                         true ->
                                             #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}, {q, As}]};
                                         false ->
                                             #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                                     end;
+                                {ok, Context} ->
+                                    mail_result(Id, Answers2, Context),
+                                    Context;
                                 {error, _Reason} ->
                                     #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                             end
@@ -342,10 +347,31 @@ is_countable_page_break(Block) ->
 %% @doc Collect all answers per question, save to the database.
 %% @todo Check if we are missing any answers
 do_submit(SurveyId, Questions, Answers, Context) ->
-    {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
-    m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
-    z_notifier:notify(#survey_submit{id=SurveyId, answers=FoundAnswers}, Context),
-    ok.
+    {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
+    case z_notifier:first(#survey_submit{id=SurveyId, answers=FoundAnswers, missing=Missing}, Context) of
+        undefined ->
+            m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
+            ok;
+        {ok, _Context1} = Handled ->
+            Handled;
+        {error, _Reason} = Error ->
+            Error
+    end.
+
+
+%% @doc mail the survey result to an e-mail address
+mail_result(SurveyId, Answers, Context) ->
+    case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
+        undefined ->
+            skip;
+        Email ->
+            Vars = [
+                {id, SurveyId},
+                {answers, Answers}
+            ],
+            z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+            ok
+    end.
 
 
 %% @doc Collect all answers, report any missing answers.
