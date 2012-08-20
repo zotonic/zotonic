@@ -20,7 +20,12 @@ export SITES=${SITES:=$ZOTONIC/priv/sites}
 # Path to the Erlang VM
 export ERL=${ERL:=erl}
 
-export MAKE=${MAKE:=make}
+if make --version 2>&1 | grep "^GNU Make" >& /dev/null
+then
+  export MAKE=${MAKE:=make}
+else
+  export MAKE=${MAKE:=gmake}
+fi
 
 # Increase this if you expect a lot of concurrent connections. For example
 # if you use comet on popular pages.
