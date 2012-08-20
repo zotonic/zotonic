@@ -4,7 +4,7 @@
 %}
 <form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
 	<fieldset>
-		{% if not id.is_a.poll and pages > 1 %}
+		{% if not id.is_a.poll and pages > 1 and not id.survey_hide_progress %}
 			<legend>{_ Question _} <span>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
 		{% endif %}
 

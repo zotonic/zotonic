@@ -36,6 +36,13 @@
 	</div>
 
 	<div class="control-group">
+		<label class="inline checkbox">
+		<input type="checkbox" name="survey_hide_progress" id="survey_hide_progress" value="1" {% if id.survey_hide_progress %}checked="checked"{% endif %} />
+		{_ Hide progress information “<em>Question 3/10</em>”. _}
+		</label>
+	</div>
+
+	<div class="control-group">
 		<label>{_ Mail filled in surveys to _}</label>
 		<input type="text" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
 	</div>
