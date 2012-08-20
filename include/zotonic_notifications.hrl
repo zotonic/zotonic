@@ -335,7 +335,7 @@
 
 
 %% @doc A survey has been filled in and submitted. (first)
--record(survey_submit, {id, answers, missing}).
+-record(survey_submit, {id, answers, missing, answers_raw}).
 
 %% @doc Check if the current user is allowed to download a survey. (first)
 -record(survey_is_allowed_results_download, {id}).
