@@ -19,7 +19,7 @@
        	<td>
     	{% if ans|is_list %}
 	  		{% for v in ans %}
-	       		{{ v|force_escape|linebreaksbr }}{% if not forloop.last %}<br/>{% endif %}
+	       		{% if v /= "" %}{{ v|force_escape|linebreaksbr }}{% if not forloop.last %}<br/>{% endif %}{% endif %}
 		    {% endfor %}
 		{% else %}
 			{{ ans|force_escape|linebreaksbr }}

@@ -112,19 +112,20 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
 %% support functions
 %%====================================================================
 
-render_update(Render, Args, Context) ->
+render_update(#context{} = RenderContext, _Args, _Context) ->
+    RenderContext;
+render_update(#render{} = Render, Args, Context) ->
     TargetId = proplists:get_value(element_id, Args, "survey-question"),
     z_render:update(TargetId, Render, Context).
 
 
 %% @doc Fetch the next page from the survey, update the page view
-render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
-    z_render:update("survey-question", 
-                    #render{
-                        template="_survey_start.tpl", 
-                        vars=[{id,Id},{answers,Answers},{history,[]}]
-                    },
-                    Context);
+-spec render_next_page(integer(), integer(), exact|forward, list(), list(), #context{}) -> #render{} | #context{}.
+render_next_page(Id, 0, _Direction, Answers, _History, _Context) ->
+    #render{
+        template="_survey_start.tpl", 
+        vars=[{id,Id},{answers,Answers},{history,[]}]
+    };
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
@@ -151,7 +152,18 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                              {history, [NewPageNr|History]}],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
-                last ->
+                {error, {not_found, Name} = Reason} ->
+                    lager:error("Survey ~p, error ~p on page ~p", [Id, Reason, PageNr]),
+                    z_render:growl_error("Error in survey, could not find page "++z_convert:to_list(Name), Context);
+
+                {error, Reason} ->
+                    lager:error("Survey ~p, error ~p on page ~p", [Id, Reason, PageNr]),
+                    z_render:growl_error("Error evaluating submit.", Context);
+
+                stop ->
+                    render_next_page(Id, 0, Direction, Answers, History, Context);
+
+                submit ->
                     case z_session:get(mod_survey_editing, Context) of
                         {U, P} -> 
                             admin_edit_survey_result(Id, U, P, Questions, Answers2, Context);
@@ -219,7 +231,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     count_pages([], N) ->
         N;
     count_pages([Q|L], N) ->
-        case is_countable_page_break(Q) of
+        case is_page_break(Q) of
             true ->
                 L1 = lists:dropwhile(fun is_page_break/1, L),
                 count_pages(L1, N+1);
@@ -235,8 +247,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
     go_page(Nr, Qs, _Answers, exact, _Context) ->
         case fetch_page(Nr, Qs) of
-            last -> last;
-            {[], _Nr} -> last;
+            stop -> stop;
+            submit -> submit;
+            {[], _Nr} -> submit;
             {L,Nr1} ->
                 L1 = lists:dropwhile(fun is_page_break/1, L),
                 L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
@@ -245,7 +258,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     go_page(Nr, Qs, Answers, forward, Context) ->
         case eval_page_jumps(fetch_page(Nr, Qs), Answers, Context) of
             {error, _} = Error -> Error;
-            last -> last;
+            stop -> stop;
+            submit -> submit;
             {L1, Nr1} ->
                 L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
                 {L2,Nr1}
@@ -254,7 +268,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
-        last;
+        submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
         case is_page_break(Q) of
             true ->
@@ -264,7 +278,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                     {jump, Name} ->
                         % Go to question 'name', count pagebreaks in between for the new page nr
                         % Only allow jumping forward to prevent endless loops.
-                        eval_page_jumps(fetch_question_name(L, z_convert:to_binary(Name), Nr, in_pagebreak), Answers, Context);
+                        case fetch_question_name(L, z_convert:to_binary(Name), Nr, in_pagebreak) of
+                            stop -> stop;
+                            submit -> submit;
+                            {[], _Nr} -> {error, {not_found, Name}};
+                            QsNr -> eval_page_jumps(QsNr, Answers, Context)
+                        end;
                     {error, Reason} ->
                         {error, Reason}
                 end;
@@ -291,7 +310,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                 end
         end.
 
+    fetch_question_name(_, <<"stop">>, _Nr, _State) ->
+        stop;
+    fetch_question_name(_, <<"submit">>, _Nr, _State) ->
+        submit;
     fetch_question_name([], _Name, Nr, _State) ->
+        % Page not found - should show error/warning here
         {[], Nr};
     fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
         case proplists:get_value(name, Q) of
@@ -339,9 +363,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 is_page_break(Block) ->
     proplists:get_value(type, Block) =:= <<"survey_page_break">>.
-
-is_countable_page_break(Block) ->
-    is_page_break(Block) andalso not z_convert:to_bool(proplists:get_value(is_nocount, Block)).
 
 
 %% @doc Collect all answers per question, save to the database.

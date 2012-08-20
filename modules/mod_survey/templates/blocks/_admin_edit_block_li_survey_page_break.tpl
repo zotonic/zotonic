@@ -38,13 +38,6 @@
         {_ When no condition is true then the question following this break will be the next page. _}
         {_ Multiple page break blocks are merged into one. _}
     </p>
-
-    <div class="control-group">
-        <label class="checkbox">
-            <input type="checkbox" id="block-{{name}}-is_nocount" name="block-{{name}}-is_nocount" value="1" {% if blk.is_not_counted %}checked="checked"{% endif %} />
-            {_ This page break doesn’t count towards the number of questions. _}
-        </label>
-    </div>
     {% endif %}
     </div>
 </fieldset>
