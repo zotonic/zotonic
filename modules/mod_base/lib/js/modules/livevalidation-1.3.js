@@ -11,13 +11,13 @@
 
 
 function addLiveValidation(element, args) {
-	if (!$(element).data("z_live_validation"))
-		$(element).data("z_live_validation", new LiveValidation($(element).attr('id'), args));
+    if (!$(element).data("z_live_validation"))
+        $(element).data("z_live_validation", new LiveValidation($(element).attr('id'), args));
 }
 
 
 function getLiveValidation(element) {
-	return $(element).data("z_live_validation");
+    return $(element).data("z_live_validation");
 }
 
 
@@ -340,16 +340,24 @@ LiveValidation.prototype =
     
     
     getValue: function() {
-		switch (this.elementType) {
-		case LiveValidation.SELECT:
-			if (this.element.selectedIndex >= 0) return this.element.options[this.element.selectedIndex].value;
-			else return "";
-		case LiveValidation.RADIO:
-			var val = $('input[name='+this.element.name+']:checked').val();
-			return val;
-		default:
-			return this.element.value;
-		}
+        switch (this.elementType) {
+        case LiveValidation.SELECT:
+            if (this.element.selectedIndex >= 0) return this.element.options[this.element.selectedIndex].value;
+            else return "";
+        case LiveValidation.RADIO:
+            var val = $('input[name='+this.element.name+']:checked').val();
+            return val;
+        case LiveValidation.CHECKBOX:
+            var val = [];
+            $('input[name='+this.element.name+']:checked').each(function() { val.push($(this).val()); });
+            if (val.length == 0) {
+                return undefined;
+            } else {
+                return val;
+            }
+        default:
+            return this.element.value;
+        }
     },
 
     /**
@@ -487,17 +495,17 @@ LiveValidation.prototype =
     insertMessage: function(elementToInsert){
         this.removeMessage();
         if (!elementToInsert) return;
-	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-	    || this.element.value != '' ) {
+    if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
+        || this.element.value != '' ) {
                 
-	        var className = this.validationFailed ? this.invalidClass : this.validClass;
-	        elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-	        if(this.insertAfterWhatNode.nextSibling){
-	            this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-	        }else{
-	            this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-	        }
-	    }
+            var className = this.validationFailed ? this.invalidClass : this.validClass;
+            elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+            if(this.insertAfterWhatNode.nextSibling){
+                this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+            }else{
+                this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+            }
+        }
     },
     
     
@@ -508,26 +516,30 @@ LiveValidation.prototype =
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
-            	$('input[name='+this.element.name+']').closest('.control-group').addClass("success");
-				switch (this.elementType) {
-				case LiveValidation.RADIO:
-	            	$('input[name='+this.element.name+']').closest('label').addClass(this.validFieldClass);
-					break;
-				default:
-                	$(this.element).addClass(this.validFieldClass);
-					break;
-				}
+                $('input[name='+this.element.name+'],select[name='+this.element.name+'],textarea[name='+this.element.name+']')
+                    .closest('.control-group').addClass("success");
+                switch (this.elementType) {
+                case LiveValidation.RADIO:
+                case LiveValidation.CHECKBOX:
+                    $('input[name='+this.element.name+']').closest('label').addClass(this.validFieldClass);
+                    break;
+                default:
+                    $(this.element).addClass(this.validFieldClass);
+                    break;
+                }
             }
         }else{
-        	$('input[name='+this.element.name+']').closest('.control-group').removeClass("success").addClass("error");
-			switch (this.elementType) {
-			case LiveValidation.RADIO:
-            	$('input[name='+this.element.name+']').closest('label').addClass(this.invalidFieldClass);
-				break;
-			default:
-            	$(this.element).addClass(this.invalidFieldClass);
-				break;
-			}
+            $('input[name='+this.element.name+'],select[name='+this.element.name+'],textarea[name='+this.element.name+']')
+                    .closest('.control-group').removeClass("success").addClass("error");
+            switch (this.elementType) {
+            case LiveValidation.RADIO:
+            case LiveValidation.CHECKBOX:
+                $('input[name='+this.element.name+']').closest('label').addClass(this.invalidFieldClass);
+                break;
+            default:
+                $(this.element).addClass(this.invalidFieldClass);
+                break;
+            }
         }
     },
     
@@ -551,15 +563,16 @@ LiveValidation.prototype =
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-    	$('input[name='+this.element.name+']').closest('.control-group').removeClass("success").removeClass("error");
-		switch (this.elementType) {
-		case LiveValidation.RADIO:
-        	$('input[name='+this.element.name+']').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
-			break;
-		default:
-    		$(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
-			break;
-		}
+        $('input[name='+this.element.name+']').closest('.control-group').removeClass("success").removeClass("error");
+        switch (this.elementType) {
+        case LiveValidation.RADIO:
+        case LiveValidation.CHECKBOX:
+            $('input[name='+this.element.name+']').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            break;
+        default:
+            $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            break;
+        }
     },
         
     /**
@@ -629,15 +642,15 @@ LiveValidationForm.prototype = {
     var self = this;
 
     this.onInvalid = function() { 
-		$(this).removeClass("z_form_valid").addClass("z_form_invalid"); 
-		$(".z_form_valid", this).hide();
-		$(".z_form_invalid", this).fadeIn();
-	};
+        $(this).removeClass("z_form_valid").addClass("z_form_invalid"); 
+        $(".z_form_valid", this).hide();
+        $(".z_form_invalid", this).fadeIn();
+    };
     this.onValid = function() { 
-		$(this).removeClass("z_form_invalid").addClass("z_form_valid");
-		$(".z_form_invalid", this).hide();
-		$(".z_form_valid", this).fadeIn();
-	};
+        $(this).removeClass("z_form_invalid").addClass("z_form_valid");
+        $(".z_form_invalid", this).hide();
+        $(".z_form_valid", this).fadeIn();
+    };
 
     $(element).submit(function(event) {
         event.zIsValidated = true;
@@ -646,13 +659,13 @@ LiveValidationForm.prototype = {
             var async = new Array();
             var is_first = true;
 
-			var fields = self.getFields();
+            var fields = self.getFields();
             for(var i = 0, len = fields.length; i < len; ++i ) {
                 if (!fields[i].element.disabled) {
                     if (fields[i].isAsync()) {
                         async.push(fields[i]);
                     } else {
-						var valid = fields[i].validate(true, this.clk);
+                        var valid = fields[i].validate(true, this.clk);
                         result = result && valid;
                     }
                 }
@@ -660,35 +673,35 @@ LiveValidationForm.prototype = {
 
             if (async.length > 0){
                 if (result)
-					self.submitWaitForAsync = async;
-				else 
-					self.onInvalid.call(this);
+                    self.submitWaitForAsync = async;
+                else 
+                    self.onInvalid.call(this);
 
                 for(var i=0; i<async.length; i++){
                     async[i].validate(true, this.clk);
                 }
                 result = false;
             }
-			else if (!result) {
-				self.onInvalid.call(this);
-			}
+            else if (!result) {
+                self.onInvalid.call(this);
+            }
             
             if (!result) {
                 // Either validation failed or we are waiting for more async results.
                 event.stopImmediatePropagation();
                 return false;
             } else {
-				self.onValid.call(this);
+                self.onValid.call(this);
                 return z_form_submit_validated_do(event);
             }
         } else {
             self.skipValidations--;
             if (self.skipValidations == 0) {
-				self.onValid.call(this);
+                self.onValid.call(this);
                 return z_form_submit_validated_do(event);
             } else {
                 return false;
-			}
+            }
         }
     })
   },
@@ -699,29 +712,29 @@ LiveValidationForm.prototype = {
    * @var force {Boolean} - whether to force the destruction even if there are fields still associated
    */
   destroy: function(force){
-	if (force || this.getFields().length == 0) {
-	    // remove events - set back to previous events
-	    this.element.onsubmit = this.oldOnSubmit;
-	    // remove from the instances namespace
-	    $(this.element).removeData("z_live_validation_instance");
-	    return true;
-	} else {
-		return false;
-	}
+    if (force || this.getFields().length == 0) {
+        // remove events - set back to previous events
+        this.element.onsubmit = this.oldOnSubmit;
+        // remove from the instances namespace
+        $(this.element).removeData("z_live_validation_instance");
+        return true;
+    } else {
+        return false;
+    }
   },
   
   /**
    * get the to-be-validated fields
    */
   getFields: function() {
-	var fields = [];
-	$("input,select,textarea", this.element).each(function() {
-		var field = $(this).data('z_live_validation');
-		if (field) {
-			fields.push(field);
-		}
-	});
-	return fields;
+    var fields = [];
+    $("input,select,textarea", this.element).each(function() {
+        var field = $(this).data('z_live_validation');
+        if (field) {
+            fields.push(field);
+        }
+    });
+    return fields;
   },
 
   asyncResult: function(Validation, isValid){
@@ -733,15 +746,15 @@ LiveValidationForm.prototype = {
                   // All validations were successful, resubmit (and skip validations for once)
                   this.skipValidations = 1;
                   var formObj = this.element;
-				  this.onValid.call(this);
+                  this.onValid.call(this);
                   setTimeout(function(){ $(formObj).submit(); }, 0);
               }
           }
       } else {
-		  if (this.submitWaitForAsync.length > 0) {
-			var formObj = this.element;
-			this.onInvalid.call(this);
-		  }
+          if (this.submitWaitForAsync.length > 0) {
+            var formObj = this.element;
+            this.onInvalid.call(this);
+          }
           this.submitWaitForAsync = new Array();
       }
   }
@@ -779,7 +792,7 @@ var Validate = {
      */
     Presence: function(value, paramsObj){
         var paramsObj = paramsObj || {};
-        var message = paramsObj.failureMessage || "*";
+        var message = paramsObj.failureMessage || "";
         if(value === '' || value === null || value === undefined){ 
             Validate.fail(message);
         }
