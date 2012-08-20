@@ -14,7 +14,7 @@
                 {{ item }}
             </label>
             {% if forloop.first %}
-                {% if question.is_required %}{% validate id=#thur.index name=name type={presence} %}{% endif %}
+                {% if blk.is_required %}{% validate id=#thur.index name=blk.name type={presence} %}{% endif %}
             {% endif %}
         {% endwith %}
     {% endfor %}
@@ -34,7 +34,7 @@
                 {{ item }}
             </label>
             {% if forloop.first %}
-                {% if question.is_required %}{% validate id=#thur.index name=name type={presence} %}{% endif %}
+                {% if blk.is_required %}{% validate id=#thur.index name=blk.name type={presence} %}{% endif %}
             {% endif %}
         {% endwith %}
     {% endfor %}

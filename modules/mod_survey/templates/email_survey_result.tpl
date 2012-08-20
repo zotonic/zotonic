@@ -17,7 +17,13 @@
         	<strong>{{ name|escape }}</strong>
        	</td>
        	<td>
-       		{{ ans|force_escape|linebreaksbr }}
+    	{% if ans|is_list %}
+	  		{% for v in ans %}
+	       		{{ v|force_escape|linebreaksbr }}{% if not forloop.last %}<br/>{% endif %}
+		    {% endfor %}
+		{% else %}
+			{{ ans|force_escape|linebreaksbr }}
+		{% endif %}
        	</td>
     </tr>
 {% endfor %}

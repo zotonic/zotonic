@@ -348,7 +348,7 @@ is_countable_page_break(Block) ->
 %% @todo Check if we are missing any answers
 do_submit(SurveyId, Questions, Answers, Context) ->
     {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
-    case z_notifier:first(#survey_submit{id=SurveyId, answers=FoundAnswers, missing=Missing}, Context) of
+    case z_notifier:first(#survey_submit{id=SurveyId, answers=FoundAnswers, missing=Missing, answers_raw=Answers}, Context) of
         undefined ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
             ok;
