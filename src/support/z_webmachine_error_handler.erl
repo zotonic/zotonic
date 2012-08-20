@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009  Marc Worrell
+%% @copyright 2009-2012  Marc Worrell
 %%
 %% @doc Error handler for webmachine HTTP errors. The result varies depending on the content type being served.
 %% @todo Mail the error to the webadmin
 
-%% Copyright 2009 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2012 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 -module(z_webmachine_error_handler).
 -author("Marc Worrell <marc@worrell.nl>").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
+
+-compile([{parse_transform, lager_transform}]).
 
 -export([render_error/3]).
 
