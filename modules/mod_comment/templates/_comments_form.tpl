@@ -52,7 +52,7 @@
 	</div>
 
 	<div>
-	  <input type="hidden" name="user_agent" value="{{ m.req.user_agent }}" />
+	  <input type="hidden" name="user_agent" value="{{ m.req.user_agent|escape }}" />
         </div>
         
     </fieldset>
