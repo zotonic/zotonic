@@ -3,7 +3,7 @@
 {# Simple page for TEXT (no media, as simple as possible) #}
 
 {% block content %}
-<div {% include "_language_attrs.tpl" id=id %}>
+<div {% block content_attributes %}{% include "_language_attrs.tpl" id=id %}{% endblock %}>
 	{% include "_title.tpl" %}
 	{% block main %}
 		{% include "_meta.tpl" %}

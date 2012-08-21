@@ -12,7 +12,3 @@
     	%}
     {% endif %}
 </div>
-
-{% javascript %}
-    $('body').addClass('survey-start').removeClass('survey-question');
-{% endjavascript %}

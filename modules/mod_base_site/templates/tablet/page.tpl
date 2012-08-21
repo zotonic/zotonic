@@ -3,7 +3,7 @@
 {# Page for TABLET+ #}
 
 {% block main %}
-<div {% include "_language_attrs.tpl" id=id %}>
+<div {% block content_attributes %}{% include "_language_attrs.tpl" id=id %}{% endblock %}>
 	{% include "_meta.tpl" %}
 
 	{% if m.rsc[id].summary %}
@@ -17,7 +17,7 @@
 
     <div class="body">
     {% block body %}
-	{{ m.rsc[id].body }}
+	{{ m.rsc[id].body|show_media }}
 	{% include "_blocks.tpl" %}
 	{% endblock %}
 	</div>

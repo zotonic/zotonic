@@ -121,11 +121,8 @@ render_update(#render{} = Render, Args, Context) ->
 
 %% @doc Fetch the next page from the survey, update the page view
 -spec render_next_page(integer(), integer(), exact|forward, list(), list(), #context{}) -> #render{} | #context{}.
-render_next_page(Id, 0, _Direction, Answers, _History, _Context) ->
-    #render{
-        template="_survey_start.tpl", 
-        vars=[{id,Id},{answers,Answers},{history,[]}]
-    };
+render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
+    z_render:wire({{redirect, [{id, Id}]}, Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
@@ -178,9 +175,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                                         false ->
                                             #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                                     end;
-                                {ok, Context} ->
+                                {ok, ContextOrRender} ->
                                     mail_result(Id, Answers2, Context),
-                                    Context;
+                                    ContextOrRender;
                                 {error, _Reason} ->
                                     #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                             end
@@ -188,7 +185,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             end;
         _NoBlocks ->
             % No survey defined, show an error page.
-            #render{template="_survey_empty.tpl", vars=[{id,Id}, {q, As}]}
+            #render{template="_survey_error.tpl", vars=[{id,Id}, {q, As}]}
     end.
 
     get_args(Context) ->
