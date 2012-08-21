@@ -41,6 +41,7 @@ start(_Type, _StartArgs) ->
 	ensure_started(inets),
 	inets:start(httpc,[{profile,zotonic}]),
     zotonic_deps:ensure(),
+    ensure_started(mimetypes),
     zotonic_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet

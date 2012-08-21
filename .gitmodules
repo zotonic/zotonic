@@ -13,3 +13,6 @@
 [submodule "deps/dh_date"]
 	path = deps/dh_date
 	url = git://github.com/zotonic/dh_date.git
+[submodule "deps/mimetypes"]
+	path = deps/mimetypes
+	url = git://github.com/zotonic/mimetypes.git

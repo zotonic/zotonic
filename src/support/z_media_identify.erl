@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% Date: 2009-03-02
 %%
 %% @doc Identify files, fetch metadata about an image
 %% @todo Recognize more files based on magic number, think of office files etc.
 
-%% Copyright 2009-2011 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2012 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,12 +37,14 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec identify(File, Context) -> {ok, Meta} | {error, Error}
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
+-spec identify(#upload{}|string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
 	identify(File, Filename, Context);
 identify(File, Context) ->
 	identify(File, File, Context).
+
+-spec identify(#upload{}|string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
     F = fun() ->
             case m_media:identify(File, Context) of
@@ -54,11 +56,13 @@ identify(File, OriginalFilename, Context) ->
     
 
 
-%% @spec identify_file(File::filename(), Context) -> {ok, PropList} | {error, Reason}
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
 %% has a specific identification methods.
+-spec identify_file(File::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
+
+-spec identify_file(File::string(), OriginalFilename::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
     case z_notifier:first(#media_identify_file{filename=File}, Context) of
         {ok, Props} ->
@@ -68,8 +72,8 @@ identify_file(File, OriginalFilename, Context) ->
 	end.
 
 
-%% @spec identify_file_direct(File, OriginalFilename) -> {ok, PropList} | {error, Reason}
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
+-spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
     {OsFamily, _} = os:type(),
 	case identify_file_os(OsFamily, File, OriginalFilename) of
@@ -87,8 +91,8 @@ identify_file_direct(File, OriginalFilename) ->
 	end.
 
 
-%% @spec identify_file_os(OsFamily::atom(), File::string(), OriginalFilename::string()) -> {ok, PropList} | {error, Reason}
 %% @doc Identify the mime type of a file using the unix "file" command.
+-spec identify_file_os(win32|unix, File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_os(win32, _File, OriginalFilename) ->
     {ok, [{mime, guess_mime(OriginalFilename)}]};
 
@@ -157,8 +161,8 @@ identify_file_os(unix, File, OriginalFilename) ->
     end.
 
 
-%% @spec identify_file_imagemagick(OsFamily, ImageFile) -> {ok, PropList} | {error, Reason}
 %% @doc Try to identify the file using image magick
+-spec identify_file_imagemagick(win32|unix, Filename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
     Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2> " ++ devnull(OsFamily)),
@@ -205,6 +209,7 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
             end
     end.
 
+-spec devnull(win32|unix) -> string().
 devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
@@ -212,6 +217,7 @@ devnull(unix)  -> "/dev/null".
 %% @spec mime(String) -> MimeType
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
+-spec mime(string()) -> string().
 mime("JPEG") -> "image/jpeg";
 mime("GIF") -> "image/gif";
 mime("TIFF") -> "image/tiff";
@@ -227,144 +233,27 @@ mime("PNG32") -> "image/png";
 mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
-%% @doc Return the extension for a known mime type.
-extension(B) when is_binary(B) -> 
-	extension(binary_to_list(B));
+%% @doc Return the extension for a known mime type (eg. ".mov")
+-spec extension(string()|binary()) -> string().
 extension(Mime) ->
-	case lists:keysearch(Mime, 2, extension_mime()) of
-		{value,{Ext,_Mime}} -> Ext;
-		false -> ".bin"
+	case mimetypes:extensions(z_convert:to_list(Mime)) of
+		[Ext|_] -> [$. | z_convert:to_list(Ext)];
+		[] -> ".bin"
 	end.
 
 
 %% @spec guess_mime(string()) -> string()
 %% @doc  Guess the mime type of a file by the extension of its filename.
-guess_mime(File) when is_binary(File) ->
-	guess_mime(binary_to_list(File));
+-spec guess_mime(string() | binary()) -> string().
 guess_mime(File) ->
-    case lists:keysearch(z_string:to_lower(filename:extension(File)), 1, extension_mime()) of
-		{value,{_Ext,Mime}} -> 
-			Mime;
-		false ->
-			"application/octet-stream"
+	case mimetypes:filename(z_convert:to_binary(File)) of
+		[Mime|_] -> z_convert:to_list(Mime);
+		[] -> "application/octet-stream"
 	end.
 
 
-% @doc Return a list of mime-type with their extension.
-extension_mime() ->
-	[
-		% Preferred extension/mime-type mapping
-		{".aiff", "audio/x-aiff"},
-		{".asf", "video/x-ms-asf"},
-		{".au", "audio/basic"},
-		{".avi", "video/msvideo"},
-		{".bin", "application/octet-stream"},
-		{".bmp", "image/bmp"},
-		{".bz2", "application/x-bzip2"},
-		{".c", "text/x-c"},
-		{".csh", "application/x-csh"},
-		{".css", "text/css"},
-		{".csv", "text/csv"},
-		{".diff", "text/x-diff"},
-		{".doc", "application/msword"},
-		{".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
-		{".dot", "application/x-dot"},
-		{".dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template"},
-		{".dvi", "application/x-dvi"},
-		{".dwg", "application/acad"},
-		{".flipchart", "application/inspire"},
-		{".gif", "image/gif"},
-		{".gz", "application/x-gzip"},
-		{".hqx", "application/mac-binhex40"},
-		{".htc", "text/x-component"},
-		{".html", "text/html"},
-		{".ico", "image/vnd.microsoft.icon"},
-		{".jar", "application/java-archive"},
-		{".jpg", "image/jpeg"},
-		{".js", "application/x-javascript"},
-		{".json", "application/json"},
-		{".latex", "application/x-latex"},
-		{".m4a", "audio/mp4"},
-		{".manifest", "text/cache-manifest"},
-		{".mdb", "application/x-msaccess"},
-		{".midi", "audio/midi"},
-		{".mov", "video/quicktime"},
-		{".mp3", "audio/mpeg"},
-		{".mp4", "video/mp4"},
-		{".mpg", "video/mpeg"},
-		{".mpp", "application/vnd.ms-project"},
-		{".odc", "application/vnd.oasis.opendocument.chart"},
-		{".odf", "application/vnd.oasis.opendocument.formula"},
-		{".odg", "application/vnd.oasis.opendocument.graphics"},
-		{".odi", "application/vnd.oasis.opendocument.image"},
-		{".odm", "application/vnd.oasis.opendocument.text-master"},
-		{".odp", "application/vnd.oasis.opendocument.presentation"},
-		{".ods", "application/vnd.oasis.opendocument.spreadsheet"},
-		{".odt", "application/vnd.oasis.opendocument.text"},
-		{".otc", "application/vnd.oasis.opendocument.chart-template"},
-		{".otf", "application/vnd.oasis.opendocument.formula-template"},
-		{".otg", "application/vnd.oasis.opendocument.graphics-template"},
-		{".oth", "application/vnd.oasis.opendocument.text-web"},
-		{".oti", "application/vnd.oasis.opendocument.image-template"},
-		{".otp", "application/vnd.oasis.opendocument.presentation-template"},
-		{".ots", "application/vnd.oasis.opendocument.spreadsheet-template"},
-		{".ott", "application/vnd.oasis.opendocument.text-template"},
-		{".patch", "text/patch"},
-		{".pdf", "application/pdf"},
-		{".php", "text/x-php"},
-		{".png", "image/png"},
-		{".ppsx", "application/vnd.openxmlformats-officedocument.presentationml.slideshow"},
-		{".ppt", "application/vnd.ms-powerpoint"},
-		{".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
-		{".ps", "application/postscript"},
-		{".psd", "image/vnd.adobe.photoshop"},
-		{".rar", "application/x-rar"},
-		{".rtf", "text/rtf"},
-		{".sh", "text/x-shellscript"},
-		{".sit", "application/x-stuffit"},
-		{".svg", "image/svg+xml"},
-		{".swf", "application/x-shockwave-flash"},
-		{".tar", "application/x-tar"},
-		{".tgz", "application/x-gzip+tar"},
-		{".tif", "image/tiff"},
-		{".tpl", "text/html"},
-		{".txt", "text/plain"},
-		{".wav", "audio/x-wav"},
-		{".webm", "video/webm"},
-		{".woff", "application/x-font-woff"},
-		{".wmf", "application/x-msmetafile"},
-		{".xhtml", "application/xhtml+xml"},
-		{".xls", "application/vnd.ms-excel"},
-		{".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-		{".xml", "application/xml"},
-		{".z", "application/x-compress"},
-		{".zip", "application/zip"},
-		
-		% Alternative mime mappings
-		{".ai", "application/postscript"},
-		{".aif", "audio/x-aiff"},
-		{".aifc", "audio/x-aiff"},
-		{".eps", "application/postscript"},
-		{".erl", "text/plain"},
-		{".flp", "application/inspire"},
-		{".gzip", "application/x-gzip"},
-		{".htm", "text/html"},
-		{".jpeg", "image/jpeg"},
-		{".js", "text/javascript"},
-		{".js", "text/x-javascript"},
-		{".m4v", "video/mp4"},
-		{".mid", "audio/midi"},
-		{".mpeg", "video/mpeg"},
-		{".pps", "application/vnd.ms-powerpoint"},
-		{".ps", "application/ps"},
-		{".qt", "video/quicktime"},
-		{".rtf", "application/msword"},
-		{".sh", "application/x-sh"},
-		{".tiff", "image/tiff"}
-	].
-
-
 %% Detect the exif rotation in an image and swaps width/height accordingly.
+-spec exif_orientation(string()) -> 1|2|3|4|5|6|7|8.
 exif_orientation(InFile) ->
     %% FIXME - don't depend on external command
     case string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)), "\n") of
@@ -387,7 +276,7 @@ exif_orientation(InFile) ->
 
 
 %% @doc Given a mime type, return whether its file contents is already compressed or not.
-%% @spec is_mime_compressed(Mime::string()) -> bool()
+-spec is_mime_compressed(string()) -> boolean().
 is_mime_compressed("text/"++_)                               -> false;
 is_mime_compressed("image/svgz"++_)                          -> true;
 is_mime_compressed("image/svg"++_)                           -> false;

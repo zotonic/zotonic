@@ -6,7 +6,7 @@ PARSER     =src/erlydtl/erlydtl_parser
 GIT_CHECK := $(shell test -d .git && git submodule update --init)
 MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
 
-all: iconv makefile-deps $(PARSER).erl erl ebin/$(APP).app 
+all: iconv mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 erl:
 	@$(ERL) -pa $(wildcard deps/*/ebin) -pa ebin -noinput +B \
@@ -17,6 +17,9 @@ $(PARSER).erl: $(PARSER).yrl
 
 iconv:
 	cd deps/iconv && ./rebar compile
+
+mimetypes:
+	cd deps/mimetypes && ./rebar compile
 
 makefile-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
