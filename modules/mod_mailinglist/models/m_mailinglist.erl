@@ -154,6 +154,8 @@ recipient_get(RecipientId, Context) ->
 	z_db:assoc_row("select * from mailinglist_recipient where id = $1", [RecipientId], Context).
 
 %% @doc Fetch the recipient record by e-mail address
+recipient_get(undefined, _Email, _Context) ->
+	undefined;
 recipient_get(ListId, Email, Context) ->
 	z_db:assoc_row("select * from mailinglist_recipient where mailinglist_id = $1 and email = $2", [ListId, Email], Context).
 

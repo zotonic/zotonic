@@ -1,3 +1,6 @@
+{% if not list_id %}
+<p style="color: #666">{_ You received this mail because someone wanted you to send this information. We did not store your e-mail address and will not send you any other e-mail because of this e-mail. _}</p>
+{% else %}
 <p style="color: #666">{_ You received this mail because you are subscribed to the mailing list _} <a href="http://{{ m.site.hostname }}{{ list_id.page_url }}">{{ list_id.title }}</a>.
 {% if recipient_id %}
 {#	{{ recipient_id }}
@@ -17,3 +20,4 @@
 	{% endwith %}
 {% endif %}
 </p>
+{% endif %}

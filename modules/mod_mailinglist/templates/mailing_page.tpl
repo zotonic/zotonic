@@ -1,7 +1,7 @@
 {% extends "email_base.tpl" %}
 
 {# Subject of the e-mail #}
-{% block title %}{{ id.title }}{% endblock %}
+{% block title %}{{ id.title }}{% if not list_id %} - {{ m.site.title }}{% endif %}{% endblock %}
 
 {# Main body of the message sent. #}
 {% block content %}
@@ -38,7 +38,7 @@
 
 {# Shown below the mail body. Reference to the mailinglist (if any) and unsubscribe links. #}
 {% block footer %}
-{% if not list_id.mailinglist_private %}
+{% if not list_id or not list_id.mailinglist_private %}
 <tr>
 	<td>&nbsp;</td>
 </tr>
