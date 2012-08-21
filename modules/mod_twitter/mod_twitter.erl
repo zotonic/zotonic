@@ -333,7 +333,7 @@ receive_chunk(RequestId, Context) ->
             lager:error("Twitter: username/password not accepted."),
             exit({error, {unauthorized, {Status, Headers}}});
         {http, {RequestId, Result}} ->
-            lager:error("Twitter: unknown stream result (~p)", Result),
+            lager:error("Twitter: unknown stream result (~p)", [Result]),
             exit({error, Result});
 
         %% start of streaming data
