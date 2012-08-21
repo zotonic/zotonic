@@ -99,7 +99,6 @@
      
      $.ui.dialog.defaults = {
 	 title: 'Title',
-	 text: 'tekst',
-	 width: '700px'
+	 text: 'tekst'
      };
  })(jQuery);

@@ -1,0 +1,20 @@
+
+div.modal-backdrop {
+    opacity: 0.5;
+}
+
+div#zmodal form {
+    margin-bottom: 0;
+}
+
+/* do not use scrolling inside modal body */
+div.modal-body {
+    max-height: none;
+}
+
+/* make it possible to use the nice modal footer inside the body, e.g. for tabs */
+div.modal-body div.modal-footer {
+    margin: -15px;
+    margin-top: 0;
+}
+
