@@ -121,7 +121,7 @@ render_update(#render{} = Render, Args, Context) ->
 
 %% @doc Fetch the next page from the survey, update the page view
 -spec render_next_page(integer(), integer(), exact|forward, list(), list(), #context{}) -> #render{} | #context{}.
-render_next_page(Id, 0, _Direction, Answers, _History, Context) ->
+render_next_page(Id, 0, _Direction, _Answers, _History, Context) ->
     z_render:wire({redirect, [{id, Id}]}, Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     {As, Submitter} = get_args(Context),
