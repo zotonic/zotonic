@@ -30,6 +30,7 @@ docs:
 clean:
 	@echo "removing:"
 	(cd deps/iconv; ./rebar clean)
+	(cd deps/mimetypes; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
 	rm -f erl_crash.dump $(PARSER).erl
