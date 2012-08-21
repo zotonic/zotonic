@@ -16,6 +16,8 @@
 	        "bootstrap/css/bootstrap.css" 
 	        "bootstrap/css/bootstrap-responsive.css" 
 	        "bootstrap/css/bootstrap-base-site.css" 
+	        "css/jquery.loadmask.css" 
+	        "css/zp-growl.css" 
 	%}
 	{% block html_head_extra %}{% endblock %}
 </head>

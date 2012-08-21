@@ -10,9 +10,8 @@
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/z.inputoverlay.js"
 	"js/modules/jquery.loadmask.js"
-
-	"js/modules/responsive.js"
 	"bootstrap/js/bootstrap.js"
+	"js/modules/responsive.js"
 %}
 
 {% block _js_include_extra %}{% endblock %}
