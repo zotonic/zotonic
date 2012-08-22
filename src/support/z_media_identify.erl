@@ -236,7 +236,7 @@ mime(Type) -> "image/" ++ string:to_lower(Type).
 %% @doc Return the extension for a known mime type (eg. ".mov")
 -spec extension(string()|binary()) -> string().
 extension(Mime) ->
-	case mimetypes:extensions(z_convert:to_list(Mime)) of
+	case mimetypes:extensions(z_convert:to_binary(Mime)) of
 		[Ext|_] -> [$. | z_convert:to_list(Ext)];
 		[] -> ".bin"
 	end.
