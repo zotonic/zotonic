@@ -16,7 +16,6 @@
     "js/modules/z.formreplace.js"
     "js/modules/z.datepicker.js"
     "js/modules/z.menuedit.js"
-    "js/modules/z.trash.js"
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
 %}
