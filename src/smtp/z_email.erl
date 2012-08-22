@@ -26,6 +26,8 @@
 	get_admin_email/1,
 	send_admin/3,
 	
+	send_page/3,
+
 	send/2,
 	send/3,
 	
@@ -66,7 +68,7 @@ get_admin_email(Context) ->
 send_admin(Subject, Message, Context) ->
 	case get_admin_email(Context) of
 		undefined -> 
-			error;
+			{error, no_admin_email};
 		Email ->
 			Subject1 = [
 				$[,
@@ -81,6 +83,34 @@ send_admin(Subject, Message, Context) ->
 			],
 			z_email_server:send(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
 	end.
+
+
+%% @doc Send a page to an e-mail address, assumes the correct template "mailing_page.tpl" is available.
+%%		 Defaults for these pages are supplied by mod_mailinglist.
+send_page(undefined, _Id, _Context) ->
+	{error, not_email};
+send_page(_Email, undefined, _Context) ->
+	{error, not_found};
+send_page(Email, Id, Context) when is_integer(Id) ->
+	Vars = [
+		{id, Id},
+		{recipient, Email}
+	],
+	case m_rsc:is_a(Id, document, Context) of
+		false ->
+			send_render(Email, {cat, "mailing_page.tpl"}, Vars, Context);
+		true ->
+			E = #email{
+				to=Email,
+				html_tpl={cat, "mailing_page.tpl"},
+				vars=Vars,
+				attachments=[Id]
+			},
+			send(E, Context)
+	end;
+send_page(Email, Id, Context) ->
+	send_page(Email, m_rsc:rid(Id, Context), Context).
+
 
 %% @doc Send an email message defined by the email record.
 send(#email{} = Email, Context) ->

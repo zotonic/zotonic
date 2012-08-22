@@ -47,20 +47,6 @@ event(#submit{message={mail_page, Args}}, Context) ->
 	Id = proplists:get_value(id, Args),
 	OnSuccess = proplists:get_all_values(on_success, Args),
 	Email = z_context:get_q_validated("email", Context),
-	Vars = [
-		{id, Id},
-		{recipient, Email}
-	],
-	case m_rsc:is_a(Id, document, Context) of
-		false -> z_email:send_render(Email, {cat, "mailing_page.tpl"}, Vars, Context);
-		true ->
-			E = #email{
-				to=Email,
-				html_tpl={cat, "mailing_page.tpl"},
-				vars=Vars,
-				attachments=[Id]
-			},
-			z_email:send(E, Context)
-	end,
+	z_email:send_page(Email, Id, Context),
 	Context1 = z_render:growl(?__("Sending the e-mail...", Context), Context),
 	z_render:wire(OnSuccess, Context1).
