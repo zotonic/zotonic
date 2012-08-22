@@ -600,17 +600,28 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                 _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1})
             end;
         _ ->
+            AttsEncoded = [ encode_attachment(Att, Context) || Att <- Attachment ],
+            AttsEncodedOk = lists:filter(fun({error, _}) -> false; (_) -> true end, AttsEncoded),
             mimemail:encode({<<"multipart">>, <<"mixed">>,
-             Headers1,
-             [],
-             [
-                {<<"multipart">>, <<"alternative">>, [], [], Parts1} |
-                [ encode_attachment(Att, Context) || Att <- Attachment ]
-             ]
-            })
+                             Headers1,
+                             [],
+                             [ {<<"multipart">>, <<"alternative">>, [], [], Parts1} | AttsEncodedOk ]
+                            })
     end.
 
-    encode_attachment(Att, _Context) ->
+    encode_attachment(Att, Context) when is_integer(Att) ->
+        case m_media:get(Att, Context) of
+            undefined -> 
+                {error, no_medium};
+            Props ->
+                Upload = #upload{
+                            tmpfile=filename:join(z_path:media_archive(Context), 
+                                                   proplists:get_value(filename, Props)),
+                            mime=proplists:get_value(mime, Props)
+                        },
+                encode_attachment(Upload, Context)
+        end;
+    encode_attachment(#upload{} = Att, _Context) ->
         Data = case Att#upload.data of
                     undefined ->
                         {ok, FileData} = file:read_file(Att#upload.tmpfile),
