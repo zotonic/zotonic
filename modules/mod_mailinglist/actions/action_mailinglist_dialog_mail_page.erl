@@ -51,6 +51,6 @@ event(#submit{message={mail_page, Args}}, Context) ->
 		{id, Id},
 		{recipient, Email}
 	],
-	z_email:send_render(Email, "mailing_page.tpl", Vars, Context),
+	z_email:send_render(Email, {cat, "mailing_page.tpl"}, Vars, Context),
 	Context1 = z_render:growl(?__("Sending the e-mail...", Context), Context),
 	z_render:wire(OnSuccess, Context1).
