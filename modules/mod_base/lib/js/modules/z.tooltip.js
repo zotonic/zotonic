@@ -88,7 +88,7 @@ $.widget("ui.tooltip",
 $.fn.tooltip.destroy = function()
 {
 	$('.tooltip').tooltip('destroy');
-}
+};
 
 $.ui.tooltip.defaults = {
 	offsetY: 	0,
@@ -97,4 +97,4 @@ $.ui.tooltip.defaults = {
 	outevent: 	'mouseout',
 	width: 		'auto',
 	maxwidth: 	'330px'
-}
+};
