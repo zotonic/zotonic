@@ -153,13 +153,14 @@ function check_options {
 
     if ! ping -c 1 -q $SITE &>/dev/null; then
 
-        echo "$SITE cannot be reached. You should add $SITE to your /etc/hosts file,"
+        echo "Warning!"
+        echo "Site: '$SITE' cannot be reached."
+        echo "Command 'host $SITE' must resolve to an IP address,"
         echo "otherwise you won't be able to reach it after installing the site."
-        echo "Add the following line to /etc/hosts:"
+        echo "You can fix that by adding the following line to /etc/hosts:"
         echo
         echo "127.0.0.1         $SITE"
         echo
-        exit 1
     fi
     
     
