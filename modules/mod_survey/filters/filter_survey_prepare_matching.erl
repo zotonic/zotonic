@@ -18,7 +18,8 @@
 -module(filter_survey_prepare_matching).
 
 -export([
-    survey_prepare_matching/2
+    survey_prepare_matching/2,
+    split_markers/1
 ]).
 
 survey_prepare_matching(Blk, Context) ->
@@ -46,10 +47,17 @@ split_option(Option) ->
     drop_eq(X) -> X.
 
 split_markers(Qs) ->
-    [ split_marker(Opt) || Opt <- Qs, Opt /= [] ].
+    split_markers(Qs, 1, []).
 
-split_marker(X) ->
+    split_markers([], _N, Acc) ->
+        lists:reverse(Acc);
+    split_markers([[]|Qs], N, Acc) ->
+        split_markers(Qs, N, Acc);
+    split_markers([Opt|Qs], N, Acc) ->
+        split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
+
+split_marker(X, N) ->
     case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {z_convert:to_binary(Opt), z_convert:to_binary(Opt)};
+        {Opt, []} -> {z_convert:to_binary(N), z_convert:to_binary(Opt)};
         {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
     end.

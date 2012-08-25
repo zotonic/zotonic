@@ -21,4 +21,4 @@
     </div>
 </div>
 {% endwith %}
-{% if blk.is_required %}{% validate id=#q1 name=name type={presence} %}{% endif %}
+{% if blk.is_required %}{% validate id=#q1 name=blk.name type={presence} %}{% endif %}

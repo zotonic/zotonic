@@ -25,7 +25,7 @@ survey_prepare_thurstone(Blk, Context) ->
     Answers = z_trans:lookup_fallback(
                     proplists:get_value(answers, Blk, <<>>), 
                     Context),
-    Qs1 = split_markers(split_lines(Answers)),
+    Qs1 = filter_survey_prepare_matching:split_markers(split_lines(Answers)),
     [
         {answers, Qs1}
     ].
@@ -33,12 +33,3 @@ survey_prepare_thurstone(Blk, Context) ->
 split_lines(Text) ->
     Options = string:tokens(z_string:trim(z_convert:to_list(Text)), "\n"),
     [ z_string:trim(Option) || Option <- Options ].
-
-split_markers(Qs) ->
-    [ split_marker(Opt) || Opt <- Qs, Opt /= [] ].
-
-split_marker(X) ->
-    case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {z_convert:to_binary(Opt), z_convert:to_binary(Opt)};
-        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
-    end.

@@ -43,7 +43,7 @@ parse([$[|T], Acc, InputAcc) ->
     Elt = case IsSelect of
         true -> 
             {Name, Options} = split_select(Input1),
-            {select, z_convert:to_binary(Name), split_markers(Options)};
+            {select, z_convert:to_binary(Name), filter_survey_prepare_matching:split_markers(Options)};
         false ->
             Name = z_string:trim(Input1),
             Length = length(Input1),
@@ -82,12 +82,3 @@ split_name([$=|Rest], Acc) ->
     {lists:reverse(Acc), Rest};
 split_name([H|T], Acc) ->
     split_name(T, [H|Acc]).
-    
-split_markers(Qs) ->
-    [ split_marker(Opt) || Opt <- Qs, Opt /= [] ].
-
-split_marker(X) ->
-    case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {z_convert:to_binary(Opt), z_convert:to_binary(Opt)};
-        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
-    end.
