@@ -1,12 +1,14 @@
 {application, zotonic,
  [{description, "zotonic"},
   {vsn, "0.9-dev"},
-  {modules, [
+  {modules,
+   [
     zotonic,
     zotonic_app,
     zotonic_sup,
-    zotonic_deps
-  ]},
+    zotonic_deps,
+    z
+   ]},
   {registered, []},
   {mod, {zotonic_app, []}},
   {env, []},
