@@ -32,6 +32,7 @@
     sanitize/1,
     sanitize/2,
     noscript/1,
+    escape_link/2,
     escape_link/1,
     nl2br/1,
     br2nl/1,
@@ -157,6 +158,11 @@ unescape(B) when is_binary(B) ->
     unescape(<<C, T/binary>>, Acc) ->
         unescape(T, <<Acc/binary, C>>).
 
+
+%% @doc Escape a text. Expands any urls to links with a nofollow attribute.
+-spec escape_link(list()|binary()|{trans, list()}, #context{}) -> binary() | undefined.
+escape_link(V, Context) ->
+    escape_link(z_trans:lookup_fallback(V, Context)).
 
 %% @doc Escape a text. Expands any urls to links with a nofollow attribute.
 %% @spec escape_link(Text) -> binary()
