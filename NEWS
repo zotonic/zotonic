@@ -38,12 +38,20 @@ mod_geomap
 mod_comment
     Added the possibility to have comments be moderated before submitting.
 
+mod_survey
+    Largely rewritten. Now uses the new 'blocks' structure for adding
+    questions to the survey.
+
+
 * New filters
 
 menu_subtree:
     Finds the menu below a particular resource id.
     Usage:  m.rsc.main_menu.menu|menu_subtree:id
 
+escape_link:
+    Escapes a text, inserts <br/> tags, and makes anchor elements of all
+    links in the text. The anchor elements have the 'nofollow' attribute.
 
 * New scomps
 
