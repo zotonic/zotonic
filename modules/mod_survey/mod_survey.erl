@@ -287,7 +287,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                             stop -> stop;
                             submit -> submit;
                             {[], _Nr} -> {error, {not_found, Name}};
-                            QsNr -> eval_page_jumps(QsNr, Answers, Context)
+                            NextQsNr -> eval_page_jumps(NextQsNr, Answers, Context)
                         end;
                     {error, Reason} ->
                         {error, Reason}
