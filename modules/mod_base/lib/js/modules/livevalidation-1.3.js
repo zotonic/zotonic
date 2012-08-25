@@ -345,11 +345,11 @@ LiveValidation.prototype =
             if (this.element.selectedIndex >= 0) return this.element.options[this.element.selectedIndex].value;
             else return "";
         case LiveValidation.RADIO:
-            var val = $('input[name='+this.element.name+']:checked').val();
+            var val = $('input[name="'+this.element.name+'"]:checked').val();
             return val;
         case LiveValidation.CHECKBOX:
             var val = [];
-            $('input[name='+this.element.name+']:checked').each(function() { val.push($(this).val()); });
+            $('input[name="'+this.element.name+'"]:checked').each(function() { val.push($(this).val()); });
             if (val.length == 0) {
                 return undefined;
             } else {
@@ -516,12 +516,12 @@ LiveValidation.prototype =
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
-                $('input[name='+this.element.name+'],select[name='+this.element.name+'],textarea[name='+this.element.name+']')
+                $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
                     .closest('.control-group').addClass("success");
                 switch (this.elementType) {
                 case LiveValidation.RADIO:
                 case LiveValidation.CHECKBOX:
-                    $('input[name='+this.element.name+']').closest('label').addClass(this.validFieldClass);
+                    $('input[name="'+this.element.name+'"]').closest('label').addClass(this.validFieldClass);
                     break;
                 default:
                     $(this.element).addClass(this.validFieldClass);
@@ -529,12 +529,12 @@ LiveValidation.prototype =
                 }
             }
         }else{
-            $('input[name='+this.element.name+'],select[name='+this.element.name+'],textarea[name='+this.element.name+']')
+            $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
                     .closest('.control-group').removeClass("success").addClass("error");
             switch (this.elementType) {
             case LiveValidation.RADIO:
             case LiveValidation.CHECKBOX:
-                $('input[name='+this.element.name+']').closest('label').addClass(this.invalidFieldClass);
+                $('input[name="'+this.element.name+'"]').closest('label').addClass(this.invalidFieldClass);
                 break;
             default:
                 $(this.element).addClass(this.invalidFieldClass);
@@ -563,11 +563,11 @@ LiveValidation.prototype =
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-        $('input[name='+this.element.name+']').closest('.control-group').removeClass("success").removeClass("error");
+        $('input[name="'+this.element.name+'"]').closest('.control-group').removeClass("success").removeClass("error");
         switch (this.elementType) {
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:
-            $('input[name='+this.element.name+']').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            $('input[name="'+this.element.name+'"]').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
             break;
         default:
             $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
