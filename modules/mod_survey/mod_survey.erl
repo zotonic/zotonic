@@ -240,7 +240,14 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     go_button_target(Submitter, Questions, Answers, Context) ->
         [Button|_] = lists:dropwhile(fun(B) -> proplists:get_value(name, B) =/= Submitter end, Questions),
         TargetName = proplists:get_value(target, Button),
-        eval_page_jumps(fetch_question_name(Questions, TargetName, 1, in_q), Answers, Context).
+        case eval_page_jumps(fetch_question_name(Questions, TargetName, 1, in_q), Answers, Context) of
+            {error, _} = Error -> Error;
+            stop -> stop;
+            submit -> submit;
+            {L1, Nr1} ->
+                L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
+                {L2,Nr1}
+        end.
 
     go_page(Nr, Qs, _Answers, exact, _Context) ->
         case fetch_page(Nr, Qs) of
@@ -267,7 +274,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
-        case is_page_break(Q) of
+        case is_page_break(Q) or is_button(Q) of
             true ->
                 case test(Q, Answers, Context) of
                     ok -> 
@@ -360,6 +367,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 is_page_break(Block) ->
     proplists:get_value(type, Block) =:= <<"survey_page_break">>.
+
+is_button(Block) ->
+    proplists:get_value(type, Block) =:= <<"survey_button">>.
 
 
 %% @doc Collect all answers per question, save to the database.
