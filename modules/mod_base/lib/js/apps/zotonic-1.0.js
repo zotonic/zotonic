@@ -1181,7 +1181,7 @@ function z_add_validator(id, type, args)
 	var elt = $('#'+id);
 	
 	if (elt.attr('type') == 'radio')
-		elt = $('input[name='+elt.attr('name')+']');
+		elt = $('input[name="'+elt.attr('name')+'"]');
 
 	elt.each(function() {
 		var v = getLiveValidation(this);
