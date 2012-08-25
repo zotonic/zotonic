@@ -33,6 +33,7 @@
     observe_admin_edit_blocks/3,
 
     render_next_page/6,
+    go_button_target/4,
     module_name/1
 ]).
 

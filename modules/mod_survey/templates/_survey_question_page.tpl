@@ -9,7 +9,7 @@
 		{% endif %}
 
 		{% for blk in questions %}
-			{% if blk.name or blk.type == `survey_page_break` %}
+			{% if blk.name or blk.type == `survey_page_break` or blk.type == 'text' %}
 				{% include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers %}
 			{% else %}
 				<p class="alert alert-error"><strong>{_ Error _}</strong> {_ You need to give a name to every question. _}</p>
