@@ -4,7 +4,7 @@
     <label>{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.explanation %}
-        <p class="help-block">{{ blk.explanation }}</p>
+        <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
 {% if blk.input_type == 'multi' %}
     {% for val,item in props.answers %}
