@@ -1160,7 +1160,7 @@ function z_init_validator(id, args)
 	{
 		if (elt.attr('type') == 'radio')
 		{
-			$('input[name='+elt.attr('name')+']').each(function() {
+			$('input[name="'+elt.attr('name')+'"]').each(function() {
 				addLiveValidation(this, args);
 			});
 		}
