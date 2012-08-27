@@ -1,4 +1,4 @@
-<div class="control-group survey-short-answer">
+<div class="control-group survey-short-answer question-{{ nr }}">
     <label for="{{ #id }}">{{ blk.prompt }}</label>
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>

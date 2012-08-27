@@ -1,4 +1,4 @@
-<div class="control-group survey-truefalse">
+<div class="control-group survey-truefalse question-{{ nr }}">
     <label class="control-label">{{ blk.prompt }}</label>
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>

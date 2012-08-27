@@ -1,6 +1,6 @@
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
-<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }}">
+<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
     <label>{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.explanation %}

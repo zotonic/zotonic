@@ -1,7 +1,7 @@
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation }}</p>
 {% endif %}
-<p class="survey-narrative">
+<p class="survey-narrative question-{{ nr }}">
 {% with blk|survey_prepare_narrative as props %}
 {% for type,name,value in props.parts %}
 	{% with forloop.counter, answers[name] as index, ans %}

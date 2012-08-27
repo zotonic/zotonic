@@ -1,4 +1,4 @@
-<div class="control-group survey-button">
+<div class="control-group survey-button question-{{ nr }}">
 {% if blk.explanation %}
     <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}

@@ -15,7 +15,7 @@
 				<p class="alert alert-error"><strong>{_ Error _}</strong> {_ You need to give a name to every question. _}</p>
 			{% endif %}
 			{% if blk.type != 'survey_stop' %}
-				{% include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers %}
+				{% include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
 			{% endif %}
 		{% endfor %}
 	</fieldset>

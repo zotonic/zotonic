@@ -1,5 +1,5 @@
 {% with answers[blk.name] as value %}
-<div class="control-group survey-likert">
+<div class="control-group survey-likert question-{{ nr }}">
     <label class="control-label">{{ blk.prompt }}</label>
 
 {% if blk.explanation %}
