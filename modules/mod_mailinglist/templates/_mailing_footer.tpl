@@ -1,5 +1,5 @@
 {% if not list_id %}
-<p style="color: #666">{_ You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other e-mail because of this e-mail. _}</p>
+<p style="color: #666">{_ You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail. _}</p>
 {% else %}
 <p style="color: #666">{_ You received this mail because you are subscribed to the mailing list _} <a href="http://{{ m.site.hostname }}{{ list_id.page_url }}">{{ list_id.title }}</a>.
 {% if recipient_id %}
