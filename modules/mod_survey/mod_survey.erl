@@ -100,7 +100,8 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_long_answer, ?__("Long answer", Context)},
                     {survey_country, ?__("Country select", Context)},
                     {survey_button, ?__("Button", Context)},
-                    {survey_page_break, ?__("Page break", Context)}
+                    {survey_page_break, ?__("Page break", Context)},
+                    {survey_stop, ?__("Stop", Context)}
                 ]}
                 | Menu
             ];
@@ -229,9 +230,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     count_pages([], N) ->
         N;
     count_pages([Q|L], N) ->
-        case is_page_break(Q) of
+        case is_page_end(Q) of
             true ->
-                L1 = lists:dropwhile(fun is_page_break/1, L),
+                L1 = lists:dropwhile(fun is_page_end/1, L),
                 count_pages(L1, N+1);
             false ->
                 count_pages(L, N)
@@ -246,7 +247,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             stop -> stop;
             submit -> submit;
             {L1, Nr1} ->
-                L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
+                L2 = takepage(L1),
                 {L2,Nr1}
         end.
 
@@ -256,8 +257,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             submit -> submit;
             {[], _Nr} -> submit;
             {L,Nr1} ->
-                L1 = lists:dropwhile(fun is_page_break/1, L),
-                L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
+                L1 = lists:dropwhile(fun is_page_end/1, L),
+                L2 = takepage(L1),
                 {L2,Nr1}
         end;
     go_page(Nr, Qs, Answers, forward, Context) ->
@@ -266,7 +267,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             stop -> stop;
             submit -> submit;
             {L1, Nr1} ->
-                L2 = lists:takewhile(fun(Q) -> not is_page_break(Q) end, L1),
+                L2 = takepage(L1),
                 {L2,Nr1}
         end.
 
@@ -275,7 +276,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
-        case is_page_break(Q) or is_button(Q) of
+        case is_page_end(Q) or is_button(Q) of
             true ->
                 case test(Q, Answers, Context) of
                     ok -> 
@@ -297,10 +298,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
         end.
 
     test(Q, Answers, Context) ->
-        case is_page_break(Q) of
-            true ->
+        case proplists:get_value(type, Q) of
+            <<"survey_stop">> ->
+                ok;
+            <<"survey_page_break">> ->
                 survey_q_page_break:test(Q, Answers, Context);
-            false ->
+            <<"survey_button">> ->
                 % Assume button
                 Name = proplists:get_value(name, Q), 
                 case proplists:get_value(Name, Answers) of
@@ -327,7 +330,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             Name ->
                 {QQs, Nr};
             _Other ->
-                case is_page_break(Q) of
+                case is_page_end(Q) of
                     true ->
                         case State of
                             in_q -> fetch_question_name(Qs, Name, Nr+1, in_pagebreak);
@@ -352,12 +355,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     fetch_page(N, Nr, L) when N >= Nr ->
         {L, N};
     fetch_page(N, Nr, L) when N == Nr - 1 ->
-        L1 = lists:dropwhile(fun(B) -> not is_page_break(B) end, L),
+        L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
         {L1, Nr};
     fetch_page(N, Nr, [B|Bs]) when N < Nr ->
-        case is_page_break(B) of
+        case is_page_end(B) of
             true ->
-                L1 = lists:dropwhile(fun is_page_break/1, Bs),
+                L1 = lists:dropwhile(fun is_page_end/1, Bs),
                 fetch_page(N+1, Nr, L1);
             false ->
                 fetch_page(N, Nr, Bs)
@@ -366,8 +369,24 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
         fetch_page(N, Nr, Bs).
 
 
-is_page_break(Block) ->
-    proplists:get_value(type, Block) =:= <<"survey_page_break">>.
+    takepage(L) ->
+        takepage(L, []).
+
+        takepage([], Acc) ->
+            lists:reverse(Acc);
+        takepage([Q|L], Acc) ->
+            case proplists:get_value(type, Q) of
+                <<"survey_page_break">> -> lists:reverse(Acc);
+                <<"survey_stop">> -> lists:reverse([Q|Acc]);
+                _ -> takepage(L, [Q|Acc])
+            end.
+
+is_page_end(Block) ->
+    case proplists:get_value(type, Block) of
+        <<"survey_page_break">> -> true;
+        <<"survey_stop">> -> true;
+        _ -> false
+    end.
 
 is_button(Block) ->
     proplists:get_value(type, Block) =:= <<"survey_button">>.

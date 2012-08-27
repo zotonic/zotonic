@@ -15,3 +15,12 @@
     vertical-align: baseline;
     width: auto;
 }
+
+hr.survey-stop {
+    border-top: 1px dashed #ccc;
+    border-bottom: 2px solid #ccc;
+    color: black;
+    background-color: white;
+    height: 2px;
+}
+

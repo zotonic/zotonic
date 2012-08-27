@@ -3,7 +3,7 @@
     <label class="control-label">{{ blk.prompt }}</label>
 
 {% if blk.explanation %}
-     <p class="help-block">{{ blk.explanation }}</p>
+     <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
 
     <div class="controls">
