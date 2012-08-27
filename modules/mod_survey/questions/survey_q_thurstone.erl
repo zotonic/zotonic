@@ -53,8 +53,7 @@ prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
-prep_chart(Block, [{_, Vals0}], Context) ->
-    Vals = explode(Vals0),
+prep_chart(Block, [{_, Vals}], Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
     Labels = [ Lab || {Lab,_} <- proplists:get_value(answers, Props) ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
@@ -66,15 +65,6 @@ prep_chart(Block, [{_, Vals0}], Context) ->
         {type, "pie"},
         {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]}
     ].
-    
-    explode(Vs) ->
-        lists:flatten([
-                    case binstr:strchr(V, $#) of
-                        0 -> V;
-                        _ -> binstr:split(V, <<$#>>)
-                    end
-                    || V <- Vs
-                ]).
 
 prep_answer_header(Q, _Context) ->
     Name = proplists:get_value(name, Q),
