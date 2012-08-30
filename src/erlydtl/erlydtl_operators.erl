@@ -25,6 +25,7 @@
     'or'/3,
     'xor'/3,
 
+    concat/3,
     add/3,
     sub/3,
     divide/3,
@@ -53,6 +54,14 @@
 
 'xor'(A, B, Context) ->
     erlydtl_runtime:is_true(A, Context) xor erlydtl_runtime:is_true(B, Context).
+
+
+concat(A, B, _Context) when is_list(A), is_list(B) ->
+    A++B;
+concat(A, B, Context) ->
+    ABin = z_convert:to_binary(A, Context),
+    BBin = z_convert:to_binary(B, Context),
+    <<ABin/binary, BBin/binary>>.
 
 
 add(A, B, _Context) ->
