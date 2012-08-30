@@ -31,6 +31,7 @@
           to_flatlist/1,
           to_atom/1, 
           to_binary/1, 
+          to_binary/2, 
           to_integer/1,
           to_float/1,
           to_bool_strict/1,
@@ -81,14 +82,17 @@ to_atom([]) -> undefined;
 to_atom(A) when is_atom(A) -> A;
 to_atom(B) when is_binary(B) -> to_atom(binary_to_list(B));
 to_atom(I) when is_integer(I) -> to_atom(integer_to_list(I));
-to_atom(L) when is_list(L) -> list_to_atom(binary_to_list(list_to_binary(L))).
+to_atom(L) when is_list(L) -> list_to_atom(binary_to_list(iolist_to_binary(L))).
 
 to_binary(undefined) -> <<>>;
 to_binary(A) when is_atom(A) -> to_binary(atom_to_list(A));
 to_binary(B) when is_binary(B) -> B;
 to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
 to_binary(F) when is_float(F) -> to_binary(float_to_list(F));
-to_binary(L) when is_list(L) -> list_to_binary(L).
+to_binary(L) when is_list(L) -> iolist_to_binary(L).
+
+to_binary({trans, _} = Tr, Context) -> to_binary(z_trans:lookup_fallback(Tr, Context));
+to_binary(A, _Context) -> to_binary(A).
 
 to_integer(undefined) -> undefined;
 to_integer([]) -> undefined;
