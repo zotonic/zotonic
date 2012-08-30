@@ -131,7 +131,6 @@ function z_notify(message, extraParams)
 		trigger_id = extraParams.z_trigger_id;
 		extraParams.z_trigger_id = undefined;
 	}
-
 	var extra = ensure_name_value(extraParams);
 	if (typeof extra != 'object')
 	{
@@ -316,11 +315,7 @@ function z_unmask(id)
 	if (id)
 	{
 		var trigger = $('#'+id).get(0);
-	
-		if (trigger && trigger.nodeName.toLowerCase() == 'form') 
-		{
-			try { $(trigger).unmask(); } catch (e) {};
-		}
+		try { $(trigger).unmask(); } catch (e) {};
 		$(trigger).removeClass("z_error_upload");
 	}
 }

@@ -456,6 +456,16 @@ ul.suggestions-list li a:hover {
         margin-right: 4px;
     }
 
+.widget-content .rsc-item {
+    overflow: hidden;
+    height: 64px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid white;
+}
+    .widget-content .rsc-item img {
+        margin-right: 4px;
+    }
+
 /* growl message */
 .notice-wrap {
 	position: fixed;

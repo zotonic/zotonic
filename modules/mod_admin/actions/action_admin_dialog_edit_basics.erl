@@ -54,12 +54,14 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
                     _ -> 
                         RscId
                end,
+    TargetId1 = z_context:get_q("element_id", Context, TargetId),
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, ObjectId},
         {edge_id, EdgeId},
         {template, Template},
-        {update_element, TargetId},
+        {update_element, TargetId1},
+        {is_update, z_convert:to_bool(z_context:get_q("is_update", Context))},
         {actions, Actions},
         {callback, Callback}
     ],
@@ -96,7 +98,10 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                                       end,
                                       Vars,
                                       Context),
-            Context1 = z_render:replace(proplists:get_value(update_element, Args), Html, Context),
+            Context1 = case proplists:get_value(is_update, Args) of
+                          true -> z_render:update(proplists:get_value(update_element, Args), Html, Context);
+                          false -> z_render:replace(proplists:get_value(update_element, Args), Html, Context)
+                        end,
             Context2 = z_render:wire({dialog_close, []}, Context1),
             %% wire any custom actions
             Context3 = case proplists:get_value(callback, Args) of

@@ -21,3 +21,7 @@
 </fieldset>
 {% endwith %}
 {% endblock %}
+
+{% block widget_content_nolang %}
+{% include "_admin_edit_block_show_as.tpl" %}
+{% endblock %}

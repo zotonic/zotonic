@@ -127,9 +127,10 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
     [
-        {1, ?__("Texts", Context), [
+        {1, ?__("Standard", Context), [
             {header, ?__("Header", Context)},
-            {text, ?__("Text", Context)}
+            {text, ?__("Text", Context)},
+            {page, ?__("Embed page", Context)}
         ]}
         | Menu
     ].
@@ -211,7 +212,7 @@ event(#postback_notify{message="update", target=TargetId}, Context) ->
         {id, Id},
         {predicate, Predicate}
     ],
-    Context1 = z_render:wire({unmask, []}, Context),
+    Context1 = z_render:wire({unmask, [{target_id, TargetId}]}, Context),
     z_render:update(TargetId, #render{template=Template, vars=Vars}, Context1);
 
 event(_E, Context) ->
@@ -247,9 +248,15 @@ do_link(undefined, _Predicate, ObjectId, Callback, Context) ->
     case Callback of
         undefined -> 
             {ok, Context};
+        {CB, Args} ->
+            {ok, z_render:wire({script, [{script, [
+                    z_convert:to_binary(CB), $(,
+                        z_utils:js_object(Vars++Args,Context),
+                    $),$;
+                ]}]}, Context)};
         _ ->
             {ok, z_render:wire({script, [{script, [
-                    Callback, $(,
+                    z_convert:to_binary(Callback), $(,
                         z_utils:js_object(Vars,Context),
                     $),$;
                 ]}]}, Context)}
@@ -280,9 +287,15 @@ do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
             Context1 = case Callback of
                     undefined -> 
                         Context;
+                    {CB, Args} ->
+                        {ok, z_render:wire({script, [{script, [
+                                z_convert:to_binary(CB), $(,
+                                    z_utils:js_object(Vars++Args,Context),
+                                $),$;
+                            ]}]}, Context)};
                     _ ->
                         z_render:wire({script, [{script, [
-                                Callback, $(,
+                                z_convert:to_binary(Callback), $(,
                                     z_utils:js_object(Vars,Context),
                                 $),$;
                             ]}]}, Context)

@@ -604,6 +604,7 @@ is_trimmable(name, _)        -> true;
 is_trimmable(slug, _)        -> true;
 is_trimmable(custom_slug, _) -> true;
 is_trimmable(category, _)    -> true;
+is_trimmable(rsc_id, _)      -> true;
 is_trimmable(_, _)           -> false.
 
 
@@ -841,13 +842,13 @@ recombine_blocks(Props) ->
                                 ({Name, Val}, {D,Ks}) ->
                                     Ts = string:tokens(Name, "-"),
                                     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
-                                    BlockField = list_to_existing_atom(lists:last(Ts)),
+                                    BlockField = lists:last(Ts),
                                     Ks1 = case lists:member(BlockId, Ks) of
                                             true -> Ks;
                                             false -> [BlockId|Ks]
                                           end,
                                     {
-                                        dict:append(BlockId, {BlockField, Val}, D),
+                                        dict:append(BlockId, opt_value_map(BlockField, Val), D),
                                         Ks1
                                     }
                             end,
@@ -855,6 +856,11 @@ recombine_blocks(Props) ->
                             BPs),
             [{blocks, [ dict:fetch(K, Dict) || K <- Keys ]} | Ps ]
     end.
+
+    % Map some values to non-strings
+    opt_value_map("rsc_id", V) -> {rsc_id, z_convert:to_integer(V)};
+    opt_value_map("is_"++_ = K, V) -> {list_to_existing_atom(K), z_convert:to_bool(V)};
+    opt_value_map(K, V) -> {list_to_existing_atom(K), V}.
 
 
 %% @doc Accept only configured languages

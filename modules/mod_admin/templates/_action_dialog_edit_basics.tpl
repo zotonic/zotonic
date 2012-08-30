@@ -3,7 +3,7 @@
 
 {% wire id=#form type="submit" 
 	postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element
-					template=template actions=actions callback=callback}
+					template=template actions=actions callback=callback is_update=is_update}
 	delegate=delegate 
 %}
 <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
@@ -62,8 +62,8 @@
     
     <div class="modal-footer">
 	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
-	{% button class="btn" text=_"Visit full editpage" action={redirect dispatch="admin_edit_rsc" id=id} %}
-	{% button class="btn btn-primary" text=_"Save" %}
+	{% button class="btn" text=_"Visit full editpage" action={redirect dispatch="admin_edit_rsc" id=id} tag="a" %}
+	{% button class="btn btn-primary" type="submit" text=_"Save" %}
     </div>
 </form>
 
