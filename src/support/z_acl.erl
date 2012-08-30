@@ -53,6 +53,7 @@
 
 
 %% @doc Check if an action is allowed for the current actor.
+-spec is_allowed(term(), term(), #context{}) -> true | false | undefined.
 is_allowed(_Action, _Object, #context{acl=admin}) ->
     true;
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
@@ -64,6 +65,7 @@ is_allowed(Action, Object, Context) ->
     end.
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor.
+-spec is_allowed_prop(term(), term(), atom(), #context{}) -> true | false | undefined.
 is_allowed_prop(_Action, _Object, _Property, #context{acl=admin}) ->
     true;
 is_allowed_prop(_Action, _Object, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
