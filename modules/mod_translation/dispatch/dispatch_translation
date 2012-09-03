@@ -1,9 +1,10 @@
+%% -*- mode: erlang -*-
 [
-    {admin_translation, ["admin", "translation"], resource_admin, 
-        [{acl_module, mod_translation}, {template, "admin_translation.tpl"}, {selected, translation}]},
-    {admin_translation_status, ["admin", "translation", "status"], resource_admin_module_manager, 
-        [{acl_module, mod_translation}, {template, "admin_translation_status.tpl"}, {selected, translation}]},
-        
-    {language_switch, ["language", "switch"], resource_template, [{template, "language_switch.tpl"}]},
-    {language_select, ["language", "select", code], resource_language_set, []}
+ {admin_translation, ["admin", "translation"], resource_admin, 
+  [{acl_module, mod_translation}, {template, "admin_translation.tpl"}, {selected, translation}]},
+ {admin_translation_status, ["admin", "translation", "status"], resource_admin_module_manager, 
+  [{acl_module, mod_translation}, {template, "admin_translation_status.tpl"}, {selected, translation}]},
+ 
+ {language_switch, ["language", "switch"], resource_template, [{template, "language_switch.tpl"}]},
+ {language_select, ["language", "select", code], resource_language_set, []}
 ].

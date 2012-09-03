@@ -1,10 +1,11 @@
+%% -*- mode: erlang -*-
 [
-    {admin_development, ["admin", "development"],  resource_admin, [{template, "admin_development.tpl"}, {selected, "development"}]},
-    
-    {admin_development_templates, ["admin", "development", "templates"], resource_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}]},
-    
-    {wmtrace_conf, ["wmtrace_conf"], resource_wmtrace_conf, []},
-
-    {wmtrace, ["wmtrace"],      resource_wmtrace, []},
-    {wmtrace, ["wmtrace", '*'], resource_wmtrace, []}
+ {admin_development, ["admin", "development"], resource_admin, [{template, "admin_development.tpl"}, {selected, "development"}]},
+ 
+ {admin_development_templates, ["admin", "development", "templates"], resource_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}]},
+ 
+ {wmtrace_conf, ["wmtrace_conf"], resource_wmtrace_conf, []},
+ 
+ {wmtrace, ["wmtrace"],      resource_wmtrace, []},
+ {wmtrace, ["wmtrace", '*'], resource_wmtrace, []}
 ].

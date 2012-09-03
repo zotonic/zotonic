@@ -1,4 +1,5 @@
+%% -*- mode: erlang -*-
 [
-%% Atom entry 
-{atom_entry, ["atom", id], resource_atom_entry, []}
+ %% Atom entry 
+ {atom_entry, ["atom", id], resource_atom_entry, []}
 ].

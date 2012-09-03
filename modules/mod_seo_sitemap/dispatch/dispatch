@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 [
-    {sitemap_xml, ["sitemap.xml"], resource_template, [{template, "sitemap.xml.tpl"}, {content_type, "text/xml"}, {anonymous, true}]}
+ {sitemap_xml, ["sitemap.xml"], resource_template, [{template, "sitemap.xml.tpl"}, {content_type, "text/xml"}, {anonymous, true}]}
 ].
