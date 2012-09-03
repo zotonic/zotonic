@@ -1,9 +1,11 @@
+%% -*- mode: erlang -*-
 [
-	{admin_backup,    [ "admin", "backup" ], resource_admin_backup, []},
-
-	{backup_download, [ "backup", '*' ], resource_file_readonly, [
-				{root, [{module, mod_backup}]}, 
-				{content_disposition, attachment}, 
-				{use_cache, false}
-			]}
+ {admin_backup,    [ "admin", "backup" ], resource_admin_backup, []},
+ 
+ {backup_download, [ "backup", '*' ],     resource_file_readonly,
+  [
+   {root, [{module, mod_backup}]}, 
+   {content_disposition, attachment}, 
+   {use_cache, false}
+  ]}
 ].
