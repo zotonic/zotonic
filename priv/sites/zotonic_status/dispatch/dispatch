@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 [
-	{home, [],         resource_zotonic_status, [{template, "home.tpl"}]}
+ {home, [], resource_zotonic_status, [{template, "home.tpl"}]}
 ].

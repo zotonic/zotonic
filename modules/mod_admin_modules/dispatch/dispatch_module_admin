@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 [
-	{admin_modules, ["admin", "modules"], resource_admin_module_manager, []}
+ {admin_modules, ["admin", "modules"], resource_admin_module_manager, []}
 ].

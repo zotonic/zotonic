@@ -1,4 +1,5 @@
+%% -*- mode: erlang -*-
 [
-	{logon, ["logon"], resource_logon, [{ssl, true}]},
-	{logoff, ["logoff"], resource_logoff, []}
+ {logon,  ["logon"],  resource_logon,  [{ssl, true}]},
+ {logoff, ["logoff"], resource_logoff, []}
 ].

@@ -1,11 +1,11 @@
+%% -*- mode: erlang -*-
 %% Dispatch rules for OAuth
 [
-    {oauth_request_token, ["oauth", "request_token"], resource_oauth_request_token, []},
-    {oauth_access_token,  ["oauth", "access_token"], resource_oauth_access_token, []},
-
-    {oauth_authorize,     ["oauth", "authorize"], resource_oauth_authorize, []},
-    {oauth_finish,        ["oauth", "authorize", "finished"], resource_template, [  {template, "oauth_authorize_finished.tpl"} ]},
-
-    {admin_oauth,          ["admin", "oauth", "apps"], resource_oauth_apps, []}
+ {oauth_request_token, ["oauth", "request_token"],         resource_oauth_request_token, []},
+ {oauth_access_token,  ["oauth", "access_token"],          resource_oauth_access_token,  []},
+ 
+ {oauth_authorize,     ["oauth", "authorize"],             resource_oauth_authorize,     []},
+ {oauth_finish,        ["oauth", "authorize", "finished"], resource_template,            [ {template, "oauth_authorize_finished.tpl"} ]},
+ 
+ {admin_oauth,         ["admin", "oauth", "apps"],         resource_oauth_apps,          []}
 ].
-
