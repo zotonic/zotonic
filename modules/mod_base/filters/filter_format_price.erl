@@ -43,14 +43,16 @@ insert_thousands_separator(Sep, Output, Input) when is_list(Input) ->
 insert_thousands_separator(Sep, Input) when is_integer(Input) ->
     insert_thousands_separator(Sep, [], integer_to_list(Input)).
 
+format_price(Input, DSep, TSep, Context) when is_integer(Input), Input < 0 ->
+    iolist_to_binary([$-, format_price(-Input, DSep, TSep, Context)]);
 format_price(Input, DSep, TSep, _Context) when is_integer(Input) ->
     case Input rem 100 of
         0 -> 
-            [insert_thousands_separator(TSep, Input div 100), DSep, $0, $0 ];
+            iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, $0, $0 ]);
         Cents when Cents < 10 -> 
-            [insert_thousands_separator(TSep, Input div 100), DSep, $0, Cents + $0 ];
+            iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, $0, Cents + $0 ]);
         Cents -> 
-            [insert_thousands_separator(TSep, Input div 100), DSep, integer_to_list(Cents) ]
+            iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, integer_to_list(Cents) ])
     end;
 format_price(Input, DSep, TSep, Context) when is_float(Input) ->
     format_price(round(Input * 100), DSep, TSep, Context);
@@ -58,18 +60,18 @@ format_price(Input, DSep, TSep, Context) when is_function(Input, 0) ->
     format_price(Input(), DSep, TSep, Context);
 format_price(Input, DSep, TSep, Context) when is_function(Input, 1) ->
     format_price(Input(Context), DSep, TSep, Context);
-format_price(Input, DSep, TSep, Context) when is_list(Input) ->
-    case string:to_integer(Input) of
-        {error, _} -> Input;
-        {N, _Rest} -> format_price(N, DSep, TSep, Context)
-    end;
-format_price(Input, DSep, TSep, Context) when is_binary(Input) ->
-    case string:to_integer(binary_to_list(Input)) of
-        {error, _} -> Input;
-        {N, _Rest} -> format_price(N, DSep, TSep, Context)
-    end;
+format_price({trans, _} = Tr, DSep, TSep, Context) ->
+    format_price(z_trans:lookup_fallback(Tr, Context), DSep, TSep, Context);
 format_price(undefined, _Dsep, _Tsep, _Context) ->
-    "-".
+    undefined;
+format_price(<<>>, _Dsep, _Tsep, _Context) ->
+    undefined;
+format_price([], _Dsep, _Tsep, _Context) ->
+    undefined;
+format_price(Input, DSep, TSep, Context) ->
+    format_price(z_convert:to_integer(Input), DSep, TSep, Context).
+
+
 
 format_price(Input, Args, Context) ->
     case length(Args) of
