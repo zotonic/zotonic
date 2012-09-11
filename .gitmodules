@@ -18,4 +18,4 @@
 	url = git://github.com/zotonic/mimetypes.git
 [submodule "deps/bert.erl"]
 	path = deps/bert.erl
-	url = git@github.com:zotonic/bert.erl.git
+	url = git://github.com/zotonic/bert.erl.git
