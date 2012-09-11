@@ -194,6 +194,10 @@
 %% action is 'insert', 'update' or 'delete'
 -record(rsc_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
 
+%% @doc Upload and replace the the resource with the given data. The data is in the given format.
+%%		Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+-record(rsc_upload, {id, format :: json|bert, data}).
+
 
 %% @doc Add custom pivot fields to a resource's search index (map)
 %% Result is a list of {module, props} pairs.
@@ -339,6 +343,10 @@
 
 %% @doc Check if the current user is allowed to download a survey. (first)
 -record(survey_is_allowed_results_download, {id}).
+
+%% @doc Check if a question is a submitting question. (first)
+-record(survey_is_submit, {block=[]}).
+
 
 %% @doc Put a value into the typed key/value store
 -record(tkvstore_put, {type, key, value}).
