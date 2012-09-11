@@ -1,0 +1,4 @@
+[
+    {rest_rsc, ["rest", "rsc", format, id], resource_rest_rsc, []},
+    {rest_rsc, ["rest", "rsc", id], resource_rest_rsc, []}
+].
