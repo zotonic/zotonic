@@ -27,6 +27,10 @@
     escape_props/2,
     escape/2,
     escape/1,
+    escape_props_check/1,
+    escape_props_check/2,
+    escape_check/2,
+    escape_check/1,
     unescape/1,
     strip/1,
     sanitize/1,
@@ -44,11 +48,11 @@
 
 
 %% @doc Escape all properties used for an update statement. Only leaves the body property intact.
-%% @spec escape_props(PropertyList) -> PropertyList
+-spec escape_props(list()) -> list().
 escape_props(Props) ->
     escape_props1(Props, [], undefined).
 
-%% @spec escape_props(PropertyList, context()) -> PropertyList
+-spec escape_props(list(), #context{}) -> list().
 escape_props(Props, Context) ->
     escape_props1(Props, [], Context).
 
@@ -82,6 +86,51 @@ escape_props(Props, Context) ->
         escape(B);
     escape_value(V) -> 
         V.
+
+
+%% @doc Checks if all properties are properly escaped
+%% @spec escape_props(PropertyList) -> PropertyList
+-spec escape_props_check(list()) -> list().
+escape_props_check(Props) ->
+    escape_props_check1(Props, [], undefined).
+
+%% @spec escape_props(PropertyList, context()) -> PropertyList
+-spec escape_props_check(list(), #context{}) -> list().
+escape_props_check(Props, Context) ->
+    escape_props_check1(Props, [], Context).
+
+    escape_props_check1([], Acc, _OptContext) ->
+        Acc;
+    escape_props_check1([{_K,V} = Prop|T], Acc, OptContext) when is_float(V); is_integer(V); is_atom(V) -> 
+        escape_props_check1(T, [Prop|Acc], OptContext);
+    escape_props_check1([{K, V}|T], Acc, OptContext) when K =:= body orelse K =:= body_extra->
+        escape_props_check1(T, [{K, sanitize(V, OptContext)} | Acc], OptContext);
+    escape_props_check1([{summary, Summary}|T], Acc, OptContext) ->
+        escape_props_check1(T, [{summary, nl2br(escape_value_check(br2nl(Summary)))} | Acc], OptContext);
+    escape_props_check1([{blocks, V}|T], Acc, OptContext) when is_list(V) ->
+        V1 = [ escape_props_check1(L, [], OptContext) || L <- V ],
+        escape_props_check1(T, [{blocks, V1}|Acc], OptContext);
+    escape_props_check1([{K, V}|T], Acc, OptContext) ->
+        EscapeFun = case lists:reverse(z_convert:to_list(K)) of
+                        "lmth_" ++ _ -> fun(A) -> sanitize(A, OptContext) end; %% prop ends in '_html'
+                        _ -> fun escape_value/1
+                    end,
+        escape_props_check1(T, [{K, EscapeFun(V)} | Acc], OptContext).
+
+    escape_value_check({trans, Texts}) ->
+        {trans, escape_props_check(Texts)};
+    escape_value_check(V) when is_list(V) ->
+        try
+            escape_value_check(iolist_to_binary(V))
+        catch _:_ ->
+            V
+        end;
+    escape_value_check(B) when is_binary(B) ->
+        escape_check(B);
+    escape_value_check(V) -> 
+        V.
+
+
 
 %% @doc Escape a string so that it is valid within HTML/ XML.
 -spec escape(list()|binary()|{trans, list()}, #context{}) -> binary() | undefined.
@@ -120,6 +169,60 @@ escape(B) when is_binary(B) ->
         escape1(T, <<Acc/binary, "&#39;">>);
     escape1(<<C, T/binary>>, Acc) ->
         escape1(T, <<Acc/binary, C>>).
+
+
+%% @doc Checks if a string is properly escaped.
+-spec escape_check(list()|binary()|{trans, list()}, #context{}) -> binary() | undefined.
+escape_check(V, Context) ->
+    escape_check(z_trans:lookup_fallback(V, Context)).
+
+%% @doc Escape a string so that it is valid within HTML/ XML.
+%% @spec escape(iolist()) -> binary()
+-spec escape_check(list()|binary()|{trans, list()}) -> binary() | undefined.
+escape_check({trans, Tr}) ->
+    {trans, [{Lang, escape_check(V)} || {Lang,V} <- Tr]};
+escape_check(undefined) -> 
+    undefined;
+escape_check(<<>>) -> 
+    <<>>;
+escape_check([]) ->
+    <<>>;
+escape_check(L) when is_list(L) ->
+    escape(list_to_binary(L));
+escape_check(B) when is_binary(B) ->
+    escape_check1(B, <<>>).
+
+    escape_check1(<<>>, Acc) -> 
+        Acc;
+    escape_check1(<<"&euro;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "€">>);
+    escape_check1(<<"&amp;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&amp;">>);
+    escape_check1(<<"&lt;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&amp;">>);
+    escape_check1(<<"&gt;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&amp;">>);
+    escape_check1(<<"&quot;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&quot;">>);
+    escape_check1(<<"&#39;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&#39;">>);
+    escape_check1(<<"&#x27;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&#x27;">>);
+    escape_check1(<<"&#x2F;", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&#x2F;">>);
+    escape_check1(<<$;, T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&amp;">>);
+    escape_check1(<<$<, T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&lt;">>);
+    escape_check1(<<$>, T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&gt;">>);
+    escape_check1(<<$", T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&quot;">>);
+    escape_check1(<<$', T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, "&#39;">>);
+    escape_check1(<<C, T/binary>>, Acc) ->
+        escape_check1(T, <<Acc/binary, C>>).
+
 
 
 %% @doc Unescape - reverses the effect of escape.
