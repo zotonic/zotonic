@@ -58,7 +58,7 @@ msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Puede tener hasta 10 copias de resguardo, las más viejas serán eliminadas automáticamente"
 
 #: modules/mod_backup/templates/admin_backup.tpl:17
-msgid "You can start a backup immediately, whilst the backup is running you can continue working."
+msgid "You can start a backup immediately, while the backup is running you can continue working."
 msgstr "Puede comenzar la copia de resguardo de inmediato, mientras que esté corriendo puede continuar trabajando."
 
 #: modules/mod_backup/templates/admin_backup.tpl:40

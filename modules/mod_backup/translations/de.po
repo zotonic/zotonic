@@ -48,12 +48,12 @@ msgid "Start backup now"
 msgstr "Backup jetzt starten"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:27
-msgid "The \"pg_dump\" command was not found in the path. Set the \"mod_backup.pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "Das \"pg_dump\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"mod_backup.pg_dump\" entsprechend, und versuchen Sie es anschließend erneut."
+msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
+msgstr "Das \"pg_dump\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"pg_dump\" entsprechend, und versuchen Sie es anschließend erneut."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:28
-msgid "The \"tar\" command was not found in the path. Set the \"mod_backup.tar\" config key to the path to pg_dump and return to this page."
-msgstr "Das \"tar\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"mod_backup.tar\" entsprechend, und versuchen Sie es anschließend erneut"
+msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to pg_dump and return to this page."
+msgstr "Das \"tar\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"tar\" entsprechend, und versuchen Sie es anschließend erneut"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:14
 msgid "The backup comprises two parts, the database and the uploaded files."
@@ -68,7 +68,7 @@ msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Bis zu zehn Backups werden aufbewahrt; ältere werden automatisch gelöscht."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:20
-msgid "You can start a backup immediately, whilst the backup is running you can continue working."
+msgid "You can start a backup immediately, while the backup is running you can continue working."
 msgstr "Sie können sofort ein Backup starten. Während es angelegt wird, können Sie mit der Seite weiterarbeiten."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:26

@@ -56,13 +56,13 @@ msgstr ""
 #: ./modules/mod_backup/templates/admin_backup.tpl:27 
 msgid ""
 "The \"pg_dump\" command was not found in the path. Set the "
-"\"mod_backup.pg_dump\" config key to the path to pg_dump and return to this "
+"\"pg_dump\" config key to the path to pg_dump and return to this "
 "page."
 msgstr ""
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:28 
 msgid ""
-"The \"tar\" command was not found in the path. Set the \"mod_backup.tar\" "
+"The \"tar\" command was not found in the path. Set the \"tar\" "
 "config key to the path to pg_dump and return to this page."
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr ""
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:20 
 msgid ""
-"You can start a backup immediately, whilst the backup is running you can "
+"You can start a backup immediately, while the backup is running you can "
 "continue working."
 msgstr ""
 

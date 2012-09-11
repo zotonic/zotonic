@@ -44,7 +44,7 @@ msgid "No backups present."
 msgstr "Aucune sauvegarde"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:16
-msgid "You can start a backup immediately, whilst the backup is running you can continue working."
+msgid "You can start a backup immediately, while the backup is running you can continue working."
 msgstr "Vous pouvez commencer une sauvegarde immediatement, tout en continuant de travailler"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:37

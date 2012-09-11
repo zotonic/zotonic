@@ -3,28 +3,40 @@
 {% block title %} {_ Admin Backups _} {% endblock %}
 
 {% block content %}
-{% with m.acl.is_admin as editable %}
+{% with m.acl.is_admin as is_editable %}
 <div class="edit-header">
 
     <h2>{_ Backups _}</h2>
 
-    <p>{_ At any moment you can make a backup of your system. _} {_ The backup comprises two parts, the database and the uploaded files. _}<br/> 
-    {_ You can have 10 backups, older ones will be deleted automatically. _}</p>
-            
-    {% if backup_config.ok %}
-    {% if m.acl.is_admin %}
-    <p>
-        {_ You can start a backup immediately, whilst the backup is running you can continue working. _}
-    </p>
+    <p>{_ Backup and restore options for your content. _}
+          
+    {% if is_editable %}
     <div class="well">
-        {% button class="btn btn-primary" text=_"Start backup now" action={backup_start} %}
+        {# TODO: make this a mod_admin_config scomp/include #}
+        <label class="checkbox">
+            <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.config.mod_backup.admin_panel.value %}checked="checked"{% endif %} /> {_ Show import/export panel in the admin. _}
+        </label>
+        {% wire id="backup_panel" postback=`config_backup_panel` %}
+        <label class="checkbox">
+            <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.config.mod_backup.daily_dump.value %}checked="checked"{% endif %}/> {_ Make a daily backup of the database and uploaded files. _}
+        </label>
+        {% wire id="backup_daily" postback=`config_backup_daily` %}
     </div>
     {% endif %}
-    {% else %}
+ 
+    <p>{_ At any moment you can make a backup of your system. _} {_ The backup comprises two parts, the database and the uploaded files. _}<br/> 
+    {_ You can have 10 backups, older ones will be deleted automatically. _}</p>
+ 
+    {% if backup_config.ok and is_editable %}
+    <div class="well">
+        <p>{_ You can start a backup immediately, while the backup is running you can continue working. _}</p>
+        {% button class="btn btn-primary" text=_"Start backup now" action={backup_start} %}
+    </div>
+    {% else if not backup_config.ok %}
     <div class="alert alert-error">
         <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
-        {% if not backup_config.db_dump %}<br/><strong>{_ The "pg_dump" command was not found in the path. Set the "mod_backup.pg_dump" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
-        {% if not backup_config.archive %}<br/><strong>{_ The "tar" command was not found in the path. Set the "mod_backup.tar" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
+        {% if not backup_config.db_dump %}<br/><strong>{_ The "pg_dump" command was not found in the path. Set the "pg_dump" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
+        {% if not backup_config.archive %}<br/><strong>{_ The "tar" command was not found in the path. Set the "tar" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
     </div>
     {% endif %}
 </div>

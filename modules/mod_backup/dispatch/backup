@@ -1,6 +1,7 @@
 %% -*- mode: erlang -*-
 [
- {admin_backup,    [ "admin", "backup" ], resource_admin_backup, []},
+ {admin_backup,    		 [ "admin", "backup" ], resource_admin_backup, []},
+ {admin_backup_revision, [ "admin", "backup", id ], resource_admin_backup_revision, []},
  
  {backup_download, [ "backup", '*' ],     resource_file_readonly,
   [

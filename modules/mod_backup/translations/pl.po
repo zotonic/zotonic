@@ -51,17 +51,17 @@ msgstr "Wykonaj kopię zapasową"
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:27 
 msgid "The \"pg_dump\" command was not found in the path. Set the "
-"\"mod_backup.pg_dump\" config key to the path to pg_dump and return to this "
+"\"pg_dump\" config key to the path to pg_dump and return to this "
 "page."
 msgstr "Polecenie \"pg)dump\" nie zostało odnalezione. Ustal parametr konfiguracyjny "
-"\"mod_backup.pg_dump\" tak, by wskazywał na polecenie pg_dump i spróbuj wykonać "
+"\"pg_dump\" tak, by wskazywał na polecenie pg_dump i spróbuj wykonać "
 "kopię ponownie."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:28 
-msgid "The \"tar\" command was not found in the path. Set the \"mod_backup.tar\" "
+msgid "The \"tar\" command was not found in the path. Set the \"tar\" "
 "config key to the path to pg_dump and return to this page."
 msgstr "Polecenie \"tar\" nie zostało odnalezione. Ustal parametr konfiguracyjny "
-"\"mod_backup.tar\" tak, by wskazywał na polecenie tar i spróbuj wykonać "
+"\"tar\" tak, by wskazywał na polecenie tar i spróbuj wykonać "
 "kopię ponownie."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:14 
@@ -79,7 +79,7 @@ msgstr "Jednocześnie możesz mieć 10 kopii danych, utworzenie kolejnej spowodu
 "usunięcie najstarszej."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:20 
-msgid "You can start a backup immediately, whilst the backup is running you can "
+msgid "You can start a backup immediately, while the backup is running you can "
 "continue working."
 msgstr "Możesz rozpocząć w dowolnym momencie i wrócić do pracy - proces wykona się w tle."
 
