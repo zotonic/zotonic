@@ -47,7 +47,8 @@
         mime=undefined,
         last_modified=undefined,
         body=undefined,
-        context=undefined
+        context=undefined,
+        allow_directory_index=false
     }).
 
 -record(cache, {
@@ -63,8 +64,9 @@
 
 init(ConfigProps) ->
     Root     = proplists:get_value(root, ConfigProps),
+    DirIndex = z_convert:to_bool(proplists:get_value(allow_directory_index, ConfigProps)),
     UseCache = proplists:get_value(use_cache, ConfigProps, false),
-    {ok, #state{root=Root, use_cache=UseCache, config=ConfigProps}}.
+    {ok, #state{root=Root, use_cache=UseCache, config=ConfigProps, allow_directory_index=DirIndex}}.
     
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
@@ -135,7 +137,7 @@ last_modified(ReqData, State) ->
             case State#state.last_modified of
                 undefined -> 
                     LMod = filelib:last_modified(State#state.fullpath),
-        			[LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+                    [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
                     {LModUTC, RD1, State1#state{last_modified=LModUTC}};
                 LModUTC ->
                     {LModUTC, RD1, State1}
@@ -155,25 +157,37 @@ provide_content(ReqData, State) ->
     case State#state.body of
         undefined ->
             FullPath = State#state.fullpath,
-            case filename:extension(FullPath) of
-                ".tpl" -> 
-                    %% Render template, prevent caching
+            case filelib:is_dir(FullPath) of
+                true ->
+                    %% Render directory index
                     Context = z_context:set_reqdata(ReqData, State#state.context),
                     Context1 = z_context:ensure_all(Context),
-                    Html = z_template:render(FullPath, State#state.config, Context1),
+                    Html = z_template:render("directory_index.tpl", directory_index_vars(FullPath, State#state.root, Context) ++ State#state.config, Context1),
                     {Html1, Context2} = z_context:output(Html, Context1),
                     ReqData1 = z_context:get_reqdata(Context2),
                     State1 = State#state{context=Context2, use_cache=false, encode_data=false},
                     {iolist_to_binary(Html1), ReqData1, State1};
-                _ -> 
-                    %% Fetch file, allow caching
-                    file:read_file(FullPath),
-                    {ok, Data} = file:read_file(State#state.fullpath),
-                    Body = case State#state.encode_data of 
-                        true -> encode_data(Data);
-                        false -> Data
-                    end,
-                    {Body, ReqData, State#state{body=Body}}
+                false ->
+                    case filename:extension(FullPath) of
+                        ".tpl" -> 
+                            %% Render template, prevent caching
+                            Context = z_context:set_reqdata(ReqData, State#state.context),
+                            Context1 = z_context:ensure_all(Context),
+                            Html = z_template:render(FullPath, State#state.config, Context1),
+                            {Html1, Context2} = z_context:output(Html, Context1),
+                            ReqData1 = z_context:get_reqdata(Context2),
+                            State1 = State#state{context=Context2, use_cache=false, encode_data=false},
+                            {iolist_to_binary(Html1), ReqData1, State1};
+                        _ -> 
+                            %% Fetch file, allow caching
+                            file:read_file(FullPath),
+                            {ok, Data} = file:read_file(State#state.fullpath),
+                            Body = case State#state.encode_data of 
+                                       true -> encode_data(Data);
+                                       false -> Data
+                                   end,
+                            {Body, ReqData, State#state{body=Body}}
+                    end
             end;
         Body ->
             {Body, ReqData, State}
@@ -227,7 +241,8 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
             end,
             case Cached of
                 undefined ->
-                    case find_file(State#state.root, SafePath, Context) of 
+                    Root = abs_root(State#state.root, Context),
+                    case find_file(Root, SafePath, Context) of 
                     	{ok, FullPath} -> 
             	            case filename:basename(FullPath, ".tpl") of
             	                "index.html" ->
@@ -241,7 +256,13 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
                     	            {ReqData, State#state{path=SafePath, fullpath=FullPath, context=Context}}
                     	    end;
                     	{error, _Reason} -> 
-                    	    {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}}
+                            Dir = filename:join(Root, SafePath),
+                            case filelib:is_dir(Dir) andalso State#state.allow_directory_index of
+                                true ->
+                                    {ReqData, State#state{path=SafePath, fullpath=Dir, context=Context, mime="text/html"}};
+                                false ->
+                                    {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}}
+                            end
                     end;
                 {ok, Cache} ->
                     {ReqData, State#state{
@@ -274,11 +295,7 @@ check_resource(ReqData, State) ->
             ],
         case find_template(T, Context) of
             {error, enoent} ->
-                Root1 = case Root of
-                    "/" ++ _ -> Root;
-                    _ -> filename:join(z_path:site_dir(Context),Root)
-                end,
-                RelName1 = filename:join(Root1, RelName),
+                RelName1 = filename:join(Root, RelName),
                 T1 = [  RelName1,
                         RelName1 ++ ".tpl", 
                         filename:join(RelName1, "index.html.tpl"),
@@ -329,3 +346,40 @@ decode_data(identity, {encoded, Data, _Gzip}) ->
 decode_data(gzip, {encoded, _Data, Gzip}) ->
     Gzip.
 
+abs_root(Root, Context) ->
+    case Root of
+        "/" ++ _ -> Root;
+        _ -> filename:join(z_path:site_dir(Context), Root)
+    end.
+    
+directory_index_vars(FullPath, RelRoot, Context) ->
+    Root = abs_root(RelRoot, Context),
+    UpFileEntry = case Root =:= FullPath of
+                      true -> [];
+                      false -> [fileinfo(filename:dirname(FullPath), "..")]
+                  end,
+    
+    Files = lists:sort(fun fileinfo_cmp/2, lists:map(fun fileinfo/1, lists:sort(filelib:wildcard(filename:join(FullPath, "*"))))),
+    [{basename, filename:basename(FullPath)},
+     {files, UpFileEntry ++ Files}
+    ].
+
+
+fileinfo(F) ->
+    fileinfo(F, filename:basename(F)).
+
+fileinfo(F, N) ->
+    [{name, N},
+     {is_dir, filelib:is_dir(F)},
+     {last_modified, filelib:last_modified(F)},
+     {mime, z_media_identify:guess_mime(F)},
+     {size, filelib:file_size(F)}].
+
+
+fileinfo_cmp(A, B) ->
+    case proplists:get_value(is_dir, A) =:= proplists:get_value(is_dir, B) of
+        true ->
+            proplists:get_value(name, A) < proplists:get_value(name, B);
+        false ->
+            proplists:get_value(is_dir, A) > proplists:get_value(is_dir, B)
+    end.

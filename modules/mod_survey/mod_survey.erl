@@ -410,6 +410,8 @@ do_submit(SurveyId, Questions, Answers, Context) ->
         undefined ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
             ok;
+        ok ->
+            ok;
         {ok, _Context1} = Handled ->
             Handled;
         {error, _Reason} = Error ->
@@ -472,5 +474,7 @@ admin_edit_survey_result(Id, U, P, Questions, Answers, Context) ->
 
 
 
+module_name(A) when is_atom(A) ->
+    module_name(list_to_binary(atom_to_list(A)));
 module_name(<<"survey_", Type/binary>>) -> list_to_atom("survey_q_"++z_convert:to_list(Type));
 module_name(_) -> undefined.
