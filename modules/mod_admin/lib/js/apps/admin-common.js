@@ -91,6 +91,33 @@ window.zEditLanguage = function() {
 }
 
 
+
+function z_admin_ensure_block_names() {
+    var names = [];
+    $('.blocks input.block-name').each(function() { 
+    	var name = $(this).val();
+    	if (name != '') {
+    		names.push(name);
+    	}
+    });
+
+    $('.blocks input.block-name').each(function() { 
+    	var name = $(this).val();
+    	if (name == '')
+    	{
+    		var $block = $(this).closest(".block");
+    		name = $("input.block-type", $block).val().split("_")[0]
+    		var ct = 1;
+		    while (names.indexOf(name+ct) != -1) {
+		        ct++;
+		    }
+		    $("input.block-name", $block).val(name+ct);
+	        names.push(name+ct);
+    	}
+    });
+}
+
+
 tinyInit = {
 	mode: "none",
 	theme: "advanced",
