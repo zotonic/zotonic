@@ -31,6 +31,7 @@
     manage_schema/2,
     event/2,
     observe_admin_edit_blocks/3,
+    observe_survey_is_submit/2,
 
     render_next_page/6,
     go_button_target/4,
@@ -107,6 +108,15 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
             ];
         false ->
             Menu
+    end.
+
+
+%% @doc Check if the given block is a survey question with submit button
+observe_survey_is_submit(#survey_is_submit{block=Q}, Context) ->
+    case proplists:get_value(type, Q) of
+        <<"survey_button">> -> true;
+        <<"survey_", _/binary>> -> proplists:get_value(input_type, Q) =:= <<"submit">>;
+        _ -> undefined
     end.
 
 

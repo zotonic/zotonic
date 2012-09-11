@@ -1,3 +1,4 @@
+{% include "_survey_block_name_check.tpl" %}
 <div class="control-group survey-truefalse question-{{ nr }}">
     <label class="control-label">{{ blk.prompt }}</label>
 {% if blk.explanation %}
