@@ -701,7 +701,7 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 		z_queue_postback(this.id, sortPostbackInfo, sortItem, true);
 	};
 	sortOptions.receive = function (ev, ui) {
-		var $target = $(this).data().sortable.currentItem;
+		var $target = $(this).data().sortable.element;
 		var $source = $(ui.sender);
 		$target.data('z_sort_tag', $source.data('z_drag_tag')); 
 	};
