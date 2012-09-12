@@ -188,8 +188,6 @@
 			</div>
 		</div>
 	</div>
-	
-	{% include "_admin_save_buttons.tpl" %}
 </fieldset>
 {% endwith %}
 {% endblock %}
