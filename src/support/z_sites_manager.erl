@@ -217,11 +217,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 
-
 %%====================================================================
 %% support functions
 %%====================================================================
-
 
 %% @doc Scan all sites subdirectories for the site configurations.
 %% @spec scan_sites() -> [ SiteProps ]
@@ -230,37 +228,36 @@ scan_sites() ->
     Configs = [ parse_config(C) || C <- filelib:wildcard(SitesDir) ],
     [ C || C <- Configs, is_list(C) ].
 
-    parse_config(C) ->
-        case file:consult(C) of
-            {ok, [SiteConfig|_]} -> 
-                %% check host option
-                Host = list_to_atom(
-                         hd(lists:reverse(
-                              filename:split(
-                                filename:dirname(C)
-                               )))),
-                case proplists:get_value(host, SiteConfig) of
-                    undefined ->
-                        lists:keystore(host, 1, SiteConfig, {host, Host});
-                    Host ->
-                        SiteConfig;
-                    InvalidHost ->
-                        error_logger:warning_msg("Ignoring invalid `host' option in site config: ~s: {host, ~p}~n",
-                                                 [C, InvalidHost]),
-                        lists:keystore(host, 1, proplists:delete(host, SiteConfig), {host, Host})
-                end;
-            {error, Reason} ->
-                Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
-                ?ERROR("~s~n", [Message]),
-                {error, Message}
-        end.
+parse_config(C) ->
+    case file:consult(C) of
+        {ok, [SiteConfig|_]} -> 
+            %% check host option
+            Host = list_to_atom(
+                     hd(lists:reverse(
+                          filename:split(
+                            filename:dirname(C)
+                           )))),
+            case proplists:get_value(host, SiteConfig) of
+                undefined ->
+                    lists:keystore(host, 1, SiteConfig, {host, Host});
+                Host ->
+                    SiteConfig;
+                InvalidHost ->
+                    error_logger:warning_msg("Ignoring invalid `host' option in site config: ~s: {host, ~p}~n",
+                                             [C, InvalidHost]),
+                    lists:keystore(host, 1, proplists:delete(host, SiteConfig), {host, Host})
+            end;
+        {error, Reason} ->
+            Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
+            ?ERROR("~s~n", [Message]),
+            {error, Message}
+    end.
 
 %% @doc Fetch the configuration of a specific site.
 %% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
 get_site_config(Site) ->
     ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
     parse_config(ConfigFile).
-
 
 has_zotonic_site([]) ->
     false;

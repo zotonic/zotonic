@@ -93,7 +93,7 @@ function do_addsite {
     $ZOTONIC_CALL -a "z_sites_manager start [$SITE]" > /dev/null
     
     echo
-    echo "Added site $SITE. Now start zotonic and go to $URL to view it."
+    echo "Added site $SITE. Now go to $URL to view it."
 }
 
 
