@@ -64,12 +64,14 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                         #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
                             Props = case proplists:get_value(id, EventProps) of
                                         undefined ->
+                                            Lang = z_context:language(Context),
                                             Title = z_context:get_q("new_media_title", Context),
                                             NewTitle = case z_utils:is_empty(Title) of
                                                            true -> OriginalFilename;
                                                            false -> Title
                                                        end,
-                                            [{title, NewTitle},
+                                            [{title, {trans, [{Lang,NewTitle}]}},
+                                             {language, [Lang]},
                                              {original_filename, OriginalFilename}];
                                         _ ->
                                             [{original_filename, OriginalFilename}]

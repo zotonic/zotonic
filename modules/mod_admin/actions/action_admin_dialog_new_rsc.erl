@@ -81,11 +81,13 @@ event(#submit{message={new_page, Args}}, Context) ->
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
 
+    Lang = z_context:language(Context), 
     Props = [
         {category_id, CatId},
-        {title, Title},
+        {title, {trans, [{Lang, Title}]}},
         {is_published, IsPublished},
-        {name, Name}
+        {name, Name},
+        {language, [Lang]}
     ],
     {ok, Id} = m_rsc_update:insert(Props, Context),
 
