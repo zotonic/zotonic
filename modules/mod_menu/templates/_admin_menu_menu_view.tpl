@@ -29,4 +29,4 @@
 	</div>
 </div>
 
-{% include "_menu_edit_scripts.tpl" menu_id=#menu in_sorter="menu" %}
+{% include "_menu_edit_scripts.tpl" menu_id=#menu in_sorter="menu-"++id %}

@@ -23,7 +23,7 @@ $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	var where = $(this).data('where');
 	var $menu_item = $(this).closest('li.menu-item');
-	var $sorter = $('#{{ menu_id }}');
+	var $sorter = $('#{{ in_sorter }}');
 
 	if (where == 'remove') {
 		$(this).closest('li.menu-item').fadeOut(500, function() { 
@@ -32,10 +32,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 		});
 	} else {
 		window.zMenuEditDone = function(v) {
-			console.log("zMenuEditDone", v);
-
 			window.zMenuNewItem = function(html) {
-				console.log(where, html);
 				if (where == 'top') {
 					$sorter.prepend(html);
 				} else if (where == 'bottom') {
