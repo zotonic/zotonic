@@ -70,6 +70,8 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 observe_rsc_update(#rsc_update{action=update, id=Id, props=Props}, Acc, Context) ->
     m_backup_revision:save_revision(Id, Props, Context),
+    Acc;
+observe_rsc_update(_, Acc, _Context) ->
     Acc.
 
 
