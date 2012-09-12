@@ -23,19 +23,21 @@
 -behaviour(gen_model).
 
 %% interface functions
--export([
+-export(
+   [
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    
+
     is_allowed_results_download/2,
     insert_survey_submission/3,
     insert_survey_submission/5,
     survey_stats/2,
     survey_results/2,
+    survey_results_sorted/3,
     single_result/4,
     delete_result/4
-]).
+   ]).
 
 -include_lib("zotonic.hrl").
 -include("../survey.hrl").
@@ -86,6 +88,7 @@ is_allowed_results_download(Id, Context) ->
 
 
 %% @doc Check if the current user/browser did the survey
+%% @private
 did_survey(SurveyId, Context) ->
     case z_acl:user(Context) of
         undefined ->
@@ -147,26 +150,29 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Created, Conte
     end,
     insert_questions(SurveyId, UserId, PersistentId, Answers, Created, Context).
 
-    insert_questions(_SurveyId, _UserId, _PersistentId, [], _Created, _Context) ->
-        ok;
-    insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], Created, Context) ->
-        insert_answers(SurveyId, UserId, PersistentId, QuestionId, Answers, Created, Context),
-        insert_questions(SurveyId, UserId, PersistentId, Rest, Created, Context).
-        
-    insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Created, _Context) ->
-        ok;
-    insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Created, Context) ->
-        Args = case Answer of
-            {text, Text} -> [SurveyId, UserId, PersistentId, QuestionId, Name, undefined, Text, Created];
-            Value -> [SurveyId, UserId, PersistentId, QuestionId, Name, z_convert:to_list(Value), undefined, Created]
-        end,
-        z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text, created) 
+%% @private
+insert_questions(_SurveyId, _UserId, _PersistentId, [], _Created, _Context) ->
+    ok;
+insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], Created, Context) ->
+    insert_answers(SurveyId, UserId, PersistentId, QuestionId, Answers, Created, Context),
+    insert_questions(SurveyId, UserId, PersistentId, Rest, Created, Context).
+
+%% @private
+insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Created, _Context) ->
+    ok;
+insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Created, Context) ->
+    Args = case Answer of
+               {text, Text} -> [SurveyId, UserId, PersistentId, QuestionId, Name, undefined, Text, Created];
+               Value -> [SurveyId, UserId, PersistentId, QuestionId, Name, z_convert:to_list(Value), undefined, Created]
+           end,
+    z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text, created) 
                 values ($1, $2, $3, $4, $5, $6, $7, $8)", 
                Args,
-               Context),
-        insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Created, Context).
+           Context),
+    insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Created, Context).
 
 
+%% @private
 prepare_results(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         [] ->
@@ -186,16 +192,18 @@ prepare_results(SurveyId, Context) ->
             ]
     end.
 
-    prepare_result(_Block, undefined, _Context) ->
-        {undefined, undefined, undefined};
-    prepare_result(Block, Stats, Context) ->
-        Type = proplists:get_value(type, Block),
-        {
-         Stats,
-         prep_chart(Type, Block, Stats, Context),
-         [] % mod_survey:question_to_props(Question)
-        }.
+%% @private
+prepare_result(_Block, undefined, _Context) ->
+    {undefined, undefined, undefined};
+prepare_result(Block, Stats, Context) ->
+    Type = proplists:get_value(type, Block),
+    {
+      Stats,
+      prep_chart(Type, Block, Stats, Context),
+      [] % mod_survey:question_to_props(Question)
+    }.
 
+%% @private
 prep_chart(_Type, _Block, undefined, _Context) ->
     undefined;
 prep_chart(Type, Block, Stats, Context) ->
@@ -209,30 +217,33 @@ prep_chart(Type, Block, Stats, Context) ->
 survey_stats(SurveyId, Context) ->
     Rows = z_db:q("
                 select question, name, value, count(*) 
-                from survey_answer 
-                where survey_id = $1 and value is not null
-                group by question, name, value 
-                order by question, name, value", [SurveyId], Context),
+                  from survey_answer 
+                  where survey_id = $1 and value is not null
+                  group by question, name, value 
+                  order by question, name, value", [SurveyId], Context),
     group_questions(Rows, []).
-    
-    group_questions([], Acc) ->
-        lists:reverse(Acc);
-    group_questions([{Question,_,_,_}|_] = Answers, Acc) ->
-        {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q == Question end, Answers),
-        NVs = case Qs of
-            [{_, Name, Value, Count}|QsTail] -> group_values(Name, [{Value, Count}], QsTail, []);
-            [] -> []
-        end,
-        group_questions(Answers1, [{Question,NVs}|Acc]).
-        
-    group_values(Name, Values, [], Acc) ->
-        [{Name, Values}|Acc];
-    group_values(Name, Values, [{_,Name,V,C}|Rs], Acc) ->
-        group_values(Name, [{V,C}|Values], Rs, Acc);
-    group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
-        group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
+
+%% @private
+group_questions([], Acc) ->
+    lists:reverse(Acc);
+group_questions([{Question,_,_,_}|_] = Answers, Acc) ->
+    {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q == Question end, Answers),
+    NVs = case Qs of
+              [{_, Name, Value, Count}|QsTail] -> group_values(Name, [{Value, Count}], QsTail, []);
+              [] -> []
+          end,
+    group_questions(Answers1, [{Question,NVs}|Acc]).
+
+%% @private
+group_values(Name, Values, [], Acc) ->
+    [{Name, Values}|Acc];
+group_values(Name, Values, [{_,Name,V,C}|Rs], Acc) ->
+    group_values(Name, [{V,C}|Values], Rs, Acc);
+group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
+    group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
 
 
+%% @doc Get survey results, sorted by the given sort column.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
     [Headers|Data] = survey_results(SurveyId, Context),
     case string:str(Headers, [list_to_binary(SortColumn)]) of
@@ -267,75 +278,83 @@ survey_results(SurveyId, Context) ->
             []
     end.
     
-    group_users([]) ->
-        [];
-    group_users([R|Rs]) ->
-        {User, Q, Created} = unpack_user_row(R),
-        group_users(User, Created, Rs, [Q], []).
-        
-    group_users(User, Created, [], UserAcc, Acc) ->
-        [{User, Created, UserAcc} | Acc];
-    group_users(User, Created, [R|Rs], UserAcc, Acc) ->
-        {U, Q, Crtd} = unpack_user_row(R),
-        case User of
-            U -> group_users(User, Created, Rs, [Q|UserAcc], Acc);
-            _ -> group_users(U, Crtd, Rs, [Q], [{User,Created,UserAcc}|Acc])
-        end.
+%% @doc private
+group_users([]) ->
+    [];
+group_users([R|Rs]) ->
+    {User, Q, Created} = unpack_user_row(R),
+    group_users(User, Created, Rs, [Q], []).
 
-    question_prepare(B, Context) ->
-        case mod_survey:module_name(proplists:get_value(type, B)) of
-            undefined -> B;
-            M -> M:prep_block(B, Context)
-        end.
+%% @doc private
+group_users(User, Created, [], UserAcc, Acc) ->
+    [{User, Created, UserAcc} | Acc];
+group_users(User, Created, [R|Rs], UserAcc, Acc) ->
+    {U, Q, Crtd} = unpack_user_row(R),
+    case User of
+        U -> group_users(User, Created, Rs, [Q|UserAcc], Acc);
+        _ -> group_users(U, Crtd, Rs, [Q], [{User,Created,UserAcc}|Acc])
+    end.
 
-    unpack_user_row({UserId, Persistent, Question, Name, Value, Text, Created}) ->
-        {
-            {user, UserId, Persistent},
-            {Question, {Name, {Value, Text}}},
-            Created
-        }.
+%% @doc private
+question_prepare(B, Context) ->
+    case mod_survey:module_name(proplists:get_value(type, B)) of
+        undefined -> B;
+        M -> M:prep_block(B, Context)
+    end.
+
+%% @doc private
+unpack_user_row({UserId, Persistent, Question, Name, Value, Text, Created}) ->
+    {
+      {user, UserId, Persistent},
+      {Question, {Name, {Value, Text}}},
+      Created
+    }.
+
+%% @doc private
+user_answer_row({user, User, Persistent}, Created, Answers, Questions, Context) ->
+    [
+     User,
+     Persistent,
+     case Created of 
+         undefined -> <<>>;
+         _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
+     end
+     | answer_row(Answers, Questions, Context)
+    ].
+
+%% @doc private
+answer_row(Answers, Questions, Context) ->
+    %% Convert answers to proper format if old format is discovered
+    Answers1 = [case A of
+                    {X, {X, _}} -> A;
+                    {_, {X, Y}} -> {X, {X, Y}}
+                end || A <- Answers],
+    lists:flatten([
+                   answer_row_question(proplists:get_all_values(QId, Answers1), 
+                                       Question,
+                                       Context)
+                   || {QId, Question} <- Questions
+                  ]).
+
+%% @doc private
+answer_row_question(_Answer, undefined, _Context) ->
+    [];
+answer_row_question(Answer, Q, Context) ->
+    Type = proplists:get_value(type, Q),
+    case mod_survey:module_name(Type) of
+        undefined -> [];
+        M -> M:prep_answer(Q, Answer, Context)
+    end.
+
+%% @doc private
+answer_header(Type, Block, Context) ->
+    case mod_survey:module_name(Type) of
+        undefined -> [];
+        M -> M:prep_answer_header(Block, Context)
+    end.
 
 
-    user_answer_row({user, User, Persistent}, Created, Answers, Questions, Context) ->
-        [
-            User,
-            Persistent,
-            case Created of 
-                undefined -> <<>>;
-                _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
-            end
-            | answer_row(Answers, Questions, Context)
-        ].
-        
-    answer_row(Answers, Questions, Context) ->
-        %% Convert answers to proper format if old format is discovered
-        Answers1 = [case A of
-                        {X, {X, _}} -> A;
-                        {_, {X, Y}} -> {X, {X, Y}}
-                    end || A <- Answers],
-        lists:flatten([
-            answer_row_question(proplists:get_all_values(QId, Answers1), 
-                                Question,
-                                Context)
-            || {QId, Question} <- Questions
-        ]).
-    
-    answer_row_question(_Answer, undefined, _Context) ->
-        [];
-    answer_row_question(Answer, Q, Context) ->
-        Type = proplists:get_value(type, Q),
-        case mod_survey:module_name(Type) of
-            undefined -> [];
-            M -> M:prep_answer(Q, Answer, Context)
-        end.
-
-
-    answer_header(Type, Block, Context) ->
-        case mod_survey:module_name(Type) of
-            undefined -> [];
-            M -> M:prep_answer_header(Block, Context)
-        end.
-
+%% @doc Retrieve a single survey result for a user or persistent id.
 single_result(SurveyId, UserId, PersistentId, Context) ->
     {Clause, Args} = case z_utils:is_empty(UserId) of
                          true -> {"persistent = $1", [PersistentId]};
@@ -353,6 +372,7 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
                 Rows).
 
 
+%% @doc Delete a survey result for a user or persistent id.
 delete_result(SurveyId, UserId, PersistentId, Context) ->
     {Clause, Args} = case z_utils:is_empty(UserId) of
                          true -> {"persistent = $1", [PersistentId]};
@@ -361,6 +381,7 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
     z_db:q("DELETE FROM survey_answer WHERE " ++ Clause ++ " and survey_id = $2", Args ++ [SurveyId], Context).
 
 
+%% @private
 survey_captions(Id, Context) ->
     case m_rsc:p(Id, blocks, Context) of
         Blocks when is_list(Blocks) ->
@@ -371,4 +392,3 @@ survey_captions(Id, Context) ->
         _ ->
             []
     end.
-
