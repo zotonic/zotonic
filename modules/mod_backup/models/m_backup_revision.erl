@@ -52,22 +52,29 @@ m_value(_m, _Context) ->
 
 
 save_revision(Id, Props, Context) ->
-    ok = prune_revisions(Id, Context),
-    1 = z_db:q("
-        insert into backup_revision 
-            (rsc_id, type, version, user_id, user_name, data_type, data)
-        values ($1, $2, $3, $4, $5, $6, $7)
-        ", [
-            Id, 
-            ?BACKUP_TYPE_PROPS,
-            proplists:get_value(version, Props),
-            z_acl:user(Context),
-            z_string:truncate(m_rsc:p_no_acl(z_acl:user(Context), title, Context), 60),
-            "erlang",
-            erlang:term_to_binary(Props, [compressed])
-        ],
-        Context),
-    ok.
+    Version = proplists:get_value(version, Props),
+    LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
+    case Version of
+        LastVersion when LastVersion =/= undefined ->
+            ok;
+        _ ->
+            1 = z_db:q("
+                insert into backup_revision 
+                    (rsc_id, type, version, user_id, user_name, data_type, data)
+                values ($1, $2, $3, $4, $5, $6, $7)
+                ", [
+                    Id, 
+                    ?BACKUP_TYPE_PROPS,
+                    proplists:get_value(version, Props),
+                    z_acl:user(Context),
+                    z_string:truncate(m_rsc:p_no_acl(z_acl:user(Context), title, Context), 60),
+                    "erlang",
+                    erlang:term_to_binary(Props, [compressed])
+                ],
+                Context),
+            ok = prune_revisions(Id, Context),
+            ok
+    end.
 
 get_revision(RevId, Context) ->
     case z_db:assoc_row("select * from backup_revision where id = $1", [RevId], Context) of

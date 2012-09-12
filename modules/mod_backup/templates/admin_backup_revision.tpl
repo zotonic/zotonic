@@ -3,12 +3,21 @@
 {% block title %}{_ Revisions for _} {{ id.title }}{% endblock %}
 
 {% block head_extra %}
+	{% lib "js/jsdiff.js" "js/modules/z.make_diff.js" %}
+
 	<style type="text/css">
 		#revisions .active a.first {
 			background-color: green;
 		}
 		#revisions .active a.second {
 			background-color: red;
+		}
+
+		ins {
+			color: green;
+		}
+		del {
+			color: red;
 		}
 	</style>
 {% endblock %}
@@ -77,7 +86,7 @@
 {% javascript %}
 var $last_clicked;
 
-$('#revisions a').click(function() {
+$('#revisions a').click(function(event) {
 	$(this).closest('li').toggleClass('active');
 	$('#revisions li a').removeClass('first second');
 
@@ -106,17 +115,8 @@ $('#revisions a').click(function() {
 			z_delegate: 'resource_admin_backup_revision' 
 		});
 	}
+	event.preventDefault();
 });
-
-
-document.revision_show_diff1 = function(id, a) {
-	console.log(id, a);
-};
-
-document.revision_show_diff2 = function(id, a, b) {
-	console.log(id, a, b);
-};
-
 {% endjavascript %}
 
 {% endblock %}

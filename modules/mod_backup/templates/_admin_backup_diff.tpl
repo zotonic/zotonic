@@ -11,7 +11,7 @@
 							}
 				%}
 			{% else %}
-				<b>{_ current version _}</b>
+				<b><ins>{_ current version _}</ins></b>
 			{% endif %}
 		</td>
 		<td>
@@ -27,10 +27,11 @@
 		</td>
 	</tr>
 {% for k,a,b in diff %}
-	<tr>
+	<tr {% if b.id %}class="do_make_diff"{% endif %}>
 		<th>{{ k }}</th>
-		<td>{{ a }}</td>
+ 		<td>{{ a }}</td>
 		<td>{{ b }}</td>
 	</tr>
 {% endfor %}
 </table>
+

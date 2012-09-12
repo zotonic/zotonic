@@ -145,7 +145,7 @@ format_value(rsc_id, Id, Context) ->
 format_value(blocks, Blocks, Context) ->
 	format_blocks(Blocks, Context);
 format_value(_, {trans, Tr}, _Context) ->
-	iolist_to_binary([ [z_convert:to_binary(Iso), $:, 32, V, <<"<br/>">>] || {Iso,V} <- Tr, V /= <<>> ]);
+	iolist_to_binary([ [z_convert:to_binary(Iso), $:, 32, V, <<"\n\n">>] || {Iso,V} <- Tr, V /= <<>> ]);
 format_value(_K, V, _Context) when is_tuple(V) ->
 	iolist:to_binary(io_lib:format("~p", [V]));
 format_value(_K, V, Context) when is_list(V) ->
@@ -166,12 +166,12 @@ by_id(Id, Context) when is_integer(Id) ->
 
 
 format_blocks(Blocks, Context) ->
-	iolist_to_binary(z_utils:combine("<hr/>", [ format_block(lists:sort(B), Context) || B <- Blocks ])).
+	iolist_to_binary(z_utils:combine("\n----++++----\n", [ format_block(lists:sort(B), Context) || B <- Blocks ])).
 
 format_block(B, Context) ->
 	iolist_to_binary(z_utils:combine(
-			"<br/>", 
+			"\n\n", 
 			[
-				["<b>", z_convert:to_binary(K), "</b>", $:, 32, format_value(K,V,Context)]
+				[" <b> ", z_convert:to_binary(K), " </b>: ", format_value(K,V,Context)]
 				|| {K,V} <- B 
 			])).
