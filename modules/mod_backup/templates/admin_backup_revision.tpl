@@ -3,7 +3,7 @@
 {% block title %}{_ Revisions for _} {{ id.title }}{% endblock %}
 
 {% block head_extra %}
-	{% lib "js/jsdiff.js" "js/modules/z.make_diff.js" %}
+	{% lib "js/wdiff.js" "js/modules/z.make_diff.js" %}
 
 	<style type="text/css">
 		#revisions .active a.first {
@@ -12,7 +12,9 @@
 		#revisions .active a.second {
 			background-color: red;
 		}
-
+		.diff-omitted {
+			color: #999;
+		}
 		ins {
 			color: green;
 		}

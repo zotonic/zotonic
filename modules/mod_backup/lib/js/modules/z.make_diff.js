@@ -28,44 +28,50 @@ $.widget("ui.make_diff",
 		var tds = $(this.element).children('td');
 		var a = $(tds.get(0)).html();
 		var b = $(tds.get(1)).html();
-		var diff = diffString(b,a);
+		var diff = WDiffShortenOutput(WDiffString(b,a));
 
-		diff = diff.replace(/\n\n\n\n/g, "<hr class='make-diff-x' />")
-				   .replace(/\n\n/g, "<br class='make-diff-x' />")
-				   ;
+		// diff = diff.replace(/\n\n--\n\n/g, "<hr class='make-diff-x' />")
+		// 		   .replace(/\n\n/g, "<br class='make-diff-x' />")
+		// 		   ;
 
 		$(this.element).html("<th>"+k+"</th><td class='make-diff-top' colspan='2'>"+diff+"</td>");
 
-		// Remove top elements that are not changed.
-		$(this.element).children('td').contents().filter(function() {
-				  return this.nodeType == 3;
-			})
-	  		.wrap('<span class="make-diff-x"></span>');
-		$(this.element).children('td').children().addClass("make-diff-delete-me");
+		// // Remove top elements that are not changed.
+		// $(this.element).children('td').contents().filter(function() {
+		// 		  return this.nodeType == 3;
+		// 	})
+	 //  		.wrap('<span class="make-diff-x"></span>');
+		// $(this.element).children('td').children().addClass("make-diff-delete-me");
 
-		$('ins,del', $(this.element)).each(function() {
-			var $elt = $(this);
-			while (!$elt.parent().hasClass('make-diff-top')) {
-				$elt = $elt.parent();
-			}
-			$elt.removeClass('make-diff-delete-me');
+		// $('ins,del', $(this.element)).each(function() {
+		// 	var $elt = $(this);
+		// 	while (!$elt.parent().hasClass('make-diff-top')) {
+		// 		$elt = $elt.parent();
+		// 	}
+		// 	$elt.removeClass('make-diff-delete-me');
 
-			var $x = $elt;
-			do {
-				$x = $x.next();
-				$x.removeClass('make-diff-delete-me');
-			} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
+		// 	var $x = $elt;
+		// 	do {
+		// 		$x = $x.next();
+		// 		$x.removeClass('make-diff-delete-me');
+		// 	} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
 
-			$x = $elt;
-			do {
-			 	$x = $x.prev();
-			 	$x.removeClass('make-diff-delete-me');
-			} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
-		});
-		$('.make-diff-delete-me').remove();
+		// 	$x = $elt;
+		// 	do {
+		// 	 	$x = $x.prev();
+		// 	 	$x.removeClass('make-diff-delete-me');
+		// 	} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
+		// });
+		// $('.make-diff-delete-me').remove();
 	}
 
 });
 
 $.ui.make_diff.defaults = {
 }
+
+window.wDiffOmittedChars = " <span class='diff-omitted'>[…]</span> ";
+window.wDiffOmittedLines = "<hr class='diff-omitted' />";
+window.wDiffNoChange = "<hr class='diff-nochange' />";
+
+
