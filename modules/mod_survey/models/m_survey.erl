@@ -308,8 +308,13 @@ survey_results(SurveyId, Context) ->
         ].
         
     answer_row(Answers, Questions, Context) ->
+        %% Convert answers to proper format if old format is discovered
+        Answers1 = [case A of
+                        {X, {X, _}} -> A;
+                        {_, {X, Y}} -> {X, {X, Y}}
+                    end || A <- Answers],
         lists:flatten([
-            answer_row_question(proplists:get_all_values(QId, Answers), 
+            answer_row_question(proplists:get_all_values(QId, Answers1), 
                                 Question,
                                 Context)
             || {QId, Question} <- Questions
