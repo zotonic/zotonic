@@ -10,37 +10,26 @@
 <h3>{_ Mailing lists _}</h3>
 <hr/>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-	    <th width="40%">{_ Title _}</th>
+	    <th width="30%">{_ Title _}</th>
+	    <th width="10%">{_ Actions _}</th>
 	    <th width="10%">{_ Recipients _}</th>
 	    <th width="15%">{_ Sent on _}</th>
 	    <th width="35%">{_ Statistics _}</th>
         </tr>
     </thead>
 
+    <tbody>
     {% for title, mid in m.search[{all_bytitle cat="mailinglist"}] %}
     {% with m.mailinglist.stats[mid] as stats %}
-    <tbody>
 	<tr id="mailinglist-{{ mid }}">
 	    <td>
                 <a href="{% url admin_mailinglist_recipients id=mid %}">{{ title|default:"untitled" }}</a>
             </td>
-
-            <td>{{ stats[1]|format_number }}</td>
-
             <td>
-                {% if rsc_stats[mid].created %}
-                <a href="{% url admin_log_email content=id other=mid severity=4 %}" title="{_ Click to view log entries _}">{{ rsc_stats[mid].created|date:"Y-m-d H:i" }}</a>
-                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
-                {% else %}
-                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
-                {% endif %}
-            </td>
-
-	    <td>
-                <div class="pull-right">
+                <div>
                         {% if rsc_stats[mid].bounce %}
                                 {% button class="btn btn-mini" text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing." 
                                         action={dialog_open template="_dialog_mailing_bounces.tpl" title=_"Bounces" id=id mid=mid} %}
@@ -55,7 +44,20 @@
                                 {% endif %}
                         {% endif %}
                 </div>
+            </td>
+            
+            <td>{{ stats[1]|format_number }}</td>
 
+            <td>
+                {% if rsc_stats[mid].created %}
+                <a href="{% url admin_log_email content=id other=mid severity=4 %}" title="{_ Click to view log entries _}">{{ rsc_stats[mid].created|date:"Y-m-d H:i" }}</a>
+                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
+                {% else %}
+                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
+                {% endif %}
+            </td>
+
+	    <td>
                 {% if rsc_stats[mid].created %}
                 {% if stats[1] > rsc_stats[mid].total %}
                 <a href="{% url admin_log_email status='sent' content=id other=mid severity=4 %}" title="{_ Click to view log entries _}">{{ rsc_stats[mid].total|default:0 }} {_ processed _}</a>
