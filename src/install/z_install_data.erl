@@ -114,7 +114,9 @@ install_modules(empty, Host, C) ->
          %% The site-specific site
          atom_to_list(Host)
         ],
-    install_modules(Modules, C).
+    install_modules(Modules, C);
+install_modules(nodb, _, _) ->
+    ok.
 
 install_modules(Modules, C) ->
     ?DEBUG("Inserting modules"),

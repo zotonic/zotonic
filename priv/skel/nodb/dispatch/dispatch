@@ -1,0 +1,5 @@
+%% -*- mode: erlang -*-
+%% Put your dispatch rules here.
+[
+     {home,      [],	resource_template,  	[ {template, "home.tpl"} ]}
+].
