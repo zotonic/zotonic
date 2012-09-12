@@ -30,8 +30,9 @@ $.widget("ui.make_diff",
 		var b = $(tds.get(1)).html();
 		var diff = diffString(b,a);
 
-		diff = diff.replace(/\n\n/g, "<br class='make-diff-x' />")
-				   .replace(/----\+\+\+\+----/g, "<hr class='make-diff-x' />");
+		diff = diff.replace(/\n\n\n\n/g, "<hr class='make-diff-x' />")
+				   .replace(/\n\n/g, "<br class='make-diff-x' />")
+				   ;
 
 		$(this.element).html("<th>"+k+"</th><td class='make-diff-top' colspan='2'>"+diff+"</td>");
 
@@ -39,7 +40,7 @@ $.widget("ui.make_diff",
 		$(this.element).children('td').contents().filter(function() {
 				  return this.nodeType == 3;
 			})
-	  		.wrap('<span></span>');
+	  		.wrap('<span class="make-diff-x"></span>');
 		$(this.element).children('td').children().addClass("make-diff-delete-me");
 
 		$('ins,del', $(this.element)).each(function() {
@@ -53,13 +54,13 @@ $.widget("ui.make_diff",
 			do {
 				$x = $x.next();
 				$x.removeClass('make-diff-delete-me');
-			} while ($x.is('br') || $x.is('hr'));
+			} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
 
 			$x = $elt;
 			do {
 			 	$x = $x.prev();
 			 	$x.removeClass('make-diff-delete-me');
-			} while ($x.is('br') || $x.is('hr'));
+			} while ($x.is('br') || $x.is('hr') || $x.hasClass('make-diff-x'));
 		});
 		$('.make-diff-delete-me').remove();
 	}

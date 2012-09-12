@@ -166,7 +166,7 @@ by_id(Id, Context) when is_integer(Id) ->
 
 
 format_blocks(Blocks, Context) ->
-	iolist_to_binary(z_utils:combine("\n----++++----\n", [ format_block(lists:sort(B), Context) || B <- Blocks ])).
+	iolist_to_binary(z_utils:combine("\n\n\n\n", [ format_block(lists:sort(B), Context) || B <- Blocks ])).
 
 format_block(B, Context) ->
 	iolist_to_binary(z_utils:combine(
@@ -175,3 +175,4 @@ format_block(B, Context) ->
 				[" <b> ", z_convert:to_binary(K), " </b>: ", format_value(K,V,Context)]
 				|| {K,V} <- B 
 			])).
+
