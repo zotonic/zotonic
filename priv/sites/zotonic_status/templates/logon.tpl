@@ -31,7 +31,7 @@
 		<input type="text" id="username" name="username" value="admin"  />
 	    </div>
 	    <p>
-		<label>{_ Password _}</label>
+		<label>{_ Password _}:&nbsp;</label>
 		<input type="password" id="password" name="password" value="" autofocus />
 	        <button class="btn btn-primary">{_ Log On _}</button>
 	    </p>
