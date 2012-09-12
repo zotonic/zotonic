@@ -3,6 +3,7 @@
 {% block widget_title %}{_ Block _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}edit-block-{{ name }}{% endblock %}
+{% block widget_header %}{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
@@ -11,15 +12,15 @@
     {% if is_editable %}
        <textarea id="block-{{name}}-narrative{{ lang_code_with_dollar }}" name="block-{{name}}-narrative{{ lang_code_with_dollar }}" 
               class="span8" rows="4"
-              placeholder="{_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]. _} ({{ lang_code }})" >{{ blk.narrative[lang_code] }}</textarea>
+              placeholder="{_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]. _} ({{ lang_code }})" >{{ blk.narrative[lang_code]  }}</textarea>
               
         <p class="help-block"><strong>{_ Example: _}</strong> {_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]._}</p>
 
         <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
                class="span8" rows="2"
-               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code] }}</textarea>
+               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
     {% else %}
-        <p>{{ blk.narrative[lang_code] }}</p>
+        <p>{{ blk.narrative[lang_code]  }}</p>
     {% endif %}
     </div>
 </fieldset>

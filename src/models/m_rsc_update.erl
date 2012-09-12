@@ -170,7 +170,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
         true ->
             DateProps = recombine_dates(Props),
             TextProps = recombine_languages(DateProps, Context),
-            BlockProps = recombine_blocks(TextProps),
+            BlockProps = recombine_blocks(TextProps, Props),
             AtomProps = [ {map_property_name(P), V} || {P, V} <- BlockProps ],
             FilteredProps = props_filter(props_trim(AtomProps), [], Context),
             EditableProps = props_filter_protected(FilteredProps),
@@ -256,7 +256,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     {modifier_id, z_acl:user(Ctx)}
                     | UpdateProps
                 ],
-                
+
                 % Optionally fetch the created date if this is an import of a resource
                 UpdateProps2 = case imported_prop(IsImport, created, AtomProps, undefined) of
                                    undefined -> UpdateProps1;
@@ -848,37 +848,44 @@ recombine_languages(Props, Context) ->
         end.
 
 
-recombine_blocks(Props) ->
+recombine_blocks(Props, OrgProps) ->
     {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
     case BPs of
         [] ->
             Props;
         _ ->
-            {Dict,Keys} = lists:foldr(
+            Keys = block_ids(OrgProps, []),
+            Dict = lists:foldr(
                             fun ({"block-", _}, Acc) -> 
                                     Acc;
-                                ({Name, Val}, {D,Ks}) ->
+                                ({"block-"++Name, Val}, Acc) ->
                                     Ts = string:tokens(Name, "-"),
                                     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
                                     BlockField = lists:last(Ts),
-                                    Ks1 = case lists:member(BlockId, Ks) of
-                                            true -> Ks;
-                                            false -> [BlockId|Ks]
-                                          end,
-                                    {
-                                        dict:append(BlockId, opt_value_map(BlockField, Val), D),
-                                        Ks1
-                                    }
+                                    dict:append(BlockId, opt_value_map(BlockField, Val), Acc)
                             end,
-                            {dict:new(), []},
+                            dict:new(),
                             BPs),
             [{blocks, [ dict:fetch(K, Dict) || K <- Keys ]} | Ps ]
     end.
 
-    % Map some values to non-strings
-    opt_value_map("rsc_id", V) -> {rsc_id, z_convert:to_integer(V)};
-    opt_value_map("is_"++_ = K, V) -> {list_to_existing_atom(K), z_convert:to_bool(V)};
-    opt_value_map(K, V) -> {list_to_existing_atom(K), V}.
+block_ids([], Acc) -> 
+    lists:reverse(Acc);
+block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
+    Ts = string:tokens(Name, "-"),
+    BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
+    case lists:member(BlockId, Acc) of
+        true -> block_ids(Rest, Acc);
+        false -> block_ids(Rest, [BlockId|Acc])
+    end;
+block_ids([_|Rest], Acc) ->
+    block_ids(Rest, Acc).
+
+% Map some values to non-strings
+opt_value_map("rsc_id", V) -> {rsc_id, z_convert:to_integer(V)};
+opt_value_map("is_"++_ = K, V) -> {list_to_existing_atom(K), z_convert:to_bool(V)};
+opt_value_map(K, V) -> {list_to_existing_atom(K), V}.
+
 
 
 %% @doc Accept only configured languages

@@ -3,6 +3,7 @@
 {% block widget_title %}{_ Block _}{% endblock %}
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}edit-block-{{ #block }}{% endblock %}
+{% block widget_header %}{% endblock %}
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
@@ -13,7 +14,7 @@
                class="span8" value="{{ blk.header[lang_code] }}"
                placeholder="{_ Header _} ({{ lang_code }})" />
     {% else %}
-        <h3>{{ blk.header[lang_code] }}</h3>
+        <h3>{{ blk.header[lang_code]  }}</h3>
     {% endif %}
     </div>
 </fieldset>

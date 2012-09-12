@@ -27,7 +27,9 @@
 
 {% else %}
 	{# non-multilanguage content and translation module disabled #}
-	{% include "admin_edit_widget_std.tpl" %}
+	{% with z_language as lang_code %}
+		{% include "admin_edit_widget_std.tpl" %}
+	{% endwith %}
 {% endif %}
 {% endwith %}
 {% endwith %}
