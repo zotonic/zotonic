@@ -26,12 +26,14 @@
 			{% endif %}
 		</td>
 	</tr>
+{% with b.id as has_diff %}
 {% for k,a,b in diff %}
-	<tr {% if b.id %}class="do_make_diff"{% endif %}>
+	<tr {% if has_diff %}class="do_make_diff"{% endif %}>
 		<th>{{ k }}</th>
  		<td>{{ a }}</td>
 		<td>{{ b }}</td>
 	</tr>
 {% endfor %}
+{% endwith %}
 </table>
 
