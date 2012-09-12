@@ -62,6 +62,7 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
 $('#edit-blocks-wrapper').on('click', '.block-page a.page-connect', function(event) {
     window.zBlockConnectTrigger = this;
     z_event("admin-block-connect", {});
+    event.preventDefault();
 });
 
 window.zAdminBlockConnectDone = function(v) {
@@ -83,7 +84,7 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
 {% wire name="admin-block-connect" 
         action={dialog_open
                     subject_id=id
-                    predicate="relation"
+                    predicate=""
                     template="_action_dialog_connect.tpl" 
                     title=_"Find page"
                     callback="window.zAdminBlockConnectDone"}

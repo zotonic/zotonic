@@ -234,7 +234,9 @@ get_predicate(P, Context) when is_list(P) ->
     end. 
 
 
-do_link(undefined, _Predicate, ObjectId, Callback, Context) ->
+do_link(SubjectId, Predicate, ObjectId, Callback, Context) 
+    when SubjectId =:= undefined; 
+         Predicate =:= ""; Predicate =:= undefined ->
     ContextP = context_language(Context),
     Title = m_rsc:p(ObjectId, title, Context),
     Vars = [
