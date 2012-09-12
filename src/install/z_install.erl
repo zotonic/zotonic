@@ -58,9 +58,11 @@ pre_install(_, _) ->
 %% @spec install(Host) -> ok
 install(Host) ->
     {ok, C} = pgsql_pool:get_connection(Host),
+    Skeleton = proplists:get_value(skeleton, z_sites_manager:get_site_config(Host)),
+    
     ok = pgsql:with_transaction(C, fun (C2) ->
                                            install_sql_list(C, model_pgsql()),
-                                           z_install_data:install(Host, C2),
+                                           z_install_data:install(Skeleton, Host, C2),
                                            ok 
                                    end
                                ),
