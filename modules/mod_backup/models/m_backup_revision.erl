@@ -67,7 +67,11 @@ save_revision(Id, Props, Context) ->
                     ?BACKUP_TYPE_PROPS,
                     proplists:get_value(version, Props),
                     z_acl:user(Context),
-                    z_string:truncate(m_rsc:p_no_acl(z_acl:user(Context), title, Context), 60),
+                    z_string:truncate(
+                        z_trans:lookup_fallback(
+                            m_rsc:p_no_acl(z_acl:user(Context), title, Context),
+                            Context)
+                        , 60),
                     "erlang",
                     erlang:term_to_binary(Props, [compressed])
                 ],
