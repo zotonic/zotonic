@@ -21,7 +21,9 @@
 -export([
     init/1,
 	service_available/2,
-    resource_exists/2
+    resource_exists/2,
+    previously_existed/2,
+    moved_temporarily/2
 ]).
 
 -include_lib("webmachine_resource.hrl").
@@ -35,27 +37,26 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     ?WM_REPLY(true, Context1).
 
 resource_exists(ReqData, Context) ->
+    {false, ReqData, Context}.
+
+previously_existed(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
-    Id = z_context:get_q("id", ContextQs),
-    case m_rsc:exists(Id, ContextQs) of
-        false ->
-            ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs);
-        true ->
-            case m_category:is_a(m_rsc:p(Id, category_id, ContextQs), "website", ContextQs) of
-                true ->
-                    case m_rsc:p(Id, website, ContextQs) of
-                        undefined ->
-                            ?WM_REPLY(false, ContextQs);
-                        <<>> ->
-                            ?WM_REPLY(false, ContextQs);
-                        Url ->
-                            %% Redirect to the website.
-                            AbsUrl = binary_to_list(filter_unescape:unescape(z_context:abs_url(Url, ContextQs), Context)),
-                            Context3 = z_context:set_resp_header("Location", AbsUrl, ContextQs),
-                            ?WM_REPLY({halt, 301}, Context3)
-                    end;
-                _ ->
-                    ?WM_REPLY(false, ContextQs)
-            end
+    ContextQs = z_context:ensure_qs(
+                    z_context:continue_session(Context1)),
+    Id = m_rsc:rid(z_context:get_q("id", ContextQs), ContextQs),
+    Exists = m_rsc:exists(Id, ContextQs)
+             andalso z_acl:rsc_visible(Id, ContextQs),
+    ?WM_REPLY(Exists, ContextQs).
+
+moved_temporarily(ReqData, Context) ->
+    Id = m_rsc:rid(z_context:get_q("id", Context), Context),
+    case m_rsc:p(Id, website, Context) of
+        undefined ->
+            {false, ReqData, Context};
+        <<>> ->
+            {false, ReqData, Context};
+        Url ->
+            AbsUrl = iolist_to_binary(z_context:abs_url(z_html:unescape(Url), Context)),
+            {{true, AbsUrl}, ReqData, Context}
     end.
+
