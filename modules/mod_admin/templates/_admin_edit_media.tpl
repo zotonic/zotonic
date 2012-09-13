@@ -22,7 +22,7 @@
         <div class="pull-right">
             <a class="btn" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
             {% button   text=_"Replace this media item"
-                class="btn"
+                class="btn btn-primary"
     	    action={dialog_media_upload id=id action={update target="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} 
     	    disabled=not id.is_editable %}
 
@@ -35,7 +35,7 @@
     <div class="save-buttons">
         <div class="pull-right">
             {% button   text=_"Replace this media item"
-                class="btn"
+                class="btn btn-primary"
     	    action={dialog_media_upload id=id action={update target="media-edit-view" template="_admin_edit_media_view.tpl" id=id}} 
     	    disabled=not id.is_editable %}
 
