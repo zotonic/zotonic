@@ -11,9 +11,8 @@
         {% for code,lang in list %}
 		{% if all or lang.is_enabled %}
             <li>
-                <a id="{{ #lang }}" href="{% url language_select code=code p=m.req.raw_path %}">{% if code == z_language %}<i class="icon-ok"></i> {% endif %}{{ lang.language }}</a>
+                <a id="{{ #lang.code }}" href="{% url language_select code=code p=m.req.raw_path %}">{% if code == z_language %}<i class="icon-ok"></i> {% endif %}{{ lang.language }}</a>
             </li>
-        	{% wire id=#lang type="change" postback={set_language} delegate="mod_translation" %}
         {% endif %}
         {% endfor %}
         </ul>

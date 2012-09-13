@@ -54,9 +54,14 @@ moved_temporarily(ReqData, Context0) ->
                    true -> "/";
                    false -> Page
                end,
-    AbsUrl = z_context:abs_url(mod_translation:url_strip_language(Location), Context1),
+    AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location), Context1), Context1),
     ?WM_REPLY({true, AbsUrl}, Context1).
 
 moved_permanently(ReqData, Context) ->
     {false, ReqData, Context}.
+
+
+add_language(Url, Context) ->
+    Lang = z_convert:to_list(z_context:language(Context)),
+    iolist_to_binary([$/, Lang, Url]).
 
