@@ -650,6 +650,8 @@ sanitize_utf8(B) when is_binary(B) -> s_utf8(B, <<>>).
 
 %% @doc Truncate a string.  Append the '...' character at the place of break off.
 %% @spec truncate(String, int()) -> String
+truncate(undefined, _) ->
+	undefined;
 truncate(L, N) ->
 	truncate(L, N, "…").
 
@@ -745,6 +747,8 @@ truncate(L, N, Append) ->
     	get_entity(Rest, [C|Acc]).
 
 
+truncatewords(undefined, _) ->
+	undefined;
 truncatewords(S, Words) ->
     truncatewords(S, Words, "…").
 truncatewords(S, Words, Append) when is_binary(S) ->
