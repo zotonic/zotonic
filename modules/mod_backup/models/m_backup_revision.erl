@@ -58,6 +58,7 @@ save_revision(Id, Props, Context) ->
         LastVersion when LastVersion =/= undefined ->
             ok;
         _ ->
+            UserId = z_acl:user(Context),
             1 = z_db:q("
                 insert into backup_revision 
                     (rsc_id, type, version, user_id, user_name, data_type, data)
@@ -66,12 +67,12 @@ save_revision(Id, Props, Context) ->
                     Id, 
                     ?BACKUP_TYPE_PROPS,
                     proplists:get_value(version, Props),
-                    z_acl:user(Context),
+                    UserId,
                     z_string:truncate(
                         z_trans:lookup_fallback(
-                            m_rsc:p_no_acl(z_acl:user(Context), title, Context),
-                            Context)
-                        , 60),
+                            m_rsc:p_no_acl(UserId, title, Context),
+                            Context),
+                        60),
                     "erlang",
                     erlang:term_to_binary(Props, [compressed])
                 ],
@@ -79,6 +80,7 @@ save_revision(Id, Props, Context) ->
             ok = prune_revisions(Id, Context),
             ok
     end.
+
 
 get_revision(RevId, Context) ->
     case z_db:assoc_row("select * from backup_revision where id = $1", [RevId], Context) of
