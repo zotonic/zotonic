@@ -157,15 +157,20 @@ observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     
 observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispatch, Context) ->
     case Parts of
-        [First|Rest] when IsDir orelse Rest /= [] ->
-            case z_trans:is_language(First) of
-                true ->
-                    case lists:keyfind(list_to_atom(First), 1, get_enabled_languages(Context)) of
-                        false -> Dispatch;
-                        _ -> {Rest, [{z_language, First}|Args]}
-                    end;
+        % Special case for the 'id' controller
+        ["id",Other] ->
+            case z_utils:only_digits(Other) of
+                true -> Dispatch;
                 false ->
-                    Dispatch
+                    case is_enabled_language("id", Context) of
+                        true -> {[Other], [{z_language, "id"}|Args]};
+                        false -> Dispatch
+                    end
+            end;
+        [First|Rest] when IsDir orelse Rest /= [] ->
+            case is_enabled_language(First, Context) of
+                true -> {Rest, [{z_language, First}|Args]};
+                false -> Dispatch
             end;
         _ ->
             Dispatch
@@ -350,6 +355,18 @@ language_enable(Code, IsEnabled, Context) ->
 
 is_multiple_languages_config(Context) ->
     length(get_enabled_languages(Context)) > 1.
+
+
+is_enabled_language(Lang, Context) ->
+    case z_trans:is_language(Lang) of
+        true ->
+            case lists:keyfind(list_to_atom(Lang), 1, get_enabled_languages(Context)) of
+                false -> false;
+                _ -> true
+            end;
+        false ->
+            false
+    end.
 
 get_enabled_languages(Context) ->
     case z_memo:get('mod_translation$enabled_languages') of

@@ -520,24 +520,15 @@ wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     IsDir = lists:last(PathAsString) == ?SEPARATOR,
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString}, {Path, []}, Context),
-    case try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context) of
-        {no_dispatch_match, _, _} = NoMatch ->
-            % Try without rewrite
-            % This is needed for URIs like "id/123" where 'id' is matched to a language (Indonesian)
-            case try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path, [], extra_depth(Path, IsDir), Context) of
-                {no_dispatch_match, _, _} -> NoMatch;
-                Match -> Match
-            end;
-        Match ->
-            Match
-    end.
+    try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context).
 
-    % URIs that end with a trailing slash are implicitly one token
-    % "deeper" than we otherwise might think as we are "inside"
-    % a directory named by the last token.
-    extra_depth([], _IsDir) -> 1;
-    extra_depth(_Path, true) -> 1;
-    extra_depth(_, _) -> 0.
+% URIs that end with a trailing slash are implicitly one token
+% "deeper" than we otherwise might think as we are "inside"
+% a directory named by the last token.
+extra_depth([], _IsDir) -> 1;
+extra_depth(_Path, true) -> 1;
+extra_depth(_, _) -> 0.
+
 
 try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->
     {no_dispatch_match, PathTokens, Bindings};
