@@ -28,7 +28,7 @@ survey_is_submit(Qs, Context) ->
 	find_first_question(lists:reverse(Qs), Context).
 
 find_first_question([], _Context) ->
-	true;
+	false;
 find_first_question([Q|Qs], Context) ->
 	case z_notifier:first(#survey_is_submit{block=Q}, Context) of
 		undefined -> find_first_question(Qs, Context);
