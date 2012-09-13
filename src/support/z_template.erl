@@ -202,8 +202,8 @@ find_template_cat(File, Id, Context) ->
                 {[meta, category|_] = L, _Name} -> L;
                 {L, Name} -> L ++ [z_convert:to_atom(Name)]
             end,
-    Root = filename:rootname(File),
-    Ext = filename:extension(File),
+    Root = z_convert:to_list(filename:rootname(File)),
+    Ext = z_convert:to_list(filename:extension(File)),
     case lists:foldr(fun(Cat, {error, enoent}) ->
                             find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
                         (_Cat, Found) ->

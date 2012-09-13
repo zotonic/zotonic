@@ -79,7 +79,7 @@ find_ua_class(template, Class, Name, Context) ->
                     #module_index_key{
                         site=z_context:site(Context), 
                         type=template, 
-                        name=Name, 
+                        name=z_convert:to_list(Name), 
                         ua_class=Class
                     })
     of

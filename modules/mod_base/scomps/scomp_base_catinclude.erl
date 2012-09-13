@@ -48,8 +48,8 @@ render(Params, Vars, Context) ->
         true ->
             % Collect all templates, then render them
             IsA = m_rsc:is_a(Id, Context),
-            Root = filename:rootname(File),
-            Ext = filename:extension(File),
+            Root = z_convert:to_list(filename:rootname(File)),
+            Ext = z_convert:to_list(filename:extension(File)),
             Templates = lists:foldr(fun(Cat, Templates) -> 
                                         Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context1) 
                                     end,
