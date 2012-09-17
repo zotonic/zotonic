@@ -32,8 +32,12 @@
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
 		{% block content %}
 			{% block above %}
-				{% include "_breadcrumb.tpl" %}
-				{% include "_title.tpl" %}
+			<div class="page-title row-fluid">
+				<div class="{% if z_language|is_rtl %}span8{% endif %}">
+					{% include "_breadcrumb.tpl" %}
+					{% include "_title.tpl" %}
+				</div>
+			</div>
 			{% endblock %}
 			<div class="row-fluid">
 				<div class="span8 main">
