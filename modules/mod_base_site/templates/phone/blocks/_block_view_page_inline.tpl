@@ -22,5 +22,5 @@
 		{% else if blk.type == "text" %}
 			{% include "blocks/_block_view_text.tpl" %}
 		{% endif %}
-	{% endif %}
+	{% endfor %}
 </div>
