@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{#codemagic_dlg.code_title}</title>
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+	<script type="text/javascript" src="js/codemirror-compressed.js"></script>
+    <script type="text/javascript" src="js/codemagic.js"></script>
+    <script type="text/javascript" src="js/beautify.js"></script>
+    <script type="text/javascript" src="js/beautify-html.js"></script>
+    
+    <link rel="stylesheet" media="all" type="text/css" href="css/style.css"  />
+    <link rel="stylesheet" media="all" type="text/css" href="css/codemirror.css"  />
+    <link rel="stylesheet" media="all" type="text/css" href="css/default.css" />
+</head>
+
+<body onresize="resizeInputs();" style="display: none; overflow: hidden;">
+	<form name="source" onsubmit="saveContent(); return false;" action="#">
+		<div style="float: left" class="title"><label for="htmlSource">{#codemagic_dlg.code_label}</label></div>
+
+        <div class="editor-buttons">
+            <a id="undo" class="disabled" href="javascript: void(0)" title="{#codemagic_dlg.undo}" onclick="undo();"><img src="img/icons/undo.png" alt="{#codemagic_dlg.undo}" /></a>
+            <a id="redo" class="disabled" href="javascript: void(0)" title="{#codemagic_dlg.redo}" onclick="redo();"><img src="img/icons/redo.png" alt="{#codemagic_dlg.redo}" /></a>
+            <a id="search_replace" href="javascript: void(0)" title="{#codemagic_dlg.search_replace}" onclick="toggleSearch(this, 'searchWindow');"><img src="img/icons/lens.png" alt="{#codemagic_dlg.search_replace}" /></a>
+            <a id="reintendt" href="javascript: void(0)" title="{#codemagic_dlg.reintendt}" onclick="reIntendt('htmlSource');"><img src="img/icons/file.png" alt="{#codemagic_dlg.reintendt}" /></a>
+            <div style="clear: both;"></div>
+        </div>  
+        
+        <div id="wrapline" style="float: right">
+            <input type="checkbox" name="autocompletion" id="autocompletion" onclick="toggleAutocompletion(this);" class="wordWrapCode" checked="checked" /><label for="autocompletion">{#codemagic_dlg.toggle_autocompletion}</label> &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" name="highlighting" id="highlighting" onclick="toggleHighlighting(this, 'htmlSource');" class="wordWrapCode" checked="checked" /><label for="highlighting">{#codemagic_dlg.toggle_highlighting}</label>
+        </div>
+        <div style="clear: both;"></div>
+        
+
+        <div id="searchWindow" class="search-window" style="display: none;">
+            <h2>{#codemagic_dlg.search_replace}</h2>
+            <table>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td><label for="query">{#codemagic_dlg.search}</label>:</td>
+                    <td><input id="query" type="text" style="width: 150px" /></td>
+                </tr>
+                <tr>
+                    <td><label for="replace">{#codemagic_dlg.replace}</label>:</td>
+                    <td><input id="replace" type="text" style="width: 150px" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="left"><input onclick="searchCode(); return false;" type="submit" value="{#codemagic_dlg.search}" class="button" style="float: none" /></td>
+                    <td align="right"><input onclick="replaceCode(); return false;" type="submit" value="{#codemagic_dlg.replace}" class="button"  style="float: none" /></td>
+                </tr>
+            </table> 
+        </div>
+        
+        <textarea name="htmlSource" id="htmlSource" rows="15" cols="100" dir="ltr" class="htmlSource"></textarea>
+
+		<div class="mceActionPanel">
+			<input type="submit" role="button" name="insert" value="{#update}" id="insert" />
+			<input type="button" role="button" name="cancel" value="{#cancel}" onclick="tinyMCEPopup.close();" id="cancel" />
+		</div>
+	</form>
+</body>
+</html>

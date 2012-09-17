@@ -1,0 +1,98 @@
+.CodeMirror {
+  overflow: auto;
+  height: 90%;
+  line-height: 14px;
+  font-size: 13px;
+  font-family: monospace;
+background-color: #fff;
+border:1px solid #abc6dd; 
+  _position: relative; /* IE6 hack */
+}
+
+.CodeMirror-gutter {
+  position: absolute; left: 0; top: 0;
+  background-color: #f7f7f7;
+  border-right: 1px solid #eee;
+  min-width: 2em;
+  height: 100%;
+}
+.CodeMirror-gutter-text {
+  color: #aaa;
+  text-align: right;
+  padding: .4em .2em .4em .4em;
+}
+.CodeMirror-lines {
+  padding: .4em;
+}
+
+.CodeMirror pre {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border-width: 0; margin: 0; padding: 0; background: transparent;
+  font-family: inherit;
+}
+
+.CodeMirror pre.activeline {
+    background: none repeat scroll 0 0 #efefef !important;    
+}
+
+.CodeMirror-cursor {
+  z-index: 10;
+  position: absolute;
+  visibility: hidden;
+  border-left: 1px solid black !important;
+}
+.CodeMirror-focused .CodeMirror-cursor {
+  visibility: visible;
+}
+
+span.CodeMirror-selected {
+  background: #ccc !important;
+  color: HighlightText !important;
+}
+.CodeMirror-focused span.CodeMirror-selected {
+  background: Highlight !important;
+}
+
+.CodeMirror-matchingbracket {color: #000 !important; background-color: #a0e0fc !important;}
+.CodeMirror-nonmatchingbracket {color: #f22 !important;}
+                  
+.CodeMirrorToolBar
+{
+	border:1px solid #abc6dd;
+	border-bottom: 0;
+	background:#e5effd;
+	margin:0px;
+	padding:0;
+}
+.CMBtn
+{
+	border:1px solid #b0c8e8;
+	background:#cadcf0;
+	font :700 10px verdana;
+	margin:5px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	color: #6497d9;
+}
+
+.searched {
+    background-color: yellow;
+}
+
+.completions {
+    position: absolute;
+    border: 1px solid #000000;
+    background-color: #F0F0EE;
+    padding: 3px; 
+}
+
+.completions select {
+    background-color: #FFFFFF;
+    border: 1px solid #B5A69C;
+    width: 200px; 
+    height: 144px;
+}
