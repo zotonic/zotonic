@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-09-17 14:58+0100\n"
+"PO-Revision-Date: 2012-09-17 15:24+0100\n"
 "Last-Translator: Ivette <schedule@online.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,63 +20,63 @@ msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:53
 msgid "Apr"
-msgstr "Kwi"
+msgstr "Apr"
 
 #: modules/mod_l10n/support/l10n_date.erl:38
 msgid "April"
-msgstr "Kwiecień"
+msgstr "เมษายน"
 
 #: modules/mod_l10n/support/l10n_date.erl:57
 msgid "Aug"
-msgstr "Sie"
+msgstr "Aug"
 
 #: modules/mod_l10n/support/l10n_date.erl:42
 msgid "August"
-msgstr "Sierpień"
+msgstr "สิงหาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:61
 msgid "Dec"
-msgstr "Gru"
+msgstr "Dec"
 
 #: modules/mod_l10n/support/l10n_date.erl:46
 msgid "December"
-msgstr "Grudzień"
+msgstr "ธันวาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:51
 msgid "Feb"
-msgstr "Lut"
+msgstr "Feb"
 
 #: modules/mod_l10n/support/l10n_date.erl:36
 msgid "February"
-msgstr "Luty"
+msgstr "กุมภาพันธ์"
 
 #: modules/mod_l10n/support/l10n_date.erl:29
 msgid "Friday"
-msgstr "Piątek"
+msgstr "วันศุกร์"
 
 #: modules/mod_l10n/support/l10n_date.erl:50
 msgid "Jan"
-msgstr "Sty"
+msgstr "Jan"
 
 #: modules/mod_l10n/support/l10n_date.erl:35
 msgid "January"
-msgstr "Styczen"
+msgstr "มกราคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:56
 msgid "Jul"
-msgstr "Lip"
+msgstr "Jul"
 
 #: modules/mod_l10n/support/l10n_date.erl:41
 msgid "July"
-msgstr "Lipiec"
+msgstr "กรกฎาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:55
 msgid "Jun"
-msgstr "Cze"
+msgstr "Jun"
 
 #: modules/mod_l10n/support/l10n_date.erl:40
 msgid "June"
-msgstr "Czerwiec"
+msgstr "มิถุนายน"
 
 #: modules/mod_l10n/support/l10n_date.erl:52
 msgid "Mar"
@@ -84,65 +84,65 @@ msgstr "Mar"
 
 #: modules/mod_l10n/support/l10n_date.erl:37
 msgid "March"
-msgstr "Marzec"
+msgstr "มีนาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:39
 #: modules/mod_l10n/support/l10n_date.erl:54
 msgid "May"
-msgstr "Maj"
+msgstr "พฤษภาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:25
 msgid "Monday"
-msgstr "Poniedziałek"
+msgstr "วันจันทร์"
 
 #: modules/mod_l10n/support/l10n_date.erl:60
 msgid "Nov"
-msgstr "Lis"
+msgstr "Nov"
 
 #: modules/mod_l10n/support/l10n_date.erl:45
 msgid "November"
-msgstr "Listopad"
+msgstr "พฤศจิกายน"
 
 #: modules/mod_l10n/support/l10n_date.erl:59
 msgid "Oct"
-msgstr "Paz"
+msgstr "Oct"
 
 #: modules/mod_l10n/support/l10n_date.erl:44
 msgid "October"
-msgstr "Październik"
+msgstr "ตุลาคม"
 
 #: modules/mod_l10n/support/l10n_date.erl:30
 msgid "Saturday"
-msgstr "Sobota"
+msgstr "วันเสาร์"
 
 #: modules/mod_l10n/support/l10n_date.erl:58
 msgid "Sep"
-msgstr "Wrz"
+msgstr "Sep"
 
 #: modules/mod_l10n/support/l10n_date.erl:43
 msgid "September"
-msgstr "Wrzesień"
+msgstr "กันยายน"
 
 #: modules/mod_l10n/support/l10n_date.erl:31
 msgid "Sunday"
-msgstr "Niedziela"
+msgstr "วันอาทิตย์"
 
 #: modules/mod_l10n/support/l10n_date.erl:28
 msgid "Thursday"
-msgstr "Czwartek"
+msgstr "วันพฤหัสบดี"
 
 #: modules/mod_l10n/support/l10n_date.erl:26
 msgid "Tuesday"
-msgstr "Wtorek"
+msgstr "วันอังคาร"
 
 #: modules/mod_l10n/support/l10n_date.erl:27
 msgid "Wednesday"
-msgstr "Środa"
+msgstr "วันพุธ"
 
 #: modules/mod_l10n/support/l10n_date.erl:20
 msgid "midnight"
-msgstr "północ"
+msgstr "midnight"
 
 #: modules/mod_l10n/support/l10n_date.erl:22
 msgid "noon"
-msgstr "południe"
+msgstr "noon"
