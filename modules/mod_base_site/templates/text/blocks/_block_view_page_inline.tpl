@@ -6,7 +6,7 @@
 	{% for blk in id.blocks %}
 		{% if blk.type == "header" %}
 			{% include "blocks/_block_view_header.tpl" %}
-		{% else if blk.type == "text" %}
+		{% elseif blk.type == "text" %}
 			{% include "blocks/_block_view_text.tpl" %}
 		{% endif %}
 	{% endfor %}
