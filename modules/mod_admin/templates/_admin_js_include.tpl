@@ -5,7 +5,8 @@
     "js/apps/z.widgetmanager.js"
 
     "js/apps/admin-common.js"
-    "js/apps/z.adminwidget.js"
+    "js/modules/tiny-init.js"
+    "js/modules/z.adminwidget.js"
     
     "js/jquery.ui.nestedSortable.js"
     
