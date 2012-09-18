@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Get core models
+
+# /path/to/zotonic/src/models/m_model_name.erl
+for f in $ZOTONIC_SRC/src/models/m_*
+do
+    dir=${0%/*}
+    mod=core
+    file=${f##*/m_}
+    model=${file%.erl}
+    stub=$dir/model_$model.rst
+    doc=$dir/doc-$model.rst
+    # no meta, since this is a 'core' model, and as such shouldn't be listed in any module's meta file
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this model, edit the doc-$model.rst file, which is included in this file.
+
+$model
+${model//?/=}
+
+* Module: $mod
+
+.. include:: doc-$model.rst
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done
+
+
+# Get models from modules
+
+# /path/to/zotonic/modules/<mod>/models/m_model_name.erl
+for f in `find $ZOTONIC_SRC/modules -name m_\*`
+do
+    read -r mod model <<EOF
+`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/m_\(.*\).erl,\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$model
+    stub=$dir/model_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this model, edit the doc-$model.rst file, which is included in this file.
+
+$model
+${model//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$model.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Model: :doc:\`models/model_$model\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done

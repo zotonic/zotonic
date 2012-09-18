@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# /path/to/zotonic/modules/<mod>/services/service_service_name.erl
+for f in `find $ZOTONIC_SRC/modules -name service_\*`
+do
+    read -r mod service <<EOF
+`echo $f | sed -e 's,.*/mod_\([^/]*\).*/service_\1_\(.*\).erl,mod_\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$service
+    stub=$dir/service_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this service, edit the doc-$base.rst file, which is included in this file.
+
+$service
+${service//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$base.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Service: :doc:\`services/service_$service\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done

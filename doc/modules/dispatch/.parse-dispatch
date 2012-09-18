@@ -1,0 +1,16 @@
+#!/usr/bin/env escript
+%% -*- erlang -*-
+
+main([File]) ->
+    {ok, [D]} = file:consult(File),
+    L = [[Name, Path, Rsrc, Args] || {Name, Path, Rsrc, Args} <- D],
+    %% strip newlines and indentation resulting from the ~p format
+    %% would use ~w, if only it wouldn't print strings as lists of integers...
+    S = [[re:replace(
+            io_lib:format("~p", [M]), 
+            "\n\s*", 
+            "", 
+            [global, {return, list}])  
+          || M <- A] || A <- L
+        ],
+    [io:format("~s	~s	~s	~s~n", Args) || Args <- S].

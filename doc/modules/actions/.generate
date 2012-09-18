@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# /path/to/zotonic/modules/<mod>/scomps/scomp_<mod>_scomp_name.erl
+for f in `find $ZOTONIC_SRC/modules -name action_\*`
+do
+    read -r mod action <<EOF
+`echo $f | sed -e 's,.*/mod_\([^/]*\).*/action_\1_\(.*\).erl,mod_\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$action
+    stub=$dir/action_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this action, edit the doc-$action.rst file, which is included in this file.
+
+$action
+${action//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$action.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Action: :doc:\`actions/action_$action\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done

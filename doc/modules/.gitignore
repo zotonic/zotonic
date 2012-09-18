@@ -1,0 +1,3 @@
+*.rst
+!doc-*.rst
+meta-*

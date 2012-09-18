@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# /path/to/zotonic/modules/<mod>/filters/filter_filter_name.erl
+for f in `find $ZOTONIC_SRC/modules -name filter_\*`
+do
+    read -r mod filter <<EOF
+`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/filter_\(.*\).erl,\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$filter
+    stub=$dir/filter_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this filter, edit the doc-$filter.rst file, which is included in this file.
+
+$filter
+${filter//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$filter.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Filter: :doc:\`filters/filter_$filter\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done

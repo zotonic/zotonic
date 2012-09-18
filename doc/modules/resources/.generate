@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# /path/to/zotonic/modules/<mod>/resources/resource_resource_name.erl
+for f in `find $ZOTONIC_SRC/modules -name resource_\*`
+do
+    read -r mod resource <<EOF
+`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/resource_\(.*\).erl,\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$resource
+    stub=$dir/resource_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this resource, edit the doc-$resource.rst file, which is included in this file.
+
+$resource
+${resource//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$resource.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Resource: :doc:\`resources/resource_$resource\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done
