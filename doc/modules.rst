@@ -17,6 +17,15 @@ Actions
    modules/actions/action_*
 
 
+Controllers
+===========
+
+.. toctree::
+   :glob:
+
+   modules/controllers/controller_*
+
+
 Dispatch rules
 ==============
 
@@ -42,15 +51,6 @@ Models
    :glob:
 
    modules/models/model_*
-
-
-Resources
-=========
-
-.. toctree::
-   :glob:
-
-   modules/resources/resource_*
 
 
 Services

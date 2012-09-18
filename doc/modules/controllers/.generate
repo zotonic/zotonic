@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# /path/to/zotonic/modules/<mod>/controllers/controller_controller_name.erl
+for f in `find $ZOTONIC_SRC/modules -name controller_\*`
+do
+    read -r mod controller <<EOF
+`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/controller_\(.*\).erl,\1 \2,'`
+EOF
+
+    dir=${0%/*}
+    base=$controller
+    stub=$dir/controller_$base.rst
+    meta=$dir/../meta-$mod.rst
+    doc=$dir/doc-$base.rst
+
+    cat <<EOF > $stub
+.. This file is generated.
+   To document this controller, edit the doc-$controller.rst file, which is included in this file.
+
+$controller
+${controller//?/=}
+
+* Module: :doc:\`../$mod\`
+
+.. include:: doc-$controller.rst
+
+EOF
+
+    cat <<EOF >> $meta
+* Controller: :doc:\`controllers/controller_$controller\`
+
+EOF
+
+    if [ ! -e $doc ]; then 
+        echo "New stub: $doc"
+        cat <<EOF > $doc
+
+Not yet documented.
+
+EOF
+    fi
+
+done
