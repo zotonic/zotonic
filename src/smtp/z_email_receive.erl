@@ -52,7 +52,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                                         ]
 			                        }},
 			                        Context),
-				z_notifier:notify(#email_received{
+				z_notifier:first(#email_received{
 										localpart=LocalPart,
 										localtags=LocalTags,
 										domain=Domain,
