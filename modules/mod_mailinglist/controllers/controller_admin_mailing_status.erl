@@ -28,12 +28,12 @@
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->
-    {Context2, Id} = resource_admin_edit:ensure_id(?WM_REQ(ReqData, Context)),
+    {Context2, Id} = controller_admin_edit:ensure_id(?WM_REQ(ReqData, Context)),
     z_acl:wm_is_authorized([{use, mod_mailinglist}, {view, Id}], Context2).
 
 
 resource_exists(ReqData, Context) ->
-    {Context2, Id} = resource_admin_edit:ensure_id(?WM_REQ(ReqData, Context)),
+    {Context2, Id} = controller_admin_edit:ensure_id(?WM_REQ(ReqData, Context)),
     case Id of
         undefined -> ?WM_REPLY(false, Context2);
         _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)

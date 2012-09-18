@@ -69,7 +69,7 @@ provide_content(ReqData, Context) ->
     
 % @doc Logoff and reset the rememberme cookie.
 reset_rememberme_cookie_and_logoff(Context) ->
-    ContextNoCookie = resource_logon:reset_rememberme_cookie(Context),
+    ContextNoCookie = controller_logon:reset_rememberme_cookie(Context),
     ContextLogOff = z_auth:logoff(ContextNoCookie),
     {ok, ContextNoSession} = z_session_manager:stop_session(ContextLogOff),
     ContextNoSession.

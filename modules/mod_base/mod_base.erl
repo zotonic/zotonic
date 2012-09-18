@@ -78,7 +78,7 @@ observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) -
 observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
     [].
 
-%% @doc Check if there is a resource or template matching the path.
+%% @doc Check if there is a controller or template matching the path.
 observe_dispatch(#dispatch{path=Path}, Context) ->
     case m_rsc:page_path_to_id(Path, Context) of
         {ok, Id} ->
@@ -92,7 +92,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
             case z_module_indexer:find(template, Template, Context) of
                 {ok, _} ->
                     {ok, #dispatch_match{
-                        mod=resource_template,
+                        mod=controller_template,
                         mod_opts=[{template, Template}, {ssl, any}],
                         bindings=[{path, Path}, {is_static, true}]
                     }};
@@ -108,7 +108,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                             case z_module_indexer:find(template, Template1, Context) of
                                 {ok, _} ->
                                     {ok, #dispatch_match{
-                                        mod=resource_template,
+                                        mod=controller_template,
                                         mod_opts=[{template, Template1}, {ssl, any}],
                                         bindings=[{path, Path}, {is_static, true}]
                                     }};

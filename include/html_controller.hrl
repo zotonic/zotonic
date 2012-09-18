@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Empty HTML controller, defining the basic callbacks needed for a html page.  All is needed is the 'html' function.
-%% Make a new resource (resource_plop.erl) by:
+%% Make a new controller (controller_plop.erl) by:
 %%
-%% -module(resource_plop).
+%% -module(controller_plop).
 %% -author("Your Name <me@example.com>").
 %% -include_lib("html_controller.hrl").
 %% 

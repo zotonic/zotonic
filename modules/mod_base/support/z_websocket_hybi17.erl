@@ -123,11 +123,11 @@ unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, Context, Acc) ->
 
 % Text frame
 handle_frame(RemainingData, 1, Message, Socket, Context) ->
-    resource_websocket:handle_message(Message, Context),
+    controller_websocket:handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Binary frame
 handle_frame(RemainingData, 2, Message, Socket, Context) ->
-    resource_websocket:handle_message(Message, Context),
+    controller_websocket:handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Close control frame
 handle_frame(_RemainingData, 8, _Message, Socket, Context) ->

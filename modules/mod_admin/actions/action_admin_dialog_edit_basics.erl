@@ -75,7 +75,7 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     Actions = proplists:get_value(actions, Args, []),
 
     Post = z_context:get_q_all_noz(Context),
-    Props = resource_admin_edit:filter_props(Post),
+    Props = controller_admin_edit:filter_props(Post),
     Props1 = proplists:delete("id", Props),
 
     case m_rsc:update(Id, Props1, Context) of

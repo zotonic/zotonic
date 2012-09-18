@@ -96,7 +96,7 @@ handle_message(Msg, Context) ->
     {ResultScript, ResultContext} = try
         % Enable caching lookup values, essential for fast data handling
         z_depcache:in_process(true),
-        resource_postback:process_postback(Context1)
+        controller_postback:process_postback(Context1)
     catch
         Error:X ->
             ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context1),

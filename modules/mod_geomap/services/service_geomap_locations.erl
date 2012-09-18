@@ -68,7 +68,7 @@ add_locations([Id|Ids], Acc, Context) ->
 
 
 get_ids(Context) ->
-    QueryArgs = resource_api:get_q_all(Context),
+    QueryArgs = controller_api:get_q_all(Context),
     case QueryArgs of
         [{"id", RscId}] ->
             get_from_id(RscId, Context);

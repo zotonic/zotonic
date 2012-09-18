@@ -28,7 +28,7 @@
 -include_lib("zotonic.hrl").
 
 process_get(_ReqData, Context) ->
-    Q1 = resource_api:get_q_all(Context),
+    Q1 = controller_api:get_q_all(Context),
     try
         Q = search_query:parse_request_args(Q1),
         S = z_search:search({'query', Q}, Context),

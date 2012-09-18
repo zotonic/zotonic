@@ -79,14 +79,14 @@ handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
     % A packet of <<0,255>> signifies that the ua wants to close the connection
     ua_close_request;
 handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    resource_websocket:handle_message(Msg, Context),
+    controller_websocket:handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
     handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
 
 %% Extract frame with length bytes
 handle_data(Msg, 0, T, Socket, Context) ->
-    resource_websocket:handle_message(Msg, Context),
+    controller_websocket:handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
     handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);

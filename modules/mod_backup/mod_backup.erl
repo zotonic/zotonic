@@ -75,7 +75,7 @@ observe_rsc_update(_, Acc, _Context) ->
     Acc.
 
 
-%% @doc Callback for resource_file_readonly.  Check if the file exists.
+%% @doc Callback for controller_file_readonly.  Check if the file exists.
 file_exists(File, Context) ->
     PathFile = filename:join([dir(Context), File]),
     case filelib:is_regular(PathFile) of 
@@ -86,7 +86,7 @@ file_exists(File, Context) ->
     end.
 
 
-%% @doc Callback for resource_file_readonly.  Check if access is allowed.
+%% @doc Callback for controller_file_readonly.  Check if access is allowed.
 file_forbidden(_File, Context) ->
     not z_acl:is_allowed(use, mod_admin_backup, Context).
 
