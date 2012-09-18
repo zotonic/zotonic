@@ -19,20 +19,19 @@
 -module(resource_admin_edit).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([
-    resource_exists/2,
-    is_authorized/2,
-    event/2,
-    filter_props/1,
-	ensure_id/1
-]).
+-export([resource_exists/2,
+         is_authorized/2,
+         event/2,
+         filter_props/1,
+         ensure_id/1
+        ]).
 
 -include_lib("resource_html.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->
     {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
-    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], Context2).
+    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context2).
 
 
 resource_exists(ReqData, Context) ->
@@ -41,17 +40,17 @@ resource_exists(ReqData, Context) ->
         undefined -> ?WM_REPLY(false, Context2);
         _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
     end.
-        
+
 
 html(Context) ->
     Id = z_context:get(id, Context),
     Blocks = z_notifier:foldl(#admin_edit_blocks{id=Id}, [], Context),
     Vars = [
-        {id, Id},
-        {blocks, lists:sort(Blocks)}
-    ],
+            {id, Id},
+            {blocks, lists:sort(Blocks)}
+           ],
     Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
-	z_context:output(Html, Context).
+    z_context:output(Html, Context).
 
 
 %% @doc Fetch the (numerical) page id from the request
@@ -92,9 +91,9 @@ event(#submit{message=rscform}, Context) ->
                             Context4 = z_render:set_value("slug",  m_rsc:p(Id, slug, Context3), Context3),
                             Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context4)), Context4),
                             Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4b)) of
-                                true ->  z_render:wire("delete-button", {disable, []}, Context4b);
-                                false -> z_render:wire("delete-button", {enable, []}, Context4b)
-                            end,
+                                           true ->  z_render:wire("delete-button", {disable, []}, Context4b);
+                                           false -> z_render:wire("delete-button", {enable, []}, Context4b)
+                                       end,
                             Title = ?__(m_rsc:p(Id, title, Context5), Context5),
                             Context6 = z_render:growl(["Saved “", Title, "”."], Context5),
                             case proplists:is_defined("save_duplicate", Post) of
@@ -149,15 +148,15 @@ event(#postback{message={query_preview, Opts}}, Context) ->
 %% @doc Remove some properties that are part of the postback
 filter_props(Fs) ->
     Remove = [
-        "triggervalue",
-        "postback",
-        "z_trigger_id",
-        "z_pageid",
-        "z_submitter",
-        "trigger_value",
-        "save_view",
-        "save_duplicate",
-        "save_stay"
-    ],
+              "triggervalue",
+              "postback",
+              "z_trigger_id",
+              "z_pageid",
+              "z_submitter",
+              "trigger_value",
+              "save_view",
+              "save_duplicate",
+              "save_stay"
+             ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
-    %[ {list_to_existing_atom(K), list_to_binary(V)} || {K,V} <- Props ].
+%%[ {list_to_existing_atom(K), list_to_binary(V)} || {K,V} <- Props ].

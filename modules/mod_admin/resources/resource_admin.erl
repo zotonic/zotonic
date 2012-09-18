@@ -19,15 +19,13 @@
 -module(resource_admin).
 -author("Tim Benniks <tim@timbenniks.com>").
 
--export([
-    is_authorized/2
-]).
+-export([is_authorized/2
+        ]).
 
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, z_context:get(acl_module, Context, mod_admin), ReqData, Context).
-
+    z_acl:wm_is_authorized(use, z_context:get(acl_module, Context, mod_admin), admin_logon, ReqData, Context).
 
 html(Context) ->
     Template = z_context:get(template, Context, "admin.tpl"),
