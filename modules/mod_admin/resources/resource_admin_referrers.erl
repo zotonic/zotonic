@@ -20,15 +20,14 @@
 -module(resource_admin_referrers).
 -author("Marc Worrell <marc@worrell.nl").
 
--export([
-    resource_exists/2,
-    is_authorized/2
-]).
+-export([resource_exists/2,
+         is_authorized/2
+        ]).
 
 -include_lib("resource_html.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_admin, ReqData, Context).
+    z_acl:wm_is_authorized(use, mod_admin, admin_logon, ReqData, Context).
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
@@ -44,7 +43,7 @@ resource_exists(ReqData, Context) ->
 
 html(Context) ->
     Vars = [
-        {id, z_context:get(id, Context)}
-    ],
+            {id, z_context:get(id, Context)}
+           ],
     Html = z_template:render("admin_referrers.tpl", Vars, Context),
-	z_context:output(Html, Context).
+    z_context:output(Html, Context).
