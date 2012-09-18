@@ -1,2 +1,0 @@
-{packages,[]}.
-{modules,[atom_convert,atom_convert_tests,mod_atom,resource_atom_entry]}.

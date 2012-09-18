@@ -1,2 +1,0 @@
-{packages,[]}.
-{modules,[action_logging_addlog,m_log,m_log_email,mod_logging]}.

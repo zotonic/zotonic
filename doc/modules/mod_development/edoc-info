@@ -1,5 +1,0 @@
-{packages,[]}.
-{modules,[action_development_development_templates_stream,mod_development,
-          resource_wmtrace,resource_wmtrace_conf,
-          service_development_recompile,z_code_reloader,
-          z_filewatcher_inotify]}.

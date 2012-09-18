@@ -1,4 +1,0 @@
-{packages,[]}.
-{modules,[action_admin_modules_module_rescan,
-          action_admin_modules_module_toggle,mod_admin_modules,
-          resource_admin_module_manager]}.

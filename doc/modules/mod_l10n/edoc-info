@@ -1,2 +1,0 @@
-{packages,[]}.
-{modules,[l10n_date,l10n_iso2country,m_l10n,mod_l10n]}.

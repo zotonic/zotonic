@@ -1,3 +1,0 @@
-{packages,[]}.
-{modules,[m_facebook,mod_facebook,resource_admin_facebook,
-          resource_facebook_authorize,resource_facebook_redirect]}.

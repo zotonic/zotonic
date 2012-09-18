@@ -1,2 +1,0 @@
-{packages,[]}.
-{modules,[import_csv,mod_import_csv,parse_csv]}.

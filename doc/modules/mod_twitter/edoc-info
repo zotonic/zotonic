@@ -1,3 +1,0 @@
-{packages,[]}.
-{modules,[filter_twitter,mod_twitter,oauth_twitter_client,
-          resource_twitter_authorize,resource_twitter_redirect]}.

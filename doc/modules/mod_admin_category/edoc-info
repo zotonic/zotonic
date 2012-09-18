@@ -1,4 +1,0 @@
-{packages,[]}.
-{modules,[action_admin_category_dialog_category_add,
-          action_admin_category_dialog_category_delete,mod_admin_category,
-          resource_admin_category_sorter]}.

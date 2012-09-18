@@ -1,3 +1,0 @@
-{packages,[]}.
-{modules,[action_signal_connect,action_signal_disconnect,action_signal_emit,
-          m_signal,mod_signal,mod_signal_tests,z_connect]}.

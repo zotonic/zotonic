@@ -1,4 +1,0 @@
-{packages,[]}.
-{modules,[action_admin_predicate_dialog_predicate_delete,
-          action_admin_predicate_dialog_predicate_new,
-          action_admin_predicate_predicate_delete,mod_admin_predicate]}.

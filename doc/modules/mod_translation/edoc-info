@@ -1,4 +1,0 @@
-{packages,[]}.
-{modules,[filter_is_rtl,filter_language,mod_translation,
-          scomp_translation_admin_translation_statistics,translation_po,
-          translation_scan]}.
