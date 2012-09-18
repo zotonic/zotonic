@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
- {admin_comments, ["admin", "comments"], resource_admin_comments, []},
- {admin_comments_settings, ["admin", "comments", "settings"], resource_admin_comments_settings, []}
+ {admin_comments, ["admin", "comments"], controller_admin_comments, []},
+ {admin_comments_settings, ["admin", "comments", "settings"], controller_admin_comments_settings, []}
 ].

@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 %% Dispatch rule for a predicate list page
 [
- {admin_predicate,      ["admin", "predicate"],     resource_admin,                [{template, "admin_predicate.tpl"}, {selected, "predicate"}]},
- {admin_predicate_edit, ["admin", "predicate", id], resource_admin_predicate_edit, []}
+ {admin_predicate,      ["admin", "predicate"],     controller_admin,                [{template, "admin_predicate.tpl"}, {selected, "predicate"}]},
+ {admin_predicate_edit, ["admin", "predicate", id], controller_admin_predicate_edit, []}
 ].

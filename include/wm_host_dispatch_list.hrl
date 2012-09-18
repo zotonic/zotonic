@@ -5,6 +5,6 @@
 %%              requests for this hostname are not redirected. '*.' is replaced by a random hostname.
 %% hostalias  = list of accepted aliases, lowercase (eg. [ "example.com", "example.net" ])
 %% redirect   = boolean, set to true to redirect GET requests to the main host
-%% dispatch_list = list of {pathspec, resource, args}
+%% dispatch_list = list of {pathspec, controller, args}
 
 -record(wm_host_dispatch_list, {host, hostname, streamhost, smtphost, hostalias, redirect, dispatch_list}).

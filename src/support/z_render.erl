@@ -449,7 +449,7 @@ growl(Text, Type, Stay, Context) ->
 %% @doc Make an encoded string containing information which module and function to call.
 make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
     Delegate1 = case Delegate of
-                    undefined -> z_context:get_resource_module(Context);
+                    undefined -> z_context:get_controller_module(Context);
                     _         -> z_convert:to_atom(Delegate)
                 end,
     PostbackInfo = {EventType, TriggerId, TargetId, Tag, Delegate1},

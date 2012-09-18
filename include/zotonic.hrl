@@ -33,8 +33,8 @@
         %% Webmachine request data (only set when this context is used because of a request)
         wm_reqdata=undefined :: #wm_reqdata{} | undefined,
         
-        %% The resource responsible for handling this request
-        resource_module=undefined :: atom(),
+        %% The controller responsible for handling this request
+        controller_module=undefined :: atom(),
         
         %% The page and session processes associated with the current request
         session_pid=undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)

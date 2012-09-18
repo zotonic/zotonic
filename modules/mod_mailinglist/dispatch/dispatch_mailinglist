@@ -1,18 +1,18 @@
 %% -*- mode: erlang -*-
 [
- {admin_mailinglist,            ["admin", "mailinglists"],                    resource_admin_mailinglist,            []},
+ {admin_mailinglist,            ["admin", "mailinglists"],                    controller_admin_mailinglist,            []},
  
- {admin_mailing_preview,        ["admin", "mailing", "preview", id],          resource_admin_mailing_preview,        []},
- {admin_mailing_status,         ["admin", "mailing", id],                     resource_admin_mailing_status,         []},
+ {admin_mailing_preview,        ["admin", "mailing", "preview", id],          controller_admin_mailing_preview,        []},
+ {admin_mailing_status,         ["admin", "mailing", id],                     controller_admin_mailing_status,         []},
  
- {admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], resource_admin_mailinglist_recipients, []},
+ {admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], controller_admin_mailinglist_recipients, []},
  
- {mailinglist_confirm,          ["mailinglist", "confirm", confirm_key],      resource_template,                     [{template, "mailinglist_confirm.tpl"}]},
- {mailinglist_unsubscribe,      ["mailinglist", "unsubscribe", confirm_key],  resource_template,                     [{template, "mailinglist_unsubscribe.tpl"}]},
+ {mailinglist_confirm,          ["mailinglist", "confirm", confirm_key],      controller_template,                     [{template, "mailinglist_confirm.tpl"}]},
+ {mailinglist_unsubscribe,      ["mailinglist", "unsubscribe", confirm_key],  controller_template,                     [{template, "mailinglist_unsubscribe.tpl"}]},
  
- {mailinglist_export,           ["mailinglist", "export", id],                resource_mailinglist_export,           []},
+ {mailinglist_export,           ["mailinglist", "export", id],                controller_mailinglist_export,           []},
  
  %% Normal page to show a resource.
- {mailinglist,                  ["mailinglist", id],                          resource_page,                         [ {template, {cat, "mailinglist.tpl"}} ]},
- {mailinglist,                  ["mailinglist", id, slug],                    resource_page,                         [ {template, {cat, "mailinglist.tpl"}} ]}
+ {mailinglist,                  ["mailinglist", id],                          controller_page,                         [ {template, {cat, "mailinglist.tpl"}} ]},
+ {mailinglist,                  ["mailinglist", id, slug],                    controller_page,                         [ {template, {cat, "mailinglist.tpl"}} ]}
 ].

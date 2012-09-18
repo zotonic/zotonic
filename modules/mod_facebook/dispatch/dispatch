@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 [
- {admin_facebook,     ["admin", "facebook"],     resource_admin_facebook, []},
- {facebook_authorize, ["facebook", "authorize"], resource_facebook_authorize, []},
- {facebook_redirect,  ["facebook", "redirect"],  resource_facebook_redirect, []}
+ {admin_facebook,     ["admin", "facebook"],     controller_admin_facebook, []},
+ {facebook_authorize, ["facebook", "authorize"], controller_facebook_authorize, []},
+ {facebook_redirect,  ["facebook", "redirect"],  controller_facebook_redirect, []}
 ].

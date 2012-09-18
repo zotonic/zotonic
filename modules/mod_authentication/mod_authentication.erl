@@ -58,7 +58,7 @@ observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
     end.
     
 observe_auth_autologon(auth_autologon, Context) ->
-    case resource_logon:get_rememberme_cookie(Context) of
+    case controller_logon:get_rememberme_cookie(Context) of
         undefined -> undefined;
         {ok, UserId} -> {ok, UserId}
     end.

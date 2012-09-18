@@ -1,26 +1,26 @@
 %% -*- mode: erlang -*-
 [
  %% The home page, just shows the "home.tpl" template.
- {home, [], resource_template, [ {template, "home.tpl"} ]},
+ {home, [], controller_template, [ {template, "home.tpl"} ]},
  
  %% Normal page to show a resource.
- {page, ["page", id],       resource_page, [ {template, {cat, "page.tpl"}} ]},
- {page, ["page", id, slug], resource_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id],       controller_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, slug], controller_page, [ {template, {cat, "page.tpl"}} ]},
  
  %% Pages when part of a menu
- {page, ["page", id, "in-menu", in_menu],       resource_page, [ {template, {cat, "page.tpl"}} ]},
- {page, ["page", id, "in-menu", in_menu, slug], resource_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, "in-menu", in_menu],       controller_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, "in-menu", in_menu, slug], controller_page, [ {template, {cat, "page.tpl"}} ]},
  
  %% Pages when part of a collection
- {page, ["page", id, "in-collection", in_collection],       resource_page, [ {template, {cat, "page.tpl"}} ]},
- {page, ["page", id, "in-collection", in_collection, slug], resource_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, "in-collection", in_collection],       controller_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, "in-collection", in_collection, slug], controller_page, [ {template, {cat, "page.tpl"}} ]},
  
  %% Show the map of an item
- {map, ["map", id], resource_page, [ {template, {cat, "map.tpl"}} ]},
+ {map, ["map", id], controller_page, [ {template, {cat, "map.tpl"}} ]},
  
  %% Redirect controller for resource of type 'website'
- {website, ["redirect", id, slug], resource_website_redirect, []},
+ {website, ["redirect", id, slug], controller_website_redirect, []},
  
  %% Simple search page
- {search, ["search"], resource_template, [ {template, "search.tpl"} ]}
+ {search, ["search"], controller_template, [ {template, "search.tpl"} ]}
 ].

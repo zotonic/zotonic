@@ -54,8 +54,8 @@
 
     get_reqdata/1,
     set_reqdata/2,
-    get_resource_module/1,
-    set_resource_module/2,
+    get_controller_module/1,
+    set_controller_module/2,
 
     get_q/2,
     get_q/3,
@@ -173,7 +173,7 @@ new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{wm_reqdata=ReqData, resource_module=Module, host=site(ReqData)}),
+    Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
     set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
 
 
@@ -551,14 +551,14 @@ set_reqdata(ReqData = #wm_reqdata{}, Context) ->
     Context#context{wm_reqdata=ReqData}.
 
 
-%% @spec get_resource_module(Context) -> term()
+%% @spec get_controller_module(Context) -> term()
 %% @doc Get the resource module handling the request.
-get_resource_module(Context) ->
-    Context#context.resource_module.
+get_controller_module(Context) ->
+    Context#context.controller_module.
 
-%% @spec set_resource_module(Module::atom(), Context) -> NewContext
-set_resource_module(Module, Context) ->
-    Context#context{resource_module=Module}.
+%% @spec set_controller_module(Module::atom(), Context) -> NewContext
+set_controller_module(Module, Context) ->
+    Context#context{controller_module=Module}.
 
 
 %% @spec get_q(Key::string(), Context) -> Value::string() | undefined

@@ -50,7 +50,7 @@ render(Params, _Vars, Context) ->
         _ ->
 
 			Delegate1	 = case Delegate of
-							undefined -> z_context:get_resource_module(Context);
+							undefined -> z_context:get_controller_module(Context);
 							_ -> z_convert:to_atom(Delegate)
 						   end,
 

@@ -1,12 +1,12 @@
 %% -*- mode: erlang -*-
 %% Dispatch rules for mod_zotonic.
 [
- {home,         [],                         resource_page,      [ {template, "home.tpl"}, {id, page_home} ]},
- {article,      ["article", id, slug],      resource_page,      [ {template, "article.tpl"}, {cat, article} ]},
- {keyword,      ["by_keyword", id, slug],   resource_page,      [ {template, "by_keyword.tpl"} ]},
+ {home,         [],                         controller_page,      [ {template, "home.tpl"}, {id, page_home} ]},
+ {article,      ["article", id, slug],      controller_page,      [ {template, "article.tpl"}, {cat, article} ]},
+ {keyword,      ["by_keyword", id, slug],   controller_page,      [ {template, "by_keyword.tpl"} ]},
  
- {page_contact, ["contact"],                resource_page,      [ {template, "contact.tpl"}, {id, page_contact} ]},
+ {page_contact, ["contact"],                controller_page,      [ {template, "contact.tpl"}, {id, page_contact} ]},
  
- {archives_y,   ["archives", year],         resource_template,  [ {template, "archives.tpl"}, {cat, article} ]},
- {archives_m,   ["archives", year, month],  resource_template,  [ {template, "archives.tpl"}, {cat, article} ]}
+ {archives_y,   ["archives", year],         controller_template,  [ {template, "archives.tpl"}, {cat, article} ]},
+ {archives_m,   ["archives", year, month],  controller_template,  [ {template, "archives.tpl"}, {cat, article} ]}
 ].

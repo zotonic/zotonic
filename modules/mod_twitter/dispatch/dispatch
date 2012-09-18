@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
- {twitter_authorize, ["twitter", "authorize"], resource_twitter_authorize, []},
- {twitter_redirect,  ["twitter", "redirect"],  resource_twitter_redirect,  []}
+ {twitter_authorize, ["twitter", "authorize"], controller_twitter_authorize, []},
+ {twitter_redirect,  ["twitter", "redirect"],  controller_twitter_redirect,  []}
 ].

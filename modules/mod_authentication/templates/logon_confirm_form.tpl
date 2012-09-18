@@ -2,7 +2,7 @@
 	wire id="logon_confirm_form"
 	type="submit"
 	postback={logon_confirm on_success=on_success on_success={dialog_close}}
-	delegate="resource_logon"
+	delegate="controller_logon"
 %}
 <form id="logon_confirm_form" method="post" action="postback">
 	<h1 class="logon_header">{_ Please confirm your _} <span>{{ m.config.site.title.value|default:"Zotonic" }} password</span></h1>

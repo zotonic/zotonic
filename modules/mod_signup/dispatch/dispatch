@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 [
- {signup,         ["signup"],                 resource_signup,         [{ssl, true}]},
- {signup_confirm, ["signup", "confirm"],      resource_signup_confirm, [{ssl, true}]},
- {signup_confirm, ["signup", "confirm", key], resource_signup_confirm, [{ssl, true}]}
+ {signup,         ["signup"],                 controller_signup,         [{ssl, true}]},
+ {signup_confirm, ["signup", "confirm"],      controller_signup_confirm, [{ssl, true}]},
+ {signup_confirm, ["signup", "confirm", key], controller_signup_confirm, [{ssl, true}]}
 ].
