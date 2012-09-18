@@ -19,8 +19,7 @@
 -module(resource_admin_media_preview).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([
-         init/1,
+-export([init/1,
          resource_exists/2,
          is_authorized/2,
          content_types_provided/2,
@@ -32,10 +31,9 @@
 
 init([]) -> {ok, []}.
 
-
 is_authorized(ReqData, _Args) ->
     Context = z_context:new(ReqData, ?MODULE),
-    z_acl:wm_is_authorized(use, mod_admin, ReqData, Context).
+    z_acl:wm_is_authorized(use, mod_admin, admin_logon, ReqData, Context).
 
 resource_exists(ReqData, Context) ->
     case z_context:get_q("id", Context) of
@@ -58,10 +56,8 @@ resource_exists(ReqData, Context) ->
             end
     end.
 
-
 content_types_provided(ReqData, Context) ->
     {[{"image/jpeg", to_image}], ReqData, Context}.
-
 
 to_image(ReqData, Context) ->
     Opts = [{mediaclass, "admin-editor"}],
