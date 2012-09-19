@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% @doc Server supplying random strings and unique ids
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,11 +47,13 @@
     fix_seed/0
 ]).
 
--record(state, {}).
+-record(state, {is_fixed = false, unique_counter = 0}).
 -include("zotonic.hrl").
 
-start_tests() -> gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
-start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+start_tests() -> 
+    gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
+start_link() -> 
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %% @doc Return an unique id to be used in javascript or html.  No randomness, just unique in the cluster.
 unique() -> 
@@ -72,16 +74,19 @@ identifier() ->
 identifier(Len) -> 
     gen_server:call(?MODULE, {identifier, Len}).
 
-optid(undefined) -> identifier(?OPTID_LENGTH);
-optid(false) -> identifier(?OPTID_LENGTH);
-optid(Id) -> Id.
+optid(undefined) ->
+    identifier(?OPTID_LENGTH);
+optid(false) ->
+    identifier(?OPTID_LENGTH);
+optid(Id) ->
+    Id.
 
 %% @spec sign_key(Context) -> binary()
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
     case m_config:get_value(site, sign_key, Context) of
         undefined ->
-            Key = list_to_binary(generate_id(50)),
+            Key = list_to_binary(generate_id(true, 50)),
             m_config:set_value(site, sign_key, Key, Context),
             Key;
         SignKey -> 
@@ -94,7 +99,7 @@ sign_key(Context) ->
 sign_key_simple(Context) -> 
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
-            Key = list_to_binary(generate_id(10)),
+            Key = list_to_binary(generate_id(true, 10)),
             m_config:set_value(site, sign_key_simple, Key, Context),
             Key;
         SignKey ->
@@ -115,48 +120,77 @@ fix_seed() ->
 
 
 init(Props) ->
-    {A1,A2,A3} = case proplists:get_value(fixed_seed, Props, false) of
-                     true -> {1,2,3};
-                     false -> erlang:now()
-                 end,
-    random:seed(A1,A2,A3),
-    {ok, #state{}}.
+    case proplists:get_value(fixed_seed, Props, false) of
+        true -> 
+            random:seed(1,2,3),
+            {ok, #state{is_fixed=true, unique_counter=0}};
+        false ->
+            {ok, #state{is_fixed=false, unique_counter=0}}
+    end.
 
+%%% Really random generators below. These are used for production Zotonic.
 
-handle_call(unique, _From, State) ->
+handle_call(unique, _From, #state{is_fixed=false} = State) ->
     Id = make_unique(),
     {reply, Id, State};
 
-handle_call(number, _From, State) ->
+handle_call(number, _From, #state{is_fixed=true} = State) ->
+    Number = crypto:rand_uniform(1,1000000000), 
+    {reply, Number, State};
+
+handle_call({number, Max}, _From, #state{is_fixed=false} = State) ->
+    Number = crypto:rand_uniform(1, Max+1),
+    {reply, Number, State};
+
+handle_call({identifier, Len}, _From, #state{is_fixed=false} = State) ->
+    Id = generate_identifier(true, Len),
+    {reply, Id, State};
+
+handle_call({id, Len}, _From, #state{is_fixed=false} = State) ->
+    Id = generate_id(true, Len),
+    {reply, Id, State};
+
+
+%%% Fixed/predictable generators below. These are used when testing Zotonic.
+
+handle_call(unique, _From, #state{is_fixed=true, unique_counter=N} = State) ->
+    Id = make_unique_fixed(N),
+    {reply, Id, State#state{unique_counter=N+1}};
+
+handle_call(number, _From, #state{is_fixed=true} = State) ->
     Number = random:uniform(1000000000), 
     {reply, Number, State};
 
-handle_call({number, Max}, _From, State) ->
-    Number = random:uniform(Max), 
+handle_call({number, Max}, _From, #state{is_fixed=true} = State) ->
+    Number = random:uniform(Max),
     {reply, Number, State};
 
-handle_call({identifier, Len}, _From, State) ->
-    Id = generate_identifier(Len),
+handle_call({identifier, Len}, _From, #state{is_fixed=true} = State) ->
+    Id = generate_identifier(false, Len),
     {reply, Id, State};
 
-handle_call({id, Len}, _From, State) ->
-    Id = generate_id(Len),
+handle_call({id, Len}, _From, #state{is_fixed=true} = State) ->
+    Id = generate_id(false, Len),
     {reply, Id, State};
 
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
-
 handle_cast(fix_seed, State) -> 
     random:seed(1,2,3),
-    {noreply, State};
-handle_cast(_Msg, State) -> {noreply, State}.
+    {noreply, State#state{is_fixed=true, unique_counter=0}};
+handle_cast(_Msg, State) -> 
+    {noreply, State}.
 
 handle_info(_Msg, State) -> {noreply, State}.
 terminate(_Reason, _State) -> ok.
 code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
 
+
+%% @doc Create a predictable temporary id, safe to use in html and javascript
+make_unique_fixed(N) ->
+    [ $t | integer_to_list(N) ].
 
 %% @doc Create an unique temporary id, safe to use in html and javascript
 make_unique() ->
@@ -174,27 +208,40 @@ unique1([_|T], Acc) ->
 
 %% @spec generate_id(int()) -> string()
 %% @doc Generate a random key
-generate_id(Len) ->
-    generate_id(Len, []).
-
-generate_id(0, Key) ->
-    Key;
-generate_id(Len, Key) ->
-    Char = case random:uniform(62) of
-                C when C =< 26 -> C - 1  + $a;
-                C when C =< 52 -> C - 27 + $A;
-                C -> C - 53 + $0
-            end,
-    generate_id(Len-1, [Char|Key]).
-
+generate_id(IsUnique, Len) ->
+    [ case N of
+          C when C < 26 -> C  + $a;
+          C when C < 52 -> C - 26 + $A;
+          C -> C - 52 + $0
+      end
+      || N <- random_list(IsUnique, 62, Len)
+    ].
 
 %% @spec generate_identifier(int()) -> string()
 %% @doc Generate a random identifier, case insensitive, only letters
-generate_identifier(Len) ->
-    generate_identifier(Len, []).
+generate_identifier(IsUnique, Len) ->
+    [ N + $a || N <- random_list(IsUnique, 26, Len) ].
 
-generate_identifier(0, Key) ->
-    Key;
-generate_identifier(Len, Key) ->
-    generate_identifier(Len-1, [random:uniform(26)-1+$a|Key]).
+random_list(false, Radix, Length) ->
+    not_so_random_list(Radix, Length, []);
+random_list(true, Radix, Length) ->
+    N = (radix_bits(Radix) * Length + 7) div 8,
+    Val = bin2int(crypto:rand_bytes(N)),
+    int2list(Val, Radix, Length, []).
 
+not_so_random_list(_Radix, 0, Acc) ->
+    Acc;
+not_so_random_list(Radix, N, Acc) ->
+    not_so_random_list(Radix, N-1, [ random:uniform(Radix)-1 | Acc ]).
+
+int2list(_, _, 0, Acc) -> 
+    Acc;
+int2list(Val, Radix, Length, Acc) ->
+    int2list(Val div Radix, Radix, Length-1, [ Val rem Radix | Acc]).
+
+bin2int(Bin) ->
+    lists:foldl(fun(N, Acc) -> Acc * 256 + N end, 0, binary_to_list(Bin)).
+
+radix_bits(N) when N =< 16 -> 4;
+radix_bits(N) when N =< 26 -> 5;
+radix_bits(N) when N =< 64 -> 6.
