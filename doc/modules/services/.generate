@@ -18,6 +18,9 @@ EOF
 .. This file is generated.
    To document this service, edit the doc-$base.rst file, which is included in this file.
 
+.. index:: service; $base
+   single: $mod; service, $base
+
 $service
 ${service//?/=}
 

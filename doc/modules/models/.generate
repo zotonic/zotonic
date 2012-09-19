@@ -17,6 +17,9 @@ do
 .. This file is generated.
    To document this model, edit the doc-$model.rst file, which is included in this file.
 
+.. index:: model; $model
+   single: $mod; model, $model
+
 $model
 ${model//?/=}
 
@@ -56,6 +59,9 @@ EOF
     cat <<EOF > $stub
 .. This file is generated.
    To document this model, edit the doc-$model.rst file, which is included in this file.
+
+.. index:: model; $base
+   single: $mod; model, $base
 
 $model
 ${model//?/=}

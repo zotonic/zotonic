@@ -17,6 +17,9 @@ EOF
 .. This file is generated.
    To document this action, edit the doc-$action.rst file, which is included in this file.
 
+.. index:: action; $base
+   single: $mod; action, $base
+
 $action
 ${action//?/=}
 

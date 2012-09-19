@@ -24,6 +24,10 @@ EOF
 .. This file is generated.
    To document this dispatch, edit the doc-$base.rst file, which is included in this file.
 
+.. index::
+   single: dispatch; $mod, $dispatch
+   single: $mod; dispatch, $dispatch,
+
 $dispatch ($mod)
 ${dispatch//?/=}==${mod//?/=}=
 

@@ -17,6 +17,9 @@ EOF
 .. This file is generated.
    To document this controller, edit the doc-$controller.rst file, which is included in this file.
 
+.. index:: controller; $base
+   single: $mod; controller, $base
+
 $controller
 ${controller//?/=}
 

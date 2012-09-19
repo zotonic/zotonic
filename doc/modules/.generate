@@ -13,6 +13,8 @@ do
 .. This file is generated.
    To document this module, edit the doc-$mod.rst file, which is included in this file.
 
+.. index:: module; $mod
+
 $mod
 ${mod//?/=}
 
