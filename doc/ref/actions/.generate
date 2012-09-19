@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$action
     stub=$dir/action_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -19,18 +18,14 @@ EOF
 
 .. index:: action; $base
    single: $mod; action, $base
+.. _action-$action:
 
 $action
 ${action//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$action.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Action: :doc:\`actions/action_$action\`
 
 EOF
 

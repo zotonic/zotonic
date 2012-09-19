@@ -156,4 +156,4 @@ doctest:
 
 .PHONY: stubs
 stubs:
-	export ZOTONIC_SRC=.. ; for f in `find modules -name .generate | sort`; do $$f || exit 1; done
+	export ZOTONIC_SRC=.. ; for f in `find ref -name .generate`; do $$f || exit 1; done

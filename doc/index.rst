@@ -13,7 +13,7 @@ Contents:
 
    tutorials
    manuals
-   reference
+   ref/index
 
 
 Indices and tables

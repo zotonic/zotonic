@@ -1,3 +1,4 @@
 *.rst
 !doc-*.rst
+!index.rst
 meta-*

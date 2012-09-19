@@ -5,8 +5,18 @@ Reference
 All the nitty gritty details when the big picture has settled.
 
 .. toctree::
+   :maxdepth: 1
 
-   modules
+   modules/index
+   actions/index
+   controllers/index
+   dispatch/index
+   filters/index
+   models/index
+   services/index
+   scomps/index
+   templates/index
+   validators/index
 
 
 EDoc reference

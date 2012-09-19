@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$filter
     stub=$dir/filter_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -19,18 +18,14 @@ EOF
 
 .. index:: filter; $base
    single: $mod; filter, $base
+.. _filter-$base:
 
 $filter
 ${filter//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$filter.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Filter: :doc:\`filters/filter_$filter\`
 
 EOF
 

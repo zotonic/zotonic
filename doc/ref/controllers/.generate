@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$controller
     stub=$dir/controller_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -19,18 +18,14 @@ EOF
 
 .. index:: controller; $base
    single: $mod; controller, $base
+.. _controller-$controller:
 
 $controller
 ${controller//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$controller.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Controller: :doc:\`controllers/controller_$controller\`
 
 EOF
 

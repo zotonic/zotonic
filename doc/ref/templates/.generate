@@ -9,7 +9,6 @@ EOF
     dir=${0%/*}
     base=$template${device:+-}$device
     stub=$dir/template_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
     title="$template${device:+ (}$device${device:+)}"
 
@@ -19,20 +18,16 @@ EOF
 
 .. index:: template; $base
    single: $mod; template, $base
+.. _template-$base:
 
 $title
 ${title//?/=}
 ${device:+
 * Device: $device
 }
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$base.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Template: :doc:\`templates/template_$base\`
 
 EOF
 

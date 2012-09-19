@@ -19,6 +19,7 @@ do
 
 .. index:: model; $model
    single: $mod; model, $model
+.. _model-$model:
 
 $model
 ${model//?/=}
@@ -53,7 +54,6 @@ EOF
     dir=${0%/*}
     base=$model
     stub=$dir/model_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -62,18 +62,14 @@ EOF
 
 .. index:: model; $base
    single: $mod; model, $base
+.. _model-$model:
 
 $model
 ${model//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$model.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Model: :doc:\`models/model_$model\`
 
 EOF
 

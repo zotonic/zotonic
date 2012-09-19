@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$scomp
     stub=$dir/scomp_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -19,18 +18,14 @@ EOF
 
 .. index:: scomp; $base
    single: $mod; scomp, $base
+.. _scomp-$scomp:
 
 $scomp
 ${scomp//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$base.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Scomp: :doc:\`scomps/scomp_$scomp\`
 
 EOF
 

@@ -6,7 +6,6 @@ do
     dir=${0%/*}
     mod=${f##*/}
     stub=$dir/$mod.rst
-    meta=$dir/meta-$mod.rst
     doc=$dir/doc-$mod.rst
 
     cat <<EOF > $stub
@@ -14,17 +13,12 @@ do
    To document this module, edit the doc-$mod.rst file, which is included in this file.
 
 .. index:: module; $mod
+.. _$mod:
 
 $mod
 ${mod//?/=}
 
-.. include:: meta-$mod.rst
 .. include:: doc-$mod.rst
-
-EOF
-
-    cat <<EOF > $meta
-.. Generated meta information for $mod.
 
 EOF
 

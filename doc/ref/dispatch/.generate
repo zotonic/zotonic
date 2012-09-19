@@ -27,11 +27,12 @@ EOF
 .. index::
    single: dispatch; $mod, $dispatch
    single: $mod; dispatch, $dispatch,
+.. _dispatch-$base:
 
 $dispatch ($mod)
 ${dispatch//?/=}==${mod//?/=}=
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. csv-table:: Dispatch rules
    :delim: tab
@@ -39,11 +40,6 @@ ${dispatch//?/=}==${mod//?/=}=
    :file: meta-$base.csv
 
 .. include:: doc-$base.rst
-
-EOF
-
-    cat <<EOF >> $dir/../meta-$mod.rst
-* Dispatch: :doc:\`dispatch/dispatch_$base\`
 
 EOF
 

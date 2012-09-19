@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$service
     stub=$dir/service_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
 
@@ -20,18 +19,14 @@ EOF
 
 .. index:: service; $base
    single: $mod; service, $base
+.. _service-$base:
 
 $service
 ${service//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$base.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Service: :doc:\`services/service_$service\`
 
 EOF
 

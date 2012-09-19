@@ -10,7 +10,6 @@ EOF
     dir=${0%/*}
     base=$validator
     stub=$dir/validator_$base.rst
-    meta=$dir/../meta-$mod.rst
     doc=$dir/doc-$base.rst
 
     cat <<EOF > $stub
@@ -19,18 +18,14 @@ EOF
 
 .. index:: validator; $base
    single: $mod; validator, $base
+.. _validator-$base:
 
 $validator
 ${validator//?/=}
 
-* Module: :doc:\`../$mod\`
+* Module: :ref:\`$mod\`
 
 .. include:: doc-$base.rst
-
-EOF
-
-    cat <<EOF >> $meta
-* Validator: :doc:\`validators/validator_$validator\`
 
 EOF
 
