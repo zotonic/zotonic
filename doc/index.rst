@@ -16,9 +16,10 @@ Contents:
    reference
 
 
-Index and search
+Indices and tables
 ==================
 
 * :ref:`genindex`
+* :doc:`glossary`
 * :ref:`search`
 
