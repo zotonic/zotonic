@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   tutorials
-   manuals
+   tutorials/index
+   manuals/index
    ref/index
 
 

@@ -1,0 +1,5 @@
+
+Categories
+==========
+
+Lorem ipsum...

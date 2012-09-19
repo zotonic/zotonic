@@ -1,5 +1,5 @@
-Zotonic installation
-======================
+Installation
+============
 
 You will need to:
 
@@ -70,12 +70,12 @@ Steps to install Zotonic
 
 
 
-Operating system specific notes:
+Operating system specific notes
 -------------------------------
 
 
 Ubuntu ( >= 10.04)
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Erlang can be installed from a custom PPA by running:
 
@@ -85,7 +85,7 @@ sudo apt-get install erlang-base postgresql imagemagick
 
 
 Ubuntu 9.04 (jaunty)
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 You'll need to build erlang from source. Before building, make sure
 you install these packages:
@@ -98,7 +98,8 @@ sudo apt-get install postgresql-8.4 imagemagick
 
 
 Debian (lenny)
---------------------
+^^^^^^^^^^^^^^
+
 You'll need to build erlang from source. Before building, make sure
 you install these packages:
 
@@ -113,15 +114,19 @@ Afterwards, for a quick setup of zotonic and postgres you can use the
 following script:
 https://raw.github.com/zotonic/zotonic/master/zotonic_install
 
+
 FreeBSD
--------
+^^^^^^^
+
 If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
 (check with 'make --version', which should give you GNU, and version
 info) If you're not running GNU-make as a default, edit the Makefile
 to run with 'gmake' (make sure gmake is available first).
 
+
 Windows
--------
+^^^^^^^
+
 Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
 ImageMagick do work on Windows, so, if you're adventurous, it should
@@ -132,7 +137,7 @@ batch-scripts which are supposed to work on Windows.
 
 
 Mac OS X
---------
+^^^^^^^^
 
 With MacPorts you can install Erlang and ImageMagick using the
 following commands:
