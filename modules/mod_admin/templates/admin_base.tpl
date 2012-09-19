@@ -29,7 +29,7 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body>
+    <body class="{% block bodyclass %}{% endblock %}">
 
 	{% wire name="adminwidget_toggle" action={adminwidget_toggle} %}
 

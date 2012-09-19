@@ -4,6 +4,8 @@
 {_ Admin log on _}
 {% endblock %}
 
+{% block bodyclass %}noframe{% endblock %}
+
 {% block navigation %}
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">

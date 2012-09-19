@@ -20,12 +20,22 @@ limitations under the License.
 
 /* bootstrap structure
 --------------------------------------------------------- */
+body {
+    background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1;
+}
+
 body > div.container {
-    margin-top: 60px;
+    margin-top: 40px;
+    background: white;
+    padding: 20px;
 }
 
 hr {
     width: 100%;
+}
+
+body.noframe > div.container {
+    background: transparent;
 }
 
 /* nav 
@@ -37,7 +47,9 @@ div.navbar .brand {
     padding-top: 7px;
     padding-bottom: 0px;
 }
-
+div.navbar-fixed-top div.navbar-inner {
+    height: 40px;
+}
 
 /* widget
 --------------------------------------------------------- */
