@@ -258,7 +258,7 @@ handle_get(Prop, State) ->
 default(ssl) -> {ok, false};
 default(ssl_cert) -> {ok, filename:join([z_utils:lib_dir(priv), "ssl"])};
 default(ssl_key) -> {ok, filename:join([z_utils:lib_dir(priv), "ssl"])};
-default(password) -> {ok, generate_id(8)};
+default(password) -> {ok, generate_id(12)};
 default(listen_port) -> {ok, 8000};
 default(listen_port_ssl) -> {ok, 8443};
 default(listen_ip) -> {ok, any};
@@ -292,7 +292,7 @@ generate_id(Len) ->
 generate_id(0, Key) ->
     Key;
 generate_id(Len, Key) ->
-    Char = case random:uniform(62) of
+    Char = case crypto:rand_uniform(1,63) of
                 C when C =< 26 -> C - 1  + $a;
                 C when C =< 52 -> C - 27 + $A;
                 C -> C - 53 + $0
