@@ -1,7 +1,10 @@
 #!/bin/bash
 
+all=${0%/*}/meta-all-dispatch.csv
+rm $all
+
 # /path/to/zotonic/modules/<mod>/dispatchs/dispatch
-for f in `find $ZOTONIC_SRC/modules -name \*dispatch\* -type f`
+for f in `find $ZOTONIC_SRC/modules -name \*dispatch\* -type f | sort`
 do
     read -r mod dispatch <<EOF
 `echo $f | sed -e 's,.*/\(mod_[^/]*\).*/dispatch/\(.*\),\1 \2,'`
@@ -19,6 +22,10 @@ EOF
         cat $meta
         exit 1
     fi
+
+    cat <<EOF - $meta >> $all
+**$mod** / $dispatch
+EOF
 
     cat <<EOF > $stub
 .. This file is generated.
