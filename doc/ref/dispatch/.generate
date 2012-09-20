@@ -3,31 +3,34 @@
 all=${0%/*}/meta-all-dispatch.csv
 rm $all
 
-# /path/to/zotonic/modules/<mod>/dispatchs/dispatch
-for f in `find $ZOTONIC_SRC/modules -name \*dispatch\* -type f | sort`
+# /path/to/zotonic/modules/<mod>/dispatch/*
+for d in `find $ZOTONIC_SRC/modules -name dispatch -type d | sort`
 do
-    read -r mod dispatch <<EOF
+    for f in $d/*
+    do
+
+        read -r mod dispatch <<EOF
 `echo $f | sed -e 's,.*/\(mod_[^/]*\).*/dispatch/\(.*\),\1 \2,'`
 EOF
 
-    dir=${0%/*}
-    base=$mod-$dispatch
-    stub=$dir/dispatch_$base.rst
-    meta=$dir/meta-$base.csv
-    doc=$dir/doc-$base.rst
+        dir=${0%/*}
+        base=$mod-$dispatch
+        stub=$dir/dispatch_$base.rst
+        meta=$dir/meta-$base.csv
+        doc=$dir/doc-$base.rst
 
-    $dir/.parse-dispatch $f > $meta
-    if [ $? -ne 0 ] ; then
-        echo "error: parse dispatch failed for $f:"
-        cat $meta
-        exit 1
-    fi
+        $dir/.parse-dispatch $f > $meta
+        if [ $? -ne 0 ] ; then
+            echo "error: parse dispatch failed for $f:"
+            cat $meta
+            exit 1
+        fi
 
-    cat <<EOF - $meta >> $all
+        cat <<EOF - $meta >> $all
 **$mod** / $dispatch
 EOF
 
-    cat <<EOF > $stub
+        cat <<EOF > $stub
 .. This file is generated.
    To document this dispatch, edit the doc-$base.rst file, which is included in this file.
 
@@ -50,13 +53,14 @@ ${dispatch//?/=}==${mod//?/=}=
 
 EOF
 
-    if [ ! -e $doc ]; then
-        echo "New stub: $doc"
-        cat <<EOF > $doc
+        if [ ! -e $doc ]; then
+            echo "New stub: $doc"
+            cat <<EOF > $doc
 
 Not yet documented.
 
 EOF
-    fi
-
+        fi
+        
+    done
 done
