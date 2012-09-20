@@ -21,7 +21,7 @@
                                 predicate="depiction"
                                 actions=[
                                     {postback postback={reload_media rsc_id=id div_id=["links-",id|make_list,"-depiction"]}
-                                              delegate="resource_admin_edit"}
+                                              delegate="controller_admin_edit"}
                                 ]}
             %}
     </div>

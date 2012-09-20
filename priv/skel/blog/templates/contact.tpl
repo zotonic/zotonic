@@ -2,7 +2,7 @@
 
 {% block below_body %}
 
-{% wire id="contact-form" type="submit" postback={contact} delegate="resource_default_contact" %}
+{% wire id="contact-form" type="submit" postback={contact} delegate="controller_default_contact" %}
 <form id="contact-form" method="post" action="postback" class="form">
 
 	<div class="control-group">

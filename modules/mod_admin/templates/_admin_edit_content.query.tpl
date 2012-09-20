@@ -19,7 +19,7 @@
     	<label class="control-label" for="query">{_ Query _}</label>
     	<div class="controls">
     	    <textarea id="{{ #query }}" name="query" rows="15">{{ r.query }}</textarea>
-    		{% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview} delegate="resource_admin_edit" %}
+    		{% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview} delegate="controller_admin_edit" %}
     	</div>
     </div>
     

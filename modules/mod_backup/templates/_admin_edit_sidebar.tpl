@@ -2,6 +2,7 @@
 
 {% block widget_title %}{_ Backup &amp; Restore _}{% endblock %}
 {% block widget_show_minimized %}true{% endblock %}
+{% block widget_id %}admin_backup_sidebar{% endblock %}
 
 {% block widget_content %}
 <div class="pull-right">

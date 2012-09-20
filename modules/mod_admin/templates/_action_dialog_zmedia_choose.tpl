@@ -23,7 +23,7 @@
                 delegate="action_admin_zmedia_choose"}
 	        action={postback
 	        postback={reload_media rsc_id=id div_id=media_div_id}
- 	        delegate="resource_admin_edit"}
+ 	        delegate="controller_admin_edit"}
                 }
                 %}
             </div>
@@ -46,7 +46,7 @@
                 target=#suggestions 
                 action_with_id={with_args action={link subject_id=subject_id predicate="depiction" element_id=element_id} arg={object_id select_id}
                 }
-	        action={postback postback={reload_media rsc_id=id div_id=media_div_id} delegate="resource_admin_edit"}
+	        action={postback postback={reload_media rsc_id=id div_id=media_div_id} delegate="controller_admin_edit"}
                 action_with_id={with_args action={zmedia_has_chosen} arg={id select_id}}
                 action={dialog_close}
 

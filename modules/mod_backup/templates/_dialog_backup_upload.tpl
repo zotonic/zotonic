@@ -1,4 +1,4 @@
-{% wire id=#form type="submit" postback={restore id=id} delegate=`resource_admin_backup` %}
+{% wire id=#form type="submit" postback={restore id=id} delegate=`controller_admin_backup` %}
 <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
 	<p>{_ Select the backup file you want to upload. The file must be a .bert file. _}</p>
 

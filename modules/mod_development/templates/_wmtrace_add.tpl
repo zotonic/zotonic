@@ -1,7 +1,7 @@
 
 <p>Please specify the new trace rule.</p>
 
-{% wire id=#form type="submit" postback={add} delegate="resource_wmtrace_conf" %}
+{% wire id=#form type="submit" postback={add} delegate="controller_wmtrace_conf" %}
 <form id="{{ #form }}" method="POST" action="postback">
 
 	<div>

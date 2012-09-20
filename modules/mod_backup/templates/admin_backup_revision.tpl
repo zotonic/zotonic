@@ -107,14 +107,14 @@ $('#revisions a').click(function(event) {
 		z_notify("rev-diff", { 
 			a: $(checked.get(0)).attr('href'), 
 			b: $(checked.get(1)).attr('href'), 
-			z_delegate: 'resource_admin_backup_revision' 
+			z_delegate: 'controller_admin_backup_revision' 
 		});
 	} else if (checked.length == 1) {
 		$(checked.get(0)).addClass("first");
 
 		z_notify("rev-diff", { 
 			a: $(checked.get(0)).attr('href'), 
-			z_delegate: 'resource_admin_backup_revision' 
+			z_delegate: 'controller_admin_backup_revision' 
 		});
 	}
 	event.preventDefault();

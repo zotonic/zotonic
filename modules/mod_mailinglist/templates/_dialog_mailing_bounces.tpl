@@ -13,16 +13,16 @@
     <li id="recipient-{{ rid }}" class="clearfix">
         <span class="zp-15">
             <input id="{{ #check.rid }}" type="checkbox" class="do_fieldreplace" {% if is_enabled %}checked="checked"{% endif %} />
-            {% wire id=#check.rid postback={recipient_is_enabled_toggle recipient_id=rid} delegate="resource_admin_mailinglist_recipients" %}
+            {% wire id=#check.rid postback={recipient_is_enabled_toggle recipient_id=rid} delegate="controller_admin_mailinglist_recipients" %}
         </span>
         <span class="zp-75">
             <input id="{{ #change.rid }}" type="text" name="email" value="{{ email|escape }}" style="width: 240px;" />
             {% validate id=#change.rid name="email" type={presence} type={email} %}
-            {% wire type="change" id=#change.rid postback={recipient_change_email recipient_id=rid} delegate="resource_admin_mailinglist_recipients" %}
+            {% wire type="change" id=#change.rid postback={recipient_change_email recipient_id=rid} delegate="controller_admin_mailinglist_recipients" %}
         </span>
         <span class="button-area">
             {% button text=_"edit" %}
-            {% button text=_"delete" postback={recipient_delete recipient_id=rid} delegate="resource_admin_mailinglist_recipients" %}
+            {% button text=_"delete" postback={recipient_delete recipient_id=rid} delegate="controller_admin_mailinglist_recipients" %}
         </span>
     </li>
     {% endfor %}

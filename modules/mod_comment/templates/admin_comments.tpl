@@ -34,7 +34,7 @@
                         {% button class="btn btn-mini"
                            text=_"delete"
                            action={confirm text=_"Are you sure you wish to delete that comment?"
-                           action={postback delegate="resource_admin_comments"
+                           action={postback delegate="controller_admin_comments"
                                             postback={comment_delete id=id on_success={slide_fade_out target=#comment.id}}}} %}
                     </div>
                     {% if comment.user_id %}
