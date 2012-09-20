@@ -1,3 +1,4 @@
+.. _manual-templates:
 
 Templates
 =========
@@ -45,11 +46,20 @@ Filters
 
 Likewise...
 
+.. _manual-actions:
 
 Actions
 ^^^^^^^
 
-Ditto.
+Attach AJAX and jQuery handlers to HTML elements and events.
+
+Actions are the basis of all interactivity on a Zotonic web page.
+
+Actions can be connected to HTML elements or Javascript events using the :ref:`scomp-wire` scomp.
+
+Actions range from a simple jQuery :ref:`action-show` to Ajax :ref:`action-postback`\s that can trigger many other actions. The server also replies to a :term:`postback` or :term:`Comet` push with actions to be executed on the browser.
+
+.. seealso:: listing of all :ref:`actions`.
 
 
 Validators
