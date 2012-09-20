@@ -19,6 +19,8 @@ Glossary
    Action
       An action is functionality that can be attached to a HTML element or event. Actions are wired to an element or event. Think of showing dialogs, posting forms, hiding elements etc.
 
+      See also the section on :ref:`manual-actions` in the templates manual.
+
    Tag
       The template systems provides tags which function as simple programming constructs. For instance, the if tag can be used for boolean tests and the for tag allows looping. The zotonic templating system compiles the tags found in a template to Erlang byte code which will be called when the template is rendered. This is very efficient.
 
