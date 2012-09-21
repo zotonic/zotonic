@@ -2,7 +2,7 @@
 	<p>{_ Find an existing page to connect _}</p>
 
 	<form id="dialog-connect-find">
-		<input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" />
+		<input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus span8" />
 		<select name="find_category">
 			{% if predicate %}
 				<option value="p:{{ predicate }}">{_ Valid for: _} {{ predicate.title }}</option>
