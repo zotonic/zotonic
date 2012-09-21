@@ -96,7 +96,26 @@ html_theme = 'default'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'bodyfont': '"Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif',
+    'headfont': '"Lucida Grande", Arial, Helvetica, sans-serif',
+
+    'bgcolor': 'white',
+    'textcolor': '#333',
+    'linkcolor': '#0778b0',
+    'headtextcolor': '#0778b0',
+
+    'collapsiblesidebar': 'false',
+    'sidebarbgcolor': 'white',
+    'sidebartextcolor': '#333',
+    'sidebarlinkcolor': '#0778b0',
+
+    'relbarbgcolor': '#039ed4',
+    'relbartextcolor': '#eee',
+    'relbarlinkcolor': '#eee',
+
+    'footerbgcolor': '#eee'
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
