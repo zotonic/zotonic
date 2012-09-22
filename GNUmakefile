@@ -26,8 +26,14 @@ mimetypes:
 makefile-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
 
-.PHONY: docs
+.PHONY: docs edocs
 docs:
+	@echo Building HTML documentation...
+	cd doc && make stubs && make html
+	@echo HTML documentation is now available in doc/_build/html/
+
+edocs:
+	@echo Building reference (edoc) documentation...
 	bin/zotonic generate-edoc
 
 .PHONY: clean_logs
