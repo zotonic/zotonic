@@ -14,6 +14,7 @@ Contents:
    tutorials/index
    manuals/index
    ref/index
+   dev/index
 
 
 Indices and tables
