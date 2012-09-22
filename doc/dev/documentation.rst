@@ -1,5 +1,5 @@
 Contributing documentation
-==================================
+==========================
 
 For documentation, we encourage contributions to Zotonic from the
 community even more!

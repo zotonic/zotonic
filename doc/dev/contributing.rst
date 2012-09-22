@@ -1,5 +1,5 @@
 Contributing source code
-=======================
+========================
 
 We encourage contributions to Zotonic from the community!
 
