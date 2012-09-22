@@ -23,3 +23,5 @@ The `moreresults` action has a `result` argument, which should point to the sear
 The number of items that get added is equal to the `pagelen` setting of the search.
 
 When there are no more items, the `moreresults` button will get disabled automatically.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-moreresults.rst>`_

@@ -21,3 +21,5 @@ type      Type of the message, one of
 ========  ================================  ============
 
 .. seealso:: actions :ref:`action-alert` and :ref:`action-confirm`.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-growl.rst>`_

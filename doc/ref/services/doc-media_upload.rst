@@ -15,3 +15,5 @@ integer with the ID of the newly created media rsc.
 
 Other arguments to this API call that can be passed in are: title,
 summary, body, chapeau, subtitle, website, page_path.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/services/doc-media_upload.rst>`_

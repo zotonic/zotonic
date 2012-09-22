@@ -12,3 +12,5 @@ Normally, instead of this action, the action :ref:`action-dialog_open` is used. 
 .. seealso:: actions :ref:`action-dialog_open` and :ref:`action-dialog_close`.
 
 
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-dialog.rst>`_

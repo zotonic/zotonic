@@ -32,3 +32,5 @@ id        When back and dispatch are not defined then the redirect uri
 location  The http address to redirect to.
           Can be an url with or without host name.                       location="http://example.com"
 ========  =============================================================  ============
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-redirect.rst>`_

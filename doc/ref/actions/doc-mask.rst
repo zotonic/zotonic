@@ -29,3 +29,5 @@ delay     Delay (in milliseconds) before the mask is shown.
 ========  =================================================  =======
 
 .. seealso:: action :ref:`action-unmask`.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-mask.rst>`_

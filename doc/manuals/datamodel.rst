@@ -122,3 +122,5 @@ pivot_task_queue
 
 Queue with tasks that will take a long time to run. They are executed by the pivoting process.
 
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/manuals/datamodel.rst>`_

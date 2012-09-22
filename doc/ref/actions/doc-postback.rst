@@ -25,3 +25,5 @@ delegate  The name of the Erlang module that will be called.
 action    Any other actions that will be executed when the 
           postback is done.  This parameter can be repeated.      action={show id="wait"}
 ========  ======================================================  =======
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-postback.rst>`_

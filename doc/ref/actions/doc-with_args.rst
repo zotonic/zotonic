@@ -15,3 +15,5 @@ Then we can pass an action to this template::
    {% include "_list_action.tpl" list=[1,2,3,4,5] my_action={redirect dispatch="admin_edit_rsc"} %}
 
 The result will be a list of titles for the pages with id 1..5.  Every title will be a link to its admin page, as the argument `id` will be added to the `my_action`.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-with_args.rst>`_
