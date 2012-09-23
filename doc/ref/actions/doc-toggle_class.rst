@@ -8,5 +8,3 @@ Example::
 When the HTML element with id "myid" has the CSS class "newclass" then it is removed, otherwise it is added.
 
 .. seealso:: actions :ref:`action-add_class` and :ref:`action-remove_class`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-toggle_class.rst>`_

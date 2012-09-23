@@ -27,5 +27,3 @@ delegate  Erlang module handling the postback.
 ========  ====================================  =======
 
 .. seealso:: actions :ref:`action-alert` and :ref:`action-growl`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-confirm.rst>`_

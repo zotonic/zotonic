@@ -27,6 +27,7 @@ ${filter//?/=}
 
 .. include:: doc-$filter.rst
 
+\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/filters/doc-${filter}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
@@ -34,8 +35,6 @@ EOF
         cat <<EOF > $doc
 
 Not yet documented.
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/filters/doc-${filter}.rst>\`_
 EOF
     fi
 

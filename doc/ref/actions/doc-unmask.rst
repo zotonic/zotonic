@@ -8,5 +8,3 @@ Example::
 In this example the mask over the `logon_outer` div will be removed.
 
 .. seealso:: action :ref:`action-mask`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-unmask.rst>`_

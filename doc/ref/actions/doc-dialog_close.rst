@@ -8,5 +8,3 @@ Example::
 This button closes any open dialog when clicked.
 
 .. seealso:: actions :ref:`action-dialog_open` and :ref:`action-dialog`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-dialog_close.rst>`_

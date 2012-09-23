@@ -1,5 +1,3 @@
 
 Not yet documented.
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/templates/doc-base_fullscreen-phone.rst>`_

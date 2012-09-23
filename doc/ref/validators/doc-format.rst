@@ -26,5 +26,3 @@ failure_message  Message to show when the input value does not match
                  argument is given). Defaults to "Not valid."            failure_message="Invalid postcode"
 ===============  ======================================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-format.rst>`_

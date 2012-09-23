@@ -42,5 +42,3 @@ action          Actions executed when a suggestion is selected.
                 This list is executed after the `action_with_id` actions.
                 This argument can be repeated.                                    action={slide_up target="form-id"}
 ==============  ================================================================  =======
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-typeselect.rst>`_

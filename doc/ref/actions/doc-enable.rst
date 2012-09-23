@@ -11,5 +11,3 @@ After clicking the button the input will be::
    <input id="myid" class="" type="text" value="hello" />
 
 .. seealso:: action :ref:`action-disable`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-enable.rst>`_

@@ -32,5 +32,3 @@ closest   The id of an element that is close to the form to be reset.
           the id of the trigger element (for example the button 
           the action is coupled to).                                   closest
 ========  ===========================================================  =======
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-reset.rst>`_

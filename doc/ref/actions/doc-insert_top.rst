@@ -18,5 +18,3 @@ Another example, now rendering a template::
 This insert the output of the template `_list_item.tpl` above the existing `<li/>`.  All arguments to the update action are also arguments to the template.
 
 .. seealso:: actions :ref:`action-insert_after`, :ref:`action-insert_before`, :ref:`action-insert_bottom` and :ref:`action-update`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-insert_top.rst>`_

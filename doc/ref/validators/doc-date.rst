@@ -24,5 +24,3 @@ format     Date format, big endian (starting with year),
            Defaults to "l" (little).                      format="m"
 =========  =============================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-date.rst>`_

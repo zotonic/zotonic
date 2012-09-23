@@ -27,6 +27,7 @@ ${validator//?/=}
 
 .. include:: doc-$base.rst
 
+\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-${base}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
@@ -34,8 +35,6 @@ EOF
         cat <<EOF > $doc
 
 Not yet documented.
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-${base}.rst>\`_
 EOF
     fi
 

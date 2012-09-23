@@ -42,5 +42,3 @@ Arguments are:
 |                       |maximum allowed. Defaults to "Must not be more than .."    |                                |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-numericality.rst>`_

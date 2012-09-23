@@ -8,5 +8,3 @@ Example::
 Adds the CSS class "newclass" to the element with HTML id "myid".
 
 .. seealso:: actions :ref:`action-remove_class` and :ref:`action-toggle_class`.
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-add_class.rst>`_

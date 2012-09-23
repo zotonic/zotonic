@@ -27,6 +27,7 @@ ${action//?/=}
 
 .. include:: doc-$action.rst
 
+\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-${action}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
@@ -34,8 +35,6 @@ EOF
         cat <<EOF > $doc
 
 Not yet documented.
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-${action}.rst>\`_
 EOF
     fi
 

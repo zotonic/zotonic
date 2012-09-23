@@ -15,5 +15,3 @@ failure_message  Message to show when the entered value is not
                  an e-mail address. Defaults to "Incorrect E-mail"  failure_message="Please enter your e-mail address."
 ===============  =================================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-email.rst>`_

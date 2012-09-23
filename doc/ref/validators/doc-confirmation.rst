@@ -22,5 +22,3 @@ failure_message  Message to be shown when the two fields are unequal.
 ===============  ==========================================================  =======
 
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-confirmation.rst>`_

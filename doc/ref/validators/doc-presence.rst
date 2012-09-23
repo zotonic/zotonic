@@ -15,5 +15,3 @@ failure_message  Message to be shown when field is empty.
                  Defaults to "*"                           failure_message="Please enter."
 ===============  ========================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-presence.rst>`_

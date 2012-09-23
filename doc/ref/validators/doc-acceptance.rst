@@ -17,5 +17,3 @@ failure_message  Message to be shown when the input is true.
                  Defaults to "Must be accepted."              failure_message="Please agree to our TOS."
 ===============  ===========================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-acceptance.rst>`_

@@ -37,5 +37,3 @@ Arguments:
 |event    |Name of an event to be broadcast with z_notifier:first/2 for handling the validation.     |event=">validate_username" |
 +---------+------------------------------------------------------------------------------------------+---------------------------+
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-postback.rst>`_

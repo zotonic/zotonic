@@ -26,5 +26,3 @@ too_long_message      Message for when there are too many characters entered.
                       Defaults to "Must not be more than . characters long." 
 ====================  ==========================================================  =======
 
-
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/validators/doc-length.rst>`_
