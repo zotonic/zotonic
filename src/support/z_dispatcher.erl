@@ -155,7 +155,7 @@ init(SiteProps) ->
 drop_port(undefined) ->
     undefined;
 drop_port(none) ->
-    "localhost";
+    undefined;
 drop_port(Hostname) ->
     hd(string:tokens(Hostname, ":")).
 
