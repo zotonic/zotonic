@@ -3,8 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Zotonic's documentation!
-===================================
+Zotonic |version| documentation
+===============================
+
+Welcome to the Zotonic documentation!
+This describes Zotonic |version|, last updated |today|.
 
 Contents:
 
