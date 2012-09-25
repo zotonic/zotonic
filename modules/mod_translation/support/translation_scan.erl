@@ -1,9 +1,8 @@
 % @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010,2011 Marc Worrell
-%% Date: 2010-05-19
+%% @copyright 2010-2012 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
 
-%% Copyright 2010,2011 Marc Worrell
+%% Copyright 2010-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,20 +21,26 @@
 
 -export([scan/1, scan_file/2]).
 
--include("zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 scan(Context) ->
-    ModTemplates = [{Path, Files} || {_M, {Path, Files}} <- z_module_indexer:all(template, Context)],
-    ModErlang = [{Path, Files} || {_M, {Path, Files}} <- z_module_indexer:all(erlang, Context)],
-    Combined = lists:foldl(
-                 fun({Path, Files}, Acc) ->
-                         [{Path, Files ++ proplists:get_value(Path, ModTemplates, [])}
-                          |proplists:delete(Path, Acc)]
-                 end, [], ModErlang),
+    Modules = z_module_manager:scan(Context),
+    Files = lists:flatten([
+                z_module_indexer:all(What, Context)
+                || What <- [template, scomp, action, validator, model, service, erlang]
+            ]),
+    ModFiles = [ {Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
+    Combined = [
+                {ModDir, [ 
+                    ModDir++"/"++z_convert:to_list(Mod)++".erl" 
+                    | proplists:get_all_values(Mod, ModFiles) 
+                ]}
+                || {Mod, ModDir} <- Modules
+            ],
     [ scan_module(Mod) || Mod <- Combined ].
 
-scan_module({Path, Templates}) ->
-    {Path, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || {_BaseName,File} <- Templates ]))}.
+scan_module({Path, Files}) ->
+    {Path, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || File <- Files ]))}.
 
 
 dedupl(Trans) ->
@@ -83,7 +88,11 @@ scan_file(".tpl", File) ->
         {error, Reason} ->
             ?ERROR("POT generation, template error in ~p: ~p~n", [File, Reason]),
             []
-    end.
+    end;
+
+%% Skip unknown extensions (like ".config")
+scan_file(_Ext, _File) ->
+    [].
 
 
 parse(File) when is_list(File) ->  

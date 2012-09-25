@@ -111,7 +111,15 @@ find_ua_class_all(What, Class, Name, Context) ->
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, Context) ->
-    scan_all(What, Context).
+    [
+        #module_index{
+            key=#module_index_key{name=F#mfile.name},
+            module=F#mfile.module,
+            filepath=F#mfile.filepath,
+            erlang_module=F#mfile.erlang_module
+        }
+        || F <- scan_all(What, Context)
+    ].
 
 
 %%====================================================================
@@ -339,7 +347,8 @@ scan_subdir(What, Context) ->
     subdir(action)     -> { "actions",     "action_",    ".erl" };
     subdir(validator)  -> { "validators",  "validator_", ".erl" };
     subdir(model)      -> { "models",      "m_",         ".erl" };
-    subdir(service)    -> { "services",    "service_",   ".erl" }.
+    subdir(service)    -> { "services",    "service_",   ".erl" };
+    subdir(erlang)     -> { "support",     "",           ".erl" }.
 
 %% @doc Find all files, for the all/2 function.
 scan_all(lib, Context) ->
