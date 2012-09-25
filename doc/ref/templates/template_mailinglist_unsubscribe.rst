@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mailinglist_unsubscribe.rst
 
+Not yet documented.

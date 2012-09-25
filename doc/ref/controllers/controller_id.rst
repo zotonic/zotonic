@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-id.rst
 
+Not yet documented.

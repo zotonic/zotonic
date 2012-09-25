@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-error.rst
 
+Not yet documented.

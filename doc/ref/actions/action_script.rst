@@ -1,4 +1,7 @@
 
+.. include:: meta-script.rst
+
+
 This action executes Javascript directly. It can be used to interface with non-Zotonic Javascript libraries and functions.
 
 Example::

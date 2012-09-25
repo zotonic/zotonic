@@ -1,4 +1,7 @@
 
+.. include:: meta-hide.rst
+
+
 Hide an element without any animation.
 
 Example::

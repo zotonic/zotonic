@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-geomap_static.rst
 
+Not yet documented.

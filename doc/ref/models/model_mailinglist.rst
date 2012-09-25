@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mailinglist.rst
 
+Not yet documented.

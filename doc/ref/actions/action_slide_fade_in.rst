@@ -1,4 +1,7 @@
 
+.. include:: meta-slide_fade_in.rst
+
+
 Show an element by animating the height and opacity.
 
 Example::

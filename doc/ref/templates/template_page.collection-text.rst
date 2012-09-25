@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-page.collection-text.rst
 
+Not yet documented.

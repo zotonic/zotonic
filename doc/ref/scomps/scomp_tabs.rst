@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-tabs.rst
 
+Not yet documented.

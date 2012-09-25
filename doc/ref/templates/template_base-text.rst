@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-base-text.rst
 
+Not yet documented.

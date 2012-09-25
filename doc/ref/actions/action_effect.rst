@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-effect.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-admin_category_sorter.rst
 
+Not yet documented.

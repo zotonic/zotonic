@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-tail.rst
 
+Not yet documented.

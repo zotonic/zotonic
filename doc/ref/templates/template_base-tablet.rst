@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-base-tablet.rst
 
+Not yet documented.

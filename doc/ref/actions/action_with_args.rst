@@ -1,4 +1,7 @@
 
+.. include:: meta-with_args.rst
+
+
 Apply actions with arguments added.
 
 This action takes a list of other actions. One or more arguments are added to the actions before the actions are executed.  This action is mostly used in included templates or callbacks.  An example can be seen with the :ref:`action-typeselect` action.

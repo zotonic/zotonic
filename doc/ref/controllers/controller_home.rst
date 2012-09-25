@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-home.rst
 
+Not yet documented.

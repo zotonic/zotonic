@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mod_search.rst
 
+Not yet documented.

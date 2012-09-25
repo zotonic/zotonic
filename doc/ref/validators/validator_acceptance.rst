@@ -1,4 +1,7 @@
 
+.. include:: meta-acceptance.rst
+
+
 Check if an input value evaluates to true.
 
 Can be used in combination with a check box that must be checked on submit.

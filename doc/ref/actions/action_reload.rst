@@ -1,4 +1,7 @@
 
+.. include:: meta-reload.rst
+
+
 Reload the current page.
 
 Example::

@@ -1,4 +1,7 @@
 
+.. include:: meta-dialog_open.rst
+
+
 Renders a template on the server and opens a dialog with the HTML output of the template.
 
 Example::

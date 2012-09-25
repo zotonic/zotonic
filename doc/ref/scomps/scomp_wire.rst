@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-wire.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-username_unique.rst
 
+Not yet documented.

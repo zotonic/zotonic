@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-adminwidget_toggle.rst
 
+Not yet documented.

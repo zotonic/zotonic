@@ -1,4 +1,7 @@
 
+.. include:: meta-dialog.rst
+
+
 Opens a dialog with a predefined HTML content and title.
 
 Example::

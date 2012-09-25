@@ -1,4 +1,7 @@
 
+.. include:: meta-mask.rst
+
+
 Places a mask over an element, useful for blocking user interaction during lengthy postbacks.
 
 Example::

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-last.rst
 
+Not yet documented.

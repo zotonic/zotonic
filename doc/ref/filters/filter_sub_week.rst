@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-sub_week.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-filesizeformat.rst
 
+Not yet documented.

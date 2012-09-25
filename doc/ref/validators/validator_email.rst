@@ -1,4 +1,7 @@
 
+.. include:: meta-email.rst
+
+
 Check if the content of the input field is an e-mail address.
 
 For example::

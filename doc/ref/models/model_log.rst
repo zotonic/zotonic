@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-log.rst
 
+Not yet documented.

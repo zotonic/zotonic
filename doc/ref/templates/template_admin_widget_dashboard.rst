@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-admin_widget_dashboard.rst
 
+Not yet documented.

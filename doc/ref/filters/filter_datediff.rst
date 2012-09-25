@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-datediff.rst
 
+Not yet documented.

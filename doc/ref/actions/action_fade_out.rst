@@ -1,4 +1,7 @@
 
+.. include:: meta-fade_out.rst
+
+
 Hide an element by animating the opacity.
 
 Example::

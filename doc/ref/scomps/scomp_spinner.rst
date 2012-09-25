@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-spinner.rst
 
+Not yet documented.

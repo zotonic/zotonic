@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mailing_page.collection.rst
 
+Not yet documented.

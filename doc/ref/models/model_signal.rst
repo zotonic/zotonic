@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-signal.rst
 
+Not yet documented.

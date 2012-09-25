@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-recompile.rst
 
+Not yet documented.

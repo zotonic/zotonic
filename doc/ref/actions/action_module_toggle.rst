@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-module_toggle.rst
 
+Not yet documented.

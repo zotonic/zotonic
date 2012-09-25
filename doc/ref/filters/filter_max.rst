@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-max.rst
 
+Not yet documented.

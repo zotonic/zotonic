@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-oauth_perms.rst
 
+Not yet documented.

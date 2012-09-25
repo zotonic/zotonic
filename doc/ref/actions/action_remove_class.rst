@@ -1,4 +1,7 @@
 
+.. include:: meta-remove_class.rst
+
+
 Remove a CSS class from an HTML element.
 
 Example::

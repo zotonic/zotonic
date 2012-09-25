@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-summary.rst
 
+Not yet documented.

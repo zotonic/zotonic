@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-connect.rst
 
+Not yet documented.

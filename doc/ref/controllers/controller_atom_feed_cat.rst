@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-atom_feed_cat.rst
 
+Not yet documented.

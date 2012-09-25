@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-template.rst
 
+Not yet documented.

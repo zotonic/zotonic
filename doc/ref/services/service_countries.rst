@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-countries.rst
 
+Not yet documented.

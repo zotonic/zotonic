@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-page.rst
 
+Not yet documented.

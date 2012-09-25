@@ -1,3 +1,6 @@
+
+.. include:: meta-date.rst
+
 .. versionadded:: 0.8
 
 Validate input date against a given date format.

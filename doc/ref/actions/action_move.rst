@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-move.rst
 
+Not yet documented.

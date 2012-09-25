@@ -1,4 +1,7 @@
 
+.. include:: meta-add_class.rst
+
+
 Add a css class to an html element.
 
 Example::

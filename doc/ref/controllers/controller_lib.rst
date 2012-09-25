@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-lib.rst
 
+Not yet documented.

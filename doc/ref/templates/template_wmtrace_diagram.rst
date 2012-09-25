@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-wmtrace_diagram.rst
 
+Not yet documented.

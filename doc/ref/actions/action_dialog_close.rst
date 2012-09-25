@@ -1,4 +1,7 @@
 
+.. include:: meta-dialog_close.rst
+
+
 Closes the currently open dialog. When there is no dialog open then nothing happens.
 
 Example::

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-stringify.rst
 
+Not yet documented.

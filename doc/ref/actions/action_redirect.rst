@@ -1,4 +1,7 @@
 
+.. include:: meta-redirect.rst
+
+
 This action redirects the browser to another page or back to the previous page.
 
 Example::

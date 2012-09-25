@@ -1,4 +1,7 @@
 
+.. include:: meta-format.rst
+
+
 Regular expression test.
 
 Checks if an input element's value matches a regular expression.  There is an optional `negate` argument to validate only when the regular expression does not match.

@@ -1,4 +1,7 @@
 
+.. include:: meta-typeselect.rst
+
+
 Show possible selections whilst typing.
 
 Performs a search for the typed text whilst typing in an input field.  Shows possible matching pages in a selectable list.

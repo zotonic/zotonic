@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-yesno.rst
 
+Not yet documented.

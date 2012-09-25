@@ -1,4 +1,7 @@
 
+.. include:: meta-growl.rst
+
+
 Show a message in the upper right corner of the browser window. The message will automatically disappear after some time.
 
 Example::

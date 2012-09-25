@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mod_signup.rst
 
+Not yet documented.

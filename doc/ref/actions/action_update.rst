@@ -1,4 +1,7 @@
 
+.. include:: meta-update.rst
+
+
 Updates the content of an HTML element with a template or a literal HTML text.
 
 Example::

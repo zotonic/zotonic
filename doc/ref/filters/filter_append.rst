@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-append.rst
 
+Not yet documented.

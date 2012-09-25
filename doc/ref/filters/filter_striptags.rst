@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-striptags.rst
 
+Not yet documented.

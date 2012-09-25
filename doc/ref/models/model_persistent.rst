@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-persistent.rst
 
+Not yet documented.

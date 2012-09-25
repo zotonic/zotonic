@@ -1,4 +1,7 @@
 
+.. include:: meta-toggle_class.rst
+
+
 Toggle a CSS class from an HTML element.
 
 Example::

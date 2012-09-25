@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-slice.rst
 
+Not yet documented.

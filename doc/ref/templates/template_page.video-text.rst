@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-page.video-text.rst
 
+Not yet documented.

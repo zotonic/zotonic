@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-locations.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-signup.rst
 
+Not yet documented.

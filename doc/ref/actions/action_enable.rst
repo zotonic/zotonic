@@ -1,4 +1,7 @@
 
+.. include:: meta-enable.rst
+
+
 Resets the "disabled" attribute of a HTML tag and removes the CSS class "disabled".
 
 Example::

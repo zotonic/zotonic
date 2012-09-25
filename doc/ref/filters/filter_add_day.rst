@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-add_day.rst
 
+Not yet documented.

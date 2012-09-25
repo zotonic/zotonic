@@ -9,13 +9,13 @@ EOF
 
     dir=${0%/*}
     base=$service
-    stub=$dir/service_$base.rst
-    doc=$dir/doc-$base.rst
+    stub=$dir/meta-$base.rst
+    doc=$dir/service_$base.rst
 
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this service, edit the doc-$base.rst file, which is included in this file.
+   To document this service, edit the service_$base.rst file, which should include this file.
 
 .. index:: service; $base
    single: $mod; service, $base
@@ -26,14 +26,13 @@ ${service//?/=}
 
 * Module: :ref:\`$mod\`
 
-.. include:: doc-$base.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/services/doc-${mod}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF

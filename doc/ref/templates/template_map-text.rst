@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-map-text.rst
 
+Not yet documented.

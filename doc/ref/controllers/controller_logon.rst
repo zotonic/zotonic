@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-logon.rst
 
+Not yet documented.

@@ -1,4 +1,7 @@
 
+.. include:: meta-toggle.rst
+
+
 Toggle the visibility of an element.
 
 Example::

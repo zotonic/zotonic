@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-notifier.rst
 
+Not yet documented.

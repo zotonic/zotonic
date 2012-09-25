@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-validate.rst
 
+Not yet documented.

@@ -1,4 +1,7 @@
 
+.. include:: meta-moreresults.rst
+
+
 Show more results of the current search query inline on the page.
 
 The `moreresults` action is an alternative to using a next/previous pager to paginate through search results. Instead, `moreresults` lets you load more results from the current search, directly onto the same page. This feature is similar to Twitter's "more" button, Slashdot's "many more" button, and others.

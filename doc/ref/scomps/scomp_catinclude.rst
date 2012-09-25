@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-catinclude.rst
 
+Not yet documented.

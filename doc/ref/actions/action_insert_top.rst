@@ -1,4 +1,7 @@
 
+.. include:: meta-insert_top.rst
+
+
 Inserts HTML before the contents of an HTML element.
 
 Adds a template or a literal HTML text before the existing content.

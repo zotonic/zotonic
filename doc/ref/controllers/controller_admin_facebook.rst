@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-admin_facebook.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-escapejs.rst
 
+Not yet documented.

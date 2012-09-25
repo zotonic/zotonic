@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-config.rst
 
+Not yet documented.

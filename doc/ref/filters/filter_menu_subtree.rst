@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-menu_subtree.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-animate.rst
 
+Not yet documented.

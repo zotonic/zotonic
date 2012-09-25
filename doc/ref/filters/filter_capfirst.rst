@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-capfirst.rst
 
+Not yet documented.

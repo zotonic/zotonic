@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-comet.rst
 
+Not yet documented.

@@ -1,4 +1,7 @@
 
+.. include:: meta-show.rst
+
+
 Show an element without any animation.
 
 Example::

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-member.rst
 
+Not yet documented.

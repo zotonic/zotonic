@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-rsc_update.rst
 
+Not yet documented.

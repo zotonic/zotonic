@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-group_by.rst
 
+Not yet documented.

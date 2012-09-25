@@ -1,4 +1,7 @@
 
+.. include:: meta-unmask.rst
+
+
 Removes a mask that was placed over an element using the :ref:`action-mask` action.
 
 Example::

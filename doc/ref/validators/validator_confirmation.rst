@@ -1,4 +1,7 @@
 
+.. include:: meta-confirmation.rst
+
+
 Check if two inputs are the same.
 
 Useful when a form requires double entry of a password or e-mail address to prevent typos.

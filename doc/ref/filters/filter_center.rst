@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-center.rst
 
+Not yet documented.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-req.rst
 
+Not yet documented.

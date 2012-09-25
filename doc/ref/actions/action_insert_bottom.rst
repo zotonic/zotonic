@@ -1,4 +1,7 @@
 
+.. include:: meta-insert_bottom.rst
+
+
 Inserts HTML after the contents of an HTML element.
 
 Adds a template or a literal HTML text after the existing content.

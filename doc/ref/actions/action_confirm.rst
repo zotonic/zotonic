@@ -1,4 +1,7 @@
 
+.. include:: meta-confirm.rst
+
+
 Show a javascript confirm message and on confirmation triggers one or more actions and/or send a postback to the server.
 
 Example::

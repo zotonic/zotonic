@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-debug.rst
 
+Not yet documented.

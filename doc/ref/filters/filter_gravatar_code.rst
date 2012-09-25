@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-gravatar_code.rst
 
+Not yet documented.

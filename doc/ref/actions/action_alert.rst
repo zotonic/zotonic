@@ -1,4 +1,7 @@
 
+.. include:: meta-alert.rst
+
+
 Show a javascript alert.
 
 Example::

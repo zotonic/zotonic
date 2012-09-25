@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-tinymce_add.rst
 
+Not yet documented.

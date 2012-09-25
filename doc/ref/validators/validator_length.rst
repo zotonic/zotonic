@@ -1,4 +1,7 @@
 
+.. include:: meta-length.rst
+
+
 Check the length of a text input.
 
 Test if the length of the input's value is more than a minimum and/or less than a maximum length.

@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-rand.rst
 
+Not yet documented.

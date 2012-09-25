@@ -1,4 +1,7 @@
 
+.. include:: meta-postback.rst
+
+
 This action sends a message to the event handler on the server.
 
 Example::

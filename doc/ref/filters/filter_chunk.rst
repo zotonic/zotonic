@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-chunk.rst
 
+Not yet documented.

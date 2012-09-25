@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-atom_entry.rst
 
+Not yet documented.

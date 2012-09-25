@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-stream.rst
 
+Not yet documented.

@@ -1,4 +1,7 @@
 
+.. include:: meta-numericality.rst
+
+
 Numerical input and range check.
 
 Checks if the input is a number and within a certain range or equal to a fixed value.  At the moment only integer inputs are allowed.

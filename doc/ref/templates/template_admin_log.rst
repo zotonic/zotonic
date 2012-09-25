@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-admin_log.rst
 
+Not yet documented.

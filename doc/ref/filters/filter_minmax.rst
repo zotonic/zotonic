@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-minmax.rst
 
+Not yet documented.

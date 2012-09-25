@@ -1,4 +1,7 @@
 
+.. include:: meta-set_class.rst
+
+
 Set the value of a form field.
 
 Example::

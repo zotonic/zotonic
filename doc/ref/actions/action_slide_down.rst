@@ -1,4 +1,7 @@
 
+.. include:: meta-slide_down.rst
+
+
 Show an element by animating the height.
 
 Example::

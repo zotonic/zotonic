@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-session.rst
 
+Not yet documented.

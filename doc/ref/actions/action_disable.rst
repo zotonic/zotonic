@@ -1,4 +1,7 @@
 
+.. include:: meta-disable.rst
+
+
 Sets the "disabled" attribute of a HTML tag and adds the CSS class "disabled".
 
 Example::

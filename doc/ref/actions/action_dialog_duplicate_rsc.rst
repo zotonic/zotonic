@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-dialog_duplicate_rsc.rst
 
+Not yet documented.

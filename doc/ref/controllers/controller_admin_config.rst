@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-admin_config.rst
 
+Not yet documented.

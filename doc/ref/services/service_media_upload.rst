@@ -1,3 +1,6 @@
+
+.. include:: meta-media_upload.rst
+
 Service URL::
 
   /api/base/media_upload

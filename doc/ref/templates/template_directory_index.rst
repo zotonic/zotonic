@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-directory_index.rst
 
+Not yet documented.

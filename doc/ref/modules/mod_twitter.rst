@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-mod_twitter.rst
 
+Not yet documented.

@@ -1,4 +1,7 @@
 
+.. include:: meta-submit.rst
+
+
 Submits the enclosing form, a specifically targeted form or the closest form to an element.
 
 Example::

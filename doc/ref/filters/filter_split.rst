@@ -1,3 +1,4 @@
 
-Not yet documented.
+.. include:: meta-split.rst
 
+Not yet documented.

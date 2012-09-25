@@ -1,4 +1,7 @@
 
+.. include:: meta-slide_up.rst
+
+
 Hide an element by animating the height.
 
 Example::
