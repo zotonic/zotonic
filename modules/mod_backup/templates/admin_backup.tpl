@@ -32,7 +32,7 @@
         <p>{_ You can start a backup immediately, while the backup is running you can continue working. _}</p>
         {% button class="btn btn-primary" text=_"Start backup now" action={backup_start} %}
     </div>
-    {% else if not backup_config.ok %}
+    {% elseif not backup_config.ok %}
     <div class="alert alert-error">
         <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
         {% if not backup_config.db_dump %}<br/><strong>{_ The "pg_dump" command was not found in the path. Set the "pg_dump" config key to the path to pg_dump and return to this page. _}</strong>{% endif %}
