@@ -3,7 +3,7 @@ Code style conventions
 
 .. note:: 
    As these conventions were established only after a large
-   part of the codebase has been written, the code style described here
+   part of the code base has been written, the code style described here
    is not yet in effect in all parts of the Zotonic code base. We're
    trying to gradually adapt to it, however.
 
@@ -11,7 +11,7 @@ Code style conventions
 Indenting Erlang code
 ---------------------
 
-We use the "Emacs-style" indenting (using erlang-mode provided with the 
+We use the "Emacs-style" indenting (using ``erlang-mode`` provided with the 
 Erlang distribution). This indenting style seems to be a convention in much
 of the Erlang world.
 
@@ -34,7 +34,7 @@ of code shorter than 80 characters.
 Writing Commit Messages
 -----------------------
 
-### taken from rebar's readme, https://github.com/basho/rebar; I find those quite sensible. ###
+### taken from rebar's README, https://github.com/basho/rebar; I find those quite sensible. ###
 
 Structure your commit message like this::
 
@@ -51,7 +51,7 @@ Structure your commit message like this::
 
 *  When your commit fixes a bug on github, add `Fixes #1545` on a separate line below the description.
 
-Notice the empty line preceeding the longer description.
+Notice the empty line preceding the longer description.
 
 
 Atomicity
@@ -60,3 +60,5 @@ Atomicity
 * Break up logical changes into separate commits.
 
 * Make whitespace changes separately.
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/codestyle.rst>`_

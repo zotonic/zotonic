@@ -3,7 +3,7 @@ Contributing source code
 
 We encourage contributions to Zotonic from the community!
 
-1. Fork the `zotonic` repository on Github (at https://github.com/zotonic/zotonic).
+1. Fork the ``zotonic`` repository on Github (at https://github.com/zotonic/zotonic).
 
 2. Clone your fork or add the remote if you already have a clone of
    the repository::
@@ -29,3 +29,6 @@ We encourage contributions to Zotonic from the community!
 6. A Zotonic committer will review your patch and merge it into the
    main repository or send you feedback. The pull request page on
    github is the main place to discuss the code and related topics.
+
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/contributing.rst>`_

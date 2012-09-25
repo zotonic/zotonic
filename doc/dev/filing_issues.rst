@@ -19,14 +19,17 @@ In the issues, please state the nature of the problem in a clear and
 reproducible way.
 
 Try summarizing the problem in a single sentence and use that as the
-issue title. In the textarea below, please elaborate on the issue,
+issue title. In the text area below, please elaborate on the issue,
 adding the relevant log sections, etc.
 
 Please also state the following:
 
 * Zotonic version you're using
-* Whether you are running zotonic from git or from a downloaded release
+* Whether you are running Zotonic from git or from a downloaded release
 * Operating system
 * Erlang release
 * ... anything that comes to mind that might be relevant, really.    
 
+
+`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/filing_issues.rst>`_
+  
