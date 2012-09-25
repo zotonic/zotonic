@@ -28,7 +28,7 @@ ${service//?/=}
 
 .. include:: doc-$base.rst
 
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/services/doc-${$mod}.rst>\`_
+\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/services/doc-${mod}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
