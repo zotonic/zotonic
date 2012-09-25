@@ -27,4 +27,5 @@ We encourage contributions to Zotonic from the community!
      git push mine some-topic-branch
 
 6. A Zotonic committer will review your patch and merge it into the
-   main repository or send you feedback.
+   main repository or send you feedback. The pull request page on
+   github is the main place to discuss the code and related topics.
