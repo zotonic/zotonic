@@ -19,6 +19,8 @@ Assuming that the resource whose id is the value of the template variable `id` i
 
 This because `news` is a subcategory of `article`, which is a subcategory of `text`. When one of the previous templates is not found then the base template `hello.tpl` is tried. The catinclude tag will only include the first file it finds, and stops after having found a file to include.
 
+When the resource has a unique name (the `name` property is set), this property is also considered for the catinclude lookup, before the category-based template names. So when the resource has `name` set to `foobar`, it will first look for ``hello.foobar.tpl``, then for ``hello.news.tpl``, etc.
+
 Unlike Django the template name must be a string literal, variables are not allowed.
 
 The tag accepts extra arguments, which will be passed as template variables to the included template. The inclusion is always done at runtime, because the selected template depends on the category of the referenced resource.
