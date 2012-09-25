@@ -137,7 +137,7 @@ callback(Next, Form, UploadCheckFun) ->
                     end
                 end;
             true ->
-                NewForm = Form#multipart_form{data=[binary_to_list(Data), Form#multipart_form.data]}
+                NewForm = Form#multipart_form{data=[Form#multipart_form.data, binary_to_list(Data)]}
             end,
             fun(N) -> callback(N, NewForm, UploadCheckFun) end;
 
