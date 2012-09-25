@@ -18,92 +18,215 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:38 
-msgid ""
-"Actions"
-msgstr ""
-
 #: ./modules/mod_backup/templates/admin_backup.tpl:3 
 msgid ""
 "Admin Backups"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:14 
+#: ./modules/mod_backup/templates/_admin_backup_diff.tpl:7 ./modules/mod_backup/templates/_admin_backup_diff.tpl:20 
 msgid ""
-"At any moment you can make a backup of your system."
-msgstr ""
-
-#: ./modules/mod_backup/templates/_admin_menu_module.tpl:2 ./modules/mod_backup/templates/admin_backup.tpl:12 ./modules/mod_backup/templates/admin_backup.tpl:34 
-msgid ""
-"Backups"
-msgstr ""
-
-#: ./modules/mod_backup/templates/admin_backup.tpl:37 
-msgid ""
-"Date"
-msgstr ""
-
-#: ./modules/mod_backup/templates/admin_backup.tpl:59 
-msgid ""
-"No backups present."
-msgstr ""
-
-#: ./modules/mod_backup/templates/admin_backup.tpl:21 
-msgid ""
-"Start backup now"
+"Are you sure you want to revert to this version?"
 msgstr ""
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:27 
 msgid ""
-"The \"pg_dump\" command was not found in the path. Set the "
-"\"pg_dump\" config key to the path to pg_dump and return to this "
-"page."
+"At any moment you can make a backup of your system."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:28 
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:41 
 msgid ""
-"The \"tar\" command was not found in the path. Set the \"tar\" "
-"config key to the path to pg_dump and return to this page."
+"Back to the edit page"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:14 
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:3 
+msgid ""
+"Backup &amp; Restore"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:11 
+msgid ""
+"Backup and restore options for your content."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:9 ./modules/mod_backup/templates/admin_backup.tpl:46 
+msgid ""
+"Backups"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_dialog_backup_upload.tpl:13 
+msgid ""
+"Cancel"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:39 
+msgid ""
+"Check and possibly restore an earlier version of your page."
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Click on <b>List and restore an earlier version</b> to get an overview of "
+"earlier saved versions of this page.<br/>You can also save the complete "
+"contents of a page to a file. Later you can reload this file, replacing "
+"the current page contents. Note that the file does not contain your unsaved "
+"changes. Connections and media are not saved as well."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:53 
+msgid ""
+"Current"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:52 
+msgid ""
+"Date"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:35 
+msgid ""
+"Deleted"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:19 
+msgid ""
+"Download backup file"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Help about backup &amp; restore."
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:15 
+msgid ""
+"List and restore an earlier version"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:21 
+msgid ""
+"Make a daily backup of the database and uploaded files."
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:9 
+msgid ""
+"Need more help?"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:74 
+msgid ""
+"No backups present."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:65 
+msgid ""
+"Previous"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_dialog_backup_upload.tpl:14 ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:20 ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:21 
+msgid ""
+"Restore backup"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_backup_diff.tpl:8 ./modules/mod_backup/templates/_admin_backup_diff.tpl:21 
+msgid ""
+"Revert"
+msgstr ""
+
+#: ./modules/mod_backup/templates/_admin_backup_diff.tpl:6 ./modules/mod_backup/templates/_admin_backup_diff.tpl:19 
+msgid ""
+"Revert to this version"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:3 ./modules/mod_backup/templates/admin_backup_revision.tpl:33 ./modules/mod_backup/templates/admin_backup_revision.tpl:35 
+msgid ""
+"Revisions for"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup_revision.tpl:81 
+msgid ""
+"Select one or two revisions from the list on the left."
+msgstr ""
+
+#: ./modules/mod_backup/templates/_dialog_backup_upload.tpl:3 
+msgid ""
+"Select the backup file you want to upload. The file must be a .bert file."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:17 
+msgid ""
+"Show import/export panel in the admin."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:33 
+msgid ""
+"Start backup now"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:38 
+msgid ""
+"The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config "
+"key to the path to pg_dump and return to this page."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:39 
+msgid ""
+"The \"tar\" command was not found in the path. Set the \"tar\" config key to "
+"the path to pg_dump and return to this page."
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:27 
 msgid ""
 "The backup comprises two parts, the database and the uploaded files."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+#: ./modules/mod_backup/templates/_dialog_backup_upload.tpl:10 
+msgid ""
+"This will overwrite your page with the contents of the backup file."
+msgstr ""
+
+#: ./modules/mod_backup/templates/_dialog_backup_upload.tpl:10 
+msgid ""
+"Warning!"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:37 
 msgid ""
 "Warning:"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:15 
+#: ./modules/mod_backup/templates/admin_backup.tpl:28 
 msgid ""
 "You can have 10 backups, older ones will be deleted automatically."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:20 
+#: ./modules/mod_backup/templates/admin_backup.tpl:32 
 msgid ""
 "You can start a backup immediately, while the backup is running you can "
 "continue working."
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:26 
+#: ./modules/mod_backup/templates/admin_backup.tpl:37 
 msgid ""
 "Your backup is not correctly configured. The backup module will not work "
 "until the problem(s) below have been resolved:"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:52 
+#: ./modules/mod_backup/templates/_admin_backup_diff.tpl:14 
+msgid ""
+"current version"
+msgstr ""
+
+#: ./modules/mod_backup/templates/admin_backup.tpl:64 
 msgid ""
 "download database"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:53 
+#: ./modules/mod_backup/templates/admin_backup.tpl:65 
 msgid ""
 "download files"
 msgstr ""
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:50 
+#: ./modules/mod_backup/templates/admin_backup.tpl:62 
 msgid ""
 "this backup is in progress"
 msgstr ""

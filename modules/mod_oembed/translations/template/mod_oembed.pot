@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:42 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:64 
 msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:13 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:15 
 msgid ""
 "Embed URL"
 msgstr ""
@@ -34,33 +34,43 @@ msgid ""
 "Vimeo or other services."
 msgstr ""
 
-#: ./modules/mod_oembed/mod_oembed.erl:233 
+#: ./modules/mod_oembed/mod_oembed.erl:238 
 msgid ""
 "Invalid or unsupported media URL. The item might have been deleted or is "
 "not public."
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:41 
+#: ./modules/mod_oembed/mod_oembed.erl:204 
+msgid ""
+"Made the media page."
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:65 
 msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:30 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:48 
 msgid ""
 "Media title"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:41 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:65 
 msgid ""
 "Replace media item"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:35 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:56 
 msgid ""
 "Summary"
 msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:23 
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:36 
 msgid ""
 "The media title will be automatically detected from its URL."
+msgstr ""
+
+#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:19 
+msgid ""
+"Try URL"
 msgstr ""

@@ -18,7 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23 
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45 
+msgid ""
+"Add configuration key"
+msgstr ""
+
+#: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31 
 msgid ""
 "Add key"
 msgstr ""
@@ -28,14 +33,9 @@ msgid ""
 "Are you sure you want to delete the configuration key"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12 ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 
 msgid ""
 "Cancel"
-msgstr ""
-
-#: ./modules/mod_admin_config/templates/_admin_menu_module.tpl:2 
-msgid ""
-"Config"
 msgstr ""
 
 #: ./modules/mod_admin_config/templates/admin_config.tpl:3 
@@ -43,39 +43,59 @@ msgid ""
 "Configuration"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:17 
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46 
 msgid ""
-"Configuration overview"
+"Confirm delete"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:6 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:36 ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8 
 msgid ""
 "Delete"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:21 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13 
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:48 ./modules/mod_admin_config/templates/admin_config.tpl:37 
+msgid ""
+"Edit"
+msgstr ""
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:20 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15 
 msgid ""
 "Key"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:23 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:11 
+msgid ""
+"Make a new config setting"
+msgstr ""
+
+#: ./modules/mod_admin_config/templates/admin_config.tpl:22 
 msgid ""
 "Modified"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:20 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:19 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7 
 msgid ""
 "Module"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:47 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:50 
 msgid ""
 "No configurations found."
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:24 
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63 
 msgid ""
-"Options"
+"Only administrators can change the configuration."
+msgstr ""
+
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48 
+msgid ""
+"Only administrators can delete configurations."
+msgstr ""
+
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64 
+msgid ""
+"Only an administrator can add configuration keys."
 msgstr ""
 
 #: ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1 
@@ -83,14 +103,19 @@ msgid ""
 "Please fill in the module, key and value for the new configuration key."
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13 
 msgid ""
 "Save"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:10 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:8 
 msgid ""
 "System Configuration"
+msgstr ""
+
+#: ./modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61 
+msgid ""
+"The config key already exists, please choose another key name."
 msgstr ""
 
 #: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4 
@@ -98,22 +123,7 @@ msgid ""
 "This can't be undone. The configuration key will be lost forever."
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/admin_config.tpl:22 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8 
+#: ./modules/mod_admin_config/templates/admin_config.tpl:21 ./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5 
 msgid ""
 "Value"
-msgstr ""
-
-#: ./modules/mod_admin_config/templates/admin_config.tpl:37 
-msgid ""
-"delete"
-msgstr ""
-
-#: ./modules/mod_admin_config/templates/admin_config.tpl:39 
-msgid ""
-"edit"
-msgstr ""
-
-#: ./modules/mod_admin_config/templates/admin_config.tpl:12 
-msgid ""
-"make a new config setting"
 msgstr ""

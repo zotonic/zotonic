@@ -18,19 +18,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_oauth/templates/_admin_menu_module.tpl:2 
-msgid ""
-"API access"
-msgstr ""
-
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:6 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:5 
 msgid ""
 "Access to"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:71 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:77 
 msgid ""
 "Add application"
+msgstr ""
+
+#: ./modules/mod_oauth/templates/oauth_apps.tpl:14 
+msgid ""
+"Add new application"
 msgstr ""
 
 #: ./modules/mod_oauth/templates/oauth_authorize.tpl:7 
@@ -38,12 +38,17 @@ msgid ""
 "Allow"
 msgstr ""
 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:54 
+msgid ""
+"Allow users of this application access to the following API calls:"
+msgstr ""
+
 #: ./modules/mod_oauth/templates/oauth_authorize.tpl:29 
 msgid ""
 "Allow!"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:14 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:15 
 msgid ""
 "Application title"
 msgstr ""
@@ -68,37 +73,47 @@ msgid ""
 "Authorized!"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:32 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:36 
 msgid ""
 "Callback URL"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 
 msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:26 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:28 
 msgid ""
 "Change the title, description and access permissions of this application."
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:7 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47 
+msgid ""
+"Close"
+msgstr ""
+
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:6 
 msgid ""
 "Consumer key"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:8 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:7 
 msgid ""
 "Consumer secret"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:28 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:30 
 msgid ""
 "Delete"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:26 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:43 
+msgid ""
+"Delete this application!"
+msgstr ""
+
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:29 
 msgid ""
 "Description"
 msgstr ""
@@ -113,22 +128,22 @@ msgid ""
 "Disallow"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:40 
 msgid ""
 "Do you really want to delete this application?"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:26 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:28 
 msgid ""
 "Edit"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:20 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:22 
 msgid ""
 "Homepage"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21 
 msgid ""
 "In use since"
 msgstr ""
@@ -138,22 +153,22 @@ msgid ""
 "More information about this program"
 msgstr ""
 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:42 
+msgid ""
+"No applications registered yet."
+msgstr ""
+
 #: ./modules/mod_oauth/templates/oauth_apps.tpl:3 
 msgid ""
 "OAuth applications"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/oauth_apps.tpl:30 
+#: ./modules/mod_oauth/templates/oauth_apps.tpl:8 
 msgid ""
 "Registered OAuth applications"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:1 
-msgid ""
-"Registered applications"
-msgstr ""
-
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:27 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:29 
 msgid ""
 "Show applications/users that are using this key"
 msgstr ""
@@ -180,23 +195,23 @@ msgid ""
 "This application wants access to the following services:"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/oauth_apps.tpl:32 
+#: ./modules/mod_oauth/templates/oauth_apps.tpl:10 
 msgid ""
 "This page allows you to register API keys with which 3rd parties can gain "
 "access to specific parts of the API and database."
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:32 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36 
 msgid ""
 "This token is not yet used by anybody."
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:5 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:4 
 msgid ""
 "Title"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:22 
 msgid ""
 "Type"
 msgstr ""
@@ -206,22 +221,22 @@ msgid ""
 "Untitled"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:69 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75 
 msgid ""
 "Update"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:19 
+#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20 
 msgid ""
 "User"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:27 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:29 
 msgid ""
 "Users"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:42 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:47 
 msgid ""
 "When done, go to the authorization tab to set permissions."
 msgstr ""

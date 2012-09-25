@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:10 ./modules/mod_admin_category/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:9 
 msgid ""
 "Categories"
 msgstr ""
 
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:36 
+#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:11 
 msgid ""
 "Categories are used to categorize all pages. Every page belongs to exactly "
 "one category.<br/>The categories are defined in a hierarchy. Here you can "
@@ -35,42 +35,17 @@ msgid ""
 "Category Hierarchy"
 msgstr ""
 
-#: ./modules/mod_admin_category/templates/_admin_category_sorter.tpl:4 
-msgid ""
-"Category overview"
-msgstr ""
-
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:38 
+#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:28 
 msgid ""
 "Drag categories to the place where you want them in the hierarchy."
 msgstr ""
 
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:41 
-msgid ""
-"Drag categories to the trash to remove them."
-msgstr ""
-
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:25 
-msgid ""
-"Drag me"
-msgstr ""
-
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:42 
-msgid ""
-"Drag the <strong>New category</strong> to add a new category."
-msgstr ""
-
 #: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:22 
-msgid ""
-"Drag to add a new page"
-msgstr ""
-
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:17 
 msgid ""
 "How does this work?"
 msgstr ""
 
-#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:26 
+#: ./modules/mod_admin_category/templates/admin_category_sorter.tpl:25 
 msgid ""
-"New category"
+"Use the <i class=\"icon-cog\"></i> button to add or remove categories."
 msgstr ""

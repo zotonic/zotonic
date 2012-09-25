@@ -18,12 +18,18 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_twitter/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:17 
+msgid ""
+"Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account "
+"name to this number go to:"
+msgstr ""
+
+#: ./modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10 
 msgid ""
 "Finding a Twitter ID."
 msgstr ""
 
-#: ./modules/mod_twitter/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -33,14 +39,14 @@ msgid ""
 "Sign in with Twitter"
 msgstr ""
 
-#: ./modules/mod_twitter/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10 
 msgid ""
 "The (numeric) Twitter ID of a user can be found on the twitter page of the "
 "user: it is the number that is contained in the URL to the RSS feed for "
 "the user\\'s updates."
 msgstr ""
 
-#: ./modules/mod_twitter/templates/_admin_edit_sidebar.person.tpl:3 
+#: ./modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:3 
 msgid ""
 "Twitter ID"
 msgstr ""

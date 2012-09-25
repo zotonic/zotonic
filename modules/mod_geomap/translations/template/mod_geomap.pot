@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:27 
+msgid ""
+"Clear"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_admin_edit_content.country.tpl:17 
+msgid ""
+"Color"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:176 
+msgid ""
+"Could not find the location."
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location.tpl:5 
+msgid ""
+"Geodata"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_admin_edit_content.country.tpl:12 
+msgid ""
+"Here you can define the color and display value for the world map of "
+"countries."
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:8 
+msgid ""
+"Latitude"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:196 
+msgid ""
+"Location has been set."
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:16 
+msgid ""
+"Longitude"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/phone/geomap_fullscreen.tpl:3 ./modules/mod_geomap/templates/_geomap_static_simple.tpl:3 
+msgid ""
+"Map"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/phone/geomap_fullscreen.tpl:3 
+msgid ""
+"Map of"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:60 ./modules/mod_geomap/templates/_geomap.tpl:12 
+msgid ""
+"Markers"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:35 
+msgid ""
+"Please click on the map to select the location."
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_popup.tpl:10 
+msgid ""
+"Read more"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:28 
+msgid ""
+"Reset"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:29 
+msgid ""
+"Save this page"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:25 
+msgid ""
+"Set to current location"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:26 
+msgid ""
+"Set to entered address"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_admin_edit_content.country.tpl:24 
+msgid ""
+"Value"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_admin_edit_content.country.tpl:5 
+msgid ""
+"World Map"
+msgstr ""
+
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:11 ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:19 
+msgid ""
+"indexed"
+msgstr ""

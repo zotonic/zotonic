@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_base_site/templates/text/map.tpl:8 ./modules/mod_base_site/templates/tablet/map.tpl:6 
+msgid ""
+"Back to"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_meta.tpl:4 
+msgid ""
+"By"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/map.tpl:28 ./modules/mod_base_site/templates/tablet/map.tpl:26 
+msgid ""
+"City"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/page.media.tpl:6 ./modules/mod_base_site/templates/tablet/page.media.tpl:30 
+msgid ""
+"Click to download"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/search.tpl:20 ./modules/mod_base_site/templates/tablet/search.tpl:24 
+msgid ""
+"Did not find any pages matching"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:12 
+msgid ""
+"Dimensions"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/page.tpl:32 ./modules/mod_base_site/templates/text/page.query.tpl:14 ./modules/mod_base_site/templates/text/page.collection.tpl:7 
+msgid ""
+"Documents"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:26 
+msgid ""
+"Download file"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_meta.tpl:9 
+msgid ""
+"Edit"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:4 
+msgid ""
+"Filename"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_navbar.tpl:5 
+msgid ""
+"Home"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:24 
+msgid ""
+"Links"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/map.tpl:3 ./modules/mod_base_site/templates/tablet/map.tpl:3 
+msgid ""
+"Map of"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/page.tpl:33 ./modules/mod_base_site/templates/text/page.query.tpl:15 ./modules/mod_base_site/templates/text/page.collection.tpl:8 
+msgid ""
+"Media"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:8 
+msgid ""
+"Mime"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/page.tpl:35 
+msgid ""
+"More"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/search.tpl:13 ./modules/mod_base_site/templates/tablet/search.tpl:13 ./modules/mod_base_site/templates/tablet/page.query.tpl:8 
+msgid ""
+"Page"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/page.media.tpl:6 ./modules/mod_base_site/templates/tablet/page.media.tpl:30 
+msgid ""
+"Preview"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/phone/_content_list_item.tpl:18 
+msgid ""
+"Read more"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/search.tpl:3 ./modules/mod_base_site/templates/text/search.tpl:33 ./modules/mod_base_site/templates/text/_navbar.tpl:11 ./modules/mod_base_site/templates/tablet/search.tpl:3 ./modules/mod_base_site/templates/tablet/_search_form.tpl:3 
+msgid ""
+"Search"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/search.tpl:10 ./modules/mod_base_site/templates/tablet/search.tpl:11 
+msgid ""
+"Searching for"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_address.tpl:13 ./modules/mod_base_site/templates/text/_address.tpl:17 
+msgid ""
+"Show map"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:16 
+msgid ""
+"Size"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/map.tpl:32 ./modules/mod_base_site/templates/tablet/map.tpl:30 
+msgid ""
+"Street"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/search.tpl:30 
+msgid ""
+"Type the text to search"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:20 
+msgid ""
+"Uploaded"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:28 
+msgid ""
+"View in browser"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/home.tpl:3 
+msgid ""
+"Welcome"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/map.tpl:6 
+msgid ""
+"Where is"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_meta.tpl:7 
+msgid ""
+"l, F j, Y"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_content_list_item.tpl:4 ./modules/mod_base_site/templates/text/_content_list_item.tpl:5 
+msgid ""
+"more…"
+msgstr ""
+
+#: ./modules/mod_base_site/templates/text/_media_info.tpl:13 
+msgid ""
+"pixels"
+msgstr ""

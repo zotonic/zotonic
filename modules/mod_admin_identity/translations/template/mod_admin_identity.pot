@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44 
 msgid ""
-"Add or remove credentials."
+"Add a new user"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:57 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68 
 msgid ""
 "Add user"
 msgstr ""
@@ -33,9 +33,14 @@ msgid ""
 "Are you sure you want to delete the username from"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 
 msgid ""
 "Cancel"
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71 
+msgid ""
+"Changed the username."
 msgstr ""
 
 #: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9 
@@ -44,71 +49,86 @@ msgid ""
 "person, the person won't be an user anymore."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:42 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53 
+msgid ""
+"Confirm user deletion"
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99 
+msgid ""
+"Could not create the user. Sorry."
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:38 
 msgid ""
 "Created on"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40 
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8 
 msgid ""
 "Delete"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:30 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94 
+msgid ""
+"Duplicate username, please choose another username."
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35 
 msgid ""
 "E-mail"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:21 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:16 
 msgid ""
-"Every page/person can be made into a user on the edit page.\n				The "
-"difference between a user and a normal page is only\n				that the former "
+"Every page/person can be made into a user on the edit page.\n        The "
+"difference between a user and a normal page is only\n        that the former "
 "has logon credentials attached to its page record."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11 
 msgid ""
 "First"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 
 msgid ""
 "Give an unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7 
 msgid ""
 "Give the name and the e-mail address of the new user. A <em>person</em> "
 "page will be created for this user."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
 msgid ""
 "Help about user credentials."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:12 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:21 
 msgid ""
 "Make a new user"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:41 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:37 
 msgid ""
 "Modified on"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:39 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:35 
 msgid ""
 "Name"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:6 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:5 
 msgid ""
 "Name and e-mail address"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -118,34 +138,59 @@ msgid ""
 "No users found."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:43 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46 ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103 
 msgid ""
-"Options"
+"Only administrators can add users."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:50 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47 
+msgid ""
+"Only administrators can delete usernames."
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56 
+msgid ""
+"Only an administrator can delete usernames."
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89 
+msgid ""
+"Only an administrator or the user him/herself can set a password."
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 
 msgid ""
 "Password"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:35 
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:44 
 msgid ""
 "Save"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:17 
 msgid ""
 "Set username / password"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:18 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55 
+msgid ""
+"Set username/ password"
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19 
 msgid ""
 "Sur. prefix"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:24 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27 
 msgid ""
 "Surname"
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84 
+msgid ""
+"The new username/ password has been set."
 msgstr ""
 
 #: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3 
@@ -154,22 +199,32 @@ msgid ""
 "edit your site's configuration file at"
 msgstr ""
 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74 ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80 
+msgid ""
+"The username is already in use, please try another."
+msgstr ""
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46 
+msgid ""
+"There is no username coupled to this person."
+msgstr ""
+
 #: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4 
 msgid ""
 "This can't be undone. The username and password will be lost forever."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:16 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24 
 msgid ""
 "This person is also a user."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:26 
 msgid ""
 "This person is not yet a user."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:40 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:36 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18 
 msgid ""
 "Username"
 msgstr ""
@@ -179,17 +234,22 @@ msgid ""
 "Username / password"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37 
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
 msgid ""
 "Username and password"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:3 ./modules/mod_admin_identity/templates/admin_users.tpl:32 ./modules/mod_admin_identity/templates/_admin_menu_module.tpl:2 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45 
+msgid ""
+"Username has been deleted."
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:3 ./modules/mod_admin_identity/templates/admin_users.tpl:9 
 msgid ""
 "Users"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11 
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
 msgid ""
 "When you add credentials to a person then the person becomes an user. A "
 "person or machine can log on with those credentials and perform actions "
@@ -197,17 +257,22 @@ msgid ""
 "the user is member of."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:14 
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96 
+msgid ""
+"You are not allowed to create the person page."
+msgstr ""
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:24 
 msgid ""
 "You need to be an administrator to add users."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:55 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:52 
 msgid ""
 "delete username"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:57 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:54 
 msgid ""
 "edit"
 msgstr ""
@@ -217,22 +282,22 @@ msgid ""
 "if you want to change the admin password."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:33 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:10 
 msgid ""
 "matching"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:35 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:12 
 msgid ""
 "overview"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:53 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:50 
 msgid ""
 "set username/ password"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:34 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:11 
 msgid ""
 "show all"
 msgstr ""

@@ -18,58 +18,62 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 ./modules/mod_admin_modules/templates/admin_modules.tpl:34 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:36 
 msgid ""
 "Activate"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:17 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 
 msgid ""
 "Author"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:30 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:31 
 msgid ""
 "Deactivate"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:15 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:16 
 msgid ""
 "Description"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/_admin_menu_module.tpl:2 ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:7 
 msgid ""
 "Modules"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:11 
-msgid ""
-"Modules overview"
-msgstr ""
-
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:41 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:49 
 msgid ""
 "No modules found"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:16 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:17 
 msgid ""
 "Prio"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/_admin_status.tpl:2 
+#: ./modules/mod_admin_modules/templates/_admin_status.tpl:3 
 msgid ""
 "Rescan modules"
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/_admin_status.tpl:3 
+#: ./modules/mod_admin_modules/templates/_admin_status.tpl:4 
 msgid ""
 "Rescanning will rebuild the index of all modules, actions, templates etc. "
 " It will also reload all dispatch rules."
 msgstr ""
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:14 
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:15 
 msgid ""
 "Title"
+msgstr ""
+
+#: ./modules/mod_admin_modules/templates/admin_modules.tpl:8 
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n    while others are externally developed. This page "
+"shows an overview of all modules which are currently known to this Zotonic "
+"installation."
 msgstr ""

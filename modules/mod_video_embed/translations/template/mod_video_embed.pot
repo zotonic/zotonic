@@ -18,12 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
+#: ./modules/mod_video_embed/templates/_media_upload_tab.tpl:2 
 msgid ""
-"Google Analytics tracking id"
-msgstr ""
-
-#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:17 
-msgid ""
-"Google Webmaster Tools"
+"Embed code"
 msgstr ""
