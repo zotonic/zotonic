@@ -145,4 +145,3 @@ Interactivity: wiring events
 wire wire pants on fire.
 
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/manuals/templates.rst>`_

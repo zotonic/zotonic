@@ -27,4 +27,3 @@ In-depth manuals
    lib-files
    controllers
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/manuals/index.rst>`_

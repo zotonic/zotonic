@@ -61,4 +61,3 @@ Atomicity
 
 * Make whitespace changes separately.
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/codestyle.rst>`_

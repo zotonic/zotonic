@@ -13,4 +13,3 @@ request.
 However, for small changes, typo's, et cetera, Github provides a nice
 edit button which you can use to edit these ``.rst`` files.
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/documentation.rst>`_

@@ -31,5 +31,4 @@ Please also state the following:
 * ... anything that comes to mind that might be relevant, really.    
 
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/filing_issues.rst>`_
   

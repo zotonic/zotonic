@@ -31,4 +31,3 @@ We encourage contributions to Zotonic from the community!
    github is the main place to discuss the code and related topics.
 
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/dev/contributing.rst>`_
