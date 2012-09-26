@@ -198,6 +198,13 @@ div.save-buttons {
     margin-top: 18px;
 }
 
+.control-group span.error {
+    display: none;
+}
+
+.control-group.error span.error {
+    display: inline;
+}
 
 /* admin table
 --------------------------------------------------------- */
