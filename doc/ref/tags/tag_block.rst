@@ -1,3 +1,4 @@
+
 .. index:: tag; block
 .. _tag-block:
 

@@ -151,4 +151,3 @@ http://www.enterprisedb.com/products/pgdownload.do#osx
 For a very basic step-by-step installation on OSX, chick this
 http://timbenniks.nl/blog/712/step-by-step-guide-to-install-zotonic-on-osx.
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/tutorials/install.rst>`_

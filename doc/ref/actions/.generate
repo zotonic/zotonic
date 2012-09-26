@@ -9,12 +9,12 @@ EOF
 
     dir=${0%/*}
     base=$action
-    stub=$dir/action_$base.rst
-    doc=$dir/doc-$base.rst
+    stub=$dir/meta-$base.rst
+    doc=$dir/action_$base.rst
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this action, edit the doc-$action.rst file, which is included in this file.
+   To document this action, edit the action_$base.rst file, which should include this file.
 
 .. index:: action; $base
    single: $mod; action, $base
@@ -25,14 +25,13 @@ ${action//?/=}
 
 * Module: :ref:\`$mod\`
 
-.. include:: doc-$action.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/actions/doc-${action}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF

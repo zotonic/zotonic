@@ -12,4 +12,3 @@ Topics:
    site-anatomy
 
 
-`Edit <https://github.com/zotonic/zotonic/edit/master/doc/tutorials/index.rst>`_

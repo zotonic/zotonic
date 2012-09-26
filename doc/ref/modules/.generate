@@ -5,12 +5,12 @@ do
 
     dir=${0%/*}
     mod=${f##*/}
-    stub=$dir/$mod.rst
-    doc=$dir/doc-$mod.rst
+    stub=$dir/meta-$mod.rst
+    doc=$dir/$mod.rst
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this module, edit the doc-$mod.rst file, which is included in this file.
+   To document this module, edit the $mod.rst file, which should include this file.
 
 .. index:: module; $mod
 .. _$mod:
@@ -18,14 +18,13 @@ do
 $mod
 ${mod//?/=}
 
-.. include:: doc-$mod.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/modules/doc-${mod}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$mod.rst
 
 Not yet documented.
 EOF

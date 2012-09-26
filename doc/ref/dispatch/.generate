@@ -15,9 +15,9 @@ EOF
 
         dir=${0%/*}
         base=$mod-$dispatch
-        stub=$dir/dispatch_$base.rst
+        stub=$dir/meta-$base.rst
         meta=$dir/meta-$base.csv
-        doc=$dir/doc-$base.rst
+        doc=$dir/dispatch_$base.rst
 
         $dir/.parse-dispatch $f > $meta
         if [ $? -ne 0 ] ; then
@@ -32,7 +32,7 @@ EOF
 
         cat <<EOF > $stub
 .. This file is generated.
-   To document this dispatch, edit the doc-$base.rst file, which is included in this file.
+   To document this dispatch, edit the dispatch_$base.rst file, which should include this file.
 
 .. index::
    single: dispatch; $mod, $dispatch
@@ -49,14 +49,13 @@ ${dispatch//?/=}==${mod//?/=}=
    :header: Name, Path, Resource, Args
    :file: meta-$base.csv
 
-.. include:: doc-$base.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/dispatch/doc-${base}.rst>\`_
 EOF
 
         if [ ! -e $doc ]; then
-            echo "New stub: $doc"
+            echo "New doc: $doc"
             cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF

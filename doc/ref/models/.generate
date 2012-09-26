@@ -9,13 +9,13 @@ do
     mod=core
     file=${f##*/m_}
     model=${file%.erl}
-    stub=$dir/model_$model.rst
-    doc=$dir/doc-$model.rst
+    stub=$dir/meta-$model.rst
+    doc=$dir/model_$model.rst
     # no meta, since this is a 'core' model, and as such shouldn't be listed in any module's meta file
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this model, edit the doc-$model.rst file, which is included in this file.
+   To document this model, edit the model_$model.rst file, which should include this file.
 
 .. index:: model; $model
    single: $mod; model, $model
@@ -26,14 +26,13 @@ ${model//?/=}
 
 * Module: $mod
 
-.. include:: doc-$model.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/models/doc-${model}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$model.rst
 
 Not yet documented.
 EOF
@@ -53,12 +52,12 @@ EOF
 
     dir=${0%/*}
     base=$model
-    stub=$dir/model_$base.rst
-    doc=$dir/doc-$base.rst
+    stub=$dir/meta-$base.rst
+    doc=$dir/model_$base.rst
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this model, edit the doc-$model.rst file, which is included in this file.
+   To document this model, edit the model_$base.rst file, which should include this file.
 
 .. index:: model; $base
    single: $mod; model, $base
@@ -69,14 +68,13 @@ ${model//?/=}
 
 * Module: :ref:\`$mod\`
 
-.. include:: doc-$model.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/models/doc-${model}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF

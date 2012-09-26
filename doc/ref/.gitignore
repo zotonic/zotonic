@@ -1,6 +1,2 @@
-*.rst
-!doc-*.rst
-!index.rst
-!tag_*
 *~
 meta-*

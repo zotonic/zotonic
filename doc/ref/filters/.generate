@@ -9,12 +9,12 @@ EOF
 
     dir=${0%/*}
     base=$filter
-    stub=$dir/filter_$base.rst
-    doc=$dir/doc-$base.rst
+    stub=$dir/meta-$base.rst
+    doc=$dir/filter_$base.rst
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this filter, edit the doc-$filter.rst file, which is included in this file.
+   To document this filter, edit the filter_$base.rst file, which should include this file.
 
 .. index:: filter; $base
    single: $mod; filter, $base
@@ -25,14 +25,13 @@ ${filter//?/=}
 
 * Module: :ref:\`$mod\`
 
-.. include:: doc-$filter.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/filters/doc-${filter}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF

@@ -9,12 +9,12 @@ EOF
 
     dir=${0%/*}
     base=$controller
-    stub=$dir/controller_$base.rst
-    doc=$dir/doc-$base.rst
+    stub=$dir/meta-$base.rst
+    doc=$dir/controller_$base.rst
 
     cat <<EOF > $stub
 .. This file is generated.
-   To document this controller, edit the doc-$controller.rst file, which is included in this file.
+   To document this controller, edit the controller_$base.rst file, which should include this file.
 
 .. index:: controller; $base
    single: $mod; controller, $base
@@ -25,14 +25,13 @@ ${controller//?/=}
 
 * Module: :ref:\`$mod\`
 
-.. include:: doc-$controller.rst
-
-\`Edit <https://github.com/zotonic/zotonic/edit/master/doc/ref/controllers/doc-${controller}.rst>\`_
 EOF
 
     if [ ! -e $doc ]; then 
-        echo "New stub: $doc"
+        echo "New doc: $doc"
         cat <<EOF > $doc
+
+.. include:: meta-$base.rst
 
 Not yet documented.
 EOF
