@@ -1,5 +1,7 @@
 {% extends "!layout.html" %}
 
+{% set css_files = css_files + ["_static/overrules.css"] %}
+
 {% block rootrellink %}
 <li><a href="http://zotonic.com">Zotonic Home</a>{{ reldelim1 }}</li>
 {{ super() }}
