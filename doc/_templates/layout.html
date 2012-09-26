@@ -4,3 +4,13 @@
 <li><a href="http://zotonic.com">Zotonic Home</a>{{ reldelim1 }}</li>
 {{ super() }}
 {% endblock %}
+
+{# Under Construction Notice #}
+{% block document %}
+<div class="admonition note">
+<p class="first admonition-title">Under Construction</p>
+<p class="last">This documentation is under development. Please refer to the <a href="http://zotonic.com/documentation">official documentation</a> if you don't find what you are looking for here.</p>
+</div>
+
+{{ super() }}
+{% endblock %}
