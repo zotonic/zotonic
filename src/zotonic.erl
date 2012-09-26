@@ -19,8 +19,13 @@
 
 -module(zotonic).
 -author('Marc Worrell <marc@worrell.nl>').
+
 -export([start/0, start/1, stop/0, stop/1, status/0, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
--revision("$Id$").
+
+-compile([{parse_transform, lager_transform}]).
+
+-define(MIN_OTP_VERSION, "R14B03").
+
 
 ensure_started(App) ->
     case application:start(App) of
@@ -37,10 +42,11 @@ start() -> start([]).
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
+    ensure_started(lager),
+    test_erlang_version(),
     zotonic_deps:ensure(),    
     ensure_started(crypto),
     ensure_started(webzmachine),
-    ensure_started(lager),
     ensure_started(mnesia),
     ok = application:start(zotonic).
 
@@ -58,7 +64,7 @@ stop() ->
 %% @spec stop([Node]) -> void()
 %% @doc Stop a zotonic server on a specific node
 stop([Node]) ->
-    io:format("Stop:~p~n",[Node]),
+    io:format("Stopping:~p~n",[Node]),
     case net_adm:ping(Node) of
     	pong -> rpc:cast(Node, init, stop, []);
     	pang -> io:format("There is no node with this name~n")
@@ -93,6 +99,17 @@ update([Node]) ->
     	pang -> io:format("There is no node with this name~n")
     end,
     init:stop().
+
+
+test_erlang_version() ->
+    Version = erlang:system_info(otp_release),
+    if
+        Version < ?MIN_OTP_VERSION ->
+            lager:error("Zotonic needs at least Erlang release ~p; this is ~p", [?MIN_OTP_VERSION, Version]),
+            erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
+        true ->
+            ok
+    end.
 
 run_tests() ->
     z_media_preview_tests:test().
