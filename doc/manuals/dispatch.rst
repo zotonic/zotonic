@@ -1,3 +1,4 @@
+.. _manual-dispatch:
 
 The URL dispatch system
 =======================

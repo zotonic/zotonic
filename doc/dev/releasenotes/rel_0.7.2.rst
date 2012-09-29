@@ -49,7 +49,7 @@ Arjan Scherpenisse (misc):
 * Added date_start_year= and date_end_year= search filters to filter on year of date start/end.     
 * Fix infinite recursion in sub_month/3 filter.     
 * mod_import_csv: Added import button to admin status page.
-* m_rsc_update emptied the pivot_date_* fields when date_ fields where not part of the update.
+* m_rsc_update emptied the pivot_date_* fields when ``date_`` fields where not part of the update.
 * Added application/x-font-woff for webfonts.     
 * Allow modules to override admin TinyMCE options which were originally set in admin-common.js
 * Addressed the issues in the backup module. Fixes #220

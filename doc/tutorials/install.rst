@@ -22,7 +22,7 @@ You will need to:
 Steps to install Zotonic
 ------------------------
 
-1. Type "make" in the root of zotonic (there where the Makefile is located). (*1)
+1. Type ``make`` in the root of Zotonic (there where the Makefile is located).
 
 2. Create an user and database in PostgreSQL (change the password for the user!):
 

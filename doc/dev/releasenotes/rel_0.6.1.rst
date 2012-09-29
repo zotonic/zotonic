@@ -152,7 +152,7 @@ Marc Worrell
 * Added notifications on edge insert/delete.  Incomplete but good enough.
 * Made session timeout configurable, use site.session_expire_1 and site.session_expire_n
 * Automatically cleanup temporary files when the request process is stopped.
-* Allow more than one do_ widget per element.
+* Allow more than one ``do_`` widget per element.
 * Fix for resizing images embedded in e-mails.
 * Added Google Analytics _trackEvent do_gaq_track
 * Added m.comment.get for a comment_id

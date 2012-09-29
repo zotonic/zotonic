@@ -54,7 +54,7 @@ Other features:
 * Newer Mochiweb r153 release from upstream
 
 
-  Bugfixes
+Bugfixes
 --------
 
 * page_path controller should not redirect to the default_page_url (#6)

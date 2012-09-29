@@ -26,4 +26,4 @@ In-depth manuals
    templates
    lib-files
    controllers
-
+   upgrading

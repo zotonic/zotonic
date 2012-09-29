@@ -133,6 +133,7 @@ General bug fixes
 - Fix for format_price filter. Show thousands when no cents.
 - Make video embed code editable.
 - Merged various webmachine fixes, updating it to 1.7.3:
+
  - support {stream, TotalSize, StreamFun} body result for range-capable streams
  - Add infinity timeout to gen_server calls
  - Allow multiple IP/port bindings
@@ -141,6 +142,7 @@ General bug fixes
  - change H7 to match on any if-match, not just *
  - webmachine: WM-1.7.3(compat) ignores client's Content-Type on HTTP PUT requests (#130)
  - webmachine: prevent using chunked transfer encoding with HTTP/1.0.
+
 - increase the startup timeouts for the gen_servers to prevent startup race condition
 - Update mochiweb to latest version from mochi/mochiweb github repository (1.5.0)
 - Pulled latest epgsql driver to support Postgres notifications.

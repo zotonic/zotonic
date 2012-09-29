@@ -9,6 +9,7 @@ EOF
 
     dir=${0%/*}
     base=$controller
+    full="controller_$controller"
     stub=$dir/meta-$base.rst
     doc=$dir/controller_$base.rst
 
@@ -20,8 +21,8 @@ EOF
    single: $mod; controller, $base
 .. _controller-$controller:
 
-$controller
-${controller//?/=}
+$full
+${full//?/=}
 
 * Module: :ref:\`$mod\`
 

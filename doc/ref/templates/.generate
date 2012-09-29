@@ -10,7 +10,7 @@ EOF
     base=$template${device:+-}$device
     stub=$dir/meta-$base.rst
     doc=$dir/template_$base.rst
-    title="$template${device:+ (}$device${device:+)}"
+    title="$template${device:+ (}$device${device:+)}.tpl"
 
     cat <<EOF > $stub
 .. This file is generated.

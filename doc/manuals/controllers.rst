@@ -1,3 +1,4 @@
+.. _manual-controllers:
 
 URL Controllers
 ===============

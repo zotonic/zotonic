@@ -106,7 +106,7 @@ Other features:
 * New ErlyDTL support for multiple argument {% with %}: {%  with a,b as c,d %}
 * New ErlyDTL support for filters with multiple parameters.
 * New ErlyDTL test set, including regression tests.
-** System wide configuration system (z_config) using a configuration file at 'priv/config'
+* System wide configuration system (z_config) using a configuration file at 'priv/config'
 
 
 Bugfixes

@@ -188,7 +188,7 @@ Arjan Scherpenisse (245):
 - Make z_form_submit_validated_do more stable using $.each()
 - Makefile - use "find" to locate every Makefile we need, including those behind symlinks.
 - Makefile now inits/updates git submodules if any.
-- Media: classify "application/*" media files as "document".
+- Media: classify ``application/*`` media files as "document".
 - Move webmachine -> webzmachine in its own repository.
 - Moved translation-tabs initialization into mod_translation.
 - New filter: index_of, which gives the index of an item in a list.
@@ -227,7 +227,7 @@ Arjan Scherpenisse (245):
 - admin: use catinclude for _edit_media template, so it can be overridden.
 - filter_index_of: Removed debug statements
 - lower/upper filters now try to convert their argument to a list if it's not.
-- m_rsc_update emptied the pivot_date_* fields when date_ fields where not part of the update.
+- m_rsc_update emptied the pivot_date_* fields when ``date_`` fields where not part of the update.
 - mod_admin: Made the title of uploaded file optional.
 - mod_admin: Press "enter" now saves the edit page.
 - mod_backup: make sure we have an archive dir before archiving.
