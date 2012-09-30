@@ -17,7 +17,7 @@ In-depth manuals
    services
    auth
    notification
-   datamodel
+   datamodel/index
    resources
    categories
    predicates

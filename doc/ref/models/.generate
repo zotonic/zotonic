@@ -11,6 +11,8 @@ do
     model=${file%.erl}
     stub=$dir/meta-$model.rst
     doc=$dir/model_$model.rst
+    title="m_$model"
+
     # no meta, since this is a 'core' model, and as such shouldn't be listed in any module's meta file
 
     cat <<EOF > $stub
@@ -21,8 +23,8 @@ do
    single: $mod; model, $model
 .. _model-$model:
 
-$model
-${model//?/=}
+$title
+${title//?/=}
 
 * Module: $mod
 
@@ -52,6 +54,7 @@ EOF
 
     dir=${0%/*}
     base=$model
+    title="m_$model"
     stub=$dir/meta-$base.rst
     doc=$dir/model_$base.rst
 
@@ -63,8 +66,8 @@ EOF
    single: $mod; model, $base
 .. _model-$model:
 
-$model
-${model//?/=}
+$title
+${title//?/=}
 
 * Module: :ref:\`$mod\`
 

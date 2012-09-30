@@ -16,6 +16,8 @@ Zotonic is a mix between a traditional database and a triple store. Some page (r
 
 In Zotonic there is no real distinction between rsc records that are a person, a news item, a video or something else. The only difference is the category of the rsc record. And the rsc.s category can be changed. Even categories and predicates are represented as rsc records and can, subsequently, have their own page on the web site.
 
+.. toctree::
+   search
 
 rsc
 ---
