@@ -13,7 +13,7 @@ In-depth manuals
 .. toctree::
 
    dispatch
-   module-system
+   modules/index
    services
    auth
    notification

@@ -32,8 +32,8 @@ The building blocks of a template.
 
 .. _manual-scomps:
 
-Scomps
-^^^^^^
+Custom tags
+^^^^^^^^^^^
 
 Screen components for when tags and included templates are not enough and programming is needed.
 
@@ -100,7 +100,12 @@ The Erlang modules implementing models always start with `m_` (like in `m_rsc`).
 Filters
 ^^^^^^^
 
-Filters are used to modify values you want to show or use in your templates.
+Filters are used to modify values you want to show or use in your
+templates. For example::
+
+  {{ value|lower }}
+
+will lowercase the input value using the :ref:`filter-lower` filter.
 
 .. seealso:: a listing of all :ref:`filters`.
 
