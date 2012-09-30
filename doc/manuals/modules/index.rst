@@ -12,15 +12,17 @@ extra :ref:`templates` and accompanying logic or adding handlers for
 internal Zotonic events. Good examples are the modules extending the
 :ref:`mod_admin`.
 
-A module is a gen_server with accompanying templates,
-:ref:`controllers`, :ref:`dispatch` and more, all contained in a
-single module directory tree.
+A module is a directory containing the module's Erlang code,
+:ref:`controllers <manual-templates>`, :ref:`controllers
+<manual-controllers>`, :ref:`dispatch rules <manual-dispatch>` and
+more, all contained in a single module directory tree.
 
 .. toctree::
    :maxdepth: 2
 
    structure
    gen_server
+   dependencies
    versioning
 
 .. seealso:: listing of all :ref:`ref-modules`.
@@ -28,13 +30,6 @@ single module directory tree.
 
 **Looking for more modules?**
 
-Check out the `Zotonic Module Index`_, an index with user-contributed modules which are not part of the core Zotonic distribution.
-
-.. _Zotonic Module Index: http://modules.zotonic.com
-
-
-Metadata
---------
-
-Lorelay...
-
+Check out the `Zotonic Module Index <http://modules.zotonic.com>`_:,
+an index with additional user-contributed modules which are not part
+of the core Zotonic distribution.

@@ -15,3 +15,9 @@ refer you to the :ref:`manual-modules` manual.
 
    mod_*
 
+
+**Looking for more modules?**
+
+Check out the `Zotonic Module Index <http://modules.zotonic.com>`_:,
+an index with additional user-contributed modules which are not part
+of the core Zotonic distribution.
