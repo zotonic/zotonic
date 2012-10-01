@@ -5,6 +5,10 @@
 # /path/to/zotonic/src/models/m_model_name.erl
 for f in $ZOTONIC_SRC/src/models/m_*
 do
+    filename=`basename $f`
+    if grep $filename .ignore >/dev/null; then
+        break;
+    fi
     dir=${0%/*}
     mod=core
     file=${f##*/m_}

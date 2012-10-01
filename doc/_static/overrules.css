@@ -3,7 +3,7 @@ body {
 }
 
 div.document {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: auto;
 }
 
@@ -24,4 +24,15 @@ pre {
 
 tt {
     font-size: 13px;
+}
+
+/* table styles */
+th {
+    background-color: #eeeeee;
+}
+
+table.docutils td, table.docutils th {
+    border-color: #CCCCCC;
+    border-style: none none dotted;
+    padding: 5px 8px 6px 5px;
 }

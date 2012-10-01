@@ -61,3 +61,4 @@ This can then be used in your template like this::
   {% for id in m.search[{foo bar=123}] %}
   ... looping over all ids in the 'foo' table for which bar = 123
   {% endfor %}
+
