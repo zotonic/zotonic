@@ -66,10 +66,11 @@ Structure your commit message like this::
   changed. Use the imperative present tense (fix, add, change). For
   example: `Add 'foobar' filter`, `Fix bug in media upload service`.
 
-* The description should explain the intention and implementation of
-  your approach, in the present tense.
+* The **description** should explain the intention and implementation
+  of your approach, in the present tense.
 
-*  Optionally, when your commit fixes a bug on github, add `Fixes #1545` on a separate line below the description.
+* Optionally, when your commit **fixes** a bug on github, add `Fixes
+   #1545` on a separate line below the description.
 
 Notice the empty line preceding the longer description and the "Fixes" tag.
 
