@@ -1,3 +1,6 @@
+.. highlight:: none
+.. _dev-codingstyle:
+
 Code style conventions
 ======================
 
@@ -39,27 +42,56 @@ The Zotonic commit convention are slightly based on `rebar's README
 
 Structure your commit message like this::
 
-  One line summary (less than 50 characters)
+  prefix: One line summary (less than 50 characters)
 
-  Longer description (wrap at 72 characters)
+  Longer description, multiline text that is supposed to wrap at 72
+  characters.
 
-* The summary should be less than 50 characters, and tell what was
+  Fixes #403
+
+* **Prefix**: Every commit message must start with one of the designated commit
+  prefixes:
+
+ * ``mod_foobar:`` Changes that are related to a single module should
+   be prefixed with the module name.
+ * ``core:`` For changes in the `src`, `include` or `deps` folder;
+   e.g. everything outside modules.
+ * ``doc:`` For changes to the documentation, everything below doc/
+ * ``scripts:`` for changes to the ``zotonic`` command and its helper scripts.
+ * ``tests:`` for unit tests and the testsandbox.
+ * ``skel`` for the skeleton sites.
+ * ``zotonic_status`` for the default site.
+
+* The **summary** should be less than 50 characters, and tell what was
   changed. Use the imperative present tense (fix, add, change). For
   example: `Add 'foobar' filter`, `Fix bug in media upload service`.
 
 * The description should explain the intention and implementation of
   your approach, in the present tense.
 
-*  When your commit fixes a bug on github, add `Fixes #1545` on a separate line below the description.
+*  Optionally, when your commit fixes a bug on github, add `Fixes #1545` on a separate line below the description.
 
-Notice the empty line preceding the longer description.
+Notice the empty line preceding the longer description and the "Fixes" tag.
 
 
-Atomicity
----------
+Git best practices
+------------------
 
-* Break up logical changes into separate commits.
+* Please maintain commit atomicity by breaking up logical changes into
+  separate commits; e.g., do not commit unrelated fixes into a single
+  commit.
 
 * Make whitespace changes separately.
 
+* When updating from the Zotonic source, please use ``git pull
+  --rebase`` to prevent unnecessary merge commits.
+
 * Generally, try to `Mind your Git Manners <http://blog.8thlight.com/kevin-liddle/2012/09/27/mind-your-git-manners.html>`_.
+
+
+The CONTRIBUTORS file
+---------------------
+
+When this is your first contribution to Zotonic, you are welcome to
+add your name and e-mail address to the CONTRIBUTORS file in the root
+of the project. Please keep the file alphabetically ordered.
