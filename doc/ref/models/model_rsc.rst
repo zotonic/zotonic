@@ -1,9 +1,11 @@
 
 .. include:: meta-rsc.rst
 
-The main resource model. This model provides an interface to all
-resource ("page") information. It also provides an easy way to fetch
-edges from pages without needing to use the :ref:`model-edge` model.  
+The main resource model, which is the central part of the
+:ref:`Zotonic data model <manual-datamodel>`. This model provides an
+interface to all resource ("page") information. It also provides an
+easy way to fetch edges from pages without needing to use the
+:ref:`model-edge` model.
 
 Properties
 ----------
@@ -232,4 +234,4 @@ A resource has the following properties accessible from the templates:
 |                   |undefined.                                           |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 
-.. seealso:: :ref:`model-edge`, :ref:`model-media`
+.. seealso:: :ref:`manual-datamodel`, :ref:`model-edge`, :ref:`model-media`

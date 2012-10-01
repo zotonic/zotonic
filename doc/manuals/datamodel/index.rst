@@ -8,13 +8,24 @@ The data model
 
 An overview of the Zotonic data model.
 
-The Zotonic data model has two tables at its core. The rsc (:term:`resource` aka :term:`page`) table and the :term:`edge` table. All other tables are for access control, visitor administration, configuration and other purposes.
+The Zotonic data model has two tables at its core. The rsc
+(:term:`resource` aka :term:`page`) table and the :term:`edge`
+table. All other tables are for access control, visitor
+administration, configuration and other purposes.
 
-For simplicity of communication the rsc record is often referred to as a page. As every rsc record can have their own page on the web site.
+For simplicity of communication the rsc record is often referred to as
+a page, as every rsc record can have their own page on the website.
 
-Zotonic is a mix between a traditional database and a triple store. Some page (rsc record) properties are stored as columns, some are serialized in a binary column and some are represented as directed edges to other pages.
+Zotonic's data model is a mixture between a traditional database and a
+triple store. Some resource properties are stored as columns, some are
+serialized in a binary column and some are represented as directed
+`edges` to other pages.
 
-In Zotonic there is no real distinction between rsc records that are a person, a news item, a video or something else. The only difference is the category of the rsc record. And the rsc.s category can be changed. Even categories and predicates are represented as rsc records and can, subsequently, have their own page on the web site.
+There is no real distinction between rsc records that are a person, a
+news item, a video or something else. The only difference is the
+`category` of the rsc record. And the rsc's category can easily be
+changed. Even categories and predicates are represented as rsc records
+and can, subsequently, have their own page on the web site.
 
 .. toctree::
    search
@@ -22,12 +33,30 @@ In Zotonic there is no real distinction between rsc records that are a person, a
 rsc
 ---
 
-The rsc (from resource) table holds all (well most) properties of a page. Some properties are present as columns and other properties are serialized in a binary blob column. The properties having their own column are essential for the system to select the wanted records or to check uniqueness constraints or foreign key constraints.
+The rsc (from resource) table holds all (well most) properties of a
+page. Some properties are present as columns and other properties are
+serialized in a binary blob column. The properties having their own
+column are essential for the system to select the wanted records or to
+check uniqueness constraints or foreign key constraints.
 
-Examples of properties represented as columns are the rsc id, visibility, category id, modification date, creation date, modifier id, creator id, version number, unique name, unique path, unique uri and publication period.
+Examples of properties represented as columns are the id, visibility,
+category id, modification date, creation date, modifier id, creator
+id, version number, unique name, unique path, unique uri and
+publication period. For a full listing of its properties, see the
+:ref:`model-rsc` page.
 
-When the version number or modification date of a rsc record is updated then its id is added to the pivot queue. The Erlang pivot process will extract all texts and some other information from the rsc record and fill the pivot columns of the rsc record. The pivot columns are used for searching, they contain amongst others the full text index.
+rsc properties can also be customly defined: any property that is
+programmatically set on the rsc, is stored in serialized form in the
+record, and can later be retrieved.
 
+When the version number or modification date of a rsc record is
+updated then its id is added to the pivot queue. The Erlang pivot
+process will extract all texts and some other information from the rsc
+record and fill the pivot columns of the rsc record. The pivot columns
+are used for searching, they contain amongst others the full text
+index.
+
+.. seealso:: :ref:`model-rsc`
 
 edge
 ----
@@ -36,19 +65,22 @@ The edge table defines relations between rsc records (pages). It does this by ad
 
 These edges are visible in the admin interface on the "Page connections" panel.
 
-All edges with a certain subject are defined to belong to that subject, this to simplify the access control.
+All edges with a certain subject are defined to `belong` to that
+subject, this to simplify the access control. So if you are allowed to
+edit the resource, you're also allowed to edit its `outgoing` edges ("Page
+connections" in the admin).
+
+.. seealso:: :ref:`model-edge`
 
 
 medium
 ------
 
-One media is a medium. When a rsc is a medium then this table holds a record describing that medium. It stores the mime type, width, height and other properties of the medium.
+One media is a medium. When a rsc is a medium then this table holds a
+record describing that medium. It stores the mime type, width, height
+and other properties of the medium.
 
-
-medium_deleted
---------------
-
-When a medium is deleted then any files referenced by that medium will be added to this table. Zotonic periodically checks this table to delete files that are not needed anymore.
+.. seealso:: :ref:`model-media`
 
 
 category
@@ -60,11 +92,20 @@ That a rsc can't belong to more than one category is for simplicity and speed of
 
 A category is a rsc, the category table only describes the hierarchy of the categories. All other properties of a category are defined by its rsc record.
 
+.. seealso:: :ref:`model-category`
+
 
 identity
 --------
 
 A rsc record can become an user by adding the user's credentials to this table. A single user can have multiple kinds of credentials, think of his/her username, openid uri etc. A user doesn't necessarily be a person.
+
+.. seealso:: :ref:`model-identity`
+
+medium_deleted
+--------------
+
+When a medium is deleted then any files referenced by that medium will be added to this table. Zotonic periodically checks this table to delete files that are not needed anymore.
 
 
 visitor / visitor_cookie
@@ -94,11 +135,7 @@ Comments on a page. Comments are not added as a separate rsc record because that
 
 This separate comment table also helps with cleaning up comments when the rsc record is deleted.
 
-
-rating
-------
-
-The rating a visitor gave to a rsc record.
+.. seealso:: :ref:`mod_comment`
 
 
 config
@@ -106,11 +143,7 @@ config
 
 System and module configuration keys.
 
-
-emailq
-------
-
-Queue with outgoing e-mails. Maintained by mod_emailer.
+.. seealso:: :ref:`model-config`, :ref:`mod_admin_config`
 
 
 rsc_pivot_queue
