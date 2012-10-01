@@ -34,7 +34,8 @@ of code shorter than 80 characters.
 Writing Commit Messages
 -----------------------
 
-### taken from rebar's README, https://github.com/basho/rebar; I find those quite sensible. ###
+The Zotonic commit convention are slightly based on `rebar's README
+<https://github.com/basho/rebar>`_.
 
 Structure your commit message like this::
 
@@ -61,3 +62,4 @@ Atomicity
 
 * Make whitespace changes separately.
 
+* Generally, try to `Mind your Git Manners <http://blog.8thlight.com/kevin-liddle/2012/09/27/mind-your-git-manners.html>`_.
