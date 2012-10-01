@@ -1,3 +1,6 @@
+.. highlight:: none
+.. _dev-documentation:
+
 Contributing documentation
 ==========================
 
@@ -13,3 +16,24 @@ request.
 However, for small changes, typo's, et cetera, Github provides a nice
 edit button which you can use to edit these ``.rst`` files.
 
+
+Writing documentation
+---------------------
+
+Emacs' `rst-mode
+<http://docutils.sourceforge.net/docs/user/emacs.html>`_ does the job
+for most things. It has nice coloring and indenting.
+
+For the easy editing of tables, we use Emacs' `table-mode
+<http://emacswiki.org/emacs/TableMode>`_, which at first has a bit of
+a learning curve but actually works pretty well when creating the
+ascii-art tables that the RST format requires you to use.
+
+In general, we use this style of tables::
+
+  +--------------------+-------------------+
+  | Header             |Other header       |
+  +====================+===================+
+  |This is the table   |Some more contents |
+  |cell contents       |                   |
+  +--------------------+-------------------+
