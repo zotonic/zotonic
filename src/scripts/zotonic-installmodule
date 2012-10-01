@@ -66,9 +66,12 @@ def install_module(modulename, moduleList):
     print "** Installing", modulename,"..."
 
     cmd = "%s clone %s %s" % (info["scm"], info["repository"], clonepath)
-    os.system(cmd)
-    print "**", modulename, "OK"
-    return True
+    code, signal = divmod(os.system(cmd), 1<<8)
+    if code != 0:
+        return False
+    else:
+        print "**", modulename, "OK"
+        return True
 
 
 from optparse import OptionParser
