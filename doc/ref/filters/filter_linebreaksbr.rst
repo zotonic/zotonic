@@ -1,4 +1,13 @@
-
+.. highlight:: django
 .. include:: meta-linebreaksbr.rst
 
-Not yet documented.
+Translate ASCII newlines (``\n``) into HTML ``<br />`` elements.
+
+The following string::
+  
+  {{ "foo\nbar"|linebreaksbr }}
+
+will evaluate to ``foo<br />bar``.
+
+
+.. seealso:: :ref:`filter-brlinebreaks`

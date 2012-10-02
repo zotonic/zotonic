@@ -1,4 +1,4 @@
 
 .. include:: meta-lower.rst
 
-Not yet documented.
+.. seealso:: :ref:`filter-upper`
