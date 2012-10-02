@@ -483,7 +483,7 @@ function z_stream_start(host)
 {
 	if (!z_ws && !z_comet_is_running)
 	{
-		if ("WebSocket" in window && window.location.protocol == "http:") 
+		if ("WebSocket" in window) 
 		{
 			z_websocket_start(host);
 		}
@@ -547,7 +547,12 @@ function z_comet_data(data)
 
 function z_websocket_start(host)
 {
-	z_ws = new WebSocket("ws://"+document.location.host+"/websocket?z_pageid="+z_pageid);
+	var protocol = "ws:";
+	if (window.location.protocol == "https:")
+	{
+		protocol = "wss:";
+	}
+	z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid);
 
 	z_ws.onopen = function() { z_ws_opened = true; };
 	z_ws.onerror = function() { };
