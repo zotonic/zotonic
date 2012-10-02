@@ -28,6 +28,8 @@
 
 twitter(undefined, _Context) -> undefined;
 twitter(<<"<p>", _/binary>> = Input, _Context) -> Input;
+twitter(Input, Context) when is_list(Input) ->
+    twitter(z_convert:to_binary(Input), Context);
 twitter(Input, Context) when is_binary(Input) -> iolist_to_binary(twitter1(Input, 0, [], Context));
 twitter(Input, _Context) -> Input.
 
