@@ -10,4 +10,5 @@ For example::
 
 When `value` is undefined then the output will be “”.
 
-.. seealso:: :ref:`filter-slugify`
+.. seealso:: :ref:`filter-slugify`, :ref:`filter-to_binary`
+

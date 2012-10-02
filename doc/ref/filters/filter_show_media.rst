@@ -27,3 +27,5 @@ Image which are inlined in the body text can have these parameters:
   small/middle/large size. Otherwise it scales to fit in the bounding
   box of the respective size.  link - checkbox if you want to let the
   image include a link to its own page.
+
+.. seealso:: :ref:`filter-without_embedded_media`

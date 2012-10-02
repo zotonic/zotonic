@@ -14,3 +14,6 @@ Outputs::
 
 This filter is very useful when displaying user-generated plaintexts,
 like comments.
+
+.. seealso:: :ref:`filter-urlize`
+

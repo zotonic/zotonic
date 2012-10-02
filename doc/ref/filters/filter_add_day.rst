@@ -15,3 +15,4 @@ The filter has an optional argument which defines the number of days to add::
 
 When the value is ``{{2008,12,10},{15,30,0}}``, the output is ``{{2008,12,13},{15,30,0}}``.
 
+.. seealso:: :ref:`filter-sub_day`, :ref:`filter-add_week`, :ref:`filter-add_month`, :ref:`filter-add_year`
