@@ -60,6 +60,17 @@ to this::
 
   {home,  [],  controller_template, [{template, "home.tpl"}]},
 
+Removed filters
+...............
+
+The ``lenght_is`` filter has gone. Replace constructs like this::
+
+  {% if value|length_is:5 %}
+
+to::
+
+  {% if value|length == 5 %}
+
 
 Upgrading to Zotonic 0.8
 ------------------------

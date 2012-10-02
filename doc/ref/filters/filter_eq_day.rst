@@ -13,4 +13,5 @@ This outputs “same day” if value and othervalue are dates and on the same da
 
 This is useful for conditions, in combination with for example the `if` tag.
 
+.. seealso:: :ref:`filter-ne_day`
 
