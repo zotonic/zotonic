@@ -42,6 +42,12 @@ mod_survey
     Largely rewritten. Now uses the new 'blocks' structure for adding
     questions to the survey.
 
+mod_ssl
+     New module: adds SSL support to sites.
+     Previously only a single certificate could be used per zotonic
+     server. With this module each site can have its own https listeners and 
+     certificates. When you don't supply a certificate then a self signed 
+     certificate and private key will be generated.
 
 * New filters
 
