@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2012 Marc Worrell
 %% @doc Supervisor for the zotonic application.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -126,66 +126,40 @@ init([]) ->
                   false -> z_config:get_dirty(listen_port); 
                   Anyport -> list_to_integer(Anyport) 
               end,
-    WebPortSSL = case os:getenv("ZOTONIC_PORT_SSL") of
-                     false -> z_config:get_dirty(listen_port_ssl); 
-                     Anyport_ -> list_to_integer(Anyport_)
-                 end,      
+
     z_config:set_dirty(listen_ip, WebIp),
     z_config:set_dirty(listen_port, WebPort),
-    z_config:set_dirty(listen_port_ssl, WebPortSSL),    
 
     WebConfig = [ 
         {dispatcher, z_sites_dispatcher},
         {dispatch_list, []},
         {backlog, z_config:get_dirty(inet_backlog)}
-                ],
+    ],
     
-    NonSSLOpts = [{port, WebPort}],
-    SSLCertOpts = [{certfile, z_config:get_dirty(ssl_certfile)}, 
-                   {keyfile, z_config:get_dirty(ssl_keyfile)},
-                   {password, z_config:get_dirty(ssl_password)}],
-    SSLCertOpts2 = case z_config:get_dirty(ssl_cacertfile) of
-                       undefined -> SSLCertOpts;
-                       CACertFile -> [{cacertfile, CACertFile} | SSLCertOpts]
-                   end,
-    SSLOpts = [
-        {port, WebPortSSL},
-        {ssl, true},  
-        {ssl_opts, SSLCertOpts2}
-              ],
-
-    IPv4Opts = [{ip, WebIp}], % Listen to the ip address and port for all sites.
-    IPv6Opts = [{ip, any6}],
+    % Listen to the ip address and port for all sites.
+    IPv4Opts = [{port, WebPort}, {ip, WebIp}], 
+    IPv6Opts = [{port, WebPort}, {ip, any6}],
 
     % Webmachine/Mochiweb processes
-    [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
+    [IPv4Proc, IPv6Proc] =
         [[{Name,
            {webmachine_mochiweb, start,
             [Name, Opts]},                                 
            permanent, 5000, worker, dynamic}]
          || {Name, Opts} 
-         <- [{webmachine_mochiweb, IPv4Opts ++ NonSSLOpts ++ WebConfig},
-             {webmachine_mochiweb_ssl, IPv4Opts ++ SSLOpts ++ WebConfig},
-             {webmachine_mochiweb_v6, IPv6Opts ++ NonSSLOpts ++ WebConfig},
-             {webmachine_mochiweb_v6_ssl, IPv6Opts ++ SSLOpts ++ WebConfig}]],
+         <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
+             {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig}]],
 
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
     EnableIPv6 = case WebIp of
                      any -> ipv6_supported();
                      _ -> false
                  end,
-    EnableSSL = z_config:get_dirty(ssl),
-   
+ 
     Processes1 = 
-        case {EnableIPv6, EnableSSL} of
-            {true, true} ->
-                Processes ++ IPv4Proc ++ IPv4SSLProc ++ IPv6Proc ++ IPv6SSLProc;
-            {true, false} ->
-                Processes ++ IPv4Proc ++ IPv6Proc;
-            {false, true} ->
-                Processes ++ IPv4Proc ++ IPv4SSLProc;
-            {false, false} ->
-                Processes ++ IPv4Proc
+        case EnableIPv6 of
+            true -> Processes ++ IPv4Proc ++ IPv6Proc;
+            false -> Processes ++ IPv4Proc
         end,
 
     init_webmachine(),

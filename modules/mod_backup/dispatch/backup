@@ -1,12 +1,13 @@
 %% -*- mode: erlang -*-
 [
- {admin_backup,    		 [ "admin", "backup" ], controller_admin_backup, []},
- {admin_backup_revision, [ "admin", "backup", id ], controller_admin_backup_revision, []},
+ {admin_backup,    		 [ "admin", "backup" ], controller_admin_backup, [{ssl, any}]},
+ {admin_backup_revision, [ "admin", "backup", id ], controller_admin_backup_revision, [{ssl, any}]},
  
  {backup_download, [ "backup", '*' ],     controller_file_readonly,
   [
    {root, [{module, mod_backup}]}, 
    {content_disposition, attachment}, 
-   {use_cache, false}
+   {use_cache, false},
+   {ssl, any}
   ]}
 ].

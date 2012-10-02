@@ -68,12 +68,12 @@ update_dispatchinfo() ->
 %%                  | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                  | handled
 dispatch(Host, Path, ReqData) ->
-    Method = wrq:method(ReqData),
-    IsSSL = wrq:is_ssl(ReqData),
     % Classify the user agent
     {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
+    Method = wrq:method(ReqData),
+    Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
     % Find a matching dispatch rule 
-    DispReq = #dispatch{host=Host, path=Path, method=Method, is_ssl=IsSSL},
+    DispReq = #dispatch{host=Host, path=Path, method=Method, protocol=Protocol},
     case gen_server:call(?MODULE, DispReq) of
         {no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings} when MatchedHost =/= undefined ->
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
@@ -160,10 +160,10 @@ init(_Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
-handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, is_ssl=IsSSL}, _From, State) ->
+handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, protocol=Protocol}, _From, State) ->
     Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, Method) of
                 {ok, Host, DispatchList} ->
-                    case wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) of
+                    case wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) of
                         {redirect, _ProtocolAsString, _Hostname} = R ->
                             R;
                         {no_dispatch_match, UnmatchedPathTokens, Bindings} ->
@@ -176,9 +176,9 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, is_ss
                              Host}
                     end;
                 {redirect, Hostname} ->
-                    ProtocolAsString = case IsSSL of
-                                           true ->"https";
-                                           false -> "http"
+                    ProtocolAsString = case Protocol of
+                                           https ->"https";
+                                           http -> "http"
                                        end,
                     {redirect, ProtocolAsString, Hostname};
                 no_host_match ->
@@ -239,10 +239,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules() ->
-    Rules = [ fetch_dispatchinfo(Site) || Site <- z_sites_manager:get_sites() ],
-    Rules1 = filter_ssl(z_config:get(ssl), Rules),
-    Rules2 = normalize_streamhosts(Rules1),
-    compile_regexps_hosts(Rules2).
+    Rules = [ filter_rules(fetch_dispatchinfo(Site), Site) || Site <- z_sites_manager:get_sites() ],
+    Rules1 = normalize_streamhosts(Rules),
+    compile_regexps_hosts(Rules1).
 
 
 %% @doc Fetch dispatch rules for a specific site.
@@ -466,26 +465,9 @@ make_streamhost(Hostname) ->
         false.
 
 
-%% @doc When SSL is not enabled, then remove any ssl option from all dispatch rules.
-filter_ssl(true, Rules) ->
-    Rules;
-filter_ssl(_, Rules) ->
-    filter_ssl_hosts(Rules).
-
-    filter_ssl_hosts(DLs) ->
-        filter_ssl_hosts(DLs, []).
-
-    filter_ssl_hosts([], Acc) ->
-        lists:reverse(Acc);
-    filter_ssl_hosts([#wm_host_dispatch_list{dispatch_list=DispatchList} = DL|Rest], Acc) ->
-        DispatchList1 = filter_ssl_hosts_dispatch(DispatchList, []),
-        filter_ssl_hosts(Rest, [DL#wm_host_dispatch_list{dispatch_list=DispatchList1}|Acc]).
-
-    filter_ssl_hosts_dispatch([], Acc) ->
-        lists:reverse(Acc);
-    filter_ssl_hosts_dispatch([{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
-        Props1 = proplists:delete(ssl, Props),
-        filter_ssl_hosts_dispatch(Rest, [{DispatchName, PathSchema, Mod, Props1}|Acc]).
+%% @doc Filter all rules, also used to set/reset protocol (https) options.
+filter_rules(Rules, Site) ->
+    z_notifier:foldl(dispatch_rules, Rules, z_context:new(Site)).
 
 
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
@@ -511,16 +493,16 @@ filter_ssl(_, Rules) ->
 -define(SEPARATOR, $\/).
 -define(MATCH_ALL, '*').
 
-%% @spec wm_dispatch(IsSSL, HostAsString, Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
+%% @spec wm_dispatch(Protocol, HostAsString, Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
 %%                                            dispterm() | dispfail()
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
-wm_dispatch(IsSSL, HostAsString, Host, PathAsString, DispatchList) ->
+wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) ->
     Context = z_context:new(Host),
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     IsDir = lists:last(PathAsString) == ?SEPARATOR,
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString}, {Path, []}, Context),
-    try_path_binding(IsSSL, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context).
+    try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context).
 
 % URIs that end with a trailing slash are implicitly one token
 % "deeper" than we otherwise might think as we are "inside"
@@ -530,37 +512,37 @@ extra_depth(_Path, true) -> 1;
 extra_depth(_, _) -> 0.
 
 
-try_path_binding(_IsSSL, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->
+try_path_binding(_Protocol, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->
     {no_dispatch_match, PathTokens, Bindings};
-try_path_binding(IsSSL, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth, Context) ->
+try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth, Context) ->
     case bind(Host, PathSchema, PathTokens, Bindings, 0, Context) of
         {ok, Remainder, NewBindings, Depth} ->
-            case {proplists:get_value(ssl, Props), IsSSL} of
-                {undefined, true} ->
-                    %Port = z_config:get(listen_port),
-                    %Host1 = set_port(Port, HostAsString),
+            case proplists:get_value(protocol, Props) of
+                % Force switch to normal http protocol
+                undefined when Protocol =/= http ->
+                    {Host1, HostPort} = split_host(HostAsString),
+                    Host2 = add_port(http, Host1, HostPort),
+                    {redirect, "http", Host2};
+
+                % Force switch to other (eg. https) protocol
+                {NewProtocol, NewPort} when NewProtocol =/= Protocol ->
                     {Host1, _Port} = split_host(HostAsString),
-                    {redirect, "http", Host1};
-                {false, true} ->
-                    %Port = z_config:get(listen_port),
-                    %Host1 = set_port(Port, HostAsString),
-                    {Host1, _Port} = split_host(HostAsString),
-                    {redirect, "http", Host1};            
-                {true, false} ->
-                    %Port = z_config:get(listen_port_ssl),
-                    %Host1 = set_port(Port, HostAsString),
-                    {Host1, _Port} = split_host(HostAsString),
-                    {redirect, "https", Host1};
+                    Host2 = add_port(NewProtocol, Host1, NewPort),
+                    {redirect, z_convert:to_list(NewProtocol), Host2};
+
+                % 'keep' or correct protocol
                 _ ->
-                    {DispatchName, Mod, Props, Remainder, NewBindings, calculate_app_root(Depth + ExtraDepth), reconstitute(Remainder)}
+                    {DispatchName, Mod, Props, Remainder, NewBindings, 
+                        calculate_app_root(Depth + ExtraDepth), 
+                        reconstitute(Remainder)}
             end;
         fail -> 
-            try_path_binding(IsSSL, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth, Context)
+            try_path_binding(Protocol, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth, Context)
     end.
     
-% set_port(Port, Host) ->
-%     {Host_, _OldPort} = split_host(Host),
-%     Host_ ++ [$: | integer_to_list(Port)].
+add_port(http, Host, 80) -> Host;
+add_port(https, Host, 443) -> Host;
+add_port(_, Host, Port) -> Host++[$:|z_convert:to_list(Port)].
 
 bind(_Host, [], [], Bindings, Depth, _Context) ->
     {ok, [], Bindings, Depth};

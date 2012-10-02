@@ -36,10 +36,13 @@
 
     debug/2,
     debug/3,
+    debug/4,
     info/2,
     info/3,
+    info/4,
     warning/2,
-    warning/3
+    warning/3,
+    warning/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -86,15 +89,22 @@ debug_msg(Module, Line, Msg) ->
 %% @doc Log a debug message, with extra props.
 debug(Msg, Context)        -> log(debug, Msg, [], Context).
 debug(Msg, Props, Context) -> log(debug, Msg, Props, Context).
+debug(Msg, Args, Props, Context) -> log(debug, Msg, Args, Props, Context).
 
 %% @doc Log an informational message.
 info(Msg, Context)         -> log(info, Msg, [], Context).
 info(Msg, Props, Context)  -> log(info, Msg, Props, Context).
+info(Msg, Args, Props, Context)  -> log(info, Msg, Args, Props, Context).
 
 %% @doc Log a warning.
 warning(Msg, Context)         -> log(warning, Msg, [], Context).
 warning(Msg, Props, Context)  -> log(warning, Msg, Props, Context).
+warning(Msg, Args, Props, Context)  -> log(warning, Msg, Args, Props, Context).
 
+
+log(Type, Msg, Args, Props, Context) ->
+    Msg1 = lists:flatten(io_lib:format(Msg, Args)),
+    log(Type, Msg1, Props, Context).
 
 log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
@@ -102,3 +112,4 @@ log(Type, Msg, Props, Context) ->
     Module = proplists:get_value(module, Props, unknown),
     error_logger:info_msg("[~p] ~p @ ~p:~p  ~s~n", [Context#context.host, Type, Module, Line, binary_to_list(Msg1)]),
     z_notifier:notify({log, #log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}}, Context).
+

@@ -981,8 +981,10 @@ set_cookie(Key, Value, Options, Context) ->
                    {domain, _} -> Options;
                    none -> [{domain, z_context:cookie_domain(Context)}|Options]
                end,
+    Options2 = z_notifier:foldl(#cookie_options{name=Key, value=Value}, Options1, Context),
     RD = Context#context.wm_reqdata,
-    Hdr = mochiweb_cookies:cookie(Key, Value, Options1),
+    Hdr = mochiweb_cookies:cookie(Key, Value, Options2),
+    ?DEBUG(Hdr),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
 

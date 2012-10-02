@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
  {logon,  ["logon"],  controller_logon,  [{ssl, true}]},
- {logoff, ["logoff"], controller_logoff, []}
+ {logoff, ["logoff"], controller_logoff, [{ssl, true}]}
 ].

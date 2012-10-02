@@ -1,14 +1,14 @@
 %% -*- mode: erlang -*-
 %% Admin dispatch rules
 [
- {admin,   		["admin"],				controller_admin,			[]},
- {admin_logon,  	["admin", "logon"],			controller_logon,			[{template, "admin_logon.tpl"}]},
- {admin_overview_rsc,   ["admin", "overview"],			controller_admin,			[{template, "admin_overview.tpl"}, {selected, "overview"}]},
- {admin_media,          ["admin", "media"],                     controller_admin,			[{template, "admin_media.tpl"}, {selected, "media"}]},
+ {admin,               ["admin"],                         controller_admin,               []},
+ {admin_logon,         ["admin", "logon"],                controller_logon,               [{template, "admin_logon.tpl"}, {ssl,true}]},
+ {admin_overview_rsc,  ["admin", "overview"],             controller_admin,               [{template, "admin_overview.tpl"}, {selected, "overview"}]},
+ {admin_media,         ["admin", "media"],                controller_admin,               [{template, "admin_media.tpl"}, {selected, "media"}]},
  
- {admin_edit_rsc, 	["admin", "edit", id],			controller_admin_edit,		[]},
- {admin_referrers,      ["admin", "referrer", id],              controller_admin_referrers,	[]},
- {admin_media_preview,  ["admin", "media", "preview", id],      controller_admin_media_preview,   []},
+ {admin_edit_rsc,      ["admin", "edit", id],             controller_admin_edit,          []},
+ {admin_referrers,     ["admin", "referrer", id],         controller_admin_referrers,     []},
+ {admin_media_preview, ["admin", "media", "preview", id], controller_admin_media_preview, []},
  
- {admin_status,	        ["admin", "status"],			controller_admin,			[{template, "admin_status.tpl"}, {selected, "status"}]}
+ {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}]}
 ].

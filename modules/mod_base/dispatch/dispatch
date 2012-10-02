@@ -5,7 +5,7 @@
  {comet,     ["comet"],              controller_comet, [{ssl, any}, {no_session, true}]},
  
  %% Comet sub-domain connection, used with long polls from the browser.
- {comet,     ["comet", "subdomain"], controller_template, [{template, "comet_subdomain.tpl"}]},
+ {comet,     ["comet", "subdomain"], controller_template, [{template, "comet_subdomain.tpl"}, {ssl, any}]},
  
  %% WebSocket connection.
  {websocket, ["websocket"],          controller_websocket, [{ssl, any}, {no_session, true}]},
@@ -17,7 +17,7 @@
  {close_connection, ["close-connection"],  controller_close_connection, [{ssl, any}, {no_session, true}]},
  
  %% The id controller redirects depending on the accept header sent by the user agent.
- {id,        ["id", id],             controller_id, []},
+ {id,        ["id", id],             controller_id, [{ssl, any}]},
  
  %% CSS and Javascript files from the "lib" module folder. Possibly more than one file combined in one request.
  {lib,       ["lib",'*'],            controller_lib, [ {use_cache, false}, {ssl, any} ]},
@@ -36,7 +36,8 @@
   [
    {path, id},
    {use_cache, false},
-   {content_disposition, attachment}
+   {content_disposition, attachment},
+   {ssl, any}
   ]},
  
  %% Download of an image, attached to a media rsc
@@ -44,26 +45,29 @@
   [
    {path, id},
    {use_cache, false},
-   {content_disposition, inline}
+   {content_disposition, inline},
+   {ssl, any}
   ]},
  
  %% Inline display of original uploaded files. Assumes the files are in the root folder.
  {media_inline,     ["media","inline",'*'],         controller_file_readonly,
   [
    {use_cache, false},
-   {content_disposition, inline}
+   {content_disposition, inline},
+   {ssl, any}
   ]},
  
  %% Download of original uploaded files. Assumes the files are in the root folder.
  {media_attachment, ["media","attachment",'*'],     controller_file_readonly,
   [
    {use_cache, false},
-   {content_disposition, attachment}
+   {content_disposition, attachment},
+   {ssl, any}
   ]},
  
  %% API access
- {api,     ["api",module,method], controller_api, []},
- {api,     ["api",module],        controller_api, []},
+ {api,     ["api",module,method], controller_api, [{ssl, any}]},
+ {api,     ["api",module],        controller_api, [{ssl, any}]},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"],       controller_file_readonly,
@@ -76,9 +80,9 @@
   ]},
  
  %% User Agent handling
- {ua_probe,   ["useragent","probe.js"],         controller_user_agent_probe, []},
- {ua_select,  ["useragent","select", ua_class], controller_user_agent_select, []},
- {ua_select,  ["useragent","select"],           controller_user_agent_select, []},
+ {ua_probe,   ["useragent","probe.js"],         controller_user_agent_probe, [{ssl, any}]},
+ {ua_select,  ["useragent","select", ua_class], controller_user_agent_select, [{ssl, any}]},
+ {ua_select,  ["useragent","select"],           controller_user_agent_select, [{ssl, any}]},
  
  %% robots.txt - simple allow all file
  {robots_txt, ["robots.txt"],                   controller_file_readonly,

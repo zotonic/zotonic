@@ -1,4 +1,4 @@
 %% -*- mode: erlang -*-
 [
- {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}]}
+ {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}, {ssl, true}]}
 ].

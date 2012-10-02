@@ -1,4 +1,4 @@
 [
-    {rest_rsc, ["rest", "rsc", format, id], controller_rest_rsc, []},
-    {rest_rsc, ["rest", "rsc", id], controller_rest_rsc, []}
+    {rest_rsc, ["rest", "rsc", format, id], controller_rest_rsc, [{ssl,any}]},
+    {rest_rsc, ["rest", "rsc", id], controller_rest_rsc, [{ssl,any}]}
 ].

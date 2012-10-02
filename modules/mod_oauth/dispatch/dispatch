@@ -7,5 +7,5 @@
  {oauth_authorize,     ["oauth", "authorize"],             controller_oauth_authorize,     []},
  {oauth_finish,        ["oauth", "authorize", "finished"], controller_template,            [ {template, "oauth_authorize_finished.tpl"} ]},
  
- {admin_oauth,         ["admin", "oauth", "apps"],         controller_oauth_apps,          []}
+ {admin_oauth,         ["admin", "oauth", "apps"],         controller_oauth_apps,          [{ssl,true}]}
 ].

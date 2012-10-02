@@ -21,11 +21,14 @@
 %%              | {ok, #dispatch_match{}} 
 %%              | {ok, #dispatch_redirect{}}
 %%              | undefined.
--record(dispatch, {host, path=[], method='GET', is_ssl=false}).
+-record(dispatch, {host, path=[], method='GET', protocol=http}).
     
     -record(dispatch_redirect, {location, is_permanent=false}).
     -record(dispatch_match, {dispatch_name, mod, mod_opts=[], path_tokens=[], bindings=[], app_root="", string_path=""}).
 
+
+%% @doc Modify cookie options, used for setting http_only and secure options. (foldl)
+-record(cookie_options, {name, value}).
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
