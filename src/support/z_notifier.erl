@@ -58,7 +58,7 @@
                           {43200, tick_12h},
                           {86400, tick_24h} ]).
 
--record(state, {observers, timers, context}).
+-record(state, {observers, timers, host}).
 
 %%====================================================================
 %% API
@@ -118,10 +118,10 @@ observe(Event, Observer, Context) ->
 
 %% @doc Subscribe to an event. Observer is a {M,F} or pid()
 observe(Event, Observer, Priority, #context{notifier=Notifier}) ->
-    gen_server:cast(Notifier, {'observe', Event, Observer, Priority});
+    gen_server:call(Notifier, {'observe', Event, Observer, Priority});
 observe(Event, Observer, Priority, Host) when is_atom(Host) ->
     Notifier = z_utils:name_for_host(?MODULE, Host),
-    gen_server:cast(Notifier, {'observe', Event, Observer, Priority}).
+    gen_server:call(Notifier, {'observe', Event, Observer, Priority}).
 
 
 %% @doc Detach all observers and delete the event
@@ -130,10 +130,10 @@ detach_all(Event, #context{notifier=Notifier}) ->
 
 %% @doc Unsubscribe from an event. Observer is a {M,F} or pid()
 detach(Event, Observer, #context{notifier=Notifier}) ->
-    gen_server:cast(Notifier, {'detach', Event, Observer});
+    gen_server:call(Notifier, {'detach', Event, Observer});
 detach(Event, Observer, Host) when is_atom(Host) ->
     Notifier = z_utils:name_for_host(?MODULE, Host),
-    gen_server:cast(Notifier, {'detach', Event, Observer}).
+    gen_server:call(Notifier, {'detach', Event, Observer}).
 
 %% @doc Return all observers for a particular event
 get_observers(Msg, Context) when is_tuple(Msg) ->
@@ -232,7 +232,7 @@ foldr(Msg, Acc0, Context) ->
 init(Args) ->
     {host, Host} = proplists:lookup(host, Args),
     Timers = [ timer:send_interval(Time * 1000, {tick, Msg}) || {Time, Msg} <- ?TIMER_INTERVAL ],
-    State = #state{observers=undefined, timers=Timers, context=z_context:new(Host)},
+    State = #state{observers=undefined, timers=Timers, host=Host},
     {ok, State}.
 
 
@@ -242,16 +242,8 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Trap unknown calls
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Add an observer to an event
-handle_cast({'observe', Event, Observer, Priority}, State) ->
+handle_call({'observe', Event, Observer, Priority}, _From, State) ->
     Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
     PObs = {Priority, Observer},
     UpdatedObservers = case ets:lookup(State#state.observers, Event1) of 
@@ -263,10 +255,10 @@ handle_cast({'observe', Event, Observer, Priority}, State) ->
             lists:sort([PObs | OtherObservers])
     end,
     ets:insert(State#state.observers, {Event1, UpdatedObservers}),
-    {noreply, State};
+    {reply, ok, State};
 
 %% @doc Detach an observer from an event
-handle_cast({'detach', Event, Observer}, State) ->
+handle_call({'detach', Event, Observer}, _From, State) ->
     Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
     case ets:lookup(State#state.observers, Event1) of 
         [] -> ok;
@@ -274,16 +266,20 @@ handle_cast({'detach', Event, Observer}, State) ->
             UpdatedObservers = lists:filter(fun({_Prio,Obs}) -> Obs /= Observer end, Observers),
             ets:insert(State#state.observers, {Event1, UpdatedObservers})
     end,
+    {reply, ok, State};
 
-    {noreply, State};
+%% @doc Trap unknown calls
+handle_call(Message, _From, State) ->
+    {stop, {unknown_call, Message}, State}.
 
-
+%% @spec handle_cast(Msg, State) -> {noreply, State} |
+%%                                  {noreply, State, Timeout} |
+%%                                  {stop, Reason, State}
 %% @doc Detach all observer from an event
 handle_cast({'detach_all', Event}, State) ->
     Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
     ets:delete(State#state.observers, Event1),  
     {noreply, State};
-
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -294,8 +290,16 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handle timer ticks
-handle_info({tick, Msg}, State) ->
-    spawn(fun() -> ?MODULE:notify(Msg, State#state.context) end),
+handle_info({tick, Msg}, #state{host=Host} = State) ->
+    case catch z_context:new(Host) of
+        #context{} = Context ->
+            spawn(fun() -> 
+                    ?MODULE:notify(Msg, Context) 
+                  end);
+        _ ->
+            % z_trans_server not running, skip this tick
+            skip
+    end,
     z_utils:flush_message({tick, Msg}),
     {noreply, State};
 

@@ -23,6 +23,8 @@
 -author('Marc Worrell <marc@worrell.nl>').
 -behaviour(gen_server).
 
+-compile([{parse_transform, lager_transform}]).
+
 %% External exports
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -378,9 +380,12 @@ handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
     {noreply, State1};
 
-handle_cast({start_child_result, Module, Result}, State) ->
-    State1 = handle_start_child_result(Module, Result, State),
+%% @doc Handle errors, success is handled by the supervisor_child_started above.
+handle_cast({start_child_result, Module, {error, _} = Error}, State) ->
+    State1 = handle_start_child_result(Module, Error, State),
     {noreply, State1};
+handle_cast({start_child_result, _Module, {ok, _}}, State) ->
+    {noreply, State};
 
 %% @doc Existing child process stopped, remove the event listeners
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
@@ -443,7 +448,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Running = z_supervisor:running_children(State#state.sup),
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     {ok, StartList} = dependency_sort(Start),
-    
+
     sets:fold(fun (Module, ok) ->
               z_supervisor:delete_child(ModuleSup, Module),
               ok
@@ -458,7 +463,6 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     % 2. Let the module manager start them one by one (if startable)
     % 3. Log any start errors, suppress modules that have errors.
     % 4. Log non startable modules (remaining after all startable modules have started)
-    
     case {StartList, sets:size(Kill)} of
         {[], 0} -> 
             State#state{start_queue=[]};
@@ -553,29 +557,31 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
 
 
 handle_start_child_result(Module, Result, State) ->
-    % ?DEBUG({module_start_result, Module, Result}),
     % Where we waiting for this child? If so, start the next.
-    State1 = case State#state.start_wait of
-                {Module, _Pid, _NowStarted} ->
-                    gen_server:cast(self(), start_next),
-                    State#state{start_wait=none};
-                _Other ->
-                    % Check if there are any non-started modules that 
-                    % depend on this module
-                    State
-             end,
-    case Result of
-        {ok, Pid} ->
-            % Remove any registered errors for the started module
-            State2 = State1#state{start_error=lists:keydelete(Module, 1, State1#state.start_error)},
-            add_observers(Module, Pid, State2#state.context),
-            z_notifier:notify(#module_activate{module=Module, pid=Pid}, State2#state.context),
-            State2;
-        {error, _Reason} = Error ->
-            State1#state{
-                start_error=[ {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error) ]
-            }
-    end.
+    {State1,IsWaiting} = case State#state.start_wait of
+                            {Module, _Pid, _NowStarted} ->
+                                {State#state{start_wait=none}, true};
+                            _Other ->
+                                {State, false}
+                         end,
+    ReturnState = case Result of
+                    {ok, Pid} ->
+                        % Remove any registered errors for the started module
+                        State2 = State1#state{start_error=lists:keydelete(Module, 1, State1#state.start_error)},
+                        add_observers(Module, Pid, State2#state.context),
+                        z_notifier:notify(#module_activate{module=Module, pid=Pid}, State2#state.context),
+                        State2;
+                    {error, _Reason} = Error ->
+                        % Add a start error for this module
+                        State1#state{
+                            start_error=[ {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error) ]
+                        }
+                   end,
+    case IsWaiting of
+        true -> gen_server:cast(self(), start_next);
+        false -> ok
+    end,
+    ReturnState.
 
 
 %% @doc Return the list of all provided services.
