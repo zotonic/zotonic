@@ -1,6 +1,9 @@
 .. include:: meta-mod_signal.rst
 
-`mod_signal` allows template developers to create pages with highly interactive behaviour. It allows one to emit so called signals. Signals are asynchronous events with attributes. Other pages can connect to the signature of a signal. When that signal is fired, the specified action is triggered. This makes it possible to create interactive pages without writing a line of erlang code.
+`mod_signal` allows template developers to create pages with highly interactive behaviour. It allows one to 
+emit so called signals. Signals are asynchronous events with attributes. Other pages can connect to the signature 
+of a signal. When that signal is fired, the specified action is triggered. This makes it possible to create 
+interactive pages without writing a line of erlang code.
 
 Signals
 =======
@@ -13,13 +16,17 @@ or by using the emit action in a template::
 
   {% button action={emit signal={example test="a" session=123}} %}
 
-Signals themselves don't do much. The fun part is connecting other stuff to signals. When a signal is emitted mod_signal examines if there is something which is interested in this particular signal. It could be that there are actions connected to signals of type ``example``. When such a signal is emitted the registered action is performed. This can be done with the connect action.
+Signals themselves don't do much. The fun part is connecting other stuff to signals. When a signal is 
+emitted ``mod_signal`` examines if there is something which is interested in this particular signal. It could 
+be that there are actions connected to signals of type ``example``. When such a signal is emitted the registered 
+action is performed. This can be done with the ``connect`` action.
 
 For example:: 
 
   {% wire action={connect signal={example session=123} action={growl text="example"}} %}
 
-The action above will trigger the grow action when a signal of type example and with property ``{session, 123}`` is emitted. It is possible to make multiple matches on the property of a signal.
+The action above will trigger the grow action when a signal of type example and with property ``{session, 123}`` 
+is emitted. It is possible to make multiple matches on the property of a signal.
 
 Actions
 =======
@@ -29,17 +36,7 @@ The module has three actions which can be used to connect and disconnect to sign
 Connect
 -------
 
-Example::
-
-  {connect signal={signal_type prop1=value} action={...}}
-
-========== ===========
-Attributes Description
-========== ===========
-signal     The pattern of a signal to which you want to connect to.
-action     The action you want to perform when a signal matching the pattern is emitted.
-name       The name of the connection. Giving a connection a name makes it possible to disconnect it at a later stage.
-========== ===========
+.. include:: action_connect.rst
 
 Emit
 ----
