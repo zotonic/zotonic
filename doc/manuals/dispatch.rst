@@ -78,7 +78,7 @@ The possible path elements are:
 -  '*': a special atom binding to the remaining part of the request URL, this must be the last element of the path
 
 URL matching using regular expressions
-.........................
+......................................
 
 Some developers need very particular control of dispatch in order for
 their applications to function as they want them to.
