@@ -47,6 +47,15 @@ The following include files have been renamed:
 |include/webmachine_resource.hrl|include/webmachine_controller.hrl|
 +-------------------------------+---------------------------------+
 
+HTTPS support
+............
+HTTPS support was moved from the core into a new module, :ref:`mod_ssl`.
+
+The global ``priv/config`` options ``ssl``, ``ssl_certfile``,
+``ssl_keyfile`` and ``ssl_password`` do no longer have an effect. See
+:ref:`mod_ssl` on how to configure HTTPS support for Zotonic from 0.9
+and up.
+
 
 Removed controller
 ..................
