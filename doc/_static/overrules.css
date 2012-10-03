@@ -17,6 +17,10 @@ div.body h4, div.body h5, div.body h6 {
     background: inherit;
 }
 
+div.body p, div.body dd, div.body li {
+    text-align: left;
+}
+
 pre {
     font-size: 13px;
     line-height: 140%;
