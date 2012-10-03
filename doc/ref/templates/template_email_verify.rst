@@ -1,4 +1,4 @@
 
 .. include:: meta-email_verify.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

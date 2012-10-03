@@ -1,4 +1,4 @@
 
 .. include:: meta-jquery_effect.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

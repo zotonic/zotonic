@@ -42,7 +42,7 @@ EOF
 
 .. include:: meta-$model.rst
 
-Not yet documented.
+.. todo:: Not yet documented.
 EOF
     fi
 

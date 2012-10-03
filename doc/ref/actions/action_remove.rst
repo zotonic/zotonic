@@ -1,4 +1,4 @@
 
 .. include:: meta-remove.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

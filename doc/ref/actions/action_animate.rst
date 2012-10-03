@@ -1,4 +1,4 @@
 
 .. include:: meta-animate.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

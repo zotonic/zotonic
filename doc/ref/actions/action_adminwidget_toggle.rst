@@ -1,4 +1,4 @@
 
 .. include:: meta-adminwidget_toggle.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

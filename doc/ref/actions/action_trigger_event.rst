@@ -1,4 +1,4 @@
 
 .. include:: meta-trigger_event.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

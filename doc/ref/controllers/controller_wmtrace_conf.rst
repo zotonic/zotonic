@@ -1,4 +1,4 @@
 
 .. include:: meta-wmtrace_conf.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

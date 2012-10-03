@@ -1,4 +1,4 @@
 
 .. include:: meta-disconnect.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

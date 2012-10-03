@@ -1,4 +1,4 @@
 
 .. include:: meta-admin_comments_settings.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

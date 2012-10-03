@@ -1,4 +1,4 @@
 
 .. include:: meta-search.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

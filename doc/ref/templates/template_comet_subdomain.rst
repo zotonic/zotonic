@@ -1,4 +1,4 @@
 
 .. include:: meta-comet_subdomain.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

@@ -1,4 +1,4 @@
 
 .. include:: meta-email_unique.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

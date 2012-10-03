@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_mailinglist.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

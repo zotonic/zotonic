@@ -1,4 +1,4 @@
 
 .. include:: meta-mailinglist_confirm.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

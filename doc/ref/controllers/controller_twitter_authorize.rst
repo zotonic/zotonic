@@ -1,4 +1,4 @@
 
 .. include:: meta-twitter_authorize.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

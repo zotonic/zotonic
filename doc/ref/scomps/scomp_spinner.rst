@@ -1,4 +1,4 @@
 
 .. include:: meta-spinner.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

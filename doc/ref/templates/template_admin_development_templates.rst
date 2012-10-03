@@ -1,4 +1,4 @@
 
 .. include:: meta-admin_development_templates.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

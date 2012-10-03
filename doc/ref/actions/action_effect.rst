@@ -1,4 +1,4 @@
 
 .. include:: meta-effect.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

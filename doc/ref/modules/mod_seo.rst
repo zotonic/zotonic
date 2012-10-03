@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_seo.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

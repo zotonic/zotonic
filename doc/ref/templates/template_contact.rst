@@ -1,4 +1,4 @@
 
 .. include:: meta-contact.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

@@ -1,4 +1,4 @@
 
 .. include:: meta-base_fullscreen-phone.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

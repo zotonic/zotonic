@@ -1,4 +1,4 @@
 
 .. include:: meta-sitemap.xml.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

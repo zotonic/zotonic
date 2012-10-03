@@ -1,4 +1,4 @@
 
 .. include:: meta-logon_confirm_form.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

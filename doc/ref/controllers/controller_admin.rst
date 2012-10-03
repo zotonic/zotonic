@@ -1,4 +1,4 @@
 
 .. include:: meta-admin.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

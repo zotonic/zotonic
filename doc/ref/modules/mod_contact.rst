@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_contact.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

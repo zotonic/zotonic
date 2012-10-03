@@ -1,4 +1,4 @@
 
 .. include:: meta-admin_edit.menu.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

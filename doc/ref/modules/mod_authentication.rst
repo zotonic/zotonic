@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_authentication.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

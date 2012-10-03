@@ -1,4 +1,4 @@
 
 .. include:: meta-wire.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

@@ -1,4 +1,4 @@
 
 .. include:: meta-tinymce_add.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

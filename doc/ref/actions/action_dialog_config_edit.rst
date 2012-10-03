@@ -1,4 +1,4 @@
 
 .. include:: meta-dialog_config_edit.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

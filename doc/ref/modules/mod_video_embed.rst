@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_video_embed.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

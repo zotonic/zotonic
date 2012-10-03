@@ -1,4 +1,4 @@
 
 .. include:: meta-mod_admin_modules.rst
 
-Not yet documented.
+.. todo:: Not yet documented.

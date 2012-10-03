@@ -1,4 +1,4 @@
 
 .. include:: meta-page.collection-text.rst
 
-Not yet documented.
+.. todo:: Not yet documented.
