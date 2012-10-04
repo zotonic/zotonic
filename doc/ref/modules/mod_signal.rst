@@ -33,44 +33,15 @@ Actions
 
 The module has three actions which can be used to connect and disconnect to signals, and an action to emit signals.
 
-Connect
--------
-
-.. include:: action_connect.rst
-
-Emit
-----
-
-Example::
-
-  {emit signal={signal_type prop1=123}}
-
-========== ===========
-Attributes Description
-========== ===========
-signal     The signal you want to emit. When there is a slot which matches the pattern of the emitted 
-           signal, it will receive the signal. Note that it is possible that multiple slots match this signal. 
-========== ===========
-
-Disconnect
-----------
-
-Example::
-
-  {disconnect name="my-signal"}
-
-========== ===========
-Attributes Description
-========== ===========
-name       Disconnect from the named slot. 
-========== ===========
+``connect``
+  Connect actions to signals. The actions are executed when the signal is emitted.
+``emit``
+  Emit a signal from a template.
+``disconnect``
+  Disconnect all actions. The actions will no longer be executed when the signal is emitted.
 
 Model
 =====
 
-m.signal
-
-Makes it possible to access the emitted signal in a template. 
-
-m.signal[signal].type - The type of the emitted signal
+Model ``m.signal`` makes it possible to use the data of the emitted signal inside a template. 
 
