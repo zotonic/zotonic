@@ -6,7 +6,7 @@ of a signal. When that signal is fired, the specified action is triggered. This 
 interactive pages without writing a line of erlang code.
 
 Signals
-=======
+-------
 
 A signal is an erlang tuple which can be emitted either by erlang code::
 
@@ -29,19 +29,22 @@ The action above will trigger the grow action when a signal of type example and 
 is emitted. It is possible to make multiple matches on the property of a signal.
 
 Actions
-=======
+-------
 
 The module has three actions which can be used to connect and disconnect to signals, and an action to emit signals.
 
 ``connect``
-  Connect actions to signals. The actions are executed when the signal is emitted.
+  Connect actions to signals. The actions are executed when the signal is emitted. For more information 
+  see: :ref:`action-connect`.
 ``emit``
-  Emit a signal from a template.
+  Emit a signal from a template. See: :ref:`action-emit`.
 ``disconnect``
-  Disconnect all actions. The actions will no longer be executed when the signal is emitted.
+  Disconnect all actions. The actions will no longer be executed when the signal is emitted. 
+  See: :ref:`action-disconnect`.
 
 Model
-=====
+-----
 
-Model ``m.signal`` makes it possible to use the data of the emitted signal inside a template. 
+Model ``m.signal`` makes it possible to use the data of the emitted signal inside a template. See: :ref:`model-signal`.
 
+.. seealso:: :ref:`action-connect` :ref:`action-emit` :ref:`action-disconnect` :ref:`model-signal`
