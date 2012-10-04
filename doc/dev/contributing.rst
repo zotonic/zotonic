@@ -1,3 +1,5 @@
+.. _dev-contributing:
+
 Contributing source code
 ========================
 

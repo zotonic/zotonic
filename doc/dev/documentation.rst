@@ -41,10 +41,24 @@ Use the following convention for headings::
 
 When writing documentation of modules, actions, etc; anything under
 ``ref/``; the first level heading is already there for you, generated
-in the ``meta-*.rst`` file. So you should only use `----------` and
-`..........` for the headings in the ``ref/`` files.
+in the ``meta-*.rst`` file. So you should only use ``----------`` and
+``..........`` for the headings in the ``ref/`` files.
 
-  
+References
+..........
+
+Be generous with using references (``:ref:`pagelabel```) in your
+writing. The more terms are linked to their respective documentation
+pages, the better. Only make the first occurrence of a term a
+reference to its page, though; consequent occurrences can be made
+```italic```.
+
+Add a ``.. seealso::`` section at the bottom to highlight any other
+pages which are closely related to the current one, for example::
+
+  .. seealso:: :ref:`dev-contributing`
+
+
 Table styles
 ............
 
@@ -62,4 +76,6 @@ In general, we use this style of tables::
   |cell contents       |                   |
   +--------------------+-------------------+
 
-  
+.. seealso:: :ref:`dev-contributing`
+
+   
