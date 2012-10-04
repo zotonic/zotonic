@@ -1,4 +1,13 @@
-
 .. include:: meta-disconnect.rst
 
-.. todo:: Not yet documented.
+Disconnect from a named slot
+
+Example::
+
+  {disconnect name="my-signal"}
+
+========== ===========
+Attributes Description
+========== ===========
+name       Disconnect from the named slot. 
+========== ===========
