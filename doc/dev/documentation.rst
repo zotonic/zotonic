@@ -24,6 +24,30 @@ Emacs' `rst-mode
 <http://docutils.sourceforge.net/docs/user/emacs.html>`_ does the job
 for most things. It has nice coloring and indenting.
 
+Heading styles
+..............
+
+Use the following convention for headings::
+
+  First-level heading
+  ===================
+
+  Second-level heading
+  --------------------
+
+  Third-level heading
+  ...................
+
+
+When writing documentation of modules, actions, etc; anything under
+``ref/``; the first level heading is already there for you, generated
+in the ``meta-*.rst`` file. So you should only use `----------` and
+`..........` for the headings in the ``ref/`` files.
+
+  
+Table styles
+............
+
 For the easy editing of tables, we use Emacs' `table-mode
 <http://emacswiki.org/emacs/TableMode>`_, which at first has a bit of
 a learning curve but actually works pretty well when creating the
@@ -37,3 +61,5 @@ In general, we use this style of tables::
   |This is the table   |Some more contents |
   |cell contents       |                   |
   +--------------------+-------------------+
+
+  
