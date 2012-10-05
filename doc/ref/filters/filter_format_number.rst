@@ -7,7 +7,7 @@ Formats integer and float values as a list, assuming a radix of ten.
 
 For example::
 
-  {{ value|formaat_number }}
+  {{ value|format_number }}
 
 When the value is the float ``12.0`` then the output is the list ``12.0``.
 
