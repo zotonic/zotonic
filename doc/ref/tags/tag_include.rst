@@ -1,4 +1,3 @@
-
 .. index:: tag; include
 .. _tag-include:
 
@@ -17,7 +16,8 @@ When `_hello.tpl` contains the text::
 
 Then this will output the text ``Hello Peter's world.``.
 
-Unlike Django the template name must be a string literal, variables are not allowed.
+When the template name is a string literal then the template will be inlined. When it is
+an expression then the template will be included during runtime.
 
 .. note::
    About unique ids
