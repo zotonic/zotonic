@@ -12,6 +12,11 @@ EOF
     stub=$dir/meta-$base.rst
     doc=$dir/scomp_$base.rst
     title="$base"
+
+    if grep $scomp $dir/.ignore >/dev/null; then
+        break;
+    fi
+
     cat <<EOF > $stub
 .. This file is generated.
    To document this scomp, edit the scomp_$base.rst file, which should include this file.

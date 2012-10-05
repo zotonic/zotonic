@@ -1,16 +1,10 @@
 #!/bin/bash
 
-DIR=`dirname $0`
-
 # Get core models
 
 # /path/to/zotonic/src/models/m_model_name.erl
 for f in $ZOTONIC_SRC/src/models/m_*
 do
-    filename=`basename $f`
-    if grep $filename $DIR/.ignore >/dev/null; then
-        break;
-    fi
     dir=${0%/*}
     mod=core
     file=${f##*/m_}
@@ -18,6 +12,10 @@ do
     stub=$dir/meta-$model.rst
     doc=$dir/model_$model.rst
     title="m_$model"
+
+    if grep $file $dir/.ignore >/dev/null; then
+        break;
+    fi
 
     # no meta, since this is a 'core' model, and as such shouldn't be listed in any module's meta file
 
