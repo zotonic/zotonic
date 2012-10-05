@@ -1,4 +1,4 @@
-
+.. _manual-datamodel-categories:
 Categories
 ==========
 
