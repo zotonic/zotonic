@@ -77,7 +77,7 @@ This is to prevent mixing them up with other sites:
     bought it. It can also be a self signed certificate, see below.
 
 :file:`sitename.ca.crt`
-    This is the *CA bundle* that contains root and intermediate certificate for
+    This is the *CA bundle* that contains root and intermediate certificates for
     the certificate authority that issued the :file:`sitename.crt` certificate.
 
     The certificate authority will supply these. All supplied certificates are
@@ -121,7 +121,7 @@ the ``mod_ssl.is_secure`` option is set, the default is ``{ssl, any}``.
 Dependencies
 ------------
 
-When mod_ssl needs to generate or convert key and/or certificates it needs ``openssl``.
+When mod_ssl needs to generate or convert key and/or certificates it needs :program:`openssl`.
 This program must be installed in the normal search path of the running Zotonic.
 
 
