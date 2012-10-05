@@ -14,7 +14,7 @@ EOF
     title="$base"
 
     if grep $scomp $dir/.ignore >/dev/null; then
-        break;
+        continue
     fi
 
     cat <<EOF > $stub

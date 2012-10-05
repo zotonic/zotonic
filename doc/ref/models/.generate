@@ -14,7 +14,7 @@ do
     title="m_$model"
 
     if grep $file $dir/.ignore >/dev/null; then
-        break;
+        continue
     fi
 
     # no meta, since this is a 'core' model, and as such shouldn't be listed in any module's meta file
