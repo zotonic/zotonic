@@ -7,19 +7,21 @@ if
 
 Show a block if the condition is true.
 
-The ``{% if %}`` tag evaluates a variable and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.  When the if-variable test fails then the optional ``{% else %}`` block content are output.
+The ``{% if %}`` tag evaluates a variable and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.  When the if-variable test fails then the optional ``{% elseif %}`` blocks are evaluated. When the if and all optional elseif variable tests fail, the optional ``{% else %}`` block content is output.
 
 Example::
 
-   {% if person_list %}
-     There are {{ person_list|length }} persons.
+   {% if genre == "pop" %}
+     Popular music.
+   {% elseif genre == "classical" %}
+     Classical music.
+   {% elseif genre == "jazz" %}
+     Jazz
    {% else %}
-     There are no persons.
+     The genre isn't pop, classical or jazz.
    {% endif %}
 
-When the person_list is not empty then the number of persons is displayed, otherwise the ``{% else %}`` block is displayed.
-
-An ``{% if %}`` tag can have an “and” or “or” expression as argument::
+An ``{% if %}`` and ``{% elseif %}`` tag can have an “and” or “or” expression as argument::
 
    {% if person_list and show_persons and full_moon %}
      There are persons that we can show during full moon.
