@@ -93,7 +93,7 @@ This is to prevent mixing them up with other sites:
 Serving a page via SSL
 ----------------------
 
-The :ref:`dispatch rule option <manual-dispatch>` ``ssl`` defines if a page will be 
+The :ref:`dispatch rule argument <manual-dispatch>` ``ssl`` defines if a page will be 
 served over https or http.
 
 There are three variations:
@@ -105,17 +105,25 @@ There are three variations:
 ``{ssl, true}``
     Force a switch to https. When accessing the page using http then the page will
     be reloaded using https.
-
     This is useful for logon, logoff and other authentication or secure pages.
 
 ``{ssl, false}``
     Force a switch to http. When accessing the page using https then the page will
     be reloaded using http.
-
     This is useful for pages with embedded video or other non https content.
 
 When the ``ssl`` option is not specified then it defaults to ``{ssl, false}``. Unless
-the ``mod_ssl.is_secure`` option is set, the default is ``{ssl, any}``.
+the ``mod_ssl.is_secure`` option is set, then default is ``{ssl, any}``.
+
+Example of a page delivered using https::
+
+    {logon,  ["logon"], controller_logon, [{ssl, true}]}
+
+And of a dispatch rule that should keep the protocol, in this case the lib controller
+used for serving css, javascript and other static lib files::
+
+    {lib, ["lib",'*'], controller_lib, [{ssl, any}]}
+ 
 
 
 Dependencies
