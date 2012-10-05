@@ -1,0 +1,24 @@
+#!/bin/bash
+
+scanner=$ZOTONIC_SRC/src/erlydtl/erlydtl_scanner.erl
+dir=${0%/*}
+
+for tag in `$dir/.get_tags $scanner`
+do
+    doc=$dir/tag_$tag.rst
+
+    if [ ! -e $doc ]; then
+        echo "New doc: $doc"
+        cat <<EOF > $doc
+
+.. index:: tag; $tag
+.. _tag-$tag:
+
+$tag
+${tag//?/=}
+
+.. todo:: Not yet documented.
+
+EOF
+    fi
+done
