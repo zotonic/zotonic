@@ -5,6 +5,10 @@ dir=${0%/*}
 
 for tag in `$dir/.get_tags $scanner`
 do
+    if grep $tag $dir/.ignore >/dev/null; then
+        break
+    fi
+
     doc=$dir/tag_$tag.rst
 
     if [ ! -e $doc ]; then
