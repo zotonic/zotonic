@@ -1,4 +1,5 @@
 .. _manual-email:
+
 E-mail configuration
 ====================
 
@@ -94,3 +95,26 @@ in the Zotonic instance.
 |smtp_bounce_domain|Which domain to use for bounce VERP   |
 |                  |messages. Defaults to the smtp domain.|
 +------------------+--------------------------------------+
+
+
+Sending E-mail
+--------------
+
+Once configured, you can use the following Erlang commands to send
+e-mail from Zotonic code:
+
++-------------------------+--------------------------------------------------+
+|Command                  |Explanation                                       |
++=========================+==================================================+
+|``z_email:send_admin/3`` |Sends a quick e-mail to the site                  |
+|                         |administrator. Handy to notice the site admin that|
+|                         |something is wrong, a job has finished, etc... The|
+|                         |e-mail that is used is the admin_email address    |
+|                         |that is specified in the site's config file.      |
++-------------------------+--------------------------------------------------+
+|``z_email:send/4``       |Sends a text message with a subject to a specified|
+|                         |recipient.                                        |
++-------------------------+--------------------------------------------------+
+|``z_email:send_render/4``|Renders a template and sends it as a HTML message |
+|                         |to a specified recipient.                         |
++-------------------------+--------------------------------------------------+

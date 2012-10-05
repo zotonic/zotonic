@@ -12,7 +12,8 @@ refer you to the :ref:`manual-modules` manual.
 
 .. toctree::
    :glob:
-
+   :maxdepth: 1
+           
    mod_*
 
 
