@@ -4,8 +4,8 @@
 The mod_ssl module adds https support. After enabling mod_ssl the logon window 
 and other secure pages will be served using https.
 
-SSL support can be switched on for every site separately. Though, because of the nature of 
-SSL, every site will listen on its own port or IP address. Virtual hosting of sites via
+SSL support can be switched on for each site separately. Because of the nature of 
+SSL, each site will listen on its own port or IP address. Virtual hosting of sites via
 https is not possible.
 
 
@@ -61,26 +61,24 @@ Certificate and key files
 -------------------------
 
 The files with the certificates and key are placed into the ``ssl`` directory inside the site
-directory::
+directory :file:`zotonic/priv/sites/sitename/ssl/`.
 
-    zotonic/priv/sites/sitename/ssl/
-
-Where ``sitename`` is the name of your site.
+Where *sitename* must be replaced with the name of your site.
 
 The files all have the name of the site in them (*sitename* in the filenames below).
 This is to prevent mixing them up with other sites:
 
-``sitename.pem``
+:file:`sitename.pem`
     This holds the private key for the encryption. The key must be unlocked and in 
     PKCS#1 format (see below).
 
-``sitename.crt``
+:file:`sitename.crt`
     This is the certificate. Usually it is supplied by the certificate authority where you 
     bought it. It can also be a self signed certificate, see below.
 
-``sitename.ca.crt``
+:file:`sitename.ca.crt`
     This is the *CA bundle* that contains root and intermediate certificate for
-    the certificate authority that issued the ``sitename.crt`` certificate.
+    the certificate authority that issued the :file:`sitename.crt` certificate.
 
     The certificate authority will supply these. All supplied certificates are
     concatenated, with the root certificate last.
@@ -90,6 +88,34 @@ This is to prevent mixing them up with other sites:
         cat intermediate.crt root.crt > sitename.ca.crt
 
     This file should not be present when using a self signed certificate.
+
+
+Serving a page via SSL
+----------------------
+
+The :ref:`dispatch rule option <manual-dispatch>` ``ssl`` defines if a page will be 
+served over https or http.
+
+There are three variations:
+
+``{ssl, any}``
+    Keep the same protocol as before, don‘t switch beteen http and https.
+    This used for lib and image files.
+
+``{ssl, true}``
+    Force a switch to https. When accessing the page using http then the page will
+    be reloaded using https.
+
+    This is useful for logon, logoff and other authentication or secure pages.
+
+``{ssl, false}``
+    Force a switch to http. When accessing the page using https then the page will
+    be reloaded using http.
+
+    This is useful for pages with embedded video or other non https content.
+
+When the ``ssl`` option is not specified then it defaults to ``{ssl, false}``. Unless
+the ``mod_ssl.is_secure`` option is set, the default is ``{ssl, any}``.
 
 
 Dependencies
@@ -117,10 +143,10 @@ error::
     {error, {need_rsa_private_key, "example.pem", "use: openssl rsa -in sitename.key -out sitename.pem"}}
 
 The given command is the command needed to convert the key to a PKCS#1 key. The
-PKCS#8 key should be renamed to ``sitename.key`` from ``sitename.pem``, before running the
+PKCS#8 key should be renamed to :file:`sitename.key` from :file:`sitename.pem`, before running the
 above command.
 
-Note that the resulting key file *must* be named ``sitename.pem`` where ``sitename`` is the name of
+Note that the resulting key file *must* be named :file:`sitename.pem` where *sitename* is the name of
 the site the key is placed in.
 
 
@@ -140,7 +166,7 @@ Optionally, when the key turns out to be in PKCS#8 format, mod_ssl will run the 
     openssl rsa -in sitename.key -out sitename.pem
 
 When the key is already in PKCS#1 format (with older openssl installs) then mod_ssl will rename
-the ``sitename.key`` file to ``sitename.pem``.
+the :file:`sitename.key` file to :file:`sitename.pem`.
 
 
-.. todo:: Work in progress.
+.. todo:: Add SSL/certificate problem solving.
