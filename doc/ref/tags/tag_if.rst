@@ -36,3 +36,5 @@ It is also possible to mix “and” and ”or” in one expression, so this is 
 The ”not” operator can be used to negate a boolean value::
 
    {% if full_moon or daytime or not clearsky %}
+
+.. seealso:: :ref:`tag-ifequal` and :ref:`tag-ifnotequal`.
