@@ -38,16 +38,16 @@ Note that the contents of this block will be completely different per page.
 The script scomp can have the following arguments:
 
 +-----------+------------------------------------------------------------+---------------+
-| Argument  | Description                                                |	Example      |
-+-----------+------------------------------------------------------------+---------------+
+| Argument  | Description                                                |	Example    |
++===========+============================================================+===============+
 | nostartup	| Exclude the page initialization code from the script, only | nostartup     |
 |           | includes the scripts from actions etc.  Default is to      |               |
-|           | include the page initialization code.	                     |               |
+|           | include the page initialization code.                      |               |
 +-----------+------------------------------------------------------------+---------------+
 | format    | Select a different format than the ``<script/>`` tag.  For | format="html" |
 |           | now this only accepts ``"html"`` (for the ``<script/>``    |               | 
 |           | tag) and ``"escapejs"`` for an escaped javascript string.  |               |
-|           | Default is ``"html"``.	                                   |               |
+|           | Default is ``"html"``.	                               |               |
 +-----------+------------------------------------------------------------+---------------+
 
 
