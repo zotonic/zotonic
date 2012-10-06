@@ -314,6 +314,7 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
                                     Hostname = DL#wm_host_dispatch_list.hostname,
                                     Hostname1 = case Port of
                                                     "80" -> Hostname;
+                                                    "443" -> Hostname;
                                                     _ -> Hostname ++ [$:|Port]
                                                 end,
                                     {redirect, Hostname1};
@@ -520,7 +521,7 @@ try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, 
             case proplists:get_value(protocol, Props) of
                 % Force switch to normal http protocol
                 undefined when Protocol =/= http ->
-                    {Host1, HostPort} = split_host(HostAsString),
+                    {Host1, HostPort} = split_host(z_context:hostname_port(Context)),
                     Host2 = add_port(http, Host1, HostPort),
                     {redirect, "http", Host2};
 
