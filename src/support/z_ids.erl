@@ -24,9 +24,6 @@
 -define(ID_LENGTH,20).
 -define(OPTID_LENGTH,6).
 
-%% Range of random numbers returned
--define(RANDOM_RANGE, 2000000000).
-
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
@@ -109,7 +106,7 @@ sign_key_simple(Context) ->
 
 %% @doc Return a big random integer, but smaller than maxint32
 number() ->
-    gen_server:call(?MODULE, number).
+    number(1000000000).
 
 number(Max) ->
     gen_server:call(?MODULE, {number, Max}).
@@ -134,10 +131,6 @@ handle_call(unique, _From, #state{is_fixed=false} = State) ->
     Id = make_unique(),
     {reply, Id, State};
 
-handle_call(number, _From, #state{is_fixed=false} = State) ->
-    Number = crypto:rand_uniform(1,1000000000), 
-    {reply, Number, State};
-
 handle_call({number, Max}, _From, #state{is_fixed=false} = State) ->
     Number = crypto:rand_uniform(1, Max+1),
     {reply, Number, State};
@@ -156,10 +149,6 @@ handle_call({id, Len}, _From, #state{is_fixed=false} = State) ->
 handle_call(unique, _From, #state{is_fixed=true, unique_counter=N} = State) ->
     Id = make_unique_fixed(N),
     {reply, Id, State#state{unique_counter=N+1}};
-
-handle_call(number, _From, #state{is_fixed=true} = State) ->
-    Number = random:uniform(1000000000), 
-    {reply, Number, State};
 
 handle_call({number, Max}, _From, #state{is_fixed=true} = State) ->
     Number = random:uniform(Max),
