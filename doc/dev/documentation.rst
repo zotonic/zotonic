@@ -22,7 +22,8 @@ Writing documentation
 
 Emacs' `rst-mode
 <http://docutils.sourceforge.net/docs/user/emacs.html>`_ does the job
-for most things. It has nice coloring and indenting.
+for most things. It has nice coloring and indenting. Paragraphs are
+hard-wrapped at 80 characters with single newlines.
 
 Heading styles
 ..............

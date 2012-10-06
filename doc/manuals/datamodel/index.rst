@@ -28,7 +28,11 @@ changed. Even categories and predicates are represented as rsc records
 and can, subsequently, have their own page on the web site.
 
 .. toctree::
+   resources
+   categories
+   predicates
    search
+
 
 rsc
 ---

@@ -18,13 +18,12 @@ In-depth manuals
    auth
    notification
    datamodel/index
-   resources
-   categories
-   predicates
    blocks
    media-files
    templates
    lib-files
    controllers
    email
+   cli
+   deployment
    upgrading
