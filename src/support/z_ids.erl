@@ -134,7 +134,7 @@ handle_call(unique, _From, #state{is_fixed=false} = State) ->
     Id = make_unique(),
     {reply, Id, State};
 
-handle_call(number, _From, #state{is_fixed=true} = State) ->
+handle_call(number, _From, #state{is_fixed=false} = State) ->
     Number = crypto:rand_uniform(1,1000000000), 
     {reply, Number, State};
 
