@@ -1,4 +1,3 @@
-
 .. index:: tag; cache
 .. _tag-cache:
 
@@ -36,6 +35,8 @@ Besides the duration and the cache name the ``{% cache %}`` tag also accepts the
 |cat         |Category the cached block depends on. This argument can be used multiple    |cat="news"          |
 |            |times for specifying multiple categories. The categories are not added to   |                    |
 |            |the cache key, only added as cache dependencies.                            |                    |
++------------+----------------------------------------------------------------------------+--------------------+
+|if          |Only cache the block when the argument evaluates to true.                   |if=can_cache        |
 +------------+----------------------------------------------------------------------------+--------------------+
 |if_anonymous|Only cache the block when the current visitor is not logged on (i.e. an     |if_anonymous        |
 |            |anonymous visitor)                                                          |                    |
