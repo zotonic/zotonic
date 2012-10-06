@@ -3,9 +3,6 @@
     % This site is enabled or not.
     {enabled, true},
 
-    % Atomic hostname, MUST be equal to the directory name of this site.
-    {host, %%SITE%%},
-
     % Hostname on which this site runs
     {hostname, "%%SITE%%:8000"},
 

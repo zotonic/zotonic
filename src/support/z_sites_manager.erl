@@ -231,22 +231,13 @@ scan_sites() ->
 parse_config(C) ->
     case file:consult(C) of
         {ok, [SiteConfig|_]} -> 
-            %% check host option
+            %% store host in site config
             Host = list_to_atom(
                      hd(lists:reverse(
                           filename:split(
                             filename:dirname(C)
                            )))),
-            case proplists:get_value(host, SiteConfig) of
-                undefined ->
-                    lists:keystore(host, 1, SiteConfig, {host, Host});
-                Host ->
-                    SiteConfig;
-                InvalidHost ->
-                    error_logger:warning_msg("Ignoring invalid `host' option in site config: ~s: {host, ~p}~n",
-                                             [C, InvalidHost]),
-                    lists:keystore(host, 1, proplists:delete(host, SiteConfig), {host, Host})
-            end;
+            lists:keystore(host, 1, SiteConfig, {host, Host});
         {error, Reason} ->
             Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
             ?ERROR("~s~n", [Message]),
