@@ -76,6 +76,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_modules,
                 label=?__("Facebook", Context),
                 url={admin_facebook},
-                visiblecheck={acl, use, ?MODULE}}
+                visiblecheck={acl, use, mod_facebook}}
      
      |Acc].

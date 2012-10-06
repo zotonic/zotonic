@@ -50,7 +50,8 @@ save_settings([], Context) ->
     Context;
 save_settings([{Key, Value} | T], Context) when Key == "appid"; 
 						Key == "appsecret" ; 
-						Key == "scope"->
+						Key == "scope" ;
+                        Key == "useauth" ->
     m_config:set_value(mod_facebook, list_to_atom(Key), Value, Context),
     save_settings(T, Context);
 save_settings([_|T], Context) ->

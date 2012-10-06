@@ -13,10 +13,6 @@
     {% wire id="admin_facebook" type="submit" postback="admin_facebook" %}
     <form name="admin_facebook" id="admin_facebook" method="POST" action="postback">
 
-        <div class="well">
-            <button class="btn btn-primary" type="submit">{_ Save Facebook settings _}</button>
-        </div>
-            
         <div class="widget">
             <h3 class="widget-header">Facebook</h3>
             <div class="widget-content">
@@ -39,6 +35,21 @@
                     <label class="control-label" for="scope">{_ Scope _}</label>
                     <div class="controls">
                         <input type="text" id="scope" name="scope" value="{{ m.config.mod_facebook.scope.value|default:'email'|escape }}" class="span6" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox" for="useauth">
+                            <input type="checkbox" id="useauth" name="useauth" {% if m.config.mod_facebook.useauth.value %}checked="checked"{% endif %} value="1" />
+                            {_ Use Facebook authentication _}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn btn-primary" type="submit">{_ Save Facebook Settings _}</button>
                     </div>
                 </div>
                 
