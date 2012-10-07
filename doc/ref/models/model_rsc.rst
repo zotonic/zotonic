@@ -118,7 +118,13 @@ A resource has the following properties accessible from the templates:
 |is_featured        |If featured checked or not. Returns a boolean        |false                           |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |is_protected       |If this page is protected from deletion. Returns a   |false                           |
-|                   |boolean                                              |                                |
+|                   |boolean.                                             |                                |
+|                   |                                                     |                                |
+|                   |Resources are protected by a simple table called     |                                |
+|                   |``protect`` that prevents accidental deletions of rsc|                                |
+|                   |records. It does this by having a foreign key        |                                |
+|                   |constraint that prohibits the deletion of the        |                                |
+|                   |referred rsc record.                                 |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |is_published       |If this page has been published. Returns a boolean   |true                            |
 +-------------------+-----------------------------------------------------+--------------------------------+

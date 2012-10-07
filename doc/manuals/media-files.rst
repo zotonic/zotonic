@@ -1,3 +1,4 @@
+.. _manual-media:
 
 Media file handling
 ===================

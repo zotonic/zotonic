@@ -1,6 +1,0 @@
-
-Predicates
-==========
-
-Lorem ipsum...
-

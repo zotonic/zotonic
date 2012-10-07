@@ -3,8 +3,8 @@
 
 Zotonic has two places where a site’s configuration is kept. One is in
 the site’s config file (accessible through :ref:`model-site`), the
-other in the config table. Entries in the config table overrule any module
-settings from the config file.
+other in the ``config`` table. Entries in the config table overrule
+any module settings from the config file.
 
 All m_config keys can be thought of as tuples ``{Module, Key,
 Value}``, where Value is a complex value that can have a text value
