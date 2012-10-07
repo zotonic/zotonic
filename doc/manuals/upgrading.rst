@@ -82,6 +82,27 @@ to::
   {% if value|length == 5 %}
 
 
+mod_backup
+..........
+
+On startup you might see this message::
+
+  18:39:59.895 [error] z_module_manager:485 [sitename] Error starting module mod_backup: {error,{missing_dependencies,[rest]}}
+
+mod_backup is now dependent on mod_rest, so you should enable that module in the module manager.
+
+
+z_logger
+........
+On startup you might see this message::
+
+  ** /home/zotonic/zotonic/deps/z_logger/ebin/z_logger.beam hides /home/zotonic/zotonic/deps/webzmachine/ebin/z_logger.beam
+  ** Found 1 name clashes in code paths
+  
+z_logger has been moved from its own reps/z_logger repo into
+webzmachine.  You can delete the entire ``deps/z_logger`` directory.
+
+  
 Upgrading to Zotonic 0.8
 ------------------------
 
