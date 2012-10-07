@@ -15,8 +15,7 @@ Say you want to sort on the column "requestor".
 
 In the init function of your site, do the following::
 
-  z_pivot_rsc:define_custom_pivot(pivotname, [{requestor, "varchar(80)"}],
-Context),
+  z_pivot_rsc:define_custom_pivot(pivotname, [{requestor, "varchar(80)"}], Context),
 
 Then create (and export!) a notification listener function ``observe_custom_pivot/2``::
 
