@@ -48,7 +48,8 @@ The following include files have been renamed:
 +-------------------------------+---------------------------------+
 
 HTTPS support
-............
+.............
+
 HTTPS support was moved from the core into a new module, :ref:`mod_ssl`.
 
 The global ``priv/config`` options ``ssl``, ``ssl_certfile``,

@@ -1,6 +1,7 @@
 .. _manual-datamodel-edges:
+
 Edges
------
+=====
 
 Like stated, an :term:`edge` is a labelled connection between two
 resources.
@@ -20,11 +21,11 @@ connections" in the admin), creating connections to other resources.
 .. seealso:: :ref:`model-edge`
 
 Predicate
-.........
+---------
 
-Edges have a label: like in the example above, `author` is a
-:term:`predicate` of an edge which denotes that a certain `article`
-was written by a certain `person`
+Edges have a label: like in :ref:`manual-datamodel-example`, `author`
+is a :term:`predicate` of an edge which denotes that a certain
+`article` was written by a certain `person`
 
 Like categories, these predicates themselves are also again resources:
 allowing you to specify metadata, give them a meaningful title, et
@@ -38,6 +39,3 @@ connection. On their edit page in the admin interface, you can edit
 the list of valid subject- and object categories for a predicate.
 
 .. seealso:: :ref:`model-predicate`
-
-
-

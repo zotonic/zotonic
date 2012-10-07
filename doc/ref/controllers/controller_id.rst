@@ -10,20 +10,20 @@ is returned.
 
 When no content types are requested then ``text/html`` is selected.
 
-This resource is also used for a page’s short url representation.
+This controller is also used for a page’s short url representation.
 
 Example dispatch rule (from mod_base)::
 
-  {id, ["id", id], resource_id, []}
+  {id, ["id", id], controller_id, []}
 
-This resource does not have any dispatch options.
+This controller does not have any dispatch options.
 
-This resource handles the following query argument:
+This controller handles the following query argument:
 
 +---------------------+-------------------------------------+------------------------+
 |Option               |Description                          |Example URL             |
 +---------------------+-------------------------------------+------------------------+
-|id                   |Id of the requested :ref:`resource`. |/id/1234                |
+|id                   |Id of the requested :term:`resource`.|/id/1234                |
 +---------------------+-------------------------------------+------------------------+
 
 The list of provided content types is collected with a `foldr`

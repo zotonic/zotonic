@@ -1,3 +1,5 @@
+.. _manual-datamodel-example:
+
 The datamodel by example
 ------------------------
 

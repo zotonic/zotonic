@@ -14,8 +14,8 @@ Resources, in the admin often called `pages`, are the main data unit:
 they have properties like title, summary, body text; and, important,
 they belong to a certain :term:`category`.
 
-Edges are nothing more than connections between two resources. Each of
-such connections are labeled, with a so-called :term:`predicate`.
+Edges are nothing more than connections between two resources. Each
+edge is labeled, with a so-called :term:`predicate`.
 
 This manual describes the data model and its related database table in depth.
 

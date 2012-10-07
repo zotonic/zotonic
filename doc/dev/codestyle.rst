@@ -70,7 +70,7 @@ Structure your commit message like this::
   of your approach, in the present tense.
 
 * Optionally, when your commit **fixes** a bug on github, add `Fixes
-   #1545` on a separate line below the description.
+  #1545` on a separate line below the description.
 
 Notice the empty line preceding the longer description and the "Fixes" tag.
 

@@ -1,4 +1,4 @@
-.. syntax:: django
+.. highlight:: django
 .. include:: meta-stream.rst
 
 Enable WebSockets or Comet communication.

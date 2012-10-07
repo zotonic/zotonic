@@ -8,10 +8,10 @@ the background, then it is possible to implement your module as a
 gen_server. A gen_server is a standard way to implement a reliable
 Erlang worker process.
 
-In that case you will need to add the behaviour and
-gen_server functions. You also need to change the ``init/1`` function to
-accept an property list, which contains the site definition and a
-``{context, Context}` property.
+In that case you will need to add the behaviour and gen_server
+functions. You also need to change the ``init/1`` function to accept
+an property list, which contains the site definition and a ``{context,
+Context}`` property.
 
 This server module will be started for every site in a Zotonic system
 where the module is enabled, so it can’t be a named server.

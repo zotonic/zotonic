@@ -19,10 +19,10 @@ and will be either set or replaced with a default when not set.
     This is the port mod_ssl will start the https listener on. When it is not defined then
     mod_ssl will assign a random port and set the ``mod_ssl.listen_port`` to that port number.
 
-    Note that on Unix and BSD it is not possible to use ports below 1024. You need to
-    map ports below 1024 to the ``mod_ssl.listen_port``.
-    See ...
-.. todo:: Add ref to "How to bind Zotonic to Port 80 and Port 443"
+    Note that on Unix and BSD it is not possible to use ports
+    below 1024. You need to map ports below 1024 to the
+    ``mod_ssl.listen_port``.  See :ref:`How to bind Zotonic to Port 80
+    and Port 443 <manual-privileged-ports>`.
 
 ``mod_ssl.port``
     This is the *outside* port, as seen by a visitor of the site. When this is set to 443 then

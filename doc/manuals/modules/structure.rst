@@ -1,4 +1,5 @@
 .. _manual-module-structure:
+
 Module structure
 ================
 

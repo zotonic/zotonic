@@ -35,15 +35,20 @@ The building blocks of a template.
 Custom tags
 ^^^^^^^^^^^
 
-Screen components for when tags and included templates are not enough and programming is needed.
+Custom tags, internally called `scomps` are module-defined tags, which
+are used when including templates is not enough and more programming
+is needed.
 
-Scomps add logic to templates or generate HTML/javascript constructs that are too difficult for templates. A good example is the :ref:`scomp-menu` scomp which implements the menu, including sub menus and highlighting of the current menu item.
+Custom tags add logic to templates or generate HTML/Javascript
+constructs that are too difficult for templates. A good example is the
+:ref:`scomp-menu` scomp which implements the menu, including sub menus
+and highlighting of the current menu item.
 
 Scomps have the same syntax as tags::
 
    {% scompname arg=value ... %}.
 
-Scomps are implemented by :ref:`modules`, tags are implemented by the template system.
+Scomps are implemented by :ref:`manual-modules`, tags are implemented by the template system.
 
 .. seealso:: a listing of all :ref:`scomps`.
 

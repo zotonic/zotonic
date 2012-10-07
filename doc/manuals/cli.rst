@@ -1,4 +1,4 @@
-.. _manual-cli::
+.. _manual-cli:
 
 The Zotonic shell command
 =========================
@@ -54,44 +54,51 @@ Currently, the following subcommands are implemented:
   following variables: ``SKEL``, ``DBHOST``, ``DBPORT``, ``DBUSER``, ``DBPASSWORD``,
   ``DBDATABASE``, ``DBSCHEMA``, ``ADMINPASSWORD``, ``DO_LINK``.
 
-zotonic installmodule <module_name>
-Installs a module from the modules.zotonic.com repository into your Zotonic instance. The module will be checked out using source control (either git or hg) into the priv/modules folder:
+``zotonic installmodule <module_name>``
+  Installs a module from the modules.zotonic.com repository into your Zotonic instance. The module will be checked out using source control (either git or hg) into the priv/modules folder::
 
-zotonic installmodule mod_openid
-Getting module index
-** Installing mod_openid ...
-requesting all changes
-adding changesets
-adding manifests
-adding file changes
-added 11 changesets with 21 changes to 15 files
-updating to branch default
-14 files updated, 0 files merged, 0 files removed, 0 files unresolved
-** mod_openid OK
-zotonic copysite [site_name] [source_server]
-Copy [site_name] and its database content from the [source_server] over SSH and load its content into the filesystem and database of the local machine. You will need to have created the database zotonic_[site_name] for this to work.
+    ~$ zotonic installmodule mod_openid
+    Getting module index
+    ** Installing mod_openid ...
+    requesting all changes
+    adding changesets
+    adding manifests
+    adding file changes
+    added 11 changesets with 21 changes to 15 files
+    updating to branch default
+    14 files updated, 0 files merged, 0 files removed, 0 files unresolved
+    ** mod_openid OK
 
-Warning: This command will reset the content of the database to the content retrieved from the [source_server].  It does, however, generate and output a restore file in case this was run by accident and explains how to recover.
+``zotonic copysite [site_name] [source_server]``
+  Copy [site_name] and its database content from the [source_server] over SSH and load its content into the filesystem and database of the local machine. You will need to have created the database zotonic_[site_name] for this to work.
 
-zotonic createdb [site_name]
-Create a database called zotonic_[site_name] with the basic setup in place to host a Zotonic datastore. This script will likely need to be run as postgres unless zotonic has been granted CREATEDB in postgres as follows:
+  Warning: This command will reset the content of the database to the content retrieved from the [source_server].  It does, however, generate and output a restore file in case this was run by accident and explains how to recover.
 
-ALTER ROLE zotonic WITH CREATEDB
-zotonic sitedir [site_name]
-Get the absolute path for a site based on [site_name]
+``zotonic createdb [site_name]``
+  Create a database called zotonic_[site_name] with the basic setup in place to host a Zotonic datastore. This script will likely need to be run as postgres unless zotonic has been granted CREATEDB in postgres as follows::
 
-zotonic snapshot [site_name]
-Take a version control snapshot of [site_name] including its database content.
+    ALTER ROLE zotonic WITH CREATEDB
 
-This works differently from mod_backup in that it consistently uses the same filename for the SQL backup to make revision-based full site rollbacks possible.
+``zotonic sitedir [site_name]``
+  Get the absolute path for a site based on [site_name]
 
-zotonic update
-Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
+``zotonic snapshot [site_name]``
+  Take a version control snapshot of [site_name] including its database content.
 
-zotonic compilefile [files...]
-Compiles a single file within the zotonic folder. This runs very fast and works very well on a save-hook of your text editor. In Emacs, it would be called like this:
+  This works differently from mod_backup in that it consistently uses
+  the same filename for the SQL backup to make revision-based full
+  site rollbacks possible.
 
-(add-hook 'erlang-mode-hook
+``zotonic update``
+  Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
+
+``zotonic compilefile [files...]``
+  Compiles and reloads a single :term:`Erlang module` within the
+  Zotonic folder. This runs very fast and works very well on a
+  save-hook of your text editor. In Emacs, it would be called like
+  this::
+
+    (add-hook 'erlang-mode-hook
           '(lambda ()
              (add-hook 'after-save-hook '
                        (lambda ()

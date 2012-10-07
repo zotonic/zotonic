@@ -1,11 +1,11 @@
+.. highlight:: django
 .. include:: meta-lazy.rst
 
-lazy
-====
+Custom tag which adds a 'loader' image to the page and performs
+a one-time action when loader comes into view.
 
-scomp which shows a 'loader' image and performs onetime actions when loader comes into view.
-
-:ref:`module-geomap` uses this to load the map javascript once the admin widget has been opened by the user.
+:ref:`mod_geomap` uses this to load the map Javascript once the admin
+widget has been opened by the user.
 
 Example::
 

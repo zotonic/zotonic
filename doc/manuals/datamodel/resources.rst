@@ -1,4 +1,5 @@
 .. _manual-datamodel-resources:
+
 Resources
 ---------
 
