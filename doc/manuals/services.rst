@@ -1,3 +1,4 @@
+.. _manual-services:
 
 API Services
 ============

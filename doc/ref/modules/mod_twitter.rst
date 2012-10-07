@@ -31,13 +31,13 @@ to find out your twitter ID.
 At this point the module will login to Twitter and starts following the
 user(s) that you entered their Twitter IDs for.
 
-How mod_twitter stores Tweets
------------------------------
+Domain model
+------------
 
-The datamodel for Tweets is simple: the module creates a
-:ref:`category <manual-datamodel-categories>` `tweet` as a subcategory
-of `text.` Each time a tweet is imported, a resource of this category
-is created.
+The :term:`domain model` for this module is the following: the module
+creates a :ref:`category <manual-datamodel-categories>` `tweet` as a
+subcategory of `text.` Each time a tweet is imported, a resource of
+this category is created.
 
 From the tweet there is an `author` edge to the person that created
 the tweet (e.g. the user who you set the Twitter ID on).

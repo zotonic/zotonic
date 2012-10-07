@@ -19,8 +19,10 @@ To implement a different navigation menu, override the ``_menu.tpl``
 in your project and create new markup.
 
 
-Data model
-----------
+Domain model
+------------
+
+The :term:`domain model` for this module is the following:
 
 The module creates a new category named `menu`. This allows one to
 create multiple menus in a single site. Its edit page in the admin
@@ -29,5 +31,8 @@ contains the hierarchical menu editor.
 The menu resource that is accessible from the admin page (`Content` >
 `Menu`) is the resource with the unique name ``main_menu``.
 
-
 .. seealso:: The filters :ref:`filter-menu_flat`, :ref:`filter-menu_subtree` and :ref:`filter-menu_trail`.
+
+
+
+             
