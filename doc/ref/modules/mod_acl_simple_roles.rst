@@ -37,3 +37,7 @@ How
 - Save
 - Log out
 - Log in as greg. You should see only Pages and Media buttons.
+
+
+.. seealso:: :ref:`mod_acl_adminonly`             
+  
