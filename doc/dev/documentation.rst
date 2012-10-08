@@ -25,6 +25,7 @@ Emacs' `rst-mode
 for most things. It has nice coloring and indenting. Paragraphs are
 hard-wrapped at 80 characters with single newlines.
 
+
 Heading styles
 ..............
 
@@ -44,6 +45,24 @@ When writing documentation of modules, actions, etc; anything under
 ``ref/``; the first level heading is already there for you, generated
 in the ``meta-*.rst`` file. So you should only use ``----------`` and
 ``..........`` for the headings in the ``ref/`` files.
+
+
+When using Emacs, this little snippet helps with adding underlines to headings::
+
+   (defun underline-with-char (char)
+     (interactive (list (read-from-minibuffer "Char: ")))
+     (when (= 0 (length char))
+       (error "Need a character"))
+     (setq char (aref char 0))             ; Ignore everything but the first char.
+     (save-excursion
+       (goto-char (point-at-eol))
+       (insert "\n"
+               (make-string (- (point-at-eol)
+                               (point-at-bol))
+                            char))))
+
+From a mailing list `post <http://lists.gnu.org/archive/html/help-gnu-emacs/2008-05/msg00305.html>`_.
+
 
 References
 ..........
