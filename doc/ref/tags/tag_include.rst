@@ -23,6 +23,11 @@ an expression then the template will be included during runtime.
    About unique ids
       :index:`Automatically generated ids` (``{{ #name }}``) are :index:`unique <pair: unique; id>` within an included template and do not clash with similarly named ids in the including template.
 
+   With keyword
+  	  For compatibility with DTL we accept the optional `with` keyword betwen the template name and the arguments::
+	
+	      {% include "_hello.tpl" with name="Peter" %}
+
 .. seealso:: :ref:`tag-all-include` and :ref:`tag-catinclude`.
 
 

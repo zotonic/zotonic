@@ -410,9 +410,9 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 {ElseAsts,TW2} = lists:foldr(fun({'else', ElseContents}, {EAS, IfTW}) ->
                                                         {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
                                                         {[{'else', ElseAstInfo}|EAS], IfTW1};
-                                                  ({'elseif', ElseIfExpr, ElseContents}, {EAS, IfTW}) ->
+                                                  ({'elif', ElifExpr, ElseContents}, {EAS, IfTW}) ->
                                                         {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
-                                                        {[{'elseif', ElseIfExpr, ElseAstInfo}|EAS], IfTW1}
+                                                        {[{'elif', ElifExpr, ElseAstInfo}|EAS], IfTW1}
                                              end,
                                              {[], TreeWalker1},
                                              ElseChoices),
@@ -1036,7 +1036,7 @@ auto_escape(Value, Context) ->
 ifexpr_ast(Expression, IfContents, ElseChoices, Context, TreeWalker) ->
     lists:foldr(fun({'else', {ElseAst, ElseInfo}}, {{_InnerAst, Inf}, TW}) ->
                             {{ElseAst, merge_info(Inf, ElseInfo)}, TW};
-                   ({'elseif', E, {ElseAst, ElseInfo}}, {{InnerAst, Inf}, TW}) ->
+                   ({'elif', E, {ElseAst, ElseInfo}}, {{InnerAst, Inf}, TW}) ->
                              {{ElseExprAst, ElseExprInfo}, TW1} = value_ast(E, false, Context, TW),
                              {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
                                                                           erl_syntax:atom(is_false), 
@@ -1049,7 +1049,7 @@ ifexpr_ast(Expression, IfContents, ElseChoices, Context, TreeWalker) ->
                               }, TW1}
                 end,
                 empty_ast(TreeWalker),
-                [{'elseif', Expression, IfContents} | ElseChoices]).
+                [{'elif', Expression, IfContents} | ElseChoices]).
 
 
 ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->

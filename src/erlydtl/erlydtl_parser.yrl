@@ -85,8 +85,8 @@ Nonterminals
     IfBlock
     IfBraced
     ElsePart
-    ElseIfList
-    ElseIfBraced
+    ElifList
+    ElifBraced
     ElseBraced
     EndIfBraced
 
@@ -122,6 +122,7 @@ Nonterminals
     LoadNames
     
     CustomTag
+    WithArgs
     Args
     SpacelessBlock
 	TransArgs
@@ -169,7 +170,7 @@ Terminals
     cycle_keyword
     dot
     else_keyword
-    elseif_keyword
+    elif_keyword
     empty_keyword
     endautoescape_keyword
     endblock_keyword
@@ -246,7 +247,7 @@ Left 500 '*' '/' '%'.
 Unary 600 Uminus Unot.
 
 %% Expected shift/reduce conflicts
-Expect 1.
+Expect 3.
 
 Elements -> '$empty' : [].
 Elements -> Elements text : '$1' ++ ['$2'].
@@ -295,8 +296,8 @@ InheritTag -> open_tag inherit_keyword close_tag : inherit.
 
 TransTag -> open_trans trans_text close_trans : {trans, '$2'}.
 TransExtTag -> open_tag __keyword string_literal TransArgs close_tag : {trans_ext, '$3', '$4'}.
-IncludeTag -> open_tag OptionalAll include_keyword E Args close_tag : {include, '$4', '$5', '$2'}.
-CatIncludeTag -> open_tag OptionalAll catinclude_keyword E E Args close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
+IncludeTag -> open_tag OptionalAll include_keyword E OptWith WithArgs close_tag : {include, '$4', '$6', '$2'}.
+CatIncludeTag -> open_tag OptionalAll catinclude_keyword E E WithArgs close_tag : {catinclude, '$4', '$5', '$6', '$2'}.
 NowTag -> open_tag now_keyword string_literal close_tag : {date, now, '$3'}.
 
 OptionalAll -> all_keyword : true.
@@ -352,12 +353,12 @@ IfBlock -> IfBraced Elements ElsePart : {'if', '$1', '$2', '$3'}.
 
 ElsePart -> EndIfBraced : [].
 ElsePart -> ElseBraced Elements EndIfBraced : [{'else', '$2'}].
-ElsePart -> ElseIfList : '$1'.
+ElsePart -> ElifList : '$1'.
 
-ElseIfList -> ElseIfBraced Elements ElsePart : [{'elseif', '$1', '$2'}] ++ '$3'.
+ElifList -> ElifBraced Elements ElsePart : [{'elif', '$1', '$2'}] ++ '$3'.
 
 IfBraced -> open_tag if_keyword E close_tag : '$3'.
-ElseIfBraced -> open_tag elseif_keyword E close_tag : '$3'.
+ElifBraced -> open_tag elif_keyword E close_tag : '$3'.
 ElseBraced -> open_tag else_keyword close_tag.
 EndIfBraced -> open_tag endif_keyword close_tag.
 
@@ -415,6 +416,10 @@ PrintTag -> open_tag print_keyword E close_tag : {print, '$3'}.
 
 TransArgs -> '$empty' : [].
 TransArgs -> TransArgs identifier equal string_literal : '$1' ++ [{'$2', '$4'}].
+
+WithArgs -> with_keyword Args identifier : '$2' ++ [{'$3', true}].
+WithArgs -> with_keyword Args identifier equal E : '$2' ++ [{'$3', '$5'}].
+WithArgs -> Args : '$1'.
 
 Args -> '$empty' : [].
 Args -> Args identifier : '$1' ++ [{'$2', true}].
