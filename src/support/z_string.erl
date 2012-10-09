@@ -608,45 +608,39 @@ replace(String, S1, S2) when is_list(String), is_list(S1), is_list(S2) ->
 sanitize_utf8(L) when is_list(L) -> sanitize_utf8(iolist_to_binary(L));
 sanitize_utf8(B) when is_binary(B) -> s_utf8(B, <<>>).
     
-    s_utf8(<<>>, Acc) ->
-        Acc;
-    s_utf8(<<C, Rest/binary>>, Acc) 
-        when C < 128 -> 
-        s_utf8(Rest, <<Acc/binary, C>>);
-    s_utf8(<<X, A, Rest/binary>>, Acc) 
-        when X >= 2#11000000, X =< 2#11011111, 
-             A >= 2#10000000, A =< 2#10111111 -> 
-        s_utf8(Rest, <<Acc/binary, X, A>>);
-    s_utf8(<<X, A, B, Rest/binary>>, Acc) 
-        when X >= 2#11100000, X =< 2#11101111, 
-             A >= 2#10000000, A =< 2#10111111,
-             B >= 2#10000000, B =< 2#10111111 -> 
-        s_utf8(Rest, <<Acc/binary, X, A, B>>);
-    s_utf8(<<X, A, B, C, Rest/binary>>, Acc) 
-        when X >= 2#11110000, X =< 2#11110111, 
-             A >= 2#10000000, A =< 2#10111111,
-             B >= 2#10000000, B =< 2#10111111,
-             C >= 2#10000000, C =< 2#10111111 ->
-        s_utf8(Rest, <<Acc/binary, X, A, B, C>>);
-    s_utf8(<<X, A, B, C, D, Rest/binary>>, Acc) 
-        when X >= 2#11111000, X =< 2#11111011, 
-             A >= 2#10000000, A =< 2#10111111,
-             B >= 2#10000000, B =< 2#10111111,
-             C >= 2#10000000, C =< 2#10111111,
-             D >= 2#10000000, D =< 2#10111111 ->
-        s_utf8(Rest, <<Acc/binary, X, A, B, C, D>>);
-    s_utf8(<<X, A, B, C, D, E, Rest/binary>>, Acc) 
-        when X >= 2#11111100, X =< 2#11111101, 
-             A >= 2#10000000, A =< 2#10111111,
-             B >= 2#10000000, B =< 2#10111111,
-             C >= 2#10000000, C =< 2#10111111,
-             D >= 2#10000000, D =< 2#10111111,
-             E >= 2#10000000, E =< 2#10111111 ->
-        s_utf8(Rest, <<Acc/binary, X, A, B, C, D, E>>);
-    % Drop illegal utf-8 character.
-    s_utf8(<<_, Rest/binary>>, Acc) ->
-        s_utf8(Rest, Acc).
-    
+s_utf8(<<>>, Acc) ->
+    Acc;
+
+%% 1 byte
+s_utf8(<<X, Rest/binary>>, Acc) when X < 128 ->
+    s_utf8(Rest, <<Acc/binary, X>>);
+
+%% 2 bytes
+s_utf8(<<2#110:3, A:5, 2#10:2, B:6, Rest/binary>>, Acc) when
+        <<0:5, A:5, B:6>> >= <<16#80:16>>,
+        <<0:5, A:5, B:6>> =< <<16#7FF:16>> ->
+    s_utf8(Rest, <<Acc/binary, 2#110:3, A:5, 2#10:2, B:6>>);
+
+%% 3 bytes
+s_utf8(<<2#1110:4, A:4, 2#10:2, B:6, 2#10:2, C:6, Rest/binary>>, Acc) when
+        <<0:7, A:5, B:6, C:6>> >= <<16#800:24>> andalso
+        <<0:7, A:5, B:6, C:6>> =< <<16#D7FF:24>>
+        orelse
+        <<0:7, A:5, B:6, C:6>> >= <<16#E000:24>> andalso
+        <<0:7, A:5, B:6, C:6>> =< <<16#FFFD:24>> ->
+    s_utf8(Rest, <<Acc/binary, 2#1110:4, A:4, 2#10:2, B:6, 2#10:2, C:6>>);
+
+%% 4 bytes
+s_utf8(<<2#11110:5, A:3, 2#10:2, B:6, 2#10:2, C:6, 2#10:2, D:6, Rest/binary>>,
+        Acc) when
+        <<0:3, A:3, B:6, C:6, D:6>> >= <<16#10000:24>> andalso
+        <<0:3, A:3, B:6, C:6, D:6>> =< <<16#10FFFF:24>> ->
+    s_utf8(Rest,
+        <<Acc/binary, 2#11110:5, A:3, 2#10:2, B:6, 2#10:2, C:6, 2#10:2, D:6>>);
+
+%% Drop illegal utf-8 character.
+s_utf8(<<_, Rest/binary>>, Acc) ->
+    s_utf8(Rest, Acc).
 
 %% @doc Truncate a string.  Append the '...' character at the place of break off.
 %% @spec truncate(String, int()) -> String
