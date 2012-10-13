@@ -94,7 +94,7 @@ validate_query_args(Context) ->
                             (_X) -> false
                        end,
             GetValue = fun
-                            ({Id, {ok, #upload{} = Value}}) -> {Id, Value};
+                            ({Id, {ok, Value}}) when is_tuple(Value) -> {Id, Value};
                             ({Id, {ok, Value}}) -> {Id, lists:flatten(Value)}
                        end,
 
