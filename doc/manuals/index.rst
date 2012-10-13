@@ -20,7 +20,7 @@ In-depth manuals
    datamodel/index
    blocks
    media-files
-   templates
+   templates/index
    lib-files
    controllers
    email
