@@ -166,20 +166,21 @@ fetch_value(Key, Data, Context) ->
 are_equal(Arg1, Arg2) ->
     z_utils:are_equal(Arg1, Arg2).
     
-is_false({trans, _} = T, Context) ->
-    z_utils:is_empty(z_trans:lookup_fallback(T, Context));
-is_false(A, _Context) ->
-    is_false(A).
+is_false(A, Context) ->
+    not is_true(A, Context).
 
 is_false(A) ->
-    not z_convert:to_bool(A).
-
+    not is_true(A).
 
 is_true({trans, _} = T, Context) ->
     not z_utils:is_empty(z_trans:lookup_fallback(T, Context));
 is_true(A, _Context) ->
     is_true(A).
 
+is_true(#m{value=V}) -> is_true(V);
+is_true(#rsc_list{list=[]}) -> false;
+is_true(#m_search_result{result=V}) -> is_true(V);
+is_true(#search_result{result=[]}) -> false;
 is_true(A) ->
     z_convert:to_bool(A).
 
@@ -266,4 +267,4 @@ do_cache1(false, _VisibleFor, _Args, _Context) ->
     false.
 
 get_bool_value(Key, Args, Default) ->
-    z_convert:to_bool(proplists:get_value(Key, Args, Default)).
+    is_true(proplists:get_value(Key, Args, Default)).

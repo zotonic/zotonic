@@ -19,3 +19,6 @@
 [submodule "deps/bert.erl"]
 	path = deps/bert.erl
 	url = git://github.com/zotonic/bert.erl.git
+[submodule "deps/z_stdlib"]
+	path = deps/z_stdlib
+	url = git@github.com:zotonic/z_stdlib.git
