@@ -34,9 +34,7 @@
           coalesce/1,
           combine/2,
           combine_defined/2,
-          decode/2,
           depickle/2,
-          encode/2,
           f/1,
           f/2,
           get_seconds/0,
@@ -151,35 +149,6 @@ erase_process_dict() ->
     ok.
 
 
-%%% HEX ENCODE and HEX DECODE
-
-hex_encode(Data) -> encode(Data, 16).
-hex_decode(Data) -> decode(Data, 16).
-
-encode(Data, Base) when is_binary(Data) -> encode(binary_to_list(Data), Base);
-encode(Data, Base) when is_list(Data) ->
-	F = fun(C) when is_integer(C) ->
-		case erlang:integer_to_list(C, Base) of
-			[C1, C2] -> [C1, C2];
-			[C1]     -> [$0, C1]
-		end
-	end,
-	[F(I) || I <- Data].
-
-decode(Data, Base) when is_binary(Data) -> decode(binary_to_list(Data), Base);
-decode(Data, Base) when is_list(Data) ->
-	inner_decode(Data, Base).
-
-inner_decode(Data, Base) when is_list(Data) ->
-	case Data of
-		[C1, C2|Rest] ->
-			I = erlang:list_to_integer([C1, C2], Base),
-			[I|inner_decode(Rest, Base)];
-		[] ->
-			[]
-	end.
-
-
 %% Encode value securely, for use in cookies.
 
 %% 50 usec on core2duo 2GHz
@@ -237,6 +206,11 @@ depickle(Data, Context) ->
     catch
         _M:_E -> erlang:throw("Postback data invalid, could not depickle: "++Data)
     end.
+
+%%% HEX ENCODE and HEX DECODE
+
+hex_encode(Value) -> z_url:hex_encode(Value).
+hex_decode(Value) -> z_url:hex_decode(Value).
 
 
 %%% URL ENCODE %%%
