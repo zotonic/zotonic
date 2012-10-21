@@ -1,6 +1,9 @@
 # This is the configuration file we use to proxy nginx to zotonic.
 # Replace "test.zotonic.com" with your hostname.
 
+# Also please don't forget to check your priv/sites/your_site/config file. 
+# Please add hostname info without any port number like this: {hostname, "test.zotonic.com"},
+
 server {
         listen 80;
         server_name  test.zotonic.com;
