@@ -50,6 +50,7 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             _:E ->
                 Msg1 = lists:flatten(io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
                 ?zWarning(Msg1, Context),
+                lager:warning("Wordpress error: ~p~n~p", [E, erlang:get_stacktrace()]),
                 z_render:growl(Msg1, error, true, Context)
         end,
     z_session_page:add_script(Context1).

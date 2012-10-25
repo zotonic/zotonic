@@ -59,6 +59,7 @@ wxr_to_datamodel(Filename, Context) ->
     case get_xmltext(Version) of
         <<"1.0">> -> supported;
         <<"1.1">> -> supported;
+        <<"1.2">> -> supported;
         V -> throw({error, {unsupported_wxr_version, binary_to_list(V)}})
     end,
 
@@ -217,19 +218,20 @@ get_xmltext(El) ->
     get_xmltext(El, true).
 get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
     Text = collapse_xmltext(Content),
-    Text2 = case Strip of
-                false -> Text;
-                true ->
-                    case xml_attrib(type, Element) of
-                        B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
-                            %% Strip tags
-                            z_html:strip(Text);
-                        B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
-                            %% Do not strip.
-                            Text
-                    end
-            end,
-    z_convert:to_binary(Text2).
+    %% See http://erlang.2086793.n4.nabble.com/xmerl-problem-td2121415.html
+    Text2 = unicode:characters_to_binary(Text, unicode),
+    case Strip of
+        false -> Text2;
+        true ->
+            case xml_attrib(type, Element) of
+                B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
+                    %% Strip tags
+                    z_html:strip(Text2);
+                B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
+                    %% Do not strip.
+                    Text2
+            end
+    end.
 
 
 %% @doc Given a list of XML test, implode it into one list.
