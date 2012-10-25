@@ -4,8 +4,14 @@
 %}
 <form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
 	<fieldset>
-		{% if not id.is_a.poll and pages > 1 and not id.survey_hide_progress %}
-			<legend>{_ Question _} <span>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
+		{% if not id.is_a.poll and pages > 1 %}
+			{% if id.survey_progress == 'nr' %}
+				<legend>{_ Question _} <span>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
+			{% elseif id.survey_progress == 'bar' %}
+				<div class="progress">
+				  <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
+				</div>
+			{% endif %}
 		{% endif %}
 
 		{% for blk in questions %}

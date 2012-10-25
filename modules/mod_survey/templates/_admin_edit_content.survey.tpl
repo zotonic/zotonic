@@ -24,21 +24,29 @@
 		{% else %}
 		<input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
 		{% endif %}
-		{_ Show results to user after completion of survey. _}
+		{_ Show results to user after completion of survey _}
 		</label>
 	</div>
 	
 	<div class="control-group">
 		<label class="inline checkbox">
 		<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple %}checked="checked"{% endif %} />
-		{_ Allow multiple entries per user/browser. _}
+		{_ Allow multiple entries per user/browser _}
 		</label>
 	</div>
 
 	<div class="control-group">
-		<label class="inline checkbox">
-		<input type="checkbox" name="survey_hide_progress" id="survey_hide_progress" value="1" {% if id.survey_hide_progress %}checked="checked"{% endif %} />
-		{_ Hide progress information “<em>Question 3/10</em>”. _}
+		<label class="radio">
+			<input type="radio" name="survey_progress" id="survey_progress_none" value="" {% if not id.survey_progress %}checked="checked"{% endif %} />
+			{_ Hide progress information _}
+		</label>
+		<label class="radio">
+			<input type="radio" name="survey_progress" id="survey_progres_nr" value="nr" {% if id.survey_progress == 'nr' %}checked="checked"{% endif %} />
+			{_ Show progress information as “<em>Question 3/10</em>” _}
+		</label>
+		<label class="radio">
+			<input type="radio" name="survey_progress" id="survey_progress_bar" value="bar" {% if id.survey_progress == 'bar' %}checked="checked"{% endif %} />
+			{_ Show progress bar _}
 		</label>
 	</div>
 
