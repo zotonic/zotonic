@@ -112,7 +112,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
 
 
 %% @doc Check if the given block is a survey question with submit button
-observe_survey_is_submit(#survey_is_submit{block=Q}, Context) ->
+observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
     case proplists:get_value(type, Q) of
         <<"survey_button">> -> true;
         <<"survey_", _/binary>> -> proplists:get_value(input_type, Q) =:= <<"submit">>;
@@ -344,7 +344,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                     true ->
                         case State of
                             in_q -> fetch_question_name(Qs, Name, Nr+1, in_pagebreak);
-                            in_page_break -> fetch_question_name(Qs, Name, Nr, in_pagebreak)
+                            in_pagebreak -> fetch_question_name(Qs, Name, Nr, in_pagebreak)
                         end;
                     false ->
                         fetch_question_name(Qs, Name, Nr, in_q)
