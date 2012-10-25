@@ -185,8 +185,11 @@ get_id(Context) ->
 get_rsc(Id, Context) ->
     Props = m_rsc:get(Id, Context),
     Filtered = lists:filter(fun({K,_}) -> z_acl:rsc_prop_visible(Id, K, Context) end, Props),
-    Complete = [ 
+    IsA = m_rsc:is_a(Id, Context),
+    Complete = [
+        {category, hd(IsA)},
         {page_url, z_convert:to_binary(z_context:abs_url(m_rsc:p(Id, page_url, Context), Context))},
+        {computed_category, IsA},
         {computed_site_name, z_context:site(Context)},
         {computed_address_country, m_l10n:country_name(proplists:get_value(address_country, Props), Context)},
         {computed_mail_country, m_l10n:country_name(proplists:get_value(mail_country, Props), Context)},
