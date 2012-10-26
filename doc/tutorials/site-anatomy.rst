@@ -1,3 +1,4 @@
+.. _tutorial-site-anatomy:
 
 Anatomy of a site
 =================

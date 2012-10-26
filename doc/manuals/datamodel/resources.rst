@@ -21,7 +21,8 @@ the record, and can later be retrieved.
 
 .. seealso:: :ref:`model-rsc`
 
-
+.. _manual-datamodel-categories:
+             
 Resource categories
 ...................
 

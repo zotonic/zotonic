@@ -126,3 +126,56 @@ file:consult/1 and see if it returns errors.
 top-to-bottom in the file.  Are any rules above your rule capturing
 the cases you are trying to match.  If so, move your rule up, but bear
 in mind that you don't want to break those rules either.
+
+
+.. _manual-dispatch-rewriting:
+
+URL rewriting
+-------------
+
+Before URLs are matched, they first can be `rewritten` to match
+something else. This is a powerful mechanism that allows you do
+anything you like with URLs.
+
+:ref:`mod_translation` uses this mechanism to prefix each URL with the
+language code of the currently selected language.
+
+.. todo:: document this fully, using mod_translation example
+
+
+
+Dispatch rule BNF
+-----------------
+
+A dispatch rule is built up as follows::
+
+  {RuleName, UrlPattern, ControllerModule, ControllerArgs}
+  RuleName = atom()
+  PathSpec = [PathSegmentSpec]
+  PathSegmentSpec = StaticMatch | Wildcard | Variable
+  StaticMatch = string()
+  Wildcard = '*'
+  PathVariable = atom()
+  ResourceModule = atom()
+  ResourceArgs = [{Key,Value}]
+
+All `PathVariables` in the matching rule are made available to the
+resource through ``z_context``. The `ResourceArgs` proplist is passed
+to ``ControllerModule:init/1``.
+
+`PathVariables` are part of the request-scope configuration of
+`ControllerModule` . Things like the ID, name or category of a page being
+requested can be gathered effectively here. Judicious use of
+PathVariables can substantially reduce the number of dispatch rules
+while making them easier to read.
+
+`ControllerArgs` is the rule-scope configuration of
+ControllerModule. It makes it possible to reuse a well-designed
+resource module in many dispatch rules with different
+needs. ControllerArgs is effective for establishing implementation
+details like the template to be used, whether or not to do caching and
+where to load static resources from.
+
+Zotonic dispatch rules are identical to Webmachine's with the addition
+of RuleName. Webmachine's dispatch rules are described in detail at
+http://webmachine.basho.com/dispatcher.html .

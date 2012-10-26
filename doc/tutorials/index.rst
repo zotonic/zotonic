@@ -8,7 +8,8 @@ Topics:
    
    preinstall
    install
-   getting-started
+   install-addsite
    site-anatomy
-
+   zotonic_status
+   install-troubleshooting
 

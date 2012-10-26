@@ -22,7 +22,7 @@ and will be either set or replaced with a default when not set.
     Note that on Unix and BSD it is not possible to use ports
     below 1024. You need to map ports below 1024 to the
     ``mod_ssl.listen_port``.  See :ref:`How to bind Zotonic to Port 80
-    and Port 443 <manual-privileged-ports>`.
+    and Port 443 <manual-deployment-privilegedports>`.
 
 ``mod_ssl.port``
     This is the *outside* port, as seen by a visitor of the site. When this is set to 443 then

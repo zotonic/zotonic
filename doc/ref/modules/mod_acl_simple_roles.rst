@@ -31,13 +31,12 @@ How
 - Activate module `ACL Simple Roles` and disabled `ACL Admin Only`
 - Create a new user, e.g. `greg`.
 - Created new role named `Posting Members` check categories `Text` and `Media`.
-- Also chech the module `Admin`.
+- Also check the module `Admin`.
 - Save
 - Added in Page Connections in ACL Role Member user greg (search by full user name)
 - Save
 - Log out
-- Log in as greg. You should see only Pages and Media buttons.
-
+- Log in as `greg`. You should see only Pages and Media buttons.
 
 .. seealso:: :ref:`mod_acl_adminonly`             
   

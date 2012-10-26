@@ -23,4 +23,4 @@ type      Type of the message, one of
           Default is "notice".              type="error"
 ========  ================================  ============
 
-.. seealso:: actions :ref:`action-alert` and :ref:`action-confirm`.
+.. seealso:: actions :ref:`action-alert` and :ref:`action-confirm`; and :ref:`manual-cookbook-frontend-growl`.

@@ -1,153 +1,103 @@
+.. highlight:: sh
+.. _tutorial-install:
+  
 Installation
 ============
 
-You will need to:
+   
+Before beginning installation, please be sure your system meets the
+:ref:`install-requirements`.
 
-1. Install Erlang R14B03 or newer. Build it from source, or
-   use packages (see platform-specific notes below)
+At the end of this page, you should have a bare-bones Zotonic running,
+without any sites in it.
 
-2. Install ImageMagick (version 6.5 or higher) for the 'convert' and
-   'identify' tools.  Make sure that the convert and identify tools
-   are in your path so that zotonic can find them. For auto-rotation
-   to work you'll need the "exif" utility as well.
+There are multiple ways of installing Zotonic, depending on what you want and 
 
-3. Install PostgreSQL (preferably 8.3 or newer).
+1. :ref:`tutorial-install-release`
+2. :ref:`tutorial-install-git`
+3. :ref:`tutorial-install-deb`
+4. :ref:`tutorial-install-script`
 
-4. Enable trust-authentication (username+password) in postgres.
+For most people, :ref:`tutorial-install-release` should be the best option.
+   
 
-5. Obtain a copy of the Zotonic source code.
+.. _tutorial-install-release:
+   
+Installing from a release .zip archive
+--------------------------------------
 
+Zotonic versions are released as `.zip` files from the official
+download page. This installation method gets you the officially
+supported version.
 
+1. Download the latest release as a `.zip` from
+   http://code.google.com/p/zotonic/downloads/list, and unzip it in a
+   folder called ``zotonic``.
 
-Steps to install Zotonic
-------------------------
+.. include:: _make_common.rst
 
-1. Type ``make`` in the root of Zotonic (there where the Makefile is located).
+.. _tutorial-install-git:
 
-2. Create an user and database in PostgreSQL (change the password for the user!):
+Installing the development version using `git`
+----------------------------------------------
 
-   CREATE USER zotonic WITH PASSWORD 'zotonic';
-   CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
-   GRANT ALL ON DATABASE zotonic TO zotonic;
-   \c zotonic
-   CREATE LANGUAGE "plpgsql";
+If you want to run the latest version of Zotonic, get a copy of the
+source tree from github.com and run the `master` branch of Zotonic.
 
-3. Create a new zotonic site, based on the "blog" skeleton site:
+1. Use `git <http://git-scm.com/>`_ to `clone` a copy of the Zotonic source tree::
 
-   bin/zotonic addsite -s blog yoursite
+     git clone git://github.com/zotonic/zotonic.git
+     cd zotonic
+   
+.. include:: _make_common.rst
 
-   This will add a site named yoursite. Its default URL will be
-   http://yoursite:8000/ so either put 'yoursite' in your hosts
-   file or change the {hostname} section of the config file.
+             
+.. _tutorial-install-deb:
 
-4. Edit the generated file priv/sites/yoursite/config, to make sure
-   your database credentials and the hostname are correct, and change
-   the password for the admin.
+Installing from the Debian package
+----------------------------------             
 
-5. Start zotonic in debug mode:
+Official Zotonic releases are packaged as a ``.deb`` package. This
+packages installs all prerequisites, creates a ``zotonic`` user, and
+sets up a Zotonic instance running from
+``/var/lib/zotonic/zotonic``. This package works for both Ubuntu and
+Debian distributions, and is the preferred way of running Zotonic on
+Debian for production purposes.
 
-   bin/zotonic debug
+Ubuntu users can do the following to install this package::
 
-7. You see zotonic starting up, lots of messages pass by, and zotonic
-   will install the initial database.  When something goes wrong here,
-   then it is almost always a problem with the database
-   connection. Check your database configuration in the zotonic.sh
-   file.
+  sudo add-apt-repository ppa:arjan-scherpenisse/zotonic
 
-8. Point your browser to 
-	
-    http://yoursite:8000/
-	
-   or logon as user 'admin' (the default password is 'admin') at:
+Debian users need to add the following line to their ``/etc/apt/sources.list`` file::
 
-    http://yoursite:8000/admin/
+  deb http://ppa.launchpad.net/arjan-scherpenisse/zotonic/ubuntu lucid main 
 
-9. When all done, then you can stop the erlang shell with:
+Then, run::
 
-    q().
+  sudo apt-get update && sudo apt-get install zotonic
+  
+Now, point your browser to http://localhost:8000/ and make sure
+you see the `Powered by Zotonic` welcome screen. Then, head on to
+:ref:`tutorial-install-addsite`.
 
-   or pressing ctrl-c twice.
+  
+.. _tutorial-install-script:
 
+Installation with the one-line script for Debian-based systems
+--------------------------------------------------------------
 
+.. note:: This script installs the latest development version, so be
+          careful not to use it on a production system.
 
-Operating system specific notes
--------------------------------
+For a one-liner install of Zotonic and its dependencies you can use
+the following script::
 
+  wget -O - https://raw.github.com/zotonic/zotonic/master/zotonic_install | bash
 
-Ubuntu ( >= 10.04)
-^^^^^^^^^^^^^^^^^^
+This will install all dependencies, clone the Zotonic `git`
+repository, create a ``zotonic`` user, add the necessary database
+permissions, and compile and start Zotonic.
 
-Erlang can be installed from a custom PPA by running:
-
-sudo add-apt-repository ppa:scattino/ppa
-sudo apt-get update
-sudo apt-get install erlang-base postgresql imagemagick
-
-
-Ubuntu 9.04 (jaunty)
-^^^^^^^^^^^^^^^^^^^^
-
-You'll need to build erlang from source. Before building, make sure
-you install these packages:
-
-sudo apt-get install build-essential unixodbc-dev libncurses-dev libssl-dev libxml2-dev libexpat1-dev
-
-PostgreSQL and Imagemagick are available on Ubuntu as packages:
-
-sudo apt-get install postgresql-8.4 imagemagick
-
-
-Debian (lenny)
-^^^^^^^^^^^^^^
-
-You'll need to build erlang from source. Before building, make sure
-you install these packages:
-
-sudo apt-get install build-essential libncurses5-dev m4
-sudo apt-get install openssl libssl-dev
-sudo apt-get install unixodbc-dev
-
-Alternatively, you can install a precompiled recent Erlang from the
-following PPA: https://launchpad.net/~scattino/+archive/ppa
-
-Afterwards, for a quick setup of zotonic and postgres you can use the
-following script:
-https://raw.github.com/zotonic/zotonic/master/zotonic_install
-
-
-FreeBSD
-^^^^^^^
-
-If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
-(check with 'make --version', which should give you GNU, and version
-info) If you're not running GNU-make as a default, edit the Makefile
-to run with 'gmake' (make sure gmake is available first).
-
-
-Windows
-^^^^^^^
-
-Currently, Zotonic is not officially supported on the Windows
-platform. However, the main dependencies Erlang, PostgreSQL and
-ImageMagick do work on Windows, so, if you're adventurous, it should
-be possible to get it running.
-
-We have included user-contributed "start.cmd" and "build.cmd"
-batch-scripts which are supposed to work on Windows.
-
-
-Mac OS X
-^^^^^^^^
-
-With MacPorts you can install Erlang and ImageMagick using the
-following commands:
-
-  sudo port install erlang +ssl
-  sudo port install ImageMagick
-
-EnterpriseDB has an excellent PostgreSQL installer available at
-http://www.enterprisedb.com/products/pgdownload.do#osx
-
-For a very basic step-by-step installation on OSX, chick this
-http://timbenniks.nl/blog/712/step-by-step-guide-to-install-zotonic-on-osx.
-
+Now, point your browser to http://localhost:8000/ and make sure
+you see the `Powered by Zotonic` welcome screen. Then, head on to
+:ref:`tutorial-install-addsite`.

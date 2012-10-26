@@ -22,7 +22,41 @@ of the Erlang world.
 Indenting templates
 -------------------
 
-### explain how we do this and how we indent HTML vs. template tags? ###
+A common style and shorthand techniques make templates from multiple
+authors more alike.  This makes them easier to maintain and share in a
+team or with the community.
+
+When the template sees that you request a property of an integer then
+it assumes that the integer is a m.rsc id. This makes templates more
+readable.
+
+Example::
+
+  <li>
+      <h3>{{ m.rsc[id].title }}</h3>
+      {% for image_id in m.rsc[id].o.depiction %}
+      <figure>
+          {% media image_id width=100 link=id %}
+          {% if m.rsc[image_id].summary %}
+              <p class="image-caption">{{ m.rsc[image_id].summary }}</p>
+          {% endif %}
+      </figure>
+      {% endfor %}
+  </li>
+
+Can be more effectively written as follows to improve readability::
+
+  <li>
+      <h3>{{ id.title }}</h3>
+      {% for image_id in id.o.depiction %}
+      <figure>
+          {% media image_id width=100 link=id %}
+          {% if image_id.summary %}
+              <p class="image-caption">{{ image_id.summary }}</p>
+          {% endif %}
+      </figure>
+      {% endfor %}
+  </li>
 
 
 Spaces versus tabs

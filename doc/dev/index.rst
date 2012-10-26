@@ -10,6 +10,7 @@ Topics:
    filing_issues
    contributing
    documentation
+   testing
    releasenotes/index
 
 

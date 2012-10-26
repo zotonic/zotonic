@@ -15,6 +15,43 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+%% the rsc_export() format, as returned by m_rsc:export/2
+%% [
+%%  {id, 112233}, % Local ID
+%%  %% Globally unique resource URI
+%%  {uri, <<"http://www.example.com/id/112233">>},
+%%  {rsc,
+%%   %% Resource properties, e.g.:
+%%   [{title, <<"Foo">>}, 
+%%    ...
+%%   ]
+%%  },
+%%  {medium,
+%%   %% Medium properties, if the item has an embedded medium record.
+%%  },
+%%  {category,
+%%   %% Category properties, if the item is a category.
+%%  },
+%%  {group,
+%%   %% Group access properties (if item is a group)
+%%  },
+%%  {edges,
+%%   %% Edges from this item to other items
+%%   [
+%%                                                 % Every edge can contain:
+%%    [ {id, 32432423} % local edge id
+%%      {object_id, 223344}, % local object id
+%%      {object_uri, <<"http://...">>},
+%%      {object_title, <<"...">>},
+%%      {predicate_id, 22}, % local predicate id
+%%      {predicate_uri, <<"http://...">>},
+%%      {predicate_title, <<"...">>},
+%%     ]
+%%   ]
+%%  }
+%% ]
+
+
 -module(m_rsc_export).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

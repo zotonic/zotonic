@@ -106,3 +106,14 @@ Currently, the following subcommands are implemented:
                          )
                        )
              ))
+
+
+Legacy zotonic.sh script
+------------------------
+
+For archival purposes, the ``zotonic.sh`` script that was used before
+release 0.8 is listed here.
+
+.. highlight:: bash
+.. literalinclude:: zotonic.sh
+

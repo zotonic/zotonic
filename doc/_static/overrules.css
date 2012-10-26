@@ -24,6 +24,8 @@ div.body p, div.body dd, div.body li {
 pre {
     font-size: 13px;
     line-height: 140%;
+    border: 0;
+    background: #f0f0f0;
 }
 
 tt {

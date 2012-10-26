@@ -1,278 +1,48 @@
+.. highlight:: django
 .. _manual-templates:
 
 Templates
 =========
 
-Lorem ipsum...
+The templates in Zotonic are based on the Django Template Language
+(DTL), using a customized version of the excellent `ErlyDTL
+<https://github.com/evanmiller/erlydtl>`_ library. Over the years,
+Zotonic's version of ErlyDTL has diverged, adding Zotonic-specific
+features and more powerful expression possibilities. However, the main
+template syntax remains the same:
 
+The double accolade constructs outputs the value of the variable on the screen::
 
-.. _manual-template-language:
+  {{ foo }}
 
-Template language
------------------
+Optionally, you can `pipe` these variables through a so-called filter,
+which is applied before output::
 
-The template engine is based on ErlyDTL, which is a port of the Django template language to Erlang.
+  {{ foo|lower }}
 
+Template `tags` allow you to express complex contructs like loops and branches::
 
-.. _manual-lookup-system:
+  {% if username == 'Arjan' %} Hi, Arjan {% endif %}
+  
 
-Lookup system
--------------
+Being a web framework, it is of no surprise that templates are one of
+the most broad topics in Zotonic. The template manual has therefore
+been split up into the following sections, each of which addresses a
+specific templates-related topic.
 
-Lore-di-lore-da...
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
+   lookups
+   tags
+   filter
+   actions
+   validators
+   identifiers
+   models
+   calling-zotonic
+   bestpractices
 
-.. _manual-template-tools:
 
-Template tools
---------------
-
-The building blocks of a template.
-
-
-.. _manual-scomps:
-
-Custom tags
-^^^^^^^^^^^
-
-Custom tags, internally called `scomps` are module-defined tags, which
-are used when including templates is not enough and more programming
-is needed.
-
-Custom tags add logic to templates or generate HTML/Javascript
-constructs that are too difficult for templates. A good example is the
-:ref:`scomp-menu` scomp which implements the menu, including sub menus
-and highlighting of the current menu item.
-
-Scomps have the same syntax as tags::
-
-   {% scompname arg=value ... %}.
-
-Scomps are implemented by :ref:`manual-modules`, tags are implemented by the template system.
-
-.. seealso:: a listing of all :ref:`scomps`.
-
-
-.. _manual-tags:
-
-Tags
-^^^^
-
-Tags add logic and flexibility to your templates.
-
-Zotonic tags are in general compatible with Django tags, though there are some differences in which arguments are accepted. Not all Django tags are implemented.
-
-Zotonic also adds some new tags and `Filters` unknown to Django. For example the tags :ref:`tag-image` and :ref:`tag-trans`.
-
-.. seealso:: listing of all :ref:`tags`.
-
-
-.. _manual-models:
-
-Models
-^^^^^^
-
-Models for storing and accessing data.
-
-Zotonic provides some models to access the different entities in the system.
-
-Here you can read about the models and how to access model properties or methods from templates. Check the source of the :term:`controller` :ref:`modules <controllers>` to learn how to access them from Erlang.
-
-The Erlang modules implementing models always start with `m_` (like in `m_rsc`). In templates they can be accessed using the `m` accessor, for example::
-
-   {# Fetch the title of the page with name page_home #}
-   {{ m.rsc.page_home.title}}
-   
-   {# Fetch the title of the page whose id is the integer 1 #}
-   {{ m.rsc[1].title }}
-   
-   {# Fetch the title of the page whose id is the template variable id #}
-   {{ m.rsc[id].title }}
-
-.. note::
-
-   The most important model is :ref:`model-rsc` that implements access to the pages.
-   So there is syntactic sugar for accessing the rsc model when you have a template variable holding the page id to access::
-
-      {# Fetch the title of the page whose id is the template variable id #}
-      {{ id.title }}
-
-.. seealso:: listing of all :ref:`models`.
-
-
-.. _manual-filters:
-
-Filters
-^^^^^^^
-
-Filters are used to modify values you want to show or use in your
-templates. For example::
-
-  {{ value|lower }}
-
-will lowercase the input value using the :ref:`filter-lower` filter.
-
-.. seealso:: a listing of all :ref:`filters`.
-
-
-.. _manual-actions:
-
-Actions
-^^^^^^^
-
-Attach AJAX and jQuery handlers to HTML elements and events.
-
-Actions are the basis of all interactivity on a Zotonic web page.
-
-Actions can be connected to HTML elements or Javascript events using the :ref:`scomp-wire` scomp.
-
-Actions range from a simple jQuery :ref:`action-show` to Ajax :ref:`action-postback`\s that can trigger many other actions. The server also replies to a :term:`postback` or :term:`Comet` push with actions to be executed on the browser.
-
-.. seealso:: listing of all :ref:`actions`.
-
-
-.. _manual-validators:
-
-Validators
-^^^^^^^^^^
-
-Validators for HTML form fields.
-
-Validators check if form fields have an acceptable value. They check both client side and server side if the input fields are valid.
-
-When an input field has been verified then it is available to Erlang programs via the function `z_context:get_q_validated/2`.
-
-When a client side input field does not validate on the server side then the complete form submit is refused.
-
-.. seealso:: listing of all :ref:`validators`, and the :ref:`scomp-validate` scomp.
-
-
-.. _manual-wiring-events:
-
-Interactivity: wiring events
-----------------------------
-
-wire wire pants on fire.
-
-
-
-Interactivity: Calling Zotonic from Javascript
-----------------------------------------------
-
-There are three main ways to call Zotonic from Javascript: wired events, notifications and API methods.
-
-Javascript is the lingua franca of web scripting.  Having a mechanism
-of directly integrating Zotonic backend calls into a flow with JQuery
-has great potential.  This guide provides some pointers on how Zotonic
-integrates with Javascript and jQuery.
-
-You can use three ways to call Zotonic from JavaScript:
-
-Wired events
-^^^^^^^^^^^^
-
-Use ``{% wire %}`` (the :ref:`scomp-wire` scomp) to defined a named
-action and trigger it from js with ``z_event("myname", { foo: bar,
-... })``. 'foo' and other arguments will become query args (access
-with z_context:get_q/2 and friends). For example::
-
-  {% wire name="test" action={growl text="Hello World"} %} 
-
-And then in some JS function::
-
-  z_event("test"); 
-
-or::
-
-  z_event("test", { foo: bar });
-
-Of course, you can also wire postback actions.
-
-Trigger notification from Javascript
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Trigger a :ref:`notification <manual-notification>` in Zotonic with the ``z_notify`` function::
-
-  z_notify("mymessage"); 
-
-or::
-
-  z_notify("mymessage", {foo: bar, lazy: "fox"});
-
-This will trigger a call to::
-
-  z_notifier:first(#postback_notify{message="mymessage"}, Context) 
-
-Which you can handle in any zotonic module by defining::
-
-  -export([ observe_postback_notify/2 ]). 
-  observe_postback_notify(#postback_notify{message="mymessage"}, Context) -> 
-      z_render:growl("Hello World", Context); 
-  observe_postback_notify(_, _Context) -> 
-      undefined. 
-
-All extra arguments are available via the ``z_context:get_q/2`` function (and friends).
-
-Calling API methods
-^^^^^^^^^^^^^^^^^^^
-
-A third way is to write your own API calls (see:
-:ref:`manual-services`) and use standard jQuery to perform Ajax
-GET/POST requests from the browser.
-
-This use is perfectly possible and legal, although the other two
-methods are preferred, as they integrate nicely with the notification
-and action systems. The API is more targeted to other applications
-interfacing to Zotonic.
-
-
-
-
-Template Best Practices and Pitfalls
-------------------------------------
-
-This chapter lists some preferred solutions to common tasks and
-pitfalls you may encounter while developing with templates.
-
-
-Variable Naming
-^^^^^^^^^^^^^^^
-
-Name your variables for what they represent.  If you are searching for
-articles, name the search result variable `article` to make things clear.
-
-In particular, if you are iterating over a list or other iterable
-variable called images, then your item variable should be named `image`.
-This makes generative templates easier to follow.
-
-Pitfalls
-^^^^^^^^
-
-Using 'm' as a template variable blocks model access
-....................................................
-
-Avoid using the name ``m`` for a variable.  It has a special meaning
-in templates for accessing models like :ref:`model-site` and
-:ref:`model-rsc` as `m.site` and `m.rsc`.  Effectively. all Erlang
-modules with names starting with `m_` are made available in templates
-through the ``m`` variable.
-
-It is particularly important since using m as a variable name will
-disable model module access for the entire scope within which that
-variable is defined.  This can lead to very confusing template errors.
-
-Using 'id' as a template variable blocks access to the current page
-...................................................................
-
-When rendering a page through :ref:`controller-page`, Zotonic sets the
-`id` variable based on the :term:`resource` (page) being rendered.  It
-is also conventionally used by dispatch rules to supply the id of the
-page to render.
-
-Note, however, that there are legitmate cases for using id as a
-template variable. It is a good idea to reuse another template to
-render a section for one page and treating related content as the
-"current page" for that template by assigning id in a for loop or with
-context.  Using id otherwise will likely confuse other developers
-trying to read your templates.
 

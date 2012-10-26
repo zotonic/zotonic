@@ -1,6 +1,0 @@
-
-Getting started
-===============
-
-Lorem ipsum...
-

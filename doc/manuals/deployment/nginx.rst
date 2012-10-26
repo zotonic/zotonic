@@ -1,10 +1,22 @@
-# This is the configuration file we use to proxy nginx to zotonic.
-# Replace "test.zotonic.com" with your hostname.
+.. _manual-deployment-nginx:
 
-# Also please don't forget to check your priv/sites/your_site/config file. 
-# Please add hostname info without any port number like this: {hostname, "test.zotonic.com"},
+Proxying Zotonic with nginx
+===========================
 
-server {
+It is possible to put Zotonic behind the `nginx <http://nginx.org/>`
+web server, for example if you have other, non-Zotonic virtual hosts
+running on your system.
+
+When proxying, don't forget to check the config files of the sites you
+are planning to server (the ``priv/sites/your_site/config``
+files). The ``hostname`` value should not contain any port number, if
+you run from port 80: ``{hostname, "test.zotonic.com"}``.
+
+Below is a configuration file we use to proxy nginx to zotonic. Be
+sure to replace all occurrences of `test.zotonic.com` with your own
+hostname::
+
+  server {
         listen 80;
         server_name  test.zotonic.com;
 
@@ -39,15 +51,7 @@ server {
              keepalive_timeout 0;
              empty_gif;
         }
+  }
 
-		# zotonic serves it's own error pages, so the ones below are not needed
-
-        #error_page  404  /404.html;
-
-        # redirect server error pages to the static page /50x.html
-        #
-        #error_page   500 502 503 504  /50x.html;
-        #location = /50x.html {
-        #       root   /var/www/nginx-default;
-        #}
-}
+See the `nginx documentation <http://nginx.org/en/docs/>`_ for more
+information on its configuration procedure.

@@ -19,7 +19,7 @@
     To provide by-language differentiation several variables are used in i18n-blocks:
 
 	+--------------+------------------------------------------------------+---------+
-	|    Param     |	                                              | Example |
+	|    Param     |                                                      | Example |
 	|    name      |                  Description                         | value   |
 	+==============+======================================================+=========+
 	|   is_i18n    | Shows whether mod_translation enabled or not.        | true    |

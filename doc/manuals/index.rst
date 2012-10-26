@@ -1,12 +1,14 @@
 
-User manuals
+Maintainance
 ============
 
 .. toctree::
 
-   user/admin
+   deployment/index
+   cli
+   upgrading
 
-
+   
 In-depth manuals
 ================
 
@@ -19,11 +21,10 @@ In-depth manuals
    notification
    datamodel/index
    blocks
+   i18n
    media-files
    templates/index
    lib-files
    controllers
    email
-   cli
-   deployment
-   upgrading
+   cookbook/index

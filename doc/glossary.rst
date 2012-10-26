@@ -102,3 +102,6 @@ Glossary
 
    Comet
        Comet is a web application model in which a long-held HTTP request allows a web server to push data to a browser, without the browser explicitly requesting it (source: `Wikipedia <http://en.wikipedia.org/wiki/Comet_(programming)>`_).
+
+   Delegate
+        A reference to a module which will be used to call a callback function on. Used in the templates when attaching actions like a :term:postback to a DOM Event. See :ref:`manual-template-actions`.

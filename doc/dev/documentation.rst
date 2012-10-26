@@ -96,6 +96,61 @@ In general, we use this style of tables::
   |cell contents       |                   |
   +--------------------+-------------------+
 
+
+Writing consistent Cookbook items
+---------------------------------  
+
+A Zotonic Cookbook item is a single-concept solution to a well-defined
+problem, living in the :ref:`manual-cookbook` section of the
+documentation.
+
+Useful items range from the simplest content management tasks to
+technically sophisticated module development and site administration
+solutions. This means that items are welcomed from noobies and wizards
+alike.
+
+Whenever you struggle to find a solution to a specific problem, fail
+to find a Cookbook item that addresses it, and work through the
+solution with a final "Aha!," you have the raw material for an
+excellent Cookbook submission.
+
+A well-written item has four sections:
+
+**WHY**: What problem does this Cookbook item solve? What benefits does it deliver?
+
+Four major reasons for submitting Cookbook items are: 
+
+1. The best way to learn is to teach
+
+2. Your Cookbook items documents your efforts; helps you remember what
+   you did next time you encounter a similar problem
+
+3. Each item makes it that much easier for noobies and other community
+   members to advance their Zotonic skills.
+
+**ASSUMPTIONS**: What does this item assume about operating system, Linux distribution, programming skills, knowledge of Zotonic architecture and conventions, etc.
+
+**HOW**: Step-by-step instructions for implementing your solution.
+
+Don't take user competency for granted. When you specify a command,
+note what user name you're working under and what directory you're
+working in.  Respect the noobies by including steps that may be
+obvious to you but not so obvious to folks with less experience.
+
+Think of your instructions as a check-list. A noobie should be able to
+achieve success by reading, implementing and checking off each
+instruction.  Keep your instructions simple, complete, and clear.
+
+Recruit a noobie to try out your solution. Fix the stumbling blocks
+she encounters. If you can't find a noobie, put yourself in noobie
+mind. Remember, you too once were one.
+
+
+
+
+
+
+  
 .. seealso:: :ref:`dev-contributing`
 
    
