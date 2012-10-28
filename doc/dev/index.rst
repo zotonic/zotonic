@@ -11,6 +11,7 @@ Topics:
    contributing
    documentation
    testing
+   directory-structure
    releasenotes/index
 
 
