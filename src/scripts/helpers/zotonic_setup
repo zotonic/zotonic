@@ -31,7 +31,15 @@ fi
 # if you use comet on popular pages.
 # Please check the documentation of your system on how to increase 
 # the maximum number of open files your operating system. 
-export MAX_PORTS=${MAX_PORTS:=1024}
+export MAX_PORTS=${MAX_PORTS:=$(ulimit -n|sed 's/unlimited/100000/')}
+
+# The maximum number of Erlang processes. Must be in the range
+# 16..134217727.
+export MAX_PROCESSES=${MAX_PROCESSES:=10000000}
+
+# Whether or not to use kernel polling (+K argument); either 'true' or
+# 'false'
+export KERNEL_POLL=${KERNEL_POLL:=true}
 
 # The include path for the erlang vm, add when needed for your application.
 export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
