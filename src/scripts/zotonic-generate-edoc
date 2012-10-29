@@ -35,8 +35,6 @@ main(_) ->
      generate("modules/" ++ M, "modules/" ++ M) || M <- Modules
     ],
 
-
-%%    generate("priv", "priv"),
     io:format("Generated modules edoc files in ~p~n", [outpath("modules")]).
 
 generate(InputDir, OutputDir) ->
@@ -45,6 +43,6 @@ generate(InputDir, OutputDir) ->
     edoc:files(Files, [{dir, outpath(OutputDir)}]).
 
 outpath(Component) ->
-    Path = filename:join([os:getenv("ZOTONIC"), "doc", Component]),
+    Path = filename:join([os:getenv("ZOTONIC"), "doc", "_build", "edoc", Component]),
     filelib:ensure_dir(filename:join([Path, ".empty"])),
     Path.

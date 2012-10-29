@@ -195,7 +195,7 @@ unique1([_|T], Acc) ->
     unique1(T, Acc).
 
 
-%% @spec generate_id(int()) -> string()
+%% @spec generate_id(boolean(), int()) -> string()
 %% @doc Generate a random key
 generate_id(IsUnique, Len) ->
     [ case N of
@@ -206,7 +206,7 @@ generate_id(IsUnique, Len) ->
       || N <- random_list(IsUnique, 62, Len)
     ].
 
-%% @spec generate_identifier(int()) -> string()
+%% @spec generate_identifier(boolean(), int()) -> string()
 %% @doc Generate a random identifier, case insensitive, only letters
 generate_identifier(IsUnique, Len) ->
     [ N + $a || N <- random_list(IsUnique, 26, Len) ].

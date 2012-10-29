@@ -32,28 +32,14 @@
 
 %% @doc Convert an Erlang list or tuple to JSON
 %% This function assumes that all strings of the input term are made of utf-8-encoded characters. 
-%% @spec to_json(ErlangTerm, Context) -> Json
-%% Where: 
-%%    * ErlangTerm = list() | tuple()
-%%    * Context = Zotonic context record
-%%    * Json = the JSON content
+%% @spec to_json(list() | tuple(), #context{}) -> iodata()
 to_json(Value, Context) ->
     to_json(Value, "utf-8", Context).
 
 %% @doc Convert an Erlang list or tuple to JSON
 %% This function assumes that the all strings of the input term have the same 
 %% character encoding. This encoding may be UTF-8 or ISO 8859-1 (also called Latin-1). 
-%% @spec to_json(ErlangTerm, Encoding, Context) -> Json
-%% Where: 
-%%    * ErlangTerm = list() | tuple()
-%%    * Encoding = the character encoding of the strings in the input term. 
-%%      Following values are accepted: 
-%%        * "utf-8": ErlangTerm contains strings of UTF-8-encoded characters
-%%        * "latin-1": ErlangTerm contains strings of ISO 8859-1 characters
-%%      Note that this parameter concerns the strings in the input term only. 
-%%      The JSON output will always contain utf-8-encoded strings.  
-%%    * Context = Zotonic context record
-%%    * Json = the JSON content
+%% @spec to_json(list() | tuple(), string(), #context{}) -> iodata()
 to_json(Value, "latin-1", _Context) ->
     mochijson:encode(z_convert:to_json(Value));
     

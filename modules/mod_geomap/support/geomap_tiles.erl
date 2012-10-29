@@ -1,3 +1,22 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2012 Marc Worrell
+%% @doc Geomap tile support functions
+%% See http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#lon.2Flat_to_tile_numbers
+
+%% Copyright 2012 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%% 
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%% 
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(geomap_tiles).
 
 -export([
@@ -17,9 +36,7 @@
 
 -include("zotonic.hrl").
 
-%% From http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#lon.2Flat_to_tile_numbers
-
-%% @doc Default zoom factor for displaying the tiles
+%% Default zoom factor for displaying the tiles
 -define(ZOOM, 14).
 
 %% @doc Return the default zoom factor
