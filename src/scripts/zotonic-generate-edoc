@@ -29,7 +29,7 @@ main(_) ->
     Zotonic = os:getenv("ZOTONIC"),
     Modules = [string:substr(L, length(Zotonic++"/modules/")+1) || L <- filelib:wildcard(filename:join([os:getenv("ZOTONIC"), "modules/mod_*"]))],
 
-    file:write_file(Zotonic ++ "/doc/modules/index.html", "<h1>Module docs</h1>" ++ lists:flatten([ ["<li><a href=\"", M, "/index.html\">", M, "</a></li>"] || M <- Modules])),
+    file:write_file(Zotonic ++ "/doc/_build/edoc/modules/index.html", "<h1>Module docs</h1>" ++ lists:flatten([ ["<li><a href=\"", M, "/index.html\">", M, "</a></li>"] || M <- Modules])),
         
     [
      generate("modules/" ++ M, "modules/" ++ M) || M <- Modules
