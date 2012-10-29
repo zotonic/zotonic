@@ -33,7 +33,7 @@ docs:
 	@echo HTML documentation is now available in doc/_build/html/
 
 edocs:
-	@echo Building reference (edoc) documentation...
+	@echo Building reference edoc documentation...
 	bin/zotonic generate-edoc
 
 .PHONY: clean_logs
