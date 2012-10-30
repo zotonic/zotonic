@@ -1,11 +1,16 @@
 #!/bin/bash
 
+if [ ! -x /usr/bin/sed ]; then
+    echo "sed not found in /usr/bin, please consider adding a symlink to it there." &>2
+    exit 1
+fi
+
 scanner=$ZOTONIC_SRC/src/erlydtl/erlydtl_scanner.erl
 dir=${0%/*}
 
 for tag in `$dir/.get_tags $scanner`
 do
-    if grep $tag $dir/.ignore >/dev/null; then
+    if grep "$tag" $dir/.ignore >/dev/null; then
         continue
     fi
 

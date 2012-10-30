@@ -1,4 +1,4 @@
-#!/usr/bin/env sed -f
+#!/usr/bin/sed -f
 
 # operate on the first lines of the identifier_to_keyword fun
 # that mentions open_tag (guard clause), and down until the
