@@ -63,7 +63,7 @@ template. The following templates are used for e-mails:
      
 +---------------------------------------------------------+-------------------------------------------+
 |Template                                                 |Description                                |
-+---------------------------------------------------------+-------------------------------------------+
++=========================================================+===========================================+
 |:ref:`template-email_mailinglist_confirm`                |Sent after subscribing to a mailing list,  |
 |                                                         |requests to click on an url to confirm the |
 |                                                         |subscription.                              |
