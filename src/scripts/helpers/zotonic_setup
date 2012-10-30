@@ -48,14 +48,7 @@ export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/eb
 export SNAME=${SNAME:=zotonic001}
 
 # Hostname to the fully qualified domain name of your host, or leave it as localhost.
-if [ "$HOSTNAME" != "localhost" ]; then
-    if [ "`echo $HOSTNAME|grep '\.'`" != "$HOSTNAME" ]; then
-	HOSTNAME="${HOSTNAME}.local"
-    else
-	HOSTNAME=${HOSTNAME:=localhost}
-    fi
-fi
-export HOSTNAME=$HOSTNAME
+export HOSTNAME=${HOSTNAME:=localhost}
 
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
