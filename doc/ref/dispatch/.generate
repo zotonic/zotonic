@@ -27,7 +27,8 @@ EOF
         fi
 
         cat <<EOF - $meta >> $all
-**$mod** / $dispatch
+.. _all-dispatch-$mod:
+:ref:\`$mod\` (:ref:\`$dispatch <dispatch-$base>\`)
 EOF
 
         cat <<EOF > $stub
@@ -39,10 +40,8 @@ EOF
    single: $mod; dispatch, $dispatch,
 .. _dispatch-$base:
 
-$dispatch ($mod)
-${dispatch//?/=}==${mod//?/=}=
-
-* Module: :ref:\`$mod\`
+$dispatch
+${dispatch//?/-}
 
 .. csv-table:: Dispatch rules
    :delim: tab
@@ -57,7 +56,7 @@ EOF
 
 .. include:: meta-$base.rst
 
-.. todo:: Not yet documented.
+.. Not yet documented. (no todo item, as this is not a major issue)
 EOF
         fi
         
