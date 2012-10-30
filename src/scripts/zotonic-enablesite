@@ -24,8 +24,8 @@ function enablesite {
     $ZOTONIC/bin/zotonic status>/dev/null
     if [ "$?" -eq 0 ]; then
         # update & start site
-        NODE=$SNAME@$HOSTNAME
-        $ERL -noshell -pa $PA -name ${SNAME}_enable@$HOSTNAME-s zotonic update $NODE -s z_sites_manager start $NODE $1  -s init stop
+        NODE=$NODENAME@$HOSTNAME
+        $ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_enable@$HOSTNAME-s zotonic update $NODE -s z_sites_manager start $NODE $1  -s init stop
     fi
 }
 

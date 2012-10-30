@@ -40,5 +40,5 @@ for FILE in $*; do
         exit 1
     fi
     echo "Compiling $F"
-    (cd $ZOTONIC; $ERL -noshell -pa $PA -name ${SNAME}_compile@$HOSTNAME -run make files "$F" -s erlang halt)
+    (cd $ZOTONIC; $ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_compile@$HOSTNAME -run make files "$F" -s erlang halt)
 done

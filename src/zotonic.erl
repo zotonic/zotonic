@@ -20,7 +20,7 @@
 -module(zotonic).
 -author('Marc Worrell <marc@worrell.nl>').
 
--export([start/0, start/1, stop/0, stop/1, status/0, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
+-export([start/0, start/1, stop/0, stop/1, ping/0, status/0, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
 
 -compile([{parse_transform, lager_transform}]).
 
@@ -71,6 +71,9 @@ stop([Node]) ->
     end,
     init:stop().
 
+%% @doc Just returns 'pong'; used by shell scripts to determine if node is alive.
+ping() ->
+    pong.
 
 %% @spec status() -> ok
 %% @doc Print the status of the current node.

@@ -18,21 +18,19 @@
 # usage zotonic-start
 #
 
+require_zotonic_running
+
 cd $ZOTONIC
-if [ ! -f $ZOTONIC_PIDFILE ]; then
-    echo Not Running
-    exit 1
-fi
 
 PID=`cat $ZOTONIC_PIDFILE`
 if ps -p $PID >&-
 then
     echo "\
-Running: $SNAME@$HOSTNAME
+Running: $NODENAME@$HOSTNAME
 
 Sites Status:
 ============="
-    $ERL -noshell -pa $PA -name ${SNAME}_stop@$HOSTNAME -s zotonic status $SNAME@$HOSTNAME -s init stop
+    $ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$HOSTNAME -s zotonic status $NODENAME@$HOSTNAME -s init stop
     echo
     exit 0
 else

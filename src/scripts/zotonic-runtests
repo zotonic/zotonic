@@ -18,7 +18,6 @@ cd $ZOTONIC
 
 set -e
 
-export SNAME="testsandbox"
 export ZOTONIC_PORT=8040
 export ZOTONIC_PORT_SSL=8043
 export ZOTONIC_SMTP_BOUNCE_PORT=2535
@@ -41,7 +40,7 @@ erlydtl)
     for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
     ALL=`echo $ALL|sed 's/^,//'`
 
-    $ERL +P 10000000 +K true -pa $PA -name $SNAME@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
+    $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
 ;;
 esac
 

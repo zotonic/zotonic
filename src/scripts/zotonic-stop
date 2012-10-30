@@ -18,5 +18,5 @@
 # usage zotonic-stop
 #
 
-echo "Stopping zotonic $SNAME@$HOSTNAME"
-$ERL -noshell -pa $PA -name ${SNAME}_stop@$HOSTNAME -s zotonic stop $SNAME@$HOSTNAME
+echo "Stopping Zotonic $NODENAME@$HOSTNAME"
+$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$HOSTNAME -s zotonic stop $NODENAME@$HOSTNAME

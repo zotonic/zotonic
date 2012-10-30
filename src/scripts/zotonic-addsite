@@ -106,12 +106,8 @@ function check_options {
         source "$HOME/.zotonic-defaults"
     fi
 
-    $ZOTONIC_CALL -a "zotonic status"  &> /dev/null
-    if [ "$?" != "0" ]; then
-        echo "Zotonic is not running. You need to start zotonic first to use this command."
-        echo
-        exit 1
-    fi
+    # make sure Zotonic is up
+    require_zotonic_running
 
     # The defaults
     SKEL=${SKEL:=blog}

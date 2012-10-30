@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # Copyright 2011 Lloyd R. Prentice
+# Copyright 2012 Arjan Scherpenisse
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+function require_zotonic_running {
+    PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
+    if [ "$PONG" != "pong" ]; then
+        echo "Zotonic is not running. You need to start Zotonic first to use this command." 1>&2
+        echo 1>&2
+        exit 1
+    fi
+}
+export -f require_zotonic_running
 
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 export SITES=${SITES:=$ZOTONIC/priv/sites}
@@ -44,8 +55,30 @@ export KERNEL_POLL=${KERNEL_POLL:=true}
 # The include path for the erlang vm, add when needed for your application.
 export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
-# The name of the Erlang node, this must be unique on your host.
-export SNAME=${SNAME:=zotonic001}
+# For zotonic-addsite et. al. we require Zotonic to be already
+# running. In that case, check if Zotonic is already running with the
+# -name parameter.
+DISTRIBUTED_DETECTED=$(ps u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
+export ZOTONIC_DISTRIBUTED=${ZOTONIC_DISTRIBUTED:=$DISTRIBUTED_DETECTED}
+
+# The ZOTONIC_DISTRIBUTED flag tells Zotonic to start a (potentially)
+# distributed node. In that case, we require the hostname to be a FQDN.
+if [ "$ZOTONIC_DISTRIBUTED" = "true" ]; then
+    HOSTNAME=$(hostname -f)
+    if [ "`echo $HOSTNAME|grep '\.'`" != "$HOSTNAME" ]; then
+        echo Zotonic is configured to run as distributed node, but your hostname is 1>&2
+        echo not configured to be a fully qualified domain name. Please configure  1>&2
+        echo your system so the output of \"hostname -f\" returns a FQDN. 1>&2
+        echo 1>&2
+        exit 1
+    fi
+    export NAME_ARG=-name
+else
+    export NAME_ARG=-sname
+fi
+
+# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
+export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
 
 # Hostname to the fully qualified domain name of your host, or leave it as localhost.
 export HOSTNAME=${HOSTNAME:=localhost}
@@ -53,7 +86,9 @@ export HOSTNAME=${HOSTNAME:=localhost}
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
 export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
-export ZOTONIC_CALL="erl_call -name $SNAME@$HOSTNAME"
+# Locate the path to the erl_call binary
+ERL_CALL=$($ERL -noshell -noinput  -eval "io:format(code:priv_dir(erl_interface))" -s erlang halt|sed 's~priv$~bin/erl_call~')
+export ZOTONIC_CALL="$ERL_CALL $NAME_ARG $NODENAME@$HOSTNAME"
 
 # Make sure the erlang.config file exists
 if [ ! -e "$ZOTONIC/priv/erlang.config" -a -e "$ZOTONIC/priv/erlang.config.in" ]; then

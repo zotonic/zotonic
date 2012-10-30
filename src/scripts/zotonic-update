@@ -18,5 +18,7 @@
 # usage zotonic-update
 #
 
-echo "Updating zotonic $SNAME"
-$ERL -noshell -pa $PA -name ${SNAME}_update@$HOSTNAME -s make all load -s zotonic update $SNAME@$HOSTNAME
+require_zotonic_running
+
+echo "Updating Zotonic $NODENAME"
+$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_update@$HOSTNAME -s make all load -s zotonic update $NODENAME@$HOSTNAME

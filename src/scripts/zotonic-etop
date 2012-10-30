@@ -22,4 +22,4 @@
 CONSOLE_LINES=`tput lines`
 LINES=$(($CONSOLE_LINES - 11))
 
-$ERL -name zotonic_etop@$HOSTNAME -hidden -s etop -s erlang halt -lines $LINES -tracing off -output text -node $SNAME@$HOSTNAME $@
+$ERL $NAME_ARG ${NODENAME}_etop@$HOSTNAME -hidden -s etop -s erlang halt -lines $LINES -tracing off -output text -node $NODENAME@$HOSTNAME $@

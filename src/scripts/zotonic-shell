@@ -18,4 +18,6 @@
 # usage zotonic-shell
 #
 
-$ERL -name zotonic_shell_$$@$HOSTNAME -remsh $SNAME@$HOSTNAME
+require_zotonic_running
+
+$ERL $NAME_ARG ${NODENAME}_shell_$$@$HOSTNAME -remsh $NODENAME@$HOSTNAME
