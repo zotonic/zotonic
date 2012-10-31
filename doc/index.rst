@@ -15,7 +15,8 @@ Contents:
    :maxdepth: 2
 
    tutorials/index
-   manuals/index
+   manuals/maintenance
+   manuals/in-depth
    ref/index
    dev/index
 

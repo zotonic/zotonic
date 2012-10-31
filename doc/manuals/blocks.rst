@@ -1,6 +1,0 @@
-
-Blocks
-======
-
-Lorem ipsum...
-
