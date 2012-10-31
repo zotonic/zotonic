@@ -19,179 +19,122 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:68
-msgid "Allow multiple entries per user/browser."
+#: modules/mod_survey/mod_survey.erl:103
+msgid "Button"
 msgstr ""
 
-#: modules/mod_survey/templates/_action_dialog_survey_question_delete.tpl:1
-msgid "Are you sure you want to delete this question?"
-msgstr "Are you sure you want to delete this question?"
-
-#: modules/mod_survey/templates/_survey_question_page.tpl:52
-msgid "Back"
+#: modules/mod_survey/mod_survey.erl:102
+msgid "Country select"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:53
-msgid ""
-"Below you can define your survey. Drag items from the left to the right."
-msgstr ""
-"Below you can define your survey. Drag items from the left to the right."
-
-#: modules/mod_survey/templates/_survey_question_page.tpl:59
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:34
-msgid "Cancel"
-msgstr "Cancel"
-
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:20
-msgid "Choices"
-msgstr "Choices"
-
-#: modules/mod_survey/templates/_survey_results.tpl:6
-msgid "Click here to download the results as a CSV file."
+#: modules/mod_survey/mod_survey.erl:83
+msgid "E-mail addresses"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_results.tpl:8
-msgid ""
-"Download will start in the background. Please check your download window."
+#: modules/mod_survey/mod_survey.erl:96
+msgid "Likert"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:13
-msgid "Drag questions here."
-msgstr "Drag questions here."
-
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:4
-msgid "Edit"
-msgstr "Edit"
-
-#: modules/mod_survey/templates/_survey_question_truefalse.tpl:4
-msgid "False"
+#: modules/mod_survey/mod_survey.erl:101
+msgid "Long answer"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:53
+#: modules/mod_survey/mod_survey.erl:98
+msgid "Matching"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:99
+msgid "Narrative"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:104
+msgid "Page break"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:100
+msgid "Short answer"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:105
+msgid "Stop"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:93
 #, fuzzy
-msgid "Help about surveys"
-msgstr "Your survey"
-
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:9
-msgid "Name"
-msgstr "Name"
-
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:53
-msgid "Need more help?"
-msgstr ""
-
-#: modules/mod_survey/templates/_survey_question_page.tpl:63
-msgid "Next"
-msgstr ""
-
-#: modules/mod_survey/templates/_survey_question_yesno.tpl:4
-msgid "No"
-msgstr ""
-
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:6
-msgid ""
-"Please enter a name of your question (for reporting), and the question that "
-"will be shown to the people surveyed."
-msgstr ""
-"Please enter a name of your question (for reporting), and the question that "
-"will be shown to the people surveyed."
-
-#: modules/mod_survey/templates/_survey_question_page.tpl:2
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:14
-msgid "Question"
+msgid "Survey Questions"
 msgstr "Question"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:77
-msgid "Question Templates"
-msgstr "Question Templates"
-
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:26
-msgid "Required?"
+#: modules/mod_survey/mod_survey.erl:75
+msgid "Survey result deleted."
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_start.tpl:19
-#: modules/mod_survey/templates/_survey_results.tpl:2
-msgid "Results"
+#: modules/mod_survey/mod_survey.erl:97
+msgid "Thurstone"
 msgstr ""
 
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:31
-msgid "Save"
-msgstr "Save"
-
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:64
-msgid "Show results to user after completion of survey."
+#: modules/mod_survey/mod_survey.erl:94
+msgid "True/False"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:72
-msgid "Show survey results"
+#: modules/mod_survey/mod_survey.erl:95
+msgid "Yes/No"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_error.tpl:1
-msgid "Something went wrong"
-msgstr ""
+#~ msgid "Are you sure you want to delete this question?"
+#~ msgstr "Are you sure you want to delete this question?"
 
-#: modules/mod_survey/templates/_survey_start.tpl:10
-msgid "Start"
-msgstr ""
+#~ msgid ""
+#~ "Below you can define your survey. Drag items from the left to the right."
+#~ msgstr ""
+#~ "Below you can define your survey. Drag items from the left to the right."
 
-#: modules/mod_survey/templates/_survey_question_likert.tpl:10
-msgid "Strongly Agree"
-msgstr ""
+#~ msgid "Cancel"
+#~ msgstr "Cancel"
 
-#: modules/mod_survey/templates/_survey_question_likert.tpl:4
-msgid "Strongly Disagree"
-msgstr ""
+#~ msgid "Choices"
+#~ msgstr "Choices"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:6
-msgid "Survey"
-msgstr "Survey"
+#~ msgid "Drag questions here."
+#~ msgstr "Drag questions here."
 
-#: modules/mod_survey/templates/_survey_end.tpl:1
-msgid "Thank you"
-msgstr ""
+#~ msgid "Edit"
+#~ msgstr "Edit"
 
-#: modules/mod_survey/templates/_survey_end.tpl:3
-msgid ""
-"Thank you for filling in our survey. Be sure to come back for other surveys!"
-msgstr ""
+#, fuzzy
+#~ msgid "Help about surveys"
+#~ msgstr "Your survey"
 
-#: modules/mod_survey/templates/_survey_error.tpl:3
-msgid ""
-"There was an error while handling your answers. We are terribly sorry about "
-"this."
-msgstr ""
+#~ msgid "Name"
+#~ msgstr "Name"
 
-#: modules/mod_survey/templates/_survey_question_truefalse.tpl:3
-msgid "True"
-msgstr ""
+#~ msgid ""
+#~ "Please enter a name of your question (for reporting), and the question "
+#~ "that will be shown to the people surveyed."
+#~ msgstr ""
+#~ "Please enter a name of your question (for reporting), and the question "
+#~ "that will be shown to the people surveyed."
 
-#: modules/mod_survey/templates/_action_dialog_survey_question.tpl:28
-msgid "Whether the question needs answering or not."
-msgstr ""
+#~ msgid "Question Templates"
+#~ msgstr "Question Templates"
 
-#: modules/mod_survey/templates/_survey_question_yesno.tpl:3
-msgid "Yes"
-msgstr ""
+#~ msgid "Save"
+#~ msgstr "Save"
 
-#: modules/mod_survey/templates/_survey_results.tpl:40
-msgid "You are not allowed to see the results of this survey."
-msgstr ""
+#~ msgid "Survey"
+#~ msgstr "Survey"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:53
-msgid ""
-"You can create your survey by dragging the Question templates to the survey "
-"on the right."
-msgstr ""
-"You can create your survey by dragging the Question templates to the survey "
-"on the right."
+#~ msgid ""
+#~ "You can create your survey by dragging the Question templates to the "
+#~ "survey on the right."
+#~ msgstr ""
+#~ "You can create your survey by dragging the Question templates to the "
+#~ "survey on the right."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:84
-msgid "Your survey"
-msgstr "Your survey"
+#~ msgid "Your survey"
+#~ msgstr "Your survey"
 
-#: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4
-msgid "edit"
-msgstr "edit"
+#~ msgid "edit"
+#~ msgstr "edit"
 
 #~ msgid "Ready"
 #~ msgstr "Ready"

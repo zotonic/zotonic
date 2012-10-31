@@ -1,0 +1,166 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-10-31 21:56+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_base/actions/action_base_alert.erl:36 
+msgid ""
+"Alert"
+msgstr "Aandacht"
+
+#: ./modules/mod_base/templates/error.tpl:69 
+msgid ""
+"Arguments"
+msgstr "Argumenten"
+
+#: ./modules/mod_base/templates/text/_ua_select.tpl:5 ./modules/mod_base/templates/phone/_ua_select.tpl:13 
+msgid ""
+"Automatic"
+msgstr "Automatisch"
+
+#: ./modules/mod_base/templates/_action_dialog_confirm.tpl:6 
+msgid ""
+"Cancel"
+msgstr "Annuleren"
+
+#: ./modules/mod_base/actions/action_base_confirm.erl:35 
+msgid ""
+"Confirm"
+msgstr "Bevestig"
+
+#: ./modules/mod_base/templates/directory_index.tpl:16 
+msgid ""
+"Date"
+msgstr "Datum"
+
+#: ./modules/mod_base/templates/text/_ua_select.tpl:2 ./modules/mod_base/templates/phone/_ua_select.tpl:9 
+msgid ""
+"Desktop"
+msgstr "Desktop"
+
+#: ./modules/mod_base/templates/error.tpl:70 
+msgid ""
+"File"
+msgstr "Bestand"
+
+#: ./modules/mod_base/templates/directory_index.tpl:14 
+msgid ""
+"Filename"
+msgstr "Bestandsnaam"
+
+#: ./modules/mod_base/templates/directory_index.tpl:28 
+msgid ""
+"Folder"
+msgstr "Map"
+
+#: ./modules/mod_base/templates/error.tpl:68 
+msgid ""
+"Function/ template"
+msgstr "Functie / template"
+
+#: ./modules/mod_base/templates/email_base.tpl:4 
+msgid ""
+"Hello from Zotonic"
+msgstr "Hello vanuit Zotonic"
+
+#: ./modules/mod_base/templates/directory_index.tpl:4 ./modules/mod_base/templates/directory_index.tpl:8 
+msgid ""
+"Index of"
+msgstr "bestandsoverzicht van"
+
+#: ./modules/mod_base/templates/phone/_ua_select.tpl:5 
+msgid ""
+"Mobile or desktop"
+msgstr "Mobiel of desktop"
+
+#: ./modules/mod_base/templates/error.tpl:67 
+msgid ""
+"Module"
+msgstr "Module"
+
+#: ./modules/mod_base/templates/text/_pager.tpl:7 
+msgid ""
+"Next"
+msgstr "Volgende"
+
+#: ./modules/mod_base/templates/error.tpl:7 
+msgid ""
+"No Access"
+msgstr "Geen toegang"
+
+#: ./modules/mod_base/templates/_action_dialog_confirm.tpl:7 ./modules/mod_base/templates/_action_dialog_alert.tpl:4 
+msgid ""
+"OK"
+msgstr "OK"
+
+#: ./modules/mod_base/templates/text/_ua_select.tpl:4 ./modules/mod_base/templates/phone/_ua_select.tpl:11 
+msgid ""
+"Phone"
+msgstr "Mobiel"
+
+#: ./modules/mod_base/templates/text/_pager.tpl:4 
+msgid ""
+"Previous"
+msgstr "Vorige"
+
+#: ./modules/mod_base/templates/error.tpl:14 
+msgid ""
+"Reason"
+msgstr "Reden"
+
+#: ./modules/mod_base/templates/directory_index.tpl:17 
+msgid ""
+"Size"
+msgstr "Grootte"
+
+#: ./modules/mod_base/templates/error.tpl:9 
+msgid ""
+"Sorry, you don’t have access to this page."
+msgstr "Sorry, je hebt geen toegang tot deze pagina."
+
+#: ./modules/mod_base/templates/error.tpl:18 
+msgid ""
+"Stack trace"
+msgstr "Stack trace"
+
+#: ./modules/mod_base/templates/text/_ua_select.tpl:3 ./modules/mod_base/templates/phone/_ua_select.tpl:10 
+msgid ""
+"Tablet"
+msgstr "Tablet"
+
+#: ./modules/mod_base/templates/phone/_ua_select.tpl:12 
+msgid ""
+"Text"
+msgstr "Tekst"
+
+#: ./modules/mod_base/templates/email_base.tpl:19 
+msgid ""
+"This is the base message. When you receive this text then the template "
+"builder did not overrule the <tt>body</tt> block."
+msgstr ""
+"Dit is het standaardbericht. Als je deze tekst krijgt, heeft het\n"
+"template het <tt>body</tt> blok niet overschreven."
+
+#: ./modules/mod_base/templates/directory_index.tpl:15 
+msgid ""
+"Type"
+msgstr "Type"
+
+#: ./modules/mod_base/templates/error.tpl:11 
+msgid ""
+"error"
+msgstr "fout"

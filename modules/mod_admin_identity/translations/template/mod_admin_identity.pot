@@ -33,7 +33,7 @@ msgid ""
 "Are you sure you want to delete the username from"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67 
 msgid ""
 "Cancel"
 msgstr ""
@@ -64,7 +64,7 @@ msgid ""
 "Created on"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41 ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8 
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41 
 msgid ""
 "Delete"
 msgstr ""
@@ -91,7 +91,7 @@ msgid ""
 "First"
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46 
 msgid ""
 "Give an unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
@@ -158,7 +158,7 @@ msgid ""
 "Only an administrator or the user him/herself can set a password."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59 
 msgid ""
 "Password"
 msgstr ""
@@ -224,7 +224,7 @@ msgid ""
 "This person is not yet a user."
 msgstr ""
 
-#: ./modules/mod_admin_identity/templates/admin_users.tpl:36 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18 
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:36 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51 
 msgid ""
 "Username"
 msgstr ""

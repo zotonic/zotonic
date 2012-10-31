@@ -13,176 +13,146 @@ msgstr ""
 "PO-Revision-Date: 2011-07-21 20:44+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:54 ./modules/mod_logging/templates/admin_log_email.tpl:84 
-msgid ""
-"All"
+#: modules/mod_logging/templates/admin_log_email.tpl:74
+#: modules/mod_logging/templates/admin_log_email.tpl:104
+msgid "All"
 msgstr "Alle"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:57 
-msgid ""
-"Bounce"
+#: modules/mod_logging/templates/admin_log_email.tpl:77
+msgid "Bounce"
 msgstr "Bounce"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:36 
-msgid ""
-"Content"
+#: modules/mod_logging/templates/admin_log_email.tpl:55
+msgid "Content"
 msgstr "Pagina"
 
-#: ./modules/mod_logging/templates/admin_log.tpl:20 ./modules/mod_logging/templates/admin_log_email.tpl:39 
-msgid ""
-"Date"
+#: modules/mod_logging/templates/admin_log_email.tpl:58
+msgid "Date"
 msgstr "Datum"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:48 
-msgid ""
-"Debug"
+#: modules/mod_logging/templates/admin_log_email.tpl:68
+msgid "Debug"
 msgstr "Debug"
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:45 
-msgid ""
-"Error"
-msgstr "Fout"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:59 
-msgid ""
-"Failed"
-msgstr "Gefaald"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:44 
-msgid ""
-"Fatal"
-msgstr "Fataal"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:83 
-msgid ""
-"Filter"
-msgstr "Filteren"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:35 
-msgid ""
-"From"
-msgstr "Van"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:47 
-msgid ""
-"Info"
-msgstr "Info"
-
-#: ./modules/mod_logging/templates/admin_log_base.tpl:3 ./modules/mod_logging/templates/_admin_menu_module.tpl:2 
-msgid ""
-"Log"
-msgstr "Log"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:3 
-msgid ""
-"Log email"
-msgstr "Email-log"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:5 
-msgid ""
-"Log incoming/outgoing e-mail"
-msgstr "Inkomend / uitgaand e-mail log"
-
-#: ./modules/mod_logging/templates/admin_log_base.tpl:10 ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 
-msgid ""
-"Log messages"
-msgstr "Berichtenlog"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:18 
-msgid ""
-"Message"
-msgstr "Bericht"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:33 
-msgid ""
-"Message nr"
-msgstr "Nummer"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:17 
-msgid ""
-"Module"
-msgstr "Module"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:10 ./modules/mod_logging/templates/admin_log_email.tpl:12 
-msgid ""
-"Most recent messages"
-msgstr "Meest recente berichten"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:30 ./modules/mod_logging/templates/admin_log_email.tpl:101 
-msgid ""
-"No log messages."
-msgstr "Geen log-items."
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:37 
-msgid ""
-"Other"
-msgstr "Andere"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:58 
-msgid ""
-"Received"
-msgstr "Ontvangen"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:60 
-msgid ""
-"Retry"
-msgstr "Opnieuw"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:55 
-msgid ""
-"Sending"
-msgstr "Versturen"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:56 
-msgid ""
-"Sent"
-msgstr "Verstuurd"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:31 
-msgid ""
-"Severity"
-msgstr "Hevigheid"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:32 
-msgid ""
-"Status"
-msgstr "Status"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:38 
-msgid ""
-"Template"
-msgstr "Template"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:34 
-msgid ""
-"To"
-msgstr "Naar"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:16 
-msgid ""
-"Type"
-msgstr "Type"
-
-#: ./modules/mod_logging/templates/admin_log.tpl:19 
-msgid ""
-"User"
-msgstr "Gebruiker"
-
-#: ./modules/mod_logging/templates/admin_log_email.tpl:46 
-msgid ""
-"Warning"
-msgstr "Waarschuwing"
-
-#: ./modules/mod_logging/templates/admin_log_base.tpl:13 
-msgid ""
-"email log"
+#: modules/mod_logging/templates/admin_log_base.tpl:13
+#, fuzzy
+msgid "Email log"
 msgstr "e-mail log"
 
-#: ./modules/mod_logging/templates/admin_log_base.tpl:12 
-msgid ""
-"message log"
+#: modules/mod_logging/templates/admin_log_email.tpl:65
+msgid "Error"
+msgstr "Fout"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:79
+msgid "Failed"
+msgstr "Gefaald"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:64
+msgid "Fatal"
+msgstr "Fataal"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:103
+msgid "Filter"
+msgstr "Filteren"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:54
+msgid "From"
+msgstr "Van"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:67
+msgid "Info"
+msgstr "Info"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:3
+msgid "Log"
+msgstr "Log"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:3
+msgid "Log email"
+msgstr "Email-log"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:5
+msgid "Log incoming/outgoing e-mail"
+msgstr "Inkomend / uitgaand e-mail log"
+
+#: modules/mod_logging/templates/admin_log.tpl:3
+#: modules/mod_logging/templates/admin_log.tpl:5
+#: modules/mod_logging/templates/admin_log_base.tpl:9
+msgid "Log messages"
+msgstr "Berichtenlog"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:12
+#, fuzzy
+msgid "Message log"
 msgstr "berichtenlog"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:52
+msgid "Message nr"
+msgstr "Nummer"
+
+#: modules/mod_logging/templates/admin_log.tpl:12
+#: modules/mod_logging/templates/admin_log_email.tpl:30
+msgid "Most recent messages"
+msgstr "Meest recente berichten"
+
+#: modules/mod_logging/templates/admin_log.tpl:22
+#: modules/mod_logging/templates/admin_log_email.tpl:121
+msgid "No log messages."
+msgstr "Geen log-items."
+
+#: modules/mod_logging/templates/admin_log_email.tpl:56
+msgid "Other"
+msgstr "Andere"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:78
+msgid "Received"
+msgstr "Ontvangen"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:80
+msgid "Retry"
+msgstr "Opnieuw"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:75
+msgid "Sending"
+msgstr "Versturen"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:76
+msgid "Sent"
+msgstr "Verstuurd"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:50
+msgid "Severity"
+msgstr "Hevigheid"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:51
+msgid "Status"
+msgstr "Status"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:57
+msgid "Template"
+msgstr "Template"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:53
+msgid "To"
+msgstr "Naar"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:66
+msgid "Warning"
+msgstr "Waarschuwing"
+
+#~ msgid "Message"
+#~ msgstr "Bericht"
+
+#~ msgid "Module"
+#~ msgstr "Module"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "User"
+#~ msgstr "Gebruiker"

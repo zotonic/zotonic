@@ -18,85 +18,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_survey/templates/survey_results_printable.tpl:9 
-msgid ""
-"All survey entries up until"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:34 
-msgid ""
-"Allow multiple entries per user/browser."
-msgstr ""
-
-#: ./modules/mod_survey/templates/email_survey_result.tpl:12 
-msgid ""
-"Answer"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:24 
-msgid ""
-"Answers, one per line"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:21 
-msgid ""
-"Apple = Red<br/>\nMilk = White<br/>\nVienna = Austria<br/>\nFlying dutchman "
-"= Wagner."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:26 
-msgid ""
-"Are you sure you want to stop?"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:18 
-msgid ""
-"Back"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:3 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:3 
-msgid ""
-"Block"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:103 
 msgid ""
 "Button"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:33 
-msgid ""
-"Button style"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:13 
-msgid ""
-"Button text"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:19 
-msgid ""
-"Cat = Picture"
-msgstr ""
-
-#: ./modules/mod_survey/templates/email_survey_result.tpl:32 
-msgid ""
-"Check the answer in the admin."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_results.tpl:6 
-msgid ""
-"Click here to download the results as a CSV file."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:7 
-msgid ""
-"Close"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:26 
-msgid ""
-"Continue"
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:102 
@@ -104,110 +28,9 @@ msgid ""
 "Country select"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40 
-msgid ""
-"Danger"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:35 
-msgid ""
-"Default"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:27 
-msgid ""
-"Delete"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:15 
-msgid ""
-"Do you like pea soup?"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:52 
-msgid ""
-"Download CSV results"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_results.tpl:8 ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:54 
-msgid ""
-"Download will start in the background. Please check your download window."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:16 
-msgid ""
-"Drag questions here."
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:83 
 msgid ""
 "E-mail addresses"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4 ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:26 
-msgid ""
-"Edit"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_survey_editor_results.tpl:26 
-msgid ""
-"Edit survey result"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_block_name_check.tpl:2 
-msgid ""
-"Error"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:21 
-msgid ""
-"Example:"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:32 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:32 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:19 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:19 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:25 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:18 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:37 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:20 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:21 
-msgid ""
-"Explanation"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:18 
-msgid ""
-"Explanation text (optional)"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:12 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:26 
-msgid ""
-"False"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:16 
-msgid ""
-"Help about surveys"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:41 
-msgid ""
-"Hide progress information “<em>Question 3/10</em>”."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:15 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17 
-msgid ""
-"I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
-"ice cream and my favorite color is [color      ]."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37 
-msgid ""
-"Informational"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:41 
-msgid ""
-"Inverse"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:46 
-msgid ""
-"Jump target"
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:96 
@@ -215,25 +38,9 @@ msgid ""
 "Likert"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21 
-msgid ""
-"List of possible answers, one per line. Use <em>value#answer</em> for "
-"selecting values."
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:101 
 msgid ""
 "Long answer"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:46 
-msgid ""
-"Mail filled in surveys to"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:15 
-msgid ""
-"Match which answer fits best."
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:98 
@@ -241,44 +48,9 @@ msgid ""
 "Matching"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:42 
-msgid ""
-"Multiple answers possible"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:39 
-msgid ""
-"Multiple page break blocks are merged into one."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:45 
-msgid ""
-"Name of target question"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:99 
 msgid ""
 "Narrative"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:16 
-msgid ""
-"Need more help?"
-msgstr ""
-
-#: ./modules/mod_survey/templates/email_survey_result.tpl:3 
-msgid ""
-"New survey result:"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:29 
-msgid ""
-"Next Question"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:12 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:26 
-msgid ""
-"No"
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:104 
@@ -286,129 +58,14 @@ msgid ""
 "Page break"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:14 
-msgid ""
-"Page jump condition"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:15 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:16 
-msgid ""
-"Please enter your name."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:15 
-msgid ""
-"Please write an essay."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:36 
-msgid ""
-"Primary"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:60 
-msgid ""
-"Printable list"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:15 
-msgid ""
-"Prompt"
-msgstr ""
-
-#: ./modules/mod_survey/templates/email_survey_result.tpl:11 ./modules/mod_survey/templates/_survey_question_page.tpl:8 
-msgid ""
-"Question"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:47 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:47 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:51 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:35 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:40 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:52 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:34 
-msgid ""
-"Required, this question must be answered."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_start.tpl:9 ./modules/mod_survey/templates/_survey_results.tpl:2 
-msgid ""
-"Results"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9 
-msgid ""
-"Select country"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:16 
-msgid ""
-"Select your country"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:100 
 msgid ""
 "Short answer"
 msgstr ""
 
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:58 
-msgid ""
-"Show email addresses"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:27 
-msgid ""
-"Show results to user after completion of survey."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:57 
-msgid ""
-"Show survey results"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:38 
-msgid ""
-"Single answer possible"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_error.tpl:1 
-msgid ""
-"Something went wrong"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_start.tpl:2 
-msgid ""
-"Start"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:25 ./modules/mod_survey/templates/_survey_question_page.tpl:26 ./modules/mod_survey/mod_survey.erl:105 
+#: ./modules/mod_survey/mod_survey.erl:105 
 msgid ""
 "Stop"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:31 
-msgid ""
-"Strongly Agree"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:12 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:21 
-msgid ""
-"Strongly Disagree"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_question_page.tpl:29 
-msgid ""
-"Submit"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46 
-msgid ""
-"Submit on clicking an option"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:38 
-msgid ""
-"Success"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:5 
-msgid ""
-"Survey"
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:93 
@@ -416,52 +73,9 @@ msgid ""
 "Survey Questions"
 msgstr ""
 
-#: ./modules/mod_survey/templates/admin_survey_editor.tpl:7 
-msgid ""
-"Survey editor"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:75 
 msgid ""
 "Survey result deleted."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:61 
-msgid ""
-"Survey results editor"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_end.tpl:1 
-msgid ""
-"Thank you"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_end.tpl:3 
-msgid ""
-"Thank you for filling in our survey. Be sure to come back for other "
-"surveys!"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15 
-msgid ""
-"The earth is flat."
-msgstr ""
-
-#: ./modules/mod_survey/templates/email_survey_result.tpl:7 
-msgid ""
-"The following survey has been filled in:"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_error.tpl:3 
-msgid ""
-"There was an error while handling your answers. We are terribly sorry about "
-"this."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:12 
-msgid ""
-"This block signals a stop in the flow. The user can't continue further and "
-"it is counted as a page break."
 msgstr ""
 
 #: ./modules/mod_survey/mod_survey.erl:97 
@@ -469,93 +83,12 @@ msgid ""
 "Thurstone"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:20 
-msgid ""
-"To question"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:9 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:21 
-msgid ""
-"True"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:94 
 msgid ""
 "True/False"
 msgstr ""
 
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:32 
-msgid ""
-"Validation"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39 
-msgid ""
-"Warning"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:15 
-msgid ""
-"Weasels make great pets."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38 
-msgid ""
-"When no condition is true then the question following this break will be "
-"the next page."
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:9 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:21 
-msgid ""
-"Yes"
-msgstr ""
-
 #: ./modules/mod_survey/mod_survey.erl:95 
 msgid ""
 "Yes/No"
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_results.tpl:37 
-msgid ""
-"You are not allowed to see the results of this survey."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_admin_edit_content.survey.tpl:16 
-msgid ""
-"You can create your survey by adding blocks with questions below the body."
-msgstr ""
-
-#: ./modules/mod_survey/templates/_survey_block_name_check.tpl:2 
-msgid ""
-"You need to give a name to every question."
-msgstr ""
-
-#: ./modules/mod_survey/templates/admin_survey_editor.tpl:15 
-msgid ""
-"edit"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36 
-msgid ""
-"must be a number"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:35 
-msgid ""
-"must be an e-mail address"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:23 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:34 
-msgid ""
-"name"
-msgstr ""
-
-#: ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:17 ./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29 
-msgid ""
-"name >= 2"
-msgstr ""
-
-#: ./modules/mod_survey/templates/admin_survey_editor.tpl:12 
-msgid ""
-"survey results editor"
 msgstr ""

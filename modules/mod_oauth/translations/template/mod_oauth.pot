@@ -78,7 +78,7 @@ msgid ""
 "Callback URL"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42 
 msgid ""
 "Cancel"
 msgstr ""

@@ -13,13 +13,14 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 21:56-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:24
+#: modules/mod_translation/templates/admin_translation_status.tpl:22
 msgid "Active modules"
 msgstr "Módulos activos"
 
@@ -27,147 +28,194 @@ msgstr "Módulos activos"
 msgid "Add a new language"
 msgstr "Agregar un nuevo idioma"
 
-#: modules/mod_translation/templates/admin_translation.tpl:38
+#: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Agregar idioma"
 
-#: modules/mod_translation/templates/admin_translation.tpl:33
+#: modules/mod_translation/templates/admin_translation.tpl:10
 msgid "All languages known to the system. You can add or remove languages."
-msgstr "Todos los idiomas presentes en el sistema. Puede agregar o eliminar idiomas."
+msgstr ""
+"Todos los idiomas presentes en el sistema. Puede agregar o eliminar idiomas."
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to delete the language"
 msgstr "¿Está seguro de que quiere borrar el idioma"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: modules/mod_translation/templates/admin_translation.tpl:47
+#: modules/mod_translation/templates/admin_translation.tpl:23
 msgid "Default"
 msgstr "Por defecto"
 
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:5
-#: modules/mod_translation/templates/admin_translation.tpl:71
+#: modules/mod_translation/templates/admin_translation.tpl:47
+msgid "Delete"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:7
+#: modules/mod_translation/templates/admin_translation.tpl:49
 msgid "Delete language"
 msgstr "Borrar idioma"
 
+#: modules/mod_translation/templates/admin_translation.tpl:54
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:5
 msgid "Edit"
 msgstr "Editar"
 
-#: modules/mod_translation/templates/admin_translation.tpl:78
-#: modules/mod_translation/templates/admin_translation.tpl:85
+#: modules/mod_translation/templates/admin_translation.tpl:56
+#: modules/mod_translation/templates/admin_translation.tpl:62
+#: modules/mod_translation/templates/admin_translation.tpl:63
 msgid "Edit language"
 msgstr "Editar idioma"
 
-#: modules/mod_translation/templates/admin_translation.tpl:46
+#: modules/mod_translation/templates/admin_translation.tpl:22
 msgid "Enabled"
 msgstr "Activado"
 
-#: modules/mod_translation/templates/admin_translation.tpl:34
-msgid "Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language."
-msgstr "Los idiomas activos aparecen en el menú de selección de idiomas. El idioma por defecto se usa para nuevos visitantes que no hayan seleccionado un idioma."
+#: modules/mod_translation/templates/admin_translation.tpl:11
+msgid ""
+"Enabled languages show up in the language selection menu. The default "
+"language is used for new visitors without a selected language."
+msgstr ""
+"Los idiomas activos aparecen en el menú de selección de idiomas. El idioma "
+"por defecto se usa para nuevos visitantes que no hayan seleccionado un "
+"idioma."
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:8
-msgid "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of the language. Use the native form of the language, for example <em>English</em>, <em>Türkçe</em> or <em>Français</em>."
-msgstr "Ingrese el código ISO (por ejemplo <em>en</em> or <em>es</em>), y el título del idioma. Use el nombre del idioma en su forma nativa, por ejemplo <em>English</em>, <em>Türkçe</em> o <em>Français</em>."
+msgid ""
+"Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
+"of the language. Use the native form of the language, for example "
+"<em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+msgstr ""
+"Ingrese el código ISO (por ejemplo <em>en</em> or <em>es</em>), y el título "
+"del idioma. Use el nombre del idioma en su forma nativa, por ejemplo "
+"<em>English</em>, <em>Türkçe</em> o <em>Français</em>."
 
-#: modules/mod_translation/templates/admin_translation.tpl:13
+#: modules/mod_translation/templates/admin_translation.tpl:85
 msgid "Generate .pot files"
 msgstr "Generar archivos .pot"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid "Help about translations."
 msgstr "Ayuda acerca de las traducciones."
 
-#: modules/mod_translation/templates/admin_translation.tpl:48
+#: modules/mod_translation/templates/admin_translation.tpl:24
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:13
 msgid "ISO Code"
 msgstr "Código ISO"
 
-#: modules/mod_translation/templates/admin_translation.tpl:49
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:19
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#: modules/mod_translation/templates/admin_translation.tpl:25
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:21
 msgid "Language"
 msgstr "Idioma"
 
-#: modules/mod_translation/templates/admin_translation.tpl:31
-#: modules/mod_translation/templates/admin_translation.tpl:42
+#: modules/mod_translation/templates/admin_translation.tpl:8
 msgid "Languages overview"
 msgstr "Resumen de idiomas"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
-msgid "Need more help?"
-msgstr "¿Necesita más ayuda?"
-
-#: modules/mod_translation/templates/admin_translation.tpl:91
+#: modules/mod_translation/templates/admin_translation.tpl:68
 msgid "No languages configured."
 msgstr "No hay idiomas configurados."
 
-#: modules/mod_translation/templates/admin_translation.tpl:50
-msgid "Options"
-msgstr "Opciones"
-
-#: modules/mod_translation/templates/admin_translation.tpl:19
+#: modules/mod_translation/templates/admin_translation.tpl:92
 msgid "Reload Translations"
 msgstr "Recargar traducciones"
 
-#: modules/mod_translation/templates/admin_translation.tpl:21
-msgid "Reload all translations from the modules and site. All templates will be recompiled."
-msgstr "Recargar todas las traducciones de los módulos y sitios. Todos los modelos se recompilarán."
+#: modules/mod_translation/templates/admin_translation.tpl:94
+msgid ""
+"Reload all translations from the modules and site. All templates will be "
+"recompiled."
+msgstr ""
+"Recargar todas las traducciones de los módulos y sitios. Todos los modelos "
+"se recompilarán."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
 msgid "Save"
 msgstr "Guardar"
 
-#: modules/mod_translation/templates/admin_translation.tpl:15
-msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates."
-msgstr "Examinar todos los modelos buscando etiquetas para traducción y generar archivos .pot que puedan usarse para traducir los modelos."
+#: modules/mod_translation/templates/admin_translation.tpl:87
+msgid ""
+"Scan all templates for translation tags and generate .pot files that can be "
+"used for translating the templates."
+msgstr ""
+"Examinar todos los modelos buscando etiquetas para traducción y generar "
+"archivos .pot que puedan usarse para traducir los modelos."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:25
+#: modules/mod_translation/templates/text/language_switch.tpl:3
+#, fuzzy
+msgid "Select language"
+msgstr "Borrar idioma"
+
+#: modules/mod_translation/templates/text/language_switch.tpl:7
+#, fuzzy
+msgid "Select your preferred language."
+msgstr "Borrar idioma"
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:29
 msgid "Show in menu"
 msgstr "Mostrar en el menú"
 
-#: modules/mod_translation/templates/admin_translation.tpl:26
-msgid "Show per module how much of the templates a translated."
+#: modules/mod_translation/templates/admin_translation.tpl:100
+#, fuzzy
+msgid "Show per module how much of the templates are translated."
 msgstr "Mostrar por módulo cuántos de los modelos han sido traducidos."
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:13
-msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
-msgstr "El título, cuerpo y otros textos se pueden traducir a distintos idiomas. Aquí puede seleccionar qué idiomas serán usados."
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#, fuzzy
+msgid "Switch language"
+msgstr "Editar idioma"
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+msgid ""
+"The title, body and other texts can be translated in different languages. "
+"Here you can select which languages will be used."
+msgstr ""
+"El título, cuerpo y otros textos se pueden traducir a distintos idiomas. "
+"Aquí puede seleccionar qué idiomas serán usados."
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:3
-msgid "This will not affect any translations in the database or .po files. This only removes the reference to the language, making it impossible to select or edit content written in the delete language."
-msgstr "Esto no afectará a las traducciones en la base de datos o en los archivos .po. Esto sólo elimina la referencia al idioma, haciendo que sea imposible seleccionar o editar contenido escrito en el idioma que ha sido eliminado."
+msgid ""
+"This will not affect any translations in the database or .po files. This "
+"only removes the reference to the language, making it impossible to select "
+"or edit content written in the delete language."
+msgstr ""
+"Esto no afectará a las traducciones en la base de datos o en los archivos ."
+"po. Esto sólo elimina la referencia al idioma, haciendo que sea imposible "
+"seleccionar o editar contenido escrito en el idioma que ha sido eliminado."
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:27
 msgid "Title"
 msgstr "Título"
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:22
-msgid "To view the up-to-date version of this module, please run \"generate .pot files\" first from the translation overview."
-msgstr "Para ver una versión actualizada de este módulo, por favor corra \"generar archivos .pot\" primero de la sección de traducciones."
+#: modules/mod_translation/templates/admin_translation_status.tpl:18
+msgid ""
+"To view the up-to-date version of this module, please run \"generate .pot "
+"files\" first from the translation overview."
+msgstr ""
+"Para ver una versión actualizada de este módulo, por favor corra \"generar "
+"archivos .pot\" primero de la sección de traducciones."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid "Translate this page in other languages."
 msgstr "Traducir esta página a otros idiomas."
 
-#: modules/mod_translation/templates/_admin_menu_module.tpl:2
 #: modules/mod_translation/templates/admin_translation.tpl:3
 msgid "Translation"
 msgstr "Traducción"
 
-#: modules/mod_translation/templates/admin_translation.tpl:10
+#: modules/mod_translation/templates/admin_translation.tpl:79
 msgid "Translation configuration and tools"
 msgstr "Configuración y herramientas y de traducción"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:3
-#: modules/mod_translation/templates/admin_translation.tpl:25
+#: modules/mod_translation/templates/admin_translation.tpl:99
 msgid "Translation status"
 msgstr "Estado de traducción"
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:20
+#: modules/mod_translation/templates/admin_translation_status.tpl:16
 msgid "Translation status per module"
 msgstr "Estado de traducción por módulo"
 
@@ -175,3 +223,8 @@ msgstr "Estado de traducción por módulo"
 msgid "Translations"
 msgstr "Traducciones"
 
+#~ msgid "Need more help?"
+#~ msgstr "¿Necesita más ayuda?"
+
+#~ msgid "Options"
+#~ msgstr "Opciones"

@@ -13,60 +13,64 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 16:32-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:54
-#: modules/mod_logging/templates/admin_log_email.tpl:84
+#: modules/mod_logging/templates/admin_log_email.tpl:74
+#: modules/mod_logging/templates/admin_log_email.tpl:104
 msgid "All"
 msgstr "Todos"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:57
+#: modules/mod_logging/templates/admin_log_email.tpl:77
 msgid "Bounce"
 msgstr "Reiniciar"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:36
+#: modules/mod_logging/templates/admin_log_email.tpl:55
 msgid "Content"
 msgstr "Contenido"
 
-#: modules/mod_logging/templates/admin_log.tpl:20
-#: modules/mod_logging/templates/admin_log_email.tpl:39
+#: modules/mod_logging/templates/admin_log_email.tpl:58
 msgid "Date"
 msgstr "Fecha"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:48
+#: modules/mod_logging/templates/admin_log_email.tpl:68
 msgid "Debug"
 msgstr "Depurar"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:45
+#: modules/mod_logging/templates/admin_log_base.tpl:13
+#, fuzzy
+msgid "Email log"
+msgstr "registro de correo electrónico"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:65
 msgid "Error"
 msgstr "Error"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:59
+#: modules/mod_logging/templates/admin_log_email.tpl:79
 msgid "Failed"
 msgstr "Falló"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:44
+#: modules/mod_logging/templates/admin_log_email.tpl:64
 msgid "Fatal"
 msgstr "Fatal"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:83
+#: modules/mod_logging/templates/admin_log_email.tpl:103
 msgid "Filter"
 msgstr "Filtro"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:35
+#: modules/mod_logging/templates/admin_log_email.tpl:54
 msgid "From"
 msgstr "Desde"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:47
+#: modules/mod_logging/templates/admin_log_email.tpl:67
 msgid "Info"
 msgstr "Info"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:3
-#: modules/mod_logging/templates/_admin_menu_module.tpl:2
 msgid "Log"
 msgstr "Log"
 
@@ -78,87 +82,79 @@ msgstr "Registrar correo electrónico"
 msgid "Log incoming/outgoing e-mail"
 msgstr "Registrar correos entrantes/salientes"
 
-#: modules/mod_logging/templates/admin_log_base.tpl:10
 #: modules/mod_logging/templates/admin_log.tpl:3
 #: modules/mod_logging/templates/admin_log.tpl:5
+#: modules/mod_logging/templates/admin_log_base.tpl:9
 msgid "Log messages"
 msgstr "Registrar mensajes"
 
-#: modules/mod_logging/templates/admin_log.tpl:18
-msgid "Message"
-msgstr "Mensaje"
+#: modules/mod_logging/templates/admin_log_base.tpl:12
+#, fuzzy
+msgid "Message log"
+msgstr "registro de mensajes"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:33
+#: modules/mod_logging/templates/admin_log_email.tpl:52
 msgid "Message nr"
 msgstr "Mensaje nro."
 
-#: modules/mod_logging/templates/admin_log.tpl:17
-msgid "Module"
-msgstr "Módulo"
-
-#: modules/mod_logging/templates/admin_log.tpl:10
-#: modules/mod_logging/templates/admin_log_email.tpl:12
+#: modules/mod_logging/templates/admin_log.tpl:12
+#: modules/mod_logging/templates/admin_log_email.tpl:30
 msgid "Most recent messages"
 msgstr "Mensajes más recientes"
 
-#: modules/mod_logging/templates/admin_log.tpl:30
-#: modules/mod_logging/templates/admin_log_email.tpl:101
+#: modules/mod_logging/templates/admin_log.tpl:22
+#: modules/mod_logging/templates/admin_log_email.tpl:121
 msgid "No log messages."
 msgstr "No hay mensajes."
 
-#: modules/mod_logging/templates/admin_log_email.tpl:37
+#: modules/mod_logging/templates/admin_log_email.tpl:56
 msgid "Other"
 msgstr "Otros"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:58
+#: modules/mod_logging/templates/admin_log_email.tpl:78
 msgid "Received"
 msgstr "Recibido"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:60
+#: modules/mod_logging/templates/admin_log_email.tpl:80
 msgid "Retry"
 msgstr "Reintentar"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:55
+#: modules/mod_logging/templates/admin_log_email.tpl:75
 msgid "Sending"
 msgstr "Enviando"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:56
+#: modules/mod_logging/templates/admin_log_email.tpl:76
 msgid "Sent"
 msgstr "Enviado"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:31
+#: modules/mod_logging/templates/admin_log_email.tpl:50
 msgid "Severity"
 msgstr "Severidad"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:32
+#: modules/mod_logging/templates/admin_log_email.tpl:51
 msgid "Status"
 msgstr "Estado"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:38
+#: modules/mod_logging/templates/admin_log_email.tpl:57
 msgid "Template"
 msgstr "Modelo"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:34
+#: modules/mod_logging/templates/admin_log_email.tpl:53
 msgid "To"
 msgstr "A"
 
-#: modules/mod_logging/templates/admin_log.tpl:16
-msgid "Type"
-msgstr "Tipo"
-
-#: modules/mod_logging/templates/admin_log.tpl:19
-msgid "User"
-msgstr "Usuario"
-
-#: modules/mod_logging/templates/admin_log_email.tpl:46
+#: modules/mod_logging/templates/admin_log_email.tpl:66
 msgid "Warning"
 msgstr "Advertencia"
 
-#: modules/mod_logging/templates/admin_log_base.tpl:13
-msgid "email log"
-msgstr "registro de correo electrónico"
+#~ msgid "Message"
+#~ msgstr "Mensaje"
 
-#: modules/mod_logging/templates/admin_log_base.tpl:12
-msgid "message log"
-msgstr "registro de mensajes"
+#~ msgid "Module"
+#~ msgstr "Módulo"
 
+#~ msgid "Type"
+#~ msgstr "Tipo"
+
+#~ msgid "User"
+#~ msgstr "Usuario"

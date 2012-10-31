@@ -28,12 +28,12 @@ msgid ""
 "Import a Wordpress WXR export file into Zotonic."
 msgstr ""
 
-#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:18 
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:20 
 msgid ""
 "Import previously deleted items again"
 msgstr ""
 
-#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:22 
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:27 
 msgid ""
 "Start import"
 msgstr ""
@@ -43,12 +43,12 @@ msgid ""
 "Upload a wordpress WXR file from your computer."
 msgstr ""
 
-#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:11 
+#: ./modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:9 
 msgid ""
 "WXR file"
 msgstr ""
 
-#: ./modules/mod_import_wordpress/templates/_admin_status.tpl:2 ./modules/mod_import_wordpress/templates/_admin_status.tpl:4 
+#: ./modules/mod_import_wordpress/templates/_admin_status.tpl:4 
 msgid ""
 "Wordpress import"
 msgstr ""

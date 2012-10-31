@@ -18,29 +18,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:48
+#: modules/mod_authentication/templates/_logon_stage.tpl:9
+#: modules/mod_authentication/templates/_logon_stage.tpl:42
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:23
+msgid "Back to logon form"
+msgstr ""
+
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "Below are your account details and a link to set a new password."
 msgstr ""
 "Hieronder staan je account details en een link om je wachtwoord te resetten."
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:6
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:5
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:5
+#: modules/mod_authentication/templates/_logon_stage.tpl:51
 msgid "Below you can enter a new password for your account"
 msgstr "Hieronder kan je een nieuw wachtwoord invullen voor je account"
 
-#: modules/mod_authentication/templates/logon_confirm_form.tpl:32
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:28
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:31
+#: modules/mod_authentication/templates/_logon_stage.tpl:78
 msgid "Change password and Log on"
 msgstr "Verander wachtwoord en login"
 
-#: modules/mod_authentication/templates/_logon_verification.tpl:13
+#: modules/mod_authentication/templates/_logon_stage.tpl:28
 msgid "Check your e-mail!"
 msgstr "Controleer je e-mail!"
 
-#: modules/mod_authentication/templates/_logon_verification.tpl:4
+#: modules/mod_authentication/templates/_logon_stage.tpl:17
 msgid "Click on the button below to e-mail you a verification message."
 msgstr "Klik op de knop hieronder om een e-mail verificatie te ontvangen."
 
@@ -60,11 +67,11 @@ msgstr "Bevestig"
 msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:9
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
 msgid "E-mail address or username"
 msgstr "E-mailadres of gebruikersnaam"
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:5
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
 msgid ""
 "Enter your e-mail address or username below and we will send you an e-mail "
 "with password reset instructions."
@@ -80,7 +87,7 @@ msgstr ""
 "Om veiligheidsredenen worden veranderde wachtwoord codes tijdelijk "
 "opgeslagen en kan je ze eenmalig gebruiken."
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:3
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:2
 msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
 
@@ -92,12 +99,16 @@ msgstr "Hallo"
 msgid "How to reset your password"
 msgstr "Hoe je wachtwoord te veranderen"
 
+#: modules/mod_authentication/templates/_logon_form.tpl:34
+#, fuzzy
+msgid "I forgot my password"
+msgstr "Wachtwoord vergeten?"
+
 #: modules/mod_authentication/templates/_logon_error.tpl:8
-#: modules/mod_authentication/templates/logon.tpl:35
 msgid "I forgot my username or password"
 msgstr "Ik ben mijn gebruikersnaam en wachtwoord vergeten"
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:24
+#: modules/mod_authentication/templates/_logon_stage.tpl:6
 msgid ""
 "In the e-mail you will find instructions on how to reset the password of "
 "your account."
@@ -110,17 +121,23 @@ msgstr ""
 msgid "Log Off"
 msgstr "Uitloggen"
 
-#: modules/mod_authentication/templates/_logon_form_box.tpl:30
 #: modules/mod_authentication/templates/_logon_off.tpl:4
 msgid "Log On"
 msgstr "Inloggen"
 
-#: modules/mod_authentication/templates/_logon_form_box.tpl:3
-msgid "Log on using your"
-msgstr "Log in met je"
+#: modules/mod_authentication/templates/_logon_form.tpl:33
+#, fuzzy
+msgid "Log on"
+msgstr "Inloggen"
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:12
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:11
+#: modules/mod_authentication/templates/_logon_form.tpl:3
+#: modules/mod_authentication/templates/logon.tpl:8
+#, fuzzy
+msgid "Log on to"
+msgstr "Inloggen"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:10
+#: modules/mod_authentication/templates/_logon_stage.tpl:56
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
@@ -129,12 +146,12 @@ msgid "One moment please, logging off…"
 msgstr "Een moment alsjeblieft, aan het uitloggen..."
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_form_box.tpl:17
+#: modules/mod_authentication/templates/_logon_form.tpl:18
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:25
-#: modules/mod_authentication/templates/_logon_error.tpl:32
+#: modules/mod_authentication/templates/_logon_error.tpl:23
+#: modules/mod_authentication/templates/_logon_error.tpl:30
 msgid "Passwords should have at least six characters."
 msgstr "Wachtwoord moet minstens zes karakters bevatten"
 
@@ -142,32 +159,29 @@ msgstr "Wachtwoord moet minstens zes karakters bevatten"
 msgid "Please confirm your"
 msgstr "Bevestig a.u.b. je"
 
-#: modules/mod_authentication/templates/logon.tpl:39
-msgid "Please show me the log on form"
-msgstr "Ik wil graag inloggen"
-
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:20
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:18
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:63
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:34
-msgid "Reset Password and Log On"
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:32
+#, fuzzy
+msgid "Reset password and Log on"
 msgstr "Verander wachtwoord en login"
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:4
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:3
 msgid "Reset your password"
 msgstr "Verander je wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_verification.tpl:8
+#: modules/mod_authentication/templates/_logon_stage.tpl:20
 msgid "Send Verification Message"
 msgstr "Stuur verificatie bericht"
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:17
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
 msgid "Send me instructions"
 msgstr "Stuur me instructies"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:37
+#: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
 msgstr "Sorry, het verificatie bericht kon niet worden verstuurd"
 
@@ -177,9 +191,9 @@ msgstr ""
 "Sorry de code waarmee je wachtwoord kan worden veranderd is onbekend of "
 "verlopen"
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:28
-#: modules/mod_authentication/templates/_logon_form_box.tpl:24
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:25
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:26
+#: modules/mod_authentication/templates/_logon_form.tpl:27
+#: modules/mod_authentication/templates/_logon_stage.tpl:72
 msgid "Stay logged on unless I log off."
 msgstr "Blijf ingelogd gedurende twee weken, behalve als ik uitlog"
 
@@ -199,30 +213,30 @@ msgstr "Het e-mailadres verbonden aan je account is"
 msgid "The e-mail will contain instructions how to reset your password."
 msgstr "Het e-mailbericht bevat instructies om je wachtwoord te veranderen"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:30
+#: modules/mod_authentication/templates/_logon_error.tpl:28
 msgid "The two passwords should be equal. Please retype them."
 msgstr "De twee wachtwoorden moeten hetzelfde zijn. Probeer het nogmaals."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:19
+#: modules/mod_authentication/templates/_logon_error.tpl:17
 msgid ""
 "To find your account\tyou need to enter either your username or the e-mail "
 "address you gave us."
 msgstr ""
 "Om je account te achterhalen moet je je gebruikersnaam of e-mail invullen."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:26
-#: modules/mod_authentication/templates/_logon_error.tpl:33
+#: modules/mod_authentication/templates/_logon_error.tpl:24
+#: modules/mod_authentication/templates/_logon_error.tpl:31
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr ""
 "Gebruik bijzondere symbolen of cijfers om het moeilijker te maken om te "
 "raden."
 
-#: modules/mod_authentication/templates/_logon_form_box.tpl:10
+#: modules/mod_authentication/templates/_logon_form.tpl:10
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:18
+#: modules/mod_authentication/templates/_logon_error.tpl:16
 msgid ""
 "We can only send you an e-mail when we have the e-mail address of your "
 "account."
@@ -230,13 +244,13 @@ msgstr ""
 "We kunnen je alleen per e-mail bereiken als we het e-mail adres hebben dat "
 "is verbonden aan je account."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:39
+#: modules/mod_authentication/templates/_logon_stage.tpl:40
 msgid ""
 "We don’t seem to have any valid e-mail address or other electronic "
 "communication address of you."
 msgstr "We hebben geen geldig e-mailadres van je."
 
-#: modules/mod_authentication/templates/_logon_verification.tpl:15
+#: modules/mod_authentication/templates/_logon_stage.tpl:30
 msgid ""
 "We have sent you an e-mail. In the e-mail you will find instructions on how "
 "to confirm your account."
@@ -245,16 +259,17 @@ msgstr ""
 "account te bevestigen."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:16
+#, fuzzy
 msgid ""
-"When you didn't request a passsword reset then you can ignore this e-mail.  "
-"Maybe someone made an error typing his or her e-mail address."
+"When you didn't request a password reset, you can ignore this e-mail. Maybe "
+"someone made an error typing his or her e-mail address."
 msgstr ""
 "Als je geen aanvraag hebt gedaan om je wachtwoord te veranderen, kan je dit "
 "bericht negeren. Misschien heeft iemand een spelfout gemaakt tijdens het "
 "invullen van zijn of haar e-mailadres."
 
-#: modules/mod_authentication/templates/_logon_password_reminder.tpl:25
-#: modules/mod_authentication/templates/_logon_verification.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:7
+#: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
 "When you don’t receive the e-mail within a few minutes then be sure to check "
 "your spam filter and spam folders."
@@ -271,13 +286,13 @@ msgstr ""
 msgid "You can"
 msgstr "Je kan"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:16
+#: modules/mod_authentication/templates/_logon_error.tpl:14
 msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr ""
 "Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het "
 "nogmaals."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:2
+#: modules/mod_authentication/templates/_logon_error.tpl:3
 msgid "You entered an unknown username or password.  Please try again."
 msgstr ""
 "Je hebt een onbekende gebruikersnaam of wachtwoord ingevuld. Probeer het "
@@ -292,7 +307,7 @@ msgstr ""
 "wachtwoord. Beide zijn hoofdletter gevoelig. Controleer of Caps Lock "
 "uitstaat.  "
 
-#: modules/mod_authentication/templates/_logon_password_expired.tpl:3
+#: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"
 msgstr "Je moet je wachtwoord veranderen"
 
@@ -320,15 +335,15 @@ msgstr "Je wordt doorgestuurd naar de homepagina"
 msgid "Your account name is"
 msgstr "Je gebruikersnaam is"
 
-#: modules/mod_authentication/templates/_logon_verification.tpl:2
+#: modules/mod_authentication/templates/_logon_stage.tpl:15
 msgid "Your account needs verification"
 msgstr "Je account moet bevestigd worden"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:23
+#: modules/mod_authentication/templates/_logon_error.tpl:21
 msgid "Your new password is too short."
 msgstr "Je nieuwe wachtwoord is te kort."
 
-#: modules/mod_authentication/templates/_logon_password_reset.tpl:38
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:37
 msgid "Your password will be reset and you will be logged on as"
 msgstr "Je wachtwoord wordt aangepast en je wordt ingelogd als"
 
@@ -339,3 +354,14 @@ msgstr "e-mail een tijdelijk wachtwoord"
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "request a new password reset code"
 msgstr "Vraag een nieuw wachtwoord aan"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:12
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
+msgid "user@example.com"
+msgstr ""
+
+#~ msgid "Log on using your"
+#~ msgstr "Log in met je"
+
+#~ msgid "Please show me the log on form"
+#~ msgstr "Ik wil graag inloggen"

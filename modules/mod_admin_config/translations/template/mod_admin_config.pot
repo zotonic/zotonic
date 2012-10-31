@@ -33,7 +33,7 @@ msgid ""
 "Are you sure you want to delete the configuration key"
 msgstr ""
 
-#: ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12 ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 
+#: ./modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7 ./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12 
 msgid ""
 "Cancel"
 msgstr ""

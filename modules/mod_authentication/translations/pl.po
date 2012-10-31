@@ -13,282 +13,355 @@ msgstr ""
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:8 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:48
+#: modules/mod_authentication/templates/_logon_stage.tpl:9
+#: modules/mod_authentication/templates/_logon_stage.tpl:42
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:23
+msgid "Back to logon form"
+msgstr ""
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "Below are your account details and a link to set a new password."
-msgstr "Poniżej znajdują się informacje o Twoim koncie i odnośnik, dzięki któremu uzyskasz nowe hasło."
+msgstr ""
+"Poniżej znajdują się informacje o Twoim koncie i odnośnik, dzięki któremu "
+"uzyskasz nowe hasło."
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:5 ./modules/mod_authentication/templates/_logon_password_reset.tpl:6 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:5
+#: modules/mod_authentication/templates/_logon_stage.tpl:51
 msgid "Below you can enter a new password for your account"
 msgstr "Poniżej możesz wprowadzić nowe hasło do konta"
 
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:32 
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:28
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:31 
+#: modules/mod_authentication/templates/_logon_stage.tpl:78
 msgid "Change password and Log on"
 msgstr "Zmień hasło i zaloguj się"
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:13 
+#: modules/mod_authentication/templates/_logon_stage.tpl:28
 msgid "Check your e-mail!"
 msgstr "Sprawdź swój e-mail!"
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:4 
+#: modules/mod_authentication/templates/_logon_stage.tpl:17
 msgid "Click on the button below to e-mail you a verification message."
 msgstr "Kliknij przycisk poniżej by wysłać wiadomość weryfikacyjną."
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:12 
-msgid "Click on the link below to enter a new password, when clicking doesn't work "
+#: modules/mod_authentication/templates/email_password_reset.tpl:12
+msgid ""
+"Click on the link below to enter a new password, when clicking doesn't work "
 "then you can copy and paste the complete address to your browser."
-msgstr "Kliknij na odnośnik poniżej by wprowadzić nowe hasło. Możesz też skopiować "
+msgstr ""
+"Kliknij na odnośnik poniżej by wprowadzić nowe hasło. Możesz też skopiować "
 "ten adres i wkleić go w pasek adresowy przeglądarki."
 
-
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:25 
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:25
 msgid "Confirm"
 msgstr "Potwierdź"
 
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:20 
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
 msgstr "Potwierdzenie nie powiodło się"
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:9 
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
 msgid "E-mail address or username"
 msgstr "Podaj e-mail lub login"
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:5 
-msgid "Enter your e-mail address or username below and we will send you an e-mail "
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
+msgid ""
+"Enter your e-mail address or username below and we will send you an e-mail "
 "with password reset instructions."
-msgstr "Do formularza poniżej wpisz swój adres e-mail lub login a otrzymasz 
-wiadomość, która pozwoli Ci uzyskać nowe hasło."
+msgstr ""
+"Do formularza poniżej wpisz swój adres e-mail lub login a otrzymasz "
+"wiadomość, która pozwoli Ci uzyskać nowe hasło."
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:45 
-msgid "For security reasons password reset codes are only kept for a limited "
-"amount of time and can only be used once."
-msgstr "Ze względów bezpieczeństwa kod pozwalający na uzyskanie nowego hasła 
-jest przechowywany tylko przez określony czas i może być użyty tylko raz."
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:45
+msgid ""
+"For security reasons password reset codes are only kept for a limited amount "
+"of time and can only be used once."
+msgstr ""
+"Ze względów bezpieczeństwa kod pozwalający na uzyskanie nowego hasła jest "
+"przechowywany tylko przez określony czas i może być użyty tylko raz."
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:3 
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:2
 msgid "Forgot your password?"
 msgstr "Zapomniałeś hasła?"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:6 
+#: modules/mod_authentication/templates/email_password_reset.tpl:6
 msgid "Hello"
 msgstr "Cześć"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:3 
+#: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
 msgstr "Jak uzyskać nowe hasło?"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:8 ./modules/mod_authentication/templates/logon.tpl:35 
+#: modules/mod_authentication/templates/_logon_form.tpl:34
+#, fuzzy
+msgid "I forgot my password"
+msgstr "Zapomniałeś hasła?"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:8
 msgid "I forgot my username or password"
 msgstr "Nie pamiętam hasła"
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:24 
-msgid "In the e-mail you will find instructions on how to reset the password of "
+#: modules/mod_authentication/templates/_logon_stage.tpl:6
+msgid ""
+"In the e-mail you will find instructions on how to reset the password of "
 "your account."
-msgstr "W wiadomości, wysłanej na Twój adres poczty elektronicznej znajdują się
-instrukcje, które pozwolą na ustawienie nowego hasła do Twojego konta."
+msgstr ""
+"W wiadomości, wysłanej na Twój adres poczty elektronicznej znajdują "
+"sięinstrukcje, które pozwolą na ustawienie nowego hasła do Twojego konta."
 
-#: ./modules/mod_authentication/templates/logoff.tpl:3 ./modules/mod_authentication/templates/_logon_off.tpl:2 
+#: modules/mod_authentication/templates/logoff.tpl:3
+#: modules/mod_authentication/templates/_logon_off.tpl:2
 msgid "Log Off"
 msgstr "Wyloguj się"
 
-#: ./modules/mod_authentication/templates/_logon_form_box.tpl:30 ./modules/mod_authentication/templates/_logon_off.tpl:4 
+#: modules/mod_authentication/templates/_logon_off.tpl:4
 msgid "Log On"
 msgstr "Zaloguj się"
 
-#: ./modules/mod_authentication/templates/_logon_form_box.tpl:3 
-msgid "Log on using your"
-msgstr "Zaloguj się wykorzystując"
+#: modules/mod_authentication/templates/_logon_form.tpl:33
+#, fuzzy
+msgid "Log on"
+msgstr "Zaloguj się"
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:11 ./modules/mod_authentication/templates/_logon_password_reset.tpl:12 
+#: modules/mod_authentication/templates/_logon_form.tpl:3
+#: modules/mod_authentication/templates/logon.tpl:8
+#, fuzzy
+msgid "Log on to"
+msgstr "Zaloguj się"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:10
+#: modules/mod_authentication/templates/_logon_stage.tpl:56
 msgid "New password"
 msgstr "Nowe hasło"
 
-#: ./modules/mod_authentication/templates/logoff.tpl:10 
+#: modules/mod_authentication/templates/logoff.tpl:10
 msgid "One moment please, logging off…"
 msgstr "Chwileczkę - trwa wylogowywanie…"
 
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:15 ./modules/mod_authentication/templates/_logon_form_box.tpl:17 
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_authentication/templates/_logon_form.tpl:18
 msgid "Password"
 msgstr "Hasło"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:25 ./modules/mod_authentication/templates/_logon_error.tpl:32 
+#: modules/mod_authentication/templates/_logon_error.tpl:23
+#: modules/mod_authentication/templates/_logon_error.tpl:30
 msgid "Passwords should have at least six characters."
 msgstr "Hasło powinno mieć co najmniej sześć znaków długości."
 
-#: ./modules/mod_authentication/templates/logon_confirm_form.tpl:8 
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Proszę potwierdzić"
 
-#: ./modules/mod_authentication/templates/logon.tpl:39 
-msgid "Please show me the log on form"
-msgstr "Wróć do strony logowania"
-
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:18 ./modules/mod_authentication/templates/_logon_password_reset.tpl:20 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:63
 msgid "Repeat password"
 msgstr "Powtórz hasło"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:34 
-msgid "Reset Password and Log On"
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:32
+#, fuzzy
+msgid "Reset password and Log on"
 msgstr "Ustaw hasło i zaloguj się"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:4 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:3
 msgid "Reset your password"
 msgstr "Ustawianie nowego hasła"
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:8 
+#: modules/mod_authentication/templates/_logon_stage.tpl:20
 msgid "Send Verification Message"
 msgstr "Wyślij wiadomość weryfikacyjną"
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:17 
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
 msgid "Send me instructions"
 msgstr "Wyślij mi instrukcję"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:37 
+#: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
 msgstr "Wybacz, nie jestem w stanie wysłać wiadomości weryfikacyjnej"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:43 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:43
 msgid "Sorry, your password reset code is unknown or expired"
-msgstr "Wybacz, kod pozwalający ustawić nowe hasło jest nieprawidłowy lub nieaktualny"
+msgstr ""
+"Wybacz, kod pozwalający ustawić nowe hasło jest nieprawidłowy lub nieaktualny"
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:25 ./modules/mod_authentication/templates/_logon_password_reset.tpl:28 ./modules/mod_authentication/templates/_logon_form_box.tpl:24 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:26
+#: modules/mod_authentication/templates/_logon_form.tpl:27
+#: modules/mod_authentication/templates/_logon_stage.tpl:72
 msgid "Stay logged on unless I log off."
 msgstr "Zapamiętaj mnie, póki sam się nie wyloguję."
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:18 
+#: modules/mod_authentication/templates/email_password_reset.tpl:18
 msgid "Thank you,"
 msgstr "Dziękujemy,"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:19 
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
 msgid "The crew at"
 msgstr "Ekipa serwisu"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:10 
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
 msgid "The e-mail address associated with your account is"
 msgstr "Adres e-mail Twojego konta to"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:10 
+#: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "The e-mail will contain instructions how to reset your password."
-msgstr "Wiadomość będzie zawierać instrukcje, jak ustawić nowe hasło dla Twojego konta."
+msgstr ""
+"Wiadomość będzie zawierać instrukcje, jak ustawić nowe hasło dla Twojego "
+"konta."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:30 
+#: modules/mod_authentication/templates/_logon_error.tpl:28
 msgid "The two passwords should be equal. Please retype them."
 msgstr "Hasła nie są jednakowe - wprowadź je ponownie."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:19 
-msgid "To find your account	you need to enter either your username or the e-mail "
+#: modules/mod_authentication/templates/_logon_error.tpl:17
+msgid ""
+"To find your account\tyou need to enter either your username or the e-mail "
 "address you gave us."
-msgstr "Musisz wprowadzić swój login lub e-mail, to pozwoli nam odszukać Twoje konto."
+msgstr ""
+"Musisz wprowadzić swój login lub e-mail, to pozwoli nam odszukać Twoje konto."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:26 ./modules/mod_authentication/templates/_logon_error.tpl:33 
-msgid "Use some non alphabetical characters or digits to make it harder to guess."
-msgstr "Użyj znaków innych niż litery i paru cyfr, by uczynić hasło trudniejszym do odgadnięcia."
+#: modules/mod_authentication/templates/_logon_error.tpl:24
+#: modules/mod_authentication/templates/_logon_error.tpl:31
+msgid ""
+"Use some non alphabetical characters or digits to make it harder to guess."
+msgstr ""
+"Użyj znaków innych niż litery i paru cyfr, by uczynić hasło trudniejszym do "
+"odgadnięcia."
 
-#: ./modules/mod_authentication/templates/_logon_form_box.tpl:10 
+#: modules/mod_authentication/templates/_logon_form.tpl:10
 msgid "Username"
 msgstr "Login"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:18 
-msgid "We can only send you an e-mail when we have the e-mail address of your "
+#: modules/mod_authentication/templates/_logon_error.tpl:16
+msgid ""
+"We can only send you an e-mail when we have the e-mail address of your "
 "account."
-msgstr "Nie znamy Twojego adresu i dlatego nie możemy wysłać do Ciebie wiadomości."
+msgstr ""
+"Nie znamy Twojego adresu i dlatego nie możemy wysłać do Ciebie wiadomości."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:39 
-msgid "We don’t seem to have any valid e-mail address or other electronic "
+#: modules/mod_authentication/templates/_logon_stage.tpl:40
+msgid ""
+"We don’t seem to have any valid e-mail address or other electronic "
 "communication address of you."
-msgstr "Obawiamy się, że nie posiadamy żadnego adresu, który pozwoliłby nam "
+msgstr ""
+"Obawiamy się, że nie posiadamy żadnego adresu, który pozwoliłby nam "
 "komunikować się z Tobą."
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:15 
-msgid "We have sent you an e-mail. In the e-mail you will find instructions on "
-"how to confirm your account."
+#: modules/mod_authentication/templates/_logon_stage.tpl:30
+msgid ""
+"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"to confirm your account."
 msgstr "Wysłaliśmy do Ciebie "
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:16 
-msgid "When you didn't request a passsword reset then you can ignore this e-mail. "
-" Maybe someone made an error typing his or her e-mail address."
-msgstr "Jeśli uważasz, że to pomyłka, wtedy możesz zignorować tę wiadomość. "
-" Być może ktoś pomylił się, podając swój adres e-mail."
+#: modules/mod_authentication/templates/email_password_reset.tpl:16
+#, fuzzy
+msgid ""
+"When you didn't request a password reset, you can ignore this e-mail. Maybe "
+"someone made an error typing his or her e-mail address."
+msgstr ""
+"Jeśli uważasz, że to pomyłka, wtedy możesz zignorować tę wiadomość.  Być "
+"może ktoś pomylił się, podając swój adres e-mail."
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:25 ./modules/mod_authentication/templates/_logon_verification.tpl:17 
-msgid "When you don’t receive the e-mail within a few minutes then be sure to "
-"check your spam filter and spam folders."
-msgstr "Jeśli wiadomość nie dotrze do Ciebie w ciągu kilku najbliższych minut, "
-"sprawdź zawartość katalogu ze spamem, a potem przyjrzyj się filtrom antyspamowym."
+#: modules/mod_authentication/templates/_logon_stage.tpl:7
+#: modules/mod_authentication/templates/_logon_stage.tpl:32
+msgid ""
+"When you don’t receive the e-mail within a few minutes then be sure to check "
+"your spam filter and spam folders."
+msgstr ""
+"Jeśli wiadomość nie dotrze do Ciebie w ciągu kilku najbliższych minut, "
+"sprawdź zawartość katalogu ze spamem, a potem przyjrzyj się filtrom "
+"antyspamowym."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:10 
+#: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "When you forgot your username or pasword then you can ask us to"
 msgstr "Jeśli zapomnisz loginu lub hasła, wtedy możesz poprosić o"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:46 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
 msgstr "Możesz "
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:16 
+#: modules/mod_authentication/templates/_logon_error.tpl:14
 msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr "Podałeś nieprawidłowy login lub e-mail. Spróbuj ponownie."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:2 
+#: modules/mod_authentication/templates/_logon_error.tpl:3
 msgid "You entered an unknown username or password.  Please try again."
 msgstr "Podałeś nieprawidłowy login lub błędne hasło. Spróbuj ponownie."
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:5 
-msgid "You might have made a typo in your username or password.  Please note that "
+#: modules/mod_authentication/templates/_logon_error.tpl:5
+msgid ""
+"You might have made a typo in your username or password.  Please note that "
 "both are case sensitive and check that your caps lock key is off."
-msgstr "Być może pomyliłeś się przy wpisywaniu loginu lub hasła. Pamiętaj, że system "
-"rozróżnia małe i duże litery - sprawdź, czy nie wcisnąłeś przypadkiem klawisza CapsLock."
+msgstr ""
+"Być może pomyliłeś się przy wpisywaniu loginu lub hasła. Pamiętaj, że system "
+"rozróżnia małe i duże litery - sprawdź, czy nie wcisnąłeś przypadkiem "
+"klawisza CapsLock."
 
-#: ./modules/mod_authentication/templates/_logon_password_expired.tpl:3 
+#: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"
 msgstr "Musisz zmienić hasło"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:22 
-msgid "You receive this e-mail because you or someone else requested a password "
-"reset for your account. You or the someone else either entered your "
-"username or e-mail address.  You will not receive any additional e-mails "
-"because of this request."
-msgstr "Otrzymałeś tę wiadomość ponieważ Ty (bądź ktoś inny) uruchomił procedurę "
-"ustawiania nowego hasła dla Twojego konta. Ty (bądź ktoś inny) podał przy tym Twój "
-"login lub adres e-mail. Nie będziesz otrzymywać z tego powodu dalszych wiadomości."
+#: modules/mod_authentication/templates/email_password_reset.tpl:22
+msgid ""
+"You receive this e-mail because you or someone else requested a password "
+"reset for your account. You or the someone else either entered your username "
+"or e-mail address.  You will not receive any additional e-mails because of "
+"this request."
+msgstr ""
+"Otrzymałeś tę wiadomość ponieważ Ty (bądź ktoś inny) uruchomił procedurę "
+"ustawiania nowego hasła dla Twojego konta. Ty (bądź ktoś inny) podał przy "
+"tym Twój login lub adres e-mail. Nie będziesz otrzymywać z tego powodu "
+"dalszych wiadomości."
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:8 
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "You requested a new password for"
 msgstr "Uruchomiono procedurę ustawiania nowego hasła dla serwisu"
 
-#: ./modules/mod_authentication/templates/logoff.tpl:12 
+#: modules/mod_authentication/templates/logoff.tpl:12
 msgid "You will be redirected to the home page."
 msgstr "Zostaniesz skierowany na stronę domową"
 
-#: ./modules/mod_authentication/templates/email_password_reset.tpl:10 
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
 msgid "Your account name is"
 msgstr "Twój login to"
 
-#: ./modules/mod_authentication/templates/_logon_verification.tpl:2 
+#: modules/mod_authentication/templates/_logon_stage.tpl:15
 msgid "Your account needs verification"
 msgstr "Twoje konto musi zostać zweryfikowane"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:23 
+#: modules/mod_authentication/templates/_logon_error.tpl:21
 msgid "Your new password is too short."
 msgstr "To hasło jest zbyt krótkie"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:38 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:37
 msgid "Your password will be reset and you will be logged on as"
 msgstr "Zresetujemy Twoje hasło a następnie zalogujemy Cię jako"
 
-#: ./modules/mod_authentication/templates/_logon_error.tpl:10 
+#: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "e-mail a temporary password"
 msgstr "przesłanie tymczasowego hasła pocztą"
 
-#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:46 
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "request a new password reset code"
 msgstr "zwrócić się o kod, który pozwoli Ci ustawić nowe hasło"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:12
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
+msgid "user@example.com"
+msgstr ""
+
+#~ msgid "Log on using your"
+#~ msgstr "Zaloguj się wykorzystując"
+
+#~ msgid "Please show me the log on form"
+#~ msgstr "Wróć do strony logowania"

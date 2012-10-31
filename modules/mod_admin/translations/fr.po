@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-07-01 14:07+0100\n"
+"PO-Revision-Date: 2012-10-31 21:43+0100\n"
 "Last-Translator: Michael Connors <michael@bring42.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -187,7 +187,7 @@ msgstr "Adresse Electronique"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:29
 msgid "Emergency telephone"
-msgstr "Telephone d\'urgence"
+msgstr "Telephone d'urgence"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:436
 msgid "Every page can have a date range. For example if the page is an event or description of someone\'s life."

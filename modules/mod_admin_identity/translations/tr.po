@@ -10,11 +10,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
-msgid "Add or remove credentials."
-msgstr "Yetki ekle veya kaldır."
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
+#, fuzzy
+msgid "Add a new user"
+msgstr "Yeni kullanıcı oluştur"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:57
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68
 msgid "Add user"
 msgstr "Kullanıcı ekle"
 
@@ -22,11 +23,16 @@ msgstr "Kullanıcı ekle"
 msgid "Are you sure you want to delete the username from"
 msgstr "Kullanıcı adını silmek istediğinizden emin misiniz?"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:37
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:58
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67
 msgid "Cancel"
 msgstr "İptal"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
+#, fuzzy
+msgid "Changed the username."
+msgstr "Kullanıcı adını sil"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
@@ -36,32 +42,44 @@ msgstr ""
 "Herhangi bir kullanıcı/şifreyi kaldırmak için \"sil\" butonuna tıklayınız, "
 "artık o kişi bir kullanıcı olamayacak."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:42
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
+msgid "Confirm user deletion"
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99
+msgid "Could not create the user. Sorry."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:38
 msgid "Created on"
 msgstr "Oluşturuldu"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:40
-#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:6
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41
 msgid "Delete"
 msgstr "Sil"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:30
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94
+msgid "Duplicate username, please choose another username."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
 msgid "E-mail"
 msgstr "E-posta"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:21
+#: modules/mod_admin_identity/templates/admin_users.tpl:16
 msgid ""
 "Every page/person can be made into a user on the edit page.\n"
-"\t\t\t\tThe difference between a user and a normal page is only\n"
-"\t\t\t\tthat the former has logon credentials attached to its page record."
+"        The difference between a user and a normal page is only\n"
+"        that the former has logon credentials attached to its page record."
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:12
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
 msgstr "İlk"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:39
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 msgid ""
 "Give an unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
@@ -69,7 +87,7 @@ msgstr ""
 "Özgün bir kullanıcı adı ve şifresi veriniz. Kullanıcı adları ve şifreler "
 "büyük/küçük harf duyarlıdır, giriş yaparken dikkat ediniz."
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:8
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
 msgid ""
 "Give the name and the e-mail address of the new user. A <em>person</em> page "
 "will be created for this user."
@@ -77,27 +95,27 @@ msgstr ""
 "Yeni kullanıcının adını ve e-mail adresini veriniz. Bu kullanıcı için bir "
 "<em>person</em> sayfası yaratılacak."
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Help about user credentials."
 msgstr "Kullanıcı kimlikleriyle ilgili yardım"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:12
+#: modules/mod_admin_identity/templates/admin_users.tpl:21
 msgid "Make a new user"
 msgstr "Yeni kullanıcı oluştur"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:41
+#: modules/mod_admin_identity/templates/admin_users.tpl:37
 msgid "Modified on"
 msgstr "Değiştirildi"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:39
+#: modules/mod_admin_identity/templates/admin_users.tpl:35
 msgid "Name"
 msgstr "İsim"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:6
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:5
 msgid "Name and e-mail address"
 msgstr "İsim ve e-posta adresi"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Need more help?"
 msgstr ""
 
@@ -105,30 +123,55 @@ msgstr ""
 msgid "No users found."
 msgstr "Kullanıcı bulunamadı."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:43
-msgid "Options"
-msgstr "Seçenekler"
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103
+#, fuzzy
+msgid "Only administrators can add users."
+msgstr "Kullanıcı eklemek için bir yönetici olmalısınız."
+
+#: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47
+msgid "Only administrators can delete usernames."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56
+#, fuzzy
+msgid "Only an administrator can delete usernames."
+msgstr "Kullanıcı eklemek için bir yönetici olmalısınız."
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89
+msgid "Only an administrator or the user him/herself can set a password."
+msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:50
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59
 msgid "Password"
 msgstr "Şifre"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:35
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:44
 msgid "Save"
 msgstr "Kaydet"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:17
 msgid "Set username / password"
 msgstr "Kullnıcı adı / şifre oluştur"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:18
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
+#, fuzzy
+msgid "Set username/ password"
+msgstr "Kullnıcı adı / şifre oluştur"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
 msgstr "Sur. prefix"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:24
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
 msgid "Surname"
 msgstr "Soyad"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84
+#, fuzzy
+msgid "The new username/ password has been set."
+msgstr "Kullanıcı adı / şifre belirle"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid ""
@@ -136,21 +179,30 @@ msgid ""
 "edit your site's configuration file at"
 msgstr ""
 
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80
+msgid "The username is already in use, please try another."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46
+msgid "There is no username coupled to this person."
+msgstr ""
+
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
 msgstr "Geri alınamaz. Kullanıcı adı ve şifre kaybedilir."
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:16
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
 msgid "This person is also a user."
 msgstr "Bu kişi aynı zamanda bir kullanıcı."
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:26
 msgid "This person is not yet a user."
 msgstr "Bu kişi henüz bir kullanıcı değil."
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:20
-#: modules/mod_admin_identity/templates/admin_users.tpl:40
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
+#: modules/mod_admin_identity/templates/admin_users.tpl:36
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51
 msgid "Username"
 msgstr "Kullanıcı adı"
 
@@ -158,17 +210,20 @@ msgstr "Kullanıcı adı"
 msgid "Username / password"
 msgstr "Kullanıcı adı / şifre"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
 msgid "Username and password"
 msgstr "Kullanıcı adı ve şifre"
 
+#: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45
+msgid "Username has been deleted."
+msgstr ""
+
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
-#: modules/mod_admin_identity/templates/admin_users.tpl:32
-#: modules/mod_admin_identity/templates/_admin_menu_module.tpl:2
+#: modules/mod_admin_identity/templates/admin_users.tpl:9
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:11
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid ""
 "When you add credentials to a person then the person becomes an user. A "
 "person or machine can log on with those credentials and perform actions on "
@@ -179,15 +234,19 @@ msgstr ""
 "can log on with those credentials and perform actions on your Zotonic system."
 "<br/><br/>Kullanıcının yapabilecekleri üyesi olduğu gruba dayanır."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:14
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
+msgid "You are not allowed to create the person page."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:24
 msgid "You need to be an administrator to add users."
 msgstr "Kullanıcı eklemek için bir yönetici olmalısınız."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:55
+#: modules/mod_admin_identity/templates/admin_users.tpl:52
 msgid "delete username"
 msgstr "Kullanıcı adını sil"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:57
+#: modules/mod_admin_identity/templates/admin_users.tpl:54
 msgid "edit"
 msgstr "düzenle"
 
@@ -195,21 +254,27 @@ msgstr "düzenle"
 msgid "if you want to change the admin password."
 msgstr ""
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:33
+#: modules/mod_admin_identity/templates/admin_users.tpl:10
 msgid "matching"
 msgstr "eşleştirme"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:35
+#: modules/mod_admin_identity/templates/admin_users.tpl:12
 msgid "overview"
 msgstr "genel bakış"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:53
+#: modules/mod_admin_identity/templates/admin_users.tpl:50
 msgid "set username/ password"
 msgstr "Kullanıcı adı / şifre belirle"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:34
+#: modules/mod_admin_identity/templates/admin_users.tpl:11
 msgid "show all"
 msgstr "tümünü göster"
+
+#~ msgid "Add or remove credentials."
+#~ msgstr "Yetki ekle veya kaldır."
+
+#~ msgid "Options"
+#~ msgstr "Seçenekler"
 
 #~ msgid "make smaller"
 #~ msgstr "ufalt"

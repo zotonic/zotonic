@@ -93,7 +93,7 @@ msgid ""
 "Log incoming/outgoing e-mail"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_base.tpl:9 ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 
+#: ./modules/mod_logging/templates/admin_log.tpl:3 ./modules/mod_logging/templates/admin_log.tpl:5 ./modules/mod_logging/templates/admin_log_base.tpl:9 
 msgid ""
 "Log messages"
 msgstr ""
@@ -108,12 +108,12 @@ msgid ""
 "Message nr"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:30 ./modules/mod_logging/templates/admin_log.tpl:12 
+#: ./modules/mod_logging/templates/admin_log.tpl:12 ./modules/mod_logging/templates/admin_log_email.tpl:30 
 msgid ""
 "Most recent messages"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_email.tpl:121 ./modules/mod_logging/templates/admin_log.tpl:22 
+#: ./modules/mod_logging/templates/admin_log.tpl:22 ./modules/mod_logging/templates/admin_log_email.tpl:121 
 msgid ""
 "No log messages."
 msgstr ""

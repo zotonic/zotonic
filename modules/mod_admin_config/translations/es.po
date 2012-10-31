@@ -13,13 +13,19 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 14:15-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
+#, fuzzy
+msgid "Add configuration key"
+msgstr "Configuración"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
 msgid "Add key"
 msgstr "Agregar clave"
 
@@ -28,79 +34,101 @@ msgid "Are you sure you want to delete the configuration key"
 msgstr "Está seguro de que quiere eliminar la clave de configuración"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
-#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
 msgid "Cancel"
 msgstr "Cancelar"
-
-#: modules/mod_admin_config/templates/_admin_menu_module.tpl:2
-msgid "Config"
-msgstr "Config"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Configuración"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:17
-msgid "Configuration overview"
-msgstr "Resumen de configuración"
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46
+#, fuzzy
+msgid "Confirm delete"
+msgstr "borrar"
 
-#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:6
+#: modules/mod_admin_config/templates/admin_config.tpl:36
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8
 msgid "Delete"
 msgstr "Borrar"
 
-#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:13
-#: modules/mod_admin_config/templates/admin_config.tpl:21
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:48
+#: modules/mod_admin_config/templates/admin_config.tpl:37
+msgid "Edit"
+msgstr ""
+
+#: modules/mod_admin_config/templates/admin_config.tpl:20
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15
 msgid "Key"
 msgstr "Clave"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:23
+#: modules/mod_admin_config/templates/admin_config.tpl:11
+#, fuzzy
+msgid "Make a new config setting"
+msgstr "crear una nueva clave de configuración"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:22
 msgid "Modified"
 msgstr "Modificado"
 
+#: modules/mod_admin_config/templates/admin_config.tpl:19
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7
-#: modules/mod_admin_config/templates/admin_config.tpl:20
 msgid "Module"
 msgstr "Módulo"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:47
+#: modules/mod_admin_config/templates/admin_config.tpl:50
 msgid "No configurations found."
 msgstr "No se encontraron configuraciones."
 
-#: modules/mod_admin_config/templates/admin_config.tpl:24
-msgid "Options"
-msgstr "Opciones"
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63
+msgid "Only administrators can change the configuration."
+msgstr ""
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
+msgid "Only administrators can delete configurations."
+msgstr ""
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
+msgid "Only an administrator can add configuration keys."
+msgstr ""
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr "Por favor ingrese el módulo, clave y valor para la nueva clave de configuración."
+msgstr ""
+"Por favor ingrese el módulo, clave y valor para la nueva clave de "
+"configuración."
 
-#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
 msgid "Save"
 msgstr "Guardar"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:10
+#: modules/mod_admin_config/templates/admin_config.tpl:8
 msgid "System Configuration"
 msgstr "Configuración de Sistema"
 
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61
+msgid "The config key already exists, please choose another key name."
+msgstr ""
+
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Esto no se puede deshacer. La clave de configuración de perderá para siempre."
+msgstr ""
+"Esto no se puede deshacer. La clave de configuración de perderá para siempre."
 
-#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:19
-#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:8
-#: modules/mod_admin_config/templates/admin_config.tpl:22
+#: modules/mod_admin_config/templates/admin_config.tpl:21
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Valor"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:37
-msgid "delete"
-msgstr "borrar"
+#~ msgid "Config"
+#~ msgstr "Config"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:39
-msgid "edit"
-msgstr "editar"
+#~ msgid "Configuration overview"
+#~ msgstr "Resumen de configuración"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:12
-msgid "make a new config setting"
-msgstr "crear una nueva clave de configuración"
+#~ msgid "Options"
+#~ msgstr "Opciones"
 
+#~ msgid "edit"
+#~ msgstr "editar"

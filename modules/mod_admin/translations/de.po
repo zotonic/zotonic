@@ -13,929 +13,1214 @@ msgstr ""
 "PO-Revision-Date: 2012-07-04 16:18+0100\n"
 "Last-Translator: Hans-Christian Espérer <hc-transl@hcesperer.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:25
+#: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:4
+msgid "+ add block"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_edit.tpl:37
 msgid "<em>untitled</em>"
 msgstr "<em>unbenannt</em>"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15
-msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+msgid ""
+"<strong>First</strong> also known as given name, forename or Christen name."
+"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
+"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
+"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
+"name or last name."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14
 msgid "Access control"
 msgstr "Zugriffskontrolle"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:48
-msgid "Actions"
-msgstr "Aktionen"
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
+#, fuzzy
+msgid "Add a connection: "
+msgstr "Seitenquerverweise"
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:17
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
 msgstr "Neue Mediendatei hinzufügen"
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:10
+#: modules/mod_admin/templates/_admin_edit_body.tpl:20
+msgid "Add link"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:10
 msgid "Add media to body"
 msgstr "Mediendatei zur Seite hinzufügen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:5
+#: modules/mod_admin/mod_admin.erl:307
+#, fuzzy
+msgid "Added the connection to"
+msgstr "Neuen Querverweis anlegen"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:5
 msgid "Address"
 msgstr "Adresse"
 
-#: ./modules/mod_admin/templates/admin_base.tpl:5
+#: modules/mod_admin/templates/admin_base.tpl:5
 msgid "Admin"
 msgstr "Admin"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:6
+#: modules/mod_admin/templates/admin_logon.tpl:4
+msgid "Admin log on"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:5
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:32
+#: modules/mod_admin/templates/admin_overview.tpl:14
 msgid "All Categories"
 msgstr "Alle Kategorien"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:24
+#: modules/mod_admin/templates/admin.tpl:17
+#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_overview.tpl:51
+#, fuzzy
+msgid "All media"
+msgstr "Benutzte Mediendateien"
+
+#: modules/mod_admin/templates/admin.tpl:16
+#: modules/mod_admin/templates/admin_media.tpl:23
+#: modules/mod_admin/templates/admin_overview.tpl:50
+#, fuzzy
+msgid "All pages"
+msgstr "Alle Kategorien"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:24
 msgid "Alternative telephone"
 msgstr "Zweite Telefonnummer"
 
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:27
-msgid "Alternatively, choose an item from this predefined list:"
-msgstr "Sie können auch ein Element aus dieser Liste auswählen:"
+#: modules/mod_admin/templates/admin_media.tpl:13
+msgid "And media can also be viewed on their own page."
+msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:3
-msgid "Are you sure you want to delete the"
-msgstr "Sind Sie sicher, daß Sie folgendes löschen möchten: "
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:10
+#, fuzzy
+msgid "Any category"
+msgstr "Kategorie ändern"
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
 msgstr "Sind Sie Sicher, daß Sie diese Seite löschen möchten: "
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:14
+#: modules/mod_admin/templates/_admin_menu.tpl:40
+#, fuzzy
+msgid "Are you sure you want to exit the admin interface?"
+msgstr "Sind Sie Sicher, daß Sie diese Seite löschen möchten: "
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:7
+msgid "Aside"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
 msgid "Ask google to not index this page"
 msgstr "Google bitten, diese Seite nicht zu indizieren"
 
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:3
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:3
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:13
 msgid "Attached media"
 msgstr "Benutzte Mediendateien"
 
-#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:3
+#: modules/mod_admin/templates/_admin_edit_basics.tpl:3
 msgid "Basic"
 msgstr "Basic"
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:13
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:68
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:3
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:3
+msgid "Block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:7
+msgid "Block name"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:6
+msgid "Block quote"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:30
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
+#: modules/mod_admin/templates/_action_dialog_zlink.tpl:19
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:16
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:64
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:27
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:13
-#: ./modules/mod_admin/templates/admin_referrers.tpl:26
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:7
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:29
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20
+#: modules/mod_admin/templates/admin_referrers.tpl:21
+#: modules/mod_admin/templates/_admin_overview_list.tpl:8
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:39
 msgid "Category"
 msgstr "Kategorie"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:28
+#: modules/mod_admin/templates/admin_edit.tpl:29
+#: modules/mod_admin/templates/admin_edit.tpl:30
 msgid "Change category"
 msgstr "Kategorie ändern"
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:9
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Wählen Sie eine Mediendatei aus, die im Text eingefügt werden soll."
 
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:2
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid "Choose the new category for this page."
 msgstr "Wählen Sie die neue Kategorie für diese Seite."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:68
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:109
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:97
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:162
 msgid "City"
 msgstr "Stadt"
 
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
 msgid "Community members"
 msgstr "Mitglieder der Community"
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:28
+msgid "Confirm block removal"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
+#, fuzzy
+msgid "Confirm delete"
+msgstr "löschen"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:40
+msgid "Confirm logoff"
+msgstr ""
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_page.tpl:10
+#, fuzzy
+msgid "Connect a page"
+msgstr "eine Querverbindung zu einer Seite"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:3
 msgid "Content"
 msgstr "Inhalt"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:83
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:124
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:60
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:125
 msgid "Country"
 msgstr "Land"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:22
+#: modules/mod_admin/templates/admin_edit.tpl:16
 msgid "Created by"
 msgstr "Erstellt von"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:10
+#: modules/mod_admin/templates/_admin_overview_list.tpl:11
 msgid "Created on"
 msgstr "Erstellt am"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:27
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:38
 msgid "Customize page slug"
 msgstr "Slug der Seite festlegen"
 
-#: ./modules/mod_admin/templates/admin.tpl:3
-#: ./modules/mod_admin/templates/admin.tpl:9
-#: ./modules/mod_admin/templates/admin_base.tpl:67
+#: modules/mod_admin/templates/admin.tpl:3
+#: modules/mod_admin/templates/admin.tpl:7
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5
 msgid "Date range"
 msgstr "Zeitraum"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
 msgid "Define who can see or edit this page."
 msgstr "Geben Sie an, wer diese Seite sehen oder editieren kann."
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:8
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:31
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:55
 msgid "Delete"
 msgstr "Löschen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:55
 msgid "Delete this page."
 msgstr "Diese Seite löschen."
 
-#: ./modules/mod_admin/templates/admin_media.tpl:46
-msgid "Dimensions"
-msgstr "Abmessungen"
+#: modules/mod_admin/templates/_rsc_edge.tpl:7
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:9
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:5
+msgid "Disconnect"
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:40
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:43
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:29
+msgid "Do you want to remove this block?"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:23
+#, fuzzy
+msgid "Download"
+msgstr "herunterladen"
+
+#: modules/mod_admin/templates/_rsc_edge.tpl:6
+#, fuzzy
+msgid "Drag to change connection position"
+msgstr "Seitenquerverweise"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:4
+msgid "Drag to change position"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:59
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:62
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:21
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:26
 msgid "Duplicate page"
 msgstr "Seite duplizieren"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:40
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:45
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:59
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
 msgid "Duplicate this page."
 msgstr "Diese Seite duplizieren."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:38
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin/templates/_rsc_edge.tpl:8
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./modules/mod_admin/templates/_edit_link.tpl:21
+#: modules/mod_admin/templates/_edit_link.tpl:21
 msgid "Edit this page"
 msgstr "Diese Seite bearbeiten"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:13
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:13
 msgid "Electronic address"
 msgstr "E-Mail-Adresse"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:31
+#: modules/mod_admin/mod_admin.erl:133
+#, fuzzy
+msgid "Embed page"
+msgstr "Die Seite"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:31
 msgid "Emergency telephone"
 msgstr "Notfalltelefon"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
-msgid "Every page can have a date range. For example if the page is an event or description of someone\\'s life."
-msgstr "Für jede Seite kann ein Zeitraum angegeben werden. Zum Beispiel eine Seite über eine Veranstaltung oder jemandes Leben"
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
+msgid ""
+"Every page can have a date range. For example if the page is an event or "
+"description of someone\\'s life."
+msgstr ""
+"Für jede Seite kann ein Zeitraum angegeben werden. Zum Beispiel eine Seite "
+"über eine Veranstaltung oder jemandes Leben"
 
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:18
-msgid "Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "Jede Seite ist genau einer Kategorie zugeordnet. Die Kategorie definiert, was die Seite repräsentiert. Zum Beispiel ein Ereignis, ein Produkt oder eine Person. Die Kategorien sind hierarchisch angeordnet. So kann es beispielsweise die 'Vehikel'-Kategorie geben mit den Unterkategorien 'Auto' und 'Fahrrad'."
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:1
+msgid ""
+"Every page is categorized in exactly one category.  The category defines "
+"what the page represents. For example an event, a product or a person.  The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Jede Seite ist genau einer Kategorie zugeordnet. Die Kategorie definiert, "
+"was die Seite repräsentiert. Zum Beispiel ein Ereignis, ein Produkt oder "
+"eine Person. Die Kategorien sind hierarchisch angeordnet. So kann es "
+"beispielsweise die 'Vehikel'-Kategorie geben mit den Unterkategorien 'Auto' "
+"und 'Fahrrad'."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:28
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
 msgid "Featured"
 msgstr "Featured"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_media.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_media.tpl:5
 msgid "File / media content"
 msgstr "Datei/Medieninhalt"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:45
-msgid "Filename"
-msgstr "Dateiname"
+#: modules/mod_admin/templates/admin_overview.tpl:11
+#, fuzzy
+msgid "Filter on category"
+msgstr "Nach Kategorie filtern:"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:20
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:17
+msgid "Find Page"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:2
+msgid "Find an existing page to connect"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:89
+msgid "Find page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:18
 msgid "First"
 msgstr "Vorname"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:18
-msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Die URL-Dispatchregel-, Template- und Bibliotheks- und eigentlich sämtliche Caches leeren."
+#: modules/mod_admin/templates/admin_status.tpl:17
+msgid ""
+"Flush all URL dispatch rules, template- and library caches and other in-"
+"memory cached data."
+msgstr ""
+"Die URL-Dispatchregel-, Template- und Bibliotheks- und eigentlich sämtliche "
+"Caches leeren."
 
-#: ./modules/mod_admin/templates/admin_status.tpl:17
+#: modules/mod_admin/templates/admin_status.tpl:16
 msgid "Flush system caches"
 msgstr "System-Caches leeren"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
 msgid "From"
 msgstr "Von"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:6
-msgid "Geodata"
-msgstr "Geodaten"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
 msgid "Go back."
 msgstr "Zurückgehen."
 
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
 msgid "Group members"
 msgstr "Gruppenmitglieder"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15
+#: modules/mod_admin/mod_admin.erl:131
+msgid "Header"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid "Help about date ranges."
 msgstr "Hilfe zu Zeiträumen."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
 msgid "Help about page connections."
 msgstr "Hilfe zu Querverbindungen."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
 msgid "Help about person name."
 msgstr "Hilfe zu 'Name einer Person'."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
 msgid "Help about publication date range."
 msgstr "Hilfe zu Veröffentlichungszeiträumen."
 
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:14
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
-"Here you can edit the arguments of the  search query. Every argument goes on its own line. For more information, see the\n"
-"		<a href=\"http://zotonic.com/documentation/761/the-query-search-model\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Hier können Sie die Argumente einer Suchanfrage bearbeiten. Jedes Argument kommt in eine neue Zeile. Für weitere Informationen, konsultieren Sie die <a href=\"http://zotonic.com/documentation/761/the-query-search-model\">Dokumentation über Query-Argumente</a> auf der Zotonic-Webseite."
+"Here you can edit the arguments of the  search query. Every argument goes on "
+"its own line. For more information, see the\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">documentation on the query arguments</a> on the Zotonic website."
+msgstr ""
+"Hier können Sie die Argumente einer Suchanfrage bearbeiten. Jedes Argument "
+"kommt in eine neue Zeile. Für weitere Informationen, konsultieren Sie die <a "
+"href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">Dokumentation über Query-Argumente</a> auf der Zotonic-Webseite."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:14
-msgid "Here you can edit the person's name.  Use the title of the base content for the display name of this person."
-msgstr "Hier können Sie den Namen einer Person bearbeiten. Geben Sie als Titel der Seite den Namen der Person an, der für alle sichtbar sein soll."
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+msgid ""
+"Here you can edit the person's name.  Use the title of the base content for "
+"the display name of this person."
+msgstr ""
+"Hier können Sie den Namen einer Person bearbeiten. Geben Sie als Titel der "
+"Seite den Namen der Person an, der für alle sichtbar sein soll."
 
-#: ./modules/mod_admin/templates/admin.tpl:44
+#: modules/mod_admin/templates/admin_media.tpl:34
+msgid "Info"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:5
+msgid "Info link with modal popup"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:4
+msgid "Inline block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:13
+msgid "Insert image"
+msgstr ""
+
+#: modules/mod_admin/templates/admin.tpl:39
 msgid "Latest modified events"
 msgstr "Zuletzt bearbeitete Ereignisse"
 
-#: ./modules/mod_admin/templates/admin.tpl:38
+#: modules/mod_admin/templates/admin.tpl:34
 msgid "Latest modified locations"
 msgstr "Zuletzt bearbeitete Orte"
 
-#: ./modules/mod_admin/templates/admin.tpl:49
+#: modules/mod_admin/templates/admin.tpl:43
 msgid "Latest modified media items"
 msgstr "Zuletzt bearbeitete Mediendateien"
 
-#: ./modules/mod_admin/templates/admin.tpl:31
+#: modules/mod_admin/templates/admin.tpl:27
 msgid "Latest modified persons"
 msgstr "Zuletzt bearbeitete Personen"
 
-#: ./modules/mod_admin/templates/admin.tpl:28
+#: modules/mod_admin/templates/admin.tpl:24
 msgid "Latest modified texts"
 msgstr "Zuletzt bearbeitete Texte"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:19
-msgid "Latitude"
-msgstr "Breitengrad"
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:28
+msgid ""
+"Live query, send notifications when matching items are updated or inserted."
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:26
-msgid "Longitude"
-msgstr "Längengrad"
+#: modules/mod_admin/templates/_admin_menu.tpl:39
+msgid "Log Off"
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:96
+#: modules/mod_admin/templates/admin_logon.tpl:21
+msgid "Log on to"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:121
 msgid "Mailing address"
 msgstr "Postalische Anschrift"
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:13
 msgid "Main"
 msgstr "Haupt"
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:46
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:62
 msgid "Make"
 msgstr "Anlegen: "
 
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:4
-msgid "Make a new connection"
-msgstr "Neuen Querverweis anlegen"
-
-#: ./modules/mod_admin/templates/admin.tpl:19
-#: ./modules/mod_admin/templates/admin_media.tpl:26
-#: ./modules/mod_admin/templates/admin_overview.tpl:14
+#: modules/mod_admin/templates/admin_media.tpl:20
 msgid "Make a new media item"
 msgstr "Neue Mediendatei anlegen"
 
-#: ./modules/mod_admin/templates/admin.tpl:15
-#: ./modules/mod_admin/templates/admin_overview.tpl:13
-msgid "Make a new page"
+#: modules/mod_admin/templates/admin.tpl:11
+#: modules/mod_admin/templates/admin_overview.tpl:45
+#, fuzzy
+msgid "Make a new page or media"
 msgstr "Neue Seite anlegen"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:67
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Make media item"
 msgstr "Neue Mediendatei anlegen"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:3
-#: ./modules/mod_admin/templates/admin_media.tpl:22
-#: ./modules/mod_admin/templates/admin_base.tpl:69
+#: modules/mod_admin/templates/admin_media.tpl:3
+#: modules/mod_admin/templates/admin_media.tpl:9
 msgid "Media"
 msgstr "Mediendatei"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:61
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL"
 msgstr "URL zu Mediendatei"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:33
-msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Mit Mediendateien sind alle hochgeladenen Bilder, Videos und Dokumente gemeint. Mediendateien können zu Seiten hinzugefügt werden."
+#: modules/mod_admin/templates/admin_media.tpl:12
+msgid ""
+"Media encompasses all uploaded images, movies and documents. Media can be "
+"attached to pages."
+msgstr ""
+"Mit Mediendateien sind alle hochgeladenen Bilder, Videos und Dokumente "
+"gemeint. Mediendateien können zu Seiten hinzugefügt werden."
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:28
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:25
 msgid "Media file"
 msgstr "Mediendatei"
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Auf dieser Seite benutzte Mediendateien"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:38
-msgid "Media overview"
-msgstr "Übersicht über alle Mediendateien"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:22
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:54
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:17
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:18
 msgid "Media title"
 msgstr "Titel der Mediendatei"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:27
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:25
 msgid "Middle"
 msgstr "Mitte"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:20
+#: modules/mod_admin/templates/admin_edit.tpl:14
 msgid "Modified"
 msgstr "Geändert"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:19
-#: ./modules/mod_admin/templates/admin_referrers.tpl:28
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:16
+#: modules/mod_admin/templates/admin_referrers.tpl:24
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
 msgid "Modified by"
 msgstr "Geändert von"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:16
-#: ./modules/mod_admin/templates/admin_referrers.tpl:27
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:13
+#: modules/mod_admin/templates/admin_referrers.tpl:23
+#: modules/mod_admin/templates/_admin_overview_list.tpl:14
 msgid "Modified on"
 msgstr "Geändert am"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
+msgid "Name"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
 msgid "Need more help?"
 msgstr "Benötigen Sie weitere Hilfe?"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:50
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:8
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:21
+#, fuzzy
+msgid "New Page"
+msgstr "Seiten"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:3
+#, fuzzy
+msgid "New page"
+msgstr "Die Seite"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:50
 msgid "Next in category: "
 msgstr "Nächstes in Kategorie: "
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:51
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:57
 msgid "No items."
 msgstr "Keine Elemente."
 
-#: ./modules/mod_admin/templates/admin_media.tpl:74
+#: modules/mod_admin/templates/admin_media.tpl:71
 msgid "No media found."
 msgstr "Keine Mediendateien gefunden."
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:42
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/admin_referrers.tpl:48
+#: modules/mod_admin/templates/_admin_overview_list.tpl:42
 msgid "No pages found."
 msgstr "Keine Seiten gefunden."
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:46
-msgid "No referrers found."
-msgstr "Keine Querverweise gefunden."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:5
 msgid "Page connections"
 msgstr "Seitenquerverweise"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:36
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:57
 msgid "Page description"
 msgstr "Seitenbeschreibung"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:31
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:49
 msgid "Page keywords"
 msgstr "Der Seite zugeordnete Keywords"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:16
 msgid "Page path, default is"
 msgstr "Pfad der Seite, Standard: "
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:33
 msgid "Page slug"
 msgstr "Slug der Seite"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
 msgid "Page title"
 msgstr "Titel der Seite"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3
-#: ./modules/mod_admin/templates/admin_base.tpl:68
+#: modules/mod_admin/templates/admin_overview.tpl:3
 msgid "Pages"
 msgstr "Seiten"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:23
+#: modules/mod_admin/templates/admin_overview.tpl:33
 msgid "Pages overview"
 msgstr "Übersicht über alle Seiten"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:7
-msgid "Performer"
-msgstr "Künstler"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:5
 msgid "Person name"
 msgstr "Name der Person"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:13
-msgid "Please click on the map to select the location."
-msgstr "Clicken Sie auf die Karte, um die Position festzulegen."
-
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
 msgid "Please fill in the title"
 msgstr "Geben Sie den Titel an"
 
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3
 msgid "Please fill in the title of the new page."
 msgstr "Geben Sie den Titel der neuen Seite an."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:73
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:114
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:104
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:169
 msgid "Postcode"
 msgstr "Postleitzahl"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:25
+#: modules/mod_admin/templates/admin_referrers.tpl:22
 msgid "Predicate"
 msgstr "Prädikat"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:42
+#: modules/mod_admin/templates/admin_media.tpl:32
 msgid "Preview"
 msgstr "Vorschau"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:54
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:46
 msgid "Previous in category: "
 msgstr "Vorheriges in aktueller Kategorie:"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:31
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
+msgid "Protect"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:37
 msgid "Protect from deletion"
 msgstr "Nicht löschbar"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
+msgid "Publication date of original article"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:5
 msgid "Publication period"
 msgstr "Veröffentlichungszeitraum"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:5
 msgid "Publish this page"
 msgstr "Diese Seite veröffentlichen"
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:37
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:29
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:47
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:35
-msgid "Published?"
-msgstr "Veröffentlicht?"
-
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid "Query"
 msgstr "Suchanfrage"
 
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:32
 msgid "Query preview"
 msgstr "Vorschau Suchanfrage"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:23
-msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
+#: modules/mod_admin/templates/admin_status.tpl:24
+msgid ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
 msgstr "Alle Such-Indizes neu berechnen. Kann viel Zeit in Anspruch nehmen!"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:22
+#: modules/mod_admin/templates/admin_status.tpl:23
 msgid "Rebuild search indices"
 msgstr "Such-Indizes neu berechnen"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:28
-msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "Nummerierung des Kategorienbaums neu berechnen. Kann viel Zeit in Anspruch nehmen!"
+#: modules/mod_admin/templates/admin_status.tpl:31
+msgid ""
+"Recalculate the numbering of the category tree. This can take a long time."
+msgstr ""
+"Nummerierung des Kategorienbaums neu berechnen. Kann viel Zeit in Anspruch "
+"nehmen!"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:21
-msgid "Referrers"
-msgstr "Querverweise"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:3
-#: ./modules/mod_admin/templates/admin_referrers.tpl:9
+#: modules/mod_admin/templates/admin_referrers.tpl:3
+#: modules/mod_admin/templates/admin_referrers.tpl:7
 msgid "Referrers to"
 msgstr "Querverweise auf"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:26
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:32
 msgid "Remarks"
 msgstr "Anmerkungen"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:27
+#: modules/mod_admin/templates/admin_status.tpl:30
 msgid "Renumber category tree"
 msgstr "Kategorienbaum neu durchnummerieren"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:67
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Replace media item"
 msgstr "Mediendatei austauschen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_media.tpl:15
+#: modules/mod_admin/templates/_admin_edit_media.tpl:24
+#: modules/mod_admin/templates/_admin_edit_media.tpl:37
 msgid "Replace this media item"
 msgstr "Diese Mediendatei austauschen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:5
 msgid "SEO Content"
 msgstr "SEO-Inhalt"
 
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:12
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:49
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:66
 msgid "Save"
 msgstr "Speichern"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:19
+#, fuzzy
+msgid "Save &amp; view"
+msgstr "speichern &amp; anzeigen"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:19
 msgid "Save and view the page."
 msgstr "Seite Speichern und anzeigen."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:13
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
 msgid "Save this page."
 msgstr "Seite speichern."
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
 msgstr "Andere Mediendateien durchsuchen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:6
 msgid "Search query"
 msgstr "Suchanfrage"
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:22
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:13
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
+msgid "Select a connected image"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:27
 msgid "Short title"
 msgstr "Kurztitel"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13
-msgid "Show this article only between the two dates."
-msgstr "Diesen Artikel nur zwischen zwei Zeitpunkten anzeigen."
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:2
+#, fuzzy
+msgid "Show as"
+msgstr "alle anzeigen"
 
-#: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:98
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:120
 msgid "Something went wrong. Sorry."
 msgstr "Etwas lief schief. Entschuldigung!!"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:10
-msgid "Start date"
-msgstr "Beginn"
+#: modules/mod_admin/mod_admin.erl:311
+msgid "Sorry, you have no permission to add the connection."
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:78
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:119
+#: modules/mod_admin/mod_admin.erl:130
+msgid "Standard"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:113
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:178
 msgid "State"
 msgstr "Bundesland"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:58
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:99
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 1"
 msgstr "Straße"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:63
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:104
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:88
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Noch Straße"
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:13
+#: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
+msgid "Sub pages"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:16
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:34
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:32
 msgid "Sur. prefix"
 msgstr "Namenszusatz"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:41
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
 msgstr "Nachname"
 
-#: ./modules/mod_admin/templates/admin_base.tpl:74
-msgid "System"
-msgstr "System"
-
-#: ./modules/mod_admin/templates/admin_status.tpl:3
+#: modules/mod_admin/templates/admin_status.tpl:3
 msgid "System Status"
 msgstr "Systemzustand"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:15
+#: modules/mod_admin/templates/admin_status.tpl:8
 msgid "System administration"
 msgstr "Systemadministration"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:17
 msgid "Telephone"
 msgstr "Telefon"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16
+#: modules/mod_admin/mod_admin.erl:132
+msgid "Text"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_referrers.tpl:13
 msgid "The following"
 msgstr "Folgt"
 
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
 msgid "The page"
 msgstr "Die Seite"
 
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:5
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
 msgid "The whole world"
 msgstr "Die ganze Welt"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:14
+#: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
 msgstr "Es gibt keine Seiten mit Querverweisen zu dieser Seite"
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:5
-msgid "This can't be undone. Your media will be lost forever."
-msgstr "Dies kann nicht rückgängig gemacht werden. Ihre Mediendatei wird für immer verloren sein."
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:4
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
-msgstr "Dies kann nicht rückgängig gemacht werden. Ihre Seite wird für immer verloren sein."
+msgstr ""
+"Dies kann nicht rückgängig gemacht werden. Ihre Seite wird für immer "
+"verloren sein."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14
-msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "Diese Seite kann mit anderen über Querverweise verbunden werden. Sie können zum Beispiel einen Künstler und eine Band miteinander verbinden."
+#: modules/mod_admin/templates/admin_status.tpl:9
+msgid ""
+"This page holds a collection of administrative options to perform certain "
+"tasks on this Zotonic installation."
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:40
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
+msgid ""
+"This page is able to connect to others. For example you can connect it to an "
+"actor or a brand."
+msgstr ""
+"Diese Seite kann mit anderen über Querverweise verbunden werden. Sie können "
+"zum Beispiel einen Künstler und eine Band miteinander verbinden."
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:39
 msgid "This resource was created by the module"
 msgstr "Diese Resource wurde erzeugt durch das Modul"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:22
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
 msgid "Till"
 msgstr "Bis"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:26
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
-#: ./modules/mod_admin/templates/admin_media.tpl:43
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:4
-#: ./modules/mod_admin/templates/admin_referrers.tpl:24
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:4
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:31
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
+#: modules/mod_admin/templates/admin_media.tpl:33
+#: modules/mod_admin/templates/admin_referrers.tpl:20
+#: modules/mod_admin/templates/_admin_overview_list.tpl:5
 msgid "Title"
 msgstr "Titel"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:14
-msgid "Try to fill the fields automatically from the title of the location"
-msgstr "Versuchen, die Angaben automatisch anhand des Titels zu vervollständigen"
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:5
+msgid "Type text to search"
+msgstr ""
 
-#: ./modules/mod_admin/templates/admin_media.tpl:44
-msgid "Type"
-msgstr "Typ"
-
-#: ./modules/mod_admin/templates/_action_dialog_zlink.tpl:2
+#: modules/mod_admin/templates/_action_dialog_zlink.tpl:2
 msgid "Type the title of the page you want to connect to."
 msgstr "Geben Sie den Titel der Seite an, auf die Sie querverweisen möchten."
 
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:2
-msgid "Type the title of the page you want to connect to.  Click “Make a new connection” when the page does not yet exist."
-msgstr "Geben Sie den Titel der Seite an, auf die Sie querverweisen möchten. Clicken Sie auf \"Neue Querverbindung anlegen\", wenn die Seite noch nicht existiert."
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:5
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:6
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:28
 msgid "URL"
 msgstr "URL"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:31
 msgid "Unique name"
 msgstr "Eindeutiger Name"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:46
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:45
 msgid "Unique uri"
 msgstr "Eindeutiger URI"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:4
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:6
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:3
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:25
 msgid "Upload"
 msgstr "Hochladen"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:11
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:3
 msgid "Upload a file from your computer."
 msgstr "Eine Datei von Ihrem Computer hochladen."
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:43
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:4
 msgid "Upload a file which is already on the internet."
 msgstr "Eine Datei vom Internet auf Ihre Seite hochladen."
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:47
+#: modules/mod_admin/templates/admin_media.tpl:35
 msgid "Uploaded"
 msgstr "Hochgeladen"
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:35
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:36
 msgid "Use the autocompleter to search the media in this site."
-msgstr "Benutzen Sie den Autovervollständiger, um nach Medieninhalten auf der Seite zu suchen."
+msgstr ""
+"Benutzen Sie den Autovervollständiger, um nach Medieninhalten auf der Seite "
+"zu suchen."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:13
-msgid "Used for events and other periods."
-msgstr "Wird für Ereignisse und andere zeitliche Resourcen benutzt."
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
+msgid "Valid for:"
+msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:46
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:49
 msgid "View all referrers"
 msgstr "Alle Querverweise anzeigen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:21
 msgid "View this page."
 msgstr "Diese Seite anzeigen."
 
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
 msgid "Visible for"
 msgstr "Sichtbar für"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:17
 msgid "Visible from"
 msgstr "Sichtbar von"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:22
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:23
 msgid "Visible till"
 msgstr "Sichtbar bis"
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 msgid "Visit full editpage"
 msgstr "Vollständige Editierseite aufrufen"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:55
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:56
 msgid "Visiting address"
 msgstr "Besucheradresse"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:5
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:46
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:47
 msgid "Website"
 msgstr "Webseite"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:12
 msgid "Website for clicks on image"
 msgstr "Webseite, die bei Clicks auf das Bild aufgerufen werden soll"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14
-msgid "When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it"
-msgstr "Eine Seite, für die ein Veröffentlichungszeitraum angegeben ist, wird nur für diesen Zeitraum sichtbar sein. Jedoch können Personen, die berechtigt sind, die Seite zu bearbeiten, selbige immer einsehen."
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
+#, fuzzy
+msgid ""
+"When a page has a publication date range then it will only be visible "
+"between the two dates. Note that when you are allowed to edit the page then "
+"you can always see it."
+msgstr ""
+"Eine Seite, für die ein Veröffentlichungszeitraum angegeben ist, wird nur "
+"für diesen Zeitraum sichtbar sein. Jedoch können Personen, die berechtigt "
+"sind, die Seite zu bearbeiten, selbige immer einsehen."
 
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
 msgstr "Sie sind im Begriff, diese Seite zu duplizieren"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:15
+#: modules/mod_admin/actions/action_admin_delete_media.erl:52
+#, fuzzy
+msgid "You are not allowed to delete this media."
+msgstr "Es ist Ihnen nicht gestattet, zu editieren: "
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
+#, fuzzy
+msgid "You are not allowed to delete this page."
+msgstr "Es ist Ihnen nicht gestattet, zu editieren: "
+
+#: modules/mod_admin/templates/admin_edit.tpl:23
 msgid "You are not allowed to edit the"
 msgstr "Es ist Ihnen nicht gestattet, zu editieren: "
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:13
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:45
-msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "Sie sollten eine Beschreibung der Datei angeben, um sie leichter auffinden und mit anderen teilen zu können."
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6
+msgid ""
+"You have to specify a description of the file to make it easier to find and "
+"share."
+msgstr ""
+"Sie sollten eine Beschreibung der Datei angeben, um sie leichter auffinden "
+"und mit anderen teilen zu können."
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16
+#: modules/mod_admin/templates/admin_referrers.tpl:14
 msgid "a connection to the page"
 msgstr "eine Querverbindung zu einer Seite"
 
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:14
-msgid "add a new media item"
-msgstr "eine neue Mediendatei hinzufügen"
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:34
+#, fuzzy
+msgid "add a connection"
+msgstr "Neuen Querverweis anlegen"
 
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:19
-msgid "add existing media item"
-msgstr "eine vorhandene Mediendatei hinzufügen"
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:15
+#, fuzzy
+msgid "add media item"
+msgstr "Neue Mediendatei anlegen"
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
 msgid "and the category of the new page."
 msgstr "und die Kategorie der neuen Seite."
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:21
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6
+msgid "block"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_edit.tpl:15
 msgid "by"
 msgstr "von"
 
-#: ./modules/mod_admin/templates/_admin_save_buttons.tpl:8
-msgid "cancel"
-msgstr "abbrechen"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:27
-msgid "change"
-msgstr "ändern"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:64
-#: ./modules/mod_admin/templates/admin_referrers.tpl:40
+#: modules/mod_admin/templates/admin_media.tpl:59
 msgid "delete"
 msgstr "löschen"
 
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:20
-msgid "download"
-msgstr "herunterladen"
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:44
-#: ./modules/mod_admin/templates/admin_media.tpl:65
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:36
-#: ./modules/mod_admin/templates/admin_referrers.tpl:41
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:32
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:48
+#: modules/mod_admin/templates/admin_media.tpl:61
+#: modules/mod_admin/templates/admin_referrers.tpl:40
+#: modules/mod_admin/templates/_admin_overview_list.tpl:34
 msgid "edit"
 msgstr "bearbeiten"
 
-#: ./modules/mod_admin/templates/_edit_button.tpl:7
+#: modules/mod_admin/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "diese Seite bearbeiten"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:18
+#: modules/mod_admin/templates/admin_edit.tpl:27
 msgid "editing"
 msgstr "bearbeite"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:30
-msgid "filter on category"
-msgstr "Nach Kategorie filtern:"
-
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
 msgid "has been disconnected."
 msgstr "wurde getrennt."
 
-#: ./modules/mod_admin/templates/admin_edit_widget_std.tpl:15
-msgid "make smaller"
-msgstr "verkleinern"
-
-#: ./modules/mod_admin/templates/admin_overview.tpl:24
+#: modules/mod_admin/templates/admin_overview.tpl:34
 msgid "matching"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:3
-msgid "media from"
-msgstr "mediendatei von"
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:7
+#, fuzzy
+msgid "name"
+msgstr "Nachname"
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
 msgid "of the new"
 msgstr "der/s neuen"
 
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:6
-msgid "or use the autocompleter to search the site."
-msgstr "benutzen Sie das Autovervollständigungsfeature, um die Seite zu durchsuchen."
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16
+#: modules/mod_admin/templates/admin_referrers.tpl:13
 msgid "page has"
 msgstr "die Seite hat"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16
+#: modules/mod_admin/templates/admin_referrers.tpl:13
 msgid "pages have"
 msgstr "die Seiten haben"
 
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:5
+#: modules/mod_admin/templates/_admin_edit_media.tpl:5
 msgid "pixels"
 msgstr "Pixel"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:13
-msgid "save"
-msgstr "speichern"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
-msgid "save &amp; view"
-msgstr "speichern &amp; anzeigen"
-
-#: ./modules/mod_admin/templates/_admin_save_buttons.tpl:4
-#: ./modules/mod_admin/templates/_admin_save_buttons.tpl:6
-msgid "save this page"
-msgstr "diese Seite speichern"
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:18
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:19
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:21
 msgid "show all"
 msgstr "alle anzeigen"
 
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:3
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "rückgängig"
 
-#: ./modules/mod_admin/templates/_choose_media.tpl:8
-#: ./modules/mod_admin/templates/_rsc_edge_media.tpl:7
+#: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:12
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:8
+#: modules/mod_admin/templates/_admin_edit_media.tpl:8
+#: modules/mod_admin/templates/_admin_edit_media.tpl:33
 msgid "uploaded on"
 msgstr "hochgeladen am"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:43
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:35
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:31
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:47
+#: modules/mod_admin/templates/admin_referrers.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:21
 msgid "view"
 msgstr "anzeigen"
 
-#: ./modules/mod_admin/templates/_admin_header_title.tpl:5
+#: modules/mod_admin/templates/_admin_menu.tpl:7
+#: modules/mod_admin/templates/admin_logon.tpl:13
 msgid "visit site"
 msgstr "Seite besuchen"
 
+#~ msgid "Actions"
+#~ msgstr "Aktionen"
+
+#~ msgid "Alternatively, choose an item from this predefined list:"
+#~ msgstr "Sie können auch ein Element aus dieser Liste auswählen:"
+
+#~ msgid "Are you sure you want to delete the"
+#~ msgstr "Sind Sie sicher, daß Sie folgendes löschen möchten: "
+
+#~ msgid "Dimensions"
+#~ msgstr "Abmessungen"
+
+#~ msgid "Filename"
+#~ msgstr "Dateiname"
+
+#~ msgid "Geodata"
+#~ msgstr "Geodaten"
+
+#~ msgid "Latitude"
+#~ msgstr "Breitengrad"
+
+#~ msgid "Longitude"
+#~ msgstr "Längengrad"
+
+#~ msgid "Media overview"
+#~ msgstr "Übersicht über alle Mediendateien"
+
+#~ msgid "No referrers found."
+#~ msgstr "Keine Querverweise gefunden."
+
+#~ msgid "Performer"
+#~ msgstr "Künstler"
+
+#~ msgid "Please click on the map to select the location."
+#~ msgstr "Clicken Sie auf die Karte, um die Position festzulegen."
+
+#~ msgid "Published?"
+#~ msgstr "Veröffentlicht?"
+
+#~ msgid "Referrers"
+#~ msgstr "Querverweise"
+
+#~ msgid "Show this article only between the two dates."
+#~ msgstr "Diesen Artikel nur zwischen zwei Zeitpunkten anzeigen."
+
+#~ msgid "Start date"
+#~ msgstr "Beginn"
+
+#~ msgid "System"
+#~ msgstr "System"
+
+#~ msgid "This can't be undone. Your media will be lost forever."
+#~ msgstr ""
+#~ "Dies kann nicht rückgängig gemacht werden. Ihre Mediendatei wird für "
+#~ "immer verloren sein."
+
+#~ msgid "Try to fill the fields automatically from the title of the location"
+#~ msgstr ""
+#~ "Versuchen, die Angaben automatisch anhand des Titels zu vervollständigen"
+
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgid ""
+#~ "Type the title of the page you want to connect to.  Click “Make a new "
+#~ "connection” when the page does not yet exist."
+#~ msgstr ""
+#~ "Geben Sie den Titel der Seite an, auf die Sie querverweisen möchten. "
+#~ "Clicken Sie auf \"Neue Querverbindung anlegen\", wenn die Seite noch "
+#~ "nicht existiert."
+
+#~ msgid "Used for events and other periods."
+#~ msgstr "Wird für Ereignisse und andere zeitliche Resourcen benutzt."
+
+#~ msgid "add a new media item"
+#~ msgstr "eine neue Mediendatei hinzufügen"
+
+#~ msgid "add existing media item"
+#~ msgstr "eine vorhandene Mediendatei hinzufügen"
+
+#~ msgid "cancel"
+#~ msgstr "abbrechen"
+
+#~ msgid "change"
+#~ msgstr "ändern"
+
+#~ msgid "make smaller"
+#~ msgstr "verkleinern"
+
+#~ msgid "media from"
+#~ msgstr "mediendatei von"
+
+#~ msgid "or use the autocompleter to search the site."
+#~ msgstr ""
+#~ "benutzen Sie das Autovervollständigungsfeature, um die Seite zu "
+#~ "durchsuchen."
+
+#~ msgid "save"
+#~ msgstr "speichern"
+
+#~ msgid "save this page"
+#~ msgstr "diese Seite speichern"

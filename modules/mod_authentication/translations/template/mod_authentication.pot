@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_authentication/templates/_logon_stage.tpl:9 ./modules/mod_authentication/templates/_logon_stage.tpl:42 ./modules/mod_authentication/templates/_logon_password_reset.tpl:48 ./modules/mod_authentication/templates/_logon_password_reminder.tpl:23 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:48 ./modules/mod_authentication/templates/_logon_stage.tpl:9 ./modules/mod_authentication/templates/_logon_stage.tpl:42 ./modules/mod_authentication/templates/_logon_password_reminder.tpl:23 
 msgid ""
 "Back to logon form"
 msgstr ""
@@ -28,7 +28,7 @@ msgid ""
 "Below are your account details and a link to set a new password."
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_stage.tpl:51 ./modules/mod_authentication/templates/_logon_password_reset.tpl:5 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:5 ./modules/mod_authentication/templates/_logon_stage.tpl:51 
 msgid ""
 "Below you can enter a new password for your account"
 msgstr ""
@@ -132,12 +132,12 @@ msgid ""
 "Log on"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/logon.tpl:8 ./modules/mod_authentication/templates/_logon_form.tpl:3 
+#: ./modules/mod_authentication/templates/_logon_form.tpl:3 ./modules/mod_authentication/templates/logon.tpl:8 
 msgid ""
 "Log on to"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_stage.tpl:56 ./modules/mod_authentication/templates/_logon_password_reset.tpl:10 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:10 ./modules/mod_authentication/templates/_logon_stage.tpl:56 
 msgid ""
 "New password"
 msgstr ""
@@ -162,7 +162,7 @@ msgid ""
 "Please confirm your"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_stage.tpl:63 ./modules/mod_authentication/templates/_logon_password_reset.tpl:17 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:17 ./modules/mod_authentication/templates/_logon_stage.tpl:63 
 msgid ""
 "Repeat password"
 msgstr ""
@@ -197,7 +197,7 @@ msgid ""
 "Sorry, your password reset code is unknown or expired"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_stage.tpl:72 ./modules/mod_authentication/templates/_logon_password_reset.tpl:26 ./modules/mod_authentication/templates/_logon_form.tpl:27 
+#: ./modules/mod_authentication/templates/_logon_password_reset.tpl:26 ./modules/mod_authentication/templates/_logon_form.tpl:27 ./modules/mod_authentication/templates/_logon_stage.tpl:72 
 msgid ""
 "Stay logged on unless I log off."
 msgstr ""
@@ -352,7 +352,7 @@ msgid ""
 "request a new password reset code"
 msgstr ""
 
-#: ./modules/mod_authentication/templates/_logon_password_reminder.tpl:12 ./modules/mod_authentication/templates/_logon_form.tpl:12 
+#: ./modules/mod_authentication/templates/_logon_form.tpl:12 ./modules/mod_authentication/templates/_logon_password_reminder.tpl:12 
 msgid ""
 "user@example.com"
 msgstr ""

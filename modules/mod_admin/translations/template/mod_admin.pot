@@ -92,12 +92,12 @@ msgid ""
 "All Categories"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:51 ./modules/mod_admin/templates/admin_media.tpl:24 ./modules/mod_admin/templates/admin.tpl:17 
+#: ./modules/mod_admin/templates/admin.tpl:17 ./modules/mod_admin/templates/admin_media.tpl:24 ./modules/mod_admin/templates/admin_overview.tpl:51 
 msgid ""
 "All media"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:50 ./modules/mod_admin/templates/admin_media.tpl:23 ./modules/mod_admin/templates/admin.tpl:16 
+#: ./modules/mod_admin/templates/admin.tpl:16 ./modules/mod_admin/templates/admin_media.tpl:23 ./modules/mod_admin/templates/admin_overview.tpl:50 
 msgid ""
 "All pages"
 msgstr ""
@@ -162,12 +162,12 @@ msgid ""
 "Block quote"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 ./modules/mod_admin/templates/_admin_edit_blocks.tpl:30 ./modules/mod_admin/templates/_action_dialog_zlink.tpl:19 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:64 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:16 
+#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:30 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35 ./modules/mod_admin/templates/_action_dialog_zlink.tpl:19 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:16 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:64 
 msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/admin_referrers.tpl:21 ./modules/mod_admin/templates/_admin_overview_list.tpl:8 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:39 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20 ./modules/mod_admin/templates/admin_referrers.tpl:21 ./modules/mod_admin/templates/_admin_overview_list.tpl:8 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:39 
 msgid ""
 "Category"
 msgstr ""
@@ -257,7 +257,7 @@ msgid ""
 "Define who can see or edit this page."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:55 ./modules/mod_admin/templates/_admin_edit_blocks.tpl:31 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 
+#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:31 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:55 
 msgid ""
 "Delete"
 msgstr ""
@@ -267,7 +267,7 @@ msgid ""
 "Delete this page."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_rsc_edge_media.tpl:9 ./modules/mod_admin/templates/_rsc_edge.tpl:7 ./modules/mod_admin/templates/_admin_edit_block_li.tpl:5 
+#: ./modules/mod_admin/templates/_rsc_edge.tpl:7 ./modules/mod_admin/templates/_rsc_edge_media.tpl:9 ./modules/mod_admin/templates/_admin_edit_block_li.tpl:5 
 msgid ""
 "Disconnect"
 msgstr ""
@@ -531,7 +531,7 @@ msgid ""
 "Make a new media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:45 ./modules/mod_admin/templates/admin.tpl:11 
+#: ./modules/mod_admin/templates/admin.tpl:11 ./modules/mod_admin/templates/admin_overview.tpl:45 
 msgid ""
 "Make a new page or media"
 msgstr ""
@@ -567,7 +567,7 @@ msgid ""
 "Media on this page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:18 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:17 
+#: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:17 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:18 
 msgid ""
 "Media title"
 msgstr ""
@@ -597,7 +597,7 @@ msgid ""
 "Name"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_person.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15 ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:11 
+#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:11 ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15 
 msgid ""
 "Need more help?"
 msgstr ""
@@ -732,7 +732,7 @@ msgid ""
 "Publish this page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:29 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:47 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 
+#: ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:29 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:47 
 msgid ""
 "Published"
 msgstr ""
@@ -793,7 +793,7 @@ msgid ""
 "SEO Content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:66 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:17 
+#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:17 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:66 
 msgid ""
 "Save"
 msgstr ""
@@ -955,7 +955,7 @@ msgid ""
 "Till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:31 ./modules/mod_admin/templates/admin_referrers.tpl:20 ./modules/mod_admin/templates/admin_media.tpl:33 ./modules/mod_admin/templates/_admin_overview_list.tpl:5 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:31 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 ./modules/mod_admin/templates/admin_media.tpl:33 ./modules/mod_admin/templates/admin_referrers.tpl:20 ./modules/mod_admin/templates/_admin_overview_list.tpl:5 
 msgid ""
 "Title"
 msgstr ""
@@ -1092,7 +1092,7 @@ msgid ""
 "You are not allowed to edit the"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5 
+#: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6 
 msgid ""
 "You have to specify a description of the file to make it easier to find "
 "and share."
@@ -1133,7 +1133,7 @@ msgid ""
 "delete"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:48 ./modules/mod_admin/templates/admin_referrers.tpl:40 ./modules/mod_admin/templates/admin_media.tpl:61 ./modules/mod_admin/templates/_admin_overview_list.tpl:34 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:48 ./modules/mod_admin/templates/admin_media.tpl:61 ./modules/mod_admin/templates/admin_referrers.tpl:40 ./modules/mod_admin/templates/_admin_overview_list.tpl:34 
 msgid ""
 "edit"
 msgstr ""
@@ -1193,7 +1193,7 @@ msgid ""
 "undo"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_rsc_edge_media.tpl:12 ./modules/mod_admin/templates/_choose_media.tpl:9 
+#: ./modules/mod_admin/templates/_choose_media.tpl:9 ./modules/mod_admin/templates/_rsc_edge_media.tpl:12 
 msgid ""
 "untitled"
 msgstr ""
@@ -1208,7 +1208,7 @@ msgid ""
 "view"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_logon.tpl:13 ./modules/mod_admin/templates/_admin_menu.tpl:7 
+#: ./modules/mod_admin/templates/_admin_menu.tpl:7 ./modules/mod_admin/templates/admin_logon.tpl:13 
 msgid ""
 "visit site"
 msgstr ""
