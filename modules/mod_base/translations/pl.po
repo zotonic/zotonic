@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2011-11-13 16:13+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,6 +24,15 @@ msgstr ""
 msgid "Alert"
 msgstr "Ostrzeżenie"
 
+#: modules/mod_base/templates/error.tpl:69
+msgid "Arguments"
+msgstr ""
+
+#: modules/mod_base/templates/text/_ua_select.tpl:5
+#: modules/mod_base/templates/phone/_ua_select.tpl:13
+msgid "Automatic"
+msgstr ""
+
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:6
 msgid "Cancel"
 msgstr "Anuluj"
@@ -31,8 +41,105 @@ msgstr "Anuluj"
 msgid "Confirm"
 msgstr "Potwierdź"
 
-#: modules/mod_base/templates/_action_dialog_confirm.tpl:5
-#: modules/mod_base/templates/_action_dialog_alert.tpl:5
+#: modules/mod_base/templates/directory_index.tpl:16
+msgid "Date"
+msgstr ""
+
+#: modules/mod_base/templates/text/_ua_select.tpl:2
+#: modules/mod_base/templates/phone/_ua_select.tpl:9
+msgid "Desktop"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:70
+msgid "File"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:14
+msgid "Filename"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:28
+msgid "Folder"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:68
+msgid "Function/ template"
+msgstr ""
+
+#: modules/mod_base/templates/email_base.tpl:4
+msgid "Hello from Zotonic"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:4
+#: modules/mod_base/templates/directory_index.tpl:8
+msgid "Index of"
+msgstr ""
+
+#: modules/mod_base/templates/phone/_ua_select.tpl:5
+msgid "Mobile or desktop"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:67
+msgid "Module"
+msgstr ""
+
+#: modules/mod_base/templates/text/_pager.tpl:7
+msgid "Next"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:7
+msgid "No Access"
+msgstr ""
+
+#: modules/mod_base/templates/_action_dialog_confirm.tpl:7
+#: modules/mod_base/templates/_action_dialog_alert.tpl:4
 msgid "OK"
 msgstr "OK"
 
+#: modules/mod_base/templates/text/_ua_select.tpl:4
+#: modules/mod_base/templates/phone/_ua_select.tpl:11
+msgid "Phone"
+msgstr ""
+
+#: modules/mod_base/templates/text/_pager.tpl:4
+msgid "Previous"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:14
+msgid "Reason"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:17
+msgid "Size"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:9
+msgid "Sorry, you don’t have access to this page."
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:18
+msgid "Stack trace"
+msgstr ""
+
+#: modules/mod_base/templates/text/_ua_select.tpl:3
+#: modules/mod_base/templates/phone/_ua_select.tpl:10
+msgid "Tablet"
+msgstr ""
+
+#: modules/mod_base/templates/phone/_ua_select.tpl:12
+msgid "Text"
+msgstr ""
+
+#: modules/mod_base/templates/email_base.tpl:19
+msgid ""
+"This is the base message. When you receive this text then the template "
+"builder did not overrule the <tt>body</tt> block."
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:15
+msgid "Type"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:11
+msgid "error"
+msgstr ""

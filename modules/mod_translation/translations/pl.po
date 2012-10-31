@@ -206,6 +206,7 @@ msgid "Translate this page in other languages."
 msgstr "Dodaj informację o innych wersjach językowych tej strony."
 
 #: modules/mod_translation/templates/admin_translation.tpl:3
+#: modules/mod_translation/mod_translation.erl:463
 msgid "Translation"
 msgstr "Tłumaczenia"
 

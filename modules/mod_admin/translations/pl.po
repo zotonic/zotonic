@@ -142,6 +142,10 @@ msgstr "Poproś Google, by nie indeksowało tej strony"
 msgid "Attached media"
 msgstr "Załączone obiekty mediów"
 
+#: modules/mod_admin/mod_admin.erl:114
+msgid "Auth"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_basics.tpl:3
 msgid "Basic"
 msgstr "Podstawowe"
@@ -220,6 +224,7 @@ msgid "Connect a page"
 msgstr "odniesienie do strony"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/mod_admin.erl:91
 msgid "Content"
 msgstr "Treść"
 
@@ -241,7 +246,7 @@ msgid "Customize page slug"
 msgstr "Dostosuj skrócony adres"
 
 #: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7
+#: modules/mod_admin/templates/admin.tpl:7 modules/mod_admin/mod_admin.erl:86
 msgid "Dashboard"
 msgstr "Kokpit"
 
@@ -514,6 +519,7 @@ msgstr "Utwórz obiekt mediów"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/mod_admin.erl:99
 msgid "Media"
 msgstr "Media"
 
@@ -559,6 +565,10 @@ msgstr "Zmodyfikowany przez"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 msgid "Modified on"
 msgstr "Zmodyfikowany"
+
+#: modules/mod_admin/mod_admin.erl:109
+msgid "Modules"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
 msgid "Name"
@@ -626,6 +636,7 @@ msgid "Page title"
 msgstr "Tytuł strony"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
+#: modules/mod_admin/mod_admin.erl:95
 msgid "Pages"
 msgstr "Strony"
 
@@ -797,6 +808,11 @@ msgstr ""
 msgid "State"
 msgstr "Województwo"
 
+#: modules/mod_admin/mod_admin.erl:122
+#, fuzzy
+msgid "Status"
+msgstr "Województwo"
+
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 1"
@@ -806,6 +822,10 @@ msgstr "Ulica"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Ulica (cd.)"
+
+#: modules/mod_admin/mod_admin.erl:104
+msgid "Structure"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
 msgid "Sub pages"
@@ -822,6 +842,10 @@ msgstr "Przedrostek"
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
 msgstr "Nazwisko"
+
+#: modules/mod_admin/mod_admin.erl:118
+msgid "System"
+msgstr "System"
 
 #: modules/mod_admin/templates/admin_status.tpl:3
 msgid "System Status"
@@ -1168,9 +1192,6 @@ msgstr "odwiedź witrynę"
 
 #~ msgid "Start date"
 #~ msgstr "Data rozpoczęcia"
-
-#~ msgid "System"
-#~ msgstr "System"
 
 #~ msgid "This can't be undone. Your media will be lost forever."
 #~ msgstr ""

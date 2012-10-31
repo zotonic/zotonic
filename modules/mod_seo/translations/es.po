@@ -13,42 +13,43 @@ msgstr ""
 "PO-Revision-Date: 2011-08-12 04:50+0200\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_seo/templates/admin_seo.tpl:30
-msgid "Add a noindex, nofollow element to all pages."
-msgstr "Agregar un elemento \"noindex, nofollow\" a todas las páginas."
+#: modules/mod_seo/mod_seo.erl:42
+msgid "SEO"
+msgstr ""
 
-#: modules/mod_seo/templates/admin_seo.tpl:25
-msgid "Description to include on every page"
-msgstr "Descripción a incluir en cada página"
+#~ msgid "Add a noindex, nofollow element to all pages."
+#~ msgstr "Agregar un elemento \"noindex, nofollow\" a todas las páginas."
 
-#: modules/mod_seo/templates/admin_seo.tpl:32
-msgid "Exclude this site from search engines"
-msgstr "Excluir este sitio de los motores de búsqueda"
+#~ msgid "Description to include on every page"
+#~ msgstr "Descripción a incluir en cada página"
 
-#: modules/mod_seo/templates/admin_seo.tpl:16
-msgid "General SEO Optimization"
-msgstr "Optimización General de SEO"
+#~ msgid "Exclude this site from search engines"
+#~ msgstr "Excluir este sitio de los motores de búsqueda"
 
-#: modules/mod_seo/templates/admin_seo.tpl:13
-msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Aquí puede encontrar ls parámetros para optimizar la indexación de su sitio por los motores de búsqueda."
+#~ msgid "General SEO Optimization"
+#~ msgstr "Optimización General de SEO"
 
-#: modules/mod_seo/templates/admin_seo.tpl:20
-msgid "Keywords to include on every page. Separate keywords with a \",\""
-msgstr "Palabras clave a incluir en todas las páginas. Separe las palabras con una \",\""
+#~ msgid ""
+#~ "Here you find settings to optimize the indexing of your site by search "
+#~ "engines."
+#~ msgstr ""
+#~ "Aquí puede encontrar ls parámetros para optimizar la indexación de su "
+#~ "sitio por los motores de búsqueda."
 
-#: modules/mod_seo/templates/admin_seo.tpl:43
-msgid "Save SEO settings"
-msgstr "Guardar configuración de SEO"
+#~ msgid "Keywords to include on every page. Separate keywords with a \",\""
+#~ msgstr ""
+#~ "Palabras clave a incluir en todas las páginas. Separe las palabras con "
+#~ "una \",\""
 
-#: modules/mod_seo/templates/admin_seo.tpl:3
-#: modules/mod_seo/templates/admin_seo.tpl:12
-msgid "Search Engine Optimization"
-msgstr "Optimización de Motor de Búsquedas"
+#~ msgid "Save SEO settings"
+#~ msgstr "Guardar configuración de SEO"
 
+#~ msgid "Search Engine Optimization"
+#~ msgstr "Optimización de Motor de Búsquedas"

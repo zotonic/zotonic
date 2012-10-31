@@ -140,6 +140,10 @@ msgstr "Avisarle a Google que no indexe esta página"
 msgid "Attached media"
 msgstr "Medios adjuntos"
 
+#: modules/mod_admin/mod_admin.erl:114
+msgid "Auth"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_basics.tpl:3
 msgid "Basic"
 msgstr "Básico"
@@ -221,6 +225,7 @@ msgid "Connect a page"
 msgstr "una conexión a la página"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/mod_admin.erl:91
 msgid "Content"
 msgstr "Contenido"
 
@@ -242,7 +247,7 @@ msgid "Customize page slug"
 msgstr "Personalizar el slug"
 
 #: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7
+#: modules/mod_admin/templates/admin.tpl:7 modules/mod_admin/mod_admin.erl:86
 msgid "Dashboard"
 msgstr "Tablero de control"
 
@@ -521,6 +526,7 @@ msgstr "Crear ítem de medios"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/mod_admin.erl:99
 msgid "Media"
 msgstr "Medios"
 
@@ -566,6 +572,10 @@ msgstr "Modificado por"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 msgid "Modified on"
 msgstr "Modificado el"
+
+#: modules/mod_admin/mod_admin.erl:109
+msgid "Modules"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
 msgid "Name"
@@ -633,6 +643,7 @@ msgid "Page title"
 msgstr "Título de página"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
+#: modules/mod_admin/mod_admin.erl:95
 msgid "Pages"
 msgstr "Páginas"
 
@@ -806,6 +817,11 @@ msgstr ""
 msgid "State"
 msgstr "Estado"
 
+#: modules/mod_admin/mod_admin.erl:122
+#, fuzzy
+msgid "Status"
+msgstr "Estado"
+
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 1"
@@ -815,6 +831,10 @@ msgstr "Calle 1"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Calle 2"
+
+#: modules/mod_admin/mod_admin.erl:104
+msgid "Structure"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
 msgid "Sub pages"
@@ -831,6 +851,10 @@ msgstr "Prefijo de apellido"
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
 msgstr "Apellido"
+
+#: modules/mod_admin/mod_admin.erl:118
+msgid "System"
+msgstr "Sistema"
 
 #: modules/mod_admin/templates/admin_status.tpl:3
 msgid "System Status"
@@ -1171,9 +1195,6 @@ msgstr "visitar sitio"
 
 #~ msgid "Show this article only between the two dates."
 #~ msgstr "Mostrar este artículo únicamente entre las dos fechas."
-
-#~ msgid "System"
-#~ msgstr "Sistema"
 
 #~ msgid "This can't be undone. Your media will be lost forever."
 #~ msgstr "Esto no se puede deshacer. Su medio se perderá para siempre."

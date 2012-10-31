@@ -14,74 +14,65 @@ msgstr ""
 "PO-Revision-Date: 2012-01-11 15:07+0200\n"
 "Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:18 ./modules/mod_admin_modules/templates/admin_modules.tpl:34 
-msgid ""
-"Activate"
-msgstr ""
-"Aktiveeri"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:36
+msgid "Activate"
+msgstr "Aktiveeri"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:17 
-msgid ""
-"Author"
-msgstr ""
-"Autor"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
+msgid "Author"
+msgstr "Autor"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:30 
-msgid ""
-"Deactivate"
-msgstr ""
-"Deaktiveeri"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:31
+msgid "Deactivate"
+msgstr "Deaktiveeri"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:15 
-msgid ""
-"Description"
-msgstr ""
-"Kirjeldus"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+msgid "Description"
+msgstr "Kirjeldus"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:3 ./modules/mod_admin_modules/templates/admin_modules.tpl:9 ./modules/mod_admin_modules/templates/_admin_menu_module.tpl:2 
-msgid ""
-"Modules"
-msgstr ""
-"Moodulid"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:3
+#: modules/mod_admin_modules/templates/admin_modules.tpl:7
+#: modules/mod_admin_modules/mod_admin_modules.erl:88
+msgid "Modules"
+msgstr "Moodulid"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:11 
-msgid ""
-"Modules overview"
-msgstr ""
-"Moodulite ülevaade"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:49
+msgid "No modules found"
+msgstr "Ei leia mooduleid"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:41 
-msgid ""
-"No modules found"
-msgstr ""
-"Ei leia mooduleid"
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+msgid "Prio"
+msgstr "Prio"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:16 
-msgid ""
-"Prio"
-msgstr ""
-"Prio"
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
+msgid "Rescan modules"
+msgstr "Skaneeri moodulid uuesti"
 
-#: ./modules/mod_admin_modules/templates/_admin_status.tpl:2 
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
 msgid ""
-"Rescan modules"
+"Rescanning will rebuild the index of all modules, actions, templates etc.  "
+"It will also reload all dispatch rules."
 msgstr ""
-"Skaneeri moodulid uuesti"
+"Uuesti skeneerimine ehitab uuesti üles kõigi moodulite, actionite, mallide "
+"indeksi. See loeb uuesti sisse ka kõik suunamis/dispatch reeglid."
 
-#: ./modules/mod_admin_modules/templates/_admin_status.tpl:3 
-msgid ""
-"Rescanning will rebuild the index of all modules, actions, templates etc. "
-" It will also reload all dispatch rules."
-msgstr ""
-"Uuesti skeneerimine ehitab uuesti üles kõigi moodulite, actionite, mallide indeksi. "
-"See loeb uuesti sisse ka kõik suunamis/dispatch reeglid."
+#: modules/mod_admin_modules/templates/admin_modules.tpl:15
+msgid "Title"
+msgstr "Nimi"
 
-#: ./modules/mod_admin_modules/templates/admin_modules.tpl:14 
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
 msgid ""
-"Title"
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of "
+"all modules which are currently known to this Zotonic installation."
 msgstr ""
-"Nimi"
+
+#~ msgid "Modules overview"
+#~ msgstr "Moodulite ülevaade"

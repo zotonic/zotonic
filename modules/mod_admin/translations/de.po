@@ -133,6 +133,10 @@ msgstr "Google bitten, diese Seite nicht zu indizieren"
 msgid "Attached media"
 msgstr "Benutzte Mediendateien"
 
+#: modules/mod_admin/mod_admin.erl:114
+msgid "Auth"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_basics.tpl:3
 msgid "Basic"
 msgstr "Basic"
@@ -211,6 +215,7 @@ msgid "Connect a page"
 msgstr "eine Querverbindung zu einer Seite"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/mod_admin.erl:91
 msgid "Content"
 msgstr "Inhalt"
 
@@ -232,7 +237,7 @@ msgid "Customize page slug"
 msgstr "Slug der Seite festlegen"
 
 #: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7
+#: modules/mod_admin/templates/admin.tpl:7 modules/mod_admin/mod_admin.erl:86
 msgid "Dashboard"
 msgstr "Übersicht"
 
@@ -510,6 +515,7 @@ msgstr "Neue Mediendatei anlegen"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/mod_admin.erl:99
 msgid "Media"
 msgstr "Mediendatei"
 
@@ -555,6 +561,10 @@ msgstr "Geändert von"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 msgid "Modified on"
 msgstr "Geändert am"
+
+#: modules/mod_admin/mod_admin.erl:109
+msgid "Modules"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
 msgid "Name"
@@ -622,6 +632,7 @@ msgid "Page title"
 msgstr "Titel der Seite"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
+#: modules/mod_admin/mod_admin.erl:95
 msgid "Pages"
 msgstr "Seiten"
 
@@ -793,6 +804,11 @@ msgstr ""
 msgid "State"
 msgstr "Bundesland"
 
+#: modules/mod_admin/mod_admin.erl:122
+#, fuzzy
+msgid "Status"
+msgstr "Bundesland"
+
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 1"
@@ -802,6 +818,10 @@ msgstr "Straße"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Noch Straße"
+
+#: modules/mod_admin/mod_admin.erl:104
+msgid "Structure"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
 msgid "Sub pages"
@@ -818,6 +838,10 @@ msgstr "Namenszusatz"
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
 msgstr "Nachname"
+
+#: modules/mod_admin/mod_admin.erl:118
+msgid "System"
+msgstr "System"
 
 #: modules/mod_admin/templates/admin_status.tpl:3
 msgid "System Status"
@@ -1169,9 +1193,6 @@ msgstr "Seite besuchen"
 
 #~ msgid "Start date"
 #~ msgstr "Beginn"
-
-#~ msgid "System"
-#~ msgstr "System"
 
 #~ msgid "This can't be undone. Your media will be lost forever."
 #~ msgstr ""

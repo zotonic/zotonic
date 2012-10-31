@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_mailinglist/mod_mailinglist.erl:365
+msgid "Mailing lists"
+msgstr "Mailinglijsten"
+
 #: modules/mod_mailinglist/mod_mailinglist.erl:158
 msgid "No addresses selected"
 msgstr "Geen adres geselecteerd"
@@ -253,9 +257,6 @@ msgstr "Deze adressen opnieuw aan het versturen..."
 
 #~ msgid "Mailing list settings."
 #~ msgstr "Mailinglijst instellingen"
-
-#~ msgid "Mailing lists"
-#~ msgstr "Mailinglijsten"
 
 #~ msgid "Mailing status"
 #~ msgstr "Mailing status"

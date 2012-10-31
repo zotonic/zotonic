@@ -38,6 +38,10 @@ msgstr "Está seguro de que quiere eliminar la clave de configuración"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "Config"
+
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Configuración"
@@ -120,9 +124,6 @@ msgstr ""
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Valor"
-
-#~ msgid "Config"
-#~ msgstr "Config"
 
 #~ msgid "Configuration overview"
 #~ msgstr "Resumen de configuración"

@@ -72,7 +72,7 @@ msgid ""
 "Please fill in the title of the new predicate."
 msgstr ""
 
-#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:9 
+#: ./modules/mod_admin_predicate/templates/admin_predicate.tpl:9 ./modules/mod_admin_predicate/mod_admin_predicate.erl:71 
 msgid ""
 "Predicates"
 msgstr ""

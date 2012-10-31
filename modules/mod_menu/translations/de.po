@@ -13,53 +13,94 @@ msgstr ""
 "PO-Revision-Date: 2012-07-04 13:46+0100\n"
 "Last-Translator: Hans-Christian Espérer <hc-translate@hcesperer.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_menu/templates/_admin_menu_menu_view.tpl:1
+#: modules/mod_menu/templates/_menu_edit_item.tpl:11
+msgid "Add after"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:9
+msgid "Add before"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:10
+msgid "Add below"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+msgid "Add bottom"
+msgstr ""
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+msgid "Add category"
+msgstr ""
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
+msgid "Add menu item"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
+msgid "Add top"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+msgid ""
+"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
+"pages."
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
 msgid "Current menu"
 msgstr "Aktuelles Menü"
 
-#: ./modules/mod_menu/templates/_menu_trash.tpl:1
+#: modules/mod_menu/templates/_menu_trash.tpl:1
 msgid "Drag elements here to remove them"
 msgstr "Ziehen Sie Elemente hierher, um sie vom Menü zu entfernen"
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:34
-msgid "Drag items from the menu to the trash to remove them."
-msgstr "Ziehen Sie Elemente vom Menü zum Mülleimer, um sie zu entfernen."
-
-#: ./modules/mod_menu/templates/_menu_edit_item.tpl:3
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:23
+#: modules/mod_menu/templates/_menu_edit_item.tpl:3
 msgid "Drag me"
 msgstr "Zieh mich"
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:35
-msgid "Drag the <strong>New page</strong> to add a new page."
-msgstr "Ziehen Sie das Element <strong>Neue Seite</strong>, um eine neue Seite anzulegen."
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
+#, fuzzy
+msgid ""
+"Drag menu items in the menu up, down, left or right to structure the menu."
+msgstr "Ziehen Sie Elemente vom Menü zum Mülleimer, um sie zu entfernen."
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:20
-msgid "Drag to add a new page"
-msgstr "Ziehen, um neue Seite anzulegen"
-
-#: ./modules/mod_menu/templates/_menu_edit_item.tpl:6
+#: modules/mod_menu/templates/_menu_edit_item.tpl:18
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./modules/mod_menu/templates/_admin_menu_module.tpl:2
+#: modules/mod_menu/mod_menu.erl:402
 msgid "Menu"
 msgstr "Menü"
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:24
-#: ./modules/mod_menu/mod_menu.erl:174
+#: modules/mod_menu/mod_menu.erl:187
 msgid "New page"
 msgstr "Neue Seite"
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:14
-msgid "Search for a page"
-msgstr "Nach Seite suchen"
+#: modules/mod_menu/templates/_menu_edit_item.tpl:13
+msgid "Remove"
+msgstr ""
 
-#: ./modules/mod_menu/templates/admin_edit.menu.tpl:33
-msgid "Type your search terms to find pages. Then drag them on to the panel on your left."
-msgstr "Geben Sie ein Schlagwort ein, um nach Seiten zu suchen. Ziehen Sie anschliessend die gewünschte Seite ins Menü links."
+#~ msgid "Drag the <strong>New page</strong> to add a new page."
+#~ msgstr ""
+#~ "Ziehen Sie das Element <strong>Neue Seite</strong>, um eine neue Seite "
+#~ "anzulegen."
 
+#~ msgid "Drag to add a new page"
+#~ msgstr "Ziehen, um neue Seite anzulegen"
+
+#~ msgid "Search for a page"
+#~ msgstr "Nach Seite suchen"
+
+#~ msgid ""
+#~ "Type your search terms to find pages. Then drag them on to the panel on "
+#~ "your left."
+#~ msgstr ""
+#~ "Geben Sie ein Schlagwort ein, um nach Seiten zu suchen. Ziehen Sie "
+#~ "anschliessend die gewünschte Seite ins Menü links."

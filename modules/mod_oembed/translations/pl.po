@@ -13,48 +13,65 @@ msgstr ""
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
 
-
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:38 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:64
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:13 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:15
 msgid "Embed URL"
 msgstr "Adres obiektu"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:5 
-msgid "Embed a video or other media URL. Here you can paste any URL from YouTube, "
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:5
+msgid ""
+"Embed a video or other media URL. Here you can paste any URL from YouTube, "
 "Vimeo or other services."
-msgstr "Osadź materiał wideo albo inny obiekt mediów. Możesz wkleić tu URL materiału "
+msgstr ""
+"Osadź materiał wideo albo inny obiekt mediów. Możesz wkleić tu URL materiału "
 "umieszczonego w YouTube, Vimeo czy innym - tego typu - serwisie."
 
-#: ./modules/mod_oembed/mod_oembed.erl:233 
-msgid "Invalid media URL"
-msgstr "Błędny URL"
+#: modules/mod_oembed/mod_oembed.erl:238
+msgid ""
+"Invalid or unsupported media URL. The item might have been deleted or is not "
+"public."
+msgstr ""
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+#: modules/mod_oembed/mod_oembed.erl:204
+#, fuzzy
+msgid "Made the media page."
+msgstr "Utwórz obiekt mediów"
+
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Make media item"
 msgstr "Utwórz obiekt mediów"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:26 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:48
 msgid "Media title"
 msgstr "Tytuł"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:37 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Replace media item"
 msgstr "Zastąp obiekt mediów"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:31 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:56
 msgid "Summary"
 msgstr "Opis"
 
-#: ./modules/mod_oembed/templates/_media_upload_panel.tpl:23 
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:36
 msgid "The media title will be automatically detected from its URL."
 msgstr "Tytuł zostanie ustalony automatycznie, na podstawie adresu."
+
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:19
+msgid "Try URL"
+msgstr ""
+
+#~ msgid "Invalid media URL"
+#~ msgstr "Błędny URL"

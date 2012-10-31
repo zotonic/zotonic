@@ -20,75 +20,87 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79
-msgid "<strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data."
-msgstr "<strong>Nota de seguridad</strong>: Cuando se permitan archivos del tipo */* todos los miembros de este rol podrán obtener acceso total al sitio completo y a todos sus datos."
+#: modules/mod_acl_simple_roles/mod_acl_simple_roles.erl:409
+msgid "Access Control"
+msgstr ""
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16
-msgid "All members are allowed to view all content.  (Check this for supervisors.)"
-msgstr "Todos los miembros pueden ver todo el contenido. (Marcar para supervisores.)"
+#~ msgid ""
+#~ "<strong>Security notice</strong>: When you allow */* files then all "
+#~ "members of this role will be able to obtain full access to your whole "
+#~ "site and all underlying data."
+#~ msgstr ""
+#~ "<strong>Nota de seguridad</strong>: Cuando se permitan archivos del tipo "
+#~ "*/* todos los miembros de este rol podrán obtener acceso total al sitio "
+#~ "completo y a todos sus datos."
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40
-msgid "Allow editing of category"
-msgstr "Permitir edición de categoría"
+#~ msgid ""
+#~ "All members are allowed to view all content.  (Check this for "
+#~ "supervisors.)"
+#~ msgstr ""
+#~ "Todos los miembros pueden ver todo el contenido. (Marcar para "
+#~ "supervisores.)"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Check below what people that are member of this role are allowed to do."
-msgstr "Marque abajo qué es lo que tienen permitido hacer las personas que tienen asignado este rol."
+#~ msgid "Allow editing of category"
+#~ msgstr "Permitir edición de categoría"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32
-msgid "Community members"
-msgstr "Miembros de la comunidad"
+#~ msgid ""
+#~ "Check below what people that are member of this role are allowed to do."
+#~ msgstr ""
+#~ "Marque abajo qué es lo que tienen permitido hacer las personas que tienen "
+#~ "asignado este rol."
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
-msgid "File types allowed to be uploaded"
-msgstr "Tipos de archivo permitidos para subir"
+#~ msgid "Community members"
+#~ msgstr "Miembros de la comunidad"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70
-msgid "File uploads"
-msgstr "Archivos subidos"
+#~ msgid "File types allowed to be uploaded"
+#~ msgstr "Tipos de archivo permitidos para subir"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33
-msgid "Group members"
-msgstr "Miembros de grupo"
+#~ msgid "File uploads"
+#~ msgstr "Archivos subidos"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Help about ACL roles."
-msgstr "Ayuda acerca de roles en listas de control de acceso."
+#~ msgid "Group members"
+#~ msgstr "Miembros de grupo"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55
-msgid "Manage modules"
-msgstr "Administrar módulos"
+#~ msgid "Help about ACL roles."
+#~ msgstr "Ayuda acerca de roles en listas de control de acceso."
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72
-msgid "Maximum allowed file size for uploads (in KB)"
-msgstr "Tamaño máximo de archivos a subir (en KB)"
+#~ msgid "Manage modules"
+#~ msgstr "Administrar módulos"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25
-msgid "Maximum visibility (user can’t change visibility to higher level than this)"
-msgstr "Visibilidad máxima (un usuario no puede cambiar su nivel de visibilidad a un valor mayor que éste)"
+#~ msgid "Maximum allowed file size for uploads (in KB)"
+#~ msgstr "Tamaño máximo de archivos a subir (en KB)"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Need more help?"
-msgstr "Necesita más ayuda?"
+#~ msgid ""
+#~ "Maximum visibility (user can’t change visibility to higher level than "
+#~ "this)"
+#~ msgstr ""
+#~ "Visibilidad máxima (un usuario no puede cambiar su nivel de visibilidad a "
+#~ "un valor mayor que éste)"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21
-msgid "Only allow to update content created by the user himself. (Check for user generated content sites.)"
-msgstr "Sólo permitir la modificación de contenido creado por el mismo usuario. (Marcar para sitios con contenido generado por los usuarios)"
+#~ msgid "Need more help?"
+#~ msgstr "Necesita más ayuda?"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5
-msgid "Permissions"
-msgstr "Permisos"
+#~ msgid ""
+#~ "Only allow to update content created by the user himself. (Check for user "
+#~ "generated content sites.)"
+#~ msgstr ""
+#~ "Sólo permitir la modificación de contenido creado por el mismo usuario. "
+#~ "(Marcar para sitios con contenido generado por los usuarios)"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29
-msgid "The whole world"
-msgstr "El mundo entero"
+#~ msgid "Permissions"
+#~ msgstr "Permisos"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules."
-msgstr "Los usuarios pueden ser miembros de múltiples roles. Dependiendo de sus roles un usuario podrá crear o editar ciertas categorías o administrar ciertos módulos."
+#~ msgid "The whole world"
+#~ msgstr "El mundo entero"
 
-#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6
-msgid "make smaller"
-msgstr "achicar"
+#~ msgid ""
+#~ "Users can be member of multiple roles. Depending on the roles an user is "
+#~ "allowed to create and edit certain categories or is able to manage "
+#~ "certain modules."
+#~ msgstr ""
+#~ "Los usuarios pueden ser miembros de múltiples roles. Dependiendo de sus "
+#~ "roles un usuario podrá crear o editar ciertas categorías o administrar "
+#~ "ciertos módulos."
 
+#~ msgid "make smaller"
+#~ msgstr "achicar"

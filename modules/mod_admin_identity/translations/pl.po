@@ -239,6 +239,7 @@ msgstr ""
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:9
+#: modules/mod_admin_identity/mod_admin_identity.erl:74
 msgid "Users"
 msgstr "Użytkownicy"
 

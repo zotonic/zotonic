@@ -16,53 +16,104 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:1
+#: modules/mod_menu/templates/_menu_edit_item.tpl:11
+msgid "Add after"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:9
+msgid "Add before"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:10
+msgid "Add below"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+msgid "Add bottom"
+msgstr ""
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+msgid "Add category"
+msgstr ""
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
+msgid "Add menu item"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
+msgid "Add top"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+msgid ""
+"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
+"pages."
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
 msgid "Current menu"
 msgstr "Huidig menu"
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+#: modules/mod_menu/templates/_menu_trash.tpl:1
+msgid "Drag elements here to remove them"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:3
 msgid "Drag me"
 msgstr "Verslepen"
 
-#: modules/mod_menu/templates/admin_edit.menu.tpl:20
-msgid "Help about editing menus."
-msgstr "Hulp bij de menu-editor"
-
-#: modules/mod_menu/templates/admin_edit.menu.tpl:19
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
 msgid ""
-"Here you can change the menu of your site.  Select pages on the right hand "
-"side and drag them to the menu on the left."
+"Drag menu items in the menu up, down, left or right to structure the menu."
 msgstr ""
-"Op deze plek kan je het menu van de site aanpassen. Selecteer pagina's aan "
-"de rechterkant en sleep ze in het menu links."
 
-#: modules/mod_menu/templates/_admin_menu_module.tpl:2
+#: modules/mod_menu/templates/_menu_edit_item.tpl:18
+msgid "Edit"
+msgstr ""
+
+#: modules/mod_menu/mod_menu.erl:402
 msgid "Menu"
 msgstr "Menu"
 
-#: modules/mod_menu/templates/admin_edit.menu.tpl:20
-msgid "Need more help?"
-msgstr "Meer hulp nodig?"
-
-#: modules/mod_menu/templates/admin_edit.menu.tpl:15
-msgid "Search for a page"
-msgstr "Pagina opzoeken"
-
-#: modules/mod_menu/templates/admin_edit.menu.tpl:20
-msgid ""
-"Type the name of the page you want in your menu in the box left of this "
-"note. When you get a result, you can drag that item onto the menu pane on "
-"the left side of the page. You can also move the menu items around to manage "
-"the way your navigations looks."
+#: modules/mod_menu/mod_menu.erl:187
+msgid "New page"
 msgstr ""
-"Type de naam van de pagina die je in het menu wilt in het zoekveld rechts. "
-"Zodra je een resultaat krijgt, kan je dat in het menu aan de linkerkan "
-"slepen. Je kan ook het menu aanpassen en van volgorde veranderen door de "
-"items binnen het menu te slepen."
 
-#: modules/mod_menu/templates/admin_edit.menu.tpl:23
-msgid ""
-"Type your search terms to find pages. Then drag them on to the panel on your "
-"left."
+#: modules/mod_menu/templates/_menu_edit_item.tpl:13
+msgid "Remove"
 msgstr ""
-"Type een zoekterm om pagina's te vinden. Sleep ze daarna in het menu links."
+
+#~ msgid "Help about editing menus."
+#~ msgstr "Hulp bij de menu-editor"
+
+#~ msgid ""
+#~ "Here you can change the menu of your site.  Select pages on the right "
+#~ "hand side and drag them to the menu on the left."
+#~ msgstr ""
+#~ "Op deze plek kan je het menu van de site aanpassen. Selecteer pagina's "
+#~ "aan de rechterkant en sleep ze in het menu links."
+
+#~ msgid "Need more help?"
+#~ msgstr "Meer hulp nodig?"
+
+#~ msgid "Search for a page"
+#~ msgstr "Pagina opzoeken"
+
+#~ msgid ""
+#~ "Type the name of the page you want in your menu in the box left of this "
+#~ "note. When you get a result, you can drag that item onto the menu pane on "
+#~ "the left side of the page. You can also move the menu items around to "
+#~ "manage the way your navigations looks."
+#~ msgstr ""
+#~ "Type de naam van de pagina die je in het menu wilt in het zoekveld "
+#~ "rechts. Zodra je een resultaat krijgt, kan je dat in het menu aan de "
+#~ "linkerkan slepen. Je kan ook het menu aanpassen en van volgorde "
+#~ "veranderen door de items binnen het menu te slepen."
+
+#~ msgid ""
+#~ "Type your search terms to find pages. Then drag them on to the panel on "
+#~ "your left."
+#~ msgstr ""
+#~ "Type een zoekterm om pagina's te vinden. Sleep ze daarna in het menu "
+#~ "links."

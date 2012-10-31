@@ -20,6 +20,10 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
+#: modules/mod_oauth/mod_oauth.erl:310
+msgid "API access"
+msgstr "Acceder a API"
+
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
 msgid "Access to"
 msgstr "Acceder a"
@@ -231,9 +235,6 @@ msgstr "acceder a su cuenta"
 #: modules/mod_oauth/templates/oauth_authorize.tpl:9
 msgid "wants to access your account."
 msgstr "quiere acceder a su cuenta."
-
-#~ msgid "API access"
-#~ msgstr "Acceder a API"
 
 #~ msgid "Registered applications"
 #~ msgstr "Aplicaciones registradas"

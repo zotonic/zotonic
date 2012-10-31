@@ -40,6 +40,10 @@ msgstr "Czy na pewno chcesz usunąć parametr"
 msgid "Cancel"
 msgstr "Anuluj"
 
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "Parametry"
+
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Parametry"
@@ -120,9 +124,6 @@ msgstr ""
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Wartość"
-
-#~ msgid "Config"
-#~ msgstr "Parametry"
 
 #~ msgid "Configuration overview"
 #~ msgstr "Zestawienie parametrów"

@@ -13,76 +13,61 @@ msgstr ""
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:16 
-msgid "Added on"
-msgstr "Dodany"
-
-#: modules/mod_comment/templates/_comments.tpl:4
-#: modules/mod_comment/templates/admin_comments.tpl:11
-#: modules/mod_comment/templates/_admin_menu_module.tpl:2
+#: modules/mod_comment/mod_comment.erl:207
+#: modules/mod_comment/mod_comment.erl:202
 msgid "Comments"
 msgstr "Komentarze"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:15 
-msgid "E-mail"
-msgstr "E-mail"
+#~ msgid "Added on"
+#~ msgstr "Dodany"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:20 
-msgid "Email"
-msgstr "E-mail"
+#~ msgid "E-mail"
+#~ msgstr "E-mail"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:35 
-msgid "Log on or sign up to comment"
-msgstr "Zaloguj się lub zarejestruj by móc komentować"
+#~ msgid "Email"
+#~ msgstr "E-mail"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:24 ./modules/mod_comment/templates/admin_comments.tpl:18 
-msgid "Message"
-msgstr "Wiadomość"
+#~ msgid "Log on or sign up to comment"
+#~ msgstr "Zaloguj się lub zarejestruj by móc komentować"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:10 ./modules/mod_comment/templates/admin_comments.tpl:19 
-msgid "Name"
-msgstr "Użytkownik"
+#~ msgid "Message"
+#~ msgstr "Wiadomość"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:21 
-msgid "Options"
-msgstr "Opcje"
+#~ msgid "Name"
+#~ msgstr "Użytkownik"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:17 
-msgid "Page"
-msgstr "Strona"
+#~ msgid "Options"
+#~ msgstr "Opcje"
 
-#: ./modules/mod_comment/templates/_comments_comment.tpl:4 
-msgid "Posted"
-msgstr "Umieszczony"
+#~ msgid "Page"
+#~ msgstr "Strona"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:4 
-msgid "Recent Comments"
-msgstr "Najnowsze komentarze"
+#~ msgid "Posted"
+#~ msgstr "Umieszczony"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:13 
-msgid "Recent comments"
-msgstr "Najnowsze komentarze"
+#~ msgid "Recent Comments"
+#~ msgstr "Najnowsze komentarze"
 
-#: ./modules/mod_comment/templates/_comments_form.tpl:29 
-msgid "Send"
-msgstr "Wyślij"
+#~ msgid "Recent comments"
+#~ msgstr "Najnowsze komentarze"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:45 
-msgid "There are no comments."
-msgstr "Nie ma żadnych komentarzy"
+#~ msgid "Send"
+#~ msgstr "Wyślij"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:39 
-msgid "delete"
-msgstr "skasuj"
+#~ msgid "There are no comments."
+#~ msgstr "Nie ma żadnych komentarzy"
 
-#: ./modules/mod_comment/templates/admin_comments.tpl:38 
-msgid "view"
-msgstr "zobacz"
+#~ msgid "delete"
+#~ msgstr "skasuj"
 
+#~ msgid "view"
+#~ msgstr "zobacz"

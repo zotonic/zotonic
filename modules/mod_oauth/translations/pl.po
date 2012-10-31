@@ -22,6 +22,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2\n"
 
+#: modules/mod_oauth/mod_oauth.erl:310
+msgid "API access"
+msgstr "Udostępnianie API"
+
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
 msgid "Access to"
 msgstr "Dostęp do"
@@ -234,9 +238,6 @@ msgstr "dostępu do swojego konta."
 #: modules/mod_oauth/templates/oauth_authorize.tpl:9
 msgid "wants to access your account."
 msgstr "prosi o dostęp do Twojego konta."
-
-#~ msgid "API access"
-#~ msgstr "Udostępnianie API"
 
 #~ msgid "Registered applications"
 #~ msgstr "Zarejestrowane aplikacje"

@@ -39,6 +39,10 @@ msgstr "Удалить ключ"
 msgid "Cancel"
 msgstr "Отмена"
 
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "Конфиг"
+
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -119,9 +123,6 @@ msgstr "Ключ конфигурации будет удален. Это дей
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Значение"
-
-#~ msgid "Config"
-#~ msgstr "Конфиг"
 
 #~ msgid "Configuration overview"
 #~ msgstr "Обзор конфигурации"

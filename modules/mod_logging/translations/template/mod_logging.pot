@@ -78,7 +78,7 @@ msgid ""
 "Info"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_base.tpl:3 
+#: ./modules/mod_logging/templates/admin_log_base.tpl:3 ./modules/mod_logging/mod_logging.erl:221 
 msgid ""
 "Log"
 msgstr ""

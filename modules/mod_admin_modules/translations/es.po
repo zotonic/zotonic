@@ -13,56 +13,67 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 13:42-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:18
-#: modules/mod_admin_modules/templates/admin_modules.tpl:33
+#: modules/mod_admin_modules/templates/admin_modules.tpl:36
 msgid "Activate"
 msgstr "Activar"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
 msgid "Author"
 msgstr "Autor"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:29
+#: modules/mod_admin_modules/templates/admin_modules.tpl:31
 msgid "Deactivate"
 msgstr "Desactivar"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:15
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
 msgid "Description"
 msgstr "Descripción"
 
-#: modules/mod_admin_modules/templates/_admin_menu_module.tpl:2
 #: modules/mod_admin_modules/templates/admin_modules.tpl:3
-#: modules/mod_admin_modules/templates/admin_modules.tpl:9
+#: modules/mod_admin_modules/templates/admin_modules.tpl:7
+#: modules/mod_admin_modules/mod_admin_modules.erl:88
 msgid "Modules"
 msgstr "Módulos"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:11
-msgid "Modules overview"
-msgstr "Resumen de Módulos"
-
-#: modules/mod_admin_modules/templates/admin_modules.tpl:41
+#: modules/mod_admin_modules/templates/admin_modules.tpl:49
 msgid "No modules found"
 msgstr "No se encontraron módulos"
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
 msgid "Prio"
 msgstr "Prio"
 
-#: modules/mod_admin_modules/templates/_admin_status.tpl:2
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
 msgid "Rescan modules"
 msgstr "Reexaminar módulos"
 
-#: modules/mod_admin_modules/templates/_admin_status.tpl:3
-msgid "Rescanning will rebuild the index of all modules, actions, templates etc.  It will also reload all dispatch rules."
-msgstr "Al reexaminar se reconstruirán los índices de todos los módulos, acciones, modelos, etc. También se recargarán todas las reglas de despacho."
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
+msgid ""
+"Rescanning will rebuild the index of all modules, actions, templates etc.  "
+"It will also reload all dispatch rules."
+msgstr ""
+"Al reexaminar se reconstruirán los índices de todos los módulos, acciones, "
+"modelos, etc. También se recargarán todas las reglas de despacho."
 
-#: modules/mod_admin_modules/templates/admin_modules.tpl:14
+#: modules/mod_admin_modules/templates/admin_modules.tpl:15
 msgid "Title"
 msgstr "Título"
 
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of "
+"all modules which are currently known to this Zotonic installation."
+msgstr ""
+
+#~ msgid "Modules overview"
+#~ msgstr "Resumen de Módulos"

@@ -84,6 +84,11 @@ msgid ""
 "Edit"
 msgstr ""
 
+#: ./modules/mod_menu/mod_menu.erl:402 
+msgid ""
+"Menu"
+msgstr ""
+
 #: ./modules/mod_menu/mod_menu.erl:187 
 msgid ""
 "New page"

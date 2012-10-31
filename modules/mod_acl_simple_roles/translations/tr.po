@@ -13,82 +13,92 @@ msgstr ""
 "PO-Revision-Date: 2010-09-02 09:55+0200\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: Turkish <kunthar@gmail.com>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Turkish\n"
 "X-Poedit-Country: Turkey\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79
-msgid "<strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data."
-msgstr "<strong>Güvenlik uyarısı</strong>: Eğer  */* şeklinde tüm dosyalara erişim hakkı verirseniz, bu haklara sahip tüm kullanıcılar, tüm site ve tüm veriye erişim hakkına sahip olurlar."
+#: modules/mod_acl_simple_roles/mod_acl_simple_roles.erl:409
+msgid "Access Control"
+msgstr ""
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:16
-msgid "All members are allowed to view all content.  (Check this for supervisors.)"
-msgstr "Tüm üyelerin tüm içeriği görmesine izin verilmiştir.  (supervisor kullanıcısına bakın.)"
+#~ msgid ""
+#~ "<strong>Security notice</strong>: When you allow */* files then all "
+#~ "members of this role will be able to obtain full access to your whole "
+#~ "site and all underlying data."
+#~ msgstr ""
+#~ "<strong>Güvenlik uyarısı</strong>: Eğer  */* şeklinde tüm dosyalara "
+#~ "erişim hakkı verirseniz, bu haklara sahip tüm kullanıcılar, tüm site ve "
+#~ "tüm veriye erişim hakkına sahip olurlar."
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:40
-msgid "Allow editing of category"
-msgstr "Kategori düzenlemeye izin ver"
+#~ msgid ""
+#~ "All members are allowed to view all content.  (Check this for "
+#~ "supervisors.)"
+#~ msgstr ""
+#~ "Tüm üyelerin tüm içeriği görmesine izin verilmiştir.  (supervisor "
+#~ "kullanıcısına bakın.)"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Check below what people that are member of this role are allowed to do."
-msgstr "Aşağıdan hangi kişilerin bu role üye olduğunu kontrol ediniz."
+#~ msgid "Allow editing of category"
+#~ msgstr "Kategori düzenlemeye izin ver"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:32
-msgid "Community members"
-msgstr "Komünite üyeleri"
+#~ msgid ""
+#~ "Check below what people that are member of this role are allowed to do."
+#~ msgstr "Aşağıdan hangi kişilerin bu role üye olduğunu kontrol ediniz."
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
-msgid "File types allowed to be uploaded"
-msgstr "Siteye yüklenebilecek dosya türleri"
+#~ msgid "Community members"
+#~ msgstr "Komünite üyeleri"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:70
-msgid "File uploads"
-msgstr "Dosya yükleme"
+#~ msgid "File types allowed to be uploaded"
+#~ msgstr "Siteye yüklenebilecek dosya türleri"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:33
-msgid "Group members"
-msgstr "Grup üyeleri"
+#~ msgid "File uploads"
+#~ msgstr "Dosya yükleme"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Help about ACL roles."
-msgstr "Erişim kontrolü yardımı"
+#~ msgid "Group members"
+#~ msgstr "Grup üyeleri"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:55
-msgid "Manage modules"
-msgstr "Modülleri yönet"
+#~ msgid "Help about ACL roles."
+#~ msgstr "Erişim kontrolü yardımı"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:72
-msgid "Maximum allowed file size for uploads (in KB)"
-msgstr "Dosya yükleme için en fazla dosya boyutu (KB olarak)"
+#~ msgid "Manage modules"
+#~ msgstr "Modülleri yönet"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25
-msgid "Maximum visibility (user can’t change visibility to higher level than this)"
-msgstr "En fazla görünürlük (kullanıcılar, bu seviyeden fazlasını değiştiremezler)"
+#~ msgid "Maximum allowed file size for uploads (in KB)"
+#~ msgstr "Dosya yükleme için en fazla dosya boyutu (KB olarak)"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Need more help?"
-msgstr "Daha fazla yardım?"
+#~ msgid ""
+#~ "Maximum visibility (user can’t change visibility to higher level than "
+#~ "this)"
+#~ msgstr ""
+#~ "En fazla görünürlük (kullanıcılar, bu seviyeden fazlasını değiştiremezler)"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:21
-msgid "Only allow to update content created by the user himself. (Check for user generated content sites.)"
-msgstr "Kullanıcının sadece kendi yarattığı içeriği güncellemesine izin ver (Kullanıcı içerik sitelerine bakın)"
+#~ msgid "Need more help?"
+#~ msgstr "Daha fazla yardım?"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:5
-msgid "Permissions"
-msgstr "İzinler"
+#~ msgid ""
+#~ "Only allow to update content created by the user himself. (Check for user "
+#~ "generated content sites.)"
+#~ msgstr ""
+#~ "Kullanıcının sadece kendi yarattığı içeriği güncellemesine izin ver "
+#~ "(Kullanıcı içerik sitelerine bakın)"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:29
-msgid "The whole world"
-msgstr "Tüm dünya"
+#~ msgid "Permissions"
+#~ msgstr "İzinler"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:11
-msgid "Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules."
-msgstr "Kullanıcılar birden çok role üye olabilirler. Bağlı oldukları role göre, sadece bazı kategorileri düzenleme ya da bazı modülleri yönetme hakkına sahip olurlar."
+#~ msgid "The whole world"
+#~ msgstr "Tüm dünya"
 
-#: ./modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:6
-msgid "make smaller"
-msgstr "ufalt"
+#~ msgid ""
+#~ "Users can be member of multiple roles. Depending on the roles an user is "
+#~ "allowed to create and edit certain categories or is able to manage "
+#~ "certain modules."
+#~ msgstr ""
+#~ "Kullanıcılar birden çok role üye olabilirler. Bağlı oldukları role göre, "
+#~ "sadece bazı kategorileri düzenleme ya da bazı modülleri yönetme hakkına "
+#~ "sahip olurlar."
 
+#~ msgid "make smaller"
+#~ msgstr "ufalt"

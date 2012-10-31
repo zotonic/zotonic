@@ -198,6 +198,7 @@ msgid "Translate this page in other languages."
 msgstr "Tõlgi see leht teise keelde."
 
 #: modules/mod_translation/templates/admin_translation.tpl:3
+#: modules/mod_translation/mod_translation.erl:463
 msgid "Translation"
 msgstr "Tõlge"
 

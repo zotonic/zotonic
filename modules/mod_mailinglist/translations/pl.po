@@ -22,6 +22,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2\n"
 
+#: modules/mod_mailinglist/mod_mailinglist.erl:365
+msgid "Mailing lists"
+msgstr "Listy wysyłkowe"
+
 #: modules/mod_mailinglist/mod_mailinglist.erl:158
 msgid "No addresses selected"
 msgstr "Nie wybrano adresów"
@@ -268,9 +272,6 @@ msgstr "Powtórna wysyłka, pierwotnie odbitych, wiadomości..."
 
 #~ msgid "Mailing list settings."
 #~ msgstr "Ustawienia list wysyłkowych."
-
-#~ msgid "Mailing lists"
-#~ msgstr "Listy wysyłkowe"
 
 #~ msgid "Mailing status"
 #~ msgstr "Status wysyłki"

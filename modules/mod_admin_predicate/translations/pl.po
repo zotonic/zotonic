@@ -14,49 +14,113 @@ msgstr ""
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
 
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
+msgid ""
+"A predicate denotes traits or aspects of a page and expresses a relationship "
+"between two pages.\n"
+"    The relation is always directed, from the subject to the object.<br/"
+">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
+"\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
+msgstr ""
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:19 
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:3
+msgid "Are you sure you want to delete the predicate"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:17
+msgid "Cancel"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:21
 msgid "From category"
 msgstr "Z kategorii"
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
 msgid "Help about predicates."
 msgstr "Predykaty - pomoc."
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
+#, fuzzy
+msgid "Make a new predicate"
+msgstr "Predykaty - pomoc."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18
+#, fuzzy
+msgid "Make predicate"
+msgstr "Predykaty - pomoc."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:23
+msgid "Name"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
 msgid "Need more help?"
 msgstr "Potrzebujesz podpowiedzi?"
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15 
-msgid "The direction (from/to) of this predicate is reversed from the normal "
-"definition."
-msgstr "Kierunek (od/do) tego predykatu jest jest odwrotny, niż wynika to z definicji."
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
+msgid "Please fill in the title of the new predicate."
+msgstr ""
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
-msgid "This predicate can be used between two pages of the following categories."
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:71
+msgid "Predicates"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:48
+msgid ""
+"The direction (from/to) of this predicate is reversed from the normal "
+"definition."
+msgstr ""
+"Kierunek (od/do) tego predykatu jest jest odwrotny, niż wynika to z "
+"definicji."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:4
+msgid "This can't be undone. The predicate will be lost forever."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:16
+msgid ""
+"This predicate can be used between two pages of the following categories."
 msgstr "Predykat może łączyć dwie strony z następujących kategorii."
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35 
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:22
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:9
+msgid "Title"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:32
 msgid "To category"
 msgstr "Do kategorii"
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3 
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:24
+msgid "URI"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3
 msgid "Valid between"
 msgstr "Predykaty - określenie relacji"
 
-#: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
-msgid "You can define for which categories the predicate is shown on the edit "
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
+msgid ""
+"You can define for which categories the predicate is shown on the edit "
 "page.  You can also define which categories of objects will be found when "
 "searching for a page to connect to.  When you don\\'t check anything then "
 "all categories are valid."
-msgstr "Możesz określić, dla których kategorii predykat będzie widoczny za "
+msgstr ""
+"Możesz określić, dla których kategorii predykat będzie widoczny za "
 "pośrednictwem strony edycji. Możesz także zdefiniować kategorie obiektów "
-"widocznie przy wyszukiwaniu połączonych stron. Jeśli nie zaznaczysz nic, wtedy "
-"widoczne będą wszystkie kategorie."
+"widocznie przy wyszukiwaniu połączonych stron. Jeśli nie zaznaczysz nic, "
+"wtedy widoczne będą wszystkie kategorie."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:38
+msgid "edit"
+msgstr ""

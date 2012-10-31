@@ -33,6 +33,10 @@ msgstr "Weet je zeker dat je het volgende item wilt weggooien:"
 msgid "Cancel"
 msgstr "Annuleren"
 
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "Configuratie"
+
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Configuratie"
@@ -111,9 +115,6 @@ msgstr "Dit kan niet ongedaan worden: het item is voor altijd weg."
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Waarde"
-
-#~ msgid "Config"
-#~ msgstr "Configuratie"
 
 #~ msgid "Configuration overview"
 #~ msgstr "Configuratieoverzicht"

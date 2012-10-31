@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2011-12-01 23:32+0300\n"
 "Last-Translator: Konstantin Nikiforov <helllamer@gmail.com>\n"
 "Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,48 +21,53 @@ msgstr ""
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: modules/mod_admin_category/templates/_admin_menu_module.tpl:2
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:9
+#: modules/mod_admin_category/mod_admin_category.erl:87
 msgid "Categories"
 msgstr "Категории"
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:36
-msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Категории используются для категорирования всех страниц. Каждая страница относится к одной определенной категории.<br/>Категории описываются иерархией. Здесь можно управлять этой иерархией."
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:11
+msgid ""
+"Categories are used to categorize all pages. Every page belongs to exactly "
+"one category.<br/>The categories are defined in a hierarchy. Here you can "
+"change that hierarchy."
+msgstr ""
+"Категории используются для категорирования всех страниц. Каждая страница "
+"относится к одной определенной категории.<br/>Категории описываются "
+"иерархией. Здесь можно управлять этой иерархией."
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
 msgstr "Дерево категории"
 
-#: modules/mod_admin_category/templates/_admin_category_sorter.tpl:4
-msgid "Category overview"
-msgstr "Обзор категорий"
-
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:38
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:28
 msgid "Drag categories to the place where you want them in the hierarchy."
 msgstr "Для изменения иерархии категорий можно использовать перетаскивание."
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:41
-msgid "Drag categories to the trash to remove them."
-msgstr "Чтобы удалить категорию, необходимо перетащить её в корзину."
-
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
-msgid "Drag me"
-msgstr "Перетяни меня"
-
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:42
-msgid "Drag the <strong>New category</strong> to add a new category."
-msgstr "Для добавления новой категории необходимо перетащить <strong>New category</strong> в дерево."
-
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
-msgid "Drag to add a new page"
-msgstr "Перетащите для создания новой страницы"
-
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:17
 msgid "How does this work?"
 msgstr "Как это работает?"
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:26
-msgid "New category"
-msgstr "Новая категория"
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+msgid "Use the <i class=\"icon-cog\"></i> button to add or remove categories."
+msgstr ""
 
+#~ msgid "Category overview"
+#~ msgstr "Обзор категорий"
+
+#~ msgid "Drag categories to the trash to remove them."
+#~ msgstr "Чтобы удалить категорию, необходимо перетащить её в корзину."
+
+#~ msgid "Drag me"
+#~ msgstr "Перетяни меня"
+
+#~ msgid "Drag the <strong>New category</strong> to add a new category."
+#~ msgstr ""
+#~ "Для добавления новой категории необходимо перетащить <strong>New "
+#~ "category</strong> в дерево."
+
+#~ msgid "Drag to add a new page"
+#~ msgstr "Перетащите для создания новой страницы"
+
+#~ msgid "New category"
+#~ msgstr "Новая категория"

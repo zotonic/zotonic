@@ -38,6 +38,11 @@ msgid ""
 "Cancel"
 msgstr ""
 
+#: ./modules/mod_admin_config/mod_admin_config.erl:43 
+msgid ""
+"Config"
+msgstr ""
+
 #: ./modules/mod_admin_config/templates/admin_config.tpl:3 
 msgid ""
 "Configuration"

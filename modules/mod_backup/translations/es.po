@@ -13,63 +13,59 @@ msgstr ""
 "PO-Revision-Date: 2011-08-05 13:38-0300\n"
 "Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_backup/templates/admin_backup.tpl:27
-msgid "Actions"
-msgstr "Acciones"
-
-#: modules/mod_backup/templates/admin_backup.tpl:3
-msgid "Admin Backups"
-msgstr "Copias de Resguardo del Administrador"
-
-#: modules/mod_backup/templates/admin_backup.tpl:12
-msgid "At any moment you can make a backup of your system."
-msgstr "En cualquier momento puede hacer una copia de resguardo de sus sistema."
-
-#: modules/mod_backup/templates/admin_backup.tpl:10
-#: modules/mod_backup/templates/admin_backup.tpl:23
-#: modules/mod_backup/templates/_admin_menu_module.tpl:2
-msgid "Backups"
+#: modules/mod_backup/mod_backup.erl:64
+#, fuzzy
+msgid "Backup"
 msgstr "Copias de Resguardo"
 
-#: modules/mod_backup/templates/admin_backup.tpl:26
-msgid "Date"
-msgstr "Fecha"
+#~ msgid "Actions"
+#~ msgstr "Acciones"
 
-#: modules/mod_backup/templates/admin_backup.tpl:48
-msgid "No backups present."
-msgstr "No hay copias de resguardo presentes."
+#~ msgid "Admin Backups"
+#~ msgstr "Copias de Resguardo del Administrador"
 
-#: modules/mod_backup/templates/admin_backup.tpl:18
-msgid "Start backup now"
-msgstr "Comenzar copia de resguardo ahora"
+#~ msgid "At any moment you can make a backup of your system."
+#~ msgstr ""
+#~ "En cualquier momento puede hacer una copia de resguardo de sus sistema."
 
-#: modules/mod_backup/templates/admin_backup.tpl:12
-msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr "La copia de resguardo consta de dos partes, la base de datos y los archivos subidos."
+#~ msgid "Date"
+#~ msgstr "Fecha"
 
-#: modules/mod_backup/templates/admin_backup.tpl:13
-msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "Puede tener hasta 10 copias de resguardo, las más viejas serán eliminadas automáticamente"
+#~ msgid "No backups present."
+#~ msgstr "No hay copias de resguardo presentes."
 
-#: modules/mod_backup/templates/admin_backup.tpl:17
-msgid "You can start a backup immediately, while the backup is running you can continue working."
-msgstr "Puede comenzar la copia de resguardo de inmediato, mientras que esté corriendo puede continuar trabajando."
+#~ msgid "Start backup now"
+#~ msgstr "Comenzar copia de resguardo ahora"
 
-#: modules/mod_backup/templates/admin_backup.tpl:40
-msgid "download database"
-msgstr "bajar base de datos"
+#~ msgid "The backup comprises two parts, the database and the uploaded files."
+#~ msgstr ""
+#~ "La copia de resguardo consta de dos partes, la base de datos y los "
+#~ "archivos subidos."
 
-#: modules/mod_backup/templates/admin_backup.tpl:41
-msgid "download files"
-msgstr "bajar archivos"
+#~ msgid "You can have 10 backups, older ones will be deleted automatically."
+#~ msgstr ""
+#~ "Puede tener hasta 10 copias de resguardo, las más viejas serán eliminadas "
+#~ "automáticamente"
 
-#: modules/mod_backup/templates/admin_backup.tpl:38
-msgid "this backup is in progress"
-msgstr "esta copia de resguardo está en progreso"
+#~ msgid ""
+#~ "You can start a backup immediately, while the backup is running you can "
+#~ "continue working."
+#~ msgstr ""
+#~ "Puede comenzar la copia de resguardo de inmediato, mientras que esté "
+#~ "corriendo puede continuar trabajando."
 
+#~ msgid "download database"
+#~ msgstr "bajar base de datos"
+
+#~ msgid "download files"
+#~ msgstr "bajar archivos"
+
+#~ msgid "this backup is in progress"
+#~ msgstr "esta copia de resguardo está en progreso"

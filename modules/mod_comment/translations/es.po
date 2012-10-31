@@ -20,70 +20,52 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_comment/templates/admin_comments.tpl:16
-msgid "Added on"
-msgstr "Agregado el"
-
-#: modules/mod_comment/templates/_comments.tpl:4
-#: modules/mod_comment/templates/admin_comments.tpl:11
-#: modules/mod_comment/templates/_admin_menu_module.tpl:2
+#: modules/mod_comment/mod_comment.erl:207
+#: modules/mod_comment/mod_comment.erl:202
 msgid "Comments"
 msgstr "Comentarios"
 
-#: modules/mod_comment/templates/_comments_form.tpl:15
-msgid "E-mail"
-msgstr "Correo Electrónico"
+#~ msgid "Added on"
+#~ msgstr "Agregado el"
 
-#: modules/mod_comment/templates/admin_comments.tpl:20
-msgid "Email"
-msgstr "Correo Electrónico"
+#~ msgid "E-mail"
+#~ msgstr "Correo Electrónico"
 
-#: modules/mod_comment/templates/_comments_form.tpl:35
-msgid "Log on or sign up to comment"
-msgstr "Conectarse o registrarse para comentar"
+#~ msgid "Email"
+#~ msgstr "Correo Electrónico"
 
-#: modules/mod_comment/templates/_comments_form.tpl:24
-#: modules/mod_comment/templates/admin_comments.tpl:18
-msgid "Message"
-msgstr "Mensaje"
+#~ msgid "Log on or sign up to comment"
+#~ msgstr "Conectarse o registrarse para comentar"
 
-#: modules/mod_comment/templates/_comments_form.tpl:10
-#: modules/mod_comment/templates/admin_comments.tpl:19
-msgid "Name"
-msgstr "Nombre"
+#~ msgid "Message"
+#~ msgstr "Mensaje"
 
-#: modules/mod_comment/templates/admin_comments.tpl:21
-msgid "Options"
-msgstr "Opciones"
+#~ msgid "Name"
+#~ msgstr "Nombre"
 
-#: modules/mod_comment/templates/admin_comments.tpl:17
-msgid "Page"
-msgstr "Página"
+#~ msgid "Options"
+#~ msgstr "Opciones"
 
-#: modules/mod_comment/templates/_comments_comment.tpl:4
-msgid "Posted"
-msgstr "Subido"
+#~ msgid "Page"
+#~ msgstr "Página"
 
-#: modules/mod_comment/templates/admin_comments.tpl:4
-msgid "Recent Comments"
-msgstr "Comentarios Recientes"
+#~ msgid "Posted"
+#~ msgstr "Subido"
 
-#: modules/mod_comment/templates/admin_comments.tpl:13
-msgid "Recent comments"
-msgstr "Comentarios recientes"
+#~ msgid "Recent Comments"
+#~ msgstr "Comentarios Recientes"
 
-#: modules/mod_comment/templates/_comments_form.tpl:29
-msgid "Send"
-msgstr "Enviar"
+#~ msgid "Recent comments"
+#~ msgstr "Comentarios recientes"
 
-#: modules/mod_comment/templates/admin_comments.tpl:45
-msgid "There are no comments."
-msgstr "No hay comentarios."
+#~ msgid "Send"
+#~ msgstr "Enviar"
 
-#: modules/mod_comment/templates/admin_comments.tpl:39
-msgid "delete"
-msgstr "borrar"
+#~ msgid "There are no comments."
+#~ msgstr "No hay comentarios."
 
-#: modules/mod_comment/templates/admin_comments.tpl:38
-msgid "view"
-msgstr "ver"
+#~ msgid "delete"
+#~ msgstr "borrar"
+
+#~ msgid "view"
+#~ msgstr "ver"

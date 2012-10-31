@@ -18,34 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:21 
+#: ./modules/mod_facebook/mod_facebook.erl:77 
 msgid ""
-"App ID."
-msgstr ""
-
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:26 
-msgid ""
-"App Secret"
-msgstr ""
-
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:3 ./modules/mod_facebook/templates/admin_facebook.tpl:13 
-msgid ""
-"Facebook API Configuration"
-msgstr ""
-
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:14 
-msgid ""
-"Here you find the settings to authenticate users with facebook. You can "
-"find these values in <a href=\"http://www.facebook.com/developers/apps.php\" "
-"title=\"Developer Dashboard\">Your Facebook Developer Dashboard</a>"
-msgstr ""
-
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:38 
-msgid ""
-"Save Facebook settings"
-msgstr ""
-
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:30 
-msgid ""
-"Scope"
+"Facebook"
 msgstr ""

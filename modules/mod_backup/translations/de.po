@@ -13,77 +13,81 @@ msgstr ""
 "PO-Revision-Date: 2012-07-04 13:47+0100\n"
 "Last-Translator: Hans-Christian Espérer <hc-translate@hcesperer.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:38
-msgid "Actions"
-msgstr "Aktionen"
-
-#: ./modules/mod_backup/templates/admin_backup.tpl:3
-msgid "Admin Backups"
-msgstr "Backups administrieren"
-
-#: ./modules/mod_backup/templates/admin_backup.tpl:14
-msgid "At any moment you can make a backup of your system."
-msgstr "Sie können jederzeit ein Backup Ihres Systems anlegen."
-
-#: ./modules/mod_backup/templates/_admin_menu_module.tpl:2
-#: ./modules/mod_backup/templates/admin_backup.tpl:12
-#: ./modules/mod_backup/templates/admin_backup.tpl:34
-msgid "Backups"
+#: modules/mod_backup/mod_backup.erl:64
+#, fuzzy
+msgid "Backup"
 msgstr "Backups"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:37
-msgid "Date"
-msgstr "Datum"
+#~ msgid "Actions"
+#~ msgstr "Aktionen"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:59
-msgid "No backups present."
-msgstr "Keine Backups vorhanden."
+#~ msgid "Admin Backups"
+#~ msgstr "Backups administrieren"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:21
-msgid "Start backup now"
-msgstr "Backup jetzt starten"
+#~ msgid "At any moment you can make a backup of your system."
+#~ msgstr "Sie können jederzeit ein Backup Ihres Systems anlegen."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:27
-msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "Das \"pg_dump\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"pg_dump\" entsprechend, und versuchen Sie es anschließend erneut."
+#~ msgid "Date"
+#~ msgstr "Datum"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:28
-msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to pg_dump and return to this page."
-msgstr "Das \"tar\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie die Einstellung \"tar\" entsprechend, und versuchen Sie es anschließend erneut"
+#~ msgid "No backups present."
+#~ msgstr "Keine Backups vorhanden."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:14
-msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr "Das Backup besteht aus zwei Teilen, der Datenbank und den hochgeladenen Dateien."
+#~ msgid "Start backup now"
+#~ msgstr "Backup jetzt starten"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:26
-msgid "Warning:"
-msgstr "Warnung:"
+#~ msgid ""
+#~ "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" "
+#~ "config key to the path to pg_dump and return to this page."
+#~ msgstr ""
+#~ "Das \"pg_dump\"-Kommandozeilentool konnte nicht gefunden werden. Setzen "
+#~ "Sie die Einstellung \"pg_dump\" entsprechend, und versuchen Sie es "
+#~ "anschließend erneut."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:15
-msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "Bis zu zehn Backups werden aufbewahrt; ältere werden automatisch gelöscht."
+#~ msgid ""
+#~ "The \"tar\" command was not found in the path. Set the \"tar\" config key "
+#~ "to the path to pg_dump and return to this page."
+#~ msgstr ""
+#~ "Das \"tar\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie "
+#~ "die Einstellung \"tar\" entsprechend, und versuchen Sie es anschließend "
+#~ "erneut"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:20
-msgid "You can start a backup immediately, while the backup is running you can continue working."
-msgstr "Sie können sofort ein Backup starten. Während es angelegt wird, können Sie mit der Seite weiterarbeiten."
+#~ msgid "The backup comprises two parts, the database and the uploaded files."
+#~ msgstr ""
+#~ "Das Backup besteht aus zwei Teilen, der Datenbank und den hochgeladenen "
+#~ "Dateien."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:26
-msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
-msgstr "Ihr Backupsystem ist nicht korrekt konfiguriert. Das Backup-Modul wird nicht funktionieren, bis die folgenden Probleme gelöst wurden:"
+#~ msgid "Warning:"
+#~ msgstr "Warnung:"
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:52
-msgid "download database"
-msgstr "Datenbank herunterladen"
+#~ msgid "You can have 10 backups, older ones will be deleted automatically."
+#~ msgstr ""
+#~ "Bis zu zehn Backups werden aufbewahrt; ältere werden automatisch gelöscht."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:53
-msgid "download files"
-msgstr "Hochgeladene Dateien herunterladen"
+#~ msgid ""
+#~ "You can start a backup immediately, while the backup is running you can "
+#~ "continue working."
+#~ msgstr ""
+#~ "Sie können sofort ein Backup starten. Während es angelegt wird, können "
+#~ "Sie mit der Seite weiterarbeiten."
 
-#: ./modules/mod_backup/templates/admin_backup.tpl:50
-msgid "this backup is in progress"
-msgstr "Das Backup wird momentan angelegt"
+#~ msgid ""
+#~ "Your backup is not correctly configured. The backup module will not work "
+#~ "until the problem(s) below have been resolved:"
+#~ msgstr ""
+#~ "Ihr Backupsystem ist nicht korrekt konfiguriert. Das Backup-Modul wird "
+#~ "nicht funktionieren, bis die folgenden Probleme gelöst wurden:"
 
+#~ msgid "download database"
+#~ msgstr "Datenbank herunterladen"
+
+#~ msgid "download files"
+#~ msgstr "Hochgeladene Dateien herunterladen"
+
+#~ msgid "this backup is in progress"
+#~ msgstr "Das Backup wird momentan angelegt"

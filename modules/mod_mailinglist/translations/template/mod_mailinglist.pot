@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_mailinglist/mod_mailinglist.erl:365 
+msgid ""
+"Mailing lists"
+msgstr ""
+
 #: ./modules/mod_mailinglist/mod_mailinglist.erl:158 
 msgid ""
 "No addresses selected"

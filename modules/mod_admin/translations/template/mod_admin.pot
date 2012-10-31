@@ -142,6 +142,11 @@ msgid ""
 "Attached media"
 msgstr ""
 
+#: ./modules/mod_admin/mod_admin.erl:114 
+msgid ""
+"Auth"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_admin_edit_basics.tpl:3 
 msgid ""
 "Basic"
@@ -217,7 +222,7 @@ msgid ""
 "Connect a page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3 
+#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3 ./modules/mod_admin/mod_admin.erl:91 
 msgid ""
 "Content"
 msgstr ""
@@ -242,7 +247,7 @@ msgid ""
 "Customize page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:7 
+#: ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:7 ./modules/mod_admin/mod_admin.erl:86 
 msgid ""
 "Dashboard"
 msgstr ""
@@ -541,7 +546,7 @@ msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:9 
+#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:9 ./modules/mod_admin/mod_admin.erl:99 
 msgid ""
 "Media"
 msgstr ""
@@ -590,6 +595,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/admin_referrers.tpl:23 ./modules/mod_admin/templates/_admin_overview_list.tpl:14 
 msgid ""
 "Modified on"
+msgstr ""
+
+#: ./modules/mod_admin/mod_admin.erl:109 
+msgid ""
+"Modules"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41 
@@ -662,7 +672,7 @@ msgid ""
 "Page title"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3 
+#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/mod_admin.erl:95 
 msgid ""
 "Pages"
 msgstr ""
@@ -858,6 +868,11 @@ msgid ""
 "State"
 msgstr ""
 
+#: ./modules/mod_admin/mod_admin.erl:122 
+msgid ""
+"Status"
+msgstr ""
+
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:81 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:146 
 msgid ""
 "Street Line 1"
@@ -866,6 +881,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:88 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:153 
 msgid ""
 "Street Line 2"
+msgstr ""
+
+#: ./modules/mod_admin/mod_admin.erl:104 
+msgid ""
+"Structure"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_haspart.tpl:3 
@@ -886,6 +906,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:39 
 msgid ""
 "Surname"
+msgstr ""
+
+#: ./modules/mod_admin/mod_admin.erl:118 
+msgid ""
+"System"
 msgstr ""
 
 #: ./modules/mod_admin/templates/admin_status.tpl:3 

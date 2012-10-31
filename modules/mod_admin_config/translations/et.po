@@ -37,6 +37,10 @@ msgstr "Oled kindel, et tahad kustutada konfiguratsioonivõtit"
 msgid "Cancel"
 msgstr "Katkesta"
 
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "Konfiguratsioon"
+
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Konfiguratsioon"
@@ -116,9 +120,6 @@ msgstr "Seda ei saa tagasi võtta. Konfiguratsiooni võti kaob iveseks."
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
 msgid "Value"
 msgstr "Väärtus"
-
-#~ msgid "Config"
-#~ msgstr "Konfiguratsioon"
 
 #~ msgid "Configuration overview"
 #~ msgstr "Konfiguratsiooni ülevaade"

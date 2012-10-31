@@ -20,6 +20,10 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
+#: modules/mod_mailinglist/mod_mailinglist.erl:365
+msgid "Mailing lists"
+msgstr "Listas de correo"
+
 #: modules/mod_mailinglist/mod_mailinglist.erl:158
 msgid "No addresses selected"
 msgstr ""
@@ -235,9 +239,6 @@ msgstr ""
 
 #~ msgid "Mailing list settings."
 #~ msgstr "Configuración de lista de correo."
-
-#~ msgid "Mailing lists"
-#~ msgstr "Listas de correo"
 
 #~ msgid "Mailing status"
 #~ msgstr "Listas de Correo"

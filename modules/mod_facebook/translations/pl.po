@@ -13,38 +13,40 @@ msgstr ""
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:21 
-msgid "App ID."
-msgstr "App ID/API Key"
+#: modules/mod_facebook/mod_facebook.erl:77
+msgid "Facebook"
+msgstr ""
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:26 
-msgid "App Secret"
-msgstr "App Secret"
+#~ msgid "App ID."
+#~ msgstr "App ID/API Key"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:3 ./modules/mod_facebook/templates/admin_facebook.tpl:13 
-msgid "Facebook API Configuration"
-msgstr "Facebook - konfiguracja API"
+#~ msgid "App Secret"
+#~ msgstr "App Secret"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:14 
-msgid "Here you find the settings to authenticate users with facebook. You can "
-"find these values in <a href=\"http://www.facebook.com/developers/apps.php\" "
-"title=\"Developer Dashboard\">Your Facebook Developer Dashboard</a>"
-msgstr "Za pomocą tej strony możesz skonfigurować mechanizm uwierzytelniania "
-"użytkowników za pomocą konta FB. Wymagane informacje pobierzesz odwiedzając "
-"stronę <a href=\"http://www.facebook.com/developers/apps.php\" "
-"title=\"Developer Dashboard\">Programiści Facebooka</a>"
+#~ msgid "Facebook API Configuration"
+#~ msgstr "Facebook - konfiguracja API"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:38 
-msgid "Save Facebook settings"
-msgstr "Zapisz ustawienia"
+#~ msgid ""
+#~ "Here you find the settings to authenticate users with facebook. You can "
+#~ "find these values in <a href=\"http://www.facebook.com/developers/apps.php"
+#~ "\" title=\"Developer Dashboard\">Your Facebook Developer Dashboard</a>"
+#~ msgstr ""
+#~ "Za pomocą tej strony możesz skonfigurować mechanizm uwierzytelniania "
+#~ "użytkowników za pomocą konta FB. Wymagane informacje pobierzesz "
+#~ "odwiedzając stronę <a href=\"http://www.facebook.com/developers/apps.php"
+#~ "\" title=\"Developer Dashboard\">Programiści Facebooka</a>"
 
-#: ./modules/mod_facebook/templates/admin_facebook.tpl:30 
-msgid "Scope"
-msgstr "Zakres"
+#~ msgid "Save Facebook settings"
+#~ msgstr "Zapisz ustawienia"
+
+#~ msgid "Scope"
+#~ msgstr "Zakres"

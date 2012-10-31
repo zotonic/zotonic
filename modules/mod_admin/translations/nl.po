@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-10-31 22:09+0100\n"
+"PO-Revision-Date: 2012-10-31 22:36+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -130,6 +130,10 @@ msgstr "Laat Google deze pagina niet indexeren"
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
+#: modules/mod_admin/mod_admin.erl:114
+msgid "Auth"
+msgstr "Auth"
+
 #: modules/mod_admin/templates/_admin_edit_basics.tpl:3
 msgid "Basic"
 msgstr "Basisgegevens"
@@ -206,6 +210,7 @@ msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/mod_admin.erl:91
 msgid "Content"
 msgstr "Inhoud"
 
@@ -227,7 +232,7 @@ msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
 #: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7
+#: modules/mod_admin/templates/admin.tpl:7 modules/mod_admin/mod_admin.erl:86
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -501,6 +506,7 @@ msgstr "Maak mediabestand"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/mod_admin.erl:99
 msgid "Media"
 msgstr "Mediabestanden"
 
@@ -546,6 +552,10 @@ msgstr "Bewerkt door"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 msgid "Modified on"
 msgstr "Bewerkt op"
+
+#: modules/mod_admin/mod_admin.erl:109
+msgid "Modules"
+msgstr "Modules"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
 msgid "Name"
@@ -611,6 +621,7 @@ msgid "Page title"
 msgstr "Paginatitel"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
+#: modules/mod_admin/mod_admin.erl:95
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -780,6 +791,10 @@ msgstr "Standaard"
 msgid "State"
 msgstr "Provincie"
 
+#: modules/mod_admin/mod_admin.erl:122
+msgid "Status"
+msgstr "Status"
+
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 1"
@@ -789,6 +804,10 @@ msgstr "Adresregel 1"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Adresregel 2"
+
+#: modules/mod_admin/mod_admin.erl:104
+msgid "Structure"
+msgstr "Indeling"
 
 #: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
 msgid "Sub pages"
@@ -805,6 +824,10 @@ msgstr "Voorvoegsel"
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
 msgstr "Achternaam"
+
+#: modules/mod_admin/mod_admin.erl:118
+msgid "System"
+msgstr "Systeem"
 
 #: modules/mod_admin/templates/admin_status.tpl:3
 msgid "System Status"
@@ -1142,9 +1165,6 @@ msgstr "bezoek site"
 
 #~ msgid "Show this article only between the two dates."
 #~ msgstr "Toon dit artikel alleen tussen deze twee datums."
-
-#~ msgid "System"
-#~ msgstr "Systeem"
 
 #~ msgid "This can't be undone. Your media will be lost forever."
 #~ msgstr ""

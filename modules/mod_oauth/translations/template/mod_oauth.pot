@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ./modules/mod_oauth/mod_oauth.erl:310 
+msgid ""
+"API access"
+msgstr ""
+
 #: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:5 
 msgid ""
 "Access to"

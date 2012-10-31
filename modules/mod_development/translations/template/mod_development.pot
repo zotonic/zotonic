@@ -18,38 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_development/templates/admin_development_templates.tpl:9 
+#: ./modules/mod_development/mod_development.erl:312 
 msgid ""
-"Below you see in real time which templates are compiled and included."
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development.tpl:18 
-msgid ""
-"Download css and javascript files as separate files (ie. don’t combine "
-"them in one url)."
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development_templates.tpl:13 
-msgid ""
-"Empty log"
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development_templates.tpl:12 
-msgid ""
-"Recompile Templates"
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development.tpl:7 
-msgid ""
-"Site Development"
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development_templates.tpl:7 
-msgid ""
-"Site Development &mdash; Included templates"
-msgstr ""
-
-#: ./modules/mod_development/templates/admin_development.tpl:9 
-msgid ""
-"Tools and settings that are useful for site development."
+"Development"
 msgstr ""
