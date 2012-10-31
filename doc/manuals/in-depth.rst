@@ -3,17 +3,17 @@ In-depth manuals
 
 .. toctree::
 
-   dispatch
+   site-anatomy
    modules/index
-   services
+   dispatch
    auth
    notification
    datamodel/index
-   blocks
    i18n
    media-files
    templates/index
    lib-files
    controllers
    email
+   services
    cookbook/index

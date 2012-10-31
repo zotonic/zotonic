@@ -49,5 +49,5 @@ called ``yoursite``.
 8. Congratulations! You got your first site running.
 
 To learn more about how sites work and what consists of a
-:term:`Zotonic site`, please see the next chapter,
-:ref:`tutorial-site-anatomy`.
+:term:`Zotonic site`, please see the in-depth manual,
+:ref:`manual-site-anatomy`.

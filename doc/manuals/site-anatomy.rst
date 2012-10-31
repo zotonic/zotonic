@@ -1,4 +1,4 @@
-.. _tutorial-site-anatomy:
+.. _manual-site-anatomy:
 
 Anatomy of a site
 =================

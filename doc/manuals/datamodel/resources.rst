@@ -77,6 +77,21 @@ files that are no longer referenced by any media.
 .. seealso:: :ref:`model-media`
 
 
+Blocks
+......
+
+Blocks are a specific feature in a resource. The ``blocks`` property
+of a resource is a list of blocks which can be dynamically added and
+removed from the resource in the admin edit page. Each module can
+define their own blocks, which consist of an edit template and a view
+template.
+
+The survey module uses the blocks feature to allow you to dynamically
+create a list of questions which a user has to answer.
+
+.. todo:: Fix blocks documentation
+
+
 Pivot columns
 .............
 
