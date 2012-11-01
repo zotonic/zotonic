@@ -20,20 +20,10 @@
 
 require_zotonic_running
 
-cd $ZOTONIC
-
-PID=`cat $ZOTONIC_PIDFILE`
-if ps -p $PID >&-
-then
-    echo "\
+echo "\
 Running: $NODENAME@$HOSTNAME
 
 Sites Status:
 ============="
-    $ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$HOSTNAME -s zotonic status $NODENAME@$HOSTNAME -s init stop
-    echo
-    exit 0
-else
-    echo "Not Running (process '$PID' may have crashed or been killed)"
-    exit 1
-fi 
+$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$HOSTNAME -s zotonic status $NODENAME@$HOSTNAME -s init stop
+echo

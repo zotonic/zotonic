@@ -61,6 +61,10 @@ export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/eb
 DISTRIBUTED_DETECTED=$(ps u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
 export ZOTONIC_DISTRIBUTED=${ZOTONIC_DISTRIBUTED:=$DISTRIBUTED_DETECTED}
 
+
+# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
+export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
+
 # The ZOTONIC_DISTRIBUTED flag tells Zotonic to start a (potentially)
 # distributed node. In that case, we require the hostname to be a FQDN.
 if [ "$ZOTONIC_DISTRIBUTED" = "true" ]; then
@@ -73,12 +77,11 @@ if [ "$ZOTONIC_DISTRIBUTED" = "true" ]; then
         exit 1
     fi
     export NAME_ARG=-name
+    export NODE="$NODENAME@$HOSTNAME"
 else
     export NAME_ARG=-sname
+    export NODE="$NODENAME"
 fi
-
-# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
-export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
 
 # Hostname to the fully qualified domain name of your host, or leave it as localhost.
 export HOSTNAME=${HOSTNAME:=localhost}
