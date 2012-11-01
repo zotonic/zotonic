@@ -13,7 +13,7 @@ called ``yoursite``.
 
 1. Edit your ``/etc/hosts`` file, adding an entry for ``yoursite`` to point at your local host::
 
-     yoursite   127.0.0.1
+     127.0.0.1   yoursite
      
 2. Create an user and database in PostgreSQL (change the password for the user!)::
 
