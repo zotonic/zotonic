@@ -27,6 +27,8 @@ called ``yoursite``.
 
      bin/zotonic addsite -s blog yoursite
 
+   .. note:: zotonic has to be running for the addsite command to succeed.
+
    This will add a site named yoursite. Its default URL will be
    http://yoursite:8000/ so either put 'yoursite' in your hosts file
    or change the {hostname} section of the config file.
@@ -35,9 +37,9 @@ called ``yoursite``.
    your database credentials and the hostname are correct, and change
    the password for the admin.
 
-5. Rebuild Zotonic by typing ``make``, and then start it using ``bin/zotonic debug``.
+5. Rebuild Zotonic by typing ``make``, and then (re)start it using ``bin/zotonic debug``.
 
-6. Now Zotonic will install the initial database. When something goes
+6. Now Zotonic will install the initial database. If something goes
    wrong here, then it is almost always a problem with the database
    connection. Double-check your database configuration in the
    `priv/sites/yoursite/config` file.
