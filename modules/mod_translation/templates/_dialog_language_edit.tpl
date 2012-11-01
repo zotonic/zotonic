@@ -1,10 +1,3 @@
-
-{% if new %}
-<h3>{_ Add a new language _}</h3>
-{% else %}
-<h3>{_ Edit _} {{ lang.language }} ({{ code }})</h3>
-{% endif %}
-
 <p>{_ Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of the language. Use the native form of the language, for example <em>English</em>, <em>Türkçe</em> or <em>Français</em>. _}</p>
 
 {% wire id=#form type="submit" postback={language_edit code=code} delegate="mod_translation" %}
