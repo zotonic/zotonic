@@ -62,7 +62,7 @@ This tells you which version of ImageMagick is installed::
 PostgreSQL
 ----------  
 
-You can check if you have ImageMagick installed by typing the following
+You can check if you have PostgreSQL installed by typing the following
 command in a terminal::
 
   $ psql -V
