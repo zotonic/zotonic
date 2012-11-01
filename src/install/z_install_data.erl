@@ -57,6 +57,7 @@ install_modules(blog, Host, C) ->
     Modules =
         [
          "mod_base",
+         "mod_base_site",
          "mod_menu",
          "mod_oauth",
          "mod_search",
