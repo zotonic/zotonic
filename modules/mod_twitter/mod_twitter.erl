@@ -261,14 +261,19 @@ fetch(URL, Body, Sleep, Context) ->
 process_data(Data, Context) ->
     case Data of
         <<${, _/binary>> ->
-            {struct, Tweet} = mochijson:binary_decode(Data),
-            case proplists:get_value(<<"delete">>, Tweet) of
-                undefined ->
+            {struct, TwitterData} = mochijson:binary_decode(Data),
+            {Tweet, Delete} = {proplists:is_defined(<<"retweet_count">>,
+                               TwitterData),proplists:is_defined(<<"retweet_count">>, TwitterData)},
+            case {Tweet, Delete} of
+                {true, _} ->
                     AsyncContext = z_context:prune_for_async(Context),
                     spawn(fun() -> import_tweet(Tweet, AsyncContext) end);
-                {struct, _} ->
-                    lager:info("Twitter: ignored delete request."),
-                    % {"delete":{"status":{"user_id":42,"user_id_str":"42","id_str":"1234","id":1234}}}
+				{false, false} ->
+					lager:error("Unexpected result from Twitter: ~p", Tweet),
+					timer:sleep(120 * 1000),
+                    exit({error, Tweet});
+                {_, true} ->
+                    lager:info("Twitter: ignored delete request: ~p", [Tweet]),
                     ok
             end;
 
