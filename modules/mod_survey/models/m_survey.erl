@@ -263,7 +263,8 @@ survey_results(SurveyId, Context) ->
         Blocks when is_list(Blocks) ->
             Rows = z_db:q("select user_id, persistent, question, name, value, text, created
                            from survey_answer 
-                           where survey_id = $1", [SurveyId], Context),
+                           where survey_id = $1
+                           order by user_id, persistent", [SurveyId], Context),
             Grouped = group_users(Rows),
             NQs = [ {proplists:get_value(name, B), question_prepare(B, Context)} || B <- Blocks ],
             UnSorted = [ user_answer_row(User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
