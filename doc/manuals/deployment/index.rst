@@ -29,6 +29,7 @@ Table of contents
               
    startup
    privilegedports
+   https
    varnish
    nginx
 
