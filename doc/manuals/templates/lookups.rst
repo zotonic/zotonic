@@ -11,23 +11,24 @@ For example, say we have two templates:
   | mod_example/templates/foobar.tpl
   | mod_example/templates/email/email_base.tpl
 
-The above are referred to as ``"foobar.tpl"`` and ``email/email_base.tpl``.
+The above are referred to as ``foobar.tpl`` and ``email/email_base.tpl``.
 Just ``email_base.tpl`` will not find the email template.
 
-All templates of all modules are grouped together, regardless in which module they are found.
+All templates of all modules are grouped together, regardless in which module they are defined and the module name is never given as part of the template name.
+
 
 Module priority and overriding templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Similar named templates can be defined in multiple modules.
-Which one is selected depends on the priority of the module.
+Which template is selected depends on the priority of the module.
 
 The :dfn:`module priority` is a number defined in the module’s code and is usually a number between 1 and 1000.
 A lower number gives a higher priority.
 Templates in a module with higher priority hide templates in a module with lower priority.
 
 When two modules have the same priority then the modules are sorted by their name.
-That means that, given the same priority number, ``mod_aloha` has higher priority than ``mod_hello``.
+That means that, given the same priority number, ``mod_aloha`` has higher priority than ``mod_hello``.
 
 This mechanism allows any module (or site) to replace every single template in the system with its own version.
 
