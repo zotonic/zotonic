@@ -172,6 +172,7 @@ model_pgsql() ->
         pivot_postcode character varying(30),
         pivot_country character varying(80),
         pivot_geocode bigint,
+        pivot_geocode_qhash bytea,
         pivot_title character varying(100),
 
         CONSTRAINT rsc_pkey PRIMARY KEY (id),
@@ -209,6 +210,31 @@ model_pgsql() ->
     "CREATE INDEX rsc_pivot_postcode_key ON rsc (pivot_postcode)",
     "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)",
     "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
+
+    % Table: rsc_gone
+    % Tracks deleted or moved resources, adding "410 gone" support
+    % Also contains new id or new url for 301 moved permanently replies.
+    % mod_backup is needed to recover a deleted resource's content.
+
+    "CREATE TABLE rsc_gone (
+        id bigint not null,
+        location_id bigint,
+        location_uri character varying(250),
+        version int not null,
+        uri character varying(250),
+        name character varying(80),
+        page_path character varying(80),
+        is_authoritative boolean NOT NULL DEFAULT true,
+        creator_id bigint,
+        modifier_id bigint,
+        created timestamp with time zone NOT NULL DEFAULT now(),
+        modified timestamp with time zone NOT NULL DEFAULT now(),
+        CONSTRAINT persistent_pkey PRIMARY KEY (id)
+    )",
+    "CREATE INDEX rsc_gone_name ON rsc_gone(name)",
+    "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)",
+    "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)",
+
 
     % Table: protect
     % By making an entry in this table we protect a rsc from being deleted.

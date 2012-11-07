@@ -127,6 +127,7 @@ upgrade(C, Database, Schema) ->
     ok = install_task_due(C, Database, Schema),
     ok = install_module_schema_version(C, Database, Schema),
     ok = install_geocode(C, Database, Schema),
+    ok = install_rsc_gone(C, Database, Schema),
     ok.
 
 
@@ -250,8 +251,41 @@ install_geocode(C, Database, Schema) ->
             {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)"),
             ok;
         <<"bigint">> ->
+            % 0.9dev was missing a column definition in the z_install.erl
+            case has_column(C, "rsc", "pivot_geocode_qhash", Database, Schema) of
+                true -> 
+                    ok;
+                false ->
+                    {ok, [], []} = pgsql:squery(C, "alter table rsc add column pivot_geocode_qhash bytea"),
+                    ok
+            end
+    end.
+
+
+% Install the table tracking deleted (or moved) resources
+install_rsc_gone(C, Database, Schema) ->
+    case has_table(C, "rsc_gone", Database, Schema) of
+        false ->
+            {ok,[],[]} = pgsql:squery(C, "create table rsc_gone ( "
+                            "  id bigint not null,"
+                            "  location_id bigint,"
+                            "  location_uri character varying(250),"
+                            "  version int not null, "
+                            "  uri character varying(250),"
+                            "  name character varying(80),"
+                            "  page_path character varying(80),"
+                            "  is_authoritative boolean NOT NULL DEFAULT true,"
+                            "  creator_id bigint,"
+                            "  modifier_id bigint,"
+                            "  created timestamp with time zone NOT NULL DEFAULT now(),"
+                            "  modified timestamp with time zone NOT NULL DEFAULT now(),"
+                            "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
+                            ")"),
+            ok;
+        true ->
             ok
     end.
+
 
 
 
