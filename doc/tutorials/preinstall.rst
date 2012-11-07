@@ -72,6 +72,8 @@ Returns the PostgreSQL version::
   psql (PostgreSQL) 9.1.6
 
 
+.. _psql-trust-authentication:
+
 Enabling trust-authentication in PostgreSQL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

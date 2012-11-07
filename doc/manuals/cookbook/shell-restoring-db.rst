@@ -1,3 +1,5 @@
+.. _cookbook-restore-db:
+
 Restore/upgrade content db from backup
 ======================================
 `Contributed by: Scott Finnie`
