@@ -123,13 +123,11 @@ unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, Context, Acc) ->
 
 % Text frame
 handle_frame(RemainingData, 1, Message, Socket, Context) ->
-    Handler = z_context:get(ws_handler, Context),
-    Handler:handle_message(Message, Context),
+    handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Binary frame
 handle_frame(RemainingData, 2, Message, Socket, Context) ->
-    Handler = z_context:get(ws_handler, Context),
-    Handler:handle_message(Message, Context),
+    handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Close control frame
 handle_frame(_RemainingData, 8, _Message, Socket, Context) ->
@@ -143,6 +141,16 @@ handle_frame(RemainingData, 9, Message, Socket, Context) ->
 % Pong control frame
 handle_frame(RemainingData, 10, _Message, Socket, Context) ->
     handle_data(RemainingData, Socket, Context).
+
+% Call the handler about the initialization
+handle_init(Context) ->
+    W = z_context:get(ws_handler,  Context),
+    W:handle_init(Context).
+
+% Let the handler handle the message
+handle_message(Message, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:handle_message(Message, Context).
 
 
 %% @TODO: log any errors
@@ -159,8 +167,7 @@ close(_Reason, Socket, _Context) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    WsHandler = z_context:get(ws_hander,  Context),
-    WsHandler:handle_init(Context),
+    handle_init(Context),
     send_loop(Socket, Context).
 
 

@@ -68,7 +68,11 @@ provide_content(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
-    Context2 = z_context:set(ws_handler, ?MODULE, Context1),
+    Context2 = case z_context:get(ws_handler, Context1) of
+        undefined ->
+            z_context:set(ws_handler, ?MODULE, Context1);
+        _Hdlr -> Context1
+    end,
     case z_context:get_req_header("sec-websocket-version", Context2) of
         undefined ->
             case z_context:get_req_header("sec-websocket-key1", Context2) of
@@ -89,10 +93,9 @@ websocket_start(ReqData, Context) ->
     end.
 
 
-%% Called during initializtion of the websocket.
+%% Called during initialization of the websocket.
 handle_init(Context) ->
     z_session_page:websocket_attach(self(), Context).
-
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
 handle_message(Msg, Context) ->

@@ -79,16 +79,14 @@ handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
     % A packet of <<0,255>> signifies that the ua wants to close the connection
     ua_close_request;
 handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    Handler = z_context:get(ws_handler, Context),
-    Handler:handle_message(Msg, Context),
+    handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
     handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
 
 %% Extract frame with length bytes
 handle_data(Msg, 0, T, Socket, Context) ->
-    Handler = z_context:get(ws_handler, Context),
-    Handler:handle_message(Msg, Context),
+    handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
     handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
@@ -96,6 +94,17 @@ handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length
 %% Data ended before the end of the frame, loop to fetch more
 handle_data(Msg, Length, <<>>, Socket, Context) ->
     z_websocket_hixie75:receive_loop(Msg, Length, Socket, Context).
+
+
+% Call the handler. We are initializing.
+handle_init(Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:init(Context).
+
+% Call the handler, new message arrived.
+handle_message(Msg, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:handle_message(Msg, Context).
 
 
 %% @doc Unpack the length bytes
@@ -137,8 +146,7 @@ unpack_length(Binary, LenBytes, Length) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    WsHandler = z_context:get(ws_handler, Context),
-    WsHandler:handle_init(Context),
+    handle_init(Context),
     send_loop(Socket, Context).
 
 send_loop(Socket, Context) ->
