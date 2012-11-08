@@ -241,7 +241,7 @@ install_module_schema_version(C, Database, Schema) ->
             ok
     end.
 
-%% make sure the geocode is an unsigned bigint
+%% make sure the geocode is a bigint (psql doesn't have unsigned bigint)
 install_geocode(C, Database, Schema) ->
     case get_column_type(C, "rsc", "pivot_geocode", Database, Schema) of
         <<"character varying">> ->
@@ -261,32 +261,41 @@ install_geocode(C, Database, Schema) ->
             end
     end.
 
-
 % Install the table tracking deleted (or moved) resources
 install_rsc_gone(C, Database, Schema) ->
     case has_table(C, "rsc_gone", Database, Schema) of
         false ->
-            {ok,[],[]} = pgsql:squery(C, "create table rsc_gone ( "
-                            "  id bigint not null,"
-                            "  location_id bigint,"
-                            "  location_uri character varying(250),"
-                            "  version int not null, "
-                            "  uri character varying(250),"
-                            "  name character varying(80),"
-                            "  page_path character varying(80),"
-                            "  is_authoritative boolean NOT NULL DEFAULT true,"
-                            "  creator_id bigint,"
-                            "  modifier_id bigint,"
-                            "  created timestamp with time zone NOT NULL DEFAULT now(),"
-                            "  modified timestamp with time zone NOT NULL DEFAULT now(),"
-                            "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
-                            ")"),
-            ok;
+            install_rsc_gone_1(C);
         true ->
-            ok
+            case has_column(C, "rsc_gone", "new_id", Database, Schema) of
+                false ->
+                    _ = pgsql:squery(C, "DROP TABLE rsc_gone"),
+                    install_rsc_gone_1(C);
+                true ->
+                    ok
+            end
     end.
 
-
+install_rsc_gone_1(C) ->
+    {ok,[],[]} = pgsql:squery(C, "create table rsc_gone ( "
+                    "  id bigint not null,"
+                    "  new_id bigint,"
+                    "  new_uri character varying(250),"
+                    "  version int not null, "
+                    "  uri character varying(250),"
+                    "  name character varying(80),"
+                    "  page_path character varying(80),"
+                    "  is_authoritative boolean NOT NULL DEFAULT true,"
+                    "  creator_id bigint,"
+                    "  modifier_id bigint,"
+                    "  created timestamp with time zone NOT NULL DEFAULT now(),"
+                    "  modified timestamp with time zone NOT NULL DEFAULT now(),"
+                    "  CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)"
+                    ")"),
+    {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_name ON rsc_gone(name)"),
+    {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)"),
+    {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)"),
+    ok.
 
 
 % Perform some simple sanity checks
