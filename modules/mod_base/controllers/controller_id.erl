@@ -24,6 +24,7 @@
     init/1,
     service_available/2,
     resource_exists/2,
+    previously_existed/2,
     content_types_provided/2,
     see_other/2
 ]).
@@ -42,6 +43,12 @@ resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
     ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs).
+
+previously_existed(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    {Id, Context2} = get_id(Context1),
+    IsGone = m_rsc_gone:is_gone(Id, Context2),
+    ?WM_REPLY(IsGone, Context2).
 
 content_types_provided(ReqData, Context) ->
     {CT,Context1} = get_content_types(Context),

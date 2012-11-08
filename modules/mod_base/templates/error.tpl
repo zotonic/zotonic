@@ -5,8 +5,10 @@
 {% block content %}
 {% if error_code == 403 %}
 	<h1>{_ No Access _}</h1>
-
 	<p>{_ Sorry, you don’t have access to this page. _}</p>
+{% elseif error_code == 410 %}
+  <h1>{_ Gone_}</h1>
+  <p>{_ Sorry, this page has been deleted. _}</p>
 {% else %}
 	<h1>{{ error_code }} {_ error _}</h1>
 

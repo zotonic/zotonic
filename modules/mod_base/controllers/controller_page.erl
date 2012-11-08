@@ -21,6 +21,7 @@
 
 -export([
     resource_exists/2,
+    previously_existed/2,
     is_authorized/2,
     html/1
 ]).
@@ -43,6 +44,12 @@ resource_exists(ReqData, Context) ->
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
     end.
+
+%% @doc Check if the resource used to exist
+previously_existed(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    IsGone = m_rsc_gone:is_gone(get_id(Context1), Context1),
+    ?WM_REPLY(IsGone, Context1).
 
 
 %% @doc Check if the current user is allowed to view the resource. 
