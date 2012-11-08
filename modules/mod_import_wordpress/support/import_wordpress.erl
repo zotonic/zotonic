@@ -102,6 +102,7 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
     Name = "wordpress_" ++ z_convert:to_list(element_content("wp:post_id", Item)),
     Body = element_content("content:encoded", Item),
     Summary = element_content("description", Item),
+    Link = element_content("link", Item),    
     IsPublished = map_wp_status(element_content("wp:status", Item)),
     PostParent = z_convert:to_integer(element_content("wp:post_parent", Item)),
 
@@ -109,6 +110,7 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
         [{title, Title},
          {body, wp_embed_tags(Body)},
          {summary, Summary},
+         {wp_link, Link},         
          {is_published, IsPublished},
          {custom_slug, true},
          {slug, element_content("wp:post_name", Item)},
