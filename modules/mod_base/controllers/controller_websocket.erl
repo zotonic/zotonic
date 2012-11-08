@@ -28,8 +28,10 @@
     provide_content/2,
     websocket_start/2,
     
-    handle_init/1,
-    handle_message/2
+    websocket_init/1,
+    websocket_message/2,
+    websocket_info/2,
+    websocket_terminate/2
 ]).
 
 -include_lib("webmachine_controller.hrl").
@@ -94,11 +96,11 @@ websocket_start(ReqData, Context) ->
 
 
 %% Called during initialization of the websocket.
-handle_init(Context) ->
+websocket_init(Context) ->
     z_session_page:websocket_attach(self(), Context).
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
-handle_message(Msg, Context) ->
+websocket_message(Msg, Context) ->
     Qs = mochiweb_util:parse_qs(Msg),
     Context1 = z_context:set('q', Qs, Context),
 
@@ -118,5 +120,11 @@ handle_message(Msg, Context) ->
     % Cleanup process dict, so our process heap is smaller between calls
     z_session_page:add_script(ResultScript, ResultContext),
     z_utils:erase_process_dict(),
+    ok.
+
+websocket_info(_Msg, _Context) -> 
+    ok.
+
+websocket_terminate(_Reason, _Context) -> 
     ok.
 

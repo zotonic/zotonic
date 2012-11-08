@@ -145,12 +145,19 @@ handle_frame(RemainingData, 10, _Message, Socket, Context) ->
 % Call the handler about the initialization
 handle_init(Context) ->
     W = z_context:get(ws_handler,  Context),
-    W:handle_init(Context).
+    W:websocket_init(Context).
 
-% Let the handler handle the message
 handle_message(Message, Context) ->
     H = z_context:get(ws_handler, Context),
-    H:handle_message(Message, Context).
+    H:websocket_message(Message, Context).
+
+handle_info(Message, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_info(Message, Context).
+
+handle_terminate(Reason, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_terminate(Reason, Context).
 
 
 %% @TODO: log any errors
@@ -174,13 +181,25 @@ start_send_loop(Socket, Context) ->
 send_loop(Socket, Context) ->
     receive
         {send_data, Data} ->
-            send_frame(Socket, Data),
-            z_websocket_hybi17:send_loop(Socket, Context);
-        {'EXIT', _FromPid, _Reason} ->
-            % Exit of the socket's process, stop sending data.
+            case send_frame(Socket, Data) of
+                ok -> 
+                    send_loop(Socket, Context);
+                {error, closed} ->
+                    handle_terminate({error, closed}, Context),
+                    closed;
+                _ ->
+                    handle_terminate(normal, Context),
+                    normal
+            end;
+        {'EXIT', _FromPid, normal} ->
+            handle_terminate(normal, Context),
+            normal;
+        {'EXIT', _FromPid, Msg} ->
+            handle_terminate({error, {exit, Msg}}, Context),
             exit;
-        _ ->
-            z_websocket_hybi17:send_loop(Socket, Context)
+        Msg ->
+            handle_info(Msg, Context),
+            send_loop(Socket, Context)
     after ?PING_TIMEOUT ->
         send_ping(Socket),
         send_loop(Socket, Context)
@@ -203,11 +222,7 @@ send_ping(Socket) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
-        ok -> ok;
-        {error, closed} -> exit(closed);
-        _ -> exit(normal)
-    end.
+    mochiweb_socket:send(Socket, iolist_to_binary(Data)). 
 
 
 
