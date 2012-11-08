@@ -142,3 +142,12 @@ A rsc record can become an user by adding the user's credentials to
 this table. A single user can have multiple kinds of credentials,
 think of his/her username, openid uri etc. A user doesn't necessarily
 be a person. See also: :ref:`model-identity`.
+
+
+Deleted resources
+.................
+
+Whenever a resource is deleted, an entry is added to the ``rsc_gone`` table.
+The page and id controllers will server a *410 Gone* when a deleted resource
+is requested..  See also: :ref:`model-rsc_gone`.
+

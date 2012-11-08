@@ -5,8 +5,8 @@ Handle different content representations of a page.
 
 Redirects to different representations of a page, depending on the
 requested content type. The redirect is done using a “303 See Other”
-status. When the requested page does not exist then a “404 Not Found”
-is returned.
+status. A “404 Not Found” or “410 Gone” is returned if the requested
+page never existed or has been deleted.
 
 When no content types are requested then ``text/html`` is selected.
 

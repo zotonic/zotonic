@@ -240,4 +240,4 @@ A resource has the following properties accessible from the templates:
 |                   |undefined.                                           |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 
-.. seealso:: :ref:`manual-datamodel`, :ref:`model-edge`, :ref:`model-media`
+.. seealso:: :ref:`manual-datamodel`, :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.

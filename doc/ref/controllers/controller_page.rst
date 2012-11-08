@@ -4,10 +4,11 @@
 Show a rsc as a HTML page.
 
 This controller is used to show the HTML page of a
-:term:`resource`. When the resource with the supplied id is not found
-in the database then a 404 page is shown. The user will be redirected
-to the ``logon`` URL when the current user is not allowed to view the
-page.
+:term:`resource`. A “404 Not Found” or “410 Gone” page is shown if the requested
+page never existed or has been deleted.
+
+The user will be redirected to the ``logon`` URL when the current user
+is not allowed to view the page. 
 
 This controller also adds a ``noindex`` response header when the page's
 “seo_noindex” flag is set.
