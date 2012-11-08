@@ -123,11 +123,13 @@ unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, Context, Acc) ->
 
 % Text frame
 handle_frame(RemainingData, 1, Message, Socket, Context) ->
-    controller_websocket:handle_message(Message, Context),
+    Handler = z_context:get(ws_handler, Context),
+    Handler:handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Binary frame
 handle_frame(RemainingData, 2, Message, Socket, Context) ->
-    controller_websocket:handle_message(Message, Context),
+    Handler = z_context:get(ws_handler, Context),
+    Handler:handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Close control frame
 handle_frame(_RemainingData, 8, _Message, Socket, Context) ->
@@ -157,7 +159,8 @@ close(_Reason, Socket, _Context) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    z_session_page:websocket_attach(self(), Context),
+    WsHandler = z_context:get(ws_hander,  Context),
+    WsHandler:handle_init(Context),
     send_loop(Socket, Context).
 
 

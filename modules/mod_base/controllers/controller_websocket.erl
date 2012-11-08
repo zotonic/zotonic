@@ -28,6 +28,7 @@
     provide_content/2,
     websocket_start/2,
     
+    handle_init/1,
     handle_message/2
 ]).
 
@@ -67,25 +68,30 @@ provide_content(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
-    case z_context:get_req_header("sec-websocket-version", Context1) of
+    Context2 = z_context:set(ws_handler, ?MODULE, Context1),
+    case z_context:get_req_header("sec-websocket-version", Context2) of
         undefined ->
-            case z_context:get_req_header("sec-websocket-key1", Context1) of
+            case z_context:get_req_header("sec-websocket-key1", Context2) of
                 undefined ->
-                    z_websocket_hixie75:start(ReqData, Context1);
+                    z_websocket_hixie75:start(ReqData, Context2);
                 WsKey1 ->
-                    z_websocket_hybi00:start(WsKey1, ReqData, Context1)
+                    z_websocket_hybi00:start(WsKey1, ReqData, Context2)
             end;
         "7" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07
-            z_websocket_hybi17:start(ReqData, Context1);
+            z_websocket_hybi17:start(ReqData, Context2);
         "8" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
-            z_websocket_hybi17:start(ReqData, Context1);
+            z_websocket_hybi17:start(ReqData, Context2);
         "13" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
-            z_websocket_hybi17:start(ReqData, Context1)
+            z_websocket_hybi17:start(ReqData, Context2)
     end.
 
+
+%% Called during initializtion of the websocket.
+handle_init(Context) ->
+    z_session_page:websocket_attach(self(), Context).
 
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.

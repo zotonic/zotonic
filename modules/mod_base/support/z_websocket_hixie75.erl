@@ -79,14 +79,16 @@ handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
     % A packet of <<0,255>> signifies that the ua wants to close the connection
     ua_close_request;
 handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    controller_websocket:handle_message(Msg, Context),
+    Handler = z_context:get(ws_handler, Context),
+    Handler:handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
     handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
 
 %% Extract frame with length bytes
 handle_data(Msg, 0, T, Socket, Context) ->
-    controller_websocket:handle_message(Msg, Context),
+    Handler = z_context:get(ws_handler, Context),
+    Handler:handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
     handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
@@ -135,7 +137,8 @@ unpack_length(Binary, LenBytes, Length) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    z_session_page:websocket_attach(self(), Context),
+    WsHandler = z_context:get(ws_handler, Context),
+    WsHandler:handle_init(Context),
     send_loop(Socket, Context).
 
 send_loop(Socket, Context) ->
