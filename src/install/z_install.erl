@@ -218,8 +218,8 @@ model_pgsql() ->
 
     "CREATE TABLE rsc_gone (
         id bigint not null,
-        location_id bigint,
-        location_uri character varying(250),
+        new_id bigint,
+        new_uri character varying(250),
         version int not null,
         uri character varying(250),
         name character varying(80),
@@ -229,7 +229,7 @@ model_pgsql() ->
         modifier_id bigint,
         created timestamp with time zone NOT NULL DEFAULT now(),
         modified timestamp with time zone NOT NULL DEFAULT now(),
-        CONSTRAINT persistent_pkey PRIMARY KEY (id)
+        CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
     )",
     "CREATE INDEX rsc_gone_name ON rsc_gone(name)",
     "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)",
