@@ -199,7 +199,7 @@ get_raw(Id, Context) when is_integer(Id) ->
              
 
 
-%% @doc Get the ACL fields for the resource with the id. The id must be an integer
+%% @doc Get the ACL fields for the resource with the id.
 %% @spec get_acl_props(Id, #context{}) -> #acl_props{}
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
