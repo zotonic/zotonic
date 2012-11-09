@@ -8,3 +8,9 @@ This table lists all the dispatch rules in one big table.
    :delim: tab
    :header: Name, Path, Resource, Args
    :file: meta-all-dispatch.csv
+
+.. toctree::
+   :hidden:
+   :glob:
+
+   dispatch_*
