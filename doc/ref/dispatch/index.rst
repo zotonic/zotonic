@@ -1,11 +1,10 @@
-.. _dispatch:
 
-Dispatch rules
-==============
+All dispatch rules
+==================
 
-.. toctree::
-   :glob:
+This table lists all the dispatch rules in one big table.
 
-   all
-   dispatch_*
-
+.. csv-table:: The Big List of Dispatch rules
+   :delim: tab
+   :header: Name, Path, Resource, Args
+   :file: meta-all-dispatch.csv

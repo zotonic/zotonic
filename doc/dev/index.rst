@@ -5,6 +5,7 @@ For developers
 Topics:
 
 .. toctree::
+   :maxdepth: 2
 
    codestyle
    filing_issues

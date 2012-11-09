@@ -2,6 +2,7 @@ In-depth manuals
 ================
 
 .. toctree::
+   :maxdepth: 2
 
    site-anatomy
    modules/index
