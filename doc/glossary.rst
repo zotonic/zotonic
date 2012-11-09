@@ -44,10 +44,10 @@ Glossary
       A validator is used to check input fields in a HTML form. A validator has two parts: the client side javascript and a server side check. You add validators to a form with the {% validate %} template tag. A validated query argument can be accessed on the server using z_context:get_q_validated/2.
 
    Dispatch rule
-      A dispatch rule maps URL patterns to controllers. Dispatch rules are defined in files in the .dispatch. folder of a Zotonic module. The dispatch rule definitions are also used to generate the urls for resources and other pages.
+      A dispatch rule maps URL patterns to controllers. Dispatch rules are defined in files in the .dispatch. folder of a Zotonic module. The dispatch rule definitions are also used to generate the urls for resources and other pages. See :ref:`manual-dispatch`.
 
    Controller
-      A controller is the main entry point where a request is handled. Controllers are referenced from a dispatch rule. Commonly used controller is controller_template, which serves a template on the URL for which the controller configured. 
+      A controller is the main entry point where a request is handled. Controllers are referenced from a dispatch rule. Commonly used controller is controller_template, which serves a template on the URL for which the controller configured. See :ref:`manual-controllers`.
 
    Context
       The context is the current request context. It contains all the request data, the current site, the handle to the database and the results (scripts or templates) you will be sending back. The context is commonly passed along in Zotonic as the last argument of a function.
