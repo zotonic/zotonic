@@ -7,7 +7,7 @@ In-depth manuals
    site-anatomy
    modules/index
    dispatch
-   auth
+   auth/index
    notification
    datamodel/index
    i18n
