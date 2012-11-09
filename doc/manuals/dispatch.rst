@@ -3,7 +3,8 @@
 The URL dispatch system
 =======================
 
-Dispatch rules map URLs to controllers, and vice versa.
+Dispatch rules map URLs to :term:`Controllers <Controller>`, and the
+other way around.
 
 A dispatch rule contains a pattern that is matched against the `path`
 of an incoming request URL. They are also used for the reverse action
@@ -63,6 +64,44 @@ Where the elements are:
 2. the path matching the request URL's path
 3. the name of the controller
 4. a property list with optional arguments to the resource module
+
+Dispatch rule naming
+....................
+
+Zotonic extends Basho's Webmachine by allowing (or actually,
+`requiring`) dispatch rules to be named. The name is the first element
+of the dispatch rule tuple, and consists of a simple atom. The
+``z_dispatcher:url_for`` function takes a name and creates the URL for
+it. This allows the developer to not hardcode the URLs everywhere, but
+use these symbolic names instead.
+
+Dispatch rule names do not have to be unique: if multiple rules with
+the same name exist, it will look at the first rule that matches the
+given name and the optional extra arguments that were given.
+
+Say I have these rules::
+
+  {rulename, ["foo", "bar"], controller_template, [{template, "foo.tpl"}]},
+  {rulename, ["foo", var], controller_template, [{template, "foo.tpl"}]},
+
+Then when I create a URL like this::
+
+  {% url rulename %}
+
+It will match the first rule (rendering the url ``/foo/bar``) because
+no arguments were given. However when I add an argument::
+
+  {% url rulename var=1 %}
+
+It will render the URL ``/foo/1``, matching the second dispatch rule
+and adding the argument in the creation of the URL.
+
+Note that any `extra` arguments that are given, are added as query-string parameters::
+
+  {% url rulename var=1 x="hello" %}
+
+Will result in the URL ``/foo/1?x=hello``.
+  
 
 URL match pattern
 .................
