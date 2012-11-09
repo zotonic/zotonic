@@ -161,7 +161,7 @@ set_visible_for(_VisibleFor, #context{user_id=undefined} = Context) ->
 set_visible_for(?ACL_VIS_PUBLIC, Context) ->
     Context#context{user_id=undefined, acl=undefined};
 set_visible_for(?ACL_VIS_COMMUNITY, Context) ->
-    Context#context{user_id=?ACL_ANONYMOUS_USER_ID, acl=undefined};
+    Context#context{user_id=?ACL_ANY_USER_ID, acl=undefined};
 set_visible_for(?ACL_VIS_GROUP, Context) ->
     Context#context{acl=undefined};
 set_visible_for(?ACL_VIS_USER, Context) ->
@@ -175,7 +175,7 @@ can_see(#context{user_id=?ACL_ADMIN_USER_ID}) ->
     ?ACL_VIS_USER;
 can_see(#context{acl=admin}) ->
     ?ACL_VIS_USER;
-can_see(#context{user_id=?ACL_ANONYMOUS_USER_ID}) ->
+can_see(#context{user_id=?ACL_ANY_USER_ID}) ->
     ?ACL_VIS_COMMUNITY;
 can_see(Context) ->
     case z_notifier:first(#acl_can_see{}, Context) of
