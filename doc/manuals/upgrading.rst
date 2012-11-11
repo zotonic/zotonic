@@ -12,6 +12,23 @@ incompatible ways or get deprecated.
 Upgrading to Zotonic 0.9
 ------------------------
 
+CSS changes
+...........
+
+Due to the move to Bootstrap, the following CSS changes need to be
+made in your templates:
+
++-------------------------------+---------------------------------+
+| Old CSS selector              | New CSS selector                |
++-------------------------------+---------------------------------+
+|``.sf-menu``                   |``.nav``                         |
++-------------------------------+---------------------------------+
+|``.sf-menu a.current``         |``.nav li.active a``             |
++-------------------------------+---------------------------------+
+|``ul.pager``                   |``div.pagination ul``            |
++-------------------------------+---------------------------------+
+
+
 Controllers
 ...........
 
