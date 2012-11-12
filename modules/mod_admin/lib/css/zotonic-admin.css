@@ -57,7 +57,7 @@ div.navbar-fixed-top div.navbar-inner {
 div.widget {
     margin-bottom: 18px;
     border-bottom: none;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 2px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
@@ -69,22 +69,14 @@ li > div.widget {
 div.widget h3.widget-header, 
 li h3.widget-header {
     padding: 0 6px;
-    text-shadow: 1px 0px 1px white;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: normal;
 }    
 
 div.widget > ul.nav,
 div.widget h3.widget-header, 
 li h3.widget-header {
-    background: #e8e8e8; /* Old browsers */
-    background: -moz-linear-gradient(top, #e8e8e8 0%, #c1c1c1 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e8e8e8), color-stop(100%,#c1c1c1)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* IE10+ */
-    background: linear-gradient(top, #e8e8e8 0%,#c1c1c1 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c1c1c1',GradientType=0 ); /* IE6-9 */
+    background: #ddd;
 }
 
 li h3.widget-header {
@@ -322,11 +314,10 @@ div.edit-media {
 ul.blocks {
     margin-left: -8px;
     margin-right: -8px;
-    border: 1px solid #e8e8e8;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
     padding: 30px 8px 0 8px;
-    background-color: #fcfcfc;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
 }
 ul.blocks > li {
     list-style-type: none;
