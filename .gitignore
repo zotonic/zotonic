@@ -18,6 +18,7 @@ erl_crash.dump
 *.mo
 
 ebin/
+log/
 
 /deps/mochiweb/doc/
 /deps/mochiweb/.eunit/
