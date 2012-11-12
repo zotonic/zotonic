@@ -23,8 +23,10 @@
 
     <div class="control-group">
         <div class="controls">
-	    <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-	    <label class="checkbox inline" for="{{ #rememberme }}">{_ Stay logged on unless I log off. _}</label>
+	        <label class="checkbox">
+            	<input type="checkbox" name="rememberme" value="1" />
+                {_ Stay logged on unless I log off. _}
+            </label>
         </div>
     </div>
 
