@@ -9,7 +9,7 @@
     <div class="control-group">
         <label for="username" class="control-label">{_ Username _}</label>
         <div class="controls">
-	    <input type="text" id="username" name="username" value="" class="span4" placeholder="{_ user@example.com _}" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
+	    <input type="text" id="username" name="username" value="" class="span4" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
             {% validate id="username" type={presence} %}
         </div>
     </div>
