@@ -226,8 +226,7 @@ name_to_id_check(Name, Context) ->
 
 id_to_name(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
     F = fun() ->
-        Nm = z_db:q1("select r.name from rsc r join category c on r.id = c.id where r.name = $1", [Name], Context),
-        z_convert:to_atom(Nm)
+        z_convert:to_atom(Name)
     end,
     z_depcache:memo(F, {category_id_to_name, Name}, ?WEEK, [category], Context);
 id_to_name(Id, Context) when is_integer(Id) ->
