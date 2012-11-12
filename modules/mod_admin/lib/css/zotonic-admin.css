@@ -567,9 +567,8 @@ body[dir=rtl] label {
     margin-top: 100px;
     width: 400px;
 }
-
-.admin-logon input.span4 {
-    width: 340px !important;
+.admin-logon form {
+    padding: 16px;
 }
 
 .admin-logon div.buttons p {
