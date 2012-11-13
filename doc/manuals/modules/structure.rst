@@ -48,8 +48,12 @@ When you need to execute code when the module starts, you can export
 an optional ``init/1`` function. This function will be called when the
 module is started. The parameter is a context record initialized for
 the site the module will be running in. This is useful when you need
-to initialize the database or other data structures for which you
-don’t need a running process.
+to initialize the database or other data structures for which you don’t 
+need a running process. When you also need to execute code when a module 
+stops you can export an optional ``terminate\2`` function. This function 
+will be called when the module terminates. The first parameter is a 
+Reason parameter which indicates why the module stopped. The second a 
+context record similar to the one in the ``init/1`` function. 
 
 When you do need a running process, read about those in the next
 topic, :ref:`manual-modules-gen_server`.

@@ -31,7 +31,7 @@
 -export([
 ]).
 
--record(state, {context}).
+-record(state, {module, context}).
 
 %%====================================================================
 %% API
@@ -40,7 +40,7 @@
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     {ok, Pid} = gen_server:start_link(?MODULE, Args, []),
-    gen_server:cast(Pid, {init, proplists:get_value(module, Args)}),
+    gen_server:cast(Pid, init),
     {ok, Pid}.
 
 
@@ -55,8 +55,9 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
+    {module, Module} = proplists:lookup(module, Args),
     {context, Context} = proplists:lookup(context, Args),
-    {ok, #state{context=z_context:new(Context)}}.
+    {ok, #state{module=Module, context=z_context:new(Context)}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -73,8 +74,8 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Handle the next step in the module initialization.
-handle_cast({init, Module}, State) ->
-    dummy_module_init(Module, State#state.context),
+handle_cast(init, #state{module=Module, context=Context}=State) ->
+    dummy_module_init(Module, Context),
     {noreply, State};
     
 %% @doc Trap unknown casts
@@ -95,7 +96,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(Reason, #state{module=Module, context=Context}) ->
+    dummy_module_terminate(Reason, Module, Context),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -115,6 +117,14 @@ code_change(_OldVsn, State, _Extra) ->
 dummy_module_init(Module, Context) ->
     case lists:member({init,1}, erlang:get_module_info(Module, exports)) of
         true -> Module:init(z_acl:sudo(Context));
+        false -> nop
+    end.
+
+%% @doc When a module doesn't implement a gen_server then check if it exports a terminate/2 function,
+%% if so then call that function with a fresh sudo context.
+dummy_module_terminate(Reason, Module, Context) ->
+    case lists:member({terminate,2}, erlang:get_module_info(Module, exports)) of
+        true -> Module:terminate(Reason, z_acl:sudo(Context));
         false -> nop
     end.
     
