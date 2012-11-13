@@ -224,9 +224,17 @@ name_to_id_check(Name, Context) ->
     {ok, Id} = name_to_id(Name, Context),
     Id.
 
+%% @doc Return the name for a given category. 
+%%
+%% If the category does not have a unique name will result in undefined.
+%% If the lookup is made by name, the name is checked for existence,
+%% and if not found, results in undefined.
+-spec id_to_name(Id::integer(), #context{}) -> atom() | undefined;
+                (Name, #context{}) -> atom() | undefined when Name :: atom() | binary() | list().
 id_to_name(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
     F = fun() ->
-        z_convert:to_atom(Name)
+        Nm = z_db:q1("select r.name from rsc r join category c on r.id = c.id where r.name = $1", [Name], Context),
+        z_convert:to_atom(Nm)
     end,
     z_depcache:memo(F, {category_id_to_name, Name}, ?WEEK, [category], Context);
 id_to_name(Id, Context) when is_integer(Id) ->
