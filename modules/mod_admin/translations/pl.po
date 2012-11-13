@@ -133,7 +133,7 @@ msgstr "Czy na pewno chcesz skasować stronę"
 msgid "Aside"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Ask google to not index this page"
 msgstr "Poproś Google, by nie indeksowało tej strony"
 
@@ -241,7 +241,7 @@ msgstr "Autor"
 msgid "Created on"
 msgstr "Utworzony"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:38
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:15
 msgid "Customize page slug"
 msgstr "Dostosuj skrócony adres"
 
@@ -614,11 +614,11 @@ msgstr "Nie znaleziono stron."
 msgid "Page connections"
 msgstr "Połączenia ze stronami"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:57
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Opis strony"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:49
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:46
 msgid "Page keywords"
 msgstr "Słowa kluczowe strony"
 
@@ -626,11 +626,11 @@ msgstr "Słowa kluczowe strony"
 msgid "Page path, default is"
 msgstr "Ścieżka strony, domyślnie:"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
 msgid "Page slug"
 msgstr "Uproszczona nazwa strony"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:25
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
 msgid "Page title"
 msgstr "Tytuł strony"

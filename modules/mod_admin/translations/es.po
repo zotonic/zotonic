@@ -131,7 +131,7 @@ msgstr "¿Está seguro de que quiere borrar la página"
 msgid "Aside"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Ask google to not index this page"
 msgstr "Avisarle a Google que no indexe esta página"
 
@@ -242,7 +242,7 @@ msgstr "Creado por"
 msgid "Created on"
 msgstr "Creado el"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:38
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:15
 msgid "Customize page slug"
 msgstr "Personalizar el slug"
 
@@ -621,11 +621,11 @@ msgstr "No se encontraron páginas."
 msgid "Page connections"
 msgstr "Conexiones de la página"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:57
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Descripción de la página"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:49
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:46
 msgid "Page keywords"
 msgstr "Palabras clave de página"
 
@@ -633,11 +633,11 @@ msgstr "Palabras clave de página"
 msgid "Page path, default is"
 msgstr "Ruta de la página, que por defecto es"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
 msgid "Page slug"
 msgstr "Slug de página"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:25
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
 msgid "Page title"
 msgstr "Título de página"
