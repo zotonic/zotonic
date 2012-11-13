@@ -18,7 +18,7 @@
                                 title=[_"Add a connection: ", m.rsc.depiction.title] 
                                 subject_id=id
                                 edge_template="_rsc_edge_media.tpl"
-                                predicate="depiction"
+                                predicate=`depiction`
                                 actions=[
                                     {postback postback={reload_media rsc_id=id div_id=["links-",id|make_list,"-depiction"]}
                                               delegate="controller_admin_edit"}
