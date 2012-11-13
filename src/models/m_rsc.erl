@@ -349,7 +349,10 @@ p(Id, Property, DefaultValue, Context) ->
 
 %% @doc Fetch a property from a resource, no ACL check is done.
 p_no_acl(undefined, _Predicate, _Context) -> undefined;
-p_no_acl(Id, Prop, Context) when not is_integer(Id) -> p_no_acl(rid(Id, Context), Prop, Context);
+p_no_acl(Id, Prop, Context) when not is_integer(Id) -> 
+    case rid(Id, Context) of
+        Rid when is_integer(Rid) -> p_no_acl(Rid, Prop, Context)
+    end;
 p_no_acl(Id, o, Context)  -> o(Id, Context);
 p_no_acl(Id, s, Context)  -> s(Id, Context);
 p_no_acl(Id, op, Context) -> op(Id, Context);
