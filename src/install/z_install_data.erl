@@ -117,7 +117,9 @@ install_modules(empty, Host, C) ->
         ],
     install_modules(Modules, C);
 install_modules(nodb, _, _) ->
-    ok.
+    ok;
+install_modules(Err, Host, _) ->
+    ?ERROR("~p: Invalid or missing skeleton: ~p.", [Host, Err]).
 
 install_modules(Modules, C) ->
     ?DEBUG("Inserting modules"),
