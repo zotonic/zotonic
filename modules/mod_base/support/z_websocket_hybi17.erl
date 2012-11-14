@@ -123,11 +123,11 @@ unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, Context, Acc) ->
 
 % Text frame
 handle_frame(RemainingData, 1, Message, Socket, Context) ->
-    controller_websocket:handle_message(Message, Context),
+    handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Binary frame
 handle_frame(RemainingData, 2, Message, Socket, Context) ->
-    controller_websocket:handle_message(Message, Context),
+    handle_message(Message, Context),
     handle_data(RemainingData, Socket, Context);
 % Close control frame
 handle_frame(_RemainingData, 8, _Message, Socket, Context) ->
@@ -141,6 +141,23 @@ handle_frame(RemainingData, 9, Message, Socket, Context) ->
 % Pong control frame
 handle_frame(RemainingData, 10, _Message, Socket, Context) ->
     handle_data(RemainingData, Socket, Context).
+
+% Call the handler about the initialization
+handle_init(Context) ->
+    W = z_context:get(ws_handler,  Context),
+    W:websocket_init(Context).
+
+handle_message(Message, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_message(Message, Context).
+
+handle_info(Message, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_info(Message, Context).
+
+handle_terminate(Reason, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_terminate(Reason, Context).
 
 
 %% @TODO: log any errors
@@ -157,20 +174,32 @@ close(_Reason, Socket, _Context) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    z_session_page:websocket_attach(self(), Context),
+    handle_init(Context),
     send_loop(Socket, Context).
 
 
 send_loop(Socket, Context) ->
     receive
         {send_data, Data} ->
-            send_frame(Socket, Data),
-            z_websocket_hybi17:send_loop(Socket, Context);
-        {'EXIT', _FromPid, _Reason} ->
-            % Exit of the socket's process, stop sending data.
+            case send_frame(Socket, Data) of
+                ok -> 
+                    send_loop(Socket, Context);
+                {error, closed} ->
+                    handle_terminate({error, closed}, Context),
+                    closed;
+                _ ->
+                    handle_terminate(normal, Context),
+                    normal
+            end;
+        {'EXIT', _FromPid, normal} ->
+            handle_terminate(normal, Context),
+            normal;
+        {'EXIT', _FromPid, Msg} ->
+            handle_terminate({error, {exit, Msg}}, Context),
             exit;
-        _ ->
-            z_websocket_hybi17:send_loop(Socket, Context)
+        Msg ->
+            handle_info(Msg, Context),
+            send_loop(Socket, Context)
     after ?PING_TIMEOUT ->
         send_ping(Socket),
         send_loop(Socket, Context)
@@ -193,11 +222,7 @@ send_ping(Socket) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
-        ok -> ok;
-        {error, closed} -> exit(closed);
-        _ -> exit(normal)
-    end.
+    mochiweb_socket:send(Socket, iolist_to_binary(Data)). 
 
 
 

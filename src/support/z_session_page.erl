@@ -338,7 +338,7 @@ ping_comet_ws(#page_state{comet_pid=undefined, websocket_pid=undefined} = State)
     State;
 ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
     try
-        State#page_state.websocket_pid ! {send_data, lists:reverse(State#page_state.script_queue)},
+        controller_websocket:websocket_send_data(WsPid, lists:reverse(State#page_state.script_queue)),
         State#page_state{script_queue=[]}
     catch _M : _E ->
         State#page_state{websocket_pid=undefined}
