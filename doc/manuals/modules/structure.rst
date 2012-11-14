@@ -70,13 +70,13 @@ This section describes what each of the module folders hold.
 actions/
 ........
 
-This directory holds the :ref:`actions <manual-actions>` defined by the
+This directory holds the :ref:`actions <manual-template-actions>` defined by the
 module. Every action name must be prefixed with the word “action” and
 the module name (without the `mod_`). For example the filename for the
 action ``dialog_open`` in the module ``mod_base`` will be
 ``action_base_dialog_open.erl``
 
-.. seealso:: :ref:`manual-actions`
+.. seealso:: :ref:`manual-template-actions`
 
 dispatch/
 .........
