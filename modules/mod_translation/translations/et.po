@@ -22,10 +22,7 @@ msgstr ""
 msgid "Active modules"
 msgstr "Aktiivsed moodulid"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:3
-msgid "Add a new language"
-msgstr "Lisa uus keel"
-
+#: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Lisa keel"
@@ -39,7 +36,7 @@ msgid "Are you sure you want to delete the language"
 msgstr "Oled sa kindel, et tahad keelt kustutada"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
 msgid "Cancel"
 msgstr "Katkesta"
 
@@ -57,7 +54,6 @@ msgid "Delete language"
 msgstr "Kustuta keel"
 
 #: modules/mod_translation/templates/admin_translation.tpl:54
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:5
 msgid "Edit"
 msgstr "Redigeeri"
 
@@ -79,7 +75,7 @@ msgstr ""
 "Aktiveeritud keeled on näha keelte valiku menüüs. Vaikimisi keelt "
 "kasutatakse külastajate jaoks, kes keelt valinud pole."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:8
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:1
 msgid ""
 "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
 "of the language. Use the native form of the language, for example "
@@ -98,13 +94,13 @@ msgid "Help about translations."
 msgstr "Tõlkimise abi."
 
 #: modules/mod_translation/templates/admin_translation.tpl:24
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:13
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:6
 msgid "ISO Code"
 msgstr "ISO kood"
 
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 #: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:21
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
 msgid "Language"
 msgstr "Keel"
 
@@ -128,7 +124,7 @@ msgstr ""
 "Loe uusti kõik tõlked moodulites ja saidilt. Kõik mallid kompileeritakse "
 "uuesti."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
 msgid "Save"
 msgstr "Salvesta"
 
@@ -150,7 +146,7 @@ msgstr "Kustuta keel"
 msgid "Select your preferred language."
 msgstr "Kustuta keel"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:29
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
 msgid "Show in menu"
 msgstr "Näite menüüs"
 
@@ -218,6 +214,9 @@ msgstr "Tõlgete staatus moodulites kaupa"
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
 msgid "Translations"
 msgstr "Tõlked"
+
+#~ msgid "Add a new language"
+#~ msgstr "Lisa uus keel"
 
 #~ msgid "Need more help?"
 #~ msgstr "Tahad veel abi"

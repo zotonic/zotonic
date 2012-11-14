@@ -138,7 +138,7 @@
 
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).
--define(ACL_ANONYMOUS_USER_ID, -1).
+-define(ACL_ANY_USER_ID, -1).
 
 %% ACL visibility levels
 -define(ACL_VIS_USER, 3).

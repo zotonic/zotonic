@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-07-21 12:40+0200\n"
+"PO-Revision-Date: 2012-11-13 09:32+0100\n"
 "Last-Translator: Joost Faber <joost@maxclass.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -23,7 +23,7 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:42
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:23
 msgid "Back to logon form"
-msgstr ""
+msgstr "Terug naar login"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "Below are your account details and a link to set a new password."
@@ -99,8 +99,7 @@ msgstr "Hallo"
 msgid "How to reset your password"
 msgstr "Hoe je wachtwoord te veranderen"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:34
-#, fuzzy
+#: modules/mod_authentication/templates/_logon_form.tpl:35
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
@@ -125,16 +124,14 @@ msgstr "Uitloggen"
 msgid "Log On"
 msgstr "Inloggen"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:33
-#, fuzzy
+#: modules/mod_authentication/templates/_logon_form.tpl:26
 msgid "Log on"
 msgstr "Inloggen"
 
 #: modules/mod_authentication/templates/_logon_form.tpl:3
 #: modules/mod_authentication/templates/logon.tpl:8
-#, fuzzy
 msgid "Log on to"
-msgstr "Inloggen"
+msgstr "Inloggen op"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:10
 #: modules/mod_authentication/templates/_logon_stage.tpl:56
@@ -159,13 +156,16 @@ msgstr "Wachtwoord moet minstens zes karakters bevatten"
 msgid "Please confirm your"
 msgstr "Bevestig a.u.b. je"
 
+#: modules/mod_authentication/templates/_logon_form.tpl:29
+msgid "Remember me"
+msgstr "Login onthouden"
+
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:17
 #: modules/mod_authentication/templates/_logon_stage.tpl:63
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:32
-#, fuzzy
 msgid "Reset password and Log on"
 msgstr "Verander wachtwoord en login"
 
@@ -259,7 +259,6 @@ msgstr ""
 "account te bevestigen."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:16
-#, fuzzy
 msgid ""
 "When you didn't request a password reset, you can ignore this e-mail. Maybe "
 "someone made an error typing his or her e-mail address."
@@ -355,7 +354,6 @@ msgstr "e-mail een tijdelijk wachtwoord"
 msgid "request a new password reset code"
 msgstr "Vraag een nieuw wachtwoord aan"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:12
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
 msgid "user@example.com"
 msgstr ""

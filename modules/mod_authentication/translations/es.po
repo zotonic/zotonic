@@ -104,7 +104,7 @@ msgstr "Hola"
 msgid "How to reset your password"
 msgstr "Cómo cambiar su clave"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:34
+#: modules/mod_authentication/templates/_logon_form.tpl:35
 #, fuzzy
 msgid "I forgot my password"
 msgstr "Olvidó su clave?"
@@ -130,7 +130,7 @@ msgstr "Desconectarse"
 msgid "Log On"
 msgstr "Conectarse"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:33
+#: modules/mod_authentication/templates/_logon_form.tpl:26
 #, fuzzy
 msgid "Log on"
 msgstr "Conectarse"
@@ -163,6 +163,10 @@ msgstr "Las claves deben tener por lo menos 6 caracteres."
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Por favor confirme su"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:29
+msgid "Remember me"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:17
 #: modules/mod_authentication/templates/_logon_stage.tpl:63
@@ -362,7 +366,6 @@ msgstr "enviar por correo electrónico una clave temporaria"
 msgid "request a new password reset code"
 msgstr "pedir un nuevo código para restablecer la clave"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:12
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
 msgid "user@example.com"
 msgstr ""

@@ -100,7 +100,7 @@ msgstr "Tere"
 msgid "How to reset your password"
 msgstr "Kuidas parooli muuta"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:34
+#: modules/mod_authentication/templates/_logon_form.tpl:35
 #, fuzzy
 msgid "I forgot my password"
 msgstr "Unustasid parooli?"
@@ -124,7 +124,7 @@ msgstr "Logi välja"
 msgid "Log On"
 msgstr "Logi sisse"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:33
+#: modules/mod_authentication/templates/_logon_form.tpl:26
 #, fuzzy
 msgid "Log on"
 msgstr "Logi sisse"
@@ -157,6 +157,10 @@ msgstr "Paroolis peab olema vähemalt 6 sümbolit."
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Palun kinnita oma"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:29
+msgid "Remember me"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:17
 #: modules/mod_authentication/templates/_logon_stage.tpl:63
@@ -343,7 +347,6 @@ msgstr "saada e-mailiga ajutine parool"
 msgid "request a new password reset code"
 msgstr "tellis uue paroolivahetuskoodi"
 
-#: modules/mod_authentication/templates/_logon_form.tpl:12
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
 msgid "user@example.com"
 msgstr ""

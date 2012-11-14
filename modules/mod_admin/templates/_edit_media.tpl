@@ -3,7 +3,8 @@
 <div id="{{ #unlink_message }}"></div>
 	
 {% sorter id=#list
-	tag={object_sorter predicate="depiction" id=id} 
+    tag={object_sorter predicate=`depiction` id=id}
+    delegate=`mod_admin`
 	placeholder="ui-sortable-placeholder" 
 %}
 <ul id="{{ #list }}" class="media thumbnails">

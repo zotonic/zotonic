@@ -25,52 +25,51 @@ $.widget("z.adminwidget",
 {
     _init: function() 
     {
-	var self = this;
-	var id = self.element.attr("id");
-	self.element.addClass("widget-active");
-	self.item = self.element.find("div.widget-content");
-	self.header = self.element.find("h3:first");
+	    var self = this;
+	    self.element.addClass("widget-active");
+	    self.item = self.element.find("div.widget-content");
+	    self.header = self.element.find("h3:first");
         self.icon = $("<i>").appendTo(self.header);
-	self.options.minifiedOnInit ? self.hide(true) : self.show(true);
-        self.icon
+	    self.options.minifiedOnInit ? self.hide(true) : self.show(true);
+        self.header
+            .css("cursor", "pointer")
+            .bind("mouseover", function(){self.icon.addClass('icon-white');})
+            .bind("mouseout", function(){self.icon.removeClass('icon-white');})
             .attr("title", z_translate("Click to toggle"))
-            .bind("mouseover", function(){$(this).addClass('icon-white');})
-            .bind("mouseout", function(){$(this).removeClass('icon-white');})
-            .click(function() 
-    		   {
-    		       self.toggle(); 
-    		       if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
-    		   });
+            .click(function(){self.toggle();});
+        
     },
 
     toggle: function() {
-	var self = this;
-	self.setVisible(!self.showing);
+	    var self = this;
+	    var id = self.element.attr("id");
+	    self.setVisible(!self.showing);
+    	if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
     },
 
     setVisible: function(v, skipAnim) {
-	var self = this;
-	v ? self.show(skipAnim) : self.hide(skipAnim);
+	    var self = this;
+	    v ? self.show(skipAnim) : self.hide(skipAnim);
     },
     
     hide: function(skipAnim) {
-	var self = this;
-	if (skipAnim) 
-	    self.item.hide();
-	else
-	    self.item.slideUp(200);
-	self.icon.attr("class", "pull-right icon-plus");
-	self.showing = false;
+	    var self = this;
+	    if (skipAnim) 
+	        self.item.hide();
+	    else
+	        self.item.slideUp(200);
+	    self.icon.attr("class", "pull-right icon-plus");
+	    self.showing = false;
     },
 
     show: function(skipAnim) {
-	var self = this;
-	if (skipAnim) 
-	    self.item.show();
-	else
-	    self.item.slideDown(200);
-	self.icon.attr("class", "pull-right icon-minus");
-	self.showing = true;
+	    var self = this;
+	    if (skipAnim) 
+	        self.item.show();
+	    else
+	        self.item.slideDown(200);
+	    self.icon.attr("class", "pull-right icon-minus");
+	    self.showing = true;
     }
 });
 

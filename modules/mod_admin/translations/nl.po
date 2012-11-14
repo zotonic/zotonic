@@ -121,7 +121,7 @@ msgstr "Weet je zeker dat je de admin wilt verlaten?"
 msgid "Aside"
 msgstr "Zijkant"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Ask google to not index this page"
 msgstr "Laat Google deze pagina niet indexeren"
 
@@ -227,7 +227,7 @@ msgstr "Gemaakt door"
 msgid "Created on"
 msgstr "Gemaakt op"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:38
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:15
 msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
@@ -599,11 +599,11 @@ msgstr "Geen pagina's gevonden."
 msgid "Page connections"
 msgstr "Paginaconnecties"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:57
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Omschrijving"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:49
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:46
 msgid "Page keywords"
 msgstr "Trefwoorden"
 
@@ -611,11 +611,11 @@ msgstr "Trefwoorden"
 msgid "Page path, default is"
 msgstr "Pagina URL, standaard is"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
 msgid "Page slug"
 msgstr "Paginaslug"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:25
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
 msgid "Page title"
 msgstr "Paginatitel"

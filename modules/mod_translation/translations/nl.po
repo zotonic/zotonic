@@ -23,10 +23,7 @@ msgstr ""
 msgid "Active modules"
 msgstr "Actieve modules"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:3
-msgid "Add a new language"
-msgstr "Nieuwe taal toevoegen"
-
+#: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Taal toevoegen"
@@ -42,7 +39,7 @@ msgid "Are you sure you want to delete the language"
 msgstr "Weet je zeker dat je de deze taal wilt verwijderen: "
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -60,7 +57,6 @@ msgid "Delete language"
 msgstr "Verwijder taal"
 
 #: modules/mod_translation/templates/admin_translation.tpl:54
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:5
 msgid "Edit"
 msgstr "Bewerk"
 
@@ -83,7 +79,7 @@ msgstr ""
 "standaardtaal is voor nieuwe bezoekers die nog geen voorkeurstaal\n"
 "hebben ingesteld."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:8
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:1
 msgid ""
 "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
 "of the language. Use the native form of the language, for example "
@@ -99,13 +95,13 @@ msgid "Help about translations."
 msgstr "Help over talen"
 
 #: modules/mod_translation/templates/admin_translation.tpl:24
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:13
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:6
 msgid "ISO Code"
 msgstr "ISO code"
 
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 #: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:21
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
 msgid "Language"
 msgstr "Taal"
 
@@ -129,7 +125,7 @@ msgstr ""
 "Herlaad alle vertalingen van de modules en de site. All templates worden "
 "gerecompiled."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
 msgid "Save"
 msgstr "Bewaar"
 
@@ -149,7 +145,7 @@ msgstr "Selecteer taal"
 msgid "Select your preferred language."
 msgstr "Selecteer je voorkeurstaal"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:29
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
 msgid "Show in menu"
 msgstr "Toon in menu"
 
@@ -216,3 +212,6 @@ msgstr "Status van de vertalingen per module"
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
 msgid "Translations"
 msgstr "Vertalingen"
+
+#~ msgid "Add a new language"
+#~ msgstr "Nieuwe taal toevoegen"

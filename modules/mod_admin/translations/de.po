@@ -124,7 +124,7 @@ msgstr "Sind Sie Sicher, daß Sie diese Seite löschen möchten: "
 msgid "Aside"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Ask google to not index this page"
 msgstr "Google bitten, diese Seite nicht zu indizieren"
 
@@ -232,7 +232,7 @@ msgstr "Erstellt von"
 msgid "Created on"
 msgstr "Erstellt am"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:38
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:15
 msgid "Customize page slug"
 msgstr "Slug der Seite festlegen"
 
@@ -610,11 +610,11 @@ msgstr "Keine Seiten gefunden."
 msgid "Page connections"
 msgstr "Seitenquerverweise"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:57
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Seitenbeschreibung"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:49
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:46
 msgid "Page keywords"
 msgstr "Der Seite zugeordnete Keywords"
 
@@ -622,11 +622,11 @@ msgstr "Der Seite zugeordnete Keywords"
 msgid "Page path, default is"
 msgstr "Pfad der Seite, Standard: "
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
 msgid "Page slug"
 msgstr "Slug der Seite"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:25
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
 msgid "Page title"
 msgstr "Titel der Seite"

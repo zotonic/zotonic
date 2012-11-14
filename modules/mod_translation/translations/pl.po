@@ -26,10 +26,7 @@ msgstr ""
 msgid "Active modules"
 msgstr "Aktywne moduły"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:3
-msgid "Add a new language"
-msgstr "Dodaj obsługę nowego języka"
-
+#: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Dodaj język"
@@ -45,7 +42,7 @@ msgid "Are you sure you want to delete the language"
 msgstr "Czy na pewno chcesz usunąć obsługę języka"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -63,7 +60,6 @@ msgid "Delete language"
 msgstr "Usuń język"
 
 #: modules/mod_translation/templates/admin_translation.tpl:54
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:5
 msgid "Edit"
 msgstr "Edycja"
 
@@ -86,7 +82,7 @@ msgstr ""
 "oznaczony jako \"Domyślny\" zostanie ustawiony użytkownikom, którzy nie "
 "wybrali sobie wersji językowej."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:8
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:1
 msgid ""
 "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
 "of the language. Use the native form of the language, for example "
@@ -105,13 +101,13 @@ msgid "Help about translations."
 msgstr "Tłumaczenia - pomoc"
 
 #: modules/mod_translation/templates/admin_translation.tpl:24
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:13
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:6
 msgid "ISO Code"
 msgstr "Kod ISO"
 
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 #: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:21
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
 msgid "Language"
 msgstr "Język"
 
@@ -135,7 +131,7 @@ msgstr ""
 "Przeładuje tłumaczenia serwisu i wszystkich modułów. Wszystkie szablony "
 "zostaną przebudowane."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
 msgid "Save"
 msgstr "Zapisz"
 
@@ -157,7 +153,7 @@ msgstr "Usuń język"
 msgid "Select your preferred language."
 msgstr "Usuń język"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:29
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
 msgid "Show in menu"
 msgstr "Pokaż w menu"
 
@@ -226,6 +222,9 @@ msgstr "Stan tłumaczeń poszczególnych modułów"
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
 msgid "Translations"
 msgstr "Tłumaczenia"
+
+#~ msgid "Add a new language"
+#~ msgstr "Dodaj obsługę nowego języka"
 
 #~ msgid "Need more help?"
 #~ msgstr "Czy potrzebujesz podpowiedzi?"

@@ -9,7 +9,7 @@
     <div class="control-group">
         <label for="username" class="control-label">{_ Username _}</label>
         <div class="controls">
-	    <input type="text" id="username" name="username" value="" class="span4" placeholder="{_ user@example.com _}" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
+	    <input type="text" id="username" name="username" value="" class="span4" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
             {% validate id="username" type={presence} %}
         </div>
     </div>
@@ -23,15 +23,15 @@
 
     <div class="control-group">
         <div class="controls">
-	    <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-	    <label class="checkbox inline" for="{{ #rememberme }}">{_ Stay logged on unless I log off. _}</label>
+	        <button class="btn btn-primary btn-large pull-right" style="margin-right: 10px" type="submit">{_ Log on _}</button>
+	        <label class="checkbox" title="{_ Stay logged on unless I log off. _}">
+            	<input type="checkbox" name="rememberme" value="1" />
+                {_ Remember me _}
+            </label>
         </div>
     </div>
 
-    <div class="control-group buttons">
-        <div class="controls">
-	    <button class="btn btn-primary btn-large" type="submit">{_ Log on _}</button>
-            <p class="pull-right"><a href="{% url logon f="reminder" %}">{_ I forgot my password _}.</a></p>
-        </div>
+    <div>
+        <a class="" href="{% url logon f="reminder" %}">{_ I forgot my password _}</a>
     </div>
 </form>

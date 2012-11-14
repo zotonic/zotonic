@@ -16,7 +16,7 @@ ul#logon_methods {
 
 div#logon_box {
     text-align: left;
-    width: 300px;
+    width: 380px;
     margin: 0 auto;
     padding: 30px;
     padding-bottom: 10px;
@@ -46,10 +46,6 @@ div#logon_box {
 
 #logon_box form div.buttons p {
     margin-top: 9px;
-}
-
-#logon_box form .checkbox {
-    padding-left: 4px;
 }
 
 #logon_box form .z_validation_message {

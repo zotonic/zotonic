@@ -3,9 +3,10 @@
 Actions
 =======
 
-.. seealso:: :ref:`manual-actions` in the :ref:`manual-templates` manual.
+.. seealso:: :ref:`manual-template-actions` in the :ref:`manual-templates` manual.
 
 .. toctree::
+   :maxdepth: 1
    :glob:
 
    action_*

@@ -96,7 +96,7 @@ memo(F, Key, MaxAge, Dep, #context{} = Context) ->
                 end,
                 Value
             catch
-                _: R ->  memo_send_errors(Key, R, Context)
+                _: R ->  memo_send_errors(Key, {R, erlang:get_stacktrace()}, Context)
             end
     end.
 
@@ -117,7 +117,7 @@ memo(F, Key, MaxAge, Dep, #context{} = Context) ->
     memo_send_errors(Key, Reason, Context) ->
         Pids = get_waiting_pids(Key, Context),
         [ catch gen_server:reply(Pid, {error, Reason}) || Pid <- Pids ],
-        error.
+        {error, Reason}.
 
 
 %% @spec set(Key, Data, Context) -> void()

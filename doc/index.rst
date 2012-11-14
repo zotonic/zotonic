@@ -28,3 +28,12 @@ Indices and tables
 * :doc:`glossary`
 * :ref:`search`
 
+
+.. add files here that should not be part of any other toc tree
+   see: http://sphinx-doc.org/markup/toctree.html and the discussion
+   following the hidden option.
+
+.. toctree::
+   :hidden:
+
+   glossary

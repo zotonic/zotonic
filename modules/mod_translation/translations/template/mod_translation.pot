@@ -23,12 +23,7 @@ msgid ""
 "Active modules"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:3 
-msgid ""
-"Add a new language"
-msgstr ""
-
-#: ./modules/mod_translation/templates/admin_translation.tpl:15 
+#: ./modules/mod_translation/templates/admin_translation.tpl:14 ./modules/mod_translation/templates/admin_translation.tpl:15 
 msgid ""
 "Add language"
 msgstr ""
@@ -43,7 +38,7 @@ msgid ""
 "Are you sure you want to delete the language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 ./modules/mod_translation/templates/_dialog_language_edit.tpl:37 
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 ./modules/mod_translation/templates/_dialog_language_edit.tpl:30 
 msgid ""
 "Cancel"
 msgstr ""
@@ -63,7 +58,7 @@ msgid ""
 "Delete language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:54 ./modules/mod_translation/templates/_dialog_language_edit.tpl:5 
+#: ./modules/mod_translation/templates/admin_translation.tpl:54 
 msgid ""
 "Edit"
 msgstr ""
@@ -84,7 +79,7 @@ msgid ""
 "language is used for new visitors without a selected language."
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:8 
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:1 
 msgid ""
 "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
 "of the language. Use the native form of the language, for example "
@@ -101,12 +96,12 @@ msgid ""
 "Help about translations."
 msgstr ""
 
-#: ./modules/mod_translation/templates/admin_translation.tpl:24 ./modules/mod_translation/templates/_dialog_language_edit.tpl:13 
+#: ./modules/mod_translation/templates/admin_translation.tpl:24 ./modules/mod_translation/templates/_dialog_language_edit.tpl:6 
 msgid ""
 "ISO Code"
 msgstr ""
 
-#: ./modules/mod_translation/templates/text/_language_switch.tpl:1 ./modules/mod_translation/templates/admin_translation.tpl:25 ./modules/mod_translation/templates/_dialog_language_edit.tpl:21 
+#: ./modules/mod_translation/templates/text/_language_switch.tpl:1 ./modules/mod_translation/templates/admin_translation.tpl:25 ./modules/mod_translation/templates/_dialog_language_edit.tpl:14 
 msgid ""
 "Language"
 msgstr ""
@@ -132,7 +127,7 @@ msgid ""
 "recompiled."
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:38 
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:31 
 msgid ""
 "Save"
 msgstr ""
@@ -153,7 +148,7 @@ msgid ""
 "Select your preferred language."
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:29 
+#: ./modules/mod_translation/templates/_dialog_language_edit.tpl:22 
 msgid ""
 "Show in menu"
 msgstr ""

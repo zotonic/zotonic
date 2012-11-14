@@ -28,17 +28,17 @@ limitations under the License.
         _init: function() {
             var self = this;
             (self.element.find("tr").each(function() {
-                                              var href = $(this).attr("data-href");
-                                              if (!href) return;
-                                              $(this).find("td").each(function() {
-                                                                          $(this)
-                                                                              .addClass("view-link")
-                                                                              .contents()
-                                                                              .wrapAll($("<a>")
-                                                                              	.addClass("view-link")
-                                                                              	.attr("href", href));
-                                                                      });
-                                          }));
+                var href = $(this).attr("data-href");
+                if (!href) return;
+                $(this).find("td").each(function() {
+                    $(this)
+                        .addClass("view-link")
+                        .contents()
+                        .wrapAll($("<a>")
+                                 .addClass("view-link")
+                                 .attr("href", href));
+                });
+            }));
         }
     });
 
@@ -79,18 +79,16 @@ window.zAdminConnectDone = function(v) {
 window.zAdminLinkDone = function(v) {
 	window.z_zlink(v.url_language, v.title_language);
 	window.zAdminConnectDone(v);
-}
+};
 
 window.zAdminMediaDone = function(v) {
 	window.z_choose_zmedia(v.object_id);
 	window.zAdminConnectDone(v);
-}
+};
 
 window.zEditLanguage = function() {
 	return $('.language-tabs li.active').attr('lang');
-}
-
-
+};
 
 function z_admin_ensure_block_names() {
     var names = [];
@@ -106,7 +104,7 @@ function z_admin_ensure_block_names() {
     	if (name == '')
     	{
     		var $block = $(this).closest(".block");
-    		name = $("input.block-type", $block).val().split("_")[0]
+    		name = $("input.block-type", $block).val().split("_")[0];
     		var ct = 1;
 		    while (names.indexOf(name+ct) != -1) {
 		        ct++;
@@ -115,5 +113,4 @@ function z_admin_ensure_block_names() {
 	        names.push(name+ct);
     	}
     });
-}
-
+};

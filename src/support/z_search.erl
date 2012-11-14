@@ -35,7 +35,7 @@
 -include_lib("zotonic.hrl").
 
 -define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
--define(OFFSET_PAGING, {1,20000}).
+-define(OFFSET_PAGING, {1,30000}).
 
 %% @doc Search items and handle the paging.  Uses the default page length.
 %% @spec search_pager({Name, SearchPropList}, Page, #context{}) -> #search_result{}

@@ -24,7 +24,7 @@ msgstr ""
 msgid "Alert"
 msgstr "Ostrzeżenie"
 
-#: modules/mod_base/templates/error.tpl:69
+#: modules/mod_base/templates/error.tpl:71
 msgid "Arguments"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:70
+#: modules/mod_base/templates/error.tpl:72
 msgid "File"
 msgstr ""
 
@@ -62,8 +62,12 @@ msgstr ""
 msgid "Folder"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:68
+#: modules/mod_base/templates/error.tpl:70
 msgid "Function/ template"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:10
+msgid "Gone"
 msgstr ""
 
 #: modules/mod_base/templates/email_base.tpl:4
@@ -79,7 +83,7 @@ msgstr ""
 msgid "Mobile or desktop"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:67
+#: modules/mod_base/templates/error.tpl:69
 msgid "Module"
 msgstr ""
 
@@ -105,7 +109,7 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:14
+#: modules/mod_base/templates/error.tpl:16
 msgid "Reason"
 msgstr ""
 
@@ -113,11 +117,15 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:9
+#: modules/mod_base/templates/error.tpl:11
+msgid "Sorry, this page has been deleted."
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:18
+#: modules/mod_base/templates/error.tpl:20
 msgid "Stack trace"
 msgstr ""
 
@@ -140,6 +148,6 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: modules/mod_base/templates/error.tpl:11
+#: modules/mod_base/templates/error.tpl:13
 msgid "error"
 msgstr ""

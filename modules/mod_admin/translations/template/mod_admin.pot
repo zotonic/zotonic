@@ -132,7 +132,7 @@ msgid ""
 "Aside"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:18 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:40 
 msgid ""
 "Ask google to not index this page"
 msgstr ""
@@ -242,7 +242,7 @@ msgid ""
 "Created on"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:38 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:15 
 msgid ""
 "Customize page slug"
 msgstr ""
@@ -647,12 +647,12 @@ msgid ""
 "Page connections"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:57 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:54 
 msgid ""
 "Page description"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:49 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:46 
 msgid ""
 "Page keywords"
 msgstr ""
@@ -662,12 +662,12 @@ msgid ""
 "Page path, default is"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:33 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:16 
 msgid ""
 "Page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:23 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12 
+#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:25 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12 
 msgid ""
 "Page title"
 msgstr ""
