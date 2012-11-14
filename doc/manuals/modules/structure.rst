@@ -50,7 +50,7 @@ module is started. The parameter is a context record initialized for
 the site the module will be running in. This is useful when you need
 to initialize the database or other data structures for which you don’t 
 need a running process. When you also need to execute code when a module 
-stops you can export an optional ``terminate\2`` function. This function 
+stops you can export an optional ``terminate/2`` function. This function 
 will be called when the module terminates. The first parameter is a 
 Reason parameter which indicates why the module stopped. The second a 
 context record similar to the one in the ``init/1`` function. 
