@@ -181,6 +181,7 @@ newest([File|Files], Mod, Context) ->
             end;
         {error, enoent} ->
             %% Not found, skip the file
+            ?zWarning("lib file not found: ~s", [File], Context),
             newest(Files, Mod, Context)
     end.
 
