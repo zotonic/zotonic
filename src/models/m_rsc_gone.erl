@@ -54,7 +54,7 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 %% @doc Get the possible 'rsc_gone' resource for the id.
-get(Id, Context) ->
+get(Id, Context) when is_integer(Id) ->
 	F = fun() ->
 			z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context) 
 		end,
@@ -63,7 +63,7 @@ get(Id, Context) ->
 
 %% @doc Check if the resource used to exist.
 -spec is_gone(integer(), #context{}) -> boolean().
-is_gone(Id, Context) ->
+is_gone(Id, Context) when is_integer(Id) ->
 	F = fun() ->
 			z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Context) =:= 1
 		end,
@@ -71,12 +71,12 @@ is_gone(Id, Context) ->
 
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
 -spec gone(integer(), #context{}) -> {ok, integer()}.
-gone(Id, Context) ->
+gone(Id, Context) when is_integer(Id) ->
 	gone(Id, undefined, Context).
 
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
 %%      Also sets the 'new id', which is the id that replaces the deleted id.
-gone(Id, NewId, Context) ->
+gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) ->
 	Props = z_db:assoc_row("
 			select id, name, version, page_path, uri, is_authoritative, creator_id, created
 			from rsc

@@ -34,12 +34,13 @@ resource_exists(ReqData, Context) ->
     ContextQs = z_context:ensure_qs(Context1),
     try
         Id = get_id(ContextQs),
-        true = m_rsc:exists(Id, ContextQs),
-        case z_context:get(cat, ContextQs) of
-            undefined ->
-                ?WM_REPLY(true, ContextQs);
-            Cat ->
-                ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs)
+        case {m_rsc:exists(Id, ContextQs), z_context:get(cat, ContextQs)} of
+            {Exists, undefined} ->
+                ?WM_REPLY(Exists, ContextQs);
+            {true, Cat} ->
+                ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs);
+            {false, _} ->
+                ?WM_REPLY(false, ContextQs)
         end
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
@@ -48,7 +49,11 @@ resource_exists(ReqData, Context) ->
 %% @doc Check if the resource used to exist
 previously_existed(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    IsGone = m_rsc_gone:is_gone(get_id(Context1), Context1),
+    IsGone = case get_id(Context1) of
+                 Id when is_integer(Id) ->
+                     m_rsc_gone:is_gone(Id, Context1);
+                 _ -> false
+             end,
     ?WM_REPLY(IsGone, Context1).
 
 
