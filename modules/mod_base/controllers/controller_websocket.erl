@@ -26,8 +26,12 @@
     charsets_provided/2,
     content_types_provided/2,
     provide_content/2,
-    websocket_start/2,
-    
+    websocket_start/2,    
+    websocket_send_data/2
+]).
+
+% websocket handler exports.
+-export([
     websocket_init/1,
     websocket_message/2,
     websocket_info/2,
@@ -35,7 +39,7 @@
 ]).
 
 -include_lib("webmachine_controller.hrl").
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 init(_Args) -> {ok, []}.
 
@@ -94,6 +98,9 @@ websocket_start(ReqData, Context) ->
             z_websocket_hybi17:start(ReqData, Context2)
     end.
 
+%% @doc Send Data over websocket Pid to the client.
+websocket_send_data(Pid, Data) ->
+    Pid ! {send_data, Data}.
 
 %% Called during initialization of the websocket.
 websocket_init(Context) ->

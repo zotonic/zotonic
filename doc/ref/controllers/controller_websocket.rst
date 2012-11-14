@@ -28,23 +28,29 @@ It is also possible to configure a custom ```ws_handler``` by specifying it in a
 WebSocket Handler API
 ---------------------
 
+In order to implement your own websocket handler you have to implement four callback functions. 
+When you want to sent a message to the client you call ``controller_websocket:send_data/2``.
+
 Example::
+
+    -module(my_ws_handler).
+    -export([websocket_init/1, websocket_message/2, websocket_info/2, websocket_terminate/2])
 
     % Called when the websocket is initialized.
     websocket_init(_Context) ->
-        erlang:start_timer(1000, self(), <<"Hello!">>),
-        ok.
+        erlang:start_timer(1000, self(), <<"Hello!">>).
 
     % Called when a message arrives on the websocket.
     websocket_message(Msg, Context) ->
-        ?DEBUG({received, Msg}).
-
+        controller_websocket:websocket_send_data(self(), ["You said: ", Msg]).
+        
     % Called when another type of message arrives.
     websocket_info(Msg, _Context) ->
-        ?DEBUG(Msg).
+        controller_websocket:websocket_send_data(self(), Msg),
+        erlang:start_timer(5000, self(), <<"Hello again!">>).
 
     % Called when the websocket terminates.
-    websocket_terminate(Reason, Context) ->
+    websocket_terminate(_Reason, _Context) ->
         ok.
 
 
