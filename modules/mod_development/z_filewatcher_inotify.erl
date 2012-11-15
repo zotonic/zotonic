@@ -42,7 +42,7 @@
 %% @spec start_link(#context{}) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Context=#context{}) ->
-    case os:cmd("which inotifywait") of
+    case os:cmd("which inotifywait 2>/dev/null") of
         [] ->
             {error, "inotifywait not found"};
         Output ->
