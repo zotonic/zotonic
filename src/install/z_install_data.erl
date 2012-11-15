@@ -114,6 +114,8 @@ install_modules(empty, Host, C) ->
 
          %% The site-specific site
          atom_to_list(Host)
+         %% plus any from the site config
+         |proplists:get_value(modules, z_sites_manager:get_site_config(Host), [])
         ],
     install_modules(Modules, C);
 install_modules(nodb, _, _) ->
