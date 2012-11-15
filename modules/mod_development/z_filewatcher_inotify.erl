@@ -29,7 +29,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 
--record(state, {port, context, timers=[]}).
+-record(state, {port, executable, context, timers=[]}).
 
 %% interface functions
 -export([
@@ -45,10 +45,11 @@ start_link(Context=#context{}) ->
     case os:cmd("which inotifywait") of
         [] ->
             {error, "inotifywait not found"};
-        _ ->
+        Output ->
             case whereis(?MODULE) of
                 undefined ->
-                    gen_server:start_link({local, ?MODULE}, ?MODULE, Context, []);
+                    Executable = hd(string:tokens(Output, "\n")),
+                    gen_server:start_link({local, ?MODULE}, ?MODULE, [Executable, Context], []);
                 Pid ->
                     {ok, Pid}
             end
@@ -64,9 +65,10 @@ start_link(Context=#context{}) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Context) ->
+init([Executable, Context]) ->
     process_flag(trap_exit, true),
-    {ok, #state{context=Context, port=start_inotify()}}.
+    State = #state{context=Context, executable=Executable},
+    {ok, State, 0}.
 
 
 %% @doc Trap unknown calls
@@ -80,8 +82,6 @@ handle_call(Message, _From, State) ->
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
-
-
 
 
 %% @doc Reading a line from the inotifywait program. Sets a timer to
@@ -111,8 +111,12 @@ handle_info({filechange, Verb, Filename}, State=#state{timers=Timers}) ->
     {noreply, State#state{timers=proplists:delete(Filename, Timers)}};
 
 handle_info({'EXIT', Port, _}, State=#state{port=Port}) ->
-    ?DEBUG("restart inotify"),
-    {noreply, State#state{port=start_inotify()}};
+    %% restart after 5 seconds
+    {noreply, State, 5000};
+
+handle_info(timeout, State=#state{context=Context}) ->
+    ?zInfo("Starting inotify file monitor.", Context),
+    {noreply, start_inotify(State)};
 
 handle_info(_Info, State) ->
     ?DEBUG(_Info),
@@ -139,17 +143,18 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-
-start_inotify() ->
+start_inotify(State=#state{executable=Executable}) ->
     os:cmd("killall inotifywait"),
-    Args = ["-e", "modify,create", "-m", "-r",
+    Args = ["-q", "-e", "modify,create", "-m", "-r", 
             filename:join(os:getenv("ZOTONIC"), "src"),
             filename:join(os:getenv("ZOTONIC"), "priv/sites"),
             filename:join(os:getenv("ZOTONIC"), "modules")
             |
             string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
-    erlang:open_port({spawn_executable, "/usr/bin/inotifywait"}, [{args, Args}, {line, 1024}]).
+    Port = erlang:open_port({spawn_executable, Executable}, [{args, Args}, {line, 1024}]),
+    State#state{port=Port}.
 
 
 verb("MODIFY") -> modify;
 verb("CREATE") -> create.
+
