@@ -70,7 +70,11 @@ menu(Context) ->
                         Menu = z_notifier:foldl(admin_menu, [], Context),
                         hierarchize(Menu, Context)
                 end,
-            z_depcache:memo(F, {admin_menu, z_acl:user(Context), z_context:language(Context)}, Context)
+            z_depcache:memo(F, 
+                            {admin_menu, z_acl:user(Context), z_context:language(Context)},
+                            ?WEEK,
+                            [admin_menu],
+                            Context)
     end.
 
 

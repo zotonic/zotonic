@@ -30,6 +30,7 @@
          observe_sanitize_element/3,
          observe_admin_menu/3,
          observe_admin_edit_blocks/3,
+         observe_module_ready/2,
          event/2,
 
          do_link/5
@@ -134,6 +135,10 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
         ]}
         | Menu
     ].
+
+
+observe_module_ready(module_ready, Context) ->
+    z_depcache:flush(admin_menu, Context).
 
 
 event(#postback_notify{message="admin-insert-block"}, Context) ->
