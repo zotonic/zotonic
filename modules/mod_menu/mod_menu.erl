@@ -381,7 +381,7 @@ manage_schema(install, Context) ->
               {main_menu,
                    menu,
                    [{title, <<"Main menu">>},
-                    {menu, case z_install_defaultdata:default_menu(m_site:get(skeleton, Context)) of
+                    {menu, case z_install_defaultdata:default_menu(Context) of
                                 undefined -> [];
                                 Menu -> Menu
                            end}
