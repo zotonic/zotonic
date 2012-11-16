@@ -30,7 +30,7 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Insert boot data into the database.
-%% @spec install(Skeleton::atom(), Host::atom(), Connection) -> ok
+%% @spec install(Host::atom(), Connection) -> ok
 install(Host, C) ->
     ?DEBUG({Host, "Install start."}),
     ok = install_config(C),
