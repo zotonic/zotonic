@@ -83,6 +83,10 @@ The following options can be configured:
   various results of function calls and database queries in memory. This
   setting determines the maximum size of it, in megabytes.
 
+``{redirect, true}``
+  Whether or not to redirect the host-aliases (listed by the
+  ``hostalias`` directives) to the main hostname. This defaults to true.
+
 ``{skeleton, blog}``
   Set by the ``zotonic addsite`` command, this settings tells Zotonic
   which skeleton site to use.
