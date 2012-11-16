@@ -148,19 +148,10 @@ install(_, _) ->
 
 %% @doc Retrieve the default menu structure for a given site. Used by mod_menu to create the menu.
 default_menu(Context) ->
-    case m_site:get(skeleton, Context) of
-        empty ->
-            m_site:get(default_menu, Context);
-        Skeleton ->
-            default_skeleton_menu(Skeleton)
+    case m_site:get(install_menu, Context) of
+        Menu when is_list(Menu) -> Menu;
+        _ -> []
     end.
-
-default_skeleton_menu(blog) ->
-    [{page_home, []}, {page_about, []}, {page_contact, []}];
-
-default_skeleton_menu(_) ->
-    %% no/unknown skeleton = no default menu
-    undefined.
 
 
 %% @doc Helper function for getting an absolute path to a data file

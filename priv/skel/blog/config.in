@@ -1,39 +1,76 @@
-% Zotonic site configuration for %%SITE%%.
+%% Zotonic site configuration for %%SITE%%.
 [
-    % This site is enabled or not.
-    {enabled, true},
+ %% This site is enabled or not.
+ {enabled, true},
 
-    % Hostname on which this site runs
-    {hostname, "%%SITE%%:8000"},
+ %% Hostname on which this site runs
+ {hostname, "%%SITE%%:8000"},
 
-    % Aliases which should redirect to the primary hostname
-    %{hostalias, "www.example.com"},
-    %{hostalias, "example.com"},
+ %% Aliases which should redirect to the primary hostname
+ %%{hostalias, "www.example.com"},
+ %%{hostalias, "example.com"},
 
-    % PostgreSQL database connection
-    {dbhost, "%%DBHOST%%"},
-    {dbport, %%DBPORT%%},
-    {dbuser, "%%DBUSER%%"},
-    {dbpassword, "%%DBPASSWORD%%"},
-    {dbdatabase, "%%DBDATABASE%%"},
-    {dbschema, "%%DBSCHEMA%%"},
+ %% PostgreSQL database connection
+ {dbhost, "%%DBHOST%%"},
+ {
+   dbport, %%DBPORT%%
+ },
+ {dbuser, "%%DBUSER%%"},
+ {dbpassword, "%%DBPASSWORD%%"},
+ {dbdatabase, "%%DBDATABASE%%"},
+ {dbschema, "%%DBSCHEMA%%"},
 
-    % Depcache settings, maximum size in mbs
-    {depcache_memory_max, 100},
+ %% Depcache settings, maximum size in mbs
+ {depcache_memory_max, 100},
 
-    % Password for the 'admin' user.
-    {admin_password, "%%ADMINPASSWORD%%"},
+ %% Password for the 'admin' user.
+ {admin_password, "%%ADMINPASSWORD%%"},
 
-    % What skeleton site this site is based on; for installing the initial data.
-    {skeleton, %%SKEL%%},
- 
-    %% Specific options
+ %% What skeleton site this site is based on; for installing the initial data.
+ {
+   skeleton, %%SKEL%%
+ },
+ {install_menu, [{page_home, []}, {page_about, []}, {page_contact, []}]},
+ {install_modules, 
+  [
+   mod_base,
+   mod_base_site,
+   mod_menu,
+   mod_oauth,
+   mod_search,
+   mod_oembed,
+   mod_atom_feed,
+   mod_translation,
+   mod_signal,
+   mod_logging,
 
-    %% Title of your site
-    {title, <<"Your first blog">>},
-    %% Subtitle
-    {subtitle, <<"built with Zotonic, the Erlang CMS.">>},
+   mod_seo,
+   mod_seo_google,
+   mod_seo_sitemap,
 
-    %% Page length
-    {pagelen, 5}
+   mod_authentication,
+   mod_acl_adminonly,
+
+   mod_admin,
+   mod_admin_category,
+   mod_admin_config,
+   mod_admin_identity,
+   mod_admin_modules,
+   mod_admin_predicate,
+
+   mod_l10n,
+   mod_geomap,
+
+   mod_comment,
+   mod_bootstrap,
+  ]},
+ %% Specific options
+
+ %% Title of your site
+ {title, <<"Your first blog">>},
+ %% Subtitle
+ {subtitle, <<"built with Zotonic, the Erlang CMS.">>},
+
+ %% Page length
+ {pagelen, 5}
 ].

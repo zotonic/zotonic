@@ -23,7 +23,7 @@
 
 %% interface functions
 -export([
-    install/3,
+    install/2,
     install_category/1
 ]).
 
@@ -31,10 +31,10 @@
 
 %% @doc Insert boot data into the database.
 %% @spec install(Skeleton::atom(), Host::atom(), Connection) -> ok
-install(Skeleton, Host, C) ->
+install(Host, C) ->
     ?DEBUG({Host, "Install start."}),
     ok = install_config(C),
-    ok = install_modules(Skeleton, Host, C),
+    ok = install_modules(Host, C),
     ok = install_category(C),
     ok = install_rsc(C),
     ok = install_identity(C),
@@ -52,81 +52,15 @@ install_config(_C) ->
     %% pgsql:reset_id(C, "config"),
     ok.
 
-
-install_modules(blog, Host, C) ->
-    Modules =
-        [
-         "mod_base",
-         "mod_base_site",
-         "mod_menu",
-         "mod_oauth",
-         "mod_search",
-         "mod_oembed",
-         "mod_atom_feed",
-         "mod_translation",
-         "mod_signal",
-         "mod_logging",
-         
-         "mod_seo",
-         "mod_seo_google",
-         "mod_seo_sitemap",
-         
-         "mod_authentication",
-         "mod_acl_adminonly",
-         
-         "mod_admin",
-         "mod_admin_category",
-         "mod_admin_config",
-         "mod_admin_identity",
-         "mod_admin_modules",
-         "mod_admin_predicate",
-         
-         "mod_l10n",
-         "mod_geomap",
-         
-         "mod_comment",
-         "mod_bootstrap",
-         
-         %% The site-specific site
-         atom_to_list(Host)
-        ],
-    install_modules(Modules, C);
-install_modules(empty, Host, C) ->
-    Modules =
-        [
-         "mod_base",
-         "mod_menu",
-         "mod_oauth",
-         "mod_search",
-         "mod_oembed",
-         "mod_signal",
-         "mod_logging",
-         
-         "mod_authentication",
-         "mod_acl_adminonly",
-         
-         "mod_admin",
-         "mod_admin_category",
-         "mod_admin_config",
-         "mod_admin_identity",
-         "mod_admin_modules",
-         "mod_admin_predicate",
-
-         %% The site-specific site
-         atom_to_list(Host)
-         %% plus any from the site config
-         |proplists:get_value(modules, z_sites_manager:get_site_config(Host), [])
-        ],
-    install_modules(Modules, C);
-install_modules(nodb, _, _) ->
-    ok;
-install_modules(Err, Host, _) ->
-    ?ERROR("~p: Invalid or missing skeleton: ~p.", [Host, Err]).
-
-install_modules(Modules, C) ->
+install_modules(Host, C) ->
     ?DEBUG("Inserting modules"),
+    Modules = [Host|proplists:get_value(install_modules, z_sites_manager:get_site_config(Host), [])],
     [
-        {ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [M]) || M <- Modules
+     {ok, 1} = pgsql:equery(
+                 C, 
+                 "insert into module (name, is_active) values ($1, true)", 
+                 [M]) 
+     || M <- Modules
     ],
     ok.
 

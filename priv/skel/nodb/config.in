@@ -1,37 +1,39 @@
-% Zotonic site configuration for %%SITE%%.
+%% Zotonic site configuration for %%SITE%%.
 [
-    % This site is enabled or not.
-    {enabled, true},
+ %% This site is enabled or not.
+ {enabled, true},
 
-    % Hostname on which this site runs
-    {hostname, "%%SITE%%:8000"},
+ %% Hostname on which this site runs
+ {hostname, "%%SITE%%:8000"},
 
-    % Aliases which should redirect to the primary hostname
-    %{hostalias, "www.example.com"},
-    %{hostalias, "example.com"},
+ %% Aliases which should redirect to the primary hostname
+ %%{hostalias, "www.example.com"},
+ %%{hostalias, "example.com"},
 
-    %% This site doesn't use a database connection
-    {dbdatabase, none},
+ %% This site doesn't use a database connection
+ {dbdatabase, none},
 
-    %% Installed modules, defined here as there is no database connection
-    {modules, [
-        %%SITE%%,
-        mod_base,
-        mod_admin,
-        mod_bootstrap,
-        mod_zotonic_status_vcs,
-        mod_zotonic_tracer
-    ]},
+ %% Installed modules, defined here as there is no database connection
+ {modules, [
+            %%SITE%%,
+            mod_base,
+            mod_admin,
+            mod_bootstrap,
+            mod_zotonic_status_vcs,
+            mod_zotonic_tracer
+           ]},
 
-    %% Default config keys
-    {site, [{language, "en"}]},
+ %% Default config keys
+ {site, [{language, "en"}]},
 
-    % Depcache settings. The maximum size in Mbs
-    {depcache_memory_max, 100},
+ %% Depcache settings. The maximum size in Mbs
+ {depcache_memory_max, 100},
 
-    % Password for the 'admin' user.
-    {admin_password, "%%ADMINPASSWORD%%"},
+ %% Password for the 'admin' user.
+ {admin_password, "%%ADMINPASSWORD%%"},
 
-    % What skeleton site this site is based on; for installing the initial data.
-    {skeleton, %%SKEL%%}
+ %% What skeleton site this site is based on; for installing the initial data.
+ {
+   skeleton, %%SKEL%%
+ }
 ].

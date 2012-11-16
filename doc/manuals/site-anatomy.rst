@@ -86,7 +86,15 @@ The following options can be configured:
 ``{skeleton, blog}``
   Set by the ``zotonic addsite`` command, this settings tells Zotonic
   which skeleton site to use.
-  
+
+``{install_menu, [<menu-item>...]}``
+  Creates the initial main menu when installing mod_menu. A `menu-item`
+  is a erlang tuple with a resource id and a list of child menu-items, 
+  if any: ``{rsc_name, []}``.
+
+``{install_modules, [<modules>...]}``
+  List all modules that should be enabled when installing the site data.
+
   
 Database connection options
 ...........................
