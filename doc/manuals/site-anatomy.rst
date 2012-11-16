@@ -99,6 +99,19 @@ The following options can be configured:
 ``{install_modules, [<modules>...]}``
   List all modules that should be enabled when installing the site data.
 
+``{smtphost, "..."}``
+  Hostname you want e-mail messages to appear from. See :ref:`manual-email`.
+
+``{streamhost, "..."}``
+  The hostname that will be used for streaming comet/websocket
+  requests. This hostname will be used in the browser for the stream
+  connections instead of the main hostname, to circumvent browser
+  limitations on the number of open sockets per host.
+
+``{cookie_domain, "..."}``
+  The domain the Zotonic session-id and page-id cookies will be set
+  on. Defaults to the main hostname.
+
   
 Database connection options
 ...........................
