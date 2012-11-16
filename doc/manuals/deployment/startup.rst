@@ -23,8 +23,8 @@ An init script will just need to call the zotonic command with either
 
   ### BEGIN INIT INFO
   # Provides:             zotonic
-  # Required-Start:       $postgresql $local_fs $remote_fs $network $time
-  # Required-Stop:        $postgresql $local_fs $remote_fs $network $time
+  # Required-Start:       $local_fs $remote_fs $network $time postgresql
+  # Required-Stop:        $local_fs $remote_fs $network $time postgresql
   # Should-Start:         
   # Should-Stop:          
   # Default-Start:        2 3 4 5
