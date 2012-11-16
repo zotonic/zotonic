@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ ! -x /usr/bin/sed ]; then
-    echo "sed not found in /usr/bin, please consider adding a symlink to it there." &>2
+if ! which sed > /dev/null; then
+    echo "sed not found!" 1>&2
     exit 1
 fi
 
