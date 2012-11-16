@@ -76,7 +76,7 @@ gone(Id, Context) when is_integer(Id) ->
 
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
 %%      Also sets the 'new id', which is the id that replaces the deleted id.
-gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) ->
+gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:= undefined ->
 	Props = z_db:assoc_row("
 			select id, name, version, page_path, uri, is_authoritative, creator_id, created
 			from rsc
