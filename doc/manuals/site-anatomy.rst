@@ -94,10 +94,12 @@ The following options can be configured:
 ``{install_menu, [<menu-item>...]}``
   Creates the initial main menu when installing mod_menu. A `menu-item`
   is a erlang tuple with a resource id and a list of child menu-items, 
-  if any: ``{rsc_name, []}``.
+  if any: ``{rsc_name, []}``. This overrides the default menu provided
+  by the skeleton.
 
 ``{install_modules, [<modules>...]}``
   List all modules that should be enabled when installing the site data.
+  This overrides the default list of modules installed by the skeleton.
 
 ``{smtphost, "..."}``
   Hostname you want e-mail messages to appear from. See :ref:`manual-email`.

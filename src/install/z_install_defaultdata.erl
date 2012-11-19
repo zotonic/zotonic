@@ -147,12 +147,23 @@ install(_, _) ->
 
 
 %% @doc Retrieve the default menu structure for a given site. Used by mod_menu to create the menu.
+%% The menu can be defined in the site config file as a list of menu items under the key `install_menu`.
+%% If that is not defined, a default menu for the skeleton is used, if any.
+-spec default_menu(#context{}) -> MenuItems | undefined when
+      MenuItems :: [MenuItem],
+      MenuItem :: {PageName, MenuItems},
+      PageName :: atom().
 default_menu(Context) ->
     case m_site:get(install_menu, Context) of
         Menu when is_list(Menu) -> Menu;
-        _ -> []
+        _ -> default_skeleton_menu(m_site:get(skeleton, Context))
     end.
 
+default_skeleton_menu(blog) ->
+    [{page_home, []}, {page_about, []}, {page_contact, []}];
+default_skeleton_menu(_) ->
+    %% no/unknown skeleton = no default menu
+    undefined.
 
 %% @doc Helper function for getting an absolute path to a data file
 %%      that is part of the default data for a site skeleton.

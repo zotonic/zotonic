@@ -29,26 +29,9 @@
  %% What skeleton site this site is based on; for installing the initial data.
  {
    skeleton, %%SKEL%%
- },
- %%{install_menu, []},
- {install_modules, 
-  [
-   mod_base,
-   mod_menu,
-   mod_oauth,
-   mod_search,
-   mod_oembed,
-   mod_signal,
-   mod_logging,
+ }
 
-   mod_authentication,
-   mod_acl_adminonly,
-
-   mod_admin,
-   mod_admin_category,
-   mod_admin_config,
-   mod_admin_identity,
-   mod_admin_modules,
-   mod_admin_predicate
-  ]}
+ %% Uncomment to override skeleton defaults
+ %%,{install_menu, []}
+ %%,{install_modules, []}
 ].
