@@ -62,8 +62,9 @@
    mod_geomap,
 
    mod_comment,
-   mod_bootstrap,
+   mod_bootstrap
   ]},
+
  %% Specific options
 
  %% Title of your site
