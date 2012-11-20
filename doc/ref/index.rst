@@ -16,7 +16,6 @@ All the nitty gritty details when the big picture has settled.
    services/index
    tags/index
    scomps/index
-   templates/index
    validators/index
 
 
