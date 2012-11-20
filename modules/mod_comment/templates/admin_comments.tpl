@@ -7,6 +7,10 @@
 {% block content %}
 <div class="edit-header">
 
+    <div class="pull-right">
+        <a class="btn btn-small" href="{% url admin_comments_settings %}">{_ Settings _}</a>
+    </div>
+    
     <h2>{_ Recent comments _}</h2>
 
     <table class="table table-striped do_adminLinkedTable">
