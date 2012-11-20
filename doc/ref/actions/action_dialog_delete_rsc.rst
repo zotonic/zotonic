@@ -1,4 +1,6 @@
 
 .. include:: meta-dialog_delete_rsc.rst
 
-.. todo:: Not yet documented.
+Open a dialog to confirm the deletion of a :term:`resource`.
+
+.. todo:: Extend documentation

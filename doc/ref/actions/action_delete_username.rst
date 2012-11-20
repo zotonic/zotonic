@@ -1,4 +1,6 @@
 
 .. include:: meta-delete_username.rst
 
-.. todo:: Not yet documented.
+Delete the username from a user, no confirmation.
+
+.. todo:: Extend documentation

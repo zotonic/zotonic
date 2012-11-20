@@ -1,4 +1,6 @@
 
 .. include:: meta-dialog_media_upload.rst
 
-.. todo:: Not yet documented.
+Shows the admin dialog for uploading a media item. See :ref:`manual-media`.
+
+.. todo:: Extend documentation

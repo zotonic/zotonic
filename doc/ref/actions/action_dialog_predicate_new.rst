@@ -1,4 +1,6 @@
 
 .. include:: meta-dialog_predicate_new.rst
 
-.. todo:: Not yet documented.
+Show a dialog for creating a new :term:`predicate`.
+
+.. todo:: Extend documentation

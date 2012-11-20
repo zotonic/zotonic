@@ -1,4 +1,5 @@
 
 .. include:: meta-focus.rst
 
-.. todo:: Not yet documented.
+Add a ``$(..).focus()`` jQuery call to the target element to give it input focus.
+

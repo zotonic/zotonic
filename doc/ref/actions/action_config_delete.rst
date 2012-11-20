@@ -1,4 +1,6 @@
 
 .. include:: meta-config_delete.rst
 
-.. todo:: Not yet documented.
+Trigger the deletion of a configuration value. Used in the admin.
+
+.. todo:: Extend documentation

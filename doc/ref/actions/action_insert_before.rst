@@ -1,4 +1,6 @@
 
 .. include:: meta-insert_before.rst
 
-.. todo:: Not yet documented.
+Insert the result of a render action before an HTML element.
+
+.. todo:: Extend documentation

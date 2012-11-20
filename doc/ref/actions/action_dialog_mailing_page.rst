@@ -1,4 +1,7 @@
 
 .. include:: meta-dialog_mailing_page.rst
 
-.. todo:: Not yet documented.
+Shows the dialog to mail the current page (:term:`resource`) to a
+mailing list. This is used in the admin "mailing status" interface.
+
+.. todo:: Extend documentation

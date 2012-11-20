@@ -1,4 +1,7 @@
 
 .. include:: meta-addlog.rst
 
-.. todo:: Not yet documented.
+Internal action used by :ref:`mod_logging` to allow realtime updates
+of the log view.
+
+.. todo:: Extend documentation

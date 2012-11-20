@@ -1,4 +1,6 @@
 
 .. include:: meta-effect.rst
 
-.. todo:: Not yet documented.
+Add a ``$(..).effect`` jQuery call to the target element.
+
+.. todo:: Extend documentation

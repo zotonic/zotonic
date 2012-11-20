@@ -1,4 +1,12 @@
 
 .. include:: meta-animate.rst
 
-.. todo:: Not yet documented.
+Add a ``$(..).animate`` jQuery call to the target element.
+
+Arguments: 
+
+- speed
+- easing
+- options
+  
+.. todo:: Extend documentation

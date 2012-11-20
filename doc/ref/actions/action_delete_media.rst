@@ -1,4 +1,6 @@
 
 .. include:: meta-delete_media.rst
 
-.. todo:: Not yet documented.
+Delete a media file from a :term:`resource`, without confirmation.
+
+.. todo:: Extend documentation

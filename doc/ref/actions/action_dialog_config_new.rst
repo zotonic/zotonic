@@ -1,4 +1,6 @@
 
 .. include:: meta-dialog_config_new.rst
 
-.. todo:: Not yet documented.
+Open a dialog to create a new configuration key/value pair.
+
+.. todo:: Extend documentation

@@ -1,4 +1,6 @@
 
 .. include:: meta-delete_rsc.rst
 
-.. todo:: Not yet documented.
+Delete a :term:`resource`, without confirmation.
+
+.. todo:: Extend documentation

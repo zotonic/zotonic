@@ -1,4 +1,6 @@
 
 .. include:: meta-dialog_config_delete.rst
 
-.. todo:: Not yet documented.
+Open a dialog that asks confirmation to delete a configuration key/value pair.
+
+.. todo:: Extend documentation

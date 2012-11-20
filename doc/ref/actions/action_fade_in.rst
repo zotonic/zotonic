@@ -1,7 +1,6 @@
 
 .. include:: meta-fade_in.rst
 
-
 Show an element by animating the opacity.
 
 Example::

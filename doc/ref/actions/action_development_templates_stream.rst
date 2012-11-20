@@ -1,4 +1,6 @@
 
 .. include:: meta-development_templates_stream.rst
 
-.. todo:: Not yet documented.
+Stream template updates to the user agent.
+
+.. todo:: Extend documentation

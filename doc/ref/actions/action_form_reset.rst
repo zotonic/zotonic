@@ -1,4 +1,6 @@
 
 .. include:: meta-form_reset.rst
 
-.. todo:: Not yet documented.
+Resets the target form to its initial state.
+
+.. todo:: Extend documentation

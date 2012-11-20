@@ -1,4 +1,6 @@
 
 .. include:: meta-backup_start.rst
 
-.. todo:: Not yet documented.
+Action which starts a manual backup.
+
+.. todo:: Extend documentation
