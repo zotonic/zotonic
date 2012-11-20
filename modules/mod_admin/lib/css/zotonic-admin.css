@@ -611,7 +611,6 @@ span.icon_status_starting {
 /* scroll - keep the save buttons into view
 --------------------------------------------------------- */
 
-
 body.scrolled #sidebar-publish-page {
     position: fixed;
     top: 12px;
@@ -627,4 +626,11 @@ body.scrolled #sort {
 }
 #sidebar-publish-page h3.widget-header i {
     display: none;
+}
+
+
+/* modal - fix for tab content getting scrollbars inside modal
+--------------------------------------------------------- */
+div.modal div.tab-content {
+    overflow: visible;
 }
