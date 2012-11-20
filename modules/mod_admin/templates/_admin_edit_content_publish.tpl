@@ -12,14 +12,16 @@
 <div class="admin-form ">
     <div class="control-group">
         <div class="pull-right">
-	    {% button class="btn" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
+        {% button class="btn" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
         </div>        
-	{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
-	{% if is_editable %}
-	    {% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
-	{% else %}
-	    {% button id="save_view" class="btn-primary" text=_"view" title=_"View this page." action={redirect id=id} %}
-	{% endif %}
+    {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
+    {% if id.page_url %}
+    {% if is_editable %}
+        {% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
+    {% else %}
+        {% button id="save_view" class="btn-primary" text=_"view" title=_"View this page." action={redirect id=id} %}
+    {% endif %}
+    {% endif %}
 
     </div>
 

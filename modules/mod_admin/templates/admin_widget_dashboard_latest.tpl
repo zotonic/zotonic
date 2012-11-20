@@ -44,7 +44,7 @@
             <td>
                 {{ m.rsc[m.rsc[id].category_id].title }}
                 <span class="pull-right">
-                    <a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>
+                    {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-mini">{_ view _}</a>{% endif %}
                     <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
                 </span>
             </td>
