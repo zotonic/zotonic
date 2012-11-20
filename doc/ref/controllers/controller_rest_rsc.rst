@@ -1,4 +1,6 @@
 
 .. include:: meta-rest_rsc.rst
 
-.. todo:: Not yet documented.
+This controller implements a RESTful endpoint for :term:`resources <resource>` and its :ref:`model-rsc` model.
+
+.. todo:: Extend documentation

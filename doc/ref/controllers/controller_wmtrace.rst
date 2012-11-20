@@ -1,4 +1,6 @@
 
 .. include:: meta-wmtrace.rst
 
-.. todo:: Not yet documented.
+Admin controller which display traces of webmachine requests.
+
+.. todo:: Extend documentation

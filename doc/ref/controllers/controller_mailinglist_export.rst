@@ -1,4 +1,6 @@
 
 .. include:: meta-mailinglist_export.rst
 
-.. todo:: Not yet documented.
+Controller which downloads the given mailinglist id as a CSV file.
+
+.. todo:: Extend documentation

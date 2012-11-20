@@ -1,4 +1,6 @@
 
 .. include:: meta-survey_results.rst
 
-.. todo:: Not yet documented.
+Controller which downloads a CSV file with the results of a survey.
+
+.. todo:: Extend documentation

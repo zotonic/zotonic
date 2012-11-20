@@ -1,4 +1,6 @@
 
 .. include:: meta-atom_feed_cat.rst
 
-.. todo:: Not yet documented.
+Renders an `Atom XML feed` based on the given :term:`category`.
+
+.. todo:: Extend documentation

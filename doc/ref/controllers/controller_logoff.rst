@@ -1,4 +1,8 @@
 
 .. include:: meta-logoff.rst
 
-.. todo:: Not yet documented.
+Controller that logs off a user, destroying the session. It also
+removes any "remember me" cookies the user has, so that auto-logon is
+disabled.
+
+.. todo:: Extend documentation

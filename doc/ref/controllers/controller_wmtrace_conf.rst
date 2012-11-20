@@ -1,4 +1,7 @@
 
 .. include:: meta-wmtrace_conf.rst
 
-.. todo:: Not yet documented.
+Admin controller which let you configure and enable/disable the
+display of traces of webmachine requests.
+
+.. todo:: Extend documentation

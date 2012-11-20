@@ -1,4 +1,9 @@
 
 .. include:: meta-signup_confirm.rst
 
-.. todo:: Not yet documented.
+Controller which displays the confirmation page where the user can
+confirm his signup.
+
+The template used is ``signup_confirm.tpl``.
+
+.. todo:: Extend documentation

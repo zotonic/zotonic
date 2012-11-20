@@ -1,4 +1,6 @@
 
 .. include:: meta-admin_seo.rst
 
-.. todo:: Not yet documented.
+Shows a form with settings related to Search Engine Optimization.
+
+.. todo:: Extend documentation

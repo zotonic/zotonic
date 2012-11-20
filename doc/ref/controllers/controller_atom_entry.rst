@@ -1,4 +1,6 @@
 
 .. include:: meta-atom_entry.rst
 
-.. todo:: Not yet documented.
+Renders a representation of the given :term:`resource` as Atom XML.
+
+.. todo:: Extend documentation

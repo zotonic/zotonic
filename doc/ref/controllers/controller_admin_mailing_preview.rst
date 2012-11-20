@@ -1,4 +1,7 @@
 
 .. include:: meta-admin_mailing_preview.rst
 
-.. todo:: Not yet documented.
+This controller shows a preview of what a resource that is being
+mailed would look like, in a popup window.
+
+.. todo:: Extend documentation

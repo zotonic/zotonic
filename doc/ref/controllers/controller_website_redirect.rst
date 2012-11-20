@@ -1,4 +1,7 @@
 
 .. include:: meta-website_redirect.rst
 
-.. todo:: Not yet documented.
+This controller does a redirect to the ``website`` property of the
+given :term:`resource`.
+
+.. todo:: Extend documentation

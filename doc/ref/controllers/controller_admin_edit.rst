@@ -1,4 +1,11 @@
 
 .. include:: meta-admin_edit.rst
 
-.. todo:: Not yet documented.
+The main admin edit controller. This controller serves the edit page
+where :term:`resources <resource>` can be edited.
+
+.. image:: /img/admin_edit.png
+
+             
+.. todo:: Extend documentation
+

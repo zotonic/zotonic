@@ -1,4 +1,6 @@
 
 .. include:: meta-websocket.rst
 
-.. todo:: Not yet documented.
+Controller which opens a WebSocket connection to the browser.
+
+.. todo:: Extend documentation

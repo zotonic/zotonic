@@ -1,4 +1,8 @@
 
 .. include:: meta-twitter_redirect.rst
 
-.. todo:: Not yet documented.
+Thic controller handles the OAuth redirect of the Twitter logon
+handshake, when the user has authorized with Twitter and returns to
+the site.
+
+.. todo:: Extend documentation

@@ -1,4 +1,6 @@
 
 .. include:: meta-admin_facebook.rst
 
-.. todo:: Not yet documented.
+This controller shows the settings related to Facebook configuration.
+
+.. todo:: Extend documentation
