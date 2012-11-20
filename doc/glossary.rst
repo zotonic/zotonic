@@ -56,7 +56,7 @@ Glossary
       The session is an Erlang process. It is connected to the session cookie id on the browser. The session contains the id of the current user and more key/value pairs, called session variables. The session is also linked to page processes. For every open page on the browser we have a process on the server. This page process is used for the communication between the server and the user-agent (browser).
 
    Category
-      The data model has a hierarchical tree for the categorization of resources. Every resource is part of one category. The categorization is used amongst others to decide which template to show when displaying a resource. A category is a resource of the category .category..
+      The data model has a hierarchical tree for the categorization of resources. Every resource is part of one category. The categorization is used amongst others to decide which template to show when displaying a resource. A category is a :term:`resource` of the category `category`. For more information, see :ref:`manual-datamodel-categories`.
 
    Page
       Another word for .resource.; used in the admin.
@@ -83,7 +83,7 @@ Glossary
       A particular configuration of resource categories and predicates, which dictate how resources of certain categories relate to each other. For example, a blog-type site might need `person`, `article` and `keyword` categories, where persons and articles are connected using the `author` predicate to indicate article authorship, and articles might be connected to keywords with `has_keyword` predicates. See :ref:`manual-datamodel`.
       
    Resource
-      The main building block of the :ref:`data model <manual-datamodel>`. For simplicity of communication, a resource is often referred to as a page. Every resource usually has its own page on the web site.
+      The main building block of the :ref:`data model <manual-datamodel>`. For simplicity of communication, a resource is often referred to as a page. Every resource usually has its own page on the web site. See :ref:`manual-datamodel-resources`.
 
    Translation
       There are two kinds of translations. Texts in the templates and Erlang modules; and translations of resources. Templates and Erlang modules are translated using gettext. Resources are translated in the admin, any resource can have an arbitrary number of translations. Zotonic selects the shown language based on the preferred language of the visitor and the available languages of a resource.
