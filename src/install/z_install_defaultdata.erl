@@ -147,7 +147,7 @@ install(_, _) ->
 
 
 %% @doc Retrieve the default menu structure for a given site. Used by mod_menu to create the menu.
-%% The menu can be defined in the site config file as a list of menu items under the key `install_menu`.
+%% The menu can be defined in the site config file as a list of menu items under the key <tt>install_menu</tt>.
 %% If that is not defined, a default menu for the skeleton is used, if any.
 -spec default_menu(#context{}) -> MenuItems | undefined when
       MenuItems :: [MenuItem],

@@ -54,7 +54,7 @@ install_config(_C) ->
 
 %% @doc Install all modules for the site.
 %% The list of modules is read from either the site config file, 
-%% under the key `install_modules`, or if that key is not found
+%% under the key <tt>install_modules</tt>, or if that key is not found
 %% in the site config file, a list of modules is installed based
 %% on the skeleton used to create the site.
 -spec install_modules(Host::atom(), Connection::any()) -> ok.
