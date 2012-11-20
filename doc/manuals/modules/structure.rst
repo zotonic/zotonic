@@ -204,7 +204,7 @@ found in the file ``mod_base/services/service_base_export.erl``. This
 particular service can then be found at
 ``http://yoursite.com/api/base/export``.
 
-.. seealso:: :ref:`controller-api`
+.. seealso:: :ref:`manual-services` and :ref:`controller-api`
 
 
 Changing / recompiling files
