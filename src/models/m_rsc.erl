@@ -65,8 +65,14 @@
     uri_lookup/2
 ]).
 
+-export_type([resource/0, resource_id/0, resource_name/0]).
+
 -include_lib("zotonic.hrl").
 
+-type resource() :: resource_id() | resource_name().
+-type resource_id() :: integer() | list(digits()).
+-type resource_name() :: string() | binary() | atom().
+-type digits() :: 16#30..16#39.
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -200,26 +206,33 @@ get_raw(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Get the ACL fields for the resource with the id.
-%% @spec get_acl_props(Id, #context{}) -> #acl_props{}
+%% Will always return a valid record, even if the resource does not exist.
+-spec get_acl_props(Id::resource(), #context{}) -> #acl_props{}.
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
-            case z_db:q_row("
-                select is_published, is_authoritative, visible_for,
-                    publication_start, publication_end
-                from rsc 
-                where id = $1", [Id], Context) of
-    
-            {IsPub, IsAuth, Vis, PubS, PubE} ->
-                #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis, 
-                           publication_start=PubS, publication_end=PubE};
-            undefined ->
-                #acl_props{is_published=false, visible_for=3}
-        end
-    end,
+                Result = 
+                    z_db:q_row(
+                      "select is_published, is_authoritative, visible_for, "
+                      "publication_start, publication_end "
+                      "from rsc "
+                      "where id = $1", 
+                      [Id], Context),
+                case Result of
+                    {IsPub, IsAuth, Vis, PubS, PubE} ->
+                        #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis, 
+                                   publication_start=PubS, publication_end=PubE};
+                    undefined ->
+                        #acl_props{is_published=false, visible_for=?ACL_VIS_USER}
+                end
+        end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
-
 get_acl_props(Name, Context) ->
-    get_acl_props(name_to_id_check(Name, Context), Context).
+    case name_to_id(Name, Context) of
+        {ok, Id} ->
+            get_acl_props(Id, Context);
+        _ ->
+            #acl_props{is_published=false, visible_for=?ACL_VIS_USER}
+    end.
 
 
 %% @doc Insert a new resource

@@ -50,12 +50,12 @@
 
 %% @doc Check if the user is allowed to perform Action on Object
 %% @todo #acl_edge
-observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) ->
     is_view_public(Id, Context);
 observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
 	undefined;
 % Logged on users
-observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) ->
     can_view(Id, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) -> 
     can_media(Mime, Size, Context);
@@ -63,12 +63,12 @@ observe_acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=C
     can_insert(Cat, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) -> 
     can_insert(Cat, Context);
-observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
 	case m_rsc:p_no_acl(Id, is_authoritative, Context) of
 		true -> can_edit(Id, Context);
 		_ -> undefined
 	end;
-observe_acl_is_allowed(#acl_is_allowed{action=delete, object=Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=delete, object=Id}, Context) ->
 	can_edit(Id, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=Action, object=ModuleName}, Context) when Action == use; Action == admin ->
 	can_module(Action, ModuleName, Context);

@@ -38,8 +38,8 @@
 -include("zotonic.hrl").
 
 %% @doc Check if the user is allowed to perform Action on Object
-observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) when is_integer(Id) ->
-	Acl = m_rsc:get_acl_props(Id, Context),
+observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) ->
+    Acl = m_rsc:get_acl_props(Id, Context),
     case Acl#acl_props.is_published of
         false -> 
             false;
