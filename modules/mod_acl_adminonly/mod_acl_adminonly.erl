@@ -54,7 +54,7 @@ observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id
     end;	
 observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
 	false;
-observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) when is_integer(Id) ->
+observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
 	case m_rsc:p(Id, is_authoritative, Context) of
 		true -> true;
 		_ -> undefined
