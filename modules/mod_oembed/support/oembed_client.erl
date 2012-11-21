@@ -39,11 +39,10 @@
 %% @spec start_link([#oembed_provider{}]) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(Context) ->
-    Name = z_utils:name_for_host(?MODULE, z_context:site(Context)),
-    gen_server:start_link({local, Name}, ?MODULE, Context, []).
+    gen_server:start_link({local, srv_name(Context)}, ?MODULE, Context, []).
 
 discover(Url, Context) ->
-    gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), {discover, Url}).
+    gen_server:call(srv_name(Context), {discover, Url}).
 
 %%====================================================================
 %% gen_server callbacks
@@ -103,14 +102,15 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 %% Endpoint for embed.ly oembed service
--define(EMBEDLY_ENDPOINT, "http://api.embed.ly/1/oembed?format=json&maxwidth=500&url=").
+-define(EMBEDLY_ENDPOINT, "http://api.embed.ly/1/oembed?format=json&url=").
 
 
 do_discover(Url, State) ->
-    discover_per_provider(Url, State#state.providers).
+    UrlExtra = oembed_url_extra(State#state.context),
+    discover_per_provider(Url, UrlExtra, State#state.providers).
 
 
-discover_per_provider(Url, [Provider=#oembed_provider{}|Rest]) ->
+discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
     %% io:format("~p ~p~n", [Provider#oembed_provider.title, Provider#oembed_provider.url_re]),
     case re:run(Url, Provider#oembed_provider.url_re) of
         {match, _} ->
@@ -119,17 +119,17 @@ discover_per_provider(Url, [Provider=#oembed_provider{}|Rest]) ->
                     F(Url);
                 undefined ->
                     RequestUrl = Provider#oembed_provider.endpoint_url
-                        ++ "?format=json&url=" ++ z_utils:url_encode(Url),
+                        ++ "?format=json&url=" ++ z_utils:url_encode(Url) ++ UrlExtra,
                     oembed_request(RequestUrl)
             end;
         nomatch ->
-            discover_per_provider(Url, Rest)
+            discover_per_provider(Url, UrlExtra, Rest)
     end;
 
-discover_per_provider(Url, []) ->
+discover_per_provider(Url, UrlExtra, []) ->
     error_logger:info_report("Fallback embed.ly discovery for url: ~p~n", [Url]),
     %% Use embed.ly service...
-    oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url)).
+    oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url) ++ UrlExtra).
 
 
 oembed_request(RequestUrl) ->
@@ -140,3 +140,19 @@ oembed_request(RequestUrl) ->
         _ ->
             {error, {http, Code, Body}}  %% empty proplist
     end.
+
+%% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
+oembed_url_extra(Context) ->
+    X1 = case m_config:get_value(oembed, maxwidth, Context) of
+             undefined -> [];
+             W -> "&maxwidth=" ++ z_utils:url_encode(z_convert:to_list(W))
+         end,
+    X2 = case m_config:get_value(oembed, maxheight, Context) of
+             undefined -> X1;
+             H -> X1 ++ "&maxheight=" ++ z_utils:url_encode(z_convert:to_list(H))
+         end,
+    X2.
+
+%% @doc Name of the oembed client gen_server for this site
+srv_name(Context) ->
+    z_utils:name_for_host(?MODULE, z_context:site(Context)).
