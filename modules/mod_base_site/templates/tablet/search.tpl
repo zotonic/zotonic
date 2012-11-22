@@ -6,7 +6,7 @@
 
 {% block content %}
 {% if q.qs %}
-{% with m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` cat=`location` cat=`mailinglist` pagelen=10 page=q.page}] as result %}
+{% with result|default_if_undefined:m.search.paged[{query text=q.qs cat=`text` cat=`collection` cat=`document` cat=`location` cat=`mailinglist` pagelen=10 page=q.page}] as result %}
 
 	<h1>{_ Searching for _} <b>{{ q.qs|escape }}</b>
 		{% if result.total > 0 %}
