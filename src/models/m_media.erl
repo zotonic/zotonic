@@ -242,7 +242,8 @@ insert_file(File, Props, Context) ->
 
 insert_file(File, Props, PropsMedia, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
+    case z_acl:is_allowed(insert, #acl_rsc{category=mime_to_category(Mime)}, Context) andalso
+         z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
         true ->
             insert_file_mime_ok(File, Props, PropsMedia, Context);
         false ->
@@ -304,7 +305,8 @@ replace_file(File, RscId, Props, Opts, Context) ->
 
 replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
+    case z_acl:is_allowed(insert, #acl_rsc{category=mime_to_category(Mime)}, Context) andalso
+         z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
         true ->
             replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context);
         false ->
@@ -426,6 +428,8 @@ download_file(Url) ->
                       [{stream, File}]) of
         {ok, saved_to_file} ->
             {ok, File};
+        {ok, _Other} ->
+            {error, download_failed};
         {error, E} ->
             file:delete(File),
             {error, E}
