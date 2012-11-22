@@ -69,6 +69,26 @@ eval1({attribute, Attr, From}, Vars, Context) ->
     erlydtl_runtime:find_value(Attr, eval1(From, Vars, Context), Vars, Context);
 eval1({value_list, List}, Vars, Context) ->
     [ eval1(Elt, Vars, Context) || Elt <- List ];
+eval1({apply_filter, filter_default, _Func, Expr, Args}, Vars, Context) ->
+    A = eval1(Expr, Vars, Context),
+    case A of
+        Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> -> 
+            case Args of
+                [B|_] -> eval1(B, Vars, Context);
+                _ -> undefined
+            end;
+        _ -> A
+    end;
+eval1({apply_filter, IfNone, _Func, Expr, Args}, Vars, Context) 
+    when IfNone =:= filter_if_undefined; IfNone =:= filter_if_none ->
+    case eval1(Expr, Vars, Context) of
+        undefined ->
+            case Args of
+                [B|_] -> eval1(B, Vars, Context);
+                _ -> undefined
+            end;
+        A -> A
+    end;
 eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Context) ->
     EvalArgs = [ eval1(Arg, Vars, Context) || Arg <- Args],
     EvalExpr = eval1(Expr, Vars, Context),
