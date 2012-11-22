@@ -5,14 +5,23 @@
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
     <div class="controls">
+{% if blk.input_type == 'submit' %}
+        <button class="btn" type="submit" value="1">
+            <span></span>{{ blk.yes|default:_"True" }}
+        </button>
+        <button class="btn" type="submit" value="0">
+            <span></span>{{ blk.no|default:_"False" }}
+        </button>
+{% else %}
         <label class="radio inline">
             <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "true" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"True" }}
         </label>
         <label class="radio inline">
             <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "false" %}checked="checked"{% endif %} value="0" /> {{ blk.yes|default:_"False" }}
         </label>
+        {% if blk.is_required %}
+            {% validate id=#yes name=blk.name type={presence} %}
+        {% endif %}
+{% endif %}
     </div>
 </div>
-{% if blk.is_required %}
-    {% validate id=#yes name=blk.name type={presence} %}
-{% endif %}

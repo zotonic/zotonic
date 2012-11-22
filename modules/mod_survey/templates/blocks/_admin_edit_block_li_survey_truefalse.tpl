@@ -43,6 +43,11 @@
 <fieldset class="form-vertical">
     <div class="control-group">
         <label class="checkbox">
+            <input type="checkbox" id="block-{{name}}-input_type" name="block-{{name}}-input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
+            {_ Submit on clicking an option _}
+        </label>
+
+        <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
             {_ Required, this question must be answered. _}
         </label>
