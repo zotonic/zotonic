@@ -52,26 +52,48 @@ content_types_provided(ReqData, Context) ->
 
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
+    Context1 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
     case z_context:get(acl, Context1) of
         undefined -> 
-            ?WM_REPLY(true, Context1);
+            is_authorized_action(Context1);
         is_auth -> 
-            Context2 = z_context:ensure_all(Context1),
-            z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2);
-        logoff ->
-            Context2 = z_context:ensure_all(Context1),
-            case z_auth:is_auth(Context2) of
-                true ->
-                    Context3 = controller_logoff:reset_rememberme_cookie_and_logoff(Context2),
-                    ?WM_REPLY(true, Context3);
-                false ->
-                    ?WM_REPLY(true, Context2)
+            case z_auth:is_auth(Context1) of
+                true -> is_authorized_action(Context1);
+                false -> is_authorized_action(false, Context)
             end;
+        logoff ->
+            Context2 = case z_auth:is_auth(Context1) of
+                           true ->
+                               z_auth:logoff(Context1);
+                           false ->
+                               Context1
+                       end,
+            is_authorized_action(Context2);
         Acl -> 
-            Context2 = z_context:ensure_all(Context1),
-            z_acl:wm_is_authorized(Acl, Context2)
+            is_authorized_action(append_acl(Acl, Context1), Context1)
     end.
+
+is_authorized_action(Context) ->
+    is_authorized_action([get_acl_action(Context)], Context).
+
+is_authorized_action(Acl, Context) ->
+    %% wm_is_authorized for Acl::{view, undefined} -> true
+    z_acl:wm_is_authorized(Acl, Context).
+
+get_acl_action(Context) ->
+    {z_context:get(acl_action, Context, view), get_id(Context)}.
+
+get_id(Context) ->
+    case z_context:get(id, Context) of
+        undefined ->
+            z_context:get_q("id", Context);
+        Id -> Id
+    end.
+
+append_acl({_, _}=Acl, Context) ->
+    [get_acl_action(Context), Acl];
+append_acl(Acl, Context) when is_list(Acl) ->
+    [get_acl_action(Context) | Acl].
 
 
 provide_content(ReqData, Context) ->
