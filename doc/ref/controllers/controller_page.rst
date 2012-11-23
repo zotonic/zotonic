@@ -59,9 +59,11 @@ The following options can be given to the dispatch rule:
 |                     |permission on the rsc to be able to  |                        |
 |                     |access the resource.                 |                        |
 +---------------------+-------------------------------------+------------------------+
-|acl                  |Extra authorization checks to be     |See `ACL options.`      |
+|acl                  |Extra authorization checks to be     |See `ACL options`_.     |
 |                     |performed.                           |                        |
 +---------------------+-------------------------------------+------------------------+
 
 
 .. include:: acl_options.rst
+
+.. seealso:: :ref:`controller-template`.

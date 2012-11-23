@@ -52,7 +52,7 @@ The following options can be given to the dispatch rule:
 |                     |permission on the rsc to be able to   |                        |
 |                     |access the resource.                  |                        |
 +---------------------+--------------------------------------+------------------------+
-|acl                  |Extra authorization checks to be      |See `ACL options`.      |
+|acl                  |Extra authorization checks to be      |See `ACL options`_.     |
 |                     |performed.                            |                        |
 +---------------------+--------------------------------------+------------------------+
 |id                   |Id or unique name of a resource to be |{id, page_about}        |
@@ -63,3 +63,5 @@ The following options can be given to the dispatch rule:
 
 
 .. include:: acl_options.rst
+
+.. seealso:: :ref:`controller-page`.
