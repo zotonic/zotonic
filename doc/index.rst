@@ -37,3 +37,4 @@ Indices and tables
    :hidden:
 
    glossary
+   ref/controllers/acl_options

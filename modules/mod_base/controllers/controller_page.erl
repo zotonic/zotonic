@@ -59,37 +59,7 @@ previously_existed(ReqData, Context) ->
 
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->
-    Context1  = ?WM_REQ(ReqData, Context),
-    ContextAll = z_context:ensure_all(Context1),
-    case z_context:get(acl, ContextAll) of
-        undefined ->
-            is_authorized_action(ContextAll);
-        is_auth -> 
-            case z_auth:is_auth(ContextAll) of
-                true -> is_authorized_action(ContextAll);
-                false -> z_acl:wm_is_authorized(false, ContextAll)
-            end;
-        logoff ->
-            case z_auth:is_auth(ContextAll) of
-                true ->
-                    ContextLogoff = z_auth:logoff(ContextAll),
-                    is_authorized_action(ContextLogoff);
-                false ->
-                    is_authorized_action(ContextAll)
-            end;
-        Acl ->
-            IdCheck = {z_context:get(acl_action, ContextAll, view), get_id(ContextAll)},
-            z_acl:wm_is_authorized(append_acl(Acl, IdCheck), ContextAll)
-    end.
-    
-    is_authorized_action(Context) ->
-        Action = z_context:get(acl_action, Context, view),
-        z_acl:wm_is_authorized(Action, get_id(Context), Context).
-
-    append_acl(Acl, Action) when is_list(Acl) ->
-        Acl ++ [Action];
-    append_acl(Acl, Action) ->
-        [Acl, Action].
+    controller_template:is_authorized(ReqData, Context).
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.

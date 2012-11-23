@@ -49,8 +49,14 @@
          wm_is_authorized/5
         ]).
 
+-export_type([acl/0]).
+
 -include_lib("zotonic.hrl").
 
+-type acl() :: list(operationrequest()).
+-type operationrequest() :: {action(), object()}.
+-type action() :: atom().
+-type object() :: m_rsc:resource().
 
 %% @doc Check if an action is allowed for the current actor.
 -spec is_allowed(term(), term(), #context{}) -> true | false | undefined.
@@ -272,13 +278,17 @@ logoff(Context) ->
 
 %% @doc Convenience function, check if the current user has enough permissions, if not then
 %% redirect to the logon page.
+-spec wm_is_authorized(boolean() | acl(), #context{}) -> webzmachine:reply().
 wm_is_authorized(true, Context) ->
     ?WM_REPLY(true, Context);
 wm_is_authorized(false, Context) ->
     wm_is_authorized(false, logon, Context);
-wm_is_authorized(ACLs, Context) ->
+wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
     wm_is_authorized(ACLs, logon, Context).
 
+-spec wm_is_authorized(boolean() | acl(), Redirect | ReqData, #context{}) -> webzmachine:reply() when
+      Redirect :: atom(),
+      ReqData :: webzmachine:reqdata().
 wm_is_authorized(true, _Redirect, Context) ->
     wm_is_authorized(true, Context);
 wm_is_authorized(false, Redirect, Context) ->
@@ -292,18 +302,24 @@ wm_is_authorized(ACLs, ReqData, Context) when is_list(ACLs) ->
 wm_is_authorized(Action, Object, Context) ->
     wm_is_authorized([{Action, Object}], Context).
 
+-spec wm_is_authorized(action(), object(), webzmachine:reqdata(), #context{}) -> webzmachine:reply().
 wm_is_authorized(Action, Object, ReqData, Context) ->
     wm_is_authorized([{Action, Object}], ?WM_REQ(ReqData, Context)).
 
+-spec wm_is_authorized(action(), object(), Redirect, ReqData, #context{}) -> webzmachine:reply() when
+      Redirect :: atom(),
+      ReqData :: webzmachine:reqdata().
 wm_is_authorized(Action, Object, Redirect, ReqData, Context) ->
     wm_is_authorized([{Action, Object}], Redirect, ?WM_REQ(ReqData, Context)).
 
+-spec wm_set_location(Redirect::atom(), #context{}) -> #context{}.
 wm_set_location(Redirect, Context) ->
     RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
     Location = z_dispatcher:url_for(Redirect, [{p,RequestPath}], Context),
     z_context:set_resp_header("Location", Location, Context).
 
 %% Check list of {Action,Object} ACL pairs
+-spec wm_is_allowed(acl(), #context{}) -> boolean().
 wm_is_allowed([], _Context) ->
     true;
 wm_is_allowed([{Action,Object}|ACLs], Context) ->
@@ -316,7 +332,7 @@ wm_is_allowed([{Action,Object}|ACLs], Context) ->
             case {Action, Object} of
                 {view, undefined} -> true;
                 {view, false} -> true;
-                {view, Id} when is_integer(Id) -> not m_rsc:exists(Id, Context);
+                {view, Id} -> not m_rsc:exists(Id, Context);
                 _ -> false
             end
     end.
