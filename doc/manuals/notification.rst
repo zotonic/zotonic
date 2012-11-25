@@ -5,14 +5,14 @@ The notification system
 
 Zotonic's notifier system makes it possible to create modular
 components with pluggable interface. The notifier system is used by
-internal core zotonic components like the authentication mechanism,
+internal core Zotonic components like the authentication mechanism,
 the logging system and more.
 
 The notification system can not only act as a traditional event 
 subscription system but also as an advance priority based function d
 ispatch system. It uses the priority system which is used to select 
 templates. This makes it possible to override pre-defined default 
-behaviour of core zotonic modules.
+behaviour of core Zotonic modules.
 
 A notification message is a tagged tuple. The first element of the
 tuple is the type of notification message. An observer can use this 
@@ -27,11 +27,11 @@ Or::
   {module_activate, mod_stream, <0.32.0>}
 
 
-Most of the notifications used in zotonic are defined as records and
+Most of the notifications used in Zotonic are defined as records and
 can be found in ``include/zotononic_notifications.hrl``
 
 Sending notifications
-=====================
+---------------------
 
 As mentioned earlier, the notification system can not only be used
 to just send events to observers. Observers can also return values 
@@ -66,13 +66,13 @@ foldr
   Do a fold over all observers, low prio observers first.
 
 Subscribing to notifications
-============================
+----------------------------
 
 Registering as an observer works as follows:: 
 
    z_notifier:observe(NotificationType, Handler, Priority, Context)
 
-If the module is either a zotonic module or a site module, the 
+If the module is either a Zotonic module or a site module, the 
 ``Priority`` parameter can be omitted. The observer will then get 
 the same priority as the module.
 
@@ -98,54 +98,70 @@ Example::
    z_notifier:observer(acl_logon, {mysitewww, handle_logon}, Context)
 
 Subscription shorthands
------------------------
+.......................
 
 Modules and sites can use shortcuts for registering as an observer. When the
-zotonic module exports a function with the prefix ``observe_`` or 
+Zotonic module exports a function with the prefix ``observe_`` or 
 ``pid_observe_`` Zotonic's module manager will register the observer for you.
 
 For example exporting ``observe_acl_logon/2`` will register that function as
 an observer. It will be triggered when the ``acl_logon`` notification is fired.
 
 Handling notifications
-======================
+----------------------
 
-When a notifications is sent the ``z_notifier`` module looks in its tables to 
-see if there are any observers intersted in receiving it. There are three type's
-of notifications.
+When a notifications is sent the ``z_notifier`` module looks in its
+tables to see if there are any observers interested in receiving
+it. There are three types of notifications.
 
-cast notifications
+Cast notifications
   This is the simplest notification. The notifier does not expect an answer back
   the result of the handler is ignored. This kind of notification is triggered by
-  calling ``z_notifier:notify/2`` or ``z_notifier:notify1/2``. They are usefule
-  for letting other modules know about a certaint event or condition. This 
+  calling ``z_notifier:notify/2`` or ``z_notifier:notify1/2``. They are useful
+  for letting other modules know about a certaint even or condition. This 
   makes it possible for other modules to act on it.
 
-call notification
-  For this kind of notification z_notifier expects an answer back. This answer
+Call notification
+  For this kind of notification, ``z_notifier`` expects an answer back. This answer
   is returned back to the notifier. This kind of notifications is used to 
   decouple modules. For instance a module can ask another module for a special
   url to go to after logging in without knowing which module will do this. 
   Call notifications are triggered by: ``z_notifier:first/2`` and 
   ``z_notifier:map/2``.
 
-fold notifications
-  Fold notifications are specialcalls each observer and passes
-  an accumulator. Each observer can adapt values in the accumulator. The final
-  value of the accumulator is returned as result. This is useful if you want
-  multiple modules to be able to adapt and use values in the accumulator. 
+Fold notifications
+
+  Fold notifications are called with ``z_notifier:foldl/3`` or
+  ``z_notifier:foldr/3``. It works similar to the `lists:foldr and
+  lists:foldl <http://www.erlang.org/doc/man/lists.html#foldl-3>`_
+  functions of Erlang's `lists
+  <http://www.erlang.org/doc/man/lists.html>`_ module.
+
+  The fold function calls each observer in sequence, either starting
+  at highest (``foldl``) or at lowest (``foldr``) priority, passing
+  values and an initial accumulator value.
+
+  Each observer can adapt values in the accumulator, and needs to
+  return it, for passing on to the next observer. The final value of
+  the accumulator is returned as result. This is useful if you want
+  multiple modules to be able to adapt and use values in the
+  accumulator.
+
+  For example, :ref:`mod_admin` uses a fold notification (called
+  ``admin_menu``) to build up the admin navigation menu, where each
+  observer is called to add menu entries to the menu.
 
 Cast notifications
-------------------
+..................
 
-todo:: explain plus complete example.
+.. todo:: explain plus complete example.
 
 Call notifications
-------------------
+..................
 
-todo:: explain plus complete example.
+.. todo:: explain plus complete example.
 
 Fold notifications
-------------------
+..................
 
-todo:: explain plus complete example.
+.. todo:: explain plus complete example.
