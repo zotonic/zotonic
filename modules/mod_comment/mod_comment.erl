@@ -204,7 +204,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, ?MODULE}},
      #menu_item{id=admin_comments_settings,
 		parent=admin_modules,
-		label=?__("Comments", Context),
+		label=?__("Comment settings", Context),
 		url={admin_comments_settings},
 		visiblecheck={acl, use, ?MODULE}}     
      |Acc].
