@@ -13,14 +13,13 @@
     
     {% if editable %}
     <div class="well">
-        {% button class="btn btn-primary" text=_"make a new acl role" action={dialog_new_rsc cat="acl_role" nocatselect} %}
+        {% button class="btn btn-primary" text=_"Make new ACL role" action={dialog_new_rsc cat="acl_role" nocatselect} %}
     </div>
     {% endif %}
 </div>
         
 <div>
     <h3>{_ ACL role overview _}</h3>
-    <hr />
 
     <table class="table table-striped do_adminLinkedTable">
         <thead>
