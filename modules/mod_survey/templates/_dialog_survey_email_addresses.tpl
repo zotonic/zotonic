@@ -4,5 +4,5 @@
 </form>
 
 <div class="modal-footer">
-    {% button text=_"Close" action={dialog_close} %}
+    {% button class="btn btn-primary" text=_"Close" action={dialog_close} %}
 </div>
