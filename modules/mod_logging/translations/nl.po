@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-07-21 20:44+0200\n"
+"PO-Revision-Date: 2012-11-27 20:22+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -40,9 +40,8 @@ msgid "Debug"
 msgstr "Debug"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:13
-#, fuzzy
 msgid "Email log"
-msgstr "e-mail log"
+msgstr "E-mail log"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:65
 msgid "Error"
@@ -88,9 +87,8 @@ msgid "Log messages"
 msgstr "Berichtenlog"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:12
-#, fuzzy
 msgid "Message log"
-msgstr "berichtenlog"
+msgstr "Berichtenlog"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:52
 msgid "Message nr"
