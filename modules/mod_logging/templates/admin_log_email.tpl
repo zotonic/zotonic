@@ -100,8 +100,8 @@
 		    <input name="template" type="text" style="width: 85%" value="{{ q.template|escape }}" />
                 </td>
 	        <td class="span2">
-		    <button class="btn btn-primary btn-small" type="submit">{_ Filter _}</button>
-		    <button class="btn btn-small" id="filter_clear">{_ All _}</button>
+		    <button class="btn btn-primary btn-mini" type="submit">{_ Filter _}</button>
+		    <button class="btn btn-mini" id="filter_clear">{_ All _}</button>
 		    {% wire id="filter_clear" 
 		        action={set_value selector="#log_filter input" value=""}
 		        action={set_value selector="#log_status" value=""}
