@@ -220,7 +220,12 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_system,
                 label=?__("Log", Context),
                 url={admin_log},
-                visiblecheck={acl, use, mod_logging}}
-     
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_email,
+                parent=admin_system,
+                label=?__("Email log", Context),
+                url={admin_log_email},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_separator{parent=admin_system}
      |Acc].
 
