@@ -8,7 +8,7 @@
                 <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="span4" />
                 <p class="help-block">
                     You find this id in the tracking script, it has the format <strong>UA-123456-1</strong>. 
-                    <a href="http://www.google.com/support/googleanalytics/bin/answer.py?hl=en&amp;answer=55603" title="Google Analytics Help">Where can I find my tracking script?</a>
+                    <a href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help">Where can I find my tracking script?</a>
                 </p>
             </div>
         </div>
