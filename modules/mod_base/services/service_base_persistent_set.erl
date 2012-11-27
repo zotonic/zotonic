@@ -24,7 +24,7 @@ process_get(_ReqData, Context) ->
                 X when X =:= undefined orelse X =:= [] ->
                     {error, missing_arg, "value"};
                 Value ->
-                    z_context:set_persistent(list_to_atom(Key), Value, Context),
+                    z_context:set_persistent(Key, Value, Context),
                     z_convert:to_json([{key, Key}, {value, Value}])
             end
     end.

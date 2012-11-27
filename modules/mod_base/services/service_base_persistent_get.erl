@@ -20,7 +20,7 @@ process_get(_ReqData, Context) ->
         X when X =:= undefined orelse X =:= [] ->
             {error, missing_arg, "key"};
         Key ->
-            R = [{key, Key}, {value, z_context:get_persistent(list_to_atom(Key), Context)}],
+            R = [{key, Key}, {value, z_context:get_persistent(Key, Context)}],
             z_convert:to_json(R)
     end.
 
