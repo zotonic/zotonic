@@ -55,4 +55,26 @@ You can use them as basis for your's site admin-related tasks.
   i18n-widgets are displayed same as _admin_widget_std.tpl.
       
 
+Making an admin widget conditionally visible
+--------------------------------------------
+
+.. highlight:: django
+               
+To make an entire admin widget visible or not, depending on some
+condition that you want to calculate inside the widget's code, you can
+use the `widget_wrapper` block (which sits around the entire widget)
+in combination with the :ref:`tag-inherit` tag, wrapping that with a
+condition.
+
+For instance, :ref:`mod_backup` uses this technique to display the
+import/export sidebar widget. Excerpt from mod_backup's `_admin_edit_sidebar.tpl`::
+
+    {# Make the widget conditional, based on the config value mod_backup.admin_panel #}
+    {% block widget_wrapper %}
+        {% if m.config.mod_backup.admin_panel.value %}
+            {% inherit %}
+        {% endif %}
+    {% endblock %}
+
+
 .. seealso:: :ref:`template-admin_edit_widget_i18n`
