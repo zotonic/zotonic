@@ -1,5 +1,12 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
+{# Make the widget conditional, based on the config value #}
+{% block widget_wrapper %}
+    {% if m.config.mod_backup.admin_panel.value %}
+    {% inherit %}
+    {% endif %}
+{% endblock %}
+
 {% block widget_title %}{_ Backup &amp; Restore _}{% endblock %}
 {% block widget_show_minimized %}true{% endblock %}
 {% block widget_id %}admin_backup_sidebar{% endblock %}
