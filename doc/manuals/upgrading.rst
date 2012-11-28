@@ -102,11 +102,16 @@ to::
 mod_backup
 ..........
 
+mod_backup's configuration values for binary path names (`pg_dump` and
+`tar`) is now coming from the global ``z_config`` instead of the
+site's configuration database.
+
 On startup you might see this message::
 
   18:39:59.895 [error] z_module_manager:485 [sitename] Error starting module mod_backup: {error,{missing_dependencies,[rest]}}
 
 mod_backup is now dependent on mod_rest, so you should enable that module in the module manager.
+
 
 
 z_logger
