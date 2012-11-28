@@ -58,7 +58,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 				ok -> 
 				    case InAdmin of
 				        true ->
-        					z_render:wire([	{growl, [{text, "Added the recipient."}]}, 
+        					z_render:wire([	{growl, [{text, ?__("Added the recipient.", Context)}]}, 
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
@@ -68,7 +68,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 				{error, _Reason} ->
 				    case InAdmin of
 				        true ->
-					        z_render:growl_error("Could not add the recipient.", Context);
+					        z_render:growl_error(?__("Could not add the recipient.", Context), Context);
 					    false ->
 					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
 					end
@@ -76,7 +76,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 		false ->
 		    case InAdmin of
 		        true ->
-			        z_render:growl_error("You are not allowed to add or enable recipients.", Context);
+			        z_render:growl_error(?__("You are not allowed to add or enable recipients.", Context), Context);
 			    false ->
 			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
 			end
@@ -97,13 +97,13 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
 			    {name_surname, z_string:trim(z_context:get_q(name_surname, Context, ""))}
 			],
             ok = m_mailinglist:update_recipient(RcptId, RecipientProps, Context),
-            z_render:wire([	{growl, [{text, "Updated the recipient."}]}, 
+            z_render:wire([	{growl, [{text, ?__("Updated the recipient.", Context)}]}, 
                             {dialog_close, []},
                             {reload, []}], Context);
 		false ->
 		    case InAdmin of
 		        true ->
-			        z_render:growl_error("You are not allowed to edit recipients.", Context);
+			        z_render:growl_error(?__("You are not allowed to edit recipients.", Context), Context);
 			    false ->
 			        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error"}]}], Context)
 			end
