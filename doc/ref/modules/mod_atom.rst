@@ -1,4 +1,6 @@
 
 .. include:: meta-mod_atom.rst
 
-.. todo:: Not yet documented.
+Support for representing resources as Atom XML.
+             
+.. todo:: Add more documentation

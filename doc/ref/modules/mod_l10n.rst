@@ -1,4 +1,7 @@
 
 .. include:: meta-mod_l10n.rst
 
-.. todo:: Not yet documented.
+Localization of Zotonic. Provides lookups for country, month, week
+names.
+             
+.. todo:: Add more documentation

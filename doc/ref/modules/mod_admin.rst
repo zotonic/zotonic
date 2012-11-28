@@ -3,6 +3,11 @@
 
 .. todo:: Finish documentation
 
+Extending the admin menu
+------------------------
+
+See :ref:`model-admin_menu` on how to extend the admin menu.
+
 
 Extending the admin edit page
 -----------------------------

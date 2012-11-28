@@ -20,6 +20,8 @@ connections" in the admin), creating connections to other resources.
 
 .. seealso:: :ref:`model-edge`
 
+.. _manual-datamodel-edge-predicates:
+             
 Predicate
 ---------
 

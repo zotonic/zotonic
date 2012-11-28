@@ -1,4 +1,6 @@
 
 .. include:: meta-mod_atom_feed.rst
 
-.. todo:: Not yet documented.
+Support for rendering feeds of Atom XML resources.
+             
+.. todo:: Add more documentation

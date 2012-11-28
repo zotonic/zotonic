@@ -1,4 +1,7 @@
 
 .. include:: meta-mod_geomap.rst
 
-.. todo:: Not yet documented.
+Support for displaying maps and adding geographical locations to
+:term:`resources <resource>` in the admin.
+
+.. todo:: Add more documentation
