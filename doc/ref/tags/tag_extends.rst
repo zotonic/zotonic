@@ -7,9 +7,11 @@ extends
 
 Inherit markup from another template.
 
-Signal that this template extends another template. The extends tag must be the first tag in a template that inherits from another template.
+Signal that this template extends another template. The extends tag
+must be the first tag in a template that inherits from another
+template.
 
-.. note:: A template that extends another template contains only the extends tag and block tags.
+.. note:: A template that extends another template contains only the extends tag and :ref:`tag-block` tags.
 
 Example::
 

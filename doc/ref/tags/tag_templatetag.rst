@@ -5,5 +5,6 @@
 templatetag
 ===========
 
-.. todo:: Not yet documented.
+Not implemented, but exists in Zotonic for forward compatibility with
+future ErlyDTL and Django versions.
 
