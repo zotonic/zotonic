@@ -1,4 +1,6 @@
 
 .. include:: meta-remove.rst
 
-.. todo:: Not yet documented.
+Remove an element from the page.
+
+.. todo:: Extend documentation

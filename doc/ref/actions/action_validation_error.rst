@@ -1,4 +1,7 @@
 
 .. include:: meta-validation_error.rst
 
-.. todo:: Not yet documented.
+Render a validation error on the target. Text is given in the `text`
+argument.
+
+.. todo:: Extend documentation

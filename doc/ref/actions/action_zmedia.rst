@@ -1,4 +1,6 @@
 
 .. include:: meta-zmedia.rst
 
-.. todo:: Not yet documented.
+Used for triggering the insertion of a media item in the TinyMCE editor in the admin.
+
+.. todo:: Extend documentation

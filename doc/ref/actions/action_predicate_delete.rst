@@ -1,4 +1,6 @@
 
 .. include:: meta-predicate_delete.rst
 
-.. todo:: Not yet documented.
+Delete a predicate, no confirmation.
+
+.. todo:: Extend documentation

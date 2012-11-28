@@ -1,4 +1,6 @@
 
 .. include:: meta-slide_toggle.rst
 
-.. todo:: Not yet documented.
+Toggle an element by sliding it up and down.
+
+.. todo:: Extend documentation

@@ -1,4 +1,6 @@
 
 .. include:: meta-replace.rst
 
-.. todo:: Not yet documented.
+Replace the target HTML element by new one.
+
+.. todo:: Extend documentation

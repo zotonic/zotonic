@@ -1,4 +1,6 @@
 
 .. include:: meta-zlink.rst
 
-.. todo:: Not yet documented.
+Used for inserting an internal link in the TinyMCE editor in the admin.
+
+.. todo:: Extend documentation

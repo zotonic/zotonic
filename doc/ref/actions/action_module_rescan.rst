@@ -1,4 +1,7 @@
 
 .. include:: meta-module_rescan.rst
 
-.. todo:: Not yet documented.
+Rescans all modules, to find all templates, lib files, dispatch rules,
+etc. again.
+
+.. todo:: Extend documentation
