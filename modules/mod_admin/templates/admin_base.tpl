@@ -13,7 +13,6 @@
                 "css/jquery-ui.datepicker.css"
                 "css/zp-menuedit.css"
                 "css/zotonic-admin.css"
-                "css/geomap.css"
                 "css/z.modal.css"
                 "css/jquery.loadmask.css"
         %}
