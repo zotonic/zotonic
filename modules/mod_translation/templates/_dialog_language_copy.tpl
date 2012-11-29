@@ -33,8 +33,6 @@ $('#{{ #copy }}').click(function(e) {
 				if ($.trim($(this).val()) == '') {
 					var to_id = $(this).attr('id');
 					var from_id = to_id.split('--')[0] + '--' + from;
-
-					console.log(from_id, to_id);
 					$('#'+to_id).val($('#'+from_id).val());
 				}
 			});
