@@ -26,7 +26,6 @@
 		<button class="btn" id="location_address"><i class="icon-screenshot"></i> {_ Set to entered address _}</button>
 		<button class="btn" id="location_clear">{_ Clear _}</button>
 		<button class="btn" id="location_reset">{_ Reset _}</button>
-		<button class="btn btn-primary" id="location_reset">{_ Save this page _}</button>
 	</div>
 </fieldset>
 
