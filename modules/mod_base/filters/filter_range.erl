@@ -25,4 +25,17 @@ range(Start, End, Context) ->
     range(Start, End, 1, Context).
 
 range(Start, End, Step, _Context) ->
-    lists:seq(z_convert:to_integer(Start), z_convert:to_integer(End), z_convert:to_integer(Step)).   
+	range1(z_convert:to_integer(Start), z_convert:to_integer(End), z_convert:to_integer(Step)).
+
+range1(Start, End, Step) 
+	when not is_integer(Start); 
+		 not is_integer(End); 
+		 not is_integer(Step);
+		 Step =:= 0 ->
+	[];
+range1(Start, End, Step) when End >= Start, Step > 0 ->
+    lists:seq(Start, End, Step);
+range1(Start, End, Step) when End =< Start, Step < 0 ->
+    lists:reverse(lists:seq(End, Start, 0-Step));
+range1(_Start, _End, _Step) ->
+	[].
