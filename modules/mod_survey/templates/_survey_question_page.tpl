@@ -41,5 +41,10 @@
 
 {% javascript %}
     $('body').removeClass('survey-start').addClass('survey-question');
+
+    var pos = $('#{{ #q }}').position();
+    if (pos.top < $(window).scrollTop() + 100) {
+    	$(window).scrollTop(pos+100);
+	}
 {% endjavascript %}
 
