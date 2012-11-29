@@ -1,8 +1,8 @@
 /* dialog js
  ----------------------------------------------------------
 
- @package:	Zotonic 2009, 2012
- @Author:	Tim Benniks <tim@timbenniks.nl>
+ @package:      Zotonic 2009, 2012
+ @Author:       Tim Benniks <tim@timbenniks.nl>
 
  Copyright 2009 Tim Benniks
  Copyright 2012 Arjan Scherpenisse
@@ -26,23 +26,23 @@
      $.extend(
          {
              dialogAdd: function(options)
-	     {	
-		 $('#zmodal').remove(); 
+             {
+                 $('#zmodal').remove();
 
-		 options = $.extend({}, $.ui.dialog.defaults, options);
-		     		     
-		 var width = options.width;
+                 options = $.extend({}, $.ui.dialog.defaults, options);
+                                     
+                 var width = options.width;
 
-		 var title = $("<div>").addClass("modal-header")
+                 var title = $("<div>").addClass("modal-header")
                      .append($("<a>").addClass("close").attr("data-dismiss", "modal").html("&times;"))
                      .append($("<h3>").text(options.title));
 
                  var body = $("<div>").addClass("modal-body")
                      .html(options.text);
                  
-		 var dialogClass = 'modal';
-		 if (typeof(options.addclass) == "string")
-		     dialogClass += ' ' + options.addclass;
+                 var dialogClass = 'modal';
+                 if (typeof(options.addclass) == "string")
+                     dialogClass += ' ' + options.addclass;
 
                  var dialog = $("<div>")
                      .attr("id", "zmodal")
@@ -53,52 +53,53 @@
                      .appendTo($("body"));
 
                  dialog.modal({backdrop: true});
+                 if (dialog.height() > 0.8 * $(window).height()) {
+                    dialog.addClass('high');
+                 }
+                 if (typeof($.widgetManager) != 'undefined') {
+                     dialog.widgetManager();
+                 }
+                 z_tinymce_add(dialog);
+             },
 
-		 if (typeof($.widgetManager) != 'undefined') {
-		     dialog.widgetManager();
-		 }
-		 z_tinymce_add(dialog);
-
-	     },
-
-	     dialogClose: function()
-	     {
-		 $('#zmodal').modal('hide');
-	     },
-	     
-	     dialogRemove: function(obj)
-	     {
-		 obj = obj || $('#zmodal');
-		 z_tinymce_remove(obj);
-		 obj.draggable('destroy').resizable('destroy').fadeOut(300, function()
-			                                               {
-				                                           $(this).remove();
-			                                               });
-	     }
-	 });
+             dialogClose: function()
+             {
+                 $('#zmodal').modal('hide');
+             },
+             
+             dialogRemove: function(obj)
+             {
+                 obj = obj || $('#zmodal');
+                 z_tinymce_remove(obj);
+                 obj.draggable('destroy').resizable('destroy').fadeOut(300, function()
+                                                                       {
+                                                                           $(this).remove();
+                                                                       });
+             }
+         });
      
-     $.widget("ui.show_dialog", 
-	      {
-		  _init: function() 
-		  {
-		      var title	= this.options.title;
-		      var text	= this.options.text;
-		      var width	= this.options.width;
-		      
-		      this.element.click(function()
-			                 {
-				             $.dialogAdd(
-				                 {
-					             title: title,
-					             text:  text,
-					             width: width
-				                 });
-			                 });
-		  }
-	      });
+     $.widget("ui.show_dialog",
+              {
+                  _init: function()
+                  {
+                      var title = this.options.title;
+                      var text  = this.options.text;
+                      var width = this.options.width;
+                      
+                      this.element.click(function()
+                                         {
+                                             $.dialogAdd(
+                                                 {
+                                                     title: title,
+                                                     text:  text,
+                                                     width: width
+                                                 });
+                                         });
+                  }
+              });
      
      $.ui.dialog.defaults = {
-	 title: 'Title',
-	 text: 'tekst'
+         title: 'Title',
+         text: 'tekst'
      };
  })(jQuery);

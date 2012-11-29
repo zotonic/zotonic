@@ -18,3 +18,9 @@ div.modal-body div.modal-footer {
     margin-top: 0;
 }
 
+#zmodal.high {
+	top: 5%;
+	bottom: 5%;
+	margin-top: 0;
+	max-height: 90%;
+}
