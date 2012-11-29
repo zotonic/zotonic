@@ -1,3 +1,6 @@
+div.olMap img {
+    max-width: none;
+}
 div.olControlZoom {
     position: absolute;
     top: 8px;
