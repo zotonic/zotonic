@@ -6,9 +6,11 @@
 <div {% block content_attributes %}{% include "_language_attrs.tpl" id=id %}{% endblock %}>
 	{% include "_meta.tpl" %}
 
+	{% block summary %}
 	{% if m.rsc[id].summary %}
 		<p class="summary"><b>{{ m.rsc[id].summary }}</b></p>
 	{% endif %}
+	{% endblock %}
 
 	{% block depiction %}
 	    {% include "_page_depiction.tpl" %}
@@ -17,8 +19,8 @@
 
     <div class="body">
     {% block body %}
-	{{ m.rsc[id].body|show_media }}
-	{% include "_blocks.tpl" %}
+		{{ m.rsc[id].body|show_media }}
+		{% include "_blocks.tpl" %}
 	{% endblock %}
 	</div>
 

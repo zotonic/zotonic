@@ -8,9 +8,11 @@
 	{% block main %}
 		{% include "_meta.tpl" %}
 
+		{% block summary %}
 		{% if m.rsc[id].summary %}
 			<p class="summary"><b>{{ m.rsc[id].summary }}</b></p>
 		{% endif %}
+		{% endblock %}
 
 		{% include "_address.tpl" %}
 
