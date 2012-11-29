@@ -283,6 +283,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
 
 
 
+    eval_page_jumps(submit, _Answers, _Context) ->
+        submit;
+    eval_page_jumps(stop, _Answers, _Context) ->
+        stop;
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
