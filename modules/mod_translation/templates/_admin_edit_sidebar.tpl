@@ -13,22 +13,26 @@
 </div>
 
 <div class="control-group">
-    <div class="controls">
+    <div class="controls" id="admin-translation-checkboxes">
         {% for code, lang in languages %}
-        {% if lang.is_enabled %}
-        <label class="inline checkbox">
-	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"
-	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} /> 
-	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.language }}</span>
-        </label>
-        {% wire id=#language.code 
-        action={toggle selector=[".tab-",code|make_list]}
-        %}
-        {% endif %}
-
+            {% if lang.is_enabled %}
+            <label class="inline checkbox">
+    	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"
+    	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} /> 
+    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.language }}</span>
+            </label>
+            {% wire id=#language.code action={toggle selector=[".tab-",code|make_list]} %}
+            {% endif %}
         {% empty %}
-        <label><input type="checkbox" checked="checked" disabled="disabled"> {{ z_language }}</label>
+            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ z_language }}</label>
         {% endfor %}
+    </div>
+</div>
+
+<div class="control-group">
+    <div class="controls">
+        <button class="btn" id="{{ #copy }}">{_ Copy translation _}…</button>
+        {% wire id=#copy action={dialog_open title=_"Copy translation" template="_dialog_language_copy.tpl"} %}
     </div>
 </div>
 {% endwith %}

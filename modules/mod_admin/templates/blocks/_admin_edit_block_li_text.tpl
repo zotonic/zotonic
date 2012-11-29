@@ -11,7 +11,7 @@
 	<div class="form-item clearfix">
 		{% if is_editable %}
 			<textarea rows="10" cols="10" 
-			    id="block-{{name}}-body{{ lang_code_with_dollar }}" 
+			    id="block-{{name}}-body{{ lang_code_for_id }}" 
 			    name="block-{{name}}-body{{ lang_code_with_dollar }}" 
 			    class="body tinymce-init" 
 			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>

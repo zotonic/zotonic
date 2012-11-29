@@ -10,16 +10,16 @@
 <fieldset class="form-vertical">
     <div class="control-group">
     {% if is_editable %}
-        <input type="text" id="block-{{name}}-prompt{{ lang_code_with_dollar }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
+        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
                class="span8" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Prompt _} ({{ lang_code }})" />
 
-       <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+       <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
               class="span8" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
 
        <label>{_ List of possible answers, one per line. Use <em>value#answer</em> for selecting values. _}</label>
-       <textarea id="block-{{name}}-answers{{ lang_code_with_dollar }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" 
+       <textarea id="block-{{name}}-answers{{ lang_code_for_id }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" 
               class="span8" rows="6"
               placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
     {% else %}

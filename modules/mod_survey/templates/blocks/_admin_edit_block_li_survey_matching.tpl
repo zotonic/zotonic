@@ -10,11 +10,11 @@
 <fieldset class="form-vertical">
     <div class="control-group">
     {% if is_editable %}
-       <input type="text" id="block-{{name}}-prompt{{ lang_code_with_dollar }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
+       <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
                class="span8" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Match which answer fits best. _} ({{ lang_code }})" />
 
-       <textarea id="block-{{name}}-matching{{ lang_code_with_dollar }}" name="block-{{name}}-matching{{ lang_code_with_dollar }}" 
+       <textarea id="block-{{name}}-matching{{ lang_code_for_id }}" name="block-{{name}}-matching{{ lang_code_with_dollar }}" 
               class="span8" rows="4"
               placeholder="{_ Cat = Picture _} ({{ lang_code }})" >{{ blk.matching[lang_code]  }}</textarea>
               
@@ -23,7 +23,7 @@ Milk = White<br/>
 Vienna = Austria<br/>
 Flying dutchman = Wagner._}</p>
 
-        <textarea id="block-{{name}}-explanation{{ lang_code_with_dollar }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
                class="span8" rows="2"
                placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
 

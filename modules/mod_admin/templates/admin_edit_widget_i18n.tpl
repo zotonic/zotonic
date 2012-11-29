@@ -12,7 +12,13 @@
 		<div class="tab-content widget-content">
 			{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 			{# to define some helper vars that will be usefull in widget_content: #}
-			{% with ["$", lang_code]|join, ["(", lang_code, ")"]|join  as  lang_code_with_dollar, lang_code_with_brackets %}
+			{% with ["$", lang_code]|join, 
+					["(", lang_code, ")"]|join,
+					["--", lang_code]|join  
+				as  lang_code_with_dollar, 
+					lang_code_with_brackets,
+					lang_code_for_id
+			%}
 			<div id="{{ #prefix }}-{{ lang_code }}" class="tab-pane {% if lang_code == edit_language %}active{% endif %} language-{{ lang_code }} {% block widget_i18n_tab_class %}{% endblock %}">
 				{% block widget_content %}{% endblock %}
 			</div>
