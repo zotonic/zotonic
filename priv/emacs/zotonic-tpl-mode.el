@@ -86,11 +86,9 @@
      '(0 font-lock-constant-face)
      (list
       zotonic-tpl-keywords-re nil nil '(1 font-lock-keyword-face))
-     ;; (zotonic-tpl--font-lock-keywords-rule
-     ;;  zotonic-tpl-keywords-re font-lock-keyword-face)
+     (list
+      zotonic-tpl-custom-tags-re nil nil '(1 font-lock-builtin-face))
      ))
-   (zotonic-tpl--font-lock-keywords-rule
-    zotonic-tpl-custom-tags-re font-lock-builtin-face)
    )
   )
 
