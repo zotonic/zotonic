@@ -117,7 +117,7 @@ item_visible({_Key, ItemProps}, Context) ->
     case proplists:get_value(visiblecheck, ItemProps) of
         undefined ->
             proplists:get_value(url, ItemProps) =/= undefined orelse
-                proplists:get_value(items, ItemProps) =/= [];
+                lists:filter(fun(#menu_separator{}) -> false; (_) -> true end, proplists:get_value(items, ItemProps, [])) =/= [];
         F when is_function(F) ->
             F();
                 {acl, Action, Object} ->
