@@ -121,6 +121,20 @@
    '(1 font-lock-builtin-face))
   "Highlight filters")
 
+(defconst zotonic-tpl-lookup-matcher
+  (list
+   "\\(\\w+\\)[.[]"
+   nil nil
+   '(1 font-lock-function-name-face))
+  "Highlight lookup expressions")
+
+(defconst zotonic-tpl-tuple-matcher
+  (list
+   "{\\(\\w+\\)"
+   nil nil
+   '(1 font-lock-type-face))
+  "Highlight tuple like expressions")
+
 (defconst zotonic-tpl-variable-matcher
   (list
    "\\w+"
@@ -128,40 +142,44 @@
    '(0 font-lock-variable-name-face))
   "Highlight variable expressions")
 
-(defun zotonic-tpl--font-lock-keywords-rule (re face)
-  "Take regexp string and return a item for the font-lock-keywords list"
-  (list re (regexp-opt-depth re) face))
-
-
 (defun zotonic-tpl-font-lock-keywords-level-1 ()
   "Basic font-lock-keywords table."
   (list
+   ;; mark {{, }} and %} as constants
    '("{{\\|[%}]}" . font-lock-constant-face)
    (cons
     "{%"
     (list
+     ;; mark {% as constant
      '(0 font-lock-constant-face)
+     ;; mark keywords and custom tags following {%
      zotonic-tpl-keywords-matcher
      zotonic-tpl-custom-tags-matcher
      ))
    (cons
     "{[{%][^|]+\\(|\\)"
     (list
+     ;; mark | as constant
      '(1 font-lock-constant-face)
+     ;; mark filters following |
      zotonic-tpl-filters-matcher
      ))
    ))
 
 (defun zotonic-tpl-font-lock-keywords-level-2 ()
   "Extended font-lock-keywords entries."
-  (list
-   '("div" . font-lock-constant-face)
-   (cons
-    "{[%{]"
-    (list
-     zotonic-tpl-variable-matcher
-     ))
-   ))
+  (mapcar
+   (lambda (matcher)
+     (cons
+      ;; mark tokens following {{ and {%
+      "{[{%]"
+      matcher
+      ))
+   (list
+    zotonic-tpl-lookup-matcher
+    zotonic-tpl-tuple-matcher
+    zotonic-tpl-variable-matcher
+    )))
 
 (defun zotonic-tpl-font-lock-keywords-default-level ()
   (append
