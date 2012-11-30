@@ -81,31 +81,30 @@ render(#render{} = Render, Context) ->
 %% The resulting list contains the rendered template and scomp contexts.  Use render_to_iolist/3 to get a iolist().
 render({cat, File}, Variables, Context) ->
     case find_template_cat(File, proplists:get_value(id, Variables), Context) of
-        {ok, FoundFileOrModuleIndex} -> 
-            render1(File, FoundFileOrModuleIndex, Variables, Context);
+        {ok, ModuleIndex} -> 
+            render1(File, ModuleIndex, Variables, Context);
         {error, Reason} ->
             lager:info("Could not find template: ~s (~p)", [File, Reason]),
             throw({error, {template_not_found, File, Reason}})
     end;
 render(#module_index{} = M, Variables, Context) ->
     render1(M#module_index.filepath, M, Variables, Context);
+render(File, Variables, Context) when is_binary(File) ->
+    render(z_convert:to_list(File), Variables, Context);
 render(File, Variables, Context) ->
-    File1 = z_convert:to_list(File),
-    case find_template(File1, Context) of
-        {ok, ModuleIndexOrList} ->
-            render1(File1, ModuleIndexOrList, Variables, Context);
+    case find_template(File, Context) of
+        {ok, ModuleIndex} ->
+            render1(File, ModuleIndex, Variables, Context);
         {error, Reason} ->
-            lager:info("Could not find template: ~s (~p)", [File1, Reason]),
-            throw({error, {template_not_found, File1, Reason}})
+            lager:info("Could not find template: ~s (~p)", [File, Reason]),
+            throw({error, {template_not_found, File, Reason}})
     end.
 
     %% Render the found template
     render1(File, #module_index{filepath=FoundFile, erlang_module=undefined}, Variables, Context) ->
-        render1(File, FoundFile, Variables, Context);
-    render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
-        render1(File, FoundFile, Module, Variables, Context);
-    render1(File, FoundFile, Variables, Context) ->
         Module = filename_to_modulename(FoundFile, Context),
+        render1(File, FoundFile, Module, Variables, Context);
+    render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
         render1(File, FoundFile, Module, Variables, Context).
         
     render1(File, FoundFile, Module, Variables, Context) ->
@@ -168,12 +167,11 @@ compile(File, FoundFile, Module, Context) ->
 
 %% @spec find_template(File, Context) -> {ok, filename()} | {ok, #module_index{}} | {error, code} 
 %% @doc Finds the template designated by the file, check modules.
-%% When the file is an absolute path, then do nothing and assume the file exists.
-%% @todo Only compile abs path templates iff the template is contained in a templates directory. 
-find_template([$/|_] = File, _Context) ->
-    {ok, File};
-find_template([_,$:,$/|_] = File, _Context) ->
-    {ok, File};
+%% When the file is tagged with 'abs' path, then do nothing and assume the file exists.
+find_template({abs, File}, _Context) ->
+    {ok, #module_index{filepath=File}};
+find_template(#module_index{} = ModuleIndex, _Context) ->
+    {ok, ModuleIndex};
 find_template(File, Context) ->
     z_module_indexer:find(template, File, Context).
 
@@ -258,7 +256,7 @@ handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
                     [
                         case F of
                             #module_index{filepath=FP} -> FP;
-                            FP -> FP
+                            {abs, FP} -> FP
                         end
                         || F <- ?MODULE:find_template(FinderFile, All, Context)
                     ]
