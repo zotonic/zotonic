@@ -35,9 +35,11 @@
   "Modify the current buffers syntax table for zotonic templates."
   (modify-syntax-entry ?{ "(}1")
   (modify-syntax-entry ?} "){4")
-  (modify-syntax-entry ?# ". 23")
+  (modify-syntax-entry ?# "_ 23")
   (modify-syntax-entry ?< "(>")
   (modify-syntax-entry ?> ")<")
+  (modify-syntax-entry ?| ".")
+  (modify-syntax-entry ?% ".")
   )
 
 (defconst zotonic-tpl-keywords-re
@@ -53,7 +55,7 @@
        "endspaceless" "ssi" "templatetag" "load" "call" "with" "url"
        "print" "image" "image_url" "media" "_" "with" "endwith" "all"
        "lib" "cache" "endcache" "filter" "endfilter" "javascript"
-       "endjavascript"
+       "endjavascript" "as"
        )
      'symbols))
   "Zotonic template keywords")
@@ -72,9 +74,56 @@
      'symbols))
   "Custom tags (aka scomps) shipped with Zotonic.")
 
+(defconst zotonic-tpl-filters-re
+  (eval-when-compile
+    (regexp-opt
+     '(
+       "add_day" "add_month" "add_week" "add_year" "after" "append"
+       "as_atom" "before" "brlinebreaks" "capfirst" "center" "chunk"
+       "date" "date_range" "datediff" "element" "eq_day" "escape"
+       "escape_ical" "escape_link" "escapejs" "escapejson" "escapexml"
+       "filesizeformat" "first" "fix_ampersands" "force_escape"
+       "format_integer" "format_number" "format_price" "gravatar_code"
+       "group_by" "group_firstchar" "group_title_firstchar" "if"
+       "in_future" "in_past" "index_of" "inject_recipientdetails"
+       "insert" "is_a" "is_defined" "is_even" "is_list" "is_not_a"
+       "is_rtl" "is_undefined" "is_visible" "join" "language" "last"
+       "length" "linebreaksbr" "ljust" "lower" "make_list" "match"
+       "max" "member" "menu_flat" "menu_subtree" "menu_trail" "min"
+       "minmax" "ne_day" "nthtail" "pprint" "rand" "random"
+       "randomize" "range" "replace" "replace_args" "reversed" "rjust"
+       "sha1" "show_media" "slice" "slugify" "split" "split_in"
+       "stringify" "striptags" "sub_day" "sub_month" "sub_week"
+       "sub_year" "summary" "survey_answer_split" "survey_is_submit"
+       "survey_prepare_matching" "survey_prepare_narrative"
+       "survey_prepare_thurstone" "tail" "timesince" "to_binary"
+       "to_integer" "to_json" "truncate" "twitter" "unescape" "upper"
+       "urlencode" "urlize" "utc" "vsplit_in" "without_embedded_media"
+       "yesno"
+       )
+     'symbols))
+  "Filters shipped with Zotonic.")
+
+(defconst zotonic-tpl-keywords-matcher
+  (list
+   zotonic-tpl-keywords-re nil nil '(1 font-lock-keyword-face))
+  "Highlight keywords")
+
+(defconst zotonic-tpl-custom-tags-matcher
+  (list
+   zotonic-tpl-custom-tags-re nil nil '(1 font-lock-builtin-face))
+  "Highlight custom tags")
+
+(defconst zotonic-tpl-filters-matcher
+  (list
+   zotonic-tpl-filters-re nil nil
+   '(1 font-lock-builtin-face))
+  "Highlight filters")
+
 (defun zotonic-tpl--font-lock-keywords-rule (re face)
   "Take regexp string and return a item for the font-lock-keywords list"
   (list re (regexp-opt-depth re) face))
+
 
 (defun zotonic-tpl-font-lock-keywords-level-1 ()
   "Basic font-lock-keywords table."
@@ -84,13 +133,16 @@
     "{%"
     (list
      '(0 font-lock-constant-face)
-     (list
-      zotonic-tpl-keywords-re nil nil '(1 font-lock-keyword-face))
-     (list
-      zotonic-tpl-custom-tags-re nil nil '(1 font-lock-builtin-face))
+     zotonic-tpl-keywords-matcher
+     zotonic-tpl-custom-tags-matcher
      ))
-   )
-  )
+   (cons
+    "{[{%][^|]+\\(|\\)"
+    (list
+     '(1 font-lock-constant-face)
+     zotonic-tpl-filters-matcher
+     ))
+   ))
 
 (defun zotonic-tpl-font-lock-keywords-default-level ()
   (zotonic-tpl-font-lock-keywords-level-1)
@@ -104,13 +156,13 @@
 
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
   "Major mode for editing Zotonic templates."
+  (zotonic-tpl-syntax-table)
   (set (make-local-variable 'comment-start)
        zotonic-tpl-comment-start)
   (set (make-local-variable 'comment-end)
        zotonic-tpl-comment-end)
   (set (make-local-variable 'comment-start-skip)
        zotonic-tpl-comment-start-skip)
-  (zotonic-tpl-syntax-table)
   (set (make-local-variable 'font-lock-defaults)
        zotonic-tpl-font-lock-defaults)
   )
