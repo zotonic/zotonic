@@ -120,6 +120,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
      #menu_item{id=admin_status,
                 parent=admin_system,
+                visiblecheck={acl, use, mod_admin_config},
                 label=?__("Status", Context),
                 url={admin_status}}
 
