@@ -1,0 +1,8 @@
+Tango Icon Library 0.8.90 (tango)
+	link: http://tango.freedesktop.org/Tango_Icon_Library
+	license: Public Domain 
+	License link: http://en.wikipedia.org/wiki/Public_domain
+	formats: svg, png
+	subdirectory: open_icon_library-devel/icons/tango
+
+application-certificate.pngapplication-msword.pngapplication-octet-stream.pngapplication-vnd-ms-excel.pngapplication-vnd-ms-powerpoint.pngapplication-vnd-openxmlformats-officedocument-presentationml-presentation.pngapplication-vnd-openxmlformats-officedocument-spreadsheetml-sheet.pngapplication-vnd-openxmlformats-officedocument-wordprocessingml-document.pngapplication-x-executable.pngaudio.pngfont.pngimage.pngpackage.pngtext-html.pngtext-x-generic-template.pngtext-x-script.pngtext.pngvideo.pngx-office-address-book.pngx-office-calendar.pngx-office-document-template.pngx-office-document.pngx-office-drawing-template.pngx-office-drawing.pngx-office-presentation-template.pngx-office-presentation.pngx-office-spreadsheet-template.pngx-office-spreadsheet.png

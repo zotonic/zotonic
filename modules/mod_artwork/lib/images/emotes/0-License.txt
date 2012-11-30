@@ -1,0 +1,6 @@
+Tango Icon Library 0.8.90 (tango)
+	link: http://tango.freedesktop.org/Tango_Icon_Library
+	license: Public Domain 
+	License link: http://en.wikipedia.org/wiki/Public_domain
+	formats: svg, png
+	subdirectory: open_icon_library-devel/icons/tango

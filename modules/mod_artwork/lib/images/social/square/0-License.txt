@@ -1,0 +1,7 @@
+Open Icon Library (homemade)
+	link: http://openiconlibrary.sourceforge.net/
+	license: Public Domain
+	license link: http://en.wikipedia.org/wiki/Public_domain
+	format: svg -> png
+	subdirectories: open_icon_library-devel/icons/homemade
+					open_icon_library-devel/icons_by_subject/homemade
