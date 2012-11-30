@@ -40,6 +40,7 @@
   (modify-syntax-entry ?> ")<")
   (modify-syntax-entry ?| ".")
   (modify-syntax-entry ?% ".")
+  (modify-syntax-entry ?_ "w")
   )
 
 (defconst zotonic-tpl-keywords-re
@@ -120,6 +121,13 @@
    '(1 font-lock-builtin-face))
   "Highlight filters")
 
+(defconst zotonic-tpl-variable-matcher
+  (list
+   "\\w+"
+   nil nil
+   '(0 font-lock-variable-name-face))
+  "Highlight variable expressions")
+
 (defun zotonic-tpl--font-lock-keywords-rule (re face)
   "Take regexp string and return a item for the font-lock-keywords list"
   (list re (regexp-opt-depth re) face))
@@ -144,8 +152,21 @@
      ))
    ))
 
+(defun zotonic-tpl-font-lock-keywords-level-2 ()
+  "Extended font-lock-keywords entries."
+  (list
+   '("div" . font-lock-constant-face)
+   (cons
+    "{[%{]"
+    (list
+     zotonic-tpl-variable-matcher
+     ))
+   ))
+
 (defun zotonic-tpl-font-lock-keywords-default-level ()
-  (zotonic-tpl-font-lock-keywords-level-1)
+  (append
+   (zotonic-tpl-font-lock-keywords-level-1)
+   (zotonic-tpl-font-lock-keywords-level-2))
   )
 
 (defvar zotonic-tpl-font-lock-defaults
