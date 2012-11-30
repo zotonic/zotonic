@@ -53,7 +53,9 @@
                      .appendTo($("body"));
 
                  dialog.modal({backdrop: true});
-                 if (dialog.height() > 0.8 * $(window).height()) {
+                 if ($(window).width() <= 480) {
+                    dialog.css({top: ($(window).scrollTop() + 10) + "px"});
+                 } else if (dialog.height() > 0.8 * $(window).height()) {
                     dialog.addClass('high');
                  }
                  if (typeof($.widgetManager) != 'undefined') {
