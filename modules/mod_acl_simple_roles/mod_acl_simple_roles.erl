@@ -50,6 +50,8 @@
 
 %% @doc Check if the user is allowed to perform Action on Object
 %% @todo #acl_edge
+observe_acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
+    undefined;
 observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) ->
     is_view_public(Id, Context);
 observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
