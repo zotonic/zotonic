@@ -121,6 +121,10 @@ Cast notifications
   for letting other modules know about a certaint even or condition. This 
   makes it possible for other modules to act on it.
 
+  For example, :ref:`mod_development` uses call notifications to trigger builds
+  and reloads. By doing this other modules can notify ``mod_development`` to 
+  trigger builds. But when ``mod_development`` is disabled nothing will happen.
+
 Call notification
   For this kind of notification, ``z_notifier`` expects an answer back. This answer
   is returned back to the notifier. This kind of notifications is used to 
@@ -129,9 +133,13 @@ Call notification
   Call notifications are triggered by: ``z_notifier:first/2`` and 
   ``z_notifier:map/2``.
 
+  For example, :ref:`mod_signup` uses a call notification to find out what page
+  to redirect to after a successfull signup. This allows one to customize the 
+  signup process.
+
 Fold notifications
 
-  Fold notifications are called with ``z_notifier:foldl/3`` or
+  Fold notifications are called, with ``z_notifier:foldl/3`` or
   ``z_notifier:foldr/3``. It works similar to the `lists:foldr and
   lists:foldl <http://www.erlang.org/doc/man/lists.html#foldl-3>`_
   functions of Erlang's `lists
@@ -150,18 +158,3 @@ Fold notifications
   For example, :ref:`mod_admin` uses a fold notification (called
   ``admin_menu``) to build up the admin navigation menu, where each
   observer is called to add menu entries to the menu.
-
-Cast notifications
-..................
-
-.. todo:: explain plus complete example.
-
-Call notifications
-..................
-
-.. todo:: explain plus complete example.
-
-Fold notifications
-..................
-
-.. todo:: explain plus complete example.
