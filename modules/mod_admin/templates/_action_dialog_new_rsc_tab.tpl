@@ -36,7 +36,7 @@
 	    </div>
 	</div>
 
-    {% if m.rsc[cat].is_a.meta %}
+    {% if m.rsc[cat].is_a.category or m.rsc[cat].is_a.predicate %}
 	<div class="control-group">
 	    <label class="control-label" for="{{ #published }}">{_ Name _}</label>
 	    <div class="controls">
