@@ -107,7 +107,8 @@ manage_predicate(Module, {Name, Uri, Props, ValidFor}, Context) ->
     manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Context);
 
 manage_predicate(Module, {Name, Props, ValidFor}, Context) ->
-    case manage_resource(Module, {Name, predicate, Props}, Context) of
+    Category = proplists:get_value(category, Props, predicate),
+    case manage_resource(Module, {Name, Category, lists:keydelete(category, 1, Props)}, Context) of
         {ok} ->
             {ok};
         {ok, Id} ->
