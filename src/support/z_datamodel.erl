@@ -145,7 +145,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                                  undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
                                  _ -> Props2
                              end,
-                    ?zInfo(io_lib:format("Creating new resource '~p'", [Name]), Context),
+                    ?zInfo(io_lib:format("Creating new ~p '~p'", [Category, Name]), Context),
                     {ok, Id} = m_rsc:insert(Props3, Context),
                     case proplists:get_value(media_url, Props3) of
                         undefined ->
