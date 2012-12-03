@@ -36,7 +36,13 @@
 % First draft protocol version, this code should be removed in due time.
 start(ReqData, Context1) ->
     Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = iolist_to_binary(["/websocket?z_pageid=", mochiweb_util:quote_plus(z_context:get_q("z_pageid", Context1))]),
+
+    Qs = [[K, $=, mochiweb_util:quote_plus(V)] || {K, V} <- wrq:req_qs(ReqData)],
+    WebSocketPath = case Qs of
+        [] -> iolist_to_binary(wrq:path(ReqData));
+        _ -> iolist_to_binary([wrq:path(ReqData), $?, Qs])
+    end,
+    
     Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
     Socket = webmachine_request:socket(ReqData),
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
