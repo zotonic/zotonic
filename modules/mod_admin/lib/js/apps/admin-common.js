@@ -57,6 +57,12 @@ limitations under the License.
             $('body').removeClass('scrolled');
         }
     });
+
+    $(window).bind('keydown.ctrl_s keydown.meta_s', function(event) {
+        event.preventDefault();
+        $('#rscform').submit();
+    });
+
 })(jQuery);
 
 

@@ -4,6 +4,8 @@
     "js/apps/zotonic-1.0.js"
     "js/apps/z.widgetmanager.js"
 
+    "js/modules/jquery.hotkeys.js"
+
     "js/apps/admin-common.js"
     "js/modules/tiny-init.js"
     "js/modules/z.adminwidget.js"
