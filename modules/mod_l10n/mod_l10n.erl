@@ -96,5 +96,6 @@ default_language(Context) ->
 resource_languages(Rsc) ->
     case proplists:get_value(language, Rsc) of
         undefined -> [];
-        Langs -> [ z_convert:to_atom(Lang) || Lang <- Langs ]
+        <<>> -> [];
+        Langs -> [ z_convert:to_atom(Lang) || Lang <- Langs, Lang /= <<>> ]
     end.
