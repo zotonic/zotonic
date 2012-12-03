@@ -466,6 +466,12 @@ ul.suggestions-list li a:hover {
         height: 64px;
     }
 
+    #dialog-connect-panels .thumbnails .thumbnail h6 {
+        font-weight: normal;
+        text-transform: lowercase;
+        line-height: 13px;
+    }
+    
     #dialog-connect-panels .thumbnails .thumbnail img {
         margin-right: 4px;
     }
