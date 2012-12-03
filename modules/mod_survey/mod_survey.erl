@@ -95,6 +95,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_yesno, ?__("Yes/No", Context)},
                     {survey_likert, ?__("Likert", Context)},
                     {survey_thurstone, ?__("Thurstone", Context)},
+                    {survey_category, ?__("Category", Context)},
                     {survey_matching, ?__("Matching", Context)},
                     {survey_narrative, ?__("Narrative", Context)},
                     {survey_short_answer, ?__("Short answer", Context)},
@@ -102,7 +103,8 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_country, ?__("Country select", Context)},
                     {survey_button, ?__("Button", Context)},
                     {survey_page_break, ?__("Page break", Context)},
-                    {survey_stop, ?__("Stop", Context)}
+                    {survey_stop, ?__("Stop", Context)},
+                    {survey_upload, ?__("File upload", Context)}
                 ]}
                 | Menu
             ];
@@ -201,7 +203,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
     end.
 
     get_args(Context) ->
-        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)} || {K,V} <- z_context:get_q_all_noz(Context) ],
+        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)} 
+                || {K,V} <- z_context:get_q_all_noz(Context), not is_tuple(V)
+               ],
         Submitter = proplists:get_value(<<"z_submitter">>, Args),
         Buttons = proplists:get_all_values(<<"survey$button">>, Args),
         WithButtons = lists:foldl(fun(B, Acc) -> 
@@ -410,7 +414,10 @@ is_button(Block) ->
 %% @todo Check if we are missing any answers
 do_submit(SurveyId, Questions, Answers, Context) ->
     {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
-    case z_notifier:first(#survey_submit{id=SurveyId, answers=FoundAnswers, missing=Missing, answers_raw=Answers}, Context) of
+    case z_notifier:first(#survey_submit{id=SurveyId, handler=m_rsc:p(SurveyId, survey_handler, Context),
+                                         answers=FoundAnswers, missing=Missing, answers_raw=Answers}, 
+                          Context)
+    of
         undefined ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
             ok;

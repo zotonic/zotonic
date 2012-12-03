@@ -30,6 +30,7 @@
     m_value/2,
 
     is_allowed_results_download/2,
+    get_handlers/1,
     insert_survey_submission/3,
     insert_survey_submission/5,
     survey_stats/2,
@@ -56,6 +57,8 @@ m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
 m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
     M#m{value=is_allowed_results_download};
+m_find_value(handlers, #m{value=undefined}, Context) ->
+    get_handlers(Context);
 
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(Id, Context);
@@ -85,6 +88,11 @@ m_value(#m{value=undefined}, _Context) ->
 is_allowed_results_download(Id, Context) ->
     z_acl:rsc_editable(Id, Context)
     orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) == true.
+
+%% @doc Return the list of known survey handlers
+-spec get_handlers(#context{}) -> list({atom(), binary()}).
+get_handlers(Context) ->
+    z_notifier:foldr(#survey_get_handlers{}, [], Context).
 
 
 %% @doc Check if the current user/browser did the survey

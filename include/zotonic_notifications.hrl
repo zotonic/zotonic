@@ -341,8 +341,11 @@
 -record(media_stillimage, {id, props=[]}).
 
 
+%% @doc Fetch lisy of handlers. (foldr)
+-record(survey_get_handlers, {}).
+
 %% @doc A survey has been filled in and submitted. (first)
--record(survey_submit, {id, answers, missing, answers_raw}).
+-record(survey_submit, {id, handler, answers, missing, answers_raw}).
 
 %% @doc Check if the current user is allowed to download a survey. (first)
 -record(survey_is_allowed_results_download, {id}).

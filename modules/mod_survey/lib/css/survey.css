@@ -20,3 +20,16 @@ hr.survey-stop {
     display: none;
 }
 
+.picture-file {
+	display: block;
+}
+
+.picture-preview {
+	margin: 4px 0;
+	width: 128px;
+}
+
+.picture-preview.has-preview {
+	width: 256px;
+}
+

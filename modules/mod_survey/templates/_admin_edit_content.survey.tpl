@@ -51,6 +51,16 @@
 	</div>
 
 	<div class="control-group">
+		<label>{_ Handle this survey with _}</label>
+		<select name="survey_handler" id="survey_handler">
+			<option value=""></option>
+			{% for val,desc in m.survey.handlers %}
+				<option value="{{ val }}" {% if id.survey_handler == val %}selected{% endif %}>{{ desc }}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="control-group">
 		<label>{_ Mail filled in surveys to _}</label>
 		<input type="text" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
 	</div>
