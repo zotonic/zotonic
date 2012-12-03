@@ -25,7 +25,7 @@
 	{% else %}
 	<p class="admin-chapeau">
 		{_ editing _}
-		{% if m.acl.insert[r.category.name|as_atom] and not r.is_a.meta %}
+		{% if m.acl.insert[r.category.name|as_atom] and not r.is_a.category and not r.is_a.predicate %}
 		<a	href="javascript:;" id="changecategory" title="{_ Change category _}">{{ m.rsc[r.category_id].title|lower }}</a>:
 		{% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}
 		{% else %}
