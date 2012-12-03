@@ -70,12 +70,12 @@ observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
 		true -> can_edit(Id, Context);
 		_ -> undefined
 	end;
+observe_acl_is_allowed(#acl_is_allowed{object=#acl_edge{} = Edge}, Context) ->
+    can_edge(Edge, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=delete, object=Id}, Context) ->
 	can_edit(Id, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=Action, object=ModuleName}, Context) when Action == use; Action == admin ->
 	can_module(Action, ModuleName, Context);
-observe_acl_is_allowed(#acl_is_allowed{object=#acl_edge{} = Edge}, Context) ->
-    can_edge(Edge, Context);
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
