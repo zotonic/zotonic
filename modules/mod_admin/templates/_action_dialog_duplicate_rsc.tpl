@@ -9,7 +9,7 @@
     <div class="control-group">
 	<label class="control-label" for="new_rsc_title">Page title</label>
         <div class="controls">
-	    <input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ m.rsc[id].title }}" />
+	    <input class="do_autofocus" type="text" id="new_rsc_title" name="new_rsc_title" value="{{ m.rsc[id].title }}" />
 	    {% validate id="new_rsc_title" type={presence} %}
         </div>
     </div>
