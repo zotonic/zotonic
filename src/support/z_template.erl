@@ -19,8 +19,9 @@
 
 -module(z_template).
 -behaviour(gen_server).
-
 -author("Marc Worrell <marc@worrell.nl>").
+
+-compile([{parse_transform, lager_transform}]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
