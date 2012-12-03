@@ -503,7 +503,7 @@ props_filter([{slug, <<>>}|T], Acc, Context) ->
 props_filter([{slug, ""}|T], Acc, Context) ->
     props_filter(T, [{slug, []} | Acc], Context);
 props_filter([{slug, Slug}|T], Acc, Context) ->
-    props_filter(T, [{slug, z_string:to_slug(Slug)} | Acc], Context);
+    props_filter(T, [{slug, to_slug(Slug, Context)} | Acc], Context);
 props_filter([{custom_slug, P}|T], Acc, Context) ->
     props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
 props_filter([{is_published, P}|T], Acc, Context) ->
@@ -555,7 +555,7 @@ props_autogenerate(Id, Props, Context) ->
                          {_, true} -> Props;
                          _X ->
                              %% Determine the slug from the title.
-                             [{slug, z_string:to_slug(Title)} | proplists:delete(slug, Props)]
+                             [{slug, to_slug(Title, Context)} | proplists:delete(slug, Props)]
                      end
              end,
     Props1.
@@ -563,7 +563,7 @@ props_autogenerate(Id, Props, Context) ->
 
 %% @doc Fill in some defaults for empty props on insert.
 %% @spec props_defaults(Props1, Context) -> Props2
-props_defaults(Props, _Context) ->
+props_defaults(Props, Context) ->
     % Generate slug from the title (when there is a title)
     Props1 = case proplists:get_value(slug, Props) of
                 undefined ->
@@ -571,7 +571,7 @@ props_defaults(Props, _Context) ->
                         undefined ->
                             Props;
                         Title ->
-                            lists:keystore(slug, 1, Props, {slug, z_string:to_slug(Title)})
+                            lists:keystore(slug, 1, Props, {slug, to_slug(Title, Context)})
                     end;
                 _ ->
                     Props
@@ -586,6 +586,11 @@ props_defaults(Props, _Context) ->
 props_filter_protected(Props) ->
     lists:filter(fun({K,_V}) -> not is_protected(K) end, Props).
 
+
+to_slug(undefined, _Context) -> undefined;
+to_slug({trans, _} = Tr, Context) -> to_slug(z_trans:lookup_fallback(Tr, en, Context), Context);
+to_slug(B, _Context) when is_binary(B) -> z_string:to_slug(B); 
+to_slug(X, Context) -> to_slug(z_convert:to_binary(X), Context).
 
 %% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
 map_property_name(P) when not is_list(P) -> map_property_name(z_convert:to_list(P));
