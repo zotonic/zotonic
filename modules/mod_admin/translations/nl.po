@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-10-31 22:36+0100\n"
+"PO-Revision-Date: 2012-12-04 19:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -61,7 +61,7 @@ msgstr "Link toevoegen"
 msgid "Add media to body"
 msgstr "Media toevoegen aan pagina"
 
-#: modules/mod_admin/mod_admin.erl:307
+#: modules/mod_admin/mod_admin.erl:313
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -85,13 +85,13 @@ msgstr "Geavanceerd"
 msgid "All Categories"
 msgstr "Alle categorieën"
 
-#: modules/mod_admin/templates/admin.tpl:17
+#: modules/mod_admin/templates/admin.tpl:24
 #: modules/mod_admin/templates/admin_media.tpl:24
 #: modules/mod_admin/templates/admin_overview.tpl:51
 msgid "All media"
 msgstr "Gekoppelde media"
 
-#: modules/mod_admin/templates/admin.tpl:16
+#: modules/mod_admin/templates/admin.tpl:23
 #: modules/mod_admin/templates/admin_media.tpl:23
 #: modules/mod_admin/templates/admin_overview.tpl:50
 msgid "All pages"
@@ -130,7 +130,7 @@ msgstr "Laat Google deze pagina niet indexeren"
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
-#: modules/mod_admin/mod_admin.erl:114
+#: modules/mod_admin/mod_admin.erl:115
 msgid "Auth"
 msgstr "Auth"
 
@@ -159,7 +159,7 @@ msgstr "Citaat"
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:16
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:64
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:57
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -167,7 +167,7 @@ msgstr "Annuleren"
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/_admin_overview_list.tpl:8
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:39
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32
 msgid "Category"
 msgstr "Categorie"
 
@@ -210,7 +210,7 @@ msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:3
-#: modules/mod_admin/mod_admin.erl:91
+#: modules/mod_admin/mod_admin.erl:92
 msgid "Content"
 msgstr "Inhoud"
 
@@ -232,7 +232,7 @@ msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
 #: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7 modules/mod_admin/mod_admin.erl:86
+#: modules/mod_admin/templates/admin.tpl:14 modules/mod_admin/mod_admin.erl:87
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -246,11 +246,11 @@ msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
 
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:31
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:55
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:57
 msgid "Delete"
 msgstr "Verwijder"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:55
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:57
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
@@ -276,8 +276,8 @@ msgstr "Sleep om de positie van de connectie te wijzigen"
 msgid "Drag to change position"
 msgstr "Sleep om de positie te wijzigen"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:59
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:62
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:61
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
 msgid "Duplicate"
 msgstr "Dupliceer"
 
@@ -285,8 +285,8 @@ msgstr "Dupliceer"
 msgid "Duplicate page"
 msgstr "Dupliceer pagina"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:59
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:61
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:66
 msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
@@ -307,13 +307,17 @@ msgstr "Bewerk deze pagina"
 msgid "Electronic address"
 msgstr "Electronisch adres"
 
-#: modules/mod_admin/mod_admin.erl:133
+#: modules/mod_admin/mod_admin.erl:135
 msgid "Embed page"
 msgstr "Pagina embedden"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:31
 msgid "Emergency telephone"
 msgstr "Noodnummer (telefoon)"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161
+msgid "Error uploading the file."
+msgstr "Fout bij uploaden van bestand."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid ""
@@ -336,7 +340,11 @@ msgstr ""
 "bijvoorbeeld een categorie voertuigen hebben met daarin subcategorieën auto "
 "en fiets."
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
+msgid "Failed to download the file."
+msgstr "Het downloaden van het mediabestand is mislukt."
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
 msgid "Featured"
 msgstr "Featured"
 
@@ -389,7 +397,7 @@ msgid "Group members"
 msgstr "Groepsleden"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15
-#: modules/mod_admin/mod_admin.erl:131
+#: modules/mod_admin/mod_admin.erl:133
 msgid "Header"
 msgstr "Kop"
 
@@ -444,23 +452,23 @@ msgstr "Inline blok"
 msgid "Insert image"
 msgstr "Afbeelding invoegen"
 
-#: modules/mod_admin/templates/admin.tpl:39
+#: modules/mod_admin/templates/admin.tpl:46
 msgid "Latest modified events"
 msgstr "Laatste evenementen"
 
-#: modules/mod_admin/templates/admin.tpl:34
+#: modules/mod_admin/templates/admin.tpl:41
 msgid "Latest modified locations"
 msgstr "Laatste lokaties"
 
-#: modules/mod_admin/templates/admin.tpl:43
+#: modules/mod_admin/templates/admin.tpl:50
 msgid "Latest modified media items"
 msgstr "Laatste mediabestanden"
 
-#: modules/mod_admin/templates/admin.tpl:27
+#: modules/mod_admin/templates/admin.tpl:34
 msgid "Latest modified persons"
 msgstr "Laatste personen"
 
-#: modules/mod_admin/templates/admin.tpl:24
+#: modules/mod_admin/templates/admin.tpl:31
 msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
@@ -479,6 +487,10 @@ msgstr "Uitloggen"
 msgid "Log on to"
 msgstr "Meld je aan bij"
 
+#: modules/mod_admin/templates/admin.tpl:9
+msgid "Logged in as"
+msgstr "Ingelogd als"
+
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:121
 msgid "Mailing address"
 msgstr "Postadres"
@@ -495,7 +507,7 @@ msgstr "Aanmaken"
 msgid "Make a new media item"
 msgstr "Maak een nieuw mediabestand"
 
-#: modules/mod_admin/templates/admin.tpl:11
+#: modules/mod_admin/templates/admin.tpl:18
 #: modules/mod_admin/templates/admin_overview.tpl:45
 msgid "Make a new page or media"
 msgstr "Maak een nieuwe pagina of media-item"
@@ -506,7 +518,7 @@ msgstr "Maak mediabestand"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:9
-#: modules/mod_admin/mod_admin.erl:99
+#: modules/mod_admin/mod_admin.erl:100
 msgid "Media"
 msgstr "Mediabestanden"
 
@@ -525,6 +537,12 @@ msgstr ""
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:25
 msgid "Media file"
 msgstr "Mediabestand"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144
+#, fuzzy
+msgid "Media item created."
+msgstr "Media titel"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -553,7 +571,7 @@ msgstr "Bewerkt door"
 msgid "Modified on"
 msgstr "Bewerkt op"
 
-#: modules/mod_admin/mod_admin.erl:109
+#: modules/mod_admin/mod_admin.erl:110
 msgid "Modules"
 msgstr "Modules"
 
@@ -578,7 +596,7 @@ msgstr "Nieuwe pagina"
 msgid "New page"
 msgstr "Niuwe pagina"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:50
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:52
 msgid "Next in category: "
 msgstr "Volgende in categorie:"
 
@@ -621,7 +639,7 @@ msgid "Page title"
 msgstr "Paginatitel"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
-#: modules/mod_admin/mod_admin.erl:95
+#: modules/mod_admin/mod_admin.erl:96
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -654,15 +672,15 @@ msgstr "Predicaat"
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:46
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:48
 msgid "Previous in category: "
 msgstr "Vorige in categorie: "
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:41
 msgid "Protect"
 msgstr "Bescherm"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
 msgid "Protect from deletion"
 msgstr "Bescherm"
 
@@ -680,8 +698,8 @@ msgstr "Publiceer deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:29
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:47
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:31
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:40
 msgid "Published"
 msgstr "Gepubliceerd"
 
@@ -738,15 +756,15 @@ msgstr "SEO inhoud"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:17
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:66
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:59
 msgid "Save"
 msgstr "Opslaan"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 msgid "Save &amp; view"
 msgstr "Opslaan &amp; bekijken"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 msgid "Save and view the page."
 msgstr "Slaat de pagina op en bekijk aan de voorkant."
 
@@ -778,11 +796,11 @@ msgstr "Toon als"
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
-#: modules/mod_admin/mod_admin.erl:311
+#: modules/mod_admin/mod_admin.erl:317
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: modules/mod_admin/mod_admin.erl:130
+#: modules/mod_admin/mod_admin.erl:132
 msgid "Standard"
 msgstr "Standaard"
 
@@ -791,7 +809,7 @@ msgstr "Standaard"
 msgid "State"
 msgstr "Provincie"
 
-#: modules/mod_admin/mod_admin.erl:122
+#: modules/mod_admin/mod_admin.erl:124
 msgid "Status"
 msgstr "Status"
 
@@ -805,7 +823,7 @@ msgstr "Adresregel 1"
 msgid "Street Line 2"
 msgstr "Adresregel 2"
 
-#: modules/mod_admin/mod_admin.erl:104
+#: modules/mod_admin/mod_admin.erl:105
 msgid "Structure"
 msgstr "Indeling"
 
@@ -825,7 +843,7 @@ msgstr "Voorvoegsel"
 msgid "Surname"
 msgstr "Achternaam"
 
-#: modules/mod_admin/mod_admin.erl:118
+#: modules/mod_admin/mod_admin.erl:119
 msgid "System"
 msgstr "Systeem"
 
@@ -841,7 +859,7 @@ msgstr "Systeembeheer"
 msgid "Telephone"
 msgstr "Telefoon"
 
-#: modules/mod_admin/mod_admin.erl:132
+#: modules/mod_admin/mod_admin.erl:134
 msgid "Text"
 msgstr "Tekst"
 
@@ -914,7 +932,7 @@ msgid "URL"
 msgstr "URL\n"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:31
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:24
 msgid "Unique name"
 msgstr "Unieke naam"
 
@@ -957,7 +975,7 @@ msgstr "Geldig voor:"
 msgid "View all referrers"
 msgstr "Bekijk verwijzende pagina's"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
 msgid "View this page."
 msgstr "Bekijk deze pagina."
 
@@ -973,7 +991,7 @@ msgstr "Zichtbaar vanaf"
 msgid "Visible till"
 msgstr "Zichtbaar tot"
 
-#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58
 msgid "Visit full editpage"
 msgstr "Ga naar volledige pagina"
 
@@ -1015,6 +1033,14 @@ msgstr "Je mag deze pagina niet verwijderen."
 #: modules/mod_admin/templates/admin_edit.tpl:23
 msgid "You are not allowed to edit the"
 msgstr "Je mag deze pagina niet bewerken:"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
+msgid "You don't have permission to change this media item."
+msgstr "Je hebt geen toestemming om dit mediabestand te bewerken."
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156
+msgid "You don't have the proper permissions to upload this type of file."
+msgstr "Je hebt niet de juiste permissies om dit type bestand te uploaden."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6
@@ -1118,7 +1144,7 @@ msgstr "geupload op"
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:47
 #: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/_admin_overview_list.tpl:33
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
 msgid "view"
 msgstr "bekijk"
 

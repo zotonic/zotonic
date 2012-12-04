@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-10-31 21:56+0100\n"
+"PO-Revision-Date: 2012-12-04 20:15+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -66,7 +66,7 @@ msgstr "Functie / template"
 
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
-msgstr ""
+msgstr "Verdwenen"
 
 #: modules/mod_base/templates/email_base.tpl:4
 msgid "Hello from Zotonic"
@@ -117,7 +117,7 @@ msgstr "Grootte"
 
 #: modules/mod_base/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
-msgstr ""
+msgstr "Helaas, deze pagina is verwijderd."
 
 #: modules/mod_base/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."

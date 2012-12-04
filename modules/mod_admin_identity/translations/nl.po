@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-04 20:04+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44 
+msgid ""
+"Add a new user"
+msgstr "Nieuwe gebruiker toevoegen"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68 
+msgid ""
+"Add user"
+msgstr "Gebruiker toevoegen"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2 
+msgid ""
+"Are you sure you want to delete the username from"
+msgstr "Weet je zeker dat je de gebruikersnaam wilt verwijderen van"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67 
+msgid ""
+"Cancel"
+msgstr "Annuleren"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71 
+msgid ""
+"Changed the username."
+msgstr "Gebruikersnaam veranderd."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9 
+msgid ""
+"Click “delete” to remove any existing username/ password from the "
+"person, the person won't be an user anymore."
+msgstr "Klik \"verwijder\" om de gebruikersnaam/wachtwoord van de persoon te verwijderen. De persoon is daarna geen gebruiker meer."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53 
+msgid ""
+"Confirm user deletion"
+msgstr "Bevestig verwijderen van gebruiker"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99 
+msgid ""
+"Could not create the user. Sorry."
+msgstr "Kan de gebruiker niet maken."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:38 
+msgid ""
+"Created on"
+msgstr "Gemaakt op"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41 
+msgid ""
+"Delete"
+msgstr "Verwijder"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94 
+msgid ""
+"Duplicate username, please choose another username."
+msgstr "Gebruikersnaam bestaat al, kies a.u.b. een andere."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35 
+msgid ""
+"E-mail"
+msgstr "E-mail"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:16 
+msgid ""
+"Every page/person can be made into a user on the edit page.\n        The "
+"difference between a user and a normal page is only\n        that the former "
+"has logon credentials attached to its page record."
+msgstr ""
+"Van elke persoon kan een gebruiker worden gemaakt op de edit pagina.\n"
+"Het verschil tussen een gebruiker en een normale pagina is slechts\n"
+"dat een gebruiker een gebruikersnaam/wachtwoord heeft waarmee hij kan inloggen."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11 
+msgid ""
+"First"
+msgstr "Voornaam"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46 
+msgid ""
+"Give an unique username and a password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr "Voer een unieke gebruikersnaam in en een wachtwoord. Gebruikersnaam en wachtwoord zijn beiden hoofdlettergevoelig, let daar dus op bij het invoeren."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7 
+msgid ""
+"Give the name and the e-mail address of the new user. A <em>person</em> "
+"page will be created for this user."
+msgstr "Geef de naam en e-mail adres van de nieuwe gebruiker. Een <em>persoon</em> pagina wordt aangemaakt voor deze gebruiker."
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
+msgid ""
+"Help about user credentials."
+msgstr "Hulp bij gebruikersgegevens."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:21 
+msgid ""
+"Make a new user"
+msgstr "Nieuwe gebruiker maken"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:37 
+msgid ""
+"Modified on"
+msgstr "Bewerkt op"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:35 
+msgid ""
+"Name"
+msgstr "Naam"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:5 
+msgid ""
+"Name and e-mail address"
+msgstr "Naam en e-mailadres"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
+msgid ""
+"Need more help?"
+msgstr "Meer hulp nodig?"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:63 
+msgid ""
+"No users found."
+msgstr "Geen gebruikers gevonden."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46 ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103 
+msgid ""
+"Only administrators can add users."
+msgstr "Alleen administrators kunnen gebruikers toevoegen."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47 
+msgid ""
+"Only administrators can delete usernames."
+msgstr "Alleen administrators kunnen gebruikers verwijderen."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56 
+msgid ""
+"Only an administrator can delete usernames."
+msgstr "Alleen administrators kunnen gebruikers verwijderen."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89 
+msgid ""
+"Only an administrator or the user him/herself can set a password."
+msgstr "Alleen de administrator of de gebruiker zelf kan het wachtwoord instellen."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59 
+msgid ""
+"Password"
+msgstr "Wachtwoord"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:44 
+msgid ""
+"Save"
+msgstr "Opslaan"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:17 
+msgid ""
+"Set username / password"
+msgstr "Gebruikersnaam / wachtwoord instellen"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55 
+msgid ""
+"Set username/ password"
+msgstr "Stel gebruikersnaam / wachtwoord in"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19 
+msgid ""
+"Sur. prefix"
+msgstr "Voorvoegsel"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27 
+msgid ""
+"Surname"
+msgstr "Achternaam"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84 
+msgid ""
+"The new username/ password has been set."
+msgstr "De nieuwe gebruikersnaam / wachtwoord is ingesteld."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3 
+msgid ""
+"The password of the admin user cannot be changed in the database. Please "
+"edit your site's configuration file at"
+msgstr "Het wachtwoord van de administrator kan niet in de database worden gewijzigd, dit gebeurt in de config file van de site."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74 ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80 
+msgid ""
+"The username is already in use, please try another."
+msgstr "Deze gebruikersnaam bestaat al, kies a.u.b. een andere."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46 
+msgid ""
+"There is no username coupled to this person."
+msgstr "Er is geen gebruikersnaam aan deze persoon gekoppeld."
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4 
+msgid ""
+"This can't be undone. The username and password will be lost forever."
+msgstr "Dit kan niet ongedaan worden gemaakt. Gebruikersnaam en wachtwoord zullen definitief worden verwijderd."
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24 
+msgid ""
+"This person is also a user."
+msgstr "Deze persoon is een gebruiker"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:26 
+msgid ""
+"This person is not yet a user."
+msgstr "Deze persoon is nog geen gebruiker."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:36 ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51 
+msgid ""
+"Username"
+msgstr "Gebruikersnaam"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:5 
+msgid ""
+"Username / password"
+msgstr "Gebruikersnaam / wachtwoord"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44 
+msgid ""
+"Username and password"
+msgstr "Gebruikersnaam en wachtwoord"
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45 
+msgid ""
+"Username has been deleted."
+msgstr "Gebruikersnaam is verwijderd."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:3 ./modules/mod_admin_identity/templates/admin_users.tpl:9 ./modules/mod_admin_identity/mod_admin_identity.erl:74 
+msgid ""
+"Users"
+msgstr "Gebruikers"
+
+#: ./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10 
+msgid ""
+"when you add credentials to a person then the person becomes an user. A "
+"person or machine can log on with those credentials and perform actions "
+"on your Zotonic system.<br/><br/>What an user can do depends on the groups "
+"the user is member of."
+msgstr "wanneer je een gebruikersnaam/wachtwoord aan ene persoon koppelt, wordt deze persoon een gebruiker. Een gebruiker kan inloggen met die gegevens en acties uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan doen hangt samen met de groepen waar de gebruiker lid van is."
+
+#: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96 
+msgid ""
+"You are not allowed to create the person page."
+msgstr "Je mag geen persoon-pagina maken."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:24 
+msgid ""
+"You need to be an administrator to add users."
+msgstr "Je moet een administrator zijn om gebruikers toe te voegen."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:52 
+msgid ""
+"delete username"
+msgstr "Verwijder gebruikersnaam"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:54 
+msgid ""
+"edit"
+msgstr "Bewerk"
+
+#: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3 
+msgid ""
+"if you want to change the admin password."
+msgstr "als je het adminwachtwoord wilt wijzigen."
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:10 
+msgid ""
+"matching"
+msgstr "voldoet aan"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:12 
+msgid ""
+"overview"
+msgstr "Overzicht"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:50 
+msgid ""
+"set username/ password"
+msgstr "Gebruikersnaam / wachtwoord instellen"
+
+#: ./modules/mod_admin_identity/templates/admin_users.tpl:11 
+msgid ""
+"show all"
+msgstr "Toon all"
