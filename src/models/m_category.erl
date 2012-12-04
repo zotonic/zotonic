@@ -504,12 +504,10 @@ ranges(CatList0, Context) ->
     merge_ranges([], Acc) ->
         Acc;
     merge_ranges([{A,B},{C,D}|T], Acc) when C =< B+1 ->
-        merge_ranges([{A,max(B,D)}|T], Acc);
+        merge_ranges([{A,erlang:max(B,D)}|T], Acc);
     merge_ranges([H|T], Acc) ->
         merge_ranges(T, [H|Acc]).
 
-    max(A,B) when A > B -> A;
-    max(_,B) -> B.
 
 
 %% @doc Return a flattened representation of the complete category tree.  Can be used for overviews or select boxes.
