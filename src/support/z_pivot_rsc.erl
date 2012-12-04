@@ -685,7 +685,7 @@ pg_lang(_) -> "english".
 %% @spec define_custom_pivot(Module, columns(), Context) -> ok
 %% @doc Let a module define a custom pivot
 %% columns() -> [column()]
-%% column()  -> {ColumName::atom(), ColSpec::string()}
+%% column()  -> {ColumName::atom(), ColSpec::string()} | {atom(), string(), options::list()}
 define_custom_pivot(Module, Columns, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     case z_db:table_exists(TableName, Context) of
@@ -694,11 +694,22 @@ define_custom_pivot(Module, Columns, Context) ->
         false ->
             Fields = custom_columns(Columns),
             Sql = "CREATE TABLE " ++ TableName ++ "(" ++
-                "id int NOT NULL," ++ Fields ++ ")",
+                "id int NOT NULL," ++ Fields ++ " primary key(id))",
             z_db:q(lists:flatten(Sql), Context),
             z_db:q("ALTER TABLE " ++ TableName ++ " ADD CONSTRAINT fk_" ++ TableName ++ "_id FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Context),
             
-            Idx = ["CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON " ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")" || {K,_} <- Columns],
+            Indexable = lists:filter(fun({_,_}) -> true;
+                                        ({_,_,Opts}) -> not lists:member(noindex, Opts)
+                                     end,
+                                     Columns),
+            Idx = [ 
+                    begin
+                        K = element(1,Col),
+                        "CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON " 
+                        ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")"
+                    end
+                    || Col <- Indexable
+                ],
             [z_db:q(Sql1, Context) || Sql1 <- Idx]
     end,
     ok.
@@ -706,10 +717,13 @@ define_custom_pivot(Module, Columns, Context) ->
 
 custom_columns(Cols) ->
     custom_columns(Cols, []).
-custom_columns([{Name, Spec}], Acc) ->
-    [ z_convert:to_list(Name), " ", Spec |  Acc];
+
+custom_columns([], Acc) ->
+    lists:reverse(Acc);
 custom_columns([{Name, Spec}|Rest], Acc) ->
-    custom_columns(Rest, [ ", ", z_convert:to_list(Name), " ", Spec |  Acc]).
+    custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]);
+custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
+    custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]).
 
 
 
