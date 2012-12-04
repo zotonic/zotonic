@@ -26,7 +26,7 @@
 -export([event/2]).
 -export([get_rememberme_cookie/1, reset_rememberme_cookie/1]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 -define(LOGON_REMEMBERME_COOKIE, "z_logon").

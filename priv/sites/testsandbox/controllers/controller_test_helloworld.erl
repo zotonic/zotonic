@@ -5,7 +5,7 @@
 -module(controller_test_helloworld).
 -export([event/2, periodic/2]).
 
--include_lib("html_controller.hrl").
+-include_lib("controller_html_helper.hrl").
 
 html(Context) ->
     {Incr, Context2} = z_context:incr_session(helloworld_counter, 1, Context),

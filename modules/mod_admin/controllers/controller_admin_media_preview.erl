@@ -26,7 +26,7 @@
          to_image/2
         ]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 init([]) -> {ok, []}.

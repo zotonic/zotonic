@@ -26,7 +26,7 @@
     html/1
 ]).
 
--include_lib("html_controller.hrl").
+-include_lib("controller_html_helper.hrl").
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
 resource_exists(ReqData, Context) ->

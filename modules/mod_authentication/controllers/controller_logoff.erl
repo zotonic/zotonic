@@ -24,7 +24,7 @@
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
 -export([reset_rememberme_cookie_and_logoff/1]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 init(DispatchArgs) -> {ok, DispatchArgs}.

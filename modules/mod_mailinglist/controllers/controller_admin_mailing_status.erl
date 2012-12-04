@@ -24,7 +24,7 @@
     is_authorized/2
 ]).
 
--include_lib("html_controller.hrl").
+-include_lib("controller_html_helper.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->

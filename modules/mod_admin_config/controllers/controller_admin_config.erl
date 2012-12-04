@@ -24,7 +24,7 @@
     is_authorized/2
 ]).
 
--include_lib("html_controller.hrl").
+-include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context) ->
     z_acl:wm_is_authorized(use, mod_admin_config, ReqData, Context).

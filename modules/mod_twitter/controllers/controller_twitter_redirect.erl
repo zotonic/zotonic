@@ -25,7 +25,7 @@
 -export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 init(DispatchArgs) -> {ok, DispatchArgs}.

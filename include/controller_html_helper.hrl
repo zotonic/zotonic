@@ -5,7 +5,7 @@
 %%
 %% -module(controller_plop).
 %% -author("Your Name <me@example.com>").
-%% -include_lib("html_controller.hrl").
+%% -include_lib("controller_html_helper.hrl").
 %% 
 %% html(Context) ->
 %%    Html = z_template:render("plop.tpl", Context),
@@ -27,7 +27,7 @@
 
 -export([init/1, to_html/2, service_available/2, charsets_provided/2]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 init(DispatchArgs) -> 

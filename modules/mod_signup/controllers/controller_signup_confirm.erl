@@ -24,7 +24,7 @@
 -export([provide_content/2]).
 -export([event/2]).
 
--include_lib("webmachine_controller.hrl").
+-include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 

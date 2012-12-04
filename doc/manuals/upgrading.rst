@@ -56,13 +56,13 @@ the new include file names.
 
 The following include files have been renamed:
 
-+-------------------------------+---------------------------------+
-|Old filename                   |New filename                     |
-+-------------------------------+---------------------------------+
-|include/resource_html.hrl      |include/html_controller.hrl      |
-+-------------------------------+---------------------------------+
-|include/webmachine_resource.hrl|include/webmachine_controller.hrl|
-+-------------------------------+---------------------------------+
++-------------------------------+----------------------------------------+
+|Old filename                   |New filename                            |
++-------------------------------+----------------------------------------+
+|include/resource_html.hrl      |include/controller_html_helper.hrl      |
++-------------------------------+----------------------------------------+
+|include/webmachine_resource.hrl|include/controller_webmachine_helper.hrl|
++-------------------------------+----------------------------------------+
 
 HTTPS support
 .............

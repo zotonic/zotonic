@@ -31,13 +31,13 @@ webmachine callback functions. For instance, when you define a
 function ``resource_exists/2``, it will be called to decide whether or
 not the page should return a 404 page.
 
-The simplest controller uses Zotonic's ``html_controller.hrl`` include to serve HTML:
+The simplest controller uses Zotonic's ``controller_html_helper.hrl`` include to serve HTML:
 
 .. code-block:: erlang  
 
    -module(controller_example).
 
-   -include_lib("html_controller.hrl").
+   -include_lib("controller_html_helper.hrl").
 
    html(Context) ->
        {<<"<h1>Hello</h1>">>, Context}.
