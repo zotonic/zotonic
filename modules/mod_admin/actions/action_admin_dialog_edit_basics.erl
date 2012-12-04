@@ -92,15 +92,20 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                             {edge_id, EdgeId}
                         ]
                   end,
-            Html = z_template:render(case proplists:get_value(template, Args) of 
-                                        undefined -> "_rsc_edge.tpl"; 
-                                        X -> X
-                                      end,
-                                      Vars,
-                                      Context),
-            Context1 = case proplists:get_value(is_update, Args) of
-                          true -> z_render:update(proplists:get_value(update_element, Args), Html, Context);
-                          false -> z_render:replace(proplists:get_value(update_element, Args), Html, Context)
+            Context1 = case proplists:get_value(update_element, Args) of
+                            window -> Context;
+                            undefined -> Context;
+                            UpdateElt ->
+                                Html = z_template:render(case proplists:get_value(template, Args) of 
+                                                            undefined -> "_rsc_edge.tpl"; 
+                                                            X -> X
+                                                          end,
+                                                          Vars,
+                                                          Context),
+                                case proplists:get_value(is_update, Args) of
+                                    true -> z_render:update(UpdateElt, Html, Context);
+                                    false -> z_render:replace(UpdateElt, Html, Context)
+                                end
                         end,
             Context2 = z_render:wire({dialog_close, []}, Context1),
             %% wire any custom actions
