@@ -38,9 +38,24 @@ msgid ""
 "Are you sure you want to delete the language"
 msgstr ""
 
-#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 ./modules/mod_translation/templates/_dialog_language_edit.tpl:30 
+#: ./modules/mod_translation/templates/_dialog_language_delete.tpl:6 ./modules/mod_translation/templates/_dialog_language_copy.tpl:9 ./modules/mod_translation/templates/_dialog_language_edit.tpl:30 
 msgid ""
 "Cancel"
+msgstr ""
+
+#: ./modules/mod_translation/templates/_dialog_language_copy.tpl:10 
+msgid ""
+"Copy"
+msgstr ""
+
+#: ./modules/mod_translation/templates/_dialog_language_copy.tpl:1 
+msgid ""
+"Copy texts from a language to the currently selected language."
+msgstr ""
+
+#: ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:34 ./modules/mod_translation/templates/_admin_edit_sidebar.tpl:35 
+msgid ""
+"Copy translation"
 msgstr ""
 
 #: ./modules/mod_translation/templates/admin_translation.tpl:23 
@@ -141,6 +156,11 @@ msgstr ""
 #: ./modules/mod_translation/templates/text/language_switch.tpl:3 
 msgid ""
 "Select language"
+msgstr ""
+
+#: ./modules/mod_translation/templates/_dialog_language_copy.tpl:4 
+msgid ""
+"Select the language to copy from:"
 msgstr ""
 
 #: ./modules/mod_translation/templates/text/language_switch.tpl:7 

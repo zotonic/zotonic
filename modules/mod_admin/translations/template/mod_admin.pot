@@ -62,7 +62,7 @@ msgid ""
 "Add media to body"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:307 
+#: ./modules/mod_admin/mod_admin.erl:313 
 msgid ""
 "Added the connection to"
 msgstr ""
@@ -92,12 +92,12 @@ msgid ""
 "All Categories"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:17 ./modules/mod_admin/templates/admin_media.tpl:24 ./modules/mod_admin/templates/admin_overview.tpl:51 
+#: ./modules/mod_admin/templates/admin.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:24 ./modules/mod_admin/templates/admin_overview.tpl:51 
 msgid ""
 "All media"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:16 ./modules/mod_admin/templates/admin_media.tpl:23 ./modules/mod_admin/templates/admin_overview.tpl:50 
+#: ./modules/mod_admin/templates/admin.tpl:23 ./modules/mod_admin/templates/admin_media.tpl:23 ./modules/mod_admin/templates/admin_overview.tpl:50 
 msgid ""
 "All pages"
 msgstr ""
@@ -142,7 +142,7 @@ msgid ""
 "Attached media"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:114 
+#: ./modules/mod_admin/mod_admin.erl:115 
 msgid ""
 "Auth"
 msgstr ""
@@ -167,12 +167,12 @@ msgid ""
 "Block quote"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:30 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35 ./modules/mod_admin/templates/_action_dialog_zlink.tpl:19 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:16 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:64 
+#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:30 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35 ./modules/mod_admin/templates/_action_dialog_zlink.tpl:19 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:16 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:57 
 msgid ""
 "Cancel"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20 ./modules/mod_admin/templates/admin_referrers.tpl:21 ./modules/mod_admin/templates/_admin_overview_list.tpl:8 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:39 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20 ./modules/mod_admin/templates/admin_referrers.tpl:21 ./modules/mod_admin/templates/_admin_overview_list.tpl:8 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32 
 msgid ""
 "Category"
 msgstr ""
@@ -222,7 +222,7 @@ msgid ""
 "Connect a page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3 ./modules/mod_admin/mod_admin.erl:91 
+#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3 ./modules/mod_admin/mod_admin.erl:92 
 msgid ""
 "Content"
 msgstr ""
@@ -247,7 +247,7 @@ msgid ""
 "Customize page slug"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:7 ./modules/mod_admin/mod_admin.erl:86 
+#: ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:14 ./modules/mod_admin/mod_admin.erl:87 
 msgid ""
 "Dashboard"
 msgstr ""
@@ -262,12 +262,12 @@ msgid ""
 "Define who can see or edit this page."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:31 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:55 
+#: ./modules/mod_admin/templates/_admin_edit_blocks.tpl:31 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:57 
 msgid ""
 "Delete"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:55 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:57 
 msgid ""
 "Delete this page."
 msgstr ""
@@ -297,7 +297,7 @@ msgid ""
 "Drag to change position"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:59 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:62 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:61 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:64 
 msgid ""
 "Duplicate"
 msgstr ""
@@ -307,7 +307,7 @@ msgid ""
 "Duplicate page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:59 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:64 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:61 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:66 
 msgid ""
 "Duplicate this page."
 msgstr ""
@@ -332,7 +332,7 @@ msgid ""
 "Electronic address"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:133 
+#: ./modules/mod_admin/mod_admin.erl:135 
 msgid ""
 "Embed page"
 msgstr ""
@@ -340,6 +340,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:31 
 msgid ""
 "Emergency telephone"
+msgstr ""
+
+#: ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161 
+msgid ""
+"Error uploading the file."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12 
@@ -356,7 +361,12 @@ msgid ""
 "vehicles category with subcategories car and bicycle."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:34 
+#: ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158 
+msgid ""
+"Failed to download the file."
+msgstr ""
+
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 
 msgid ""
 "Featured"
 msgstr ""
@@ -417,7 +427,7 @@ msgid ""
 "Group members"
 msgstr ""
 
-#: ./modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15 ./modules/mod_admin/mod_admin.erl:131 
+#: ./modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15 ./modules/mod_admin/mod_admin.erl:133 
 msgid ""
 "Header"
 msgstr ""
@@ -476,27 +486,27 @@ msgid ""
 "Insert image"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:39 
+#: ./modules/mod_admin/templates/admin.tpl:46 
 msgid ""
 "Latest modified events"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:34 
+#: ./modules/mod_admin/templates/admin.tpl:41 
 msgid ""
 "Latest modified locations"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:43 
+#: ./modules/mod_admin/templates/admin.tpl:50 
 msgid ""
 "Latest modified media items"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:27 
+#: ./modules/mod_admin/templates/admin.tpl:34 
 msgid ""
 "Latest modified persons"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:24 
+#: ./modules/mod_admin/templates/admin.tpl:31 
 msgid ""
 "Latest modified texts"
 msgstr ""
@@ -514,6 +524,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/admin_logon.tpl:21 
 msgid ""
 "Log on to"
+msgstr ""
+
+#: ./modules/mod_admin/templates/admin.tpl:9 
+msgid ""
+"Logged in as"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:121 
@@ -536,7 +551,7 @@ msgid ""
 "Make a new media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin.tpl:11 ./modules/mod_admin/templates/admin_overview.tpl:45 
+#: ./modules/mod_admin/templates/admin.tpl:18 ./modules/mod_admin/templates/admin_overview.tpl:45 
 msgid ""
 "Make a new page or media"
 msgstr ""
@@ -546,7 +561,7 @@ msgid ""
 "Make media item"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:9 ./modules/mod_admin/mod_admin.erl:99 
+#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:9 ./modules/mod_admin/mod_admin.erl:100 
 msgid ""
 "Media"
 msgstr ""
@@ -565,6 +580,11 @@ msgstr ""
 #: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:25 
 msgid ""
 "Media file"
+msgstr ""
+
+#: ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132 ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144 
+msgid ""
+"Media item created."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4 
@@ -597,7 +617,7 @@ msgid ""
 "Modified on"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:109 
+#: ./modules/mod_admin/mod_admin.erl:110 
 msgid ""
 "Modules"
 msgstr ""
@@ -622,7 +642,7 @@ msgid ""
 "New page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:50 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:52 
 msgid ""
 "Next in category: "
 msgstr ""
@@ -672,7 +692,7 @@ msgid ""
 "Page title"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/mod_admin.erl:95 
+#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/mod_admin.erl:96 
 msgid ""
 "Pages"
 msgstr ""
@@ -712,17 +732,17 @@ msgid ""
 "Preview"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:46 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:48 
 msgid ""
 "Previous in category: "
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:39 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:41 
 msgid ""
 "Protect"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:37 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:39 
 msgid ""
 "Protect from deletion"
 msgstr ""
@@ -742,7 +762,7 @@ msgid ""
 "Publish this page"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:29 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:47 
+#: ./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:31 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:40 
 msgid ""
 "Published"
 msgstr ""
@@ -803,17 +823,17 @@ msgid ""
 "SEO Content"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:17 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:66 
+#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:17 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:59 
 msgid ""
 "Save"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:19 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 
 msgid ""
 "Save &amp; view"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:19 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 
 msgid ""
 "Save and view the page."
 msgstr ""
@@ -853,12 +873,12 @@ msgid ""
 "Something went wrong. Sorry."
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:311 
+#: ./modules/mod_admin/mod_admin.erl:317 
 msgid ""
 "Sorry, you have no permission to add the connection."
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:130 
+#: ./modules/mod_admin/mod_admin.erl:132 
 msgid ""
 "Standard"
 msgstr ""
@@ -868,7 +888,7 @@ msgid ""
 "State"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:122 
+#: ./modules/mod_admin/mod_admin.erl:124 
 msgid ""
 "Status"
 msgstr ""
@@ -883,7 +903,7 @@ msgid ""
 "Street Line 2"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:104 
+#: ./modules/mod_admin/mod_admin.erl:105 
 msgid ""
 "Structure"
 msgstr ""
@@ -908,7 +928,7 @@ msgid ""
 "Surname"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:118 
+#: ./modules/mod_admin/mod_admin.erl:119 
 msgid ""
 "System"
 msgstr ""
@@ -928,7 +948,7 @@ msgid ""
 "Telephone"
 msgstr ""
 
-#: ./modules/mod_admin/mod_admin.erl:132 
+#: ./modules/mod_admin/mod_admin.erl:134 
 msgid ""
 "Text"
 msgstr ""
@@ -1000,7 +1020,7 @@ msgid ""
 "URL"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:31 
+#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:24 
 msgid ""
 "Unique name"
 msgstr ""
@@ -1050,7 +1070,7 @@ msgid ""
 "View all referrers"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:21 
+#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:22 
 msgid ""
 "View this page."
 msgstr ""
@@ -1070,7 +1090,7 @@ msgid ""
 "Visible till"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65 
+#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58 
 msgid ""
 "Visit full editpage"
 msgstr ""
@@ -1115,6 +1135,16 @@ msgstr ""
 #: ./modules/mod_admin/templates/admin_edit.tpl:23 
 msgid ""
 "You are not allowed to edit the"
+msgstr ""
+
+#: ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154 
+msgid ""
+"You don't have permission to change this media item."
+msgstr ""
+
+#: ./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156 
+msgid ""
+"You don't have the proper permissions to upload this type of file."
 msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5 ./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6 
@@ -1228,7 +1258,7 @@ msgid ""
 "uploaded on"
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:47 ./modules/mod_admin/templates/admin_referrers.tpl:39 ./modules/mod_admin/templates/_admin_overview_list.tpl:33 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:21 
+#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:47 ./modules/mod_admin/templates/admin_referrers.tpl:39 ./modules/mod_admin/templates/_admin_overview_list.tpl:33 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:22 
 msgid ""
 "view"
 msgstr ""

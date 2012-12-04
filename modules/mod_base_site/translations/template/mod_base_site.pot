@@ -48,7 +48,7 @@ msgid ""
 "Dimensions"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/page.tpl:32 ./modules/mod_base_site/templates/text/page.query.tpl:14 ./modules/mod_base_site/templates/text/page.collection.tpl:7 
+#: ./modules/mod_base_site/templates/text/page.tpl:34 ./modules/mod_base_site/templates/text/page.collection.tpl:7 ./modules/mod_base_site/templates/text/page.query.tpl:14 
 msgid ""
 "Documents"
 msgstr ""
@@ -83,7 +83,7 @@ msgid ""
 "Map of"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/page.tpl:33 ./modules/mod_base_site/templates/text/page.query.tpl:15 ./modules/mod_base_site/templates/text/page.collection.tpl:8 
+#: ./modules/mod_base_site/templates/text/page.tpl:35 ./modules/mod_base_site/templates/text/page.collection.tpl:8 ./modules/mod_base_site/templates/text/page.query.tpl:15 
 msgid ""
 "Media"
 msgstr ""
@@ -93,12 +93,12 @@ msgid ""
 "Mime"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/page.tpl:35 
+#: ./modules/mod_base_site/templates/text/page.tpl:37 
 msgid ""
 "More"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/search.tpl:13 ./modules/mod_base_site/templates/tablet/search.tpl:13 ./modules/mod_base_site/templates/tablet/page.query.tpl:8 
+#: ./modules/mod_base_site/templates/text/search.tpl:13 ./modules/mod_base_site/templates/tablet/page.query.tpl:8 ./modules/mod_base_site/templates/tablet/search.tpl:13 
 msgid ""
 "Page"
 msgstr ""
@@ -113,7 +113,7 @@ msgid ""
 "Read more"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/search.tpl:3 ./modules/mod_base_site/templates/text/search.tpl:33 ./modules/mod_base_site/templates/text/_navbar.tpl:11 ./modules/mod_base_site/templates/tablet/search.tpl:3 ./modules/mod_base_site/templates/tablet/_search_form.tpl:3 
+#: ./modules/mod_base_site/templates/text/_navbar.tpl:11 ./modules/mod_base_site/templates/text/search.tpl:3 ./modules/mod_base_site/templates/text/search.tpl:33 ./modules/mod_base_site/templates/tablet/_search_form.tpl:3 ./modules/mod_base_site/templates/tablet/search.tpl:3 
 msgid ""
 "Search"
 msgstr ""

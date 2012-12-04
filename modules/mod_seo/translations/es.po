@@ -20,36 +20,45 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
+#: modules/mod_seo/templates/admin_seo.tpl:43
+msgid "Add a noindex, nofollow element to all pages."
+msgstr "Agregar un elemento \"noindex, nofollow\" a todas las páginas."
+
+#: modules/mod_seo/templates/admin_seo.tpl:35
+msgid "Description to include on every page"
+msgstr "Descripción a incluir en cada página"
+
+#: modules/mod_seo/templates/admin_seo.tpl:45
+msgid "Exclude this site from search engines"
+msgstr "Excluir este sitio de los motores de búsqueda"
+
+#: modules/mod_seo/templates/admin_seo.tpl:24
+msgid "General SEO Optimization"
+msgstr "Optimización General de SEO"
+
+#: modules/mod_seo/templates/admin_seo.tpl:14
+msgid ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+msgstr ""
+"Aquí puede encontrar ls parámetros para optimizar la indexación de su sitio "
+"por los motores de búsqueda."
+
+#: modules/mod_seo/templates/admin_seo.tpl:28
+msgid "Keywords to include on every page. Separate keywords with a \",\""
+msgstr ""
+"Palabras clave a incluir en todas las páginas. Separe las palabras con una "
+"\",\""
+
 #: modules/mod_seo/mod_seo.erl:42
 msgid "SEO"
 msgstr ""
 
-#~ msgid "Add a noindex, nofollow element to all pages."
-#~ msgstr "Agregar un elemento \"noindex, nofollow\" a todas las páginas."
+#: modules/mod_seo/templates/admin_seo.tpl:17
+msgid "Save SEO settings"
+msgstr "Guardar configuración de SEO"
 
-#~ msgid "Description to include on every page"
-#~ msgstr "Descripción a incluir en cada página"
-
-#~ msgid "Exclude this site from search engines"
-#~ msgstr "Excluir este sitio de los motores de búsqueda"
-
-#~ msgid "General SEO Optimization"
-#~ msgstr "Optimización General de SEO"
-
-#~ msgid ""
-#~ "Here you find settings to optimize the indexing of your site by search "
-#~ "engines."
-#~ msgstr ""
-#~ "Aquí puede encontrar ls parámetros para optimizar la indexación de su "
-#~ "sitio por los motores de búsqueda."
-
-#~ msgid "Keywords to include on every page. Separate keywords with a \",\""
-#~ msgstr ""
-#~ "Palabras clave a incluir en todas las páginas. Separe las palabras con "
-#~ "una \",\""
-
-#~ msgid "Save SEO settings"
-#~ msgstr "Guardar configuración de SEO"
-
-#~ msgid "Search Engine Optimization"
-#~ msgstr "Optimización de Motor de Búsquedas"
+#: modules/mod_seo/templates/admin_seo.tpl:3
+#: modules/mod_seo/templates/admin_seo.tpl:12
+msgid "Search Engine Optimization"
+msgstr "Optimización de Motor de Búsquedas"

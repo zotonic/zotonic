@@ -22,34 +22,43 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 
+#: modules/mod_seo/templates/admin_seo.tpl:43
+msgid "Add a noindex, nofollow element to all pages."
+msgstr "Dodaj znaczniki noindex i nofollow do wszystkich stron."
+
+#: modules/mod_seo/templates/admin_seo.tpl:35
+msgid "Description to include on every page"
+msgstr "Opis, dołączany do wszystkich stron"
+
+#: modules/mod_seo/templates/admin_seo.tpl:45
+msgid "Exclude this site from search engines"
+msgstr "Wyklucz serwis z indeksów wyszukiwarek"
+
+#: modules/mod_seo/templates/admin_seo.tpl:24
+msgid "General SEO Optimization"
+msgstr "Ogólne ustawienia SEO"
+
+#: modules/mod_seo/templates/admin_seo.tpl:14
+msgid ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+msgstr "Te ustawienia pozwolą dopasować serwis do wymagań wyszukiwarek."
+
+#: modules/mod_seo/templates/admin_seo.tpl:28
+msgid "Keywords to include on every page. Separate keywords with a \",\""
+msgstr ""
+"Słowa kluczowe, dołączane do wszystkich stron. Kolejne słowa kluczowe "
+"oddziel przecinkami (\",\")"
+
 #: modules/mod_seo/mod_seo.erl:42
 msgid "SEO"
 msgstr ""
 
-#~ msgid "Add a noindex, nofollow element to all pages."
-#~ msgstr "Dodaj znaczniki noindex i nofollow do wszystkich stron."
+#: modules/mod_seo/templates/admin_seo.tpl:17
+msgid "Save SEO settings"
+msgstr "Zapisz ustawienia"
 
-#~ msgid "Description to include on every page"
-#~ msgstr "Opis, dołączany do wszystkich stron"
-
-#~ msgid "Exclude this site from search engines"
-#~ msgstr "Wyklucz serwis z indeksów wyszukiwarek"
-
-#~ msgid "General SEO Optimization"
-#~ msgstr "Ogólne ustawienia SEO"
-
-#~ msgid ""
-#~ "Here you find settings to optimize the indexing of your site by search "
-#~ "engines."
-#~ msgstr "Te ustawienia pozwolą dopasować serwis do wymagań wyszukiwarek."
-
-#~ msgid "Keywords to include on every page. Separate keywords with a \",\""
-#~ msgstr ""
-#~ "Słowa kluczowe, dołączane do wszystkich stron. Kolejne słowa kluczowe "
-#~ "oddziel przecinkami (\",\")"
-
-#~ msgid "Save SEO settings"
-#~ msgstr "Zapisz ustawienia"
-
-#~ msgid "Search Engine Optimization"
-#~ msgstr "Optymalizacja dla wyszukiwarek internetowych"
+#: modules/mod_seo/templates/admin_seo.tpl:3
+#: modules/mod_seo/templates/admin_seo.tpl:12
+msgid "Search Engine Optimization"
+msgstr "Optymalizacja dla wyszukiwarek internetowych"

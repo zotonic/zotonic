@@ -28,7 +28,7 @@ msgid ""
 "Color"
 msgstr ""
 
-#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:176 
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:175 
 msgid ""
 "Could not find the location."
 msgstr ""
@@ -49,7 +49,7 @@ msgid ""
 "Latitude"
 msgstr ""
 
-#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:196 
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:195 
 msgid ""
 "Location has been set."
 msgstr ""
@@ -69,12 +69,12 @@ msgid ""
 "Map of"
 msgstr ""
 
-#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:60 ./modules/mod_geomap/templates/_geomap.tpl:12 
+#: ./modules/mod_geomap/templates/_geomap.tpl:12 ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:59 
 msgid ""
 "Markers"
 msgstr ""
 
-#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:35 
+#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:34 
 msgid ""
 "Please click on the map to select the location."
 msgstr ""
@@ -87,11 +87,6 @@ msgstr ""
 #: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:28 
 msgid ""
 "Reset"
-msgstr ""
-
-#: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:29 
-msgid ""
-"Save this page"
 msgstr ""
 
 #: ./modules/mod_geomap/templates/_geomap_admin_location_map.tpl:25 

@@ -36,9 +36,24 @@ msgid "Are you sure you want to delete the language"
 msgstr "Oled sa kindel, et tahad keelt kustutada"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:9
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:30
 msgid "Cancel"
 msgstr "Katkesta"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:10
+msgid "Copy"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:1
+msgid "Copy texts from a language to the currently selected language."
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
+#, fuzzy
+msgid "Copy translation"
+msgstr "Tõlge"
 
 #: modules/mod_translation/templates/admin_translation.tpl:23
 msgid "Default"
@@ -139,6 +154,11 @@ msgstr ""
 #: modules/mod_translation/templates/text/language_switch.tpl:3
 #, fuzzy
 msgid "Select language"
+msgstr "Kustuta keel"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:4
+#, fuzzy
+msgid "Select the language to copy from:"
 msgstr "Kustuta keel"
 
 #: modules/mod_translation/templates/text/language_switch.tpl:7

@@ -43,7 +43,7 @@ msgid ""
 "Debug"
 msgstr ""
 
-#: ./modules/mod_logging/templates/admin_log_base.tpl:13 
+#: ./modules/mod_logging/templates/admin_log_base.tpl:13 ./modules/mod_logging/mod_logging.erl:226 
 msgid ""
 "Email log"
 msgstr ""
