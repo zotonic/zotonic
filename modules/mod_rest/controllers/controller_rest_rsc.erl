@@ -132,6 +132,8 @@ do_get(Id, Data, Extension, Context) ->
                     $-,   
                     integer_to_list(Id),
                     $-, 
+                    m_rsc:p(Id, slug, Context),
+                    $-, 
                     erlydtl_dateformat:format(Modified, "YmdHis", Context),
                     Extension
                 ]),
