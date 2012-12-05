@@ -241,17 +241,39 @@ Returns t if point was moved, otherwise nil."
       (not (eq start (point)))
       )))
 
+(defun zotonic-tpl-indent-tag-line ()
+  "Indent zotonic line inside tag."
+  (save-excursion
+    (beginning-of-line)
+    (cond
+     ((looking-at-p "[ \t]*[%}]}")
+      (indent-line-to (save-excursion
+                        (zotonic-tpl-prev-tag-boundary (point-min))
+                        (current-column)))
+      )
+     )))
+
+(defun zotonic-tpl-indent-line ()
+  "Indent zotonic template code."
+  (interactive)
+  (let ((start (point)))
+    (if (and
+         (zotonic-tpl-prev-tag-boundary (point-min))
+         (looking-at-p "{"))
+        (progn
+          (goto-char start)
+          (zotonic-tpl-indent-tag-line))
+      (goto-char start)
+      (indent-relative))))
+
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
   "Major mode for editing Zotonic templates."
   (zotonic-tpl-syntax-table)
-  (set (make-local-variable 'comment-start)
-       zotonic-tpl-comment-start)
-  (set (make-local-variable 'comment-end)
-       zotonic-tpl-comment-end)
-  (set (make-local-variable 'comment-start-skip)
-       zotonic-tpl-comment-start-skip)
-  (set (make-local-variable 'font-lock-defaults)
-       zotonic-tpl-font-lock-defaults)
+  (set (make-local-variable 'comment-start) zotonic-tpl-comment-start)
+  (set (make-local-variable 'comment-end) zotonic-tpl-comment-end)
+  (set (make-local-variable 'comment-start-skip) zotonic-tpl-comment-start-skip)
+  (set (make-local-variable 'font-lock-defaults) zotonic-tpl-font-lock-defaults)
+  (set (make-local-variable 'indent-line-function) #'zotonic-tpl-indent-line)
   (setq font-lock-multiline t)
   (setq font-lock-extend-region-functions
         (append font-lock-extend-region-functions
