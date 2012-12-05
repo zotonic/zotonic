@@ -105,93 +105,141 @@
      'symbols))
   "Filters shipped with Zotonic.")
 
+;; FIXME: all keywords are accepted by erlydtl after a opening {%,
+;; but only a limited set after that...
+;; but here, zotonic-tpl-mode accepts all keywords within a {% %}-tag.
 (defconst zotonic-tpl-keywords-matcher
   (list
-   zotonic-tpl-keywords-re nil nil '(1 font-lock-keyword-face))
+   zotonic-tpl-keywords-re
+   '(progn (goto-char (match-end 1)) (match-end 0)) nil
+   '(1 font-lock-keyword-face))
   "Highlight keywords")
 
 (defconst zotonic-tpl-custom-tags-matcher
   (list
-   zotonic-tpl-custom-tags-re nil nil '(1 font-lock-builtin-face))
+   (concat "{% *" zotonic-tpl-custom-tags-re)
+   '(progn (goto-char (match-beginning 1)) (match-end 2)) nil
+   '(1 font-lock-builtin-face))
   "Highlight custom tags")
 
 (defconst zotonic-tpl-filters-matcher
   (list
-   zotonic-tpl-filters-re nil nil
-   '(1 font-lock-builtin-face))
+   (concat "\\(|\\)\\(" zotonic-tpl-filters-re "\\|\\(\\_<\\w+\\_>\\)\\)")
+   '(progn (goto-char (match-end 2)) (match-end 0)) nil
+   '(1 font-lock-constant-face)
+   '(3 font-lock-builtin-face t t)
+   '(4 font-lock-function-name-face t t))
   "Highlight filters")
 
 (defconst zotonic-tpl-lookup-matcher
   (list
-   "\\(\\w+\\)[.[]"
-   nil nil
-   '(1 font-lock-function-name-face))
+   "\\(\\w+\\)\\(\\.\\)"
+   '(progn (goto-char (match-end 2)) (match-end 0)) nil
+   '(1 font-lock-variable-name-face)
+   '(2 font-lock-constant-face))
   "Highlight lookup expressions")
+
+(defconst zotonic-tpl-index-matcher
+  (list
+   "\\(\\w+\\)\\(\\[\\)[^]]*\\(]\\.?\\)"
+   '(progn (goto-char (match-end 2)) (match-end 0)) nil
+   '(1 font-lock-variable-name-face)
+   '(2 font-lock-constant-face)
+   '(3 font-lock-constant-face))
+  "Highlight index expressions")
 
 (defconst zotonic-tpl-tuple-matcher
   (list
-   "{\\(\\w+\\)"
-   nil nil
-   '(1 font-lock-type-face))
-  "Highlight tuple like expressions")
+   "\\({\\)[ \t\n]*\\(\\w+\\)"
+   '(progn (goto-char (match-end 2)) (match-end 0)) nil
+   '(1 font-lock-constant-face)
+   '(2 font-lock-type-face))
+  "Highlight tuple expressions")
 
-(defconst zotonic-tpl-variable-matcher
+(defconst zotonic-tpl-tuple-close-matcher
   (list
-   "\\w+"
-   nil nil
-   '(0 font-lock-variable-name-face))
-  "Highlight variable expressions")
+   "}"
+   '(progn (goto-char (match-end 2)) (match-end 0)) nil
+   '(0 font-lock-constant-face))
+  "Highlight tuple expressions")
 
-(defun zotonic-tpl-font-lock-keywords-level-1 ()
-  "Basic font-lock-keywords table."
+
+(defun zotonic-tpl-font-lock-tags ()
+  "font-lock keywords list for highlighting Zotonic template {% %}-tags."
   (list
-   ;; mark {{, }} and %} as constants
-   '("{{\\|[%}]}" . font-lock-constant-face)
    (cons
-    "{%"
+    ;; find next {% ... %} tag (notice: we need to keep the captures in sync)
+    "\\({%\\) *\\(\\w+\\)\\([^%]\\|\n\\|\\(%[^}]\\)\\)*\\(%}\\)"
+    ;; captures: 1. {%  2. tag/keyword 3-4. tag contents  5. %}
     (list
-     ;; mark {% as constant
-     '(0 font-lock-constant-face)
-     ;; mark keywords and custom tags following {%
+     '(1 font-lock-constant-face)
+     '(5 font-lock-constant-face)
      zotonic-tpl-keywords-matcher
      zotonic-tpl-custom-tags-matcher
+     zotonic-tpl-filters-matcher
+     zotonic-tpl-lookup-matcher
+     zotonic-tpl-index-matcher
+     zotonic-tpl-tuple-matcher
+     zotonic-tpl-tuple-close-matcher
      ))
    (cons
-    "{[{%][^|]+\\(|\\)"
+    ;; find next {{ ... }} tag (notice: we need to keep the captures in sync)
+    "\\({{\\)\\( *\\)\\([^}]\\|\n\\|\\(}[^}]\\)\\)*\\(}}\\)"
+    ;; captures: 1. {{  2. dummy (leading space) 3-4. tag contents  5. }}
     (list
-     ;; mark | as constant
      '(1 font-lock-constant-face)
-     ;; mark filters following |
+     '(5 font-lock-constant-face)
      zotonic-tpl-filters-matcher
+     zotonic-tpl-lookup-matcher
+     zotonic-tpl-index-matcher
      ))
    ))
-
-(defun zotonic-tpl-font-lock-keywords-level-2 ()
-  "Extended font-lock-keywords entries."
-  (mapcar
-   (lambda (matcher)
-     (cons
-      ;; mark tokens following {{ and {%
-      "{[{%]"
-      matcher
-      ))
-   (list
-    zotonic-tpl-lookup-matcher
-    zotonic-tpl-tuple-matcher
-    zotonic-tpl-variable-matcher
-    )))
-
-(defun zotonic-tpl-font-lock-keywords-default-level ()
-  (append
-   (zotonic-tpl-font-lock-keywords-level-1)
-   (zotonic-tpl-font-lock-keywords-level-2))
-  )
 
 (defvar zotonic-tpl-font-lock-defaults
   (list
-   (zotonic-tpl-font-lock-keywords-default-level)
-   ;;(zotonic-tpl-font-lock-keywords-level-1)
+   (zotonic-tpl-font-lock-tags)
    ))
+
+(defun zotonic-tpl-font-lock-extend-region ()
+  "Move fontification boundaries to surround any template tags."
+  (save-excursion
+    (let ((changed nil))
+      (goto-char font-lock-beg)
+      (when (zotonic-tpl-prev-tag-boundary (point-min))
+        (setq changed t
+              font-lock-beg (point)))
+      (goto-char font-lock-end)
+      (when (zotonic-tpl-next-tag-boundary (point-max))
+        (setq changed t
+              font-lock-end (point)))
+      changed))
+  )
+
+(defconst zotonic-tpl-tag-boundary-re
+  "\\({[{%]\\)\\|\\([%}]}\\)"
+  "Regular expression used to locate tag boundaries.")
+
+(defun zotonic-tpl-prev-tag-boundary (limit)
+  "Search backwards for the closest open/close tag and move point there.
+That is, it will move point to just before the opening tag,
+or just after the closing tag. Returns t if point was moved, otherwise nil."
+  (interactive (list (point-min)))
+  (let ((start (point)))
+    (when (re-search-backward zotonic-tpl-tag-boundary-re limit t)
+      (unless (looking-at-p "{") (forward-char 2))
+      (not (eq start (point)))
+      )))
+
+(defun zotonic-tpl-next-tag-boundary (limit)
+  "Search forwards for the closest open/close tag and move point there.
+Returns t if point was moved, otherwise nil."
+  (interactive (list (point-max)))
+  (let ((start (point)))
+    (when (re-search-forward zotonic-tpl-tag-boundary-re limit t)
+      (backward-char 2)
+      (unless (looking-at-p "{") (forward-char 2))
+      (not (eq start (point)))
+      )))
 
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
   "Major mode for editing Zotonic templates."
@@ -204,6 +252,10 @@
        zotonic-tpl-comment-start-skip)
   (set (make-local-variable 'font-lock-defaults)
        zotonic-tpl-font-lock-defaults)
+  (setq font-lock-multiline t)
+  (setq font-lock-extend-region-functions
+        (append font-lock-extend-region-functions
+                '(zotonic-tpl-font-lock-extend-region)))
   )
 
 (provide 'zotonic-tpl-mode)
