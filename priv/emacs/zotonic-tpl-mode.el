@@ -66,15 +66,36 @@
        "endblock" "extends" "overrules" "inherit" "autoescape"
        "endautoescape" "if" "else" "elif" "elseif" "endif" "not" "or"
        "and" "xor" "comment" "endcomment" "cycle" "firstof"
-       "ifchanged" "ifequal" "endifequal" "ifnotequal"
-       "endifnotequal" "now" "regroup" "rsc" "spaceless"
-       "endspaceless" "ssi" "templatetag" "load" "call" "with" "url"
-       "print" "image" "image_url" "media" "_" "with" "endwith" "all"
-       "lib" "cache" "endcache" "filter" "endfilter" "javascript"
-       "endjavascript" "as"
+       "ifchanged" "ifequal" "endifequal" "ifnotequal" "endifnotequal"
+       "now" "regroup" "rsc" "spaceless" "endspaceless" "ssi"
+       "templatetag" "load" "call" "url" "print" "image" "image_url"
+       "media" "_" "with" "endwith" "all" "lib" "cache" "endcache"
+       "filter" "endfilter" "javascript" "endjavascript" "as"
        )
      'symbols))
   "Zotonic template keywords")
+
+(defconst zotonic-tpl-begin-keywords-re
+  (eval-when-compile
+    (regexp-opt
+     '(
+       "for" "empty" "block" "autoescape" "if" "else" "elif" "elseif"
+       "comment" "ifchanged" "ifequal" "ifnotequal" "spaceless" "with"
+       "cache" "filter" "javascript"
+       )
+     'symbols))
+  "Zotonic template keywords that opens a block")
+
+(defconst zotonic-tpl-end-keywords-re
+  (eval-when-compile
+    (regexp-opt
+     '(
+       "empty" "endfor" "endblock" "endautoescape" "else" "elif"
+       "elseif" "endif" "endcomment" "endifequal" "endifnotequal"
+       "endspaceless" "endwith" "endcache" "endfilter" "endjavascript"
+       )
+     'symbols))
+  "Zotonic template keywords that closes a block")
 
 (defconst zotonic-tpl-custom-tags-re
   (eval-when-compile
@@ -395,6 +416,16 @@ Returns t if point was moved, otherwise nil."
                 (setq indent (current-column))))
         (goto-char start))
       (while (not (eolp))
+        ;; indent after block begin tags
+        (if (looking-at-p (concat "{%[ \t\n]*"
+                                  zotonic-tpl-begin-keywords-re))
+            (progn
+              (setq indent (+ indent tab-width))
+                                        ; point-max is no good here...
+                                        ; should limit to initial pos
+                                        ; of indentation request
+              (zotonic-tpl-next-tag-boundary (point-max))))
+        ;; indent after opening soup tags
         (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
             (setq indent (+ indent tab-width)))
         (forward-char))
@@ -413,6 +444,10 @@ Returns the column the line was indented to."
                  (current-column))
              ;; indent tag soup
              (zotonic-tpl-tag-soup-get-indent-for-line -1))))
+      ;; un-indent block end tags
+      (if (looking-at-p (concat "[ \t]*{%[ \t\n]*"
+                                zotonic-tpl-end-keywords-re))
+          (setq indent (- indent tab-width)))
       (indent-line-to indent)
       indent)
     ))
