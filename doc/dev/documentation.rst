@@ -16,6 +16,10 @@ request.
 However, for small changes, typo's, et cetera, Github provides a nice
 edit button which you can use to edit these ``.rst`` files.
 
+.. note:: 
+   Under `Actions` in the sidebar, there is a `View source` link
+   directly to the ReST source for the current page on github.
+
 
 Writing documentation
 ---------------------
@@ -47,7 +51,9 @@ in the ``meta-*.rst`` file. So you should only use ``----------`` and
 ``..........`` for the headings in the ``ref/`` files.
 
 
-When using Emacs, this little snippet helps with adding underlines to headings::
+When using Emacs, this little snippet helps with adding underlines to headings:
+
+.. code-block:: common-lisp
 
    (defun underline-with-char (char)
      (interactive (list (read-from-minibuffer "Char: ")))
