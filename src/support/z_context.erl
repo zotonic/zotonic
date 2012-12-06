@@ -406,6 +406,8 @@ output1([C|Rest], Context, Acc) ->
         case proplists:get_value(format, Args, "html") of
             "html" ->
                 [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
+            "js" ->
+                [ $\n, Script, $\n ];
             "escapejs" ->
                 z_utils:js_escape(Script)
         end.

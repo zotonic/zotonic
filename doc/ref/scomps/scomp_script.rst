@@ -48,8 +48,9 @@ The script scomp can have the following arguments:
 |           | include the page initialization code.                      |               |
 +-----------+------------------------------------------------------------+---------------+
 | format    | Select a different format than the ``<script/>`` tag.  For | format="html" |
-|           | now this only accepts ``"html"`` (for the ``<script/>``    |               | 
-|           | tag) and ``"escapejs"`` for an escaped javascript string.  |               |
+|           | now this accepts ``"html"`` (for the ``<script/>``         |               | 
+|           | tag), ``"escapejs"`` for an escaped javascript string, and |               |
+|           | ``"js"`` for a normal javascript string.                   |               |
 |           | Default is ``"html"``.                                     |               |
 +-----------+------------------------------------------------------------+---------------+
 
