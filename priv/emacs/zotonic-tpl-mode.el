@@ -171,12 +171,12 @@
    '(2 font-lock-type-face))
   "Highlight tuple expressions")
 
-(defconst zotonic-tpl-tuple-close-matcher
+(defconst zotonic-tpl-const-matcher
   (list
-   "}"
+   "}\\|="
    '(progn (goto-char (match-end 2)) (match-end 0)) nil
    '(0 font-lock-constant-face))
-  "Highlight tuple expressions")
+  "Highlight constant characters")
 
 
 (defun zotonic-tpl-font-lock-tags ()
@@ -195,7 +195,7 @@
      zotonic-tpl-lookup-matcher
      zotonic-tpl-index-matcher
      zotonic-tpl-tuple-matcher
-     zotonic-tpl-tuple-close-matcher
+     zotonic-tpl-const-matcher
      ))
    (cons
     ;; find next {{ ... }} tag (notice: we need to keep the captures in sync)
