@@ -256,6 +256,15 @@ Returns t if point was moved, otherwise nil."
       (not (eq start (point)))
       )))
 
+(defun zotonic-tpl-within-tag (pos)
+  "Test if POS is inside a template tag {% ... %} or {{ ... }}."
+  (interactive (list (point)))
+  (save-excursion
+    (goto-char pos)
+    (and
+     (zotonic-tpl-prev-tag-boundary (point-min))
+     (looking-at-p "{"))))
+
 (defun zotonic-tpl-get-indent-for-line (offset)
   "Calculate the indentation to use for the line following the line
  offset lines from the current line."
@@ -289,33 +298,29 @@ Returns t if point was moved, otherwise nil."
   "Indent zotonic line inside tag. Returns the column the line was indented to."
   (save-excursion
     (beginning-of-line)
-    (let ((indent
-           (if (looking-at-p "[ \t]*[#%}]}")
-               ;; indent closing tag
-               (save-excursion
-                 (zotonic-tpl-prev-tag-boundary (point-min))
-                 (current-column))
-             ;; indent line inside tag
-             (zotonic-tpl-get-indent-for-line -1))))
-      (indent-line-to indent)
-      indent
-      )))
+    (if (looking-at-p "[ \t]*{[{%#]")
+        ;; indent first line of a tag in the context of tag soup
+        (zotonic-tpl-tag-soup-indent)
+      (let ((indent
+             (if (looking-at-p "[ \t]*[#%}]}")
+                 ;; indent closing tag
+                 (save-excursion
+                   (zotonic-tpl-prev-tag-boundary (point-min))
+                   (current-column))
+               ;; indent line inside tag
+               (zotonic-tpl-get-indent-for-line -1))))
+        (indent-line-to indent)
+        indent
+        ))))
 
 (defun zotonic-tpl-indent-line ()
   "Indent zotonic template code."
   (interactive)
-  (let* ((start (point))
-         (indent
-          (if (and
-               (zotonic-tpl-prev-tag-boundary (point-min))
-               (looking-at-p "{"))
-              ;; point is inside a template tag {% ... %} or {{ ... }}
-              (progn
-                (goto-char start)
-                (zotonic-tpl-indent-tag-line))
-            ;; point is not in a template tag
-            (goto-char start)
-            (zotonic-tpl-tag-soup-indent))))
+  (let ((indent
+         (if (zotonic-tpl-within-tag (point))
+             (zotonic-tpl-indent-tag-line)
+           ;; point is not in a template tag
+           (zotonic-tpl-tag-soup-indent))))
     ;; if we're looking at the indentation, jump to it
     (if (< (current-column) indent) (forward-char (- indent (current-column))))
     ))
