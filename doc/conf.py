@@ -240,7 +240,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'zotonic', u'Zotonic Documentation',
-     [u'Andreas Stenius'], 1)
+     [u'The Zotonic team'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -254,8 +254,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Zotonic', u'Zotonic Documentation',
-   u'Andreas Stenius', 'Zotonic', 'One line description of project.',
-   'Miscellaneous'),
+   u'The Zotonic team', 'Zotonic', 'The Erlang Web Framework.',
+   'Web development'),
 ]
 
 # Documents to append as an appendix to all manuals.
