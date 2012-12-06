@@ -328,16 +328,21 @@ user_answer_row({user, User, Persistent}, Created, Answers, Questions, Context) 
          undefined -> <<>>;
          _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
      end
-     | answer_row(Answers, Questions, Context)
+     | answer_row(Answers, Questions, Created, Context)
     ].
 
 %% @doc private
-answer_row(Answers, Questions, Context) ->
-    %% Convert answers to proper format if old format is discovered
-    Answers1 = [case A of
-                    {X, {X, _}} -> A;
-                    {_, {X, Y}} -> {X, {X, Y}}
-                end || A <- Answers],
+answer_row(Answers, Questions, Created, Context) ->
+    Answers1 = case Created =:= undefined orelse Created >= {{2012,12,1},{0,0,0}} of
+                   true ->
+                       Answers;
+                   false ->
+                       %% Convert answers to proper format if old format is discovered and survey was filled before 2012-12-01
+                       [case A of
+                            {X, {X, _}} -> A;
+                            {_, {X, Y}} -> {X, {X, Y}}
+                        end || A <- Answers]
+               end,
     lists:flatten([
                    answer_row_question(proplists:get_all_values(QId, Answers1), 
                                        Question,
