@@ -197,6 +197,8 @@ get_attach_state(Context) ->
 
 
 %% @doc Get app page pid()'s that are attached to the session
+get_pages(undefined) ->
+    [];
 get_pages(Pid) when is_pid(Pid) ->
     gen_server:call(Pid, get_pages);
 get_pages(#context{} = Context) ->
