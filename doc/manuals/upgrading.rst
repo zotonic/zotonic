@@ -113,6 +113,14 @@ On startup you might see this message::
 mod_backup is now dependent on mod_rest, so you should enable that module in the module manager.
 
 
+mod_survey
+..........
+
+The storage format changed slightly. For the correct display of the
+results of "narrative"-type questions answered before 2012-12-01, the
+name of the block needs to equal the name of the first narrative
+sub-question.
+
 
 z_logger
 ........
