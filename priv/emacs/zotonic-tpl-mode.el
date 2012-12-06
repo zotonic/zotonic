@@ -208,11 +208,20 @@
      zotonic-tpl-lookup-matcher
      zotonic-tpl-index-matcher
      ))
+   ;; this does NOT work - emacs hangs with this construct
+   ;; (cons
+   ;;  ;; find comment blocks
+   ;;  "{%[ \t]*comment[ \t]*%}\\(.*\\|\n*\\)*{%[ \t]*endcomment[ \t]*%}"
+   ;;  (list
+   ;;   '(1 font-lock-comment-face)
+   ;;   ))
    ))
 
 (defvar zotonic-tpl-font-lock-defaults
   (list
-   (zotonic-tpl-font-lock-tags)
+   (append
+    (zotonic-tpl-font-lock-tags)
+    (zotonic-tpl-tag-soup-font-lock-tags))
    ))
 
 (defun zotonic-tpl-font-lock-extend-region ()
@@ -345,6 +354,21 @@ Returns t if point was moved, otherwise nil."
 ;;; Tag soup functions
 ;;;
 
+(defun zotonic-tpl-tag-soup-font-lock-tags ()
+  "font-lock keywords list for highlighting tag soup tags in zotonic templates."
+  (list
+   (cons
+    ;; find tags to highlight
+    "\\(</?\\)\\(\\w+\\)\\([^/>]*\\|\\(/[^/>]\\)*\\)*\\(/?>\\)"
+    ;; captures: 1. start tag  2. tag name  3-4. tag contents  5. end tag
+    (list
+     '(1 font-lock-constant-face)
+     '(2 font-lock-keyword-face)
+     '(5 font-lock-constant-face)
+     ;; zotonic-tpl-...-matcher
+     ))
+   ))
+
 (defun zotonic-tpl-tag-soup-find-open-tag (limit)
   "Search backwards for the open tag that is being closed by the tag at point."
   (interactive (list (point-min)))
@@ -371,7 +395,7 @@ Returns t if point was moved, otherwise nil."
                 (setq indent (current-column))))
         (goto-char start))
       (while (not (eolp))
-        (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^>]\\)*\\)*>")
+        (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
             (setq indent (+ indent tab-width)))
         (forward-char))
       indent)))
