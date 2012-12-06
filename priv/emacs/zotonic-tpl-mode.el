@@ -231,7 +231,7 @@
   )
 
 (defconst zotonic-tpl-tag-boundary-re
-  "\\({[{%]\\)\\|\\([%}]}\\)"
+  "\\({[{%#]\\)\\|\\([#%}]}\\)"
   "Regular expression used to locate tag boundaries.")
 
 (defun zotonic-tpl-prev-tag-boundary (limit)
@@ -289,7 +289,7 @@ Returns t if point was moved, otherwise nil."
   "Indent zotonic line inside tag."
   (save-excursion
     (beginning-of-line)
-    (if (looking-at-p "[ \t]*[%}]}")
+    (if (looking-at-p "[ \t]*[#%}]}")
         ;; indent closing tag
         (indent-line-to (save-excursion
                           (zotonic-tpl-prev-tag-boundary (point-min))
