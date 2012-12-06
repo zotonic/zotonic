@@ -25,6 +25,21 @@
 ;; This header is following the guidelines presented in
 ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html#Library-Headers
 
+;;; Multiline font-lock:
+
+;; Support for multiline font-lock has been achieved by setting
+;; font-lock-multiline to `t', plus some neat trickery in the keywords
+;; table. The trick is to match the anchor to entire tags, that may be
+;; spanning multiple lines. Then each anchored sub highlighter will have
+;; to move point back in the `pre-form', yet still return the `end-of-tag'
+;; that was matched in order to mark it too as a multiline construct.
+;; This is all the goto-char match-end you'll see in the matchers.
+
+;;; Tag soup support:
+
+;; Tag soup, a.k.a html, is supported directly in this mode. It ought to
+;; be supported by an accompanying sub-mode. But I can't be bothered with it.
+
 ;;; Code:
 
 (defvar zotonic-tpl-comment-start "{# ")
@@ -245,8 +260,10 @@ Returns t if point was moved, otherwise nil."
   "Calculate the indentation to use for the line following the line
  offset lines from the current line."
   (save-excursion
-    (forward-line offset)
-    (skip-chars-forward " \t")
+    (while (progn
+             (forward-line offset)
+             (skip-chars-forward " \t")
+             (eolp)))
     (let ((indent (current-column)))
       (skip-chars-forward "]}")
       (while (not (eolp))
@@ -254,7 +271,7 @@ Returns t if point was moved, otherwise nil."
         (if (looking-at-p "[[{]") (setq indent (+ indent tab-width))
           ;; un-indent if we close with ] or }
           (if (looking-at-p "[]}]") (setq indent (- indent tab-width))))
-        (forward-char 1))
+        (forward-char))
       ;; un-indent if next line starts with a closing ] or }
       (if (looking-at-p "\n[ \t]*[]}]") (setq indent (- indent tab-width)))
 
@@ -273,9 +290,11 @@ Returns t if point was moved, otherwise nil."
   (save-excursion
     (beginning-of-line)
     (if (looking-at-p "[ \t]*[%}]}")
+        ;; indent closing tag
         (indent-line-to (save-excursion
                           (zotonic-tpl-prev-tag-boundary (point-min))
                           (current-column)))
+      ;; indent line inside tag
       (indent-line-to (zotonic-tpl-get-indent-for-line -1))
       )))
 
@@ -286,11 +305,13 @@ Returns t if point was moved, otherwise nil."
     (if (and
          (zotonic-tpl-prev-tag-boundary (point-min))
          (looking-at-p "{"))
+        ;; point is inside a template tag {% ... %} or {{ ... }}
         (progn
           (goto-char start)
           (zotonic-tpl-indent-tag-line))
+      ;; point is not in a template tag
       (goto-char start)
-      (indent-relative))))
+      (zotonic-tpl-tag-soup-indent))))
 
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
   "Major mode for editing Zotonic templates."
@@ -307,5 +328,54 @@ Returns t if point was moved, otherwise nil."
   )
 
 (provide 'zotonic-tpl-mode)
+
+;;;
+;;; Tag soup functions
+;;;
+
+(defun zotonic-tpl-tag-soup-find-open-tag (limit)
+  "Search backwards for the open tag that is being closed by the tag at point."
+  (interactive (list (point-min)))
+  (save-match-data
+    (if (looking-at "[ \t]*</\\([^>]*\\)>")
+        (re-search-backward (concat "<" (match-string 1)) limit t)
+      )))
+
+
+(defun zotonic-tpl-tag-soup-get-indent-for-line (offset)
+  "Calculate the indentation to use for the line following the line
+ offset lines from the current line."
+  (save-excursion
+    (while (progn
+             (forward-line offset)
+             (skip-chars-forward " \t")
+             (eolp)))
+    (let ((start (point))
+          (indent (current-column)))
+      (end-of-line)
+      (if (re-search-backward "</" start t)
+          (save-excursion
+            (if (zotonic-tpl-tag-soup-find-open-tag (point-min))
+                (setq indent (current-column))))
+        (goto-char start))
+      (while (not (eolp))
+        (if (looking-at-p "<[^/]")
+            (setq indent (+ indent tab-width)))
+        (forward-char))
+      indent)))
+
+(defun zotonic-tpl-tag-soup-indent ()
+  "Indent zotonic line in midst of a tag soup (e.g. html, xml, et. al.)"
+  (save-excursion
+    (beginning-of-line)
+    (if (looking-at-p "[ \t]*</")
+        ;; indent closing tag
+        (indent-line-to (save-excursion
+                          (zotonic-tpl-tag-soup-find-open-tag (point-min))
+                          (current-column)))
+      ;; indent tag soup
+      (indent-line-to (zotonic-tpl-tag-soup-get-indent-for-line -1))
+      )))
+
 
 ;;; zotonic-tpl-mode.el ends here
