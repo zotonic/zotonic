@@ -238,13 +238,6 @@
    ;;   ))
    ))
 
-(defvar zotonic-tpl-font-lock-defaults
-  (list
-   (append
-    (zotonic-tpl-font-lock-tags)
-    (zotonic-tpl-tag-soup-font-lock-tags))
-   ))
-
 (defun zotonic-tpl-font-lock-extend-region ()
   "Move fontification boundaries to surround any template tags."
   (save-excursion
@@ -355,21 +348,10 @@ Returns t if point was moved, otherwise nil."
     (if (< (current-column) indent) (forward-char (- indent (current-column))))
     ))
 
-(define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
-  "Major mode for editing Zotonic templates."
-  (zotonic-tpl-syntax-table)
-  (set (make-local-variable 'comment-start) zotonic-tpl-comment-start)
-  (set (make-local-variable 'comment-end) zotonic-tpl-comment-end)
-  (set (make-local-variable 'comment-start-skip) zotonic-tpl-comment-start-skip)
-  (set (make-local-variable 'font-lock-defaults) zotonic-tpl-font-lock-defaults)
-  (set (make-local-variable 'indent-line-function) #'zotonic-tpl-indent-line)
-  (setq font-lock-multiline t)
-  (setq font-lock-extend-region-functions
-        (append font-lock-extend-region-functions
-                '(zotonic-tpl-font-lock-extend-region)))
-  )
-
-(provide 'zotonic-tpl-mode)
+(defun zotonic-tpl-indent-buffer ()
+  "Indent entire buffer."
+  (interactive)
+  (indent-region (point-min) (point-max)))
 
 ;;;
 ;;; Tag soup functions
@@ -395,9 +377,16 @@ Returns t if point was moved, otherwise nil."
   (interactive (list (point-min)))
   (save-match-data
     (if (looking-at "[ \t]*</\\([^>]*\\)>")
-        (re-search-backward (concat "<" (match-string 1)) limit t)
+        (let ((res)
+              (tag (match-string 1)))
+          (while
+              (if (re-search-backward (concat "</?" tag) limit t)
+                  (if  (looking-at-p "</")
+                      (zotonic-tpl-tag-soup-find-open-tag limit)
+                    (setq res (point))
+                    nil)))
+          res)
       )))
-
 
 (defun zotonic-tpl-tag-soup-get-indent-for-line (offset)
   "Calculate the indentation to use for the line following the line
@@ -451,6 +440,33 @@ Returns the column the line was indented to."
       (indent-line-to indent)
       indent)
     ))
+
+;;;
+;;; Define zotonic major mode
+;;;
+
+(defvar zotonic-tpl-font-lock-defaults
+  (list
+   (append
+    (zotonic-tpl-font-lock-tags)
+    (zotonic-tpl-tag-soup-font-lock-tags))
+   ))
+
+(define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
+  "Major mode for editing Zotonic templates."
+  (zotonic-tpl-syntax-table)
+  (set (make-local-variable 'comment-start) zotonic-tpl-comment-start)
+  (set (make-local-variable 'comment-end) zotonic-tpl-comment-end)
+  (set (make-local-variable 'comment-start-skip) zotonic-tpl-comment-start-skip)
+  (set (make-local-variable 'font-lock-defaults) zotonic-tpl-font-lock-defaults)
+  (set (make-local-variable 'indent-line-function) #'zotonic-tpl-indent-line)
+  (setq font-lock-multiline t)
+  (setq font-lock-extend-region-functions
+        (append font-lock-extend-region-functions
+                '(zotonic-tpl-font-lock-extend-region)))
+  )
+
+(provide 'zotonic-tpl-mode)
 
 
 ;;; zotonic-tpl-mode.el ends here

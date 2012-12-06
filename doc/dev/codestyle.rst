@@ -26,13 +26,14 @@ Provided with the Zotonic distribution is a Zotonic template mode,
 ``zotonic-tpl-mode``, which supports the Zotonic flavor of ErlyDtl.
 It is located in the :file:`priv/emacs/zotonic-tpl-mode.el` file, and
 may be installed in emacs by adding something like this to your `.emacs`
-file::
+file:
 
-   (setq load-path (cons ".../path/to/zotonic/priv/emacs" load-path))
+.. code-block:: common-lisp
+
+   (add-to-list 'load-path ".../path/to/zotonic/priv/emacs")
    (require 'zotonic-tpl-mode)
    ;; optional, for associating .tpl files with zotonic-tpl-mode
-   (setq auto-mode-alist (append
-      '(("\\.tpl$" . zotonic-tpl-mode)) auto-mode-alist))
+   (add-to-list 'auto-mode-alist '("\\.tpl$" . zotonic-tpl-mode))
 
 
 Hint when using the m.rsc model
@@ -46,7 +47,9 @@ When the template sees that you request a property of an integer then
 it assumes that the integer is a ``m.rsc`` `id`. This makes templates more
 readable.
 
-Example::
+Example:
+
+.. code-block:: django
 
   <li>
       <h3>{{ m.rsc[id].title }}</h3>
@@ -60,7 +63,9 @@ Example::
       {% endfor %}
   </li>
 
-Can be more effectively written as follows to improve readability::
+Can be more effectively written as follows to improve readability:
+
+.. code-block:: django
 
   <li>
       <h3>{{ id.title }}</h3>
