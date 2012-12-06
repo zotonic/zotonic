@@ -286,32 +286,39 @@ Returns t if point was moved, otherwise nil."
       indent)))
 
 (defun zotonic-tpl-indent-tag-line ()
-  "Indent zotonic line inside tag."
+  "Indent zotonic line inside tag. Returns the column the line was indented to."
   (save-excursion
     (beginning-of-line)
-    (if (looking-at-p "[ \t]*[#%}]}")
-        ;; indent closing tag
-        (indent-line-to (save-excursion
-                          (zotonic-tpl-prev-tag-boundary (point-min))
-                          (current-column)))
-      ;; indent line inside tag
-      (indent-line-to (zotonic-tpl-get-indent-for-line -1))
+    (let ((indent
+           (if (looking-at-p "[ \t]*[#%}]}")
+               ;; indent closing tag
+               (save-excursion
+                 (zotonic-tpl-prev-tag-boundary (point-min))
+                 (current-column))
+             ;; indent line inside tag
+             (zotonic-tpl-get-indent-for-line -1))))
+      (indent-line-to indent)
+      indent
       )))
 
 (defun zotonic-tpl-indent-line ()
   "Indent zotonic template code."
   (interactive)
-  (let ((start (point)))
-    (if (and
-         (zotonic-tpl-prev-tag-boundary (point-min))
-         (looking-at-p "{"))
-        ;; point is inside a template tag {% ... %} or {{ ... }}
-        (progn
-          (goto-char start)
-          (zotonic-tpl-indent-tag-line))
-      ;; point is not in a template tag
-      (goto-char start)
-      (zotonic-tpl-tag-soup-indent))))
+  (let* ((start (point))
+         (indent
+          (if (and
+               (zotonic-tpl-prev-tag-boundary (point-min))
+               (looking-at-p "{"))
+              ;; point is inside a template tag {% ... %} or {{ ... }}
+              (progn
+                (goto-char start)
+                (zotonic-tpl-indent-tag-line))
+            ;; point is not in a template tag
+            (goto-char start)
+            (zotonic-tpl-tag-soup-indent))))
+    ;; if we're looking at the indentation, jump to it
+    (if (< (current-column) indent) (forward-char (- indent (current-column))))
+    ))
 
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
   "Major mode for editing Zotonic templates."
@@ -365,17 +372,21 @@ Returns t if point was moved, otherwise nil."
       indent)))
 
 (defun zotonic-tpl-tag-soup-indent ()
-  "Indent zotonic line in midst of a tag soup (e.g. html, xml, et. al.)"
+  "Indent zotonic line in midst of a tag soup (e.g. html, xml, et. al.).
+Returns the column the line was indented to."
   (save-excursion
     (beginning-of-line)
-    (if (looking-at-p "[ \t]*</")
-        ;; indent closing tag
-        (indent-line-to (save-excursion
-                          (zotonic-tpl-tag-soup-find-open-tag (point-min))
-                          (current-column)))
-      ;; indent tag soup
-      (indent-line-to (zotonic-tpl-tag-soup-get-indent-for-line -1))
-      )))
+    (let ((indent
+           (if (looking-at-p "[ \t]*</")
+               ;; indent closing tag
+               (save-excursion
+                 (zotonic-tpl-tag-soup-find-open-tag (point-min))
+                 (current-column))
+             ;; indent tag soup
+             (zotonic-tpl-tag-soup-get-indent-for-line -1))))
+      (indent-line-to indent)
+      indent)
+    ))
 
 
 ;;; zotonic-tpl-mode.el ends here
