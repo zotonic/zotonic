@@ -241,17 +241,43 @@ Returns t if point was moved, otherwise nil."
       (not (eq start (point)))
       )))
 
+(defun zotonic-tpl-get-indent-for-line (offset)
+  "Calculate the indentation to use for the line following the line
+ offset lines from the current line."
+  (save-excursion
+    (forward-line offset)
+    (skip-chars-forward " \t")
+    (let ((indent (current-column)))
+      (skip-chars-forward "]}")
+      (while (not (eolp))
+        ;; indent next line if we open with [ or {
+        (if (looking-at-p "[[{]") (setq indent (+ indent tab-width))
+          ;; un-indent if we close with ] or }
+          (if (looking-at-p "[]}]") (setq indent (- indent tab-width))))
+        (forward-char 1))
+      ;; un-indent if next line starts with a closing ] or }
+      (if (looking-at-p "\n[ \t]*[]}]") (setq indent (- indent tab-width)))
+
+      ;; indent the next line, if we end the line with a = sign
+      (if (eq ?\= (char-after (1- (point)))) (setq indent (+ indent tab-width)))
+      ;; check if this line was indented by a = on the previous line
+      ;; and if so, undo it for the next line
+      (forward-line -1)
+      (end-of-line)
+      (if (eq ?\= (char-after (1- (point)))) (setq indent (- indent tab-width)))
+      ;; return indentation
+      indent)))
+
 (defun zotonic-tpl-indent-tag-line ()
   "Indent zotonic line inside tag."
   (save-excursion
     (beginning-of-line)
-    (cond
-     ((looking-at-p "[ \t]*[%}]}")
-      (indent-line-to (save-excursion
-                        (zotonic-tpl-prev-tag-boundary (point-min))
-                        (current-column)))
-      )
-     )))
+    (if (looking-at-p "[ \t]*[%}]}")
+        (indent-line-to (save-excursion
+                          (zotonic-tpl-prev-tag-boundary (point-min))
+                          (current-column)))
+      (indent-line-to (zotonic-tpl-get-indent-for-line -1))
+      )))
 
 (defun zotonic-tpl-indent-line ()
   "Indent zotonic template code."
