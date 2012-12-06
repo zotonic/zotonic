@@ -366,7 +366,7 @@ Returns t if point was moved, otherwise nil."
                 (setq indent (current-column))))
         (goto-char start))
       (while (not (eolp))
-        (if (looking-at-p "<[^/]")
+        (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^>]\\)*\\)*>")
             (setq indent (+ indent tab-width)))
         (forward-char))
       indent)))
