@@ -22,12 +22,28 @@ of the Erlang world.
 Indenting templates
 -------------------
 
+Provided with the Zotonic distribution is a Zotonic template mode,
+``zotonic-tpl-mode``, which supports the Zotonic flavor of ErlyDtl.
+It is located in the :file:`priv/emacs/zotonic-tpl-mode.el` file, and
+may be installed in emacs by adding something like this to your `.emacs`
+file::
+
+   (setq load-path (cons ".../path/to/zotonic/priv/emacs" load-path))
+   (require 'zotonic-tpl-mode)
+   ;; optional, for associating .tpl files with zotonic-tpl-mode
+   (setq auto-mode-alist (append
+      '(("\\.tpl$" . zotonic-tpl-mode)) auto-mode-alist))
+
+
+Hint when using the m.rsc model
+...............................
+
 A common style and shorthand techniques make templates from multiple
 authors more alike.  This makes them easier to maintain and share in a
 team or with the community.
 
 When the template sees that you request a property of an integer then
-it assumes that the integer is a m.rsc id. This makes templates more
+it assumes that the integer is a ``m.rsc`` `id`. This makes templates more
 readable.
 
 Example::
