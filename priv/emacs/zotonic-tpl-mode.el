@@ -431,7 +431,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                                       zotonic-tpl-end-keywords-re))
                 (setq indent (- indent tab-width)))
             ;; indent after opening soup tags
-            (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
+            (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
                 (setq indent (+ indent tab-width)))
             (forward-char))
           indent)
