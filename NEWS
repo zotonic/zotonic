@@ -17,6 +17,10 @@ Modules can now implement their own URL dispatch mechanisms through
 #dispatch{} notifications. They are triggered when the regular
 dispatch rules do not match.
 
+A new major mode for emacs has been developed, called zotonic-tpl-mode.
+See documentation at zotonic.com for details on how to install it.
+
+
 * New tags/changed tags
 
 {% javascript %}...{% endjavascript %}
