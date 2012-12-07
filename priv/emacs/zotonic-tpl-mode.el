@@ -288,34 +288,46 @@ Returns t if point was moved, otherwise nil."
      (zotonic-tpl-prev-tag-boundary (point-min))
      (looking-at-p "{"))))
 
+(defun zotonic-tpl-goto-indent-column (offset)
+  "Move point to the first character (i.e. the indentation column) of line,
+looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
+  (unless (eq 0 offset)
+    (let ((res t))
+      (while
+          (if (not (eq 0 (forward-line offset)))
+              (setq res nil)
+            (skip-chars-forward " \t")
+            (eolp)))
+      res)))
+
 (defun zotonic-tpl-get-indent-for-line (offset)
   "Calculate the indentation to use for the line following the line
  offset lines from the current line."
   (save-excursion
-    (while (progn
-             (forward-line offset)
-             (skip-chars-forward " \t")
-             (eolp)))
-    (let ((indent (current-column)))
-      (skip-chars-forward "]}")
-      (while (not (eolp))
-        ;; indent next line if we open with [ or {
-        (if (looking-at-p "[[{]") (setq indent (+ indent tab-width))
-          ;; un-indent if we close with ] or }
-          (if (looking-at-p "[]}]") (setq indent (- indent tab-width))))
-        (forward-char))
-      ;; un-indent if next line starts with a closing ] or }
-      (if (looking-at-p "\n[ \t]*[]}]") (setq indent (- indent tab-width)))
+    (if (zotonic-tpl-goto-indent-column offset)
+        (let ((indent (current-column)))
+          (skip-chars-forward "]}")
+          (while (not (eolp))
+            ;; indent next line if we open with [ or {
+            (if (looking-at-p "[[{]") (setq indent (+ indent tab-width))
+              ;; un-indent if we close with ] or }
+              (if (looking-at-p "[]}]") (setq indent (- indent tab-width))))
+            (forward-char))
+          ;; un-indent if next line starts with a closing ] or }
+          (if (looking-at-p "\n[ \t]*[]}]") (setq indent (- indent tab-width)))
 
-      ;; indent the next line, if we end the line with a = sign
-      (if (eq ?\= (char-after (1- (point)))) (setq indent (+ indent tab-width)))
-      ;; check if this line was indented by a = on the previous line
-      ;; and if so, undo it for the next line
-      (forward-line -1)
-      (end-of-line)
-      (if (eq ?\= (char-after (1- (point)))) (setq indent (- indent tab-width)))
-      ;; return indentation
-      indent)))
+          ;; indent the next line, if we end the line with a = sign
+          (if (eq ?\= (char-after (1- (point))))
+              (setq indent (+ indent tab-width)))
+          ;; check if this line was indented by a = on the previous line
+          ;; and if so, undo it for the next line
+          (forward-line -1)
+          (end-of-line)
+          (if (eq ?\= (char-after (1- (point))))
+              (setq indent (- indent tab-width)))
+          ;; return indentation
+          indent)
+      0)))
 
 (defun zotonic-tpl-indent-tag-line ()
   "Indent zotonic line inside tag. Returns the column the line was indented to."
@@ -392,33 +404,31 @@ Returns t if point was moved, otherwise nil."
   "Calculate the indentation to use for the line following the line
  offset lines from the current line."
   (save-excursion
-    (while (progn
-             (forward-line offset)
-             (skip-chars-forward " \t")
-             (eolp)))
-    (let ((start (point))
-          (indent (current-column)))
-      (end-of-line)
-      (if (re-search-backward "</" start t)
-          (save-excursion
-            (if (zotonic-tpl-tag-soup-find-open-tag (point-min))
-                (setq indent (current-column))))
-        (goto-char start))
-      (while (not (eolp))
-        ;; indent after block begin tags
-        (if (looking-at-p (concat "{%[ \t\n]*"
-                                  zotonic-tpl-begin-keywords-re))
-            (progn
-              (setq indent (+ indent tab-width))
+    (if (zotonic-tpl-goto-indent-column offset)
+        (let ((start (point))
+              (indent (current-column)))
+          (end-of-line)
+          (if (re-search-backward "</" start t)
+              (save-excursion
+                (if (zotonic-tpl-tag-soup-find-open-tag (point-min))
+                    (setq indent (current-column))))
+            (goto-char start))
+          (while (not (eolp))
+            ;; indent after block begin tags
+            (if (looking-at-p (concat "{%[ \t\n]*"
+                                      zotonic-tpl-begin-keywords-re))
+                (progn
+                  (setq indent (+ indent tab-width))
                                         ; point-max is no good here...
                                         ; should limit to initial pos
                                         ; of indentation request
-              (zotonic-tpl-next-tag-boundary (point-max))))
-        ;; indent after opening soup tags
-        (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
-            (setq indent (+ indent tab-width)))
-        (forward-char))
-      indent)))
+                  (zotonic-tpl-next-tag-boundary (point-max))))
+            ;; indent after opening soup tags
+            (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
+                (setq indent (+ indent tab-width)))
+            (forward-char))
+          indent)
+      0)))
 
 (defun zotonic-tpl-tag-soup-indent ()
   "Indent zotonic line in midst of a tag soup (e.g. html, xml, et. al.).
