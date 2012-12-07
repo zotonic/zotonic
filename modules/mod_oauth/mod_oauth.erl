@@ -34,13 +34,11 @@
 -export([
          serve_oauth/3,
          request_is_signed/1,
-         check_request_logon/2,
          oauth_param/2,
          to_oauth_consumer/2,
          str_value/2,
-         authenticate/3,
          test/0,
-         is_allowed/3,
+         observe_service_authorize/2,
          observe_admin_menu/3
 ]).
 
@@ -301,6 +299,31 @@ is_allowed(Id, Service, Context) ->
         lists:member(Service, [proplists:get_value(service, S)
                                || S <- m_oauth_perms:all_services_for(Id, Context)]).
 
+
+%% Main authorization hook, called from controller_api
+observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
+    ReqData = z_context:get_reqdata(Context),
+    case check_request_logon(ReqData, Context) of
+        {none, Context} ->
+            %% No OAuth; Authentication is required for this module...
+            ServiceInfo = z_service:serviceinfo(Module, Context),			    
+            authenticate(proplists:get_value(method, ServiceInfo) ++ ": " ++
+                             z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context);
+
+        {true, AuthorizedContext} ->
+            %% OAuth succeeded; check whether we are allowed to exec this module
+            ConsumerId = proplists:get_value(id, z_context:get("oauth_consumer", AuthorizedContext)),
+            case is_allowed(ConsumerId, Module, AuthorizedContext) of
+                true ->
+                    {true, ReqData, AuthorizedContext};
+                false ->
+                    ReqData1 = wrq:set_resp_body("You are not authorized to execute this API call.\n", ReqData),
+                    {{halt, 403}, ReqData1, AuthorizedContext}
+            end;
+
+        {false, Response} ->
+            Response
+    end.
 
 
 observe_admin_menu(admin_menu, Acc, Context) ->

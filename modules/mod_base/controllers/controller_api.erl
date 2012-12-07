@@ -65,7 +65,7 @@ allowed_methods(ReqData, Context) ->
 
     try
         {ok, Module}  = z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method),
-        Context2 = z_context:set("module", Module, Context1),
+        Context2 = z_context:set(service_module, Module, Context1),
         try
             {z_service:http_methods(Module), ReqData, Context2}
         catch
@@ -84,45 +84,33 @@ is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
     Context0 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
+
+    Module = z_context:get(service_module, Context2),
     
-    case z_auth:is_auth(Context2) of
-        true ->
-            %% Yep; use these credentials.
-            ?WM_REPLY(true, Context2);
+    case z_service:needauth(Module) of
         false ->
-            %% No; see if we can use OAuth.
-            Module = z_context:get("module", Context2),
-            case mod_oauth:check_request_logon(ReqData, Context2) of
-                {none, Context2} ->
-                    case z_service:needauth(Module) of
-                        false ->
-                            %% No auth needed; so we're authorized.
-                            {true, ReqData, Context2};
-                        true ->
-			    ServiceInfo = z_service:serviceinfo(Module, Context2),			    
-                            %% Authentication is required for this module...
-                            mod_oauth:authenticate(proplists:get_value(method, ServiceInfo) ++ ": " ++ z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context2)
-                    end;
-
-                {true, AuthorizedContext} ->
-                    %% OAuth succeeded; check whether we are allowed to exec this module
-                    ConsumerId = proplists:get_value(id, z_context:get("oauth_consumer", AuthorizedContext)),
-                    case mod_oauth:is_allowed(ConsumerId, Module, AuthorizedContext) of
-                        true ->
-                            {true, ReqData, AuthorizedContext};
-                        false ->
-                            ReqData1 = wrq:set_resp_body("You are not authorized to execute this API call.\n", ReqData),
-                            {{halt, 403}, ReqData1, AuthorizedContext}
-                    end;
-
-                {false, Response} ->
-                    Response
+            %% No auth needed; so we're authorized.
+            {true, ReqData, Context2};
+        true ->
+            %% Auth needed; see if we're authorized through regular session
+            case z_auth:is_auth(Context2) of
+                true ->
+                    %% Yep; use these credentials.
+                    ?WM_REPLY(true, Context2);
+                false ->
+                    %% No; see if we can use OAuth.
+                    case z_notifier:first(#service_authorize{service_module=Module}, Context2) of
+                        undefined ->
+                            api_error(500, 0, "No service authorization method available", ReqData, Context2);
+                        Reply ->
+                            Reply
+                    end
             end
     end.
 
 
 resource_exists(ReqData, Context) ->
-    Exists = case z_context:get("module", Context) of
+    Exists = case z_context:get(service_module, Context) of
 		 undefined -> false;
 		 ServiceModule ->
 		     case z_service:serviceinfo(ServiceModule, Context) of
@@ -187,12 +175,12 @@ api_result(ReqData, Context, Result) ->
     
 
 to_json(ReqData, Context) ->
-    Module = z_context:get("module", Context),
+    Module = z_context:get(service_module, Context),
     api_result(ReqData, Context, Module:process_get(ReqData, Context)).
 
 
 process_post(ReqData, Context) ->
-    Module = z_context:get("module", Context),
+    Module = z_context:get(service_module, Context),
     case Module:process_post(ReqData, Context) of
         ok ->
             {true, ReqData, Context};
@@ -232,4 +220,3 @@ filter(F) ->
                  orelse C =:= $]
                  orelse C =:= $$
     ].
-

@@ -279,6 +279,9 @@
 -record(user_is_enabled, {id}).
 
 
+%% @doc Request API logon
+-record(service_authorize, {service_module}).
+
 
 %% @doc Fetch the url of a resource's html representation (first)
 %% Returns {ok, Url} or undefined
