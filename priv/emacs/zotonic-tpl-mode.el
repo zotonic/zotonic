@@ -6,7 +6,7 @@
 ;; Created: 27 Nov 2012
 ;; Keywords: languages
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Zotonic (http://zotonic.com).
 
 ;; Licensed under the Apache License, Version 2.0 (the "License");
 ;; you may not use this file except in compliance with the License.
