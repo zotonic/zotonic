@@ -358,7 +358,9 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
            (zotonic-tpl-tag-soup-indent))))
     (unless (> (current-column) indent)
       ;; if we're looking at the indentation, jump to it
-      (forward-char (- indent (current-column)))
+      ;; in case of tabs, movement by 1 char != 1 column
+      (while (not (eq indent (current-column)))
+        (forward-char (- indent (current-column))))
       ;; if the line is empty, leave it empty
       (if (eolp) (indent-line-to 0))
       )))
