@@ -356,9 +356,12 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
              (zotonic-tpl-indent-tag-line)
            ;; point is not in a template tag
            (zotonic-tpl-tag-soup-indent))))
-    ;; if we're looking at the indentation, jump to it
-    (if (< (current-column) indent) (forward-char (- indent (current-column))))
-    ))
+    (unless (> (current-column) indent)
+      ;; if we're looking at the indentation, jump to it
+      (forward-char (- indent (current-column)))
+      ;; if the line is empty, leave it empty
+      (if (eolp) (indent-line-to 0))
+      )))
 
 (defun zotonic-tpl-indent-buffer ()
   "Indent entire buffer."
@@ -423,6 +426,10 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                                         ; should limit to initial pos
                                         ; of indentation request
                   (zotonic-tpl-next-tag-boundary (point-max))))
+            ;; un-indent after block end tags
+            (if (looking-at-p (concat "{%[ \t\n]*"
+                                      zotonic-tpl-end-keywords-re))
+                (setq indent (- indent tab-width)))
             ;; indent after opening soup tags
             (if (looking-at-p "<[^/]\\([^/>]*\\|\\(/[^/>]\\)*\\)*>")
                 (setq indent (+ indent tab-width)))
