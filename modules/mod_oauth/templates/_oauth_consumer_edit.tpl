@@ -11,6 +11,22 @@
         <div class="tab-content">
             <div class="tab-pane active" id="{{ #tab }}-details">
 
+                {% if consumer %}
+                <div class="control-group">
+                    <label for="zp-ckey" class="control-label">{_ Consumer key _}:</label>
+                    <div class="controls">
+                        <input type="text" id="zp-ckey" readonly value="{{ consumer.consumer_key }}" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="zp-csec" class="control-label">{_ Consumer secret _}:</label>
+                    <div class="controls">
+                        <input type="text" id="zp-csec" readonly value="{{ consumer.consumer_secret }}" />
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="control-group">
                     <label for="zp-title" class="control-label">{_ Application title _}:</label>
                     <div class="controls">
