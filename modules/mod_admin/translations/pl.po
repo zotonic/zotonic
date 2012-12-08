@@ -827,9 +827,8 @@ msgid "State"
 msgstr "Województwo"
 
 #: modules/mod_admin/mod_admin.erl:124
-#, fuzzy
 msgid "Status"
-msgstr "Województwo"
+msgstr "Status"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
