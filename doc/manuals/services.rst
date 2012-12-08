@@ -128,25 +128,32 @@ posted.
 
 Again, its output is a JSON object containing a `result` field.
 
+.. _manual-services-auth:
 
-Authentication
---------------
+Service authentication
+----------------------
 
-Like stated, authorization is done either through the Zotonic session
-or through OAuth.
+Like stated, authentication and authorization is done either through
+the Zotonic session or through a custom notification hook,
+``#service_authorize{}``.
 
-For the session, you need to have a valid session id (``z_sid``)
+For session authentication, you need to have a valid session id (``z_sid``)
 cookie. This method of authentication is the easiest when you are
 accessing the services from Javascript from the same domain as your
 user is logged in to.
 
-For OAuth authentication, the :ref:`mod_oauth` module is
-used. :ref:`controller-api` checks the request for the OAuth
-authorization header and if it is found, it checks for a valid token
-and verifies the request signature. When this is all done, it looks
-which OAuth application (the `consumer key`) is being used and checks
-if the requested API service is in the list of allowed services for
-that particular application.
+When no session is available, but the called services requires
+authentication (according to its ``svc_needauth`` metadata attribute),
+a :ref:`notification hook <manual-notification>` with the name
+``service_authorize`` is called.
 
+In a default Zotonic install, this ``service_authorize`` hook is
+handled by the :ref:`OAuth module <mod_oauth>`, but can be replaced by
+a different service authentication module.
 
-.. seealso:: :term:`Services glossary entry <Service>`, :ref:`List of all core services <services>`
+The module implementing the ``service_authorize`` hook is expected to
+return either `undefined` (when the request is not applicable) or a
+response which must conform to the Webmachine ``is_authorized/2``
+return format.
+
+.. seealso:: :term:`Services glossary entry <Service>`, :ref:`List of all core services <services>`, :ref:`mod_oauth`, :ref:`controller-api`

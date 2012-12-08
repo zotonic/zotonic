@@ -10,6 +10,12 @@ patterns ``/api/:module/:method`` and the url ``/api/:module``. See
 the :ref:`manual-services` manual for more information.
 
 
+Authentication
+--------------
+See :ref:`manual-services-auth` for how authentication is done when
+using this controller.
+
+
 .. _controller-api-nonstandard-url:
 
 Creating services at a non-standard URL
