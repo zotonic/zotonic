@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2012-12-08 22:30+0100\n"
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:4
 msgid "+ add block"
-msgstr ""
+msgstr "+ dodaj sekcję"
 
 #: modules/mod_admin/templates/admin_edit.tpl:37
 msgid "<em>untitled</em>"
@@ -62,16 +62,15 @@ msgstr "Dodaj nowy obiekt mediów"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:20
 msgid "Add link"
-msgstr ""
+msgstr "Dodaj odnośnik"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:10
 msgid "Add media to body"
 msgstr "Dołącz obiekt mediów do treści"
 
 #: modules/mod_admin/mod_admin.erl:313
-#, fuzzy
 msgid "Added the connection to"
-msgstr "Utwórz nowe połączenie"
+msgstr "Utworzono nowe połączenie"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:5
 msgid "Address"
@@ -98,14 +97,13 @@ msgstr "Wszystkie kategorie"
 #: modules/mod_admin/templates/admin_overview.tpl:51
 #, fuzzy
 msgid "All media"
-msgstr "Załączone obiekty mediów"
+msgstr "Obiekty mediów"
 
 #: modules/mod_admin/templates/admin.tpl:23
 #: modules/mod_admin/templates/admin_media.tpl:23
 #: modules/mod_admin/templates/admin_overview.tpl:50
-#, fuzzy
 msgid "All pages"
-msgstr "Wszystkie kategorie"
+msgstr "Wszystkie strony"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:24
 msgid "Alternative telephone"
@@ -116,18 +114,16 @@ msgid "And media can also be viewed on their own page."
 msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:10
-#, fuzzy
 msgid "Any category"
-msgstr "Zmień kategorię"
+msgstr "Dowolna kategorię"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
 msgstr "Czy na pewno chcesz skasować stronę"
 
 #: modules/mod_admin/templates/_admin_menu.tpl:40
-#, fuzzy
 msgid "Are you sure you want to exit the admin interface?"
-msgstr "Czy na pewno chcesz skasować stronę"
+msgstr "Czy na pewno chcesz zamknąć panel administracyjny?"
 
 #: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:7
 msgid "Aside"
@@ -153,11 +149,11 @@ msgstr "Podstawowe"
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:3
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:3
 msgid "Block"
-msgstr ""
+msgstr "Sekcja"
 
 #: modules/mod_admin/templates/_admin_edit_block_li.tpl:7
 msgid "Block name"
-msgstr ""
+msgstr "Nazwa sekcji"
 
 #: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:6
 msgid "Block quote"
@@ -210,13 +206,12 @@ msgid "Confirm block removal"
 msgstr ""
 
 #: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
-#, fuzzy
 msgid "Confirm delete"
-msgstr "skasuj"
+msgstr "Potwierdź usunięcie"
 
 #: modules/mod_admin/templates/_admin_menu.tpl:40
 msgid "Confirm logoff"
-msgstr ""
+msgstr "Potwierdź zakończenie pracy"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_page.tpl:10
 #, fuzzy
@@ -276,7 +271,7 @@ msgstr "Rozłącz"
 
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:29
 msgid "Do you want to remove this block?"
-msgstr ""
+msgstr "Czy na pewno usunąć sekcję?"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:23
 #, fuzzy
@@ -842,11 +837,11 @@ msgstr "Ulica (cd.)"
 
 #: modules/mod_admin/mod_admin.erl:105
 msgid "Structure"
-msgstr ""
+msgstr "Struktura"
 
 #: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
 msgid "Sub pages"
-msgstr ""
+msgstr "Podstrony"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:16
 msgid "Summary"

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin_identity\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2012-12-08 22:10+0100\n"
 "PO-Revision-Date: 2011-11-14 22:34+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
@@ -23,9 +23,8 @@ msgstr ""
 "X-Poedit-Country: POLAND\n"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
-#, fuzzy
 msgid "Add a new user"
-msgstr "Stwórz nowego użytkownika"
+msgstr "Dodaj użytkownika"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68
 msgid "Add user"
@@ -33,7 +32,7 @@ msgstr "Dodaj użytkownika"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
-msgstr "Czy na pewno chcesz usunąć login użytkownikowi"
+msgstr "Czy na pewno chcesz usunąć użytkownika"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38
@@ -44,7 +43,7 @@ msgstr "Anuluj"
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
 #, fuzzy
 msgid "Changed the username."
-msgstr "skasuj login"
+msgstr "Zmodyfikowano użytkownika."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
@@ -56,11 +55,11 @@ msgstr ""
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
 msgid "Confirm user deletion"
-msgstr ""
+msgstr "Podtwierdź usunięcie użytkownika"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99
 msgid "Could not create the user. Sorry."
-msgstr ""
+msgstr "Nie jestem w stanie stworzyć takiego użytkownika."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:38
 msgid "Created on"
@@ -73,14 +72,13 @@ msgstr "Skasuj"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94
 msgid "Duplicate username, please choose another username."
-msgstr ""
+msgstr "Wybrany login już istnieje, wybierz inny."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
 msgid "E-mail"
 msgstr "e-mail"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:16
-#, fuzzy
 msgid ""
 "Every page/person can be made into a user on the edit page.\n"
 "        The difference between a user and a normal page is only\n"
@@ -88,11 +86,11 @@ msgid ""
 msgstr ""
 "Każdą stronę lub osobę można przekształcić w użytkownika za pomocą strony "
 "edycji.<br/>Różnica między użytkownikiem a stroną/osobą polega na tym, że "
-"ten pierwszy ma przypisane dane uwierzytelniające (loginu i hasło)."
+"ten pierwszy ma przypisane dane uwierzytelniające (login i hasło)."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
-msgstr "Pierwszy"
+msgstr "Imię"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
@@ -100,8 +98,8 @@ msgid ""
 "Give an unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
-"Podaj unikalne: login i hasło użytkownika. Uwaga: rozpoznawana jest wielkość "
-"liter (\"a\" to nie to samo, co \"A\"), dlatego dane wprowadzaj uważnie!"
+"Podaj unikalne: login i hasło użytkownika.\nWielkość liter ma znaczenie:"
+"\"a\" to nie to samo, co \"A\", dlatego dane wprowadzaj uważnie!"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
 msgid ""
@@ -143,20 +141,19 @@ msgstr "Nie znaleziono żadnego użytkownika."
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103
 #, fuzzy
 msgid "Only administrators can add users."
-msgstr "Musisz mieć uprawnienia administratora by tworzyć użytkowników"
+msgstr "Tylko administratorzy mogą tworzyć użytkowników"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47
 msgid "Only administrators can delete usernames."
-msgstr ""
+msgstr "Tylko administratorzy mogą usuwać użytkowników."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56
-#, fuzzy
 msgid "Only an administrator can delete usernames."
-msgstr "Musisz mieć uprawnienia administratora by tworzyć użytkowników"
+msgstr "Tylko administrator może usuwać użytkowników."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89
 msgid "Only an administrator or the user him/herself can set a password."
-msgstr ""
+msgstr "Tylko administrator lub sam użytkownik może zmienić hasło."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59
@@ -172,22 +169,20 @@ msgid "Set username / password"
 msgstr "Zmień login lub hasło"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-#, fuzzy
 msgid "Set username/ password"
 msgstr "Zmień login lub hasło"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
-msgstr "Przedrostek nazwiska"
+msgstr "Przedrostek"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
 msgid "Surname"
 msgstr "Nazwisko"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84
-#, fuzzy
 msgid "The new username/ password has been set."
-msgstr "zmień login / hasło"
+msgstr "Login / hasło zostały zmienione."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid ""
@@ -200,11 +195,11 @@ msgstr ""
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80
 msgid "The username is already in use, please try another."
-msgstr ""
+msgstr "Ten login jest już wykorzystywany, wybierz inny."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46
 msgid "There is no username coupled to this person."
-msgstr ""
+msgstr "Ta osoba nie ma przydzielonego loginu."
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
@@ -235,7 +230,7 @@ msgstr "Login i hasło"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45
 msgid "Username has been deleted."
-msgstr ""
+msgstr "Login został skasowany."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:9
@@ -257,7 +252,7 @@ msgstr ""
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
 msgid "You are not allowed to create the person page."
-msgstr ""
+msgstr "Nie masz uprawnień do tworzenia stron użytkownikow."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:24
 msgid "You need to be an administrator to add users."
@@ -291,8 +286,3 @@ msgstr "zmień login / hasło"
 msgid "show all"
 msgstr "pokaż wszystko"
 
-#~ msgid "Add or remove credentials."
-#~ msgstr "Dodaj lub usuń dane uwierzytelniające"
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
