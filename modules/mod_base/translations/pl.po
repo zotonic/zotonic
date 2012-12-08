@@ -26,12 +26,12 @@ msgstr "Ostrzeżenie"
 
 #: modules/mod_base/templates/error.tpl:71
 msgid "Arguments"
-msgstr ""
+msgstr "Parametry"
 
 #: modules/mod_base/templates/text/_ua_select.tpl:5
 #: modules/mod_base/templates/phone/_ua_select.tpl:13
 msgid "Automatic"
-msgstr ""
+msgstr "Automatycznie"
 
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:6
 msgid "Cancel"
@@ -43,57 +43,57 @@ msgstr "Potwierdź"
 
 #: modules/mod_base/templates/directory_index.tpl:16
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: modules/mod_base/templates/text/_ua_select.tpl:2
 #: modules/mod_base/templates/phone/_ua_select.tpl:9
 msgid "Desktop"
-msgstr ""
+msgstr "Stacjonarny"
 
 #: modules/mod_base/templates/error.tpl:72
 msgid "File"
-msgstr ""
+msgstr "Plik"
 
 #: modules/mod_base/templates/directory_index.tpl:14
 msgid "Filename"
-msgstr ""
+msgstr "Nazwa pliku"
 
 #: modules/mod_base/templates/directory_index.tpl:28
 msgid "Folder"
-msgstr ""
+msgstr "Katalog"
 
 #: modules/mod_base/templates/error.tpl:70
 msgid "Function/ template"
-msgstr ""
+msgstr "Funkcja/ szablon"
 
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
-msgstr ""
+msgstr "Nie istnieje"
 
 #: modules/mod_base/templates/email_base.tpl:4
 msgid "Hello from Zotonic"
-msgstr ""
+msgstr "Zotonic pozdrawia!"
 
 #: modules/mod_base/templates/directory_index.tpl:4
 #: modules/mod_base/templates/directory_index.tpl:8
 msgid "Index of"
-msgstr ""
+msgstr "Zawartość"
 
 #: modules/mod_base/templates/phone/_ua_select.tpl:5
 msgid "Mobile or desktop"
-msgstr ""
+msgstr "Mobilny czy stacjonarny"
 
 #: modules/mod_base/templates/error.tpl:69
 msgid "Module"
-msgstr ""
+msgstr "Moduł"
 
 #: modules/mod_base/templates/text/_pager.tpl:7
 msgid "Next"
-msgstr ""
+msgstr "Dalej"
 
 #: modules/mod_base/templates/error.tpl:7
 msgid "No Access"
-msgstr ""
+msgstr "Brak dostępu"
 
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
 #: modules/mod_base/templates/_action_dialog_alert.tpl:4
@@ -103,40 +103,40 @@ msgstr "OK"
 #: modules/mod_base/templates/text/_ua_select.tpl:4
 #: modules/mod_base/templates/phone/_ua_select.tpl:11
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: modules/mod_base/templates/text/_pager.tpl:4
 msgid "Previous"
-msgstr ""
+msgstr "Poprzedni"
 
 #: modules/mod_base/templates/error.tpl:16
 msgid "Reason"
-msgstr ""
+msgstr "Przyczyna"
 
 #: modules/mod_base/templates/directory_index.tpl:17
 msgid "Size"
-msgstr ""
+msgstr "Rozmiar"
 
 #: modules/mod_base/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
-msgstr ""
+msgstr "Niestety, strona została usunięta."
 
 #: modules/mod_base/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
-msgstr ""
+msgstr "Niestety, do tej strony nie masz dostępu."
 
 #: modules/mod_base/templates/error.tpl:20
 msgid "Stack trace"
-msgstr ""
+msgstr "Stack trace"
 
 #: modules/mod_base/templates/text/_ua_select.tpl:3
 #: modules/mod_base/templates/phone/_ua_select.tpl:10
 msgid "Tablet"
-msgstr ""
+msgstr "Tablet"
 
 #: modules/mod_base/templates/phone/_ua_select.tpl:12
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #: modules/mod_base/templates/email_base.tpl:19
 msgid ""
@@ -146,8 +146,8 @@ msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:15
 msgid "Type"
-msgstr ""
+msgstr "Rodzaj"
 
 #: modules/mod_base/templates/error.tpl:13
 msgid "error"
-msgstr ""
+msgstr "błąd"
