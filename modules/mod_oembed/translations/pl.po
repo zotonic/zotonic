@@ -45,9 +45,8 @@ msgid ""
 msgstr ""
 
 #: modules/mod_oembed/mod_oembed.erl:204
-#, fuzzy
 msgid "Made the media page."
-msgstr "Utwórz obiekt mediów"
+msgstr "Utwórz stronę mediów"
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Make media item"
@@ -71,7 +70,5 @@ msgstr "Tytuł zostanie ustalony automatycznie, na podstawie adresu."
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:19
 msgid "Try URL"
-msgstr ""
+msgstr "Sprawdź"
 
-#~ msgid "Invalid media URL"
-#~ msgstr "Błędny URL"
