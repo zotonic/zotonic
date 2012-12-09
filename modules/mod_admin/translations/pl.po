@@ -973,7 +973,7 @@ msgstr "Prawidłowy dla:"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:49
 msgid "View all referrers"
-msgstr "Zobacz wszystkie odnośniki"
+msgstr "Zobacz wszystkie"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
 msgid "View this page."
@@ -1057,7 +1057,7 @@ msgstr "odniesienie do strony"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:34
 msgid "add a connection"
-msgstr "dodaj połączenie"
+msgstr "połącz"
 
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:15
 msgid "add media item"
