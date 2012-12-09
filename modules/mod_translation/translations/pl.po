@@ -209,7 +209,7 @@ msgid ""
 "files\" first from the translation overview."
 msgstr ""
 "Aby uzyskać jak najnowsze informacje, wykonaj operację odtworzenia plików ."
-"pot (moduł \"Tłumaczenia\", pierwszy przycisk)."
+"pot (menu \"Struktura\", moduł \"Tłumaczenia\")."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid "Translate this page in other languages."
