@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic - mod_admin\n"
+"POT-Creation-Date: 2012-12-08 22:30+0100\n"
+"PO-Revision-Date: 2011-11-14 22:54+0100\n"
+"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2\n"
+
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:40 
+msgid ""
+"Cancel"
+msgstr ""
+"Anuluj"
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:5 
+msgid ""
+"Embed a video or other media. Here you can paste embed code from YouTube, "
+"Vimeo or other services."
+msgstr ""
+"Osadź obraz wideo lub inny obiekt mediów. Możesz wkleić tu kod pobrany "
+"z YouTube, Vimeo czy innego, tego typu, serwisu."
+
+#: ./modules/mod_video_embed/templates/_media_upload_tab.tpl:2 ./modules/mod_video_embed/templates/_media_upload_panel.tpl:32 
+msgid ""
+"Embed code"
+msgstr ""
+"Wklej kod"
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:23 
+msgid ""
+"From site"
+msgstr ""
+"Z serwisu"
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:41 
+msgid ""
+"Make media item"
+msgstr ""
+"Utwórz obiekt mediów"
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:14 
+msgid ""
+"Media title"
+msgstr ""
+"Tytuł"
+
+#: ./modules/mod_video_embed/templates/_media_upload_panel.tpl:41 
+msgid ""
+"Replace media item"
+msgstr ""
+"Zamień obiekt mediów"
+
