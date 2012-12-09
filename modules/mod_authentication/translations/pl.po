@@ -111,7 +111,7 @@ msgstr "Zapomniałeś hasła?"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:8
 msgid "I forgot my username or password"
-msgstr "Nie pamiętam hasła"
+msgstr "Nie pamiętasz hasła?"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
 msgid ""
