@@ -292,7 +292,7 @@ publish_check(_Table, _Alias, _SearchSql) ->
 
 
 %% @doc Create the 'where' conditions for the category check
-%% @spec add_cat_check(Alias, Exclude, Cats, Context) -> Where
+%% @spec add_cat_check(From, Alias, Exclude, Cats, Context) -> Where
 add_cat_check(_From, _Alias, _Exclude, [], _Context) ->
     {_From, []};
 add_cat_check(From, Alias, Exclude, Cats, Context) ->
