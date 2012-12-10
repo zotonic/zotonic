@@ -13,10 +13,10 @@
 	</div>
 
 	<div class="control-group">
-	<label class="control-label" for="email">E-mail</label>
+	<label class="control-label" for="mail">E-mail</label>
 		<div class="controls">
-			<input type="text" name="mail" id="email" class="span4" />
-			{% validate id="email" type={email} type={presence} %}
+			<input type="text" name="mail" id="mail" class="span4" />
+			{% validate id="mail" type={email} type={presence} %}
 		</div>
 	</div>
 
