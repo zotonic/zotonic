@@ -62,7 +62,8 @@
     renumber/1,
     renumber_pivot_task/1,
     enumerate/1,
-    boundaries/2      
+    boundaries/2,
+    is_tree_dirty/1
 ]).
 
 
@@ -668,6 +669,7 @@ renumber_transaction(Context) ->
                 , Context)
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],
+    set_tree_dirty(true, Context),
     z_pivot_rsc:insert_task_after(10, ?MODULE, renumber_pivot_task, "m_category:renumber", [], Context),
     ok.
 
@@ -678,9 +680,11 @@ renumber_pivot_task(Context) ->
                  where c.id = r.category_id
                    and (r.pivot_category_nr is null or r.pivot_category_nr <> c.nr)
                  order by r.id
-                 limit 500", Context),
+                 limit 1000", Context),
     case Nrs of
         [] ->
+            ?zInfo("Category renumbering completed.", Context),
+            set_tree_dirty(false, Context),
             ok;
         Ids ->
             ok = z_db:transaction(fun(Ctx) ->
@@ -692,7 +696,7 @@ renumber_pivot_task(Context) ->
                         || {Id,CatNr} <- Ids
                     ],
                     ok
-                end, Context),
+                                  end, Context),
             {delay, 1}
     end.
 
@@ -749,3 +753,16 @@ boundaries(CatId, Context) ->
 				end
         end,
     z_depcache:memo(F, {category_bounds, CatId}, ?WEEK, [CatId, category], Context).
+
+
+%% @doc Whether the category tree is currently marked dirty (e.g. resource pivot numbers are being updated)
+is_tree_dirty(Context) ->
+    case m_config:get(?MODULE, meta, Context) of
+        undefined -> false;
+        Props ->
+            proplists:get_value(tree_dirty, Props, false)
+    end.
+
+%% @doc Set the tree dirty flag
+set_tree_dirty(Flag, Context) when Flag =:= true; Flag =:= false ->
+    m_config:set_prop(?MODULE, meta, tree_dirty, Flag, Context).

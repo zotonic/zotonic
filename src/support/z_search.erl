@@ -105,6 +105,11 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
 search(Name, OffsetLimit, Context) ->
     search({z_convert:to_atom(Name), []}, OffsetLimit, Context).
 
+%% @doc Given a query as proplist, return all results.
+%% @spec query_(Props, Context) -> [Id] | []
+query_(Props, Context) ->
+    S = search({'query', Props}, ?OFFSET_PAGING, Context),
+    S#search_result.result.
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
@@ -167,29 +172,29 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
 
 %% @doc Inject the ACL checks in the SQL query.
 %% @spec reformat_sql_query(#search_sql{}, Context) -> #search_sql{}
-reformat_sql_query(#search_sql{where=Where, tables=Tables, args=Args, cats=TabCats, cats_exclude=TabCatsExclude} = Q, Context) ->
+reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args, cats=TabCats, cats_exclude=TabCatsExclude} = Q, Context) ->
     {ExtraWhere, Args1} = lists:foldl(
                                 fun(Table, {Acc,As}) ->
                                     {W,As1} = add_acl_check(Table, As, Q, Context),
                                     {[W|Acc], As1}
                                 end, {[], Args}, Tables),
-    ExtraWhere1 = lists:foldl(
-                                fun({Alias, Cats}, Acc) ->
-                                    case add_cat_check(Alias, false, Cats, Context) of
-                                        [] -> Acc;
-                                        CatCheck -> [CatCheck | Acc]
+    {From1, ExtraWhere1} = lists:foldl(
+                             fun({Alias, Cats}, {F, C}) ->
+                                     case add_cat_check(F, Alias, false, Cats, Context) of
+                                         {_, []} -> {F, C};
+                                         {FromNew, CatCheck} -> {FromNew, [CatCheck | C]}
+                                     end
+                             end, {From, ExtraWhere}, TabCats),
+    {From2, ExtraWhere2} = lists:foldl(
+                                fun({Alias, Cats}, {F, C}) ->
+                                    case add_cat_check(F, Alias, true, Cats, Context) of
+                                        {_, []} -> {F, C};
+                                        {FromNew, CatCheck} -> {FromNew, [CatCheck | C]}
                                     end
-                                end, ExtraWhere, TabCats),
-    ExtraWhere2 = lists:foldl(
-                                fun({Alias, Cats}, Acc) ->
-                                    case add_cat_check(Alias, true, Cats, Context) of
-                                        [] -> Acc;
-                                        CatCheck -> [CatCheck | Acc]
-                                    end
-                                end, ExtraWhere1, TabCatsExclude),
+                                end, {From1, ExtraWhere1}, TabCatsExclude),
 
     Where1 = lists:flatten(concat_where(ExtraWhere2, Where)),
-    Q#search_sql{where=Where1, args=Args1}.
+    Q#search_sql{where=Where1, from=From2, args=Args1}.
 
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
@@ -288,32 +293,66 @@ publish_check(_Table, _Alias, _SearchSql) ->
 
 %% @doc Create the 'where' conditions for the category check
 %% @spec add_cat_check(Alias, Exclude, Cats, Context) -> Where
-add_cat_check(_Alias, _Exclude, [], _Context) ->
-    [];
-add_cat_check(Alias, Exclude, Cats, Context) ->
-    Ranges = m_category:ranges(Cats, Context),
-    CatChecks = [ cat_check1(Alias, Exclude, Range) || Range <- Ranges ],
-    case CatChecks of
-        [] -> [];
-        [_CatCheck] -> CatChecks;
-        _ -> "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"
+add_cat_check(_From, _Alias, _Exclude, [], _Context) ->
+    {_From, []};
+add_cat_check(From, Alias, Exclude, Cats, Context) ->
+    case m_category:is_tree_dirty(Context) of
+        false ->
+            add_cat_check_pivot(From, Alias, Exclude, Cats, Context);
+        true ->
+            lager:warning("dirty: ~p", [dirty]),
+            %% While the category tree is rebuilding, we use the less efficient version with joins.
+            add_cat_check_joined(From, Alias, Exclude, Cats, Context)
     end.
 
-    cat_check1(Alias, false, {From,From}) ->
-        Alias ++ ".pivot_category_nr = "++integer_to_list(From);
-    cat_check1(Alias, false, {From,To}) ->
-        Alias ++ ".pivot_category_nr >= " ++ integer_to_list(From)
+add_cat_check_pivot(From, Alias, Exclude, Cats, Context) ->
+    Ranges = m_category:ranges(Cats, Context),
+    CatChecks = [ cat_check_pivot1(Alias, Exclude, Range) || Range <- Ranges ],
+    case CatChecks of
+        [] -> {From, []};
+        [_CatCheck] -> {From, CatChecks};
+        _ -> {From, "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"}
+    end.
+
+cat_check_pivot1(Alias, false, {From,From}) ->
+    Alias ++ ".pivot_category_nr = "++integer_to_list(From);
+cat_check_pivot1(Alias, false, {From,To}) ->
+    Alias ++ ".pivot_category_nr >= " ++ integer_to_list(From)
         ++ " and "++ Alias ++ ".pivot_category_nr <= " ++ integer_to_list(To);
 
-    cat_check1(Alias, true, {From,From}) ->
-        Alias ++ ".pivot_category_nr <> "++integer_to_list(From);
-    cat_check1(Alias, true, {From,To}) ->
-        [$(|Alias] ++ ".pivot_category_nr < " ++ integer_to_list(From)
+cat_check_pivot1(Alias, true, {From,From}) ->
+    Alias ++ ".pivot_category_nr <> "++integer_to_list(From);
+cat_check_pivot1(Alias, true, {From,To}) ->
+    [$(|Alias] ++ ".pivot_category_nr < " ++ integer_to_list(From)
         ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To) ++ ")".
 
 
-%% @doc Given a query as proplist, return all results.
-%% @spec query_(Props, Context) -> [Id] | []
-query_(Props, Context) ->
-    S = search({'query', Props}, ?OFFSET_PAGING, Context),
-    S#search_result.result.
+
+%% Add category tree range checks by using joins. Less optimal; only
+%% used while the category tree is being recalculated.
+add_cat_check_joined(From, Alias, Exclude, Cats, Context) ->
+    Ranges = m_category:ranges(Cats, Context),
+    CatAlias = Alias ++ "_cat",
+    FromNew = [{"category", CatAlias}|From],
+    CatChecks = lists:map(fun(Range) ->
+                                  Check = cat_check_joined1(CatAlias, Exclude, Range),
+                                  Alias ++ ".category_id = " ++ CatAlias ++ ".id and " ++ Check
+                          end,
+                          Ranges),
+    case CatChecks of
+        [] -> {From, []};
+        [_CatCheck] -> {FromNew, CatChecks};
+        _ -> {FromNew, "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"}
+    end.
+
+cat_check_joined1(CatAlias, false, {Left,Left}) ->
+    CatAlias ++ ".nr = "++integer_to_list(Left);
+cat_check_joined1(CatAlias, false, {Left,Right}) ->
+      CatAlias ++ ".nr >= " ++ integer_to_list(Left)
+        ++ " and "++ CatAlias ++ ".nr <= " ++ integer_to_list(Right);
+
+cat_check_joined1(CatAlias, true, {Left,Left}) ->
+    CatAlias ++ ".nr <> "++integer_to_list(Left);
+cat_check_joined1(CatAlias, true, {Left,Right}) ->
+    "(" ++ CatAlias ++ ".nr < " ++ integer_to_list(Left)
+        ++ " or "++ CatAlias ++ ".nr > " ++ integer_to_list(Right) ++ ")".
