@@ -16,9 +16,9 @@ served files with gzip when the user-agent supports it.
 
 Example dispatch rule::
 
-  {image, ["image", '*'], resource_file_readonly, [{is_media_preview, true}]}
+  {image, ["image", '*'], controller_file_readonly, [{is_media_preview, true}]}
 
-Resource_file_readonly has the following dispatch options:
+controller_file_readonly has the following dispatch options:
 
 +---------------------+-------------------------------------+------------------------+
 |Option               |Description                          |Example                 |
@@ -40,10 +40,15 @@ Resource_file_readonly has the following dispatch options:
 |                     |files like "robots.txt" and          |                        |
 |                     |"favicon.ico".                       |{path, id}              |
 |                     |                                     |                        |
+|                     |The path is relative to              |                        |
+|                     |`files/archive` in the site, or      |                        |
+|                     |relative to `files/preview` if       |                        |
+|                     |`is_media_preview` is set.           |                        |
+|                     |                                     |                        |
 |                     |When set to the atom 'id' then there |                        |
 |                     |must be an 'id' argument in the      |                        |
 |                     |dispatch list. The file attached to  |                        |
-|                     |this resource is then served.        |                        |
+|                     |this controller is then served.      |                        |
 +---------------------+-------------------------------------+------------------------+
 |content_disposition  |If the file should be viewed in the  |{content_disposition,   |
 |                     |browser or downloaded. Possible      |inline}                 |
