@@ -17,4 +17,5 @@ In-depth manuals
    controllers
    email
    services
+   extensions
    cookbook/index
