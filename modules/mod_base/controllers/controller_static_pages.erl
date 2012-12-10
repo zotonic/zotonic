@@ -259,7 +259,12 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
                             Dir = filename:join(Root, SafePath),
                             case filelib:is_dir(Dir) andalso State#state.allow_directory_index of
                                 true ->
-                                    {ReqData, State#state{path=SafePath, fullpath=Dir, context=Context, mime="text/html"}};
+                                    case last(wrq:path(ReqData)) /= $/ of
+                                        true ->
+                            	            {ReqData, State#state{path=SafePath, fullpath=redir, context=Context}};
+                                        false ->
+                                            {ReqData, State#state{path=SafePath, fullpath=Dir, context=Context, mime="text/html"}}
+                                        end;
                                 false ->
                                     {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}}
                             end
