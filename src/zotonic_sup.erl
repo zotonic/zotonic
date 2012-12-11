@@ -22,7 +22,7 @@
 -behaviour(supervisor).
 
 %% External exports
--export([start_link/0, upgrade/0]).
+-export([start_link/0, upgrade/0, upgrade/2]).
 
 %% supervisor callbacks
 -export([init/1]).
@@ -34,23 +34,27 @@
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-%% @spec upgrade() -> ok
+%% @spec upgrade(Name, NewSpecs) -> ok
 %% @doc Add processes if necessary.
-upgrade() ->
-    {ok, {_, Specs}} = init([]),
-
-    Old = sets:from_list([Name || {Name, _, _, _} <- supervisor:which_children(?MODULE)]),
+upgrade(SupName, Specs) ->
+    Old = sets:from_list([Name || {Name, _, _, _} <- supervisor:which_children(SupName)]),
     New = sets:from_list([Name || {Name, _, _, _, _, _} <- Specs]),
     Kill = sets:subtract(Old, New),
 
     sets:fold(fun (Id, ok) ->
-                      supervisor:terminate_child(?MODULE, Id),
-                      supervisor:delete_child(?MODULE, Id),
+                      supervisor:terminate_child(SupName, Id),
+                      supervisor:delete_child(SupName, Id),
                       ok
               end, ok, Kill),
 
-    [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
+    [supervisor:start_child(SupName, Spec) || Spec <- Specs],
     ok.
+
+%% @spec upgrade() -> ok
+%% @doc Add processes if necessary.
+upgrade() ->
+    {ok, {_, Specs}} = init([]),
+    upgrade(?MODULE, Specs).
 
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
@@ -72,11 +76,6 @@ init([]) ->
     PreviewServer = {z_media_preview_server,
                      {z_media_preview_server, start_link, []}, 
                      permanent, 5000, worker, dynamic},
-
-    % Sites disapatcher, matches hosts and paths to sites and resources.
-    Dispatcher = {z_sites_dispatcher,
-                  {z_sites_dispatcher, start_link, []},
-                  permanent, 5000, worker, dynamic},
               
     % SMTP gen_servers: one for encoding and sending mails, the other for bounces
     SmtpServer = {z_email_server,
@@ -106,14 +105,14 @@ init([]) ->
                         permanent, 5000, worker, dynamic},
 
     % Sites supervisor, starts all enabled sites
-    SitesSup = {z_sites_manager,
-                {z_sites_manager, start_link, []},
-                permanent, 5000, worker, dynamic},
+    SitesSup = {z_sites_sup,
+                {z_sites_sup, start_link, []},
+                permanent, 10100, supervisor, dynamic},
                 
     Processes = [
         Ids, Config, PreviewServer,
         SmtpServer, SmtpBounceServer,
-        SitesSup, Dispatcher | get_extensions()
+        SitesSup | get_extensions()
     ],
 
     % Listen to IP address and Port
