@@ -16,7 +16,7 @@
 {% if m.config.comments.moderate.value %}
     <p>({_ Note: Comments are moderated _})</p>
 {% endif %}
-<form id="comments-form" method="post" action="postback" class="form-horizontal">
+<form id="comments-form" method="post" action="postback" class="{% block form_class %}{% endblock %}">
     <fieldset>
 
 	{% if not user_id %}
