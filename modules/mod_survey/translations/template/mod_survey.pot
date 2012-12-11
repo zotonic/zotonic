@@ -673,6 +673,11 @@ msgid ""
 "name >= 2"
 msgstr ""
 
+#: ./modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:15 
+msgid ""
+"select…"
+msgstr ""
+
 #: ./modules/mod_survey/templates/admin_survey_editor.tpl:12 
 msgid ""
 "survey results editor"
