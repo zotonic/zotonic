@@ -61,6 +61,9 @@ manage(Module, Datamodel, Context) ->
     ok.
 
 
+manage_medium(Module, {Name, Props}, Context) ->
+    manage_resource(Module, {Name, media, Props}, Context);
+
 manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Context) ->
     case manage_resource(Module, {Name, media, Props}, Context) of
         {ok} ->

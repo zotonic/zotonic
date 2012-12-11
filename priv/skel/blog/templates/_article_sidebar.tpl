@@ -6,7 +6,7 @@
 	{% for medium in media %}
 	<li>
 		<a href="{{ medium.id.page_url }}" class="thumbnail">
-			{% include "_body_media.tpl" width=300 align="block" id=medium %}
+			{% include "_body_media.tpl" width=360 align="block" id=medium %}
 		</a>
 	</li>
 	{% endfor %}

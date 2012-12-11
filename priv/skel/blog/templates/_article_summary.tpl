@@ -32,7 +32,7 @@
 		<h1><a href="{{m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h1>
 		{% include "_article_meta.tpl" id=id %}
 		<p class="summary">
-			{{ m.rsc[id].summary|default:m.rsc[id].body|striptags|truncate:100 }} <a href="{{ m.rsc[id].page_url }}">{_ Read more _}&nbsp;&raquo;</a>
+			{{ m.rsc[id].summary|default:m.rsc[id].body|striptags|truncate:300 }} <a href="{{ m.rsc[id].page_url }}">{_ Read more _}&nbsp;&raquo;</a>
 		</p>
 	</section>
 

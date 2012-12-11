@@ -32,7 +32,7 @@
 
 			<div class="navbar-inner">
 				<div class="container">
-				<a class="brand" href="/">{{ m.config.site.title.value }} {% if m.config.site.subtitle.value %}{% endif %}</a>
+				<a class="brand" href="/">{{ m.config.site.title.value|default:"Your Zotonic Site" }} {% if m.config.site.subtitle.value %}{% endif %}</a>
 					{# <span>{{ m.config.site.subtitle.value }}</span> #}
 
 					{% menu id=id %}

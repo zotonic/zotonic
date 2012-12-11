@@ -26,6 +26,8 @@ body {
     background: #fff url(../images/bg.png) repeat-x left top;
     color: #333;
     padding-top: 60px;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 aside, header, footer, figure, article {
@@ -43,6 +45,10 @@ div.navbar-inner {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#154868', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
 }
 
+div.navbar .brand,
+div.navbar .nav li a {
+    color: #fff;
+}
 
 /* Typography
    ---------------------------------------------------------- */
@@ -50,7 +56,6 @@ div.navbar-inner {
 h1 {
     color: #163a51;
     font-size: 18px;
-    line-height: 24px;
     margin: 0 0 12px 0;
     font-style: normal;
 }
@@ -125,30 +130,8 @@ p.summary {
     font-style: italic;
 }
 
-p.summary:first-letter {
-    font-size: inherit;
-    font-weight: normal;
-    line-height: inherit;
-    letter-spacing: 0;
-    float: none;
-    padding: 0;
-    width: auto;
-}
-
-p.summary:first-line,
-p.important:first-line {
-    font-variant: normal;
-}
-
-p.important:first-letter {
-    font-size: 51px;
-    font-weight: normal;
-    line-height: 32px;
-    letter-spacing: 5px;
-    float: left;
-    padding: 6px 0 0 0;
-    width: auto;
-    color: #154868;
+p.important {
+    padding: 18px 0 0 0;
 }
 
 p.keywords {
@@ -165,8 +148,13 @@ p img, li img {
     margin: 6px 6px 0 0;
 }
 
+p img.left, li img.left {
+    float: left;
+}
+
 p img.right, li img.right {
     margin: 6px 0 0 9px;
+    float: right;
 }
 
 p img.block {
@@ -204,8 +192,7 @@ header {
 #footer p.footer-blog-title {
     margin: 0;
     font-size: 12px;
-    font-variant: small-caps;
-    text-transform: lowercase;
+    text-transform: uppercase;
     color: #666;
 }
 
@@ -302,7 +289,7 @@ header {
 }
 
 .post img {
-    margin: 6px 6px 0 0;
+    margin: 6px 12px 0 0;
     display: block;
     float: left;
 }
@@ -334,18 +321,17 @@ header {
    ---------------------------------------------------------- */
 
 figure.image-wrapper {
-    margin: 0 0 18px 0;
-    width: 100%;
+    margin: 0;
 }
 
 .block-level-image img {
     display: block;
-    margin: 0;
 }
 
 p.image-caption {
     display: block;
-    font: 11px/18px arial, helvetica, sans-serif;
+    padding-top: 6px;
+    font: 12px/18px arial, helvetica, sans-serif;
     margin: 0;
     color: #666;
 }
@@ -353,6 +339,12 @@ p.image-caption {
 
 /* Misc
    ---------------------------------------------------------- */
+
+.comments-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
 .comments-list li {
     border-bottom: 1px dotted #aaa;
@@ -369,11 +361,13 @@ p.image-caption {
     font-style: italic;
     color: #555;
     font-size: 16px;
-    line-height: 1;
+    line-height: 10px;
+    padding-top: 6px;
 }
 
-.comments-list li img {
-    margin: 2px 6px 0 0;
+.comments-list li img.avatar {
+    float: left;
+    margin: 0 6px 0 0;
 }
 
 .comments-list li .comment-meta {
@@ -382,3 +376,6 @@ p.image-caption {
     line-height: 18px;
 }
 
+.comments-list li .comment-body {
+    margin-top: 9px;
+}

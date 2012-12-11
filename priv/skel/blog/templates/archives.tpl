@@ -3,7 +3,7 @@
 {% block title %}{_ Archive for _} {% if q.month %}{{ q.month }}, {% endif %}{{ q.year }}{% endblock %}
 
 {% block chapeau %}
-	<h5 class="chapeau">{_ Archive for _} {% if q.month %}{{ q.month }}, {% endif %}{{ q.year }}</h5>
+	<h5 class="chapeau">{_ Archive for _} {% if q.month %}{{ [q.year, q.month, 1]|date:"F" }}, {% endif %}{{ q.year }}</h5>
 {% endblock %}
 
 {% block content %}
