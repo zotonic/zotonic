@@ -1,5 +1,6 @@
 {% if chart.type == "pie" %}
 <div class="graph">
+    <h4>{{ chart.name }}:</h4>
 	{% chart_pie3d height=100 width=400 data=chart.data %}
 	
 	<div class="values">

@@ -72,17 +72,18 @@ prep_chart(Block, Answers, Context) ->
         {charts, [ prep_chart1(Parts, Ans) || Ans <- Answers ]}
     ].
 
-    prep_chart1(Parts, {Name, Vals}) ->
+prep_chart1(Parts, {Name, Vals}) ->
         case find_select(Parts, Name) of
-            {select, _, Labels} ->
-                LabelsB = [ z_convert:to_binary(Lab) || {Lab,_} <- Labels ],
-                Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
+            {select, Nm, Labels} ->
+                {LabelIndices, LabelLabels} = lists:unzip(Labels),
+                Values = [ proplists:get_value(z_convert:to_binary(C), Vals, 0) || C <- LabelIndices ],
                 Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
                 Perc = [ round(V*100/Sum) || V <- Values ],
                 [
-                    {values, lists:zip(LabelsB, Values)},
+                    {name, Nm},
+                    {values, lists:zip(LabelLabels, Values)},
                     {type, "pie"},
-                    {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
+                    {data, [{L,P} || {L,P} <- lists:zip(LabelLabels, Perc), P /= 0]}
                 ];
             _ ->
                 undefined
@@ -95,15 +96,15 @@ prep_answer_header(Block, _Context) ->
     
 prep_answer(Block, Answers, _Context) ->
     Parts = proplists:get_value(parts, Block),
-    Names = [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ],
-    [ z_convert:to_binary(value(proplists:get_value(Name, Answers))) || Name <- Names ].
+    [ z_convert:to_binary(value(Type, proplists:get_value(z_convert:to_binary(Name), Answers), TypeArgs)) || {Type, Name, TypeArgs} <- Parts ].
 
-    is_answerable({html, _, _}) -> false;
-    is_answerable(_) -> true.
+is_answerable({html, _, _}) -> false;
+is_answerable(_) -> true.
 
-    value(undefined) -> <<>>;
-    value({undefined, X}) -> X;
-    value({X, _}) -> X.
+value(_, undefined, _) -> <<>>;
+value(_, {undefined, X}, _) -> X;
+value(select, {V, _}, T) -> proplists:get_value(V, T, V);
+value(_, {X, _}, _) -> X.
 
 prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(
