@@ -18,7 +18,7 @@
 
 		{% lib
 			"bootstrap/css/bootstrap.min.css"
-			"bootstrap/css/bootstrap.responsive.min.css"
+			"bootstrap/css/bootstrap-responsive.min.css"
 			"css/jquery.loadmask.css"
 			"css/z-menu.css"
 			"css/project.css"
@@ -80,6 +80,7 @@
 			"js/apps/z.widgetmanager.js"
 			"js/modules/livevalidation-1.3.js"
 			"js/modules/z.inputoverlay.js"
+			"js/modules/z.dialog.js"
 			"js/modules/jquery.loadmask.js"
 			"js/z.superfish.js"
 		%}
