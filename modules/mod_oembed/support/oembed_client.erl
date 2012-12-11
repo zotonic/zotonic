@@ -143,10 +143,8 @@ oembed_request(RequestUrl) ->
 
 %% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
 oembed_url_extra(Context) ->
-    X1 = case m_config:get_value(oembed, maxwidth, Context) of
-             undefined -> [];
-             W -> "&maxwidth=" ++ z_utils:url_encode(z_convert:to_list(W))
-         end,
+    W = m_config:get_value(oembed, maxwidth, 640, Context),
+    X1 =  "&maxwidth=" ++ z_utils:url_encode(z_convert:to_list(W)),
     X2 = case m_config:get_value(oembed, maxheight, Context) of
              undefined -> X1;
              H -> X1 ++ "&maxheight=" ++ z_utils:url_encode(z_convert:to_list(H))

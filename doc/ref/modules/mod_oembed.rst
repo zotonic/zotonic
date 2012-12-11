@@ -54,10 +54,12 @@ The following :ref:`model-config` options are supported:
 
 ``oembed.maxwidth``
 
-  Requests the OEmbed service to return an HTML embed code with the requested maximum width.
+  Requests the OEmbed service to return an HTML embed code with the
+  requested maximum width. Defaults to 640.
 
 ``oembed.maxheight``
 
-  Requests the OEmbed service to return an HTML embed code with the requested maximum height.
+  Requests the OEmbed service to return an HTML embed code with the
+  requested maximum height. Not set by default.
   
 .. todo:: Extend documentation
