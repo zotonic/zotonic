@@ -425,7 +425,7 @@ manage_schema(install, _Context) ->
                predicates=
                [{acl_role_member,
                  [{title, <<"ACL Role Member">>}],
-                 [{acl_role, person}, {acl_role, institution}]
+                 [{acl_role, person}]
                 }],
                resources=
                [
