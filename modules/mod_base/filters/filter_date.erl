@@ -22,6 +22,18 @@
 
 date(undefined, _FormatStr, _Context) ->
     undefined;
+date([Y,M,D], FormatStr, Context) ->
+    date({{z_convert:to_integer(Y),
+           z_convert:to_integer(M),
+           z_convert:to_integer(D)}, {0,0,0}}, FormatStr, Context);
+date([[Y,M,D],[H,I,S]], FormatStr, Context) ->
+    date({{z_convert:to_integer(Y),
+           z_convert:to_integer(M),
+           z_convert:to_integer(D)},
+          {z_convert:to_integer(H),
+           z_convert:to_integer(I),
+           z_convert:to_integer(S)}},
+         FormatStr, Context);
 date(Input, FormatStr, Context) when is_binary(FormatStr) ->
     date(Input, binary_to_list(FormatStr), Context);
 date(Input, FormatStr, Context) when is_binary(Input) ->

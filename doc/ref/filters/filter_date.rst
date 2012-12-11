@@ -125,4 +125,17 @@ All supported formatting characters are listed below:
 |z         |Day of the year, i.e. 1 to 366.        |“361”                      |
 +----------+---------------------------------------+---------------------------+
 
+
+To construct a date in a template, the filter also accepts Erlang
+lists as input, so the following will work::
+
+  {{ [1990,10,10]|date:"j F Y" }}
+
+Will output `10 October 1990`. This also works with datetimes::
+
+  {{ [[1990,10,10],[10,11,12]]|date:"j F Y - H:i:s" }}
+
+Will output `10 October 1990 - 10:11:12`.
+
+
 .. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`
