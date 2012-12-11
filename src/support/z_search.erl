@@ -300,7 +300,6 @@ add_cat_check(From, Alias, Exclude, Cats, Context) ->
         false ->
             add_cat_check_pivot(From, Alias, Exclude, Cats, Context);
         true ->
-            lager:warning("dirty: ~p", [dirty]),
             %% While the category tree is rebuilding, we use the less efficient version with joins.
             add_cat_check_joined(From, Alias, Exclude, Cats, Context)
     end.
