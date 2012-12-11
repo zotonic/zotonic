@@ -36,7 +36,7 @@ upgrade() ->
     zotonic_sup:upgrade(?MODULE, Specs),
     z_sites_sup:upgrade().
 
-%% @spec start_link(Host) -> ServerRet
+%% @spec start_link() -> ServerRet
 %% @doc API for starting the sites dispatcher and manager
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
