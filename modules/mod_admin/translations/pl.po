@@ -677,7 +677,7 @@ msgstr "Przebuduje indeksy wyszukiwania umieszczając wszystkie strony i dane zn
 
 #: modules/mod_admin/templates/admin_status.tpl:23
 msgid "Rebuild search indices"
-msgstr "Przebuduje indeksy wyszukiwarki"
+msgstr "Przebuduj indeksy wyszukiwarki"
 
 #: modules/mod_admin/templates/admin_status.tpl:31
 msgid "Recalculate the numbering of the category tree. This can take a long time."
@@ -766,7 +766,7 @@ msgstr "Województwo"
 
 #: modules/mod_admin/mod_admin.erl:124
 msgid "Status"
-msgstr "Operacje"
+msgstr "Administracja"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
