@@ -21,7 +21,7 @@
 			<a data-toggle="tab" href="#{{ #tab }}-new">{_ New Page _}</a>
 		</li>
 		{% endif %}
-	    <li {% if predicate.name == "depiction" %}class="active"{% endif %}>
+	    <li {% if predicate.name == "depiction" and not is_zmedia %}class="active"{% endif %}>
 	        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
 	    </li>
 	    <li>
@@ -45,7 +45,7 @@
 		{% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
 
 		{% with "action_admin_dialog_media_upload" as delegate %}
-			{% include "_action_dialog_media_upload_tab_upload.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" is_active=(predicate.name=="depiction") %}
+			{% include "_action_dialog_media_upload_tab_upload.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" is_active=(predicate.name=="depiction" and not is_zmedia) %}
 			{% include "_action_dialog_media_upload_tab_url.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" %}
 
 		    {% all include "_media_upload_panel.tpl" tab=#tab 
