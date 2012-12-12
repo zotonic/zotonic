@@ -45,9 +45,8 @@ msgstr "Debug"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:13
 #: modules/mod_logging/mod_logging.erl:226
-#, fuzzy
 msgid "Email log"
-msgstr "logi poczty"
+msgstr "Dziennik poczty"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:65
 msgid "Error"
@@ -76,26 +75,25 @@ msgstr "Info"
 #: modules/mod_logging/templates/admin_log_base.tpl:3
 #: modules/mod_logging/mod_logging.erl:221
 msgid "Log"
-msgstr "Logi"
+msgstr "Dziennik zdarzeń"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:3
 msgid "Log email"
-msgstr "Logi poczty"
+msgstr "Dziennik poczty"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:5
 msgid "Log incoming/outgoing e-mail"
-msgstr "Log poczty przychodzącej i wychodzącej"
+msgstr "Dziennik poczty przychodzącej i wychodzącej"
 
 #: modules/mod_logging/templates/admin_log.tpl:3
 #: modules/mod_logging/templates/admin_log.tpl:5
 #: modules/mod_logging/templates/admin_log_base.tpl:9
 msgid "Log messages"
-msgstr "Logi wiadomości"
+msgstr "Dziennik wiadomości"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:12
-#, fuzzy
 msgid "Message log"
-msgstr "logi wiadomości"
+msgstr "Dziennik wiadomości"
 
 #: modules/mod_logging/templates/admin_log_email.tpl:52
 msgid "Message nr"
@@ -109,7 +107,7 @@ msgstr "Najnowsze wiadomości"
 #: modules/mod_logging/templates/admin_log.tpl:22
 #: modules/mod_logging/templates/admin_log_email.tpl:121
 msgid "No log messages."
-msgstr "Log wiadomości jest pusty."
+msgstr "Dziennik wiadomości jest pusty."
 
 #: modules/mod_logging/templates/admin_log_email.tpl:56
 msgid "Other"
@@ -151,14 +149,3 @@ msgstr "Do"
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
-#~ msgid "Message"
-#~ msgstr "Wiadomość"
-
-#~ msgid "Module"
-#~ msgstr "Moduł"
-
-#~ msgid "Type"
-#~ msgstr "Typ"
-
-#~ msgid "User"
-#~ msgstr "Użytkownik"

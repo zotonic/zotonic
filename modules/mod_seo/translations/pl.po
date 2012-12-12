@@ -52,7 +52,7 @@ msgstr ""
 
 #: modules/mod_seo/mod_seo.erl:42
 msgid "SEO"
-msgstr ""
+msgstr "SEO"
 
 #: modules/mod_seo/templates/admin_seo.tpl:17
 msgid "Save SEO settings"

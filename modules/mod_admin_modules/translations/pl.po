@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin_module\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-11-14 22:53+0100\n"
+"PO-Revision-Date: 2012-12-12 15:48+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
@@ -55,11 +55,8 @@ msgid "Rescan modules"
 msgstr "Przebuduj listę modułów"
 
 #: modules/mod_admin_modules/templates/_admin_status.tpl:4
-msgid ""
-"Rescanning will rebuild the index of all modules, actions, templates etc.  "
-"It will also reload all dispatch rules."
-msgstr ""
-"Odtwarza listę modułów, akcji i szablonów. Przeładuje reguły dyspozytora URL."
+msgid "Rescanning will rebuild the index of all modules, actions, templates etc.  It will also reload all dispatch rules."
+msgstr "Odtwarza listę modułów, akcji i szablonów. Przeładuje reguły dyspozytora URL."
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:15
 msgid "Title"
@@ -67,12 +64,7 @@ msgstr "Tytuł"
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:8
 msgid ""
-"Zotonic is a modular web development framework. Most functionality is "
-"encapsulated inside modules. A set of basic modules are shipped with the "
-"Zotonic distribution,\n"
-"    while others are externally developed. This page shows an overview of "
-"all modules which are currently known to this Zotonic installation."
-msgstr ""
+"Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
+msgstr "Zotonic jest systemem modularnym - większość jego funkcji zawarta jest w oddzielnych modułach. Podstawowy ich zestaw dostarczany jest w ramach domyślnej instalacji - dodatkowe tworzone są przez innych autorów. Ta strona zawiera listę wszystkich modułów dostępnych w tej instancji systemu."
 
-#~ msgid "Modules overview"
-#~ msgstr "Zestawienie modułów"

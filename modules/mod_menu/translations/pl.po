@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_menu\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2012-12-09 12:20:00+0100\n"
 "PO-Revision-Date: 2011-11-14 22:54+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
@@ -24,38 +24,40 @@ msgstr ""
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:11
 msgid "Add after"
-msgstr ""
+msgstr "Dodaj po"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:9
 msgid "Add before"
-msgstr ""
+msgstr "Dodaj przed"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:10
 msgid "Add below"
-msgstr ""
+msgstr "Dodaj poniżej"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
 msgid "Add bottom"
-msgstr ""
+msgstr "Dodaj na dole"
 
 #: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
 msgid "Add category"
-msgstr ""
+msgstr "Dodaj kategorię"
 
 #: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
 msgid "Add menu item"
-msgstr ""
+msgstr "Dodaj do menu"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
 msgid "Add top"
-msgstr ""
+msgstr "Dodaj na górze"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
 msgid ""
 "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
 "pages."
 msgstr ""
+"Kliknij <strong>Dodaj do menu</strong> albo <strong>Element menu</strong> aby "
+"dodać stronę."
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
 msgid "Current menu"
@@ -70,10 +72,10 @@ msgid "Drag me"
 msgstr "Przeciągnij mnie"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
-#, fuzzy
 msgid ""
 "Drag menu items in the menu up, down, left or right to structure the menu."
-msgstr "Aby usunąć elementy z menu przeciągnij je do kosza."
+msgstr ""
+"Modyfikuj strukturę menu, przeciągając elementy na odpowiednie miejsca."
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:18
 msgid "Edit"
@@ -89,21 +91,5 @@ msgstr "Nowa strona"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:13
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
-#~ msgid "Drag the <strong>New page</strong> to add a new page."
-#~ msgstr ""
-#~ "Przeciągnij element <strong>Nowa strona</strong> żeby dodać nową stronę."
-
-#~ msgid "Drag to add a new page"
-#~ msgstr "Przeciągnij by dodać nową stronę"
-
-#~ msgid "Search for a page"
-#~ msgstr "Znajdź stronę"
-
-#~ msgid ""
-#~ "Type your search terms to find pages. Then drag them on to the panel on "
-#~ "your left."
-#~ msgstr ""
-#~ "Wpisz zapytanie aby znaleźć stronę. Potem przeciągnij ją na panel po "
-#~ "lewej stronie."

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_translation\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-11-14 22:34+0100\n"
+"PO-Revision-Date: 2012-12-08 20:50+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
@@ -49,17 +49,16 @@ msgstr "Anuluj"
 
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:10
 msgid "Copy"
-msgstr ""
+msgstr "Kopiuj"
 
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:1
 msgid "Copy texts from a language to the currently selected language."
-msgstr ""
+msgstr "Skopiuj treść z innego tłumaczenia do aktualnie wybranego."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
-#, fuzzy
 msgid "Copy translation"
-msgstr "Tłumaczenia"
+msgstr "Skopiuj tłumaczenie"
 
 #: modules/mod_translation/templates/admin_translation.tpl:23
 msgid "Default"
@@ -67,7 +66,7 @@ msgstr "Domyślny"
 
 #: modules/mod_translation/templates/admin_translation.tpl:47
 msgid "Delete"
-msgstr ""
+msgstr "Skasuj"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:7
 #: modules/mod_translation/templates/admin_translation.tpl:49
@@ -159,33 +158,28 @@ msgstr ""
 "przygotowania wersji językowej."
 
 #: modules/mod_translation/templates/text/language_switch.tpl:3
-#, fuzzy
 msgid "Select language"
-msgstr "Usuń język"
+msgstr "Wybierz język"
 
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:4
-#, fuzzy
 msgid "Select the language to copy from:"
-msgstr "Usuń język"
+msgstr "Wybierz, z którego języka kopiować:"
 
 #: modules/mod_translation/templates/text/language_switch.tpl:7
-#, fuzzy
 msgid "Select your preferred language."
-msgstr "Usuń język"
+msgstr "Wybierz swój domyślny język."
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:22
 msgid "Show in menu"
 msgstr "Pokaż w menu"
 
 #: modules/mod_translation/templates/admin_translation.tpl:100
-#, fuzzy
 msgid "Show per module how much of the templates are translated."
 msgstr "Pokaże zaawansowanie tłumaczeń szablonów w poszczególnych modułach."
 
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
-#, fuzzy
 msgid "Switch language"
-msgstr "Edytuj ustawienia języka"
+msgstr "Zmień język"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid ""
@@ -207,7 +201,7 @@ msgstr ""
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:27
 msgid "Title"
-msgstr "Tytuł"
+msgstr "Nazwa"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:18
 msgid ""
@@ -215,7 +209,7 @@ msgid ""
 "files\" first from the translation overview."
 msgstr ""
 "Aby uzyskać jak najnowsze informacje, wykonaj operację odtworzenia plików ."
-"pot (moduł \"Tłumaczenia\", pierwszy przycisk)."
+"pot (menu \"Struktura\", moduł \"Tłumaczenia\")."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid "Translate this page in other languages."
@@ -243,11 +237,3 @@ msgstr "Stan tłumaczeń poszczególnych modułów"
 msgid "Translations"
 msgstr "Tłumaczenia"
 
-#~ msgid "Add a new language"
-#~ msgstr "Dodaj obsługę nowego języka"
-
-#~ msgid "Need more help?"
-#~ msgstr "Czy potrzebujesz podpowiedzi?"
-
-#~ msgid "Options"
-#~ msgstr "Opcje"

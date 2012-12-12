@@ -35,7 +35,6 @@ msgid "Add application"
 msgstr "Dodaj aplikację"
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:14
-#, fuzzy
 msgid "Add new application"
 msgstr "Dodaj aplikację"
 
@@ -44,9 +43,8 @@ msgid "Allow"
 msgstr "Zezwól"
 
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:54
-#, fuzzy
 msgid "Allow users of this application access to the following API calls:"
-msgstr "Aplikacja wymaga dostępu do następujących usług:"
+msgstr "Pozwól aplikacji na dostęp do następujących funkcji API:"
 
 #: modules/mod_oauth/templates/oauth_authorize.tpl:29
 msgid "Allow!"
@@ -89,7 +87,7 @@ msgstr "Ustaw nazwę, opis i prawa dostępu dla tej aplikacji."
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47
 msgid "Close"
-msgstr ""
+msgstr "Zamknij"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
 msgid "Consumer key"
@@ -101,12 +99,11 @@ msgstr "Fraza zabezpieczająca"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:30
 msgid "Delete"
-msgstr "Skasuj"
+msgstr "Usuń"
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:43
-#, fuzzy
 msgid "Delete this application!"
-msgstr "Zarejestrowane aplikacje OAuth"
+msgstr "Usuń aplikację!"
 
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:29
 msgid "Description"
@@ -142,7 +139,7 @@ msgstr "Więcej informacji o tym programie"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
 msgid "No applications registered yet."
-msgstr ""
+msgstr "Nie zarejestrowano jeszcze żadnych aplikacji."
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:3
 msgid "OAuth applications"
@@ -166,7 +163,7 @@ msgid ""
 "application, you will revoke access and most likely their applications will "
 "break."
 msgstr ""
-"Następujący użytkownicy nadal korzystają z tej aplikacji. Skasowanie jej w "
+"Następujący użytkownicy nadal korzystają z tej aplikacji. Usunięcie jej w "
 "tym momencie zaowocuje odebraniem uprawnień i - najprawdopodobniej - źle "
 "wpłynie na działanie ich aplikacji."
 
@@ -239,5 +236,3 @@ msgstr "dostępu do swojego konta."
 msgid "wants to access your account."
 msgstr "prosi o dostęp do Twojego konta."
 
-#~ msgid "Registered applications"
-#~ msgstr "Zarejestrowane aplikacje"

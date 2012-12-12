@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin_config\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-11-14 21:39+0100\n"
+"PO-Revision-Date: 2012-12-12 15:45+0100\n"
 "Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
@@ -19,13 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
-#, fuzzy
 msgid "Add configuration key"
-msgstr "Parametry"
+msgstr "Dodaj parametr"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
 msgid "Add key"
@@ -42,26 +40,25 @@ msgstr "Anuluj"
 
 #: modules/mod_admin_config/mod_admin_config.erl:43
 msgid "Config"
-msgstr "Parametry"
+msgstr "Konfiguracja"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
-msgstr "Parametry"
+msgstr "Konfiguracja"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46
-#, fuzzy
 msgid "Confirm delete"
-msgstr "skasuj"
+msgstr "Potwierdź skasowanie"
 
-#: modules/mod_admin_config/templates/admin_config.tpl:36
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8
+#: modules/mod_admin_config/templates/admin_config.tpl:36
 msgid "Delete"
 msgstr "Skasuj"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:48
 #: modules/mod_admin_config/templates/admin_config.tpl:37
 msgid "Edit"
-msgstr ""
+msgstr "Edycja"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:20
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15
@@ -69,9 +66,8 @@ msgid "Key"
 msgstr "Klucz"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:11
-#, fuzzy
 msgid "Make a new config setting"
-msgstr "stwórz nowy parametr"
+msgstr "Stwórz nowy parametr"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:22
 msgid "Modified"
@@ -88,19 +84,19 @@ msgstr "Nie znaleziono konfiguracji"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63
 msgid "Only administrators can change the configuration."
-msgstr ""
+msgstr "Tylko administratorzy mogą modyfikowac parametry."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
 msgid "Only administrators can delete configurations."
-msgstr ""
+msgstr "Tylko administratorzy mogą kasować parametry."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
 msgid "Only an administrator can add configuration keys."
-msgstr ""
+msgstr "Tylko administratorzy mogą dodawać parametry."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr "Określ moduł, klucz i wartość nowego parametru"
+msgstr "Określ którego modułu dotyczy, klucz i wartość nowego parametru"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
 msgid "Save"
@@ -108,28 +104,19 @@ msgstr "Zapisz"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:8
 msgid "System Configuration"
-msgstr "Parametry systemu"
+msgstr "Konfiguracja systemu"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
-msgstr ""
+msgstr "Parametr już istnieje, wybierz inną nazwę klucza."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr ""
-"Tej operacji nie da się cofnąć. Parametr zostanie skasowany nieodwracalnie."
+msgstr "Tej operacji nie da się cofnąć. Parametr zostanie nieodwracalnie usunięty."
 
 #: modules/mod_admin_config/templates/admin_config.tpl:21
-#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
 msgid "Value"
 msgstr "Wartość"
 
-#~ msgid "Configuration overview"
-#~ msgstr "Zestawienie parametrów"
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
-
-#~ msgid "edit"
-#~ msgstr "edytuj"
