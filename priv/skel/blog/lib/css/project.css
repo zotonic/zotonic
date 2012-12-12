@@ -23,7 +23,7 @@ limitations under the License.
 ---------------------------------------------------------- */
 
 body {
-    background: #fff url(../images/bg.png) repeat-x left top;
+    background: #fff;
     color: #333;
     padding-top: 60px;
     font-size: 14px;
