@@ -18,3 +18,13 @@ integer with the ID of the newly created media rsc.
 
 Other arguments to this API call that can be passed in are: title,
 summary, body, chapeau, subtitle, website, page_path.
+
+When upload succeeds it returns a JSON object like the following::
+
+  {"rsc_id": 123}
+
+Where `rsc_id` is the id of the newly created :term:`resource`.
+
+In case of failure, a JSON message like the following is returned::
+
+  {"error": {"code": 403, "message": "Access denied"}}

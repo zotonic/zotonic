@@ -47,7 +47,7 @@ process_post(_ReqData, Context) ->
 
     case m_media:insert_file(Upload, Props, Context) of
         {ok, Id} ->
-            Id;
+            z_convert:to_json([{rsc_id, Id}]);
         {error, R} ->
             {error, R, <<>>}
     end.
