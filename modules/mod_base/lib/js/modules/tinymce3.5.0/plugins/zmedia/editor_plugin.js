@@ -49,20 +49,18 @@
                         }
                     });
 
+                ed.onPostProcess.add(function(ed, o) {
+                    o.content = self._MediaHtmlToMarkers(o.content);
+                });
+            
                 ed.onLoadContent.add(function(ed, o) {
                     ed.setContent(self._zMarkersToMediaHtml(o.content));
-                                         
-                    ed.onPostProcess.add(function(ed, o) {
-                        o.content = self._MediaHtmlToMarkers(o.content);
-                        });
+                });
 
-                    });
+                ed.onBeforeSetContent.add(function(ed, o) {
+                    o.content = self._zMarkersToMediaHtml(o.content);
+                });
 
-                ed.onSetContent.add(function(ed, o) {
-                    });
-
-            
-            
                 // Register buttons
                 ed.addButton('zmedia', {
                     title : 'Insert a Zotonic media item.',
