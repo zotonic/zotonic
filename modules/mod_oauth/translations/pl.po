@@ -139,7 +139,7 @@ msgstr "Więcej informacji o tym programie"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
 msgid "No applications registered yet."
-msgstr "Nie zarejestrowany jeszcze żadnych aplikacji."
+msgstr "Nie zarejestrowano jeszcze żadnych aplikacji."
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:3
 msgid "OAuth applications"
