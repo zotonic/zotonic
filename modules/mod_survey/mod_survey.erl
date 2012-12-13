@@ -396,7 +396,11 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
             case proplists:get_value(type, Q) of
                 <<"survey_page_break">> -> lists:reverse(Acc);
                 <<"survey_stop">> -> lists:reverse([Q|Acc]);
-                _ -> takepage(L, [Q|Acc])
+                _ ->
+                    case proplists:get_value(name, Q) of
+                        <<"survey_feedback">> ->  takepage(L, Acc);
+                        _ -> takepage(L, [Q|Acc])
+                    end
             end.
 
 is_page_end(Block) ->
