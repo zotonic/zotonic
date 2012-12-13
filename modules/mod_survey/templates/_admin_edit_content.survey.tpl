@@ -28,13 +28,18 @@
 		</label>
 	</div>
 	
+	<div class="control-group pull-right">
+		<label>{_ Mail filled in surveys to _}</label>
+		<input type="text" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
+	</div>
+
 	<div class="control-group">
 		<label class="inline checkbox">
 		<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple %}checked="checked"{% endif %} />
 		{_ Allow multiple entries per user/browser _}
 		</label>
 	</div>
-
+    
 	<div class="control-group">
 		<label class="radio">
 			<input type="radio" name="survey_progress" id="survey_progress_none" value="" {% if not id.survey_progress %}checked="checked"{% endif %} />
@@ -50,6 +55,7 @@
 		</label>
 	</div>
 
+    {% if m.survey.handlers|length %}
 	<div class="control-group">
 		<label>{_ Handle this survey with _}</label>
 		<select name="survey_handler" id="survey_handler">
@@ -59,11 +65,7 @@
 			{% endfor %}
 		</select>
 	</div>
-
-	<div class="control-group">
-		<label>{_ Mail filled in surveys to _}</label>
-		<input type="text" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
-	</div>
+    {% endif %}
 
 	<p>
 		{% if m.survey.is_allowed_results_download[id] %}
