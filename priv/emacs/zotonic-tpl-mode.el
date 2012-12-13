@@ -428,10 +428,12 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                                         ; should limit to initial pos
                                         ; of indentation request
                   (zotonic-tpl-next-tag-boundary (point-max))))
-            ;; un-indent after block end tags
+            ;; un-indent after block end tags that has junk in front of it
+            ;; (without junk is taken care of in zotonic-tpl-tag-soup-indent)
             (if (looking-at-p (concat "{%[ \t\n]*"
                                       zotonic-tpl-end-keywords-re))
-                (setq indent (- indent tab-width)))
+                (unless (eq start (point))
+                  (setq indent (- indent tab-width))))
             ;; indent after opening soup tags
             (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
                 (setq indent (+ indent tab-width)))
