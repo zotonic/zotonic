@@ -21,7 +21,8 @@
     answer/3,
     prep_answer_header/2,
     prep_answer/3,
-    prep_block/2
+    prep_block/2,
+    prep_chart/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -37,4 +38,7 @@ prep_answer(_Q, _Answer, _Context) ->
 
 prep_block(B, _Context) ->
     B.
+
+prep_chart(_Q, _As, _Context) ->
+    undefined.
 
