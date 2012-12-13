@@ -8,5 +8,6 @@
     {% if id.is_editable %}
         <a class="btn btn-mini pull-right" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
     {% endif %}
+    {% include "_meta_share.tpl" %}
     {% all include "_meta_extra.tpl" %}
 </p>

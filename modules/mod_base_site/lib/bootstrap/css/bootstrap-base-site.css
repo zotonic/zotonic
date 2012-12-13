@@ -63,6 +63,15 @@ ul.simple-list {
 .meta a {
     font-weight: 200;
 }
+ul.share-page-options {
+  list-style: none;
+  margin: 0;
+}
+  ul.share-page-options li {
+    float:left;
+    padding: 10px;
+  }
+
 .content .address {
     border-left: 10px solid #eee;
     padding-left: 10px;
