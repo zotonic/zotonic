@@ -19,6 +19,10 @@
 		{% endfor %}
 	</fieldset>
 
+	<div class="alert alert-error z_invalid">
+		{_ Please fill in all the required fields. _}
+	</div>
+
 	<div class="form-actions">
 		{% if page_nr > 1 %}
 			<a id="{{ #back }}" href="#" class="btn">{_ Back _}</a>

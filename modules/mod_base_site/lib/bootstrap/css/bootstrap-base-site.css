@@ -179,7 +179,12 @@ ul.share-page-options {
 form div.row {
     margin-left: -20px;
 }
-
+.alert.z_invalid {
+  display: none;
+}
+form.z_form_invalid .alert.z_invalid {
+    display: block;
+}
 
 .body table {
   max-width: 100%;

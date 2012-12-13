@@ -33,3 +33,10 @@ hr.survey-stop {
 	width: 256px;
 }
 
+.alert.z_invalid {
+  display: none;
+}
+form.z_form_invalid .alert.z_invalid {
+    display: block;
+}
+
