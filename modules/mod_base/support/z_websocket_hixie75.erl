@@ -19,6 +19,8 @@
 -module(z_websocket_hixie75).
 -author("Marc Worrell <marc@worrell.nl>").
 
+-include_lib("zotonic.hrl").
+
 -export([
     start/2,
     
@@ -34,7 +36,13 @@
 % First draft protocol version, this code should be removed in due time.
 start(ReqData, Context1) ->
     Hostname = m_site:get(hostname, Context1),
-    WebSocketPath = iolist_to_binary(["/websocket?z_pageid=", mochiweb_util:quote_plus(z_context:get_q("z_pageid", Context1))]),
+
+    Qs = [[K, $=, mochiweb_util:quote_plus(V)] || {K, V} <- wrq:req_qs(ReqData)],
+    WebSocketPath = case Qs of
+        [] -> iolist_to_binary(wrq:path(ReqData));
+        _ -> iolist_to_binary([wrq:path(ReqData), $?, Qs])
+    end,
+    
     Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
     Socket = webmachine_request:socket(ReqData),
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
@@ -79,14 +87,14 @@ handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
     % A packet of <<0,255>> signifies that the ua wants to close the connection
     ua_close_request;
 handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    controller_websocket:handle_message(Msg, Context),
+    handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
     handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
 
 %% Extract frame with length bytes
 handle_data(Msg, 0, T, Socket, Context) ->
-    controller_websocket:handle_message(Msg, Context),
+    handle_message(Msg, Context),
     handle_data(none, nolength, T, Socket, Context);
 handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
     handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
@@ -94,6 +102,25 @@ handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length
 %% Data ended before the end of the frame, loop to fetch more
 handle_data(Msg, Length, <<>>, Socket, Context) ->
     z_websocket_hixie75:receive_loop(Msg, Length, Socket, Context).
+
+
+% Call the handler. We are initializing.
+handle_init(Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_init(Context).
+
+% Call the handler, new message arrived.
+handle_message(Msg, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_message(Msg, Context).
+
+handle_info(Msg, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_info(Msg, Context).
+
+handle_terminate(Reason, Context) ->
+    H = z_context:get(ws_handler, Context),
+    H:websocket_terminate(Reason, Context).
 
 
 %% @doc Unpack the length bytes
@@ -135,21 +162,31 @@ unpack_length(Binary, LenBytes, Length) ->
 start_send_loop(Socket, Context) ->
     % We want to receive any exit signal (including 'normal') from the socket's process.
     process_flag(trap_exit, true),
-    z_session_page:websocket_attach(self(), Context),
+    handle_init(Context),
     send_loop(Socket, Context).
 
 send_loop(Socket, Context) ->
     receive
         {send_data, Data} ->
             case send(Socket, [0, Data, 255]) of
-                ok -> z_websocket_hixie75:send_loop(Socket, Context);
-                closed -> closed
+                ok -> 
+                    send_loop(Socket, Context);
+                {error, closed} -> 
+                    handle_terminate({error, closed}, Context),
+                    closed;
+                _ ->
+                    handle_terminate(normal, Context),
+                    normal
             end;
-        {'EXIT', _FromPid, _Reason} ->
-            % Exit of the socket's process, stop sending data.
+        {'EXIT', _FromPid, normal} ->
+            handle_terminate(normal, Context),
+            normal;
+        {'EXIT', _FromPid, Reason} ->
+            handle_terminate({error, {exit, Reason}}, Context),
             exit;
-        _ ->
-            z_websocket_hixie75:send_loop(Socket, Context)
+        Msg ->
+            handle_info(Msg, Context),
+            send_loop(Socket, Context)
     end.
 
 
@@ -158,9 +195,5 @@ send_loop(Socket, Context) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    case mochiweb_socket:send(Socket, iolist_to_binary(Data)) of
-        ok -> ok;
-        {error, closed} -> closed;
-        _ -> exit(normal)
-    end.
+    mochiweb_socket:send(Socket, iolist_to_binary(Data)).
 
