@@ -31,9 +31,7 @@
     out_mime/2,
     string2filter/2,
     cmd_args/3,
-    calc_size/7,
-
-    add_optional_quality_1/2
+    calc_size/7
 ]).
 
 -define(MAX_WIDTH,  5000).
