@@ -20,9 +20,19 @@
 -export([render_action/4]).
 
 render_action(TriggerId, TargetId, Args, Context) -> 
-	Postback  = proplists:get_value(postback, Args),
+	Postback0 = proplists:get_value(postback, Args),
     Delegate  = z_convert:to_atom(proplists:get_value(delegate, Args)),
     Actions   = proplists:get_all_values(action, Args),
+
+    %% check for injection of args into postback message
+    Postback  = case {Postback0, proplists:get_value(inject_args, Args)} of
+                    {{PbTag, PbArgs}, true} ->
+                        {PbTag, lists:map(
+                                 fun({K, V}) ->
+                                         {K, proplists:get_value(K, Args, V)}
+                                 end, PbArgs)};
+                    {Pb, _} -> Pb
+                end,
 
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, undefined, TriggerId, TargetId, Delegate, Context),
 	{ActionsJS, Context1} = z_render:render_actions(TriggerId, TargetId, Actions, Context),

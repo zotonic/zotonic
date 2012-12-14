@@ -19,12 +19,24 @@ The `event/2` function in the controller module will be called as::
 
 This action can have the following arguments:
 
-========  ======================================================  =======
-Argument  Description                                             Example
-========  ======================================================  =======
-postback  The message that will be send to the server module.     postback={my_message arg="hello"}
-delegate  The name of the Erlang module that will be called. 
-          Defaults to the controller module generating the page.  delegate="my_module"
-action    Any other actions that will be executed when the 
-          postback is done.  This parameter can be repeated.      action={show id="wait"}
-========  ======================================================  =======
+==============  =======================================================  =======
+Argument        Description                                              Example
+==============  =======================================================  =======
+postback        The message that will be send to the server module.      postback={my_message arg="hello"}
+delegate        The name of the Erlang module that will be called. 
+                Defaults to the controller module generating the page.   delegate="my_module"
+action          Any other actions that will be executed when the 
+                postback is done.  This parameter can be repeated.       action={show id="wait"}
+inject_args     If set to `true`, and postback is a tuple (as in the
+                `my_message` example in this table), any values from 
+                the args in the the postback will replace the arg value
+                in the postback argument. This is useful when the arg
+                is coming from an outer action and not set explicitly
+                in the template code (as is done in the example for
+                illustration). The value of `some_arg` in the postback
+                handler will be `123`.                                   {postback postback={my_event some_arg} inject_args some_arg=123}
+==============  =======================================================  =======
+
+
+.. versionadded:: 0.9.0
+   Added `inject_args` option.
