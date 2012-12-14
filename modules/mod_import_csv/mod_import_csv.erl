@@ -140,10 +140,6 @@ can_handle(Filename, Context) ->
     end.
 
 
-min(A,B) when A < B -> A;
-min(_,B) -> B.
-
-
 %% @doc Check if the first row is made up of column headers.
 %% The file must have at least a name and a category column.
 is_valid_file(<<>>) ->

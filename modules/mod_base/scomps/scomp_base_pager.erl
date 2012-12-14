@@ -100,33 +100,6 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
     Html.
 
-    % [
-    %     "\n<ul class=\"pager block\">",
-    %         prev(Page, Pages, Dispatch, DispatchArgs, Context),
-    %         [ url_to_li(Url, N, N == Page) || {N, Url} <- Urls ],
-    %         next(Page, Pages, Dispatch, DispatchArgs, Context),
-    %     "\n</ul>"
-    % ].
-
-prev(Page, _Pages, _Dispatch, _DispatchArgs, Context) when Page =< 1 ->
-    ["\n<li class=\"disabled pager-prev\">&laquo; ", z_trans:trans(?TRANS_PAGER_PREV, Context), "</li>"];
-prev(Page, _Pages, Dispatch, DispatchArgs, Context) ->
-    Url = z_dispatcher:url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context),
-    ["\n<li class=\"pager-prev\"><a href=\"",Url,"\">&laquo; ", z_trans:trans(?TRANS_PAGER_PREV, Context), "</a></li>"].
-
-next(Page, Pages, _Dispatch, _DispatchArgs, Context) when Page >= Pages ->
-    ["\n<li class=\"disabled pager-next\">", z_trans:trans(?TRANS_PAGER_NEXT, Context), " &raquo;</li>"];
-next(Page, _Pages, Dispatch, DispatchArgs, Context) ->
-    Url = z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context),
-    ["\n<li class=\"pager-next\"><a href=\"",Url,"\">", z_trans:trans(?TRANS_PAGER_NEXT, Context), " &raquo;</a></li>"].
-
-
-url_to_li(sep, _, _) ->
-    "\n<li class=\"pager-sep\">…</li>";
-url_to_li(Url, N, false) ->
-    ["\n<li class=\"pager-page\"><a href=\"",Url,"\">",integer_to_list(N),"</a></li>"];
-url_to_li(Url, N, true) ->
-    ["\n<li class=\"pager-page current\"><a href=\"",Url,"\">",integer_to_list(N),"</a></li>"].
 
 pages(Page, Pages) ->
     Start = case Page - ?DELTA > 1 of

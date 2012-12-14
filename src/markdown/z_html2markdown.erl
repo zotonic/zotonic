@@ -230,16 +230,6 @@ escape_html_text(<<$\n, T/binary>>, Acc) ->
 escape_html_text(<<C, T/binary>>, Acc) ->
     escape_html_text(T, <<Acc/binary, C>>).
 
-%% @doc Escape pointy brackets (for in comments)
-escape_html_comment(<<>>, Acc) -> 
-    Acc;
-escape_html_comment(<<$<, T/binary>>, Acc) ->
-    escape_html_comment(T, <<Acc/binary, "&lt;">>);
-escape_html_comment(<<$>, T/binary>>, Acc) ->
-    escape_html_comment(T, <<Acc/binary, "&gt;">>);
-escape_html_comment(<<C, T/binary>>, Acc) ->
-    escape_html_comment(T, <<Acc/binary, C>>).
-
 
 trimnl(<<$\n, Rest/binary>>) ->
     trimnl(Rest);

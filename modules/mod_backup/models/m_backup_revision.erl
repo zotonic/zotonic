@@ -107,7 +107,7 @@ list_revisions_assoc(Id, Context) ->
 
 
 %% @doc Prune the old revisions in the database. Drops revisions close to each other.
-prune_revisions(Id, Context) ->
+prune_revisions(_Id, _Context) ->
     % TODO
     ok.
 
