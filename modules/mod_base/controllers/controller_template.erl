@@ -59,7 +59,7 @@ is_authorized(ReqData, Context) ->
         is_auth -> 
             case z_auth:is_auth(Context1) of
                 true -> is_authorized_action(Context1);
-                false -> is_authorized_action(false, Context)
+                false -> is_authorized_action(false, Context1)
             end;
         logoff ->
             Context2 = case z_auth:is_auth(Context1) of
