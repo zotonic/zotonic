@@ -868,7 +868,7 @@ msgid ""
 "Show as"
 msgstr ""
 
-#: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:120 
+#: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125 
 msgid ""
 "Something went wrong. Sorry."
 msgstr ""
