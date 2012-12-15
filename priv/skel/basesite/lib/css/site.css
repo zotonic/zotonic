@@ -1,0 +1,7 @@
+/* Define your site-specific styles here. */
+
+/* fix vertical alignment of Zotonic logo */
+nav.navbar a.brand img {
+    vertical-align: -2px;
+    padding-right: 8px;
+}

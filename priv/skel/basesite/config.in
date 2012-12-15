@@ -1,0 +1,66 @@
+% Zotonic site configuration for %%SITE%%.
+[
+    % This site is enabled or not.
+    {enabled, true},
+
+    % Hostname on which this site runs
+    {hostname, "%%SITE%%:8000"},
+
+    % Aliases which should redirect to the primary hostname
+    %{hostalias, "www.example.com"},
+    %{hostalias, "example.com"},
+
+    % PostgreSQL database connection
+    {dbhost, "%%DBHOST%%"},
+    {dbport, %%DBPORT%%},
+    {dbuser, "%%DBUSER%%"},
+    {dbpassword, "%%DBPASSWORD%%"},
+    {dbdatabase, "%%DBDATABASE%%"},
+    {dbschema, "%%DBSCHEMA%%"},
+
+    % Depcache settings. The maximum size in Mbs
+    {depcache_memory_max, 100},
+
+    % Password for the 'admin' user.
+    {admin_password, "%%ADMINPASSWORD%%"},
+
+    % What skeleton site this site is based on; for installing the initial data.
+    {skeleton, %%SKEL%%},
+
+ {install_modules, 
+  [
+   mod_base,
+   mod_base_site,
+   mod_menu,
+   mod_oauth,
+   mod_search,
+   mod_oembed,
+   mod_atom_feed,
+   mod_translation,
+   mod_signal,
+   mod_logging,
+
+   mod_seo,
+   mod_seo_google,
+   mod_seo_sitemap,
+
+   mod_authentication,
+   mod_acl_adminonly,
+
+   mod_admin,
+   mod_admin_category,
+   mod_admin_config,
+   mod_admin_identity,
+   mod_admin_modules,
+   mod_admin_predicate,
+
+   mod_l10n,
+   mod_geomap,
+
+   mod_comment,
+   mod_artwork,
+   mod_bootstrap
+  ]},
+    
+    {title, "A default Zotonic website"}
+].

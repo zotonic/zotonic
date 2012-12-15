@@ -19,6 +19,7 @@
 	        "css/jquery.loadmask.css" 
 	        "css/z.growl.css" 
 	        "css/z.modal.css" 
+	        "css/site.css" 
 	%}
 	{% block html_head_extra %}{% endblock %}
 </head>

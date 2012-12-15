@@ -29,8 +29,23 @@
 ]).
 
 
+install(basesite, Context) ->
+    Datamodel = #datamodel{
+         resources =
+             [
+              {page_home,
+               text,
+               [{title, <<"Home">>},
+                {summary, <<"Welcome to your new site!">>},
+                {page_path, <<"/">>}]
+              }
+             ]
+        },
+    ?DEBUG("Installing basesite data"),
+    z_datamodel:manage(?MODULE, Datamodel, Context);
+
 install(blog, Context) ->
-    Now = {{2010,04,03},{9,12,0}},
+    Now = {{2012,12,14},{9,12,0}},
     Datamodel = 
         #datamodel{
       resources =
@@ -137,7 +152,7 @@ install(blog, Context) ->
       ]
      },
 
-    ?DEBUG("Installin blog data"),
+    ?DEBUG("Installing blog data"),
     z_datamodel:manage(?MODULE, Datamodel, Context);
 
 

@@ -27,13 +27,16 @@ called ``yoursite``.
 
      bin/zotonic addsite -s blog yoursite
 
-   .. note:: zotonic has to be running for the addsite command to succeed.
+   .. note:: Zotonic has to be running for the `addsite` command to succeed.
 
-   This will add a site named yoursite. Its default URL will be
-   http://yoursite:8000/ so either put 'yoursite' in your hosts file
-   or change the {hostname} section of the config file.
+   This will add a site named `yoursite`. Its default URL will be
+   http://yoursite:8000/ so either put 'yoursite' in your hosts file as stated above,
+   or change the ``{hostname}`` section of the site's config file.
 
-4. Edit the generated file priv/sites/yoursite/config, to make sure
+   Look at :ref:`skeleton-sites` to see which other skeletons are
+   available to base your site on.
+
+4. Edit the generated file ``priv/sites/yoursite/config``, to make sure
    your database credentials and the hostname are correct, and change
    the password for the admin.
 
@@ -53,3 +56,37 @@ called ``yoursite``.
 To learn more about how sites work and what consists of a
 :term:`Zotonic site`, please see the in-depth manual,
 :ref:`manual-site-anatomy`.
+
+
+.. _skeleton-sites:
+     
+Available skeleton sites
+------------------------
+
+Zotonic comes with four different skeletons to base your site on.
+
+
+``blog``
+  As a full example of a Zotonic website, it installs a front page
+  with a listing of recent articles. As default example data, three
+  example articles and a couple of images are also installed.
+
+``basesite``
+  A skeleton site which lets you build a site on top of
+  :ref:`mod_base_site`. Its site directory is pretty empty, as
+  `mod_base_site` itself implements most of the frontend templates
+  that are needed. This skeleton does install a custom homepage
+  template as ``home.tpl`` and dispatch rule to serve it. It also adds
+  a `site.css` file for tweaking fonts, colors, et cetera.
+
+``empty``
+  An empty skeleton. No templates or dispatch rules whatsoever are
+  created. You can use this skeleton to create a new site based on
+  your own base templates, a custom CSS framework, etc.
+
+``nodb``
+  Like the `empty` template, but this skeleton does not require a
+  database connection. As such, the admin and content management
+  interface is disabled, as those modules all require a database
+  connection.
+  
