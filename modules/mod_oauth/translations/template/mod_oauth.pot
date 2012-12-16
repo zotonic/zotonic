@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_oauth/mod_oauth.erl:333 
+#: ./modules/mod_oauth/mod_oauth.erl:310 
 msgid ""
 "API access"
 msgstr ""
@@ -28,7 +28,7 @@ msgid ""
 "Access to"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:77 
 msgid ""
 "Add application"
 msgstr ""
@@ -43,7 +43,7 @@ msgid ""
 "Allow"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:70 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:54 
 msgid ""
 "Allow users of this application access to the following API calls:"
 msgstr ""
@@ -53,7 +53,7 @@ msgid ""
 "Allow!"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:15 
 msgid ""
 "Application title"
 msgstr ""
@@ -78,12 +78,12 @@ msgid ""
 "Authorized!"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:36 
 msgid ""
 "Callback URL"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:89 ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73 ./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42 
 msgid ""
 "Cancel"
 msgstr ""
@@ -98,12 +98,12 @@ msgid ""
 "Close"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16 ./modules/mod_oauth/templates/_oauth_apps_list.tpl:6 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:6 
 msgid ""
 "Consumer key"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23 ./modules/mod_oauth/templates/_oauth_apps_list.tpl:7 
+#: ./modules/mod_oauth/templates/_oauth_apps_list.tpl:7 
 msgid ""
 "Consumer secret"
 msgstr ""
@@ -118,7 +118,7 @@ msgid ""
 "Delete this application!"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:29 
 msgid ""
 "Description"
 msgstr ""
@@ -143,7 +143,7 @@ msgid ""
 "Edit"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:22 
 msgid ""
 "Homepage"
 msgstr ""
@@ -226,7 +226,7 @@ msgid ""
 "Untitled"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:91 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45 ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75 
 msgid ""
 "Update"
 msgstr ""
@@ -241,7 +241,7 @@ msgid ""
 "Users"
 msgstr ""
 
-#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63 
+#: ./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:47 
 msgid ""
 "When done, go to the authorization tab to set permissions."
 msgstr ""

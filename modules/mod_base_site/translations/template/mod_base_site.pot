@@ -38,12 +38,7 @@ msgid ""
 "Click to download"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/phone/_dialog_share_page.tpl:17 
-msgid ""
-"Close"
-msgstr ""
-
-#: ./modules/mod_base_site/templates/text/search.tpl:27 ./modules/mod_base_site/templates/tablet/search.tpl:29 
+#: ./modules/mod_base_site/templates/text/search.tpl:20 ./modules/mod_base_site/templates/tablet/search.tpl:24 
 msgid ""
 "Did not find any pages matching"
 msgstr ""
@@ -103,7 +98,7 @@ msgid ""
 "More"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/search.tpl:20 ./modules/mod_base_site/templates/tablet/page.query.tpl:8 ./modules/mod_base_site/templates/tablet/search.tpl:18 
+#: ./modules/mod_base_site/templates/text/search.tpl:13 ./modules/mod_base_site/templates/tablet/page.query.tpl:8 ./modules/mod_base_site/templates/tablet/search.tpl:13 
 msgid ""
 "Page"
 msgstr ""
@@ -118,24 +113,14 @@ msgid ""
 "Read more"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/_navbar.tpl:11 ./modules/mod_base_site/templates/text/search.tpl:3 ./modules/mod_base_site/templates/text/search.tpl:41 ./modules/mod_base_site/templates/tablet/_search_form.tpl:4 ./modules/mod_base_site/templates/tablet/search.tpl:3 
+#: ./modules/mod_base_site/templates/text/_navbar.tpl:11 ./modules/mod_base_site/templates/text/search.tpl:3 ./modules/mod_base_site/templates/text/search.tpl:33 ./modules/mod_base_site/templates/tablet/_search_form.tpl:3 ./modules/mod_base_site/templates/tablet/search.tpl:3 
 msgid ""
 "Search"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/search.tpl:14 ./modules/mod_base_site/templates/tablet/search.tpl:14 
+#: ./modules/mod_base_site/templates/text/search.tpl:10 ./modules/mod_base_site/templates/tablet/search.tpl:11 
 msgid ""
 "Searching for"
-msgstr ""
-
-#: ./modules/mod_base_site/templates/phone/_meta_share.tpl:3 
-msgid ""
-"Share"
-msgstr ""
-
-#: ./modules/mod_base_site/templates/phone/_meta_share.tpl:3 ./modules/mod_base_site/templates/phone/_meta_share.tpl:5 
-msgid ""
-"Share this page"
 msgstr ""
 
 #: ./modules/mod_base_site/templates/text/_address.tpl:13 ./modules/mod_base_site/templates/text/_address.tpl:17 
@@ -153,7 +138,7 @@ msgid ""
 "Street"
 msgstr ""
 
-#: ./modules/mod_base_site/templates/text/search.tpl:37 
+#: ./modules/mod_base_site/templates/text/search.tpl:30 
 msgid ""
 "Type the text to search"
 msgstr ""

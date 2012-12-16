@@ -22,7 +22,7 @@ msgstr ""
 msgid "All survey entries up until"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:39
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:34
 msgid "Allow multiple entries per user/browser"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgstr ""
 msgid "April"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
+#: modules/mod_survey/templates/_survey_question_page.tpl:32
 #, fuzzy
 msgid "Are you sure you want to stop?"
 msgstr "Bu soruyu silmek istediğinizden emin misiniz?"
@@ -55,7 +55,7 @@ msgstr "Bu soruyu silmek istediğinizden emin misiniz?"
 msgid "August"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:28
+#: modules/mod_survey/templates/_survey_question_page.tpl:24
 msgid "Back"
 msgstr ""
 
@@ -109,7 +109,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
+#: modules/mod_survey/templates/_survey_question_page.tpl:32
 msgid "Continue"
 msgstr ""
 
@@ -137,12 +137,12 @@ msgstr ""
 msgid "Do you like pea soup?"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:72
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:70
 msgid "Download CSV results"
 msgstr ""
 
 #: modules/mod_survey/templates/_survey_results.tpl:8
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:74
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:72
 msgid ""
 "Download will start in the background. Please check your download window."
 msgstr ""
@@ -205,7 +205,7 @@ msgstr ""
 msgid "File upload"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:60
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:54
 msgid "Handle this survey with"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 msgid "Help about surveys"
 msgstr "Anketiniz"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:46
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:41
 msgid "Hide progress information"
 msgstr ""
 
@@ -263,7 +263,7 @@ msgstr ""
 msgid "Long answer"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:32
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:64
 msgid "Mail filled in surveys to"
 msgstr ""
 
@@ -308,7 +308,7 @@ msgstr ""
 msgid "New survey result:"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:40
+#: modules/mod_survey/templates/_survey_question_page.tpl:36
 #, fuzzy
 msgid "Next Question"
 msgstr "Soru"
@@ -344,10 +344,6 @@ msgstr ""
 msgid "Please enter your name."
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:23
-msgid "Please fill in all the required fields."
-msgstr ""
-
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:19
 msgid "Please upload your image."
 msgstr ""
@@ -360,7 +356,7 @@ msgstr ""
 msgid "Primary"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:80
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:78
 msgid "Printable list"
 msgstr ""
 
@@ -410,15 +406,15 @@ msgstr ""
 msgid "Short answer"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:78
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:76
 msgid "Show email addresses"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:54
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:49
 msgid "Show progress bar"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:50
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:45
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr ""
 
@@ -426,7 +422,7 @@ msgstr ""
 msgid "Show results to user after completion of survey"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:77
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75
 #, fuzzy
 msgid "Show survey results"
 msgstr "Soru"
@@ -444,8 +440,8 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:35
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
+#: modules/mod_survey/templates/_survey_question_page.tpl:31
+#: modules/mod_survey/templates/_survey_question_page.tpl:32
 #: modules/mod_survey/mod_survey.erl:106
 msgid "Stop"
 msgstr ""
@@ -460,7 +456,7 @@ msgstr ""
 msgid "Strongly Disagree"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:40
+#: modules/mod_survey/templates/_survey_question_page.tpl:36
 msgid "Submit"
 msgstr ""
 
@@ -493,16 +489,16 @@ msgstr "Soru"
 msgid "Survey result deleted."
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:81
+#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:79
 #, fuzzy
 msgid "Survey results editor"
 msgstr "Soru"
 
-#: modules/mod_survey/templates/_survey_end.tpl:5
+#: modules/mod_survey/templates/_survey_end.tpl:1
 msgid "Thank you"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_end.tpl:7
+#: modules/mod_survey/templates/_survey_end.tpl:3
 msgid ""
 "Thank you for filling in our survey. Be sure to come back for other surveys!"
 msgstr ""
