@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
-#: modules/mod_oauth/mod_oauth.erl:310
+#: modules/mod_oauth/mod_oauth.erl:333
 msgid "API access"
 msgstr "Acceder a API"
 
@@ -28,7 +28,7 @@ msgstr "Acceder a API"
 msgid "Access to"
 msgstr "Acceder a"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:77
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93
 msgid "Add application"
 msgstr "Agregar aplicación"
 
@@ -41,7 +41,7 @@ msgstr "Agregar aplicación"
 msgid "Allow"
 msgstr "Permitir"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:54
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:70
 #, fuzzy
 msgid "Allow users of this application access to the following API calls:"
 msgstr "Esta aplicación quiere acceder a los siguientes servicios:"
@@ -50,7 +50,7 @@ msgstr "Esta aplicación quiere acceder a los siguientes servicios:"
 msgid "Allow!"
 msgstr "¡Permitir!"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:15
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31
 msgid "Application title"
 msgstr "Título de la aplicación"
 
@@ -70,12 +70,12 @@ msgstr "Autorizar este requerimiento"
 msgid "Authorized!"
 msgstr "Autorizado!"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:36
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52
 msgid "Callback URL"
 msgstr "URL de retorno"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:89
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
 msgid "Cancel"
 msgstr "Cancelar"
@@ -90,10 +90,12 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
 msgid "Consumer key"
 msgstr "Clave de consumidor"
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:7
 msgid "Consumer secret"
 msgstr "Secreto de consumidor"
@@ -107,7 +109,7 @@ msgstr "Brrar"
 msgid "Delete this application!"
 msgstr "Aplicaciones OAuth registradas"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:29
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
 msgid "Description"
 msgstr "Descripción"
 
@@ -127,7 +129,7 @@ msgstr "¿Está seguro de que desea borrar esta aplicación?"
 msgid "Edit"
 msgstr "Editar"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:22
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38
 msgid "Homepage"
 msgstr "Página principal"
 
@@ -202,8 +204,8 @@ msgstr "Tipo"
 msgid "Untitled"
 msgstr "Sin título"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:91
 msgid "Update"
 msgstr "Actualizar"
 
@@ -215,7 +217,7 @@ msgstr "Usuario"
 msgid "Users"
 msgstr "Usuarios"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:47
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
 msgid "When done, go to the authorization tab to set permissions."
 msgstr ""
 "Cuando termine, vaya a la lengüeta de autorización para asignar los permisos."

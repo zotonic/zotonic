@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2\n"
 
-#: modules/mod_oauth/mod_oauth.erl:310
+#: modules/mod_oauth/mod_oauth.erl:333
 msgid "API access"
 msgstr "Udostępnianie API"
 
@@ -30,7 +30,7 @@ msgstr "Udostępnianie API"
 msgid "Access to"
 msgstr "Dostęp do"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:77
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93
 msgid "Add application"
 msgstr "Dodaj aplikację"
 
@@ -42,7 +42,7 @@ msgstr "Dodaj aplikację"
 msgid "Allow"
 msgstr "Zezwól"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:54
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:70
 msgid "Allow users of this application access to the following API calls:"
 msgstr "Pozwól aplikacji na dostęp do następujących funkcji API:"
 
@@ -50,7 +50,7 @@ msgstr "Pozwól aplikacji na dostęp do następujących funkcji API:"
 msgid "Allow!"
 msgstr "Zezwól!"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:15
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31
 msgid "Application title"
 msgstr "Nazwa aplikacji"
 
@@ -70,12 +70,12 @@ msgstr "Autoryzuj to żądanie"
 msgid "Authorized!"
 msgstr "Udzielono autoryzacji!"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:36
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52
 msgid "Callback URL"
 msgstr "URL odwołania"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:44
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:73
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:89
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
 msgid "Cancel"
 msgstr "Anuluj"
@@ -89,10 +89,12 @@ msgstr "Ustaw nazwę, opis i prawa dostępu dla tej aplikacji."
 msgid "Close"
 msgstr "Zamknij"
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
 msgid "Consumer key"
 msgstr "Klucz klienta"
 
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:7
 msgid "Consumer secret"
 msgstr "Fraza zabezpieczająca"
@@ -105,7 +107,7 @@ msgstr "Usuń"
 msgid "Delete this application!"
 msgstr "Usuń aplikację!"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:29
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
 msgid "Description"
 msgstr "Opis"
 
@@ -125,7 +127,7 @@ msgstr "Czy naprawdę chcesz usunąć aplikację?"
 msgid "Edit"
 msgstr "Edytuj"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:22
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38
 msgid "Homepage"
 msgstr "Strona domowa"
 
@@ -201,8 +203,8 @@ msgstr "Typ"
 msgid "Untitled"
 msgstr "Bez tytułu"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:91
 msgid "Update"
 msgstr "Uaktualnij"
 
@@ -214,7 +216,7 @@ msgstr "Użytkownik"
 msgid "Users"
 msgstr "Użytkownicy"
 
-#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:47
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
 msgid "When done, go to the authorization tab to set permissions."
 msgstr ""
 "Gdy skończysz, przejdź do zakładki <b>Autoryzacja</b> by ustawić prawa "
@@ -235,4 +237,3 @@ msgstr "dostępu do swojego konta."
 #: modules/mod_oauth/templates/oauth_authorize.tpl:9
 msgid "wants to access your account."
 msgstr "prosi o dostęp do Twojego konta."
-
