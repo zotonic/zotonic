@@ -24,7 +24,9 @@
 -include_lib("zotonic.hrl").
 
 scan(Context) ->
-    Modules = z_module_manager:scan(Context),
+    AllModules = z_module_manager:scan(Context),
+    Active = z_module_manager:active(Context),
+    Modules = [{Mod, ModDir} || {Mod, ModDir} <- AllModules, lists:member(Mod, Active)],
     Files = lists:flatten([
                 z_module_indexer:all(What, Context)
                 || What <- [template, scomp, action, validator, model, service, erlang]
@@ -36,7 +38,7 @@ scan(Context) ->
                     | proplists:get_all_values(Mod, ModFiles) 
                 ]}
                 || {Mod, ModDir} <- Modules
-            ],
+               ],
     [ scan_module(Mod) || Mod <- Combined ].
 
 scan_module({Path, Files}) ->
