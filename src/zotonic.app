@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic,
  [{description, "zotonic"},
-  {vsn, "0.9-dev"},
+  {vsn, "0.10-dev"},
   {modules,
    [
     zotonic,
