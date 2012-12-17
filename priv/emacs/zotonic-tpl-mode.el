@@ -442,15 +442,16 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                       (setq indent (- indent tab-width)))
                     (forward-char)
                     (zotonic-tpl-next-tag-boundary end))
-                ;; else skip over other tags
+                ;;; else
+                ;; skip over other tags
                 (if (looking-at-p "{%")
                     (progn
                       (forward-char)
-                      (zotonic-tpl-next-tag-boundary end))))
-              ;; indent after opening soup tags
-              (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
-                  (setq indent (+ indent tab-width)))
-              (forward-char)))
+                      (zotonic-tpl-next-tag-boundary end)))
+                ;; indent after opening soup tags
+                (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
+                    (setq indent (+ indent tab-width)))
+                (forward-char))))
           indent)
       0)))
 
