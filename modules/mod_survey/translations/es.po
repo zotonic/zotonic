@@ -392,7 +392,7 @@ msgstr "Resultados"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
-msgstr Seleccione un país"
+msgstr "Seleccione un país"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:16
 msgid "Select your country"
