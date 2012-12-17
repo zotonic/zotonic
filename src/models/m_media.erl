@@ -1,11 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-04-09
-%%
 %% @doc Model for medium database
-%% @todo Add ACL checks for the mime types.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2012 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -328,6 +325,15 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
                     {is_deletable_file, not z_media_archive:is_archived(File, Context)}
                     | PropsMedia
                 ],
+                MediumPropRows1 = z_notifier:foldl(
+                                        #media_upload_props{
+                                                id=RscId,
+                                                mime=Mime, 
+                                                archive_file=ArchiveFile,
+                                                options=Opts
+                                        },
+                                        MediumRowProps,
+                                        Context),
 
                 IsImport = proplists:is_defined(is_import, Opts),
                 NoTouch = proplists:is_defined(no_touch, Opts),
@@ -357,7 +363,7 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
                                                z_db:delete(medium, RscId, Ctx),
                                                {ok, RscId}
                                        end,
-                            case z_db:insert(medium, [{id, Id} | MediumRowProps], Ctx) of
+                            case z_db:insert(medium, [{id, Id} | MediumPropRows1], Ctx) of
                                 {ok, _MediaId} ->
                                     {ok, Id};
                                 Error ->

@@ -303,6 +303,11 @@
 %% @doc Notification that a site configuration's property is changed (notify)
 -record(m_config_update_prop, {module, key, prop, value}).
 
+%% @doc Notification that a medium file has been uploaded.
+%%      This is the moment to change properties, modify the file etc. 
+%%		The medium record properties are folded over all observers. (foldl)
+-record(media_upload_props, {id, mime, archive_file, options}).
+
 %% @doc Notification that a medium file has been changed (notify)
 %% The id is the resource id, medium contains the medium's property list.
 -record(media_replace_file, {id, medium}).
