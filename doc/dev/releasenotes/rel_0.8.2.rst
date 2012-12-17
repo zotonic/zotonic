@@ -1,4 +1,4 @@
-Zotonic 0.8.2
+Release 0.8.2
 =============
 
 Released on 2012-10-30 11:48 by arjan.

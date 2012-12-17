@@ -1,22 +1,3 @@
-Welcome to Zotonic!
-
-
-Release 0.10.0, not yet released
-================================
-
-New core features
------------------
-
-...
-
-
-New updated modules
--------------------
-
-...
-
-
-
 Release 0.9.0
 =============
 
