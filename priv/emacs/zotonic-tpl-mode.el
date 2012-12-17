@@ -437,8 +437,16 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
               (if (looking-at-p (concat "\\(%}\\)\\|\\({%[ \t\n]*"
                                         zotonic-tpl-end-keywords-re
                                         "\\)"))
-                  (unless (eq start (point))
-                    (setq indent (- indent tab-width))))
+                  (progn
+                    (unless (eq start (point))
+                      (setq indent (- indent tab-width)))
+                    (forward-char)
+                    (zotonic-tpl-next-tag-boundary end))
+                ;; else skip over other tags
+                (if (looking-at-p "{%")
+                    (progn
+                      (forward-char)
+                      (zotonic-tpl-next-tag-boundary end))))
               ;; indent after opening soup tags
               (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
                   (setq indent (+ indent tab-width)))
