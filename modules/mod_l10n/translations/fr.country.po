@@ -222,7 +222,7 @@ msgstr "Estonie"
 msgid "Ethiopia"
 msgstr "Éthiopie"
 
-msgid "Falkland Islands"
+msgid "Falkland Islands (Malvinas)"
 msgstr "Îles Falkland"
 
 msgid "Faroe Islands"
@@ -237,7 +237,7 @@ msgstr "Finlande"
 msgid "France"
 msgstr "France"
 
-msgid "French Guyana"
+msgid "French Guiana"
 msgstr "Guyane Française"
 
 msgid "Gabon"
@@ -273,10 +273,10 @@ msgstr "Groenland"
 msgid "Grenada"
 msgstr "Grenade"
 
-msgid "Guadeloupe (French)"
+msgid "Guadeloupe"
 msgstr "Guadeloupe"
 
-msgid "Guam (USA)"
+msgid "Guam"
 msgstr "Guam"
 
 msgid "Guatemala"
@@ -334,7 +334,7 @@ msgid "Italy"
 msgstr "Italie"
 
 msgid "Ivory Coast (Cote D'Ivoire)"
-msgstr "Cote D'Ivoire"
+msgstr "Côte d'Ivoire"
 
 msgid "Jamaica"
 msgstr "Jamaïque"
@@ -357,7 +357,7 @@ msgstr "Kiribati"
 msgid "Kuwait"
 msgstr "Koweït"
 
-msgid "Kyrgyz Republic (Kyrgyzstan)"
+msgid "Kyrgyzstan"
 msgstr "Kirghizistan"
 
 msgid "Laos"
@@ -387,7 +387,7 @@ msgstr "Lituanie"
 msgid "Luxembourg"
 msgstr "Luxembourg"
 
-msgid "Macau"
+msgid "Macao"
 msgstr "Macao"
 
 msgid "Macedonia"
@@ -414,7 +414,7 @@ msgstr "Malte"
 msgid "Marshall Islands"
 msgstr "Îles Marshall"
 
-msgid "Martinique (French)"
+msgid "Martinique"
 msgstr "Martinique"
 
 msgid "Mauritania"
@@ -432,7 +432,7 @@ msgstr "Mexique"
 msgid "Micronesia"
 msgstr "États Fédérés de Micronésie"
 
-msgid "Moldavia"
+msgid "Moldova"
 msgstr "Moldavie"
 
 msgid "Monaco"
@@ -468,7 +468,7 @@ msgstr "Pays-Bas"
 msgid "Netherlands Antilles"
 msgstr "Antilles Néerlandaises"
 
-msgid "New Caledonia (French)"
+msgid "New Caledonia"
 msgstr "Nouvelle-Calédonie"
 
 msgid "New Zealand"
@@ -528,7 +528,7 @@ msgstr "Pitcairn"
 msgid "Poland"
 msgstr "Pologne"
 
-msgid "Polynesia (French)"
+msgid "French Polynesia"
 msgstr "Polynésie Française"
 
 msgid "Portugal"
@@ -540,7 +540,7 @@ msgstr "Puerto Rico"
 msgid "Qatar"
 msgstr "Qatar"
 
-msgid "Reunion (French)"
+msgid "Reunion"
 msgstr "Ile de la Réunion"
 
 msgid "Romania"
@@ -552,7 +552,7 @@ msgstr "Russie"
 msgid "Rwanda"
 msgstr "Rwanda"
 
-msgid "S. Georgia and S. Sandwich Isls."
+msgid "South Georgia and the South Sandwich Islands"
 msgstr "Géorgie du Sud et les Îles Sandwich du Sud"
 
 msgid "Saint Helena"
@@ -567,7 +567,7 @@ msgstr "Sainte Lucie"
 msgid "Saint Pierre and Miquelon"
 msgstr "Saint Pierre et Miquelon"
 
-msgid "Saint Tome (Sao Tome) and Principe"
+msgid "Sao Tome and Principe"
 msgstr "Sao Tomé-et-Principe"
 
 msgid "Saint Vincent and Grenadines"
@@ -594,7 +594,7 @@ msgstr "Sierra Leone"
 msgid "Singapore"
 msgstr "Singapour"
 
-msgid "Slovak Republic"
+msgid "Slovakia"
 msgstr "Slovaquie"
 
 msgid "Slovenia"
@@ -639,8 +639,8 @@ msgstr "Suisse"
 msgid "Syria"
 msgstr "Syrienne, République Arabe"
 
-msgid "Tadjikistan"
-msgstr "Tadjikistan"
+msgid "Tajikistan"
+msgstr "Tajikistan"
 
 msgid "Taiwan"
 msgstr "Taiwan"
