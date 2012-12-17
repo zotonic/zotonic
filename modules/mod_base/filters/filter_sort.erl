@@ -22,16 +22,24 @@
 -include_lib("zotonic.hrl").
 
 %% no arg, sort on id, default order
-sort(Input, Context) ->
+sort(Input, _Context) when is_list(Input) ->
+    lists:sort(Input);
+sort(Input, Context) when is_record(Input, rsc_list) ->
     sort(Input, [id], Context).
 
+sort(Input, Arg, _Context) when is_list(Input) ->
+    case is_opt(Arg) of 
+        false -> Input;
+        ascending -> lists:sort(Input);
+        descending -> lists:reverse(lists:sort(Input))
+    end;
 sort(#rsc_list{ list=Rscs }, Args, Context) when is_list(Args) ->
     Args1 = case z_string:is_string(Args) of
                 true -> [Args];
                 false -> Args
             end,
     sort_list({0, Rscs}, {ascending, Args1}, Context);
-sort(Input, Arg, Context) ->
+sort(Input, Arg, Context) when is_record(Input, rsc_list) ->
     sort(Input, [Arg], Context).
 
 
