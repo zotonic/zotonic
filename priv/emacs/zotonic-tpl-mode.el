@@ -352,10 +352,12 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
   "Indent zotonic template code."
   (interactive)
   (let ((indent
-         (if (zotonic-tpl-within-tag (point))
-             (zotonic-tpl-indent-tag-line)
-           ;; point is not in a template tag
-           (zotonic-tpl-tag-soup-indent))))
+         (save-excursion
+           (beginning-of-line)
+           (if (zotonic-tpl-within-tag (point))
+               (zotonic-tpl-indent-tag-line)
+             ;; point is not in a template tag
+             (zotonic-tpl-tag-soup-indent)))))
     (unless (> (current-column) indent)
       ;; if we're looking at the indentation, jump to it
       ;; in case of tabs, movement by 1 char != 1 column
@@ -411,8 +413,10 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
   (save-excursion
     (if (zotonic-tpl-goto-indent-column offset)
         (let ((start (point))
-              (indent (current-column)))
-          (end-of-line)
+              (indent (current-column))
+              (end (progn
+                     (end-of-line)
+                     (point))))
           (if (re-search-backward "</" start t)
               (save-excursion
                 (if (zotonic-tpl-tag-soup-find-open-tag (point-min))
@@ -424,14 +428,14 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                                       zotonic-tpl-begin-keywords-re))
                 (progn
                   (setq indent (+ indent tab-width))
-                                        ; point-max is no good here...
-                                        ; should limit to initial pos
-                                        ; of indentation request
-                  (zotonic-tpl-next-tag-boundary (point-max))))
-            ;; un-indent after block end tags that has junk in front of it
+                  (forward-char)
+                  (zotonic-tpl-next-tag-boundary end)))
+            ;; un-indent after block end tags (or close tag)
+            ;; that has junk in front of it
             ;; (without junk is taken care of in zotonic-tpl-tag-soup-indent)
-            (if (looking-at-p (concat "{%[ \t\n]*"
-                                      zotonic-tpl-end-keywords-re))
+            (if (looking-at-p (concat "\\(%}\\)\\|\\({%[ \t\n]*"
+                                      zotonic-tpl-end-keywords-re
+                                      "\\)"))
                 (unless (eq start (point))
                   (setq indent (- indent tab-width))))
             ;; indent after opening soup tags
