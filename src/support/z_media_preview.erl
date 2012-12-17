@@ -371,8 +371,9 @@ fetch_crop(Filters) ->
                                     (_) -> false
                                 end, Filters),
     CropPar = case Crop of
-                  [{crop,None}] when None == false; None == undefined; None == ""; None == <<>> -> none;
-                  [{crop,Gravity}] -> Gravity; % center or one of the wind directions
+                  [{crop,None}|_] when None == false; None == undefined; None == ""; None == <<>> -> none;
+                  [crop|_] -> center; % default crop = center
+                  [{crop,Gravity}|_] -> Gravity; % center or one of the wind directions
                   _ -> none
               end,
     {CropPar,OtherFilters}.
