@@ -7,11 +7,13 @@ The `sort` filter takes a list of items to sort. Items can be a ordinary list of
 By default it sorts the list in `ascending` order, and resource lists are sorted on their `id` if no property is specified.
 
 Example::
+
    {{ [4, 6, 2, 3, 5]|sort }}
 
 Sorts the list of numbers in `ascending` order.
 
 Example::
+
    {{ [4, 6, 2, 3, 5]|sort:'desc' }}
 
 Sorts the list of numbers in `descending` order.
