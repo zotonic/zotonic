@@ -388,11 +388,11 @@ msgstr ""
 #: modules/mod_survey/templates/_survey_results.tpl:2
 #: modules/mod_survey/templates/_survey_start.tpl:9
 msgid "Results"
-msgstr "resultados"
+msgstr "Resultados"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
-msgstr "seleccione un país"
+msgstr Seleccione un país"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:16
 msgid "Select your country"

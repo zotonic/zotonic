@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2010-09-02 10:05+0200\n"
-"Last-Translator: furiston <furiston@gmail.com>\n"
+"Last-Translator: Ivette <schedule@online.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr ""
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:24
 msgid "Back"
-msgstr ""
+msgstr "Önce"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:3
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:3
@@ -107,11 +107,11 @@ msgstr ""
 
 #: modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:7
 msgid "Close"
-msgstr ""
+msgstr "Kapatmak"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:32
 msgid "Continue"
-msgstr ""
+msgstr "Devam etmek"
 
 #: modules/mod_survey/mod_survey.erl:103
 msgid "Country select"
@@ -195,7 +195,7 @@ msgstr ""
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:26
 msgid "False"
-msgstr ""
+msgstr "Yanlış"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:26
 msgid "February"
@@ -207,12 +207,12 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:54
 msgid "Handle this survey with"
-msgstr ""
+msgstr "Bu anket kolu"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
 #, fuzzy
 msgid "Help about surveys"
-msgstr "Anketiniz"
+msgstr "Anketler hakkında yardım"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:41
 msgid "Hide progress information"
@@ -309,15 +309,14 @@ msgid "New survey result:"
 msgstr ""
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:36
-#, fuzzy
 msgid "Next Question"
-msgstr "Soru"
+msgstr "Sonraki soru"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:26
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
 msgid "November"
@@ -367,7 +366,6 @@ msgstr ""
 
 #: modules/mod_survey/templates/email_survey_result.tpl:11
 #: modules/mod_survey/templates/_survey_question_page.tpl:9
-#, fuzzy
 msgid "Question"
 msgstr "Soru"
 
@@ -388,11 +386,11 @@ msgstr ""
 #: modules/mod_survey/templates/_survey_results.tpl:2
 #: modules/mod_survey/templates/_survey_start.tpl:9
 msgid "Results"
-msgstr ""
+msgstr "Sonuçlar"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
-msgstr ""
+msgstr "Ülke seçin"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:16
 msgid "Select your country"
@@ -423,9 +421,8 @@ msgid "Show results to user after completion of survey"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75
-#, fuzzy
 msgid "Show survey results"
-msgstr "Soru"
+msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:46
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:38
@@ -434,17 +431,17 @@ msgstr ""
 
 #: modules/mod_survey/templates/_survey_error.tpl:1
 msgid "Something went wrong"
-msgstr ""
+msgstr "Bir şeyler ters gitti"
 
 #: modules/mod_survey/templates/_survey_start.tpl:2
 msgid "Start"
-msgstr ""
+msgstr "Başlatmak"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:31
 #: modules/mod_survey/templates/_survey_question_page.tpl:32
 #: modules/mod_survey/mod_survey.erl:106
 msgid "Stop"
-msgstr ""
+msgstr "Son vermek"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:31
@@ -478,30 +475,30 @@ msgstr "Anket"
 #: modules/mod_survey/mod_survey.erl:93
 #, fuzzy
 msgid "Survey Questions"
-msgstr "Soru"
+msgstr "Anket soruları"
 
 #: modules/mod_survey/templates/admin_survey_editor.tpl:7
-#, fuzzy
 msgid "Survey editor"
-msgstr "Soru"
+msgstr "Anket editörü"
 
 #: modules/mod_survey/mod_survey.erl:75
 msgid "Survey result deleted."
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:79
-#, fuzzy
 msgid "Survey results editor"
-msgstr "Soru"
+msgstr "Anket sonuçları editörü"
 
 #: modules/mod_survey/templates/_survey_end.tpl:1
 msgid "Thank you"
-msgstr ""
+msgstr "Teşekkür ederim"
 
 #: modules/mod_survey/templates/_survey_end.tpl:3
 msgid ""
 "Thank you for filling in our survey. Be sure to come back for other surveys!"
 msgstr ""
+"Anketimize doldurduğunuz için teşekkür ederiz. Diğer araştırmalar için "
+"geri gelmek için emin olun!"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15
 msgid "The earth is flat."
@@ -542,11 +539,11 @@ msgstr ""
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:21
 msgid "True"
-msgstr ""
+msgstr "Gerçek"
 
 #: modules/mod_survey/mod_survey.erl:94
 msgid "True/False"
-msgstr ""
+msgstr "Gerçek/Yanlış"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:32
 msgid "Validation"
@@ -570,21 +567,21 @@ msgstr ""
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:21
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: modules/mod_survey/mod_survey.erl:95
 msgid "Yes/No"
-msgstr ""
+msgstr "Evet/Hayır"
 
 #: modules/mod_survey/templates/_survey_results.tpl:37
 msgid "You are not allowed to see the results of this survey."
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
-#, fuzzy
 msgid ""
 "You can create your survey by adding blocks with questions below the body."
-msgstr "Soru kalıplarını şağ tarafa sürükleyerek anketinizi yaratabilirsiniz."
+msgstr ""
+"Sen gövdesi altında sorularla blokları ekleyerek anket oluşturabilirsiniz."
 
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
@@ -596,33 +593,33 @@ msgstr "düzenle"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:38
 msgid "must be a date"
-msgstr ""
+msgstr "bir tarih olmalıdır"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
 msgid "must be a number"
-msgstr ""
+msgstr "bir sayı olmalıdır"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:37
 msgid "must be a phone number"
-msgstr ""
+msgstr "bir telefon numarası olmalıdır"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:35
 msgid "must be an e-mail address"
-msgstr ""
+msgstr "bir e-posta adresi olmalıdır"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:23
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:34
 msgid "name"
-msgstr ""
+msgstr "isim"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:17
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
 msgid "name >= 2"
-msgstr ""
+msgstr "isim >= 2"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:15
 msgid "select…"
-msgstr ""
+msgstr "seçin…"
 
 #: modules/mod_survey/templates/admin_survey_editor.tpl:12
 msgid "survey results editor"
