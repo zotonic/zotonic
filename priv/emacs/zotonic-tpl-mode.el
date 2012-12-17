@@ -429,19 +429,20 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                 (progn
                   (setq indent (+ indent tab-width))
                   (forward-char)
-                  (zotonic-tpl-next-tag-boundary end)))
-            ;; un-indent after block end tags (or close tag)
-            ;; that has junk in front of it
-            ;; (without junk is taken care of in zotonic-tpl-tag-soup-indent)
-            (if (looking-at-p (concat "\\(%}\\)\\|\\({%[ \t\n]*"
-                                      zotonic-tpl-end-keywords-re
-                                      "\\)"))
-                (unless (eq start (point))
-                  (setq indent (- indent tab-width))))
-            ;; indent after opening soup tags
-            (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
-                (setq indent (+ indent tab-width)))
-            (forward-char))
+                  (zotonic-tpl-next-tag-boundary end))
+              ;;; else
+              ;; un-indent after block end tags (or close tag)
+              ;; that has junk in front of it
+              ;; (without junk is taken care of in zotonic-tpl-tag-soup-indent)
+              (if (looking-at-p (concat "\\(%}\\)\\|\\({%[ \t\n]*"
+                                        zotonic-tpl-end-keywords-re
+                                        "\\)"))
+                  (unless (eq start (point))
+                    (setq indent (- indent tab-width))))
+              ;; indent after opening soup tags
+              (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
+                  (setq indent (+ indent tab-width)))
+              (forward-char)))
           indent)
       0)))
 
