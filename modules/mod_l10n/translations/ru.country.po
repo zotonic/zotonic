@@ -223,7 +223,7 @@ msgstr "Эстония"
 msgid "Ethiopia"
 msgstr "Эфиопия"
 
-msgid "Falkland Islands"
+msgid "Falkland Islands (Malvinas)"
 msgstr "Фолклендские острова"
 
 msgid "Faroe Islands"
@@ -238,7 +238,7 @@ msgstr "Финляндия"
 msgid "France"
 msgstr "Франция"
 
-msgid "French Guyana"
+msgid "French Guiana"
 msgstr "Французская Гвиана"
 
 msgid "Gabon"
@@ -274,10 +274,10 @@ msgstr "Гринландия"
 msgid "Grenada"
 msgstr "Гренада"
 
-msgid "Guadeloupe (French)"
+msgid "Guadeloupe"
 msgstr "Гваделупе (Франция)"
 
-msgid "Guam (USA)"
+msgid "Guam"
 msgstr "Гума (США)"
 
 msgid "Guatemala"
@@ -358,7 +358,7 @@ msgstr "Кирибати"
 msgid "Kuwait"
 msgstr "Кувейт"
 
-msgid "Kyrgyz Republic (Kyrgyzstan)"
+msgid "Kyrgyzstan"
 msgstr "Киргизская республика (Кыргазстан)"
 
 msgid "Laos"
@@ -388,7 +388,7 @@ msgstr "Литва"
 msgid "Luxembourg"
 msgstr "Люксембург"
 
-msgid "Macau"
+msgid "Macao"
 msgstr "Макао"
 
 msgid "Macedonia"
@@ -415,7 +415,7 @@ msgstr "Малта"
 msgid "Marshall Islands"
 msgstr "Маршалловы Острова"
 
-msgid "Martinique (French)"
+msgid "Martinique"
 msgstr "Мартиника (Франция)"
 
 msgid "Mauritania"
@@ -433,7 +433,7 @@ msgstr "Мексика"
 msgid "Micronesia"
 msgstr "Микронезия"
 
-msgid "Moldavia"
+msgid "Moldova"
 msgstr "Молдавия"
 
 msgid "Monaco"
@@ -469,7 +469,7 @@ msgstr "Нидерланды"
 msgid "Netherlands Antilles"
 msgstr "Нидерландские Антильские острова"
 
-msgid "New Caledonia (French)"
+msgid "New Caledonia"
 msgstr "Новая Каледония (Франция)"
 
 msgid "New Zealand"
@@ -529,7 +529,7 @@ msgstr "Острова Питкэрн"
 msgid "Poland"
 msgstr "Польша"
 
-msgid "Polynesia (French)"
+msgid "French Polynesia"
 msgstr "Полинезия (Франция)"
 
 msgid "Portugal"
@@ -541,7 +541,7 @@ msgstr "Пуэрто-Рико"
 msgid "Qatar"
 msgstr "Катар"
 
-msgid "Reunion (French)"
+msgid "Reunion"
 msgstr "Реюньон (Франция)"
 
 msgid "Romania"
@@ -553,7 +553,7 @@ msgstr "Российская Федерация"
 msgid "Rwanda"
 msgstr "Руанда"
 
-msgid "S. Georgia and S. Sandwich Isls."
+msgid "South Georgia and the South Sandwich Islands"
 msgstr "Южная Георгия и Южные Сандвичевы острова"
 
 msgid "Saint Helena"
@@ -568,7 +568,7 @@ msgstr "Сент-Люсия"
 msgid "Saint Pierre and Miquelon"
 msgstr "Сен-Пьер и Микелон"
 
-msgid "Saint Tome (Sao Tome) and Principe"
+msgid "Sao Tome and Principe"
 msgstr "Сан-Томе и Принсипи"
 
 msgid "Saint Vincent and Grenadines"
@@ -595,7 +595,7 @@ msgstr "Сьерра-Леоне"
 msgid "Singapore"
 msgstr "Сингапур"
 
-msgid "Slovak Republic"
+msgid "Slovakia"
 msgstr "Республика Словакия"
 
 msgid "Slovenia"
@@ -640,7 +640,7 @@ msgstr "Швейцария"
 msgid "Syria"
 msgstr "Сирия"
 
-msgid "Tadjikistan"
+msgid "Tajikistan"
 msgstr "Таджикистан"
 
 msgid "Taiwan"
