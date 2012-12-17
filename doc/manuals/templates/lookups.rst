@@ -48,6 +48,8 @@ Exactly the same module priority is also valid for all files in the :file:`lib` 
 This allows any module to change the static css, javascript, images, favicon.ico, robots.txt and other static files with its own version.
 
 
+.. _manual-lookup-system-ua:
+
 User Agent selection
 ^^^^^^^^^^^^^^^^^^^^
 

@@ -29,10 +29,13 @@ The following arguments/filters can be specified:
 
 +--------------------+------------------------------------------------------------+--------------------+
 |Argument            |Description                                                 |Example             |
-+--------------------+------------------------------------------------------------+--------------------+
++====================+============================================================+====================+
 |width               |The maximum width of the image.                             |width=200           |
 +--------------------+------------------------------------------------------------+--------------------+
 |height              |The maximum height of the image.                            |height=200          |
++--------------------+------------------------------------------------------------+--------------------+
+|mediaclass          |The media class of the image. See                           |mediaclass="thumb"  |
+|                    |:ref:`manual-media-classes`.                                |                    |
 +--------------------+------------------------------------------------------------+--------------------+
 |background          |The background color for transparent image parts. See       |background="white"  |
 |                    |ImageMagick colors for how to specify the RGB color.        |                    |
