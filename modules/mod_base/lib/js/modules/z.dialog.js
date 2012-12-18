@@ -46,13 +46,22 @@
 
                  var dialog = $("<div>")
                      .attr("id", "zmodal")
-                     .attr("style", "width: "+width)
                      .addClass(dialogClass)
                      .append(title)
                      .append(body)
                      .appendTo($("body"));
 
                  dialog.modal({backdrop: true});
+
+                 if (width > 0) {
+                     dialog.css({
+                         width: width,
+                         'margin-left': function () {
+                             return -($(this).width() / 2);
+                         }
+                     });
+                 }
+                 
                  if ($(window).width() <= 480) {
                     dialog.css({top: ($(window).scrollTop() + 10) + "px"});
                  } else if (dialog.height() > 0.8 * $(window).height()) {
