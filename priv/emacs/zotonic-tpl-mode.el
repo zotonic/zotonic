@@ -55,7 +55,7 @@
   (modify-syntax-entry ?> ")<")
   (modify-syntax-entry ?| ".")
   (modify-syntax-entry ?% ".")
-  (modify-syntax-entry ?_ "w")
+  (modify-syntax-entry ?_ ".")
   )
 
 (defconst zotonic-tpl-keywords-re
