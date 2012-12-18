@@ -487,9 +487,20 @@ Returns the column the line was indented to."
     (zotonic-tpl-tag-soup-font-lock-tags))
    ))
 
+(defvar zotonic-tpl-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-\M-\\" 'zotonic-tpl-indent-buffer)
+    map)
+  "The zotonic-tpl-mode key map")
+
 (define-derived-mode zotonic-tpl-mode prog-mode "Zotonic"
-  "Major mode for editing Zotonic templates."
+  "Major mode for editing Zotonic templates.
+
+Keys defined in this mode are:
+\\{zotonic-tpl-mode-map}
+"
   (zotonic-tpl-syntax-table)
+  (use-local-map zotonic-tpl-mode-map)
   (set (make-local-variable 'comment-start) zotonic-tpl-comment-start)
   (set (make-local-variable 'comment-end) zotonic-tpl-comment-end)
   (set (make-local-variable 'comment-start-skip) zotonic-tpl-comment-start-skip)
