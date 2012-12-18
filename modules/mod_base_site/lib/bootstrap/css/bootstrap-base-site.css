@@ -63,6 +63,16 @@ ul.simple-list {
 .meta a {
     font-weight: 200;
 }
+.meta .share-button {
+  margin-left: 5px;
+  float: right;
+}
+.meta .share-button img {
+  height:18px;
+}
+.meta .btn {
+  margin-left:5px;
+}
 ul.share-page-options {
   list-style: none;
   margin: 0;
