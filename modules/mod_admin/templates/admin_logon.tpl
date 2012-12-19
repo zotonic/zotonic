@@ -21,7 +21,7 @@
     <h3 class="widget-header">{_ Log on to _} {{ m.config.site.title.value|default:"Zotonic" }}</h3>
     <div class="widget-content">
         <div id="logon_error"></div>
-        {% include "_logon_form.tpl" page="/admin" hide_title %}
+        {% include "_logon_form.tpl" page=page|default:"/admin" hide_title %}
     </div>
 </div>
 </div>
