@@ -163,6 +163,22 @@ init([]) ->
 
     init_webmachine(),
 
+    spawn(fun() ->
+                  timer:sleep(4000),
+                  lager:info(""),
+                  lager:info("Zotonic started"),
+                  lager:info("==============="),
+                  lager:info("Web server listening on IPv4 ~p:~p", [WebIp, WebPort]),
+                  case EnableIPv6 of
+                      true -> lager:info("Web server listening on IPv6 ::~p", [WebPort]);
+                      false -> lager:info("IPv6 support disabled.")
+                  end,
+                  %%lager:info("SMTP server listening on IPv4 ~p:~p", [SmtpListenIp, SmtpListenPort]),
+                  lager:info(""),
+                  [lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status]) ||
+                      [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status]
+          end),
+    
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
 
 %% @doc Sets the application parameters for webmachine and starts the logger processes.
