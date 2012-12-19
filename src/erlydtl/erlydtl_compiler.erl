@@ -682,7 +682,8 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                                 case Key of
                                     "maxage" -> {true, IsSu};
                                     "vary"   -> {true, IsSu};
-                                    "scomp"  -> {true, IsSu};
+                                    "scomp"  -> {true, IsSu}; % TODO: legacy, remove this
+                                    "runtime" -> {true, IsSu};
                                     "visible_for" -> {true, IsSu};
                                     "sudo" ->
                                         case Val of
