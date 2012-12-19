@@ -48,7 +48,8 @@ manage_schema(What, Context) ->
 
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    render_update(render_next_page(SurveyId, 1, exact, [], [], Context), Args, Context);
+    Answers = normalize_answers(proplists:get_value(answers, Args)),
+    render_update(render_next_page(SurveyId, 1, exact, Answers, [], Context), Args, Context);
 
 event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -125,6 +126,18 @@ observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+normalize_answers(undefined) -> [];
+normalize_answers(L) -> lists:map(fun normalize_answer/1, L).
+
+normalize_answer(A) when is_atom(A), is_binary(A) -> {z_convert:to_binary(A), <<"1">>};
+normalize_answer({A, undefined}) -> {z_convert:to_binary(A), <<>>};
+normalize_answer({A, true}) -> {z_convert:to_binary(A), <<"1">>};
+normalize_answer({A, false}) -> {z_convert:to_binary(A), <<"0">>};
+normalize_answer({A,V}) -> {z_convert:to_binary(A), z_convert:to_binary(V)};
+normalize_answer([A,V]) -> normalize_answer({A,V}).
+    
 
 render_update(#context{} = RenderContext, _Args, _Context) ->
     RenderContext;
