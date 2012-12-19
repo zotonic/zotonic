@@ -115,15 +115,7 @@ file_blacklisted(F) ->
 
 %% @doc Recompile Erlang files on the fly
 handle_file(_Verb, ".erl", F) ->
-    spawn(fun() ->
-                  make:files([F], [load,
-                                   {i, "include"},
-                                   {i, "src/dbdrivers/postgresql/include"},
-                                   {i, "deps/webzmachine/include"},
-                                   {outdir, "ebin"},
-                                   {parse_transform, lager_transform}
-                                  ])
-          end),
+    spawn(fun() -> recompile_file(F) end),
     "Recompile " ++ F;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
@@ -314,4 +306,39 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, mod_development}}
      
      |Acc].
+
+
+%% @doc Recompile and reload an Erlang file.
+recompile_file(File) ->
+    Module = list_to_existing_atom(filename:basename(File, ".erl")),
+
+    do_observe_fun(Module, fun z_module_manager:remove_observers/3),
+    
+    make:files([File], [load,
+                     {i, "include"},
+                     {i, "src/dbdrivers/postgresql/include"},
+                     {i, "deps/webzmachine/include"},
+                     {outdir, "ebin"},
+                     {parse_transform, lager_transform}
+                    ]),
+    do_observe_fun(Module, fun z_module_manager:add_observers/3).
+
+
+%% @doc Given an Erlang module that is being recompiled, adds or
+%% remove the 'magic' module observers if the erlang module is also a
+%% Zotonic module.
+do_observe_fun(Module, F) ->
+    Contexts = [z:c(Site) || [Site, State |_] <- z_sites_manager:get_sites_status(), State =:= running],
+    lists:foreach(
+      fun(C) ->
+              case z_module_manager:whereis(Module, C) of
+                  {ok, Pid} ->
+                      F(Module, Pid, C),
+                      z_depcache:flush(C);
+                  {error, _} ->
+                      nop
+              end
+      end,
+      Contexts).
+                      
 

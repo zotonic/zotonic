@@ -51,7 +51,9 @@
     dependencies/1,
     startable/2,
     module_exists/1,
-    title/1
+    title/1,
+    add_observers/3,
+    remove_observers/3
 ]).
 
 -include_lib("zotonic.hrl").
