@@ -48,7 +48,7 @@ Caching is enabled by defining one of the caching arguments:
 |            |will share the output of the rendering.                 |                    |
 |            |                                                        |                    |
 +------------+--------------------------------------------------------+--------------------+
-|vary        |Dependency keys for the cached output. When a cache key |vary="news"         |
+|vary        |Dependency keys for the cached output. If a cache key   |vary="news"         |
 |            |with the same name is flushed or invalidated then the   |                    |
 |            |cached output of this template is also invalidated. You |                    |
 |            |can use category names here.                            |                    |
@@ -61,11 +61,16 @@ Caching is enabled by defining one of the caching arguments:
 |            |"public", 0                                             |                    |
 |            |                                                        |                    |
 +------------+--------------------------------------------------------+--------------------+
-|sudo        |When supplied then access control is disabled whilst    |sudo                |
+|sudo        |If supplied then access control is disabled whilst      |sudo                |
 |            |rendering the included template. This will show any     |                    |
 |            |content not visible for the current user.  Use with     |                    |
 |            |care.                                                   |                    |
 |            |                                                        |                    |
++------------+--------------------------------------------------------+--------------------+
+|runtime     |If supplied then the included template is not inlined   |runtime             |
+|            |but included during evaluation of the calling template. |                    |
+|            |Only the supplied arguments are available as variables  |                    |
+|            |in the included template.                               |                    |
 +------------+--------------------------------------------------------+--------------------+
 
 .. versionadded:: 0.6
