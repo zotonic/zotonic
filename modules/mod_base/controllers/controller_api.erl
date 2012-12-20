@@ -62,18 +62,16 @@ allowed_methods(ReqData, Context) ->
                      end;
                  M3 -> M3
              end,
-
-    try
-        {ok, Module}  = z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method),
-        Context2 = z_context:set(service_module, Module, Context1),
-        try
-            {z_service:http_methods(Module), ReqData, Context2}
-        catch
-            _X:_Y ->
-                {['GET', 'HEAD', 'POST'], ReqData, Context2}
-        end
-    catch
-        error: badarg ->
+    case z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method) of
+        {ok, Module} ->
+            Context2 = z_context:set(service_module, Module, Context1),
+            try
+                {z_service:http_methods(Module), ReqData, Context2}
+            catch
+                _X:_Y ->
+                    {['GET', 'HEAD', 'POST'], ReqData, Context2}
+            end;
+        {error, not_found} ->
             %% The atom (service module) does not exist, return default methods.
             {['GET', 'HEAD', 'POST'], ReqData, Context1}
     end.
@@ -86,7 +84,7 @@ is_authorized(ReqData, Context) ->
     Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
 
     Module = z_context:get(service_module, Context2),
-    
+
     case z_service:needauth(Module) of
         false ->
             %% No auth needed; so we're authorized.
