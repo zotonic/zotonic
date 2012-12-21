@@ -517,9 +517,10 @@ sql_safe(String) ->
 %% Make sure the input is a list of valid categories.
 assure_categories(Name, Context) ->
     Cats = case z_string:is_string(Name) of
-               true -> [Name];
+               true -> [iolist_to_binary(Name)];
                false -> Name
            end,
+    Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
                     case assure_category(C, Context) of
                         error -> Acc;
@@ -527,7 +528,21 @@ assure_categories(Name, Context) ->
                     end
                 end,
                 [],
-                Cats).
+                Cats1).
+
+%% Flatten eventual lists of categories
+assure_cat_flatten(Names) when is_list(Names) ->
+    lists:flatten([  
+        case is_list(N) of
+            true -> 
+                case z_string:is_string(N) of
+                    true -> iolist_to_binary(N);
+                    false -> assure_cat_flatten(N)
+                end;
+            false ->
+                N
+        end
+        || N <- Names]).
 
 %% Make sure the given name is a category.
 assure_category([], _) -> error;
