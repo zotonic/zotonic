@@ -555,6 +555,8 @@ rid(undefined, _Context) ->
 rid(UniqueName, Context) when is_atom(UniqueName) -> 
     name_lookup(atom_to_list(UniqueName), Context);
 rid(<<>>, _Context) -> 
+    undefined;
+rid([], _Context) -> 
     undefined.
 
 %% @doc Return the id of the resource with a certain unique name.
