@@ -349,7 +349,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
         ))))
 
 (defun zotonic-tpl-indent-line ()
-  "Indent zotonic template code."
+  "Indent zotonic template code. Returns the indentation used."
   (interactive)
   (let ((indent
          (save-excursion
@@ -364,8 +364,11 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
       (while (not (eq indent (current-column)))
         (forward-char (- indent (current-column))))
       ;; if the line is empty, leave it empty
-      (if (eolp) (indent-line-to 0))
-      )))
+      (if (eolp)
+          (progn
+            (indent-line-to 0)
+            (setq indent 0))))
+    indent))
 
 (defun zotonic-tpl-indent-buffer ()
   "Indent entire buffer."
@@ -475,6 +478,57 @@ Returns the column the line was indented to."
       (indent-line-to indent)
       indent)
     ))
+
+;;;
+;;; Test routines
+;;;
+
+(defun zotonic-tpl-test-current-line-ok ()
+  "Test indent current line, return t if it was indented according to mode."
+  (save-excursion
+    (let ((expect (save-excursion
+                    (progn
+                      (beginning-of-line)
+                      (skip-chars-forward " \t")
+                      (current-column))))
+          (actual (zotonic-tpl-indent-line)))
+      (if (equal expect actual) t
+        ;; restore indentation on mismatch
+        (indent-line-to expect) nil))))
+
+(defun zotonic-tpl-test-report-error (prefix)
+  "Returns a formatted error message with PREFIX."
+  (format "%s line %d: %s\n"
+          prefix
+          (line-number-at-pos)
+          (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
+
+(defun zotonic-tpl-mode-test-buffer (buffer)
+  "Test indentation in BUFFER. Each line in the BUFFER where
+`zotonic-tpl-indent-line` would change it is reported/returned."
+  (interactive "*bRun zotonic-tpl-mode tests in buffer: ")
+  (let ((errors ""))
+    (with-current-buffer buffer
+      (save-excursion
+        (goto-char (point-min))
+        (while (not (eobp))
+          ;; test line indentation with point at beginning of line
+          (if (not (zotonic-tpl-test-current-line-ok))
+              (setq errors
+                    (concat errors (zotonic-tpl-test-report-error
+                                    "indentation error from beginning of")))
+            ;; if that succeeds, test with point at end of line
+            ;; (there may be subtle differences from that of beginning of line)
+            (end-of-line)
+            (unless (zotonic-tpl-test-current-line-ok)
+              (setq errors
+                    (concat errors (zotonic-tpl-test-report-error
+                                    "indentation error from end of")))))
+          ;; go to next line to test
+          (forward-line))))
+    (if (called-interactively-p 'any)
+        (message "%s" errors)
+      errors)))
 
 ;;;
 ;;; Define zotonic major mode
