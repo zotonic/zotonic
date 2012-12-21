@@ -16,8 +16,12 @@ current language. The idea behind this is that each language version
 of a :term:`resource` gets its own URL, and is as such indexable for
 Google.
 
-This behaviour is enabled by default, but can be switched off by
-setting the config key ``mod_translation.rewrite_url`` to ``false``.
+This behaviour is enabled by default, but can be switched off in the
+admin, by going to `Structure`, `Translation`. There is a checkbox at
+the bottom of the page.
+
+Alternatively you can set the config key
+``mod_translation.rewrite_url`` to ``false``.
 
 
 Programmatically switching languages
