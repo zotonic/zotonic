@@ -30,6 +30,29 @@ if you need something in the sidebar just for persons, create a
 ``_admin_edit_sidebar.person.tpl`` file in your project.
   
 
+Overriding TinyMCE options
+``````````````````````````
+
+If you need to override TinyMCE options; adding plugins, or setting
+other settings; you can create an ``_admin_tinymce_overrides_js.tpl``
+file which can contain extra settings for the TinyMCE editors in the
+admin.
+
+.. highlight:: javascript
+   
+The template must contain Javascript which modifies the `tinyInit`
+variable just before the editor is started. For example, to tweak the
+"paste" options you can put the following in the template::
+
+  tinyInit.theme_advanced_blockformats = "p,h1,h2"
+  tinyInit.paste_auto_cleanup_on_paste = true;
+  tinyInit.paste_remove_styles = true;
+  tinyInit.paste_remove_styles_if_webkit = true;
+  tinyInit.paste_strip_class_attributes = true;
+  tinyInit.paste_text_sticky = true;
+  tinyInit.paste_text_sticky_default = true;
+
+
 Writing admin widget templates
 ------------------------------
 
