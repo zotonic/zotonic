@@ -106,7 +106,7 @@ get_id(SubjectId, PredId, ObjectId, Context) when is_integer(PredId) ->
     z_db:q1("select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2", [SubjectId, PredId, ObjectId], Context);
 get_id(SubjectId, Pred, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Pred, Context),
-    z_db:q1("select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2", [SubjectId, PredId, ObjectId], Context).
+    get_id(SubjectId, PredId, ObjectId, Context).
 
 %% @doc Return the full description of all edges from a subject, grouped by predicate
 get_edges(SubjectId, Context) ->
