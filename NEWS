@@ -1,3 +1,15 @@
+Release 0.9.2, not yet released
+===============================
+
+New updated modules
+-------------------
+
+mod_admin
+  Resources in the meta category can have 'features': certain resource
+  properties (usually in the form of checkboxes) that decide what to
+  show or hide on certain pages in the admin. Used for example to
+  control where to show address and geodata edit boxes.
+
 
 Release 0.9.1, released on 2013-03-14
 =====================================
