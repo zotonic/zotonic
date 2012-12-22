@@ -37,15 +37,19 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Action = proplists:get_all_values(action, Args),
     UndoAction = proplists:get_all_values(undo_action, Args),
     UndoMessageId = proplists:get_value(undo_message_id, Args, "unlink-undo-message"),
-    
-    Postback = {unlink, EdgeId, SubjectId, Predicate, ObjectId, Hide, UndoMessageId, EdgeTemplate, Action, UndoAction},
+
+    Action1 = case Hide of
+                  undefined -> Action;
+                  _ -> [{fade_out, Hide}|Action]
+              end,
+    Postback = {unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action1, UndoAction},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Unlink the edge, on success show an undo message in the element with id "undo-message"
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, Hide, UndoMessageId, EdgeTemplate, Action, UndoAction}}, Context) ->
+event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action, UndoAction}}, Context) ->
     case z_acl:rsc_editable(SubjectId, Context) of
         true ->
             {SubjectId, Predicate1, ObjectId1} = case EdgeId of
@@ -62,10 +66,7 @@ event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, Hide, U
             ],
             Html = z_template:render("_action_unlink_undo.tpl", Vars, Context),
             Context1 = z_render:update(UndoMessageId, Html, Context),
-            case Hide of
-                undefined -> Context1;
-                _ -> z_render:wire([{fade_out, [{target, Hide}]} | Action], Context1)
-            end;
+            z_render:wire(Action, Context1);
         false ->
             z_render:growl_error("Sorry, you have no permission to edit this page.", Context)
     end.
