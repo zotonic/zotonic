@@ -101,3 +101,36 @@ import/export sidebar widget. Excerpt from mod_backup's `_admin_edit_sidebar.tpl
 
 
 .. seealso:: :ref:`template-admin_edit_widget_i18n`
+
+
+Resource meta `features`
+------------------------
+
+Resources in the meta category can have 'features': certain resource
+properties (usually in the form of checkboxes) that decide what to
+show or hide on certain pages in the admin. To use this, create a
+``_admin_features.category.tpl`` in your module.
+
+For instance, :ref:`mod_geodata` defines the following
+``_admin_features.category.tpl`` to create an extra checkbox so that
+per category can be defined whether or not the geodata box should be
+shown::
+
+  <div class="controls">
+	  <label class="checkbox">
+          <input value="1" type="checkbox"
+                 name="feature_show_geodata"
+                 {% if id.feature_show_geodata|if_undefined:`true` %}checked{% endif %}
+                 />
+          {_ Show geo data on edit page _}
+      </label>
+  </div>
+
+And on the edit page there is this check to conditionally include the geodata box::
+
+  {% if id.category_id.feature_show_geodata|if_undefined:`true` %}
+
+The ``if_undefined`` is used so that the default value can be true
+when the checkbox has never been touched.
+  
+.. seealso:: :ref:`filter-if_undefined`
