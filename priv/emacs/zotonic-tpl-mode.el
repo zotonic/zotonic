@@ -443,7 +443,10 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                   (if (zotonic-tpl-tag-soup-find-open-tag (point-min))
                       (setq indent (current-column))))
               (goto-char start))
-            ;; now look at the rest of line (either the enitre line,
+            ;; look for ending multiline soup tag
+            (if (looking-at-p ">")
+                (setq indent (+ indent tab-width)))
+            ;; look at the rest of line (either the enitre line,
             ;; or that following the soup close tag
             (while (not (eolp))
               ;; indent after block begin tags
@@ -453,10 +456,9 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                     (setq indent (+ indent tab-width))
                     (forward-char)
                     (zotonic-tpl-next-tag-boundary end))
-                ;;; else
+                  ;;; else
                 ;; un-indent after block end tags (or close tag)
                 ;; that has junk in front of it
-                ;; without junk is taken care of in zotonic-tpl-tag-soup-indent
                 (if (looking-at-p (concat "\\(%}\\)\\|\\({%[ \t\n]*"
                                           zotonic-tpl-end-keywords-re
                                           "\\)"))
@@ -465,15 +467,16 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                         (setq indent (- indent tab-width)))
                       (forward-char)
                       (zotonic-tpl-next-tag-boundary end))
-                  ;;; else
+                    ;;; else
                   ;; skip over other tags
                   (if (looking-at-p "{%")
                       (progn
                         (forward-char)
                         (zotonic-tpl-next-tag-boundary end))
-                    ;;; else
+                      ;;; else
                     ;; indent after opening soup tags (or multiline open tags)
-                    (if (looking-at-p "<\\w+[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>?")
+                    (if (looking-at-p
+                         "<\\w+[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>?")
                         (setq indent (+ indent tab-width)))
                     ;; unindent after self closing multiline soup tag
                     (if (looking-at-p "/>")
@@ -491,15 +494,17 @@ Returns the column the line was indented to."
     (beginning-of-line)
     (let ((indent
            (if (looking-at-p "[ \t]*</")
-               ;; indent closing tag
+               ;; indent closing tag matching it's open tag
                (save-excursion
                  (zotonic-tpl-tag-soup-find-open-tag (point-min))
                  (current-column))
              ;; indent tag soup
              (zotonic-tpl-tag-soup-get-indent-for-line -1))))
-      ;; un-indent block end tags
-      (if (looking-at-p (concat "[ \t]*{%[ \t\n]*"
-                                zotonic-tpl-end-keywords-re))
+      ;; un-indent block end tags and ending multiline soup tags
+      (if (or
+           (looking-at-p (concat "[ \t]*{%[ \t\n]*"
+                                 zotonic-tpl-end-keywords-re))
+           (looking-at-p "[ \t]*/?>"))
           (setq indent (- indent tab-width)))
       (indent-line-to indent)
       indent)
