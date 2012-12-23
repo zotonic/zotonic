@@ -91,6 +91,12 @@ outside...
         name="title"
         value="{{ id.title }}" />
     {% validate id=#title.id name="title" type={presence} %}
+
+    <textarea
+        foo
+    >
+        Default text...
+    </textarea>
 </div>
 
 
