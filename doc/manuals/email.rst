@@ -62,48 +62,58 @@ The file ``priv/config`` can be configured to hold any of the
 configuration options below. They are in effect for every site running
 in the Zotonic instance.
 
-+------------------+--------------------------------------+
-|Key               |Description                           |
-+==================+======================================+
-|smtp_relay        |Whether or not to use a SMTP relay    |
-|                  |host. Boolean value, defaults to      |
-|                  |false.                                |
-+------------------+--------------------------------------+
-|smtp_host         |The hostname for the SMTP relay host, |
-|                  |only needed if smtp_relay is enabled. |
-+------------------+--------------------------------------+
-|smtp_ssl          |Whether or not to use SSL on the relay|
-|                  |host, only needed if smtp_relay is    |
-|                  |enabled.                              |
-+------------------+--------------------------------------+
-|smtp_username     |The username for the relay host, only |
-|                  |needed if smtp_relay is enabled.      |
-+------------------+--------------------------------------+
-|smtp_password     |The password for the relay host, only |
-|                  |needed if smtp_relay is enabled.      |
-+------------------+--------------------------------------+
-|smtp_no_mx_lookups|Set to true to not do a MX lookup     |
-|                  |before sending mail. (default: false) |
-+------------------+--------------------------------------+
-|smtp_verp_as_from |Use the "from" address as VERP for    |
-|                  |bounce handling (default: false)      |
-+------------------+--------------------------------------+
-|smtp_bcc          |Optionally send a BCC of every sent to|
-|                  |this address                          |
-+------------------+--------------------------------------+
-|email_override    |A global e-mail override. The override|
-|                  |logic first checks the site override, |
-|                  |and then the global override address. |
-+------------------+--------------------------------------+
-|smtp_spamd_ip     |Optional IP address for a spamassassin|
-|                  |host                                  |
-+------------------+--------------------------------------+
-|smtp_spamd_port   |Optional port number for a            |
-|                  |spamassassin host                     |
-+------------------+--------------------------------------+
-|smtp_bounce_domain|Which domain to use for bounce VERP   |
-|                  |messages. Defaults to the smtp domain.|
-+------------------+--------------------------------------+
++--------------------------+--------------------------------------+
+|Key                       |Description                           |
++==========================+======================================+
+|smtp_relay                |Whether or not to use a SMTP relay    |
+|                          |host. Boolean value, defaults to      |
+|                          |false.                                |
++--------------------------+--------------------------------------+
+|smtp_relay_host           |Host name for the relay server.       |
+|                          |Defaults to "localhost".              |
++--------------------------+--------------------------------------+
+|smtp_relay_port           |Port number of the SMTP relay host.   |
+|                          |Defaults to 2525.                     |
++--------------------------+--------------------------------------+
+|smtp_host                 |The hostname for the SMTP relay host, |
+|                          |only needed if smtp_relay is enabled. |
++--------------------------+--------------------------------------+
+|smtp_ssl                  |Whether or not to use SSL on the relay|
+|                          |host, only needed if smtp_relay is    |
+|                          |enabled.                              |
++--------------------------+--------------------------------------+
+|smtp_username             |The username for the relay host, only |
+|                          |needed if smtp_relay is enabled.      |
++--------------------------+--------------------------------------+
+|smtp_password             |The password for the relay host, only |
+|                          |needed if smtp_relay is enabled.      |
++--------------------------+--------------------------------------+
+|smtp_no_mx_lookups        |Set to true to not do a MX lookup     |
+|                          |before sending mail. (default: false) |
++--------------------------+--------------------------------------+
+|smtp_verp_as_from         |Use the "from" address as VERP for    |
+|                          |bounce handling (default: false)      |
++--------------------------+--------------------------------------+
+|smtp_bcc                  |Optionally send a BCC of every sent to|
+|                          |this address                          |
++--------------------------+--------------------------------------+
+|email_override            |A global e-mail override. The override|
+|                          |logic first checks the site override, |
+|                          |and then the global override address. |
++--------------------------+--------------------------------------+
+|smtp_spamd_ip             |Optional IP address for a spamassassin|
+|                          |host                                  |
++--------------------------+--------------------------------------+
+|smtp_spamd_port           |Optional port number for a            |
+|                          |spamassassin host                     |
++--------------------------+--------------------------------------+
+|smtp_bounce_domain        |Which domain to use for bounce VERP   |
+|                          |messages. Defaults to the smtp domain.|
++--------------------------+--------------------------------------+
+|smtp_bounce_email_override|The email address for bounce handling.|
+|                          |Only use when all else fails (see     |
+|                          |the paragraph below).                 |
++--------------------------+--------------------------------------+
 
 
 The sender’s domain
@@ -129,6 +139,13 @@ is delivered at a SMTP server.
 You need a valid domain for this envelope sender address. The part
 before the ``@`` is generated by Zotonic and is used for identifying
 the original message and recipient when the message bounces.
+
+When the generated part is not acceptable then you can force an envelope
+address by setting the ``smtp_bounce_email_override`` option. Setting the
+bounce/envelop address manually disables Zotonic’s build-in handling of
+bounces that happen *after* the e-mail was accepted for delivery by
+the remote SMTP host.
+
 
 How does Zotonic know the domain?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
