@@ -20,7 +20,7 @@
 	    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
 	    <div class="controls">
 		{% if cat and nocatselect %}
-		<input type="text" readonly value="{{ m.rsc[cat].title }}" />
+		<input type="text" readonly value="{{ m.rsc[cat].title }}" class="span4" />
 		<input type="hidden" name="category_id" value="{{ cat }}"/>
 		{% else %}
 		<select id="{{ #category }}" name="category_id" class="span4">
@@ -36,11 +36,11 @@
 	    </div>
 	</div>
 
-    {% if m.rsc[cat].is_a.category or m.rsc[cat].is_a.predicate %}
+    {% if cat.name == 'category' or cat.name == 'predicate' %}
 	<div class="control-group">
-	    <label class="control-label" for="{{ #published }}">{_ Name _}</label>
+	    <label class="control-label" for="{{ #name }}">{_ Name _}</label>
 	    <div class="controls">
-		    <input type="input" id="{{ #name }}" name="name" value="" />
+		    <input type="text" id="{{ #name }}" name="name" value="" class="span4" />
 			{% validate id=#name name="name" type={presence} %}
 	    </div>
 	</div>
