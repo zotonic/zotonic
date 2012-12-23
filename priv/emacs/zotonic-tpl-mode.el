@@ -476,7 +476,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                       ;;; else
                     ;; indent after opening soup tags (or multiline open tags)
                     (if (looking-at-p
-                         "<\\w+[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>?")
+                         "<\\w+\\(?:[^/>]\\|\\(?:/[^>]\\)\\)*\\(?:>\\|\n\\)")
                         (setq indent (+ indent tab-width)))
                     ;; unindent after self closing multiline soup tag
                     (if (looking-at-p "/>")
