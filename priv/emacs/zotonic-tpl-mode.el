@@ -472,9 +472,14 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                         (forward-char)
                         (zotonic-tpl-next-tag-boundary end))
                     ;;; else
-                    ;; indent after opening soup tags
-                    (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
+                    ;; indent after opening soup tags (or multiline open tags)
+                    (if (looking-at-p "<\\w+[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>?")
                         (setq indent (+ indent tab-width)))
+                    ;; unindent after self closing multiline soup tag
+                    (if (looking-at-p "/>")
+                        (save-excursion
+                          (if (not (re-search-backward "<\\w+" start t))
+                              (setq indent (- indent tab-width)))))
                     (forward-char)))))
             indent))
       0)))
