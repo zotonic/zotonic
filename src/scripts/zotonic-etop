@@ -22,4 +22,4 @@
 CONSOLE_LINES=`tput lines`
 LINES=$(($CONSOLE_LINES - 11))
 
-$ERL $NAME_ARG ${NODENAME}_etop@$HOSTNAME -hidden -s etop -s erlang halt -lines $LINES -tracing off -output text -node $NODENAME@$HOSTNAME $@
+$ERL $NAME_ARG ${NODENAME}_etop@$NODEHOST -hidden -s etop -s erlang halt -lines $LINES -tracing off -output text -node $NODENAME@$NODEHOST $@

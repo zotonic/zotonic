@@ -23,6 +23,8 @@
 # For more information see: http://steve.vinoski.net/blog/2009/02/22/controlling-erlangs-heart/
 #
 
+require_zotonic_not_running
+
 cd $ZOTONIC
 
 now=`date -u +%s`
@@ -53,7 +55,7 @@ else
     starttime=$now
 
     # Only build zotonic the first time, not for restarts
-    echo  "Starting Zotonic $NODENAME@$HOSTNAME" 
+    echo  "Starting Zotonic $NODENAME@$NODEHOST" 
     ${MAKE} >/dev/null
 fi
 
@@ -61,4 +63,4 @@ ENV=`which env`
 HEART_COMMAND="${ENV} HEART=true ZOTONIC_HEART_RESTARTS=$restarts ZOTONIC_HEART_START=$starttime $ZOTONIC_BIN/zotonic start"
 export HEART_COMMAND
 
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODE -boot start_sasl -config $ZOTONIC/priv/erlang.config -heart -detached -s zotonic
+$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -heart -detached -s zotonic

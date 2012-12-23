@@ -40,7 +40,7 @@ erlydtl)
     for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
     ALL=`echo $ALL|sed 's/^,//'`
 
-    $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$HOSTNAME -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
+    $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
 ;;
 esac
 
