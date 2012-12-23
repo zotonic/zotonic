@@ -82,6 +82,18 @@ outside...
     tab soup.
 </div>
 
+9. indent multiline soup tags
+<div>
+    <label for="{{ #title.id }}">Project name</label>
+    <input
+        type="text"
+        id="{{ #title.id }}"
+        name="title"
+        value="{{ id.title }}" />
+    {% validate id=#title.id name="title" type={presence} %}
+</div>
+
+
 
 {# Don't add tests below this point... #}
 {# The test results are updated automatically by the test routine #}
