@@ -24,9 +24,8 @@ SITE=$1
 function disablesite {
     $ZOTONIC/bin/zotonic status>/dev/null
     if [ "$?" -eq 0 ]; then
-        # update & start site
-        NODE=$NODENAME@$HOSTNAME
-        $ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_enable@$HOSTNAME -s z_sites_manager stop $NODE $1 -s init stop
+        # stop site
+        $ZOTONIC_CALL -a "z_sites_manager stop [$1]" > /dev/null
     fi
 }
 

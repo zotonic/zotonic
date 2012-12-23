@@ -20,4 +20,4 @@
 
 require_zotonic_running
 
-$ERL $NAME_ARG ${NODENAME}_shell_$$@$HOSTNAME -remsh $NODENAME@$HOSTNAME
+$ERL $NAME_ARG ${NODENAME}_shell_$$@$NODEHOST -remsh $NODENAME@$NODEHOST

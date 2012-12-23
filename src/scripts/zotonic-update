@@ -20,5 +20,5 @@
 
 require_zotonic_running
 
-echo "Updating Zotonic $NODENAME"
-$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_update@$HOSTNAME -s make all load -s zotonic update $NODENAME@$HOSTNAME
+echo "Updating Zotonic $NODENAME@$NODEHOST"
+$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_update@$NODEHOST -s make all load -s zotonic update $NODENAME@$NODENAME

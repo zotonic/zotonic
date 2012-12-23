@@ -21,9 +21,9 @@
 require_zotonic_running
 
 echo "\
-Running: $NODENAME@$HOSTNAME
+Running: $NODENAME@$NODEHOST
 
 Sites Status:
 ============="
-$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$HOSTNAME -s zotonic status $NODENAME@$HOSTNAME -s init stop
+$ERL -noshell -pa $PA $NAME_ARG ${NODENAME}_stop@$NODEHOST -s zotonic status $NODENAME@$NODEHOST -s init stop
 echo
