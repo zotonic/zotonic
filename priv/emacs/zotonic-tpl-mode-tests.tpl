@@ -76,7 +76,11 @@
 </div>
 outside...
 
-
+8. don't indent tag soup following a template tag
+{% tabs id="tabs" %}
+<div id="tabs">
+    tab soup.
+</div>
 
 
 {# Don't add tests below this point... #}

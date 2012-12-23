@@ -214,11 +214,11 @@
     ;; find next {% ... %} tag (notice: we need to keep the captures in sync)
     (concat
      "\\({%\\) *" zotonic-tpl-identifer-re ; open tag followed by identifier
-     "\\([^%]\\|\n\\|\\(%[^}]\\)\\)*\\(%}\\)") ; skip tag contents up to close
-    ;; captures: 1. {%  2. tag/keyword 3-4. tag contents  5. %}
+     "\\([^%]\\|\n\\|\\(?:%[^}]\\)\\)*\\(%}\\)") ; skip tag contents up to close
+    ;; captures: 1. {%  2. tag/keyword 3. tag contents  4. %}
     (list
      '(1 font-lock-constant-face)
-     '(5 font-lock-constant-face)
+     '(4 font-lock-constant-face)
      zotonic-tpl-keywords-matcher
      zotonic-tpl-custom-tags-matcher
      zotonic-tpl-filters-matcher
@@ -393,12 +393,12 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
   (list
    (cons
     ;; find tags to highlight
-    "\\(</?\\)\\(\\w+\\)\\([^/>]*\\|\\(/[^/>]\\)*\\)*\\(/?>\\)"
-    ;; captures: 1. start tag  2. tag name  3-4. tag contents  5. end tag
+    "\\(</?\\)\\(\\w+\\)\\([^/>]\\|\\(?:/[^/>]\\)\\)*\\(/?>\\)"
+    ;; captures: 1. start tag  2. tag name  3. tag contents  4. end tag
     (list
      '(1 font-lock-constant-face)
      '(2 font-lock-keyword-face)
-     '(5 font-lock-constant-face)
+     '(4 font-lock-constant-face)
      ;; zotonic-tpl-...-matcher
      ))
    ))
@@ -470,11 +470,12 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
                   (if (looking-at-p "{%")
                       (progn
                         (forward-char)
-                        (zotonic-tpl-next-tag-boundary end)))
-                  ;; indent after opening soup tags
-                  (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
-                      (setq indent (+ indent tab-width)))
-                  (forward-char))))
+                        (zotonic-tpl-next-tag-boundary end))
+                    ;;; else
+                    ;; indent after opening soup tags
+                    (if (looking-at-p "<[^/]\\([^/>]\\|\\(/[^/>]\\)\\)*>")
+                        (setq indent (+ indent tab-width)))
+                    (forward-char)))))
             indent))
       0)))
 
