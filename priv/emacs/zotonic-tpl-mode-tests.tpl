@@ -99,6 +99,12 @@ outside...
     </textarea>
 </div>
 
+10. don't indent after self closing soup tags
+<input type="hidden" name="id" value="{{ id }}" />
+<div class="ui-widget">
+    form widget...
+</div>
+
 
 
 {# Don't add tests below this point... #}
