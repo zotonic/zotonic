@@ -10,169 +10,213 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-09-02 10:04+0200\n"
+"PO-Revision-Date: 2012-12-28 02:22+0200\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: Turkish <kunthar@gmail.com>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Turkish\n"
 "X-Poedit-Country: Turkey\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ./modules/mod_signup/templates/signup.tpl:163
+#: modules/mod_signup/templates/signup.tpl:161
 msgid "And sign up"
 msgstr "Üye olun"
 
-#: ./modules/mod_signup/templates/signup.tpl:142
+#: modules/mod_signup/templates/signup_confirm.tpl:12
+msgid "Bring me to my profile page"
+msgstr "Profil sayfama git"
+
+#: modules/mod_signup/templates/signup.tpl:146
 msgid "Check our Terms of Service and Privacy policies"
 msgstr "Lütfen Kullanım ve Gizlilik Politikamızı onaylayın"
 
-#: ./modules/mod_signup/templates/signup.tpl:114
+#: modules/mod_signup/templates/signup.tpl:115
 msgid "Choose a username and password"
 msgstr "Kullanıcı adı ve şifre seçin"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:12
+#: modules/mod_signup/templates/signup_confirm.tpl:26
+msgid "Confirm key"
+msgstr "Onay anahtarı"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:3
+#: modules/mod_signup/templates/signup_confirm.tpl:15
+#: modules/mod_signup/templates/signup_confirm.tpl:30
+msgid "Confirm my account"
+msgstr "Hesabımı onayla"
+
+#: modules/mod_signup/templates/email_verify.tpl:12
 msgid "Confirm my account."
 msgstr "Hesabımı onayla"
 
-#: ./modules/mod_signup/templates/signup.tpl:75
+#: modules/mod_signup/templates/signup.tpl:70
 msgid "Create your account"
 msgstr "Hesabınızı yaratın"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:6
+#: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
 msgstr "Sayın"
 
-#: ./modules/mod_signup/templates/signup.tpl:102
+#: modules/mod_signup/templates/signup.tpl:103
 msgid "E-mail"
 msgstr "E-posta"
 
-#: ./modules/mod_signup/templates/signup.tpl:80
+#: modules/mod_signup/templates/signup.tpl:75
 msgid "First name"
 msgstr "Adınız"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:16
+#: modules/mod_signup/templates/email_verify.tpl:16
 msgid "Hope to see you soon."
-msgstr "Çok yakında görüşmek üzere :)"
+msgstr "Çok yakında görüşmek üzere."
 
-#: ./modules/mod_signup/templates/signup.tpl:156
+#: modules/mod_signup/templates/signup.tpl:154
 msgid "I agree to the"
 msgstr "Sözleşmeyi kabul ediyorum"
 
-#: ./modules/mod_signup/templates/_logon_link.tpl:1
+#: modules/mod_signup/templates/_logon_link.tpl:2
 msgid "I don’t have an account, please sign me up."
 msgstr "Henüz üye değilim. Kayıt olmak istiyorum."
 
-#: ./modules/mod_signup/templates/email_verify.tpl:14
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
 msgstr "Eğer link çalışmazsa"
 
-#: ./modules/mod_signup/templates/signup.tpl:62
+#: modules/mod_signup/templates/signup.tpl:57
 msgid "If you have already an account,"
 msgstr "Zaten üyemiz iseniz,"
 
-#: ./modules/mod_signup/templates/signup.tpl:92
+#: modules/mod_signup/templates/signup_confirm.tpl:17
+msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
+msgstr "E-mailinize onay anahtarı gönderildi. Lütfen aşağıdaki alana anahtarı kopyalayıp yapıştırınız."
+
+#: modules/mod_signup/templates/signup.tpl:93
 msgid "Last name"
 msgstr "Soyadınız"
 
-#: ./modules/mod_signup/templates/signup.tpl:125
+#: modules/mod_signup/templates/signup.tpl:126
 msgid "Password"
 msgstr "Şifre"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:3
+#: modules/mod_signup/templates/email_verify.tpl:3
 msgid "Please confirm your account."
 msgstr "Lütfen hesabınızı onaylayın"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:10
+#: modules/mod_signup/templates/email_verify.tpl:10
 msgid "Please follow the link below."
 msgstr "Lütfen aşağıdaki linki takip edin"
 
-#: ./modules/mod_signup/templates/signup.tpl:157
+#: modules/mod_signup/templates/signup.tpl:87
+msgid "Prefix"
+msgstr "Önek"
+
+#: modules/mod_signup/templates/signup.tpl:155
 msgid "Privacy policies"
 msgstr "Gizlilik Politikasını onaylıyorum"
 
-#: ./modules/mod_signup/templates/signup.tpl:166
+#: modules/mod_signup/templates/signup.tpl:3
+#: modules/mod_signup/templates/signup.tpl:164
 msgid "Sign Up"
 msgstr "Üye Ol"
 
-#: ./modules/mod_signup/templates/signup.tpl:60
+#: modules/mod_signup/templates/signup.tpl:55
 msgid "Sign up and become a member"
-msgstr "KAYDOLUN VE ÜYEMİZ OLARAK ALL DÜNYASININ TADINI ÇIKARIN"
+msgstr "Kaydolarak üyemiz olun"
 
-#: ./modules/mod_signup/templates/signup.tpl:77
+#: modules/mod_signup/templates/signup_confirm.tpl:20
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr "Üzgünüz, bu onay kodu geçersiz. Doğru olarak kopyaladığınızdan emin olun."
+
+#: modules/mod_signup/templates/signup.tpl:72
 msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
 msgstr "Üzgünüz, servis sağlayıcınız tarafından zaten bu hesap yaratılmış. Facebook üzerindeki hesabınız durdurulmuş olabilir."
 
-#: ./modules/mod_signup/templates/signup.tpl:116
+#: modules/mod_signup/templates/signup.tpl:117
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Üzgünüz, bu kullanıcı adı daha önce alınmıştır. Lütfen yeni bir isimle deneyin."
 
-#: ./modules/mod_signup/templates/email_verify.tpl:8
+#: modules/mod_signup/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Üye olduğunuz çok teşekkür ediyoruz. Hesabınızı keyifle kullanmak için onaylamanız gerekiyor. "
 
-#: ./modules/mod_signup/templates/signup.tpl:153
+#: modules/mod_signup/templates/signup.tpl:151
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Kayıt olmak için onay vermeniz gerekiyor."
 
-#: ./modules/mod_signup/templates/signup.tpl:119
+#: modules/mod_signup/templates/signup.tpl:120
 msgid "Username"
 msgstr "Kullanıcı adı"
 
-#: ./modules/mod_signup/templates/signup.tpl:134
+#: modules/mod_signup/templates/signup.tpl:134
 msgid "Verify password"
 msgstr "Şifre tekrar"
 
-#: ./modules/mod_signup/templates/signup.tpl:175
+#: modules/mod_signup/templates/signup.tpl:173
 msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
 msgstr "Size bir e-posta gönderdik. Hesabınızı nasıl onaylayacağınız bu e-postada olacak."
 
-#: ./modules/mod_signup/templates/signup.tpl:145
-msgid "We will be very careful with all the information given to us and will never "
-msgstr "Burada verdiğiniz hiç bir kişisel bilgi, haberiniz olmaksızın paylaşılmamaktadır. Lütfen kullanım şartları ve gizlilik politikamızı okuyunuz."
+#: modules/mod_signup/templates/signup.tpl:149
+msgid ""
+"We will be very careful with all the information given to us and will never give your name or address away without your permission.\n"
+"\t\t\tWe do have some rules that we need you to agree with."
+msgstr ""
+"Bize verdiğiniz tüm bilgiler için çok dikkatli olacağız ve isminizi ve adresinizi izniniz olmadan paylaşmayacağız.\n"
+"\t\t\tAnlaşmamız gereken bazı kurallarımız var."
 
-#: ./modules/mod_signup/templates/signup.tpl:177
+#: modules/mod_signup/templates/signup_confirm.tpl:8
+msgid "Welcome"
+msgstr "Hoşgeldiniz"
+
+#: modules/mod_signup/templates/signup.tpl:175
 msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
 msgstr "Eğer bir kaç dakika içinde e-posta elinize geçmemişse lütfen SPAM ve çöp klasörlerinizi kontrol edin."
 
-#: ./modules/mod_signup/templates/signup.tpl:54
-msgid "When you want to sign up a new member, then first"
-msgstr "Zaten üyemiz iseniz,"
-
-#: ./modules/mod_signup/templates/signup.tpl:173
+#: modules/mod_signup/templates/signup.tpl:171
 msgid "You are almost there!"
 msgstr "Neredeyse tamamladınız!"
 
-#: ./modules/mod_signup/templates/signup.tpl:52
-msgid "You are already a member"
-msgstr "Zaten üyemiz olmuşsunuz :)"
-
-#: ./modules/mod_signup/templates/signup.tpl:65
+#: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
 msgstr "Ayrıca"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:14
+#: modules/mod_signup/templates/signup_confirm.tpl:10
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr "Hesabınız onaylandı. Şimdi siteye devam edebilirsiniz."
+
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "and enter the key"
 msgstr "anahtarı giriniz"
 
-#: ./modules/mod_signup/templates/signup.tpl:157
+#: modules/mod_signup/templates/signup.tpl:155
 msgid "and the"
 msgstr "ve"
 
-#: ./modules/mod_signup/templates/email_verify.tpl:14
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "in the input field."
 msgstr "giriş alanına"
 
-#: ./modules/mod_signup/templates/signup.tpl:54
-msgid "log off from your current account"
-msgstr "hesaptan çıkış"
-
-#: ./modules/mod_signup/templates/signup.tpl:62
+#: modules/mod_signup/templates/signup.tpl:57
 msgid "log on now"
 msgstr "giriş yapabilirsiniz"
 
-#: ./modules/mod_signup/templates/signup.tpl:65
+#: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"
 msgstr "kullanıcı adı ve şifre ile kayıt olabilirsiniz"
 
+#~ msgid ""
+#~ "We will be very careful with all the information given to us and will "
+#~ "never "
+#~ msgstr ""
+#~ "Burada verdiğiniz hiç bir kişisel bilgi, haberiniz olmaksızın "
+#~ "paylaşılmamaktadır. Lütfen kullanım şartları ve gizlilik politikamızı "
+#~ "okuyunuz."
+
+#~ msgid "When you want to sign up a new member, then first"
+#~ msgstr "Zaten üyemiz iseniz,"
+
+#~ msgid "You are already a member"
+#~ msgstr "Zaten üyemiz olmuşsunuz"
+
+#~ msgid "log off from your current account"
+#~ msgstr "hesaptan çıkış"

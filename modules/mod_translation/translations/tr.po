@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-28 02:23+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:22
+msgid "Active modules"
+msgstr "Aktif modüller"
+
+#: modules/mod_translation/templates/admin_translation.tpl:14
+#: modules/mod_translation/templates/admin_translation.tpl:15
+msgid "Add language"
+msgstr "Dil ekle"
+
+#: modules/mod_translation/templates/admin_translation.tpl:10
+msgid "All languages known to the system. You can add or remove languages."
+msgstr "Sistemdeki tüm diller. Dil ekleyip kaldırabilirsiniz."
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:1
+msgid "Are you sure you want to delete the language"
+msgstr "Bu dili silmek istediğinizden emin misiniz?"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:9
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:6
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
+msgid "Cancel"
+msgstr "İptal"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:10
+msgid "Copy"
+msgstr "Kopyala"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:1
+msgid "Copy texts from a language to the currently selected language."
+msgstr "Seçilen dile bir başka dilden yazı kopyala."
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
+msgid "Copy translation"
+msgstr "Çeviriyi kopyala"
+
+#: modules/mod_translation/templates/admin_translation.tpl:23
+msgid "Default"
+msgstr "Varsayılan"
+
+#: modules/mod_translation/templates/admin_translation.tpl:47
+msgid "Delete"
+msgstr "Sil"
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:7
+#: modules/mod_translation/templates/admin_translation.tpl:49
+msgid "Delete language"
+msgstr "Dili sil"
+
+#: modules/mod_translation/templates/admin_translation.tpl:54
+msgid "Edit"
+msgstr "Düzenle"
+
+#: modules/mod_translation/templates/admin_translation.tpl:56
+#: modules/mod_translation/templates/admin_translation.tpl:62
+#: modules/mod_translation/templates/admin_translation.tpl:63
+msgid "Edit language"
+msgstr "Dili düzenle"
+
+#: modules/mod_translation/templates/admin_translation.tpl:22
+msgid "Enabled"
+msgstr "Etkinleştirildi"
+
+#: modules/mod_translation/templates/admin_translation.tpl:11
+msgid "Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language."
+msgstr "Etkinleştirilen diller dil seçim menüsünde gösterilir. Yeni ziyaretçi için varsayılan dil kullanılır."
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:1
+msgid "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of the language. Use the native form of the language, for example <em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+msgstr "Dilin iso kodunu (örneğin <em>tr</em> veya <em>en</em>) ve başlığı girin. Dilin kendi dilindeki karşılığı kullanın, örneğin <em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+
+#: modules/mod_translation/templates/admin_translation.tpl:85
+msgid "Generate .pot files"
+msgstr ".pot dosyası oluştur"
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+msgid "Help about translations."
+msgstr "Çevirilerle ilgili yardım."
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:6
+#: modules/mod_translation/templates/admin_translation.tpl:24
+msgid "ISO Code"
+msgstr "ISO kodu"
+
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
+#: modules/mod_translation/templates/admin_translation.tpl:25
+msgid "Language"
+msgstr "Dil"
+
+#: modules/mod_translation/templates/admin_translation.tpl:8
+msgid "Languages overview"
+msgstr "Diller genel bakış"
+
+#: modules/mod_translation/templates/admin_translation.tpl:68
+msgid "No languages configured."
+msgstr "Hiç dil yapılandırılmadı."
+
+#: modules/mod_translation/templates/admin_translation.tpl:115
+msgid "Put the current language in the URL"
+msgstr "Geçerli dili URL içinde göster"
+
+#: modules/mod_translation/templates/admin_translation.tpl:92
+msgid "Reload Translations"
+msgstr "Çevirileri yeniden yükle"
+
+#: modules/mod_translation/templates/admin_translation.tpl:94
+msgid "Reload all translations from the modules and site. All templates will be recompiled."
+msgstr "Modüllerden ve siteden tüm çevirileri yükle. Tüm temalar yeniden derlenecek."
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
+msgid "Save"
+msgstr "Kaydet"
+
+#: modules/mod_translation/templates/admin_translation.tpl:87
+msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates."
+msgstr "Tüm temaları çeviri etiketleri için tara ve .pot dosyaları oluştur."
+
+#: modules/mod_translation/templates/text/language_switch.tpl:3
+msgid "Select language"
+msgstr "Dil seç"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:4
+msgid "Select the language to copy from:"
+msgstr "Kopyalayacağınız dili seçiniz:"
+
+#: modules/mod_translation/templates/text/language_switch.tpl:7
+msgid "Select your preferred language."
+msgstr "Tervih ettiğiniz dili seçiniz."
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
+msgid "Show in menu"
+msgstr "Menüde göster"
+
+#: modules/mod_translation/templates/admin_translation.tpl:100
+msgid "Show per module how much of the templates are translated."
+msgstr "Her modül için temanın ne kadarının çeirildiğini göster."
+
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
+msgid "Switch language"
+msgstr "Dili değiştir"
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
+msgstr "Başlık, gövde ve diğer yazılar diğer dillere çevrilebilir. Hangi dillerin kullanılacağını seçebilirsiniz."
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:3
+msgid "This will not affect any translations in the database or .po files. This only removes the reference to the language, making it impossible to select or edit content written in the delete language."
+msgstr "Bu veritabanındaki veya .po dosyalarındaki çevirileri etkilemeyecek. Sadece dile olan referansı kaldırır ve silinen dilde yazılan içeriğin seçilmesini ve düzenlenmesini imkansız kılar."
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:27
+msgid "Title"
+msgstr "Başlık"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:18
+msgid "To view the up-to-date version of this module, please run \"generate .pot files\" first from the translation overview."
+msgstr "Bu modülün güncel versiyonunu görüntülemek için lütfen \".pot dosyası oluştur\"u çalıştırınız."
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+msgid "Translate this page in other languages."
+msgstr "Bu sayfayı diğer dillere çevir."
+
+#: modules/mod_translation/templates/admin_translation.tpl:3
+#: modules/mod_translation/mod_translation.erl:463
+msgid "Translation"
+msgstr "Çeviri"
+
+#: modules/mod_translation/templates/admin_translation.tpl:79
+msgid "Translation configuration and tools"
+msgstr "Çeviri yapılandırması ve araçları"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:3
+#: modules/mod_translation/templates/admin_translation.tpl:99
+msgid "Translation status"
+msgstr "Çeviri durumu"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:16
+msgid "Translation status per module"
+msgstr "Her modül için çeviri durumu"
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
+msgid "Translations"
+msgstr "Çeviriler"
+

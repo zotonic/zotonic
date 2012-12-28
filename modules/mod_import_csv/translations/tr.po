@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-26 23:17+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:4
+msgid "CSV import"
+msgstr "CSV içe aktar"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:4
+msgid "Import CSV file"
+msgstr "CSV dosyası içe aktar"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:5
+msgid "Import a CSV file into Zotonic."
+msgstr "Zotonic'e bir CSV dosyası içe aktar."
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:20
+msgid "Import previously deleted items again"
+msgstr "Daha önce silinen öğeleri tekrar içe aktar"
+
+#: modules/mod_import_csv/mod_import_csv.erl:66
+msgid "Please hold on while the file is importing. You will get a notification when it is ready."
+msgstr "Lütfen dosya içe aktarılırken bekleyiniz. Hazır olduğunda bir bilgilendirme alacaksınız."
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:9
+msgid "Select file"
+msgstr "Dosya seç"
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:27
+msgid "Start import"
+msgstr "İçe aktarmayı başlat"
+
+#: modules/mod_import_csv/mod_import_csv.erl:69
+msgid "This file cannot be imported."
+msgstr "Bu dosya içe aktarılamaz."
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:2
+msgid "Upload a CSV file from your computer."
+msgstr "Bilgisayarınızdan bir CSV dosyası içe aktarın."
+

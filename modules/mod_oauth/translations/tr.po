@@ -1,0 +1,222 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-28 12:38+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_oauth/mod_oauth.erl:333
+msgid "API access"
+msgstr "API erişimi"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
+msgid "Access to"
+msgstr "Erişilen"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93
+msgid "Add application"
+msgstr "Uygulama ekle"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:14
+msgid "Add new application"
+msgstr "Yeni uygulama ekle"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+msgid "Allow"
+msgstr "İzin ver"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:70
+msgid "Allow users of this application access to the following API calls:"
+msgstr "Bu uygulamanın kullanıcılarına aşağıdaki API çağrılarına erişim ver:"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:29
+msgid "Allow!"
+msgstr "İzin ver!"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31
+msgid "Application title"
+msgstr "Uygulama başlığı"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:8
+msgid "Authorization"
+msgstr "Yetkilendirme"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:3
+msgid "Authorization finished"
+msgstr "Yetkilendirme bitti"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:3
+msgid "Authorize this request"
+msgstr "Bu isteği yetkilendir"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:7
+msgid "Authorized!"
+msgstr "Yetkilendirildi!"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52
+msgid "Callback URL"
+msgstr "Callback URL"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:89
+msgid "Cancel"
+msgstr "İptal"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid "Change the title, description and access permissions of this application."
+msgstr "Bu uygulamanın başlığını, tanımını ve erişim izinlerini değiştir."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47
+msgid "Close"
+msgstr "Kapat"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
+msgid "Consumer key"
+msgstr "Consumer key"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:7
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23
+msgid "Consumer secret"
+msgstr "Consumer secret"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:30
+msgid "Delete"
+msgstr "Sil"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:43
+msgid "Delete this application!"
+msgstr "Bu uygulamayı sil"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
+msgid "Description"
+msgstr "Tanım"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:7
+msgid "Details"
+msgstr "Detaylar"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:30
+msgid "Disallow"
+msgstr "İzin verme"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:40
+msgid "Do you really want to delete this application?"
+msgstr "Bu uygulamayı silmek istediğinizden emin misiniz?"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid "Edit"
+msgstr "Düzenle"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38
+msgid "Homepage"
+msgstr "Ana sayfa"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21
+msgid "In use since"
+msgstr "Şu tarihten beri kullanımda"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:16
+msgid "More information about this program"
+msgstr "Bu programla ilgili daha fazla bilgi"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
+msgid "No applications registered yet."
+msgstr "Henüz bir uygulama kaydedilmedi."
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:3
+msgid "OAuth applications"
+msgstr "OAuth uygulamaları"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:8
+msgid "Registered OAuth applications"
+msgstr "Kayıtlı OAuth uygulamaları"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+msgid "Show applications/users that are using this key"
+msgstr "Bu anahtarı kullanan uygulamaları/kullanıcıları göster"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "The application"
+msgstr "Uygulama"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:8
+msgid "The following users are still using this application. If you delete this application, you will revoke access and most likely their applications will break."
+msgstr "Aşağıdaki kullanıcılar hala bu uygulamayı kullanıyor. Eğer bu uygulamayı silerseniz erişimi iptal edeceksiniz ve uygulamaları bozulacaktır."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
+msgid "The following users are using this application:"
+msgstr "Şu kullanıcılar bu uygulamayı kullanıyor:"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:19
+msgid "This application wants access to the following services:"
+msgstr "Bu uygulama şu servislere erişim istiyor:"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:10
+msgid "This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database."
+msgstr "Bu sayfa üçüncü partilerin API'ın belirli yerlerine erişim hakkı almaları için API anahtarlarıyla kaydolmalarına izin verir."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
+msgid "This token is not yet used by anybody."
+msgstr "Bu token henüz kimse tarafından kullanılmadı."
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:4
+msgid "Title"
+msgstr "Başlık"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:22
+msgid "Type"
+msgstr "Tip"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "Untitled"
+msgstr "Başlıksız"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:91
+msgid "Update"
+msgstr "Güncelle"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20
+msgid "User"
+msgstr "Kullanıcı"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+msgid "Users"
+msgstr "Kullanıcılar"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
+msgid "When done, go to the authorization tab to set permissions."
+msgstr "Bittiğinde yetkilendirme sekmesine giderek izinleri ayarlayın."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:11
+msgid "You can now safely close this window."
+msgstr "Bu pencereyi kapatmanız artık güvenli."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "You have granted the application"
+msgstr "Uygulamaya hak tanıdınız"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "access your account."
+msgstr "hesabınıza erişim."
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "wants to access your account."
+msgstr "hesabınıza erişmek istiyor."
+
