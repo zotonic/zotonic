@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-09-02 09:55+0200\n"
+"PO-Revision-Date: 2012-12-26 17:21+0200\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: Turkish <kunthar@gmail.com>\n"
 "Language: tr\n"
@@ -23,53 +23,39 @@ msgstr ""
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar.person.tpl:12
 msgid "(implicit)"
-msgstr ""
+msgstr "belirtilen"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:41
-#, fuzzy
 msgid "(users can’t change visibility to higher level than this)"
-msgstr ""
-"En fazla görünürlük (kullanıcılar, bu seviyeden fazlasını değiştiremezler)"
+msgstr "(kullanıcılar daha üst seviye bir görünürlüğü seçemezler)"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:86
-msgid ""
-"<strong>Security notice</strong>: When you allow */* files then all members "
-"of this role will be able to obtain full access to your whole site and all "
-"underlying data."
-msgstr ""
-"<strong>Güvenlik uyarısı</strong>: Eğer  */* şeklinde tüm dosyalara erişim "
-"hakkı verirseniz, bu haklara sahip tüm kullanıcılar, tüm site ve tüm veriye "
-"erişim hakkına sahip olurlar."
+msgid "<strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data."
+msgstr "<strong>Güvenlik uyarısı</strong>: Eğer  */* şeklinde tüm dosyalara erişim hakkı verirseniz, bu haklara sahip tüm kullanıcılar, tüm site ve tüm veriye erişim hakkına sahip olurlar."
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:22
 msgid "ACL role overview"
-msgstr ""
+msgstr "ACL rol genel bakış"
 
 #: modules/mod_acl_simple_roles/mod_acl_simple_roles.erl:411
 msgid "Access Control"
-msgstr ""
+msgstr "Erişim Kontrolü"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:10
 msgid "Access Control - Roles Overview"
-msgstr ""
+msgstr "Erişim Kontrolü - Roller Özet"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:12
-msgid ""
-"Access control controls what an user is allowed to do and see.  The roles "
-"define different groups of rights.  Users can be made member of multiple "
-"roles."
-msgstr ""
+msgid "Access control controls what an user is allowed to do and see.  The roles define different groups of rights.  Users can be made member of multiple roles."
+msgstr "Erişim kontrolü bir kullanıcının neleri yapabileceğini ve görüntüleyebileceğini kontrol eder. Roller farklı gruplar için haklar tanımlar. Kullanıcılar birden fazla rol üyesi olabilir."
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:3
 msgid "Admin Access Control"
-msgstr ""
+msgstr "Yönetici Erişim Kontrolü"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:18
-msgid ""
-"All members are allowed to view all content.  (Check this for supervisors.)"
-msgstr ""
-"Tüm üyelerin tüm içeriği görmesine izin verilmiştir.  (supervisor "
-"kullanıcısına bakın.)"
+msgid "All members are allowed to view all content.  (Check this for supervisors.)"
+msgstr "Tüm üyelerin tüm içeriği görmesine izin verilmiştir.  (supervisor kullanıcıları için kontrol edin.)"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:49
 msgid "Allow editing of category"
@@ -77,15 +63,15 @@ msgstr "Kategori düzenlemeye izin ver"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:44
 msgid "Categories"
-msgstr ""
+msgstr "Kategoriler"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:12
 msgid "Check below what people that are member of this role are allowed to do."
-msgstr "Aşağıdan hangi kişilerin bu role üye olduğunu kontrol ediniz."
+msgstr "Bu role üye olan kişilerin neler için izin sahibi olduğunu aşağıdan kontrol ediniz."
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:38
 msgid "Community members"
-msgstr "Komünite üyeleri"
+msgstr "Topluluk üyeleri"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:84
 msgid "File types allowed to be uploaded"
@@ -93,7 +79,7 @@ msgstr "Siteye yüklenebilecek dosya türleri"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
 msgid "File uploads"
-msgstr "Dosya yükleme"
+msgstr "Yüklü dosyalar"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:39
 msgid "Group members"
@@ -105,7 +91,7 @@ msgstr "Erişim kontrolü yardımı"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16
 msgid "Make new ACL role"
-msgstr ""
+msgstr "Yeni ACL rolü oluştur"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:61
 msgid "Manage modules"
@@ -117,33 +103,27 @@ msgstr "Dosya yükleme için en fazla dosya boyutu (KB olarak)"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:30
 msgid "Maximum visibility"
-msgstr ""
+msgstr "Görünürlük limiti"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar.person.tpl:3
 msgid "Member of roles"
-msgstr ""
+msgstr "Üye olunan roller"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:48
-#, fuzzy
 msgid "Modules"
-msgstr "Modülleri yönet"
+msgstr "Modüller"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
 msgid "Need more help?"
 msgstr "Daha fazla yardım?"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:58
-#, fuzzy
 msgid "No ACL roles found."
-msgstr "Erişim kontrolü yardımı"
+msgstr "Bir ACL rolü bulunamadı"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25
-msgid ""
-"Only allow to update content created by the user himself. (Check for user "
-"generated content sites.)"
-msgstr ""
-"Kullanıcının sadece kendi yarattığı içeriği güncellemesine izin ver "
-"(Kullanıcı içerik sitelerine bakın)"
+msgid "Only allow to update content created by the user himself. (Check for user generated content sites.)"
+msgstr "Kullanıcının sadece kendi yarattığı içeriği güncellemesine izin ver (Kullanıcı içerik sitelerine bakın)"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:4
 msgid "Permissions"
@@ -151,7 +131,7 @@ msgstr "İzinler"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:29
 msgid "Rights"
-msgstr ""
+msgstr "İzinler"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:35
 msgid "The whole world"
@@ -159,33 +139,27 @@ msgstr "Tüm dünya"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:27
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
-msgid ""
-"Users can be member of multiple roles. Depending on the roles an user is "
-"allowed to create and edit certain categories or is able to manage certain "
-"modules."
-msgstr ""
-"Kullanıcılar birden çok role üye olabilirler. Bağlı oldukları role göre, "
-"sadece bazı kategorileri düzenleme ya da bazı modülleri yönetme hakkına "
-"sahip olurlar."
+msgid "Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules."
+msgstr "Kullanıcılar birden çok role üye olabilirler. Bağlı oldukları role göre, sadece bazı kategorileri düzenleme ya da bazı modülleri yönetme hakkına sahip olurlar."
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:28
 msgid "View all"
-msgstr ""
+msgstr "Tümünü göster"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:41
 msgid "delete"
-msgstr ""
+msgstr "sil"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:42
 msgid "edit"
-msgstr ""
+msgstr "düzenle"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:38
 msgid "view all,&mdash;"
-msgstr ""
+msgstr "tümünü göster,&mdash;"
 
 #~ msgid "make smaller"
 #~ msgstr "ufalt"

@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-26 23:45+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:74
+#: modules/mod_logging/templates/admin_log_email.tpl:104
+msgid "All"
+msgstr "Tümü"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:77
+msgid "Bounce"
+msgstr "Sıçra"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:55
+msgid "Content"
+msgstr "İçerik"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:58
+msgid "Date"
+msgstr "Tarih"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:68
+msgid "Debug"
+msgstr "Hata ayıkla"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:13
+#: modules/mod_logging/mod_logging.erl:226
+msgid "Email log"
+msgstr "Eposta kaydı"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:65
+msgid "Error"
+msgstr "Hata"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:79
+msgid "Failed"
+msgstr "Hata oluştu"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:64
+msgid "Fatal"
+msgstr "Önemli"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:103
+msgid "Filter"
+msgstr "Filtre"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:54
+msgid "From"
+msgstr "Kimden"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:67
+msgid "Info"
+msgstr "Bilgi"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:3
+#: modules/mod_logging/mod_logging.erl:221
+msgid "Log"
+msgstr "Kayıt"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:3
+msgid "Log email"
+msgstr "Kayıt emaili"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:5
+msgid "Log incoming/outgoing e-mail"
+msgstr "Gelen/giden epostaları kaydet"
+
+#: modules/mod_logging/templates/admin_log.tpl:3
+#: modules/mod_logging/templates/admin_log.tpl:5
+#: modules/mod_logging/templates/admin_log_base.tpl:9
+msgid "Log messages"
+msgstr "Kayıt mesajları"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:12
+msgid "Message log"
+msgstr "Mesaj kayıtları"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:52
+msgid "Message nr"
+msgstr "Mesaj no"
+
+#: modules/mod_logging/templates/admin_log.tpl:12
+#: modules/mod_logging/templates/admin_log_email.tpl:30
+msgid "Most recent messages"
+msgstr "Son gelen mesajlar"
+
+#: modules/mod_logging/templates/admin_log.tpl:22
+#: modules/mod_logging/templates/admin_log_email.tpl:121
+msgid "No log messages."
+msgstr "Kayıtlı mesaj yok."
+
+#: modules/mod_logging/templates/admin_log_email.tpl:56
+msgid "Other"
+msgstr "Diğer"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:78
+msgid "Received"
+msgstr "Alınan"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:80
+msgid "Retry"
+msgstr "Tekrar dene"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:75
+msgid "Sending"
+msgstr "Gönderiliyor"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:76
+msgid "Sent"
+msgstr "Gönderildi"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:50
+msgid "Severity"
+msgstr "Önem"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:51
+msgid "Status"
+msgstr "Durum"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:57
+msgid "Template"
+msgstr "Tema"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:53
+msgid "To"
+msgstr "Kime"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:66
+msgid "Warning"
+msgstr "Uyarı"
+

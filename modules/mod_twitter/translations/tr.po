@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-28 01:49+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:17
+msgid "Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account name to this number go to:"
+msgstr "<strong>Numerik</strong> Twitter id'nizi giriniz. Bu numaraya bir twitter hesabı map etmek için:"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid "Finding a Twitter ID."
+msgstr "Twitter ID bulunuyor."
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid "Need more help?"
+msgstr "Daha fazla yardım?"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:3
+msgid "Sign in with Twitter"
+msgstr "Twitter'la giriş yap"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid "The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user\\'s updates."
+msgstr "Kullanıcı Twitter ID (numerik), kullanıcının sayfasında bulunabilir: kullanıcıların güncellemelerindeki URL adresinde bulunan numaradır."
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:3
+msgid "Twitter ID"
+msgstr "Twitter ID"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:5
+msgid "Waiting for Twitter…"
+msgstr "Twitter bekleniyor..."
+
