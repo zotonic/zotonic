@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-26 20:18+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:36
+msgid "Activate"
+msgstr "Etkinleştir"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
+msgid "Author"
+msgstr "Yazar"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:31
+msgid "Deactivate"
+msgstr "Devre dışı bırak"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+msgid "Description"
+msgstr "Tanım"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:3
+#: modules/mod_admin_modules/templates/admin_modules.tpl:7
+#: modules/mod_admin_modules/mod_admin_modules.erl:88
+msgid "Modules"
+msgstr "Modüller"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:49
+msgid "No modules found"
+msgstr "Modül bulunamadı"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+msgid "Prio"
+msgstr "Öncelik"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
+msgid "Rescan modules"
+msgstr "Modülleri tekrar tara"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
+msgid "Rescanning will rebuild the index of all modules, actions, templates etc.  It will also reload all dispatch rules."
+msgstr "Tekrar taramak tüm modüllerin, eylemlerin, temaların vs indekslerini yeniden oluşturacaktır. Tüm sevk kuralları da yeniden yüklenecektir."
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:15
+msgid "Title"
+msgstr "Başlık"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
+msgstr ""
+"Zotonic modüler bir web geliştirme çatısıdır. Çoğu işlev modüller içinde tanımlanmıştır. Zotonic dağıtımıyla bazı temel modüller birlikte gelmektedir.\n"
+"Haricen modül geliştirilebilir. Bu sayfa Zotonic sistemi tarafından tanınmış modüllere genel bir bakış sunmaktadır."
+

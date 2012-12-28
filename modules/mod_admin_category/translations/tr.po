@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-26 18:05+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:9
+#: modules/mod_admin_category/mod_admin_category.erl:87
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:11
+msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
+msgstr "Kategoriler tüm sayfaları kategorilendirmek için kullanılır. Her sayfa kesinlikle ve sadece bir kategoriye ait olmalıdır.</br>Kategoriler bir hiyerarşiye göre tanımlanır. Bu hiyerarşiyi değiştirebilirsiniz."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
+msgid "Category Hierarchy"
+msgstr "Kategori Hiyerarşisi"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:28
+msgid "Drag categories to the place where you want them in the hierarchy."
+msgstr "Kategorileri olmasını istediğiniz yere sürükleyin."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
+msgid "How does this work?"
+msgstr "Nasıl çalışır?"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+msgid "Use the <i class=\"icon-cog\"></i> button to add or remove categories."
+msgstr "Kategori eklemek veya çıkartmak için <i class=\"icon-cog\"></i> butonunu kullanın."
+

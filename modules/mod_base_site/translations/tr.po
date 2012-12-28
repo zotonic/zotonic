@@ -1,0 +1,180 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-12-26 22:00+0200\n"
+"Last-Translator: furiston <furiston@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_base_site/templates/text/map.tpl:8
+#: modules/mod_base_site/templates/tablet/map.tpl:6
+msgid "Back to"
+msgstr "Geri dön"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:4
+msgid "By"
+msgstr "Yazan"
+
+#: modules/mod_base_site/templates/text/map.tpl:28
+#: modules/mod_base_site/templates/tablet/map.tpl:26
+msgid "City"
+msgstr "Şehir"
+
+#: modules/mod_base_site/templates/text/page.media.tpl:6
+#: modules/mod_base_site/templates/tablet/page.media.tpl:30
+msgid "Click to download"
+msgstr "İndirmek için tıklayın"
+
+#: modules/mod_base_site/templates/phone/_dialog_share_page.tpl:17
+msgid "Close"
+msgstr "Kapat"
+
+#: modules/mod_base_site/templates/text/search.tpl:27
+#: modules/mod_base_site/templates/tablet/search.tpl:29
+msgid "Did not find any pages matching"
+msgstr "Eşleşen bir sayfa bulunamadı"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:12
+msgid "Dimensions"
+msgstr "Boyutlar"
+
+#: modules/mod_base_site/templates/text/page.tpl:34
+#: modules/mod_base_site/templates/text/page.collection.tpl:7
+#: modules/mod_base_site/templates/text/page.query.tpl:14
+msgid "Documents"
+msgstr "Dokümanlar"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:26
+msgid "Download file"
+msgstr "Dosyayı indir"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:9
+msgid "Edit"
+msgstr "Düzenle"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:4
+msgid "Filename"
+msgstr "Dosya adı"
+
+#: modules/mod_base_site/templates/text/_navbar.tpl:5
+msgid "Home"
+msgstr "Ana sayfa"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:24
+msgid "Links"
+msgstr "Bağlantılar"
+
+#: modules/mod_base_site/templates/text/map.tpl:3
+#: modules/mod_base_site/templates/tablet/map.tpl:3
+msgid "Map of"
+msgstr "Harita"
+
+#: modules/mod_base_site/templates/text/page.tpl:35
+#: modules/mod_base_site/templates/text/page.collection.tpl:8
+#: modules/mod_base_site/templates/text/page.query.tpl:15
+msgid "Media"
+msgstr "Görsel"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:8
+msgid "Mime"
+msgstr "Mime"
+
+#: modules/mod_base_site/templates/text/page.tpl:37
+msgid "More"
+msgstr "Daha"
+
+#: modules/mod_base_site/templates/text/search.tpl:20
+#: modules/mod_base_site/templates/tablet/page.query.tpl:8
+#: modules/mod_base_site/templates/tablet/search.tpl:18
+msgid "Page"
+msgstr "Sayfa"
+
+#: modules/mod_base_site/templates/text/page.media.tpl:6
+#: modules/mod_base_site/templates/tablet/page.media.tpl:30
+msgid "Preview"
+msgstr "Önizleme"
+
+#: modules/mod_base_site/templates/phone/_content_list_item.tpl:18
+msgid "Read more"
+msgstr "Tümünü oku"
+
+#: modules/mod_base_site/templates/text/_navbar.tpl:11
+#: modules/mod_base_site/templates/text/search.tpl:3
+#: modules/mod_base_site/templates/text/search.tpl:41
+#: modules/mod_base_site/templates/tablet/_search_form.tpl:4
+#: modules/mod_base_site/templates/tablet/search.tpl:3
+msgid "Search"
+msgstr "Ara"
+
+#: modules/mod_base_site/templates/text/search.tpl:14
+#: modules/mod_base_site/templates/tablet/search.tpl:14
+msgid "Searching for"
+msgstr "Arama yapılan - "
+
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
+msgid "Share"
+msgstr "Paylaş"
+
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:5
+msgid "Share this page"
+msgstr "Bu sayfayı paylaş"
+
+#: modules/mod_base_site/templates/text/_address.tpl:13
+#: modules/mod_base_site/templates/text/_address.tpl:17
+msgid "Show map"
+msgstr "Haritayı göster"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:16
+msgid "Size"
+msgstr "Boyut"
+
+#: modules/mod_base_site/templates/text/map.tpl:32
+#: modules/mod_base_site/templates/tablet/map.tpl:30
+msgid "Street"
+msgstr "Cadde"
+
+#: modules/mod_base_site/templates/text/search.tpl:37
+msgid "Type the text to search"
+msgstr "Aradığınız girdiyi yazın"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:20
+msgid "Uploaded"
+msgstr "Yüklendi"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:28
+msgid "View in browser"
+msgstr "Tarayıcıda göster"
+
+#: modules/mod_base_site/templates/text/home.tpl:3
+msgid "Welcome"
+msgstr "Hoş geldiniz"
+
+#: modules/mod_base_site/templates/text/map.tpl:6
+msgid "Where is"
+msgstr "Nerede"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:7
+msgid "l, F j, Y"
+msgstr "l, F j, Y"
+
+#: modules/mod_base_site/templates/text/_content_list_item.tpl:4
+#: modules/mod_base_site/templates/text/_content_list_item.tpl:5
+msgid "more…"
+msgstr "daha..."
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:13
+msgid "pixels"
+msgstr "piksel"
+
