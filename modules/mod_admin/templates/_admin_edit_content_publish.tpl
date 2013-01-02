@@ -19,7 +19,7 @@
     {% if is_editable %}
         {% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
     {% else %}
-        {% button id="save_view" class="btn-primary" text=_"view" title=_"View this page." action={redirect id=id} %}
+        {% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
     {% endif %}
     {% endif %}
 
