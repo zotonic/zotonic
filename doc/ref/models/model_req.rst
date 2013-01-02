@@ -23,18 +23,18 @@ Viewing all request variables
 Use the :ref:`tag-print` tag to get a complete overview of all request
 variables::
 
-  {% print m.req %}
+  {% print m.req|make_list %}
 
 This will show something like::
 
-  {version,{1,1}},
-  {peer,"127.0.0.1"},
-  {is_ssl,false},
-  {host,"127.0.0.1:8000"},
-  {raw_path,"/?foo=bar"},
-  {path,"/"},
-  {qs,[{"foo","bar"}]},
-  {headers,[{"accept",
+  [{version,{1,1}},
+   {peer,"127.0.0.1"},
+   {is_ssl,false},
+   {host,"127.0.0.1:8000"},
+   {raw_path,"/?foo=bar"},
+   {path,"/"},
+   {qs,[{"foo","bar"}]},
+   {headers,[{"accept",
             "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
            {"accept-encoding","gzip, deflate"},
            {"accept-language","en-us"},
@@ -49,3 +49,6 @@ Please note that all values are raw and not escaped, take care to
 escape the values before you use them in your templates, using the
 :ref:`filter-escape` filter.
 
+The :ref:`filter-make_list` filter is used to force the evaluation of the
+model; otherwise it would just print ``{m,req,undefined}``.
+     
