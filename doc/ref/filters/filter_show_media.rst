@@ -20,7 +20,7 @@ Image which are inlined in the body text can have these parameters:
 ``size``
   choose between "small", "middle", "large". The actual sizes that are
   taken come from the config key "site.media_dimensions", which
-  defaults to "100x100,200x200,300x300".
+  defaults to "200x200,300x300,500x500".
 
 ``crop``
   checkbox if you want to crop your image to exactly the
