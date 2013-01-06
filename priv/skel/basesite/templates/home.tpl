@@ -10,7 +10,7 @@
     {% button class="pull-right btn btn-primary btn-large" action={redirect dispatch=`admin`} text=_"Visit Admin Interface" %}
 </div>
 
-{{ m.rsc.page_home.body }}
+{{ m.rsc.page_home.body|show_media }}
 
 {% button class="btn btn-info" action={redirect dispatch=`admin_edit_rsc` id=`page_home`} text=_"Edit this page" %}
 
