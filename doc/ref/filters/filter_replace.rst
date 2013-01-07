@@ -12,15 +12,15 @@ For example::
 
 The output will be the string "axcxa".
 
-When you don not specify the replacement value, the replacement value
+If you do not specify the replacement value, the replacement value
 is assumed to be the empty string::
 
   {{ "abcba"|replace:"b" }}
 
 The output will be the string "aca".
 
-**Note:** This filter is very inefficient, as it will compile and
-match the regular expression while serving the template.  Try to do
-your replacements when you `save` your content, and not when you
-serve the content.
+**Note:** This filter is inefficient, as it will compile and match a
+regular expression while serving the template.  Try to do string
+replacements when you `save` your content, and not when you serve the
+content.
 
