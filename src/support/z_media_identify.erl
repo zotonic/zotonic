@@ -168,7 +168,7 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
     Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2> " ++ devnull(OsFamily)),
     case Result of
         [] ->
-            Err = os:cmd("identify -quiet 2>&1" ++ CleanedImageFile),
+            Err = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2>&1"),
             ?LOG("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, "identify error: " ++ Err};
         _ ->
