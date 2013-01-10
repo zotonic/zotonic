@@ -55,7 +55,7 @@ Example dispatch rule::
 |                   |resource will not change in the          |                     |
 |                   |specified time (in seconds). Default:    |                     |
 |                   |315360000                                |                     |
-+-------------------|-----------------------------------------+---------------------+
++-------------------+-----------------------------------------+---------------------+
 
 `controller_lib` does not handles any query arguments other than the file path.
 
