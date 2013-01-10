@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% @doc Serve static library files (css and js).  Library files can be combined in one path, using z_lib_include:tag/2
+%% @doc Serve static library files (css and js).  Library files can be combined in one 
+%% path, using z_lib_include:tag/2
 %%
 %% Serves files like: /lib/some/path
 
@@ -46,7 +47,8 @@
         path=undefined,
         mime=undefined,
         last_modified=undefined,
-        body=undefined
+        body=undefined,
+        dispatch_paths=undefined
     }).
 
 -record(cache, {
@@ -63,7 +65,9 @@ init(ConfigProps) ->
     UseCache = proplists:get_value(use_cache, ConfigProps, false),
     Root = proplists:get_value(root, ConfigProps, [lib]),
     ContentDisposition = proplists:get_value(content_disposition, ConfigProps),
-    {ok, #state{root=Root, use_cache=UseCache, content_disposition=ContentDisposition}}.
+    DispatchPaths = proplists:get_value(paths, ConfigProps, undefined),
+    {ok, #state{root=Root, use_cache=UseCache, dispatch_paths=DispatchPaths, 
+                content_disposition=ContentDisposition}}.
     
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
@@ -72,7 +76,12 @@ content_types_provided(ReqData, State) ->
 	State1 = lookup_path(ReqData, State),
     case State1#state.mime of
         undefined ->
-            Path = mochiweb_util:unquote(wrq:disp_path(ReqData)),
+            Path = case State#state.dispatch_paths of
+                undefined ->
+                    mochiweb_util:unquote(wrq:disp_path(ReqData));
+                [FirstFile|_T] -> 
+                    FirstFile
+            end,
             CT = z_media_identify:guess_mime(Path),
             {[{CT, provide_content}], ReqData, State1#state{mime=CT}};
         Mime -> 
@@ -143,10 +152,9 @@ provide_content(ReqData, State) ->
     {Content, State2} = case State1#state.body of
         undefined ->
             Data = [ read_data(F) || F <- State1#state.fullpaths ],
-            Data1 = case State1#state.mime of
-                "text/javascript" -> z_utils:combine([$;, $\n], Data);
-                "application/x-javascript" -> z_utils:combine([$;, $\n], Data);
-                _ -> z_utils:combine($\n, Data)
+            Data1 = case is_javascript(State1#state.mime) of
+                true -> z_utils:combine(<<";\n">>, Data);
+                false -> z_utils:combine($\n, Data)
             end,
             Body = case State1#state.encode_data of 
                 true -> encode_data(Data1);
@@ -158,11 +166,10 @@ provide_content(ReqData, State) ->
     end,
     {Content, RD1, State2}.
     
-    read_data(F) ->
-        {ok, Data} = file:read_file(F),
-        Data.
+read_data(F) ->
+    {ok, Data} = file:read_file(F),
+    Data.
     
-
 finish_request(ReqData, State) ->
     case State#state.is_cached of
         false ->
@@ -235,23 +242,26 @@ file_exists1([DirName|T], RelName, Context) ->
 %% @spec is_text(Mime) -> bool()
 %% @doc Check if a mime type is textual
 is_text("text/" ++ _) -> true;
+is_text("application/javascript") -> true;
 is_text("application/x-javascript") -> true;
 is_text("application/xhtml+xml") -> true;
 is_text("application/xml") -> true;
 is_text(_Mime) -> false.
 
-
-
+%% @spec is_javascript(Mime) -> bool()
+%% @doc Check if the mime-type is javascript.
+is_javascript("application/javascript") -> true;
+is_javascript("application/x-javascript") -> true;
+is_javascript("text/javascript") -> true;
+is_javascript(_) -> false.
+ 
+%% @doc Lookup all files which we must concatenate.
 lookup_path(ReqData, State = #state{path=undefined}) ->
     Context = z_context:new(ReqData, ?MODULE),
-    Path   = mochiweb_util:unquote(wrq:disp_path(ReqData)),
-    Cached = case State#state.use_cache of
-        true -> z_depcache:get(cache_key(Path), Context);
-        _    -> undefined
-    end,
-    case Cached of
+    Path = get_path(ReqData, State),
+    case get_cached(Path, State#state.use_cache, Context) of
         undefined ->
-            Paths = z_lib_include:uncollapse(Path),
+            Paths = get_paths(Path),
             FullPaths = [ file_exists(State, P, Context) || P <- Paths ],
             FullPaths1 = [ P || {true, P} <- FullPaths ], 
             case FullPaths1 of
@@ -271,7 +281,24 @@ lookup_path(ReqData, State = #state{path=undefined}) ->
 lookup_path(_ReqData, State) ->
 	State.
 
+% @doc Get the cached information.
+get_cached(Path, true, Context) ->
+    z_depcache:get(cache_key(Path), Context);
+get_cached(_Path, false, _Context) ->
+    undefined.
 
+% @doc get the path, a representation of the names of the files
+% which must be included.
+get_path(ReqData, #state{dispatch_paths=undefined}) ->
+    mochiweb_util:unquote(wrq:disp_path(ReqData));
+get_path(_ReqData, #state{dispatch_paths=DispatchPaths}) ->
+    {dispatch_paths, DispatchPaths}.
+
+% @doc get a list with path names.
+get_paths({dispatch_paths, DispatchPaths}) ->
+    DispatchPaths;
+get_paths(Path) ->
+    z_lib_include:uncollapse(Path).
 
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_list(Data) ->

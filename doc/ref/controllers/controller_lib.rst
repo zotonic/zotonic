@@ -46,6 +46,10 @@ Example dispatch rule::
 |                   |useful when a proxy cache like Varnish is|                     |
 |                   |used. Defaults to false.                 |                     |
 +-------------------+-----------------------------------------+---------------------+
+|paths              |List of files to concatenate. Useful for |{paths,              |
+|                   |creating custom dispatch rules to make   |["js/foo.js",        |
+|                   |nice urls for js api's.                  | "js/bar.js"]}       |
++-------------------+-----------------------------------------+---------------------+
 
 `controller_lib` does not handles any query arguments other than the file path.
 
