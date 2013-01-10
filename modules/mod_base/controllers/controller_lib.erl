@@ -36,6 +36,8 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+-define(MAX_AGE, 315360000).
+
 %% These are used for file serving (move to metadata)
 -record(state, {
         root=undefined,
@@ -48,7 +50,8 @@
         mime=undefined,
         last_modified=undefined,
         body=undefined,
-        dispatch_paths=undefined
+        dispatch_paths=undefined,
+        max_age=undefined
     }).
 
 -record(cache, {
@@ -59,14 +62,18 @@
     body=undefined
     }).
 
--define(MAX_AGE, 315360000).
+
 
 init(ConfigProps) ->
     UseCache = proplists:get_value(use_cache, ConfigProps, false),
     Root = proplists:get_value(root, ConfigProps, [lib]),
     ContentDisposition = proplists:get_value(content_disposition, ConfigProps),
     DispatchPaths = proplists:get_value(paths, ConfigProps, undefined),
-    {ok, #state{root=Root, use_cache=UseCache, dispatch_paths=DispatchPaths, 
+    MaxAge = proplists:get_value(max_age, ConfigProps, ?MAX_AGE),
+    {ok, #state{root=Root, 
+                use_cache=UseCache, 
+                dispatch_paths=DispatchPaths,
+                max_age=MaxAge,
                 content_disposition=ContentDisposition}}.
     
 allowed_methods(ReqData, State) ->
@@ -117,7 +124,7 @@ charsets_provided(ReqData, State) ->
     
 last_modified(ReqData, State) ->
 	State1 = lookup_path(ReqData, State),
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
+    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(State#state.max_age), ReqData),
     case State1#state.last_modified of
         undefined -> 
             LMod = max_last_modified(State1#state.fullpaths, {{1970,1,1},{12,0,0}}),

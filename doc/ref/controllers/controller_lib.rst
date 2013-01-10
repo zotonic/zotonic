@@ -50,6 +50,12 @@ Example dispatch rule::
 |                   |creating custom dispatch rules to make   |["js/foo.js",        |
 |                   |nice urls for js api's.                  | "js/bar.js"]}       |
 +-------------------+-----------------------------------------+---------------------+
+|max_age            |Define a custom value for the max-age    |{max_age, 3600}      |
+|                   |header indicating to the client that the |                     |
+|                   |resource will not change in the          |                     |
+|                   |specified time (in seconds). Default:    |                     |
+|                   |315360000                                |                     |
++-------------------|-----------------------------------------+---------------------+
 
 `controller_lib` does not handles any query arguments other than the file path.
 
