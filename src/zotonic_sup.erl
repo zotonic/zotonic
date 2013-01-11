@@ -163,9 +163,20 @@ init([]) ->
             false -> Processes ++ IPv4Proc
         end,
 
+    init_ua_classifier(),
     init_webmachine(),
 
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
+
+%% @doc Initializes the ua classifier. When it is enabled it is loaded and 
+%% tested if it works.
+init_ua_classifier() ->
+    case z_config:get_dirty(use_ua_classifier) of
+        true ->
+            {ok, _Something} = ua_classifier:classify("");
+        false ->
+            ok
+    end.
 
 %% @doc Sets the application parameters for webmachine and starts the logger processes.
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid

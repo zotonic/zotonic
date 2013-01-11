@@ -280,6 +280,7 @@ default(dbport) -> {ok, 5432};
 default(dbuser) -> {ok, "zotonic"};
 default(dbpassword) -> {ok, ""};
 default(dbschema) -> {ok, "public"};
+default(use_ua_classifier) -> {ok, true};
 default(_) -> undefined.
 
 

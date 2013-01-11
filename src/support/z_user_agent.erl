@@ -178,7 +178,7 @@ ua_select(automatic, Context) ->
                CurrHasPointer,
                CurrWidth,
                CurrHeight,
-               Context);
+               Context);    
 ua_select(UAClass, Context) ->
     case get_class(Context) of
         UAClass ->
