@@ -27,4 +27,50 @@ Notifications
 ``signup_confirm_redirect{id=UserId}``
   Decide to which page a user gets redirected to after signup
 
+
+Config: Disabling confirmation email
+------------------------------------
+
+Set the configuration value ``mod_signup.request_confirm`` to
+``false`` to disable the signup confirmation process.
+
+
+Config: Using the user's e-mail address as username
+---------------------------------------------------
+
+By setting a configuration value, it is possible to use the entered
+email address as the username.
+
+Set the configuration value ``mod_signup.username_equals_email`` to ``true``.
+
+This makes the username equal to the email address, so that the user
+can log in using his email address instead of a separate user
+name. Note that when you allow a user to change his email, take care
+to update the ``{username_pw, {Username, Password}}`` identity as
+well, otherwise the username remains equal to the old email address.
+
+
+Config: setting the category for new users
+------------------------------------------
+
+By default, users created through the signup process will become
+:term:`resources <resource>` of the category `person`. This can be
+changed by setting the configuration value
+``mod_signup.member_category`` to the name of a different category.
+
+
+Config: setting the visibility of new users
+-------------------------------------------
+
+By default, the ``visible_for`` property of the new users's
+:term:`resource` will be set to 0, meaning world-viewable. To control
+the value of the ``visible_for`` flag on signup, set the configuration
+value ``mod_signup.member_visible_for`` to either 1 (visible for other
+logged in members), 2 (visible for "group members") or 3 (visible only
+for the user itself).
+
+      
 .. todo:: Add more documentation
+
+
+          
