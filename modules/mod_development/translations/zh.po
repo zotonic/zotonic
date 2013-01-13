@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-13 14:18+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_development/templates/admin_development_templates.tpl:9
+msgid "Below you see in real time which templates are compiled and included."
+msgstr "下面可以实时看到引用和编译了哪些模版。"
+
+#: modules/mod_development/mod_development.erl:312
+msgid "Development"
+msgstr "开发"
+
+#: modules/mod_development/templates/admin_development.tpl:18
+msgid ""
+"Download css and javascript files as separate files (ie. don’t combine them "
+"in one url)."
+msgstr "分别下载每个 javascript 和 css 文件（不要合并 js 和 css 文件）。"
+
+#: modules/mod_development/templates/admin_development_templates.tpl:13
+msgid "Empty log"
+msgstr "清空 Log"
+
+#: modules/mod_development/templates/admin_development_templates.tpl:12
+msgid "Recompile Templates"
+msgstr "重新编译模版"
+
+#: modules/mod_development/templates/admin_development.tpl:7
+msgid "Site Development"
+msgstr "站点开发"
+
+#: modules/mod_development/templates/admin_development_templates.tpl:7
+msgid "Site Development &mdash; Included templates"
+msgstr "站点开发 &mdash; 包括模版"
+
+#: modules/mod_development/templates/admin_development.tpl:9
+msgid "Tools and settings that are useful for site development."
+msgstr "站点开发中使用的工具和设置。"

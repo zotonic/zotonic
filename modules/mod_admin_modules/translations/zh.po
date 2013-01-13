@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-11 18:38+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:36
+msgid "Activate"
+msgstr "启用"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
+msgid "Author"
+msgstr "作者"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:31
+msgid "Deactivate"
+msgstr "停用"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+msgid "Description"
+msgstr "描述"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:3
+#: modules/mod_admin_modules/templates/admin_modules.tpl:7
+#: modules/mod_admin_modules/mod_admin_modules.erl:88
+msgid "Modules"
+msgstr "模块"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:49
+msgid "No modules found"
+msgstr "没有找到模块"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+msgid "Prio"
+msgstr "优先"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
+msgid "Rescan modules"
+msgstr "重新扫描模块"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
+msgid ""
+"Rescanning will rebuild the index of all modules, actions, templates etc.  "
+"It will also reload all dispatch rules."
+msgstr ""
+"重新扫描会重建所有模块，动作，模版的索引，同时也会重新载入所有调度规则。"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:15
+msgid "Title"
+msgstr "标题"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of "
+"all modules which are currently known to this Zotonic installation."
+msgstr ""
+"Zotonic 是一个模块化的 web 开发框架。大多功能都封装在模块里。一些基础模块随 "
+"Zotonic 一起提供，其他模块为外部开发。本页面列出了当前 Zotonic 安装可以找到到"
+"的所有模块。"
