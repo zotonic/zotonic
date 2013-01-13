@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-11 18:10+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
+msgid "Add configuration key"
+msgstr "创建配置 Key"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
+msgid "Add key"
+msgstr "创建 Key"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
+msgid "Are you sure you want to delete the configuration key"
+msgstr "确认删除配置 Key"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
+msgid "Cancel"
+msgstr "取消"
+
+#: modules/mod_admin_config/mod_admin_config.erl:43
+msgid "Config"
+msgstr "配置"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:3
+msgid "Configuration"
+msgstr "配置"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46
+msgid "Confirm delete"
+msgstr "确认删除"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:36
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8
+msgid "Delete"
+msgstr "删除"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:48
+#: modules/mod_admin_config/templates/admin_config.tpl:37
+msgid "Edit"
+msgstr "编辑"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:20
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15
+msgid "Key"
+msgstr "Key"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:11
+msgid "Make a new config setting"
+msgstr "创建新配置"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:22
+msgid "Modified"
+msgstr "修改时间"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:19
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7
+msgid "Module"
+msgstr "模块"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:50
+msgid "No configurations found."
+msgstr "没有找到配置。"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63
+msgid "Only administrators can change the configuration."
+msgstr "只有管理员可以修改配置。"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
+msgid "Only administrators can delete configurations."
+msgstr "只有管理员可以删除配置。"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
+msgid "Only an administrator can add configuration keys."
+msgstr "只有管理员可以创建配置 Key。"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
+msgid "Please fill in the module, key and value for the new configuration key."
+msgstr "请填写新建配置 Key 的相关信息。"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
+msgid "Save"
+msgstr "保存"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:8
+msgid "System Configuration"
+msgstr "系统配置"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61
+msgid "The config key already exists, please choose another key name."
+msgstr "配置 Key 已经存在，请选择其他名字。"
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
+msgid "This can't be undone. The configuration key will be lost forever."
+msgstr "操作不可以撤销，配置 Key 会丢失。"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:21
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:5
+msgid "Value"
+msgstr "值"

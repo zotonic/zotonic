@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-11 23:55+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:11
+msgid "Add after"
+msgstr "添加到之前"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:9
+msgid "Add before"
+msgstr "添加到之后"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:10
+msgid "Add below"
+msgstr "添加到下面"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+msgid "Add bottom"
+msgstr "添加到底部"
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+msgid "Add category"
+msgstr "添加分类"
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
+msgid "Add menu item"
+msgstr "添加菜单条目"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
+msgid "Add top"
+msgstr "添加到顶端"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+msgid ""
+"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
+"pages."
+msgstr ""
+"点击 <strong>添加菜单条目</strong> 或 <strong>菜单条目</strong> 来添加页面。"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
+msgid "Current menu"
+msgstr "当前菜单"
+
+#: modules/mod_menu/templates/_menu_trash.tpl:1
+msgid "Drag elements here to remove them"
+msgstr "拖动元素到这里来删除"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:3
+msgid "Drag me"
+msgstr "拖动我"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
+msgid ""
+"Drag menu items in the menu up, down, left or right to structure the menu."
+msgstr "可以上下左右拖动菜单条目来调整结构。"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:18
+msgid "Edit"
+msgstr "编辑"
+
+#: modules/mod_menu/mod_menu.erl:402
+msgid "Menu"
+msgstr "菜单"
+
+#: modules/mod_menu/mod_menu.erl:187
+msgid "New page"
+msgstr "新建页面"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:13
+msgid "Remove"
+msgstr "删除"

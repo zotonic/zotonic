@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-11 18:00+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:9
+#: modules/mod_admin_category/mod_admin_category.erl:87
+msgid "Categories"
+msgstr "分类"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:11
+msgid ""
+"Categories are used to categorize all pages. Every page belongs to exactly "
+"one category.<br/>The categories are defined in a hierarchy. Here you can "
+"change that hierarchy."
+msgstr ""
+"分类用于用于所有页面的分类管理。每个页面只能属于一个分类。<br />分类定义通过"
+"层级来定义，在这里你可以修改层级关系。"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
+msgid "Category Hierarchy"
+msgstr "分类层级"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:28
+msgid "Drag categories to the place where you want them in the hierarchy."
+msgstr "通过拖动将分类放到合适的位置。"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
+msgid "How does this work?"
+msgstr "这是如何工作的？"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+msgid "Use the <i class=\"icon-cog\"></i> button to add or remove categories."
+msgstr "使用 <i class=\"icon-cog\"></i> 按钮来添加或删除分类。"
