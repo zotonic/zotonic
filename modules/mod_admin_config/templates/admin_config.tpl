@@ -30,7 +30,7 @@
             <tr id="{{ #tr.id }}" class="clickable"  data-href="#">
                     <td>{{ module|escape|default:"-" }}</td>
                     <td>{{ key|escape|default:"-" }}</td>
-                    <td>{{ c.value|escape|default:"-" }}</td>
+                    <td>{{ c.value|escape|default:"-"|truncate:65 }}</td>
                     <td>
                         <div class="pull-right">
                             {% button class="btn btn-mini" text=_"Delete" action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#tr.id}} %}
