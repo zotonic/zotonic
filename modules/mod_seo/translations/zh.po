@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-12 00:32+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_seo/templates/admin_seo.tpl:43
+msgid "Add a noindex, nofollow element to all pages."
+msgstr "为所有页面加入 noindex，nofollow 元素。"
+
+#: modules/mod_seo/templates/admin_seo.tpl:35
+msgid "Description to include on every page"
+msgstr "每一个页面都会包含的描述"
+
+#: modules/mod_seo/templates/admin_seo.tpl:45
+msgid "Exclude this site from search engines"
+msgstr "从搜索引擎里排除本站点"
+
+#: modules/mod_seo/templates/admin_seo.tpl:24
+msgid "General SEO Optimization"
+msgstr "通用 SEO 优化"
+
+#: modules/mod_seo/templates/admin_seo.tpl:14
+msgid ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+msgstr "这里可以设置优化站点被搜索引擎收录相关内容。"
+
+#: modules/mod_seo/templates/admin_seo.tpl:28
+msgid "Keywords to include on every page. Separate keywords with a \",\""
+msgstr "每个页面都会包含的关键字。使用半角逗号 \",\" 分割。"
+
+#: modules/mod_seo/mod_seo.erl:42
+msgid "SEO"
+msgstr "SEO"
+
+#: modules/mod_seo/templates/admin_seo.tpl:17
+msgid "Save SEO settings"
+msgstr "保存 SEO 设置"
+
+#: modules/mod_seo/templates/admin_seo.tpl:3
+#: modules/mod_seo/templates/admin_seo.tpl:12
+msgid "Search Engine Optimization"
+msgstr "搜索引擎优化"
