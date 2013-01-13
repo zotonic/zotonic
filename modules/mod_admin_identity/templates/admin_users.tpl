@@ -43,7 +43,7 @@
 
         <tbody>
             {% for id, rank in result %}
-            <tr id="{{ #tr.id }}" data-href="{% url admin_edit_rsc id=id %}">
+            <tr id="{{ #tr.id }}" data-href="{% url admin_edit_rsc id=id %}" {% if not id.is_published %}class="unpublished"{% endif %}>
                 <td>{{ m.rsc[id].title|striptags }}</td>
                 <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>(that's you)</strong>{% endif %}</td>
                 <td>{{ m.rsc[id].modified|date:"d M, H:i" }}</td>
