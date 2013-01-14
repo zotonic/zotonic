@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 19:05+0800\n"
+"PO-Revision-Date: 2013-01-14 11:33+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
@@ -27,11 +27,11 @@ msgid ""
 "    The relation is always directed, from the subject to the object.<br/"
 ">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
 "\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
-msgstr ""
+msgstr "谓词"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:3
 msgid "Are you sure you want to delete the predicate"
-msgstr ""
+msgstr "确认删除谓词"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:17
 msgid "Cancel"
@@ -39,19 +39,19 @@ msgstr "取消"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:21
 msgid "From category"
-msgstr ""
+msgstr "从分类"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
 msgid "Help about predicates."
-msgstr ""
+msgstr "谓词帮助。"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
 msgid "Make a new predicate"
-msgstr ""
+msgstr "创建新谓词"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18
 msgid "Make predicate"
-msgstr ""
+msgstr "创建谓词"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:23
 msgid "Name"
@@ -59,31 +59,31 @@ msgstr "名字"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
 msgid "Need more help?"
-msgstr ""
+msgstr "更多帮助？"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
 msgid "Please fill in the title of the new predicate."
-msgstr ""
+msgstr "请填写新谓词的标题"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
 #: modules/mod_admin_predicate/mod_admin_predicate.erl:71
 msgid "Predicates"
-msgstr ""
+msgstr "谓词"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:48
 msgid ""
 "The direction (from/to) of this predicate is reversed from the normal "
 "definition."
-msgstr ""
+msgstr "本谓词的方向（从/到）为通用定义所保留。"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:4
 msgid "This can't be undone. The predicate will be lost forever."
-msgstr ""
+msgstr "操作无法撤销。谓词将被永远删除。"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:16
 msgid ""
 "This predicate can be used between two pages of the following categories."
-msgstr ""
+msgstr "本谓词用于下列两类页面之间。"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:22
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:9
@@ -92,7 +92,7 @@ msgstr "标题"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:32
 msgid "To category"
-msgstr ""
+msgstr "到分类"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:24
 msgid "URI"
@@ -100,7 +100,7 @@ msgstr "URI"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3
 msgid "Valid between"
-msgstr ""
+msgstr "有效范围"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
 msgid ""
@@ -109,6 +109,8 @@ msgid ""
 "searching for a page to connect to.  When you don\\'t check anything then "
 "all categories are valid."
 msgstr ""
+"你可以定义本谓词显示在哪些分类的编辑页面中。同时也可以定义搜索连接页面时显示"
+"哪些分类对象。如果不选择的话，则表示所有分类可用。"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:38
 msgid "edit"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 18:19+0800\n"
+"PO-Revision-Date: 2013-01-14 13:44+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:4
 msgid "+ add block"
-msgstr ""
+msgstr "+ 添加块"
 
 #: modules/mod_admin/templates/admin_edit.tpl:37
 msgid "<em>untitled</em>"
@@ -76,7 +76,7 @@ msgstr "管理员登陆到"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:5
 msgid "Advanced"
-msgstr "搞基"
+msgstr "高级"
 
 #: modules/mod_admin/templates/admin_overview.tpl:14
 msgid "All Categories"
@@ -100,7 +100,7 @@ msgstr "其他电话"
 
 #: modules/mod_admin/templates/admin_media.tpl:13
 msgid "And media can also be viewed on their own page."
-msgstr ""
+msgstr "所有媒体也可以通过它们自己的页面来查看。"
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:10
 msgid "Any category"
@@ -175,16 +175,16 @@ msgstr "修改分类"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
-msgstr ""
+msgstr "从本页面的媒体条目中选择一个，插入到正文文本中。"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid "Choose the new category for this page."
-msgstr ""
+msgstr "请为本页面选择一个新分类。"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:97
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:162
 msgid "City"
-msgstr "城市"
+msgstr "市/区/县"
 
 #: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
 msgid "Community members"
@@ -235,7 +235,7 @@ msgstr "控制台"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5
 msgid "Date range"
-msgstr "日期区间"
+msgstr "日期范围"
 
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
 msgid "Define who can see or edit this page."
@@ -259,7 +259,7 @@ msgstr "取消连接"
 
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:29
 msgid "Do you want to remove this block?"
-msgstr "你确认需要删除这个块？"
+msgstr "真的要删除这个块？"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:23
 msgid "Download"
@@ -298,11 +298,11 @@ msgstr "编辑"
 
 #: modules/mod_admin/templates/_edit_link.tpl:21
 msgid "Edit this page"
-msgstr "编辑这个页面"
+msgstr "编辑本页面"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:13
 msgid "Electronic address"
-msgstr "电子邮箱"
+msgstr "电子地址"
 
 #: modules/mod_admin/mod_admin.erl:135
 msgid "Embed page"
@@ -370,7 +370,7 @@ msgstr "名"
 msgid ""
 "Flush all URL dispatch rules, template- and library caches and other in-"
 "memory cached data."
-msgstr ""
+msgstr "刷新所有的 URL 调度规则，模版以及缓存数据。"
 
 #: modules/mod_admin/templates/admin_status.tpl:16
 msgid "Flush system caches"
@@ -378,7 +378,7 @@ msgstr "清理系统缓存"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
 msgid "From"
-msgstr "来自"
+msgstr "起始"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
 msgid "Go back."
@@ -391,11 +391,11 @@ msgstr "组成员"
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15
 #: modules/mod_admin/mod_admin.erl:133
 msgid "Header"
-msgstr "头"
+msgstr "题头"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid "Help about date ranges."
-msgstr "时间范围帮助。"
+msgstr "日期范围帮助。"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:12
 msgid "Help about features."
@@ -411,7 +411,7 @@ msgstr "人名帮助。"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
 msgid "Help about publication date range."
-msgstr "发布日期范围帮助。"
+msgstr "发布时间范围帮助。"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
@@ -433,11 +433,11 @@ msgstr "信息"
 
 #: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:5
 msgid "Info link with modal popup"
-msgstr ""
+msgstr "有一个模态弹出框的消息链接"
 
 #: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:4
 msgid "Inline block"
-msgstr "内联块"
+msgstr "内嵌块"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:13
 msgid "Insert image"
@@ -482,7 +482,7 @@ msgstr "登陆为"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:121
 msgid "Mailing address"
-msgstr "邮件地址"
+msgstr "通信地址"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:13
 msgid "Main"
@@ -494,12 +494,12 @@ msgstr "创建"
 
 #: modules/mod_admin/templates/admin_media.tpl:20
 msgid "Make a new media item"
-msgstr "创建一个新媒体条目"
+msgstr "创建新媒体条目"
 
 #: modules/mod_admin/templates/admin_overview.tpl:45
 #: modules/mod_admin/templates/admin.tpl:18
 msgid "Make a new page or media"
-msgstr "创建一个新页面或媒体"
+msgstr "创建新页面或媒体条目"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Make media item"
@@ -519,7 +519,7 @@ msgstr "媒体 URL"
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
-msgstr ""
+msgstr "媒体包括所有上传的图片，视频以及文档。媒体可以被附加到页面上。"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:25
 msgid "Media file"
@@ -614,7 +614,7 @@ msgstr "页面关键字"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:16
 msgid "Page path, default is"
-msgstr "页面路劲，默认为"
+msgstr "页面路径，默认是"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
 msgid "Page slug"
@@ -652,9 +652,8 @@ msgid "Postcode"
 msgstr "邮政编码"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:22
-#, fuzzy
 msgid "Predicate"
-msgstr "声明"
+msgstr "谓词"
 
 #: modules/mod_admin/templates/admin_media.tpl:32
 msgid "Preview"
@@ -704,6 +703,8 @@ msgid ""
 "Rebuild all search-indices by putting all pages and data from the database "
 "in the indexer queue. This can take a long time!"
 msgstr ""
+"将所有数据库中的页面和数据重新放入索引队列中，重建所有检索索引。这可能会耗费"
+"相当长的时间。"
 
 #: modules/mod_admin/templates/admin_status.tpl:23
 msgid "Rebuild search indices"
@@ -721,7 +722,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:32
 msgid "Remarks"
-msgstr ""
+msgstr "附注"
 
 #: modules/mod_admin/templates/admin_status.tpl:30
 msgid "Renumber category tree"
@@ -804,7 +805,7 @@ msgstr "标准"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:113
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:178
 msgid "State"
-msgstr "省"
+msgstr "省/直辖市/自治区"
 
 #: modules/mod_admin/mod_admin.erl:124
 msgid "Status"
@@ -818,7 +819,7 @@ msgstr "街道地址"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:88
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
-msgstr "街道地址续"
+msgstr "街道地址(续)"
 
 #: modules/mod_admin/mod_admin.erl:105
 msgid "Structure"
@@ -870,7 +871,7 @@ msgstr "页面"
 
 #: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
 msgid "The whole world"
-msgstr "整个世界"
+msgstr "全部可见"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
@@ -878,19 +879,19 @@ msgstr "没有连接到本页面的页面"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
-msgstr ""
+msgstr "操作不可以撤销，页面会永远丢失。"
 
 #: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
 "This page holds a collection of administrative options to perform certain "
 "tasks on this Zotonic installation."
-msgstr ""
+msgstr "本页面包含一些管理选项，用于执行相关操作。"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
 msgid ""
 "This page is able to connect to others. For example you can connect it to an "
 "actor or a brand."
-msgstr ""
+msgstr "本页面可以连接到其他页面。例如你可以链接到作者或者品牌页面。"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:39
 msgid "This resource was created by the module"
@@ -898,7 +899,7 @@ msgstr "这个资源的创建模块是"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
 msgid "Till"
-msgstr "直到"
+msgstr "终止"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:31
 #: modules/mod_admin/templates/admin_referrers.tpl:20
@@ -925,7 +926,7 @@ msgstr "URL"
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:24
 msgid "Unique name"
-msgstr "唯一名字"
+msgstr "唯一标识"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:45
 msgid "Unique uri"
@@ -980,12 +981,11 @@ msgstr "可见"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:17
 msgid "Visible from"
-msgstr ""
+msgstr "可见起始时间"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:23
-#, fuzzy
 msgid "Visible till"
-msgstr "可见直到"
+msgstr "可见结束时间"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58
 msgid "Visit full editpage"
@@ -993,7 +993,7 @@ msgstr "访问完整编辑页面"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:56
 msgid "Visiting address"
-msgstr "访问地址"
+msgstr "可访问地址"
 
 #: modules/mod_admin/templates/_admin_edit_content_website.tpl:5
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:47
@@ -1010,6 +1010,8 @@ msgid ""
 "between the two dates. Note that when you are allowed to edit the page then "
 "you can always see it."
 msgstr ""
+"当页面被设置了发布时间范围后，它只在这两个日期之间可见。注意如果你有权限编辑"
+"页面的话，那么你总能看到它。"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -1040,7 +1042,7 @@ msgstr "没有上传这个文件类型的权限。"
 msgid ""
 "You have to specify a description of the file to make it easier to find and "
 "share."
-msgstr "需要指定文件的描述信息，这可以让查找和共享更方便。"
+msgstr "请指定文件的描述信息，让查找和共享更方便。"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:14
 msgid "a connection to the page"
