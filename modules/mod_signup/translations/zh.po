@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:19+0800\n"
+"PO-Revision-Date: 2013-01-12 00:52+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,11 +29,11 @@ msgstr "带我去个人资料页面"
 
 #: modules/mod_signup/templates/signup.tpl:146
 msgid "Check our Terms of Service and Privacy policies"
-msgstr "阅读服务条款和隐私政策"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:115
 msgid "Choose a username and password"
-msgstr "选择用户名和密码"
+msgstr ""
 
 #: modules/mod_signup/templates/signup_confirm.tpl:26
 msgid "Confirm key"
@@ -67,7 +67,7 @@ msgstr "名"
 
 #: modules/mod_signup/templates/email_verify.tpl:16
 msgid "Hope to see you soon."
-msgstr "希望很快见到你。"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:154
 msgid "I agree to the"
@@ -75,15 +75,15 @@ msgstr "我同意"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
 msgid "I don’t have an account, please sign me up."
-msgstr "我没有账户，需要注册。"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
-msgstr "如果链接无法使用，那么你可以"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:57
 msgid "If you have already an account,"
-msgstr "已经有账户，"
+msgstr ""
 
 #: modules/mod_signup/templates/signup_confirm.tpl:17
 msgid ""
@@ -109,7 +109,7 @@ msgstr "请点击下面的链接。"
 
 #: modules/mod_signup/templates/signup.tpl:87
 msgid "Prefix"
-msgstr "称呼"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:155
 msgid "Privacy policies"
@@ -118,7 +118,8 @@ msgstr "隐私条款"
 #: modules/mod_signup/templates/signup.tpl:3
 #: modules/mod_signup/templates/signup.tpl:164
 msgid "Sign Up"
-msgstr "注册 "
+msgstr "注册
+"
 
 #: modules/mod_signup/templates/signup.tpl:55
 msgid "Sign up and become a member"
@@ -182,7 +183,7 @@ msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:171
 msgid "You are almost there!"
-msgstr "即将完成！"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
@@ -190,7 +191,7 @@ msgstr "你也可以"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:10
 msgid "Your account is confirmed. You can now continue on our site."
-msgstr "你的账户已经被确认。你可以继续访问站点。"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "and enter the key"

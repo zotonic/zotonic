@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:23+0800\n"
+"PO-Revision-Date: 2013-01-12 00:41+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: modules/mod_oembed/mod_oembed.erl:204
 msgid "Made the media page."
-msgstr "创建媒体页面。"
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Make media item"

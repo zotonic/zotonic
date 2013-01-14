@@ -8,9 +8,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \\bzotonic\n"
+"Project-Id-Version: \bzotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:24+0800\n"
+"PO-Revision-Date: 2013-01-11 23:46+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "消息"
 
 #: modules/mod_comment/templates/admin_comments_settings.tpl:31
 msgid "Moderate comments"
-msgstr "审核评论"
+msgstr ""
 
 #: modules/mod_comment/templates/admin_comments.tpl:22
 #: modules/mod_comment/templates/_comments_form.tpl:24
@@ -82,7 +82,7 @@ msgstr "名字"
 
 #: modules/mod_comment/templates/_comments_form.tpl:17
 msgid "Note: Comments are moderated"
-msgstr "注意：评论需要审核"
+msgstr ""
 
 #: modules/mod_comment/templates/admin_comments.tpl:20
 msgid "Page"
@@ -90,7 +90,7 @@ msgstr "页面"
 
 #: modules/mod_comment/templates/_comments_comment.tpl:4
 msgid "Posted"
-msgstr "发表于"
+msgstr ""
 
 #: modules/mod_comment/templates/admin_comments.tpl:4
 msgid "Recent Comments"
