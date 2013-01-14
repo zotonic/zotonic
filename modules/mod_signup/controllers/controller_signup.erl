@@ -61,8 +61,8 @@ provide_content(ReqData, Context) ->
 
 
 %% @doc Handle the submit of the signup form.
-event(#submit{message={signup, [{xs_props,Xs}]}, form="signup_form"}, Context) ->
-    {XsProps0,XsSignupProps} = case Xs of
+event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
+    {XsProps0,XsSignupProps} = case proplists:get_value(xs_props, Args) of
         {A,B} -> {A,B};
         undefined -> {undefined, undefined}
     end,
@@ -82,13 +82,17 @@ event(#submit{message={signup, [{xs_props,Xs}]}, form="signup_form"}, Context) -
             SignupProps = case is_set(XsSignupProps) of
                                 true ->
                                     XsSignupProps;
-                                false ->
-                                    [ {identity, {username_pw, 
-                                            {z_string:trim(z_context:get_q_validated("username", Context)), 
-                                             z_context:get_q_validated("password1", Context)},
-                                            true,
-                                            true}}
-                                    ]
+                              false ->
+                                  Username = case z_convert:to_bool(m_config:get_value(mod_signup, username_equals_email, false, Context)) of
+                                                 false -> z_string:trim(z_context:get_q_validated("username", Context));
+                                                 true -> Email
+                                             end,
+                                  [ {identity, {username_pw, 
+                                                {Username, 
+                                                 z_context:get_q_validated("password1", Context)},
+                                                true,
+                                                true}}
+                                  ]
                             end,
             SignupProps1 = case Email of
                 [] -> SignupProps;

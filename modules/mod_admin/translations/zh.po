@@ -1023,7 +1023,8 @@ msgstr "没有权限删除这个媒体。"
 
 #: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
 msgid "You are not allowed to delete this page."
-msgstr "没有权限删除这个页面。 "
+msgstr "没有权限删除这个页面。
+"
 
 #: modules/mod_admin/templates/admin_edit.tpl:23
 msgid "You are not allowed to edit the"

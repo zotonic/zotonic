@@ -118,7 +118,8 @@ msgstr "隐私条款"
 #: modules/mod_signup/templates/signup.tpl:3
 #: modules/mod_signup/templates/signup.tpl:164
 msgid "Sign Up"
-msgstr "注册 "
+msgstr "注册
+"
 
 #: modules/mod_signup/templates/signup.tpl:55
 msgid "Sign up and become a member"
