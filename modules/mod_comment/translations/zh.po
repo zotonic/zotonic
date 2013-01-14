@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \\bzotonic\n"
+"Project-Id-Version: \bzotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2013-01-13 14:24+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
