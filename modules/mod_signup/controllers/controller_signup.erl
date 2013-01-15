@@ -67,17 +67,23 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
         undefined -> {undefined, undefined}
     end,
     XsProps = case XsProps0 of undefined -> []; _ -> XsProps0 end,
+
+    %% Call listeners to fetch the required signup form fields
+    FormProps0 = [{email, true},
+                  {name_first, true},
+                  {name_surname_prefix, false},
+                  {name_surname, true}],
+    FormProps = z_notifier:foldl(signup_form_fields, FormProps0, Context),
+
+    Props = lists:map(fun({Prop, Validate}) ->
+                              {Prop, fetch_prop(Prop, Validate, XsProps, Context)}
+                      end,
+                      FormProps),
     
-    Agree = z_context:get_q_validated("signup_tos_agree", Context),
+    Agree = z_convert:to_bool(z_context:get_q_validated("signup_tos_agree", Context)),
     case Agree of
-        "1" ->
-            Email = fetch_prop(email, true, XsProps, Context),
-            Props = [
-                {name_first, fetch_prop(name_first, true, XsProps, Context)},
-                {name_surname_prefix, fetch_prop(name_surname_prefix, false, XsProps, Context)},
-                {name_surname, fetch_prop(name_surname, true, XsProps, Context)},
-                {email, Email}
-            ],
+        true ->
+            {email, Email} = proplists:lookup(email, Props),
             RequestConfirm = z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, true, Context)),
             SignupProps = case is_set(XsSignupProps) of
                                 true ->
@@ -103,7 +109,7 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                       end
             end,
             signup(Props, SignupProps1, RequestConfirm, Context);
-        _ ->
+        false ->
             show_errors([error_tos_agree], Context)
     end.
 
