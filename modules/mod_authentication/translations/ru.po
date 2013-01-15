@@ -1,0 +1,351 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-01 13:29+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:9
+#: modules/mod_authentication/templates/_logon_stage.tpl:42
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:23
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:48
+msgid "Back to logon form"
+msgstr "Вернуться к форме входа"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "Below are your account details and a link to set a new password."
+msgstr ""
+"Ниже указаны реквизиты учетной записи и ссылка для установки нового пароля."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:51
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:5
+msgid "Below you can enter a new password for your account"
+msgstr "Ниже вы можете указать новый пароль для вашей учетной записи"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:28
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:78
+msgid "Change password and Log on"
+msgstr "Изменить пароль и войти"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:28
+msgid "Check your e-mail!"
+msgstr "Проверьте свой e-mail!"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:17
+msgid "Click on the button below to e-mail you a verification message."
+msgstr "Нажмите на эту кнопку, чтобы получить сообщение для проверки e-mail."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:12
+msgid ""
+"Click on the link below to enter a new password, when clicking doesn't work "
+"then you can copy and paste the complete address to your browser."
+msgstr ""
+"Нажмите на эту ссылку, чтобы заменить пароль. Если это не работает, "
+"попробуйте скопировать и указать браузеру полный адрес."
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:25
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:20
+msgid "Confirmation failure"
+msgstr "Ошибка подтверждения"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
+msgid "E-mail address or username"
+msgstr "E-mail или имя пользователя"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
+msgid ""
+"Enter your e-mail address or username below and we will send you an e-mail "
+"with password reset instructions."
+msgstr ""
+"Введите e-mail или имя пользователя, чтобы получить сообщение с инструкцией "
+"по сбросу пароля."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:45
+msgid ""
+"For security reasons password reset codes are only kept for a limited amount "
+"of time and can only be used once."
+msgstr ""
+"В целях обеспечения безопасности коды сброса пароля хранятся в течение "
+"ограниченного промежутка времени и могут быть использованы только один раз."
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:2
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:6
+msgid "Hello"
+msgstr "Добро пожаловать,"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:3
+msgid "How to reset your password"
+msgstr "Как сбросить пароль"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:35
+msgid "I forgot my password"
+msgstr "Забыл пароль"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:8
+msgid "I forgot my username or password"
+msgstr "Забыл имя пользователя или пароль"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:6
+msgid ""
+"In the e-mail you will find instructions on how to reset the password of "
+"your account."
+msgstr ""
+"В сообщении e-mail вы получите инструкции, как сбросить пароль учетной "
+"записи."
+
+#: modules/mod_authentication/templates/_logon_off.tpl:2
+#: modules/mod_authentication/templates/logoff.tpl:3
+msgid "Log Off"
+msgstr "Выйти"
+
+#: modules/mod_authentication/templates/_logon_off.tpl:4
+msgid "Log On"
+msgstr "Войти"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:26
+msgid "Log on"
+msgstr "Вход"
+
+#: modules/mod_authentication/templates/logon.tpl:8
+#: modules/mod_authentication/templates/_logon_form.tpl:3
+msgid "Log on to"
+msgstr "Войти на"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:56
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:10
+msgid "New password"
+msgstr "Новый пароль"
+
+#: modules/mod_authentication/templates/logoff.tpl:10
+msgid "One moment please, logging off…"
+msgstr "Подождите, пожалуйста, выполняется выход…"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_authentication/templates/_logon_form.tpl:18
+msgid "Password"
+msgstr "Пароль"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:23
+#: modules/mod_authentication/templates/_logon_error.tpl:30
+msgid "Passwords should have at least six characters."
+msgstr "Пароли должны содержать как минимум 6 символов."
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:8
+msgid "Please confirm your"
+msgstr "Пожалуйста, подтвердите ваш пароль для"
+
+#: modules/mod_authentication/templates/_logon_form.tpl:29
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:63
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:17
+msgid "Repeat password"
+msgstr "Повторите пароль"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:32
+msgid "Reset password and Log on"
+msgstr "Сбросить пароль и войти"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:3
+msgid "Reset your password"
+msgstr "Сброс пароля"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:20
+msgid "Send Verification Message"
+msgstr "Получить код проверки"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
+msgid "Send me instructions"
+msgstr "Получить инструкции"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:38
+msgid "Sorry, could not send the verification message."
+msgstr "Извините, не удалось отправить сообщение для проверки."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:43
+msgid "Sorry, your password reset code is unknown or expired"
+msgstr "Извините, ваш код для сброса пароля неверен или истек"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:72
+#: modules/mod_authentication/templates/_logon_form.tpl:27
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:26
+msgid "Stay logged on unless I log off."
+msgstr "Оставаться в системе до самостоятельного выхода."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:18
+msgid "Thank you,"
+msgstr "Спасибо, "
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
+msgid "The crew at"
+msgstr "Администрация"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "The e-mail address associated with your account is"
+msgstr "Адрес e-mail, соответствующий вашей учетной записи:"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "The e-mail will contain instructions how to reset your password."
+msgstr "На ваш e-mail придут инструкции по сбросу пароля."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:28
+msgid "The two passwords should be equal. Please retype them."
+msgstr "Пароли должны совпадать. Пожалуйста, введите их снова."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:17
+msgid ""
+"To find your account\tyou need to enter either your username or the e-mail "
+"address you gave us."
+msgstr ""
+"Чтобы определить вашу учетную запись,\tнужно указать имя пользователя или "
+"связанный с ней адрес e-mail."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:24
+#: modules/mod_authentication/templates/_logon_error.tpl:31
+msgid ""
+"Use some non alphabetical characters or digits to make it harder to guess."
+msgstr "Используйте цифры или знаки препинания для большей надежности пароля."
+
+#: modules/mod_authentication/templates/_logon_form.tpl:10
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:16
+msgid ""
+"We can only send you an e-mail when we have the e-mail address of your "
+"account."
+msgstr ""
+"Сообщение может быть отправлено только в том случае, если задан адрес e-mail "
+"для вашего аккаунта."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:40
+msgid ""
+"We don’t seem to have any valid e-mail address or other electronic "
+"communication address of you."
+msgstr "Ваш электронный адрес для обратной связи в системе не обнаружен."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:30
+msgid ""
+"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"to confirm your account."
+msgstr ""
+"Вам отправлено сообщение на e-mail. В сообщении указаны инструкции по "
+"активации вашей учетной записи."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:16
+msgid ""
+"When you didn't request a password reset, you can ignore this e-mail. Maybe "
+"someone made an error typing his or her e-mail address."
+msgstr ""
+"Если вы не запрашивали смену пароля, вы можете проигнорировать это "
+"сообщение. Возможно, кто-то ошибся при наборе своего адреса e-mail."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:7
+#: modules/mod_authentication/templates/_logon_stage.tpl:32
+msgid ""
+"When you don’t receive the e-mail within a few minutes then be sure to check "
+"your spam filter and spam folders."
+msgstr ""
+"Если вам не пришло сообщение в течение нескольких минут, проверьте свой спам-"
+"фильтр и папки со спамом."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "When you forgot your username or pasword then you can ask us to"
+msgstr "Если вы забыли имя пользователя или пароль, вы можете сделать"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
+msgid "You can"
+msgstr "Вы можете сделать"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:14
+msgid "You entered an unknown username or e-mail address.  Please try again."
+msgstr "Вы указали неверное имя пользователя или e-mail.  Попробуйте снова."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:3
+msgid "You entered an unknown username or password.  Please try again."
+msgstr "Вы указали неверное имя пользователя или пароль.  Попробуйте снова."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:5
+msgid ""
+"You might have made a typo in your username or password.  Please note that "
+"both are case sensitive and check that your caps lock key is off."
+msgstr ""
+"Возможно, вы ошиблись при наборе имени пользователя или пароля.  Обратите "
+"внимание, что оба поля чувствительны к регистру, и убедитесь, что режим caps "
+"lock выключен."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:49
+msgid "You need to change your password"
+msgstr "Вам нужно сменить свой пароль"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:22
+msgid ""
+"You receive this e-mail because you or someone else requested a password "
+"reset for your account. You or the someone else either entered your username "
+"or e-mail address.  You will not receive any additional e-mails because of "
+"this request."
+msgstr ""
+"Вы получили это сообщение, потому что вы или кто-то другой запросили сброс "
+"пароля для вашей учетной записи. В заявке было указано имя пользователя или "
+"ваш e-mail.  Вы не будете получать повторные сообщения, связанные с этой "
+"функцией."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "You requested a new password for"
+msgstr "Вы запросили смену пароля от"
+
+#: modules/mod_authentication/templates/logoff.tpl:12
+msgid "You will be redirected to the home page."
+msgstr "Вы будете автоматически перенаправлены на домашнюю страницу."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "Your account name is"
+msgstr "Имя вашей учетной записи:"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:15
+msgid "Your account needs verification"
+msgstr "Вашу учетную запись необходимо активировать"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:21
+msgid "Your new password is too short."
+msgstr "Вы указали слишком короткий пароль."
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:37
+msgid "Your password will be reset and you will be logged on as"
+msgstr "Ваш пароль будет сброшен, и вы войдете как"
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "e-mail a temporary password"
+msgstr "заявку на временный пароль"
+
+#: modules/mod_authentication/templates/_logon_password_reset.tpl:46
+msgid "request a new password reset code"
+msgstr "заявку на новый код для смены пароля"
+
+#: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
+msgid "user@example.com"
+msgstr "user@example.com"

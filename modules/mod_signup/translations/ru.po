@@ -1,0 +1,238 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2013-01-14 16:40+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_signup/templates/signup.tpl:161
+msgid "And sign up"
+msgstr "И зарегистрируйтесь"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:12
+msgid "Bring me to my profile page"
+msgstr "Перейти на страницу профиля"
+
+#: modules/mod_signup/templates/signup.tpl:146
+msgid "Check our Terms of Service and Privacy policies"
+msgstr "Прочитайте Условия использования и Политику конфиденциальности"
+
+#: modules/mod_signup/templates/signup.tpl:115
+msgid "Choose a username and password"
+msgstr "Укажите имя пользователя и пароль"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:26
+msgid "Confirm key"
+msgstr "Код подтверждения"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:3
+#: modules/mod_signup/templates/signup_confirm.tpl:15
+#: modules/mod_signup/templates/signup_confirm.tpl:30
+msgid "Confirm my account"
+msgstr "Подтвердить регистрацию"
+
+#: modules/mod_signup/templates/email_verify.tpl:12
+msgid "Confirm my account."
+msgstr "Подтвердить регистрацию."
+
+#: modules/mod_signup/templates/signup.tpl:70
+msgid "Create your account"
+msgstr "Создайте учетную запись"
+
+#: modules/mod_signup/templates/email_verify.tpl:6
+msgid "Dear"
+msgstr "Уважаемый(ая)"
+
+#: modules/mod_signup/templates/signup.tpl:103
+msgid "E-mail"
+msgstr "Электронная почта"
+
+#: modules/mod_signup/templates/signup.tpl:75
+msgid "First name"
+msgstr "Имя"
+
+#: modules/mod_signup/templates/email_verify.tpl:16
+msgid "Hope to see you soon."
+msgstr "Надеемся скоро увидеть вас."
+
+#: modules/mod_signup/templates/signup.tpl:154
+msgid "I agree to the"
+msgstr "Я прочитал(а) и согласен(на) с"
+
+#: modules/mod_signup/templates/_logon_link.tpl:2
+msgid "I don’t have an account, please sign me up."
+msgstr "У меня нет учетной записи, пожалуйста, зарегистрируйте меня."
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "If the link does not work then you can go to"
+msgstr "Если ссылка не работает, вы можете перейти на"
+
+#: modules/mod_signup/templates/signup.tpl:57
+msgid "If you have already an account,"
+msgstr "Если у вас уже есть учетная запись, вы можете"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:17
+msgid ""
+"In your e-mail you received a confirmation key. Please copy it in the input "
+"field below."
+msgstr ""
+"На ваш e-mail отправлен код подтверждения. Пожалуйста, скопируйте его в поле "
+"ввода снизу."
+
+#: modules/mod_signup/templates/signup.tpl:93
+msgid "Last name"
+msgstr "Фамилия"
+
+#: modules/mod_signup/templates/signup.tpl:126
+msgid "Password"
+msgstr "Пароль"
+
+#: modules/mod_signup/templates/email_verify.tpl:3
+msgid "Please confirm your account."
+msgstr "Пожалуйста, подтвердите вашу регистрацию."
+
+#: modules/mod_signup/templates/email_verify.tpl:10
+msgid "Please follow the link below."
+msgstr "Пожалуйста, перейдите по ссылке снизу."
+
+#: modules/mod_signup/templates/signup.tpl:87
+msgid "Prefix"
+msgstr "Префикс"
+
+#: modules/mod_signup/templates/signup.tpl:155
+msgid "Privacy policies"
+msgstr "Политикой конфиденциальности"
+
+#: modules/mod_signup/templates/signup.tpl:3
+#: modules/mod_signup/templates/signup.tpl:164
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: modules/mod_signup/templates/signup.tpl:55
+msgid "Sign up and become a member"
+msgstr "Зарегистрируйтесь и станьте участником"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:20
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr ""
+"Извините, код подтверждения неверен. Убедитесь, что вы скопировали его "
+"правильно."
+
+#: modules/mod_signup/templates/signup.tpl:72
+msgid ""
+"Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+msgstr ""
+"Извините, уже существует учетная запись, совпадающая с данными вашего "
+"поставщика услуг. Возможно ваша учетная запись была приостановлена."
+
+#: modules/mod_signup/templates/signup.tpl:117
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr ""
+"Извините, это имя пользователя уже занято. Пожалуйста, попробуйте указать "
+"другое."
+
+#: modules/mod_signup/templates/email_verify.tpl:8
+msgid ""
+"Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+msgstr ""
+"Спасибо за регистрацию на нашем сайте. Нам требуется подтверждение "
+"регистрации перед использованием вашей учетной записи."
+
+#: modules/mod_signup/templates/signup.tpl:151
+msgid ""
+"To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr ""
+"Для регистрации необходимо согласие с Условиями использования и Политикой "
+"конфиденциальности."
+
+#: modules/mod_signup/templates/signup.tpl:129
+msgid "Too short, use 6 or more."
+msgstr "Пароль слишком короткий, используйте не менее 6 символов."
+
+#: modules/mod_signup/templates/signup.tpl:120
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: modules/mod_signup/templates/signup.tpl:134
+msgid "Verify password"
+msgstr "Повторите пароль"
+
+#: modules/mod_signup/templates/signup.tpl:173
+msgid ""
+"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"to confirm your account."
+msgstr ""
+"Вам отправлено почтовое сообщение. В сообщении указаны инструкции по "
+"подтверждению вашей учетной записи."
+
+#: modules/mod_signup/templates/signup.tpl:149
+msgid ""
+"We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission.\n"
+"\t\t\tWe do have some rules that we need you to agree with."
+msgstr ""
+"Мы будем соблюдать осторожность по отношению к указанным вами сведениям и не "
+"будем разглашать ваше имя или адрес без вашего разрешения.\n"
+"\t\t\tУ нас действуют определенные правила, с которыми вам нужно согласиться."
+
+#: modules/mod_signup/templates/signup_confirm.tpl:8
+msgid "Welcome"
+msgstr "Добро пожаловать,"
+
+#: modules/mod_signup/templates/signup.tpl:175
+msgid ""
+"When you don’t receive the e-mail within a few minutes then be sure to check "
+"your spam filter and spam folders."
+msgstr ""
+"Если вы не получите сообщение в течение нескольких минут, не забудьте "
+"проверить ваш спам-фильтр и папки для спама."
+
+#: modules/mod_signup/templates/signup.tpl:171
+msgid "You are almost there!"
+msgstr "Почти готово!"
+
+#: modules/mod_signup/templates/signup.tpl:60
+msgid "You can also"
+msgstr "Вы можете также"
+
+#: modules/mod_signup/templates/signup_confirm.tpl:10
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr ""
+"Ваша регистрация подтверждена. Теперь вы можете продолжать пользоваться "
+"нашим сайтом."
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "and enter the key"
+msgstr "и указать следующий код:"
+
+#: modules/mod_signup/templates/signup.tpl:155
+msgid "and the"
+msgstr "и"
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "in the input field."
+msgstr "в поле ввода."
+
+#: modules/mod_signup/templates/signup.tpl:57
+msgid "log on now"
+msgstr "войти немедленно"
+
+#: modules/mod_signup/templates/signup.tpl:60
+msgid "sign up for a username and password"
+msgstr "зарегистрироваться для получения имени пользователя и пароля"

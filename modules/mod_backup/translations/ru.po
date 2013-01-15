@@ -1,0 +1,231 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2013-01-10 20:38+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_backup/templates/admin_backup.tpl:3
+msgid "Admin Backups"
+msgstr "Администраторские резервные копии"
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:7
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:20
+msgid "Are you sure you want to revert to this version?"
+msgstr "Вы уверены, что желаете вернуться к этой версии?"
+
+#: modules/mod_backup/templates/admin_backup.tpl:27
+msgid "At any moment you can make a backup of your system."
+msgstr "В любое время вы можете создать резервную копию системы."
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:41
+msgid "Back to the edit page"
+msgstr "Назад на страницу редактирования"
+
+#: modules/mod_backup/mod_backup.erl:64
+msgid "Backup"
+msgstr "Резервное копирование"
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:10
+msgid "Backup &amp; Restore"
+msgstr "Резервное копирование и восстановление"
+
+#: modules/mod_backup/templates/admin_backup.tpl:11
+msgid "Backup and restore options for your content."
+msgstr "Опции резервного копирования и восстановления для вашего контента."
+
+#: modules/mod_backup/templates/admin_backup.tpl:9
+#: modules/mod_backup/templates/admin_backup.tpl:46
+msgid "Backups"
+msgstr "Резервные копии"
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:13
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:39
+msgid "Check and possibly restore an earlier version of your page."
+msgstr "Проверить и возможно восстановить предыдущую версию вашей страницы."
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
+msgid ""
+"Click on <b>List and restore an earlier version</b> to get an overview of "
+"earlier saved versions of this page.<br/>You can also save the complete "
+"contents of a page to a file. Later you can reload this file, replacing the "
+"current page contents. Note that the file does not contain your unsaved "
+"changes. Connections and media are not saved as well."
+msgstr ""
+"Нажмите <b>Список предыдущих версий</b>, чтобы получить обзор ранее "
+"сохраненных версий страницы.<br/>Вы также можете записать содержимое "
+"страницы полностью в файл. Позже вы можете загрузить этот файл снова, "
+"заменив текущее содержимое страницы. Обратите внимание, что файл не будет "
+"содержать несохраненные изменения. Связи и материалы также не сохраняются."
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:53
+msgid "Current"
+msgstr "Текущая версия"
+
+#: modules/mod_backup/templates/admin_backup.tpl:52
+msgid "Date"
+msgstr "Дата"
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:35
+msgid "Deleted"
+msgstr "Удаленное"
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:26
+msgid "Download backup file"
+msgstr "Скачать файл с резервной копией"
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
+msgid "Help about backup &amp; restore."
+msgstr "Справка о резервном копировании и восстановлении."
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:22
+msgid "List and restore an earlier version"
+msgstr "Список предыдущих версий"
+
+#: modules/mod_backup/templates/admin_backup.tpl:21
+msgid "Make a daily backup of the database and uploaded files."
+msgstr "Ежедневно создавать резервные копии базы данных и загруженных файлов."
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
+msgid "Need more help?"
+msgstr "Нужна помощь?"
+
+#: modules/mod_backup/templates/admin_backup.tpl:74
+msgid "No backups present."
+msgstr "Резервные копии отсутствуют."
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:65
+msgid "Previous"
+msgstr "Предыдущая версия"
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:27
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:28
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:14
+msgid "Restore backup"
+msgstr "Восстановить"
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:8
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:21
+msgid "Revert"
+msgstr "Вернуться"
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:6
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:19
+msgid "Revert to this version"
+msgstr "Вернуться к этой версии"
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:3
+#: modules/mod_backup/templates/admin_backup_revision.tpl:33
+#: modules/mod_backup/templates/admin_backup_revision.tpl:35
+msgid "Revisions for"
+msgstr "Модификации"
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:81
+msgid "Select one or two revisions from the list on the left."
+msgstr "Выберите одну или две модификации из списка слева."
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:3
+msgid ""
+"Select the backup file you want to upload. The file must be a .bert file."
+msgstr ""
+"Выберите файл с резервной копией для закачки. Эти файлы имеют расширение ."
+"bert."
+
+#: modules/mod_backup/templates/admin_backup.tpl:17
+msgid "Show import/export panel in the admin."
+msgstr "Показывать панель импорта/экспорта в интерфейсе администратора."
+
+#: modules/mod_backup/templates/admin_backup.tpl:33
+msgid "Start backup now"
+msgstr "Начать резервное копирование"
+
+#: modules/mod_backup/templates/admin_backup.tpl:38
+msgid ""
+"The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" "
+"config key to the path to pg_dump and return to this page."
+msgstr ""
+"Команда «pg_dump» не доступна в путях, указанных в переменной среды PATH. "
+"Установите ключ настройки «pg_dump» в путь к исполняемому файлу pg_dump в "
+"файловой системе и вернитесь на эту страницу."
+
+#: modules/mod_backup/templates/admin_backup.tpl:39
+msgid ""
+"The \"tar\" command was not found in the path. Set the \"tar\" config key to "
+"the path to pg_dump and return to this page."
+msgstr ""
+"Команда «tar» не доступна в путях, указанных в переменной среды PATH. "
+"Установите ключ настройки «tar» в путь к исполняемому файлу tar в файловой "
+"системе и вернитесь на эту страницу."
+
+#: modules/mod_backup/templates/admin_backup.tpl:27
+msgid "The backup comprises two parts, the database and the uploaded files."
+msgstr "Резервная копия содержит две части — базу данных и закачанные файлы."
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
+msgid "This will overwrite your page with the contents of the backup file."
+msgstr ""
+"Это действие заменит текущее содержимое страницы содержимым из резервной "
+"копии."
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
+msgid "Warning!"
+msgstr "Внимание!"
+
+#: modules/mod_backup/templates/admin_backup.tpl:37
+msgid "Warning:"
+msgstr "Внимание:"
+
+#: modules/mod_backup/templates/admin_backup.tpl:28
+msgid "You can have 10 backups, older ones will be deleted automatically."
+msgstr ""
+"Вы можете хранить до 10 резервных копий, старые копии будут автоматически "
+"удалены."
+
+#: modules/mod_backup/templates/admin_backup.tpl:32
+msgid ""
+"You can start a backup immediately, while the backup is running you can "
+"continue working."
+msgstr ""
+"Резервное копирование можно начать в любой момент, в процессе копирования вы "
+"можете продолжать работу."
+
+#: modules/mod_backup/templates/admin_backup.tpl:37
+msgid ""
+"Your backup is not correctly configured. The backup module will not work "
+"until the problem(s) below have been resolved:"
+msgstr ""
+"Параметры резервного копирования не настроены. Чтобы обеспечить работу "
+"модуля, нужно решить следующие проблемы:"
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:14
+msgid "current version"
+msgstr "текущая версия"
+
+#: modules/mod_backup/templates/admin_backup.tpl:64
+msgid "download database"
+msgstr "скачать базу данных"
+
+#: modules/mod_backup/templates/admin_backup.tpl:65
+msgid "download files"
+msgstr "скачать файлы"
+
+#: modules/mod_backup/templates/admin_backup.tpl:62
+msgid "this backup is in progress"
+msgstr "выполняется резервное копирование"

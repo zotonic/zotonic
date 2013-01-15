@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2013-01-05 10:48+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:21
+msgid "App ID."
+msgstr "ID приложения"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:28
+msgid "App Secret"
+msgstr "Секретный ключ"
+
+#: modules/mod_facebook/mod_facebook.erl:77
+msgid "Facebook"
+msgstr "Facebook"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:3
+#: modules/mod_facebook/templates/admin_facebook.tpl:9
+msgid "Facebook API Configuration"
+msgstr "Настройка Facebook API"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:11
+msgid ""
+"Here you find the settings to authenticate users with facebook. You can find "
+"these values in <a href=\"http://www.facebook.com/developers/apps.php\" "
+"title=\"Developer Dashboard\">Your Facebook Developer Dashboard</a>"
+msgstr ""
+"Здесь расположены параметры для доступа пользователей через Facebook. Вы "
+"можете получить нужные значения в <a href=\"http://www.facebook.com/"
+"developers/apps.php\" title=\"Панель разработчика\">панели разработчика "
+"Facebook</a>"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:52
+msgid "Save Facebook Settings"
+msgstr "Сохранить настройки для Facebook"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:35
+msgid "Scope"
+msgstr "Возможности"
+
+#: modules/mod_facebook/templates/admin_facebook.tpl:45
+msgid "Use Facebook authentication"
+msgstr "Использовать вход через Facebook"
