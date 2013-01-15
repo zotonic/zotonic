@@ -7,12 +7,17 @@ themselves.
 Notifications
 -------------
 
-``identify_verification{user_id=UserId, identity=Ident}``
+``signup_form_fields``
+  Fold for determining which signup fields to validate. This is an
+  array of ``{Fieldname, Validate}`` tuples, defaulting to ``[{email,
+  true}, {name_first, true}, {name_surname_prefix, false},
+  {name_surname, true}]``. Observers can add / remove fields using the
+  accumulator value that is passed into the notification.
 
+``identify_verification{user_id=UserId, identity=Ident}``
   Sent verification requests to non verified identities.
 
 ``signup_check``
-
   Fold for the signup preflight check. Allows to add extra user properties or abort the signup.
 
   If no ``{ok, _Props1, SignupProps}`` is returned, but ``{error,
