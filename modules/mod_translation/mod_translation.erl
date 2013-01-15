@@ -61,14 +61,15 @@ init(Context) ->
                 undefined ->
                     m_config:set_prop(i18n, language_list, list, [
                             {ar, [ {language, <<"العربية">>}, {is_enabled, false}]},
-                            {en, [ {language, <<"English">>}, {is_enabled, true}]},
-                            {et, [ {language, <<"Eesti">>}, {is_enabled, true}]},
-                            {es, [ {language, <<"Español">>}, {is_enabled, true}]},
-                            {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {de, [ {language, <<"Deutsch">>}, {is_enabled, true}]},
+                            {en, [ {language, <<"English">>}, {is_enabled, true}]},
+                            {es, [ {language, <<"Español">>}, {is_enabled, true}]},
+                            {et, [ {language, <<"Eesti">>}, {is_enabled, true}]},
+                            {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
                             {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
-                            {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
                             {pl, [ {language, <<"Polski">>}, {is_enabled, true}]},
+                            {ru, [ {language, <<"Русский">>}, {is_enabled, true}]},
+                            {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
                             {zh, [ {language, <<"中文">>}, {is_enabled, false}]}
                         ], Context);
                 _Exists ->

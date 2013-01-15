@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2012-12-30 17:15+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:36
+msgid "Activate"
+msgstr "Включить"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
+msgid "Author"
+msgstr "Автор"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:31
+msgid "Deactivate"
+msgstr "Выключить"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+msgid "Description"
+msgstr "Описание"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:3
+#: modules/mod_admin_modules/templates/admin_modules.tpl:7
+#: modules/mod_admin_modules/mod_admin_modules.erl:88
+msgid "Modules"
+msgstr "Модули"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:49
+msgid "No modules found"
+msgstr "Модули не найдены"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+msgid "Prio"
+msgstr "Приоритет"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
+msgid "Rescan modules"
+msgstr "Обновить список"
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
+msgid ""
+"Rescanning will rebuild the index of all modules, actions, templates etc.  "
+"It will also reload all dispatch rules."
+msgstr ""
+"При обновлении будут пересобраны индексы всех модулей, поведений, шаблонов и "
+"т. д.  Также, будут перезагружены все правила размещения."
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:15
+msgid "Title"
+msgstr "Название"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n"
+"    while others are externally developed. This page shows an overview of "
+"all modules which are currently known to this Zotonic installation."
+msgstr ""
+"Zotonic является модульным фреймворком для веб-разработки. Большая часть "
+"функциональности реализована в виде модулей. Набор основных модулей "
+"поставляется с Zotonic,\n"
+"    в то время как прочие разрабатываются вне рамок проекта. На этой "
+"странице показан обзор всех модулей, известных этому экземпляру Zotonic."
