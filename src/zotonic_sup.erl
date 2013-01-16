@@ -21,6 +21,8 @@
 
 -behaviour(supervisor).
 
+-compile([{parse_transform, lager_transform}]).
+
 %% External exports
 -export([start_link/0, upgrade/0, upgrade/2]).
 
