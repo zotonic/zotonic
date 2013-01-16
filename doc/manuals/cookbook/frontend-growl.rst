@@ -22,7 +22,7 @@ How
 
 Although the magic is quite simple. The missing pieces are a couple of
 client side scripts, ``/lib/js/modules/z.notice.js`` and
-``/lib/css/zp-growl.css``.
+``/lib/css/z.growl.css`` from :ref:`mod_base`.
 
 In your ``base.tpl`` template, include these files using the :ref:`tag-lib` tag::
 
@@ -30,7 +30,7 @@ In your ``base.tpl`` template, include these files using the :ref:`tag-lib` tag:
 
 And the CSS::
 
-  {% lib "css/zp-growl.css" %} 
+  {% lib "css/z.growl.css" %} 
 
 Now you should be able to use growl actions in your templates, example:
 
