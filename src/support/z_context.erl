@@ -328,19 +328,23 @@ abs_url(Url, Context) ->
         true ->
             Url;
         false ->
-            ["http://", hostname_port(Context), Url]
+            [site_protocol(Context), "://", hostname_port(Context), Url]
     end.
 
     has_url_protocol([]) ->
         false;
-    has_url_protocol([H|T]) when is_integer($a) andalso H >= $a andalso H =< $z ->
+    has_url_protocol([H|T]) when is_integer(H) andalso H >= $a andalso H =< $z ->
         has_url_protocol(T);
     has_url_protocol([$:|_]) ->
         true;
     has_url_protocol(_) ->
         false.
 
-
+%% @doc Fetch the protocol for absolute urls referring to the site (defaults to http).
+%%      Useful when the site is behind a https proxy.
+%% @todo: integrate this with mod_ssl, option 
+site_protocol(Context) ->
+    z_convert:to_list(m_config:get_value(site, protocol, "http", Context)).
 
 %% @doc Pickle a context for storing in the database
 %% @todo pickle/depickle the visitor id (when any)
