@@ -759,12 +759,14 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                     end
             end,
 
+            %% optional include should not go find all templates...
+            AllB = case All of optional -> false; _ -> All end,
             % Compile all included files, put them in a block expr with a single assignment of the argument vars at the start.
-            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(Template1, All, Context)) of
+            case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(Template1, AllB, Context)) of
                 {[], _, TreeWalkerN} ->
                     case All of
-                        false -> ?LOG("include_ast: could not find template ~p", [Template1]);
-                        true -> ok
+                        false -> ?LOG("include: could not find template ~p", [Template1]);
+                        _ -> ok
                     end,
                     {{erl_syntax:string(""), #ast_info{}}, TreeWalkerN};
                 {AstList, AstInfo, TreeWalkerN} ->
