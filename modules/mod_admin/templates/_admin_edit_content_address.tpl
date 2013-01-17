@@ -62,7 +62,7 @@
 			{% if m.modules.info.mod_l10n.enabled %}
 			<select id="address_country" name="address_country" class="span4">
 				<option value=""></option>
-				{% include "_l10n_country_options.tpl" country=r.address_country %}
+				{% optional include "_l10n_country_options.tpl" country=r.address_country %}
 			</select>
 			{% else %}
 			<input id="address_country" type="text" name="address_country" value="{{ r.address_country }}" class="span4" />
@@ -130,7 +130,7 @@
 			{% if m.modules.info.mod_l10n.enabled %}
 				<select id="mail_country" name="mail_country" class="span4">
 					<option value=""></option>
-					{% include "_l10n_country_options.tpl" country=r.mail_country %}
+					{% optional include "_l10n_country_options.tpl" country=r.mail_country %}
 				</select>
 			{% else %}
 				<input id="mail_country" type="text" name="mail_country" value="{{ r.mail_country }}" class="span4" />
