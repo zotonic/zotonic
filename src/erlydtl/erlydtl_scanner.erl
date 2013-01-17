@@ -61,16 +61,26 @@ scan(SourceRef, Template) ->
     scan(Template, [], {SourceRef, 1, 1}, in_text).
 
 
-identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToken == open_tag; PrevToken == all_keyword ->
+identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) 
+  when PrevToken == open_tag; 
+       PrevToken == all_keyword;
+       PrevToken == optional_keyword ->
+    %% the last two guards really ought to be for it's own fun, 
+    %% since they only apply for [cat]include (the last one only for include)
+
     %% At the start of a {% .... %} tag we accept all keywords
     RevString = lists:reverse(String),
-    Keywords = ["for", "empty", "endfor", "in", "include", "catinclude", "block", "endblock",
-        "extends", "overrules", "inherit", "autoescape", "endautoescape", "if", "else", "elif", "elseif", "endif",
-        "not", "or", "and", "xor", "comment", "endcomment", "cycle", "firstof",
-        "ifchanged", "ifequal", "endifequal", "ifnotequal", "endifnotequal",
-        "now", "regroup", "rsc", "spaceless", "endspaceless", "ssi", "templatetag",
-        "load", "call", "url", "print", "image", "image_url", "media", "_", "with", "endwith", 
-        "all", "lib", "cache", "endcache", "filter", "endfilter", "javascript", "endjavascript" ], 
+    Keywords = ["for", "empty", "endfor", "in", "include",
+        "catinclude", "block", "endblock", "extends", "overrules",
+        "inherit", "autoescape", "endautoescape", "if", "else",
+        "elif", "elseif", "endif", "not", "or", "and", "xor",
+        "comment", "endcomment", "cycle", "firstof", "ifchanged",
+        "ifequal", "endifequal", "ifnotequal", "endifnotequal", "now",
+        "regroup", "rsc", "spaceless", "endspaceless", "ssi",
+        "templatetag", "load", "call", "url", "print", "image",
+        "image_url", "media", "_", "with", "endwith", "all", "lib",
+        "cache", "endcache", "filter", "endfilter", "javascript",
+        "endjavascript", "optional" ],
     Type = case lists:member(RevString, Keywords) of
         true -> 
             case list_to_atom(RevString ++ "_keyword") of
@@ -84,7 +94,7 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToke
 identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToken == pipe ->
     %% Accept any filter function, though translate 'not', 'and' and 'or' as they are special keywords
     RevString = lists:reverse(String),
-    ReservedErlang = ["not", "and", "or"], 
+    ReservedErlang = ["not", "and", "or"],
     NewFilter = case lists:member(RevString, ReservedErlang) of
         true -> "b_" ++ RevString;
         _ ->    RevString

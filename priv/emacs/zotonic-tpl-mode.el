@@ -71,7 +71,7 @@
        "now" "regroup" "rsc" "spaceless" "endspaceless" "ssi"
        "templatetag" "load" "call" "url" "print" "image" "image_url"
        "media" "_" "with" "endwith" "all" "lib" "cache" "endcache"
-       "filter" "endfilter" "javascript" "endjavascript" "as"
+       "filter" "endfilter" "javascript" "endjavascript" "as" "optional"
        )
      'symbols))
   "Zotonic template keywords")
