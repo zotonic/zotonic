@@ -8,7 +8,7 @@
 {% with m.site.hostname|default:"localhost" as hostname %}
 
 	<url>
-	  <loc>http://{{ hostname }}/</loc>
+	  <loc>{{ m.site.protocol }}://{{ hostname }}/</loc>
 	  <lastmod>{{ m.rsc.home.modified|default:now|date:"c" }}</lastmod>
 	  <changefreq>daily</changefreq>
 	  <priority>1.00</priority>
@@ -16,15 +16,15 @@
 	
 	{% for id in result %}
 		{% if not m.rsc[id].seo_noindex %}
-			{% with m.rsc[id].page_url as page_url %}
-				{% ifnotequal page_url "/" %}
+			{% with m.rsc[id].page_url_abs as page_url %}
+				{% if page_url /= "/" and id.page_path /= "/" %}
 	<url>
-	  <loc>http://{{ hostname }}{{ page_url|escapexml }}</loc>
+	  <loc>{{ page_url|escapexml }}</loc>
 	  <lastmod>{{ m.rsc[id].modified|date:"c" }}</lastmod>
 	  <changefreq>daily</changefreq>
 	  <priority>{% if m.rsc[id].page_path %}0.8{% else %}0.5{% endif %}</priority>
 	</url>
-				{% endifnotequal %}
+				{% endif %}
 			{% endwith %}
 		{% endif %}
 	{% endfor %}

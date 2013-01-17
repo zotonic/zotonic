@@ -82,5 +82,8 @@ The following arguments/filters can be specified:
 +--------------------+------------------------------------------------------------+--------------------+
 |class               |The text for the class="..."  attribute of the <img>.       |class="figure"      |
 +--------------------+------------------------------------------------------------+--------------------+
+|use_absolute_url    |Ensure that the generated url contains the hostname and port|use_absolute_url    |
++--------------------+------------------------------------------------------------+--------------------+
+
 
 .. seealso:: :ref:`tag-image_url` and :ref:`tag-media`.
