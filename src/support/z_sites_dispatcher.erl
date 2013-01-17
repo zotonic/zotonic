@@ -118,8 +118,10 @@ dispatch(Host, Path, ReqData) ->
                     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}
             end;
 
-        {redirect, ProtocolAsString, Hostname} ->
-            {handled, redirect(false, ProtocolAsString, Hostname, ReqDataUA)};
+        {redirect, MatchedHost} ->
+            RawPath = wrq:raw_path(ReqDataUA),
+            Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
+            {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
 
         {Match, MatchedHost} ->
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
@@ -175,12 +177,8 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, proto
                               AppRoot, StringPath}, 
                              Host}
                     end;
-                {redirect, Hostname} ->
-                    ProtocolAsString = case Protocol of
-                                           https ->"https";
-                                           http -> "http"
-                                       end,
-                    {redirect, ProtocolAsString, Hostname};
+                {redirect, Host} = Redirect ->
+                    Redirect;
                 no_host_match ->
                     no_host_match
             end,
@@ -310,14 +308,7 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
                                 andalso Method =:= 'GET' 
                             of
                                 true ->
-                                    % Redirect, keep the port number
-                                    Hostname = DL#wm_host_dispatch_list.hostname,
-                                    Hostname1 = case Port of
-                                                    "80" -> Hostname;
-                                                    "443" -> Hostname;
-                                                    _ -> Hostname ++ [$:|Port]
-                                                end,
-                                    {redirect, Hostname1};
+                                    {redirect, DL#wm_host_dispatch_list.host};
                                 false ->
                                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
                             end;

@@ -12,7 +12,7 @@
 					{% else %}
 						<meta name="keywords" content="{% for predicate in m.rsc[id].op %}{% ifnotequal predicate "depiction" %}{% for oid in m.rsc[id].o[predicate] %}{{ m.rsc[oid].title|striptags }}, {% endfor %}{% endifnotequal %}{% endfor %}{{ keywords }}" />
 					{% endif %}
-					<meta name="description" content="{{ m.rsc[id].seo_desc|default:(m.rsc[id].summary)|striptags }} {{ description|striptags }}" />
+					<meta name="description" content="{{ m.rsc[id].seo_desc|default:m.rsc[id].summary|striptags }} {{ description|striptags }}" />
 				{% endwith %}
 			{% endif %}
 		{% else %}
