@@ -177,7 +177,7 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, proto
                               AppRoot, StringPath}, 
                              Host}
                     end;
-                {redirect, Host} = Redirect ->
+                {redirect, _Host} = Redirect ->
                     Redirect;
                 no_host_match ->
                     no_host_match
@@ -291,7 +291,7 @@ handle_host_for_domain(Domain, DispatchList) ->
 get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
     case DispatchList of
         [#wm_host_dispatch_list{}|_] ->
-            {Host, Port} = split_host(WMHost),
+            {Host, _Port} = split_host(WMHost),
             case get_dispatch_host(Host, DispatchList) of
                 {ok, DL} ->
                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list};
