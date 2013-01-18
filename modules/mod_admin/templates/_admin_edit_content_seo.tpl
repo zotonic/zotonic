@@ -55,7 +55,7 @@
     <textarea rows="5" cols="10" id="seo_desc" name="seo_desc" class="seo-desc span8">{{ r.seo_desc }}</textarea>
 </div>
 
-{% all include "_admin_edit_content_seo_extra.tpl" id=r.id %}
+{% all catinclude "_admin_edit_content_seo_extra.tpl" r.id %}
 
 {% endwith %}
 {% endblock %}
