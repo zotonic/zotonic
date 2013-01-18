@@ -23,7 +23,7 @@
 {% if is_i18n and id.language %}
 	{% for lang in id.language %}
 	<url>
-	  <loc>{{ id.page_url|escapexml with z_language=lang }}</loc>
+	  <loc>{{ id.page_url_abs|escapexml with z_language=lang }}</loc>
 	  <lastmod>{{ id.modified|date:"c" }}</lastmod>
 	  <changefreq>{{ category_id.seo_sitemap_changefreq|default:'weekly' }}</changefreq>
 	  <priority>{% if category_id.seo_sitemap_priority %}{{ category_id.seo_sitemap_priority }}{% elseif id.page_path %}0.8{% else %}0.5{% endif %}</priority>
