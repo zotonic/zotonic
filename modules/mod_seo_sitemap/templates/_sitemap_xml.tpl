@@ -11,20 +11,22 @@
 	  <loc>{{ m.site.protocol }}://{{ hostname }}/</loc>
 	  <lastmod>{{ m.rsc.home.modified|default:now|date:"c" }}</lastmod>
 	  <changefreq>daily</changefreq>
-	  <priority>1.00</priority>
+	  <priority>1.0</priority>
 	</url>
 	
 	{% for id in result %}
-		{% if not m.rsc[id].seo_noindex %}
-			{% with m.rsc[id].page_url_abs as page_url %}
+		{% if not id.seo_noindex %}
+			{% with id.page_url_abs as page_url %}
+			{% with id.category_id as category_id %}
 				{% if page_url /= "/" and id.page_path /= "/" %}
 	<url>
 	  <loc>{{ page_url|escapexml }}</loc>
-	  <lastmod>{{ m.rsc[id].modified|date:"c" }}</lastmod>
-	  <changefreq>daily</changefreq>
-	  <priority>{% if m.rsc[id].page_path %}0.8{% else %}0.5{% endif %}</priority>
+	  <lastmod>{{ id.modified|date:"c" }}</lastmod>
+	  <changefreq>{{ category_id.seo_sitemap_changefreq|default:'weekly' }}</changefreq>
+	  <priority>{% if category_id.seo_sitemap_priority %}{{ category_id.seo_sitemap_priority }}{% elseif id.page_path %}0.8{% else %}0.5{% endif %}</priority>
 	</url>
 				{% endif %}
+			{% endwith %}
 			{% endwith %}
 		{% endif %}
 	{% endfor %}
