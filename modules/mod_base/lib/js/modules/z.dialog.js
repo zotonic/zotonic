@@ -35,7 +35,7 @@
 
                  var title = $("<div>").addClass("modal-header")
                      .append($("<a>").addClass("close").attr("data-dismiss", "modal").html("&times;"))
-                     .append($("<h3>").text(options.title));
+                     .append($("<h3>").html(options.title));
 
                  var body = $("<div>").addClass("modal-body")
                      .html(options.text);
