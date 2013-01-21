@@ -123,6 +123,9 @@ dispatch(Host, Path, ReqData) ->
             Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
             {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
 
+        {redirect, NewProtocol, NewHost} ->
+            redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA); 
+
         {Match, MatchedHost} ->
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
             {Match, ReqDataHost};
@@ -178,6 +181,8 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, proto
                              Host}
                     end;
                 {redirect, _Host} = Redirect ->
+                    Redirect;
+                {redirect, _NewProtocol, _NewHost} = Redirect -> 
                     Redirect;
                 no_host_match ->
                     no_host_match
