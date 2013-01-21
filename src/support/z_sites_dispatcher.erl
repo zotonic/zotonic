@@ -124,7 +124,7 @@ dispatch(Host, Path, ReqData) ->
             {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
 
         {redirect, NewProtocol, NewHost} ->
-            redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA); 
+            {handled, redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}; 
 
         {Match, MatchedHost} ->
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
@@ -273,7 +273,7 @@ redirect(IsPermanent, Location, ReqData) ->
             _ -> webmachine_logger
         end,
     spawn(LogModule, log_access, [LogData]),
-    RD2.
+    handled.
 
 
 %% @doc Fetch the host for the given domain
