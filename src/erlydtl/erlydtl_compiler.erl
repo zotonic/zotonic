@@ -739,7 +739,8 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                                                         InclusionParseTree,
                                                         Context#dtl_context{
                                                                 local_scopes = [ IncludeScope | ContextInclude#dtl_context.local_scopes ],
-                                                                parse_trail = [FilePath | ContextInclude#dtl_context.parse_trail]}, 
+                                                                parse_trail = [FilePath | ContextInclude#dtl_context.parse_trail],
+                                                                extends_trail = [Template]}, 
                                                         TreeW#treewalker{has_auto_id=false})),
                             Ast1 = case InclTW2#treewalker.has_auto_id of
                                 false -> Ast;
