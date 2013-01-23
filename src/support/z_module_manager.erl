@@ -81,12 +81,14 @@ start_link(SiteProps) ->
 %% @spec upgrade(#context{}) -> ok
 %% @doc Reload the list of all modules, add processes if necessary.
 upgrade(Context) ->
+    flush(Context),
     gen_server:cast(name(Context), upgrade).
 
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
 %% @spec deactivate(Module, #context{}) -> ok
 deactivate(Module, Context) ->
+    flush(Context),
     case z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context) of
         1 -> upgrade(Context);
         0 -> ok
@@ -97,6 +99,7 @@ deactivate(Module, Context) ->
 %% The module manager can be checked later to see if the module started or not.
 %% @spec activate(Module, #context{}) -> void()
 activate(Module, Context) ->
+    flush(Context),
     Scanned = scan(Context),
     {Module, _Dirname} = proplists:lookup(Module, Scanned),
     F = fun(Ctx) ->
@@ -120,8 +123,11 @@ restart(Module, Context) ->
 active(Context) ->
     case z_db:has_connection(Context) of
         true ->
-            Modules = z_db:q("select name from module where is_active = true order by name", Context),
-            [ z_convert:to_atom(M) || {M} <- Modules ];
+            F = fun() -> 
+                Modules = z_db:q("select name from module where is_active = true order by name", Context),
+                [ z_convert:to_atom(M) || {M} <- Modules ]
+            end,
+            z_depcache:memo(F, {?MODULE, active, Context#context.host}, Context);
         false ->
             case m_site:get(modules, Context) of
                 L when is_list(L) -> L;
@@ -436,6 +442,8 @@ name(Context) ->
 name(Module, #context{host=Host}) ->
     z_utils:name_for_host(Module, Host).
 
+flush(Context) ->
+    z_depcache:flush({?MODULE, active, Context#context.host}, Context).
 
 handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     ValidModules = valid_modules(Context),
