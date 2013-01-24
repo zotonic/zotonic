@@ -36,7 +36,7 @@ compile-rule/%: $(REBAR)
 	cd $* && $(REBAR) compile
 
 # Use Rebar to get, update and compile dependencies
-.PHONY: get-deps update-deps compile-deps compile-zotonic
+.PHONY: get-deps update-deps compile-deps compile-zotonic compile
 
 get-deps: $(REBAR)
 	$(REBAR) get-deps
@@ -47,6 +47,8 @@ update-deps: $(REBAR)
 compile-deps: $(REBAR) $(DEPS_CMD)
 
 compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
+
+compile: all
 
 # Default target - call all compile rules in succession
 .PHONY: all

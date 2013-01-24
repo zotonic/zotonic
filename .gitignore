@@ -23,6 +23,15 @@ ebin/
 /deps/mochiweb/doc/
 /deps/mochiweb/.eunit/
 
+/deps/bert/
+/deps/dh_date/
+/deps/gen_smtp/
+/deps/lager/
+/deps/mimetypes/
+/deps/ua_classifier/
+/deps/webzmachine/
+/deps/z_stdlib/
+
 /src/erlydtl/erlydtl_parser.erl
 /src/tests/erlydtl/rendered_output/
 
