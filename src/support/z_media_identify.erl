@@ -30,6 +30,7 @@
 	identify_file/3,
 	identify_file_direct/2,
     extension/1,
+    extension/2,
 	guess_mime/1,
     is_mime_compressed/1
 ]).
@@ -233,13 +234,43 @@ mime("PNG32") -> "image/png";
 mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
-%% @doc Return the extension for a known mime type (eg. ".mov")
+
+%% @doc Return the extension for a known mime type (eg. ".mov").
 -spec extension(string()|binary()) -> string().
 extension(Mime) ->
-	case mimetypes:extensions(z_convert:to_binary(Mime)) of
-		[Ext|_] -> [$. | z_convert:to_list(Ext)];
-		[] -> ".bin"
-	end.
+    extension(Mime, undefined).
+
+%% @doc Return the extension for a known mime type (eg. ".mov"). When
+%% multiple extensions are found for the given mime type, returns the
+%% one that is given as the preferred extension. Otherwise, it returns
+%% the first extension.
+-spec extension(string()|binary(), string()|binary()|undefined) -> string().
+extension(Mime, PreferExtension) ->
+    Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
+    case PreferExtension of
+        undefined ->
+            first_extension(Extensions);
+        _ ->
+            %% convert prefer extension to something that mimetypes likes
+            Ext1 = z_convert:to_list(PreferExtension),
+            Ext2 = case Ext1 of
+                       [$.|Rest] ->
+                           z_convert:to_binary(Rest);
+                       _ -> z_convert:to_binary(Ext1)
+                   end,
+            case lists:member(Ext2, Extensions) of
+                true ->
+                    [$. | z_convert:to_list(Ext2)];
+                false ->
+                    first_extension(Extensions)
+            end
+    end.
+
+
+first_extension([]) ->
+    ".bin";
+first_extension(Extensions) ->
+    [$. | z_convert:to_list(hd(Extensions))].
 
 
 %% @spec guess_mime(string()) -> string()
