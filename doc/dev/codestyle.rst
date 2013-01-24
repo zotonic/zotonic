@@ -115,6 +115,7 @@ Structure your commit message like this::
  * ``tests:`` for unit tests and the testsandbox.
  * ``skel:`` for the skeleton sites.
  * ``zotonic_status:`` for the default site.
+ * ``translations:`` for new/updated translations.
  * ``core:`` For changes in the `src`, `include` or `deps` folder;
    e.g. anything not covered by another tag.
 
