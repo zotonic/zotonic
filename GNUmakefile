@@ -11,6 +11,7 @@ DEPS_CMD    =$(foreach dep, $(_WITH_LAGER), compile-rule/$(dep))
 
 # Erlang Rebar downloading, see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR=$(shell which rebar || echo ./rebar)
+REBAR_DEPS=$(shell which rebar || echo ../../rebar)
 REBAR_URL=http://cloud.github.com/downloads/basho/rebar/rebar
 
 ./rebar:
@@ -33,7 +34,7 @@ ebin/$(APP).app: src/$(APP).app.src
 
 # Phony rule to compile a particular dependency with Rebar
 compile-rule/%: $(REBAR)
-	cd $* && $(REBAR) compile
+	cd $* && $(REBAR_DEPS) compile
 
 # Use Rebar to get, update and compile dependencies
 .PHONY: get-deps update-deps compile-deps compile-zotonic compile
