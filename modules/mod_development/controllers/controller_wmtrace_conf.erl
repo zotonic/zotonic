@@ -29,7 +29,7 @@
 
 
 -include_lib("controller_html_helper.hrl").
--include_lib("webmachine_logger.hrl").
+-include_lib("webzmachine/include/webmachine_logger.hrl").
 
 %% GLOBAL
 %% only 5xx
