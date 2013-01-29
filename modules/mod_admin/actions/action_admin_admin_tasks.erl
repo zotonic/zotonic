@@ -34,6 +34,11 @@ event(#postback{message={admin_tasks, [{task, "pivot_all"}]}}, Context) ->
        "The search index is rebuilding. Depending on the database size, this can take a long time.", Context);
 
 %% @doc Renumber the category tree
+event(#postback{message={admin_tasks, [{task, "site_reinstall"}]}}, Context) ->
+    do(fun() -> reinstall(Context) end,
+       "The site's data is being reinstalled. Watch the console for messages", Context);
+
+%% @doc Renumber the category tree
 event(#postback{message={admin_tasks, [{task, "renumber_categories"}]}}, Context) ->
     do(fun() -> m_category:renumber(Context) end, 
        "The category tree is rebuilding. This can take a long time.", Context).
@@ -46,4 +51,21 @@ do(Fun, OkMsg, Context) ->
             z_render:growl(OkMsg, Context);
         false ->
             z_render:growl_error("You don't have permission to perform this action.", Context)
+    end.
+
+
+reinstall(Context) ->
+    Module = z_context:site(Context),
+    case proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)) of
+        undefined ->
+            %% nothing to do, no manage_schema
+            nop;
+        2 ->
+            %% has manage_schema/2
+            case Module:manage_schema(install, Context) of
+                D=#datamodel{} ->
+                    ok = z_datamodel:manage(Module, D, Context);
+                ok -> ok
+            end,
+            ok = z_db:flush(Context)
     end.
