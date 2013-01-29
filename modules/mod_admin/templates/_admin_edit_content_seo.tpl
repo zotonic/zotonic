@@ -31,12 +31,12 @@
     
 <div class="row">
     <div class="control-group span4">
-	    <label class="control-label" for="title">
+	    <label class="control-label" for="no-google">
             &nbsp;
         </label>
         <div class="controls">
             <label class="checkbox">
-                <input id="no-google" type="checkbox" class="do_fieldreplace" name="seo_noindex" {% if r.seo_noindex %}checked="checked"{% endif %} value="1" />
+                <input id="seo_noindex" type="checkbox" class="do_fieldreplace" name="seo_noindex" {% if r.seo_noindex %}checked="checked"{% endif %} value="1" />
 	        {_ Ask google to not index this page _}
             </label>
         </div>            
@@ -50,9 +50,12 @@
     </div>
 </div>
 
-<div>
+<div class="control-group">
     <label class="control-label" for="seo_desc">{_ Page description _}</label>
     <textarea rows="5" cols="10" id="seo_desc" name="seo_desc" class="seo-desc span8">{{ r.seo_desc }}</textarea>
 </div>
+
+{% all catinclude "_admin_edit_content_seo_extra.tpl" r.id %}
+
 {% endwith %}
 {% endblock %}

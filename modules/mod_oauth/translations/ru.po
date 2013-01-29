@@ -1,0 +1,233 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-14 15:32+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_oauth/mod_oauth.erl:333
+msgid "API access"
+msgstr "Доступ к API"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
+msgid "Access to"
+msgstr "Доступ к"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93
+msgid "Add application"
+msgstr "Добавить приложение"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:14
+msgid "Add new application"
+msgstr "Добавить новое приложение"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+msgid "Allow"
+msgstr "Разрешить для"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:70
+msgid "Allow users of this application access to the following API calls:"
+msgstr "Открыть пользователям этого приложения доступ к следующим вызовам API:"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:29
+msgid "Allow!"
+msgstr "Разрешить"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31
+msgid "Application title"
+msgstr "Название приложения"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:8
+msgid "Authorization"
+msgstr "Авторизация"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:3
+msgid "Authorization finished"
+msgstr "Авторизация завершена"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:3
+msgid "Authorize this request"
+msgstr "Авторизация запроса"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:7
+msgid "Authorized!"
+msgstr "Авторизовано"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52
+msgid "Callback URL"
+msgstr "URL обратного вызова"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:89
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid ""
+"Change the title, description and access permissions of this application."
+msgstr "Изменить название, описание и права доступа этого приложения."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47
+msgid "Close"
+msgstr "Закрыть"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:6
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
+msgid "Consumer key"
+msgstr "Пользовательский ключ"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:7
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23
+msgid "Consumer secret"
+msgstr "Секретный ключ"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:30
+msgid "Delete"
+msgstr "Удалить"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:43
+msgid "Delete this application!"
+msgstr "Удалить это приложение"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
+msgid "Description"
+msgstr "Описание"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:7
+msgid "Details"
+msgstr "Подробности"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:30
+msgid "Disallow"
+msgstr "Запретить"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:40
+msgid "Do you really want to delete this application?"
+msgstr "Вы уверены, что желаете удалить это приложение?"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid "Edit"
+msgstr "Изменить"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38
+msgid "Homepage"
+msgstr "Домашняя страница"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21
+msgid "In use since"
+msgstr "Используется с"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:16
+msgid "More information about this program"
+msgstr "Подробнее об этой программе"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
+msgid "No applications registered yet."
+msgstr "Еще нет зарегистрированных приложений."
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:3
+msgid "OAuth applications"
+msgstr "Приложения OAuth"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:8
+msgid "Registered OAuth applications"
+msgstr "Зарегистрированные приложения OAuth"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+msgid "Show applications/users that are using this key"
+msgstr "Показать приложения/пользователей, использующих этот ключ"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "The application"
+msgstr "Приложение"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:8
+msgid ""
+"The following users are still using this application. If you delete this "
+"application, you will revoke access and most likely their applications will "
+"break."
+msgstr ""
+"Следующие пользователи все еще используют это приложение. Если вы удалите "
+"это приложение, вы отзовете доступ и, скорее всего, работа их приложений "
+"будет нарушена."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
+msgid "The following users are using this application:"
+msgstr "Следующие пользователи используют это приложение:"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:19
+msgid "This application wants access to the following services:"
+msgstr "Это приложение запрашивает доступ к следующим службам:"
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:10
+msgid ""
+"This page allows you to register API keys with which 3rd parties can gain "
+"access to specific parts of the API and database."
+msgstr ""
+"На этой странице вы можете регистрировать ключи API, при помощи которых "
+"сторонние лица могут получать доступ к определенным частям API и базы данных."
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
+msgid "This token is not yet used by anybody."
+msgstr "Этот ключ еще никем не используется."
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:4
+msgid "Title"
+msgstr "Название"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:22
+msgid "Type"
+msgstr "Тип"
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "Untitled"
+msgstr "Без названия"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:91
+msgid "Update"
+msgstr "Обновить"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20
+msgid "User"
+msgstr "Пользователь"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+msgid "Users"
+msgstr "Пользователи"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
+msgid "When done, go to the authorization tab to set permissions."
+msgstr "Когда закончите, перейдите на вкладку авторизации для указания прав."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:11
+msgid "You can now safely close this window."
+msgstr "Теперь вы можете безопасно закрыть это окно."
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "You have granted the application"
+msgstr "Вы открыли для приложения"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "access your account."
+msgstr "доступ к вашей учетной записи."
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "wants to access your account."
+msgstr "запрашивает доступ к вашей учетной записи."

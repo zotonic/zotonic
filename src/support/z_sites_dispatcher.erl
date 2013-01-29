@@ -118,8 +118,13 @@ dispatch(Host, Path, ReqData) ->
                     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}
             end;
 
-        {redirect, ProtocolAsString, Hostname} ->
-            {handled, redirect(false, ProtocolAsString, Hostname, ReqDataUA)};
+        {redirect, MatchedHost} ->
+            RawPath = wrq:raw_path(ReqDataUA),
+            Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
+            {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
+
+        {redirect, NewProtocol, NewHost} ->
+            {handled, redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}; 
 
         {Match, MatchedHost} ->
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
@@ -175,12 +180,10 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, proto
                               AppRoot, StringPath}, 
                              Host}
                     end;
-                {redirect, Hostname} ->
-                    ProtocolAsString = case Protocol of
-                                           https ->"https";
-                                           http -> "http"
-                                       end,
-                    {redirect, ProtocolAsString, Hostname};
+                {redirect, _Host} = Redirect ->
+                    Redirect;
+                {redirect, _NewProtocol, _NewHost} = Redirect -> 
+                    Redirect;
                 no_host_match ->
                     no_host_match
             end,
@@ -270,7 +273,7 @@ redirect(IsPermanent, Location, ReqData) ->
             _ -> webmachine_logger
         end,
     spawn(LogModule, log_access, [LogData]),
-    RD2.
+    handled.
 
 
 %% @doc Fetch the host for the given domain
@@ -293,7 +296,7 @@ handle_host_for_domain(Domain, DispatchList) ->
 get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
     case DispatchList of
         [#wm_host_dispatch_list{}|_] ->
-            {Host, Port} = split_host(WMHost),
+            {Host, _Port} = split_host(WMHost),
             case get_dispatch_host(Host, DispatchList) of
                 {ok, DL} ->
                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list};
@@ -310,14 +313,7 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
                                 andalso Method =:= 'GET' 
                             of
                                 true ->
-                                    % Redirect, keep the port number
-                                    Hostname = DL#wm_host_dispatch_list.hostname,
-                                    Hostname1 = case Port of
-                                                    "80" -> Hostname;
-                                                    "443" -> Hostname;
-                                                    _ -> Hostname ++ [$:|Port]
-                                                end,
-                                    {redirect, Hostname1};
+                                    {redirect, DL#wm_host_dispatch_list.host};
                                 false ->
                                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
                             end;

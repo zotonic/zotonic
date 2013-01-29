@@ -10,7 +10,7 @@ in a dispatch rule.
 
 Example dispatch rule::
 
-  {oldsite, ["old", '*'], resource_static_pages, [{root, "old_site"}]}
+  {oldsite, ["old", '*'], controller_static_pages, [{root, "old_site"}]}
 
 When a file ``a.txt`` is requested this resource will check for
 ``a.txt`` and ``a.txt.tpl``.  When it finds a ``.tpl`` file then that

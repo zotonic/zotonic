@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-14 15:09+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:11
+msgid "Add after"
+msgstr "Добавить впереди"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:9
+msgid "Add before"
+msgstr "Добавить сзади"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:10
+msgid "Add below"
+msgstr "Добавить внутри"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+msgid "Add bottom"
+msgstr "Добавить в конец"
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+msgid "Add category"
+msgstr "Добавить категорию"
+
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
+msgid "Add menu item"
+msgstr "Добавить пункт меню"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
+msgid "Add top"
+msgstr "Добавить в начало"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+msgid ""
+"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
+"pages."
+msgstr ""
+"Нажмите <strong>Добавить пункт меню</strong> или <strong>Пункт меню</"
+"strong>, чтобы добавлять страницы."
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
+msgid "Current menu"
+msgstr "Текущее меню"
+
+#: modules/mod_menu/templates/_menu_trash.tpl:1
+msgid "Drag elements here to remove them"
+msgstr "Перетащите элементы сюда для удаления"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:3
+msgid "Drag me"
+msgstr "Перетащить"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
+msgid ""
+"Drag menu items in the menu up, down, left or right to structure the menu."
+msgstr ""
+"Перетаскивайте пункты меню вверх, вниз, налево или направо для организации "
+"меню."
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:18
+msgid "Edit"
+msgstr "Изменить"
+
+#: modules/mod_menu/mod_menu.erl:402
+msgid "Menu"
+msgstr "Меню"
+
+#: modules/mod_menu/mod_menu.erl:187
+msgid "New page"
+msgstr "Новая страница"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:13
+msgid "Remove"
+msgstr "Удалить"

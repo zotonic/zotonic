@@ -6,10 +6,10 @@
 {% endif %}
     <div class="controls">
 {% if blk.input_type == 'submit' %}
-        <button class="btn" type="submit" value="1">
+        <button id="{{ #yes }}" name="{{ blk.name}}" class="btn" type="submit" value="1">
             <span></span>{{ blk.yes|default:_"Yes" }}
         </button>
-        <button class="btn" type="submit" value="0">
+        <button id="{{ #no }}" name="{{ blk.name}}" class="btn" type="submit" value="0">
             <span></span>{{ blk.no|default:_"No" }}
         </button>
 {% else %}

@@ -4,15 +4,15 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
-#
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: zotonic.mod_admin_category.ru\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-12-01 23:49+0300\n"
-"Last-Translator: Konstantin Nikiforov <helllamer@gmail.com>\n"
-"Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2013-01-15 23:36+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,11 +20,12 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
-#, fuzzy
 msgid "Add configuration key"
-msgstr "Конфигурация"
+msgstr "Добавить параметр"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
 msgid "Add key"
@@ -32,7 +33,7 @@ msgstr "Добавить ключ"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Удалить ключ"
+msgstr "Вы уверены, что желаете удалить параметр"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
@@ -41,16 +42,15 @@ msgstr "Отмена"
 
 #: modules/mod_admin_config/mod_admin_config.erl:43
 msgid "Config"
-msgstr "Конфиг"
+msgstr "Параметры"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:3
 msgid "Configuration"
 msgstr "Конфигурация"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46
-#, fuzzy
 msgid "Confirm delete"
-msgstr "удалить"
+msgstr "Подтвердите удаление"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:36
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8
@@ -60,7 +60,7 @@ msgstr "Удалить"
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:48
 #: modules/mod_admin_config/templates/admin_config.tpl:37
 msgid "Edit"
-msgstr ""
+msgstr "Изменить"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:20
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15
@@ -68,9 +68,8 @@ msgid "Key"
 msgstr "Ключ"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:11
-#, fuzzy
 msgid "Make a new config setting"
-msgstr "создать новый ключ конфигурации"
+msgstr "Создать новый параметр"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:22
 msgid "Modified"
@@ -83,24 +82,23 @@ msgstr "Модуль"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:50
 msgid "No configurations found."
-msgstr "Конфигурация не найдена."
+msgstr "Параметры конфигурации отсутствуют."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63
 msgid "Only administrators can change the configuration."
-msgstr ""
+msgstr "Только администраторы могут изменять конфигурацию."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
 msgid "Only administrators can delete configurations."
-msgstr ""
+msgstr "Только администраторы могут удалять параметры."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
 msgid "Only an administrator can add configuration keys."
-msgstr ""
+msgstr "Только администраторы могут добавлять параметры."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr ""
-"Необходимо указать модуль, ключ и значения для нового ключа конфигурации."
+msgstr "Пожалуйста, укажите имя модуля, ключ и значение для нового параметра."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
 msgid "Save"
@@ -112,11 +110,12 @@ msgstr "Системная конфигурация"
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
-msgstr ""
+msgstr "Параметр уже существует, пожалуйста, задайте другое имя ключа."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Ключ конфигурации будет удален. Это действие нельзя отменить."
+msgstr ""
+"Это действие нельзя отменить. Ключ конфигурации будет безвозвратно удален."
 
 #: modules/mod_admin_config/templates/admin_config.tpl:21
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23

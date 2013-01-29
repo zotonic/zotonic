@@ -89,19 +89,19 @@ event(#postback{message={logoff, []}}, Context) ->
 event(#postback{message={site_start, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:start(Site),
-    Context;
+    notice(Site, "Successfully started.", Context);
 event(#postback{message={site_restart, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:restart(Site),
-    Context;
+    notice(Site, "Successfully restarted.", Context);
 event(#postback{message={site_stop, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:stop(Site),
-    Context;
+    notice(Site, "Successfully stopped.", Context);
 event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z:flush(z_context:new(Site)),
-    Context.
+    notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context).
 
 
 %% -----------------------------------------------------------------------------------------------
@@ -137,4 +137,5 @@ render_update(SitesStatus, Context) ->
     Context1 = z_render:update("sites", #render{template="_sites.tpl", vars=Vars1}, Context),
     z_session_page:add_script(Context1).
     
-
+notice(SiteName, Text, Context) ->
+     mod_zotonic_status_vcs:notice(SiteName, Text, Context).

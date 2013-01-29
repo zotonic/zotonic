@@ -4,15 +4,15 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
-#
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: zotonic.mod_admin_identity.ru\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-12-02 00:27+0300\n"
-"Last-Translator: Konstantin Nikiforov <helllamer@gmail.com>\n"
-"Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-10 20:37+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,11 +20,12 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
-#, fuzzy
 msgid "Add a new user"
-msgstr "Создать нового пользователя."
+msgstr "Добавить нового пользователя"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68
 msgid "Add user"
@@ -32,7 +33,7 @@ msgstr "Добавить пользователя."
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
-msgstr "Вы действительно хотите удалить пользователя из"
+msgstr "Вы действительно хотите удалить учетную запись из"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38
@@ -41,25 +42,24 @@ msgid "Cancel"
 msgstr "Отмена"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
-#, fuzzy
 msgid "Changed the username."
-msgstr "удалить логин"
+msgstr "Учетная запись изменена."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
 "Click “delete” to remove any existing username/ password from the person, "
 "the person won't be an user anymore."
 msgstr ""
-"Нажмите “удалить” для удаления всех связанных с этим пользователем пар имен "
-"и паролей. Это равнознчно удалению статуса пользователя у этого человека."
+"Нажмите «удалить» для удаления связанных с этой персоной пар имен и паролей. "
+"Это равнозначно удалению статуса пользователя у этой персоны."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
 msgid "Confirm user deletion"
-msgstr ""
+msgstr "Подтвердите удаление пользователя"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99
 msgid "Could not create the user. Sorry."
-msgstr ""
+msgstr "Не удалось создать пользователя. Извините."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:38
 msgid "Created on"
@@ -73,26 +73,25 @@ msgstr "Удалить"
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94
 msgid "Duplicate username, please choose another username."
 msgstr ""
+"Пользователь с таким именем уже существует, пожалуйста, задайте другое имя."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
 msgid "E-mail"
 msgstr "E-mail"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:16
-#, fuzzy
 msgid ""
 "Every page/person can be made into a user on the edit page.\n"
 "        The difference between a user and a normal page is only\n"
 "        that the former has logon credentials attached to its page record."
 msgstr ""
-"Каждый человек может стать зарегистрированным пользователем системы.\n"
-"\t\t\t\tРазница между пользователем и обычной страницей\n"
-"\t\t\t\tтолько в наличии или отсутствии привязанной к странице учетной "
-"записи."
+"Каждой персоне может быть присвоен статус пользователя при редактировании.\n"
+"        Разница между пользователем и обычной страницей только\n"
+"        в наличии или отсутствии привязанных к записи учетных данных."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
-msgstr "Первый"
+msgstr "Имя"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
@@ -101,7 +100,7 @@ msgid ""
 "sensitive, so be careful when entering them."
 msgstr ""
 "Укажите уникальное имя пользователя и пароль. Имена пользователей и пароли "
-"регистрозависимые."
+"чувствительны к регистру, будьте внимательны при вводе."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
 msgid ""
@@ -113,7 +112,7 @@ msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Help about user credentials."
-msgstr "Помощь по учетным записям."
+msgstr "Справка об учетных записях."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
 msgid "Make a new user"
@@ -137,26 +136,24 @@ msgstr "Требуется помощь?"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:63
 msgid "No users found."
-msgstr "Пользователей не найдено."
+msgstr "Пользователи не найдены."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103
-#, fuzzy
 msgid "Only administrators can add users."
-msgstr "Только администратор может создавать новых пользователей."
+msgstr "Только администраторы могут добавлять пользователей."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47
 msgid "Only administrators can delete usernames."
-msgstr ""
+msgstr "Только администраторы могут удалять учетные записи."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56
-#, fuzzy
 msgid "Only an administrator can delete usernames."
-msgstr "Только администратор может создавать новых пользователей."
+msgstr "Только администратор может удалять учетные записи."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89
 msgid "Only an administrator or the user him/herself can set a password."
-msgstr ""
+msgstr "Только администратор или сам пользователь может устанавливать пароль."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59
@@ -172,51 +169,50 @@ msgid "Set username / password"
 msgstr "Установить имя / пароль"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-#, fuzzy
 msgid "Set username/ password"
 msgstr "Установить имя / пароль"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
-msgstr "Префикс фамил."
+msgstr "Префикс"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
 msgid "Surname"
 msgstr "Фамилия"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84
-#, fuzzy
 msgid "The new username/ password has been set."
-msgstr "установить логин/ пароль"
+msgstr "Новые имя / пароль установлены."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid ""
 "The password of the admin user cannot be changed in the database. Please "
 "edit your site's configuration file at"
 msgstr ""
-"Пароль администратора нельзя изменить в базе данных. Отредактируйте файл "
-"конфигурации текущего сайта в"
+"Пароль администратора нельзя изменить в базе данных. Пожалуйста, "
+"отредактируйте файл конфигурации вашего сайта в"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80
 msgid "The username is already in use, please try another."
 msgstr ""
+"Пользователь с таким именем уже существует, пожалуйста, задайте другое имя."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46
 msgid "There is no username coupled to this person."
-msgstr ""
+msgstr "С этой персоной нет связанных учетных записей."
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
-msgstr "Имя и пароль будут удалены. Это действие нельзя отменить."
+msgstr "Это действие нельзя отменить. Имя и пароль будут безвозвратно удалены."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
 msgid "This person is also a user."
-msgstr "Эта страница person также является пользователем."
+msgstr "Эта персона также является пользователем."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:26
 msgid "This person is not yet a user."
-msgstr "Этот человек не является пользователем."
+msgstr "Эта персона еще не является пользователем."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:36
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18
@@ -234,7 +230,7 @@ msgstr "Логин и пароль"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45
 msgid "Username has been deleted."
-msgstr ""
+msgstr "Учетная запись удалена."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:9
@@ -249,22 +245,22 @@ msgid ""
 "your Zotonic system.<br/><br/>What an user can do depends on the groups the "
 "user is member of."
 msgstr ""
-"Когда вы добавляете учетную запись к странице, эта страница становится "
-"пользователем. Пользователь может осуществлять вход в систему и производить "
-"какие-то действия.<br/><br/>Диапазон доступных действий зависит от того, в "
-"какой группе состоит пользователь и от настроек контроля доступа."
+"Когда вы добавляете учетную запись к персоне, эта персона становится "
+"пользователем. Человек или программа может осуществлять вход и выполнять "
+"действия в вашей системе Zotonic.<br/><br/>Диапазон доступных действий "
+"зависит от того, членом каких групп является пользователь."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
 msgid "You are not allowed to create the person page."
-msgstr ""
+msgstr "Вы не имеете прав для создания страницы персоны."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:24
 msgid "You need to be an administrator to add users."
-msgstr "Только администратор может создавать новых пользователей."
+msgstr "Вы должны быть администратором для добавления пользователей."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:52
 msgid "delete username"
-msgstr "удалить логин"
+msgstr "удалить учетную запись"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:54
 msgid "edit"
@@ -272,11 +268,11 @@ msgstr "изменить"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
 msgid "if you want to change the admin password."
-msgstr "если необходимо изменить пароль администратора."
+msgstr "если желаете изменить пароль администратора."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:10
 msgid "matching"
-msgstr "совпадение"
+msgstr "соответствует"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:12
 msgid "overview"
@@ -284,14 +280,8 @@ msgstr "обзор"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:50
 msgid "set username/ password"
-msgstr "установить логин/ пароль"
+msgstr "установить имя / пароль"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:11
 msgid "show all"
 msgstr "показать все"
-
-#~ msgid "Add or remove credentials."
-#~ msgstr "Создание и удаление учетных записей."
-
-#~ msgid "Options"
-#~ msgstr "Опции"
