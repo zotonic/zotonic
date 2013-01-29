@@ -32,6 +32,10 @@ An init script will just need to call the zotonic command with either
   # Short-Description:    Zotonic
   ### END INIT INFO
 
+  # Set any environment variables here, e.g.:
+  #export ZOTONIC_IP="127.0.0.1"
+  
   /usr/bin/sudo -u zotonic -i /home/zotonic/zotonic/bin/zotonic $@
 
 
+For other environment variables which can be set, see :ref:`manual-deployment-env`.

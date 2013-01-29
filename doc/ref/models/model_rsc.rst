@@ -50,13 +50,15 @@ A resource has the following properties accessible from the templates:
 |                   |generation. Returns a binary or undefined. Valid     |                                |
 |                   |characters are a-z, 0-9, / and -                     |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
-|page_url           |The url of the page. Derived using the page’s        |[$/, "blog", [$/, "42"]]        |
+|page_url           |The url of the page. Derived using the page’s        |<<"/blog/42">>                  |
 |                   |category, the page id and its slug. Returns a non    |                                |
 |                   |flattened list. Returns the binary page_path when it |                                |
 |                   |is set.                                              |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
-|default_page_url   |The page without considering its page_path setting.  |[$/, "page", [$/, "42", [$/,    |
-|                   |                                                     |"my-slug"]]                     |
+|page_url_abs       |The absolute url of the page. Same as ``page_url``   |<<"http://example.org/blog/42">>|
+|                   |but then with added protocol, hostname and port.     |                                |
++-------------------+-----------------------------------------------------+--------------------------------+
+|default_page_url   |The page without considering its page_path setting.  |<<"/page/42/my-slug">>          |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |is_authoritative   |Whether this page originated on this site or is      |true                            |
 |                   |imported and maintained on another site. Return a    |                                |

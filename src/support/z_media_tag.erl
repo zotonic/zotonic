@@ -39,6 +39,7 @@
 
 -include_lib("zotonic.hrl").
 
+-compile([{parse_transform, lager_transform}]).
 
 %% @spec viewer(MediaReference, Options, Context) -> {ok, HtmlFragMent} | {error, Reason}
 %%   MediaReference = Filename | RscId | MediaPropList
@@ -278,6 +279,31 @@ url(Filename, Options, Context) ->
 %% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
 %% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
 url1(File, Options, Context) ->
+    UrlAndOpts = url2(File, Options, Context),
+    case use_absolute_url(Options, Context) of
+        true ->
+            {url, Url, TagOpts, ImageOpts} = UrlAndOpts, 
+            {url, z_dispatcher:abs_url(Url, Context), TagOpts, ImageOpts};
+        false -> 
+            UrlAndOpts
+    end.
+
+use_absolute_url(Options, Context) ->
+    case use_absolute(proplists:get_value(use_absolute_url, Options)) of
+        false -> false;
+        true -> true;
+        undefined -> z_convert:to_bool(z_context:get(use_absolute_url, Context))
+    end.
+
+use_absolute(undefined) -> undefined;
+use_absolute(<<>>) -> undefined;
+use_absolute([]) -> undefined;
+use_absolute(true) -> true;
+use_absolute(false) -> false;
+use_absolute(A) -> z_convert:to_bool(A).
+
+
+url2(File, Options, Context) ->
     Filename = z_convert:to_list(File),
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
     % Map all ImageOpts to an opt string
@@ -348,6 +374,8 @@ props2url([{width,Width}|Rest], _Width, Height, Acc, Context) ->
     props2url(Rest, z_convert:to_integer(Width), Height, Acc, Context);
 props2url([{height,Height}|Rest], Width, _Height, Acc, Context) ->
     props2url(Rest, Width, z_convert:to_integer(Height), Acc, Context);
+props2url([{use_absolute_url,_}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, Acc, Context);
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->

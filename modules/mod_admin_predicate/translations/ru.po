@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-15 23:16+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
+msgid ""
+"A predicate denotes traits or aspects of a page and expresses a relationship "
+"between two pages.\n"
+"    The relation is always directed, from the subject to the object.<br/"
+">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
+"\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
+msgstr ""
+"Предикат обозначает особенности или аспекты страницы и выражает отношение "
+"между двумя страницами.\n"
+"    Это отношение всегда является направленным от субъекта к объекту.<br/"
+">Предикаты определяются в онтологиях, таких как <a href=\"http://sioc-"
+"project.org/\">SIOC</a>.  На этой странице вы можете определить предикаты, "
+"известные системе Zotonic."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:3
+msgid "Are you sure you want to delete the predicate"
+msgstr "Вы уверены, что желаете удалить предикат"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:17
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:21
+msgid "From category"
+msgstr "От категории"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
+msgid "Help about predicates."
+msgstr "Справка о предикатах."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
+msgid "Make a new predicate"
+msgstr "Создать новый предикат"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18
+msgid "Make predicate"
+msgstr "Создать предикат"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:23
+msgid "Name"
+msgstr "Имя"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
+msgid "Need more help?"
+msgstr "Нужна помощь?"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
+msgid "Please fill in the title of the new predicate."
+msgstr "Пожалуйста, укажите название нового предиката."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:71
+msgid "Predicates"
+msgstr "Предикаты"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:48
+msgid ""
+"The direction (from/to) of this predicate is reversed from the normal "
+"definition."
+msgstr ""
+"Направление (от/к) для этого предиката обратно по отношению к обычному "
+"определению."
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:4
+msgid "This can't be undone. The predicate will be lost forever."
+msgstr "Это действие нельзя отменить. Предикат будет безвозвратно удален."
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:16
+msgid ""
+"This predicate can be used between two pages of the following categories."
+msgstr ""
+"Этот предикат может быть использован для пары страниц из следующих категорий."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:22
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:9
+msgid "Title"
+msgstr "Название"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:32
+msgid "To category"
+msgstr "К категории"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:24
+msgid "URI"
+msgstr "URI"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:3
+msgid "Valid between"
+msgstr "Определен между"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
+msgid ""
+"You can define for which categories the predicate is shown on the edit "
+"page.  You can also define which categories of objects will be found when "
+"searching for a page to connect to.  When you don\\'t check anything then "
+"all categories are valid."
+msgstr ""
+"Вы можете определить, для каких категорий предикат будет отображен на "
+"странице редактирования.  Вы также можете определить, какие категории "
+"объектов будут найдены при поиске страницы для связывания.  Если ничего не "
+"указано, применимы все категории."
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:38
+msgid "edit"
+msgstr "изменить"

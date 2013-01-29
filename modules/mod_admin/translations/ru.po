@@ -1,0 +1,1176 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2012-12-30 16:33+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:4
+msgid "+ add block"
+msgstr "+ добавить блок"
+
+#: modules/mod_admin/templates/admin_edit.tpl:37
+msgid "<em>untitled</em>"
+msgstr "<em>без названия</em>"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+msgid ""
+"<strong>First</strong> also known as given name, forename or Christen name."
+"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
+"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
+"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
+"name or last name."
+msgstr ""
+"<strong>Имя</strong>.<br/><strong>Отчество</strong>, иногда сокращается до "
+"инициалов, например <em>John D. Rockefeller</em>.<br/><strong>Префикс "
+"фамилии</strong>, например голландские <em>van, van de, der</em>.<br/"
+"><strong>Фамилия</strong>."
+
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:14
+msgid "Access control"
+msgstr "Управление доступом"
+
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
+msgid "Add a connection: "
+msgstr "Добавить связь:"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
+msgid "Add a new media item"
+msgstr "Добавить новый материал"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:20
+msgid "Add link"
+msgstr "Добавить ссылку"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:10
+msgid "Add media to body"
+msgstr "Добавить материал в тело"
+
+#: modules/mod_admin/mod_admin.erl:313
+msgid "Added the connection to"
+msgstr "Добавлена связь с"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:5
+msgid "Address"
+msgstr "Адрес"
+
+#: modules/mod_admin/templates/admin_base.tpl:5
+msgid "Admin"
+msgstr "Администратор"
+
+#: modules/mod_admin/templates/admin_logon.tpl:4
+msgid "Admin log on"
+msgstr "Вход в качестве администратора"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:5
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: modules/mod_admin/templates/admin_overview.tpl:14
+msgid "All Categories"
+msgstr "Все категории"
+
+#: modules/mod_admin/templates/admin.tpl:24
+#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_overview.tpl:51
+msgid "All media"
+msgstr "Все материалы"
+
+#: modules/mod_admin/templates/admin.tpl:23
+#: modules/mod_admin/templates/admin_media.tpl:23
+#: modules/mod_admin/templates/admin_overview.tpl:50
+msgid "All pages"
+msgstr "Все страницы"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:24
+msgid "Alternative telephone"
+msgstr "Дополнительный телефон"
+
+#: modules/mod_admin/templates/admin_media.tpl:13
+msgid "And media can also be viewed on their own page."
+msgstr "Также материалы могут быть просмотрены на собственной странице."
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:10
+msgid "Any category"
+msgstr "Любая категория"
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
+msgid "Are you sure you want to delete the page"
+msgstr "Вы уверены, что желаете удалить страницу"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:40
+msgid "Are you sure you want to exit the admin interface?"
+msgstr "Вы уверены, что желаете покинуть интерфейс администратора?"
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:7
+msgid "Aside"
+msgstr "Примечание"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
+msgid "Ask google to not index this page"
+msgstr "Не индексировать эту страницу в поисковых системах"
+
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:3
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:13
+msgid "Attached media"
+msgstr "Прикрепленные материалы"
+
+#: modules/mod_admin/mod_admin.erl:115
+msgid "Auth"
+msgstr "Авторизация"
+
+#: modules/mod_admin/templates/_admin_edit_basics.tpl:3
+msgid "Basic"
+msgstr "Основное"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:3
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:3
+msgid "Block"
+msgstr "Блок"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:7
+msgid "Block name"
+msgstr "Название блока"
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:6
+msgid "Block quote"
+msgstr "Цитату"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:30
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
+#: modules/mod_admin/templates/_action_dialog_zlink.tpl:19
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:16
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:57
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:20
+#: modules/mod_admin/templates/admin_referrers.tpl:21
+#: modules/mod_admin/templates/_admin_overview_list.tpl:8
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32
+msgid "Category"
+msgstr "Категория"
+
+#: modules/mod_admin/templates/admin_edit.tpl:29
+#: modules/mod_admin/templates/admin_edit.tpl:30
+msgid "Change category"
+msgstr "Изменить категорию"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
+msgid "Choose a media item from this page to insert in the body text."
+msgstr "Выберите материал из этой страницы для вставки в текст тела."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
+msgid "Choose the new category for this page."
+msgstr "Выберите новую категорию для этой страницы."
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:97
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:162
+msgid "City"
+msgstr "Город"
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
+msgid "Community members"
+msgstr "Членов сообщества"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:28
+msgid "Confirm block removal"
+msgstr "Подтвердите удаление блока"
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
+msgid "Confirm delete"
+msgstr "Подтвердите удаление"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:40
+msgid "Confirm logoff"
+msgstr "Подтвердите выход"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_page.tpl:10
+msgid "Connect a page"
+msgstr "Связать страницу"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:3
+#: modules/mod_admin/mod_admin.erl:92
+msgid "Content"
+msgstr "Контент"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:60
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:125
+msgid "Country"
+msgstr "Страна"
+
+#: modules/mod_admin/templates/admin_edit.tpl:16
+msgid "Created by"
+msgstr "Создано пользователем"
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:11
+msgid "Created on"
+msgstr "Создано"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:15
+msgid "Customize page slug"
+msgstr "Настроить ЧПУ"
+
+#: modules/mod_admin/templates/admin.tpl:3
+#: modules/mod_admin/templates/admin.tpl:14 modules/mod_admin/mod_admin.erl:87
+msgid "Dashboard"
+msgstr "Панель"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5
+msgid "Date range"
+msgstr "Период"
+
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
+msgid "Define who can see or edit this page."
+msgstr "Определить, кто сможет просматривать или редактировать эту страницу."
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:31
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:57
+msgid "Delete"
+msgstr "Удалить"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:57
+msgid "Delete this page."
+msgstr "Удалить эту страницу."
+
+#: modules/mod_admin/templates/_rsc_edge.tpl:7
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:9
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:5
+msgid "Disconnect"
+msgstr "Отсоединить"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:29
+msgid "Do you want to remove this block?"
+msgstr "Вы желаете удалить этот блок?"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:23
+msgid "Download"
+msgstr "Скачать"
+
+#: modules/mod_admin/templates/_rsc_edge.tpl:6
+msgid "Drag to change connection position"
+msgstr "Перетащите для смены положения связи"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:4
+msgid "Drag to change position"
+msgstr "Перетащите для смены положения"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:61
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
+msgid "Duplicate"
+msgstr "Скопировать"
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:26
+msgid "Duplicate page"
+msgstr "Скопировать страницу"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:61
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:66
+msgid "Duplicate this page."
+msgstr "Создать дубликат этой страницы."
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
+msgid "E-mail address"
+msgstr "Адрес e-mail"
+
+#: modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin/templates/_rsc_edge.tpl:8
+msgid "Edit"
+msgstr "Изменить"
+
+#: modules/mod_admin/templates/_edit_link.tpl:21
+msgid "Edit this page"
+msgstr "Изменить эту страницу"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:13
+msgid "Electronic address"
+msgstr "Электронный адрес"
+
+#: modules/mod_admin/mod_admin.erl:135
+msgid "Embed page"
+msgstr "Встроить страницу"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:31
+msgid "Emergency telephone"
+msgstr "Экстренный телефон"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161
+msgid "Error uploading the file."
+msgstr "Ошибка при закачивании файла."
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
+msgid ""
+"Every page can have a date range. For example if the page is an event or "
+"description of someone\\'s life."
+msgstr ""
+"У каждой страницы может быть указан период. Например, если страница содержит "
+"событие или описание чьей-то жизни."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:1
+msgid ""
+"Every page is categorized in exactly one category.  The category defines "
+"what the page represents. For example an event, a product or a person.  The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Каждая страница принадлежит ровно одной категории.  Категория определяет, "
+"что отображает страница. Например, событие, товар или персону.  Категории "
+"определяются иерархически. Таким образом у вас может быть категория для "
+"транспорта с подкатегориями для автомобилей и велосипедов."
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
+msgid "Failed to download the file."
+msgstr "Не удалось скачать файл."
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
+msgid "Featured"
+msgstr "В избранное"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:3
+msgid "Features"
+msgstr "Особенности"
+
+#: modules/mod_admin/templates/_admin_edit_content_media.tpl:5
+msgid "File / media content"
+msgstr "Содержимое файла / материала"
+
+#: modules/mod_admin/templates/admin_overview.tpl:11
+msgid "Filter on category"
+msgstr "Фильтр категорий"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:17
+msgid "Find Page"
+msgstr "Найти страницу"
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:2
+msgid "Find an existing page to connect"
+msgstr "Найти готовую страницу для связи"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:89
+msgid "Find page"
+msgstr "Найти страницу"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:18
+msgid "First"
+msgstr "Имя"
+
+#: modules/mod_admin/templates/admin_status.tpl:17
+msgid ""
+"Flush all URL dispatch rules, template- and library caches and other in-"
+"memory cached data."
+msgstr ""
+"Очистить кэш правил размещения URL, шаблонов и библиотек, а также прочие "
+"кэшируемые в памяти данные."
+
+#: modules/mod_admin/templates/admin_status.tpl:16
+msgid "Flush system caches"
+msgstr "Очистить системный кэш"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+msgid "From"
+msgstr "От"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:15
+msgid "Go back."
+msgstr "Перейти назад."
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
+msgid "Group members"
+msgstr "Членов группы"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:15
+#: modules/mod_admin/mod_admin.erl:133
+msgid "Header"
+msgstr "Заголовок"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
+msgid "Help about date ranges."
+msgstr "Справка о периодах."
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:12
+msgid "Help about features."
+msgstr "Справка об особенностях."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
+msgid "Help about page connections."
+msgstr "Справка о связях страниц."
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+msgid "Help about person name."
+msgstr "Справка об имени персоны."
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
+msgid "Help about publication date range."
+msgstr "Справка о периоде публикации."
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
+msgid ""
+"Here you can edit the arguments of the  search query. Every argument goes on "
+"its own line. For more information, see the\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">documentation on the query arguments</a> on the Zotonic website."
+msgstr ""
+"Здесь вы можете изменить аргументы поискового запроса. Каждый аргумент "
+"ставится на отдельной строке. Для дополнительных сведений смотрите\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
+"\">справку по аргументам запросов</a> на сайте Zotonic."
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+msgid ""
+"Here you can edit the person's name.  Use the title of the base content for "
+"the display name of this person."
+msgstr ""
+"Здесь вы можете изменить имя персоны.  Используйте заголовок базового "
+"контента в качестве отображаемого имени этой персоны."
+
+#: modules/mod_admin/templates/admin_media.tpl:34
+msgid "Info"
+msgstr "Информация"
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:5
+msgid "Info link with modal popup"
+msgstr "Справочную ссылку с модальным сообщением"
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:4
+msgid "Inline block"
+msgstr "Встроенный блок"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:13
+msgid "Insert image"
+msgstr "Вставить изображение"
+
+#: modules/mod_admin/templates/admin.tpl:46
+msgid "Latest modified events"
+msgstr "Недавно измененные события"
+
+#: modules/mod_admin/templates/admin.tpl:41
+msgid "Latest modified locations"
+msgstr "Недавно измененные местоположения"
+
+#: modules/mod_admin/templates/admin.tpl:50
+msgid "Latest modified media items"
+msgstr "Недавно измененные материалы"
+
+#: modules/mod_admin/templates/admin.tpl:34
+msgid "Latest modified persons"
+msgstr "Недавно измененные персоны"
+
+#: modules/mod_admin/templates/admin.tpl:31
+msgid "Latest modified texts"
+msgstr "Недавно измененные тексты"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:28
+msgid ""
+"Live query, send notifications when matching items are updated or inserted."
+msgstr ""
+"Живой запрос, уведомлять когда соответствующие элементы обновлены или "
+"вставлены."
+
+#: modules/mod_admin/templates/_admin_menu.tpl:39
+msgid "Log Off"
+msgstr "Выйти"
+
+#: modules/mod_admin/templates/admin_logon.tpl:21
+msgid "Log on to"
+msgstr "Войти на"
+
+#: modules/mod_admin/templates/admin.tpl:9
+msgid "Logged in as"
+msgstr "Вы вошли как"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:121
+msgid "Mailing address"
+msgstr "Почтовый адрес"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:13
+msgid "Main"
+msgstr "Основное"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:62
+msgid "Make"
+msgstr "Создать"
+
+#: modules/mod_admin/templates/admin_media.tpl:20
+msgid "Make a new media item"
+msgstr "Создать новый материал"
+
+#: modules/mod_admin/templates/admin.tpl:18
+#: modules/mod_admin/templates/admin_overview.tpl:45
+msgid "Make a new page or media"
+msgstr "Создать страницу или материал"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
+msgid "Make media item"
+msgstr "Создать материал"
+
+#: modules/mod_admin/templates/admin_media.tpl:3
+#: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/mod_admin.erl:100
+msgid "Media"
+msgstr "Материалы"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:27
+msgid "Media URL"
+msgstr "URL материала"
+
+#: modules/mod_admin/templates/admin_media.tpl:12
+msgid ""
+"Media encompasses all uploaded images, movies and documents. Media can be "
+"attached to pages."
+msgstr ""
+"Материалы включают в себя все загружаемые изображения, видеозаписи и "
+"документы. Материалы могут быть прикреплены к страницам."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:25
+msgid "Media file"
+msgstr "Файл с материалом"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144
+msgid "Media item created."
+msgstr "Материал создан."
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
+msgid "Media on this page"
+msgstr "Материалы на этой странице"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:17
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:18
+msgid "Media title"
+msgstr "Название материала"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:25
+msgid "Middle"
+msgstr "Отчество"
+
+#: modules/mod_admin/templates/admin_edit.tpl:14
+msgid "Modified"
+msgstr "Изменено"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:24
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
+msgid "Modified by"
+msgstr "Изменено пользователем"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:23
+#: modules/mod_admin/templates/_admin_overview_list.tpl:14
+msgid "Modified on"
+msgstr "Изменено"
+
+#: modules/mod_admin/mod_admin.erl:110
+msgid "Modules"
+msgstr "Модули"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
+msgid "Name"
+msgstr "Имя"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
+msgid "Need more help?"
+msgstr "Нужна помощь?"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:8
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:21
+msgid "New Page"
+msgstr "Новая страница"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:3
+msgid "New page"
+msgstr "Новая страница"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:52
+msgid "Next in category: "
+msgstr "Следующее в категории:"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:57
+msgid "No items."
+msgstr "Элементы отсутствуют."
+
+#: modules/mod_admin/templates/admin_media.tpl:71
+msgid "No media found."
+msgstr "Материалы не найдены."
+
+#: modules/mod_admin/templates/admin_referrers.tpl:48
+#: modules/mod_admin/templates/_admin_overview_list.tpl:42
+msgid "No pages found."
+msgstr "Страницы не найдены."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:5
+msgid "Page connections"
+msgstr "Связи страницы"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
+msgid "Page description"
+msgstr "Описание страницы"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:46
+msgid "Page keywords"
+msgstr "Ключевые слова страницы"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:16
+msgid "Page path, default is"
+msgstr "Путь к странице, по умолчанию"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:16
+msgid "Page slug"
+msgstr "ЧПУ страницы"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:25
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:12
+msgid "Page title"
+msgstr "Название страницы"
+
+#: modules/mod_admin/templates/admin_overview.tpl:3
+#: modules/mod_admin/mod_admin.erl:96
+msgid "Pages"
+msgstr "Страницы"
+
+#: modules/mod_admin/templates/admin_overview.tpl:33
+msgid "Pages overview"
+msgstr "Обзор страниц"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:5
+msgid "Person name"
+msgstr "Имя персоны"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
+msgid "Please fill in the title"
+msgstr "Пожалуйста укажите название"
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3
+msgid "Please fill in the title of the new page."
+msgstr "Пожалуйста укажите название новой страницы."
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:104
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:169
+msgid "Postcode"
+msgstr "Почтовый индекс"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:22
+msgid "Predicate"
+msgstr "Предикат"
+
+#: modules/mod_admin/templates/admin_media.tpl:32
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:48
+msgid "Previous in category: "
+msgstr "Предыдущее в категории:"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:41
+msgid "Protect"
+msgstr "Защита"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
+msgid "Protect from deletion"
+msgstr "Защита от удаления"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
+msgid "Publication date of original article"
+msgstr "Дата публикации исходной статьи"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:5
+msgid "Publication period"
+msgstr "Период публикации"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:5
+msgid "Publish this page"
+msgstr "Опубликовать эту страницу"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:31
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:40
+msgid "Published"
+msgstr "Опубликовано"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
+msgid "Query"
+msgstr "Запрос"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:32
+msgid "Query preview"
+msgstr "Предварительный просмотр запроса"
+
+#: modules/mod_admin/templates/admin_status.tpl:24
+msgid ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
+msgstr ""
+"Пересобрать все поисковые индексы путем отправки всех страниц и данных из "
+"базы данных в очередь индексатора. Это может занять много времени!"
+
+#: modules/mod_admin/templates/admin_status.tpl:23
+msgid "Rebuild search indices"
+msgstr "Пересобрать поисковые индексы"
+
+#: modules/mod_admin/templates/admin_status.tpl:31
+msgid ""
+"Recalculate the numbering of the category tree. This can take a long time."
+msgstr ""
+"Пересчитать нумерацию дерева категорий. Это может занять много времени."
+
+#: modules/mod_admin/templates/admin_referrers.tpl:3
+#: modules/mod_admin/templates/admin_referrers.tpl:7
+msgid "Referrers to"
+msgstr "Связи с"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:32
+msgid "Remarks"
+msgstr "Примечания"
+
+#: modules/mod_admin/templates/admin_status.tpl:30
+msgid "Renumber category tree"
+msgstr "Перенумеровать дерево категорий"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
+msgid "Replace media item"
+msgstr "Заменить материал"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:24
+#: modules/mod_admin/templates/_admin_edit_media.tpl:37
+msgid "Replace this media item"
+msgstr "Заменить этот материал"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:12
+msgid ""
+"Resources in the <i>meta</i> category can have 'features': certain resource "
+"properties that decide what to show or hide on certain pages in the admin. "
+"If this box is empty, no features are enabled for this meta-resource."
+msgstr ""
+"Ресурсы в категории <i>meta</i> могут обладать «особенностями» — "
+"определенными свойствами, определяющими, что показывать или скрывать на "
+"некоторых страницах в панели администратора. Если флажок снят, особенности "
+"для этого мета-ресурса выключены."
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:5
+msgid "SEO Content"
+msgstr "SEO-контент"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:17
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:59
+msgid "Save"
+msgstr "Сохранить"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+msgid "Save &amp; view"
+msgstr "Сохранить и просмотреть"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+msgid "Save and view the page."
+msgstr "Сохранить и просмотреть страницу."
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
+msgid "Save this page."
+msgstr "Сохранить эту страницу."
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
+msgid "Search other media"
+msgstr "Поиск прочих материалов"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:6
+msgid "Search query"
+msgstr "Поисковый запрос"
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
+msgid "Select a connected image"
+msgstr "Выбрать связанное изображение"
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:27
+msgid "Short title"
+msgstr "Короткий заголовок"
+
+#: modules/mod_admin/templates/_admin_features.category.tpl:7
+msgid "Show address on edit page"
+msgstr "Показать адрес на странице редактирования"
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:2
+msgid "Show as"
+msgstr "Показать как"
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125
+msgid "Something went wrong. Sorry."
+msgstr "Что-то пошло не так. Извините."
+
+#: modules/mod_admin/mod_admin.erl:317
+msgid "Sorry, you have no permission to add the connection."
+msgstr "Извините, у вас отсутствуют права для добавление связи."
+
+#: modules/mod_admin/mod_admin.erl:132
+msgid "Standard"
+msgstr "Стандартные"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:113
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:178
+msgid "State"
+msgstr "Состояние"
+
+#: modules/mod_admin/mod_admin.erl:124
+msgid "Status"
+msgstr "Статус"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:81
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:146
+msgid "Street Line 1"
+msgstr "Улица (строка 1)"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:88
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:153
+msgid "Street Line 2"
+msgstr "Улица (строка 2)"
+
+#: modules/mod_admin/mod_admin.erl:105
+msgid "Structure"
+msgstr "Структура"
+
+#: modules/mod_admin/templates/_admin_edit_haspart.tpl:3
+msgid "Sub pages"
+msgstr "Подстраницы"
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:16
+msgid "Summary"
+msgstr "Краткое изложение"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:32
+msgid "Sur. prefix"
+msgstr "Префикс фамилии"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
+msgid "Surname"
+msgstr "Фамилия"
+
+#: modules/mod_admin/mod_admin.erl:119
+msgid "System"
+msgstr "Система"
+
+#: modules/mod_admin/templates/admin_status.tpl:3
+msgid "System Status"
+msgstr "Состояние системы"
+
+#: modules/mod_admin/templates/admin_status.tpl:8
+msgid "System administration"
+msgstr "Системное администрирование"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:17
+msgid "Telephone"
+msgstr "Телефон"
+
+#: modules/mod_admin/mod_admin.erl:134
+msgid "Text"
+msgstr "Текст"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:13
+msgid "The following"
+msgstr "У"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+msgid "The page"
+msgstr "Страница"
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
+msgid "The whole world"
+msgstr "Всего мира"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:11
+msgid "There are no pages with a connection to the page"
+msgstr "Страницы, связанные с этой, отсутствуют"
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
+msgid "This can't be undone. Your page will be lost forever."
+msgstr ""
+"Это действие нельзя отменить. Ваша страница будет безвозвратно удалена."
+
+#: modules/mod_admin/templates/admin_status.tpl:9
+msgid ""
+"This page holds a collection of administrative options to perform certain "
+"tasks on this Zotonic installation."
+msgstr ""
+"Эта страница содержит набор административных опций для выполнения некоторых "
+"задач с этим экземпляром Zotonic."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
+msgid ""
+"This page is able to connect to others. For example you can connect it to an "
+"actor or a brand."
+msgstr ""
+"Эта страница может подключаться к другим. Например, вы можете подключить ее "
+"к актеру или марке."
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:39
+msgid "This resource was created by the module"
+msgstr "Этот ресурс был создан модулем"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
+msgid "Till"
+msgstr "До"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:31
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
+#: modules/mod_admin/templates/admin_media.tpl:33
+#: modules/mod_admin/templates/admin_referrers.tpl:20
+#: modules/mod_admin/templates/_admin_overview_list.tpl:5
+msgid "Title"
+msgstr "Название"
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:5
+msgid "Type text to search"
+msgstr "Введите строку для поиска"
+
+#: modules/mod_admin/templates/_action_dialog_zlink.tpl:2
+msgid "Type the title of the page you want to connect to."
+msgstr "Введите название страницы, с которой вы желаете установить связь."
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:6
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:28
+msgid "URL"
+msgstr "URL"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:26
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:24
+msgid "Unique name"
+msgstr "Уникальное имя"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:45
+msgid "Unique uri"
+msgstr "Уникальный идентификатор ресурса"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:6
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:3
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:25
+msgid "Upload"
+msgstr "Закачать"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:3
+msgid "Upload a file from your computer."
+msgstr "Закачать файл с вашего компьютера."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:4
+msgid "Upload a file which is already on the internet."
+msgstr "Закачать файл, уже имеющийся в Интернете."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
+msgid "Upload file"
+msgstr "Закачать файл"
+
+#: modules/mod_admin/templates/admin_media.tpl:35
+msgid "Uploaded"
+msgstr "Закачано"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:36
+msgid "Use the autocompleter to search the media in this site."
+msgstr "Используйте автозаполнение для поиска материалов на этом сайте."
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
+msgid "Valid for:"
+msgstr "Действителен для:"
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:49
+msgid "View all referrers"
+msgstr "Просмотр всех связей"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
+msgid "View this page."
+msgstr "Просмотреть эту страницу."
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
+msgid "Visible for"
+msgstr "Видимо для"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:17
+msgid "Visible from"
+msgstr "Видимо с"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:23
+msgid "Visible till"
+msgstr "Видимо до"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58
+msgid "Visit full editpage"
+msgstr "Открыть страницу редактирования"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:56
+msgid "Visiting address"
+msgstr "Фактический адрес проживания"
+
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:5
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:47
+msgid "Website"
+msgstr "Веб-сайт"
+
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:12
+msgid "Website for clicks on image"
+msgstr "Ссылка для нажатий на изображении"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
+msgid ""
+"When a page has a publication date range then it will only be visible "
+"between the two dates. Note that when you are allowed to edit the page then "
+"you can always see it."
+msgstr ""
+"Когда для страницы указан период публикации, она будет видима только в этом "
+"периоде между заданными датами. Учтите, что для пользователей, имеющих право "
+"на редактирование страницы, она видима всегда."
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
+msgid "You are going to duplicate the page"
+msgstr "Вы собираетесь скопировать страницу"
+
+#: modules/mod_admin/actions/action_admin_delete_media.erl:52
+msgid "You are not allowed to delete this media."
+msgstr "У вас нет прав для удаления этого материала."
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
+msgid "You are not allowed to delete this page."
+msgstr "У вас нет прав для удаления этой страницы."
+
+#: modules/mod_admin/templates/admin_edit.tpl:23
+msgid "You are not allowed to edit the"
+msgstr "У вас нет прав для изменения"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
+msgid "You don't have permission to change this media item."
+msgstr "У вас нет прав для замены этого материала."
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156
+msgid "You don't have the proper permissions to upload this type of file."
+msgstr "У вас нет требуемых прав для закачивания данного типа файла."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:5
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:6
+msgid ""
+"You have to specify a description of the file to make it easier to find and "
+"share."
+msgstr ""
+"Вы должны указать описание файла для облегчения поиска и общего доступа."
+
+#: modules/mod_admin/templates/admin_referrers.tpl:14
+msgid "a connection to the page"
+msgstr "связь со страницей"
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:34
+msgid "add a connection"
+msgstr "добавить связь"
+
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:15
+msgid "add media item"
+msgstr "добавить материал"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
+msgid "and the category of the new page."
+msgstr "и категорию новой страницы."
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6
+msgid "block"
+msgstr "блок"
+
+#: modules/mod_admin/templates/admin_edit.tpl:15
+msgid "by"
+msgstr "пользователем"
+
+#: modules/mod_admin/templates/admin_media.tpl:59
+msgid "delete"
+msgstr "удалить"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:48
+#: modules/mod_admin/templates/admin_media.tpl:61
+#: modules/mod_admin/templates/admin_referrers.tpl:40
+#: modules/mod_admin/templates/_admin_overview_list.tpl:34
+msgid "edit"
+msgstr "изменить"
+
+#: modules/mod_admin/templates/_edit_button.tpl:7
+msgid "edit this page"
+msgstr "изменить эту страницу"
+
+#: modules/mod_admin/templates/admin_edit.tpl:27
+msgid "editing"
+msgstr "редактируется"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+msgid "has been disconnected."
+msgstr "была отсоединена."
+
+#: modules/mod_admin/templates/admin_overview.tpl:34
+msgid "matching"
+msgstr "соответствующих"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:7
+msgid "name"
+msgstr "имя"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:6
+msgid "of the new"
+msgstr "нового экземпляра"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:13
+msgid "page has"
+msgstr "следующей страницы"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:13
+msgid "pages have"
+msgstr "следующих страниц"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:5
+msgid "pixels"
+msgstr "пикселей"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:19
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:21
+msgid "show all"
+msgstr "показать все"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:3
+msgid "undo"
+msgstr "отменить"
+
+#: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:12
+msgid "untitled"
+msgstr "без названия"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:8
+#: modules/mod_admin/templates/_admin_edit_media.tpl:33
+msgid "uploaded on"
+msgstr "загружено"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:47
+#: modules/mod_admin/templates/admin_referrers.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
+msgid "view"
+msgstr "просмотр"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:7
+#: modules/mod_admin/templates/admin_logon.tpl:13
+msgid "visit site"
+msgstr "перейти на сайт"

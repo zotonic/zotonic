@@ -29,6 +29,8 @@
     event/2
 ]).
 
+-export([notice/3, show_notice/3]).
+
 -include("zotonic.hrl").
 
 
@@ -40,29 +42,25 @@ event(#postback{message={vcs_up, Args}}, Context) ->
                 undefined -> 
                     notice('Zotonic', "Zotonic hasn’t been checked out using version control.", Context);
                 {hg, Path} ->
-                    z_session_page:add_script(notice('Zotonic', "Fetching updates…", Context)),
+                    show_notice('Zotonic', "Fetching updates…", Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
-                    z_session_page:add_script(notice('Zotonic', os:cmd(Command), Context)),
-                    Context;
+                    notice('Zotonic', os:cmd(Command), Context);
                 {git, Path} ->
-                    z_session_page:add_script(notice('Zotonic', "Fetching updates…", Context)),
+                    show_notice('Zotonic', "Fetching updates…", Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
-                    z_session_page:add_script(notice('Zotonic', os:cmd(Command), Context)),
-                    Context
+                    notice('Zotonic', os:cmd(Command), Context)
             end;
         undefined -> 
             Site = proplists:get_value(site, Args),
             case has_vcs(Site) of
                 {hg, Path} ->
-                    z_session_page:add_script(notice(Site, "Fetching updates…", Context)),
+                    show_notice(Site, "Fetching updates…", Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
-                    z_session_page:add_script(notice(Site, os:cmd(Command), Context)),
-                    Context;
+                    notice(Site, os:cmd(Command), Context);
                 {git, Path} ->
-                    z_session_page:add_script(notice(Site, "Fetching updates…", Context)),
+                    show_notice(Site, "Fetching updates…", Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
-                    z_session_page:add_script(notice(Site, os:cmd(Command), Context)),
-                    Context;
+                    show_notice(Site, os:cmd(Command), Context);
                 undefined ->
                     notice(Site, "Unknown site or nor mercurial/git folder present.", Context)
             end
@@ -71,17 +69,22 @@ event(#postback{message=make}, Context) ->
     true = z_auth:is_auth(Context),
     spawn(fun() -> 
             z:m(),
-            z_session_page:add_script(notice('Zotonic', "Finished rebuilding Zotonic.", Context))
+            show_notice('Zotonic', "Finished rebuilding Zotonic.", Context)
           end),
     notice('Zotonic', "Building Zotonic in the background…", Context).
 
 
+% @doc Show a notice on the current webpage.
+show_notice(SiteName, Text, Context) ->
+    z_session_page:add_script(notice(SiteName, Text, Context)).
+
+% @doc Render a notice.
 notice(SiteName, Text, Context) ->
     Context1 = z_render:appear_top(
                         "notices", 
                         #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]}, 
                         Context),
-    z_render:wire({fade_out, [{selector, "#notices > p:gt(0)"}, {speed, 1000}]}, Context1).
+    z_render:wire({fade_out, [{selector, "#notices > p:gt(0)"}, {speed, 2000}]}, Context1).
 
 
 %% @doc Check which sites have a .hgrc directory. Add this info to the template vars.

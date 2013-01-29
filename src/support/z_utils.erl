@@ -695,38 +695,42 @@ replace1(F, T, [C|R], Acc) ->
 
 %% @doc Return a list of all files in a directory, recursive depth first search for files not starting with a '.'
 list_dir_recursive(Dir) ->
-    case file:list_dir(Dir) of
+    Sep = separator(element(1, os:type())),
+    AbsDir = filename:absname(Dir),
+    case file:list_dir(AbsDir) of
         {ok, Files} ->
-            list_dir_recursive(Files, Dir, []);
+            list_dir_recursive(Files, AbsDir, Sep, []);
         {error, _} ->
             []
     end.
 
-    list_dir_recursive([], _BaseDir, Acc) ->
+    list_dir_recursive([], _BaseDir, _Sep, Acc) ->
         Acc;
-    list_dir_recursive([[$.|_]|OtherFiles], BaseDir, Acc) ->
-        list_dir_recursive(OtherFiles, BaseDir, Acc);
-    list_dir_recursive([File|OtherFiles], BaseDir, Acc) ->
-        Path = filename:join(BaseDir, File),
+    list_dir_recursive([[$.|_]|OtherFiles], BaseDir, Sep, Acc) ->
+        list_dir_recursive(OtherFiles, BaseDir, Sep, Acc);
+    list_dir_recursive([File|OtherFiles], BaseDir, Sep, Acc) ->
+        Path = [BaseDir, Sep, File],
         case filelib:is_regular(Path) of
             true ->
-                list_dir_recursive(OtherFiles, BaseDir, [File|Acc]);
+                list_dir_recursive(OtherFiles, BaseDir, Sep, [File|Acc]);
             false ->
                 case filelib:is_dir(Path) of
                     true ->
                         Acc1 = case file:list_dir(Path) of
                             {ok, Files} ->
-                                NonDotFiles = lists:filter(fun([$.|_]) -> false; (_) -> true end, Files),
-                                RelFiles = [ filename:join(File, F) || F <- NonDotFiles],
-                                list_dir_recursive(RelFiles, BaseDir, Acc);
+                                RelFiles = [ [File, Sep, F] || [H|_]=F <- Files, H /= $.],
+                                list_dir_recursive(RelFiles, BaseDir, Sep, Acc);
                             {error, _} ->
                                 Acc
                         end,
-                        list_dir_recursive(OtherFiles, BaseDir, Acc1);
+                        list_dir_recursive(OtherFiles, BaseDir, Sep, Acc1);
                     false ->
-                        list_dir_recursive(OtherFiles, BaseDir, Acc)
+                        list_dir_recursive(OtherFiles, BaseDir, Sep, Acc)
                 end
         end.
+
+    separator(win32) -> $\\;
+    separator(_) -> $/.
 
 
 %% @doc Check if two arguments are equal, optionally converting them

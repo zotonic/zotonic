@@ -316,7 +316,8 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
             true ->
                 Mime = proplists:get_value(mime, PropsMedia),
                 SafeRootName = z_string:to_rootname(proplists:get_value(original_filename, Props, File)),
-                SafeFilename = SafeRootName ++ z_media_identify:extension(Mime),
+                PreferExtension = z_convert:to_binary(filename:extension(proplists:get_value(original_filename, Props, File))),
+                SafeFilename = SafeRootName ++ z_media_identify:extension(Mime, PreferExtension),
                 ArchiveFile = z_media_archive:archive_copy_opt(File, SafeFilename, Context),
                 RootName = filename:rootname(filename:basename(ArchiveFile)),
                 MediumRowProps = [

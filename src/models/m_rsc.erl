@@ -59,6 +59,7 @@
     sp/2, s/2, s/3, s/4,
     media/2,
     page_url/2,
+    page_url_abs/2,
     rid/2,
 
     name_lookup/2,
@@ -376,10 +377,15 @@ p_no_acl(Id, is_editable, Context) -> is_editable(Id, Context);
 p_no_acl(Id, is_deletable, Context) -> is_deletable(Id, Context);
 p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);
+p_no_acl(Id, page_url_abs, Context) -> 
+    case p_no_acl(Id, page_path, Context) of
+        undefined -> page_url(Id, true, Context);
+        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), true, Context)
+    end;
 p_no_acl(Id, page_url, Context) -> 
     case p_no_acl(Id, page_path, Context) of
-        undefined -> page_url(Id, Context);
-        PagePath -> z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context)
+        undefined -> page_url(Id, false, Context);
+        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), false, Context)
     end;
 p_no_acl(Id, translation, Context) ->
     fun(Code) ->
@@ -632,15 +638,25 @@ is_a(Id, Cat, Context) ->
     
 
 page_url(Id, Context) ->
+    page_url(Id, false, Context).
+
+page_url_abs(Id, Context) ->
+    page_url(Id, true, Context).
+
+page_url(Id, IsAbs, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
             CatPath = lists:reverse(is_a(Id, Context)),
             case z_notifier:first(#page_url{id=RscId, is_a=CatPath}, Context) of
                 {ok, Url} -> 
-                    Url;
+                    opt_url_abs(Url, IsAbs, Context);
                 undefined ->
                     Args = [{id,RscId}, {slug, p(RscId, slug, Context)} | z_context:get(extra_args, Context, [])],
-                    page_url_path(CatPath, Args, Context)
+                    Url = page_url_path(CatPath, Args, Context),
+                    case IsAbs of
+                        true -> z_dispatcher:abs_url(Url, Context);
+                        false -> Url
+                    end
             end;
         _ ->
             undefined
@@ -657,6 +673,18 @@ page_url_path([CatName|Rest], Args, Context) ->
     case z_dispatcher:url_for(CatName, Args, Context) of
         undefined -> page_url_path(Rest, Args, Context);
         Url -> Url
+    end.
+
+
+%% @doc Depending on the context or the requested property we make the URL absolute
+opt_url_abs(undefined, _IsAbs, _Context) ->
+    undefined;
+opt_url_abs(Url, true, Context) ->
+    z_dispatcher:abs_url(Url, Context);
+opt_url_abs(Url, false, Context) ->
+    case z_context:get(use_absolute_url, Context) of
+        true -> z_dispatcher:abs_url(Url, Context);
+        _ -> Url
     end.
 
 %% @doc Return the predicates that are valid combined with the predicates that are actually used by the subject.

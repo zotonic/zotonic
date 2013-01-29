@@ -1,0 +1,922 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2013-01-14 14:31+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+msgid ""
+"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
+"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
+"address</h3><p>The sender name and e-mail address can be set per mailing "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
+"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
+"used for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</"
+"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
+"allowed to send a page to the mailing list. Everybody who can view the "
+"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr ""
+"<h3>Адресаты</h3><p>Чтобы добавить, удалить или просмотреть адресатов в "
+"списке, нажмите на ссылку «Показать всех адресатов».</p><h3>Имя и адрес e-"
+"mail отправителя</h3><p>Имя отправителя и адрес e-mail можно устанавливать "
+"отдельно для каждого списка адресатов. По умолчанию принимается значение "
+"ключа конфигурации <tt>site.email_from</tt>.  В поле <i>From</i> "
+"отправляемых сообщений будут указаны заданные имя и адрес отправителя.</"
+"p><h3>Автоматическая загрузка списков адресатов</h3><p>Файл в папке dropbox, "
+"используемый для автоматической загрузки полного списка адресатов. "
+"Указываемое имя должно соответствовать файлу, содержащему загруженный список "
+"адресатов. Весь список адресатов будет заменен содержимым этого файла из "
+"папки dropbox.</p><h3>Управление доступом</h3><p>Любой, кто может "
+"редактировать список адресатов, также имеет права для рассылки страницы "
+"адресатам из этого списка. Любой, кто может просматривать список адресатов, "
+"имеет права для добавления адреса e-mail в этот список.</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:15
+msgid "<p>Sorry, something went wrong. Please try again later.</p>"
+msgstr ""
+"<p>Извините, что-то пошло не так. Пожалуйста, попробуйте еще раз через "
+"некоторое время.</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:20
+msgid "<p>Sorry, something went wrong. Please try to re-subscribe.</p>"
+msgstr ""
+"<p>Извините, что-то пошло не так. Пожалуйста, попробуйте подписаться "
+"повторно.</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:19
+msgid "<p>Thank you. You are now subscribed.</p>"
+msgstr "<p>Спасибо. Теперь вы подписаны.</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:14
+msgid "<p>Thank you. You are now unsubscribed.</p>"
+msgstr "<p>Спасибо. Теперь ваша подписка отменена.</p>"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+msgid "Act"
+msgstr "Активен"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
+msgid "Actions"
+msgstr "Действия"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:25
+msgid "Add a new recipient."
+msgstr "Добавить нового адресата."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:25
+msgid "Add recipient"
+msgstr "Добавить адресата"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+msgid "Added the recipient."
+msgstr "Адресат добавлен."
+
+#: modules/mod_mailinglist/templates/mailinglist.tpl:14
+msgid "All mailing lists"
+msgstr "Все списки адресатов"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
+msgid "All processed"
+msgstr "Все обработано"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:17
+msgid ""
+"All recipients of the mailing list. You can upload or download this list, "
+"which must be a file with one e-mail address per line."
+msgstr ""
+"Все адресаты в данном списке. Вы можете закачивать или скачивать этот "
+"список, представленный текстовым файлом, содержащим по одному адресу e-mail "
+"на строку."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
+msgid ""
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
+msgstr ""
+"Любая страница может быть отправлена в качестве рассылки. Вы можете "
+"отправить рассылку с любой страницы редактирования. На этой странице вы "
+"можете добавлять или удалять списки адресатов, а также модифицировать их "
+"содержимое."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
+msgid "Are you sure you want to cancel the mailing to"
+msgstr "Вы уверены, что желаете отменить рассылку по"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:2
+msgid "Are you sure you want to delete the mailing list"
+msgstr "Вы уверены, что желаете удалить рассылку"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid ""
+"Are you sure you want to reset the statistics for this mailing? This means "
+"that if you send the mailing again afterwards, recipients might have gotten "
+"the mailing twice."
+msgstr ""
+"Вы уверены, что желаете сбросить статистику для этой рассылки? В этом "
+"случае, если вы позже отправите рассылку повторно, возможно, адресаты "
+"получат ее во второй раз."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
+msgid ""
+"Before you will receive any further mail you need to confirm your "
+"subscription."
+msgstr ""
+"Перед тем, как получать дальнейшие сообщения, вам нужно подтвердить вашу "
+"подписку."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
+msgid "Bounces"
+msgstr "Возвраты"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:67
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
+msgid "Cancel"
+msgstr "Отмена"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:5
+msgid "Cancel mailing"
+msgstr "Отменить рассылку"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+msgid "Check to activate the e-mail address."
+msgstr "Установите флажок для активации адреса e-mail."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Clear"
+msgstr "Очистить"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:10
+msgid ""
+"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgstr ""
+"Нажмите <strong>Отменить подписку</strong> для прекращения рассылки на ваш "
+"адрес."
+
+#: modules/mod_mailinglist/templates/mailing_page.tpl:29
+msgid "Click here when you can’t read the message below."
+msgstr "Нажмите здесь, если вы не можете прочитать нижеприведенное сообщение."
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
+msgid ""
+"Click the button below to confirm your subscription to this mailing list."
+msgstr "Нажмите на кнопку ниже для подтверждения подписки на эту рассылку."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+msgid "Click to view log entries"
+msgstr "Нажмите для просмотра записей в журнале"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
+msgid "Confirm sending to mailinglist"
+msgstr "Подтвердить отправку рассылки"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
+msgid "Confirm subscription"
+msgstr "Подтвердить подписку"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+msgid "Could not add the recipient."
+msgstr "Не удалось добавить адресата."
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:4
+msgid "Dear"
+msgstr "Уважаемый(ая)"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:43
+msgid "Delete"
+msgstr "Удалить"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:18
+msgid "Delete all current recipients before adding the file."
+msgstr "Удалить всех текущих адресатов перед импортом файла."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Delete all recipients from this list?"
+msgstr "Удалить всех адресатов из этого списка?"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:21
+msgid "Description"
+msgstr "Описание"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Download all"
+msgstr "Скачать все"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Download list of all active recipients."
+msgstr "Скачать список всех активных адресатов."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Downloading active recipients list. Check your download window."
+msgstr "Список активных адресатов скачивается. Откройте окно загрузок."
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:40
+msgid "Dropbox filename (optional)"
+msgstr "Файл в папке dropbox (необязательно)"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:20
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:8
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:8
+msgid "E-mail"
+msgstr "E-mail"
+
+#: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
+msgid "E-mail page"
+msgstr "Отправить страницу"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
+msgid "E-mail this page"
+msgstr "Отправить эту страницу"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:71
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:14
+msgid "Edit"
+msgstr "Изменить"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+msgid "Edit recipient"
+msgstr "Изменить адресата"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:18
+msgid "Edit the mailing list &raquo;"
+msgstr "Изменить список адресатов &raquo;"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+msgid "Email"
+msgstr "Адрес e-mail"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6
+msgid "Enabled"
+msgstr "Включен"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
+msgid ""
+"Enter the e-mail address of the recipient. The name of the recipient is "
+"optional."
+msgstr "Введите адрес e-mail адресата. Имя адресата указывать необязательно."
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
+msgid "Externally managed list &mdash; no (un)subscribe links"
+msgstr "Список управляется извне — ссылки подписки отсутствуют"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
+msgid "First name"
+msgstr "Имя"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "From now on you will receive mail from our mailing list."
+msgstr "В дальнейшем вы будете получать сообщения из этой рассылки."
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
+msgid "Give your e-mail address to subscribe to"
+msgstr "Укажите адрес e-mail для подписки на"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
+msgid "Go to mailinglist page"
+msgstr "Перейти на страницу рассылки"
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:6
+msgid "Hello,"
+msgstr "Здравствуйте,"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+msgid "Help about mailing lists."
+msgstr "Справка о списках адресатов."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid "Help about the mailing page."
+msgstr "Справка о странице рассылки."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "Hope to see you again."
+msgstr "Надеемся увидеть вас снова."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid ""
+"It appears you have sent\n"
+"    this page once already to this list. If you send it again, only\n"
+"    the recipients that did not yet receive the mail will get it. As a\n"
+"    safety-caution, it is impossible to send the same page twice to\n"
+"    the same e-mail address."
+msgstr ""
+"Похоже, вы уже отправляли\n"
+"    эту страницу по этому списку адресатов. Если вы отправите ее снова,\n"
+"    ее получат только те адресаты, которые прошлый раз ее не получали.\n"
+"    В качестве предостережения, попытки повторного отправления одной и\n"
+"    той же страницы по одному и тому же адресу блокируются."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
+msgid "Keep mailing"
+msgstr "Продолжить рассылку"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
+msgid "Kind Regards,"
+msgstr "С уважением,"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
+msgid "Mailing Lists"
+msgstr "Списки адресатов"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3
+msgid "Mailing list"
+msgstr "Список адресатов"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
+#: modules/mod_mailinglist/mod_mailinglist.erl:365
+msgid "Mailing lists"
+msgstr "Списки адресатов"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
+msgid "Mailing status"
+msgstr "Статус рассылки"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid "Need more help?"
+msgstr "Нужна помощь?"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:13
+msgid "New mailing list"
+msgstr "Новый список адресатов"
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:158
+msgid "No addresses selected"
+msgstr "Адреса не выбраны"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:53
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:79
+msgid "No items found"
+msgstr "Записи не найдены"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+msgid "No recipients"
+msgstr "Адресаты отсутсвуют"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
+msgid "OK"
+msgstr "OK"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
+msgid ""
+"On this page you see the addresses that have bounced. They have\n"
+"    been disabled by default. Please correct each address and check the\n"
+"    checkbox in front of the address to re-enable it. If an address is "
+"invalid, you can delete it."
+msgstr ""
+"На этой странице показаны адреса, возвратившие отправленные сообщения.\n"
+"    По умолчанию они были отключены. Пожалуйста, исправьте каждый адрес и "
+"установите\n"
+"    флажок перед адресом для повторного включения. Если адрес "
+"недействителен, вы можете удалить его."
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
+msgid "Our excuses for the inconvenience."
+msgstr "Приносим извинения за причиненные неудобства."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "Please confirm that you want to send the page"
+msgstr "Пожалуйста, подтвердите, что желаете отправить страницу"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
+msgid "Please confirm your subscription"
+msgstr "Пожалуйста, подтвердите вашу подписку"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
+msgid "Please confirm your subscription on"
+msgstr "Пожалуйста, подтвердите вашу подписку на"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
+msgid "Please enter the e-mail address you want to send a test mail to."
+msgstr "Пожалуйста, укажите адрес e-mail для отправки тестового сообщения."
+
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
+msgid "Please enter the e-mail address you want to send this page to."
+msgstr "Пожалуйста, укажите адрес e-mail для отправки этой страницы."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "Please follow"
+msgstr "Пожалуйста, перейдите по"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid "Please note:"
+msgstr "Обратите внимание:"
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "Please unsubscribe"
+msgstr "Пожалуйста, отмените подписку,"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36
+msgid "Prefix"
+msgstr "Префикс"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:15
+msgid "Preview mailing"
+msgstr "Предпросмотр рассылки"
+
+#: modules/mod_mailinglist/templates/mailing_page.collection.tpl:52
+msgid "Read this page on the web."
+msgstr "Прочитать эту страницу на сайте."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
+msgid "Recipients"
+msgstr "Адресаты"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+"Адресаты могут быть подписаны как указанием только адреса e-mail (через "
+"упрощенную форму подписки), так и в качестве зарегистрированных "
+"пользователей системы."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:8
+msgid "Recipients for"
+msgstr "Адресаты для"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+msgid "Remove this recipient. No undo possible."
+msgstr "Удалить этого адресата. Отмена невозможна."
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:160
+msgid "Resending bounced addresses..."
+msgstr "Повторная отправка по возвратившим адресам…"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:23
+msgid "Scheduled"
+msgstr "Запланировано"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "See the"
+msgstr "Просмотр"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
+msgid "Select file"
+msgstr "Выбор файла"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17
+msgid "Send e-mail"
+msgstr "Отправить сообщение"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
+msgid "Send mailing"
+msgstr "Отправить рассылку"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send test mailing"
+msgstr "Отправить тестовую рассылку"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send test to address"
+msgstr "Отправить тестовое сообщение по адресу"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "Send the mailing automatically after the publication start date of"
+msgstr ""
+"Отправить рассылку автоматически в момент начала публикации, датируемый"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
+msgid ""
+"Send the mailing immediately after the \"published\" checkbox has been "
+"checked in the edit page."
+msgstr ""
+"Отправить рассылку, как только флажок «Опубликовано» будет установлен на "
+"странице редактирования."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
+msgid ""
+"Send the mailing right now, but do not include a link back to the website."
+msgstr "Отправить рассылку прямо сейчас, но не указывать в ней ссылку на сайт."
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
+msgid "Send this page to a mailinglist and view mailinglist statistics."
+msgstr ""
+"Отправить эту страницу по списку адресатов и просмотреть статистику рассылки."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send this page to a single address"
+msgstr "Отправить эту страницу по одному адресу"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send this page to the test mailing list."
+msgstr "Отправить эту страницу по тестовому списку адресатов."
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
+msgid "Send welcome"
+msgstr "Отправить приглашение"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:23
+msgid "Sender address for e-mails (optional)"
+msgstr "Адрес e-mail отправителя (необязательно)"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:16
+msgid "Sender name for e-mails (optional)"
+msgstr "Имя отправителя (необязательно)"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:51
+msgid "Sending the e-mail..."
+msgstr "Отправка электронной почты…"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
+msgid "Sending the page to the test mailing list..."
+msgstr "Отправка страницы по тестовому списку адресатов…"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:19
+msgid "Sent on"
+msgstr "Отправлено"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:11
+msgid "Show all recipients &raquo;"
+msgstr "Показать всех адресатов &raquo;"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
+msgid ""
+"Sorry, I could not subscribe you to the mailing list. Please try again later "
+"or with another e-mail address."
+msgstr ""
+"Извините, не удалось подписать вас на рассылку. Пожалуйста, попробуйте снова "
+"или укажите другой адрес e-mail."
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
+msgid "Sorry, can’t confirm your subscription"
+msgstr "Извините, не удалось подтвердить вашу подписку"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:19
+msgid "Sorry, can’t find your subscription"
+msgstr "Извините, не удалось найти вашу подписку"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:20
+msgid "Statistics"
+msgstr "Статистика"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:17
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:14
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:73
+msgid "Subscribe"
+msgstr "Подписаться"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3
+msgid "Subscribe to"
+msgstr "Подписаться на"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:43
+msgid "Surname"
+msgstr "Фамилия"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
+msgid "Thank you"
+msgstr "Спасибо"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:26
+msgid ""
+"The confirmation key is unknown. Either you already confirmed or something "
+"else went wrong."
+msgstr ""
+"Неверный ключ подтверждения. Возможно, вы уже подтверждены, либо что-то "
+"пошло не так."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
+msgid "The e-mails are being sent..."
+msgstr "Отправляются сообщения…"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:20
+msgid ""
+"The key in your link does not match any subscription. Either you already "
+"unsubscribed, or the mailing list has been deleted."
+msgstr ""
+"Ключ в вашей ссылке не соответствует ни одной подписке. Возможно, ваша "
+"подписка уже отменена, либо рассылка была удалена."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
+msgid "The mailing will be send when the page becomes visible."
+msgstr "Сообщение будет отправлено, когда страница станет видимой."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
+msgid ""
+"The page you are trying to e-mail is not yet published. What do you want to "
+"do?"
+msgstr ""
+"Страница, которую вы собираетесь отправить, еще не опубликована. Что вы "
+"желаете сделать?"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
+msgid "The recipients list of the mailing list will be deleted as well."
+msgstr "Список адресатов этой рассылки будет также удален."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:32
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr ""
+"Отсутствуют адреса-кандидаты для повторной отправки. Похоже, вы уже "
+"обработали все возвращающие адреса."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
+msgid "There is no mailing list with the name ‘mailinglist_test’."
+msgstr "Отсутствует список адресатов с названием «mailinglist_test»."
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
+msgid "This can not be undone"
+msgstr "Это действие нельзя отменить"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
+msgid ""
+"This is a \"private\", externally managed list. Recipients will not receive "
+"any subscribe/unsubscribe messages."
+msgstr ""
+"Это «закрытый», управляемый извне список. Адресаты не будут получать "
+"сообщения о подписке / отмене подписки."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid ""
+"This overview allows you to send the current page to a group of recipients, "
+"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
+"which shows how the mailing will look like when it is sent; choose 'send "
+"test mailing' to send it to the predefined list of test e-mail addresses. "
+"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
+"the table below, together with statistics on when it was sent and to how "
+"many recipients."
+msgstr ""
+"При помощи этой панели вы можете отправлять текущую страницу нескольким "
+"адресатам, сгруппированным в списки. Нажмите «Предпросмотр рассылки» для "
+"открытия диалогового окна, отображающего рассылку в том виде, в котором она "
+"будет отправлена; нажмите «Отправить тестовую рассылку» для отправки "
+"страницы по предопределенному списку тестовых адресов e-mail. Нажмите "
+"«Изменить» для возврата на страницу редактирования.  Каждая рассылка "
+"перечислена в нижеприведенной таблице вместе со статистикой, когда она была "
+"отправлена и каким адресатам."
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+msgid "This page can be sent to different mailing lists."
+msgstr "Эта страница может отправляться в разных рассылках."
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
+msgid ""
+"Tick the checkbox if you want the recipient to receive a welcome e-mail "
+"message."
+msgstr ""
+"Установите флажок, если вы желаете, чтобы адресат получил сообщение с "
+"приглашением по e-mail."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:20
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:16
+msgid "Title"
+msgstr "Заголовок"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12
+msgid "Unsubscribe"
+msgstr "Отменить подписку"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "Unsubscribe from"
+msgstr "Отменить подписку на"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:3
+msgid "Unsubscribe from mailing list"
+msgstr "Отменить подписку на рассылку"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:100
+msgid "Updated the recipient."
+msgstr "Адресат обновлен."
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:4
+msgid ""
+"Upload a file with recipients. The file must contain a single e-mail address "
+"per line. The file’s character set must be utf-8."
+msgstr ""
+"Закачать файл с адресатами. Файл должен содержать по одному адресу e-mail на "
+"строку. Кодировка файла должна быть UTF-8."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+msgid "Upload a list of recipients."
+msgstr "Закачать список адресатов."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:25
+msgid "Upload file"
+msgstr "Закачать файл"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:41
+msgid "View"
+msgstr "Просмотр"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
+msgid "View and edit the bounced addresses and re-send the mailing."
+msgstr "Просмотреть и править возвратившие адреса и переслать рассылку."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
+msgid "Welcome to"
+msgstr "Добро пожаловать на"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
+msgid ""
+"When you don’t want to receive any mail then please ignore this message."
+msgstr ""
+"Если вы не желаете получать сообщения в дальнейшем, пожалуйста, пропустите "
+"это сообщение."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "When you don’t want to receive any more mail then"
+msgstr "Если вы не желаете получать рассылку в дальнейшем,"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+msgid "You are not allowed to add or enable recipients."
+msgstr "У вас нет прав для добавления или включения адресатов."
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
+msgid "You are not allowed to edit recipients."
+msgstr "У вас нет прав для редактирования адресатов."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
+msgid "You are not allowed to send mail to the test mailing list."
+msgstr "У вас нет прав для отправки рассылки по тестовому списку адресатов."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:11
+msgid ""
+"You are not allowed to view or edit the recipients list. You need to have "
+"edit permission on the mailing list to change and view the recipients."
+msgstr ""
+"У вас нет прав для просмотра или редактирования списка адресатов. Для "
+"модификации и просмотра адресатов требуется разрешение изменения списка "
+"рассылки."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "You are now subscribed to our mailing list"
+msgstr "Теперь вы подписаны на рассылку"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:3
+msgid "You are now unsubscribed from"
+msgstr "Теперь вы отменили подписку на"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "You are now unsubscribed from the mailing list"
+msgstr "Теперь вы отменили подписку на рассылку"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
+msgid ""
+"You can try to re-subscribe to one of our mailing lists in the side column."
+msgstr ""
+"Вы можете попробовать повторно подписаться на одну из рассылок в столбце "
+"сбоку."
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
+msgid ""
+"You received this mail because someone wanted to send you this information. "
+"We did not store your e-mail address and will not send you any other mail "
+"because of this mail."
+msgstr ""
+"Вы получили это сообщение, поскольку кто-то указал ваш адрес e-mail для "
+"отправки этих сведений. Мы не сохранили ваш адрес и не будем отправлять "
+"дальнейшие сообщения автоматически."
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
+msgid "You received this mail because you are subscribed to the mailing list"
+msgstr "Вы получили это сообщение, поскольку вы подписаны на рассылку"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:7
+msgid "You will receive a confirmation in your e-mail."
+msgstr "Вы получите сообщение для подтверждения по e-mail."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
+msgid "You, or someone else, added your e-mail address to our mailing list"
+msgstr "Вы либо кто-то другой добавили этот адрес e-mail в список рассылки"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
+msgid ""
+"Your e-mail address is added to the mailing list. A confirmation mail is "
+"sent to your e-mail address and will arrive shortly. When you don’t receive "
+"it, then please check your spam folder."
+msgstr ""
+"Ваш адрес e-mail добавлен в список рассылки. Сообщение для подтверждение "
+"отправлено по вашему адресу e-mail и вскоре будет доставлено. Если вы его не "
+"получите, пожалуйста, проверьте папку для спама."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
+msgid "bounced"
+msgstr "возвращено"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:10
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38
+msgid "cancel"
+msgstr "отмена"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid "clear"
+msgstr "очистить"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "click here to unsubscribe."
+msgstr "нажмите здесь для отмены подписки."
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
+msgid "delete"
+msgstr "удалить"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:22
+msgid "edit"
+msgstr "изменить"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+msgid "error"
+msgstr "ошибка"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
+msgid "has been sent to the following lists:"
+msgstr "было отправлено по следующим спискам:"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
+msgid "has never been sent yet."
+msgstr "еще ни разу не было отправлено."
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "mailing list"
+msgstr "рассылку"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:8
+msgid "mailinglist status page"
+msgstr "страница статуса рассылки"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "or copy and paste the address below in your browser."
+msgstr "или скопируйте и укажите браузеру нижеуказанный адрес."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
+msgid "processed"
+msgstr "обработано"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:54
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+msgid "scheduled"
+msgstr "запланировано"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send mailing"
+msgstr "отправить рассылку"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:28
+msgid "send mailing again to corrected addresses"
+msgstr "отправить рассылку повторно по исправленным адресам"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send to "
+msgstr "отправить по "
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "subscribing persons &raquo;"
+msgstr "подписанных пользователей &raquo;"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "this link to confirm"
+msgstr "этой ссылке для подтверждения"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "to the list"
+msgstr "по списку"
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "when you don't want to receive any further mail from this list."
+msgstr "если вы не желаете получать дальнейшие сообщения из этой рассылки."
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "with your e-mail address"
+msgstr "с указанием вашего адреса"

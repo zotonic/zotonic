@@ -111,6 +111,7 @@ find_ua_class_all(What, Class, Name, Context) ->
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, Context) ->
+    ActiveDirs = z_module_manager:active_dir(Context),
     [
         #module_index{
             key=#module_index_key{name=F#mfile.name},
@@ -118,7 +119,7 @@ all(What, Context) ->
             filepath=F#mfile.filepath,
             erlang_module=F#mfile.erlang_module
         }
-        || F <- scan_all(What, Context)
+        || F <- scan_all(What, ActiveDirs)
     ].
 
 
@@ -227,7 +228,8 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 translations1(Context) ->
-    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir("translations", "", ".po", Context) ],
+    ActiveDirs = z_module_manager:active_dir(Context),
+    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir("translations", "", ".po", ActiveDirs) ],
     ByModule = lists:foldl(fun({M,F}, Acc) ->
                                 dict:append(M, F, Acc)
                            end,
@@ -327,20 +329,21 @@ lookup_class_all(Class, Name, List) ->
 
 %% @doc Scan the module directories for scomps, actions etc.
 scan(Context) ->
+    ActiveDirs = z_module_manager:active_dir(Context),
     [
-        {template, scan_subdir_class_files("templates", Context)},
-        {lib, scan_subdir_class_files("lib", Context)}
+        {template, scan_subdir_class_files("templates", ActiveDirs)},
+        {lib, scan_subdir_class_files("lib", ActiveDirs)}
         | [ 
-            {What, scan_subdir(What, Context)} 
+            {What, scan_subdir(What, ActiveDirs)} 
             || What <- [ scomp, action, validator, model, service ]
         ]
     ].
 
 
 %% @doc Scan module directories for specific kinds of parts. Returns a lookup list [ {lookup-name, fullpath} ]
-scan_subdir(What, Context) ->
+scan_subdir(What, ActiveDirs) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(Subdir, Prefix, Extension, Context). 
+    scan_subdir(Subdir, Prefix, Extension, ActiveDirs). 
 
     subdir(translation)-> { "translations","",           ".po" };
     subdir(scomp)      -> { "scomps",      "scomp_",     ".erl" };
@@ -351,17 +354,17 @@ scan_subdir(What, Context) ->
     subdir(erlang)     -> { "support",     "",           ".erl" }.
 
 %% @doc Find all files, for the all/2 function.
-scan_all(lib, Context) ->
-    scan_subdir_class_files("lib", Context);
-scan_all(template, Context) ->
-    scan_subdir_class_files("templates", Context);
-scan_all(What, Context) ->
+scan_all(lib, ActiveDirs) ->
+    scan_subdir_class_files("lib", ActiveDirs);
+scan_all(template, ActiveDirs) ->
+    scan_subdir_class_files("templates", ActiveDirs);
+scan_all(What, ActiveDirs) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(Subdir, Prefix, Extension, Context).
+    scan_subdir(Subdir, Prefix, Extension, ActiveDirs).
 
 
 %% @doc Scan the whole subdir hierarchy for files, used for templates and lib folders.
-scan_subdir_class_files(Subdir, Context) ->
+scan_subdir_class_files(Subdir, ActiveDirs) ->
     Scan1 = fun({Module, Dir}, Acc) ->
                 case z_utils:list_dir_recursive(filename:join(Dir, Subdir)) of
                     [] -> 
@@ -388,12 +391,12 @@ scan_subdir_class_files(Subdir, Context) ->
                         ]
                 end
             end,
-    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], z_module_manager:active_dir(Context)))).
+    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], ActiveDirs))).
 
 
 %% @doc Scan all module directories for templates/scomps/etc.  Example: scan("scomps", "scomp_", ".erl", Context)
 %% @spec scan_subdir(Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
-scan_subdir(Subdir, Prefix, Extension, Context) ->
+scan_subdir(Subdir, Prefix, Extension, ActiveDirs) ->
     ExtensionRe = case Extension of [] -> []; "."++_ -> "\\" ++ Extension ++ "$" end,
     Scan1 = fun({Module, Dir}, Acc) ->
                 {Dir1, Pattern, PrefixLen} = 
@@ -421,7 +424,7 @@ scan_subdir(Subdir, Prefix, Extension, Context) ->
                         ] | Acc ]
                 end
             end,
-    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], z_module_manager:active_dir(Context)))).
+    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], ActiveDirs))).
 
 
     module2prefix(Module) ->

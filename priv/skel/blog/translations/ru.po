@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"PO-Revision-Date: 2012-12-27 21:47+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: priv/sites/mediafonds/templates/archives.tpl:3
+#: priv/sites/mediafonds/templates/_sidebar.tpl:25
+msgid "Archive"
+msgstr "Архив"
+
+#: priv/sites/mediafonds/templates/archives.tpl:6
+msgid "Archive for"
+msgstr "Архив за"
+
+#: priv/sites/mediafonds/templates/by_keyword.tpl:6
+msgid "Articles about"
+msgstr "Статьи о"
+
+#: priv/sites/mediafonds/templates/by_keyword.tpl:3
+msgid "Articles for"
+msgstr "Статьи для"
+
+#: priv/sites/mediafonds/templates/_sidebar.tpl:38
+#: priv/sites/mediafonds/templates/_article_keywords.tpl:4
+msgid "Keywords"
+msgstr "Ключевые слова"
+
+#: priv/sites/mediafonds/templates/_article_prevnext.tpl:7
+msgid "Next post"
+msgstr "Следующее"
+
+#: priv/sites/mediafonds/templates/_article_meta.tpl:1
+msgid "Posted on"
+msgstr "Отправлено"
+
+#: priv/sites/mediafonds/templates/_article_prevnext.tpl:13
+msgid "Previous post"
+msgstr "Предыдущее"
+
+#: priv/sites/mediafonds/templates/_article_summary.tpl:21
+#: priv/sites/mediafonds/templates/_article_summary.tpl:36
+msgid "Read more"
+msgstr "Подробнее"
+
+#: priv/sites/mediafonds/templates/base.tpl:64
+msgid "Website powered by"
+msgstr "Сайт работает на"
+
+#: priv/sites/mediafonds/templates/_article_meta.tpl:2
+msgid "by"
+msgstr "пользователем"
+
+#: priv/sites/mediafonds/templates/_sidebar.tpl:48
+#: priv/sites/mediafonds/templates/_article_sidebar.tpl:16
+msgid "edit this page"
+msgstr "изменить страницу"

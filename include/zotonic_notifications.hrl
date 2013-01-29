@@ -100,10 +100,13 @@
 %% @doc Set the language of the context to a user's prefered language (first)
 -record(set_user_language, {id}).
 
+%% @doc Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher (first)
+-record(url_abs, {url, dispatch, dispatch_options}).
+
 %% @doc Rewrite an url after it has been generated using the z_dispatcher (foldl)
 -record(url_rewrite, {dispatch, args=[]}).
 
-%% @doc Rewrite an url before it will be dispatched using the z_dispatcher (foldl)
+%% @doc Rewrite an url before it will be dispatched using the z_sites_dispatcher (foldl)
 -record(dispatch_rewrite, {is_dir=false, path=""}).
 
 %% @doc Used in the admin to fetch the possible blocks for display (foldl)

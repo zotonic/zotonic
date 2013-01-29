@@ -7,7 +7,7 @@ GIT_CHECK := $(shell test -d .git && git submodule update --init)
 MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
 
 .PHONY: all
-all: iconv mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
+all: lager iconv mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 .PHONY: erl
 erl:
@@ -16,6 +16,9 @@ erl:
 
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl $(PARSER).yrl
+
+lager:
+	cd deps/lager && ./rebar compile
 
 iconv:
 	cd deps/iconv && ./rebar compile

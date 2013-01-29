@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-03 22:05+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: modules/mod_base_site/templates/text/map.tpl:8
+#: modules/mod_base_site/templates/tablet/map.tpl:6
+msgid "Back to"
+msgstr "Назад на"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:4
+msgid "By"
+msgstr "От"
+
+#: modules/mod_base_site/templates/text/map.tpl:28
+#: modules/mod_base_site/templates/tablet/map.tpl:26
+msgid "City"
+msgstr "Город"
+
+#: modules/mod_base_site/templates/text/page.media.tpl:6
+#: modules/mod_base_site/templates/tablet/page.media.tpl:30
+msgid "Click to download"
+msgstr "Нажмите чтобы скачать"
+
+#: modules/mod_base_site/templates/phone/_dialog_share_page.tpl:17
+msgid "Close"
+msgstr "Закрыть"
+
+#: modules/mod_base_site/templates/text/search.tpl:27
+#: modules/mod_base_site/templates/tablet/search.tpl:29
+msgid "Did not find any pages matching"
+msgstr "Не обнаружены страницы, соответвующие"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:12
+msgid "Dimensions"
+msgstr "Размеры"
+
+#: modules/mod_base_site/templates/text/page.query.tpl:14
+#: modules/mod_base_site/templates/text/page.tpl:34
+#: modules/mod_base_site/templates/text/page.collection.tpl:7
+msgid "Documents"
+msgstr "Документы"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:26
+msgid "Download file"
+msgstr "Скачать файл"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:9
+msgid "Edit"
+msgstr "Изменить"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:4
+msgid "Filename"
+msgstr "Имя файла"
+
+#: modules/mod_base_site/templates/text/_navbar.tpl:5
+msgid "Home"
+msgstr "Домой"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:24
+msgid "Links"
+msgstr "Ссылки"
+
+#: modules/mod_base_site/templates/text/map.tpl:3
+#: modules/mod_base_site/templates/tablet/map.tpl:3
+msgid "Map of"
+msgstr "Карта для"
+
+#: modules/mod_base_site/templates/text/page.query.tpl:15
+#: modules/mod_base_site/templates/text/page.tpl:35
+#: modules/mod_base_site/templates/text/page.collection.tpl:8
+msgid "Media"
+msgstr "Материалы"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:8
+msgid "Mime"
+msgstr "Тип MIME"
+
+#: modules/mod_base_site/templates/text/page.tpl:37
+msgid "More"
+msgstr "Подробнее"
+
+#: modules/mod_base_site/templates/text/search.tpl:20
+#: modules/mod_base_site/templates/tablet/page.query.tpl:8
+#: modules/mod_base_site/templates/tablet/search.tpl:18
+msgid "Page"
+msgstr "Страница"
+
+#: modules/mod_base_site/templates/text/page.media.tpl:6
+#: modules/mod_base_site/templates/tablet/page.media.tpl:30
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: modules/mod_base_site/templates/phone/_content_list_item.tpl:18
+msgid "Read more"
+msgstr "Читать далее"
+
+#: modules/mod_base_site/templates/text/search.tpl:3
+#: modules/mod_base_site/templates/text/search.tpl:41
+#: modules/mod_base_site/templates/text/_navbar.tpl:11
+#: modules/mod_base_site/templates/tablet/_search_form.tpl:4
+#: modules/mod_base_site/templates/tablet/search.tpl:3
+msgid "Search"
+msgstr "Поиск"
+
+#: modules/mod_base_site/templates/text/search.tpl:14
+#: modules/mod_base_site/templates/tablet/search.tpl:14
+msgid "Searching for"
+msgstr "Поиск строки"
+
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
+msgid "Share"
+msgstr "Поделиться"
+
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
+#: modules/mod_base_site/templates/phone/_meta_share.tpl:5
+msgid "Share this page"
+msgstr "Рассказать об этом"
+
+#: modules/mod_base_site/templates/text/_address.tpl:13
+#: modules/mod_base_site/templates/text/_address.tpl:17
+msgid "Show map"
+msgstr "Показать на карте"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:16
+msgid "Size"
+msgstr "Размер файла"
+
+#: modules/mod_base_site/templates/text/map.tpl:32
+#: modules/mod_base_site/templates/tablet/map.tpl:30
+msgid "Street"
+msgstr "Улица"
+
+#: modules/mod_base_site/templates/text/search.tpl:37
+msgid "Type the text to search"
+msgstr "Введите текст для поиска"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:20
+msgid "Uploaded"
+msgstr "Закачано"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:28
+msgid "View in browser"
+msgstr "Просмотр в браузере"
+
+#: modules/mod_base_site/templates/text/home.tpl:3
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: modules/mod_base_site/templates/text/map.tpl:6
+msgid "Where is"
+msgstr "Местоположение"
+
+#: modules/mod_base_site/templates/text/_meta.tpl:7
+msgid "l, F j, Y"
+msgstr "l, j F Y"
+
+#: modules/mod_base_site/templates/text/_content_list_item.tpl:4
+#: modules/mod_base_site/templates/text/_content_list_item.tpl:5
+msgid "more…"
+msgstr "подробнее…"
+
+#: modules/mod_base_site/templates/text/_media_info.tpl:13
+msgid "pixels"
+msgstr "пикселей"

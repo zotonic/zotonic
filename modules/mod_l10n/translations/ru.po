@@ -4,35 +4,35 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
-#
+# Ilyas Gasanov <torso.nafi@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: zotonic - mod_l10n - russian\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-11-30 11:38+0300\n"
-"Last-Translator: constantinko <helllamer@gmail.com>\n"
-"Language-Team: Konstantin Nikiforov <helllamer@gmail.com>\n"
+"Project-Id-Version: zotonic-0.10-dev\n"
+"POT-Creation-Date: 2012-12-27 23:06+0400\n"
+"PO-Revision-Date: 2013-01-10 14:45+0400\n"
+"Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
+"Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: modules/mod_l10n/support/l10n_date.erl:53
-#, fuzzy
 msgid "Apr"
-msgstr "Апрель"
+msgstr "Апр"
 
 #: modules/mod_l10n/support/l10n_date.erl:38
 msgid "April"
 msgstr "Апреля"
 
 #: modules/mod_l10n/support/l10n_date.erl:57
-#, fuzzy
 msgid "Aug"
-msgstr "Август"
+msgstr "Авг"
 
 #: modules/mod_l10n/support/l10n_date.erl:42
 msgid "August"
@@ -40,7 +40,7 @@ msgstr "Августа"
 
 #: modules/mod_l10n/support/l10n_date.erl:61
 msgid "Dec"
-msgstr ""
+msgstr "Дек"
 
 #: modules/mod_l10n/support/l10n_date.erl:46
 msgid "December"
@@ -48,7 +48,7 @@ msgstr "Декабря"
 
 #: modules/mod_l10n/support/l10n_date.erl:51
 msgid "Feb"
-msgstr ""
+msgstr "Фев"
 
 #: modules/mod_l10n/support/l10n_date.erl:36
 msgid "February"
@@ -59,36 +59,32 @@ msgid "Friday"
 msgstr "Пятница"
 
 #: modules/mod_l10n/support/l10n_date.erl:50
-#, fuzzy
 msgid "Jan"
-msgstr "Январь"
+msgstr "Янв"
 
 #: modules/mod_l10n/support/l10n_date.erl:35
 msgid "January"
 msgstr "Января"
 
 #: modules/mod_l10n/support/l10n_date.erl:56
-#, fuzzy
 msgid "Jul"
-msgstr "Июль"
+msgstr "Июл"
 
 #: modules/mod_l10n/support/l10n_date.erl:41
 msgid "July"
 msgstr "Июля"
 
 #: modules/mod_l10n/support/l10n_date.erl:55
-#, fuzzy
 msgid "Jun"
-msgstr "Июнь"
+msgstr "Июн"
 
 #: modules/mod_l10n/support/l10n_date.erl:40
 msgid "June"
 msgstr "Июня"
 
 #: modules/mod_l10n/support/l10n_date.erl:52
-#, fuzzy
 msgid "Mar"
-msgstr "Март"
+msgstr "Мар"
 
 #: modules/mod_l10n/support/l10n_date.erl:37
 msgid "March"
@@ -105,16 +101,15 @@ msgstr "Понедельник"
 
 #: modules/mod_l10n/support/l10n_date.erl:60
 msgid "Nov"
-msgstr ""
+msgstr "Ноя"
 
 #: modules/mod_l10n/support/l10n_date.erl:45
 msgid "November"
 msgstr "Ноября"
 
 #: modules/mod_l10n/support/l10n_date.erl:59
-#, fuzzy
 msgid "Oct"
-msgstr "Октябрь"
+msgstr "Окт"
 
 #: modules/mod_l10n/support/l10n_date.erl:44
 msgid "October"
@@ -126,7 +121,7 @@ msgstr "Суббота"
 
 #: modules/mod_l10n/support/l10n_date.erl:58
 msgid "Sep"
-msgstr ""
+msgstr "Сен"
 
 #: modules/mod_l10n/support/l10n_date.erl:43
 msgid "September"
@@ -154,4 +149,4 @@ msgstr "полночь"
 
 #: modules/mod_l10n/support/l10n_date.erl:22
 msgid "noon"
-msgstr "полдель"
+msgstr "полдень"

@@ -109,13 +109,15 @@ Structure your commit message like this::
 
  * ``mod_foobar:`` Changes that are related to a single module should
    be prefixed with the module name.
- * ``core:`` For changes in the `src`, `include` or `deps` folder;
-   e.g. everything outside modules.
  * ``doc:`` For changes to the documentation, everything below doc/
  * ``scripts:`` for changes to the ``zotonic`` command and its helper scripts.
+ * ``build:`` for the build system and related changes.
  * ``tests:`` for unit tests and the testsandbox.
- * ``skel`` for the skeleton sites.
- * ``zotonic_status`` for the default site.
+ * ``skel:`` for the skeleton sites.
+ * ``zotonic_status:`` for the default site.
+ * ``translation:`` for new/updated translations.
+ * ``core:`` For changes in the `src`, `include` or `deps` folder;
+   e.g. anything not covered by another tag.
 
 * The **summary** should be less than 50 characters, and tell what was
   changed. Use the imperative present tense (fix, add, change). For

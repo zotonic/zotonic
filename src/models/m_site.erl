@@ -46,6 +46,8 @@ m_find_value(hostname_no_port, #m{value=undefined}, Context) ->
     z_dispatcher:drop_port(get(hostname, Context));
 m_find_value(document_domain, #m{value=undefined}, Context) ->
     z_context:document_domain(Context);
+m_find_value(protocol, #m{value=undefined}, Context) ->
+    z_context:site_protocol(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 

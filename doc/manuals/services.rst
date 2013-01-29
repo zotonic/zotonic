@@ -35,7 +35,38 @@ URL                Module       Method     Found service .erl file
 For creating services at alternative URLs, see
 :ref:`controller-api-nonstandard-url` in the :ref:`controller-api`
 documentation.
-     
+
+
+Service naming in detail
+........................
+
+As stated above, a service module is defined like this::
+
+  service_<modulename>_<processname>.erl
+    
+And is then reachable on the URL
+``http://<hostname>/api/<module_name>/<process_name>``. Important: the
+module that the service is in needs to be has to be activated.
+
+Say you have a module named `mod_something`, and it is activated and
+you want a service to return stats.  Your directory would look like
+this::
+
+  mod_something/
+    mod_something.erl
+    services/
+      service_something_stats.erl
+
+And the url for this service http://<site_addr>/api/something/stats
+
+The key is that an activated module (`minus the mod_ prefix if you use
+them!`) should be part of the service name. Zotonic parses the service
+modules filename to identify what module a service relates to and what
+process should be called.  It checks to make sure that module is
+activated and it also uses that same information when matching a
+service url. So, reversly, ``service_something_stats.erl`` is served by
+``http://<hostname>/api/something/stats``.
+
 
 .. highlight:: erlang
 
