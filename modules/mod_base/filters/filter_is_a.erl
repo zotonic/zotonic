@@ -20,6 +20,8 @@
 -export([is_a/3, is_a/4]).
 
 
+is_a({rsc_list, List}, Cat, Context) -> 
+    is_a(List, Cat, Context);
 is_a(Arg, Cat, Context) ->
     case m_category:name_to_id(Cat, Context) of
         {ok, CatId} -> z_list_of_ids_filter:filter(Arg, fun(Id) -> m_rsc:is_a(Id, CatId, Context) end, Context);
