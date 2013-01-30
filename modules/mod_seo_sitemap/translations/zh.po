@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-31 00:29+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:34
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:34
+msgid "Always"
+msgstr "总是"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:30
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:30
+msgid "Change frequency for sitemap"
+msgstr "站点地图的修改频率"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:36
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:36
+msgid "Daily"
+msgstr "每天"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:35
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:35
+msgid "Hourly"
+msgstr "每小时"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:38
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:38
+msgid "Monthly"
+msgstr "每月"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:40
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:40
+msgid "Never"
+msgstr "从不"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:9
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:9
+msgid "Priority in sitemap"
+msgstr "站点地图中优先级"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:2
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:2
+msgid "Sitemap settings"
+msgstr "站点地图设置"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:4
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:4
+msgid ""
+"These settings apply to all pages of this category. They define hints for "
+"search engines indexing the site."
+msgstr "这些设置对分类的所有页面有效，它们定义了搜索引擎索引本站的隐含规则。"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:37
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:37
+msgid "Weekly (default)"
+msgstr "每周（默认）"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:39
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:39
+msgid "Yearly"
+msgstr "每年"
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.tpl:18
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr "默认"

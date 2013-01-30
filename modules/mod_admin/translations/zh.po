@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-14 13:44+0800\n"
+"PO-Revision-Date: 2013-01-30 22:41+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,10 @@ msgid ""
 "<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
 "name or last name."
 msgstr ""
+"<strong>名字</strong>对应英文的 First Name。<br/><strong>中名</strong>在中文"
+"姓名中一般不常见，英文姓名中例如 <em>John D. Rockefeller</em>。<br/><strong>"
+"姓前缀</strong>在中文中不常见，荷兰文姓名例如 <em>van, van de, der</em>。<br/"
+"><strong>姓</strong>对应与英文的 Last Name。"
 
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:5
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:11
@@ -72,7 +76,7 @@ msgstr "管理员"
 
 #: modules/mod_admin/templates/admin_logon.tpl:4
 msgid "Admin log on"
-msgstr "管理员登陆到"
+msgstr "管理员登录到"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:5
 msgid "Advanced"
@@ -320,7 +324,7 @@ msgstr "上传文件出错。"
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
 "description of someone\\'s life."
-msgstr ""
+msgstr "每个页面都可以有一个日期范围。例如当页面表示一个事件或者某人的生平时。"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:1
 msgid ""
@@ -329,14 +333,18 @@ msgid ""
 "categories are hierarchically defined. In that way you can have a vehicles "
 "category with subcategories car and bicycle."
 msgstr ""
+"每个页面只属于一个分类。分类定义了页面代表了什么。例如事件、产品或是人。分类"
+"是树状的，也就是说你可以有一个“交通工具”分类，然后其下有子分类“汽车”和“自行"
+"车”。"
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
 msgid "Failed to download the file."
 msgstr "下载文件出错。"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:36
+#, fuzzy
 msgid "Featured"
-msgstr "特稿"
+msgstr "专题"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:3
 msgid "Features"
@@ -364,7 +372,7 @@ msgstr "查找页面"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:18
 msgid "First"
-msgstr "名"
+msgstr "名字"
 
 #: modules/mod_admin/templates/admin_status.tpl:17
 msgid ""
@@ -420,12 +428,15 @@ msgid ""
 "\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model"
 "\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
+"这里可以编辑搜索查询词的参数。每个参数占一行。更多相关信息请参考\n"
+"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model\">"
+"查询词参数文档</a>。"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
 msgid ""
 "Here you can edit the person's name.  Use the title of the base content for "
 "the display name of this person."
-msgstr ""
+msgstr "这里可以编辑人员的名字。基本内容的标题会做为人员的显示名字。"
 
 #: modules/mod_admin/templates/admin_media.tpl:34
 msgid "Info"
@@ -474,11 +485,11 @@ msgstr "登出"
 
 #: modules/mod_admin/templates/admin_logon.tpl:21
 msgid "Log on to"
-msgstr "登陆到"
+msgstr "登录到"
 
 #: modules/mod_admin/templates/admin.tpl:9
 msgid "Logged in as"
-msgstr "登陆为"
+msgstr "登录为"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:121
 msgid "Mailing address"
@@ -541,7 +552,7 @@ msgstr "媒体标题"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:25
 msgid "Middle"
-msgstr "中"
+msgstr "中名"
 
 #: modules/mod_admin/templates/admin_edit.tpl:14
 msgid "Modified"
@@ -717,8 +728,9 @@ msgstr "重新计算分类树。这可能会耗费一定的时间。"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:3
 #: modules/mod_admin/templates/admin_referrers.tpl:7
+#, fuzzy
 msgid "Referrers to"
-msgstr ""
+msgstr "指的是"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:32
 msgid "Remarks"
@@ -743,6 +755,9 @@ msgid ""
 "properties that decide what to show or hide on certain pages in the admin. "
 "If this box is empty, no features are enabled for this meta-resource."
 msgstr ""
+"Resources in the <i>meta</i> category can have 'features': certain resource "
+"properties that decide what to show or hide on certain pages in the admin. "
+"If this box is empty, no features are enabled for this meta-resource."
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:5
 msgid "SEO Content"
@@ -835,7 +850,7 @@ msgstr "摘要"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:32
 msgid "Sur. prefix"
-msgstr "称呼"
+msgstr "姓前缀"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:39
 msgid "Surname"
@@ -959,8 +974,9 @@ msgid "Use the autocompleter to search the media in this site."
 msgstr "使用自动完成来搜索本站点的媒体。"
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
+#, fuzzy
 msgid "Valid for:"
-msgstr ""
+msgstr "有效："
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:22
 msgid "View"
@@ -1001,8 +1017,9 @@ msgid "Website"
 msgstr "网站"
 
 #: modules/mod_admin/templates/_admin_edit_content_website.tpl:12
+#, fuzzy
 msgid "Website for clicks on image"
-msgstr ""
+msgstr "点击图片的网站"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
 msgid ""
@@ -1023,8 +1040,7 @@ msgstr "没有权限删除这个媒体。"
 
 #: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
 msgid "You are not allowed to delete this page."
-msgstr "没有权限删除这个页面。
-"
+msgstr "没有权限删除这个页面"
 
 #: modules/mod_admin/templates/admin_edit.tpl:23
 msgid "You are not allowed to edit the"

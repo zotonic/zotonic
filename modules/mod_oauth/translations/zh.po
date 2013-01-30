@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-12 00:20+0800\n"
+"PO-Revision-Date: 2013-01-30 19:38+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,11 +29,11 @@ msgstr "访问权限"
 
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:93
 msgid "Add application"
-msgstr "添加英语"
+msgstr "添加应用"
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:14
 msgid "Add new application"
-msgstr "添加新英语"
+msgstr "添加新应用"
 
 #: modules/mod_oauth/templates/oauth_authorize.tpl:7
 msgid "Allow"
@@ -139,7 +139,7 @@ msgstr "程序的更多信息"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
 msgid "No applications registered yet."
-msgstr "没有注册任何英语。"
+msgstr "没有注册任何应用。"
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:3
 msgid "OAuth applications"
@@ -163,6 +163,7 @@ msgid ""
 "application, you will revoke access and most likely their applications will "
 "break."
 msgstr ""
+"以下用户仍然在使用本应用。删除了应用可能会导致访问权限被回收并导致其他问题。"
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
 msgid "The following users are using this application:"
@@ -170,13 +171,13 @@ msgstr "如下用户正在使用这个应用："
 
 #: modules/mod_oauth/templates/oauth_authorize.tpl:19
 msgid "This application wants access to the following services:"
-msgstr ""
+msgstr "本应用需要访问如下服务："
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:10
 msgid ""
 "This page allows you to register API keys with which 3rd parties can gain "
 "access to specific parts of the API and database."
-msgstr ""
+msgstr "本页面可以注册 API key，第三方可以通过这些 API 访问特定内容和数据库。"
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
 msgid "This token is not yet used by anybody."
@@ -210,7 +211,7 @@ msgstr "用户"
 
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
 msgid "When done, go to the authorization tab to set permissions."
-msgstr ""
+msgstr "完成后，请在授权一栏设置权限。"
 
 #: modules/mod_oauth/templates/oauth_authorize_finished.tpl:11
 msgid "You can now safely close this window."

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 18:29+0800\n"
+"PO-Revision-Date: 2013-01-31 01:02+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -80,7 +80,7 @@ msgid ""
 "        that the former has logon credentials attached to its page record."
 msgstr ""
 "每个可编辑页面上的人员都可以成为用户。用户和普通页面的区别只是前者的页面记录"
-"有登陆证书。"
+"有登录证书。"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
@@ -118,7 +118,7 @@ msgstr "名字"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:5
 msgid "Name and e-mail address"
-msgstr "名字和 \be-mail 地址"
+msgstr "名字和 e-mail 地址"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Need more help?"
@@ -233,7 +233,7 @@ msgid ""
 "user is member of."
 msgstr ""
 "当一个人员被添加认证信息后，他就成为一个用户。这样自然人或者机器就可以通过这"
-"些认证信息来登陆你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖"
+"些认证信息来登录你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖"
 "于他所在的用户组。"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
