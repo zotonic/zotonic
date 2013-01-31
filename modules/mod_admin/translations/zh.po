@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-30 22:41+0800\n"
+"PO-Revision-Date: 2013-02-01 00:09+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -157,6 +157,7 @@ msgstr "块引用"
 #: modules/mod_admin/templates/_action_dialog_zlink.tpl:19
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:61
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:33
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:57
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:25
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
@@ -1085,6 +1086,12 @@ msgstr "块"
 msgid "by"
 msgstr "由"
 
+#: modules/mod_admin/templates/admin_referrers.tpl:35
+#: modules/mod_admin/templates/_admin_overview_list.tpl:28
+#: modules/mod_admin/templates/_admin_overview_list.tpl:29
+msgid "d M Y, H:i"
+msgstr "Y M d, H:i"
+
 #: modules/mod_admin/templates/admin_media.tpl:59
 msgid "delete"
 msgstr "删除"
@@ -1120,6 +1127,10 @@ msgstr "名字"
 #, fuzzy
 msgid "of the new"
 msgstr "新"
+
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:49
+msgid "page"
+msgstr "页面"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:13
 msgid "page has"
@@ -1162,3 +1173,6 @@ msgstr "查看"
 #: modules/mod_admin/templates/_admin_menu.tpl:7
 msgid "visit site"
 msgstr "查看站点"
+
+#~ msgid "Make a new "
+#~ msgstr "创建新"

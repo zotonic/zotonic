@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,10 +46,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, Callback, Actions}}, Context) ->
     CatName = case Cat of
-        undefined -> "page";
+        undefined -> z_convert:to_list(?__("page", Context));
         _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
     end,
-    CatId = case Cat of 
+    CatId = case Cat of
                 undefined -> undefined;
                 X when is_integer(X) -> X;
                 X -> m_category:name_to_id_check(X, Context)
@@ -67,7 +67,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, Subj
         {catname, CatName},
         {actions, Actions}
     ],
-    z_render:dialog("Make a new "++CatName++".", "_action_dialog_new_rsc.tpl", Vars, Context);
+    z_render:dialog(z_convert:to_list(?__("Make a new ", Context))++CatName, "_action_dialog_new_rsc.tpl", Vars, Context);
 
 
 event(#submit{message={new_page, Args}}, Context) ->
@@ -81,7 +81,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
 
-    Lang = z_context:language(Context), 
+    Lang = z_context:language(Context),
     Props = [
         {category_id, CatId},
         {title, {trans, [{Lang, Title}]}},
@@ -92,8 +92,8 @@ event(#submit{message={new_page, Args}}, Context) ->
     {ok, Id} = m_rsc_update:insert(Props, Context),
 
     % Optionally add an edge from the subject to this new resource
-    {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context), 
-       
+    {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context),
+
     % Close the dialog
     Context2a = z_render:wire({dialog_close, []}, Context1),
 
@@ -108,5 +108,3 @@ event(#submit{message={new_page, Args}}, Context) ->
             Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
-
-
