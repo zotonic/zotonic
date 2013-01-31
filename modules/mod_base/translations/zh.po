@@ -178,3 +178,6 @@ msgstr "天"
 
 msgid "days"
 msgstr "天"
+
+msgid "now"
+msgstr "刚刚"
