@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-02-01 00:09+0800\n"
+"PO-Revision-Date: 2013-02-01 14:54+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -50,9 +50,13 @@ msgstr "访问控制"
 msgid "Add a connection: "
 msgstr "添加一个连接："
 
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+msgid "Add a new media file"
+msgstr "添加新媒体文件"
+
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
-msgstr "添加一个新媒体条目"
+msgstr "添加新媒体条目"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:20
 msgid "Add link"
@@ -740,6 +744,10 @@ msgstr "附注"
 #: modules/mod_admin/templates/admin_status.tpl:30
 msgid "Renumber category tree"
 msgstr "重计数分类树"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+msgid "Replace current medium"
+msgstr "替换这个媒体条目"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Replace media item"

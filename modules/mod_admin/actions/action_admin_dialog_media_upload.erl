@@ -54,8 +54,8 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
         {predicate, Predicate},
         {stay, Stay}
     ],
-    DTitle = case Id of undefined -> "Add a new media file"; _ -> "Replace current medium" end,
-    z_render:dialog(?__(DTitle, Context), "_action_dialog_media_upload.tpl", Vars, Context);
+    DTitle = case Id of undefined -> ?__("Add a new media file", Context); _ -> ?__("Replace current medium", Context) end,
+    z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);
 
 
 event(#submit{message={media_upload, EventProps}}, Context) ->
