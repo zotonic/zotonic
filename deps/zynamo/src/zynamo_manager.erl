@@ -387,10 +387,16 @@ do_save(Ring) ->
 -spec do_read() -> {ok, ring()} | {error, term()}.
 do_read() ->
     case catch file:consult(ring_file()) of
-        {ok, Rings} ->
+        {ok, []} ->
+            error_logger:info_msg("Ring state file is empty."),
+            {error, empty};
+        {ok, Rings} when is_list(Rings) ->
             {ok, hd(Rings)};
-        {error, _Reason} = Error ->
-            error_logger:info_msg("Error reading ring state:~n~n~p~n", [Error]),
+        {ok, _Content} ->
+            error_logger:info_msg("Ring state file doesn't contain a list."),
+            {error, illegal};
+        {error, Reason} = Error ->
+            error_logger:info_msg("Error reading ring state:~n~n~p~n", [Reason]),
             Error
     end.
 
