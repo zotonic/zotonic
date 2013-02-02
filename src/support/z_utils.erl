@@ -115,11 +115,11 @@ lib_dir(Dir) ->
 
 %% @doc Return the current tick count
 now() ->
-    {M,S,_M} = erlang:now(),
+    {M,S,_M} = os:timestamp(),
     M*1000000 + S.
 
 now_msec() ->
-    {M,S,Micro} = erlang:now(),
+    {M,S,Micro} = os:timestamp(),
     M*1000000000 + S*1000 + Micro div 1000.
 
 %% @doc Return the current universal time in seconds
