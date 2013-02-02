@@ -1,14 +1,26 @@
 ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
-PARSER     =src/erlydtl/erlydtl_parser
+PARSER    =src/erlydtl/erlydtl_parser
 
-GIT_CHECK := $(shell test -d .git && git submodule update --init)
-MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
+# List existing dependencies eventually putting lager first (if exists)
+_DEPS_DIRS  =$(filter-out deps/lager/, $(filter %/, $(wildcard deps/*/)))
+_DEPS       =$(_DEPS_DIRS:%/=%)
+_WITH_LAGER =$(wildcard deps/lager) $(_DEPS)
+DEPS_CMD    =$(foreach dep, $(_WITH_LAGER), compile-rule/$(dep))
 
-.PHONY: all
-all: lager iconv mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
+# Erlang Rebar downloading, see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
+REBAR=$(shell which rebar || echo ./rebar)
+REBAR_DEPS=$(shell which rebar || echo ../../rebar)
+REBAR_URL=http://cloud.github.com/downloads/basho/rebar/rebar
 
+./rebar:
+	$(ERL) -noshell -s inets -s ssl \
+	  -eval 'httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar"}])' \
+	  -s init stop
+	chmod +x ./rebar
+
+# Helper targets
 .PHONY: erl
 erl:
 	@$(ERL) -pa $(wildcard deps/*/ebin) -pa ebin -noinput +B \
@@ -17,18 +29,33 @@ erl:
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl $(PARSER).yrl
 
-lager:
-	cd deps/lager && ./rebar compile
+ebin/$(APP).app: src/$(APP).app.src
+	cp src/$(APP).app.src $@
 
-iconv:
-	cd deps/iconv && ./rebar compile
+# Phony rule to compile a particular dependency with Rebar
+compile-rule/%: $(REBAR)
+	cd $* && $(REBAR_DEPS) compile
 
-mimetypes:
-	cd deps/mimetypes && ./rebar compile
+# Use Rebar to get, update and compile dependencies
+.PHONY: get-deps update-deps compile-deps compile-zotonic compile
 
-makefile-deps:
-	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+get-deps: $(REBAR)
+	$(REBAR) get-deps
 
+update-deps: $(REBAR)
+	$(REBAR) update-deps
+
+compile-deps: $(REBAR) $(DEPS_CMD)
+
+compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
+
+compile: all
+
+# Default target - call all compile rules in succession
+.PHONY: all
+all: compile-deps compile-zotonic
+
+# Generate documentation
 .PHONY: docs edocs
 docs:
 	@echo Building HTML documentation...
@@ -39,6 +66,7 @@ edocs:
 	@echo Building reference edoc documentation...
 	bin/zotonic generate-edoc
 
+# Cleaning
 .PHONY: clean_logs
 clean_logs:
 	@echo "deleting logs:"
@@ -46,12 +74,12 @@ clean_logs:
 	rm -f priv/log/*
 
 .PHONY: clean
-clean: clean_logs
+clean: clean_logs $(REBAR)
 	@echo "removing:"
-	(cd deps/iconv; ./rebar clean)
-	(cd deps/mimetypes; ./rebar clean)
-	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
+	@echo "cleaning dependencies:"
+	$(REBAR) clean
 
-ebin/$(APP).app:
-	cp src/$(APP).app $@
+.PHONY: dist-clean
+dist-clean: clean
+	rm -f ./rebar
