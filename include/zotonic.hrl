@@ -23,6 +23,8 @@
 
 -include("zotonic_events.hrl").
 
+-include_lib("zotonic_stats.hrl").
+
 -include_lib("deps/webzmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
