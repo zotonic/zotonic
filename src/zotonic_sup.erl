@@ -216,7 +216,7 @@ init_webmachine() ->
         
     LogDir = z_config:get_dirty(log_dir),
     
-    application:set_env(webzmachine, webmachine_logger_module, webmachine_logger),
+    application:set_env(webzmachine, webmachine_logger_module, z_stats),
     webmachine_sup:start_logger(LogDir),
     
     case z_config:get_dirty(enable_perf_logger) of
