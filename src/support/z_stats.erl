@@ -49,14 +49,18 @@ timed_update(Name, Mod, Fun, Args, StatsFrom) ->
 %%
 log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=ResponseLength}=LogData) ->
     try 
+        Duration =  #histogram{name=duration, value=timer:now_diff(EndTime, StartTime)},
+        Out = #counter{name=out, value=ResponseLength},
+        System = #stats_from{system=webzmachine},
+
         %% The request has already been counted by z_sites_dispatcher.
-        Host = case webmachine_logger:get_metadata(zotonic_host, LogData) of
-            undefined -> zotonic;
-            H -> H
+        For = case webmachine_logger:get_metadata(zotonic_host, LogData) of
+            undefined -> System;
+            Host -> [System, System#stats_from{host=Host}]
         end,
-        Duration =  timer:now_diff(EndTime, StartTime),
-        
-        ?DEBUG({request, Host,, ResponseLength})
+
+        update(Duration, For),
+        update(Out, For)
     after 
         % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
