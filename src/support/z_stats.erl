@@ -47,8 +47,17 @@ timed_update(Name, Mod, Fun, Args, StatsFrom) ->
 
 %% @doc Collect log data from webzmachine.
 %%
-log_access(#wm_log_data{}=Data) ->
-    ?DEBUG(Data),
-
-    % Pass it to the normal logger.
-    webmachine_logger:log_access(Data).
+log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=ResponseLength}=LogData) ->
+    try 
+        %% The request has already been counted by z_sites_dispatcher.
+        Host = case webmachine_logger:get_metadata(zotonic_host, LogData) of
+            undefined -> zotonic;
+            H -> H
+        end,
+        Duration =  timer:now_diff(EndTime, StartTime),
+        
+        ?DEBUG({request, Host,, ResponseLength})
+    after 
+        % Pass it to the default webmachine logger.
+        webmachine_logger:log_access(LogData)
+    end.
