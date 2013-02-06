@@ -110,20 +110,32 @@ set_class(#wm_reqdata{} = ReqData) ->
         end.
         
 
-    %% @doc Let the ua-classifier do its work on the user-agent request header.
-    get_ua_header(ReqData) -> 
-        case wrq:get_req_header_lc("user-agent", ReqData) of
-            undefined ->
-                {desktop, []};
-            UserAgent ->
-                case ua_classifier:classify(UserAgent) of
-                    {ok, Props} ->
-                        {ua_classifier:device_type(Props), Props};
-                    {error, _Reason} ->
-                        {desktop, []}
-                end
-        end.
+%% @doc Let the ua-classifier do its work on the user-agent request header.
+get_ua_header(ReqData) -> 
+    case wrq:get_req_header_lc("user-agent", ReqData) of
+        undefined ->
+            {desktop, []};
+        UserAgent ->
+            ua_classify(UserAgent)
+    end.
 
+%% @doc classify the UserAgent string. 
+ua_classify(UserAgent) ->
+    case ua_classifier:classify(UserAgent) of
+        {ok, Props} ->
+            {ua_classifier:device_type(Props), Props};
+        {error, ua_classifier_nif_not_loaded} ->
+            %% Ignore ua_classifier_nif_not_loaded error. It is a configuration error 
+            %% and handled during startup.
+            %% Note: Do not call z_config:get(use_ua_classifier) here. Otherwise 
+            %% every request will call z_config gen_server making it a potential 
+            %% bottleneck. 
+            {desktop, []};    
+        {error, Reason} ->
+            error_logger:warning_msg("z_user_agent: ua_classifier returned error. [UA: ~p] [Reason: ~p]~n", [UserAgent, Reason]),
+            {desktop, []}
+    end.
+        
 to_ua_class("desktop") -> desktop;
 to_ua_class("tablet") -> tablet;
 to_ua_class("phone") -> phone;
