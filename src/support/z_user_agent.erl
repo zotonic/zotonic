@@ -124,8 +124,8 @@ ua_classify(UserAgent) ->
     case ua_classifier:classify(UserAgent) of
         {ok, Props} ->
             {ua_classifier:device_type(Props), Props};
-        {error, ua_classifier_not_loaded} ->
-            %% Ignore ua_classifier_not_loaded error. It is a configuration error 
+        {error, ua_classifier_nif_not_loaded} ->
+            %% Ignore ua_classifier_nif_not_loaded error. It is a configuration error 
             %% and handled during startup.
             %% Note: Do not call z_config:get(use_ua_classifier) here. Otherwise 
             %% every request will call z_config gen_server making it a potential 
