@@ -393,7 +393,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
   (list
    (cons
     ;; find tags to highlight
-    "\\(</?\\)\\(\\w+\\)\\([^/>]\\|\\(?:/[^/>]\\)\\)*\\(/?>\\)"
+    "\\(</?\\)\\(\\w+\\)\\([^/>]\\|\\(?:/+[^>]\\)\\)*\\(/?>\\)"
     ;; captures: 1. start tag  2. tag name  3. tag contents  4. end tag
     (list
      '(1 font-lock-constant-face)
