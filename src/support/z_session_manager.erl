@@ -103,7 +103,7 @@ stop_session(#context{session_manager=SessionManager, session_pid=SessionPid} = 
 %% @doc Rename the session id, only call this after ensure_session
 -spec rename_session(#context{}) -> {ok, #context{}} | {error, term()}.
 rename_session(#context{session_manager=SessionManager, session_pid=SessionPid} = Context) when is_pid(SessionPid) ->
-    case z_context:get(set_session_id, Context) of
+    case z_context:get_session(set_session_id, Context) of
         true ->
             % The session id cookie has been set, ignore the session id change
             {ok, Context};
@@ -482,7 +482,8 @@ get_session_cookie(Context) ->
 set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
                {http_only, true}],
-    z_context:set([{set_session_id, true}, {session_id, SessionId}], z_context:set_cookie(?SESSION_COOKIE, SessionId, Options, Context)).
+    z_context:set_session(set_session_id, true, Context),
+    z_context:set([{session_id, SessionId}], z_context:set_cookie(?SESSION_COOKIE, SessionId, Options, Context)).
 
 
 %% @doc Remove the session id from the user agent and clear the session pid in the context
