@@ -125,7 +125,14 @@ file_blacklisted(F) ->
 %% @doc Recompile Erlang files on the fly
 handle_file(_Verb, ".erl", F) ->
     spawn(fun() -> recompile_file(F) end),
-    "Recompile " ++ F;
+    Libdir = code:lib_dir(zotonic),
+    L = length(Libdir),
+    F2 = case string:substr(F, 1, L) of
+             Libdir ->
+                 string:substr(F, L+2);
+             _ -> F
+         end,
+    "Recompile " ++ F2;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
 handle_file(_Verb, ".sass", F) ->
@@ -349,20 +356,3 @@ do_observe_fun(Module, F) ->
               end
       end,
       Contexts).
-                      
-
-
-reinstall(Module, Context) ->
-    case proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)) of
-        undefined ->
-            %% nothing to do, no manage_schema
-            nop;
-        2 ->
-            %% has manage_schema/2
-            case Module:manage_schema(install, Context) of
-                D=#datamodel{} ->
-                    ok = z_datamodel:manage(Module, D, Context);
-                ok -> ok
-            end,
-            ok = z_db:flush(Context)
-    end.
