@@ -41,7 +41,7 @@
     pid_observe_development_make/3,
     file_changed/2,
     observe_admin_menu/3,
-
+    observe_module_activate/2,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -83,6 +83,15 @@ debug_stream(TargetId, What, Context) ->
 %% @doc Stream all debug information of a certain kind to the target id on the user agent.
 observe_debug_stream(#debug_stream{target=TargetId, what=What}, Context) ->
     start_debug_stream(TargetId, What, Context).
+
+%% @doc When activating a module while developing, call Module:manage_schema(install, Context).
+observe_module_activate(#module_activate{module=Module}, Context) ->
+    case z_module_manager:reinstall(Module, Context) of
+        ok ->
+            lager:warning("Reinstalled module: ~p", [Module]);
+        nop ->
+            nop
+    end.
 
 pid_observe_development_reload(Pid, development_reload, _Context) ->
     gen_server:cast(Pid, development_reload).
@@ -342,3 +351,18 @@ do_observe_fun(Module, F) ->
       Contexts).
                       
 
+
+reinstall(Module, Context) ->
+    case proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)) of
+        undefined ->
+            %% nothing to do, no manage_schema
+            nop;
+        2 ->
+            %% has manage_schema/2
+            case Module:manage_schema(install, Context) of
+                D=#datamodel{} ->
+                    ok = z_datamodel:manage(Module, D, Context);
+                ok -> ok
+            end,
+            ok = z_db:flush(Context)
+    end.
