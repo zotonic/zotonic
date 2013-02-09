@@ -18,6 +18,7 @@
 function require_zotonic_running {
     PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
     if [ "$PONG" != "pong" ]; then
+        echo "$PONG" 1>&2
         echo "Zotonic is not running. You need to start Zotonic first to use this command." 1>&2
         echo 1>&2
         exit 1
