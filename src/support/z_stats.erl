@@ -18,15 +18,19 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
-    catch z_stat_handler:init().
+    z_stat_handler:init().
 
 %% @doc Update a counter, histogram, whatever.
 %%
 update(What) ->
     update(What, #stats_from{}).
-
-update(What, StatsFrom) ->
-    catch z_stat_handler:update(What, StatsFrom).
+update(What, StatsFrom) when is_tuple(StatsFrom) ->
+    z_stat_handler:update(What, StatsFrom);
+update(_Stat, []) ->
+    ok;
+update(Stat, [H|T]) ->
+    update(Stat, H),
+    update(Stat, T).
 
 %% @doc Execute the function, and store the measured execution time.
 %%
@@ -47,6 +51,10 @@ timed_update(Name, Mod, Fun, Args, StatsFrom) ->
 
 %% @doc Collect log data from webzmachine.
 %%
+log_access(#wm_log_data{start_time=undefined}) -> 
+    ok;
+log_access(#wm_log_data{end_time=undefined}) -> 
+    ok;
 log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=ResponseLength}=LogData) ->
     try 
         Duration =  #histogram{name=duration, value=timer:now_diff(EndTime, StartTime)},
