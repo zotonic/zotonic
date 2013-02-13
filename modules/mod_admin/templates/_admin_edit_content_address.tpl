@@ -13,40 +13,36 @@
 	<h5>{_ Electronic address _}</h5>
 	
 	<div class="row">
-	<div class="span3 control-group">
-		<label class="control-label" for="phone">{_ Telephone _}</label>
+		<div class="span3 control-group">
+			<label class="control-label" for="phone">{_ Telephone _}</label>
 			<div class="controls">
-		<input id="phone" type="text" name="phone" value="{{ r.phone }}" class="span3" />
-		</div>
-	</div>
-
-	<div class="span3 control-group">
-		<label class="control-label" for="phone_alt">{_ Alternative telephone _}</label>
-			<div class="controls">
-		<input id="phone_alt" type="text" name="phone_alt" value="{{ r.phone_alt }}" class="span3" />
-		</div>
+				<input id="phone" type="text" name="phone" value="{{ r.phone }}" class="span3" />
+			</div>
 		</div>
 
-	<div class="span3 control-group">
-		<label class="control-label" for="phone_emergency">{_ Emergency telephone _}</label>
+		<div class="span3 control-group">
+			<label class="control-label" for="phone_alt">{_ Alternative telephone _}</label>
 			<div class="controls">
-		<input id="phone_emergency" type="text" name="phone_emergency" value="{{ r.phone_emergency }}" class="span3" />
+				<input id="phone_alt" type="text" name="phone_alt" value="{{ r.phone_alt }}" class="span3" />
+			</div>
 		</div>
+
+		<div class="span3 control-group">
+			<label class="control-label" for="phone_emergency">{_ Emergency telephone _}</label>
+			<div class="controls">
+				<input id="phone_emergency" type="text" name="phone_emergency" value="{{ r.phone_emergency }}" class="span3" />
+			</div>
 		</div>
 	</div>
 
 	<div class="row">
-	<div class="span4 control-group">
-		<label class="control-label" for="email">{_ E-mail address _}</label>
-			<div class="controls">
-		<input id="email" type="text" name="email" value="{{ r.email }}" class="span4" />
-		{% validate id="email" type={email} %}
+		<div class="span4 control-group">
+			{% catinclude "_admin_edit_content_address_email.tpl" r.id %}
 		</div>
-		</div>
-	<div class="span4 control-group">
-		<label class="control-label" for="website">{_ Website _}</label>
+		<div class="span4 control-group">
+			<label class="control-label" for="website">{_ Website _}</label>
 			<div class="controls">
-		<input id="website" type="text" name="website" value="{{ r.website }}" class="span4" />
+				<input id="website" type="text" name="website" value="{{ r.website }}" class="span4" />
 			</div>
 		</div>
 	</div>
@@ -58,16 +54,16 @@
 	<div class="row">
 		<div class="control-group span4">
 			<label class="control-label" for="address_country">{_ Country _}</label>
-				<div class="controls">
+			<div class="controls">
 			{% if m.modules.info.mod_l10n.enabled %}
-			<select id="address_country" name="address_country" class="span4">
-				<option value=""></option>
-				{% optional include "_l10n_country_options.tpl" country=r.address_country %}
-			</select>
+				<select id="address_country" name="address_country" class="span4">
+					<option value=""></option>
+					{% optional include "_l10n_country_options.tpl" country=r.address_country %}
+				</select>
 			{% else %}
-			<input id="address_country" type="text" name="address_country" value="{{ r.address_country }}" class="span4" />
+				<input id="address_country" type="text" name="address_country" value="{{ r.address_country }}" class="span4" />
 			{% endif %}
-				</div>
+			</div>
 		</div>
 		{% wire id="address_country" 
 				type="change" 
@@ -82,41 +78,41 @@
 		<div class="row">
 			<div class="control-group span4">
 				<label class="control-label" for="address_street_1">{_ Street Line 1 _}</label>
-					<div class="controls">
-				<input id="address_street_1" type="text" name="address_street_1" value="{{ r.address_street_1 }}" class="span4" />
-					</div>
+				<div class="controls">
+					<input id="address_street_1" type="text" name="address_street_1" value="{{ r.address_street_1 }}" class="span4" />
+				</div>
 			</div>
 
 			<div class="control-group span4">
 				<label class="control-label" for="address_street_2">{_ Street Line 2 _}</label>
-					<div class="controls">
-				<input id="address_street_2" type="text" name="address_street_2" value="{{ r.address_street_2 }}" class="span4" />
-					</div>
+				<div class="controls">
+					<input id="address_street_2" type="text" name="address_street_2" value="{{ r.address_street_2 }}" class="span4" />
+				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="control-group span4">
 				<label class="control-label" for="address_city">{_ City _}</label>
-					<div class="controls">
-				<input id="address_city" type="text" name="address_city" value="{{ r.address_city }}" class="span4" />
-					</div>
+				<div class="controls">
+					<input id="address_city" type="text" name="address_city" value="{{ r.address_city }}" class="span4" />
+				</div>
 			</div>
 
 			<div class="control-group span4">
 				<label class="control-label" for="address_postcode">{_ Postcode _}</label>
-					<div class="controls">
-				<input id="address_postcode" type="text" name="address_postcode" value="{{ r.address_postcode }}" class="span4" />
-					</div>
+				<div class="controls">
+					<input id="address_postcode" type="text" name="address_postcode" value="{{ r.address_postcode }}" class="span4" />
+				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="control-group span4">
 				<label class="control-label" for="address_state">{_ State _}</label>
-					<div class="controls">
-				<input id="address_state" type="text" name="address_state" value="{{ r.address_state }}" class="span4" />
-					</div>
+				<div class="controls">
+					<input id="address_state" type="text" name="address_state" value="{{ r.address_state }}" class="span4" />
+				</div>
 			</div>
 		</div>
 	</div>
