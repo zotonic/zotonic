@@ -190,22 +190,28 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
     case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
-        {error, _Reason} ->
-            z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
         {ok, UserId} when is_integer(UserId) ->
             z_auth:confirm(UserId, Context),
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
-        Other -> ?DEBUG(Other)
+        {error, _Reason} ->
+            z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
+        undefined ->
+            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
+            z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
     end;
 
 event(#submit{message=[]}, Context) ->
     Args = z_context:get_q_all(Context),
     case z_notifier:first(#logon_submit{query_args=Args}, Context) of
-        undefined -> logon_error("pwd", Context); % No handler for posted args
-        {error, _Reason} -> logon_error("pw", Context);
+        {ok, UserId} when is_integer(UserId) -> 
+            logon_user(UserId, Context);
+        {error, _Reason} -> 
+            logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
             logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
-        {ok, UserId} when is_integer(UserId) -> logon_user(UserId, Context)
+        undefined -> 
+            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
+            logon_error("pw", Context)
     end.
 
 logon_error(Reason, Context) ->
