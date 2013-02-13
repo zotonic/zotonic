@@ -1,4 +1,6 @@
 %% -*- mode: erlang -*-
 [
- {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}, {ssl, true}]}
+ {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}, {ssl, true}]},
+
+ {identity_verify, ["identity", "verify", idn_id, verify_key], controller_template, [{template, "identity_verify.tpl"}, {ssl, true}]}
 ].
