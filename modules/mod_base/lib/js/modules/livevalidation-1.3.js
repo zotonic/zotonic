@@ -868,7 +868,7 @@ var Validate = {
      *
      *  paramsObj properties:
      *              failureMessage {String} - the message to show when the field fails validation
-     *                            (DEFAULT: "Not valid!")
+     *                            (DEFAULT: "")
      *              pattern {RegExp}    - the regular expression pattern
      *                            (DEFAULT: /./)
      *             negate {Boolean} - if set to true, will validate true if the pattern is not matched
@@ -881,7 +881,7 @@ var Validate = {
     Format: function(value, paramsObj){
       var value = String(value);
       var paramsObj = paramsObj || {};
-      var message = paramsObj.failureMessage || "Not valid.";
+      var message = paramsObj.failureMessage || "";
       var pattern = paramsObj.pattern || /./;
       var negate = paramsObj.negate || false;
       if(!negate && !pattern.test(value)) Validate.fail(message); // normal
@@ -901,7 +901,7 @@ var Validate = {
      */
     Email: function(value, paramsObj){
       var paramsObj = paramsObj || {};
-      var message = paramsObj.failureMessage || "Incorrect E-mail";
+      var message = paramsObj.failureMessage || "";
       value = $.trim(value);
       // see validator_base_email.erl:43
       var re = /^$|^(("[^"\f\n\r\t\v\b]+")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,})$/;
@@ -1147,7 +1147,7 @@ var Validate = {
      *
      *  paramsObj properties:
      *              failureMessage {String} - the message to show when the field fails validation
-     *                            (DEFAULT: "Not valid!")
+     *                            (DEFAULT: "")
      *              against {Function}      - a function that will take the value and object of arguments and return true or false 
      *                            (DEFAULT: function(){ return true; })
      *              args {Object}     - an object of named arguments that will be passed to the custom function so are accessible through this object within it 
@@ -1157,7 +1157,7 @@ var Validate = {
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
-        var message = paramsObj.failureMessage || "Not valid.";
+        var message = paramsObj.failureMessage || "";
         if (typeof against == "string") {
             var result = z_call_function_by_name(against, window, value, args, isSubmit, submitTrigger);
         } else {
@@ -1176,7 +1176,7 @@ var Validate = {
         var paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
-        var message = paramsObj.failureMessage || "Not valid.";
+        var message = paramsObj.failureMessage || "";
 
         if (!against(value, args, isSubmit, submitTrigger)) {
             Validate.fail(message);
