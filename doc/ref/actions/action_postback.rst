@@ -26,15 +26,21 @@ postback        The message that will be send to the server module.      postbac
 delegate        The name of the Erlang module that will be called. 
                 Defaults to the controller module generating the page.   delegate="my_module"
 action          Any other actions that will be executed when the 
-                postback is done.  This parameter can be repeated.       action={show id="wait"}
+                postback is done.  This parameter can be repeated.       action={show target="wait"}
 inject_args     If set to `true`, and postback is a tuple (as in the
                 `my_message` example in this table), any values from 
-                the args in the the postback will replace the arg value
+                the args in the postback will replace the arg value
                 in the postback argument. This is useful when the arg
                 is coming from an outer action and not set explicitly
                 in the template code (as is done in the example for
                 illustration). The value of `some_arg` in the postback
                 handler will be `123`.                                   {postback postback={my_event some_arg} inject_args some_arg=123}
+qarg            Post the value of an input or select with the postback.  qarg="my-input-id"
+                The value of the `qarg` argument is the id of the
+                element to be posted.
+                Multiple `qarg` arguments can be given.
+                On the server the value will be available as a normal
+                query argument using `z_context:get_q/2`
 ==============  =======================================================  =======
 
 

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2013 Marc Worrell
 %%
 %% Based on code (c) 2008-2009 Rusty Klophaus
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,7 +52,8 @@ render(Params, _Vars, Context) ->
 										undefined -> Options1;
 										_ -> [{delegate, Delegate} | Options1]
 									end,
-						z_render:wire(Id, {event,[{type,click}|Options2]}, Context)
+                        Options3  = [ {qarg,X} || {qarg,X} <- Params ] ++ Options2,
+						z_render:wire(Id, {event,[{type,click}|Options3]}, Context)
                end,
 
     Attrs = [

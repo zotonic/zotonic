@@ -99,6 +99,7 @@
     growl/4,
     
     make_postback/6,
+    make_postback/7,
     make_postback_info/6,
     make_validation_postback/2,
     make_validation_postback/3,
@@ -459,14 +460,43 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information. 
 %% The PostbackTag is send to the server, EventType is normally the atom 'postback'.
 %% @spec make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) -> {JavascriptString, PickledPostback}
-make_postback(undefined, _EventType, _TriggerId, _TargetId, _Delegate, _Context) ->
-    {[],[]};
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
+    make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, [], Context).
+
+make_postback(undefined, _EventType, _TriggerId, _TargetId, _Delegate, _QArgs, _Context) ->
+    {[],[]};
+make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, QArgs, Context) ->
     PickledPostbackInfo = make_postback_info(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context),
-    {[<<"z_queue_postback('">>,ensure_iolist(TriggerId),<<"', '">>,PickledPostbackInfo,<<"', typeof(zEvtArgs) != 'undefined' ? zEvtArgs : undefined);">>], PickledPostbackInfo}.
+    {ZEvtArgsPre, ZEvtArgs} = make_postback_zevtargs(QArgs),
+    {[
+        ZEvtArgsPre,
+        <<"z_queue_postback('">>,
+            ensure_iolist(TriggerId),
+            <<"', '">>,PickledPostbackInfo,
+            <<"', ">>, ZEvtArgs,
+            <<");">>
+     ], 
+     PickledPostbackInfo}.
 
     ensure_iolist(A) when is_atom(A) -> atom_to_list(A);
     ensure_iolist(L) -> L.
+
+make_postback_zevtargs([]) ->
+    {<<>>, <<"typeof(zEvtArgs) != 'undefined' ? zEvtArgs : undefined">>};
+make_postback_zevtargs(QArgs) when is_list(QArgs) ->
+    {
+        [
+            <<"var zEvtQArgs = typeof(zEvtArgs) != 'undefined' ? zEvtArgs : [];">>,
+            [
+                begin
+                    QArgB = z_convert:to_binary(QArg),
+                    [<<"zEvtQArgs.push({name:$('#">>, QArgB, <<"').attr('name'), value:$('#">>,QArgB,<<"').val()});">>]
+                end
+                || QArg <- QArgs 
+            ]
+        ],
+        <<"zEvtQArgs">>
+    }.
 
 make_validation_postback(Validator, Context) ->
     make_validation_postback(Validator, {}, Context).

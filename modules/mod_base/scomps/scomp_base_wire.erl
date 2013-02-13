@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Wire an action to an element.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,14 +45,15 @@ render(Params, _Vars, Context) ->
                 end,
     Options3  = case proplists:get_value(propagate, Params) of
                     undefined -> Options2;
-                    Propagate -> [{propagate,Propagate}|Options2]
+                    _ -> [{propagate,Propagate}|Options2]
                 end,
+    Options4  = [ {qarg,X} || {qarg,X} <- Params ] ++ Options3,
     Delegate1 = case Delegate of
-        undefined -> undefined;
-        _ -> z_convert:to_atom(Delegate)
-    end,
+                    undefined -> undefined;
+                    _ -> z_convert:to_atom(Delegate)
+                end,
 
     case Options1 of
         [] -> {error, "scomp wire: please give either an <em>action</em> or a <em>postback</em> parameter."};
-        _  -> {ok, z_render:wire(Id, TargetId, {event,[{delegate,Delegate1}|Options3]}, Context)}
+        _  -> {ok, z_render:wire(Id, TargetId, {event,[{delegate,Delegate1}|Options4]}, Context)}
     end.
