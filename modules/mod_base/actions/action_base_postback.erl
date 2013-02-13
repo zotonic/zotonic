@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2013 Marc Worrell
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	Postback0 = proplists:get_value(postback, Args),
     Delegate  = z_convert:to_atom(proplists:get_value(delegate, Args)),
     Actions   = proplists:get_all_values(action, Args),
+    QArgs     = proplists:get_all_values(qarg, Args),
 
     %% check for injection of args into postback message
     Postback  = case {Postback0, proplists:get_value(inject_args, Args)} of
@@ -34,6 +35,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
                     {Pb, _} -> Pb
                 end,
 
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, undefined, TriggerId, TargetId, Delegate, Context),
+	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, undefined, TriggerId, TargetId, 
+                                                               Delegate, QArgs, Context),
 	{ActionsJS, Context1} = z_render:render_actions(TriggerId, TargetId, Actions, Context),
 	{[ PostbackMsgJS, ActionsJS ], Context1}.
