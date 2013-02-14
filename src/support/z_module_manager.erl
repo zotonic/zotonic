@@ -139,14 +139,17 @@ active(Context) ->
 
 
 %% @doc Return whether a specific module is active.
-%% @spec active(Module::atom(), #context{}) -> [ atom() ]
+%% @spec active(Module::atom(), #context{}) -> true | false.
 active(Module, Context) ->
     case z_db:has_connection(Context) of
         true ->
-            case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
-                [{true}] -> true;
-                _ -> false
-            end;
+            F = fun() ->
+                    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
+                        [{true}] -> true;
+                        _ -> false
+                    end
+                end,
+            z_depcache:memo(F, {?MODULE, {active, Module}, Context#context.host}, Context);
         false ->
             lists:member(Module, active(Context))
     end.
