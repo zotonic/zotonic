@@ -297,7 +297,10 @@ q1(Sql, Parameters, Context, Timeout) ->
            (C) ->
                 case pgsql:equery1(C, Sql, Parameters, Timeout) of
                     {ok, Value} -> Value;
-                    {error, noresult} -> undefined
+                    {error, noresult} -> undefined;
+                    {error, Reason} = Error ->
+                        lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                        throw(Error) 
                 end
     end,
     with_connection(F, Context).
