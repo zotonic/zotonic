@@ -58,38 +58,43 @@ datamodel() ->
 
 %% @doc Install the SQL tables to track recipients and scheduled mailings.
 manage_schema(install, Context) ->
-    z_db:q("
-				CREATE TABLE mailinglist_recipient (
-					id serial NOT NULL,
-					mailinglist_id INT NOT NULL,
-					email character varying (200) NOT NULL,
-					is_enabled boolean NOT NULL default true,
-                    is_bounced boolean NOT NULL default false,
-					props bytea,
-					confirm_key character varying (32) NOT NULL,
-					timestamp timestamp with time zone NOT NULL DEFAULT now(),
+    case z_db:table_exists(mailinglist_recipient, Context) of
+        false ->
+            z_db:q("
+        				CREATE TABLE mailinglist_recipient (
+        					id serial NOT NULL,
+        					mailinglist_id INT NOT NULL,
+        					email character varying (200) NOT NULL,
+        					is_enabled boolean NOT NULL default true,
+                            is_bounced boolean NOT NULL default false,
+        					props bytea,
+        					confirm_key character varying (32) NOT NULL,
+        					timestamp timestamp with time zone NOT NULL DEFAULT now(),
 
-					CONSTRAINT mailinglist_recipient_pkey PRIMARY KEY (id),
-					CONSTRAINT mailinglist_recipient_mailinglist_id_email_key UNIQUE (mailinglist_id, email),
-			        CONSTRAINT confirm_key_key UNIQUE (confirm_key),
-					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
-				      REFERENCES rsc (id)
-				      ON UPDATE CASCADE ON DELETE CASCADE
-				)", Context),
+        					CONSTRAINT mailinglist_recipient_pkey PRIMARY KEY (id),
+        					CONSTRAINT mailinglist_recipient_mailinglist_id_email_key UNIQUE (mailinglist_id, email),
+        			        CONSTRAINT confirm_key_key UNIQUE (confirm_key),
+        					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
+        				      REFERENCES rsc (id)
+        				      ON UPDATE CASCADE ON DELETE CASCADE
+        				)", Context),
 
-    z_db:q("
-				CREATE TABLE mailinglist_scheduled (
-					page_id INT NOT NULL,
-					mailinglist_id INT NOT NULL,
+            z_db:q("
+        				CREATE TABLE mailinglist_scheduled (
+        					page_id INT NOT NULL,
+        					mailinglist_id INT NOT NULL,
 
-					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
-					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
-				      REFERENCES rsc (id)
-				      ON UPDATE CASCADE ON DELETE CASCADE,
-					CONSTRAINT fk_page_id FOREIGN KEY (page_id)
-				      REFERENCES rsc (id)
-				      ON UPDATE CASCADE ON DELETE CASCADE
-				)", Context),
+        					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
+        					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
+        				      REFERENCES rsc (id)
+        				      ON UPDATE CASCADE ON DELETE CASCADE,
+        					CONSTRAINT fk_page_id FOREIGN KEY (page_id)
+        				      REFERENCES rsc (id)
+        				      ON UPDATE CASCADE ON DELETE CASCADE
+        				)", Context);
+        true ->
+            ok
+    end,
     z_datamodel:manage(mod_mailinglist, datamodel(), Context),
     ok.
 
