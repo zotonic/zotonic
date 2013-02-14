@@ -130,7 +130,7 @@ active(Context) ->
 
 
 %% @doc Return whether a specific module is active.
-%% @spec active(Module::atom(), #context{}) -> true | false.
+-spec active(Module::atom(), #context{}) -> boolean().
 active(Module, Context) ->
     case z_db:has_connection(Context) of
         true ->
