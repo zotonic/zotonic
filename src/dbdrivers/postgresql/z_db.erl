@@ -71,6 +71,7 @@
 -include_lib("pgsql.hrl").
 -include_lib("zotonic.hrl").
 
+-compile([{parse_transform, lager_transform}]).
 
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
@@ -275,7 +276,10 @@ q(Sql, Parameters, Context, Timeout) ->
                 case pgsql:equery(C, Sql, Parameters, Timeout) of
                     {ok, _Affected, _Cols, Rows} -> Rows;
                     {ok, _Cols, Rows} -> Rows;
-                    {ok, Rows} -> Rows
+                    {ok, Rows} -> Rows;
+                    {error, Reason} = Error ->
+                        lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                        throw(Error) 
                 end
 	end,
     with_connection(F, Context).
