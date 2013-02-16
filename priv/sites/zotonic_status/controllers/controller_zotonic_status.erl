@@ -52,20 +52,30 @@ provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
 
-    Template = case z_acl:user(Context2) of
-                   undefined -> "logon.tpl";
-                   _ -> z_context:get(template, Context2)
-               end,
+    case z_acl:user(Context2) of
+        undefined -> 
+            logon_page(Context2);
+        _ -> 
+            status_page(Context2)
+    end.
+
+logon_page(Context) ->
+    Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
+    {Output, OutputContext} = z_context:output(Rendered, Context),
+    ?WM_REPLY(Output, OutputContext).
+
+status_page(Context) ->
+    Template = z_context:get(template, Context),
     SitesStatus = z_sites_manager:get_sites_status(),
     Vars = [
-        {has_user, z_acl:user(Context2)},
+        {has_user, z_acl:user(Context)},
         {configs, [ {Site, z_sites_manager:get_site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
         {sites, SitesStatus}
-        | z_context:get_all(Context2)
+        | z_context:get_all(Context)
     ],
     Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
-    Rendered = z_template:render(Template, Vars1, Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
+    Rendered = z_template:render(Template, Vars1, Context),
+    {Output, OutputContext} = z_context:output(Rendered, Context),
     start_stream(SitesStatus, OutputContext),
     ?WM_REPLY(Output, OutputContext).
 
