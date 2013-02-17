@@ -1,6 +1,21 @@
+%% @author Maas-Maarten Zeeman <mmzeema@xs4all.nl>
+%% @copyright 2013 Maas-Maarten Zeeman
+%% Date: 2013-02-17
+%% @doc Server for matching the request path to correct site and dispatch rule.
+
+%% Copyright 2013 Maas-Maarten Zeeman
 %%
-%%
-%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%% 
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%% 
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 
 -module(z_stats).
 
@@ -22,11 +37,11 @@ init() ->
     folsom:start().
 
 %% @doc Create a new counters and histograms.
+%%
 new(#counter{}=Counter, From) ->
     folsom_metrics:new_meter(key(Counter, From));
 new(#histogram{}=Histogram, From) ->
     folsom_metrics:new_histogram(key(Histogram, From), exdec).
-
 
 %% @doc Update a counter, histogram, whatever.
 %%
@@ -82,7 +97,7 @@ log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=
 
     
 
-%% Helper functions.
+%% Some helper functions.
 
 update_metric(#counter{op=incr, value=Value}=Stat, From) ->
     folsom_metrics:notify(key(Stat, From), Value);
