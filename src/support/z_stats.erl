@@ -9,7 +9,7 @@
 
 -export([
     init/0,
-    new/1, new/2,
+    new/2,
     update/2,
     timed_update/3, timed_update/4, timed_update/5]).
 
@@ -19,23 +19,19 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
-    z_stat_handler:init().
+    folsom:start().
 
-%% @doc Create a new counter, or histogram for zotonic
-%% 
-new(Stat) ->
-    new(Stat, #stats_from{}).
-
-%% @doc Create a new counter or histogram.
-%%
-new(Stat, StatsFrom) ->
-    z_stat_handler:new(Stat, StatsFrom).
+%% @doc Create a new counters and histograms.
+new(#counter{}=Counter, From) ->
+    folsom_metrics:new_meter(key(Counter, From));
+new(#histogram{}=Histogram, From) ->
+    folsom_metrics:new_histogram(key(Histogram, From), exdec).
 
 
 %% @doc Update a counter, histogram, whatever.
 %%
 update(What, StatsFrom) when is_tuple(StatsFrom) ->
-    z_stat_handler:update(What, StatsFrom);
+    update_metric(What, StatsFrom);
 update(_Stat, []) ->
     ok;
 update(Stat, [H|T]) ->
@@ -83,3 +79,17 @@ log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=
         % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
     end.
+
+    
+
+%% Helper functions.
+
+update_metric(#counter{op=incr, value=Value}=Stat, From) ->
+    folsom_metrics:notify(key(Stat, From), Value);
+update_metric(#histogram{value=Value}=Stat, From) ->
+    folsom_metrics:notify({key(Stat, From), Value}).
+  
+key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
+	{Host, System, Name};
+key(#histogram{name=Name}, #stats_from{host=Host, system=System}) ->
+	{Host, System, Name}.    
