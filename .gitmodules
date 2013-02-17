@@ -22,3 +22,12 @@
 [submodule "deps/z_stdlib"]
 	path = deps/z_stdlib
 	url = git://github.com/zotonic/z_stdlib.git
+[submodule "deps/bear"]
+	path = deps/bear
+	url = git://github.com/boundary/bear.git
+[submodule "deps/folsom"]
+	path = deps/folsom
+	url = git://github.com/boundary/folsom.git
+[submodule "deps/meck"]
+	path = deps/meck
+	url = git://github.com/eproxus/meck

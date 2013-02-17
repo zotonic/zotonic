@@ -4,9 +4,11 @@ APP       := zotonic
 PARSER     =src/erlydtl/erlydtl_parser
 
 GIT_CHECK := $(shell test -d .git && git submodule update --init)
-MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
+MAKEFILES := $(shell find -L deps modules priv/sites pr iv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
+DEPS_DIR := $(shell pwd)/deps
 
-.PHONY: all
+
+.PHONY : all
 all: lager iconv mimetypes folsom bear makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 .PHONY: erl
@@ -30,7 +32,7 @@ bear:
 	cd deps/bear && ./rebar compile
 
 folsom: 
-	cd deps/folsom && ./rebar compile
+	cd deps/folsom && ./rebar deps_dir=$(DEPS_DIR) compile
 
 makefile-deps:
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
