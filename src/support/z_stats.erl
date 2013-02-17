@@ -38,10 +38,15 @@ init() ->
 
 %% @doc Create a new counters and histograms.
 %%
-new(#counter{}=Counter, From) ->
-    folsom_metrics:new_meter(key(Counter, From));
-new(#histogram{}=Histogram, From) ->
-    folsom_metrics:new_histogram(key(Histogram, From), exdec).
+new(Stat, From) ->
+    Key = key(Stat, From),
+    case Stat of
+        #counter{} ->
+            folsom_metrics:new_meter(Key);
+        #histogram{} ->
+            folsom_metrics:new_histogram(Key, exdec)
+    end,
+    folsom_metrics:tag_metric(Key, tag(From)).
 
 %% @doc Update a counter, histogram, whatever.
 %%
@@ -84,8 +89,10 @@ log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=
 
         %% The request has already been counted by z_sites_dispatcher.
         For = case webmachine_logger:get_metadata(zotonic_host, LogData) of
-            undefined -> System;
-            Host -> [System, System#stats_from{host=Host}]
+            undefined -> 
+                System;
+            Host -> 
+                [System, System#stats_from{host=Host}]
         end,
 
         update(Duration, For),
@@ -108,3 +115,6 @@ key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
 	{Host, System, Name};
 key(#histogram{name=Name}, #stats_from{host=Host, system=System}) ->
 	{Host, System, Name}.    
+
+tag(#stats_from{host=Host}) ->
+    Host.
