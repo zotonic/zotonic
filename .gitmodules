@@ -22,3 +22,6 @@
 [submodule "deps/z_stdlib"]
 	path = deps/z_stdlib
 	url = git://github.com/zotonic/z_stdlib.git
+[submodule "deps/eiconv"]
+	path = deps/eiconv
+	url = git://github.com/zotonic/eiconv.git
