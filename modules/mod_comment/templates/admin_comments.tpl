@@ -10,7 +10,7 @@
     <div class="pull-right">
         <a class="btn btn-small" href="{% url admin_comments_settings %}">{_ Settings _}</a>
     </div>
-    
+
     <h2>{_ Recent comments _}</h2>
 
     <table class="table table-striped do_adminLinkedTable">
@@ -28,13 +28,13 @@
             {% for comment in result %}
             {% with comment.id as id %}
             <tr id="{{ #comment.id }}" {% if not comment.is_visible %}class="unpublished" {% endif %} data-href="{{ m.rsc[comment.rsc_id].page_url }}#comment-{{ id }}">
-                <td>{{ comment.created|date:"d M Y, H:i" }}</td>
+                <td>{{ comment.created|date:_"d M Y, H:i" }}</td>
                 <td>{{ m.rsc[comment.rsc_id].title|truncate:20 }}</td>
                 <td>{{ comment.message|striptags|truncate:40 }}</td>
                 <td title="{{ comment.email }}">
                     <div class="pull-right">
                         {% button class="btn btn-mini" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
-			{% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}
+                        {% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}
                         {% button class="btn btn-mini"
                            text=_"delete"
                            action={confirm text=_"Are you sure you wish to delete that comment?"
@@ -61,6 +61,6 @@
     </table>
     {% pager result=result dispatch="admin_comments" qargs %}
     {% endwith %}
-        
+
 </div>
 {% endblock %}
