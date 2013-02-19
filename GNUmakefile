@@ -7,7 +7,7 @@ GIT_CHECK := $(shell test -d .git && git submodule update --init)
 MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
 
 .PHONY: all
-all: lager iconv mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
+all: lager mimetypes makefile-deps $(PARSER).erl erl ebin/$(APP).app 
 
 .PHONY: erl
 erl:
@@ -19,9 +19,6 @@ $(PARSER).erl: $(PARSER).yrl
 
 lager:
 	cd deps/lager && ./rebar compile
-
-iconv:
-	cd deps/iconv && ./rebar compile
 
 mimetypes:
 	cd deps/mimetypes && ./rebar compile
@@ -48,7 +45,7 @@ clean_logs:
 .PHONY: clean
 clean: clean_logs
 	@echo "removing:"
-	(cd deps/iconv; ./rebar clean)
+	(cd deps/eiconv; ./rebar clean)
 	(cd deps/mimetypes; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
