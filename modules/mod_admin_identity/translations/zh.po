@@ -10,15 +10,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 18:29+0800\n"
+"PO-Revision-Date: 2013-01-31 23:59+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:46
+msgid "(that's you)"
+msgstr "(你自己)"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
 msgid "Add a new user"
@@ -40,7 +44,7 @@ msgstr "取消"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
 msgid "Changed the username."
-msgstr "修改用户名"
+msgstr "用户名已修改。"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
@@ -80,11 +84,11 @@ msgid ""
 "        that the former has logon credentials attached to its page record."
 msgstr ""
 "每个可编辑页面上的人员都可以成为用户。用户和普通页面的区别只是前者的页面记录"
-"有登陆证书。"
+"有登录证书。"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
-msgstr "名"
+msgstr "名字"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
@@ -118,7 +122,7 @@ msgstr "名字"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:5
 msgid "Name and e-mail address"
-msgstr "名字和 \be-mail 地址"
+msgstr "名字和 e-mail 地址"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Need more help?"
@@ -164,7 +168,7 @@ msgstr "设置用户名/密码"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
-msgstr "称呼"
+msgstr "姓前缀"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
 msgid "Surname"
@@ -233,7 +237,7 @@ msgid ""
 "user is member of."
 msgstr ""
 "当一个人员被添加认证信息后，他就成为一个用户。这样自然人或者机器就可以通过这"
-"些认证信息来登陆你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖"
+"些认证信息来登录你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖"
 "于他所在的用户组。"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
@@ -243,6 +247,11 @@ msgstr "没有权限创建人员页面。"
 #: modules/mod_admin_identity/templates/admin_users.tpl:24
 msgid "You need to be an administrator to add users."
 msgstr "只有管理员可以添加用户。"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:47
+#: modules/mod_admin_identity/templates/admin_users.tpl:56
+msgid "d M, H:i"
+msgstr "M d, H:i"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:52
 msgid "delete username"

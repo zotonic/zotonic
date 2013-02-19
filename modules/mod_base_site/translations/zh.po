@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 19:28+0800\n"
+"PO-Revision-Date: 2013-01-30 23:26+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -171,7 +171,7 @@ msgstr "在哪里"
 
 #: modules/mod_base_site/templates/text/_meta.tpl:7
 msgid "l, F j, Y"
-msgstr ""
+msgstr "Y F j, l "
 
 #: modules/mod_base_site/templates/text/_content_list_item.tpl:4
 #: modules/mod_base_site/templates/text/_content_list_item.tpl:5

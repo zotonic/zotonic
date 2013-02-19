@@ -151,3 +151,33 @@ msgstr "类型"
 #: modules/mod_base/templates/error.tpl:13
 msgid "error"
 msgstr "错误"
+
+msgid "second"
+msgstr "秒"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "minute"
+msgstr "分"
+
+msgid "minutes"
+msgstr "分"
+
+msgid "ago"
+msgstr "之前"
+
+msgid "hour"
+msgstr "小时"
+
+msgid "hours"
+msgstr "小时"
+
+msgid "day"
+msgstr "天"
+
+msgid "days"
+msgstr "天"
+
+msgid "now"
+msgstr "刚刚"

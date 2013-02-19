@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,8 +37,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Stay = proplists:get_value(stay, Args, false),
     Callback = proplists:get_value(callback, Args),
     Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Callback, Actions},
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-	{PostbackMsgJS, Context}.
+        {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+        {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
@@ -54,7 +54,7 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
         {predicate, Predicate},
         {stay, Stay}
     ],
-    DTitle = case Id of undefined -> "Add a new media file"; _ -> "Replace current medium." end,
+    DTitle = case Id of undefined -> ?__("Add a new media file", Context); _ -> ?__("Replace current medium", Context) end,
     z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);
 
 
@@ -117,32 +117,32 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
                 {ok, MediaId} ->
                     {_, ContextCb} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context),
 
-                    ContextRedirect = 
+                    ContextRedirect =
                             case SubjectId of
-                              undefined -> 
+                              undefined ->
                                   case Stay of
                                       true -> ContextCb;
                                       false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, ContextCb)
                                   end;
-                              _ -> 
+                              _ ->
                                   ContextCb
                             end,
                     Actions2 = [add_arg_to_action({id, MediaId}, A) || A <- Actions],
                     z_render:wire([
                             {growl, [{text, ?__("Media item created.", ContextRedirect)}]},
-                            {dialog_close, []} 
+                            {dialog_close, []}
                             | Actions2], ContextRedirect);
                 {error, R} ->
                     z_render:growl_error(error_message(R, Context), Context)
             end;
-      
+
         %% Replace attached medium with the uploaded file (skip any edge requests)
-        N when is_integer(N) -> 
+        N when is_integer(N) ->
             case ReplaceFun(Id, Context) of
                 {ok, _} ->
                     z_render:wire([
                             {growl, [{text, ?__("Media item created.", Context)}]},
-                            {dialog_close, []} 
+                            {dialog_close, []}
                             | Actions], Context);
                 {error, R} ->
                     z_render:growl_error(error_message(R, Context), Context)
@@ -165,5 +165,3 @@ add_arg_to_action(Arg, {postback, [{postback, {Action, ArgList}} | Rest]}) ->
     {postback, [{postback, {Action, [Arg | ArgList]}} | Rest]};
 add_arg_to_action(_A, B) ->
     B.
-
-

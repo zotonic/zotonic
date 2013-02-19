@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-30 23:28+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_contact/templates/email_contact.tpl:13
+#: modules/mod_contact/templates/contact.tpl:16
+msgid "E-mail"
+msgstr "E-mail"
+
+#: modules/mod_contact/templates/email_contact.tpl:6
+msgid "Hello, the contact form of"
+msgstr "你好，联系表单"
+
+#: modules/mod_contact/templates/email_contact.tpl:16
+#: modules/mod_contact/templates/contact.tpl:22
+msgid "Message"
+msgstr "信息内容"
+
+#: modules/mod_contact/templates/email_contact.tpl:10
+#: modules/mod_contact/templates/contact.tpl:11
+msgid "Name"
+msgstr "名字"
+
+#: modules/mod_contact/templates/contact.tpl:27
+msgid "Send"
+msgstr "发送"
+
+#: modules/mod_contact/templates/contact.tpl:32
+msgid "Thank you!"
+msgstr "谢谢！"
+
+#: modules/mod_contact/templates/contact.tpl:33
+msgid "Your message has been submitted! We’ll get in touch soon."
+msgstr "您的信息已经被提交！我们将尽快联系您。"
+
+#: modules/mod_contact/templates/email_contact.tpl:3
+msgid "contact form on"
+msgstr "联系表单在"
+
+#: modules/mod_contact/templates/email_contact.tpl:6
+msgid "has been submitted."
+msgstr "已被提交。"

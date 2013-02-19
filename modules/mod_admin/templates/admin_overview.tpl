@@ -32,7 +32,7 @@
     <h2>
 	{_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
 	{_ matching _} “{{ q.qs|escape }}”
-	{% button text="show all" class="btn btn-mini" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
+	{% button text=_"show all" class="btn btn-mini" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
 	<input type="hidden" name="qs" value="{{ q.qs|escape }}" />
 	{% endif %}
     </h2>

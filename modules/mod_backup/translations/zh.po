@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:18+0800\n"
+"PO-Revision-Date: 2013-01-30 23:22+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "确认恢复到这个版本？"
 
 #: modules/mod_backup/templates/admin_backup.tpl:27
 msgid "At any moment you can make a backup of your system."
-msgstr ""
+msgstr "任何时候你都可以创建系统的备份。"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:41
 msgid "Back to the edit page"
@@ -59,7 +59,7 @@ msgstr "取消"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:39
 msgid "Check and possibly restore an earlier version of your page."
-msgstr ""
+msgstr "检查并恢复到页面的先前版本。"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
 msgid ""
@@ -69,6 +69,9 @@ msgid ""
 "current page contents. Note that the file does not contain your unsaved "
 "changes. Connections and media are not saved as well."
 msgstr ""
+"点击<b>列出并恢复到之前的版本</b>来预览本页面的之前保存版本。<br />你也可以把"
+"页面的完整内容保存到文件。随后重加载这个文件，替换当前页面内容。注意文件不会"
+"包含你未保存的改动。链接和媒体不会一同保存"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:53
 msgid "Current"
@@ -135,12 +138,12 @@ msgstr "版本"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:81
 msgid "Select one or two revisions from the list on the left."
-msgstr ""
+msgstr "从左边列表中选择一个或两个版本。"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:3
 msgid ""
 "Select the backup file you want to upload. The file must be a .bert file."
-msgstr ""
+msgstr "选择需要上传的备份文件。文件必须是 .bert 格式。"
 
 #: modules/mod_backup/templates/admin_backup.tpl:17
 msgid "Show import/export panel in the admin."
@@ -155,20 +158,23 @@ msgid ""
 "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" "
 "config key to the path to pg_dump and return to this page."
 msgstr ""
+"PATH 中找不到 \"pg_dump\" 命令。请设置 \"pg_dump\" 配置 key 为 pg_dump 的路径"
+"然后回到本页面。"
 
 #: modules/mod_backup/templates/admin_backup.tpl:39
 msgid ""
 "The \"tar\" command was not found in the path. Set the \"tar\" config key to "
 "the path to pg_dump and return to this page."
 msgstr ""
+"命令 \"tar\" 没有在搜索路径中找到。请设置 \"tar\" 的配置项然后返回本页面。"
 
 #: modules/mod_backup/templates/admin_backup.tpl:27
 msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr ""
+msgstr "备份包括两部分，数据库和上传文件。"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
-msgstr ""
+msgstr "这将会使用备份文件内容覆盖你的页面。"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
@@ -180,19 +186,19 @@ msgstr "警告："
 
 #: modules/mod_backup/templates/admin_backup.tpl:28
 msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr ""
+msgstr "你可以拥有 10 个备份，旧的备份将会被自动删除。"
 
 #: modules/mod_backup/templates/admin_backup.tpl:32
 msgid ""
 "You can start a backup immediately, while the backup is running you can "
 "continue working."
-msgstr ""
+msgstr "你可以立即开始备份，备份进行时你可以继续其他操作。"
 
 #: modules/mod_backup/templates/admin_backup.tpl:37
 msgid ""
 "Your backup is not correctly configured. The backup module will not work "
 "until the problem(s) below have been resolved:"
-msgstr ""
+msgstr "备份没有被正确配置。backup 模块需要你先解决如下问题："
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:14
 msgid "current version"
