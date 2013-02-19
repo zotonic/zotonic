@@ -69,8 +69,7 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the Erlang module. Extract all translation tags.
 scan_file(".erl", File) ->
-    {ok, Path} = zotonic_app:get_path(),
-    case epp:open(File, [filename:join(Path, "include")]) of
+    case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
