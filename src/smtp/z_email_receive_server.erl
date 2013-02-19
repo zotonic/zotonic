@@ -173,12 +173,12 @@ terminate(Reason, State) ->
 
 %% Internal functions
 
+% If the message is a {<<"multipart">>,<<"report">>} then here is also
+% a {<<"message">>,<<"rfc822">>} part that contains the original message.
+% From that original message we can find the original message id
+
 %% @doc A message is classified as a bounce if the recipient is noreply+MSGID@@example.org
 %% OR if the Return-Path is set to an empty address and other appropriate headers are present
-%% TODO:
-%% If the message is a {<<"multipart">>,<<"report">>} then here is also
-%% a {<<"message">>,<<"rfc822">>} part that contains the original message.
-%% From that original message we can find the original message id
 find_bounce_id(Type, Recipients, Headers) ->
     case find_bounce_email(Recipients) of
         {ok, _MessageId} = M -> 
