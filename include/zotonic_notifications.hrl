@@ -135,7 +135,8 @@
                 vars=[], attachments=[], queue=false}).
 
 %% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).
+-record(email_received, {to, from, localpart, localtags, domain, reference, email, 
+						 headers, is_bulk=false, is_auto=false, decoded, raw}).
 
 % E-mail received notification:
 % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}

@@ -49,12 +49,14 @@ start(_Args) ->
     ensure_started(iconv),
     ensure_started(webzmachine),
     ensure_started(mnesia),
+    ensure_started(eiconv),
     ok = application:start(zotonic).
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
     Res = application:stop(zotonic),
+    application:stop(eiconv),
     application:stop(mnesia),
     application:stop(lager),
     application:stop(iconv),
