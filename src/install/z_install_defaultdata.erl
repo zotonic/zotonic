@@ -183,4 +183,4 @@ default_skeleton_menu(_) ->
 %% @doc Helper function for getting an absolute path to a data file
 %%      that is part of the default data for a site skeleton.
 datafile(Skeleton, Filename) ->
-    filename:join([z_utils:lib_dir(src), "install", "defaultdata", Skeleton, Filename]).
+    filename:join([z_utils:lib_dir(priv), "install", Skeleton, Filename]).
