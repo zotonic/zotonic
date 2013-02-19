@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-30 19:22+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Import WXR file"
+msgstr "导入 WXR 文件"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:5
+msgid "Import a Wordpress WXR export file into Zotonic."
+msgstr "导入一个 Wordpress WXR 文件到 Zotonic。"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:20
+msgid "Import previously deleted items again"
+msgstr "重新导入之前被删除的条目"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:27
+msgid "Start import"
+msgstr "开始导入"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2
+msgid "Upload a wordpress WXR file from your computer."
+msgstr "从本机上传一个 Wordpress WXR 文件。"
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:9
+msgid "WXR file"
+msgstr "WXR 文件"
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Wordpress import"
+msgstr "Wordpress 导入"
