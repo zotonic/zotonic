@@ -44,7 +44,9 @@ observe_rsc_update_done(#rsc_update_done{action=Action, id=RscId, pre_props=Pre,
         {_Old, undefined} -> ok;
         {_Old, <<>>} -> ok;
         {_Old, New} -> ensure(RscId, email, New, Context)
-    end.
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    undefined.
 
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
