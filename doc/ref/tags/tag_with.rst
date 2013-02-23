@@ -20,3 +20,16 @@ For example::
 
 This outputs the number of latest news articles and also the titles of the news articles.  The search is only done once when the ``{% with %}`` tag assigns the variable “latest_news”.
 
+
+Multiple assignments
+--------------------
+
+It is also possible to assign multiple variables with a single `with` statement, like this::
+
+  {% with "value1", "value2" as foo, bar %}
+    {{ foo }}
+    {{ bar }}
+  {% endwith %}
+
+This will output ``value1 value2``.
+  
