@@ -157,7 +157,7 @@ spawn_link(Module, Func, Args, Context) ->
 
 %% @doc Kill this page when timeout has been reached
 check_timeout(Pid) ->
-    gen_server:cast(Pid, check_timeout).
+    Pid ! check_timeout.
 
 
 %%====================================================================
