@@ -25,6 +25,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws					= false;
 var z_ws_opened				= false;
+var z_stream_host           = undefined;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -481,6 +482,7 @@ function z_tinymce_remove(element)
 
 function z_stream_start(host)
 {
+    z_stream_host = host;
 	if (!z_ws && !z_comet_is_running)
 	{
 		if ("WebSocket" in window) 
@@ -542,6 +544,16 @@ function z_comet_data(data)
 		$.misc.error("Error evaluating ajax return value: " + data);
 		$.misc.warn(e);
 	}
+}
+
+
+function z_websocket_restart()
+{
+    if (z_ws) {
+        z_ws.close();
+	    z_ws_opened = false;
+	    setTimeout(function() { z_websocket_start(z_stream_host); }, 100);
+    }
 }
 
 
