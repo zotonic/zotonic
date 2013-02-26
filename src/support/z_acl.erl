@@ -330,9 +330,13 @@ wm_is_allowed([{Action,Object}|ACLs], Context) ->
             %% When the resource doesn't exist then we let the request through
             %% This will enable a 404 response later in the http flow checks.
             case {Action, Object} of
-                {view, undefined} -> true;
-                {view, false} -> true;
-                {view, Id} -> not m_rsc:exists(Id, Context);
+                {view, undefined} -> wm_is_allowed(ACLs, Context);
+                {view, false} -> wm_is_allowed(ACLs, Context);
+                {view, Id} ->  
+                    case m_rsc:exists(Id, Context) of
+                        true -> false;
+                        false -> wm_is_allowed(ACLs, Context)
+                    end;
                 _ -> false
             end
     end.
