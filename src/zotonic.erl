@@ -46,6 +46,7 @@ start(_Args) ->
     test_erlang_version(),
     zotonic_deps:ensure(),    
     ensure_started(crypto),
+    ensure_started(iconv),
     ensure_started(webzmachine),
     ensure_started(mnesia),
     ok = application:start(zotonic).
@@ -56,6 +57,7 @@ stop() ->
     Res = application:stop(zotonic),
     application:stop(mnesia),
     application:stop(lager),
+    application:stop(iconv),
     application:stop(webzmachine),
     application:stop(crypto),
     Res.
