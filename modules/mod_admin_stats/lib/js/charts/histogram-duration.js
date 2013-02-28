@@ -4,6 +4,7 @@
 function histogram_duration_chart() {
     // declare private vars
     var formatTime = d3.time.format("%H:%M");
+    var root;
 
     // declare public properties
     var props = {
@@ -27,10 +28,14 @@ function histogram_duration_chart() {
             y: d3.svg.axis()
         },
         data: null, // [{x, y}]
+
+        animation_speed: 500, // e.g. transition duration, in ms
     };
 
     // this function is responsible for visualizing the chart
     function chart(selection) {
+        root = selection;
+
         var client_width = props.width
             - props.margin.left
             - props.margin.right;
@@ -83,8 +88,65 @@ function histogram_duration_chart() {
             return props.x(d.x) - left(d, i) - 1;
         }
 
-        // draw chart!
-        var svg = selection.append("svg")
+        // chart redraw function
+        chart.update = function(data) {
+            if (data) props.data = data;
+
+            // draw bars!
+            var bar = svg.selectAll(".bar")
+                .data(props.data);
+
+            // update existing
+            bar.transition()
+                .attr("transform", function(d, i) {
+                    return "translate("
+                        + left(d, i) + ","
+                        + top(d) + ")"; })
+                .select("rect")
+                .attr("width", function(d, i) { return width(d, i) })
+                .attr("height", function(d) {
+                    return client_height - top(d); });
+
+            // enter added bars
+            bar.enter().append("g")
+                .attr("class", "bar")
+                .attr("transform", function(d, i) {
+                    return "translate("
+                        + left(d, i) + ","
+                        + top(d) + ")"; })
+                .append("rect")
+                .attr("x", 1)
+                .attr("height", function(d) {
+                    return client_height - top(d); })
+                .style("fill-opacity", 1e-6)
+                .transition()
+                .duration(props.animation_speed)
+                .attr("width", function(d, i) { return width(d, i) })
+                .style("fill-opacity", 1);
+
+            // exit dropped bars
+            bar.exit().transition()
+                .attr("height", 0)
+                .style("fill-opacity", 1e-6)
+                .remove();
+
+            // update axis domains
+            props.x.domain([0, d3.max(props.data, function(d){ return d.x })]);
+            props.y.domain([0, d3.max(props.data, function(d){ return d.y })]);
+
+            // redraw axis
+            svg.select(".x.axis").transition()
+                .duration(props.animation_speed)
+                .call(props.axis.x);
+            svg.select(".y.axis").transition()
+                .duration(props.animation_speed)
+                .call(props.axis.y);
+
+            return chart;
+        };
+
+        // create svg
+        var svg = root.append("svg")
             .attr("width", props.width)
             .attr("height", props.height)
             .append("g")
@@ -92,41 +154,16 @@ function histogram_duration_chart() {
                   + props.margin.left + ","
                   + props.margin.top + ")");
 
-        var bar = svg.selectAll(".bar")
-            .data(props.data)
-            .enter().append("g")
-            .attr("class", "bar")
-            .attr("transform", function(d, i) {
-                return "translate("
-                    + left(d, i) + ","
-                    + top(d) + ")"; });
-
-        bar.append("rect")
-            .attr("x", 1)
-            .attr("width", function(d, i) { return width(d, i) })
-            .attr("height", function(d) {
-                return client_height - top(d); });
-
-        /*bar.append("text")
-            .attr("dy", ".75em")
-            .attr("y", 6)
-            .attr("x", function (d, i) { return width(d, i) / 2 })
-            .attr("text-anchor", "middle")
-            .text(function(d) { return props.format.y(d.y); });*/
-
+        // add axis
         svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + client_height + ")")
-            .call(props.axis.x)
-            ; /*.selectAll("text")
-                .attr("transform", function(d, i) {
-                return "translate(0," + (i % 2 ? "12" : "0") + ")" })*/
+            .attr("transform", "translate(0," + client_height + ")");
 
         svg.append("g")
-            .attr("class", "y axis")
-            .call(props.axis.y);
+            .attr("class", "y axis");
 
-        return chart;
+        // draw chart & we're done!
+        return chart.update();
     }
 
     // define property setter/getter function

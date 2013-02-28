@@ -1,6 +1,21 @@
+svg {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .bar rect {
-  fill: steelblue;
+//  fill: rgba(2, 176, 232, 0.75);
+  fill: rgb(6, 156, 209);
+  fill-opacity: 0.75;
   shape-rendering: crispEdges;
+}
+
+.bar rect:hover {
+  fill-opacity: 1;
 }
 
 .bar text {
@@ -10,5 +25,6 @@
 .axis path, .axis line {
   fill: none;
   stroke: #000;
+  stroke-opacity: .25;
   shape-rendering: crispEdges;
 }
