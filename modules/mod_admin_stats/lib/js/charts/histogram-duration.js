@@ -122,7 +122,9 @@ function histogram_duration_chart() {
                 .transition()
                 .duration(props.animation_speed)
                 .attr("width", function(d, i) { return width(d, i) })
-                .style("fill-opacity", 1);
+                .style("fill-opacity", 1)
+                .each("end", function(){
+                    d3.select(this).style("fill-opacity", null) });
 
             // exit dropped bars
             bar.exit().transition()
