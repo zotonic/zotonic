@@ -353,7 +353,10 @@ insert(Table, Props, Context) ->
     F = fun(C) ->
 		Id = case pgsql:equery1(C, FinalSql, Parameters) of
 			 {ok, IdVal} -> IdVal;
-			 {error, noresult} -> undefined
+			 {error, noresult} -> undefined;
+             {error, Reason} = Error ->
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
+                throw(Error) 
 		     end,
 		{ok, Id}
 	end,
@@ -391,8 +394,12 @@ update(Table, Id, Parameters, Context) ->
         Sql = "update \""++Table++"\" set " 
                  ++ string:join([ "\"" ++ atom_to_list(ColName) ++ "\" = $" ++ integer_to_list(Nr) || {ColName, Nr} <- ColNamesNr ], ", ")
                  ++ " where id = $1",
-        {ok, RowsUpdated} = pgsql:equery1(C, Sql, [Id | Params]),
-        {ok, RowsUpdated}
+        case pgsql:equery1(C, Sql, [Id | Params]) of
+            {ok, _RowsUpdated} = Ok -> Ok;
+            {error, Reason} = Error ->
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
+                throw(Error) 
+        end
     end,
     with_connection(F, Context).
 
@@ -405,8 +412,12 @@ delete(Table, Id, Context) ->
     assert_table_name(Table),
     F = fun(C) ->
         Sql = "delete from \""++Table++"\" where id = $1", 
-        {ok, RowsDeleted} = pgsql:equery1(C, Sql, [Id]),
-        {ok, RowsDeleted}
+        case pgsql:equery1(C, Sql, [Id]) of
+            {ok, _RowsDeleted} = Ok -> Ok;
+            {error, Reason} = Error ->
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
+                throw(Error) 
+        end            
 	end,
     with_connection(F, Context).
 
