@@ -13,27 +13,27 @@
 
 {% block content %}
 
-<div class="edit-header">
-    <h2>{_ Site Statistics _}<h2>
-</div>
+    <div class="edit-header">
+        <h2>{_ Site Statistics _}</h2>
+        {% button text="update"
+            action={script script="z_notify('update_metrics')"} %}
+    </div>
 
-{% button text="update" action={script script="z_notify('get_stats')"} %}
+    <div id="graphs"></div>
 
-<div id="graphs"></div>
+    {% wire name='new_metrics'
+        action={script
+            script="d3.select('#graphs').call(update_charts, zEvtArgs)"}
+    %}
 
-{% javascript %}
+    {% wire action={script script="z_notify('update_metrics')"} %}
 
-    var graphs = d3.select("#graphs");
+{% endblock %}
 
-    var data = {% include "_metrics_jsdata.tpl" %};
-
-    log("initial stats data: ", data.length, ": ", data);
-    graphs.call(update_charts, data);
-
-    z_event_register("stats_data", function(d) {
+    {#z_event_register("stats_data", function(d) {
     log("got stats data: ", d.length, ": ", d);
     graphs.call(update_charts, d);
-    });
+    });#}
 
     {# for metric in m.stats.metrics %}
         var div = graphs.append("div");
@@ -67,7 +67,3 @@
             ]}]) # }
         {% endif %}
     {% endfor #}
-
-{% endjavascript %}
-
-{% endblock %}
