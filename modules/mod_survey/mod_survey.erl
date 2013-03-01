@@ -105,7 +105,8 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_button, ?__("Button", Context)},
                     {survey_page_break, ?__("Page break", Context)},
                     {survey_stop, ?__("Stop", Context)},
-                    {survey_upload, ?__("File upload", Context)}
+                    {survey_upload, ?__("File upload", Context)},
+                    {survey_multiple_choice, ?__("Multiple choice", Context)}
                 ]}
                 | Menu
             ];
