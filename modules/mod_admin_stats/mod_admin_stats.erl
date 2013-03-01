@@ -26,7 +26,8 @@
 
 %% interface functions
 -export([
-         observe_admin_menu/3
+         observe_admin_menu/3,
+         observe_postback_notify/2
         ]).
 
 -include_lib("zotonic.hrl").
@@ -40,3 +41,13 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                  visiblecheck={acl, use, mod_admin_stats}
                }
      |Acc].
+
+observe_postback_notify(#postback_notify{ message="get_stats" }, Context) ->
+    {Output, Context1} = z_template:render_to_iolist("_metrics_jsdata.tpl", [], Context),
+    z_context:add_script_page(
+      io_lib:format("z_event('stats_data', ~s);", [z_convert:to_flatlist(Output)]),
+      Context1),
+    Context1;
+observe_postback_notify(Args, _Context) ->
+    ?DEBUG(Args),
+    undefined.

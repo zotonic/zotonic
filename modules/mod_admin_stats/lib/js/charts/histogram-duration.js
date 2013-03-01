@@ -22,6 +22,11 @@ function histogram_duration_chart() {
 
         // scales, axis and data
         x: d3.scale.linear(),
+        // callback functions for updating axis ticks
+        ticks: {
+            x: null,
+            y: null
+        },
         y: d3.scale.linear(),
         axis: {
             x: d3.svg.axis(),
@@ -92,6 +97,16 @@ function histogram_duration_chart() {
         chart.update = function(data) {
             if (data) props.data = data;
 
+            // update axis domains
+            props.x.domain([0, d3.max(props.data, function(d){ return d.x })]);
+            props.y.domain([0, d3.max(props.data, function(d){ return d.y })]);
+
+            // update axis ticks
+            if (props.ticks.x)
+                props.ticks.x.apply(chart, [props.axis.x, props.data]);
+            if (props.ticks.y)
+                props.ticks.y.apply(chart, [props.axis.y, props.data]);
+
             // draw bars!
             var bar = svg.selectAll(".bar")
                 .data(props.data);
@@ -132,11 +147,7 @@ function histogram_duration_chart() {
                 .style("fill-opacity", 1e-6)
                 .remove();
 
-            // update axis domains
-            props.x.domain([0, d3.max(props.data, function(d){ return d.x })]);
-            props.y.domain([0, d3.max(props.data, function(d){ return d.y })]);
-
-            // redraw axis
+           // redraw axis
             svg.select(".x.axis").transition()
                 .duration(props.animation_speed)
                 .call(props.axis.x);
@@ -167,6 +178,11 @@ function histogram_duration_chart() {
         // draw chart & we're done!
         return chart.update();
     }
+
+    chart.call = function(callback) {
+        callback.apply(this, Array.prototype.slice.call(arguments, 1));
+        return this;
+    };
 
     // define property setter/getter function
     // this is made generic, so it could just as well be moved

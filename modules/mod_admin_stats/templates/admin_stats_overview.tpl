@@ -17,15 +17,7 @@
     <h2>{_ Site Statistics _}<h2>
 </div>
 
-{#
-{% for metric in m.stats.metrics %}
-
-    {{ metric.system }}.{{ metric.name }}<br />
-    {{ metric.value|pprint }}<br />
-    <br />
-
-{% endfor %}
-#}
+{% button text="update" action={script script="z_notify('get_stats')"} %}
 
 <div id="graphs"></div>
 
@@ -33,7 +25,17 @@
 
     var graphs = d3.select("#graphs");
 
-    {% for metric in m.stats.metrics %}
+    var data = {% include "_metrics_jsdata.tpl" %};
+
+    log("initial stats data: ", data.length, ": ", data);
+    graphs.call(update_charts, data);
+
+    z_event_register("stats_data", function(d) {
+    log("got stats data: ", d.length, ": ", d);
+    graphs.call(update_charts, d);
+    });
+
+    {# for metric in m.stats.metrics %}
         var div = graphs.append("div");
         {% if metric.type == `histogram` %}
             addGraph(duraChart, div,
@@ -62,9 +64,9 @@
             info: [
             {label: "Count", value: {{ metric.value.count }} },
             {label: "Mean", value: {{ metric.value.mean }} }
-            ]}]) #}
+            ]}]) # }
         {% endif %}
-    {% endfor %}
+    {% endfor #}
 
 {% endjavascript %}
 
