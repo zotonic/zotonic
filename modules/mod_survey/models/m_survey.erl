@@ -53,6 +53,8 @@ m_find_value(all_results, #m{value=undefined} = M, _Context) ->
     M#m{value=all_results};
 m_find_value(captions, #m{value=undefined} = M, _Context) ->
     M#m{value=captions};
+m_find_value(totals, #m{value=undefined} = M, _Context) ->
+    M#m{value=totals};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
 m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
@@ -68,6 +70,8 @@ m_find_value(Id, #m{value=all_results}, Context) ->
     survey_results(Id, Context);
 m_find_value(Id, #m{value=captions}, Context) ->
     survey_captions(Id, Context);
+m_find_value(Id, #m{value=totals}, Context) ->
+    survey_totals(Id, Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
     did_survey(Id, Context);
 m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
@@ -403,6 +407,42 @@ survey_captions(Id, Context) ->
                 {<<"created">>, ?__("Created", Context)} |
                 [ {proplists:get_value(name, Block), proplists:get_value(prompt, Block)} || Block <- Blocks ]
             ];
+        _ ->
+            []
+    end.
+
+
+%% @private
+survey_totals(Id, Context) ->
+    Stats = survey_stats(Id, Context),
+    lager:warning("Stats: ~p", [Stats]),
+    
+    case m_rsc:p(Id, blocks, Context) of
+        Blocks when is_list(Blocks) ->
+            lager:warning("Blocks: ~p", [Blocks]),
+
+            All = lists:map(fun(Block) ->
+                                    Name = proplists:get_value(name, Block),
+                                    Type = proplists:get_value(type, Block),
+                                    M = mod_survey:module_name(Type),
+                                    Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
+                                                3 ->
+                                                    lager:warning("Name: ~p", [Name]),
+                                                    Vals = proplists:get_value(Name, Stats),
+                                                    M:prep_totals(Block, Vals, Context);
+                                                undefined ->
+                                                    undefined
+                                            end,
+                                    {Name, Value}
+                            end,
+                            Blocks),
+            AllEmpty = lists:foldl(fun(Total, Acc) -> z_utils:is_empty(Total) and Acc end, true, All),
+            case AllEmpty of
+                true ->
+                    undefined;
+                false ->
+                    All
+            end;
         _ ->
             []
     end.

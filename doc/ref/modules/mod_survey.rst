@@ -6,6 +6,62 @@ user-definable forms which can be created in the admin interface and
 filled out by the website's visitors.
 
 
+Survey question types
+---------------------
+
+The following question types are defined in the survey.
+
+likert
+  Answer a question on a scale of 5 points, from "completely
+  disagree" (1) to "completely agree" (5).
+
+long answer
+  An open question with a big text field.
+
+matching
+  Question type which allows you to match given answers to each other.
+
+narrative
+  Question type for specifying inline questions in a narrative fashion.
+
+page break
+  Breaks the survey into multiple pages.
+
+short answer
+  An open question with a single-lined text field. You have the option of specifying a validation like email, date, numeric.
+
+thurstone
+  A multiple choice field. Like multiple choice, but more powerful. The choices are translatable, and you have the possibility to select either a single answer, multiple answers or submit the form directly when choosing an answer.
+
+true or false
+  Answers a true or false question. You have the option to specify
+  custom texts for both the options.
+
+yes or no
+  Like true or false, answers a true or false question. You have the
+  option to specify custom texts for both the options.
+
+multiple choice
+  A simple multiple choice field that has the added option that the
+  multiple choice can be a numeric value, in which case an overview of the
+  total value will be shown in the printable list and beneath the
+  survey pie chart. This is useful for creating forms which require
+  you to enter an amount or quantity, e.g. for a reservation
+  system. Multiple choice fields cannot currently be translated, use the "thurstone" question type in that case.
+
+category
+  Choose a single resource from a given category as the answer to this question.
+
+subhead
+  Renders a sub-heading between questions.
+
+prompt
+  Renders an extra prompt block.
+
+text block
+  Renders a text block between questions.
+
+
 
 Intercepting survey submissions
 -------------------------------
@@ -28,7 +84,7 @@ notification, and return ``ok``::
       ?DEBUG(SurveyId),
       ok.
 
-  
+      
 Creating a custom survey handler
 --------------------------------
 
