@@ -7,9 +7,10 @@
     {% if metric.type == `histogram` %}
         histogram: [
         {% for bin, count in metric.value.histogram %}
-            {x: "{{ bin/1000 }}", y: {{ count }} },
+            {x: {{ bin/1000 }}, y: {{ count }} },
         {% endfor %}
         ],
+        count: {{ metric.value.n }},
         min: {{ metric.value.min/1000 }},
         max: {{ metric.value.max/1000 }},
         mean: {

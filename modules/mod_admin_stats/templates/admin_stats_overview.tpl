@@ -5,8 +5,10 @@
 {% block head_extra %}
     {% lib
         "js/d3.js"
+        "js/charts/z_charts.js"
         "js/charts/histogram-duration.js"
-        "js/charts/charts.js"
+        "js/charts/line-chart.js"
+        "js/charts/stats_charts.js"
         "css/charts.css"
     %}
 {% endblock %}
@@ -19,14 +21,25 @@
             action={script script="z_notify('update_metrics')"} %}
     </div>
 
+    <div id="test"></div>
     <div id="graphs"></div>
 
     {% wire name='new_metrics'
         action={script
-            script="d3.select('#graphs').call(update_charts, zEvtArgs)"}
+            script="d3.select('#graphs').call(
+            z_charts.update, zEvtArgs, factory)"}
     %}
 
-    {% wire action={script script="z_notify('update_metrics')"} %}
+    {% wire action={script
+            script="var factory = stats_chart_factory();
+            z_notify('update_metrics')"} %}
+
+    {% javascript %}
+
+        d3.select("#test").append("div")
+        .call(line_chart());
+
+    {% endjavascript %}
 
 {% endblock %}
 

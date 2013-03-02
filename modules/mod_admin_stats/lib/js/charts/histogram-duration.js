@@ -4,7 +4,7 @@
 function histogram_duration_chart() {
     // declare private vars
     var formatTime = d3.time.format("%H:%M");
-    var root;
+    var client_width, client_height;
 
     // declare public properties
     var props = {
@@ -22,94 +22,53 @@ function histogram_duration_chart() {
 
         // scales, axis and data
         x: d3.scale.linear(),
-        // callback functions for updating axis ticks
-        ticks: {
-            x: null,
-            y: null
-        },
         y: d3.scale.linear(),
         axis: {
             x: d3.svg.axis(),
             y: d3.svg.axis()
         },
-        data: null, // [{x, y}]
 
-        animation_speed: 500, // e.g. transition duration, in ms
+        // callback functions for updating axis ticks
+        ticks: {
+            x: null,
+            y: null
+        },
+
+        // e.g. transition duration, in ms
+        animation_speed: 500,
     };
 
     // this function is responsible for visualizing the chart
     function chart(selection) {
-        root = selection;
-
-        var client_width = props.width
-            - props.margin.left
-            - props.margin.right;
-        var client_height = props.height
-            - props.margin.top
-            - props.margin.bottom;
-
-        // produce sample graph if no data provided
-        if (!props.data)
-        {
-            // Generate a log-normal distribution with a median of 30 minutes.
-            var values = d3.range(1000)
-                .map(d3.random.logNormal(Math.log(30), .4));
-
-            // dummy domain, needed to get proper ticks for the bins
-            props.x.domain([0, 120]);
-
-            // Generate a histogram using twenty uniformly-spaced bins.
-            props.data = d3.layout.histogram()
-                .bins(props.x.ticks(20))(values);
-        }
-
-       // setup input domain and output range
-        props.x
-            .domain([0, d3.max(props.data, function(d){ return d.x })])
-            .range([0, client_width]);
-        props.y
-            .domain([0, d3.max(props.data, function(d){ return d.y })])
-            .range([client_height, 0]);
-
-        // setup axis
-        props.axis.x
-            .scale(props.x)
-            .orient("bottom")
-            .tickFormat(props.format.x);
-        props.axis.y
-            .scale(props.y)
-            .orient("left")
-            .tickFormat(props.format.y);
-
-        function top(d) {
-            return props.y(d.y);
-        }
-
-        function left(d, i) {
-            return i > 0 ? props.x(props.data[i-1].x) : 0;
-        }
-
-        function width(d, i) {
-            return props.x(d.x) - left(d, i) - 1;
-        }
-
-        // chart redraw function
+        // define chart redraw function
         chart.update = function(data) {
-            if (data) props.data = data;
+            var svg = d3.select(this).select("svg g");
 
-            // update axis domains
-            props.x.domain([0, d3.max(props.data, function(d){ return d.x })]);
-            props.y.domain([0, d3.max(props.data, function(d){ return d.y })]);
+             // update axis domains
+            props.x.domain([0, d3.max(data, function(d){ return d.x })]);
+            props.y.domain([0, d3.max(data, function(d){ return d.y })]);
 
             // update axis ticks
             if (props.ticks.x)
-                props.ticks.x.apply(chart, [props.axis.x, props.data]);
+                props.ticks.x.apply(chart, [props.axis.x, data]);
             if (props.ticks.y)
-                props.ticks.y.apply(chart, [props.axis.y, props.data]);
+                props.ticks.y.apply(chart, [props.axis.y, data]);
+
+            function top(d) {
+                return props.y(d.y);
+            }
+
+            function left(d, i) {
+                return i > 0 ? props.x(data[i-1].x) : 0;
+            }
+
+            function width(d, i) {
+                return props.x(d.x) - left(d, i) - 1;
+            }
 
             // draw bars!
             var bar = svg.selectAll(".bar")
-                .data(props.data);
+                .data(data);
 
             // update existing
             bar.transition()
@@ -147,7 +106,7 @@ function histogram_duration_chart() {
                 .style("fill-opacity", 1e-6)
                 .remove();
 
-           // redraw axis
+            // redraw axis
             svg.select(".x.axis").transition()
                 .duration(props.animation_speed)
                 .call(props.axis.x);
@@ -158,25 +117,73 @@ function histogram_duration_chart() {
             return chart;
         };
 
-        // create svg
-        var svg = root.append("svg")
-            .attr("width", props.width)
-            .attr("height", props.height)
-            .append("g")
-            .attr("transform", "translate("
-                  + props.margin.left + ","
-                  + props.margin.top + ")");
+        // create chart svg object for each selected object
+        selection.each(function (data) {
+            // store reference to this chart in the node
+            this.chart = chart;
 
-        // add axis
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + client_height + ")");
+            client_width = props.width
+                - props.margin.left
+                - props.margin.right;
+            client_height = props.height
+                - props.margin.top
+                - props.margin.bottom;
 
-        svg.append("g")
-            .attr("class", "y axis");
+            // produce sample graph if no data provided
+            if (!data)
+            {
+                // Generate a log-normal distribution with a median of 30 minutes.
+                var values = d3.range(1000)
+                    .map(d3.random.logNormal(Math.log(30), .4));
 
-        // draw chart & we're done!
-        return chart.update();
+                // dummy domain, needed to get proper ticks for the bins
+                props.x.domain([0, 120]);
+
+                // Generate a histogram using twenty uniformly-spaced bins.
+                data = d3.layout.histogram()
+                    .bins(props.x.ticks(20))(values);
+            }
+
+            // setup input domain and output range
+            props.x
+                .domain([0, d3.max(data, function(d){ return d.x })])
+                .range([0, client_width]);
+            props.y
+                .domain([0, d3.max(data, function(d){ return d.y })])
+                .range([client_height, 0]);
+
+            // setup axis
+            props.axis.x
+                .scale(props.x)
+                .orient("bottom")
+                .tickFormat(props.format.x);
+            props.axis.y
+                .scale(props.y)
+                .orient("left")
+                .tickFormat(props.format.y);
+
+            // create svg
+            var svg = d3.select(this).append("svg")
+                .attr("width", props.width)
+                .attr("height", props.height)
+                .append("g")
+                .attr("transform", "translate("
+                      + props.margin.left + ","
+                      + props.margin.top + ")");
+
+            // add axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + client_height + ")");
+
+            svg.append("g")
+                .attr("class", "y axis");
+
+            // draw initial chart, and we're done
+            return chart.update.apply(this, [data]);
+        });
+
+        return chart;
     }
 
     chart.call = function(callback) {
@@ -184,27 +191,7 @@ function histogram_duration_chart() {
         return this;
     };
 
-    // define property setter/getter function
-    // this is made generic, so it could just as well be moved
-    // to a utils lib or something...
-    function prop(obj, name, ret) {
-        return function() {
-            if (!arguments.length)
-                return obj[name];
-            obj[name] = arguments[0];
-            return ret;
-        };
-    }
-
-    // assign properties to chart
-    // this function is also generic enough to be hosted else where...
-    (function (dst, src){
-        var name;
-        for (name in src) {
-            if (src.hasOwnProperty(name))
-                dst[name] = prop(src, name, dst);
-        }
-    }(chart, props));
+    z_charts.proxy_properties(props, chart);
 
     // return our properly propertized chart function object
     return chart;
