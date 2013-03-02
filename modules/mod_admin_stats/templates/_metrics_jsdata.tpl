@@ -18,6 +18,8 @@
         geometric: {{ metric.value.geometric_mean }},
         harmonic: {{ metric.value.harmonic_mean }}
         }
+    {% else %}
+        one: {{ metric.value.one }}
     {% endif %}
     },
 {% endfor %}

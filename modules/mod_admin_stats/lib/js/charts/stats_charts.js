@@ -23,12 +23,41 @@ function stats_chart_factory() {
             }));
     }
 
-    function test() {
-        this.append("h4").text(function(d){ return "initial count: " + d });
+    function line() {
+        this.call(line_chart());
+    }
+
+    function text() {
+        this.append("span")
+            .attr("class", "chart-text")
+            .call(function() {
+                this.append("span")
+                    .attr("class", "chart-label")
+                    .text(function(d){ return d.label });
+                this.append("span")
+                    .attr("class", "chart-value")
+                    .text(function(d){ return d.value });
+            });
         this.node().chart = { update: function(d) {
-            d3.select(this).select("h4")
-                .text("updated count: " + d);
+            d3.select(this).select(".chart-value")
+                //.transition()
+                //.attr("style", "opacity: 0")
+                //.transition()
+                .text(d.value);
+                //.attr("style", "opacity: 1")
+                //.each("end", function(){
+            //d3.select(this).style("opacity", null) });
         }};
+    }
+
+    function chart_data(d) {
+        if (d.type == "histogram")
+            return [{ factory: text, datum: {
+                        label: "histogram sample count",
+                        value: d.count }
+                    },
+                    { factory: histogram, datum: d.histogram }];
+        return [{factory: line, datum: [{x: Date.now(), y: d.one}]}];
     }
 
     function chart(selection) {
@@ -36,43 +65,26 @@ function stats_chart_factory() {
             .append("h3").text(function(d){
                 return d.system + "." + d.name + " (" + d.type + ")"});
 
-        selection.each(function (d) {
-            if (d.type == "histogram") {
-                d3.select(this).selectAll("div")
-                    .data([
-                        { factory: histogram, datum: d.histogram },
-                        { factory: test, datum: d.count }
-                    ])
-                    .enter()
-                    .append("div")
-                    .attr("class", "chart-data")
-                    .each(function(d){
-                        d3.select(this)
-                            .datum(d.datum)
-                            .call(d.factory);
-                    });
-            }
-        });
-        /*chart.append("div").selectAll("span").data(data[0].info)
-          .enter()
-          .append("span")
-          .text(function(d){
-          return d.label + ": " + d.value + (d.unit ? " (" + d.unit + ")" : "") })
-          .append("br");*/
+        selection.selectAll("div")
+                .data(chart_data)
+                .enter()
+                .append("div")
+                .attr("class", "chart-data")
+                .each(function(d){
+                    d3.select(this)
+                        .datum(d.datum)
+                        .call(d.factory);
+                });
 
         return selection;
     }
 
     chart.update = function(selection) {
         selection.selectAll(".chart-data")
-            .data(function(d){
-                if (d.type == "histogram")
-                    return [d.histogram, d.count];
-                return [];
-            })
-            .each(function(d){
+            .data(chart_data)
+            .each(function(d) {
                 if (this.chart && this.chart.update)
-                    this.chart.update.apply(this, [d]);
+                    this.chart.update.apply(this, [d.datum]);
             });
     }
 
