@@ -16,7 +16,7 @@ function histogram_duration_chart() {
         },
 
         // chart margins and size
-        margin: {top: 10, right: 30, bottom: 30, left: 30},
+        margin: {top: 10, right: 30, bottom: 30, left: 50},
         width: 600,
         height: 200,
 

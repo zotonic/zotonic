@@ -40,27 +40,46 @@ function stats_chart_factory() {
             });
         this.node().chart = { update: function(d) {
             d3.select(this).select(".chart-value")
-                //.transition()
-                //.attr("style", "opacity: 0")
-                //.transition()
                 .text(d.value);
-                //.attr("style", "opacity: 1")
-                //.each("end", function(){
-            //d3.select(this).style("opacity", null) });
         }};
     }
 
-    function chart_data(d) {
-        if (d.type == "histogram")
-            return [{ factory: text, datum: {
-                        label: "histogram sample count",
-                        value: d.count }
-                    },
-                    { factory: histogram, datum: d.histogram }];
-        return [{factory: line, datum: [{x: Date.now(), y: d.one}]}];
+    function histogram_data(d) {
+        return [{ factory: text,
+                  datum: {
+                      label: "histogram sample count",
+                      value: d.count }
+                },
+                { factory: histogram, datum: d.histogram }];
     }
 
-    function chart(selection) {
+    function meter_data(d) {
+        var now = Date.now();
+        var data = this.length > 0 && d3.select(this[0]).datum();
+        var values = data || d3.range(299).map(function(i){
+            return {x: now - (300 - i)*1000, y: 0} });
+
+        values.push({x: now, y: d.one});
+
+        return [{factory: line, datum: values}];
+    }
+
+    function chart_data(d) {
+        var type_data = {
+            histogram: histogram_data,
+            meter: meter_data
+        };
+
+        var data = type_data[d.type].apply(this, [d]);
+
+        if (this.length > 0)
+            for (var i = 0; i < data.length; i++)
+                data[i] = data[i].datum;
+
+        return data;
+    }
+
+    function factory(selection) {
         selection
             .append("h3").text(function(d){
                 return d.system + "." + d.name + " (" + d.type + ")"});
@@ -79,14 +98,14 @@ function stats_chart_factory() {
         return selection;
     }
 
-    chart.update = function(selection) {
+    factory.update = function(selection) {
         selection.selectAll(".chart-data")
             .data(chart_data)
             .each(function(d) {
                 if (this.chart && this.chart.update)
-                    this.chart.update.apply(this, [d.datum]);
+                    this.chart.update.apply(this, [d]);
             });
     }
 
-    return chart;
+    return factory;
 }

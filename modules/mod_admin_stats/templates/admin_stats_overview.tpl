@@ -17,8 +17,16 @@
 
     <div class="edit-header">
         <h2>{_ Site Statistics _}</h2>
-        {% button text="update"
-            action={script script="z_notify('update_metrics')"} %}
+        {% button text="start"
+            action={script script="
+                if (!updateTimer) z_notify('update_metrics')"
+            }
+        %}
+        {% button text="stop"
+            action={script script="
+                clearTimeout(updateTimer); updateTimer = null"
+            }
+        %}
     </div>
 
     <div id="test"></div>
@@ -27,18 +35,18 @@
     {% wire name='new_metrics'
         action={script
             script="d3.select('#graphs').call(
-            z_charts.update, zEvtArgs, factory)"}
+            z_charts.update, zEvtArgs, factory);
+            if (!updateTimer) updateTimer = setTimeout(
+            \"z_notify('update_metrics')\", 2000)"
+        }
     %}
 
-    {% wire action={script
+    {% wire
+        action={script
             script="var factory = stats_chart_factory();
-            z_notify('update_metrics')"} %}
+            var updateTimer;
+            z_notify('update_metrics');"
+        }
+    %}
 
-    {% javascript %}
-
-        d3.select("#test").append("div")
-        .call(line_chart());
-
-    {% endjavascript %}
-
-{% endblock %}
+ {% endblock %}

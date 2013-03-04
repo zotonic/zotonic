@@ -28,3 +28,8 @@ svg {
   stroke-opacity: .25;
   shape-rendering: crispEdges;
 }
+
+.line path {
+  fill: none;
+  stroke: rgb(6, 156, 209);
+}
