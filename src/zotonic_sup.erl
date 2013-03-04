@@ -189,7 +189,13 @@ init([]) ->
 init_ua_classifier() ->
     case z_config:get_dirty(use_ua_classifier) of
         true ->
-            {ok, _Something} = ua_classifier:classify("");
+            case ua_classifier:classify("") of
+              {error, ua_classifier_nif_not_loaded} = Error ->
+                  lager:error("ua_classifier: could not load the NIF. Check deps/ua_classifier or set Zotonic config {use_ua_classifier, false}."),
+                  Error;
+              {ok, _} ->
+                  ok
+            end;
         false ->
             ok
     end.
