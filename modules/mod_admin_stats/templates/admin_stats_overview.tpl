@@ -36,7 +36,7 @@
         action={script
             script="d3.select('#graphs').call(
             z_charts.update, zEvtArgs, factory);
-            if (!updateTimer) updateTimer = setTimeout(
+            updateTimer = setTimeout(
             \"z_notify('update_metrics')\", 2000)"
         }
     %}

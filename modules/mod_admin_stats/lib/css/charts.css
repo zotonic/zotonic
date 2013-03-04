@@ -33,3 +33,7 @@ svg {
   fill: none;
   stroke: rgb(6, 156, 209);
 }
+
+.chart-label:after {
+  content: ": ";
+}

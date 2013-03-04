@@ -19,6 +19,7 @@
         harmonic: {{ metric.value.harmonic_mean }}
         }
     {% else %}
+        count: {{ metric.value.count }},
         one: {{ metric.value.one }}
     {% endif %}
     },
