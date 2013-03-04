@@ -14,9 +14,9 @@
         min: {{ metric.value.min/1000 }},
         max: {{ metric.value.max/1000 }},
         mean: {
-        arithmetic: {{ metric.value.arithmetic_mean }},
-        geometric: {{ metric.value.geometric_mean }},
-        harmonic: {{ metric.value.harmonic_mean }}
+        arithmetic: {{ metric.value.arithmetic_mean/1000 }},
+        geometric: {{ metric.value.geometric_mean/1000 }},
+        harmonic: {{ metric.value.harmonic_mean/1000 }}
         }
     {% else %}
         count: {{ metric.value.count }},
