@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-06-13
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Identity administration.  Adds overview of users to the admin and enables to add passwords on the edit page.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,13 +20,14 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Admin identity/user supports").
--mod_description("Adds an user overview and possibility to edit passwords.").
+-mod_description("Adds support for handling and verification of user identities.").
 -mod_depends([admin]).
 -mod_provides([]).
 
 
 %% interface functions
 -export([
+    observe_identity_verified/2,
     observe_rsc_update_done/2,
     observe_search_query/2,
     observe_admin_menu/3,
@@ -36,6 +36,10 @@
 
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
+
+
+observe_identity_verified(#identity_verified{user_id=RscId, type=Type, key=Key}, Context) ->
+    m_identity:set_verified(RscId, Type, Key, Context).
 
 observe_rsc_update_done(#rsc_update_done{action=Action, id=RscId, pre_props=Pre, post_props=Post}, Context) 
     when Action =:= insert; Action =:= update ->
