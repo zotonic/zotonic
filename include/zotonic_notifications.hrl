@@ -57,6 +57,9 @@
 %% Identity may be undefined, or is a identity used for the verification.
 -record(identity_verification, {user_id, identity}).
 
+%% @doc Notification that an user's identity has been verified. (notify)
+-record(identity_verified, {user_id, type, key}).
+
 
 %% @doc Handle a signup of an user, return the follow on page for after the signup. (first)
 %% Return {ok, Url}
