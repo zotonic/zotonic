@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Generic template controller, serves the template mentioned in the dispatch configuration.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -84,11 +84,8 @@ get_acl_action(Context) ->
     {z_context:get(acl_action, Context, view), get_id(Context)}.
 
 get_id(Context) ->
-    case z_context:get(id, Context) of
-        undefined ->
-            z_context:get_q("id", Context);
-        Id -> Id
-    end.
+    controller_page:get_id(Context).
+
 
 append_acl({_, _}=Acl, Context) ->
     [get_acl_action(Context), Acl];
@@ -104,6 +101,10 @@ provide_content(ReqData, Context) ->
     end,
     Context3 = z_context:set_noindex_header(Context2),
     Template = z_context:get(template, Context3),
-    Rendered = z_template:render(Template, z_context:get_all(Context), Context3),
+    Vars = [
+        {id, get_id(Context3)}
+        | z_context:get_all(Context3)
+    ],
+    Rendered = z_template:render(Template, Vars, Context3),
     {Output, OutputContext} = z_context:output(Rendered, Context3),
     ?WM_REPLY(Output, OutputContext).
