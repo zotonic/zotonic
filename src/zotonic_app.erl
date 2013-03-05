@@ -20,26 +20,25 @@
 -author('Marc Worrell <marc@worrell.nl>').
 
 -behaviour(application).
--export([start/2, stop/1, get_path/0]).
+-export([start/2, stop/1]).
 
 ensure_started(App) ->
     case application:start(App) of
-	ok ->
-	    ok;
-	{error, {already_started, App}} ->
-	    ok
+        ok ->
+            ok;
+        {error, {already_started, App}} ->
+            ok
     end.
 
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for zotonic.
 start(_Type, _StartArgs) ->
     write_pidfile(),
-	set_path(),
     ensure_started(crypto),
     ensure_started(public_key),
     ensure_started(ssl),
-	ensure_started(inets),
-	inets:start(httpc,[{profile,zotonic}]),
+    ensure_started(inets),
+    inets:start(httpc,[{profile,zotonic}]),
     zotonic_deps:ensure(),
     ensure_started(mimetypes),
     zotonic_sup:start_link().
@@ -49,15 +48,6 @@ start(_Type, _StartArgs) ->
 stop(_State) ->
     remove_pidfile(),
     ok.
-
-set_path() ->
-	P = code:all_loaded(),
-	Path = filename:dirname(filename:dirname(proplists:get_value(?MODULE, P))),
-	application:set_env(zotonic, lib_dir, Path).
-
-get_path() ->
-	application:get_env(zotonic, lib_dir).
-
 
 %% Pid-file handling
 
