@@ -171,7 +171,13 @@ limitations under the License.
 				data = "";
 			}
 		}
-		data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
+        console.log(data);
+
+		try {
+            data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
+        } catch (e) {
+            console.error("Error evaluating widget data attribute:", data);
+        }
 		$(elem).data(data_name, data);
 		return data;
 	};
