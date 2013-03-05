@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-04-27
+%% @copyright 2010-2013 Marc Worrell
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -85,6 +84,8 @@ is_allowed_prop(Action, Object, Property, Context) ->
 
 
 %% @doc Check if the resource is visible for the current user
+rsc_visible(undefined, _Context) ->
+    true;
 rsc_visible(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
     %% Can always see myself
     true;
@@ -92,7 +93,7 @@ rsc_visible(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 rsc_visible(_Id, #context{acl=admin}) ->
     true;
-rsc_visible(Id, Context) ->
+rsc_visible(Id, Context) when is_integer(Id) ->
     case z_memo:is_enabled(Context) of
         true ->
             case z_memo:get({rsc_visible, Id}) of
@@ -105,17 +106,25 @@ rsc_visible(Id, Context) ->
             end;
         false ->
             is_allowed(view, Id, Context)
+    end;
+rsc_visible(RscName, Context) ->
+    ?DEBUG(RscName),
+    case m_rsc:rid(RscName, Context) of
+        undefined -> true;
+        RscId -> rsc_visible(RscId, Context)
     end.
 
 
 %% @doc Check if a property of the resource is visible for the current user
+rsc_prop_visible(undefined, _Property, _Context) ->
+    true;
 rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{acl=admin}) ->
     true;
-rsc_prop_visible(Id, Property, Context) ->
+rsc_prop_visible(Id, Property, Context) when is_integer(Id) ->
     case z_memo:is_enabled(Context) of
         true ->
             case z_memo:get({rsc_prop_visible, Id, Property}) of
@@ -128,30 +137,47 @@ rsc_prop_visible(Id, Property, Context) ->
             end;
         false ->
             is_allowed_prop(view, Id, Property, Context)
+    end;
+rsc_prop_visible(RscName, Property, Context) ->
+    case m_rsc:rid(RscName, Context) of
+        undefined -> false;
+        RscId -> rsc_prop_visible(RscId, Property, Context)
     end.
-
 
 %% @doc Check if the resource is editable by the current user
 rsc_editable(_Id, #context{user_id=undefined}) ->
     %% Anonymous visitors can't edit anything
+    false;
+rsc_editable(undefined, _Context) ->
     false;
 rsc_editable(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
     %% Can always edit myself
     true;
 rsc_editable(_Id, #context{acl=admin}) ->
     true;
-rsc_editable(Id, Context) ->
-    is_allowed(update, Id, Context).
-
+rsc_editable(Id, Context) when is_integer(Id) ->
+    is_allowed(update, Id, Context);
+rsc_editable(RscName, Context) ->
+    case m_rsc:rid(RscName, Context) of
+        undefined -> false;
+        RscId -> rsc_editable(RscId, Context)
+    end.
 
 %% @doc Check if the resource is deletable by the current user
+rsc_deletable(undefined, _Context) ->
+    false;
 rsc_deletable(_Id, #context{user_id=undefined}) ->
     false;
 rsc_deletable(Id, #context{acl=admin} = Context) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context));
-rsc_deletable(Id, Context) ->
+rsc_deletable(Id, Context) when is_integer(Id) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context))
-        andalso is_allowed(delete, Id, Context).
+        andalso is_allowed(delete, Id, Context);
+rsc_deletable(RscName, Context) ->
+    case m_rsc:rid(RscName, Context) of
+        undefined -> false;
+        RscId -> rsc_deletable(RscId, Context)
+    end.
 
 
 %% @doc Filter the properties of an update.  This is before any escaping.
