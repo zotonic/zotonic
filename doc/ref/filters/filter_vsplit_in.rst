@@ -12,9 +12,9 @@ time. See the example below.
 
 For example::
 
-  {% for a,b,c in [1,2,3,4,5,6]|vsplit_in:3 %}
+  {% with [1,2,3,4,5,6]|vsplit_in:3 as a,b,c %}
       {% for n in a %}{{ n|format_number }} {% endfor %}
-  {% endfor %}
+  {% endwith %}
 
 This displays ``1 2``.  The variable b will be ``[3,4]`` and the variable c will be ``[5,6]``.
 
