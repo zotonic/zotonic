@@ -171,7 +171,6 @@ limitations under the License.
 				data = "";
 			}
 		}
-        console.log(data);
 
 		try {
             data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
