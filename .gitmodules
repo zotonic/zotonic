@@ -25,3 +25,6 @@
 [submodule "deps/eiconv"]
 	path = deps/eiconv
 	url = git://github.com/zotonic/eiconv.git
+[submodule "deps/mochiweb"]
+	path = deps/mochiweb
+	url = git://github.com/zotonic/mochiweb
