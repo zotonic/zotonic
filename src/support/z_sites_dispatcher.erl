@@ -89,15 +89,21 @@ dispatch(Host, Path, ReqData) ->
             case z_notifier:first(DispReq#dispatch{path=RewrittenPath}, Context#context{wm_reqdata=ReqDataHost}) of
                 {ok, Id} when is_integer(Id) ->
                     %% Retry with the resource's default page uri
-                    DefaultPagePath = binary_to_list(m_rsc:p_no_acl(Id, default_page_url, Context)),
-                    case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
-                        {no_dispatch_match, _, _, _} = M ->
-                            {M, ReqDataHost};
-                        {redirect, ProtocolAsString, Hostname} ->
-                            {handled, redirect(false, ProtocolAsString, Hostname, ReqDataUA)};
-                        {Match, MatchedHost} ->
-                            {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
-                            {Match, ReqDataHost}
+                    case m_rsc:p_no_acl(Id, default_page_url, Context) of
+                        undefined ->
+                            {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost};
+                        DefaultPagePathBin ->
+                            DefaultPagePath = binary_to_list(DefaultPagePathBin),
+                            case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
+                                {no_dispatch_match, MatchedHost1, NonMatchedPathTokens1, _} ->
+                                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataUA),
+                                    {{no_dispatch_match, MatchedHost1, NonMatchedPathTokens1}, ReqDataHost1};
+                                {redirect, ProtocolAsString, Hostname} ->
+                                    {handled, redirect(false, ProtocolAsString, Hostname, ReqDataUA)};
+                                {Match1, MatchedHost1} ->
+                                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataUA),
+                                    {Match1, ReqDataHost1}
+                            end
                     end;
                 {ok, #dispatch_match{
                         dispatch_name=SDispatchName,
