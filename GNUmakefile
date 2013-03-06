@@ -9,6 +9,11 @@ REBAR := $(shell (type rebar 2>/dev/null || echo ./rebar) | tail -1 | awk '{ pri
 REBAR_DEPS := $(shell which rebar || echo ../../rebar)
 REBAR_URL := http://cloud.github.com/downloads/basho/rebar/rebar
 
+# Default target - update sources and call all compile rules in succession
+.PHONY: all
+all: get-deps update-deps compile
+
+
 ./rebar:
 	$(ERL) -noshell -s inets -s ssl \
 	  -eval '{ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar"}])' \
@@ -47,10 +52,6 @@ compile-deps: $(REBAR)
 compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
 compile: compile-deps compile-zotonic
-
-# Default target - update sources and call all compile rules in succession
-.PHONY: all
-all: get-deps update-deps compile
 
 # Generate documentation
 .PHONY: docs edocs
