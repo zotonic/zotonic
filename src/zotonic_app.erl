@@ -20,7 +20,7 @@
 -author('Marc Worrell <marc@worrell.nl>').
 
 -behaviour(application).
--export([start/2, stop/1]).
+-export([start/2, stop/1, get_path/0]).
 
 ensure_started(App) ->
     case application:start(App) of
@@ -34,6 +34,7 @@ ensure_started(App) ->
 %% @doc application start callback for zotonic.
 start(_Type, _StartArgs) ->
     write_pidfile(),
+    set_path(),
     ensure_started(crypto),
     ensure_started(public_key),
     ensure_started(ssl),
@@ -49,6 +50,24 @@ stop(_State) ->
     remove_pidfile(),
     ok.
 
+%% @doc Set the abs pathname of zotonic in the application environment. It is 
+%% used to locate templates, scomps, translations and actions.
+set_path() ->
+    Path = case code:lib_dir(zotonic) of
+        {error, _} ->
+            % When zotonic's root directory isn't called 'zotonic' try to find
+            % out what this name is. 
+            P = code:all_loaded(),
+            filename:dirname(filename:dirname(proplists:get_value(?MODULE, P)));
+        P ->
+            P
+    end,
+    application:set_env(zotonic, lib_dir, Path).
+
+%% @doc Return the applications lib_dir from the applications environment.
+get_path() ->
+    application:get_env(zotonic, lib_dir).
+    
 %% Pid-file handling
 
 get_pidfile() ->
