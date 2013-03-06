@@ -13,7 +13,7 @@
 -export([tracefun/2]). % dbg callback function
 
 -include_lib("zotonic.hrl").
--include_lib("webmachine_logger.hrl").
+-include_lib("webzmachine/include/webmachine_logger.hrl").
 
 -define(TRACED_MOD, z_notifier).
 -define(TRACE_OPTS, []).

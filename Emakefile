@@ -7,6 +7,7 @@
     "src/*/*/*/*",
     "modules/*/*",
     "modules/*/*/*",
+    "modules/*/deps/*/src/*",
     "priv/modules/*/*",
     "priv/modules/*/*/*",
     "priv/extensions/ext_*/*",
