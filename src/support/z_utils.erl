@@ -103,13 +103,13 @@ f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
 
 
 %% @doc Return an abspath to a directory relative to the application root.
-%% This is used to prevent that we have to name the root dir "zotonic".
 lib_dir() ->
-    code:lib_dir(zotonic).
+    {ok, Path} = zotonic_app:get_path(),
+    Path.
 
 lib_dir(Dir) ->
-    code:lib_dir(zotonic, Dir).
-
+    {ok, Path} = zotonic_app:get_path(),
+    filename:join([Path, Dir]).
 
 %% @doc Return the current tick count
 now() ->
