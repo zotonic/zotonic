@@ -80,8 +80,6 @@
     vsplit_in/2,
     now/0,
     now_msec/0,
-    tempfile/0,
-    temppath/0,
     flush_message/1,
     ensure_existing_module/1,
     generate_username/2,
@@ -790,22 +788,6 @@ ensure_valid_modulechar(C) when C >= $0, C =< $9 -> true;
 ensure_valid_modulechar(C) when C >= $a, C =< $z -> true;
 ensure_valid_modulechar(C) when C >= $A, C =< $Z -> true;
 ensure_valid_modulechar(C) when C == $_ -> true.
-
-
-%% @doc return a unique temporary filename.
-%% @spec tempfile() -> string()
-tempfile() ->
-    {A,B,C}=erlang:now(),
-    filename:join(temppath(), lists:flatten(io_lib:format("ztmp-~s-~p.~p.~p",[node(),A,B,C]))).
-
-
-%% @doc Returns the path where to store temporary files.
-%%@spec temppath() -> string()
-temppath() ->
-    lists:foldl(fun(false, Fallback) -> Fallback;
-                   (Good, _) -> Good end,
-                "/tmp",
-                [os:getenv("TMP"), os:getenv("TEMP")]).
 
 
 %% @doc Flush all incoming messages, used when receiving timer ticks to prevent multiple ticks.
