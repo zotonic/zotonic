@@ -69,7 +69,7 @@ edocs:
 clean_logs:
 	@echo "deleting logs:"
 	rm -f erl_crash.dump $(PARSER).erl
-	rm -f priv/log/*
+	rm -rf priv/log/*
 
 .PHONY: clean
 clean: clean_logs $(REBAR)

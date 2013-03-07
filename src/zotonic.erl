@@ -42,6 +42,8 @@ start() -> start([]).
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
+    ensure_started(syntax_tools),
+    ensure_started(compiler),
     ensure_started(lager),
     test_erlang_version(),
     zotonic_deps:ensure(),    
