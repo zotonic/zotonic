@@ -48,6 +48,8 @@
     insert_before/3,
     insert_after/3,
 
+    update_iframe/3,
+
     appear/3,
     appear_replace/3,
     appear_top/3,
@@ -291,6 +293,16 @@ appear_before(TargetId, Html, Context) ->
 appear_after(TargetId, Html, Context) ->
     appear_after_selector(css_selector(TargetId), Html, Context).
 
+%% @doc Set the contents of an iframe to the generated html.
+update_iframe(IFrameId, Html, Context) ->
+    {Html1, Context1} = render_html(Html, Context),
+    Document = [<<"window.frames['">>, IFrameId, <<"'].document">>],
+    Update = [ 
+        Document, <<".open();">>,
+        Document, <<".write('">>, z_utils:js_escape(Html1), <<"');">>,
+        Document, <<".close();">>
+    ],
+    Context1#context{updates=[{Update}|Context1#context.updates]}.
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment 
 update_selector(CssSelector, Html, Context) ->
