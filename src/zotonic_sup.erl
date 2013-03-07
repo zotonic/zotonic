@@ -61,8 +61,8 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
+    <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
+    random:seed({A1,B1,C1}),
 
     % Random id generation
     Ids     = {z_ids,

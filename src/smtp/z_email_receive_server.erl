@@ -121,7 +121,7 @@ handle_RCPT_extension(_Extension, State) ->
 
 -spec handle_DATA(From :: binary(), To :: [binary(),...], Data :: binary(), State :: #state{}) -> {'ok', string(), #state{}} | {'error', string(), #state{}}.
 handle_DATA(From, To, Data, State) ->
-    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary({node(), erlang:now()}))]),
+    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary({node(), make_ref(), os:timestamp()}))]),
     try mimemail:decode(Data) of
         {Type, Subtype, Headers, Params, Body} ->
             case find_bounce_id({Type, Subtype}, To, Headers) of

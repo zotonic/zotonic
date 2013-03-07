@@ -493,7 +493,7 @@ flush() ->
 %% @doc Re-index the ets table holding all module indices
 reindex_ets_lookup(State) ->
     Site = z_context:site(State#state.context),
-    Now = erlang:now(),
+    Now = os:timestamp(),
     templates_to_ets(State#state.templates, Now, Site),
     to_ets(State#state.lib, lib, Now, Site),
     to_ets(State#state.scomps, scomp, Now, Site),

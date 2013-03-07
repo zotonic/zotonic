@@ -581,8 +581,8 @@ set_nth(N, V, L) when N >= 1 ->
 
 %% @doc Simple randomize of a list. Not good quality, but good enough for us
 randomize(List) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
+    <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
+    random:seed({A1,B1,C1}),
     D = lists:map(fun(A) ->
                           {random:uniform(), A}
                   end, List),
