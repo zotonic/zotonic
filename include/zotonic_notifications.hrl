@@ -392,6 +392,58 @@
 -record(debug, {what, arg=[]}).
 
 
+%% @doc mod_export - return the content type (like {ok, "text/csv"}) for the dispatch rule/id export.
+-record(export_resource_content_type, {
+		dispatch :: atom(),
+		id :: integer()
+	}).
+
+%% @doc mod_export - return the {ok, Filename} for the content disposition.
+-record(export_resource_filename, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string()
+	}).
+
+%% @doc mod_export - Fetch the header for the export.
+%% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
+-record(export_resource_header, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string()
+	}).
+
+%% @doc mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
+%% The 'first' notification should return: {ok, Values|binary()} | {ok, Values|binary(), ContinuationState} | {error, Reason}.
+%% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
+%% Return the empty list of values to signify the end of the data stream.
+-record(export_resource_data, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		state :: term()
+	}).
+
+%% @doc mod_export - Encode a single data element.
+%% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
+-record(export_resource_encode, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		data :: term(),
+		state :: term()
+	}).
+
+%% @doc mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
+%% The 'first' notification should return: {ok, binary()} | {error, Reason}.
+-record(export_resource_footer, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		state :: term()
+	}).
+
+
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
