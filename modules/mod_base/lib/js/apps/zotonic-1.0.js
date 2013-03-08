@@ -1152,7 +1152,7 @@ $.fn.formValidationPostback = function()
 		var el = els[i];
 		var n  = el.name;
 
-		if (n && !el.disabled)
+		if (n && !el.disabled && !$(el).hasClass("nosubmit"))
 		{
 			var v = $(el).data("z_postback_validation");
 			if (v)
