@@ -100,11 +100,23 @@ provide_content(ReqData, Context) ->
         _ -> z_context:ensure_all(Context1)
     end,
     Context3 = z_context:set_noindex_header(Context2),
-    Template = z_context:get(template, Context3),
+    Context4 = set_optional_cache_header(Context3),
+    Template = z_context:get(template, Context4),
     Vars = [
         {id, get_id(Context3)}
         | z_context:get_all(Context3)
     ],
-    Rendered = z_template:render(Template, Vars, Context3),
-    {Output, OutputContext} = z_context:output(Rendered, Context3),
+    Rendered = z_template:render(Template, Vars, Context4),
+    {Output, OutputContext} = z_context:output(Rendered, Context4),
     ?WM_REPLY(Output, OutputContext).
+
+set_optional_cache_header(Context) ->
+    case z_context:get(maxage, Context) of
+        undefined ->
+            Context;
+        MaxAge when is_integer(MaxAge) ->
+            z_context:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(MaxAge), Context)
+    end.
+
+            
+            

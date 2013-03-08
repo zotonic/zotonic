@@ -46,6 +46,11 @@ The following options can be given to the dispatch rule:
 |                     |dispatch rule. Defaults to            |"application/json"}     |
 |                     |“text/html”.                          |                        |
 +---------------------+--------------------------------------+------------------------+
+|maxage               |The number of seconds of how long to  |{maxage, 3600}          |
+|                     |cache this file in the browser. Sets  |                        |
+|                     |the response header: `Cache-control:  |                        |
+|                     |public; maxage=X`.                    |                        |
++---------------------+--------------------------------------+------------------------+
 |acl_action           |What ACL action will be               |{acl_action, edit}      |
 |                     |checked. Defaults to 'view'; but can  |                        |
 |                     |also be 'edit' if users need edit     |                        |
