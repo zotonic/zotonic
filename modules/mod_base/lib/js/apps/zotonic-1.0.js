@@ -1230,13 +1230,6 @@ function z_set_validator_postback(id, postback)
 {
 	if (postback)
 	{
-		var pb = $('#'+id).data("z_postback_validation");
-		
-		if (pb)
-		{
-			$.misc.error("Element #"+id+" had already a validation postback, add all validations as one batch.", $('#' +id));
-		}
-
 		$('#'+id).data("z_postback_validation", postback);
 	}
 }
