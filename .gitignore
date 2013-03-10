@@ -49,3 +49,5 @@ ebin/
 /priv/sites/*/files/processing/
 /priv/sites/*/files/unhandled/
 /priv/modules/
+
+/modules/*/translations/template/*.pot
