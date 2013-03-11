@@ -589,6 +589,7 @@ msgstr "Statystyki"
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3
 msgid "Subscribe to"
 msgstr "Subskrybuj"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 18:11+0100\n"
+"PO-Revision-Date: 2013-03-11 19:37+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -165,7 +165,7 @@ msgstr "Klik hier als je het onderstaande bericht niet kunt lezen."
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
 msgid ""
 "Click the button below to confirm your subscription to this mailing list."
-msgstr "Klik op de onderstaande knop om je aanmelding te bevestingen."
+msgstr "Klik op de onderstaande knop om je aanmelding te bevestigen."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
@@ -283,7 +283,7 @@ msgstr "Vanaf nu ontvang je mail van deze mailinglijst."
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
-msgstr "Geef je email adres waarmee je je wilt aanmelden."
+msgstr "Geef je email adres waarmee je je wilt aanmelden bij"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
 msgid "Go to mailinglist page"
@@ -576,6 +576,7 @@ msgstr "Statistieken"
 msgid "Subscribe"
 msgstr "Aanmelden"
 
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3
 msgid "Subscribe to"
 msgstr "Aanmelden bij"
@@ -741,7 +742,8 @@ msgstr "Wanneer je geen mail meer wilt ontvangen kun je"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
 msgid "You are not allowed to add or enable recipients."
-msgstr "Je hebt geen toestemming om ontvangers toe te voegen of actief te maken."
+msgstr ""
+"Je hebt geen toestemming om ontvangers toe te voegen of actief te maken."
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
 msgid "You are not allowed to edit recipients."
@@ -781,7 +783,10 @@ msgid ""
 "You received this mail because someone wanted to send you this information. "
 "We did not store your e-mail address and will not send you any other mail "
 "because of this mail."
-msgstr "Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. We hebben je e-mail adres niet opgeslagen en zullen je geen andere e-mail meer sturen."
+msgstr ""
+"Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. "
+"We hebben je e-mail adres niet opgeslagen en zullen je geen andere e-mail "
+"meer sturen."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
