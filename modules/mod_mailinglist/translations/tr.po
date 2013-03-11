@@ -13,13 +13,36 @@ msgstr ""
 "PO-Revision-Date: 2012-12-27 23:36+0200\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
-msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Alıcılar</h3><p>Mail listesi alıcılarını eklemek, kaldırmak veya görüntülemek için \"tüm alıcıları göster\"e tıklayınız.</p><h3>Gönderici adı ve e-mail adresi</h3><p>Her mail listesi için gönderici adı ve e-mail adresi düzenlenebilir. Varsayılan olan config anahtarı <tt>site.email_from</tt>.  <i>Kimden</i> kısmına bu ayarlanan ad ve adres eklenecektir.</p><h3>Alıcı listelerinin otomatik yüklenmesi</h3><p>Otomatik yükleme için dropbox dosya adı kullanılır. Dosya adı alıcı listesiyle aynı olmalıdır. Alıcı listesi dosyadaki alıcılarla değitirilecektir.</p><h3>Erişim kontrolü</h3><p>Mail listesini düzenleyebilen kişiler mail listesine sayfa gönderebilirler. Mail listesini görüntüleyebilenler listeye e-mail adresi ekleyebilirler.</p>"
+msgid ""
+"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
+"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
+"address</h3><p>The sender name and e-mail address can be set per mailing "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
+"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
+"used for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</"
+"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
+"allowed to send a page to the mailing list. Everybody who can view the "
+"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr ""
+"<h3>Alıcılar</h3><p>Mail listesi alıcılarını eklemek, kaldırmak veya "
+"görüntülemek için \"tüm alıcıları göster\"e tıklayınız.</p><h3>Gönderici adı "
+"ve e-mail adresi</h3><p>Her mail listesi için gönderici adı ve e-mail adresi "
+"düzenlenebilir. Varsayılan olan config anahtarı <tt>site.email_from</tt>.  "
+"<i>Kimden</i> kısmına bu ayarlanan ad ve adres eklenecektir.</p><h3>Alıcı "
+"listelerinin otomatik yüklenmesi</h3><p>Otomatik yükleme için dropbox dosya "
+"adı kullanılır. Dosya adı alıcı listesiyle aynı olmalıdır. Alıcı listesi "
+"dosyadaki alıcılarla değitirilecektir.</p><h3>Erişim kontrolü</h3><p>Mail "
+"listesini düzenleyebilen kişiler mail listesine sayfa gönderebilirler. Mail "
+"listesini görüntüleyebilenler listeye e-mail adresi ekleyebilirler.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:15
 msgid "<p>Sorry, something went wrong. Please try again later.</p>"
@@ -66,12 +89,21 @@ msgid "All processed"
 msgstr "Tümü gerçekleşti"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:17
-msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "Mail listesinin tüm alıcıları. Bu listeyi her satıra bir mail adresi gelecek şekilde yükleyebilir ya da indirebilirsiniz."
+msgid ""
+"All recipients of the mailing list. You can upload or download this list, "
+"which must be a file with one e-mail address per line."
+msgstr ""
+"Mail listesinin tüm alıcıları. Bu listeyi her satıra bir mail adresi gelecek "
+"şekilde yükleyebilir ya da indirebilirsiniz."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
-msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "Sayfalar mailing olarak gönderilebilir. Herhangi bir düzenleme sayfasından mail gönderebilirsiniz. Bu sayfada mail listelerini ve alıcıları ekleyip çıkartabilirsiniz."
+msgid ""
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
+msgstr ""
+"Sayfalar mailing olarak gönderilebilir. Herhangi bir düzenleme sayfasından "
+"mail gönderebilirsiniz. Bu sayfada mail listelerini ve alıcıları ekleyip "
+"çıkartabilirsiniz."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
@@ -82,11 +114,18 @@ msgid "Are you sure you want to delete the mailing list"
 msgstr "Mail listesini silmek istediğinizden emin misiniz?"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
-msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
-msgstr "Mailing istatistiklerini silmek istediğinizden emin misiniz? Bu daha sonra göndereceğiniz bir mailin alıcılara iki kez gönderilmesi anlamına gelebilir."
+msgid ""
+"Are you sure you want to reset the statistics for this mailing? This means "
+"that if you send the mailing again afterwards, recipients might have gotten "
+"the mailing twice."
+msgstr ""
+"Mailing istatistiklerini silmek istediğinizden emin misiniz? Bu daha sonra "
+"göndereceğiniz bir mailin alıcılara iki kez gönderilmesi anlamına gelebilir."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
-msgid "Before you will receive any further mail you need to confirm your subscription."
+msgid ""
+"Before you will receive any further mail you need to confirm your "
+"subscription."
 msgstr "Daha sonraki mailleri almanız için üyeliğinizi onaylamalısınız."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
@@ -115,7 +154,8 @@ msgid "Clear"
 msgstr "Temizle"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:10
-msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgid ""
+"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr "Mail listesinden çıkmak için <strong>üyelikten çık</strong>'a tıkla."
 
 #: modules/mod_mailinglist/templates/mailing_page.tpl:29
@@ -123,7 +163,8 @@ msgid "Click here when you can’t read the message below."
 msgstr "Aşağıdaki mesajı okuyamıyorsanız buraya tıklayınız."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
-msgid "Click the button below to confirm your subscription to this mailing list."
+msgid ""
+"Click the button below to confirm your subscription to this mailing list."
 msgstr "Mail listesine üyeliğinizi onaylamak için aşağıdaki butona tıklayınız."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53
@@ -177,7 +218,8 @@ msgstr "Tüm aktif alıcıların listesini indir."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
 msgid "Downloading active recipients list. Check your download window."
-msgstr "Aktif alıcıların listesi indiriliyor. İndirme pencerenizi kontrol ediniz."
+msgstr ""
+"Aktif alıcıların listesi indiriliyor. İndirme pencerenizi kontrol ediniz."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:40
 msgid "Dropbox filename (optional)"
@@ -194,6 +236,7 @@ msgid "E-mail page"
 msgstr "Sayfayı gönder"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
+#: modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
 msgid "E-mail this page"
 msgstr "Bu sayfayı gönder"
 
@@ -221,12 +264,15 @@ msgid "Enabled"
 msgstr "Etkin"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
-msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
+msgid ""
+"Enter the e-mail address of the recipient. The name of the recipient is "
+"optional."
 msgstr "Alıcının email adresini giriniz. Alıcının ismi isteğe bağlıdır."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
 msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "Dışarıdan yönetilen liste &mdash; Üye ol/ Üyelikten çık bağlantıları yok."
+msgstr ""
+"Dışarıdan yönetilen liste &mdash; Üye ol/ Üyelikten çık bağlantıları yok."
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
 msgid "First name"
@@ -332,7 +378,8 @@ msgstr "TAMAM"
 msgid ""
 "On this page you see the addresses that have bounced. They have\n"
 "    been disabled by default. Please correct each address and check the\n"
-"    checkbox in front of the address to re-enable it. If an address is invalid, you can delete it."
+"    checkbox in front of the address to re-enable it. If an address is "
+"invalid, you can delete it."
 msgstr ""
 "Bu sayfada geri dönen adresleri görüyorsunuz. Bu adresler\n"
 "iptal edildi. Her adresi doğrulayın ve yeniden etkinleştirmek\n"
@@ -394,8 +441,12 @@ msgid "Recipients"
 msgstr "Alıcılar"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
-msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
-msgstr "Alıcılar sadece email ile (basit üyelik formu yoluyla) üye olmuş ya da sistemdeki kayıtlı kullanıcılar olabilir."
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+"Alıcılar sadece email ile (basit üyelik formu yoluyla) üye olmuş ya da "
+"sistemdeki kayıtlı kullanıcılar olabilir."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:8
@@ -444,16 +495,22 @@ msgid "Send the mailing automatically after the publication start date of"
 msgstr "Yayınlanma tarihi geldiğinde otomatik olarak mail gönder"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
-msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
-msgstr "Düzenleme sayfasındaki \"yayınla\" kutusu işaretlendiğinde hemen mailing gönder."
+msgid ""
+"Send the mailing immediately after the \"published\" checkbox has been "
+"checked in the edit page."
+msgstr ""
+"Düzenleme sayfasındaki \"yayınla\" kutusu işaretlendiğinde hemen mailing "
+"gönder."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
-msgid "Send the mailing right now, but do not include a link back to the website."
+msgid ""
+"Send the mailing right now, but do not include a link back to the website."
 msgstr "Mailingi şimdi gönder, ama sayfa linkini ekleme."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
 msgid "Send this page to a mailinglist and view mailinglist statistics."
-msgstr "Mail listesine bu sayfayı gönder ve mail listesi istatistiklerini görüntüle."
+msgstr ""
+"Mail listesine bu sayfayı gönder ve mail listesi istatistiklerini görüntüle."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
@@ -492,8 +549,12 @@ msgid "Show all recipients &raquo;"
 msgstr "Tüm alıcıları göster &raquo;"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
-msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
-msgstr "Üzgünüz, mail listesine üyeliğiniz gerçekleştirilemedi. Lütfen daha sonra veya başka bir e-mail adresiyle yeniden deneyiniz."
+msgid ""
+"Sorry, I could not subscribe you to the mailing list. Please try again later "
+"or with another e-mail address."
+msgstr ""
+"Üzgünüz, mail listesine üyeliğiniz gerçekleştirilemedi. Lütfen daha sonra "
+"veya başka bir e-mail adresiyle yeniden deneyiniz."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
 msgid "Sorry, can’t confirm your subscription"
@@ -526,23 +587,33 @@ msgid "Thank you"
 msgstr "Teşekkürler"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:26
-msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
-msgstr "Onay kodu bilinmiyor. Daha önce onaylamış olabilirsiniz ya da bir hata oluştu."
+msgid ""
+"The confirmation key is unknown. Either you already confirmed or something "
+"else went wrong."
+msgstr ""
+"Onay kodu bilinmiyor. Daha önce onaylamış olabilirsiniz ya da bir hata "
+"oluştu."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
 msgstr "E-mailler gönderiliyor..."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:20
-msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "Bağlantınızdaki anahtar hiçbir üyelikle eşleşmedi. Üyelikten çıkmış ya da mail listesi silinmiş olabilir."
+msgid ""
+"The key in your link does not match any subscription. Either you already "
+"unsubscribed, or the mailing list has been deleted."
+msgstr ""
+"Bağlantınızdaki anahtar hiçbir üyelikle eşleşmedi. Üyelikten çıkmış ya da "
+"mail listesi silinmiş olabilir."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
 msgid "The mailing will be send when the page becomes visible."
 msgstr "Sayfa görünür olduğunda mailing gönderilecek."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
-msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
+msgid ""
+"The page you are trying to e-mail is not yet published. What do you want to "
+"do?"
 msgstr "Göndermeye çalıştığınız sayfa yayınlanmadı. Ne yapmak istiyorsunuz?"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
@@ -550,8 +621,12 @@ msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "Mail listesinin alıcı listesi de silinecek."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:32
-msgid "There are no addresses eligible for re-sending. You seem to have already processed all bouncing addresses."
-msgstr "Tekrar göndermek için uygun olan bir adres yok. Tüm geri dönenlerle işlemlerinizi bitirmiş durumdasınız."
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr ""
+"Tekrar göndermek için uygun olan bir adres yok. Tüm geri dönenlerle "
+"işlemlerinizi bitirmiş durumdasınız."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
 msgid "There is no mailing list with the name ‘mailinglist_test’."
@@ -562,20 +637,40 @@ msgid "This can not be undone"
 msgstr "Geri alınamaz"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
-msgid "This is a \"private\", externally managed list. Recipients will not receive any subscribe/unsubscribe messages."
-msgstr "Bu bir \"özel\" liste. Alıcılar üye ol veya üyelikten çık mesajı almayacaklar."
+msgid ""
+"This is a \"private\", externally managed list. Recipients will not receive "
+"any subscribe/unsubscribe messages."
+msgstr ""
+"Bu bir \"özel\" liste. Alıcılar üye ol veya üyelikten çık mesajı "
+"almayacaklar."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
-msgid "This overview allows you to send the current page to a group of recipients, grouped into mailing lists. Choose 'preview mailing' to open a popup window which shows how the mailing will look like when it is sent; choose 'send test mailing' to send it to the predefined list of test e-mail addresses. Choose 'edit' to go back to editing the page.  Each mailinglist is listed in the table below, together with statistics on when it was sent and to how many recipients."
-msgstr "Bu genel bakış size sayfayı mail listesindeki alıcı grubuna gönderme imkanı verir. 'mail önizleme'yi seçerek gönderildiğinde nasıl görüneceğini görebilirsiniz. 'test mailingi gönder'i seçerek önceden belirlenmiş test alıcılarına deneme maili gönderebilirsiniz. Tekrar düzenleme sayfasına dönmek için 'düzenle'yi seçiniz. Aşağıda listelenen mail listeleri kaç alıcıya ne zaman gönderildi bilgisiyle birlikte yer alır."
+msgid ""
+"This overview allows you to send the current page to a group of recipients, "
+"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
+"which shows how the mailing will look like when it is sent; choose 'send "
+"test mailing' to send it to the predefined list of test e-mail addresses. "
+"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
+"the table below, together with statistics on when it was sent and to how "
+"many recipients."
+msgstr ""
+"Bu genel bakış size sayfayı mail listesindeki alıcı grubuna gönderme imkanı "
+"verir. 'mail önizleme'yi seçerek gönderildiğinde nasıl görüneceğini "
+"görebilirsiniz. 'test mailingi gönder'i seçerek önceden belirlenmiş test "
+"alıcılarına deneme maili gönderebilirsiniz. Tekrar düzenleme sayfasına "
+"dönmek için 'düzenle'yi seçiniz. Aşağıda listelenen mail listeleri kaç "
+"alıcıya ne zaman gönderildi bilgisiyle birlikte yer alır."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
 msgid "This page can be sent to different mailing lists."
 msgstr "Bu sayfa farklı mail listelerine gönedrilebilir."
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
-msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
-msgstr "Alıcıların Hoşgeldiniz mesajı almasını istiyorsanız kutuyu işaretleyin."
+msgid ""
+"Tick the checkbox if you want the recipient to receive a welcome e-mail "
+"message."
+msgstr ""
+"Alıcıların Hoşgeldiniz mesajı almasını istiyorsanız kutuyu işaretleyin."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:20
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:16
@@ -599,8 +694,12 @@ msgid "Updated the recipient."
 msgstr "Alıcılar güncellendi."
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:4
-msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
-msgstr "Alıcıların yer aldığı bir dosya yükleyin. Dosyada her bir satırda bir e-mail adresi yer almalıdır. Dosyanın karakter kodu utf-8 olmalıdır."
+msgid ""
+"Upload a file with recipients. The file must contain a single e-mail address "
+"per line. The file’s character set must be utf-8."
+msgstr ""
+"Alıcıların yer aldığı bir dosya yükleyin. Dosyada her bir satırda bir e-mail "
+"adresi yer almalıdır. Dosyanın karakter kodu utf-8 olmalıdır."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
 msgid "Upload a list of recipients."
@@ -624,7 +723,8 @@ msgid "Welcome to"
 msgstr "Hoşgeldiniz"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
-msgid "When you don’t want to receive any mail then please ignore this message."
+msgid ""
+"When you don’t want to receive any mail then please ignore this message."
 msgstr "Bundan sonra mail almak istemiyorsanız lütfen bu mesajı yoksayın."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
@@ -644,8 +744,12 @@ msgid "You are not allowed to send mail to the test mailing list."
 msgstr "Test mail listesine e-mail gönderme yetkiniz yok."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:11
-msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
-msgstr "Alıcı listesini görüntüleme veya düzenleme yetkiniz yok. Bunları yapabilmek için yetkilerinizin düzenlenmesi gerekir."
+msgid ""
+"You are not allowed to view or edit the recipients list. You need to have "
+"edit permission on the mailing list to change and view the recipients."
+msgstr ""
+"Alıcı listesini görüntüleme veya düzenleme yetkiniz yok. Bunları yapabilmek "
+"için yetkilerinizin düzenlenmesi gerekir."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
@@ -660,12 +764,18 @@ msgid "You are now unsubscribed from the mailing list"
 msgstr "Mail listesindeki üyeliğiniz sonlandırıldı"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
-msgid "You can try to re-subscribe to one of our mailing lists in the side column."
+msgid ""
+"You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "Yandaki bölümden diğer mail listelerimize üye olmayı deneyebilirsiniz."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
-msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
-msgstr "Bu maili aldınız çünkü biri bu bilginin size gönderilmesini istedi. E-mail adresinizi kaydetmiyoruz ve size bu mailden başka bir mail yollamayacağız."
+msgid ""
+"You received this mail because someone wanted to send you this information. "
+"We did not store your e-mail address and will not send you any other mail "
+"because of this mail."
+msgstr ""
+"Bu maili aldınız çünkü biri bu bilginin size gönderilmesini istedi. E-mail "
+"adresinizi kaydetmiyoruz ve size bu mailden başka bir mail yollamayacağız."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -680,8 +790,13 @@ msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Siz veya bir başkası e-mail adresinizi mail listemize ekledi"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
-msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "E-mail adresiniz mail listesine eklendi. E-mail adresinize bir onay maili gönderildi. Eğer gelen kutunuzda göremezseniz spam klasörünüze bakınız."
+msgid ""
+"Your e-mail address is added to the mailing list. A confirmation mail is "
+"sent to your e-mail address and will arrive shortly. When you don’t receive "
+"it, then please check your spam folder."
+msgstr ""
+"E-mail adresiniz mail listesine eklendi. E-mail adresinize bir onay maili "
+"gönderildi. Eğer gelen kutunuzda göremezseniz spam klasörünüze bakınız."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
 msgid "bounced"
@@ -700,6 +815,10 @@ msgstr "temizle"
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "click here to unsubscribe."
 msgstr "üyelikten çıkmak için buraya tıklayınız"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "d M Y, H:i"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
@@ -775,4 +894,3 @@ msgstr "bu listeden başka mail almak istemiyorsanız."
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "e-mail adresinizle"
-

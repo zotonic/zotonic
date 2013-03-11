@@ -13,11 +13,11 @@ msgstr ""
 "PO-Revision-Date: 2013-01-31 01:03+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
@@ -234,6 +234,7 @@ msgid "E-mail page"
 msgstr "E-mail 页面"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
+#: modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
 msgid "E-mail this page"
 msgstr "E-mail 本页面"
 
@@ -790,6 +791,10 @@ msgstr "清除"
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "click here to unsubscribe."
 msgstr "点击这里取消订阅。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "d M Y, H:i"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
