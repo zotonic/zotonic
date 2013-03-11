@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 19:44+0100\n"
+"PO-Revision-Date: 2013-03-11 20:35+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -91,9 +91,7 @@ msgstr "Alles verwerkt"
 msgid ""
 "All recipients of the mailing list. You can upload or download this list, "
 "which must be a file with one e-mail address per line."
-msgstr ""
-"Alle ontvangers van de mailinglijst. Je kan deze lijst downloaden of "
-"uploaden. Elke regel van het bestand moet 1 email adres bevatten."
+msgstr "Alle ontvangers van de mailinglijst. Je kan deze lijst downloaden of uploaden. Elke regel van het bestand moet 1 e-mailadres bevatten."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
 msgid ""
@@ -147,7 +145,7 @@ msgstr "Mailing annuleren"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
 msgid "Check to activate the e-mail address."
-msgstr "Vink aan om het e-mail adres actief te maken"
+msgstr "Vink aan om het e-mailadres actief te maken"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
 msgid "Clear"
@@ -266,8 +264,7 @@ msgstr "Actief"
 msgid ""
 "Enter the e-mail address of the recipient. The name of the recipient is "
 "optional."
-msgstr ""
-"Geef het email adres van de ontvanger. De naam van de ontvanger is optioneel."
+msgstr "Geef het e-mailadres van de ontvanger. De naam van de ontvanger is optioneel."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
 msgid "Externally managed list &mdash; no (un)subscribe links"
@@ -283,7 +280,7 @@ msgstr "Vanaf nu ontvang je mail van deze mailinglijst."
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
-msgstr "Geef je email adres waarmee je je wilt aanmelden bij"
+msgstr "Geef je e-mailadres waarmee je je wilt aanmelden bij"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
 msgid "Go to mailinglist page"
@@ -403,11 +400,11 @@ msgstr "Bevestig a.u.b. uw aanmelding voor"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr "Voer het email adres in waar je een test-mail naartoe wilt sturen."
+msgstr "Voer het e-mailadres in waar je een test-mail naartoe wilt sturen."
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr "Voer het email adres in waar je een test-mail naartoe wilt sturen."
+msgstr "Voer het e-mailadres in waar je een test-mail naartoe wilt sturen."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
@@ -445,7 +442,7 @@ msgid ""
 "Recipients are subscribed either as email-only (via a simple signup form), "
 "or as subscribed persons in the system."
 msgstr ""
-"De geaddresseerden van een mailinglijst zijn óf slechts een mailadres,\n"
+"De geaddresseerden van een mailinglijst zijn óf slechts een e-mailadres,\n"
 "óf een volledige persoon in het systeem."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
@@ -516,7 +513,7 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
-msgstr "Verstuur deze pagina naar een enkel email adres."
+msgstr "Verstuur deze pagina naar een enkel e-mailadres."
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
 msgid "Send this page to the test mailing list."
@@ -554,9 +551,7 @@ msgstr "Toon alle ontvangers &raquo;"
 msgid ""
 "Sorry, I could not subscribe you to the mailing list. Please try again later "
 "or with another e-mail address."
-msgstr ""
-"Het aanmelden bij de mailinglijst is niet gelukt. Probeer het later a.u.b. "
-"nog een keer of met een ander email adres."
+msgstr "Het aanmelden bij de mailinglijst is niet gelukt. Probeer het later a.u.b. nog een keer of met een ander e-mailadres."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
 msgid "Sorry, can’t confirm your subscription"
@@ -783,10 +778,7 @@ msgid ""
 "You received this mail because someone wanted to send you this information. "
 "We did not store your e-mail address and will not send you any other mail "
 "because of this mail."
-msgstr ""
-"Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. "
-"We hebben je e-mail adres niet opgeslagen en zullen je geen andere e-mail "
-"meer sturen."
+msgstr "Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. We hebben je e-mailadres niet opgeslagen en zullen je geen andere e-mail meer sturen."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -798,7 +790,7 @@ msgstr "Je ontvangt een bevestigingsbericht in je mail."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Jij of iemand anders heeft jou adres toegevoegd aan de mailinglijst"
+msgstr "Jij of iemand anders heeft jouw e-mailadres toegevoegd aan de mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid ""
@@ -905,7 +897,7 @@ msgstr "wanneer je geen mail meer wilt ontvangen van deze lijst."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
-msgstr "met je email adres"
+msgstr "met je e-mailadres"
 
 #~ msgid "<em>withheld</em>"
 #~ msgstr "<em>achtergehouden</em>"
