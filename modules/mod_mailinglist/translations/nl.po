@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 19:37+0100\n"
+"PO-Revision-Date: 2013-03-11 19:44+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -763,7 +763,7 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
-msgstr "Je bent nu aangemeld bij deze mailinglijst."
+msgstr "Je bent nu aangemeld bij de mailinglijst"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
