@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 20:35+0100\n"
+"PO-Revision-Date: 2013-03-11 20:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -124,7 +124,7 @@ msgstr ""
 msgid ""
 "Before you will receive any further mail you need to confirm your "
 "subscription."
-msgstr "Voordat je email ontvangt, moet je aanmelding eerst worden bevestigd."
+msgstr "Voordat je e-mail van deze lijst zal ontvangen, moet je aanmelding eerst worden bevestigd."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
@@ -235,7 +235,7 @@ msgstr "Email deze pagina"
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
 #: modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
 msgid "E-mail this page"
-msgstr "Email deze pagina"
+msgstr "E-mail deze pagina"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:71
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
@@ -254,7 +254,7 @@ msgstr "Bewerk de mailinglijst &raquo;"
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6
 msgid "Enabled"
@@ -276,7 +276,7 @@ msgstr "Voornaam"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
-msgstr "Vanaf nu ontvang je mail van deze mailinglijst."
+msgstr "Vanaf nu ontvang je e-mail van deze mailinglijst."
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
@@ -473,7 +473,7 @@ msgstr "Kies bestand"
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17
 msgid "Send e-mail"
-msgstr "Via email"
+msgstr "Via e-mail"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
 msgid "Send mailing"
@@ -728,12 +728,11 @@ msgstr "Welkom bij"
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
 msgid ""
 "When you don’t want to receive any mail then please ignore this message."
-msgstr ""
-"Wanneer je geen mail meer wenst te ontvangen kun je dit bericht negeren."
+msgstr "Wanneer je geen e-mail meer wenst te ontvangen kun je dit bericht negeren."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "When you don’t want to receive any more mail then"
-msgstr "Wanneer je geen mail meer wilt ontvangen kun je"
+msgstr "Wanneer je geen e-mail meer wilt ontvangen kun je"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
 msgid "You are not allowed to add or enable recipients."
@@ -746,7 +745,7 @@ msgstr "Je hebt geen toestemming om ontvangers te bewerken."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
 msgid "You are not allowed to send mail to the test mailing list."
-msgstr "Je hebt geen toestemming om mail te sturen naar de testmailinglijst."
+msgstr "Je hebt geen toestemming om e-mail te sturen naar de testmailinglijst."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:11
 msgid ""
@@ -771,7 +770,7 @@ msgstr "Je bent nu afgemeld van deze mailinglijst"
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
 msgid ""
 "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "opgegven a"
+msgstr "Je kan je wel nog proberen op een van de andere mailinglijsten van deze site aan te melden."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
 msgid ""
@@ -782,7 +781,7 @@ msgstr "Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sture
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
-msgstr "Je ontvangt deze mail omdat je lid bent van de mailinglijst"
+msgstr "Je ontvangt deze mailing omdat je lid bent van de mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:7
 msgid "You will receive a confirmation in your e-mail."
@@ -893,7 +892,7 @@ msgstr "naar de lijst"
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
 msgid "when you don't want to receive any further mail from this list."
-msgstr "wanneer je geen mail meer wilt ontvangen van deze lijst."
+msgstr "wanneer je geen e-mail meer wilt ontvangen van deze lijst."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
