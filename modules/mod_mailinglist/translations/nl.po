@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 20:45+0100\n"
+"PO-Revision-Date: 2013-03-11 20:46+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -180,7 +180,7 @@ msgstr "Bevestig versturen van mailinglijst"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
 msgid "Confirm subscription"
-msgstr "Bevestig a.u.b. uw aanmelding"
+msgstr "Bevestig a.u.b. je aanmelding"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
 msgid "Could not add the recipient."
@@ -392,11 +392,11 @@ msgstr "Bevestig a.u.b. dat je de pagina"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
-msgstr "Bevestig a.u.b. uw aanmelding"
+msgstr "Bevestig a.u.b. je aanmelding"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
 msgid "Please confirm your subscription on"
-msgstr "Bevestig a.u.b. uw aanmelding voor"
+msgstr "Bevestig a.u.b. je aanmelding voor"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
