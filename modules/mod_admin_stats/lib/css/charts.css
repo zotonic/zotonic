@@ -29,9 +29,34 @@ svg {
   shape-rendering: crispEdges;
 }
 
-.line path {
+path.line {
   fill: none;
+  stroke-width: 2;
+  stroke-opacity: 0.5;
+}
+
+path.line:hover {
+  stroke-opacity: 1;
+}
+
+.serie-0 {
   stroke: rgb(6, 156, 209);
+}
+
+.serie-1 {
+  stroke: #ff7f0e;
+}
+
+.serie-2 {
+  stroke: #2ca02c;
+}
+
+.serie-3 {
+  stroke: #d62728;
+}
+
+.serie-4 {
+  stroke: #9467bd;
 }
 
 .chart-label:after {

@@ -20,7 +20,10 @@
         }
     {% else %}
         count: {{ metric.value.count }},
-        one: {{ metric.value.one }}
+        one: {{ metric.value.one }},
+        five: {{ metric.value.five }},
+        fifteen: {{ metric.value.fifteen }},
+        day: {{ metric.value.day }}
     {% endif %}
     },
 {% endfor %}

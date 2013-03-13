@@ -39,34 +39,26 @@ function line_chart() {
             var svg = d3.select(this).select("svg g");
 
             // input domain and output range
+            // for now, we only look at all series for y input domain
+            // for all else, we only look at the first series.
             props.x
-                .domain([d3.min(data, function(d){ return d.x }),
-                         d3.max(data, function(d){ return d.x })])
+                .domain([d3.min(data[0], function(d){ return d.x }),
+                         d3.max(data[0], function(d){ return d.x })])
                 .range([0, client_width]);
             props.y
-                .domain([0, d3.max(data, function(d){ return d.y })])
+                .domain([0, d3.max(data, function(s) {
+                    return d3.max(s, function(d){
+                        return d.y })})])
                 .range([client_height, 0]);
 
             // update axis ticks
             if (props.ticks.x)
-                props.ticks.x.apply(chart, [props.axis.x, data]);
+                props.ticks.x.apply(chart, [props.axis.x, data[0]]);
             if (props.ticks.y)
-                props.ticks.y.apply(chart, [props.axis.y, data]);
-
-            function top(d) {
-                return props.y(d.y);
-            }
-
-            function left(d, i) {
-                return i > 0 ? props.x(data[i-1].x) : 0;
-            }
-
-            function width(d, i) {
-                return props.x(d.x) - left(d, i) - 1;
-            }
+                props.ticks.y.apply(chart, [props.axis.y, data[0]]);
 
             // redraw line!
-            svg.select(".line path")
+            svg.selectAll("path.line")
                 .transition()
                 .duration(props.animation_speed)
                 .attr("d", props.line);
@@ -97,9 +89,12 @@ function line_chart() {
             // produce sample graph if no data provided
             if (!data)
             {
-                var random = d3.random.normal(10);
-                data = d3.range(50).map(function(i){
-                    return { x: Date.now() + 10000 * i, y: random() } });
+                data = [];
+                for (var i = 0; i < 5; i++) {
+                    var random = d3.random.normal(5+5*i);
+                    data.push(d3.range(50).map(function(j){
+                        return { x: Date.now() + 10000 * j, y: random() } }));
+                }
             }
 
             // setup axis
@@ -135,12 +130,14 @@ function line_chart() {
             svg.append("g")
                 .attr("class", "y axis");
 
-            // add line
+            // add line series
             svg.append("g")
-                .attr("class", "line")
+                .attr("class", "series")
                 .attr("clip-path", "url(#clip)")
+                .selectAll("path").data(data)
+                .enter()
                 .append("path")
-                .data([data]);
+                .attr("class", function(d, i) { return "line serie-" + i });
 
 
             // draw chart & we're done!

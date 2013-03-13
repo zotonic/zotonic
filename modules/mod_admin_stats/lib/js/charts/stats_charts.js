@@ -72,18 +72,25 @@ function stats_chart_factory() {
 
     // create data for the line chart
     function meter_data(d) {
+        var series = ["one", "five", "fifteen", "day"];
         var now = Date.now();
         var data = this.length > 0 && d3.select(this[1]).datum();
-        var values = data || d3.range(299).map(function(i){
-            return {x: now - (300 - i)*1000, y: 0} });
+        if (!data)
+            data = series.map(function(){
+                return d3.range(299).map(function(i){
+                    return {x: now - (300 - i)*1000, y: 0} })});
 
-        values.push({x: now, y: d.one});
+        data.forEach(
+            function(s, i) {
+                s.push({x: now, y: d[this[i]]})
+            },
+            series);
 
         return [
             { factory: text, datum:
              { label: "Total count", value: d.count }
             },
-            { factory: line, datum: values }
+            { factory: line, datum: data }
         ];
     }
 
