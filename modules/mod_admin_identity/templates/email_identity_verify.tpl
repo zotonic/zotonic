@@ -18,11 +18,9 @@
 <p><a href="{{ m.site.protocol }}://{{ m.site.hostname }}{% url identity_verify idn_id=idn.id verify_key=verify_key %}">{{ m.site.protocol }}://{{ m.site.hostname }}{% url identity_verify idn_id=idn.id verify_key=verify_key %}</a></p>
 
 <p>{_ If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address. _}</p>
+{% endblock %}
 
-<p>{_ Thank you, _}</p>
-<p>{_ The crew at _} {{ m.config.site.title.value }}.</p>
-
+{% block disclaimer %}
 <p style="color: #666; font-size: 80%;">--<br/>
 {_ You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request. _}</p>
-
 {% endblock %}

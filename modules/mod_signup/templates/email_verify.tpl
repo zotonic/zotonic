@@ -12,8 +12,4 @@
 <p><a href="{% url signup_confirm key=verify_key %}">{_ Confirm my account. _}</a></p>
 
 <p>{_ If the link does not work then you can go to _} <a href="http://{{ m.site.hostname }}{% url signup_confirm %}">http://{{ m.site.hostname }}{% url signup_confirm %}</a> {_ and enter the key _} <strong>{{ verify_key }}</strong> {_ in the input field. _} {_ Hope to see you soon. _}</p>
-
-<p>{_ Kind regards, _}</p>
-
-<p><a href="http://{{ m.site.hostname }}/">{{ m.config.site.title.value }}</a></p>
 {% endblock %}

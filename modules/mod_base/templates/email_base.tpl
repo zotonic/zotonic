@@ -18,6 +18,12 @@
 				<h1>Lectori Salutem,</h1>
 				<p>{_ This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block. _}</p>
 				{% endblock %}
+				{% block closing %}
+					<p>{_ Kind regards, _}</p>
+					<p><a href="http://{{ m.site.hostname }}/">{{ m.config.site.title.value }}</a></p>
+				{% endblock %}
+				{% block disclaimer %}
+				{% endblock %}
 			</td>
 		</tr>
 		{% endblock %}

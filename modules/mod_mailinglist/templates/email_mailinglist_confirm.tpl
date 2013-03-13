@@ -13,8 +13,4 @@
 	<p><a href="http://{{ m.site.hostname }}{% url mailinglist_confirm confirm_key=recipient.confirm_key %}">http://{{m.site.hostname}}{% url mailinglist_confirm confirm_key=recipient.confirm_key %}</a></p>
 
 	<p>{_ When you don’t want to receive any mail then please ignore this message. _}</p>
-
-	<p>{_ Kind Regards, _}</p>
-
-	<p><a href="http://{{ m.site.hostname }}/">{{ m.config.site.title.value }}</a></p>
 {% endblock %}
