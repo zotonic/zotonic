@@ -77,8 +77,7 @@ function stats_chart_factory() {
         var data = this.length > 0 && d3.select(this[1]).datum();
         if (!data)
             data = series.map(function(){
-                return d3.range(299).map(function(i){
-                    return {x: now - (300 - i)*1000, y: 0} })});
+                return [{x: now - 1000, y: 0}] });
 
         data.forEach(
             function(s, i) {
