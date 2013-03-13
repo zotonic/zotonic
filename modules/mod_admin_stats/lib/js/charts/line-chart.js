@@ -42,7 +42,7 @@ function line_chart() {
             // for now, we only look at all series for y input domain
             // for all else, we only look at the first series.
             props.x
-                .domain([Date.now() - 300000, Date.now()])
+                .domain([Date.now() - 300 * 1000, Date.now()])
                     //d3.min(data[0], function(d){ return d.x }),
                     //d3.max(data[0], function(d){ return d.x })])
                 .range([0, client_width]);
@@ -117,7 +117,7 @@ function line_chart() {
                       + props.margin.left + ","
                       + props.margin.top + ")");
 
-            svg.append("defs").append("clippath")
+            svg.append("defs").append("svg:clipPath")
                 .attr("id", "clip")
                 .append("rect")
                 .attr("width", client_width)
