@@ -2,10 +2,10 @@
 {% with m.rsc[object_id].title as title %}
 {% sortable id=#unlink_wrapper tag=edge_id %}
 <li id="{{ #unlink_wrapper }}">
-    <span class="btn btn-small" id="{{ #edit }}">
+    <span class="btn btn-small">
         <i title="{_ Drag to change connection position _}" class="unlink-mover icon-move"></i>
         <id id="{{ #unlink }}" title="{_ Disconnect _}" class="icon-remove"></id>
-        <a href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _} {{ title }}">{{ title|truncate:30 }}</a>
+        <a id="{{ #edit }}" href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _} {{ title }}">{{ title|truncate:30 }}</a>
     </span>
 </li>
 {% endwith %}
