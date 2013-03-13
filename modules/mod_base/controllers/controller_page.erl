@@ -104,5 +104,5 @@ get_id(Context) ->
     end,
     case m_rsc:name_to_id(ReqId, Context) of
         {ok, RscId} -> RscId;
-        _ -> false
+        _ -> undefined
     end.
