@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-12-28 02:22+0200\n"
+"PO-Revision-Date: 2013-03-13 16:12+0100\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: Turkish <kunthar@gmail.com>\n"
 "Language: tr\n"
@@ -67,7 +67,7 @@ msgstr "E-posta"
 msgid "First name"
 msgstr "Adınız"
 
-#: modules/mod_signup/templates/email_verify.tpl:16
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Çok yakında görüşmek üzere."
 
@@ -88,8 +88,16 @@ msgid "If you have already an account,"
 msgstr "Zaten üyemiz iseniz,"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:17
-msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
-msgstr "E-mailinize onay anahtarı gönderildi. Lütfen aşağıdaki alana anahtarı kopyalayıp yapıştırınız."
+msgid ""
+"In your e-mail you received a confirmation key. Please copy it in the input "
+"field below."
+msgstr ""
+"E-mailinize onay anahtarı gönderildi. Lütfen aşağıdaki alana anahtarı "
+"kopyalayıp yapıştırınız."
+
+#: modules/mod_signup/templates/email_verify.tpl:16
+msgid "Kind regards,"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:93
 msgid "Last name"
@@ -100,7 +108,7 @@ msgid "Password"
 msgstr "Şifre"
 
 #: modules/mod_signup/templates/email_verify.tpl:3
-msgid "Please confirm your account."
+msgid "Please confirm your account"
 msgstr "Lütfen hesabınızı onaylayın"
 
 #: modules/mod_signup/templates/email_verify.tpl:10
@@ -126,22 +134,34 @@ msgstr "Kaydolarak üyemiz olun"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:20
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr "Üzgünüz, bu onay kodu geçersiz. Doğru olarak kopyaladığınızdan emin olun."
+msgstr ""
+"Üzgünüz, bu onay kodu geçersiz. Doğru olarak kopyaladığınızdan emin olun."
 
 #: modules/mod_signup/templates/signup.tpl:72
-msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
-msgstr "Üzgünüz, servis sağlayıcınız tarafından zaten bu hesap yaratılmış. Facebook üzerindeki hesabınız durdurulmuş olabilir."
+msgid ""
+"Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+msgstr ""
+"Üzgünüz, servis sağlayıcınız tarafından zaten bu hesap yaratılmış. Facebook "
+"üzerindeki hesabınız durdurulmuş olabilir."
 
 #: modules/mod_signup/templates/signup.tpl:117
 msgid "Sorry, this username is already in use. Please try another one."
-msgstr "Üzgünüz, bu kullanıcı adı daha önce alınmıştır. Lütfen yeni bir isimle deneyin."
+msgstr ""
+"Üzgünüz, bu kullanıcı adı daha önce alınmıştır. Lütfen yeni bir isimle "
+"deneyin."
 
 #: modules/mod_signup/templates/email_verify.tpl:8
-msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
-msgstr "Üye olduğunuz çok teşekkür ediyoruz. Hesabınızı keyifle kullanmak için onaylamanız gerekiyor. "
+msgid ""
+"Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+msgstr ""
+"Üye olduğunuz çok teşekkür ediyoruz. Hesabınızı keyifle kullanmak için "
+"onaylamanız gerekiyor. "
 
 #: modules/mod_signup/templates/signup.tpl:151
-msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgid ""
+"To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Kayıt olmak için onay vermeniz gerekiyor."
 
 #: modules/mod_signup/templates/signup.tpl:120
@@ -153,15 +173,21 @@ msgid "Verify password"
 msgstr "Şifre tekrar"
 
 #: modules/mod_signup/templates/signup.tpl:173
-msgid "We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account."
-msgstr "Size bir e-posta gönderdik. Hesabınızı nasıl onaylayacağınız bu e-postada olacak."
+msgid ""
+"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"to confirm your account."
+msgstr ""
+"Size bir e-posta gönderdik. Hesabınızı nasıl onaylayacağınız bu e-postada "
+"olacak."
 
 #: modules/mod_signup/templates/signup.tpl:149
 msgid ""
-"We will be very careful with all the information given to us and will never give your name or address away without your permission.\n"
+"We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission.\n"
 "\t\t\tWe do have some rules that we need you to agree with."
 msgstr ""
-"Bize verdiğiniz tüm bilgiler için çok dikkatli olacağız ve isminizi ve adresinizi izniniz olmadan paylaşmayacağız.\n"
+"Bize verdiğiniz tüm bilgiler için çok dikkatli olacağız ve isminizi ve "
+"adresinizi izniniz olmadan paylaşmayacağız.\n"
 "\t\t\tAnlaşmamız gereken bazı kurallarımız var."
 
 #: modules/mod_signup/templates/signup_confirm.tpl:8
@@ -169,8 +195,12 @@ msgid "Welcome"
 msgstr "Hoşgeldiniz"
 
 #: modules/mod_signup/templates/signup.tpl:175
-msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
-msgstr "Eğer bir kaç dakika içinde e-posta elinize geçmemişse lütfen SPAM ve çöp klasörlerinizi kontrol edin."
+msgid ""
+"When you don’t receive the e-mail within a few minutes then be sure to check "
+"your spam filter and spam folders."
+msgstr ""
+"Eğer bir kaç dakika içinde e-posta elinize geçmemişse lütfen SPAM ve çöp "
+"klasörlerinizi kontrol edin."
 
 #: modules/mod_signup/templates/signup.tpl:171
 msgid "You are almost there!"
