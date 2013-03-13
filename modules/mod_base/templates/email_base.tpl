@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title>{% block title %}{_ Hello from Zotonic _}{% endblock %}</title>
+	<title>{% block title_wrapper %}{% block title %}{_ Hello from Zotonic _}{% endblock %}{% endblock %}</title>
 	<base href="http://{{ m.site.hostname }}/" />
 	<base target="_blank" />
 	{% block email_styles %}{% include "_email_styles.tpl" %}{% endblock %}
