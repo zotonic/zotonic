@@ -355,7 +355,7 @@ insert(Table, Props, Context) ->
 			 {ok, IdVal} -> IdVal;
 			 {error, noresult} -> undefined;
              {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
+                error_logger:error_msg("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
                 throw(Error) 
 		     end,
 		{ok, Id}
@@ -397,7 +397,7 @@ update(Table, Id, Parameters, Context) ->
         case pgsql:equery1(C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
+                error_logger:error_msg("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
                 throw(Error) 
         end
     end,
@@ -415,7 +415,7 @@ delete(Table, Id, Context) ->
         case pgsql:equery1(C, Sql, [Id]) of
             {ok, _RowsDeleted} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
+                error_logger:error_msg("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
                 throw(Error) 
         end            
 	end,
