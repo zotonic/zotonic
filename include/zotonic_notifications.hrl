@@ -57,6 +57,9 @@
 %% Identity may be undefined, or is a identity used for the verification.
 -record(identity_verification, {user_id, identity}).
 
+%% @doc Notification that an user's identity has been verified. (notify)
+-record(identity_verified, {user_id, type, key}).
+
 
 %% @doc Handle a signup of an user, return the follow on page for after the signup. (first)
 %% Return {ok, Url}
@@ -107,7 +110,7 @@
 -record(url_rewrite, {dispatch, args=[]}).
 
 %% @doc Rewrite an url before it will be dispatched using the z_sites_dispatcher (foldl)
--record(dispatch_rewrite, {is_dir=false, path=""}).
+-record(dispatch_rewrite, {is_dir=false, path="", host}).
 
 %% @doc Used in the admin to fetch the possible blocks for display (foldl)
 -record(admin_edit_blocks, {id}).
@@ -132,7 +135,8 @@
                 vars=[], attachments=[], queue=false}).
 
 %% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, localtags, domain, reference, email, headers, decoded, raw}).
+-record(email_received, {to, from, localpart, localtags, domain, reference, email, 
+						 headers, is_bulk=false, is_auto=false, decoded, raw}).
 
 % E-mail received notification:
 % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}
@@ -386,6 +390,58 @@
 %% @doc Push some information to the debug page in the user-agent. 
 % Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
 -record(debug, {what, arg=[]}).
+
+
+%% @doc mod_export - return the content type (like {ok, "text/csv"}) for the dispatch rule/id export.
+-record(export_resource_content_type, {
+		dispatch :: atom(),
+		id :: integer()
+	}).
+
+%% @doc mod_export - return the {ok, Filename} for the content disposition.
+-record(export_resource_filename, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string()
+	}).
+
+%% @doc mod_export - Fetch the header for the export.
+%% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
+-record(export_resource_header, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string()
+	}).
+
+%% @doc mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
+%% The 'first' notification should return: {ok, Values|binary()} | {ok, Values|binary(), ContinuationState} | {error, Reason}.
+%% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
+%% Return the empty list of values to signify the end of the data stream.
+-record(export_resource_data, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		state :: term()
+	}).
+
+%% @doc mod_export - Encode a single data element.
+%% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
+-record(export_resource_encode, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		data :: term(),
+		state :: term()
+	}).
+
+%% @doc mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
+%% The 'first' notification should return: {ok, binary()} | {error, Reason}.
+-record(export_resource_footer, {
+		dispatch :: atom(),
+		id :: integer(),
+		content_type :: string(),
+		state :: term()
+	}).
 
 
 % Simple mod_development notifications:

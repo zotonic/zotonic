@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-08
+%% @copyright 2009-2013 Marc Worrell
 %%
 %% @doc Some easy shortcut functions.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +30,9 @@
     flush/0,
     flush/1,
     restart/0,
+    restart/1,
+
+    ld/1,
 
     debug_msg/3,
 
@@ -45,8 +47,8 @@
     warning/4
 ]).
 
--include_lib("zotonic.hrl").
--include_lib("zotonic_log.hrl").
+-include("zotonic.hrl").
+-include("zotonic_log.hrl").
 
 % @doc Return a new context
 c(Site) ->
@@ -69,7 +71,9 @@ m() ->
 flush() ->
     [ flush(C) || C <- z_sites_manager:get_site_contexts() ],
     z_sites_dispatcher:update_dispatchinfo().
-	
+
+flush(Site) when is_atom(Site) ->
+    flush(c(Site));
 flush(Context) ->
    	z_depcache:flush(Context),
    	z_dispatcher:reload(Context),
@@ -80,6 +84,15 @@ restart() ->
     zotonic:stop(),
     zotonic:start().
 
+%% @doc Restart a site
+restart(Site) ->
+    z_sites_manager:restart(Site).
+
+
+%% @doc Reload an Erlang module
+ld(Module) ->
+    code:purge(Module),
+    code:load_file(Module). 
 
 %% @doc Echo and return a debugging value
 debug_msg(Module, Line, Msg) ->

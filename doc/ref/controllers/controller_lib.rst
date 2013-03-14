@@ -48,7 +48,7 @@ Example dispatch rule::
 +-------------------+-----------------------------------------+---------------------+
 |paths              |List of files to concatenate. Useful for |{paths,              |
 |                   |creating custom dispatch rules to make   |["js/foo.js",        |
-|                   |nice urls for js api's.                  | "js/bar.js"]}       |
+|                   |nice urls for js api's.                  |"js/bar.js"]}        |
 +-------------------+-----------------------------------------+---------------------+
 |max_age            |Define a custom value for the max-age    |{max_age, 3600}      |
 |                   |header indicating to the client that the |                     |

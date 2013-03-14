@@ -8,9 +8,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \bzotonic\n"
+"Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 19:06+0800\n"
+"PO-Revision-Date: 2013-01-31 01:00+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,11 +24,11 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:48
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:23
 msgid "Back to logon form"
-msgstr "回到登陆表单"
+msgstr "回到登录表单"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "Below are your account details and a link to set a new password."
-msgstr ""
+msgstr "下面是你的账户资料以及设置新密码的链接。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:51
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:5
@@ -41,7 +41,7 @@ msgstr "取消"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:78
 msgid "Change password and Log on"
-msgstr "修改密码并登陆"
+msgstr "修改密码并登录"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:28
 msgid "Check your e-mail!"
@@ -49,13 +49,13 @@ msgstr "检查你的 e-mail"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:17
 msgid "Click on the button below to e-mail you a verification message."
-msgstr ""
+msgstr "点击下面的按钮通过 e-mail 向你发送确认信息"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:12
 msgid ""
 "Click on the link below to enter a new password, when clicking doesn't work "
 "then you can copy and paste the complete address to your browser."
-msgstr ""
+msgstr "点击下面链接来输入一个新密码，如果无法点击请复制完整地址到浏览器。"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:25
 msgid "Confirm"
@@ -74,12 +74,14 @@ msgid ""
 "Enter your e-mail address or username below and we will send you an e-mail "
 "with password reset instructions."
 msgstr ""
+"在下面输入你的 e-mail 地址或者用户名，我们将会发送给你包含密码重设指导的 e-"
+"mail。"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
 "For security reasons password reset codes are only kept for a limited amount "
 "of time and can only be used once."
-msgstr ""
+msgstr "为了确保安全，密码重设码只在有限时间内可用，而且只能被使用一次。"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:2
 msgid "Forgot your password?"
@@ -114,16 +116,16 @@ msgstr "登出"
 
 #: modules/mod_authentication/templates/_logon_off.tpl:4
 msgid "Log On"
-msgstr "登陆"
+msgstr "登录"
 
 #: modules/mod_authentication/templates/_logon_form.tpl:26
 msgid "Log on"
-msgstr "登陆"
+msgstr "登录"
 
 #: modules/mod_authentication/templates/logon.tpl:8
 #: modules/mod_authentication/templates/_logon_form.tpl:3
 msgid "Log on to"
-msgstr "登陆到"
+msgstr "登录到"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:56
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:10
@@ -159,7 +161,7 @@ msgstr "重复密码"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:32
 msgid "Reset password and Log on"
-msgstr "重设密码并登陆"
+msgstr "重设密码并登录"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:3
 msgid "Reset your password"
@@ -185,7 +187,7 @@ msgstr "对不起，你的密码重设码无效。"
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:26
 #: modules/mod_authentication/templates/_logon_form.tpl:27
 msgid "Stay logged on unless I log off."
-msgstr "保持登陆状态，直到主动登出。"
+msgstr "保持登录状态，直到主动登出。"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:18
 msgid "Thank you,"
@@ -212,13 +214,13 @@ msgstr "两个密码需要完全一致，请重新输入。"
 msgid ""
 "To find your account\tyou need to enter either your username or the e-mail "
 "address you gave us."
-msgstr ""
+msgstr "为了找回你的账户，你需要输入用户名或者 e-mail 地址。"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:24
 #: modules/mod_authentication/templates/_logon_error.tpl:31
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
-msgstr ""
+msgstr "请不要使用纯字母或者纯数字的密码。"
 
 #: modules/mod_authentication/templates/_logon_form.tpl:10
 msgid "Username"
@@ -228,36 +230,36 @@ msgstr "用户名"
 msgid ""
 "We can only send you an e-mail when we have the e-mail address of your "
 "account."
-msgstr ""
+msgstr "只有在你的账户绑定了 e-mail 地址的情况下我们才能给你发送邮件。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:40
 msgid ""
 "We don’t seem to have any valid e-mail address or other electronic "
 "communication address of you."
-msgstr ""
+msgstr "没有找到任何关于你的可用 e-mail 地址信息或是其他电子联系方式。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:30
 msgid ""
 "We have sent you an e-mail. In the e-mail you will find instructions on how "
 "to confirm your account."
-msgstr ""
+msgstr "我们已经给你发送了一封邮件，里面会告诉你如果确认你的账户。"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:16
 msgid ""
 "When you didn't request a password reset, you can ignore this e-mail. Maybe "
 "someone made an error typing his or her e-mail address."
-msgstr ""
+msgstr "如果你没有请求重置密码，请忽略本邮件。可能是有人输入了错误的地址。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
 "When you don’t receive the e-mail within a few minutes then be sure to check "
 "your spam filter and spam folders."
-msgstr ""
+msgstr "如果你在几分钟内还没有收到邮件，请检查你的垃圾邮件过滤文件夹。 "
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "When you forgot your username or pasword then you can ask us to"
-msgstr ""
+msgstr "当你忘记了用户名或密码，那么你可以"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -269,13 +271,15 @@ msgstr "未知用户名/e-mail地址，请重试。"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:3
 msgid "You entered an unknown username or password.  Please try again."
-msgstr ""
+msgstr "你输入了错误的用户名或密码。请重试。"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:5
 msgid ""
 "You might have made a typo in your username or password.  Please note that "
 "both are case sensitive and check that your caps lock key is off."
 msgstr ""
+"你可能输错了你的用户名或者密码。请确认两者大小写正确，并检查键盘的 caps lock "
+"键是否关闭。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"
@@ -288,6 +292,8 @@ msgid ""
 "or e-mail address.  You will not receive any additional e-mails because of "
 "this request."
 msgstr ""
+"你收到本邮件是因为有人通过输入用户名或者 e-mail 地址请求重置你的账户密码.你不"
+"会因此收到其他邮件。"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "You requested a new password for"
@@ -311,7 +317,7 @@ msgstr "你的新密码太短。"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:37
 msgid "Your password will be reset and you will be logged on as"
-msgstr "你的密码将被重置，需要重新登陆为"
+msgstr "你的密码将被重置，需要重新登录为"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "e-mail a temporary password"
@@ -323,4 +329,4 @@ msgstr "获取一个新的密码重设码"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
 msgid "user@example.com"
-msgstr ""
+msgstr "user@example.com"

@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-30 00:12+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:40
+msgid "Cancel"
+msgstr "取消"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:5
+msgid ""
+"Embed a video or other media. Here you can paste embed code from YouTube, "
+"Vimeo or other services."
+msgstr ""
+"嵌入视频或者其他媒体。这里可以粘贴来自优酷、土豆或其他视频网站的嵌入代码。"
+
+#: modules/mod_video_embed/templates/_media_upload_tab.tpl:2
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:32
+msgid "Embed code"
+msgstr "嵌入代码"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:23
+msgid "From site"
+msgstr "来自站点"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:41
+msgid "Make media item"
+msgstr "创建媒体条目"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:14
+msgid "Media title"
+msgstr "媒体标题"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:41
+msgid "Replace media item"
+msgstr "替换媒体条目"

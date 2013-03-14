@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-14 15:06+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar.person.tpl:12
+msgid "(implicit)"
+msgstr "(隐含)"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:41
+msgid "(users can’t change visibility to higher level than this)"
+msgstr "(用户不能修改高于此级别的可见性)"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:86
+msgid ""
+"<strong>Security notice</strong>: When you allow */* files then all members "
+"of this role will be able to obtain full access to your whole site and all "
+"underlying data."
+msgstr ""
+"<strong>安全提示</strong>: 当你允许 */* 文件的时候，那么所有角色成员将会获得"
+"站点和数据的所有访问权限。"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:22
+msgid "ACL role overview"
+msgstr "ACL 角色概览"
+
+#: modules/mod_acl_simple_roles/mod_acl_simple_roles.erl:411
+msgid "Access Control"
+msgstr "访问控制"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:10
+msgid "Access Control - Roles Overview"
+msgstr "访问控制 - 角色概览"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:12
+msgid ""
+"Access control controls what an user is allowed to do and see.  The roles "
+"define different groups of rights.  Users can be made member of multiple "
+"roles."
+msgstr ""
+"访问控制用于控制用户的行为和可见权限。角色定义了不同的权限组。用户可以成为多"
+"个组的成员。"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:3
+msgid "Admin Access Control"
+msgstr "管理访问控制"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:18
+msgid ""
+"All members are allowed to view all content.  (Check this for supervisors.)"
+msgstr "所有成员都允许查看所有内容。"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:49
+msgid "Allow editing of category"
+msgstr "允许编辑分类"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:44
+msgid "Categories"
+msgstr "分类"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:12
+msgid "Check below what people that are member of this role are allowed to do."
+msgstr "在下面选择角色允许的行为。"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:38
+msgid "Community members"
+msgstr "社区成员"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:84
+msgid "File types allowed to be uploaded"
+msgstr "允许上传的文件类型"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
+msgid "File uploads"
+msgstr "文件上传"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:39
+msgid "Group members"
+msgstr "组成员"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
+msgid "Help about ACL roles."
+msgstr "ACL 角色帮助。"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16
+msgid "Make new ACL role"
+msgstr "创建新 ACL 角色"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:61
+msgid "Manage modules"
+msgstr "管理模块"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:79
+msgid "Maximum allowed file size for uploads (in KB)"
+msgstr "允许上传的文件大小（KB为单位）"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:30
+msgid "Maximum visibility"
+msgstr "最大可见性"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_sidebar.person.tpl:3
+msgid "Member of roles"
+msgstr "角色成员"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:48
+msgid "Modules"
+msgstr "模块"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
+msgid "Need more help?"
+msgstr "更多帮助？"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:58
+msgid "No ACL roles found."
+msgstr "没有找到 ACL 角色。"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:25
+msgid ""
+"Only allow to update content created by the user himself. (Check for user "
+"generated content sites.)"
+msgstr "只允许用户修改自己创建的内容。（适合用户创建内容的网站）"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:4
+msgid "Permissions"
+msgstr "权限"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:29
+msgid "Rights"
+msgstr "权限"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:35
+msgid "The whole world"
+msgstr "全部"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:27
+msgid "Title"
+msgstr "标题"
+
+#: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
+msgid ""
+"Users can be member of multiple roles. Depending on the roles an user is "
+"allowed to create and edit certain categories or is able to manage certain "
+"modules."
+msgstr ""
+"用户可以是多个角色的成员。基于角色，拥护可以创建并编辑特定分类的内容，或是可"
+"以管理特定模块。"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:28
+msgid "View all"
+msgstr "查看所有"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:41
+msgid "delete"
+msgstr "删除"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:42
+msgid "edit"
+msgstr "编辑"
+
+#: modules/mod_acl_simple_roles/templates/admin_acl.tpl:38
+msgid "view all,&mdash;"
+msgstr "查看所有,&mdash;"

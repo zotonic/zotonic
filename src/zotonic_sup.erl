@@ -61,8 +61,8 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    {A1,A2,A3} = erlang:now(),
-    random:seed(A1, A2, A3),
+    <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
+    random:seed({A1,B1,C1}),
 
     % Random id generation
     Ids     = {z_ids,
@@ -195,7 +195,13 @@ init_stats() ->
 init_ua_classifier() ->
     case z_config:get_dirty(use_ua_classifier) of
         true ->
-            {ok, _Something} = ua_classifier:classify("");
+            case ua_classifier:classify("") of
+              {error, ua_classifier_nif_not_loaded} = Error ->
+                  lager:error("ua_classifier: could not load the NIF. Check deps/ua_classifier or set Zotonic config {use_ua_classifier, false}."),
+                  Error;
+              {ok, _} ->
+                  ok
+            end;
         false ->
             ok
     end.

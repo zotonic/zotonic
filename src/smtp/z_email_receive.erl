@@ -52,19 +52,23 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                                           ]
                                  }},
                                Context),
-             z_notifier:first(#email_received{
-                                 localpart=LocalPart,
-                                 localtags=LocalTags,
-                                 domain=Domain,
-                                 to=Recipient,
-                                 from=From,
-                                 reference=Reference,
-                                 email=ParsedEmail2,
-                                 headers=Headers,
-                                 decoded={Type, Subtype, Headers, Params, Body},
-                                 raw=Data
-                                }, 
-                              Context);
+             Email = #email_received{
+                         localpart=LocalPart,
+                         localtags=LocalTags,
+                         domain=Domain,
+                         to=Recipient,
+                         from=From,
+                         reference=Reference,
+                         email=ParsedEmail2,
+                         headers=lowercase_headers(Headers),
+                         decoded={Type, Subtype, Headers, Params, Body},
+                         raw=Data
+                     },
+             Email1 = #email_received{
+                        is_bulk=z_email_receive_check:is_bulk(Email),
+                        is_auto=z_email_receive_check:is_auto(Email)
+                      },
+             z_notifier:first(Email1, Context);
          undefined ->
              error_logger:info_msg("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
              skip
@@ -81,6 +85,9 @@ get_host(Recipient) ->
         undefined ->
             undefined
     end.
+
+lowercase_headers(Hs) ->
+    [ {z_string:to_lower(H), V} || {H,V} <- Hs ].
 
 
 %% @doc Parse an #email_received to a sanitized #email try to make

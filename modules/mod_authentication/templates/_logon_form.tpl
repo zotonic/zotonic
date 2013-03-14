@@ -1,4 +1,5 @@
-<form id="logon_form" method="post" action="postback">
+<iframe src="/lib/images/spinner.gif" id="logonTarget" name="logonTarget" style="display:none"></iframe>
+<form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
     {% if not hide_title %}
     <h1 class="logon_header">{_ Log on to _} <span>{{ m.config.site.title.value|default:"Zotonic" }}</span>.</h1>
     {% endif %}

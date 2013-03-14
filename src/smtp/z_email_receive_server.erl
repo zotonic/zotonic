@@ -3,9 +3,9 @@
 %%      with gen_smtp. 
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2011 Maximonster Interactive Things
+%% @copyright 2010-2013 Maximonster Interactive Things
 
-%% Copyright 2010-2011 Maximonster Interactive Things
+%% Copyright 2010-2013 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 
 -module(z_email_receive_server).
 -behaviour(gen_smtp_server_session).
+
+-compile([{parse_transform, lager_transform}]).
 
 -include_lib("zotonic.hrl").
 
@@ -119,13 +121,17 @@ handle_RCPT_extension(_Extension, State) ->
 
 -spec handle_DATA(From :: binary(), To :: [binary(),...], Data :: binary(), State :: #state{}) -> {'ok', string(), #state{}} | {'error', string(), #state{}}.
 handle_DATA(From, To, Data, State) ->
-    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary({node(), erlang:now()}))]),
+    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary({node(), make_ref(), os:timestamp()}))]),
     try mimemail:decode(Data) of
         {Type, Subtype, Headers, Params, Body} ->
-            case find_bounce_id(To, Headers) of
+            case find_bounce_id({Type, Subtype}, To, Headers) of
                 {ok, MessageId} ->
                     % The e-mail server knows about the messages sent from our system.
-                    z_email_server:bounced(State#state.peer, MessageId);
+                    % Only report fatal bounces, silently ignore delivery warnings
+                    case z_email_receive_check:is_nonfatal_bounce({Type, Subtype}, Headers, Body) of
+                        true -> nop;
+                        false -> z_email_server:bounced(State#state.peer, MessageId)
+                    end;
                 ok ->
                     % Bounced, but without a message id
                     nop;
@@ -167,16 +173,20 @@ terminate(Reason, State) ->
 
 %% Internal functions
 
-%% @doc A message is classified as a bounce when the recipient is noreply+MSGID@@example.org
-%% OR when the Return-Path is set to an empty address.
-find_bounce_id(Recipients, Headers) ->
+% If the message is a {<<"multipart">>,<<"report">>} then here is also
+% a {<<"message">>,<<"rfc822">>} part that contains the original message.
+% From that original message we can find the original message id
+
+%% @doc A message is classified as a bounce if the recipient is noreply+MSGID@@example.org
+%% OR if the Return-Path is set to an empty address and other appropriate headers are present
+find_bounce_id(Type, Recipients, Headers) ->
     case find_bounce_email(Recipients) of
         {ok, _MessageId} = M -> 
             M;
         undefined ->
-            case proplists:get_value(<<"Return-Path">>, Headers) of
-                <<"<>">> -> ok;
-                _ -> no_bounce
+            case z_email_receive_check:is_bounce(Type, Headers) of
+                true -> ok;
+                false -> no_bounce
             end
     end.
 
@@ -184,10 +194,8 @@ find_bounce_id(Recipients, Headers) ->
 find_bounce_email([]) ->
     undefined;
 find_bounce_email([To|Other]) ->
-    case z_email_server:is_bounce_email(To) of
+    case z_email_server:is_bounce_email_address(To) of
         true -> {ok, To};
         false -> find_bounce_email(Other)
     end.
 
-
-    

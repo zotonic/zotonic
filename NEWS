@@ -19,7 +19,15 @@ mod_admin
   show or hide on certain pages in the admin. Used for example to
   control where to show address and geodata edit boxes.
 
+mod_export
+  FIXME -- marc?
 
+
+Bug fixes
+---------
+
+
+  
 
 Release 0.9.0
 =============

@@ -1,4 +1,4 @@
-% @author Marc Worrell <marc@worrell.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2012 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
 
@@ -23,22 +23,18 @@
 
 -include_lib("zotonic.hrl").
 
+
 scan(Context) ->
     AllModules = z_module_manager:scan(Context),
     Active = z_module_manager:active(Context),
     Modules = [{Mod, ModDir} || {Mod, ModDir} <- AllModules, lists:member(Mod, Active)],
-    Files = lists:flatten([
-                z_module_indexer:all(What, Context)
-                || What <- [template, scomp, action, validator, model, service, erlang]
-            ]),
-    ModFiles = [ {Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
-    Combined = [
-                {ModDir, [ 
-                    ModDir++"/"++z_convert:to_list(Mod)++".erl" 
-                    | proplists:get_all_values(Mod, ModFiles) 
-                ]}
-                || {Mod, ModDir} <- Modules
-               ],
+    Files = lists:flatten(
+              [z_module_indexer:all(What, Context)
+               || What <- [template, scomp, action, validator, model, service, erlang]]),
+    ModFiles = [{Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
+    Combined = [{ModDir, [ModDir++"/"++z_convert:to_list(Mod)++".erl" 
+                          | proplists:get_all_values(Mod, ModFiles)]}
+                || {Mod, ModDir} <- Modules],
     [ scan_module(Mod) || Mod <- Combined ].
 
 scan_module({Path, Files}) ->
@@ -49,38 +45,38 @@ dedupl(Trans) ->
     Dict = dict:new(),
     List = dict:to_list(insert(Trans, Dict)),
     [ Tr || {_Key,Tr} <- List ].
-    
-    insert([], Dict) ->
-        Dict;
-    insert([{Text, Args, Loc}|Trans], Dict) ->
-        case dict:find(Text, Dict) of
-            {ok, {_Text, Args0, Loc0}} ->
-                Dict1 = dict:store(Text, {Text, merge_args(Args,Args0), [Loc|Loc0]}, Dict),
-                insert(Trans, Dict1);
-            error ->
-                Dict1 = dict:store(Text, {Text, Args, [Loc]}, Dict),
-                insert(Trans, Dict1)
-        end.
 
-    merge_args([], Args) -> Args;
-    merge_args(Args, []) -> Args;
-    merge_args([{Lang,Text}|Rest], Args) ->
-        case proplists:get_value(Lang, Args) of
-            undefined -> merge_args(Rest, [{Lang,Text}|Args]);
-            _ -> merge_args(Rest, Args)
-        end.
+insert([], Dict) ->
+    Dict;
+insert([{Text, Args, Loc}|Trans], Dict) ->
+    case dict:find(Text, Dict) of
+        {ok, {_Text, Args0, Loc0}} ->
+            Dict1 = dict:store(Text, {Text, merge_args(Args,Args0), [Loc|Loc0]}, Dict),
+            insert(Trans, Dict1);
+        error ->
+            Dict1 = dict:store(Text, {Text, Args, [Loc]}, Dict),
+            insert(Trans, Dict1)
+    end.
+
+merge_args([], Args) -> Args;
+merge_args(Args, []) -> Args;
+merge_args([{Lang,Text}|Rest], Args) ->
+    case proplists:get_value(Lang, Args) of
+        undefined -> merge_args(Rest, [{Lang,Text}|Args]);
+        _ -> merge_args(Rest, Args)
+    end.
 
 
 %% @doc Parse the Erlang module. Extract all translation tags.
 scan_file(".erl", File) ->
-    {ok, Path} = zotonic_app:get_path(),
-    case epp:open(File, [filename:join(Path, "include")]) of
+    case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
             ?ERROR("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
             []
     end;
+
 
 %% @doc Parse the template in the file. Extract all translation tags.
 scan_file(".tpl", File) ->
@@ -91,6 +87,7 @@ scan_file(".tpl", File) ->
             ?ERROR("POT generation, template error in ~p: ~p~n", [File, Reason]),
             []
     end;
+
 
 %% Skip unknown extensions (like ".config")
 scan_file(_Ext, _File) ->
@@ -116,7 +113,7 @@ parse(Data) when is_binary(Data) ->
         Err ->
             Err
     end.
-    
+
 
 %% @doc Extract all translation tags from the parse tree.
 extract(ParseTree, Acc, F) when is_list(ParseTree) ->
@@ -138,10 +135,10 @@ extract(T, Acc, F) when is_tuple(T) ->
 extract(N, Acc, _F) when is_integer(N); is_atom(N) ->
     Acc.
 
-    trans_ext_args([], Acc) ->
-        Acc;
-    trans_ext_args([{{identifier,_,Lang}, {string_literal, _, Text}}|Args], Acc) ->
-        trans_ext_args(Args, [{list_to_atom(Lang), Text}|Acc]).
+trans_ext_args([], Acc) ->
+    Acc;
+trans_ext_args([{{identifier,_,Lang}, {string_literal, _, Text}}|Args], Acc) ->
+    trans_ext_args(Args, [{list_to_atom(Lang), Text}|Acc]).
 
 
 %% Scan binary for erlang ?__(..., Context) syntax with either a binary or a string as first arg.
@@ -156,7 +153,6 @@ parse_erl_form({ok, Other}, File, Epp, Acc) ->
                    parse_erl_form_part(Other, File, Acc));
 parse_erl_form({error, _}, File, Epp, Acc) ->
     parse_erl_form(epp:parse_erl_form(Epp), File, Epp, Acc).
-
 
 parse_erl_form_part({function, _, _, _, Expressions}, File, Acc) ->
     lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);

@@ -52,7 +52,7 @@ moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context1),
     Page = get_page(Context1),
-    RedirectUrl = lists:flatten(
+    RedirectUrl = z_convert:to_list(
                         z_context:abs_url(
                             z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context1),
                             Context1)),

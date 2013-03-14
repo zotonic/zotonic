@@ -1,16 +1,30 @@
 ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
-PARSER     =src/erlydtl/erlydtl_parser
+PARSER    := src/erlydtl/erlydtl_parser
 
-GIT_CHECK := $(shell test -d .git && git submodule update --init)
-MAKEFILES := $(shell find -L deps modules priv/sites priv/modules priv/extensions priv/sites/*/modules -maxdepth 2 -name Makefile)
-DEPS_DIR := $(shell pwd)/deps
+# Erlang Rebar downloading
+# see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
+REBAR := $(shell (type rebar 2>/dev/null || echo ./rebar) | tail -1 | awk '{ print $$NF }')
+REBAR_DEPS := $(shell which rebar || echo ../../rebar)
+REBAR_URL := http://cloud.github.com/downloads/basho/rebar/rebar
+
+# Default target - update sources and call all compile rules in succession
+.PHONY: all
+all: get-deps update-deps compile
 
 
-.PHONY : all
-all: lager iconv mimetypes folsom bear makefile-deps $(PARSER).erl erl ebin/$(APP).app 
+./rebar:
+	$(ERL) -noshell -s inets -s ssl \
+	  -eval '{ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar"}])' \
+	  -s init stop
+	chmod +x ./rebar
 
+DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
+LAGER = deps/lager
+Compile = (cd $(1) && $(REBAR_DEPS) compile)
+
+# Helper targets
 .PHONY: erl
 erl:
 	@$(ERL) -pa $(wildcard deps/*/ebin) -pa ebin -noinput +B \
@@ -19,24 +33,28 @@ erl:
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl $(PARSER).yrl
 
-lager:
-	cd deps/lager && ./rebar compile
+ebin/$(APP).app: src/$(APP).app.src
+	cp src/$(APP).app.src $@
 
-iconv:
-	cd deps/iconv && ./rebar compile
+# Use Rebar to get, update and compile dependencies
+.PHONY: get-deps update-deps compile-deps compile-zotonic compile
 
-mimetypes:
-	cd deps/mimetypes && ./rebar compile
+get-deps: $(REBAR)
+	$(REBAR) get-deps
 
-bear:
-	cd deps/bear && ./rebar compile
+update-deps: $(REBAR)
+	$(REBAR) update-deps
 
-folsom: 
-	cd deps/folsom && ./rebar deps_dir=$(DEPS_DIR) compile
+compile-deps: $(REBAR)
+	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
+	for i in $(DEPS); do $(call Compile, $$i); done
 
-makefile-deps:
-	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f`; done; fi
+compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
+compile: compile-deps compile-zotonic
+
+
+# Generate documentation
 .PHONY: docs edocs
 docs:
 	@echo Building HTML documentation...
@@ -47,21 +65,20 @@ edocs:
 	@echo Building reference edoc documentation...
 	bin/zotonic generate-edoc
 
+# Cleaning
 .PHONY: clean_logs
 clean_logs:
 	@echo "deleting logs:"
 	rm -f erl_crash.dump $(PARSER).erl
-	rm -f priv/log/*
+	rm -rf priv/log/*
 
 .PHONY: clean
-clean: clean_logs
+clean: clean_logs $(REBAR)
 	@echo "removing:"
-	(cd deps/iconv; ./rebar clean)
-	(cd deps/mimetypes; ./rebar clean)
-	(cd deps/bear; ./rebar clean)
-	(cd deps/folsom; ./rebar clean)
-	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
+	@echo "cleaning dependencies:"
+	$(REBAR) clean
 
-ebin/$(APP).app:
-	cp src/$(APP).app $@
+.PHONY: dist-clean
+dist-clean: clean
+	rm -f ./rebar

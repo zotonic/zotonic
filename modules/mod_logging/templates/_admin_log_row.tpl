@@ -5,7 +5,7 @@
         {% if l.user_id %}
         <a href="{% url admin_edit_rsc id=l.user_id %}">{{ m.rsc[l.user_id].title }}</a> @
         {% endif %}
-        {{ l.created|date:"d M Y, H:i" }}
+        {{ l.created|date:_"d M Y, H:i" }}
     </div>
     <h5>
         {% if l.type %}{{ l.type }}{% if l.module %} &mdash; {% endif %}{% endif %}

@@ -1,23 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# NB: Consider using poEdit <http://poedit.sourceforge.net>
-#
-#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:19+0800\n"
+"PO-Revision-Date: 2013-03-13 16:12+0100\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 
 #: modules/mod_signup/templates/signup.tpl:161
 msgid "And sign up"
@@ -59,13 +56,13 @@ msgstr "亲爱的"
 
 #: modules/mod_signup/templates/signup.tpl:103
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: modules/mod_signup/templates/signup.tpl:75
 msgid "First name"
-msgstr "名"
+msgstr "名字"
 
-#: modules/mod_signup/templates/email_verify.tpl:16
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "希望很快见到你。"
 
@@ -89,6 +86,10 @@ msgstr "已经有账户，"
 msgid ""
 "In your e-mail you received a confirmation key. Please copy it in the input "
 "field below."
+msgstr "在 e-mail 中你将获得一个确认码，请复制到下面的输入框中。"
+
+#: modules/mod_signup/templates/email_verify.tpl:16
+msgid "Kind regards,"
 msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:93
@@ -100,7 +101,7 @@ msgid "Password"
 msgstr "密码"
 
 #: modules/mod_signup/templates/email_verify.tpl:3
-msgid "Please confirm your account."
+msgid "Please confirm your account"
 msgstr "请确认账户。"
 
 #: modules/mod_signup/templates/email_verify.tpl:10
@@ -126,28 +127,28 @@ msgstr "注册并成为成员"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:20
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr ""
+msgstr "对不起，确认码错误，请确认复制正确。"
 
 #: modules/mod_signup/templates/signup.tpl:72
 msgid ""
 "Sorry, there is already an account coupled to your account at your service "
 "provider. Maybe your account here was suspended."
-msgstr ""
+msgstr "对不起，你的账户已经存在。可能您的账户已经被挂起。"
 
 #: modules/mod_signup/templates/signup.tpl:117
 msgid "Sorry, this username is already in use. Please try another one."
-msgstr ""
+msgstr "对不起，用户名已被使用。请尝试其他用户名。"
 
 #: modules/mod_signup/templates/email_verify.tpl:8
 msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
-msgstr ""
+msgstr "感谢您注册本站点。接下来将需要您在使用账户前对账户进行确认。"
 
 #: modules/mod_signup/templates/signup.tpl:151
 msgid ""
 "To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr ""
+msgstr "必须同意服务条款和隐私政策才可以继续注册。"
 
 #: modules/mod_signup/templates/signup.tpl:120
 msgid "Username"
@@ -161,7 +162,7 @@ msgstr "确认密码"
 msgid ""
 "We have sent you an e-mail. In the e-mail you will find instructions on how "
 "to confirm your account."
-msgstr ""
+msgstr "我们已经给你发送了一封邮件。邮件里包含如何确认账户的说明。"
 
 #: modules/mod_signup/templates/signup.tpl:149
 msgid ""
@@ -169,6 +170,8 @@ msgid ""
 "give your name or address away without your permission.\n"
 "\t\t\tWe do have some rules that we need you to agree with."
 msgstr ""
+"我们将严格保管您的信息并确保不会透露您的名字和邮件地址给第三方。\n"
+"\t\t\t这里需要您同意一些服务条款。"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:8
 msgid "Welcome"
@@ -178,7 +181,7 @@ msgstr "欢迎"
 msgid ""
 "When you don’t receive the e-mail within a few minutes then be sure to check "
 "your spam filter and spam folders."
-msgstr ""
+msgstr "如果你在几分钟内没有收到邮件，请检查你的垃圾邮件过滤器和垃圾文件夹。"
 
 #: modules/mod_signup/templates/signup.tpl:171
 msgid "You are almost there!"
@@ -206,7 +209,7 @@ msgstr "在输入框中。"
 
 #: modules/mod_signup/templates/signup.tpl:57
 msgid "log on now"
-msgstr "现在登陆"
+msgstr "现在登录"
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"

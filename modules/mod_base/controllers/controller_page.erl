@@ -23,7 +23,8 @@
     resource_exists/2,
     previously_existed/2,
     is_authorized/2,
-    html/1
+    html/1,
+    get_id/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
@@ -103,5 +104,5 @@ get_id(Context) ->
     end,
     case m_rsc:name_to_id(ReqId, Context) of
         {ok, RscId} -> RscId;
-        _ -> false
+        _ -> undefined
     end.

@@ -10,7 +10,7 @@
     <div class="well">
         {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
     </div>
-        
+
 </div>
 <div>
     <table class="table table-striped do_adminLinkedTable">
@@ -36,8 +36,8 @@
                             {% button class="btn btn-mini" text=_"Delete" action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#tr.id}} %}
                             {% button class="btn btn-mini" text=_"Edit" action={dialog_config_edit module=module key=key on_success={reload}} %}
                         </div>
-                        
-                        {{ c.modified|date:"d M Y, H:i" }}
+
+                        {{ c.modified|date:_"d M Y, H:i" }}
                     </td>
             </tr>
             {% wire id=#tr.id action={dialog_config_edit module=module key=key on_success={reload}} %}

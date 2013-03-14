@@ -24,22 +24,22 @@
 
 ensure_started(App) ->
     case application:start(App) of
-	ok ->
-	    ok;
-	{error, {already_started, App}} ->
-	    ok
+        ok ->
+            ok;
+        {error, {already_started, App}} ->
+            ok
     end.
 
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for zotonic.
 start(_Type, _StartArgs) ->
     write_pidfile(),
-	set_path(),
+    set_path(),
     ensure_started(crypto),
     ensure_started(public_key),
     ensure_started(ssl),
-	ensure_started(inets),
-	inets:start(httpc,[{profile,zotonic}]),
+    ensure_started(inets),
+    inets:start(httpc,[{profile,zotonic}]),
     zotonic_deps:ensure(),
     ensure_started(mimetypes),
     zotonic_sup:start_link().
@@ -50,15 +50,24 @@ stop(_State) ->
     remove_pidfile(),
     ok.
 
+%% @doc Set the abs pathname of zotonic in the application environment. It is 
+%% used to locate templates, scomps, translations and actions.
 set_path() ->
-	P = code:all_loaded(),
-	Path = filename:dirname(filename:dirname(proplists:get_value(?MODULE, P))),
-	application:set_env(zotonic, lib_dir, Path).
+    Path = case code:lib_dir(zotonic) of
+        {error, _} ->
+            % When zotonic's root directory isn't called 'zotonic' try to find
+            % out what this name is. 
+            P = code:all_loaded(),
+            filename:dirname(filename:dirname(proplists:get_value(?MODULE, P)));
+        P ->
+            P
+    end,
+    application:set_env(zotonic, lib_dir, Path).
 
+%% @doc Return the applications lib_dir from the applications environment.
 get_path() ->
-	application:get_env(zotonic, lib_dir).
-
-
+    application:get_env(zotonic, lib_dir).
+    
 %% Pid-file handling
 
 get_pidfile() ->

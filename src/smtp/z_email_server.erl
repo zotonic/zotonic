@@ -28,7 +28,7 @@
 %% interface functions
 -export([
     start_link/0,
-    is_bounce_email/1,
+    is_bounce_email_address/1,
     bounced/2,
     generate_message_id/0,
     send/2,
@@ -70,9 +70,9 @@ start_link(Args) when is_list(Args) ->
 
 
 %% @doc Check if the received e-mail address is a bounce address
-is_bounce_email(<<"noreply+",_/binary>>) -> true;
-is_bounce_email("noreply+"++_) -> true;
-is_bounce_email(_) -> false.
+is_bounce_email_address(<<"noreply+",_/binary>>) -> true;
+is_bounce_email_address("noreply+"++_) -> true;
+is_bounce_email_address(_) -> false.
 
 %% @doc Handle a bounce
 bounced(Peer, NoReplyEmail) ->

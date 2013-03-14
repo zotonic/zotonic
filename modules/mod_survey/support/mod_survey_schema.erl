@@ -117,6 +117,7 @@ survey_to_blocks(Id, Context) ->
     question_to_block(#survey_question{type=thurstone} = Q) -> survey_q_thurstone:to_block(Q);
     question_to_block(#survey_question{type=truefalse} = Q) -> survey_q_truefalse:to_block(Q);
     question_to_block(#survey_question{type=yesno} = Q) -> survey_q_yesno:to_block(Q);
+    question_to_block(#survey_question{type=multiple_choice} = Q) -> survey_q_multiple_choice:to_block(Q);
     question_to_block(#survey_question{type=subhead, name=Name, question=Q}) ->
         [
             {type, header},
