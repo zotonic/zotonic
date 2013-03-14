@@ -1,0 +1,4 @@
+%% -*- mode: erlang -*-
+[
+ {admin_stats, ["admin", "stats"], controller_template, [{template, "admin_stats_overview.tpl"}, {acl, {use, mod_admin_stats}}, {ssl, true}]}
+].
