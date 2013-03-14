@@ -857,7 +857,7 @@ function z_init_postback_forms()
 				setTimeout(action, 10);
 			}
 
-			var use_post = $(theForm).hasClass("z_cookie_form");
+			var use_post = $(theForm).hasClass("z_cookie_form") || $(theForm).hasClass("z_logon_form");
 			if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
 			{
 				use_post = true;
@@ -877,6 +877,10 @@ function z_init_postback_forms()
 			if (use_post) 
 			{
 				$(theForm).postbackFileForm(form_id, postback, validations);
+                if ($(theForm).hasClass("z_logon_form")) {
+                    /* When a z_logon_form is posted, we post to a hidden iframe, to trick chrome into showing the "save password" option. The logon form submit cannot be cancelled because that blocks the form-remembering. */
+                    return true;
+                }
 			}
 			else
 			{
