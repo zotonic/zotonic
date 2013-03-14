@@ -1,4 +1,4 @@
-Zotonic 0.9.1
+Release 0.9.1
 =============
 
 Released on 2013-03-14 19:31 by arjan.

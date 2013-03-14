@@ -1,12 +1,13 @@
-Release 0.9.0
-=============
+
 Release 0.9.1, released on 2013-03-14
--------------------------------------
+=====================================
 
 This is a bugfix release. See doc/dev/releasenotes/rel_0.9.1.rst for all the
 relevant bugfixes.
 
 
+Release 0.9.0
+=============
 
 Welcome Zotonic 0.9.0, released on December 17, 2012. These notes list
 the most important changes for this new feature release.
