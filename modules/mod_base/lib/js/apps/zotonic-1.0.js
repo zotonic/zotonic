@@ -296,8 +296,7 @@ function z_ajax(triggerID, params)
 			} 
 			catch(e)
 			{
-				$.misc.error("Error evaluating ajax return value: " + data);
-				$.misc.warn(e);
+                $.misc.error("Error evaluating ajax return value: " + data, e);
 			}
 			setTimeout("z_postback_check()", 0);
 		},
@@ -541,8 +540,7 @@ function z_comet_data(data)
 	} 
 	catch (e)
 	{
-		$.misc.error("Error evaluating ajax return value: " + data);
-		$.misc.warn(e);
+        $.misc.error("Error evaluating ajax return value: " + data, e);
 	}
 }
 
@@ -1627,4 +1625,3 @@ $.parseQuery = function(qs,options) {
 	});
 	return params;
 }
-

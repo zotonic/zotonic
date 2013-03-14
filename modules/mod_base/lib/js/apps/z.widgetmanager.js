@@ -79,14 +79,15 @@ limitations under the License.
 		{
 			log: function(obj)
 			{
+                var text = obj.toString();
 				if(window.console) 
 				{
-					console.log(obj);
+                    console.log(text);
 	
 					if($.noticeAdd)
 					{
 						$.noticeAdd({
-							text: 'Logging, check firebug: '+obj, 
+                            text: 'Logging, check firebug: '+text,
 							type: 'notice', 
 							stay: 0
 						});
@@ -97,14 +98,14 @@ limitations under the License.
 					if($.noticeAdd)
 					{
 						$.noticeAdd({
-							text: 'logged: '+obj, 
+                            text: 'logged: '+text,
 							type: 'notice', 
 							stay: 0
 						});
 					}
 					else
 					{
-						alert(obj.toSource());
+                        alert(text);
 					}
 				}
 			},
@@ -115,7 +116,7 @@ limitations under the License.
 				
 				if(window.console) 
 				{
-					console.warn(text, obj);
+                    console.warn(text, obj.toString());
 				}
 				
 				if($.noticeAdd)
@@ -134,7 +135,9 @@ limitations under the License.
 
 				if(window.console) 
 				{
-					console.error(text, obj);
+                    console.error(text, obj.toString());
+                    if (obj.stack)
+                        console.error(obj.stack);
 				}
 				
 				if($.noticeAdd)
