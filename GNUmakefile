@@ -22,7 +22,7 @@ all: get-deps update-deps compile
 
 DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
 LAGER = deps/lager
-Compile = (cd $(1) && $(REBAR_DEPS) compile)
+Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
