@@ -1,0 +1,64 @@
+svg {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.bar rect {
+//  fill: rgba(2, 176, 232, 0.75);
+  fill: rgb(6, 156, 209);
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+}
+
+.bar rect:hover {
+  fill-opacity: 1;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .25;
+  shape-rendering: crispEdges;
+}
+
+path.line {
+  fill: none;
+  stroke-width: 2;
+  stroke-opacity: 0.5;
+}
+
+path.line:hover {
+  stroke-opacity: 1;
+}
+
+.serie-0 {
+  stroke: rgb(6, 156, 209);
+}
+
+.serie-1 {
+  stroke: #ff7f0e;
+}
+
+.serie-2 {
+  stroke: #2ca02c;
+}
+
+.serie-3 {
+  stroke: #d62728;
+}
+
+.serie-4 {
+  stroke: #9467bd;
+}
+
+.chart-label:after {
+  content: ": ";
+}

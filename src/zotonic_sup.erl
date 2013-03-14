@@ -163,6 +163,7 @@ init([]) ->
             false -> Processes ++ IPv4Proc
         end,
 
+    init_stats(),
     init_ua_classifier(),
     init_webmachine(),
 
@@ -183,6 +184,11 @@ init([]) ->
           end),
     
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
+
+%% @doc Initializes the stats collector. 
+%%
+init_stats() ->
+    z_stats:init().
 
 %% @doc Initializes the ua classifier. When it is enabled it is loaded and 
 %% tested if it works.
@@ -216,7 +222,7 @@ init_webmachine() ->
         
     LogDir = z_config:get_dirty(log_dir),
     
-    application:set_env(webzmachine, webmachine_logger_module, webmachine_logger),
+    application:set_env(webzmachine, webmachine_logger_module, z_stats),
     webmachine_sup:start_logger(LogDir),
     
     case z_config:get_dirty(enable_perf_logger) of

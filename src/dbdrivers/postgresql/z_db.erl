@@ -192,8 +192,11 @@ with_connection(F, Context) ->
     with_connection(F, none, _Context) -> 
         F(none);
     with_connection(F, Connection, Context) when is_pid(Connection) -> 
+        Counter = #counter{name=requests},
+        From = [#stats_from{system=db}, #stats_from{host=Context#context.host, system=db}],
+        z_stats:update(Counter, From),
         try
-            F(Connection)
+            z_stats:timed_update(duration, F, [Connection], From)
         after
             return_connection(Connection, Context)
 	end.

@@ -74,8 +74,10 @@ dispatch(Host, Path, ReqData) ->
     Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
     % Find a matching dispatch rule 
     DispReq = #dispatch{host=Host, path=Path, method=Method, protocol=Protocol},
+    z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine}),
     case gen_server:call(?MODULE, DispReq) of
         {no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings} when MatchedHost =/= undefined ->
+            z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
 
             Context = case lists:keyfind(z_language, 1, Bindings) of
@@ -125,6 +127,7 @@ dispatch(Host, Path, ReqData) ->
             end;
 
         {redirect, MatchedHost} ->
+            z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
             RawPath = wrq:raw_path(ReqDataUA),
             Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
             {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
@@ -133,6 +136,7 @@ dispatch(Host, Path, ReqData) ->
             {handled, redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}; 
 
         {Match, MatchedHost} ->
+            z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
             {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
             {Match, ReqDataHost};
         
@@ -162,7 +166,8 @@ get_host_for_domain(Domain) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    {ok, #state{rules=collect_dispatchrules(), fallback_site=z_sites_manager:get_fallback_site()}}.
+    {ok, #state{rules=collect_dispatchrules(), 
+        fallback_site=z_sites_manager:get_fallback_site()}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
