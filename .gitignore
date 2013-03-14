@@ -19,20 +19,7 @@ rebar
 *.mo
 
 ebin/
-
-/deps/mochiweb/doc/
-/deps/mochiweb/.eunit/
-
-/deps/bert/
-/deps/dh_date/
-/deps/eiconv/
-/deps/gen_smtp/
-/deps/lager/
-/deps/mimetypes/
-/deps/mochiweb/
-/deps/ua_classifier/
-/deps/webzmachine/
-/deps/z_stdlib/
+deps/
 
 /src/erlydtl/erlydtl_parser.erl
 /src/tests/erlydtl/rendered_output/
