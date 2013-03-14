@@ -7,6 +7,10 @@
 
 ---------------------------------------------------------- */
 
+body {
+    // Fixes webkit scrolling bug, see https://github.com/zotonic/zotonic/issues/509
+    -webkit-transform: translate3d(0,0,0);
+}
 
 a,
 a:focus {
