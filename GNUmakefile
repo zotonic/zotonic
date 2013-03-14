@@ -53,6 +53,7 @@ compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
 compile: compile-deps compile-zotonic
 
+
 # Generate documentation
 .PHONY: docs edocs
 docs:
