@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-30 00:23+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:4
+msgid "CSV import"
+msgstr "CSV 导入"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:4
+msgid "Import CSV file"
+msgstr "导入 CSV 文件"
+
+#: modules/mod_import_csv/templates/_admin_status.tpl:5
+msgid "Import a CSV file into Zotonic."
+msgstr "将 CSV 文件导入到 Zotonic。"
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:20
+msgid "Import previously deleted items again"
+msgstr "重新导入之前被删除的条目"
+
+#: modules/mod_import_csv/mod_import_csv.erl:66
+msgid ""
+"Please hold on while the file is importing. You will get a notification when "
+"it is ready."
+msgstr "请等待文件导入完成。完成后你将看到通知。"
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:9
+msgid "Select file"
+msgstr "选择文件"
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:27
+msgid "Start import"
+msgstr "开始导入"
+
+#: modules/mod_import_csv/mod_import_csv.erl:69
+msgid "This file cannot be imported."
+msgstr "该文件不能被导入。"
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:2
+msgid "Upload a CSV file from your computer."
+msgstr "从本机上传一个 CSV 文件。"

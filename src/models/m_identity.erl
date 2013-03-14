@@ -344,11 +344,32 @@ set_verified(Id, Context) ->
            Context).
 
 %% @doc Set the verified flag on a record by rescource id, identity type and value (eg an user's email address).
-set_verified(RscId, Type, Key, Context) ->
-    z_db:q("update identity set is_verified = true, verify_key = null where rsc_id = $1 and type = $2 and key = $3", 
-           [RscId, Type, Key], 
-           Context).
-    
+set_verified(RscId, Type, Key, Context) 
+    when is_integer(RscId), 
+         Type =/= undefined, 
+         Key =/= undefined, Key =/= <<>>, Key =/= [] ->
+    z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context);
+set_verified(_RscId, _Type, _Key, _Context) ->
+    {error, badarg}.
+
+set_verified_trans(RscId, Type, Key, Context) ->
+    case z_db:q("update identity 
+                 set is_verified = true, 
+                     verify_key = null 
+                 where rsc_id = $1 and type = $2 and key = $3", 
+                [RscId, Type, Key], 
+                Context)
+    of
+        1 -> 
+            ok;
+        0 ->
+            1 = z_db:q("insert into identity (rsc_id, type, key, is_verified) 
+                        values ($1,$2,$3,true)", 
+                       [RscId, Type, Key], 
+                       Context),
+            ok
+    end.
+
 %% @doc Check if there is a verified identity for the user, beyond the username_pw
 is_verified(RscId, Context) ->
     case z_db:q1("select id from identity where rsc_id = $1 and is_verified = true and type <> 'username_pw'", 

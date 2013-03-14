@@ -25,6 +25,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws					= false;
 var z_ws_opened				= false;
+var z_stream_host           = undefined;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -481,6 +482,7 @@ function z_tinymce_remove(element)
 
 function z_stream_start(host)
 {
+    z_stream_host = host;
 	if (!z_ws && !z_comet_is_running)
 	{
 		if ("WebSocket" in window) 
@@ -542,6 +544,16 @@ function z_comet_data(data)
 		$.misc.error("Error evaluating ajax return value: " + data);
 		$.misc.warn(e);
 	}
+}
+
+
+function z_websocket_restart()
+{
+    if (z_ws) {
+        z_ws.close();
+	    z_ws_opened = false;
+	    setTimeout(function() { z_websocket_start(z_stream_host); }, 100);
+    }
 }
 
 
@@ -845,7 +857,7 @@ function z_init_postback_forms()
 				setTimeout(action, 10);
 			}
 
-			var use_post = $(theForm).hasClass("z_cookie_form");
+			var use_post = $(theForm).hasClass("z_cookie_form") || $(theForm).hasClass("z_logon_form");
 			if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
 			{
 				use_post = true;
@@ -865,6 +877,10 @@ function z_init_postback_forms()
 			if (use_post) 
 			{
 				$(theForm).postbackFileForm(form_id, postback, validations);
+                if ($(theForm).hasClass("z_logon_form")) {
+                    /* When a z_logon_form is posted, we post to a hidden iframe, to trick chrome into showing the "save password" option. The logon form submit cannot be cancelled because that blocks the form-remembering. */
+                    return true;
+                }
 			}
 			else
 			{
@@ -1140,7 +1156,7 @@ $.fn.formValidationPostback = function()
 		var el = els[i];
 		var n  = el.name;
 
-		if (n && !el.disabled)
+		if (n && !el.disabled && !$(el).hasClass("nosubmit"))
 		{
 			var v = $(el).data("z_postback_validation");
 			if (v)
@@ -1219,7 +1235,6 @@ function z_set_validator_postback(id, postback)
 	if (postback)
 	{
 		var pb = $('#'+id).data("z_postback_validation");
-		
 		if (pb)
 		{
 			$.misc.error("Element #"+id+" had already a validation postback, add all validations as one batch.", $('#' +id));

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-11 19:22+0800\n"
+"PO-Revision-Date: 2013-01-30 19:51+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "添加语言"
 
 #: modules/mod_translation/templates/admin_translation.tpl:10
 msgid "All languages known to the system. You can add or remove languages."
-msgstr ""
+msgstr "系统已知的所有语言。你可以添加或删除语言。"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to delete the language"
@@ -48,7 +48,7 @@ msgstr "复制"
 
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:1
 msgid "Copy texts from a language to the currently selected language."
-msgstr ""
+msgstr "从其他语言拷贝文本到当前选择语言。"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
@@ -86,7 +86,7 @@ msgstr "启用"
 msgid ""
 "Enabled languages show up in the language selection menu. The default "
 "language is used for new visitors without a selected language."
-msgstr ""
+msgstr "在语言选择菜单里启用语言。新用户访问时将使用默认语言展示。"
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:1
 msgid ""
@@ -94,6 +94,8 @@ msgid ""
 "of the language. Use the native form of the language, for example "
 "<em>English</em>, <em>Türkçe</em> or <em>Français</em>."
 msgstr ""
+"输入 iso 码（例如 <em>en</em> 或 <em>zh</em>），以及语言的标题。请使用语言自"
+"身来表示，例如 <em>中文</em>，<em>English</em> 等。"
 
 #: modules/mod_translation/templates/admin_translation.tpl:85
 msgid "Generate .pot files"
@@ -134,7 +136,7 @@ msgstr "重新加载翻译"
 msgid ""
 "Reload all translations from the modules and site. All templates will be "
 "recompiled."
-msgstr ""
+msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:31
 msgid "Save"
@@ -144,7 +146,7 @@ msgstr "保存"
 msgid ""
 "Scan all templates for translation tags and generate .pot files that can be "
 "used for translating the templates."
-msgstr ""
+msgstr "扫描所有模版中需要翻译的词条，生成 .pot 文件。"
 
 #: modules/mod_translation/templates/text/language_switch.tpl:3
 msgid "Select language"
@@ -164,7 +166,7 @@ msgstr "在菜单中显示"
 
 #: modules/mod_translation/templates/admin_translation.tpl:100
 msgid "Show per module how much of the templates are translated."
-msgstr ""
+msgstr "显示每个模块的翻译进度。"
 
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 msgid "Switch language"
@@ -175,6 +177,7 @@ msgid ""
 "The title, body and other texts can be translated in different languages. "
 "Here you can select which languages will be used."
 msgstr ""
+"标题，正文以及其他文本都可以被翻译为多种语言。这里你可以设置使用哪些语言。"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:3
 msgid ""
@@ -182,6 +185,8 @@ msgid ""
 "only removes the reference to the language, making it impossible to select "
 "or edit content written in the delete language."
 msgstr ""
+"这不会影响到任何数据库中的翻译和 .po 文件。只是删除了到语言的引用，这样可禁止"
+"对应语言内容的展示。"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:27
 msgid "Title"
@@ -191,7 +196,7 @@ msgstr "标题"
 msgid ""
 "To view the up-to-date version of this module, please run \"generate .pot "
 "files\" first from the translation overview."
-msgstr ""
+msgstr "请从翻译概览执行 \"生成 .pot 文件\"，然后再查看模块最近状态。"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
 msgid "Translate this page in other languages."

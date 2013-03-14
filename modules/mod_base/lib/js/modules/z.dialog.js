@@ -28,6 +28,7 @@
              dialogAdd: function(options)
              {
                  $('#zmodal').remove();
+                 $(".modal-backdrop").remove();
 
                  options = $.extend({}, $.ui.dialog.defaults, options);
                                      

@@ -40,8 +40,9 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     Action1 = case Hide of
                   undefined -> Action;
-                  _ -> [{fade_out, Hide}|Action]
+                  _ -> [{fade_out, [{target, Hide}]}|Action]
               end,
+
     Postback = {unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action1, UndoAction},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.

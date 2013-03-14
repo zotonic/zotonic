@@ -125,7 +125,7 @@ file_blacklisted(F) ->
 %% @doc Recompile Erlang files on the fly
 handle_file(_Verb, ".erl", F) ->
     spawn(fun() -> recompile_file(F) end),
-    Libdir = code:lib_dir(zotonic),
+    Libdir = z_utils:lib_dir(),
     L = length(Libdir),
     F2 = case string:substr(F, 1, L) of
              Libdir ->

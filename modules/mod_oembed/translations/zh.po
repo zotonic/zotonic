@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-13 14:23+0800\n"
+"PO-Revision-Date: 2013-01-14 13:00+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,12 +32,13 @@ msgid ""
 "Embed a video or other media URL. Here you can paste any URL from YouTube, "
 "Vimeo or other services."
 msgstr ""
+"嵌入一个视频或其他媒体 URL。你可以粘贴来自 YouTube，Vimeo 或其他服务的 URL。"
 
 #: modules/mod_oembed/mod_oembed.erl:238
 msgid ""
 "Invalid or unsupported media URL. The item might have been deleted or is not "
 "public."
-msgstr ""
+msgstr "失效或不支持的媒体 URL。条目可能被删除或是非公开内容。"
 
 #: modules/mod_oembed/mod_oembed.erl:204
 msgid "Made the media page."
@@ -61,7 +62,7 @@ msgstr "摘要"
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:36
 msgid "The media title will be automatically detected from its URL."
-msgstr ""
+msgstr "媒体标题将根据 URL 自动生成。"
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:19
 msgid "Try URL"

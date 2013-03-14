@@ -7,8 +7,4 @@
 	<p>{_ You are now subscribed to our mailing list _} <a href="http://{{ m.site.hostname }}{{ m.rsc[list_id].page_url }}">{{ m.rsc[list_id].title }}</a> {_ with your e-mail address _} {{ recipient.email|escape }}. {_ From now on you will receive mail from our mailing list. _}</p>
 
 	<p>{_ When you don’t want to receive any more mail then _} <a href="http://{{ m.site.hostname }}{% url mailinglist_unsubscribe confirm_key=recipient.confirm_key %}">{_ click here to unsubscribe. _}</a></p>
-
-	<p>{_ Kind Regards, _}</p>
-
-	<p><a href="http://{{ m.site.hostname }}/">{{ m.config.site.title.value }}</a></p>
 {% endblock %}

@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-04-17
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -288,10 +287,14 @@ do_poll(Context) ->
                 end
             catch
                 error:undef -> 
-                    ?zWarning(io_lib:format("Undefined task, aborting: ~p:~p(~p)~n", [Module, Function, Args]), Context),
+                    ?zWarning(io_lib:format("Undefined task, aborting: ~p:~p(~p) ~p~n", 
+                                [Module, Function, Args, erlang:get_stacktrace()]),
+                                Context),
                     z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
                 Error:Reason -> 
-                    ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p)~n", [Error, Reason, Module, Function, Args]), Context)
+                    ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p) ~p~n", 
+                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()]), 
+                                Context)
             end;
         empty ->
             nop

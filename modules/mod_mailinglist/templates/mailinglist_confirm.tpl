@@ -5,7 +5,7 @@
 {% block main %}
 {% with m.mailinglist.confirm_key[q.confirm_key] as confirm %}
 	{% if confirm.mailinglist_id and confirm.email %}
-		<h1>Subscribe to {{ m.rsc[confirm.mailinglist_id].title }}</h1>
+		<h1>{_ Subscribe to _} {{ m.rsc[confirm.mailinglist_id].title }}</h1>
 
 		<p class="summary">{{ m.rsc[confirm.mailinglist_id].summary }}</p>
 		

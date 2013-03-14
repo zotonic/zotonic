@@ -1,0 +1,873 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-31 01:03+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+msgid ""
+"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
+"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
+"address</h3><p>The sender name and e-mail address can be set per mailing "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
+"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
+"used for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</"
+"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
+"allowed to send a page to the mailing list. Everybody who can view the "
+"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr ""
+"<h3>收件人</h3><p>添加，删除或查看收件人列表，请点击“显示所有收件人”链接。</"
+"p><h3>发送者名字及 e-mail 地址</h3><p>发送者名字可以针对每个邮件列表设置，默"
+"认是配置 key <tt>site.email_from</tt>。E-mail 的<i>发送者</i>将被设置为发送者"
+"名字和地址。</p><h3>自动上传收件人列表</h3><p>The dropbox filename is used "
+"for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</p><h3>"
+"访问控制</h3><p>任何可以编辑邮件列表的人可以给邮件列表发送页面。任何可以查看"
+"邮件列表的人可以添加地址到邮件列表。</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:15
+msgid "<p>Sorry, something went wrong. Please try again later.</p>"
+msgstr "<p>对不起，出现问题。请待会重试。</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:20
+msgid "<p>Sorry, something went wrong. Please try to re-subscribe.</p>"
+msgstr "<p>对不起，订阅不成功。请尝试重新订阅。</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:19
+msgid "<p>Thank you. You are now subscribed.</p>"
+msgstr "<p>谢谢，您已经订阅。</p>"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:14
+msgid "<p>Thank you. You are now unsubscribed.</p>"
+msgstr "<p>谢谢，您已经取消订阅。</p>"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+msgid "Act"
+msgstr "启用"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
+msgid "Actions"
+msgstr "动作"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:25
+msgid "Add a new recipient."
+msgstr "添加新收件人"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:25
+msgid "Add recipient"
+msgstr "添加收件人"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+msgid "Added the recipient."
+msgstr "收件人已添加。"
+
+#: modules/mod_mailinglist/templates/mailinglist.tpl:14
+msgid "All mailing lists"
+msgstr "所有邮件列表"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
+msgid "All processed"
+msgstr "全部被处理"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:17
+msgid ""
+"All recipients of the mailing list. You can upload or download this list, "
+"which must be a file with one e-mail address per line."
+msgstr ""
+"邮件列表的所有收件人。你可以上传或者下载这个列表，文件每行包含一个 e-mail 地"
+"址。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
+msgid ""
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
+msgstr ""
+"任何页面都可以通过邮件发送。你可以从任意编辑页面发送邮件。本页面你可以添加或"
+"删除邮件列表以及其中收件人。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
+msgid "Are you sure you want to cancel the mailing to"
+msgstr "确认取消发送邮件给"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:2
+msgid "Are you sure you want to delete the mailing list"
+msgstr "确认需要删除邮件列表"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid ""
+"Are you sure you want to reset the statistics for this mailing? This means "
+"that if you send the mailing again afterwards, recipients might have gotten "
+"the mailing twice."
+msgstr ""
+"确认重置本邮件统计？这意味着之后如果你再次发送邮件，收件人可能会收到两次同样"
+"邮件。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
+msgid ""
+"Before you will receive any further mail you need to confirm your "
+"subscription."
+msgstr "你在收到邮件之前需要确认订阅。"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
+msgid "Bounces"
+msgstr "退信"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:67
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
+msgid "Cancel"
+msgstr "取消"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:5
+msgid "Cancel mailing"
+msgstr "取消邮寄"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+msgid "Check to activate the e-mail address."
+msgstr "选取以激活 e-mail 地址。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Clear"
+msgstr "清除"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:10
+msgid ""
+"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgstr "点击<strong>取消订阅</strong>将你从邮件列表中删除。"
+
+#: modules/mod_mailinglist/templates/mailing_page.tpl:29
+msgid "Click here when you can’t read the message below."
+msgstr "如果你不能看到下面的信息，请点击这里。"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
+msgid ""
+"Click the button below to confirm your subscription to this mailing list."
+msgstr "点击下面的按钮来确认邮件列表订阅。"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+msgid "Click to view log entries"
+msgstr "点击查看日志条目"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
+msgid "Confirm sending to mailinglist"
+msgstr "确认发送给邮件列表"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
+msgid "Confirm subscription"
+msgstr "确认订阅"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+msgid "Could not add the recipient."
+msgstr "无法添加收件人。"
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:4
+msgid "Dear"
+msgstr "亲爱的"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:43
+msgid "Delete"
+msgstr "删除"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:18
+msgid "Delete all current recipients before adding the file."
+msgstr "添加文件前删除所有当前收件人。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Delete all recipients from this list?"
+msgstr "从列表中删除所有收件人？"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:21
+msgid "Description"
+msgstr "描述"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Download all"
+msgstr "全部下载"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Download list of all active recipients."
+msgstr "下载所有活动收件人列表。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:26
+msgid "Downloading active recipients list. Check your download window."
+msgstr "下载活动收件人列表。请检查下载窗口。"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:40
+msgid "Dropbox filename (optional)"
+msgstr "Dropbox 文件名（可选）"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:20
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:8
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:8
+msgid "E-mail"
+msgstr "E-mail"
+
+#: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
+msgid "E-mail page"
+msgstr "E-mail 页面"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
+#: modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
+msgid "E-mail this page"
+msgstr "E-mail 本页面"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:71
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:39
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:14
+msgid "Edit"
+msgstr "编辑"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+msgid "Edit recipient"
+msgstr "编辑接收人"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:18
+msgid "Edit the mailing list &raquo;"
+msgstr "编辑邮件列表 &raquo;"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+msgid "Email"
+msgstr "Email"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6
+msgid "Enabled"
+msgstr "启用"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
+msgid ""
+"Enter the e-mail address of the recipient. The name of the recipient is "
+"optional."
+msgstr "输入收件人的 e-mail 地址，收件人姓名是可选的。"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
+msgid "Externally managed list &mdash; no (un)subscribe links"
+msgstr "外部管理的列表 &mdash; 没有订阅（取消订阅）链接"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
+msgid "First name"
+msgstr "名字"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "From now on you will receive mail from our mailing list."
+msgstr "从现在开始你将会收到来自我们邮件列表的邮件。"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
+msgid "Give your e-mail address to subscribe to"
+msgstr "请输入你的 e-mail 地址来订阅"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:12
+msgid "Go to mailinglist page"
+msgstr "前往邮件列表页面"
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:6
+msgid "Hello,"
+msgstr "你好，"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+msgid "Help about mailing lists."
+msgstr "邮件列表帮助。"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid "Help about the mailing page."
+msgstr "邮寄页面帮助。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "Hope to see you again."
+msgstr "期望再次见到您。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid ""
+"It appears you have sent\n"
+"    this page once already to this list. If you send it again, only\n"
+"    the recipients that did not yet receive the mail will get it. As a\n"
+"    safety-caution, it is impossible to send the same page twice to\n"
+"    the same e-mail address."
+msgstr ""
+"你已经给这个列表发送过了本页面，如果你选择再次发送，那么只有没有收到过邮件的"
+"收件人会被发送。作为安全设置，无法给同样的 e-mail 地址再次发送相同页面。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
+msgid "Keep mailing"
+msgstr "继续邮寄"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
+msgid "Kind Regards,"
+msgstr "亲，"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
+msgid "Mailing Lists"
+msgstr "邮件列表"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:3
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:3
+msgid "Mailing list"
+msgstr "邮件列表"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
+#: modules/mod_mailinglist/mod_mailinglist.erl:365
+msgid "Mailing lists"
+msgstr "邮件列表"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
+msgid "Mailing status"
+msgstr "邮寄状态"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid "Need more help?"
+msgstr "需要更多帮助？"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:13
+msgid "New mailing list"
+msgstr "新建邮件列表"
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:158
+msgid "No addresses selected"
+msgstr "没有选择地址"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:53
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:79
+msgid "No items found"
+msgstr "没有找到"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+msgid "No recipients"
+msgstr "没有收件人"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
+msgid "OK"
+msgstr "成功"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
+msgid ""
+"On this page you see the addresses that have bounced. They have\n"
+"    been disabled by default. Please correct each address and check the\n"
+"    checkbox in front of the address to re-enable it. If an address is "
+"invalid, you can delete it."
+msgstr ""
+"本页你可以看到已退信的邮件地址。这些地址将被禁用。请确认地址无误后重新启用，"
+"如果地址无效，请删除它。"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
+msgid "Our excuses for the inconvenience."
+msgstr "对此带来的不便我们表示抱歉。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "Please confirm that you want to send the page"
+msgstr "请确认你需要发送页面"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
+msgid "Please confirm your subscription"
+msgstr "请确认你的订阅"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
+msgid "Please confirm your subscription on"
+msgstr "请确认你订阅了"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
+msgid "Please enter the e-mail address you want to send a test mail to."
+msgstr "请输入需要接收测试邮件的目的地址。"
+
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
+msgid "Please enter the e-mail address you want to send this page to."
+msgstr "请输入本页面发送的目标 e-mail 地址。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "Please follow"
+msgstr "请按照"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid "Please note:"
+msgstr "请注意："
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "Please unsubscribe"
+msgstr "请取消订阅"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36
+msgid "Prefix"
+msgstr "称呼"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:15
+msgid "Preview mailing"
+msgstr "预览邮件"
+
+#: modules/mod_mailinglist/templates/mailing_page.collection.tpl:52
+msgid "Read this page on the web."
+msgstr "在网页上阅读本页面。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
+msgid "Recipients"
+msgstr "收件人"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+"收件人可以通过 email 方式（简单的注册表单），或者是系统中成员的方式来订阅。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:8
+msgid "Recipients for"
+msgstr "收件人位于"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+msgid "Remove this recipient. No undo possible."
+msgstr "删除这个收件人，无法撤销。"
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:160
+msgid "Resending bounced addresses..."
+msgstr "重新向被退信的地址发送..."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:23
+msgid "Scheduled"
+msgstr "计划中"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "See the"
+msgstr "查看"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
+msgid "Select file"
+msgstr "选择文件"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17
+msgid "Send e-mail"
+msgstr "发送 e-mail"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
+msgid "Send mailing"
+msgstr "发送邮件"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send test mailing"
+msgstr "发送测试邮件"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send test to address"
+msgstr "发送测试到地址"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "Send the mailing automatically after the publication start date of"
+msgstr "自动发送邮件在发布日期"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
+msgid ""
+"Send the mailing immediately after the \"published\" checkbox has been "
+"checked in the edit page."
+msgstr "编辑页面中 \"发布\" 被选中后立即发送邮件。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
+msgid ""
+"Send the mailing right now, but do not include a link back to the website."
+msgstr "立即发送邮件，但是不会带有到内容的网页链接。"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:10
+msgid "Send this page to a mailinglist and view mailinglist statistics."
+msgstr "发送本页面到邮件列表，并查看邮件列表统计。"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send this page to a single address"
+msgstr "发送本页面到单个地址"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send this page to the test mailing list."
+msgstr "发送本页面到测试邮件列表。"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
+msgid "Send welcome"
+msgstr "发送欢迎消息"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:23
+msgid "Sender address for e-mails (optional)"
+msgstr "E-mail 的发送者地址（可选）"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:16
+msgid "Sender name for e-mails (optional)"
+msgstr "E-mail 的发送者名字（可选）"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:51
+msgid "Sending the e-mail..."
+msgstr "发送 e-mail ..."
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
+msgid "Sending the page to the test mailing list..."
+msgstr "正在将页面发送到测试邮件列表..."
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:19
+msgid "Sent on"
+msgstr "发送时间"
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:11
+msgid "Show all recipients &raquo;"
+msgstr "显示所有收件人 &raquo;"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
+msgid ""
+"Sorry, I could not subscribe you to the mailing list. Please try again later "
+"or with another e-mail address."
+msgstr "对不起，无法完成您的订阅。请稍后重试或使用其他 e-mail 地址。"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
+msgid "Sorry, can’t confirm your subscription"
+msgstr "对不起，无法确认您的订阅"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:19
+msgid "Sorry, can’t find your subscription"
+msgstr "对不起，找不到您的订阅"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:20
+msgid "Statistics"
+msgstr "统计"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:17
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:14
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:73
+msgid "Subscribe"
+msgstr "订阅"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3
+msgid "Subscribe to"
+msgstr "订阅到"
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:43
+msgid "Surname"
+msgstr "姓"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
+msgid "Thank you"
+msgstr "谢谢你"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:26
+msgid ""
+"The confirmation key is unknown. Either you already confirmed or something "
+"else went wrong."
+msgstr "确认 key 未知。可能是您已经确认过或是系统错误。"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
+msgid "The e-mails are being sent..."
+msgstr "E-mail 正在被发送..."
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:20
+msgid ""
+"The key in your link does not match any subscription. Either you already "
+"unsubscribed, or the mailing list has been deleted."
+msgstr ""
+"您链接中的 key 不匹配任何订阅。可能是您已经取消订阅，或者是邮件列表已被删除。"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
+msgid "The mailing will be send when the page becomes visible."
+msgstr "邮件将会在页面可见后被发送。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
+msgid ""
+"The page you are trying to e-mail is not yet published. What do you want to "
+"do?"
+msgstr "你需要发送的页面还没有被发布。请选择发布方式。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
+msgid "The recipients list of the mailing list will be deleted as well."
+msgstr "邮件列表中的收件人也会被一同删除。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:32
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr "没有需要重新发送的地址。可能已经处理过退信地址。"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
+msgid "There is no mailing list with the name ‘mailinglist_test’."
+msgstr "没有找到名为 ‘mailinglist_test’ 的邮件列表。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
+msgid "This can not be undone"
+msgstr "操作无法撤销"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
+msgid ""
+"This is a \"private\", externally managed list. Recipients will not receive "
+"any subscribe/unsubscribe messages."
+msgstr ""
+"这是一个“私有的”，外部管理的列表。收件人不会收到任何订阅、取消订阅信息。"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
+msgid ""
+"This overview allows you to send the current page to a group of recipients, "
+"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
+"which shows how the mailing will look like when it is sent; choose 'send "
+"test mailing' to send it to the predefined list of test e-mail addresses. "
+"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
+"the table below, together with statistics on when it was sent and to how "
+"many recipients."
+msgstr ""
+"这里可以将当前页面发送给一组收件人，这些收件人通过邮件列表分组。选择“预览邮"
+"件”来预览即将发送的邮件；选择“发送测试邮件”来将内容发送给预先定义的测试 e-"
+"mail 地址。选择“编辑”回到编辑页面。邮件列表在下面列出，同时还列出了相关的统计"
+"信息。"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+msgid "This page can be sent to different mailing lists."
+msgstr "页面可以被发送给不同的邮件列表。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
+msgid ""
+"Tick the checkbox if you want the recipient to receive a welcome e-mail "
+"message."
+msgstr "如果你需要收到欢迎消息，请选取。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:20
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:16
+msgid "Title"
+msgstr "标题"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:12
+msgid "Unsubscribe"
+msgstr "取消订阅"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "Unsubscribe from"
+msgstr "取消订阅自"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:3
+msgid "Unsubscribe from mailing list"
+msgstr "取消邮件列表订阅"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:100
+msgid "Updated the recipient."
+msgstr "更新收件人。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:4
+msgid ""
+"Upload a file with recipients. The file must contain a single e-mail address "
+"per line. The file’s character set must be utf-8."
+msgstr ""
+"上传一个收件人文件。文件必须每行包含一个 e-mail 地址。文件编码必须是 utf-8。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+msgid "Upload a list of recipients."
+msgstr "上传收件人列表。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:25
+msgid "Upload file"
+msgstr "上传文件"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:41
+msgid "View"
+msgstr "查看"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
+msgid "View and edit the bounced addresses and re-send the mailing."
+msgstr "查看并编辑退信地址，进行重新发送。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
+msgid "Welcome to"
+msgstr "欢迎来到"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
+msgid ""
+"When you don’t want to receive any mail then please ignore this message."
+msgstr "当你不想收到任何邮件，请忽略本消息。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "When you don’t want to receive any more mail then"
+msgstr "如果你不想再收到邮件，那么"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+msgid "You are not allowed to add or enable recipients."
+msgstr "不允许添加或启用收件人。"
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
+msgid "You are not allowed to edit recipients."
+msgstr "不允许编辑收件人。"
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
+msgid "You are not allowed to send mail to the test mailing list."
+msgstr "不允许发送邮件给测试邮件地址。"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:11
+msgid ""
+"You are not allowed to view or edit the recipients list. You need to have "
+"edit permission on the mailing list to change and view the recipients."
+msgstr "不允许查看或编辑收件人列表。你需要获取邮件的编辑权限。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "You are now subscribed to our mailing list"
+msgstr "你已订阅我们的邮件列表"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:3
+msgid "You are now unsubscribed from"
+msgstr "你已经取消订阅了"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "You are now unsubscribed from the mailing list"
+msgstr "你已经取消订阅了邮件列表"
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
+msgid ""
+"You can try to re-subscribe to one of our mailing lists in the side column."
+msgstr "你可以尝试在侧边栏重新订阅我们的邮件列表。"
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
+msgid ""
+"You received this mail because someone wanted to send you this information. "
+"We did not store your e-mail address and will not send you any other mail "
+"because of this mail."
+msgstr ""
+"你收到本邮件是因为有人给你发送了本信息。我们不会保存你的 e-mail 地址，也不会"
+"由此发送给你其他邮件。"
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
+msgid "You received this mail because you are subscribed to the mailing list"
+msgstr "你收到本邮件是因为你订阅了邮件列表"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:7
+msgid "You will receive a confirmation in your e-mail."
+msgstr "你将收到一封确认邮件。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
+msgid "You, or someone else, added your e-mail address to our mailing list"
+msgstr "你或者是其他人，将你的 e-mail 地址加入到了我们的邮件列表中"
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
+msgid ""
+"Your e-mail address is added to the mailing list. A confirmation mail is "
+"sent to your e-mail address and will arrive shortly. When you don’t receive "
+"it, then please check your spam folder."
+msgstr ""
+"你的 e-mail 地址已经被加入了邮件列表。我们已经给您的地址发送了一封确认邮件，"
+"如果没有收到，请检查垃圾邮件过滤。"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
+msgid "bounced"
+msgstr "退信"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:10
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38
+msgid "cancel"
+msgstr "取消"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid "clear"
+msgstr "清除"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "click here to unsubscribe."
+msgstr "点击这里取消订阅。"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "d M Y, H:i"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
+msgid "delete"
+msgstr "删除"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:22
+msgid "edit"
+msgstr "编辑"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+msgid "error"
+msgstr "错误"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
+msgid "has been sent to the following lists:"
+msgstr "已被发送到下列列表："
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
+msgid "has never been sent yet."
+msgstr "没有被发送。"
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "mailing list"
+msgstr "邮件列表"
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:8
+msgid "mailinglist status page"
+msgstr "邮件列表状态页"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "or copy and paste the address below in your browser."
+msgstr "或拷贝并粘贴地址到下面。"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
+msgid "processed"
+msgstr "已处理"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:54
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+msgid "scheduled"
+msgstr "已排期"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send mailing"
+msgstr "发送邮件"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:28
+msgid "send mailing again to corrected addresses"
+msgstr "重新发送邮件"
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send to "
+msgstr "发送到"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "subscribing persons &raquo;"
+msgstr "订阅人 &raquo;"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "this link to confirm"
+msgstr "这个链接来确认"
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "to the list"
+msgstr "到列表"
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "when you don't want to receive any further mail from this list."
+msgstr "当你不想再收到列表的其他邮件时。"
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "with your e-mail address"
+msgstr "使用你的 e-mail 地址"

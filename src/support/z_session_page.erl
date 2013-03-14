@@ -25,6 +25,8 @@
 
 -include_lib("zotonic.hrl").
 
+-define(INTERVAL_MSEC, (?SESSION_PAGE_TIMEOUT div 2) * 1000).
+
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
@@ -155,7 +157,7 @@ spawn_link(Module, Func, Args, Context) ->
 
 %% @doc Kill this page when timeout has been reached
 check_timeout(Pid) ->
-    gen_server:cast(Pid, check_timeout).
+    Pid ! check_timeout.
 
 
 %%====================================================================
@@ -168,9 +170,8 @@ check_timeout(Pid) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server, initialises the pid lookup dicts
 init(Args) ->
-    SessionPid   = proplists:get_value(session_pid, Args),
-    IntervalMsec = (?SESSION_PAGE_TIMEOUT div 2) * 1000,
-    timer:apply_interval(IntervalMsec, ?MODULE, check_timeout, [self()]),
+    SessionPid = proplists:get_value(session_pid, Args),
+    trigger_check_timeout(),
     State = #page_state{session_pid=SessionPid, last_detach=z_utils:now()},
     {ok, State}.
 
@@ -223,20 +224,6 @@ handle_cast({add_script, Script}, State) ->
     StatePing   = ping_comet_ws(StateQueued),
     {noreply, StatePing};
     
-%% @doc Do not timeout while there is a comet or websocket process attached
-handle_cast(check_timeout, State) when is_pid(State#page_state.comet_pid) or is_pid(State#page_state.websocket_pid)->
-    z_utils:flush_message({'$gen_cast', check_timeout}),
-    {noreply, State};
-
-%% @doc Give the comet process some time to come back, timeout afterwards
-handle_cast(check_timeout, State) ->
-    Timeout = State#page_state.last_detach + ?SESSION_PAGE_TIMEOUT,
-    z_utils:flush_message({'$gen_cast', check_timeout}),
-    case Timeout =< z_utils:now() of
-        true ->  {stop, normal, State};
-        false -> {noreply, State}
-    end;
-
 handle_cast(ping, State) ->
     {noreply, State#page_state{last_detach=z_utils:now()}};
 
@@ -307,6 +294,24 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) when Pid == State
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
     Linked = lists:delete(Pid, State#page_state.linked),
     {noreply, State#page_state{linked=Linked}};
+
+%% @doc Do not timeout while there is a comet or websocket process attached
+handle_info(check_timeout, State) when is_pid(State#page_state.comet_pid) or is_pid(State#page_state.websocket_pid)->
+    z_utils:flush_message(check_timeout),
+    trigger_check_timeout(),
+    {noreply, State};
+
+%% @doc Give the comet process some time to come back, timeout afterwards
+handle_info(check_timeout, State) ->
+    Timeout = State#page_state.last_detach + ?SESSION_PAGE_TIMEOUT,
+    z_utils:flush_message(check_timeout),
+    case Timeout =< z_utils:now() of
+        true -> {stop, normal, State};
+        false ->
+            trigger_check_timeout(), 
+            {noreply, State}
+    end;
+
 handle_info(_, State) ->
     {noreply, State}.
 
@@ -331,6 +336,10 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+%% @doc Trigger sending a check_timeout message.
+trigger_check_timeout() ->
+    erlang:send_after(?INTERVAL_MSEC, self(), check_timeout).
+    
 %% @doc Ping the comet process that we have a script queued
 ping_comet_ws(#page_state{script_queue=[]} = State) ->
     State;

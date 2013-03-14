@@ -335,6 +335,7 @@ p(Id, Property, Context) when is_list(Property) ->
 p(Id, Property, Context) 
     when   Property =:= category_id 
     orelse Property =:= page_url 
+    orelse Property =:= page_url_abs
     orelse Property =:= category 
     orelse Property =:= is_a 
     orelse Property =:= uri 

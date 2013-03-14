@@ -35,6 +35,9 @@
 {% endif %}
 {% endblock %}
 
+{# No closing ('kind regards, ...') in mailings / mail page #}
+{% block closing %}
+{% endblock %}
 
 {# Shown below the mail body. Reference to the mailinglist (if any) and unsubscribe links. #}
 {% block footer %}

@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 %% Zotonic site configuration for %%SITE%%.
 [
  %% This site is enabled or not.
@@ -14,26 +15,27 @@
  {dbdatabase, none},
 
  %% Installed modules, defined here as there is no database connection
- {modules, [
-            %%SITE%%,
-            mod_base,
-            mod_admin,
-            mod_bootstrap,
-            mod_zotonic_status_vcs,
-            mod_zotonic_tracer
-           ]},
+ {modules,
+  [%%SITE%%,
+   mod_base,
+   mod_zotonic_status_vcs,
+   mod_zotonic_tracer
+  ]},
 
- %% Default config keys
+ %% Default config keys.
  {site, [{language, "en"}]},
 
- %% Depcache settings. The maximum size in Mbs
+ %% Depcache settings. The maximum size in Mbs.
  {depcache_memory_max, 100},
 
  %% Password for the 'admin' user.
  {admin_password, "%%ADMINPASSWORD%%"},
 
+ %% Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
+ %% Must be defined here because otherwise Zotonic will try to generate a new key and store it
+ %% in the database, which will fail since this skeleton assumes no DB access.
+ {sign_key, <<"--change-me--">>},
+
  %% What skeleton site this site is based on; for installing the initial data.
- {
-   skeleton, %%SKEL%%
- }
+ {skeleton, %%SKEL%%}
 ].

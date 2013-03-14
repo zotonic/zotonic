@@ -462,7 +462,7 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{uri, undefined} | Acc], Context);
                 _ ->
-                    props_filter(T, [{uri, Uri} | Acc], Context)
+                    props_filter(T, [{uri, z_html:sanitize_uri(Uri)} | Acc], Context)
             end;
         false ->
             props_filter(T, Acc, Context)

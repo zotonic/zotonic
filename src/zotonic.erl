@@ -29,10 +29,13 @@
 
 ensure_started(App) ->
     case application:start(App) of
-	ok ->
-	    ok;
-	{error, {already_started, App}} ->
-	    ok
+        ok ->
+            ok;
+        {error, {not_started, Dep}} ->
+            ok = ensure_started(Dep),
+            ensure_started(App);
+        {error, {already_started, App}} ->
+            ok
     end.
 
 %% @spec start() -> ok
@@ -42,18 +45,15 @@ start() -> start([]).
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
-    ensure_started(lager),
     test_erlang_version(),
     zotonic_deps:ensure(),    
-    ensure_started(crypto),
-    ensure_started(webzmachine),
-    ensure_started(mnesia),
-    ok = application:start(zotonic).
+    ok = ensure_started(zotonic).
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
     Res = application:stop(zotonic),
+    application:stop(eiconv),
     application:stop(mnesia),
     application:stop(lager),
     application:stop(webzmachine),

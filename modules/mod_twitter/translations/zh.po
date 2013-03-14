@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-01-31 00:58+0800\n"
+"Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh\n"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:17
+msgid ""
+"Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account "
+"name to this number go to:"
+msgstr "填入<strong>数字</strong> Twitter id。映射 Twitter 帐户到数字请访问："
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid "Finding a Twitter ID."
+msgstr "获取一个 Twitter ID."
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid "Need more help?"
+msgstr "需要更多帮助？"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:3
+msgid "Sign in with Twitter"
+msgstr "使用 Twitter 登录"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:10
+msgid ""
+"The (numeric) Twitter ID of a user can be found on the twitter page of the "
+"user: it is the number that is contained in the URL to the RSS feed for the "
+"user\\'s updates."
+msgstr ""
+"用户的数字 Twitter ID 可以从用户的 twitter 页面获取：用户的 RSS feed 更新 "
+"URL 中包含这个数字。"
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:3
+msgid "Twitter ID"
+msgstr "Twitter ID"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:5
+msgid "Waiting for Twitter…"
+msgstr "等待 Twitter..."

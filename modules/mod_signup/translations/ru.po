@@ -9,10 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.10-dev\n"
-"POT-Creation-Date: 2012-12-27 15:07+0400\n"
-"PO-Revision-Date: 2013-01-14 16:40+0400\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-13 16:12+0100\n"
 "Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -65,7 +66,7 @@ msgstr "Электронная почта"
 msgid "First name"
 msgstr "Имя"
 
-#: modules/mod_signup/templates/email_verify.tpl:16
+#: modules/mod_signup/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Надеемся скоро увидеть вас."
 
@@ -93,6 +94,10 @@ msgstr ""
 "На ваш e-mail отправлен код подтверждения. Пожалуйста, скопируйте его в поле "
 "ввода снизу."
 
+#: modules/mod_signup/templates/email_verify.tpl:16
+msgid "Kind regards,"
+msgstr ""
+
 #: modules/mod_signup/templates/signup.tpl:93
 msgid "Last name"
 msgstr "Фамилия"
@@ -102,8 +107,8 @@ msgid "Password"
 msgstr "Пароль"
 
 #: modules/mod_signup/templates/email_verify.tpl:3
-msgid "Please confirm your account."
-msgstr "Пожалуйста, подтвердите вашу регистрацию."
+msgid "Please confirm your account"
+msgstr "Пожалуйста, подтвердите вашу регистрацию"
 
 #: modules/mod_signup/templates/email_verify.tpl:10
 msgid "Please follow the link below."
@@ -160,10 +165,6 @@ msgid ""
 msgstr ""
 "Для регистрации необходимо согласие с Условиями использования и Политикой "
 "конфиденциальности."
-
-#: modules/mod_signup/templates/signup.tpl:129
-msgid "Too short, use 6 or more."
-msgstr "Пароль слишком короткий, используйте не менее 6 символов."
 
 #: modules/mod_signup/templates/signup.tpl:120
 msgid "Username"
@@ -236,3 +237,6 @@ msgstr "войти немедленно"
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"
 msgstr "зарегистрироваться для получения имени пользователя и пароля"
+
+#~ msgid "Too short, use 6 or more."
+#~ msgstr "Пароль слишком короткий, используйте не менее 6 символов."

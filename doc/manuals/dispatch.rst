@@ -176,13 +176,42 @@ Before URLs are matched, they first can be `rewritten` to match
 something else. This is a powerful mechanism that allows you do
 anything you like with URLs.
 
+The URL rewriting mechanism allows one to set extra context variables
+or change the (internal) URL so different dispatch rules get
+triggered.
+
+
 :ref:`mod_translation` uses this mechanism to prefix each URL with the
 language code of the currently selected language.
 
 .. todo:: document this fully, using mod_translation example
 
 
+Domain-dependent language selection
+...................................
 
+An application of URL rewriting allows you to set the Zotonic language based on the domain that is being requested on your site. To set up domain-based language detection using
+the following code snippet::
+
+  observe_dispatch_rewrite(#dispatch_rewrite{host=Host}, {Parts, Args}, _Context) ->
+      Language = case Host of
+                     "example.nl" -> nl;
+                     "example.de" -> de;
+                     _ -> en  %% default language
+                 end,
+      {Parts, [{z_language, Language}|Args]}.
+
+This leaves the request URI intact (the `Parts` variable), but injects
+the `z_language` variable into the request context, this overriding
+the language selection.
+      
+For this setup to work, this requires you to have the ``{redirect,
+false}`` option in your site, and the appropriate ``hostalias``
+directives for each host. See :ref:`manual-site-anatomy` for more
+details on this.
+
+
+     
 Dispatch rule BNF
 -----------------
 

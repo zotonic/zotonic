@@ -6,12 +6,12 @@
 <div class="edit-header">
 
     <h2>
-        {_ Users _}{% if q.qs %}, 
+        {_ Users _}{% if q.qs %},
         {_ matching _} “{{ q.qs|escape }}”
         {% button text=_"show all" action={redirect dispatch="admin_user"} %}
         {% else %} {_ overview _}{% endif %}
     </h2>
-    
+
     <p>
         {_ Every page/person can be made into a user on the edit page.
         The difference between a user and a normal page is only
@@ -27,7 +27,7 @@
     {% endif %}
 </div>
 
-<div>    
+<div>
     {% with m.acl.user as me %}
     {% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
@@ -45,8 +45,8 @@
             {% for id, rank in result %}
             <tr id="{{ #tr.id }}" data-href="{% url admin_edit_rsc id=id %}" {% if not id.is_published %}class="unpublished"{% endif %}>
                 <td>{{ m.rsc[id].title|striptags }}</td>
-                <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>(that's you)</strong>{% endif %}</td>
-                <td>{{ m.rsc[id].modified|date:"d M, H:i" }}</td>
+                <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
+                <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
                 <td>
                     <div class="pull-right">
                         {% button class="btn btn-mini" action={dialog_set_username_password id=id} text=_"set username/ password" on_delete={slide_fade_out target=#tr.id} %}
@@ -55,7 +55,7 @@
                         {% endif %}
                         {% button class="btn btn-mini" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                     </div>
-                    {{ m.rsc[id].created|date:"d M, H:i" }}
+                    {{ m.rsc[id].created|date:_"d M, H:i" }}
                 </td>
             </tr>
 

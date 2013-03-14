@@ -7,13 +7,13 @@
     <h2 id="content-pager">{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
 
 {% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
-	{% ifequal result.total 0 %}
-		<p>{_ There are no pages with a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”</p>
-	{% else %}
-		<p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %} 
-		{_ a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”.</p>
-	{% endifequal %}
-	
+        {% ifequal result.total 0 %}
+                <p>{_ There are no pages with a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”</p>
+        {% else %}
+                <p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %}
+                {_ a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”.</p>
+        {% endifequal %}
+
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
@@ -32,7 +32,7 @@
                 <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
                 <td>{{ m.rsc[m.rsc[id].category_id].title }}</td>
                 <td>{{ m.rsc[pred_id].title }}</td>
-                <td>{{ m.rsc[id].modified|date:"d M Y, H:i" }}</td>
+                <td>{{ m.rsc[id].modified|date:_"d M Y, H:i" }}</td>
                 <td>
                     {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
                     <span class="pull-right">
