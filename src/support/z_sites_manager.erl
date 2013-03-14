@@ -124,6 +124,7 @@ restart(Site) ->
 %% @doc Initiates the server.
 init([]) ->
     {ok, Sup} = z_supervisor:start_link([]),
+    z_supervisor:set_manager_pid(Sup, self()), 
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
     add_sites_to_sup(Sup, scan_sites()),
@@ -188,6 +189,17 @@ handle_cast({start, Site}, State) ->
 handle_cast({restart, Site}, State) ->
     z_supervisor:restart_child(State#state.sup, Site),
     {noreply, State};
+
+%% @doc A site started - report
+handle_cast({supervisor_child_started, Child, SitePid}, State) ->
+    lager:info("Site started: ~p (~p)", [Child#child_spec.name, SitePid]),
+    {noreply, State};
+
+%% @doc A site stopped - report
+handle_cast({supervisor_child_stopped, Child, SitePid}, State) ->
+    lager:info("Site stopped: ~p (~p)", [Child#child_spec.name, SitePid]),
+    {noreply, State};
+
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
