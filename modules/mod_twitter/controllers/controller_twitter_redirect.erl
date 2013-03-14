@@ -70,7 +70,6 @@ moved_temporarily(ReqData, Context) ->
 
 %% @doc Redirect user to a signup failure URL, or to the logon page.
 redirect_error(Reason, Context) ->
-    ?DEBUG({?MODULE, Reason}),
     z_context:set_session(twitter_logon, false, Context),
     z_context:set_session(twitter_access_token, undefined, Context),
     Location = case z_notifier:first(#signup_failed_url{reason=Reason}, Context) of
@@ -78,7 +77,7 @@ redirect_error(Reason, Context) ->
                    undefined ->
                        z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)
                end,
-    ?WM_REPLY({true, Location}, Context).
+    ?WM_REPLY({true, z_convert:to_list(Location)}, Context).
 
 
 
@@ -115,7 +114,7 @@ logon_twitter_user(TwitterProps, LocationAfterSignup0, Context) ->
             end;
         Row ->
             UserId = proplists:get_value(rsc_id, Row),
-			{Location,Context1} = case z_auth:logon(UserId, Context) of
+            {Location,Context1} = case z_auth:logon(UserId, Context) of
                                                   {ok, ContextUser} ->
                                                       case z_notifier:first(#logon_ready_page{request_page=LocationAfterSignup}, ContextUser) of
                                                           undefined ->
@@ -129,8 +128,8 @@ logon_twitter_user(TwitterProps, LocationAfterSignup0, Context) ->
                                                       end;
                                                   {error, _Reason} ->
                                                       {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
-			end,
-            LocationAbs = lists:flatten(z_context:abs_url(Location, Context1)),
+            end,
+            LocationAbs = z_context:abs_url(Location, Context1),
             use_see_other(LocationAbs, Context1)
     end.
     

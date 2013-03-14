@@ -848,7 +848,7 @@ set_language(Lang, Context) ->
 %% @doc Set a response header for the request in the context.
 %% @spec set_resp_header(Header, Value, Context) -> NewContext
 set_resp_header(Header, Value, Context = #context{wm_reqdata=ReqData}) ->
-    RD1 = wrq:set_resp_header(Header, Value, ReqData),
+    RD1 = wrq:set_resp_header(Header, z_convert:to_list(Value), ReqData),
     Context#context{wm_reqdata=RD1}.
 
 %% @doc Get a response header

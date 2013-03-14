@@ -79,18 +79,18 @@ redirect_error(Reason, Context) ->
                    undefined ->
                        z_context:abs_url(z_dispatcher:url_for(logon, Context), Context)
                end,
-    ?WM_REPLY({true, Location}, Context).
+    ?WM_REPLY({true, z_convert:to_list(Location)}, Context).
 
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     Page = z_context:get_q("p", Context, "/"),
-    RedirectUrl = lists:flatten(z_context:abs_url(z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context), Context)),
+    RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context), Context),
 
     FacebookUrl = "https://graph.facebook.com/oauth/access_token?client_id="
                 ++ z_utils:url_encode(AppId)
-                ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
+                ++ "&redirect_uri=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
                 ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
                 ++ "&code=" ++ z_utils:url_encode(Code),
     case httpc:request(FacebookUrl) of
