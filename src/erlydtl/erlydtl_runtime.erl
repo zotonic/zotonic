@@ -126,8 +126,8 @@ find_value(Key, {GBSize, GBData}, _Context) when is_integer(GBSize) ->
         _ -> undefined
     end;
 
-%% Other cases: context, dict or parametrized module lookup.
-find_value(Key, Tuple, Context) when is_tuple(Tuple) ->
+%% Other cases: context or dict module lookup.
+find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
     Module = element(1, Tuple),
     case Module of
         context -> 
@@ -137,19 +137,8 @@ find_value(Key, Tuple, Context) when is_tuple(Tuple) ->
                 {ok, Val} -> Val;
                 _ -> undefined
             end;
-        Module ->
-            Exports = Module:module_info(exports),
-            case proplists:get_value(Key, Exports) of
-                0 -> Tuple:Key();
-                1 -> Tuple:Key(Context);
-                _ ->
-                    case proplists:get_value(get, Exports) of
-                        1 -> Tuple:get(Key);
-                        2 -> Tuple:get(Key, Context);
-                        _ ->
-                            undefined
-                    end
-            end
+        _ ->
+            undefined
     end;
 
 %% When the current value lookup is a function, the context can be passed to F
