@@ -64,7 +64,7 @@ process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     erlang:monitor(process, Context1#context.page_pid),
     z_session_page:comet_attach(self(), Context1#context.page_pid),
-    {ok, TRef} = start_timer(?COMET_FLUSH_EMPTY),
+    TRef = start_timer(?COMET_FLUSH_EMPTY),
     process_post_loop(Context1, TRef, false).
 
 
@@ -72,7 +72,7 @@ process_post(ReqData, Context) ->
 process_post_loop(Context, TRef, HasData) ->
     receive
         flush ->
-            timer:cancel(TRef),
+            erlang:cancel_timer(TRef),
             z_session_page:comet_detach(Context#context.page_pid),
             ?WM_REPLY(true, Context);
 
@@ -94,8 +94,8 @@ process_post_loop(Context, TRef, HasData) ->
 
 
 start_timer(Delta) ->
-    timer:send_after(Delta, flush).
+    erlang:send_after(Delta, self(), flush).
 
 reset_timer(Delta, TRef) ->
-    timer:cancel(TRef),
+    erlang:cancel_timer(TRef),
     start_timer(Delta).
