@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
                 EventType == enterkey orelse EventType == "enterkey" ->
                     [
                         z_render:render_css_selector(z_render:css_selector(Trigger, Args)), 
-                        <<"'.bind('keypress', ">>,
+                        <<"'.on('keypress', ">>,
                         <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, 
                         case Propagate of 
                             true -> $;; 
@@ -86,7 +86,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
                 true ->
                     [
                         z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
-                        <<".bind('">>, z_convert:to_list(EventType), <<"', ">>,
+                        <<".on('">>, z_convert:to_list(EventType), <<"', ">>,
                         <<"function(event) { ">>, PostbackMsgJS, ActionsJS, 
                         case Propagate of 
                             true -> <<>>; 
