@@ -34,7 +34,7 @@ function stats_chart_factory() {
     // creates a dynamic "label value" text element
     function text() {
         this.append("span")
-            .attr("class", "chart-text")
+            .attr("class", function(d){ return "chart-text " + d.class })
             .call(function() {
                 this.append("span")
                     .attr("class", "chart-label")
@@ -74,23 +74,36 @@ function stats_chart_factory() {
     function meter_data(d) {
         var series = ["one", "five", "fifteen", "day"];
         var now = Date.now();
-        var data = this.length > 0 && d3.select(this[1]).datum();
+
+        // for the line chart, we append each new value to a list
+        var data = this.length > 0 && d3.select(this[this.length - 1]).datum();
+
+        // if we don't have a list yet, initialize a new one
         if (!data)
             data = series.map(function(){
                 return [{x: now - 1000, y: 0}] });
 
+        // for each line series, append the new value
         data.forEach(
             function(s, i) {
                 s.push({x: now, y: d[this[i]]})
             },
             series);
 
-        return [
-            { factory: text, datum:
-             { label: "Total count", value: d.count }
-            },
-            { factory: line, datum: data }
-        ];
+        // return our updated values
+        return series.map(
+            function(serie, i){
+                return { factory: text, datum:
+                         { label: serie, value: d[serie], class: "serie-" + i  }
+                       }
+            }).concat([
+                { factory: text, datum:
+                  { label: "Total count", value: d.count }
+                },
+                // the index of this line chart is used above
+                // when declaring the `var data =`; keep in sync!
+                { factory: line, datum: data }
+            ]);
     }
 
     // chart data middle man

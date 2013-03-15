@@ -41,24 +41,34 @@ path.line:hover {
 
 .serie-0 {
   stroke: rgb(6, 156, 209);
+  background-color: rgba(6, 156, 209, 0.2);
 }
 
 .serie-1 {
   stroke: #ff7f0e;
+  background-color: rgba(255, 127, 14, 0.2);
 }
 
 .serie-2 {
   stroke: #2ca02c;
+  background-color: rgba(44, 160, 44, 0.2);
 }
 
 .serie-3 {
   stroke: #d62728;
+  background-color: rgba(214, 39, 40, 0.2);
 }
 
 .serie-4 {
   stroke: #9467bd;
+  background-color: rgba(148, 103, 189, 0.2);
 }
 
 .chart-label:after {
   content: ": ";
+}
+
+.chart-text {
+  border-radius: 5px;
+  padding: 0px 5px;
 }
