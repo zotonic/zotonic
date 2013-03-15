@@ -496,7 +496,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
             [
-                ?ERROR("[~p] Error starting module ~p: ~p~n", 
+                ?ERROR("[~p] Error starting module ~p: ~p", 
                         [ z_context:site(Context), 
                           M, 
                           startable(M, Provided)
