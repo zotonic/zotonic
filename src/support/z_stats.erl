@@ -20,7 +20,7 @@
 -module(z_stats).
 
 -include_lib("zotonic.hrl").
--include_lib("webmachine_logger.hrl").
+-include_lib("webzmachine/include/webmachine_logger.hrl").
 
 -export([
     init/0,
