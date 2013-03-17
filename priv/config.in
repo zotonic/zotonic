@@ -87,6 +87,9 @@
  %% Webmachine error handler, you can use your own.
  % {webmachine_error_handler,z_webmachine_error_handler},
 
+ %% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above) use the RGB colorspace, so all images are darker then the original. <br />Possible Values: CMY, CMYK, Grey, HCL, HSB, HSL, HWB, Lab, LCH, LMS, Log, Luv, OHTA, Rec601Luma, Rec601YCbCr, Rec709Luma, Rec709YCbCr, RGB, sRGB, Transparent, XYZ, YCbCr, YCC, YIQ, YCbCr, YUV
+ % {default_colorspace, "sRGB"},
+
  % Date this file was created/updated
  {modify_date, {{2010,7,12},{12,28,30}}}
 ].
