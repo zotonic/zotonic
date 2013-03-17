@@ -7,7 +7,7 @@ PARSER    := src/erlydtl/erlydtl_parser
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := $(shell (type rebar 2>/dev/null || echo ./rebar) | tail -1 | awk '{ print $$NF }')
 REBAR_DEPS := $(shell which rebar || echo ../../rebar)
-REBAR_URL := http://cloud.github.com/downloads/basho/rebar/rebar
+REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
 
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
