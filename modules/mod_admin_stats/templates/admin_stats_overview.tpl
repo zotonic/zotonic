@@ -8,6 +8,8 @@
         "js/charts/z_charts.js"
         "js/charts/histogram-duration.js"
         "js/charts/line-chart.js"
+        "js/charts/metric-histogram.js"
+        "js/charts/metric-meter.js"
         "js/charts/stats_charts.js"
         "css/charts.css"
     %}
@@ -35,7 +37,7 @@
     {% wire name='new_metrics'
         action={script
             script="d3.select('#graphs').call(
-            z_charts.update, zEvtArgs, factory);
+            z_charts.process, zEvtArgs, factory);
             updateTimer = setTimeout(
             \"z_notify('update_metrics')\", 2000)"
         }
@@ -43,7 +45,7 @@
 
     {% wire
         action={script
-            script="var factory = stats_chart_factory();
+            script="var factory = z_charts.factories.stats;
             var updateTimer;
             z_notify('update_metrics');"
         }
