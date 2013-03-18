@@ -25,25 +25,16 @@ function metric_histogram() {
 
     function factory_data(d) {
         return [
-            { factory: "wrap",
+            { factory: "text",
               datum: {
-                  class: "pull-left",
+                  format: d3.format(".2s"),
                   data: [
-                      { factory: "text",
-                        datum: { data: [
-                            { label: "Min", value: d.min },
-                            { label: "Max", value: d.max }]}
-                      },
-                      { factory: "text",
-                        datum: {
-                            label: "Mean (geometric)",
-                            value: d.mean.geometric }
-                      },
-                      { factory: "text",
-                        datum: {
-                            label: "Sample count",
-                            value: d.count }
-                      }]}
+                      { label: "Min", value: d.min },
+                      { label: "Max", value: d.max },
+                      { label: "Mean (geometric)",
+                        value: d.mean.geometric },
+                      { label: "Sample count", value: d.count }
+                  ]}
             },
             { factory: histogram, datum: d.histogram }
         ];

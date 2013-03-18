@@ -97,10 +97,17 @@ var z_charts = {};
     };
 
     function text_update(d) {
+        function format_value(v) {
+            return d.format ? d.format(v.value) : v.value;
+        }
+
         var texts = d3.select(this).selectAll("span.chart-text")
             .data(d.data || [d]);
-        texts.selectAll(".chart-value")
-            .text(function(v) { return v.value });
+
+        // update
+        texts.select(".chart-value").text(format_value);
+
+        // add
         texts.enter()
             .append("span")
             .attr("class", function(d) {
@@ -111,8 +118,10 @@ var z_charts = {};
                     .text(function(v) { return v.label });
                 this.append("span")
                     .attr("class", "chart-value")
-                    .text(function(v) { return v.value });
+                    .text(format_value);
             });
+
+        // delete
         texts.exit()
             .remove();
     }

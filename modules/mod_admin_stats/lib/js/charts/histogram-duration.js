@@ -92,13 +92,13 @@ function histogram_duration_chart() {
                 .attr("x", 1)
                 .attr("height", function(d) {
                     return client_height - top(d); })
-            //.style("fill-opacity", 1e-6)
+                .style("fill-opacity", 1e-6)
                 .transition()
                 .duration(props.animation_speed)
-            //.style("fill-opacity", 1)
+                .style("fill-opacity", 1)
                 .attr("width", function(d, i) { return width(d, i) })
-            //.each("end", function(){
-            //d3.select(this).style("fill-opacity", null) });
+                .each("end", function(){
+                    d3.select(this).style("fill-opacity", null) });
             ;
 
             // exit dropped bars

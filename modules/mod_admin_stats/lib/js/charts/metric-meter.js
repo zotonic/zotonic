@@ -21,23 +21,19 @@ function metric_meter() {
 
         // return our updated values
         return [
-            { factory: "wrap",
+            { factory: "text",
               datum: {
-                  class: "pull-left",
+                  format: d3.format(".2s"),
                   data: series.map(
                       function(serie, i) {
                           return {
-                              factory: "text",
-                              datum: {
-                                  class: "serie-" + i,
-                                  label: serie,
-                                  value: d[serie] }
+                              class: "serie-" + i,
+                              label: serie,
+                              value: d[serie]
                           };
                       })
                       .concat([
-                          { factory: "text",
-                            datum: { label: "Total count", value: d.count }
-                          }
+                          { label: "Total count", value: d.count }
                       ])}
             },
             // the index of this line chart is used above
