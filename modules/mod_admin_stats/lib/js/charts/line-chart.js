@@ -47,7 +47,7 @@ function line_chart() {
                     //d3.max(data[0], function(d){ return d.x })])
                 .range([0, client_width]);
             props.y
-                .domain([0, d3.max(data, function(s) {
+                .domain([0, 1.01 * d3.max(data, function(s) {
                     return d3.max(s, function(d){
                         return d.y })})])
                 .range([client_height, 0]);
@@ -154,4 +154,23 @@ function line_chart() {
     z_charts.proxy_properties(props, chart);
 
     return chart;
+}
+
+// data -> { init: {x, y}, x: now, y: [values], max_length, series: [list]}
+line_chart.append_value = function(data) {
+    var d = data.datum;
+
+    if (!d)
+        d = data.datum = data.series.map(
+            function() { return []; }
+        );
+
+    d.forEach(
+        function(s, i) {
+            if (data.max_length < s.push({x: data.x, y: data.y[this[i]]}))
+                s.shift();
+        },
+        data.series);
+
+    return data;
 }

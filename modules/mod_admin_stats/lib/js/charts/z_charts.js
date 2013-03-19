@@ -86,7 +86,14 @@ var z_charts = {};
 
     // creates a line chart
    $.factories.line = function(selection) {
-        return selection.call(line_chart());
+       return line_chart().call(
+           function() {
+               this
+                   .width(300)
+                   .height(100);
+               this.axis().x.ticks(5);
+               this.axis().y.ticks(3);
+           })(selection);
     };
 
     // Creates a dynamic "label value" text element

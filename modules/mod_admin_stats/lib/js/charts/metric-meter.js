@@ -1,30 +1,22 @@
 function metric_meter() {
 
     function factory_data(d) {
-        var series = ["one", "five", "fifteen", "day"];
         var now = Date.now();
-
-        // for the line chart, we append each new value to a list
-        var data = this.length > 0 && d3.select(this[this.length - 1]).datum();
-
-        // if we don't have a list yet, initialize a new one
-        if (!data)
-            data = series.map(function(){
-                return [{x: now - 1000, y: 0}] });
-
-        // for each line series, append the new value
-        data.forEach(
-            function(s, i) {
-                s.push({x: now, y: d[this[i]]})
-            },
-            series);
+        var data = line_chart.append_value({
+            init: { x: now - 2000, y: 0 },
+            x: now,
+            y: d,
+            max_length: 150,
+            series: ["one", "five", "fifteen", "day"],
+            datum: this.length > 0 && d3.select(this[this.length - 1]).datum()
+        });
 
         // return our updated values
         return [
             { factory: "text",
               datum: {
                   format: d3.format(".2s"),
-                  data: series.map(
+                  data: data.series.map(
                       function(serie, i) {
                           return {
                               class: "serie-" + i,
@@ -38,7 +30,7 @@ function metric_meter() {
             },
             // the index of this line chart is used above
             // when declaring the `var data =`; keep in sync!
-            { factory: "line", datum: data }
+            { factory: "line", datum: data.datum }
         ];
     }
 
