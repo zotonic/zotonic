@@ -44,7 +44,7 @@ new(Stat, From) ->
         #counter{} ->
             folsom_metrics:new_meter(Key);
         #histogram{} ->
-            folsom_metrics:new_histogram(Key, exdec)
+            folsom_metrics:new_histogram(Key, slide)
     end,
     folsom_metrics:tag_metric(Key, tag(From)).
 
