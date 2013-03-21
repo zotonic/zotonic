@@ -59,7 +59,7 @@ parse_po_file(List) ->
       lists:foldl(fun ({"", R}, AccIn) ->
                           [{?GETTEXT_HEADER_INFO, R}|AccIn];
                       ({T, ""}, AccIn) ->
-                          [{T,T}|AccIn];
+                          AccIn;
                       (R, AccIn) ->
                           [R|AccIn]
                   end,

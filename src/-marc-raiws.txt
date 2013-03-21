@@ -1,0 +1,32 @@
+REDUNDANT ARRAY OF INEXPENSIVE WEB SERVERS
+==========================================
+
+Goal
+====
+
+Make a web system hosting multiple sites on multiple locations. All locations work together in serving the web sites, balancing load and sharing backups. Web sites contain different data but cooperate in a federation where they share data and resources.
+
+
+Notes:
+- distribute backups using (modified) p2p/torrent protocols
+- failover: start a site & load backup from network
+- distribute processing (image resizing, email decoding etc) to low load machines
+- federate content
+- pubsub for distributing updates
+- backup/store files on cloud systems (s3, greenqloud, etc)
+
+
+Federation:
+- shared logons/ authentication
+- share/distribute content
+- pubsub for cooperation
+
+
+Every server needs:
+- PolderCast for distributed PubSub
+- Bittorrent for distributing backups and other big backups
+- DNS server for failover and location handling
+
+
+Misc:
+- Upload files using dropbox
