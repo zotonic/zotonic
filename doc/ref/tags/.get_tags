@@ -1,6 +1,5 @@
 #!/bin/sh
-exec sed -f - -- "$@" <<'EOF'
-
+echo <<EOF
 # operate on the first lines of the identifier_to_keyword fun
 # that mentions open_tag (guard clause), and down until the
 # the line containing "Type ="
@@ -24,4 +23,6 @@ exec sed -f - -- "$@" <<'EOF'
 
 # delete everything else
 d
-EOF
+EOF > /tmp/ztgsed$$
+exec sed -f /tmp/ztgsed$$ -- "$@"
+# rm /tmp/ztgsed$$
