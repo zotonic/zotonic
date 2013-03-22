@@ -3,8 +3,12 @@
 # /path/to/zotonic/modules/<mod>/templates/{device/}template_name.tpl
 for f in `find $ZOTONIC_SRC/modules -name [^_]\*.tpl`
 do
-    read -r mod template device <<EOF
-`echo $f | sed -e 's,.*/\(mod_[^/]*\)/templates/\(\([^/]*\)/\|\)\(.*\).tpl,\1 \4 \3,'`
+    read -r mod templatepath <<EOF
+`echo $f | sed -e 's/^.*\/\(mod_[^\/]*\)\/templates\/\(.*\)\.tpl$/\1 \2/'`
+EOF
+    template=`basename $templatepath`
+    read -r device <<EOF
+`dirname $templatepath | sed -e 's/^\.$//'`
 EOF
     dir=${0%/*}
     base=$template${device:+-}$device
