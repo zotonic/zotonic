@@ -23,7 +23,7 @@
         <tbody>
             {% for sort, prio, module, props in modules %}
             <tr id="{{ #li.module }}" class="{% if not props.is_active %}unpublished{% endif %}">
-                <td>{% include "_icon_status.tpl" status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</td>
+                <td>{% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</td>
                 <td>{{ props.mod_description|default:"-" }}</td>
                 <td>{{ prio }}</td>
                 <td>
