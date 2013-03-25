@@ -45,7 +45,7 @@ This tutorial was tested on Ubuntu 11.04.
 How
 ---
 
-How can I install and lean Rebar?
+How can I install and learn Rebar?
 .................................
 Create a root directory for experimentation. Let's call it "learn."::
 
