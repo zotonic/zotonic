@@ -184,8 +184,8 @@ event(#postback{message={identity_add, Args}}, Context) ->
                 <<>> -> 
                     Context;
                 Key ->
-                    KeyNorm = normalize_key(Type, Key),
-                    case is_valid_key(Type, KeyNorm, Context) of
+                    KeyNorm = m_identity:normalize_key(Type, Key),
+                    case m_identity:is_valid_key(Type, KeyNorm, Context) of
                         true ->
                             case is_existing_key(RscId, Type, KeyNorm, Context) of
                                 true ->
@@ -206,10 +206,6 @@ event(#postback{message={identity_add, Args}}, Context) ->
             z_render:growl_error(?__("You are not allowed to edit identities.", Context), Context)
     end.
 
-is_valid_key(email, Key, _Context) ->
-    z_email_utils:is_email(Key);
-is_valid_key(_Type, _Key, _Context) ->
-    true.
 
 is_existing_key(RscId, Type, Key, Context) ->
     Existing = m_identity:get_rsc_by_type(RscId, Type, Context),
@@ -218,20 +214,11 @@ is_existing_key(RscId, Type, Key, Context) ->
         _ -> true
     end.
 
-normalize_key(email, Key) ->
-    z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
-normalize_key(_Type, Key) ->
-    Key.
-
 ensure(_RscId, _Type, undefined, _Context) -> ok;
 ensure(_RscId, _Type, <<>>, _Context) -> ok;
 ensure(_RscId, _Type, [], _Context) -> ok;
 ensure(RscId, Type, Key, Context) ->
-    KeyNorm = normalize_key(Type, Key),
-    case is_valid_key(Type, KeyNorm, Context) of
-        true -> m_identity:ensure(RscId, Type, KeyNorm, Context);
-        false -> {error, invalid_key}
-    end.
+    m_identity:insert(RscId, Type, Key, Context).
 
 
 optional_update_list(_RscId, _Type, [], Context) ->

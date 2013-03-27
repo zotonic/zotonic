@@ -1,6 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-09-22
 %% @doc Handle the OAuth callback from the Twitter
 %% handshake. Exchanges request token (from session) with access
 %% token.
@@ -100,15 +99,14 @@ logon_twitter_user(TwitterProps, LocationAfterSignup0, Context) ->
         undefined ->
             % Register the Twitter identities as verified
             SignupProps = [
-                {identity, {username_pw, {z_utils:generate_username(Props, Context), z_ids:id(6)}, true, true}},
+                {identity, {username_pw, {z_utils:generate_username(Props, Context), z_ids:id(10)}, true, true}},
                 {identity, {twitter, UID, true, true}},
                 {identity, {twitter_screenname, proplists:get_value(screen_name, TwitterProps), true, true}},
                 {ready_page, LocationAfterSignup}
             ],
             case z_notifier:first(#signup_url{props=Props, signup_props=SignupProps}, Context) of
                 {ok, Location} ->
-                    use_see_other(Location, Context);
-                    %?WM_REPLY({true, Location}, Context);
+                    ?WM_REPLY({true, Location}, Context);
                 undefined ->
                     throw({error, {?MODULE, "No result from signup_url notification handler"}})
             end;
@@ -129,10 +127,7 @@ logon_twitter_user(TwitterProps, LocationAfterSignup0, Context) ->
                                                   {error, _Reason} ->
                                                       {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
             end,
-            LocationAbs = z_context:abs_url(Location, Context1),
-            use_see_other(LocationAbs, Context1)
+            LocationAbs = z_convert:to_list(z_context:abs_url(Location, Context1)),
+            ?WM_REPLY({true, LocationAbs}, Context1)
     end.
     
-use_see_other(Location, Context) ->
-    ContextLoc = z_context:set_resp_header("Location", Location, Context),
-    ?WM_REPLY({halt, 303}, ContextLoc).

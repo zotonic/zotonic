@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-12
+%% @copyright 2010-2013 Marc Worrell
 %% @doc Display a form to sign up.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -86,8 +85,8 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
             {email, Email} = proplists:lookup(email, Props),
             RequestConfirm = z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, true, Context)),
             SignupProps = case is_set(XsSignupProps) of
-                                true ->
-                                    XsSignupProps;
+                              true ->
+                                  XsSignupProps;
                               false ->
                                   Username = case z_convert:to_bool(m_config:get_value(mod_signup, username_equals_email, false, Context)) of
                                                  false -> z_string:trim(z_context:get_q_validated("username", Context));
@@ -114,63 +113,38 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
     end.
 
 
-    fetch_prop(Prop, Validated, SignupProps, Context) ->
-        case proplists:get_value(Prop, SignupProps) of
-            undefined ->
-                V = case Validated of
-                    true -> z_context:get_q_validated(Prop, Context);
-                    false -> z_context:get_q(Prop, Context)
-                end,
-                V1 = case {V,Prop} of
-                    {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context);
-                    _ -> V
-                end,
-                z_string:trim(z_convert:to_list(V1));
-            V -> V
-        end.
-    
-    is_set(undefined) -> false;
-    is_set([]) -> false;
-    is_set(<<>>) -> false;
-    is_set(_) -> true.
+fetch_prop(Prop, Validated, SignupProps, Context) ->
+    case proplists:get_value(Prop, SignupProps) of
+        undefined ->
+            V = case Validated of
+                true -> z_context:get_q_validated(Prop, Context);
+                false -> z_context:get_q(Prop, Context)
+            end,
+            V1 = case {V,Prop} of
+                {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context);
+                _ -> V
+            end,
+            z_string:trim(z_convert:to_list(V1));
+        V -> V
+    end.
 
-    has_email_identity(_Email, []) -> false;
-    has_email_identity(Email, [{identity, {email, Email, _, _}}|_]) -> true;
-    has_email_identity(Email, [_|Rest]) -> has_email_identity(Email, Rest).
+is_set(undefined) -> false;
+is_set([]) -> false;
+is_set(<<>>) -> false;
+is_set(_) -> true.
+
+has_email_identity(_Email, []) -> false;
+has_email_identity(Email, [{identity, {email, Email, _, _}}|_]) -> true;
+has_email_identity(Email, [_|Rest]) -> has_email_identity(Email, Rest).
 
 
 %% @doc Sign up a new user. Check if the identity is available.
 signup(Props, SignupProps, RequestConfirm, Context) ->
-    case mod_signup:signup(Props, SignupProps, RequestConfirm, Context) of
-        {ok, UserId} ->
-            case not RequestConfirm orelse m_identity:is_verified(UserId, Context) of
-                true ->
-                    ensure_published(UserId, z_acl:sudo(Context)),
-                    {ok, ContextUser} = z_auth:logon(UserId, Context),
-                    Location = case z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])) of
-                        [] -> 
-                            case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
-                                undefined -> m_rsc:p(UserId, page_url, ContextUser);
-                                Loc -> Loc
-                            end;
-                        Url ->
-                            Url
-                    end,
-                    z_render:wire({redirect, [{location, Location}]}, ContextUser);
-                false ->
-                    % User is not yet verified, send a verification message to the user's external identities
-                    case mod_signup:request_verification(UserId, Context) of
-                        {error, no_verifiable_identities} ->
-                            % Problem, no email address or other identity that could be verified
-                            show_errors([error_need_verification], Context);
-                        ok ->
-                            % Show feedback that we sent a confirmation message
-                            Context1 = show_errors([], Context),
-                            z_render:wire([ {hide, [{target, "signup_area"}]},
-                                            {show, [{target, "signup_verify"}]},
-                                            {redirect, [{location, "#signup_verify"}]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_value(user_id, SignupProps),
+    SignupProps1 = proplists:delete(user_id, SignupProps),
+    case mod_signup:signup_existing(UserId, Props, SignupProps1, RequestConfirm, Context) of
+        {ok, NewUserId} ->
+            handle_confirm(NewUserId, SignupProps1, RequestConfirm, Context);
         {error, {identity_in_use, username}} ->
             show_errors([error_duplicate_username], Context);
         {error, {identity_in_use, _}} ->
@@ -180,6 +154,41 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
         {error, _Reason} ->
             show_errors([error_signup], Context)
     end.
+
+
+%% Handle sending a confirm, or redirect to the 'ready_page' location
+handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
+    case not RequestConfirm orelse m_identity:is_verified(UserId, Context) of
+        true ->
+            ensure_published(UserId, z_acl:sudo(Context)),
+            {ok, ContextUser} = z_auth:logon(UserId, Context),
+            Location = case get_redirect_page(SignupProps) of
+                [] -> 
+                    case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
+                        undefined -> m_rsc:p(UserId, page_url, ContextUser);
+                        Loc -> Loc
+                    end;
+                Url ->
+                    Url
+            end,
+            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+        false ->
+            % User is not yet verified, send a verification message to the user's external identities
+            case mod_signup:request_verification(UserId, Context) of
+                {error, no_verifiable_identities} ->
+                    % Problem, no email address or other identity that could be verified
+                    show_errors([error_need_verification], Context);
+                ok ->
+                    % Show feedback that we sent a confirmation message
+                    Context1 = show_errors([], Context),
+                    z_render:wire([ {hide, [{target, "signup_area"}]},
+                                    {show, [{target, "signup_verify"}]},
+                                    {redirect, [{location, "#signup_verify"}]}], Context1)
+            end
+    end.
+
+get_redirect_page(SignupProps) ->
+    z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])).
 
 
 ensure_published(UserId, Context) ->

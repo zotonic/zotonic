@@ -27,9 +27,13 @@
 -export([
     observe_auth_logoff/3,
     observe_search_query/2,
-    observe_admin_menu/3
+    observe_admin_menu/3,
+
+    event/2
 ]).
--export([get_config/1]).
+-export([
+    get_config/1
+]).
 
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
@@ -43,16 +47,8 @@
 
 %% @doc Reset the received facebook access token (as set in the session)
 observe_auth_logoff(auth_logoff, AccContext, _Context) ->
-    AccContext1 = case z_context:get_session(facebook_logon, AccContext) of
-        true ->
-            z_script:add_script(
-                        "FB.logout(function() { window.location = '/'; }); setTimeout(function() { window.location='/'; }, 8000)", 
-                        AccContext);
-        _ ->
-            AccContext
-    end,
-    z_context:set_session(facebook_logon, false, AccContext1),
-    z_context:set_session(facebook_access_token, undefined, AccContext1).
+    z_context:set_session(facebook_logon, false, AccContext),
+    z_context:set_session(facebook_access_token, undefined, AccContext).
 
 
 %% @doc Return the facebook appid, secret and scope
@@ -79,3 +75,16 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, mod_facebook}}
      
      |Acc].
+
+
+%% @doc Redirect to facebook, keep extra arguments in query arg
+event(#postback{message={logon_redirect, Args}}, Context) ->
+    Pickled = z_utils:pickle(Args, Context),
+    z_render:wire([
+            {alert, [
+                    {title, ?__("One moment please", Context)},
+                    {text, ?__("Redirecting to Facebook", Context)}
+                ]},
+            {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
+        ], Context).
+

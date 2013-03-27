@@ -48,13 +48,12 @@ previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
 
 moved_temporarily(ReqData, Context) ->
-    %% @todo add the redirect page parameter of the logon page to the redirect url
     Context1 = ?WM_REQ(ReqData, Context),
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context1),
-    Page = get_page(Context1),
+    Args = get_args(Context1),
     RedirectUrl = z_convert:to_list(
                         z_context:abs_url(
-                            z_dispatcher:url_for(facebook_redirect, [{p,Page}], Context1),
+                            z_dispatcher:url_for(facebook_redirect, Args, Context1),
                             Context1)),
     Location = "https://www.facebook.com/dialog/oauth?client_id="
                 ++ z_utils:url_encode(AppId)
@@ -62,6 +61,15 @@ moved_temporarily(ReqData, Context) ->
                 ++ "&scope=" ++ Scope,
     ?WM_REPLY({true, Location}, Context1).
 
+
+get_args(Context) ->
+    case z_context:get_q("pk", Context, []) of
+        [] -> 
+            Page = get_page(Context),
+            [{pk, z_utils:pickle([{p,Page}], Context)}];
+        PK ->
+            [{pk, PK}]
+    end.
 
 %% @doc Get the page we should redirect to after a successful log on.
 get_page(Context) ->
