@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-12
+%% @copyright 2010-2013 Marc Worrell
 %% @doc Let new members register themselves.
 %% @todo Check person props before sign up
 %% @todo Add verification and verification e-mails (check for _Verified, add to m_identity)
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +36,11 @@
     observe_identity_verification/2,
     observe_logon_ready_page/2
 ]).
--export([signup/4, request_verification/2]).
+-export([
+    signup/4,
+    signup_existing/5,
+    request_verification/2
+]).
 
 -include("zotonic.hrl").
 
@@ -71,14 +74,18 @@ observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
 %% @doc Sign up a new user.
 %% @spec signup(proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
 signup(Props, SignupProps, RequestConfirm, Context) ->
+    signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
+
+%% @doc Sign up a existing user
+%% @spec signup(proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
         {ok, Props1, SignupProps1} ->
-            z_db:transaction(fun(Ctx) -> do_signup(Props1, SignupProps1, RequestConfirm, Ctx) end, ContextSudo);
+            do_signup(UserId, Props1, SignupProps1, RequestConfirm, ContextSudo);
         {error, _} = Error ->
             Error
     end.
-
 
 %% @doc Sent verification requests to non verified identities
 request_verification(UserId, Context) ->
@@ -104,7 +111,8 @@ request_verification(UserId, Context) ->
 check_signup(Props, SignupProps, Context) ->
     case z_notifier:foldl(signup_check, {ok, Props, SignupProps}, Context) of
         {ok, Props1, SignupProps1} ->
-            case check_identity(SignupProps1, Context) of
+            UserId = proplists:get_value(user_id, SignupProps),
+            case check_identity(UserId, SignupProps1, Context) of
                 ok -> 
                     case check_props(Props1, Context) of
                         ok -> {ok, Props1, SignupProps1};
@@ -124,56 +132,61 @@ check_props(_Props, _Context) ->
     ok.
 
 %% @doc Preflight check on identities, prevent double identity keys.
-check_identity([], _Context) ->
+check_identity(_UserId, [], _Context) ->
     ok;
-check_identity([{identity, {username_pw, {Username, _Password}, true, _Verified}}|Idents], Context) ->
-    case username_exists(Username, Context) of
-        false -> check_identity(Idents, Context);
+check_identity(UserId, [{identity, {username_pw, {Username, _Password}, true, _Verified}}|Idents], Context) ->
+    case username_exists(UserId, Username, Context) of
+        false -> check_identity(UserId, Idents, Context);
         true -> {error, {identity_in_use, username}}
     end;
-check_identity([{identity, {Type, Key, true, _Verified}}|Idents], Context) ->
-    case identity_exists(Type, Key, Context) of
-        false -> check_identity(Idents, Context);
+check_identity(UserId, [{identity, {Type, Key, true, _Verified}}|Idents], Context) ->
+    case identity_exists(UserId, Type, Key, Context) of
+        false -> check_identity(UserId, Idents, Context);
         true -> {error, {identity_in_use, Type}}
     end;
-check_identity([_|Idents], Context) ->
-    check_identity(Idents, Context).
+check_identity(UserId, [_|Idents], Context) ->
+    check_identity(UserId, Idents, Context).
 
 
-%% @doc Insert a new user, return the user id on success. Assume all args are ok as we did
+%% @doc Insert or update a new user, return the user id on success. Assume all args are ok as we did
 %% a preflight check and users sign up slowly (ie. no race condition)
-%% This function is called with a 'sudo' context within a transaction. We throw errors to
-%% force a rollback of the transaction.
-do_signup(Props, SignupProps, RequestConfirm, Context) ->
+do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     IsVerified = not RequestConfirm orelse has_verified_identity(SignupProps),
-    case m_rsc:insert(props_to_rsc(Props, IsVerified, Context), Context) of
-        {ok, Id} ->
-            [ insert_identity(Id, Ident, Context) || {K,Ident} <- SignupProps, K == identity ],
-            z_notifier:map(#signup_done{id=Id, is_verified=IsVerified, props=Props, signup_props=SignupProps}, Context),
+    case insert_or_update(UserId, props_to_rsc(Props, IsVerified, Context), Context) of
+        {ok, NewUserId} ->
+            ensure_identities(NewUserId, SignupProps, Context),
+            z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, Context),
             case IsVerified of
-                true -> z_notifier:map(#signup_confirm{id=Id}, Context);
+                true -> z_notifier:map(#signup_confirm{id=NewUserId}, Context);
                 false -> nop
-            end,    
-            {ok, Id};
+            end,
+            {ok, NewUserId};
         {error, Reason} ->
             throw({error, Reason})
     end.
 
-    
-    has_verified_identity([]) -> false;
-    has_verified_identity([{identity, {Type, _, _, true}}|_Is]) when Type /= username_pw -> true;
-    has_verified_identity([_|Is]) -> has_verified_identity(Is).
+
+insert_or_update(undefined, Props, Context) ->
+    m_rsc:insert(Props, Context);
+insert_or_update(UserId, Props, Context) when is_integer(UserId) ->
+    m_rsc:update(UserId, Props, Context).
 
 
-insert_identity(Id, {username_pw, {Username, Password}, true, true}, Context) ->
+has_verified_identity([]) -> false;
+has_verified_identity([{identity, {Type, _, _, true}}|_Is]) when Type /= username_pw -> true;
+has_verified_identity([_|Is]) -> has_verified_identity(Is).
+
+
+ensure_identities(Id, SignupProps, Context) ->
+    [ ensure_identity(Id, Ident, Context) || {K,Ident} <- SignupProps, K == identity ].
+
+ensure_identity(Id, {username_pw, {Username, Password}, true, true}, Context) ->
     case m_identity:set_username_pw(Id, Username, Password, Context) of
         ok -> ok;
         Error -> throw(Error)
     end;
-insert_identity(Id, {Type, Key, true, Verified}, Context) when is_binary(Key); is_list(Key) ->
-    m_identity:insert_unique(Id, Type, Key, [{is_verified, Verified}], Context);
-insert_identity(Id, {Type, Key, false, Verified}, Context) when is_binary(Key); is_list(Key) ->
-    m_identity:insert(Id, Type, Key, [{is_verified, Verified}], Context).
+ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(Key); is_list(Key) ->
+    m_identity:insert(Id, Type, Key, [{is_verified, IsVerified}, {is_unique, IsUnique}], Context).
 
 
 props_to_rsc(Props, IsVerified, Context) ->
@@ -204,17 +217,17 @@ props_to_rsc(Props, IsVerified, Context) ->
 
 
 %% @doc Check if a username exists
-username_exists(Username, Context) ->
+username_exists(UserId, Username, Context) ->
     case m_identity:lookup_by_username(Username, Context) of
         undefined -> false;
-        _Props -> true
+        Props -> UserId =/= proplists:get_value(rsc_id, Props)
     end.
 
 %% @doc Check if the identity exists
-identity_exists(Type, Key, Context) ->
+identity_exists(UserId, Type, Key, Context) ->
     case m_identity:lookup_by_type_and_key(Type, Key, Context) of
         undefined -> false;
-        _Props -> true
+        Props -> UserId =/= proplists:get_value(rsc_id, Props)
     end.
 
 

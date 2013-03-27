@@ -2,6 +2,6 @@
 
 {% wire id=#fb_logon 
 	action={mask target=mask_target|default:"logon_outer" message="Waiting for Facebook …"}
-	action={redirect dispatch="facebook_authorize" p=page}
+	postback={logon_redirect ready_page=page user_id=user_id}
+	delegate=`mod_facebook`
 %}
-
