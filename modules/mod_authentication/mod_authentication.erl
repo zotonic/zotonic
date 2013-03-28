@@ -29,9 +29,7 @@
 %% gen_server exports
 -export([
     observe_logon_submit/2,
-    observe_auth_autologon/2,
-	observe_auth_logoff_done/2,
-	observe_auth_logon_done/2
+    observe_auth_autologon/2
 ]).
 
 -include("zotonic.hrl").
@@ -62,15 +60,3 @@ observe_auth_autologon(auth_autologon, Context) ->
         undefined -> undefined;
         {ok, UserId} -> {ok, UserId}
     end.
-
-observe_auth_logoff_done(auth_logoff_done, Context) ->
-	reload_other_pages(Context).
-
-observe_auth_logon_done(auth_logon_done, Context) ->
-	reload_other_pages(Context).
-
-reload_other_pages(Context) ->
-	Pages = z_session:get_pages(Context),
-	ContextPush = z_render:wire({reload, []}, z_context:new(Context)),
-	{Script, _} = z_script:split(ContextPush),
-	[ z_session_page:add_script(Script, Pid) || Pid <- Pages, Pid /= Context#context.page_pid ].
