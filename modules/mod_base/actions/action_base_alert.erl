@@ -32,15 +32,11 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the resource
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={alert, Args}}, Context) ->
-    Text = proplists:get_value(text, Args, ""),
     Title = proplists:get_value(title, Args, ?__(<<"Alert">>, Context)),
-    Button = proplists:get_value(button, Args),
-    Action = proplists:get_all_values(action, Args),
     Vars = [
         {title, Title},
-        {text, Text},
-        {button, Button},
-        {action, Action}
+        {action, proplists:get_all_values(action, Args)}
+        | Args
     ],
     z_render:dialog(Title, "_action_dialog_alert.tpl", Vars, Context).
 
