@@ -77,7 +77,7 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
-%% @spec signup(proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
+%% @spec signup(UserId, proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
 signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
