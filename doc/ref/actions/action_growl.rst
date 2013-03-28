@@ -10,7 +10,7 @@ Example::
 
 Shows a message with the text "hello world".
 
-Growl accept the following arguments:
+Growl accepts the following arguments:
 
 ========  ================================  ============
 Argument  Description                       Example
