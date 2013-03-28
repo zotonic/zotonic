@@ -72,12 +72,12 @@ observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
 
 
 %% @doc Sign up a new user.
-%% @spec signup(proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
+-spec signup(list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
-%% @spec signup(UserId, proplist(), proplist(), RequestConfirm, Context) -> {ok, UserId} | {error, Reason}
+-spec signup_existing(integer()|undefined, list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
 signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
