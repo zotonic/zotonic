@@ -83,7 +83,8 @@ event(#postback{message={logon_redirect, Args}}, Context) ->
     z_render:wire([
             {alert, [
                     {title, ?__("One moment please", Context)},
-                    {text, ?__("Redirecting to Facebook", Context)}
+                    {text, ?__("Redirecting to Facebook", Context)},
+                    only_text
                 ]},
             {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
         ], Context).

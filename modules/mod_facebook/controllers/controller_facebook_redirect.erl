@@ -156,6 +156,7 @@ logon_fb_user(FacebookProps, Args, Context) ->
                                           {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
                                   end,
             LocationAbs = z_convert:to_list(z_context:abs_url(Location, Context1)),
+            ?DEBUG(LocationAbs),
             ?WM_REPLY({true, LocationAbs}, Context1)
     end.
 
