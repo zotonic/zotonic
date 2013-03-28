@@ -163,10 +163,16 @@ make_all() ->
 
 %% @doc Reload a module, purge the old code.
 reload_module(M) ->
+	lager:debug("reloading '~p'", [M]),
 	code:purge(M),
 	code:soft_purge(M),
-	{module, M} = code:load_file(M),
-	{ok, M}.
+	case code:load_file(M) of
+		{module, M} -> 
+			{ok, M};
+		{error, Reason} = Error ->
+			lager:warning("Could not reload '~p': ~p", [M, Reason]),
+			Error
+	end.
 
 %% @doc Reload all modules from the zotonic directory or subdirectories.  Return a list of modules reloaded. Empty list when nothing changed.
 %% @spec reload_loaded_modules() -> [Result]
