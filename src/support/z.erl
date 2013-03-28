@@ -34,6 +34,8 @@
 
     ld/1,
 
+    log_level/1,
+    
     debug_msg/3,
 
     debug/2,
@@ -88,6 +90,9 @@ restart() ->
 restart(Site) ->
     z_sites_manager:restart(Site).
 
+%% @doc Shortcut to set the lager console log level
+log_level(Level) ->
+    lager:set_loglevel(lager_console_backend, Level).
 
 %% @doc Reload an Erlang module
 ld(Module) ->
