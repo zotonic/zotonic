@@ -65,7 +65,7 @@ export MAX_PROCESSES=${MAX_PROCESSES:=10000000}
 export KERNEL_POLL=${KERNEL_POLL:=true}
 
 # The include path for the erlang vm, add when needed for your application.
-export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
+export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
 # For zotonic-addsite et. al. we require Zotonic to be already
 # running. In that case, check if Zotonic is already running with the
