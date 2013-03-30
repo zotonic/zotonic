@@ -123,9 +123,14 @@ category, they are accessed by id or category name. For example::
 |          |up to the children of the       |                                     |
 |          |children.                       |                                     |
 +----------+--------------------------------+-------------------------------------+
-|path      |List of parent categories from  |[ 104, 106 ]                         |
+|path      |List of parent category ids from|[ 104, 106 ]                         |
 |          |the root till the category,     |                                     |
 |          |excluding the indexing category.|                                     |
++----------+--------------------------------+-------------------------------------+
+|is_a      |List of the parent category     |[ text, article, news ]              |
+|          |names form the root till the    |                                     |
+|          |category, including the current |                                     |
+|          |category.                       |                                     |
 +----------+--------------------------------+-------------------------------------+
 |image     |A random depiction for this     |<<"2009/10/20/flat-world-proof.jpg">>|
 |          |category. The returned image    |                                     |

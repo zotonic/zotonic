@@ -52,7 +52,7 @@
 </div>
 
 {% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
-	{% include "_admin_overview_list.tpl" result=result %}
+	{% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
 	{% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page=1 %}
 {% endwith %}
 

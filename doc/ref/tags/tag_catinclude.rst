@@ -28,6 +28,18 @@ The tag accepts extra arguments, which will be passed as template variables to t
 
 The resource id will be available in the included template as the variable `id`.
 
+Instead of passing an id, you can also pass in a list of category
+names which are to be search for. These names need to be atoms, like
+this::
+
+   {% catinclude "hello.tpl" [`text`, `article`] %}
+
+This will search for the following templates, in order::
+
+   hello.article.tpl
+   hello.text.tpl
+   hello.tpl
+ 
 See the :ref:`tag-include` for caching options and argument handling.
 
 .. seealso:: :ref:`tag-all-catinclude`, which is useful to include multiple templates.
