@@ -803,7 +803,6 @@ This function can be run multiple times.
 
 function z_init_postback_forms()
 {
-<<<<<<< HEAD
 	$("form[action*='postback']").each(function() 
 	{
 		// store options in hash
