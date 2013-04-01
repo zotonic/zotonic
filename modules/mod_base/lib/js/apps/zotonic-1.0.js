@@ -875,10 +875,6 @@ function z_init_postback_forms()
             if (use_post)
             {
                 $(theForm).postbackFileForm(form_id, postback, validations);
-                if ($(theForm).hasClass("z_logon_form")) {
-                    /* When a z_logon_form is posted, we post to a hidden iframe, to trick chrome into showing the "save password" option. The logon form submit cannot be cancelled because that blocks the form-remembering. */
-                    return true;
-                }
             }
             else
             {
