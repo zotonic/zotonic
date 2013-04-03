@@ -381,13 +381,13 @@ set_verified_trans(RscId, Type, Key, Context) ->
                 [RscId, Type, Key], 
                 Context)
     of
-        1 -> 
-            ok;
         0 ->
             1 = z_db:q("insert into identity (rsc_id, type, key, is_verified) 
                         values ($1,$2,$3,true)", 
                        [RscId, Type, Key], 
                        Context),
+            ok;
+        N when N > 0 -> 
             ok
     end.
 
@@ -402,8 +402,8 @@ is_verified(RscId, Context) ->
 set_by_type(RscId, Type, Key, Context) ->
 	F = fun(Ctx) -> 
 		case z_db:q("update identity set key = $3 where rsc_id = $1 and type = $2", [RscId, Type, Key], Ctx) of
-			1 -> ok;
-			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3)", [RscId, Type, Key], Ctx)
+			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3)", [RscId, Type, Key], Ctx);
+            N when N > 0 -> ok
 		end
 	end,
 	z_db:transaction(F, Context).
