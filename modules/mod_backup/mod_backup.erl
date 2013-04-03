@@ -270,7 +270,7 @@ maybe_daily_dump(State) ->
             end,
             case DoStart of
                 true ->
-                    Pid = do_backup(erlydtl_dateformat:format({Date, Time}, "Ymd-His", State#state.context), State),
+                    Pid = do_backup(name(State#state.context), State),
                     {noreply, State#state{backup_pid=Pid, backup_start={Date, Time}}};
                 false ->
                     {noreply, State}
