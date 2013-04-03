@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-04-03 16:36+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:53 
+msgid ""
+"Apr"
+msgstr "四月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:38 
+msgid ""
+"April"
+msgstr "四月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:57 
+msgid ""
+"Aug"
+msgstr "八月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:42 
+msgid ""
+"August"
+msgstr "八月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:61 
+msgid ""
+"Dec"
+msgstr "十二月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:46 
+msgid ""
+"December"
+msgstr "十二月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:51 
+msgid ""
+"Feb"
+msgstr "二月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:36 
+msgid ""
+"February"
+msgstr "二月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:29 
+msgid ""
+"Friday"
+msgstr "金曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:50 
+msgid ""
+"Jan"
+msgstr "一月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:35 
+msgid ""
+"January"
+msgstr "一月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:56 
+msgid ""
+"Jul"
+msgstr "七月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:41 
+msgid ""
+"July"
+msgstr "七月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:55 
+msgid ""
+"Jun"
+msgstr "六月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:40 
+msgid ""
+"June"
+msgstr "六月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:52 
+msgid ""
+"Mar"
+msgstr "三月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:37 
+msgid ""
+"March"
+msgstr "三月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:39 ./modules/mod_l10n/support/l10n_date.erl:54 
+msgid ""
+"May"
+msgstr "五月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:25 
+msgid ""
+"Monday"
+msgstr "月曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:60 
+msgid ""
+"Nov"
+msgstr "十一月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:45 
+msgid ""
+"November"
+msgstr "十一月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:59 
+msgid ""
+"Oct"
+msgstr "十月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:44 
+msgid ""
+"October"
+msgstr "十月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:30 
+msgid ""
+"Saturday"
+msgstr "土曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:58 
+msgid ""
+"Sep"
+msgstr "九月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:43 
+msgid ""
+"September"
+msgstr "九月"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:31 
+msgid ""
+"Sunday"
+msgstr "日曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:28 
+msgid ""
+"Thursday"
+msgstr "木曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:26 
+msgid ""
+"Tuesday"
+msgstr "火曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:27 
+msgid ""
+"Wednesday"
+msgstr "水曜日"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:20 
+msgid ""
+"midnight"
+msgstr "深夜"
+
+#: ./modules/mod_l10n/support/l10n_date.erl:22 
+msgid ""
+"noon"
+msgstr "正午"
