@@ -1,4 +1,4 @@
-{# tablet+ footer template #}
+{# phone+ footer template #}
 <div class="row-fluid footer">
     <hr/>
     {% with m.rsc.menu_footer.menu as menu %}
@@ -10,7 +10,7 @@
         </ul>
     {% endif %}
     {% endwith %}
-    <span class="pull-right">&copy; {{ now|date:"Y" }} {{  m.config.site.title.value }}</span>
+    <span class="pull-right copyright">{% block copyright %}{% include "_copyright.tpl" %}{% endblock %}</span>
     {% include "_ua_select.tpl" dropup %}
 </div>
 

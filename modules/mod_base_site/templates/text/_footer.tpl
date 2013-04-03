@@ -17,8 +17,8 @@
     <tr>
         <td>{% include "_ua_select.tpl" dropup %}</td>
     </tr>
-    <tr class="copyright">
-        <td>&copy; {{ now|date:"Y" }} {{  m.config.site.title.value }}</td>
+    <tr>
+        <td><div class="copyright">{% block copyright %}{% include "_copyright.tpl" %}{% endblock %}</div></td>
     </tr>
     </table>
 </div>
