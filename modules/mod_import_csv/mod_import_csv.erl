@@ -40,7 +40,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
             %% Correct file type, see if we can handle the file.
             %% Either a module has a definition or there are correct header lines.
             case can_handle(F, Context) of
-                {ok, Definition} -> handle_spawn(Definition, Context), true;
+                {ok, Definition} -> handle_spawn(Definition, false, z_acl:sudo(Context)), true;
                 false -> undefined
             end;
         _ ->
@@ -51,6 +51,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
 %% @doc Uploading a CSV file through the web interface.
 event(#submit{message={csv_upload, []}}, Context) ->
     #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
+    IsReset = z_convert:to_bool(z_context:get_q("reset", Context)), 
 
     %% Move temporary file to processing directory
     Dir = z_path:files_subdir_ensure("processing", Context),
@@ -59,10 +60,9 @@ event(#submit{message={csv_upload, []}}, Context) ->
     {ok, _} = file:copy(TmpFile, Target),
     file:delete(TmpFile),
 
-    %% Process the file
     Context2 = case can_handle(Target, Context) of
                    {ok, Definition} ->
-                       handle_spawn(Definition, Context),
+                       handle_spawn(Definition, IsReset, Context),
                        z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
                    false ->
                        file:delete(Target),
@@ -76,9 +76,10 @@ event(#submit{message={csv_upload, []}}, Context) ->
 %%====================================================================
 
 
-handle_spawn(Def, Context) ->
+handle_spawn(Def, IsReset, Context) ->
     {ok, Def1} = to_importing_dir(Def, Context),
-    spawn(fun() -> import_csv:import(Def1, z_acl:sudo(z_context:new(Context))) end).
+    ContextAsync = z_context:prune_for_async(Context), 
+    spawn(fun() -> import_csv:import(Def1, IsReset, ContextAsync) end).
 
 
 

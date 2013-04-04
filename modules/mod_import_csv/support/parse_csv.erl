@@ -1,8 +1,7 @@
 %% @doc Import a csv file according to the derived file/record definitions.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2010-06-26
 
-%% Copyright 2010-2011 Arjan Scherpenisse
+%% Copyright 2010-2013 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +22,8 @@
     scan_lines/2,
     trim_field/1
 ]).
+
+-include("zotonic.hrl").
 
 %% @doc Scan all lines, split in columns.
 %% @todo Handle quoted fields (with escapes).
@@ -71,15 +72,36 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder) ->
     end.
 
 append_field(<<>>, Field, [Row|Rows]) ->
-    [[trim_field(Field)|Row]|Rows];
+    [[clean_field(Field)|Row]|Rows];
 append_field(Prefix, Field, [Row|Rows]) ->
     NewField = <<Prefix/binary, Field/binary>>,
-    [[trim_field(NewField)|Row]|Rows].
+    [[clean_field(NewField)|Row]|Rows].
 append_last_field(Prefix, Field, Acc) ->
     [R|RS] = append_field(Prefix, Field, Acc),
     [lists:reverse(R)|RS].
+
+
+clean_field(S) ->
+    unescape(trim_field(S)).
 
 %% Remove any quotes and whitespace around the fields.
 trim_field(S) ->
     z_string:trim(z_string:unquote(S)).
 
+unescape(S) ->
+    unescape(S, <<>>).
+
+unescape(<<>>, Acc) ->
+    Acc;
+unescape(<<$\\, $n, Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, 10>>);
+unescape(<<$\\, $r, Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, 13>>);
+unescape(<<$\\, $t, Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, 9>>);
+unescape(<<$\\, $', Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, $'>>);
+unescape(<<$\\, $", Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, $">>);
+unescape(<<C, Rest/binary>>, Acc) ->
+    unescape(Rest, <<Acc/binary, C>>).
