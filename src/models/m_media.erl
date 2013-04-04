@@ -37,13 +37,16 @@
     replace/3,
     insert_file/2,
     insert_file/3,
+    insert_file/4,
     replace_file/3,
     replace_file/4,
     replace_file/5,
     replace_file/6,
     insert_url/2,
     insert_url/3,
+    insert_url/4,
     replace_url/4,
+    replace_url/5,
 	save_preview/4
 ]).
 
@@ -226,35 +229,42 @@ insert_file(File, Context) ->
 insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, Props, Context) when Data /= undefined ->
     TmpFile = z_tempfile:new(),
     ok = file:write_file(TmpFile, Data),
-    insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=TmpFile}, Props, Context);
-
-insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, Context) ->
-    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    insert_file(TmpFile, [{original_filename, OriginalFilename}|Props], PropsMedia, Context);
+    insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=TmpFile}, Props, [], Context);
 
 insert_file(File, Props, Context) ->
+    insert_file(File, Props, [], Context).
+
+insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, Options, Context) ->
+    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
+    insert_file(TmpFile, [{original_filename, OriginalFilename}|Props], PropsMedia, Options, Context);
+insert_file(File, Props, Options, Context) ->
     OriginalFilename = proplists:get_value(original_filename, Props, File),
     PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    insert_file(File, Props, PropsMedia, Context).
+    insert_file(File, Props, PropsMedia, Options, Context).
 
-insert_file(File, Props, PropsMedia, Context) ->
+insert_file(File, Props, PropsMedia, Options, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
     case z_acl:is_allowed(insert, #acl_rsc{category=mime_to_category(Mime)}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
         true ->
-            insert_file_mime_ok(File, Props, PropsMedia, Context);
+            insert_file_mime_ok(File, Props, PropsMedia, Options, Context);
         false ->
             {error, file_not_allowed}
     end.
+
 
 %% @doc Make a new resource for the file based on a URL.
 %% @spec insert_url(File, Context) -> {ok, Id} | {error, Reason}
 insert_url(Url, Context) ->
     insert_url(Url, [], Context).
+
 insert_url(Url, Props, Context) ->
+    insert_url(Url, Props, [], Context).
+
+insert_url(Url, Props, Options, Context) ->
     case download_file(Url) of
         {ok, File} ->
-            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], Context),
+            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], undefined, Options, Context),
             file:delete(File),
             Result;
         {error, Reason} ->
@@ -264,7 +274,7 @@ insert_url(Url, Props, Context) ->
 
 %% Perform the resource management around inserting a file. The ACL is already checked for the mime type.
 %% Runs the final insert inside a transaction so that we can rollback.
-insert_file_mime_ok(File, Props1, PropsMedia, Context) ->
+insert_file_mime_ok(File, Props1, PropsMedia, Options, Context) ->
     Props2 = case proplists:get_value(is_published, Props1) of
         undefined -> [{is_published, true} | Props1];
         _ -> Props1
@@ -273,7 +283,7 @@ insert_file_mime_ok(File, Props1, PropsMedia, Context) ->
         undefined -> [{title, proplists:get_value(original_filename, Props2)}|Props2];
         _ -> Props2
     end,
-    replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, [], Context).
+    replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, Options, Context).
 
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is made in the archive.
@@ -391,11 +401,14 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
 
 
 replace_url(Url, RscId, Props, Context) ->
+    replace_url(Url, RscId, Props, [], Context).
+
+replace_url(Url, RscId, Props, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
             case download_file(Url) of
                 {ok, File} ->
-                    Result = replace_file(File, RscId, [{original_filename, filename:basename(Url)}|Props], Context),
+                    Result = replace_file(File, RscId, [{original_filename, filename:basename(Url)}|Props], Options, Context),
                     file:delete(File),
                     Result;
                 {error, E} ->
