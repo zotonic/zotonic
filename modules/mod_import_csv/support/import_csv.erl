@@ -24,20 +24,20 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    import/2
+    import/3
 ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("../include/import_csv.hrl").
 
 -record(importresult, {seen=[], new=[], updated=[], errors=[], ignored=[], deleted=0}).
--record(importstate, {name_to_id, managed_edges, to_flush=[], result, managed_resources}).
+-record(importstate, {is_reset, name_to_id, managed_edges, to_flush=[], result, managed_resources}).
 
 
 %% @doc The import function, read the csv file and fetch all records.
 %% This function is run as a spawned process.  The Context should have the right permissions for inserting
 %% or updating the resources.
-import(Def, Context) ->
+import(Def, IsReset, Context) ->
     StartDate = erlang:localtime(),
     %% Read all rows
     {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
@@ -47,7 +47,7 @@ import(Def, Context) ->
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
     Rows1 = case Def#filedef.skip_first_row of true -> tl(Rows); _ -> Rows end,
     Rows2 = lists:filter(fun([<<$#, _/binary>>|_]) -> false; ([]) -> false; (_) -> true end, Rows1),
-    State = import_rows(Rows2, Def, new_importstate(), Context),
+    State = import_rows(Rows2, Def, new_importstate(IsReset), Context),
 
     %% @todo Delete all not-mentioned but previously imported resources
     DeleteIds = [],
@@ -65,8 +65,9 @@ import(Def, Context) ->
       {ignored, R#importresult.ignored}].
 
 
-new_importstate() ->
+new_importstate(IsReset) ->
     #importstate{
+        is_reset=IsReset,
         name_to_id=gb_trees:empty(),
         managed_edges=gb_trees:empty(),
         managed_resources=sets:new(),
@@ -160,10 +161,9 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
             case name_lookup(Name, State1, Context) of
                 %% Not exists
                 {undefined, State2} ->
+                    lager:debug("Import CSV: importing ~p", [Name]),
                     Props1 = [{import_csv_original, Props0} | Props0],
-
-                    %% .. insert record
-                    case m_rsc_update:insert(Props1, false, Context) of
+                    case rsc_insert(Props1, Context) of
                         {ok, NewId} ->
                             StateAdd = flush_add(NewId, State2),
                             case proplists:get_value(rsc_insert, Callbacks) of
@@ -172,11 +172,12 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
                             end,
                             {StateAdd, {new, Type, NewId, Name}};
                         E ->
-                            ?DEBUG(Type),
-                            ?DEBUG(Props1),
-                            ?DEBUG(Row),
-                            ?DEBUG(E),
-                            ?DEBUG(m_rsc:name_to_id(Name, Context)),
+                            lager:warning("Import CSV: could not insert ~p: ~p", [Name, E]),
+                            % ?DEBUG(Type),
+                            % ?DEBUG(Props1),
+                            % ?DEBUG(Row),
+                            % ?DEBUG(E),
+                            % ?DEBUG(m_rsc:name_to_id(Name, Context)),
                             {State2, {error, Type, E}}
                     end;
 
@@ -184,36 +185,35 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
                 {Id, State2} ->
                     %% Calculate resource checksum
                     RscCS = rsc_checksum(Id, PropK, Context),
-                    %% checksum check
                     case RowCS of
-                        RscCS ->
-                            %% They stayed equal; do nothing.
+                        RscCS when not State#importstate.is_reset ->
+                            lager:debug("Import CSV: skipping ~p (checksum not changed)", [Name]),
                             {State2, {equal, Type, Id}};
                         _ ->
                             %% Resource has been enriched, or the import has changed.
-                            {State3, Props1} = case m_rsc:p(Id, import_csv_original, Context) of
+                            {State3, Props1} = case m_rsc:p_no_acl(Id, import_csv_original, Context) of
                                          undefined ->
                                              %% No import_csv_original record for this rsc; update all.
                                              {State2, Props0};
 
                                          OriginalProps ->
-                                             case m_rsc:p(Id, is_protected, Context) of
-                                                 false ->
-                                                     %% Protected flag was unchecked; update the record.
-                                                     {State2, [{import_csv_touched, {props, []}} | Props0]};
-                                                 true ->
-                                                     %% 3-way diff.
-                                                     compare_old_new_props(Id, OriginalProps, Props0, State2, Context)
+                                             IsProtected = m_rsc:p_no_acl(Id, is_protected, Context),
+                                             if
+                                                not State#importstate.is_reset orelse IsProtected ->
+                                                    {State2, [{import_csv_touched, {props, []}} | Props0]};
+                                                true ->
+                                                    compare_old_new_props(Id, OriginalProps, Props0, State2, Context)
                                              end
                                      end,
 
                             case Props1 of 
                                 [] ->
+                                    lager:debug("Import CSV: skipping ~p (fields not changed)", [Name]),
                                     {State, {equal, Type, Id}};
                                 Props1 ->
+                                    lager:debug("Import CSV: updating ~p", [Name]),
                                     Props2 = [{import_csv_original, Props0} | Props1],
-                                    %% .. update record and new checksum
-                                    case m_rsc_update:update(Id, Props2, false, Context) of
+                                    case rsc_update(Id, Props2, Context) of
                                         {ok, Id} ->
                                             StateAdd = flush_add(Id, State3),
                                             case proplists:get_value(rsc_update, Callbacks) of
@@ -233,6 +233,31 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
             {State, {ignore}}
     end.
 
+
+rsc_insert(Props, Context) ->
+    case check_medium(Props) of
+        {url, Url, PropsMedia} ->
+            m_media:insert_url(Url, PropsMedia, [{escape_texts, false}], Context);
+        none ->
+            m_rsc_update:insert(Props, [{escape_texts, false}], Context)
+    end.
+
+rsc_update(Id, Props, Context) ->
+    case check_medium(Props) of
+        {url, Url, PropsMedia} ->
+            m_media:replace_url(Url, Id, PropsMedia, [{escape_texts, false}], Context);
+        none ->
+            m_rsc_update:update(Id, Props, [{escape_texts, false}], Context)
+    end.
+
+
+check_medium(Props) ->
+    case proplists:get_value(medium_url, Props) of
+        undefined -> none;
+        <<>> -> none;
+        [] -> none;
+        Url -> {url, Url, proplists:delete(medium_url, Props)}
+    end.
 
 
 import_def_edges({error, _}, _, _, State, _Context) ->
@@ -256,8 +281,7 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
         Name ->
             case name_lookup(Name, State, Context) of
                 {undefined, _State1} ->
-                    ?DEBUG("Edge predicate does not exist?"),
-                    ?DEBUG(Name),
+                    lager:warning("Import CSV: ddge predicate does not exist: '~p'", [Name]),
                     fail;
                 {PredId, State1} ->
                     import_do_edge(Id, Row, {PredId, ObjectDefinition}, State1, Context)
@@ -287,7 +311,7 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
                 {undefined, _State1} -> 
-                    ?DEBUG([{category, ObjectCat}, {name, Name} | ObjectProps]),
+                    lager:debug("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
                     case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
                         {ok, RscId} ->
                             {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
