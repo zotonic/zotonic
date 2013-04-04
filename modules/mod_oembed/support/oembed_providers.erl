@@ -1,9 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-09-19
+%% @copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc A list of known oembed providers.
 
-%% Copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,12 +18,12 @@
 
 -module(oembed_providers).
 
--export([list/1]).
+-export([list/0]).
 
 -include_lib("../include/oembed.hrl").
 
 
-list(_Context) ->
+list() ->
     [
 
      #oembed_provider{
@@ -34,7 +33,7 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://dailymotion\\.com/.+",
+       url_re="^https?://(www\\.)?dailymotion\\.com/.+",
        endpoint_url="http://www.dailymotion.com/api/oembed/",
        title="Dailymotion"
      },
@@ -46,7 +45,7 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://hulu\\.com/watch/.*",
+       url_re="^https?://(www\\.)?hulu\\.com/watch/.*",
        endpoint_url="http://www.hulu.com/api/oembed.json",
        title="Hulu"
      },
@@ -70,7 +69,7 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://scribd\\.com/.+",
+       url_re="^https?://(www\\.)?scribd\\.com/.+",
        endpoint_url="http://www.scribd.com/services/oembed",
        title="Scribd"
      },
@@ -82,13 +81,19 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://vimeo\\.com/.*",
+       url_re="^https?://(www\\.)?vimeo\\.com/.*",
        endpoint_url="http://www.vimeo.com/api/oembed.json",
        title="Vimeo"
      },
 
      #oembed_provider{
-       url_re="^https?://((www\\.)?youtube\\.com/(watch|v/|embed/)|youto\\.be/\\w+)",
+       url_re="^https?://([a-z]+\\.)?youtube\\.com/(watch|v/|embed/)",
+       endpoint_url="http://www.youtube.com/oembed",
+       title="YouTube"
+     },
+
+     #oembed_provider{
+       url_re="^https?://youtu\\.be/",
        endpoint_url="http://www.youtube.com/oembed",
        title="YouTube"
      },
@@ -100,7 +105,7 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://yfrog\\.(com|ru|com\\.tr|it|fr|co\\.il|co\\.uk|com\\.pl|pl|eu|us)/[a-zA-Z0-9]+",
+       url_re="^https?://(www\\.)?yfrog\\.(com|ru|com\\.tr|it|fr|co\\.il|co\\.uk|com\\.pl|pl|eu|us)/[a-zA-Z0-9]+",
        endpoint_url="http://www.yfrog.com/api/oembed",
        title="YFrog"
      },
@@ -112,19 +117,19 @@ list(_Context) ->
      },
 
      #oembed_provider{
-       url_re="^https?://kinomap\\.com/.+",
+       url_re="^https?://(www\\.)?kinomap\\.com/.+",
        endpoint_url="http://www.kinomap.com/oembed",
        title="Kinomap"
      },
 
      #oembed_provider{
-       url_re="^https?://photobucket\\.com/(albums|groups)/.+",
+       url_re="^https?://(www\\.)?photobucket\\.com/(albums|groups)/.+",
        endpoint_url="http://photobucket.com/oembed",
        title="Photobucket"
      },
 
      #oembed_provider{
-       url_re="^https?://www\\.slideshare\\.net/.+/.+",
+       url_re="^https?://(www\\.)?slideshare\\.net/.+/.+",
        endpoint_url="http://www.slideshare.net/api/oembed/2",
        title="Slideshare"
      }

@@ -1,9 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-09-14
+%% @copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
