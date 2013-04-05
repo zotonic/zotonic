@@ -264,7 +264,7 @@ insert_url(Url, Props, Context) ->
 insert_url(Url, Props, Options, Context) ->
     case download_file(Url) of
         {ok, File} ->
-            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], undefined, Options, Context),
+            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], Options, Context),
             file:delete(File),
             Result;
         {error, Reason} ->
