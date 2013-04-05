@@ -1,8 +1,8 @@
 /* clickable js
 ----------------------------------------------------------
 
-@package:	Zotonic 2012	
-@Author: 	Joost Faber <info@joostfaber.nl>
+@package:	Zotonic 2012
+@author:	Joost Faber <info@joostfaber.nl>
 
 Copyright 2012 Joost Faber
 
@@ -20,41 +20,35 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-$.widget("ui.clickable", 
+$.widget("ui.clickable",
 {
-	_init: function() 
+	_init: function()
 	{
 		$(this.element).click(function(e) {
-			var target = $(this).find("a").attr("href");
-			if($(this).find("a").attr("rel") == "external"){
-				window.open(target);
-			} else {
-				window.location=target;
+			switch (e.target.nodeName)
+			{
+				case 'A':
+				case 'INPUT':
+					break;
+				default:
+					var target = $(this).find("a").attr("href");
+					if($(this).find("a").attr("rel") == "external"){
+						window.open(target);
+					} else {
+						window.location=target;
+					}
+					return false;
 			}
-			return false;
 		}).addClass("clickable").hover(
 			function () {
-				$(this).addClass("hover");	    	
-		    }, 
-		    function () {		
-				$(this).removeClass("hover");	
-		  	}
-	 	);
-
-		// Make sure that checkboxes still work
-		$(":checkbox", this.element).click(function(e) {
-			var checkbox = this;
-			setTimeout(function() { 
-					if ($(checkbox).attr('checked'))
-						$(checkbox).attr('checked', false);
-					else
-						$(checkbox).attr('checked', true);
-				 }, 10);
-			e.stopPropagation();
-			return false; 
-		});
+				$(this).addClass("hover");
+			},
+			function () {
+				$(this).removeClass("hover");
+			}
+		);
 	}
 });
 
 $.ui.clickable.defaults = {
-}
+};
