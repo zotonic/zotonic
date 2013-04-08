@@ -129,7 +129,8 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                     case m_rsc:p(Id, installed_by, Context) of
                         Module ->
                             NewProps = update_new_props(Module, Id, Props, Context),
-                            m_rsc:update(Id, [{managed_props, z_html:escape_props(Props)} | NewProps], Context),
+                            m_rsc_update:update(Id, [{managed_props, z_html:escape_props(Props)} | NewProps],
+                                                [{is_import, true}], Context),
                             {ok};
                         _ ->
                             %% Resource exists but is not installed by us.
@@ -150,7 +151,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                                  _ -> Props2
                              end,
                     ?zInfo(io_lib:format("Creating new ~p '~p'", [Category, Name]), Context),
-                    {ok, Id} = m_rsc:insert(Props3, Context),
+                    {ok, Id} = m_rsc_update:update(insert_rsc, Props3, [{is_import, true}], Context),
                     case proplists:get_value(media_url, Props3) of
                         undefined ->
                             nop;
