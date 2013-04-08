@@ -51,6 +51,7 @@
     lookup_by_type_and_key_multi/3,
 
 	set_by_type/4,
+	set_by_type/5,
 	delete_by_type/3,
     delete_by_type_and_key/4,
 	
@@ -229,13 +230,7 @@ check_username_pw(Username, Password, Context) ->
                 false -> {error, nouser}
             end;
         {RscId, Hash} ->
-            case hash_is_equal(Password, Hash) of
-                true -> 
-                    set_visited(RscId, Context),
-                    {ok, RscId};
-                false ->
-                    {error, password}
-            end
+            check_hash(RscId, Username, Password, Hash, Context)
     end.
 
 %% @doc Check is the password belongs to an user with the given e-mail address.
@@ -246,25 +241,23 @@ check_email_pw(Email, Password, Context) ->
     EmailLower = z_string:trim(z_string:to_lower(Email)),
     case lookup_by_type_and_key_multi(email, EmailLower, Context) of
         [] -> {error, nouser};
-        Users -> check_email_pw_1(Users, Password, Context)
+        Users -> check_email_pw_1(Users, Email, Password, Context)
     end.
 
-check_email_pw_1([], _Password, _Context) ->
+check_email_pw_1([], _Email, _Password, _Context) ->
     {error, password};
-check_email_pw_1([Idn|Rest], Password, Context) ->
+check_email_pw_1([Idn|Rest], Email, Password, Context) ->
     UserId = proplists:get_value(rsc_id, Idn),
-    Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and rsc_id = $1", 
+    Row = z_db:q_row("select rsc_id, key, propb from identity where type = 'username_pw' and rsc_id = $1", 
                      [UserId], Context),
     case Row of
         undefined -> 
-            check_email_pw_1(Rest, Password, Context);
-        {RscId, Hash} ->
-            case hash_is_equal(Password, Hash) of
-                true -> 
-                    set_visited(RscId, Context),
-                    {ok, RscId};
-                false ->
-                    check_email_pw_1(Rest, Password, Context)
+            check_email_pw_1(Rest, Email, Password, Context);
+        {RscId, Username, Hash} ->
+            case check_hash(RscId, Username, Password, Hash, Context) of
+                {ok, Id} -> {ok, Id};
+                {error, password} ->
+                    check_email_pw_1(Rest, Email, Password, Context)
             end
     end.
 
@@ -400,9 +393,11 @@ is_verified(RscId, Context) ->
     end.
 
 set_by_type(RscId, Type, Key, Context) ->
+    set_by_type(RscId, Type, Key, [], Context).
+set_by_type(RscId, Type, Key, Props, Context) ->
 	F = fun(Ctx) -> 
-		case z_db:q("update identity set key = $3 where rsc_id = $1 and type = $2", [RscId, Type, Key], Ctx) of
-			0 -> z_db:q("insert into identity (rsc_id, type, key) values ($1,$2,$3)", [RscId, Type, Key], Ctx);
+		case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2", [RscId, Type, Key, Props], Ctx) of
+			0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)", [RscId, Type, Key, Props], Ctx);
             N when N > 0 -> ok
 		end
 	end,
@@ -440,3 +435,23 @@ set_verify_key(Id, Context) ->
             set_verify_key(Id, Context)
     end.
 
+
+check_hash(RscId, Username, Password, Hash, Context) ->
+    N = #identity_password_match{rsc_id=RscId, password=Password, hash=Hash},
+    case z_notifier:first(N, Context) of
+        {ok, rehash} ->
+            %% OK but module says it needs rehashing; do that using
+            %% the current hashing mechanism
+            ok = set_username_pw(RscId, Username, Password, z_acl:sudo(Context)),
+            check_hash_ok(RscId, Context);
+        ok ->
+            check_hash_ok(RscId, Context);
+        {error, Reason} ->
+            {error, Reason}
+    end.
+
+
+check_hash_ok(RscId, Context) ->
+    set_visited(RscId, Context),
+    {ok, RscId}.
+    

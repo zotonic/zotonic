@@ -28,6 +28,7 @@
 %% interface functions
 -export([
     observe_identity_verified/2,
+    observe_identity_password_match/2,
     observe_rsc_update_done/2,
     observe_search_query/2,
     observe_admin_menu/3,
@@ -40,6 +41,16 @@
 
 observe_identity_verified(#identity_verified{user_id=RscId, type=Type, key=Key}, Context) ->
     m_identity:set_verified(RscId, Type, Key, Context).
+
+
+observe_identity_password_match(#identity_password_match{password=Password, hash=Hash}, _Context) ->
+    case m_identity:hash_is_equal(Password, Hash) of
+        true -> 
+            ok;
+        false ->
+            {error, password}
+    end.
+    
 
 observe_rsc_update_done(#rsc_update_done{action=Action, id=RscId, pre_props=Pre, post_props=Post}, Context) 
     when Action =:= insert; Action =:= update ->

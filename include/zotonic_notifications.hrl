@@ -60,6 +60,8 @@
 %% @doc Notification that an user's identity has been verified. (notify)
 -record(identity_verified, {user_id, type, key}).
 
+-record(identity_password_match, {rsc_id, password, hash}).
+
 
 %% @doc Handle a signup of an user, return the follow on page for after the signup. (first)
 %% Return {ok, Url}
