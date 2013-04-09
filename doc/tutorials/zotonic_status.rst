@@ -35,3 +35,24 @@ in the ``priv/config`` file of the Zotonic folder.
 The "update" buttons only appear when the site (or Zotonic itself) is
 under Mercurial or Git revision control. These buttons do a "pull"
 from the repository and then rebuild the system.
+
+
+
+Getting the global sites status
+-------------------------------
+
+The Zotonic status sites exposes a small API service which allows you
+to check whether all of your sites are still running::
+
+  http://yourzotonichost.com/api/zotonic_status/check
+
+It returns a JSON response of ``{"status":"ok"}`` when every Zotonic
+site is running.
+
+"Running" means that a site's status is not `retrying` or `failed`; so
+it does not count sites that you have manually stopped from the
+interface.
+
+This API service can be plugged in to a service like
+https://www.pingdom.com/ to monitor the availability of all hosted sites
+at once.
