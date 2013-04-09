@@ -324,8 +324,8 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
                                     {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
                             end;
                         undefined ->
-                            %% Always fallback to the zotonic host
-                            zotonic
+                            %% Always fallback to the zotonic_status site
+                            zotonic_status
                     end
             end;
         _ ->
@@ -335,9 +335,7 @@ get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
 
 split_host(Host) ->
     case Host of
-        undefined -> 
-            {"", "80"};
-        [] -> 
+        H when H =:= undefined; H =:= []; H =:= none -> 
             {"", "80"};
         _ -> 
             % Split the optional port number from the host name
