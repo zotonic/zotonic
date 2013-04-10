@@ -97,14 +97,23 @@ change.
 Platform-specific notes
 -----------------------
 
-Ubuntu ( >= 10.04)
+Ubuntu ( >= 12.04)
+^^^^^^^^^^^^^^^^^^
+
+You can install Erlang from the default Ubuntu repositories::
+
+  sudo apt-get install build-essential postgresql imagemagick erlang-base erlang-tools \
+  erlang-parsetools erlang-inets erlang-ssl erlang-eunit erlang-dev erlang-xmerl erlang-src
+
+
+Ubuntu ( < 12.04)
 ^^^^^^^^^^^^^^^^^^
 
 A recent Erlang should be installed from a custom PPA by running::
 
   sudo add-apt-repository ppa:scattino/ppa
   sudo apt-get update
-  sudo apt-get install erlang-base erlang-ssl postgresql imagemagick
+  sudo apt-get install build-essential erlang-base erlang-ssl postgresql imagemagick
 
 
 Debian (lenny)
