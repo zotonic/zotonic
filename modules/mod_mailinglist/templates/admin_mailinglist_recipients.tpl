@@ -26,8 +26,11 @@
 	    {% button class="btn" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
 	    {% button class="btn" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
             {% button class="btn" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
+        {% button class="btn" text=_"Combine…" action={dialog_open title=_"Combine mailing list" id=id template="_admin_dialog_mailinglist_combine.tpl"} %}
 
-        </div>
+    </div>
+
+    <p>{_ Number of recipients on this list: _} <b>{{ m.mailinglist.stats[id][1]|format_number }}</b></p>
 </div>
 
 <div class="row">

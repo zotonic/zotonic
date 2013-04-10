@@ -8,13 +8,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-11 20:46+0100\n"
+"PO-Revision-Date: 2013-04-10 16:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:15
+msgid "<em>Add</em> all recipients to this list that are on the target list"
+msgstr "Alle geaddresseerden van de bronlijst aan deze lijst <em>toevoegen</em>"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:19
+msgid ""
+"<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "<em>Verwijder alle geaddresseerden van deze lijst die op de bronlijst voorkomen"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
@@ -59,7 +68,7 @@ msgstr "<p>Bedankt. Je hebt je nu aangemeld bij de mailing.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Bedankt. Je bent nu afgemeld van de mailing.</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:45
 msgid "Act"
 msgstr "Actief"
 
@@ -91,7 +100,9 @@ msgstr "Alles verwerkt"
 msgid ""
 "All recipients of the mailing list. You can upload or download this list, "
 "which must be a file with one e-mail address per line."
-msgstr "Alle ontvangers van de mailinglijst. Je kan deze lijst downloaden of uploaden. Elke regel van het bestand moet 1 e-mailadres bevatten."
+msgstr ""
+"Alle ontvangers van de mailinglijst. Je kan deze lijst downloaden of "
+"uploaden. Elke regel van het bestand moet 1 e-mailadres bevatten."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
 msgid ""
@@ -124,7 +135,9 @@ msgstr ""
 msgid ""
 "Before you will receive any further mail you need to confirm your "
 "subscription."
-msgstr "Voordat je e-mail van deze lijst zal ontvangen, moet je aanmelding eerst worden bevestigd."
+msgstr ""
+"Voordat je e-mail van deze lijst zal ontvangen, moet je aanmelding eerst "
+"worden bevestigd."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
@@ -135,6 +148,7 @@ msgstr "Bounces"
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:42
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
 msgid "Cancel"
 msgstr "Annuleren"
@@ -143,7 +157,7 @@ msgstr "Annuleren"
 msgid "Cancel mailing"
 msgstr "Mailing annuleren"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
 msgid "Check to activate the e-mail address."
 msgstr "Vink aan om het e-mailadres actief te maken"
 
@@ -173,6 +187,14 @@ msgstr "Klik op de onderstaande knop om je aanmelding te bevestigen."
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "Click to view log entries"
 msgstr "Klik om e-mail log te bekijken"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine mailing list"
+msgstr "Combineer mailinglijst"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine…"
+msgstr "Combineer…"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
@@ -243,7 +265,7 @@ msgstr "E-mail deze pagina"
 msgid "Edit"
 msgstr "Bewerk"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:54
 msgid "Edit recipient"
 msgstr "Bewerk ontvanger"
 
@@ -252,7 +274,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Bewerk de mailinglijst &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Email"
 msgstr "E-mail"
 
@@ -264,7 +286,8 @@ msgstr "Actief"
 msgid ""
 "Enter the e-mail address of the recipient. The name of the recipient is "
 "optional."
-msgstr "Geef het e-mailadres van de ontvanger. De naam van de ontvanger is optioneel."
+msgstr ""
+"Geef het e-mailadres van de ontvanger. De naam van de ontvanger is optioneel."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:33
 msgid "Externally managed list &mdash; no (un)subscribe links"
@@ -319,12 +342,6 @@ msgstr ""
 msgid "Keep mailing"
 msgstr "Niet afmelden"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
-#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
-#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
-msgid "Kind Regards,"
-msgstr "Met vriendelijke groet,"
-
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr "Mailinglijsten"
@@ -336,7 +353,7 @@ msgstr "Mailinglijst"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
-#: modules/mod_mailinglist/mod_mailinglist.erl:365
+#: modules/mod_mailinglist/mod_mailinglist.erl:376
 msgid "Mailing lists"
 msgstr "Mailinglijsten"
 
@@ -362,9 +379,13 @@ msgstr "Geen adres geselecteerd"
 msgid "No items found"
 msgstr "Geen ontvangers gevonden"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:68
 msgid "No recipients"
 msgstr "Geen ontvangers"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
+msgid "Number of recipients on this list:"
+msgstr "Aantal geaddresseerden op deze lijst:"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
 msgid "OK"
@@ -382,9 +403,21 @@ msgstr ""
 "activeer ze weer door ze aan te vinken. Wanneer een adres ongeldig is,\n"
 "kan je het ook verwijderen."
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:23
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr "Behoud alleen de geaddresseerden die op <em>beide lijsten</em> voorkomen"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:10
+msgid "Operation"
+msgstr "Bewerking"
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid "Our excuses for the inconvenience."
 msgstr "Onze excuses voor het ongemak"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:43
+msgid "Perform operation"
+msgstr "Bewerking uitvoeren"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
@@ -432,7 +465,7 @@ msgstr "Lees deze pagina online"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:41
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
 msgid "Recipients"
 msgstr "Ontvangers"
@@ -450,7 +483,7 @@ msgstr ""
 msgid "Recipients for"
 msgstr "Ontvangers voor"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 msgid "Remove this recipient. No undo possible."
 msgstr "Verwijder deze ontvanger."
 
@@ -469,6 +502,10 @@ msgstr "Bekijk de"
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
 msgstr "Kies bestand"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:32
+msgid "Select..."
+msgstr "Selecteer..."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17
@@ -551,7 +588,9 @@ msgstr "Toon alle ontvangers &raquo;"
 msgid ""
 "Sorry, I could not subscribe you to the mailing list. Please try again later "
 "or with another e-mail address."
-msgstr "Het aanmelden bij de mailinglijst is niet gelukt. Probeer het later a.u.b. nog een keer of met een ander e-mailadres."
+msgstr ""
+"Het aanmelden bij de mailinglijst is niet gelukt. Probeer het later a.u.b. "
+"nog een keer of met een ander e-mailadres."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:24
 msgid "Sorry, can’t confirm your subscription"
@@ -579,6 +618,10 @@ msgstr "Aanmelden bij"
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:43
 msgid "Surname"
 msgstr "Achternaam"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:29
+msgid "Target mailing list"
+msgstr "Bron mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Thank you"
@@ -633,6 +676,13 @@ msgstr "Er is geen mailinglijst met de naam 'mailinglist_test'."
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
 msgstr "Deze actie kan niet ongedaan worden gemaakt."
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr "Dit venster laat je de geaddresseerden van deze lijst combineren met die van een andere lijst. De resultaat van deze combinatie wordt opgeslagen in deze lijst."
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
 msgid ""
@@ -728,7 +778,8 @@ msgstr "Welkom bij"
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
 msgid ""
 "When you don’t want to receive any mail then please ignore this message."
-msgstr "Wanneer je geen e-mail meer wenst te ontvangen kun je dit bericht negeren."
+msgstr ""
+"Wanneer je geen e-mail meer wenst te ontvangen kun je dit bericht negeren."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "When you don’t want to receive any more mail then"
@@ -770,14 +821,19 @@ msgstr "Je bent nu afgemeld van deze mailinglijst"
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
 msgid ""
 "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "Je kan je wel nog proberen op een van de andere mailinglijsten van deze site aan te melden."
+msgstr ""
+"Je kan je wel nog proberen op een van de andere mailinglijsten van deze site "
+"aan te melden."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
 msgid ""
 "You received this mail because someone wanted to send you this information. "
 "We did not store your e-mail address and will not send you any other mail "
 "because of this mail."
-msgstr "Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. We hebben je e-mailadres niet opgeslagen en zullen je geen andere e-mail meer sturen."
+msgstr ""
+"Je hebt deze mail ontvangen omdat iemand jou deze informatie wilde sturen. "
+"We hebben je e-mailadres niet opgeslagen en zullen je geen andere e-mail "
+"meer sturen."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -789,7 +845,8 @@ msgstr "Je ontvangt een bevestigingsbericht in je mail."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Jij of iemand anders heeft jouw e-mailadres toegevoegd aan de mailinglijst"
+msgstr ""
+"Jij of iemand anders heeft jouw e-mailadres toegevoegd aan de mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid ""
@@ -824,7 +881,7 @@ msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "delete"
 msgstr "verwijder"
@@ -897,6 +954,9 @@ msgstr "wanneer je geen e-mail meer wilt ontvangen van deze lijst."
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "met je e-mailadres"
+
+#~ msgid "Kind Regards,"
+#~ msgstr "Met vriendelijke groet,"
 
 #~ msgid "<em>withheld</em>"
 #~ msgstr "<em>achtergehouden</em>"

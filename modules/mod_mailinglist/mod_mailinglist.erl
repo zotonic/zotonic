@@ -159,9 +159,20 @@ event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Co
         _ ->
             Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
             z_render:wire([{dialog_close, []}], Context1)
+    end;
+
+
+%% @doc Combine lists
+event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
+    lager:warning("Id: ~p", [Id]),
+    TargetId = z_convert:to_integer(z_context:get_q("list_id", Context)),
+    Operation = z_convert:to_atom(z_context:get_q("operation", Context)),
+    case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
+        ok ->
+            z_render:wire([{dialog_close, []}, {reload, []}], Context);
+        {error, Msg} ->
+            z_render:growl(Msg, "error", true, Context)
     end.
-
-
 
 %%====================================================================
 %% API
@@ -367,3 +378,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, ?MODULE}}
      
      |Acc].
+
+
+

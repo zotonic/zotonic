@@ -19,6 +19,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:15
+msgid "<em>Add</em> all recipients to this list that are on the target list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:19
+#, fuzzy
+msgid ""
+"<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "从列表中删除所有收件人？"
+
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
@@ -60,7 +70,7 @@ msgstr "<p>谢谢，您已经订阅。</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>谢谢，您已经取消订阅。</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:45
 msgid "Act"
 msgstr "启用"
 
@@ -136,6 +146,7 @@ msgstr "退信"
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:42
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
 msgid "Cancel"
 msgstr "取消"
@@ -144,7 +155,7 @@ msgstr "取消"
 msgid "Cancel mailing"
 msgstr "取消邮寄"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
 msgid "Check to activate the e-mail address."
 msgstr "选取以激活 e-mail 地址。"
 
@@ -174,6 +185,15 @@ msgstr "点击下面的按钮来确认邮件列表订阅。"
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "Click to view log entries"
 msgstr "点击查看日志条目"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+#, fuzzy
+msgid "Combine mailing list"
+msgstr "新建邮件列表"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine…"
+msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
@@ -244,7 +264,7 @@ msgstr "E-mail 本页面"
 msgid "Edit"
 msgstr "编辑"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:54
 msgid "Edit recipient"
 msgstr "编辑接收人"
 
@@ -253,7 +273,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "编辑邮件列表 &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Email"
 msgstr "Email"
 
@@ -318,12 +338,6 @@ msgstr ""
 msgid "Keep mailing"
 msgstr "继续邮寄"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
-#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
-#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
-msgid "Kind Regards,"
-msgstr "亲，"
-
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr "邮件列表"
@@ -335,7 +349,7 @@ msgstr "邮件列表"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
-#: modules/mod_mailinglist/mod_mailinglist.erl:365
+#: modules/mod_mailinglist/mod_mailinglist.erl:376
 msgid "Mailing lists"
 msgstr "邮件列表"
 
@@ -361,9 +375,14 @@ msgstr "没有选择地址"
 msgid "No items found"
 msgstr "没有找到"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:68
 msgid "No recipients"
 msgstr "没有收件人"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
+#, fuzzy
+msgid "Number of recipients on this list:"
+msgstr "从列表中删除所有收件人？"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
 msgid "OK"
@@ -379,9 +398,22 @@ msgstr ""
 "本页你可以看到已退信的邮件地址。这些地址将被禁用。请确认地址无误后重新启用，"
 "如果地址无效，请删除它。"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:23
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:10
+#, fuzzy
+msgid "Operation"
+msgstr "描述"
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid "Our excuses for the inconvenience."
 msgstr "对此带来的不便我们表示抱歉。"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:43
+msgid "Perform operation"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
@@ -429,7 +461,7 @@ msgstr "在网页上阅读本页面。"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:41
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
 msgid "Recipients"
 msgstr "收件人"
@@ -446,7 +478,7 @@ msgstr ""
 msgid "Recipients for"
 msgstr "收件人位于"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 msgid "Remove this recipient. No undo possible."
 msgstr "删除这个收件人，无法撤销。"
 
@@ -464,6 +496,11 @@ msgstr "查看"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
+msgstr "选择文件"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:32
+#, fuzzy
+msgid "Select..."
 msgstr "选择文件"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
@@ -571,6 +608,11 @@ msgstr "订阅到"
 msgid "Surname"
 msgstr "姓"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:29
+#, fuzzy
+msgid "Target mailing list"
+msgstr "新建邮件列表"
+
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Thank you"
 msgstr "谢谢你"
@@ -619,6 +661,13 @@ msgstr "没有找到名为 ‘mailinglist_test’ 的邮件列表。"
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
 msgstr "操作无法撤销"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
 msgid ""
@@ -798,7 +847,7 @@ msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "delete"
 msgstr "删除"
@@ -871,3 +920,6 @@ msgstr "当你不想再收到列表的其他邮件时。"
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "使用你的 e-mail 地址"
+
+#~ msgid "Kind Regards,"
+#~ msgstr "亲，"

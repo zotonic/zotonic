@@ -20,6 +20,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:15
+msgid "<em>Add</em> all recipients to this list that are on the target list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:19
+#, fuzzy
+msgid ""
+"<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "Удалить всех адресатов из этого списка?"
+
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
@@ -70,7 +80,7 @@ msgstr "<p>Спасибо. Теперь вы подписаны.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Спасибо. Теперь ваша подписка отменена.</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:45
 msgid "Act"
 msgstr "Активен"
 
@@ -152,6 +162,7 @@ msgstr "Возвраты"
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:42
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
 msgid "Cancel"
 msgstr "Отмена"
@@ -160,7 +171,7 @@ msgstr "Отмена"
 msgid "Cancel mailing"
 msgstr "Отменить рассылку"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
 msgid "Check to activate the e-mail address."
 msgstr "Установите флажок для активации адреса e-mail."
 
@@ -192,6 +203,15 @@ msgstr "Нажмите на кнопку ниже для подтвержден�
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "Click to view log entries"
 msgstr "Нажмите для просмотра записей в журнале"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+#, fuzzy
+msgid "Combine mailing list"
+msgstr "Новый список адресатов"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine…"
+msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
@@ -262,7 +282,7 @@ msgstr "Отправить эту страницу"
 msgid "Edit"
 msgstr "Изменить"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:54
 msgid "Edit recipient"
 msgstr "Изменить адресата"
 
@@ -271,7 +291,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Изменить список адресатов &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Email"
 msgstr "Адрес e-mail"
 
@@ -339,12 +359,6 @@ msgstr ""
 msgid "Keep mailing"
 msgstr "Продолжить рассылку"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
-#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
-#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
-msgid "Kind Regards,"
-msgstr "С уважением,"
-
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr "Списки адресатов"
@@ -356,7 +370,7 @@ msgstr "Список адресатов"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
-#: modules/mod_mailinglist/mod_mailinglist.erl:365
+#: modules/mod_mailinglist/mod_mailinglist.erl:376
 msgid "Mailing lists"
 msgstr "Списки адресатов"
 
@@ -382,9 +396,14 @@ msgstr "Адреса не выбраны"
 msgid "No items found"
 msgstr "Записи не найдены"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:68
 msgid "No recipients"
 msgstr "Адресаты отсутсвуют"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
+#, fuzzy
+msgid "Number of recipients on this list:"
+msgstr "Удалить всех адресатов из этого списка?"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
 msgid "OK"
@@ -403,9 +422,22 @@ msgstr ""
 "    флажок перед адресом для повторного включения. Если адрес "
 "недействителен, вы можете удалить его."
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:23
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:10
+#, fuzzy
+msgid "Operation"
+msgstr "Описание"
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid "Our excuses for the inconvenience."
 msgstr "Приносим извинения за причиненные неудобства."
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:43
+msgid "Perform operation"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
@@ -453,7 +485,7 @@ msgstr "Прочитать эту страницу на сайте."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:41
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
 msgid "Recipients"
 msgstr "Адресаты"
@@ -472,7 +504,7 @@ msgstr ""
 msgid "Recipients for"
 msgstr "Адресаты для"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 msgid "Remove this recipient. No undo possible."
 msgstr "Удалить этого адресата. Отмена невозможна."
 
@@ -490,6 +522,11 @@ msgstr "Просмотр"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
+msgstr "Выбор файла"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:32
+#, fuzzy
+msgid "Select..."
 msgstr "Выбор файла"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
@@ -603,6 +640,11 @@ msgstr "Подписаться на"
 msgid "Surname"
 msgstr "Фамилия"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:29
+#, fuzzy
+msgid "Target mailing list"
+msgstr "Новый список адресатов"
+
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Thank you"
 msgstr "Спасибо"
@@ -658,6 +700,13 @@ msgstr "Отсутствует список адресатов с названи
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
 msgstr "Это действие нельзя отменить"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
 msgid ""
@@ -854,7 +903,7 @@ msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "delete"
 msgstr "удалить"
@@ -927,3 +976,6 @@ msgstr "если вы не желаете получать дальнейшие 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "с указанием вашего адреса"
+
+#~ msgid "Kind Regards,"
+#~ msgstr "С уважением,"

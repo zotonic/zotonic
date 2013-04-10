@@ -20,6 +20,16 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:15
+msgid "<em>Add</em> all recipients to this list that are on the target list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:19
+#, fuzzy
+msgid ""
+"<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "¿Borrar todos los detinatarios de esta lista?"
+
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
@@ -69,7 +79,7 @@ msgstr "<p>Gracias. Se ha podido suscribir.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Gracias. Se ha podido desuscribir.</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:45
 msgid "Act"
 msgstr "Activar"
 
@@ -147,6 +157,7 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:42
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
 msgid "Cancel"
 msgstr "Cancelar"
@@ -155,7 +166,7 @@ msgstr "Cancelar"
 msgid "Cancel mailing"
 msgstr "Cancelar correo"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
 msgid "Check to activate the e-mail address."
 msgstr ""
 
@@ -188,6 +199,15 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "Click to view log entries"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+#, fuzzy
+msgid "Combine mailing list"
+msgstr "Nueva lista de correo"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine…"
 msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
@@ -269,7 +289,7 @@ msgstr "Página de correo"
 msgid "Edit"
 msgstr ""
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:54
 #, fuzzy
 msgid "Edit recipient"
 msgstr "Agregar destinatario"
@@ -279,7 +299,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Editar la lista de correo &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Email"
 msgstr "Dirección de correo"
 
@@ -343,12 +363,6 @@ msgstr ""
 msgid "Keep mailing"
 msgstr "Continuar enviando"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
-#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
-#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
-msgid "Kind Regards,"
-msgstr "Saludos,"
-
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr "Listas de Correo"
@@ -360,7 +374,7 @@ msgstr "Lista de correo"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
-#: modules/mod_mailinglist/mod_mailinglist.erl:365
+#: modules/mod_mailinglist/mod_mailinglist.erl:376
 msgid "Mailing lists"
 msgstr "Listas de correo"
 
@@ -386,9 +400,14 @@ msgstr ""
 msgid "No items found"
 msgstr "No se encontraron ítems."
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:68
 msgid "No recipients"
 msgstr "No hay destinatarios."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
+#, fuzzy
+msgid "Number of recipients on this list:"
+msgstr "¿Borrar todos los detinatarios de esta lista?"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
 msgid "OK"
@@ -402,9 +421,22 @@ msgid ""
 "invalid, you can delete it."
 msgstr ""
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:23
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:10
+#, fuzzy
+msgid "Operation"
+msgstr "Descripción"
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid "Our excuses for the inconvenience."
 msgstr "Discúlpenos por los inconvenientes causados."
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:43
+msgid "Perform operation"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
@@ -455,7 +487,7 @@ msgstr "Lea esta página en la web."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:41
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
 msgid "Recipients"
 msgstr "Destinatarios"
@@ -473,7 +505,7 @@ msgstr ""
 msgid "Recipients for"
 msgstr "Destinatarios para"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 msgid "Remove this recipient. No undo possible."
 msgstr "Elimine este destinatario. No se puede deshacer."
 
@@ -491,6 +523,11 @@ msgstr "Ver el"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
+msgstr "Seleccione un archivo"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:32
+#, fuzzy
+msgid "Select..."
 msgstr "Seleccione un archivo"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
@@ -609,6 +646,11 @@ msgstr "Suscribir"
 msgid "Surname"
 msgstr "Apellido"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:29
+#, fuzzy
+msgid "Target mailing list"
+msgstr "Nueva lista de correo"
+
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Thank you"
 msgstr "Gracias"
@@ -661,6 +703,13 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
 msgstr "Esto no se puede deshacer"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
 msgid ""
@@ -847,7 +896,7 @@ msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "delete"
 msgstr "borrar"
@@ -924,6 +973,9 @@ msgstr "si no quiere recibir más correo de esta lista."
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "con su dirección de correo"
+
+#~ msgid "Kind Regards,"
+#~ msgstr "Saludos,"
 
 #~ msgid "<em>withheld</em>"
 #~ msgstr "<em>retenido</em>"

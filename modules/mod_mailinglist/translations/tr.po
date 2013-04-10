@@ -18,6 +18,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:15
+msgid "<em>Add</em> all recipients to this list that are on the target list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:19
+#, fuzzy
+msgid ""
+"<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "Bu listedeki tüm alıcıları sil?"
+
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
 msgid ""
 "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
@@ -60,7 +70,7 @@ msgstr "<p>Teşekkürler. Üyeliğiniz tamamlandı.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Teşekkürler. Üyeliğiniz sonlandırıldı.</p>"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:42
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:45
 msgid "Act"
 msgstr "Yap"
 
@@ -137,6 +147,7 @@ msgstr "Geri dönen"
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:16
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:24
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:42
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16
 msgid "Cancel"
 msgstr "İptal"
@@ -145,7 +156,7 @@ msgstr "İptal"
 msgid "Cancel mailing"
 msgstr "Mailingi iptal et"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:50
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
 msgid "Check to activate the e-mail address."
 msgstr "Etkinleştirmek için e-mail adresini kontrol et."
 
@@ -175,6 +186,15 @@ msgstr "Mail listesine üyeliğinizi onaylamak için aşağıdaki butona tıklay
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "Click to view log entries"
 msgstr "Log girişlerini görmek için tıklayınız."
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+#, fuzzy
+msgid "Combine mailing list"
+msgstr "Yeni mail listesi"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Combine…"
+msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
@@ -246,7 +266,7 @@ msgstr "Bu sayfayı gönder"
 msgid "Edit"
 msgstr "Düzenle"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:51
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:54
 msgid "Edit recipient"
 msgstr "Alıcıyı düzenle"
 
@@ -255,7 +275,7 @@ msgid "Edit the mailing list &raquo;"
 msgstr "Mail listesini düzenle &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
 msgid "Email"
 msgstr "Email"
 
@@ -323,12 +343,6 @@ msgstr ""
 msgid "Keep mailing"
 msgstr "Devam et"
 
-#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:11
-#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:17
-#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:10
-msgid "Kind Regards,"
-msgstr "Saygılarımızla,"
-
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr "Mail Listeleri"
@@ -340,7 +354,7 @@ msgstr "Mail listesi"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10
-#: modules/mod_mailinglist/mod_mailinglist.erl:365
+#: modules/mod_mailinglist/mod_mailinglist.erl:376
 msgid "Mailing lists"
 msgstr "Mail listeleri"
 
@@ -366,9 +380,14 @@ msgstr "Adres seçilmedi"
 msgid "No items found"
 msgstr "Öğe bulunamadı"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:65
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:68
 msgid "No recipients"
 msgstr "Alıcı yok"
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:33
+#, fuzzy
+msgid "Number of recipients on this list:"
+msgstr "Bu listedeki tüm alıcıları sil?"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
 msgid "OK"
@@ -385,9 +404,22 @@ msgstr ""
 "iptal edildi. Her adresi doğrulayın ve yeniden etkinleştirmek\n"
 "için yanındaki kutuyu işaretleyin. Eğer adres geçersizse silebilirsiniz."
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:23
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:10
+#, fuzzy
+msgid "Operation"
+msgstr "Tanım"
+
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid "Our excuses for the inconvenience."
 msgstr "Verdiğimiz rahatsızlıktan dolayı özür dileriz."
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:43
+msgid "Perform operation"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
@@ -435,7 +467,7 @@ msgstr "Bu sayfayı internette oku."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:37
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:38
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:41
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18
 msgid "Recipients"
 msgstr "Alıcılar"
@@ -453,7 +485,7 @@ msgstr ""
 msgid "Recipients for"
 msgstr "Alıcılar"
 
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 msgid "Remove this recipient. No undo possible."
 msgstr "Bu alıcıyı kaldır. Geri alınamaz."
 
@@ -471,6 +503,11 @@ msgstr "Gör"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
+msgstr "Dosyayı seç"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:32
+#, fuzzy
+msgid "Select..."
 msgstr "Dosyayı seç"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17
@@ -583,6 +620,11 @@ msgstr "Üye ol"
 msgid "Surname"
 msgstr "Soyad"
 
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:29
+#, fuzzy
+msgid "Target mailing list"
+msgstr "Yeni mail listesi"
+
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Thank you"
 msgstr "Teşekkürler"
@@ -636,6 +678,13 @@ msgstr "'mailinglist_test' isminde bir mail listesi yok."
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
 msgstr "Geri alınamaz"
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
 msgid ""
@@ -822,7 +871,7 @@ msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:23
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:53
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9
 msgid "delete"
 msgstr "sil"
@@ -895,3 +944,6 @@ msgstr "bu listeden başka mail almak istemiyorsanız."
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
 msgstr "e-mail adresinizle"
+
+#~ msgid "Kind Regards,"
+#~ msgstr "Saygılarımızla,"

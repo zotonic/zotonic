@@ -56,7 +56,8 @@
     reset_log_email/3,
 
 	reset_bounced/2,
-	get_bounced_recipients/2
+    get_bounced_recipients/2,
+    recipient_set_operation/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -441,3 +442,18 @@ get_bounced_recipients(ListId, Context) ->
 	[ E || {E} <- Emails ].
 
 
+%% @doc Perform a set operation on two lists. The result of the
+%% operation gets stored in the first list.
+recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtract; Op =:= intersection ->
+    A = get_email_set(IdA, Context),
+    B = get_email_set(IdB, Context),
+    lager:warning("A: ~p", [A]),
+    lager:warning("B: ~p", [B]),
+    Emails = sets:to_list(sets:Op(A, B)),
+    lager:warning("Emails: ~p", [Emails]),
+    insert_recipients(IdA, Emails, true, Context).
+
+
+get_email_set(ListId, Context) ->
+    sets:from_list([list_to_binary(z_string:trim(z_string:to_lower(Email)))
+                    || {Email} <- z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1", [ListId], Context)]).
