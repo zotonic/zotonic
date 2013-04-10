@@ -78,10 +78,36 @@ template. The following templates are used for e-mails:
 Sending mailings in the admin
 -----------------------------
 
-
 On the resource edit page of any page (remember: the mailinglist
 module can send `any` resource as a mailing!) there is an link in the
 right column called `Go to the mailing page`.
+
+The mailinglist recipients page
+-------------------------------
+
+Each mailinglist has a special page in the admin that lets you view
+the recipients that are part of the list. On that page you can perform
+varions functions on the recipients of the list.
+
+- `Add new recipient` - Opens a dialog to add a single recipient to
+  the list.
+
+- `Download recipient list` - Downloads a ``.txt`` file with all the
+  e-mail addresses and name details of all recipients.
+
+- `Upload recipient list` - Upload a new file with recipients. Each
+  e-mail address goes on its own line. There is a checkbox which lets
+  you clear the list before the import, effectively overwriting all
+  recipients in the list.
+
+- `Clear recipient list` - After a confirmation, this removes all
+  recipients from the list.
+  
+- `Combine two lists` - this opens a dialog which lets you combine two
+  lists. Using this new dialog, the recipients of two lists can be
+  combined according to the three set operations union, subtract and
+  intersect.
+
 
 The mailing status page
 -----------------------
