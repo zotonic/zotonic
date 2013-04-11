@@ -63,10 +63,15 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 event(#submit{message=custom_redirects}, Context) ->
-    Qs = z_context:get_q_all_noz(Context),
-    Rows = group_rows(Qs),
-    ok = save_rows(Rows, Context),
-    z_render:wire({reload, []}, Context).
+    case z_acl:is_allowed(use, mod_custom_redirect, Context) of
+        true ->
+            Qs = z_context:get_q_all_noz(Context),
+            Rows = group_rows(Qs),
+            ok = save_rows(Rows, Context),
+            z_render:wire({reload, []}, Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to change this.", Context), Context) 
+    end.
 
 manage_schema(Version, Context) ->
     m_custom_redirect:manage_schema(Version, Context).
