@@ -24,30 +24,37 @@ bounced messages.
 Site-specific settings
 ......................
 
-+----------+--------------+-----------------------------------------+
-|Module    |Key           |Value                                    |
-+==========+==============+=========================================+
-|site      |email_from    |Set this to the from-address you want to |
-|          |              |e-mail to appear from, e.g. something    |
-|          |              |like noreply@yoursite.com.               |
-+----------+--------------+-----------------------------------------+
-|site      |email_override|If set, all e-mail messages that get sent|
-|          |              |from Zotonic will arrive at this         |
-|          |              |address. Usefull if you are testing but  |
-|          |              |don't want to confuse other people with  |
-|          |              |your test e-mails.                       |
-+----------+--------------+-----------------------------------------+
-|site      |smtphost      |The hostname where you want messages to  |
-|          |              |appear from. Mostly used for bounce      |
-|          |              |message handling and the EHLO            |
-|          |              |handshake. Defaults to the site's        |
-|          |              |hostname, but can be overriden           |
-+----------+--------------+-----------------------------------------+
-|site      |admin_email   |E-mail address of the admin user, the    |
-|          |              |address where admin log/debug messages   |
-|          |              |get sent to when using                   |
-|          |              |``z_email:send_admin/3``.                |
-+----------+--------------+-----------------------------------------+
++----------+----------------------+-----------------------------------------+
+|Module    |Key                   |Value                                    |
++==========+======================+=========================================+
+|site      |email_from            |Set this to the from-address you want to |
+|          |                      |e-mail to appear from, e.g. something    |
+|          |                      |like noreply@yoursite.com.               |
++----------+----------------------+-----------------------------------------+
+|site      |email_override        |If set, all e-mail messages that get sent|
+|          |                      |from Zotonic will arrive at this         |
+|          |                      |address. Usefull if you are testing but  |
+|          |                      |don't want to confuse other people with  |
+|          |                      |your test e-mails.                       |
++----------+----------------------+-----------------------------------------+
+|site      |smtphost              |The hostname where you want messages to  |
+|          |                      |appear from. Mostly used for bounce      |
+|          |                      |message handling and the EHLO            |
+|          |                      |handshake. Defaults to the site's        |
+|          |                      |hostname, but can be overriden           |
++----------+----------------------+-----------------------------------------+
+|site      |admin_email           |E-mail address of the admin user, the    |
+|          |                      |address where admin log/debug messages   |
+|          |                      |get sent to when using                   |
+|          |                      |``z_email:send_admin/3``.                |
++----------+----------------------+-----------------------------------------+
+|site      |bounce_email_override |E-mail address where bounces are sent to.|
+|          |                      |Normally a special bounce address is     |
+|          |                      |generated. See also the discussion about |
+|          |                      |``smtp_bounce_email_override`` below.    |
++----------+----------------------+-----------------------------------------+
+
+
 
 The ``z_email:send_admin/3`` command actually looks in three different
 places for determining the admin e-mail address: the config key
@@ -145,6 +152,10 @@ address by setting the ``smtp_bounce_email_override`` option. Setting the
 bounce/envelop address manually disables Zotonic’s build-in handling of
 bounces that happen *after* the e-mail was accepted for delivery by
 the remote SMTP host.
+
+The bounce e-mail address can also be set on a per-site basis using the 
+``site.bounce_email_override`` configuration. See the site specific 
+settings table above.
 
 
 How does Zotonic know the domain?
