@@ -237,8 +237,9 @@ mime(Type) -> "image/" ++ string:to_lower(Type).
 
 %% @doc Return the extension for a known mime type (eg. ".mov").
 -spec extension(string()|binary()) -> string().
-extension(Mime) ->
-    extension(Mime, undefined).
+extension("image/jpeg") -> ".jpg";
+extension(<<"image/jpeg">>) -> ".jpg";
+extension(Mime) -> extension(Mime, undefined).
 
 %% @doc Return the extension for a known mime type (eg. ".mov"). When
 %% multiple extensions are found for the given mime type, returns the
