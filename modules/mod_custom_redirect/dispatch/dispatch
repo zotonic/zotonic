@@ -1,0 +1,4 @@
+[
+    {admin_custom_redirect,  ["admin", "custom-redirect"], controller_admin, 
+            [{template, "admin_custom_redirect.tpl"}, {acl_module, mod_custom_redirect}]}
+].

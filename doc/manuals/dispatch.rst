@@ -211,6 +211,30 @@ directives for each host. See :ref:`manual-site-anatomy` for more
 details on this.
 
 
+Unmatched hosts/domains
+-----------------------
+
+The dispatcher finds the correct site based on the ``Host`` in the request.
+If no site can be found then the dispatcher will first check all enabled sites with 
+a ``#dispatch_host`` notification to see if any site has a known redirect.
+
+If this fails then the dispatcher will select a default site (usually ``zotonic_status``)
+to handle the request.
+
+If no site is running then a bare bones `404 Not Found` page will be shown.
+
+See :ref:`mod_custom_redirect` for redirecting unknown domains.
+
+
+Unmatched paths
+---------------
+
+If the dispatcher can’t find a match a dispatch rule against the request path then
+it will check the site’s modules using a ``#dispatch`` notification.
+
+The module :ref:`mod_base` will check the request path against the ``page_path`` property of all resources.
+After that the module :ref:`mod_custom_redirect` will check the configured redirect locations.
+
      
 Dispatch rule BNF
 -----------------
@@ -223,7 +247,9 @@ A dispatch rule is built up as follows::
   PathSegmentSpec = StaticMatch | Wildcard | Variable
   StaticMatch = string()
   Wildcard = '*'
-  PathVariable = atom()
+  PathVariable = atom() | {atom(), RegExp} | {atom{}, RegExp, ReOptions}
+  RegExp = string()
+  ReOptions = [term()]
   ResourceModule = atom()
   ResourceArgs = [{Key,Value}]
 
@@ -247,3 +273,6 @@ where to load static resources from.
 Zotonic dispatch rules are identical to Webmachine's with the addition
 of RuleName. Webmachine's dispatch rules are described in detail at
 http://webmachine.basho.com/dispatcher.html .
+
+.. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`
+

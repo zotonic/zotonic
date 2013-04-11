@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
-%% Date: 2009-12-15
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,18 +41,21 @@
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
 
--record(state, {rules, fallback_site}).
+-record(state, {
+            rules = [],
+            fallback_site = zotonic_status
+        }).
 
 %%====================================================================
 %% API
 %%====================================================================
+
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link() -> 
     start_link([]).
 start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
-
 
 
 %% @doc Update the webmachine dispatch information. Collects dispatch information from all sites and sends it
@@ -63,89 +65,27 @@ update_dispatchinfo() ->
 
 
 %% @doc Match the host and path to a dispatch rule.
-%% @spec dispatch(Host::string(), Path::string(), ReqData::wm_reqdata) -> {dispatch(), NewReqData}
+%% @spec dispatch(Host::string()|atom(), Path::string(), ReqData::wm_reqdata) -> {dispatch(), NewReqData}
 %% @type dispatch() = {no_dispatch_match, _UnmatchedHost, _UnmatchedPathTokens}
 %%                  | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                  | handled
 dispatch(Host, Path, ReqData) ->
     % Classify the user agent
     {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
-    Method = wrq:method(ReqData),
     Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
-    % Find a matching dispatch rule 
-    DispReq = #dispatch{host=Host, path=Path, method=Method, protocol=Protocol},
-    case gen_server:call(?MODULE, DispReq) of
-        {no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings} when MatchedHost =/= undefined ->
-            {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
-
-            Context = case lists:keyfind(z_language, 1, Bindings) of
-                          {z_language, Language} -> z_context:set_language(list_to_atom(Language), z_context:new(MatchedHost));
-                          false -> z_context:new(MatchedHost)
-                      end,
-            RewrittenPath = case NonMatchedPathTokens of 
-                                undefined -> Path;
-                                _ -> string:join(NonMatchedPathTokens, "/")
-                            end,
-            case z_notifier:first(DispReq#dispatch{path=RewrittenPath}, Context#context{wm_reqdata=ReqDataHost}) of
-                {ok, Id} when is_integer(Id) ->
-                    %% Retry with the resource's default page uri
-                    case m_rsc:p_no_acl(Id, default_page_url, Context) of
-                        undefined ->
-                            {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost};
-                        DefaultPagePathBin ->
-                            DefaultPagePath = binary_to_list(DefaultPagePathBin),
-                            case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
-                                {no_dispatch_match, MatchedHost1, NonMatchedPathTokens1, _} ->
-                                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataUA),
-                                    {{no_dispatch_match, MatchedHost1, NonMatchedPathTokens1}, ReqDataHost1};
-                                {redirect, ProtocolAsString, Hostname} ->
-                                    {handled, redirect(false, ProtocolAsString, Hostname, ReqDataUA)};
-                                {Match1, MatchedHost1} ->
-                                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataUA),
-                                    {Match1, ReqDataHost1}
-                            end
-                    end;
-                {ok, #dispatch_match{
-                        dispatch_name=SDispatchName,
-                        mod=SMod,
-                        mod_opts=SModOpts,
-                        path_tokens=SPathTokens,
-                        bindings=SBindings,
-                        app_root=SAppRoot,
-                        string_path=SStringPath}} ->
-                    {{SMod, SModOpts, 
-                      [], none, % Host info
-                      SPathTokens, [{zotonic_dispatch, SDispatchName},{zotonic_host, MatchedHost}|SBindings] ++ Bindings, 
-                      SAppRoot, SStringPath}, 
-                     ReqDataHost};
-                {ok, #dispatch_redirect{location=Location, is_permanent=IsPermanent}} ->
-                    {handled, redirect(IsPermanent, Location, ReqDataHost)};
-                undefined ->
-                    {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}
-            end;
-
-        {redirect, MatchedHost} ->
-            RawPath = wrq:raw_path(ReqDataUA),
-            Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
-            {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
-
-        {redirect, NewProtocol, NewHost} ->
-            {handled, redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}; 
-
-        {Match, MatchedHost} ->
-            {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
-            {Match, ReqDataHost};
-        
-        no_host_match ->
-            {{no_dispatch_match, undefined, undefined, []}, undefined}
-    end.
-
+    DispReq = #dispatch{
+                    host=Host, 
+                    path=Path, 
+                    method=wrq:method(ReqData), 
+                    protocol=Protocol
+              },
+    handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA).
 
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->
-    gen_server:call(?MODULE, {get_fallback_site}).
+    gen_server:call(?MODULE, get_fallback_site).
 
-%% @doc Fetch the host from the given domain name
+%% @doc Fetch the host handling the given domain name
 get_host_for_domain(Domain) when is_binary(Domain) ->
     get_host_for_domain(binary_to_list(Domain));
 get_host_for_domain(Domain) ->
@@ -162,7 +102,9 @@ get_host_for_domain(Domain) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    {ok, #state{rules=collect_dispatchrules(), fallback_site=z_sites_manager:get_fallback_site()}}.
+    gen_server:cast(self(), update_dispatchinfo),
+    {ok, #state{}}.
+
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -170,25 +112,22 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Match a host/path to the dispatch rules.  Return a match result or a no_dispatch_match tuple.
-handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, protocol=Protocol}, _From, State) ->
-    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, State#state.fallback_site, Method) of
+%% @doc Match a host/path to the dispatch rules.  Return a match result, a no_dispatch_match tuple or no_host_match
+handle_call({site_dispatch, Host, Dispatch}, _From, State) ->
+    case lists:keyfind(Host, #wm_host_dispatch_list.host, State#state.rules) of
+        false -> 
+            {reply, no_host_match, State};
+        WMHost ->
+            DL = WMHost#wm_host_dispatch_list.dispatch_list,
+            {reply, handle_host_dispatch(Host, DL, Dispatch), State}
+    end;
+handle_call(#dispatch{host=HostAsString, method=Method} = Dispatch, _From, State) ->
+    Reply = case get_host_dispatch_list(HostAsString, State#state.rules, Method) of
                 {ok, Host, DispatchList} ->
-                    case wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) of
-                        {redirect, _ProtocolAsString, _Hostname} = R ->
-                            R;
-                        {no_dispatch_match, UnmatchedPathTokens, Bindings} ->
-                            {no_dispatch_match, Host, UnmatchedPathTokens, Bindings};
-                        {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
-                            {{Mod, ModOpts, 
-                              [], none, % Host info
-                              PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
-                              AppRoot, StringPath}, 
-                             Host}
-                    end;
+                    handle_host_dispatch(Host, DispatchList, Dispatch);
                 {redirect, _Host} = Redirect ->
                     Redirect;
-                {redirect, _NewProtocol, _NewHost} = Redirect -> 
+                {redirect_protocol, _NewProtocol, _NewHost} = Redirect -> 
                     Redirect;
                 no_host_match ->
                     no_host_match
@@ -196,7 +135,7 @@ handle_call(#dispatch{host=HostAsString, path=PathAsString, method=Method, proto
     {reply, Reply, State};
 
 %% @doc Return the fallback site
-handle_call({get_fallback_site}, _From, State) ->
+handle_call(get_fallback_site, _From, State) ->
     {reply, State#state.fallback_site, State};
 
 
@@ -212,10 +151,11 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Reloads the dispatch rules.
-%% @todo Do SSL filtering per host (instead of on a system wide basis).
 handle_cast(update_dispatchinfo, State) ->
-    {noreply, State#state{rules=collect_dispatchrules()}};
-
+    {noreply, State#state{
+                rules=collect_dispatchrules(), 
+                fallback_site=z_sites_manager:get_fallback_site()
+            }};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -236,7 +176,6 @@ terminate(_Reason, _State) ->
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -244,6 +183,134 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+handle_host_dispatch(Host, DispatchList, #dispatch{host=HostAsString, path=PathAsString, protocol=Protocol}) ->
+    case wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) of
+        {redirect_protocol, _ProtocolAsString, _Hostname} = R ->
+            R;
+        {no_dispatch_match, UnmatchedPathTokens, Bindings} ->
+            {no_dispatch_match, Host, UnmatchedPathTokens, Bindings};
+        {DispatchName, Mod, ModOpts, PathTokens, Bindings, AppRoot, StringPath} ->
+            {{Mod, ModOpts, 
+              [], none, % Host info
+              PathTokens, [{zotonic_dispatch, DispatchName},{zotonic_host, Host}|Bindings], 
+              AppRoot, StringPath}, 
+             Host}
+    end.
+
+handle_dispatch({Match, MatchedHost}, _DispReq, ReqDataUA) when is_tuple(Match) ->
+    % Known host, known dispatch rule
+    {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
+    {Match, ReqDataHost};
+handle_dispatch({redirect, MatchedHost}, _DispReq, ReqDataUA) when is_atom(MatchedHost) ->
+    % Redirect to other host, same path
+    RawPath = wrq:raw_path(ReqDataUA),
+    Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
+    {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
+handle_dispatch({redirect, MatchedHost, NewPathOrURI, IsPermanent}, _DispReq, ReqDataUA) when is_atom(MatchedHost) ->
+    % Redirect to some site, new path or uri
+    AbsURI = z_context:abs_url(NewPathOrURI, z_context:new(MatchedHost)),
+    {handled, redirect(IsPermanent, z_convert:to_list(AbsURI), ReqDataUA)};
+handle_dispatch({redirect_protocol, NewProtocol, NewHost}, _DispReq, ReqDataUA) ->
+    % Switch protocols (mostly http/https switch)
+    {handled, redirect(false, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}; 
+handle_dispatch({no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}, DispReq, ReqDataUA) when MatchedHost =/= undefined ->
+    % Known host, unknown dispatch rule
+    {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
+    Context = case lists:keyfind(z_language, 1, Bindings) of
+                  {z_language, Language} -> z_context:set_language(list_to_atom(Language), z_context:new(MatchedHost));
+                  false -> z_context:new(MatchedHost)
+              end,
+    RewrittenPath = case NonMatchedPathTokens of 
+                        undefined -> DispReq#dispatch.path;
+                        _ -> string:join(NonMatchedPathTokens, "/")
+                    end,
+    Redirect = z_notifier:first(DispReq#dispatch{path=RewrittenPath}, Context#context{wm_reqdata=ReqDataHost}),
+    handle_rewrite(Redirect, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, ReqDataHost, Context);
+handle_dispatch(no_host_match, DispReq, ReqDataUA) ->
+    % No host match - try to find matching host by asking all sites
+    handle_no_host_match(DispReq, ReqDataUA).
+
+
+%% Handle possible request rewrite; used when no dispatch rule matched
+handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, Context) when is_integer(Id) ->
+    %% Retry with the resource's default page uri
+    case m_rsc:p_no_acl(Id, default_page_url, Context) of
+        undefined ->
+            {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost};
+        DefaultPagePathBin ->
+            DefaultPagePath = binary_to_list(DefaultPagePathBin),
+            case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
+                {no_dispatch_match, MatchedHost1, NonMatchedPathTokens1, _} ->
+                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataHost),
+                    {{no_dispatch_match, MatchedHost1, NonMatchedPathTokens1}, ReqDataHost1};
+                {no_host_match} ->
+                    {{no_dispatch_match, undefined, undefined, []}, undefined};
+                OtherDispatchMatch ->
+                    handle_dispatch(OtherDispatchMatch, DispReq, ReqDataHost)
+            end
+    end;
+handle_rewrite({ok, #dispatch_match{
+                            dispatch_name=SDispatchName,
+                            mod=SMod,
+                            mod_opts=SModOpts,
+                            path_tokens=SPathTokens,
+                            bindings=SBindings,
+                            app_root=SAppRoot,
+                            string_path=SStringPath}},
+                _DispReq, MatchedHost, _NonMatchedPathTokens, Bindings, ReqDataHost, _Context) ->
+    {{SMod, SModOpts, 
+      [], none, % Host info
+      SPathTokens, [{zotonic_dispatch, SDispatchName},{zotonic_host, MatchedHost}|SBindings] ++ Bindings, 
+      SAppRoot, SStringPath}, 
+     ReqDataHost};
+handle_rewrite({ok, #dispatch_redirect{location=Location, is_permanent=IsPermanent}},
+               _DispReq, _MatchedHost, _NonMatchedPathTokens, _Bindings, ReqDataHost, Context) ->
+    AbsURI = z_context:abs_url(Location, Context),
+    {handled, redirect(IsPermanent, AbsURI, ReqDataHost)};
+handle_rewrite(undefined, _DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, _Context) ->
+    {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}.
+
+
+%% @doc Try to find a site which says it can handle the host.
+%%      This enables to have special (short) urls for deep pages.
+handle_no_host_match(DispReq, ReqData) ->
+    Sites = z_sites_manager:get_sites(),
+    DispHost = #dispatch_host{
+                    host=DispReq#dispatch.host,
+                    path=DispReq#dispatch.path,
+                    method=DispReq#dispatch.method,
+                    protocol=DispReq#dispatch.protocol
+                },
+    case first_site_match(Sites, DispHost, ReqData) of
+        no_host_match -> handle_dispatch_fallback(DispReq, ReqData);
+        Redirect-> handle_dispatch(Redirect, DispReq, ReqData)
+    end.
+
+
+%% @doc Try to find the fallback site (usually zotonic_status).
+handle_dispatch_fallback(DispReq, ReqData) ->
+    case get_fallback_site() of
+        undefined ->
+            {{no_dispatch_match, undefined, undefined}, ReqData};
+        Site ->
+            handle_dispatch(gen_server:call(?MODULE, {site_dispatch, Site, DispReq}), DispReq, ReqData)
+    end.
+
+
+first_site_match([], _DispHost, _ReqData) ->
+    no_host_match;
+first_site_match([Site|Sites], DispHost, ReqData) ->
+    case catch z_notifier:first(DispHost, z_context:new(Site)) of
+        {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
+            {redirect, Site, z_convert:to_list(PathOrURI), IsPermanent};
+        undefined ->
+            first_site_match(Sites, DispHost, ReqData);
+        Unexpected ->
+            lager:error("dispatch_host for ~p returned ~p on ~p", [Site, Unexpected, DispHost]),
+            first_site_match(Sites, DispHost, ReqData)
+    end.
+
 
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
@@ -258,9 +325,9 @@ fetch_dispatchinfo(Site) ->
     Name = z_utils:name_for_host(z_dispatcher, Site),
     {Host, Hostname, Streamhost, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
     #wm_host_dispatch_list{
-                            host=Host, hostname=Hostname, streamhost=Streamhost, smtphost=SmtpHost, hostalias=Hostalias,
-                            redirect=Redirect, dispatch_list=DispatchList
-                          }.
+        host=Host, hostname=Hostname, streamhost=Streamhost, smtphost=SmtpHost, hostalias=Hostalias,
+        redirect=Redirect, dispatch_list=DispatchList
+    }.
 
 
 %% @doc Redirect to another host name.
@@ -298,44 +365,38 @@ handle_host_for_domain(Domain, DispatchList) ->
     end.
 
 %% @doc Fetch the host and dispatch list for the request
-%% @spec get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
-get_host_dispatch_list(WMHost, DispatchList, Fallback, Method) ->
-    case DispatchList of
-        [#wm_host_dispatch_list{}|_] ->
-            {Host, _Port} = split_host(WMHost),
-            case get_dispatch_host(Host, DispatchList) of
-                {ok, DL} ->
-                    {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list};
+%% @spec get_host_dispatch_list(WMHost, DispatchList, Method) -> {ok, Host::atom(), DispatchList::list()} | {redirect, Hostname::string()} | no_host_match
+get_host_dispatch_list(WMHost, [#wm_host_dispatch_list{}|_] = DispatchList, Method) ->
+    {Host, _Port} = split_host(WMHost),
+    case get_dispatch_host(Host, DispatchList) of
+        {ok, DL} ->
+            {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list};
 
+        undefined ->
+            case get_dispatch_alias(Host, DispatchList) of
+                {ok, DL} ->
+                    case DL#wm_host_dispatch_list.redirect 
+                        andalso is_hostname(DL#wm_host_dispatch_list.hostname) 
+                        andalso Method =:= 'GET' 
+                    of
+                        true ->
+                            {redirect, DL#wm_host_dispatch_list.host};
+                        false ->
+                            {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
+                    end;
                 undefined ->
-                    FoundHost = case get_dispatch_alias(Host, DispatchList) of
-                                    {ok, _} = Found -> Found;
-                                    undefined -> get_dispatch_fallback(DispatchList, Fallback)
-                                end,
-                    case FoundHost of
-                        {ok, DL} ->
-                            case DL#wm_host_dispatch_list.redirect 
-                                andalso is_hostname(DL#wm_host_dispatch_list.hostname) 
-                                andalso Method =:= 'GET' 
-                            of
-                                true ->
-                                    {redirect, DL#wm_host_dispatch_list.host};
-                                false ->
-                                    {ok, DL#wm_host_dispatch_list.host, DL#wm_host_dispatch_list.dispatch_list}
-                            end;
-                        undefined ->
-                            %% Always fallback to the zotonic_status site
-                            zotonic_status
-                    end
-            end;
-        _ ->
-            {ok, Fallback, DispatchList} 
-    end.
+                    no_host_match
+            end
+    end;
+get_host_dispatch_list(_WMHost, _DispatchList, _Method) ->
+    no_host_match.
 
 
 split_host(Host) ->
     case Host of
-        H when H =:= undefined; H =:= []; H =:= none -> 
+        undefined -> 
+            {"", "80"};
+        [] -> 
             {"", "80"};
         _ -> 
             % Split the optional port number from the host name
@@ -378,16 +439,6 @@ get_dispatch_alias(Host, [#wm_host_dispatch_list{hostalias=Alias} = DL|Rest]) ->
         true  -> {ok, DL};
         false -> get_dispatch_alias(Host, Rest)
     end.
-
-
-%% @doc Retrieve the dispatch list of the fallback site for unknown hostnames.
-get_dispatch_fallback([], _FallbackHost) ->
-    undefined;
-get_dispatch_fallback([#wm_host_dispatch_list{host=FallbackHost} = DL|_], FallbackHost) ->
-    {ok, DL};
-get_dispatch_fallback([_|Rest], FallbackHost) ->
-    get_dispatch_fallback(Rest, FallbackHost).
-
 
 %% @doc Check if the hostname is a hostname suitable to redirect to
 is_hostname(undefined) -> false;
@@ -523,13 +574,13 @@ try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, 
                 undefined when Protocol =/= http ->
                     {Host1, HostPort} = split_host(z_context:hostname_port(Context)),
                     Host2 = add_port(http, Host1, HostPort),
-                    {redirect, "http", Host2};
+                    {redirect_protocol, "http", Host2};
 
                 % Force switch to other (eg. https) protocol
                 {NewProtocol, NewPort} when NewProtocol =/= Protocol ->
                     {Host1, _Port} = split_host(HostAsString),
                     Host2 = add_port(NewProtocol, Host1, NewPort),
-                    {redirect, z_convert:to_list(NewProtocol), Host2};
+                    {redirect_protocol, z_convert:to_list(NewProtocol), Host2};
 
                 % 'keep' or correct protocol
                 _ ->
