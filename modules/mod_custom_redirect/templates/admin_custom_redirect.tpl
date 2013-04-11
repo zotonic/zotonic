@@ -46,7 +46,7 @@
                     </label>
                 </td>
                 <td>
-                    <button class="btn delete">{_ Delete _}</button>
+                    <a href="#delete" class="btn delete">{_ Delete _}</a>
                 </td>
             </tr>
             {% endfor %}
@@ -68,7 +68,7 @@
                     </label>
                </td>
                 <td>
-                    <button class="btn delete">{_ Delete _}</button>
+                    <a href="#delete" class="btn delete">{_ Delete _}</a>
                 </td>
             </tr>
             <tr id="template" style="display: none">
@@ -89,14 +89,14 @@
                     </label>
                </td>
                 <td>
-                    <button class="btn delete">{_ Delete _}</button>
+                    <a href="#delete" class="btn delete">{_ Delete _}</a>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <div class="form-actions">
-        <button class="btn btn-primary">{_ Save _}</button>
+        <button type="submit" class="btn btn-primary">{_ Save _}</button>
         <a id="{{ #cancel }}" class="btn">{_ Cancel _}</a>
         {% wire id=#cancel action={reload} %}
     </div>
