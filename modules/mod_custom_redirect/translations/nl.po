@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-04-11 14:07+0200\n"
+"PO-Revision-Date: 2013-04-11 14:07+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid ""
+"Domains and redirects"
+msgstr "Domeinnamen en doorverwijzingen"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:25 
+msgid ""
+"Actions"
+msgstr "Acties"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:3 
+msgid ""
+"Admin Custom Redirects"
+msgstr "Beheer verwijzigingen"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:100 
+msgid ""
+"Cancel"
+msgstr "Annuleren"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:49 ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:71 ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:92 
+msgid ""
+"Delete"
+msgstr "Verwijderen"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:21 
+msgid ""
+"Domain"
+msgstr "Domeinnaam"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:7 ./modules/mod_custom_redirect/mod_custom_redirect.erl:59 
+msgid ""
+"Domains and redirects"
+msgstr "Domeinnamen en doorverwijzingen"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:22 
+msgid ""
+"Path"
+msgstr "Pad"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:24 ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:45 ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:67 ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:88 
+msgid ""
+"Permanent"
+msgstr "Permanent"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:23 
+msgid ""
+"Redirect to"
+msgstr "Stuur door naar"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:8 
+msgid ""
+"Redirect unknown domains and paths to known pages or locations."
+msgstr "Stuur onbekende domeinnamen en paden door naar bekende paden en adressen."
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:99 
+msgid ""
+"Save"
+msgstr "Opslaan"
+
+#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:9 
+msgid ""
+"The new location can be a local path or a complete URL. Leave the host "
+"empty for redirects within this site."
+msgstr "Het doorstuuradres kan een lokaal pad zijn of een volledig web adres. Laat de host leeg voor verwijzingen binnen de website."

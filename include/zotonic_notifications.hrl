@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2013 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,12 +16,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+%% @doc Try to find the site for the request z_notifier:first/2
+%%		Called when the request Host doesn't match any active site.
+%%		Result:   {ok, #dispatch_redirect{}}
+%%				| undefined.
+-record(dispatch_host, {host, path=[], method='GET', protocol=http}).
+
 %% @doc Final try for dispatch, try to match the request. Called with z_notifier:first/2
+%%		Called when the site is known, but no match is found for the path
 %%      Result:   {ok, RscId::integer()} 
 %%              | {ok, #dispatch_match{}} 
 %%              | {ok, #dispatch_redirect{}}
 %%              | undefined.
--record(dispatch, {host, path=[], method='GET', protocol=http}).
+-record(dispatch, {host, path="", method='GET', protocol=http}).
     
     -record(dispatch_redirect, {location, is_permanent=false}).
     -record(dispatch_match, {dispatch_name, mod, mod_opts=[], path_tokens=[], bindings=[], app_root="", string_path=""}).
