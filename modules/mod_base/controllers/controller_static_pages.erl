@@ -173,7 +173,7 @@ provide_content(ReqData, State) ->
                             %% Render template, prevent caching
                             Context = z_context:set_reqdata(ReqData, State#state.context),
                             Context1 = z_context:ensure_all(Context),
-                            Html = z_template:render(FullPath, State#state.config, Context1),
+                            Html = z_template:render({abs, FullPath}, State#state.config, Context1),
                             {Html1, Context2} = z_context:output(Html, Context1),
                             ReqData1 = z_context:get_reqdata(Context2),
                             State1 = State#state{context=Context2, use_cache=false, encode_data=false},
