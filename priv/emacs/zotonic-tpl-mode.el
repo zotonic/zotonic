@@ -229,11 +229,11 @@
      ))
    (cons
     ;; find next {{ ... }} tag (notice: we need to keep the captures in sync)
-    "\\({{\\)\\( *\\)\\([^}]\\|\n\\|\\(}[^}]\\)\\)*\\(}}\\)"
-    ;; captures: 1. {{  2. dummy (leading space) 3-4. tag contents  5. }}
+    "\\({{\\)\\(\\(?:.\\|\n\\)*?\\)\\(}}\\)"
+    ;; captures: 1. {{  2. tag contents  3. }}
     (list
      '(1 font-lock-constant-face)
-     '(5 font-lock-constant-face)
+     '(3 font-lock-constant-face)
      zotonic-tpl-filters-matcher
      zotonic-tpl-lookup-matcher
      zotonic-tpl-index-matcher
