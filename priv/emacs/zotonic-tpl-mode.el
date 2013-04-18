@@ -214,7 +214,7 @@
     ;; find next {% ... %} tag (notice: we need to keep the captures in sync)
     (concat
      "\\({%\\) *" zotonic-tpl-identifer-re ; open tag followed by identifier
-     "\\([^%]\\|\n\\|\\(?:%[^}]\\)\\)*\\(%}\\)") ; skip tag contents up to close
+     "\\(\\(?:.\\|\n\\)*?\\)\\(%}\\)") ; skip tag contents up to close
     ;; captures: 1. {%  2. tag/keyword 3. tag contents  4. %}
     (list
      '(1 font-lock-constant-face)

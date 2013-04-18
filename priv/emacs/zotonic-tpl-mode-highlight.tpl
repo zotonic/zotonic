@@ -12,6 +12,8 @@
 <script src="http://example.com/dummy.js"></script>
 
 Check: that both the opening and closing script tags above are
-       highlighted the same.
+highlighted the same.
 
-2.
+2. Highlight tag in spite of dot in tag contents
+
+{% extends "foo.tpl" %}
