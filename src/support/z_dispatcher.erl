@@ -218,8 +218,10 @@ drop_port(undefined) ->
     undefined;
 drop_port(none) ->
     undefined;
+drop_port(Hostname) when is_list(Hostname) ->
+    hd(string:tokens(Hostname, ":"));
 drop_port(Hostname) ->
-    hd(string:tokens(Hostname, ":")).
+    drop_port(z_convert:to_list(Hostname)).
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
