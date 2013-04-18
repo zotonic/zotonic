@@ -326,7 +326,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 %% @doc Recompile and reload an Erlang file.
 recompile_file(File) ->
-    Module = list_to_existing_atom(filename:basename(File, ".erl")),
+    Module = list_to_atom(filename:basename(File, ".erl")),
 
     do_observe_fun(Module, fun z_module_manager:remove_observers/3),
     
