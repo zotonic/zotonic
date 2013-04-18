@@ -188,7 +188,7 @@ handle_call({restart_child, Name}, _From, State) ->
 %% @doc Return a full list of all children
 handle_call(which_children, _From, State) ->
     F = fun(C) ->
-        {C#child_state.name, #child_state.child, C#child_state.pid, C#child_state.time} 
+        {C#child_state.name, C#child_state.child, C#child_state.pid, C#child_state.time}
     end,
     {reply, [
             {waiting, [ F(C) || C <- State#state.waiting]},
