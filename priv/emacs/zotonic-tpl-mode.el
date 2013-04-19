@@ -371,12 +371,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
       ;; if we're looking at the indentation, jump to it
       ;; in case of tabs, movement by 1 char != 1 column
       (while (not (eq indent (current-column)))
-        (forward-char (- indent (current-column))))
-      ;; if the line is empty, leave it empty
-      (if (eolp)
-          (progn
-            (indent-line-to 0)
-            (setq indent 0))))
+        (forward-char (- indent (current-column)))))
     indent))
 
 (defun zotonic-tpl-indent-buffer ()
