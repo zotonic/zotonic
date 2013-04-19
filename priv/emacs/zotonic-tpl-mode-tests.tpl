@@ -105,6 +105,11 @@ outside...
     form widget...
 </div>
 
+11. tag soup tend to be surrounded by ordinary text
+Like this <strong>interesting</strong> word,
+should not indent the following line.
+
+
 
 {# Don't add tests below this point... #}
 {# The test results are updated automatically by the test routine #}
