@@ -121,7 +121,17 @@ The following options can be configured:
   The domain the Zotonic session-id and page-id cookies will be set
   on. Defaults to the main hostname.
 
-  
+.. versionadded:: 0.10
+
+``{installer, <module>}``
+  Override the default zotonic installer (``z_installer``). ``<module>`` should
+  make sure that the database, if used, is setup properly along with any
+  required data. Note that it is ``z_installer`` that is processing the
+  ``install_modules`` and ``install_menu`` options, so if this module is not used
+  then those menus and modules will not be installed unless the new module
+  performs those operations.
+
+
 Database connection options
 ...........................
 
