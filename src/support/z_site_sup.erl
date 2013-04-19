@@ -61,8 +61,9 @@ init(Host) ->
                 permanent, 5000, worker, dynamic},
 
     % The installer needs the database pool, depcache and translation.
+    InstallerModule = proplists:get_value(installer, SiteProps, z_installer),
     Installer = {z_installer,
-                {z_installer, start_link, [SiteProps]},
+                {InstallerModule, start_link, [SiteProps]},
                 permanent, 1, worker, dynamic},
 
     % Continue with the normal per-site servers
