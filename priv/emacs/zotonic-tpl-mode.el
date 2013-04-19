@@ -437,10 +437,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
       ;; template block tags (those that has matching pairs)
       ;; like block .. endblock or if .. endif, etc.
       (let ((start (point))
-            (indent (current-column))
-            (end (save-excursion ;progn
-                   (end-of-line)
-                   (point))))
+            (indent (current-column)))
 
         ;; look for ending multiline soup tag
         (if (looking-at-p ">")
@@ -460,7 +457,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
              (setq indent (+ indent tab-width))
              (forward-char)
              ;; skip over tpl tag contents
-             (if (not (zotonic-tpl-next-tag-boundary end))
+             (if (not (zotonic-tpl-next-tag-boundary (point-at-eol)))
                  (end-of-line))
              nil)
 
@@ -473,7 +470,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
              (unless (eq start (point))
                (setq indent (- indent tab-width)))
              (forward-char)
-             (if (not (zotonic-tpl-next-tag-boundary end))
+             (if (not (zotonic-tpl-next-tag-boundary (point-at-eol)))
                  (end-of-line))
              nil)
 
@@ -481,7 +478,7 @@ looking at lines going in OFFSET direction. -1 or 1 is sensible offset values."
            (if (not (looking-at-p "{%"))
                t
              (forward-char)
-             (if (not (zotonic-tpl-next-tag-boundary end))
+             (if (not (zotonic-tpl-next-tag-boundary (point-at-eol)))
                  (end-of-line))
              nil)
 
@@ -540,6 +537,17 @@ Returns the column the line was indented to."
       indent)
     ))
 
+(defun zotonic-tpl-tag-soup-complete (string)
+  "Complete tag soup at point"
+  (save-excursion
+    (if (and
+         (string= string "</")
+         (re-search-backward
+          "<\\(\\w+\\)\\(?:[^/>]\\|\\(?:/[^>]\\)\\|\n\\)*>"
+          (point-min) t))
+        (match-string 1)
+      nil)))
+
 ;;;
 ;;; Test routines
 ;;;
@@ -555,7 +563,9 @@ Returns the column the line was indented to."
           (actual (zotonic-tpl-indent-line)))
       (if (equal expect actual) t
         ;; restore indentation on mismatch
-        (indent-line-to expect) nil))))
+        (indent-line-to expect)
+        ;; edge case for empty lines
+        (equal (point-at-bol) (point-at-eol))))))
 
 (defun zotonic-tpl-test-report-error (prefix)
   "Returns a formatted error message with PREFIX."
@@ -616,6 +626,14 @@ Returns the column the line was indented to."
 ;;; Define zotonic major mode
 ;;;
 
+(defun zotonic-tpl-post-insert ()
+  "Hook function to do special processing on input."
+  (if (looking-back "</")
+      (pcase (zotonic-tpl-tag-soup-complete "</")
+        (`nil)
+        (tag (insert tag) (skip-chars-forward ">"))))
+  (zotonic-tpl-indent-line))
+
 (defvar zotonic-tpl-font-lock-defaults
   (list
    (append
@@ -646,6 +664,7 @@ Keys defined in this mode are:
   (setq font-lock-extend-region-functions
         (append font-lock-extend-region-functions
                 '(zotonic-tpl-font-lock-extend-region)))
+  (add-hook 'post-self-insert-hook 'zotonic-tpl-post-insert)
   )
 
 (provide 'zotonic-tpl-mode)
