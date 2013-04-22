@@ -1,4 +1,3 @@
-
 .. include:: meta-menu.rst
 
 Show a page menu.
@@ -35,7 +34,7 @@ The menu has the following features:
 * The class of the menu is always "clearfix at-menu do_superfish"
 * Menu items are a <li> with a single <a>
 * The first and last <li> are given the respective classes "first" and "last".
-* The link of the menu item referring to the current page has the class "current"
+* The link of the menu item referring to the current page has the class "active"
 * Every link also gets the unique name of the target as a class.
 * Every menu item can have single level submenus.  A submenu has the same properties as the menu.
 
