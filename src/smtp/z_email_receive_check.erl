@@ -111,11 +111,11 @@ is_bounce(Type, Headers) ->
 is_from_daemon(Headers) ->
     contains(lists:keyfind(<<"From">>, 1, Headers), <<"mailer-daemon">>).
 
-is_multipart_report(Headers) ->
-    case lists:keyfind(<<"Content-Type">>, 1, Headers) of
-        false -> false;
-        {_, <<"multipart/report", _/binary>>} -> true
-    end.
+% is_multipart_report(Headers) ->
+%     case lists:keyfind(<<"Content-Type">>, 1, Headers) of
+%         false -> false;
+%         {_, <<"multipart/report", _/binary>>} -> true
+%     end.
 
 is_delivery_status(Headers) ->
     case lists:keyfind(<<"Subject">>, 1, Headers) of
@@ -176,7 +176,7 @@ is_nonfatal_status({<<"multipart">>,<<"report">>}, Parts) ->
     case Status of
         [Body|_] ->
             Body1 = binary:replace(Body, <<"\r\n\r\n">>, <<"\r\n">>, [global]), 
-            Hs = mochiweb_headers:to_list(mochiweb_headers:decode(<<Body1/binary, "\r\n\r\n">>)),
+            Hs = mochiweb_headers:to_list(mochiweb_headers:from_binary(<<Body1/binary, "\r\n\r\n">>)),
                    is_action_delayed(Hs)
             orelse is_nonfatal_diagnostic(Hs)
             orelse is_nonfatal_code(Hs);
@@ -188,20 +188,15 @@ is_nonfatal_status(_Type, _Parts) ->
 
 
 is_action_delayed(Hs) ->
-    case proplists:get_value(<<"Action">>, Hs) of
+    case z_convert:to_binary(proplists:get_value("Action", Hs)) of
         <<"Delay", _/binary>> -> true;
         <<"delay", _/binary>> -> true;
         <<"DELAY", _/binary>> -> true;
         _ -> false
     end.
 
-is_nonfatal_diagnostic(Hs) ->
-    case get_diagnostic(Hs) of
-        undefined -> true
-    end.
-
 get_diagnostic(Hs) ->
-    case proplists:get_value(<<"Diagnostic-Code">>, Hs) of
+    case z_convert:to_binary(proplists:get_value("Diagnostic-Code", Hs)) of
         <<"smtp;  ", C/binary>> -> C;
         <<"smtp; ", C/binary>> -> C;
         <<"smtp;", C/binary>> -> C;
@@ -211,9 +206,17 @@ get_diagnostic(Hs) ->
         C -> C
     end.
 
+is_nonfatal_diagnostic(Hs) ->
+    case get_diagnostic(Hs) of
+        undefined -> true;
+        <<"2", _/binary>> -> true;
+        <<"4", _/binary>> -> true;
+        _ -> false
+    end.
+
 % http://www.iana.org/assignments/smtp-enhanced-status-codes/smtp-enhanced-status-codes.xml
 is_nonfatal_code(Hs) ->
-    case proplists:get_value(<<"Status">>, Hs) of
+    case z_convert:to_binary(proplists:get_value(<<"Status">>, Hs)) of
         <<"2.", _/binary>> -> true;
         <<"4.", _/binary>> -> true;
         _ -> false
