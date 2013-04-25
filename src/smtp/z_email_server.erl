@@ -52,8 +52,8 @@
                 smtp_verp_as_from, smtp_bcc, override, 
                 smtp_spamd_ip, smtp_spamd_port, sending=[],
                 delete_sent_after}).
--record(email_queue, {id, retry_on=inc_timestamp(now(), 1), retry=0, 
-                      recipient, email, created=now(), sent, 
+-record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0, 
+                      recipient, email, created=os:timestamp(), sent, 
                       pickled_context}).
 
 %%====================================================================
@@ -356,7 +356,8 @@ send_email(Id, Recipient, Email, Context, State) ->
     QEmail = #email_queue{id=Id,
                           recipient=Recipient,
                           email=Email,
-                          retry_on=inc_timestamp(now(), 0),
+                          retry_on=inc_timestamp(os:timestamp(), 0),
+                          sent=undefined,
                           pickled_context=z_context:pickle(Context)},
     QEmailTransFun = fun() -> mnesia:write(QEmail) end,
     {atomic, ok} = mnesia:transaction(QEmailTransFun),        
@@ -782,12 +783,13 @@ set_render_language(Vars, Context) ->
 %%      This will schedule it for deletion as well.
 mark_sent(Id) ->
     Tr = fun() ->
-                 [QEmail] = mnesia:read(email_queue, Id),
-                 SentTS = now(),
-                 mnesia:write(QEmail#email_queue{sent=SentTS})
+                 case mnesia:read(email_queue, Id) of
+                    [QEmail] -> mnesia:write(QEmail#email_queue{sent=os:timestamp()});
+                    [] -> {error, notfound}
+                end
          end,
-    {atomic, SentTimestamp} = mnesia:transaction(Tr),
-    SentTimestamp.
+    {atomic, Result} = mnesia:transaction(Tr),
+    Result.
 
 %% @doc Deletes a message from the queue.
 delete_emailq(Id) ->
@@ -806,10 +808,10 @@ delete_emailq(Id) ->
 poll_queued(State) ->
 
     %% delete sent messages
-    Now = now(),
+    Now = os:timestamp(),
     DelTransFun = fun() -> 
                           DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                                      QEmail#email_queue.sent /= undefined andalso
+                                                      QEmail#email_queue.sent =/= undefined andalso
                                                         timer:now_diff(
                                                             inc_timestamp(QEmail#email_queue.sent, State#state.delete_sent_after),
                                                             Now) < 0
@@ -830,7 +832,7 @@ poll_queued(State) ->
     %% delete all messages with too high retry count
     SetFailTransFun = fun() ->
                               PollQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                                 QEmail#email_queue.sent == undefined,
+                                                 QEmail#email_queue.sent =:= undefined,
                                                  QEmail#email_queue.retry > ?MAX_RETRY]),
                               PollQueryRes = qlc:e(PollQuery),
                               [ begin
@@ -853,9 +855,9 @@ poll_queued(State) ->
                 fun() ->
                         Q = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
                                    %% Should not already have been sent
-                                   QEmail#email_queue.sent == undefined,
+                                   QEmail#email_queue.sent =:= undefined,
                                    %% Should not be currently sending
-                                   proplists:get_value(QEmail#email_queue.id, State#state.sending) == undefined,
+                                   proplists:get_value(QEmail#email_queue.id, State#state.sending) =:= undefined,
                                    %% Eligible for retry
                                    timer:now_diff(QEmail#email_queue.retry_on, Now) < 0]),
                         QCursor = qlc:cursor(Q),
@@ -891,7 +893,7 @@ update_retry(QEmail=#email_queue{retry=Retry}) ->
     Period = period(Retry),
     Tr = fun()->
                  mnesia:write(QEmail#email_queue{retry=Retry+1,
-                                                 retry_on=inc_timestamp(now(), Period)})
+                                                 retry_on=inc_timestamp(os:timestamp(), Period)})
          end,
     mnesia:transaction(Tr).
 
@@ -905,7 +907,7 @@ period(_) -> 7 * 24 * 60.       % Retry every week for extreme cases
     
 
 %% @doc Increases a timestamp (as returned by now/0) with a value provided in minutes
-inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) ->
+inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) when is_integer(MinToAdd) ->
     Sec2 = Sec + (MinToAdd * 60),
     Sec3 = Sec2 rem 1000000,
     MegaSec2 = MegaSec + Sec2 div 1000000,
