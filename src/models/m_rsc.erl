@@ -158,9 +158,10 @@ name_to_id_cat_check(Name, Cat, Context) ->
 
 page_path_to_id(Path, Context) ->
     Path1 = [ $/, string:strip(Path, both, $/)],
-    case z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
+    case catch z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
+        Id when is_integer(Id) -> {ok, Id};
         undefined -> {error, {unknown_page_path, Path1}};
-        Id -> {ok, Id}
+        Other -> {error, {illegal_page_path, Path1, Other}}
     end.
 
 
