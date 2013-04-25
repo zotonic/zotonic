@@ -394,10 +394,9 @@ get_host_dispatch_list(_WMHost, _DispatchList, _Method) ->
 
 split_host(Host) ->
     case Host of
-        undefined -> 
-            {"", "80"};
-        [] -> 
-            {"", "80"};
+        undefined -> {"", "80"};
+        none -> {"", "80"};
+        [] -> {"", "80"};
         _ -> 
             % Split the optional port number from the host name
             [H|Rest] = string:tokens(string:to_lower(Host), ":"),
