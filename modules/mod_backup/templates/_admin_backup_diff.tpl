@@ -28,11 +28,13 @@
 	</tr>
 {% with b.id as has_diff %}
 {% for k,a,b in diff %}
+{% if not k|member:[`modifier_id`, `modified`, `version`] %}
 	<tr {% if has_diff %}class="do_make_diff"{% endif %}>
 		<th>{{ k }}</th>
  		<td>{{ a }}</td>
 		<td>{{ b }}</td>
 	</tr>
+{% endif %}
 {% endfor %}
 {% endwith %}
 </table>
