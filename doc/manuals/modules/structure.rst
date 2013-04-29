@@ -44,16 +44,16 @@ priority are checked first for templates, actions, custom tags,
 etc. Modules with the same priority are sorted by ascending module
 name.
 
-When you need to execute code when the module starts, you can export
-an optional ``init/1`` function. This function will be called when the
-module is started. The parameter is a context record initialized for
-the site the module will be running in. This is useful when you need
-to initialize the database or other data structures for which you don’t 
-need a running process. When you also need to execute code when a module 
-stops you can export an optional ``terminate/2`` function. This function 
-will be called when the module terminates. The first parameter is a 
-Reason parameter which indicates why the module stopped. The second a 
-context record similar to the one in the ``init/1`` function. 
+In cases where you need to execute code when the module starts, you
+can export an optional ``init/1`` function. The parameter is a context
+record initialized for the site the module will be running in. This is
+useful when you need to initialize the database or other data
+structures for which you don’t need a running process. When you also
+need to execute code when a module stops you can export an optional
+``terminate/2`` function. This function will be called when the module
+terminates. The first parameter is a Reason parameter which indicates
+why the module stopped. The second a context record similar to the one
+in the ``init/1`` function.
 
 When you do need a running process, read about those in the next
 topic, :ref:`manual-modules-gen_server`.
@@ -82,7 +82,7 @@ dispatch/
 .........
 
 This directory contains files with :ref:`dispatch rules
-<manual-dispatch>`. You can name your files like you want, though
+<manual-dispatch>`. You can name your files however you want, just
 don't give them the extension ``.erl``, because then the Makefile will
 try to compile them.
 
@@ -187,7 +187,7 @@ This directory holds Erlang modules, each of which defines a
 
 Validators are prefixed in the same way as actions and scomps, except
 that the word “validator” is used. For example the validator “email”
-in the module “mod_base” has as file name: “validator_base_email.erl”
+in the module “mod_base” has the file name: “validator_base_email.erl”
 
 .. seealso:: :ref:`manual-validators`
 
