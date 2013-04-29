@@ -3,12 +3,12 @@
 Anatomy of a site
 =================
 
-Zotonic has the capability of serving more than one site at the same
-time. You can have multiple sites enabled, each which have their own
-set of templates, has its own database and its own URL dispatch rules.
+Zotonic has the capability of serving more than one site at a
+time. You can have multiple sites enabled, each with its own set of
+templates, database and URL dispatch rules.
 
 A Zotonic site is defined as a folder which lives in the priv/sites
-directory of the zotonic installation (or on a location which is
+directory of the zotonic installation (or in a location which is
 symlinked to this folder, see the tip below).
 
 A site's folder contains at least the following:
@@ -21,9 +21,9 @@ simple Erlang atom: it should be lowercase and only contain letters,
 numbers and the underscore character.
 
 Internally, sites are treated no different from a :ref:`Zotonic module
-<manual-module-structure>`, in fact, they function in an identical
-way, and, as such, can contain all kinds of resources (templates,
-dispatch rules, etc) that a normal module also has. The only
+<manual-module-structure>`. In fact, they function in an identical
+way, and as such, can contain all kinds of resources (templates,
+dispatch rules, etc.) that a normal module also has. The only
 difference is that site names do not need to be prefixed with `mod_`
 and sites have an extra ``config`` file in their base directory. A
 site's ``mod_prio`` metadata attribute is usually set to ``1``, to
