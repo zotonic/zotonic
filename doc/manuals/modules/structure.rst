@@ -61,7 +61,7 @@ topic, :ref:`manual-modules-gen_server`.
 Module subdirectories
 ---------------------
 
-Besides the module code file, a module ususally has one or more
+Besides the module code file, a module usually has one or more
 subdirectories. These are specially named; different parts of Zotonic
 scan through different folders.
 
@@ -123,7 +123,7 @@ This directory contains Erlang modules which define controllers which
 are called from the dispatch system to handle incoming HTTP requests.
 
 Controllers must have unique names, as they are compiled and loaded in
-the Erlang system. The convenstion is to prefix every controller with
+the Erlang system. The convention is to prefix every controller with
 ``controller_`` and the name of the module, for example
 ``controller_admin_edit.erl``.
 
