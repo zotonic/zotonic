@@ -33,8 +33,8 @@ The code of the smallest possible module is below::
 
 In this case, the module code only consists of some metadata
 properties, there is no real code in there. This is fine for a lot of
-modules: since Zotonic already provides so much functions, often it is
-not needed to write custom code.
+modules: since Zotonic already provides so many functions, there is
+often little need to write custom code.
 
 The `mod_title` and `mod_description` properties describe your module
 in natural language: these properties will be visible on the admin
