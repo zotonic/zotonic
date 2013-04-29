@@ -13,7 +13,7 @@ internal Zotonic events. Good examples are the modules extending the
 :ref:`mod_admin`.
 
 A module is a directory containing the module's Erlang code,
-:ref:`controllers <manual-templates>`, :ref:`controllers
+:ref:`templates <manual-templates>`, :ref:`controllers
 <manual-controllers>`, :ref:`dispatch rules <manual-dispatch>` and
 more, all contained in a single module directory tree.
 
