@@ -10,9 +10,9 @@ between a traditional database and a triple store.
 
 The data model has two main concepts: the :term:`resource` and the :term:`edge`.
 
-Resources, in the admin often called `pages`, are the main data unit:
-they have properties like title, summary, body text; and, important,
-they belong to a certain :term:`category`.
+Resources, which are often called `pages` in the admin, are the main
+data unit: they have properties like title, summary, body text; and
+importantly, they belong to a certain :term:`category`.
 
 Edges are nothing more than connections between two resources. Each
 edge is labeled, with a so-called :term:`predicate`.
