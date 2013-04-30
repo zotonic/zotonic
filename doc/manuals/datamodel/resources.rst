@@ -15,7 +15,7 @@ id, version number, unique name, unique path, unique uri and
 publication period. For a full listing of its properties, see the
 :ref:`model-rsc` page.
 
-Resource properties can also be customly defined: any property that is
+Custom resource properties can also be defined: any property that is
 programmatically set on the resource, is stored in serialized form in
 the record, and can later be retrieved.
 
@@ -34,8 +34,8 @@ news item, a video or something else. The only difference is the
 categories and predicates themselves are represented as rsc records
 and can, subsequently, have their own page on the web site.
 
-Categories are organised in a hierarchical fashion, and is used to
-organise the resources into meaningful groups. Zotonic has a standard
+Categories are organized in a hierarchical fashion, and is used to
+org anise the resources into meaningful groups. Zotonic has a standard
 set of categories (see :ref:`manual-datamodel-domainmodel`, but it is
 very usual to define your own in your own site, resulting in a custom
 :term:`domain model`.
