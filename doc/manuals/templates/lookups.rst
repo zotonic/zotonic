@@ -57,7 +57,7 @@ The module priority is a very powerful mechanism for extending and adapting Zoto
 
 But what if a page requested with a mobile phone should be served with a different template than the same page requested with a desktop computer?
 
-For this there is another template selection mechanism, based on the categorisation of the device requesting the page.
+For this there is another template selection mechanism, based on the categorization of the device requesting the page.
 
 User agent classes
 ------------------
@@ -108,8 +108,8 @@ The user agent class and the module priority are two dimensions of the template 
 
 The module priority is more important than the user agent class.
 
-A mismatch in user agent class (eg. a desktop template when looking for a phone version) will never be selected.
-A sub-optimal version (eg. a generic or text version instead of phone version) will be selected if that sub-optimal version resides in a module with higher priority than the module with the better matching version.
+A mismatch in user agent class (e.g. a desktop template when looking for a phone version) will never be selected.
+A sub-optimal version (e.g. a generic or text version instead of phone version) will be selected if that sub-optimal version resides in a module with higher priority than the module with the better matching version.
 
 The *all include* tag will select the best version from all modules. Again skipping any user agent mismatches.
 
