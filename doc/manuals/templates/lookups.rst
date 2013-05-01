@@ -17,16 +17,17 @@ The above are referred to as ``foobar.tpl`` and
 ``email/email_base.tpl``.  Just ``email_base.tpl`` will not find the
 email template.
 
-All templates of all modules are grouped together, regardless in which
-module they are defined and the module name is never given as part of
+All templates of all modules are grouped together, regardless of which
+module they are defined in. The module name is never given as part of
 the template name.
 
 
 Module priority and overriding templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Similar named templates can be defined in multiple modules.  Which
-template is selected depends on the priority of the module.
+Templates with the same filename can be defined in multiple
+modules. The actual template which is selected depends on the priority
+of the module.
 
 The :dfn:`module priority` is a number defined in the module’s code
 and is usually a number between 1 and 1000.  A lower number gives a
@@ -135,7 +136,7 @@ The module priority is more important than the user agent class.
 
 A mismatch in user agent class (e.g. a desktop template when looking
 for a phone version) will never be selected.  A sub-optimal version
-(e.g. a generic or text version instead of phone version) will be
+(e.g. a generic or text version instead of a phone version) will be
 selected if that sub-optimal version resides in a module with higher
 priority than the module with the better matching version.
 
@@ -156,10 +157,10 @@ modules. Again skipping any user agent mismatches.
 
 .. note:: Seeing which template is selected.
 
-    The `mod_development` implements a screen where it is possible to
-    see in real time which templates are included and compiled. The
-    full path of all templates can be seen, giving insight in the
-    template selection process.
+    `mod_development` implements a screen where it is possible to see
+    in real time which templates are included and compiled. The full
+    path of all templates can be seen, giving insight in the template
+    selection process.
 
     See also :ref:`mod_development`
 
