@@ -35,7 +35,7 @@ categories and predicates themselves are represented as rsc records
 and can, subsequently, have their own page on the web site.
 
 Categories are organized in a hierarchical fashion, and is used to
-organise the resources into meaningful groups. Zotonic has a standard
+organize the resources into meaningful groups. Zotonic has a standard
 set of categories (see :ref:`manual-datamodel-domainmodel`, but it is
 very usual to define your own in your own site, resulting in a custom
 :term:`domain model`.
