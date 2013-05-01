@@ -32,7 +32,7 @@ Next, you need to tell Zotonic which languages you are going to use.
 You can do this in the /admin, following the `Translation` menu item
 in the `Structure` submenu.
 
-On this page you can add and remove languages, enabled/disable
+On this page you can add and remove languages, enable/disable
 languages and more. Note that a language is always identified by its
 two letter `ISO639-1 language code
 <http://nl.wikipedia.org/wiki/Lijst_van_ISO_639-1-codes>`_.
@@ -45,7 +45,7 @@ The fixed texts in a Zotonic website are translated using the `GNU
 gettext <http://www.gnu.org/software/gettext/>` ``.po`` file format and
 its related tools.
 
-In Zotonic, static translations are organised in each Zotonic
+In Zotonic, static translations are organized in each Zotonic
 module. It is the module's responsibility to provide translations for
 all the texts that it uses in its templates. All files related to
 static translations live inside the ``translations/`` subdirectory of
@@ -75,9 +75,9 @@ file which is located in the ``template/`` subdirectory of the translations
 directory. This ``.pot`` file is regenerated when you click on the `generate
 .pot files` button on the Translation page in the admin.
 
-After clicking generate .pot files Zotonic will parse all your
-templates and Erlang modules for translatable strings. These strings are
-then added to the .pot file.
+After clicking generate .pot files, Zotonic will parse all your
+templates and Erlang modules for translatable strings. These strings
+are then added to the .pot file.
 
 Creating a new translation for a module
 .......................................
@@ -104,8 +104,8 @@ The `Translation status` page in the admin gives an overview, per
 module / language combination, of the amount of strings that are
 translated for each language.
 
-When pressing the `Generate .pot files` button in the translation
-admin, the ``.pot`` files are updated, but the existing ``.po`` files
+After pressing the `Generate .pot files` button in the translation
+admin the ``.pot`` files are updated, but the existing ``.po`` files
 are not.
 
 GNU gettext comes with a tool, ``msgmerge``, which looks at the
