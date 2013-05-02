@@ -91,6 +91,10 @@ m_find_value(ListId, #m{value=subscription} = M, _Context) ->
    M#m{value={subscription, ListId}};
 m_find_value(Email, #m{value={subscription, ListId}}, Context) ->
    recipient_get(ListId, Email, Context);
+m_find_value(bounce_reason, #m{value=undefined} = M, _Context) ->
+   M#m{value=bounce_reason};
+m_find_value(Email, #m{value=bounce_reason}, Context) ->
+    bounce_reason(Email, Context);
 m_find_value(_Key, #m{value=undefined}, _Context) ->
    undefined.
 
@@ -457,3 +461,7 @@ recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtrac
 get_email_set(ListId, Context) ->
     sets:from_list([list_to_binary(z_string:trim(z_string:to_lower(Email)))
                     || {Email} <- z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1", [ListId], Context)]).
+
+bounce_reason(Email, Context) ->
+    z_db:assoc_row("SELECT * FROM log_email WHERE envelop_to = $1 AND mailer_status = 'bounce' ORDER BY created DESC LIMIT 1", [Email], Context).
+
