@@ -435,12 +435,15 @@ If found, returns t, and match-string 2 captures the tag name."
          (re-search-backward
           "<\\(/?\\)\\([^ />]+\\)\\(?:[^/>]\\|\\(?:/[^>]\\)\\|\n\\)*\\(/?\\)>"
           limit t))
-      (if (string= "/" (or (match-string 1) (match-string 3)))
-          ;; found a closed tag, recurse unless it's a self closed tag
-          (or (string= "/" (match-string 3))
-              (zotonic-tpl-tag-soup-find-open-tag limit))
-        ;; found a open tag, bail
-        (setq found t)))
+      (if (string= "/" (match-string 1))
+          ;; found a close tag, recursive search to find it's open tag
+          (zotonic-tpl-tag-soup-find-open-tag limit)
+        (or
+         ;; self closed, continue search
+         (string= "/" (match-string 3))
+         ;; else it's a open tag, bail search
+         (setq found t))
+        ))
     found))
 
 (defun zotonic-tpl-tag-soup-get-indent-for-line (offset)
@@ -630,7 +633,7 @@ Returns the column the line was indented to."
       errors)))
 
 ;;;
-;;; Define zotonic major mode
+;;; Tag complete functions
 ;;;
 
 (defun zotonic-tpl-tag-complete (string)
@@ -666,6 +669,10 @@ i.e. (tagname . endtag), (\"div\" . \">\")."
         (`nil)
         (tag (zotonic-tpl-tag-close tag))))
   (zotonic-tpl-indent-line))
+
+;;;
+;;; Define zotonic major mode
+;;;
 
 (defvar zotonic-tpl-font-lock-defaults
   (list
