@@ -15,7 +15,7 @@ id, version number, unique name, unique path, unique uri and
 publication period. For a full listing of its properties, see the
 :ref:`model-rsc` page.
 
-Resource properties can also be customly defined: any property that is
+Custom resource properties can also be defined: any property that is
 programmatically set on the resource, is stored in serialized form in
 the record, and can later be retrieved.
 
@@ -34,8 +34,8 @@ news item, a video or something else. The only difference is the
 categories and predicates themselves are represented as rsc records
 and can, subsequently, have their own page on the web site.
 
-Categories are organised in a hierarchical fashion, and is used to
-organise the resources into meaningful groups. Zotonic has a standard
+Categories are organized in a hierarchical fashion, and used to
+organize the resources into meaningful groups. Zotonic has a standard
 set of categories (see :ref:`manual-datamodel-domainmodel`, but it is
 very usual to define your own in your own site, resulting in a custom
 :term:`domain model`.
@@ -141,10 +141,10 @@ in the background.
 Identities
 ..........
 
-A rsc record can become an user by adding the user's credentials to
+A rsc record can become a user by adding the user's credentials to
 this table. A single user can have multiple kinds of credentials,
-think of his/her username, openid uri etc. A user doesn't necessarily
-be a person.
+think of his/her username, openid uri etc. A user isn't necessarily a
+person.
 
 .. seealso:: :ref:`model-identity`.
 
@@ -152,8 +152,8 @@ be a person.
 Deleted resources
 .................
 
-Whenever a resource is deleted, an entry is added to the ``rsc_gone`` table.
-The page and id controllers will server a *410 Gone* when a deleted resource
-is requested.
+Whenever a resource is deleted, an entry is added to the ``rsc_gone``
+table.  The page and id controllers will serve a *410 Gone* when a
+deleted resource is requested.
 
 .. seealso:: :ref:`model-rsc_gone`.
