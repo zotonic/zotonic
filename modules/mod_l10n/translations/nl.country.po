@@ -1005,6 +1005,11 @@ msgstr ""
 "Zuid Afrika"
 
 msgid ""
+"South Sudan"
+msgstr ""
+"Zuid Sudan"
+
+msgid ""
 "South Korea"
 msgstr ""
 "Zuid Korea"
