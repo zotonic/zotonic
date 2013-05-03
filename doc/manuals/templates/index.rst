@@ -11,7 +11,8 @@ Zotonic's version of ErlyDTL has diverged, adding Zotonic-specific
 features and more powerful expression possibilities. However, the main
 template syntax remains the same:
 
-The double accolade constructs outputs the value of the variable on the screen::
+The double accolade/brace construct outputs the value of the
+variable::
 
   {{ foo }}
 
@@ -20,7 +21,8 @@ which is applied before output::
 
   {{ foo|lower }}
 
-Template `tags` allow you to express complex contructs like loops and branches::
+Template `tags` allow you to express complex constructs like loops and
+branches::
 
   {% if username == 'Arjan' %} Hi, Arjan {% endif %}
   
@@ -28,7 +30,7 @@ Template `tags` allow you to express complex contructs like loops and branches::
 Being a web framework, it is of no surprise that templates are one of
 the most broad topics in Zotonic. The template manual has therefore
 been split up into the following sections, each of which addresses a
-specific templates-related topic.
+specific template-related topic.
 
 .. toctree::
    :glob:

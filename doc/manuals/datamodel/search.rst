@@ -12,7 +12,8 @@ You access the query model in the following way::
 
   {% for id in m.search[{query (options go here...) }] %}
 
-For instance, to select all news items, ordered by their modification date, newest first::
+For instance, to select all news items, ordered by their modification
+date, newest first::
 
   {% for id in m.search[{query cat='news' sort='-rsc.modified'}] %}
       {{ id }}
@@ -21,8 +22,8 @@ For instance, to select all news items, ordered by their modification date, newe
 Trying it out
 -------------
 
-Ofcourse you can create your own ``for``-loop in a template, but there
-are more easier ways to check out the inner workings of the
+Of course you can create your own ``for``-loop in a template, but
+there are easier ways to check out the inner workings of the
 query-model: through your browser.
 
 The query-model is exposed to the browser in (currently) 2 URLs: the
@@ -37,12 +38,14 @@ Get a feed of most recent documentation containing the word "filter"::
 
   http://zotonic.com/feed/search?cat=documentation&text=filter
 
-Note that ``mod_atom_feed`` automatically appends a sorting on
-last-modified date, something which ``api/search`` does not do.
+.. note::
+   
+   ``mod_atom_feed`` automatically sorts on last-modified date,
+   ``api/search`` doesn't.
 
 
 Query-model arguments
--------------------------
+---------------------
 
 **authoritative**
 
@@ -68,9 +71,10 @@ Query-model arguments
 
   Select all resources that have an outgoing connection to the given
   page, which is specified by the argument (123 in the
-  example). Optionally, you can give the name of a predicate as second
-  argument, to specify that the connection should have this
-  predicate. Specifying this multiple times does an "or" of the conditions.
+  example). Optionally, you can pass the name of a predicate as the
+  second argument, to specify that the connection should have this
+  predicate. Specifying this multiple times does an "or" of the
+  conditions.
 
   ``hassubject=123``
   ``hassubject=[123,'author']``
@@ -79,8 +83,9 @@ Query-model arguments
 
   Like hassubject, but selects all pages that have an incoming
   connection to the given page, which is specified by the
-  argument. Optionally, you can give the name of a predicate as second
-  argument, to specify that the connection should have this predicate.
+  argument. Optionally, you can pass the name of a predicate as the
+  second argument, to specify that the connection should have this
+  predicate.
 
   ``hasobject=123``
   ``hasobject=[123,'document']``
@@ -93,19 +98,23 @@ Query-model arguments
 
 **is_published**
 
-  Select published, unpublished or omit the publish check. Legal values are true,false or all.
+  Select published, unpublished or omit the publish check. Legal
+  values are true, false or all.
 
   ``is_published='all'``
 
 **is_public**
 
-  Filter on whether an item is publicly visible or not. Valid values are 'true', 'false', 'all'.
+  Filter on whether an item is publicly visible or not. Valid values
+  are 'true', 'false', 'all'.
 
   ``is_public='false'``
 
 **upcoming**
 
-Specifying 'upcoming' means that you only want to select things that have a start date which lies in the future. Like the name says, useful to select upcom  ing events.
+  Specifying 'upcoming' means that you only want to select things that
+  have a start date which lies in the future. Like the name says,
+  useful to select upcoming events.
 
   ``upcoming``
 
@@ -121,34 +130,40 @@ Specifying 'upcoming' means that you only want to select things that have a star
   - ``rsc.modified`` - date of last modification
   - ``rsc.pivot_date_start`` - the start date specified in the admin
   - ``rsc.pivot_date_end`` - the end date specified in the admin
-  - ``rsc.pivot_title`` - the title of the page. When making multilanguage sites, the behaviour of sorting on title is undefined.
+  - ``rsc.pivot_title`` - the title of the page. When making
+    multilingual sites, the behavior of sorting on title is undefined.
 
-  For all the sort fields, you will have to consult the Zotonic's data model. Example sorting on modification date, newest first:
+  For all the sort fields, you will have to consult Zotonic's data
+  model. Example sorting on modification date, newest first:
 
   ``sort='-rsc.modified'``
 
 **custompivot**
 
-  Add a join on the given custom pivot table. The table is joined to the primary ``rsc`` table.
+  Add a join on the given custom pivot table. The table is joined to
+  the primary ``rsc`` table.
 
   ``custompivot=foo``
   (joins the ``pivot_foo`` table into the query)
 
 **hasobjectpredicate**
 
-  Filter on all things which have any outgoing edge with given predicate.
+  Filter on all things which have any outgoing edge with the given
+  predicate.
 
   ``hasobjectpredicate='document'``
 
 **hassubjectpredicate**
 
-  Filter on all things which have any incoming edge with given predicate.
+  Filter on all things which have any incoming edge with the given
+  predicate.
 
   ``hasobject='author'``
 
 **text**
 
-  Perform a fulltext search on the primary "rsc" table. The result will automatically be ordered on the relevancy (rank) of the result.
+  Perform a fulltext search on the primary "rsc" table. The result
+  will automatically be ordered on the relevancy (rank) of the result.
 
   ``text="test"``
 
@@ -174,23 +189,23 @@ Specifying 'upcoming' means that you only want to select things that have a star
 
   Select items with a start date greater than given value
 
-  ``date_start_after="2010-01-01"``
+  ``date_start_after="2010-01-15"``
 
 **date_start_before**
 
   Select items with a start date smaller than given value
 
-  ``date_start_before="2010-01-01"``
+  ``date_start_before="2010-01-15"``
 
 **date_start_year**
 
-  Select items with a "event start date" in the given year.
+  Select items with an "event start date" in the given year.
 
   ``date_start_year=2012``
 
 **date_end_year**
 
-  Select items with a "event end date" in the given year.
+  Select items with an "event end date" in the given year.
 
   ``date_end_year=2012``
 

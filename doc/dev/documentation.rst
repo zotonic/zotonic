@@ -8,12 +8,12 @@ For documentation, we encourage contributions to Zotonic from the
 community even more!
 
 
-We use git for documentation. For large documentation changed, you
+We use git for documentation. For large documentation changes you
 should take the same approach as with :doc:`contributing`: e.g. create
 a fork of Zotonic, create a topic branch, make the changes, push, pull
 request.
 
-However, for small changes, typo's, et cetera, Github provides a nice
+However, for small changes, typos, et cetera, Github provides a nice
 edit button which you can use to edit these ``.rst`` files.
 
 .. note:: 
@@ -45,13 +45,14 @@ Use the following convention for headings::
   ...................
 
 
-When writing documentation of modules, actions, etc; anything under
+When writing documentation of modules, actions, etc.; anything under
 ``ref/``; the first level heading is already there for you, generated
 in the ``meta-*.rst`` file. So you should only use ``----------`` and
 ``..........`` for the headings in the ``ref/`` files.
 
 
-When using Emacs, this little snippet helps with adding underlines to headings:
+When using Emacs, this little snippet helps with adding underlines to
+headings:
 
 .. code-block:: common-lisp
 
@@ -67,7 +68,8 @@ When using Emacs, this little snippet helps with adding underlines to headings:
                                (point-at-bol))
                             char))))
 
-From a mailing list `post <http://lists.gnu.org/archive/html/help-gnu-emacs/2008-05/msg00305.html>`_.
+From a mailing list `post
+<http://lists.gnu.org/archive/html/help-gnu-emacs/2008-05/msg00305.html>`_.
 
 
 References
@@ -93,7 +95,7 @@ For the easy editing of tables, we use Emacs' `table-mode
 a learning curve but actually works pretty well when creating the
 ascii-art tables that the RST format requires you to use.
 
-In general, we use this style of tables::
+In general, we use this style of table::
 
   +--------------------+-------------------+
   | Header             |Other header       |
@@ -122,7 +124,8 @@ excellent Cookbook submission.
 
 A well-written item has four sections:
 
-**WHY**: What problem does this Cookbook item solve? What benefits does it deliver?
+**WHY**: What problem does this Cookbook item solve? What benefits
+does it deliver?
 
 Four major reasons for submitting Cookbook items are: 
 
@@ -134,7 +137,9 @@ Four major reasons for submitting Cookbook items are:
 3. Each item makes it that much easier for noobies and other community
    members to advance their Zotonic skills.
 
-**ASSUMPTIONS**: What does this item assume about operating system, Linux distribution, programming skills, knowledge of Zotonic architecture and conventions, etc.
+**ASSUMPTIONS**: What does this item assume about operating
+system, Linux distribution, programming skills, knowledge of Zotonic
+architecture and conventions etc.
 
 **HOW**: Step-by-step instructions for implementing your solution.
 
@@ -145,10 +150,10 @@ obvious to you but not so obvious to folks with less experience.
 
 Think of your instructions as a check-list. A noobie should be able to
 achieve success by reading, implementing and checking off each
-instruction.  Keep your instructions simple, complete, and clear.
+instruction. Keep your instructions simple, complete, and clear.
 
 Recruit a noobie to try out your solution. Fix the stumbling blocks
-she encounters. If you can't find a noobie, put yourself in noobie
+s/he encounters. If you can't find a noobie, put yourself in noobie
 mind. Remember, you too once were one.
 
 

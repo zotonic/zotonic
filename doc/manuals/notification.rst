@@ -8,10 +8,10 @@ components with pluggable interface. The notifier system is used by
 internal core Zotonic components like the authentication mechanism,
 the logging system and more.
 
-The notification system can not only act as a traditional event 
-subscription system but also as an advance priority based function d
-ispatch system. It uses the priority system which is used to select 
-templates. This makes it possible to override pre-defined default 
+The notification system can not only act as a traditional event
+subscription system but also as an advance priority based function
+dispatch system. It uses the priority system which is used to select
+templates. This makes it possible to override pre-defined default
 behaviour of core Zotonic modules.
 
 A notification message is a tagged tuple. The first element of the
@@ -53,7 +53,7 @@ notify1
 first 
   Call all observers, and use the first non ``undefined`` answer.
   This is used to get information from one of the observers. By
-  using the notication system it makes sure that modules are 
+  using the notification system it makes sure that modules are 
   decoupled. 
   
 map
@@ -81,7 +81,7 @@ NotificationType
 
 Handler 
   Can be a ``pid()``, or a ``{Module, Fun}`` tuple. When the handler
-  is a ``pid()`` and the notication is sent with ``notify`` or ``notify1``
+  is a ``pid()`` and the notification is sent with ``notify`` or ``notify1``
   the gen_server process receives a ``handle_cast``. When an answer is 
   expected back ``handle_call`` is used. This is the case for ``first``, 
   ``map``, ``foldr`` and ``foldr``.  
@@ -118,7 +118,7 @@ Cast notifications
   This is the simplest notification. The notifier does not expect an answer back
   the result of the handler is ignored. This kind of notification is triggered by
   calling ``z_notifier:notify/2`` or ``z_notifier:notify1/2``. They are useful
-  for letting other modules know about a certaint even or condition. This 
+  for letting other modules know about a certain even or condition. This 
   makes it possible for other modules to act on it.
 
   For example, :ref:`mod_development` uses call notifications to trigger builds
@@ -129,7 +129,7 @@ Call notification
   For this kind of notification, ``z_notifier`` expects an answer back. This answer
   is returned back to the notifier. This kind of notifications is used to 
   decouple modules. For instance a module can ask another module for a special
-  url to go to after logging in without knowing which module will do this. 
+  URL to go to after logging in without knowing which module will do this. 
   Call notifications are triggered by: ``z_notifier:first/2`` and 
   ``z_notifier:map/2``.
 
