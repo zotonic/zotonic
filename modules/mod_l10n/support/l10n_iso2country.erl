@@ -229,6 +229,7 @@ iso2country() -> [
 	{<<"so">>, <<"Somalia">>},
 	{<<"za">>, <<"South Africa">>},
 	{<<"kr">>, <<"South Korea">>},
+	{<<"ss">>, <<"South Sudan">>},
 	{<<"es">>, <<"Spain">>},
 	{<<"lk">>, <<"Sri Lanka">>},
 	{<<"sd">>, <<"Sudan">>},
