@@ -22,8 +22,10 @@
 
     <div class="control-group">
         <div class="controls">
-	    <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-	    <label class="checkbox inline" for="{{ #rememberme }}">{_ Stay logged on unless I log off. _}</label>
+	        <label class="checkbox inline" for="{{ #rememberme }}">
+                <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
+	            {_ Stay logged on unless I log off. _}
+            </label>
         </div>
     </div>
 
@@ -43,9 +45,11 @@
 <h1 class="logon_header">{_ Sorry, your password reset code is unknown or expired _}</h1>
 
 <p>{_ For security reasons password reset codes are only kept for a limited amount of time and can only be used once. _}</p>
-<p>{_ You can _} <a href="{% url logon f="reminder" %}">{_ request a new password reset code _}</a>.</p>
+<p>{_ You can _} <a href="{% url logon_reminder %}">{_ request a new password reset code _}</a>.</p>
 
+{% if not m.acl.user %}
 <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+{% endif %}
 
 {% endif %}
 </div>

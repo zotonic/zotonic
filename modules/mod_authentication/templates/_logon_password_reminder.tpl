@@ -19,7 +19,9 @@
     </div>
 
     <div class="control-group buttons">
-	<button class="btn btn-primary" type="submit">{_ Send me instructions _}</button>
-	<a class="btn" href="{% url logon %}">{_ Back to logon form _}</a>
+        <button class="btn btn-primary" type="submit">{_ Send me instructions _}</button>
+        {% if not m.acl.user %}
+	       <a class="btn" href="{% url logon %}">{_ Back to logon form _}</a>
+        {% endif %}
     </div>
 </form>

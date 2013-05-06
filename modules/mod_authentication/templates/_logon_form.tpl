@@ -33,6 +33,6 @@
     </div>
 
     <div>
-        <a class="" href="{% url logon f="reminder" %}">{_ I forgot my password _}</a>
+        <a class="" href="{% url logon_reminder %}">{_ I forgot my password _}</a>
     </div>
 </form>
