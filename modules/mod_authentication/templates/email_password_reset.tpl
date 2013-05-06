@@ -11,7 +11,7 @@
 
 <p>{_ Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
 
-<p><a href="{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon f="password_reset" secret=secret %}">{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon f="password_reset" secret=secret %}</a></p>
+<p><a href="{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon_reset secret=secret %}">{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon_reset secret=secret %}</a></p>
 
 <p>{_ When you didn't request a password reset, you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address. _}</p>
 

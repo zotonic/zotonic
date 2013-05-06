@@ -1,16 +1,21 @@
 {% if stage == "reminder_sent" %}
-<div>
+<div class="logon_message">
 
     <h1 class="logon_header">We sent you an e-mail</h1>
 
     <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
     <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
 
-    <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+    {% if not m.acl.user %}
+        <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+    {% else %}
+        <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
+        {% wire id=#cancel action={redirect back} %}
+    {% endif %}
 
 </div>
 {% elseif stage == "verification_pending" %}
-<div>
+<div class="logon_message">
 
     <h1 class="logon_header">{_ Your account needs verification _}</h1>
 
@@ -23,7 +28,7 @@
 
 </div>
 {% elseif stage == "verification_sent" %}
-<div>
+<div class="logon_message">
 
     <h1 class="logon_header">{_ Check your e-mail! _}</h1>
 
@@ -33,18 +38,21 @@
 
 </div>
 {% elseif stage == "verification_error" %}
-<div>
+<div class="logon_message">
 
     <h1 class="logon_header error">{_ Sorry, could not send the verification message. _}</h1>
     
     <p>{_ We don’t seem to have any valid e-mail address or other electronic communication address of you. _}</p>
 
-    <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
-
+    {% if not m.acl.user %}
+        <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+    {% else %}
+        <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
+        {% wire id=#cancel action={redirect back} %}
+    {% endif %}
 </div>
 {% elseif stage == "password_expired" %}
 <div>
-
     <form id="password_expired" method="post" action="postback">
         <h1 class="logon_header">{_ You need to change your password _}</h1>
 

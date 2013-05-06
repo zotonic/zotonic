@@ -17,13 +17,13 @@
     </div>
 
     <div id="logon_form">
-        {% if q.f == "reminder" %}
+    {% if zotonic_dispatch == `logon_reminder` %}
         {% include "_logon_password_reminder.tpl" %}
-        {% elseif q.f == "password_reset" %}
+    {% elseif zotonic_dispatch == `logon_reset` %}
         {% include "_logon_password_reset.tpl" %}
-        {% else %}
+    {% else %}
         {% include "_logon_form.tpl" %}
-        {% endif %}
+    {% endif %}
     </div>    
 </div>
 

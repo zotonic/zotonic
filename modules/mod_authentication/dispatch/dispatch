@@ -1,5 +1,7 @@
 %% -*- mode: erlang -*-
 [
- {logon,  ["logon"],  controller_logon,  [{ssl, true}]},
- {logoff, ["logoff"], controller_logoff, [{ssl, true}]}
+ {logon,  ["logon"],  controller_logon,  [{ssl, true}, {is_only_anonymous, true}]},
+ {logoff, ["logoff"], controller_logoff, [{ssl, true}]},
+ {logon_reminder, ["logon", "reminder"], controller_logon, [{ssl, true}]},
+ {logon_reset, ["logon", "reset"], controller_logon, [{ssl, true}]}
 ].
