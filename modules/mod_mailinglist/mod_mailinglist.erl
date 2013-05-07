@@ -62,12 +62,12 @@ observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _Offset
         order="email",
         tables=[]
     };
-observe_search_query({search_query, {mailinglist_recipients, [{id,Id}, {is_bounced, Bounced}]}, _OffsetLimit}, _Context) ->
+observe_search_query({search_query, {mailinglist_bounced, [{list_id,ListId}, {mailing_id, Id}]}, _OffsetLimit}, _Context) ->
     #search_sql{
-        select="id, email, is_enabled",
-        from="mailinglist_recipient",
-		where="mailinglist_id = $1 AND is_bounced = $2",
-		args=[Id, Bounced],
+        select="distinct r.id, r.email, r.is_enabled",
+        from="mailinglist_recipient r, log_email l",
+		where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
+		args=[ListId, Id],
         order="email",
         tables=[]
     };
