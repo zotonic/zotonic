@@ -1,4 +1,4 @@
-{% with m.search[{mailinglist_recipients id=mid is_bounced=1}] as r %}
+{% with m.search[{mailinglist_bounced list_id=mid mailing_id=id}] as r %}
 {% if r %}
 <p>{_ On this page you see the addresses that have bounced. They have
     been disabled by default. Please correct each address and check the
