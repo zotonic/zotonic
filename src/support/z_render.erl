@@ -482,16 +482,18 @@ make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, QArgs, Cont
     {ZEvtArgsPre, ZEvtArgs} = make_postback_zevtargs(QArgs),
     {[
         ZEvtArgsPre,
-        <<"z_queue_postback('">>,
-            ensure_iolist(TriggerId),
-            <<"', '">>,PickledPostbackInfo,
+        <<"z_queue_postback(">>,
+            postback_trigger_id(TriggerId),
+            <<", '">>,PickledPostbackInfo,
             <<"', ">>, ZEvtArgs,
             <<");">>
      ], 
      PickledPostbackInfo}.
 
-    ensure_iolist(A) when is_atom(A) -> atom_to_list(A);
-    ensure_iolist(L) -> L.
+postback_trigger_id(undefined) -> <<"undefined">>;
+postback_trigger_id(A) when is_atom(A) -> [$', atom_to_list(A), $'];
+postback_trigger_id([32|_CssSel]) -> <<"$(this).attr('id')">>;
+postback_trigger_id(L) -> [$', L, $'].
 
 make_postback_zevtargs([]) ->
     {<<>>, <<"typeof(zEvtArgs) != 'undefined' ? zEvtArgs : undefined">>};

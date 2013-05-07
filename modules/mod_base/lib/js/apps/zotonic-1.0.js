@@ -314,19 +314,30 @@ function z_unmask(id)
 {
     if (id)
     {
-        var trigger = $('#'+id).get(0);
-        try { $(trigger).unmask(); } catch (e) {};
-        $(trigger).removeClass("z_error_upload");
+        var trigger;
+        if (id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
+        trigger.each(function() { try { $(this).unmask(); } catch (e) {}});
+        trigger.each(function() { $(this).removeClass("z_error_upload"); });
     }
 }
-
 
 function z_unmask_error(id)
 {
     if (id)
     {
+        var trigger;
+        if (id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
         z_unmask(id);
-        $('#'+id).addClass("z_error_upload");
+        trigger.each(function() { try { $(this).unmask(); } catch (e) {}});
+        trigger.each(function() { $(this).addClass("z_error_upload"); });
     }
 }
 
