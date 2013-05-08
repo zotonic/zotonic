@@ -221,10 +221,7 @@ handle_dispatch({redirect_protocol, NewProtocol, NewHost}, _DispReq, ReqDataUA) 
 handle_dispatch({no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}, DispReq, ReqDataUA) when MatchedHost =/= undefined ->
     % Known host, unknown dispatch rule
     {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
-    Context = case lists:keyfind(z_language, 1, Bindings) of
-                  {z_language, Language} -> z_context:set_language(list_to_atom(Language), z_context:new(MatchedHost));
-                  false -> z_context:new(MatchedHost)
-              end,
+    Context = context_with_language(MatchedHost, Bindings),
     RewrittenPath = case NonMatchedPathTokens of 
                         undefined -> DispReq#dispatch.path;
                         _ -> string:join(NonMatchedPathTokens, "/")
@@ -234,6 +231,23 @@ handle_dispatch({no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}
 handle_dispatch(no_host_match, DispReq, ReqDataUA) ->
     % No host match - try to find matching host by asking all sites
     handle_no_host_match(DispReq, ReqDataUA).
+
+
+context_with_language(MatchedHost, Bindings) ->
+    context_set_language(MatchedHost, language_from_bindings(Bindings)).
+
+context_set_language(MatchedHost, {ok, Language}) ->
+    z_context:new(MatchedHost, Language);
+context_set_language(MatchedHost, {error, _}) ->
+    z_context:new(MatchedHost, undefined).
+
+language_from_bindings(Bindings) ->
+    language_from_bindings_1(lists:keyfind(z_language, 1, Bindings)).
+
+language_from_bindings_1({z_language, Language}) ->
+    z_trans:to_language_atom(Language);
+language_from_bindings_1(false) ->
+    {error, not_a_language}.
 
 
 %% Handle possible request rewrite; used when no dispatch rule matched
