@@ -60,24 +60,30 @@ add_script(Script, Context) ->
     Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
 
 get_page_startup_script(Context) ->
+    UAScript = [ ?SESSION_UA_CLASS_Q, $=, $", ua_class_to_script(z_user_agent:get_class(Context)), $", $;],
+    PageIdUAScript = case Context#context.page_id of
+        undefined ->
+            %% No page id, so no comet loop started and generated random page id for postback loop
+            [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $;, UAScript ];
+        PageId ->
+            [ ?SESSION_PAGE_Q, $=, $", PageId, $", $;, UAScript ]
+    end,
     case z_context:document_domain(Context) of
         undefined ->
-            case Context#context.page_id of
-                undefined ->
-                    %% No page id, so no comet loop started and generated random page id for postback loop
-                    [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $; ];
-                PageId ->
-                    [ ?SESSION_PAGE_Q, $=, $", PageId, $", $; ]
-            end;
+            PageIdUAScript;
         DocumentDomain ->
-            case Context#context.page_id of
-                undefined ->
-                    %% No page id, so no comet loop started and generated random page id for postback loop
-                    [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), <<"\"; document.domain=\"">>, DocumentDomain, $", $; ];
-                PageId ->
-                    [ ?SESSION_PAGE_Q, $=, $", PageId, <<"\"; document.domain=\"">>, DocumentDomain ,$", $; ]
-            end
+            [ PageIdUAScript, <<"document.domain=\"">>, DocumentDomain, $", $; ]
     end.
+
+%%
+ua_class_to_script(desktop) ->
+    <<"desktop">>;
+ua_class_to_script(tablet) ->
+    <<"tablet">>;
+ua_class_to_script(phone) ->
+    <<"phone">>;
+ua_class_to_script(text) ->
+    <<"text">>.
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
 %% @spec clean(Context1) -> Context2

@@ -181,6 +181,9 @@
 %% The name of the session request parameter
 -define(SESSION_PAGE_Q, "z_pageid").
 
+%% The name of the session user agent class parameter
+-define(SESSION_UA_CLASS_Q, "z_ua").
+
 %% Number of seconds between two comet polls before the page expires
 -define(SESSION_PAGE_TIMEOUT, 20).
 

@@ -34,7 +34,7 @@
 
 -include_lib("zotonic.hrl").
 
--define(UA_COOKIE, "z_ua").
+-define(UA_COOKIE, ?SESSION_UA_CLASS_Q).
 -define(UA_COOKIE_MAX_AGE, 3600*24*3650).
 
 -type ua_template_class() :: ua_classifier:device_type() | generic.
@@ -66,7 +66,7 @@ set_class(#wm_reqdata{} = ReqData) ->
 
     %% @doc Try to find the user agent class from the ua classifier and the ua cookie.
     derive_class_from_reqdata(ReqData) ->   
-        {UAClass, UAProps} = get_ua_header(ReqData),
+        {UAClass, UAProps} = get_ua_req_data(ReqData),
         case get_cookie(ReqData) of
             {UAClassCookie, UAPropsCookie, IsUserDefined} ->
                 % Cookie with result of previous tests, merge with classifier props
@@ -110,14 +110,26 @@ set_class(#wm_reqdata{} = ReqData) ->
         end.
         
 
-%% @doc Let the ua-classifier do its work on the user-agent request header.
-get_ua_header(ReqData) -> 
-    case wrq:get_req_header_lc("user-agent", ReqData) of
-        undefined ->
-            {desktop, []};
-        UserAgent ->
-            ua_classify(UserAgent)
+%% @doc Let the ua-classifier do its work on the user-agent request header or qs parameter.
+get_ua_req_data(ReqData) -> 
+    % Try to get the ua class from a qs. This is a workarond for a problem in
+    % Chrome and Safari which do not include the user-agent header in the 
+    % websocket request.
+    case get_ua_class_qs(ReqData) of
+        undefined -> 
+            case wrq:get_req_header_lc("user-agent", ReqData) of
+                undefined ->
+                    {desktop, []};
+                UserAgent ->
+                    ua_classify(UserAgent)
+            end;
+        Class ->
+            {Class, []}
     end.
+ 
+get_ua_class_qs(ReqData) ->
+    to_ua_class(wrq:get_qs_value(?SESSION_UA_CLASS_Q, ReqData)).
+
 
 %% @doc classify the UserAgent string. 
 ua_classify(UserAgent) ->
@@ -170,7 +182,7 @@ get_props(#wm_reqdata{} = ReqData) ->
 %% @doc The user selects an user agent by hand. Update cookie and session.
 -spec ua_select(ua_classifier:device_type() | automatic, #context{}) -> #context{}.
 ua_select(automatic, Context) ->
-    {UAClass, UAProps} = get_ua_header(z_context:get_reqdata(Context)),
+    {UAClass, UAProps} = get_ua_req_data(z_context:get_reqdata(Context)),
     CurrWidth = proplists:get_value(displayWidth, UAProps, 800),
     CurrHeight = proplists:get_value(displayHeight, UAProps, 600),
     CurrHasPointer = has_pointer_device(UAClass, UAProps),

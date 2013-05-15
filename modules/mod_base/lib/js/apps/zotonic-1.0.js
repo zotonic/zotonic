@@ -38,6 +38,7 @@ var z_on_visible_checks		= [];
 var z_on_visible_timer		= undefined;
 var z_unique_id_counter		= 0;
 var z_language				= "en";
+var z_ua                        = "desktop";
 
 /* Non modal dialogs
 ---------------------------------------------------------- */
@@ -573,7 +574,7 @@ function z_websocket_start(host)
     {
         protocol = "wss:";
     }
-    z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid);
+    z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
 
     z_ws.onopen = function() { z_ws_opened = true; };
     z_ws.onerror = function() { };
