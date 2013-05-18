@@ -63,7 +63,7 @@ Where the elements are:
 1. a name identifying the dispatch rule (used by {% url %})
 2. the path matching the request URL's path
 3. the name of the controller
-4. a property list with optional arguments to the resource module
+4. a property list with optional arguments to the resource module; see :ref:`controller_page`
 
 Dispatch rule naming
 ....................
