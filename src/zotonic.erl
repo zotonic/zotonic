@@ -32,10 +32,16 @@ ensure_started(App) ->
         ok ->
             ok;
         {error, {not_started, Dep}} ->
-            ok = ensure_started(Dep),
-            ensure_started(App);
+            case ensure_started(Dep) of
+                ok ->
+                    ensure_started(App);
+                Error ->
+                    Error
+            end;
         {error, {already_started, App}} ->
-            ok
+            ok;
+        {error, Reason} ->
+            Reason
     end.
 
 %% @spec start() -> ok
@@ -47,7 +53,19 @@ start() -> start([]).
 start(_Args) ->
     test_erlang_version(),
     zotonic_deps:ensure(),    
-    ok = ensure_started(zotonic).
+    case ensure_started(zotonic) of
+        ok -> ok;
+        Error ->
+            Message = if is_tuple(Error) -> 
+                              string:join([z_convert:to_list(E) || E <- tuple_to_list(Error)], ": ");
+                         is_list(Error) -> 
+                              Error;
+                         true -> 
+                              z_convert:to_list(Error)
+                      end,
+            lager:error("Zotonic failed to start application: ~s~n", [Message]),
+            init:stop()
+    end.
 
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.

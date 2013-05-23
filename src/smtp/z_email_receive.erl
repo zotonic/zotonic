@@ -64,7 +64,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                          decoded={Type, Subtype, Headers, Params, Body},
                          raw=Data
                      },
-             Email1 = #email_received{
+             Email1 = Email#email_received{
                         is_bulk=z_email_receive_check:is_bulk(Email),
                         is_auto=z_email_receive_check:is_auto(Email)
                       },

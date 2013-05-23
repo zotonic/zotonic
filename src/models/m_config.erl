@@ -70,10 +70,10 @@ all(Context) ->
         {ok, Cs} ->
             Cs;
         undefined ->
-			Cs = case z_db:has_connection(Context) of
-					true -> z_db:assoc_props("select * from config order by module, key", Context);
-					false -> []
-				 end,
+            Cs = case z_db:has_connection(Context) of
+                     true -> z_db:assoc_props("select * from config order by module, key", Context);
+                     false -> []
+                 end,
             Indexed = [ {M, z_utils:index_proplist(key, CMs)} || {M,CMs} <- z_utils:group_proplists(module, Cs) ],
             z_depcache:set(config, Indexed, ?DAY, Context),
             Indexed

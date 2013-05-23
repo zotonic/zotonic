@@ -60,10 +60,14 @@ A single dispatch rule looks like::
 
 Where the elements are:
 
-1. a name identifying the dispatch rule (used by {% url %})
+1. a name identifying the dispatch rule (used by {% :ref:`tag-url` %})
 2. the path matching the request URL's path
-3. the name of the controller
-4. a property list with optional arguments to the resource module
+3. the name of the controller (:ref:`controller-page` in this example)
+4. a property list with optional arguments to the controller
+   module. Refer to the documentation for respective controller for
+   available options. 
+
+.. seealso:: The full list of available :ref:`controllers`.
 
 Dispatch rule naming
 ....................
