@@ -29,7 +29,7 @@
 start(WsKey1, ReqData, Context1) ->
     Hostname = m_site:get(hostname, Context1),
 
-    Qs = [[K, $=, mochiweb_util:quote_plus(V)] || {K, V} <- wrq:req_qs(ReqData)],
+    Qs = mochiweb_util:urlencode(wrq:req_qs(ReqData)),
     WebSocketPath = case Qs of
         [] -> iolist_to_binary(wrq:path(ReqData));
         _ -> iolist_to_binary([wrq:path(ReqData), $?, Qs])
