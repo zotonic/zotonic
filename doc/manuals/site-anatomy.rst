@@ -106,7 +106,12 @@ The following options can be configured:
 
 ``{install_modules, [<modules>...]}``
   List all modules that should be enabled when installing the site data.
-  This overrides the default list of modules installed by the skeleton.
+  This overrides the default list of modules installed by the
+  skeleton.
+.. versionadded:: 0.10
+   To inherit the list of modules from a skeleton, add a ``{skeleton,
+   <name>}`` and it will install the list of modules from that skeleton
+   as well.
 
 ``{smtphost, "..."}``
   Hostname you want e-mail messages to appear from. See :ref:`manual-email`.

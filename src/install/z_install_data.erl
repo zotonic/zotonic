@@ -69,14 +69,16 @@ install_modules(Host, C) ->
                     proplists:get_value(skeleton, Config))
                  )
               ],
-    [
-     {ok, 1} = pgsql:equery(
-                 C, 
-                 "insert into module (name, is_active) values ($1, true)", 
-                 [M]) 
-     || M <- Modules
-    ],
+    [install_module(M, C) || M <- Modules],
     ok.
+
+install_module({skeleton, S}, C) ->
+    [install_module(M, C) || M <- get_skeleton_modules(S)];
+install_module(M, C) ->
+    {ok, 1} = pgsql:equery(
+                C, 
+                "insert into module (name, is_active) values ($1, true)", 
+                [M]).
 
 -spec get_skeleton_modules(Skeleton::atom()) -> list().
 get_skeleton_modules(empty) ->
@@ -133,7 +135,8 @@ get_skeleton_modules(blog) ->
      mod_bootstrap
     ];
 get_skeleton_modules(_) ->
-    []. % nodb | undefined -> []
+    %% nodb | undefined | OtherUnknown -> []
+    []. 
 
 
 install_category(C) ->
