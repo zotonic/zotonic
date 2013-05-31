@@ -72,7 +72,7 @@ observe_acl_can_see(#acl_can_see{}, _Context) ->
 	
 %% @doc Let the user log on, this is the moment to start caching information.
 observe_acl_logon(#acl_logon{id=UserId}, Context) ->
-	Context#context{acl=?MODULE, user_id=UserId}.
+	z_acl:set_admin(Context#context{acl=?MODULE, user_id=UserId}).
 
 %% @doc Let the user log off, clean up any cached information.
 observe_acl_logoff(#acl_logoff{}, Context) ->
