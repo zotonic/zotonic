@@ -44,8 +44,10 @@
 		{% include "_action_dialog_connect_tab_find.tpl" tab=#tab predicate=predicate subject_id=subject_id 
 					is_active=(not is_zmedia and predicate.name /= "depiction" and tab == "find") title="" %}
 
+		{% if predicate.name /= "depiction" %}
 		{% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" 
 					is_active=(tab == "new") %}
+		{% endif %}
 
 		{% with "action_admin_dialog_media_upload" as delegate %}
 			{% include "_action_dialog_media_upload_tab_upload.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" 

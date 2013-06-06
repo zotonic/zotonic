@@ -3,6 +3,7 @@
 					template="_action_dialog_connect.tpl" 
 					title=(in_sorter == 'category')|if:_"Add category":_"Add menu item"
 					callback="window.zMenuEditDone"
+					cat=cat_id
 					in_sorter=in_sorter}
 %}
 {% wire name="admin-menu-edit" 
