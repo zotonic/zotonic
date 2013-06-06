@@ -21,7 +21,7 @@
 		{% with m.rsc[tree_id].id as tree_id %}
 			{% if tree_id and tree_id.is_visible %}
 				<div class="span4" id="menu-editor">
-			        {% include "_admin_menu_menu_view.tpl" id=tree_id %}
+			        {% include "_admin_menu_menu_view.tpl" id=tree_id connect_tab="new" %}
 				</div>
 				<div class="span8" id="editcol">
 					{% if id %}
