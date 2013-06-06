@@ -3,6 +3,8 @@
 	    <img class="grippy" src="/lib/images/grippy.png" title="{_ Drag me _}" />
 	    <span class="title-{{id}}">{{ id.short_title|default:id.title }}</span>
 
+	    <img class="warning" src="/lib/images/noun/no-entry.png" width="12" {% if id.is_published %}style="display: none"{% endif %}/>
+
 	    <span class="btns">
 		    <span class="btn-group">
 		        <a href="#" class="btn menu-edit">{_ Edit _}</a>
