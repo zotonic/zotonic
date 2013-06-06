@@ -1,7 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013 Marc Worrell
-
-%% @doc Zotonic: admin blocks model & interface
+%% @doc Zotonic: admin blocks model and interface
 
 %% Copyright 2013 Marc Worrell
 %%
