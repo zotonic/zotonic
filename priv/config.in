@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 %% This is a sample config file for Zotonic.
 %%
 %% The configurations are for the Zotonic system itself.
@@ -23,73 +24,78 @@
 %% Be careful with the comma after each option, exclude it after the last option.
 
 [
+%%% PostgreSQL database defaults.
+%%% These are the defaults for the equally named options in your site's config file.
+ {dbschema, "public"},
+ {dbpassword, []},
+ {dbuser, "zotonic"},
+ {dbport, 5432},
+ {dbhost, "localhost"},
 
- %% PostgeSQL database defaults.
- %% These are the defaults for the equally named options in your site's config file.
- {dbschema,"public"},
- {dbpassword,[]},
- {dbuser,"zotonic"},
- {dbport,5432},
- {dbhost,"localhost"},
+%%% IP address on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_IP environment variable.
+%%% Use 'any' for all IP addresses.
+ {listen_ip, any},
 
- %% IP address Zotonic will listen on for HTTP requests
- %% Always overruled by the environment variable ZOTONIC_IP
- %% Use 'any' for all IP addresses
- {listen_ip,any},
- 
- %% Port Zotonic will listen on for HTTP requests.
- %% Always overruled by the environment variable ZOTONIC_PORT
- {listen_port,8000},
+%%% Port on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_PORT environment variable.
+ {listen_port, 8000},
 
- %% SMTP outbound relay configuration
- % {smtp_relay, true},
- % {smtp_host, "localhost"},
- % {smtp_port, 2525},
- % {smtp_ssl, true},
+%%% SMTP outbound relay configuration.
+ %% {smtp_relay, true},
+ %% {smtp_host, "localhost"},
+ %% {smtp_port, 2525},
+ %% {smtp_ssl, true},
 
- %% SMTP extra relay options:
- %% some picky/buggy/misconfigured relays might need one of these to be enabled
- % {smtp_no_mx_lookups, false},
- % {smtp_verp_as_from, false},
- % {smtp_bounce_email_override, "me@example.com"},
+%%% SMTP extra relay options:
+%%% some picky/buggy/misconfigured relays might need one of these to be enabled.
+ %% {smtp_no_mx_lookups, false},
+ %% {smtp_verp_as_from, false},
+ %% {smtp_bounce_email_override, "me@example.com"},
 
- %% SMTP mail queue
- %% How long to keep sent messages in the mail queue (in minutes)
- %% Leave it long enough to receive any bounce message
- % {smtp_delete_sent_after, 240},
+%%% SMTP mail queue.
+%%% How long to keep sent messages in the mail queue (in minutes).
+%%% Leave it long enough to receive any bounce message.
+ %% {smtp_delete_sent_after, 240},
 
- %% SMTP debug options
- %% Send a copy of outgoing mail to this address
- % {smtp_bcc, "bcc@localhost"},
- %% Send all mail to this address instead of the original recipient
- % {email_override, "override@localhost"},
+%%% SMTP debug options.
+%%% Send a copy of outgoing mail to this address:
+ %% {smtp_bcc, "bcc@localhost"},
+%%% Send all mail to this address instead of the original recipient:
+ %% {email_override, "override@localhost"},
 
- %% SMTP Inbound Server Options 
- %% Always overruled by the environment variables ZOTONIC_SMTP_LISTEN_DOMAIN, ZOTONIC_SMTP_LISTEN_IP and ZOTONIC_SMTP_LISTEN_PORT
- % {smtp_listen_domain, undefined},
- % {smtp_listen_ip, "127.0.0.1"},
- % {smtp_listen_port, 2525},
+%%% SMTP Inbound Server Options.
+%%% Always overridden by the environment variables:
+%%% ZOTONIC_SMTP_LISTEN_DOMAIN, ZOTONIC_SMTP_LISTEN_IP and ZOTONIC_SMTP_LISTEN_PORT.
+ %% {smtp_listen_domain, undefined},
+ %% {smtp_listen_ip, "127.0.0.1"},
+ %% {smtp_listen_port, 2525},
 
- %% Password for the sites administration site (zotonic_status)
- %% Zotonic will generate a secure password for you, so you don't need to enable this.  
- %% When you enable this you MUST select a secure password!!!
- % {password, ""},
- 
- %% inet request backlog, enlarge when requests are dropped
- % {inet_backlog,500},
- 
- %% Directory where log files are written
- % {log_dir,"priv/log"},
+%%% Password for the sites administration site (zotonic_status).
+%%% Zotonic will generate a secure password for you, so you don't need to enable this.
+%%% !!! If you enable this you MUST create a secure password !!!
+ %% {password, ""},
 
- %% Enable performance logging (in addition to request logging)
- % {enable_perf_logger, true},
+%%% Inet request backlog, increase when requests are being dropped.
+ %% {inet_backlog, 500},
 
- %% Webmachine error handler, you can use your own.
- % {webmachine_error_handler,z_webmachine_error_handler},
+%%% Directory where log files are written.
+ %% {log_dir,"priv/log"},
 
- %% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above) use the RGB colorspace, so all images are darker then the original. <br />Possible Values: CMY, CMYK, Grey, HCL, HSB, HSL, HWB, Lab, LCH, LMS, Log, Luv, OHTA, Rec601Luma, Rec601YCbCr, Rec709Luma, Rec709YCbCr, RGB, sRGB, Transparent, XYZ, YCbCr, YCC, YIQ, YCbCr, YUV
- % {default_colorspace, "sRGB"},
+%%% Enable performance logging (in addition to request logging).
+ %% {enable_perf_logger, true},
 
- % Date this file was created/updated
- {modify_date, {{2010,7,12},{12,28,30}}}
+%%% Webmachine error handler, you can use your own.
+ %% {webmachine_error_handler, z_webmachine_error_handler},
+
+%%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
+%%% use the RGB colorspace, so all images are darker than the original.
+%%% Possible Values:
+%%% CMY, CMYK, Grey, HCL, HSB, HSL, HWB, Lab, LCH, LMS, Log, Luv, OHTA,
+%%% Rec601Luma, Rec601YCbCr, Rec709Luma, Rec709YCbCr, RGB, sRGB, Transparent,
+%%% XYZ, YCbCr, YCC, YIQ, YCbCr, YUV.
+ %% {default_colorspace, "sRGB"},
+
+%%% Date and time on which this file was created/updated:
+ {modify_date, {{2013,6,5}, {21,32,0}}}
 ].

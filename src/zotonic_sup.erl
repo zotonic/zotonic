@@ -64,40 +64,40 @@ init([]) ->
     <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
     random:seed({A1,B1,C1}),
 
-    % Random id generation
-    Ids     = {z_ids,
-               {z_ids, start_link, []}, 
-               permanent, 5000, worker, dynamic},
-    
-    % File based configuration, manages the file priv/config
-    Config  = {z_config,
-               {z_config, start_link, []},
-               permanent, 5000, worker, dynamic},
+    %% Random id generation
+    Ids = {z_ids,
+           {z_ids, start_link, []}, 
+           permanent, 5000, worker, dynamic},
 
-    % Image resizer, prevents to many images to be resized at once, bogging the processor.
+    %% File based configuration, manages the file priv/config
+    Config = {z_config,
+              {z_config, start_link, []},
+              permanent, 5000, worker, dynamic},
+
+    %% Image resizer, prevents to many images to be resized at once, bogging the processor.
     PreviewServer = {z_media_preview_server,
                      {z_media_preview_server, start_link, []}, 
                      permanent, 5000, worker, dynamic},
-              
-    % SMTP gen_servers: one for encoding and sending mails, the other for bounces
+
+    %% SMTP gen_servers: one for encoding and sending mails, the other for bounces
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
                   permanent, 5000, worker, dynamic},
 
-    % Smtp listen to IP address, Domain and Port
+    %% Smtp listen to IP address, Domain and Port
     SmtpListenDomain = case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
-                false -> z_config:get_dirty(smtp_listen_domain);
-                SmtpListenDomain_ -> SmtpListenDomain_
-            end,
+                           false -> z_config:get_dirty(smtp_listen_domain);
+                           SmtpListenDomain_ -> SmtpListenDomain_
+                       end,
     SmtpListenIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
-                false -> z_config:get_dirty(smtp_listen_ip);
-                SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
-                SmtpListenIp_-> SmtpListenIp_
-            end,   
+                       false -> z_config:get_dirty(smtp_listen_ip);
+                       SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
+                       SmtpListenIp_-> SmtpListenIp_
+                   end,   
     SmtpListenPort = case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
-                     false -> z_config:get_dirty(smtp_listen_port);
-                     SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
-                 end,
+                         false -> z_config:get_dirty(smtp_listen_port);
+                         SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
+                     end,
     z_config:set_dirty(smtp_listen_domain, SmtpListenDomain),
     z_config:set_dirty(smtp_listen_ip, SmtpListenIp),
     z_config:set_dirty(smtp_listen_port, SmtpListenPort),
@@ -106,18 +106,18 @@ init([]) ->
                         {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, dynamic},
 
-    % Sites supervisor, starts all enabled sites
+    %% Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_sup,
                 {z_sites_sup, start_link, []},
                 permanent, 10100, supervisor, dynamic},
-                
-    Processes = [
-        Ids, Config, PreviewServer,
-        SmtpServer, SmtpBounceServer,
-        SitesSup | get_extensions()
-    ],
 
-    % Listen to IP address and Port
+    Processes = [
+                 Ids, Config, PreviewServer,
+                 SmtpServer, SmtpBounceServer,
+                 SitesSup | get_extensions()
+                ],
+
+    %% Listen to IP address and Port
     WebIp = case os:getenv("ZOTONIC_IP") of
                 false -> z_config:get_dirty(listen_ip);
                 Any when Any == []; Any == "*"; Any == "any" -> any;
@@ -132,31 +132,31 @@ init([]) ->
     z_config:set_dirty(listen_port, WebPort),
 
     WebConfig = [ 
-        {dispatcher, z_sites_dispatcher},
-        {dispatch_list, []},
-        {backlog, z_config:get_dirty(inet_backlog)}
-    ],
-    
-    % Listen to the ip address and port for all sites.
+                  {dispatcher, z_sites_dispatcher},
+                  {dispatch_list, []},
+                  {backlog, z_config:get_dirty(inet_backlog)}
+                ],
+
+    %% Listen to the ip address and port for all sites.
     IPv4Opts = [{port, WebPort}, {ip, WebIp}], 
     IPv6Opts = [{port, WebPort}, {ip, any6}],
 
-    % Webmachine/Mochiweb processes
+    %% Webmachine/Mochiweb processes
     [IPv4Proc, IPv6Proc] =
         [[{Name,
            {webmachine_mochiweb, start,
             [Name, Opts]},                                 
            permanent, 5000, worker, dynamic}]
          || {Name, Opts} 
-         <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
-             {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig}]],
+                <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
+                    {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig}]],
 
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
     EnableIPv6 = case WebIp of
                      any -> ipv6_supported();
                      _ -> false
                  end,
- 
+
     Processes1 = 
         case EnableIPv6 of
             true -> Processes ++ IPv4Proc ++ IPv6Proc;
@@ -182,7 +182,7 @@ init([]) ->
                   [lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status]) ||
                       [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status]
           end),
-    
+
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
 
 %% @doc Initializes the stats collector. 
@@ -196,11 +196,11 @@ init_ua_classifier() ->
     case z_config:get_dirty(use_ua_classifier) of
         true ->
             case ua_classifier:classify("") of
-              {error, ua_classifier_nif_not_loaded} = Error ->
-                  lager:error("ua_classifier: could not load the NIF. Check deps/ua_classifier or set Zotonic config {use_ua_classifier, false}."),
-                  Error;
-              {ok, _} ->
-                  ok
+                {error, ua_classifier_nif_not_loaded} = Error ->
+                    lager:error("ua_classifier: could not load the NIF. Check deps/ua_classifier or set Zotonic config {use_ua_classifier, false}."),
+                    Error;
+                {ok, _} ->
+                    ok
             end;
         false ->
             ok
@@ -219,12 +219,12 @@ init_webmachine() ->
         end,
     application:set_env(webzmachine, server_header, webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION),
     application:set_env(webzmachine, error_handler, ErrorHandler),        
-        
+
     LogDir = z_config:get_dirty(log_dir),
-    
+
     application:set_env(webzmachine, webmachine_logger_module, z_stats),
     webmachine_sup:start_logger(LogDir),
-    
+
     case z_config:get_dirty(enable_perf_logger) of
         true ->
             application:set_env(webzmachine, enable_perf_logger, true),
@@ -233,14 +233,12 @@ init_webmachine() ->
             ignore
     end.
 
-
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 ipv6_supported() ->
     case (catch inet:getaddr("localhost", inet6)) of
         {ok, _Addr} -> true;
         {error, _} -> false
     end.
-
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->
