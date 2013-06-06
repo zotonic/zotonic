@@ -1,12 +1,26 @@
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top">
 
     <div class="navbar-inner">
-        <div class="container">
-	    
+        <div class="container-fluid">
+        
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
             <a class="brand" href="/" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/admin_zotonic.png" width="106" height="20"></a>
 
-            <div class="nav-collapse">
+            <div class="nav-collapse collapse">
+                {% block search %}
+                <form class="pull-right navbar-form form-search" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
+                        <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
+                        <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
+                        <input class="input-medium search-query" type="text" name="qs" value="{{q.qs|escape}}" placeholder="Search..." />
+                </form>
+                {% endblock %}
+
                 <ul class="nav">
                     {% for id, item in m.admin_menu %}
                         {% if item.items %}
@@ -17,7 +31,7 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                {% for id, item in item.items %}
+                            {% for id, item in item.items %}
                                 {% if item.separator %}
                                 <li class="divider"></li>
                                 {% else %}
@@ -26,7 +40,7 @@
                                     {{ item.label|escape }}</a>
                                 </li>
                                 {% endif %}
-                                {% endfor %}
+                            {% endfor %}
                             </ul>
                         </li>
                         {% else %}
@@ -41,22 +55,12 @@
                                                    action={redirect dispatch=`logoff`}} %}
                     </li>
                 </ul>
-            </div>
 
-	    {% block search %}
-	    <div class="pull-right">
-                <ul class="nav">
+                <ul class="nav pull-right">
                     {% all include "_admin_headeritem.tpl" %}
-                    <li>
-		        <form class="navbar-form form-search" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
-                            <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
-                            <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
-		            <input class="input-medium search-query" type="text" name="qs" value="{{q.qs|escape}}" placeholder="Search..." />
-		        </form>
-                    </li>
                 </ul>
-	    </div>
-	    {% endblock %}
+
+            </div>
             
         </div>
     </div>

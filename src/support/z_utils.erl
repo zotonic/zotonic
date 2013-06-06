@@ -72,6 +72,7 @@
           prefix/2,
           prop_delete/2,
           prop_replace/3,
+          props_merge/2,
           randomize/1,
           randomize/2,
           replace1/3,
@@ -95,7 +96,6 @@
           url_unreserved_char/1,
           url_valid_char/1
          ]).
-
 
 %%% FORMAT %%%
 
@@ -495,6 +495,18 @@ prop_replace(Prop, Value, List) ->
 prop_delete(Prop, List) ->
     lists:keydelete(Prop, 1, List).
 
+<<<<<<< HEAD
+=======
+props_merge(Ps, []) ->
+    Ps;
+props_merge(Ps, [{K,_}=P|Xs]) ->
+    case proplists:is_defined(K, Ps) of
+        true -> props_merge(Ps, Xs);
+        false -> props_merge([P|Ps], Xs)
+    end. 
+
+
+>>>>>>> 5807a12... mod_admin/mod_admin_frontend: made admin more responsive. Added first version of frontend editor based on mod_admin.
 %% @doc Given a list of proplists, make it a nested list with respect to a property, combining elements
 %% with the same property.  Assumes the list is sorted on the property you are splitting on
 %% For example:  [[{a,b}{x}], [{a,b}{z}], [{a,c}{y}]] gives:

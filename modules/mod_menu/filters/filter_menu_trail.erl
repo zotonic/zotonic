@@ -2,7 +2,7 @@
 %% @copyright 2011 Arjan Scherpenisse
 %% @doc Get a "trail" of menu parents
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2011 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 menu_trail(undefined, _Context) ->
     undefined;
 menu_trail(Id, Context) ->
-    menu_trail(Id, main_menu, Context).
+    menu_trail(Id, filter_menu_rsc:menu_rsc(Id, Context), Context).
 
 menu_trail(_Id, undefined, _Context) ->
     undefined;

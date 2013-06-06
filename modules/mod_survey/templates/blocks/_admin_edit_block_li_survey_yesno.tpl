@@ -7,40 +7,41 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="form-vertical">
-    <div class="control-group">
     {% if is_editable %}
+    <div class="control-group">
         <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
-               class="span8" value="{{ blk.prompt[lang_code]  }}"
+               class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Do you like pea soup? _} ({{ lang_code }})" />
+    </div>
 
+    <div class="control-group">
        <div class="controls">
            <label class="radio inline"><input type="radio" name="{{ name }}" class="nosubmit" />
                <input type="text" id="block-{{name}}-yes{{ lang_code_for_id }}" name="block-{{name}}-yes{{ lang_code_with_dollar }}" 
-                     class="span3" value="{{ blk.yes[lang_code]  }}"
+                     class="input-medium" value="{{ blk.yes[lang_code]  }}"
                      placeholder="{_ Yes _}" />
            </label>
            <label class="radio inline"><input type="radio" name="{{ name }}" class="nosubmit" />
                <input type="text" id="block-{{name}}-no{{ lang_code_for_id }}" name="block-{{name}}-no{{ lang_code_with_dollar }}" 
-                     class="span3" value="{{ blk.no[lang_code]  }}"
+                     class="input-medium" value="{{ blk.no[lang_code]  }}"
                      placeholder="{_ No _}" />
            </label>
        </div>
+    </div>
 
+    <div class="control-group">
        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
-              class="span8" rows="2"
+              class="input-block-level" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
 
+    </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
-    </div>
-</fieldset>
 {% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}
-<fieldset class="form-vertical">
     <div class="control-group">
         <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-input_type" name="block-{{name}}-input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
@@ -52,5 +53,4 @@
             {_ Required, this question must be answered. _}
         </label>
     </div>
-</fieldset>
 {% endblock %}

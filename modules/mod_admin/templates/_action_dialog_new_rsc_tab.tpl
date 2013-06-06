@@ -11,7 +11,7 @@
 	<div class="control-group">
 	    <label class="control-label" for="new_rsc_title">{_ Page title _}</label>
 	    <div class="controls">
-		<input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ title|escape }}" class="span4 do_autofocus" />
+		<input type="text" id="new_rsc_title" name="new_rsc_title" value="{{ title|escape }}" class="input-block-level do_autofocus" />
 		{% validate id="new_rsc_title" type={presence} %}
 	    </div>
 	</div>
@@ -20,10 +20,10 @@
 	    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
 	    <div class="controls">
 		{% if cat and nocatselect %}
-		<input type="text" readonly value="{{ m.rsc[cat].title }}" class="span4" />
+		<input type="text" readonly value="{{ m.rsc[cat].title }}" class="input-block-level" />
 		<input type="hidden" name="category_id" value="{{ cat }}"/>
 		{% else %}
-		<select id="{{ #category }}" name="category_id" class="span4">
+		<select id="{{ #category }}" name="category_id" class="input-block-level">
 		    {% for cat_id, level, indent, name in m.category.all_flat %}
 		    {% if m.acl.insert[name|as_atom] %}
 		    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
@@ -40,7 +40,7 @@
 	<div class="control-group">
 	    <label class="control-label" for="{{ #name }}">{_ Name _}</label>
 	    <div class="controls">
-		    <input type="text" id="{{ #name }}" name="name" value="" class="span4" />
+		    <input type="text" id="{{ #name }}" name="name" value="" class="input-block-level" />
 			{% validate id=#name name="name" type={presence} %}
 	    </div>
 	</div>

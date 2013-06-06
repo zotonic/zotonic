@@ -1,4 +1,4 @@
-{% if is_editable %}
+{% if id.is_editable %}
 <div class="btn-group pull-right block-add-block">
     <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
         {_ + add block _}

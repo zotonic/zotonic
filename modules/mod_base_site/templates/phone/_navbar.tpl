@@ -18,7 +18,7 @@
 			<div class="pull-right">
                 {% include "_navbar_right.tpl"%}
             </div>        
-			{% menu id=id maxdepth=2 %}
+			{% menu menu_id=menu_id id=id maxdepth=2 %}
         </div>
     </div>
   </div>

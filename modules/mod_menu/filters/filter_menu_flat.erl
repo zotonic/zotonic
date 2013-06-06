@@ -2,7 +2,7 @@
 %% @copyright 2011 Arjan Scherpenisse
 %% @doc Get a "flat" of menu parents
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2011 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

@@ -6,31 +6,30 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="form-vertical">
-    <div class="control-group">
     {% if is_editable %}
-    <div class="row">
-        <div class="span5">
+    <div class="row-fluid">
+        <div class="span6">
             <label>{_ Page jump condition _}</label>
             <input type="text" id="block-{{name}}-condition1" name="block-{{name}}-condition1" 
-                   class="span5" value="{{ blk.condition1 }}"
+                   class="input-block-level" value="{{ blk.condition1 }}"
                    placeholder="{_ name >= 2 _}" />
         </div>
-        <div class="span2">
+        <div class="span4">
             <label>{_ To question _}</label>
             <input type="text" id="block-{{name}}-target1" name="block-{{name}}-target1" 
-                   class="span2" value="{{ blk.target1 }}"
+                   class="input-block-level" value="{{ blk.target1 }}"
                    placeholder="{_ name _}" />
         </div> 
-
-        <div class="span5">
+    </div>
+    <div class="row-fluid">
+        <div class="span6">
             <input type="text" id="block-{{name}}-condition2" name="block-{{name}}-condition2" 
-                   class="span5" value="{{ blk.condition2 }}"
+                   class="input-block-level" value="{{ blk.condition2 }}"
                    placeholder="{_ name >= 2 _}" />
         </div>
-        <div class="span2">
+        <div class="span4">
             <input type="text" id="block-{{name}}-target2" name="block-{{name}}-target2" 
-                   class="span2" value="{{ blk.target2 }}"
+                   class="input-block-level" value="{{ blk.target2 }}"
                    placeholder="{_ name _}" />
         </div>
     </div>
@@ -39,7 +38,5 @@
         {_ Multiple page break blocks are merged into one. _}
     </p>
     {% endif %}
-    </div>
-</fieldset>
 {% endwith %}
 {% endblock %}

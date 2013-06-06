@@ -48,6 +48,7 @@ html(Context) ->
     Vars = [
             {id, Id},
             {blocks, lists:sort(Blocks)}
+            | z_context:get_all(Context) 
            ],
     Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
     z_context:output(Html, Context).

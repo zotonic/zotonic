@@ -14,27 +14,22 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
 ---------------------------------------------------------- */
-
 
 /* bootstrap structure
 --------------------------------------------------------- */
 body {
-    background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1;
+    padding-top: 60px;
+    /* background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1; */
 }
-
-body > div.container {
-    margin-top: 40px;
-    background: white;
-    padding: 20px;
+body > div.container-fluid {
+    margin-top: 0;
+    margin-bottom: 40px;
 }
-
 hr {
     width: 100%;
 }
-
-body.noframe > div.container {
+body.noframe > div.container-fluid {
     background: transparent;
 }
 
@@ -45,17 +40,40 @@ div.navbar ul.nav i.icon-white {
 }
 div.navbar .brand {
     padding-top: 7px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
-div.navbar-fixed-top div.navbar-inner {
-    height: 40px;
+
+/* footer edit nav
+--------------------------------------------------------- */
+
+.navbar-fixed-bottom {
+    background-color: black;
+    padding: 5px 20px;
+}
+.navbar-fixed-bottom .control-group {
+    margin: 0 20px 0;
+}
+.navbar.navbar-fixed-bottom .pull-right {
+    float: right;
+}
+.navbar-fixed-bottom label {
+    color: white;
+    margin-left: 20px;
+}
+@media (max-width: 979px) {
+    body > div.container-fluid {
+        margin-top: 0;
+    }
+    .navbar-fixed-bottom {
+        position: fixed;
+    }
 }
 
 /* widget
 --------------------------------------------------------- */
 
 div.widget {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
     border-bottom: none;
     border-radius: 2px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
@@ -149,41 +167,6 @@ div.widget-active h3 i {
     margin: 5px;
 }
 
-div.widget-content.tab-content {
-    width: auto;
-}
-
-
-
-/* widget forms, overrides */
-div.widget input.span8, div.widget textarea.span8 {
-    width: 712px;
-}
-div.widget input.span4, div.widget textarea.span4, div.widget select.span4 {
-    width: 332px;
-}
-div.widget input.span3, div.widget textarea.span3 {
-    width: 216px;
-}
-
-#zmodal input.span8, #zmodal textarea.span8  {
-    width: 420px;
-}
-
-div.widget div.span4 {
-    width: 352px;
-}
-div.widget div.span2 {
-    width: 130px;
-}
-div.widget div.span3 {
-    width: 215px;
-}
-
-.admin-form textarea {
-    width: 712px;
-}
-
 div.widget-footer,
 div.save-buttons {
     min-height: 36px;
@@ -247,6 +230,14 @@ img.admin-rsc-edge-media {
 
 /* admin edit page
    -------------------------------------------------------------- */
+
+#content-address table {
+    margin-bottom: 0;
+}
+
+.widget h5 {
+    margin-top: 18px;
+}
 
 .pull-right p.admin-chapeau {
     text-align: right;
@@ -499,6 +490,10 @@ ul.suggestions-list li a:hover {
 /* tinyMce stuff
 --------------------------------------------------------- */
 
+table.mceLayout, textarea.tinyMCE {
+    width: 100% !important;
+}
+
 .mceToolbar td a span.mce_zmore {
 	background: url(/lib/images/toolbars.gif) !important;
 }
@@ -613,19 +608,19 @@ span.icon_status_starting {
     background-position: -77px 0;
 }
 
+/* sidebar - less space
+--------------------------------------------------------- */
+
+#sidebar .controls {
+    margin-left: 100px;
+}
+
+#sidebar .control-label {
+    width: 90px;
+}
 
 /* scroll - keep the save buttons into view
 --------------------------------------------------------- */
-
-body.scrolled #sidebar-publish-page {
-    position: fixed;
-    top: 12px;
-    width: 360px;
-}
-
-body.scrolled #sort {
-    padding-top: 166px;
-}
 
 #sidebar-publish-page .widget-content {
     display: block;

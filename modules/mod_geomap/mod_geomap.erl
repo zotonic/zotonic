@@ -152,7 +152,7 @@ do_geocode(Id, Version, Q, Context) ->
     end.
 
     update_geocode(Id, Version, Q, Lat, Long, Context) ->
-        lager:info("geocode of ~p set to ~p", [Id, {Lat,Long}]),
+        lager:debug("geocode of ~p set to ~p", [Id, {Lat,Long}]),
         z_db:q("update rsc set "
                " pivot_geocode = $1, "
                " pivot_geocode_qhash = $2 "
@@ -232,9 +232,11 @@ googlemaps(Q) ->
                                     {error, no_result}
                             end
                     end;
+                <<"ZERO_RESULTS">> ->
+                    {error, not_found};
                 Status ->
                     lager:warning("Google maps status ~p on ~p", [Status, Q]),
-                    {error, not_found}
+                    {error, unexpected_result}
             end;
         {ok, JSON} ->
             lager:error("Google maps unknown JSON ~p on ~p", [JSON, Q]),

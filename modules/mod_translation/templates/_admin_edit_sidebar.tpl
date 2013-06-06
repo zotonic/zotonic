@@ -13,7 +13,7 @@
 </div>
 
 <div class="control-group">
-    <div class="controls" id="admin-translation-checkboxes">
+    <div id="admin-translation-checkboxes">
         {% for code, lang in languages %}
             {% if lang.is_enabled %}
             <label class="inline checkbox">
@@ -30,10 +30,8 @@
 </div>
 
 <div class="control-group">
-    <div class="controls">
-        <button class="btn" id="{{ #copy }}">{_ Copy translation _}…</button>
-        {% wire id=#copy action={dialog_open title=_"Copy translation" template="_dialog_language_copy.tpl"} %}
-    </div>
+    <button class="btn" id="{{ #copy }}">{_ Copy translation _}…</button>
+    {% wire id=#copy action={dialog_open title=_"Copy translation" template="_dialog_language_copy.tpl"} %}
 </div>
 {% endwith %}
 {% endblock %}

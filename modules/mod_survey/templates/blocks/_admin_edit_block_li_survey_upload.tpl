@@ -7,26 +7,23 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="form-vertical">
     <p class="alert">
         {_ This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module. _}
     </p>
 
-    <div class="control-group">
     {% if is_editable %}
+    <div class="control-group">
         <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
-               class="span8" value="{{ blk.prompt[lang_code]  }}"
+               class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Please upload your image. _} ({{ lang_code }})" />
+    </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
-    </div>
-</fieldset>
 {% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}
-<fieldset class="form-vertical">
     <div class="control-group">
         <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-is_image" name="block-{{name}}-is_image" value="1" {% if blk.is_image or is_new %}checked="checked"{% endif %} />
@@ -37,6 +34,5 @@
             {_ Required, this question must be answered. _}
         </label>
     </div>
-</fieldset>
 {% endblock %}
 

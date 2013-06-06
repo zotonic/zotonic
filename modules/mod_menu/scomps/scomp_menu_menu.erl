@@ -41,7 +41,7 @@
 vary(_Params, _Context) -> default.
 
 render(Params, _Vars, Context) ->
-    MenuId = m_rsc:rid(proplists:get_value(menu_id, Params, main_menu), Context),
+    MenuId = m_rsc:rid(get_menu_id(Params, Context), Context),
     Template = case proplists:get_value(is_superfish, Params, false) of
                     true -> proplists:get_value(template, Params, "_menu_superfish.tpl");
                     false -> proplists:get_value(template, Params, "_menu.tpl")
@@ -54,3 +54,9 @@ render(Params, _Vars, Context) ->
         | Params
     ],
     {ok, z_template:render(Template, Vars, Context)}.
+
+get_menu_id(Params, Context) ->
+    case proplists:get_value(menu_id, Params) of
+        undefined -> filter_menu_rsc:menu_rsc(proplists:get_value(id, Params), Context);
+        MenuId -> MenuId
+    end.

@@ -7,31 +7,25 @@
 {% block widget_id %}edit-advanced{% endblock %}
 
 {% block widget_content %}
-<fieldset>
     {% if m.rsc[id].is_authoritative %}
-    
     <div class="row">
-        <div class="span4">
 	    <div class="control-group">
-		<label class="control-label" for="field-page-path">{_ Page path, default is _} <em>{{ r.default_page_url|escape }}</em></label>
+		<label class="control-label" for="field-page-path">{_ Page path _}</label>
                 <div class="controls">
-		    <input type="text" id="field-page-path" class="span4" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %}/>
+		    <input type="text" id="field-page-path" class="input-block-level" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %} placeholder="{{ r.default_page_url|escape }}" />
 		</div>
 	    </div>
-        </div>
 
-        <div class="span4">
 	    <div class="control-group">
 	        {% if m.acl.use.mod_admin_config %}
 	        <label class="control-label" for="field-name">{_ Unique name _}</label>
                 <div class="controls">
-	            <input type="text" id="field-name" class="span4" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
+	            <input type="text" id="field-name" class="input-block-level" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
                 </div>
 	        {% else %}
 	        &nbsp;
 	        {% endif %}
-            </div>
-	</div>
+        </div>
     </div>
     {% endif %}
 
@@ -43,11 +37,8 @@
 	{% if r.is_a.meta or not r.is_authoritative %}
 	    <div class="form-item clearfix">
 		<label for="field-name">{_ Unique uri _}</label>
-		<input type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
+		<input type="text" id="field-name" name="uri" value="{{ r.uri }}" class="input-block-level" {% if not is_editable %}disabled="disabled"{% endif %} />
 	    </div>
 	{% endif %}
     {% endif %}
-
-</fieldset>
-
 {% endblock %}

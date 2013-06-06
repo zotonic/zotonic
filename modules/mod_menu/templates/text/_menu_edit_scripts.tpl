@@ -6,7 +6,7 @@
 					in_sorter=in_sorter}
 %}
 {% wire name="admin-menu-edit" 
-		action={dialog_edit_basics callback="window.zMenuEditDone"} 
+		action=admin_menu_edit_action|default:{dialog_edit_basics callback="window.zMenuEditDone"} 
 %}
 
 {% javascript %}

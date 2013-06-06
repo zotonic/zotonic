@@ -56,7 +56,7 @@ msgstr ""
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
 #, fuzzy
 msgid "Copy translation"
-msgstr "Vertalingen"
+msgstr "Kopieer vertalingen"
 
 #: modules/mod_translation/templates/admin_translation.tpl:23
 msgid "Default"

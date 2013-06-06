@@ -37,11 +37,12 @@ ul.tree-list li {
 }
 
 ul.tree-list li img.grippy {
-    cursor: move;
     padding-right: 2px;
 }
 
 ul.tree-list li div {
+    cursor: move;
+    clear: both;
     border: 1px solid #E0E0E0;
     margin-bottom: -1px;
     position: relative;

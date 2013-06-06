@@ -125,6 +125,9 @@
 %% Used for fetching the menu in the admin (foldl)
 % admin_menu
 
+%% @doc Fetch the menu id belonging to a certain resource (first)
+-record(menu_rsc, {id}).
+
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
 %% of patterns matching this activity.  These patterns are then used to find interested
 %% subscribers. (map)

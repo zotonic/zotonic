@@ -3,7 +3,7 @@
     <h3 class="widget-header">
         <i title="{_ Drag to change position _}" class="icon-move"></i>
         <span title="{_ Disconnect _}" class="icon-remove"></span>
-        <span>{{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}</span>
+        {{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}
         <input type="text" class="block-name" name="block-{{#s}}-name" id="block-{{#s}}-name" value="{{ blk.name|escape }}" title="{_ Block name _}" placeholder="{_ name _}" />
     </h3>
     <div class="widget-content">

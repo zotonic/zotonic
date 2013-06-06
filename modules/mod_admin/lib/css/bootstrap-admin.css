@@ -20,8 +20,8 @@ nav,
 section {
   display: block;
 }
-
-audio,
+audio
+,
 canvas,
 video {
   display: inline-block;
@@ -197,103 +197,103 @@ a:hover {
 .container,
 .navbar-fixed-top .container,
 .navbar-fixed-bottom .container {
-  width: 1120px;
+  width: 940px;
 }
 
 .span12 {
-  width: 1120px;
+  width: 940px;
 }
 
 .span11 {
-  width: 1025px;
+  width: 860px;
 }
 
 .span10 {
-  width: 930px;
+  width: 780px;
 }
 
 .span9 {
-  width: 835px;
+  width: 700px;
 }
 
 .span8 {
-  width: 740px;
+  width: 620px;
 }
 
 .span7 {
-  width: 645px;
+  width: 540px;
 }
 
 .span6 {
-  width: 550px;
+  width: 460px;
 }
 
 .span5 {
-  width: 455px;
+  width: 380px;
 }
 
 .span4 {
-  width: 360px;
+  width: 300px;
 }
 
 .span3 {
-  width: 265px;
+  width: 220px;
 }
 
 .span2 {
-  width: 170px;
+  width: 140px;
 }
 
 .span1 {
-  width: 75px;
+  width: 60px;
 }
 
 .offset12 {
-  margin-left: 1160px;
+  margin-left: 980px;
 }
 
 .offset11 {
-  margin-left: 1065px;
+  margin-left: 900px;
 }
 
 .offset10 {
-  margin-left: 970px;
+  margin-left: 820px;
 }
 
 .offset9 {
-  margin-left: 875px;
+  margin-left: 740px;
 }
 
 .offset8 {
-  margin-left: 780px;
+  margin-left: 660px;
 }
 
 .offset7 {
-  margin-left: 685px;
+  margin-left: 580px;
 }
 
 .offset6 {
-  margin-left: 590px;
+  margin-left: 500px;
 }
 
 .offset5 {
-  margin-left: 495px;
+  margin-left: 420px;
 }
 
 .offset4 {
-  margin-left: 400px;
+  margin-left: 340px;
 }
 
 .offset3 {
-  margin-left: 305px;
+  margin-left: 260px;
 }
 
 .offset2 {
-  margin-left: 210px;
+  margin-left: 180px;
 }
 
 .offset1 {
-  margin-left: 115px;
+  margin-left: 100px;
 }
 
 .row-fluid {
@@ -3728,7 +3728,7 @@ input[type="submit"].btn.btn-mini {
 
 .navbar-fixed-top .container,
 .navbar-fixed-bottom .container {
-  width: 1120px;
+  width: 940px;
 }
 
 .navbar-fixed-top {
