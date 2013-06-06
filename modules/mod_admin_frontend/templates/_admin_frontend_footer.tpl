@@ -1,9 +1,10 @@
 <div class="navbar navbar-fixed-bottom">
 	<div class="row-fluid">
 		<div class="span4">
+			<span class="brand pull-right">{_ This page _}</span>
 		</div>
 		<div class="span8">
-			{% button class="btn pull-right" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
+			{% button class="btn pull-right" text=_"Cancel" action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" %}
 			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
 		
 			{% if id.page_url %}

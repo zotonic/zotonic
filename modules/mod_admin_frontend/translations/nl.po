@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_nopage.tpl:2 
+msgid ""
+"Add pages or click on a page in the menu."
+msgstr ""
+"Voeg pagina’s toe of klik op een pagina in het menu."
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:7 
+msgid ""
+"Cancel"
+msgstr ""
+""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:20 
+msgid ""
+"Published"
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:8 
+msgid ""
+"Save"
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:12 
+msgid ""
+"Save &amp; view"
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:12 
+msgid ""
+"Save and view the page."
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:8 
+msgid ""
+"Save this page."
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:4 
+msgid ""
+"This page"
+msgstr ""
+"Deze pagina"
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:14 
+msgid ""
+"View"
+msgstr ""
+
+#: ./modules/mod_admin_frontend/templates/_admin_frontend_footer.tpl:14 
+msgid ""
+"View this page."
+msgstr ""
