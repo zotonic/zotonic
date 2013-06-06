@@ -18,9 +18,11 @@ limitations under the License.
 
 /* bootstrap structure
 --------------------------------------------------------- */
-body {
-    padding-top: 60px;
-    /* background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1; */
+@media (min-width: 980px) {
+    body {
+        padding-top: 60px;
+        /* background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1; */
+    }
 }
 body > div.container-fluid {
     margin-top: 0;
