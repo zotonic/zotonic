@@ -54,7 +54,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 
 			z_notify("menu-item-render", {id: v.object_id, callback: "window.zMenuNewItem", z_delegate:"mod_menu"});
 		};
-		z_event("admin-menu-select");
+		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});
 	}
 	e.preventDefault();
 });
