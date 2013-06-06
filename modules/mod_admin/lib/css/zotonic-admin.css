@@ -634,6 +634,9 @@ span.icon_status_starting {
 
 /* modal - fix for tab content getting scrollbars inside modal
 --------------------------------------------------------- */
+.modal {
+    width: 700px;
+}
 div.modal div.tab-content {
     overflow: visible;
 }
