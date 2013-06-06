@@ -495,8 +495,6 @@ prop_replace(Prop, Value, List) ->
 prop_delete(Prop, List) ->
     lists:keydelete(Prop, 1, List).
 
-<<<<<<< HEAD
-=======
 props_merge(Ps, []) ->
     Ps;
 props_merge(Ps, [{K,_}=P|Xs]) ->
@@ -505,8 +503,6 @@ props_merge(Ps, [{K,_}=P|Xs]) ->
         false -> props_merge([P|Ps], Xs)
     end. 
 
-
->>>>>>> 5807a12... mod_admin/mod_admin_frontend: made admin more responsive. Added first version of frontend editor based on mod_admin.
 %% @doc Given a list of proplists, make it a nested list with respect to a property, combining elements
 %% with the same property.  Assumes the list is sorted on the property you are splitting on
 %% For example:  [[{a,b}{x}], [{a,b}{z}], [{a,c}{y}]] gives:
