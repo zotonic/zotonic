@@ -1,3 +1,4 @@
+{% with blocks|if_undefined:(m.admin_blocks.list[id]) as blocks %}
 <div id="edit-blocks-wrapper">
     <input type="hidden" id="block-" name="block-" value="" /> 
     {% include "_admin_edit_block_addblock.tpl" %}
@@ -7,6 +8,7 @@
     {% endfor %}
     </ul>
 </div>
+{% endwith %}
 
 {% javascript %}
 $('#edit-blocks').sortable({ 
@@ -22,7 +24,8 @@ $('#edit-blocks').sortable({
         z_tinymce_add($(this));
     }
 })
-.on('click', '.icon-remove', function() { 
+.on('click', '.icon-remove', function(event) { 
+    event.stopPropagation();
     var block = $(this).closest('li');
     z_dialog_confirm({
         title: '{_ Confirm block removal _}',

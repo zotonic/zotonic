@@ -8,31 +8,29 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="form-vertical">
-    <div class="control-group">
     {% if is_editable %}
+    <div class="control-group">
         <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
-               class="span8" value="{{ blk.prompt[lang_code]  }}"
+               class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Select your country _} ({{ lang_code }})" />
+    </div>
 
+    <div class="control-group">
        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
-              class="span8" rows="2"
+              class="input-block-level" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+    </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
-    </div>
-</fieldset>
 {% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}
-<fieldset class="form-vertical">
     <div class="control-group">
         <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
             {_ Required, this question must be answered. _}
         </label>
     </div>
-</fieldset>
 {% endblock %}

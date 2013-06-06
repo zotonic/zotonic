@@ -13,7 +13,7 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			{% menu id=id %}
+			{% menu menu_id=menu_id id=id %}
 		<td>
 	</tr>
 </table>

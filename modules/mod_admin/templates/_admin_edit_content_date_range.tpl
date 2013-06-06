@@ -31,7 +31,7 @@
 <div class="control-group">
     <label class="control-label">{_ Remarks _}</label>
     <div class="controls">
-	<input type="text" name="date_remarks" value="{{ r.date_remarks }}" />
+	<input type="text" class="input-block-level" name="date_remarks" value="{{ r.date_remarks }}" />
     </div>
 </div>
 

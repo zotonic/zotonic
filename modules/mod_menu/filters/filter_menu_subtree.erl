@@ -24,7 +24,7 @@
 ]).
 
 menu_subtree(BelowId, Context) ->
-    menu_subtree(BelowId, main_menu, false, Context).
+    menu_subtree(BelowId, filter_menu_rsc:menu_rsc(BelowId, Context), false, Context).
 
 menu_subtree(BelowId, Menu, Context) ->
     menu_subtree(BelowId, Menu, false, Context).

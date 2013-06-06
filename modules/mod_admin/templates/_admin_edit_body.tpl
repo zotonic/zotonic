@@ -6,7 +6,7 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="admin-form">
+
 	{% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
 
 	{% wire name="zmedia" 
@@ -27,28 +27,14 @@
 	{% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
 #}
 
-	<div class="form-item clearfix">
+	<div class="control-group">
 		{% with is_i18n|if:r.translation[lang_code].body:r.body	 as	 body %}
-		{% if is_editable %}
-			<textarea rows="10" cols="10" id="rsc-body{{ lang_code_for_id }}" name="body{{ lang_code_with_dollar }}" class="body tinymce-init" {% include "_language_attrs.tpl" language=lang_code %}>{{ body|escape }}</textarea>
+		{% if r.is_editable %}
+			<textarea rows="10" cols="10" id="rsc-body{{ lang_code_for_id }}" name="body{{ lang_code_with_dollar }}" class="body tinymce-init input-block-level" {% include "_language_attrs.tpl" language=lang_code %}>{{ body|escape }}</textarea>
 		{% else %}
 			{{ body }}
 		{% endif %}
 		{% endwith %}
 	</div>
-</fieldset>
 {% endwith %}
-{% endblock %}
-
-
-{# some tinymce js #}
-{% block widget_after %}
-<script type="text/javascript" src="/lib/js/modules/tinymce3.5.0/tiny_mce.js"></script>
-<script type="text/javascript" src="/lib/js/modules/tinymce3.5.0/jquery.tinymce.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	{% all catinclude "_admin_tinymce_overrides_js.tpl" id %}
-    z_tinymce_init();
-});
-</script>
 {% endblock %}

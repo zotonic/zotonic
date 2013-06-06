@@ -9,12 +9,12 @@
 {% with m.config.i18n.language_list.list as languages %}
 
 <div class="edit-header">
-	<div class="pull-right span4">
+	<div class="pull-right">
 		<p class="admin-chapeau">
-		{_ Modified _} {{ r.modified|timesince }}
-		{_ by _} <nobr><a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>.</nobr>
-		{_ Created by _}
-			<nobr><a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>.</nobr>
+			{_ Modified _} {_ by _}
+			<a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a> &ndash; {{ r.modified|date:"Y-m-d H:i" }}<br/>
+			{_ Created by _}
+			<a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a> &ndash; {{ r.created|date:"Y-m-d H:i" }}
 		</p>
 	</div>
 
@@ -42,62 +42,55 @@
 {% block admin_edit_form_pre %}{% endblock %}
 
 {% wire id="rscform" type="submit" postback="rscform" %}
-<form id="rscform" method="post" action="postback" class="row">
-	<button style="display:none" type="submit"></button><!-- for saving on press enter -->
+<form id="rscform" method="post" action="postback" class="form-horizontal">
 	<input type="hidden" name="id" value="{{ id }}" />
 
-	<div class="span8" id="poststuff">
-		{% block admin_edit_form_top %}{% endblock %}
+	{% include "_admin_edit_footer.tpl" %}
 
-		{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
+	<div class="row-fluid">
+		<div class="span8" id="poststuff">
+			{% block admin_edit_form_top %}{% endblock %}
 
-        {% if id.category_id.feature_show_address|if_undefined:`true` %}
-        {% catinclude "_admin_edit_content_address.tpl" id is_editable=is_editable languages=languages %}
-        {% endif %}
-        
-		{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
+			{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
+			{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
 
-		{% if r.is_a.media or r.medium %}
-			{% include "_admin_edit_content_media.tpl" %}
-		{% endif %}
+	        {% if id.category_id.feature_show_address|if_undefined:`true` %}
+	        	{% catinclude "_admin_edit_content_address.tpl" id is_editable=is_editable languages=languages %}
+	        {% endif %}
+	        
+			{% if r.is_a.media or r.medium %}
+				{% include "_admin_edit_content_media.tpl" %}
+			{% endif %}
 
-		{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
-		{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
-		{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
+			{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
+			{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
+			{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 
-{#
-		{% catinclude "_admin_edit_haspart.tpl" id is_editable=is_editable languages=languages %}
-#}
+			{# {% catinclude "_admin_edit_haspart.tpl" id is_editable=is_editable languages=languages %} #}
 
-		{% include "_admin_edit_content_advanced.tpl" %}
-		{% include "_admin_edit_content_seo.tpl" %}
-	</div>
+			{% include "_admin_edit_content_advanced.tpl" %}
+			{% include "_admin_edit_content_seo.tpl" %}
+		</div>
 
-	<div class="span4" id="sidebar">
-		<div id="sort"> {# also sidebar #}
+		<div class="span4" id="sidebar">
+			<div id="sort"> {# also sidebar #}
+			{% include "_admin_edit_content_publish.tpl" headline="simple" %}
 
-		{# Publish page #}
-		{% include "_admin_edit_content_publish.tpl" headline="simple" %}
+	        {% if r.is_a.meta %}
+				{% include "_admin_edit_meta_features.tpl" %}
+	        {% endif %}
+	        
+			{% include "_admin_edit_content_acl.tpl" %}
 
-        {% if r.is_a.meta %}
-		{% include "_admin_edit_meta_features.tpl" %}
-        {% endif %}
-        
-		{# Access control #}
-		{% include "_admin_edit_content_acl.tpl" %}
+			{% if not r.is_a.meta %}
+				{% include "_admin_edit_content_pub_period.tpl" %}
+				{% include "_admin_edit_content_date_range.tpl" %}
+			{% endif %}
 
-		{% if not r.is_a.meta %}
-				{# Publication period #}
-		{% include "_admin_edit_content_pub_period.tpl" %}
+			{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
 
-		{# Date range #}
-		{% include "_admin_edit_content_date_range.tpl" %}
-		{% endif %} {# not r.is_a.meta #}
-
-		{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
-
-		{# Page connections #}
-		{% include "_admin_edit_content_page_connections.tpl" %}
+			{% include "_admin_edit_content_page_connections.tpl" %}
+			</div>
 		</div>
 	</div>
 </form>
@@ -106,27 +99,15 @@
 
 </div>
 
-<script>
-	$(function() {
-		setTimeout(function() {
-		$({{ m.session['admin_widgets']|to_json }}).each(function() {
-			for (var k in this) {
-				$("#"+k).adminwidget("setVisible", this[k] == "true", true);
-			}});
-		}, 1);
-		
-		$('.language-tabs > li > a[data-toggle="tab"]').live('shown', function (e) {
-			if (e.target != e.relatedTarget) {
-				var lang = $(e.target).parent().attr('lang');
-				$("li[lang='"+lang+"']:visible > a").tab('show');
-			}
-		});
-	});
-</script>
+{% endwith %}
+{% endwith %}
+{% endwith %}
 
-
-{% endwith %}
-{% endwith %}
-{% endwith %}
+{% include "_admin_edit_js.tpl" %}
 
 {% endblock %}
+
+{% block tinymce %}
+	{% include "_admin_tinymce.tpl" %}
+{% endblock %}
+

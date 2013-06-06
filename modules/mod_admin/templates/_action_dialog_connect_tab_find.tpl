@@ -2,7 +2,7 @@
 	<p>{_ Find an existing page to connect _}</p>
 
 	<form id="dialog-connect-find">
-		<input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus span8" />
+		<input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus input-block-level" />
 		<select name="find_category">
 			{% if predicate %}
 				<option value="p:{{ predicate }}">{_ Valid for: _} {{ predicate.title }}</option>
@@ -11,7 +11,7 @@
 			<option value="" disabled></option>
 		    {% for cat_id, level, indent, name in m.category.all_flat %}
 		    {% if m.acl.insert[name|as_atom] %}
-		    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
+		    <option value="{{cat_id}}" {% if cat_id == cat %}selected="selected" {% endif %}>
 			{{ indent }}{{ m.rsc[cat_id].title|default:name }}
 		    </option>
 		    {% endif %}

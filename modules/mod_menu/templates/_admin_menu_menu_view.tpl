@@ -18,7 +18,6 @@
             <br/>{_ Drag menu items in the menu up, down, left or right to structure the menu. _}
         </p>
 
-
 		<ul class="tree-list do_menuedit" id="menu-{{ id }}">
 			{% for mid, path, action in id.menu|menu_flat %}
 			{% with forloop.counter as c %}

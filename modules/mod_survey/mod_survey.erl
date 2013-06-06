@@ -78,13 +78,20 @@ event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, 
         ], Context);
 
 event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
-    [Headers0|Data] = m_survey:survey_results(SurveyId, Context),
-    Headers = lists:map(fun(X) -> list_to_atom(binary_to_list(X)) end, Headers0),
-    All = [lists:zip(Headers, Row) || Row <- Data],
-    z_render:dialog(?__("E-mail addresses", Context),
-                    "_dialog_survey_email_addresses.tpl",
-                    [{id, SurveyId}, {all, All}],
-                    Context).
+    case m_survey:survey_results(SurveyId, Context) of
+        [Headers0|Data] ->
+            Headers = lists:map(fun(X) -> list_to_atom(binary_to_list(X)) end, Headers0),
+            All = [lists:zip(Headers, Row) || Row <- Data],
+            z_render:dialog(?__("E-mail addresses", Context),
+                            "_dialog_survey_email_addresses.tpl",
+                            [{id, SurveyId}, {all, All}],
+                            Context);
+        [] ->
+            z_render:dialog(?__("E-mail addresses", Context),
+                            "_dialog_survey_email_addresses.tpl",
+                            [{id, SurveyId}, {all, []}],
+                            Context)
+    end.
 
 %% @doc Append the possible blocks for a survey's edit page.
 observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->

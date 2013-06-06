@@ -5,15 +5,12 @@
 {% block content %}
 {% with m.acl.is_admin as editable %}
 <div class="edit-header">
-
     <h2>{_ Categories _}</h2>
 
     <p>{_ Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy. _}</p>
-    
 </div>
-<div class="row">
-
-    <div id="category-sorter" class="span6">
+<div class="row-fluid">
+    <div id="category-sorter" class="span8">
         {% include "_admin_category_sorter.tpl" %}
     </div>
 
@@ -29,7 +26,6 @@
                 </p>
             </div>
         </div>
-
     </div>
 </div>
 </div>

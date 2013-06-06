@@ -36,15 +36,20 @@ $.widget("z.adminwidget",
             .bind("mouseover", function(){self.icon.addClass('icon-white');})
             .bind("mouseout", function(){self.icon.removeClass('icon-white');})
             .attr("title", z_translate("Click to toggle"))
-            .click(function(){self.toggle();});
+            .click(function(ev){self.toggle(ev);});
         
     },
 
-    toggle: function() {
-	    var self = this;
-	    var id = self.element.attr("id");
-	    self.setVisible(!self.showing);
-    	if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
+    toggle: function(ev) {
+    	if (	$(ev.target).hasClass('widget-header')
+    		||	$(ev.target).hasClass('icon-plus')
+    		||	$(ev.target).hasClass('icon-minus')) {
+		    var self = this;
+		    var id = self.element.attr("id");
+		    self.setVisible(!self.showing);
+	    	if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
+	    	ev.stopPropagation();
+	    }
     },
 
     setVisible: function(v, skipAnim) {

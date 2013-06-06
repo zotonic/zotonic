@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="input-append">
-		<input id="{{ #email }}" type="text" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="span3 nosubmit" />
+		<input id="{{ #email }}" type="email" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="input-xlarge nosubmit" />
 		<a id="{{ #email_add }}" href="#" class="btn">{_ Add _}</a>
 	</div>
 	{% validate id=#email type={email failure_message=""} %}

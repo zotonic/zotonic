@@ -20,23 +20,25 @@
 	%}
 	{% block html_head_extra %}{% endblock %}
 	<style type="text/css">
-	body.fullscreen {
-		height: 100%;
-		width: 100%;
-		position: absolute;
-		padding: 0 !important;
-	}
-	.container-fluid,
-	.row-fluid { 
-		height: inherit; 
-		padding: 0;
-	}
-	.navbar-fixed-top {
-		position: absolute !important;
-	}
-	.navbar .container-fluid {
-		padding: 0 20px;
-	}
+	{% block head_css_extra %}
+		.container-fluid,
+		.row-fluid { 
+			height: inherit; 
+			padding: 0;
+		}
+		.navbar-fixed-top {
+			position: absolute !important;
+		}
+		.navbar .container-fluid {
+			padding: 0 20px;
+		}
+		body.fullscreen {
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			padding: 0 !important;
+		}
+	{% endblock %}
 	</style>
 </head>
 
