@@ -55,7 +55,7 @@
 -define(PIVOT_POLL_INTERVAL, 10).
 
 % Number of queued ids taken from the queue at one go
--define(POLL_BATCH, 100).
+-define(POLL_BATCH, 500).
 
 %% Minimum day, inserted for date start search ranges
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
