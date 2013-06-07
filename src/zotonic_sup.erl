@@ -210,27 +210,16 @@ init_ua_classifier() ->
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
 %%      messing with application parameters when starting up a new wm-mochiweb process.
 init_webmachine() -> 
-    ErrorHandler0 = z_config:get_dirty(webmachine_error_handler),        
-    ErrorHandler = 
-        case ErrorHandler0 of 
-            undefined ->
-                webmachine_error_handler;
-            EH -> EH
-        end,
-    application:set_env(webzmachine, server_header, webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION),
-    application:set_env(webzmachine, error_handler, ErrorHandler),        
+    ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
+    application:set_env(webzmachine, server_header, ServerHeader),
+    set_webzmachine_default(webmachine_logger_module, z_stats),
+    set_webzmachine_default(error_handler, z_webmachine_error_handler),
+    webmachine_sup:start_logger().
 
-    LogDir = z_config:get_dirty(log_dir),
-
-    application:set_env(webzmachine, webmachine_logger_module, z_stats),
-    webmachine_sup:start_logger(LogDir),
-
-    case z_config:get_dirty(enable_perf_logger) of
-        true ->
-            application:set_env(webzmachine, enable_perf_logger, true),
-            webmachine_sup:start_perf_logger(LogDir);
-        _ ->
-            ignore
+set_webzmachine_default(Par, Def) ->
+    case application:get_env(webzmachine, Par) of
+        undefined -> application:set_env(webzmachine, Par, Def);
+        _ -> nop
     end.
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options

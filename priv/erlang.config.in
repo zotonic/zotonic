@@ -13,7 +13,27 @@
   ]},
 
  {webzmachine,
-  [{wmtrace_dir, "priv/wmtrace"},
-   {silent_console, true}
+  [
+%%% Logger module, use this option to set your own.
+   %% {webmachine_logger_module, z_stats}, % <- default set by Zotonic
+   %% {webmachine_logger_module, webmachine_logger}, % <- webmachine default
+
+%%% Error handler module, use this option to set your own.
+   %% {error_handler, z_webmachine_error_handler}, % <- default set by Zotonic
+   %% {error_handler, webmachine_error_handler}, % <- webmachine default
+
+%%% Set this option to false if you want webmachine to write info about
+%%% opening/closing log files to the Erlang console.
+   %% {silent_console, true},
+
+%%% Location of access logs (logging is disabled if not set).
+   {log_dir, "priv/log/access/"},
+
+%%% Location of performance logs (logging is disabled if not set).
+   %% {perf_log_dir, "priv/log/perf/"},
+
+%%% Location of wmtrace logs (defaults to "priv/wmtrace" if not specified).
+   {wmtrace_dir, "priv/log/wmtrace/"}
+
   ]}
 ].
