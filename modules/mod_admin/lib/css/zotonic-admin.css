@@ -582,6 +582,21 @@ body[dir=rtl] label {
     margin-top: 30px;
 }
 
+#logon_error {
+    padding: 16px;
+    display: none;
+}
+.logon_error #logon_error {
+    display: block;
+}
+#logon_error h2, #logon_error h3 {
+    font-size: 1.1em;
+    line-height: 1.2em;
+}
+#logon_error p {
+    margin-bottom: 1em;
+}
+
 /* icon status
 --------------------------------------------------------- */
 span.icon_status {
