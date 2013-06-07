@@ -79,15 +79,6 @@
 %%% Inet request backlog, increase when requests are being dropped.
  %% {inet_backlog, 500},
 
-%%% Directory where log files are written.
- %% {log_dir,"priv/log"},
-
-%%% Enable performance logging (in addition to request logging).
- %% {enable_perf_logger, true},
-
-%%% Webmachine error handler, you can use your own.
- %% {webmachine_error_handler, z_webmachine_error_handler},
-
 %%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
 %%% use the RGB colorspace, so all images are darker than the original.
 %%% Possible Values:
