@@ -77,7 +77,6 @@ allowed_methods(ReqData, Context) ->
     end.
 
 
-%% TODO: refactor via z_notifier.
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
     Context0 = ?WM_REQ(ReqData, Context),
