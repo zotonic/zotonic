@@ -576,7 +576,17 @@ function z_websocket_start(host)
     }
     z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
 
-    z_ws.onopen = function() { z_ws_opened = true; };
+    var connect_timeout = setTimeout(function() { 
+        if(z_ws.readyState != 0) return;
+        // Failed to open a websocket within the specified time - try to start comet
+        z_ws = undefined;
+        z_comet(host);
+    }, 2000); 
+
+    z_ws.onopen = function() { 
+        clearTimeout(connect_timeout);
+        z_ws_opened = true; 
+    };
     z_ws.onerror = function() { };
 
     z_ws.onclose = function (evt)
