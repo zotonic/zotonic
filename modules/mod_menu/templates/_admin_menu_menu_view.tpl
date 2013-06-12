@@ -1,6 +1,6 @@
 <div class="widget" id="{{ #menu }}">
 	<h3 class="widget-header">
-		{_ Current menu _}
+		{_ Menu _}
 	</h3>
 	<div class="widget-content">
 
