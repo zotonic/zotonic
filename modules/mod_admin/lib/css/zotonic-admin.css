@@ -48,17 +48,24 @@ div.navbar .brand {
 /* footer edit nav
 --------------------------------------------------------- */
 
-.navbar-fixed-bottom {
-    background-color: black;
-    padding: 5px 20px;
+.navbar-fixed-save {
+    display: none;
+    position: fixed;
+    top: 40px;
 }
-.navbar-fixed-bottom .control-group {
+.navbar-fixed-save .navbar-inner {
+    border-radius: 0 0 4px 4px;
+}
+.scrolled .navbar-fixed-save {
+    display: block;
+}
+.navbar-fixed-save .control-group {
     margin: 0 20px 0;
 }
-.navbar.navbar-fixed-bottom .pull-right {
+.navbar.navbar-fixed-save .pull-right {
     float: right;
 }
-.navbar-fixed-bottom label {
+.navbar-fixed-save label {
     color: white;
     margin-left: 20px;
 }
@@ -66,8 +73,11 @@ div.navbar .brand {
     body > div.container-fluid {
         margin-top: 0;
     }
-    .navbar-fixed-bottom {
+    .navbar-fixed-save {
         position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
     }
 }
 

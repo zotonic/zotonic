@@ -45,8 +45,6 @@
 <form id="rscform" method="post" action="postback" class="form-horizontal">
 	<input type="hidden" name="id" value="{{ id }}" />
 
-	{% include "_admin_edit_footer.tpl" %}
-
 	<div class="row-fluid">
 		<div class="span8" id="poststuff">
 			{% block admin_edit_form_top %}{% endblock %}
@@ -73,6 +71,8 @@
 		</div>
 
 		<div class="span4" id="sidebar">
+			{% include "_admin_edit_footer.tpl" %}
+
 			<div id="sort"> {# also sidebar #}
 			{% include "_admin_edit_content_publish.tpl" headline="simple" %}
 
