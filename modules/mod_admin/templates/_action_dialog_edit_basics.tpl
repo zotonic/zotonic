@@ -54,8 +54,9 @@
     </div>
     
     <div class="modal-footer">
+
 	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
-	{% button class="btn" text=_"Visit full editpage" action={redirect dispatch="admin_edit_rsc" id=id} tag="a" %}
+	{% button class="btn" text=_"Visit full editpage" action={redirect dispatch=q.edit_dispatch|default:`admin_edit_rsc` id=id} tag="a" %}
 	{% button class="btn btn-primary" type="submit" text=_"Save" %}
     </div>
 </form>

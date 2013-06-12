@@ -16,12 +16,14 @@
 
 {% block content_area %}
 	{% with id|menu_rsc as tree_id %}
-	{% with {postback postback=`admin-menu-edit` delegate=`mod_admin_frontend`} as admin_menu_edit_action %}
+	{% with {postback postback={admin_menu_edit} delegate=`mod_admin_frontend`} as admin_menu_edit_action %}
 	<div class="row-fluid">
 		{% with m.rsc[tree_id].id as tree_id %}
 			{% if tree_id and tree_id.is_visible %}
 				<div class="span4" id="menu-editor">
+					{% block above_menu %}{% endblock%}
 			        {% include "_admin_menu_menu_view.tpl" id=tree_id connect_tab="new" cat_id=m.rsc.text.id %}
+					{% block below_menu %}{% endblock%}
 				</div>
 				<div class="span8" id="editcol">
 					{% if id %}
@@ -32,11 +34,7 @@
 				</div>
 			{% else %}
 				<div class="span12" id="editcol">
-					{% if id %}
-						{% catinclude "_admin_frontend_edit.tpl" id tree_id=tree_id %}
-					{% else %}
-						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
-					{% endif %}
+					{% wire postback={admin_menu_edit id=id} delegate=`mod_admin_frontend` %}
 				</div>
 			{% endif %}
 		{% endwith %}

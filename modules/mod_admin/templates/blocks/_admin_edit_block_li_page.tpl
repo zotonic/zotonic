@@ -15,6 +15,8 @@
 </fieldset>
 {% endwith %}
 
-{% include "_admin_edit_block_show_as.tpl" %}
+{% include "_admin_edit_block_show_as.tpl" is_page_block %}
 
 {% endblock %}
+
+
