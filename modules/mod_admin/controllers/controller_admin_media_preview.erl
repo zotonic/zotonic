@@ -20,6 +20,7 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([init/1,
+         service_available/2,
          resource_exists/2,
          content_types_provided/2,
          to_image/2
@@ -30,24 +31,31 @@
 
 init([]) -> {ok, []}.
 
-resource_exists(ReqData, Context) ->
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
+    Context  = z_context:new(ReqData, ?MODULE),
+    Context1 = z_context:set(DispatchArgs, Context),
+    ?WM_REPLY(true, Context1).
+
+resource_exists(ReqData, Context0) ->
+    ContextReq = ?WM_REQ(ReqData, Context0),
+    Context = z_context:ensure_all(ContextReq), 
     case z_context:get_q("id", Context) of
         undefined ->
-            {false, ReqData, Context};
+            ?WM_REPLY(false, Context);
         [] ->
-            {false, ReqData, Context};
+            ?WM_REPLY(false, Context);
         Id ->
-            case m_rsc:exists(Id, Context) of 
-                true ->
-                    case m_rsc:is_visible(Id, Context) of
+            case m_rsc:rid(Id, Context) of
+                undefined -> 
+                    ?WM_REPLY(false, Context);
+                RscId -> 
+                    case m_rsc:exists(RscId, Context) andalso m_rsc:is_visible(RscId, Context) of 
                         true ->
-                            Context2 = z_context:set("id", Id, Context),
-                            {true, ReqData, Context2};
+                            Context2 = z_context:set(id, RscId, Context),
+                            ?WM_REPLY(true, Context2);
                         false ->
-                            {false, ReqData, Context}
-                    end;
-                false ->
-                    {false, ReqData, Context}
+                            ?WM_REPLY(true, Context)
+                    end
             end
     end.
 
@@ -56,7 +64,6 @@ content_types_provided(ReqData, Context) ->
 
 to_image(ReqData, Context) ->
     Opts = [{mediaclass, "admin-editor"}],
-    Id = m_rsc:rid(z_context:get("id", Context), Context),
-    {ok, Url} = z_media_tag:url(Id, Opts, Context),
-    ReqData1 = wrq:set_resp_header("Location", binary_to_list(Url), ReqData),
+    {ok, Url} = z_media_tag:url(z_context:get(id, Context), Opts, Context),
+    ReqData1 = wrq:set_resp_header("Location", z_context:abs_url(Url, Context), ReqData),
     {{halt, 303}, ReqData1, Context}.
