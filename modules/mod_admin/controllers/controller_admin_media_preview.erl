@@ -21,7 +21,6 @@
 
 -export([init/1,
          resource_exists/2,
-         is_authorized/2,
          content_types_provided/2,
          to_image/2
         ]).
@@ -30,10 +29,6 @@
 -include_lib("zotonic.hrl").
 
 init([]) -> {ok, []}.
-
-is_authorized(ReqData, _Args) ->
-    Context = z_context:new(ReqData, ?MODULE),
-    z_acl:wm_is_authorized(use, mod_admin, admin_logon, ReqData, Context).
 
 resource_exists(ReqData, Context) ->
     case z_context:get_q("id", Context) of

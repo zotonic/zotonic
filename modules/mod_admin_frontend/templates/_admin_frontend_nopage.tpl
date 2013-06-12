@@ -4,4 +4,5 @@
 
 {% javascript %}
 	$('.tree-list .active').removeClass('active');
+	$('#save-buttons').fadeOut();
 {% endjavascript %}
