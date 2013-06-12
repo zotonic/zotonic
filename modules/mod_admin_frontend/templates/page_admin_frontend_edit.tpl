@@ -11,6 +11,15 @@
 		#editcol {
 			max-width: 800px;
 		}
+		nav.navbar .checkbox.inline {
+			color:white;
+			padding-top: 0;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+		nav.navbar .btn {
+			margin-bottom: 10px;
+		}
 	</style>
 {% endblock %}
 
@@ -42,6 +51,45 @@
 	{% endwith %}
 	{% endwith %}
 	{% include "_admin_edit_js.tpl" %}
+{% endblock %}
+
+{% block navbar %}
+{# The buttons in the navbar click/sync with hidden counter parts in the resource edit form #}
+<nav class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span4">
+				<a href="{{ school_id.page_url }}" class="btn">{_ Close _}</a>
+			</div>
+			<div class="span8" id="save-buttons" style="display:none">
+				<span class="brand visible-desktop">{_ This page _}</span>
+
+				{% button class="btn btn-primary" text=_"Save" title=_"Save this page." 
+						  action={script script="$('#save_stay').click();"}
+				 %}
+
+				{% button class="btn" text=_"Save &amp; view" title=_"Save and view the page." 
+						  action={script script="$('#save_view').click();"}
+				 %}
+
+				<label for="is_published_navbar" class="checkbox inline">
+		    		<input type="checkbox" id="is_published_navbar" name="is_published_navbar" value="1" checked="checked" />
+		    	    {_ Published _}
+	    	    </label>
+	    	    {% javascript %}
+	    	    	$('#is_published_navbar').change(function() {
+	    	    		alert($(this).is(':checked'));
+	    	    		$('#is_published').attr('checked', $(this).is(':checked'));
+		    	    });
+	    	    {% endjavascript %}
+
+				{% button class="btn pull-right" text=_"Cancel" action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" %}
+	    	</div>
+		</div>
+	</div>
+	</div>
+</nav>
 {% endblock %}
 
 {% block _js_include_extra %}
