@@ -7,31 +7,14 @@
 {% block widget_id %}sidebar-translations{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id].language as r_lang %}
 <div class="pull-right">
     <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{_ Help about translations. _}', text: '{_ The title, body and other texts can be translated in different languages. Here you can select which languages will be used. _}'" title="{_ Translate this page in other languages. _}"><i class="icon-question-sign icon-white"></i></a>
 </div>
 
-<div class="control-group">
-    <div id="admin-translation-checkboxes">
-        {% for code, lang in languages %}
-            {% if lang.is_enabled %}
-            <label class="inline checkbox">
-    	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"
-    	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} /> 
-    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.language }}</span>
-            </label>
-            {% wire id=#language.code action={toggle selector=[".tab-",code|make_list]} %}
-            {% endif %}
-        {% empty %}
-            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ z_language }}</label>
-        {% endfor %}
-    </div>
-</div>
+{% include "_translation_edit_languages.tpl" %}
 
 <div class="control-group">
     <button class="btn" id="{{ #copy }}">{_ Copy translation _}…</button>
     {% wire id=#copy action={dialog_open title=_"Copy translation" template="_dialog_language_copy.tpl"} %}
 </div>
-{% endwith %}
 {% endblock %}

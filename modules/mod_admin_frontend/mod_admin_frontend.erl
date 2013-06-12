@@ -30,11 +30,15 @@
 
 -include("zotonic.hrl").
 
-event(#postback{message='admin-menu-edit'}, Context) ->
-	case m_rsc:rid(z_context:get_q("id", Context), Context) of
+event(#postback{message={admin_menu_edit, Args}}, Context) ->
+	case m_rsc:rid(z_context:get_q("id", Context, proplists:get_value(id, Args)), Context) of
 		undefined ->
 			Context;
 		Id ->
-			Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl"}, vars=[{id,Id}]}, Context),
+			Vars = [
+				{id, Id},
+				{edit_dispatch, admin_edit_frontend}
+			],
+			Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl"}, vars=Vars}, Context),
 			z_script:add_script(<<"setTimeout(function() { z_tinymce_init(); }, 100);">>, Context1)
 	end.

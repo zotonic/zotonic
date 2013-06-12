@@ -78,7 +78,12 @@ window.zAdminBlockConnectDone = function(v) {
 
 $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
     var rsc_id = $(this).attr('href').replace('#', '');
-    z_event("admin-edit-basics", {id: rsc_id, element_id: $(this).closest(".rsc-item").attr('id'), template: "_rsc_item.tpl"});
+    z_event("admin-edit-basics", {
+                        id: rsc_id, 
+                        element_id: $(this).closest(".rsc-item").attr('id'), 
+                        template: "_rsc_item.tpl", 
+                        edit_dispatch: "{{ edit_dispatch }}"
+                });
     event.preventDefault();
 });
 

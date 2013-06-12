@@ -1,4 +1,10 @@
+{% javascript %}
+	$('.tree-list .active').removeClass('active');
+	$('.tree-list div[data-page-id="{{ id }}"]').addClass('active');
+{% endjavascript %}
+
 {% with id.is_editable as is_editable %}
+{% with m.config.i18n.language_list.list as languages %}
 {% wire id="rscform" type="submit" postback="rscform" delegate=`controller_admin_edit` %}
 <form id="rscform" method="post" action="postback" class="form-horizontal">
 	<input type="hidden" name="id" value="{{ id }}" />
@@ -8,7 +14,7 @@
 	<div id="poststuff">
 		{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
 
-		{% if id.category_id.feature_show_address|if_undefined:`true` %}
+		{% if id.category_id.feature_show_address %}
 			{% catinclude "_admin_edit_content_address.tpl" id is_editable=is_editable languages=languages %}
 		{% endif %}
 		
@@ -22,5 +28,14 @@
 		{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
 		{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 	</div>
+
+	{# Hidden language checkboxes. TODO: make this user selectable (popup?) #}
+	{% if m.modules.info.mod_translation.enabled %}
+		<div style="display: none">
+			{% include "_translation_edit_languages.tpl" %}
+		</div>
+	{% endif %}
+
 </form>
+{% endwith %}
 {% endwith %}
