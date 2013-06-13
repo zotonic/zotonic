@@ -34,7 +34,8 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
-    folsom:start().
+    folsom:start(),
+    webmachine_sup:start_logger(webmachine_logger).
 
 %% @doc Create a new counters and histograms.
 %%
