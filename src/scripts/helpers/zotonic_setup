@@ -67,14 +67,14 @@ export KERNEL_POLL=${KERNEL_POLL:=true}
 # The include path for the erlang vm, add when needed for your application.
 export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
+# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
+export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
+
 # For zotonic-addsite et. al. we require Zotonic to be already
 # running. In that case, check if Zotonic is already running with the
 # -name parameter.
 DISTRIBUTED_DETECTED=$(ps u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
 export ZOTONIC_DISTRIBUTED=${ZOTONIC_DISTRIBUTED:=$DISTRIBUTED_DETECTED}
-
-# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
-export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
 
 # The ZOTONIC_DISTRIBUTED flag tells Zotonic to start a (potentially)
 # distributed node. In that case, we require the hostname to be a FQDN.
