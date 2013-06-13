@@ -79,7 +79,6 @@
 	    	    </label>
 	    	    {% javascript %}
 	    	    	$('#is_published_navbar').change(function() {
-	    	    		alert($(this).is(':checked'));
 	    	    		$('#is_published').attr('checked', $(this).is(':checked'));
 		    	    });
 	    	    {% endjavascript %}
