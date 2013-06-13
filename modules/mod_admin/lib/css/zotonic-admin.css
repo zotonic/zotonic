@@ -60,9 +60,10 @@ div.navbar .brand {
 }
 .navbar-fixed-save .navbar-inner {
     border-radius: 0 0 4px 4px;
+    padding: 0 4px 0 4px;
 }
 .scrolled .navbar-fixed-save {
-    opacity: 0.9;
+    opacity: 1.0;
     height: auto;
 }
 .navbar-fixed-save .control-group {
@@ -671,3 +672,4 @@ span.icon_status_starting {
 div.modal div.tab-content {
     overflow: visible;
 }
+
