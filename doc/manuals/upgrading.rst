@@ -9,6 +9,16 @@ that require attetion for site developers when things change in
 incompatible ways or get deprecated.
 
 
+Upgrading to Zotonic 0.10
+-------------------------
+
+Config changes
+..............
+
+All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
+which is created by default if misssing from ``priv/erlang.config.in``.
+
+
 Upgrading to Zotonic 0.9
 ------------------------
 
