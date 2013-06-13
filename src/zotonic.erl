@@ -40,8 +40,13 @@ ensure_started(App) ->
             end;
         {error, {already_started, App}} ->
             ok;
+        {error, {Tag, Msg}} when is_list(Tag), is_list(Msg) ->
+                io_lib:format("~s: ~s", [Tag, Msg]);
+        {error, {bad_return, {{M, F, Args}, Return}}} ->
+                A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
+                io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p", [App, M, F, A, Return]);
         {error, Reason} ->
-            Reason
+            io_lib:format("~p", [Reason])
     end.
 
 %% @spec start() -> ok
@@ -55,15 +60,8 @@ start(_Args) ->
     zotonic_deps:ensure(),    
     case ensure_started(zotonic) of
         ok -> ok;
-        Error ->
-            Message = if is_tuple(Error) -> 
-                              string:join([z_convert:to_list(E) || E <- tuple_to_list(Error)], ": ");
-                         is_list(Error) -> 
-                              Error;
-                         true -> 
-                              z_convert:to_list(Error)
-                      end,
-            lager:error("Zotonic failed to start application: ~s~n", [Message]),
+	Message ->
+            lager:error("Zotonic start error: ~s~n", [Message]),
             init:stop()
     end.
 
