@@ -49,15 +49,21 @@ div.navbar .brand {
 --------------------------------------------------------- */
 
 .navbar-fixed-save {
-    display: none;
+    opacity: 0;
     position: fixed;
     top: 40px;
+    height: 0;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
 }
 .navbar-fixed-save .navbar-inner {
     border-radius: 0 0 4px 4px;
 }
 .scrolled .navbar-fixed-save {
-    display: block;
+    opacity: 0.9;
+    height: auto;
 }
 .navbar-fixed-save .control-group {
     margin: 0 20px 0;
