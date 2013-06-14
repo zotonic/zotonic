@@ -63,7 +63,7 @@ install(blog, Context) ->
        {page_about,
         text,
         [{title, <<"About this blog">>},
-         {summary, <<"This is your blog!! It would be wise to type some text here on what you will be writing about. Ofcourse, this page is just a demo page and can be deleted just as well.">>}]
+         {summary, <<"This is your blog!! It would be wise to type some text here on what you will be writing about. Of course, this page is just a demo page and can be deleted just as well.">>}]
        },
 
        {page_contact,
