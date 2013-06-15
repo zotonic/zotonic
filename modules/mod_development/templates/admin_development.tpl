@@ -12,15 +12,26 @@
 
             <div>
                 {% wire id="tpldbg" 
-                    action={config_toggle module="mod_development" key="filepath_debug"}
+                    action={config_toggle module="mod_development" key="debug_includes"}
                     action={admin_tasks task='flush'} 
                 %}
                 <label class="checkbox inline">
-                    <input type="checkbox" id="tpldbg" value="1" {% if m.config.mod_development.filepath_debug.value %}checked="checked"{% endif %} />
-                    {_ Show paths to template files in generated templates _}
+                    <input type="checkbox" id="tpldbg" value="1" {% if m.config.mod_development.debug_includes.value %}checked="checked"{% endif %} />
+                    {_ Show paths to included template files in generated templates _}
                 </label>
             </div>
 
+            <div>
+                {% wire id="blkdbg" 
+                    action={config_toggle module="mod_development" key="debug_blocks"}
+                    action={admin_tasks task='flush'} 
+                %}
+                <label class="checkbox inline">
+                    <input type="checkbox" id="blkdbg" value="1" {% if m.config.mod_development.debug_blocks.value %}checked="checked"{% endif %} />
+                    {_ Show defined blocks in generated templates _}
+                </label>
+            </div>
+            
             <div>
                 {% wire id="libsep" 
                     action={config_toggle module="mod_development" key="libsep"}

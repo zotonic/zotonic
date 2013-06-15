@@ -270,7 +270,9 @@ handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
                                         File,
                                         Module, 
                                         [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter},
-                                         {filepath_debug, get_debugging(Context)}],
+                                         {debug_includes, get_debug_includes(Context)},
+                                         {debug_blocks, get_debug_blocks(Context)}
+                                        ],
                                         Context) of
                     {ok, Module1} -> {ok, Module1};
                     Error -> Error
@@ -354,11 +356,15 @@ is_modified([{File, DateTime}|Rest]) ->
     end.
 
 
-get_debugging(Context) ->
-    z_convert:to_bool(m_config:get_value(mod_development, filepath_debug, Context)).
+get_debug_includes(Context) ->
+    z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)).
     
+get_debug_blocks(Context) ->
+    z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)).
+    
+
 runtime_wrap_debug_comments(FilePath, Output, Context) ->
-    case get_debugging(Context) of
+    case get_debug_includes(Context) of
         false ->
             Output;
         true ->

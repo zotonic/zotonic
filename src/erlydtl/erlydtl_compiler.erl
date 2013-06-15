@@ -61,7 +61,8 @@
     module = [],
     compiler_options = [verbose, report_errors],
     force_recompile = false,
-    filepath_debug = false,
+    debug_includes = false,
+    debug_blocks = false,
     z_context = undefined}).
 
 -record(ast_info, {
@@ -164,7 +165,8 @@ init_dtl_context(File, BaseFile, Module, Options, ZContext) ->
         finder = proplists:get_value(finder, Options, Ctx#dtl_context.finder),
         compiler_options = proplists:get_value(compiler_options, Options, Ctx#dtl_context.compiler_options),
         force_recompile = proplists:get_value(force_recompile, Options, Ctx#dtl_context.force_recompile),
-        filepath_debug = proplists:get_value(filepath_debug, Options, Ctx#dtl_context.filepath_debug),
+        debug_includes = proplists:get_value(debug_includes, Options, Ctx#dtl_context.debug_includes),
+        debug_blocks = proplists:get_value(debug_blocks, Options, Ctx#dtl_context.debug_blocks),
         z_context = ZContext}.   
     
 parse(File, Context) ->  
@@ -378,7 +380,7 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                         ?ERROR("body_ast: recursive block ~p (~p)", [Name, BlockFile]),
                         throw({error, "Recursive block definition of '" ++ Name ++ "' (" ++ BlockFile ++ ")"});
                     false ->
-                        body_ast(Block,
+                        block_ast(Block,
                             Context1#dtl_context{block_trail=[{Name,BlockFile}|Context1#dtl_context.block_trail]}, 
                             TreeWalkerAcc)
                 end;
@@ -507,6 +509,14 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
         end, {#ast_info{}, TreeWalker2}, AstInfoList),
     {{erl_syntax:list(AstList), Info}, TreeWalker3}.
 
+block_ast(Block, Context=#dtl_context{debug_blocks=true, block_trail=[{Name,BlockFile}|_]}, TreeWalker) ->
+    {{Ast, Info}, Walker1} = body_ast(Block, Context, TreeWalker),
+    Start = erl_syntax:string("\n<!-- BLOCK " ++ Name ++ " (in " ++ relpath(BlockFile) ++ ") -->\n"),
+    End = erl_syntax:string("\n<!-- ENDBLOCK " ++ Name ++ " -->\n"),
+    Ast1 = erl_syntax:list([Start, Ast, End]),
+    {{Ast1, Info}, Walker1};
+block_ast(Block, Context, TreeWalker) ->
+    body_ast(Block, Context, TreeWalker).
 
 merge_info(Info1, Info2) ->
     #ast_info{dependencies = 
@@ -1758,7 +1768,7 @@ notify(Msg, ZContext) ->
     z_notifier:notify(Msg, ZContext).
 
 
-cond_wrap_debug_comments(FilePath, Ast, #dtl_context{filepath_debug=true}) ->
+cond_wrap_debug_comments(FilePath, Ast, #dtl_context{debug_includes=true}) ->
     Start = erl_syntax:string("\n<!-- START " ++ relpath(FilePath) ++ " -->\n"),
     End = erl_syntax:string("\n<!-- END " ++ relpath(FilePath) ++ " -->\n"),
     erl_syntax:list(
