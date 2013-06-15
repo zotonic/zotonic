@@ -120,7 +120,7 @@ render(File, Variables, Context) ->
                 case Module:render(Variables, Context) of
                     {ok, Output}   -> 
                         z_depcache:in_process(OldCaching),
-                        Output;
+                        runtime_wrap_debug_comments(FoundFile, Output, Context);
                     {error, Reason} ->
                         z_depcache:in_process(OldCaching),
                         lager:error("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
@@ -269,7 +269,8 @@ handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
     ErlyResult = case erlydtl:compile(  FoundFile,
                                         File,
                                         Module, 
-                                        [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter}],
+                                        [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter},
+                                         {filepath_debug, get_debugging(Context)}],
                                         Context) of
                     {ok, Module1} -> {ok, Module1};
                     Error -> Error
@@ -351,3 +352,21 @@ is_modified([{File, DateTime}|Rest]) ->
         _ ->
             is_modified(Rest)
     end.
+
+
+get_debugging(Context) ->
+    z_convert:to_bool(m_config:get_value(mod_development, filepath_debug, Context)).
+    
+runtime_wrap_debug_comments(FilePath, Output, Context) ->
+    case get_debugging(Context) of
+        false ->
+            Output;
+        true ->
+            Start = "\n<!-- START " ++ relpath(FilePath) ++ " (runtime) -->\n",
+            End = "\n<!-- END " ++ relpath(FilePath) ++ " -->\n",
+            [Start, Output, End]
+    end.
+
+relpath(FilePath) ->
+    Base = os:getenv("ZOTONIC"),
+    lists:nthtail(1+length(Base), FilePath).

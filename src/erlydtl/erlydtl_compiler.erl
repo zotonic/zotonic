@@ -61,6 +61,7 @@
     module = [],
     compiler_options = [verbose, report_errors],
     force_recompile = false,
+    filepath_debug = false,
     z_context = undefined}).
 
 -record(ast_info, {
@@ -163,6 +164,7 @@ init_dtl_context(File, BaseFile, Module, Options, ZContext) ->
         finder = proplists:get_value(finder, Options, Ctx#dtl_context.finder),
         compiler_options = proplists:get_value(compiler_options, Options, Ctx#dtl_context.compiler_options),
         force_recompile = proplists:get_value(force_recompile, Options, Ctx#dtl_context.force_recompile),
+        filepath_debug = proplists:get_value(filepath_debug, Options, Ctx#dtl_context.filepath_debug),
         z_context = ZContext}.   
     
 parse(File, Context) ->  
@@ -319,7 +321,7 @@ body_extends(Extends, File, ThisParseTree, Context, TreeWalker) ->
                                                 Context#dtl_context.block_dict),
                         block_trail = [],
                         parse_trail = [File | Context#dtl_context.parse_trail],
-                        extends_trail = [Extends | Context#dtl_context.extends_trail]}, TreeWalker));
+                        extends_trail = [Extends | Context#dtl_context.extends_trail]}, TreeWalker), Context);
                 Err ->
                     throw(Err)
             end        
@@ -526,8 +528,10 @@ merge_info(Info1, Info2) ->
 %with_dependencies([H, T], Args) ->
 %     with_dependencies(T, with_dependency(H, Args)).
 %        
-with_dependency(FilePath, {{Ast, Info}, TreeWalker}) ->
-    {{Ast, Info#ast_info{dependencies = [{FilePath, filelib:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
+
+with_dependency(FilePath, {{Ast, Info}, TreeWalker}, Context) ->
+    Ast1 = cond_wrap_debug_comments(FilePath, Ast, Context),
+    {{Ast1, Info#ast_info{dependencies = [{FilePath, filelib:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
 
 
 
@@ -741,7 +745,8 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                                                                 local_scopes = [ IncludeScope | ContextInclude#dtl_context.local_scopes ],
                                                                 parse_trail = [FilePath | ContextInclude#dtl_context.parse_trail],
                                                                 extends_trail = [Template]}, 
-                                                        TreeW#treewalker{has_auto_id=false})),
+                                                      TreeW#treewalker{has_auto_id=false}),
+                                                           ContextInclude),
                             Ast1 = case InclTW2#treewalker.has_auto_id of
                                 false -> Ast;
                                 true ->  erl_syntax:block_expr(
@@ -1393,7 +1398,7 @@ tag_ast(Name, Args, All, Context, TreeWalker) ->
  tag_ast2(Source, TagParseTree, InterpretedArgs, Context, TreeWalker) ->
     with_dependency(Source, body_ast(TagParseTree, Context#dtl_context{
         local_scopes = [ InterpretedArgs | Context#dtl_context.local_scopes ],
-        parse_trail = [ Source | Context#dtl_context.parse_trail ]}, TreeWalker)).
+        parse_trail = [ Source | Context#dtl_context.parse_trail ]}, TreeWalker), Context).
 
 
 call_ast(Module, Args, Context, TreeWalker) ->
@@ -1752,3 +1757,16 @@ notify(_Msg, #context{host=test}) ->
 notify(Msg, ZContext) ->
     z_notifier:notify(Msg, ZContext).
 
+
+cond_wrap_debug_comments(FilePath, Ast, #dtl_context{filepath_debug=true}) ->
+    Start = erl_syntax:string("\n<!-- START " ++ relpath(FilePath) ++ " -->\n"),
+    End = erl_syntax:string("\n<!-- END " ++ relpath(FilePath) ++ " -->\n"),
+    erl_syntax:list(
+      [Start, Ast, End]);
+cond_wrap_debug_comments(_, Ast, #dtl_context{}) ->
+    Ast.
+
+
+relpath(FilePath) ->
+    Base = os:getenv("ZOTONIC"),
+    lists:nthtail(1+length(Base), FilePath).
