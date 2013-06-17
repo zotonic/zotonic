@@ -26,6 +26,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 var z_ws					= false;
 var z_ws_opened				= false;
 var z_stream_host           = undefined;
+var z_websocket_host        = undefined;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -491,9 +492,10 @@ function z_tinymce_remove(element)
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
-function z_stream_start(host)
+function z_stream_start(host, websocket_host)
 {
     z_stream_host = host;
+    z_websocket_host = websocket_host || host;
     if (!z_ws && !z_comet_is_running)
     {
         if ("WebSocket" in window)
@@ -574,7 +576,7 @@ function z_websocket_start(host)
     {
         protocol = "wss:";
     }
-    z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
+    z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
 
     var connect_timeout = setTimeout(function() { 
         if(z_ws.readyState != 0) return;

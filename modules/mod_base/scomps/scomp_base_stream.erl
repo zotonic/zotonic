@@ -26,12 +26,16 @@
 vary(_Params, _Context) -> nocache.
 
 render(_Params, _Vars, Context) ->
-    {ok, z_script:add_script(
-                    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), ");"], 
-                    Context)
-    }.
+    Script = stream_start_script(z_context:has_websockethost(Context), Context),
+    {ok, z_script:add_script(Script, Context)}.
 
-
+% Make the call of the start script.
+stream_start_script(false, Context) ->
+    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), ");"];
+stream_start_script(true, Context) ->
+    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), $,,
+        $', z_context:websockethost(Context), $', ");"].
+    
 % Add random number 0-9
 add_subdomain([$?|Hostname]) ->
     [$', integer_to_list(z_ids:number(10)), Hostname, $'];

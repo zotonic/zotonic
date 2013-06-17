@@ -120,7 +120,17 @@ The following options can be configured:
   The hostname that will be used for streaming comet/websocket
   requests. This hostname will be used in the browser for the stream
   connections instead of the main hostname, to circumvent browser
-  limitations on the number of open sockets per host.
+  limitations on the number of open sockets per host. For example::
+
+    {streamhost, "stream.example.com"}
+
+``{websockethost, "..."}``
+  The hostname that will be used for websocket requests. This hostname
+  will be used in the browser for setting up the websocket connection.
+  It can be used to configure a different port number for the websocket
+  connection. For example::
+
+    {websockethost, "example.com:443"}
 
 ``{cookie_domain, "..."}``
   The domain the Zotonic session-id and page-id cookies will be set
