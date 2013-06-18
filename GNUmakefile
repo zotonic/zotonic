@@ -45,7 +45,7 @@ clean_logs:
 .PHONY: clean
 clean: clean_logs
 	@echo "removing:"
-	(cd deps/eiconv; ./rebar clean)
+	(cd deps/eiconv; make clean)
 	(cd deps/mimetypes; ./rebar clean)
 	@if [ "${MAKEFILES}" != "" ]; then for f in ${MAKEFILES}; do echo $$f; $(MAKE) -C `dirname $$f` clean; done; fi
 	rm -f ebin/*.beam ebin/*.app
