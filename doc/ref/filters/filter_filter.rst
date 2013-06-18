@@ -22,5 +22,5 @@ For example, see all published elements in a list of resource ids::
 
   {% print [1,2,3,4,5,6]|filter:`is_published` %}
 
-.. seealso:: :ref:`filter-tail`, :ref:`filter-last`
+.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`
 

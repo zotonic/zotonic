@@ -13,5 +13,5 @@ thumbnail resources::
   ...
   {% endfor %}
 
-.. seealso:: :ref:`filter-is_a`
+.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_visible`, :ref:`filter-filter`
 

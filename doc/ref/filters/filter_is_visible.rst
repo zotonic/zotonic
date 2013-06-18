@@ -25,3 +25,5 @@ Whilst::
   {% endfor %}
 
 Lists only the first three collection members that are visible.
+
+.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_not_a`, :ref:`filter-filter`

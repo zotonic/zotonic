@@ -42,4 +42,4 @@ This will list all collection members that are a person. While::
 
 Lists only the first three collection members that are a person.
 
-.. seealso:: :ref:`filter-is_not_a`
+.. seealso:: :ref:`filter-is_not_a`, :ref:`filter-is_visible`, :ref:`filter-filter`
