@@ -75,6 +75,21 @@ m_find_value(s, #m{value=undefined}, _Context) ->
         end
     end;
 
+%% m.edge.id[subject_id].predicatename[object_id] returns the
+%% corresponding edge id or undefined.
+m_find_value(id, #m{value=undefined}, _Context) ->
+    fun(SubjectId, _IdContext) ->
+            fun(Pred, _PredContext) ->
+                    fun(ObjectId, Context) ->
+                            z_depcache:memo(
+                              fun() ->
+                                      get_id(SubjectId, Pred, ObjectId, Context)
+                              end,
+                              {get_id, SubjectId, Pred, ObjectId}, ?DAY, [SubjectId], Context)
+                    end
+            end
+    end;
+
 m_find_value(_Key, #m{}, _Context) ->
     undefined.
 

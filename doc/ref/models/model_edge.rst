@@ -17,20 +17,28 @@ used to obtain the edge’s id for edit pages.
 
 The following m_edge model properties are available in templates:
 
-+----------+---------------------------------------+----------------------------+
-|Property  |Description                            |Example                     |
-|          |                                       |value                       |
-+==========+=======================================+============================+
-|o         |Returns a function that accepts a page |[{204,13},{510,14},{508,15}]|
-|          |id and a predicate. The end result is a|                            |
-|          |list of tuples {PageId, EdgeId} which  |                            |
-|          |are objects of the page.  Example      |                            |
-|          |usage: ``m.edge.o[id].author``         |                            |
-+----------+---------------------------------------+----------------------------+
-|s         |Identical to the “o” property, except  |                            |
-|          |that this function returns the subject |                            |
-|          |edges.                                 |                            |
-+----------+---------------------------------------+----------------------------+
++----------+-----------------------------------------------+----------------------------+
+|Property  |Description                                    |Example                     |
+|          |                                               |value                       |
++==========+===============================================+============================+
+|o         |Returns a function that accepts a page         |[{204,13},{510,14},{508,15}]|
+|          |id and a predicate. The end result is a        |                            |
+|          |list of tuples {PageId, EdgeId} which          |                            |
+|          |are objects of the page.  Example              |                            |
+|          |usage: ``m.edge.o[id].author``                 |                            |
++----------+-----------------------------------------------+----------------------------+
+|s         |Identical to the “o” property, except          |                            |
+|          |that this function returns the subject         |                            |
+|          |edges.                                         |                            |
++----------+-----------------------------------------------+----------------------------+
+|id        |Look up an edge id by a                        |213                         |
+|          |subject/predicate/object tiple. Example usage::|                            |
+|          |                                               |                            |
+|          |  m.edge.id[subject_id].relation.[object_id]   |                            |
+|          |                                               |                            |
+|          |Returns `undefined` when the edge does not     |                            |
+|          |exist; otherwise returns an integer.           |                            |
++----------+-----------------------------------------------+----------------------------+
 
 .. seealso:: :ref:`model-rsc`, :ref:`model-media`
 
