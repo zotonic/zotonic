@@ -95,7 +95,8 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
         CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
     end,
     PropsSorted = lists:keysort(1, Props2),
-    case z_notifier:first({search_query, {SearchName, PropsSorted}, OffsetLimit}, Context) of
+    Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
+    case z_notifier:first(Q, Context) of
         undefined -> 
             ?LOG("Unknown search query ~p~n~p~n", [Search, erlang:get_stacktrace()]),
             #search_result{};
