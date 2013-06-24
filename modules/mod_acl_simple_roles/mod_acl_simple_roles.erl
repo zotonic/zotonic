@@ -116,9 +116,9 @@ observe_acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) ->
         case proplists:get_value(visible_for, Props) of
     		undefined ->
                 case min_visible(Context) of
-                    N when is_integer(N) ->
+                    N when is_integer(N) andalso id =:= insert_rsc ->
                         z_utils:prop_replace(visible_for, N, Props);
-                    undefined ->
+                    _ ->
                         Props
                 end;
     		Vis -> 
