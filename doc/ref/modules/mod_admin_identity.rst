@@ -1,7 +1,13 @@
 
 .. include:: meta-mod_admin_identity.rst
 
-Provides "identity management" in the admin - for example the storage of usernames and passwords.
+Provides "identity management" in the admin - for example the storage
+of usernames and passwords.
+
+It provides a user interface where you can create new users for the
+admin system. There is also an option to send these new users an
+e-mail with their password.
+
 
 Password Complexity Rules
 -------------------------
