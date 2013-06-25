@@ -59,6 +59,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                 _ -> [ NameFirst, " ", NamePrefix, " ", NameSur ]
             end,
 
+            Email = z_context:get_q_validated("email", Context),
             PersonProps = [
                 {is_published, true},
                 {category, person},
@@ -66,7 +67,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},
-                {email, z_context:get_q_validated("email", Context)},
+                {email, Email},
                 {creator_id, self}
             ],
             
@@ -78,7 +79,17 @@ event(#submit{message={user_add, Props}}, Context) ->
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
                             ok -> {ok, PersonId};
                             {error, PWReason} -> throw({error, PWReason})
-                        end;
+                        end,
+                        case z_convert:to_bool(z_context:get_q("send_welcome", Context)) of
+                            true ->
+                                Vars = [{id, PersonId},
+                                        {username, Username},
+                                        {password, Password}],
+                                z_email:send_render(Email, "email_admin_new_user.tpl", Vars, Context);
+                            false ->
+                                nop
+                        end,
+                        {ok, PersonId};
                     {error, InsReason} ->
                         throw({error, InsReason})
                 end
