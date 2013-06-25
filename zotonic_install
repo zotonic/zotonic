@@ -5,7 +5,7 @@ apt-get install -y \
         erlang \
         erlang-src \
         build-essential \
-        postgresql-8.4 \
+        postgresql \
         imagemagick \
         exif \
         git && \
