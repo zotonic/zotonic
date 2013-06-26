@@ -42,6 +42,13 @@ and will be either set or replaced with a default when not set.
     Besides that mod_ssl will ensure that, after using https, all following pages will be
     served using https. Unless specifically specified otherwise in the dispatch rules.
 
+    This is done by adding the ``{ssl, keep}`` option to all dispatch rules that do not have
+    an ``ssl`` option already.
+
+``mod_ssl.is_ssl``
+    Force all dispatch rules to use ``{ssl, true}``, unless specified otherwise.
+    Use this in combination with ``mod_ssl.is_secure`` to ensure serving a site over https.
+
 
 SSL Certificates
 ----------------
