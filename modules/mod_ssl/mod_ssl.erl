@@ -86,27 +86,36 @@ pid_observe_dispatch_rules(_Pid, dispatch_rules, #wm_host_dispatch_list{dispatch
 	{ok, SSLPort} = get_ssl_port(Context),
 	Port = get_http_port(Context),
 	IsSecure = z_convert:to_bool(m_config:get_value(mod_ssl, is_secure, false, Context)),
-	Dispatch1 = map_ssl_option(IsSecure, Port, SSLPort, Dispatch, []),
+	IsSSL = z_convert:to_bool(m_config:get_value(mod_ssl, is_ssl, false, Context)),
+	Dispatch1 = map_ssl_option(IsSecure, IsSSL, Port, SSLPort, Dispatch, []),
 	HD#wm_host_dispatch_list{dispatch_list=Dispatch1}.
 
 
-map_ssl_option(_IsSecure, _Port, _SSLPort, [], Acc) ->
+map_ssl_option(_IsSecure, _IsSSL, _Port, _SSLPort, [], Acc) ->
 	lists:reverse(Acc);
-map_ssl_option(IsSecure, Port, SSLPort, [{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
+map_ssl_option(IsSecure, IsSSL, Port, SSLPort, [{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
 	Props1= case proplists:get_value(ssl, Props) of
 				any -> 
-					[{protocol, keep} | Props];
+					case IsSSL of
+						true -> [{protocol, {https, SSLPort}} | Props ];
+						false -> [{protocol, keep} | Props]
+					end;
 				true ->
 					[{protocol, {https, SSLPort}} | Props ];
 				false ->
 					[{protocol, {http, Port}} | Props ];
 				undefined ->
-					case IsSecure of
-						true -> [{protocol, {https, SSLPort}} | Props];
-						false -> Props
+					case IsSSL of
+						true ->
+							[{protocol, {https, SSLPort}} | Props ];
+						false ->
+							case IsSecure of
+								true -> [{protocol, keep} | Props];
+								false -> Props
+							end
 					end
 			end,
-    map_ssl_option(IsSecure, Port, SSLPort, Rest, [{DispatchName, PathSchema, Mod, Props1}|Acc]).
+    map_ssl_option(IsSecure, IsSSL, Port, SSLPort, Rest, [{DispatchName, PathSchema, Mod, Props1}|Acc]).
 
 
 
