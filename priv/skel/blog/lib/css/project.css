@@ -186,7 +186,7 @@ header {
 #footer {
     margin-top: 20px;
     border-top: 1px dotted #333;
-    padding: 9px 0 0 0;
+    padding: 9px 0 9px 0;
 }
 
 #footer p.footer-blog-title {
