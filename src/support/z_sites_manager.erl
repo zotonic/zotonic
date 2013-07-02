@@ -182,7 +182,7 @@ handle_cast({stop, Site}, State) ->
 
 %% @doc Start a site, assume it is a known site.
 handle_cast({start, Site}, State) ->
-    z_supervisor:start_child(State#state.sup, Site),
+    z_supervisor:start_child(State#state.sup, Site, infinity),
     {noreply, State};
 
 %% @doc Start a site, assume it is a known site.
@@ -291,7 +291,7 @@ add_sites_to_sup(Sup, [SiteProps|Rest]) ->
             Spec = #child_spec{name=Name, mfa={z_site_sup, start_link, [Name]}},
             ok = z_supervisor:add_child(Sup, Spec),
             case proplists:get_value(enabled, SiteProps, false) of
-                true -> z_supervisor:start_child(Sup, Name);
+                true -> z_supervisor:start_child(Sup, Name, infinity);
                 false -> leave_in_stop_state
             end;
         _ ->
