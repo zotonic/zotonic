@@ -324,7 +324,7 @@ insert_1(RscId, Type, Key, Props, Context) ->
     of
         undefined -> 
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
-            z_db:insert(identity, Props1, Context);
+            z_db:insert(identity, validate_is_unique(Props1), Context);
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
                 true -> set_verified_trans(RscId, Type, Key, Context);
@@ -333,6 +333,15 @@ insert_1(RscId, Type, Key, Props, Context) ->
             {ok, IdnId}
     end.
 
+% The is_unique flag is 'null' if the entry is not unique.
+% This enables using an 'unique' constraint.
+validate_is_unique(Props) ->
+    case proplists:get_value(is_unique, Props) of
+        false ->
+            [{is_unique, undefined} | proplists:delete(is_unique, Props)];
+        _ ->
+            Props
+    end.
 
 is_valid_key(email, Key, _Context) ->
     z_email_utils:is_email(Key);
