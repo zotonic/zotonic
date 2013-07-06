@@ -34,6 +34,16 @@ To make the Title section contain your shop's name and url, you can redefine ``_
 For the sidebar area you can follow the same procedure. Of course you need to keep the submit buttons, so include ``_admin_edit_content_publish.tpl``.
 
 
+Category and instance
+---------------------
+
+To show a block on a category edit page, but not on an instance of that category, check for ``r.is_a.meta``. To show the block "Features" on the category page we write::
+
+  {% if r.is_a.meta %}
+  {% include "_admin_edit_meta_features.tpl" %}
+  {% endif %}
+
+
 Word of caution
 ---------------
 
