@@ -1013,7 +1013,7 @@ msgid "Visible till"
 msgstr "可见结束时间"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58
-msgid "Visit full editpage"
+msgid "Visit full edit page"
 msgstr "访问完整编辑页面"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:56

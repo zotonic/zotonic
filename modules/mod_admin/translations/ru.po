@@ -1015,7 +1015,7 @@ msgid "Visible till"
 msgstr "Видимо до"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:58
-msgid "Visit full editpage"
+msgid "Visit full edit page"
 msgstr "Открыть страницу редактирования"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:56

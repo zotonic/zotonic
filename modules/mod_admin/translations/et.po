@@ -1098,7 +1098,7 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50 
 msgid ""
-"Visit full editpage"
+"Visit full edit page"
 msgstr ""
 "Mine redigeerimisse"
 
