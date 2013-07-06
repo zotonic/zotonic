@@ -47,11 +47,11 @@
 
 	<div class="row-fluid">
 		<div class="span8" id="poststuff">
-			{% catinclude "_admin_edit_main_blocks.tpl" id is_editable=is_editable languages=languages %}
+			{% catinclude "_admin_edit_main_blocks.tpl" id is_editable=is_editable languages=languages r=r %}
 		</div>
 
 		<div class="span4" id="sidebar">
-			{% catinclude "_admin_edit_sidebar_blocks.tpl" id is_editable=is_editable languages=languages %}
+			{% catinclude "_admin_edit_sidebar_blocks.tpl" id is_editable=is_editable languages=languages r=r %}
 		</div>
 	</div>
 </form>
