@@ -47,50 +47,11 @@
 
 	<div class="row-fluid">
 		<div class="span8" id="poststuff">
-			{% block admin_edit_form_top %}{% endblock %}
-
-			{% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
-			{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
-
-	        {% if id.category_id.feature_show_address|if_undefined:`true` %}
-	        	{% catinclude "_admin_edit_content_address.tpl" id is_editable=is_editable languages=languages %}
-	        {% endif %}
-	        
-			{% if r.is_a.media or r.medium %}
-				{% include "_admin_edit_content_media.tpl" %}
-			{% endif %}
-
-			{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
-			{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
-			{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
-
-			{# {% catinclude "_admin_edit_haspart.tpl" id is_editable=is_editable languages=languages %} #}
-
-			{% include "_admin_edit_content_advanced.tpl" %}
-			{% include "_admin_edit_content_seo.tpl" %}
+			{% catinclude "_admin_edit_main_parts.tpl" id is_editable=is_editable languages=languages r=r %}
 		</div>
 
 		<div class="span4" id="sidebar">
-			{% include "_admin_edit_footer.tpl" %}
-
-			<div id="sort"> {# also sidebar #}
-			{% include "_admin_edit_content_publish.tpl" headline="simple" %}
-
-	        {% if r.is_a.meta %}
-				{% include "_admin_edit_meta_features.tpl" %}
-	        {% endif %}
-	        
-			{% include "_admin_edit_content_acl.tpl" %}
-
-			{% if not r.is_a.meta %}
-				{% include "_admin_edit_content_pub_period.tpl" %}
-				{% include "_admin_edit_content_date_range.tpl" %}
-			{% endif %}
-
-			{% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
-
-			{% include "_admin_edit_content_page_connections.tpl" %}
-			</div>
+			{% catinclude "_admin_edit_sidebar_parts.tpl" id is_editable=is_editable languages=languages r=r %}
 		</div>
 	</div>
 </form>
