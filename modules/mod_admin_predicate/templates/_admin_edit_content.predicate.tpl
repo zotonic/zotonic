@@ -15,9 +15,9 @@
 
     <p>{_ This predicate can be used between two pages of the following categories. _}</p>
     
-    <div class="row">
+    <div class="row-fluid">
 
-        <div class="span3">
+        <div class="span6">
 	    <h4>{_ From category _}</h4>
 
 	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}
@@ -28,7 +28,7 @@
 	    {% endfor %}
 	</div>
 
-	<div class="span3">
+	<div class="span6">
 	    <h4>{_ To category _}</h4>
 
 	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}
