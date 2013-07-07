@@ -164,18 +164,31 @@ handle_file(_Verb, ".coffee", F) ->
             undefined
     end;
 
-%% @doc Flush the cache when a new .tpl file is used
+%% @doc Flush 
 handle_file(_Verb, ".tpl", F) ->
-    case re:run(F, "^.*/(.*?)/templates/(.*)", [{capture, all_but_first, list}]) of
-        nomatch -> 
-            undefined;
+    case re:run(F, "/sites/(.*?)/templates/(.*)", [{capture, all_but_first, list}]) of
+        nomatch ->
+            %% Flush the cache when a new zotonic-wide .tpl file is used
+            case re:run(F, ".*?/templates/(.*)", [{capture, all_but_first, list}]) of
+                nomatch -> 
+                    undefined;
+                {match, [TemplateFile]} ->
+                    case z_template:find_template(TemplateFile, z_context:new(hd(z_sites_manager:get_sites()))) of
+                        {ok, _} ->
+                            undefined;
+                        {error, _} ->
+                            z:flush(),
+                            "Flushed global cache due to new template, " ++ TemplateFile
+                    end
+            end;
         {match, [Site, TemplateFile]} ->
+            %% Flush the cache when a new .tpl file is used, within a site
             C = z_context:new(list_to_atom(Site)),
             case z_template:find_template(TemplateFile, C) of
                 {ok, _} -> undefined;
                 {error, _} ->
-                    z:flush(),
-                    "Flushed cache due to new template."
+                    z_depcache:flush(C),
+                    "Flushed cache of " ++ Site ++ " due to new template, " ++ TemplateFile
             end
     end;
 
