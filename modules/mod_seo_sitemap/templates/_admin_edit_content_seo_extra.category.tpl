@@ -3,8 +3,8 @@
 
 <p class="help-block">{_ These settings apply to all pages of this category. They define hints for search engines indexing the site. _}</p>
 
-<div class="row">
-    <div class="control-group span4">
+<div class="row-fluid">
+    <div class="control-group span6">
         <label class="control-label" for="seo_sitemap_priority">
             {_ Priority in sitemap _}
         </label>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="control-group span4">
+    <div class="control-group span6">
         <label class="control-label" for="seo_sitemap_changefreq">
             {_ Change frequency for sitemap _}
         </label>
