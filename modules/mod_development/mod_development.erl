@@ -174,7 +174,7 @@ handle_file(_Verb, ".coffee", F) ->
 
 %% @doc Flush 
 handle_file(_Verb, ".tpl", F) ->
-    case re:run(F, "/sites/(.*?)/templates/(.*)", [{capture, all_but_first, list}]) of
+    case re:run(F, "/sites/([^/]+).*?/templates/(.*)", [{capture, all_but_first, list}]) of
         nomatch ->
             %% Flush the cache when a new zotonic-wide .tpl file is used
             case re:run(F, ".*?/templates/(.*)", [{capture, all_but_first, list}]) of
