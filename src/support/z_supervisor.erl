@@ -372,6 +372,9 @@ do_start_child(#child_state{child=Child} = CS, State) ->
             CS1 = CS#child_state{state=running, pid=Pid, time=erlang:localtime()},
             notify_start(CS1, State),
             State#state{running=[CS1|State#state.running]};
+        {error, {already_started, Pid}} ->
+            CS1 = CS#child_state{state=running, pid=Pid, time=erlang:localtime()},
+            State#state{running=[CS1|State#state.running]};
         {error, _What} ->
             do_maybe_restart(CS, State)
     end.
