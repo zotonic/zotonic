@@ -44,7 +44,7 @@ resource_exists(ReqData, Context) ->
 
 html(Context) ->
     Id = z_context:get(id, Context),
-    Blocks = z_notifier:foldl(#admin_edit_blocks{id=Id}, [], Context),
+    Blocks = z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context),
     Vars = [
             {id, Id},
             {blocks, lists:sort(Blocks)}
