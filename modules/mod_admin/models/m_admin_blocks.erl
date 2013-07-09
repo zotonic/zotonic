@@ -33,7 +33,7 @@
 m_find_value(list, #m{value=undefined} = M, _Context) ->
     M#m{value=list};
 m_find_value(Id, #m{value=list}, Context) ->
-    lists:sort(z_notifier:foldl(#admin_edit_blocks{id=Id}, [], Context)).
+    lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)).
 
 %% @spec m_to_list(Source, Context) -> List
 m_to_list(_, Context) ->
