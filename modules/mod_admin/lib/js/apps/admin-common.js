@@ -49,13 +49,17 @@ limitations under the License.
             self.element.focus();
         }
     });
-    
+
+    var scrollTimer = undefined;
     $(window).scroll(function() {
-        if ($(window).scrollTop() > 118) {
-            $('body').addClass('scrolled');
-        } else {
-            $('body').removeClass('scrolled');
-        }
+        if (scrollTimer) clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function() {
+            if ($(window).scrollTop() > 118) {
+                $('body').addClass('scrolled');
+            } else {
+                $('body').removeClass('scrolled');
+            }
+        }, 200);
     });
 
     $(window).bind('keydown.ctrl_s keydown.meta_s', function(event) {
