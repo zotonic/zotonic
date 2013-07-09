@@ -49,10 +49,9 @@
 
 <div class="tab-content" id="dialog-connect-panels">
 	{% if in_sorter == "category" %}
-	    {% if "new"|member:tabs_enabled %}
-            {% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active=(tab == "new")
+	    {# only one tab, so no conditional #}
+            {% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active
                     title="" cat=m.rsc.category.id nocatselect %}
-        {% endif %}
 	{% else %}
 	    {% if "depiction"|member:tabs_enabled %}
             {% if q.is_zmedia %}
