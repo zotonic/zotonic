@@ -351,9 +351,8 @@ msgid "Please enter your name."
 msgstr "Voer je naam in."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:19
-#, fuzzy
 msgid "Please upload your image."
-msgstr "Voer je naam in."
+msgstr "Upload een afbeelding."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:15
 msgid "Please write an essay."
@@ -602,18 +601,16 @@ msgid "edit"
 msgstr "bewerk"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:38
-#, fuzzy
 msgid "must be a date"
-msgstr "moet een numerieke waarde zijn"
+msgstr "moet een datum zijn"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
 msgid "must be a number"
 msgstr "moet een numerieke waarde zijn"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:37
-#, fuzzy
 msgid "must be a phone number"
-msgstr "moet een numerieke waarde zijn"
+msgstr "moet een telefoonnummer zijn"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:35
 msgid "must be an e-mail address"
