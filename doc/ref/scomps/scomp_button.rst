@@ -63,6 +63,9 @@ Where TriggerId and TargetId are both the HTML id of the button.
 +----------+-------------------------------+-------------------------------+
 |style     |The css style of the button.   |style="color: #fc0"            |
 +----------+-------------------------------+-------------------------------+
+|tabindex  |The value for the `tabindex`   |tabindex=1                     |
+|          |property.                      |                               |
++----------+-------------------------------+-------------------------------+
 |type      |The type attribute of the      |type="submit"                  |
 |          |button.                        |                               |
 +----------+-------------------------------+-------------------------------+
