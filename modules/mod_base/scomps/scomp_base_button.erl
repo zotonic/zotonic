@@ -33,6 +33,7 @@ render(Params, _Vars, Context) ->
     Class     = proplists:get_all_values(class, Params),
     Icon      = proplists:get_all_values(icon, Params),
     Style     = proplists:get_value(style, Params),
+    TabIndex  = proplists:get_value(tabindex, Params),
     Type      = proplists:get_value(type, Params),
     Title     = proplists:get_value(title, Params),
     Disabled  = proplists:get_value(disabled, Params, false),
@@ -60,7 +61,8 @@ render(Params, _Vars, Context) ->
         {<<"id">>,    Id},
         {<<"name">>,  case proplists:is_defined(id, Params) of true -> Id; false -> "" end},
         {<<"style">>, Style},
-        {<<"title">>, Title}
+        {<<"title">>, Title},
+        {<<"tabindex">>, TabIndex}
     ],
     
     {Class1, Attrs1} = case z_convert:to_bool(Disabled) of
