@@ -47,6 +47,7 @@
 
 	<div class="row-fluid">
 		<div class="span8" id="poststuff">
+            {% block admin_edit_form_top %}{% endblock %}
 			{% catinclude "_admin_edit_main_parts.tpl" id is_editable=is_editable languages=languages r=r %}
 		</div>
 
