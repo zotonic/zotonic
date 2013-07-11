@@ -60,7 +60,7 @@
         {% endif %}
         {% if "find"|member:tabs_enabled %}
             {% include "_action_dialog_connect_tab_find.tpl" tab=#tab predicate=predicate subject_id=subject_id 
-                        is_active=(not is_zmedia and predicate.name /= "depiction" and tab == "find") title="" %}
+                        is_active=(not is_zmedia and tab == "find") title="" %}
         {% endif %}
         {% if "new"|member:tabs_enabled %}
             {% if predicate.name /= "depiction" %}
