@@ -109,18 +109,22 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
     case proplists:get_value(mime, Props) of
         ?OEMBED_MIME ->
             TplOpts = [{id, Id}, {medium, Props}, {options, Options}, {filename, Filename}],
-            {oembed, OEmbed} = proplists:lookup(oembed, Props),
-            Html = case proplists:lookup(provider_name, OEmbed) of
-                       {provider_name, N} ->
-                           Tpl = "_oembed_embeddable_" ++ z_string:to_name(N) ++ ".tpl",
-                           case z_template:find_template(Tpl, Context) of
-                               {ok, _} ->
-                                   z_template:render(Tpl, TplOpts, Context);
-                               {error, _} ->
+            Html = case proplists:lookup(oembed, Props) of
+                       {oembed, OEmbed} ->
+                           case proplists:lookup(provider_name, OEmbed) of
+                               {provider_name, N} ->
+                                   Tpl = "_oembed_embeddable_" ++ z_string:to_name(N) ++ ".tpl",
+                                   case z_template:find_template(Tpl, Context) of
+                                       {ok, _} ->
+                                           z_template:render(Tpl, TplOpts, Context);
+                                       {error, _} ->
+                                           media_viewer_fallback(OEmbed, TplOpts, Context)
+                                   end;
+                               none ->
                                    media_viewer_fallback(OEmbed, TplOpts, Context)
                            end;
                        none ->
-                           media_viewer_fallback(OEmbed, TplOpts, Context)
+                           "<!-- No oembed code found -->"
                    end,
             {ok, Html};
         _ ->
