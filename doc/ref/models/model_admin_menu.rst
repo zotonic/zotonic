@@ -18,17 +18,21 @@ menu items as they wish.
             
 For example, this add a menu separator and an "edit homepage" button
 to the "content" submenu::
-  
+
+  -include_lib("modules/mod_admin/include/admin_menu.hrl").
+
   observe_admin_menu(admin_menu, Acc, _Context) ->
     [
      #menu_separator{
        parent=admin_content},
      #menu_item{
-        id=mediafonds_mediaviewer,
+        id=admin_edit_homepage,
         parent=admin_content,
         label="Edit homepage",
         url={admin_edit_rsc, [{id, page_home}]}}
      |Acc].
 
 The default submenu names are `admin_content`, `admin_structure`,
-`admin_modules`, `admin_auth` and `admin_system`.
+`admin_modules`, `admin_auth` and `admin_system`, but you are free to
+add your own submenus.
+
