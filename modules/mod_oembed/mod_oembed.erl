@@ -79,11 +79,12 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
                             true;
                         OldMediaProps ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?OEMBED_MIME)
-                                andalso z_utils:are_equal(proplists:get_value(oembed_url, OldMediaProps), EmbedUrl) of
+                                andalso z_utils:are_equal(proplists:get_value(oembed_url, OldMediaProps), EmbedUrl)
+                                andalso proplists:get_value(oembed, OldMediaProps) =/= undefined of
                                 true ->
                                     %% Not changed
                                     false; 
-                                false -> 
+                                false ->
                                     %% Changed, update the medium record
                                     ok = m_media:replace(Id, MediaProps, Context),
                                     preview_create(Id, MediaProps, Context),
@@ -208,7 +209,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                                 | Actions], ContextRedirect);
                 {error, _} = Error ->
                     ?ERROR("~p", [Error]),
-                    z_render:growl_error("Could not create the media page.", Context)
+                    z_render:growl_error(?__("Could not create the media page.", Context), Context)
             end;
 
         %% Update the current page
@@ -220,7 +221,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {ok, _} ->
                     z_render:wire([{dialog_close, []} | Actions], Context);
                 {error, _} ->
-                    z_render:growl_error("Could not update the page with the new embed code.", Context)
+                    z_render:growl_error(?__("Could not update the page with the new embed code.", Context), Context)
             end
     end;
 
@@ -248,8 +249,18 @@ event(#postback_notify{message="do_oembed"}, Context) ->
                         PreviewUrl -> 
                             z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"], Context)
                     end,
-                    z_render:growl("Detected media item", Context)
+                    z_render:growl(?__("Detected media item", Context), Context)
             end
+    end;
+
+event(#postback{message=fix_missing}, Context) ->
+    case oembed_admin:count_missing(Context) of
+        0 ->
+            z_render:growl(?__("No embedded videos found which need fixing.", Context), Context);
+        N ->
+            spawn(fun() -> oembed_admin:count_missing(Context) end),
+            Msg = ?__("Attempting to fix ~p videos.", Context),
+            z_render:growl(lists:flatten(io_lib:format(Msg, [N])), Context)
     end.
 
 
@@ -284,6 +295,9 @@ preview_create(MediaId, MediaProps, Context) ->
                                 false -> m_rsc:touch(MediaId, Context)
                             end
                     end;
+                {error, {http, Code, Body}} ->
+                    Err = [{error, http_error}, {code, Code}, {body, Body}],
+                    ok = m_media:replace(MediaId, [{oembed, Err} | MediaProps], Context);
                 {error, _} ->
                     nop
             end
