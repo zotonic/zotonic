@@ -22,11 +22,37 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2\n"
 
+#: modules/mod_oembed/templates/_admin_status.tpl:5
+msgid ""
+"Attempt to fix embedded videos for which OEmbed embedding has failed "
+"previously."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:262
+msgid "Attempting to fix ~p videos."
+msgstr ""
+
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:64
 msgid "Cancel"
 msgstr "Anuluj"
 
+#: modules/mod_oembed/mod_oembed.erl:212
+#, fuzzy
+msgid "Could not create the media page."
+msgstr "Utwórz stronę mediów"
+
+#: modules/mod_oembed/mod_oembed.erl:224
+msgid "Could not update the page with the new embed code."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:252
+#, fuzzy
+msgid "Detected media item"
+msgstr "Zastąp obiekt mediów"
+
+#: modules/mod_oembed/templates/_media_upload_tab.tpl:2
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:15
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:3
 msgid "Embed URL"
 msgstr "Adres obiektu"
 
@@ -38,13 +64,21 @@ msgstr ""
 "Osadź materiał wideo albo inny obiekt mediów. Możesz wkleić tu URL materiału "
 "umieszczonego w YouTube, Vimeo czy innym - tego typu - serwisie."
 
-#: modules/mod_oembed/mod_oembed.erl:238
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:11
+msgid "Embedding of media item failed with HTTP code"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_status.tpl:4
+msgid "Fix embedded videos"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:242
 msgid ""
 "Invalid or unsupported media URL. The item might have been deleted or is not "
 "public."
 msgstr ""
 
-#: modules/mod_oembed/mod_oembed.erl:204
+#: modules/mod_oembed/mod_oembed.erl:208
 msgid "Made the media page."
 msgstr "Utwórz stronę mediów"
 
@@ -55,6 +89,10 @@ msgstr "Utwórz obiekt mediów"
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:48
 msgid "Media title"
 msgstr "Tytuł"
+
+#: modules/mod_oembed/mod_oembed.erl:259
+msgid "No embedded videos found which need fixing."
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Replace media item"
@@ -71,4 +109,3 @@ msgstr "Tytuł zostanie ustalony automatycznie, na podstawie adresu."
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:19
 msgid "Try URL"
 msgstr "Sprawdź"
-

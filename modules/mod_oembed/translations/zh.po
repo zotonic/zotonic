@@ -13,17 +13,43 @@ msgstr ""
 "PO-Revision-Date: 2013-01-14 13:00+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
+
+#: modules/mod_oembed/templates/_admin_status.tpl:5
+msgid ""
+"Attempt to fix embedded videos for which OEmbed embedding has failed "
+"previously."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:262
+msgid "Attempting to fix ~p videos."
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:64
 msgid "Cancel"
 msgstr "取消"
 
+#: modules/mod_oembed/mod_oembed.erl:212
+#, fuzzy
+msgid "Could not create the media page."
+msgstr "创建媒体页面。"
+
+#: modules/mod_oembed/mod_oembed.erl:224
+msgid "Could not update the page with the new embed code."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:252
+#, fuzzy
+msgid "Detected media item"
+msgstr "替换媒体条目"
+
+#: modules/mod_oembed/templates/_media_upload_tab.tpl:2
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:15
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:3
 msgid "Embed URL"
 msgstr "嵌入 URL"
 
@@ -34,13 +60,21 @@ msgid ""
 msgstr ""
 "嵌入一个视频或其他媒体 URL。你可以粘贴来自 YouTube，Vimeo 或其他服务的 URL。"
 
-#: modules/mod_oembed/mod_oembed.erl:238
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:11
+msgid "Embedding of media item failed with HTTP code"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_status.tpl:4
+msgid "Fix embedded videos"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:242
 msgid ""
 "Invalid or unsupported media URL. The item might have been deleted or is not "
 "public."
 msgstr "失效或不支持的媒体 URL。条目可能被删除或是非公开内容。"
 
-#: modules/mod_oembed/mod_oembed.erl:204
+#: modules/mod_oembed/mod_oembed.erl:208
 msgid "Made the media page."
 msgstr "创建媒体页面。"
 
@@ -51,6 +85,10 @@ msgstr "创建媒体条目"
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:48
 msgid "Media title"
 msgstr "媒体标题"
+
+#: modules/mod_oembed/mod_oembed.erl:259
+msgid "No embedded videos found which need fixing."
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Replace media item"
