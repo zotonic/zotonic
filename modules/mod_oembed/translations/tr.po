@@ -13,27 +13,69 @@ msgstr ""
 "PO-Revision-Date: 2012-12-27 23:56+0200\n"
 "Last-Translator: furiston <furiston@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_oembed/templates/_admin_status.tpl:5
+msgid ""
+"Attempt to fix embedded videos for which OEmbed embedding has failed "
+"previously."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:262
+msgid "Attempting to fix ~p videos."
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:64
 msgid "Cancel"
 msgstr "İptal"
 
+#: modules/mod_oembed/mod_oembed.erl:212
+#, fuzzy
+msgid "Could not create the media page."
+msgstr "Medya sayfası oluştur."
+
+#: modules/mod_oembed/mod_oembed.erl:224
+msgid "Could not update the page with the new embed code."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:252
+#, fuzzy
+msgid "Detected media item"
+msgstr "Medya öğesini değiştir"
+
+#: modules/mod_oembed/templates/_media_upload_tab.tpl:2
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:15
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:3
 msgid "Embed URL"
 msgstr "Yerleştirme adresi"
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:5
-msgid "Embed a video or other media URL. Here you can paste any URL from YouTube, Vimeo or other services."
-msgstr "Buraya youtube, vimeo veya diğer servislerin adreslerini yapıştırabilirsiniz."
+msgid ""
+"Embed a video or other media URL. Here you can paste any URL from YouTube, "
+"Vimeo or other services."
+msgstr ""
+"Buraya youtube, vimeo veya diğer servislerin adreslerini yapıştırabilirsiniz."
 
-#: modules/mod_oembed/mod_oembed.erl:238
-msgid "Invalid or unsupported media URL. The item might have been deleted or is not public."
-msgstr "Geçersiz veya desteklenmeyen medya adresi. Medya silinmiş veya herkese açık olmayabilir."
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:11
+msgid "Embedding of media item failed with HTTP code"
+msgstr ""
 
-#: modules/mod_oembed/mod_oembed.erl:204
+#: modules/mod_oembed/templates/_admin_status.tpl:4
+msgid "Fix embedded videos"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:242
+msgid ""
+"Invalid or unsupported media URL. The item might have been deleted or is not "
+"public."
+msgstr ""
+"Geçersiz veya desteklenmeyen medya adresi. Medya silinmiş veya herkese açık "
+"olmayabilir."
+
+#: modules/mod_oembed/mod_oembed.erl:208
 msgid "Made the media page."
 msgstr "Medya sayfası oluştur."
 
@@ -44,6 +86,10 @@ msgstr "Medya öğesi oluştur"
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:48
 msgid "Media title"
 msgstr "Medya başlığı"
+
+#: modules/mod_oembed/mod_oembed.erl:259
+msgid "No embedded videos found which need fixing."
+msgstr ""
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:65
 msgid "Replace media item"
@@ -60,4 +106,3 @@ msgstr "Medya başlığı bu adresten otomatik olarak alınacaktır."
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:19
 msgid "Try URL"
 msgstr "Adresi dene"
-
