@@ -21,7 +21,10 @@
 -module(z_datamodel).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([manage/3, reset_deleted/2]).
+-export([manage/3, manage/4, reset_deleted/2]).
+
+-type datamodel_options() :: [datamodel_option()].
+-type datamodel_option() :: force_update.
 
 
 %% The datamodel manages parts of your datamodel. This includes
@@ -38,8 +41,8 @@
 reset_deleted(Module, Context) ->
     m_config:delete(Module, datamodel, Context).
 
-
-
+%% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
+-spec manage(atom(), #datamodel{}, #context{}) -> ok.
 manage(Module, Datamodel, Context) when is_list(Datamodel) ->
     %% Backwards compatibility with old datamodel notation.
     manage(Module,
@@ -52,20 +55,25 @@ manage(Module, Datamodel, Context) when is_list(Datamodel) ->
            Context);
 
 manage(Module, Datamodel, Context) ->
+    manage(Module, Datamodel, [], Context).
+
+%% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
+-spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
+manage(Module, Datamodel, Options, Context) ->
     AdminContext = z_acl:sudo(Context),
-    [manage_category(Module, Cat, AdminContext) || Cat <- Datamodel#datamodel.categories],
-    [manage_predicate(Module, Pred, AdminContext) || Pred <- Datamodel#datamodel.predicates],
-    [manage_resource(Module, R, AdminContext) || R <- Datamodel#datamodel.resources],
-    [manage_medium(Module, Medium, AdminContext) || Medium <- Datamodel#datamodel.media],
-    [manage_edge(Module, Edge, AdminContext) || Edge <- Datamodel#datamodel.edges],
+    [manage_category(Module, Cat, Options, AdminContext) || Cat <- Datamodel#datamodel.categories],
+    [manage_predicate(Module, Pred, Options, AdminContext) || Pred <- Datamodel#datamodel.predicates],
+    [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
+    [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
+    [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
     ok.
 
 
-manage_medium(Module, {Name, Props}, Context) ->
-    manage_resource(Module, {Name, media, Props}, Context);
+manage_medium(Module, {Name, Props}, Options, Context) ->
+    manage_resource(Module, {Name, media, Props}, Options, Context);
 
-manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Context) ->
-    case manage_resource(Module, {Name, media, Props}, Context) of
+manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context) ->
+    case manage_resource(Module, {Name, media, Props}, Options, Context) of
         {ok} ->
             {ok};
         {ok, Id} ->
@@ -77,8 +85,8 @@ manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Context) ->
             {ok, Id}
     end;
 
-manage_medium(Module, {Name, Filename, Props}, Context) ->
-    case manage_resource(Module, {Name, media, Props}, Context) of
+manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
+    case manage_resource(Module, {Name, media, Props}, Options, Context) of
         {ok} ->
             {ok};
         {ok, Id} ->
@@ -87,8 +95,8 @@ manage_medium(Module, {Name, Filename, Props}, Context) ->
     end.
 
 
-manage_category(Module, {Name, ParentCategory, Props}, Context) ->
-    case manage_resource(Module, {Name, category, Props}, Context) of
+manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
+    case manage_resource(Module, {Name, category, Props}, Options, Context) of
         {ok} ->
             {ok};
         {ok, Id} ->
@@ -106,21 +114,21 @@ manage_category(Module, {Name, ParentCategory, Props}, Context) ->
     end.
 
 
-manage_predicate(Module, {Name, Uri, Props, ValidFor}, Context) ->
-    manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Context);
+manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) ->
+    manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Options, Context);
 
-manage_predicate(Module, {Name, Props, ValidFor}, Context) ->
+manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
     Category = proplists:get_value(category, Props, predicate),
-    case manage_resource(Module, {Name, Category, lists:keydelete(category, 1, Props)}, Context) of
+    case manage_resource(Module, {Name, Category, lists:keydelete(category, 1, Props)}, Options, Context) of
         {ok} ->
             {ok};
         {ok, Id} ->
-            ok = manage_predicate_validfor(Id, ValidFor, Context),
+            ok = manage_predicate_validfor(Id, ValidFor, Options, Context),
             {ok, Id}
     end.
 
 
-manage_resource(Module, {Name, Category, Props0}, Context) ->
+manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} -> 
             Props = map_props(Props0, Context),
@@ -128,7 +136,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
                 {ok, Id} ->
                     case m_rsc:p(Id, installed_by, Context) of
                         Module ->
-                            NewProps = update_new_props(Module, Id, Props, Context),
+                            NewProps = update_new_props(Module, Id, Props, Options, Context),
                             m_rsc_update:update(Id, [{managed_props, z_html:escape_props(Props)} | NewProps],
                                                 [{is_import, true}], Context),
                             {ok};
@@ -172,7 +180,7 @@ manage_resource(Module, {Name, Category, Props0}, Context) ->
             {ok}
     end.
 
-update_new_props(Module, Id, NewProps, Context) ->
+update_new_props(Module, Id, NewProps, Options, Context) ->
     case m_rsc:p(Id, managed_props, Context) of
         undefined ->
             NewProps;
@@ -192,25 +200,33 @@ update_new_props(Module, Id, NewProps, Context) ->
                                                 case z_convert:to_list(DbVal) of
                                                     V ->
                                                         Props;
-                                                    _ ->
+                                                    _X ->
                                                         %% Changed by someone else
-                                                        ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
-                                                        Props
+                                                        maybe_force_update(K, V, Props, Module, Id, Options, Context)
                                                 end;
                                             _PrevVal2 ->
-
                                                 %% Changed by someone else
-                                                ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
-                                                Props
+                                                maybe_force_update(K, V, Props, Module, Id, Options, Context)
                                         end
                                 end
                         end, [], NewProps)
     end.
 
 
-manage_predicate_validfor(_Id, [], _Context) ->
+maybe_force_update(K, V, Props, Module, Id, Options, Context) ->
+    case lists:member(force_update, Options) of
+        true ->
+            ?zInfo(io_lib:format("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]), Context),
+            z_utils:prop_replace(K, V, Props);
+        false ->
+            ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
+            Props
+    end.
+
+
+manage_predicate_validfor(_Id, [], _Options, _Context) ->
     ok;
-manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
+manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Options, Context) ->
     F = fun(S, I, C) ->
                 case z_db:q("SELECT 1 FROM predicate_category WHERE predicate_id = $1 AND is_subject = $2 AND category_id = $3", [S, I, C], Context) of
                     [{1}] ->
@@ -230,7 +246,7 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Context) ->
         _ ->
             F(Id, false, m_rsc:name_to_id_check(ObjectCat, Context))
     end,
-    manage_predicate_validfor(Id, Rest, Context).
+    manage_predicate_validfor(Id, Rest, Options, Context).
 
 
 
@@ -256,7 +272,7 @@ map_prop(Value, _Context) ->
     Value.
 
 
-manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, Context) ->
+manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, _Options, Context) ->
     Subject = m_rsc:name_to_id(SubjectName, Context),
     Predicate = m_predicate:name_to_id(PredicateName, Context),
     Object = m_rsc:name_to_id(ObjectName, Context),
