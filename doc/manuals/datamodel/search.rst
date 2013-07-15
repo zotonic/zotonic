@@ -67,6 +67,32 @@ Query-model arguments
 
   ``cat_exclude='meta'``
 
+**id_exclude**
+
+  Filter resources to exclude the ones with the given ids.
+
+  ``id_exclude=123``
+
+**filter**
+
+  Filtering on columns.
+
+  ``filter=['pivot_title', 'Hello']``
+
+  In its most simple form, this does an 'equals' compare filter. The
+  "filter" keywords expects a list. If the list is two elements long,
+  we expect the first column to be the filter column name from the
+  database table, and the second column name to be the filter value.
+
+  ``filter=['numeric_value', `gt`, 10]``
+  
+  If the filter is a three-column list, the second column is the
+  operator. This must be an atom (surround it in backquotes!) and must
+  be one of the following: ``eq``, ``ne``, ``gt``, ``gte``, ``lt``,
+  ``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``:
+
+  ``filter=['numeric_value', `>`, 10]``
+  
 **hassubject**
 
   Select all resources that have an outgoing connection to the given
@@ -146,6 +172,13 @@ Query-model arguments
   ``custompivot=foo``
   (joins the ``pivot_foo`` table into the query)
 
+  The pivot tables are aliassed with a number in order of their
+  occurrence, with the first pivot table aliassed as ``pivot1``. This
+  allows you to do filtering on custom fields like this:
+
+  ``{query custompivot="pivotname" filter=["pivot1.fieldname", `=`, "hello"]}``
+
+
 **hasobjectpredicate**
 
   Filter on all things which have any outgoing edge with the given
@@ -209,3 +242,12 @@ Query-model arguments
 
   ``date_end_year=2012``
 
+
+Filter behaviour
+----------------
+
+All of the filters works as ``AND`` filter. The only exception to this
+is the ``cat=`` filter: if you specify multiple categories, those
+categories are "OR"'ed together, to allow to search in multiple
+distinct categories with a single search query.
+  
