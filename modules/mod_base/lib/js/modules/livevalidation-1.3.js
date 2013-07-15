@@ -563,7 +563,8 @@ LiveValidation.prototype =
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-        $('input[name="'+this.element.name+'"]').closest('.control-group').removeClass("success").removeClass("error");
+        $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
+                .closest('.control-group').removeClass("success").removeClass("error");
         switch (this.elementType) {
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:
