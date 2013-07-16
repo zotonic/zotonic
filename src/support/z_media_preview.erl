@@ -304,8 +304,9 @@ filter2arg({crop, {CropL, CropT, CropWidth, CropHeight}}, _Width, _Height, _AllF
     GArg = "-gravity NorthWest",
     CArg = ["-crop ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight), 
                         $+,integer_to_list(CropL),$+,integer_to_list(CropT)],
+    EArg = ["-extent ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight)],
     RArg = "+repage",
-    {CropWidth, CropHeight, [GArg,32,CArg,32,RArg]};
+    {CropWidth, CropHeight, [GArg,32,CArg,32,EArg,32,RArg]};
 filter2arg(grey, Width, Height, _AllFilters) ->
     {Width, Height, "-colorspace Gray"};
 filter2arg(mono, Width, Height, _AllFilters) ->
@@ -433,18 +434,19 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
         false -> {ImageAspect * Height, Height}
         end,
 
+        Scale = ImageWidth / Width,
             
         CropL = case CropPar of
         X when X == north_west; X == west; X == south_west -> 0;
         X when X == north_east; X == east; X == south_east -> ceil(W - Width);
-        [X,_] when is_integer(X) -> X;
+        [X,_] when is_integer(X) -> ceil(erlang:max(0, erlang:min(W-Width, X / Scale)));
         _ -> ceil((W - Width) / 2)
         end,
 
             CropT = case CropPar of
         Y when Y == north_west; Y == north; Y == north_east -> 0;
         Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
-        [_,Y] when is_integer(Y) -> Y;
+        [_,Y] when is_integer(Y) -> ceil(erlang:max(0, erlang:min(H-Height, Y / Scale)));
         _ -> ceil((H - Height) / 2)
         end,
 

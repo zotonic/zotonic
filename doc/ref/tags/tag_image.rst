@@ -43,11 +43,19 @@ The following arguments/filters can be specified:
 |blur                |Blur the image, making it less sharp. See ImageMagick blur  |blur="20x8"         |
 |                    |for valid argument values.                                  |                    |
 +--------------------+------------------------------------------------------------+--------------------+
-|crop                |Crop the image, the resulting image will be exactly the     |crop="south"        |
-|                    |width x height specified.  Which part of the image will be  |                    |
-|                    |cropped depends on the value of the crop argument.  Default |                    |
-|                    |is the center. Other options are: north, north_east, east,  |                    |
-|                    |south_east, south, south_west, west and north_west.         |                    |
+|crop                |Crop the image, the resulting image will be exactly the size|crop="south"        |
+|                    |specified in the `width` and `height` arguments. Which part |                    |
+|                    |of the image will be cropped depends on the value of the    |crop = "+100+100"   |
+|                    |crop argument.  Default is the center. Other options are:   |                    |
+|                    |north, north_east, east, south_east, south, south_west, west|                    |
+|                    |and north_west.                                             |                    |
+|                    |                                                            |                    |
+|                    |When the "crop" argument is a string of the form "+x+y",    |                    |
+|                    |this coordinate is taken as the 'center of gravity' of the  |                    |
+|                    |crop, to assure that the given point is in view after the   |                    |
+|                    |image is cropped. This point is given in image coordinates  |                    |
+|                    |(unscaled), and is relative to the top left of the image, so|                    |
+|                    |``crop="+0+0"`` is the same as saying ``crop="north_east"``.|                    |
 +--------------------+------------------------------------------------------------+--------------------+
 |extent              |Resize the image so that it fits inside the width/height    |extent              |
 |                    |box.  Then extent the image with a white background so that |                    |
