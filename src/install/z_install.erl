@@ -46,8 +46,8 @@ pre_install(testsandbox, SiteProps) ->
 
     %% Remove all files
     FilesDir = z_utils:os_filename(filename:join([z_utils:lib_dir(priv), "sites", testsandbox, "files", "preview"])),
-    os:cmd("rm -rf " ++ FilesDir),
-    os:cmd("mkdir -p " ++ FilesDir),
+    os:cmd("rm -rf " ++ z_utils:os_filename(FilesDir)),
+    os:cmd("mkdir -p " ++ z_utils:os_filename(FilesDir)),
     ok;
 
 pre_install(_, _) ->
