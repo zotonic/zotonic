@@ -25,6 +25,6 @@ get_missing(Context) ->
       fun(M) ->
               OEmbed = proplists:get_value(oembed, M),
               proplists:lookup(oembed_url, M) =/= none
-                  andalso (OEmbed =:= none orelse proplists:get_value(error, OEmbed) =/= undefined)
+                  andalso (OEmbed =:= undefined orelse proplists:get_value(error, OEmbed) =/= undefined)
       end,
       Media).    
