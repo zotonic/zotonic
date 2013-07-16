@@ -7,7 +7,7 @@
 {% endif %}
     <div class="controls">
     {% if blk.validation == "date" %}
-        {% include "_block_view_survey_short_answer_date.tpl" %}
+        {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}
         <input type="text" class="{% if blk.validation == 'numericality' %}input-small{% elseif blk.validation == 'phone' %}input-medium{% else %}span6{% endif %}" name="{{ blk.name }}" id="{{ #id }}" value="{{ answers[blk.name]|escape }}" {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}/>
         {% if blk.is_required %}
