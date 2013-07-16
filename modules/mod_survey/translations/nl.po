@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-12-11 14:04+0100\n"
+"PO-Revision-Date: 2013-07-16 19:53+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:28
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:32
 msgid "Are you sure you want to stop?"
@@ -56,7 +56,7 @@ msgstr "Weet je zeker dat je wilt stoppen?"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:32
 msgid "August"
-msgstr ""
+msgstr "Augustus"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:24
 msgid "Back"
@@ -94,11 +94,11 @@ msgstr "Kat = Afbeelding"
 
 #: modules/mod_survey/mod_survey.erl:98
 msgid "Category"
-msgstr ""
+msgstr "Categorie"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:32
 msgid "Category to choose from"
-msgstr ""
+msgstr "Categorie om uit te kiezen"
 
 #: modules/mod_survey/templates/email_survey_result.tpl:32
 msgid "Check the answer in the admin."
@@ -126,7 +126,7 @@ msgstr "Pas op"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:36
 msgid "December"
-msgstr ""
+msgstr "December"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
 msgid "Default"
@@ -202,15 +202,15 @@ msgstr "Onwaar"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:26
 msgid "February"
-msgstr ""
+msgstr "Februari"
 
 #: modules/mod_survey/mod_survey.erl:107
 msgid "File upload"
-msgstr ""
+msgstr "Bestandsupload"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:54
 msgid "Handle this survey with"
-msgstr ""
+msgstr "Laat survey afhandelen door"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
 msgid "Help about surveys"
@@ -240,19 +240,19 @@ msgstr "Geinverteerd"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25
 msgid "January"
-msgstr ""
+msgstr "Januari"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:46
 msgid "Jump target"
-msgstr "Sprong doel"
+msgstr "Doen van sprong"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:30
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: modules/mod_survey/mod_survey.erl:96
 msgid "Likert"
@@ -276,7 +276,7 @@ msgstr "Stuur ingevulde surveys naar"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:27
 msgid "March"
-msgstr ""
+msgstr "Maart"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:15
 msgid "Match which answer fits best."
@@ -288,7 +288,7 @@ msgstr "Voldoet aan"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:29
 msgid "May"
-msgstr ""
+msgstr "Mei"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:50
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:42
@@ -327,15 +327,15 @@ msgstr "Nee"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:34
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
-msgstr ""
+msgstr "Sta alleen afbeeldingen toe."
 
 #: modules/mod_survey/mod_survey.erl:105
 msgid "Page break"
@@ -405,7 +405,7 @@ msgstr "Selecteer uw land"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: modules/mod_survey/mod_survey.erl:101
 msgid "Short answer"
@@ -526,6 +526,10 @@ msgid ""
 "question of a survey. The default survey routines can’t handle file upload, "
 "you will need to add your own survey handler to your site or module."
 msgstr ""
+"Dit blok toont een veld met een bestandsupload. Dit veld kan alleen\n"
+"worden gebruikt als de laatste vraag van een survey. De standaard\n"
+"surveymodule kan geen bestanden aan, er moet een aparte\n"
+"survey-afhandelroutine worden gebruikt."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:12
 msgid ""
