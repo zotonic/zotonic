@@ -1,6 +1,6 @@
 <nav class="trail">
 {% with id|menu_trail as breadcrumb %}
-{% if not q.in_collection and breadcrumb %}
+{% if not q.in_collection and breadcrumb|length > 1 %}
 	<ul class="breadcrumb">
 		{% for id in breadcrumb %}
 			{% if forloop.last %}

@@ -3,7 +3,7 @@
 {# Page for TABLET+ #}
 
 {% block main %}
-<div {% block content_attributes %}{% include "_language_attrs.tpl" id=id %}{% endblock %}>
+<div {% block content_attributes %}{% include "_language_attrs.tpl" id=id class="wrapper" %}{% endblock %}>
 	{% include "_meta.tpl" %}
 
 	{% block summary %}

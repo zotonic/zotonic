@@ -5,7 +5,7 @@
 	{% lib "css/survey.css" %}
 {% endblock %}
 
-{% block content_attributes %}{% include "_language_attrs.tpl" id=id %} id="survey-question"{% endblock %}
+{% block content_attributes %}{% include "_language_attrs.tpl" id=id class="wrapper" %} id="survey-question"{% endblock %}
 
 {% block body %}
 	{{ id.body|show_media }}
