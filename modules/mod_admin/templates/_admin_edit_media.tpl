@@ -9,16 +9,18 @@
     </p>
 
     {% if medium.width and medium.height %}
-    <div class="edit-media">
+    <div class="edit-media" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597  %}
-        {% media medium %}
+            {% media medium %}
         {% else %}
-        {% media medium width=597 height=597 %}
-        {% endif %}
+            {% media medium width=597 height=597 %}
+        {% endif %}   
     </div>
     {% endif %}
 
     <div class="save-buttons">
+        {% if id.is_a.image %}{% include "_admin_edit_image_crop_center.tpl" %}{% endif %}
+
         <div class="pull-right">
             <a class="btn" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
             {% button   text=_"Replace this media item"
