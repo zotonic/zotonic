@@ -113,7 +113,8 @@ tag(Name, Options, Context, Visited) when is_atom(Name) ->
         {ok, Id} -> tag(Id, Options, Context, Visited);
         _ -> {ok, []}
     end;
-tag(Id, Options, Context, Visited) when is_integer(Id) ->
+tag(Id, Options0, Context, Visited) when is_integer(Id) ->
+    Options = opt_crop_center(Id, Options0, Context),
     case m_media:get(Id, Context) of
         Props when is_list(Props) ->
             case mediaprops_filename(Id, Props, Context) of
@@ -245,7 +246,8 @@ filename_to_urlpath(Filename) ->
 %% @doc Generate the url for the image with the filename and options
 url(undefined, _Options, _Context) ->
     {error, enoent};
-url(Id, Options, Context) when is_integer(Id) ->
+url(Id, Options0, Context) when is_integer(Id) ->
+    Options = opt_crop_center(Id, Options0, Context),
     case m_media:get(Id, Context) of
         Props when is_list(Props) ->
             url(Props, Options, Context);
@@ -258,6 +260,7 @@ url(Id, Options, Context) when is_integer(Id) ->
             end
     end;
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
+    lager:warning("xx: ~p", [xx]),
     case z_convert:to_list(proplists:get_value(filename, Props)) of
         None when None == undefined; None == <<>>; None == [] -> 
             case z_notifier:first({media_stillimage, proplists:get_value(id, Props), Props}, Context) of
@@ -272,6 +275,7 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
             {ok, Url}
     end;
 url(Filename, Options, Context) ->
+    lager:warning("xx: ~p", [xx]),
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
     
@@ -460,4 +464,12 @@ url2props1([P|Rest], Acc) ->
     url2props1(Rest, [Filter|Acc]).
 
 
-    
+
+opt_crop_center(Id, Options, Context) ->
+    case {proplists:get_value(crop, Options), m_rsc:p(Id, crop_center, Context)} of
+        {true, <<"+",_/binary>> = C} ->
+            z_utils:prop_replace(crop, C, Options);
+        {_, _} ->
+            Options
+    end.
+

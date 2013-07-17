@@ -43,12 +43,16 @@ The following arguments/filters can be specified:
 |blur                |Blur the image, making it less sharp. See ImageMagick blur  |blur="20x8"         |
 |                    |for valid argument values.                                  |                    |
 +--------------------+------------------------------------------------------------+--------------------+
-|crop                |Crop the image, the resulting image will be exactly the size|crop="south"        |
+|crop                |Crop the image, the resulting image will be exactly the size|crop                |
 |                    |specified in the `width` and `height` arguments. Which part |                    |
-|                    |of the image will be cropped depends on the value of the    |crop = "+100+100"   |
-|                    |crop argument.  Default is the center. Other options are:   |                    |
-|                    |north, north_east, east, south_east, south, south_west, west|                    |
-|                    |and north_west.                                             |                    |
+|                    |of the image will be cropped depends on the value of the    |crop="south"        |
+|                    |crop argument.                                              |                    |
+|                    |                                                            |crop = "+100+100"   |
+|                    |When no argument is given to crop, it defaults to the center|                    |
+|                    |point of the image, unless there is a cropping center point |                    |
+|                    |defined in the media item. Other options are: `north`,      |                    |
+|                    |`north_east`, `east`, `south_east`, `south`, `south_west`,  |                    |
+|                    |`west`, `north_west` and `center`.                          |                    |
 |                    |                                                            |                    |
 |                    |When the "crop" argument is a string of the form "+x+y",    |                    |
 |                    |this coordinate is taken as the 'center of gravity' of the  |                    |
