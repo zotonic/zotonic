@@ -434,19 +434,19 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
         false -> {ImageAspect * Height, Height}
         end,
 
-        Scale = ImageWidth / Width,
+        Scale = ImageWidth / W,
             
         CropL = case CropPar of
         X when X == north_west; X == west; X == south_west -> 0;
         X when X == north_east; X == east; X == south_east -> ceil(W - Width);
-        [X,_] when is_integer(X) -> ceil(erlang:max(0, erlang:min(W-Width, X / Scale)));
+        [X,_] when is_integer(X) -> ceil(erlang:max(0, erlang:min(W-Width, X / Scale - Width/2)));
         _ -> ceil((W - Width) / 2)
         end,
 
             CropT = case CropPar of
         Y when Y == north_west; Y == north; Y == north_east -> 0;
         Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
-        [_,Y] when is_integer(Y) -> ceil(erlang:max(0, erlang:min(H-Height, Y / Scale)));
+        [_,Y] when is_integer(Y) -> ceil(erlang:max(0, erlang:min(H-Height, Y / Scale - Height/2)));
         _ -> ceil((H - Height) / 2)
         end,
 
