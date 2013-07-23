@@ -260,7 +260,6 @@ url(Id, Options0, Context) when is_integer(Id) ->
             end
     end;
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
-    lager:warning("xx: ~p", [xx]),
     case z_convert:to_list(proplists:get_value(filename, Props)) of
         None when None == undefined; None == <<>>; None == [] -> 
             case z_notifier:first({media_stillimage, proplists:get_value(id, Props), Props}, Context) of
@@ -275,7 +274,6 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
             {ok, Url}
     end;
 url(Filename, Options, Context) ->
-    lager:warning("xx: ~p", [xx]),
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
     
