@@ -358,7 +358,8 @@ redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
 
 redirect(IsPermanent, Location, ReqData) -> 
     RD1 = wrq:set_resp_header("Location", Location, ReqData),
-    {ok, RD2} = webmachine_request:send_response(case IsPermanent of true -> 301; false -> 302 end, RD1),
+    RespCode = case IsPermanent of true -> 301; false -> 302 end,
+    {ok, RD2} = webmachine_request:send_response(RD1#wm_reqdata{response_code = RespCode}),
     LogData = webmachine_request:log_data(RD2),
     {ok, LogModule} = application:get_env(webzmachine, webmachine_logger_module),
     spawn(LogModule, log_access, [LogData]),
