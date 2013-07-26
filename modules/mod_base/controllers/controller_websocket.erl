@@ -41,14 +41,14 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-
+init(DispatchArgs) -> {ok, DispatchArgs}.
 
 %% @doc The request must have a valid session cookie.
-forbidden(ReqData, _State) ->
+forbidden(ReqData, DispatchArgs) ->
     Context = z_context:new(ReqData),
-    Context1 = z_context:continue_session(Context),
-    ?WM_REPLY(not z_context:has_session(Context1), Context1).
+    Context1 = z_context:set(DispatchArgs, Context),
+    Context2 = z_context:continue_session(Context1),
+    ?WM_REPLY(not z_context:has_session(Context2), Context2).
 
 %% @doc Possible connection upgrades
 upgrades_provided(ReqData, Context) ->
