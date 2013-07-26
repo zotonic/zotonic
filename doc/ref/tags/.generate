@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if ! which sed > /dev/null; then
     echo "sed not found!" 1>&2

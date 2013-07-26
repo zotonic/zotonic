@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 for f in `find $ZOTONIC_SRC/modules -name mod_\* -type d` 
 do 

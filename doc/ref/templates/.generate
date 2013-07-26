@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/templates/{device/}template_name.tpl
 for f in `find $ZOTONIC_SRC/modules -name [^_]\*.tpl`
