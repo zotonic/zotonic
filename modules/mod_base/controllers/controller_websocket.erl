@@ -33,7 +33,7 @@
 % websocket handler exports.
 -export([
     websocket_init/1,
-    websocket_message/2,
+    websocket_message/3,
     websocket_info/2,
     websocket_terminate/2
 ]).
@@ -107,7 +107,7 @@ websocket_init(Context) ->
     z_session_page:websocket_attach(self(), Context).
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
-websocket_message(Msg, Context) ->
+websocket_message(Msg, _SenderPid, Context) ->
     Qs = mochiweb_util:parse_qs(Msg),
     Context1 = z_context:set('q', Qs, Context),
 

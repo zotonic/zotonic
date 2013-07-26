@@ -39,21 +39,33 @@ Example::
 
   -module(my_ws_handler).
 
+  -export([websocket_init/1,
+           websocket_message/3,
+           websocket_info/2,
+           websocket_terminate/2]).
+  
   %% @doc Called when the websocket is initialized.
   websocket_init(_Context) ->
-      erlang:start_timer(1000, self(), <<"Hello!">>),
+      erlang:send_after(1000, self(), <<"Hello!">>),
       ok.
 
   %% @doc Called when a message arrives on the websocket.
-  websocket_message(Msg, Context) ->
-      controller_websocket:websocket_send_data(self(), ["You said: ", Msg]).
+  websocket_message(Msg, From, Context) ->
+      controller_websocket:websocket_send_data(From, ["You said: ", Msg]).
 
   %% @doc Called when another type of message arrives.
   websocket_info(Msg, _Context) ->
       controller_websocket:websocket_send_data(self(), Msg),
-      erlang:start_timer(5000, self(), <<"Hello again!">>).
+      erlang:send_after(5000, self(), <<"Hello again!">>).
 
   %% @doc Called when the websocket terminates.
   websocket_terminate(Reason, Context) ->
       ok.
 
+The websocket_init, websocket_info and websocket_terminate callbacks
+are called from within the controller's receive loop, so to send a message
+to the websocket, you send it to ``self()``, as in the example above.
+
+The `websocket_message` function however gets a `From` argument passed
+to it because it is called from another process. To send a message to
+the socket, you need to send it to the `From` pid.

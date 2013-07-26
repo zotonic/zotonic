@@ -27,8 +27,8 @@
 -export([
     start/2,
     
-    handle_data/3,
-    receive_loop/3,
+    handle_data/4,
+    receive_loop/4,
     send_loop/2
 ]).
 
@@ -51,105 +51,105 @@ start(ReqData, Context) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    spawn_link(fun() -> start_send_loop(Socket, Context) end),
-    receive_loop(<<>>, Socket, Context).
+    SenderPid = spawn_link(fun() -> start_send_loop(Socket, Context) end),
+    receive_loop(<<>>, Socket, SenderPid, Context).
 
 
 %% ============================== RECEIVE DATA =====================================
 
 %% @doc Start receiving messages from the websocket
-receive_loop(Buff, Socket, Context) ->
+receive_loop(Buff, Socket, SenderPid, Context) ->
     case mochiweb_socket:recv(Socket, 0, infinity) of
         {ok, Received} ->
-            z_websocket_hybi17:handle_data(<<Buff/binary, Received/binary>>, Socket, Context);
+            z_websocket_hybi17:handle_data(<<Buff/binary, Received/binary>>, Socket, SenderPid, Context);
         {error, Reason} ->
             {error, Reason}
     end.
 
 
 % Check if we received a full frame
-handle_data(Data, Socket, Context) when byte_size(Data) =< 1 ->
-    receive_loop(Data, Socket, Context);
-handle_data(Data, Socket, Context) ->
+handle_data(Data, Socket, SenderPid, Context) when byte_size(Data) =< 1 ->
+    receive_loop(Data, Socket, SenderPid, Context);
+handle_data(Data, Socket, SenderPid, Context) ->
     << 1:1, 0:3, Opcode:4, Mask:1, PayloadLen:7, Rest/bits >> = Data,
     case {PayloadLen, Rest} of
         {126, _} when Opcode >= 8 -> 
-            close({error, protocol}, Socket, Context);
+            close({error, protocol}, Socket, SenderPid, Context);
         {127, _} when Opcode >= 8 ->
-            close({error, protocol}, Socket, Context);
+            close({error, protocol}, Socket, SenderPid, Context);
         {126, << L:16, R/bits >>}  -> 
-            unmask(Data, R, Opcode, Mask, L, Socket, Context);
+            unmask(Data, R, Opcode, Mask, L, Socket, SenderPid, Context);
         {126, Rest} -> 
-            unmask(Data, Rest, Opcode, Mask, undefined, Socket, Context);
+            unmask(Data, Rest, Opcode, Mask, undefined, Socket, SenderPid, Context);
         {127, << 0:1, L:63, R/bits >>} -> 
-            unmask(Data, R, Opcode, Mask, L, Socket, Context);
+            unmask(Data, R, Opcode, Mask, L, Socket, SenderPid, Context);
         {127, Rest} -> 
-            unmask(Data, Rest, Opcode, Mask, undefined, Socket, Context);
+            unmask(Data, Rest, Opcode, Mask, undefined, Socket, SenderPid, Context);
         {PayloadLen, Rest} -> 
-            unmask(Data, Rest, Opcode, Mask, PayloadLen, Socket, Context)
+            unmask(Data, Rest, Opcode, Mask, PayloadLen, Socket, SenderPid, Context)
     end.
 
 % Check if we have received a complete message.
-unmask(_Data, Rest, Opcode, 0, 0, Socket, Context) ->
-    handle_frame(Rest, Opcode, <<>>, Socket, Context);
-unmask(Data, _Rest, _Opcode, 1, undefined, Socket, Context) ->
-    z_websocket_hybi17:receive_loop(Data, Socket, Context);
-unmask(Data, Rest, _Opcode, 1, PayloadLen, Socket, Context) when PayloadLen + 4 > byte_size(Rest) ->
-    z_websocket_hybi17:receive_loop(Data, Socket, Context);
-unmask(_Data, Rest, Opcode, 1, PayloadLen, Socket, Context) ->
+unmask(_Data, Rest, Opcode, 0, 0, Socket, SenderPid, Context) ->
+    handle_frame(Rest, Opcode, <<>>, Socket, SenderPid, Context);
+unmask(Data, _Rest, _Opcode, 1, undefined, Socket, SenderPid, Context) ->
+    z_websocket_hybi17:receive_loop(Data, Socket, SenderPid, Context);
+unmask(Data, Rest, _Opcode, 1, PayloadLen, Socket, SenderPid, Context) when PayloadLen + 4 > byte_size(Rest) ->
+    z_websocket_hybi17:receive_loop(Data, Socket, SenderPid, Context);
+unmask(_Data, Rest, Opcode, 1, PayloadLen, Socket, SenderPid, Context) ->
     <<MaskKey:32, Payload:PayloadLen/binary, Rest2/bits>> = Rest,
-    unmask_data(Opcode, Payload, MaskKey, Rest2, Socket, Context, <<>>).
+    unmask_data(Opcode, Payload, MaskKey, Rest2, Socket, SenderPid, Context, <<>>).
 
 
 % unmask the received data
-unmask_data(Opcode, <<>>, _MaskKey, RemainingData, Socket, Context, Acc) ->
-    handle_frame(RemainingData, Opcode, Acc, Socket, Context);
-unmask_data(Opcode, <<O:32, Rest/bits>>, MaskKey, RemainingData, Socket, Context, Acc) ->
+unmask_data(Opcode, <<>>, _MaskKey, RemainingData, Socket, SenderPid, Context, Acc) ->
+    handle_frame(RemainingData, Opcode, Acc, Socket, SenderPid, Context);
+unmask_data(Opcode, <<O:32, Rest/bits>>, MaskKey, RemainingData, Socket, SenderPid, Context, Acc) ->
     T = O bxor MaskKey,
-    unmask_data(Opcode, Rest, MaskKey, RemainingData, Socket, Context, <<Acc/binary, T:32>>);
-unmask_data(Opcode, <<O:24>>, MaskKey, RemainingData, Socket, Context, Acc) ->
+    unmask_data(Opcode, Rest, MaskKey, RemainingData, Socket, SenderPid, Context, <<Acc/binary, T:32>>);
+unmask_data(Opcode, <<O:24>>, MaskKey, RemainingData, Socket, SenderPid, Context, Acc) ->
     << MaskKey2:24, _:8 >> = << MaskKey:32 >>,
     T = O bxor MaskKey2,
-    handle_frame(RemainingData, Opcode, <<Acc/binary, T:24>>, Socket, Context);
-unmask_data(Opcode, <<O:16>>, MaskKey, RemainingData, Socket, Context, Acc) ->
+    handle_frame(RemainingData, Opcode, <<Acc/binary, T:24>>, Socket, SenderPid, Context);
+unmask_data(Opcode, <<O:16>>, MaskKey, RemainingData, Socket, SenderPid, Context, Acc) ->
     << MaskKey2:16, _:16 >> = << MaskKey:32 >>,
     T = O bxor MaskKey2,
-    handle_frame(RemainingData, Opcode, <<Acc/binary, T:16>>, Socket, Context);
-unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, Context, Acc) ->
+    handle_frame(RemainingData, Opcode, <<Acc/binary, T:16>>, Socket, SenderPid, Context);
+unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, SenderPid, Context, Acc) ->
     << MaskKey2:8, _:24 >> = << MaskKey:32 >>,
     T = O bxor MaskKey2,
-    handle_frame(RemainingData, Opcode, <<Acc/binary, T:8>>, Socket, Context).
+    handle_frame(RemainingData, Opcode, <<Acc/binary, T:8>>, Socket, SenderPid, Context).
 
 
 % Text frame
-handle_frame(RemainingData, 1, Message, Socket, Context) ->
-    handle_message(Message, Context),
-    handle_data(RemainingData, Socket, Context);
+handle_frame(RemainingData, 1, Message, Socket, SenderPid, Context) ->
+    handle_message(Message, SenderPid, Context),
+    handle_data(RemainingData, Socket, SenderPid, Context);
 % Binary frame
-handle_frame(RemainingData, 2, Message, Socket, Context) ->
-    handle_message(Message, Context),
-    handle_data(RemainingData, Socket, Context);
+handle_frame(RemainingData, 2, Message, Socket, SenderPid, Context) ->
+    handle_message(Message, SenderPid, Context),
+    handle_data(RemainingData, Socket, SenderPid, Context);
 % Close control frame
-handle_frame(_RemainingData, 8, _Message, Socket, Context) ->
-    close({normal, closed}, Socket, Context);
+handle_frame(_RemainingData, 8, _Message, Socket, SenderPid, Context) ->
+    close({normal, closed}, Socket, SenderPid, Context);
 % Ping control frame
-handle_frame(RemainingData, 9, Message, Socket, Context) ->
+handle_frame(RemainingData, 9, Message, Socket, SenderPid, Context) ->
     % send a pong
     Len = hybi_payload_length(byte_size(Message)),
     send(Socket, <<1:1, 0:3, 10:4, 0:1, Len/bits, Message/binary>>),
-    handle_data(RemainingData, Socket, Context);
+    handle_data(RemainingData, Socket, SenderPid, Context);
 % Pong control frame
-handle_frame(RemainingData, 10, _Message, Socket, Context) ->
-    handle_data(RemainingData, Socket, Context).
+handle_frame(RemainingData, 10, _Message, Socket, SenderPid, Context) ->
+    handle_data(RemainingData, Socket, SenderPid, Context).
 
 % Call the handler about the initialization
 handle_init(Context) ->
     W = z_context:get(ws_handler,  Context),
     W:websocket_init(Context).
 
-handle_message(Message, Context) ->
+handle_message(Message, SenderPid, Context) ->
     H = z_context:get(ws_handler, Context),
-    H:websocket_message(Message, Context).
+    H:websocket_message(Message, SenderPid, Context).
 
 handle_info(Message, Context) ->
     H = z_context:get(ws_handler, Context),
@@ -161,7 +161,7 @@ handle_terminate(Reason, Context) ->
 
 
 %% @TODO: log any errors
-close(_Reason, Socket, _Context) ->
+close(_Reason, Socket, _SenderPid, _Context) ->
     send(Socket, <<1:1,0:3,8:4,0:8>>),
     ok.
 
