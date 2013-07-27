@@ -139,6 +139,13 @@ identify_file_os(unix, File, OriginalFilename) ->
                         _ ->
                             {ok, [{mime, "application/zip"}]}
                     end;
+                "application/ogg" ->
+                    % The file utility does some miss-guessing
+                    case guess_mime(OriginalFilename) of
+                        "video/ogg" -> {ok, [{mime, "video/ogg"}]};
+                        "audio/ogg" -> {ok, [{mime, "audio/ogg"}]};
+                        _ -> {ok, [{mime, "application/ogg"}]}
+                    end;
                 "application/octet-stream" ->
                     % The file utility does some miss-guessing
                     case guess_mime(OriginalFilename) of
