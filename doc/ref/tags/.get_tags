@@ -27,4 +27,4 @@ d
 
 exec sed -f /tmp/ztgsed$$ -- "$@"
 
-rm /tmp/ztgsed$$
+rm -f /tmp/ztgsed$$
