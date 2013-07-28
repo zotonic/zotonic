@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/validators/validator_validator_name.erl
 for f in `find $ZOTONIC_SRC/modules -name validator_\*`

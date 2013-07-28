@@ -58,7 +58,7 @@ compile: compile-deps compile-zotonic
 .PHONY: docs edocs
 docs:
 	@echo Building HTML documentation...
-	cd doc && make stubs && make html
+	cd doc && $(MAKE) stubs && $(MAKE) html
 	@echo HTML documentation is now available in doc/_build/html/
 
 edocs:
