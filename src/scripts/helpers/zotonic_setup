@@ -73,7 +73,8 @@ export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
 # For zotonic-addsite et. al. we require Zotonic to be already
 # running. In that case, check if Zotonic is already running with the
 # -name parameter.
-DISTRIBUTED_DETECTED=$(ps u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
+PSCMD=`which /usr/ucb/ps 2>/dev/null || which ps`
+DISTRIBUTED_DETECTED=$($PSCMD u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
 export ZOTONIC_DISTRIBUTED=${ZOTONIC_DISTRIBUTED:=$DISTRIBUTED_DETECTED}
 
 # The ZOTONIC_DISTRIBUTED flag tells Zotonic to start a (potentially)
