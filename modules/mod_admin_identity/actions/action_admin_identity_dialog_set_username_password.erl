@@ -79,6 +79,15 @@ event(#submit{message=set_username_password}, Context) ->
                             %% Assume duplicate key violation, user needs to pick another username.
                             z_render:growl_error(?__("The username is already in use, please try another.", Context), Context);
                         ok ->
+                            case z_convert:to_bool(z_context:get_q("send_welcome", Context)) of
+                            true ->
+                                Vars = [{id, Id},
+                                        {username, Username},
+                                        {password, Password}],
+                                z_email:send_render(m_rsc:p(Id, email, Context), "email_admin_new_user.tpl", Vars, Context);
+                            false ->
+                                nop
+                            end,
                             z_render:wire([
                                 {dialog_close, []},
                                 {growl, [{text, ?__("The new username/ password has been set.", Context)}]}
