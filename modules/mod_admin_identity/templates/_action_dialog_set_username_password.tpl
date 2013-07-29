@@ -34,6 +34,14 @@
         </div>
     </div>
 
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="send_welcome" /> {_ Send welcome e-mail _} ({{ id.email }})
+            </label>
+        </div>
+    </div>
+    
     <div class="modal-footer">
 	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
 
