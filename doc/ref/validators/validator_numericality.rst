@@ -29,6 +29,9 @@ Arguments are:
 +-----------------------+-----------------------------------------------------------+--------------------------------+
 |maximum                |Maximum value.                                             |maximum=100                     |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
+|is_float               |Boolean flag which tells if the input can be a floating    |is_float                        |
+|                       |point number. Defaults to false.                           |is_float=`true`                 |
++-----------------------+-----------------------------------------------------------+--------------------------------+
 |not_a_number_message   |Message to show when the entered value is not a            |not_a_number_message="*"        |
 |                       |number. Defaults to "Must be a number."                    |                                |
 +-----------------------+-----------------------------------------------------------+--------------------------------+

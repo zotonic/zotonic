@@ -27,36 +27,44 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
                     undefined -> { proplists:get_value(minimum, Args), proplists:get_value(maximum, Args) };
                     _ -> {Is,Is}
                 end,
-	JsObject   = z_utils:js_object([{onlyInteger,true}|z_validation:rename_args(Args)]),
+    IsFloat = z_convert:to_bool(proplists:get_value(is_float, Args)),
+    Opt = case IsFloat of
+              true -> [];
+              false -> [{onlyInteger,true}]
+          end,
+	JsObject   = z_utils:js_object(Opt ++ z_validation:rename_args(Args)),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"numericality\", ">>, JsObject, <<");\n">>],
-	{[to_number(Min),to_number(Max)], Script, Context}.
+	{[IsFloat, to_number(Min),to_number(Max)], Script, Context}.
 
 
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error = invalid | novalue | {script, Script}
-validate(numericality, Id, Value, [Min,Max], Context) ->
-    Trimmed = z_string:trim(Value),
-    case Trimmed of
-        [] -> 
-            {{ok, Trimmed}, Context};
-        _ ->
-            case string:to_integer(Trimmed) of
-                {error,_Error} -> 
-                    % Not a number
-                    {{error, Id, invalid}, Context};
-                {Num,[]} ->
-                    MinOK = (Min == -1 orelse Num >= Min),
-                    MaxOK = (Max == -1 orelse Num =< Max),
-                    case MinOK andalso MaxOK of
-                        true  -> {{ok, Value}, Context};
-                        false -> {{error, Id, invalid}, Context}
-                    end;
-                {_Num, _} ->
-                    % Has some trailing information 
-                    {{error, Id, invalid}, Context}
-            end
-    end.
+validate(numericality, Id, Value, [IsFloat,Min,Max], Context) ->
+    Result = case z_string:trim(Value) of
+                 [] -> 
+                     {ok, []};
+                 Trimmed ->
+                     ConvertFun = case IsFloat of
+                                      true -> fun z_convert:to_float/1;
+                                      false -> fun z_convert:to_integer/1
+                                  end,
+                     try
+                         validate_minmax(Trimmed, ConvertFun(Trimmed), Min, Max, Id)
+                     catch
+                         error:{badarg, _} ->
+                             {error, Id, invalid}
+                     end
+            end,
+    {Result, Context}.
 
+validate_minmax(Value, Num, Min, Max, Id) ->
+    MinOK = (Min == -1 orelse Num >= Min),
+    MaxOK = (Max == -1 orelse Num =< Max),
+    case MinOK andalso MaxOK of
+        true  -> {ok, Value};
+        false -> {error, Id, invalid}
+    end.
+    
 
 to_number(undefined) -> 
     -1;
