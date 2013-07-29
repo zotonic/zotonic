@@ -27,7 +27,7 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
                     undefined -> { proplists:get_value(minimum, Args), proplists:get_value(maximum, Args) };
                     _ -> {Is,Is}
                 end,
-	JsObject   = z_utils:js_object([{onlyInt,true}|z_validation:rename_args(Args)]),
+	JsObject   = z_utils:js_object([{onlyInteger,true}|z_validation:rename_args(Args)]),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"numericality\", ">>, JsObject, <<");\n">>],
 	{[to_number(Min),to_number(Max)], Script, Context}.
 
