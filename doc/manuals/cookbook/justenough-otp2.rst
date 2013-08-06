@@ -41,14 +41,10 @@ In the shell::
 
 Edit handle_call/2 in zzz_srv.erl as follows::
 
-  say_hello() ->
-    gen_server:call(?MODULE, hello).
-
-  %% callbacks
   handle_call(hello, _From, State) ->
     hello:hello(),
     io:format("~nHello from zzz_srv!~n", []),
-    {reply, ok, State}.
+    {reply, ok, State};
 
 While you're at it, check your handle_cast/2 code. It should look like this::
 
@@ -76,7 +72,7 @@ And test::
   learn$ erl -pa apps/*/ebin
   ...
   1> zzz_sup:start_link().
-  {ok,<0.34.0>}
+  {ok,<0.33.0>}
 
 Note that you may see a different PID on your system. Try some functions::
 
@@ -97,7 +93,7 @@ How can I kill a running process?
 In the Erlang shell, start `pman`, the process manager::
 
   3> pman:start().
-  <0.38.0>
+  <0.37.0>
 
 You should see a graphic window open with a list of running
 processes. Find ``zzz_srv`` and ``zzz_sup`` under Name. Click on
@@ -118,7 +114,7 @@ You can confirm::
 
 But, no worry, you can start it back up again::
 
-  5> zzz_srv:start().
+  5> zzz_srv:start_link().
   {ok,<0.48.0>}
 
 Now let's test zzz_srv:stop().::
@@ -188,6 +184,7 @@ TROUBLESHOOTING
 I got an error when I compiled. What now?
 
 make sure rebar.config in ../learn looks like this::
+
   {sub_dirs,
           ["apps/zzz",
            "apps/zzz/src",
@@ -209,6 +206,7 @@ Make sure you have this directory structure::
   │   │       ├── zzz_srv.erl
   │   │       └── zzz_sup.erl
   │   └── zzz_lib
+  │   │   ├── ebin
   │       └── src
   │           ├── hello.erl
   │           ├── zzz_lib_app.erl
@@ -227,29 +225,36 @@ compile it and create documentation.
 WHERE TO GO FROM HERE
 ---------------------
 
-Study the on-line and printed Erlang documentation upside and
+Study the online and printed Erlang documentation upside and
 sideways. Skim to see what's there, then reread everytime you have a
 problem. You'll be an Erlang/OTP wizard before you know it.
 
 Now, dive into Zotonic source code. It should be much easier to
-follow:
+follow.
 
 REFERENCES
 ----------
 
-Getting Started https://bitbucket.org/basho/rebar/wiki/GettingStarted
+Getting Started:
+https://github.com/basho/rebar/wiki/Getting-started
 
-Damn Technology http://damntechnology.blogspot.com/ Thursday, August 4, 2011
+Damn Technology:
+http://damntechnology.blogspot.com/
 
-How to create, build, and run an Erlang OTP application using Rebar http://skeptomai.com/?p=56#sec-3
+How to create, build, and run an Erlang OTP application using Rebar:
+http://skeptomai.com/?p=56#sec-3
 
-Commands http://hg.basho.com/rebar/wiki/Commands
+Commands:
+https://github.com/basho/rebar/wiki/Rebar-commands
 
-Erlang App. Management with Rebar http://erlang-as-is.blogspot.com/2011/04/erlang-app-management-with-rebar-alan.html
+Erlang App. Management with Rebar:
+http://erlang-as-is.blogspot.com/2011/04/erlang-app-management-with-rebar-alan.html
 
-Dizzy Smith – Building Erlang Applications with Rebar http://ontwik.com/erlang/dizzy-smith-building-erlang-applications-with-rebar/
+Dizzy Smith – Building Erlang Applications with Rebar:
+http://ontwik.com/erlang/dizzy-smith-building-erlang-applications-with-rebar/
 
-Rebar Demo using ibrowse http://vimeo.com/8311407
+Rebar Demo using ibrowse:
+http://vimeo.com/8311407
 
-rebar / rebar.config.sample http://hg.basho.com/rebar/src/d4fcc10abc0b/rebar.config.sample
-
+rebar / rebar.config.sample:
+https://github.com/basho/rebar/blob/master/rebar.config.sample?source=cc
