@@ -97,5 +97,6 @@ The following arguments/filters can be specified:
 |use_absolute_url    |Ensure that the generated url contains the hostname and port|use_absolute_url    |
 +--------------------+------------------------------------------------------------+--------------------+
 
+See also :ref:`manual-media-classes` for some options that are only available in `mediaclass` files.
 
-.. seealso:: :ref:`tag-image_url` and :ref:`tag-media`.
+.. seealso:: :ref:`tag-image_url`, :ref:`manual-media-classes` and :ref:`tag-media`.

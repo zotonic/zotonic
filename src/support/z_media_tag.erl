@@ -310,7 +310,7 @@ url2(File, Options, Context) ->
     {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
     % Map all ImageOpts to an opt string
     MimeFile = z_media_identify:guess_mime(Filename),
-    {_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts),
+    {_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
     case props2url(ImageOpts, Context) of
         {no_checksum, UrlProps} ->
             PropsQuoted = mochiweb_util:quote_plus(UrlProps),
@@ -423,7 +423,7 @@ url2props(Url, Context) ->
                            _ -> string:tokens(Props, ")(")
                        end,
             FileMime = z_media_identify:guess_mime(Rest),
-            {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList),
+            {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList, Context),
             case {Check1,PropList} of
                 {"mediaclass-"++_, []} ->
                     % shorthand with only the mediaclass
