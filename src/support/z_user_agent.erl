@@ -29,7 +29,8 @@
     to_ua_class/1,
     filename_split_class/1,
     order_class/2,
-    classes/0
+    classes/0,
+    classes_fallback/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -343,3 +344,9 @@ order_class(_, _) -> false.
 -spec classes() -> [ ua_classifier:device_type() ].
 classes() ->
     [ text, phone, tablet, desktop ].
+
+%% @doc Return all possible UA classes for a fallback from another class, including the given class.
+%%      The returned list is ordered from the specific to less specific.
+-spec classes_fallback(ua_classifier:device_type()) -> [ ua_classifier:device_type() ].
+classes_fallback(UAClass) ->
+    lists:dropwhile(fun(X) -> X =/= UAClass end, lists:reverse(classes())).
