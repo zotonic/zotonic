@@ -1,15 +1,14 @@
-
 .. include:: meta-validate.rst
 
 Add a validation to a form.
 
 This tag connects validators to input elements of a form.
 
-Validators check the input element with Javascript and prevent posting the form unless the validation is passed. All validations are also done on the server. This prevents people bypassing the validation checks. When the validation does not pass on the server side then the post will fail.
+Validators check the input element with Javascript and prevent posting the form unless the validation is passed. All validations are also done on the server. This prevents people bypassing the validation checks in their browser. When the validation does not pass on the server side then the post will fail.
 
 Validated form fields are available to Erlang code using the ``z_context:get_q_validated/2`` function.
 
-For exampe, to check if two fields are equal::
+To check if two fields are equal::
 
    <input type="password" id="password" name="password" value="" />
    <input type="password" id="password2" name="password2" value="" />
@@ -38,10 +37,10 @@ The validator tag accepts the following arguments:
 |target         |Target of validator, defaults to the trigger. Almost never  |                       |
 |               |used.                                                       |                       |
 +---------------+------------------------------------------------------------+-----------------------+
-|name           |Used when the id of the input element is unequal to the     |name="password_field"  |
-|               |name. The name is used by the server side code to validate  |                       |
-|               |the received input. Defaults to the target argument (which  |                       |
-|               |defaults to id).                                            |                       |
+|name           |Use this when the name of the input element is unequal to   |name="password_field"  |
+|               |the id. The name is used by the server side code to         |                       |
+|               |validate the received input. Defaults to the target         |                       |
+|               |argument (which defaults to id).                            |                       |
 +---------------+------------------------------------------------------------+-----------------------+
 |valid_message  |Message to show when the field passes validation. Defaults  |valid_message="ok!"    |
 |               |to the empty string.                                        |                       |
