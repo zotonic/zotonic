@@ -57,10 +57,10 @@ this::
     services/
       service_something_stats.erl
 
-And the url for this service http://<site_addr>/api/something/stats
+And the url for this service ``http://<site_addr>/api/something/stats``
 
-The key is that an activated module (`minus the mod_ prefix if you use
-them!`) should be part of the service name. Zotonic parses the service
+The key is that an activated module (minus the ``mod_`` prefix if you use
+them!) should be part of the service name. Zotonic parses the service
 modules filename to identify what module a service relates to and what
 process should be called.  It checks to make sure that module is
 activated and it also uses that same information when matching a
@@ -104,7 +104,7 @@ By implementing the ``process_get/2`` function in your service module,
 it indicates that it is able to handle GET requests.  A full example
 of a services which handles a GET request is listed below::
 
-  -module(service_example_stats).
+  -module(service_something_stats).
   -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
   -svc_title("Retrieve uptime statistics of the system.").
@@ -119,12 +119,16 @@ of a services which handles a GET request is listed below::
                {uptime, 399}],
       z_convert:to_json(Stats).
 
-This module could be called ``service_example_stats.erl`` and then
-gets served at ``/api/example/stats``. Its output is a JSON object
-containing a `count` and an `uptime` field, containing some values. Of
-course, you would write real code there which retrieves actual stats.
-      
+This module could be called ``service_something_stats.erl`` and then
+gets served at ``/api/something/stats``. Its output is a JSON object
+containing a `count` and an `uptime` field, containing some values.
 
+Of course, you would write real code there which retrieves actual stats. If your module `something` contains the function ``stats_data/1``, call it from the process function like this::
+
+  process_get(_ReqData, Context) ->
+      Stats = mod_something:stats_data(Context),
+      z_convert:to_json(Stats).
+      
 Creating a POST service
 -----------------------
 
@@ -136,7 +140,7 @@ requests. The POST parameters are accessible to you by using
 A full example of a services which handles a POST request
 is listed below::
 
-  -module(service_example_process).
+  -module(service_something_process).
   -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
   -svc_title("Processes the given id.").
@@ -152,8 +156,8 @@ is listed below::
       Response = [{result, Id}],
       z_convert:to_json(Response).
 
-This module could be called ``service_example_process.erl`` and then
-gets served at ``/api/example/process``. It requires authentication,
+This module could be called ``service_something_process.erl`` and then
+gets served at ``/api/something/process``. It requires authentication,
 and is only accessible with POST and expects an ``id`` argument to be
 posted.
 
