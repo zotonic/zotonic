@@ -7,10 +7,8 @@
 {% block widget_id %}edit-content-media{% endblock %}
 
 {% block widget_content %}
-    {% with id.medium  as  medium %}
-        <div id="media-edit-view">
-            {# show the media in the best possible way - separate template because we need to refresh this after an media replace #}
-            {% all include "_admin_edit_media.tpl" medium=id.medium %}
-        </div>
-    {% endwith %}
+    <div id="media-edit-view">
+        {# show the media in the best possible way - separate template because we need to refresh this after an media replace #}
+        {% include "_admin_edit_media_all.tpl" id=id %}
+    </div>
 {% endblock %}
