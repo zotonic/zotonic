@@ -18,4 +18,17 @@ Another example, now rendering a template::
 
 This updates the `<ul/>` with the output of the template `_list_item.tpl`.  All arguments to the update action are also arguments to the template.
 
+
+===========  ===============================================================  ==========================
+Argument     Description                                                      Example
+===========  ===============================================================  ==========================
+target       The id of the element receiving the rendered HTML.               `target="my-view"`
+text         Literal HTML text to be inserted, no escaping will be done.      `text="Hello <b>World</b>"`
+template     Name of the template to be rendered.                             `template="_list_view.tpl"`
+include_all  Add this argument to include all templates with the same name.   `include_all`
+             If not added then the best template will be used.
+===========  ===============================================================  ==========================
+
+All other arguments are passed as-is to the included template(s).
+
 .. seealso:: actions :ref:`action-insert_top` and :ref:`action-insert_bottom`.

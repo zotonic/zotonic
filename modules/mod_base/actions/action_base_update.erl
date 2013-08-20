@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 render_update(Method, TriggerId, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
         undefined -> proplists:get_value(text, Args, "");
-        Template -> #render{template=Template, vars=Args}
+        Template -> #render{template=Template, vars=Args, is_all=proplists:get_value('include_all', Args)}
     end,
     case {TargetId, Html} of
         {undefined,_} -> render_inline(Method, TargetId, Html, Args, Context);

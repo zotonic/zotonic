@@ -167,7 +167,7 @@
 -record(dragdrop, {tag, delegate, id}).
 
 %% @doc Template definition for z_render:update/insert (and others)
--record(render, {template, vars=[]}).
+-record(render, {template, is_all=false, vars=[]}).
 
 %% @doc Data import definition. See also mod_import_csv.
 -record(import_data_def, {colsep=$\t, skip_first_row=true, record, importdef}).

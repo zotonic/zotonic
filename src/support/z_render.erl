@@ -416,9 +416,8 @@ update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
       AfterEffects, 
       $;].
 
-    render_html(#render{template=Template, vars=Vars}, Context) ->
-        {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
-        {iolist_to_binary(Html), Context1};
+    render_html(#render{template=Template, is_all=All, vars=Vars}, Context) ->
+        render_html_opt_all(z_convert:to_bool(All), Template, Vars, Context);
     render_html(undefined, Context) ->
         {"", Context};
     render_html(Html, Context) when is_binary(Html) ->
@@ -426,6 +425,15 @@ update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
     render_html(Html, Context) ->
         {Html1, Context1} = render_to_iolist(Html, Context),
         {iolist_to_binary(Html1), Context1}.
+
+
+    render_html_opt_all(false, Template, Vars, Context) ->
+        {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
+        {iolist_to_binary(Html), Context1};
+    render_html_opt_all(true, Template, Vars, Context) ->
+        Templates = z_template:find_template(Template, true, Context),
+        Html = [ z_template:render(Tpl, Vars, Context) || Tpl <- Templates ],
+        render_html(Html, Context).
 
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
