@@ -58,7 +58,7 @@
     <div class="control-group">
 	<label class="control-label" for="new_password">{_ Password _}</label>
         <div class="controls">
-	    <input type="text" id="new_password" name="new_password" value="" />
+	    <input type="password" id="new_password" name="new_password" value="" />
 	    {% validate id="new_password" type={presence} %}
 	</div>
     </div>

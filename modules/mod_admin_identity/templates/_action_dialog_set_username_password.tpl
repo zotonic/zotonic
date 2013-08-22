@@ -25,7 +25,7 @@
     <div class="control-group">
 	<label class="control-label" for="new_password">{_ Password _}</label>
         <div class="controls">
-	    <input type="text" id="new_password" name="new_password" value="{{ password|escape }}" />
+	    <input type="password" id="new_password" name="new_password" value="{{ password|escape }}" />
 	    {% if m.config.mod_admin_identity.password_regex.value %}
 	        {% validate id="new_password" type={presence} type={format pattern=m.config.mod_admin_identity.password_regex.value} %}
             {% else %}
