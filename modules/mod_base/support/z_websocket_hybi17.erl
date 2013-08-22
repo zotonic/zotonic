@@ -180,8 +180,19 @@ start_send_loop(Socket, Context) ->
 
 send_loop(Socket, Context) ->
     receive
+	{send_data, {binary, Data}} ->
+	    case send_frame(Socket, Data, binary) of
+		ok ->
+		    send_loop(Socket, Context);
+		{error, closed} ->
+		    handle_terminate({error, closed}, Context),
+		    closed;
+		_ ->
+		    handle_terminate(normal, Context),
+		    normal
+	    end;
         {send_data, Data} ->
-            case send_frame(Socket, Data) of
+            case send_frame(Socket, Data, text) of
                 ok -> 
                     send_loop(Socket, Context);
                 {error, closed} ->
@@ -207,9 +218,14 @@ send_loop(Socket, Context) ->
 
 
 % Send a text frame
-send_frame(Socket, Data) ->
+send_frame(Socket, Data, text) ->
     Len = hybi_payload_length(iolist_size(Data)),
-    send(Socket, [<<1:1, 0:3, 1:4, 0:1, Len/bits>>, Data]).
+    send(Socket, [<<1:1, 0:3, 1:4, 0:1, Len/bits>>, Data]);
+
+% Send a binary frame
+send_frame(Socket, Data, binary) ->
+    Len = hybi_payload_length(iolist_size(Data)),
+    send(Socket, [<<1:1, 0:3, 2:4, 0:1, Len/bits>>, Data]).
 
 % Send a ping to see if the UA is still listening
 send_ping(Socket) ->
