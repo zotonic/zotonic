@@ -33,7 +33,7 @@ msgid "Changed the username."
 msgstr "Kullanıcı adı değiştirildi."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
-msgid "Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore."
+msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
 msgstr "Herhangi bir kullanıcı/şifreyi kaldırmak için \"sil\" butonuna tıklayınız, artık o kişi bir kullanıcı olamayacak."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
@@ -77,7 +77,7 @@ msgstr "İlk"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
-msgid "Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
+msgid "Enter a (unique) username and password. Usernames and passwords are case sensitive, so be careful when entering them."
 msgstr "Özgün bir kullanıcı adı ve şifre veriniz. Kullanıcı adları ve şifreler büyük/küçük harf duyarlıdır, giriş yaparken dikkat ediniz."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
@@ -143,7 +143,7 @@ msgid "Set username / password"
 msgstr "Kullanıcı adı / şifre oluştur"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-msgid "Set username/ password"
+msgid "Set username / password"
 msgstr "Kullanıcı adı / şifre oluştur"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
