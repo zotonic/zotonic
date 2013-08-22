@@ -47,8 +47,8 @@ msgstr "Учетная запись изменена."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
-"Click “delete” to remove any existing username/ password from the person, "
-"the person won't be an user anymore."
+"Click “delete” to remove any existing username/password from the person; "
+"this person will no longer be a user."
 msgstr ""
 "Нажмите «удалить» для удаления связанных с этой персоной пар имен и паролей. "
 "Это равнозначно удалению статуса пользователя у этой персоны."
@@ -96,7 +96,7 @@ msgstr "Имя"
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 msgid ""
-"Give an unique username and a password. Usernames and passwords are case "
+"Enter a (unique) username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
 "Укажите уникальное имя пользователя и пароль. Имена пользователей и пароли "
@@ -169,7 +169,7 @@ msgid "Set username / password"
 msgstr "Установить имя / пароль"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-msgid "Set username/ password"
+msgid "Set username / password"
 msgstr "Установить имя / пароль"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19

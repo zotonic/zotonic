@@ -44,7 +44,7 @@ msgid "Changed the username."
 msgstr "Zmieniono login."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
-msgid "Click “delete” to remove any existing username/ password from the person, the person won't be an user anymore."
+msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
 msgstr "Naciśnij \"skasuj\" aby usunąć dane uwierzytelniające tej osoby. Po wykonaniu tej operacji osoba przestanie być użytkownikiem."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
@@ -85,7 +85,7 @@ msgstr "Imię"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
-msgid "Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
+msgid "Enter a (unique) username and password. Usernames and passwords are case sensitive, so be careful when entering them."
 msgstr ""
 "Podaj unikalne: login i hasło użytkownika.\n"
 "Wielkość liter ma znaczenie:\"a\" to nie to samo, co \"A\", dlatego dane wprowadzaj uważnie!"
@@ -153,7 +153,7 @@ msgid "Set username / password"
 msgstr "Zmień login lub hasło"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-msgid "Set username/ password"
+msgid "Set username / password"
 msgstr "Zmień login lub hasło"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19

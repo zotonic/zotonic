@@ -45,8 +45,8 @@ msgstr "kustuta kasutajanimi"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
-"Click “delete” to remove any existing username/ password from the person, "
-"the person won't be an user anymore."
+"Click “delete” to remove any existing username/password from the person; "
+"this person will no longer be a user."
 msgstr ""
 "Kliki “kustuta” ,et kustutada olemasolev kasutajanimi/parool isikult, isik "
 "lakkab olemas kasutaja."
@@ -94,7 +94,7 @@ msgstr "Esimene"
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 msgid ""
-"Give an unique username and a password. Usernames and passwords are case "
+"Enter a (unique) username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
 "Sisesta unikaalne kasutajanimi ja parool. Kasutajanimed ja paroolid on "
@@ -170,7 +170,7 @@ msgstr "Sisesta kasutajanimi / parool"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
 #, fuzzy
-msgid "Set username/ password"
+msgid "Set username / password"
 msgstr "Sisesta kasutajanimi / parool"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19

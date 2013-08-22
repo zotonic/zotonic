@@ -43,7 +43,7 @@
 
     <h3>{_ Username and password _}</h3>
     <p>
-	{_ Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
+	{_ Enter a unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
     </p>
 
 	
