@@ -575,15 +575,30 @@ assure_category(Name, Context) ->
 
 
 %% Add filters
+add_filters({'or', Filters}, Result) ->
+    {Exprs, Result1} = lists:foldr(
+                         fun([C,O,V], {Es, R}) ->
+                                 {E, R1} = create_filter(C, O, V, R),
+                                 {[E|Es], R1}
+                         end,
+                         {[], Result},
+                         Filters),
+    Or = "(" ++ string:join(Exprs, " OR ") ++ ")",
+    add_where(Or, Result1);
+    
 add_filters([Column, Value], R) ->
     add_filters([Column, eq, Value], R);
 
 add_filters([Column, Operator, Value], Result) ->
+    {Expr, Result1} = create_filter(Column, Operator, Value, Result),
+    add_where(Expr, Result1).
+
+create_filter(Column, Operator, Value, Result) ->
     {Arg, Result1} = add_arg(Value, Result),
     Column1 = sql_safe(Column),
     Operator1 = map_filter_operator(Operator),
-    add_where(Column1 ++ " " ++ Operator1 ++ " " ++ Arg, Result1).
-        
+    {Column1 ++ " " ++ Operator1 ++ " " ++ Arg, Result1}.
+
 map_filter_operator(eq) -> "=";
 map_filter_operator('=') -> "=";
 map_filter_operator(ne) -> "<>";
