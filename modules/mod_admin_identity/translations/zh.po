@@ -48,8 +48,8 @@ msgstr "用户名已修改。"
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
-"Click “delete” to remove any existing username/ password from the person, "
-"the person won't be an user anymore."
+"Click “delete” to remove any existing username/password from the person; "
+"this person will no longer be a user."
 msgstr "使用“删除”来删除人员的用户名/密码，这样人员就不再是用户。"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
@@ -93,7 +93,7 @@ msgstr "名字"
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
 msgid ""
-"Give an unique username and a password. Usernames and passwords are case "
+"Enter a (unique) username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr "设置唯一用户名和一个密码。键入时需要注意用户名和密码区分大小写。"
 
@@ -163,7 +163,7 @@ msgid "Set username / password"
 msgstr "设置用户名/密码"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-msgid "Set username/ password"
+msgid "Set username / password"
 msgstr "设置用户名/密码"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19

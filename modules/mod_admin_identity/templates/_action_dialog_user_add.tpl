@@ -43,7 +43,7 @@
 
     <h3>{_ Username and password _}</h3>
     <p>
-	{_ Give an unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
+	{_ Enter a unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
     </p>
 
 	
@@ -58,7 +58,7 @@
     <div class="control-group">
 	<label class="control-label" for="new_password">{_ Password _}</label>
         <div class="controls">
-	    <input type="text" id="new_password" name="new_password" value="" />
+	    <input type="password" id="new_password" name="new_password" value="" />
 	    {% validate id="new_password" type={presence} %}
 	</div>
     </div>

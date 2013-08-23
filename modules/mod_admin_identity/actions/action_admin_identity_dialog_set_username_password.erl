@@ -52,7 +52,7 @@ event(#postback{message={set_username_password, Id, OnDelete}}, Context) ->
         {password, Password},
         {on_delete, OnDelete}
     ],
-    z_render:dialog(?__("Set username/ password", Context), "_action_dialog_set_username_password.tpl", Vars, Context);
+    z_render:dialog(?__("Set username / password", Context), "_action_dialog_set_username_password.tpl", Vars, Context);
 
 event(#submit{message=set_username_password}, Context) ->
     Id = z_convert:to_integer(z_context:get_q("id", Context)),

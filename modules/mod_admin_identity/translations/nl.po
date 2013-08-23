@@ -96,7 +96,7 @@ msgstr "Voornaam"
 
 #: ./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7 ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46 
 msgid ""
-"Give an unique username and a password. Usernames and passwords are case "
+"Enter a (unique) username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr "Voer een unieke gebruikersnaam in en een wachtwoord. Gebruikersnaam en wachtwoord zijn beiden hoofdlettergevoelig, let daar dus op bij het invoeren."
 
@@ -178,7 +178,7 @@ msgstr "Gebruikersnaam / wachtwoord instellen"
 
 #: ./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55 
 msgid ""
-"Set username/ password"
+"Set username / password"
 msgstr "Stel gebruikersnaam / wachtwoord in"
 
 #: ./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19 
