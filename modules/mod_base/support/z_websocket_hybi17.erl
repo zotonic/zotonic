@@ -206,10 +206,16 @@ send_loop(Socket, Context) ->
     end.
 
 
-% Send a text frame
-send_frame(Socket, Data) ->
+% Send a data frame
+send_frame(Socket, {binary, Data}) ->
     Len = hybi_payload_length(iolist_size(Data)),
-    send(Socket, [<<1:1, 0:3, 1:4, 0:1, Len/bits>>, Data]).
+    send(Socket, [<<1:1, 0:3, 2:4, 0:1, Len/bits>>, Data]);
+send_frame(Socket, {text, Data}) ->
+    Len = hybi_payload_length(iolist_size(Data)),
+    send(Socket, [<<1:1, 0:3, 1:4, 0:1, Len/bits>>, Data]);
+send_frame(Socket, Data) ->
+    %% default to text frames
+    send_frame(Socket, {text, Data}).
 
 % Send a ping to see if the UA is still listening
 send_ping(Socket) ->
@@ -222,9 +228,7 @@ send_ping(Socket) ->
 send(undefined, _Data) ->
     ok;
 send(Socket, Data) ->
-    mochiweb_socket:send(Socket, iolist_to_binary(Data)). 
-
-
+    mochiweb_socket:send(Socket, iolist_to_binary(Data)).
 
 hybi_payload_length(N) ->
     case N of
