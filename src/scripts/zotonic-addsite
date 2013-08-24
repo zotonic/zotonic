@@ -46,6 +46,9 @@ function do_addsite {
     pushd .
     cd $SITES/$SITE
 
+    # Remove existing git repo
+    rm -rf .git
+
     # Remove placeholder .empty files
     rm `find . -name .empty`
 
