@@ -41,10 +41,13 @@ function usage {
 #
 function do_addsite {
      # Copy the default site as a template
-    cp -pR $SKELDIR $SITES/$SITE
+    cp -pRL $SKELDIR $SITES/$SITE
 
     pushd .
     cd $SITES/$SITE
+
+    # Remove existing git repo
+    rm -rf .git
 
     # Remove placeholder .empty files
     rm `find . -name .empty`
