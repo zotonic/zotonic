@@ -41,7 +41,7 @@ function usage {
 #
 function do_addsite {
      # Copy the default site as a template
-    cp -pR $SKELDIR $SITES/$SITE
+    cp -pRL $SKELDIR $SITES/$SITE
 
     pushd .
     cd $SITES/$SITE
