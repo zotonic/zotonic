@@ -16,8 +16,10 @@
 				    <li><a href="#" data-where="before">&uarr; {_ Add before _}</a></li>
 				    <li><a href="#" data-where="below">&rarr; {_ Add below _}</a></li>
 				    <li><a href="#" data-where="after">&darr; {_ Add after _}</a></li>
+				    {% if not id.is_protected %}
 				    <li class="divider"></li>
 				    <li><a href="#" data-where="remove">{_ Remove _}</a></li>
+				    {% endif %}
 				</ul>
 		    </span>
 		  </span>
