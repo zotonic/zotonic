@@ -195,7 +195,7 @@ finish_request(ReqData, State) ->
                                         body=State#state.body
                                     },
                             Context = z_context:new(ReqData, ?MODULE),
-                            z_depcache:set(cache_key(State#state.path), Cache, Context),
+                            z_depcache:set(cache_key(State#state.path), Cache, 3600, [module_index], Context),
                             {ok, ReqData, State};
                         _ ->
                             % No cache or no gzip'ed version (file system cache is fast enough for image serving)
