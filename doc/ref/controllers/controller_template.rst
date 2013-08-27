@@ -37,6 +37,9 @@ The following options can be given to the dispatch rule:
 |Option               |Description                           |Example                 |
 +=====================+======================================+========================+
 |template             |Name of the template to be rendered.  |{template, "home.tpl"}  |
+|                     |Can also be a tuple of the following  |{template, {cat, "home. |
+|                     |form: `{cat, Name}`.                  |tpl"}}                  |
+|                     |See also: :ref:`tag-catinclude`.      |                        |
 +---------------------+--------------------------------------+------------------------+
 |anonymous            |Render the template always as the     |{anonymous, true}       |
 |                     |anonymous user, even when an user is  |                        |
