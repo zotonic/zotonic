@@ -47,6 +47,9 @@ The following options can be given to the dispatch rule:
 +---------------------+-------------------------------------+------------------------+
 |template             |Name of the template to be           |{template, "about.tpl"} |
 |                     |rendered. Defaults to “page.tpl”     |                        |
+|                     |Can also be a tuple of the following |{template, {cat, "home. |
+|                     |form: `{cat, Name}`.                 |tpl"}}                  |
+|                     |See also: :ref:`tag-catinclude`.     |                        |
 +---------------------+-------------------------------------+------------------------+
 |cat                  |The category the resource that is    |{cat, text}             |
 |                     |requested has to be. If a page of a  |                        |
