@@ -1,10 +1,10 @@
 /* geomap country js
 ----------------------------------------------------------
 
-@package:	Zotonic 2012	
+@package:	Zotonic 2012-2013	
 @Author:	Marc Worrell <marc@worrell.nl>
 
-Copyright 2012 Marc Worrell
+Copyright 2012-2013 Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ limitations under the License.
 !function( $ ) {
 
     /* Connect to Zotonic */
-    OpenLayers.ImgPath = '/lib/images/'
+    OpenLayers.ImgPath = '/lib/images/';
     
     var GeoMapCountry = {
         _options: {},
@@ -109,7 +109,7 @@ limitations under the License.
     };
     GeoMapCountry.selectControl = function() {
         return this._selectControl;
-    }
+    };
 
     // Needed only for interaction, not for the display.
     GeoMapCountry.featureSelect = function(evt) {
@@ -122,12 +122,12 @@ limitations under the License.
                                  this._selectedFeature.geometry.getBounds().getCenterLonLat(),
                                  new OpenLayers.Size(100,100),
                                  t,
-                                 null, true, 
+                                 null, true,
                                  function(_closeEvt) {
                                      // 'this' is the popup.
                                      if (this.feature.layer) {
                                          self._selectControl.unselect(this.feature);
-                                     } else { 
+                                     } else {
                                          this.destroy();
                                      }
                                  });
@@ -144,16 +144,16 @@ limitations under the License.
                 if (typeof data.rsc_id != "undefined") {
                     z_notify("render-update", {
                                 template: "_geomap_popup.tpl",
-                                id: data.rsc_id, 
-                                name: data.name, 
-                                color: data.colour, 
-                                value: data.value, 
+                                id: data.rsc_id,
+                                name: data.name,
+                                color: data.colour,
+                                value: data.value,
                                 z_target_id: 'geo-popup-info'
                             });
                 }
             }, 10);
         }
-    }
+    };
     GeoMapCountry.featureUnselect = function(evt) {
         this._selectedFeature = evt.feature;
         if (this._selectedFeature.popup) {

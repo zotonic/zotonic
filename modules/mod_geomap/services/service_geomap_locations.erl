@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2013 Marc Worrell
 %% @doc Return a list of locations for the search or id given.
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,8 +42,6 @@ add_locations([], Acc, _Context) ->
 add_locations([Id|Ids], Acc, Context) ->
     Lat = m_rsc:p(Id, computed_location_lat, Context),
     Lng = m_rsc:p(Id, computed_location_lng, Context),
-    IsManualLoc = not z_utils:is_empty(m_rsc:p(Id, location_lat, Context))
-                andalso not z_utils:is_empty(m_rsc:p(Id, location_lng, Context)),
     case {Lat,Lng} of
         {undefined, _} -> add_locations(Ids, Acc, Context);
         {_, undefined} -> add_locations(Ids, Acc, Context);
@@ -51,17 +49,7 @@ add_locations([Id|Ids], Acc, Context) ->
             Loc = {struct, [
                 {id, z_convert:to_binary(Id)},
                 {location_lat, Lat},
-                {location_lng, Lng},
-                {is_manual, IsManualLoc},
-                {category, m_rsc:p(m_rsc:p(Id, category_id, Context), name, Context)},
-                {title, ?__(m_rsc:p(Id, title, Context), Context)},
-                {page_url, iolist_to_binary(m_rsc:p(Id, page_url, Context))},
-                {address_country, m_l10n:country_name(m_rsc:p(Id, address_country, Context), Context)},
-                {address_city, m_rsc:p(Id, address_city, Context)},
-                {address_state, m_rsc:p(Id, address_state, Context)},
-                {address_street_1, m_rsc:p(Id, address_street_1, Context)},
-                {address_street_2, m_rsc:p(Id, address_street_2, Context)},
-                {address_postcode, m_rsc:p(Id, address_postcode, Context)}
+                {location_lng, Lng}
             ]},
             add_locations(Ids, [Loc|Acc], Context)
     end.
