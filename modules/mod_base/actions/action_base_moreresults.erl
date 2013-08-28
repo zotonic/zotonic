@@ -58,12 +58,12 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
     SearchProps1 = [{page, Page}|SearchProps],
     R = m_search:search({SearchName, SearchProps1}, Context),
     Result = R#m_search_result.result,
-    Ids = case proplists:get_value(ids, Result#search_result.result) of
+    Rows = case proplists:get_value(ids, Result#search_result.result) of
               undefined -> Result#search_result.result;
               X -> X
-          end,
+           end,
 
-    Context1 = case length(Ids) < PageLen of
+    Context1 = case length(Rows) < PageLen of
                    false ->
                         {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
                         RebindJS = case proplists:get_value(visible, Args) of
@@ -79,17 +79,27 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
                end,
 
     FirstRow = PageLen*(Page-1)+1,
-    Ids1 = lists:zip3(lists:map(fun to_id/1, Ids), Ids, lists:seq(FirstRow, FirstRow+length(Ids)-1)),
-    Html = lists:map(fun({Id, ResultRow, RowNr}) -> 
-                        Vars = [
-                                {id, Id}, {result_row, ResultRow}, {row, RowNr}, {is_first, RowNr == FirstRow}
-                               ] ++ Args,
-                             Template = proplists:get_value(template, Args),
-                             case proplists:get_value(catinclude, Args) of
-                                 true -> z_template:render({cat, Template}, Vars, Context1);
-                                 _ -> z_template:render(Template, Vars, Context1)
-                             end
-                    end, Ids1),
+    Template = proplists:get_value(template, Args),
+    Html = case z_convert:to_bool(proplists:get_value(is_result_render,Args)) of
+              true ->
+                  Vars = [ {result, Rows}, {ids, lists:map(fun to_id/1, Rows)} | Args ],
+                  z_template:render(Template, Vars, Context1);
+              false ->
+                  IsCatInclude = z_convert:to_bool(proplists:get_value(catinclude, Args)),
+                  IdRows = lists:zip3(lists:map(fun to_id/1, Rows), Rows, lists:seq(FirstRow, FirstRow+length(Rows)-1)),
+                  lists:map(fun({Id, ResultRow, RowNr}) -> 
+                                Vars = [
+                                        {id, Id}, {result_row, ResultRow}, 
+                                        {row, RowNr}, {is_first, RowNr == FirstRow}
+                                        | Args 
+                                       ],
+                                case IsCatInclude of
+                                    true -> z_template:render({cat, Template}, Vars, Context1);
+                                    false -> z_template:render(Template, Vars, Context1)
+                                end
+                            end, 
+                            IdRows)
+                  end,
     z_render:appear_bottom(TargetId, Html, Context1).
 
 
