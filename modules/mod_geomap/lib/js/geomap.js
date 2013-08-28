@@ -23,7 +23,7 @@ limitations under the License.
 !function( $ ) {
 
     /* Connect to Zotonic */
-    OpenLayers.ImgPath = '/lib/images/'
+    OpenLayers.ImgPath = '/lib/images/';
     OpenLayers.Format.ModGeoMap = OpenLayers.Class(OpenLayers.Format, {
         read: function(obj) {
             if (typeof obj.error == "object") {
@@ -92,7 +92,7 @@ limitations under the License.
     };
     GeoMap.selectControl = function() {
         return this._selectControl;
-    }
+    };
 
     GeoMap.addCollections = function(list) {
         var self = this;
@@ -106,12 +106,14 @@ limitations under the License.
             }, {
                 context: {
                     radius: function(feature) {
-                        return Math.min(feature.attributes.count, 7) + 5;
+                        return Math.min(feature.attributes.count, 15) + 5;
                     }
                 }
             });
 
         var layers = [];
+        var fun_featureselected = function(evt) { self.featureSelect(evt); };
+        var fun_featureunselected = function(evt) { self.featureUnselect(evt); };
         for (i=0; i<list.length; i++)
         {
             var c = list[i];
@@ -129,18 +131,18 @@ limitations under the License.
                     format: new OpenLayers.Format.ModGeoMap()
                 }),
                 styleMap: new OpenLayers.StyleMap({
-                    "default": default_style,
+                    "default": c.style||default_style,
                     "select": {
-                        fillColor: "#8aeeef",
-                        strokeColor: "#32a8a9"
+                        fillColor: c.fillColor||"#8aeeef",
+                        strokeColor: c.strokeColor||"#32a8a9"
                     }
                 }),
                 eventListeners: {
-                    "featureselected": function(evt) { self.featureSelect(evt); },
-                    "featureunselected": function(evt) { self.featureUnselect(evt); }
+                    "featureselected": fun_featureselected,
+                    "featureunselected": fun_featureunselected
                 }
             });
-            layers.push(layer)
+            layers.push(layer);
         }
         var selectFeatures = new OpenLayers.Control.SelectFeature(layers, { click: true });
         this._map.addLayers(layers);
@@ -154,36 +156,41 @@ limitations under the License.
         this._selectedFeature = evt.feature;
         var self = this;
         var cluster = this._selectedFeature.cluster;
-        var t = "";
-        
-        for (var i=0, len=cluster.length; i<Math.min(len,3); i++) {
-            var d = cluster[i].data;
-            t += "<h3><a href='"+d.page_url+"'>"+d.title+"</a></h3>"
-                 + "<p>"+d.address_country
-                 + ", " + d.address_city
-                 + ", " + d.address_street_1
-                 + "</p>";
-        }
-        if (cluster.length > 3) {
-            t = t+"<p class='geomap-other'>And <span>"+(cluster.length-3)+"</span> other.</p>";
-        }
+        var t = "<div id='geo-popup-cluster'><img src='/lib/images/spinner.gif' /></div>";
         this._popup = new OpenLayers.Popup.FramedCloud("featurePopup",
                                  this._selectedFeature.geometry.getBounds().getCenterLonLat(),
                                  new OpenLayers.Size(100,100),
                                  t,
-                                 null, true, 
+                                 null, true,
                                  function(_closeEvt) {
                                      // 'this' is the popup.
                                      if (this.feature.layer) {
                                          self._selectControl.unselect(this.feature);
-                                     } else { 
+                                     } else {
                                          this.destroy();
                                      }
                                  });
         this._selectedFeature.popup = this._popup;
         this._popup.feature = this._selectedFeature;
         GeoMap.map().addPopup(this._popup, true);
-    }
+        if (self._popup_callback) {
+            setTimeout(function() { self._popup_callback.apply(self, ['geo-popup-cluster', cluster]); }, 10);
+        } else {
+            setTimeout(function() {
+                var ids = "";
+                for (var i=0, len=cluster.length; i<len; i++) {
+                    if (i>0)
+                        ids+=",";
+                    ids += cluster[i].data.id;
+                }
+                z_notify("render-update", {
+                            template: "_geomap_popup_cluster.tpl",
+                            ids: ids,
+                            z_target_id: 'geo-popup-cluster'
+                        });
+            }, 10);
+        }
+    };
     GeoMap.featureUnselect = function(evt) {
         this._selectedFeature = evt.feature;
         if (this._selectedFeature.popup) {

@@ -37,14 +37,14 @@
 %% @doc Handle an address lookup from the admin.
 %% @todo Maybe add check if the user is allowed to use the admin.
 event(#postback_notify{message="address_lookup"}, Context) ->
-    Q = q([
+    {ok, Type, Q} = q([
             {address_street_1, z_context:get_q("street", Context)},
             {address_city, z_context:get_q("city", Context)},
             {address_state, z_context:get_q("state", Context)},
             {address_postcode, z_context:get_q("postcode", Context)},
             {address_country, z_context:get_q("country", Context)}
         ], Context),
-    case find_geocode(Q) of
+    case find_geocode(Q, Type, Context) of
         {error, _} ->
             z_script:add_script("map_mark_location_error();", Context);
         {ok, {Lat, Long}} ->
@@ -86,7 +86,7 @@ observe_pivot_update(#pivot_update{}, KVs, _Context) ->
 
 %% @doc Check if the latitude/longitude are set, if so the pivot the pivot_geocode.
 %%      If not then try to derive the lat/long from the rsc's address data.
-observe_pivot_fields(#pivot_fields{id=Id, rsc=R}, KVs, Context) ->
+observe_pivot_fields(#pivot_fields{rsc=R}, KVs, Context) ->
     case {catch z_convert:to_float(proplists:get_value(location_lat, R)),
           catch z_convert:to_float(proplists:get_value(location_lng, R))}
     of
@@ -99,11 +99,17 @@ observe_pivot_fields(#pivot_fields{id=Id, rsc=R}, KVs, Context) ->
         _ ->
             % Optionally geocode the address in the resource.
             % When successful this will spawn a new geocode pivot.
-            case optional_geocode(Id, R, Context) of
+            case optional_geocode(R, Context) of
                 reset -> 
                     [ 
                         {pivot_geocode, undefined},
                         {pivot_geocode_qhash, undefined} 
+                        | KVs
+                    ];
+                {ok, Lat, Long, QHash} ->
+                    [ 
+                        {pivot_geocode, geomap_quadtile:encode(Lat, Long)},
+                        {pivot_geocode_qhash, QHash} 
                         | KVs
                     ];
                 ok -> 
@@ -115,7 +121,7 @@ observe_pivot_fields(#pivot_fields{id=Id, rsc=R}, KVs, Context) ->
 
 %% @doc Check if we should lookup the location belonging to the resource.
 %%      If so we store the quadtile code into the resource without a re-pivot.
-optional_geocode(Id, R, Context) ->
+optional_geocode(R, Context) ->
     Lat = proplists:get_value(location_lat, R),
     Long = proplists:get_value(location_long, R),
     case z_utils:is_empty(Lat) andalso z_utils:is_empty(Long) of
@@ -123,9 +129,9 @@ optional_geocode(Id, R, Context) ->
             reset;
         true ->
             case q(R, Context) of
-                <<>> ->
+                {ok, _, <<>>} ->
                     reset;
-                Q ->
+                {ok, Type, Q} ->
                     LocHash = crypto:md5(Q),
                     case proplists:get_value(pivot_geocode_qhash, R) of
                         LocHash ->
@@ -133,45 +139,25 @@ optional_geocode(Id, R, Context) ->
                             ok;
                         _ ->
                             % Changed, and we are doing automatic lookups
-                            Version = proplists:get_value(version, R),
-                            % Remove the dbc from the context
-                            ContextNoTrans = z_context:new(Context),
-                            spawn_link(fun() -> do_geocode(Id, Version, Q, ContextNoTrans) end),
-                            ok
+                            case find_geocode(Q, Type, Context) of
+                                {error, _} ->
+                                    reset;
+                                {ok, {NewLat,NewLong}} ->
+                                    {ok, NewLat, NewLong, LocHash}
+                            end
                     end
             end
     end.
 
 
-do_geocode(Id, Version, Q, Context) ->
-    case find_geocode(Q) of
-        {error, _} ->
-            update_geocode(Id, Version, undefined, undefined, undefined, Context);
-        {ok, {Lat, Long}} ->
-            update_geocode(Id, Version, Q, Lat, Long, Context)
-    end.
-
-    update_geocode(Id, Version, Q, Lat, Long, Context) ->
-        lager:debug("geocode of ~p set to ~p", [Id, {Lat,Long}]),
-        z_db:q("update rsc set "
-               " pivot_geocode = $1, "
-               " pivot_geocode_qhash = $2 "
-               "where id = $3 "
-               "  and version = $4",
-               [
-                  case Lat of undefined -> undefined; _ -> geomap_quadtile:encode(Lat, Long) end,
-                  case Q of undefined -> undefined; _ -> crypto:md5(Q) end,
-                  Id,
-                  Version
-               ],
-               Context),
-        m_rsc_update:flush(Id, Context),
-        ok.
 
 %% @doc Check with Google and OpenStreetMap if they know the address
-find_geocode(Q) ->
+find_geocode(Q, country, _Context) ->
     Qq = mochiweb_util:quote_plus(Q),
-    case googlemaps(Qq) of
+    openstreetmap(Qq);
+find_geocode(Q, _Type, Context) ->
+    Qq = mochiweb_util:quote_plus(Q),
+    case googlemaps_check(Qq, Context) of
         {error, _} ->
             openstreetmap(Qq);
         {ok, {_Lat, _Long}} = Ok->
@@ -199,6 +185,22 @@ openstreetmap(Q) ->
             {error, unexpected_result};
         {error, Reason} = Error ->
             lager:warning("OpenStreetMap returns ~p for ~p", [Reason, Q]),
+            Error
+    end.
+
+googlemaps_check(Q, Context) ->
+    case z_depcache:get(googlemaps_error, Context) of
+        undefined ->
+            case googlemaps(Q) of
+                {error, query_limit} = Error ->
+                    lager:warning("Geomap: Google reached query limit, disabling for 1800 sec"),
+                    z_depcache:set(googlemaps_error, Error, 1800, Context),
+                    Error;
+                Result ->
+                    Result
+            end;
+        {ok, Error} -> 
+            lager:debug("Geomap: skipping Google lookup due to ~p", [Error]),
             Error
     end.
 
@@ -234,6 +236,8 @@ googlemaps(Q) ->
                     end;
                 <<"ZERO_RESULTS">> ->
                     {error, not_found};
+                <<"OVER_QUERY_LIMIT">> ->
+                    {error, query_limit};
                 Status ->
                     lager:warning("Google maps status ~p on ~p", [Status, Q]),
                     {error, unexpected_result}
@@ -249,6 +253,7 @@ googlemaps(Q) ->
 
 
 get_json(Url) ->
+    lager:debug("Geo lookup: ~p", [Url]),
     case httpc:request(get, {Url, []}, [{autoredirect, true}, {relaxed, true}, {timeout, 10000}], []) of
         {ok, {
             {_HTTP, 200, _OK},
@@ -273,27 +278,31 @@ get_json(Url) ->
 
 
 q(R, Context) ->
-    Fs = [
+    Fs = iolist_to_binary([
         p(address_street1, $,, R),
         p(address_city, $,, R),
         p(address_state, $,, R),
-        p(address_postcode, $,, R),
-        country_name(proplists:get_value(address_country, R), Context)
-    ],
-    iolist_to_binary(Fs).
+        p(address_postcode, $,, R)
+    ]),
+    Country = iolist_to_binary(country_name(proplists:get_value(address_country, R), Context)),
+    case Fs of
+        <<>> -> {ok, country, Country};
+        _ -> {ok, full, <<Fs/binary, Country/binary>>}
+    end.
 
-    p(F, Sep, R) ->
-        case proplists:get_value(F, R) of
-            <<>> -> <<>>;
-            [] -> <<>>;
-            undefined -> <<>>;
-            V -> [V, Sep]
-        end.
+p(F, Sep, R) ->
+    case proplists:get_value(F, R) of
+        <<>> -> <<>>;
+        [] -> <<>>;
+        undefined -> <<>>;
+        V -> [V, Sep]
+    end.
 
 
 country_name([], _Context) -> <<>>;
 country_name(<<>>, _Context) -> <<>>;
 country_name(undefined, _Context) -> <<>>;
+country_name(<<"gb-nir">>, _Context) -> <<"Northern Ireland">>;
 country_name(Iso, Context) ->
     m_l10n:country_name(Iso, en, Context).
 
