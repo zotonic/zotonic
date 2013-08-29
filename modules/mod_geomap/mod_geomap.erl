@@ -294,10 +294,12 @@ q(R, Context) ->
         p(address_state, $,, R),
         p(address_postcode, $,, R)
     ]),
-    Country = iolist_to_binary(country_name(proplists:get_value(address_country, R), Context)),
     case Fs of
-        <<>> -> {ok, country, Country};
-        _ -> {ok, full, <<Fs/binary, Country/binary>>}
+        <<>> ->
+            {ok, country, iolist_to_binary(p(address_country, <<>>, R))};
+        _ -> 
+            Country = iolist_to_binary(country_name(proplists:get_value(address_country, R), Context)),
+            {ok, full, <<Fs/binary, Country/binary>>}
     end.
 
 p(F, Sep, R) ->
