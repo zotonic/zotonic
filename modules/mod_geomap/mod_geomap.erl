@@ -29,7 +29,10 @@
     
     observe_rsc_get/3,
     observe_pivot_update/3,
-    observe_pivot_fields/3
+    observe_pivot_fields/3,
+
+    find_geocode/3,
+    find_geocode_api/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -150,12 +153,19 @@ optional_geocode(R, Context) ->
     end.
 
 
+find_geocode(Q, Type, Context) ->
+    case geomap_precoded:find_geocode(Q, Type) of
+        {ok, {_, _}} = OK ->
+            OK;
+        {error, notfound} ->
+            find_geocode_api(Q, Type, Context) 
+    end.
 
 %% @doc Check with Google and OpenStreetMap if they know the address
-find_geocode(Q, country, _Context) ->
+find_geocode_api(Q, country, _Context) ->
     Qq = mochiweb_util:quote_plus(Q),
     openstreetmap(Qq);
-find_geocode(Q, _Type, Context) ->
+find_geocode_api(Q, _Type, Context) ->
     Qq = mochiweb_util:quote_plus(Q),
     case googlemaps_check(Qq, Context) of
         {error, _} ->
