@@ -44,31 +44,27 @@
     
     <hr/>
     
-        <div class="row">
-            <div class="span4">
-        <h4>{_ Allow editing of category _}</h4>
+    <div class="row-fluid">
+        <div class="span6">
+            <h4>{_ Allow editing of category _}</h4>
 
-        {% for cat_id, level, indent, title in m.category.all_flat_meta %}
-                <div class="controls">
-            <label class="checkbox inline" for="{{ #category.cat_id }}">
-            {{ indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat" {% if title|as_atom|member:acl.categories %}checked="checked" {% endif %} value="{{ title }}" />{{ title }}<br/>
-            </label>
+            {% for cat_id, level, indent, title in m.category.all_flat_meta %}
+                <div>
+                    <label class="checkbox inline" for="{{ #category.cat_id }}">{{ indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if title|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ title }}</label>
                 </div>
-        {% endfor %}
+            {% endfor %}
         </div>
         
-        <div class="span4">
-        <h4>{_ Manage modules _}</h4>
+        <div class="span6">
+            <h4>{_ Manage modules _}</h4>
 
-        {% with m.modules.all as modules %}
-        {% for mod in m.modules.enabled %}
-                <div class="controls">
-            <label class="checkbox inline" for="{{ #module.mod }}">
-            <input type="checkbox" id="{{ #module.mod }}" name="acl_mod"  {% if mod|member:acl.modules %}checked="checked" {% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }}<br/>
-            </label>
-                </div>
-        {% endfor %}
-        {% endwith %}
+            {% with m.modules.all as modules %}
+                {% for mod in m.modules.enabled %}
+                    <div>
+                        <label class="checkbox inline" for="{{ #module.mod }}"><input type="checkbox" id="{{ #module.mod }}" name="acl_mod"{% if mod|member:acl.modules %} checked="checked"{% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }}</label>
+                    </div>
+                {% endfor %}
+            {% endwith %}
         </div>
     </div>
         
