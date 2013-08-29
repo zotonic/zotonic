@@ -96,7 +96,7 @@ model_pgsql() ->
         id serial NOT NULL,
         module character varying(80) NOT NULL DEFAULT 'zotonic'::character varying,
         key character varying(80) NOT NULL DEFAULT ''::character varying,
-        value character varying(1000) NOT NULL DEFAULT ''::character varying,
+        value text NOT NULL DEFAULT ''::character varying,
         props bytea,
         created timestamp with time zone NOT NULL DEFAULT now(),
         modified timestamp with time zone NOT NULL DEFAULT now(),
