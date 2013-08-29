@@ -7,9 +7,9 @@
             <a href="javascript:void(0)" class="btn btn-mini btn-primary do_dialog" data-dialog="title: '{_ Help about ACL roles. _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
         </div>
         
-        <p>
+        <h4>
             {_ Check below what people that are member of this role are allowed to do. _}
-        </p>
+        </h4>
 
         <div class="control-group">
             <label class="checkbox">
