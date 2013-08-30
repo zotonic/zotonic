@@ -403,13 +403,12 @@ update(Table, Id, Parameters, Context) ->
         UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
             true ->
                 % Merge the new props with the props in the database
-                {ok, OldProps} = pgsql:equery1(C, "select props from \""++Table++"\" where id = $1", [Id]),
-                case is_list(OldProps) of
-                    true ->
+                case pgsql:equery1(C, "select props from \""++Table++"\" where id = $1", [Id]) of
+                    {ok, OldProps} when is_list(OldProps) ->
                         FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
                         NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props, UpdateProps)),
                         lists:keystore(props, 1, UpdateProps, {props, cleanup_props(NewProps)});
-                    false ->
+                    _ ->
                         UpdateProps
                 end;
             false ->
