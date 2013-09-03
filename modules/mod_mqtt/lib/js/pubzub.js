@@ -28,7 +28,7 @@ function Pubzub ()
 }
 
 Pubzub.prototype.me = function () {
-    return "page/" + z_pageid;
+    return "/page/" + z_pageid;
 };
 
 Pubzub.prototype.subscribe = function (topic, fun) {

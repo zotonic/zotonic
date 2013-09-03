@@ -400,7 +400,7 @@
 %% @doc Subscribe a function to a QMTT topic.
 %%      The function will be called from a temporary process, and must be of the form:
 %%		m:f(#emqtt_msg{}, A, Context)
--record(mqtt_subscribe, {topic, mfa}).
+-record(mqtt_subscribe, {topic, qos=0, mfa}).
 
 %% @doc Unsubscribe a function from a QMTT topic.
 %%      The MFA _must_ match the one supplied with #qmtt_subscribe{}

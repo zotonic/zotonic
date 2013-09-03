@@ -6,8 +6,11 @@
 	<h1>Hello</h1>
 
 	{% javascript %}
-	pubzub.subscribe("/test", function (topic, msg) { console.log(topic, msg); });
-	pubzub.subscribe("/growl", function (topic, msg) { z_growl_add(msg.payload); });
+	pubzub.subscribe("pageinit", function (topic, msg) {
+		console.log("subscribing");
+		pubzub.subscribe("/test", function (topic, msg) { console.log(topic, msg); });
+		pubzub.subscribe("/page", function (topic, msg) { z_growl_add(msg.payload); });
+	});
 	{% endjavascript %}
 
 {% endblock %}
@@ -18,4 +21,5 @@
 		 "js/qlobber.js"
 		 "js/pubzub.js"
 	%}
+	{% stream %}
 {% endblock %}

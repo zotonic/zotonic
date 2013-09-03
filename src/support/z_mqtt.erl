@@ -20,10 +20,12 @@
 -module(z_mqtt).
 
 -export([
+    route/2,
     publish/2,
     publish/3,
     subscribe/2,
     subscribe/3,
+    subscribe/4,
     unsubscribe/2,
     unsubscribe/3,
     maybe_context_topic/2,
@@ -48,28 +50,51 @@
     }).
 
 
+
+%% @doc Entry point for messages received via the mqtt listener.
+%% @todo Check the payload encoding, don't assume ubf (need magic number?)
+%% @todo Payload might be a z_mqtt_payload record, in that case only verify the user_id etc
+route(#mqtt_msg{} = Msg, Context) ->
+    Msg1 = Msg#mqtt_msg{
+        topic=maybe_context_topic(Msg#mqtt_msg.topic, Context),
+        payload=wrap_payload(ubf, Msg#mqtt_msg.payload, Context),
+        encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
+    },
+    case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
+        true ->
+            emqtt_router:publish(Msg1);
+        false ->
+            lager:debug("MQTT publish access denied to ~p", [Msg1#mqtt_msg.topic]),
+            {error, eacces}
+    end.
+
+%% @doc Entry point for messages received via events
 publish(#mqtt_msg{} = Msg, Context) ->
     Msg1 = Msg#mqtt_msg{
         topic=maybe_context_topic(Msg#mqtt_msg.topic, Context)
     },
-    case emqtt_auth_zotonic:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
-        true -> emqtt_router:publish(Msg1);
-        false -> {error, eacces}
+    case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
+        true ->
+            emqtt_router:publish(Msg1);
+        false ->
+            lager:debug("MQTT publish access denied to ~p", [Msg1#mqtt_msg.topic]),
+            {error, eacces}
     end.
 
 publish(Topic, #z_mqtt_payload{} = Payload, Context) ->
     Msg = #mqtt_msg{
         topic=maybe_context_topic(Topic, Context),
-        retain=?QOS_0,
+        retain=false,
+        qos=?QOS_0,
         payload=Payload,
         encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
     },
-    case emqtt_auth_zotonic:is_allowed(publish, Msg#mqtt_msg.topic, Context) of
+    case z_mqtt_acl:is_allowed(publish, Msg#mqtt_msg.topic, Context) of
         true -> 
             emqtt_router:publish(Msg);
-        false -> {
-            lager:debug("MQTT publish access denied to ~p", [Topic]),
-            error, eacces}
+        false ->
+            lager:debug("MQTT publish access denied to ~p", [Msg#mqtt_msg.topic]),
+            {error, eacces}
     end;
 publish(Topic, Data, Context) ->
     Payload = #z_mqtt_payload{
@@ -80,23 +105,26 @@ publish(Topic, Data, Context) ->
     publish(Topic, Payload, Context).
 
 subscribe(Topic, Context) ->
-    subscribe(Topic, self(), Context).
+    subscribe(Topic, ?QOS_0, self(), Context).
 
-subscribe(Topic, Pid, Context) when is_pid(Pid) ->
+subscribe(Topic, Callback, Context) when is_pid(Callback); is_tuple(Callback) ->
+    subscribe(Topic, ?QOS_0, Callback, Context).
+
+subscribe(Topic, Qos, Pid, Context) when is_pid(Pid) ->
     Topic1 = maybe_context_topic(Topic, Context),
-    case emqtt_auth_zotonic:is_allowed(subscribe, Topic1, Context) of
+    case z_mqtt_acl:is_allowed(subscribe, Topic1, Context) of
         true ->
             lager:debug("MQTT subscribe ~p to ~p", [Pid, Topic1]),
-            emqtt_router:subscribe(Topic1, Pid);
+            emqtt_router:subscribe({Topic1, Qos}, Pid);
         false ->
             lager:debug("MQTT subscribe access denied to ~p", [Topic]),
             {error, eacces}
     end;
-subscribe(Topic, MFA, Context) when is_tuple(MFA) ->
+subscribe(Topic, Qos, MFA, Context) when is_tuple(MFA) ->
     Topic1 = maybe_context_topic(Topic, Context),
-    case emqtt_auth_zotonic:is_allowed(subscribe, Topic1, Context) of
+    case z_mqtt_acl:is_allowed(subscribe, Topic1, Context) of
         true ->
-            case z_notifier:first(#mqtt_subscribe{topic=Topic1, mfa=MFA}, Context) of
+            case z_notifier:first(#mqtt_subscribe{topic=Topic1, qos=Qos, mfa=MFA}, Context) of
                 undefined -> undefined;
                 ok -> ok
             end;

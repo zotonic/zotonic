@@ -24,7 +24,7 @@
     add/2,
     check/2,
     delete/1,
-    is_allowed/3,
+    with_access_control/3,
     map_user_site/1,
     test/0]).
 
@@ -56,65 +56,18 @@ delete(Username) when is_binary(Username) ->
     {error, noacces}.
 
 
-is_allowed(Action, Topic, {zauth, UserId, Host}) when is_integer(UserId) ->
+with_access_control(publish, Msg, {zauth, UserId, Host}) when is_integer(UserId) ->
     Context = z_acl:logon(UserId, z_context:new(Host)),
-    is_allowed(Action, z_convert:to_binary(Topic), Context);
-is_allowed(Action, Topic, #context{} = Context) when Action =:= subscribe; Action =:= publish ->
-    LocalSite = z_convert:to_binary(z_context:site(Context)), 
-    Parts = emqtt_topic:words(Topic),
-    case z_acl:is_admin(Context) of
-        true ->
-            % Admin can do anything on any topic within the admin's site.
-            case Parts of
-                [<<"site">>, LocalSite | _] -> 
-                    true;
-                _ ->
-                    is_allowed(Action, Topic, Parts, LocalSite, Context)
-            end;
-        false ->
-            is_allowed(Action, Topic, Parts, LocalSite, Context)
-    end.
-
-
-is_allowed(_Action, _Topic, [<<"test">>], _Site, _Context) -> 
-    true;
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">>], Site, _Context) -> 
-    true;
-
-is_allowed(subscribe, _Topic, [<<"public">>], _Site, _Context) -> 
-    true;
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"public">>], Site, _Context) ->
-     true;
-
-is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) -> 
-    z_auth:is_auth(Context); 
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"user">>], Site, Context) -> 
-    z_auth:is_auth(Context); 
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context) ->
-    case z_convert:to_binary(z_acl:user(Context)) of
-        User ->
-            true;
-        _ ->
-            case m_identity:get_username(Context) of
-                User -> true;
-                _ -> false
-            end 
+    case z_mqtt:route(Msg, Context) of
+        {error, _} = Error -> Error;
+        _ -> handled
     end;
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"page">>], Site, _Context) -> true;
-is_allowed(Action, Topic, Words, Site, Context) ->
-    is_allowed(Action, Topic, Words, Site, z_session_page:page_id(Context), Context).
-
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"page">>, PageId], Site, PageId, _Context) ->
-    true;
-is_allowed(Action, Topic, Words, Site, PageId, Context) ->
-    Object = #acl_mqtt{
-        type=emqtt_topic:type(Words),   % wildcard | direct
-        topic=Topic,
-        words=Words,
-        site=Site,
-        page_id=PageId
-    },
-    z_acl:is_allowed(Action, Object, Context).
+with_access_control(subscribe, {Topic,Qos}, {zauth, UserId, Host}) when is_integer(UserId) ->
+    Context = z_acl:logon(UserId, z_context:new(Host)),
+    case z_mqtt:subscribe(Topic, Qos, self(), Context) of
+        {error, _} = Error -> Error;
+        _ -> handled
+    end.
 
 
 map_user_site(Username) when is_binary(Username) ->

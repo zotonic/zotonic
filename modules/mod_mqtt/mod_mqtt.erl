@@ -60,8 +60,8 @@ pid_observe_module_activate(MyPid, #module_activate{module=Module, pid=ModulePid
                   end,
                   Fs).
 
-pid_observe_mqtt_subscribe(MyPid, #mqtt_subscribe{topic=Topic, mfa=MFA}, Context) ->
-    subscribe_topic(Topic, MFA, undefined, MyPid, Context).
+pid_observe_mqtt_subscribe(MyPid, #mqtt_subscribe{topic=Topic, qos=Qos, mfa=MFA}, Context) ->
+    subscribe_topic(Topic, Qos, MFA, undefined, MyPid, Context).
 
 pid_observe_mqtt_unsubscribe(MyPid, #mqtt_unsubscribe{topic=Topic, mfa=MFA}, _Context) ->
     unsubscribe_topic(Topic, MFA, MyPid).
@@ -115,7 +115,7 @@ msg_from_event(Topic, Data, Context) ->
 
 
 maybe_subscribe({<<"mqtt:", Topic/binary>>, F}, M, ModulePid, MyPid, Context) ->
-    subscribe_topic(z_mqtt:maybe_context_topic(Topic, Context), {M,F}, ModulePid, MyPid, Context);
+    subscribe_topic(z_mqtt:maybe_context_topic(Topic, Context), ?QOS_0, {M,F}, ModulePid, MyPid, Context);
 maybe_subscribe(_, _M, _Pid, _MyPid, _Context) ->
     nop.
 
@@ -124,10 +124,10 @@ maybe_subscribe(_, _M, _Pid, _MyPid, _Context) ->
 % Middleman is linked to the module ModulePid.
 % Middleman subscribes to emqtt with its own Pid
 % Middleman calls M:F(Message, ModulePid, Context) when it receives a message.
-subscribe_topic(Topic, MFA, ModulePid, MyPid, Context) ->
+subscribe_topic(Topic, Qos, MFA, ModulePid, MyPid, Context) ->
     Sub = {
         {Topic,MFA},
-        {z_mqtt_module_subscriber, start_link, [{Topic, MFA, ModulePid, z_context:site(Context)}]},
+        {z_mqtt_module_subscriber, start_link, [{Topic, Qos, MFA, ModulePid, z_context:site(Context)}]},
         temporary, 5000, worker, [z_mqtt_module_subscriber]
     },
     lager:debug("MQTT subscribe ~p to ~p", [MFA, Topic]),

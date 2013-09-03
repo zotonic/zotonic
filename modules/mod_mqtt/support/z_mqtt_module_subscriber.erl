@@ -23,6 +23,7 @@
 
 -record(state, {
         topic,
+        qos,
         mfa,
         pid,
         site
@@ -31,15 +32,16 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 
-start_link({_Topic, _MFA, _Pid, _Site} = Args) ->
+start_link({_Topic, _Qos, _MFA, _Pid, _Site} = Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 
-init({Topic, MFA, Pid, Site}) ->
+init({Topic, Qos, MFA, Pid, Site}) ->
     maybe_link(Pid),
-    ok = emqtt_router:subscribe(Topic, self()),
+    ok = emqtt_router:subscribe({Topic,Qos}, self()),
     {ok, #state{
         topic=Topic,
+        qos=Qos,
         mfa=MFA,
         pid=Pid,
         site=Site
