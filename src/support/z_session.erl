@@ -23,6 +23,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 
+-compile([{parse_transform, lager_transform}]).
+
 -include_lib("zotonic.hrl").
 
 %% gen_server exports
@@ -360,7 +362,7 @@ handle_call({ensure_page_session, CurrPageId}, _From, Session) ->
     {NewPage, Session1} = case find_page(NewPageId, Session) of
                             undefined -> 
                                 % Make a new page for this pid
-                                P     = page_start(NewPageId),
+                                P     = page_start(NewPageId, Session#session.context),
                                 Pages = [P|Session#session.pages], 
                                 {P, Session#session{pages=Pages}};
                             #page{page_pid=Pid} = P -> 
@@ -388,6 +390,13 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
     Pages  = lists:filter(FIsUp, Session#session.pages),
     Linked = lists:delete(Pid, Session#session.linked),
     {noreply, Session#session{pages=Pages, linked=Linked}};
+
+%% @doc MQTT message, forward it to the page.
+%% TODO: Add all handling
+handle_info({route, Msg}, State) ->
+    lager:debug("Session route ~p", [Msg]),
+    {noreply, State};
+
 handle_info(_, Session) ->
     {noreply, Session}.
 
@@ -460,8 +469,8 @@ save_persist(Session) ->
 
 
 %% @doc Return a new page record, monitor the started page process because we want to know about normal exits
-page_start(PageId) ->
-    {ok,PagePid} = z_session_page:start_link([{session_pid, self()}]),
+page_start(PageId, Context) ->
+    {ok,PagePid} = z_session_page:start_link(self(), z_convert:to_binary(PageId), Context),
     erlang:monitor(process, PagePid),
     #page{page_pid=PagePid, page_id=PageId }.
 

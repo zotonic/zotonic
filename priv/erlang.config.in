@@ -1,5 +1,24 @@
 %% -*- mode: erlang -*-
 [
+ {mnesia, [
+    {dir, "priv/mnesia"}
+ ]},
+
+ {emqtt, [
+    {auth, {z_mqtt_auth, []}},
+    {access_control, {z_mqtt_auth, is_allowed}},
+    {listeners, [
+        %%% Unescape to enable MQTT on the given port
+        % {1883,  [
+        %     binary,
+        %     {packet,        raw},
+        %     {reuseaddr,     true},
+        %     {backlog,       128},
+        %     {nodelay,       true}
+        ]}
+    ]}
+ ]},
+
  {lager,
   [{handlers,
     [

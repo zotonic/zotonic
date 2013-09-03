@@ -1,0 +1,3 @@
+[
+	{mqtt_test, ["mqtt", "test"], controller_template, [{template, "mqtt_test.tpl"}]}
+].
