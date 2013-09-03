@@ -25,7 +25,7 @@
 -compile([{parse_transform, lager_transform}]).
 
 -include_lib("zotonic.hrl").
--include("emqtt/include/emqtt.hrl").
+-include_lib("emqtt/include/emqtt.hrl").
 
 -define(INTERVAL_MSEC, (?SESSION_PAGE_TIMEOUT div 2) * 1000).
 
