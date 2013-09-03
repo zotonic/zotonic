@@ -64,9 +64,9 @@ get_page_startup_script(Context) ->
     PageIdUAScript = case Context#context.page_id of
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
-            [ ?SESSION_PAGE_Q, $=, $", z_ids:id(), $", $;, UAScript ];
+            [ <<"z_set_page_id(\"\");">>, UAScript ];
         PageId ->
-            [ ?SESSION_PAGE_Q, $=, $", PageId, $", $;, UAScript ]
+            [ <<"z_set_page_id(\"">>, PageId, $", $), $;, UAScript ]
     end,
     case z_context:document_domain(Context) of
         undefined ->
