@@ -27,6 +27,7 @@
     n/2,
     n1/2,
     m/0,
+    m/1,
     flush/0,
     flush/1,
     restart/0,
@@ -66,7 +67,12 @@ n1(Msg, Context) ->
 
 %% @doc (Re)make all erlang source modules and reset the caches.
 m() -> 
-    make:all([load]), 
+    m([]).
+
+%% @doc (Re)make all erlang source modules with the supplied compile 
+%% options and reset the caches.
+m(Options) ->
+    make:all([load | Options]), 
     flush().
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
