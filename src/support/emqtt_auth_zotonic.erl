@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_mqtt_auth).
+-module(emqtt_auth_zotonic).
 
 -export([
     init/1,

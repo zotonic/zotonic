@@ -52,7 +52,7 @@ publish(#mqtt_msg{} = Msg, Context) ->
     Msg1 = Msg#mqtt_msg{
         topic=maybe_context_topic(Msg#mqtt_msg.topic, Context)
     },
-    case z_mqtt_acl:can_publish(Msg1, Context) of
+    case emqtt_auth_zotonic:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
         true -> emqtt_router:publish(Msg1);
         false -> {error, eacces}
     end.
@@ -64,7 +64,7 @@ publish(Topic, #z_mqtt_payload{} = Payload, Context) ->
         payload=Payload,
         encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
     },
-    case z_mqtt_auth:is_allowed(publish, Msg#mqtt_msg.topic, Context) of
+    case emqtt_auth_zotonic:is_allowed(publish, Msg#mqtt_msg.topic, Context) of
         true -> 
             emqtt_router:publish(Msg);
         false -> {
@@ -84,7 +84,7 @@ subscribe(Topic, Context) ->
 
 subscribe(Topic, Pid, Context) when is_pid(Pid) ->
     Topic1 = maybe_context_topic(Topic, Context),
-    case z_mqtt_auth:is_allowed(subscribe, Topic1, Context) of
+    case emqtt_auth_zotonic:is_allowed(subscribe, Topic1, Context) of
         true ->
             lager:debug("MQTT subscribe ~p to ~p", [Pid, Topic1]),
             emqtt_router:subscribe(Topic1, Pid);
@@ -94,7 +94,7 @@ subscribe(Topic, Pid, Context) when is_pid(Pid) ->
     end;
 subscribe(Topic, MFA, Context) when is_tuple(MFA) ->
     Topic1 = maybe_context_topic(Topic, Context),
-    case z_mqtt_auth:is_allowed(subscribe, Topic1, Context) of
+    case emqtt_auth_zotonic:is_allowed(subscribe, Topic1, Context) of
         true ->
             case z_notifier:first(#mqtt_subscribe{topic=Topic1, mfa=MFA}, Context) of
                 undefined -> undefined;
