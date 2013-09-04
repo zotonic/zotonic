@@ -1,0 +1,10 @@
+#!/bin/env bash
+
+# Pass url to release file to download, something like:
+# $ ./update-bootstrap http://getbootstrap.com/2.3.2/assets/bootstrap.zip
+
+cd `dirname $0`/../lib
+rm -rf bootstrap
+wget $1 -O bootstrap.zip
+unzip bootstrap.zip
+rm bootstrap.zip
