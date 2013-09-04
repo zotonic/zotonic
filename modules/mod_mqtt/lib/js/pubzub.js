@@ -25,6 +25,9 @@ function Pubzub ()
     });
 
     this._will_id = 0;
+    ubf.add_spec("z_mqtt_payload", [
+            "version", "site", "user_id", "encoding", "payload"
+        ]);
 }
 
 Pubzub.prototype.me = function () {
@@ -79,21 +82,17 @@ Pubzub.prototype.transport = function (cmd, topic, message, args) {
 
 Pubzub.prototype.map_record = function (data) {
     if (typeof data == 'object') {
-        switch (data[0].valueOf())
+        switch (data._record)
         {
             case 'z_mqtt_payload':
-                return {
-                    version: data[1],
-                    site: data[2].valueOf(),
-                    user_id: data[3],
-                    payload: (data[4] == 'ubf') ? ubf.decode(data[5]) : data[5]
-                };
+                if (data.encoding == "ubf")
+                    data.payload = ubf.decode(payload);
+                break;
             default:
-                return data;
+                break;
         }
-    } else {
-        return data;
     }
+    return data;
 };
 
 Pubzub.prototype.unique_id = function () {

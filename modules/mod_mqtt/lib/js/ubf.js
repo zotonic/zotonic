@@ -23,6 +23,7 @@ limitations under the License.
     var window = window;
     var $ = $;
     var ubf = {};
+    var specs = {};
 
     ubf.BINARY = 0;
     ubf.CONSTANT = 1;
@@ -33,22 +34,26 @@ limitations under the License.
     // Encode the value as a ubf(a) tuple. 
     //
     function encode_as_tuple(value, spec, buffer) {
-        var buf = buffer || []; 
-        var inner = [];
-        buf.push('{')
-        if(spec) 
-            $.each(spec, function(_i, k) { encode(value[k], inner); });
-        else 
-            $.each(value, function(_i, v) { encode(v, inner); });
+        if (value._record) {
+            encode_as_record(value, value._record, spec || specs[value._record], buf);
+        } else {
+            var buf = buffer || [];
+            var inner = [];
+            buf.push('{');
+            if (spec)
+                $.each(spec, function(_i, k) { encode(value[k], inner); });
+            else
+                $.each(value, function(_i, v) { encode(v, inner); });
 
-        buf.push(inner.join(", "));
-        buf.push('}')
+            buf.push(inner.join(","));
+            buf.push('}');
 
-        if(!buffer) {
-            buf.push("$");
-            return buf.join("");
+            if(!buffer) {
+                buf.push("$");
+                return buf.join("");
+            }
         }
-    };
+    }
     ubf.encode_as_tuple = encode_as_tuple;
 
     // Encode the value as list
@@ -57,8 +62,8 @@ limitations under the License.
         var buf = buffer || [];
 
         buf.push("#");
-        $.each(value, function(_i, v) { 
-            encode(v, buf); 
+        $.each(value, function(_i, v) {
+            encode(v, buf);
             buffer.push("&");
         });
 
@@ -72,19 +77,21 @@ limitations under the License.
     // Encode as record
     function encode_as_record(value, record_name, spec, buffer) {
         var buf = buffer || [], inner = [];
+        spec = spec || specs[record_name];
 
         buf.push('{');
-        encode_as_constant(record_name, inner);
-        if(spec) 
-            $.each(spec, function(_i, k) { 
-                encode(value[k], inner); 
+        if(spec) {
+            encode_as_constant(record_name, inner);
+            $.each(spec, function(_i, k) {
+                encode(value[k], inner);
             });
-        else 
-            $.each(value, function(_i, v) { 
-                encode(v, inner); 
+        } else {
+            $.each(value, function(_i, v) {
+                encode(v, inner);
             });
+        }
         buf.push(inner.join(","));
-        buf.push('}')
+        buf.push('}');
 
         if(!buffer) {
             buf.push("$");
@@ -94,23 +101,23 @@ limitations under the License.
     ubf.encode_as_record = encode_as_record;
 
     function string_escape(s) {
-        if(s == undefined) return "";
+        if(s === undefined) return "";
         return s.replace(/\\/g, "\\\\").replace(/\"/g, '\\"');
     }
 
     function constant_escape(s) {
-        if(s == undefined) return "";
+        if(s === undefined) return "";
         return s.replace(/\\/g, "\\\\").replace(/\'/g, "\\'");
     }
 
     function encode_as_string(value, buffer) {
-        buffer.push(['"', string_escape(value), '"'].join("")); 
-    };
+        buffer.push(['"', string_escape(value), '"'].join(""));
+    }
     ubf.encode_as_string = encode_as_string;
 
     function encode_as_constant(value, buffer) {
         buffer.push(["'", constant_escape(value), "'"].join(""));
-    };
+    }
     ubf.encode_as_constant = encode_as_constant;
 
     // ubf(a) encode javascript to ubf.
@@ -123,7 +130,7 @@ limitations under the License.
         } else {
             switch(value.ubf_type) {
             case ubf.STRING:
-                encode_as_string(value, buf); 
+                encode_as_string(value, buf);
                 break;
             case ubf.CONSTANT:
                 encode_as_constant(value, buf);
@@ -137,19 +144,21 @@ limitations under the License.
             case ubf.TUPLE:
                 encode_as_tuple(value, undefined, buf);
                 break;
-            case undefined:
+            default:
                 if($.isArray(value)) {
-                    encode_as_list(value, buf);   
+                    encode_as_list(value, buf);
                 } else if($.isNumeric(value)) {
                     // floats are not possible in UBF...
                     buf.push(Math.floor(value));
                 } else if(typeof(value) == "string") {
                     // Per default encode strings as binary - better on the server
                     buf.push(_utf8len(value)+"~"+value+"~");
+                } else if (typeof(value) == "object" && value._record) {
+                    encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object" && value.valueOf) {
                     buf.push(_utf8len(value.valueOf)+"~"+value.valueOf+"~");
                 } else if(typeof(value) == "boolean") {
-                    value?encode_as_constant("true", buf):encode_as_constant("false", buf);
+                    encode_as_constant((value)?"true":"false", buf);
                 } else {
                     throw("ubf encode: unknown value");
                 }
@@ -175,20 +184,25 @@ limitations under the License.
         while(true) {
             opcode = bytes[0];
             j = _operation(opcode, bytes, env, stack);
-            if(j == 0) {
+            if(j === 0) {
                 if(ready_fun) {
                     data = stack.pop();
                     ready_fun(data);
                     bytes = bytes.slice(1);
-                    if(bytes.length == 0)
+                    if(bytes.length === 0)
                         return data;
                 } else {
                     return stack.pop();
                 }
             }
             bytes = bytes.slice(j);
-        }   
-    }
+        }
+    };
+
+    /* A spec is a list of field names */
+    ubf.add_spec = function(name, spec) {
+        specs[name] = spec;
+    };
 
     function _read(bytes, terminator, type, stack) {
         var current, buf = [], i = 0;
@@ -250,16 +264,16 @@ limitations under the License.
     function skip_ws(bytes) {
         if(!bytes) return 0;
         var ws = bytes.match(/^(\s|,)+/);
-        if(ws) 
+        if(ws)
             return ws[0].length;
         return 0;
     }
 
     function _integer_or_binary_data(bytes, stack) {
-        var found = bytes.match(/^\-?[0-9]+/)[0], 
-            integer = Number(found), 
+        var found = bytes.match(/^\-?[0-9]+/)[0],
+            integer = Number(found),
             length = found.length,
-            rest = bytes.slice(length), 
+            rest = bytes.slice(length),
             ws_length = skip_ws(rest);
 
         if(rest[ws_length] != "~") {
@@ -275,15 +289,15 @@ limitations under the License.
             throw "missing closing ~";
 
         return length + ws_length + charct + 2;
-    };
+    }
 
     function _string(bytes, stack) {
         return _read(bytes.slice(1), '"', ubf.STRING, stack) + 1;
-    };
+    }
 
     function _constant(bytes, stack) {
         return _read(bytes.slice(1), "'", ubf.CONSTANT, stack) + 1;
-    };
+    }
 
     function _start_tuple(stack) {
         stack.push(NaN); // marker for building a tuple
@@ -298,41 +312,50 @@ limitations under the License.
         var obj;
         do {
             obj = stack.pop();
-            if((typeof(obj) == "number") && isNaN(obj)) 
+            if((typeof(obj) == "number") && isNaN(obj))
                 break;
             tuple.unshift(obj);
         } while(true);
 
-        stack.push(tuple);
+        if (tuple[0] &&
+            tuple[0].ubf_type == ubf.CONSTANT &&
+            typeof specs[tuple[0].valueOf()] !== 'undefined')
+        {
+            var rec = { _record: tuple[0].valueOf() };
+            $.each(specs[tuple[0]], function(i, k) {
+                rec[k] = tuple[i+1];
+            });
+            stack.push(rec);
+        } else {
+            stack.push(tuple);
+        }
         return 1;
-    };
+    }
 
     function _push_nil(stack) {
         var list = [];
         list.ubf_type = ubf.LIST;
         stack.push(list);
-
         return 1;
-    };
+    }
 
     function _push_element(stack) {
         var obj = stack.pop(), list = stack.pop();
         if(list.ubf_type != ubf.LIST) throw "Push error: not a list";
         list.unshift(obj);
         stack.push(list);
-
-        return 1;       
-    };
+        return 1;
+    }
 
     function _comment(bytes) {
         return _read(bytes.slice(1), "%") + 1;
-    };
+    }
 
     function _pop(bytes, env, stack) {
         var code = bytes[1];
-        env[code] = stack.pop();   
+        env[code] = stack.pop();
         return 2;
-    };
+    }
 
     function _push(bytes, env, stack) {
         var code = bytes[0];
@@ -340,12 +363,12 @@ limitations under the License.
             throw "Unknown register value: " + code;
         stack.push(env[code]);
         return 1;
-    };
+    }
 
     function _return(stack) {
-        if(stack.length == 1) 
+        if(stack.length == 1)
             return 0;
-        throw "The stack should contain one item"; 
+        throw "The stack should contain one item";
     }
 
     function _operation(opcode, bytes, env, stack) {
