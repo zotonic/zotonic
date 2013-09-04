@@ -36,6 +36,6 @@ Arguments:
 +=========+==========================================================================================+===========================+
 |delegate |The module to handle the validation.  Must implement and export the function validate/5.  |delegate="myvalidator"     |
 +---------+------------------------------------------------------------------------------------------+---------------------------+
-|event    |Name of an event to be broadcast with z_notifier:first/2 for handling the validation.     |event="validate_username" |
+|event    |Name of an event to be broadcast with z_notifier:first/2 for handling the validation.     |event="validate_username"  |
 +---------+------------------------------------------------------------------------------------------+---------------------------+
 
