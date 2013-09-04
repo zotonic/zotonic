@@ -69,6 +69,7 @@ start(_Args) ->
 %% @doc Stop the zotonic server.
 stop() ->
     Res = application:stop(zotonic),
+    application:stop(emqtt),
     application:stop(eiconv),
     application:stop(mnesia),
     application:stop(lager),
