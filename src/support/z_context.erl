@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012  Marc Worrell
+%% @copyright 2009-2013  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@
 
     is_request/1,
 
+    prune_for_spawn/1,
     prune_for_async/1,
     prune_for_template/1,
     prune_for_database/1,
@@ -248,6 +249,12 @@ hostname_port(Context) ->
 is_request(#context{wm_reqdata=undefined}) -> false;
 is_request(_Context) -> true.
 
+
+%% @doc Minimal prune, for ensuring that the context can safely used in two processes
+prune_for_spawn(#context{} = Context) ->
+    Context#context{
+        dbc=undefined
+    }.
 
 %% @doc Make the context safe to use in a async message. This removes buffers and the db transaction.
 prune_for_async(#context{} = Context) ->
