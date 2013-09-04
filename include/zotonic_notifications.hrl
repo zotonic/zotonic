@@ -397,6 +397,25 @@
 -record(tkvstore_delete, {type, key}).
 
 
+%% @doc Subscribe a function to a QMTT topic.
+%%      The function will be called from a temporary process, and must be of the form:
+%%		m:f(#emqtt_msg{}, A, Context)
+-record(mqtt_subscribe, {topic, qos=0, mfa}).
+
+%% @doc Unsubscribe a function from a QMTT topic.
+%%      The MFA _must_ match the one supplied with #qmtt_subscribe{}
+-record(mqtt_unsubscribe, {topic, mfa}).
+
+%% @doc MQTT acl check, called via the normal acl notifications.
+%%		Actions for these checks: subscribe, publish
+-record(acl_mqtt, {
+		type :: 'wildcard' | 'direct',
+		topic :: binary(),
+		words :: list(binary() | integer()),
+		site :: binary(),
+		page_id :: 'undefined' | binary()	
+	}).
+
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 

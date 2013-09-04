@@ -5,7 +5,7 @@
 @Author:	Tim Benniks <tim@timbenniks.nl>
 @Author:	Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2011 Tim Benniks, Marc Worrell
+Copyright 2009-2013 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws					= false;
 var z_ws_opened				= false;
-var z_stream_host           = undefined;
-var z_websocket_host        = undefined;
+var z_stream_host;
+var z_websocket_host;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -34,12 +34,24 @@ var z_postbacks				= [];
 var z_default_form_postback = false;
 var z_input_updater			= false;
 var z_drag_tag				= [];
-var z_registered_events		= new Object();
+var z_registered_events		= {};
 var z_on_visible_checks		= [];
-var z_on_visible_timer		= undefined;
+var z_on_visible_timer;
 var z_unique_id_counter		= 0;
 var z_language				= "en";
-var z_ua                        = "desktop";
+var z_ua					= "desktop";
+var z_pageid				= '';
+
+
+function z_set_page_id( page_id )
+{
+	if (z_pageid != page_id) {
+		z_pageid = page_id;
+		if (typeof pubzub == "object") {
+			setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
+		}
+	}
+}
 
 /* Non modal dialogs
 ---------------------------------------------------------- */
@@ -521,7 +533,7 @@ function z_comet(host)
     }
     else
     {
-        z_comet_host()
+        z_comet_host();
     }
 }
 

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2013 Marc Worrell
 %% @doc Page session for interaction with the page displayed on the user agent. Support for comet polls and websocket.
 %%      The page session is the switchboard for getting data pushed to the user agent.  All queued requests 
 %%      can be sent via the current request being handled, via a comet poll or a websocket connection.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@
 
 -module(z_session_page).
 -author("Marc Worrell <marc@worrell.nl>").
-
 -behaviour(gen_server).
 
+-compile([{parse_transform, lager_transform}]).
+
 -include_lib("zotonic.hrl").
+-include_lib("emqtt/include/emqtt.hrl").
 
 -define(INTERVAL_MSEC, (?SESSION_PAGE_TIMEOUT div 2) * 1000).
 
@@ -32,8 +34,7 @@
 
 %% session exports
 -export([
-    start_link/0, 
-    start_link/1, 
+    start_link/3, 
     stop/1, 
     ping/1,
     
@@ -42,6 +43,8 @@
     get/2, 
     incr/3, 
     append/3,
+
+    page_id/1,
     
     add_script/2,
     add_script/1,
@@ -60,6 +63,8 @@
 -record(page_state, {
     last_detach,
     session_pid,
+    page_id,
+    site,
     linked=[],
     comet_pid=undefined,
     websocket_pid=undefined,
@@ -71,12 +76,10 @@
 %% API
 %%====================================================================
 
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the person manager server
-start_link() ->
-    start_link([]).
-start_link(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
+-spec start_link(pid(), binary(), #context{}) -> {ok, pid()} | {error, term()}.
+start_link(SessionPid, PageId, Context) ->
+    gen_server:start_link(?MODULE, {SessionPid,PageId,z_context:site(Context)}, []).
 
 stop(Pid) ->
     try
@@ -98,7 +101,17 @@ get_attach_state(Pid) ->
     catch _Class:_Term -> 
         error 
     end.
-        
+
+page_id(#context{page_pid=Pid}) ->
+    page_id(Pid);
+page_id(undefined) ->
+    undefined;
+page_id(Pid) when is_pid(Pid) ->
+    case catch gen_server:call(Pid, page_id) of
+        {'EXIT', _} -> undefined;
+        {ok, PageId} -> PageId
+    end.
+
 set(Key, Value, #context{page_pid=Pid}) ->
 	set(Key, Value, Pid);
 set(Key, Value, Pid) ->
@@ -169,11 +182,14 @@ check_timeout(Pid) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server, initialises the pid lookup dicts
-init(Args) ->
-    SessionPid = proplists:get_value(session_pid, Args),
+init({SessionPid, PageId, Site}) ->
     trigger_check_timeout(),
-    State = #page_state{session_pid=SessionPid, last_detach=z_utils:now()},
-    {ok, State}.
+    {ok, #page_state{
+            session_pid=SessionPid,
+            page_id=z_convert:to_binary(PageId), 
+            last_detach=z_utils:now(),
+            site=Site
+    }}.
 
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
@@ -242,6 +258,9 @@ handle_cast(Message, State) ->
 
 handle_call(session_pid, _From, State) ->
     {reply, State#page_state.session_pid, State};
+
+handle_call(page_id, _From, State) ->
+    {reply, {ok, State#page_state.page_id}, State};
 
 handle_call({spawn_link, Module, Func, Args}, _From, State) ->
     Pid    = spawn_link(Module, Func, Args),
@@ -312,15 +331,26 @@ handle_info(check_timeout, State) ->
             {noreply, State}
     end;
 
+%% @doc MQTT message, forward it to the page.
+%% TODO: Queue messages, QoS handling
+handle_info({route, Msg}, State) ->
+    lager:debug("Page ~p route ~p", [State#page_state.page_id, Msg]),
+    Topic = Msg#mqtt_msg.topic,
+    Script = iolist_to_binary([
+            <<"pubzub.relayed('">>,
+            z_utils:js_escape(
+                z_mqtt:remove_context_topic(Topic, State#page_state.site)),
+            "','",
+            z_utils:js_escape(encode_payload(Msg)),
+            "');"
+    ]),
+    handle_cast({add_script, Script}, State);
+
 handle_info(_, State) ->
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-%% Terminate all processes coupled to the page.
+%% @doc Terminate all processes coupled to the page.
 terminate(_Reason, State) ->
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, State#page_state.linked),
     ok.
@@ -359,4 +389,23 @@ ping_comet_ws(State) ->
     catch _M : _E ->
         State#page_state{comet_pid=undefined}
     end.
+
+
+% % @doc Replace the "page/PageId/" prefix with "local/" when relaying messages to the page
+% local_page_topic(<<"page/", Rest/binary>> = Topic, PageId) ->
+%     N = size(PageId),
+%     case Rest of
+%         <<PageId:N/binary, $/, X/binary>> ->
+%             <<"local/", X/binary>>;
+%         _ ->
+%             Topic
+%     end;
+% local_page_topic(Topic, _PageId) ->
+%     Topic.
+
+
+encode_payload(#mqtt_msg{encoder=undefined, payload=Data}) ->
+    z_mqtt:encode_packet_payload(Data);
+encode_payload(#mqtt_msg{encoder=Encoder, payload=Data}) ->
+    Encoder(Data).
 
