@@ -23,8 +23,8 @@
     is_allowed/3
     ]).
 
--include("zotonic.hrl").
--include("emqtt/include/emqtt.hrl").
+-include_lib("zotonic.hrl").
+-include_lib("emqtt/include/emqtt.hrl").
 
 -compile([{parse_transform, lager_transform}]).
 

@@ -40,8 +40,8 @@
     init/1
     ]).
 
--include("zotonic.hrl").
--include("emqtt/include/emqtt.hrl").
+-include_lib("zotonic.hrl").
+-include_lib("emqtt/include/emqtt.hrl").
 
 
 -export([
