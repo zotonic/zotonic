@@ -8,7 +8,7 @@ Special topics:
 
 TODO:
 
-    * Server side: add ACL checks
+    * add relay from page topics to server topics
     * add QoS levels
         - default level 0
         - add level 0 and 1, needs local puback
@@ -63,7 +63,6 @@ Pubzub.prototype.is_local_topic = function (topic) {
 };
 
 Pubzub.prototype.relayed = function (topic, data) {
-    console.log("relay", topic, data);
     var subs = this._matcher.match(topic);
     var message = ubf.decode(data);
     message = this.map_record(message);
