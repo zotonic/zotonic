@@ -5,15 +5,15 @@ Enables MQTT support in a site.
 
 MQTT is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol. 
 It was designed as an extremely lightweight publish/subscribe messaging transport. 
-It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios (source and more information: ``MQTT.org <http://mqtt.org>``_)
+It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios (source and more information: `MQTT.org <http://mqtt.org>`_)
 
 MQTT uses a simple message broker to route messages from publishers to multiple subscribers. 
 
 A quick overview of MQTT
-========================
+------------------------
 
 Publish/subscribe
------------------
+^^^^^^^^^^^^^^^^^
 
 With MQTT messages are published to topics. All subscribers to a topic will then receive the message.
 A topic is a string, much like a file-path, for example: ``truck/0001/temperature``
@@ -30,13 +30,13 @@ Examples of subscription patterns:
  * ``truck/0001/#`` matches all publishes to ``truck/0001`` and all its sub-topics
 
 Retained messages
------------------
+^^^^^^^^^^^^^^^^^
 
 A publisher can publish a *retained* message to a topic. When publishing all current topic subscribers will receive the message.
 Above that, if a new subscription is made to the topic, then all retained messages are sent to the new subscriber.
 
 Quality of service
-------------------
+^^^^^^^^^^^^^^^^^^
 
 MQTT has three levels for the quality of message delivery. These are used when sending messages between machines.
 The levels are:
@@ -48,13 +48,13 @@ The levels are:
 For most communication level 0 is used.
 
 Wills
------
+^^^^^
 
 A client can set a *last will* message and topic. This is a message that will be published to the topic at the moment the client is unexpectedly disconnected.
 
 
 MQTT in Zotonic
-===============
+---------------
 
 Zotonic has a central MQTT message broker. Optionally clients can connect to this broker using the normal MQTT protocol.
 
@@ -66,7 +66,7 @@ In this way it is possible for HTML pages to have their own local publish/subscr
 As the central broker is shared between sites it is even possible to publish/subscribe between different sites. In the future it will be possible to bridge the brokers between servers.
 
 Predefined topics
------------------
+^^^^^^^^^^^^^^^^^
 
 Currently the following topics are defined:
 
@@ -94,7 +94,7 @@ Currently the following topics are defined:
 
 
 Topics and namespaces
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 To make it easier to write generic software, without changing topic names, some namespace conventions and mappings are introduced.
 
@@ -109,14 +109,14 @@ In Erlang, any topic not starting with ``//`` will be prefixed with the site’s
 
 
 Access control
---------------
+^^^^^^^^^^^^^^
 
 All topics have access control added. For this an extra ACL object ``#acl_mqtt{}`` defined, with the actions ``publish`` and ``subscribe``.
 Modules can observe the usual ``#acl_is_allowed{}`` notification to add access control to topics.
 
 
 Subscribing modules
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 Modules can automatically subscribe to topics. This is done by adding specially named functions.
 
@@ -135,7 +135,7 @@ Here *Message* is the received ``#mqtt_msg{}``, and *ModulePid* is the process i
 The function will be called from within a process that is subscribed to the topic.
 
 Erlang API
-----------
+^^^^^^^^^^
 
 Subscribe a function F in a module M to a topic::
 
@@ -167,7 +167,7 @@ To publish a message::
 
 
 JavaScript API
---------------
+^^^^^^^^^^^^^^
 
 The JavaScript API uses callback functions:
 
@@ -202,7 +202,7 @@ You will need to include the following JavaScript files:
 	%}
 
 Connection will
----------------
+^^^^^^^^^^^^^^^
 
 Currently a simple version of the *lastwill* is available for JavaScript.  This sets a topic and message to be sent when the page process stops.
 
@@ -216,7 +216,7 @@ Example:
 
 
 Quality of service
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Currently there is no quality of service implemented for the JavaScript API and relay. The server side page process will buffer all messages till the browser connects to the page session. This happens on connects with comet, WebSocket, and postbacks.
 
@@ -224,12 +224,12 @@ On the browser all messages are queued and sent one by one to the server. This u
 
 
 Enabling the MQTT listener
-==========================
+--------------------------
 
 MQTT can listen on a port for incoming connections. Per default the listener is disabled.
 
 Configuration
--------------
+^^^^^^^^^^^^^
 
 The MQTT listener is configured in the :file:`priv/erlang.config`.
 If this file is missing then it can be copied from :file:`priv/erlang.config.in`.
@@ -254,7 +254,7 @@ The following section defines the Zotonic authentication module, access control,
 
 
 Authentication
---------------
+^^^^^^^^^^^^^^
 
 All connections must authenticat themselves using an username and password.
 The username is postfixed with the hostname of the user’s site, for example: ``jantje@foobar.com``.
