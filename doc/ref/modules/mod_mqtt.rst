@@ -81,9 +81,9 @@ Currently the following topics are defined:
 +--------------------------+-------------------------------------------------------------------------+
 |site/sitename             |Root for a site                                                          |
 +--------------------------+-------------------------------------------------------------------------+
-|site/sitename/test        |Test topic, freely accessible within the site                            |
-+--------------------------+-------------------------------------------------------------------------+
 |site/sitename/public      |Freely accessible within the site                                        |
++--------------------------+-------------------------------------------------------------------------+
+|site/sitename/test        |Test topic, freely accessible within the site                            |
 +--------------------------+-------------------------------------------------------------------------+
 |site/sitename/user        |Topic available for any authenticated user of the site *sitename*        |
 +--------------------------+-------------------------------------------------------------------------+
