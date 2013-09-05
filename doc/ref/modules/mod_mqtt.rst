@@ -201,6 +201,25 @@ You will need to include the following JavaScript files:
 		 "js/pubzub.js"
 	%}
 
+Connection will
+---------------
+
+Currently a simple version of the *lastwill* is available for JavaScript.  This sets a topic and message to be sent when the page process stops.
+
+Multiple wills can be set. Currently it is not possible to remove a will, though that will change in the near future.
+
+Example:
+
+.. code-block:: javascript
+
+    var will_id = pubzub.lastwill("/page/goodbye", "thanks for the fish");
+
+
+Quality of service
+------------------
+
+Currently there is no quality of service implemented for the JavaScript API and relay.
+
 
 Enabling the MQTT listener
 ==========================
