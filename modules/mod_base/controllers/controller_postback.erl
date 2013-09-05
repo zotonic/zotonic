@@ -145,11 +145,12 @@ process_postback(Context1) ->
             end
     end,
 
-    Script      = iolist_to_binary(z_script:get_script(EventContext)),
     % Remove the busy mask from the element that triggered this event.
-    Script1 = case TriggerId1 of 
-        undefined -> Script;
-        "" -> Script;
-        _HtmlElementId -> [Script, " z_unmask('",z_utils:js_escape(TriggerId1),"');" ]
-    end,
-    {Script1, EventContext}.
+    Unmask = case TriggerId1 of
+                 undefined -> [];
+                 "" -> [];
+                 _HtmlElementId ->
+                     [" z_unmask('", z_utils:js_escape(TriggerId1), "');"]
+             end,
+    Script = iolist_to_binary([z_script:get_script(EventContext), Unmask]),
+    {Script, EventContext}.
