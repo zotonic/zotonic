@@ -52,36 +52,38 @@ tag(Files, Args, Context) ->
                          Files)
     end.
 
-
 tag1(Files, Args, Context) ->
     {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
-    UrlPrefix = case proplists:get_bool(use_absolute_url, Args) of
-		    true -> [<<"http://">>, z_context:hostname_port(Context), <<"/lib">>];
-		    false -> <<"/lib">>
-    end,
+    NoLangContext = z_context:set_language(undefined, Context),
+    [link_element(Css, CssPath, Args, NoLangContext),
+     script_element(Js, JsPath, Args, NoLangContext)].
+
+link_element(_Css, [], _Args, _Context) ->
+    [];
+link_element(Css, CssPath, Args, Context) ->
     TitleAttr = case proplists:get_value(title, Args) of
-		   undefined -> [];
-		   TitleValue -> [<<" title=\"">>, TitleValue, $"]
-	       end,
+           undefined -> [];
+           TitleValue -> [<<" title=\"">>, TitleValue, $"]
+           end,
     MediaAttr = [<<" media=\"">>, proplists:get_value(media, Args, "all"), $"],
     RelAttr = [<<" rel=\"">>, proplists:get_value(rel, Args, "stylesheet"), $"],
+    CssUrl = z_dispatcher:url_for(lib, url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
+    iolist_to_binary([<<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>]).
 
-    LinkElement = case CssPath of
-        [] ->
-            [];
-        _ -> 
-            ModCss = newest(Css, {{1970,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<link href=\"">>, UrlPrefix, CssPath, ?SEP, integer_to_list(ModCss), <<".css\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>])
-    end,
-    ScriptElement = case JsPath of
-        [] ->
-            [];
-        _ -> 
-            ModJs = newest(Js, {{1970,1,1},{12,0,0}}, Context),
-            iolist_to_binary([ <<"<script src=\"">>, UrlPrefix, JsPath, ?SEP, integer_to_list(ModJs), <<".js\" type=\"text/javascript\"></script>">>])
-    end,
-    [LinkElement, ScriptElement].
+script_element(_Js, [], _Args, _Context) ->
+    [];
+script_element(Js, JsPath, Args, Context) ->
+    JsUrl = z_dispatcher:url_for(lib, url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
+    iolist_to_binary([<<"<script src=\"">>, JsUrl, <<"\" type=\"text/javascript\"></script>">>]).
 
+url_for_args(Files, JoinedPath, Extension, Args, Context) ->
+    Args1 = case proplists:get_bool(use_absolute_url, Args) of
+        false -> [];
+        true -> [use_absolute_url]
+    end,
+    Modified = newest(Files, {{1970,1,1},{12,0,0}}, Context),
+    [$/|Path] = JoinedPath,
+    [{star, [Path, ?SEP, integer_to_list(Modified), Extension]} | Args1].
 
 %% @doc Make the collapsed paths for the js and the css files.
 collapsed_paths(Files) ->
