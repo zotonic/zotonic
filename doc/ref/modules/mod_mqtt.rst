@@ -218,7 +218,9 @@ Example:
 Quality of service
 ------------------
 
-Currently there is no quality of service implemented for the JavaScript API and relay.
+Currently there is no quality of service implemented for the JavaScript API and relay. The server side page process will buffer all messages till the browser connects to the page session. This happens on connects with comet, WebSocket, and postbacks.
+
+On the browser all messages are queued and sent one by one to the server. This uses either the WebSocket connection or the postback interface.
 
 
 Enabling the MQTT listener
