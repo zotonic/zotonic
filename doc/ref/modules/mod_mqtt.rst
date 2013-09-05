@@ -103,7 +103,7 @@ This site root is automatically added to any publish or subscribe actions, depen
 
 Topics starting with ``//`` are directly mapped to the central broker’s topic tree, without the slashes. For example ``//public`` corresponds to ``public``
 
-In the browser, topics starting with a ``/`` are relayed to the sites’s central broker, and any topic without a prefixed ``/`` are routed within the browser.
+In the browser, topics starting with a ``/`` are relayed to the sites’s central broker, and any topic without a prefixed ``/`` is routed within the browser.
 
 In Erlang, any topic not starting with ``//`` will be prefixed with the site’s topic root.
 
@@ -170,6 +170,8 @@ JavaScript API
 ^^^^^^^^^^^^^^
 
 The JavaScript API uses callback functions:
+
+.. code-block:: javascript
 
 	pubzub.subscribe("foo/#", function(topic, msg) { console.log(topic, msg); });
 	pubzub.publish("foo/bar", "hello world");
