@@ -574,7 +574,7 @@ function z_comet_data(data)
 function z_websocket_restart()
 {
     if (z_ws) {
-        z_ws.close();
+        try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
         z_ws_opened = false;
         setTimeout(function() { z_websocket_start(z_stream_host); }, 100);
     }
@@ -591,7 +591,12 @@ function z_websocket_start(host)
     z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
 
     var connect_timeout = setTimeout(function() { 
-        if(z_ws.readyState != 0) return;
+        if(z_ws && z_ws.readyState != 0) {
+            try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
+            z_ws = undefined;
+            z_ws_opened = false;
+            return;
+        }
         // Failed to open a websocket within the specified time - try to start comet
         z_ws = undefined;
         z_comet(host);
@@ -607,9 +612,9 @@ function z_websocket_start(host)
     {
         if (z_ws_opened)
         {
-            // Try to reopen once, might be closed due to an server side error
             z_ws_opened = false;
-            setTimeout(function() { z_websocket_start(host); }, 100);
+            // Try to reopen once, might be closed due to an server side error
+            setTimeout(function() { z_websocket_restart(host); }, 100);
         }
         else
         {
