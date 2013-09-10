@@ -244,17 +244,44 @@ parse_config(C) ->
     case file:consult(C) of
         {ok, [SiteConfig|_]} -> 
             %% store host in site config
+            SitePath = filename:dirname(C),
             Host = list_to_atom(
                      hd(lists:reverse(
                           filename:split(
-                            filename:dirname(C)
+                            SitePath
                            )))),
-            lists:keystore(host, 1, SiteConfig, {host, Host});
+            MasterConfig = lists:keystore(host, 1, SiteConfig, {host, Host}),
+            SortedMasterConfig = lists:keysort(1, MasterConfig),
+            parse_config(config_d_files(SitePath), SortedMasterConfig);
         {error, Reason} ->
             Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
             ?ERROR("~s~n", [Message]),
             {error, Message}
     end.
+
+%% @doc Parse configurations from multiple files, merging results. The last file wins.
+parse_config([], SiteConfig) ->
+    SiteConfig;
+parse_config([C|T], SiteConfig) ->
+    case file:consult(C) of
+        {ok, [NewSiteConfig|_]} ->
+            SortedNewConfig = lists:keysort(1, NewSiteConfig),
+            MergedConfig = lists:keymerge(1, SortedNewConfig, SiteConfig),
+            parse_config(T, MergedConfig);
+        {error, Reason} ->
+            Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
+            ?ERROR("~s~n", [Message]),
+            {error, Message}
+    end.
+
+%% @doc Get site config.d contents in alphabetical order.
+%% Filter out files starting with '.' or ending with '~'.
+config_d_files(SitePath) ->
+    Path = filename:join([SitePath, "config.d", "*"]),
+    lists:sort([ F || F <- filelib:wildcard(Path),
+                      filelib:is_regular(F),
+                      lists:nth(1, filename:basename(F)) =/= $.,
+                      lists:last(filename:basename(F)) =/= $~ ]).
 
 %% @doc Fetch the configuration of a specific site.
 %% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
