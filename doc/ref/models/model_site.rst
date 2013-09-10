@@ -1,12 +1,12 @@
 .. highlight:: django
 .. include:: meta-site.rst
 
-Retrieve information which is stored in the site's `config` file.
+Retrieve information which is stored in the site's `config` files.
 
 The site configuration is stored for each site in
-``priv/sites/<sitename>/config``. Its syntax is equal to an Erlang
-property list. Some properties can be repeated, for example the
-“hostalias” property, to specify multiple host aliases.
+``priv/sites/<sitename>/config`` and files in
+``priv/sites/<sitename>/config.d/``. Their syntax is equal to an Erlang
+property list.
 
 
 Fetch a site configuration key
