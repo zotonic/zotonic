@@ -24,20 +24,11 @@ It is easy to loop over all site configurations::
       {{ key }} -- {{ value }} <br />
   {% endfor %}
 
-Fetching all values of a repeating config
------------------------------------------
-
-Some config keys have multiple values. To fetch all values of, for
-example, the “hostalias” key use::
-
-  {{ m.site.all.hostalias }}
-
-
 Overriding config values
 ------------------------
 
 Zotonic has two places where a site’s configuration is kept. One is in
-the site’s config file, the other in the config table. The config
+the site’s config files, the other in the config table. The config
 table overrules any module settings from the config file, for rows
 where the `module` key of the config value is set to `site`.
 
