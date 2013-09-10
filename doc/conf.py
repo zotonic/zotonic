@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Zotonic'
-copyright = u'2012, The Zotonic Project (zotonic.com)'
+copyright = u'2013, The Zotonic Project (zotonic.com)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
