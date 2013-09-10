@@ -7,8 +7,7 @@
  {hostname, "%%SITE%%:8000"},
 
  %% Aliases which should redirect to the primary hostname
- %%{hostalias, "www.example.com"},
- %%{hostalias, "example.com"},
+ %%{hostalias, ["www.example.com", "example.com"]},
 
  %% PostgreSQL database connection
  {dbhost, "%%DBHOST%%"},

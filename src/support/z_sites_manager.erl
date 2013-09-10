@@ -261,7 +261,7 @@ parse_config([], SiteConfig) ->
 parse_config([C|T], SiteConfig) ->
     case file:consult(C) of
         {ok, [NewSiteConfig|_]} ->
-            SortedNewConfig = lists:keysort(1, NewSiteConfig),
+            SortedNewConfig = lists:ukeysort(1, NewSiteConfig),
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
         {error, Reason} ->
