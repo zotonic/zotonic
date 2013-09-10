@@ -76,7 +76,7 @@ The following options can be configured:
   different `hostalias` options to the list::
 
     {hostalias, ["example.com", "www.example.com",
-                 "example.net", "www.example.net"},
+                 "example.net", "www.example.net"]},
 
   Zotonic versions before 0.10 used multiple `hostalias` options.
   That is no longer supported.
