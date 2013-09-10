@@ -128,7 +128,17 @@ upgrade(C, Database, Schema) ->
     ok = install_module_schema_version(C, Database, Schema),
     ok = install_geocode(C, Database, Schema),
     ok = install_rsc_gone(C, Database, Schema),
+    ok = upgrade_config_schema(C, Database, Schema),
     ok.
+
+upgrade_config_schema(C, Database, Schema) ->
+    case get_column_type(C, "config", "value", Database, Schema) of
+        <<"text">> -> 
+            ok;
+        _ ->
+            {ok,[],[]} = pgsql:squery(C, "alter table config alter column value type text"),
+            ok
+    end.
 
 
 install_acl(C, Database, Schema) ->
