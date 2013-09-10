@@ -277,7 +277,7 @@ parse_config([C|T], SiteConfig) ->
 %% @doc Get site config.d contents in alphabetical order.
 config_d_files(SitePath) ->
     Path = filename:join(SitePath, "config.d", "*"),
-    lists:sort([ F || F <- filelib:widlcard(Path), filelib:is_regular(F) ]).
+    lists:sort([ F || F <- filelib:wildcard(Path), filelib:is_regular(F) ]).
 
 %% @doc Fetch the configuration of a specific site.
 %% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
