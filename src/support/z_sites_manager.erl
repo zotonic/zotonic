@@ -275,9 +275,13 @@ parse_config([C|T], SiteConfig) ->
     end.
 
 %% @doc Get site config.d contents in alphabetical order.
+%% Filter out files starting with '.' or ending with '~'.
 config_d_files(SitePath) ->
     Path = filename:join([SitePath, "config.d", "*"]),
-    lists:sort([ F || F <- filelib:wildcard(Path), filelib:is_regular(F) ]).
+    lists:sort([ F || F <- filelib:wildcard(Path),
+                      filelib:is_regular(F),
+                      lists:nth(1, filename:basename(F)) =/= $.,
+                      lists:last(filename:basename(F)) =/= $~ ]).
 
 %% @doc Fetch the configuration of a specific site.
 %% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
