@@ -63,7 +63,7 @@ The following options can be configured:
   Setting this config key to "https" ensures that redirect locations
   have the correct HTTPS protocol.
 
-``{hostalias, "www.example.com"}``
+``{hostalias, ["www.example.com"]}``
   The host aliases allow you to specify extra aliases for your
   site. This comes in handy if you have registered yoursite.com,
   yoursite.net and yoursite.org, and all want them to be served the
@@ -72,13 +72,14 @@ The following options can be configured:
   content duplication: it is good web practice to let your content
   live on a single URL only.
 
-  You can specify multiple host aliases; for that, just repeat the
-  different `hostalias` options below each other::
+  You can specify multiple host aliases; for that, just add the
+  different `hostalias` options to the list::
 
-    {hostalias, "example.com"},
-    {hostalias, "www.example.com"},
-    {hostalias, "example.net"},
-    {hostalias, "www.example.net"},
+    {hostalias, ["example.com", "www.example.com",
+                 "example.net", "www.example.net"]},
+
+  Zotonic versions before 0.10 used multiple `hostalias` options.
+  That is no longer supported.
 
 ``{admin_password, "test123"}``
   This setting specifies the password for the ``admin`` user. Unlike
