@@ -6,7 +6,7 @@
 	{% lib 
 			"css/zp-menuedit.css" 
 			"css/zotonic-admin.css" 
-			"css/frontend-admin.css" 
+			"css/admin-frontend.css" 
 			"css/jquery-ui.datepicker.css"
             "css/jquery.timepicker.css"
             "font-awesome/css/font-awesome.min.css"
