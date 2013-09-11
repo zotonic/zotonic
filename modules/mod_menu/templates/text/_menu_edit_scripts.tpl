@@ -11,13 +11,15 @@
 %}
 
 {% javascript %}
+
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	var id = $(this).closest('div').data('page-id');
 
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id).html(title);
 	};
-	z_event("admin-menu-edit", { id: id });
+	$('#rscform').mask();
+	z_event("admin-menu-edit", { id: id, tree_id: {{ tree_id }} });
 	e.preventDefault();
 });
 
@@ -27,13 +29,16 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	var $sorter = $('#{{ in_sorter }}');
 
 	if (where == 'remove') {
+		z_notify("menu-item-delete", {id: $menu_item.children('div').data('page-id')});
 		$(this).closest('li.menu-item').fadeOut(500, function() { 
 			$(this).remove();
 			$sorter.trigger('sortupdate')
 		});
+	} else if (where == 'copy') {
+		z_notify("menu-item-copy", {id: $menu_item.children('div').data('page-id')});
 	} else {
 		window.zMenuEditDone = function(v) {
-			window.zMenuNewItem = function(html) {
+			window.zMenuNewItem = function(rsc_id, html) {
 				if (where == 'top') {
 					$sorter.prepend(html);
 				} else if (where == 'bottom') {
@@ -50,9 +55,11 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				} else if (where == 'after') {
 					$(html).insertAfter($menu_item);
 				}
-				$sorter.trigger('sortupdate')
+				$sorter.trigger('sortupdate');
+				if (pubzub) {
+					pubzub.publish("menu/insert", {id: rsc_id});
+				}
 			};
-
 			z_notify("menu-item-render", {id: v.object_id, callback: "window.zMenuNewItem", z_delegate:"mod_menu"});
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});
@@ -60,6 +67,15 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	e.preventDefault();
 });
 
+window.zMenuInsertAfter = function(after_id, html) {
+	var $menu_item = $('#{{ menu_id }} div[data-page-id='+after_id+']').closest('li.menu-item');
+	$html = $(html);
+	$html.insertAfter($menu_item);
+	$('#{{ in_sorter }}').trigger('sortupdate');
+	if (pubzub) {
+		pubzub.publish("menu/insert", {menu_id: '{{ menu_id }}', id: $html.children('div').data('page-id')});
+	}
+}
 
 {% endjavascript %}
 

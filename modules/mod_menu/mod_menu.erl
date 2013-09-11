@@ -34,6 +34,7 @@
     observe_menu_get_rsc_ids/2,
     observe_menu_save/2,
     observe_admin_menu/3,
+    observe_postback_notify/2,
     get_menu/1,
     get_menu/2,
     set_menu/3,
@@ -83,10 +84,44 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
 event(#postback_notify{message="menu-item-render"}, Context) ->
     Id = z_convert:to_integer(z_context:get_q("id", Context)),
     Callback = z_context:get_q("callback", Context),
-    {Html, Context2} = z_template:render_to_iolist("_menu_edit_item.tpl", [{id,Id}], Context),
+    Template = z_context:get_q("item_template", Context, "_menu_edit_item.tpl"),
+    {Html, Context2} = z_template:render_to_iolist({cat, Template}, [{id,Id}], Context),
     z_render:wire({script, [{script, [
-                    Callback, $(, $",z_utils:js_escape(Html,Context2),$",$),$;
+                    Callback, $(,$", integer_to_list(Id), $",$,,$",z_utils:js_escape(Html,Context2),$",$),$;
                 ]}]}, Context2).
+
+
+observe_postback_notify(#postback_notify{message="menu-item-copy"}, Context) ->
+    FromId = z_convert:to_integer(z_context:get_q("id", Context)),
+    case m_rsc:is_visible(FromId, Context) of
+        true ->
+            NewTitle = make_copy_title(m_rsc:p(FromId, title, Context), Context),
+            case m_rsc:duplicate(FromId, [{title, NewTitle}], Context) of
+                {ok, NewId} ->
+                    Template = z_context:get_q("item_template", Context, "_menu_edit_item.tpl"),
+                    {Html, Context1} = z_template:render_to_iolist({cat, Template}, [{id,NewId}], Context),
+                    z_render:wire({script, [{script, [
+                                    <<"window.zMenuInsertAfter(\"">>,
+                                            integer_to_list(FromId), $",$,,
+                                            $",z_utils:js_escape(Html,Context1),$",$),$;
+                                ]}]}, Context1);
+                {error, _Reason} ->
+                    z_render:growl_error(?__("Sorry, can’t copy that page.", Context), Context) 
+            end;
+        false ->
+            Context
+    end;
+observe_postback_notify(_, _Context) ->
+    undefined.
+
+make_copy_title(Title, Context) when is_binary(Title) ->
+    iolist_to_binary([?__("COPY", Context), " ", Title]);
+make_copy_title({trans, Ts}, Context) ->
+    {trans, [ 
+        {Lang, make_copy_title(Title, z_context:set_language(Lang, Context))}
+        || {Lang,Title} <- Ts
+    ]}.
+
 
 
 % @doc Sync a hierarchy based on edges (silently ignore ACL errors)

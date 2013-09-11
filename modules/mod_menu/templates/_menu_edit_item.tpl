@@ -3,7 +3,7 @@
 	    <img class="grippy" src="/lib/images/grippy.png" title="{_ Drag me _}" />
 	    <span class="title-{{id}}">{{ id.short_title|default:id.title }}</span>
 
-	    <img class="warning" src="/lib/images/noun/no-entry.png" width="12" {% if id.is_published %}style="display: none"{% endif %}/>
+		<i class="warning icon-eye-close" {% if id.is_published %}style="display: none"{% endif %}></i>
 
 	    <span class="btns">
 		    <span class="btn-group">
@@ -16,8 +16,9 @@
 				    <li><a href="#" data-where="before">&uarr; {_ Add before _}</a></li>
 				    <li><a href="#" data-where="below">&rarr; {_ Add below _}</a></li>
 				    <li><a href="#" data-where="after">&darr; {_ Add after _}</a></li>
-				    {% if not id.is_protected %}
 				    <li class="divider"></li>
+				    <li><a href="#" data-where="copy">{_ Copy _}</a></li>
+				    {% if not id.is_protected %}
 				    <li><a href="#" data-where="remove">{_ Remove _}</a></li>
 				    {% endif %}
 				</ul>
