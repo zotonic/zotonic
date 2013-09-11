@@ -31,13 +31,20 @@
 -include("zotonic.hrl").
 
 event(#postback{message={admin_menu_edit, Args}}, Context) ->
+	maybe_load_edit_panel(Args, Context);
+event(#postback_notify{message="admin-menu-edit"}, Context) ->
+	maybe_load_edit_panel([], Context);
+event(#sort{} = S, Context) ->
+	controller_admin_edit:event(S, Context).
+
+maybe_load_edit_panel(Args, Context) ->
 	case m_rsc:rid(z_context:get_q("id", Context, proplists:get_value(id, Args)), Context) of
 		undefined ->
 			Context;
 		Id ->
 			Vars = [
 				{id, Id},
-				{edit_dispatch, admin_edit_frontend}
+				{tree_id, m_rsc:rid(z_context:get_q("tree_id", Context), Context)}
 			],
 			Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl"}, vars=Vars}, Context),
 			z_script:add_script(<<"setTimeout(function() { z_tinymce_init(); }, 100);">>, Context1)

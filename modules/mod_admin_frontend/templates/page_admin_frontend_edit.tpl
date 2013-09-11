@@ -6,21 +6,11 @@
 	{% lib 
 			"css/zp-menuedit.css" 
 			"css/zotonic-admin.css" 
+			"css/frontend-admin.css" 
+			"css/jquery-ui.datepicker.css"
+            "css/jquery.timepicker.css"
+            "font-awesome/css/font-awesome.min.css"
 	%}
-	<style type="text/css">
-		#editcol {
-			max-width: 800px;
-		}
-		nav.navbar .checkbox.inline {
-			color:white;
-			padding-top: 0;
-			margin-left: 10px;
-			margin-right: 10px;
-		}
-		nav.navbar .btn {
-			margin-bottom: 10px;
-		}
-	</style>
 {% endblock %}
 
 {% block content_area %}
@@ -29,17 +19,19 @@
 	<div class="row-fluid">
 		{% with m.rsc[tree_id].id as tree_id %}
 			{% if tree_id and tree_id.is_visible %}
-				<div class="span4" id="menu-editor">
+				<div class="span4" id="menu-editor" data-rsc-id="{{ tree_id }}">
 					{% block above_menu %}{% endblock%}
-			        {% include "_admin_menu_menu_view.tpl" id=tree_id connect_tab="new" cat_id=m.rsc.text.id %}
+			        {% catinclude "_admin_menu_menu_view.tpl" tree_id connect_tab="new" cat_id=m.rsc.text.id admin_menu_edit_action=admin_menu_edit_action %}
 					{% block below_menu %}{% endblock%}
 				</div>
 				<div class="span8" id="editcol">
+				{% block editcol %}
 					{% if id %}
 						{% catinclude "_admin_frontend_edit.tpl" id tree_id=tree_id %}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
+				{% endblock %}
 				</div>
 			{% else %}
 				<div class="span12" id="editcol">
@@ -60,7 +52,9 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span4">
-				<a href="{{ school_id.page_url }}" class="btn">{_ Close _}</a>
+				{% block close_button %}
+					<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
+				{% endblock %}
 			</div>
 			<div class="span8" id="save-buttons" style="display:none">
 				<span class="brand visible-desktop">{_ This page _}</span>
@@ -73,6 +67,7 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
+{#
 				<label for="is_published_navbar" class="checkbox inline">
 		    		<input type="checkbox" id="is_published_navbar" name="is_published_navbar" value="1" checked="checked" />
 		    	    {_ Published _}
@@ -82,6 +77,7 @@
 	    	    		$('#is_published').attr('checked', $(this).is(':checked'));
 		    	    });
 	    	    {% endjavascript %}
+#}
 
 				{% button class="btn pull-right" text=_"Cancel" action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" %}
 	    	</div>
@@ -93,18 +89,26 @@
 
 {% block _js_include_extra %}
 	{% lib
+		"js/ubf.js"
+		"js/qlobber.js"
+		"js/pubzub.js"
+
     	"js/modules/jquery.hotkeys.js"
-	    "js/modules/tiny-init.js"
+	    "js/modules/frontend-tiny-init.js"
 	    "js/modules/z.adminwidget.js"
 	    "js/modules/z.tooltip.js"
 	    "js/modules/z.feedback.js"
 	    "js/modules/z.formreplace.js"
 	    "js/modules/z.datepicker.js"
 	    "js/modules/z.menuedit.js"
+	    "js/modules/z.cropcenter.js"
+	    "js/modules/jquery.shorten.js"
+	    "js/modules/jquery.timepicker.min.js"
 
 	    "js/jquery.ui.nestedSortable.js"
 
 	    "js/apps/admin-common.js"
+	    "js/modules/admin-frontend.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
 	{% include "_admin_tinymce.tpl" %}
