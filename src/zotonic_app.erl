@@ -35,6 +35,7 @@ ensure_started(App) ->
 start(_Type, _StartArgs) ->
     write_pidfile(),
     set_path(),
+    exec:start([]),
     ensure_started(crypto),
     ensure_started(public_key),
     ensure_started(ssl),
