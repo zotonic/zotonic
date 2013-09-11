@@ -35,6 +35,7 @@
     depicts/2,
     delete/2,
     replace/3,
+    duplicate/3,
     insert_file/2,
     insert_file/3,
     insert_file/4,
@@ -219,6 +220,75 @@ replace(Id, Props, Context) ->
         {rollback, {Error, _Trace}} ->
              {error, Error}
     end.
+
+
+%% @doc Duplicate the media item from the id to the new-id. Called by m_rsc:duplicate/3 
+duplicate(FromId, ToId, Context) ->
+    case z_db:assoc_props_row("select * from medium where id = $1", [FromId], Context) of
+        Ms when is_list(Ms) ->
+            {ok, Ms1} = maybe_duplicate_file(Ms, Context),
+            {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
+            Ms3 = z_utils:prop_replace(id, ToId, Ms2),
+            {ok, _ToId} = z_db:insert(medium, Ms3, Context),
+            ok;
+        undefined ->
+            ok
+    end.
+
+maybe_duplicate_file(Ms, Context) ->
+    case proplists:get_value(filename, Ms) of
+        <<>> ->
+            {ok, Ms};
+        undefined ->
+            {ok, Ms};
+        Filename ->
+            case proplists:get_value(is_deletable_file, Ms) of
+                false ->
+                    {ok, Ms};
+                true ->
+                    {ok, NewFile} = duplicate_file(Filename, Context),
+                    RootName = filename:rootname(filename:basename(NewFile)),
+                    Ms1 = proplists:delete(filename, 
+                            proplists:delete(rootname, 
+                                proplists:delete(is_deletable_file, Ms))), 
+                    Ms2 = [
+                        {filename, NewFile}, 
+                        {rootname, RootName}, 
+                        {is_deletable_file, true}
+                        | Ms1
+                    ],
+                    {ok, Ms2}
+            end
+    end.
+
+maybe_duplicate_preview(Ms, Context) ->
+    case proplists:get_value(preview_filename, Ms) of
+        <<>> ->
+            {ok, Ms};
+        undefined ->
+            {ok, Ms};
+        Filename ->
+            case proplists:get_value(is_deletable_preview, Ms) of
+                false ->
+                    {ok, Ms};
+                true ->
+                    {ok, NewFile} = duplicate_file(Filename, Context),
+                    Ms1 = proplists:delete(preview_filename, 
+                            proplists:delete(is_deletable_preview, Ms)), 
+                    Ms2 = [
+                        {preview_filename, NewFile}, 
+                        {is_deletable_preview, true}
+                        | Ms1
+                    ],
+                    {ok, Ms2}
+            end
+    end.
+
+
+duplicate_file(Filename, Context) ->
+    File = z_media_archive:abspath(Filename, Context),
+    ArchiveFile = z_media_archive:archive_copy(File, Context),
+    {ok, ArchiveFile}.
 
 
 %% @doc Make a new resource for the file, when the file is not in the archive dir then a copy is made in the archive dir

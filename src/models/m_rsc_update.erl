@@ -134,8 +134,8 @@ duplicate(Id, DupProps, Context) ->
                                 {slug,undefined}
                             ]),
             {ok, NewId} = insert(InsProps, false, Context),
-            %% Duplicate all edges
             m_edge:duplicate(Id, NewId, Context),
+            m_media:duplicate(Id, NewId, Context),
             {ok, NewId};
         false ->
             throw({error, eacces})
