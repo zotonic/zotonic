@@ -31,12 +31,27 @@ make sure that it is the first module where Zotonic looks for template
 lookups and the like.
   
 
-The site config file
---------------------
+The site config files
+---------------------
 
 The ``config`` file is the central configuration file for your
 site. Its syntax is the Erlang term format, essentially it is a big
 `proplist` with different configuration options.
+
+.. versionadded:: 0.10
+   Each option must be specified at most once (per file).
+   Using a option key multiple times are no longer supported (was only
+   used by the `hostalias` option) and any duplicates will be silently
+   dropped. Additional config options are read from files under
+   ``config.d/``.
+
+All files under the ``config.d/`` folder in the site's folder are
+loaded to extend/override config options from the site ``config``
+file. So if the same key is present in both `config` and
+``config.d/some-file``, then the value from the latter will be used.
+
+The files under ``config.d/`` are read in alphabetical order.
+ 
 
 The following options can be configured:
 
@@ -63,6 +78,9 @@ The following options can be configured:
   Setting this config key to "https" ensures that redirect locations
   have the correct HTTPS protocol.
 
+.. versionadded:: 0.10
+   The ``hostalias`` option now holds a list of aliases.
+
 ``{hostalias, ["www.example.com"]}``
   The host aliases allow you to specify extra aliases for your
   site. This comes in handy if you have registered yoursite.com,
@@ -77,9 +95,6 @@ The following options can be configured:
 
     {hostalias, ["example.com", "www.example.com",
                  "example.net", "www.example.net"]},
-
-  Zotonic versions before 0.10 used multiple `hostalias` options.
-  That is no longer supported.
 
 ``{admin_password, "test123"}``
   This setting specifies the password for the ``admin`` user. Unlike
