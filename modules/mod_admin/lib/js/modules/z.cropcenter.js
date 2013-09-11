@@ -1,13 +1,22 @@
 $(function() {
     $.extend($.fn,
     {
-        doCropCenterEditor: function(hiddenInput, removeButton, message) {
+        cropcenter: function(settings) {
+            var config = {
+                hiddenInput: "#crop_center",
+                removeButton: "#crop-center-remove",
+                message: "#crop-center-message"
+            };
+
+            if (settings) {
+                $.extend(config, settings);
+            }
 
             var el = this;
 
             var img = el.find("img");
 
-            var scale = parseInt(el.attr("data-original-width")) / img.width();
+            var scale = parseInt(el.attr("data-original-width"), 10) / img.width();
             
             var guide_h = $("<div>").attr("class", "cropguide horiz").hide();
             var guide_v = $("<div>").attr("class", "cropguide vert").hide();
@@ -17,9 +26,9 @@ $(function() {
             function removeCrop() {
                 guide_h.fadeOut();
                 guide_v.fadeOut();
-                hiddenInput.val("");
-                removeButton.hide();
-                message.show();
+                $(config.hiddenInput).val("");
+                $(config.removeButton).hide();
+                $(config.message).show();
                 return false;
             }
             
@@ -28,9 +37,9 @@ $(function() {
                 guide_h.show().css("top", y/scale);
                 guide_v.show().css("left", x/scale);
 
-                hiddenInput.val((x>=0?"+":"")+x + (y>=0?"+":"")+y);
-                removeButton.show();
-                message.hide();
+                $(config.hiddenInput).val((x>=0?"+":"")+x + (y>=0?"+":"")+y);
+                $(config.removeButton).show();
+                $(config.message).hide();
             }
             
             function setCropFromEvent(e) {
@@ -45,7 +54,7 @@ $(function() {
                 if (!l) {
                     removeCrop();
                 } else {
-                    setCrop(parseInt(l[1]), parseInt(l[2]));
+                    setCrop(parseInt(l[1], 10), parseInt(l[2], 10));
                 }
             }
 
@@ -53,8 +62,10 @@ $(function() {
             
             var dragging = false;
             el.mousedown(function(e) {
-                dragging = true;
-                setCropFromEvent(e);
+                if (e.which == 1) {
+                    dragging = true;
+                    setCropFromEvent(e);
+                }
             });
             el.mousemove(function(e) {
                 if (dragging) setCropFromEvent(e);
@@ -63,8 +74,8 @@ $(function() {
                 dragging = false;
             });
 
-            removeButton.click(removeCrop);
-            setCropFromValue(hiddenInput.val());
+            $(config.removeButton).click(removeCrop);
+            setCropFromValue($(config.hiddenInput).val());
         }
     });
 

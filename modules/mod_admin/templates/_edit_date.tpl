@@ -1,10 +1,8 @@
 <input type="text" style="width:80px" name="dt:ymd:{{ is_end }}:{{ name }}" value="{{ date|date:'Y-m-d' }}" class="do_datepicker" />
-<input type="text" style="width:40px" name="dt:hi:{{ is_end }}:{{ name }}" value="{{ date|date:'H:i' }}" />
-
-{# 
-<input type="text" style="width:32px" name="dt:y:{{ is_end }}:{{ name }}" value="{{ date|date:'Y' }}" />
-<input type="text" style="width:20px" name="dt:m:{{ is_end }}:{{ name }}" value="{{ date|date:'m' }}" />
-<input type="text" style="width:20px" name="dt:d:{{ is_end }}:{{ name }}" value="{{ date|date:'d' }}" /> &ndash;
-<input type="text" style="width:20px" name="dt:h:{{ is_end }}:{{ name }}" value="{{ date|date:'H' }}" /> :
-<input type="text" style="width:20px" name="dt:i:{{ is_end }}:{{ name }}" value="{{ date|date:'i' }}" />
-#}
+<input 	type="text" 
+		name="dt:hi:{{ is_end }}:{{ name }}"
+		class="input-mini do_timepicker"
+		style="{% if is_whole_day %}display: none;{% endif %}"
+		value="{{ date|date:'H:i' }}" 
+		data-timepicker="timeFormat:'H:i',step:15,scrollDefaultTime:{% if is_end %}'18:00'{%else%}'08:30'{% endif %}"
+	/>

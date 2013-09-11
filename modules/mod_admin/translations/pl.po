@@ -326,7 +326,7 @@ msgstr "Błąd zapisywania pliku."
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\\'s life."
+"description of someone’s life."
 msgstr ""
 "Dla każdej strony można określić okres czasu. Na przykład jeśli dotyczy ona "
 "zdarzenia albo opisuje czyjeś życie."

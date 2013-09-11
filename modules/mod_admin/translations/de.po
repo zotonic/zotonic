@@ -330,7 +330,7 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\\'s life."
+"description of someone’s life."
 msgstr ""
 "Für jede Seite kann ein Zeitraum angegeben werden. Zum Beispiel eine Seite "
 "über eine Veranstaltung oder jemandes Leben"

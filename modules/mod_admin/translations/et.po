@@ -291,7 +291,7 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\\'s life."
+"description of someone뭩 life."
 msgstr ""
 "Iga lehek체ljega v천ib olla seotud kuup채evade vahemik. N채iteks juhul kui lehek체lg on s체ndmuse"
 " v천i kellegi elu kirjelduse leheks."

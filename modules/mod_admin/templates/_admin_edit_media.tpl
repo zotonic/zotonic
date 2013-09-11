@@ -9,17 +9,23 @@
     </p>
 
     {% if medium.width and medium.height %}
-    <div class="edit-media" id="rsc-image" data-original-width="{{ medium.width }}">
-        {% if medium.width < 597  %}
-            {% media medium %}
+    <div class="edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
+        {% if medium.width < 597 and medium.height < 597 %}
+            {% media medium class="do_cropcenter" %}
         {% else %}
-            {% media medium width=597 height=597 %}
+            {% media medium width=597 height=597  %}
         {% endif %}   
     </div>
     {% endif %}
 
     <div class="save-buttons">
-        {% if id.is_a.image %}{% include "_admin_edit_image_crop_center.tpl" %}{% endif %}
+        {% if id.is_a.image %}
+            <input type="hidden" name="crop_center" id="crop_center" value="{{ id.crop_center }}" />
+            <a href="#" id="crop-center-remove" class="btn">
+                <i class="icon-remove"></i> {_ Remove crop center _}
+            </a>
+            <span id="crop-center-message" class="alert">{_ Click the image to set the cropping center. _}</span>
+        {% endif %}
 
         <div class="pull-right">
             <a class="btn" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>

@@ -88,6 +88,28 @@ div.navbar .brand {
 /* footer edit nav
 --------------------------------------------------------- */
 
+#rsc-image {
+    position: relative;
+}
+div.cropguide {
+    position: absolute;
+}
+div.cropguide.horiz {
+    border-top: 1px dotted rgba(255,255,255,0.7);
+    border-bottom: 1px dotted rgba(0,0,0,0.7);
+    height: 0;
+    left: 0; right: 0;
+}
+div.cropguide.vert {
+    border-left: 1px dotted rgba(255,255,255,0.7);
+    border-right: 1px dotted rgba(0,0,0,0.7);
+    width: 0;
+    top: 0; bottom: 0;
+}
+
+/* footer edit nav
+--------------------------------------------------------- */
+
 .navbar-fixed-save {
     opacity: 0;
     position: fixed;
@@ -424,20 +446,22 @@ ul.blocks .ui-sortable-placeholder {
 /* Connections
 ---------------------------------------------------------- */
 ul.connections-list {
-    list-style-type: none; margin: 0; padding: 0;
+    padding-bottom: 8px;
+    min-height: 1em;
 }
 ul.connections-list li {
-    float: left;
-    margin-right: 8px; margin-bottom: 8px;
+    position: relative;
 }
-ul.connections-list li .unlink-mover, .icon-move {
-    cursor: move;
+ul.connections-list .icon-remove {
+    float: right;
+    cursor: pointer;
+    padding: 4px;
+    margin-top: .7em;
 }
 
 #unlink-undo-message div.alert {
     padding-right: 14px; /* right-aligned undo button in page connections */
 }
-
 
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
@@ -690,6 +714,11 @@ span.icon_status_starting {
 
 #sidebar .control-label {
     width: 90px;
+}
+
+
+#sidebar-date-range .tab-content {
+    overflow: visible;
 }
 
 /* scroll - keep the save buttons into view

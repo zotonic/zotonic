@@ -95,7 +95,7 @@ event(#submit{message=rscform}, Context) ->
                                            true ->  z_render:wire("delete-button", {disable, []}, Context4b);
                                            false -> z_render:wire("delete-button", {enable, []}, Context4b)
                                        end,
-                            Title = ?__(m_rsc:p(Id, title, Context5), Context5),
+                            Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
                             Context6 = z_render:growl(["Saved “", Title, "”."], Context5),
                             case proplists:is_defined("save_duplicate", Post) of
                                 true ->

@@ -328,7 +328,7 @@ msgstr "上传文件出错。"
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\\'s life."
+"description of someone’s life."
 msgstr "每个页面都可以有一个日期范围。例如当页面表示一个事件或者某人的生平时。"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:1

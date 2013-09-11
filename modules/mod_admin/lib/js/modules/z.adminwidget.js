@@ -29,15 +29,20 @@ $.widget("z.adminwidget",
 	    self.element.addClass("widget-active");
 	    self.item = self.element.find("div.widget-content");
 	    self.header = self.element.find("h3:first");
-        self.icon = $("<i>").appendTo(self.header);
-	    self.options.minifiedOnInit ? self.hide(true) : self.show(true);
-        self.header
-            .css("cursor", "pointer")
-            .bind("mouseover", function(){self.icon.addClass('icon-white');})
-            .bind("mouseout", function(){self.icon.removeClass('icon-white');})
-            .attr("title", z_translate("Click to toggle"))
-            .click(function(ev){self.toggle(ev);});
-        
+        self.tabs = self.element.find(".language-tabs");
+        if (self.options.minifier) {
+            self.icon = $("<i>").appendTo(self.header);
+            self.header
+                .css("cursor", "pointer")
+                .bind("mouseover", function(){self.icon.addClass('icon-white');})
+                .bind("mouseout", function(){self.icon.removeClass('icon-white');})
+                .attr("title", z_translate("Click to toggle"))
+                .click(function(ev){self.toggle(ev);});
+        }
+        if (self.options.minifiedOnInit && self.options.minifier)
+            self.hide(true);
+        else
+            self.show(true);
     },
 
     toggle: function(ev) {
@@ -63,6 +68,8 @@ $.widget("z.adminwidget",
 	        self.item.hide();
 	    else
 	        self.item.slideUp(200);
+        if (self.tabs)
+            self.tabs.hide();
 	    self.icon.attr("class", "pull-right icon-plus");
 	    self.showing = false;
     },
@@ -73,11 +80,15 @@ $.widget("z.adminwidget",
 	        self.item.show();
 	    else
 	        self.item.slideDown(200);
-	    self.icon.attr("class", "pull-right icon-minus");
+        if (self.tabs)
+            self.tabs.show();
+	    if (self.icon)
+            self.icon.attr("class", "pull-right icon-minus");
 	    self.showing = true;
     }
 });
 
 $.z.adminwidget.defaults = {
-    minifiedOnInit: false
+    minifiedOnInit: false,
+    minifier: true
 };

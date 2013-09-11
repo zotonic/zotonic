@@ -327,7 +327,7 @@ msgstr "Fout bij uploaden van bestand."
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone\\'s life."
+"description of someone’s life."
 msgstr ""
 "Elke pagina kan een datum-bereik hebben. Bijvoorbeeld als de pagina een "
 "evenement voorstelt."

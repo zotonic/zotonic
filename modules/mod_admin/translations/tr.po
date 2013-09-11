@@ -313,7 +313,7 @@ msgid "Error uploading the file."
 msgstr "Dosya yükleme hatası."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Every page can have a date range. For example if the page is an event or description of someone\\'s life."
+msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
 msgstr "Her sayfa tarih aralığına sahip olabilir. Örneğin sayfa bir etkinlik veya birinin hayatını tanımlıyorsa."
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:1

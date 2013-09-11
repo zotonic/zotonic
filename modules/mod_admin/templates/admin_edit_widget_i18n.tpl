@@ -7,8 +7,20 @@
 {% with edit_language|member:r_language|if:edit_language:(r_language[1]) as edit_language %}
 {% if is_i18n %}
 	{% block widget_before %}{% endblock %}
-	<div class="{% if in_dialog %}dialog-{% endif %}widget translations tabbable" id="{% block widget_id %}{% endblock %}">
+	<div class="{% if in_dialog %}dialog-{% endif %}widget translations tabbable {% if show_header %}do_adminwidget{% endif %}"
+		 data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened %}false{% else %}true{% endif %}"
+		 id="{% block widget_id %}{% endblock %}">
+	    {% block widget_header %}
+	        {% if show_header %}
+	        <h3 class="widget-header">
+	            {% block widget_title %}{% endblock %}
+	        </h3>
+	        {% endif %}
+	    {% endblock %}
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
+		<div class="tab-content widget-content">
+		    {% block widget_content_nolang_before %}{% endblock %}
+		</div>
 		<div class="tab-content widget-content">
 			{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 			{# to define some helper vars that will be usefull in widget_content: #}

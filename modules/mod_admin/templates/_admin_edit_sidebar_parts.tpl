@@ -11,7 +11,7 @@
 
     {% if not r.is_a.meta %}
         {% include "_admin_edit_content_pub_period.tpl" %}
-        {% include "_admin_edit_content_date_range.tpl" %}
+        {% include "_admin_edit_content_date_range.tpl" show_header %}
     {% endif %}
 
     {% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
