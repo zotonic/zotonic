@@ -19,7 +19,7 @@ $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 		$(".title-"+id).html(title);
 	};
 	$('#rscform').mask();
-	z_event("admin-menu-edit", { id: id, tree_id: {{ tree_id }} });
+	z_event("admin-menu-edit", { id: id, tree_id: {{ tree_id|default:"undefined" }} });
 	e.preventDefault();
 });
 
