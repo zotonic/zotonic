@@ -176,9 +176,9 @@ fetch_line(<<C, B/binary>>, Line) ->
 
 %% @doc Try to parse the line with the given field escape and quote chars.
 parse_line([], _Sep, Col, Cols) ->
-    {ok, lists:reverse([parse_csv:trim_field(lists:reverse(Col))|Cols])};
+    {ok, lists:reverse([parse_csv:cleanup_field(lists:reverse(Col))|Cols])};
 parse_line([Sep|Rest], Sep, Col, Cols) ->
-    parse_line(Rest, Sep, [], [parse_csv:trim_field(lists:reverse(Col))|Cols]);
+    parse_line(Rest, Sep, [], [parse_csv:cleanup_field(lists:reverse(Col))|Cols]);
 parse_line([C|Rest], Sep, Col, Cols) ->
     parse_line(Rest, Sep, [C|Col], Cols).
     
