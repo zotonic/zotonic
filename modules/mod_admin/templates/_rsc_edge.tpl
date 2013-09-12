@@ -4,11 +4,13 @@
 <li id="{{ #unlink_wrapper }}" class="menu-item">
     <div class="">
 	    <img class="grippy" src="/lib/images/grippy.png" title="{_ Drag me _}" />
-        <span id="{{ #unlink }}" title="{_ Disconnect _}" class="icon-remove pull-right"></span>
         <a id="{{ #edit }}" href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _}">
 	    	{% image object_id mediaclass="admin-list-dashboard" %}
         	{{ title|truncate:30|default:"<i>untitled</i>" }}
        	</a>
+        <span class="btns">
+            <button id="{{ #unlink }}" title="{_ Disconnect _}" class="btn btn-mini"><i class="icon-remove"></i></button>
+        </span>
     </div>
 </li>
 {% endwith %}

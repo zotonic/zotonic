@@ -452,11 +452,8 @@ ul.connections-list {
 ul.connections-list li {
     position: relative;
 }
-ul.connections-list .icon-remove {
-    float: right;
-    cursor: pointer;
-    padding: 4px;
-    margin-top: .7em;
+ul.connections-list li .btns {
+    top: -2px;
 }
 
 #unlink-undo-message div.alert {
