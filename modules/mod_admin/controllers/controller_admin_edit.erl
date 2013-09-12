@@ -119,10 +119,10 @@ event(#submit{message=rscform}, Context) ->
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;
 
+% Opts: rsc_id, div_id, edge_template
 event(#postback{message={reload_media, Opts}}, Context) ->
-    RscId = proplists:get_value(rsc_id, Opts),
     DivId = proplists:get_value(div_id, Opts),
-    {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, [{id,RscId},{div_id,DivId}], Context),
+    {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, Opts, Context),
     z_render:update(DivId, Html, Context1);
 
 event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Context) ->
