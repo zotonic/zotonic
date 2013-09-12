@@ -1,8 +1,7 @@
-%% @doc Import a csv file according to the derived file/record definitions.
+%% @doc Parse CSV file into a nested list of lines and fields.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2010-06-26
 
-%% Copyright 2010-2011 Arjan Scherpenisse
+%% Copyright 2010-2013 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(parse_csv_).
+-module(parse_csv).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
