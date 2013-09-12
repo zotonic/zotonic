@@ -46,7 +46,7 @@
 
 {% if not hide_referrers %}
 <div class="button-wrapper clearfix">
-	<a href="{% url admin_referrers id=id %}" class="button">{_ View all referrers _}</a>
+	<a class="btn btn-small" href="{% url admin_referrers id=id %}"><i class="icon-list"></i> {_ View all referrers _}</a>
 </div>
 {% endif %}
 
