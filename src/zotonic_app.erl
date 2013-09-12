@@ -35,7 +35,6 @@ ensure_started(App) ->
 start(_Type, _StartArgs) ->
     write_pidfile(),
     set_path(),
-    exec:start([]),
     ensure_started(crypto),
     ensure_started(public_key),
     ensure_started(ssl),
@@ -44,6 +43,7 @@ start(_Type, _StartArgs) ->
     zotonic_deps:ensure(),
     ensure_started(mimetypes),
     ensure_started(emqtt),
+    ensure_started(exec),
     zotonic_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet
