@@ -92,6 +92,7 @@ event(#postback_notify{message="menu-item-render"}, Context) ->
 
 
 observe_postback_notify(#postback_notify{message="menu-item-copy"}, Context) ->
+    ?DEBUG(z_context:get_q_all(Context)),
     FromId = z_convert:to_integer(z_context:get_q("id", Context)),
     case m_rsc:is_visible(FromId, Context) of
         true ->

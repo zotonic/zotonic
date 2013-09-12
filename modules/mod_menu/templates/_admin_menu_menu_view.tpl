@@ -19,7 +19,7 @@
         </p>
 
         {% block menu_tree %}
-		<ul class="tree-list do_menuedit" id="menu-{{ id }}">
+		<ul class="tree-list do_menuedit" id="menu-{{ id }}" data-menuedit="item_template: '_menu_edit_item.tpl'">
 			{% for mid, path, action in id.menu|menu_flat %}
 				{% include "_menu_edit_item.tpl" c=forloop.counter id=mid %}
 			{% endfor %}

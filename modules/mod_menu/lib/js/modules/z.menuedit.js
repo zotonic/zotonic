@@ -30,7 +30,7 @@ $.widget("ui.menuedit", {
         self.options.update = function() {
             if (suppress_update) {
                 suppress_update = false;
-            } else if (self.options.z_notify != undefined) {
+            } else if (self.options.z_notify !== undefined) {
                 var h = $(this).nestedSortable('toHierarchy', { expression: /()(.*)/ });
                 var hs = self.flatten(h);
                 var args = jQuery.extend(true, {}, self.options.z_args);
@@ -54,7 +54,7 @@ $.widget("ui.menuedit", {
             var h = $(this).nestedSortable('toHierarchy', { expression: /()(.*)/ });
             var hs = self.flatten(h);
 
-            if (self.options.z_notify != undefined) {
+            if (self.options.z_notify !== undefined) {
                 var args = jQuery.extend(true, {}, self.options.z_args);
                 args.action = "receive";
                 args.tree = hs;
@@ -77,7 +77,7 @@ $.widget("ui.menuedit", {
         for (var i=0; i<n; i++) {
             if (i > 0) s +=",";
             s += h[i].id;
-            if (h[i].children != undefined) {
+            if (h[i].children !== undefined) {
                 s += this.flatten(h[i].children);
             }
         }
@@ -92,12 +92,13 @@ $.ui.menuedit.defaults = {
 	helper: "clone",
 	items: "li.menu-item",
 	maxLevels: 0,
-	opacity: .6,
+	opacity: 0.6,
 	placeholder: "placeholder",
 	revert: 250,
 	tabSize: 20,
 	tolerance: "pointer",
 	toleranceElement: "> div",
+    item_template: "_menu_edit_item.tpl",
 
 	z_notify: "menuedit",
 	z_delegate: "mod_menu",

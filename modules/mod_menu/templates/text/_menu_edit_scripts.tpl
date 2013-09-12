@@ -29,13 +29,18 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	var $sorter = $('#{{ in_sorter }}');
 
 	if (where == 'remove') {
-		z_notify("menu-item-delete", {id: $menu_item.children('div').data('page-id')});
+		z_notify("menu-item-delete", {
+				id: $menu_item.children('div').data('page-id')
+			});
 		$(this).closest('li.menu-item').fadeOut(500, function() { 
 			$(this).remove();
 			$sorter.trigger('sortupdate')
 		});
 	} else if (where == 'copy') {
-		z_notify("menu-item-copy", {id: $menu_item.children('div').data('page-id')});
+		z_notify("menu-item-copy", {
+				id: $menu_item.children('div').data('page-id'),
+				item_template: $('#{{ menu_id }} .do_menuedit').data('menuedit').options.item_template
+			});
 	} else {
 		window.zMenuEditDone = function(v) {
 			window.zMenuNewItem = function(rsc_id, html) {
@@ -56,11 +61,16 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 					$(html).insertAfter($menu_item);
 				}
 				$sorter.trigger('sortupdate');
-				if (pubzub) {
+				if (typeof pubzub !== "undefined") {
 					pubzub.publish("menu/insert", {id: rsc_id});
 				}
 			};
-			z_notify("menu-item-render", {id: v.object_id, callback: "window.zMenuNewItem", z_delegate:"mod_menu"});
+			z_notify("menu-item-render", {
+					id: v.object_id, 
+					callback: "window.zMenuNewItem", 
+					z_delegate:"mod_menu",
+					item_template: $('#{{ menu_id }} .do_menuedit').data('menuedit').options.item_template
+				});
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});
 	}
@@ -72,7 +82,7 @@ window.zMenuInsertAfter = function(after_id, html) {
 	$html = $(html);
 	$html.insertAfter($menu_item);
 	$('#{{ in_sorter }}').trigger('sortupdate');
-	if (pubzub) {
+	if (typeof pubzub !== "undefined") {
 		pubzub.publish("menu/insert", {menu_id: '{{ menu_id }}', id: $html.children('div').data('page-id')});
 	}
 }
