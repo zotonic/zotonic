@@ -31,7 +31,14 @@ render_action(TriggerId, TargetId, Args, Context) ->
 render_update(Method, TriggerId, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
         undefined -> proplists:get_value(text, Args, "");
-        Template -> #render{template=Template, vars=Args, is_all=proplists:get_value('include_all', Args)}
+        Template -> 
+            IsAll = proplists:get_value('include_all', Args),
+            case z_convert:to_bool(proplists:get_value('catinclude', Args)) of
+                true ->
+                    #render{template={cat, Template}, vars=Args, is_all=IsAll};
+                false ->
+                    #render{template=Template, vars=Args, is_all=IsAll}
+            end
     end,
     case {TargetId, Html} of
         {undefined,_} -> render_inline(Method, TargetId, Html, Args, Context);

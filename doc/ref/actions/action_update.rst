@@ -26,7 +26,10 @@ target       The id of the element receiving the rendered HTML.               `t
 text         Literal HTML text to be inserted, no escaping will be done.      `text="Hello <b>World</b>"`
 template     Name of the template to be rendered.                             `template="_list_view.tpl"`
 include_all  Add this argument to include all templates with the same name.   `include_all`
-             If not added then the best template will be used.
+             If not added then the best template will be used.                
+catinclude   Add this argument to use a :ref:`tag-catinclude` instead of      `catinclude id=1`
+             a normal include of the template. The `id` argument *must*
+             be present for a catinclude to work.
 ===========  ===============================================================  ==========================
 
 All other arguments are passed as-is to the included template(s).
