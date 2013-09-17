@@ -15,7 +15,7 @@ $(function() {
 		}
 	});
 
-	if (pubzub) {
+	if (typeof pubzub !== "undefined") {
 		pubzub.subscribe("menu/insert", function(topic,args) {
 			$('#rscform').mask();
 			z_notify("admin-menu-edit", {
