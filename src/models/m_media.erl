@@ -333,14 +333,13 @@ insert_url(Url, Props, Context) ->
 
 insert_url(Url, Props, Options, Context) ->
     case download_file(Url) of
-        {ok, File} ->
-            Result = insert_file(File, [{original_filename, filename:basename(Url)}|Props], Options, Context),
+        {ok, File, Filename} ->
+            Result = insert_file(File, [{original_filename, Filename}|Props], Options, Context),
             file:delete(File),
             Result;
         {error, Reason} ->
             {error, Reason}
     end.
-
 
 %% Perform the resource management around inserting a file. The ACL is already checked for the mime type.
 %% Runs the final insert inside a transaction so that we can rollback.
@@ -477,8 +476,8 @@ replace_url(Url, RscId, Props, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
             case download_file(Url) of
-                {ok, File} ->
-                    Result = replace_file(File, RscId, [{original_filename, filename:basename(Url)}|Props], Options, Context),
+                {ok, File, Filename} ->
+                    Result = replace_file(File, RscId, [{original_filename, Filename}|Props], Options, Context),
                     file:delete(File),
                     Result;
                 {error, E} ->
@@ -509,20 +508,50 @@ mime_to_category(Mime) ->
     end.
 
 
-%% @doc Download a file from a http url.
+%% @doc Download a file from a http or data url.
+download_file("data:" ++ _ = DataUrl) ->
+    download_file(z_convert:to_binary(DataUrl));
+download_file(<<"data:", _/binary>> = DataUrl) ->
+    case z_url:decode_data_url(DataUrl) of
+        {ok, Mime, _Charset, Bytes} ->
+            Filename = z_tempfile:new(),
+            ok = file:write_file(Filename, Bytes),
+            {ok, Filename, mime2filename(Mime)};
+        {error, _} = Error ->
+            Error
+    end;
 download_file(Url) ->
-    File = z_tempfile:tempfile(),
+    File = z_tempfile:new(),
     case httpc:request(get, 
                       {z_convert:to_list(Url), []},
                       [],
                       [{stream, File}]) of
         {ok, saved_to_file} ->
-            {ok, File};
+            {ok, File, filename:basename(Url)};
         {ok, _Other} ->
             {error, download_failed};
         {error, E} ->
             file:delete(File),
             {error, E}
+    end.
+
+
+mime2filename(<<"image/jpeg">>) ->
+    <<"image.jpg">>;
+mime2filename(<<"application/pdf">>) ->
+    <<"document.pdf">>;
+mime2filename(<<"text/", _/binary>>) ->
+    <<"document.txt">>;
+mime2filename(<<"application/", _/binary>> = Mime) ->
+    case mimetypes:mime_to_exts(Mime) of
+        undefined -> "file";
+        [Ext|_] -> iolist_to_binary([<<"document.">>, Ext]) 
+    end;
+mime2filename(Mime) ->
+    [Base|_] = binary:split(Mime, <<"/">>),
+    case mimetypes:mime_to_exts(Mime) of
+        undefined -> Base;
+        [Ext|_] -> iolist_to_binary([Base, $., Ext]) 
     end.
 
 
