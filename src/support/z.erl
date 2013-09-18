@@ -32,6 +32,7 @@
     restart/0,
     restart/1,
 
+    ld/0,
     ld/1,
 
     log_level/1,
@@ -93,6 +94,12 @@ restart(Site) ->
 %% @doc Shortcut to set the lager console log level
 log_level(Level) ->
     lager:set_loglevel(lager_console_backend, Level).
+
+
+%% @doc Reload all changed Erlang modules
+ld() ->
+    Ms = reloader:all_changed(),
+    [ ld(M) || M <- Ms ]. 
 
 %% @doc Reload an Erlang module
 ld(Module) ->
