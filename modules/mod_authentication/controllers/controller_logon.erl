@@ -330,6 +330,8 @@ lookup_identities(Handle, Context) ->
     Handle1 = z_string:trim(Handle),
 	lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context).
 
+lookup_by_username("admin", _Context) ->
+    [];
 lookup_by_username(Handle, Context) ->
 	case m_identity:lookup_by_username(Handle, Context) of
 		undefined -> [];
@@ -359,25 +361,31 @@ send_reminder([], _Context, Acc) ->
 	Acc;
 send_reminder([Id|Ids], Context, Acc) ->
 	case find_email(Id, Context) of
-		[] -> send_reminder(Ids, Context, Acc);
+		undefined -> 
+            send_reminder(Ids, Context, Acc);
 		Email -> 
-			Vars = [
-			    {recipient_id, Id},
-				{id, Id},
-				{secret, set_reminder_secret(Id, Context)},
-				{username, m_identity:get_username(Id, Context)},
-				{email, Email}
-			],
-			send_email(Email, Vars, Context)
+            case m_identity:get_username(Id, Context) of
+                undefined ->
+                    send_reminder(Ids, Context, Acc);
+                <<"admin">> ->
+                    send_reminder(Ids, Context, Acc);
+                Username ->
+        			Vars = [
+        			    {recipient_id, Id},
+        				{id, Id},
+        				{secret, set_reminder_secret(Id, Context)},
+        				{username, Username},
+        				{email, Email}
+        			],
+        			send_email(Email, Vars, Context),
+                    send_reminder(Ids, Context, [Id|Acc])
+            end
 	end.
 
 
-%% @doc Find all e-mail addresses of an user.
+%% @doc Find the preferred e-mail address of an user.
 find_email(Id, Context) ->
-	case m_rsc:p(Id, email, Context) of
-		undefined -> [];
-		Email -> [Email]
-	end.
+	m_rsc:p_no_acl(Id, email, Context).
 
 %% @doc Sent the reminder e-mail to the user.
 send_email(Email, Vars, Context) ->
