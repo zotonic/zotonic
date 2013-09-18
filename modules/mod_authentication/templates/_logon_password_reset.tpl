@@ -9,14 +9,14 @@
     <div class="control-group">
 	<label class="control-label" for="password_reset1">{_ New password _}</label>
         <div class="controls">
-	    <input type="password" id="password_reset1" class="span4" name="password_reset1" value="" autocomplete="off" />
+	    <input type="password" id="password_reset1" class="input-block-level" name="password_reset1" value="" autocomplete="off" />
         </div>
     </div>
 
     <div class="control-group">
 	<label class="control-label" for="password_reset1">{_ Repeat password _}</label>
         <div class="controls">
-	    <input type="password" id="password_reset2" class="span4" name="password_reset2" value="" autocomplete="off" />
+	    <input type="password" id="password_reset2" class="input-block-level" name="password_reset2" value="" autocomplete="off" />
         </div>
     </div>
 

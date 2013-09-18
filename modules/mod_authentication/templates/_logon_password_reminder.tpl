@@ -8,7 +8,7 @@
         <div class="controls">
 	    <input type="text" id="reminder_address"
                    autofocus="autofocus="
-                   class="span4"
+                   class="input-block-level"
                    placeholder="{_ user@example.com _}"
                    name="reminder_address"
                    value="{{ q.username|default:(m.identity[m.acl.user].username)|escape }}"

@@ -10,7 +10,7 @@
     <div class="control-group">
         <label for="username" class="control-label">{_ Username _}</label>
         <div class="controls">
-	    <input type="text" id="username" name="username" value="" class="span4" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
+	    <input type="text" id="username" name="username" value="" class="input-block-level" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
             {% validate id="username" type={presence} %}
         </div>
     </div>
@@ -18,7 +18,7 @@
     <div class="control-group">
         <label for="password" class="control-label">{_ Password _}</label>
         <div class="controls">
-	    <input type="password" id="password" class="span4" name="password" value="" autocomplete="on" />
+	    <input type="password" id="password" class="input-block-level" name="password" value="" autocomplete="on" />
         </div>
     </div>
 
