@@ -2,7 +2,7 @@ Module dependencies
 ===================
 
 Modules can have dependencies on other modules. These are expressed
-via the module's metadata, as follows::
+via the module’s metadata, as follows::
 
     -mod_depends([mod_admin]).
 

@@ -1,7 +1,7 @@
 
 .. include:: meta-debug.rst
 
-Shows which variables are assigned for use in the current template's
+Shows which variables are assigned for use in the current template’s
 scope::
 
   {% debug %}

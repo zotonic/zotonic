@@ -31,7 +31,7 @@ power. These actions can be called from the template, but can also be
 called based on some server-side event that occurs.
 
 Making the templates this way is a different approach from the usual
-Javascript onLoad() binding of events, but, once you're used to it,
+Javascript onLoad() binding of events, but, once you’re used to it,
 is really simple to use and very, very powerful.
 
 

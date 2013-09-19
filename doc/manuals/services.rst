@@ -83,7 +83,7 @@ The title of a service should be a human-readable, one-line
 description of what the services does. This title is used in the OAuth
 authentication dialog: when authorizing an application, the titles of
 the services that it wants to access are listed, for the authorizing
-user's consideration.
+user’s consideration.
 
 Secondary there is ``svc_needauth``::
 

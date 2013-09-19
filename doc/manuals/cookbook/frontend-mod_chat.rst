@@ -1,7 +1,7 @@
 Add Chat to Your Zotonic Site
 =============================
 
-Thanks to Michael Connor's ``zchat``, it's easy to add chat system on
+Thanks to Michael Connor’s ``zchat``, it’s easy to add chat system on
 your Zotonic site.
 
 Why
@@ -61,7 +61,7 @@ modules`.
 
 Now you should be able to go to ``<yoururl>/chat`` and see your chat
 window. You'll see `Anonymous <long number>` in the right-most
-pane. That's you. If your chat buddy enters the chat page, a second
+pane. That’s you. If your chat buddy enters the chat page, a second
 Anonymous <another big number> will appear. When you or your buddy
 leave the chat page, the respective Anonymous tag will disappear. Note
 that chat messages are not stored or logged. That may come with a

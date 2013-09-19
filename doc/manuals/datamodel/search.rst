@@ -159,7 +159,7 @@ Query-model arguments
   - ``rsc.pivot_title`` - the title of the page. When making
     multilingual sites, the behavior of sorting on title is undefined.
 
-  For all the sort fields, you will have to consult Zotonic's data
+  For all the sort fields, you will have to consult Zotonic’s data
   model. Example sorting on modification date, newest first:
 
   ``sort='-rsc.modified'``

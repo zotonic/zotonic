@@ -30,7 +30,7 @@ dispatch rules do not match.
 A new major mode for Emacs has been developed, called ``zotonic-tpl-mode``.
 See documentation at zotonic.com for details on how to install it.
 
-Zotonic's core routines which serve a greater purpose, like date and
+Zotonic’s core routines which serve a greater purpose, like date and
 string manipulation and HTML sanitization, has been moved out of the
 main repository into a new subproject called z_stdlib.
 
@@ -94,7 +94,7 @@ mod_backup
   perform a rollback.
 
 mod_rest
-  A new module to interact with Zotonic's data model using a
+  A new module to interact with Zotonic’s data model using a
   RESTful interface.
 
   

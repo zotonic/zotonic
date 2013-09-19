@@ -14,7 +14,7 @@ In the admin, edges are represented in the "Page connections" sidebar
 panel, of the edit page of the `subject`: the resource where the edges
 originate. By convention, edges are said to `belong` to their subject.
 This is to simplify the access control: if you are allowed to edit the
-resource, you're also allowed to edit its `outgoing` edges ("Page
+resource, you’re also allowed to edit its `outgoing` edges ("Page
 connections" in the admin), creating connections to other resources.
 
 .. seealso:: :ref:`model-edge`

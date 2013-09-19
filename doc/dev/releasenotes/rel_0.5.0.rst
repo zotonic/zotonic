@@ -10,7 +10,7 @@ New features
 Simpler module system 
    Modules are simpler, do not have to be a fullblown
    gen_server. Registering z_notifier for modules is made more simpler
-   by using erlang's introspection on modules.
+   by using Erlang’s introspection on modules.
 
 i18n support through gettext
    Gettext .po and .pot file support for translations. Templates can
@@ -59,7 +59,7 @@ Media preview enhancements
    'extent' - create a larger image then the original not by scaling
    up but by adding a border to the image.
    
-   'removebg' - removes the image's
+   'removebg' - removes the image’s
    background. It accepts an optional fuzziness parameter (range
    0..100).
 

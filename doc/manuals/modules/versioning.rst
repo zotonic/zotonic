@@ -2,7 +2,7 @@ Module versioning
 =================
 
 Modules can export a ``-module_schema()`` attribute which contains an
-integer number, denoting the current module's version. On module
+integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
 installation and upgrade of data.
 

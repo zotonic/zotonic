@@ -31,7 +31,7 @@ webmachine callback functions. For instance, when you define a
 function ``resource_exists/2``, it will be called to decide whether or
 not the page should return a 404 page.
 
-The simplest controller uses Zotonic's ``controller_html_helper.hrl`` include to serve HTML:
+The simplest controller uses Zotonic’s ``controller_html_helper.hrl`` include to serve HTML:
 
 .. code-block:: erlang  
 
@@ -55,13 +55,13 @@ helpful for understanding controllers.
 
 .. _manual-controllers-webzmachine:
 
-Differences between Zotonic's and Basho's Webmachine
+Differences between Zotonic’s and Basho’s Webmachine
 ----------------------------------------------------
 
-Zotonic's fork has been named ``webzmachine`` and lives in its
+Zotonic’s fork has been named ``webzmachine`` and lives in its
 separate repository at https://github.com/zotonic/webzmachine).
 
-The main differences with Basho's Webmachine are:
+The main differences with Basho’s Webmachine are:
 
 * Pluggable dispatch handler
 * Support for the HTTP ``Upgrade:`` header

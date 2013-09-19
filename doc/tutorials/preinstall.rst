@@ -132,9 +132,9 @@ following PPA: https://launchpad.net/~scattino/+archive/ppa
 FreeBSD
 ^^^^^^^
 
-If you're running on FreeBSD, make sure you've got the 'GNU' 'make'
+If you’re running on FreeBSD, make sure you've got the 'GNU' 'make'
 (check with 'make --version', which should give you GNU, and version
-info) If you're not running GNU-make as a default, edit the Makefile
+info) If you’re not running GNU-make as a default, edit the Makefile
 to run with 'gmake' (make sure gmake is available first).
 
 
@@ -156,7 +156,7 @@ Windows
 
 Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
-ImageMagick do work on Windows, so, if you're adventurous, it should
+ImageMagick do work on Windows, so, if you’re adventurous, it should
 be possible to get it running.
 
 We have included user-contributed ``start.cmd`` and ``build.cmd``

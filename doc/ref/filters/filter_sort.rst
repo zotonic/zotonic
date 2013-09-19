@@ -25,7 +25,7 @@ Example::
    {% endfor %}
 
 This will sort on `title` in `ascending` order first, then on `modified` in `descending` order.
-Any number of properties may be added, each one can have it's own sort order, or use the current one.
+Any number of properties may be added, each one can have it’s own sort order, or use the current one.
 
 See :ref:`model-rsc` for a list of properties available to sort on. 
 

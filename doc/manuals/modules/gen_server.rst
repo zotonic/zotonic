@@ -35,5 +35,5 @@ it.
 
 The ``init/1`` function contains some more boilerplate for getting the
 ``context{}`` argument from the arguments, and storing this context
-into the server's state. This way, you'll always have access to the
-current context of the site in the rest of the gen_server's functions.
+into the server’s state. This way, you'll always have access to the
+current context of the site in the rest of the gen_server’s functions.

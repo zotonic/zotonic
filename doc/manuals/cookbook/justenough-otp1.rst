@@ -1,4 +1,5 @@
 .. _cookbook-otp1:
+
 Just enough Erlang/OTP and rebar, part 1
 ========================================
 
@@ -25,7 +26,7 @@ By following each step in this tutorial carefully, and referring back
 to the many excellent on-line Erlang documentation resources, you will
 accelerate your progress up the daunting Erlang/OTP learning
 curve. And more, you'll learn how to read and understand Zotonic
-source code while you're at it.
+source code while you’re at it.
 
 In this tutorial we'll use rebar to create, compile, and test two
 Erlang applications. One will include a simple gen_server.
@@ -46,8 +47,8 @@ How
 ---
 
 How can I install and learn Rebar?
-.................................
-Create a root directory for experimentation. Let's call it "learn."::
+...................................
+Create a root directory for experimentation. Let’s call it "learn."::
 
   $ mkdir learn 
   $ cd learn 
@@ -129,14 +130,14 @@ Add before handle_cast(_Msg, State), put::
   handle_cast(stop, State) ->
     {stop, normal, State};
 
-NOTE: If your gen_server is under supervision, there's a better way to stop your server. See:
+NOTE: If your gen_server is under supervision, there’s a better way to stop your server. See:
 
 Section 2.6 of gen_server Concepts - Stopping:
 http://www.erlang.org/doc/design_principles/gen_server_concepts.html
 
-You could compile this code with Rebar now, but let's defer.
+You could compile this code with Rebar now, but let’s defer.
 
-To really get the hang, let's create TWO applications. We'll put them under a new directory, `apps/`::
+To really get the hang, let’s create TWO applications. We'll put them under a new directory, `apps/`::
 
   learn$ mkdir apps 
   learn$ mkdir apps/zzz 
@@ -153,7 +154,7 @@ Now we'll create the zzz_lib application::
   learn$ ls
   >> apps rebar rebar-src src
 
-And let's make it do something::
+And let’s make it do something::
 
   learn$ cd src 
 
@@ -207,7 +208,7 @@ Check out the ebin directories::
   learn$ ls apps/zzz_lib/ebin 
   >> hello.beam zzz_lib.app zzz_lib_app.beam zzz_lib_sup.beam 
 
-You're now ready to rock and roll!!
+you’re now ready to rock and roll!!
   
 How can I test?
 ...............
@@ -270,7 +271,7 @@ Where to go from here
 ---------------------
 
 Study the online and printed Erlang documentation upside and
-sideways. Skim to see what's there, then reread everytime you have a
+sideways. Skim to see what’s there, then reread everytime you have a
 problem. You'll be an Erlang/OTP wizard before you know it.
 
 References on the web

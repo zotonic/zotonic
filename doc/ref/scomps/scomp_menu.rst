@@ -4,7 +4,7 @@ Show a page menu.
 
 This tag is part of the module mod_menu. The ``{% menu %}`` tag is used to generate the HTML for the menu defined in the admin.
 
-You can define multiple menu's in your site. By default there is one menu, called “main_menu”. If you want another one, create a page of type “page menu” (under “Categorization”) and start editing your menu. You can use the “menu_id” argument to select which menu you want to display.
+You can define multiple menus in your site. By default there is one menu, called “main_menu”. If you want another one, create a page of type “page menu” (under “Categorization”) and start editing your menu. You can use the “menu_id” argument to select which menu you want to display.
 
 Example::
 

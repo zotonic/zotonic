@@ -144,7 +144,7 @@ architecture and conventions etc.
 **HOW**: Step-by-step instructions for implementing your solution.
 
 Don't take user competency for granted. When you specify a command,
-note what user name you're working under and what directory you are
+note what user name you’re working under and what directory you are
 working in.  Respect the noobies by including steps that may be
 obvious to you but not so obvious to folks with less experience.
 

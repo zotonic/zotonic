@@ -7,9 +7,9 @@ impossible. This is an example of what you can do with filters.
 Why
 ---
 
-It is often useful to use a page's category to present it on the page
+It is often useful to use a page’s category to present it on the page
 itself or to look up related content.  This guide provides
-step-by-step instructions for getting a page's category in a template.
+step-by-step instructions for getting a page’s category in a template.
 
 I have a page with url of the form ``/my_category``,
 ``/my_category/:id``, or ``/my_category/:id/:slug``. How can I

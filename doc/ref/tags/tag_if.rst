@@ -29,7 +29,7 @@ An ``{% if %}`` and ``{% elif %}`` tag can have an “and” or “or” express
 
 Or for example::
 
-   {% if new_moon or daytime %} Guess you can't see the moon. {% endif %}
+   {% if new_moon or daytime %} Guess you can’t see the moon. {% endif %}
 
 It is also possible to mix “and” and ”or” in one expression, so this is a valid::
 

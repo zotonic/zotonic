@@ -19,9 +19,9 @@ The edit page consists of 2 main areas, main and sidebar. The area contents are 
 - main area: ``_admin_edit_main_parts.tpl``
 - sidebar area: ``_admin_edit_sidebar_parts.tpl``
 
-Let's say you have created a category 'Shop', and the only data you want to maintain on shops are the name and url.
+Let’s say you have created a category *Shop*, and the only data you want to maintain on shops are the name and url.
 
-In your site's template directory you create the file ``_admin_edit_main_parts.shop.tpl``. In it you write only those elements that you need. For instance, to show the default Title and Advanced blocks you would write::
+In your site’s template directory you create the file ``_admin_edit_main_parts.shop.tpl``. In it you write only those elements that you need. For instance, to show the default Title and Advanced blocks you would write::
 
   {% block admin_edit_form_top %}{% endblock %}
   
@@ -29,7 +29,7 @@ In your site's template directory you create the file ``_admin_edit_main_parts.s
   
   {% include "_admin_edit_content_advanced.tpl" %}
 
-To make the Title section contain your shop's name and url, you can redefine ``_admin_edit_basics_form.tpl``. Copy the file ``_admin_edit_basics_form.tpl`` to ``_admin_edit_basics_form.shop.tpl`` in your site's template directory. Change the fields to your needs.
+To make the Title section contain your shop's name and url, you can redefine ``_admin_edit_basics_form.tpl``. Copy the file ``_admin_edit_basics_form.tpl`` to ``_admin_edit_basics_form.shop.tpl`` in your site’s template directory. Change the fields to your needs.
 
 For the sidebar area you can follow the same procedure. Of course you need to keep the submit buttons, so include ``_admin_edit_content_publish.tpl``.
 

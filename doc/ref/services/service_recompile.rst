@@ -4,7 +4,7 @@
 Remotely recompile and flush.
 
 This GET requests performs a ``z:m()`` call which recompiles all of
-Zotonic's Erlang modules and all Erlang modules in all Zotonic sites.
+Zotonic’s Erlang modules and all Erlang modules in all Zotonic sites.
 
 When done recompiling, it calls ``z:flush()`` to flush the memo
 caches.

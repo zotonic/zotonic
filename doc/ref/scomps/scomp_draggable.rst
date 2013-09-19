@@ -46,7 +46,7 @@ The draggable tag accepts the following arguments:
 |                |Defaults to the whole element.                       |                           |
 +----------------+-----------------------------------------------------+---------------------------+
 |group           |The name of this drag group, for use in the droppable|group="edges"              |
-|                |element's "accept" argument. Multiple groups are     |                           |
+|                |element’s "accept" argument. Multiple groups are     |                           |
 |                |allowed.                                             |                           |
 +----------------+-----------------------------------------------------+---------------------------+
 |opacity         |Change the opacity while dragging. Defaults to "0.8".|opacity="0.5"              |

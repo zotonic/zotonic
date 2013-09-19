@@ -33,7 +33,7 @@ would program your template as shown in these scripts:
 
   {% extends "base_1.tpl" %}
   
-  {# THIS WON'T WORK BECAUSE %with% AND %block% TAGS CANNOT BE NESTED THIS WAY #}
+  {# THIS won’t WORK BECAUSE %with% AND %block% TAGS CANNOT BE NESTED THIS WAY #}
   {% with m.mymodule.myquery as myresult %}
   
   {% block html_body %}

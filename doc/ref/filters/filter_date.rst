@@ -16,7 +16,7 @@ When mydate is ``{2009,6,1}`` this returns ``2009-06-01`` as output.
 See also the :ref:`filter-timesince` filter to display a human
 readable `relative` time like `10 hours ago`.
 
-Date uses the same format as PHP's date function with some extensions
+Date uses the same format as PHP’s date function with some extensions
 and some omissions.
 
 All supported formatting characters are listed below:

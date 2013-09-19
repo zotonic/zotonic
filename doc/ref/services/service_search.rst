@@ -1,7 +1,7 @@
 
 .. include:: meta-search.rst
 
-Search Zotonic's :term:`resources <resource>` using the
+Search Zotonic’s :term:`resources <resource>` using the
 :ref:`manual-datamodel-query-model`.
 
 For instance, the API call::

@@ -21,7 +21,7 @@ How
 ---
 
 Dumps from postgres include both database structure (tables,
-sequences, constraints, etc.) as well as content. Therefore it's not
+sequences, constraints, etc.) as well as content. Therefore it’s not
 possible to simply import the dump directly into an existing Zotonic
 database populated with content. The target database must be empty
 before the dump can be imported. There are (at least) 2 ways to do
@@ -33,7 +33,7 @@ this:
    something temporary, rename new database to match site, and finally
    delete the old database.
 
-Option 2 seems more involved but is safer and quicker: It's
+Option 2 seems more involved but is safer and quicker: it’s
 non-destructive. The old db remains intact until after the new one is
 activated. If anything goes wrong, you can fall back to the original.
 
@@ -97,7 +97,7 @@ Restart Zotonic::
 
   zotonic:~$ ~/zotonic/bin/zotonic start
 
-Browse to your site & test it's now serving updated content.
+Browse to your site & test it’s now serving updated content.
 
 (Optional) Drop the old database::
 

@@ -17,7 +17,7 @@ certificate at your favorite CA.
 
 .. note:: The lines below are `really` just for Zotonic <= 0.8; they don't have any effect in 0.9 and up! Use :ref:`mod_ssl` instead.
 
-Add to Zotonic's priv/config file several lines::
+Add to Zotonic’s priv/config file several lines::
 
   {listen_port_ssl,8443},
   {ssl,          true},

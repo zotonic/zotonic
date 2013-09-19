@@ -27,7 +27,7 @@ Alternatively you can set the config key
 Programmatically switching languages
 ------------------------------------
 
-In a template, you can use :ref:`mod_translation`'s `postback` hook
+In a template, you can use :ref:`mod_translation`’s `postback` hook
 to switch between languages::
 
   {% button text="Dutch" postback={set_language code="nl"} delegate=`mod_translation` %}

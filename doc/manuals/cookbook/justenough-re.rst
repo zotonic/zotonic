@@ -39,7 +39,7 @@ Bring up an Erlang terminal::
   1> 
 
 and follow along with the following examples. Modify and re-execute
-each example until you feel comfortable with what's going on.
+each example until you feel comfortable with what’s going on.
 
 What is a regular expression?
 .............................
@@ -102,14 +102,14 @@ Hmmm... re:replace/3 returns an odd-looking binary, which is called an
 `iolist`: an efficient data structure, used like this to prevent
 copying of data in memory.
 
-But, let's use re:replace/4 to provide an option: ``replace(Subject, RE, Replacement, Options) -> iodata() | unicode:charlist()``::
+But, let’s use re:replace/4 to provide an option: ``replace(Subject, RE, Replacement, Options) -> iodata() | unicode:charlist()``::
 
   11> re:replace("The quick brown fox.", "brown", "red", [{return, list}]).
   "The quick red fox."
 
 The ``{return, list}`` does the trick of returning a "regular"
 string. Erlang documentation is generally thorough, but often not that
-easy to follow. That's why I created this Cookbook item. I wanted to
+easy to follow. That’s why I created this Cookbook item. I wanted to
 learn this stuff myself.
 
 Regular expressions can deliver much much more, however, with shrewd
@@ -259,7 +259,7 @@ http://www.erlang.org/doc/man/re.html
 
 Do further research on the web. Everytime you see an interesting
 regular expression, test it in re:run/2. You may well have to edit to
-get it to run on re:run/2. But if you understand the basics, it won't
+get it to run on re:run/2. But if you understand the basics, it won’t
 be difficult.
 
 TROUBLESHOOTING
@@ -270,7 +270,7 @@ error prone. Break them down into short segments and test each
 segment. Then build them back up.
 
 The hard part is confirming that your pattern will match all possible
-instances of the string segments you're interested in.
+instances of the string segments you’re interested in.
 
 RESOURCES
 ---------

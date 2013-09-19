@@ -37,7 +37,7 @@ Where `mod_modulename` is the name of your module and `yoursitename` is the name
 Check Your Hostname
 -------------------
 
-If you can't launch the shell chances are that your hostname is not a
+If you can’t launch the shell chances are that your hostname is not a
 fully-qualified domain name (FQDN).  This complicates things since
 Erlang is picky about allowing connections to unqualified nodes. For
 example, the hostname should be ``myprimarysite.example.com`` rather than

@@ -16,7 +16,7 @@ Arjan Scherpenisse (20):
 * mod_mailinglist - depend on mod_logging.
 * mod_mailinglist - address recipients by name in welcome/confirm/goodbye messages.
 * mod_mailinglist: new filter to add recipient details to links in mails.
-* mod_backup: Prefix backup files with the site's name.
+* mod_backup: Prefix backup files with the site’s name.
 * Dynamically calculate the ebin dirs when compiling .erl, to ensure deps/ ebin dir existence.
 * Fix wording of SEO webmaster tools configuration. Fixes #310.
 * Merge remote-tracking branch 'origin/release-0.8.x' into release-0.8.x

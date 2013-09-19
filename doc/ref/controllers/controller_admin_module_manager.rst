@@ -3,7 +3,7 @@
 
 Shows the list of Zotonic modules currently known to the system.
 
-The list is sorted based on the module's status: active modules are
+The list is sorted based on the module’s status: active modules are
 listed first, non-active modules next.
 
 Each module has a button which let you toggle the active status of the

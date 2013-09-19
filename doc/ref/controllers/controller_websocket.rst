@@ -63,7 +63,7 @@ Example::
       ok.
 
 The websocket_init, websocket_info and websocket_terminate callbacks
-are called from within the controller's receive loop, so to send a message
+are called from within the controller’s receive loop, so to send a message
 to the websocket, you send it to ``self()``, as in the example above.
 
 The `websocket_message` function however gets a `From` argument passed

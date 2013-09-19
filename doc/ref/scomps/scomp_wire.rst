@@ -47,13 +47,13 @@ Example::
      <button id="mybutton" type="submit">Submit</button>
    </form>
 
-The wire tag redirects the submit of the form to the event routine of the controller. A submit will also toggle the visibility of the "message" element on the page. Note that the action is “postback”, this is obligatory.
+The wire tag redirects the submit of the form to the event routine of the controller. A submit will also toggle the visibility of the “message” element on the page. Note that the action is “postback”, this is obligatory.
 
 The event routine will be called as::
 
    event({submit, Tag, FormId, TargetId}, Context).
 
-Where Tag will be the postback set by the wire tag (in the example the atom 'some_tag') and FormId and TargetId are both the HTML id of the submitted form.  The posted input fields can be fetched using ``z_context:get_q/2``, ``z_context:get_q_all/1`` or ``z_context:get_q_validated/2``.
+Where Tag will be the postback set by the wire tag (in the example the atom ``some_tag``) and FormId and TargetId are both the HTML id of the submitted form.  The posted input fields can be fetched using ``z_context:get_q/2``, ``z_context:get_q_all/1`` or ``z_context:get_q_validated/2``.
 
 ::
 

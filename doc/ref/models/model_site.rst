@@ -1,7 +1,7 @@
 .. highlight:: django
 .. include:: meta-site.rst
 
-Retrieve information which is stored in the site's `config` files.
+Retrieve information which is stored in the site’s `config` files.
 
 The site configuration is stored for each site in
 ``priv/sites/<sitename>/config`` and files in

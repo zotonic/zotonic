@@ -12,7 +12,7 @@ extra :ref:`templates` and accompanying logic or adding handlers for
 internal Zotonic events. Good examples are the modules extending the
 :ref:`mod_admin`.
 
-A module is a directory containing the module's Erlang code,
+A module is a directory containing the module’s Erlang code,
 :ref:`templates <manual-templates>`, :ref:`controllers
 <manual-controllers>`, :ref:`dispatch rules <manual-dispatch>` and
 more, all contained in a single module directory tree.

@@ -1,12 +1,12 @@
-Reset a user's password
+Reset a user’s password
 =======================
 
-Emergency password reset when you can't get into the admin interface.
+Emergency password reset when you can’t get into the admin interface.
 
 Why
 ---
 
-Sometimes it happens that you want to reset an user's password from
+Sometimes it happens that you want to reset an user’s password from
 the Erlang shell.
 
 Assumptions
@@ -37,7 +37,7 @@ If you get the error::
 
 That means you are trying to change the password for the admin (user
 1). The admin password is not set in the database: you need to define
-your admin password in the site's config file, use the property
+your admin password in the site’s config file, use the property
 ``admin_password``. For more info on this, see
-:ref:`tutorial-site-anatomy`.
+:ref:`manual-site-anatomy`.
 

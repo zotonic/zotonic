@@ -10,7 +10,7 @@ Request method(s):
   POST
 
 Upload media items into Zotonic. Pass in the `file` argument for the
-actual file. Because it's a file upload, the post payload should be
+actual file. Because it’s a file upload, the post payload should be
 `multipart/form-data` encoded (which is the standard for file
 uploads). Proper authorization is needed to use this API call, either
 through session cookie or using OAuth. The value returned is a single

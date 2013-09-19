@@ -46,8 +46,8 @@ In the database, categories are stored in an extra metadata table,
 <http://en.wikipedia.org/wiki/Nested_set_model>`_. The tree is
 strictly hierarchical: Every category has at most a single parent
 category, and every resource belongs to exactly one category.  That a
-resource can't belong to more than a single category is done to
-maintain the datamodel's simplicity and speed of the searches in the
+resource can’t belong to more than a single category is done to
+maintain the datamodel’s simplicity and speed of the searches in the
 system.
 
 Since in Zotonic, `everything is a resource`, categories `themselves`
@@ -141,7 +141,7 @@ in the background.
 Identities
 ..........
 
-A rsc record can become a user by adding the user's credentials to
+A rsc record can become a user by adding the user’s credentials to
 this table. A single user can have multiple kinds of credentials,
 think of his/her username, openid uri etc. A user isn't necessarily a
 person.

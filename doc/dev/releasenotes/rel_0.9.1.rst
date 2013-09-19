@@ -33,7 +33,7 @@ Arjan Scherpenisse (49):
 * controller_api: Fix throwing a 404 error when service module not is found
 * core: Fix use of hostname in startup / management scripts
 * core: Include the request hostname in a dispatch rewrite notification
-* core: Keep file extension when it is allowed for the file's mime type
+* core: Keep file extension when it is allowed for the file’s mime type
 * doc: Add paragraph about multiple assignments to `with` tag docs
 * doc: Add some documentation about startup environment variables
 * doc: Document how to override TinyMCE options
@@ -44,7 +44,7 @@ Arjan Scherpenisse (49):
 * doc: Explain the make_list filter to force model evaluation
 * doc: Improve wording on replace filter
 * doc: show_media filter: correct the default value for media dimensions
-* mod_admin: Add button to run schema install from the site's module again
+* mod_admin: Add button to run schema install from the site’s module again
 * mod_admin: Add inlinepopups TinyMCE plugin.
 * mod_admin: Fix redirect to admin page when using admin logon form
 * mod_admin: Fix some errors in new rsc dialog

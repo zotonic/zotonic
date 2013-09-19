@@ -10,7 +10,7 @@ YouTube, Vimeo or any other service which supports OEmbed.
 
 A saved media resource has a thumbnail image which is downloaded from
 the OEmbed service and embedded in the resource. Furthermore, the
-resource's `medium` record has an ``oembed`` field which contains the
+resource’s `medium` record has an ``oembed`` field which contains the
 full JSON response of the request. The ``oembed`` field looks like
 this::
 

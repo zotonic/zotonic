@@ -80,7 +80,7 @@ check like this::
     undefined. %% fall through
 
 This checks the password against the old MD5 format. The ``{ok,
-rehash}`` return value indicates that the user's password hash will be
+rehash}`` return value indicates that the user’s password hash will be
 updated by Zotonic, and as such, this method is only called once per
-user, as the next time the password is stored using Zotonic's internal
+user, as the next time the password is stored using Zotonic’s internal
 hashing scheme.

@@ -16,7 +16,7 @@ For example::
 
 This wires the action ``{my_action some_arg=some_value the_link_id=...}`` to the links.
 
-The following arguments are part of the wire tag and can't be used for argument appending: "id", "type", "target", "action", "postback" and "delegate".
+The following arguments are part of the wire tag and can’t be used for argument appending: "id", "type", "target", "action", "postback" and "delegate".
 
 .. seealso:: the :ref:`scomp-wire` tag.
 

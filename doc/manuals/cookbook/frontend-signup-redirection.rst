@@ -3,7 +3,7 @@
 Managing redirection after login and signup
 ===========================================
 
-Configure mod_signup to redirect to something other than a member's home page.
+Configure mod_signup to redirect to something other than a member’s home page.
 
 Why
 ---

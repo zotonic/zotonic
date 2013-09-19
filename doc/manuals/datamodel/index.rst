@@ -4,7 +4,7 @@ The Zotonic data model
 ======================
 
 
-Zotonic's data model can be seen as a pragmatic implementation of the
+Zotonic’s data model can be seen as a pragmatic implementation of the
 `Semantic Web <http://en.wikipedia.org/wiki/Semantic_Web>`_: a mixture
 between a traditional database and a triple store.
 

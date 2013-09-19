@@ -1,7 +1,7 @@
 
 .. include:: meta-mod_admin_config.rst
 
-Add support for editing the site's configuration values, as accessed
+Add support for editing the site’s configuration values, as accessed
 through :ref:`model-config`.
 
 The page in the admin is a list of every configuration module, key and

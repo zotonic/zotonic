@@ -3,11 +3,11 @@ Filing issues
 
 Whenever you encounter a bug in Zotonic, please do the following:
 
-* Search the current issue list to see if the bug you're experiencing
+* Search the current issue list to see if the bug you’re experiencing
   is already reported.
 
 * If not, search the mailing list and the documentation for
-  references, to see if other people experience the same or if you're
+  references, to see if other people experience the same or if you’re
   the first.
 
 * If you did not find anything, you can file a bug report on github.
@@ -24,7 +24,7 @@ adding the relevant log sections, etc.
 
 Please also state the following:
 
-* Zotonic version you're using
+* Zotonic version you’re using
 * Whether you are running Zotonic from git or from a downloaded release
 * Operating system
 * Erlang release

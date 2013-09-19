@@ -21,13 +21,13 @@ Arjan Scherpenisse
 * Made group_title_firstchar filter work with translatable content.
 * Fix up base/info service -- add translation lookup to administrator title.
 * Small tweak to atom entries, better follow atom spec
-* Remove link to atom_feed from mod_base's base template to remove dependency on mod_atom_feed.
+* Remove link to atom_feed from mod_base’s base template to remove dependency on mod_atom_feed.
 * Fix lib tag for including multiple files directly from the toplevel 'lib' folder.
 * Release depcache locks immediately after exception in z:memo().
 * Use translation lookup in internal link action.
 * Make dispatch rule reloading more stable.
 * Make z_utils:url_decode/1 work and add unit tests.
-* z_media_tag: Ensure that the generated URL is a binary, even if it's empty.
+* z_media_tag: Ensure that the generated URL is a binary, even if it’s empty.
 * Fix for editing content which used to be multilingual but is no longer multilingual.
 * backport changeset 05a5254b6c92 - Fix for embedded media not showing up
 * Fix translation statistics for modules in places other than modules/
@@ -57,7 +57,7 @@ Marc Worrell
 * Fixes for looking up flipchart, upper case extensions and mime icons.
 * Fix for getValue on an empty select element.
 * Make pivoting dates more resilient against illegal dates.
-* Fetch the widget options from data-... attributes instead from in the element's class.  The class is still parsed for backwards compatibility.
+* Fetch the widget options from data-... attributes instead from in the element’s class.  The class is still parsed for backwards compatibility.
 * Move widget options to data-... attributes.
 * Remove newlines before parsing the widget options.
 * always call the widgetManager when inserting content.
@@ -120,13 +120,13 @@ Marc Worrell
 * Workaround for validations of elements that are removed.  Needs better solution.
 * Fixes for dynamic changes in LiveValidation checked forms. Keep the administration of LiveValidation objects in the data() of the form elements.  So that you can dynamically add/remove elements without the LiveValidationForm object getting out of sync.
 * Prevent retry loop when providing an illegal page id
-* Move the init of non-gen_server modules to the dummy module process instead of the module manager's process.
+* Move the init of non-gen_server modules to the dummy module process instead of the module manager’s process.
 * Added user_from_page/1 and user_from_session/1 to derive the user id from a page or session pid.
 * Fix for a problem where the 'appear' was called on the enclosing container for insert_top/bottom instead of the inserted html fragment.
 * Part of previous commit to fetch user_id from page pid.
 * Added do_popupwindow widget to open a link in a popup window.
 * Replace textual smiley codes with images.
-* Supervisor for named processes, based on Erlang's supervisor.erl
+* Supervisor for named processes, based on Erlang’s supervisor.erl
 * Added firefox smiley.
 * Fix for a problem where widgetManager is only called for the first element in the jquery context.
 * Fix for popupwindow namespace.

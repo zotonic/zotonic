@@ -47,8 +47,8 @@ all errors, and provides powerful debugging tools.
 A Webmachine application is a set of `resources` written in Erlang,
 each of which is a set of functions over the state of the resource.
 
-Note: in Zotonic's version of Webmachine, we renamed `resource` to
-`controller`, as we think that's a better name for those things. And
+Note: in Zotonic’s version of Webmachine, we renamed `resource` to
+`controller`, as we think that’s a better name for those things. And
 in Zotonic, resources are "pages".
 
 These functions give you a place to define the representations and
@@ -120,8 +120,8 @@ So how does Zotonic integrate Webmachine? Peek into your Zotonic `deps` director
 
   $ cd /home/zotonic/zotonic/deps
 
-You'll see the``webzmachine`` directory, which is Zotonic's version of
-webmachine It's contents will be quite familiar from your explorations
+You'll see the``webzmachine`` directory, which is Zotonic’s version of
+webmachine it’s contents will be quite familiar from your explorations
 above, although some implementation details differ.
 
 REFERENCES

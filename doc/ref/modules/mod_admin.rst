@@ -61,7 +61,7 @@ This section contains examples of templates to create widgets for the
 from mod_admin. To write your own you need to drop example content and
 fill holes in these example widgets.
 
-You can use them as basis for your's site admin-related tasks.
+You can use them as basis for your site admin-related tasks.
 
 ``_admin_dashboard_example.tpl``
   Very simple example widget for admin dashboard. Contains blocks for title and body.
@@ -84,13 +84,13 @@ Making an admin widget conditionally visible
 .. highlight:: django
                
 To make an entire admin widget visible or not, depending on some
-condition that you want to calculate inside the widget's code, you can
+condition that you want to calculate inside the widget’s code, you can
 use the `widget_wrapper` block (which sits around the entire widget)
 in combination with the :ref:`tag-inherit` tag, wrapping that with a
 condition.
 
 For instance, :ref:`mod_backup` uses this technique to display the
-import/export sidebar widget. Excerpt from mod_backup's `_admin_edit_sidebar.tpl`::
+import/export sidebar widget. Excerpt from mod_backup’s `_admin_edit_sidebar.tpl`::
 
     {# Make the widget conditional, based on the config value mod_backup.admin_panel #}
     {% block widget_wrapper %}

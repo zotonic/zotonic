@@ -7,7 +7,7 @@ Templates
 The templates in Zotonic are based on the Django Template Language
 (DTL), using a customized version of the excellent `ErlyDTL
 <https://github.com/evanmiller/erlydtl>`_ library. Over the years,
-Zotonic's version of ErlyDTL has diverged, adding Zotonic-specific
+Zotonic’s version of ErlyDTL has diverged, adding Zotonic-specific
 features and more powerful expression possibilities. However, the main
 template syntax remains the same:
 

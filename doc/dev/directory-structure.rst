@@ -1,7 +1,7 @@
 Directory structure
 ===================
 
-Zotonic's directory structure is somewhat different from a regular
+Zotonic’s directory structure is somewhat different from a regular
 Erlang application::
 
   zotonic/

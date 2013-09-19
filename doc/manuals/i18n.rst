@@ -8,7 +8,7 @@ languages. Luckily, Zotonic is completely multilingual, out of the
 box. :ref:`mod_translation` does all the work for you.
 
 Zotonic will try to serve the page in the language of the user (based
-on the browser's `HTTP Accept header
+on the browser’s `HTTP Accept header
 <http://en.wikipedia.org/wiki/Content_negotiation>`_) or the selected
 language from the URL. If this fails, Zotonic falls back to the
 default language as configured on the Translation admin page.
@@ -46,7 +46,7 @@ gettext <http://www.gnu.org/software/gettext/>` ``.po`` file format and
 its related tools.
 
 In Zotonic, static translations are organized in each Zotonic
-module. It is the module's responsibility to provide translations for
+module. It is the module’s responsibility to provide translations for
 all the texts that it uses in its templates. All files related to
 static translations live inside the ``translations/`` subdirectory of
 a module (remember: a Zotonic site is just a module!). 
@@ -110,7 +110,7 @@ are not.
 
 GNU gettext comes with a tool, ``msgmerge``, which looks at the
 changed strings in a ``.pot`` file and changes the translated strings
-in a language's ``.po`` file accordingly::
+in a language’s ``.po`` file accordingly::
 
   $ cd modules/mod_foo/translations
   $ msgmerge -U nl.po templates/mod_foo.pot

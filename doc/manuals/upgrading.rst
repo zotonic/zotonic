@@ -49,7 +49,7 @@ module. This was done to eliminate the confusion between webmachine
 resources and the "rsc" table of the Zotonic datamodel.
 
 This means that you have to update your custom dispatch rules. Each
-dispatch rule which uses one of Zotonic's ``resource_*`` controllers,
+dispatch rule which uses one of Zotonic’s ``resource_*`` controllers,
 needs to be changed from this::
 
   {article,      ["article", id, slug],      resource_page,      [ {template, "article.tpl"} ]},
@@ -112,9 +112,9 @@ to::
 mod_backup
 ..........
 
-mod_backup's configuration values for binary path names (`pg_dump` and
+mod_backup’s configuration values for binary path names (`pg_dump` and
 `tar`) is now coming from the global ``z_config`` instead of the
-site's configuration database.
+site’s configuration database.
 
 On startup you might see this message::
 
@@ -127,7 +127,7 @@ mod_survey
 ..........
 
 The storage format changed slightly. For the correct display of the
-results of "narrative"-type questions answered before 2012-12-01, the
+results of *narrative*-type questions answered before 2012-12-01, the
 name of the block needs to equal the name of the first narrative
 sub-question.
 
@@ -152,11 +152,11 @@ Module versioning
 From 0.8, modules have a schema version concept, which is used to
 install and update module-specific data (like managed tables, custom
 categories, default data). Previously this was either done in the
-module's ``init()`` or ``datamodel()`` function. The ``datamodel/1``
+module’s ``init()`` or ``datamodel()`` function. The ``datamodel/1``
 function is no longer called upon module start.
 
 Instead, modules export a ``-module_schema()`` attribute which
-contains an integer number, denoting the current module's version. On
+contains an integer number, denoting the current module’s version. On
 module initialization, ``Module:manage_schema/2`` is called which
 handles installation and upgrade of data. See :ref:`manual-modules`
 for more information and example code.
@@ -210,7 +210,7 @@ your existing Zotonic database.
 Admin password
 ..............
 
-The admin password is now hardcoded in your site's config file. For sites that are upgrading, you have to add a line to your config file::
+The admin password is now hardcoded in your site’s config file. For sites that are upgrading, you have to add a line to your config file::
 
   {admin_password, "letmein"}
 
@@ -258,7 +258,7 @@ becomes ::
   m.search[{query hassubjectpredicate=id}] (and reverse)
 
 
-``resource_staticfile's`` ``root`` directory has changed from the site's template folder to the sites base folder, e.g. from `site/templates/xx` to `site/xx`.
+``resource_staticfile’s`` ``root`` directory has changed from the site’s template folder to the sites base folder, e.g. from `site/templates/xx` to `site/xx`.
 
 The `m_group`` model no longer exists.
 

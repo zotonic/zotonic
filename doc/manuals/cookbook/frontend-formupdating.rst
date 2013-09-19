@@ -4,7 +4,7 @@ Updating form field from a dialog
 =================================
 
 Ever wanted to update a form field from a dialog, possibly giving the
-user some list to choose from? Here's how to do it.
+user some list to choose from? Here’s how to do it.
 
 Why
 ---
@@ -43,7 +43,7 @@ Then create your dialog template, my_dialog.tpl in this example, and wire a set_
   %} 
 
 If you include a template like the one above into your dialog template
-many times (i.e. from a for loop), then having fixed id's are no
+many times (i.e. from a for loop), then having fixed ids are no
 good. To prefix the id with a unique value (per invocation of the
 template) prefix the id with a ``#``-sign. so the a-tag becomes ``<a
 id={{#my_anchor}}…`` and the wire becomes ``wire id=#my_anchor…`` which will

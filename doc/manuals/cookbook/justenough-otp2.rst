@@ -46,7 +46,7 @@ Edit handle_call/2 in zzz_srv.erl as follows::
     io:format("~nHello from zzz_srv!~n", []),
     {reply, ok, State};
 
-While you're at it, check your handle_cast/2 code. It should look like this::
+While you’re at it, check your handle_cast/2 code. It should look like this::
 
   stop() ->
     gen_server:cast(?MODULE, stop).
@@ -117,7 +117,7 @@ But, no worry, you can start it back up again::
   5> zzz_srv:start_link().
   {ok,<0.48.0>}
 
-Now let's test zzz_srv:stop().::
+Now let’s test zzz_srv:stop().::
 
   6) zzz_srv:stop().
   ok
@@ -134,7 +134,7 @@ It turns out, zzz_sup started it up again. Try it again::
   8> zzz_srv:stop().
   ** exception exit: shutdown
 
-Wait! If you look at pman, you'll see that zzz_sup also died. What's going on here?
+Wait! If you look at pman, you'll see that zzz_sup also died. What’s going on here?
 
 If you look at zzz_sup.erl in learn/apps/zzz/src, you'll note that init/1 allows only one restart, the value following "one_for_one."::
 
@@ -226,7 +226,7 @@ WHERE TO GO FROM HERE
 ---------------------
 
 Study the online and printed Erlang documentation upside and
-sideways. Skim to see what's there, then reread everytime you have a
+sideways. Skim to see what’s there, then reread everytime you have a
 problem. You'll be an Erlang/OTP wizard before you know it.
 
 Now, dive into Zotonic source code. It should be much easier to

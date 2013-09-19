@@ -23,8 +23,8 @@ PostgreSQL
    We stabilized the pgsql connection pool in the presence of database
    connection failures and improvoved query timeout handling.
 
-The "host" option in a site's config file is now optional. When not
-present it will be derived from the site's directory name.
+The "host" option in a site’s config file is now optional. When not
+present it will be derived from the site’s directory name.
 
 
 New / updated modules
@@ -95,7 +95,7 @@ Andreas Stenius (27):
 - mod_base/filters/replace_args: new filter (#193).
 - format filter: support filtering binaries. (#251)
 - Windows: Update build.cmd for renamed webmachine -> webzmachine.
-- mod_signup: url's are returned as binaries.
+- mod_signup: urls are returned as binaries.
 - Added Michael Connors for his Irish translations.
 - Avoid // in path of found Makefiles.
 - Pull in lager using git:// rather than https.
@@ -195,7 +195,7 @@ Arjan Scherpenisse (245):
 - OAuth: fix request/acces token with POST
 - OEmbed: even better error reporting, and show preview image when creating item.
 - OEmbed: make the gen_server site-dependent; do not crash when getting invalid http request.
-- OEmbed: when adding an oembed video, set the title if it's not set yet.
+- OEmbed: when adding an oembed video, set the title if it’s not set yet.
 - On win32, mime type returned as application/octet for all files.
 - Only show text direction controls in TinyMCE when mod_translation is enabled.
 - Pass all filters into filter2arg function. Fix background removal for JPG images.
@@ -226,7 +226,7 @@ Arjan Scherpenisse (245):
 - action_admin_dialog_edit_basics: custom action= argument(s)
 - admin: use catinclude for _edit_media template, so it can be overridden.
 - filter_index_of: Removed debug statements
-- lower/upper filters now try to convert their argument to a list if it's not.
+- lower/upper filters now try to convert their argument to a list if it’s not.
 - m_rsc_update emptied the pivot_date_* fields when ``date_`` fields where not part of the update.
 - mod_admin: Made the title of uploaded file optional.
 - mod_admin: Press "enter" now saves the edit page.
@@ -327,7 +327,7 @@ Maas-Maarten Zeeman (39):
 - Changed filenames of translation templates
 - Changed md5 hash for hmac and use base64url encoding so pickles are url friendly
 - Configurable max memory for depcache
-- Copied macro's not needed anymore
+- Copied macros not needed anymore
 - Couple of wrong renames
 - Fix for a nasty loop caused by heart when things fail. Issue #212
 - Fixed parsing of quoted attributes. They can contain newlines

@@ -24,7 +24,7 @@ If you want to just change the look and feel, you should be able to
 get most of the way with CSS: create a CSS file in your site, and
 override the styles you don't like.
 
-Failing that, you should try overriding templates: Copy the module's
+Failing that, you should try overriding templates: Copy the module’s
 templates into your own site/module, keeping the file name and
 relative directory intact.
 

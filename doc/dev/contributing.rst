@@ -36,7 +36,7 @@ We encourage contributions to Zotonic from the community!
 Writing Commit Messages
 -----------------------
 
-The Zotonic commit convention are slightly based on `rebar's README
+The Zotonic commit convention are slightly based on `rebar’s README
 <https://github.com/basho/rebar>`_.
 
 Structure your commit message like this::

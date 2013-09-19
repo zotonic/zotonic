@@ -9,7 +9,7 @@ Why
 ---
 
 When you are working on the shell chances are you are looking to be
-fast.  A way to be faster is to leverage the EShell's tab completion.
+fast.  A way to be faster is to leverage the EShell’s tab completion.
 
 Assumptions
 -----------
@@ -24,7 +24,7 @@ How
 ---
 
 The Erlang shell has tab-completion. IIt is very handy for using in
-Zotonic, especially because of Zotonic's naming scheme. Just type::
+Zotonic, especially because of Zotonic’s naming scheme. Just type::
 
   1> z_<tab> 
 

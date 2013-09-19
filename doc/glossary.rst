@@ -77,7 +77,7 @@ Glossary
       A field in a resource. Examples are title and summary. Properties are dynamically defined. Although some property names are reserved, you can set any other property, which will be stored in the resource.
 
    Data model
-      :ref:`Zotonic's generic data model <manual-datamodel>` of (categorized) resources which connect to other resources using labelled edges. This data model is loosely based on the principles of the semantic web.
+      :ref:`Zotonic’s generic data model <manual-datamodel>` of (categorized) resources which connect to other resources using labelled edges. This data model is loosely based on the principles of the semantic web.
 
    Domain model
       A particular configuration of resource categories and predicates, which dictate how resources of certain categories relate to each other. For example, a blog-type site might need `person`, `article` and `keyword` categories, where persons and articles are connected using the `author` predicate to indicate article authorship, and articles might be connected to keywords with `has_keyword` predicates. See :ref:`manual-datamodel`.

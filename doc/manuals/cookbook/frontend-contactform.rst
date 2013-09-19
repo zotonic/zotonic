@@ -10,7 +10,7 @@ Why
 ...
 
 Making a simple contact form might seem difficult, but with the smart
-application of different Zotonic techniques you'll see that it's
+application of different Zotonic techniques you'll see that it’s
 actually very easy.﻿
 
 1. Create the contact page URL dispatcher and template
@@ -32,7 +32,7 @@ The URL dispatcher is placed in ``priv/sites/yoursite/dispatch/dispatch``. Add t
 
   {contact_url, ["contact"], controller_template, [ {template, "contact.tpl"} ]},
 
-This says that the page at "/contact" will use the "contact.tpl" template. Let's create this template, at ``priv/sites/yoursite/templates/contact.tpl``::
+This says that the page at "/contact" will use the "contact.tpl" template. Let’s create this template, at ``priv/sites/yoursite/templates/contact.tpl``::
 
   {% extends "base.tpl" %}
 
@@ -40,7 +40,7 @@ This says that the page at "/contact" will use the "contact.tpl" template. Let's
   <h1>Contact page</h1>
   {% endblock %}
 
-Now we have this, let's try to see if it loads. Flush the Zotonic
+Now we have this, let’s try to see if it loads. Flush the Zotonic
 cache (to refresh the URL dispatchers) by going to "modules" ->
 "rescan modules" in the admin. Now, point your browser to
 http://yoursite:8000/contact. This should show the contact page with the
@@ -78,7 +78,7 @@ Create the contact-form handler Erlang file
 As you see in the :ref:`scomp-wire` statement in the contact form, the
 `delegate` argument is set to ``resource_default_contact``, which is
 the name of an erlang module which we still have to create. When the
-form submits, this module's event/2 function gets called.Create a file
+form submits, this module’s event/2 function gets called.Create a file
 ``priv/sites/default/resources/resource_default_contact.erl`` with the
 following contents::
 
@@ -106,8 +106,8 @@ recompile it using this command.
 E-mail the contents of the contact form to somebody
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Using Zotonic's email module, you can very easily send somebody an
-e-mail. Let's create a simple template to send the contents of the
+Using Zotonic’s email module, you can very easily send somebody an
+e-mail. Let’s create a simple template to send the contents of the
 form to the site administrator.
 
 Create the file ``priv/sites/default/templates/_email_contact.tpl``::
@@ -128,7 +128,7 @@ Create the file ``priv/sites/default/templates/_email_contact.tpl``::
 
 This template will function as the message body that will be
 sent. Note: this template gets scanned for the <title> tag, which will
-double as the e-mail's subject, so be sure to include it!
+double as the e-mail’s subject, so be sure to include it!
 
 Now we have to change our ``event/2`` function to render this template and
 e-mail it using mod_emailer. Change the event function to the
@@ -144,7 +144,7 @@ following::
 This loads the relevant values from the form, puts them in the Vars
 variable, and then calls the z_email module to mail the given template
 to the e-mail address of the site admin (which is defined in your
-site's config file). For more information on sending mails from
+site’s config file). For more information on sending mails from
 Zotonic, please see the mod_emailer documentation.
 
 Finally, this contact-form handler replaces the contact form with a

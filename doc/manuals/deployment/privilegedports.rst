@@ -33,7 +33,7 @@ For production release of your new Zotonic site you need to:
   server accepts connections on port 80.
 
 - For each of your Zotonic sites, configure their DNS
-  (e.g. `www.mysite.com`) to point to your server's IP address.
+  (e.g. `www.mysite.com`) to point to your server’s IP address.
 
 - Change ``{hostname, "mysite:8000"}`` to ``{hostname,
   "www.mysite.com"}`` in ``priv/sites/mysite/config``.  This last

@@ -20,7 +20,7 @@ by checking the "import previously deleted content" button.
  
 **Note:** YMMV with importing 2 .wxr files from different blogs: as
 the unique keys of the entries are based on the wordpress numeric
-id's, it is possible that content from the second one will overwrite
+ids, it is possible that content from the second one will overwrite
 content from the previous import.
 
 

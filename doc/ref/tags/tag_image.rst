@@ -23,7 +23,7 @@ The file argument can be one of the following:
 
 * resource id of a resource with attached file (mostly of the category “media”)
 
-* property list of a resource's medium record
+* property list of a resource’s medium record
 
 The following arguments/filters can be specified:
 

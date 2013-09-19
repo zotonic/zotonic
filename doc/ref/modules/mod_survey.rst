@@ -3,7 +3,7 @@
 
 Adds the concept of `survey` :term:`resources <resource>`:
 user-definable forms which can be created in the admin interface and
-filled out by the website's visitors.
+filled out by the website’s visitors.
 
 
 Survey question types

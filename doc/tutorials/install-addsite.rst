@@ -31,7 +31,7 @@ called ``yoursite``.
 
    This will add a site named `yoursite`. Its default URL will be
    http://yoursite:8000/ so either put 'yoursite' in your hosts file as stated above,
-   or change the ``{hostname}`` section of the site's config file.
+   or change the ``{hostname}`` section of the site’s config file.
 
    Look at :ref:`skeleton-sites` to see which other skeletons are
    available to base your site on.

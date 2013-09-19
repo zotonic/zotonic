@@ -31,7 +31,7 @@ It has the following dispatch options:
 |root                 |Name of the directory in the site    |{root, "oldsite"}      |
 |                     |directory containing the static      |                       |
 |                     |files. The root is a path name       |                       |
-|                     |relative to the current site's base  |                       |
+|                     |relative to the current site’s base  |                       |
 |                     |directory.                           |                       |
 +---------------------+-------------------------------------+-----------------------+
 |use_cache            |Whether or not served files are      |{use_cache, true}      |

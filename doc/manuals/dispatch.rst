@@ -72,7 +72,7 @@ Where the elements are:
 Dispatch rule naming
 ....................
 
-Zotonic extends Basho's Webmachine by allowing (or actually,
+Zotonic extends Basho’s Webmachine by allowing (or actually,
 `requiring`) dispatch rules to be named. The name is the first element
 of the dispatch rule tuple, and consists of a simple atom. The
 ``z_dispatcher:url_for`` function takes a name and creates the URL for
@@ -274,8 +274,8 @@ needs. ControllerArgs is effective for establishing implementation
 details like the template to be used, whether or not to do caching and
 where to load static resources from.
 
-Zotonic dispatch rules are identical to Webmachine's with the addition
-of RuleName. Webmachine's dispatch rules are described in detail at
+Zotonic dispatch rules are identical to Webmachine’s with the addition
+of RuleName. Webmachine’s dispatch rules are described in detail at
 http://webmachine.basho.com/dispatcher.html .
 
 .. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`

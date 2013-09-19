@@ -8,12 +8,12 @@ New modules
 -----------
 
 mod_pubsub
-   Enables resource sharing over XMPP's PubSub; share content between
+   Enables resource sharing over XMPP’s PubSub; share content between
    sites and get realtime updates when content changes. See:
    http://scherpenisse.net/id/644
 
 mod_search_solr
-   Added a module which plugs into Zotonic's search system to support
+   Added a module which plugs into Zotonic’s search system to support
    Solr (http://lucene.apache.org/solr/). Using Solr enables quick
    fulltext searching and facetting.
 
@@ -23,11 +23,11 @@ New features
 
 Default site improvements
    The default site of a vanilla Zotonic install has been improved
-   with nicer graphics, cleaner typography, a "contact form" example
+   with nicer graphics, cleaner typography, a “contact form” example
    and styles for the Twitter module.
 
-"More results" scomp
-   A twitter/facebook style ajaxified "read more" pager, which is a
+“More results” scomp
+   A twitter/facebook style ajaxified “read more” pager, which is a
    button which will fetch more results for the current search
    question inline on the same page.
 
@@ -37,8 +37,8 @@ Windows support
 
 Database schema support
    Multiple sites running inside one Postgres database is now possible
-   thanks to Postgres' support for multiple table namespaces
-   (schema's)
+   thanks to Postgres’ support for multiple table namespaces
+   (schema’s)
 
 Template expressions
    It is now possible to use full boolean and arithmetic expressions
@@ -68,6 +68,6 @@ Bugfixes
 * Comment form breaks on new default site (#64)
 * Getting an unknown_rsc error on startup (#66)
 * Zotonic fails to (re)start if an existing admin panel is open with browser supporting WebSockets (#70)
-* Can't save location without e-mail (#71)
+* can’t save location without e-mail (#71)
 * Improve the default styles to include list bullets/numbers (#72)
 * Twitter module cannot be enabled (#76)

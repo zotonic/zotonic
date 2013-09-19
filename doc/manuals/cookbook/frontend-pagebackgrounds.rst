@@ -17,7 +17,7 @@ What the project needed was different backgrounds for different pages. Compare, 
 Assumptions
 -----------
 
-Readers are expected to be familiar with where templates reside and how things like conditional tags work.  To benefit most you should also be comfortable getting around and editing items in Zotonic's CMS admin interface.
+Readers are expected to be familiar with where templates reside and how things like conditional tags work.  To benefit most you should also be comfortable getting around and editing items in Zotonic’s CMS admin interface.
 
 How
 ---
@@ -35,14 +35,14 @@ has a severe downside. What if you actually want to attach other media
 to the page? What if you want to display images and video in your
 text, not just a background?
 
-This is where custom predicates come into play. Don't fret! It's much
+This is where custom predicates come into play. Don't fret! it’s much
 easier than you think
 
 :term:`Predicate` is nothing but a fancy way to say
 "relationship". Predicates define relationships between various places
 (objects, entities) within Zotonic. If you are into graphs and graph
 theory, a predicate is a directed labeled edge from one node to
-another (see Marko Rodriguez's amazing presentations on (among oher
+another (see Marko Rodriguez’s amazing presentations on (among oher
 things) graph theory and graph algebra here:
 http://www.slideshare.net/slidarko/presentations ).
 
@@ -58,7 +58,7 @@ So, if you have an article A, then you can have:
 - several authors who collaborated on it
 - a few images to go with the article
     
-Let's rephrase that:
+Let’s rephrase that:
 
 - an article has tags
 - an article has authors
@@ -72,7 +72,7 @@ Once you can make such a "has" connection, you can use a predicate::
 
 Easy, isn't it?
 
-The greatest thing about predicates is that you can define your own. Here's how yu do it.
+The greatest thing about predicates is that you can define your own. Here’s how yu do it.
 
 - Go to the "Predicates" section (under `Structure`) and click "Make a new predicate".
 - Name it "Background", since its used to signify a dynamic background on a page.
@@ -84,9 +84,9 @@ objects, and "To" is the entity that can be had . So, our Text has an
 Image as a background. This means that "From" is Text and "To" is
 Image. Click the corresponding checkboxes and then click save.
   
-You're done!
+you’re done!
 
-Now if you create a new text item (an article or news) you will see that in the Page Connections section there's now a new option, "Background". Let's try and make a new background:
+Now if you create a new text item (an article or news) you will see that in the Page Connections section there’s now a new option, "Background". Let’s try and make a new background:
 
 - Go to Pages
 - Click "Make a new media item"
@@ -103,7 +103,7 @@ Now if you create a new text item (an article or news) you will see that in the 
 
 You should now see your test page... with no background on it. This
 is ok, since we haven't told Zotonic how we want to display our
-background.  To do this we have to edit a template. Let's try and
+background.  To do this we have to edit a template. Let’s try and
 display the background image first. First, we can make a checklist to
 see how we should proceed:
 

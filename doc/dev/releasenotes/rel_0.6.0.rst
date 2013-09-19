@@ -42,7 +42,7 @@ mod_tkvstore
    Erlang code.
 
 mod_translation
-   Check if the user has a preferred language (in the user's
+   Check if the user has a preferred language (in the user’s
    persistent data). If not then check the accept-language header (if
    any) against the available languages.
 
@@ -140,7 +140,7 @@ General bug fixes
  - split chunk header on semicolon just in case a client is using chunk extensions
  - properly extract peername from all rfc1918 addrs
  - change H7 to match on any if-match, not just *
- - webmachine: WM-1.7.3(compat) ignores client's Content-Type on HTTP PUT requests (#130)
+ - webmachine: WM-1.7.3(compat) ignores client’s Content-Type on HTTP PUT requests (#130)
  - webmachine: prevent using chunked transfer encoding with HTTP/1.0.
 
 - increase the startup timeouts for the gen_servers to prevent startup race condition

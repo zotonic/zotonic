@@ -1,9 +1,9 @@
 
 .. include:: meta-geomap_static.rst
 
-Shows a location's map using static images from OpenStreetMap.
+Shows a location’s map using static images from OpenStreetMap.
 
-The location is taken from the tag's `latitude` + `longitude`
+The location is taken from the tag’s `latitude` + `longitude`
 parameters, or, when absent, from the `id` parameter which is supposed
 to be a :term:`resource` of category `location` (e.g. having an
 address).

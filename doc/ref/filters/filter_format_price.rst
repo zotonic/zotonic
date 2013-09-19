@@ -14,6 +14,6 @@ When the value is the float ``12.1`` then the output is the list ``12.10``.
 An undefined price will have the output “-”.
 
 **Note:** the decimal separator is currently always a dot, independent of
-the user's language.
+the user’s language.
 
 .. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`

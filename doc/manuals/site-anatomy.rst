@@ -11,7 +11,7 @@ A Zotonic site is defined as a folder which lives in the priv/sites
 directory of the zotonic installation (or in a location which is
 symlinked to this folder, see the tip below).
 
-A site's folder contains at least the following:
+A site’s folder contains at least the following:
 
 - a ``config`` file
 - A file called ``sitename.erl``
@@ -26,7 +26,7 @@ way, and as such, can contain all kinds of resources (templates,
 dispatch rules, etc.) that a normal module also has. The only
 difference is that site names do not need to be prefixed with `mod_`
 and sites have an extra ``config`` file in their base directory. A
-site's ``mod_prio`` metadata attribute is usually set to ``1``, to
+site’s ``mod_prio`` metadata attribute is usually set to ``1``, to
 make sure that it is the first module where Zotonic looks for template
 lookups and the like.
   
@@ -45,7 +45,7 @@ site. Its syntax is the Erlang term format, essentially it is a big
    dropped. Additional config options are read from files under
    ``config.d/``.
 
-All files under the ``config.d/`` folder in the site's folder are
+All files under the ``config.d/`` folder in the site’s folder are
 loaded to extend/override config options from the site ``config``
 file. So if the same key is present in both `config` and
 ``config.d/some-file``, then the value from the latter will be used.
@@ -56,7 +56,7 @@ The files under ``config.d/`` are read in alphabetical order.
 The following options can be configured:
 
 ``{hostname, "127.0.0.1:8000"}``
-  This config key specifies the hostname+port part of the site's URL,
+  This config key specifies the hostname+port part of the site’s URL,
   to determine to which site an incoming request belongs to (since
   they all come in on the same port).
 
@@ -99,7 +99,7 @@ The following options can be configured:
 ``{admin_password, "test123"}``
   This setting specifies the password for the ``admin`` user. Unlike
   passwords for other users, the admin password is not stored in the
-  database, but is set in the site's config file.
+  database, but is set in the site’s config file.
 
 ``{depcache_memory_max, 100}``
   The maximum amount of memory a site may take. The `depcache` caches
@@ -124,6 +124,7 @@ The following options can be configured:
   List all modules that should be enabled when installing the site data.
   This overrides the default list of modules installed by the
   skeleton.
+  
 .. versionadded:: 0.10
    To inherit the list of modules from a skeleton, add a ``{skeleton,
    <name>}`` and it will install the list of modules from that skeleton
@@ -205,8 +206,8 @@ does for example), but instead, Zotonic uses Postgres' native feature
 `database schemas` to support this.
 
 A database schema is basically another database inside your database:
-it's a namespace in which tables live. By default, your tables live in
-the namespace called `PUBLIC`, but it's quite easy to create another
+it’s a namespace in which tables live. By default, your tables live in
+the namespace called `PUBLIC`, but it’s quite easy to create another
 schema::
 
   CREATE SCHEMA anothersite;

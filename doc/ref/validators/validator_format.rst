@@ -4,7 +4,7 @@
 
 Regular expression test.
 
-Checks if an input element's value matches a regular expression.  There is an optional `negate` argument to validate only when the regular expression does not match.
+Checks if an input element’s value matches a regular expression.  There is an optional `negate` argument to validate only when the regular expression does not match.
 
 For example, to test a dutch postal code::
 

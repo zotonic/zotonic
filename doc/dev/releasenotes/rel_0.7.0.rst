@@ -36,7 +36,7 @@ New modules
 -----------
 
 mod_email_relay
-   Relay received e-mails to an user's email address. Serving as an
+   Relay received e-mails to an user’s email address. Serving as an
    example for the SMTP functionality, this module looks up a username
    by the local part of a received e-mail and forwards the mail to the
    mail address the user configured.

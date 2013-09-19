@@ -3,7 +3,7 @@
 The notification system
 =======================
 
-Zotonic's notifier system makes it possible to create modular
+Zotonic’s notifier system makes it possible to create modular
 components with pluggable interface. The notifier system is used by
 internal core Zotonic components like the authentication mechanism,
 the logging system and more.
@@ -102,7 +102,7 @@ Subscription shorthands
 
 Modules and sites can use shortcuts for registering as an observer. When the
 Zotonic module exports a function with the prefix ``observe_`` or 
-``pid_observe_`` Zotonic's module manager will register the observer for you.
+``pid_observe_`` Zotonic’s module manager will register the observer for you.
 
 For example exporting ``observe_acl_logon/2`` will register that function as
 an observer. It will be triggered when the ``acl_logon`` notification is fired.
@@ -142,7 +142,7 @@ Fold notifications
   Fold notifications are called, with ``z_notifier:foldl/3`` or
   ``z_notifier:foldr/3``. It works similar to the `lists:foldr and
   lists:foldl <http://www.erlang.org/doc/man/lists.html#foldl-3>`_
-  functions of Erlang's `lists
+  functions of Erlang’s `lists
   <http://www.erlang.org/doc/man/lists.html>`_ module.
 
   The fold function calls each observer in sequence, either starting

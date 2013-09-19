@@ -26,7 +26,7 @@ controller_file_readonly has the following dispatch options:
 |root                 |List of root directories where files |{root, [lib]}           |
 |                     |are located. Use 'lib' for the       |                        |
 |                     |library files. This defaults to the  |                        |
-|                     |site's “files/archive” directory,    |                        |
+|                     |site’s “files/archive” directory,    |                        |
 |                     |unless “is_meda_preview” is set then |                        |
 |                     |it defaults to the sites’s           |                        |
 |                     |“files/preview” directory.           |                        |

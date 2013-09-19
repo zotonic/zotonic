@@ -15,7 +15,7 @@ To store data in a key, use ``m_tkvstore:put/4``, as follows::
 
   m_tkvstore:put(KeyType, KeyVar, Value, Context).
 
-For instance, from within Erlang, let's store `edge data` for a given
+For instance, from within Erlang, let’s store `edge data` for a given
 edge id, 3434::
 
   Edgeid = 3434,

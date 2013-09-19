@@ -14,7 +14,7 @@
    site you are looking at is called ``zotonic_status``, which is the
    default site for when there are no "real" sites configured
    yet. **note**: don't bother to log in yet on this screen; that will
-   come later (if you're interested, see :ref:`tutorial-zotonic_status`)
+   come later (if you’re interested, see :ref:`tutorial-zotonic_status`)
 
 7. Stop Zotonic, by pressing ctrl-c twice in the terminal.
 

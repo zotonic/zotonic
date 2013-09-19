@@ -3,7 +3,7 @@
 
 Retrieve a value from the Zotonic visitor record.
 
-The visitor record's value for the ``key`` argument is returned::
+The visitor record’s value for the ``key`` argument is returned::
 
   http://localhost:8000/api/base/persistent_get?key=foo
 
