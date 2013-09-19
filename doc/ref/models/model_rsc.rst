@@ -136,6 +136,12 @@ A resource has the following properties accessible from the templates:
 |publication_end    |End date of the publication period. Returns a        |{{9999,8,17},{12,0,0}}          |
 |                   |datetime tuple.                                      |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
+|is_published_date  |If this page is published and the current date/time  |true                            |
+|                   |is within the set publication_start/end range.       |                                |
+|                   |Note that no ACL checks are performed, use           |                                |
+|                   |`is_visible` to check if a resource is visible for   |                                |
+|                   |the current user.                                    |                                |
++-------------------+-----------------------------------------------------+--------------------------------+
 |visible_for        |Visibility level. Returns an integer. 0 = world      |0                               |
 |                   |visible, 1 = only for logged on users, 2 = only for  |                                |
 |                   |group members, 3 = only for current user.            |                                |

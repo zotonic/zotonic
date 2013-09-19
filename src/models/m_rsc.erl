@@ -327,6 +327,21 @@ is_me(Id, Context) ->
             false
     end.
 
+is_published_date(Id, Context) ->
+    case rid(Id, Context) of
+        RscId when is_integer(RscId) ->
+            case m_rsc:p_no_acl(RscId, is_published, Context) of
+                true ->
+                    Date = calendar:local_time(),
+                    m_rsc:p_no_acl(RscId, publication_start, Context) =< Date 
+                      andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
+                false ->
+                    false
+            end;
+        _ ->
+            false
+    end.
+
 
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
@@ -377,6 +392,7 @@ p_no_acl(Id, is_me, Context) -> is_me(Id, Context);
 p_no_acl(Id, is_visible, Context) -> is_visible(Id, Context);
 p_no_acl(Id, is_editable, Context) -> is_editable(Id, Context);
 p_no_acl(Id, is_deletable, Context) -> is_deletable(Id, Context);
+p_no_acl(Id, is_published_date, Context) -> is_published_date(Id, Context);
 p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);
 p_no_acl(Id, page_url_abs, Context) -> 
