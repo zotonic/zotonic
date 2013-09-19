@@ -1,4 +1,3 @@
-
 .. index:: tag; url
 .. _tag-url:
 
@@ -21,7 +20,7 @@ Arguments not named in the path of the dispatch rule are added to the query stri
 
    {% url admin_edit_rsc id=42 foo="bar" %}
 
-Returns the url “/admin/edit/42?foo=bar”.
+Returns the url "/admin/edit/42?foo=bar".
 
 Please note that the best way to generate the url of a page (resource) is to use::
 
@@ -32,4 +31,4 @@ protocol, hostname and port of the website (as seen by the user agent)::
 
    {% url admin_edit_rsc id=42 foo="bar" %}
 
-Will return an url like “http://example.com/admin/edit/42?foo=bar”.
+Will return a url like http://example.com/admin/edit/42?foo=bar.
