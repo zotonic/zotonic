@@ -119,7 +119,7 @@ alike.
 
 Whenever you struggle to find a solution to a specific problem, fail
 to find a Cookbook item that addresses it, and work through the
-solution with a final "Aha!," you have the raw material for an
+solution with a final “Aha!,” you have the raw material for an
 excellent Cookbook submission.
 
 A well-written item has four sections:
@@ -144,7 +144,7 @@ architecture and conventions etc.
 **HOW**: Step-by-step instructions for implementing your solution.
 
 Don't take user competency for granted. When you specify a command,
-note what user name you're working under and what directory you're
+note what user name you're working under and what directory you are
 working in.  Respect the noobies by including steps that may be
 obvious to you but not so obvious to folks with less experience.
 
@@ -153,15 +153,24 @@ achieve success by reading, implementing and checking off each
 instruction. Keep your instructions simple, complete, and clear.
 
 Recruit a noobie to try out your solution. Fix the stumbling blocks
-s/he encounters. If you can't find a noobie, put yourself in noobie
+s/he encounters. If you can’t find a noobie, put yourself in noobie
 mind. Remember, you too once were one.
 
 
+Quotes
+------
 
+Basically, there are two kinds of quotes. There are “curly quotes” and "straight quotes".
 
+In text we use the curly quotes and not the non-curly quotes, as the non-curly ones are really inch marks.
 
+If a programmatic value is described then use two back-ticks, to make the text fixed width.
+So something like: `if else` and not "if else", or “if else”.
 
-  
+Same holds for the ’ in words like it’s, that is a curly one, and not a foot.
+
+Use ' (foot) and " (inch) in programming texts, as that is what is used in the programming language.
+
 .. seealso:: :ref:`dev-contributing`
 
    
