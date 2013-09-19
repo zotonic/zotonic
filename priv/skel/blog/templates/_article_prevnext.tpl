@@ -1,6 +1,3 @@
-  {{ [[1990,10,10],[10,11,12]]|date:"j F Y - H:i:s" }}
-  {{ [1990,10,10]|date:"j F Y" }}
-  
 {% cache 3600 cat='article' vary=id %}
 
 <div class="prevnext">
