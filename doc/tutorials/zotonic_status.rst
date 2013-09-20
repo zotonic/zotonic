@@ -49,7 +49,7 @@ to check whether all of your sites are still running::
 It returns a JSON response of ``{"status":"ok"}`` when every Zotonic
 site is running.
 
-`Running` means that a site’s status is not `retrying` or `failed`; so
+``"Running"`` means that a site’s status is not ``"retrying"`` or ``"failed"``; so
 it does not count sites that you have manually stopped from the
 interface.
 
