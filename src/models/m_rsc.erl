@@ -95,12 +95,7 @@ m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) ->
 m_find_value(Key, #m{value={is_cat, Id}}, Context) -> 
     is_cat(Id, Key, Context);
 m_find_value(Key, #m{value=Id}, Context) when is_integer(Id) ->
-    case z_acl:rsc_prop_visible(Id, Key, Context) of
-        true ->
-            p_no_acl(Id, Key, Context);
-        false ->
-            undefined
-    end.
+    p(Id, Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
@@ -351,10 +346,16 @@ p(Id, Property, Context) ->
             undefined;
         RId ->
             case z_acl:rsc_visible(RId, Context) of
-                true -> p_no_acl(RId, Property, Context);
-                false -> undefined
+                true -> 
+                    case z_acl:rsc_prop_visible(RId, Property, Context) of
+                        true -> p_no_acl(RId, Property, Context);
+                        false -> undefined
+                    end;
+                false ->
+                    undefined
             end
     end.
+
 %% Fetch property from a resource; but return a default value if not found.
 p(Id, Property, DefaultValue, Context) ->
     case p(Id, Property, Context) of
