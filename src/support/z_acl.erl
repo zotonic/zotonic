@@ -108,7 +108,6 @@ rsc_visible(Id, Context) when is_integer(Id) ->
             is_allowed(view, Id, Context)
     end;
 rsc_visible(RscName, Context) ->
-    ?DEBUG(RscName),
     case m_rsc:rid(RscName, Context) of
         undefined -> true;
         RscId -> rsc_visible(RscId, Context)
