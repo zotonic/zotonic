@@ -3,8 +3,7 @@
 
 Enables the Zotonic site to receive emails for the site’s users. The
 user’s email address is `username@hostname`, where the hostname is the
-hostname as configured in the :ref:`sites`’s config file
-<manual-site-anatomy>`.
+hostname as configured in the :ref:`site’s config file <manual-site-anatomy>`.
 
 Any email that has no valid recipient is rejected.
 
