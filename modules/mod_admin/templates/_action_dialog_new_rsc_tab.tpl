@@ -20,18 +20,20 @@
 	    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
 	    <div class="controls">
 		{% if cat and nocatselect %}
-		<input type="text" readonly value="{{ m.rsc[cat].title }}" class="input-block-level" />
-		<input type="hidden" name="category_id" value="{{ cat }}"/>
+			<input type="text" readonly value="{{ m.rsc[cat].title }}" class="input-block-level" />
+			<input type="hidden" name="category_id" value="{{ cat }}"/>
 		{% else %}
-		<select id="{{ #category }}" name="category_id" class="input-block-level">
-		    {% for cat_id, level, indent, name in m.category.all_flat %}
-		    {% if m.acl.insert[name|as_atom] %}
-		    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
-			{{ indent }}{{ m.rsc[cat_id].title|default:name }}
-		    </option>
-		    {% endif %}
-		    {% endfor %}
-		</select>
+			{% block category_select %}
+			<select id="{{ #category }}" name="category_id" class="input-block-level">
+			    {% for cat_id, level, indent, name in m.category.all_flat %}
+			    {% if m.acl.insert[name|as_atom] %}
+			    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
+				{{ indent }}{{ m.rsc[cat_id].title|default:name }}
+			    </option>
+			    {% endif %}
+			    {% endfor %}
+			</select>
+			{% endblock %}
 		{% endif %}
 	    </div>
 	</div>
