@@ -6,7 +6,7 @@ setTimeout(function() {
 		}});
 	}, 1);
 	
-	$('.language-tabs > li > a[data-toggle="tab"]').live('shown', function (e) {
+	$('.language-tabs').on('shown', '> li > a[data-toggle="tab"]', function (e) {
 		if (e.target != e.relatedTarget) {
 			var lang = $(e.target).parent().attr('lang');
 			$("li[lang='"+lang+"']:visible > a").tab('show');
