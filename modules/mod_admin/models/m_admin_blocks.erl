@@ -36,7 +36,7 @@ m_find_value(Id, #m{value=list}, Context) ->
     lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)).
 
 %% @spec m_to_list(Source, Context) -> List
-m_to_list(_, Context) ->
+m_to_list(_, _Context) ->
     undefined.
 
 %% @spec m_value(Source, Context) -> term()
