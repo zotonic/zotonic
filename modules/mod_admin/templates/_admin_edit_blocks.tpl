@@ -10,6 +10,8 @@
 </div>
 {% endwith %}
 
+{% all include "_admin_edit_blocks_additional.tpl" %}
+
 {% javascript %}
 $('#edit-blocks').sortable({ 
     helper: 'clone',
