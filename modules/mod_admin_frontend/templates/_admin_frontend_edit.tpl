@@ -4,6 +4,10 @@
 	$('#save-buttons').hide().fadeIn();
 {% endjavascript %}
 
+{% block tinymce_init %}
+	{% catinclude "_admin_frontend_tinymce_init.tpl" id %}
+{% endblock %}
+
 {% with id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 {% wire id="rscform" type="submit" postback="rscform" delegate=`controller_admin_edit` %}

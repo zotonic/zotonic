@@ -27,7 +27,14 @@
 				<div class="span8" id="editcol">
 				{% block editcol %}
 					{% if id %}
-						{% catinclude "_admin_frontend_edit.tpl" id tree_id=tree_id %}
+						{% lazy action={update
+											target="editcol"
+											id=id
+											template="_admin_frontend_edit.tpl"
+											catinclude
+											tree_id=tree_id
+									   }
+						%}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
@@ -94,7 +101,6 @@
 		"js/pubzub.js"
 
     	"js/modules/jquery.hotkeys.js"
-	    "js/modules/frontend-tiny-init.js"
 	    "js/modules/z.adminwidget.js"
 	    "js/modules/z.tooltip.js"
 	    "js/modules/z.feedback.js"
@@ -111,5 +117,5 @@
 	    "js/modules/admin-frontend.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_admin_tinymce.tpl" %}
+	{% include "_admin_tinymce.tpl" is_tinymce_include %}
 {% endblock %}
