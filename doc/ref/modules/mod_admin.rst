@@ -137,13 +137,16 @@ when the checkbox has never been touched.
 Configuration keys
 ------------------
 
-For the admin there is one configuration key: ``mod_admin.rsc_dialog_tabs``
-It defines which tabs are shown in the new resource, media-upload, and image-link dialogs.
+For the admin there are two configuration keys: ``mod_admin.rsc_dialog_tabs`` and ``mod_admin.rsc_dialog_is_published``.
+
+The ``mod_admin.rsc_dialog_tabs`` key defines which tabs are shown in the new resource, media-upload, and image-link dialogs.
 Per defauls these dialogs show all the possible tabs, with this configurarion key it is possible to change that.
 
 The tabs are: ``find,new,upload,url,embed,oembed,depiction``
 
 The ``depiction`` is used for the TinyMCE image-link dialog; it shows all media connected using the ``depiction`` predicate.
 
+The ``mod_admin.rsc_dialog_is_published`` defines the default *is_published* state for new resources being mad in the *new* tab.
+Setting this key to `1` will check the *is_published* checkbox.
 
 .. seealso:: :ref:`filter-if_undefined`
