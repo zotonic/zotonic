@@ -133,4 +133,17 @@ And on the edit page there is this check to conditionally include the geodata bo
 The ``if_undefined`` is used so that the default value can be true
 when the checkbox has never been touched.
   
+
+Configuration keys
+------------------
+
+For the admin there is one configuration key: ``mod_admin.rsc_dialog_tabs``
+It defines which tabs are shown in the new resource, media-upload, and image-link dialogs.
+Per defauls these dialogs show all the possible tabs, with this configurarion key it is possible to change that.
+
+The tabs are: ``find,new,upload,url,embed,oembed,depiction``
+
+The ``depiction`` is used for the TinyMCE image-link dialog; it shows all media connected using the ``depiction`` predicate.
+
+
 .. seealso:: :ref:`filter-if_undefined`

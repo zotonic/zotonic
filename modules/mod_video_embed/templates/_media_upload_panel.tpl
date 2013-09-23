@@ -1,4 +1,6 @@
 {# Panel for defining the embed code #}
+{% if not tabs_enabled or "embed"|member:tabs_enabled %}
+
 {% with id.medium as medium %}
 {% with medium.mime == "text/html-video-embed" as is_video_embed %}
 <div class="tab-pane" id="{{ tab }}-embed">
@@ -45,3 +47,5 @@
 
 {% endwith %}
 {% endwith %}
+
+{% endif %}
