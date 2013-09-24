@@ -331,6 +331,8 @@ is_published_date(Id, Context) ->
                     m_rsc:p_no_acl(RscId, publication_start, Context) =< Date 
                       andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
                 false ->
+                    false;
+                undefined ->
                     false
             end;
         _ ->
