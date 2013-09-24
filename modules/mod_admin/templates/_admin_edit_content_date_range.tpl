@@ -25,7 +25,9 @@
         <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
     </div>
 
-    {% with (not id.date_start|date:"H:i" and not id.date_end|date:"H:i") as is_whole_day %}
+    {% with id.date_start|date:"H:i" as start_hi %}
+    {% with id.date_end|date:"H:i" as end_hi %}
+    {% with (not start_hi or start_hi=='00:00') and (not end_hi or end_hi == '23:59') as is_whole_day %}
     <div class="date-range">
         <div class="control-group">
             <div class="controls">
@@ -57,5 +59,7 @@
             </div>
         </div>
     </div>
+    {% endwith %}
+    {% endwith %}
     {% endwith %}
 {% endblock %}
