@@ -28,8 +28,11 @@ stringify(L, Context) when is_list(L) ->
 stringify(X, Context) ->
 	stringify_1(X, Context).
 
+%% Recursive stringify - safe to be applied in lists (where integers are assumed to be characters)
 stringify_1(undefined, _Context) ->
     <<>>;
+stringify_1({{_Y,_M,_D},{_H,_I,_S}} = Date, Context) ->
+	erlydtl_dateformat:format(Date, "Y-m-d H:i:s", Context);
 stringify_1(B, _Context) when is_binary(B) ->
     B;
 stringify_1(C, _Context) when C >= 0, C =< 255 ->
