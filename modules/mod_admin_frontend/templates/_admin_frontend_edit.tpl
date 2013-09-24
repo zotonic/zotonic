@@ -5,7 +5,7 @@
 {% endjavascript %}
 
 {% block tinymce_init %}
-	{% catinclude "_admin_frontend_tinymce_init.tpl" id %}
+	{% catinclude "_admin_frontend_tinymce_init.tpl" id tree_id=tree_id %}
 {% endblock %}
 
 {% with id.is_editable as is_editable %}
