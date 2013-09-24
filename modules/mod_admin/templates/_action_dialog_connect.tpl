@@ -5,6 +5,7 @@
 {% with tabs_enabled|default:(m.config.mod_admin.rsc_dialog_tabs.value|split:",") as tabs_enabled %}
 {% with tab|default:q.tab|default:(tabs_enabled|first)|default:"find" as tab %}
 <ul class="nav nav-pills">
+    {% block tabs %}
 	{% if in_sorter == "category" %}
 	    {% if "new"|member:tabs_enabled %}
             <li class="active">
@@ -43,9 +44,11 @@
 	    {% endif %}
    	    {% all include "_media_upload_tab.tpl" tab=#tab %}
 	{% endif %}
+    {% endblock %}
 </ul>
 
 <div class="tab-content" id="dialog-connect-panels">
+    {% block tabs_content %}
 	{% if in_sorter == "category" %}
 	    {# only one tab, so no conditional #}
             {% include "_action_dialog_connect_tab_new.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active
@@ -83,6 +86,7 @@
             {% all include "_media_upload_panel.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" delegate=delegate %}
 		{% endwith %}
 	{% endif %}
+    {% endblock %}
 </div>
 {% endwith %}
 {% endwith %}
