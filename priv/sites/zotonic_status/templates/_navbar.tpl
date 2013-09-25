@@ -3,7 +3,7 @@
     <div class="navbar-inner">
         <div class="container">
 	    
-            <a class="brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/zotonic.png" width="106" height="20"></a>
+            <a class="brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/zotonic_gray.png" width="106" height="20"></a>
 
             <div class="nav-collapse pull-right">
                 <ul class="nav">
