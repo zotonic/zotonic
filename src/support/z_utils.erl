@@ -359,7 +359,7 @@ js_object1([{Key,Value}|T], Acc, OptContext) ->
 
 js_prop_value(_, undefined, _OptContext) -> <<"null">>;
 js_prop_value(_, true, _OptContext) -> <<"true">>;
-js_prop_value(_, false, _OptContext) -> <<"true">>;
+js_prop_value(_, false, _OptContext) -> <<"false">>;
 js_prop_value(_, Atom, _OptContext) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(Atom)), $"];
 js_prop_value(pattern, [$/|T]=List, OptContext) ->
     %% Check for regexp
