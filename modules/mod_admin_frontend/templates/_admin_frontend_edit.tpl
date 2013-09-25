@@ -88,6 +88,8 @@
 
 	{# Hidden safe buttons and publish state - controlled via the nabvar #}
 	<div style="display: none">
+		<span id="button-prompt">{% block nav_prompt %}{_ This _} {{ id.category_id.title }}{% endblock %}</span>
+
 		{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
 	
 		{% if id.is_editable %}
@@ -99,3 +101,7 @@
 </form>
 {% endwith %}
 {% endwith %}
+
+{% javascript %}
+	$("#save-buttons .brand").html($('#button-prompt').html());
+{% endjavascript %}

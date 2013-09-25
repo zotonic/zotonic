@@ -60,7 +60,7 @@
 		<div class="row-fluid">
 			<div class="span4">
 				{% block close_button %}
-					<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
+					<a href="{{ id.page_url }}" class="btn">{_ Close _}x</a>
 				{% endblock %}
 			</div>
 			<div class="span8" id="save-buttons" style="display:none">
@@ -74,19 +74,9 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
-{#
-				<label for="is_published_navbar" class="checkbox inline">
-		    		<input type="checkbox" id="is_published_navbar" name="is_published_navbar" value="1" checked="checked" />
-		    	    {_ Published _}
-	    	    </label>
-	    	    {% javascript %}
-	    	    	$('#is_published_navbar').change(function() {
-	    	    		$('#is_published').attr('checked', $(this).is(':checked'));
-		    	    });
-	    	    {% endjavascript %}
-#}
-
-				{% button class="btn pull-right" text=_"Cancel" action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" %}
+				{% button class="btn pull-right" text=_"Cancel" 
+						  action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" 
+				%}
 	    	</div>
 		</div>
 	</div>
