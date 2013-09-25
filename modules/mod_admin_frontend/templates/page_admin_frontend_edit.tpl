@@ -15,7 +15,7 @@
 
 {% block content_area %}
 	{% with id|menu_rsc as tree_id %}
-	{% with {postback postback={admin_menu_edit} delegate=`mod_admin_frontend`} as admin_menu_edit_action %}
+	{% with `none` as admin_menu_edit_action %}
 	<div class="row-fluid">
 		{% with m.rsc[tree_id].id as tree_id %}
 			{% if tree_id and tree_id.is_visible %}
@@ -27,14 +27,11 @@
 				<div class="span8" id="editcol">
 				{% block editcol %}
 					{% if id %}
-						{% lazy action={update
-											target="editcol"
-											id=id
-											template="_admin_frontend_edit.tpl"
-											catinclude
-											tree_id=tree_id
-									   }
-						%}
+						{% javascript %}
+							setTimeout(10, function() {
+								window.location.hash = '#edit-id='+id;
+							});
+						{% endjavascript %}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}

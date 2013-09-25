@@ -53,16 +53,26 @@
 	{% endblock %}
 
 	<div class="row-fluid meta-extra" id="meta-extra" style="display:none">
-		{% if m.modules.info.mod_translation.enabled %}
-		<fieldset>
-			<legend>{_ Language _}</legend>
-			{% optional include "_translation_edit_languages.tpl" %}
-		</fieldset>
-		{% endif %}
-		<fieldset>
-			<legend>{_ Access control _}</legend>
-			{% include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
-		</fieldset>
+		<ul class="nav nav-tabs">
+			{% block meta_tabs %}{% endblock %}
+			{% if m.modules.info.mod_translation.enabled %}
+				<li><a href="#meta-language" data-toggle="tab">{_ Language _}</a></li>
+			{% endif %}
+			<li><a href="#meta-acl" data-toggle="tab">{_ Access control _}</a></li>
+		</ul>
+		<div class="tab-content">
+			{% block meta_panels %}{% endblock %}
+			<div class="tab-pane" id="meta-language">
+				{% optional include "_translation_edit_languages.tpl" %}
+			</div>
+			<div class="tab-pane" id="meta-acl">
+				{% include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+			</div>
+		</div>
+
+		{% javascript %}
+			$('#meta-extra .nav-tabs a:first').tab('show');
+		{% endjavascript %}
 	</div>
 
 	<div id="poststuff">
