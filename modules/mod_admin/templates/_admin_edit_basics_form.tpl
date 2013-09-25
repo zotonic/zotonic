@@ -1,5 +1,5 @@
 {% with m.rsc[id] as r %}
-{% with m.rsc[id].is_editable as is_editable %}
+{% with not id or m.rsc[id].is_editable as is_editable %}
 <fieldset>
     <div class="control-group">
 	<label class="control-label" for="{{ #title }}{{ lang_code_for_id }}">{_ Title _} {{ lang_code_with_brackets }}</label>
