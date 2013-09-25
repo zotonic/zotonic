@@ -6,9 +6,11 @@
 					cat=cat_id
 					in_sorter=in_sorter}
 %}
-{% wire name="admin-menu-edit" 
-		action=admin_menu_edit_action|default:{dialog_edit_basics callback="window.zMenuEditDone"} 
-%}
+{% if admin_menu_edit_action /= `none` %}
+	{% wire name="admin-menu-edit" 
+			action=admin_menu_edit_action|default:{dialog_edit_basics callback="window.zMenuEditDone"} 
+	%}
+{% endif %}
 
 {% javascript %}
 
@@ -18,7 +20,6 @@ $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id).html(title);
 	};
-	$('#rscform').mask();
 	z_event("admin-menu-edit", { id: id, tree_id: {{ tree_id|default:"undefined" }} });
 	e.preventDefault();
 });
