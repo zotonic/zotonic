@@ -455,7 +455,9 @@ ul.connections-list li {
 ul.connections-list li .btns {
     top: -2px;
 }
-
+a span.category {
+    color: #bbb;
+}
 #unlink-undo-message div.alert {
     padding-right: 14px; /* right-aligned undo button in page connections */
 }
