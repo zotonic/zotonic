@@ -35,7 +35,7 @@ stringify_1({{_Y,_M,_D},{_H,_I,_S}} = Date, Context) ->
 	erlydtl_dateformat:format(Date, "Y-m-d H:i:s", Context);
 stringify_1(B, _Context) when is_binary(B) ->
     B;
-stringify_1(C, _Context) when C >= 0, C =< 255 ->
+stringify_1(C, _Context) when is_integer(C), C >= 0, C =< 255 ->
     C;
 stringify_1({trans, _Tr} = Tr, Context) ->
     z_trans:lookup_fallback(Tr, Context);
