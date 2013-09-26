@@ -37,7 +37,7 @@ stringify_1(B, _Context) when is_binary(B) ->
     B;
 stringify_1(C, _Context) when C >= 0, C =< 255 ->
     C;
-stringify_1({trans, Tr}, Context) ->
+stringify_1({trans, _Tr} = Tr, Context) ->
     z_trans:lookup_fallback(Tr, Context);
 stringify_1(N, _Context) when is_integer(N); is_float(N); is_atom(N) ->
     z_convert:to_binary(N);
