@@ -127,8 +127,12 @@ render(#context{} = C, Context) ->
     C1 = render(C#context.render, Context),
     C2 = z_context:merge_scripts(C, C1),
     C2;
-render(B, Context) when is_integer(B) orelse is_binary(B) -> 
+render(B, Context) when is_binary(B) -> 
     Context#context{render=[Context#context.render, B]};
+render(N, Context) when is_integer(N), N >= 0, N =< 255 -> 
+    Context#context{render=[Context#context.render, N]};
+render(N, Context) when is_integer(N) -> 
+    Context#context{render=[Context#context.render, z_convert:to_binary(N)]};
 render(A, Context) when is_atom(A) -> 
     Context#context{render=[Context#context.render, atom_to_list(A)]};
 render(List=[H|_], Context) when is_integer(H) orelse is_binary(H) ->
@@ -142,7 +146,9 @@ render(List=[H|_], Context) when is_integer(H) orelse is_binary(H) ->
 render({trans, _} = Tr, Context) ->
     render(z_trans:lookup_fallback(Tr, Context), Context);
 render({{_,_,_},{_,_,_}} = D, Context) ->
-    render(filter_date:date(D, "Y-m-d H:i:s", Context), Context);
+    render(filter_stringify:stringify(D, Context), Context);
+render(F, Context) when is_float(F) ->
+    render(filter_stringify:stringify(F, Context), Context);
 render(T, Context) when is_tuple(T) ->
     render(iolist_to_binary(io_lib:format("~p", [T])), Context);
 render([H|T], Context) ->
