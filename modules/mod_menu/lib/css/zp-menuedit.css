@@ -42,6 +42,7 @@ ul.tree-list li img.grippy {
 
 ul.tree-list .active {
     font-weight: bold;
+    background: #f0f0ff;
 }
 ul.tree-list .active .menu-edit {
     opacity: 0.5;
