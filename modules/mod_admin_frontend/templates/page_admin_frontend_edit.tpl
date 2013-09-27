@@ -71,9 +71,7 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
-				{% button class="btn pull-right" text=_"Cancel" 
-						  action={update target="editcol" template="_admin_frontend_nopage.tpl"} tag="a" 
-				%}
+				{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
 	    	</div>
 		</div>
 	</div>

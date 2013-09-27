@@ -71,7 +71,9 @@ ensure_id(Context) ->
 
 
 %% @doc Handle the submit of the resource edit form
-event(#submit{message=rscform}, Context) ->
+event(#submit{message=rscform} = Msg, Context) ->
+    event(Msg#submit{message={rscform, []}}, Context);
+event(#submit{message={rscform, Args}}, Context) ->
     Post = z_context:get_q_all_noz(Context),
     Props = filter_props(Post),
     Id = z_convert:to_integer(proplists:get_value("id", Props)),
@@ -81,8 +83,13 @@ event(#submit{message=rscform}, Context) ->
         {ok, _} -> 
             case proplists:is_defined("save_view", Post) of
                 true ->
-                    PageUrl = m_rsc:p(Id, page_url, Context),
-                    z_render:wire({redirect, [{location, PageUrl}]}, Context);
+                    case proplists:get_value(view_location, Args) of
+                        undefined ->
+                            PageUrl = m_rsc:p(Id, page_url, Context),
+                            z_render:wire({redirect, [{location, PageUrl}]}, Context);
+                        Location ->
+                            z_render:wire({redirect, [{location, Location}]}, Context)
+                    end;
                 false ->
                     case m_rsc:p(Id, category_id, Context) of
                         CatBefore ->

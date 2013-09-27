@@ -8,9 +8,11 @@
 	{% catinclude "_admin_frontend_tinymce_init.tpl" id tree_id=tree_id %}
 {% endblock %}
 
+{% block rscform %}
+
 {% with id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
-{% wire id="rscform" type="submit" postback="rscform" delegate=`controller_admin_edit` %}
+{% wire id="rscform" type="submit" postback={rscform view_location=view_location} delegate=`controller_admin_edit` %}
 <form id="rscform" method="post" action="postback" class="form-horizontal">
 	<input type="hidden" name="id" value="{{ id }}" />
 
@@ -100,13 +102,15 @@
 	<div style="display: none">
 		<span id="button-prompt">{% block nav_prompt %}{_ This _} {{ id.category_id.title }}{% endblock %}</span>
 
-		{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
-	
-		{% if id.is_editable %}
-			{% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
-		{% else %}
-			{% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
-		{% endif %}
+		{% block buttons %}
+			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
+		
+			{% if id.is_editable %}
+				{% button type="submit" id="save_view" class="btn" text=_"Save &amp; view" title=_"Save and view the page." %}
+			{% else %}
+				{% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
+			{% endif %}
+		{% endblock %}
 	</div>
 </form>
 {% endwith %}
@@ -115,3 +119,6 @@
 {% javascript %}
 	$("#save-buttons .brand").html($('#button-prompt').html());
 {% endjavascript %}
+
+{% endblock %}
+
