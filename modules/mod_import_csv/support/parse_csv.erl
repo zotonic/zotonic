@@ -72,11 +72,9 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
         % Escaped characters
 
         {<<_Field:Index/binary, $\\, 13, 10, _Rest/binary>>, _} ->
-            lager:warning("Escaped NL"),
             scan_lines(Device, Fs, Chunk, Index + 3, Acc, Remainder, Quoted);
 
         {<<_Field:Index/binary, $\\, _, _Rest/binary>>, _} ->
-            lager:warning("Escaped Char"),
             scan_lines(Device, Fs, Chunk, Index + 2, Acc, Remainder, Quoted);
 
         % Quoted ----
