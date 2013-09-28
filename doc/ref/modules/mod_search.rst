@@ -76,8 +76,11 @@ implemented in `mod_search`:
 |                        |month, and includes counts. The order is descending, newest    |                   |
 |                        |year first.                                                    |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|keyword_cloud           |Return a list of ``{keyword_id, count}`` for all resources     |cat                |
-|                        |within a given category. The list is ordered on keyword title. |                   |
+|keyword_cloud           |Return a list of ``{keyword_id, count}`` for all resources     |cat, keywordpred,  |
+|                        |within a given category. The list is ordered on keyword title. |keywordcat         |
+|                        |Default predicate is ``subject``, default category is          |                   |
+|                        |``keyword``. Change optional ``keywordpred`` and ``keywordcat``|                   |
+|                        |to create a different cloud.                                   |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |previous                |Given an id, return a list of "previous" ids in the given      |id, cat            |
 |                        |category. This list is ordered by publication date, latest     |                   |

@@ -206,14 +206,18 @@ search({previous, Args}, _OffsetLimit, Context) ->
 search({next, Args}, _OffsetLimit, Context) ->
     search_prevnext(next, Args, Context);
 
-search({keyword_cloud, [{cat, Cat}]}, _OffsetLimit, Context) ->
-    Subject = m_predicate:name_to_id_check(subject, Context),
+search({keyword_cloud, Props}, _OffsetLimit, Context) ->
+    Cat = proplists:get_value(cat, Props),
+    KeywordCatName = proplists:get_value(keywordcat, Props, "keyword"),
+    KeywordCat = list_to_atom(KeywordCatName),    
+    KeywordPredName = proplists:get_value(keywordpred, Props, "subject"),
+    Subject = m_predicate:name_to_id_check(KeywordPredName, Context),
     #search_sql{
         select="kw.id as id, count(*) as count",
         from="rsc kw, edge e, rsc r",
         where="kw.id = e.object_id AND e.predicate_id = $1 AND e.subject_id = r.id",
         tables=[{rsc, "kw"}, {edge, "e"}, {rsc, "r"}],
-        cats=[{"kw", keyword}, {"r", Cat}],
+        cats=[{"kw", KeywordCat}, {"r", Cat}],
         args=[Subject],
         group_by="kw.id, kw.pivot_title",
         order="kw.pivot_title"
