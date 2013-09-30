@@ -71,25 +71,14 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, Subj
 
 
 event(#submit{message={new_page, Args}}, Context) ->
-    Title   = z_context:get_q("new_rsc_title", Context),
-    CatId   = list_to_integer(z_context:get_q("category_id", Context)),
-    IsPublished = z_context:get_q("is_published", Context),
-    Name = z_context:get_q("name", Context),
     Redirect = proplists:get_value(redirect, Args),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
 
-    Lang = z_context:language(Context),
-    Props = [
-        {category_id, CatId},
-        {title, {trans, [{Lang, Title}]}},
-        {is_published, IsPublished},
-        {name, Name},
-        {language, [Lang]}
-    ],
-    {ok, Id} = m_rsc_update:insert(Props, Context),
+    BaseProps = get_base_props(z_context:get_q("new_rsc_title", Context), Context),
+    {ok, Id} = m_rsc_update:insert(BaseProps, Context),
 
     % Optionally add an edge from the subject to this new resource
     {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context),
@@ -108,3 +97,19 @@ event(#submit{message={new_page, Args}}, Context) ->
             Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
+
+get_base_props(undefined, Context) ->
+    z_context:get_q_all_noz(Context);
+get_base_props(NewRscTitle, Context) ->
+    Lang = z_context:language(Context),
+    CatId = list_to_integer(z_context:get_q("category_id", Context)),
+    IsPublished = z_context:get_q("is_published", Context),
+    Name = z_context:get_q("name", Context),
+    [
+        {title, {trans, [{Lang, NewRscTitle}]}},
+        {language, [Lang]},
+        {name, Name},
+        {category_id, CatId},
+        {is_published, IsPublished}
+    ].
+
