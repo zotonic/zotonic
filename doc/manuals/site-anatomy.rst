@@ -121,7 +121,7 @@ The following options can be configured:
   The domain the Zotonic session-id and page-id cookies will be set
   on. Defaults to the main hostname.
 
-  
+
 Database connection options
 ...........................
 
@@ -134,8 +134,33 @@ The following options for your site config specify how it connects to the databa
 - dbdatabase
 - dbschema
 
- 
 
+Setting module-specific config values in the site config
+........................................................
+
+It is also possible to add :ref:`model-config` values for modules to
+the site's ``priv/sitename/config file``. To do this, add clauses like
+this to the site's config file::
+
+  {mod_foo, [{key, value}, ...]}
+
+For instance, to set the ``mod_ssl.listen_port`` and
+``mod_ssl.is_secure`` configuration options from :ref:`mod_ssl`, do::
+
+  {mod_ssl, [{listen_port, 443}, {is_secure, true}]}
+
+
+Reloading the site config
+.........................
+
+After you make changes to the site config you have to restart your
+site for them to have effect. From the Zotonic shell, do::
+
+  z_sites_manager:restart(yoursitename).
+  
+to restart your site.
+
+  
 Tip: using symlinks for easy development
 --------------------------------------------
 
