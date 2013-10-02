@@ -91,6 +91,10 @@ init(Host) ->
                 {z_pivot_rsc, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
+    MediaCleanup = {z_media_cleanup_server,
+                {z_media_cleanup_server, start_link, [SiteProps]}, 
+                permanent, 5000, worker, dynamic},
+
     ModuleIndexer = {z_module_indexer,
                 {z_module_indexer, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -105,7 +109,7 @@ init(Host) ->
 
     Processes = [
             Notifier, Depcache, Translation, Installer, Session, 
-            Dispatcher, Template, MediaClass, DropBox, Pivot,
+            Dispatcher, Template, MediaClass, DropBox, Pivot, MediaCleanup,
             ModuleIndexer, Modules,
             PostStartup
     ],
