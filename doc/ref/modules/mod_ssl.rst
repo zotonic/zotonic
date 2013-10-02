@@ -165,6 +165,26 @@ Note that the resulting key file *must* be named :file:`sitename.pem` where *sit
 the site the key is placed in.
 
 
+Using SSL certificates
+----------------------
+
+If you order a SSL certificate, the signing authority will ask you which kind of web server you are using and a CSR file.
+For the web server, select *other*. For the CSR, use the following command (replace ``sitename`` with
+the name of your site)::
+
+    openssl req -out sitename.csr -new -newkey rsa:2048 -nodes -keyout sitename.key
+
+When OpenSSL asks for the *Common Name* then fill in the site’s hostname (e.g. *www.example.com*).
+
+The resulting ``.key`` file can be converted to a ``.pem`` file::
+
+    openssl rsa -in sitename.key -out sitename.pem
+
+From the SSL certificate authority you will receive a signed ``.crt`` file.
+
+See the section *Certificate and key files* above for instructions how to use the ``.crt`` and ``.pem`` files.
+
+
 Generating the self signed certificate
 --------------------------------------
 
@@ -183,5 +203,5 @@ Optionally, when the key turns out to be in PKCS#8 format, mod_ssl will run the 
 When the key is already in PKCS#1 format (with older openssl installs) then mod_ssl will rename
 the :file:`sitename.key` file to :file:`sitename.pem`.
 
-
 .. todo:: Add SSL/certificate problem solving.
+
