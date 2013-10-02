@@ -85,7 +85,10 @@ observe_cookie_options(#cookie_options{name=Name}, Options, Context) ->
 	end.
 
 is_ssl(Context) ->
-	wrq:is_ssl(z_context:get_reqdata(Context)).
+        case z_context:get_reqdata(Context) of
+                undefined -> false;
+                RD -> wrq:is_ssl(RD)
+        end.
 
 is_secure_cookie("z_sid") -> true;
 is_secure_cookie("z_logon") -> true;
