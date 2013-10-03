@@ -12,6 +12,7 @@
         {% endif %}
     {% endblock %}
     <div class="widget-content">
+        {% block widget_content_nolang_before %}{% endblock %}
     	{% block widget_content %}{% endblock %}
         {% block widget_content_nolang %}{% endblock %}
     </div>
