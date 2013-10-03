@@ -1,0 +1,638 @@
+#!/usr/bin/env python
+#
+# Copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+# Copyright 2013 Mawuli Adzaku <mawuli@mawuli.me>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Zotonic Module Manager
+# Modules are by default pulled from modules.zotonic.com
+#
+# Usage:
+# $ bin/zotonic modules <subcommand> [OPTIONS]
+# $ bin/zotonic modules --help
+#
+
+
+# version
+__version__ = "0.1.0"
+_VERSION = 'Zotonic Module Manager - version ' + __version__
+
+# usage
+_USAGE = """ bin/zotonic modules <subcommand> [options]
+
+Commands:
+  install    <module> [module2, ...]      Install a module
+  uninstall  <module> [module2, ...]      Uninstall a module
+  activate   <module> [module2, ...]      Activate a module
+  deactivate <module> [module2, ...]      Deactivate a module
+  update     <module> [module2, ...]      Update a module
+  restart    <module> [module2, ...]      Restart a module
+  reinstall  <module> [module2, ...]      Reinstall a module
+  list                                    List all modules avaiable on the Zotonic Module Repository
+  search     <query>                      Search for a module
+"""
+
+from urlparse import urlparse
+import subprocess
+import optparse
+import urllib
+import sys
+import os
+import re
+
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+SITES_DIR = os.path.join(os.environ['ZOTONIC'], 'priv', 'sites')
+BASE_MODULE_PATH = os.path.join(os.environ['ZOTONIC'], 'modules')
+ROOT_DIR = os.environ['ZOTONIC']
+ZOTONIC = os.path.join(os.environ['ZOTONIC_BIN'], 'zotonic')
+
+
+class ZMM():
+    """Zotonic Module Manager
+
+    Wraps module related actions into a class
+    """
+    zmr_server = "http://%s/api/zmr/repositories"
+    install_path = os.path.join(ROOT_DIR, 'priv', 'modules')
+
+    def __init__(self):
+        # debug switch
+        self.debug = False
+        self.nodename = os.environ['NODENAME']
+
+    def _scan_modules(self):
+        """Scan for modules
+
+        Looks for modules in the shared modules dircectory and the
+        various site specific module directories
+        """
+        import glob
+
+        # dictionary to hold all Zotonic modules
+        modules = {}
+        glob_pattern = os.path.join(self.install_path, 'mod_*')
+        shared_modules = glob.glob(glob_pattern)
+
+        # get remote repository links
+        modules['priv'] = {}
+        for (module, path) in [(os.path.basename(module), module)
+                               for module in shared_modules]:
+            # get the repo's remote url
+            modules['priv'][module] = {'path': path,
+                                       'url': self._get_repo_url(path)}
+
+        zotonic_sites = self._scan_sites()
+        for site in zotonic_sites:
+            if site not in modules:
+                modules[site] = {}
+            glob_pattern = os.path.join(SITES_DIR, site, "modules/mod_*")
+            site_modules = glob.glob(glob_pattern)
+
+            # get remote repository links
+            for (module, path) in [(os.path.basename(module), module)
+                                   for module in site_modules]:
+                repo_path = os.path.join(path, '.git')
+                scm = 'git' if os.path.exists(repo_path) else 'hg'
+                # get the repo's remote url
+                modules[site][module] = {'path': path,
+                                         'url': self._get_repo_url(path),
+                                         'scm': scm}
+        return modules
+
+    def module_exists(self, module, site=None):
+        """Check if module exists"""
+        if site:
+            modules = self._scan_modules()
+            return site in modules and module in modules[site]
+        else:
+            return os.path.exists(os.path.join(self.install_path, module))
+
+    def _get_repo_url(self, repo_path):
+        """Returns the url to a module's repository master branch"""
+        if os.path.exists(os.path.join(repo_path, '.git')):
+            # repository is a Git repo
+            git_cmd = 'cd %s && git remote -v | grep fetch | cut -f 2 | cut -d " " -f 1'
+            cmd = git_cmd % repo_path
+        else:
+            # assume Mercurial repository
+            # `hg paths` returns 'default = remote_url_here'
+            cmd = "hg paths | head -1 | awk '{print $3}'"
+
+        sh_cmd = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        return sh_cmd.stdout.read().rstrip()
+
+    def is_url(self, module_str):
+        p = urlparse(module_str)
+        return (p.scheme or p.netloc)
+
+    def install(self, module, site=None):
+        """Installs a module"""
+        # parse the module url/name given
+        if self.is_url(module):
+            info = self.parse_repo_url(module)
+            modulename, repo, scm = info['base_name'], info['url'], info['scm']
+            if scm:
+                # clone repository
+                if self._clone_repo(modulename, repo, scm):
+                    print "**", modulename, "OK"
+                    return True
+        else:
+            modulename = module
+        if not re.match("^mod_[a-z_]+$", modulename):
+            # fixme - valid module name
+            print "** Invalid module name:", modulename
+            return False
+
+        # update the install path to point to the given site's install path
+        if site:
+            install_path = os.path.join(SITES_DIR, site, "modules")
+            if os.path.exists(install_path):
+                self.install_path = install_path
+        clonepath = os.path.join(self.install_path, modulename)
+        if os.path.exists(clonepath):
+            print "** %s already installed at %s" % (modulename, clonepath)
+            return False
+
+        if os.path.exists(os.path.join(BASE_MODULE_PATH, modulename)):
+            print "** Module already exists in zotonic core:", clonepath
+            return False
+
+        else:
+            info = [mod for mod in self.search(modulename)
+                    if mod['title'] == modulename]
+            if not info:
+                print "** Module not found:", modulename
+                return False
+            info = info[0]
+
+            # clone repository
+            if self._clone_repo(modulename, info['repository'],
+                                info['scm']):
+                print "**", modulename, "OK"
+                return True
+
+    def _clone_repo(self, modulename, repository, scm):
+        clonepath = os.path.join(self.install_path, modulename)
+        if scm not in ['hg', 'git']:
+            print "** ERROR: unsupported SCM: %s", scm
+            return False
+
+        print "** Installing ", modulename, "..."
+        if self.cmd_exists(scm):
+            cmd = "%s clone %s %s" % (scm, repository, clonepath)
+            code, signal = divmod(os.system(cmd), 1 << 8)
+            if code != 0:
+                return False
+            else:
+                return True
+        else:
+            print "ERROR: please install %s and try again" % scm
+            exit(1)
+
+    def cmd_exists(self, cmd):
+        return subprocess.call("type " + cmd, shell=True,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE) == 0
+
+    def parse_repo_path(self, path):
+        """Parse repository path
+
+        Given a path, it tries to parse out the directory
+        path component and the repository (directory) name components
+
+        """
+        sep = os.path.sep
+        path = path[:-1] if path.endswith(sep) else path
+        repo_name = os.path.basename(path)
+        repo_basename = os.path.splitext(repo_name)[0]
+        return (repo_name, repo_basename)
+
+    def parse_repo_url(self, url):
+        """Parses SCM repository URL specifications.
+
+        Parses out components of a repostiory URL specification.
+        """
+        # regexps to match the repository url
+        GENERAL_RE = '(\w+://)(.+@)*([\w\d\.]+)(:[\d]+){0,1}/*(.*)'
+        GENERAL_RE2 = '(.+@)*([\w\d\.]+):(.*)'
+        GOOGLECODE_RE = '(\w+)://(.*?)\.(.*?)\.(.*)/(.*)/'
+        repo = {'url': None, 'protocol': None, 'user': None,
+                'host': None, 'port': None, 'scm': None,
+                'base_name': None}
+        repo['url'] = url
+        if 'googlecode' in url:
+            p_googlecode = re.compile(GOOGLECODE_RE)
+            match = p_googlecode.match(url)
+            if match:
+                repo['protocol'] = match.group(1)
+                repo_name = match.group(2)
+                repo['base_name'] = repo_name.replace('-', '_')
+                repo['scm'] = 'hg'
+                repo['host'] = match.group(4)
+                return repo
+        else:
+            p_general = re.compile(GENERAL_RE)
+            match = p_general.match(url)
+            if match:
+                repo['protocol'] = match.group(1).split(":")[0]
+                if match.group(2):
+                    repo['user'] = match.group(2)[:-1]
+                repo['host'] = match.group(3)
+                if match.group(4):
+                    repo['port'] = match.group(4)[1:]
+                if match.group(5):
+                    path = match.group(5)
+                    if not path.startswith("~"):
+                        path = "/" + path
+                    pathnames = self.parse_repo_path(path)
+                    repo['name'], repo['base_name'] = pathnames
+            else:
+                p_unspec = re.compile(GENERAL_RE2)
+                match = p_unspec.match(url)
+                if match:
+                    if match.group(1):
+                        repo['user'] = match.group(1)[:-1]
+                repo['host'] = match.group(2)
+                path = match.group(3)
+                pathnames = self.parse_repo_path(path)
+                repo['name'], repo['base_name'] = pathnames
+                repo['protocol'] = 'ssh'
+
+        if repo['host'] in ['bitbucket.org'] or repo['user'] == 'hg':
+            repo['scm'] = 'hg'
+        elif repo['host'] in ['github.org', 'github.com'] or repo['user'] == 'git':
+            repo['scm'] = 'git'
+
+        # return the repository data
+        return repo
+
+    def run_zotonic_cmd(self, command, module, site):
+        """Runs zotonic module related methods on the zotonic node
+
+        Commands accepted: reinstall, restart, activate, and deactivate.
+        @todo: activate, deactivate, restart module dependencies
+        """
+        if self.module_exists(module):
+            if self.zotonic_call(command, module, site):
+                print "OK: %s %s" % (command, module)
+                return True
+            else:
+                print "ERROR: Could not %s %s" % (command, module)
+                return False
+        else:
+            print "ERROR: module '%s' does not exist in %s" % (module, site)
+            return False
+
+    def update_repo(self, path, module):
+        os.chdir(path)
+        print "* Updating '%s'" % module
+        if os.path.exists(os.path.join(path, '.git')):
+            cmd = "git pull origin --verbose"
+        else:
+            cmd = 'hg pull --verbose; hg update'
+        code, signal = divmod(os.system(cmd), 1 << 8)
+        if code != 0:
+            return False
+        else:
+            return True
+
+    def update(self, module, site=None):
+        """ Update a module
+
+        If site is given, the module is then assumed to be within the module's
+        directory of the given site
+        """
+        if site:
+            if not self.module_exists(module, site):
+                print "ERROR: '%s' module was not found in '%s' site " % (module, site)
+                exit(os.EX_DATAERR)
+            modulepath = os.path.join(SITES_DIR, site, 'modules', module)
+            if self.update_repo(modulepath, module):
+                print "OK: %s in %s updated" % (module, site)
+            else:
+                print "ERROR: Could not update '%s' module" % module
+                exit(os.EX_DATAERR)
+        else:
+            if not self.module_exists(module):
+                print "ERROR: '%s' module not found" % module
+                exit(os.EX_DATAERR)
+            modulepath = os.path.join(self.install_path, module)
+            if self.update_repo(modulepath, module):
+                print "OK: %s updated" % module
+            else:
+                print "ERROR: Could not update '%s' module" % module
+                exit(os.EX_DATAERR)
+
+    def uninstall(self, module, site=None):
+        """ Uninstall modules
+
+        Deactivates and deletes a mdoule
+        """
+        if site:
+            if not self.module_exists(module, site):
+                print "ERROR: %s does not exist in '%s'site" % (module, site)
+                return False
+
+            module_path = os.path.join(SITES_DIR, site, 'modules', module)
+            # deactivate module and delete module directory
+            self.run_zotonic_cmd('deactivate', module, site)
+
+        else:
+            if not self.module_exists(module):
+                print "ERROR: %s not found" % module
+                return False
+            module_path = os.path.join(self.install_path, module)
+
+        # handle error encounted when deleting directory
+        def handle_error(func, path, exec_info):
+            print "ERROR: Failed to uninstall %s" % module
+            return False
+
+        import shutil
+        shutil.rmtree(module_path, False, handle_error)
+        print "OK: %s uninstalled" % module
+        return True
+
+    def _scan_sites(self):
+        """Scan for Zotonic sites in the install path"""
+        return filter(lambda x: os.path.isdir(os.path.join(SITES_DIR, x)),
+                      os.listdir(SITES_DIR))
+
+    def search(self, query):
+        """ Search for modules
+
+        Searches for modules on the remote repository
+        The response can be filtered or by module name/title match.
+
+        """
+        print "* Getting module index"
+        try:
+            url = self.zmr_server + '?q=%s' % query if query else self.zmr_server
+            fp = urllib.urlopen(url)
+            return json.loads(fp.read())
+        except IOError:
+            print "ERROR: Network down or server unknown: " + self.zmr_server
+            exit(os.EX_NOINPUT)
+        except:
+            print "ERROR: can not parse data returned from " + self.zmr_server
+
+    def update_zotonic(self):
+        print "* Updating Zotonic..."
+        os.system("make compile-zotonic")
+        os.system("%s update" % ZOTONIC)
+
+    def zotonic_call(self, function, args, site):
+        """Make a call to the Zotonic node
+
+        Passes an erlang expression to the $ERL_CALL environment variable.
+        The expression is a call to z_module_manager.
+        """
+        Expression = """
+        Context = z:c(%s),
+        Response = z_module_manager:%s(%s, Context),
+        Response.
+        """ % (site, function, args)
+
+        # replace the nodename in the $ZOTONIC_CALL ENVIRONMENT
+        z_call = os.environ['ZOTONIC_CALL']
+        erl_call = z_call[:z_call.find(' ')] + ' '
+        z_call = erl_call + os.environ['NAME_ARG'] + " %s@$NODEHOST" % self.nodename
+        run_cmd = 'echo "%s" | %s -e' if self.debug else 'echo "%s" | %s -e  > /dev/null 2>&1'
+        code, signal = divmod(os.system(run_cmd % (Expression, z_call)), 1 << 8)
+        if code != 0:
+            return False
+        else:
+            return True
+
+
+def main():
+    """Main script logic"""
+    zmm = ZMM()
+    parser = optparse.OptionParser(usage=_USAGE, version=_VERSION)
+    parser.add_option('-z', '--zmr', help='Zotonic modules repository',
+                      dest='zmr', default='modules.zotonic.com')
+    parser.add_option('-s', '--site', help='Affected Zotonic site',
+                      dest='site')
+    parser.add_option('-d', '--debug', help='Enable debugging',
+                      action='store_true', dest='debug', default=zmm.debug)
+    parser.add_option('-n', '--node', help='Zotonic Erlang node',
+                      action='store', dest='node')
+
+    (opts, args) = parser.parse_args()
+    zmm.zmr_server = zmm.zmr_server % opts.zmr
+    zmm.debug = opts.debug
+
+    # subcommands
+    subcommands = ['list', 'search', 'install', 'uninstall',
+                   'activate', 'deactivate', 'restart', 'reinstall', 'update']
+
+    if not args:
+        parser.print_help()
+        exit(os.EX_NOINPUT)
+
+    elif args[0] not in subcommands:
+        print 'ERROR: unknown command "%s"' % args[0]
+        exit(os.EX_NOINPUT)
+
+    command, command_args = args[0], args[1:]
+    # commands that require args
+    required_cmds = list(set(subcommands) - set(['list']))
+    if command in required_cmds and len(command_args) < 1:
+        print "ERROR: missing argument for '%s' command" % command
+        exit(os.EX_DATAERR)
+
+    # require sitename for certain commands
+    if command in ['activate', 'deactivate', 'restart', 'reinstall']:
+        if not opts.site:
+            print "ERROR: please provide a site name"
+            exit(os.EX_DATAERR)
+
+    # affected Zotonic node
+    if opts.node:
+        zmm.nodename = opts.node
+
+    if command in ['list', 'search']:
+        if command_args and command == 'search':
+            query = command_args[0]
+        else:
+            query = None
+        modules = zmm.search(query)
+
+        if modules:
+            table = [[module['title'], module['repository']]
+                     for module in modules]
+            print "%-25s %s" % ("Module", "Description")
+            for row in table:
+                print "%-25s  %s" % (row[0], row[1])
+
+        else:
+            print 'ERROR: "%s" did not match any module' % query
+
+    elif command == 'install':
+        ok = False
+        for module in command_args:
+            ok = zmm.install(module, opts.site)
+        # if OK, update server
+        if ok:
+            zmm.update_zotonic()
+
+    elif command in ['activate', 'deactivate', 'restart', 'reinstall']:
+        for module in command_args:
+            zmm.run_zotonic_cmd(command, module, opts.site)
+
+    elif command == 'uninstall':
+        site = opts.site if opts.site else None
+        ok = False
+        for module in command_args:
+            ok = zmm.uninstall(module, site)
+
+        # update server to effect changes
+        if ok:
+            zmm.update_zotonic()
+
+    elif command == 'update':
+        for command in command_args:
+            zmm.update(command, opts.site)
+
+# define test fixture
+import unittest
+
+
+class FixturesTest(unittest.TestCase):
+    """ Tests Fixture for Zotonic Module Manager"""
+    def setUp(self):
+        self.zmm = ZMM()
+        # site used for this test is zmm_testsite
+        self.sitename = 'zmm_testsite'
+
+        # initialize the option parser
+        parser = optparse.OptionParser(usage=_USAGE, version=_VERSION)
+        parser.add_option('-z', '--zmr', help='Zotonic modules repository',
+                          dest='zmr', default='modules.zotonic.com')
+        parser.add_option('-s', '--site', help='Affected Zotonic site',
+                          dest='site')
+        parser.add_option('-d', '--debug', help='Enable debugging',
+                          action='store_true', dest='debug',
+                          default=self.zmm.debug)
+        parser.add_option('-n', '--node', help='Zotonic Erlang node',
+                          action='store', dest='node')
+
+        (self.opts, args) = parser.parse_args()
+        self.zmm.zmr_server = self.zmm.zmr_server % self.opts.zmr
+        self.zmm.debug = self.opts.debug
+
+    def test_zmr_server(self):
+        self.assertEqual("modules.zotonic.com", self.opts.zmr)
+
+    def test_module_not_exist(self):
+        self.assertFalse(self.zmm.module_exists('mod_foobar'))
+
+    def test_module_not_exist_insite(self):
+        self.assertFalse(self.zmm.module_exists('mod_foobar', SITE))
+
+    def test_install_global(self):
+        self.zmm.install('mod_zeroclipboard')
+        self.assertTrue(self.zmm.module_exists('mod_zeroclipboard'))
+
+    def test_install_in_site(self):
+        self.zmm.install('mod_admin_multiupload', SITE)
+        self.assertTrue(self.zmm.module_exists('mod_admin_multiupload', SITE))
+
+    def test_uninstall_in_site(self):
+        self.zmm.uninstall('mod_admin_multiupload', SITE)
+        self.assertFalse(self.zmm.module_exists('mod_admin_multiupload', SITE))
+
+    def test_uninstall_global(self):
+        self.zmm.uninstall('mod_broadcast')
+        self.assertFalse(self.zmm.module_exists('mod_broadcast'))
+
+    def test_search_nomatch(self):
+        self.zmm.ZMR_SERVER = 'http://%s/api/zmr/repositories' % ':8000'
+        r = self.zmm.search('foobar')
+        self.assertFalse(len(r) == 0)
+
+    """
+    def test_search_match(self):
+        #self.zmm.ZMR_SERVER= 'http://%s/api/zmr/repositories' % 'gsoc:8000'
+        r = self.zmm.search('mod_zmr')
+        self.assertFalse(len(r) > 0)
+    """
+
+    def test_install_from_googlecode(self):
+        url = 'https://mod-broadcast.zotonic-modules.googlecode.com/hg/'
+        repo = self.zmm.parse_repo_url(url)
+        self.assertEqual(repo['base_name'], 'mod_broadcast')
+        self.assertEqual(repo['scm'], 'hg')
+
+    def test_install_from_github(self):
+        url = 'http://github.com/arjan/mod_search_solr'
+        repo = self.zmm.parse_repo_url(url)
+        self.assertEqual(repo['base_name'], 'mod_search_solr')
+        self.assertEqual(repo['scm'], 'git')
+
+    def test_install_from_bitbucket(self):
+        url = 'https://helllamer@bitbucket.org/helllamer/mod_openid'
+        repo = self.zmm.parse_repo_url(url)
+        self.assertEqual(repo['base_name'], 'mod_openid')
+        self.assertEqual(repo['scm'], 'hg')
+
+    def tearDown(self):
+        # delete_testsite(self.sitename)
+        pass
+
+
+def run_tests(argv):
+    def create_testsite(site):
+        if not os.path.exists(test_sitepath):
+            print '***CREATING ZMM TEST SITE: %s' % site
+            cmd = ZOTONIC + ' addsite %s' % site
+            return subprocess.Popen(cmd, shell=True,
+                                    stdout=subprocess.PIPE).stdout.read()
+        return True
+
+    def delete_testsite(site):
+        if os.path.isdir(test_sitepath):
+            print '***DELETING ZMM TEST SITE: %s' % site
+            import shutil
+            cmd = ZOTONIC + ' disablesite %s' % site
+            subprocess.Popen(cmd, shell=True,
+                             stdout=subprocess.PIPE).stdout.read()
+            return shutil.rmtree(test_sitepath)
+        return True
+
+    # first, delete test site
+    if os.path.exists(test_sitepath):
+        delete_testsite(SITE)
+
+    # create the test site
+    create_testsite(SITE)
+    unittest.main(argv=[argv], verbosity=2)
+
+    # delete the test site
+    delete_testsite(SITE)
+
+# main entry point
+if __name__ == "__main__":
+    if len(sys.argv) == 2 and sys.argv[1] == 'test':
+        SITE = 'zmm_testsite'
+        test_sitepath = os.path.join(SITES_DIR, SITE)
+        run_tests(sys.argv[0])
+    else:
+        main()
