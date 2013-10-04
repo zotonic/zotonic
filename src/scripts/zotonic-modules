@@ -88,11 +88,11 @@ class ZMM():
 
         # get remote repository links
         modules['priv'] = {}
-        for (modulename, modulepath) in [(os.path.basename(module), module)
-                                         for module in shared_modules]:
+        for (module, path) in [(os.path.basename(module), module)
+                               for module in shared_modules]:
             # get the repo's remote url
-            modules['priv'][modulename] = {'path': modulepath,
-                                           'url': self._get_repo_url(modulepath)}
+            modules['priv'][module] = {'path': path,
+                                       'url': self._get_repo_url(path)}
 
         zotonic_sites = self._scan_sites()
         for site in zotonic_sites:
@@ -102,14 +102,14 @@ class ZMM():
             site_modules = glob.glob(glob_pattern)
 
             # get remote repository links
-            for (modulename, modulepath) in [(os.path.basename(module), module)
-                                             for module in site_modules]:
-                repo_path = os.path.join(modulepath, '.git')
+            for (module, path) in [(os.path.basename(module), module)
+                                   for module in site_modules]:
+                repo_path = os.path.join(path, '.git')
                 scm = 'git' if os.path.exists(repo_path) else 'hg'
                 # get the repo's remote url
-                modules[site][modulename] = {'path': modulepath,
-                                             'url': self._get_repo_url(modulepath),
-                                             'scm': scm}
+                modules[site][module] = {'path': path,
+                                         'url': self._get_repo_url(path),
+                                         'scm': scm}
         return modules
 
     def module_exists(self, module, site=None):
@@ -124,7 +124,8 @@ class ZMM():
         """Returns the url to a module's repository master branch"""
         if os.path.exists(os.path.join(repo_path, '.git')):
             # repository is a Git repo
-            cmd = 'cd %s  && git remote -v | grep fetch | cut -f 2 | cut -d " " -f 1 ' % repo_path
+            git_cmd = 'cd %s && git remote -v | grep fetch | cut -f 2 | cut -d " " -f 1'
+            cmd = git_cmd % repo_path
         else:
             # assume Mercurial repository
             # `hg paths` returns 'default = remote_url_here'
@@ -132,7 +133,6 @@ class ZMM():
 
         sh_cmd = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         return sh_cmd.stdout.read().rstrip()
-
 
     def install(self, module, site=None):
         """Installs a module"""
@@ -169,7 +169,8 @@ class ZMM():
                 print "**", modulename, "OK"
                 return True
         else:
-            info = [mod for mod in self.search(modulename) if mod['title'] == modulename]
+            info = [mod for mod in self.search(modulename)
+                    if mod['title'] == modulename]
             if not info:
                 print "** Module not found:", modulename
                 return False
@@ -202,8 +203,7 @@ class ZMM():
         return subprocess.call("type " + cmd, shell=True,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
 
-
-    def parse_repo_path(self,path):
+    def parse_repo_path(self, path):
         """Parse repository path
 
         Given a path, it tries to parse out the directory
@@ -378,7 +378,7 @@ class ZMM():
         """Make a call to the Zotonic node
 
         Passes an erlang expression to the $ERL_CALL environment variable.
-        The expression is a call to z_module_manager. The z_module_mamanger method to call,
+        The expression is a call to z_module_manager.The z_module_mamanger method to call,
         argumnents, and the affected site are passed to this function.
 
         """
@@ -388,11 +388,7 @@ class ZMM():
         Response.
         """ % (site, function, args)
 
-        # replace the nodename in the $ZOTONIC_CALL ENVIRONMENT variable with custom nodename
-        # So, if the value of $ZOTONIC_CALL is
-        # '/home/foobar/erlang/lib/erl_interface-3.7.7/bin/erl_call -sname zotonic001@foobar',
-        # find the firt occurrence of space and grab that part as the path to erl_call,
-        # and piece in the $NAME_ARG then finally add the custom nodename supplied via the -n switch
+        # replace the nodename in the $ZOTONIC_CALL ENVIRONMENT
         z_call = os.environ['ZOTONIC_CALL']
         erl_call = z_call[:z_call.find(' ')] + ' '
         z_call = erl_call + os.environ['NAME_ARG'] + " %s@$NODEHOST" % self.nodename
@@ -433,15 +429,17 @@ def main():
         exit(os.EX_NOINPUT)
 
     command, command_args = args[0], args[1:]
-
-    if command in list(set(subcommands) - set(['list', 'search'])) and len(command_args) < 1:
-        parser.print_help()
+    # commands that require args
+    required_cmds = list(set(subcommands) - set(['list']))
+    if command in required_cmds and len(command_args) < 1:
+        print "ERROR: missing argument for '%s' command" % command
         exit(os.EX_DATAERR)
 
     # require sitename for certain commands
-    if command in ['activate', 'deactivate', 'restart', 'reinstall'] and not opts.site:
-        print "ERROR: please provide a site name"
-        exit(os.EX_DATAERR)
+    if command in ['activate', 'deactivate', 'restart', 'reinstall']:
+        if not opts.site:
+            print "ERROR: please provide a site name"
+            exit(os.EX_DATAERR)
 
     # affected Zotonic node
     if opts.node:
