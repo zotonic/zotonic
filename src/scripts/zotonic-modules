@@ -78,7 +78,7 @@ class ZMM():
         """Scan for modules
 
         Looks for modules in the shared modules dircectory and the
-        various site specific module directories in the
+        various site specific module directories
         """
         import glob
 
@@ -125,11 +125,14 @@ class ZMM():
         if os.path.exists(os.path.join(repo_path, '.git')):
             # repository is a Git repo
             cmd = 'cd %s  && git remote -v | grep fetch | cut -f 2 | cut -d " " -f 1 ' % repo_path
-            sh_cmd = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-            sh_cmd.stdout.read().rstrip()
         else:
-            # todo: how to get Mercurial/hg repo remote url
-            return None
+            # assume Mercurial repository
+            # `hg paths` returns 'default = remote_url_here'
+            cmd = "hg paths | head -1 | awk '{print $3}'"
+
+        sh_cmd = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        return sh_cmd.stdout.read().rstrip()
+
 
     def install(self, module, site=None):
         """Installs a module"""
