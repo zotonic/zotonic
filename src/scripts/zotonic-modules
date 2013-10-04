@@ -27,10 +27,10 @@
 
 # version
 __version__ = "0.1.0"
-VERSION = 'Zotonic Module Manager - version ' + __version__
+_VERSION = 'Zotonic Module Manager - version ' + __version__
 
 # usage
-USAGE = """ bin/zotonic modules <subcommand> [options]
+_USAGE = """ bin/zotonic modules <subcommand> [options]
 
 Commands:
   install    <module> [module2, ...]      Install a module
@@ -44,12 +44,12 @@ Commands:
   search     <query>                      Search for a module
 """
 
-
-import os
-import urllib
-import re
+from urlparse import urlparse
 import subprocess
 import optparse
+import urllib
+import os
+import re
 
 
 try:
@@ -134,25 +134,33 @@ class ZMM():
         sh_cmd = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         return sh_cmd.stdout.read().rstrip()
 
+    def is_url(self, module_str):
+        p = urlparse(module_str)
+        return (p.scheme or p.netloc)
+
     def install(self, module, site=None):
         """Installs a module"""
-        # update the install path to point to the given site's install path
-        if site:
-            install_path = os.path.join(SITES_DIR, site, "modules")
-            if os.path.exists(install_path):
-                self.install_path = install_path
-
         # parse the module url/name given
-        info = self.parse_repo_url(module)
-        modulename, repository, scm = info['base_name'], info['url'], info['scm']
-        # url parser does not detect a git/hg url
-        if modulename is None:
+        if self.is_url(module):
+            info = self.parse_repo_url(module)
+            modulename, repository, scm = info['base_name'], info['url'], info['scm']
+            if scm:
+                # clone repository
+                if self._clone_repo(modulename, repository, scm):
+                    print "**", modulename, "OK"
+                    return True
+        else:
             modulename = module
         if not re.match("^mod_[a-z_]+$", modulename):
             # fixme - valid module name
             print "** Invalid module name:", modulename
             return False
 
+        # update the install path to point to the given site's install path
+        if site:
+            install_path = os.path.join(SITES_DIR, site, "modules")
+            if os.path.exists(install_path):
+                self.install_path = install_path
         clonepath = os.path.join(self.install_path, modulename)
         if os.path.exists(clonepath):
             print "** %s already installed at %s" % (modulename, clonepath)
@@ -162,12 +170,6 @@ class ZMM():
             print "** Module already exists in zotonic core:", clonepath
             return False
 
-        # If SCM is detected from the url
-        if scm:
-            # clone repository
-            if self._clone_repo(modulename, repository, scm):
-                print "**", modulename, "OK"
-                return True
         else:
             info = [mod for mod in self.search(modulename)
                     if mod['title'] == modulename]
@@ -224,39 +226,55 @@ class ZMM():
         # regexps to match the repository url
         GENERAL_RE = '(\w+://)(.+@)*([\w\d\.]+)(:[\d]+){0,1}/*(.*)'
         GENERAL_RE2 = '(.+@)*([\w\d\.]+):(.*)'
+        GOOGLECODE_RE = '(\w+)://(.*?)\.(.*?)\.(.*)/(.*)/'
         repo = {'url': None, 'protocol': None, 'user': None,
-                'host': None, 'port': None, 'scm': None, 'base_name': None}
+                'host': None, 'port': None, 'scm': None,
+                'base_name': None}
         repo['url'] = url
-        p_general = re.compile(GENERAL_RE)
-        p_unspec = re.compile(GENERAL_RE2)
-        match = p_general.match(url)
-        if match:
-            repo['protocol'] = match.group(1).split(":")[0]
-            if match.group(2):
-                repo['user'] = match.group(2)[:-1]
-            repo['host'] = match.group(3)
-            if match.group(4):
-                repo['port'] = match.group(4)[1:]
+        if 'googlecode' in url:
+            p_googlecode = re.compile(GOOGLECODE_RE)
+            match = p_googlecode.match(url)
+            if match:
+                repo['protocol'] = match.group(1)
+                repo_name = match.group(2)
+                repo['base_name'] =repo_name.replace('-','_')
+                repo['scm'] = 'hg'
+                repo['host'] = match.group(4)
+                return repo
+        else:
+            p_general = re.compile(GENERAL_RE)
+            match = p_general.match(url)
+            if match:
+                repo['protocol'] = match.group(1).split(":")[0]
+                if match.group(2):
+                    repo['user'] = match.group(2)[:-1]
+                repo['host'] = match.group(3)
+                if match.group(4):
+                    repo['port'] = match.group(4)[1:]
                 if match.group(5):
                     path = match.group(5)
-                    path = match.group(5)
-                if not path.startswith("~"):
-                    path = "/" + path
-            repo['name'], repo['base_name'] = self.parse_repo_path(path)
-        else:
-            match = p_unspec.match(url)
-            if match:
-                if match.group(1):
-                    repo['user'] = match.group(1)[:-1]
+                    if not path.startswith("~"):
+                        path = "/" + path
+                    pathnames = self.parse_repo_path(path)
+                    repo['name'], repo['base_name'] = pathnames
+            else:
+                print url
+                p_unspec = re.compile(GENERAL_RE2)
+                match = p_unspec.match(url)
+                if match:
+                    if match.group(1):
+                        repo['user'] = match.group(1)[:-1]
                 repo['host'] = match.group(2)
                 path = match.group(3)
-                repo['name'], repo['base_name'] = self.parse_repo_path(path)
+                pathnames = self.parse_repo_path(path)
+                repo['name'], repo['base_name'] = pathnames
                 repo['protocol'] = 'ssh'
 
         if repo['host'] in ['bitbucket.org'] or repo['user'] == 'hg':
             repo['scm'] = 'hg'
         elif repo['host'] in ['github.org', 'github.com'] or repo['user'] == 'git':
             repo['scm'] = 'git'
+
         # return the repository data
         return repo
 
@@ -370,7 +388,7 @@ class ZMM():
             print "ERROR: can not parse data returned from " + self.zmr_server
 
     def update_zotonic(self):
-        print "Updating Zotonic..."
+        print "* Updating Zotonic..."
         os.system("make compile-zotonic")
         os.system("%s update" % os.path.join(os.environ["ZOTONIC_BIN"], "zotonic"))
 
@@ -403,7 +421,7 @@ class ZMM():
 def main():
     """Main script logic"""
     zmm = ZMM()
-    parser = optparse.OptionParser(usage=USAGE, version=VERSION)
+    parser = optparse.OptionParser(usage=_USAGE, version=_VERSION)
     parser.add_option('-z', '--zmr', help='Zotonic modules repository',
                       dest='zmr', default='modules.zotonic.com')
     parser.add_option('-s', '--site', help='Affected Zotonic site', dest='site')
@@ -450,9 +468,6 @@ def main():
             query = command_args[0]
         else:
             query = None
-        if command == 'search' and not query:
-            print "ERROR: please provide a search query"
-            exit(os.EX_NOINPUT)
         modules = zmm.search(query)
 
         if modules:
