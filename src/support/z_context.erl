@@ -354,8 +354,13 @@ abs_url(Url, Context) ->
 %%      Useful when the site is behind a https proxy.
 site_protocol(Context) ->
     case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
-        <<>> -> <<"http">>;
-        P -> P
+        <<>> -> 
+            case m_req:get(is_ssl, Context) of
+                true -> <<"https">>;
+                _Other -> <<"http">>
+            end;
+        P ->
+            P
     end.
 
 %% @doc Pickle a context for storing in the database
