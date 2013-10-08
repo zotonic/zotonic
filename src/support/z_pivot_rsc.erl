@@ -38,8 +38,9 @@
     insert_task/3,
     insert_task/4,
     insert_task/5,
-    
     insert_task_after/6,
+    delete_task/3,
+    delete_task/4,
     
     pivot_resource/2,
     pg_lang/1,
@@ -147,26 +148,35 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
-insert_task_after(Seconds, Module, Function, UniqueKey, Args, Context) ->
-    z_db:transaction(fun(Ctx) -> insert_transaction(Seconds, Module, Function, UniqueKey, Args, Ctx) end, Context).
+insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
+    z_db:transaction(fun(Ctx) -> insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Ctx) end, Context).
 
-    insert_transaction(Seconds, Module, Function, UniqueKey, Args, Context) ->
-        Due = case Seconds of 
-                undefined -> undefined; 
-                _ -> calendar:gregorian_seconds_to_datetime(
-                        calendar:datetime_to_gregorian_seconds(calendar:local_time()) + Seconds)
+    insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
+        Due = case SecondsOrDate of 
+                undefined -> 
+                    undefined;
+                N when is_integer(N) ->
+                    calendar:gregorian_seconds_to_datetime(
+                        calendar:datetime_to_gregorian_seconds(calendar:local_time()) + N);
+                {Y,M,D} = YMD when is_integer(Y), is_integer(M), is_integer(D) ->
+                    {YMD,{0,0,0}};
+                {{Y,M,D},{H,I,S}} when is_integer(Y), is_integer(M), is_integer(D), is_integer(H), is_integer(I), is_integer(S) ->
+                    SecondsOrDate
               end,
+        UniqueKeyBin = z_convert:to_binary(UniqueKey), 
         Fields = [
             {module, Module},
             {function, Function},
-            {key, UniqueKey},
+            {key, UniqueKeyBin},
             {args, Args},
             {due, Due}
         ],
         case z_db:q1("select id 
                       from pivot_task_queue 
                       where module = $1 and function = $2 and key = $3", 
-                    [Module, Function, UniqueKey], Context) of
+                     [Module, Function, UniqueKeyBin], 
+                     Context) 
+        of
             undefined -> 
                 z_db:insert(pivot_task_queue, Fields, Context);
             Id when is_integer(Id) -> 
@@ -181,6 +191,18 @@ insert_task_after(Seconds, Module, Function, UniqueKey, Args, Context) ->
                 end,
                 {ok, Id}
         end.
+
+delete_task(Module, Function, Context) ->
+    z_db:q("delete from pivot_task_queue where module = $1 and function = $2", 
+           [Module, Function], 
+           Context).
+
+delete_task(Module, Function, UniqueKey, Context) ->
+    UniqueKeyBin = z_convert:to_binary(UniqueKey), 
+    z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
+           [Module, Function, UniqueKeyBin], 
+           Context).
+
 
 %%====================================================================
 %% API
