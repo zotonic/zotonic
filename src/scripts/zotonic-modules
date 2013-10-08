@@ -63,6 +63,7 @@ BASE_MODULE_PATH = os.path.join(os.environ['ZOTONIC'], 'modules')
 ROOT_DIR = os.environ['ZOTONIC']
 ZOTONIC = os.path.join(os.environ['ZOTONIC_BIN'], 'zotonic')
 
+
 class ZMM():
     """Zotonic Module Manager
 
@@ -86,7 +87,8 @@ class ZMM():
 
         # dictionary to hold all Zotonic modules
         modules = {}
-        shared_modules = glob.glob(os.path.join(self.install_path, 'mod_*'))
+        glob_pattern = os.path.join(self.install_path, 'mod_*')
+        shared_modules = glob.glob(glob_pattern)
 
         # get remote repository links
         modules['priv'] = {}
@@ -145,10 +147,10 @@ class ZMM():
         # parse the module url/name given
         if self.is_url(module):
             info = self.parse_repo_url(module)
-            modulename, repository, scm = info['base_name'], info['url'], info['scm']
+            modulename, repo, scm = info['base_name'], info['url'], info['scm']
             if scm:
                 # clone repository
-                if self._clone_repo(modulename, repository, scm):
+                if self._clone_repo(modulename, repo, scm):
                     print "**", modulename, "OK"
                     return True
         else:
@@ -181,14 +183,15 @@ class ZMM():
             info = info[0]
 
             # clone repository
-            if self._clone_repo(modulename, info['repository'], info['scm']):
+            if self._clone_repo(modulename, info['repository'],
+                                info['scm']):
                 print "**", modulename, "OK"
                 return True
 
     def _clone_repo(self, modulename, repository, scm):
         clonepath = os.path.join(self.install_path, modulename)
         if scm not in ['hg', 'git']:
-            print "** ERROR: unsupported SCM: %s. Please use either HG or GIT", scm
+            print "** ERROR: unsupported SCM: %s", scm
             return False
 
         print "** Installing ", modulename, "..."
@@ -205,7 +208,8 @@ class ZMM():
 
     def cmd_exists(self, cmd):
         return subprocess.call("type " + cmd, shell=True,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE) == 0
 
     def parse_repo_path(self, path):
         """Parse repository path
@@ -239,7 +243,7 @@ class ZMM():
             if match:
                 repo['protocol'] = match.group(1)
                 repo_name = match.group(2)
-                repo['base_name'] =repo_name.replace('-','_')
+                repo['base_name'] = repo_name.replace('-', '_')
                 repo['scm'] = 'hg'
                 repo['host'] = match.group(4)
                 return repo
@@ -260,7 +264,6 @@ class ZMM():
                     pathnames = self.parse_repo_path(path)
                     repo['name'], repo['base_name'] = pathnames
             else:
-                print url
                 p_unspec = re.compile(GENERAL_RE2)
                 match = p_unspec.match(url)
                 if match:
@@ -399,9 +402,7 @@ class ZMM():
         """Make a call to the Zotonic node
 
         Passes an erlang expression to the $ERL_CALL environment variable.
-        The expression is a call to z_module_manager.The z_module_mamanger method to call,
-        argumnents, and the affected site are passed to this function.
-
+        The expression is a call to z_module_manager.
         """
         Expression = """
         Context = z:c(%s),
@@ -427,7 +428,8 @@ def main():
     parser = optparse.OptionParser(usage=_USAGE, version=_VERSION)
     parser.add_option('-z', '--zmr', help='Zotonic modules repository',
                       dest='zmr', default='modules.zotonic.com')
-    parser.add_option('-s', '--site', help='Affected Zotonic site', dest='site')
+    parser.add_option('-s', '--site', help='Affected Zotonic site',
+                      dest='site')
     parser.add_option('-d', '--debug', help='Enable debugging',
                       action='store_true', dest='debug', default=zmm.debug)
     parser.add_option('-n', '--node', help='Zotonic Erlang node',
@@ -509,11 +511,9 @@ def main():
         for command in command_args:
             zmm.update(command, opts.site)
 
-
-
-
 # define test fixture
 import unittest
+
 
 class FixturesTest(unittest.TestCase):
     """ Tests Fixture for Zotonic Module Manager"""
@@ -526,9 +526,11 @@ class FixturesTest(unittest.TestCase):
         parser = optparse.OptionParser(usage=_USAGE, version=_VERSION)
         parser.add_option('-z', '--zmr', help='Zotonic modules repository',
                           dest='zmr', default='modules.zotonic.com')
-        parser.add_option('-s', '--site', help='Affected Zotonic site', dest='site')
+        parser.add_option('-s', '--site', help='Affected Zotonic site',
+                          dest='site')
         parser.add_option('-d', '--debug', help='Enable debugging',
-                          action='store_true', dest='debug', default=self.zmm.debug)
+                          action='store_true', dest='debug',
+                          default=self.zmm.debug)
         parser.add_option('-n', '--node', help='Zotonic Erlang node',
                           action='store', dest='node')
 
@@ -562,7 +564,7 @@ class FixturesTest(unittest.TestCase):
         self.assertFalse(self.zmm.module_exists('mod_broadcast'))
 
     def test_search_nomatch(self):
-        self.zmm.ZMR_SERVER= 'http://%s/api/zmr/repositories' % ':8000'
+        self.zmm.ZMR_SERVER = 'http://%s/api/zmr/repositories' % ':8000'
         r = self.zmm.search('foobar')
         self.assertFalse(len(r) == 0)
 
@@ -591,7 +593,6 @@ class FixturesTest(unittest.TestCase):
         self.assertEqual(repo['base_name'], 'mod_openid')
         self.assertEqual(repo['scm'], 'hg')
 
-
     def tearDown(self):
         # delete_testsite(self.sitename)
         pass
@@ -607,7 +608,7 @@ def run_tests(argv):
         return True
 
     def delete_testsite(site):
-        if  os.path.isdir(test_sitepath):
+        if os.path.isdir(test_sitepath):
             print '***DELETING ZMM TEST SITE: %s' % site
             import shutil
             cmd = ZOTONIC + ' disablesite %s' % site
@@ -617,7 +618,7 @@ def run_tests(argv):
         return True
 
     # first, delete test site
-    if  os.path.exists(test_sitepath):
+    if os.path.exists(test_sitepath):
         delete_testsite(SITE)
 
     # create the test site
