@@ -344,7 +344,7 @@ js_array(L) ->
 js_object(L) -> js_object(L, undefined).
 
 js_object([], _OptContext) -> <<"{}">>;
-js_object(L, OptContext) -> js_object(L,[], OptContext).
+js_object(L, OptContext) -> iolist_to_binary(js_object(L, [], OptContext)).
 
 js_object(L, [], Context) -> js_object1(L, [], Context);
 js_object(L, [Key|T], Context) -> js_object(proplists:delete(Key,L), T, Context).
@@ -356,6 +356,7 @@ js_object1([], Acc, _OptContext) ->
 js_object1([{Key,Value}|T], Acc, OptContext) ->
     Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value, OptContext)],
     js_object1(T, [Prop|Acc], OptContext).
+
 
 js_prop_value(_, undefined, _OptContext) -> <<"null">>;
 js_prop_value(_, true, _OptContext) -> <<"true">>;
