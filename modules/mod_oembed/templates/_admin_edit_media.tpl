@@ -5,7 +5,11 @@
 </p>
 <p class="clear">
     {% if medium.oembed.html %}
-        {{ medium.oembed.html }}
+        {% if m.req.is_ssl %}
+            {{ medium.oembed.html|replace:"http://":"https://" }}
+        {% else %}
+            {{ medium.oembed.html }}
+        {% endif %}
     {% elseif medium.oembed.error %}
         <p><span class="label label-warning">
                 {_ Embedding of media item failed with HTTP code _} {{ medium.oembed.code }}:
@@ -13,7 +17,7 @@
             {{ medium.oembed.body }}
         </p>
     {% else %}
-    {% image medium width=500 %}
+        {% image medium width=500 %}
     {% endif %}
 </p>
 {% endif %}

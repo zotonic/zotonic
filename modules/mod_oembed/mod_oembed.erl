@@ -113,7 +113,13 @@ observe_rsc_update(#rsc_update{id=Id, props=BeforeProps}, {Changed, Props}, Cont
 observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, options=Options}, Context) ->
     case proplists:get_value(mime, Props) of
         ?OEMBED_MIME ->
-            TplOpts = [{id, Id}, {medium, Props}, {options, Options}, {filename, Filename}],
+            TplOpts = [
+                {id, Id},
+                {medium, Props},
+                {options, Options},
+                {filename, Filename},
+                {is_ssl, is_ssl(Context)}
+            ],
             Html = case proplists:lookup(oembed, Props) of
                        {oembed, OEmbed} ->
                            case proplists:lookup(provider_name, OEmbed) of
@@ -139,9 +145,20 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
     case proplists:lookup(html, OEmbed) of
         {html, Html} ->
-            Html;
+            case proplists:get_value(is_ssl, TplOpts) of
+                true -> binary:replace(Html, <<"http://">>, <<"https://">>);
+                false -> Html
+            end;
         none ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
+    end.
+
+%% @doc Map http:// urls to https:// if viewed on a secure connection
+is_ssl(Context) ->
+    case m_req:get(is_ssl, Context) of
+        true -> true;
+        false -> false;
+        undefined -> z_convert:to_bool(z_context:get(is_ssl, Context)) 
     end.
 
 %% @doc Return the filename of a still image to be used for image tags.
