@@ -225,7 +225,7 @@ class ZMM():
         return (repo_name, repo_basename)
 
     def parse_repo_url(self, url):
-        """Parses Git and Mercurial repository URL specifications.
+        """Parses SCM repository URL specifications.
 
         Parses out components of a repostiory URL specification.
         """
