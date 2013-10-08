@@ -4,7 +4,8 @@
 	
 {% sorter id=#list
     tag={object_sorter predicate=`depiction` id=id}
-	placeholder="ui-sortable-placeholder" 
+	placeholder="ui-sortable-placeholder"
+	delegate=`controller_admin_edit`
 %}
 <ul id="{{ #list }}" class="media thumbnails">
     {% for object_id, edge_id in m.edge.o[id].depiction %}

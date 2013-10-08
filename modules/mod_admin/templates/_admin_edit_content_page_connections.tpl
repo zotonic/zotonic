@@ -22,7 +22,11 @@
 	    <h4>{{ p.title }}</h4>
 		
 	    <div class="unlink-wrapper">
-		{% sorter id=["links",id|format_integer,name]|join:"-" tag={object_sorter predicate=name id=id} group="edges" %}
+		{% sorter id=["links",id|format_integer,name]|join:"-" 
+				  tag={object_sorter predicate=name id=id} 
+				  group="edges"
+				  delegate=`controller_admin_edit`
+		%}
 		<ul id="links-{{ id }}-{{ name }}" class="tree-list connections-list" data-reload-template="_rsc_edge_list.tpl">
 			{% include "_rsc_edge_list.tpl" id=id predicate=name %}
 		</ul>
