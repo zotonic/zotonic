@@ -31,6 +31,7 @@
 %% Act as a webmachine logger.
 -export([log_access/1]).
 
+
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
@@ -76,15 +77,15 @@ timed_update(Name, Mod, Fun, Args, StatsFrom) ->
     update(#histogram{name=Name, value=Time}, StatsFrom),
     Result.
 
+
 %% @doc Collect log data from webzmachine.
 %%
-log_access(#wm_log_data{start_time=undefined}) -> 
-    ok;
-log_access(#wm_log_data{end_time=undefined}) -> 
-    ok;
-log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=ResponseLength}=LogData) ->
+log_access(#wm_log_data{finish_time=undefined}=LogData) -> 
+    log_access(LogData#wm_log_data{finish_time=os:timestamp()});
+log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime, 
+                        response_length=ResponseLength}=LogData) when StartTime =/= undefined ->
     try 
-        Duration = #histogram{name=duration, value=timer:now_diff(EndTime, StartTime)},
+        Duration = #histogram{name=duration, value=timer:now_diff(FinishTime, StartTime)},
         Out = #counter{name=out, value=ResponseLength},
         System = #stats_from{system=webzmachine},
 
@@ -104,7 +105,6 @@ log_access(#wm_log_data{start_time=StartTime, end_time=EndTime, response_length=
     end.
 
     
-
 %% Some helper functions.
 
 update_metric(#counter{op=incr, value=Value}=Stat, From) ->
