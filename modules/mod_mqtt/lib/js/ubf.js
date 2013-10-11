@@ -156,7 +156,7 @@ limitations under the License.
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object" && value.valueOf) {
-                    buf.push(_utf8len(value.valueOf)+"~"+value.valueOf+"~");
+                    buf.push(_utf8len(value.valueOf)+"~"+value.valueOf()+"~");
                 } else if(typeof(value) == "boolean") {
                     encode_as_constant((value)?"true":"false", buf);
                 } else {
