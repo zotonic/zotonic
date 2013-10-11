@@ -420,6 +420,7 @@ start_session(Action, CurrentSessionId, Context) ->
                            CurrentSessionId -> Context2;
                             _ -> set_session_cookie(NewSessionId, Context2)
                        end,
+            % lager:debug("Session: ~p ~p (old ~p, for ~p)", [SessionState, NewSessionId, CurrentSessionId, m_req:get(peer, Context3)]),
             Context4 = case SessionState of
                            new ->
                                Props = [
@@ -450,6 +451,7 @@ start_session(Action, CurrentSessionId, Context) ->
                        end,
             {ok, Context4};
         {error, no_session_pid} when Action =:= optional ->
+            lager:debug("Session: continuation request for non-existing session ~p", [CurrentSessionId]),
             {ok, Context1};
         {error, _} = Error ->
             Error
