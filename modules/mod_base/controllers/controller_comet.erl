@@ -62,16 +62,17 @@ content_types_provided(ReqData, Context) ->
 %% @doc Collect all scripts to be pushed back to the user agent
 process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    erlang:monitor(process, Context1#context.page_pid),
+    MRef = erlang:monitor(process, Context1#context.page_pid),
     z_session_page:comet_attach(self(), Context1#context.page_pid),
     TRef = start_timer(?COMET_FLUSH_EMPTY),
-    process_post_loop(Context1, TRef, false).
+    process_post_loop(Context1, TRef, MRef, false).
 
 
 %% @doc Wait for all scripts to be pushed to the user agent.
-process_post_loop(Context, TRef, HasData) ->
+process_post_loop(Context, TRef, MRef, HasData) ->
     receive
         flush ->
+            erlang:demonitor(MRef, [flush]),
             erlang:cancel_timer(TRef),
             z_session_page:comet_detach(Context#context.page_pid),
             ?WM_REPLY(true, Context);
@@ -85,11 +86,11 @@ process_post_loop(Context, TRef, HasData) ->
                         true  -> TRef;
                         false -> reset_timer(?COMET_FLUSH_DATA, TRef)
                     end,
-            process_post_loop(Context1, TRef1, true);
+            process_post_loop(Context1, TRef1, MRef, true);
 
         {'DOWN', _MonitorRef, process, Pid, _Info} when Pid == Context#context.page_pid ->
             self() ! flush,
-            process_post_loop(Context, TRef, HasData)
+            process_post_loop(Context, TRef, MRef, HasData)
     end.
 
 
