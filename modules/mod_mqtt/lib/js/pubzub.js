@@ -84,8 +84,8 @@ Pubzub.prototype.map_record = function (data) {
         switch (data._record)
         {
             case 'z_mqtt_payload':
-                if (data.encoding == "ubf")
-                    data.payload = ubf.decode(payload);
+                if (data.encoding.valueOf() == "ubf")
+                    data.payload = ubf.decode(data.payload);
                 break;
             default:
                 break;
@@ -95,7 +95,11 @@ Pubzub.prototype.map_record = function (data) {
 };
 
 Pubzub.prototype.unique_id = function () {
-    return ((new Date()).getTime() + "" + Math.floor(Math.random() * 1000000)).substr(0, 18);
+    var t = (new Date()).getTime() + "-";
+    var cs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 20; i++ )
+        t += cs.charAt(Math.floor(Math.random() * cs.length));
+    return t;
 };
 
 (function($) {
