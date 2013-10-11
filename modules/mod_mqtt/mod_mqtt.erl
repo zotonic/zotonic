@@ -68,9 +68,12 @@ pid_observe_mqtt_unsubscribe(MyPid, #mqtt_unsubscribe{topic=Topic, mfa=MFA}, _Co
 
 event(#postback_notify{message=Message}, Context) ->
     handle_event(z_convert:to_binary(Message),
-                 z_convert:to_binary(z_context:get_q("topic", Context)),
+                 local_topic(z_convert:to_binary(z_context:get_q("topic", Context))),
                  z_context:get_q("msg", Context),
                  Context).
+
+local_topic(<<"/", Topic/binary>>) -> Topic;
+local_topic(Topic) -> Topic.
 
 
 start_link(Args) ->
@@ -141,7 +144,6 @@ unsubscribe_topic(Topic, MFA, MyPid) ->
 
 
 add_lastwill(Pid, WillId, Msg, Context) when is_pid(Pid) ->
-    Pid = Context#context.page_pid,
     case is_pid(Pid) of
         true ->
             WillId1 = z_convert:to_binary(WillId), 
@@ -177,5 +179,6 @@ start_lastwill_proc(Pid, WillId, Msg, Context) ->
         transient, 5000, worker, [z_mqtt_lastwill]
     },
     lager:debug("MQTT lastwill ~p to ~p", [Pid, Msg#mqtt_msg.topic]),
-    supervisor:start_child(z_module_manager:whereis(?MODULE, Context), Sub).
+    {ok, ModPid} = z_module_manager:whereis(?MODULE, Context),
+    supervisor:start_child(ModPid, Sub).
 
