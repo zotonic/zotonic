@@ -25,7 +25,9 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws					= false;
 var z_ws_opened				= false;
+var z_ws_retries            = 0;
 var z_stream_host           = undefined;
+var z_websocket_host;
 var z_comet_is_running		= false;
 var z_doing_postback		= false;
 var z_spinner_show_ct		= 0;
@@ -570,32 +572,50 @@ function z_websocket_restart()
 
 function z_websocket_start(host)
 {
-	var protocol = "ws:";
-	if (window.location.protocol == "https:")
-	{
-		protocol = "wss:";
-	}
-	z_ws = new WebSocket(protocol+"//"+document.location.host+"/websocket?z_pageid="+z_pageid);
+    var protocol = "ws:";
+    if (window.location.protocol == "https:")
+    {
+        protocol = "wss:";
+    }
+    z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
 
-	z_ws.onopen = function() { z_ws_opened = true; };
-	z_ws.onerror = function() { };
+    var connect_timeout = setTimeout(function() { 
+        if(z_ws && z_ws.readyState != 0) {
+            try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
+            z_ws = undefined;
+            z_ws_opened = false;
+            return;
+        }
+        // Failed to open a websocket within the specified time - try to start comet
+        z_ws = undefined;
+        z_comet(host);
+    }, 2000); 
 
-	z_ws.onclose = function (evt) 
-	{
-		if (z_ws_opened)
-		{
-			// Try to reopen once, might be closed due to an server side error
-			z_ws_opened = false;
-			setTimeout(function() { z_websocket_start(host); }, 100);
-		}
-		else
-		{
-			// Failed opening websocket connection - try to start comet
-			z_ws = undefined;
-			setTimeout(function() { z_comet(host); }, 2000);
-			z_comet_is_running = true;
-		}
-	};
+    z_ws.onopen = function() { 
+        clearTimeout(connect_timeout);
+        z_ws_opened = true; 
+    };
+    z_ws.onerror = function() { };
+
+    z_ws.onclose = function (evt)
+    {
+        if (z_ws_opened && z_ws_retries < 1)
+        {
+            z_ws_opened = false;
+            // Try to reopen once, might be closed due to an server side error
+            setTimeout(function() {
+                z_ws_retries += 1;
+                z_websocket_restart(host);
+            }, 100);
+        }
+        else
+        {
+            // Failed opening websocket connection - try to start comet
+            z_ws = undefined;
+            setTimeout(function() { z_comet(host); }, 2000);
+            z_comet_is_running = true;
+        }
+    };
 
 	z_ws.onmessage = function (evt)
 	{
