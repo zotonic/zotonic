@@ -119,11 +119,12 @@ append(Key, Value, Pid) ->
 
 %% @doc Attach the comet request process to the page session, enabling sending scripts to the user agent
 comet_attach(CometPid, Pid) ->
-    gen_server:cast(Pid, {comet_attach, CometPid}).
+    gen_server:call(Pid, {comet_attach, CometPid}).
 
 %% @doc Called when the comet request process closes, we will need to wait for the next connection
 comet_detach(Pid) ->
-    gen_server:cast(Pid, comet_detach).
+    gen_server:call(Pid, comet_detach),
+    z_utils:flush_message(script_queued).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
 websocket_attach(WsPid, #context{page_pid=Pid}) ->
@@ -192,20 +193,6 @@ handle_cast({append, Key, Value}, State) ->
     State1 = State#page_state{vars = z_utils:prop_replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
 
-handle_cast({comet_attach, CometPid}, State) ->
-    case z_utils:is_process_alive(CometPid) of
-        true ->
-            erlang:monitor(process, CometPid),
-            StateComet = State#page_state{comet_pid=CometPid},
-            StatePing  = ping_comet_ws(StateComet),
-            z_session:keepalive(State#page_state.session_pid),
-            {noreply, StatePing};
-        false ->
-            {noreply, State}
-    end;
-handle_cast(comet_detach, State) ->
-    StateNoComet = State#page_state{comet_pid=undefined, last_detach=z_utils:now()},
-    {noreply, StateNoComet};
 handle_cast({websocket_attach, WebsocketPid}, State) ->
     case z_utils:is_process_alive(WebsocketPid) of
         true ->
@@ -280,6 +267,20 @@ handle_call({incr, Key, Delta}, _From, State) ->
     State1 = State#page_state{ vars = z_utils:prop_replace(Key, NV, State#page_state.vars) },
     {reply, NV, State1};
 
+handle_call({comet_attach, CometPid}, _From, State) ->
+    case z_utils:is_process_alive(CometPid) of
+        true ->
+            erlang:monitor(process, CometPid),
+            StateComet = State#page_state{comet_pid=CometPid},
+            StatePing  = ping_comet_ws(StateComet),
+            z_session:keepalive(State#page_state.session_pid),
+            {reply, ok, StatePing};
+        false ->
+            {reply, ok, State}
+    end;
+handle_call(comet_detach, _From, State) ->
+    StateNoComet = State#page_state{comet_pid=undefined, last_detach=z_utils:now()},
+    {reply, ok, StateNoComet};
 
 handle_call(get_attach_state, _From, State) when is_pid(State#page_state.websocket_pid) ->
     {reply, attached, State};
