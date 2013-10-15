@@ -25,6 +25,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 var z_ws					= false;
 var z_ws_opened				= false;
+var z_ws_retries            = 0;
 var z_stream_host;
 var z_websocket_host;
 var z_comet_is_running		= false;
@@ -610,11 +611,14 @@ function z_websocket_start(host)
 
     z_ws.onclose = function (evt)
     {
-        if (z_ws_opened)
+        if (z_ws_opened && z_ws_retries < 1)
         {
             z_ws_opened = false;
             // Try to reopen once, might be closed due to an server side error
-            setTimeout(function() { z_websocket_restart(host); }, 100);
+            setTimeout(function() {
+                z_ws_retries += 1;
+                z_websocket_restart(host);
+            }, 100);
         }
         else
         {
