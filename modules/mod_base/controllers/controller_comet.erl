@@ -73,7 +73,7 @@ process_post_loop(Context, TRef, MRef, HasData) ->
     receive
         flush ->
             erlang:demonitor(MRef, [flush]),
-            erlang:cancel_timer(TRef),
+            cancel_timer(TRef),
             z_session_page:comet_detach(Context#context.page_pid),
             ?WM_REPLY(true, Context);
 
@@ -98,5 +98,9 @@ start_timer(Delta) ->
     erlang:send_after(Delta, self(), flush).
 
 reset_timer(Delta, TRef) ->
-    erlang:cancel_timer(TRef),
+    cancel_timer(TRef),
     start_timer(Delta).
+
+cancel_timer(TRef) ->
+    erlang:cancel_timer(TRef),
+    z_utils:flush_message(flush).
