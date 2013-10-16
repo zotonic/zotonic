@@ -122,6 +122,8 @@ comet_attach(CometPid, Pid) ->
     gen_server:call(Pid, {comet_attach, CometPid}).
 
 %% @doc Called when the comet request process closes, we will need to wait for the next connection
+comet_detach(undefined) ->
+    z_utils:flush_message(script_queued);
 comet_detach(Pid) ->
     gen_server:call(Pid, comet_detach),
     z_utils:flush_message(script_queued).

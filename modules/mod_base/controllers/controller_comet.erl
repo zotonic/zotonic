@@ -90,7 +90,8 @@ process_post_loop(Context, TRef, MRef, HasData) ->
 
         {'DOWN', _MonitorRef, process, Pid, _Info} when Pid == Context#context.page_pid ->
             self() ! flush,
-            process_post_loop(Context, TRef, MRef, HasData)
+            Context1 = Context#context{page_pid=undefined},
+            process_post_loop(Context1, TRef, MRef, HasData)
     end.
 
 
