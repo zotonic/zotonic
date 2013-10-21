@@ -294,7 +294,7 @@ guess_mime(File) ->
 -spec exif_orientation(string()) -> 1|2|3|4|5|6|7|8.
 exif_orientation(InFile) ->
     %% FIXME - don't depend on external command
-    case string:tokens(os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(InFile)), "\n") of
+    case string:tokens(exif_orientation_cmd(InFile), "\n") of
         [] -> 
             1;
         [Line|_] -> 
@@ -312,6 +312,13 @@ exif_orientation(InFile) ->
             end
     end.
 
+exif_orientation_cmd(File) ->
+    exif_orientation_cmd_1(os:type(), File).
+
+exif_orientation_cmd_1({win32, _}, File) ->
+    os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(File));
+exif_orientation_cmd_1({_Unix, _}, File) ->
+    os:cmd("LANG=en exif -m -t Orientation " ++ z_utils:os_filename(File)).
 
 %% @doc Given a mime type, return whether its file contents is already compressed or not.
 -spec is_mime_compressed(string()) -> boolean().
