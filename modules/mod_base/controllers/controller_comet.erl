@@ -64,7 +64,7 @@ process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     MRef = erlang:monitor(process, Context1#context.page_pid),
     z_session_page:comet_attach(self(), Context1#context.page_pid),
-    TRef = start_timer(?COMET_FLUSH_EMPTY),
+    {ok, TRef} = start_timer(?COMET_FLUSH_EMPTY),
     process_post_loop(Context1, TRef, MRef, false).
 
 
