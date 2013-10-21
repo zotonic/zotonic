@@ -260,11 +260,10 @@ extension(Mime, PreferExtension) ->
             first_extension(Extensions);
         _ ->
             %% convert prefer extension to something that mimetypes likes
-            Ext1 = z_convert:to_list(PreferExtension),
+            Ext1 = z_convert:to_binary(z_string:to_lower(PreferExtension)),
             Ext2 = case Ext1 of
-                       [$.|Rest] ->
-                           z_convert:to_binary(Rest);
-                       _ -> z_convert:to_binary(Ext1)
+                       <<$.,Rest/binary>> -> Rest;
+                       _ -> Ext1
                    end,
             case lists:member(Ext2, Extensions) of
                 true ->
@@ -285,7 +284,7 @@ first_extension(Extensions) ->
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime(string() | binary()) -> string().
 guess_mime(File) ->
-	case mimetypes:filename(z_convert:to_binary(File)) of
+	case mimetypes:filename(z_convert:to_binary(z_string:to_lower(File))) of
 		[Mime|_] -> z_convert:to_list(Mime);
 		[] -> "application/octet-stream"
 	end.
