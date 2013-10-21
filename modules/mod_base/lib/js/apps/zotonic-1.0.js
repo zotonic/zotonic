@@ -577,7 +577,7 @@ function z_websocket_start(host)
     {
         protocol = "wss:";
     }
-    z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
+    z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid);
 
     var connect_timeout = setTimeout(function() { 
         if(z_ws && z_ws.readyState != 0) {
