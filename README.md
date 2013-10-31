@@ -12,10 +12,7 @@ You can find out more about Zotonic on http://zotonic.com, such as:
 
 - [**Installation** instructions](http://zotonic.com/install).
 
-- [**Documentation**](http://zotonic.com/documentation).
-
-- [**EDoc**](http://zotonic.com/edoc/core).
+- [**Documentation**](http://zotonic.com/docs).
 
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zotonic&url=https://github.com/zotonic/zotonic&title=zotonic&language=en_GB&tags=github&category=software) 
-
