@@ -43,13 +43,14 @@ start(WsKey1, ReqData, Context1) ->
     Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
     {ok, Body} = mochiweb_socket:recv(Socket, 8, infinity),
     SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
+    WSProtocol = case wrq:is_ssl(ReqData) of true -> "wss"; _ -> "ws" end,
 
     %% Send the handshake
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
             "Upgrade: WebSocket", 13, 10,
             "Connection: Upgrade", 13, 10,
             "Sec-WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
-            "Sec-WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
+            "Sec-WebSocket-Location: ", WSProtocol, "://", Hostname, WebSocketPath, 13, 10,
             "Sec-WebSocket-Protocol: zotonic", 13, 10,
             13, 10,
             <<SignKey/binary>>
