@@ -44,12 +44,13 @@ start(ReqData, Context1) ->
     end,
     
     Protocol = case wrq:is_ssl(ReqData) of true -> "https"; _ -> "http" end,
+    WSProtocol = case wrq:is_ssl(ReqData) of true -> "wss"; _ -> "ws" end,
     Socket = webmachine_request:socket(ReqData),
     Data = ["HTTP/1.1 101 Web Socket Protocol Handshake", 13, 10,
             "Upgrade: WebSocket", 13, 10,
             "Connection: Upgrade", 13, 10,
             "WebSocket-Origin: ",Protocol,"://", Hostname, 13, 10,
-            "WebSocket-Location: ws://", Hostname, WebSocketPath, 13, 10,
+            "WebSocket-Location: ", WSProtocol, "://", Hostname, WebSocketPath, 13, 10,
             13, 10
             ],
     ok = send(Socket, Data),
