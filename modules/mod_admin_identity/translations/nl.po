@@ -303,4 +303,4 @@ msgstr "Gebruikersnaam / wachtwoord instellen"
 #: ./modules/mod_admin_identity/templates/admin_users.tpl:11 
 msgid ""
 "show all"
-msgstr "Toon all"
+msgstr "Toon alle"
