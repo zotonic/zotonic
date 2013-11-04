@@ -103,10 +103,22 @@ websocket_send_data(Pid, Data) ->
     Pid ! {send_data, Data}.
 
 %% Called during initialization of the websocket.
-websocket_init(Context) ->
-    z_session_page:websocket_attach(self(), Context).
+websocket_init(_Context) ->
+    ok.
 
 %% Handle a message from the browser, should contain an url encoded request. Sends result script back to browser.
+websocket_message(<<"Z:PING:",PingId/binary>>, SenderPid, Context) ->
+    PageId = z_convert:to_binary(Context#context.page_id),
+    case PingId of
+        PageId ->
+            % Ping for this page-id, reply with a pong
+            z_session_page:websocket_attach(SenderPid, Context),
+            SenderPid ! {send_data, iolist_to_binary(["Z:PONG:",PageId])},
+            ok;
+        _Other ->
+            % Ping for wrong page-id, stay silent.
+            ok
+    end;
 websocket_message(Msg, _SenderPid, Context) ->
     Qs = mochiweb_util:parse_qs(Msg),
     Context1 = z_context:set('q', Qs, Context),

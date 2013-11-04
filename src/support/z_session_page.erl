@@ -212,6 +212,8 @@ handle_cast({append, Key, Value}, State) ->
     State1 = State#page_state{vars = z_utils:prop_replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
 
+handle_cast({websocket_attach, WebsocketPid}, #page_state{websocket_pid=WebsocketPid} = State) ->
+    {noreply, State};
 handle_cast({websocket_attach, WebsocketPid}, State) ->
     case z_utils:is_process_alive(WebsocketPid) of
         true ->

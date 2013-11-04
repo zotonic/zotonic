@@ -1,0 +1,35 @@
+digraph pushconnect {
+	edge [style=dotted];
+
+	start -> open_ws;
+	start -> start_comet;
+
+	open_ws -> ws_onopen;
+	open_ws -> ws_onerror;
+
+	ws_onopen -> ws_ondata;
+	ws_ondata -> ws_ondata;
+
+	ws_onopen -> ws_onclose;
+	ws_ondata -> ws_onclose;
+
+	edge [style=normal];
+	ws_onopen -> ws_send_ping;
+	ws_onerror -> close_ws;
+	ws_onclose -> close_ws;
+
+	close_ws -> open_ws [label="if any ws-ping"];
+	close_ws -> ensure_comet [label="if no ws-ping"];
+
+	ws_send_ping -> close_ws [label="on ws-ping\ntimeout"];
+	ws_send_ping -> ws_receive_ping;
+	ws_receive_ping -> ws_send_ping;
+	ws_receive_ping [label="ws_receive_ping\nis_ws_ok = 1"]
+
+	start_comet -> comet_loop;
+	comet_loop -> comet_loop [label="setTimeout()"];
+
+	comet_loop [label="comet loop\nif !is_ws_ok\nelse wait"]
+
+	ensure_comet [label="ensure comet\nis_ws_ok = 0"];
+}

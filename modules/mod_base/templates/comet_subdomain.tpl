@@ -37,17 +37,16 @@
 					document.domain = old_domain;
 				} catch (e) {
 				};
-				setTimeout("z_comet();", 200);
+				setTimeout("z_comet_poll();", 200);
 			},
 			error: function(xmlHttpRequest, textStatus, errorThrown) 
 			{
-				setTimeout("z_comet();", 1000);
+				setTimeout("z_comet_poll();", 1000);
 			}
 		});
 		return;
 	}
-	
-	setTimeout("z_comet()", 1000);
+	setTimeout("z_comet_poll()", 1000);
 	</script>
   </body>
 </html>
