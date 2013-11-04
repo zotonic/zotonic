@@ -51,9 +51,11 @@
     week_boundaries/1,
     week_boundaries/2,
     
+    timestamp/0,
+
     timestamp_to_datetime/1,
     datetime_to_timestamp/1,
-    
+
     undefined_if_invalid_date/1
 ]).
 
@@ -295,21 +297,24 @@ day_add(Date, Num) when Num > 0 ->
 
 
 
+% Constant value of calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}})
+-define(SECS_1970, 62167219200).
+
+%% @doc Calculate the current UNIX timestamp (seconds since Jan 1, 1970)
+timestamp() ->
+	calendar:datetime_to_gregorian_seconds(calendar:universal_time())-?SECS_1970.
+
 %% @doc Translate UNIX timestamp to local datetime.
 timestamp_to_datetime(Seconds) ->
-   BaseDate = calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
-   calendar:universal_time_to_local_time(calendar:gregorian_seconds_to_datetime(BaseDate + Seconds)).
+   calendar:universal_time_to_local_time(calendar:gregorian_seconds_to_datetime(?SECS_1970 + Seconds)).
 
-
-%% @doc Translate a date to UNIX timestamp
+%% @doc Translate a local time date to UNIX timestamp
 datetime_to_timestamp(?ST_JUTTEMIS) ->
     undefined;
 datetime_to_timestamp(undefined) ->
     undefined;
 datetime_to_timestamp(DT) ->
-    BaseDate = calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
-    calendar:datetime_to_gregorian_seconds(hd(calendar:local_time_to_universal_time_dst(DT))) - BaseDate.
-
+    calendar:datetime_to_gregorian_seconds(hd(calendar:local_time_to_universal_time_dst(DT))) - ?SECS_1970.
 
 %% @doc Return 'undefined' if a given date is invalid
 undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
