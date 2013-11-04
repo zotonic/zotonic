@@ -24,7 +24,7 @@
 -export([
     start/2,
     
-    receive_loop/4,
+    receive_loop/5,
     start_send_loop/2,
     send_loop/2,
     
@@ -37,7 +37,7 @@
 start(ReqData, Context1) ->
     Hostname = m_site:get(hostname, Context1),
 
-    Qs = [[K, $=, mochiweb_util:quote_plus(V)] || {K, V} <- wrq:req_qs(ReqData)],
+    Qs = mochiweb_util:urlencode(wrq:req_qs(ReqData)),
     WebSocketPath = case Qs of
         [] -> iolist_to_binary(wrq:path(ReqData));
         _ -> iolist_to_binary([wrq:path(ReqData), $?, Qs])
@@ -54,55 +54,55 @@ start(ReqData, Context1) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, Context1) end),
-    z_websocket_hixie75:receive_loop(none, nolength, Socket, Context1).
+    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, Context1) end),
+    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, Context1).
 
 
 %% ============================== RECEIVE DATA =====================================
 
 %% @doc Start receiving messages from the websocket
-receive_loop(Buff, Length, Socket, Context) ->
+receive_loop(Buff, Length, Socket, SenderPid, Context) ->
     case mochiweb_socket:recv(Socket, 0, infinity) of
         {ok, Received} ->
-            handle_data(Buff, Length, Received, Socket, Context);
+            handle_data(Buff, Length, Received, Socket, SenderPid, Context);
         {error, Reason} ->
             {error, Reason}
     end.
 
 %% @doc Upack any data frames, send them to the handling functions.
-handle_data(none, nolength, <<0,T/binary>>, Socket, Context) ->
+handle_data(none, nolength, <<0,T/binary>>, Socket, SenderPid, Context) ->
     <<Type, _/binary>> = T,
     case Type =< 127 of
         true -> 
-            handle_data(<<>>, nolength, T, Socket, Context);
+            handle_data(<<>>, nolength, T, Socket, SenderPid, Context);
         false ->
             {Length, LenBytes} = unpack_length(T),
             <<_:LenBytes/bytes, Rest:Length/bytes>> = T,
-            handle_data(<<>>, Length, Rest, Socket, Context)
+            handle_data(<<>>, Length, Rest, Socket, SenderPid, Context)
     end;
 
 %% Extract frame ending with 255
-handle_data(none, nolength, <<>>, Socket, Context) ->
-    z_websocket_hixie75:receive_loop(none, nolength, Socket, Context);
-handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _Context) ->
+handle_data(none, nolength, <<>>, Socket, SenderPid, Context) ->
+    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, Context);
+handle_data(<<>>, nolength, <<255,_T/binary>>, _Socket, _SenderPid, _Context) ->
     % A packet of <<0,255>> signifies that the ua wants to close the connection
     ua_close_request;
-handle_data(Msg, nolength, <<255,T/binary>>, Socket, Context) ->
-    handle_message(Msg, Context),
-    handle_data(none, nolength, T, Socket, Context);
-handle_data(Msg, nolength, <<H,T/binary>>, Socket, Context) ->
-    handle_data(<<Msg/binary, H>>, nolength, T, Socket, Context);
+handle_data(Msg, nolength, <<255,T/binary>>, Socket, SenderPid, Context) ->
+    handle_message(Msg, SenderPid, Context),
+    handle_data(none, nolength, T, Socket, SenderPid, Context);
+handle_data(Msg, nolength, <<H,T/binary>>, Socket, SenderPid, Context) ->
+    handle_data(<<Msg/binary, H>>, nolength, T, Socket, SenderPid, Context);
 
 %% Extract frame with length bytes
-handle_data(Msg, 0, T, Socket, Context) ->
-    handle_message(Msg, Context),
-    handle_data(none, nolength, T, Socket, Context);
-handle_data(Msg, Length, <<H,T/binary>>, Socket, Context) when is_integer(Length) and Length > 0 ->
-    handle_data(<<Msg/binary, H>>, Length-1, T, Socket, Context);
+handle_data(Msg, 0, T, Socket, SenderPid, Context) ->
+    handle_message(Msg, SenderPid, Context),
+    handle_data(none, nolength, T, Socket, SenderPid, Context);
+handle_data(Msg, Length, <<H,T/binary>>, Socket, SenderPid, Context) when is_integer(Length) and Length > 0 ->
+    handle_data(<<Msg/binary, H>>, Length-1, T, Socket, SenderPid, Context);
 
 %% Data ended before the end of the frame, loop to fetch more
-handle_data(Msg, Length, <<>>, Socket, Context) ->
-    z_websocket_hixie75:receive_loop(Msg, Length, Socket, Context).
+handle_data(Msg, Length, <<>>, Socket, SenderPid, Context) ->
+    z_websocket_hixie75:receive_loop(Msg, Length, Socket, SenderPid, Context).
 
 
 % Call the handler. We are initializing.
@@ -111,9 +111,9 @@ handle_init(Context) ->
     H:websocket_init(Context).
 
 % Call the handler, new message arrived.
-handle_message(Msg, Context) ->
+handle_message(Msg, SenderPid, Context) ->
     H = z_context:get(ws_handler, Context),
-    H:websocket_message(Msg, Context).
+    H:websocket_message(Msg, SenderPid, Context).
 
 handle_info(Msg, Context) ->
     H = z_context:get(ws_handler, Context),
