@@ -508,26 +508,26 @@ function z_tinymce_remove(element)
 function z_stream_start(host, websocket_host)
 {
     z_stream_host = host;
-    z_websocket_host = websocket_host || host;
+    z_websocket_host = websocket_host || window.location.host;
     if (!z_ws && !z_comet_is_running)
     {
         if ("WebSocket" in window)
         {
-            z_websocket_start(host);
+            z_websocket_start();
         }
         else
         {
-            setTimeout(function() { z_comet(host); }, 2000);
+            setTimeout(function() { z_comet(); }, 2000);
             z_comet_is_running = true;
         }
     }
 }
 
-function z_comet(host)
+function z_comet()
 {
-    if (host != window.location.host && window.location.protocol == "http:")
+    if (z_stream_host != window.location.host && window.location.protocol == "http:")
     {
-        var url = window.location.protocol + '//' + host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
+        var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
         var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
         comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
         comet.appendTo("body");
@@ -577,31 +577,37 @@ function z_websocket_restart()
     if (z_ws) {
         try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
         z_ws_opened = false;
-        setTimeout(function() { z_websocket_start(z_stream_host); }, 100);
+        setTimeout(function() { z_websocket_start(); }, 100);
     }
 }
 
+function z_comet_fallback() {
+    if(z_ws && z_ws.readyState != 0) {
+        try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
+        z_ws = undefined;
+        z_ws_opened = false;
+        return;
+    }
+    // Failed to open a websocket within the specified time - try to start comet
+    z_ws = undefined;
+    z_comet();
+}
 
-function z_websocket_start(host)
+function z_websocket_start()
 {
     var protocol = "ws:";
     if (window.location.protocol == "https:")
     {
         protocol = "wss:";
     }
-    z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
+    var connect_timeout = setTimeout(function() { z_comet_fallback(); }, 2000);
 
-    var connect_timeout = setTimeout(function() { 
-        if(z_ws && z_ws.readyState != 0) {
-            try { z_ws.close(); } catch(e) {}; // closing an already closed ws can raise exceptions.
-            z_ws = undefined;
-            z_ws_opened = false;
-            return;
-        }
-        // Failed to open a websocket within the specified time - try to start comet
-        z_ws = undefined;
-        z_comet(host);
-    }, 2000); 
+    try {
+        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
+    } catch (e) {
+        clearTimeout(connect_timeout);
+        z_comet_fallback();
+    }
 
     z_ws.onopen = function() { 
         clearTimeout(connect_timeout);
@@ -617,14 +623,14 @@ function z_websocket_start(host)
             // Try to reopen once, might be closed due to an server side error
             setTimeout(function() {
                 z_ws_retries += 1;
-                z_websocket_restart(host);
+                z_websocket_restart();
             }, 100);
         }
         else
         {
             // Failed opening websocket connection - try to start comet
             z_ws = undefined;
-            setTimeout(function() { z_comet(host); }, 2000);
+            setTimeout(function() { z_comet(); }, 2000);
             z_comet_is_running = true;
         }
     };
