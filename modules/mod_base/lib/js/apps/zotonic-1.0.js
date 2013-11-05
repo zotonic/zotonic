@@ -493,57 +493,57 @@ function z_stream_start(host, websocket_host)
 {
     z_stream_host = host;
     z_websocket_host = websocket_host || window.location.host;
-    setTimeout(function() { z_comet_poll(); }, 1000);
+    setTimeout(function() { z_comet_start(); }, 1000);
     if ("WebSocket" in window)
     {
         setTimeout(function() { z_websocket_start(); }, 200);
     }
 }
 
-function z_comet_poll()
+function z_comet_start()
 {
-    if (z_ws_pong_count === 0)
+    if (z_stream_host != window.location.host && window.location.protocol == "http:")
     {
-        if (z_stream_host != window.location.host && window.location.protocol == "http:")
-        {
-            var $zc = $('#z_comet_connection');
-            if ($zc.length > 0) {
-                $zc.attr('src', $zc.attr('src'));
-            } else {
-                var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
-                var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
-                comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
-                comet.appendTo("body");
-            }
-        }
-        else
-        {
-            z_comet_ajax();
+        var $zc = $('#z_comet_connection');
+        if ($zc.length > 0) {
+            $zc.attr('src', $zc.attr('src'));
+        } else {
+            var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
+            var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
+            comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+            comet.appendTo("body");
         }
     }
     else
     {
-        setTimeout(function() { z_comet_poll(); }, 5000);
+        z_comet_poll_ajax();
     }
 }
 
-function z_comet_ajax()
+function z_comet_poll_ajax()
 {
-    $.ajax({
-        url: window.location.protocol + '//' + window.location.host + '/comet',
-        type:'post',
-        data: "z_pageid=" + urlencode(z_pageid),
-        dataType: 'text',
-        success: function(data, textStatus)
-        {
-            z_comet_data(data);
-            setTimeout(function() { z_comet_poll(); }, 1000);
-        },
-        error: function(xmlHttpRequest, textStatus, errorThrown)
-        {
-            setTimeout(function() { z_comet_poll(); }, 1000);
-        }
-    });
+    if (z_ws_pong_count === 0)
+    {
+	    $.ajax({
+	        url: window.location.protocol + '//' + window.location.host + '/comet',
+	        type:'post',
+	        data: "z_pageid=" + urlencode(z_pageid),
+	        dataType: 'text',
+	        success: function(data, textStatus)
+	        {
+	            z_comet_data(data);
+	            setTimeout(function() { z_comet_poll_ajax(); }, 500);
+	        },
+	        error: function(xmlHttpRequest, textStatus, errorThrown)
+	        {
+	            setTimeout(function() { z_comet_poll_ajax(); }, 1000);
+	        }
+	    });
+    }
+    else
+    {
+        setTimeout(function() { z_comet_poll_ajax(); }, 5000);
+    }
 }
 
 

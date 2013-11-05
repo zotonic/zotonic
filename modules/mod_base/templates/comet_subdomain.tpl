@@ -12,41 +12,57 @@
 	{% include "_js_include_jquery.tpl" %}
 
     <script type="text/javascript">
-	function z_comet() 
+	function get_poll_count()
 	{
-		$.ajax({ 
-			url: '/comet',
-			type: 'post',
-			data: "z_pageid={{ q.z_pageid|urlencode }}",
-			dataType: 'text',
-			success: function(data, textStatus) 
-			{
-				var old_domain = document.domain;
-				try 
-				{
-					document.domain = "{{ m.site.document_domain }}";
-					window.parent.z_comet_data(data);
-				} 
-				catch (e)
-				{
-					if (window.console && window.console.log)
-						window.console.log(e);
-				}
-				
-				try {
-					document.domain = old_domain;
-				} catch (e) {
-				};
-				setTimeout("z_comet_poll();", 200);
-			},
-			error: function(xmlHttpRequest, textStatus, errorThrown) 
-			{
-				setTimeout("z_comet_poll();", 1000);
-			}
-		});
-		return;
+		var old_domain = document.domain;
+		document.domain = "{{ m.site.document_domain }}";
+		var ws_pong_count = window.parent.z_ws_pong_count;
+		try {
+			document.domain = old_domain;
+		} catch (e) {
+		}
+		return ws_pong_count;
 	}
-	setTimeout("z_comet_poll()", 1000);
+
+	function handle_poll_data(data)
+	{
+		var old_domain = document.domain;
+		try {
+			document.domain = "{{ m.site.document_domain }}";
+			window.parent.z_comet_data(data);
+		} catch (e) {
+			if (window.console && window.console.log)
+				window.console.log(e);
+		}
+		try {
+			document.domain = old_domain;
+		} catch (e) {
+		}
+	}
+
+	function z_comet_poll_subdomain() 
+	{
+		if (get_poll_count() === 0) {
+			$.ajax({ 
+				url: '/comet',
+				type: 'post',
+				data: "z_pageid={{ q.z_pageid|urlencode }}",
+				dataType: 'text',
+				success: function(data, textStatus) 
+				{
+					handle_poll_data(data);
+					setTimeout(function() { z_comet_poll_subdomain(); }, 500);
+				},
+				error: function(xmlHttpRequest, textStatus, errorThrown) 
+				{
+					setTimeout(function() { z_comet_poll_subdomain(); }, 1000);
+				}
+			});
+		} else {
+			setTimeout(function() { z_comet_poll_subdomain(); }, 5000);
+		}
+	}
+	z_comet_poll_subdomain();
 	</script>
   </body>
 </html>
