@@ -477,7 +477,7 @@ function z_tinymce_remove(element)
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
-function z_stream_start(host)
+function z_stream_start(host, websocket_host)
 {
     z_stream_host = host;
     z_websocket_host = websocket_host || window.location.host;
