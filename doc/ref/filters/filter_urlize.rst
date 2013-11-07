@@ -5,7 +5,7 @@ Find urls in the given input and make them clickable.
 
 Example::
 
-  {{ "http://foo.bar/"|escape_link }}
+  {{ "http://foo.bar/"|urlize }}
 
 Outputs::
 
