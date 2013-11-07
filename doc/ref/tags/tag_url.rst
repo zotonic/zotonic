@@ -1,4 +1,3 @@
-
 .. index:: tag; url
 .. _tag-url:
 
@@ -30,6 +29,6 @@ Please note that the best way to generate the url of a page (resource) is to use
 There is one magic argument: ``use_absolute_url``. When this argument is added then the generated url contains the
 protocol, hostname and port of the website (as seen by the user agent)::
 
-   {% url admin_edit_rsc id=42 foo="bar" %}
+   {% url admin_edit_rsc id=42 foo="bar" use_absolute_url %}
 
 Will return an url like “http://example.com/admin/edit/42?foo=bar”.
