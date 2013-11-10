@@ -96,13 +96,14 @@ Query-model arguments
 **hassubject**
 
   Select all resources that have an outgoing connection to the given
-  page, which is specified by the argument (123 in the
-  example). Optionally, you can pass the name of a predicate as the
-  second argument, to specify that the connection should have this
-  predicate. Specifying this multiple times does an "or" of the
-  conditions.
+  page, which is specified by the argument (the page id 123 in the
+  example, or the unique page name 'tag_gift'). Optionally, you can
+  pass the name of a predicate as the second argument, to specify that
+  the connection should have this predicate. Specifying this multiple
+  times does an "or" of the conditions.
 
   ``hassubject=123``
+  ``hassubject='tag_gift'``
   ``hassubject=[123,'author']``
 
 **hasobject**
@@ -114,6 +115,7 @@ Query-model arguments
   predicate.
 
   ``hasobject=123``
+  ``hasobject='tag_gift'``
   ``hasobject=[123,'document']``
 
 **is_featured**
