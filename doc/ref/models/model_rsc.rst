@@ -1,4 +1,3 @@
-
 .. include:: meta-rsc.rst
 
 The main resource model, which is the central part of the
@@ -43,7 +42,7 @@ A resource has the following properties accessible from the templates:
 |                   |datetime tuple or undefined. When there is a start   |                                |
 |                   |date then there is also an end date.                 |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
-|name               |Unique name of the page. Returns a binary of         |<<"page_home">>                 |
+|name               |Unique name of the page. Returns a binary or         |<<"page_home">>                 |
 |                   |undefined. Valid characters are a-z, 0-9 and _       |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |page_path          |Unique path of the page, used for url                |<<"/">>                         |
