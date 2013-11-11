@@ -191,7 +191,7 @@ Query-model arguments
   Filter on all things which have any incoming edge with the given
   predicate.
 
-  ``hasobject='author'``
+  ``hassubjectpredicate='author'``
 
 **text**
 
