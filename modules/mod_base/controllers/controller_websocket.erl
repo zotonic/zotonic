@@ -48,7 +48,8 @@ forbidden(ReqData, DispatchArgs) ->
     Context = z_context:new(ReqData),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:continue_session(Context1),
-    ?WM_REPLY(not z_context:has_session(Context2), Context2).
+    ?WM_REPLY(not z_context:has_session(Context2) andalso
+              z_context:get(require_session, Context2, true), Context2).
 
 %% @doc Possible connection upgrades
 upgrades_provided(ReqData, Context) ->
