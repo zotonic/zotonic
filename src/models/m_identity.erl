@@ -208,16 +208,18 @@ set_username_pw(Id, Username, Password, Context) ->
 %% @doc Return the rsc_id with the given username/password.  
 %%      If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_username_pw(Username, Password, Context) -> {ok, Id} | {error, Reason}
-check_username_pw("admin", [], _Context) ->
+check_username_pw(<<"admin">>, Password, Context) ->
+    check_username_pw("admin", Password, Context);
+check_username_pw("admin", Empty, _Context) when Empty =:= []; Empty =:= <<>> ->
     {error, password};
 check_username_pw("admin", Password, Context) ->
     Password1 = z_convert:to_list(Password),
     case m_site:get(admin_password, Context) of
-	Password1 ->
-	    z_db:q("update identity set visited = now() where id = 1", Context),
-	    {ok, 1};
-	_ ->
-	    {error, password}
+        Password1 ->
+            z_db:q("update identity set visited = now() where id = 1", Context),
+            {ok, 1};
+        _ ->
+            {error, password}
     end;
 check_username_pw(Username, Password, Context) ->
     Username1 = z_string:trim(z_string:to_lower(Username)),
