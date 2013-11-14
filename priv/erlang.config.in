@@ -6,7 +6,7 @@
 
  {emqtt, [
     {auth, {zotonic, []}},
-    {access_control, {z_mqtt_auth, with_access_control}},
+    {access_control, {zotonic, []}},
     {listeners, [
         %%% Unescape to enable MQTT on the given port
         % {1883,  [

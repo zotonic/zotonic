@@ -24,7 +24,8 @@
     add/2,
     check/2,
     delete/1,
-    with_access_control/3,
+    publish/2,
+    subscribe/3,
     map_user_site/1,
     test/0]).
 
@@ -34,16 +35,20 @@ init(_Opts) ->
     ok.
 
 % @doc Usernames are in the form "user@sitename" or "user@foobar.com"
-check(undefined, _) -> false;
-check(_, undefined) -> false;
+check(undefined, _) ->
+    false;
+check(_, undefined) ->
+    false;
 check(Username, Password) when is_binary(Username), is_binary(Password) ->
     case map_user_site(Username) of
         {ok, SiteUser, Context} ->
             case z_auth:logon_pw(SiteUser, Password, Context) of
                 {false, _Context} ->
+                    lager:info("MQTT logon failed for ~p on ~p", [SiteUser, z_context:site(Context)]),
                     false;
                 UserContext ->
-                    {ok, {zauth, z_acl:user(UserContext), z_context:site(UserContext)}}
+                    lager:debug("MQTT logon success for ~p on ~p", [SiteUser, z_context:site(UserContext)]),
+                    {true, {zauth, z_acl:user(UserContext), z_context:site(UserContext)}}
             end;
         {error, _} -> 
             false
@@ -56,18 +61,23 @@ delete(Username) when is_binary(Username) ->
     {error, noacces}.
 
 
-with_access_control(publish, Msg, {zauth, UserId, Host}) when is_integer(UserId) ->
+publish(Topic, {zauth, UserId, Host}) when is_integer(UserId) ->
     Context = z_acl:logon(UserId, z_context:new(Host)),
-    case z_mqtt:route(Msg, Context) of
+    case z_mqtt:publish(Topic, Context) of
         {error, _} = Error -> Error;
-        _ -> handled
+        _ -> ok
     end;
-with_access_control(subscribe, {Topic,Qos}, {zauth, UserId, Host}) when is_integer(UserId) ->
+publish(_Topic, _Auth) ->
+    {error, eaccess}.
+
+subscribe({Topic, Qos}, Pid, {zauth, UserId, Host}) when is_integer(UserId) ->
     Context = z_acl:logon(UserId, z_context:new(Host)),
-    case z_mqtt:subscribe(Topic, Qos, self(), Context) of
+    case z_mqtt:subscribe(Topic, Qos, Pid, Context) of
         {error, _} = Error -> Error;
-        _ -> handled
-    end.
+        _ -> ok
+    end;
+subscribe(_TopicQos, _Pid, _Auth) ->
+    {error, eaccess}.
 
 
 map_user_site(Username) when is_binary(Username) ->
@@ -84,9 +94,11 @@ map_user_site(Username) when is_binary(Username) ->
                                 true ->
                                     {ok, local_username(Parts), z_context:new(Host)};
                                 false ->
+                                    lager:info("MQTT: no site found for ~p, using fallback", [Hostname]),
                                     fallback_site(Username)
                             end;
-                        {'EXIT',_} -> 
+                        {'EXIT',_} ->
+                            lager:info("MQTT: no site found for ~p, using fallback", [Hostname]),
                             fallback_site(Username)
                     end;
                 {ok, Host} -> 

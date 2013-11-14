@@ -242,7 +242,7 @@ The following section defines the Zotonic authentication module, access control,
 
    {emqtt, [
       {auth, {z_mqtt_auth, []}},
-      {access_control, {z_mqtt_auth, with_access_control}},
+      {access_control, {zotonic, []}},
       {listeners, [
           {1883,  [
               binary,

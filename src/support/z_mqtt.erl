@@ -192,6 +192,10 @@ maybe_context_topic("//" ++ Topic, _Context) ->
     unicode:characters_to_binary(Topic);
 maybe_context_topic(<<"//", Topic/binary>>, _Context) ->
     Topic;
+maybe_context_topic("site/" ++ _ = Topic, _Context) ->
+    unicode:characters_to_binary(Topic);
+maybe_context_topic(<<"site/", _/binary>> = Topic, _Context) ->
+    Topic;
 maybe_context_topic(Topic, Context) ->
     iolist_to_binary([
             <<"site/">>,
