@@ -20,7 +20,7 @@
 
 require_zotonic_running
 
-LOGS=$(ls $ZOTONIC/priv/log/{crash,error,console}.log)
+LOGS=$(ls $ZOTONIC/priv/sasl/{error,console}.log $ZOTONIC/priv/log/crash.log)
 tail -n 500 $LOGS
 tail -F $LOGS
 
