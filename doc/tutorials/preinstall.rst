@@ -160,4 +160,6 @@ ImageMagick do work on Windows, so, if you’re adventurous, it should
 be possible to get it running.
 
 We have included user-contributed ``start.cmd`` and ``build.cmd``
-batch-scripts which are supposed to work on Windows.
+batch-scripts which used to work on Windows, but have not been kept
+up-to-date with recent changes. Expect some major tweaking to get this
+back on track.
