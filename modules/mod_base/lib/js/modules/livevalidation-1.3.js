@@ -48,9 +48,9 @@ function getLiveValidation(element) {
 
 var LiveValidation = function(element, optionsObj){
     this.initialize(element, optionsObj);
-}
+};
 
-LiveValidation.VERSION = '1.3 standalone';
+LiveValidation.VERSION = '1.3 standalone-zotonic';
 
 /** element types constants ****/
 
@@ -61,12 +61,12 @@ LiveValidation.CHECKBOX = 4;
 LiveValidation.SELECT   = 5;
 LiveValidation.FILE     = 6;
 LiveValidation.RADIO    = 7;
+LiveValidation.FORM     = 8;
 
 
 /****** prototype ******/
 
-LiveValidation.prototype = 
-{
+LiveValidation.prototype = {
 
     validClass: 'z_valid',
     invalidClass: 'z_invalid',
@@ -82,56 +82,73 @@ LiveValidation.prototype =
      */
     initialize: function(element, optionsObj){
       var self = this;
+      var $form;
+
       if(!element)
         throw new Error("LiveValidation::initialize - No element reference or element id has been provided!");
       this.element = element.nodeName ? element : document.getElementById(element);
-      if(!this.element) 
+      if(!this.element)
         throw new Error("LiveValidation::initialize - No element with reference or id of '" + element + "' exists!");
       // default properties that could not be initialised above
       this.validations = [];
       this.elementType = this.getElementType();
-      this.form = this.element.form;
-      // options
       var options = optionsObj || {};
+      if (this.elementType == LiveValidation.FORM) {
+          this.form = this.element;
+          $form = $(this.element);
+          this.onAsync = options.onAsync || function(){};
+          this.onValid = options.onValid || function(){};
+          this.onInvalid = options.onInvalid || function(){};
+          this.onlyOnBlur =  options.onlyOnBlur || false;
+          this.wait = options.wait || 0;
+          this.onlyOnSubmit = true;
+      } else {
+          this.form = this.element.form;
+          $form = $(this.element).closest("form");
+          this.onAsync = options.onAsync || function(){ this.insertSpinner(this.createSpinnerSpan()); this.addFieldClass(); };
+          this.onValid = options.onValid || function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); };
+          this.onInvalid = options.onInvalid || function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); };
+          this.onlyOnBlur =  options.onlyOnBlur || false;
+          this.wait = options.wait || 0;
+          this.onlyOnSubmit = options.onlyOnSubmit || false;
+      }
+      // options
       this.validMessage = options.validMessage || '';
       var node = options.insertAfterWhatNode || this.element;
       this.insertAfterWhatNode = node.nodeType ? node : document.getElementById(node);
-      this.onAsync = options.onAsync || function(){ this.insertSpinner(this.createSpinnerSpan()); this.addFieldClass(); };
-      this.onValid = options.onValid || function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); };
-      this.onInvalid = options.onInvalid || function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); };  
-      this.onlyOnBlur =  options.onlyOnBlur || false;
-      this.wait = options.wait || 0;
-      this.onlyOnSubmit = options.onlyOnSubmit || false;
       this.validationAsync = false;
       
       // Initialize the form hooks, remember the LiveValidationForm object.
-      var theForm = $(this.element).closest("form");
-      if(theForm.length){
-        this.formObj = LiveValidationForm.getInstance(theForm[0]);
+      if($form.length){
+        this.formObj = LiveValidationForm.getInstance($form[0]);
       }
 
       // events
       // collect old events
-      this.oldOnFocus = this.element.onfocus || function(){};
-      this.oldOnBlur = this.element.onblur || function(){};
-      this.oldOnClick = this.element.onclick || function(){};
-      this.oldOnChange = this.element.onchange || function(){};
-      this.oldOnKeyup = this.element.onkeyup || function(){};
-      this.element.onfocus = function(e){ self.doOnFocus(e); return self.oldOnFocus.call(this, e); }
-      if(!this.onlyOnSubmit){
-        switch(this.elementType){
-          case LiveValidation.RADIO:
-          case LiveValidation.CHECKBOX:
-            this.element.onclick = function(e){ self.validate(); return self.oldOnClick.call(this, e); }
-          // let it run into the next to add a change event too
-          case LiveValidation.SELECT:
-          case LiveValidation.FILE:
-            this.element.onchange = function(e){ self.validate(); return self.oldOnChange.call(this, e); }
-            break;
-          default:
-            if(!this.onlyOnBlur) this.element.onkeyup = function(e){ self.deferValidation(); return self.oldOnKeyup.call(this, e); }
-            this.element.onblur = function(e){ self.doOnBlur(e); return self.oldOnBlur.call(this, e); }
-        }
+      if (this.elementType != LiveValidation.FORM) {
+          this.oldOnFocus = this.element.onfocus || function(){};
+          this.oldOnBlur = this.element.onblur || function(){};
+          this.oldOnClick = this.element.onclick || function(){};
+          this.oldOnChange = this.element.onchange || function(){};
+          this.oldOnKeyup = this.element.onkeyup || function(){};
+          this.element.onfocus = function(e){ self.doOnFocus(e); return self.oldOnFocus.call(this, e); };
+          if(!this.onlyOnSubmit){
+            switch(this.elementType){
+              case LiveValidation.RADIO:
+              case LiveValidation.CHECKBOX:
+                this.element.onclick = function(e){ self.validate(); return self.oldOnClick.call(this, e); };
+                this.element.onchange = function(e){ self.validate(); return self.oldOnChange.call(this, e); };
+                break;
+              case LiveValidation.SELECT:
+              case LiveValidation.FILE:
+                this.element.onchange = function(e){ self.validate(); return self.oldOnChange.call(this, e); };
+                break;
+              default:
+                if(!this.onlyOnBlur) this.element.onkeyup = function(e){ self.deferValidation(); return self.oldOnKeyup.call(this, e); };
+                this.element.onblur = function(e){ self.doOnBlur(e); return self.oldOnBlur.call(this, e); };
+                break;
+            }
+          }
       }
     },
   
@@ -140,20 +157,24 @@ LiveValidation.prototype =
      */
     destroy: function(){
         // remove events - set them back to the previous events
-        this.element.onfocus = this.oldOnFocus;
-        if(!this.onlyOnSubmit){
-            switch(this.elementType){
-              case LiveValidation.RADIO:
-              case LiveValidation.CHECKBOX:
-                this.element.onclick = this.oldOnClick;
-              // let it run into the next to add a change event too
-              case LiveValidation.SELECT:
-              case LiveValidation.FILE:
-                this.element.onchange = this.oldOnChange;
-                break;
-              default:
-                if(!this.onlyOnBlur) this.element.onkeyup = this.oldOnKeyup;
-                this.element.onblur = this.oldOnBlur;
+        if (this.elementType != LiveValidation.FORM) {
+            this.element.onfocus = this.oldOnFocus;
+            if(!this.onlyOnSubmit){
+                switch(this.elementType){
+                  case LiveValidation.RADIO:
+                  case LiveValidation.CHECKBOX:
+                    this.element.onclick = this.oldOnClick;
+                    this.element.onchange = this.oldOnChange;
+                    break;
+                  case LiveValidation.SELECT:
+                  case LiveValidation.FILE:
+                    this.element.onchange = this.oldOnChange;
+                    break;
+                  default:
+                    if(!this.onlyOnBlur) this.element.onkeyup = this.oldOnKeyup;
+                    this.element.onblur = this.oldOnBlur;
+                    break;
+                }
             }
         }
         this.validations = [];
@@ -198,10 +219,12 @@ LiveValidation.prototype =
      * makes the validation wait the alotted time from the last keystroke 
      */
     deferValidation: function(e){
-      if(this.wait >= 300) this.removeMessageAndFieldClass();
+      if (this.wait >= 300)
+          this.removeMessageAndFieldClass();
+      if (this.timeout)
+          clearTimeout(this.timeout);
       var self = this;
-      if(this.timeout) clearTimeout(self.timeout);
-      this.timeout = setTimeout( function(){ self.validate() }, self.wait); 
+      this.timeout = setTimeout( function(){ self.validate(); }, this.wait);
     },
         
     /**
@@ -209,7 +232,7 @@ LiveValidation.prototype =
      */
     doOnBlur: function(e){
       this.focused = false;
-      this.validate(e);
+      this.validate();
     },
         
     /**
@@ -252,6 +275,8 @@ LiveValidation.prototype =
             return LiveValidation.TEXT;
         if (nodeName == 'SELECT')
             return LiveValidation.SELECT;
+        if (nodeName == 'FORM')
+            return LiveValidation.FORM;
         if (nodeName == 'INPUT')
             throw new Error('LiveValidation::getElementType - Cannot use LiveValidation on an ' + this.element.type + ' input!');
         throw new Error('LiveValidation::getElementType - Element must be an input, select, or textarea!');
@@ -276,17 +301,17 @@ LiveValidation.prototype =
                 case Validate.Confirmation:
                 case Validate.Acceptance:
                   this.displayMessageWhenEmpty = true;
-                  result = this.validateElement(validation.type, validation.params, isSubmit, submitTrigger); 
                   break;
                 default:
-                  result = this.validateElement(validation.type, validation.params, isSubmit, submitTrigger);
                   break;
             }
-            this.validationFailed = !result;
-            if(this.validationFailed) return false; 
-          }
-          this.message = this.validMessage;
-          return true;
+            if (!this.validateElement(validation.type, validation.params, isSubmit, submitTrigger)) {
+                this.validationFailed = true;
+                return false;
+            }
+        }
+        this.message = this.validMessage;
+        return true;
     },
 
     /**
@@ -295,7 +320,7 @@ LiveValidation.prototype =
     isAsync: function (){
         for(var i = 0, len = this.validations.length; i < len; ++i) {
             var validation = this.validations[i];
-            if (validation.type == Validate.Postback)
+            if (validation.type == Validate.Postback || validation.params.isAsync === true)
                 return true;
         }
         return false;
@@ -311,31 +336,35 @@ LiveValidation.prototype =
      * @return {Boolean} or {"async"} - whether the validation has passed, failed or waits for an async server side check
      */
     validateElement: function(validationFunction, validationParamsObj, isSubmit, submitTrigger){
-        var value = this.getValue();
-        if(validationFunction == Validate.Acceptance){
-            if(this.elementType != LiveValidation.CHECKBOX) 
-                throw new Error('LiveValidation::validateElement - Element to validate acceptance must be a checkbox!');
-            value = this.element.checked;
-        }
-        var isValid = true;
-        try {
-            isValid = validationFunction(value, validationParamsObj, isSubmit, submitTrigger);
-            if (isValid == 'async') {
-                this.validationAsync = true;
+        if (!this.element.disabled) {
+            var value = this.getValue();
+            if(validationFunction == Validate.Acceptance){
+                if(this.elementType != LiveValidation.CHECKBOX)
+                    throw new Error('LiveValidation::validateElement - Element to validate acceptance must be a checkbox!');
+                value = this.element.checked;
             }
-        } 
-        catch(error) {
-            if(error instanceof Validate.Error){
-                if( value !== '' || (value === '' && this.displayMessageWhenEmpty) ){
-                    this.validationFailed = true;
-                    this.message = error.message;
-                    isValid = false;
+            var isValid = true;
+            try {
+                isValid = validationFunction(value, validationParamsObj, isSubmit, submitTrigger);
+                if (isValid == 'async') {
+                    this.validationAsync = true;
                 }
-            } else {
-                throw error;
             }
+            catch(error) {
+                if(error instanceof Validate.Error){
+                    if( value !== '' || (value === '' && this.displayMessageWhenEmpty) ){
+                        this.validationFailed = true;
+                        this.message = error.message;
+                        isValid = false;
+                    }
+                } else {
+                    throw error;
+                }
+            }
+            return isValid;
+        } else {
+            return true;
         }
-        return isValid;
     },
     
     
@@ -345,16 +374,17 @@ LiveValidation.prototype =
             if (this.element.selectedIndex >= 0) return this.element.options[this.element.selectedIndex].value;
             else return "";
         case LiveValidation.RADIO:
-            var val = $('input[name="'+this.element.name+'"]:checked').val();
-            return val;
+            return $('input[name="'+this.element.name+'"]:checked').val();
         case LiveValidation.CHECKBOX:
             var val = [];
             $('input[name="'+this.element.name+'"]:checked').each(function() { val.push($(this).val()); });
-            if (val.length == 0) {
+            if (val.length === 0) {
                 return undefined;
             } else {
                 return val;
             }
+        case LiveValidation.FORM:
+            return "";
         default:
             return this.element.value;
         }
@@ -394,7 +424,7 @@ LiveValidation.prototype =
             // Find which validation was waiting for async, assume only one async postback per field.
             for(var i = 0, len = this.validations.length; i < len; ++i){
                 var validation = this.validations[i];
-                if(validation.type == Validate.Postback){
+                if(validation.type == Validate.Postback || validation.params.isAsync === true) {
                     // Clear the async wait flag
                     this.validationAsync = false;
                     this.validationFailed = !isValid;
@@ -403,7 +433,7 @@ LiveValidation.prototype =
                     } else {
                         this.onInvalid();
                     }
-                    this.formObj.asyncResult(this, isValid)
+                    this.formObj.asyncResult(this, isValid);
                 }
             }
         }
@@ -474,8 +504,8 @@ LiveValidation.prototype =
      */
     insertSpinner: function (elementToInsert){
         this.removeMessage();
-        if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-          || this.element.value != '' ){
+        if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value === ''))
+          || this.element.value !== '' ){
 
           elementToInsert.className += ' ' + this.messageClass + ' ' + this.asyncFieldClass;
           if(this.insertAfterWhatNode.nextSibling){
@@ -494,17 +524,18 @@ LiveValidation.prototype =
      */
     insertMessage: function(elementToInsert){
         this.removeMessage();
-        if (!elementToInsert) return;
-    if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-        || this.element.value != '' ) {
-                
-            var className = this.validationFailed ? this.invalidClass : this.validClass;
-            elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-            if(this.insertAfterWhatNode.nextSibling){
-                this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-            }else{
-                this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-            }
+        if (elementToInsert) {
+          if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value === ''))
+            || this.element.value !== '' ) {
+                  
+              var className = this.validationFailed ? this.invalidClass : this.validClass;
+              elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+              if(this.insertAfterWhatNode.nextSibling){
+                  this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+              }else{
+                  this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+              }
+          }
         }
     },
     
@@ -515,13 +546,15 @@ LiveValidation.prototype =
     addFieldClass: function(){
         this.removeFieldClass();
         if(!this.validationFailed){
-            if(this.displayMessageWhenEmpty || this.element.value != ''){
+            if(this.displayMessageWhenEmpty || this.element.value !== ''){
                 $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
                     .closest('.control-group').addClass("success");
                 switch (this.elementType) {
                 case LiveValidation.RADIO:
                 case LiveValidation.CHECKBOX:
                     $('input[name="'+this.element.name+'"]').closest('label').addClass(this.validFieldClass);
+                    break;
+                case LiveValidation.FORM:
                     break;
                 default:
                     $(this.element).addClass(this.validFieldClass);
@@ -535,6 +568,8 @@ LiveValidation.prototype =
             case LiveValidation.RADIO:
             case LiveValidation.CHECKBOX:
                 $('input[name="'+this.element.name+'"]').closest('label').addClass(this.invalidFieldClass);
+                break;
+            case LiveValidation.FORM:
                 break;
             default:
                 $(this.element).addClass(this.invalidFieldClass);
@@ -556,7 +591,8 @@ LiveValidation.prototype =
         }
         el = el.nextSibling;
       }
-        if(nextEl && nextEl.className.indexOf(this.messageClass) != -1) this.insertAfterWhatNode.parentNode.removeChild(nextEl);
+      if(nextEl && nextEl.className.indexOf(this.messageClass) != -1)
+        this.insertAfterWhatNode.parentNode.removeChild(nextEl);
     },
     
     /**
@@ -569,6 +605,8 @@ LiveValidation.prototype =
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:
             $('input[name="'+this.element.name+'"]').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            break;
+        case LiveValidation.FORM:
             break;
         default:
             $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
@@ -584,7 +622,7 @@ LiveValidation.prototype =
       this.removeFieldClass();
     }
 
-} // end of LiveValidation class
+}; // end of LiveValidation class
 
 
 
@@ -604,7 +642,7 @@ LiveValidation.prototype =
    */
 var LiveValidationForm = function(element){
   this.initialize(element);
-}
+};
 
 /**
    *  gets the instance of the LiveValidationForm if it has already been made or creates it if it doesnt exist
@@ -621,7 +659,7 @@ LiveValidationForm.getInstance = function(element){
       $(element).data("z_live_validation_instance", instance);
   }
   return instance;
-}
+};
 
 LiveValidationForm.prototype = {
   validFormClass: 'z_form_valid',
@@ -636,18 +674,20 @@ LiveValidationForm.prototype = {
     this.name = $(element).attr("id");
     this.element = element;
     this.skipValidations = 0;
-    this.submitWaitForAsync = new Array();
+    this.submitWaitForAsync = [];
+    this.isWaitForFormAsync = false;
+    this.clk = undefined;
 
     // preserve the old onsubmit event
     this.oldOnSubmit = this.element.onsubmit || function(){};
     var self = this;
 
-    this.onInvalid = function() { 
-        $(this).removeClass("z_form_valid").addClass("z_form_invalid"); 
+    this.onInvalid = function() {
+        $(this).removeClass("z_form_valid").addClass("z_form_invalid");
         $(".z_form_valid", this).hide();
         $(".z_form_invalid", this).fadeIn();
     };
-    this.onValid = function() { 
+    this.onValid = function() {
         $(this).removeClass("z_form_invalid").addClass("z_form_valid");
         $(".z_form_invalid", this).hide();
         $(".z_form_valid", this).fadeIn();
@@ -655,39 +695,58 @@ LiveValidationForm.prototype = {
 
     $(element).submit(function(event) {
         event.zIsValidated = true;
-        if (self.skipValidations == 0) {
+        if (self.skipValidations === 0) {
             var result = true;
-            var async = new Array();
+            var async = [];
             var is_first = true;
+            var i;
 
             var fields = self.getFields();
-            for(var i = 0, len = fields.length; i < len; ++i ) {
+            for(i = 0, len = fields.length; i < len; ++i ) {
                 if (!fields[i].element.disabled) {
                     if (fields[i].isAsync()) {
                         async.push(fields[i]);
                     } else {
-                        var valid = fields[i].validate(true, this.clk);
-                        result = result && valid;
+                        result = fields[i].validate(true, this.clk) && result;
                     }
                 }
             }
 
             if (async.length > 0){
-                if (result)
+                self.isWaitForFormAsync = false;
+                if (result) {
                     self.submitWaitForAsync = async;
-                else 
+                } else {
+                    self.submitWaitForAsync = [];
                     self.onInvalid.call(this);
-
-                for(var i=0; i<async.length; i++){
+                }
+                for(i = 0; i<async.length; i++){
                     async[i].validate(true, this.clk);
                 }
-                result = false;
+                self.clk = this.clk;
             }
             else if (!result) {
                 self.onInvalid.call(this);
             }
             
-            if (!result) {
+            // Optionally check validations attached to the form itself
+            // Only done if all other validations are done and passing
+            if (result && self.submitWaitForAsync.length === 0) {
+                var formValidation = $(this).data('z_live_validation');
+                if (formValidation) {
+                    if (formValidation.isAsync()) {
+                        self.submitWaitForAsync = [formValidation];
+                        self.isWaitForFormAsync = true;
+                        formValidation.validate(true, this.clk);
+                    } else {
+                        result = formValidation.validate(true, this.clk) && result;
+                    }
+                }
+                if (!result) {
+                    self.onInvalid.call(this);
+                }
+            }
+            if (!result || self.submitWaitForAsync.length > 0) {
                 // Either validation failed or we are waiting for more async results.
                 event.stopImmediatePropagation();
                 return false;
@@ -697,14 +756,14 @@ LiveValidationForm.prototype = {
             }
         } else {
             self.skipValidations--;
-            if (self.skipValidations == 0) {
+            if (self.skipValidations === 0) {
                 self.onValid.call(this);
                 return z_form_submit_validated_do(event);
             } else {
                 return false;
             }
         }
-    })
+    });
   },
   
   /**
@@ -713,7 +772,7 @@ LiveValidationForm.prototype = {
    * @var force {Boolean} - whether to force the destruction even if there are fields still associated
    */
   destroy: function(force){
-    if (force || this.getFields().length == 0) {
+    if (force || this.getFields().length === 0) {
         // remove events - set back to previous events
         this.element.onsubmit = this.oldOnSubmit;
         // remove from the instances namespace
@@ -743,23 +802,44 @@ LiveValidationForm.prototype = {
           var index = $.inArray(Validation, this.submitWaitForAsync);
           if (index >= 0){
               this.submitWaitForAsync.splice(index, 1);
-              if (this.submitWaitForAsync.length == 0){
-                  // All validations were successful, resubmit (and skip validations for once)
-                  this.skipValidations = 1;
-                  var formObj = this.element;
-                  this.onValid.call(this);
-                  setTimeout(function(){ $(formObj).submit(); }, 0);
+              if (this.submitWaitForAsync.length === 0){
+                  // Optionally perform (and wait for) form-level validations
+                  if (!this.isWaitForFormAsync) {
+                      var formValidation = $(this.element).data('z_live_validation');
+                      if (formValidation) {
+                          if (formValidation.isAsync()) {
+                              this.submitWaitForAsync = [formValidation];
+                              this.isWaitForFormAsync = true;
+                              formValidation.validate(true, this.clk);
+                          } else {
+                              isValid = formValidation.validate(true, this.clk) && isValid;
+                          }
+                      }
+                  } else {
+                    this.isWaitForFormAsync = false;
+                  }
+
+                  if (!this.isWaitForFormAsync) {
+                    if (isValid){
+                      // All validations were successful, resubmit (and skip validations for once)
+                      this.skipValidations = 1;
+                      var formObj = this.element;
+                      this.onValid.call(this);
+                      setTimeout(function(){ $(formObj).submit(); }, 0);
+                    } else {
+                      this.onInvalid.call(this);
+                    }
+                  }
               }
           }
       } else {
           if (this.submitWaitForAsync.length > 0) {
-            var formObj = this.element;
             this.onInvalid.call(this);
           }
-          this.submitWaitForAsync = new Array();
+          this.submitWaitForAsync = [];
       }
   }
-}// end of LiveValidationForm prototype
+}; // end of LiveValidationForm prototype
 
 
 
@@ -792,9 +872,9 @@ var Validate = {
      *                            (DEFAULT: "Can't be empty!")
      */
     Presence: function(value, paramsObj){
-        var paramsObj = paramsObj || {};
+        paramsObj = paramsObj || {};
         var message = paramsObj.failureMessage || "";
-        if(value === '' || value === null || value === undefined){ 
+        if(value === '' || value === null || value === undefined){
             Validate.fail(message);
         }
         return true;
@@ -828,20 +908,20 @@ var Validate = {
      */
     Numericality: function(value, paramsObj){
         var suppliedValue = value;
-        var value = Number(value);
-        var paramsObj = paramsObj || {};
-        var minimum = ((paramsObj.minimum) || (paramsObj.minimum == 0)) ? paramsObj.minimum : null;;
-        var maximum = ((paramsObj.maximum) || (paramsObj.maximum == 0)) ? paramsObj.maximum : null;
-        var is = ((paramsObj.is) || (paramsObj.is == 0)) ? paramsObj.is : null;
+        value = Number(value);
+        paramsObj = paramsObj || {};
+        var minimum = ((paramsObj.minimum) || (paramsObj.minimum === 0)) ? paramsObj.minimum : null;
+        var maximum = ((paramsObj.maximum) || (paramsObj.maximum === 0)) ? paramsObj.maximum : null;
+        var is = ((paramsObj.is) || (paramsObj.is === 0)) ? paramsObj.is : null;
         var notANumberMessage = paramsObj.notANumberMessage || "Must be a number.";
         var notAnIntegerMessage = paramsObj.notAnIntegerMessage || "Must be an integer.";
         var wrongNumberMessage = paramsObj.wrongNumberMessage || "Must be " + is + ".";
         var tooLowMessage = paramsObj.tooLowMessage || "Must not be less than " + minimum + ".";
         var tooHighMessage = paramsObj.tooHighMessage || "Must not be more than " + maximum + ".";
         
-        if (!isFinite(value)) 
+        if (!isFinite(value))
             Validate.fail(notANumberMessage);
-        if (paramsObj.onlyInteger && (/\.0+$|\.$/.test(String(suppliedValue))  || value != parseInt(value)) )
+        if (paramsObj.onlyInteger && (/\.0+$|\.$/.test(String(suppliedValue))  || value != parseInt(value,10)) )
             Validate.fail(notAnIntegerMessage);
         switch(true){
             case (is !== null):
@@ -880,8 +960,8 @@ var Validate = {
      *    or build it into the regular expression pattern
      */
     Format: function(value, paramsObj){
-      var value = String(value);
-      var paramsObj = paramsObj || {};
+      value = String(value);
+      paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "";
       var pattern = paramsObj.pattern || /./;
       var negate = paramsObj.negate || false;
@@ -901,7 +981,7 @@ var Validate = {
      *                            (DEFAULT: "Must be a number!" or "Must be an integer!")
      */
     Email: function(value, paramsObj){
-      var paramsObj = paramsObj || {};
+      paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "";
       value = $.trim(value);
       // see validator_base_email.erl:43
@@ -931,11 +1011,11 @@ var Validate = {
           if (parseInt(value, 10) == value) {
               return parseInt(value, 10);
           } else {
-              return parseInt("NaN");
+              return parseInt("NaN", 10);
           }
       }
 
-      var paramsObj = paramsObj || {};
+      paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "Incorrect Date";
       var format = paramsObj.format || "l";
       var separator = paramsObj.separator || "-";
@@ -946,22 +1026,26 @@ var Validate = {
       if (date_components.length != 3) {
           Validate.fail(message);
       } else {
+          var day;
+          var month;
+          var year;
+
           not_a_number = to_integer(separator);
           if (!isNaN(not_a_number)) {
               throw "Seperator cannot be a number!";
           }
           if (format == 'l') {
-              var day = to_integer(date_components[0]);
-              var month = to_integer(date_components[1]);
-              var year = to_integer(date_components[2]);
+              day = to_integer(date_components[0]);
+              month = to_integer(date_components[1]);
+              year = to_integer(date_components[2]);
           } else if (format == 'b') {
-              var day = to_integer(date_components[2]);
-              var month = to_integer(date_components[1]);
-              var year = to_integer(date_components[0]);
+              day = to_integer(date_components[2]);
+              month = to_integer(date_components[1]);
+              year = to_integer(date_components[0]);
           } else if (format == 'm') {
-              var day = to_integer(date_components[1]);
-              var month = to_integer(date_components[0]);
-              var year = to_integer(date_components[2]);
+              day = to_integer(date_components[1]);
+              month = to_integer(date_components[0]);
+              year = to_integer(date_components[2]);
           } else {
               throw "Bad date format error!";
           }
@@ -993,11 +1077,11 @@ var Validate = {
      *  NB. can be checked if it is within a range by specifying both a minimum and a maximum       
      */
     Length: function(value, paramsObj){
-        var value = String(value);
-        var paramsObj = paramsObj || {};
-        var minimum = ((paramsObj.minimum) || (paramsObj.minimum == 0)) ? paramsObj.minimum : null;
-        var maximum = ((paramsObj.maximum) || (paramsObj.maximum == 0)) ? paramsObj.maximum : null;
-        var is = ((paramsObj.is) || (paramsObj.is == 0)) ? paramsObj.is : null;
+        value = String(value);
+        paramsObj = paramsObj || {};
+        var minimum = ((paramsObj.minimum) || (paramsObj.minimum === 0)) ? paramsObj.minimum : null;
+        var maximum = ((paramsObj.maximum) || (paramsObj.maximum === 0)) ? paramsObj.maximum : null;
+        var is = ((paramsObj.is) || (paramsObj.is === 0)) ? paramsObj.is : null;
         var wrongLengthMessage = paramsObj.wrongLengthMessage || "Must be " + is + " characters long.";
         var tooShortMessage = paramsObj.tooShortMessage || "Must not be less than " + minimum + " characters long.";
         var tooLongMessage = paramsObj.tooLongMessage || "Must not be more than " + maximum + " characters long.";
@@ -1042,31 +1126,40 @@ var Validate = {
      *                            (DEFAULT: false)      
      */
     Inclusion: function(value, paramsObj){
-      var paramsObj = paramsObj || {};
+      paramsObj = paramsObj || {};
       var message = paramsObj.failureMessage || "Must be included in the list!";
       var caseSensitive = (paramsObj.caseSensitive === false) ? false : true;
-      if(paramsObj.allowNull && value == null) return true;
-      if(!paramsObj.allowNull && value == null) Validate.fail(message);
+      if(paramsObj.allowNull && value === null)
+        return true;
+      if(!paramsObj.allowNull && value === null)
+        Validate.fail(message);
       var within = paramsObj.within || [];
+      var length;
+
       //if case insensitive, make all strings in the array lowercase, and the value too
-      if(!caseSensitive){ 
+      if(!caseSensitive){
         var lowerWithin = [];
-        for(var j = 0, length = within.length; j < length; ++j){
+        length = within.length;
+        for(var j = 0; j < length; ++j){
           var item = within[j];
-          if(typeof item == 'string') item = item.toLowerCase();
+          if(typeof item == 'string')
+            item = item.toLowerCase();
           lowerWithin.push(item);
         }
         within = lowerWithin;
-        if(typeof value == 'string') value = value.toLowerCase();
+        if(typeof value == 'string')
+          value = value.toLowerCase();
       }
       var found = false;
-      for(var i = 0, length = within.length; i < length; ++i){
+      length = within.length;
+      for(var i = 0; i < length; ++i){
         if(within[i] == value) found = true;
-        if(paramsObj.partialMatch){ 
+        if(paramsObj.partialMatch){
           if(value.indexOf(within[i]) != -1) found = true;
         }
       }
-      if( (!paramsObj.negate && !found) || (paramsObj.negate && found) ) Validate.fail(message);
+      if( (!paramsObj.negate && !found) || (paramsObj.negate && found) )
+        Validate.fail(message);
       return true;
     },
     
@@ -1089,7 +1182,7 @@ var Validate = {
      *                          (DEFAULT: true)     
      */
     Exclusion: function(value, paramsObj){
-      var paramsObj = paramsObj || {};
+      paramsObj = paramsObj || {};
       paramsObj.failureMessage = paramsObj.failureMessage || "Must not be included in the list";
       paramsObj.negate = true;
       Validate.Inclusion(value, paramsObj);
@@ -1108,14 +1201,14 @@ var Validate = {
      *              match {String}      - id of the field that this one should match            
      */
     Confirmation: function(value, paramsObj){
-        if(!paramsObj.match) 
+        if(!paramsObj.match)
             throw new Error("Validate::Confirmation - Error validating confirmation: Id of element to match must be provided");
-        var paramsObj = paramsObj || {};
+        paramsObj = paramsObj || {};
         var message = paramsObj.failureMessage || "Does not match.";
         var match = paramsObj.match.nodeName ? paramsObj.match : document.getElementById(paramsObj.match);
-        if(!match) 
+        if(!match)
             throw new Error("Validate::Confirmation - There is no reference with name of, or element with id of '" + paramsObj.match + "'");
-        if(value != match.value){ 
+        if(value != match.value){
           Validate.fail(message);
         }
         return true;
@@ -1132,10 +1225,10 @@ var Validate = {
      *                            (DEFAULT: "Must be accepted!")
      */
     Acceptance: function(value, paramsObj){
-        var paramsObj = paramsObj || {};
+        paramsObj = paramsObj || {};
         var message = paramsObj.failureMessage || "Must be accepted.";
-        if(!value){ 
-        Validate.fail(message);
+        if(!value){
+          Validate.fail(message);
         }
         return true;
     },
@@ -1155,17 +1248,23 @@ var Validate = {
      *                            (DEFAULT: {})
      */
     Custom: function(value, paramsObj, isSubmit, submitTrigger){
-        var paramsObj = paramsObj || {};
+        paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
         var message = paramsObj.failureMessage || "";
+        var result;
+
         if (typeof against == "string") {
-            var result = z_call_function_by_name(against, window, value, args, isSubmit, submitTrigger);
+            result = z_call_function_by_name(against, window, value, args, isSubmit, submitTrigger);
         } else {
-            var result = against(value, args, isSubmit, submitTrigger);
+            result = against(value, args, isSubmit, submitTrigger);
         }
-        if(!result) Validate.fail(message);
-        return true;
+        if (result === 'async') {
+          return 'async';
+        } else {
+          if(!result) Validate.fail(message);
+          return true;
+        }
     },
 
 
@@ -1174,7 +1273,7 @@ var Validate = {
      * next to the input element. 
      */
     Postback: function(value, paramsObj, isSubmit, submitTrigger) {
-        var paramsObj = paramsObj || {};
+        paramsObj = paramsObj || {};
         var against = paramsObj.against || function(){ return true; };
         var args = paramsObj.args || {};
         var message = paramsObj.failureMessage || "";
@@ -1183,11 +1282,11 @@ var Validate = {
             Validate.fail(message);
         } else if (paramsObj.z_postback) {
             // Perform the async postback
-            extraParams = new Array();
+            extraParams = [];
             if (isSubmit) {
                 extraParams.push({name: 'z_submitter', value: (submitTrigger && submitTrigger.name) ? submitTrigger.name : ''});
             }
-            z_queue_postback(paramsObj.z_id, paramsObj.z_postback, extraParams); 
+            z_queue_postback(paramsObj.z_id, paramsObj.z_postback, extraParams);
             return 'async';
         } else {
             return true;
@@ -1203,19 +1302,20 @@ var Validate = {
      *  @var validationParamsObj {Object} - parameters for doing the validation, if wanted or necessary
      */
     now: function(validationFunction, value, validationParamsObj){
-        if(!validationFunction) throw new Error("Validate::now - Validation function must be provided!");
+      if(!validationFunction)
+        throw new Error("Validate::now - Validation function must be provided!");
       var isValid = true;
-        try{    
+      try {
         validationFunction(value, validationParamsObj || {});
       } catch(error) {
-        if(error instanceof Validate.Error){
+        if (error instanceof Validate.Error) {
           isValid =  false;
-        }else{
+        } else {
           throw error;
         }
-      }finally{ 
-            return isValid 
-        }
+      } finally {
+        return isValid;
+      }
     },
     
     /**
@@ -1224,7 +1324,7 @@ var Validate = {
      *  @var errorMessage {String} - message to display
      */
     fail: function(errorMessage){
-            throw new Validate.Error(errorMessage);
+      throw new Validate.Error(errorMessage);
     },
     
     Error: function(errorMessage){
@@ -1232,4 +1332,4 @@ var Validate = {
       this.name = 'ValidationError';
     }
 
-}
+};
