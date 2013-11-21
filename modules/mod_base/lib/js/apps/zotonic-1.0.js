@@ -859,7 +859,7 @@ function z_init_postback_forms()
     $("form[action*='postback']").each(function()
     {
         // store options in hash
-        $(":submit,input:image", this).bind('click.form-plugin',function(e)
+        $(this).on('click.form-plugin', ":submit,input:image", function(e)
         {
             var form = this.form;
             form.clk = this;
