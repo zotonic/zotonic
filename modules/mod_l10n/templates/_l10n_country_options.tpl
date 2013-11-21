@@ -1,5 +1,5 @@
 {% with m.l10n.countries as countries %}
-	{% if country and not countries[country] %}
+	{% if country and not countries[country] and not is_only_known %}
 		<option value="{{ country }}" selected="selected">{{ country }}</option>
 	{% endif %}
 	{% for iso_code,name in countries %}
