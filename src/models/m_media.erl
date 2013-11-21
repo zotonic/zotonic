@@ -193,7 +193,7 @@ delete(Id, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             Depicts = depicts(Id, Context),
-            z_db:delete(medium, Id, Context),
+            medium_delete(Id, Context),
             [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
             z_depcache:flush(Id, Context),
             ok;
@@ -208,8 +208,8 @@ delete(Id, Context) ->
 replace(Id, Props, Context) ->
     Depicts = depicts(Id, Context),
     F = fun(Ctx) ->
-        {ok, _}  = z_db:delete(medium, Id, Ctx),
-        {ok, Id} = z_db:insert(medium, [{id, Id} | Props], Ctx)
+        {ok, _}  = medium_delete(Id, Ctx),
+        {ok, Id} = medium_insert(Id, [{id, Id} | Props], Ctx)
     end,
     
     case z_db:transaction(F, Context) of
@@ -229,7 +229,7 @@ duplicate(FromId, ToId, Context) ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
             Ms3 = z_utils:prop_replace(id, ToId, Ms2),
-            {ok, _ToId} = z_db:insert(medium, Ms3, Context),
+            {ok, _ToId} = medium_insert(ToId, Ms3, Context),
             ok;
         undefined ->
             ok
@@ -440,10 +440,10 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
                                                             false -> {ok, RscId} = m_rsc:touch(RscId, Ctx)
                                                         end
                                                end,
-                                               z_db:delete(medium, RscId, Ctx),
+                                               medium_delete(RscId, Ctx),
                                                {ok, RscId}
                                        end,
-                            case z_db:insert(medium, [{id, Id} | MediumPropRows1], Ctx) of
+                            case medium_insert(Id, [{id, Id} | MediumPropRows1], Ctx) of
                                 {ok, _MediaId} ->
                                     {ok, Id};
                                 Error ->
@@ -462,7 +462,7 @@ replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
                 
                 m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
                 %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-                z_notifier:notify(#media_replace_file{id=Id, medium=m_media:get(Id, Context)}, Context),
+                z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
                 {ok, Id};
             false ->
                 {error, eacces}
@@ -644,4 +644,17 @@ save_preview(RscId, Data, Mime, Context) ->
 				Filename1 = filename:join([Dirname, Rootname1 ++ filename:extension(Basename)]),
 				make_preview_unique(Filename1, Context)
 		end.
-		
+
+
+medium_insert(Id, Props, Context) ->
+    IsA = m_rsc:is_a(Id, Context),
+    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props}),
+    z_db:insert(medium, Id, Props, Context).
+ 
+medium_delete(Id, Context) ->
+    medium_delete(Id, get(Id, Context), Context).
+
+medium_delete(Id, Props, Context) ->
+    IsA = m_rsc:is_a(Id, Context),
+    z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}),
+    z_db:delete(medium, Id, Context).

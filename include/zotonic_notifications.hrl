@@ -337,6 +337,10 @@
 %% The id is the resource id, medium contains the medium's property list.
 -record(media_replace_file, {id, medium}).
 
+%% @doc Media update done notification.
+%% action is 'insert', 'update' or 'delete'
+-record(media_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
+
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id. (notify)
 -record(rsc_query_item, {query_id, match_id}).
