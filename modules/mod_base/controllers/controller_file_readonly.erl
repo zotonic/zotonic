@@ -30,6 +30,7 @@
     service_available/2,
     allowed_methods/2,
     resource_exists/2,
+    is_authorized/2,
     forbidden/2,
     last_modified/2,
     expires/2,
@@ -94,6 +95,10 @@ allowed_methods(ReqData, Context) ->
 
 content_types_provided(ReqData, Context) ->
     {[{z_context:get(mime, Context), provide_content}], ReqData, Context}.
+
+%% @doc Check if the current user is allowed to view the resource. 
+is_authorized(ReqData, Context) ->
+    controller_template:is_authorized(ReqData, Context).
 
 %% @doc Simple access control for rsc based files
 forbidden(ReqData, Context) ->
