@@ -117,7 +117,7 @@ name_to_id(Name, Context) ->
     case is_list(Name) andalso z_utils:only_digits(Name) of
         true ->
             {ok, z_convert:to_integer(Name)};
-        false when is_integer(Name) -> Name;
+        false when is_integer(Name) -> {ok, Name};
         false ->
             case name_lookup(Name, Context) of
                 Id when is_integer(Id) -> {ok, Id};
