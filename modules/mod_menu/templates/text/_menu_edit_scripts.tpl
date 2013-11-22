@@ -25,10 +25,18 @@ $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 });
 
 $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
-	var where = $(this).data('where');
-	var $menuedit = $(this).closest(".do_menuedit");
-	var $menu_item = $(this).closest('li.menu-item');
+	var $a = $(e.currentTarget);
+	var where = $a.data('where');
+	var $menu_item = $a.closest('li.menu-item');
 	var $sorter = $('#{{ in_sorter }}');
+	var $menuedit = $a.closest(".do_menuedit");
+
+	if ($menuedit.length === 0) {
+		$menuedit = $(".do_menuedit", $a.closest("div"));
+	}
+	if ($menuedit.length === 0) {
+		$menuedit = $(".do_menuedit", $a.closest(".widget"));
+	}
 
 	if (where == 'remove') {
 		z_notify("menu-item-delete", {
