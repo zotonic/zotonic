@@ -648,7 +648,7 @@ save_preview(RscId, Data, Mime, Context) ->
 
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props}),
+    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props}, Context),
     z_db:insert(medium, Id, Props, Context).
  
 medium_delete(Id, Context) ->
@@ -656,5 +656,5 @@ medium_delete(Id, Context) ->
 
 medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}),
+    z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
     z_db:delete(medium, Id, Context).
