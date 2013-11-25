@@ -12,7 +12,7 @@
     <tr>
         <th>&nbsp;</th>
         {% for name in columns|tail|tail|tail %}
-        <th align="left">{{ captions[name] }}</th>
+            <th align="left">{{ captions[name]|default:name|capfirst }}</th>
         {% endfor %}
     </tr>
     {% endwith %}
