@@ -4,17 +4,17 @@
 
 Show a javascript confirm message and on confirmation triggers one or more actions and/or send a postback to the server.
 
-Example:
-
 .. highlight:: django
+
+Example::
 
    {% button action={confirm text="Format hard disk?" action={growl text="Better not"}} %}
 
 Shows a javascript dialog with the question "Format hard disk?".  When this dialog is confirmed then the growl message "Better not" will appear. When the dialog is denied or canceled then nothing happens.
 
-When there is a postback defined then the event handler for the postback will be called like:
-
 .. highlight:: erlang
+
+When there is a postback defined then the event handler for the postback will be called like::
 
    event(#postback{message=Message, trigger=TriggerId, target=TargetId}, Context).
 
@@ -43,6 +43,6 @@ postback       Event to be sent back to the server
 delegate       Erlang module handling the postback. 
                Defaults to the controller 
                generating the page.                  delegate="my_event_module"
-=============  =====================================  =====================================
+=============  ====================================  =====================================
 
 .. seealso:: actions :ref:`action-alert` and :ref:`action-growl`.
