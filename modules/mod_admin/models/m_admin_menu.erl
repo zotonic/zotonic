@@ -31,7 +31,9 @@
 -export([
     m_find_value/3,
     m_to_list/2,
-    m_value/2
+    m_value/2,
+
+    menu/1
 ]).
 
 
@@ -120,7 +122,7 @@ item_visible({_Key, ItemProps}, Context) ->
                 lists:filter(fun(#menu_separator{}) -> false; (_) -> true end, proplists:get_value(items, ItemProps, [])) =/= [];
         F when is_function(F) ->
             F();
-                {acl, Action, Object} ->
+       {acl, Action, Object} ->
             z_acl:is_allowed(Action, Object, Context)
     end.
                      
