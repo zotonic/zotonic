@@ -58,7 +58,7 @@ observe_sanitize_element(sanitize_element, {<<"img">>, Attrs, _Enclosed} = Eleme
                         32,
                         class_to_opts(proplists:get_value(<<"class">>, Attrs))
                     ],
-                    ?DEBUG({comment, iolist_to_binary(CommentText)})
+                    {comment, iolist_to_binary(CommentText)}
             end;
         _OtherSrc ->
             Element
