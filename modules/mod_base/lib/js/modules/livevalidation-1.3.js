@@ -290,7 +290,7 @@ LiveValidation.prototype = {
      * @return {Boolean} - whether the all the validations passed or if one failed
      */
     doValidations: function(isSubmit, submitTrigger){
-        var result;
+        var result = true;
 
         this.validationFailed = false;
         this.validationAsync = false;
@@ -305,13 +305,17 @@ LiveValidation.prototype = {
                 default:
                   break;
             }
-            if (!this.validateElement(validation.type, validation.params, isSubmit, submitTrigger)) {
+            var v = this.validateElement(validation.type, validation.params, isSubmit, submitTrigger);
+            if (v === 'async') {
+                this.validationAsync = true;
+                result = 'async';
+            } else if (!v) {
                 this.validationFailed = true;
                 return false;
             }
         }
         this.message = this.validMessage;
-        return true;
+        return result;
     },
 
     /**
@@ -346,7 +350,7 @@ LiveValidation.prototype = {
             var isValid = true;
             try {
                 isValid = validationFunction(value, validationParamsObj, isSubmit, submitTrigger);
-                if (isValid == 'async') {
+                if (isValid === 'async') {
                     this.validationAsync = true;
                 }
             }
@@ -395,15 +399,15 @@ LiveValidation.prototype = {
      *
      * @var isSubmit {Boolean} - is this a form submit or an individual field check
      * @var submitTrigger {Object} - the element that triggered the submit
-     * @return {Boolean} - whether all the validations passed or if one failed
+     * @return {Boolean} or "async" - whether all the validations passed or if one failed
      */
     validate: function(isSubmit, submitTrigger){
         if(!this.element.disabled) {
-            var isValid = this.doValidations(isSubmit, submitTrigger);
-            if (this.validationAsync) {
+            var valid = this.doValidations(isSubmit, submitTrigger);
+            if (valid === 'async') {
                 this.onAsync();
-                return false;
-            } else if (isValid) {
+                return 'async';
+            } else if (valid) {
                 this.onValid();
                 return true;
             } else {
@@ -697,36 +701,26 @@ LiveValidationForm.prototype = {
         event.zIsValidated = true;
         if (self.skipValidations === 0) {
             var result = true;
-            var async = [];
             var is_first = true;
             var i;
-
             var fields = self.getFields();
+
+            self.submitWaitForAsync = [];
+            self.isWaitForFormAsync = false;
+            self.clk = this.clk;
+
             for(i = 0, len = fields.length; i < len; ++i ) {
                 if (!fields[i].element.disabled) {
-                    if (fields[i].isAsync()) {
-                        async.push(fields[i]);
-                    } else {
-                        result = fields[i].validate(true, this.clk) && result;
+                    var ve = fields[i].validate(true, this.clk);
+                    if (ve === 'async') {
+                        self.submitWaitForAsync.push(fields[i]);
+                    } else if (!ve) {
+                        result = false;
                     }
                 }
             }
-
-            if (async.length > 0){
-                self.isWaitForFormAsync = false;
-                if (result) {
-                    self.submitWaitForAsync = async;
-                } else {
-                    self.submitWaitForAsync = [];
-                    self.onInvalid.call(this);
-                }
-                for(i = 0; i<async.length; i++){
-                    async[i].validate(true, this.clk);
-                }
-                self.clk = this.clk;
-            }
-            else if (!result) {
-                self.onInvalid.call(this);
+            if (result === false) {
+                self.submitWaitForAsync = [];
             }
             
             // Optionally check validations attached to the form itself
@@ -734,20 +728,20 @@ LiveValidationForm.prototype = {
             if (result && self.submitWaitForAsync.length === 0) {
                 var formValidation = $(this).data('z_live_validation');
                 if (formValidation) {
-                    if (formValidation.isAsync()) {
+                    var vf = formValidation.validate(true, this.clk);
+                    if (vf === 'async') {
                         self.submitWaitForAsync = [formValidation];
                         self.isWaitForFormAsync = true;
-                        formValidation.validate(true, this.clk);
-                    } else {
-                        result = formValidation.validate(true, this.clk) && result;
+                    } else if (!vf) {
+                        result = false;
                     }
                 }
-                if (!result) {
-                    self.onInvalid.call(this);
-                }
             }
-            if (!result || self.submitWaitForAsync.length > 0) {
-                // Either validation failed or we are waiting for more async results.
+            if (self.submitWaitForAsync.length > 0) {
+                event.stopImmediatePropagation();
+                return false;
+            } else if (!result) {
+                self.onInvalid.call(this);
                 event.stopImmediatePropagation();
                 return false;
             } else {
@@ -807,28 +801,30 @@ LiveValidationForm.prototype = {
                   if (!this.isWaitForFormAsync) {
                       var formValidation = $(this.element).data('z_live_validation');
                       if (formValidation) {
-                          if (formValidation.isAsync()) {
+                          var result = formValidation.validate(true, this.clk);
+                          if (result === 'async') {
                               this.submitWaitForAsync = [formValidation];
                               this.isWaitForFormAsync = true;
-                              formValidation.validate(true, this.clk);
+                          } else if (!result) {
+                              isValid = false;
                           } else {
-                              isValid = formValidation.validate(true, this.clk) && isValid;
+                              isValid = true;
                           }
                       }
                   } else {
-                    this.isWaitForFormAsync = false;
+                      this.isWaitForFormAsync = false;
                   }
 
                   if (!this.isWaitForFormAsync) {
-                    if (isValid){
-                      // All validations were successful, resubmit (and skip validations for once)
-                      this.skipValidations = 1;
-                      var formObj = this.element;
-                      this.onValid.call(this);
-                      setTimeout(function(){ $(formObj).submit(); }, 0);
-                    } else {
-                      this.onInvalid.call(this);
-                    }
+                      if (isValid){
+                          // All validations were successful, resubmit (and skip validations for once)
+                          this.skipValidations = 1;
+                          var formObj = this.element;
+                          this.onValid.call(this);
+                          setTimeout(function(){ $(formObj).submit(); }, 0);
+                      } else {
+                          this.onInvalid.call(this);
+                      }
                   }
               }
           }
