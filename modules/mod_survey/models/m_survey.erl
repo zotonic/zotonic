@@ -37,7 +37,8 @@
     survey_results/2,
     survey_results_sorted/3,
     single_result/4,
-    delete_result/4
+    delete_result/4,
+    get_questions/2
    ]).
 
 -include_lib("zotonic.hrl").
@@ -269,16 +270,28 @@ survey_results_sorted(SurveyId, SortColumn, Context) ->
             [Headers|Data2]
     end.
 
-%% @doc Return all results of a survey
-survey_results(SurveyId, Context) ->
+
+
+%% @doc get prepared questions from the blocks
+-spec get_questions(integer(), #context{}) -> [term()] | undefined.
+get_questions(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks) ->
+            [ {proplists:get_value(name, B), question_prepare(B, Context)} || B <- Blocks];
+        _ ->
+            undefined
+    end.
+
+
+%% @doc Return all results of a survey
+survey_results(SurveyId, Context) ->
+    case get_questions(SurveyId, Context) of
+        NQs when is_list(NQs) ->
             Rows = z_db:q("select user_id, persistent, question, name, value, text, created
                            from survey_answer 
                            where survey_id = $1
                            order by user_id, persistent", [SurveyId], Context),
             Grouped = group_users(Rows),
-            NQs = [ {proplists:get_value(name, B), question_prepare(B, Context)} || B <- Blocks ],
             UnSorted = [ user_answer_row(User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
             Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
             [
@@ -446,3 +459,5 @@ survey_totals(Id, Context) ->
         _ ->
             []
     end.
+
+                
