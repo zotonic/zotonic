@@ -55,8 +55,12 @@ else
     starttime=$now
 
     # Only build zotonic the first time, not for restarts
+    if [ ! -e $ZOTONIC/ebin/zotonic.app ]; then
+        echo "Building Zotonic, please wait."
+        ${MAKE} >/dev/null
+    fi
+
     echo  "Starting Zotonic $NODENAME@$NODEHOST" 
-    ${MAKE} >/dev/null
 fi
 
 ENV=`which env`
