@@ -29,6 +29,7 @@ deps/
 /priv/sites/*/config
 
 /priv/log/
+/priv/sasl/
 /priv/sites/default/files/
 /priv/sites/*/files/dropbox/
 /priv/sites/*/files/preview/
