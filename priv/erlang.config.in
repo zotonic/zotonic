@@ -23,8 +23,8 @@
   [{handlers,
     [
       {lager_console_backend, info},
-      {lager_file_backend, [{file, "priv/sasl/error.log"},   {level, error}]},
-      {lager_file_backend, [{file, "priv/sasl/console.log"}, {level, info}]}
+      {lager_file_backend, [{file, "priv/log/error.log"},   {level, error}]},
+      {lager_file_backend, [{file, "priv/log/console.log"}, {level, info}]}
     ]},
    {crash_log, "priv/log/crash.log"}
   ]},
