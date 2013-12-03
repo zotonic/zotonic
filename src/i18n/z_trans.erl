@@ -44,7 +44,8 @@
 translations({trans, Tr0} = Trans0, Context) ->
     {en, From} = proplists:lookup(en, Tr0),
     case translations(From, Context) of
-        {trans, Tr1} -> merge_trs(Tr0, Tr1);
+        {trans, Tr1} ->
+            {trans, merge_trs(Tr0, lists:reverse(Tr1))};
         _ -> Trans0
     end;
 translations(From, Context) when is_binary(From) ->
@@ -57,13 +58,13 @@ translations(From, Context) when is_binary(From) ->
 translations(From, Context) ->
     translations(z_convert:to_binary(From), Context).
 
-    merge_trs([], Acc) ->
-        Acc;
-    merge_trs([{Lang,_} = LT|Rest], Acc) ->
-        case proplists:is_defined(Lang, Acc) of
-            true -> merge_trs(Rest, Acc);
-            false -> merge_trs(Rest, [LT|Acc])
-        end.
+merge_trs([], Acc) ->
+    lists:reverse(Acc);
+merge_trs([{Lang,_} = LT|Rest], Acc) ->
+    case proplists:is_defined(Lang, Acc) of
+        true -> merge_trs(Rest, Acc);
+        false -> merge_trs(Rest, [LT|Acc])
+    end.
 
 %% @doc Prepare a translations table based on all .po files in the active modules.
 parse_translations(Context) ->
