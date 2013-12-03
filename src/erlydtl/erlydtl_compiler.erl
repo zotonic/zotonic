@@ -1285,7 +1285,7 @@ trans_ast1(Arg, Context) ->
         	Tr1 = [ {z_convert:to_atom(Lang), z_convert:to_binary(S)} || {Lang,S} <- Tr ],
         	erl_syntax:application(
         		erl_syntax:atom(z_trans),
-        		erl_syntax:atom(trans),
+        		erl_syntax:atom(lookup_fallback),
         		[
         			erl_syntax:abstract({trans, Tr1}),
         			z_context_ast(Context)
