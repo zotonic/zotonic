@@ -65,6 +65,12 @@ The following options can be given to the dispatch rule:
 |acl                  |Extra authorization checks to be     |See `ACL options`_.     |
 |                     |performed.                           |                        |
 +---------------------+-------------------------------------+------------------------+
+|is_canonical         |Whether this URL should be considered|{is_canonical, false}   |
+|                     |the caninical URL of the page. If so,|                        |
+|                     |the controller will redirect to the  |                        |
+|                     |sc's page path if set. Defaults to   |                        |
+|                     |true.                                |                        |
++---------------------+-------------------------------------+------------------------+
 
 
 .. include:: acl_options.rst
