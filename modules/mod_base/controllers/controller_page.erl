@@ -45,13 +45,13 @@ resource_exists(ReqData, Context) ->
                            ReqPath -> false;
                            _ -> true
                        end,
-        case WrongReqPath of
+        case WrongReqPath andalso z_context:get(is_canonical, ContextQs, true) of
             false ->
                 case {m_rsc:exists(Id, ContextQs), z_context:get(cat, ContextQs)} of
                     {Exists, undefined} ->
-                        ?WM_REPLY(Exists and not WrongReqPath, ContextQs);
+                        ?WM_REPLY(Exists, ContextQs);
                     {true, Cat} ->
-                        ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs) and not WrongReqPath, ContextQs);
+                        ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs);
                     {false, _} ->
                         ?WM_REPLY(false, ContextQs)
                 end;
