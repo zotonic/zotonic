@@ -35,13 +35,29 @@ resource_exists(ReqData, Context) ->
     ContextQs = z_context:ensure_qs(Context1),
     try
         Id = get_id(ContextQs),
-        case {m_rsc:exists(Id, ContextQs), z_context:get(cat, ContextQs)} of
-            {Exists, undefined} ->
-                ?WM_REPLY(Exists, ContextQs);
-            {true, Cat} ->
-                ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs);
-            {false, _} ->
-                ?WM_REPLY(false, ContextQs)
+        ReqPath = wrq:raw_path(ReqData),
+
+        %% Check if we need to be at a different URL. When the page
+        %% path of a resource is set, we need to redirect there if the
+        %% current request's path is not equal to the resource's path.
+        WrongReqPath = case z_convert:to_list(m_rsc:p(Id, page_path, ContextQs)) of
+                           [] -> false;
+                           ReqPath -> false;
+                           _ -> true
+                       end,
+        case WrongReqPath of
+            false ->
+                case {m_rsc:exists(Id, ContextQs), z_context:get(cat, ContextQs)} of
+                    {Exists, undefined} ->
+                        ?WM_REPLY(Exists and not WrongReqPath, ContextQs);
+                    {true, Cat} ->
+                        ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs) and not WrongReqPath, ContextQs);
+                    {false, _} ->
+                        ?WM_REPLY(false, ContextQs)
+                end;
+            true ->
+                ContextRedirect = z_context:set_resp_header("Location", m_rsc:p(Id, page_path, ContextQs), ContextQs),
+                ?WM_REPLY({halt, 301}, ContextRedirect)
         end
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
@@ -56,7 +72,6 @@ previously_existed(ReqData, Context) ->
                  _ -> false
              end,
     ?WM_REPLY(IsGone, Context1).
-
 
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->
