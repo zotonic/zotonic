@@ -57,7 +57,7 @@
 		<div class="row-fluid">
 			<div class="span4">
 				{% block close_button %}
-					<a href="{{ id.page_url }}" class="btn">{_ Close _}x</a>
+					<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
 				{% endblock %}
 			</div>
 			<div class="span8" id="save-buttons" style="display:none">
