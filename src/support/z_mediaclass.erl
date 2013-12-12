@@ -217,26 +217,32 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Find all mediaclass files for all device types.
 reindex(#state{context=Context, last=Last} = State) ->
-    Files = [
-        case z_module_indexer:find_ua_class_all(template, UAClass, ?MEDIACLASS_FILENAME, Context) of
-            [] -> 
-                {[], undefined};
-            Ms ->
-                Paths = [ {Module, UAClass, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
-                {Paths, lists:max([ filelib:last_modified(Path) || {_, _, Path} <- Paths ])}
-        end
-        || UAClass <- z_user_agent:classes()
-    ],
-    case Files of
-        Last ->
+    case collect_files(z_user_agent:classes(), [], Context) of
+        {error, timeout} ->
+            lager:warning("[~p] timeout on module indexer", [z_context:site(Context)]),
             State;
-        _ ->
+        {ok, Last} ->
+            State;
+        {ok, Files} ->
             % Something changed, parse and update all classes in the files.
             Files1 = lists:flatten([ Fs || {Fs, MaxMod} <- Files, MaxMod =/= undefined ]),
             Site = z_context:site(State#state.context),
             ok = reindex_files(Files1, Site),
             lager:debug("Re-indexed mediaclass definitions for ~p", [Site]),
             State#state{last=Files}
+    end.
+
+
+collect_files([], Acc, _Context) ->
+    {ok, lists:reverse(Acc)};
+collect_files([UAClass|Rest], Acc, Context) ->
+    case z_module_indexer:find_ua_class_all(template, UAClass, ?MEDIACLASS_FILENAME, Context) of
+        [] -> 
+            collect_files(Rest, Acc, Context);
+        Ms ->
+            Paths = [ {Module, UAClass, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
+            Acc1 = [ {Paths, lists:max([ filelib:last_modified(Path) || {_, _, Path} <- Paths ])} | Acc ],
+            collect_files(Rest, Acc1, Context)
     end.
 
 
