@@ -100,6 +100,11 @@ no arguments were given. However when I add an argument::
 It will render the URL ``/foo/1``, matching the second dispatch rule
 and adding the argument in the creation of the URL.
 
+In a template the value of the argument can be retrieved with the `q` variable.
+In the example where the atom `var` is used::
+
+  {{ q.var }}
+
 Note that any `extra` arguments that are given, are added as query-string parameters::
 
   {% url rulename var=1 x="hello" %}
