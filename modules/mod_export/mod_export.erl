@@ -38,20 +38,25 @@ observe_content_types_dispatch(#content_types_dispatch{}, Acc, _Context) ->
 
 
 %% @doc Fetch all ids making up the export, handles collections and search queries.
-observe_export_resource_data(#export_resource_data{id=Id}, Context) ->
+observe_export_resource_data(#export_resource_data{id=Id}, Context) when is_integer(Id) ->
     case m_rsc:is_a(Id, 'query', Context) of
         true ->
             {ok, z_search:query_([{id, Id}], Context)};
         false ->
             case m_rsc:is_a(Id, collection, Context) of
                 true -> {ok, m_edge:objects(Id, haspart, Context)};
-                false -> undefined
+                false -> {ok, [Id]}
             end
-    end.
+    end;
+observe_export_resource_data(#export_resource_data{}, _Context) ->
+    {ok, []}.
+
 
 %% @doc Encode a "row" of data, according to the encoding requested
 observe_export_resource_encode(#export_resource_encode{content_type="text/csv", data=Id}, Context) when is_integer(Id) ->
     Data = rsc_data(Id, Context),
+    {ok, export_encode_csv:encode(Data, Context)};
+observe_export_resource_encode(#export_resource_encode{content_type="text/csv", data=Data}, Context) when is_list(Data) ->
     {ok, export_encode_csv:encode(Data, Context)};
 observe_export_resource_encode(#export_resource_encode{}, _Context) ->
     undefined.

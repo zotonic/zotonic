@@ -28,7 +28,11 @@
     content_types_provided/2,
     charsets_provided/2,
     
-    do_export/2
+    do_export/2,
+
+    % Exports for controller_export
+    get_content_type/3,
+    do_header/1
 ]).
 
 -include_lib("controller_webmachine_helper.hrl").
@@ -55,7 +59,12 @@ previously_existed(ReqData, Context) ->
 forbidden(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     {Id, Context2} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
-    ?WM_REPLY(not z_acl:rsc_visible(Id, Context2), Context2).
+    Dispatch = z_context:get(zotonic_dispatch, Context2),
+    case z_notifier:first(#export_resource_visible{id=Id, dispatch=Dispatch}, Context2) of
+        undefined -> ?WM_REPLY(not z_acl:rsc_visible(Id, Context2), Context2);
+        true -> ?WM_REPLY(false, Context2);
+        false -> ?WM_REPLY(true, Context2)
+    end.
 
 content_types_provided(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),

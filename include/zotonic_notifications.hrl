@@ -433,6 +433,12 @@
 -record(debug, {what, arg=[]}).
 
 
+%% @doc mod_export - Check if the resource or dispatch is visible for export.
+-record(export_resource_visible, {
+			dispatch :: atom(),
+			id :: integer()
+ 		}).
+
 %% @doc mod_export - return the content type (like {ok, "text/csv"}) for the dispatch rule/id export.
 -record(export_resource_content_type, {
 		dispatch :: atom(),
@@ -447,7 +453,7 @@
 	}).
 
 %% @doc mod_export - Fetch the header for the export.
-%% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
+%% The 'first' notification should return: {ok, list()|binary()} | {ok, list()|binary(), ContinuationState} | {error, Reason}.
 -record(export_resource_header, {
 		dispatch :: atom(),
 		id :: integer(),
