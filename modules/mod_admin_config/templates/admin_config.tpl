@@ -24,24 +24,40 @@
         </thead>
 
         <tbody>
-            {% for module, keys in config %}
-            {% for key, c in keys %}
-            {% with c.id as id %}
-            <tr id="{{ #tr.id }}" class="clickable"  data-href="#">
-                    <td>{{ module|escape|default:"-" }}</td>
-                    <td>{{ key|escape|default:"-" }}</td>
-                    <td>{{ c.value|escape|default:"-"|truncate:65 }}</td>
-                    <td>
-                        <div class="pull-right">
-                            {% button class="btn btn-mini" text=_"Delete" action={dialog_config_delete module=module key=key on_success={slide_fade_out target=#tr.id}} %}
-                            {% button class="btn btn-mini" text=_"Edit" action={dialog_config_edit module=module key=key on_success={reload}} %}
-                        </div>
-
-                        {{ c.modified|date:_"d M Y, H:i" }}
-                    </td>
+            {% for m, keys in config %}
+            {% for k, c in keys %}
+            {% with c.id,
+                    m|default:'',
+                    k|default:'',
+                    c.value
+               as
+                    id,
+                    module,
+                    key,
+                    value
+            %}
+            {% with
+               {dialog_config_edit module=module key=key value=value on_success={reload}},
+               {dialog_config_delete module=module key=key on_success={slide_fade_out target=#tr.id}}
+               as
+               updateAction,
+               deleteAction
+            %}
+            <tr id="{{ #tr.id }}" class="clickable" data-href="#" data-entry="{{module}}.{{key}}">
+                <td>{{ module|escape|default:"-" }}</td>
+                <td>{{ key|escape|default:"-" }}</td>
+                <td>{{ value|escape|default:"-"|truncate:65 }}</td>
+                <td>
+                    <div class="pull-right">
+                        {% button class="btn btn-mini" text=_"Delete" action=deleteAction %}
+                        {% button class="btn btn-mini" text=_"Edit" action=updateAction %}
+                    </div>
+                    {{ c.modified|date:_"d M Y, H:i" }}
+                </td>
             </tr>
-            {% wire id=#tr.id action={dialog_config_edit module=module key=key on_success={reload}} %}
+            {% wire id=#tr.id action=updateAction %}
 
+            {% endwith %}
             {% endwith %}
             {% endfor %}
             {% empty %}
