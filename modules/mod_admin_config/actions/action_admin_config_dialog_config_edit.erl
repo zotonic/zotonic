@@ -55,12 +55,21 @@ event(#postback{message={config_edit_dialog, Module, Key, Value, OnSuccess}}, Co
 event(#submit{message={config_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            Value = z_context:get_q("val", Context, ""),
+            CurrentModule = proplists:get_value(module, Args),
+            CurrentKey = proplists:get_value(key, Args),
             Module = z_context:get_q("module", Context, ""),
             Key = z_context:get_q("key", Context, ""),
+            Value = z_context:get_q("val", Context, ""),
             OnSuccess = proplists:get_all_values(on_success, Args),
-            m_config:set_value(Module, Key, Value, Context),
+            update_entry(CurrentModule, CurrentKey, Module, Key, Value, Context),
             z_render:wire([{dialog_close, []} | OnSuccess], Context);
         false ->
             z_render:growl_error(?__("Only administrators can change the configuration.", Context), Context)
     end.
+    
+%% Update config entry. First delete entry when module or key name is equal to current name.
+update_entry(CurrentModule, CurrentKey, Module, Key, Value, Context) when CurrentModule =/= Module; CurrentKey =/= Key -> 
+    m_config:delete(CurrentModule, CurrentKey, Context),
+    m_config:set_value(Module, Key, Value, Context);
+update_entry(_, _, Module, Key, Value, Context) -> 
+    m_config:set_value(Module, Key, Value, Context).
