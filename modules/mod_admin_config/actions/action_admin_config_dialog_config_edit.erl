@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-08-07
-%% @doc Open a dialog to change the value of a config key.
+%% @doc Open a dialog to change the module/key/value of a config entry.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -31,18 +31,20 @@
 render_action(TriggerId, TargetId, Args, Context) ->
     Module = proplists:get_value(module, Args),
     Key = proplists:get_value(key, Args),
+    Value = proplists:get_value(value, Args),
     OnSuccess = proplists:get_all_values(on_success, Args),
-    Postback = {config_edit_dialog, Module, Key, OnSuccess},
+    Postback = {config_edit_dialog, Module, Key, Value, OnSuccess},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new group form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={config_edit_dialog, Module, Key, OnSuccess}}, Context) ->
+event(#postback{message={config_edit_dialog, Module, Key, Value, OnSuccess}}, Context) ->
     Vars = [
         {module, Module},
         {key, Key},
+        {value, Value},
         {on_success, OnSuccess}
     ],
     z_render:dialog([?__("Edit", Context), " ", Module, "." , Key], "_action_dialog_config_edit.tpl", Vars, Context);
@@ -53,12 +55,21 @@ event(#postback{message={config_edit_dialog, Module, Key, OnSuccess}}, Context) 
 event(#submit{message={config_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
+            CurrentModule = proplists:get_value(module, Args),
+            CurrentKey = proplists:get_value(key, Args),
+            Module = z_context:get_q("module", Context, ""),
+            Key = z_context:get_q("key", Context, ""),
             Value = z_context:get_q("val", Context, ""),
-            Module = proplists:get_value(module, Args),
-            Key = proplists:get_value(key, Args),
             OnSuccess = proplists:get_all_values(on_success, Args),
-            m_config:set_value(Module, Key, Value, Context),
+            update_entry(CurrentModule, CurrentKey, Module, Key, Value, Context),
             z_render:wire([{dialog_close, []} | OnSuccess], Context);
         false ->
             z_render:growl_error(?__("Only administrators can change the configuration.", Context), Context)
     end.
+    
+%% Update config entry. First delete old entry if module or key name is not equal to current name.
+update_entry(CurrentModule, CurrentKey, Module, Key, Value, Context) when CurrentModule =/= Module; CurrentKey =/= Key -> 
+    m_config:delete(CurrentModule, CurrentKey, Context),
+    m_config:set_value(Module, Key, Value, Context);
+update_entry(_, _, Module, Key, Value, Context) -> 
+    m_config:set_value(Module, Key, Value, Context).
