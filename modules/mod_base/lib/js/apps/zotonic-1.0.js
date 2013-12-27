@@ -309,6 +309,15 @@ function z_ajax(triggerID, params)
     });
 }
 
+function z_fetch_cookies()
+{
+    $.ajax({
+        url: '/z_session/cookies',
+        type: 'post',
+        dataType: 'text'
+    });
+}
+
 function z_unmask(id)
 {
     if (id)

@@ -26,12 +26,6 @@
 %% The name of the session cookie
 -define(SESSION_COOKIE, "z_sid").
 
-%% The name of the persistent data cookie
--define(PERSIST_COOKIE, "z_pid").
-
-%% Max age of the person cookie, 10 years or so.
--define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
-
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
@@ -56,7 +50,7 @@
 -include_lib("zotonic.hrl").
 
 %% The session server state
--record(session_srv, {context, key2pid, pid2key, persist2pid, pid2persist}).
+-record(session_srv, {context, key2pid, pid2key}).
 
 -type session_id() :: list().
 -type persistent_id() :: list().
@@ -198,9 +192,7 @@ init(SiteProps) ->
     State = #session_srv{
                     context=z_acl:sudo(z_context:new(Host)),
                     key2pid=dict:new(), 
-                    pid2key=dict:new(), 
-                    persist2pid=dict:new(), 
-                    pid2persist=dict:new()
+                    pid2key=dict:new()
             },
     timer:apply_interval(?SESSION_CHECK_EXPIRE * 1000, ?MODULE, tick, [self()]),
     process_flag(trap_exit, true),
@@ -303,19 +295,10 @@ code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
 %% Make sure that the session cookie is set and that the session process has been started.
 ensure_session1(SessionId, SessionPid, PersistId, State) when SessionId =:= undefined orelse SessionPid =:= error ->
-    case dict:find(PersistId, State#session_srv.persist2pid) of
-        {ok, Pid} ->
-            % Browser restart, though session still alive
-            z_session:restart(Pid),
-            {ok, NewSessionId, State1} = rename_session(Pid, State),
-            {ok, restart, Pid, NewSessionId, State1};
-        error ->
-            NewSessionPid = spawn_session(PersistId, State#session_srv.context),
-            NewSessionId = z_ids:id(),
-            State1 = store_persist_pid(PersistId, NewSessionPid, 
-                                       store_session_pid(NewSessionId, NewSessionPid, State)),
-            {ok, new, NewSessionPid, NewSessionId, State1}
-    end;
+    NewSessionPid = spawn_session(PersistId, State#session_srv.context),
+    NewSessionId = z_ids:id(),
+    State1 = store_session_pid(NewSessionId, NewSessionPid, State),
+    {ok, new, NewSessionPid, NewSessionId, State1};
 ensure_session1(SessionId, SessionPid, _PersistId, State) ->
     {ok, alive, SessionPid, SessionId, State}.
 
@@ -333,19 +316,9 @@ rename_session(Pid, State) ->
 erase_session_pid(Pid, State) ->
     case dict:find(Pid, State#session_srv.pid2key) of
         {ok, Key} ->
-            State1 = State#session_srv{
+            State#session_srv{
                     pid2key = dict:erase(Pid, State#session_srv.pid2key),
-                    key2pid = dict:erase(Key, State#session_srv.key2pid)
-                },
-            case dict:find(Pid, State1#session_srv.pid2persist) of
-                {ok, Persist} ->
-                    State1#session_srv{
-                        persist2pid = dict:erase(Persist, State#session_srv.persist2pid),
-                        pid2persist = dict:erase(Pid, State#session_srv.pid2persist)
-                    };
-                error ->
-                    State1
-            end;
+                    key2pid = dict:erase(Key, State#session_srv.key2pid)};
         error ->
             State
     end.
@@ -357,15 +330,6 @@ store_session_pid(SessionId, Pid, State) when is_list(SessionId) and is_pid(Pid)
     State#session_srv{
             pid2key = dict:store(Pid, SessionId, State#session_srv.pid2key),
             key2pid = dict:store(SessionId, Pid, State#session_srv.key2pid)
-        }.
-
-
-%% @doc Add the pid to the persist state
--spec store_persist_pid(persistent_id(), pid(), #session_srv{}) -> #session_srv{}.
-store_persist_pid(PersistId, Pid, State) when is_list(PersistId) and is_pid(Pid) ->
-    State#session_srv{
-            pid2persist = dict:store(Pid, PersistId, State#session_srv.pid2persist),
-            persist2pid = dict:store(PersistId, Pid, State#session_srv.persist2pid)
         }.
 
 
@@ -409,50 +373,50 @@ spawn_session(PersistId, Context) ->
 
 -spec start_session( optional | ensure, session_id(), #context{} ) -> {ok, #context{}} | {error, term()}.
 start_session(Action, CurrentSessionId, Context) ->
-    {PersistId, Context1} = ensure_persist_cookie(Context),
-    case gen_server:call(Context1#context.session_manager, {start_session, Action, CurrentSessionId, PersistId}) of
+    PersistId = z_context:get_cookie(?PERSIST_COOKIE, Context),
+    case gen_server:call(Context#context.session_manager, {start_session, Action, CurrentSessionId, PersistId}) of
         {ok, SessionState, SessionPid, NewSessionId} ->
-            Context2 = Context1#context{
+            Context1 = Context#context{
                             session_pid=SessionPid, 
-                            props=[{session_id, NewSessionId}|Context1#context.props]
+                            props=[{session_id, NewSessionId}|Context#context.props]
                        },
-            Context3 = case NewSessionId of
-                           CurrentSessionId -> Context2;
-                            _ -> set_session_cookie(NewSessionId, Context2)
+            Context2 = case NewSessionId of
+                           CurrentSessionId -> Context1;
+                            _ -> set_session_cookie(NewSessionId, Context1)
                        end,
-            % lager:debug("Session: ~p ~p (old ~p, for ~p)", [SessionState, NewSessionId, CurrentSessionId, m_req:get(peer, Context3)]),
-            Context4 = case SessionState of
+            % lager:debug("Session: ~p ~p (old ~p, for ~p)", [SessionState, NewSessionId, CurrentSessionId, m_req:get(peer, Context2)]),
+            Context3 = case SessionState of
                            new ->
                                Props = [
-                                   {auth_user_id, z_acl:user(Context3)},
-                                   {remote_ip, m_req:get(peer, Context3)},
-                                   {ua_class, z_user_agent:get_class(Context3)},
-                                   {ua_props, z_user_agent:get_props(Context3)}
+                                   {auth_user_id, z_acl:user(Context2)},
+                                   {remote_ip, m_req:get(peer, Context2)},
+                                   {ua_class, z_user_agent:get_class(Context2)},
+                                   {ua_props, z_user_agent:get_props(Context2)}
                                ],
-                               z_session:set(Props, Context3),
-                               z_notifier:notify(session_init, Context3),
-                               z_notifier:foldl(session_init_fold, Context3, Context3);
+                               z_session:set(Props, Context2),
+                               z_notifier:notify(session_init, Context2),
+                               z_notifier:foldl(session_init_fold, Context2, Context2);
                            restart -> 
                                Props = [
-                                   {auth_user_id, z_acl:user(Context3)},
-                                   {remote_ip, m_req:get(peer, Context3)},
-                                   {ua_class, z_user_agent:get_class(Context3)},
-                                   {ua_props, z_user_agent:get_props(Context3)}
+                                   {auth_user_id, z_acl:user(Context2)},
+                                   {remote_ip, m_req:get(peer, Context2)},
+                                   {ua_class, z_user_agent:get_class(Context2)},
+                                   {ua_props, z_user_agent:get_props(Context2)}
                                ],
-                               z_session:set(Props, Context3),
-                               Context3;
+                               z_session:set(Props, Context2),
+                               Context2;
                            alive -> 
                                Props = [
-                                   {remote_ip, m_req:get(peer, Context3)}
+                                   {remote_ip, m_req:get(peer, Context2)}
                                ],
-                               z_session:keepalive(Context3#context.page_pid, SessionPid),
-                               z_session:set(Props, Context3),
-                               Context3
+                               z_session:keepalive(Context2#context.page_pid, SessionPid),
+                               z_session:set(Props, Context2),
+                               Context2
                        end,
-            {ok, Context4};
+            {ok, Context3};
         {error, no_session_pid} when Action =:= optional ->
             lager:debug("Session: continuation request for non-existing session ~p", [CurrentSessionId]),
-            {ok, Context1};
+            {ok, Context};
         {error, _} = Error ->
             Error
     end.
@@ -495,21 +459,3 @@ clear_session_cookie(Context) ->
                {http_only, true}],
     Context1 = z_context:set_cookie(?SESSION_COOKIE, "", Options, Context),
     Context1#context{session_pid=undefined}.
-
-
-
-%% @doc Ensure that there is a persistent cookie set at the browser, return the updated context and the id.
-%% We need to do this on first visit as the user might communicate further via websockets.
--spec ensure_persist_cookie( #context{} ) -> { persistent_id(), #context{} }.
-ensure_persist_cookie(Context) ->
-    case z_context:get_cookie(?PERSIST_COOKIE, Context) of
-        undefined ->
-            NewPersistCookieId = z_ids:id(),
-            Options = [
-                {max_age, ?PERSIST_COOKIE_MAX_AGE}, 
-                {path, "/"},
-                {http_only, true}],
-            {NewPersistCookieId, z_context:set_cookie(?PERSIST_COOKIE, NewPersistCookieId, Options, Context)};
-        PersistCookieId ->
-            {PersistCookieId, Context}
-    end.

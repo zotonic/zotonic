@@ -58,19 +58,25 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 %% @doc Select full row by persistent id.
--spec get(Id :: id(), #context{}) -> Props :: list().
+-spec get(Id :: undefined | id(), #context{}) -> Props :: list().
+get(undefined, _Context) ->
+    [];
 get(Id, Context) ->
     z_db:q1("SELECT props FROM " ++ ?T_PERSISTENT ++ " WHERE id = $1", [Id], Context).
 
 
 %% @doc Get only stored (persistent) props for session by id.
--spec get_props(Id :: id(), Context :: #context{}) -> Props :: list() | 'undefined'.
+-spec get_props(Id :: undefined | id(), Context :: #context{}) -> Props :: list() | 'undefined'.
+get_props(undefined, _Context) ->
+    undefined;
 get_props(Id, Context) ->
     z_db:q1("SELECT props FROM " ++ ?T_PERSISTENT ++ " WHERE id = $1", [Id], Context).
 
 
 %% @doc Save new persistent session data.
--spec put(Id :: id(), Props :: list(), #context{}) -> ok.
+-spec put(Id :: undefined | id(), Props :: list(), #context{}) -> ok | {error, undefined}.
+put(undefined, _Props, _Context) ->
+    {error, undefined};
 put(Id, Props, Context) ->
     z_db:q("UPDATE " ++ ?T_PERSISTENT ++ " SET props = $2, modified = now() WHERE id = $1", [Id, Props], Context) == 1
     orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, Props], Context),

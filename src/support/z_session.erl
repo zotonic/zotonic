@@ -43,7 +43,6 @@
     set_persistent/3,
     get_persistent/2, 
     get_persistent/3, 
-    restart/1,
     keepalive/1, 
     keepalive/2, 
     ensure_page_session/1,
@@ -51,6 +50,9 @@
     get_attach_state/1,
     add_script/2,
     add_script/1,
+    add_cookie/4,
+    get_cookies/1,
+    clear_cookies/1,
     check_expire/2,
     dump/1,
     spawn_link/4
@@ -64,11 +66,12 @@
             expire_n,
             pages=[],
             linked=[],
-            persist_id,
+            persist_id = undefined,
             persist_is_saved = false,
             persist_is_dirty = false,
             props=[],
             props_persist=[],
+            cookies=[],
             context
             }).
 
@@ -131,20 +134,22 @@ persistent_id(Context) ->
     gen_server:call(Context#context.session_pid, persistent_id).
 
 set_persistent(Key, Value, Context) ->
-    gen_server:cast(Context#context.session_pid, {set_persistent, Key, Value}).
+    case gen_server:call(Context#context.session_pid, {set_persistent, Key, Value}) of
+        {new_persist_id, NewPersistCookieId} ->
+            Options = [
+                 {max_age, ?PERSIST_COOKIE_MAX_AGE},
+                 {path, "/"},
+                 {http_only, true}],
+             z_context:set_cookie(?PERSIST_COOKIE, NewPersistCookieId, Options, Context);
+        ok -> 
+            Context
+    end.
 
 get_persistent(Key, Context) ->
    get_persistent(Key, Context, undefined).
 
 get_persistent(Key, Context, DefaultValue) ->
     gen_server:call(Context#context.session_pid, {get_persistent, Key, DefaultValue}).
-
-
-%% @doc Reset the session contents, keep the persistent data. Used in the case where an user restarts his browser.
-restart(Context=#context{}) ->
-    restart(Context#context.session_pid);
-restart(Pid) when is_pid(Pid) ->
-    gen_server:cast(Pid, restart).
 
 
 %% @spec add_script(Script::io_list(), PagePid::pid()) -> none()
@@ -162,6 +167,17 @@ add_script(Context) ->
     add_script(Scripts, CleanContext),
     CleanContext.
 
+%% @doc Store a cookie on the session. Useful for setting cookies from a websocket connection.
+add_cookie(Key, Value, Options, #context{session_pid=Pid}) ->
+    gen_server:cast(Pid, {add_cookie, Key, Value, Options}).
+
+%% @doc Get cookies stored on the session.
+get_cookies(#context{session_pid=Pid}) ->
+    gen_server:call(Pid, get_cookies).
+
+%% @doc Resets cookies temporarily stored on the session.
+clear_cookies(#context{session_pid=Pid}) ->
+    gen_server:cast(Pid, clear_cookies).
 
 %% @doc Reset the expire counter of the session, called from the page process when comet attaches
 keepalive(Pid) ->
@@ -227,10 +243,6 @@ init({Host, PersistId}) ->
 handle_cast(stop, Session) ->
     {stop, normal, Session};
 
-%% @doc Reinitialize the complete session, cleanup the old pages, retain the persistent data.
-handle_cast(restart, Session) ->
-    {noreply, restart_session(Session)};
-
 %% @doc Reset the timeout counter for the session and, optionally, a specific page
 handle_cast(keepalive, Session) ->
     Now      = z_utils:now(),
@@ -286,20 +298,14 @@ handle_cast({add_script, Script}, Session) ->
     lists:foreach(F, Session#session.pages),
     {noreply, Session};
 
-%% @doc Set the session variable, replaces any old value
-handle_cast({set_persistent, Key, Value}, Session) ->
-    case proplists:get_value(Key, Session#session.props_persist) of
-        Value ->
-            {noreply, Session};
-        _Other ->
-            % @todo Save the persistent state on tick, and not every time it is changed.
-            %       For now (and for testing) this is ok.
-            Session1 = Session#session{ 
-                            props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
-                            persist_is_dirty = true
-                    },
-            {noreply, save_persist(Session1)}
-    end;
+%% @doc Add a cookie to the session. Useful for setting cookies from a websocket connection.
+handle_cast({add_cookie, Key, Value, Options}, Session) ->
+    Cookies = [{Key, Value, Options} | Session#session.cookies],
+    {noreply, Session#session{cookies=Cookies}};
+
+%% @doc Reset the stored cookies.
+handle_cast(clear_cookies, Session) ->
+    {noreply, Session#session{cookies=[]}};
 
 %% @doc Set the session variable, replaces any old value
 handle_cast({set, Key, Value}, Session) ->
@@ -335,8 +341,33 @@ handle_call(persistent_id, _From, Session) ->
     end,
     {reply, PersistedSession#session.persist_id, PersistedSession};
 
+%% @doc Set a persistent variable, replaces any old value
+handle_call({set_persistent, Key, Value}, _From, #session{persist_id=undefined}=Session) ->
+    PersistId = z_ids:id(),
+    Session1 = Session#session{
+        persist_id=PersistId, 
+        props_persist=[{Key, Value}], 
+        persist_is_dirty=true},
+    {reply, {new_persist_id, PersistId}, save_persist(Session1)};
+handle_call({set_persistent, Key, Value}, _From, Session) ->
+    case proplists:get_value(Key, Session#session.props_persist) of
+        Value ->
+            {reply, ok, Session};
+        _Other ->
+            % @todo Save the persistent state on tick, and not every time it is changed.
+            %       For now (and for testing) this is ok.
+            Session1 = Session#session{ 
+                            props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
+                            persist_is_dirty = true
+                    },
+            {reply, ok, save_persist(Session1)}
+    end;
+
 handle_call({get_persistent, Key, DefaultValue}, _From, Session) ->
     {reply, proplists:get_value(Key, Session#session.props_persist, DefaultValue), Session};
+
+handle_call(get_cookies, _From, Session) ->
+    {reply, Session#session.cookies, Session};
 
 handle_call({get, Key, DefaultValue}, _From, Session) ->
     {reply, proplists:get_value(Key, Session#session.props, DefaultValue), Session};
@@ -434,16 +465,6 @@ new_session(Host, PersistId) ->
             persist_id = PersistId,
             context=Context
             }).
-
-
-% @todo: perform unlinks?
-restart_session(Session) ->
-    [ z_session_page:stop(Pid) || Pid <- Session#session.pages ],
-    Session#session{
-            expire=z_utils:now() + Session#session.expire_1,
-            pages=[],
-            props=[]
-         }.
 
 
 %% @doc Load the persistent data from the database, used on session start.

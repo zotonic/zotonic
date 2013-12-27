@@ -196,6 +196,12 @@
 -define(SESSION_EXPIRE_1,   40).
 -define(SESSION_EXPIRE_N, 3600).
 
+%% The name of the persistent data cookie
+-define(PERSIST_COOKIE, "z_pid").
+
+%% Max age of the person cookie, 10 years or so.
+-define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
+
 %% Millisecs of no activity before the visitor process is stopped (if there are no attached sessions).
 -define(VISITOR_TIMEOUT, 60 * 1000).
 

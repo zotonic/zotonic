@@ -27,7 +27,8 @@
     content_types_provided/2,
     provide_content/2,
     websocket_start/2,    
-    websocket_send_data/2
+    websocket_send_data/2,
+    is_websocket_request/1
 ]).
 
 % websocket handler exports.
@@ -80,23 +81,31 @@ websocket_start(ReqData, Context) ->
             z_context:set(ws_handler, ?MODULE, Context1);
         _Hdlr -> Context1
     end,
-    case z_context:get_req_header("sec-websocket-version", Context2) of
+    Context3 = z_context:set(ws_request, true, Context2),
+    case z_context:get_req_header("sec-websocket-version", Context3) of
         undefined ->
-            case z_context:get_req_header("sec-websocket-key1", Context2) of
+            case z_context:get_req_header("sec-websocket-key1", Context3) of
                 undefined ->
-                    z_websocket_hixie75:start(ReqData, Context2);
+                    z_websocket_hixie75:start(ReqData, Context3);
                 WsKey1 ->
-                    z_websocket_hybi00:start(WsKey1, ReqData, Context2)
+                    z_websocket_hybi00:start(WsKey1, ReqData, Context3)
             end;
         "7" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07
-            z_websocket_hybi17:start(ReqData, Context2);
+            z_websocket_hybi17:start(ReqData, Context3);
         "8" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
-            z_websocket_hybi17:start(ReqData, Context2);
+            z_websocket_hybi17:start(ReqData, Context3);
         "13" ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
-            z_websocket_hybi17:start(ReqData, Context2)
+            z_websocket_hybi17:start(ReqData, Context3)
+    end.
+
+%% @doc Returns true if this a websocket request
+is_websocket_request(Context) ->
+    case z_context:get(ws_request, Context, false) of
+        true -> true;
+        _ -> false
     end.
 
 %% @doc Send Data over websocket Pid to the client.

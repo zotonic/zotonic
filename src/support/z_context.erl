@@ -738,8 +738,8 @@ persistent_id(Context) ->
 %% @spec set_persistent(Key, Value, Context) -> Context
 %% @doc Set the value of the visitor variable Key to Value
 set_persistent(Key, Value, Context) ->
-    z_session:set_persistent(Key, Value, Context),
-    Context.
+    z_session:set_persistent(Key, Value, Context).
+
 
 %% @spec get_persistent(Key, Context) -> Value
 %% @doc Fetch the value of the visitor variable Key
@@ -1014,16 +1014,25 @@ set_cookie(Key, Value, Context) ->
 
 %% @doc Set a cookie value with cookie options.
 set_cookie(Key, Value, Options, Context) ->
-    % Add domain to cookie if not set
-    Options1 = case proplists:lookup(domain, Options) of
-                   {domain, _} -> Options;
-                   none -> [{domain, z_context:cookie_domain(Context)}|Options]
-               end,
-    Options2 = z_notifier:foldl(#cookie_options{name=Key, value=Value}, Options1, Context),
-    RD = Context#context.wm_reqdata,
-    Hdr = mochiweb_cookies:cookie(Key, Value, Options2),
-    RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set_reqdata(RD1, Context).
+    case controller_websocket:is_websocket_request(Context) of
+        true ->
+            %% Store the cookie in the session and trigger an ajax cookie fetch.
+            z_session:add_cookie(Key, Value, Options, Context),
+            add_script_page(<<"z_fetch_cookies();">>, Context),
+            Context;
+        false ->
+            % Add domain to cookie if not set
+            Options1 = case proplists:lookup(domain, Options) of
+                           {domain, _} -> Options;
+                           none -> [{domain, z_context:cookie_domain(Context)}|Options]
+                       end,
+            Options2 = z_notifier:foldl(#cookie_options{name=Key, value=Value}, Options1, Context),
+            RD = Context#context.wm_reqdata,
+            Hdr = mochiweb_cookies:cookie(Key, Value, Options2),
+            RD1 = wrq:merge_resp_headers([Hdr], RD),
+            z_context:set_reqdata(RD1, Context)
+    end.
+
 
 %% @doc Read a cookie value from the current request.
 get_cookie(Key, #context{wm_reqdata=RD}) ->
