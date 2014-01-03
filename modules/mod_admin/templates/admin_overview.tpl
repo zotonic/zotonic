@@ -8,7 +8,7 @@
 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}" class="form-horizontal">
     <div class="pull-right">
         <select id="{{ #pagelen }}" name="qpagelen" style="width: auto; margin-left: .75em">
-            {% for pagelen_value,pagelen_label in [[10,10],[20,20],[50,50],[100,100],[200,200],[500,500],[10000000,_"All"]] %}
+            {% for pagelen_value,pagelen_label in [[10,"10"],[20,"20"],[50,"50"],[100,"100"],[200,"200"],[500,"500"]] %}
             <option value="{{ pagelen_value }}" {% ifequal pagelen_value qpagelen %}selected="selected" {% endifequal %}>
                 {{ pagelen_label }}
             </option>
