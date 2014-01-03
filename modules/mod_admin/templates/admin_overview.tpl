@@ -4,7 +4,18 @@
 
 {% block content %}
 
+{% with q.qpagelen|default:20 as qpagelen %}
 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}" class="form-horizontal">
+    <div class="pull-right">
+        <select id="{{ #pagelen }}" name="qpagelen" style="width: auto; margin-left: .75em">
+            {% for pagelen_value,pagelen_label in [[10,"10"],[20,"20"],[50,"50"],[100,"100"],[200,"200"],[500,"500"]] %}
+            <option value="{{ pagelen_value }}" {% ifequal pagelen_value qpagelen %}selected="selected" {% endifequal %}>
+                {{ pagelen_label }}
+            </option>
+            {% endfor %}
+        </select>
+        {% wire type="change" id=#pagelen action={submit} %}
+    </div>
     <div class="pull-right">
 	{% with q.qcat as qcat %}
         <div class="control-group">
@@ -51,9 +62,10 @@
     <a class="btn" href="{% url admin_media %}">{_ All media _}</a>
 </div>
 
-{% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page sort=q.qsort|default:"-modified"}] as result %}
+{% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
 	{% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
 	{% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page=1 %}
+{% endwith %}
 {% endwith %}
 
 {% endblock %}
