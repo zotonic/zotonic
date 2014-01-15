@@ -28,7 +28,7 @@
 	 expires/2,
 	 content_types_provided/2,
 	 charsets_provided/2,
-	 encodings_provided/2,
+	 content_encodings_provided/2,
 	 provide_content/2,
 	 finish_request/2
 	 ]).
@@ -95,14 +95,11 @@ content_types_provided(ReqData, State) ->
             {[{Mime, provide_content}], ReqData, State1}
     end.
 
-encodings_provided(ReqData, State) ->
+content_encodings_provided(ReqData, State) ->
     State1 = lookup_path(ReqData, State),
     Encodings = case z_media_identify:is_mime_compressed(State1#state.mime) of
-        true -> 
-            [{"identity", fun(Data) -> Data end}];
-        false -> 
-            [{"identity", fun(Data) -> decode_data(identity, Data) end},
-             {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+        true -> ["identity"];
+        false -> ["identity", "gzip"]
     end,
     EncodeData = length(Encodings) > 1,
     {Encodings, ReqData, State1#state{encode_data=EncodeData}}.
@@ -118,7 +115,7 @@ resource_exists(ReqData, State) ->
 charsets_provided(ReqData, State) ->
 	State1 = lookup_path(ReqData, State),
     case is_text(State1#state.mime) of
-        true -> {[{"utf-8", fun(X) -> X end}], ReqData, State1};
+        true -> {["utf-8"], ReqData, State1};
         _ -> {no_charset, ReqData, State1}
     end.
     
@@ -171,7 +168,7 @@ provide_content(ReqData, State) ->
         Body -> 
             {Body, State1}
     end,
-    {Content, RD1, State2}.
+    {select_encoding(Content, RD1), RD1, State2}.
     
 read_data(F) ->
     {ok, Data} = file:read_file(F),
@@ -307,13 +304,20 @@ get_paths({dispatch_paths, DispatchPaths}) ->
 get_paths(Path) ->
     z_lib_include:uncollapse(Path).
 
+select_encoding(Data, ReqData) ->
+    decode_data(wrq:resp_content_encoding(ReqData), Data).
+
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_list(Data) ->
     encode_data(iolist_to_binary(Data));
 encode_data(Data) when is_binary(Data) ->
     {Data, zlib:gzip(Data)}.
 
-decode_data(identity, {Data, _Gzip}) ->
+decode_data("identity", {Data, _Gzip}) ->
 	Data;
-decode_data(gzip, {_Data, Gzip}) ->
-	Gzip.
+decode_data("identity", Data) ->
+    Data;
+decode_data("gzip", {_Data, Gzip}) ->
+	Gzip;
+decode_data("gzip", Data) ->
+    zlib:gzip(Data).
