@@ -68,7 +68,7 @@ publish(Topic, {zauth, UserId, Host}) when is_integer(UserId) ->
         _ -> ok
     end;
 publish(_Topic, _Auth) ->
-    {error, eaccess}.
+    {error, eacces}.
 
 subscribe({Topic, Qos}, Pid, {zauth, UserId, Host}) when is_integer(UserId) ->
     Context = z_acl:logon(UserId, z_context:new(Host)),
@@ -77,7 +77,7 @@ subscribe({Topic, Qos}, Pid, {zauth, UserId, Host}) when is_integer(UserId) ->
         _ -> ok
     end;
 subscribe(_TopicQos, _Pid, _Auth) ->
-    {error, eaccess}.
+    {error, eacces}.
 
 
 map_user_site(Username) when is_binary(Username) ->
