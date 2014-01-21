@@ -1,7 +1,7 @@
 {% if stage == "reminder_sent" %}
 <div class="logon_message">
 
-    <h1 class="logon_header">We sent you an e-mail</h1>
+    <h1 class="logon_header">{_ We've sent you an e-mail _}</h1>
 
     <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
     <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
