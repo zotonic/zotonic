@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content_area %}
-	{% with id|menu_rsc as tree_id %}
+	{% with tree_id|default:(id|menu_rsc) as tree_id %}
 	{% with `none` as admin_menu_edit_action %}
 	<div class="row-fluid">
 		{% with m.rsc[tree_id].id as tree_id %}
@@ -28,10 +28,13 @@
 				{% block editcol %}
 					{% if id %}
 						{% javascript %}
-							setTimeout(10, function() {
-								window.location.hash = '#edit-id='+id;
-							});
+							if (window.location.hash == '') {
+								setTimeout(function() {
+									window.location.hash = '#edit_id={{id}}';
+								}, 100);
+							}
 						{% endjavascript %}
+						<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
@@ -39,6 +42,7 @@
 				</div>
 			{% else %}
 				<div class="span12" id="editcol">
+					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
 					{% wire postback={admin_menu_edit id=id} delegate=`mod_admin_frontend` %}
 				</div>
 			{% endif %}

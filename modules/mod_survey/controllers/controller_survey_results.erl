@@ -25,7 +25,7 @@
     allowed_methods/2,
     content_encodings_provided/2,
     resource_exists/2,
-    forbidden/2,
+    % forbidden/2,
     expires/2,
     content_types_provided/2,
     charsets_provided/2,
@@ -94,11 +94,11 @@ provide_content(ReqData, Context) ->
                     end,
                     ".csv"
                 ]),
-    RD1 = wrq:set_resp_header("Content-Disposition", "inline; filename="++Filename, ReqData),
+    RD1 = wrq:set_resp_header("Content-Disposition", "attachment; filename="++Filename, ReqData),
     Context1 = ?WM_REQ(RD1, Context),
     Data = m_survey:survey_results(Id, Context1),
     Content = to_csv(Data),
-    Content1 = wrq:encode_content(Content, ReqData), 
+    Content1 = wrq:encode_content(Content, RD1), 
     ?WM_REPLY(Content1, Context1).
 
 

@@ -50,7 +50,7 @@ html(Context) ->
             {blocks, lists:sort(Blocks)}
             | z_context:get_all(Context) 
            ],
-    Html = z_template:render({cat, "admin_edit.tpl"}, Vars, Context),
+    Html = z_template:render(z_context:get(template, Context, {cat, "admin_edit.tpl"}), Vars, Context),
     z_context:output(Html, Context).
 
 
@@ -79,7 +79,8 @@ event(#submit{message={rscform, Args}}, Context) ->
     Id = z_convert:to_integer(proplists:get_value("id", Props)),
     Props1 = proplists:delete("id", Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
-    case m_rsc:update(Id, Props1, Context) of
+    Props2 = z_notifier:foldl(#admin_rscform{id=Id, is_a=m_rsc:is_a(Id, Context)}, Props1, Context),
+    case m_rsc:update(Id, Props2, Context) of
         {ok, _} -> 
             case proplists:is_defined("save_view", Post) of
                 true ->

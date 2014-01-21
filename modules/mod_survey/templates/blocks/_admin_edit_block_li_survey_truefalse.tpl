@@ -7,7 +7,7 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-    {% if is_editable %}
+    {% if id.is_editable %}
     <div class="control-group">
         <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
                class="input-block-level" value="{{ blk.prompt[lang_code]  }}"

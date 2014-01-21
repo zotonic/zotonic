@@ -124,6 +124,9 @@
 %% @doc Used in the admin to fetch the possible blocks for display (foldl)
 -record(admin_edit_blocks, {id}).
 
+%% @doc Used in the admin to process a submitted resource form
+-record(admin_rscform, {id, is_a}).
+
 %% Used for fetching the menu in the admin (foldl)
 % admin_menu
 

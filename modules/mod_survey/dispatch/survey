@@ -10,4 +10,5 @@
  {survey, ["survey", id, slug], controller_page, [ {template, "survey.tpl"} ]},
  
  {admin_survey_editor, ["admin", "survey", id], controller_admin, [{acl, {module, mod_survey}}, {template, "admin_survey_editor.tpl"}]}
+
 ].

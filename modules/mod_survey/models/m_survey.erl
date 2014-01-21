@@ -428,12 +428,8 @@ survey_captions(Id, Context) ->
 %% @private
 survey_totals(Id, Context) ->
     Stats = survey_stats(Id, Context),
-    lager:warning("Stats: ~p", [Stats]),
-    
     case m_rsc:p(Id, blocks, Context) of
         Blocks when is_list(Blocks) ->
-            lager:warning("Blocks: ~p", [Blocks]),
-
             All = lists:map(fun(Block) ->
                                     Name = proplists:get_value(name, Block),
                                     Type = proplists:get_value(type, Block),
