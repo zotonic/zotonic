@@ -90,7 +90,7 @@ ZSurveyEditor.prototype.action = function(e) {
 			e.preventDefault();
 			break;
 		case '#jump-go':
-			this.jump_go(e);
+			this.jump_go($(e.target).closest(".page-jump"));
 			e.preventDefault();
 			break;
 		default:
@@ -238,7 +238,19 @@ ZSurveyEditor.prototype.jump_delete = function(id) {
 	});
 };
 
-ZSurveyEditor.prototype.jump_go = function() {
+ZSurveyEditor.prototype.jump_go = function($jump) {
+	var $target_input = $(".jump-target", $jump);
+	var target_name = $target_input.val();
+	var $target = $('input.block-name').filter(function() { return $(this).val() == target_name; });
+
+	if ($target.length) {
+		$('html, body').animate({ scrollTop: Math.max(0, $target.offset().top-100) }, 500);
+	} else {
+		$target_input
+			.stop()
+			.css("background-color", "#f88")
+			.animate({backgroundColor: "white"}, 500);
+	}
 };
 
 ZSurveyEditor.prototype.unique_id = function() {
