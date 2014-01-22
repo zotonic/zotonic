@@ -1,3 +1,7 @@
+<div id="tinyinit">
+	{% lazy action={script script="z_tinymce_init();"} action={remove target="tinyinit"} %}
+</div>
+
 {% with id.blocks|survey_as_pages as pages %}
 	<div id="admin-survey-questions">
 		<ol class="pages">
