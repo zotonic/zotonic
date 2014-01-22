@@ -25,7 +25,7 @@
     allowed_methods/2,
     content_encodings_provided/2,
     resource_exists/2,
-    % forbidden/2,
+    forbidden/2,
     expires/2,
     content_types_provided/2,
     charsets_provided/2,
