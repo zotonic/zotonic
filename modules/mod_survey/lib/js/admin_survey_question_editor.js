@@ -29,6 +29,8 @@ function ZSurveyEditor() {
 		}
 	});
 
+	this.set_page_sorters($(".pages"));
+
 	$('#modal-question .span4').hover(
 		function () {
 			$(this).addClass("hover");
@@ -174,6 +176,10 @@ ZSurveyEditor.prototype.page_new = function(e, where) {
 		default:
 			break;
 	}
+	this.set_page_sorters(p);
+};
+
+ZSurveyEditor.prototype.set_page_sorters = function(p) {
 	$(".question-list", p).sortable({
 		//helper: 'clone',
 		//handle: '.widget-header',

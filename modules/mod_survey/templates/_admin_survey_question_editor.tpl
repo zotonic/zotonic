@@ -160,3 +160,41 @@
 			{% include "_admin_survey_question_j.tpl" blk=[] nosubmit %}
 		</ul>
 	</div>
+
+{% javascript %}
+	$('#admin-survey-questions').on('click', '.block-page a.page-connect', function(event) {
+	    window.zBlockConnectTrigger = this;
+	    z_event("admin-q-block-connect", {});
+	    event.preventDefault();
+	});
+
+	window.zAdminBlockConnectDone = function(v) {
+	    var $block_page = $(window.zBlockConnectTrigger).closest(".block-page");
+	    var target_id = $(".rsc-item-wrapper", $block_page).attr('id');
+	    $("input[type=hidden]", $block_page).val(v.object_id);
+	    z_notify("update", {z_delegate: 'mod_admin', template: "_rsc_item.tpl", id: v.object_id, z_target_id: target_id});
+	    window.zAdminConnectDone(v);
+	}
+
+	$('#admin-survey-questions').on('click', '.rsc-item h5 a', function(event) {
+	    var rsc_id = $(this).attr('href').replace('#', '');
+	    z_event("admin-edit-basics", {
+	                        id: rsc_id, 
+	                        element_id: $(this).closest(".rsc-item").attr('id'), 
+	                        template: "_rsc_item.tpl", 
+	                        edit_dispatch: "{{ edit_dispatch }}"
+	                });
+	    event.preventDefault();
+	});
+{% endjavascript %}
+
+{% wire name="admin-q-block-connect" 
+        action={dialog_open
+                    subject_id=id
+                    predicate=""
+                    template="_action_dialog_connect.tpl" 
+                    title=_"Find page"
+                    callback="window.zAdminBlockConnectDone"}
+%}
+
+{% wire name="admin-edit-basics" action={dialog_edit_basics template="_rsc_item.tpl"} %}

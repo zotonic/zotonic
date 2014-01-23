@@ -113,14 +113,16 @@ function z_admin_ensure_block_names() {
         var name = $(this).val();
         if (name === '')
         {
-            var $block = $(this).closest(".block");
-            name = $("input.block-type", $block).val().split("_").pop();
-            var ct = 1;
-            while (names.indexOf(name+ct) != -1) {
-                ct++;
+            var $type = $("input.block-type", $(this).closest(".block"));
+            if ($type.length > 0) {
+                name = $type.val().split("_").pop();
+                var ct = 1;
+                while (names.indexOf(name+ct) != -1) {
+                    ct++;
+                }
+                $(this).val(name+ct);
+                names.push(name+ct);
             }
-            $(this).val(name+ct);
-            names.push(name+ct);
         }
     });
 }
