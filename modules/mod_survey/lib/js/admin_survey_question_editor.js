@@ -21,11 +21,11 @@ function ZSurveyEditor() {
 		revert: 'invalid',
 		axis: 'y',
 		start: function(event, ui) {
-			z_tinymce_save($(this));
-			z_tinymce_remove($(this));
+			z_tinymce_save(ui.item);
+			z_tinymce_remove(ui.item);
 		},
 		stop: function(event, ui) {
-			z_tinymce_add($(this));
+			z_tinymce_add(ui.item);
 		}
 	});
 
@@ -187,11 +187,11 @@ ZSurveyEditor.prototype.set_page_sorters = function(p) {
 		axis: 'y',
 		connectWith: ".question-list",
 		start: function(event, ui) {
-			z_tinymce_save($(this));
-			z_tinymce_remove($(this));
+			z_tinymce_save(ui.item);
+			z_tinymce_remove(ui.item);
 		},
 		stop: function(event, ui) {
-			z_tinymce_add($(this));
+			z_tinymce_add(ui.item);
 		}
 	});
 	$(".jump-list", p).sortable({
