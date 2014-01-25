@@ -393,7 +393,7 @@ js_prop_value(_, Value, OptContext) -> [$",js_escape(Value, OptContext),$"].
 
 % @doc Deprecated: moved to z_json.
 json_escape(A) ->
-    z_json:escape(A).
+    z_json:json_escape(A).
 
 
 only_letters([]) ->
