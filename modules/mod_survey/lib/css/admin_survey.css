@@ -65,6 +65,23 @@ ol.pages > li:before {
 .question-list {
     min-height: 4em;
 }
+.question-list > li.block {
+    position: relative;
+}
+.question-list > li.block .actions {
+    position: absolute;
+    right: 8px;
+    bottom: 17px;
+}
+
+label.block-type {
+    padding: 4px;
+    color: #ccc;
+}
+
+.hide-expanded .view-expanded {
+    display: none;
+}
 
 #survey .shortanswer input, #survey-qs .shortanswer input {
     width: 90%;
@@ -107,3 +124,4 @@ ol.pages > li:before {
 #modal-question .span4 select {
     cursor: pointer;
 }
+

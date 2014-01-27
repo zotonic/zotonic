@@ -1,10 +1,21 @@
 <li class="page" id="{{ #p }}">
+	<div class="options btn-group pull-right">
+		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+			<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+			<li><a tabindex="-1" href="#question-prepend">{_ Add question _}</a></li>
+			<li class="divider"></li>
+			<li><a tabindex="-1" href="#page-above">{_ Add page above _}</a></li>
+			<li><a tabindex="-1" href="#page-below">{_ Add page below _}</a></li>
+			<li class="divider"></li>
+			<li><a tabindex="-1" href="#page-delete">{_ Delete page _}</a></li>
+			<li class="divider"></li>
+			<li><a tabindex="-1" href="#outline-toggle">{_ Toggle outline view _}</a></li>
+		</ul>
+	</div>
+
 	<h3 class="page-header">&nbsp;</h3>
-	<ul class="nav nav-pills">
-		<li><a href="#page-above">{_ Add page above _}</a></li>
-		<li><a href="#page-below">{_ Add page below _}</a></li>
-		<li><a href="#page-delete">{_ Delete page _}</a></li>
-	</ul>
 
 	<div class="questions">
 		<ul class="question-list">

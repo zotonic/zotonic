@@ -13,7 +13,7 @@
                class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Prompt _} ({{ lang_code }})" />
     </div>
-    <div class="control-group">
+    <div class="control-group view-expanded">
        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
               class="input-block-level" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<div class="row-fluid">
+<div class="row-fluid view-expanded">
     <div class="span6">
       <div class="control-group">
           <label class="radio">

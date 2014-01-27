@@ -1,6 +1,6 @@
 {% extends "base_frontend_edit.tpl" %}
 
-{% block title %}{% if id %}{{ id.title|default:"-" }}{% elseif tree_id %}{{ tree_id.title|default:"-" }}{% endif %}{% endblock%}
+{% block title %}{_ Edit _}{% if id %}: {{ id.title|default:"-" }}{% elseif tree_id %}: {{ tree_id.title|default:"-" }}{% endif %}{% endblock%}
 
 {% block html_head_extra %}
 	{% lib 

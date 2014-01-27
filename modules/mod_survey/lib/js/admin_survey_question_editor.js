@@ -79,6 +79,10 @@ ZSurveyEditor.prototype.action = function(e) {
 			this.question_new(e, 'append');
 			e.preventDefault();
 			break;
+		case '#question-prepend':
+			this.question_new(e, 'prepend');
+			e.preventDefault();
+			break;
 		case '#question-delete':
 			this.question_delete($(e.target).closest(".block").attr('id'));
 			e.preventDefault();
@@ -93,6 +97,10 @@ ZSurveyEditor.prototype.action = function(e) {
 			break;
 		case '#jump-go':
 			this.jump_go($(e.target).closest(".page-jump"));
+			e.preventDefault();
+			break;
+		case '#outline-toggle':
+			$("#survey-questions").toggleClass("hide-expanded");
 			e.preventDefault();
 			break;
 		default:
@@ -114,6 +122,7 @@ ZSurveyEditor.prototype.question_add_select = function(block) {
 				.clone()
 				.attr('id', id);
 	$(".nosubmit", q).removeClass('nosubmit');
+	$("label.block-type", q).text(block.split("_").pop());
 	switch (this._event_where) {
 		case 'above':
 			q.insertBefore($(this._event_target).closest(".block"));
@@ -123,9 +132,15 @@ ZSurveyEditor.prototype.question_add_select = function(block) {
 			break;
 		case 'append':
 			$(this._event_target)
-				.closest('div')
-				.children('.question-list')
+				.closest('li.page')
+				.find('.question-list')
 				.append(q);
+			break;
+		case 'prepend':
+			$(this._event_target)
+				.closest('li.page')
+				.find('.question-list')
+				.prepend(q);
 			break;
 		default:
 			break;

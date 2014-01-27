@@ -7,7 +7,7 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-    <p class="alert">
+    <p class="alert view-expanded">
         {_ This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module. _}
     </p>
 
@@ -24,15 +24,17 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-    <div class="control-group">
-        <label class="checkbox">
-            <input type="checkbox" id="block-{{name}}-is_image" name="block-{{name}}-is_image" value="1" {% if blk.is_image or is_new %}checked="checked"{% endif %} />
-            {_ Only accept images. _}
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-            {_ Required, this question must be answered. _}
-        </label>
+    <div class="view-expanded view-expanded">
+        <div class="control-group">
+            <label class="checkbox">
+                <input type="checkbox" id="block-{{name}}-is_image" name="block-{{name}}-is_image" value="1" {% if blk.is_image or is_new %}checked="checked"{% endif %} />
+                {_ Only accept images. _}
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                {_ Required, this question must be answered. _}
+            </label>
+        </div>
     </div>
 {% endblock %}
 
