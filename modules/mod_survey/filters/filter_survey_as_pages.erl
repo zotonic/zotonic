@@ -38,7 +38,12 @@ split([], Acc, Pages) ->
 split(Ps, Acc, Pages) ->
 	case lists:splitwith(fun is_page_end/1, Ps) of
 		{[], [Q|Ps1]} ->
-			split(Ps1, [Q|Acc], Pages);
+			case proplists:get_value(name, Q) of
+				<<"survey_feedback">> ->
+					split(Ps1, Acc, Pages);
+				_ ->
+					split(Ps1, [Q|Acc], Pages)
+			end;
 		{Jumps, Qs} ->
 			split(Qs, [], [{lists:reverse(Acc),Jumps}|Pages])
 	end.
