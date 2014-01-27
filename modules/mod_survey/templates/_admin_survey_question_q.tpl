@@ -19,7 +19,7 @@
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-			<li><a tabindex="-1" href="#question-below">{_ Add question _}</a></li>
+			<li><a tabindex="-1" href="#question-below">{_ Add question after _}</a></li>
 			<li><a tabindex="-1" href="#question-delete">{_ Delete question _}</a></li>
 		</ul>
 	</div>
