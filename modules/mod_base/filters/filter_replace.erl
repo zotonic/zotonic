@@ -30,6 +30,12 @@ replace(In, [A,B], Context) when is_binary(A) orelse is_list(A) ->
 replace(In, A, Context) ->
     replace(In, A, <<>>, Context).
 
+replace(undefined, _A, _B, _Context) ->
+	undefined;
+replace(In, undefined, _B, _Context) ->
+	In;
+replace(In, A, undefined, Context) ->
+	replace(In, A, <<>>, Context);
 replace(In, A, B, Context) ->
     In1 = z_trans:lookup_fallback(In, Context),
     A1 = z_trans:lookup_fallback(A, Context),
