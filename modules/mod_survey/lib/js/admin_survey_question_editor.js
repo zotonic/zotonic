@@ -220,7 +220,7 @@ ZSurveyEditor.prototype.set_page_sorters = function(p) {
 
 ZSurveyEditor.prototype.page_delete = function(id) {
 	z_dialog_confirm({
-		text: z_translate("Are you sure you want to delete this page?"),
+		text: z_translate("Are you sure you want to delete this page?<br/>This also deletes all questions on this page."),
 		ok: z_translate("Delete"),
 		on_confirm: function() {
 					$('#'+id).fadeOut('fast',

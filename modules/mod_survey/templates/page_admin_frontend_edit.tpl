@@ -16,7 +16,7 @@
 		window.z_translations["Cancel"] = "{_ Cancel _}";
 		window.z_translations["Delete"] = "{_ Delete _}";
 		window.z_translations["Confirm"] = "{_ Confirm _}";
-		window.z_translations["Are you sure you want to delete this page?"] = "{_ Are you sure you want to delete this page? _}";
+		window.z_translations["Are you sure you want to delete this page?<br/>This also deletes all questions on this page."] = "{_ Are you sure you want to delete this page?<br/>This also deletes all questions on this page. _}";
 		window.z_translations["Are you sure you want to delete this question?"] = "{_ Are you sure you want to delete this question? _}";
 		window.z_translations["Are you sure you want to delete this page jump?"] = "{_ Are you sure you want to delete this page jump? _}";
 
